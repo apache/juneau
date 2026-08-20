@@ -72,4 +72,27 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		var fnBody = functionBody(body, "function resolveButtonIcon(");
 		assertTrue(fnBody.contains("\"tune\""), fnBody);
 	}
+
+	@Test void a04_ribbonStorageKey_layoutUnchanged() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fnBody = functionBody(body, "function ribbonStorageKey(");
+		assertTrue(fnBody.contains("\"juneau.view.\" + viewId + \".ribbon.\" + optionId"), fnBody);
+	}
+
+	@Test void a05_loadPersistedState_routesThroughSyncPersistenceSpi_sameExactKeys() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		var load = functionBody(body, "function loadPersistedState(");
+		assertTrue(load.contains("storageGet(ribbonStorageKey(viewDef.id, a.id))"), load);
+		assertFalse(load.contains("store.getItem("), load);
+		var persistFn = functionBody(body, "function persist(");
+		assertTrue(persistFn.contains("storageSet(ribbonStorageKey(viewDef.id, id), String(value))"), persistFn);
+		assertFalse(persistFn.contains("store.setItem("), persistFn);
+		var getFn = functionBody(body, "function storageGet(");
+		assertTrue(getFn.contains("NS.persistence.getItem(key)"), getFn);
+		assertFalse(getFn.contains("Promise"), getFn);
+		assertFalse(getFn.contains(".then("), getFn);
+		var setFn = functionBody(body, "function storageSet(");
+		assertTrue(setFn.contains("NS.persistence.setItem(key, value)"), setFn);
+		assertFalse(setFn.contains("Promise"), setFn);
+	}
 }

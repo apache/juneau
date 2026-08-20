@@ -168,7 +168,8 @@ class ViewTable_SelectionBulk_Test extends TestBase {
 	}
 
 	@Test void d02_viewDefContractVersionUnchanged() {
-		// Sanity: this wave must not have bumped the existing VIEW_META contract version.
-		assertEquals("3", ViewDef.CONTRACT_VERSION);
+		// Sanity: the selection/bulk-mutation opt-ins themselves never bump VIEW_META's contract version - pin
+		// whatever the current value is so a future bump elsewhere doesn't silently drift this fixture's assumption.
+		assertEquals("4", ViewDef.CONTRACT_VERSION);
 	}
 }

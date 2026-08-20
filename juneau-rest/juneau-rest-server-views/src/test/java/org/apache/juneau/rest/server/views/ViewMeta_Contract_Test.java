@@ -53,7 +53,7 @@ class ViewMeta_Contract_Test extends TestBase {
 	 */
 	private static final String EXPECTED_VIEW_META = """
 		{
-		  "contractVersion": "3",
+		  "contractVersion": "4",
 		  "id": "releases",
 		  "rowType": "Release",
 		  "dataMode": "server",
@@ -123,14 +123,17 @@ class ViewMeta_Contract_Test extends TestBase {
 			new ArrayList<>(actual.keySet()));
 	}
 
-	@Test void a03_reservedFieldsOmittedNotNull() {
+	@Test void a03_reservedOrUnsetFieldsOmittedNotNull() {
 		var json = Json.of(releasesView());
-		// "details" and "rowActions" are implemented - see f01-f04 (details) and g01-g05 (rowActions) below for
-		// their POSITIVE assertions. The remaining reserved C/D/E stubs must still be omitted entirely (not
-		// serialized as null keys).
-		for (var k : List.of("catalog", "format", "description", "pinned", "defaultVisible")) {
+		// "rowActions" is a VIEW_META wire field - see g01-g05. "details" left the sidecar (Java-only
+		// <template>); it is in a03's omitted list. "catalog"/"format"/"description" remain reserved stubs.
+		// (design doc §6.4/§6.10) not exposed by this builder at all. "pinned"/"defaultVisible" are no longer
+		// reserved stubs as of contract v4 - they are REAL nullable-wrapper fields (see h01-h04 below for their
+		// positive assertions) that are simply omitted-when-unset by this non-configurable fixture, same as
+		// "columnConfig" (the chooser opt-in this fixture never sets).
+		for (var k : List.of("catalog", "format", "description", "pinned", "defaultVisible", "columnConfig", "details")) {
 			var key = "\"" + k + "\"";
-			assertFalse(json.contains(key), () -> "Reserved field leaked into VIEW_META: " + k + "\n" + json);
+			assertFalse(json.contains(key), () -> "Reserved or unset field leaked into VIEW_META: " + k + "\n" + json);
 		}
 	}
 
@@ -391,42 +394,42 @@ class ViewMeta_Contract_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) Row-details expander: the positive assertion for the "details" key (the same positive-assertion-plus-
-	// remaining-negatives split used elsewhere for "rowActions", applied here - see a03 above for the remaining
-	// negative list with "details" now removed from it).
+	// f) Row-details expander: details is Java-only (never VIEW_META JSON), even when set.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_details_omittedWhenUnset() {
-		// The golden fixture view never calls .details(...) - confirms the new field doesn't leak when absent,
-		// and that a01/a02's frozen contract is untouched by this additive field.
 		var json = Json.of(releasesView());
 		assertFalse(json.contains("\"details\""), json);
 	}
 
-	@Test void f02_details_emittedInPinnedOrder_withExpectedShape() {
+	@Test void f02_details_neverEmittedEvenWhenSet() {
 		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
-			.details(ViewDef.DetailDef.of("owner").title("Owner"), ViewDef.DetailDef.of("createdAt").title("Created"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
 			.build();
 		var json = Json.of(v);
-		assertTrue(json.contains(
-			"\"details\":[{\"data\":\"owner\",\"title\":\"Owner\"},{\"data\":\"createdAt\",\"title\":\"Created\"}]"),
-			json);
+		assertFalse(json.contains("\"details\""), json);
+		assertFalse(json.contains("\"endpoint\""), json);
+		assertEquals("4", v.contractVersion);
 	}
 
-	@Test void f03_details_isBeforePollIntervalMs_andAfterRowClassRules_inTopLevelKeyOrder() {
+	@Test void f03_details_doesNotAffectTopLevelKeyOrder() {
 		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
 			.rowClassRule("error", Op.PRESENT, "row-flagged")
-			.details(ViewDef.DetailDef.of("owner").title("Owner"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
 			.poll(60_000L)
 			.build();
 		Map<?,?> actual = Json.to(Json.of(v), Map.class);
 		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "details", "pollIntervalMs"),
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "pollIntervalMs"),
 			new ArrayList<>(actual.keySet()));
 	}
 
-	@Test void f04_detailDefTitleDefaultsToNullWhenUnset() {
-		var d = ViewDef.DetailDef.of("owner");
+	@Test void f04_detailFieldTitleDefaultsToNullWhenUnset() {
+		var d = DetailField.of("owner");
 		assertEquals("owner", d.data);
 		assertNull(d.title);
 	}
@@ -472,16 +475,18 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertFalse(json.contains("\"onSuccess\""), json);
 	}
 
-	@Test void g04_rowActions_isAfterRowClassRules_andBeforeDetails_inTopLevelKeyOrder() {
+	@Test void g04_rowActions_isAfterRowClassRules_inTopLevelKeyOrder() {
 		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
 			.rowClassRule("error", Op.PRESENT, "row-flagged")
 			.rowActions(RowAction.create("go").endpoint("u").method(RowAction.Method.POST))
-			.details(ViewDef.DetailDef.of("owner").title("Owner"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
 			.poll(60_000L)
 			.build();
 		Map<?,?> actual = Json.to(Json.of(v), Map.class);
 		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "rowActions", "details", "pollIntervalMs"),
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "rowActions", "pollIntervalMs"),
 			new ArrayList<>(actual.keySet()));
 	}
 
@@ -506,5 +511,63 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertEquals("redraw", RowAction.OnSuccess.REDRAW.wire());
 		assertEquals("mergeRow", RowAction.OnSuccess.MERGE_ROW.wire());
 		assertEquals("navigate", RowAction.OnSuccess.NAVIGATE.wire());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// h) Column-configurator opt-in (contract v4): ViewDef.columnConfig + Column.pinned/defaultVisible/formats -
+	// each omitted from the wire when unset (a03 above pins the non-configurable negative); this section pins the
+	// POSITIVE configurable shape and proves the nullable-wrapper omit-when-unset behavior field-by-field.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_columnConfig_omittedWhenUnset() {
+		// The golden fixture view never calls .columnConfig(...) - confirms the new field doesn't leak when absent,
+		// and that a01/a02's frozen contract is untouched by this additive field.
+		var json = Json.of(releasesView());
+		assertFalse(json.contains("\"columnConfig\""), json);
+	}
+
+	@Test void h02_configurableView_serializesColumnConfigAndColumnFlags() {
+		// Each column sets exactly ONE of the three new nullable fields, proving they're independently omitted
+		// (not a package-deal) - and none of them ever emits as a primitive "false" when unset on a sibling column.
+		var v = ViewDef.create("releases")
+			.rowType(Release.class)
+			.dataMode(DataMode.SERVER)
+			.dataUrl("servlet:/releases/data")
+			.columns(
+				Column.of("name").title("Name").pinned(true),
+				Column.of("status").title("Status").defaultVisible(false),
+				Column.of("date").title("Date").formats("date", "ts-zulu"))
+			.columnConfig(ColumnConfig.create())
+			.build();
+		var json = Json.of(v);
+		assertTrue(json.contains(
+			"\"columns\":["
+			+ "{\"data\":\"name\",\"title\":\"Name\",\"orderable\":true,\"searchable\":true,\"pinned\":true},"
+			+ "{\"data\":\"status\",\"title\":\"Status\",\"orderable\":true,\"searchable\":true,\"defaultVisible\":false},"
+			+ "{\"data\":\"date\",\"title\":\"Date\",\"orderable\":true,\"searchable\":true,\"formats\":[\"date\",\"ts-zulu\"]}"
+			+ "]"),
+			json);
+		assertTrue(json.contains("\"columnConfig\":{}"), json);
+	}
+
+	@Test void h03_columnConfig_isTheLastWireKey_afterPollIntervalMs() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.poll(60_000L)
+			.columnConfig(ColumnConfig.create())
+			.build();
+		Map<?,?> actual = Json.to(Json.of(v), Map.class);
+		assertEquals(
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs", "columnConfig"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void h04_columnFlags_areNullableWrappers_neverEmitPrimitiveFalseWhenUnset() {
+		// pinned/defaultVisible/formats must be wrapper types left null, not primitives - a primitive boolean
+		// would emit "pinned":false/"defaultVisible":false on every column and break the omit-when-unset invariant
+		// the way the always-emitting primitive orderable/searchable fields do (contrast with c/d sections above).
+		var json = Json.of(Column.of("plain").title("Plain"));
+		assertFalse(json.contains("\"pinned\""), json);
+		assertFalse(json.contains("\"defaultVisible\""), json);
+		assertFalse(json.contains("\"formats\""), json);
 	}
 }

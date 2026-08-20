@@ -240,4 +240,134 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 			() -> "the scanner's own RED/GREEN fixture file must be excluded from the tree walk (its example "
 				+ "strings would otherwise register as false-positive sinks): " + r.sinks());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// c: juneau-config.js HTML-sink gate (innerHTML = / .html() never in the chooser)
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void c01_innerHtmlAssignment_isFlagged() {
+		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.innerHTML = name;");
+		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
+		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
+	}
+
+	@Test void c02_jqueryHtmlCall_isFlagged() {
+		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js", "$(el).html(name);");
+		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
+		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
+	}
+
+	@Test void c03_textContentAssignment_isNotFlagged() {
+		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.textContent = name; inp.value = name;");
+		assertEquals(List.of(), r.violations());
+		assertEquals(List.of(), r.sinks());
+	}
+
+	@Test void c04_commentMentionOfInnerHtml_isNotASink() {
+		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js",
+			"// never innerHTML / .html()\nel.textContent = name;\n");
+		assertEquals(List.of(), r.violations());
+		assertEquals(List.of(), r.sinks());
+	}
+
+	@Test void c05_shippedConfigJs_hasNoHtmlSinks() throws Exception {
+		var r = RawContentSinkScanner.scanConfigJs(requireModuleRoot());
+		assertEquals(List.of(), r.violations(),
+			() -> "juneau-config.js must not assign innerHTML or call .html():\n  "
+				+ String.join("\n  ", r.violations()));
+	}
+
+	@Test void c06_shippedConfigJs_hasTextContentBaseline_notVacuous() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-config.js");
+		var source = Files.readString(root.resolve(rel));
+		assertTrue(source.contains(".textContent"),
+			"juneau-config.js must paint user strings with textContent (anti-vacuous baseline)");
+		assertTrue(source.contains("paintUserText"), source);
+		var r = RawContentSinkScanner.scanConfigJs(root);
+		assertEquals(List.of(), r.sinks(),
+			() -> "the HTML-sink scan of a known-good file must be empty, not merely 'no violations': " + r.sinks());
+	}
+
+	@Test void c07_mutatingTextContentIntoInnerHtml_isFlagged() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-config.js");
+		var source = Files.readString(root.resolve(rel));
+		assertTrue(source.contains("el.textContent = value == null ? \"\" : String(value);"),
+			"paintUserText body moved - update this fixture");
+		var clean = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), source);
+		assertEquals(List.of(), clean.violations());
+		var mutated = source.replace("el.textContent = value == null ? \"\" : String(value);",
+			"el.innerHTML = value == null ? \"\" : String(value);");
+		var mutatedResult = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), mutated);
+		assertTrue(mutatedResult.violations().size() >= 1,
+			() -> "mutating paintUserText to innerHTML must be flagged: " + mutatedResult.violations());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// d: row-detail template emitter + fillDetailSlots (textContent baseline + innerHTML fixture)
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void d01_viewTableEmitter_hasNoInnerHtml_andEmitsTemplate() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "java", "org", "apache", "juneau", "rest", "server", "views", "ViewTable.java");
+		var source = Files.readString(root.resolve(rel));
+		assertTrue(source.contains("DETAIL_TEMPLATE_ATTR"), source);
+		assertTrue(source.contains("data-juneau-row-detail") || source.contains("DETAIL_TEMPLATE_ATTR"), source);
+		assertFalse(source.contains("innerHTML"), source);
+		assertTrue(source.contains("emitDetailTemplate"), source);
+	}
+
+	@Test void d02_fillDetailSlots_textContentBaseline_noHtmlSinks() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var fn = extractFunction(source, "function fillDetailSlots(");
+		assertTrue(fn.contains(".textContent"), fn);
+		assertFalse(fn.contains("innerHTML"), fn);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		assertEquals(List.of(), r.violations(), () -> "fillDetailSlots must not assign innerHTML: " + r.violations());
+		assertEquals(List.of(), r.sinks());
+	}
+
+	@Test void d03_mutatingFillDetailSlotsIntoInnerHtml_isFlagged() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var needle = "slots[i].textContent = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : \"\";";
+		assertTrue(source.contains(needle), "fillDetailSlots assignment moved - update this fixture");
+		var fn = extractFunction(source, "function fillDetailSlots(");
+		var clean = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		assertEquals(List.of(), clean.violations());
+		var mutated = fn.replace("slots[i].textContent", "slots[i].innerHTML");
+		var mutatedResult = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), mutated);
+		assertTrue(mutatedResult.violations().size() >= 1,
+			() -> "mutating fillDetailSlots to innerHTML must be flagged: " + mutatedResult.violations());
+	}
+
+	private static String extractFunction(String body, String signature) {
+		var start = body.indexOf(signature);
+		assertTrue(start >= 0, () -> "'" + signature + "' not found");
+		var i = body.indexOf('{', start);
+		var depth = 0;
+		var j = i;
+		for (; j < body.length(); j++) {
+			var c = body.charAt(j);
+			if (c == '{')
+				depth++;
+			else if (c == '}') {
+				depth--;
+				if (depth == 0) { j++; break; }
+			} else if (c == '"' || c == '\'' || c == '`') {
+				var quote = c;
+				j++;
+				while (j < body.length() && body.charAt(j) != quote) {
+					if (body.charAt(j) == '\\')
+						j++;
+					j++;
+				}
+			}
+		}
+		return body.substring(start, j);
+	}
 }

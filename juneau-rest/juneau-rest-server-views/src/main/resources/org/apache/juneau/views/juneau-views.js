@@ -38,7 +38,7 @@
 
 	// Contract-version handshake: MUST equal ViewDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION (single source
 	// of truth on the server).  The initializer fails loud when a sidecar's contractVersion differs.
-	const JUNEAU_VIEW_CONTRACT_VERSION = "3";
+	const JUNEAU_VIEW_CONTRACT_VERSION = "4";
 
 	// The typed action-result contract version (ActionResult.CONTRACT_VERSION on the server).  This is a SEPARATE,
 	// independently-versioned wire contract from VIEW_META - it is deliberately NOT aliased to
@@ -56,6 +56,9 @@
 	 * withheld, per the two-independent-opt-ins separability guarantee (HIGH-5).
 	 */
 	const JUNEAU_BULK_CONTRACT_VERSION = "1";
+
+	/** Independently-versioned row-detail expand envelope ({@code RowDetailDef.CONTRACT_VERSION}). */
+	const JUNEAU_ROW_DETAIL_CONTRACT_VERSION = "1";
 
 	/**
 	 * TODO-428 selection/bulk DOM attribute names - MUST equal ViewTable's constants of the same names
@@ -77,6 +80,7 @@
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
 	NS.ACTION_RESULT_CONTRACT_VERSION = JUNEAU_ACTION_RESULT_CONTRACT_VERSION;
 	NS.BULK_CONTRACT_VERSION = JUNEAU_BULK_CONTRACT_VERSION;
+	NS.ROW_DETAIL_CONTRACT_VERSION = JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -102,15 +106,42 @@
 	}
 
 	/**
+	 * The live DataTables index of `dataKey` in the ACTUAL `opts.columns` array.  Delegates to slice 4's
+	 * {@code JuneauViews.config.dtIndex} when juneau-config.js is present; otherwise walks the same array
+	 * (the no-config-js seam still has to fix the selection-offset off-by-one).  Returns -1 when absent.
+	 */
+	function liveDtIndex(dataKey, optsColumns) {
+		if (NS.config && typeof NS.config.dtIndex === "function")
+			return NS.config.dtIndex(dataKey, optsColumns);
+		if (!optsColumns) return -1;
+		for (let i = 0; i < optsColumns.length; i++)
+			if (optsColumns[i] && optsColumns[i].data === dataKey) return i;
+		return -1;
+	}
+
+	/**
 	 * Resolves `defaultOrder` [{data,dir}] to DataTables' positional `order` [[colIndex, dir]] by field name (m2) -
 	 * indices are not pinned server-side, so client-side column reorder stays correct.  Unknown fields are skipped.
+	 * When `optsColumns` (the ACTUAL DataTables column array) is supplied, indices go through {@link #liveDtIndex}
+	 * so a leading selection column cannot off-by-one the ordered field; a now-hidden ordered column falls back
+	 * to the first visible orderable catalog column.
 	 */
-	function resolveOrder(viewDef) {
+	function resolveOrder(viewDef, optsColumns) {
 		const out = [];
 		(viewDef.defaultOrder || []).forEach(function (e) {
-			const idx = columnIndexOf(viewDef, e.data);
-			if (idx >= 0) out.push([idx, e.dir]);
+			const idx = optsColumns ? liveDtIndex(e.data, optsColumns) : columnIndexOf(viewDef, e.data);
+			if (idx < 0) return;
+			if (optsColumns && optsColumns[idx] && optsColumns[idx].visible === false) return;
+			out.push([idx, e.dir]);
 		});
+		if (out.length === 0 && optsColumns) {
+			for (let i = 0; i < optsColumns.length; i++) {
+				const c = optsColumns[i];
+				if (!c || c.data == null || c.visible === false || c.orderable === false) continue;
+				out.push([i, "asc"]);
+				break;
+			}
+		}
 		return out;
 	}
 
@@ -142,18 +173,53 @@
 	}
 
 	/**
-	 * Projects a VIEW_META `details` field list ([{data,title}]) against one row's data into label/value pairs
-	 * for the row-details expander (client-rendered from row data by default - this never issues a request of
-	 * its own) - pure, DOM-free. A field whose row value is null/undefined renders as "" rather than
-	 * "null"/"undefined", matching evaluateRowClassRules' null-safety above.
+	 * Whether `endpoint` is a same-origin path template: no `://`, no `//` prefix, no scheme colon-before-slash,
+	 * and no `..` path segments.  Mirrors {@code RowDetailDef.isSafeDetailEndpoint}.
 	 */
-	function buildDetailFields(details, rowData) {
-		const out = [];
-		(details || []).forEach(function (d) {
-			const v = rowData ? rowData[d.data] : undefined;
-			out.push({ title: d.title || d.data, value: (v == null ? "" : String(v)) });
-		});
-		return out;
+	function isSafeDetailUrl(url) {
+		if (url == null || String(url).trim() === "") return false;
+		const s = String(url);
+		if (s.indexOf("://") >= 0) return false;
+		if (s.indexOf("//") === 0) return false;
+		const colon = s.indexOf(":");
+		const slash = s.indexOf("/");
+		if (colon >= 0 && (slash < 0 || colon < slash)) return false;
+		if (/(^|\/)\.\.(\/|$)/.test(s)) return false;
+		return true;
+	}
+
+	/**
+	 * Substitutes `{id}` via encodeURIComponent and re-checks the result is still a same-origin path.
+	 * Returns null when the template or the substituted URL is unsafe.
+	 */
+	function substituteDetailUrl(template, id) {
+		if (!isSafeDetailUrl(template) || id == null) return null;
+		const encoded = encodeURIComponent(String(id));
+		const url = String(template).split("{id}").join(encoded);
+		return isSafeDetailUrl(url) ? url : null;
+	}
+
+	/** Coalesce key for an in-flight expand GET: row id + expander generation. */
+	function detailCoalesceKey(rowId, generation) {
+		return String(rowId) + ":" + generation;
+	}
+
+	/** Scalar expand-JSON values become strings; objects/arrays/undefined become "". */
+	function scalarFieldValue(v) {
+		if (v == null) return "";
+		const t = typeof v;
+		if (t === "string" || t === "number" || t === "boolean") return String(v);
+		return "";
+	}
+
+	/** Loud-handshake check for the expand GET envelope. */
+	function detailContractOk(body, expected) {
+		return !!(body && typeof body === "object" && body.contractVersion === (expected || JUNEAU_ROW_DETAIL_CONTRACT_VERSION));
+	}
+
+	/** True when a settled GET must be discarded (child gone or generation mismatch). */
+	function shouldDropDetailPayload(childShown, expectedGen, actualGen) {
+		return !childShown || expectedGen !== actualGen;
 	}
 
 	/**
@@ -466,6 +532,7 @@
 		if (col.title != null) def.title = col.title;
 		if (col.name != null) def.name = col.name;
 		if (col.className != null) def.className = col.className;
+		if (col.visible === false) def.visible = false;
 
 		if (col.render) {
 			const spec = deps.parseRenderId(col.render);
@@ -501,8 +568,12 @@
 	 */
 	function buildOptions(viewDef, deps) {
 		const opts = {};
-		opts.columns = (viewDef.columns || []).map(function (c) { return buildColumnDef(c, deps); });
-		opts.order = resolveOrder(viewDef);
+		// Catalog-column defs only.  Selection / actions / order are assembled AFTERWARDS from the full
+		// `opts.columns` array (see assembleFullColumnArray) so a leading selection column cannot off-by-one
+		// defaultOrder or the ribbon/search indices.  `deps.effectiveColumns` is the post-chooser model when
+		// present; otherwise the sidecar catalog.
+		const catalog = (deps && deps.effectiveColumns) || viewDef.columns || [];
+		opts.columns = catalog.map(function (c) { return buildColumnDef(c, deps); });
 		// Text polish (design doc §4.B): the native search input's label is blanked (searchPlaceholder replaces it
 		// as the input's placeholder attribute); the native length-select's language.lengthMenu is deliberately NOT
 		// set here - Task 9's paging pill hides and replaces that control entirely, so there is nothing left for it
@@ -535,26 +606,11 @@
 			});
 			// Marks every row as expandable when the view declares a details field list - initDetailsExpander
 			// (below) delegates its click listener off this class rather than binding one handler per row.
-			if (viewDef.details && viewDef.details.length) {
+			if (deps.hasRowDetail) {
 				rowEl.className += (rowEl.className ? " " : "") + "juneau-view-detail-row";
 			}
 		};
 
-		// A declared rowActions list appends ONE synthetic, non-orderable/non-searchable trailing column whose
-		// cell is the per-row action trigger.  initTable(...) appends the matching <th> to <thead> before booting
-		// DataTables so column and header counts stay in step.  The action BEHAVIOR (modal/form/typed result) is a
-		// later wave (TODO-416); this column only surfaces the menu trigger and routes its click to submitRowAction.
-		if (viewDef.rowActions && viewDef.rowActions.length) {
-			opts.columns.push({
-				data: null,
-				orderable: false,
-				searchable: false,
-				className: "juneau-view-actions-cell",
-				defaultContent: "",
-				title: "",
-				render: function () { return actionTriggerMarkup(); }
-			});
-		}
 		return opts;
 	}
 
@@ -771,16 +827,19 @@
 	 * (`ctx.onColumnSearchToggle`, wired by the caller, toggles visibility).  Returns null when the table has no
 	 * `<thead>` (defensive; every juneau view table has one).
 	 */
-	function buildColumnSearchRow(table, viewDef, dt) {
+	function buildColumnSearchRow(table, optsColumns, dt) {
 		const thead = table.querySelector("thead");
 		if (!thead) return null;
 		const row = document.createElement("tr");
 		row.className = "juneau-view-columnsearch-row";
 		row.setAttribute("data-testid", "col-search-row");
 		row.style.display = "none";
-		(viewDef.columns || []).forEach(function (col, idx) {
+		(optsColumns || []).forEach(function (col, idx) {
 			const th = document.createElement("th");
-			if (col.searchable !== false) {
+			const isSynthetic = !col || col.data == null;
+			const isHidden = col && col.visible === false;
+			if (isHidden) th.style.display = "none";
+			if (!isSynthetic && !isHidden && col.searchable !== false) {
 				const input = document.createElement("input");
 				input.type = "text";
 				input.className = "juneau-view-columnsearch-input";
@@ -857,6 +916,35 @@
 		return !!table.querySelector("tbody tr[data-juneau-inflight]");
 	}
 
+	/** Whether `table` currently has a row streaming an async job (`data-juneau-job` marker). */
+	function hasJobRow(table) {
+		return !!table.querySelector("tbody tr[data-juneau-job]");
+	}
+
+	/**
+	 * Visible Apply-refused notice (teardown step 1).  Never queued; the user re-applies once in-flight / job
+	 * markers clear.  Painted with {@code textContent} only.
+	 */
+	function renderReinitNotice(table, message) {
+		const host = table.parentNode || table;
+		let el = host.querySelector ? host.querySelector(".juneau-view-reinit-notice") : null;
+		if (!el) {
+			el = document.createElement("div");
+			el.className = "juneau-view-reinit-notice";
+			el.setAttribute("role", "alert");
+			el.setAttribute("data-testid", "reinit-notice");
+			if (table.parentNode) table.parentNode.insertBefore(el, table);
+			else table.insertBefore(el, table.firstChild);
+		}
+		el.textContent = message;
+	}
+
+	function clearReinitNotice(table) {
+		const host = table.parentNode || table;
+		const el = host.querySelector ? host.querySelector(".juneau-view-reinit-notice") : null;
+		if (el && el.parentNode) el.parentNode.removeChild(el);
+	}
+
 	/**
 	 * Builds the per-table staleness-indicator chip (per-table, never a single page-level chip).  Starts in the
 	 * neutral "fresh" state; {@link #initPolling} drives every subsequent update.
@@ -870,40 +958,98 @@
 	}
 
 	/**
-	 * Builds the row-details expander's detail-body element (client-rendered from row data by default).  A
-	 * plain `<dl>` of label/value pairs built with `textContent` only (never `innerHTML`) - the values are row
-	 * data, not markup, so this stays safe by construction without needing an escaper (unlike a raw-markup
-	 * panel content feature, which is a different, still-gated, question). There is no server-render path wired
-	 * here; see the class comment atop `ViewDef.java`'s row-details-expander section for why that path is
-	 * deferred rather than designed twice.
+	 * Locates the server-emitted {@code <template data-juneau-row-detail>} sibling of `table`.
 	 */
-	function buildDetailPanel(fields) {
-		const dl = document.createElement("dl");
-		dl.className = "juneau-view-detail-panel";
-		dl.setAttribute("data-testid", "detail-panel");
-		fields.forEach(function (f) {
-			const dtEl = document.createElement("dt");
-			dtEl.textContent = f.title;
-			const ddEl = document.createElement("dd");
-			ddEl.textContent = f.value;
-			dl.appendChild(dtEl);
-			dl.appendChild(ddEl);
-		});
-		return dl;
+	function findRowDetailTemplate(table) {
+		const parent = table && table.parentNode;
+		return parent && parent.querySelector ? parent.querySelector("template[data-juneau-row-detail]") : null;
+	}
+
+	/**
+	 * Fills `[data-juneau-field]` slots from an expand JSON `fields` map via textContent only.  Unknown keys are
+	 * dropped; missing keys and non-scalars become empty.
+	 */
+	function fillDetailSlots(root, fields) {
+		if (!root || !root.querySelectorAll) return;
+		const map = fields && typeof fields === "object" ? fields : {};
+		const slots = root.querySelectorAll("[data-juneau-field]");
+		for (let i = 0; i < slots.length; i++) {
+			const key = slots[i].getAttribute("data-juneau-field");
+			slots[i].textContent = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+		}
+	}
+
+	/** Enables or disables ActionRef buttons; SafeAction.COLLAPSE is never touched. */
+	function setActionRefEnabled(root, enabled) {
+		if (!root || !root.querySelectorAll) return;
+		const buttons = root.querySelectorAll("[data-juneau-action]");
+		for (let i = 0; i < buttons.length; i++)
+			buttons[i].disabled = !enabled;
+	}
+
+	/** Hides ActionRef buttons (404/500 / contract-fail closed) while leaving COLLAPSE in place. */
+	function hideActionRefs(root) {
+		if (!root || !root.querySelectorAll) return;
+		const buttons = root.querySelectorAll("[data-juneau-action]");
+		for (let i = 0; i < buttons.length; i++) {
+			buttons[i].disabled = true;
+			buttons[i].hidden = true;
+		}
+	}
+
+	function findRowActionById(viewDef, id) {
+		const actions = viewDef && viewDef.rowActions ? viewDef.rowActions : [];
+		for (let i = 0; i < actions.length; i++)
+			if (actions[i] && actions[i].id === id) return actions[i];
+		return null;
 	}
 
 	/**
 	 * Wires the row-details expander via DataTables' native child-row API.  ONE delegated click listener on
-	 * `table` (rather than one per row) toggles a client-rendered detail panel, built from that row's OWN data
-	 * (no extra network request), for whichever `.juneau-view-detail-row` `<tr>` was clicked; `createdRow` (see
-	 * `buildOptions` above) is what applies that marker class.
+	 * `table` toggles expand, collapse, and ActionRef submit.  Expand GETs the stamped URL; ActionRef buttons
+	 * stay disabled until 2xx + loud contract OK.  SafeAction.COLLAPSE works during loading and after failure.
 	 *
-	 * <p>"Collapse on redraw" needs no extra code here: DataTables' child-row API does not survive a `draw.dt` -
-	 * a sort, page change, search, or poll tick rebuilds `<tbody>` (and any open child `<tr>` along with it),
-	 * which IS the accepted behavior, not an oversight.
+	 * <p>"Collapse on redraw" needs no extra code here: DataTables' child-row API does not survive a `draw.dt`.
 	 */
-	function initDetailsExpander(table, dt, viewDef) {
+	function initDetailsExpander(table, ctx, viewDef) {
+		if (!ctx._detailInflight) ctx._detailInflight = new Map();
+		if (!ctx._detailGeneration) ctx._detailGeneration = new WeakMap();
+
 		table.addEventListener("click", function (e) {
+			const dt = ctx.dataTable;
+			if (!dt) return;
+			const tpl = findRowDetailTemplate(table);
+			if (!tpl) return;
+
+			const safeBtn = e.target && e.target.closest ? e.target.closest("[data-juneau-safe=\"collapse\"]") : null;
+			if (safeBtn) {
+				e.preventDefault();
+				e.stopPropagation();
+				const panel = safeBtn.closest(".juneau-view-detail-panel");
+				const parentTr = panel && panel._juneauParentTr;
+				if (!parentTr) return;
+				const row = dt.row(parentTr);
+				if (row && row.child && row.child.isShown()) {
+					row.child.hide();
+					parentTr.classList.remove("juneau-view-detail-open");
+				}
+				return;
+			}
+
+			const actionBtn = e.target && e.target.closest ? e.target.closest("[data-juneau-action]") : null;
+			if (actionBtn) {
+				e.preventDefault();
+				e.stopPropagation();
+				if (actionBtn.disabled || actionBtn.hidden) return;
+				const panel = actionBtn.closest(".juneau-view-detail-panel");
+				const parentTr = panel && panel._juneauParentTr;
+				if (!parentTr) return;
+				const action = findRowActionById(viewDef, actionBtn.getAttribute("data-juneau-action"));
+				if (!action) return;
+				submitRowAction(action, table, parentTr, ctx);
+				return;
+			}
+
 			const tr = e.target && e.target.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
 			if (!tr) return;
 			const row = dt.row(tr);
@@ -911,10 +1057,107 @@
 			if (row.child.isShown()) {
 				row.child.hide();
 				tr.classList.remove("juneau-view-detail-open");
-			} else {
-				row.child(buildDetailPanel(buildDetailFields(viewDef.details, row.data()))).show();
-				tr.classList.add("juneau-view-detail-open");
+				return;
 			}
+			expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
+		});
+	}
+
+	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row) {
+		const gen = (ctx._detailGeneration.get(tr) || 0) + 1;
+		ctx._detailGeneration.set(tr, gen);
+		const rowId = tr.getAttribute(ROW_ID_ATTR);
+		const key = detailCoalesceKey(rowId, gen);
+
+		const panel = document.createElement("div");
+		panel.className = "juneau-view-detail-panel";
+		panel.setAttribute("data-testid", "detail-panel");
+		panel.setAttribute("data-juneau-detail-state", "loading");
+		panel._juneauParentTr = tr;
+		panel.appendChild(tpl.content.cloneNode(true));
+		const loading = document.createElement("p");
+		loading.className = "juneau-view-detail-status";
+		loading.textContent = "Loading…";
+		panel.appendChild(loading);
+		row.child(panel).show();
+		tr.classList.add("juneau-view-detail-open");
+
+		function stillCurrent() {
+			return ctx._detailGeneration.get(tr) === gen && row.child.isShown();
+		}
+
+		function settleMap() {
+			if (ctx._detailInflight) ctx._detailInflight.delete(key);
+		}
+
+		function failClosed(kind, message) {
+			if (!stillCurrent()) { settleMap(); return; }
+			hideActionRefs(panel);
+			panel.setAttribute("data-juneau-detail-state", kind);
+			loading.textContent = message;
+			settleMap();
+		}
+
+		if (rowId == null || String(rowId) === "") {
+			failClosed("error", "this row has no stable id");
+			return;
+		}
+
+		const url = substituteDetailUrl(tpl.getAttribute("data-juneau-detail-url"), rowId);
+		if (!url) {
+			failClosed("error", "detail URL is not a same-origin path template");
+			return;
+		}
+
+		function handleEnvelope(env) {
+			if (!stillCurrent()) { settleMap(); return; }
+			if (!env) {
+				failClosed("error", "the detail request could not be completed");
+				return;
+			}
+			if (env.status === 404) {
+				failClosed("empty", "this row is gone");
+				return;
+			}
+			if (!env.ok) {
+				failClosed("error", "the detail request was refused (" + env.status + ")");
+				return;
+			}
+			const body = parseJsonSafe(env.text);
+			const expected = tpl.getAttribute("data-juneau-detail-contract") || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
+			if (!detailContractOk(body, expected)) {
+				const m = "Juneau view '" + (viewDef && viewDef.id ? viewDef.id : "") +
+					"': row-detail contract version mismatch (page='" +
+					(body && body.contractVersion) + "', runtime='" + expected + "').";
+				error(m);
+				renderBanner(table, m);
+				failClosed("error", m);
+				return;
+			}
+			if (shouldDropDetailPayload(row.child.isShown(), gen, ctx._detailGeneration.get(tr))) {
+				settleMap();
+				return;
+			}
+			fillDetailSlots(panel, body.fields);
+			setActionRefEnabled(panel, true);
+			panel.setAttribute("data-juneau-detail-state", "ok");
+			if (loading.parentNode) loading.parentNode.removeChild(loading);
+			settleMap();
+		}
+
+		const inflight = ctx._detailInflight;
+		let req = inflight.get(key);
+		if (!req) {
+			req = fetch(url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
+				.then(function (resp) {
+					return readBodyText(resp).then(function (text) {
+						return { status: resp.status, ok: resp.ok, text: text };
+					});
+				});
+			inflight.set(key, req);
+		}
+		req.then(handleEnvelope).catch(function () {
+			failClosed("error", "the detail request could not be completed");
 		});
 	}
 
@@ -930,7 +1173,7 @@
 	 * "error" state without touching the last-success timestamp, so a frozen clock and a broken poll never look
 	 * identical to a healthy one (the whole point of this function).
 	 */
-	function initPolling(table, dt, viewDef, indicator) {
+	function initPolling(table, dt, viewDef, indicator, ctx) {
 		const intervalMs = clampPollInterval(viewDef.pollIntervalMs);
 		const state = { lastSuccessAt: Date.now(), failed: false };
 
@@ -949,10 +1192,14 @@
 			dt.ajax.reload(null, false);
 		}
 
-		setInterval(poll, intervalMs);
+		if (ctx && ctx._pollTimers) {
+			ctx._pollTimers.forEach(function (id) { clearInterval(id); });
+		}
+		const pollId = setInterval(poll, intervalMs);
 		// The visible age ("5s ago" -> "6s ago" ...) must keep advancing between polls, independent of the data-
 		// fetch cadence - a short, fixed, network-free tick keeps the label honest without any extra ajax cost.
-		setInterval(render, 1000);
+		const renderId = setInterval(render, 1000);
+		if (ctx) ctx._pollTimers = [pollId, renderId];
 		render();
 	}
 
@@ -1017,8 +1264,12 @@
 	 * `submitActionDialog`) treats it as already-authoritative once stamped.
 	 */
 	function stampRowId(rowEl, rowData, rowIdField) {
-		if (!rowIdField) return;
-		const id = rowIdOf(rowData, rowIdField);
+		var id;
+		if (rowIdField) id = rowIdOf(rowData, rowIdField);
+		if (id == null && rowData) {
+			if (rowData.id != null) id = rowData.id;
+			else if (rowData.name != null) id = rowData.name;
+		}
 		if (id != null) rowEl.setAttribute(ROW_ID_ATTR, String(id));
 	}
 
@@ -1057,7 +1308,7 @@
 	 * page, or a TODO-426 poll tick).  Select-all is scoped to the CURRENT draw's rows only (the ones actually on
 	 * screen) - consistent with the drop rule, it can never reach into an off-screen page.
 	 */
-	function initSelection(table, dt, selectionState, ctx) {
+	function initSelection(table, ctx) {
 		function currentRowIds() {
 			const ids = [];
 			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
@@ -1067,10 +1318,23 @@
 		}
 
 		function refresh() {
-			if (ctx && ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
+			if (ctx && ctx.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
 		}
 
 		table.addEventListener("change", function (e) {
+			const selectionState = ctx.selectionState;
+			if (!selectionState) return;
+			const allCb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-all-checkbox") : null;
+			if (allCb) {
+				Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+					const id = tr.getAttribute(ROW_ID_ATTR);
+					const cb = tr.querySelector(".juneau-view-select-checkbox");
+					if (cb) cb.checked = allCb.checked;
+					if (allCb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
+				});
+				refresh();
+				return;
+			}
 			const cb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-checkbox") : null;
 			if (!cb) return;
 			const tr = cb.closest("tr");
@@ -1080,34 +1344,40 @@
 			refresh();
 		});
 
-		if (table.getAttribute(SELECT_ALL_ATTR) === "1") {
-			const th = table.querySelector(".juneau-view-select-th");
-			if (th) {
-				const allCb = document.createElement("input");
-				allCb.type = "checkbox";
-				allCb.className = "juneau-view-select-all-checkbox";
-				allCb.setAttribute("aria-label", "Select all rows on this page");
-				allCb.addEventListener("change", function () {
-					Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
-						const id = tr.getAttribute(ROW_ID_ATTR);
-						const cb = tr.querySelector(".juneau-view-select-checkbox");
-						if (cb) cb.checked = allCb.checked;
-						if (allCb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
-					});
-					refresh();
-				});
-				th.appendChild(allCb);
-			}
-		}
+		// Select-all checkbox element is (re)created per build in ensureSelectAllCheckbox - the listener above is
+		// delegated off `table` so it is bound exactly once (listener-lifetime class (a)).
+	}
 
-		// The off-screen-id-drop rule (Q2/MED-11): every redraw prunes the live selection down to ids still
-		// actually on screen, so a poll/sort/page tick can never leave a bulk mutate targeting a row the user can
-		// no longer see.
+	/**
+	 * Per-instance off-screen-id-drop prune (listener-lifetime class (b)).  Re-registered against the freshly
+	 * constructed DataTables instance on every buildTable; dies with {@code dt.destroy()}.
+	 */
+	function bindSelectionPrune(table, ctx) {
+		const dt = ctx.dataTable;
+		if (!dt || !ctx.selectionState) return;
 		dt.on("draw.dt", function () {
-			const pruned = pruneSelection(Array.from(selectionState.selected), currentRowIds());
+			const selectionState = ctx.selectionState;
+			const ids = [];
+			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+				ids.push(tr.getAttribute(ROW_ID_ATTR));
+			});
+			const pruned = pruneSelection(Array.from(selectionState.selected), ids);
 			selectionState.selected = new Set(pruned);
-			refresh();
+			if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
 		});
+	}
+
+	/** Ensures the select-all checkbox exists in the (possibly restored) selection header cell.  No listener. */
+	function ensureSelectAllCheckbox(table) {
+		if (table.getAttribute(SELECT_ALL_ATTR) !== "1") return;
+		const th = table.querySelector(".juneau-view-select-th");
+		if (!th) return;
+		if (th.querySelector(".juneau-view-select-all-checkbox")) return;
+		const allCb = document.createElement("input");
+		allCb.type = "checkbox";
+		allCb.className = "juneau-view-select-all-checkbox";
+		allCb.setAttribute("aria-label", "Select all rows on this page");
+		th.appendChild(allCb);
 	}
 
 	/**
@@ -1445,6 +1715,7 @@
 			if (st.settled) return;
 			st.settled = true;
 			es.close();
+			if (ctx && ctx._jobSources) ctx._jobSources.delete(es);
 			setRowJobRunning(tr, false);
 			clearJobProgress(tr);
 			if (result) finishJobFromResult(action, table, tr, ctx, result);
@@ -1459,7 +1730,10 @@
 		es.addEventListener("error", function () {
 			finish(null, { outcome: "unknown", message: "the progress stream was interrupted" });
 		});
-		if (ctx) ctx._jobSource = es;
+		if (ctx) {
+			if (!ctx._jobSources) ctx._jobSources = new Set();
+			ctx._jobSources.add(es);
+		}
 		return es;
 	}
 
@@ -1592,12 +1866,16 @@
 	/** Shows a dialog overlay for an action and wires its confirm (submit) / cancel (dismiss) buttons. */
 	function showActionDialog(modal, action, table, tr, ctx) {
 		const ui = buildDialogOverlay(modal, action);
-		function close() { if (ui.backdrop.parentNode) ui.backdrop.parentNode.removeChild(ui.backdrop); }
+		function close() {
+			if (ui.backdrop.parentNode) ui.backdrop.parentNode.removeChild(ui.backdrop);
+			if (ctx && ctx._actionDialog === ui.backdrop) ctx._actionDialog = null;
+		}
 		ui.cancelBtn.addEventListener("click", close);
 		ui.confirmBtn.addEventListener("click", function () {
 			close();
 			submitActionDialog(modal, action, table, tr, ctx);
 		});
+		if (ctx) ctx._actionDialog = ui.backdrop;
 		document.body.appendChild(ui.backdrop);
 		return ui;
 	}
@@ -1675,7 +1953,7 @@
 	 * a row's `.juneau-view-action-trigger` toggles a menu of that view's rowActions for that row.  Mirrors the
 	 * details-expander's delegated-listener pattern above.
 	 */
-	function initRowActions(table, dt, viewDef, ctx) {
+	function initRowActions(table, viewDef, ctx) {
 		table.addEventListener("click", function (e) {
 			const trigger = e.target && e.target.closest ? e.target.closest(".juneau-view-action-trigger") : null;
 			if (!trigger) return;
@@ -1689,11 +1967,243 @@
 		});
 	}
 
-	// NOSONAR javascript:S3776 -- sequential wiring of one view table's DataTables instance, ribbon, paging pill,
-	// column search, details expander, and polling; several of these steps and their exact call order are pinned
-	// verbatim by the wiring canary tests below `functionBody(body, "function initTable(")`, so splitting them
-	// into further helpers would reduce test/code locality without reducing real complexity.
-	function initTable(table) {
+	function removeEl(el) {
+		if (el && el.parentNode) el.parentNode.removeChild(el);
+	}
+
+	function closeActionDialog(ctx) {
+		const el = ctx && ctx._actionDialog;
+		if (el && el.parentNode) el.parentNode.removeChild(el);
+		if (ctx) ctx._actionDialog = null;
+		Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-dialog-backdrop"), removeEl);
+	}
+
+	function stripGeneratedDom(table) {
+		const wrapper = table.parentNode;
+		if (wrapper) {
+			Array.prototype.forEach.call(wrapper.querySelectorAll(".juneau-view-toolbar-row"), removeEl);
+		}
+		Array.prototype.forEach.call(table.querySelectorAll("thead tr.juneau-view-columnsearch-row"), removeEl);
+		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-actions-th"), removeEl);
+		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-select-th"), removeEl);
+	}
+
+	/**
+	 * Restores the server-emitted header shell after destroy: re-create the leading selection {@code <th>}
+	 * (ViewTable emitted it on first paint; the server will not re-run) then append the trailing actions
+	 * {@code <th>} as JS does today.
+	 */
+	function restoreHeaderShell(table, ctx) {
+		if (ctx.selectionState) {
+			const headRow = table.querySelector("thead tr");
+			if (headRow && !headRow.querySelector(".juneau-view-select-th")) {
+				const selTh = document.createElement("th");
+				selTh.className = "juneau-view-select-th";
+				headRow.insertBefore(selTh, headRow.firstChild);
+			}
+		}
+		if (ctx.viewDef.rowActions && ctx.viewDef.rowActions.length) {
+			appendActionsHeaderCell(table);
+		}
+	}
+
+	function teardownTable(table, ctx) {
+		if (ctx._pollTimers) {
+			ctx._pollTimers.forEach(function (id) { clearInterval(id); });
+			ctx._pollTimers = [];
+		}
+		if (ctx._jobSources) {
+			ctx._jobSources.forEach(function (es) {
+				try { if (es && es.close) es.close(); } catch (e) { /* already closed */ }
+			});
+			ctx._jobSources.clear();
+		}
+		closeActionDialog(ctx);
+		closeRowActionMenus(table);
+		if (ctx.dataTable) {
+			try { ctx.dataTable.destroy(); } catch (e) { /* already destroyed */ }
+			ctx.dataTable = null;
+		}
+		stripGeneratedDom(table);
+	}
+
+	/**
+	 * Catalog → effective columns.  When juneau-config.js is present, delegates to
+	 * {@code computeEffectiveColumns}; otherwise the no-op seam (default catalog columns, all visible).
+	 */
+	function resolveEffectiveColumns(viewDef, savedView) {
+		if (NS.config && typeof NS.config.computeEffectiveColumns === "function")
+			return NS.config.computeEffectiveColumns(viewDef.columns || [], savedView);
+		return (viewDef.columns || []).map(function (c) {
+			const copy = {};
+			for (const k in c) if (Object.hasOwn(c, k)) copy[k] = c[k];
+			copy.visible = true;
+			return copy;
+		});
+	}
+
+	/**
+	 * Builds the FULL {@code opts.columns} array FIRST =
+	 * {@code [selection?] + effectiveColumns(including hidden, in order) + [actions?]}, THEN derives
+	 * {@code opts.order} from {@link #liveDtIndex}.  Do not unshift selection after {@link #resolveOrder}.
+	 */
+	function assembleFullColumnArray(opts, viewDef, ctx) {
+		const catalogCols = opts.columns || [];
+		const cols = [];
+		if (ctx.selectionState) {
+			const sel = buildSelectionColumnDef(ctx.selectionState);
+			sel._juneau = "selection";
+			cols.push(sel);
+		}
+		catalogCols.forEach(function (c) { cols.push(c); });
+		if (viewDef.rowActions && viewDef.rowActions.length) {
+			cols.push({
+				data: null,
+				_juneau: "actions",
+				orderable: false,
+				searchable: false,
+				className: "juneau-view-actions-cell",
+				defaultContent: "",
+				title: "",
+				render: function () { return actionTriggerMarkup(); }
+			});
+		}
+		opts.columns = cols;
+		const priorCreatedRow = opts.createdRow;
+		opts.createdRow = function (rowEl, rowData, index) {
+			if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
+			const field = ctx.selectionState ? ctx.selectionState.rowIdField : null;
+			stampRowId(rowEl, rowData, field);
+		};
+		opts.order = resolveOrder(viewDef, opts.columns);
+	}
+
+	function constructTable(table, viewDef, effectiveColumns, ctx) {
+		const $ = window.jQuery;
+		restoreHeaderShell(table, ctx);
+		clearReinitNotice(table);
+
+		const deps = {
+			parseRenderId: NS.parseRenderId,
+			resolveRenderer: NS.resolveRenderer,
+			warn: warn,
+			effectiveColumns: effectiveColumns,
+			hasRowDetail: !!findRowDetailTemplate(table),
+			ribbonParams: function () {
+				return NS.ribbon?.ribbonToQueryParams
+					? NS.ribbon.ribbonToQueryParams(viewDef, ctx.activeState, ctx.optsColumns)
+					: {};
+			}
+		};
+
+		const opts = buildOptions(viewDef, deps);
+		assembleFullColumnArray(opts, viewDef, ctx);
+		ctx.optsColumns = opts.columns;
+		ctx.effectiveColumns = effectiveColumns;
+
+		// DataTables treats column.title as HTML.  When juneau-config.js is present, strip titles from the
+		// opts array and paint header text with textContent after boot so a user label override cannot XSS.
+		if (NS.config && typeof NS.config.sanitizeColumnTitlesForDataTables === "function")
+			NS.config.sanitizeColumnTitlesForDataTables(opts.columns);
+
+		ctx.dataTable = $(table).DataTable(opts);
+		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
+			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
+		if (ctx._detailInflight) {
+			ctx.dataTable.on("draw.dt", function () {
+				if (ctx._detailInflight) ctx._detailInflight.clear();
+			});
+		}
+		ctx.redraw = function () {
+			const d = ctx.dataTable;
+			if (!d) return;
+			if (d.ajax) d.ajax.reload(); else d.draw();
+		};
+
+		if (ctx.selectionState) {
+			ensureSelectAllCheckbox(table);
+			bindSelectionPrune(table, ctx);
+			if (ctx._bulkDef)
+				ctx.bulkToolbar = buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState);
+			else
+				ctx.bulkToolbar = null;
+		}
+
+		const pill = buildPagingPill(viewDef, ctx);
+		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
+		const columnSearchRow = buildColumnSearchRow(table, ctx.optsColumns, ctx.dataTable);
+		ctx.onColumnSearchToggle = function (on) {
+			if (!columnSearchRow) return;
+			columnSearchRow.style.display = on ? "" : "none";
+			if (!on) {
+				Array.prototype.forEach.call(columnSearchRow.querySelectorAll("input"), function (inp) { inp.value = ""; });
+				if (ctx.dataTable) ctx.dataTable.columns().search("").draw();
+			}
+		};
+
+		const wrapper = table.parentNode;
+		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
+
+		if (toolbarRow) {
+			const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
+			if (leftCluster) {
+				if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
+				else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
+			}
+		}
+
+		if (viewDef.pollIntervalMs && toolbarRow) {
+			const staleness = buildStalenessIndicator();
+			const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
+			if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
+			initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
+		}
+
+		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
+		if (viewDef.columnConfig && NS.config && typeof NS.config.mountChooser === "function")
+			NS.config.mountChooser(table, ctx, toolbarRow);
+	}
+
+	/**
+	 * Re-runnable DataTable constructor.  First construct skips teardown; Apply / programmatic rebuild runs the
+	 * 9-step teardown first.  Single-slot latest-wins mutex: a second Apply while running replaces
+	 * {@code ctx._reinitPending} and never starts a concurrent teardown.
+	 */
+	function buildTable(table, viewDef, effectiveColumns, ctx) {
+		const $ = window.jQuery;
+		if (!$?.fn?.DataTable) return { ok: false, reason: "no-datatables" };
+
+		if (ctx._reinitRunning) {
+			ctx._reinitPending = { viewDef: viewDef, effectiveColumns: effectiveColumns };
+			return { ok: true, coalesced: true };
+		}
+
+		const already = !!( $?.fn?.dataTable?.isDataTable && $.fn.dataTable.isDataTable(table) );
+		if (already) {
+			if (hasInFlightRow(table) || hasJobRow(table)) {
+				renderReinitNotice(table, "Finish the in-progress action first.");
+				return { ok: false, reason: "in-flight" };
+			}
+			ctx._reinitRunning = true;
+			teardownTable(table, ctx);
+		}
+
+		try {
+			constructTable(table, viewDef, effectiveColumns, ctx);
+			return { ok: true };
+		} finally {
+			if (already) {
+				ctx._reinitRunning = false;
+				if (ctx._reinitPending) {
+					const pending = ctx._reinitPending;
+					ctx._reinitPending = null;
+					buildTable(table, pending.viewDef, pending.effectiveColumns, ctx);
+				}
+			}
+		}
+	}
+
+	function beginInitTable(table) {
 		const $ = window.jQuery;
 		const id = table.getAttribute("data-juneau-view");
 		const sidecar = document.getElementById("juneau-view:" + id);
@@ -1708,89 +2218,52 @@
 			return;
 		}
 
-		// FAIL-LOUD contract-version handshake (§6.2): a mismatch means the served JS is stale vs the JSON - refuse.
 		if (viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
 			const m = "Juneau view '" + id + "': contract version mismatch (page='" + viewDef.contractVersion +
 				"', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION + "'). Refusing to init - reload to clear a stale cached script.";
 			error(m);
 			renderBanner(table, m);
-			return;   // refuse to init rather than silently mis-render
+			return;
 		}
 
 		if (!$?.fn?.DataTable) {
 			warn("Juneau view '" + id + "': jQuery/DataTables not present; cannot bind.");
 			return;
 		}
-		if ($.fn.dataTable.isDataTable(table)) return;   // idempotent
 
 		const activeState = NS.ribbon?.loadPersistedState ? NS.ribbon.loadPersistedState(viewDef) : {};
-
-		const deps = {
-			parseRenderId: NS.parseRenderId,
-			resolveRenderer: NS.resolveRenderer,
-			warn: warn,
-			ribbonParams: function () {
-				return NS.ribbon?.ribbonToQueryParams ? NS.ribbon.ribbonToQueryParams(viewDef, activeState) : {};
-			}
-		};
-
-		const opts = buildOptions(viewDef, deps);
-
-		// TODO-428: row selection is detected PURELY from the DOM attribute ViewTable stamped (SELECT_ATTR) -
-		// never from viewDef/VIEW_META (R2 guard).  When present, a synthetic LEADING selection column is
-		// unshifted (mirroring how a declared rowActions list appends a synthetic TRAILING one below) and every
-		// created row is additionally stamped with its stable id.
 		const selectionState = hasSelection(table)
 			? { selected: new Set(), rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR) }
 			: null;
-		if (selectionState) {
-			opts.columns.unshift(buildSelectionColumnDef(selectionState));
-			const priorCreatedRow = opts.createdRow;
-			opts.createdRow = function (rowEl, rowData, index) {
-				if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
-				stampRowId(rowEl, rowData, selectionState.rowIdField);
-			};
-		}
 
-		// A declared rowActions list added a synthetic trailing column in buildOptions; append its matching <th>
-		// BEFORE booting DataTables so header and column counts agree (DataTables errors on a mismatch).
-		if (viewDef.rowActions && viewDef.rowActions.length) {
-			appendActionsHeaderCell(table);
-		}
-
-		const dt = $(table).DataTable(opts);
-
-		// A declared `details` field list makes every row expandable.
-		if (viewDef.details && viewDef.details.length) {
-			initDetailsExpander(table, dt, viewDef);
-		}
-
-		const pill = buildPagingPill(viewDef, { table: table, dataTable: dt });
-
-		// Hoisted above the `NS.ribbon.build` call (rather than scoped inside it) because the columnSearchToggle
-		// button's click handler reads `ctx.onColumnSearchToggle` at CLICK time, not at build time - as long as
-		// this same object is later given that callback (below), the button already wired to it works correctly
-		// regardless of which happens first.
 		const ctx = {
 			table: table,
-			dataTable: dt,
+			viewDef: viewDef,
+			dataTable: null,
 			activeState: activeState,
+			selectionState: selectionState,
 			columnSearchOn: false,
-			redraw: function () { dt.ajax ? dt.ajax.reload() : dt.draw(); }
+			_jobSources: new Set(),
+			_pollTimers: [],
+			_reinitPending: null,
+			_reinitRunning: false,
+			redraw: function () {
+				const d = ctx.dataTable;
+				if (!d) return;
+				if (d.ajax) d.ajax.reload(); else d.draw();
+			}
 		};
+		table.__juneauCtx = ctx;
 
-		// A declared rowActions list wires the per-row action menu + fail-closed CSRF submit (delegated listener).
+		if (findRowDetailTemplate(table)) {
+			initDetailsExpander(table, ctx, viewDef);
+		}
 		if (viewDef.rowActions && viewDef.rowActions.length) {
-			initRowActions(table, dt, viewDef, ctx);
+			initRowActions(table, viewDef, ctx);
 		}
 
-		// TODO-428: selection wiring (checkbox toggle, select-all, off-screen-id-drop on every draw.dt) is wired
-		// whenever selection was declared - completely independent of whether bulk mutation was ALSO declared.
-		// The bulk toolbar itself (a SEPARATE, independent opt-in - hasBulk(...)) is only ever built INSIDE this
-		// same `if (selectionState)` branch, so a selection-only table (e.g. selectable-for-export) has no code
-		// path that can reach it (HIGH-5's compile/DOM-shape separability guarantee).
 		if (selectionState) {
-			initSelection(table, dt, selectionState, ctx);
+			initSelection(table, ctx);
 			if (hasBulk(table)) {
 				const bulkDef = readBulkDef(id);
 				if (!bulkDef) {
@@ -1801,51 +2274,53 @@
 						bulkDef.contractVersion + "', runtime='" + JUNEAU_BULK_CONTRACT_VERSION + "'); bulk mutation withheld.";
 					error(ctx._bulkError);
 				} else {
-					// Selection remains fully usable (e.g. for export) even when bulk mutation is withheld above -
-					// only the toolbar this branch builds is gated on a healthy sidecar.
-					ctx.bulkToolbar = buildBulkToolbar(bulkDef, table, ctx, selectionState);
+					ctx._bulkDef = bulkDef;
 				}
 			}
 		}
 
-		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
-
-		const columnSearchRow = buildColumnSearchRow(table, viewDef, dt);
-		ctx.onColumnSearchToggle = function (on) {
-			if (!columnSearchRow) return;
-			columnSearchRow.style.display = on ? "" : "none";
-			if (!on) {
-				Array.prototype.forEach.call(columnSearchRow.querySelectorAll("input"), function (inp) { inp.value = ""; });
-				dt.columns().search("").draw();
-			}
-		};
-
-		// One unified top-toolbar row (IRS reference layout) - LEFT the unified paging ribbon, RIGHT [search,
-		// ribbon], all sitting ABOVE the table as a single row (buildToolbarRow(...) owns the left/right split).
-		// Paging exists in exactly this one place - there is no second, right-side paging control any more.
-		const wrapper = table.parentNode;
-		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
-
-		// The bulk toolbar (or its withheld-sidecar error) is inserted into the LEFT cluster, after the paging
-		// pill, as a follow-up DOM step - mirroring the staleness-indicator insertion below, which is likewise a
-		// post-hoc addition rather than a buildToolbarRow(...) parameter (keeping that function's own
-		// signature/tests untouched).
-		if (toolbarRow) {
-			const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
-			if (leftCluster) {
-				if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
-				else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
-			}
+		function go(saved) {
+			const effective = resolveEffectiveColumns(viewDef, saved);
+			buildTable(table, viewDef, effective, ctx);
 		}
 
-		// A declared pollIntervalMs gets its own per-table staleness chip, inserted at the front of the RIGHT
-		// toolbar cluster (ahead of search/ribbon) without touching buildToolbarRow's own signature/tests.
-		if (viewDef.pollIntervalMs && toolbarRow) {
-			const staleness = buildStalenessIndicator();
-			const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
-			if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
-			initPolling(table, dt, viewDef, staleness);
+		if (viewDef.columnConfig && NS.config && typeof NS.config.resolveActiveView === "function")
+			return NS.config.resolveActiveView(table, viewDef).then(go);
+		go(null);
+	}
+
+	/**
+	 * ALWAYS returns a thenable.  Overlapping calls while {@code data-juneau-init-pending} is set return the SAME
+	 * in-flight promise (not a fresh resolve, not a second init).  Flag + stash are cleared on settle
+	 * (success OR failure).
+	 */
+	function initTable(table) {
+		if (table.__juneauInitPromise) return table.__juneauInitPromise;
+		const $ = window.jQuery;
+		if ($?.fn?.dataTable?.isDataTable(table)) return Promise.resolve();
+
+		let proceed, fail;
+		const p = new Promise(function (res, rej) { proceed = res; fail = rej; });
+		table.__juneauInitPromise = p;
+		table.setAttribute("data-juneau-init-pending", "1");
+
+		function settleOk(v) {
+			table.removeAttribute("data-juneau-init-pending");
+			table.__juneauInitPromise = null;
+			proceed(v);
 		}
+		function settleErr(err) {
+			table.removeAttribute("data-juneau-init-pending");
+			table.__juneauInitPromise = null;
+			fail(err);
+		}
+
+		try {
+			Promise.resolve(beginInitTable(table)).then(settleOk, settleErr);
+		} catch (e) {
+			settleErr(e);
+		}
+		return p;
 	}
 
 	/**
@@ -1881,9 +2356,16 @@
 		buildOptions: buildOptions,
 		initAll: initAll,
 		// Previously private - exposed so juneau-pages.js can init one specific view's table on demand (lazy,
-		// on first tab activation).  Already idempotent (isDataTable guard below), so re-entry from the page
+		// on first tab activation).  Always returns a thenable; overlapping calls coalesce on the in-flight
+		// promise (data-juneau-init-pending).  Already idempotent (isDataTable guard), so re-entry from the page
 		// runtime after the DOMContentLoaded scan has already run is always safe.
 		initTable: initTable,
+		buildTable: buildTable,
+		liveDtIndex: liveDtIndex,
+		assembleFullColumnArray: assembleFullColumnArray,
+		restoreHeaderShell: restoreHeaderShell,
+		teardownTable: teardownTable,
+		beginInitTable: beginInitTable,
 		// visual-parity pass: exposed for manual verification.
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
@@ -1894,11 +2376,21 @@
 		clampPollInterval: clampPollInterval,
 		formatStalenessAge: formatStalenessAge,
 		hasInFlightRow: hasInFlightRow,
+		hasJobRow: hasJobRow,
 		buildStalenessIndicator: buildStalenessIndicator,
 		initPolling: initPolling,
 		// Row-details expander - exposed for manual verification.
-		buildDetailFields: buildDetailFields,
-		buildDetailPanel: buildDetailPanel,
+		JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION,
+		isSafeDetailUrl: isSafeDetailUrl,
+		substituteDetailUrl: substituteDetailUrl,
+		scalarFieldValue: scalarFieldValue,
+		fillDetailSlots: fillDetailSlots,
+		findRowDetailTemplate: findRowDetailTemplate,
+		detailCoalesceKey: detailCoalesceKey,
+		detailContractOk: detailContractOk,
+		shouldDropDetailPayload: shouldDropDetailPayload,
+		setActionRefEnabled: setActionRefEnabled,
+		hideActionRefs: hideActionRefs,
 		initDetailsExpander: initDetailsExpander,
 		// Row actions + fail-closed CSRF submit - exposed for manual verification and the fail-closed canary.
 		DEFAULT_CSRF_HEADER: DEFAULT_CSRF_HEADER,
@@ -1954,6 +2446,8 @@
 		selectionCellMarkup: selectionCellMarkup,
 		buildSelectionColumnDef: buildSelectionColumnDef,
 		initSelection: initSelection,
+		bindSelectionPrune: bindSelectionPrune,
+		ensureSelectAllCheckbox: ensureSelectAllCheckbox,
 		readBulkDef: readBulkDef,
 		buildBulkToolbar: buildBulkToolbar,
 		executeBulkAction: executeBulkAction,

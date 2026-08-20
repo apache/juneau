@@ -26,6 +26,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.*;
 
 /**
  * Builds the HTML delivery shell for a {@link PageDef} &mdash; the self-contained, class-based tab/sub-tab shell
@@ -180,6 +181,15 @@ public class PageTable {
 	 */
 	public static final String PARENT_TAB_ATTR = "data-parent-tab";
 
+	/**
+	 * Attribute the resolved saved-views REST base is stamped onto on this page shell so every nested
+	 * {@code table[data-juneau-view]} can find it via {@code closest('[data-juneau-saved-views]')}.
+	 *
+	 * <p>
+	 * Same spelling as {@link ViewTable#SAVED_VIEWS_ATTR} (the shared contract with {@code juneau-config.js}).
+	 */
+	public static final String SAVED_VIEWS_ATTR = ViewTable.SAVED_VIEWS_ATTR;
+
 	private PageTable() {}
 
 	/**
@@ -190,7 +200,19 @@ public class PageTable {
 	 * 	referenced view, and the PAGE_META sidecar.
 	 */
 	public static Div of(PageDef pageDef) {
-		return of(MarshallingContext.DEFAULT, pageDef);
+		return of(MarshallingContext.DEFAULT, pageDef, null);
+	}
+
+	/**
+	 * Builds the page shell, stamping the request's resolved saved-views REST base onto the page shell so
+	 * nested view tables can discover it via {@code closest(...)}.
+	 *
+	 * @param req The current request, supplying the URI resolver.  Must not be <jk>null</jk>.
+	 * @param pageDef The built page definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code [data-juneau-page]} shell and {@link #SAVED_VIEWS_ATTR}.
+	 */
+	public static Div of(RestRequest req, PageDef pageDef) {
+		return of(MarshallingContext.DEFAULT, pageDef, SavedViewsMixin.resolvedBaseUrl(req));
 	}
 
 	/**
@@ -203,6 +225,20 @@ public class PageTable {
 	 * 	referenced view, and the PAGE_META sidecar.
 	 */
 	public static Div of(MarshallingContext ctx, PageDef pageDef) {
+		return of(ctx, pageDef, null);
+	}
+
+	/**
+	 * Builds the page shell, optionally stamping a pre-resolved saved-views REST base onto the page shell.
+	 *
+	 * @param ctx The marshalling context passed through to each child {@code ViewTable.of(...)} call.  Must not be
+	 * 	<jk>null</jk>.
+	 * @param pageDef The built page definition.  Must not be <jk>null</jk>.
+	 * @param savedViewsBase The already-resolved saved-views REST base, or <jk>null</jk>/blank to stamp none.
+	 * @return A new {@link Div} carrying the {@code [data-juneau-page]} shell and optional {@link #SAVED_VIEWS_ATTR}.
+	 */
+	public static Div of(MarshallingContext ctx, PageDef pageDef, String savedViewsBase) {
+		pageDef.validate();
 		var id = pageDef.id;
 		var tabs = pageDef.tabs == null ? List.<Tab>of() : pageDef.tabs;
 
@@ -222,7 +258,10 @@ public class PageTable {
 		var json = escapeForScript(Json.of(buildMeta(pageDef)));
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
-		return div(tabBar, panels, sidecar).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
+		var shell = div(tabBar, panels, sidecar).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
+		if (savedViewsBase != null && ! savedViewsBase.isBlank())
+			shell.attr(SAVED_VIEWS_ATTR, savedViewsBase);
+		return shell;
 	}
 
 	/**

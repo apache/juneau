@@ -143,16 +143,24 @@ class TablePolling_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("state.failed = false"), fnBody);
 	}
 
-	@Test void b07_initTable_onlyWiresPollingWhenViewDeclaresAPollInterval() throws Exception {
+	@Test void b07_constructTable_onlyWiresPollingWhenViewDeclaresAPollInterval() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var initBody = functionBody(body, "function initTable(");
+		var initBody = functionBody(body, "function constructTable(");
 		assertTrue(initBody.contains("if (viewDef.pollIntervalMs && toolbarRow)"), initBody);
 		assertTrue(initBody.contains("buildStalenessIndicator()"), initBody);
-		assertTrue(initBody.contains("initPolling(table, dt, viewDef, staleness)"), initBody);
-		// Inserted into the RIGHT toolbar cluster, ahead of search/ribbon - buildToolbarRow's own signature/tests
-		// are untouched (this insertion happens as a follow-up DOM step, not a buildToolbarRow(...) parameter).
+		assertTrue(initBody.contains("initPolling(table, ctx.dataTable, viewDef, staleness, ctx)"), initBody);
 		assertTrue(initBody.contains(".juneau-view-toolbar-right"), initBody);
 		assertTrue(initBody.contains("insertBefore(staleness, rightCluster.firstChild)"), initBody);
+	}
+
+	@Test void b08_initPolling_storesIntervalIds_andClearsLeftovers() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fnBody = functionBody(body, "function initPolling(");
+		assertTrue(fnBody.contains("clearInterval(id)"), fnBody);
+		assertTrue(fnBody.contains("ctx._pollTimers = [pollId, renderId]"), fnBody);
+		var teardown = functionBody(body, "function teardownTable(");
+		assertTrue(teardown.contains("clearInterval(id)"), teardown);
+		assertTrue(teardown.contains("ctx._pollTimers"), teardown);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

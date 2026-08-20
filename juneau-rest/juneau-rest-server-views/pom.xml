@@ -37,6 +37,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-datatables</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -133,10 +133,11 @@ class PageServerWiring_Test extends TestBase {
 	// The host also exposes the full asset set a real page would load (ViewsMixin, including the new pages.js).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_hostServesAllFiveAssetsIncludingPagesJs() throws Exception {
+	@Test void b01_hostServesAllAssetsIncludingPagesAndConfig() throws Exception {
 		for (var path : List.of(
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
-				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.PAGES_JS_PATH))
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.PAGES_JS_PATH,
+				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH))
 			c.get(path).run().assertStatus(200);
 	}
 }

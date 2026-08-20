@@ -26,6 +26,7 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.filter.*;
 
 import jakarta.servlet.http.*;
@@ -118,6 +119,39 @@ public class ViewTable {
 	/** Prefix of the bulk-actions sidecar {@code <script>} element id: {@code juneau-view-bulk:<viewId>}. */
 	public static final String BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
 
+	/**
+	 * Attribute the resolved, context-path-aware saved-views REST base is stamped onto on the wrapper
+	 * {@code <div>} (standalone tables) so {@code juneau-config.js} can locate it via
+	 * {@code table.closest('[data-juneau-saved-views]')}.
+	 *
+	 * <p>
+	 * The mount is fixed at {@link SavedViewsMixin#SAVED_VIEWS_PREFIX}; only the resolved URL varies with the
+	 * servlet context path.  Page-embedded tables find the same attribute on the enclosing {@link PageTable}
+	 * shell instead.  Absent/blank means the JS server-provider is unavailable for this table (fail closed).
+	 */
+	public static final String SAVED_VIEWS_ATTR = "data-juneau-saved-views";
+
+	/** Marker attribute on the row-detail {@code <template>} sibling of the view table. */
+	public static final String DETAIL_TEMPLATE_ATTR = "data-juneau-row-detail";
+
+	/** Attribute carrying {@link RowDetailDef#CONTRACT_VERSION} on the row-detail template. */
+	public static final String DETAIL_CONTRACT_ATTR = "data-juneau-detail-contract";
+
+	/** Attribute carrying the server-stamped expand GET path template on the row-detail template. */
+	public static final String DETAIL_URL_ATTR = "data-juneau-detail-url";
+
+	/** Attribute carrying a {@link DetailSection#id} on each {@code <section>}. */
+	public static final String DETAIL_SECTION_ATTR = "data-juneau-detail-section";
+
+	/** Attribute carrying a {@link DetailField#data} key on each empty field slot. */
+	public static final String DETAIL_FIELD_ATTR = "data-juneau-field";
+
+	/** Attribute carrying an {@link org.apache.juneau.rest.server.widgets.ActionRef} id on a write button. */
+	public static final String DETAIL_ACTION_ATTR = "data-juneau-action";
+
+	/** Attribute carrying a {@link org.apache.juneau.rest.server.widgets.SafeAction#wire()} token. */
+	public static final String DETAIL_SAFE_ATTR = "data-juneau-safe";
+
 	private ViewTable() {}
 
 	/**
@@ -161,7 +195,7 @@ public class ViewTable {
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef) {
-		return of(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req));
+		return of(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req));
 	}
 
 	/**
@@ -179,7 +213,7 @@ public class ViewTable {
 	 * 	JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows) {
-		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req));
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), null, null, savedViewsBase(req));
 	}
 
 	/**
@@ -205,7 +239,7 @@ public class ViewTable {
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, SelectionDef selection) {
 		if (selection == null)
 			throw iaex("selection must not be null; use one of the other of(...) overloads for a table with no selection.");
-		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null);
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null, savedViewsBase(req));
 	}
 
 	/**
@@ -230,7 +264,8 @@ public class ViewTable {
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, BulkMutateDef bulkMutate) {
 		if (bulkMutate == null)
 			throw iaex("bulkMutate must not be null; use the SelectionDef overload for selection without bulk mutation.");
-		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), bulkMutate.selection(), bulkMutate);
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), bulkMutate.selection(), bulkMutate,
+			savedViewsBase(req));
 	}
 
 	/**
@@ -325,6 +360,33 @@ public class ViewTable {
 	 */
 	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
 			SelectionDef selection, BulkMutateDef bulkMutate) {
+		return of(ctx, viewDef, rows, csrfToken, selection, bulkMutate, null);
+	}
+
+	/**
+	 * Builds the view-table shell, optionally stamping a CSRF token, selection, bulk-mutate, AND a resolved
+	 * saved-views REST base onto the wrapper {@code <div>}.
+	 *
+	 * <p>
+	 * A non-blank {@code savedViewsBase} is stamped into {@link #SAVED_VIEWS_ATTR} on the wrapper (not the
+	 * {@code <table>}) so page-embedded tables still discover a page-shell stamp via {@code closest(...)}
+	 * without this emitter having to thread a per-child request into {@link PageTable}.
+	 *
+	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param csrfToken The CSRF token to embed, or <jk>null</jk>/blank to embed none.
+	 * @param selection The selection opt-in, or <jk>null</jk> for none. When {@code bulkMutate} is non-<jk>null</jk>,
+	 * 	must be either <jk>null</jk> or exactly {@code bulkMutate.selection()}.
+	 * @param bulkMutate The bulk-mutate opt-in, or <jk>null</jk> for none.
+	 * @param savedViewsBase The already-resolved saved-views REST base, or <jk>null</jk>/blank to stamp none.
+	 * @return A new {@link Div} carrying the table, sidecars, and optional {@link #SAVED_VIEWS_ATTR} stamp.
+	 * @throws IllegalArgumentException If {@code selection} and {@code bulkMutate} are both non-<jk>null</jk> but
+	 * 	{@code selection} is not {@code bulkMutate.selection()}.
+	 */
+	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
+			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase) {
+		viewDef.validate();
 		if (bulkMutate != null) {
 			if (selection != null && selection != bulkMutate.selection())
 				throw iaex("selection must be exactly bulkMutate.selection() when both are supplied; "
@@ -384,6 +446,8 @@ public class ViewTable {
 
 		var children = new ArrayList<>();
 		children.add(table);
+		if (viewDef.details != null)
+			children.add(emitDetailTemplate(viewDef));
 
 		// Bulk-mutate opt-in: its OWN independently-versioned sidecar (BulkMutateDef.CONTRACT_VERSION), never
 		// merged into VIEW_META - a version bump here can never force a ViewDef.CONTRACT_VERSION bump (R2).
@@ -395,7 +459,76 @@ public class ViewTable {
 		}
 
 		children.add(sidecar);
-		return div(children.toArray());
+		var wrapper = div(children.toArray());
+		if (savedViewsBase != null && ! savedViewsBase.isBlank())
+			wrapper.attr(SAVED_VIEWS_ATTR, savedViewsBase);
+		return wrapper;
+	}
+
+	/**
+	 * Emits the one {@code <template data-juneau-row-detail>} sibling: empty field slots, {@link ActionRef}
+	 * buttons initially disabled, {@link org.apache.juneau.rest.server.widgets.SafeAction#COLLAPSE} enabled.
+	 * Labels are HtmlBuilder text children (never poured in as markup).
+	 */
+	private static Template emitDetailTemplate(ViewDef viewDef) {
+		var d = viewDef.details;
+		var sections = new ArrayList<>();
+		for (var s : d.sections) {
+			var kids = new ArrayList<>();
+			kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
+				.class_("juneau-view-detail-section-title"));
+			if (s.actions != null && s.actions.items != null && !s.actions.items.isEmpty())
+				kids.add(emitActionBar(s.actions, viewDef.rowActions));
+			var fieldSlots = new ArrayList<>();
+			if (s.fields != null) {
+				for (var f : s.fields) {
+					fieldSlots.add(div(
+						div(f.title == null || f.title.isBlank() ? f.data : f.title)
+							.class_("juneau-view-detail-field-title"),
+						div().attr(DETAIL_FIELD_ATTR, f.data).class_("juneau-view-detail-field-value")
+					).class_("juneau-view-detail-field"));
+				}
+			}
+			kids.add(div(fieldSlots.toArray())
+				.class_("juneau-view-detail-fields")
+				.attr("style", "grid-template-columns:repeat(" + s.columns + ",minmax(0,1fr))"));
+			sections.add(section(kids.toArray())
+				.attr(DETAIL_SECTION_ATTR, s.id)
+				.class_("juneau-view-detail-section"));
+		}
+		return template()
+			.attr(DETAIL_TEMPLATE_ATTR, "1")
+			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
+			.attr(DETAIL_URL_ATTR, d.endpoint)
+			.children(sections.toArray());
+	}
+
+	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {
+		var buttons = new ArrayList<>();
+		for (var item : bar.items) {
+			if (item instanceof org.apache.juneau.rest.server.widgets.ActionRef ar) {
+				var label = actionLabel(ar.id, rowActions);
+				buttons.add(button("button", label)
+					.attr(DETAIL_ACTION_ATTR, ar.id)
+					.attr("class", "juneau-view-detail-action")
+					.disabled(true));
+			} else if (item instanceof org.apache.juneau.rest.server.widgets.SafeAction sa) {
+				buttons.add(button("button", sa.label())
+					.attr(DETAIL_SAFE_ATTR, sa.wire())
+					.attr("class", "juneau-view-detail-action juneau-view-detail-safe"));
+			}
+		}
+		return div(buttons.toArray()).class_("juneau-view-detail-actions");
+	}
+
+	private static String actionLabel(String id, List<RowAction> rowActions) {
+		if (rowActions != null) {
+			for (var a : rowActions) {
+				if (a != null && id.equals(a.id) && a.label != null && !a.label.isBlank())
+					return a.label;
+			}
+		}
+		return id;
 	}
 
 	/** Reads the boundary-stamped CSRF token off the request, or {@code null} when absent. */
@@ -404,6 +537,16 @@ public class ViewTable {
 			return null;
 		var v = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
 		return v == null ? null : v.toString();
+	}
+
+	/**
+	 * Resolves the saved-views REST base when {@code req} is a {@link RestRequest}; otherwise {@code null}
+	 * (a plain {@link HttpServletRequest} has no URI resolver).
+	 */
+	private static String savedViewsBase(HttpServletRequest req) {
+		if (!(req instanceof RestRequest rr))
+			return null;
+		return SavedViewsMixin.resolvedBaseUrl(rr);
 	}
 
 	/** Reads a column value from a row: a direct key lookup for a {@code Map}, a bean-property read otherwise. */

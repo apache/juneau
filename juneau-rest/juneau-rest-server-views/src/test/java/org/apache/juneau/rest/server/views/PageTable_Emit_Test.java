@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
@@ -204,5 +205,17 @@ class PageTable_Emit_Test extends TestBase {
 		assertTrue(html.contains("href=\"#admin/releases\""), html);
 		assertTrue(html.contains("href=\"#admin/catalog/packages\""), html);
 		assertTrue(html.contains("href=\"#admin/catalog/bundles\""), html);
+	}
+
+	@Test void c01_resolvedBase_stampsPageShell() {
+		var html = Html.of(PageTable.of(MarshallingContext.DEFAULT, leafPage(), "/ctx/juneau-saved-views"));
+		assertTrue(html.contains("data-juneau-saved-views="), html);
+		assertTrue(html.contains("/ctx/juneau-saved-views"), html);
+		assertEquals(ViewTable.SAVED_VIEWS_ATTR, PageTable.SAVED_VIEWS_ATTR);
+	}
+
+	@Test void c02_absentBase_doesNotStamp() {
+		var html = Html.of(PageTable.of(leafPage()));
+		assertFalse(html.contains("data-juneau-saved-views"), html);
 	}
 }

@@ -22,8 +22,9 @@ import org.apache.juneau.rest.server.util.*;
 
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
- * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, and the opt-in
- * {@code juneau-pages.js} tabs/sub-tabs page runtime &mdash; each at its stable path (design doc §6.1).
+ * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
+ * {@code juneau-pages.js} tabs/sub-tabs page runtime, and the opt-in {@code juneau-config.js}/
+ * {@code juneau-config.css} column-chooser runtime &mdash; each at its stable path (design doc §6.1).
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -100,6 +101,17 @@ public class ViewsMixin {
 	public static final String PAGES_JS_PATH = "/juneau-pages.js";
 
 	/**
+	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
+	 * consumer adds this {@code <script>} after {@code juneau-views.js}; a non-configurable table never loads it.
+	 */
+	public static final String CONFIG_JS_PATH = "/juneau-config.js";
+
+	/**
+	 * The URL path at which the opt-in column-chooser stylesheet is served (relative to the host mount).
+	 */
+	public static final String CONFIG_CSS_PATH = "/juneau-config.css";
+
+	/**
 	 * The frozen {@code VIEW_META} contract-version handshake constant, kept in one source of truth with the value the
 	 * model emits ({@link ViewDef#CONTRACT_VERSION}).
 	 */
@@ -122,6 +134,12 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped page runtime. */
 	static final String PAGES_JS_RESOURCE = "/org/apache/juneau/views/juneau-pages.js";
+
+	/** Classpath location of the shipped column-chooser runtime. */
+	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
+
+	/** Classpath location of the shipped column-chooser stylesheet. */
+	static final String CONFIG_CSS_RESOURCE = "/org/apache/juneau/views/juneau-config.css";
 
 	/** Content type emitted for the JavaScript assets. */
 	static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
@@ -230,12 +248,43 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser / saved-views runtime.
+	 *
+	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CONFIG_JS_PATH,
+		summary="Juneau rich-view column-chooser runtime",
+		description="First-party, opt-in JavaScript that renders the View-tab column chooser and saved-views persistence for a columnConfig view.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getConfigScript() {
+		return serve(CONFIG_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-config.css] &mdash; serve the opt-in column-chooser stylesheet.
+	 *
+	 * @return The column-chooser stylesheet as a CSS {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CONFIG_CSS_PATH,
+		summary="Juneau rich-view column-chooser stylesheet",
+		description="First-party, opt-in CSS for the View-tab column chooser dialog.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getConfigStylesheet() {
+		return serve(CONFIG_CSS_RESOURCE, CSS_CONTENT_TYPE);
+	}
+
+	/**
 	 * Returns the servlet-relative URL for a served asset, carrying a {@code ?v=<buildVersion>-<hash8>} content-
 	 * sensitive cache-buster suitable for a page's {@code head=} block (see the class Javadoc's cache-busting
 	 * section for why the buster is content- rather than purely version-keyed).
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH}).
+	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
+	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -257,7 +306,8 @@ public class ViewsMixin {
 	 *
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH}).
+	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
+	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -277,6 +327,8 @@ public class ViewsMixin {
 		if (VIEWS_CSS_PATH.equals(path)) return VIEWS_CSS_RESOURCE;
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
+		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
+		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
 		throw new IllegalArgumentException("Unknown asset path: " + path);
 	}
 }

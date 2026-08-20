@@ -44,6 +44,14 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- ActionBar / ActionRef / SafeAction — declared directly because this module references the API,
+			not just juneau-rest-server-views's (same posture as the datatables CDN constants below). -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- DataTablesMixin's jQuery/DataTables CDN URL constants, used directly by the demo page's <head>.
 			Already a transitive compile dep of juneau-rest-server-views; declared directly too since this
 			module references its API, not just juneau-rest-server-views's. -->

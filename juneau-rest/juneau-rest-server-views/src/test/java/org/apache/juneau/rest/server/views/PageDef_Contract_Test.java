@@ -113,7 +113,7 @@ class PageDef_Contract_Test extends TestBase {
 			.tabs(Tab.create("releases", "Releases").view(view("releases")))
 			.build();
 		var json = Json.of(page);
-		assertTrue(json.contains("\"contractVersion\":\"3\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"4\""), json);
 		assertTrue(json.contains("\"id\":\"admin\""), json);
 		assertTrue(json.contains("\"title\":\"Admin\""), json);
 		assertTrue(json.contains("\"tabs\":["), json);

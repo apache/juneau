@@ -129,12 +129,12 @@ class RowActionCsrf_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a) The runtime loaded, at contract version "3"
+	// a) The runtime loaded, at the current contract version
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_runtimeLoadedAtContractVersionThree() {
+	@Test void a01_runtimeLoadedAtCurrentContractVersion() {
 		assertEquals(Boolean.TRUE, report.get("hasInit"), () -> "juneau-views.js did not populate JuneauViews.init: " + report);
-		assertEquals("3", report.get("contractVersion"), () -> report.toString());
+		assertEquals("4", report.get("contractVersion"), () -> report.toString());
 		assertEquals(LoopbackBoundary.DEFAULT_CSRF_HEADER, report.get("defaultCsrfHeader"), () -> report.toString());
 		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
 	}

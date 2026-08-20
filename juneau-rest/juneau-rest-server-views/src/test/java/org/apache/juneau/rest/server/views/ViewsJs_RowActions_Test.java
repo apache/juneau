@@ -54,10 +54,10 @@ class ViewsJs_RowActions_Test extends TestBase {
 		return c.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 	}
 
-	@Test void a01_contractVersionBumpedToThree() throws Exception {
+	@Test void a01_contractVersionPinnedToCurrent() throws Exception {
 		var body = viewsJs();
-		assertTrue(body.contains("JUNEAU_VIEW_CONTRACT_VERSION = \"3\""), body);
-		assertEquals("3", ViewDef.CONTRACT_VERSION);
+		assertTrue(body.contains("JUNEAU_VIEW_CONTRACT_VERSION = \"4\""), body);
+		assertEquals("4", ViewDef.CONTRACT_VERSION);
 	}
 
 	@Test void a02_defaultCsrfHeaderMatchesTheServerBoundary() throws Exception {

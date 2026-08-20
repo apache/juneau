@@ -35,10 +35,11 @@ import org.apache.juneau.rest.server.datatables.*;
  * sidecar the server writes and the {@code juneau-views.js} runtime consumes stay wire-stable.
  *
  * <p>
- * {@code details} (the row-details expander's field list) and {@code rowActions} (the per-row action menu; see
- * {@link #rowActions(RowAction...)}) are both implemented.  The remaining reserved catalog fields ({@code catalog},
- * {@code format}, ...) are <b>not</b> part of this MVP builder and are therefore omitted from the serialized
- * contract (design doc §6.10 reserved stubs) &mdash; omitted, not emitted as {@code null}.
+ * {@code rowActions} (the per-row action menu; see {@link #rowActions(RowAction...)}) is a {@code VIEW_META} wire
+ * field.  Row-details structure ({@link #details(RowDetailDef)}) is Java-only (a {@code <template>} sibling, never
+ * a sidecar key).  The remaining reserved catalog fields ({@code catalog}, {@code format}, ...) are <b>not</b>
+ * part of this MVP builder and are therefore omitted from the serialized contract (design doc §6.10 reserved
+ * stubs) &mdash; omitted, not emitted as {@code null}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -57,16 +58,20 @@ import org.apache.juneau.rest.server.datatables.*;
  * 	<li class='jc'>{@link RibbonAction}
  * 	<li class='jc'>{@link RowClassRule}
  * 	<li class='jc'>{@link RowAction}
+ * 	<li class='jc'>{@link RowDetailDef}
+ * 	<li class='jc'>{@link ColumnConfig}
  * </ul>
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,details,pollIntervalMs")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,pollIntervalMs,columnConfig")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class ViewDef {
 
 	/** The frozen contract version.  Bumped only on a breaking wire change. */
-	public static final String CONTRACT_VERSION = "3";
+	public static final String CONTRACT_VERSION = "4";
 
 	/**
 	 * The minimum honored polling interval, in milliseconds.
@@ -169,49 +174,6 @@ public class ViewDef {
 		}
 	}
 
-	/**
-	 * A single field projected into the row-details expander's body.
-	 *
-	 * <p>
-	 * Client-rendered from the row's own already-fetched data by default &mdash; declaring a {@link #data} key
-	 * reads a value the row already carries, so expanding a row never issues a request of its own. An optional
-	 * server-render path for consumers that need it is not exposed by this type.
-	 *
-	 * @since 10.0.0
-	 */
-	@BeanType(properties="data,title")
-	public static class DetailDef {
-
-		/** The row bean-property / JSON key this field reads from the row's own data. */
-		public String data;
-
-		/** The label shown next to the value in the expanded detail panel. */
-		public String title;
-
-		/**
-		 * Creates a detail field bound to the specified row data key.
-		 *
-		 * @param data The bean-property / JSON key.  Must not be <jk>null</jk>.
-		 * @return A new {@link DetailDef}.
-		 */
-		public static DetailDef of(String data) {
-			var d = new DetailDef();
-			d.data = data;
-			return d;
-		}
-
-		/**
-		 * Sets the label shown next to the value in the expanded detail panel.
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public DetailDef title(String value) {
-			title = value;
-			return this;
-		}
-	}
-
 	/** The frozen contract version discriminator (always {@value #CONTRACT_VERSION} for this contract). */
 	public String contractVersion = CONTRACT_VERSION;
 
@@ -250,20 +212,27 @@ public class ViewDef {
 	public List<RowAction> rowActions;
 
 	/**
-	 * The row-details expander's field list; omitted from the wire when unset (no expander).
-	 *
-	 * <p>
-	 * Rendered client-side from the row's own already-fetched data by default &mdash; declaring this does not
-	 * add a request per expansion. Expanding a row does not survive a redraw: a sort, page change, search, or
-	 * {@link #poll(long)} tick collapses any expanded row.
+	 * The row-details expander definition; <b>not</b> a {@code VIEW_META} wire field (omitted from
+	 * {@code @BeanType}).  When set, {@link ViewTable} emits a {@code <template data-juneau-row-detail>} sibling
+	 * and the client expands via GET.
 	 */
-	public List<DetailDef> details;
+	public RowDetailDef details;
 
 	/**
 	 * The declared table-refresh polling interval, in milliseconds; omitted from the wire when unset (no polling).
 	 * Never below {@link #MIN_POLL_INTERVAL_MS} &mdash; see {@link #poll(long)}.
 	 */
 	public Long pollIntervalMs;
+
+	/**
+	 * The opt-in column-configurator settings; omitted from the wire when unset (no chooser).
+	 *
+	 * <p>
+	 * Presence alone &mdash; even an empty {@link ColumnConfig}) &mdash; enables the View-only column chooser for
+	 * this view; there is no separate {@code enabled} flag.  Appended last in the {@code @BeanType} order so an
+	 * existing golden fixture only ever gains a trailing key when this is set.
+	 */
+	public ColumnConfig columnConfig;
 
 	/**
 	 * The row bean type, retained (non-serialized) so {@link #build()} can auto-seed {@link #columns} from
@@ -407,18 +376,29 @@ public class ViewDef {
 	}
 
 	/**
-	 * Declares the row-details expander's field list.
+	 * Declares the row-details expander.
 	 *
 	 * <p>
-	 * Rendered client-side ({@code juneau-views.js}) from the row's own data by default; see {@link #details} for
-	 * the no-extra-request and collapse-on-redraw notes.
+	 * Structure is a server-emitted {@code <template>}; field values arrive from {@link RowDetailDef#endpoint}.
+	 * See {@link #details} &mdash; this is not a {@code VIEW_META} JSON field.
 	 *
-	 * @param value The detail fields, in display order.
+	 * @param value The row-detail definition.  May be <jk>null</jk> (no expander).
 	 * @return This object.
 	 */
-	public ViewDef details(DetailDef...value) {
-		details = l(value);
+	public ViewDef details(RowDetailDef value) {
+		details = value;
 		return this;
+	}
+
+	/**
+	 * Fail-closed bean validation.  When {@link #details} is set, delegates to
+	 * {@link RowDetailDef#validate(List)} against this view's {@link #rowActions}.
+	 *
+	 * @throws IllegalArgumentException If this view (or its nested details) is not well-formed.
+	 */
+	public void validate() {
+		if (details != null)
+			details.validate(rowActions);
 	}
 
 	/**
@@ -434,6 +414,18 @@ public class ViewDef {
 	 */
 	public ViewDef rowActions(RowAction...value) {
 		rowActions = l(value);
+		return this;
+	}
+
+	/**
+	 * Enables the View-only column chooser for this view by setting its column-configurator settings.
+	 *
+	 * @param value The column-configurator settings.  Presence alone enables the chooser; an empty
+	 * 	{@link ColumnConfig#create()} suffices.
+	 * @return This object.
+	 */
+	public ViewDef columnConfig(ColumnConfig value) {
+		columnConfig = value;
 		return this;
 	}
 

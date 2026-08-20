@@ -136,7 +136,7 @@ public class PageDef {
 		return this;
 	}
 
-	private void validate() {
+	void validate() {
 		if (tabs == null || tabs.isEmpty())
 			throw iaex("PageDef '%s' must declare at least one tab.", id);
 		var tabIds = new HashSet<String>();
@@ -145,12 +145,16 @@ public class PageDef {
 			t.validate();
 			if (!tabIds.add(t.id))
 				throw iaex("PageDef '%s': duplicate tab id '%s'.", id, t.id);
-			if (t.view != null)
+			if (t.view != null) {
 				addViewId(viewIds, t.view.id);
+				t.view.validate();
+			}
 			if (t.subtabs != null)
 				for (var s : t.subtabs)
-					if (s.view != null)
+					if (s.view != null) {
 						addViewId(viewIds, s.view.id);
+						s.view.validate();
+					}
 		}
 	}
 

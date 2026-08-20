@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
+
 import org.apache.juneau.commons.bean.*;
 
 /**
@@ -25,12 +29,15 @@ import org.apache.juneau.commons.bean.*;
  * Mirrors the DataTables column shape (the DataTables-native terms {@code orderable}/{@code searchable}/
  * {@code className} are kept) and adds a named-renderer reference ({@link #render}) plus a declarative
  * {@code {property}} URL template ({@link #href}).  Optional fields ({@code name}, {@code href}, {@code className})
- * are omitted from the wire when unset.
+ * are omitted from the wire when unset, as are the column-configurator fields ({@link #pinned},
+ * {@link #defaultVisible}, {@link #formats}) &mdash; each is a nullable wrapper type left <jk>null</jk> by default
+ * so the serializer drops it, rather than a primitive that would emit on every column.
  *
  * <p>
- * The reserved catalog/View-Settings fields ({@code format}, {@code description}, {@code pinned},
- * {@code defaultVisible}) are <b>not</b> exposed by this MVP builder and are therefore omitted from the serialized
- * contract (design doc §6.4 reserved stubs).
+ * The reserved catalog/View-Settings fields ({@code format}, {@code description}) remain <b>not</b> exposed by
+ * this MVP builder and are therefore omitted from the serialized contract (design doc §6.4 reserved stubs); the
+ * <b>selected</b> format for a column (which id from {@link #formats} is active) is persistence-only and never a
+ * wire field here.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -40,7 +47,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="data,name,title,orderable,searchable,render,href,className")
+@BeanType(properties="data,name,title,orderable,searchable,render,href,className,pinned,defaultVisible,formats")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Column {
 
@@ -67,6 +74,26 @@ public class Column {
 
 	/** Optional static CSS class on the cell (DataTables-native {@code className}). */
 	public String className;
+
+	/**
+	 * Whether this column is always visible and un-hideable in the column chooser (its checkbox renders disabled).
+	 * A pinned column may still be freely reordered.  Omitted from the wire when unset (not pinned).
+	 */
+	public Boolean pinned;
+
+	/**
+	 * Whether this column is in the initial visible set when no saved view overrides it.  Absent/<jk>null</jk> is
+	 * treated as <jk>true</jk> by the client.  Omitted from the wire when unset.
+	 */
+	public Boolean defaultVisible;
+
+	/**
+	 * The selectable P3 renderer ids (e.g. {@code "date"}, {@code "datetime"}, {@code "ts-zulu"}) offered by the
+	 * column chooser's per-column format dropdown.  Absent/<jk>null</jk> means no dropdown; the column always
+	 * renders with its fixed {@link #render}.  The chooser-selected format itself is persistence-only, never a
+	 * wire field on this bean.  Omitted from the wire when unset.
+	 */
+	public List<String> formats;
 
 	/**
 	 * Creates a column bound to the specified data key, with {@code orderable}/{@code searchable} defaulting to
@@ -166,6 +193,39 @@ public class Column {
 	 */
 	public Column className(String value) {
 		className = value;
+		return this;
+	}
+
+	/**
+	 * Marks this column as always-visible and un-hideable in the column chooser (still freely reorderable).
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public Column pinned(boolean value) {
+		pinned = value;
+		return this;
+	}
+
+	/**
+	 * Sets whether this column is in the initial visible set when no saved view overrides it.
+	 *
+	 * @param value The new value.  Absent/<jk>null</jk> is treated as <jk>true</jk> by the client.
+	 * @return This object.
+	 */
+	public Column defaultVisible(boolean value) {
+		defaultVisible = value;
+		return this;
+	}
+
+	/**
+	 * Sets the selectable P3 renderer ids offered by the column chooser's per-column format dropdown.
+	 *
+	 * @param value The renderer ids.  Can be <jk>null</jk>/omitted to unset (no dropdown).
+	 * @return This object.
+	 */
+	public Column formats(String...value) {
+		formats = l(value);
 		return this;
 	}
 }

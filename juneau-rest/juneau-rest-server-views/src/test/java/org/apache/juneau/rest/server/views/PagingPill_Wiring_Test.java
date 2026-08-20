@@ -148,7 +148,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("juneau-view-toolbar-right"), fnBody);
 		assertTrue(fnBody.contains("left.appendChild(pill)"), fnBody);
 
-		var initBody = functionBody(body, "function initTable(");
+		var initBody = functionBody(body, "function constructTable(");
 		assertTrue(initBody.contains("buildPagingPill("), initBody);
 		assertTrue(initBody.contains("buildToolbarRow(wrapper, pill, bar)"), initBody);
 	}
@@ -277,7 +277,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertFalse(body.contains("function buildCompactPagingRibbon("), body);
 		assertFalse(body.contains("juneau-view-pagingribbon"), body);
-		var initBody = functionBody(body, "function initTable(");
+		var initBody = functionBody(body, "function constructTable(");
 		assertFalse(initBody.contains("pagingRibbon"), initBody);
 	}
 
@@ -294,12 +294,12 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("row.style.display = \"none\""), fnBody);
 		assertTrue(fnBody.contains("dt.column(idx).search(input.value).draw()"), fnBody);
 		assertTrue(fnBody.contains("col.searchable !== false"), fnBody);
+		assertTrue(fnBody.contains("col.visible === false"), fnBody);
+		assertTrue(fnBody.contains("th.style.display = \"none\""), fnBody);
 
-		// initTable(...) must actually wire ctx.onColumnSearchToggle to show/hide + clear-and-redraw this row -
-		// the root cause of the previously-broken toggle was that nothing ever assigned this callback.
-		var initBody = functionBody(body, "function initTable(");
+		var initBody = functionBody(body, "function constructTable(");
 		assertTrue(initBody.contains("buildColumnSearchRow("), initBody);
 		assertTrue(initBody.contains("ctx.onColumnSearchToggle = function"), initBody);
-		assertTrue(initBody.contains("dt.columns().search(\"\").draw()"), initBody);
+		assertTrue(initBody.contains("ctx.dataTable.columns().search(\"\").draw()"), initBody);
 	}
 }

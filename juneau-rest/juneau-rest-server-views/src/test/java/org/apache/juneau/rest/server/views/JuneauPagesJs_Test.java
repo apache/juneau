@@ -114,10 +114,9 @@ class JuneauPagesJs_Test extends TestBase {
 	@Test void b01_activatePanelViews_lazyInitsFirstThenAdjustsColumnsOnReShow() throws Exception {
 		var body = pagesJs();
 		var fn = functionBody(body, "activatePanelViews");
-		// First activation: idempotent isDataTable guard decides between NS.init.initTable(...) (first time)...
 		assertTrue(fn.contains("isDataTable(t)"), fn);
 		assertTrue(fn.contains("NS.init.initTable"), fn);
-		// ...and columns.adjust() (every subsequent show - fixes sizing deferred while display:none).
+		assertTrue(fn.contains("Promise.resolve(NS.init.initTable(t))"), fn);
 		assertTrue(fn.contains("columns.adjust()"), fn);
 	}
 

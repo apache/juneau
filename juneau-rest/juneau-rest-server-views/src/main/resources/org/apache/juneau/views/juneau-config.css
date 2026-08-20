@@ -1,0 +1,138 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-config.css - View-tab column chooser (opt-in; loaded after juneau-views.css).
+ * Neutral shape/layout only, no palette color; a host's chrome.css MAY theme these same classes.
+ */
+
+.juneau-config-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.35);
+	z-index: 1100;
+}
+
+.juneau-config-dialog {
+	min-width: 32em;
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow: auto;
+	padding: 1em 1.25em;
+	border: 1px solid;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.juneau-config-title {
+	margin: 0 0 0.5em;
+	font-size: 1.1em;
+}
+
+.juneau-config-tabs {
+	display: flex;
+	gap: 0.25em;
+	margin-bottom: 0.75em;
+	border-bottom: 1px solid;
+}
+
+.juneau-config-tab {
+	border: 1px solid;
+	border-bottom: none;
+	border-radius: 4px 4px 0 0;
+	padding: 0.25em 0.75em;
+	background: transparent;
+	cursor: default;
+}
+
+.juneau-config-tab-active {
+	font-weight: 600;
+}
+
+.juneau-config-saved-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em;
+	margin-bottom: 0.5em;
+}
+
+.juneau-config-view-select {
+	min-width: 10em;
+}
+
+.juneau-config-dirty {
+	font-size: 0.85em;
+}
+
+.juneau-config-status {
+	margin: 0 0 0.5em;
+	font-size: 0.9em;
+}
+
+.juneau-config-status-error {
+	font-weight: 600;
+}
+
+.juneau-config-col-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	margin: 0.5em 0 0.75em;
+	max-height: 50vh;
+	overflow: auto;
+}
+
+.juneau-config-col-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.juneau-config-col-name {
+	min-width: 7em;
+	flex: 1 1 7em;
+}
+
+.juneau-config-col-pinned {
+	font-size: 0.8em;
+	opacity: 0.75;
+}
+
+.juneau-config-col-move {
+	padding: 0.15em 0.45em;
+}
+
+.juneau-config-col-label {
+	min-width: 8em;
+	flex: 1 1 8em;
+}
+
+.juneau-config-col-format {
+	min-width: 7em;
+}
+
+.juneau-config-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5em;
+	margin-top: 0.5em;
+}

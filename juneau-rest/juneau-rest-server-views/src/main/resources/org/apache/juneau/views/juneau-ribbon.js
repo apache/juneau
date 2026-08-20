@@ -53,17 +53,31 @@
 	/**
 	 * Maps ONE option/opt to the {name, value} request param it contributes, or null.  Column-scoped options resolve
 	 * to `columns[<index>][search][value]`; custom-param options contribute `param=value` verbatim; a valueless (or
-	 * column+param-less) option contributes nothing.  Byte-for-byte identical to the Java addOptionParam(...).
+	 * column+param-less) option contributes nothing.  Byte-for-byte identical to the Java addOptionParam(...) for
+	 * the no-selection/no-reorder catalog index; when `optsColumns` is supplied, the index is the live
+	 * {@code dtIndex} (selection offset + client reorder).
 	 */
-	function optionParam(viewDef, opt) {
+	function optionParam(viewDef, opt, optsColumns) {
 		if (opt == null || opt.value == null) return null;
 		if (opt.column != null) {
-			const idx = columnIndex(viewDef, opt.column);
+			const idx = indexForRibbonColumn(viewDef, opt.column, optsColumns);
 			if (idx < 0) return null;
 			return { name: "columns[" + idx + "][search][value]", value: opt.value };
 		}
 		if (opt.param != null) return { name: opt.param, value: opt.value };
 		return null;
+	}
+
+	/** Live {@code dtIndex} when {@code optsColumns} is the actual DataTables array; else catalog index. */
+	function indexForRibbonColumn(viewDef, columnKey, optsColumns) {
+		if (optsColumns) {
+			if (NS.config && typeof NS.config.dtIndex === "function")
+				return NS.config.dtIndex(columnKey, optsColumns);
+			for (let i = 0; i < optsColumns.length; i++)
+				if (optsColumns[i] && optsColumns[i].data === columnKey) return i;
+			return -1;
+		}
+		return columnIndex(viewDef, columnKey);
 	}
 
 	/**
@@ -73,20 +87,20 @@
 	 *   - an `optionGroup` contributes its member whose id === activeState[group.id] (the selected radio value).
 	 * refresh/columnSearchToggle/divider/export are not query-contributing and are skipped.
 	 */
-	function ribbonToQueryParams(viewDef, activeState) {
+	function ribbonToQueryParams(viewDef, activeState, optsColumns) {
 		const out = {};
 		const state = activeState || {};
 		(viewDef.ribbon || []).forEach(function (a) {
 			if (a.type === "option") {
 				if (state[a.id]) {
-					const p = optionParam(viewDef, a);
+					const p = optionParam(viewDef, a, optsColumns);
 					if (p) out[p.name] = p.value;
 				}
 			} else if (a.type === "optionGroup" && a.options) {
 				const selected = state[a.id];
 				a.options.forEach(function (o) {
 					if (o.id === selected) {
-						const p = optionParam(viewDef, o);
+						const p = optionParam(viewDef, o, optsColumns);
 						if (p) out[p.name] = p.value;
 					}
 				});
@@ -163,16 +177,36 @@
 		try { return window.localStorage; } catch (e) { return null; }
 	}
 
+	/**
+	 * Reads a ribbon-toggle value.  Prefers the slice-2 persistence SPI's synchronous {@code getItem}
+	 * (same exact keys) when {@code juneau-config.js} is loaded; falls back to localStorage so a
+	 * non-configurable table (no config.js) keeps working and the ribbon never becomes Promise-based.
+	 */
+	function storageGet(key) {
+		if (NS.persistence && typeof NS.persistence.getItem === "function")
+			return NS.persistence.getItem(key);
+		const store = safeStorage();
+		return store ? store.getItem(key) : null;
+	}
+
+	/** Writes a ribbon-toggle value; same SPI-or-localStorage split as {@link #storageGet}. */
+	function storageSet(key, value) {
+		if (NS.persistence && typeof NS.persistence.setItem === "function") {
+			NS.persistence.setItem(key, value);
+			return;
+		}
+		const store = safeStorage();
+		if (store) store.setItem(key, String(value));
+	}
+
 	function loadPersistedState(viewDef) {
 		const state = {};
-		const store = safeStorage();
-		if (!store) return state;
 		(viewDef.ribbon || []).forEach(function (a) {
 			if (a.type === "option" && a.persist) {
-				const raw = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				const raw = storageGet(ribbonStorageKey(viewDef.id, a.id));
 				if (raw != null) state[a.id] = (raw === "true");
 			} else if (a.type === "optionGroup" && a.persist) {
-				const sel = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				const sel = storageGet(ribbonStorageKey(viewDef.id, a.id));
 				if (sel != null) state[a.id] = sel;
 			}
 		});
@@ -180,8 +214,7 @@
 	}
 
 	function persist(viewDef, id, value) {
-		const store = safeStorage();
-		if (store) store.setItem(ribbonStorageKey(viewDef.id, id), String(value));
+		storageSet(ribbonStorageKey(viewDef.id, id), String(value));
 	}
 
 	/**
@@ -241,7 +274,10 @@
 						// Still registers/feature-gates each button with DataTables Buttons - but renders our own
 						// first-party icon buttons instead of delegating to Buttons' own DOM (design doc §4.A); a
 						// click programmatically triggers the SAME, already-reviewed Buttons action (design doc §7).
-						new $.fn.dataTable.Buttons(ctx.dataTable, { buttons: ids });
+						new $.fn.dataTable.Buttons(ctx.dataTable, {
+							buttons: ids,
+							exportOptions: { columns: ":visible" }
+						});
 						const exportGroupId = a.group != null ? a.group : ("__export" + idx);
 						ids.forEach(function (id) {
 							place(button(id, resolveButtonIcon(null, id), function () {
@@ -346,6 +382,7 @@
 		// pure
 		columnIndex: columnIndex,
 		optionParam: optionParam,
+		indexForRibbonColumn: indexForRibbonColumn,
 		ribbonToQueryParams: ribbonToQueryParams,
 		detectExportFeatures: detectExportFeatures,
 		resolveExportButtons: resolveExportButtons,

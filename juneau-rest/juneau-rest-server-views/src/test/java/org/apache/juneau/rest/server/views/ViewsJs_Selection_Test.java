@@ -111,20 +111,27 @@ class ViewsJs_Selection_Test extends TestBase {
 		assertTrue(fn.contains("Object.hasOwn(present, String(id))"), fn);
 	}
 
-	@Test void d02_initSelection_prunesOnEveryDraw() throws Exception {
+	@Test void d02_initSelection_listenerLifetimeSplit_pruneIsPerInstance() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function initSelection(");
-		assertTrue(fn.contains("\"draw.dt\""), fn);
-		assertTrue(fn.contains("pruneSelection(Array.from(selectionState.selected), currentRowIds())"), fn);
-		assertTrue(fn.contains("selectionState.selected = new Set(pruned)"), fn);
+		var nativeFn = functionBody(body, "function initSelection(");
+		assertTrue(nativeFn.contains("table.addEventListener(\"change\""), nativeFn);
+		assertTrue(nativeFn.contains(".juneau-view-select-checkbox"), nativeFn);
+		assertFalse(nativeFn.contains("\"draw.dt\""), nativeFn);
+
+		var pruneFn = functionBody(body, "function bindSelectionPrune(");
+		assertTrue(pruneFn.contains("\"draw.dt\""), pruneFn);
+		assertTrue(pruneFn.contains("pruneSelection(Array.from(selectionState.selected), ids)"), pruneFn);
+		assertTrue(pruneFn.contains("selectionState.selected = new Set(pruned)"), pruneFn);
 	}
 
 	@Test void e01_selectAll_isScopedToTheCurrentDrawsRowsOnly() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function initSelection(");
 		// The select-all header checkbox only ever iterates rows currently in the tbody - never an off-screen page.
-		assertTrue(fn.contains("SELECT_ALL_ATTR"), fn);
 		assertTrue(fn.contains("tbody tr[\" + ROW_ID_ATTR + \"]"), fn);
+		assertTrue(fn.contains(".juneau-view-select-all-checkbox"), fn);
+		var ensure = functionBody(body, "function ensureSelectAllCheckbox(");
+		assertTrue(ensure.contains("SELECT_ALL_ATTR"), ensure);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -134,29 +141,32 @@ class ViewsJs_Selection_Test extends TestBase {
 
 	@Test void f01_initTable_bulkIsOnlyEverConsultedInsideTheSelectionBranch() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function initTable(");
+		var fn = functionBody(body, "function beginInitTable(");
 		var selectionIdx = fn.indexOf("const selectionState = hasSelection(table)");
 		var selectionBranchIdx = fn.indexOf("if (selectionState) {");
 		var bulkCheckIdx = fn.indexOf("hasBulk(table)");
-		var bulkToolbarIdx = fn.indexOf("buildBulkToolbar(bulkDef, table, ctx, selectionState)");
 		assertTrue(selectionIdx >= 0, fn);
 		assertTrue(selectionBranchIdx > selectionIdx, fn);
 		assertTrue(bulkCheckIdx > selectionBranchIdx, fn);
-		assertTrue(bulkToolbarIdx > bulkCheckIdx, fn);
+		var construct = functionBody(body, "function constructTable(");
+		assertTrue(construct.contains("buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState)"), construct);
 	}
 
-	@Test void f02_initTable_unshiftsASyntheticLeadingSelectionColumn() throws Exception {
+	@Test void f02_buildTable_prependsASyntheticLeadingSelectionColumn_beforeResolveOrder() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function initTable(");
-		assertTrue(fn.contains("opts.columns.unshift(buildSelectionColumnDef(selectionState))"), fn);
+		var fn = functionBody(body, "function assembleFullColumnArray(");
+		assertTrue(fn.contains("buildSelectionColumnDef(ctx.selectionState)"), fn);
+		assertTrue(fn.contains("cols.push(sel)"), fn);
+		assertTrue(fn.contains("opts.order = resolveOrder(viewDef, opts.columns)"), fn);
+		assertFalse(fn.contains("opts.columns.unshift"), fn);
 	}
 
 	@Test void f03_initTable_selectionWiringIsUnconditionalOnBulkHealth() throws Exception {
 		// initSelection(...) must run whenever selection was declared, REGARDLESS of whether the bulk sidecar is
 		// present/healthy - selection (e.g. for export) must keep working even if bulk mutation is withheld.
 		var body = viewsJs();
-		var fn = functionBody(body, "function initTable(");
-		var initSelectionIdx = fn.indexOf("initSelection(table, dt, selectionState, ctx)");
+		var fn = functionBody(body, "function beginInitTable(");
+		var initSelectionIdx = fn.indexOf("initSelection(table, ctx)");
 		var bulkCheckIdx = fn.indexOf("hasBulk(table)");
 		assertTrue(initSelectionIdx >= 0 && initSelectionIdx < bulkCheckIdx, fn);
 	}
@@ -199,7 +209,7 @@ class ViewsJs_Selection_Test extends TestBase {
 
 	@Test void i01_bulkContractMismatch_isLoggedAndWithheld_selectionSurvives() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function initTable(");
+		var fn = functionBody(body, "function beginInitTable(");
 		assertTrue(fn.contains("bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION"), fn);
 		assertTrue(fn.contains("bulk mutation withheld"), fn);
 	}

@@ -25,19 +25,20 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 import org.apache.juneau.rest.server.views.RowClassRule.Op;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
-import org.apache.juneau.rest.server.views.ViewDef.DetailDef;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * Demonstrates a {@link PageDef} with a sub-tabbed tab ("Catalog" &rarr; Active/Archived) alongside a sibling plain
- * tab ("Audit Log"), served on an embedded Jetty server via {@link ExampleViewsServer}.
+ * Demonstrates a {@link PageDef} with a sub-tabbed tab ("Catalog" &rarr; Active/Archived) alongside sibling
+ * plain tabs ("Audit Log", "Alerts"), served on an embedded Jetty server via {@link ExampleViewsServer}.
  *
  * <p>
  * This is a real caller of {@link PageDef}'s {@link Tab#subtabs(Subtab...) subtabs} outside the views module's own
@@ -46,19 +47,23 @@ import org.apache.juneau.rest.server.views.*;
  * <h5 class='section'>What this dogfoods (beyond the bare sub-tab requirement):</h5>
  * <ul>
  * 	<li>The "Active" sub-tab additionally declares {@link ViewDef#poll(long) poll} and
- * 		{@link ViewDef#details(DetailDef...) details}, plus a ribbon and a {@code rowClassRule}, so this one view
- * 		exercises most of the toolkit's declarative surface in one place.
+ * 		{@link ViewDef#details(RowDetailDef) details}, plus a ribbon and a {@code rowClassRule}, so this one view
+ * 		exercises most of the toolkit's declarative surface in one place.  Expand GET
+ * 		{@code /data/widgets/active/{id}} projects owner/updatedAt/notes (the expander is the only place notes
+ * 		appear).
  * 	<li>The "Archived" sub-tab and the "Audit Log" tab are deliberately PLAIN (no ribbon/poll/details), both to
  * 		satisfy the "at least one sibling plain tab" requirement and to keep a contrasting baseline the sub-tabbed
  * 		panel's blank-panel regression would show up against.
- * 	<li>Two distinct row types ({@link Widget}, {@link AuditEntry}) are composed into one page, rather than one
- * 		type reused everywhere.
+ * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with two named sections, two mutating {@link ActionRef}s,
+ * 		{@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.
+ * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) are composed into one page,
+ * 		rather than one type reused everywhere.
  * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
  * 		{@code ProtocolQueryable}/{@code QueryableSettings} wiring) &mdash; {@code SERVER} mode is already covered
  * 		end-to-end by {@code ViewServerWiring_Test} in the views module itself, so this example does not repeat it.
  * 	<li>Each sub-tab/tab carries enough rows (see {@link #buildActiveWidgets()}/{@link #buildArchivedWidgets()}/
- * 		{@link #buildAuditLog()}) that a column-sizing regression from the eager-init defect would be visibly wrong,
- * 		not just theoretically present.
+ * 		{@link #buildAuditLog()}/{@link #buildAlerts()}) that a column-sizing regression from the eager-init defect
+ * 		would be visibly wrong, not just theoretically present.
  * </ul>
  *
  * <p>
@@ -79,13 +84,17 @@ public class ExampleViewsRest extends BasicRestServlet {
 	private static final String STATUS_ERROR = "error";
 	private static final String VALUE_ARCHIVED = "archived";
 	private static final String TITLE_OWNER = "Owner";
+	private static final String STATUS_OPEN = "open";
+	private static final String STATUS_ACKNOWLEDGED = "acknowledged";
+	private static final String STATUS_ESCALATED = "escalated";
 
 	private static final List<Widget> ACTIVE_WIDGETS = buildActiveWidgets();
 	private static final List<Widget> ARCHIVED_WIDGETS = buildArchivedWidgets();
 	private static final List<AuditEntry> AUDIT_LOG = buildAuditLog();
+	private static final List<Alert> ALERTS = buildAlerts();
 
 	//------------------------------------------------------------------------------------------------------------------
-	// The composed page: Catalog (sub-tabbed: Active/Archived) + a sibling plain Audit Log tab.
+	// The composed page: Catalog (sub-tabbed: Active/Archived) + sibling Audit Log + Alerts tabs.
 	//------------------------------------------------------------------------------------------------------------------
 
 	static PageDef page() {
@@ -95,7 +104,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 				Tab.create("catalog", "Catalog").subtabs(
 					Subtab.create("active", "Active").view(activeView()),
 					Subtab.create(VALUE_ARCHIVED, "Archived").view(archivedView())),
-				Tab.create("audit", "Audit Log").view(auditView()))
+				Tab.create("audit", "Audit Log").view(auditView()),
+				Tab.create("alerts", "Alerts").view(alertsView()))
 			.build();
 	}
 
@@ -118,11 +128,15 @@ public class ExampleViewsRest extends BasicRestServlet {
 			// Use 10s for the per-table poll (well above the 5s floor) so the
 			// staleness chip's "Xs ago" advance is easy to observe without hammering this demo endpoint.
 			.poll(10_000L)
-			// "notes" is intentionally not a table column; the expander is the only place it appears.
-			.details(
-				DetailDef.of(COL_OWNER).title(TITLE_OWNER),
-				DetailDef.of(COL_UPDATED_AT).title("Last updated"),
-				DetailDef.of("notes").title("Notes"))
+			// "notes" is intentionally not a table column; the expander GET is the only place it appears.
+			.details(RowDetailDef.create()
+				.endpoint("/data/widgets/active/{id}")
+				.sections(DetailSection.create("info", "Info")
+					.fields(
+						DetailField.of(COL_OWNER).title(TITLE_OWNER),
+						DetailField.of(COL_UPDATED_AT).title("Last updated"),
+						DetailField.of("notes").title("Notes"))
+					.actions(ActionBar.create().items(SafeAction.COLLAPSE))))
 			.build();
 	}
 
@@ -155,21 +169,55 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.build();
 	}
 
+	/** Fake alerts table &mdash; two detail sections, two mutating ActionRefs, expand GET. */
+	static ViewDef alertsView() {
+		return ViewDef.create("alerts")
+			.rowType(Alert.class)
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/alerts")
+			.defaultOrder("id", Dir.ASC)
+			.columns(
+				Column.of("id").title("Id"),
+				Column.of("severity").title("Severity").render("tag:status"),
+				Column.of("title").title("Title"),
+				Column.of(COL_STATUS).title("Status"))
+			.rowActions(
+				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack")
+					.method(RowAction.Method.POST).onSuccess(RowAction.OnSuccess.REDRAW),
+				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc")
+					.method(RowAction.Method.POST).onSuccess(RowAction.OnSuccess.REDRAW))
+			.details(RowDetailDef.create()
+				.endpoint("/data/alerts/{id}")
+				.sections(
+					DetailSection.create("overview", "Overview")
+						.columns(2)
+						.fields(
+							DetailField.of("severity").title("Severity"),
+							DetailField.of("title").title("Title"))
+						.actions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE)),
+					DetailSection.create("context", "Context")
+						.fields(
+							DetailField.of("summary").title("Summary"),
+							DetailField.of("assignee").title("Assignee"))
+						.actions(ActionBar.create().items(ActionRef.of("esc")))))
+			.build();
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// HTML page (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * [GET /] &mdash; the composed page: tab bar + sub-tab bar + all three panels, plus the DataTables/jQuery
+	 * [GET /] &mdash; the composed page: tab bar + sub-tab bar + all panels, plus the DataTables/jQuery
 	 * (caller-provided, per ASF category-A discipline) and first-party toolkit asset links a real page needs.
 	 *
 	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}
 	 * 	so the head links stay correct however this example is mounted.
 	 * @return The full HTML page.
 	 */
-	@RestGet(path="/", summary="The Catalog (Active/Archived sub-tabs) + Audit Log demo page")
+	@RestGet(path="/", summary="The Catalog (Active/Archived sub-tabs) + Audit Log + Alerts demo page")
 	public HttpResource index(RestRequest req) {
-		var pageMarkup = Html.of(PageTable.of(page()));
+		var pageMarkup = Html.of(PageTable.of(req, page()));
 		var deepLink = "#" + PAGE_ID + "/catalog/archived";
 		var html = """
 			<!DOCTYPE html>
@@ -187,7 +235,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<body>
 			<h1>Apache Juneau &mdash; Rich Views Example</h1>
 			<p>Demonstrates a sub-tabbed <code>PageDef</code>: the <b>Catalog</b> tab holds two sub-tabs
-			(<b>Active</b>/<b>Archived</b>), and <b>Audit Log</b> is a sibling plain leaf tab. The Active sub-tab
+			(<b>Active</b>/<b>Archived</b>), <b>Audit Log</b> is a sibling plain leaf tab, and <b>Alerts</b>
+			dogfoods row-detail sections with an expand GET and mutating action-bar buttons. The Active sub-tab
 			also declares a poll interval (watch the staleness chip) and a row-details expander (click any row).</p>
 			<p><a href="%s">Deep link straight to the Archived sub-tab</a> (exercises
 			<code>juneau-pages.js</code>'s hash-routing on load, not just via the tab bar's own links).</p>
@@ -235,6 +284,23 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
+	 * [GET /data/widgets/active/{id}] &mdash; expand envelope for one active widget (row id = {@link Widget#name}).
+	 *
+	 * @param id The widget name.
+	 * @return {@code {contractVersion, fields}} for the expander.
+	 */
+	@RestGet(path="/data/widgets/active/{id}", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> activeWidgetDetail(@Path("id") String id) {
+		for (var w : ACTIVE_WIDGETS)
+			if (id.equals(w.name))
+				return detailEnvelope(Map.of(
+					COL_OWNER, w.owner,
+					COL_UPDATED_AT, w.updatedAt,
+					"notes", w.notes));
+		throw new NotFound("Widget not found: %s", id);
+	}
+
+	/**
 	 * [GET /data/widgets/archived] &mdash; the Archived sub-tab's rows.
 	 *
 	 * @return The archived widgets.
@@ -254,9 +320,75 @@ public class ExampleViewsRest extends BasicRestServlet {
 		return AUDIT_LOG;
 	}
 
+	/**
+	 * [GET /data/alerts] &mdash; the Alerts tab's rows.
+	 *
+	 * @return The alerts.
+	 */
+	@RestGet(path="/data/alerts", swagger=@OpSwagger(ignore=true))
+	public List<Alert> alertsData() {
+		return ALERTS;
+	}
+
+	/**
+	 * [GET /data/alerts/{id}] &mdash; expand envelope for one alert.
+	 *
+	 * @param id The alert id.
+	 * @return {@code {contractVersion, fields}} for the expander.
+	 */
+	@RestGet(path="/data/alerts/{id}", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> alertDetail(@Path("id") String id) {
+		var a = findAlert(id);
+		return detailEnvelope(Map.of(
+			"severity", a.severity,
+			"title", a.title,
+			"summary", a.summary,
+			"assignee", a.assignee));
+	}
+
+	/**
+	 * [POST /data/alerts/{id}/ack] &mdash; acknowledge an open alert.
+	 *
+	 * @param id The alert id.
+	 * @return The typed action result carrying the updated row.
+	 */
+	@RestPost(path="/data/alerts/{id}/ack", swagger=@OpSwagger(ignore=true))
+	public ActionResult ackAlert(@Path("id") String id) {
+		var a = findAlert(id);
+		a.status = STATUS_ACKNOWLEDGED;
+		return ActionResult.success(a);
+	}
+
+	/**
+	 * [POST /data/alerts/{id}/esc] &mdash; escalate an alert.
+	 *
+	 * @param id The alert id.
+	 * @return The typed action result carrying the updated row.
+	 */
+	@RestPost(path="/data/alerts/{id}/esc", swagger=@OpSwagger(ignore=true))
+	public ActionResult escalateAlert(@Path("id") String id) {
+		var a = findAlert(id);
+		a.status = STATUS_ESCALATED;
+		return ActionResult.success(a);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Row generation - enough rows per panel that a column-sizing regression would be visibly wrong.
 	//------------------------------------------------------------------------------------------------------------------
+
+	private static Map<String,Object> detailEnvelope(Map<String,?> fields) {
+		var out = new LinkedHashMap<String,Object>();
+		out.put("contractVersion", RowDetailDef.CONTRACT_VERSION);
+		out.put("fields", fields);
+		return out;
+	}
+
+	private static Alert findAlert(String id) {
+		for (var a : ALERTS)
+			if (id.equals(a.id))
+				return a;
+		throw new NotFound("Alert not found: %s", id);
+	}
 
 	private static List<Widget> buildActiveWidgets() {
 		var out = new ArrayList<Widget>();
@@ -302,5 +434,21 @@ public class ExampleViewsRest extends BasicRestServlet {
 				actions.get(i % actions.size()) + " widget-" + ((i % 30) + 1)));
 		}
 		return List.copyOf(out);
+	}
+
+	private static List<Alert> buildAlerts() {
+		var out = new ArrayList<Alert>();
+		var severities = List.of("critical", "warning", "info");
+		var assignees = List.of("alice", "bob", "carol");
+		for (var i = 1; i <= 12; i++) {
+			out.add(new Alert(
+				"ALRT-" + i,
+				severities.get(i % severities.size()),
+				"Synthetic alert " + i,
+				STATUS_OPEN,
+				"Fired by the views-example generator; row " + i + " of the fake pager.",
+				assignees.get(i % assignees.size())));
+		}
+		return out;
 	}
 }

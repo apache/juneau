@@ -54,7 +54,7 @@
 	// Contract-version handshake for PAGE_META: MUST equal PageDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION
 	// (single source of truth on the server, itself reusing ViewDef.CONTRACT_VERSION).  Distinct from - and does
 	// not replace - the per-view VIEW_META handshake juneau-views.js's initTable(...) already performs.
-	const JUNEAU_PAGE_CONTRACT_VERSION = "3";
+	const JUNEAU_PAGE_CONTRACT_VERSION = "4";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 
@@ -174,10 +174,10 @@
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest(PANEL_SELECTOR) !== panel) return;
 			const $ = window.jQuery;
-			if ($?.fn?.dataTable?.isDataTable(t)) {
-				$(t).DataTable().columns.adjust();
-			} else if (NS.init?.initTable) {
-				NS.init.initTable(t);
+			if (NS.init?.initTable) {
+				Promise.resolve(NS.init.initTable(t)).then(function () {
+					if ($?.fn?.dataTable?.isDataTable(t)) $(t).DataTable().columns.adjust();
+				});
 			} else {
 				warn("Juneau page: juneau-views.js not loaded (or too old to expose initTable); cannot lazy-init view '" +
 					t.getAttribute("data-juneau-view") + "'.");

@@ -399,10 +399,8 @@ table.dataTable > tbody > tr > td {
 
 /*
  * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
- * `.juneau-view-detail-row` when the view declares a `details` field list; a `::before` triangle glyph on the
- * first cell (a bare CSS content string, like the paging pill's checkmark above - no icon-registry dependency)
- * flips direction via the `.juneau-view-detail-open` class the same click handler toggles. NEUTRAL - no palette
- * color; console-ui's chrome.css MAY theme these same classes when present.
+ * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; a `::before` triangle
+ * glyph on the first cell flips direction via the `.juneau-view-detail-open` class. NEUTRAL - no palette color.
  */
 .juneau-view-detail-row {
 	cursor: pointer;
@@ -425,15 +423,33 @@ table.dataTable > tbody > tr > td {
 	padding: 0.5em 1em;
 }
 
-.juneau-view-detail-panel dt {
-	float: left;
-	clear: left;
-	width: 40%;
+.juneau-view-detail-section {
+	margin: 0 0 1em;
+}
+
+.juneau-view-detail-section-title {
+	margin: 0 0 0.5em;
+	font-size: 1em;
+}
+
+.juneau-view-detail-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	margin: 0 0 0.75em;
+}
+
+.juneau-view-detail-fields {
+	display: grid;
+	gap: 0.5em 1em;
+}
+
+.juneau-view-detail-field-title {
 	font-weight: 600;
 }
 
-.juneau-view-detail-panel dd {
-	margin: 0 0 0.35em 42%;
+.juneau-view-detail-status {
+	margin: 0.5em 0 0;
 }
 
 /*

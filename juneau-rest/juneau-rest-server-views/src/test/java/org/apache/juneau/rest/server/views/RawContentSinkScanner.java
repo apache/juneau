@@ -79,6 +79,12 @@ final class RawContentSinkScanner {
 	/** Matches a {@code .content(} call (the {@code Tab}/{@code Subtab} raw-content fluent setter). */
 	private static final Pattern CONTENT_CALL = Pattern.compile("\\.content\\s*\\(");
 
+	/** Matches an {@code innerHTML =} assignment in JavaScript (the XSS sink the chooser must never use). */
+	private static final Pattern JS_INNERHTML_ASSIGN = Pattern.compile("\\.innerHTML\\s*=");
+
+	/** Matches a jQuery {@code .html(} call in JavaScript (the other XSS sink the chooser must never use). */
+	private static final Pattern JS_JQUERY_HTML = Pattern.compile("\\.html\\s*\\(");
+
 	/** A single string literal or text-block literal (content kept verbatim by {@link #stripComments}). */
 	private static final Pattern LITERAL_TOKEN =
 		Pattern.compile("\\s*(?:\"\"\"[\\s\\S]*?\"\"\"|\"(?:[^\"\\\\]|\\\\.)*\"|null)\\s*");
@@ -125,6 +131,48 @@ final class RawContentSinkScanner {
 	/** Convenience overload for ad-hoc source strings. */
 	static Result scan(String source) {
 		return scan("(source)", source);
+	}
+
+	/**
+	 * Scans a JavaScript source string for {@code innerHTML =} / {@code .html(} sinks.  Comments are stripped
+	 * first so a mention of the forbidden APIs in a comment is not a hit.
+	 *
+	 * @param file A label for the source (used in violation messages).
+	 * @param source The JavaScript source text.
+	 * @return The sinks found and any violations.  Every HTML sink here is a violation (there is no
+	 * 	literal-only carve-out: user-controlled strings must never reach these APIs).
+	 */
+	static Result scanJsHtmlSinks(String file, String source) {
+		var sinks = new ArrayList<Sink>();
+		var violations = new ArrayList<String>();
+		var code = stripComments(source);
+
+		var inner = JS_INNERHTML_ASSIGN.matcher(code);
+		while (inner.find()) {
+			var detail = "innerHTML assignment";
+			sinks.add(new Sink(file, false, detail));
+			violations.add(file + ": " + detail + " — user-controlled strings must be painted with textContent / input.value only");
+		}
+		var html = JS_JQUERY_HTML.matcher(code);
+		while (html.find()) {
+			var detail = ".html( call";
+			sinks.add(new Sink(file, false, detail));
+			violations.add(file + ": " + detail + " — user-controlled strings must be painted with textContent / input.value only");
+		}
+		return new Result(sinks, violations);
+	}
+
+	/**
+	 * Scans the shipped {@code juneau-config.js} asset under {@code src/main/resources} for HTML sinks.
+	 *
+	 * @param moduleRoot The {@code juneau-rest-server-views} module root.
+	 * @return The scan result for that one file.
+	 * @throws IOException If the asset cannot be read.
+	 */
+	static Result scanConfigJs(Path moduleRoot) throws IOException {
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-config.js");
+		var file = moduleRoot.resolve(rel);
+		return scanJsHtmlSinks(rel.toString(), Files.readString(file));
 	}
 
 	/**

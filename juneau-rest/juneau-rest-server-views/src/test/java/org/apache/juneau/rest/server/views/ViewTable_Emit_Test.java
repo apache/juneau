@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
@@ -204,5 +205,24 @@ class ViewTable_Emit_Test extends TestBase {
 		assertTrue(html.contains("<tbody>"), html);
 		assertTrue(html.contains("released"), html);
 		assertTrue(html.contains("2.0"), html);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// data-juneau-saved-views stamp (slice 6) — wrapper <div>, not the <table>
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_resolvedBase_stampsWrapperDivNotTable() {
+		var html = Html.of(ViewTable.of(MarshallingContext.DEFAULT, view(), null, null, null, null,
+			"/myapp/juneau-saved-views"));
+		assertTrue(html.contains("data-juneau-saved-views="), html);
+		assertTrue(html.contains("/myapp/juneau-saved-views"), html);
+		assertEquals("data-juneau-saved-views", ViewTable.SAVED_VIEWS_ATTR);
+		// The table itself must NOT carry the attribute (JS reads it via closest() from the wrapper/page shell).
+		assertFalse(html.contains("<table id=\"releases\" data-juneau-saved-views"), html);
+	}
+
+	@Test void e02_absentBase_doesNotStamp() {
+		var html = Html.of(ViewTable.of(view()));
+		assertFalse(html.contains("data-juneau-saved-views"), html);
 	}
 }

@@ -116,10 +116,29 @@ class ViewsMixin_Serving_Test extends TestBase {
 		}
 	}
 
+	/**
+	 * Request-bearing {@link ViewTable}/{@link PageTable} {@code of(req, ...)} host so the
+	 * {@code data-juneau-saved-views} stamp is resolved through a real {@link RestRequest} URI resolver
+	 * (the emit tests only exercise the already-resolved-base overload).
+	 */
+	@Rest(mixins=ViewsMixin.class)
+	public static class StampHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/releases") public Div releases(RestRequest req) {
+			return ViewTable.of(req, releasesView());
+		}
+		@RestGet(path="/admin") public Div admin(RestRequest req) {
+			return PageTable.of(req, PageDef.create("admin")
+				.tabs(Tab.create("releases", "Releases").view(releasesView()))
+				.build());
+		}
+	}
+
 	private static final MockRestClient cNoMixin = MockRestClient.buildLax(NoMixin.class);
 	private static final MockRestClient cWithMixin = MockRestClient.buildLax(WithMixin.class);
 	private static final MockRestClient cViewHost = MockRestClient.buildLax(ViewHost.class);
 	private static final MockRestClient cViewBeanHost = MockRestClient.buildLax(ViewBeanHost.class);
+	private static final MockRestClient cStampHost = MockRestClient.buildLax(StampHost.class);
 
 	/** Extracts a named function's body: from `function <name>(` to the next top-level `\n\t}`. */
 	private static String functionBody(String body, String signature) {
@@ -147,10 +166,17 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.RENDERS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CONFIG_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 	}
 
 	@Test void h01_hostWithoutMixin_iconsJsRouteIs404() throws Exception {
 		cNoMixin.get(ViewsMixin.ICONS_JS_PATH).run().assertStatus(404);
+	}
+
+	@Test void h02_hostWithoutMixin_configAssetsAre404() throws Exception {
+		cNoMixin.get(ViewsMixin.CONFIG_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 	}
 
 	@Test void a02_hostExistingRoute_unaffectedByMixin() throws Exception {
@@ -198,6 +224,22 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cWithMixin.get(ViewsMixin.VIEWS_JS_PATH + "?v=whatever").run().assertStatus(200);
 	}
 
+	@Test void b06_configJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.CONFIG_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-config.js");
+	}
+
+	@Test void b07_configCss_served() throws Exception {
+		cWithMixin.get(ViewsMixin.CONFIG_CSS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/css")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-config.css");
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// c) Versioned asset URL (?v=<buildVersion>) via the viewAssetUrl(...) helper
 	//------------------------------------------------------------------------------------------------------------------
@@ -211,7 +253,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -234,7 +276,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
 		for (var path : new String[]{
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
-				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.PAGES_JS_PATH}) {
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.PAGES_JS_PATH,
+				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
 			var url = ViewsMixin.viewAssetUrl(path);
@@ -248,7 +291,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	@Test void d01_contractVersion_equalsViewDefContractVersion() {
 		assertEquals(ViewDef.CONTRACT_VERSION, ViewsMixin.CONTRACT_VERSION);
-		assertEquals("3", ViewsMixin.CONTRACT_VERSION);
+		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
 	}
 
 	@Test void d02_viewsJs_bakesInContractVersionHandshake() throws Exception {
@@ -596,5 +639,24 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var start = body.indexOf(".juneau-view-columnsearch-input {");
 		var end = body.indexOf("}", start);
 		assertTrue(body.substring(start, end).contains("border: 1px solid"), body);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i) data-juneau-saved-views stamp via a real RestRequest URI resolver
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_requestBearingViewTable_stampsWrapperNotTable() throws Exception {
+		var html = cStampHost.get("/releases").accept("text/html").run().assertStatus(200).getContent().asString();
+		assertTrue(html.contains("data-juneau-saved-views="), html);
+		assertTrue(html.contains(SavedViewsMixin.SAVED_VIEWS_PREFIX), html);
+		assertFalse(html.contains("<table id=\"releases\" data-juneau-saved-views"), html);
+		assertFalse(html.contains("<table id='releases' data-juneau-saved-views"), html);
+	}
+
+	@Test void i02_requestBearingPageTable_stampsPageShell() throws Exception {
+		var html = cStampHost.get("/admin").accept("text/html").run().assertStatus(200).getContent().asString();
+		assertTrue(html.contains("data-juneau-saved-views="), html);
+		assertTrue(html.contains(SavedViewsMixin.SAVED_VIEWS_PREFIX), html);
+		assertTrue(html.contains("data-juneau-page"), html);
 	}
 }

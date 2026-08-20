@@ -71,8 +71,15 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-page=\"widgets-demo\""), "page marker");
 		assertTrue(body.contains("data-tab-id=\"catalog\""), "Catalog tab");
 		assertTrue(body.contains("data-tab-id=\"audit\""), "Audit Log tab");
+		assertTrue(body.contains("data-tab-id=\"alerts\""), "Alerts tab");
 		assertTrue(body.contains("data-subtab-id=\"active\""), "Active sub-tab");
 		assertTrue(body.contains("data-subtab-id=\"archived\""), "Archived sub-tab");
+		assertTrue(body.contains("data-juneau-row-detail"), "row-detail template");
+		assertTrue(body.contains("data-juneau-detail-url=\"/data/alerts/{id}\""), "alerts expand URL");
+		assertTrue(body.contains("data-juneau-detail-url=\"/data/widgets/active/{id}\""), "widget expand URL");
+		assertTrue(body.contains("data-juneau-action=\"ack\""), "ack ActionRef");
+		assertTrue(body.contains("data-juneau-action=\"esc\""), "esc ActionRef");
+		assertTrue(body.contains("data-juneau-safe=\"collapse\""), "COLLAPSE");
 	}
 
 	@Test
@@ -132,5 +139,56 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	void c02_viewsCssAsset_isReachable() throws Exception {
 		var res = get("/juneau-views.css");
 		assertEquals(200, res.statusCode());
+	}
+
+	@Test
+	void d01_alertsData_returnsNonEmptyRows() throws Exception {
+		var res = getJson("/data/alerts");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("\"id\":\"ALRT-1\""));
+		assertTrue(body.contains("\"severity\""));
+		assertTrue(body.contains("\"assignee\""));
+	}
+
+	@Test
+	void d02_widgetExpandGet_projectsNotesNotOnTheTable() throws Exception {
+		var res = getJson("/data/widgets/active/widget-1");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("\"contractVersion\":\"1\""));
+		assertTrue(body.contains("\"notes\""));
+		assertTrue(body.contains("\"owner\""));
+	}
+
+	@Test
+	void d03_alertExpandGet_returnsSectionFields() throws Exception {
+		var res = getJson("/data/alerts/ALRT-1");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("\"contractVersion\":\"1\""));
+		assertTrue(body.contains("\"severity\""));
+		assertTrue(body.contains("\"summary\""));
+		assertTrue(body.contains("\"assignee\""));
+	}
+
+	@Test
+	void d04_unknownAlert_returns404() throws Exception {
+		var res = getJson("/data/alerts/NO-SUCH");
+		assertEquals(404, res.statusCode());
+	}
+
+	@Test
+	void d05_ackAlert_mutatesStatus() throws Exception {
+		var uri = server.getRootUrl().resolve("/data/alerts/ALRT-2/ack");
+		var req = HttpRequest.newBuilder(uri)
+			.header("Accept", "application/json")
+			.header("Content-Type", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString("{}"))
+			.build();
+		var res = http.send(req, BodyHandlers.ofString());
+		assertEquals(200, res.statusCode(), res.body());
+		assertTrue(res.body().contains("\"outcome\":\"success\""), res.body());
+		assertTrue(res.body().contains("\"acknowledged\""), res.body());
 	}
 }
