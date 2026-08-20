@@ -47,6 +47,7 @@
 		<module>juneau-rest-server-tracing-otel</module>
 		<module>juneau-rest-server-management-logging</module>
 		<module>juneau-rest-server-datatables</module>
+		<module>juneau-rest-server-widgets</module>
 		<module>juneau-rest-server-views</module>
 		<module>juneau-rest-server-views-markdown</module>
 		<module>juneau-rest-server-console-ui</module>
