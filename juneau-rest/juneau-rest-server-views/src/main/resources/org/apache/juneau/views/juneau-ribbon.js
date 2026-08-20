@@ -224,10 +224,11 @@
 	 *
 	 * <p>Adjacent actions sharing a non-null {@code group} id (visual-parity design doc §4.A, item 2/5) are
 	 * clustered into ONE segmented {@code .juneau-view-ribbon-group} wrapper (shared borders, rounded only on the
-	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  An {@code export}
-	 * action's own resolved buttons are always clustered this way even without an explicit {@code group} (one
-	 * action, one visual cluster - each export action gets its own synthetic per-index id so consecutive distinct
-	 * export actions never merge).  A {@code divider} or an ungrouped action always closes any open cluster.
+	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  Actions with no
+	 * explicit {@code group} (including an {@code export} action's resolved buttons) share the synthetic
+	 * {@code __ungrouped} id so consecutive icon buttons — refresh + copy/csv/excel/pdf — render as one connected
+	 * ribbon rather than orphan glyphs.  A {@code divider} always closes any open cluster; an explicit
+	 * {@code group} id still splits clusters the way the caller declared.
 	 */
 	// NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type (design doc §4.A); each branch is a
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
@@ -259,7 +260,7 @@
 			openGroup.el.appendChild(el);
 		}
 
-		actions.forEach(function (a, idx) {
+		actions.forEach(function (a) {
 			if (a.type === "divider") {
 				openGroup = null;
 				const d = document.createElement("span");
@@ -278,7 +279,7 @@
 							buttons: ids,
 							exportOptions: { columns: ":visible" }
 						});
-						const exportGroupId = a.group != null ? a.group : ("__export" + idx);
+						const exportGroupId = a.group != null ? a.group : "__ungrouped";
 						ids.forEach(function (id) {
 							place(button(id, resolveButtonIcon(null, id), function () {
 								ctx.dataTable.button(id).trigger();
@@ -289,7 +290,7 @@
 				return;
 			}
 			if (a.type === "refresh") {
-				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }), a.group || null);
+				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "columnSearchToggle") {
@@ -297,11 +298,11 @@
 					csBtn.setAttribute("aria-pressed", toggleColumnSearch(viewDef, ctx) ? "true" : "false");
 				});
 				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
-				place(csBtn, a.group || null);
+				place(csBtn, a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "option") {
-				place(optionToggle(viewDef, a, ctx), a.group || null);
+				place(optionToggle(viewDef, a, ctx), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "optionGroup") {

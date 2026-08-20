@@ -119,6 +119,10 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 		assertTrue(compute.contains("String(override).trim()"), compute);
 		var swap = functionBody(body, "function swapRenderId(");
 		assertTrue(swap.contains("render.meta"), swap);
+		assertTrue(swap.contains("render.popover"), swap);
+		assertTrue(body.contains("function copyCatalogColumn("), body);
+		var copy = functionBody(body, "function copyCatalogColumn(");
+		assertTrue(copy.contains("popover"), copy);
 	}
 
 	@Test void a05_dtIndex_isIndexIntoActualOptsColumns_notVisibleOffset() throws Exception {
@@ -326,5 +330,13 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 	@Test void b13_defaultVisibleFalse_hiddenOnFirstVisit() {
 		var r = report();
 		assertEquals(List.of("A", "C"), r.get("m_firstVisitVisible"));
+	}
+
+	@Test void b14_copyAndSwap_preservePopover() {
+		var r = report();
+		assertEquals(true, r.get("n_hasCopyExport"));
+		assertEquals(true, r.get("n_copyPreservesPopover"));
+		assertEquals(true, r.get("n_copyIsStructured"));
+		assertEquals(true, r.get("n_swapKeepsPopover"));
 	}
 }

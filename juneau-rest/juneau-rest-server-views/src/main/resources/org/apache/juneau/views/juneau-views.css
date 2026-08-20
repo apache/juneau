@@ -43,6 +43,54 @@
 	vertical-align: baseline;
 }
 
+/*
+ * Threshold progress bar.  Views-owned shape classes (.jc-progress / .jc-progress-bar.is-* /
+ * .jc-progress-label); theming hook is .progress.{field}.  Neutral greys via --jc-* tokens so the bar
+ * is legible without a theme; a consumer stylesheet may override the tokens.  No hue names.
+ */
+:root {
+	--jc-progress-track: #e6e6e6;
+	--jc-progress-ok: #6b6b6b;
+	--jc-progress-warn: #8a8a8a;
+	--jc-progress-exceeds: #333333;
+	--jc-popover-bg: #f7f7f7;
+	--jc-popover-border: #ccc;
+	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+	--jc-popover-z: 1200;
+}
+
+.jc-progress {
+	position: relative;
+	display: inline-block;
+	width: 6em;
+	height: 1.1em;
+	background: var(--jc-progress-track);
+	border-radius: 0.2em;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.jc-progress-bar {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.jc-progress-bar.is-ok { background: var(--jc-progress-ok); }
+.jc-progress-bar.is-warn { background: var(--jc-progress-warn); }
+.jc-progress-bar.is-exceeds { background: var(--jc-progress-exceeds); }
+
+.jc-progress-label {
+	position: relative;
+	z-index: 1;
+	display: block;
+	text-align: center;
+	font-size: 0.7em;
+	line-height: 1.1em;
+	white-space: nowrap;
+}
+
 /* Fail-loud contract-version-mismatch banner - neutral, no palette color. */
 .juneau-view-error {
 	display: block;
@@ -63,47 +111,71 @@
 .juneau-view-ribbon-btn:focus-visible,
 .juneau-view-pagingpill-btn:focus-visible,
 .juneau-view-pagingpill-menu-option:focus-visible,
-.juneau-view-columnsearch-input:focus-visible {
+.juneau-view-columnsearch-input:focus-visible,
+.juneau-ts:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
 }
 
 /*
- * DataTables table density/shape (design doc §4 IRS-parity pass) - compact rows + thin separators.  NEUTRAL -
- * shape only (font-size, cell padding, border WIDTH/style); no color/background-color/border-color palette here
- * (console-ui's chrome.css themes the SAME selectors with --jc-* colors, mirroring the ".tag"/ribbon reconciliation
- * above).  Selectors list BOTH `table[data-juneau-view]` (the marker attribute present from first paint) and
- * `table.dataTable` (the class DataTables' own init ADDS to that same element - it never removes the attribute,
- * so both describe the identical element pre/post-init) so the rule applies whether or not DataTables has run
- * yet.  Child-combinator (`>`) selectors deliberately mirror the vendored dataTables.dataTables.css structure
- * (`table.dataTable>thead>tr>th`, `table.dataTable>tbody>tr>td`) so this rule's specificity TIES the vendored
- * one instead of losing to it; this file is served AFTER the vendored DataTables CSS in every juneau-views page's
- * <head>, so the tie resolves in our favor by cascade order.
+ * DataTables table density/shape (IRS Instances metrics: compact 4px 5px cells, 0.75rem type,
+ * hairline separators, no vertical grid).  NEUTRAL - shape only (font-size, padding, border WIDTH/style);
+ * no color/background-color/border-color palette here (console-ui's chrome.css themes the SAME selectors
+ * with --jc-* colors).  Selectors list BOTH `table[data-juneau-view]` and `table.dataTable` so the rule
+ * applies whether or not DataTables has run yet.  Child-combinator (`>`) selectors deliberately mirror
+ * the vendored dataTables.dataTables.css structure so this rule's specificity TIES the vendored one;
+ * this file is served AFTER the vendored DataTables CSS, so the tie resolves in our favor.
  */
 table[data-juneau-view],
 table.dataTable {
-	font-size: 0.8125rem;
+	font-size: 0.75rem;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
-	padding: 8px 10px;
-	font-weight: 600;
+	padding: 4px 5px;
+	font-weight: normal;
 	text-align: left;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;   /* color falls back to currentColor - no palette color set here */
+	vertical-align: middle;
+	min-width: 20px;
+	border: none;
+	border-bottom: 1px solid;     /* currentColor - hairline; chrome.css themes the color */
 }
 
 table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-	padding: 6px 10px;
+	padding: 4px 5px;
 	vertical-align: middle;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;   /* color falls back to currentColor - no palette color set here */
+	border: none;
+	border-bottom: 1px solid;
+}
+
+/* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
+   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs. */
+table[data-juneau-view] thead th div.dt-column-header,
+table[data-juneau-view] thead td div.dt-column-header,
+table.dataTable thead th div.dt-column-header,
+table.dataTable thead td div.dt-column-header {
+	flex-direction: row !important;   /* DT2 numeric columns otherwise reverse and put the chevron on the left */
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+	content: none;
 }
 
 /*
@@ -120,24 +192,26 @@ table.dataTable > tbody > tr > td {
 .juneau-view-ribbon {
 	display: flex;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 0.25em;
+	flex-wrap: nowrap;
+	gap: 0.5em;
 }
 
 .juneau-view-ribbon-btn {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
+	box-sizing: border-box;
+	min-width: 32px;
 	height: 32px;
-	padding: 0;
+	padding: 0 10px;              /* IRS ribbon-button horizontal padding between glyphs */
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	background: transparent;
+	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
 	cursor: pointer;
 }
 
-.juneau-view-ribbon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.juneau-view-ribbon-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
 .juneau-view-ribbon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -149,28 +223,34 @@ table.dataTable > tbody > tr > td {
 .juneau-view-ribbon-btn[aria-pressed="true"] { border-width: 2px; }
 
 /*
- * Segmented ribbon group (design doc §4.A, item 2/5 - IRS parity): a "single ribbon" of adjacent buttons that
- * share a border (no double borders) with rounding only on the group's outer ends.  NEUTRAL - shape only (radius/
- * margin-collapse); console-ui's chrome.css themes the member buttons' colors exactly like a standalone button
- * (same ".juneau-view-ribbon-btn" class, so :hover/:active/[aria-pressed] all already apply unchanged).  The
- * negative margin-left overlaps each member's left border onto its predecessor's right border (collapsing the
- * pair into one hairline); a raised z-index on hover/focus/pressed keeps that member's own border/background on
- * top of its neighbors' overlapping edges.
+ * Segmented ribbon group (design doc §4.A, item 2/5 - IRS parity): one OUTER chrome around the group,
+ * no inner vertical borders between glyphs.  Ends keep left/right; middles keep only top/bottom.  Rounding
+ * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
+ * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
  */
-.juneau-view-ribbon-group { display: inline-flex; }
+.juneau-view-ribbon-group { display: inline-flex; align-items: stretch; }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn {
 	border-radius: 0;
-	margin-left: -1px;
-	position: relative;
+	border-left: none;
+	border-right: none;
 }
 
-.juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child { margin-left: 0; border-radius: 0.25em 0 0 0.25em; }
-.juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child { border-radius: 0 0.25em 0.25em 0; }
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {
+	border-left: 1px solid;
+	border-radius: 0.25em 0 0 0.25em;
+}
 
-.juneau-view-ribbon-group .juneau-view-ribbon-btn:hover,
-.juneau-view-ribbon-group .juneau-view-ribbon-btn:focus,
-.juneau-view-ribbon-group .juneau-view-ribbon-btn[aria-pressed="true"] { z-index: 1; }
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {
+	border-right: 1px solid;
+	border-radius: 0 0.25em 0.25em 0;
+}
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {
+	border-left: 1px solid;
+	border-right: 1px solid;
+	border-radius: 0.25em;
+}
 
 /*
  * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
@@ -184,11 +264,22 @@ table.dataTable > tbody > tr > td {
  */
 .dataTables_length, .dt-length, .dataTables_paginate, .dt-paging { display: none; }
 
+/*
+ * DataTables 2's default layout puts search/length/paging in their own `.dt-layout-row` *above* the table
+ * (sibling of `.dt-layout-row.dt-layout-table`).  `buildToolbarRow` relocates `.dt-search` into the unified
+ * toolbar; these leftover feature rows would otherwise keep an empty (or still-populated, if the move missed)
+ * second line.  DT1 has no `.dt-layout-*` nodes, so this rule is a no-op there.
+ */
+.dt-container > .dt-layout-row:not(.dt-layout-table) { display: none; }
+
 .juneau-view-pagingpill {
 	display: inline-flex;
 	align-items: stretch;
+	box-sizing: border-box;
+	height: 32px;
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
+	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
 }
 
 /* Corner-rounding on the outer segments only (no `overflow: hidden` on the pill itself - that would clip the
@@ -200,17 +291,18 @@ table.dataTable > tbody > tr > td {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
-	height: 32px;
-	padding: 0;
+	box-sizing: border-box;
+	min-width: 32px;
+	padding: 0 8px;
 	border: none;
 	border-right: 1px solid;      /* currentColor - segment divider; last-child override below */
 	background: transparent;
+	font-family: inherit;
 	cursor: pointer;
 }
 .juneau-view-pagingpill-btn:last-child { border-right: none; }
 .juneau-view-pagingpill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.juneau-view-pagingpill-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.juneau-view-pagingpill-btn svg { width: 12px; height: 12px; fill: currentColor; }
 
 /*
  * The pill's central segment (visual-parity follow-up): BOTH the compact "n-n of n" range summary AND the
@@ -228,18 +320,18 @@ table.dataTable > tbody > tr > td {
 	display: flex;
 	align-items: center;
 	gap: 0.35em;
-	height: 32px;
-	padding: 0 0.6em;
+	padding: 0 0.75em;
 	border: none;
 	background: transparent;
-	font-size: 0.8125rem;
+	font-family: inherit;
+	font-size: inherit;
 	white-space: nowrap;
 	cursor: pointer;
 }
 
-.juneau-view-pagingpill-info { white-space: nowrap; }
+.juneau-view-pagingpill-info { white-space: nowrap; font-family: inherit; }
 
-.juneau-view-pagingpill-caret svg { width: 14px; height: 14px; fill: currentColor; }
+.juneau-view-pagingpill-caret svg { width: 12px; height: 12px; fill: currentColor; }
 
 /* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
    is enough to show/hide it, so no explicit `display` toggle rule is needed here. */
@@ -257,19 +349,27 @@ table.dataTable > tbody > tr > td {
 }
 
 .juneau-view-pagingpill-menu-option {
-	padding: 0.3em 1.75em 0.3em 0.75em;
+	padding: 0.3em 0.75em;
 	white-space: nowrap;
 	cursor: pointer;
+}
+
+/* Reserved left gutter so every option's label lines up, selected or not - the selected-item check sits
+   here (standard checkbox-column layout), not floated to the far right of the row. */
+.juneau-view-pagingpill-menu-option::before {
+	content: "";
+	display: inline-block;
+	width: 1.1em;
+	margin-right: 0.35em;
+	text-align: center;
 }
 
 .juneau-view-pagingpill-menu-option[aria-selected="true"] { font-weight: bold; }
 
 /* A plain checkmark glyph (not an icon-registry glyph - a bare CSS content string) indicating the current
    page-size selection, mirroring the affordance a native <select> gives its chosen <option> for free. */
-.juneau-view-pagingpill-menu-option[aria-selected="true"]::after {
+.juneau-view-pagingpill-menu-option[aria-selected="true"]::before {
 	content: "\2713";
-	float: right;
-	margin-left: 0.75em;
 }
 
 /*
@@ -279,19 +379,42 @@ table.dataTable > tbody > tr > td {
  */
 .juneau-view-toolbar-row {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	justify-content: space-between;
 	align-items: center;
 	gap: 0.5em;
 	margin: 0 0 0.5em 0;
+	font-size: 0.75rem;           /* same type size as the table / IRS paging+search */
 }
 
 .juneau-view-toolbar-left,
 .juneau-view-toolbar-right {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-items: center;
 	gap: 0.5em;
+}
+
+/* Native DT search box, once relocated into the right cluster: inline with the icon ribbon, not a
+   full-width / floated block that drops onto its own line. Same 32px control class as the paging
+   pill and icon ribbon (box-sizing so the 1px border is inside the 32px, not added on top). */
+.juneau-view-toolbar-right .dataTables_filter,
+.juneau-view-toolbar-right .dt-search {
+	float: none;
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+}
+
+.juneau-view-toolbar-right .dataTables_filter input,
+.juneau-view-toolbar-right .dt-search input {
+	box-sizing: border-box;
+	height: 32px;
+	margin: 0;
+	padding: 0 0.5em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	font-family: inherit;
 }
 
 .juneau-view-ribbon-divider {
@@ -406,11 +529,18 @@ table.dataTable > tbody > tr > td {
 	cursor: pointer;
 }
 
+.juneau-view-detail-row > td:first-child {
+	padding-left: 0;
+}
+
 .juneau-view-detail-row > td:first-child::before {
 	content: "\25B8";   /* ▸ */
 	display: inline-block;
-	width: 1em;
-	margin-right: 0.35em;
+	width: 20px;
+	max-width: 20px;
+	margin-right: 0;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .juneau-view-detail-open > td:first-child::before {
@@ -573,8 +703,12 @@ table.dataTable > tbody > tr > td {
  */
 .juneau-view-select-th,
 .juneau-view-select-cell {
-	width: 2.25em;
+	width: 1%;
+	white-space: nowrap;
 	text-align: center;
+	vertical-align: middle;
+	padding-left: 8px;
+	padding-right: 8px;
 }
 
 .juneau-view-select-checkbox,
@@ -606,4 +740,96 @@ table.dataTable > tbody > tr > td {
 .juneau-view-bulk-action-btn:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
+}
+
+/*
+ * Timestamp (ts-zulu / datetime+popup) hover/focus popup — two lines of local + California time.
+ * White overlay (same exception as .juneau-view-dialog): a floating box must be opaque to stay readable
+ * over table cells.  Position/visibility are set by juneau-renders.js.
+ */
+.juneau-ts {
+	white-space: nowrap;
+	cursor: default;
+}
+
+.juneau-ts-popup {
+	position: fixed;
+	z-index: 1100;
+	display: none;
+	pointer-events: none;
+	padding: 0.4em 0.65em;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: #fff;
+	color: #222;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	font-size: 0.8125rem;
+	line-height: 1.4;
+	white-space: nowrap;
+}
+
+/*
+ * Author-declared cell popover (Render.popover).  Portaled to document.body, position:fixed.
+ * Neutral greys via --jc-* tokens; do not restyle .juneau-ts-popup here.
+ */
+.jc-cell-popover-trigger {
+	display: inline-block;
+	margin-left: 0.35em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+	line-height: 1;
+}
+
+.jc-cell-popover-trigger::before {
+	content: "";
+	display: block;
+	width: 0.55em;
+	height: 0.55em;
+	margin: 0.15em auto 0;
+	border: 0.12em solid currentColor;
+	border-radius: 50%;
+	box-sizing: border-box;
+}
+
+.jc-cell-popover {
+	position: fixed;
+	z-index: var(--jc-popover-z);
+	display: none;
+	min-width: 12em;
+	max-width: 24em;
+	padding: 0.5em 0.75em;
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	background: var(--jc-popover-bg);
+	color: #222;
+	box-shadow: var(--jc-popover-shadow);
+	font-size: 0.8125rem;
+	line-height: 1.4;
+}
+
+.jc-cell-popover-title {
+	font-weight: 600;
+	margin-bottom: 0.35em;
+}
+
+.jc-cell-popover-row {
+	display: flex;
+	gap: 0.75em;
+	margin: 0.15em 0;
+}
+
+.jc-cell-popover-label {
+	flex: 0 0 7em;
+	color: #555;
+}
+
+.jc-cell-popover-value {
+	flex: 1 1 auto;
+	min-width: 0;
+	word-break: break-word;
 }

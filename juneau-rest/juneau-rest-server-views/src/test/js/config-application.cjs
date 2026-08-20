@@ -180,4 +180,21 @@ const catalogHiddenB = [
 const firstVisit = C.computeEffectiveColumns(catalogHiddenB, null);
 out.m_firstVisitVisible = firstVisit.filter(function (c) { return c.visible; }).map(function (c) { return c.data; });
 
+const popoverCol = {
+	data: 'used',
+	render: {
+		id: 'progress',
+		meta: { max: '100' },
+		popover: { title: 'CPU', fields: [{ data: 'actual', title: 'Actual', render: { id: 'decimal' } }] }
+	}
+};
+const copied = C.copyCatalogColumn(popoverCol);
+out.n_copyPreservesPopover = !!(copied.render && copied.render.popover && copied.render.popover.title === 'CPU'
+	&& copied.render.popover.fields[0].data === 'actual');
+copied.render.popover.title = 'mutated';
+out.n_copyIsStructured = popoverCol.render.popover.title === 'CPU';
+const swapped = C.swapRenderId(popoverCol.render, 'decimal');
+out.n_swapKeepsPopover = swapped.id === 'decimal' && swapped.popover && swapped.popover.title === 'CPU';
+out.n_hasCopyExport = typeof C.copyCatalogColumn === 'function';
+
 process.stdout.write(JSON.stringify(out));

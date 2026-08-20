@@ -134,7 +134,9 @@ class PagingPill_Wiring_Test extends TestBase {
 	 * info node, which (a) put it at the BOTTOM of the table by default, and (b) broke once `info:false` removed
 	 * that info node entirely (the pill's insertion fallback appended to the END of the wrapper - still the
 	 * bottom). buildToolbarRow(...) now owns ALL toolbar placement: pill + native search + ribbon assembled into
-	 * ONE row and inserted as the wrapper's first child, i.e. above the table.
+	 * ONE row and inserted as the wrapper's first child, i.e. above the table.  The wrapper is the real DT
+	 * container ({@code findViewWrapper} → {@code .dt-container} / {@code .dataTables_wrapper}), not
+	 * {@code table.parentNode}, which under DT2 is a nested layout cell that cannot see {@code .dt-search}.
 	 */
 	@Test void b02_buildToolbarRow_assemblesPillSearchAndRibbonAboveTheTable() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
@@ -148,8 +150,13 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("juneau-view-toolbar-right"), fnBody);
 		assertTrue(fnBody.contains("left.appendChild(pill)"), fnBody);
 
+		var findBody = functionBody(body, "function findViewWrapper(");
+		assertTrue(findBody.contains(".dt-container, .dataTables_wrapper"), findBody);
+		assertTrue(findBody.contains("table.closest("), findBody);
+
 		var initBody = functionBody(body, "function constructTable(");
 		assertTrue(initBody.contains("buildPagingPill("), initBody);
+		assertTrue(initBody.contains("findViewWrapper(table)"), initBody);
 		assertTrue(initBody.contains("buildToolbarRow(wrapper, pill, bar)"), initBody);
 	}
 
@@ -163,6 +170,8 @@ class PagingPill_Wiring_Test extends TestBase {
 		var hideStart = body.indexOf(".dataTables_length, .dt-length, .dataTables_paginate, .dt-paging {");
 		var hideEnd = body.indexOf("}", hideStart);
 		assertTrue(body.substring(hideStart, hideEnd).contains("display: none"), body);
+		// DT2 leftover feature rows (search/length/paging) after the unified toolbar relocates those controls.
+		assertTrue(body.contains(".dt-container > .dt-layout-row:not(.dt-layout-table) { display: none; }"), body);
 	}
 
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledDim() throws Exception {
@@ -170,6 +179,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-pagingpill {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn:disabled { opacity:"), body);
+		assertTrue(body.contains("font-family: inherit"), body);
 	}
 
 	/**
@@ -228,6 +238,9 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-pagingpill-menu {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-menu-option {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-menu-option[aria-selected=\"true\"]"), body);
+		// Selected-item check lives in a left-side ::before gutter, not a far-right ::after float.
+		assertTrue(body.contains(".juneau-view-pagingpill-menu-option[aria-selected=\"true\"]::before"), body);
+		assertFalse(body.contains(".juneau-view-pagingpill-menu-option[aria-selected=\"true\"]::after"), body);
 	}
 
 	/** data-testid hooks (selector-ambiguity removal): the unified paging ribbon and the right actions ribbon. */
