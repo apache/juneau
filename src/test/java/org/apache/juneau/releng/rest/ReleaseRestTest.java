@@ -128,6 +128,38 @@ class ReleaseRestTest {
 	}
 
 	/**
+	 * The Excel/PDF export buttons are declared {@code .optional("excel","pdf")} on {@link ReleaseRest} and are
+	 * feature-detected off {@code window.JSZip} / {@code window.pdfMake} by {@code juneau-ribbon.js}, so they only
+	 * render when JSZip + pdfMake are on the page. DataTables Buttons' HTML5 export reads those globals as
+	 * {@code buttons.html5.min.js} initializes, so all three export-dependency scripts must be included and ordered
+	 * before it. Asserts the served page carries the JSZip, pdfMake, and pdfMake {@code vfs_fonts} includes, each
+	 * ahead of {@code buttons.html5.min.js}.
+	 */
+	@Test
+	void pageIncludesExportDependencyScriptsBeforeButtonsHtml5() throws Exception {
+		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
+			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				var jszipIdx = body.indexOf("jszip.min.js");
+				var pdfmakeIdx = body.indexOf("pdfmake.min.js");
+				var vfsIdx = body.indexOf("vfs_fonts.min.js");
+				var buttonsHtml5Idx = body.indexOf("buttons.html5.min.js");
+				assertTrue(jszipIdx >= 0, "Missing jszip.min.js script include: " + body);
+				assertTrue(pdfmakeIdx >= 0, "Missing pdfmake.min.js script include: " + body);
+				assertTrue(vfsIdx >= 0, "Missing vfs_fonts.min.js script include: " + body);
+				assertTrue(buttonsHtml5Idx >= 0, "Missing buttons.html5.min.js script include: " + body);
+				assertTrue(jszipIdx < buttonsHtml5Idx,
+					"jszip.min.js must be included before buttons.html5.min.js: " + body);
+				assertTrue(pdfmakeIdx < buttonsHtml5Idx,
+					"pdfmake.min.js must be included before buttons.html5.min.js: " + body);
+				assertTrue(vfsIdx < buttonsHtml5Idx,
+					"vfs_fonts.min.js must be included before buttons.html5.min.js: " + body);
+			}
+		}
+	}
+
+	/**
 	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
 	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
 	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used

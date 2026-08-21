@@ -42,9 +42,10 @@
     <link rel="icon" type="image/svg+xml" href="/img/oakleaf.svg">
     <#if activeTab?? && (activeTab == 'releases' || activeTab == 'admin')>
     <link rel="stylesheet" href="/datatables/dataTables.dataTables.min.css">
-    <#-- DataTables Buttons extension (copy/csv export) — caller-provided per ASF category-A discipline; CDN
-         coordinates per the toolkit design §6.11. Only the copy/csv cluster needs this; excel/pdf (JSZip/pdfmake)
-         stay unloaded and are feature-detected off by juneau-ribbon.js. -->
+    <#-- DataTables Buttons extension (copy/csv/excel/pdf export) — caller-provided per ASF category-A discipline;
+         CDN coordinates per the toolkit design §6.11. The excel/pdf cluster additionally needs JSZip + pdfMake,
+         loaded from cdnjs in the script block below (before buttons.html5.min.js) so juneau-ribbon.js
+         feature-detects window.JSZip / window.pdfMake and lights the Excel/PDF icon buttons. -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
     <#-- First-party toolkit base .tag chip stylesheet (neutral); the app's console-ui palette themes the same
          .tag.<domain>.<value> classes. This same stylesheet also carries the TODO-399 Phase C .jc-tab/.jc-panel
@@ -97,6 +98,12 @@
     <script src="/datatables/jquery.min.js"></script>
     <script src="/datatables/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+    <#-- JSZip (Excel export) + pdfMake (PDF export) — caller-provided category-A libs (MIT), pinned to cdnjs
+         coordinates; MUST load before buttons.html5.min.js so DataTables Buttons feature-detects window.JSZip /
+         window.pdfMake and juneau-ribbon.js lights the excel/pdf icon buttons declared .optional("excel","pdf"). -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
     <script src="${rendersJsUrl!'/rest/releases/juneau-renders.js'}"></script>
     <script src="${iconsJsUrl!'/rest/releases/juneau-icons.js'}"></script>
