@@ -253,6 +253,46 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Shared strip widget - TAB-MODE shape.  The SAME ".juneau-view-ribbon-group" widget carries an optional
+ * "data-juneau-strip-mode" visual flag decoupled from its a11y role: absent (or "ribbon") is the default
+ * four-corner segmented pill above (toolbar/paging/pill call sites are unchanged - they emit no attribute);
+ * "tab" repaints the SAME connected buttons as a folder-tab strip.  Tab-mode adds a floor/divider line under
+ * the strip, SQUARE bottom corners on the end caps (top radii stay), and a 1px downward overlap so the strip's
+ * buttons sit ON the floor line and the selected tab's own bottom edge reads as continuous with it.  The strip
+ * never wraps and never grows a "more" menu: it scrolls horizontally.  NEUTRAL - shape only (border/floor fall
+ * back to currentColor); console-ui's chrome.css layers the themed floor + selected-tab accent over these same
+ * selectors.  Row-detail multi-section conversion (juneau-views.js buildDetailStrip) is the first consumer:
+ * it stamps data-juneau-strip-mode="tab" + role="tablist" and per-button role="tab"/aria-selected.
+ */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] {
+	display: flex;
+	align-items: stretch;
+	border-bottom: 1px solid;     /* currentColor floor line - themed by chrome.css */
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	position: relative;
+	margin-bottom: -1px;          /* buttons overlap the floor line so the selected tab paints over it */
+}
+
+/* Square the outer bottom corners on the end caps so they meet the floor line flush (top radii stay). */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:first-child {
+	border-bottom-left-radius: 0;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:last-child {
+	border-bottom-right-radius: 0;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:only-child {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+/*
  * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
  * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
  * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]

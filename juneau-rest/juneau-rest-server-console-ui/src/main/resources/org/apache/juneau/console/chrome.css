@@ -531,6 +531,19 @@ table.dataTable.display > tbody > tr:hover {
    matches the blue "active" export button in the IRS reference ribbon (item 1). */
 .juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); border-color: var(--jc-accent); }
 
+/* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
+   SHAPE (floor line + squared bottom caps + overlap, all via currentColor); this themes the floor line with
+   --jc-border and the ONE selected tab with the accent wash + an accent underline that paints over the floor -
+   the same subtle-accent treatment the primary .jc-tab active state uses (NOT the solid aria-pressed fill, since
+   a tablist has exactly one selection at a time rather than N independent toggles).  Each var(--jc-*) is the
+   entire value of a color/border-color property (sink-property discipline - see file header). */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+	background-color: var(--jc-accent-wash);
+	color: var(--jc-accent);
+	border-bottom-color: var(--jc-accent);
+}
+
 /* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
    buttons. */
 .juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-control-bg); }

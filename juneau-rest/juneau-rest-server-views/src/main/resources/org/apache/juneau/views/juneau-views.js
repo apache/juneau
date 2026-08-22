@@ -1266,6 +1266,141 @@
 		}
 	}
 
+	// ==================================================================================================================
+	// SHARED STRIP WIDGET - TAB-MODE (row-detail multi-section pane switcher)
+	// ==================================================================================================================
+	//
+	// The row-detail template emits its sections as a stack of <section data-juneau-detail-section> blocks (all
+	// visible).  For a MULTI-section detail (>= 2 sections) buildDetailStrip(...) converts that stack, client-side,
+	// into ONE tab-mode strip of the shared ".juneau-view-ribbon-group" widget plus a single visible pane; a
+	// single-section detail is left strip-less (title + body, no lone tab).  This is the same widget the toolbar/
+	// paging use in ribbon-mode - here it carries data-juneau-strip-mode="tab" (visual) + role="tablist" (a11y),
+	// keeping the visual mode decoupled from the a11y role.
+	//
+	// Switching tabs is VISIBILITY ONLY: it toggles the `hidden` flag on panes and never refetches (Juneau already
+	// loads every field in one expand GET; fillDetailSlots still fills EVERY pane's slots, including hidden ones,
+	// so switching shows already-populated content).  Labels are painted with textContent, never innerHTML.
+
+	/** Monotonic id seed so simultaneously-expanded rows get unique tab/pane ids (DataTables allows N open rows). */
+	let detailStripSeq = 0;
+
+	/**
+	 * Roving-tabindex keyboard target: given the pressed key, the current tab index and the tab count, returns the
+	 * index to move selection to, or -1 for a key this widget does not handle.  Left/Right wrap; Home/End jump to
+	 * the ends.  Pure - no DOM - so the arrow-key contract is unit-checkable.
+	 */
+	function detailTabTargetIndex(key, currentIndex, count) {
+		if (count <= 0) return -1;
+		if (key === "ArrowRight") return (currentIndex + 1) % count;
+		if (key === "ArrowLeft") return (currentIndex - 1 + count) % count;
+		if (key === "Home") return 0;
+		if (key === "End") return count - 1;
+		return -1;
+	}
+
+	/**
+	 * Selects the tab whose section id === `sectionId` in a built strip: exactly one tab carries
+	 * aria-selected="true" + tabindex 0 (the rest -1), and exactly one pane is visible (the rest `hidden`).  `tabs`
+	 * is the [{btn, pane, id}] array buildDetailStrip closes over.  DOM-visibility only - never fetches.
+	 */
+	function activateDetailTab(tabs, sectionId) {
+		if (!tabs) return;
+		const want = String(sectionId);
+		for (let i = 0; i < tabs.length; i++) {
+			const t = tabs[i];
+			const match = String(t.id) === want;
+			t.btn.setAttribute("aria-selected", match ? "true" : "false");
+			t.btn.tabIndex = match ? 0 : -1;
+			t.pane.hidden = !match;
+		}
+	}
+
+	/**
+	 * Converts the stacked detail sections in a cloned detail `panel` into a tab-mode strip + one visible pane.
+	 * No-op returning null for < 2 sections (single-section details stay strip-less).  Builds a
+	 * ".juneau-view-ribbon-group[data-juneau-strip-mode=tab][role=tablist]" whose buttons are role="tab" +
+	 * aria-selected + aria-controls (the pane id) + roving tabindex; each <section> becomes role="tabpanel" +
+	 * aria-labelledby (the tab id), hidden unless it is the first (initially-selected) section.  Left/Right/Home/End
+	 * move selection.  Returns the strip element (already inserted as the panel's first child), or null.
+	 */
+	function buildDetailStrip(panel) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return null;
+		const sections = panel.querySelectorAll("[data-juneau-detail-section]");
+		if (!sections || sections.length < 2) return null;
+
+		const seq = ++detailStripSeq;
+		const strip = document.createElement("div");
+		strip.className = "juneau-view-ribbon-group juneau-view-detail-tabs";
+		strip.setAttribute("data-juneau-strip-mode", "tab");
+		strip.setAttribute("role", "tablist");
+		strip.setAttribute("data-testid", "detail-tabs");
+
+		const tabs = [];
+		for (let i = 0; i < sections.length; i++) {
+			const sec = sections[i];
+			const sid = sec.getAttribute("data-juneau-detail-section");
+			const paneId = "juneau-detail-pane-" + seq + "-" + i;
+			const tabId = "juneau-detail-tab-" + seq + "-" + i;
+			const active = i === 0;
+
+			// The <section> becomes the tabpanel; hide all but the initially-selected one (visibility only).
+			sec.id = paneId;
+			sec.setAttribute("role", "tabpanel");
+			sec.setAttribute("aria-labelledby", tabId);
+			sec.setAttribute("tabindex", "0");
+			sec.hidden = !active;
+
+			// The tab label is the section's own title; the stacked <h2> title is hidden (the tab replaces it).
+			const titleEl = typeof sec.querySelector === "function"
+				? sec.querySelector(".juneau-view-detail-section-title") : null;
+			const label = titleEl && titleEl.textContent ? titleEl.textContent : sid;
+			if (titleEl) titleEl.hidden = true;
+
+			const btn = document.createElement("button");
+			btn.type = "button";
+			btn.className = "juneau-view-ribbon-btn";
+			btn.id = tabId;
+			btn.setAttribute("role", "tab");
+			btn.setAttribute("data-juneau-strip-tab", sid);
+			btn.setAttribute("aria-controls", paneId);
+			btn.setAttribute("aria-selected", active ? "true" : "false");
+			btn.tabIndex = active ? 0 : -1;
+			btn.textContent = label;            // never innerHTML - labels are plain text
+			strip.appendChild(btn);
+			tabs.push({ btn: btn, pane: sec, id: sid });
+		}
+
+		strip.addEventListener("click", function (e) {
+			const btn = e.target && e.target.closest ? e.target.closest("[role=\"tab\"]") : null;
+			if (!btn || (strip.contains && !strip.contains(btn))) return;
+			activateDetailTab(tabs, btn.getAttribute("data-juneau-strip-tab"));
+			if (typeof btn.focus === "function") btn.focus();
+		});
+		strip.addEventListener("keydown", function (e) {
+			if (!e) return;
+			const focused = (typeof document !== "undefined") ? document.activeElement : null;
+			let idx = -1;
+			for (let i = 0; i < tabs.length; i++) {
+				if (tabs[i].btn === focused) { idx = i; break; }
+			}
+			if (idx < 0) {
+				for (let i = 0; i < tabs.length; i++) {
+					if (tabs[i].btn.getAttribute("aria-selected") === "true") { idx = i; break; }
+				}
+				if (idx < 0) idx = 0;
+			}
+			const next = detailTabTargetIndex(e.key, idx, tabs.length);
+			if (next < 0) return;
+			if (typeof e.preventDefault === "function") e.preventDefault();
+			const nextBtn = tabs[next].btn;
+			activateDetailTab(tabs, nextBtn.getAttribute("data-juneau-strip-tab"));
+			if (typeof nextBtn.focus === "function") nextBtn.focus();
+		});
+
+		panel.insertBefore(strip, panel.firstChild);
+		return strip;
+	}
+
 	/** Enables or disables ActionRef buttons; SafeAction.COLLAPSE is never touched. */
 	function setActionRefEnabled(root, enabled) {
 		if (!root || !root.querySelectorAll) return;
@@ -1612,6 +1747,10 @@
 		panel.setAttribute("data-juneau-detail-state", "loading");
 		panel._juneauParentTr = tr;
 		panel.appendChild(tpl.content.cloneNode(true));
+		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
+		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
+		// fills EVERY pane's slots (including the hidden ones) so switching tabs shows populated content.
+		buildDetailStrip(panel);
 		const loading = document.createElement("p");
 		loading.className = "juneau-view-detail-status";
 		loading.textContent = "Loading…";
@@ -2996,6 +3135,9 @@
 		fillMarkdownSlot: fillMarkdownSlot,
 		fillRenderSlot: fillRenderSlot,
 		fillDetailSlots: fillDetailSlots,
+		detailTabTargetIndex: detailTabTargetIndex,
+		activateDetailTab: activateDetailTab,
+		buildDetailStrip: buildDetailStrip,
 		findRowDetailTemplate: findRowDetailTemplate,
 		detailCoalesceKey: detailCoalesceKey,
 		detailContractOk: detailContractOk,
