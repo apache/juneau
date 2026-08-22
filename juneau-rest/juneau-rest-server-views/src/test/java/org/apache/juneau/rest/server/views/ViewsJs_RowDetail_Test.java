@@ -60,6 +60,9 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"fillRenderSlot: fillRenderSlot",
 			"fillDetailSlots: fillDetailSlots",
 			"findRowDetailTemplate: findRowDetailTemplate",
+			"detailTabTargetIndex: detailTabTargetIndex",
+			"activateDetailTab: activateDetailTab",
+			"buildDetailStrip: buildDetailStrip",
 			"JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION"
 		})
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
@@ -151,6 +154,12 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		return report;
 	}
 
+	/** Compares a numeric report value regardless of whether the JSON parser boxed it as Integer or Long. */
+	private static void assertNum(long expected, Object actual) {
+		assertInstanceOf(Number.class, actual, () -> "expected a number, got: " + actual);
+		assertEquals(expected, ((Number)actual).longValue());
+	}
+
 	@Test void b01_urlSafety() {
 		var r = report();
 		assertEquals(true, r.get("url_pathOk"));
@@ -235,5 +244,81 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("contract_ok"));
 		assertEquals(false, r.get("contract_bad"));
 		assertEquals(false, r.get("contract_missing"));
+	}
+
+	@Test void b08_tabTargetIndex_rovingKeyboardMath() {
+		var r = report();
+		assertEquals(true, r.get("hasDetailTabTargetIndex"));
+		assertNum(1, r.get("tti_right"));
+		assertNum(0, r.get("tti_rightWrap"));     // ArrowRight wraps to the first tab
+		assertNum(2, r.get("tti_left"));          // ArrowLeft wraps to the last tab
+		assertNum(0, r.get("tti_home"));
+		assertNum(2, r.get("tti_end"));
+		assertNum(-1, r.get("tti_other"));        // unhandled key
+	}
+
+	@Test void b09_multiSection_buildsTabStrip_oneVisiblePane() {
+		var r = report();
+		assertEquals(true, r.get("hasBuildDetailStrip"));
+		assertEquals(true, r.get("strip_built"));
+		assertEquals(true, r.get("strip_isFirstChild"));
+		assertEquals("tablist", r.get("strip_role"));
+		assertEquals("tab", r.get("strip_mode"));
+		assertEquals(true, r.get("strip_hasRibbonGroupClass"));   // shared strip widget - not a new grammar
+		assertNum(2, r.get("strip_tabCount"));
+		assertEquals("Overview,Context", r.get("strip_labels"));
+		assertEquals("juneau-view-ribbon-btn", r.get("strip_btnClass"));
+		assertEquals("true", r.get("strip_firstSelected"));
+		assertEquals("false", r.get("strip_secondSelected"));
+		assertNum(0, r.get("strip_firstTabindex"));
+		assertNum(-1, r.get("strip_secondTabindex"));         // roving tabindex
+		assertEquals(false, r.get("strip_pane0Hidden"));          // first pane initially visible
+		assertEquals(true, r.get("strip_pane1Hidden"));
+		assertEquals("tabpanel", r.get("strip_pane0Role"));
+		assertEquals(true, r.get("strip_pane0Labelledby"));
+		assertEquals(true, r.get("strip_tab0Controls"));
+		assertEquals(true, r.get("strip_titleHidden"));           // stacked <h2> hidden - the tab replaces it
+	}
+
+	@Test void b10_activateDetailTab_visibilityOnly() {
+		var r = report();
+		assertEquals(true, r.get("hasActivateDetailTab"));
+		assertEquals(true, r.get("act_tab1Selected"));
+		assertEquals(true, r.get("act_tab0Deselected"));
+		assertEquals(true, r.get("act_pane1Visible"));
+		assertEquals(true, r.get("act_pane0Hidden"));
+	}
+
+	@Test void b11_keyboardNavigation_moveSelectionAndFocus() {
+		var r = report();
+		assertEquals(true, r.get("kbd_right_tab1Selected"));
+		assertEquals(true, r.get("kbd_right_tab0Deselected"));
+		assertEquals(true, r.get("kbd_right_pane1Visible"));
+		assertEquals(true, r.get("kbd_right_focusMoved"));
+		assertEquals(true, r.get("kbd_home_tab0Selected"));
+		assertEquals(true, r.get("kbd_end_tab1Selected"));
+		assertEquals(true, r.get("kbd_left_tab0Selected"));
+		assertEquals(true, r.get("kbd_enter_noop"));
+	}
+
+	@Test void b12_singleSection_staysStripLess() {
+		var r = report();
+		assertEquals(true, r.get("single_noStrip"));
+		assertEquals(true, r.get("single_firstStillSection"));
+		assertEquals(true, r.get("single_paneNotHidden"));
+		assertEquals(true, r.get("single_noTabpanelRole"));       // no lone tab, no tabpanel role
+		assertEquals(true, r.get("single_titleNotHidden"));
+	}
+
+	@Test void b13_skillsFixture_becomesTabs() {
+		var r = report();
+		assertEquals("Skill,SKILL.md", r.get("skills_labels"));
+		assertNum(2, r.get("skills_tabCount"));
+	}
+
+	@Test void b14_tabSwitch_neverRefetches() {
+		var r = report();
+		assertNum(0, r.get("noRefetch_fetchCalls"));          // tab switch is DOM-visibility only
+		assertEquals(true, r.get("noRefetch_clickSelectedTab0"));
 	}
 }

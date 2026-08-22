@@ -652,6 +652,37 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {"), body);
 	}
 
+	/**
+	 * Tab-mode strip shape: the SAME {@code .juneau-view-ribbon-group} carries a {@code data-juneau-strip-mode="tab"}
+	 * visual variant (floor line under the strip, square bottom corners on the end caps, the active tab overlapping
+	 * the divider) reused by multi-section row-details.  The neutral shape lives here; color lives in chrome.css.
+	 */
+	@Test void o05_viewsCss_ribbonGroupHasTabModeStripVariant() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = ".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"]";
+		assertTrue(body.contains(sel + " {"), body);
+		var start = body.indexOf(sel + " {");
+		var region = body.substring(start, body.indexOf("}", start));
+		assertTrue(region.contains("border-bottom: 1px solid"), region);   // the floor line
+		assertTrue(region.contains("overflow-x: auto"), region);           // scroll, no "more" menu
+		assertTrue(region.contains("white-space: nowrap"), region);
+
+		// The active tab overlaps the divider (margin-bottom: -1px).
+		assertTrue(body.contains(sel + " .juneau-view-ribbon-btn {"), body);
+		var btnStart = body.indexOf(sel + " .juneau-view-ribbon-btn {");
+		assertTrue(body.substring(btnStart, body.indexOf("}", btnStart)).contains("margin-bottom: -1px"), body);
+
+		// End caps square off their BOTTOM corners in tab-mode (top radii stay).
+		var firstSel = sel + " .juneau-view-ribbon-btn:first-child {";
+		assertTrue(body.contains(firstSel), body);
+		var fcStart = body.indexOf(firstSel);
+		assertTrue(body.substring(fcStart, body.indexOf("}", fcStart)).contains("border-bottom-left-radius: 0"), body);
+		var lastSel = sel + " .juneau-view-ribbon-btn:last-child {";
+		assertTrue(body.contains(lastSel), body);
+		var lcStart = body.indexOf(lastSel);
+		assertTrue(body.substring(lcStart, body.indexOf("}", lcStart)).contains("border-bottom-right-radius: 0"), body);
+	}
+
 	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-columnsearch-row > th {"), body);

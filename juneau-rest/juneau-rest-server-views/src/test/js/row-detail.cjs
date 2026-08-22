@@ -36,6 +36,33 @@ if (!viewsJsPath) {
 	process.exit(2);
 }
 
+/** Minimal CSS-selector matcher for the subset the harness needs: `.class` and `[attr]` / `[attr="v"]`. */
+function elMatches(node, sel) {
+	if (!node || node.nodeType !== 1) return false;
+	if (sel.charAt(0) === '.') {
+		const cls = sel.slice(1);
+		const raw = ' ' + (node.className || node.getAttribute('class') || '') + ' ';
+		return raw.indexOf(' ' + cls + ' ') >= 0;
+	}
+	const m = /^\[([\w:-]+)(?:="([^"]*)")?\]$/.exec(sel);
+	if (m) {
+		const v = node.getAttribute(m[1]);
+		return m[2] == null ? v != null : v === m[2];
+	}
+	return false;
+}
+
+function elWalk(node, sel, acc) {
+	for (let i = 0; i < node.childNodes.length; i++) {
+		const c = node.childNodes[i];
+		if (c.nodeType === 1) {
+			if (elMatches(c, sel)) acc.push(c);
+			elWalk(c, sel, acc);
+		}
+	}
+	return acc;
+}
+
 function el(tag) {
 	const node = {
 		nodeType: 1,
@@ -43,11 +70,18 @@ function el(tag) {
 		childNodes: [],
 		attrs: {},
 		parentNode: null,
+		_listeners: {},
 		get firstChild() { return this.childNodes[0] || null; },
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		appendChild: function (c) {
 			this.childNodes.push(c);
+			c.parentNode = this;
+			return c;
+		},
+		insertBefore: function (c, ref) {
+			const i = ref ? this.childNodes.indexOf(ref) : -1;
+			if (i < 0) this.childNodes.push(c); else this.childNodes.splice(i, 0, c);
 			c.parentNode = this;
 			return c;
 		},
@@ -57,6 +91,29 @@ function el(tag) {
 			return c;
 		},
 		replaceChildren: function () { this.childNodes.length = 0; },
+		querySelectorAll: function (sel) { return elWalk(this, sel, []); },
+		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
+		closest: function (sel) {
+			let n = this;
+			while (n && n.nodeType === 1) { if (elMatches(n, sel)) return n; n = n.parentNode; }
+			return null;
+		},
+		contains: function (other) {
+			if (other === this) return true;
+			for (let i = 0; i < this.childNodes.length; i++) {
+				const c = this.childNodes[i];
+				if (c === other) return true;
+				if (c.nodeType === 1 && c.contains && c.contains(other)) return true;
+			}
+			return false;
+		},
+		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		_fire: function (type, ev) {
+			ev = ev || {};
+			if (ev.currentTarget == null) ev.currentTarget = this;
+			(this._listeners[type] || []).forEach(function (fn) { fn(ev); });
+		},
+		focus: function () { document.activeElement = this; },
 		set textContent(v) { this.childNodes.length = 0; this._text = v == null ? '' : String(v); },
 		get textContent() {
 			if (this.childNodes.length === 0) return this._text || '';
@@ -118,6 +175,7 @@ DOMParser.prototype.parseFromString = function (str) {
 
 const document = {
 	readyState: 'loading',
+	activeElement: null,
 	addEventListener: function () {},
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
@@ -345,6 +403,129 @@ if (out.hasFillRender) {
 	out.rr_dispatchRenderFirst = findTag(both, 'SPAN', []).some(function (n) {
 		return String(n.getAttribute('class') || '').indexOf('tag') >= 0;
 	});
+}
+
+// ----------------------------------------------------------------------------------------------------------------
+// Shared strip widget - tab-mode (multi-section row-detail pane switcher).
+// ----------------------------------------------------------------------------------------------------------------
+
+out.hasBuildDetailStrip = typeof I.buildDetailStrip === 'function';
+out.hasActivateDetailTab = typeof I.activateDetailTab === 'function';
+out.hasDetailTabTargetIndex = typeof I.detailTabTargetIndex === 'function';
+
+if (out.hasBuildDetailStrip) {
+	function detailSection(sid, title) {
+		const sec = el('section');
+		sec.setAttribute('data-juneau-detail-section', sid);
+		sec.className = 'juneau-view-detail-section';
+		const h2 = el('h2');
+		h2.className = 'juneau-view-detail-section-title';
+		h2.textContent = title;
+		sec.appendChild(h2);
+		const fields = el('div');
+		fields.className = 'juneau-view-detail-fields';
+		sec.appendChild(fields);
+		return sec;
+	}
+	function detailPanel(pairs) {
+		const panel = el('div');
+		panel.className = 'juneau-view-detail-panel';
+		pairs.forEach(function (p) { panel.appendChild(detailSection(p[0], p[1])); });
+		return panel;
+	}
+	function tabButtonsOf(strip) {
+		return strip.childNodes.filter(function (c) { return c.getAttribute && c.getAttribute('role') === 'tab'; });
+	}
+
+	// Pure keyboard-target math.
+	out.tti_right = I.detailTabTargetIndex('ArrowRight', 0, 3);
+	out.tti_rightWrap = I.detailTabTargetIndex('ArrowRight', 2, 3);
+	out.tti_left = I.detailTabTargetIndex('ArrowLeft', 0, 3);
+	out.tti_home = I.detailTabTargetIndex('Home', 2, 3);
+	out.tti_end = I.detailTabTargetIndex('End', 0, 3);
+	out.tti_other = I.detailTabTargetIndex('Enter', 0, 3);
+
+	// Multi-section (Alerts Overview | Context) -> one tablist, one visible pane.
+	const multi = detailPanel([['overview', 'Overview'], ['context', 'Context']]);
+	const strip = I.buildDetailStrip(multi);
+	out.strip_built = !!strip;
+	out.strip_isFirstChild = multi.firstChild === strip;
+	out.strip_role = strip.getAttribute('role');
+	out.strip_mode = strip.getAttribute('data-juneau-strip-mode');
+	out.strip_hasRibbonGroupClass = (strip.className || '').indexOf('juneau-view-ribbon-group') >= 0;
+	const tabButtons = tabButtonsOf(strip);
+	out.strip_tabCount = tabButtons.length;
+	out.strip_labels = tabButtons.map(function (b) { return b.textContent; }).join(',');
+	out.strip_btnClass = tabButtons[0].className;
+	out.strip_firstSelected = tabButtons[0].getAttribute('aria-selected');
+	out.strip_secondSelected = tabButtons[1].getAttribute('aria-selected');
+	out.strip_firstTabindex = tabButtons[0].tabIndex;
+	out.strip_secondTabindex = tabButtons[1].tabIndex;
+	const panes = multi.querySelectorAll('[data-juneau-detail-section]');
+	out.strip_pane0Hidden = panes[0].hidden === true;
+	out.strip_pane1Hidden = panes[1].hidden === true;
+	out.strip_pane0Role = panes[0].getAttribute('role');
+	out.strip_pane0Labelledby = panes[0].getAttribute('aria-labelledby') === tabButtons[0].id;
+	out.strip_tab0Controls = tabButtons[0].getAttribute('aria-controls') === panes[0].id;
+	out.strip_titleHidden = panes[0].querySelector('.juneau-view-detail-section-title').hidden === true;
+
+	// activateDetailTab flips exactly one selection + one visible pane (visibility only).
+	const fakeTabs = [
+		{ btn: tabButtons[0], pane: panes[0], id: 'overview' },
+		{ btn: tabButtons[1], pane: panes[1], id: 'context' }
+	];
+	I.activateDetailTab(fakeTabs, 'context');
+	out.act_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+	out.act_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
+	out.act_pane1Visible = panes[1].hidden === false;
+	out.act_pane0Hidden = panes[0].hidden === true;
+	// reset to first for the keyboard walk
+	I.activateDetailTab(fakeTabs, 'overview');
+
+	// Keyboard: Right/Home/End/Left via the strip's own delegated keydown (roving tabindex).
+	document.activeElement = null;                 // fall back to the aria-selected tab (index 0)
+	strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+	out.kbd_right_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+	out.kbd_right_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
+	out.kbd_right_pane1Visible = panes[1].hidden === false;
+	out.kbd_right_focusMoved = document.activeElement === tabButtons[1];
+	strip._fire('keydown', { key: 'Home', preventDefault: function () {} });
+	out.kbd_home_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
+	strip._fire('keydown', { key: 'End', preventDefault: function () {} });
+	out.kbd_end_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+	strip._fire('keydown', { key: 'ArrowLeft', preventDefault: function () {} });
+	out.kbd_left_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
+	// An unhandled key is a no-op (selection stays on tab0).
+	strip._fire('keydown', { key: 'Enter', preventDefault: function () {} });
+	out.kbd_enter_noop = tabButtons[0].getAttribute('aria-selected') === 'true';
+
+	// Single-section (Widgets "Active" Info) stays strip-less; sections are untouched.
+	const single = detailPanel([['info', 'Info']]);
+	const singleStrip = I.buildDetailStrip(single);
+	out.single_noStrip = singleStrip === null;
+	out.single_firstStillSection = single.firstChild.getAttribute('data-juneau-detail-section') === 'info';
+	out.single_paneNotHidden = single.firstChild.hidden !== true;
+	out.single_noTabpanelRole = single.firstChild.getAttribute('role') == null;
+	out.single_titleNotHidden = single.firstChild.querySelector('.juneau-view-detail-section-title').hidden !== true;
+
+	// Skills fixture: Skill | SKILL.md (matches Support Console SkillsView).
+	const skills = detailPanel([['skill', 'Skill'], ['body', 'SKILL.md']]);
+	const skillsStrip = I.buildDetailStrip(skills);
+	out.skills_labels = tabButtonsOf(skillsStrip).map(function (b) { return b.textContent; }).join(',');
+	out.skills_tabCount = tabButtonsOf(skillsStrip).length;
+
+	// Tab switch does NOT refetch: activating a tab (click or keyboard) issues no fetch.
+	let fetchCalls = 0;
+	window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
+	const nf = detailPanel([['a', 'A'], ['b', 'B']]);
+	const nfStrip = I.buildDetailStrip(nf);
+	const nfTabs = tabButtonsOf(nfStrip);
+	document.activeElement = null;
+	nfStrip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+	nfStrip._fire('click', { target: nfTabs[0] });
+	out.noRefetch_fetchCalls = fetchCalls;
+	out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
+	window.fetch = undefined;
 }
 
 process.stdout.write(JSON.stringify(out));
