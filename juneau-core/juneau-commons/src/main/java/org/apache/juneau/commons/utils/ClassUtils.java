@@ -392,6 +392,7 @@ public class ClassUtils {
 	 * 	<li><b>CGLIB Proxies</b> - Created by Spring's CGLIB enhancer (class name contains <js>"$$EnhancerBySpringCGLIB$$"</js>)
 	 * 	<li><b>Javassist Proxies</b> - Created by Javassist proxy factory (class name contains <js>"_$$_javassist"</js> or <js>"_$$_jvst"</js>)
 	 * 	<li><b>ByteBuddy Proxies</b> - Created by ByteBuddy (class name contains <js>"$ByteBuddy$"</js>)
+	 * 	<li><b>Hibernate lazy proxies</b> - Class name contains <js>"$HibernateProxy$"</js>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -408,7 +409,7 @@ public class ClassUtils {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>For JDK dynamic proxies, returns the first interface implemented by the proxy
-	 * 	<li>For CGLIB/Javassist/ByteBuddy proxies, returns the superclass
+	 * 	<li>For CGLIB/Javassist/ByteBuddy/Hibernate proxies, returns the superclass
 	 * 	<li>For Spring CGLIB proxies with a <c>getTargetClass()</c> method, invokes that method for more accurate results
 	 * 	<li>Returns <jk>null</jk> if the object is not a recognized proxy type
 	 * </ul>
@@ -449,12 +450,9 @@ public class ClassUtils {
 			return v.isPresent() ? v.get() : c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 		}
 
-		// Javassist Proxy: Created by Javassist ProxyFactory
-		// Pattern: com.example.MyClass_$$_javassist_123 or com.example.MyClass_$$_jvst123
-		// ByteBuddy Proxy: Created by ByteBuddy framework
-		// Pattern: com.example.MyClass$ByteBuddy$abc123
-		if (s.contains("_$$_javassist") || s.contains("_$$_jvst") || s.contains("$ByteBuddy$")) {
-			return c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with _$$_javassist, _$$_jvst, or $ByteBuddy$ in name
+		// Javassist / ByteBuddy / Hibernate lazy association proxies: subclasses of the user type
+		if (s.contains("_$$_javassist") || s.contains("_$$_jvst") || s.contains("$ByteBuddy$") || s.contains("$HibernateProxy$")) {
+			return c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with _$$_javassist, _$$_jvst, $ByteBuddy$, or $HibernateProxy$ in name
 		}
 
 		// Not a recognized proxy type

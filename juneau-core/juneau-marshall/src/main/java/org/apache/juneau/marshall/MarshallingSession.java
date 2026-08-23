@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -692,7 +693,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	}
 
 	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
+	 * Returns the {@link ClassMeta} for the object's class, unwrapping recognized proxies first.
+	 *
+	 * <p>
+	 * Delegates to {@link #getClassMetaForObject(Object,ClassMeta)} with a <jk>null</jk> default.
 	 *
 	 * @param <T> The class of the object being passed in.
 	 * @param o The class to find the class type for.  Can be <jk>null</jk> (returns <jk>null</jk>).
@@ -1163,7 +1167,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		assertArgNotNull(ARG_o, o);
 		if (o instanceof BeanMap o2)
 			return o2;
-		return this.toBeanMap(o, (Class<T>)o.getClass());
+		// Unwrap recognized proxies (e.g. Hibernate $HibernateProxy$) so we enumerate the entity's properties, not the proxy's.
+		var unwrapped = getProxyFor(o);
+		return this.toBeanMap(o, (Class<T>)(unwrapped != null ? unwrapped : o.getClass()));
 	}
 
 	/**
@@ -1240,11 +1246,15 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (o instanceof BeanMap o2)
 			return o2;
 
+		// Unwrap recognized proxies (e.g. Hibernate $HibernateProxy$) so we enumerate the entity's properties, not the proxy's.
+		var unwrapped = getProxyFor(o);
+		var beanClass = unwrapped != null ? unwrapped : o.getClass();
+
 		// Preserve the cached default-namer path when no override (or the override matches the default) is supplied.
 		if (propertyNamer == null || propertyNamer.equals(getPropertyNamer()))
-			return this.toBeanMap(o, (Class<T>)o.getClass());
+			return this.toBeanMap(o, (Class<T>)beanClass);
 
-		var c = (Class<T>)o.getClass();
+		var c = (Class<T>)beanClass;
 		var cm = getClassMeta(c);
 		var m = cm.getBeanMeta(propertyNamer);
 		if (m == null)
@@ -1299,9 +1309,17 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	}
 
 	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
+	 * Returns the {@link ClassMeta} for the object's class, unwrapping recognized proxies first.
 	 *
-	 * @param o The class to find the class type for.  Can be <jk>null</jk> (returns {@code def}).
+	 * <p>
+	 * If {@link org.apache.juneau.commons.utils.ClassUtils#getProxyFor(Object)} returns a class,
+	 * that class is used; otherwise {@code o.getClass()}. JDK dynamic proxies (including
+	 * annotation instances) resolve to the first interface. Subclass proxies (CGLIB,
+	 * Javassist, ByteBuddy, Hibernate {@code $HibernateProxy$}) resolve to the immediate
+	 * superclass. Spring CGLIB objects may have {@code getTargetClass()} invoked on the live
+	 * instance. Names matching {@code $$SpringCGLIB$$} only (Spring 6) are not recognized.
+	 *
+	 * @param o The object to find the class type for.  Can be <jk>null</jk> (returns {@code def}).
 	 * @param def The default {@link ClassMeta} if the object is null.  Can be <jk>null</jk> (returned as-is if
 	 * 	<c>o</c> is <jk>null</jk>).
 	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
@@ -1309,7 +1327,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {
 		if (o == null)
 			return def;
-		return getClassMeta(o.getClass());
+		var unwrapped = getProxyFor(o);
+		return getClassMeta(unwrapped != null ? unwrapped : o.getClass());
 	}
 
 	/**

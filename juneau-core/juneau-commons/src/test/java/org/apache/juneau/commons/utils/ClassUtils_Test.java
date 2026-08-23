@@ -308,6 +308,24 @@ class ClassUtils_Test {
 		});
 	}
 
+	static class A_User {
+		public String getName() {
+			return "alice";
+		}
+	}
+
+	static class A_User$HibernateProxy$1 extends A_User {
+		public Object getHibernateLazyInitializer() {
+			return "handler";
+		}
+	}
+
+	static class A_Nested {
+		public String getName() {
+			return "nested";
+		}
+	}
+
 	//====================================================================================================
 	// getProxyFor(Object)
 	//====================================================================================================
@@ -337,6 +355,13 @@ class ClassUtils_Test {
 		);
 		var result2 = getProxyFor(proxy2);
 		assertNull(result2);
+
+		// Named nested type: binary name contains $HibernateProxy$
+		assertTrue(A_User$HibernateProxy$1.class.getName().contains("$HibernateProxy$"));
+		assertEquals(A_User.class, getProxyFor(new A_User$HibernateProxy$1()));
+
+		// Ordinary nested type still has $ but is not a proxy infix
+		assertNull(getProxyFor(new A_Nested()));
 	}
 
 	//====================================================================================================

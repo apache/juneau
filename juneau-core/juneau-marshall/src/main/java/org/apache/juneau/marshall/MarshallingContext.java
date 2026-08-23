@@ -4938,16 +4938,23 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	}
 
 	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
+	 * Returns the {@link ClassMeta} for the object's class, unwrapping recognized proxies first.
+	 *
+	 * <p>
+	 * Same contract as {@link MarshallingSession#getClassMetaForObject(Object, ClassMeta)}:
+	 * {@link org.apache.juneau.commons.utils.ClassUtils#getProxyFor(Object)} if non-<jk>null</jk>,
+	 * else {@code o.getClass()}. Used by object-tools and other context callers; parsers do not
+	 * call this method.
 	 *
 	 * @param <T> The class of the object being passed in.
-	 * @param o The class to find the class type for.
+	 * @param o The object to find the class type for.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The ClassMeta object.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
 		assertArgNotNull(ARG_o, o);
-		return (ClassMeta<T>)getClassMeta(o.getClass());
+		var unwrapped = getProxyFor(o);
+		return (ClassMeta<T>)getClassMeta(unwrapped != null ? unwrapped : o.getClass());
 	}
 
 	/**

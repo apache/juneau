@@ -18,6 +18,7 @@ package org.apache.juneau.marshall;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -372,7 +373,9 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		} else if (o instanceof ClassMeta) {
 			cm = (ClassMeta<?>)o;
 		} else {
-			cm = getClassMeta(c);
+			// Unwrap recognized proxies (e.g. Hibernate $HibernateProxy$) so we serialize the entity, not the proxy subclass.
+			var unwrapped = getProxyFor(o);
+			cm = getClassMeta(unwrapped != null ? unwrapped : c);
 		}
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
