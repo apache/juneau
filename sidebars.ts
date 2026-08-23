@@ -406,6 +406,11 @@ const sidebars: SidebarsConfig = {
 					},
 					{
 						type: 'doc',
+						id: 'topics/03.20.01.JpaAndHibernate',
+						label: '3.20.1. JPA and Hibernate',
+					},
+					{
+						type: 'doc',
 						id: 'topics/03.21.PojoCategories',
 						label: '3.21. POJO Categories',
 					},
