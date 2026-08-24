@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The declarative modal (dialog) a {@code present=}{@link RowAction.Present#DIALOG dialog} row action opens &mdash;
@@ -72,9 +73,12 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="title,fields,form,idempotencyKey")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
-public class ModalDef {
+public class ModalDef implements Widget {
+
+	/** The frozen modal contract version.  Bumped only on a breaking wire change to this modal contract. */
+	public static final String CONTRACT_VERSION = "1";
 
 	/**
 	 * A single typed confirmation field: a label and a value, painted client-side with {@code textContent} (never
@@ -108,6 +112,16 @@ public class ModalDef {
 			return f;
 		}
 	}
+
+	/**
+	 * The frozen modal contract version discriminator.
+	 *
+	 * <p>
+	 * <b>Null</b> on a confirm-only modal (no {@link #form}) &mdash; confirm-only stays unversioned and is not
+	 * fail-loud on a missing version; omitted from the wire while null.  Set to {@link #CONTRACT_VERSION} by
+	 * {@link #checked()} when a form is present.
+	 */
+	public String contractVersion;
 
 	/** The modal title / confirmation prompt. */
 	public String title;
@@ -172,6 +186,54 @@ public class ModalDef {
 	 */
 	public ModalDef idempotencyKey(String value) {
 		idempotencyKey = value;
+		return this;
+	}
+
+	/**
+	 * Fail-closed bean validation.
+	 *
+	 * <p>
+	 * Requires a non-blank {@link #title} and a non-blank label on each {@link Field}; when a {@link #form} is present
+	 * it delegates to {@link FormDef#validate()}.  Does <b>not</b> require {@link #contractVersion} to already be set
+	 * (a raw-built form-bearing modal validated directly must not false-refuse on a null version &mdash;
+	 * {@link #checked()} stamps the version first, then validates).
+	 *
+	 * @throws IllegalArgumentException If this modal is not well-formed.
+	 */
+	@Override
+	public void validate() {
+		if (title == null || title.isBlank())
+			throw iaex("ModalDef title must not be null or blank.");
+		if (fields != null)
+			for (var f : fields) {
+				if (f == null)
+					throw iaex("ModalDef field must not be null.");
+				if (f.label == null || f.label.isBlank())
+					throw iaex("ModalDef.Field label must not be null or blank.");
+			}
+		if (form != null)
+			form.validate();
+	}
+
+	/**
+	 * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} must invoke.
+	 *
+	 * <p>
+	 * When a {@link #form} is present it stamps {@link #CONTRACT_VERSION} on this modal and its form (the fail-loud
+	 * handshake baseline); a confirm-only modal is left <b>unversioned</b> ({@code contractVersion} null).  Then it
+	 * {@link #validate() validates}, so a malformed modal/form fails at serve time rather than silently on the wire.
+	 *
+	 * @return This object.
+	 * @throws IllegalArgumentException If this modal (or its form) is not well-formed.
+	 */
+	public ModalDef checked() {
+		if (form != null) {
+			contractVersion = CONTRACT_VERSION;
+			form.checked();
+		} else {
+			contractVersion = null;
+		}
+		validate();
 		return this;
 	}
 }

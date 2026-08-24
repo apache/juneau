@@ -95,7 +95,8 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var body = viewsJs();
 		for (var sig : new String[]{"function settleActionResponse(", "function renderActionOutcome(",
 				"function showActionDialog(", "function submitActionDialog(", "function openActionDialog(",
-				"function appendDialogForm(", "function collectDialogFormFields("}) {
+				"function appendDialogForm(", "function collectDialogFormFields(",
+				"function paintFormControl(", "function validateDialogForm("}) {
 			var f = fn(body, sig);
 			assertFalse(f.contains(".innerHTML"), () -> sig + " must never use innerHTML:\n" + f);
 			assertFalse(f.contains("insertAdjacentHTML"), () -> sig + " must never use insertAdjacentHTML:\n" + f);
@@ -240,14 +241,24 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	@Test void h01_appendDialogFormUsesCreateElementNeverInnerHtml() throws Exception {
 		var body = viewsJs();
 		var append = fn(body, "function appendDialogForm(");
+		// The row scaffolding (label + help/error siblings) is built via createElement + textContent, then each
+		// control is delegated to paintFormControl.  The client never consumes form.template as markup.
 		assertTrue(append.contains("createElement(\"label\")"), append);
-		assertTrue(append.contains("createElement(\"input\")"), append);
-		assertTrue(append.contains("createElement(\"textarea\")"), append);
+		assertTrue(append.contains("paintFormControl("), append);
 		assertTrue(append.contains(".textContent"), append);
-		assertTrue(append.contains(".value"), append);
 		assertFalse(append.contains(".innerHTML"), () -> "FormDef paint must never use innerHTML:\n" + append);
 		assertFalse(append.contains("insertAdjacentHTML"), append);
 		assertFalse(append.contains("form.template"), () -> "client must not consume form.template as markup:\n" + append);
+		// The native controls themselves are created (never markup) in the per-control dispatcher, with prefills via
+		// .value / .checked.
+		var paint = fn(body, "function paintFormControl(");
+		assertTrue(paint.contains("createElement(\"input\")"), paint);
+		assertTrue(paint.contains("createElement(\"textarea\")"), paint);
+		assertTrue(paint.contains("createElement(\"select\")"), paint);
+		assertTrue(paint.contains(".value"), paint);
+		assertTrue(paint.contains(".checked"), paint);
+		assertFalse(paint.contains(".innerHTML"), () -> "paintFormControl must never use innerHTML:\n" + paint);
+		assertFalse(paint.contains("insertAdjacentHTML"), paint);
 	}
 
 	@Test void h02_collectDialogFormFieldsUsesValueNotInnerHtml() throws Exception {
@@ -266,11 +277,18 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		assertTrue(s.contains("targetId"), s);
 	}
 
-	@Test void h04_typedInputsOnly_textAndTextarea() throws Exception {
+	@Test void h04_typedInputs_sixTypeAllowlistAndSkipUnknown() throws Exception {
 		var body = viewsJs();
 		var typed = fn(body, "function isTypedFormInputType(");
-		assertTrue(typed.contains("\"text\""), typed);
-		assertTrue(typed.contains("\"textarea\""), typed);
+		// The frozen v1 vocabulary: text, textarea, checkbox, toggle, select, action - and nothing else.
+		for (var t : new String[]{"text", "textarea", "checkbox", "toggle", "select", "action"})
+			assertTrue(typed.contains("\"" + t + "\""), () -> t + " missing from the allowlist:\n" + typed);
+		// paintFormControl gates on the allowlist and returns null (skips) an unknown type: a hostile token never
+		// becomes an element.
+		var paint = fn(body, "function paintFormControl(");
+		assertTrue(paint.contains("isTypedFormInputType(type)"), paint);
+		assertTrue(paint.contains("return null"), paint);
+		// appendDialogForm also gates each field on the allowlist before painting.
 		var append = fn(body, "function appendDialogForm(");
 		assertTrue(append.contains("isTypedFormInputType(type)"), append);
 	}
@@ -278,6 +296,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	@Test void h05_buildDialogOverlayPaintsForm() throws Exception {
 		var body = viewsJs();
 		var build = fn(body, "function buildDialogOverlay(");
-		assertTrue(build.contains("appendDialogForm(dialog, modal && modal.form)"), build);
+		// The form paint is threaded the row context (table/tr/ctx) and the dialog-only field-id sequence.
+		assertTrue(build.contains("appendDialogForm(dialog, modal && modal.form, table, tr, ctx, seq)"), build);
 	}
 }

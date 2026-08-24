@@ -80,6 +80,9 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-action=\"ack\""), "ack ActionRef");
 		assertTrue(body.contains("data-juneau-action=\"esc\""), "esc ActionRef");
 		assertTrue(body.contains("data-juneau-safe=\"collapse\""), "COLLAPSE");
+		assertTrue(body.contains("data-juneau-nested"), "nested-table shell in the alert expander");
+		assertTrue(body.contains("data-juneau-nested-scope-param=\"alertId\""), "custom nested scope param");
+		assertTrue(body.contains("data-juneau-nested-meta=\"alert-events\""), "nested sidecar keyed by author view id");
 	}
 
 	@Test
@@ -179,6 +182,54 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
+	void e01_dashboardPage_rendersCardGrid_withStaticAndRefreshableCards() throws Exception {
+		var res = get("/dashboard");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("data-juneau-card-grid"), "grid marker");
+		assertTrue(body.contains("data-juneau-card-grid-id=\"ops\""), "grid id");
+		assertTrue(body.contains("data-juneau-card-id=\"fleet\""), "static card");
+		assertTrue(body.contains("data-juneau-card-id=\"live\""), "refreshable card");
+		// Only the live card carries the refresh wire; the static card must not.
+		assertTrue(body.contains("data-juneau-card-refresh=\"/data/cards/summary\""), "refresh endpoint");
+		assertTrue(body.contains("data-juneau-card-poll-ms=\"10000\""), "poll (>= 5s floor)");
+		assertTrue(body.contains("data-juneau-card-contract=\"1\""), "per-card contract stamp");
+		// The static Fleet Summary card is server-painted so it reads with JavaScript disabled.
+		assertTrue(body.contains(">Total widgets<"), "static field label painted server-side");
+	}
+
+	@Test
+	void e02_dashboardPage_linksIconsThenCardsAssets_noDataTables() throws Exception {
+		var body = get("/dashboard").body();
+		assertFalse(body.contains("servlet:"), "no unresolved servlet: URIs");
+		var icons = body.indexOf("/juneau-icons.js?v=");
+		var cards = body.indexOf("/juneau-cards.js?v=");
+		assertTrue(icons >= 0, "icons.js linked");
+		assertTrue(cards >= 0, "cards.js linked");
+		assertTrue(icons < cards, "icons.js must load before cards.js (the refresh glyph comes from the icon registry)");
+		assertFalse(body.contains("datatables"), "a card page carries no table, so no DataTables");
+	}
+
+	@Test
+	void e03_cardsJsAsset_isReachable() throws Exception {
+		var res = get("/juneau-cards.js");
+		assertEquals(200, res.statusCode());
+		assertTrue(res.body().contains("window.JuneauCards"), "ships the card runtime namespace");
+	}
+
+	@Test
+	void e04_cardsSummaryEnvelope_isCardContract_withLiveAlertCounts() throws Exception {
+		var res = getJson("/data/cards/summary");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("\"contractVersion\":\"1\""), body);
+		assertTrue(body.contains("\"open\""), body);
+		assertTrue(body.contains("\"acknowledged\""), body);
+		assertTrue(body.contains("\"escalated\""), body);
+		assertTrue(body.contains("\"asOf\""), body);
+	}
+
+	@Test
 	void d05_ackAlert_mutatesStatus() throws Exception {
 		var uri = server.getRootUrl().resolve("/data/alerts/ALRT-2/ack");
 		var req = HttpRequest.newBuilder(uri)
@@ -190,5 +241,22 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertEquals(200, res.statusCode(), res.body());
 		assertTrue(res.body().contains("\"outcome\":\"success\""), res.body());
 		assertTrue(res.body().contains("\"acknowledged\""), res.body());
+	}
+
+	@Test
+	void d06_ackForm_servesVersionStampedValidatedModal() throws Exception {
+		// The present=dialog form GET returns the modal.checked() envelope: contractVersion "1" on BOTH the modal
+		// top-level and the nested form, the typed 6-type inputs (textarea/toggle/select/action), and the nested
+		// action button targets the confirm-only "esc" action (modal-over-modal trigger).
+		var res = getJson("/data/alerts/ALRT-2/ack-form");
+		assertEquals(200, res.statusCode(), res.body());
+		var body = res.body();
+		assertTrue(body.contains("\"contractVersion\":\"1\""), body);
+		assertTrue(body.contains("\"type\":\"textarea\""), body);
+		assertTrue(body.contains("\"type\":\"toggle\""), body);
+		assertTrue(body.contains("\"type\":\"select\""), body);
+		assertTrue(body.contains("\"type\":\"action\""), body);
+		assertTrue(body.contains("\"actionId\":\"esc\""), body);
+		assertTrue(body.contains("\"idempotencyKey\""), body);
 	}
 }

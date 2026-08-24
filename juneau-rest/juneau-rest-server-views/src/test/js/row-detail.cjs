@@ -514,17 +514,27 @@ if (out.hasBuildDetailStrip) {
 	out.skills_labels = tabButtonsOf(skillsStrip).map(function (b) { return b.textContent; }).join(',');
 	out.skills_tabCount = tabButtonsOf(skillsStrip).length;
 
-	// Tab switch does NOT refetch: activating a tab (click or keyboard) issues no fetch.
+	// Tab switch is visibility-only for the PARENT detail envelope: activating a tab (click or keyboard) never
+	// re-GETs the parent detail (the strip itself issues no fetch).  It DOES, however, fire the optional
+	// onActivate(sectionId, pane) seam - the hook a newly-shown pane's nested table rides on to run its OWN
+	// independent GET.  Here we prove both: fetch stays 0, and onActivate fires with the activated pane.
 	let fetchCalls = 0;
 	window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
+	const activated = [];
 	const nf = detailPanel([['a', 'A'], ['b', 'B']]);
-	const nfStrip = I.buildDetailStrip(nf);
+	const nfStrip = I.buildDetailStrip(nf, function (sid, pane) { activated.push({ sid: sid, pane: pane }); });
 	const nfTabs = tabButtonsOf(nfStrip);
+	const nfPanes = nf.querySelectorAll('[data-juneau-detail-section]');
 	document.activeElement = null;
-	nfStrip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
-	nfStrip._fire('click', { target: nfTabs[0] });
+	nfStrip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });   // -> section 'b'
+	nfStrip._fire('click', { target: nfTabs[0] });                                     // -> section 'a'
 	out.noRefetch_fetchCalls = fetchCalls;
 	out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
+	out.noRefetch_onActivateCount = activated.length;                                  // keyboard + click = 2
+	out.noRefetch_onActivateFirstSid = activated.length ? activated[0].sid : null;     // 'b' (ArrowRight)
+	out.noRefetch_onActivateLastSid = activated.length ? activated[activated.length - 1].sid : null;   // 'a' (click)
+	out.noRefetch_onActivatePaneMatches = activated.length >= 2
+		&& activated[0].pane === nfPanes[1] && activated[1].pane === nfPanes[0];
 	window.fetch = undefined;
 }
 

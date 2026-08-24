@@ -225,4 +225,51 @@ class RowDetailDef_Test extends TestBase {
 			.build();
 		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
 	}
+
+	private static ViewDef nested(String id) {
+		return ViewDef.create(id).dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/" + id)
+			.columns(Column.of("name")).build();
+	}
+
+	@Test void c01_nestedTable_valid() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(oneSection().table(NestedTableDef.create(nested("events"))))
+			.validate(null, "alerts");
+	}
+
+	@Test void c02_nestedTable_delegatesValidation() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(oneSection().table(NestedTableDef.create(nested("events")).parentScopeParam("draw")))
+			.validate(null, "alerts"));
+		assertTrue(e.getMessage().contains("reserved"), e::getMessage);
+	}
+
+	@Test void c03_nestedViewId_collidesWithEnclosing_rejected() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(oneSection().table(NestedTableDef.create(nested("alerts"))))
+			.validate(null, "alerts"));
+		assertTrue(e.getMessage().contains("collides"), e::getMessage);
+	}
+
+	@Test void c04_duplicateNestedViewIds_rejected() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(
+				DetailSection.create("a", "A").fields(DetailField.of("owner")).table(NestedTableDef.create(nested("events"))),
+				DetailSection.create("b", "B").fields(DetailField.of("host")).table(NestedTableDef.create(nested("events"))))
+			.validate(null, "alerts"));
+		assertTrue(e.getMessage().contains("duplicate nested"), e::getMessage);
+	}
+
+	@Test void c05_viewTableOf_rejectsCollidingNestedViewId() {
+		var v = ViewDef.create("alerts").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
+			.columns(Column.of("name"))
+			.details(RowDetailDef.create().endpoint("/d/{id}")
+				.sections(DetailSection.create("s", "S").fields(DetailField.of("owner")).table(NestedTableDef.create(nested("alerts")))))
+			.build();
+		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
+	}
 }

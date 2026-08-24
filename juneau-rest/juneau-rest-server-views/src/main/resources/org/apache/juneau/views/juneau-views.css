@@ -57,6 +57,15 @@
 	--jc-popover-border: #ccc;
 	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
 	--jc-popover-z: 1200;
+	/*
+	 * The base z-index of the shared popup layer stack (TODO-445h) and the per-layer step.  juneau-views.js stamps
+	 * each registered layer an INLINE z-index of (--jc-dialog-z + rawStackIndex * --jc-layer-step); these tokens are
+	 * the single source of truth the runtime reads (with the same numeric fallbacks baked into the script for the
+	 * token-less / Node-shim case).  Keep --jc-dialog-z below --jc-popover-z so a cell popover's own chrome layers
+	 * sensibly; raise them together if a host's chrome needs more headroom.
+	 */
+	--jc-dialog-z: 1000;
+	--jc-layer-step: 10;
 }
 
 .jc-progress {
@@ -631,6 +640,23 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Nested read-only table inside a row-detail section (a table[data-juneau-view] + its id-less sidecar, appended
+ * after the section's fields grid).  NEUTRAL - layout only, no palette color.  Full-width within the panel; the
+ * `min-width: 0` lets the nested table shrink below its content's intrinsic width (a grid/flex child otherwise
+ * refuses to), and `overflow-x: auto` gives a wide nested table its own horizontal scroll rather than forcing the
+ * whole detail panel (and the parent table) to widen.
+ */
+.juneau-view-detail-nested {
+	margin: 0.75em 0 0;
+	min-width: 0;
+	overflow-x: auto;
+}
+
+.juneau-view-detail-nested > table {
+	width: 100%;
+}
+
+/*
  * Declarative row-action modal (present=dialog) + settled-outcome banner (juneau-views.js openActionDialog/
  * buildDialogOverlay/renderActionOutcome, TODO-416/417).  NEUTRAL - shape/layout only, no palette color; a host's
  * chrome.css MAY theme these same classes.  The confirmation body is typed fields painted with textContent (never
@@ -643,7 +669,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 	align-items: center;
 	justify-content: center;
 	background: rgba(0, 0, 0, 0.35);
-	z-index: 1000;
+	/* Fallback only; the runtime stamps an inline per-layer z-index (--jc-dialog-z + index*--jc-layer-step). */
+	z-index: var(--jc-dialog-z, 1000);
 }
 
 .juneau-view-dialog {
@@ -655,6 +682,22 @@ table.dataTable thead .sorting_desc_disabled:after {
 	border: 1px solid;
 	border-radius: 6px;
 	background: #fff;
+}
+
+/*
+ * A NESTED dialog (a type=action button opened it over its parent) is offset so both backdrops read as a stack
+ * rather than one exactly-occluding the other.  Dialog-only: the rule targets `.juneau-view-dialog` (popover / menu
+ * layers have no such child), and applies to any layer above the base (raw stack index != 0).
+ */
+.juneau-view-dialog-backdrop[data-juneau-layer]:not([data-juneau-layer="0"]) .juneau-view-dialog {
+	transform: translate(1.5em, 1.5em);
+}
+
+/* The depth-cap / missing-action refusal painted INTO the current top dialog (never a silent no-op). */
+.juneau-view-dialog-depth-refusal,
+.juneau-view-dialog-action-refusal {
+	margin: 0.75em 0 0;
+	font-size: 0.9em;
 }
 
 .juneau-view-dialog-title {
@@ -691,7 +734,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-dialog-form-row input,
-.juneau-view-dialog-form-row textarea {
+.juneau-view-dialog-form-row textarea,
+.juneau-view-dialog-form-row select {
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -700,10 +744,98 @@ table.dataTable thead .sorting_desc_disabled:after {
 	min-height: 6em;
 }
 
+/* A checkbox and a checkbox styled as a switch are inline (auto width), not full-width form controls. */
+.juneau-view-dialog-form-row input[type="checkbox"] {
+	width: auto;
+}
+
+/*
+ * The toggle skin (role=switch): a track+knob rendered from a native checkbox via appearance:none, so keyboard /
+ * form semantics are unchanged.  NEUTRAL - shape only; a host's chrome.css MAY theme the on/off palette.
+ */
+.juneau-view-toggle {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 2.25em;
+	height: 1.25em;
+	border: 1px solid;
+	border-radius: 1em;
+	position: relative;
+	vertical-align: middle;
+	cursor: pointer;
+	flex: 0 0 auto;
+}
+
+.juneau-view-toggle::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 0.15em;
+	width: 0.9em;
+	height: 0.9em;
+	border-radius: 50%;
+	background: currentColor;
+	transform: translateY(-50%);
+	transition: left 0.1s ease-in-out;
+}
+
+.juneau-view-toggle:checked::after {
+	left: calc(100% - 1.05em);
+}
+
+/* The optional per-field help hint (painted with textContent). */
+.juneau-view-dialog-form-help {
+	font-size: 0.85em;
+	font-weight: normal;
+	margin-top: 0.2em;
+}
+
+/* The per-field inline validation error sibling; empty until a rule fails (role=alert set on confirm-time). */
+.juneau-view-dialog-form-error {
+	font-size: 0.85em;
+	font-weight: normal;
+	margin-top: 0.2em;
+	min-height: 1em;
+}
+
+/* A type=action button rendered inside a dialog form. */
+.juneau-view-dialog-form-action {
+	align-self: flex-start;
+}
+
 .juneau-view-dialog-actions {
 	display: flex;
 	gap: 0.5em;
 	justify-content: flex-end;
+}
+
+/*
+ * The row-action menu (TODO-445h): portalled to document.body as a light-dismiss layer and positioned under its
+ * trigger, so it needs its own opaque box + a fallback z-index (the runtime stamps an inline per-layer z-index).
+ * NEUTRAL - shape only; a host's chrome.css MAY theme these classes.
+ */
+.juneau-view-action-menu {
+	position: fixed;
+	margin: 0;
+	padding: 0.25em 0;
+	list-style: none;
+	min-width: 10em;
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	background: var(--jc-popover-bg);
+	box-shadow: var(--jc-popover-shadow);
+	z-index: var(--jc-popover-z, 1200);
+}
+
+.juneau-view-action-item {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	text-align: left;
+	padding: 0.35em 0.75em;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
 }
 
 /* The post-response settled-outcome banner (success/failure/refusal/unknown) - neutral; role drives assistive text. */
@@ -870,6 +1002,137 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .jc-cell-popover-value {
 	flex: 1 1 auto;
+	min-width: 0;
+	word-break: break-word;
+}
+
+/*
+ * Card-layout widget (CardGrid / Card / CardFieldList).  Shape classes are views-owned
+ * (.juneau-view-card-*); a refreshable card's runtime behavior is driven by the data-juneau-card-* attributes
+ * the CardGridTable emitter stamps and juneau-cards.js reads.  Neutral, dependency-free defaults via --jc-card-*
+ * tokens so a grid is legible without a theme; a consumer stylesheet (or console-ui chrome.css) may override the
+ * tokens.  The grid's minmax() floor reads --jc-card-min, which the emitter overrides inline per-grid from
+ * CardGrid.minCardPx when set; there is deliberately no --jc-card-status-error token - the error status chip is
+ * distinguished by a heavier border + bold weight, not a color, so it reads in any theme.
+ */
+:root {
+	--jc-card-bg: #ffffff;
+	--jc-card-border: #dddddd;
+	--jc-card-radius: 6px;
+	--jc-card-gap: 1rem;
+	--jc-card-min: 280px;
+	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.juneau-view-card-grid {
+	display: grid;
+	gap: var(--jc-card-gap, 1rem);
+	grid-template-columns: repeat(auto-fill, minmax(var(--jc-card-min, 280px), 1fr));
+	align-items: start;
+}
+
+.juneau-view-card-grid-title {
+	grid-column: 1 / -1;
+	margin: 0 0 0.25rem;
+}
+
+.juneau-view-card {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	background: var(--jc-card-bg, #ffffff);
+	border: 1px solid var(--jc-card-border, #dddddd);
+	border-radius: var(--jc-card-radius, 6px);
+	box-shadow: var(--jc-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+	overflow: hidden;
+}
+
+.juneau-view-card-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid var(--jc-card-border, #dddddd);
+}
+
+.juneau-view-card-title {
+	font-weight: 600;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.juneau-view-card-status {
+	font-size: 0.75rem;
+	color: #555;
+	padding: 0.05em 0.4em;
+	border-radius: 3px;
+}
+
+/* Error status: heavier border + bold weight (no color token) so it reads in any theme. */
+.juneau-view-card-status[data-state="error"],
+[data-juneau-card-status][data-state="error"] {
+	font-weight: 700;
+	border: 1px solid currentColor;
+}
+
+.juneau-view-card-actions {
+	margin-left: auto;
+	display: flex;
+	gap: 0.25em;
+}
+
+.juneau-view-card-refresh {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75em;
+	height: 1.75em;
+	padding: 0;
+	border: 1px solid var(--jc-card-border, #dddddd);
+	border-radius: 4px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.juneau-view-card-refresh:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.juneau-view-card-banner {
+	padding: 0.4rem 0.75rem;
+	border-bottom: 1px solid var(--jc-card-border, #dddddd);
+	font-size: 0.8125rem;
+}
+
+.juneau-view-card-body {
+	padding: 0.5rem 0.75rem;
+	min-width: 0;
+}
+
+/* Field list: the emitter stamps grid-template-columns inline from CardFieldList.columns. */
+.juneau-view-card-fields {
+	display: grid;
+	gap: 0.4rem 0.75rem;
+	margin: 0;
+}
+
+.juneau-view-card-field {
+	min-width: 0;
+}
+
+.juneau-view-card-field dt {
+	font-size: 0.75rem;
+	color: #555;
+	margin: 0;
+}
+
+.juneau-view-card-field dd {
+	margin: 0;
 	min-width: 0;
 	word-break: break-word;
 }

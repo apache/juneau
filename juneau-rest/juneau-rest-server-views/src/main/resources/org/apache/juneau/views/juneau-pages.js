@@ -174,6 +174,17 @@
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest(PANEL_SELECTOR) !== panel) return;
 			const $ = window.jQuery;
+			// A nested table (a read-only table inside a row-detail section) is NOT owned by this page runtime: it
+			// inits lazily off its parent row's detail GET (juneau-views.js), never via initTable here - and its
+			// sidecar carries no html id for initTable's getElementById lookup to find.  If it is already open and
+			// inited (the user expanded a row, then switched tabs away and back), just re-measure its columns now
+			// that its panel is visible again; otherwise leave it entirely to the detail expander.
+			if (t.closest("[data-juneau-nested]") || t.closest(".juneau-view-detail-panel")) {
+				if ($?.fn?.dataTable?.isDataTable(t)) {
+					try { $(t).DataTable().columns.adjust(); } catch (e) { /* not yet drawable */ }
+				}
+				return;
+			}
 			if (NS.init?.initTable) {
 				Promise.resolve(NS.init.initTable(t)).then(function () {
 					if ($?.fn?.dataTable?.isDataTable(t)) $(t).DataTable().columns.adjust();

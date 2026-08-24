@@ -1,0 +1,275 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-calendar.css - stylesheet for the Apache Juneau reusable calendar widget (parent concept #10).
+ *
+ * Served by ViewsMixin alongside juneau-views.css.  This file is SELF-CONTAINED: it declares FALLBACKS for every
+ * --jc-* token it consumes (--jc-popover-*, --jc-tag-*, plus the neutral chrome tokens) so the grid, chips and
+ * popover are legible standalone - before any app adopts console-ui's chrome.css.  It takes NO dependency on
+ * chrome.css and MUST NOT edit it; when chrome.css (or juneau-views.css) defines the same tokens, those themed
+ * values win via the normal cascade and the var() fallbacks are simply not used.
+ *
+ * The five jc-cal-cat--{blue,green,amber,red,neutral} classes are defined ONLY in terms of the existing
+ * --jc-tag-{color}-{bg,border,text} token families - no author inline color, no per-instance concatenated class.
+ */
+
+/* Token fallbacks (S9 / L7 A): only fill a slot the theme hasn't; a themed :root wins by cascade. */
+.jc-cal {
+	--jc-cal-popover-bg: var(--jc-popover-bg, #f7f7f7);
+	--jc-cal-popover-border: var(--jc-popover-border, #ccc);
+	--jc-cal-popover-shadow: var(--jc-popover-shadow, 0 2px 10px rgba(0, 0, 0, 0.18));
+	--jc-cal-popover-z: var(--jc-popover-z, 1200);
+
+	--jc-cal-accent: var(--jc-accent, #2b6cb0);
+	--jc-cal-accent-wash: var(--jc-accent-wash, #ebf3fb);
+	--jc-cal-border: var(--jc-border, #d0d0d0);
+	--jc-cal-radius: var(--jc-radius, 0.25em);
+	--jc-cal-text-muted: var(--jc-text-muted, #8a8a8a);
+	--jc-cal-focus: var(--jc-focus, #2b6cb0);
+	--jc-cal-space-1: var(--jc-space-1, 0.25em);
+	--jc-cal-space-2: var(--jc-space-2, 0.5em);
+	--jc-cal-space-3: var(--jc-space-3, 0.75em);
+
+	--jc-cal-tag-blue-bg: var(--jc-tag-blue-bg, #ebf3fb);
+	--jc-cal-tag-blue-border: var(--jc-tag-blue-border, #a9cbec);
+	--jc-cal-tag-blue-text: var(--jc-tag-blue-text, #1a4971);
+	--jc-cal-tag-green-bg: var(--jc-tag-green-bg, #e8f5ec);
+	--jc-cal-tag-green-border: var(--jc-tag-green-border, #a6d7b6);
+	--jc-cal-tag-green-text: var(--jc-tag-green-text, #1f5b34);
+	--jc-cal-tag-amber-bg: var(--jc-tag-amber-bg, #fdf3e0);
+	--jc-cal-tag-amber-border: var(--jc-tag-amber-border, #ecca8f);
+	--jc-cal-tag-amber-text: var(--jc-tag-amber-text, #7a531a);
+	--jc-cal-tag-red-bg: var(--jc-tag-red-bg, #fbeaea);
+	--jc-cal-tag-red-border: var(--jc-tag-red-border, #e2a9a9);
+	--jc-cal-tag-red-text: var(--jc-tag-red-text, #7a1f1f);
+	--jc-cal-tag-neutral-bg: var(--jc-tag-neutral-bg, #f0f0f0);
+	--jc-cal-tag-neutral-border: var(--jc-tag-neutral-border, #c9c9c9);
+	--jc-cal-tag-neutral-text: var(--jc-tag-neutral-text, #444444);
+
+	position: relative;              /* the calendar container never clips its own popovers (concept #11) */
+	font-size: 0.95em;
+}
+
+/* Header: prev/next/today nav + the aria-live month/year title. */
+.jc-cal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--jc-cal-space-2);
+	margin-bottom: var(--jc-cal-space-2);
+}
+
+.jc-cal-nav {
+	display: flex;
+	gap: var(--jc-cal-space-1);
+}
+
+.jc-cal-nav-btn {
+	padding: var(--jc-cal-space-1) var(--jc-cal-space-2);
+	border: 1px solid var(--jc-cal-border);
+	border-radius: var(--jc-cal-radius);
+	background: transparent;
+	cursor: pointer;
+	line-height: 1.2;
+}
+
+.jc-cal-nav-btn:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.jc-cal-nav-btn:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: 1px;
+}
+
+.jc-cal-title {
+	font-weight: 600;
+}
+
+/* Inline fetch/handshake error surface (single attempt - no retry storm). */
+.jc-cal-error {
+	margin-bottom: var(--jc-cal-space-2);
+	padding: var(--jc-cal-space-1) var(--jc-cal-space-2);
+	border: 1px solid var(--jc-cal-border);
+	border-radius: var(--jc-cal-radius);
+}
+
+/* Month grid: 7 columns, always 6 fixed week rows. */
+.jc-cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 1px;
+	transition: opacity 120ms;       /* month-change fade; disabled under prefers-reduced-motion below */
+}
+
+/* A week row / weekday header row spans the whole 7-column track. */
+.jc-cal-weekdays,
+.jc-cal-week {
+	display: contents;
+}
+
+.jc-cal-weekday {
+	padding: var(--jc-cal-space-1);
+	font-size: 0.8em;
+	font-weight: 600;
+	text-align: center;
+	color: var(--jc-cal-text-muted);
+}
+
+.jc-cal-day {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-cal-space-1);
+	min-height: 4.5em;
+	padding: var(--jc-cal-space-1);
+	border: 1px solid var(--jc-cal-border);
+	border-radius: var(--jc-cal-radius);
+}
+
+.jc-cal-day:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: -2px;
+}
+
+.jc-cal-day-num {
+	font-size: 0.8em;
+	font-weight: 600;
+}
+
+/* Adjacent (prev/next month) cells: muted, never carry events. */
+.jc-cal-day--adjacent {
+	color: var(--jc-cal-text-muted);
+	background: transparent;
+}
+
+.jc-cal-day--adjacent .jc-cal-day-num {
+	opacity: 0.6;
+}
+
+/* Today highlight. */
+.jc-cal-day--today {
+	background: var(--jc-cal-accent-wash);
+	border-color: var(--jc-cal-accent);
+}
+
+.jc-cal-day-events {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-cal-space-1);
+}
+
+/* Event chip base - shape only; color comes from the jc-cal-cat--* class. */
+.jc-cal-event {
+	display: block;
+	padding: 0.1em 0.4em;
+	border: 1px solid transparent;
+	border-radius: var(--jc-cal-radius);
+	font-size: 0.8em;
+	line-height: 1.3;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-decoration: none;
+	color: inherit;
+}
+
+a.jc-cal-event:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: 1px;
+}
+
+/* "+N more" overflow trigger. */
+.jc-cal-more {
+	align-self: flex-start;
+	padding: 0 0.3em;
+	border: none;
+	background: transparent;
+	font-size: 0.8em;
+	cursor: pointer;
+	color: var(--jc-cal-accent);
+}
+
+.jc-cal-more:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: 1px;
+}
+
+/* Day-overflow popover - reuses the shared --jc-popover-* tokens (with fallbacks). */
+.jc-cal-popover {
+	position: absolute;
+	z-index: var(--jc-cal-popover-z);
+	min-width: 12em;
+	max-width: 20em;
+	padding: var(--jc-cal-space-2);
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-cal-space-1);
+	border: 1px solid var(--jc-cal-popover-border);
+	border-radius: var(--jc-cal-radius);
+	background: var(--jc-cal-popover-bg);
+	box-shadow: var(--jc-cal-popover-shadow);
+}
+
+/* Legend - display-only in v1 (no toggle-filter). */
+.jc-cal-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jc-cal-space-3);
+	margin: var(--jc-cal-space-2) 0 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 0.85em;
+}
+
+.jc-cal-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-cal-space-1);
+}
+
+.jc-cal-legend-swatch {
+	display: inline-block;
+	width: 0.85em;
+	height: 0.85em;
+	border: 1px solid transparent;
+	border-radius: 0.2em;
+}
+
+/*
+ * Category color families - each defined ONLY via the --jc-tag-{color}-{bg,border,text} tokens (with fallbacks).
+ * The chip uses bg/border/text; the legend swatch uses bg/border.  No new tokens, no inline color.
+ */
+.jc-cal-cat--blue.jc-cal-event { background: var(--jc-cal-tag-blue-bg); border-color: var(--jc-cal-tag-blue-border); color: var(--jc-cal-tag-blue-text); }
+.jc-cal-cat--green.jc-cal-event { background: var(--jc-cal-tag-green-bg); border-color: var(--jc-cal-tag-green-border); color: var(--jc-cal-tag-green-text); }
+.jc-cal-cat--amber.jc-cal-event { background: var(--jc-cal-tag-amber-bg); border-color: var(--jc-cal-tag-amber-border); color: var(--jc-cal-tag-amber-text); }
+.jc-cal-cat--red.jc-cal-event { background: var(--jc-cal-tag-red-bg); border-color: var(--jc-cal-tag-red-border); color: var(--jc-cal-tag-red-text); }
+.jc-cal-cat--neutral.jc-cal-event { background: var(--jc-cal-tag-neutral-bg); border-color: var(--jc-cal-tag-neutral-border); color: var(--jc-cal-tag-neutral-text); }
+
+.jc-cal-cat--blue .jc-cal-legend-swatch { background: var(--jc-cal-tag-blue-bg); border-color: var(--jc-cal-tag-blue-border); }
+.jc-cal-cat--green .jc-cal-legend-swatch { background: var(--jc-cal-tag-green-bg); border-color: var(--jc-cal-tag-green-border); }
+.jc-cal-cat--amber .jc-cal-legend-swatch { background: var(--jc-cal-tag-amber-bg); border-color: var(--jc-cal-tag-amber-border); }
+.jc-cal-cat--red .jc-cal-legend-swatch { background: var(--jc-cal-tag-red-bg); border-color: var(--jc-cal-tag-red-border); }
+.jc-cal-cat--neutral .jc-cal-legend-swatch { background: var(--jc-cal-tag-neutral-bg); border-color: var(--jc-cal-tag-neutral-border); }
+
+/* Reduced-motion: no month-change fade (§5.17). */
+@media (prefers-reduced-motion: reduce) {
+	.jc-cal-grid {
+		transition: none;
+	}
+}

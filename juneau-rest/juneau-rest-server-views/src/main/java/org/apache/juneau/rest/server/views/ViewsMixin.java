@@ -19,12 +19,14 @@ package org.apache.juneau.rest.server.views;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
- * {@code juneau-pages.js} tabs/sub-tabs page runtime, and the opt-in {@code juneau-config.js}/
- * {@code juneau-config.css} column-chooser runtime &mdash; each at its stable path (design doc §6.1).
+ * {@code juneau-pages.js} tabs/sub-tabs page runtime, the opt-in {@code juneau-config.js}/
+ * {@code juneau-config.css} column-chooser runtime, and the opt-in {@code juneau-cards.js} card-layout runtime
+ * &mdash; each at its stable path (design doc §6.1).
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -112,10 +114,36 @@ public class ViewsMixin {
 	public static final String CONFIG_CSS_PATH = "/juneau-config.css";
 
 	/**
+	 * The URL path at which the opt-in card-layout runtime is served (relative to the host mount).  A consumer adds
+	 * this {@code <script>} after {@code juneau-icons.js} (the refresh button's glyph is resolved from the icon
+	 * registry); a page with no {@code data-juneau-card-grid} never loads it.
+	 */
+	public static final String CARDS_JS_PATH = "/juneau-cards.js";
+
+	/**
+	 * The URL path at which the opt-in reusable-calendar runtime is served (relative to the host mount).  A
+	 * consumer adds this {@code <script>} after {@code juneau-views.js}; a page with no calendar never loads it.
+	 */
+	public static final String CALENDAR_JS_PATH = "/juneau-calendar.js";
+
+	/**
+	 * The URL path at which the opt-in reusable-calendar stylesheet is served (relative to the host mount).
+	 */
+	public static final String CALENDAR_CSS_PATH = "/juneau-calendar.css";
+
+	/**
 	 * The frozen {@code VIEW_META} contract-version handshake constant, kept in one source of truth with the value the
 	 * model emits ({@link ViewDef#CONTRACT_VERSION}).
 	 */
 	public static final String CONTRACT_VERSION = ViewDef.CONTRACT_VERSION;
+
+	/**
+	 * The card refresh-envelope contract-version handshake constant that {@code juneau-cards.js} bakes in, kept in one
+	 * source of truth with the value the card model emits ({@link CardFieldList#CONTRACT_VERSION}).  Deliberately a
+	 * distinct constant from {@link #CONTRACT_VERSION} (the {@code VIEW_META} sidecar contract): a card-envelope
+	 * revision must never force a view-sidecar bump, or vice-versa.
+	 */
+	public static final String CARDS_CONTRACT_VERSION = CardFieldList.CONTRACT_VERSION;
 
 	/** Classpath location of the shipped initializer. */
 	static final String VIEWS_JS_RESOURCE = "/org/apache/juneau/views/juneau-views.js";
@@ -140,6 +168,15 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped column-chooser stylesheet. */
 	static final String CONFIG_CSS_RESOURCE = "/org/apache/juneau/views/juneau-config.css";
+
+	/** Classpath location of the shipped card-layout runtime. */
+	static final String CARDS_JS_RESOURCE = "/org/apache/juneau/views/juneau-cards.js";
+
+	/** Classpath location of the shipped reusable-calendar runtime. */
+	static final String CALENDAR_JS_RESOURCE = "/org/apache/juneau/views/juneau-calendar.js";
+
+	/** Classpath location of the shipped reusable-calendar stylesheet. */
+	static final String CALENDAR_CSS_RESOURCE = "/org/apache/juneau/views/juneau-calendar.css";
 
 	/** Content type emitted for the JavaScript assets. */
 	static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
@@ -278,13 +315,29 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-cards.js] &mdash; serve the opt-in card-layout runtime.
+	 *
+	 * @return The card-layout runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CARDS_JS_PATH,
+		summary="Juneau rich-view card-layout runtime",
+		description="First-party, opt-in JavaScript that enhances a CardGridTable's refreshable cards: contract handshake, built-in refresh button, and an optional per-card poll loop.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getCardsScript() {
+		return serve(CARDS_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * Returns the servlet-relative URL for a served asset, carrying a {@code ?v=<buildVersion>-<hash8>} content-
 	 * sensitive cache-buster suitable for a page's {@code head=} block (see the class Javadoc's cache-busting
 	 * section for why the buster is content- rather than purely version-keyed).
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
-	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}).
+	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
+	 * 	{@link #CALENDAR_CSS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -307,11 +360,42 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
-	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}).
+	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
+	 * 	{@link #CALENDAR_CSS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
 		return req.getUriResolver().resolve("servlet:" + path) + ASSET_CACHE.cacheBuster(resourceFor(path));
+	}
+
+	/**
+	 * [GET /juneau-calendar.js] &mdash; serve the opt-in reusable-calendar runtime.
+	 *
+	 * @return The calendar runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CALENDAR_JS_PATH,
+		summary="Juneau reusable-calendar runtime",
+		description="First-party, opt-in JavaScript that hydrates a data-juneau-calendar month grid from its seed sidecar or a same-origin per-month GET.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getCalendarScript() {
+		return serve(CALENDAR_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-calendar.css] &mdash; serve the opt-in reusable-calendar stylesheet.
+	 *
+	 * @return The calendar stylesheet as a CSS {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CALENDAR_CSS_PATH,
+		summary="Juneau reusable-calendar stylesheet",
+		description="First-party, opt-in CSS for the reusable-calendar month grid, chips, legend and day popover; declares --jc-* token fallbacks.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getCalendarStylesheet() {
+		return serve(CALENDAR_CSS_RESOURCE, CSS_CONTENT_TYPE);
 	}
 
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */
@@ -329,6 +413,9 @@ public class ViewsMixin {
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
+		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;
+		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
+		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
 		throw new IllegalArgumentException("Unknown asset path: " + path);
 	}
 }

@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.datatables.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The top-level, declarative "rich DataTables view" definition &mdash; the root of the frozen {@code VIEW_META}
@@ -82,8 +83,13 @@ public class ViewDef {
 	 * problem on a server-side-query table.  Enforced here (server-side) rather than only in
 	 * {@code juneau-views.js} so the clamp is a single, easily-tested source of truth and a stale/cached client
 	 * script can't be tricked into honoring a sub-floor value the server never actually declared.
+	 *
+	 * <p>
+	 * This is a public alias, equal by construction, of the toolkit-wide floor
+	 * {@link org.apache.juneau.commons.http.SafePathTemplate#MIN_POLL_INTERVAL_MS} &mdash; the single commons source
+	 * of truth every polling widget shares.
 	 */
-	public static final long MIN_POLL_INTERVAL_MS = 5_000L;
+	public static final long MIN_POLL_INTERVAL_MS = org.apache.juneau.commons.http.SafePathTemplate.MIN_POLL_INTERVAL_MS;
 
 	/**
 	 * How the table sources its rows.
@@ -217,6 +223,15 @@ public class ViewDef {
 	 * and the client expands via GET.
 	 */
 	public RowDetailDef details;
+
+	/**
+	 * Author-declared server-side scalar values interpolated into this view's chrome (titles/labels) as
+	 * <js>"$FV{name}"</js> at serve time; <b>not</b> a {@code VIEW_META} wire field (Java-only, like
+	 * {@link #details}, because lambda providers never marshal).  When set, {@link ViewTable} resolves the declared
+	 * {@code $FV} chrome against a per-response sibling session, so the painted chrome and the VIEW_META sidecar
+	 * carry the same resolved strings.
+	 */
+	public ServerValues serverValues;
 
 	/**
 	 * The declared table-refresh polling interval, in milliseconds; omitted from the wire when unset (no polling).
@@ -391,14 +406,31 @@ public class ViewDef {
 	}
 
 	/**
-	 * Fail-closed bean validation.  When {@link #details} is set, delegates to
-	 * {@link RowDetailDef#validate(List)} against this view's {@link #rowActions}.
+	 * Declares the server-side scalar values interpolated into this view's chrome as <js>"$FV{name}"</js>.
 	 *
-	 * @throws IllegalArgumentException If this view (or its nested details) is not well-formed.
+	 * <p>
+	 * See {@link #serverValues} &mdash; this is a Java-only builder field, not a {@code VIEW_META} JSON key.
+	 *
+	 * @param value The server-values declaration.  May be <jk>null</jk> (no {@code $FV} interpolation).
+	 * @return This object.
+	 */
+	public ViewDef serverValues(ServerValues value) {
+		serverValues = value;
+		return this;
+	}
+
+	/**
+	 * Fail-closed bean validation.  When {@link #details} is set, delegates to
+	 * {@link RowDetailDef#validate(List, String)} against this view's {@link #rowActions} and id; when
+	 * {@link #serverValues} is set, cascades to {@link ServerValues#validate()}.
+	 *
+	 * @throws IllegalArgumentException If this view (or its nested details / server values) is not well-formed.
 	 */
 	public void validate() {
 		if (details != null)
-			details.validate(rowActions);
+			details.validate(rowActions, id);
+		if (serverValues != null)
+			serverValues.validate();
 		if (columns != null) {
 			for (var c : columns) {
 				if (c != null && c.render != null && c.render.popover != null)

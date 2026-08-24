@@ -316,9 +316,15 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertNum(2, r.get("skills_tabCount"));
 	}
 
-	@Test void b14_tabSwitch_neverRefetches() {
+	@Test void b14_tabSwitch_parentVisibilityOnly_firesNestedActivationSeam() {
 		var r = report();
-		assertNum(0, r.get("noRefetch_fetchCalls"));          // tab switch is DOM-visibility only
+		assertNum(0, r.get("noRefetch_fetchCalls"));          // parent detail envelope is DOM-visibility only
 		assertEquals(true, r.get("noRefetch_clickSelectedTab0"));
+		// The onActivate seam (the hook a newly-shown pane's nested table uses to run its own GET) fires on every
+		// tab activation - keyboard then click - carrying the correct section id + the activated pane.
+		assertNum(2, r.get("noRefetch_onActivateCount"));
+		assertEquals("b", r.get("noRefetch_onActivateFirstSid"));
+		assertEquals("a", r.get("noRefetch_onActivateLastSid"));
+		assertEquals(true, r.get("noRefetch_onActivatePaneMatches"));
 	}
 }

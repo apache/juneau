@@ -19,15 +19,26 @@
  * Reusable widget primitives for the Juneau REST server toolkit.
  *
  * <p>
- * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker and the first
- * concrete primitive, {@link org.apache.juneau.rest.server.widgets.ActionBar}.  Table-specific types
- * (row-detail defs, row actions) stay in {@code juneau-rest-server-views}; this module has <b>no</b> dependency
- * on views, so an {@link org.apache.juneau.rest.server.widgets.ActionBar} can never import a row-action type.
+ * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker, the
+ * {@link org.apache.juneau.rest.server.widgets.ActionBar} primitive, the card-layout beans
+ * ({@link org.apache.juneau.rest.server.widgets.CardGrid} / {@link org.apache.juneau.rest.server.widgets.Card} /
+ * {@link org.apache.juneau.rest.server.widgets.CardBody} / {@link org.apache.juneau.rest.server.widgets.CardFieldList}
+ * / {@link org.apache.juneau.rest.server.widgets.CardField}), and the bean-only definitions for the reusable
+ * calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef},
+ * {@link org.apache.juneau.rest.server.widgets.EventCategory},
+ * {@link org.apache.juneau.rest.server.widgets.CalendarEvent}).  Table-specific types (row-detail defs, row actions)
+ * and the concrete html5 emitters + client runtimes stay in {@code juneau-rest-server-views}; this module has
+ * <b>no</b> dependency on views, so a widget bean can never import a views-module type.  A
+ * {@link org.apache.juneau.rest.server.widgets.CalendarDef} carries no HTML-emitter code &mdash; the calendar's
+ * emitter ({@code CalendarTable}) lives in views and composes these beans.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.Widget}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ActionBar}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CardGrid}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CalendarDef}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ServerValues}
  * </ul>
  *
  * @since 10.0.0

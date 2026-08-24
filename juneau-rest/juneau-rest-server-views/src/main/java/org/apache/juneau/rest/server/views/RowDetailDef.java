@@ -106,6 +106,19 @@ public class RowDetailDef {
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	public void validate(List<RowAction> rowActions) {
+		validate(rowActions, null);
+	}
+
+	/**
+	 * Fail-closed bean validation, additionally validating nested {@link DetailSection#table}s and enforcing that a
+	 * nested view id neither duplicates another nested view id nor collides with the enclosing view id.
+	 *
+	 * @param rowActions The enclosing {@link ViewDef#rowActions}, or <jk>null</jk> (any {@link ActionRef} then
+	 * 	fails).
+	 * @param enclosingViewId The enclosing {@link ViewDef#id}, or <jk>null</jk> to skip the parent-id collision check.
+	 * @throws IllegalArgumentException If this definition is not well-formed.
+	 */
+	public void validate(List<RowAction> rowActions, String enclosingViewId) {
 		if (endpoint == null || endpoint.isBlank())
 			throw iaex("RowDetailDef endpoint must not be null or blank.");
 		if (!endpoint.contains("{id}"))
@@ -130,6 +143,7 @@ public class RowDetailDef {
 
 		var sectionIds = new HashSet<String>();
 		var fieldKeys = new HashSet<String>();
+		var nestedViewIds = new HashSet<String>();
 		for (var s : sections) {
 			if (s == null)
 				throw iaex("RowDetailDef section must not be null.");
@@ -166,6 +180,14 @@ public class RowDetailDef {
 						}
 					}
 				}
+			}
+			if (s.table != null) {
+				s.table.validate();
+				var nid = s.table.view.id;
+				if (enclosingViewId != null && enclosingViewId.equals(nid))
+					throw iaex("DetailSection '%s' nested table view id '%s' collides with the enclosing view id.", s.id, nid);
+				if (!nestedViewIds.add(nid))
+					throw iaex("RowDetailDef duplicate nested table view id '%s'.", nid);
 			}
 		}
 	}

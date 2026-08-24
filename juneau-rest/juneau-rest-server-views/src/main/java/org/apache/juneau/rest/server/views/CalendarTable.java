@@ -1,0 +1,369 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.views;
+
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
+
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
+
+import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.widgets.*;
+import org.apache.juneau.rest.server.widgets.CalendarDef.*;
+import org.apache.juneau.rest.server.widgets.EventCategory.*;
+
+/**
+ * Builds the HTML delivery shell for a {@link CalendarDef} &mdash; the {@code data-juneau-calendar} month grid, a
+ * display-only legend, the day-cell and event-chip {@code <template>} skeletons, and an optional
+ * {@code <script type="application/json" data-juneau-calendar-seed>} sidecar the {@code juneau-calendar.js} runtime
+ * consumes for the initial month.
+ *
+ * <p>
+ * This is the views-module emitter (parent decision L5 B / i1 A): {@link CalendarDef} and friends are
+ * <b>bean-only</b> in {@code juneau-rest-server-widgets}; views <b>composes</b> them here.  Widgets keeps no
+ * dependency on views.  The renderer paints the initial month's real day cells <b>and</b> real event chips for the
+ * seed events (true progressive enhancement &mdash; a no-JS reader sees a populated month with same-origin event
+ * links as plain anchors), then emits the {@code <template>} skeletons the runtime clones for other months.
+ *
+ * <h5 class='section'>Clock / civil-today (design doc &sect;5.7, l2):</h5>
+ * <p>
+ * "Today" and the default month come from an injected {@link Clock} &mdash; never a field on the bean and never
+ * {@code Date.now()} in the runtime's pure code.  The civil today date is stamped onto the root as
+ * {@code data-juneau-calendar-today="yyyy-MM-dd"} (from {@link LocalDate#now(Clock)}, honoring the clock's zone;
+ * the default zone policy is UTC).  When {@link CalendarDef#initialYear}/{@link CalendarDef#initialMonth} are unset
+ * the emitter resolves the effective window from the clock and passes it to
+ * {@link CalendarDef#validate(Integer, Integer)} so seed events are still checked against the month actually
+ * rendered.
+ *
+ * <h5 class='section'>Escaping contract (security-critical &mdash; mirrors {@link ViewTable}):</h5>
+ * <p>
+ * The seed sidecar JSON is emitted as the raw-text body of a {@code <script type="application/json">} element and is
+ * therefore handed to {@link org.apache.juneau.commons.utils.StringUtils#escapeForScript(String)} before insertion
+ * &mdash; a title containing {@code </script>} cannot break out of the element.  JSON is <b>data only</b>: the
+ * runtime fills every title/tooltip/label with {@code textContent}, never {@code innerHTML}.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='jc'>{@link CalendarDef}
+ * 	<li class='jc'>{@link ViewTable}
+ * </ul>
+ *
+ * @since 10.0.0
+ */
+public class CalendarTable {
+
+	/** Marker attribute the {@code juneau-calendar.js} runtime looks for; value = the instance {@link CalendarDef#id}. */
+	public static final String MARKER_ATTR = "data-juneau-calendar";
+
+	/** Attribute carrying the baked contract-version string {@code "1"}; the runtime fails loud on mismatch. */
+	public static final String CONTRACT_ATTR = "data-juneau-calendar-contract";
+
+	/** Attribute carrying the server-stamped civil today {@code yyyy-MM-dd} (from the injected clock). */
+	public static final String TODAY_ATTR = "data-juneau-calendar-today";
+
+	/** Attribute carrying the same-origin {@code {year}}/{@code {month}} GET template.  Absent when seed-only. */
+	public static final String ENDPOINT_ATTR = "data-juneau-calendar-endpoint";
+
+	/** Attribute carrying the view token ({@code month} in v1). */
+	public static final String VIEW_ATTR = "data-juneau-calendar-view";
+
+	/** Attribute carrying the week-start token ({@code sunday}/{@code monday}). */
+	public static final String WEEKSTART_ATTR = "data-juneau-calendar-weekstart";
+
+	/** Attribute carrying the integer chip cap before "+N more". */
+	public static final String MAXPERDAY_ATTR = "data-juneau-calendar-maxperday";
+
+	/** Marker attribute on the nav {@code <div>} wrapping the prev/next/today buttons. */
+	public static final String NAV_ATTR = "data-juneau-calendar-nav";
+
+	/** Marker attribute on the {@code aria-live} month/year title element. */
+	public static final String TITLE_ATTR = "data-juneau-calendar-title";
+
+	/** Marker attribute on the {@code role="grid"} month-grid mount. */
+	public static final String GRID_ATTR = "data-juneau-calendar-grid";
+
+	/** Marker attribute on the legend {@code <ul>}. */
+	public static final String LEGEND_ATTR = "data-juneau-calendar-legend";
+
+	/** Attribute carrying a category id on a legend item and on each painted chip (drives the color class). */
+	public static final String CAT_ATTR = "data-juneau-calendar-cat";
+
+	/** Marker attribute on the day-cell {@code <template>} skeleton. */
+	public static final String DAY_TEMPLATE_ATTR = "data-juneau-calendar-day";
+
+	/** Marker attribute on the event-chip {@code <template>} skeleton. */
+	public static final String EVENT_TEMPLATE_ATTR = "data-juneau-calendar-event";
+
+	/** Marker attribute on the optional {@code <script type="application/json">} seed sidecar. */
+	public static final String SEED_ATTR = "data-juneau-calendar-seed";
+
+	/** English weekday abbreviations when weeks start on Sunday. */
+	private static final String[] WEEKDAYS_SUNDAY = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
+	/** English weekday abbreviations when weeks start on Monday. */
+	private static final String[] WEEKDAYS_MONDAY = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+
+	private CalendarTable() {}
+
+	/**
+	 * Builds the calendar shell using the system-UTC clock (test/convenience; the civil today is then UTC-based).
+	 *
+	 * @param def The built calendar definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the month grid, legend, {@code <template>}s, and optional seed sidecar.
+	 */
+	public static Div of(CalendarDef def) {
+		return of(def, Clock.systemUTC());
+	}
+
+	/**
+	 * Builds the calendar shell for the specified definition and clock.
+	 *
+	 * <p>
+	 * Resolves the effective (year, month) window &mdash; the bean's {@link CalendarDef#initialYear}/
+	 * {@link CalendarDef#initialMonth} when set, else the clock's civil year/month &mdash; validates the bean against
+	 * that window (fail-closed on the serving path), then paints the initial month.
+	 *
+	 * @param def The built calendar definition.  Must not be <jk>null</jk>.
+	 * @param clock The clock supplying civil today and the default month.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the month grid, legend, {@code <template>}s, and optional seed sidecar.
+	 */
+	public static Div of(CalendarDef def, Clock clock) {
+		var today = LocalDate.now(clock);
+		var year = def.initialYear != null ? def.initialYear : today.getYear();
+		var month = def.initialMonth != null ? def.initialMonth : today.getMonthValue();
+
+		// Fail-closed on the serving path against the window actually rendered (mirrors the 445a B1 non-vacuous fix).
+		def.validate(year, month);
+
+		var weekStart = def.effectiveWeekStart();
+		var maxPerDay = def.effectiveMaxPerDay();
+
+		var root = div(
+			header(year, month, def.endpoint != null),
+			grid(def, year, month, weekStart, today, maxPerDay),
+			legend(def),
+			dayTemplate(),
+			eventTemplate()
+		).class_("jc-cal").attr("role", "group").attr("aria-label", "Calendar");
+
+		root.attr(MARKER_ATTR, def.id);
+		root.attr(CONTRACT_ATTR, CalendarDef.CONTRACT_VERSION);
+		root.attr(TODAY_ATTR, today.format(DateTimeFormatter.ISO_LOCAL_DATE));
+		if (def.endpoint != null)
+			root.attr(ENDPOINT_ATTR, def.endpoint);
+		root.attr(VIEW_ATTR, def.effectiveView().name().toLowerCase(Locale.ROOT));
+		root.attr(WEEKSTART_ATTR, weekStart.token());
+		root.attr(MAXPERDAY_ATTR, String.valueOf(maxPerDay));
+
+		var seed = seedSidecar(def, year, month);
+		if (seed != null)
+			root.children(seed);
+		return root;
+	}
+
+	/** Prev/next/today nav (disabled when seed-only) plus the {@code aria-live} month/year title. */
+	private static Div header(int year, int month, boolean nav) {
+		var prev = button("button", "‹").attr("data-juneau-calendar-prev", "1")
+			.attr("aria-label", "Previous month").class_("jc-cal-nav-btn");
+		var next = button("button", "›").attr("data-juneau-calendar-next", "1")
+			.attr("aria-label", "Next month").class_("jc-cal-nav-btn");
+		var todayBtn = button("button", "Today").attr("data-juneau-calendar-today-btn", "1")
+			.attr("aria-label", "Today").class_("jc-cal-nav-btn jc-cal-today-btn");
+		if (!nav) {
+			prev.disabled(true);
+			next.disabled(true);
+			todayBtn.disabled(true);
+		}
+		return div(
+			div(prev, next, todayBtn).attr(NAV_ATTR, "1").class_("jc-cal-nav"),
+			div(monthTitle(year, month)).attr(TITLE_ATTR, "1").attr("aria-live", "polite").class_("jc-cal-title")
+		).class_("jc-cal-header");
+	}
+
+	/** The month grid: a weekday header row plus six week rows of day cells with painted seed chips. */
+	private static Div grid(CalendarDef def, int year, int month, WeekStart weekStart, LocalDate today, int maxPerDay) {
+		var byDay = seedByDay(def, year, month);
+
+		var headerCells = new ArrayList<>(7);
+		for (var name : weekStart == WeekStart.MONDAY ? WEEKDAYS_MONDAY : WEEKDAYS_SUNDAY)
+			headerCells.add(span(name).attr("role", "columnheader").class_("jc-cal-weekday"));
+		var headerRow = div(headerCells.toArray()).attr("role", "row").class_("jc-cal-weekdays");
+
+		var gridStart = LocalDate.of(year, month, 1).minusDays(leadingOffset(year, month, weekStart));
+
+		var rows = new ArrayList<>(7);
+		rows.add(headerRow);
+		for (var w = 0; w < 6; w++) {
+			var cells = new ArrayList<>(7);
+			for (var d = 0; d < 7; d++) {
+				var date = gridStart.plusDays((long) w * 7 + d);
+				var inMonth = date.getMonthValue() == month && date.getYear() == year;
+				cells.add(dayCell(def, date, inMonth, date.equals(today), inMonth ? byDay.get(date) : null, maxPerDay));
+			}
+			rows.add(div(cells.toArray()).attr("role", "row").class_("jc-cal-week"));
+		}
+		return div(rows.toArray()).attr(GRID_ATTR, "1").attr("role", "grid").class_("jc-cal-grid");
+	}
+
+	/** One painted day cell: the day number and, for in-month cells, up to {@code maxPerDay} chips + "+N more". */
+	private static Div dayCell(CalendarDef def, LocalDate date, boolean inMonth, boolean isToday,
+			List<CalendarEvent> events, int maxPerDay) {
+		var cls = "jc-cal-day";
+		if (!inMonth)
+			cls += " jc-cal-day--adjacent";
+		if (isToday)
+			cls += " jc-cal-day--today";
+
+		var kids = new ArrayList<>();
+		kids.add(span(String.valueOf(date.getDayOfMonth())).class_("jc-cal-day-num"));
+
+		var chips = new ArrayList<>();
+		if (events != null && !events.isEmpty()) {
+			var shown = Math.min(maxPerDay, events.size());
+			for (var i = 0; i < shown; i++)
+				chips.add(chip(def, events.get(i)));
+			if (events.size() > shown)
+				chips.add(button("button", "+" + (events.size() - shown) + " more")
+					.attr("data-juneau-calendar-more", "1").class_("jc-cal-more"));
+		}
+		kids.add(div(chips.toArray()).class_("jc-cal-day-events"));
+
+		var cell = div(kids.toArray()).attr("role", "gridcell").class_(cls);
+		if (isToday)
+			cell.attr("aria-current", "date");
+		return cell;
+	}
+
+	/** One painted event chip: a same-origin anchor when {@code href} is a safe document URL, else a span. */
+	private static HtmlElement<?> chip(CalendarDef def, CalendarEvent e) {
+		var cls = "jc-cal-event jc-cal-cat--" + colorToken(def, e.categoryId);
+		HtmlElement<?> el;
+		if (e.href != null && !e.href.isBlank() && SafePathTemplate.isSafeDocumentUrl(e.href))
+			el = a(e.href, e.title).class_(cls);
+		else
+			el = span(e.title).class_(cls);
+		if (e.categoryId != null && !e.categoryId.isBlank())
+			el.attr(CAT_ATTR, e.categoryId);
+		if (e.tooltip != null && !e.tooltip.isBlank())
+			el.attr("title", e.tooltip);
+		return el;
+	}
+
+	/** The display-only legend: one item per declared category, in declared order, each with its color class. */
+	private static Ul legend(CalendarDef def) {
+		var items = new ArrayList<>();
+		if (def.categories != null) {
+			for (var c : def.categories) {
+				var item = li(span().class_("jc-cal-legend-swatch"), span(c.label).class_("jc-cal-legend-label"))
+					.attr(CAT_ATTR, c.id)
+					.class_("jc-cal-legend-item jc-cal-cat--" + c.effectiveColor().token());
+				if (c.description != null && !c.description.isBlank())
+					item.attr("title", c.description);
+				items.add(item);
+			}
+		}
+		return ul(items.toArray()).attr(LEGEND_ATTR, "1").class_("jc-cal-legend");
+	}
+
+	/** The day-cell skeleton the runtime clones for every cell of a non-seed month. */
+	private static Template dayTemplate() {
+		return template().attr(DAY_TEMPLATE_ATTR, "1").children(
+			div(
+				span().class_("jc-cal-day-num"),
+				div().class_("jc-cal-day-events")
+			).attr("role", "gridcell").class_("jc-cal-day"));
+	}
+
+	/** The event-chip skeleton the runtime clones and fills with {@code textContent}. */
+	private static Template eventTemplate() {
+		return template().attr(EVENT_TEMPLATE_ATTR, "1").children(
+			span().class_("jc-cal-event"));
+	}
+
+	/** The optional {@code escapeForScript}-encoded initial-month seed envelope, or {@code null} when no seed events. */
+	private static Script seedSidecar(CalendarDef def, int year, int month) {
+		if (def.events == null || def.events.isEmpty())
+			return null;
+		var events = new ArrayList<java.util.Map<String,Object>>();
+		for (var e : def.events)
+			events.add(eventMap(e));
+		var envelope = new LinkedHashMap<String,Object>();
+		envelope.put("contractVersion", CalendarDef.CONTRACT_VERSION);
+		envelope.put("year", year);
+		envelope.put("month", month);
+		envelope.put("events", events);
+		var json = escapeForScript(Json.of(envelope));
+		return script().type("application/json").attr(SEED_ATTR, "1").text(rawText(json));
+	}
+
+	/** Serializes one seed event to the wire envelope's element shape, omitting unset optional fields. */
+	private static java.util.Map<String,Object> eventMap(CalendarEvent e) {
+		var m = new LinkedHashMap<String,Object>();
+		m.put("id", e.id);
+		m.put("title", e.title);
+		m.put("start", e.start);
+		if (e.end != null)
+			m.put("end", e.end);
+		m.put("allDay", e.effectiveAllDay());
+		if (e.categoryId != null)
+			m.put("categoryId", e.categoryId);
+		if (e.href != null)
+			m.put("href", e.href);
+		if (e.tooltip != null)
+			m.put("tooltip", e.tooltip);
+		return m;
+	}
+
+	/** Groups the seed events falling in the initial month by their civil start date, sorted by start. */
+	private static java.util.Map<LocalDate,List<CalendarEvent>> seedByDay(CalendarDef def, int year, int month) {
+		var byDay = new HashMap<LocalDate,List<CalendarEvent>>();
+		if (def.events != null) {
+			var sorted = new ArrayList<>(def.events);
+			sorted.sort(Comparator.comparing(e -> e.start));
+			for (var e : sorted) {
+				var d = e.civilStart();
+				if (d.getYear() == year && d.getMonthValue() == month)
+					byDay.computeIfAbsent(d, k -> new ArrayList<>()).add(e);
+			}
+		}
+		return byDay;
+	}
+
+	/** The color token for an event's category, defaulting to {@code neutral} for an unknown/absent category. */
+	private static String colorToken(CalendarDef def, String categoryId) {
+		if (categoryId != null && def.categories != null)
+			for (var c : def.categories)
+				if (categoryId.equals(c.id))
+					return c.effectiveColor().token();
+		return CategoryColor.NEUTRAL.token();
+	}
+
+	/** The number of leading adjacent-month cells before the 1st, given the week-start column. */
+	private static int leadingOffset(int year, int month, WeekStart weekStart) {
+		var dow = LocalDate.of(year, month, 1).getDayOfWeek().getValue(); // MONDAY=1 .. SUNDAY=7
+		return weekStart == WeekStart.MONDAY ? dow - 1 : dow % 7;
+	}
+
+	/** The English month/year title, e.g. {@code "August 2026"}. */
+	private static String monthTitle(int year, int month) {
+		return Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + year;
+	}
+}

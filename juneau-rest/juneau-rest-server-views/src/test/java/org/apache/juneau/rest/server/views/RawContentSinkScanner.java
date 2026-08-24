@@ -98,13 +98,14 @@ final class RawContentSinkScanner {
 	private static final List<AllowedJsSink> SHIPPED_JS_ALLOWLIST = List.of(
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "b.innerHTML = markup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;")
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;"),
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-cards.js", "btn.innerHTML = glyph;")
 	);
 
 	/** Shipped widget JS assets scanned by {@link #scanShippedJs(Path)}. */
 	private static final List<String> SHIPPED_JS_FILES = List.of(
 		"juneau-config.js", "juneau-pages.js", "juneau-icons.js",
-		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js"
+		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js", "juneau-cards.js"
 	);
 
 	record AllowedJsSink(String relativePath, String snippet) {}
@@ -223,7 +224,7 @@ final class RawContentSinkScanner {
 	}
 
 	/**
-	 * Walks the six shipped {@code juneau-*.js} assets.  Hits are violations unless the unique snippet is on
+	 * Walks the shipped {@code juneau-*.js} assets.  Hits are violations unless the unique snippet is on
 	 * the first-party icon-registry allowlist.
 	 *
 	 * @param moduleRoot The {@code juneau-rest-server-views} module root.

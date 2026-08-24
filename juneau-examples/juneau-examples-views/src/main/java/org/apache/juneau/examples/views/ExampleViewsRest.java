@@ -19,8 +19,11 @@ package org.apache.juneau.examples.views;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 
+import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
@@ -55,7 +58,9 @@ import org.apache.juneau.rest.server.widgets.*;
  * 		satisfy the "at least one sibling plain tab" requirement and to keep a contrasting baseline the sub-tabbed
  * 		panel's blank-panel regression would show up against.
  * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with two named sections, two mutating {@link ActionRef}s,
- * 		{@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.
+ * 		{@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.  Its "Context" section further
+ * 		dogfoods a read-only {@link NestedTableDef}: a "related events" table with its own client-mode GET
+ * 		{@code /data/alerts/events}, scoped to the parent alert by the {@code alertId} query parameter.
  * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) are composed into one page,
  * 		rather than one type reused everywhere.
  * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
@@ -67,7 +72,10 @@ import org.apache.juneau.rest.server.widgets.*;
  * </ul>
  *
  * <p>
- * Every panel is a {@link ViewDef} table; non-table prose or form panels are outside this example's scope.
+ * Every panel on the composed page is a {@link ViewDef} table.  A separate {@code /dashboard} endpoint dogfoods
+ * the card-layout widget as a second, non-table consumer: {@link #dashboardGrid()} builds a {@link CardGrid}
+ * (rendered by {@link CardGridTable}) with a static summary card and a live, auto-refreshing metrics card backed
+ * by the {@code /data/cards/summary} refresh envelope.
  *
  * @since 10.0.0
  */
@@ -92,6 +100,24 @@ public class ExampleViewsRest extends BasicRestServlet {
 	private static final List<Widget> ARCHIVED_WIDGETS = buildArchivedWidgets();
 	private static final List<AuditEntry> AUDIT_LOG = buildAuditLog();
 	private static final List<Alert> ALERTS = buildAlerts();
+	private static final List<AlertEvent> ALERT_EVENTS = buildAlertEvents();
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Register the $FV server-values variable on this serving-path resource's VarResolver.  This @Bean factory
+	// receives the framework-built builder (so all default vars stay available) and returns a resolver that also
+	// knows ServerValuesVar, letting a view's $FV{name} chrome resolve at serve time.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Replaces the framework-built {@link VarResolver} with one that also knows {@link ServerValuesVar}.
+	 *
+	 * @param b The framework-built builder, pre-seeded with the default vars/functions.
+	 * @return A resolver that additionally resolves <js>"$FV{name}"</js> chrome.
+	 */
+	@Bean
+	public VarResolver varResolver(VarResolver.Builder b) {
+		return b.vars(ServerValuesVar.class).build();
+	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// The composed page: Catalog (sub-tabbed: Active/Archived) + sibling Audit Log + Alerts tabs.
@@ -155,6 +181,29 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.build();
 	}
 
+	/**
+	 * A standalone view whose column title interpolates a server-side scalar value via {@code $FV}.
+	 *
+	 * <p>
+	 * The {@code flaggedCount} provider is session-aware ({@code Function<VarResolverSession,?>}) and returns a
+	 * scalar; {@link ViewTable#of(RestRequest, ViewDef)} resolves the <js>"$FV{flaggedCount}"</js> chrome at serve
+	 * time into plain, serializer-encoded text.  {@code $FV} is registered by {@link #varResolver(VarResolver.Builder)}.
+	 */
+	static ViewDef flaggedView() {
+		return ViewDef.create("widgets-flagged")
+			.rowType(Widget.class)
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/widgets/active")
+			.defaultOrder("name", Dir.ASC)
+			.columns(
+				Column.of("name").title("Name"),
+				Column.of(COL_STATUS).title("Status ($FV{flaggedCount} flagged)").render("tag:status"),
+				Column.of(COL_OWNER).title(TITLE_OWNER))
+			.serverValues(ServerValues.create()
+				.value("flaggedCount", s -> ACTIVE_WIDGETS.stream().filter(w -> STATUS_ERROR.equals(w.status)).count()))
+			.build();
+	}
+
 	/** The sibling PLAIN leaf tab (no sub-tabs) - the contrast case the blank-panel regression needs. */
 	static ViewDef auditView() {
 		return ViewDef.create("audit-log")
@@ -182,10 +231,17 @@ public class ExampleViewsRest extends BasicRestServlet {
 				Column.of("title").title("Title"),
 				Column.of(COL_STATUS).title("Status"))
 			.rowActions(
+				// "ack" is a present=dialog action: clicking it fetches the form envelope (ackForm below), paints a
+				// typed input form, and submits to the POST endpoint on confirm.  The form carries a nested
+				// type=action button targeting "esc" (modal-over-modal, h3).
 				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack")
-					.method(RowAction.Method.POST).onSuccess(RowAction.OnSuccess.REDRAW),
+					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
+					.form("/data/alerts/{id}/ack-form").onSuccess(RowAction.OnSuccess.REDRAW),
+				// "esc" is a present=dialog CONFIRM-ONLY action (no form URL): clicking it opens a title-only
+				// confirmation, and it is also the nested trigger reached from the ack form's action button.
 				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc")
-					.method(RowAction.Method.POST).onSuccess(RowAction.OnSuccess.REDRAW))
+					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
+					.confirm("Escalate this alert to on-call?").onSuccess(RowAction.OnSuccess.REDRAW))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
 				.sections(
@@ -199,8 +255,60 @@ public class ExampleViewsRest extends BasicRestServlet {
 						.fields(
 							DetailField.of("summary").title("Summary"),
 							DetailField.of("assignee").title("Assignee"))
-						.actions(ActionBar.create().items(ActionRef.of("esc")))))
+						.actions(ActionBar.create().items(ActionRef.of("esc")))
+						// A read-only table nested in the expander: its own client-mode GET is scoped to the
+						// parent alert by the "alertId" query param (no {parentId} URL template).  It runs only
+						// after the alert's detail GET succeeds and the Context pane becomes visible.
+						.table(NestedTableDef.create(relatedEventsView()).parentScopeParam("alertId"))))
 			.build();
+	}
+
+	/** The read-only nested "related events" table dogfooded inside the Alerts expander's Context section. */
+	static ViewDef relatedEventsView() {
+		return ViewDef.create("alert-events")
+			.rowType(AlertEvent.class)
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/alerts/events")
+			.defaultOrder("timestamp", Dir.ASC)
+			.columns(
+				Column.of("timestamp").title("When").render("date"),
+				Column.of("kind").title("Kind"),
+				Column.of("detail").title("Detail"))
+			.build();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Card dashboard (a second, non-table consumer of the toolkit): a CardGrid rendered by CardGridTable.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * A {@link CardGrid} dashboard: one static summary card (server-rendered, works with JavaScript disabled) and
+	 * one live metrics card that declares a same-origin refresh endpoint and a poll interval, so
+	 * {@code juneau-cards.js} wires its built-in refresh button and an auto-refresh loop.  This dogfoods the
+	 * card-layout widget as a distinct delivery shape from the {@link ViewDef} tables above &mdash; the refresh
+	 * envelope's fields are keyed by {@link CardField#data}, not table columns.
+	 *
+	 * @return The dashboard grid.
+	 */
+	static CardGrid dashboardGrid() {
+		return CardGrid.create("ops").title("Operations Dashboard").minCardPx(320).cards(
+			Card.create("fleet", "Fleet Summary").body(
+				CardFieldList.create().columns(2).fields(
+					CardField.of("total", "Total widgets", Integer.toString(ACTIVE_WIDGETS.size() + ARCHIVED_WIDGETS.size())),
+					CardField.of("active", "Active", Integer.toString(ACTIVE_WIDGETS.size())),
+					CardField.of(VALUE_ARCHIVED, "Archived", Integer.toString(ARCHIVED_WIDGETS.size())),
+					CardField.of("alerts", "Total alerts", Integer.toString(ALERTS.size())))),
+			Card.create("live", "Live Alert Metrics").body(
+				CardFieldList.create().columns(2)
+					.fields(
+						CardField.of(STATUS_OPEN, "Open"),
+						CardField.of(STATUS_ACKNOWLEDGED, "Acknowledged"),
+						CardField.of(STATUS_ESCALATED, "Escalated"),
+						CardField.of("asOf", "As of"))
+					// Same-origin, non-templated path; poll well above the 5s floor so the staleness chip's advance is
+					// easy to watch.  Acknowledge/escalate an alert on the main page, then refresh to see counts move.
+					.refresh("/data/cards/summary")
+					.pollIntervalMs(10_000)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -269,6 +377,70 @@ public class ExampleViewsRest extends BasicRestServlet {
 			list(ContentType.of("text/html;charset=utf-8")));
 	}
 
+	/**
+	 * [GET /dashboard] &mdash; the {@link #dashboardGrid() card dashboard}: a static summary card plus a live,
+	 * auto-refreshing metrics card, with only the {@code juneau-icons.js} &rarr; {@code juneau-cards.js} assets a
+	 * card page needs (no DataTables/jQuery &mdash; a card grid carries no table).
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The card-dashboard HTML page.
+	 */
+	@RestGet(path="/dashboard", summary="A CardGrid dashboard: a static summary card + a live, auto-refreshing metrics card")
+	public HttpResource dashboard(RestRequest req) {
+		var gridMarkup = Html.of(CardGridTable.of(dashboardGrid()));
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - Card Dashboard Example</title>
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; Card Dashboard Example</h1>
+			<p>A <code>CardGridTable</code> dashboard. The <b>Fleet Summary</b> card is static (server-rendered,
+			legible with JavaScript disabled); the <b>Live Alert Metrics</b> card declares a same-origin refresh
+			endpoint and a poll interval, so <code>juneau-cards.js</code> wires its built-in refresh button and an
+			auto-refresh loop (watch the "As of" field and the staleness chip). Acknowledge or escalate an alert on
+			the <a href="/">main page</a>, then refresh this card to see the counts move.</p>
+			%s
+			<script src="%s"></script>
+			<script src="%s"></script>
+			</body>
+			</html>
+			""".formatted(
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				gridMarkup,
+				// Load order: the icon registry first (the refresh button's glyph is resolved from it), then cards.
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.CARDS_JS_PATH));
+		return HttpResourceBean.of(
+			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
+			list(ContentType.of("text/html;charset=utf-8")));
+	}
+
+	/**
+	 * [GET /flagged] &mdash; a standalone {@link ViewTable} whose column title resolves a {@code $FV} server value.
+	 *
+	 * <p>
+	 * Uses {@link ViewTable#of(RestRequest, ViewDef)} (the {@code ViewDef} host path) so the declared
+	 * {@code $FV{flaggedCount}} chrome is resolved against a per-response sibling session; the standalone
+	 * {@code ViewTable.of(view)} / {@link PageTable} paths intentionally do not resolve {@code $FV}.
+	 *
+	 * @param req The current request, whose var resolver knows {@code $FV}.
+	 * @return The rendered standalone view.
+	 */
+	@RestGet(path="/flagged", swagger=@OpSwagger(ignore=true))
+	public HttpResource flagged(RestRequest req) {
+		var markup = Html.of(ViewTable.of(req, flaggedView(), ACTIVE_WIDGETS));
+		return HttpResourceBean.of(
+			ByteArrayBody.of(markup.getBytes(UTF_8), "text/html;charset=utf-8"),
+			list(ContentType.of("text/html;charset=utf-8")));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// CLIENT-mode data endpoints - each returns its full row list; DataTables paginates in-browser.
 	//------------------------------------------------------------------------------------------------------------------
@@ -331,6 +503,28 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
+	 * [GET /data/alerts/events] &mdash; the nested "related events" table's rows, scoped to one parent alert.
+	 *
+	 * <p>
+	 * The nested table's own data GET carries the parent alert id under the {@code alertId} query parameter (the
+	 * {@code parentScopeParam} declared on its {@link NestedTableDef}).  An absent/blank scope returns nothing rather
+	 * than the whole unscoped set &mdash; a nested table without a parent id has no rows to show.
+	 *
+	 * @param alertId The parent alert id the nested table scoped its request to.
+	 * @return The events for that alert.
+	 */
+	@RestGet(path="/data/alerts/events", swagger=@OpSwagger(ignore=true))
+	public List<AlertEvent> alertEventsData(@Query("alertId") String alertId) {
+		if (alertId == null || alertId.isBlank())
+			return List.of();
+		var out = new ArrayList<AlertEvent>();
+		for (var e : ALERT_EVENTS)
+			if (alertId.equals(e.alertId))
+				out.add(e);
+		return out;
+	}
+
+	/**
 	 * [GET /data/alerts/{id}] &mdash; expand envelope for one alert.
 	 *
 	 * @param id The alert id.
@@ -344,6 +538,37 @@ public class ExampleViewsRest extends BasicRestServlet {
 			"title", a.title,
 			"summary", a.summary,
 			"assignee", a.assignee));
+	}
+
+	/**
+	 * [GET /data/alerts/{id}/ack-form] &mdash; the modal-open confirmation payload for the {@code present=dialog}
+	 * {@code ack} action: a typed input form (resolution comment, notify toggle, severity re-assignment select) plus
+	 * a nested {@code type=action} button that opens the confirm-only {@code esc} dialog over this one.
+	 *
+	 * <p>
+	 * The serving-path {@link ModalDef#checked() checked()} hook stamps the contract version and fail-closed validates
+	 * the modal/form &mdash; a malformed form fails here at serve time, not silently on the wire.
+	 *
+	 * @param id The alert id.
+	 * @return The validated, version-stamped modal definition.
+	 */
+	@RestGet(path="/data/alerts/{id}/ack-form", swagger=@OpSwagger(ignore=true))
+	public ModalDef ackForm(@Path("id") String id) {
+		var a = findAlert(id);
+		var key = IdempotencyKey.mint("ack", id);
+		return ModalDef.create("Acknowledge this alert?")
+			.field("Id", a.id)
+			.field("Severity", a.severity)
+			.field("Title", a.title)
+			.form(FormDef.create()
+				.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required()
+					.maxLength(500).help("Describe what you did to acknowledge this alert."))
+				.field(FormDef.Input.of("notify", "Notify on-call", "toggle").value("true"))
+				.field(FormDef.Input.of("severity", "Re-assign severity", "select")
+					.option("critical", "Critical").option("warning", "Warning").option("info", "Info").value(a.severity))
+				.field(FormDef.Input.of("escalate", "Escalate instead…", "action").action(ActionRef.of("esc"))))
+			.idempotencyKey(key.value())
+			.checked();
 	}
 
 	/**
@@ -372,9 +597,42 @@ public class ExampleViewsRest extends BasicRestServlet {
 		return ActionResult.success(a);
 	}
 
+	/**
+	 * [GET /data/cards/summary] &mdash; the Live Alert Metrics card's refresh envelope: live open/acknowledged/
+	 * escalated counts (moved by the {@code ack}/{@code esc} endpoints above) plus a server timestamp.  The field
+	 * keys match the {@link CardField#data} keys the {@link #dashboardGrid() dashboard} declares.
+	 *
+	 * @return {@code {contractVersion, fields}} for the card runtime.
+	 */
+	@RestGet(path="/data/cards/summary", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> cardsSummary() {
+		var open = 0;
+		var ack = 0;
+		var esc = 0;
+		for (var a : ALERTS) {
+			if (STATUS_OPEN.equals(a.status)) open++;
+			else if (STATUS_ACKNOWLEDGED.equals(a.status)) ack++;
+			else if (STATUS_ESCALATED.equals(a.status)) esc++;
+		}
+		var fields = new LinkedHashMap<String,Object>();
+		fields.put(STATUS_OPEN, open);
+		fields.put(STATUS_ACKNOWLEDGED, ack);
+		fields.put(STATUS_ESCALATED, esc);
+		fields.put("asOf", Instant.now().toString());
+		return cardEnvelope(fields);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Row generation - enough rows per panel that a column-sizing regression would be visibly wrong.
 	//------------------------------------------------------------------------------------------------------------------
+
+	/** Card refresh envelope: {@link CardFieldList#CONTRACT_VERSION} + a data-only field map (no table columns). */
+	private static Map<String,Object> cardEnvelope(Map<String,?> fields) {
+		var out = new LinkedHashMap<String,Object>();
+		out.put("contractVersion", CardFieldList.CONTRACT_VERSION);
+		out.put("fields", fields);
+		return out;
+	}
 
 	private static Map<String,Object> detailEnvelope(Map<String,?> fields) {
 		var out = new LinkedHashMap<String,Object>();
@@ -450,5 +708,24 @@ public class ExampleViewsRest extends BasicRestServlet {
 				assignees.get(i % assignees.size())));
 		}
 		return out;
+	}
+
+	private static List<AlertEvent> buildAlertEvents() {
+		var out = new ArrayList<AlertEvent>();
+		var kinds = List.of("fired", "notified", "acknowledged", "note");
+		// A handful of events per alert so the nested table has enough rows to page/sort against, and so a
+		// mis-scoped request (wrong or missing alertId) would be visibly wrong - some alerts' rows leaking into
+		// another's expander.
+		for (var i = 1; i <= 12; i++) {
+			var alertId = "ALRT-" + i;
+			var count = 3 + (i % 4);
+			for (var j = 0; j < count; j++)
+				out.add(new AlertEvent(
+					alertId,
+					"2026-08-%02dT%02d:%02d:00Z".formatted((i % 18) + 1, (8 + j) % 24, (i * 7 + j * 11) % 60),
+					kinds.get(j % kinds.size()),
+					kinds.get(j % kinds.size()) + " event " + (j + 1) + " for " + alertId));
+		}
+		return List.copyOf(out);
 	}
 }

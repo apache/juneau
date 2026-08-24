@@ -61,6 +61,38 @@
 	const JUNEAU_ROW_DETAIL_CONTRACT_VERSION = "1";
 
 	/**
+	 * The nested-table shell contract version (NestedTableDef.CONTRACT_VERSION on the server).  A FOURTH,
+	 * independently-versioned wire contract - deliberately NOT aliased to any of the three above, so a
+	 * nested-table shell revision can never force a VIEW_META / row-detail / action-result / bulk contract bump.
+	 * A nested-table wrapper whose data-juneau-nested-contract differs is refused (fail-loud), leaving the rest of
+	 * the detail panel fully functional - only that one nested table is withheld.
+	 */
+	const JUNEAU_NESTED_CONTRACT_VERSION = "1";
+
+	/**
+	 * Nested-table DOM attribute names - MUST equal ViewTable's constants of the same names (NESTED_ATTR,
+	 * NESTED_META_ATTR, NESTED_CONTRACT_ATTR, NESTED_SCOPE_PARAM_ATTR) on the server.  A nested table is a
+	 * read-only DataTables view (columns/paging/sort/search only) inside a row-detail section, scoped to its parent
+	 * row by merging ONE query parameter (named by NESTED_SCOPE_PARAM_ATTR) that carries the parent row id (stamped
+	 * at instantiation into NESTED_PARENT_ID_ATTR).  None of this is part of the VIEW_META wire contract.
+	 */
+	const NESTED_ATTR = "data-juneau-nested";
+	const NESTED_META_ATTR = "data-juneau-nested-meta";
+	const NESTED_CONTRACT_ATTR = "data-juneau-nested-contract";
+	const NESTED_SCOPE_PARAM_ATTR = "data-juneau-nested-scope-param";
+	const NESTED_PARENT_ID_ATTR = "data-juneau-parent-id";
+	const NESTED_INIT_ATTR = "data-juneau-nested-init";
+
+	/**
+	 * The declarative dialog-form contract version (TODO-445h): ModalDef.CONTRACT_VERSION / FormDef.CONTRACT_VERSION on
+	 * the server, both "1".  Fail-loud ONLY when a form is present: a form-bearing modal-open envelope whose top-level
+	 * contractVersion or nested form.contractVersion is missing or does not equal this baked-in value is a visible
+	 * refusal and the dialog does NOT open.  A confirm-only modal (no form) is unversioned and is NEVER refused on a
+	 * missing version (h5) - the naive {@code !== "1"} test must not run on that path.
+	 */
+	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "1";
+
+	/**
 	 * TODO-428 selection/bulk DOM attribute names - MUST equal ViewTable's constants of the same names
 	 * (SELECT_ATTR, ROW_ID_FIELD_ATTR, SELECT_ALL_ATTR, BULK_ATTR, BULK_SIDECAR_ID_PREFIX) on the server. Selection
 	 * and bulk-mutation are two INDEPENDENT opt-ins (HIGH-5): a table carries SELECT_ATTR with or without
@@ -81,6 +113,7 @@
 	NS.ACTION_RESULT_CONTRACT_VERSION = JUNEAU_ACTION_RESULT_CONTRACT_VERSION;
 	NS.BULK_CONTRACT_VERSION = JUNEAU_BULK_CONTRACT_VERSION;
 	NS.ROW_DETAIL_CONTRACT_VERSION = JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
+	NS.NESTED_CONTRACT_VERSION = JUNEAU_NESTED_CONTRACT_VERSION;
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -626,6 +659,14 @@
 			opts.ajax = { url: viewDef.dataUrl, dataSrc: "" };
 		}
 
+		// Nested-table parent scoping (445-family read-only nested ajax).  `deps.nestedScope`, present ONLY for a
+		// nested table, merges exactly ONE extra query parameter (its declared scope-param name -> the parent row id)
+		// into the GET in BOTH data modes.  The parent id is read through a getter at REQUEST time (off the live
+		// data-juneau-parent-id attribute) so the scope stays correct even if the nested table is re-init'd against a
+		// different parent row.  This is deliberately nested-only: a top-level view never carries deps.nestedScope.
+		if (deps && deps.nestedScope)
+			applyNestedScope(opts, deps.nestedScope);
+
 		opts.createdRow = function (rowEl, rowData) {
 			evaluateRowClassRules(viewDef.rowClassRules, rowData).forEach(function (cls) {
 				if (cls) rowEl.className += (rowEl.className ? " " : "") + cls;
@@ -638,6 +679,26 @@
 		};
 
 		return opts;
+	}
+
+	/**
+	 * Merges a nested table's parent-scope parameter into an already-built `opts.ajax`, wrapping any pre-existing
+	 * `data` contributor (the server-mode ribbon-param merger) rather than clobbering it.  `scope` is
+	 * `{param, parentId}` where `param` is the query-parameter name and `parentId` is a getter (or a plain value)
+	 * read at request time.  A null/blank parent id contributes nothing (the request goes out unscoped rather than
+	 * with an empty param) - a fail-closed caller withholds init entirely when the parent id is unknown, so this
+	 * only guards against a transient blank.  Pure: mutates the passed `opts` and touches no DOM/jQuery.
+	 */
+	function applyNestedScope(opts, scope) {
+		if (!opts || !opts.ajax || !scope || !scope.param) return;
+		const prior = opts.ajax.data;
+		opts.ajax.data = function (d) {
+			let out = d;
+			if (typeof prior === "function") { const r = prior(d); if (r !== undefined) out = r; }
+			const pid = typeof scope.parentId === "function" ? scope.parentId() : scope.parentId;
+			if (pid != null && String(pid) !== "") out[scope.param] = pid;
+			return out;
+		};
 	}
 
 	// ==================================================================================================================
@@ -838,7 +899,9 @@
 			lastBtn.disabled = st.lastDisabled;
 			sizeMenu.refresh(pagingSummaryText(info), st.selectedLength);
 		}
-		ctx.dataTable.on("draw.dt", refreshPillState);
+		// Guard against a nested table's draw.dt bubbling up the DOM to this parent-table handler (a nested
+		// DataTable lives inside the parent's expanded child row): only this table's own draw refreshes its pill.
+		ctx.dataTable.on("draw.dt", function (e) { if (e && e.target !== ctx.table) return; refreshPillState(); });
 		refreshPillState();   // correct initial disabled state before the first draw.dt fires
 
 		return pill;
@@ -1323,7 +1386,7 @@
 	 * aria-labelledby (the tab id), hidden unless it is the first (initially-selected) section.  Left/Right/Home/End
 	 * move selection.  Returns the strip element (already inserted as the panel's first child), or null.
 	 */
-	function buildDetailStrip(panel) {
+	function buildDetailStrip(panel, onActivate) {
 		if (!panel || typeof panel.querySelectorAll !== "function") return null;
 		const sections = panel.querySelectorAll("[data-juneau-detail-section]");
 		if (!sections || sections.length < 2) return null;
@@ -1370,10 +1433,21 @@
 			tabs.push({ btn: btn, pane: sec, id: sid });
 		}
 
+		// Fires the optional onActivate(sectionId, pane) after a tab becomes visible.  The row-detail expander uses
+		// it to lazily init a newly-shown pane's nested table (a nested DataTable must never be constructed while its
+		// pane is hidden - column widths would compute to zero).
+		function notifyActivate(sid) {
+			if (typeof onActivate !== "function") return;
+			for (let i = 0; i < tabs.length; i++)
+				if (String(tabs[i].id) === String(sid)) { onActivate(tabs[i].id, tabs[i].pane); return; }
+		}
+
 		strip.addEventListener("click", function (e) {
 			const btn = e.target && e.target.closest ? e.target.closest("[role=\"tab\"]") : null;
 			if (!btn || (strip.contains && !strip.contains(btn))) return;
-			activateDetailTab(tabs, btn.getAttribute("data-juneau-strip-tab"));
+			const sid = btn.getAttribute("data-juneau-strip-tab");
+			activateDetailTab(tabs, sid);
+			notifyActivate(sid);
 			if (typeof btn.focus === "function") btn.focus();
 		});
 		strip.addEventListener("keydown", function (e) {
@@ -1393,7 +1467,9 @@
 			if (next < 0) return;
 			if (typeof e.preventDefault === "function") e.preventDefault();
 			const nextBtn = tabs[next].btn;
-			activateDetailTab(tabs, nextBtn.getAttribute("data-juneau-strip-tab"));
+			const nsid = nextBtn.getAttribute("data-juneau-strip-tab");
+			activateDetailTab(tabs, nsid);
+			notifyActivate(nsid);
 			if (typeof nextBtn.focus === "function") nextBtn.focus();
 		});
 
@@ -1452,6 +1528,9 @@
 				if (!parentTr) return;
 				const row = dt.row(parentTr);
 				if (row && row.child && row.child.isShown()) {
+					// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
+					// their listeners/timers leak with the detached nodes).
+					teardownNestedTables(panel);
 					row.child.hide();
 					parentTr.classList.remove("juneau-view-detail-open");
 				}
@@ -1477,11 +1556,183 @@
 			const row = dt.row(tr);
 			if (!row || !row.length) return;
 			if (row.child.isShown()) {
+				// Tear down nested DataTables before hiding (their child-row DOM is about to be detached).
+				if (tr._juneauDetailPanel) teardownNestedTables(tr._juneauDetailPanel);
 				row.child.hide();
 				tr.classList.remove("juneau-view-detail-open");
 				return;
 			}
 			expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
+		});
+	}
+
+	// ==================================================================================================================
+	// popupLayerStack (TODO-445h): ONE shared registry for stacked light-dismiss / modal layers - dialogs, cell
+	// popovers, and row-action menus.  Top-layer-only Escape (preventDefault) and outside-click; per-layer focus trap
+	// for modals; focus restore on pop.  Cell-anchored layers portal to document.body as position:fixed; the page-size
+	// menu (stays position:absolute in the paging pill) and the timestamp popup (initTsPopup / hideTsPopupIfPresent)
+	// are deliberately NOT registered here.  The inline z-index (base + rawStackIndex*step) is the ONLY z source of
+	// truth for a registered layer.
+	// ==================================================================================================================
+
+	/**
+	 * The live layer records, bottom -> top.  Each record:
+	 * {@code { el, onDismiss, trapFocus, lightDismiss, detachOnPop, returnFocusTo, kind }}.
+	 */
+	const popupLayerStack = [];
+
+	/**
+	 * The v1 modal-over-modal depth cap: an outer dialog plus ONE nested {@code type=action} dialog.  This counts
+	 * {@code kind === "dialog"} records ONLY - a dialog + a popover is two stack entries but ONE dialog, and a nested
+	 * dialog must still open over them.  Popovers, row-action menus, and the (off-stack) timestamp popup never consume
+	 * the cap.  A third dialog push is a visible refusal inside the current top dialog.  Unlimited dialog depth is 10.0.
+	 */
+	const MAX_DIALOG_DEPTH = 2;
+
+	/**
+	 * A monotonic dialog sequence, incremented ONLY on a dialog-kind push, that namespaces the form field element ids
+	 * ({@code juneau-dialog-field-<seq>-<name>}).  Stacked dialogs sharing a field name therefore never collide, and
+	 * popover / row-action-menu pushes (which do not touch this counter) never shift a dialog's field ids (N-3).
+	 */
+	let dialogSeq = 0;
+
+	/** Reads a numeric {@code --jc-*} token off {@code :root}; falls back when unavailable (Node shim / missing token). */
+	function cssLayerNumber(name, fallback) {
+		try {
+			if (typeof window !== "undefined" && typeof window.getComputedStyle === "function"
+				&& typeof document !== "undefined" && document.documentElement) {
+				const v = window.getComputedStyle(document.documentElement).getPropertyValue(name);
+				const n = v ? parseInt(String(v).trim(), 10) : NaN;
+				if (! isNaN(n)) return n;
+			}
+		} catch (e) { /* fall through to the fallback */ }
+		return fallback;
+	}
+
+	function layerZBase() { return cssLayerNumber("--jc-dialog-z", 1000); }
+	function layerZStep() { return cssLayerNumber("--jc-layer-step", 10); }
+
+	function topLayer() {
+		return popupLayerStack.length ? popupLayerStack[popupLayerStack.length - 1] : null;
+	}
+
+	/** The number of {@code kind === "dialog"} layers currently open (the depth cap counts these, not stack.length). */
+	function dialogLayerCount() {
+		let n = 0;
+		for (let i = 0; i < popupLayerStack.length; i++) if (popupLayerStack[i].kind === "dialog") n++;
+		return n;
+	}
+
+	function focusablesIn(el) {
+		if (! el || typeof el.querySelectorAll !== "function") return [];
+		const sel = "a[href],area[href],button:not([disabled]),input:not([disabled]),select:not([disabled])," +
+			"textarea:not([disabled]),[tabindex]";
+		const out = [];
+		Array.prototype.forEach.call(el.querySelectorAll(sel), function (n) {
+			if (n && n.getAttribute && n.getAttribute("tabindex") === "-1") return;
+			out.push(n);
+		});
+		return out;
+	}
+
+	/** Focuses the first focusable control in a layer; a form with no focusable control focuses the layer element. */
+	function focusFirstInLayer(rec) {
+		const f = focusablesIn(rec.el);
+		const target = f.length ? f[0] : rec.el;
+		if (target && typeof target.focus === "function") { try { target.focus(); } catch (e) { /* ignore */ } }
+	}
+
+	/**
+	 * Registers a layer.  When {@code opts.portal !== false} the element is reparented to {@code document.body} and set
+	 * {@code position:fixed} (cell-anchored surfaces; a dialog backdrop is already full-viewport).  Records the current
+	 * {@code activeElement} (or {@code opts.returnFocusTo}) for focus-restore on pop, stamps the inline z-index and
+	 * {@code data-juneau-layer} = raw stack index, and installs the focus trap when {@code opts.trapFocus}.
+	 */
+	function pushLayer(el, opts) {
+		opts = opts || {};
+		const rec = {
+			el: el,
+			onDismiss: typeof opts.onDismiss === "function" ? opts.onDismiss : null,
+			trapFocus: !! opts.trapFocus,
+			lightDismiss: !! opts.lightDismiss,
+			detachOnPop: opts.detachOnPop !== false,
+			kind: opts.kind || "layer",
+			returnFocusTo: opts.returnFocusTo ||
+				((typeof document !== "undefined") ? document.activeElement : null)
+		};
+		if (opts.portal !== false && typeof document !== "undefined" && document.body) {
+			if (el.parentNode !== document.body) document.body.appendChild(el);
+			if (el.style) el.style.position = "fixed";
+		}
+		popupLayerStack.push(rec);
+		const idx = popupLayerStack.length - 1;
+		if (el.style) el.style.zIndex = String(layerZBase() + idx * layerZStep());
+		if (el.setAttribute) el.setAttribute("data-juneau-layer", String(idx));
+		bindLayerStackDocumentListeners();
+		if (rec.trapFocus) focusFirstInLayer(rec);
+		return rec;
+	}
+
+	/**
+	 * Pops the top layer, or - when {@code el} is given - that layer AND everything stacked above it (never a sibling
+	 * BELOW it, so a dialog's backdrop pop does not remove another dialog's backdrop).  A dialog layer's element is the
+	 * backdrop, so removing it takes exactly that dialog + its own backdrop.  Restores focus to the lowest removed
+	 * layer's {@code returnFocusTo} if it is still in the document.
+	 */
+	function popLayer(el) {
+		if (! popupLayerStack.length) return;
+		let from = popupLayerStack.length - 1;
+		if (el) {
+			let idx = -1;
+			for (let i = popupLayerStack.length - 1; i >= 0; i--) if (popupLayerStack[i].el === el) { idx = i; break; }
+			if (idx < 0) return;   // not a registered layer
+			from = idx;
+		}
+		const removed = popupLayerStack.splice(from);   // [from .. top]
+		const restore = removed.length ? removed[0].returnFocusTo : null;
+		for (let i = removed.length - 1; i >= 0; i--) {
+			const rec = removed[i];
+			if (rec.detachOnPop && rec.el && rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
+			if (rec.onDismiss) { try { rec.onDismiss(); } catch (e) { /* ignore */ } }
+		}
+		if (restore && typeof restore.focus === "function"
+			&& (typeof document === "undefined" || typeof document.contains !== "function" || document.contains(restore)))
+			{ try { restore.focus(); } catch (e) { /* ignore */ } }
+	}
+
+	function handleLayerTab(e) {
+		const top = topLayer();
+		if (! top || ! top.trapFocus) return;
+		const f = focusablesIn(top.el);
+		if (! f.length) { e.preventDefault(); return; }
+		const first = f[0], last = f[f.length - 1];
+		const active = (typeof document !== "undefined") ? document.activeElement : null;
+		const inLayer = top.el.contains && top.el.contains(active);
+		if (e.shiftKey) {
+			if (active === first || ! inLayer) { e.preventDefault(); if (typeof last.focus === "function") last.focus(); }
+		} else {
+			if (active === last || ! inLayer) { e.preventDefault(); if (typeof first.focus === "function") first.focus(); }
+		}
+	}
+
+	let _layerListenersBound = false;
+	function bindLayerStackDocumentListeners() {
+		if (_layerListenersBound) return;
+		if (typeof document === "undefined" || typeof document.addEventListener !== "function") return;
+		_layerListenersBound = true;
+		// ONE document keydown: Escape pops the TOP layer only (preventDefault); Tab cycles within a trapping top layer.
+		document.addEventListener("keydown", function (e) {
+			if (! popupLayerStack.length) return;
+			if (e.key === "Escape") { e.preventDefault(); popLayer(); return; }
+			if (e.key === "Tab") handleLayerTab(e);
+		});
+		// ONE document pointerdown: an outside click dismisses the TOP layer only, and only when it is light-dismiss.
+		document.addEventListener("pointerdown", function (e) {
+			const top = topLayer();
+			if (! top || ! top.lightDismiss) return;
+			const t = e.target;
+			if (t && top.el && top.el.contains && top.el.contains(t)) return;
+			popLayer();
 		});
 	}
 
@@ -1514,10 +1765,8 @@
 		return document.querySelector(".jc-cell-popover-trigger[aria-expanded=\"true\"]");
 	}
 
-	function closeCellPopover() {
-		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
-			? document.getElementById(CELL_POPOVER_ID) : null;
-		const trigger = currentPopoverTrigger();
+	/** Hides the (reused) cell-popover element and resets its trigger's expanded state.  Does NOT detach the element. */
+	function hidePopoverEl(el, trigger) {
 		if (el) {
 			el.style.display = "none";
 			if (typeof el.replaceChildren === "function") el.replaceChildren();
@@ -1530,6 +1779,17 @@
 				&& typeof trigger.focus === "function")
 				trigger.focus();
 		}
+	}
+
+	function closeCellPopover() {
+		// The cell popover reuses ONE element; when registered as a layer, popLayer's onDismiss hides+resets it (the
+		// element is kept, detachOnPop:false).  Fall back to a direct hide when it is not on the stack.
+		for (let i = popupLayerStack.length - 1; i >= 0; i--) {
+			if (popupLayerStack[i].kind === "popover") { popLayer(popupLayerStack[i].el); return; }
+		}
+		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
+			? document.getElementById(CELL_POPOVER_ID) : null;
+		hidePopoverEl(el, currentPopoverTrigger());
 	}
 
 	function positionCellPopover(el, trigger) {
@@ -1672,11 +1932,8 @@
 		const popover = findPopoverDecl(ctx, viewDef, colData);
 		if (!popover) return;
 		hideTsPopupIfPresent();
-		const prev = currentPopoverTrigger();
-		if (prev && prev !== btn) {
-			prev.setAttribute("aria-expanded", "false");
-			prev.removeAttribute("aria-controls");
-		}
+		// A previously-open popover is a layer; pop it (onDismiss resets its trigger) before opening the new one.
+		closeCellPopover();
 		const el = cellPopoverEl();
 		if (!el) return;
 		fillCellPopover(el, popover, rowData || {});
@@ -1684,41 +1941,21 @@
 		btn.setAttribute("aria-controls", CELL_POPOVER_ID);
 		positionCellPopover(el, btn);
 		if (typeof el.focus === "function") el.focus();
-	}
-
-	function bindCellPopoverDocumentListeners() {
-		if (typeof document === "undefined" || typeof document.addEventListener !== "function") return;
-		if (document._juneauCellPopoverBound) return;
-		document._juneauCellPopoverBound = true;
-		document.addEventListener("keydown", function (e) {
-			if (e.key === "Escape") closeCellPopover();
-		});
-		document.addEventListener("pointerdown", function (e) {
-			const el = document.getElementById(CELL_POPOVER_ID);
-			if (!el || el.style.display === "none") return;
-			const t = e.target;
-			if (t && t.closest && (t.closest("#" + CELL_POPOVER_ID) || t.closest("[data-juneau-popover]")))
-				return;
-			closeCellPopover();
-		});
-		document.addEventListener("focusout", function (e) {
-			const el = document.getElementById(CELL_POPOVER_ID);
-			if (!el || el.style.display === "none") return;
-			const to = e.relatedTarget;
-			const trigger = currentPopoverTrigger();
-			if (to && ((el.contains && el.contains(to)) || (trigger && trigger.contains && trigger.contains(to))))
-				return;
-			if (to && to.closest && (to.closest("#" + CELL_POPOVER_ID) || to.closest("[data-juneau-popover]")))
-				return;
-			closeCellPopover();
+		// Register on the shared stack as a light-dismiss popover.  portal:false (the element already lives in body)
+		// and detachOnPop:false (the element is reused): popLayer just hides+resets it via onDismiss.
+		pushLayer(el, {
+			kind: "popover", portal: false, detachOnPop: false, lightDismiss: true, trapFocus: false,
+			returnFocusTo: btn,
+			onDismiss: function () { hidePopoverEl(el, btn); }
 		});
 	}
 
 	/**
-	 * ONE delegated click listener on the stable table element.  Survives DataTables redraw.
+	 * ONE delegated click listener on the stable table element.  Survives DataTables redraw.  Escape / outside-click
+	 * dismissal is owned by the shared {@code popupLayerStack} (the popover registers as a light-dismiss layer on open),
+	 * so there are no per-popover document listeners here.
 	 */
 	function initCellPopover(table, ctx, viewDef) {
-		bindCellPopoverDocumentListeners();
 		if (!table || typeof table.addEventListener !== "function") return;
 		if (table._juneauCellPopoverBound) return;
 		table._juneauCellPopoverBound = true;
@@ -1746,11 +1983,19 @@
 		panel.setAttribute("data-testid", "detail-panel");
 		panel.setAttribute("data-juneau-detail-state", "loading");
 		panel._juneauParentTr = tr;
+		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
 		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
 		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
 		// fills EVERY pane's slots (including the hidden ones) so switching tabs shows populated content.
-		buildDetailStrip(panel);
+		//
+		// The onActivate callback lazily inits a newly-shown pane's nested table - but ONLY after the parent detail
+		// GET succeeded (state "ok").  A tab clicked while the panel is still loading (or has failed) inits nothing,
+		// honoring "init nested after parent 2xx AND pane visible" (a failed parent expand yields no nested table).
+		buildDetailStrip(panel, function (sid, pane) {
+			if (panel.getAttribute("data-juneau-detail-state") !== "ok") return;
+			activateNestedTablesInPane(pane, rowId);
+		});
 		const loading = document.createElement("p");
 		loading.className = "juneau-view-detail-status";
 		loading.textContent = "Loading…";
@@ -1818,6 +2063,11 @@
 			setActionRefEnabled(panel, true);
 			panel.setAttribute("data-juneau-detail-state", "ok");
 			if (loading.parentNode) loading.parentNode.removeChild(loading);
+			// Now that the parent detail loaded (2xx + contract OK), init the nested tables that live in a currently
+			// VISIBLE pane (in tab mode, only the initially-selected section is visible; a hidden pane's nested table
+			// waits for its tab to be activated via the onActivate callback above).  Each nested table runs its OWN
+			// independent GET, scoped to this parent row.
+			initNestedTablesInVisiblePanes(panel, rowId);
 			settleMap();
 		}
 
@@ -1859,8 +2109,10 @@
 			indicator.textContent = state.failed ? "Refresh failed - last updated " + age : "Updated " + age;
 		}
 
-		dt.on("draw.dt", function () { state.lastSuccessAt = Date.now(); state.failed = false; render(); });
-		dt.on("error.dt", function () { state.failed = true; render(); });
+		// Guard against a nested table's draw.dt/error.dt bubbling up to this parent-table poll indicator: a nested
+		// table's own round trips must not reset (or fail) the parent's staleness clock.
+		dt.on("draw.dt", function (e) { if (e && e.target !== table) return; state.lastSuccessAt = Date.now(); state.failed = false; render(); });
+		dt.on("error.dt", function (e) { if (e && e.target !== table) return; state.failed = true; render(); });
 
 		function poll() {
 			if (document.hidden) return;
@@ -2031,7 +2283,10 @@
 	function bindSelectionPrune(table, ctx) {
 		const dt = ctx.dataTable;
 		if (!dt || !ctx.selectionState) return;
-		dt.on("draw.dt", function () {
+		dt.on("draw.dt", function (e) {
+			// Guard against a nested table's draw.dt bubbling up: the parent's selection prune must ignore it (and
+			// must never scan the nested table's <tbody> rows, which the descendant query below would otherwise pick up).
+			if (e && e.target !== table) return;
 			const selectionState = ctx.selectionState;
 			const ids = [];
 			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
@@ -2461,7 +2716,10 @@
 	 * from the declared `confirm` text.  The mutation is the SEPARATE non-safe submit the confirm button issues.
 	 */
 	function openActionDialog(action, table, tr, ctx) {
+		// v1 depth cap (counts dialog-kind layers): a third dialog is a visible refusal inside the current top dialog.
+		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return; }
 		if (isBlankToken(action.form)) {
+			// Confirm-only LOCAL path (no form-source URL): unversioned, and never fail-loud on a missing version.
 			showActionDialog({ title: action.confirm || action.label || action.id }, action, table, tr, ctx);
 			return;
 		}
@@ -2478,8 +2736,27 @@
 					});
 				}
 				return readBodyText(resp).then(function (text) {
-					showActionDialog(parseJsonSafe(text) || { title: action.confirm || action.label || action.id },
-						action, table, tr, ctx);
+					const payload = parseJsonSafe(text);
+					if (! payload) {
+						// A form-source GET that did not parse: do NOT optimistically open a title-only dialog once forms
+						// exist (SF-6).  Treat as a form-bearing-expected failure -> visible refusal.
+						renderRowActionRefusal(tr, action, "request-failed");
+						return;
+					}
+					if (payload.form) {
+						// Form present -> fail-loud handshake: BOTH the modal top-level and nested form contractVersion
+						// must equal the baked-in "1", or a visible refusal and the dialog does not open (h5).
+						if (payload.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION
+							|| payload.form.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION) {
+							renderActionOutcome(tr, { outcome: "refusal",
+								message: "dialog-form contract mismatch (modal='" + payload.contractVersion +
+									"', form='" + payload.form.contractVersion + "', runtime='" +
+									JUNEAU_DIALOG_FORM_CONTRACT_VERSION + "')" });
+							return;
+						}
+					}
+					// Confirm-only fetched envelope (no form): unversioned; do NOT test contractVersion.
+					showActionDialog(payload, action, table, tr, ctx);
 				});
 			})
 			.catch(function () { renderRowActionRefusal(tr, action, "request-failed"); });
@@ -2491,7 +2768,7 @@
 	 * live-data HTML blob (BLK-1/MED-9): live/remote data is attacker-influenceable and this origin holds the CSRF
 	 * token, so a typed/escaped path is the only safe one here.  Returns the pieces so the caller can wire buttons.
 	 */
-	function buildDialogOverlay(modal, action) {
+	function buildDialogOverlay(modal, action, table, tr, ctx, seq) {
 		const backdrop = document.createElement("div");
 		backdrop.className = "juneau-view-dialog-backdrop";
 		backdrop.setAttribute("data-testid", "dialog-backdrop");
@@ -2521,7 +2798,7 @@
 			dialog.appendChild(dl);
 		}
 
-		appendDialogForm(dialog, modal && modal.form);
+		appendDialogForm(dialog, modal && modal.form, table, tr, ctx, seq);
 
 		const actions = document.createElement("div");
 		actions.className = "juneau-view-dialog-actions";
@@ -2541,17 +2818,154 @@
 		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn };
 	}
 
-	/** Whether `type` is a legal FormDef input token.  Anything else is skipped (typed inputs only). */
+	/**
+	 * Whether `type` is a legal FormDef.Input token the client paints (the frozen v1 6-type allowlist: text, textarea,
+	 * checkbox, toggle, select, action).  Anything else is skipped so a hostile type token cannot become an element.
+	 */
 	function isTypedFormInputType(type) {
-		return type === "text" || type === "textarea";
+		return type === "text" || type === "textarea" || type === "checkbox" || type === "toggle"
+			|| type === "select" || type === "action";
+	}
+
+	/** Whether a checkbox/toggle prefill token means "checked": "true" (case-insensitive) or "on" (decision 9). */
+	function isCheckedToken(v) {
+		if (v == null) return false;
+		const s = String(v).trim().toLowerCase();
+		return s === "true" || s === "on";
 	}
 
 	/**
-	 * Paints typed form fields as native label+input/textarea controls via createElement.  Labels use textContent;
-	 * prefills use `.value`.  Never innerHTML, never a template-markup sink (that FormDef field is a server-author
-	 * reference).  Unknown types are skipped so a hostile type token cannot become an element.
+	 * Paints ONE typed FormDef.Input control into `row` via createElement (never innerHTML).  Dispatches on the frozen
+	 * 6-type allowlist - text/textarea (native inputs), checkbox, toggle (checkbox + role=switch), select (native
+	 * &lt;select&gt; with &lt;option&gt; text via textContent), action (a &lt;button type=button&gt; that opens a nested
+	 * dialog for the named RowAction).  Prefills use `.value` / `.checked`.  Unknown types are skipped (returns null).
+	 * A `type=action` whose id is absent from the enclosing view's `rowActions` catalog is painted DISABLED (a visible,
+	 * fail-closed refusal at paint time; never a throw - SF-1 / H-P4-S1).
 	 */
-	function appendDialogForm(dialog, form) {
+	function paintFormControl(row, f, id, table, tr, ctx) {
+		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
+		if (! isTypedFormInputType(type)) return null;
+		let control;
+		if (type === "textarea") {
+			control = document.createElement("textarea");
+		} else if (type === "select") {
+			control = document.createElement("select");
+			const options = f.options || [];
+			for (let i = 0; i < options.length; i++) {
+				const o = options[i];
+				if (! o || o.value == null) continue;
+				const opt = document.createElement("option");
+				opt.value = String(o.value);
+				opt.textContent = o.label != null ? String(o.label) : String(o.value);
+				control.appendChild(opt);
+			}
+		} else if (type === "checkbox" || type === "toggle") {
+			control = document.createElement("input");
+			control.type = "checkbox";
+			if (type === "toggle") {
+				control.setAttribute("role", "switch");
+				control.className = "juneau-view-toggle";
+			}
+			const on = isCheckedToken(f.value);
+			control.checked = on;
+			control.setAttribute("aria-checked", on ? "true" : "false");
+			control.addEventListener("change", function () {
+				control.setAttribute("aria-checked", control.checked ? "true" : "false");
+			});
+		} else if (type === "action") {
+			control = document.createElement("button");
+			control.type = "button";
+			control.className = "juneau-view-dialog-form-action";
+			control.textContent = f.label != null ? String(f.label) : String(f.name);
+			control.name = String(f.name);
+			control.setAttribute("data-juneau-form-field", String(f.name));
+			const actionId = f.actionId;
+			if (! dialogActionIsOpenable(ctx, actionId)) {
+				control.disabled = true;
+				control.setAttribute("aria-disabled", "true");
+				control.setAttribute("data-juneau-action-missing", "1");
+			}
+			control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx); });
+			row.appendChild(control);
+			return control;
+		} else {
+			control = document.createElement("input");
+			control.type = "text";
+		}
+		control.id = id;
+		control.name = String(f.name);
+		control.setAttribute("data-juneau-form-field", String(f.name));
+		if (f.required) { control.required = true; control.setAttribute("aria-required", "true"); }
+		if (type === "select" && f.value != null) control.value = String(f.value);
+		if (type === "text" || type === "textarea") {
+			if (f.value != null) control.value = String(f.value);
+			if (f.maxLength != null) {
+				const ml = parseInt(f.maxLength, 10);
+				if (! isNaN(ml) && ml > 0) control.maxLength = ml;
+			}
+			if (f.pattern != null) control.setAttribute("data-juneau-pattern", String(f.pattern));
+		}
+		row.appendChild(control);
+		return control;
+	}
+
+	/** Whether `actionId` names a present=dialog RowAction on the enclosing view (paint-time catalog check, SF-1). */
+	function dialogActionIsOpenable(ctx, actionId) {
+		const catalog = (ctx && ctx.viewDef && ctx.viewDef.rowActions) || [];
+		for (let i = 0; i < catalog.length; i++)
+			if (catalog[i] && catalog[i].id === actionId && isDialogAction(catalog[i])) return true;
+		return false;
+	}
+
+	/**
+	 * A `type=action` button click: opens a nested dialog for the named RowAction on the enclosing view WITHOUT
+	 * closing the parent dialog (pushes a child layer).  A missing / non-dialog action is a visible refusal painted
+	 * into the current top dialog - never a throw (SF-1).
+	 */
+	function openFormActionDialog(actionId, table, tr, ctx) {
+		if (! dialogActionIsOpenable(ctx, actionId)) { renderDialogActionRefusal(actionId); return; }
+		let target = null;
+		const catalog = (ctx && ctx.viewDef && ctx.viewDef.rowActions) || [];
+		for (let i = 0; i < catalog.length; i++) if (catalog[i] && catalog[i].id === actionId) { target = catalog[i]; break; }
+		openActionDialog(target, table, tr, ctx);
+	}
+
+	/** Paints a visible fail-closed refusal into the current top dialog (used for a missing/non-dialog action id). */
+	function renderDialogActionRefusal(actionId) {
+		renderTopDialogNotice("juneau-view-dialog-action-refusal", "dialog-action-refusal",
+			"Action '" + String(actionId) + "' is not available.");
+	}
+
+	/** Paints the depth-cap refusal into the CURRENT top dialog (H-P5-S5), not a row-cell banner behind two backdrops. */
+	function renderDialogDepthRefusal() {
+		renderTopDialogNotice("juneau-view-dialog-depth-refusal", "dialog-depth-refusal",
+			"Only " + MAX_DIALOG_DEPTH + " stacked dialogs are supported.");
+	}
+
+	function renderTopDialogNotice(cls, testid, text) {
+		const top = topLayer();
+		const el = top && top.el;
+		const host = (el && el.querySelector && el.querySelector(".juneau-view-dialog")) || el;
+		if (! host || ! host.appendChild) return;
+		let banner = host.querySelector ? host.querySelector("." + cls) : null;
+		if (! banner) {
+			banner = document.createElement("div");
+			banner.className = cls;
+			banner.setAttribute("role", "alert");
+			banner.setAttribute("data-testid", testid);
+			host.appendChild(banner);
+		}
+		banner.textContent = text;
+	}
+
+	/**
+	 * Paints the typed FormDef inputs as native label+control rows via createElement (never innerHTML, never the
+	 * `form.template` markup sink - that is a server-author reference the client ignores).  Each row: a label bound by
+	 * `for` to the control id, the control (via paintFormControl), an optional help hint, and an (initially empty)
+	 * per-control error sibling.  Field ids use a dialog-only sequence (`juneau-dialog-field-<seq>-<name>`) so stacked
+	 * dialogs with the same field name do not collide and popover layers do not shift ids (N-3).
+	 */
+	function appendDialogForm(dialog, form, table, tr, ctx, seq) {
 		if (!dialog || !form || !form.fields || !form.fields.length) return;
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
@@ -2559,31 +2973,135 @@
 		form.fields.forEach(function (f) {
 			if (!f || f.name == null || String(f.name) === "") return;
 			const type = (f.type == null || f.type === "") ? "text" : String(f.type);
-			if (!isTypedFormInputType(type)) return;
+			if (! isTypedFormInputType(type)) return;
 			const row = document.createElement("div");
 			row.className = "juneau-view-dialog-form-row";
-			const id = "juneau-dialog-field-" + String(f.name);
-			const label = document.createElement("label");
-			label.setAttribute("for", id);
-			label.textContent = f.label != null ? String(f.label) : String(f.name);
-			const input = type === "textarea" ? document.createElement("textarea") : document.createElement("input");
-			if (type !== "textarea") input.type = "text";
-			input.id = id;
-			input.name = String(f.name);
-			input.setAttribute("data-juneau-form-field", String(f.name));
-			if (f.required) input.required = true;
-			if (f.value != null) input.value = String(f.value);
-			row.appendChild(label);
-			row.appendChild(input);
+			const id = "juneau-dialog-field-" + String(seq == null ? 0 : seq) + "-" + String(f.name);
+			if (type !== "action") {
+				const label = document.createElement("label");
+				label.setAttribute("for", id);
+				label.textContent = f.label != null ? String(f.label) : String(f.name);
+				row.appendChild(label);
+			}
+			const control = paintFormControl(row, f, id, table, tr, ctx);
+			if (! control) return;   // unknown type skipped
+			if (type !== "action") {
+				let helpId = null;
+				if (f.help != null && String(f.help) !== "") {
+					const help = document.createElement("div");
+					help.className = "juneau-view-dialog-form-help";
+					help.id = id + "-help";
+					help.setAttribute("data-juneau-help", "1");
+					help.textContent = String(f.help);
+					row.appendChild(help);
+					helpId = help.id;
+				}
+				const err = document.createElement("div");
+				err.className = "juneau-view-dialog-form-error";
+				err.id = id + "-error";
+				err.setAttribute("data-juneau-error-for", String(f.name));
+				err.setAttribute("aria-live", "polite");
+				row.appendChild(err);
+				// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
+				// error id added only when invalid - S5).
+				control._juneauErrorEl = err;
+				control._juneauHelpId = helpId;
+				if (helpId) control.setAttribute("aria-describedby", helpId);
+				bindControlValidation(dialog, control);
+			}
 			wrap.appendChild(row);
 		});
 		if (wrap.childNodes.length)
 			dialog.appendChild(wrap);
 	}
 
+	/** Wires per-control blur/input revalidation (advisory, non-alert): keeps the error sibling fresh as the user types. */
+	function bindControlValidation(dialog, control) {
+		if (! control || typeof control.addEventListener !== "function") return;
+		const revalidate = function () { applyControlValidity(control, validateOneControl(control), false); };
+		control.addEventListener("blur", revalidate);
+		control.addEventListener("input", revalidate);
+		control.addEventListener("change", revalidate);
+	}
+
 	/**
-	 * Reads typed form controls from a dialog via `.value` (never textContent of the control, never innerHTML)
-	 * into a `{ name: value }` map for the submit body.
+	 * Client-side inline validation (advisory to the user - the server submit stays fully authoritative).  Per
+	 * collectable control: required-empty (checkbox/toggle required = must be checked), `pattern` mismatch and
+	 * `maxLength` exceeded.  A `new RegExp` that throws (a Java-only pattern) FAIL-OPENS that one rule (skip it; do not
+	 * block submit).  On failure paints `aria-invalid`, refreshes the error sibling and concatenates `aria-describedby`
+	 * (help + error); when triggered by confirm, focuses the first invalid control and sets role=alert on its error.
+	 * Returns true when the form may submit.
+	 */
+	function validateDialogForm(dialog, fromConfirm) {
+		if (!dialog || !dialog.querySelectorAll) return true;
+		const nodes = dialog.querySelectorAll("[data-juneau-form-field]");
+		let firstInvalid = null;
+		for (let i = 0; i < nodes.length; i++) {
+			const el = nodes[i];
+			const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
+			if (tag === "button") continue;   // type=action buttons are not values
+			const msg = validateOneControl(el);
+			applyControlValidity(el, msg, fromConfirm);
+			if (msg && ! firstInvalid) firstInvalid = el;
+		}
+		if (firstInvalid && fromConfirm && typeof firstInvalid.focus === "function") {
+			try { firstInvalid.focus(); } catch (e) { /* ignore */ }
+		}
+		return ! firstInvalid;
+	}
+
+	/** Validates one control; returns an error message string, or null when valid. */
+	function validateOneControl(el) {
+		const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
+		const required = !! el.required || (el.getAttribute && el.getAttribute("aria-required") === "true");
+		if (tag === "input" && String(el.type).toLowerCase() === "checkbox") {
+			if (required && ! el.checked) return "This must be checked.";
+			return null;
+		}
+		const value = el.value != null ? String(el.value) : "";
+		if (required && value.trim() === "") return "This field is required.";
+		if (value !== "") {
+			const max = el.maxLength;
+			if (typeof max === "number" && max > 0 && value.length > max)
+				return "Must be at most " + max + " characters.";
+			const pat = el.getAttribute ? el.getAttribute("data-juneau-pattern") : null;
+			if (pat) {
+				let re = null;
+				try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern
+				if (re && ! re.test(value)) return "Value is not in the expected format.";
+			}
+		}
+		return null;
+	}
+
+	/** Applies (or clears) a control's validity: aria-invalid, the error sibling text/role, and aria-describedby. */
+	function applyControlValidity(el, msg, fromConfirm) {
+		const err = el._juneauErrorEl || null;
+		const helpId = el._juneauHelpId || null;
+		if (msg) {
+			el.setAttribute("aria-invalid", "true");
+			if (err) {
+				err.textContent = msg;
+				if (fromConfirm) err.setAttribute("role", "alert");
+				else err.removeAttribute("role");
+			}
+			const ids = [];
+			if (helpId) ids.push(helpId);
+			if (err && err.id) ids.push(err.id);
+			if (ids.length) el.setAttribute("aria-describedby", ids.join(" "));
+		} else {
+			el.removeAttribute("aria-invalid");
+			if (err) { err.textContent = ""; err.removeAttribute("role"); }
+			if (helpId) el.setAttribute("aria-describedby", helpId);
+			else if (el.removeAttribute) el.removeAttribute("aria-describedby");
+		}
+	}
+
+	/**
+	 * Reads collectable typed form controls from a dialog into a `{ name: value }` map for the submit body: text /
+	 * textarea / select via `.value`, checkbox / toggle via `.checked` -> "true"/"false" (unchecked always submits an
+	 * explicit "false", never omitted - decision 9).  `type=action` buttons are skipped.  Never reads control
+	 * textContent, never innerHTML.
 	 */
 	function collectDialogFormFields(dialog) {
 		const out = {};
@@ -2594,31 +3112,55 @@
 			const name = el.getAttribute ? el.getAttribute("data-juneau-form-field") : null;
 			if (name == null || name === "") continue;
 			const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
-			if (tag !== "input" && tag !== "textarea") continue;
+			if (tag === "button") continue;   // type=action buttons carry no submit value
+			if (tag === "select" || tag === "textarea") {
+				out[name] = el.value != null ? String(el.value) : "";
+				continue;
+			}
 			if (tag === "input") {
 				const itype = el.type ? String(el.type).toLowerCase() : "text";
-				if (itype !== "text") continue;
+				if (itype === "checkbox") { out[name] = el.checked ? "true" : "false"; continue; }
+				out[name] = el.value != null ? String(el.value) : "";
 			}
-			out[name] = el.value != null ? String(el.value) : "";
 		}
 		return out;
 	}
 
-	/** Shows a dialog overlay for an action and wires its confirm (submit) / cancel (dismiss) buttons. */
+	/**
+	 * Shows a dialog overlay for an action as a modal layer on the shared {@code popupLayerStack} and wires its confirm
+	 * (validate -> submit) / cancel (dismiss) buttons.  The backdrop is pushed as a {@code kind:"dialog"} focus-trapping
+	 * layer (portal to body, no light-dismiss): Escape / z-order / focus-restore are owned by the stack.  A dialog-only
+	 * {@code seq} namespaces the form field ids.  Confirm runs {@link validateDialogForm} first and only submits when
+	 * the client-side form is valid (fail-loud, advisory to the authoritative server submit).  A push that would exceed
+	 * the depth cap is a visible refusal inside the current top dialog rather than a new overlay (H-P5-S5).
+	 */
 	function showActionDialog(modal, action, table, tr, ctx) {
-		const ui = buildDialogOverlay(modal, action);
-		function close() {
-			if (ui.backdrop.parentNode) ui.backdrop.parentNode.removeChild(ui.backdrop);
-			if (ctx && ctx._actionDialog === ui.backdrop) ctx._actionDialog = null;
-		}
+		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return null; }
+		const seq = ++dialogSeq;
+		const ui = buildDialogOverlay(modal, action, table, tr, ctx, seq);
+		function close() { popLayer(ui.backdrop); }
 		ui.cancelBtn.addEventListener("click", close);
 		ui.confirmBtn.addEventListener("click", function () {
+			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
 			const fields = collectDialogFormFields(ui.dialog);
 			close();
 			submitActionDialog(modal, action, table, tr, ctx, fields);
 		});
-		if (ctx) ctx._actionDialog = ui.backdrop;
-		document.body.appendChild(ui.backdrop);
+		if (ctx) {
+			if (! ctx._dialogStack) ctx._dialogStack = [];
+			ctx._dialogStack.push(ui.backdrop);
+			ctx._actionDialog = ui.backdrop;
+		}
+		pushLayer(ui.backdrop, {
+			kind: "dialog", portal: true, trapFocus: true, lightDismiss: false, detachOnPop: true,
+			onDismiss: function () {
+				if (ctx && ctx._dialogStack) {
+					const i = ctx._dialogStack.indexOf(ui.backdrop);
+					if (i >= 0) ctx._dialogStack.splice(i, 1);
+					ctx._actionDialog = ctx._dialogStack.length ? ctx._dialogStack[ctx._dialogStack.length - 1] : null;
+				}
+			}
+		});
 		return ui;
 	}
 
@@ -2687,16 +3229,28 @@
 		return menu;
 	}
 
-	/** Removes any open row-action menu under `table` (single-open invariant). */
+	/**
+	 * Removes any open row-action menu under `table` (single-open invariant).  A menu is a {@code kind:"menu"} light-
+	 * dismiss layer (portalled to body), so pop those first (their onDismiss clears the ctx tracking); then defensively
+	 * sweep both the table and the document for any menu appended directly to a cell (the buildRowActionMenu harness
+	 * path) or otherwise orphaned.  Kept single-param to preserve the teardown call site's signature.
+	 */
 	function closeRowActionMenus(table) {
-		Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-action-menu"), function (m) {
-			if (m.parentNode) m.parentNode.removeChild(m);
-		});
+		const menus = [];
+		for (let i = 0; i < popupLayerStack.length; i++)
+			if (popupLayerStack[i].kind === "menu") menus.push(popupLayerStack[i].el);
+		menus.forEach(function (el) { popLayer(el); });
+		if (table && typeof table.querySelectorAll === "function")
+			Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-action-menu"), removeEl);
+		if (typeof document !== "undefined" && typeof document.querySelectorAll === "function")
+			Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-action-menu"), removeEl);
 	}
 
 	/**
-	 * Wires the row-action menu via ONE delegated click listener on `table` (rather than one per row): a click on
-	 * a row's `.juneau-view-action-trigger` toggles a menu of that view's rowActions for that row.  Mirrors the
+	 * Wires the row-action menu via ONE delegated click listener on `table` (rather than one per row): a click on a
+	 * row's `.juneau-view-action-trigger` toggles a menu of that view's rowActions for that row.  The menu is portalled
+	 * to body as a {@code kind:"menu"} light-dismiss layer (h4-C: cell-anchored surfaces render position:fixed on body)
+	 * and positioned under its trigger; Escape / outside-click dismissal is owned by the shared stack.  Mirrors the
 	 * details-expander's delegated-listener pattern above.
 	 */
 	function initRowActions(table, viewDef, ctx) {
@@ -2705,11 +3259,19 @@
 			if (!trigger) return;
 			const tr = trigger.closest("tr");
 			if (!tr) return;
-			const existing = tr.querySelector(".juneau-view-action-menu");
+			const wasOpen = !! (ctx && ctx._actionMenuTrigger === trigger);
 			closeRowActionMenus(table);
-			if (existing) return;   // second click on an open menu's trigger closes it
-			const cell = trigger.closest(".juneau-view-actions-cell") || tr.lastElementChild;
-			if (cell) cell.appendChild(buildRowActionMenu(viewDef, table, tr, ctx));
+			if (wasOpen) return;   // second click on the open menu's trigger closes it (toggle)
+			const menu = buildRowActionMenu(viewDef, table, tr, ctx);
+			if (ctx) { ctx._actionMenu = menu; ctx._actionMenuTrigger = trigger; }
+			pushLayer(menu, {
+				kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
+				returnFocusTo: trigger,
+				onDismiss: function () {
+					if (ctx && ctx._actionMenu === menu) { ctx._actionMenu = null; ctx._actionMenuTrigger = null; }
+				}
+			});
+			positionCellPopover(menu, trigger);
 		});
 	}
 
@@ -2717,7 +3279,17 @@
 		if (el && el.parentNode) el.parentNode.removeChild(el);
 	}
 
+	/**
+	 * Tears down this ctx's whole dialog stack: snapshot {@code ctx._dialogStack} and pop each backdrop layer (bottom
+	 * pop takes its nested children with it), then clear the tracking.  A defensive document sweep removes any orphaned
+	 * backdrop that was never (or is no longer) a registered layer.
+	 */
 	function closeActionDialog(ctx) {
+		if (ctx && ctx._dialogStack && ctx._dialogStack.length) {
+			const snapshot = ctx._dialogStack.slice();
+			for (let i = snapshot.length - 1; i >= 0; i--) popLayer(snapshot[i]);
+			ctx._dialogStack = [];
+		}
 		const el = ctx && ctx._actionDialog;
 		if (el && el.parentNode) el.parentNode.removeChild(el);
 		if (ctx) ctx._actionDialog = null;
@@ -2839,7 +3411,10 @@
 				return NS.ribbon?.ribbonToQueryParams
 					? NS.ribbon.ribbonToQueryParams(viewDef, ctx.activeState, ctx.optsColumns)
 					: {};
-			}
+			},
+			// Present ONLY for a nested table (set by prepareNestedTable); a top-level view leaves it undefined so
+			// buildOptions merges no parent-scope parameter.
+			nestedScope: ctx.nestedScope
 		};
 
 		const opts = buildOptions(viewDef, deps);
@@ -2856,8 +3431,19 @@
 		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
 			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
 		if (ctx._detailInflight) {
-			ctx.dataTable.on("draw.dt", function () {
+			// Guard against a nested table's draw.dt bubbling up (see the paging/poll/prune guards): only this
+			// parent table's own draw clears its in-flight detail set.
+			ctx.dataTable.on("draw.dt", function (e) {
+				if (e && e.target !== table) return;
 				if (ctx._detailInflight) ctx._detailInflight.clear();
+			});
+			// Before a parent redraw destroys its child rows (sort/search/page/poll), tear down any nested tables
+			// living inside still-open detail panels.  preDraw.dt fires while the child-row DOM still exists; draw.dt
+			// is too late (DataTables has already discarded the child rows, so the nested DataTable instances would
+			// leak their listeners/timers).  Guarded so a nested table's own preDraw never triggers this.
+			ctx.dataTable.on("preDraw.dt", function (e) {
+				if (e && e.target !== table) return;
+				teardownNestedTables(table);
 			});
 		}
 		ctx.redraw = function () {
@@ -2947,6 +3533,174 @@
 				}
 			}
 		}
+	}
+
+	// ==================================================================================================================
+	// NESTED TABLES  (read-only DataTables view inside a row-detail section, scoped to its parent row)
+	// ==================================================================================================================
+
+	/**
+	 * Finds a nested table's VIEW_META sidecar within its wrapper.  Unlike a top-level view (whose sidecar carries a
+	 * minted {@code id="juneau-view:<id>"} and is found via getElementById), a nested sidecar carries NO html id (a
+	 * {@code <template>} clone would collide) and is instead a SIBLING of the nested {@code <table>} tagged with
+	 * {@code data-juneau-nested-meta="<viewId>"}.  Matches on that attribute; falls back to the first meta node in
+	 * the wrapper so a mint-time id/attr skew degrades to "wrong-but-present" rather than a silent no-init.
+	 */
+	function findNestedSidecar(wrap, id) {
+		if (!wrap || typeof wrap.querySelectorAll !== "function") return null;
+		const cands = wrap.querySelectorAll("[" + NESTED_META_ATTR + "]");
+		for (let i = 0; i < cands.length; i++)
+			if (cands[i].getAttribute(NESTED_META_ATTR) === id) return cands[i];
+		return cands.length ? cands[0] : null;
+	}
+
+	/**
+	 * Constructs ONE nested read-only DataTables view from its wrapper.  Idempotent: a wrapper already inited (its
+	 * table carries {@code data-juneau-nested-init}) is skipped.  Fail-loud + fail-closed on a contract mismatch or a
+	 * malformed/absent sidecar - it renders a banner (or logs) and withholds just this one table, never throwing
+	 * into the caller's detail-panel flow.
+	 *
+	 * <p>Read-only is enforced defensively here (the server already rejects a nested {@code rowActions}/
+	 * {@code columnConfig}/non-null {@code details}, and a bare {@link ViewDef} can carry neither selection nor
+	 * bulk): any such field surviving on the wire is nulled before build, so the nested table can only ever run the
+	 * columns/paging/sort/search feature set.  The parent-row scope is applied by seeding {@code ctx.nestedScope},
+	 * which buildOptions merges into the ajax GET in both data modes.
+	 */
+	function prepareNestedTable(wrap, parentId) {
+		if (!wrap || typeof wrap.querySelector !== "function") return;
+		const table = wrap.querySelector("table[data-juneau-view]");
+		if (!table || table.getAttribute(NESTED_INIT_ATTR) === "1") return;
+
+		const nestedContract = wrap.getAttribute(NESTED_CONTRACT_ATTR);
+		if (nestedContract !== JUNEAU_NESTED_CONTRACT_VERSION) {
+			const m = "Juneau nested table: shell contract version mismatch (page='" + nestedContract +
+				"', runtime='" + JUNEAU_NESTED_CONTRACT_VERSION + "'). Refusing to init - reload to clear a stale cached script.";
+			error(m);
+			renderBanner(table, m);
+			return;
+		}
+
+		const id = table.getAttribute("data-juneau-view");
+		const sidecar = findNestedSidecar(wrap, id);
+		if (!sidecar) { error("Juneau nested table '" + id + "': missing nested sidecar; refusing to init."); return; }
+
+		let viewDef;
+		try {
+			viewDef = JSON.parse(sidecar.textContent);
+		} catch (e) {
+			error("Juneau nested table '" + id + "': malformed nested sidecar; refusing to init.");
+			renderBanner(table, "Juneau nested table '" + id + "': malformed configuration.");
+			return;
+		}
+
+		if (viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
+			const m = "Juneau nested table '" + id + "': view contract version mismatch (page='" +
+				viewDef.contractVersion + "', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION + "'). Refusing to init.";
+			error(m);
+			renderBanner(table, m);
+			return;
+		}
+
+		const $ = window.jQuery;
+		if (!$?.fn?.DataTable) {
+			warn("Juneau nested table '" + id + "': jQuery/DataTables not present; cannot bind.");
+			return;
+		}
+
+		// Read-only clamp (defensive - the server already forbids all of these on a nested view).
+		viewDef.rowActions = null;
+		viewDef.columnConfig = null;
+		viewDef.pollIntervalMs = null;
+		viewDef.details = null;
+
+		table.setAttribute(NESTED_PARENT_ID_ATTR, parentId == null ? "" : String(parentId));
+		const scopeParam = wrap.getAttribute(NESTED_SCOPE_PARAM_ATTR) || "parentId";
+
+		const ctx = {
+			table: table,
+			viewDef: viewDef,
+			dataTable: null,
+			activeState: {},
+			selectionState: null,
+			columnSearchOn: false,
+			nested: true,
+			nestedScope: {
+				param: scopeParam,
+				// Read at REQUEST time off the live attribute so a re-init against a different parent stays correct.
+				parentId: function () { return table.getAttribute(NESTED_PARENT_ID_ATTR); }
+			},
+			_jobSources: new Set(),
+			_pollTimers: [],
+			_reinitPending: null,
+			_reinitRunning: false,
+			redraw: function () {
+				const d = ctx.dataTable;
+				if (!d) return;
+				if (d.ajax) d.ajax.reload(); else d.draw();
+			}
+		};
+		table.__juneauCtx = ctx;
+		table.setAttribute(NESTED_INIT_ATTR, "1");
+
+		const effective = resolveEffectiveColumns(viewDef, null);
+		buildTable(table, viewDef, effective, ctx);
+	}
+
+	/** columns.adjust() an already-inited nested table (needed after its pane transitions from hidden to visible). */
+	function adjustNestedColumns(table) {
+		const ctx = table && table.__juneauCtx;
+		if (ctx && ctx.dataTable && ctx.dataTable.columns)
+			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
+	}
+
+	/**
+	 * Inits (or, if already inited, re-measures) every nested table within a single now-visible pane.  Called from
+	 * the detail strip's tab-activation callback: a nested table constructed while its pane was hidden would compute
+	 * zero-width columns, so a hidden pane's table waits here for its tab to be shown.
+	 */
+	function activateNestedTablesInPane(pane, parentId) {
+		if (!pane || typeof pane.querySelectorAll !== "function") return;
+		const wraps = pane.querySelectorAll("[" + NESTED_ATTR + "]");
+		Array.prototype.forEach.call(wraps, function (wrap) {
+			const table = wrap.querySelector("table[data-juneau-view]");
+			if (table && table.getAttribute(NESTED_INIT_ATTR) === "1")
+				adjustNestedColumns(table);
+			else
+				prepareNestedTable(wrap, parentId);
+		});
+	}
+
+	/**
+	 * Inits nested tables that live in a currently-VISIBLE detail pane (called once, right after the parent detail
+	 * GET succeeds).  A nested table inside a hidden tab pane is deliberately left for its tab's activation.
+	 */
+	function initNestedTablesInVisiblePanes(panel, parentId) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		const wraps = panel.querySelectorAll("[" + NESTED_ATTR + "]");
+		Array.prototype.forEach.call(wraps, function (wrap) {
+			const sec = typeof wrap.closest === "function" ? wrap.closest("[data-juneau-detail-section]") : null;
+			if (sec && sec.hidden) return;   // hidden tab pane - defer to tab activation
+			prepareNestedTable(wrap, parentId);
+		});
+	}
+
+	/**
+	 * Destroys every inited nested DataTable within {@code root} (a detail panel or a whole parent table subtree).
+	 * Called before the parent's child-row DOM is discarded - on collapse, on re-expand, and (via preDraw.dt) on any
+	 * parent redraw - so nested DataTable instances never leak their listeners with the detached nodes.  Clears the
+	 * init marker so a subsequent re-expand rebuilds cleanly.
+	 */
+	function teardownNestedTables(root) {
+		if (!root || typeof root.querySelectorAll !== "function") return;
+		const tables = root.querySelectorAll("table[data-juneau-view][" + NESTED_INIT_ATTR + "]");
+		Array.prototype.forEach.call(tables, function (t) {
+			const ctx = t.__juneauCtx;
+			if (ctx) {
+				try { teardownTable(t, ctx); } catch (e) { /* already gone */ }
+				t.__juneauCtx = null;
+			}
+			t.removeAttribute(NESTED_INIT_ATTR);
+		});
 	}
 
 	function beginInitTable(table) {
@@ -3081,6 +3835,11 @@
 		const tables = document.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest && t.closest("[data-juneau-page]")) return;
+			// Skip nested tables (a read-only table inside a row-detail section).  They init lazily - after the
+			// parent detail GET succeeds and their pane is visible (see prepareNestedTable) - never on this eager
+			// page-load scan.  At DOMContentLoaded a nested table is still inert inside its <template> and is not
+			// matched here anyway; this guard covers a nested table already cloned into an open panel.
+			if (t.closest && (t.closest("[" + NESTED_ATTR + "]") || t.closest(".juneau-view-detail-panel"))) return;
 			initTable(t);
 		});
 	}
@@ -3145,6 +3904,15 @@
 		setActionRefEnabled: setActionRefEnabled,
 		hideActionRefs: hideActionRefs,
 		initDetailsExpander: initDetailsExpander,
+		// Nested read-only tables inside a row-detail section - exposed for the node harness + manual verification.
+		JUNEAU_NESTED_CONTRACT_VERSION: JUNEAU_NESTED_CONTRACT_VERSION,
+		applyNestedScope: applyNestedScope,
+		findNestedSidecar: findNestedSidecar,
+		prepareNestedTable: prepareNestedTable,
+		adjustNestedColumns: adjustNestedColumns,
+		activateNestedTablesInPane: activateNestedTablesInPane,
+		initNestedTablesInVisiblePanes: initNestedTablesInVisiblePanes,
+		teardownNestedTables: teardownNestedTables,
 		fillCellPopover: fillCellPopover,
 		initCellPopover: initCellPopover,
 		closeCellPopover: closeCellPopover,
@@ -3179,6 +3947,22 @@
 		isTypedFormInputType: isTypedFormInputType,
 		showActionDialog: showActionDialog,
 		submitActionDialog: submitActionDialog,
+		closeActionDialog: closeActionDialog,
+		closeRowActionMenus: closeRowActionMenus,
+		// Complex forms + nested popups / shared layer stack (TODO-445h) - exposed for the canary and harnesses.
+		JUNEAU_DIALOG_FORM_CONTRACT_VERSION: JUNEAU_DIALOG_FORM_CONTRACT_VERSION,
+		MAX_DIALOG_DEPTH: MAX_DIALOG_DEPTH,
+		paintFormControl: paintFormControl,
+		isCheckedToken: isCheckedToken,
+		validateDialogForm: validateDialogForm,
+		openFormActionDialog: openFormActionDialog,
+		dialogActionIsOpenable: dialogActionIsOpenable,
+		renderDialogActionRefusal: renderDialogActionRefusal,
+		renderDialogDepthRefusal: renderDialogDepthRefusal,
+		pushLayer: pushLayer,
+		popLayer: popLayer,
+		topLayer: topLayer,
+		dialogLayerCount: dialogLayerCount,
 		// Async jobs + SSE streaming (TODO-425) - exposed for the canary and manual verification.  The job-running
 		// affordance (setRowJobRunning) is DISTINCT from the synchronous in-flight marker: it never freezes polling.
 		parseJobStarted: parseJobStarted,

@@ -45,6 +45,16 @@ public class DetailSection {
 	public ActionBar actions;
 
 	/**
+	 * Optional nested, read-only table.
+	 *
+	 * <p>
+	 * When set, {@link ViewTable} appends a nested-table shell after this section's fields and the
+	 * {@code juneau-views.js} runtime instantiates it (scoped to the parent row) once the detail GET succeeds and
+	 * this section's pane becomes visible.  Validated by {@link RowDetailDef#validate(List, String)}.
+	 */
+	public NestedTableDef table;
+
+	/**
 	 * Creates a section with the specified id and title.
 	 *
 	 * @param id The section id.  Must not be <jk>null</jk> or blank.
@@ -90,6 +100,17 @@ public class DetailSection {
 	 */
 	public DetailSection actions(ActionBar value) {
 		actions = value;
+		return this;
+	}
+
+	/**
+	 * Sets the optional nested read-only table.
+	 *
+	 * @param value The nested table.  May be <jk>null</jk> (no nested table).
+	 * @return This object.
+	 */
+	public DetailSection table(NestedTableDef value) {
+		table = value;
 		return this;
 	}
 }
