@@ -507,7 +507,7 @@
 		return h + "h ago";
 	}
 
-	/** Formats a non-negative integer with thousands separators (e.g. 1463 -> "1,463"), matching IRS's paging summary style. */
+	/** Formats a non-negative integer with thousands separators (e.g. 1463 -> "1,463") for the paging summary. */
 	function formatThousands(n) {
 		const s = String(Math.trunc(Math.abs(n)));
 		let out = "";
@@ -633,8 +633,8 @@
 	 */
 	function buildOptions(viewDef, deps) {
 		const opts = {};
-		// Catalog-column defs only.  Selection / actions / order are assembled AFTERWARDS from the full
-		// `opts.columns` array (see assembleFullColumnArray) so a leading selection column cannot off-by-one
+		// Catalog-column defs only.  Expander / selection / actions / order are assembled AFTERWARDS from the
+		// full `opts.columns` array (see assembleFullColumnArray) so a leading synthetic column cannot off-by-one
 		// defaultOrder or the ribbon/search indices.  `deps.effectiveColumns` is the post-chooser model when
 		// present; otherwise the sidecar catalog.
 		const catalog = (deps && deps.effectiveColumns) || viewDef.columns || [];
@@ -980,8 +980,8 @@
 	}
 
 	/**
-	 * Assembles ONE unified toolbar row and inserts it as the FIRST child of `wrapper`, i.e. ABOVE the table (IRS
-	 * reference layout).  Per the control-row layout spec: a LEFT cluster (`.juneau-view-toolbar-left`) holding
+	 * Assembles ONE unified toolbar row and inserts it as the FIRST child of `wrapper`, i.e. ABOVE the table.
+	 * Per the control-row layout spec: a LEFT cluster (`.juneau-view-toolbar-left`) holding
 	 * just the unified paging ribbon (nav + page-size, left-aligned - the only place paging exists), and a RIGHT
 	 * cluster (`.juneau-view-toolbar-right`, right-aligned via the row's `space-between`) holding, in order: the
 	 * native DataTables search box, then the ribbon bar (already internally grouped into filter-ribbon/copy-
@@ -2304,6 +2304,37 @@
 	}
 
 	/**
+	 * Dual-chevron markup for the dedicated row-expand cell (the .juneau-view-detail-control column).  Collapsed (right)
+	 * and expanded (down) glyphs; CSS on {@code .juneau-view-detail-open} swaps which one shows.  Falls back to
+	 * unicode triangles when the icon registry has not loaded.
+	 */
+	function detailsControlCellMarkup() {
+		const icons = NS.icons;
+		const collapsed = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon("chevron_right") : "";
+		const expanded = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon("expand_more") : "";
+		return '<span class="juneau-view-detail-glyphs" aria-hidden="true">'
+			+ '<span class="juneau-view-detail-collapsed">' + (collapsed || "\u25B8") + '</span>'
+			+ '<span class="juneau-view-detail-expanded">' + (expanded || "\u25BE") + '</span>'
+			+ '</span>';
+	}
+
+	/**
+	 * Builds the synthetic, non-orderable/non-searchable LEADING expander column so the chevron never shares a
+	 * data cell (a dedicated .juneau-view-detail-control column).
+	 */
+	function buildDetailsControlColumnDef() {
+		return {
+			data: null,
+			orderable: false,
+			searchable: false,
+			className: "juneau-view-detail-control",
+			defaultContent: detailsControlCellMarkup(),
+			title: "",
+			width: "20px"
+		};
+	}
+
+	/**
 	 * Builds the synthetic, non-orderable/non-searchable LEADING selection column (mirrors how a declared
 	 * rowActions list appends a synthetic TRAILING column in buildOptions) - `selectionState.selected` is a
 	 * live `Set` of currently-selected stable row ids, so a redraw always paints each row's checkbox from the
@@ -3438,20 +3469,30 @@
 		Array.prototype.forEach.call(table.querySelectorAll("thead tr.juneau-view-columnsearch-row"), removeEl);
 		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-actions-th"), removeEl);
 		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-select-th"), removeEl);
+		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-detail-th"), removeEl);
 	}
 
 	/**
-	 * Restores the server-emitted header shell after destroy: re-create the leading selection {@code <th>}
-	 * (ViewTable emitted it on first paint; the server will not re-run) then append the trailing actions
-	 * {@code <th>} as JS does today.
+	 * Restores the server-emitted header shell after destroy: re-create the leading expander {@code <th>}
+	 * (when a row-detail template is present) and the leading selection {@code <th>} (ViewTable emitted both
+	 * on first paint; the server will not re-run) then append the trailing actions {@code <th>} as JS does today.
 	 */
 	function restoreHeaderShell(table, ctx) {
+		const headRow = table.querySelector("thead tr");
+		if (headRow && findRowDetailTemplate(table) && !headRow.querySelector(".juneau-view-detail-th")) {
+			const dcTh = document.createElement("th");
+			dcTh.className = "juneau-view-detail-th";
+			dcTh.setAttribute("aria-label", "Expand");
+			headRow.insertBefore(dcTh, headRow.firstChild);
+		}
 		if (ctx.selectionState) {
-			const headRow = table.querySelector("thead tr");
-			if (headRow && !headRow.querySelector(".juneau-view-select-th")) {
+			const row = table.querySelector("thead tr");
+			if (row && !row.querySelector(".juneau-view-select-th")) {
 				const selTh = document.createElement("th");
 				selTh.className = "juneau-view-select-th";
-				headRow.insertBefore(selTh, headRow.firstChild);
+				selTh.setAttribute("aria-label", "Select");
+				const after = row.querySelector(".juneau-view-detail-th");
+				row.insertBefore(selTh, after ? after.nextSibling : row.firstChild);
 			}
 		}
 		if (ctx.viewDef.rowActions && ctx.viewDef.rowActions.length) {
@@ -3503,12 +3544,17 @@
 
 	/**
 	 * Builds the FULL {@code opts.columns} array FIRST =
-	 * {@code [selection?] + effectiveColumns(including hidden, in order) + [actions?]}, THEN derives
-	 * {@code opts.order} from {@link #liveDtIndex}.  Do not unshift selection after {@link #resolveOrder}.
+	 * {@code [expander?] + [selection?] + effectiveColumns(including hidden, in order) + [actions?]}, THEN derives
+	 * {@code opts.order} from {@link #liveDtIndex}.  Do not unshift synthetic columns after {@link #resolveOrder}.
 	 */
 	function assembleFullColumnArray(opts, viewDef, ctx) {
 		const catalogCols = opts.columns || [];
 		const cols = [];
+		if (ctx.table && findRowDetailTemplate(ctx.table)) {
+			const dc = buildDetailsControlColumnDef();
+			dc._juneau = "detail";
+			cols.push(dc);
+		}
 		if (ctx.selectionState) {
 			const sel = buildSelectionColumnDef(ctx.selectionState);
 			sel._juneau = "selection";
@@ -4146,6 +4192,8 @@
 		setActionRefEnabled: setActionRefEnabled,
 		hideActionRefs: hideActionRefs,
 		initDetailsExpander: initDetailsExpander,
+		buildDetailsControlColumnDef: buildDetailsControlColumnDef,
+		detailsControlCellMarkup: detailsControlCellMarkup,
 		// Nested read-only tables inside a row-detail section - exposed for the node harness + manual verification.
 		JUNEAU_NESTED_CONTRACT_VERSION: JUNEAU_NESTED_CONTRACT_VERSION,
 		applyNestedScope: applyNestedScope,

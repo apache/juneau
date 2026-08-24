@@ -150,8 +150,18 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertTrue(fn.contains("_detailInflight"), fn);
 	}
 
+	@Test void b09_assembleFullColumnArray_prependsDedicatedExpanderColumn() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function assembleFullColumnArray(");
+		assertTrue(fn.contains("buildDetailsControlColumnDef()"), fn);
+		assertTrue(fn.contains("_juneau = \"detail\""), fn);
+		assertTrue(body.contains("function detailsControlCellMarkup("), body);
+		assertTrue(body.contains("juneau-view-detail-control"), body);
+		assertTrue(body.contains("juneau-view-detail-glyphs"), body);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
-	// CSS shape (neutral, no palette color; open/closed glyph is a bare content-string, not an icon dependency)
+	// CSS shape (neutral, no palette color; dual-chevron swap on a dedicated expander column)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_viewsCss_detailRowIsMarkedClickable() throws Exception {
@@ -162,11 +172,15 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertTrue(body.substring(start, end).contains("cursor: pointer"), body.substring(start, end));
 	}
 
-	@Test void c02_viewsCss_openStateFlipsGlyph_withoutAnIconDependency() throws Exception {
+	@Test void c02_viewsCss_openStateFlipsGlyph_onDedicatedExpanderColumn() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-detail-row > td:first-child::before {"), body);
-		assertTrue(body.contains(".juneau-view-detail-open > td:first-child::before {"), body);
+		assertTrue(body.contains(".juneau-view-detail-control {") || body.contains(".juneau-view-detail-th,"), body);
+		assertTrue(body.contains(".juneau-view-detail-expanded { display: none; }")
+			|| body.contains(".juneau-view-detail-expanded {display: none;}"), body);
+		assertTrue(body.contains(".juneau-view-detail-open .juneau-view-detail-collapsed"), body);
+		assertTrue(body.contains(".juneau-view-detail-open .juneau-view-detail-expanded"), body);
 		assertTrue(body.contains("width: 20px"), body);
+		assertFalse(body.contains("td:first-child::before"), body);
 		assertFalse(body.contains("url("), body);
 	}
 

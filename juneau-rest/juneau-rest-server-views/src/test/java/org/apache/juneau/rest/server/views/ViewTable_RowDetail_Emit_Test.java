@@ -101,6 +101,18 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		var v = ViewDef.create("plain").dataMode(DataMode.CLIENT).dataUrl("/u").columns(Column.of("a")).build();
 		var html = Html.of(ViewTable.of(v));
 		assertFalse(html.contains("data-juneau-row-detail"), html);
+		assertFalse(html.contains(ViewTable.DETAIL_TH_CLASS), html);
+		assertFalse(html.contains(ViewTable.DETAIL_CONTROL_CLASS), html);
+	}
+
+	@Test void a05b_emitsDedicatedExpanderColumn_whenDetailsSet() {
+		var html = Html.of(ViewTable.of(view()));
+		assertTrue(html.contains("class=\"" + ViewTable.DETAIL_TH_CLASS + "\""), html);
+		assertTrue(html.contains("aria-label=\"Expand\""), html);
+		// Expander th is the FIRST header cell, before the first data column title.
+		var expanderAt = html.indexOf(ViewTable.DETAIL_TH_CLASS);
+		var idTitleAt = html.indexOf(">Id<");
+		assertTrue(expanderAt >= 0 && idTitleAt > expanderAt, html);
 	}
 
 	@Test void a06_gridTemplateColumns_fromValidatedColumns() {

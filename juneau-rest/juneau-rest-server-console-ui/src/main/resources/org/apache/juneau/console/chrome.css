@@ -16,7 +16,7 @@
    ==========================================================================
 
    PURPOSE
-   A themeable IRS-style admin-console shell (branded header, primary nav tab
+   A themeable admin-console shell (branded header, primary nav tab
    bar, content card on a tinted page background, data grid with semantic
    status pills). Structural rules only — this file ships no :root block of
    its own. Every --jc-* token is defined by the DYNAMIC part of the served
@@ -548,7 +548,7 @@ a:hover { text-decoration: underline; }
 .tag.stage.failed { background-color: var(--jc-tag-red-bg); color: var(--jc-tag-red-text); border-color: var(--jc-tag-red-border); }
 
 /* ==========================================================================
-   Data table (IRS / DataTables style)
+   Data table (DataTables style)
    ========================================================================== */
 
 table.jc-table {
@@ -586,7 +586,7 @@ table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
 table.jc-table tbody tr:last-child td { border-bottom: none; }
 
 /* ==========================================================================
-   DataTables table visual parity (IRS reference: compact rows, subtle zebra
+   DataTables table visual parity (compact rows, subtle zebra
    striping, row hover, light header) - juneau-rest-server-views' neutral
    `table[data-juneau-view]` / `table.dataTable` selectors (juneau-views.css)
    get their font-family/color/background-color/border-color HERE, via
@@ -612,7 +612,8 @@ table[data-juneau-view],
 table.dataTable {
   font-family: var(--jc-font);
   color: var(--jc-text);
-  border-bottom-color: var(--jc-border);   /* themes the table's own outer bottom border */
+  border-color: var(--jc-border);          /* outer/grid frame */
+  border-top-color: var(--jc-border-2);    /* accented 2px top rule */
   --dt-row-stripe: 255, 255, 255;
   --dt-row-hover: 255, 255, 255;
 }
@@ -623,14 +624,14 @@ table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
   background-color: var(--jc-table-header-bg);
   color: var(--jc-text-soft);
-  border-bottom-color: var(--jc-border);
+  border-color: var(--jc-border);
 }
 
 table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-  border-bottom-color: var(--jc-border);
+  border-color: var(--jc-border);
 }
 
 /* Zebra striping - bare nth-child (the mechanism actually in effect today, see comment above), tr.odd/tr.even
@@ -670,8 +671,8 @@ table.dataTable.display > tbody > tr:hover {
    compliant (color/background-color only - see the file header comment).
    ========================================================================== */
 
-/* Base thin-neutral-border shape (IRS parity item 1) - -views ships only a currentColor-fallback border, which
-   inherits the body's near-black text color instead of IRS's subtle gray; themed here with --jc-border, plus a
+/* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
+   inherits the body's near-black text color instead of a subtle gray; themed here with --jc-border, plus a
    white face so a button reads as a distinct control against the card's tinted background. */
 .juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
 .juneau-view-ribbon-btn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
@@ -681,7 +682,7 @@ table.dataTable.display > tbody > tr:hover {
    neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
    (e.g. a column-scoped "option" toggle whose state survived a browser refresh) is visually indistinguishable
    from an unpressed button - clicking it once and never again can silently keep filtering out every row.  Also
-   matches the blue "active" export button in the IRS reference ribbon (item 1). */
+   matches the blue "active" export button in the ribbon. */
 .juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); border-color: var(--jc-accent); }
 
 /* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
@@ -697,7 +698,7 @@ table.dataTable.display > tbody > tr:hover {
 	border-bottom-color: var(--jc-accent);
 }
 
-/* Detail-panel tabs: IRS instance-detail look (light track, selected pill darker blue / white text).
+/* Detail-panel tabs: instance-detail look (light track, selected pill darker blue / white text).
    Each var(--jc-*) is the entire value of a color/border-color/background-color property (sink-property discipline). */
 .juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
 	background-color: var(--jc-accent-wash);
@@ -718,13 +719,18 @@ table.dataTable.display > tbody > tr:hover {
 	border-color: var(--jc-accent);
 }
 
-/* Detail-panel header bar (IRS instance-detail header wash). */
+/* Detail-panel header bar (instance-detail header wash). */
 .juneau-view-detail-header {
 	background-color: var(--jc-accent-wash);
 }
 .juneau-view-detail-header .juneau-view-detail-title {
 	color: var(--jc-text);
 }
+
+/* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
+.juneau-view-detail-th,
+.juneau-view-detail-control { color: var(--jc-text-muted); }
+.juneau-view-detail-control:hover { color: var(--jc-accent); }
 
 /* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
    buttons. */
@@ -740,7 +746,7 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
 
-/* Per-column search row inputs (IRS parity item 4) - same thin-neutral-border treatment, themed accent on focus. */
+/* Per-column search row inputs - same thin-neutral-border treatment, themed accent on focus. */
 .juneau-view-columnsearch-input { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text); }
 .juneau-view-columnsearch-input:focus { border-color: var(--jc-accent); }
 

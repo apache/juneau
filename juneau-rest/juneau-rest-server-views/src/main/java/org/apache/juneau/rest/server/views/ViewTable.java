@@ -146,6 +146,17 @@ public class ViewTable {
 	/** The only {@link #LAYOUT_ATTR} value in v1: request full horizontal real estate for the wrapper's content. */
 	public static final String LAYOUT_WIDE = "wide";
 
+	/**
+	 * CSS class on the dedicated row-expand header cell.  Emitted whenever {@link ViewDef#details} is set so the
+	 * expander glyph never shares the first data column (a dedicated {@code .juneau-view-detail-control} column).
+	 */
+	public static final String DETAIL_TH_CLASS = "juneau-view-detail-th";
+
+	/**
+	 * CSS class on the dedicated row-expand body cell (and the DataTables column {@code className}).
+	 */
+	public static final String DETAIL_CONTROL_CLASS = "juneau-view-detail-control";
+
 	/** Marker attribute on the row-detail {@code <template>} sibling of the view table. */
 	public static final String DETAIL_TEMPLATE_ATTR = "data-juneau-row-detail";
 
@@ -497,10 +508,12 @@ public class ViewTable {
 		var id = viewDef.id;
 		var cols = viewDef.columns == null ? List.<Column>of() : viewDef.columns;
 
-		// <thead> of column titles (falling back to the data key when no title was set); a selection opt-in
-		// prepends a dedicated, unlabeled leading header cell for the checkbox column (never sharing the leading
-		// cell with any other affordance - TODO-428 Q3/owner decision).
-		var headerCells = new ArrayList<>(cols.size() + 1);
+		// <thead> of column titles (falling back to the data key when no title was set).  Leading synthetic
+		// columns are dedicated cells that never share the first data column: expander (when details is set),
+		// then a selection checkbox.
+		var headerCells = new ArrayList<>(cols.size() + 2);
+		if (viewDef.details != null)
+			headerCells.add(th().attr("class", DETAIL_TH_CLASS).attr("aria-label", "Expand"));
 		if (selection != null)
 			headerCells.add(th().attr("class", "juneau-view-select-th").attr("aria-label", "Select"));
 		for (var c : cols)
@@ -512,7 +525,9 @@ public class ViewTable {
 		if (rows != null) {
 			var bodyRows = new ArrayList<>(rows.size());
 			for (var row : rows) {
-				var cells = new ArrayList<>(cols.size() + 1);
+				var cells = new ArrayList<>(cols.size() + 2);
+				if (viewDef.details != null)
+					cells.add(td().attr("class", DETAIL_CONTROL_CLASS));
 				if (selection != null)
 					cells.add(td().attr("class", "juneau-view-select-cell"));
 				for (var c : cols) {

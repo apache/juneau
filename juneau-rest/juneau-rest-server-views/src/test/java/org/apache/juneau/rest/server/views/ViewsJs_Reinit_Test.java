@@ -168,12 +168,14 @@ class ViewsJs_Reinit_Test extends TestBase {
 	@Test void b06_restoreHeaderShell_recreatesSelectionThThenActions() throws Exception {
 		var fn = functionBody(viewsJs(), "function restoreHeaderShell(");
 		assertTrue(fn.contains("juneau-view-select-th"), fn);
+		assertTrue(fn.contains("juneau-view-detail-th"), fn);
 		assertTrue(fn.contains("appendActionsHeaderCell(table)"), fn);
 		var strip = functionBody(viewsJs(), "function stripGeneratedDom(");
 		assertTrue(strip.contains("juneau-view-toolbar-row"), strip);
 		assertTrue(strip.contains("juneau-view-columnsearch-row"), strip);
 		assertTrue(strip.contains("juneau-view-actions-th"), strip);
 		assertTrue(strip.contains("juneau-view-select-th"), strip);
+		assertTrue(strip.contains("juneau-view-detail-th"), strip);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

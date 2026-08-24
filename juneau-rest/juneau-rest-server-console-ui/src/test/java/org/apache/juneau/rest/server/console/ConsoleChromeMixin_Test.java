@@ -207,7 +207,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	private static final Theme POSITIVES_THEME = Theme.create("positives")
 		.token("--jc-accent", "#e91e63")
 		.token("--jc-page-bg", "linear-gradient(180deg, #aabbcc 0%, #112233 100%)")
-		.token("--jc-font", "'Salesforce Sans', Inter, sans-serif")
+		.token("--jc-font", "'Helvetica Neue', Inter, sans-serif")
 		.build();
 
 	@Rest(mixins=ConsoleChromeMixin.class)
@@ -220,7 +220,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var body = bodyOf(MockRestClient.buildLax(PositivesHost.class));
 		assertTrue(body.contains("--jc-accent:#e91e63;"));
 		assertTrue(body.contains("--jc-page-bg:linear-gradient(180deg, #aabbcc 0%, #112233 100%);"));
-		assertTrue(body.contains("--jc-font:'Salesforce Sans', Inter, sans-serif;"));
+		assertTrue(body.contains("--jc-font:'Helvetica Neue', Inter, sans-serif;"));
 	}
 
 	/**
@@ -530,7 +530,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// k) DataTables table visual parity (IRS reference: zebra striping, row hover, themed header)
+	// k) DataTables table visual parity (zebra striping, row hover, themed header)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void k01_chromeCss_themesDataTableZebraStriping_bothGenerations() throws Exception {
@@ -563,6 +563,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(css.contains("table.dataTable {"), () -> "missing table.dataTable base rule, css:\n" + css);
 		assertTrue(css.contains("font-family: var(--jc-font);"), () -> "missing themed font-family, css:\n" + css);
 		assertTrue(css.contains("table.dataTable > thead > tr > th"), () -> "missing themed header rule, css:\n" + css);
+		assertTrue(css.contains("border-color: var(--jc-border);"), () -> "missing themed table/cell border-color, css:\n" + css);
+		assertTrue(css.contains("border-top-color: var(--jc-border-2);"), () -> "missing themed table top border, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-detail-control"), () -> "missing expander column theme, css:\n" + css);
+		assertTrue(css.contains("var(--jc-text-muted)"), () -> "missing muted expander color, css:\n" + css);
 	}
 
 	private static String readChromeCss() throws IOException {

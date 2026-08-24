@@ -164,12 +164,13 @@
 }
 
 /*
- * DataTables table density/shape (IRS Instances metrics: compact 4px 5px cells, 0.75rem type,
- * hairline separators, no vertical grid).  NEUTRAL - shape only (font-size, padding, border WIDTH/style);
- * no color/background-color/border-color palette here (console-ui's chrome.css themes the SAME selectors
- * with --jc-* colors).  Selectors list BOTH `table[data-juneau-view]` and `table.dataTable` so the rule
- * applies whether or not DataTables has run yet.  Child-combinator (`>`) selectors deliberately mirror
- * the vendored dataTables.dataTables.css structure so this rule's specificity TIES the vendored one;
+ * DataTables table density/shape (compact 4px 5px cells, 0.75rem type,
+ * outer frame + cell grid).  NEUTRAL - shape only (font-size,
+ * padding, border WIDTH/style); no color/background-color/border-color palette here (console-ui's
+ * chrome.css themes the SAME selectors with --jc-* colors).  Selectors list BOTH
+ * `table[data-juneau-view]` and `table.dataTable` so the rule applies whether or not DataTables
+ * has run yet.  Child-combinator (`>`) selectors deliberately mirror the vendored
+ * dataTables.dataTables.css structure so this rule's specificity TIES the vendored one;
  * this file is served AFTER the vendored DataTables CSS, so the tie resolves in our favor.
  */
 table[data-juneau-view],
@@ -177,6 +178,8 @@ table.dataTable {
 	font-size: 0.75rem;
 	border-collapse: collapse;
 	border-spacing: 0;
+	border: 1px solid;            /* currentColor; chrome.css themes the color */
+	border-top-width: 2px;        /* accented top rule */
 }
 
 table[data-juneau-view] > thead > tr > th,
@@ -188,8 +191,7 @@ table.dataTable > thead > tr > td {
 	text-align: left;
 	vertical-align: middle;
 	min-width: 20px;
-	border: none;
-	border-bottom: 1px solid;     /* currentColor - hairline; chrome.css themes the color */
+	border: 1px solid;            /* currentColor - cell grid; chrome.css themes the color */
 }
 
 table[data-juneau-view] > tbody > tr > th,
@@ -198,8 +200,7 @@ table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
 	padding: 4px 5px;
 	vertical-align: middle;
-	border: none;
-	border-bottom: 1px solid;
+	border: 1px solid;
 }
 
 /* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
@@ -249,7 +250,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	box-sizing: border-box;
 	min-width: 32px;
 	height: 32px;
-	padding: 0 10px;              /* IRS ribbon-button horizontal padding between glyphs */
+	padding: 0 10px;              /* ribbon-button horizontal padding between glyphs */
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	background: transparent;
@@ -269,7 +270,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-ribbon-btn[aria-pressed="true"] { border-width: 2px; }
 
 /*
- * Segmented ribbon group (design doc §4.A, item 2/5 - IRS parity): one OUTER chrome around the group,
+ * Segmented ribbon group (design doc §4.A, item 2/5): one OUTER chrome around the group,
  * no inner vertical borders between glyphs.  Ends keep left/right; middles keep only top/bottom.  Rounding
  * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
  * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
@@ -379,7 +380,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Detail section tabs: IRS instance-detail ribbon (light track, selected pill).
+ * Detail section tabs: instance-detail ribbon (light track, selected pill).
  * Overrides generic tab-mode folder tabs for this consumer only; toolbar/paging stay ribbon-mode.
  * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
  */
@@ -555,7 +556,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Single unified top-toolbar row (IRS reference layout): a LEFT cluster (page-size + paging nav pill) and a RIGHT
+ * Single unified top-toolbar row: a LEFT cluster (page-size + paging nav pill) and a RIGHT
  * cluster (search, ribbon groups, refresh) laid out with `space-between` so the right cluster stays right-aligned
  * - built once by `buildToolbarRow(...)` (juneau-views.js), which assembles both clusters above the table.
  */
@@ -566,7 +567,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	align-items: center;
 	gap: 0.5em;
 	margin: 0 0 0.5em 0;
-	font-size: 0.75rem;           /* same type size as the table / IRS paging+search */
+	font-size: 0.75rem;           /* same type size as the table / paging+search */
 }
 
 .juneau-view-toolbar-left,
@@ -629,7 +630,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Per-column search row (design doc §4, item 4 - IRS parity fix): one text input per searchable column, inserted
+ * Per-column search row (design doc §4, item 4): one text input per searchable column, inserted
  * into <thead> by buildColumnSearchRow(...) (juneau-views.js) and shown/hidden by the columnSearchToggle ribbon
  * button.  NEUTRAL - shape only; console-ui's chrome.css themes the input's border/background/focus colors.
  */
@@ -756,30 +757,36 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 /*
  * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
- * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; a `::before` triangle
- * glyph on the first cell flips direction via the `.juneau-view-detail-open` class. NEUTRAL - no palette color.
+ * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; the
+ * chevron lives in a dedicated leading column (`.juneau-view-detail-control`), never jammed into
+ * the first data cell.  Dual-chevron swap via `.juneau-view-detail-open`.  NEUTRAL - no palette color.
  */
 .juneau-view-detail-row {
 	cursor: pointer;
 }
 
-.juneau-view-detail-row > td:first-child {
-	padding-left: 0;
-}
-
-.juneau-view-detail-row > td:first-child::before {
-	content: "\25B8";   /* ▸ */
-	display: inline-block;
+.juneau-view-detail-th,
+.juneau-view-detail-control {
 	width: 20px;
 	max-width: 20px;
-	margin-right: 0;
+	padding-left: 4px;
+	padding-right: 4px;
 	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.juneau-view-detail-control svg {
+	width: 12px;
+	height: 12px;
+	fill: currentColor;
 	vertical-align: middle;
 }
 
-.juneau-view-detail-open > td:first-child::before {
-	content: "\25BE";   /* ▾ */
-}
+.juneau-view-detail-expanded { display: none; }
+
+.juneau-view-detail-open .juneau-view-detail-collapsed { display: none; }
+.juneau-view-detail-open .juneau-view-detail-expanded { display: inline; }
 
 /* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`). */
 .juneau-view-detail-panel {

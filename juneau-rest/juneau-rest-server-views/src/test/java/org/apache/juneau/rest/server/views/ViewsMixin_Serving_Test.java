@@ -724,6 +724,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("flex-direction: row !important"), body);
 		assertTrue(body.contains("content: none"), body);
 		assertTrue(body.contains("border-collapse: collapse"), body);
+		assertTrue(body.contains("border-top-width: 2px"), body);
+		assertTrue(body.contains("border: 1px solid"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

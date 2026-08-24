@@ -653,12 +653,14 @@
 
 	/**
 	 * Builds the ACTUAL DataTables {@code opts.columns} index space (§4.2):
-	 * {@code [selection?] + effectiveColumns(including hidden, in order) + [actions?]}.
-	 * Synthetic selection/actions cells use {@code data:null} and a {@code _juneau} marker so they are never
+	 * {@code [expander?] + [selection?] + effectiveColumns(including hidden, in order) + [actions?]}.
+	 * Synthetic expander/selection/actions cells use {@code data:null} and a {@code _juneau} marker so they are never
 	 * mistaken for a catalog column by {@link #dtIndex}.  Pure / DOM-free — slice 5 rewires consumers onto this.
 	 */
 	function buildOptsColumnSpace(effectiveColumns, options) {
 		const cols = [];
+		if (options && options.hasRowDetail)
+			cols.push({ data: null, _juneau: "detail" });
 		if (options && options.hasSelection)
 			cols.push({ data: null, _juneau: "selection" });
 		(effectiveColumns || []).forEach(function (c) {
@@ -1223,21 +1225,25 @@
 	 */
 	function sanitizeColumnTitlesForDataTables(cols) {
 		(cols || []).forEach(function (c) {
-			if (c && c._juneau !== "selection" && c._juneau !== "actions")
+			if (c && !c._juneau)
 				c.title = "";
 		});
 	}
 
 	/**
 	 * Paints DataTables header cells from the effective column model using {@code textContent} only.
-	 * Selection / actions headers are skipped (they are unlabeled by design).
+	 * Synthetic expander / selection / actions headers are skipped (they are unlabeled by design).
 	 */
 	function paintHeaderTitles(table, effectiveColumns, ctx) {
 		if (!table) return;
 		const headRow = table.querySelector("thead tr");
 		if (!headRow) return;
 		const ths = headRow.children;
-		const offset = (ctx && ctx.selectionState) ? 1 : 0;
+		let offset = 0;
+		if (typeof headRow.querySelector === "function"
+				&& (headRow.querySelector(".juneau-view-detail-th") || headRow.querySelector(".juneau-view-detail-control")))
+			offset++;
+		if (ctx && ctx.selectionState) offset++;
 		(effectiveColumns || []).forEach(function (col, i) {
 			const th = ths[offset + i];
 			if (!th) return;
