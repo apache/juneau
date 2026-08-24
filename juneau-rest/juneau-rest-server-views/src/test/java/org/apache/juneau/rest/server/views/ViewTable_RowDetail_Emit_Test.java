@@ -190,4 +190,33 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertTrue(html.contains("data-juneau-field-format=\"markdown\""), html);
 		assertFalse(html.contains("data-juneau-field-render"), html);
 	}
+
+	@Test void a12_headerEmitsTitleTemplateAndIcon_beforeSections() {
+		var v = ViewDef.create("alerts")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id").title("Id"))
+			.rowActions(RowAction.create("ack").label("Acknowledge").endpoint("/data/{id}/ack").method(RowAction.Method.POST))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.title("Incident #{number}")
+				.icon("search")
+				.headerActions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE))
+				.sections(
+					DetailSection.create("details", "Details").fields(DetailField.of("summary").title("Summary")),
+					DetailSection.create("diagnose", "Diagnose").fields(DetailField.of("findings").title("Findings"))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("juneau-view-detail-header"), html);
+		assertTrue(html.contains("juneau-view-detail-title"), html);
+		assertTrue(html.contains("data-juneau-detail-title"), html);
+		assertTrue(html.contains("data-juneau-detail-title-template"), html);
+		assertTrue(html.contains("Incident #{number}"), html);
+		assertTrue(html.contains("data-juneau-detail-icon=\"search\"") || html.contains("data-juneau-detail-icon='search'"), html);
+		assertTrue(html.contains("data-juneau-action=\"ack\""), html);
+		assertFalse(html.contains("data-juneau-field=\"headerTitle\""), html);
+		var headerAt = html.indexOf("juneau-view-detail-header");
+		var sectionAt = html.indexOf("data-juneau-detail-section=\"details\"");
+		assertTrue(headerAt >= 0 && sectionAt > headerAt, html);
+	}
 }

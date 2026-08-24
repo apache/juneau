@@ -59,6 +59,8 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"fillMarkdownSlot: fillMarkdownSlot",
 			"fillRenderSlot: fillRenderSlot",
 			"fillDetailSlots: fillDetailSlots",
+			"resolveDetailHeaderIcon: resolveDetailHeaderIcon",
+			"paintActionMessageIntoDetail: paintActionMessageIntoDetail",
 			"findRowDetailTemplate: findRowDetailTemplate",
 			"detailTabTargetIndex: detailTabTargetIndex",
 			"activateDetailTab: activateDetailTab",
@@ -204,6 +206,14 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(false, r.get("href_js"));
 		assertEquals(true, r.get("href_https"));
 		assertEquals(false, r.get("href_data"));
+		assertEquals("Incident #42", r.get("title_filled"));
+		assertEquals(true, r.get("title_xssNotInterpreted"));
+		assertTrue(String.valueOf(r.get("title_xss")).contains("<img"));
+		assertEquals(true, r.get("hasPaintActionMessageIntoDetail"));
+		assertEquals("<b>disk full</b>", r.get("paint_text"));
+		assertEquals(true, r.get("paint_xssNotInterpreted"));
+		assertEquals(true, r.get("hasResolveDetailHeaderIcon"));
+		assertEquals(true, r.get("icon_unknownHidden"));
 	}
 
 	@Test void b07_fillRenderSlot_tagProgressLinkedAndCanary() {
@@ -326,5 +336,19 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals("b", r.get("noRefetch_onActivateFirstSid"));
 		assertEquals("a", r.get("noRefetch_onActivateLastSid"));
 		assertEquals(true, r.get("noRefetch_onActivatePaneMatches"));
+	}
+
+	@Test void b15_headerKeepsStripAfterHeader() {
+		var r = report();
+		assertEquals(true, r.get("header_firstIsHeader"));
+		assertEquals(true, r.get("header_stripAfterHeader"));
+	}
+
+	@Test void b16_findRowDetailTemplate_survivesDataTablesWrap() {
+		var r = report();
+		assertEquals(true, r.get("hasFindRowDetailTemplate"));
+		assertEquals(true, r.get("find_sibling"));
+		assertEquals(true, r.get("find_dt2Wrap"));
+		assertEquals(true, r.get("find_missing"));
 	}
 }

@@ -272,4 +272,31 @@ class RowDetailDef_Test extends TestBase {
 			.build();
 		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
 	}
+
+	@Test void d01_titleTemplate_doesNotCollideWithSectionField() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.title("Owner {owner}")
+			.sections(oneSection())
+			.validate(null);
+	}
+
+	@Test void d02_headerActions_unknownActionRef_rejected() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.headerActions(ActionBar.create().items(ActionRef.of("ack")))
+			.sections(oneSection())
+			.validate(null));
+		assertTrue(e.getMessage().contains("ack"), e::getMessage);
+	}
+
+	@Test void d03_titleIconAndHeaderActions_accepted() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.title("Incident #{number}")
+			.icon("search")
+			.headerActions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE))
+			.sections(oneSection())
+			.validate(java.util.List.of(ack()));
+	}
 }

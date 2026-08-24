@@ -174,6 +174,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.ICONS_JS_PATH).run().assertStatus(404);
 	}
 
+	@Test void h01b_hostWithoutMixin_symbolsSvgRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.SYMBOLS_SVG_PATH).run().assertStatus(404);
+	}
+
 	@Test void h02_hostWithoutMixin_configAssetsAre404() throws Exception {
 		cNoMixin.get(ViewsMixin.CONFIG_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
@@ -253,7 +257,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -276,7 +280,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
 		for (var path : new String[]{
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
-				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.PAGES_JS_PATH,
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.PAGES_JS_PATH,
 				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -508,10 +512,20 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.ICONS_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("registerIcon("), body);
 		assertTrue(body.contains("resolveIcon("), body);
+		assertTrue(body.contains("juneau-symbols.svg"), body);
 		for (var name : new String[]{
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
 				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more"})
 			assertTrue(body.contains("\"" + name + "\""), () -> "missing bundled glyph '" + name + "':\n" + body);
+	}
+
+	@Test void h04_symbolsSvg_served_andKeyFileIsNot() throws Exception {
+		cWithMixin.get(ViewsMixin.SYMBOLS_SVG_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-sym-copy");
+		cWithMixin.get("/juneau-symbols-key.svg").run().assertStatus(404);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -681,6 +695,16 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains(lastSel), body);
 		var lcStart = body.indexOf(lastSel);
 		assertTrue(body.substring(lcStart, body.indexOf("}", lcStart)).contains("border-bottom-right-radius: 0"), body);
+	}
+
+	@Test void o06_viewsCss_hasDetailHeaderAndIndependentDetailTabs() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains(".juneau-view-detail-header {"), body);
+		assertTrue(body.contains(".juneau-view-detail-title {"), body);
+		assertTrue(body.contains(".juneau-view-detail-icon {"), body);
+		assertTrue(body.contains(".juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode=\"tab\"]"), body);
+		assertTrue(body.contains("border-radius: 999px"), body);
+		assertTrue(body.contains(".juneau-sym-flip-x"), body);
 	}
 
 	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {

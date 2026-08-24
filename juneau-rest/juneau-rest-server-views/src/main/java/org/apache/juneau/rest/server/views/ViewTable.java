@@ -161,6 +161,18 @@ public class ViewTable {
 	/** Attribute carrying a {@link DetailField#data} key on each empty field slot. */
 	public static final String DETAIL_FIELD_ATTR = "data-juneau-field";
 
+	/** Marker on the optional detail-panel header (title + header actions). */
+	public static final String DETAIL_HEADER_ATTR = "data-juneau-detail-header";
+
+	/** Marker on the header title element filled from a <code>{field}</code> template. */
+	public static final String DETAIL_TITLE_ATTR = "data-juneau-detail-title";
+
+	/** Attribute carrying the header title template (placeholders filled at expand time). */
+	public static final String DETAIL_TITLE_TEMPLATE_ATTR = "data-juneau-detail-title-template";
+
+	/** Attribute carrying the header icon registry name. */
+	public static final String DETAIL_ICON_ATTR = "data-juneau-detail-icon";
+
 	/**
 	 * Attribute carrying a {@link DetailField.Format} wire token.  Omitted for {@link DetailField.Format#TEXT}
 	 * (the default).
@@ -563,7 +575,9 @@ public class ViewTable {
 	 */
 	private static Template emitDetailTemplate(ViewDef viewDef) {
 		var d = viewDef.details;
-		var sections = new ArrayList<>();
+		var children = new ArrayList<>();
+		if (hasDetailHeader(d))
+			children.add(emitDetailHeader(d, viewDef.rowActions));
 		for (var s : d.sections) {
 			var kids = new ArrayList<>();
 			kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
@@ -583,7 +597,7 @@ public class ViewTable {
 			// the detail GET succeeds and this section's pane is visible (TODO fold g5 DOM order).
 			if (s.table != null)
 				kids.add(emitNestedTable(s.table));
-			sections.add(section(kids.toArray())
+			children.add(section(kids.toArray())
 				.attr(DETAIL_SECTION_ATTR, s.id)
 				.class_("juneau-view-detail-section"));
 		}
@@ -591,7 +605,28 @@ public class ViewTable {
 			.attr(DETAIL_TEMPLATE_ATTR, "1")
 			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
 			.attr(DETAIL_URL_ATTR, d.endpoint)
-			.children(sections.toArray());
+			.children(children.toArray());
+	}
+
+	private static boolean hasDetailHeader(RowDetailDef d) {
+		var titled = d.title != null && !d.title.isBlank();
+		var icon = d.icon != null && !d.icon.isBlank();
+		var actions = d.headerActions != null && d.headerActions.items != null && !d.headerActions.items.isEmpty();
+		return titled || icon || actions;
+	}
+
+	private static Div emitDetailHeader(RowDetailDef d, List<RowAction> rowActions) {
+		var kids = new ArrayList<>();
+		if (d.icon != null && !d.icon.isBlank())
+			kids.add(span().attr(DETAIL_ICON_ATTR, d.icon).class_("juneau-view-detail-icon"));
+		if (d.title != null && !d.title.isBlank())
+			kids.add(h2(d.title)
+				.attr(DETAIL_TITLE_ATTR, "1")
+				.attr(DETAIL_TITLE_TEMPLATE_ATTR, d.title)
+				.class_("juneau-view-detail-title"));
+		if (d.headerActions != null && d.headerActions.items != null && !d.headerActions.items.isEmpty())
+			kids.add(emitActionBar(d.headerActions, rowActions));
+		return div(kids.toArray()).class_("juneau-view-detail-header").attr(DETAIL_HEADER_ATTR, "1");
 	}
 
 	/**

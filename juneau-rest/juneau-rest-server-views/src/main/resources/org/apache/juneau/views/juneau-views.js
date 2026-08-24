@@ -1073,10 +1073,19 @@
 
 	/**
 	 * Locates the server-emitted {@code <template data-juneau-row-detail>} sibling of `table`.
+	 *
+	 * <p>ViewTable emits the template next to the {@code <table>}. DataTables 2 then wraps the table in
+	 * {@code .dt-container > .dt-layout-cell}, so {@code table.parentNode} is the cell and no longer contains
+	 * the template. After wrap, the template is a sibling of {@code .dt-container}; {@link #findViewWrapper}
+	 * plus its parent is that host. Before wrap (and in the Node harness), {@code table.parentNode} is the host.
 	 */
 	function findRowDetailTemplate(table) {
-		const parent = table && table.parentNode;
-		return parent && parent.querySelector ? parent.querySelector("template[data-juneau-row-detail]") : null;
+		if (!table) return null;
+		const wrapper = findViewWrapper(table);
+		const host = wrapper && wrapper.parentNode && wrapper !== table.parentNode
+			? wrapper.parentNode
+			: table.parentNode;
+		return host && host.querySelector ? host.querySelector("template[data-juneau-row-detail]") : null;
 	}
 
 	/**
@@ -1333,6 +1342,60 @@
 			else
 				slot.textContent = value;
 		}
+		const titles = root.querySelectorAll("[data-juneau-detail-title]");
+		for (let t = 0; t < titles.length; t++) {
+			const el = titles[t];
+			const tmpl = el.getAttribute("data-juneau-detail-title-template") || "";
+			el.textContent = tmpl.replace(/\{([A-Za-z0-9_]+)\}/g, function (_, key) {
+				return Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+			});
+		}
+	}
+
+	/**
+	 * Resolves the header icon from the views icon registry (trusted sprite markup, same as ribbon buttons).
+	 * Unknown names hide the slot.  Kept out of fillDetailSlots so that function stays a textContent-only sink.
+	 */
+	function resolveDetailHeaderIcon(root) {
+		if (!root || typeof root.querySelector !== "function") return;
+		const slot = root.querySelector("[data-juneau-detail-icon]");
+		if (!slot) return;
+		const name = slot.getAttribute("data-juneau-detail-icon");
+		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const markup = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon(name) : null;
+		if (!markup) {
+			slot.hidden = true;
+			slot.textContent = "";
+			return;
+		}
+		slot.hidden = false;
+		slot.innerHTML = markup;  // trusted icon-registry sprite markup only - never user data
+	}
+
+	/**
+	 * Paints an action's message into the first field slot of the section that owns that action button
+	 * (in-tab Diagnose findings).  TEXT slots use textContent; markdown slots use fillMarkdownSlot.
+	 */
+	function paintActionMessageIntoDetail(tr, actionId, message) {
+		const panel = tr && tr._juneauDetailPanel;
+		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		const want = String(actionId == null ? "" : actionId);
+		if (!want) return;
+		const buttons = panel.querySelectorAll("[data-juneau-action]");
+		let btn = null;
+		for (let i = 0; i < buttons.length; i++) {
+			if (buttons[i].getAttribute("data-juneau-action") === want) { btn = buttons[i]; break; }
+		}
+		if (!btn) return;
+		const section = btn.closest ? btn.closest("[data-juneau-detail-section]") : null;
+		if (!section || typeof section.querySelector !== "function") return;
+		const slot = section.querySelector("[data-juneau-field]");
+		if (!slot) return;
+		const value = message == null ? "" : String(message);
+		if (slot.getAttribute("data-juneau-field-format") === "markdown")
+			fillMarkdownSlot(slot, value);
+		else
+			slot.textContent = value;
 	}
 
 	// ==================================================================================================================
@@ -1479,7 +1542,16 @@
 			if (typeof nextBtn.focus === "function") nextBtn.focus();
 		});
 
-		panel.insertBefore(strip, panel.firstChild);
+		var header = typeof panel.querySelector === "function"
+			? panel.querySelector(".juneau-view-detail-header") : null;
+		if (header) {
+			if (header.nextSibling)
+				panel.insertBefore(strip, header.nextSibling);
+			else
+				panel.appendChild(strip);
+		} else {
+			panel.insertBefore(strip, panel.firstChild);
+		}
 		return strip;
 	}
 
@@ -2008,6 +2080,7 @@
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
+		resolveDetailHeaderIcon(panel);
 		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
 		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
 		// fills EVERY pane's slots (including the hidden ones) so switching tabs shows populated content.
@@ -2534,6 +2607,8 @@
 	 * result) with onSuccess=redraw still redraws, preserving the pre-416 direct-submit behavior.
 	 */
 	function applySuccessBehavior(action, table, tr, ctx, result) {
+		if (result && result.message)
+			paintActionMessageIntoDetail(tr, action && action.id, result.message);
 		if (action.onSuccess === "mergeRow" && result && result.row != null) {
 			mergeRowFromResult(tr, ctx, result.row);
 		} else if (action.onSuccess === "redraw" && ctx && ctx.redraw) {
@@ -2676,7 +2751,10 @@
 			else renderActionOutcome(tr, fallback);
 		}
 		es.addEventListener("progress", function (e) {
-			if (! st.settled) renderJobProgress(tr, e.data, started, table);
+			if (! st.settled) {
+				renderJobProgress(tr, e.data, started, table);
+				paintActionMessageIntoDetail(tr, action && action.id, e.data);
+			}
 		});
 		es.addEventListener("result", function (e) {
 			finish(parseActionResult(e.data), { outcome: "unknown", message: "the job produced no readable result" });
@@ -4056,6 +4134,8 @@
 		fillMarkdownSlot: fillMarkdownSlot,
 		fillRenderSlot: fillRenderSlot,
 		fillDetailSlots: fillDetailSlots,
+		resolveDetailHeaderIcon: resolveDetailHeaderIcon,
+		paintActionMessageIntoDetail: paintActionMessageIntoDetail,
 		detailTabTargetIndex: detailTabTargetIndex,
 		activateDetailTab: activateDetailTab,
 		buildDetailStrip: buildDetailStrip,

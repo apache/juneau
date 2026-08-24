@@ -98,6 +98,7 @@ final class RawContentSinkScanner {
 	private static final List<AllowedJsSink> SHIPPED_JS_ALLOWLIST = List.of(
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "b.innerHTML = markup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "slot.innerHTML = markup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-cards.js", "btn.innerHTML = glyph;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-chrome.js", "iconSpan.innerHTML = glyph;")

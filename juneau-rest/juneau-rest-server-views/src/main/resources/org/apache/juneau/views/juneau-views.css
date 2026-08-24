@@ -339,6 +339,79 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Detail-panel header (icon + title + action bar) sitting above the section tab strip.
+ * NEUTRAL - layout only; chrome.css themes colors.
+ */
+.juneau-view-detail-header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5em 0.75em;
+	margin: 0 0 0.5em;
+	padding: 0.5em 0.75em;
+}
+
+.juneau-view-detail-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 1.25em;
+	height: 1.25em;
+}
+
+.juneau-view-detail-icon[hidden] {
+	display: none;
+}
+
+.juneau-view-detail-title {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	font-size: 1.05em;
+	font-weight: 600;
+}
+
+.juneau-view-detail-header .juneau-view-detail-actions {
+	margin: 0;
+	margin-left: auto;
+	flex: 0 0 auto;
+}
+
+/*
+ * Detail section tabs: IRS instance-detail ribbon (light track, selected pill).
+ * Overrides generic tab-mode folder tabs for this consumer only; toolbar/paging stay ribbon-mode.
+ * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
+ */
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
+	gap: 0.25em;
+	width: 100%;
+	margin: 0 0 0.75em;
+	padding: 0.25em;
+	border-bottom: none;
+}
+
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	margin-bottom: 0;
+	border-left: 1px solid;
+	border-right: 1px solid;
+	border-radius: 999px;
+}
+
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:first-child,
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:last-child,
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:only-child {
+	border-radius: 999px;
+}
+
+.juneau-sym-flip-x { transform: scaleX(-1); }
+
+.juneau-view-paging-double {
+	display: inline-flex;
+	align-items: center;
+}
+
+/*
  * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
  * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
  * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]

@@ -664,6 +664,35 @@ table.dataTable.display > tbody > tr:hover {
 	border-bottom-color: var(--jc-accent);
 }
 
+/* Detail-panel tabs: IRS instance-detail look (light track, selected pill darker blue / white text).
+   Each var(--jc-*) is the entire value of a color/border-color/background-color property (sink-property discipline). */
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
+	background-color: var(--jc-accent-wash);
+	border-bottom-color: var(--jc-accent-wash);
+}
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	background-color: var(--jc-control-bg);
+	color: var(--jc-text-soft);
+	border-color: var(--jc-border);
+}
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:hover {
+	background-color: var(--jc-accent-wash);
+	color: var(--jc-accent);
+}
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+	background-color: var(--jc-accent);
+	color: var(--jc-on-accent);
+	border-color: var(--jc-accent);
+}
+
+/* Detail-panel header bar (IRS instance-detail header wash). */
+.juneau-view-detail-header {
+	background-color: var(--jc-accent-wash);
+}
+.juneau-view-detail-header .juneau-view-detail-title {
+	color: var(--jc-text);
+}
+
 /* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
    buttons. */
 .juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-control-bg); }

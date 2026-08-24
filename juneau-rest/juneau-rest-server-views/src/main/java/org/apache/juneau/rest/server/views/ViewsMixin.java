@@ -97,6 +97,12 @@ public class ViewsMixin {
 	public static final String ICONS_JS_PATH = "/juneau-icons.js";
 
 	/**
+	 * The URL path at which the shared SVG symbol sprite is served (relative to the host mount).
+	 * {@code juneau-icons.js} fetches this next to itself; the key/legend file is not served to browsers.
+	 */
+	public static final String SYMBOLS_SVG_PATH = "/juneau-symbols.svg";
+
+	/**
 	 * The URL path at which the opt-in tabs/sub-tabs page runtime is served (relative to the host mount).  A
 	 * separate, opt-in asset (Decision 2(A)): single-view pages never load it.
 	 */
@@ -182,6 +188,9 @@ public class ViewsMixin {
 	/** Classpath location of the shipped icon registry. */
 	static final String ICONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-icons.js";
 
+	/** Classpath location of the shipped SVG symbol sprite. */
+	static final String SYMBOLS_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols.svg";
+
 	/** Classpath location of the shipped page runtime. */
 	static final String PAGES_JS_RESOURCE = "/org/apache/juneau/views/juneau-pages.js";
 
@@ -208,6 +217,9 @@ public class ViewsMixin {
 
 	/** Content type emitted for the stylesheet asset. */
 	static final String CSS_CONTENT_TYPE = "text/css;charset=utf-8";
+
+	/** Content type emitted for the SVG symbol sprite. */
+	static final String SVG_CONTENT_TYPE = "image/svg+xml";
 
 	/** {@code Cache-Control} header emitted for every asset (1 day). */
 	static final String CACHE_CONTROL = "max-age=86400, public";
@@ -295,6 +307,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.
+	 *
+	 * @return The sprite as an SVG {@link HttpResource}.
+	 */
+	@RestGet(
+		path=SYMBOLS_SVG_PATH,
+		summary="Juneau rich-view SVG symbol sprite",
+		description="Shared SVG <symbol> sprite referenced by juneau-icons.js <use href> hosts. The key/legend file is not served.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSymbolsSvg() {
+		return serve(SYMBOLS_SVG_RESOURCE, SVG_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-pages.js] &mdash; serve the opt-in tabs/sub-tabs page runtime.
 	 *
 	 * @return The page runtime as a JavaScript {@link HttpResource}.
@@ -360,9 +387,9 @@ public class ViewsMixin {
 	 * section for why the buster is content- rather than purely version-keyed).
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
-	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
-	 * 	{@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
+	 * 	{@link #PAGES_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -384,9 +411,9 @@ public class ViewsMixin {
 	 *
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH},
-	 * 	{@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
-	 * 	{@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
+	 * 	{@link #PAGES_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -450,6 +477,7 @@ public class ViewsMixin {
 		if (RENDERS_JS_PATH.equals(path)) return RENDERS_JS_RESOURCE;
 		if (VIEWS_CSS_PATH.equals(path)) return VIEWS_CSS_RESOURCE;
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
+		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;

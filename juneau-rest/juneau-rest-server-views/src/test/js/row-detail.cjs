@@ -36,15 +36,24 @@ if (!viewsJsPath) {
 	process.exit(2);
 }
 
-/** Minimal CSS-selector matcher for the subset the harness needs: `.class` and `[attr]` / `[attr="v"]`. */
+/** Minimal CSS-selector matcher: tag, `.class`, `[attr]` / `[attr="v"]`, comma lists, and tag[attr] combos. */
 function elMatches(node, sel) {
 	if (!node || node.nodeType !== 1) return false;
-	if (sel.charAt(0) === '.') {
-		const cls = sel.slice(1);
+	if (sel.indexOf(',') >= 0)
+		return sel.split(',').some(function (part) { return elMatches(node, part.trim()); });
+	var rest = sel;
+	var tm = /^([a-zA-Z][\w-]*)(.*)$/.exec(sel);
+	if (tm) {
+		if (node.tagName !== tm[1].toUpperCase()) return false;
+		rest = tm[2] || '';
+		if (!rest) return true;
+	}
+	if (rest.charAt(0) === '.') {
+		const cls = rest.slice(1);
 		const raw = ' ' + (node.className || node.getAttribute('class') || '') + ' ';
 		return raw.indexOf(' ' + cls + ' ') >= 0;
 	}
-	const m = /^\[([\w:-]+)(?:="([^"]*)")?\]$/.exec(sel);
+	const m = /^\[([\w:-]+)(?:="([^"]*)")?\]$/.exec(rest);
 	if (m) {
 		const v = node.getAttribute(m[1]);
 		return m[2] == null ? v != null : v === m[2];
@@ -72,6 +81,12 @@ function el(tag) {
 		parentNode: null,
 		_listeners: {},
 		get firstChild() { return this.childNodes[0] || null; },
+		get nextSibling() {
+			if (!this.parentNode) return null;
+			var kids = this.parentNode.childNodes;
+			var i = kids.indexOf(this);
+			return i >= 0 && i + 1 < kids.length ? kids[i + 1] : null;
+		},
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		appendChild: function (c) {
@@ -245,6 +260,56 @@ out.fill_xss = title.textContent;
 out.fill_num = notes.textContent;
 out.fill_missing = extra.textContent;
 out.fill_xssNotInterpreted = title.textContent === xss;
+
+const titleWrap = el('div');
+const titleH2 = el('h2');
+titleH2.setAttribute('data-juneau-detail-title', '1');
+titleH2.setAttribute('data-juneau-detail-title-template', 'Incident #{number}');
+titleH2.textContent = 'Incident #{number}';
+titleWrap.appendChild(titleH2);
+I.fillDetailSlots(titleWrap, { number: '42' });
+out.title_filled = titleH2.textContent;
+
+const titleXssWrap = el('div');
+const titleXss = el('h2');
+titleXss.setAttribute('data-juneau-detail-title', '1');
+titleXss.setAttribute('data-juneau-detail-title-template', 'Incident #{number}');
+titleXssWrap.appendChild(titleXss);
+const titleXssPayload = '<img src=x onerror="window.__juneauTitleXss=1">';
+I.fillDetailSlots(titleXssWrap, { number: titleXssPayload });
+out.title_xss = titleXss.textContent;
+out.title_xssNotInterpreted = titleXss.textContent === 'Incident #' + titleXssPayload;
+
+out.hasPaintActionMessageIntoDetail = typeof I.paintActionMessageIntoDetail === 'function';
+if (out.hasPaintActionMessageIntoDetail) {
+	const paintPanel = el('div');
+	const paintSec = el('section');
+	paintSec.setAttribute('data-juneau-detail-section', 'diagnose');
+	const paintSlot = el('div');
+	paintSlot.setAttribute('data-juneau-field', 'findings');
+	const paintBtn = el('button');
+	paintBtn.setAttribute('data-juneau-action', 'diagnose');
+	paintSec.appendChild(paintSlot);
+	paintSec.appendChild(paintBtn);
+	paintPanel.appendChild(paintSec);
+	const paintTr = { _juneauDetailPanel: paintPanel };
+	const paintMsg = '<b>disk full</b>';
+	I.paintActionMessageIntoDetail(paintTr, 'diagnose', paintMsg);
+	out.paint_text = paintSlot.textContent;
+	out.paint_xssNotInterpreted = paintSlot.textContent === paintMsg;
+}
+
+out.hasResolveDetailHeaderIcon = typeof I.resolveDetailHeaderIcon === 'function';
+if (out.hasResolveDetailHeaderIcon) {
+	const iconWrap = el('div');
+	const iconSlot = el('span');
+	iconSlot.setAttribute('data-juneau-detail-icon', 'no-such-icon');
+	iconWrap.appendChild(iconSlot);
+	window.JuneauViews = window.JuneauViews || {};
+	window.JuneauViews.icons = { resolveIcon: function () { return null; } };
+	I.resolveDetailHeaderIcon(iconWrap);
+	out.icon_unknownHidden = iconSlot.hidden === true;
+}
 
 function markdownSlot() {
 	const s = el('div');
@@ -536,6 +601,41 @@ if (out.hasBuildDetailStrip) {
 	out.noRefetch_onActivatePaneMatches = activated.length >= 2
 		&& activated[0].pane === nfPanes[1] && activated[1].pane === nfPanes[0];
 	window.fetch = undefined;
+
+	const headed = detailPanel([['overview', 'Overview'], ['context', 'Context']]);
+	const hdr = el('div');
+	hdr.className = 'juneau-view-detail-header';
+	headed.insertBefore(hdr, headed.firstChild);
+	const headedStrip = I.buildDetailStrip(headed);
+	out.header_firstIsHeader = headed.firstChild === hdr;
+	out.header_stripAfterHeader = headed.childNodes[1] === headedStrip;
+}
+
+// findRowDetailTemplate: sibling of the table (pre-wrap) AND sibling of .dt-container (DataTables 2 wrap).
+out.hasFindRowDetailTemplate = typeof I.findRowDetailTemplate === 'function';
+if (out.hasFindRowDetailTemplate) {
+	const sibHost = el('div');
+	const sibTable = el('table');
+	const sibTmpl = el('template');
+	sibTmpl.setAttribute('data-juneau-row-detail', '1');
+	sibHost.appendChild(sibTable);
+	sibHost.appendChild(sibTmpl);
+	out.find_sibling = I.findRowDetailTemplate(sibTable) === sibTmpl;
+
+	const dtHost = el('div');
+	const dtContainer = el('div');
+	dtContainer.className = 'dt-container';
+	const dtCell = el('div');
+	dtCell.className = 'dt-layout-cell';
+	const dtTable = el('table');
+	const dtTmpl = el('template');
+	dtTmpl.setAttribute('data-juneau-row-detail', '1');
+	dtHost.appendChild(dtContainer);
+	dtContainer.appendChild(dtCell);
+	dtCell.appendChild(dtTable);
+	dtHost.appendChild(dtTmpl);
+	out.find_dt2Wrap = I.findRowDetailTemplate(dtTable) === dtTmpl;
+	out.find_missing = I.findRowDetailTemplate(el('table')) == null;
 }
 
 process.stdout.write(JSON.stringify(out));

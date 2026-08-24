@@ -23,14 +23,21 @@ import java.util.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * The row-details expander definition: named sections, an expand GET endpoint, and optional per-section
- * {@link ActionBar}s.
+ * The row-details expander definition: named sections, an expand GET endpoint, an optional IRS-style header
+ * (title template, icon, and {@link ActionBar} above section tabs), and optional per-section {@link ActionBar}s.
  *
  * <p>
  * Structure is emitted as a {@code <template data-juneau-row-detail>} sibling of the view table; field values
  * arrive via a same-origin GET.  {@link DetailField.Format#TEXT} (the default) paints with {@code textContent};
  * {@link DetailField.Format#MARKDOWN} copies allowlisted nodes from a {@code DOMParser} document and never
  * assigns {@code innerHTML}.  This type is Java-only &mdash; it is not part of the {@code VIEW_META} JSON sidecar.
+ *
+ * <p>
+ * Two or more {@link #sections} become a tab-mode strip under the header (Details / Diagnose / &hellip;), the
+ * same nested-ribbon pattern IRS Instances uses.  When {@link #title}, {@link #icon}, and/or
+ * {@link #headerActions} are set, the template emits a {@code .juneau-view-detail-header} above that strip.
+ * {@link #title} may contain <code>{field}</code> placeholders filled from the expand GET {@code fields} map
+ * via {@code textContent}.
  *
  * @since 10.0.0
  */
@@ -44,6 +51,24 @@ public class RowDetailDef {
 
 	/** The named sections, in display order.  At least one is required. */
 	public List<DetailSection> sections;
+
+	/**
+	 * Optional expander-panel title.  May contain <code>{field}</code> placeholders filled from the expand GET
+	 * {@code fields} map (plain text).  {@code null} or blank omits the title slot.
+	 */
+	public String title;
+
+	/**
+	 * Optional icon name resolved by the views icon registry (same names as ribbon buttons).  Painted to the
+	 * left of {@link #title}.  Unknown names hide the slot at runtime.
+	 */
+	public String icon;
+
+	/**
+	 * Optional action bar in the detail header, above section tabs.  {@code null} / empty omits header actions.
+	 * {@link ActionRef} ids are validated against the enclosing view's {@code rowActions}.
+	 */
+	public ActionBar headerActions;
 
 	/**
 	 * App-approved custom renderer ids allowed on {@link DetailField#render} in addition to
@@ -79,6 +104,40 @@ public class RowDetailDef {
 	 */
 	public RowDetailDef sections(DetailSection...value) {
 		sections = l(value);
+		return this;
+	}
+
+	/**
+	 * Sets the expander-panel header title.
+	 *
+	 * @param value Title text, optionally with <code>{field}</code> placeholders.  Blank / {@code null} omits
+	 * 	the title slot.
+	 * @return This object.
+	 */
+	public RowDetailDef title(String value) {
+		title = value;
+		return this;
+	}
+
+	/**
+	 * Sets the expander-panel header icon name.
+	 *
+	 * @param value An icon registry name.  Blank / {@code null} omits the icon slot.
+	 * @return This object.
+	 */
+	public RowDetailDef icon(String value) {
+		icon = value;
+		return this;
+	}
+
+	/**
+	 * Sets the header action bar (right of the title, above section tabs).
+	 *
+	 * @param value The action bar.  May be <jk>null</jk> (no header actions).
+	 * @return This object.
+	 */
+	public RowDetailDef headerActions(ActionBar value) {
+		headerActions = value;
 		return this;
 	}
 
@@ -141,6 +200,8 @@ public class RowDetailDef {
 				if (a != null && a.id != null)
 					actionIds.add(a.id);
 
+		validateActionBar(headerActions, actionIds);
+
 		var sectionIds = new HashSet<String>();
 		var fieldKeys = new HashSet<String>();
 		var nestedViewIds = new HashSet<String>();
@@ -170,17 +231,7 @@ public class RowDetailDef {
 					}
 				}
 			}
-			if (s.actions != null) {
-				s.actions.validate();
-				if (s.actions.items != null) {
-					for (var item : s.actions.items) {
-						if (item instanceof ActionRef ar) {
-							if (!actionIds.contains(ar.id))
-								throw iaex("ActionRef '%s' is not declared on the enclosing view's rowActions.", ar.id);
-						}
-					}
-				}
-			}
+			validateActionBar(s.actions, actionIds);
 			if (s.table != null) {
 				s.table.validate();
 				var nid = s.table.view.id;
@@ -188,6 +239,20 @@ public class RowDetailDef {
 					throw iaex("DetailSection '%s' nested table view id '%s' collides with the enclosing view id.", s.id, nid);
 				if (!nestedViewIds.add(nid))
 					throw iaex("RowDetailDef duplicate nested table view id '%s'.", nid);
+			}
+		}
+	}
+
+	private static void validateActionBar(ActionBar bar, Set<String> actionIds) {
+		if (bar == null)
+			return;
+		bar.validate();
+		if (bar.items == null)
+			return;
+		for (var item : bar.items) {
+			if (item instanceof ActionRef ar) {
+				if (!actionIds.contains(ar.id))
+					throw iaex("ActionRef '%s' is not declared on the enclosing view's rowActions.", ar.id);
 			}
 		}
 	}
