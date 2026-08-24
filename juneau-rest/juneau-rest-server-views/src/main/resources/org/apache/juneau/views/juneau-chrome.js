@@ -24,13 +24,16 @@
  *
  * On DOMContentLoaded it scans [data-juneau-app-header] and [data-juneau-bar-slot] regions and, per region, performs
  * a fail-loud contract-version handshake against the baked-in JUNEAU_HEADER_CONTRACT_VERSION /
- * JUNEAU_BAR_CONTRACT_VERSION before hydrating action glyphs, wiring an avatar image fallback, dispatching SAFE
- * host-events, and (only when the host explicitly calls refresh(root)) re-applying same-origin counts.
+ * JUNEAU_BAR_CONTRACT_VERSION before hydrating action glyphs, wiring an avatar image fallback, wiring menu triggers,
+ * dispatching SAFE host-events, and (only when the host explicitly calls refresh(root)) re-applying same-origin counts.
  *
- * Menus WAIT on [TODO-445h] (M1 B): a Behavior.MENU trigger arrives DISABLED with its list OMITTED, so this runtime
- * never opens one.  It also does NOT define a layer manager: pushLayer(...) here is a THIN FORWARD to
- * window.JuneauViews.init.pushLayer (445h/juneau-views.js) when present, else a no-op - it never competes with the
- * views layer stack.  Nothing internally calls it under M1 B.
+ * Menus ride the ONE shared layer stack (window.JuneauViews.init) that 445h/juneau-views.js owns.  This runtime does
+ * NOT define pushLayer/popLayer (Pass 5 M-P5-B1) and carries no competing popup-layer stack of its own: a Behavior.MENU trigger's
+ * aria-controls'd .jc-menu list is portalled to document.body (position:fixed) as a kind:"menu" light-dismiss layer,
+ * positioned under the trigger, and its Escape / outside-click dismissal + z-index depth are owned by that shared
+ * stack - exactly as the harvested row-action menus do.  With the stack absent (views not loaded) a MENU trigger is
+ * inert and its list stays display:none - never a fake <details>/role=menu disclosure.  Menus are single-level (445h
+ * owns nested popups).
  *
  * The "PURE LOGIC LAYER" is DOM-free (plain data in, plain data out) and independently node-testable; the "DOM
  * BINDING LAYER" is the thin shim that scans, handshakes, hydrates and binds.  There is NO poller: refresh is
@@ -56,6 +59,11 @@
 	const BADGE_MAX_ATTR = "data-juneau-badge-max";
 	const AVATAR_MARKER = "data-juneau-avatar";
 	const REFRESH_ATTR = "data-juneau-refresh";
+	// A menu trigger's aria-controls points at its .jc-menu list; a marker records that a trigger is already wired.
+	const MENU_CLASS = "jc-menu";
+	const MENU_ITEM_CLASS = "jc-menu-item";
+	const MENU_WIRED_ATTR = "data-juneau-menu-wired";
+	const MENU_ITEMS_WIRED_ATTR = "data-juneau-menu-items-wired";
 	const HEADER_SIDECAR_PREFIX = "juneau-header:";
 	const BAR_SIDECAR_PREFIX = "juneau-bar:";
 
@@ -178,15 +186,128 @@
 	}
 
 	/**
-	 * THIN FORWARD to the shared 445h/juneau-views.js layer manager (window.JuneauViews.init.pushLayer) when present,
-	 * else a no-op returning null.  This runtime deliberately does NOT define its own layer stack (m3 B): menus wait on
-	 * 445h, so nothing here calls it yet - it exists only so a later menu build forwards to the ONE shared manager.
+	 * Resolves the ONE shared layer stack (window.JuneauViews.init, 445h/juneau-views.js) or null when views is not
+	 * loaded.  This runtime NEVER defines pushLayer/popLayer of its own (Pass 5 M-P5-B1): it is strictly a client of
+	 * the shared stack, so a chrome menu shares the same z-index / Escape / light-dismiss depth as views dialogs.
 	 */
-	function pushLayer(el, opts) {
+	function viewsLayerStack() {
 		const views = window.JuneauViews && window.JuneauViews.init;
-		if (views && typeof views.pushLayer === "function")
-			return views.pushLayer(el, opts);
-		return null;                                              // 445h layer manager absent - no-op (menus wait)
+		return views && typeof views.pushLayer === "function" && typeof views.popLayer === "function" ? views : null;
+	}
+
+	/**
+	 * chrome-local positioner: sets top/left (and shows) an ALREADY-portalled menu node under its trigger.  views'
+	 * pushLayer already reparented it to body and set position:fixed; this only computes the cell-anchored offset (with
+	 * a light viewport clamp), never re-parents.  positionCellPopover is not exported by views, so chrome carries this
+	 * tiny helper rather than reaching into the views internals.
+	 */
+	function positionMenuUnderTrigger(menu, trigger) {
+		if (!menu || !menu.style || !trigger || typeof trigger.getBoundingClientRect !== "function") return;
+		const rect = trigger.getBoundingClientRect();
+		const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1024;
+		menu.style.display = "block";
+		const w = menu.offsetWidth || 0;
+		let left = rect.left;
+		const top = rect.bottom + 4;
+		if (left + w > vw - 4) left = Math.max(4, vw - w - 4);
+		if (left < 4) left = 4;
+		menu.style.left = left + "px";
+		menu.style.top = top + "px";
+	}
+
+	/** Resolves a trigger's aria-controls'd .jc-menu list node (compared by id via getElementById, never interpolated). */
+	function menuForTrigger(trigger) {
+		const id = trigger && trigger.getAttribute ? trigger.getAttribute("aria-controls") : null;
+		if (!id || typeof document === "undefined" || typeof document.getElementById !== "function") return null;
+		const el = document.getElementById(id);
+		return el && el.classList && Array.prototype.indexOf.call(el.classList, MENU_CLASS) >= 0 ? el : null;
+	}
+
+	// Single-open tracking: chrome menus are one-at-a-time (a new open closes any other), matching the row-action menus.
+	let openMenuRec = null;
+
+	/**
+	 * Wires SAFE .jc-menu-item buttons in a list to dispatch the SAME host CustomEvent a top-level SAFE action uses
+	 * (from the owning TRIGGER, which stays in the header, so the event bubbles through the header even though the list
+	 * is portalled to body), then close the menu.  A format-invalid token is refused loud (hand-edited attribute only).
+	 * LINK items are plain same-origin anchors (native navigation) - closing the menu on their click keeps no orphan
+	 * open if navigation is intercepted.  Dividers are inert.  Idempotent per list.
+	 */
+	function wireMenuItems(menu, trigger, root) {
+		if (!menu || !menu.querySelectorAll || menu.getAttribute(MENU_ITEMS_WIRED_ATTR) === "1") return;
+		menu.setAttribute(MENU_ITEMS_WIRED_ATTR, "1");
+		const safeItems = menu.querySelectorAll("." + MENU_ITEM_CLASS + "[" + SAFE_ATTR + "]");
+		for (let i = 0; i < safeItems.length; i++) {
+			const item = safeItems[i];
+			const token = item.getAttribute(SAFE_ATTR);
+			if (!isSafeToken(token)) {
+				(window.console && console.error) && console.error(
+					"juneau-chrome.js: refusing to wire SAFE menu item with malformed token '" + token + "'.");
+				continue;
+			}
+			if (!item.addEventListener) continue;
+			item.addEventListener("click", function (ev) {
+				if (ev && ev.preventDefault) ev.preventDefault();
+				dispatchSafe(trigger, token, root);
+				closeMenu();
+			});
+		}
+		const links = menu.querySelectorAll("a." + MENU_ITEM_CLASS);
+		for (let j = 0; j < links.length; j++)
+			if (links[j].addEventListener) links[j].addEventListener("click", function () { closeMenu(); });
+	}
+
+	/** Opens a trigger's menu on the shared views stack (no stack / no list -> inert, never a fake disclosure). */
+	function openMenu(trigger, root) {
+		const views = viewsLayerStack();
+		const menu = menuForTrigger(trigger);
+		if (!views || !menu) return;
+		wireMenuItems(menu, trigger, root);
+		views.pushLayer(menu, {
+			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: false,
+			returnFocusTo: trigger,
+			onDismiss: function () {
+				if (trigger.setAttribute) trigger.setAttribute("aria-expanded", "false");
+				if (menu.style) menu.style.display = "none";
+				if (openMenuRec && openMenuRec.menu === menu) openMenuRec = null;
+			}
+		});
+		positionMenuUnderTrigger(menu, trigger);
+		if (trigger.setAttribute) trigger.setAttribute("aria-expanded", "true");
+		openMenuRec = { trigger: trigger, menu: menu };
+	}
+
+	/** Closes the open chrome menu (if any) by popping its layer off the shared views stack; onDismiss resets ARIA. */
+	function closeMenu() {
+		const views = viewsLayerStack();
+		if (views && openMenuRec) views.popLayer(openMenuRec.menu);
+	}
+
+	/** Toggles a trigger's menu: a re-click on the open trigger closes it; opening one first closes any other. */
+	function toggleMenu(trigger, root) {
+		if (openMenuRec && openMenuRec.trigger === trigger) { closeMenu(); return; }
+		if (openMenuRec) closeMenu();
+		openMenu(trigger, root);
+	}
+
+	/**
+	 * Wires each enabled Behavior.MENU trigger (header action or avatar chip) to toggle its .jc-menu list on the shared
+	 * views layer stack.  Idempotent per trigger.  A trigger with no resolvable list / no views stack stays inert.
+	 */
+	function wireMenus(root) {
+		if (!root || !root.querySelectorAll) return;
+		const triggers = root.querySelectorAll("[" + BEHAVIOR_ATTR + "='menu']");
+		for (let i = 0; i < triggers.length; i++) {
+			const trigger = triggers[i];
+			if (trigger.getAttribute(MENU_WIRED_ATTR) === "1" || !trigger.addEventListener) continue;
+			trigger.setAttribute(MENU_WIRED_ATTR, "1");
+			(function (t) {
+				t.addEventListener("click", function (ev) {
+					if (ev && ev.preventDefault) ev.preventDefault();
+					toggleMenu(t, root);
+				});
+			})(trigger);
+		}
 	}
 
 	/** Wires an avatar's image so a broken same-origin image falls back to the hidden initials chip (no dead avatar). */
@@ -207,8 +328,9 @@
 	/**
 	 * Wires each fully-functional SAFE action to dispatch a bubbling CustomEvent the host listens for; the host does
 	 * the work (there is no built-in navigation and no new token type).  A format-invalid token is refused loud - it
-	 * can only be a hand-edited attribute, since the server already format-validates it.  MENU triggers arrive
-	 * disabled (menus wait on 445h) so they are never wired; LINK actions are plain anchors needing no wiring.
+	 * can only be a hand-edited attribute, since the server already format-validates it.  This selects only top-level
+	 * SAFE actions (data-juneau-header-action + behavior=safe); MENU triggers are wired separately by wireMenus, and
+	 * SAFE items INSIDE a menu list by wireMenuItems.  LINK actions are plain anchors needing no wiring.
 	 */
 	function wireSafeActions(root) {
 		if (!root || !root.querySelectorAll) return;
@@ -272,6 +394,7 @@
 		hydrateIcons(header);
 		wireAvatarFallback(header);
 		wireSafeActions(header);
+		wireMenus(header);
 		if (sidecar) applyCounts(header, envelopeBadges(sidecar));
 		return { root: header, refresh: function () { return refresh(header); } };
 	}
@@ -319,9 +442,12 @@
 		hydrateIcons: hydrateIcons,
 		applyCounts: applyCounts,
 		readSidecar: readSidecar,
-		pushLayer: pushLayer,
 		wireAvatarFallback: wireAvatarFallback,
 		wireSafeActions: wireSafeActions,
+		wireMenus: wireMenus,
+		openMenu: openMenu,
+		closeMenu: closeMenu,
+		positionMenuUnderTrigger: positionMenuUnderTrigger,
 		dispatchSafe: dispatchSafe,
 		refresh: refresh,
 		initHeader: initHeader,

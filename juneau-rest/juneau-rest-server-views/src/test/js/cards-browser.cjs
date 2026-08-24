@@ -242,5 +242,29 @@ const out = { hasInit: !!(I && typeof I.initCard === 'function') };
 	const shown = el('div'); const kid = el('div'); shown.appendChild(kid);
 	out.h_shown = I.isElementHidden(kid) === false;
 
+	// I) The real pages tab-hide path: a card inside a .jc-panel that LACKS .jc-active is CSS-hidden (juneau-views.css
+	//    keeps an inactive panel at display:none); juneau-pages.js toggles .jc-active on that ANCESTOR panel, never on
+	//    the card subtree.  isElementHidden must report hidden, the poll must not start there, and the observer must
+	//    stop/restart the timers as .jc-active is toggled on the ancestor panel.
+	fetchCalls = [];
+	window.fetch = makeFetch({ contractVersion: '1', fields: { k: 'P' } });
+	observerCallback = null;
+	const panel = el('div'); panel.setAttribute('class', 'jc-panel');       // inactive tab panel: CSS display:none
+	const cardI = buildCard({ contract: '1', refresh: '/data/summary', poll: 10000 });
+	const gridI = el('section'); gridI.setAttribute('data-juneau-card-grid', '1'); gridI.appendChild(cardI);
+	panel.appendChild(gridI);
+	out.i_hiddenInInactivePanel = I.isElementHidden(cardI) === true;
+	const ctlI = I.initCard(cardI);
+	out.i_notStartedInInactivePanel = ctlI.running === false;               // start() bails while the ancestor tab is hidden
+	const obsI = I.observeGrid(gridI, [ctlI]);
+	out.i_observerInstalled = obsI != null && observerCallback != null;
+	panel.setAttribute('class', 'jc-panel jc-active');                      // pages shows this tab
+	observerCallback();
+	out.i_startedWhenActivated = ctlI.running === true;
+	out.i_shownWhenActive = I.isElementHidden(cardI) === false;
+	panel.setAttribute('class', 'jc-panel');                               // pages hides this tab again
+	observerCallback();
+	out.i_stoppedWhenDeactivated = ctlI.running === false;
+
 	process.stdout.write(JSON.stringify(out));
 })();

@@ -88,6 +88,15 @@ class ViewsJs_Cards_Test extends TestBase {
 			"card contract must be a distinct constant from the VIEW_META contract");
 	}
 
+	@Test void a04_hiddenCheckKnowsPagesTabPanels() throws Exception {
+		// The poll-teardown path must recognize the juneau-pages.js tab-hide markers (an inactive .jc-panel/.jc-subpanel
+		// that lacks .jc-active is CSS-hidden above the grid).  A light wiring pin - not a whole-file string match.
+		var body = cardsJs();
+		assertTrue(body.contains("jc-panel"), "hidden-check must recognize the pages tab panel class");
+		assertTrue(body.contains("jc-subpanel"), "hidden-check must recognize the pages tab subpanel class");
+		assertTrue(body.contains("jc-active"), "hidden-check must recognize the pages tab active marker");
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Behavioral: run both node harnesses once, gated on node availability
 	//------------------------------------------------------------------------------------------------------------------
@@ -323,5 +332,18 @@ class ViewsJs_Cards_Test extends TestBase {
 		var r = dom();
 		assertEquals(true, r.get("h_hiddenViaAncestor"));
 		assertEquals(true, r.get("h_shown"));
+	}
+
+	@Test void c09_pagesTabHide_inactivePanelStopsAndRestartsPoll() {
+		// The real juneau-pages.js hide path: a card inside an ancestor .jc-panel that lacks .jc-active is CSS-hidden,
+		// and pages toggles .jc-active on that ancestor panel (never the card subtree).  isElementHidden must see it,
+		// the poll must not start there, and the observer must stop/restart timers as .jc-active toggles.
+		var r = dom();
+		assertEquals(true, r.get("i_hiddenInInactivePanel"));       // ancestor .jc-panel without .jc-active => hidden
+		assertEquals(true, r.get("i_notStartedInInactivePanel"));   // poll never starts under a hidden tab
+		assertEquals(true, r.get("i_observerInstalled"));
+		assertEquals(true, r.get("i_startedWhenActivated"));        // pages adds .jc-active -> timers restart
+		assertEquals(true, r.get("i_shownWhenActive"));
+		assertEquals(true, r.get("i_stoppedWhenDeactivated"));      // pages removes .jc-active -> timers stop
 	}
 }

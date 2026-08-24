@@ -231,13 +231,43 @@ if (!out.hasInit) {
 	out.avatar_imgHidden = img.hidden === true;
 	out.avatar_initialsShown = initials.hidden === false;
 
-	// ---- DOM: pushLayer is a THIN FORWARD to JuneauViews.init.pushLayer, else no-op ----
-	const sentinel = { rec: true };
-	window.JuneauViews.init = { pushLayer: function (el, opts) { pushCall = { el: el, opts: opts }; return sentinel; } };
-	const someEl = makeEl('div', {});
-	out.push_forwarded = I.pushLayer(someEl, { kind: 'menu' }) === sentinel && pushCall !== null && pushCall.el === someEl;
-	delete window.JuneauViews.init;
-	out.push_noop = I.pushLayer(someEl, {}) === null;
+	// ---- DOM: a MENU trigger opens/closes its .jc-menu list on the SHARED views stack (chrome defines NO stack) ----
+	// The mock stands in for window.JuneauViews.init (445h): it records push/pop and runs onDismiss on pop, exactly as
+	// the real stack does - so aria-expanded round-trips through the shared teardown, not a chrome-local closer.
+	let menuPushCall = null, menuPopCall = null, lastMenuOpts = null;
+	window.JuneauViews = window.JuneauViews || {};
+	window.JuneauViews.init = {
+		pushLayer: function (el, opts) { menuPushCall = { el: el, opts: opts }; lastMenuOpts = opts; return { el: el }; },
+		popLayer: function (el) {
+			menuPopCall = { el: el };
+			if (lastMenuOpts && typeof lastMenuOpts.onDismiss === 'function') lastMenuOpts.onDismiss();
+		}
+	};
+	const miLink = makeEl('a', { 'class': 'jc-menu-item', 'href': '/a', 'role': 'menuitem' });
+	const miSafe = makeEl('button', { 'class': 'jc-menu-item', 'role': 'menuitem', 'data-juneau-safe': 'do-it' });
+	const menuList = makeEl('div', { 'class': 'jc-menu', 'id': 'juneau-menu:app:more', 'role': 'menu' }, [miLink, miSafe]);
+	documentAll.push(menuList);
+	const menuTrigger = makeEl('button', {
+		'data-juneau-header-action': 'more', 'data-juneau-behavior': 'menu', 'aria-haspopup': 'menu',
+		'aria-expanded': 'false', 'aria-controls': 'juneau-menu:app:more'
+	});
+	const menuHeader = makeEl('header', { 'data-juneau-app-header': 'app' }, [menuTrigger]);
+	I.wireMenus(menuHeader);
+	menuTrigger.dispatchEvent({ type: 'click', preventDefault: function () { this.defaultPrevented = true; } });
+	out.menu_pushedList = menuPushCall !== null && menuPushCall.el === menuList;
+	out.menu_kind = menuPushCall && menuPushCall.opts ? menuPushCall.opts.kind : null;
+	out.menu_portal = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.portal === true);
+	out.menu_lightDismiss = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.lightDismiss === true);
+	out.menu_returnFocusToTrigger = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.returnFocusTo === menuTrigger);
+	out.menu_ariaExpandedOnOpen = menuTrigger.getAttribute('aria-expanded');
+	// A SAFE menu item dispatches the host event FROM THE TRIGGER (so it bubbles through the header), then closes.
+	let menuSafeCaptured = null;
+	menuTrigger.addEventListener(I.SAFE_EVENT, function (ev) { menuSafeCaptured = ev; });
+	miSafe.dispatchEvent({ type: 'click', preventDefault: function () { this.defaultPrevented = true; } });
+	out.menu_safeDispatchedFromTrigger = !!menuSafeCaptured
+		&& menuSafeCaptured.detail.token === 'do-it' && menuSafeCaptured.detail.actionId === 'more';
+	out.menu_closedOnSafe = menuPopCall !== null && menuPopCall.el === menuList;
+	out.menu_ariaExpandedAfterClose = menuTrigger.getAttribute('aria-expanded');
 
 	// ---- DOM: initHeader handshake (mismatch -> null, no apply; ok -> counts applied from sidecar) ----
 	const badBadge = makeEl('span', { 'data-juneau-badge': 'header:reload' });

@@ -239,7 +239,8 @@ a:hover { text-decoration: underline; }
 .jc-avatar-status-busy::after    { background-color: var(--jc-tag-red-text); }
 .jc-avatar-status-offline::after { background-color: var(--jc-tag-neutral-text); }
 
-/* Menu surface skeleton - kept hidden; the trigger stays disabled until 445h flips this on via the shared layer. */
+/* Menu surface - display:none until juneau-chrome.js portals it onto the shared views layer stack (445h), which
+   sets position:fixed + the cell-anchored top/left and toggles display back on.  Inert with JS off. */
 .jc-menu {
   display: none;
   min-width: 160px;
@@ -248,6 +249,38 @@ a:hover { text-decoration: underline; }
   color: var(--jc-text);
   border: 1px solid var(--jc-border);
   border-radius: var(--jc-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* A single row: a same-origin <a href> link or a SAFE host-dispatch <button>; both share this chrome. */
+.jc-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+  text-align: left;
+  color: var(--jc-text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.jc-menu-item:hover,
+.jc-menu-item:focus {
+  background-color: var(--jc-accent-wash);
+  text-decoration: none;
+  outline: none;
+}
+
+/* An inert separator between item groups. */
+.jc-menu-divider {
+  height: 1px;
+  margin: 4px 0;
+  background-color: var(--jc-border);
 }
 
 /* ==========================================================================

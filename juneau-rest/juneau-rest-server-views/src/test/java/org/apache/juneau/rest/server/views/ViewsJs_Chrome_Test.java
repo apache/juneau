@@ -36,11 +36,13 @@ import org.junit.jupiter.api.*;
  * &mdash; no {@code -Pjs-tests} required).
  *
  * <p>
- * Pins the TODO-445m locked rules on the client side: two <b>distinct</b> baked contract constants
+ * Pins the 445m locked rules on the client side: two <b>distinct</b> baked contract constants
  * ({@code JUNEAU_HEADER_CONTRACT_VERSION}/{@code JUNEAU_BAR_CONTRACT_VERSION}) kept in lockstep with the server bean
- * constants, {@code window.JuneauChrome} namespacing, a thin {@code pushLayer} <b>forward</b> to
- * {@code window.JuneauViews.init.pushLayer} (never a competing definition &mdash; m3 B), textContent-only count
- * apply, same-origin/non-templated refresh endpoints, format-validated SAFE tokens (L11), and no poller.
+ * constants, {@code window.JuneauChrome} namespacing, working {@code Behavior.MENU} triggers that ride the ONE shared
+ * {@code window.JuneauViews.init} layer stack (445h) as {@code kind:"menu"} light-dismiss layers &mdash; this runtime
+ * <b>never defines its own</b> {@code pushLayer}/{@code popLayer} and carries no competing {@code popupLayerStack}
+ * (Pass 5 M-P5-B1) and no fake {@code <details>}/{@code role=menu} disclosure &mdash; textContent-only count apply,
+ * same-origin/non-templated refresh endpoints, format-validated SAFE tokens (L11), and no poller.
  */
 class ViewsJs_Chrome_Test extends TestBase {
 
@@ -73,11 +75,13 @@ class ViewsJs_Chrome_Test extends TestBase {
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
 	}
 
-	@Test void a03_pushLayerIsForwardNotCompetingDefinition() throws Exception {
+	@Test void a03_callsSharedStack_neverDefinesOrCompetesWithIt() throws Exception {
 		var body = chromeJs();
-		// m3 B: must CALL window.JuneauViews.init.pushLayer (thin forward), never define its own layer stack.
-		assertTrue(body.contains("window.JuneauViews.init.pushLayer") || body.contains("views.pushLayer"),
-			"pushLayer must forward to the shared views layer manager");
+		// M-P5-B1: chrome must CALL the shared views stack (window.JuneauViews.init) - never DEFINE pushLayer/popLayer.
+		assertTrue(body.contains("window.JuneauViews.init"), "chrome must resolve the shared window.JuneauViews.init stack");
+		assertTrue(body.contains("views.pushLayer("), "chrome must open menus via the shared stack's pushLayer");
+		assertFalse(body.contains("function pushLayer("), "chrome must NOT define its own pushLayer");
+		assertFalse(body.contains("function popLayer("), "chrome must NOT define its own popLayer");
 		assertFalse(body.contains("popupLayerStack"), "chrome.js must not carry a competing layer stack");
 	}
 
@@ -87,10 +91,13 @@ class ViewsJs_Chrome_Test extends TestBase {
 		assertTrue(body.contains("b.textContent = clampCount("), "counts painted via textContent, never innerHTML");
 	}
 
-	@Test void a05_menusWaitOn445h_noFakeDisclosure() throws Exception {
+	@Test void a05_menusOpenOnSharedStack_noFakeDisclosure() throws Exception {
 		var body = chromeJs();
-		// The runtime never opens a menu (server emits MENU triggers disabled); no <details>/role=menu construction.
-		assertFalse(body.contains("role=\"menu\""), "no fake role=menu construction");
+		// Menus now WORK, but only by riding the shared stack as kind:"menu" layers - never a chrome-fabricated overlay.
+		assertTrue(body.contains("kind: \"menu\""), "a chrome menu opens as a kind:\"menu\" layer on the shared stack");
+		assertTrue(body.contains("viewsLayerStack"), "menu open/close is gated on resolving the shared views stack");
+		// The runtime never fabricates menu markup client-side: the server emits role=menu; there is no fake disclosure.
+		assertFalse(body.contains("role=\"menu\""), "no client-fabricated role=menu construction (server emits it)");
 		assertFalse(body.contains("createElement(\"details\")"), "no fake <details> disclosure");
 	}
 
@@ -248,10 +255,19 @@ class ViewsJs_Chrome_Test extends TestBase {
 		assertEquals(true, r.get("avatar_initialsShown"));
 	}
 
-	@Test void b09_pushLayerForwardsElseNoop() {
+	@Test void b09_menuOpensAndClosesOnSharedStack() {
 		var r = r();
-		assertEquals(true, r.get("push_forwarded"));   // forwards to window.JuneauViews.init.pushLayer when present
-		assertEquals(true, r.get("push_noop"));        // else a null no-op (never a competing layer manager)
+		// Open: the trigger's aria-controls'd list is pushed onto the shared stack as a light-dismiss kind:"menu" layer.
+		assertEquals(true, r.get("menu_pushedList"));           // the resolved .jc-menu list is what gets pushed
+		assertEquals("menu", r.get("menu_kind"));               // shares the row-action menu's stack kind
+		assertEquals(true, r.get("menu_portal"));               // portalled to body (escapes any overflow-clip ancestor)
+		assertEquals(true, r.get("menu_lightDismiss"));         // outside-click / Escape dismissal owned by the stack
+		assertEquals(true, r.get("menu_returnFocusToTrigger")); // focus returns to the trigger on pop
+		assertEquals("true", r.get("menu_ariaExpandedOnOpen")); // ARIA reflects the open state
+		// A SAFE menu item dispatches the host event FROM THE TRIGGER (bubbles through the header), then closes the menu.
+		assertEquals(true, r.get("menu_safeDispatchedFromTrigger"));
+		assertEquals(true, r.get("menu_closedOnSafe"));         // popLayer runs on the SAME list node
+		assertEquals("false", r.get("menu_ariaExpandedAfterClose"));   // onDismiss (shared teardown) resets ARIA
 	}
 
 	@Test void b10_initHeaderHandshake() {

@@ -28,11 +28,13 @@ import org.junit.jupiter.api.*;
  * chrome the {@code juneau-chrome.js} runtime enhances.
  *
  * <p>
- * Pins the {@code data-juneau-*} DOM contract the runtime depends on, and the locked behavior of TODO-445m M1 B:
- * chips / {@link Behavior#LINK} / {@link Behavior#SAFE} are fully functional, a {@link Behavior#MENU} trigger is
- * emitted <b>disabled with its list omitted</b> (menus wait on 445h; no {@code <details>} fake disclosure, no
- * {@code role="menu"}), no {@code .jc-nav}/{@code .jc-nav-tab} is ever emitted (445f standing nav rule), and every
- * human string is entity-escaped.
+ * Pins the {@code data-juneau-*} DOM contract the runtime depends on, and the locked behavior of 445m now that
+ * the shared views layer stack (445h) has shipped: chips / {@link Behavior#LINK} / {@link Behavior#SAFE} are fully
+ * functional, and a {@link Behavior#MENU} trigger is emitted <b>enabled</b> with real menu ARIA
+ * ({@code aria-haspopup="menu"}, {@code aria-expanded="false"}, {@code aria-controls}) and its
+ * {@code .jc-menu}/{@code .jc-menu-item}/{@code .jc-menu-divider} list markup emitted (hidden until opened via the
+ * views {@code pushLayer} stack) &mdash; no {@code <details>} fake disclosure.  No {@code .jc-nav}/{@code .jc-nav-tab}
+ * is ever emitted (445f standing nav rule), and every human string is entity-escaped.
  */
 class AppHeaderTable_Emit_Test extends TestBase {
 
@@ -132,25 +134,47 @@ class AppHeaderTable_Emit_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// MENU action -> DISABLED trigger, list OMITTED (menus wait on 445h; M1 B)
+	// MENU action -> ENABLED trigger with real menu ARIA + emitted list (wired to the views layer stack)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a08_menuTriggerDisabled_listOmitted() {
+	@Test void a08_menuTriggerEnabled_withMenuAria() {
 		var h = html(header());
 		assertTrue(h.contains("data-juneau-header-action=\"more\""), h);
 		assertTrue(h.contains("data-juneau-behavior=\"menu\""), h);
 		var menuFrag = h.substring(h.indexOf("data-juneau-header-action=\"more\""));
 		menuFrag = menuFrag.substring(0, menuFrag.indexOf("</button>"));
-		assertTrue(menuFrag.contains("disabled"), "MENU trigger must be disabled until 445h");
-		assertTrue(menuFrag.contains("aria-disabled=\"true\""), h);
+		// A working MENU trigger is a live button - never disabled / aria-disabled.
+		assertFalse(menuFrag.contains("disabled"), "a working MENU trigger must not be disabled");
+		assertFalse(menuFrag.contains("aria-disabled"), "a working MENU trigger must not be aria-disabled");
+		assertTrue(menuFrag.contains("aria-haspopup=\"menu\""), h);
+		assertTrue(menuFrag.contains("aria-expanded=\"false\""), h);
+		assertTrue(menuFrag.contains("aria-controls=\"juneau-menu:app:more\""), h);
 	}
 
-	@Test void a09_noFakeMenuDisclosureOrItems() {
+	@Test void a09_menuListEmittedWithRealAria_noDetails() {
 		var h = html(header());
-		assertFalse(h.contains("<details"), "no <details> fake disclosure");
-		assertFalse(h.contains("role=\"menu\""), "no fake role=menu ARIA");
-		assertFalse(h.contains(">Item A<"), "menu item label must be omitted until 445h");
-		assertFalse(h.contains("href=\"/a\""), "menu item href must be omitted until 445h");
+		assertFalse(h.contains("<details"), "no <details> fake disclosure - the views layer stack owns opening");
+		assertTrue(h.contains("class=\"jc-menu\""), "the menu list markup is emitted");
+		assertTrue(h.contains("id=\"juneau-menu:app:more\""), h);
+		assertTrue(h.contains("role=\"menu\""), "real menu ARIA now that the JS layer manager exists");
+		assertTrue(h.contains("class=\"jc-menu-item\""), h);
+		assertTrue(h.contains("role=\"menuitem\""), h);
+		assertTrue(h.contains(">Item A<"), "menu item label emitted");
+		assertTrue(h.contains("href=\"/a\""), "menu item link href emitted");
+	}
+
+	@Test void a09b_menuSafeItemAndDivider() {
+		var h = html(AppHeaderDef.create("app")
+			.actions(HeaderAction.menu("more", "tune", "More")
+				.menu(MenuItem.link("a", "Item A", "/a"), MenuItem.divider(), MenuItem.safe("b", "Do It", "do-it")))
+			.build());
+		assertTrue(h.contains("class=\"jc-menu-divider\""), h);
+		assertTrue(h.contains("role=\"separator\""), "a divider is an inert separator row");
+		assertTrue(h.contains("data-juneau-safe=\"do-it\""), "a SAFE menu item carries its dispatch token");
+		assertTrue(h.contains(">Do It<"), h);
+		// The SAFE item is a real <button> (host-dispatch); the link item is an <a href> (same-origin navigation).
+		assertTrue(h.contains("<button type=\"button\" class=\"jc-menu-item\""), h);
+		assertTrue(h.contains("<a href=\"/a\" class=\"jc-menu-item\""), h);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -166,13 +190,18 @@ class AppHeaderTable_Emit_Test extends TestBase {
 		assertTrue(h.contains(">AL<"), "initials rendered as escaped text");
 	}
 
-	@Test void a11_avatarWithMenuIsDisabledButton() {
+	@Test void a11_avatarWithMenuIsEnabledTrigger() {
 		var h = html(AppHeaderDef.create("app")
 			.avatar(AvatarChip.of("Ada").initials("A").menu(MenuItem.link("p", "Profile", "/p"))).build());
-		var frag = h.substring(h.indexOf("data-juneau-avatar"));
-		assertTrue(frag.contains("disabled"), "an avatar with a menu is a disabled trigger until 445h");
-		assertTrue(frag.contains("aria-disabled=\"true\""), h);
-		assertFalse(h.contains(">Profile<"), "avatar menu item omitted until 445h");
+		var btn = h.substring(h.indexOf("data-juneau-avatar"));
+		btn = btn.substring(0, btn.indexOf("</button>"));
+		assertFalse(btn.contains("disabled"), "an avatar with a menu is now a live trigger (menus shipped)");
+		assertFalse(btn.contains("aria-disabled"), h);
+		assertTrue(btn.contains("aria-haspopup=\"menu\""), h);
+		assertTrue(btn.contains("aria-expanded=\"false\""), h);
+		assertTrue(btn.contains("aria-controls=\"juneau-menu:app:avatar\""), h);
+		assertTrue(h.contains(">Profile<"), "avatar menu item now emitted");
+		assertTrue(h.contains("href=\"/p\""), h);
 	}
 
 	@Test void a12_avatarImageWithHiddenInitialsFallback() {

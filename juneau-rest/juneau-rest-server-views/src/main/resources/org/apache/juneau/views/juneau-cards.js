@@ -164,16 +164,45 @@
 		banner.hidden = false;
 	}
 
-	/** True when the element is hidden by its own `hidden`/`display:none` or by an enclosing pages tab that is (in-page tab hiding is not document.hidden). */
+	/** True when `cls` is present in the element's space-separated class attribute (classList-free so it also works against the Node harness DOM). */
+	function hasClass(n, cls) {
+		if (!n || !n.getAttribute) return false;
+		return (" " + (n.getAttribute("class") || "") + " ").indexOf(" " + cls + " ") >= 0;
+	}
+
+	/**
+	 * True when the card is hidden by ANY of: its own `hidden` / inline `display:none`; an enclosing pages tab panel
+	 * (`.jc-panel` / `.jc-subpanel`) that LACKS `.jc-active` - juneau-pages.js toggles `.jc-active` on the ancestor
+	 * panel and juneau-views.css keeps an inactive panel at `display:none`, and that toggle never touches this card's
+	 * own subtree; or a computed `display:none` on any ancestor (defense for other CSS-hidden cases, skipped where
+	 * getComputedStyle is absent, e.g. the Node harness).  In-page tab hiding is NOT document.hidden, so it is
+	 * checked here rather than via the visibilitychange path.
+	 */
 	function isElementHidden(node) {
 		let n = node;
 		while (n && n.nodeType === 1) {
 			if (n.hidden === true) return true;
 			const style = n.getAttribute && n.getAttribute("style");
 			if (style && /display\s*:\s*none/i.test(style)) return true;
+			if ((hasClass(n, "jc-panel") || hasClass(n, "jc-subpanel")) && !hasClass(n, "jc-active")) return true;
+			if (window.getComputedStyle) {
+				const cs = window.getComputedStyle(n);
+				if (cs && cs.display === "none") return true;
+			}
 			n = n.parentNode;
 		}
 		return false;
+	}
+
+	/** The ancestor pages tab panels (`.jc-panel` / `.jc-subpanel`) above a node, nearest first - the elements juneau-pages.js toggles `.jc-active` on. */
+	function ancestorPanels(node) {
+		const panels = [];
+		let n = node ? node.parentNode : null;
+		while (n && n.nodeType === 1) {
+			if (hasClass(n, "jc-panel") || hasClass(n, "jc-subpanel")) panels.push(n);
+			n = n.parentNode;
+		}
+		return panels;
 	}
 
 	/** Renders the header status chip: an "ok" staleness age or a distinct "error" state that does NOT reset the last-success clock. */
@@ -283,7 +312,13 @@
 		return ctl;
 	}
 
-	/** Installs a MutationObserver on the grid so a card's poll timers stop when it is hidden/removed and restart on re-show (no juneau-pages.js hook). */
+	/**
+	 * Installs a MutationObserver so a card's poll timers stop when it is hidden/removed and restart on re-show (no
+	 * juneau-pages.js hook).  It watches the grid subtree (own `hidden` / `style` / `class`) AND every ancestor pages
+	 * tab panel's `class`: a pages tab hide toggles `.jc-active` on an ancestor `.jc-panel` / `.jc-subpanel` that sits
+	 * ABOVE the grid, so a grid-subtree-only observer would never see it.  With no panel ancestor the grid watch is the
+	 * sole fallback (a card hidden by its own `hidden` / inline `style`).
+	 */
 	function observeGrid(grid, controls) {
 		if (typeof window.MutationObserver === "undefined") return null;
 		const obs = new window.MutationObserver(function () {
@@ -295,6 +330,9 @@
 			}
 		});
 		obs.observe(grid, { attributes: true, attributeFilter: ["hidden", "style", "class"], subtree: true, childList: true });
+		const panels = ancestorPanels(grid);
+		for (let i = 0; i < panels.length; i++)
+			obs.observe(panels[i], { attributes: true, attributeFilter: ["class"] });
 		return obs;
 	}
 

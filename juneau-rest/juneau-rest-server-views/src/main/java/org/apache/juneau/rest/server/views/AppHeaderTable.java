@@ -43,12 +43,18 @@ import org.apache.juneau.rest.server.widgets.*;
  * hydrates the trusted first-party SVG client-side (the single allow-listed {@code innerHTML} sink).  This emitter
  * never emits {@code .jc-nav}/{@code .jc-nav-tab} (445f standing nav rule).
  *
- * <h5 class='section'>Menus wait on {@code [TODO-445h]} (M1 B):</h5>
+ * <h5 class='section'>Working menus on the shared views layer stack:</h5>
  * <p>
- * A {@link Behavior#MENU} trigger is emitted <b>disabled</b> ({@code disabled} + {@code aria-disabled="true"}) and its
- * item list is <b>omitted</b> &mdash; no {@code <details>} disclosure, no fake {@code role="menu"} ARIA that would
- * require the (not-yet-shipped) layer manager.  Chips / {@link Behavior#LINK} / {@link Behavior#SAFE} are fully
- * functional.
+ * A {@link Behavior#MENU} trigger (a header action or an avatar chip) is emitted as an <b>enabled</b>
+ * {@code <button type="button">} carrying real menu ARIA ({@code aria-haspopup="menu"}, {@code aria-expanded="false"},
+ * {@code aria-controls="<menuId>"}), and its single-level item list is emitted as a hidden sibling
+ * {@code <div class="jc-menu" role="menu">} of {@code .jc-menu-item} rows ({@code <a>} for {@link MenuItem#href}
+ * links, {@code <button>} for {@link MenuItem#safe} host-dispatch items) and {@code .jc-menu-divider}
+ * {@code role="separator"} rows.  There is <b>no</b> {@code <details>} disclosure: {@code juneau-chrome.js} portals the
+ * list onto the shared {@code juneau-views.js} {@code pushLayer} stack on open (nested popups / z-index / Escape /
+ * light-dismiss are owned by that one stack &mdash; this emitter invents no chrome-local overlay scheme).  The list is
+ * inert with JS off (it is {@code display:none} chrome, never a working fake disclosure).  Chips /
+ * {@link Behavior#LINK} / {@link Behavior#SAFE} are fully functional.
  *
  * @since 10.0.0
  */
@@ -85,6 +91,13 @@ public class AppHeaderTable {
 	public static final String AVATAR_MARKER = "data-juneau-avatar";
 
 	/**
+	 * Prefix of a menu list's element id ({@code juneau-menu:<headerId>:<actionId>}, or
+	 * {@code juneau-menu:<headerId>:avatar} for the avatar chip's menu).  The MENU trigger's {@code aria-controls}
+	 * points at this id, and {@code juneau-chrome.js} resolves the list to portal onto the shared views layer stack.
+	 */
+	public static final String MENU_ID_PREFIX = "juneau-menu:";
+
+	/**
 	 * Attribute carrying the header's same-origin demand-refresh endpoint (emitted only when {@code refreshUrl} is set).
 	 *
 	 * <p>
@@ -119,10 +132,16 @@ public class AppHeaderTable {
 			children.add(emitBrand(header.brand));
 		var actionKids = new ArrayList<>();
 		if (header.actions != null)
-			for (var a : header.actions)
-				actionKids.add(emitAction(a));
-		if (header.avatar != null)
-			actionKids.add(emitAvatar(header.avatar));
+			for (var a : header.actions) {
+				actionKids.add(emitAction(a, header.id));
+				if (a.behavior == Behavior.MENU)
+					actionKids.add(emitMenu(menuId(header.id, a.id), a.menu));
+			}
+		if (header.avatar != null) {
+			actionKids.add(emitAvatar(header.avatar, header.id));
+			if (header.avatar.menu != null && ! header.avatar.menu.isEmpty())
+				actionKids.add(emitMenu(menuId(header.id, "avatar"), header.avatar.menu));
+		}
 		if (! actionKids.isEmpty())
 			children.add(div(actionKids.toArray()).class_("jc-header-actions"));
 
@@ -171,7 +190,7 @@ public class AppHeaderTable {
 		return div(kids.toArray()).class_("jc-brand");
 	}
 
-	private static HtmlElement emitAction(HeaderAction a) {
+	private static HtmlElement emitAction(HeaderAction a, String headerId) {
 		var behavior = a.behavior.name().toLowerCase(Locale.ROOT);
 		var inner = new ArrayList<>();
 		inner.add(span().class_("jc-icon").attr("aria-hidden", "true"));
@@ -199,8 +218,10 @@ public class AppHeaderTable {
 		if (a.behavior == Behavior.SAFE)
 			el.attr(SAFE_ATTR, a.safe);
 		if (a.behavior == Behavior.MENU) {
-			// M1 B: menus wait on 445h - disable the trigger and omit the list (no fake disclosure).
-			el.attr("disabled", "disabled").attr("aria-disabled", "true");
+			// A working, enabled MENU trigger: juneau-chrome.js portals the aria-controls'd list onto the views stack.
+			el.attr("aria-haspopup", "menu")
+				.attr("aria-expanded", "false")
+				.attr("aria-controls", menuId(headerId, a.id));
 		}
 		return el;
 	}
@@ -228,7 +249,7 @@ public class AppHeaderTable {
 		return Integer.toString(count);
 	}
 
-	private static HtmlElement emitAvatar(AvatarChip avatar) {
+	private static HtmlElement emitAvatar(AvatarChip avatar, String headerId) {
 		var cls = new StringBuilder("jc-avatar");
 		if (avatar.status != null)
 			cls.append(" jc-avatar-status-").append(avatar.status.name().toLowerCase(Locale.ROOT));
@@ -243,18 +264,61 @@ public class AppHeaderTable {
 		}
 
 		if (avatar.menu != null && ! avatar.menu.isEmpty()) {
-			// M1 B: an avatar with a menu is a menu trigger - disabled until 445h, list omitted (never a dead button).
+			// An avatar with a menu is an enabled menu trigger; juneau-chrome.js portals its list onto the views stack.
 			return button("button", kids.toArray()).class_(cls.toString())
 				.attr(AVATAR_MARKER, "1")
 				.attr(BEHAVIOR_ATTR, "menu")
 				.attr("aria-label", avatar.displayName)
-				.attr("disabled", "disabled")
-				.attr("aria-disabled", "true");
+				.attr("aria-haspopup", "menu")
+				.attr("aria-expanded", "false")
+				.attr("aria-controls", menuId(headerId, "avatar"));
 		}
 		// No menu: a non-interactive identity chip, not a dead <button>.
 		return span(kids.toArray()).class_(cls.toString())
 			.attr(AVATAR_MARKER, "1")
 			.attr("role", "img")
 			.attr("aria-label", avatar.displayName);
+	}
+
+	/** The stable element id of an action's / the avatar's attached menu list ({@code juneau-menu:<headerId>:<key>}). */
+	private static String menuId(String headerId, String key) {
+		return MENU_ID_PREFIX + headerId + ":" + key;
+	}
+
+	/**
+	 * Emits a single-level attached menu as a hidden {@code <div class="jc-menu" role="menu">} of {@code .jc-menu-item}
+	 * rows and {@code .jc-menu-divider} separators.  The list ships {@code display:none} (chrome CSS) and inert with JS
+	 * off; {@code juneau-chrome.js} portals it onto the shared views layer stack when its trigger opens it.  Every human
+	 * label is a text child (serializer entity-escapes it); no label or token is ever concatenated into markup.
+	 */
+	private static Div emitMenu(String menuId, List<MenuItem> items) {
+		var rows = new ArrayList<>();
+		for (var mi : items)
+			rows.add(emitMenuItem(mi));
+		return div(rows.toArray()).class_("jc-menu").id(menuId).attr("role", "menu");
+	}
+
+	/** Emits one menu row: a divider separator, a link {@code <a href>}, or a SAFE host-dispatch {@code <button>}. */
+	private static HtmlElement emitMenuItem(MenuItem mi) {
+		if (mi.isDivider())
+			return div().class_("jc-menu-divider").attr("role", "separator");
+
+		var kids = new ArrayList<>();
+		if (mi.icon != null && ! mi.icon.isBlank())
+			kids.add(span().class_("jc-icon").attr("aria-hidden", "true"));
+		kids.add(mi.label);   // plain text child - serializer entity-escapes it
+
+		if (mi.href != null && ! mi.href.isBlank()) {
+			var el = a(mi.href, kids.toArray()).class_("jc-menu-item").attr("role", "menuitem");
+			if (mi.icon != null && ! mi.icon.isBlank())
+				el.attr(ICON_ATTR, mi.icon);
+			return el;
+		}
+		var el = button("button", kids.toArray()).class_("jc-menu-item")
+			.attr("role", "menuitem")
+			.attr(SAFE_ATTR, mi.safe);
+		if (mi.icon != null && ! mi.icon.isBlank())
+			el.attr(ICON_ATTR, mi.icon);
+		return el;
 	}
 }
