@@ -208,6 +208,21 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 		assertEquals(true, r.get("missing_actionRefusal"));
 	}
 
+	@Test void b08_rowActionMenuInScrollBoxIsPortalledOutAndDismissesViaStack() {
+		// A row-action menu opened from a trigger inside a DT2 .dt-layout-cell overflow box must be portalled to the
+		// body as a kind:"menu" position:fixed layer, so the scroll box's overflow cannot clip it, and its dismissal
+		// must run through the shared stack (not a parallel closer).  A menu must never inflate the dialog-kind cap.
+		var r = report();
+		assertEquals(true, r.get("rowmenu_opened"), () -> "the row-action menu did not open: " + r);
+		assertEquals(true, r.get("rowmenu_onBody"), () -> "the menu was not portalled to body: " + r);
+		assertEquals(true, r.get("rowmenu_notInScrollBox"), () -> "the menu is still inside the .dt-layout-cell clip box: " + r);
+		assertEquals(true, r.get("rowmenu_notInCell"), () -> "the menu is still inside its <td>: " + r);
+		assertEquals(true, r.get("rowmenu_positionFixed"), () -> "the menu is not position:fixed: " + r);
+		assertEquals(true, r.get("rowmenu_isMenuLayer"), () -> "the menu did not register as a kind:menu stack layer: " + r);
+		assertEquals(true, r.get("rowmenu_notADialog"), () -> "the menu inflated the dialog-kind depth cap: " + r);
+		assertEquals(true, r.get("rowmenu_closedViaStack"), () -> "an outside click did not dismiss the menu via the stack: " + r);
+	}
+
 	private static double toD(Object o) {
 		return ((Number)o).doubleValue();
 	}

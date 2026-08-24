@@ -167,4 +167,17 @@ class NestedPopup_BrowserTest extends TestBase {
 		assertEquals(Boolean.TRUE, t.get("notOnStack"), () -> "the timestamp popup registered as a layer: " + report);
 		assertEquals(Boolean.TRUE, t.get("dialogCountZero"), () -> report.toString());
 	}
+
+	@Test void g01_lastColumnMenuInScrolledOverflowBoxIsNotClipped() {
+		// The concrete clip case: a menu opened from a last-column trigger inside a scrolled-right .dt-layout-cell
+		// overflow box must escape that box (portalled to body, position:fixed) and land within the viewport, so the
+		// box's overflow cannot clip it.
+		var m = sub("scrolledMenu");
+		assertEquals(Boolean.TRUE, m.get("opened"), () -> "the last-column row-action menu did not open: " + report);
+		assertEquals(Boolean.TRUE, m.get("onBody"), () -> "the menu was not portalled to body: " + report);
+		assertEquals(Boolean.TRUE, m.get("escapedScrollBox"), () -> "the menu is still inside the .dt-layout-cell overflow box (clipped): " + report);
+		assertEquals(Boolean.TRUE, m.get("positionFixed"), () -> "the menu is not position:fixed: " + report);
+		assertEquals(Boolean.TRUE, m.get("withinViewportX"), () -> "the menu extends outside the viewport horizontally: " + report);
+		assertEquals(Boolean.TRUE, m.get("withinViewportY"), () -> "the menu extends outside the viewport vertically: " + report);
+	}
 }

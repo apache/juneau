@@ -142,4 +142,37 @@ const tr = env.el('tr');
 	drain();
 })();
 
+// --- row-action menu opened from a trigger inside a DT2 .dt-layout-cell overflow box escapes that box (unclipped) --
+// The clipping surface: a last-column / scrolled-right menu that stays appendChild'd into the
+// <td> would be clipped by the .dt-layout-cell overflow scroll box.  initRowActions must portal it to document.body
+// (kind:"menu", position:fixed) so it is a sibling lineage of - never a descendant of - that scroll box, and its
+// light-dismiss / detach must run through the shared stack, not a parallel closer.
+(function () {
+	if (typeof I.initRowActions !== 'function') return;
+	const ctx = { viewDef: { rowActions: [{ id: 'ack', label: 'Ack' }] } };
+	// DT2 tree: .dt-layout-cell (the overflow scroll box) > table > tbody > tr > td.actions-cell (last) > trigger.
+	const scrollBox = env.el('div'); scrollBox.className = 'dt-layout-cell';
+	env.body.appendChild(scrollBox);
+	const t2 = env.el('table'); scrollBox.appendChild(t2);
+	const tbody = env.el('tbody'); t2.appendChild(tbody);
+	const row = env.el('tr'); tbody.appendChild(row);
+	const td = env.el('td'); td.className = 'juneau-view-actions-cell'; row.appendChild(td);
+	const trigger = env.el('button'); trigger.className = 'juneau-view-action-trigger'; td.appendChild(trigger);
+	I.initRowActions(t2, ctx.viewDef, ctx);
+	t2.dispatch('click', { target: trigger });
+	const menu = env.body.querySelector('.juneau-view-action-menu');
+	out.rowmenu_opened = !! menu;
+	out.rowmenu_onBody = menu != null && menu.parentNode === env.body;
+	out.rowmenu_notInScrollBox = menu != null && ! scrollBox.contains(menu);   // escaped the overflow clip box
+	out.rowmenu_notInCell = menu != null && ! td.contains(menu);
+	out.rowmenu_positionFixed = menu != null && menu.style.position === 'fixed';
+	out.rowmenu_isMenuLayer = I.topLayer() != null && I.topLayer().kind === 'menu';   // a stack layer, not off-stack
+	out.rowmenu_notADialog = I.dialogLayerCount() === 0;   // a menu must not inflate the dialog-kind depth cap
+	// Light-dismiss + detach go through the shared stack (an outside pointerdown pops the top menu layer).
+	const outside = env.el('div'); env.body.appendChild(outside);
+	env.dispatchDocument('pointerdown', { target: outside });
+	out.rowmenu_closedViaStack = env.body.querySelector('.juneau-view-action-menu') === null && I.topLayer() === null;
+	drain();
+})();
+
 process.stdout.write(JSON.stringify(out));

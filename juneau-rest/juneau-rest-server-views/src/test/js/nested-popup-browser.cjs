@@ -165,6 +165,55 @@ const PROBE = async function () {
 		drain();
 	}
 
+	// ---- Block G: a menu opened from a LAST-COLUMN trigger inside a scrolled-right .dt-layout-cell is UNCLIPPED ----
+	// The concrete clip case: the trigger's cell lives inside a real .dt-layout-cell overflow box
+	// (overflow:auto, narrow) whose table is far wider, scrolled fully right.  A menu appendChild'd into that cell
+	// would be clipped by the box; portalling it to the body as position:fixed makes it a sibling lineage of the box,
+	// so it is measurably outside the box and horizontally within the viewport.
+	{
+		const box = document.createElement('div');
+		box.className = 'dt-layout-cell';
+		box.style.overflow = 'auto';
+		box.style.width = '160px';
+		box.style.height = '120px';
+		document.body.appendChild(box);
+		const table = document.createElement('table');
+		table.style.width = '1200px';       // far wider than the 160px box -> horizontal scroll
+		table.style.tableLayout = 'fixed';
+		const tbody = document.createElement('tbody');
+		const tr = document.createElement('tr');
+		tr.setAttribute('data-juneau-row-id', 'INC-G');
+		const filler = document.createElement('td');   // pushes the actions cell to the far right
+		filler.style.width = '1080px';
+		filler.textContent = 'wide';
+		const actions = document.createElement('td');
+		actions.className = 'juneau-view-actions-cell';
+		actions.style.width = '120px';
+		const trigger = document.createElement('button');
+		trigger.className = 'juneau-view-action-trigger';
+		trigger.textContent = 'Actions';
+		actions.appendChild(trigger);
+		tr.appendChild(filler); tr.appendChild(actions);
+		tbody.appendChild(tr); table.appendChild(tbody); box.appendChild(table);
+		box.scrollLeft = box.scrollWidth;   // scroll fully right so the last-column trigger is at the box's edge
+		init.initRowActions(table, ctx.viewDef, {});
+		trigger.click();
+		await tick();
+		const menu = document.querySelector('.juneau-view-action-menu');
+		const vw = window.innerWidth, vh = window.innerHeight;
+		const rect = menu ? menu.getBoundingClientRect() : null;
+		out.scrolledMenu = {
+			opened: !!menu,
+			onBody: menu ? menu.parentElement === document.body : false,
+			escapedScrollBox: menu ? !box.contains(menu) : false,   // NOT a descendant of the overflow clip box
+			positionFixed: menu ? menu.style.position === 'fixed' : false,
+			// Horizontally within the viewport (the .dt-layout-cell overflow-x axis is the clip axis this proves).
+			withinViewportX: rect ? (rect.left >= -1 && rect.right <= vw + 1) : false,
+			withinViewportY: rect ? (rect.top >= -1 && rect.bottom <= vh + 1) : false
+		};
+		drain();
+	}
+
 	return out;
 };
 
