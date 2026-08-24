@@ -264,4 +264,62 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("freeze_sinkDisplaySafe"));
 		assertEquals("bool,date,datetime,decimal,json,linked,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// TODO-445k: pill cell renderer (display-only by default; opt-in action-binding; cell-path only)
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void d01_pill_displayOnlyChip_dotAndRawValue() {
+		var r = report();
+		// Raw textContent "ok" (NOT uppercased), themed via .tag.state.ok, dot has no tone class, data-juneau-pill.
+		assertEquals(
+			"<span class=\"jc-pill tag state ok\" data-juneau-pill>"
+				+ "<span class=\"jc-pill-dot\" aria-hidden=\"true\"></span>ok</span>",
+			r.get("pill_display"));
+		assertEquals("pill-cell", r.get("pill_class"));
+	}
+
+	@Test void d02_pill_dotOffDropsTheDot() {
+		var r = report();
+		assertEquals(
+			"<span class=\"jc-pill tag state ok\" data-juneau-pill>ok</span>",
+			r.get("pill_dotOff"));
+	}
+
+	@Test void d03_pill_toneClassOnlyForOkWarnExceeds() {
+		var r = report();
+		assertEquals(true, r.get("pill_toneOk"));
+		assertEquals(true, r.get("pill_toneWarn"));
+		assertEquals(true, r.get("pill_toneExceeds"));
+		assertEquals(true, r.get("pill_toneNeutralNoClass"));
+		assertEquals(true, r.get("pill_toneInfoNoClass"));   // info is NOT a valid tone (B7-fold)
+		assertEquals(true, r.get("pill_toneAbsentNoClass"));
+	}
+
+	@Test void d04_pill_actionAddsRoleTabindexAndId_onlyWhenSet() {
+		var r = report();
+		assertEquals(true, r.get("pill_actionHasRole"));
+		assertEquals(true, r.get("pill_actionHasTabindex"));
+		assertEquals(true, r.get("pill_actionHasId"));
+		assertEquals(true, r.get("pill_noActionNoRole"));
+		assertEquals(true, r.get("pill_noSelect"));   // no aria-pressed / select toggle ever (B5/N1-fold)
+	}
+
+	@Test void d05_pill_blankValueIsEmpty() {
+		var r = report();
+		assertEquals("", r.get("pill_blank"));
+		assertEquals("", r.get("pill_empty"));
+	}
+
+	@Test void d06_pill_hostileInputEscaped() {
+		var r = report();
+		assertEquals(false, r.get("pill_hostileScript"));
+		assertEquals(true, r.get("pill_hostileEscaped"));
+	}
+
+	@Test void d07_pill_isNotAFrozenBuiltin_cellPathOnly() {
+		var r = report();
+		assertEquals(true, r.get("pill_notFrozen"));       // resolveSinkRenderer("pill") == null
+		assertEquals(true, r.get("pill_notInFrozenIds"));  // "pill" absent from frozen id snapshot (size stays 10)
+	}
 }

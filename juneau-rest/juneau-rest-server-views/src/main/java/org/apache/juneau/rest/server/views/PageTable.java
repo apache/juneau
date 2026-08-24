@@ -252,13 +252,28 @@ public class PageTable {
 
 		var panelsChildren = new ArrayList<>();
 		for (var t : tabs)
-			panelsChildren.add(buildTabPanel(ctx, id, t));
+			panelsChildren.add(buildTabPanel(ctx, id, t, pageDef.barSlot));
 		var panels = div(panelsChildren.toArray()).class_("jc-panels");
 
 		var json = escapeForScript(Json.of(buildMeta(pageDef)));
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
-		var shell = div(tabBar, panels, sidecar).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
+		// Page chrome (m1/m2): the whole <header> (+ its optional refresh sidecar) leads the shell; the bar slot's
+		// single data-only sidecar (the region itself is a trailing sibling of each .jc-subtab-bar, below) trails it.
+		var shellChildren = new ArrayList<>();
+		if (pageDef.header != null) {
+			shellChildren.add(AppHeaderTable.of(pageDef.header));
+			var headerSidecar = AppHeaderTable.sidecar(pageDef.header);
+			if (headerSidecar != null)
+				shellChildren.add(headerSidecar);
+		}
+		shellChildren.add(tabBar);
+		shellChildren.add(panels);
+		if (pageDef.barSlot != null)
+			shellChildren.add(BarSlotTable.sidecar(pageDef.barSlot));
+		shellChildren.add(sidecar);
+
+		var shell = div(shellChildren.toArray()).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
 		if (savedViewsBase != null && ! savedViewsBase.isBlank())
 			shell.attr(SAVED_VIEWS_ATTR, savedViewsBase);
 		return shell;
@@ -269,7 +284,7 @@ public class PageTable {
 	 * content-prefaced) sub-tab bar + one sub-panel per subtab &mdash; the {@code Tab} panel-body matrix
 	 * ({@code {view} | {subtabs} | {content} | {content+subtabs}}, TODO-420) mirrored from {@link Tab#validate()}.
 	 */
-	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t) {
+	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t, org.apache.juneau.rest.server.widgets.BarSlot barSlot) {
 		if (t.view != null) {
 			var body = ViewTable.of(ctx, t.view, null);
 			return div(body).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
@@ -311,6 +326,9 @@ public class PageTable {
 		if (t.content != null)
 			outerChildren.add(rawText(t.content));
 		outerChildren.add(subtabBar);
+		// Bar slot (m1): a trailing sibling of .jc-subtab-bar - never into the archived .juneau-view-toolbar-* row.
+		if (barSlot != null)
+			outerChildren.add(BarSlotTable.of(barSlot));
 		outerChildren.add(subpanels);
 		return div(outerChildren.toArray()).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 	}

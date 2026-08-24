@@ -134,6 +134,18 @@ public class ViewTable {
 	 */
 	public static final String SAVED_VIEWS_ATTR = "data-juneau-saved-views";
 
+	/**
+	 * Full-real-estate layout hint stamped on the wrapper {@code <div>} (TODO-445n Goal 1).  A first-class public
+	 * {@code data-juneau-*} convention: the toolkit stamps {@link #LAYOUT_WIDE} on the one stamp node
+	 * {@code ViewTable} already returns so consumer chrome (the console {@code chrome.css} full-bleed {@code :has}
+	 * rules) can widen the enclosing card/main out of its default centered {@code max-width}.  Never stamped on
+	 * the {@code <table>}, {@code .jc-card}, or {@code .jc-main} (this emitter produces none of those classes).
+	 */
+	public static final String LAYOUT_ATTR = "data-juneau-layout";
+
+	/** The only {@link #LAYOUT_ATTR} value in v1: request full horizontal real estate for the wrapper's content. */
+	public static final String LAYOUT_WIDE = "wide";
+
 	/** Marker attribute on the row-detail {@code <template>} sibling of the view table. */
 	public static final String DETAIL_TEMPLATE_ATTR = "data-juneau-row-detail";
 
@@ -536,6 +548,9 @@ public class ViewTable {
 
 		children.add(sidecar);
 		var wrapper = div(children.toArray());
+		// Full-real-estate stamp (TODO-445n Goal 1 / N2 A): the ONE stamp node is this wrapper <div>. The console
+		// chrome full-bleed :has() rules widen the enclosing .jc-card/.jc-main off this attribute.
+		wrapper.attr(LAYOUT_ATTR, LAYOUT_WIDE);
 		if (savedViewsBase != null && ! savedViewsBase.isBlank())
 			wrapper.attr(SAVED_VIEWS_ATTR, savedViewsBase);
 		return wrapper;

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The top-level, declarative "tabs / sub-tabs page" definition (design doc §"Bean model") &mdash; composes
@@ -80,6 +81,21 @@ public class PageDef {
 	public List<Tab> tabs;
 
 	/**
+	 * Optional page-chrome header (concept #18/#19), emitted as a whole {@code <header class="jc-header">} by
+	 * {@link PageTable}.  This is a <b>Java-only builder field</b> &mdash; it is omitted from {@code @BeanType} / the
+	 * wire (exactly like a reserved-and-omitted field), and it does <b>not</b> bump {@link #CONTRACT_VERSION}.  The
+	 * html5 emit lives in {@link AppHeaderTable}; the beans live in {@code juneau-rest-server-widgets}.
+	 */
+	public AppHeaderDef header;
+
+	/**
+	 * Optional bar slot (concept #9), emitted by {@link PageTable} as a <b>trailing sibling of {@code .jc-subtab-bar}</b>
+	 * &mdash; never into the archived {@code .juneau-view-toolbar-*} DataTables control row.  Also a Java-only builder
+	 * field, omitted from the wire and not bumping {@link #CONTRACT_VERSION}.
+	 */
+	public BarSlot barSlot;
+
+	/**
 	 * Starts a new {@link PageDef} builder with the specified stable page id.
 	 *
 	 * @param id The stable page id.  Must not be <jk>null</jk> or blank.
@@ -112,6 +128,34 @@ public class PageDef {
 	 */
 	public PageDef tabs(Tab...value) {
 		tabs = l(value);
+		return this;
+	}
+
+	/**
+	 * Sets the optional page-chrome header.
+	 *
+	 * <p>
+	 * Java-only builder field: not on the wire, and does not bump {@link #CONTRACT_VERSION}.
+	 *
+	 * @param value The header definition.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public PageDef header(AppHeaderDef value) {
+		header = value;
+		return this;
+	}
+
+	/**
+	 * Sets the optional bar slot (trailing sibling of {@code .jc-subtab-bar}).
+	 *
+	 * <p>
+	 * Java-only builder field: not on the wire, and does not bump {@link #CONTRACT_VERSION}.
+	 *
+	 * @param value The bar-slot definition.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public PageDef barSlot(BarSlot value) {
+		barSlot = value;
 		return this;
 	}
 
@@ -156,6 +200,11 @@ public class PageDef {
 						s.view.validate();
 					}
 		}
+		// Java-only page-chrome fields (m1/m2): validated on the serving path, absent from the wire.
+		if (header != null)
+			header.validate();
+		if (barSlot != null)
+			barSlot.validate();
 	}
 
 	private void addViewId(Set<String> viewIds, String viewId) {

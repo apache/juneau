@@ -108,6 +108,12 @@
 	const BULK_ATTR = "data-juneau-bulk";
 	const BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
 
+	// TODO-445n table overflow discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
+	// CSS-only "Approach D" overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
+	const TABLE_SCROLL_CLASS = "juneau-view-table-scroll";
+	// L12 A: a generic (Juneau-vocabulary) label applied to the scroll region ONLY when it actually overflows.
+	const TABLE_SCROLL_LABEL = "Table, horizontally scrollable";
+
 	const NS = window.JuneauViews = window.JuneauViews || {};
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
 	NS.ACTION_RESULT_CONTRACT_VERSION = JUNEAU_ACTION_RESULT_CONTRACT_VERSION;
@@ -1481,8 +1487,22 @@
 	function setActionRefEnabled(root, enabled) {
 		if (!root || !root.querySelectorAll) return;
 		const buttons = root.querySelectorAll("[data-juneau-action]");
-		for (let i = 0; i < buttons.length; i++)
-			buttons[i].disabled = !enabled;
+		for (let i = 0; i < buttons.length; i++) {
+			const b = buttons[i];
+			b.disabled = !enabled;
+			// A pill is a <span role="button">, where the .disabled property is inert - reflect the disabled state
+			// via aria-disabled + an .is-disabled class instead (activatePillAction ignores either).
+			if (b.getAttribute && b.getAttribute("role") === "button"
+				&& (b.hasAttribute ? b.hasAttribute("data-juneau-pill") : b.getAttribute("data-juneau-pill") != null)) {
+				if (enabled) {
+					b.removeAttribute("aria-disabled");
+					if (b.classList && b.classList.remove) b.classList.remove("is-disabled");
+				} else {
+					b.setAttribute("aria-disabled", "true");
+					if (b.classList && b.classList.add) b.classList.add("is-disabled");
+				}
+			}
+		}
 	}
 
 	/** Hides ActionRef buttons (404/500 / contract-fail closed) while leaving COLLAPSE in place. */
@@ -1539,12 +1559,15 @@
 
 			const actionBtn = e.target && e.target.closest ? e.target.closest("[data-juneau-action]") : null;
 			if (actionBtn) {
-				e.preventDefault();
-				e.stopPropagation();
-				if (actionBtn.disabled || actionBtn.hidden) return;
+				// Only a detail-panel ActionRef is handled here.  A cell pill also carries [data-juneau-action] but
+				// lives in a body <td>, not a panel - bail BEFORE preventDefault/stopPropagation so its own
+				// table-level handler (initRowActions) still fires and the click is not swallowed.
 				const panel = actionBtn.closest(".juneau-view-detail-panel");
 				const parentTr = panel && panel._juneauParentTr;
 				if (!parentTr) return;
+				e.preventDefault();
+				e.stopPropagation();
+				if (actionBtn.disabled || actionBtn.hidden) return;
 				const action = findRowActionById(viewDef, actionBtn.getAttribute("data-juneau-action"));
 				if (!action) return;
 				submitRowAction(action, table, parentTr, ctx);
@@ -3253,8 +3276,33 @@
 	 * and positioned under its trigger; Escape / outside-click dismissal is owned by the shared stack.  Mirrors the
 	 * details-expander's delegated-listener pattern above.
 	 */
+	/**
+	 * Activates an action-bound cell pill ({@code <span data-juneau-pill role="button" data-juneau-action="<id>">}).
+	 * Resolves the row from the pill's {@code <tr>} (as the row-action menu resolves it from the trigger's row), looks
+	 * the action up via {@link #findRowActionById}, then takes the SAME confirm / {@code present=dialog} branch the
+	 * menu takes ({@link #isDialogAction} → {@link #openActionDialog}, else {@link #submitRowAction}) - so a pill can
+	 * never skip a confirmation or a form dialog.  A disabled pill (capability-gated or already in-flight) is ignored.
+	 */
+	function activatePillAction(pill, table, viewDef, ctx) {
+		if (!pill) return;
+		if (pill.getAttribute("aria-disabled") === "true"
+			|| (pill.classList && pill.classList.contains && pill.classList.contains("is-disabled"))) return;
+		const action = findRowActionById(viewDef, pill.getAttribute("data-juneau-action"));
+		if (!action) return;
+		const tr = pill.closest ? pill.closest("tr") : null;
+		if (!tr) return;
+		if (tr.getAttribute && tr.getAttribute("data-juneau-inflight")) return;   // in-flight guard (no double submit)
+		if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
+		else submitRowAction(action, table, tr, ctx);
+	}
+
 	function initRowActions(table, viewDef, ctx) {
 		table.addEventListener("click", function (e) {
+			// An action-bound cell pill dispatches here (NOT in initDetailsExpander, which binds only when a
+			// row-detail template is present); bind no more broadly than [data-juneau-pill] so a menu/ActionBar
+			// click is never stolen.
+			const pill = e.target && e.target.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
+			if (pill) { activatePillAction(pill, table, viewDef, ctx); return; }
 			const trigger = e.target && e.target.closest ? e.target.closest(".juneau-view-action-trigger") : null;
 			if (!trigger) return;
 			const tr = trigger.closest("tr");
@@ -3272,6 +3320,14 @@
 				}
 			});
 			positionCellPopover(menu, trigger);
+		});
+		// Keyboard parity for the (non-native) pill button: Enter/Space activate; Space must not scroll the page.
+		table.addEventListener("keydown", function (e) {
+			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+			const pill = e.target && e.target.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
+			if (!pill) return;
+			if (e.preventDefault) e.preventDefault();
+			activatePillAction(pill, table, viewDef, ctx);
 		});
 	}
 
@@ -3338,11 +3394,18 @@
 		}
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
+		// TODO-445n: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
+		if (ctx._scrollRegionObserver) {
+			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
+			ctx._scrollRegionObserver = null;
+		}
 		if (ctx.dataTable) {
 			try { ctx.dataTable.destroy(); } catch (e) { /* already destroyed */ }
 			ctx.dataTable = null;
 		}
 		stripGeneratedDom(table);
+		// TODO-445n: remove the DT1 wrap (INV-5) so a reconstruct cannot nest the toolbar inside the overflow box.
+		unwrapTableScroll(table);
 	}
 
 	/**
@@ -3394,6 +3457,97 @@
 			stampRowId(rowEl, rowData, field);
 		};
 		opts.order = resolveOrder(viewDef, opts.columns);
+	}
+
+	/**
+	 * TODO-445n table overflow discipline — DT1 "Approach B" single-node wrap.  Gives a DT1 {@code <table>} its own
+	 * horizontal-scroll container ({@code .juneau-view-table-scroll}) so a table wider than its card scrolls inside
+	 * its own region while the toolbar / paging-pill menu (a sibling lineage) and the page chrome stay put (INV-1 /
+	 * INV-2).  No-op on the DT2 dogfood path: DataTables 2's flex {@code .dt-layout-cell} is ALREADY the scroll box
+	 * (CSS-only "Approach D"), so wrapping there would nest a second scroll box inside it (INV-5 double scrollbar).
+	 *
+	 * <p>
+	 * Skip-guard order matters (N-P5-B1): the {@code .dt-layout-cell} DT2 no-op MUST precede the already-wrapped
+	 * skip, because a DT2 table's parent is the layout cell, not a {@code .juneau-view-table-scroll}.  Also skips a
+	 * table already inside a scroll box so a nested {@code constructTable} (445g) does not double-wrap inner tables
+	 * (N5).  Moves the existing {@code <table>} node (never clones — DataTables' bindings ride the live node) and
+	 * calls {@code columns.adjust()} so header/body re-align against the now-constrained containing block (S5).
+	 */
+	function ensureTableScroll(table, ctx) {
+		if (!table || typeof table.closest !== "function") return;
+		// DT2 (Approach D): the flex .dt-layout-cell is the scroll box already — do not double-scroll.
+		if (table.closest(".dt-layout-cell")) return;
+		// Nested (445g) or a leftover wrap from a prior construct — already inside a scroll box.
+		if (table.closest("." + TABLE_SCROLL_CLASS)) return;
+		const parent = table.parentNode;
+		if (!parent) return;
+		const box = document.createElement("div");
+		box.className = TABLE_SCROLL_CLASS;
+		parent.insertBefore(box, table);
+		box.appendChild(table);
+		if (ctx && ctx.dataTable && ctx.dataTable.columns) {
+			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
+		}
+	}
+
+	/**
+	 * Paired teardown for {@link #ensureTableScroll} (INV-5): removes the DT1 wrap and restores the {@code <table>}
+	 * to the wrap's former parent, so a {@code destroy()} + reconstruct cannot leave the toolbar nested inside the
+	 * overflow box.  No-op on the DT2 path (there is no JS-inserted wrap to remove).
+	 */
+	function unwrapTableScroll(table) {
+		if (!table || !table.parentNode) return;
+		const box = table.parentNode;
+		if (!box.className || (" " + box.className + " ").indexOf(" " + TABLE_SCROLL_CLASS + " ") < 0) return;
+		const grandparent = box.parentNode;
+		if (!grandparent) return;
+		grandparent.insertBefore(table, box);
+		grandparent.removeChild(box);
+	}
+
+	/**
+	 * Resolves the table-only scroll region for a11y stamping: the DT1 wrap or the DT2 flex layout cell (scoped —
+	 * never a toolbar layout cell).  Returns {@code null} for a non-DOM test double or a bare table.
+	 */
+	function scrollRegionFor(table) {
+		if (!table || typeof table.closest !== "function") return null;
+		return table.closest("." + TABLE_SCROLL_CLASS)
+			|| table.closest(".dt-layout-row.dt-layout-table > .dt-layout-cell")
+			|| null;
+	}
+
+	/**
+	 * L12 A: keyboard-reachable scroll region ONLY when it actually overflows (WCAG 2.1.1).  When
+	 * {@code scrollWidth > clientWidth} the region gets {@code tabindex="0"} + a generic Juneau-vocabulary label;
+	 * otherwise both are removed (an unconditional tab stop on a non-overflowing table is a false "scrollable"
+	 * announcement, and a focus ring can inflate {@code documentElement.scrollWidth}).  A {@code ResizeObserver}
+	 * keeps it honest; the observer is stored on {@code ctx} so {@code teardownTable} can disconnect it (S3/N-P5-S3).
+	 */
+	function applyScrollRegionA11y(table, ctx) {
+		const region = scrollRegionFor(table);
+		if (!region) return;
+		const recheck = function () {
+			const overflowing = (region.scrollWidth || 0) > (region.clientWidth || 0) + 1;
+			if (overflowing) {
+				if (!region.getAttribute("tabindex")) region.setAttribute("tabindex", "0");
+				if (!region.getAttribute("aria-label")) region.setAttribute("aria-label", TABLE_SCROLL_LABEL);
+			} else {
+				region.removeAttribute("tabindex");
+				region.removeAttribute("aria-label");
+			}
+		};
+		recheck();
+		if (ctx && ctx._scrollRegionObserver) {
+			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
+			ctx._scrollRegionObserver = null;
+		}
+		if (typeof window.ResizeObserver === "function") {
+			try {
+				const ro = new window.ResizeObserver(recheck);
+				ro.observe(region);
+				if (ctx) ctx._scrollRegionObserver = ro;
+			} catch (e) { /* observer unavailable — the one-shot recheck above still ran */ }
+		}
 	}
 
 	function constructTable(table, viewDef, effectiveColumns, ctx) {
@@ -3494,6 +3648,11 @@
 		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
 		if (viewDef.columnConfig && NS.config && typeof NS.config.mountChooser === "function")
 			NS.config.mountChooser(table, ctx, toolbarRow);
+
+		// TODO-445n table overflow discipline: DT1 gets its own JS-inserted scroll box (no-op on DT2 — the flex
+		// .dt-layout-cell already scrolls via CSS), then the scroll region gets an overflow-detected tabindex.
+		ensureTableScroll(table, ctx);
+		applyScrollRegionA11y(table, ctx);
 	}
 
 	/**
@@ -3871,6 +4030,9 @@
 		assembleFullColumnArray: assembleFullColumnArray,
 		restoreHeaderShell: restoreHeaderShell,
 		teardownTable: teardownTable,
+		// TODO-445n table overflow discipline (DT1 "Approach B" wrap) - exposed for the Node harness.
+		ensureTableScroll: ensureTableScroll,
+		unwrapTableScroll: unwrapTableScroll,
 		beginInitTable: beginInitTable,
 		// visual-parity pass: exposed for manual verification.
 		buildPagingPill: buildPagingPill,
@@ -3928,6 +4090,8 @@
 		buildRowActionMenu: buildRowActionMenu,
 		submitRowAction: submitRowAction,
 		initRowActions: initRowActions,
+		activatePillAction: activatePillAction,
+		findRowActionById: findRowActionById,
 		// Declarative modal + typed action-result + in-flight lifecycle (TODO-416/417) - exposed for the canary
 		// and manual verification.
 		ACTION_RESULT_CONTRACT_VERSION: JUNEAU_ACTION_RESULT_CONTRACT_VERSION,

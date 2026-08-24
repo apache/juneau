@@ -161,6 +161,96 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
+   App-header extras (TODO-445m): action/avatar count-dot badges, avatar
+   presence status + image fallback, and the 445h-pending menu surface.
+   Tones and presence states reuse the shared .tag palette tokens - WARN tone
+   and AWAY status BOTH map to amber (locked mapping L10; no dedicated
+   --jc-warn* token is introduced).  Every var(--jc-*) here sinks only into
+   color / background-color / border-color / border-radius (or a "Npx solid
+   var()" border shorthand as elsewhere in this file) - never a url-capable
+   whole value.
+   ========================================================================== */
+
+/* A badge overlays its host action/avatar, so those hosts anchor it. */
+.jc-icon-btn,
+.jc-avatar { position: relative; }
+
+/* A menu-bearing action/avatar is a DISABLED trigger until 445h wires the layer (M1 B). */
+.jc-icon-btn[disabled],
+.jc-avatar[disabled] { cursor: default; opacity: 0.5; }
+
+.jc-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  background-color: var(--jc-tag-neutral-bg);
+  color: var(--jc-tag-neutral-text);
+  border: 1px solid var(--jc-tag-neutral-border);
+}
+
+/* A dot badge (no count) collapses to a small circle in the same corner. */
+.jc-badge.jc-badge-dot {
+  min-width: 8px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.jc-badge[data-juneau-badge-tone="accent"]  { background-color: var(--jc-tag-blue-bg);    color: var(--jc-tag-blue-text);    border-color: var(--jc-tag-blue-border); }
+.jc-badge[data-juneau-badge-tone="success"] { background-color: var(--jc-tag-green-bg);   color: var(--jc-tag-green-text);   border-color: var(--jc-tag-green-border); }
+.jc-badge[data-juneau-badge-tone="warn"]    { background-color: var(--jc-tag-amber-bg);   color: var(--jc-tag-amber-text);   border-color: var(--jc-tag-amber-border); }
+.jc-badge[data-juneau-badge-tone="danger"]  { background-color: var(--jc-tag-red-bg);     color: var(--jc-tag-red-text);     border-color: var(--jc-tag-red-border); }
+.jc-badge[data-juneau-badge-tone="neutral"] { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+
+/* Avatar image + hidden-initials fallback (juneau-chrome.js hides the img on error and unhides the initials). */
+.jc-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Presence dot in the avatar's lower-right corner; the ring blends into the header bar. */
+.jc-avatar[class*="jc-avatar-status-"]::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--jc-header-bg);
+  background-color: var(--jc-tag-neutral-text);
+}
+
+.jc-avatar-status-online::after  { background-color: var(--jc-tag-green-text); }
+.jc-avatar-status-away::after    { background-color: var(--jc-tag-amber-text); }
+.jc-avatar-status-busy::after    { background-color: var(--jc-tag-red-text); }
+.jc-avatar-status-offline::after { background-color: var(--jc-tag-neutral-text); }
+
+/* Menu surface skeleton - kept hidden; the trigger stays disabled until 445h flips this on via the shared layer. */
+.jc-menu {
+  display: none;
+  min-width: 160px;
+  padding: 4px 0;
+  background-color: var(--jc-header-bg);
+  color: var(--jc-text);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+}
+
+/* ==========================================================================
    Primary navigation
    ========================================================================== */
 
@@ -303,6 +393,36 @@ a:hover { text-decoration: underline; }
   font-weight: 700;
   color: var(--jc-text);
   margin: 0;
+}
+
+/* ==========================================================================
+   TODO-445n full horizontal real estate (Goal 1)
+   ==========================================================================
+   ViewTable stamps `data-juneau-layout="wide"` on the ONE stamp node it emits (its wrapper <div>).  This is a
+   first-class public data-juneau-* convention (allowed value: "wide"; never stamped on .jc-card / .jc-main — the
+   toolkit emits neither class).  The wide wrapper widens itself, and the enclosing card/main expand off it via
+   :has(), so a wide table page uses the full content-area width instead of the default centered 1180px card.
+
+   Position-dependent wide-stamp matrix:
+     - the wrapper itself           -> always widened
+     - .jc-card                     -> widened ONLY when the wide wrapper is a DIRECT child (typical after the RM
+                                       .rm-table-scroll unwrap)
+     - .jc-main                     -> widened when ANY descendant wrapper is wide
+   `.jc-main` keeps its padding; `max-width:none` means edge-of-content-area, not edge-of-viewport.
+   `min-width:0` lets the main region shrink below the table's intrinsic width so the table-region scroll box
+   (juneau-views.css), not the page, absorbs overflow (INV-3). */
+.jc-main {
+  min-width: 0;
+}
+
+[data-juneau-layout="wide"] {
+  max-width: none;
+  width: 100%;
+}
+
+.jc-card:has(> [data-juneau-layout="wide"]),
+.jc-main:has([data-juneau-layout="wide"]) {
+  max-width: none;
 }
 
 /* ==========================================================================

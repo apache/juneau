@@ -132,6 +132,13 @@ public class ViewsMixin {
 	public static final String CALENDAR_CSS_PATH = "/juneau-calendar.css";
 
 	/**
+	 * The URL path at which the opt-in page-chrome runtime is served (relative to the host mount).  A consumer adds
+	 * this {@code <script>} after {@code juneau-icons.js} (header action glyphs resolve from the icon registry); a
+	 * page with no {@code data-juneau-app-header}/{@code data-juneau-bar-slot} region never loads it.
+	 */
+	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
+
+	/**
 	 * The frozen {@code VIEW_META} contract-version handshake constant, kept in one source of truth with the value the
 	 * model emits ({@link ViewDef#CONTRACT_VERSION}).
 	 */
@@ -144,6 +151,21 @@ public class ViewsMixin {
 	 * revision must never force a view-sidecar bump, or vice-versa.
 	 */
 	public static final String CARDS_CONTRACT_VERSION = CardFieldList.CONTRACT_VERSION;
+
+	/**
+	 * The app-header refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in, kept
+	 * in one source of truth with the value the header model emits ({@link AppHeaderDef#CONTRACT_VERSION}).
+	 * Deliberately distinct from {@link #CONTRACT_VERSION} and {@link #BAR_CONTRACT_VERSION}: a header-envelope
+	 * revision must never force a view-sidecar or bar-sidecar bump, or vice-versa.
+	 */
+	public static final String HEADER_CONTRACT_VERSION = AppHeaderDef.CONTRACT_VERSION;
+
+	/**
+	 * The bar-slot refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in, kept in
+	 * one source of truth with the value the bar model emits ({@link BarSlot#CONTRACT_VERSION}).  Deliberately a
+	 * distinct constant from {@link #HEADER_CONTRACT_VERSION} (see that constant).
+	 */
+	public static final String BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION;
 
 	/** Classpath location of the shipped initializer. */
 	static final String VIEWS_JS_RESOURCE = "/org/apache/juneau/views/juneau-views.js";
@@ -177,6 +199,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped reusable-calendar stylesheet. */
 	static final String CALENDAR_CSS_RESOURCE = "/org/apache/juneau/views/juneau-calendar.css";
+
+	/** Classpath location of the shipped page-chrome runtime. */
+	static final String CHROME_JS_RESOURCE = "/org/apache/juneau/views/juneau-chrome.js";
 
 	/** Content type emitted for the JavaScript assets. */
 	static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
@@ -398,6 +423,21 @@ public class ViewsMixin {
 		return serve(CALENDAR_CSS_RESOURCE, CSS_CONTENT_TYPE);
 	}
 
+	/**
+	 * [GET /juneau-chrome.js] &mdash; serve the opt-in page-chrome runtime.
+	 *
+	 * @return The page-chrome runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=CHROME_JS_PATH,
+		summary="Juneau page-chrome runtime",
+		description="First-party, opt-in JavaScript that enhances a PageDef's app-header / avatar / bar-slot chrome: contract handshake, icon hydration, avatar fallback, SAFE host-events, and demand-only same-origin count refresh.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getChromeScript() {
+		return serve(CHROME_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */
 	private static HttpResource serve(String resource, String contentType) {
 		return ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);
@@ -416,6 +456,7 @@ public class ViewsMixin {
 		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;
 		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
 		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
+		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;
 		throw new IllegalArgumentException("Unknown asset path: " + path);
 	}
 }

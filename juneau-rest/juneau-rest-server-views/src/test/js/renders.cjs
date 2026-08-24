@@ -153,6 +153,45 @@ out.progress_onmouse = String(out.progress_hostileMax).indexOf('onmouseover=') >
 out.progress_hostileEmpty = emptyTrack(out.progress_hostileCell);
 out.progress_widthCanary = WIDTH_RE.test(phtml(50, {})) && phtml(50, {}).indexOf('style="width:50%"') >= 0;
 
+const pill = NS.resolveRenderer('pill');
+function pillHtml(cell, meta) {
+	return String(pill.display(cell, {}, meta || {}));
+}
+// Display-only chip: dot (no tone class) + raw value, .tag.<field>.<value> theming, data-juneau-pill.
+out.pill_display = pillHtml('ok', { field: 'state' });
+out.pill_class = String(pill['class']());
+out.pill_dotOff = pillHtml('ok', { field: 'state', dot: 'off' });
+// Tone class only for ok|warn|exceeds; neutral/absent/info -> no tone class (inherits currentColor).
+out.pill_toneOk = pillHtml('open', { field: 'state', tone: 'ok' }).indexOf('jc-pill-dot is-ok') >= 0;
+out.pill_toneWarn = pillHtml('open', { field: 'state', tone: 'warn' }).indexOf('jc-pill-dot is-warn') >= 0;
+out.pill_toneExceeds = pillHtml('open', { field: 'state', tone: 'exceeds' }).indexOf('jc-pill-dot is-exceeds') >= 0;
+out.pill_toneNeutralNoClass = pillHtml('open', { field: 'state', tone: 'neutral' }).indexOf('is-') < 0;
+out.pill_toneInfoNoClass = pillHtml('open', { field: 'state', tone: 'info' }).indexOf('is-') < 0;
+out.pill_toneAbsentNoClass = pillHtml('open', { field: 'state' }).indexOf('is-') < 0;
+// Action-bound variant adds role/tabindex/data-juneau-action ONLY when meta.action is present.
+out.pill_action = pillHtml('open', { field: 'state', action: 'ack' });
+out.pill_actionHasRole = out.pill_action.indexOf('role="button"') >= 0;
+out.pill_actionHasTabindex = out.pill_action.indexOf('tabindex="0"') >= 0;
+out.pill_actionHasId = out.pill_action.indexOf('data-juneau-action="ack"') >= 0;
+out.pill_noActionNoRole = out.pill_display.indexOf('role=') < 0 && out.pill_display.indexOf('data-juneau-action') < 0;
+// No selection/toggle protocol ever (B5/N1-fold).
+out.pill_noSelect = (out.pill_display + out.pill_action).indexOf('aria-pressed') < 0
+	&& (out.pill_display + out.pill_action).indexOf('data-juneau-pill-select') < 0;
+out.pill_blank = pillHtml(null, { field: 'state' });
+out.pill_empty = pillHtml('', { field: 'state' });
+// Hostile label/field/action are escaped (display facet returns an escaped string, no innerHTML).
+out.pill_hostileLabel = pillHtml('<img src=x onerror=alert(1)>', { field: 'state' });
+out.pill_hostileField = pillHtml('open', { field: '"><b>' });
+out.pill_hostileAction = pillHtml('open', { field: 'state', action: '"><script>alert(1)</script>' });
+out.pill_hostileScript = String(out.pill_hostileLabel + out.pill_hostileField + out.pill_hostileAction)
+	.toLowerCase().indexOf('<script') >= 0;
+// The hostile label is escaped to text (&lt;img ...&gt;), so no raw <img tag survives into the markup.
+out.pill_hostileEscaped = String(out.pill_hostileLabel).indexOf('&lt;img') >= 0
+	&& String(out.pill_hostileLabel).indexOf('<img') < 0;
+// pill is NOT a frozen built-in (cell-path only, k2/B3): resolveSinkRenderer must not find it.
+out.pill_notFrozen = NS.resolveSinkRenderer('pill') == null;
+out.pill_notInFrozenIds = (NS._render.frozenBuiltinIds || []).indexOf('pill') < 0;
+
 const builtinTag = NS.resolveSinkRenderer('tag');
 NS.registerRenderer('tag', { display: function () { return '<img src=x onerror=alert(1)>'; } });
 out.freeze_cellHonorsOverride = String(NS.resolveRenderer('tag').display()).indexOf('<img') >= 0;

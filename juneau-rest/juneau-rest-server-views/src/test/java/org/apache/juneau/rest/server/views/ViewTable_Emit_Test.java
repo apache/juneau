@@ -225,4 +225,26 @@ class ViewTable_Emit_Test extends TestBase {
 		var html = Html.of(ViewTable.of(view()));
 		assertFalse(html.contains("data-juneau-saved-views"), html);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// data-juneau-layout="wide" full-real-estate stamp (TODO-445n Goal 1 / N2 A) — the ONE stamp node is the wrapper
+	// <div>, never the <table>, .jc-card, or .jc-main (ViewTable emits none of those classes).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_layoutWide_stampsWrapperDiv() {
+		var html = Html.of(ViewTable.of(view()));
+		assertTrue(html.contains("data-juneau-layout=\"wide\""), html);
+		assertEquals("data-juneau-layout", ViewTable.LAYOUT_ATTR);
+		assertEquals("wide", ViewTable.LAYOUT_WIDE);
+		// The wrapper <div> opens the emitted markup; the stamp rides it, not the <table>.
+		assertTrue(html.startsWith("<div"), html);
+		assertFalse(html.contains("<table id=\"releases\" data-juneau-view=\"releases\" data-juneau-layout"), html);
+	}
+
+	@Test void f02_layoutWide_notStampedOnCardOrMain() {
+		// ViewTable emits neither .jc-card nor .jc-main; those are consumer chrome. The stamp must not synthesize them.
+		var html = Html.of(ViewTable.of(view()));
+		assertFalse(html.contains("jc-card"), html);
+		assertFalse(html.contains("jc-main"), html);
+	}
 }

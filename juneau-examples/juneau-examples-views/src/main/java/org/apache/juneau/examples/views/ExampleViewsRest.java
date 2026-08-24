@@ -229,7 +229,12 @@ public class ExampleViewsRest extends BasicRestServlet {
 				Column.of("id").title("Id"),
 				Column.of("severity").title("Severity").render("tag:status"),
 				Column.of("title").title("Title"),
-				Column.of(COL_STATUS).title("Status"))
+				// An action-bound status pill: the chip themes via .tag.state.<value> (generic "state" domain, not
+				// an IRS probe vocabulary) and clicking (or Enter/Space on) it dispatches the "ack" RowAction through
+				// the same confirm/dialog handler the row-action menu uses - proving pill dispatch is NOT gated on a
+				// row-detail template (this view has both details AND rowActions).
+				Column.of(COL_STATUS).title("Status")
+					.render(Render.pill().meta("field", "state").meta("action", "ack")))
 			.rowActions(
 				// "ack" is a present=dialog action: clicking it fetches the form envelope (ackForm below), paints a
 				// typed input form, and submits to the POST endpoint on confirm.  The form carries a nested

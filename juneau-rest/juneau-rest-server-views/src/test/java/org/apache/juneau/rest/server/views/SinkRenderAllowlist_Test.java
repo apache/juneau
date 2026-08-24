@@ -73,6 +73,14 @@ class SinkRenderAllowlist_Test extends TestBase {
 		assertTrue(expected.contains("tag"));
 	}
 
+	@Test void a08_pillIsNotABuiltinFillSink_thisSlice() {
+		// TODO-445k is cell-path only: "pill" must NOT join the fill-sink allowlist and BUILTIN_IDS stays 10.
+		assertEquals(10, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertFalse(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must not be a fill-sink built-in");
+		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed("pill", null));
+		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("pill"));
+	}
+
 	@Test void a07_servingPath_detailFieldUnknownIdFailsViewTableOf() {
 		var v = ViewDef.create("x").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
 			.columns(Column.of("name"))

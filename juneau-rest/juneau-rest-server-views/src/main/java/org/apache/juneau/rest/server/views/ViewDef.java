@@ -432,11 +432,44 @@ public class ViewDef {
 		if (serverValues != null)
 			serverValues.validate();
 		if (columns != null) {
+			var actionIds = new HashSet<String>();
+			if (rowActions != null)
+				for (var a : rowActions)
+					if (a != null && a.id != null)
+						actionIds.add(a.id);
 			for (var c : columns) {
-				if (c != null && c.render != null && c.render.popover != null)
-					c.render.popover.validate();
+				if (c != null && c.render != null) {
+					if (c.render.popover != null)
+						c.render.popover.validate();
+					if ("pill".equals(c.render.id))
+						validatePill(c.render, actionIds);
+				}
 			}
 		}
+	}
+
+	/** The four dot tones the {@code pill} renderer understands ({@code info} is intentionally excluded). */
+	private static final Set<String> PILL_TONES = Set.of("ok", "warn", "exceeds", "neutral");
+
+	/**
+	 * Serving-path fail-closed check for a {@code pill} column: an {@code meta.action} must name a declared
+	 * {@link #rowActions} id, an {@code meta.tone} (when present) must be one of {@link #PILL_TONES}, and an
+	 * action-bound pill cannot also carry a {@code render.popover} (two competing click affordances on one cell).
+	 */
+	private static void validatePill(Render render, Set<String> actionIds) {
+		var meta = render.meta;
+		if (meta == null)
+			return;
+		var action = meta.get("action");
+		if (action != null && ! action.isBlank()) {
+			if (! actionIds.contains(action))
+				throw iaex("Pill column action '%s' is not declared on the view's rowActions.", action);
+			if (render.popover != null)
+				throw iaex("Pill column action '%s' cannot also set render.popover on the same cell.", action);
+		}
+		var tone = meta.get("tone");
+		if (tone != null && ! tone.isBlank() && ! PILL_TONES.contains(tone))
+			throw iaex("Pill column tone '%s' must be one of ok|warn|exceeds|neutral.", tone);
 	}
 
 	/**

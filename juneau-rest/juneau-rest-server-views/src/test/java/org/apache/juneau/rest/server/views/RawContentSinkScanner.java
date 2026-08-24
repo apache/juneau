@@ -99,13 +99,14 @@ final class RawContentSinkScanner {
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "b.innerHTML = markup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
 		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-cards.js", "btn.innerHTML = glyph;")
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-cards.js", "btn.innerHTML = glyph;"),
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
 	);
 
 	/** Shipped widget JS assets scanned by {@link #scanShippedJs(Path)}. */
 	private static final List<String> SHIPPED_JS_FILES = List.of(
 		"juneau-config.js", "juneau-pages.js", "juneau-icons.js",
-		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js", "juneau-cards.js"
+		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js", "juneau-cards.js", "juneau-chrome.js"
 	);
 
 	record AllowedJsSink(String relativePath, String snippet) {}

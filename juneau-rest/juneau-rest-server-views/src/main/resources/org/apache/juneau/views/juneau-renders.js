@@ -371,6 +371,40 @@
 		return Object.hasOwn(frozenBuiltins, id) ? frozenBuiltins[id] : null;
 	}
 
+	// --- pill renderer (TODO-445k) -------------------------------------------------------------------------------
+	// A status chip = leading dot + label, themed by the same shared `.tag.<domain>.<value>` classes the `tag`
+	// renderer emits (so consumer palettes theme pills for free) plus one structural `.jc-pill-dot` span.  Display
+	// only by default; `meta.action` (a ViewDef.rowActions id) opts into action-binding: the renderer stamps
+	// `role="button" tabindex="0" data-juneau-action="<id>"` and the EXISTING table-level row-action handler
+	// (juneau-views.js) dispatches - no handler is bound here, no second action protocol.
+	//
+	// DELIBERATELY registered on the cell-render path ONLY and NOT added to BUILTIN_RENDER_IDS / frozenBuiltins:
+	// `pill` is not a fill-sink built-in this slice (k2 / review B3), so `resolveSinkRenderer("pill")` stays null
+	// and the frozen id set stays the current 10.  The display facet returns an escaped string (like `tag`); it
+	// never assigns innerHTML.
+	registerRenderer("pill", {
+		display: function (cellData, rowData, meta) {
+			if (cellData == null || cellData === "") return "";
+			const value = String(cellData);
+			const domain = meta && meta.field ? String(meta.field) : "";
+			const domainToken = normalizeTagToken(domain);
+			const valueToken = normalizeTagToken(value);
+			const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
+			// Tone class only for the three views progress tokens; neutral/absent/unknown inherit currentColor.
+			const tone = meta && meta.tone ? String(meta.tone) : "";
+			const toneClass = (tone === "ok" || tone === "warn" || tone === "exceeds") ? " is-" + tone : "";
+			const dot = (meta && meta.dot === "off")
+				? ""
+				: '<span class="jc-pill-dot' + toneClass + '" aria-hidden="true"></span>';
+			const action = meta && meta.action ? String(meta.action) : "";
+			const actionAttrs = action
+				? ' role="button" tabindex="0" data-juneau-action="' + escAttr(action) + '"'
+				: "";
+			return '<span class="' + escAttr(cls) + '" data-juneau-pill' + actionAttrs + '>' + dot + escHtml(value) + "</span>";
+		},
+		"class": function () { return "pill-cell"; }
+	});
+
 	// ==================================================================================================================
 	// TIMESTAMP POPUP  (datetime-renderer-owned; 445c CellPopover can generalize later)
 	// Two-line floating box: local browser time + California.  Built with createElement/textContent only — never
