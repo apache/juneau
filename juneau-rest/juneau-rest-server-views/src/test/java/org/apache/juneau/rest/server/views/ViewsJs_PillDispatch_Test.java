@@ -191,4 +191,39 @@ class ViewsJs_PillDispatch_Test extends TestBase {
 	@Test void b06_pillDispatchesEvenWhenDetailsExpanderAlsoWired() {
 		assertEquals(true, report().get("withDetails_fetchIssued"));
 	}
+
+	/**
+	 * Selection stays the checkbox protocol.  With {@code initSelection} wired on the same table, activating a pill by
+	 * click, {@code Enter} or {@code Space} leaves {@code selectionState} untouched - a pill is a row action or pure
+	 * presentation, never a selection affordance.  The checkbox assertion at the end is the positive control that
+	 * makes the zeroes meaningful.
+	 */
+	@Test void b07_pillActivationNeverTogglesSelection() {
+		var r = report();
+		assertEquals(0, r.get("selection_afterPillClick"));
+		assertEquals(0, r.get("selection_afterPillKeys"));
+		assertEquals(0, r.get("selection_afterDisplayOnlyPillClick"));
+		assertEquals(1, r.get("selection_afterCheckboxChange"));
+		assertEquals(true, r.get("selection_checkboxSelectedR1"));
+	}
+
+	/**
+	 * {@code initSelection} listens for {@code change} on the two checkbox classes and nothing else: no pill branch,
+	 * no {@code data-juneau-pill-select} attribute, no click path.  Source-shape half of the lock above, so a
+	 * re-grown select-pill protocol fails even if it happened to leave {@code selectionState} alone in the probe.
+	 */
+	@Test void a05_sourceShape_initSelectionIsCheckboxOnly() throws Exception {
+		var body = viewsJs();
+		assertFalse(body.contains("data-juneau-pill-select"), "No pill-select protocol may exist.");
+		var start = body.indexOf("function initSelection(");
+		assertTrue(start > 0, body);
+		var fn = body.substring(start, body.indexOf("\n\t/**", start));
+		assertTrue(fn.contains("addEventListener(\"change\""), fn);
+		assertFalse(fn.contains("addEventListener(\"click\""), fn);
+		assertFalse(fn.contains("addEventListener(\"keydown\""), fn);
+		assertFalse(fn.contains("pill"), fn);
+		assertFalse(fn.contains("data-juneau-action"), fn);
+		assertTrue(fn.contains(".juneau-view-select-checkbox"), fn);
+		assertTrue(fn.contains(".juneau-view-select-all-checkbox"), fn);
+	}
 }

@@ -190,7 +190,7 @@ public class AppHeaderTable {
 		return div(kids.toArray()).class_("jc-brand");
 	}
 
-	private static HtmlElement emitAction(HeaderAction a, String headerId) {
+	private static HtmlElement<?> emitAction(HeaderAction a, String headerId) {
 		var behavior = a.behavior.name().toLowerCase(Locale.ROOT);
 		var inner = new ArrayList<>();
 		inner.add(span().class_("jc-icon").attr("aria-hidden", "true"));
@@ -249,7 +249,7 @@ public class AppHeaderTable {
 		return Integer.toString(count);
 	}
 
-	private static HtmlElement emitAvatar(AvatarChip avatar, String headerId) {
+	private static HtmlElement<?> emitAvatar(AvatarChip avatar, String headerId) {
 		var cls = new StringBuilder("jc-avatar");
 		if (avatar.status != null)
 			cls.append(" jc-avatar-status-").append(avatar.status.name().toLowerCase(Locale.ROOT));
@@ -299,7 +299,7 @@ public class AppHeaderTable {
 	}
 
 	/** Emits one menu row: a divider separator, a link {@code <a href>}, or a SAFE host-dispatch {@code <button>}. */
-	private static HtmlElement emitMenuItem(MenuItem mi) {
+	private static HtmlElement<?> emitMenuItem(MenuItem mi) {
 		if (mi.isDivider())
 			return div().class_("jc-menu-divider").attr("role", "separator");
 

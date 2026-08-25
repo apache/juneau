@@ -63,6 +63,20 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 		assertTrue(body.contains("_layerListenersBound"), body);
 	}
 
+	/**
+	 * The cap is 2 and is <b>not</b> a deferred promise.  The stale "Unlimited dialog depth is 10.0." comment
+	 * advertised a follow-on that is not coming: the answer to "I need more depth" is a sectioned dialog, not a
+	 * deeper stack.  Asserting the removed sentence alongside the unchanged value is what keeps a future reader from
+	 * re-introducing either half.
+	 */
+	@Test void a01b_sourceShape_depthCapIsTwoAndPromisesNoUnlimitedFollowOn() throws Exception {
+		var body = viewsJs();
+		assertTrue(body.contains("const MAX_DIALOG_DEPTH = 2;"), "the cap must still be exactly 2");
+		assertFalse(body.contains("Unlimited dialog depth"),
+			"the unlimited-dialog-depth follow-on comment must be gone, not re-worded");
+		assertFalse(body.contains("10.0"), "no 10.0 follow-on promise anywhere in the runtime");
+	}
+
 	@Test void a02_sourceShape_timestampIsNotALayerStackClient() throws Exception {
 		// SF-3: the timestamp popup stays a plain show/hide element - it must never become a pushLayer client.
 		var body = viewsJs();

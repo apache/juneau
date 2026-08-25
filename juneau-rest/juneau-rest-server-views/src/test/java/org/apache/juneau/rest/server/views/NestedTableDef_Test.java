@@ -19,13 +19,13 @@ package org.apache.juneau.rest.server.views;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
  * {@link NestedTableDef#validate()} matrix: happy path, parent-scope param grammar / reserved keys, the nested
  * {@code dataUrl} rule ({@code servlet:} and relative allowed; {@code ://} / {@code //} / {@code javascript:} /
- * {@code data:} / {@code ..} rejected), depth-1 enforcement, and the read-only ({@code g4}) forbids.
+ * {@code data:} / {@code ..} rejected), the {@link NestedTableDef#MAX_DEPTH} cap with path-scoped cycle detection,
+ * and the remaining parent-only forbid ({@code columnConfig}).
  */
 class NestedTableDef_Test extends TestBase {
 
@@ -43,8 +43,9 @@ class NestedTableDef_Test extends TestBase {
 		NestedTableDef.create(nestedView()).validate();
 	}
 
-	@Test void a02_contractVersion_isOne_andIndependent() {
-		assertEquals("1", NestedTableDef.CONTRACT_VERSION);
+	@Test void a02_contractVersion_isTwo_andIndependent() {
+		assertEquals("2", NestedTableDef.CONTRACT_VERSION);
+		// Per-widget versioning: widening the nested shell must not drag the view/detail contracts along.
 		assertEquals("4", ViewDef.CONTRACT_VERSION);
 		assertEquals("1", RowDetailDef.CONTRACT_VERSION);
 	}
@@ -128,32 +129,25 @@ class NestedTableDef_Test extends TestBase {
 			() -> NestedTableDef.create(nestedView("/data/../secrets/events")).validate());
 	}
 
-	@Test void a17_depthOneOnly_nestedDetailsRejected() {
-		var deep = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
-			.columns(Column.of("name"))
-			.details(RowDetailDef.create().endpoint("/data/events/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner"))))
-			.build();
-		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(deep).validate());
-		assertTrue(e.getMessage().contains("depth"), e::getMessage);
+	@Test void a17_nestedDetailSections_permitted() {
+		// A nested view may declare its own detail sections, as long as none of them is another nested table.
+		NestedTableDef.create(withDetails("events", null)).validate();
 	}
 
-	@Test void a18_readOnly_rowActionsRejected() {
-		var v = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
+	@Test void a18_rowActions_permitted() {
+		NestedTableDef.create(ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
 			.columns(Column.of("name"))
 			.rowActions(RowAction.create("ack").endpoint("/x").method(RowAction.Method.POST))
-			.build();
-		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(v).validate());
-		assertTrue(e.getMessage().contains("read-only"), e::getMessage);
+			.build()).validate();
 	}
 
-	@Test void a19_readOnly_columnConfigRejected() {
+	@Test void a19_columnConfigRejected() {
 		var v = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
 			.columns(Column.of("name"))
 			.columnConfig(ColumnConfig.create())
 			.build();
 		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(v).validate());
-		assertTrue(e.getMessage().contains("read-only"), e::getMessage);
+		assertTrue(e.getMessage().contains("columnConfig"), e::getMessage);
 	}
 
 	@Test void a20_isSafeNestedDataUrl_matrix() {
@@ -167,5 +161,99 @@ class NestedTableDef_Test extends TestBase {
 		assertFalse(NestedTableDef.isSafeNestedDataUrl("/data/../x"));
 		assertFalse(NestedTableDef.isSafeNestedDataUrl("  "));
 		assertFalse(NestedTableDef.isSafeNestedDataUrl(null));
+	}
+
+	/**
+	 * A view with one detail section whose nested table is {@code inner} (or which is table-less when
+	 * {@code inner} is <jk>null</jk>).
+	 */
+	private static ViewDef withDetails(String id, NestedTableDef inner) {
+		var section = DetailSection.create("info", "Info").fields(DetailField.of(id + "Owner"));
+		if (inner != null)
+			section.table(inner);
+		return ViewDef.create(id).dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/" + id)
+			.columns(Column.of("name"))
+			.details(RowDetailDef.create().endpoint("/data/" + id + "/{id}").sections(section))
+			.build();
+	}
+
+	@Test void b01_maxDepth_isTwo() {
+		assertEquals(2, NestedTableDef.MAX_DEPTH);
+	}
+
+	@Test void b02_depthTwo_passes() {
+		// Root table = depth 1, this nested table = depth 2 - the cap, not a violation.
+		NestedTableDef.create(nestedView()).validate();
+	}
+
+	@Test void b03_depthThree_fails() {
+		// A nested view that itself declares a nested table would put that table at depth 3.
+		var leaf = NestedTableDef.create(ViewDef.create("hosts").dataMode(ViewDef.DataMode.CLIENT)
+			.dataUrl("/data/hosts").columns(Column.of("name")).build());
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> NestedTableDef.create(withDetails("events", leaf)).validate());
+		assertTrue(e.getMessage().contains("depth"), e::getMessage);
+	}
+
+	@Test void b04_noAuthorMaxDepthField() {
+		// Topology IS depth-2: there must be no author-visible knob to declare or clamp it.
+		for (var f : NestedTableDef.class.getFields())
+			assertNotEquals("maxDepth", f.getName(), "NestedTableDef must not expose an author maxDepth field");
+		for (var m : NestedTableDef.class.getMethods())
+			assertNotEquals("maxDepth", m.getName(), "NestedTableDef must not expose a maxDepth setter");
+	}
+
+	@Test void b05_noBulkMutateField() {
+		// Bulk mutation stays on the parent table id only.
+		for (var f : NestedTableDef.class.getFields())
+			assertNotEquals("bulkMutate", f.getName(), "bulk mutation is parent-table only");
+		for (var m : NestedTableDef.class.getMethods())
+			assertNotEquals("bulkMutate", m.getName(), "bulk mutation is parent-table only");
+	}
+
+	@Test void b06_selfCycle_fails() {
+		// A nested view whose own detail section points back at itself.
+		var self = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
+			.columns(Column.of("name")).build();
+		var back = NestedTableDef.create(self);
+		self.details(RowDetailDef.create().endpoint("/data/events/{id}")
+			.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner")).table(back)));
+		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(self).validate());
+	}
+
+	@Test void b07_mutualCycle_fails() {
+		// a -> b -> a.
+		var a = ViewDef.create("a").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/a")
+			.columns(Column.of("name")).build();
+		var b = ViewDef.create("b").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/b")
+			.columns(Column.of("name")).build();
+		a.details(RowDetailDef.create().endpoint("/data/a/{id}")
+			.sections(DetailSection.create("sa", "A").fields(DetailField.of("aOwner")).table(NestedTableDef.create(b))));
+		b.details(RowDetailDef.create().endpoint("/data/b/{id}")
+			.sections(DetailSection.create("sb", "B").fields(DetailField.of("bOwner")).table(NestedTableDef.create(a))));
+		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(a).validate());
+		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(b).validate());
+	}
+
+	@Test void b08_siblingDag_reusingOneViewDefInstance_passes() {
+		// Cycle detection is PATH-scoped (pushed on descent, popped on unwind), not a global visited set: the same
+		// nested ViewDef instance reached from two different parents is a legal DAG, not a cycle.
+		var shared = nestedView();
+		var p1 = withDetails("alerts", NestedTableDef.create(shared));
+		var p2 = withDetails("hosts", NestedTableDef.create(shared));
+		p1.validate();
+		p2.validate();
+		p2.validate();
+		p1.validate();
+	}
+
+	@Test void b09_selection_isCarriedAndCascadesIntoValidate() {
+		var selection = SelectionDef.create("id");
+		var nt = NestedTableDef.create(nestedView()).selection(selection);
+		assertSame(selection, nt.selection);
+		nt.validate();
+		// The whole nested path is still validated with a selection present (it is not a short-circuit).
+		var bad = NestedTableDef.create(nestedView("https://evil/data")).selection(selection);
+		assertThrows(IllegalArgumentException.class, bad::validate);
 	}
 }

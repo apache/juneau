@@ -31,6 +31,15 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code data-juneau-bar-slot} region {@link PageTable} emits as a <b>trailing sibling of {@code .jc-subtab-bar}</b>
  * (concept #9), plus a data-only sidecar for its dynamic counts.
  *
+ * <h5 class='section'>Two named hosts, one emitter:</h5>
+ * <p>
+ * {@link PageDef#barSlot} is the page host: {@link #of(BarSlot)} + {@link #sidecar(BarSlot)}, emitted once per page
+ * with a document-unique sidecar {@code id}.  {@link RowDetailDef#barSlot} is the row-detail host:
+ * {@link #detailRegion(BarSlot, String)} + {@link #detailSidecar(BarSlot)}, emitted into the row-expand
+ * {@code <template>} and therefore cloned per expanded row &mdash; so its sidecar ships {@code id}-less and the
+ * runtime mints a row-qualified identity after cloning.  Sharing the bean and the emitter is the point; the hosts and
+ * their placements stay distinct.
+ *
  * <p>
  * The bar beans live in {@code juneau-rest-server-widgets}; this emitter is the only place that turns them into markup.
  * It calls {@link BarSlot#validate()} on entry.  Every human string is emitted as an entity-escaped html5 text child.
@@ -51,6 +60,35 @@ public class BarSlotTable {
 
 	/** The badge id namespace for bar badges ({@code bar:<id>}), so header and bar counts never collide. */
 	public static final String BADGE_NS = "bar";
+
+	/**
+	 * Attribute naming the markup anchor a <b>detail-hosted</b> region was emitted against, so the runtime never has to
+	 * guess from position: {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE}.  Absent on a page-level region.
+	 */
+	public static final String BAR_SLOT_ANCHOR_ATTR = "data-juneau-bar-slot-anchor";
+
+	/**
+	 * Anchor for a detail with <b>two or more</b> sections: the region is the detail {@code <template>}'s last direct
+	 * child, and the runtime moves it to the trailing position of the ribbon it builds from those sections.
+	 */
+	public static final String ANCHOR_RIBBON = "ribbon";
+
+	/**
+	 * Anchor for a <b>single-section</b> detail: no ribbon exists and none is synthesized, so the region is emitted
+	 * inside that lone section as the immediate next sibling of its
+	 * {@code h2.juneau-view-detail-section-title}, and the runtime leaves it there.
+	 */
+	public static final String ANCHOR_SECTION_TITLE = "section-title";
+
+	/** Class added to a detail-hosted region, so CSS and the runtime address it by name rather than by position. */
+	public static final String DETAIL_SLOT_CLASS = "juneau-view-detail-bar-slot";
+
+	/**
+	 * Attribute finding a detail-hosted region's {@code id}-less sidecar inside a cloned panel, exactly as
+	 * {@link ViewTable#NESTED_META_ATTR} finds a nested table's: a {@code <template>} clone cannot carry a
+	 * document-unique {@code id}, so the runtime mints one per expanded row.
+	 */
+	public static final String BAR_META_ATTR = "data-juneau-bar-meta";
 
 	private BarSlotTable() {}
 
@@ -76,12 +114,52 @@ public class BarSlotTable {
 	}
 
 	/**
+	 * Builds the {@code data-juneau-bar-slot} region for a bar slot hosted on the <b>row-detail ribbon</b>.
+	 *
+	 * <p>
+	 * Same region as {@link #of(BarSlot)}, plus {@link #DETAIL_SLOT_CLASS} and the declared
+	 * {@link #BAR_SLOT_ANCHOR_ATTR}.  The marker still carries the <b>author</b> {@link BarSlot#id}; the runtime
+	 * rewrites it to a row-qualified suffix once the enclosing {@code <template>} has been cloned, since one document
+	 * can hold one such region per expanded row.
+	 *
+	 * @param bar The built bar slot.  Must not be <jk>null</jk>.
+	 * @param anchor {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE}.
+	 * @return A new {@link Div} carrying the detail-hosted region.
+	 * @throws IllegalArgumentException If {@code bar} is <jk>null</jk> or fails {@link BarSlot#validate()}.
+	 */
+	public static Div detailRegion(BarSlot bar, String anchor) {
+		var region = of(bar);
+		region.attr("class", "jc-bar-slot " + DETAIL_SLOT_CLASS);
+		region.attr(BAR_SLOT_ANCHOR_ATTR, anchor);
+		return region;
+	}
+
+	/**
 	 * Builds the bar slot's data-only sidecar carrying its initial dynamic counts.
 	 *
 	 * @param bar The built bar slot.  Must not be <jk>null</jk>.
 	 * @return The {@code <script type="application/json">} sidecar.
 	 */
 	public static Script sidecar(BarSlot bar) {
+		return sidecar(bar, true);
+	}
+
+	/**
+	 * Builds the same data-only sidecar {@code id}-less, found by {@link #BAR_META_ATTR} instead.
+	 *
+	 * <p>
+	 * For a detail-hosted slot only: the sidecar rides the row-expand {@code <template>}, so a baked-in
+	 * {@code id="juneau-bar:<authorId>"} would collide across simultaneously-expanded rows.  The runtime mints the
+	 * per-row {@code id} after cloning, matching the nested-table VIEW_META sidecar's contract.
+	 *
+	 * @param bar The built bar slot.  Must not be <jk>null</jk>.
+	 * @return The {@code id}-less {@code <script type="application/json">} sidecar.
+	 */
+	public static Script detailSidecar(BarSlot bar) {
+		return sidecar(bar, false);
+	}
+
+	private static Script sidecar(BarSlot bar, boolean withId) {
 		if (bar == null)
 			throw iaex("bar must not be null.");
 		var badges = new LinkedHashMap<String,Integer>();
@@ -93,10 +171,15 @@ public class BarSlotTable {
 		meta.put("contractVersion", BarSlot.CONTRACT_VERSION);
 		meta.put("badges", badges);
 		var json = escapeForScript(Json.of(meta));
-		return script().type("application/json").id(SIDECAR_ID_PREFIX + bar.id).text(rawText(json));
+		var s = script().type("application/json").text(rawText(json));
+		if (withId)
+			s.id(SIDECAR_ID_PREFIX + bar.id);
+		else
+			s.attr(BAR_META_ATTR, bar.id);
+		return s;
 	}
 
-	private static HtmlElement emitWidget(BarWidget w) {
+	private static HtmlElement<?> emitWidget(BarWidget w) {
 		if (w instanceof BarText t)
 			return span(t.text).class_("jc-bar-text").attr(BAR_WIDGET_MARKER, t.id);
 		if (w instanceof BarBadge b) {

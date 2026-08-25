@@ -17,10 +17,14 @@
 
 /*
  * contract-version.cjs - always-on Node harness for the dialog-form contract-version handshake (TODO-445h, h5):
- * a form-bearing modal opens ONLY when BOTH the modal top-level and the nested form contractVersion equal the
- * baked-in "1"; a wrong or missing version on either is a visible refusal and the dialog does not open.  A
+ * a form-bearing modal opens ONLY when BOTH the modal top-level and the nested form contractVersion equal the ONE
+ * baked-in literal; a wrong or missing version on either is a visible refusal and the dialog does not open.  A
  * confirm-only envelope (no form) - whether fetched or a local blank-form-token prompt - stays UNVERSIONED and
  * always opens.
+ *
+ * The three constants (ModalDef.CONTRACT_VERSION, FormDef.CONTRACT_VERSION, and the runtime literal) move in
+ * lockstep, so a HALF-DONE bump is its own case here: a modal still stamped the previous version carrying a form
+ * stamped the new one must produce the visible "dialog-form contract mismatch" refusal rather than opening.
  *
  *   Usage:  node contract-version.cjs <juneau-renders.js> <juneau-views.js>
  */
@@ -45,21 +49,29 @@ function drain() { while (I.topLayer()) I.popLayer(); }
 function flush() { return new Promise(function (r) { let n = 0; (function tick() { if (n++ >= 6) return r(); setTimeout(tick, 0); })(); }); }
 function serve(body, opts) { env.setFetch(function () { return Promise.resolve(jsonResponse(body, opts)); }); }
 function refusalState(tr) { const b = tr.querySelector('[data-testid="action-outcome"]'); return b ? b.getAttribute('data-state') : null; }
+function refusalText(tr) { const b = tr.querySelector('[data-testid="action-outcome"]'); return b ? String(b.textContent || '') : ''; }
 
-const FORM = { contractVersion: '1', fields: [{ name: 'notes', type: 'textarea', label: 'Notes' }] };
+// The version the runtime under test bakes in, read back out of the bundle so this harness cannot drift from it.
+const CURRENT = I.JUNEAU_DIALOG_FORM_CONTRACT_VERSION;
+const STALE = '1';
+out.currentVersion = CURRENT;
+out.currentVersionIsNotStale = CURRENT !== STALE;
+
+const FIELDS = [{ name: 'notes', type: 'textarea', label: 'Notes' }];
+const FORM = { contractVersion: CURRENT, fields: FIELDS };
 
 (async function main() {
-	// Case 1: form-bearing, BOTH versions "1" -> the dialog opens.
-	serve({ contractVersion: '1', title: 'Ack', form: FORM });
+	// Case 1: form-bearing, BOTH versions current -> the dialog opens.
+	serve({ contractVersion: CURRENT, title: 'Ack', form: FORM });
 	const tr1 = env.el('tr');
 	I.openActionDialog({ id: 'ack', label: 'Ack', form: '/data/x/ack-form' }, table, tr1, {});
 	await flush();
-	out.bothV1_opens = I.dialogLayerCount() === 1;
-	out.bothV1_noRefusal = refusalState(tr1) == null;
+	out.bothCurrent_opens = I.dialogLayerCount() === 1;
+	out.bothCurrent_noRefusal = refusalState(tr1) == null;
 	drain();
 
 	// Case 2: form-bearing, WRONG modal version -> visible refusal, no open.
-	serve({ contractVersion: '2', title: 'Ack', form: FORM });
+	serve({ contractVersion: CURRENT + '9', title: 'Ack', form: FORM });
 	const tr2 = env.el('tr');
 	I.openActionDialog({ id: 'ack', label: 'Ack', form: '/data/x/ack-form' }, table, tr2, {});
 	await flush();
@@ -68,12 +80,39 @@ const FORM = { contractVersion: '1', fields: [{ name: 'notes', type: 'textarea',
 	drain();
 
 	// Case 3: form-bearing, MISSING nested-form version -> visible refusal, no open.
-	serve({ contractVersion: '1', title: 'Ack', form: { fields: FORM.fields } });
+	serve({ contractVersion: CURRENT, title: 'Ack', form: { fields: FIELDS } });
 	const tr3 = env.el('tr');
 	I.openActionDialog({ id: 'ack', label: 'Ack', form: '/data/x/ack-form' }, table, tr3, {});
 	await flush();
 	out.formVersionMissing_noOpen = I.dialogLayerCount() === 0;
 	out.formVersionMissing_refusal = refusalState(tr3) === 'refusal';
+	drain();
+
+	// Case 3b: the HALF-DONE lockstep bump - a modal still stamped the stale version carrying a form stamped the
+	// current one.  This is what shipping only two of the three constants looks like on the wire, and it must be the
+	// visible "dialog-form contract mismatch" refusal rather than an opened dialog.
+	serve({ contractVersion: STALE, title: 'Ack', form: { contractVersion: CURRENT, fields: FIELDS } });
+	const tr3b = env.el('tr');
+	I.openActionDialog({ id: 'ack', label: 'Ack', form: '/data/x/ack-form' }, table, tr3b, {});
+	await flush();
+	out.staleModalCurrentForm_noOpen = I.dialogLayerCount() === 0;
+	out.staleModalCurrentForm_refusal = refusalState(tr3b) === 'refusal';
+	out.staleModalCurrentForm_message = refusalText(tr3b);
+	out.staleModalCurrentForm_namesTheMismatch = refusalText(tr3b).indexOf('dialog-form contract mismatch') >= 0;
+	// The message quotes all three so an operator can see which one is behind.
+	out.staleModalCurrentForm_quotesAllThree = refusalText(tr3b).indexOf("modal='" + STALE + "'") >= 0
+		&& refusalText(tr3b).indexOf("form='" + CURRENT + "'") >= 0
+		&& refusalText(tr3b).indexOf("runtime='" + CURRENT + "'") >= 0;
+	drain();
+
+	// Case 3c: the mirror image - a form left on the stale version under a current modal.  Both halves of the
+	// handshake are checked, so neither direction can slip through.
+	serve({ contractVersion: CURRENT, title: 'Ack', form: { contractVersion: STALE, fields: FIELDS } });
+	const tr3c = env.el('tr');
+	I.openActionDialog({ id: 'ack', label: 'Ack', form: '/data/x/ack-form' }, table, tr3c, {});
+	await flush();
+	out.currentModalStaleForm_noOpen = I.dialogLayerCount() === 0;
+	out.currentModalStaleForm_refusal = refusalState(tr3c) === 'refusal';
 	drain();
 
 	// Case 4: confirm-only FETCHED envelope (no form) -> unversioned, opens even with no contractVersion.

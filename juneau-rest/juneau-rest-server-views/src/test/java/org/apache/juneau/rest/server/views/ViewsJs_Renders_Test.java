@@ -262,11 +262,12 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("freeze_cellHonorsOverride"));
 		assertEquals(true, r.get("freeze_sinkStillBuiltin"));
 		assertEquals(true, r.get("freeze_sinkDisplaySafe"));
-		assertEquals("bool,date,datetime,decimal,json,linked,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
+		// 11 ids, lockstep with SinkRenderAllowlist.BUILTIN_IDS.  `pill` is the hand-registered display-only variant.
+		assertEquals("bool,date,datetime,decimal,json,linked,pill,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// TODO-445k: pill cell renderer (display-only by default; opt-in action-binding; cell-path only)
+	// TODO-445k: pill cell renderer (display-only by default; opt-in action-binding on the cell host only)
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void d01_pill_displayOnlyChip_dotAndRawValue() {
@@ -276,7 +277,8 @@ class ViewsJs_Renders_Test extends TestBase {
 			"<span class=\"jc-pill tag state ok\" data-juneau-pill>"
 				+ "<span class=\"jc-pill-dot\" aria-hidden=\"true\"></span>ok</span>",
 			r.get("pill_display"));
-		assertEquals("pill-cell", r.get("pill_class"));
+		// `juneau-cell-wrap` is the table's clip/ellipsis opt-out: a pill is a chip affordance, never ellipsised text.
+		assertEquals("pill-cell juneau-cell-wrap", r.get("pill_class"));
 	}
 
 	@Test void d02_pill_dotOffDropsTheDot() {
@@ -286,14 +288,38 @@ class ViewsJs_Renders_Test extends TestBase {
 			r.get("pill_dotOff"));
 	}
 
-	@Test void d03_pill_toneClassOnlyForOkWarnExceeds() {
+	/**
+	 * The client half of the closed five-value status palette: the map holds exactly
+	 * {@code info|success|warning|error|neutral} and the retired v1 names emit nothing.
+	 */
+	@Test void d03_pill_toneClassIsTheFiveValuePalette() {
 		var r = report();
-		assertEquals(true, r.get("pill_toneOk"));
-		assertEquals(true, r.get("pill_toneWarn"));
-		assertEquals(true, r.get("pill_toneExceeds"));
+		assertEquals("error,info,neutral,success,warning", r.get("pill_tones"));
+		assertEquals(true, r.get("pill_toneInfo"));
+		assertEquals(true, r.get("pill_toneSuccess"));
+		assertEquals(true, r.get("pill_toneWarning"));
+		assertEquals(true, r.get("pill_toneError"));
+		// `neutral` is in-palette but deliberately classless: no semantic colour is the absence of a modifier.
 		assertEquals(true, r.get("pill_toneNeutralNoClass"));
-		assertEquals(true, r.get("pill_toneInfoNoClass"));   // info is NOT a valid tone (B7-fold)
 		assertEquals(true, r.get("pill_toneAbsentNoClass"));
+		// ok/warn/exceeds/accent were the v1 palette; they are off-palette now and must not paint anything.
+		assertEquals(true, r.get("pill_toneV1NoClass"));
+	}
+
+	/**
+	 * The palette rename must not have swept the {@code progress} renderer, whose {@code warn}/{@code exceeds} meta
+	 * are numeric THRESHOLDS that happen to share two spellings with the retired tone names.  {@code is-warn} and
+	 * {@code is-exceeds} are progress state classes and stay exactly as they were.
+	 */
+	@Test void d03b_progressThresholdsAreUnaffectedByTheToneRename() {
+		var r = report();
+		assertEquals(true, r.get("progress_warnEq"));            // meta.warn still drives is-warn
+		assertEquals(true, r.get("progress_exceedsEq"));         // meta.exceeds still drives is-exceeds
+		assertEquals(true, r.get("progress_warnEqExceeds"));     // exceeds still wins a tie
+		assertEquals(true, r.get("progress_exceedsBelowWarn"));
+		assertEquals(true, r.get("progress_units"));
+		assertEquals(true, r.get("progress_eqMaxOk"));           // and `is-ok` survives as a progress state class
+		assertEquals(true, r.get("progress_overExceeds"));
 	}
 
 	@Test void d04_pill_actionAddsRoleTabindexAndId_onlyWhenSet() {
@@ -317,9 +343,44 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("pill_hostileEscaped"));
 	}
 
-	@Test void d07_pill_isNotAFrozenBuiltin_cellPathOnly() {
+	// -----------------------------------------------------------------------------------------------------------
+	// Fill-sink pill: `pill` resolves on the sink path as a distinct, display-only variant of the cell renderer.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void d07_sinkPill_resolvesAndIsPartOfTheFrozenIdSet() {
 		var r = report();
-		assertEquals(true, r.get("pill_notFrozen"));       // resolveSinkRenderer("pill") == null
-		assertEquals(true, r.get("pill_notInFrozenIds"));  // "pill" absent from frozen id snapshot (size stays 10)
+		assertEquals(true, r.get("sinkPill_resolves"));       // resolveSinkRenderer("pill") != null
+		assertEquals(true, r.get("sinkPill_inFrozenIds"));    // "pill" is the 11th frozen id
+		// The sink variant carries the same clip/ellipsis opt-out as the cell variant.
+		assertEquals("pill-cell juneau-cell-wrap", r.get("sinkPill_class"));
+	}
+
+	@Test void d08_sinkPill_rendersTheSameChipAsADisplayOnlyCellPill() {
+		var r = report();
+		assertEquals(
+			"<span class=\"jc-pill tag state ok\" data-juneau-pill>"
+				+ "<span class=\"jc-pill-dot\" aria-hidden=\"true\"></span>ok</span>",
+			r.get("sinkPill_display"));
+		assertEquals(true, r.get("sinkPill_sameAsCellWhenDisplayOnly"));
+		assertEquals(true, r.get("sinkPill_keepsTone"));
+	}
+
+	/**
+	 * A fill sink has no {@code rowActions} in scope, so a sink pill can never be action-bound.  The server rejects
+	 * {@code meta["action"]} on the sink host outright; this pins the client's independent half - even a smuggled
+	 * action yields no {@code role}, no {@code tabindex} and no {@code data-juneau-action}, so the chip is not
+	 * keyboard-actionable and the table-level row-action handler has nothing to dispatch on.
+	 */
+	@Test void d09_sinkPill_hasNoActionAffordanceEvenWithASmuggledAction() {
+		var r = report();
+		assertEquals(true, r.get("sinkPill_noRole"));
+		assertEquals(true, r.get("sinkPill_noTabindex"));
+		assertEquals(true, r.get("sinkPill_noActionAttr"));
+		assertEquals(true, r.get("sinkPill_noHandlerAttrs"));
+	}
+
+	@Test void d10_sinkPill_isFrozenAgainstRegisterRendererOverride() {
+		var r = report();
+		assertEquals(true, r.get("sinkPill_frozenAgainstOverride"));
 	}
 }

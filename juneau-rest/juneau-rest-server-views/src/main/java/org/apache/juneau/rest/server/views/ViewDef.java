@@ -19,6 +19,8 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.rest.server.converter.*;
@@ -234,6 +236,17 @@ public class ViewDef {
 	public ServerValues serverValues;
 
 	/**
+	 * The optional at-a-glance figures strip painted above this table's toolbar; <b>not</b> a {@code VIEW_META} wire
+	 * field (omitted from {@code @BeanType}, like {@link #details}).
+	 *
+	 * <p>
+	 * Server-painted once by {@link ViewTable} and carried by its own {@link QuickStats#CONTRACT_VERSION}, so adding a
+	 * strip to a view cannot bump {@link #CONTRACT_VERSION}.  Display-only: {@link QuickStats} has no action,
+	 * endpoint, or refresh surface to emit, and it is never a {@code $FV} interpolation host.
+	 */
+	public QuickStats quickStats;
+
+	/**
 	 * The declared table-refresh polling interval, in milliseconds; omitted from the wire when unset (no polling).
 	 * Never below {@link #MIN_POLL_INTERVAL_MS} &mdash; see {@link #poll(long)}.
 	 */
@@ -420,17 +433,35 @@ public class ViewDef {
 	}
 
 	/**
+	 * Declares the at-a-glance figures strip painted above this table's toolbar.
+	 *
+	 * <p>
+	 * See {@link #quickStats} &mdash; this is a Java-only builder field, not a {@code VIEW_META} JSON key.
+	 *
+	 * @param value The quick-stats strip.  May be <jk>null</jk> (no strip).
+	 * @return This object.
+	 */
+	public ViewDef quickStats(QuickStats value) {
+		quickStats = value;
+		return this;
+	}
+
+	/**
 	 * Fail-closed bean validation.  When {@link #details} is set, delegates to
 	 * {@link RowDetailDef#validate(List, String)} against this view's {@link #rowActions} and id; when
-	 * {@link #serverValues} is set, cascades to {@link ServerValues#validate()}.
+	 * {@link #serverValues} is set, cascades to {@link ServerValues#validate()}; when {@link #quickStats} is set,
+	 * cascades to {@link QuickStats#validate()}.
 	 *
-	 * @throws IllegalArgumentException If this view (or its nested details / server values) is not well-formed.
+	 * @throws IllegalArgumentException If this view (or its nested details / server values / quick stats) is not
+	 * 	well-formed.
 	 */
 	public void validate() {
 		if (details != null)
 			details.validate(rowActions, id);
 		if (serverValues != null)
 			serverValues.validate();
+		if (quickStats != null)
+			quickStats.validate();
 		if (columns != null) {
 			var actionIds = new HashSet<String>();
 			if (rowActions != null)
@@ -448,13 +479,33 @@ public class ViewDef {
 		}
 	}
 
-	/** The four dot tones the {@code pill} renderer understands ({@code info} is intentionally excluded). */
-	private static final Set<String> PILL_TONES = Set.of("ok", "warn", "exceeds", "neutral");
+	/**
+	 * The closed dot-tone palette a {@code pill} understands on either host &mdash; the same five status tones
+	 * {@link org.apache.juneau.rest.server.widgets.QuickStats} paints with, so one name means one colour everywhere.
+	 *
+	 * <p>
+	 * The older {@code ok}/{@code warn}/{@code exceeds} vocabulary is gone: a tone is now one of
+	 * {@code info}/{@code success}/{@code warning}/{@code error}/{@code neutral} and anything else fails closed.  Note
+	 * this is unrelated to the {@code progress} renderer's {@code warn}/{@code exceeds} <b>threshold</b> meta keys,
+	 * which are numeric comparison points rather than tones and are deliberately untouched.
+	 */
+	private static final Set<String> PILL_TONES = StatusTone.WIRE_TOKENS;
+
+	/** One-shot guard so the ignored-{@code meta.select} notice logs only once per JVM. */
+	private static final AtomicBoolean PILL_SELECT_LOGGED = new AtomicBoolean();
+
+	private static final Logger LOG = Logger.getLogger(ViewDef.class.getName());
 
 	/**
-	 * Serving-path fail-closed check for a {@code pill} column: an {@code meta.action} must name a declared
+	 * Serving-path fail-closed check for a {@code pill} <b>column</b>: an {@code meta.action} must name a declared
 	 * {@link #rowActions} id, an {@code meta.tone} (when present) must be one of {@link #PILL_TONES}, and an
 	 * action-bound pill cannot also carry a {@code render.popover} (two competing click affordances on one cell).
+	 *
+	 * <p>
+	 * An {@code meta.action} is <b>optional</b>: a pill with no metadata at all, or with metadata but no action, is a
+	 * legal display-only chip and is not gated on anything.  An unrecognized {@code meta.select} is <b>ignored</b>
+	 * rather than rejected &mdash; pills are not part of the selection protocol (that stays the checkbox column owned
+	 * by {@link SelectionDef}) &mdash; but it is worth telling the author once that the key does nothing.
 	 */
 	private static void validatePill(Render render, Set<String> actionIds) {
 		var meta = render.meta;
@@ -467,9 +518,40 @@ public class ViewDef {
 			if (render.popover != null)
 				throw iaex("Pill column action '%s' cannot also set render.popover on the same cell.", action);
 		}
-		var tone = meta.get("tone");
+		if (meta.containsKey("select") && PILL_SELECT_LOGGED.compareAndSet(false, true))
+			LOG.log(Level.INFO, "A pill render declares meta.select, which is not a supported feature and is ignored. "
+				+ "Row selection is the checkbox protocol declared with SelectionDef, not a pill affordance.");
+		validatePillTone(meta.get("tone"), "Pill column");
+	}
+
+	/**
+	 * Serving-path fail-closed check for a {@code pill} named on a <b>fill sink</b>
+	 * ({@link DetailField#render(String)}).
+	 *
+	 * <p>
+	 * A fill sink has no {@link #rowActions} in scope, so a {@code meta.action} there could never resolve to anything
+	 * &mdash; it is rejected outright rather than silently painting a dead affordance.  The tone palette is the same
+	 * closed set the cell path enforces.
+	 *
+	 * @param render The sink's render spec.  Must not be <jk>null</jk>.
+	 * @param host A human identifier for the sink being validated, used in the failure message.
+	 * @throws IllegalArgumentException If the sink pill declares an action or an off-palette tone.
+	 */
+	static void validateSinkPill(Render render, String host) {
+		var meta = render.meta;
+		if (meta == null)
+			return;
+		var action = meta.get("action");
+		if (action != null && ! action.isBlank())
+			throw iaex("Pill fill sink '%s' must not declare meta.action ('%s'): a fill sink has no rowActions in "
+				+ "scope, so a sink pill is display-only.", host, action);
+		validatePillTone(meta.get("tone"), "Pill fill sink '" + host + "'");
+	}
+
+	/** The one tone check both pill hosts share, so a tone can never be legal on one host and not the other. */
+	private static void validatePillTone(String tone, String what) {
 		if (tone != null && ! tone.isBlank() && ! PILL_TONES.contains(tone))
-			throw iaex("Pill column tone '%s' must be one of ok|warn|exceeds|neutral.", tone);
+			throw iaex("%s tone '%s' must be one of %s.", what, tone, String.join("|", PILL_TONES));
 	}
 
 	/**

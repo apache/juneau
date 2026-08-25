@@ -240,15 +240,22 @@ class ViewsJs_ModalResult_Test extends TestBase {
 
 	@Test void h01_appendDialogFormUsesCreateElementNeverInnerHtml() throws Exception {
 		var body = viewsJs();
-		var append = fn(body, "function appendDialogForm(");
 		// The row scaffolding (label + help/error siblings) is built via createElement + textContent, then each
-		// control is delegated to paintFormControl.  The client never consumes form.template as markup.
-		assertTrue(append.contains("createElement(\"label\")"), append);
-		assertTrue(append.contains("paintFormControl("), append);
-		assertTrue(append.contains(".textContent"), append);
-		assertFalse(append.contains(".innerHTML"), () -> "FormDef paint must never use innerHTML:\n" + append);
-		assertFalse(append.contains("insertAdjacentHTML"), append);
-		assertFalse(append.contains("form.template"), () -> "client must not consume form.template as markup:\n" + append);
+		// control is delegated to paintFormControl.  The client never consumes form.template as markup.  The row
+		// painter is its own function so a sectioned form paints byte-identical rows into a per-section pane; the
+		// markup-free requirement covers the entry point, the row painter AND the sectioned painter.
+		var row = fn(body, "function appendDialogFormRow(");
+		assertTrue(row.contains("createElement(\"label\")"), row);
+		assertTrue(row.contains("paintFormControl("), row);
+		assertTrue(row.contains(".textContent"), row);
+		for (var name : new String[]{
+			"function appendDialogForm(", "function appendDialogFormRow(", "function appendSectionedDialogForm("
+		}) {
+			var append = fn(body, name);
+			assertFalse(append.contains(".innerHTML"), () -> "FormDef paint must never use innerHTML:\n" + append);
+			assertFalse(append.contains("insertAdjacentHTML"), append);
+			assertFalse(append.contains("form.template"), () -> "client must not consume form.template as markup:\n" + append);
+		}
 		// The native controls themselves are created (never markup) in the per-control dispatcher, with prefills via
 		// .value / .checked.
 		var paint = fn(body, "function paintFormControl(");
@@ -288,9 +295,12 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var paint = fn(body, "function paintFormControl(");
 		assertTrue(paint.contains("isTypedFormInputType(type)"), paint);
 		assertTrue(paint.contains("return null"), paint);
-		// appendDialogForm also gates each field on the allowlist before painting.
-		var append = fn(body, "function appendDialogForm(");
-		assertTrue(append.contains("isTypedFormInputType(type)"), append);
+		// The row painter also gates each field on the allowlist before painting - and it is the ONLY row painter, so
+		// a sectioned form's rows go through the same gate.
+		var row = fn(body, "function appendDialogFormRow(");
+		assertTrue(row.contains("isTypedFormInputType(type)"), row);
+		assertTrue(fn(body, "function appendSectionedDialogForm(").contains("appendDialogFormRow(pane, dialog,"),
+			"a sectioned form must paint its rows through the same gated row painter");
 	}
 
 	@Test void h05_buildDialogOverlayPaintsForm() throws Exception {

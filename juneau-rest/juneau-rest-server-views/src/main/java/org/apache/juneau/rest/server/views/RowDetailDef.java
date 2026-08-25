@@ -77,6 +77,52 @@ public class RowDetailDef {
 	public Set<String> allowedCustomRenderers;
 
 	/**
+	 * Author-declared server-side scalar values interpolated into <b>this panel's own</b> chrome (titles) as
+	 * <js>"$FV{name}"</js> at serve time.  Java-only, like the rest of this type &mdash; lambda providers never
+	 * marshal, and this does not bump {@link #CONTRACT_VERSION}.
+	 *
+	 * <p>
+	 * Resolution happens at <b>parent paint time</b>, in the {@link ViewTable} {@code <template>} emit path, against a
+	 * per-response <b>sibling</b> {@link org.apache.juneau.commons.svl.VarResolverSession} carrying its own registry.
+	 * The panel's labels are painted into the server-emitted {@code <template>}, so the expand GET carries row data
+	 * only and has no chrome left to resolve; a {@code $FV} template must never reach the expand envelope.  The closed
+	 * allowlist is {@link #title}, {@link DetailSection#title}, and {@link DetailField#title} &mdash; nothing else.
+	 * {@link #icon} is an icon-registry name, {@link ActionRef} is an id, and {@link SafeAction} is an enum, so none of
+	 * them are interpolated.
+	 *
+	 * <h5 class='section'>There is no inheritance, and same-name collisions are legal:</h5>
+	 * <p>
+	 * This host resolves only its own allowlisted fields.  It neither sees nor is seen by the enclosing
+	 * {@link PageDef#serverValues} or the enclosing {@link ViewDef#serverValues}; all three sessions are
+	 * <b>siblings</b>.  A name declared here and a same-name value on either of those hosts resolve independently and
+	 * may differ within one response &mdash; a documented semantic, not an accident.
+	 */
+	public ServerValues serverValues;
+
+	/**
+	 * Optional additive bar slot riding this panel's <b>detail ribbon</b> &mdash; the <i>second</i> named
+	 * {@link BarSlot} attachment, distinct from {@link PageDef#barSlot}.
+	 *
+	 * <p>
+	 * Same bean, same {@link BarSlotTable} emitter, different host and placement: the page slot trails
+	 * {@code .jc-subtab-bar} once per page, while this one is painted into the row-expand {@code <template>} and is
+	 * therefore <b>cloned per expanded row</b>, trailing the ribbon the runtime assembles from this panel's sections.
+	 * A single-section panel has no ribbon and none is synthesized for it; the region is anchored to that lone
+	 * section's title instead ({@link BarSlotTable#ANCHOR_SECTION_TITLE}).
+	 *
+	 * <p>
+	 * Java-only, like the rest of this type &mdash; it never appears on the expand GET envelope, so it does not bump
+	 * {@link #CONTRACT_VERSION}.  {@link BarSlot#id} stays the author's own id: it is what the enclosing
+	 * {@link PageDef} uniqueness check compares, and the runtime mints per-row DOM identities from the parent table's
+	 * id rather than from it.  {@link BarSlot#refreshUrl} powers <b>demand</b> refresh only; there is no poller.
+	 *
+	 * <p>
+	 * Cross-host id collisions are rejected by {@link PageDef#validate()} &mdash; the only scope that sees both hosts.
+	 * A top-level view served with no enclosing page has no page slot to collide with, and is a legal no-op.
+	 */
+	public BarSlot barSlot;
+
+	/**
 	 * Creates an empty row-detail definition.
 	 *
 	 * @return A new {@link RowDetailDef}.
@@ -157,6 +203,36 @@ public class RowDetailDef {
 	}
 
 	/**
+	 * Declares the server-side scalar values interpolated into this panel's own titles as <js>"$FV{name}"</js>.
+	 *
+	 * <p>
+	 * See {@link #serverValues} &mdash; resolved at parent paint time into the emitted {@code <template>}, never at
+	 * expand-GET time, and never inherited from (or by) the enclosing page or view.
+	 *
+	 * @param value The server-values declaration.  Can be <jk>null</jk> (no {@code $FV} interpolation).
+	 * @return This object.
+	 */
+	public RowDetailDef serverValues(ServerValues value) {
+		serverValues = value;
+		return this;
+	}
+
+	/**
+	 * Declares the additive bar slot riding this panel's detail ribbon.
+	 *
+	 * <p>
+	 * See {@link #barSlot} &mdash; a second named host for the same {@link BarSlot} bean, not a re-use of
+	 * {@link PageDef#barSlot}.
+	 *
+	 * @param value The bar slot.  Can be <jk>null</jk> (no detail bar slot).
+	 * @return This object.
+	 */
+	public RowDetailDef barSlot(BarSlot value) {
+		barSlot = value;
+		return this;
+	}
+
+	/**
 	 * Fail-closed bean validation, including {@link ActionRef} existence against the enclosing view's action
 	 * catalog.
 	 *
@@ -193,6 +269,12 @@ public class RowDetailDef {
 					throw iaex("allowCustomRenderers entry must not be blank.");
 			}
 		}
+		if (serverValues != null)
+			serverValues.validate();
+		// Cascade into the second named bar-slot host.  Cross-host id uniqueness is NOT checkable here: this scope has
+		// no enclosing page, so PageDef.validate() owns that rejection.
+		if (barSlot != null)
+			barSlot.validate();
 
 		var actionIds = new HashSet<String>();
 		if (rowActions != null)
@@ -228,6 +310,8 @@ public class RowDetailDef {
 						if (f.format != null && f.format != DetailField.Format.TEXT)
 							throw iaex("DetailField '%s' cannot set both render and a non-TEXT format.", f.data);
 						SinkRenderAllowlist.assertAllowed(f.render.id, allowedCustomRenderers);
+						if ("pill".equals(f.render.id))
+							ViewDef.validateSinkPill(f.render, s.id + "." + f.data);
 					}
 				}
 			}

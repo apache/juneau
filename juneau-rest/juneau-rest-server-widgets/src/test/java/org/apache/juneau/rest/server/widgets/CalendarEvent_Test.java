@@ -107,4 +107,137 @@ class CalendarEvent_Test extends TestBase {
 		assertFalse(CalendarEvent.create().id("e").title("t").start("2026-08-14").allDay(false).effectiveAllDay());
 		assertTrue(CalendarEvent.create().id("e").title("t").start("2026-08-14T04:00:00Z").allDay(true).effectiveAllDay());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// `end` is layout-significant, with SPLIT inclusivity.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static CalendarEvent ev(String start, String end) {
+		var e = CalendarEvent.create().id("e1").title("t").start(start);
+		return end == null ? e : e.end(end);
+	}
+
+	@Test void c01_allDayEnd_isInclusive_threeDaySpanOccupiesThreeCells() {
+		var e = ev("2026-03-02", "2026-03-04");
+		assertEquals(LocalDate.of(2026, 3, 4), e.lastDay());
+		assertTrue(e.spanning());
+		assertEquals(3, e.lastDay().toEpochDay() - e.civilStart().toEpochDay() + 1);
+	}
+
+	@Test void c02_timedEnd_isExclusive_startHourOnly() {
+		var e = ev("2026-03-02T09:00", "2026-03-02T10:00");
+		assertEquals(LocalDate.of(2026, 3, 2), e.lastDay());
+		assertFalse(e.spanning());
+	}
+
+	@Test void c03_allDayEndEqualsStart_isSingleDay() {
+		var e = ev("2026-03-02", "2026-03-02");
+		assertEquals(LocalDate.of(2026, 3, 2), e.lastDay());
+		assertFalse(e.spanning());
+		assertNull(e.malformedReason());
+	}
+
+	@Test void c04_timedEndEqualsStart_isZeroDuration_andRejected() {
+		var e = ev("2026-03-02T09:00", "2026-03-02T09:00");
+		assertNotNull(e.malformedReason());
+		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, null, null));
+	}
+
+	@Test void c05_timedCrossingMidnight_isSpanningBar_usingExclusiveEnd() {
+		var e = ev("2026-03-02T15:00", "2026-03-03T09:00");
+		assertEquals(LocalDate.of(2026, 3, 3), e.lastDay());
+		assertTrue(e.spanning());
+		// An end at exactly midnight is EXCLUSIVE, so the last occupied day is the day before.
+		assertEquals(LocalDate.of(2026, 3, 2), ev("2026-03-02T15:00", "2026-03-03T00:00").lastDay());
+		assertFalse(ev("2026-03-02T15:00", "2026-03-03T00:00").spanning());
+	}
+
+	@Test void c06_omittedEnd_isStartOnly_andValid() {
+		var allDay = ev("2026-03-02", null);
+		assertNull(allDay.malformedReason());
+		assertEquals(LocalDate.of(2026, 3, 2), allDay.lastDay());
+		assertFalse(allDay.spanning());
+		var timed = ev("2026-03-02T15:00", null);
+		assertNull(timed.malformedReason());
+		assertEquals(LocalDate.of(2026, 3, 2), timed.lastDay());
+		assertFalse(timed.spanning());   // a start-only timed event is a zero-width chip, never a bar
+		assertNull(allDay.civilEnd());
+	}
+
+	@Test void c07_endBeforeStart_stillRejected() {
+		assertNotNull(ev("2026-03-04", "2026-03-02").malformedReason());
+		assertNotNull(ev("2026-03-04T09:00", "2026-03-02T09:00").malformedReason());
+	}
+
+	@Test void c08_offsetOrZ_isIgnored_neverRejected() {
+		// Fail-soft: v1 already ignored the offset, and rejecting it would break shipped seeds.
+		var e = ev("2026-03-02T09:00:00Z", "2026-03-02T10:00:00+02:00");
+		assertNull(e.malformedReason());
+		assertDoesNotThrow(() -> e.validate(CATS, 2026, 3));
+		assertEquals(LocalDate.of(2026, 3, 2), e.civilStart());
+		assertEquals(LocalDate.of(2026, 3, 2), e.lastDay());
+		assertEquals("09:00", e.startTimeLabel());
+	}
+
+	@Test void c09_startTimeLabel_onlyForTimedEvents() {
+		assertEquals("09:05", ev("2026-03-02T09:05", null).startTimeLabel());
+		assertNull(ev("2026-03-02", null).startTimeLabel());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// The CLOSED malformed set - no other kind exists.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_malformed_missingRequiredFields() {
+		assertNotNull(CalendarEvent.create().title("t").start("2026-03-02").malformedReason());
+		assertNotNull(CalendarEvent.create().id("e").start("2026-03-02").malformedReason());
+		assertNotNull(CalendarEvent.create().id("e").title("t").malformedReason());
+	}
+
+	@Test void d02_malformed_unparseableDates() {
+		assertNotNull(ev("nope", null).malformedReason());
+		assertNotNull(ev("2026-03-02", "nope").malformedReason());
+	}
+
+	@Test void d03_malformed_declaredAllDayDisagreesWithEndShape() {
+		assertNotNull(ev("2026-03-02", "2026-03-02T10:00").allDay(true).malformedReason());
+		assertNotNull(ev("2026-03-02T09:00", "2026-03-04").allDay(false).malformedReason());
+	}
+
+	@Test void d04_malformed_mixedShapesWithNullAllDay() {
+		assertNotNull(ev("2026-03-02", "2026-03-04T10:00").malformedReason());
+		assertNotNull(ev("2026-03-02T09:00", "2026-03-04").malformedReason());
+	}
+
+	@Test void d05_nullAllDay_staysValid_viaEffectiveAllDay() {
+		// rec F / rec L: agreement is decided by effectiveAllDay(), so a null allDay with matching shapes is fine.
+		var dateOnly = ev("2026-03-02", "2026-03-04");
+		assertNull(dateOnly.allDay);
+		assertNull(dateOnly.malformedReason());
+		var timed = ev("2026-03-02T09:00", "2026-03-02T10:00");
+		assertNull(timed.allDay);
+		assertNull(timed.malformedReason());
+	}
+
+	@Test void d06_retainWellFormed_dropsMalformedKeepsTheRest() {
+		var ok1 = CalendarEvent.create().id("a").title("A").start("2026-03-02");
+		var bad = CalendarEvent.create().id("b").title("B").start("2026-03-02").allDay(true).end("2026-03-02T10:00");
+		var ok2 = CalendarEvent.create().id("c").title("C").start("2026-03-03T09:00").end("2026-03-03T10:00");
+		var kept = CalendarEvent.retainWellFormed(Arrays.asList(ok1, bad, null, ok2));
+		assertEquals(List.of("a", "c"), kept.stream().map(x -> x.id).toList());
+	}
+
+	@Test void d07_authorErrorsAreNotMalformed() {
+		// An unknown category / unsafe href / off-month start are AUTHOR errors that throw; they are not drop reasons.
+		assertNull(good().categoryId("nope").malformedReason());
+		assertNull(good().href("https://evil/x").malformedReason());
+		assertNull(good().start("2026-09-01").malformedReason());
+	}
+
+	@Test void d08_spanIntoTheRenderedMonth_isNotOffMonth() {
+		// `end` is layout-significant, so an event that STARTS earlier but is visible in the month is in-window.
+		assertDoesNotThrow(() -> ev("2026-07-28", "2026-08-03").id("e1").title("t").validate(Set.of(), 2026, 8));
+		assertThrows(IllegalArgumentException.class,
+			() -> ev("2026-06-01", "2026-06-05").id("e1").title("t").validate(Set.of(), 2026, 8));
+	}
 }

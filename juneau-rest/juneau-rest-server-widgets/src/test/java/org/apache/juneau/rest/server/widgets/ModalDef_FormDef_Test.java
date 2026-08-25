@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +22,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -64,7 +63,7 @@ class ModalDef_FormDef_Test extends TestBase {
 		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
 		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
 		assertEquals(List.of("contractVersion", "title", "fields", "form", "idempotencyKey"), new ArrayList<>(actual.keySet()));
-		assertEquals("1", actual.get("contractVersion"));
+		assertEquals(ModalDef.CONTRACT_VERSION, actual.get("contractVersion"));
 	}
 
 	@Test void a03_confirmOnlyModal_omitsFieldsFormAndKey() {
@@ -278,13 +277,18 @@ class ModalDef_FormDef_Test extends TestBase {
 	// e) Per-widget contract version + fail-loud handshake (h5)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_contractVersionConstantsAreOne() {
-		assertEquals("1", FormDef.CONTRACT_VERSION);
-		assertEquals("1", ModalDef.CONTRACT_VERSION);
+	/**
+	 * The two bean halves of the three-way lockstep, pinned to the literal.  The runtime's baked-in third is pinned
+	 * against these in the views module's {@code ViewsJs_ContractVersion_Test}; bumping any two of the three makes
+	 * every form-bearing dialog refuse to open, so the literal is asserted here rather than compared to itself.
+	 */
+	@Test void e01_contractVersionConstantsAreTwo() {
+		assertEquals("2", FormDef.CONTRACT_VERSION);
+		assertEquals("2", ModalDef.CONTRACT_VERSION);
 	}
 
 	@Test void e02_rawFormDefLeaksNoVersion() {
-		// A raw builder never leaks "1" on the nested form until checked() is called on the serving path.
+		// A raw builder never leaks a version on the nested form until checked() is called on the serving path.
 		var form = FormDef.create().field(FormDef.Input.of("r", "R", "textarea"));
 		assertNull(form.contractVersion);
 		assertFalse(Json.of(form).contains("contractVersion"), Json.of(form));
@@ -293,12 +297,12 @@ class ModalDef_FormDef_Test extends TestBase {
 	@Test void e03_checkedStampsBothVersionsFirst() {
 		var modal = ModalDef.create("t")
 			.form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea"))).checked();
-		assertEquals("1", modal.contractVersion);
-		assertEquals("1", modal.form.contractVersion);
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+		assertEquals(FormDef.CONTRACT_VERSION, modal.form.contractVersion);
 		var json = Json.of(modal);
-		assertTrue(json.contains("\"contractVersion\":\"1\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"" + ModalDef.CONTRACT_VERSION + "\""), json);
 		// The nested form carries its own version too.
-		assertEquals("1", Json.to(Json.of(modal.form), Map.class).get("contractVersion"));
+		assertEquals(FormDef.CONTRACT_VERSION, Json.to(Json.of(modal.form), Map.class).get("contractVersion"));
 	}
 
 	@Test void e04_validateDoesNotRequireVersionSet() {
@@ -327,7 +331,101 @@ class ModalDef_FormDef_Test extends TestBase {
 		// A fieldless / template-only form is a shipped shape; validate() over empty fields is a no-op.
 		var form = FormDef.ofTemplate("servlet:/x.ftl");
 		assertDoesNotThrow(form::validate);
-		assertEquals("1", form.checked().contractVersion);
+		assertEquals(FormDef.CONTRACT_VERSION, form.checked().contractVersion);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) Sectioned forms: an ordered list of labelled field groups instead of one flat list
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_sectionsAlone_validatesAndChecks() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
+			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea")));
+		assertDoesNotThrow(form::validate);
+		assertEquals(FormDef.CONTRACT_VERSION, form.checked().contractVersion);
+	}
+
+	@Test void f02_flatFieldsAlone_stillValidates() {
+		// The flat list IS the single-section case and stays a first-class shape.
+		var form = FormDef.create().field(FormDef.Input.of("name", "Name", "text"));
+		assertDoesNotThrow(form::validate);
+		assertNull(form.sections);
+	}
+
+	@Test void f03_bothFieldsAndSections_areRejected() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("name", "Name", "text"))
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("notes", "Notes", "textarea")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("mutually exclusive"), e.getMessage());
+		// checked() reaches the same rejection, so a serving path cannot emit the ambiguous shape either.
+		assertThrows(IllegalArgumentException.class, form::checked);
+	}
+
+	@Test void f04_emptySectionsList_isRejected() {
+		var form = FormDef.create();
+		form.sections = new ArrayList<>();
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	@Test void f05_duplicateSectionId_isRejected() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("dup", "First").field(FormDef.Input.of("a", "A", "text")))
+			.section(FormDef.Section.of("dup", "Second").field(FormDef.Input.of("b", "B", "text")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("duplicate section id"), e.getMessage());
+	}
+
+	@Test void f06_fieldlessSection_isRejected() {
+		var form = FormDef.create().section(FormDef.Section.of("empty", "Empty"));
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	/**
+	 * Field names are unique across the WHOLE form, not per section: every control shares one submit body and one
+	 * dialog-scoped element-id namespace, so two sections declaring the same name would collide in both.
+	 */
+	@Test void f07_duplicateFieldNameAcrossSections_isRejected() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("one", "One").field(FormDef.Input.of("shared", "A", "text")))
+			.section(FormDef.Section.of("two", "Two").field(FormDef.Input.of("shared", "B", "text")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("duplicate field name"), e.getMessage());
+	}
+
+	@Test void f08_perFieldValidationStillRunsInsideASection() {
+		// A select with no options is malformed wherever it is declared.
+		var form = FormDef.create()
+			.section(FormDef.Section.of("one", "One").field(FormDef.Input.of("sev", "Severity", "select")));
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	@Test void f09_sectionFactoryRejectsBlankIdAndLabel() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of(" ", "Label"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of("id", " "));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of(null, "Label"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of("id", null));
+	}
+
+	@Test void f10_sectionsWireShape() {
+		var json = Json.of(FormDef.create()
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
+			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea"))));
+		var expected = Json.to("""
+			{"sections":[{"id":"basics","label":"Basics","fields":[{"name":"name","label":"Name","type":"text"}]},
+			             {"id":"advanced","label":"Advanced","fields":[{"name":"notes","label":"Notes","type":"textarea"}]}]}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+	}
+
+	@Test void f11_flatFormOmitsSectionsFromTheWire() {
+		var json = Json.of(FormDef.create().field(FormDef.Input.of("name", "Name", "text")));
+		assertFalse(json.contains("sections"), json);
+	}
+
+	@Test void f12_nullSection_isRejectedAtTheBuilder() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.create().section(null));
 	}
 
 	/** Builds a minimal valid field of the given non-text type (for cross-type rejection tests). */

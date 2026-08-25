@@ -64,6 +64,11 @@
 	const MENU_ITEM_CLASS = "jc-menu-item";
 	const MENU_WIRED_ATTR = "data-juneau-menu-wired";
 	const MENU_ITEMS_WIRED_ATTR = "data-juneau-menu-items-wired";
+	// The ONE marker wireSafeActions and initAll share, so re-running initAll (the enhance-on-insert path a cloned
+	// row-detail bar slot needs) can never bind a second click handler onto an already-wired SAFE action.  The avatar
+	// image fallback carries the same guard for the same reason.
+	const SAFE_WIRED_ATTR = "data-juneau-safe-wired";
+	const AVATAR_WIRED_ATTR = "data-juneau-avatar-wired";
 	const HEADER_SIDECAR_PREFIX = "juneau-header:";
 	const BAR_SIDECAR_PREFIX = "juneau-bar:";
 
@@ -310,13 +315,18 @@
 		}
 	}
 
-	/** Wires an avatar's image so a broken same-origin image falls back to the hidden initials chip (no dead avatar). */
+	/**
+	 * Wires an avatar's image so a broken same-origin image falls back to the hidden initials chip (no dead avatar).
+	 * Idempotent per image (AVATAR_WIRED_ATTR), so a re-scan cannot stack error handlers.
+	 */
 	function wireAvatarFallback(root) {
 		if (!root || !root.querySelectorAll) return;
 		const avatars = root.querySelectorAll("[" + AVATAR_MARKER + "]");
 		for (let i = 0; i < avatars.length; i++) {
 			const img = avatars[i].querySelector("img.jc-avatar-img");
 			if (!img || !img.addEventListener) continue;
+			if (img.getAttribute(AVATAR_WIRED_ATTR) === "1") continue;
+			img.setAttribute(AVATAR_WIRED_ATTR, "1");
 			img.addEventListener("error", function () {
 				img.hidden = true;
 				const initials = avatars[i].querySelector(".jc-avatar-initials");
@@ -331,6 +341,10 @@
 	 * can only be a hand-edited attribute, since the server already format-validates it.  This selects only top-level
 	 * SAFE actions (data-juneau-header-action + behavior=safe); MENU triggers are wired separately by wireMenus, and
 	 * SAFE items INSIDE a menu list by wireMenuItems.  LINK actions are plain anchors needing no wiring.
+	 *
+	 * Idempotent per action, guarded by SAFE_WIRED_ATTR - the marker this function SHARES with initAll.  initAll is
+	 * now re-entrant on purpose (a row-detail bar slot cloned from a <template> is only enhanceable after insert), so
+	 * without the shared marker a second scan would bind a second handler and one click would fire twice.
 	 */
 	function wireSafeActions(root) {
 		if (!root || !root.querySelectorAll) return;
@@ -344,6 +358,8 @@
 				continue;
 			}
 			if (!el.addEventListener) continue;
+			if (el.getAttribute(SAFE_WIRED_ATTR) === "1") continue;
+			el.setAttribute(SAFE_WIRED_ATTR, "1");
 			el.addEventListener("click", function (ev) {
 				if (ev && ev.preventDefault) ev.preventDefault();
 				dispatchSafe(el, token, root);
@@ -413,7 +429,16 @@
 		return { root: bar, refresh: function () { return refresh(bar); } };
 	}
 
-	/** DOMContentLoaded entry: enhance every app-header, then every bar slot (a bar id can repeat per sub-tab bar). */
+	/**
+	 * DOMContentLoaded entry: enhance every app-header, then every bar slot (a bar id can repeat per sub-tab bar).
+	 *
+	 * Also the ENHANCE-ON-INSERT entry: the scan is document-wide, so a bar slot cloned from a row-detail
+	 * {@code <template>} and inserted after load is picked up by simply calling this again (juneau-views.js does,
+	 * once per expanded row).  Re-entrancy is safe because every binding step is marker-guarded - SAFE_WIRED_ATTR for
+	 * SAFE actions (shared with wireSafeActions), AVATAR_WIRED_ATTR, MENU_WIRED_ATTR - and the remaining work
+	 * (handshake, icon hydration, count apply) is idempotent by construction.  Still no poller: this only ever runs
+	 * when something asks it to.
+	 */
 	function initAll() {
 		const out = { headers: [], bars: [] };
 		const headers = window.document.querySelectorAll("[" + HEADER_MARKER + "]");

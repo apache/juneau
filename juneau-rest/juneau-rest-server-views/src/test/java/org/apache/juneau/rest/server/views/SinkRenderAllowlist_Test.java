@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.views;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -68,17 +69,39 @@ class SinkRenderAllowlist_Test extends TestBase {
 		var expected = String.join(",", SinkRenderAllowlist.BUILTIN_IDS.stream().sorted().toList());
 		// The JS array is not sorted the same way as Set.of iteration; pin membership via the snapshot list.
 		assertTrue(body.contains("\"progress\""), body);
-		assertEquals(10, SinkRenderAllowlist.BUILTIN_IDS.size());
+		// Lockstep count: 11 built-in fill-sink ids, the eleventh being "pill".
+		assertEquals(11, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(expected.contains("progress"));
 		assertTrue(expected.contains("tag"));
+		// Bidirectional lockstep against the two source arrays that together drive frozenBuiltinIds: the snapshot
+		// list plus the hand-registered sink variants (`pill`).  Catches an id added on one side only, in either
+		// direction, without needing Node.
+		assertEquals(expected, jsFrozenIds(body));
 	}
 
-	@Test void a08_pillIsNotABuiltinFillSink_thisSlice() {
-		// TODO-445k is cell-path only: "pill" must NOT join the fill-sink allowlist and BUILTIN_IDS stays 10.
-		assertEquals(10, SinkRenderAllowlist.BUILTIN_IDS.size());
-		assertFalse(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must not be a fill-sink built-in");
-		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed("pill", null));
+	/** The sorted union of the JS {@code BUILTIN_RENDER_IDS} and {@code SINK_VARIANT_RENDER_IDS} literals. */
+	private static String jsFrozenIds(String rendersJs) {
+		var ids = new TreeSet<String>();
+		for (var name : List.of("BUILTIN_RENDER_IDS = [", "SINK_VARIANT_RENDER_IDS = [")) {
+			var start = rendersJs.indexOf(name);
+			assertTrue(start > 0, () -> "missing " + name);
+			start += name.length();
+			var literal = rendersJs.substring(start, rendersJs.indexOf(']', start));
+			for (var part : literal.split(","))
+				if (part.contains("\""))
+					ids.add(part.substring(part.indexOf('"') + 1, part.lastIndexOf('"')));
+		}
+		return String.join(",", ids);
+	}
+
+	@Test void a08_pillIsABuiltinFillSink_withADisplayOnlySinkRenderer() {
+		// "pill" is now a fill-sink built-in; the count moved 10 -> 11 with this addition and nothing else.
+		assertEquals(11, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must be a fill-sink built-in");
+		SinkRenderAllowlist.assertAllowed("pill", null);
+		// Still not popover text - a pill is a chip, not a text-shaped built-in.
 		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("pill"));
+		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("pill"));
 	}
 
 	@Test void a07_servingPath_detailFieldUnknownIdFailsViewTableOf() {

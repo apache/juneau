@@ -96,6 +96,34 @@ public class PageDef {
 	public BarSlot barSlot;
 
 	/**
+	 * Author-declared server-side scalar values interpolated into <b>this page's own</b> chrome (titles/labels) as
+	 * <js>"$FV{name}"</js> at serve time; a <b>Java-only builder field</b>, omitted from {@code @BeanType} / the wire
+	 * (lambda providers never marshal) and not bumping {@link #CONTRACT_VERSION}.
+	 *
+	 * <p>
+	 * {@code PageTable.of(req, pageDef)} resolves the closed page-chrome allowlist against a per-response
+	 * <b>sibling</b> {@link org.apache.juneau.commons.svl.VarResolverSession} carrying its own registry, exactly as
+	 * {@link ViewTable} does for {@link ViewDef#serverValues}.  The allowlist is {@link #title}, {@link Tab#label},
+	 * {@link Subtab#label}, and &mdash; for the Java-only page chrome &mdash; {@link Brand#title},
+	 * each {@link Brand#crumbs} element, {@link HeaderAction#tooltip}, {@link AvatarChip#displayName},
+	 * {@link AvatarChip#initials}, {@link BarText#text}, and {@link BarBadge#label}.  Nothing else is interpolated.
+	 *
+	 * <h5 class='section'>There is no inheritance:</h5>
+	 * <p>
+	 * Each host resolves only its <i>own</i> allowlisted fields.  A {@link ViewDef} rendered inside this page does
+	 * <b>not</b> see this declaration &mdash; a child view interpolates only what its own
+	 * {@link ViewDef#serverValues} declares, and a child that declares none keeps its {@code $FV{...}} text literal.
+	 * The hosts' sessions are <b>siblings</b>, not nested.
+	 *
+	 * <h5 class='section'>Same-name collisions across hosts are legal and independent:</h5>
+	 * <p>
+	 * This page and a child view may both declare a value named (say) {@code env} and they may resolve to different
+	 * strings in the same response.  That is a documented semantic, not an accident: a name is scoped to the host
+	 * that declared it.
+	 */
+	public ServerValues serverValues;
+
+	/**
 	 * Starts a new {@link PageDef} builder with the specified stable page id.
 	 *
 	 * @param id The stable page id.  Must not be <jk>null</jk> or blank.
@@ -160,6 +188,21 @@ public class PageDef {
 	}
 
 	/**
+	 * Declares the server-side scalar values interpolated into this page's own chrome as <js>"$FV{name}"</js>.
+	 *
+	 * <p>
+	 * See {@link #serverValues} &mdash; a Java-only builder field, not a PAGE_META JSON key, and not inherited by any
+	 * child {@link ViewDef}.
+	 *
+	 * @param value The server-values declaration.  Can be <jk>null</jk> (no {@code $FV} interpolation).
+	 * @return This object.
+	 */
+	public PageDef serverValues(ServerValues value) {
+		serverValues = value;
+		return this;
+	}
+
+	/**
 	 * Finalizes the builder, validating the composed tab tree, and returns the wire-ready {@link PageDef}.
 	 *
 	 * <p>
@@ -171,6 +214,12 @@ public class PageDef {
 	 * view or any subtab's view &mdash; a tab or subtab carrying {@link Tab#content}/{@link Subtab#content}
 	 * instead references no {@link ViewDef} and contributes nothing here) must be unique across the whole page, so
 	 * hash routing and sidecar lookup stay unambiguous.
+	 *
+	 * <p>
+	 * This is also where <b>cross-host</b> bar-slot id uniqueness is enforced: a {@link RowDetailDef#barSlot} in this
+	 * page's view tree may not reuse this page's own {@link #barSlot} id, since a page can now hold both hosts live at
+	 * once.  {@link RowDetailDef#validate(java.util.List)} cannot make that check &mdash; it has no enclosing page
+	 * &mdash; and a top-level view served with no page has no page slot to collide with at all.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException On any validation rule violation.
@@ -205,6 +254,42 @@ public class PageDef {
 			header.validate();
 		if (barSlot != null)
 			barSlot.validate();
+		if (serverValues != null)
+			serverValues.validate();
+
+		// Cross-host bar-slot id uniqueness.  This is the ONLY scope that sees both hosts: RowDetailDef.validate() has
+		// no enclosing page, so it cannot make this check.  Runs last, so both slots have already passed
+		// BarSlot.validate() and their ids are known non-blank.
+		if (barSlot != null)
+			for (var t : tabs) {
+				checkDetailBarSlotIds(t.view, 0);
+				if (t.subtabs != null)
+					for (var s : t.subtabs)
+						checkDetailBarSlotIds(s.view, 0);
+			}
+	}
+
+	/**
+	 * Rejects a {@link RowDetailDef#barSlot} whose id equals this page's own {@link #barSlot} id, anywhere in the view
+	 * tree this page references &mdash; including a detail section's nested table view, which carries its own details.
+	 *
+	 * <p>
+	 * A page with no {@link #barSlot}, and a top-level {@link ViewDef} served with no enclosing page at all, have no
+	 * page slot to collide with: those are legal no-ops rather than errors.
+	 *
+	 * @param view The view to walk.  May be <jk>null</jk> (a content-only tab references none).
+	 * @param depth The nesting depth, bounded by {@link NestedTableDef#MAX_DEPTH}.
+	 */
+	private void checkDetailBarSlotIds(ViewDef view, int depth) {
+		if (view == null || view.details == null || depth > NestedTableDef.MAX_DEPTH)
+			return;
+		var detailSlot = view.details.barSlot;
+		if (detailSlot != null && barSlot.id.equals(detailSlot.id))
+			throw iaex("PageDef '%s': RowDetailDef bar slot id '%s' duplicates the page bar slot id.", id, barSlot.id);
+		if (view.details.sections != null)
+			for (var s : view.details.sections)
+				if (s != null && s.table != null)
+					checkDetailBarSlotIds(s.table.view, depth + 1);
 	}
 
 	private void addViewId(Set<String> viewIds, String viewId) {

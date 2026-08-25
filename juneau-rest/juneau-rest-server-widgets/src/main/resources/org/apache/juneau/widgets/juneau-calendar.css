@@ -61,6 +61,11 @@
 	--jc-cal-tag-neutral-border: var(--jc-tag-neutral-border, #c9c9c9);
 	--jc-cal-tag-neutral-text: var(--jc-tag-neutral-text, #444444);
 
+	/* Spanning-bar geometry: one lane's height, and the horizontal step from one day cell to the next (the grid
+	   gap plus the cells' own padding and borders), so a bar can be widened across the columns it covers. */
+	--jc-cal-lane-height: 1.35em;
+	--jc-cal-day-step: calc(1px + 2 * var(--jc-cal-space-1) + 2px);
+
 	position: relative;              /* the calendar container never clips its own popovers (concept #11) */
 	font-size: 0.95em;
 }
@@ -168,10 +173,75 @@
 	border-color: var(--jc-cal-accent);
 }
 
+/*
+ * Spanning-bar lane band.  Every cell of a week row reserves the SAME number of lanes (the server and the runtime
+ * both stamp --jc-cal-lanes per cell), so the bars in a row line up even though each day is its own grid item.  A
+ * bar piece is absolutely positioned inside the cell it starts in and widened across the columns it covers.
+ */
+.jc-cal-day-lanes {
+	position: relative;
+	height: calc(var(--jc-cal-lanes, 0) * var(--jc-cal-lane-height));
+}
+
 .jc-cal-day-events {
 	display: flex;
 	flex-direction: column;
 	gap: var(--jc-cal-space-1);
+}
+
+/* One piece of a spanning bar - shape only; color comes from the jc-cal-cat--* class, as for a chip. */
+.jc-cal-bar {
+	position: absolute;
+	left: 0;
+	top: calc(var(--jc-cal-lane, 0) * var(--jc-cal-lane-height));
+	width: calc(var(--jc-cal-span, 1) * 100% + (var(--jc-cal-span, 1) - 1) * var(--jc-cal-day-step));
+	height: calc(var(--jc-cal-lane-height) - 0.15em);
+	padding: 0 0.4em;
+	border: 1px solid transparent;
+	border-radius: var(--jc-cal-radius);
+	font-size: 0.8em;
+	line-height: 1.4;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-decoration: none;
+	color: inherit;
+}
+
+a.jc-cal-bar:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: 1px;
+}
+
+/* Cut edges: the square corner reads as "this piece is not where the event begins / ends". */
+.jc-cal-bar--continues-left {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-left-style: dashed;
+}
+
+.jc-cal-bar--continues-right {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-right-style: dashed;
+}
+
+/* Timed chip: the leading HH:mm label sits ahead of the title and never squeezes it out. */
+.jc-cal-event--timed {
+	display: flex;
+	gap: 0.35em;
+}
+
+.jc-cal-event-time {
+	flex: none;
+	font-variant-numeric: tabular-nums;
+	opacity: 0.8;
+}
+
+.jc-cal-event-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Event chip base - shape only; color comes from the jc-cal-cat--* class. */
@@ -226,7 +296,7 @@ a.jc-cal-event:focus-visible {
 	box-shadow: var(--jc-cal-popover-shadow);
 }
 
-/* Legend - display-only in v1 (no toggle-filter). */
+/* Legend - each entry is a real aria-pressed toggle that filters its category client-side. */
 .jc-cal-legend {
 	display: flex;
 	flex-wrap: wrap;
@@ -241,6 +311,30 @@ a.jc-cal-event:focus-visible {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--jc-cal-space-1);
+}
+
+.jc-cal-legend-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-cal-space-1);
+	padding: 0.1em 0.4em;
+	border: 1px solid transparent;
+	border-radius: var(--jc-cal-radius);
+	background: transparent;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+
+.jc-cal-legend-toggle:focus-visible {
+	outline: 2px solid var(--jc-cal-focus);
+	outline-offset: 1px;
+}
+
+/* Un-pressed = that category is filtered out.  Struck-through as well as dimmed, so the state is not color-only. */
+.jc-cal-legend-toggle[aria-pressed="false"] {
+	opacity: 0.55;
+	text-decoration: line-through;
 }
 
 .jc-cal-legend-swatch {
@@ -260,6 +354,12 @@ a.jc-cal-event:focus-visible {
 .jc-cal-cat--amber.jc-cal-event { background: var(--jc-cal-tag-amber-bg); border-color: var(--jc-cal-tag-amber-border); color: var(--jc-cal-tag-amber-text); }
 .jc-cal-cat--red.jc-cal-event { background: var(--jc-cal-tag-red-bg); border-color: var(--jc-cal-tag-red-border); color: var(--jc-cal-tag-red-text); }
 .jc-cal-cat--neutral.jc-cal-event { background: var(--jc-cal-tag-neutral-bg); border-color: var(--jc-cal-tag-neutral-border); color: var(--jc-cal-tag-neutral-text); }
+
+.jc-cal-cat--blue.jc-cal-bar { background: var(--jc-cal-tag-blue-bg); border-color: var(--jc-cal-tag-blue-border); color: var(--jc-cal-tag-blue-text); }
+.jc-cal-cat--green.jc-cal-bar { background: var(--jc-cal-tag-green-bg); border-color: var(--jc-cal-tag-green-border); color: var(--jc-cal-tag-green-text); }
+.jc-cal-cat--amber.jc-cal-bar { background: var(--jc-cal-tag-amber-bg); border-color: var(--jc-cal-tag-amber-border); color: var(--jc-cal-tag-amber-text); }
+.jc-cal-cat--red.jc-cal-bar { background: var(--jc-cal-tag-red-bg); border-color: var(--jc-cal-tag-red-border); color: var(--jc-cal-tag-red-text); }
+.jc-cal-cat--neutral.jc-cal-bar { background: var(--jc-cal-tag-neutral-bg); border-color: var(--jc-cal-tag-neutral-border); color: var(--jc-cal-tag-neutral-text); }
 
 .jc-cal-cat--blue .jc-cal-legend-swatch { background: var(--jc-cal-tag-blue-bg); border-color: var(--jc-cal-tag-blue-border); }
 .jc-cal-cat--green .jc-cal-legend-swatch { background: var(--jc-cal-tag-green-bg); border-color: var(--jc-cal-tag-green-border); }

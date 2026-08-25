@@ -27,13 +27,19 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Always-on coverage for the dialog-form contract-version handshake (h5): a form-bearing modal opens only when BOTH
- * the modal top-level and the nested form {@code contractVersion} equal the baked-in {@code "1"}; a wrong or missing
- * version on either is a visible refusal and the dialog does not open.  A confirm-only envelope (no form) - whether
- * fetched or a local blank-form-token prompt - stays unversioned and always opens.
+ * the modal top-level and the nested form {@code contractVersion} equal the ONE literal the runtime bakes in; a wrong
+ * or missing version on either is a visible refusal and the dialog does not open.  A confirm-only envelope (no form) -
+ * whether fetched or a local blank-form-token prompt - stays unversioned and always opens.
+ *
+ * <p>
+ * Because one literal is compared against both halves, the three constants ({@link ModalDef#CONTRACT_VERSION},
+ * {@link FormDef#CONTRACT_VERSION} and the runtime's) must move together.  A half-done bump is covered directly: a
+ * modal stamped the previous version carrying a form stamped the current one must refuse, naming the mismatch.
  */
 class ViewsJs_ContractVersion_Test extends TestBase {
 
@@ -59,6 +65,18 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 		assertTrue(body.contains("payload.form.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION"), body);
 		// Confirm-only (blank form token) stays a local, unversioned prompt.
 		assertTrue(body.contains("isBlankToken(action.form)"), body);
+	}
+
+	/**
+	 * The lockstep guard: the runtime's baked-in literal and both bean constants are the same string.  This is the
+	 * cheap, always-on half of the check the behavioural cases below prove end-to-end - bumping any two of the three
+	 * fails here immediately rather than surfacing as "every form dialog refuses to open".
+	 */
+	@Test void a02_contractLockstep_runtimeLiteralEqualsBothBeanConstants() throws Exception {
+		assertEquals(ModalDef.CONTRACT_VERSION, FormDef.CONTRACT_VERSION,
+			"ModalDef and FormDef contract versions must move together");
+		assertTrue(viewsJs().contains("const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = \"" + ModalDef.CONTRACT_VERSION + "\";"),
+			"the runtime must bake in the same literal the beans stamp, currently '" + ModalDef.CONTRACT_VERSION + "'");
 	}
 
 	private static Map<?,?> report;
@@ -143,10 +161,13 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 		return report;
 	}
 
-	@Test void b01_bothVersionsOneOpensTheDialog() {
+	@Test void b01_bothVersionsCurrentOpenTheDialog() {
 		var r = report();
-		assertEquals(true, r.get("bothV1_opens"));
-		assertEquals(true, r.get("bothV1_noRefusal"));
+		assertEquals(ModalDef.CONTRACT_VERSION, r.get("currentVersion"),
+			"the harness must be exercising the version the beans stamp");
+		assertEquals(true, r.get("currentVersionIsNotStale"), "the stale value must differ from the current one, or the negative cases below are vacuous");
+		assertEquals(true, r.get("bothCurrent_opens"));
+		assertEquals(true, r.get("bothCurrent_noRefusal"));
 	}
 
 	@Test void b02_wrongModalVersionRefusesWithoutOpening() {
@@ -159,6 +180,28 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 		var r = report();
 		assertEquals(true, r.get("formVersionMissing_noOpen"));
 		assertEquals(true, r.get("formVersionMissing_refusal"));
+	}
+
+	/**
+	 * A modal left on the previous version while its form carries the new one - exactly what shipping two of the
+	 * three constants produces - refuses visibly, names the mismatch, and quotes all three values so the half that
+	 * was missed is identifiable from the message alone.
+	 */
+	@Test void b03b_halfDoneLockstepBump_refusesNamingTheMismatch() {
+		var r = report();
+		assertEquals(true, r.get("staleModalCurrentForm_noOpen"), "a mismatched handshake must not open a dialog");
+		assertEquals(true, r.get("staleModalCurrentForm_refusal"));
+		assertEquals(true, r.get("staleModalCurrentForm_namesTheMismatch"),
+			() -> "expected a 'dialog-form contract mismatch' refusal, got: " + r.get("staleModalCurrentForm_message"));
+		assertEquals(true, r.get("staleModalCurrentForm_quotesAllThree"),
+			() -> "refusal must quote modal/form/runtime versions, got: " + r.get("staleModalCurrentForm_message"));
+	}
+
+	/** The mirror image: a stale form under a current modal is refused too, so neither half can slip through. */
+	@Test void b03c_staleFormUnderCurrentModal_alsoRefuses() {
+		var r = report();
+		assertEquals(true, r.get("currentModalStaleForm_noOpen"));
+		assertEquals(true, r.get("currentModalStaleForm_refusal"));
 	}
 
 	@Test void b04_confirmOnlyFetchedEnvelopeStaysUnversionedAndOpens() {

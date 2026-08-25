@@ -161,13 +161,18 @@ function pillHtml(cell, meta) {
 out.pill_display = pillHtml('ok', { field: 'state' });
 out.pill_class = String(pill['class']());
 out.pill_dotOff = pillHtml('ok', { field: 'state', dot: 'off' });
-// Tone class only for ok|warn|exceeds; neutral/absent/info -> no tone class (inherits currentColor).
-out.pill_toneOk = pillHtml('open', { field: 'state', tone: 'ok' }).indexOf('jc-pill-dot is-ok') >= 0;
-out.pill_toneWarn = pillHtml('open', { field: 'state', tone: 'warn' }).indexOf('jc-pill-dot is-warn') >= 0;
-out.pill_toneExceeds = pillHtml('open', { field: 'state', tone: 'exceeds' }).indexOf('jc-pill-dot is-exceeds') >= 0;
+// Tone class for the four coloured tones of the closed palette; neutral/absent/off-palette -> no tone class.
+out.pill_tones = (NS._render.pillTones || []).slice().sort().join(',');
+out.pill_toneInfo = pillHtml('open', { field: 'state', tone: 'info' }).indexOf('jc-pill-dot is-info') >= 0;
+out.pill_toneSuccess = pillHtml('open', { field: 'state', tone: 'success' }).indexOf('jc-pill-dot is-success') >= 0;
+out.pill_toneWarning = pillHtml('open', { field: 'state', tone: 'warning' }).indexOf('jc-pill-dot is-warning') >= 0;
+out.pill_toneError = pillHtml('open', { field: 'state', tone: 'error' }).indexOf('jc-pill-dot is-error') >= 0;
 out.pill_toneNeutralNoClass = pillHtml('open', { field: 'state', tone: 'neutral' }).indexOf('is-') < 0;
-out.pill_toneInfoNoClass = pillHtml('open', { field: 'state', tone: 'info' }).indexOf('is-') < 0;
 out.pill_toneAbsentNoClass = pillHtml('open', { field: 'state' }).indexOf('is-') < 0;
+// The retired v1 tone names are off-palette now and must emit no modifier at all.
+out.pill_toneV1NoClass = ['ok', 'warn', 'exceeds', 'accent', 'danger', 'INFO', 'Success'].every(function (t) {
+	return pillHtml('open', { field: 'state', tone: t }).indexOf('is-') < 0;
+});
 // Action-bound variant adds role/tabindex/data-juneau-action ONLY when meta.action is present.
 out.pill_action = pillHtml('open', { field: 'state', action: 'ack' });
 out.pill_actionHasRole = out.pill_action.indexOf('role="button"') >= 0;
@@ -188,9 +193,27 @@ out.pill_hostileScript = String(out.pill_hostileLabel + out.pill_hostileField + 
 // The hostile label is escaped to text (&lt;img ...&gt;), so no raw <img tag survives into the markup.
 out.pill_hostileEscaped = String(out.pill_hostileLabel).indexOf('&lt;img') >= 0
 	&& String(out.pill_hostileLabel).indexOf('<img') < 0;
-// pill is NOT a frozen built-in (cell-path only, k2/B3): resolveSinkRenderer must not find it.
-out.pill_notFrozen = NS.resolveSinkRenderer('pill') == null;
-out.pill_notInFrozenIds = (NS._render.frozenBuiltinIds || []).indexOf('pill') < 0;
+// pill IS a fill-sink built-in, but its sink renderer is a distinct DISPLAY-ONLY variant of the cell renderer.
+const sinkPill = NS.resolveSinkRenderer('pill');
+function sinkPillHtml(cell, meta) {
+	return String(sinkPill.display(cell, {}, meta || {}));
+}
+out.sinkPill_resolves = sinkPill != null;
+out.sinkPill_inFrozenIds = (NS._render.frozenBuiltinIds || []).indexOf('pill') >= 0;
+out.sinkPill_class = String(sinkPill['class']());
+out.sinkPill_display = sinkPillHtml('ok', { field: 'state' });
+out.sinkPill_sameAsCellWhenDisplayOnly = out.sinkPill_display === out.pill_display;
+out.sinkPill_keepsTone = sinkPillHtml('open', { field: 'state', tone: 'warning' }).indexOf('is-warning') >= 0;
+// The action affordance can never appear on a sink pill, even if an author smuggles meta.action past the server.
+out.sinkPill_actionSmuggled = sinkPillHtml('open', { field: 'state', action: 'ack' });
+out.sinkPill_noRole = out.sinkPill_actionSmuggled.indexOf('role=') < 0;
+out.sinkPill_noTabindex = out.sinkPill_actionSmuggled.indexOf('tabindex') < 0;
+out.sinkPill_noActionAttr = out.sinkPill_actionSmuggled.indexOf('data-juneau-action') < 0;
+out.sinkPill_noHandlerAttrs = /\son[a-z]+=/.test(out.sinkPill_actionSmuggled) === false;
+// registerRenderer cannot swap the sink variant out (frozen), and cannot bleed the cell action branch onto it.
+NS.registerRenderer('pill', { display: function () { return '<b onclick="x()">pwned</b>'; } });
+out.sinkPill_frozenAgainstOverride = NS.resolveSinkRenderer('pill') === sinkPill
+	&& sinkPillHtml('open', { field: 'state', action: 'ack' }).indexOf('role=') < 0;
 
 const builtinTag = NS.resolveSinkRenderer('tag');
 NS.registerRenderer('tag', { display: function () { return '<img src=x onerror=alert(1)>'; } });

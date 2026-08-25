@@ -165,4 +165,39 @@ const c9 = fixture('ack', { rowActions: [ACK] }, true);
 clickPill(c9);
 out.withDetails_fetchIssued = fetchCalls.length > before;
 
+// --- Case 10: selection stays checkbox-only - clicking or keying a pill never toggles a row -------------------
+// Selection is the SelectionDef/BulkMutateDef checkbox protocol.  A pill is not a selection affordance, so with
+// initSelection ALSO wired on the same table, activating a pill must leave selectionState untouched (and a
+// display-only pill must be just as inert).  Guards against re-growing the dropped select-pill path.
+(function selectionIntegrity() {
+	const selectionState = { selected: new Set(), rowIdField: 'id' };
+	const f = fixture('ack', { rowActions: [ACK] }, false);
+	f.ctx.selectionState = selectionState;
+	I.initSelection(f.table, f.ctx);
+	f.tr.setAttribute('data-juneau-row-id', 'r1');
+
+	clickPill(f);
+	out.selection_afterPillClick = selectionState.selected.size;
+	keyPill(f, 'Enter');
+	keyPill(f, ' ');
+	out.selection_afterPillKeys = selectionState.selected.size;
+
+	const d = fixture(null, { rowActions: [ACK] }, false);
+	d.ctx.selectionState = selectionState;
+	I.initSelection(d.table, d.ctx);
+	d.tr.setAttribute('data-juneau-row-id', 'r2');
+	clickPill(d);
+	out.selection_afterDisplayOnlyPillClick = selectionState.selected.size;
+
+	// Positive control: the checkbox protocol still works on the very same table, so the zeroes above are the pill
+	// being inert rather than initSelection being unwired.
+	const cb = env.el('input');
+	cb.className = 'juneau-view-select-checkbox';
+	cb.checked = true;
+	f.td.appendChild(cb);
+	f.table.dispatch('change', { target: cb });
+	out.selection_afterCheckboxChange = selectionState.selected.size;
+	out.selection_checkboxSelectedR1 = selectionState.selected.has('r1');
+})();
+
 process.stdout.write(JSON.stringify(out));

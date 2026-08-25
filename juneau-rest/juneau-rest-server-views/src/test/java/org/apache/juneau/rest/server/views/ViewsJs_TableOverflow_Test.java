@@ -210,4 +210,44 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertEquals(true, r.get("dt2_notWrapped"));
 		assertEquals(true, r.get("dt2_noScrollBoxCreated"));
 	}
+
+	/**
+	 * DT1 is <b>not</b> dropped by the 10.0 overflow contract: a DT1-shaped DOM still resolves its scroll region
+	 * through the existing wrap path, so there is no "explicit failure on DT1" anywhere in the contract.
+	 */
+	@Test void b07_dt1StillResolvesThroughTheWrapPath() {
+		assertEquals(true, report().get("l12_dt1RegionResolves"),
+			"a DT1-shaped DOM must still resolve .juneau-view-table-scroll as its scroll region");
+	}
+
+	/**
+	 * L12 A preserved verbatim: the overflow-detected {@code tabindex="0"} + generic label are applied ONLY while the
+	 * region actually overflows, and BOTH are removed once it does not.  OQ4/OQ5 stay out.
+	 */
+	@Test void b08_l12a_tabindexOnlyWhileOverflowing() {
+		var r = report();
+		assertEquals(true, r.get("l12_overflowingHasTabindex"), "an overflowing region must be keyboard-reachable");
+		assertEquals(true, r.get("l12_overflowingHasLabel"), "an overflowing region must carry the generic label");
+		assertEquals(true, r.get("l12_notOverflowingNoTabindex"),
+			"a non-overflowing region must NOT keep a tab stop (a false 'scrollable' announcement)");
+		assertEquals(true, r.get("l12_notOverflowingNoLabel"), "a non-overflowing region must NOT keep the label");
+	}
+
+	/**
+	 * The clip/ellipsis opt-out has to reach the cell to mean anything: the named emitters (progress / pill / tag /
+	 * linked) put {@code juneau-cell-wrap} on their column's className, which is what stamps it on the {@code <td>}.
+	 * Prose renderers stay on the clip default, and an author's own column class is preserved rather than replaced.
+	 */
+	@Test void b09_namedEmittersPutTheOptOutOnTheCell() {
+		var r = report();
+		assertEquals(true, r.get("wrap_pill"), "the `pill` column must carry juneau-cell-wrap");
+		assertEquals(true, r.get("wrap_progress"), "the `progress` column must carry juneau-cell-wrap");
+		assertEquals(true, r.get("wrap_tag"), "the `tag` column must carry juneau-cell-wrap");
+		assertEquals(true, r.get("wrap_linked"), "the `linked` column must carry juneau-cell-wrap");
+		assertEquals(true, r.get("wrap_truncateStaysClipped"),
+			"`truncate` is unchanged and stays on the clip default - it must not opt out");
+		assertEquals(true, r.get("wrap_dateStaysClipped"), "a prose renderer must stay on the clip default");
+		assertEquals(true, r.get("wrap_authorClassPreserved"),
+			"a renderer class must be APPENDED to the author's column class, never replace it");
+	}
 }

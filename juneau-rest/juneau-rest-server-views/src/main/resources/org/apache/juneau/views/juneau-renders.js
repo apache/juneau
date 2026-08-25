@@ -237,7 +237,10 @@
 			const href = meta && meta.href;
 			if (!href) return escHtml(text);
 			return '<a href="' + escAttr(interpolateHref(href, rowData)) + '">' + escHtml(text) + "</a>";
-		}
+		},
+		// A link is an affordance, not prose: opt its cell out of the clip/ellipsis default so the anchor text stays
+		// whole and clickable.  `linked` has no cell class of its own, so the opt-out IS its class facet.
+		"class": function () { return "juneau-cell-wrap"; }
 	});
 
 	registerRenderer("truncate", {
@@ -284,7 +287,9 @@
 			const cls = "tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
 			return '<span class="' + escAttr(cls) + '">' + escHtml(value) + "</span>";
 		},
-		"class": function () { return "tag-cell"; }
+		// `juneau-cell-wrap` opts the cell out of the clip/ellipsis default - a tag chip is a fixed-size affordance
+		// that must not be ellipsised, and a multi-tag cell needs to wrap.
+		"class": function () { return "tag-cell juneau-cell-wrap"; }
 	});
 
 	function progressUnknown(cellData) {
@@ -350,13 +355,18 @@
 			const n = Number(cellData);
 			return Number.isFinite(n) ? n : cellData;
 		},
-		"class": function () { return "progress-cell"; }
+		// `juneau-cell-wrap` opts the cell out of the clip/ellipsis default - a progress bar is a sized box, and
+		// clipping it with an ellipsis would truncate the bar rather than any text.
+		"class": function () { return "progress-cell juneau-cell-wrap"; }
 	});
 
 	const frozenBuiltins = Object.create(null);
 	const BUILTIN_RENDER_IDS = [
 		"bool", "date", "datetime", "decimal", "json", "linked", "progress", "tag", "truncate", "ts-zulu"
 	];
+	// Fill-sink built-ins whose sink renderer is a distinct, hand-registered variant of the cell renderer rather than
+	// a frozen snapshot of it (see the `pill` block below).  Part of the frozen id set, absent from the snapshot pass.
+	const SINK_VARIANT_RENDER_IDS = ["pill"];
 	(function snapshotFrozenBuiltins() {
 		for (let i = 0; i < BUILTIN_RENDER_IDS.length; i++) {
 			const id = BUILTIN_RENDER_IDS[i];
@@ -371,39 +381,61 @@
 		return Object.hasOwn(frozenBuiltins, id) ? frozenBuiltins[id] : null;
 	}
 
-	// --- pill renderer (TODO-445k) -------------------------------------------------------------------------------
+	// --- pill renderer -------------------------------------------------------------------------------------------
 	// A status chip = leading dot + label, themed by the same shared `.tag.<domain>.<value>` classes the `tag`
 	// renderer emits (so consumer palettes theme pills for free) plus one structural `.jc-pill-dot` span.  Display
-	// only by default; `meta.action` (a ViewDef.rowActions id) opts into action-binding: the renderer stamps
-	// `role="button" tabindex="0" data-juneau-action="<id>"` and the EXISTING table-level row-action handler
-	// (juneau-views.js) dispatches - no handler is bound here, no second action protocol.
+	// only by default; on the CELL path `meta.action` (a ViewDef.rowActions id) opts into action-binding: the
+	// renderer stamps `role="button" tabindex="0" data-juneau-action="<id>"` and the EXISTING table-level row-action
+	// handler (juneau-views.js) dispatches - no handler is bound here, no second action protocol.  The display facet
+	// returns an escaped string (like `tag`); it never assigns innerHTML.
 	//
-	// DELIBERATELY registered on the cell-render path ONLY and NOT added to BUILTIN_RENDER_IDS / frozenBuiltins:
-	// `pill` is not a fill-sink built-in this slice (k2 / review B3), so `resolveSinkRenderer("pill")` stays null
-	// and the frozen id set stays the current 10.  The display facet returns an escaped string (like `tag`); it
-	// never assigns innerHTML.
+	// `meta.tone` is the closed five-value status palette below - the same names QuickStats paints with, so one tone
+	// name is one colour across the toolkit.  This is NOT the `progress` renderer's `warn`/`exceeds` meta, which are
+	// numeric THRESHOLDS rather than tones and share no vocabulary with this map.
+	const PILL_TONES = { info: 1, success: 1, warning: 1, error: 1, neutral: 1 };
+
+	// `neutral` is a legal tone that deliberately emits NO modifier: "no semantic colour" is the absence of a class,
+	// so it inherits the chip's themed currentColor exactly as an absent tone does.  An off-palette value also emits
+	// nothing (the server-side ViewDef check has already rejected it; this is the client's fail-safe half).
+	function pillToneClass(tone) {
+		return tone && tone !== "neutral" && Object.hasOwn(PILL_TONES, tone) ? " is-" + tone : "";
+	}
+
+	function pillMarkup(cellData, meta, allowAction) {
+		if (cellData == null || cellData === "") return "";
+		const value = String(cellData);
+		const domain = meta && meta.field ? String(meta.field) : "";
+		const domainToken = normalizeTagToken(domain);
+		const valueToken = normalizeTagToken(value);
+		const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
+		const toneClass = pillToneClass(meta && meta.tone ? String(meta.tone) : "");
+		const dot = (meta && meta.dot === "off")
+			? ""
+			: '<span class="jc-pill-dot' + toneClass + '" aria-hidden="true"></span>';
+		const action = allowAction && meta && meta.action ? String(meta.action) : "";
+		const actionAttrs = action
+			? ' role="button" tabindex="0" data-juneau-action="' + escAttr(action) + '"'
+			: "";
+		return '<span class="' + escAttr(cls) + '" data-juneau-pill' + actionAttrs + '>' + dot + escHtml(value) + "</span>";
+	}
+
 	registerRenderer("pill", {
-		display: function (cellData, rowData, meta) {
-			if (cellData == null || cellData === "") return "";
-			const value = String(cellData);
-			const domain = meta && meta.field ? String(meta.field) : "";
-			const domainToken = normalizeTagToken(domain);
-			const valueToken = normalizeTagToken(value);
-			const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
-			// Tone class only for the three views progress tokens; neutral/absent/unknown inherit currentColor.
-			const tone = meta && meta.tone ? String(meta.tone) : "";
-			const toneClass = (tone === "ok" || tone === "warn" || tone === "exceeds") ? " is-" + tone : "";
-			const dot = (meta && meta.dot === "off")
-				? ""
-				: '<span class="jc-pill-dot' + toneClass + '" aria-hidden="true"></span>';
-			const action = meta && meta.action ? String(meta.action) : "";
-			const actionAttrs = action
-				? ' role="button" tabindex="0" data-juneau-action="' + escAttr(action) + '"'
-				: "";
-			return '<span class="' + escAttr(cls) + '" data-juneau-pill' + actionAttrs + '>' + dot + escHtml(value) + "</span>";
-		},
-		"class": function () { return "pill-cell"; }
+		display: function (cellData, rowData, meta) { return pillMarkup(cellData, meta, true); },
+		// `juneau-cell-wrap` opts the cell out of the clip/ellipsis default - a pill is a chip affordance, and a
+		// multi-pill cell needs to wrap rather than ellipsise.
+		"class": function () { return "pill-cell juneau-cell-wrap"; }
 	});
+
+	// The fill-sink variant of `pill`, registered straight into the frozen set rather than snapshotted from the
+	// registry above: a sink pill is unconditionally DISPLAY-ONLY.  A fill sink has no rowActions in scope, so it can
+	// never emit `role="button"`/`tabindex`/`data-juneau-action` even if an author smuggles a `meta.action` past the
+	// server's fail-closed check.  Registered here (not via BUILTIN_RENDER_IDS) precisely so `registerRenderer("pill")`
+	// cannot replace it and so the cell variant's action branch cannot leak onto the sink path.
+	const sinkPill = {
+		display: function (cellData, rowData, meta) { return pillMarkup(cellData, meta, false); },
+		"class": function () { return "pill-cell juneau-cell-wrap"; }
+	};
+	frozenBuiltins["pill"] = Object.freeze(sinkPill);
 
 	// ==================================================================================================================
 	// TIMESTAMP POPUP  (datetime-renderer-owned; 445c CellPopover can generalize later)
@@ -534,5 +566,10 @@
 	NS._render.formatLocalTime = formatLocalTime;
 	NS._render.formatCalifornia = formatCalifornia;
 	NS._render.popupLines = popupLines;
-	NS._render.frozenBuiltinIds = BUILTIN_RENDER_IDS.slice();
+	// The closed status palette, exposed so a test can pin the exact five names rather than probe them one chip at a
+	// time (and catch a sixth being smuggled in).
+	NS._render.pillTones = Object.keys(PILL_TONES);
+	// `pill`'s sink renderer is a hand-registered display-only variant rather than a snapshot of the cell renderer,
+	// so it is appended here instead of living in BUILTIN_RENDER_IDS (which drives snapshotFrozenBuiltins).
+	NS._render.frozenBuiltinIds = BUILTIN_RENDER_IDS.concat(SINK_VARIANT_RENDER_IDS);
 })();

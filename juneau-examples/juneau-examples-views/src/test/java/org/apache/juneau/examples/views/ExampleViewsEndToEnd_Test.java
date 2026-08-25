@@ -22,6 +22,7 @@ import java.net.http.*;
 import java.net.http.HttpResponse.*;
 
 import org.apache.juneau.TestBase;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -230,6 +231,49 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
+	void f01_overviewPage_paintsAQuickStatsStripAboveTheTable() throws Exception {
+		var res = get("/overview");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("data-juneau-quickstats=\"alert-overview\""), "strip marker");
+		assertTrue(body.contains("data-juneau-quickstats-contract=\"1\""), "QuickStats' own contract stamp");
+		assertTrue(body.contains("data-juneau-stat=\"total\""), "scalar tile");
+		assertTrue(body.contains("data-juneau-stat=\"critical\""), "meter");
+		assertTrue(body.contains("data-juneau-stat=\"by-status\""), "segmented breakdown");
+		// Server-painted once, so the figures read with JavaScript disabled.
+		assertTrue(body.contains(">Total alerts<"), "tile label painted server-side");
+		assertTrue(body.contains("jc-stat-fill"), "meter fill painted server-side");
+		// The strip leads the wrapper, so it lands above the toolbar row DataTables grows at init.
+		assertTrue(body.indexOf("jc-quickstats") < body.indexOf("<table"), "strip precedes the table");
+	}
+
+	@Test
+	void f02_overviewPage_stripAndPillsUseTheFiveValueToneVocabulary() throws Exception {
+		var body = get("/overview").body();
+		// At least one of each coloured tone the page declares, and none of the retired v1 pill tone names.
+		assertTrue(body.contains("is-info"), "info tone");
+		assertTrue(body.contains("is-warning"), "warning tone");
+		assertTrue(body.contains("is-error"), "error tone");
+		assertFalse(body.contains("is-ok\""), "retired 'ok' tone");
+		assertFalse(body.contains("is-exceeds"), "retired 'exceeds' tone");
+		assertFalse(body.contains("is-accent"), "badge-palette 'accent' is not a status tone");
+	}
+
+	@Test
+	void f03_overviewPage_quickStatsAndItsPillsCarryNoActionAffordance() throws Exception {
+		var body = get("/overview").body();
+		var strip = body.substring(body.indexOf("jc-quickstats"), body.indexOf("<table"));
+		assertFalse(strip.contains("role="), "no button semantics on a stat");
+		assertFalse(strip.contains("tabindex"), "a stat is not focusable");
+		assertFalse(strip.contains("<a "), "a stat is not a link");
+		assertFalse(strip.contains("data-juneau-action"), "a stat dispatches nothing");
+		// The overview's own pills are display-only too: no action id anywhere in its sidecar.
+		assertFalse(body.contains("\"action\""), "no pill action on this page's view");
+		// And the sink pill is declared in the row-detail template rather than as a column renderer.
+		assertTrue(body.contains("\"id\":\"pill\""), "pill renderer declared");
+	}
+
+	@Test
 	void d05_ackAlert_mutatesStatus() throws Exception {
 		var uri = server.getRootUrl().resolve("/data/alerts/ALRT-2/ack");
 		var req = HttpRequest.newBuilder(uri)
@@ -245,13 +289,21 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 
 	@Test
 	void d06_ackForm_servesVersionStampedValidatedModal() throws Exception {
-		// The present=dialog form GET returns the modal.checked() envelope: contractVersion "1" on BOTH the modal
-		// top-level and the nested form, the typed 6-type inputs (textarea/toggle/select/action), and the nested
+		// The present=dialog form GET returns the modal.checked() envelope: the CURRENT contract version on BOTH the
+		// modal top-level and the nested form, the typed 6-type inputs (textarea/toggle/select/action), and the nested
 		// action button targets the confirm-only "esc" action (modal-over-modal trigger).
 		var res = getJson("/data/alerts/ALRT-2/ack-form");
 		assertEquals(200, res.statusCode(), res.body());
 		var body = res.body();
-		assertTrue(body.contains("\"contractVersion\":\"1\""), body);
+		// Read from the constants, not a literal: the runtime compares ONE baked-in literal against BOTH stamps, so a
+		// half-done bump would make every form-bearing dialog refuse to open.  Asserting both occurrences here is what
+		// makes that visible end-to-end.
+		assertEquals(ModalDef.CONTRACT_VERSION, FormDef.CONTRACT_VERSION,
+			"the modal and form contract versions must move in lockstep");
+		var stamp = "\"contractVersion\":\"" + ModalDef.CONTRACT_VERSION + "\"";
+		assertTrue(body.contains(stamp), body);
+		assertEquals(2, body.split(java.util.regex.Pattern.quote(stamp), -1).length - 1,
+			() -> "both the modal top-level and the nested form must carry " + stamp + ": " + body);
 		assertTrue(body.contains("\"type\":\"textarea\""), body);
 		assertTrue(body.contains("\"type\":\"toggle\""), body);
 		assertTrue(body.contains("\"type\":\"select\""), body);

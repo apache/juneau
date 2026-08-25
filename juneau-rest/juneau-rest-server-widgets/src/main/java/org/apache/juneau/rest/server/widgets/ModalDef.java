@@ -14,19 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * The declarative modal (dialog) a {@code present=}{@link RowAction.Present#DIALOG dialog} row action opens &mdash;
- * the payload the <b>modal-open confirmation fetch</b> returns (design doc §6.2; the modal half of
- * {@code TODO-416}).
+ * The declarative modal (dialog) a {@code present=dialog} row action opens &mdash; the payload the
+ * <b>modal-open confirmation fetch</b> returns (design doc §6.2).
+ *
+ * <h5 class='section'>A widget contract driven by a view-module runtime</h5>
+ * <p>
+ * This bean is a general widget contract and lives in this module, but the browser runtime that paints it ships with
+ * the rich-view module (it is part of that module's {@code juneau-views.js} monolith, which is not split apart here).
+ * So a page that opens one of these dialogs loads the view runtime; nothing in this module reaches back to it.
  *
  * <h5 class='section'>Safe-by-construction confirmation body</h5>
  * <p>
@@ -40,35 +44,32 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>The idempotency key rides here</h5>
  * <p>
- * {@link #idempotencyKey} is the server-minted {@link IdempotencyKey#value() key value}, minted at modal-open and
- * bound to {@code (action, targetId)}.  The runtime carries it verbatim on the submit so a double-click / re-submit /
- * browser retry all collapse to one effect; the server checks the {@link IdempotencyKey#matches(String, String)
- * binding} on submit and answers a mismatch with a named refusal, never a replayed success.
+ * {@link #idempotencyKey} is a server-minted key value, minted at modal-open and bound to
+ * {@code (action, targetId)}.  The runtime carries it verbatim on the submit so a double-click / re-submit / browser
+ * retry all collapse to one effect; the server checks that binding on submit and answers a mismatch with a named
+ * refusal, never a replayed success.  The minting/binding helper itself is a table-and-row-action concern and stays
+ * in the rich-view module, which is why this field is a plain {@code String} rather than that helper's type.
  *
- * <h5 class='section'>Not a new {@code RowAction} wire field</h5>
+ * <h5 class='section'>Not a new row-action wire field</h5>
  * <p>
- * This is the response the {@link RowAction#form form-source URL} returns, <b>not</b> a new field on the frozen
- * {@link RowAction} wire schema: the modal's declaration lives in this separately-served payload so the row-action
- * contract stays frozen.
+ * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
+ * schema: the modal's declaration lives in this separately-served payload so the row-action contract stays frozen.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mint</jsm>(<js>"ack"</js>, <jv>incidentId</jv>);
  * 	ModalDef <jv>modal</jv> = ModalDef.<jsm>create</jsm>(<js>"Acknowledge this incident?"</js>)
  * 		.field(<js>"Incident"</js>, <jv>incidentNumber</jv>)
  * 		.field(<js>"Title"</js>, <jv>incidentTitle</jv>)
  * 		.field(<js>"Service"</js>, <jv>serviceName</jv>)
  * 		.field(<js>"Current status"</js>, <jv>currentStatus</jv>)
  * 		.form(FormDef.<jsm>ofTemplate</jsm>(<js>"servlet:/incidents/ack-form.ftl"</js>))
- * 		.idempotencyKey(<jv>key</jv>.value());
+ * 		.idempotencyKey(<jv>keyValue</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link FormDef}
- * 	<li class='jc'>{@link IdempotencyKey}
- * 	<li class='jc'>{@link ActionResult}
- * 	<li class='jc'>{@link RowAction}
+ * 	<li class='jc'>{@link Widget}
  * </ul>
  *
  * @since 10.0.0
@@ -77,8 +78,15 @@ import org.apache.juneau.rest.server.widgets.*;
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ModalDef implements Widget {
 
-	/** The frozen modal contract version.  Bumped only on a breaking wire change to this modal contract. */
-	public static final String CONTRACT_VERSION = "1";
+	/**
+	 * The frozen modal contract version.  Bumped only on a breaking wire change to this modal contract.
+	 *
+	 * <p>
+	 * Moves in <b>lockstep</b> with {@link FormDef#CONTRACT_VERSION} and the runtime's baked-in literal: the runtime
+	 * compares one literal against both this version and the nested form's, so bumping any two of the three makes
+	 * every form-bearing dialog refuse to open.
+	 */
+	public static final String CONTRACT_VERSION = "2";
 
 	/**
 	 * A single typed confirmation field: a label and a value, painted client-side with {@code textContent} (never
@@ -134,7 +142,8 @@ public class ModalDef implements Widget {
 
 	/**
 	 * The server-minted idempotency key value the runtime carries on the submit; omitted from the wire when unset.
-	 * See {@link IdempotencyKey}.
+	 * The value is minted (and its {@code (action, targetId)} binding re-checked on submit) by the rich-view
+	 * module's idempotency-key helper.
 	 */
 	public String idempotencyKey;
 
@@ -179,7 +188,7 @@ public class ModalDef implements Widget {
 	}
 
 	/**
-	 * Sets the server-minted idempotency key value carried on the submit (see {@link IdempotencyKey}).
+	 * Sets the server-minted idempotency key value carried on the submit.
 	 *
 	 * @param value The key value.  Can be <jk>null</jk> to unset.
 	 * @return This object.

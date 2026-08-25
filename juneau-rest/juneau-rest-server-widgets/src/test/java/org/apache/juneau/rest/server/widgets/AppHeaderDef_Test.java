@@ -19,14 +19,12 @@ package org.apache.juneau.rest.server.widgets;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.*;
-
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@link AppHeaderDef} bean contract and fail-closed {@link AppHeaderDef#validate()} branches, plus the L8 A
- * "no {@code roles()} API" and views-module isolation rules.
+ * {@link AppHeaderDef} bean contract and fail-closed {@link AppHeaderDef#validate()} branches, plus the "no
+ * {@code roles()} API" rule.  The module-isolation rules are asserted in {@link Widgets_ModuleBoundary_Test}.
  */
 class AppHeaderDef_Test extends TestBase {
 
@@ -123,26 +121,6 @@ class AppHeaderDef_Test extends TestBase {
 				assertNotEquals("roles", m.getName(), () -> "unexpected roles() method on " + c.getName());
 			for (var f : c.getFields())
 				assertNotEquals("roles", f.getName(), () -> "unexpected roles field on " + c.getName());
-		}
-	}
-
-	// S7: the widgets module is data + validate() only - no views / rest.server import.
-	@Test void a15_widgetsModule_hasNoViewsOrServerImport() throws Exception {
-		var root = Path.of("").toAbsolutePath();
-		var src = root;
-		if (!Files.isDirectory(src.resolve("src/main/java")))
-			src = root.resolve("juneau-rest/juneau-rest-server-widgets");
-		assertTrue(Files.isDirectory(src.resolve("src/main/java")), src::toString);
-		try (var walk = Files.walk(src.resolve("src/main/java"))) {
-			for (var f : walk.filter(p -> p.toString().endsWith(".java")).toList()) {
-				var text = Files.readString(f);
-				assertFalse(text.contains("import org.apache.juneau.rest.server.views."),
-					() -> "widgets module must not import views: " + f);
-				assertFalse(text.contains("import org.apache.juneau.rest.server.RestContext"),
-					() -> "widgets module must not import rest.server runtime: " + f);
-				assertFalse(text.contains("import org.apache.juneau.bean.html5."),
-					() -> "widgets beans must not import html5 (emit lives in views): " + f);
-			}
 		}
 	}
 }

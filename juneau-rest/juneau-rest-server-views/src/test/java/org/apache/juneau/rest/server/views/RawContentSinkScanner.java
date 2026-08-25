@@ -94,20 +94,39 @@ final class RawContentSinkScanner {
 	/** Matches {@code document.write(}. */
 	private static final Pattern JS_DOCUMENT_WRITE = Pattern.compile("document\\.write\\s*\\(");
 
+	/** This module's shipped-JS resource directory, relative to the module root. */
+	private static final String VIEWS_JS_DIR = "src/main/resources/org/apache/juneau/views";
+
+	/**
+	 * The WIDGET module's shipped-JS resource directory, relative to THIS module's root.
+	 *
+	 * <p>The card / calendar / chrome assets ship there now.  A guardrail follows the file it guards rather than the
+	 * module the test happens to live in - scanning a views path for a relocated asset would silently scan nothing.
+	 */
+	private static final String WIDGETS_JS_DIR =
+		"../juneau-rest-server-widgets/src/main/resources/org/apache/juneau/widgets";
+
 	/** First-party icon-registry SVG assignments; never request/app/renderer text. */
 	private static final List<AllowedJsSink> SHIPPED_JS_ALLOWLIST = List.of(
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "b.innerHTML = markup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "slot.innerHTML = markup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-cards.js", "btn.innerHTML = glyph;"),
-		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "b.innerHTML = markup;"),
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "slot.innerHTML = markup;"),
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-ribbon.js", "b.innerHTML = markup;"),
+		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-cards.js", "btn.innerHTML = glyph;"),
+		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
 	);
 
-	/** Shipped widget JS assets scanned by {@link #scanShippedJs(Path)}. */
+	/** Shipped JS assets scanned by {@link #scanShippedJs(Path)}, each as a reactor-root-relative path. */
 	private static final List<String> SHIPPED_JS_FILES = List.of(
-		"juneau-config.js", "juneau-pages.js", "juneau-icons.js",
-		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js", "juneau-cards.js", "juneau-chrome.js"
+		VIEWS_JS_DIR + "/juneau-config.js",
+		VIEWS_JS_DIR + "/juneau-pages.js",
+		VIEWS_JS_DIR + "/juneau-icons.js",
+		VIEWS_JS_DIR + "/juneau-renders.js",
+		VIEWS_JS_DIR + "/juneau-views.js",
+		VIEWS_JS_DIR + "/juneau-ribbon.js",
+		WIDGETS_JS_DIR + "/juneau-cards.js",
+		WIDGETS_JS_DIR + "/juneau-calendar.js",
+		WIDGETS_JS_DIR + "/juneau-chrome.js"
 	);
 
 	record AllowedJsSink(String relativePath, String snippet) {}
@@ -236,15 +255,13 @@ final class RawContentSinkScanner {
 	static Result scanShippedJs(Path moduleRoot) throws IOException {
 		var sinks = new ArrayList<Sink>();
 		var violations = new ArrayList<String>();
-		var viewsDir = Path.of("src", "main", "resources", "org", "apache", "juneau", "views");
-		for (var name : SHIPPED_JS_FILES) {
-			var rel = viewsDir.resolve(name);
-			var file = moduleRoot.resolve(rel);
+		for (var rel : SHIPPED_JS_FILES) {
+			var file = moduleRoot.resolve(rel.replace('/', File.separatorChar));
 			var allowed = new HashSet<String>();
 			for (var a : SHIPPED_JS_ALLOWLIST)
-				if (a.relativePath().equals(rel.toString().replace('\\', '/')))
+				if (a.relativePath().equals(rel))
 					allowed.add(a.snippet());
-			var r = scanJsHtmlSinks(rel.toString().replace('\\', '/'), Files.readString(file), allowed);
+			var r = scanJsHtmlSinks(rel, Files.readString(file), allowed);
 			sinks.addAll(r.sinks());
 			violations.addAll(r.violations());
 		}

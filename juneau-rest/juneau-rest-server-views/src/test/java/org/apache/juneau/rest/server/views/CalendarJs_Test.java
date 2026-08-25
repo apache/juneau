@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -64,7 +65,14 @@ class CalendarJs_Test extends TestBase {
 			"substituteEndpoint: substituteEndpoint",
 			"eventsForDay: eventsForDay",
 			"applyCap: applyCap",
-			"coalesceKey: coalesceKey"
+			"coalesceKey: coalesceKey",
+			"lastDayKey: lastDayKey",
+			"spanning: spanning",
+			"startTimeLabel: startTimeLabel",
+			"malformedReason: malformedReason",
+			"chipCompare: chipCompare",
+			"laneBudgetFor: laneBudgetFor",
+			"buildSegments: buildSegments"
 		})
 			assertTrue(body.contains(name), () -> "missing pure export '" + name + "'");
 		// The DOM entry points are exposed for the harness/browser runtime.
@@ -178,8 +186,23 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void b01_contractAndMinPoll() {
 		var r = report();
-		assertEquals("1", r.get("contractVersion"));
+		assertEquals("2", r.get("contractVersion"));
 		assertNum(5000, r.get("minPoll"));
+	}
+
+	/** Contract lockstep: the JS literal and the bean constant must move together, or old JS misrenders silently. */
+	@Test void a04_contractVersion_inLockstepWithTheBean() throws Exception {
+		var body = calendarJs();
+		assertTrue(body.contains("JUNEAU_CALENDAR_CONTRACT_VERSION = \"" + CalendarDef.CONTRACT_VERSION + "\""), body);
+	}
+
+	@Test void a05_noLocalLayerStack_popoverUsesTheSharedOne() throws Exception {
+		var code = stripComments(calendarJs());
+		// Rec 8 / rec F: the "+N more" popover is a CLIENT of the one shared stack, never a second stack.
+		assertTrue(code.contains("window.JuneauViews && window.JuneauViews.init"), code);
+		assertTrue(code.contains("stack.pushLayer(pop,"), code);
+		assertFalse(code.contains("function pushLayer"), "the calendar must not define its own pushLayer: " + code);
+		assertFalse(code.contains("function popLayer"), "the calendar must not define its own popLayer: " + code);
 	}
 
 	@Test void b02_daysInMonth_leapYearCorrect() {
@@ -217,11 +240,11 @@ class CalendarJs_Test extends TestBase {
 		assertNull(r.get("civil_badSep"));
 	}
 
-	@Test void b06_contractHandshake_strictStringOne() {
+	@Test void b06_contractHandshake_strictStringTwo() {
 		var r = report();
 		assertEquals(true, r.get("contract_okStr"));
-		assertEquals(false, r.get("contract_badNum"));           // numeric 1 must fail strict ===
-		assertEquals(false, r.get("contract_bad2"));
+		assertEquals(false, r.get("contract_badNum"));           // numeric 2 must fail strict ===
+		assertEquals(false, r.get("contract_bad1"));             // and so must the superseded v1 string
 	}
 
 	@Test void b07_echoCheck() {
@@ -322,5 +345,169 @@ class CalendarJs_Test extends TestBase {
 		assertEquals(true, r.get("err_singleAttempt"));
 		assertEquals(true, r.get("err_emptyMonth"));
 		assertEquals(true, r.get("html_error"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// `end` split inclusivity and the closed malformed set, mirrored from CalendarEvent.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_endInclusivity_allFourCases() {
+		var r = report();
+		assertEquals("2026-03-04", r.get("last_allDayInclusive"));          // date-only end is INCLUSIVE
+		assertEquals("2026-03-02", r.get("last_timedExclusive"));           // [09:00, 10:00) is the start day only
+		assertEquals("2026-03-03", r.get("last_timedMidnightCrossing"));
+		assertEquals("2026-03-02", r.get("last_timedEndsAtMidnight"));      // exclusive: midnight lands the day before
+		assertEquals("2026-03-02", r.get("last_allDaySameDay"));
+		assertEquals("2026-03-02", r.get("last_omittedEnd"));
+		assertEquals("2026-03-02", r.get("last_offsetIgnored"));
+	}
+
+	@Test void c02_spanning_onlyWhenMoreThanOneDayCellIsCovered() {
+		var r = report();
+		assertEquals(true, r.get("span_allDayThreeDay"));
+		assertEquals(false, r.get("span_timedHour"));
+		assertEquals(true, r.get("span_timedMidnight"));                    // a timed crossing is a BAR
+		assertEquals(false, r.get("span_omittedEnd"));                      // start-only is never a bar
+	}
+
+	@Test void c03_malformedSet_isExactlyTheClosedList() {
+		var r = report();
+		assertNull(r.get("mal_ok"));
+		for (var k : new String[]{"mal_noId", "mal_noTitle", "mal_noStart", "mal_badStart", "mal_badEnd",
+			"mal_allDayTrueWithTimedEnd", "mal_allDayFalseWithDateEnd", "mal_mixedShapesNullAllDay",
+			"mal_timedZeroDuration", "mal_endBeforeStart"})
+			assertEquals(true, r.get(k), k);
+		// And these are NOT malformed - no new kinds were invented.
+		for (var k : new String[]{"mal_omittedEndOk", "mal_nullAllDayDateOnlyOk", "mal_nullAllDayTimedOk",
+			"mal_offsetOk", "mal_allDaySameDayOk"})
+			assertEquals(true, r.get(k), k);
+	}
+
+	@Test void c04_malformedEventsAreDropped_theRestStillPaint() {
+		assertEquals("good1,good2", report().get("dropMalformed_ids"));
+	}
+
+	@Test void c05_timeLabels() {
+		var r = report();
+		assertEquals("09:05", r.get("timeLabel_timed"));
+		assertNull(r.get("timeLabel_allDay"));
+		assertEquals("14:30", r.get("timeLabel_offset"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Ordering, lanes, segmentation.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_chipOrdering_allDayFirstThenTimedAscending() {
+		var r = report();
+		assertEquals("a1,a2,t1,t2", r.get("chipOrder_ids"));
+		assertEquals("ch", r.get("chipOrder_spanExcluded"));   // a spanning event is a bar, not a chip
+	}
+
+	@Test void d02_laneBudget_derivedAndHardCapped() {
+		var r = report();
+		assertNum(3, r.get("laneBudget_default"));
+		assertNum(8, r.get("laneBudget_capped"));
+	}
+
+	@Test void d03_weekBoundarySegmentation_withContinuationFlags() {
+		var r = report();
+		assertNum(2, r.get("seg_weekCross_count"));
+		assertEquals("1:6-6:-R 2:0-2:L-", r.get("seg_weekCross_shape"));
+		assertEquals(true, r.get("seg_weekCross_sameEvent"));
+	}
+
+	@Test void d04_spanLongerThanTheMonth_clipsWithFlagsOnBothEnds() {
+		var r = report();
+		assertNum(6, r.get("seg_clip_count"));
+		assertEquals(true, r.get("seg_clip_leftmost"));
+		assertEquals(true, r.get("seg_clip_rightmost"));
+		assertEquals(true, r.get("seg_clip_allInMonth"));
+	}
+
+	@Test void d05_laneSeating_andStabilityAcrossRerender() {
+		var r = report();
+		assertEquals("a@0,c@0,b@1", r.get("seg_lanes"));
+		assertEquals(true, r.get("seg_stable"));
+	}
+
+	@Test void d06_lanesBeyondBudgetOverflowIntoMore() {
+		var r = report();
+		assertNum(2, r.get("seg_budget_seated"));
+		assertNum(2, r.get("seg_budget_laneCount"));
+		assertEquals("s3", r.get("seg_budget_overflowAtMon"));
+	}
+
+	@Test void d07_timedChipsAndBarsPaint() {
+		var r = report();
+		assertEquals("Sprint", r.get("timed_barTitles"));
+		assertEquals("09:30Standup", r.get("timed_chipTitles"));
+		assertTrue(String.valueOf(r.get("timed_chipClass")).contains("jc-cal-event--timed"), r.toString());
+		assertEquals("09:30", r.get("timed_label"));
+		assertEquals("sp", r.get("timed_barEventId"));
+		assertEquals("3", r.get("timed_barSpan"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Legend toggle-filter.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_legendToggle_hidesChipsAndSpanningSegments_noRefetch() {
+		var r = report();
+		assertEquals(true, r.get("filter_hasToggles"));
+		// Both chips are all-day on the same day, so the total order falls through to the event id: rc before tc.
+		assertEquals("ReviewChip,TeamChip", r.get("filter_initialChips"));
+		assertEquals("TeamBar", r.get("filter_initialBars"));
+		assertEquals("ReviewChip", r.get("filter_hiddenChips"));      // the team chip is gone
+		assertEquals("", r.get("filter_hiddenBars"));                 // and so is the team spanning bar
+		assertEquals(true, r.get("filter_pressedFalse"));
+		assertEquals(true, r.get("filter_noRefetch"));
+	}
+
+	@Test void e02_legendToggle_revealsAgain() {
+		var r = report();
+		assertEquals("ReviewChip,TeamChip", r.get("filter_revealedChips"));
+		assertEquals("TeamBar", r.get("filter_revealedBars"));
+		assertEquals(true, r.get("filter_pressedTrueAgain"));
+	}
+
+	@Test void e03_filterResetsOnMonthNavigation() {
+		var r = report();
+		assertEquals("SepTeam", r.get("navReset_painted"));
+		assertEquals("true", r.get("navReset_pressed"));
+	}
+
+	@Test void e04_failedNavigationPreservesTheFilter() {
+		var r = report();
+		assertEquals(true, r.get("navFail_error"));
+		assertEquals("false", r.get("navFail_pressed"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// "+N more" on the ONE shared layer stack.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_moreButton_countsOnlyWhatItHides() {
+		assertEquals("+1 more", report().get("pop_moreLabel"));
+	}
+
+	@Test void f02_missingSharedStack_failsLoud_noLocalSecondStack() {
+		var r = report();
+		assertEquals(true, r.get("pop_noStackLoud"));
+		assertEquals(true, r.get("pop_noStackNoPopover"));
+		assertEquals(true, r.get("pop_noStackVisibleError"));
+	}
+
+	@Test void f03_popoverRegistersOnSharedStack_escapePopsAndRestoresFocus() {
+		var r = report();
+		assertEquals(true, r.get("pop_registered"));
+		assertEquals(true, r.get("pop_lightDismiss"));
+		assertEquals(true, r.get("pop_zOrdered"));
+		assertEquals("true", r.get("pop_expanded"));
+		assertEquals("1", r.get("pop_listsHidden"));
+		assertEquals(true, r.get("pop_escapePopped"));
+		assertEquals(true, r.get("pop_detached"));
+		assertEquals(true, r.get("pop_focusRestored"));
+		assertEquals("false", r.get("pop_collapsed"));
 	}
 }

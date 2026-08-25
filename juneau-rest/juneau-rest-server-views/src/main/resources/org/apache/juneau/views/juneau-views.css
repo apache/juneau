@@ -53,6 +53,15 @@
 	--jc-progress-ok: #6b6b6b;
 	--jc-progress-warn: #8a8a8a;
 	--jc-progress-exceeds: #333333;
+	/*
+	 * The four painted status tones (the fifth, `neutral`, is deliberately the ABSENCE of a modifier and inherits
+	 * currentColor).  Neutral greys of increasing weight so the tones are distinguishable without a theme and without
+	 * this dependency-free file shipping a hue palette; a consumer stylesheet overrides the tokens to add colour.
+	 */
+	--jc-tone-info: #6b6b6b;
+	--jc-tone-success: #4f4f4f;
+	--jc-tone-warning: #8a8a8a;
+	--jc-tone-error: #333333;
 	--jc-popover-bg: #f7f7f7;
 	--jc-popover-border: #ccc;
 	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
@@ -103,9 +112,8 @@
 /*
  * Status pill.  Inherits the shared ".tag.<domain>.<value>" chip shape (theming/palette lives on ".tag");
  * this file adds only the inline-flex layout and the leading dot.  The dot defaults to currentColor (inheriting
- * the chip's themed color); explicit tones map ONLY to the existing --jc-progress-* greys for ok|warn|exceeds.
- * There is deliberately no .is-info and no .is-neutral color rule (neutral/absent keeps currentColor).  No
- * --jc-tag-*, no --jc-focus, no --jc-tone-* aliases here - a richer palette is a console-ui chrome.css follow-on.
+ * the chip's themed color); the four painted tones map to the shared --jc-tone-* tokens.  There is deliberately
+ * no .is-neutral color rule - `neutral` (like an absent tone) keeps currentColor.
  */
 .jc-pill {
 	display: inline-flex;
@@ -120,9 +128,10 @@
 	background: currentColor;
 }
 
-.jc-pill-dot.is-ok { background: var(--jc-progress-ok); }
-.jc-pill-dot.is-warn { background: var(--jc-progress-warn); }
-.jc-pill-dot.is-exceeds { background: var(--jc-progress-exceeds); }
+.jc-pill-dot.is-info { background: var(--jc-tone-info); }
+.jc-pill-dot.is-success { background: var(--jc-tone-success); }
+.jc-pill-dot.is-warning { background: var(--jc-tone-warning); }
+.jc-pill-dot.is-error { background: var(--jc-tone-error); }
 
 /* Action-bound pill: activatable (pointer + keyboard); focus ring via the shared currentColor :focus-visible rule below. */
 .jc-pill[role="button"] {
@@ -135,6 +144,79 @@
 	cursor: default;
 	opacity: 0.5;
 }
+
+/*
+ * Quick-stats strip - the server-painted at-a-glance figures row above a table's toolbar.  Shape only; the four
+ * painted tones reuse the same shared --jc-tone-* tokens the pill dot does, so a tone name is one colour across the
+ * toolkit.  Nothing here is interactive: there is no cursor, no hover, and no focus rule, because the emitted markup
+ * carries no control (see QuickStatsTable).
+ */
+.jc-quickstats {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1.25em;
+	margin: 0 0 0.5em;
+}
+
+.jc-stat {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.jc-stat-label {
+	font-size: 0.85em;
+	opacity: 0.75;
+}
+
+.jc-stat-value {
+	font-weight: bold;
+}
+
+.jc-stat-value.is-info { color: var(--jc-tone-info); }
+.jc-stat-value.is-success { color: var(--jc-tone-success); }
+.jc-stat-value.is-warning { color: var(--jc-tone-warning); }
+.jc-stat-value.is-error { color: var(--jc-tone-error); }
+
+.jc-stat-track {
+	position: relative;
+	display: inline-block;
+	width: 6em;
+	height: 0.5em;
+	background: var(--jc-progress-track);
+	border-radius: 0.25em;
+	overflow: hidden;
+}
+
+.jc-stat-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background: currentColor;
+}
+
+.jc-stat-fill.is-info { background: var(--jc-tone-info); }
+.jc-stat-fill.is-success { background: var(--jc-tone-success); }
+.jc-stat-fill.is-warning { background: var(--jc-tone-warning); }
+.jc-stat-fill.is-error { background: var(--jc-tone-error); }
+
+.jc-stat-segment {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.25em;
+	font-size: 0.85em;
+}
+
+.jc-stat-segment-count {
+	font-weight: bold;
+}
+
+.jc-stat-segment.is-info .jc-stat-segment-count { color: var(--jc-tone-info); }
+.jc-stat-segment.is-success .jc-stat-segment-count { color: var(--jc-tone-success); }
+.jc-stat-segment.is-warning .jc-stat-segment-count { color: var(--jc-tone-warning); }
+.jc-stat-segment.is-error .jc-stat-segment-count { color: var(--jc-tone-error); }
 
 /* Fail-loud contract-version-mismatch banner - neutral, no palette color. */
 .juneau-view-error {
@@ -455,6 +537,36 @@ table.dataTable thead .sorting_desc_disabled:after {
 .dataTables_wrapper, .dt-container { min-width: 0; }
 .juneau-view-table-scroll { overflow-x: auto; min-width: 0; }
 
+/*
+ * The 10.0 one-overflow-contract half: the two scroll boxes above are unchanged, but cell CONTENT now CLIPS with an
+ * ellipsis instead of wrapping - the SAME policy on both DataTables generations, so a table no longer changes shape
+ * depending on which generation the app supplied.
+ *
+ * The selector is deliberately NAMED (`.juneau-view-table`, stamped by ViewTable's emit) rather than a global
+ * unnamed `td` rule: a bare `td { overflow: hidden }` would reach every table on the page - including app markup
+ * this toolkit does not own - which is blast radius the toolkit has no right to take.  The ellipsis needs all three
+ * of `overflow`/`text-overflow`/`white-space` plus a constrained box; `max-width` is what actually gives a table
+ * cell something to overflow, since an unconstrained `td` simply grows the column instead.
+ *
+ * Opt-out is the `juneau-cell-wrap` class on the cell, which restores the pre-10.0 wrap.  The named emitters whose
+ * markup is a chip / bar / link rather than prose (progress, pill, tag, linked) stamp it themselves, and an author
+ * who wants a wrapping prose column can stamp it via the column's own class.  The `truncate` renderer is untouched
+ * and composes with this: it shortens the VALUE, while this rule clips whatever still overflows the box.
+ */
+.juneau-view-table td {
+	max-width: 24em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.juneau-view-table td.juneau-cell-wrap {
+	max-width: none;
+	overflow: visible;
+	text-overflow: clip;
+	white-space: normal;
+}
+
 .juneau-view-pagingpill {
 	display: inline-flex;
 	align-items: stretch;
@@ -756,6 +868,29 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * SECOND bar-slot host: a bar slot riding the row-detail ribbon (RowDetailDef.barSlot), which the runtime relocates
+ * to the ribbon's trailing position and marks with [data-juneau-strip-trailed] on the ribbon itself.  Both become
+ * inline-level so they share ONE line while there is room and WRAP onto the next when there is not - so a badge can
+ * never overlap a ribbon tab at a narrow width.  Without a trailing slot the ribbon keeps its full-width track.
+ * NEUTRAL - shape only.
+ */
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"][data-juneau-strip-trailed] {
+	display: inline-flex;
+	width: auto;
+	max-width: 100%;
+	vertical-align: top;
+	margin-right: 0.5em;
+}
+
+.juneau-view-detail-bar-slot {
+	display: inline-flex;
+	flex-wrap: wrap;
+	vertical-align: top;
+	max-width: 100%;
+	margin: 0 0 0.75em 0;
+}
+
+/*
  * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
  * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; the
  * chevron lives in a dedicated leading column (`.juneau-view-detail-control`), never jammed into
@@ -917,6 +1052,41 @@ table.dataTable thead .sorting_desc_disabled:after {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75em;
+}
+
+/*
+ * In-dialog section strip: the same ribbon widget the row-detail sections use, borrowing that consumer's pill shape
+ * so a sectioned dialog and a sectioned detail read as one vocabulary.  Panes stack below it in the form's flex
+ * column; only the selected one is unhidden, and the strip itself opens no layer.
+ * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
+ */
+.juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
+	gap: 0.25em;
+	width: 100%;
+	margin: 0;
+	padding: 0.25em;
+	border-bottom: none;
+}
+
+.juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	margin-bottom: 0;
+	border-left: 1px solid;
+	border-right: 1px solid;
+	border-radius: 999px;
+}
+
+.juneau-view-dialog-form-section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+}
+
+/*
+ * The `display: flex` above is an AUTHOR rule, so it OUTRANKS the UA stylesheet's `[hidden] { display: none }` - an
+ * unselected pane would keep rendering and every section would show at once.  Re-hide it explicitly.
+ */
+.juneau-view-dialog-form-section[hidden] {
+	display: none;
 }
 
 .juneau-view-dialog-form-row label {

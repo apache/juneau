@@ -81,7 +81,7 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link RowAction}
- * 	<li class='jc'>{@link ModalDef}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ModalDef}
  * 	<li class='jc'>{@link IdempotencyKey}
  * </ul>
  *

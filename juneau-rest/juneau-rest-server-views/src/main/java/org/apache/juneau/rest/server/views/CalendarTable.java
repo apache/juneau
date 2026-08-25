@@ -31,10 +31,24 @@ import org.apache.juneau.rest.server.widgets.CalendarDef.*;
 import org.apache.juneau.rest.server.widgets.EventCategory.*;
 
 /**
- * Builds the HTML delivery shell for a {@link CalendarDef} &mdash; the {@code data-juneau-calendar} month grid, a
- * display-only legend, the day-cell and event-chip {@code <template>} skeletons, and an optional
- * {@code <script type="application/json" data-juneau-calendar-seed>} sidecar the {@code juneau-calendar.js} runtime
- * consumes for the initial month.
+ * Builds the HTML delivery shell for a {@link CalendarDef} &mdash; the {@code data-juneau-calendar} month grid with
+ * its spanning bars and chips, the toggle-filter legend, the day-cell and event-chip {@code <template>} skeletons,
+ * and an optional {@code <script type="application/json" data-juneau-calendar-seed>} sidecar the
+ * {@code juneau-calendar.js} runtime consumes for the initial month.
+ *
+ * <h5 class='section'>Spanning bars, chips, and the two caps:</h5>
+ * <p>
+ * {@link CalendarLayout} owns the geometry: a multi-day event is drawn as a bar cut into one piece per week row
+ * (every piece carrying the same {@code data-juneau-calendar-event-id} so hover, focus, and the legend filter act on
+ * the whole event), while single-day events are chips inside their day cell.  Bars consume per-week lanes against
+ * {@link CalendarDef#effectiveLaneBudget()}; {@link CalendarDef#maxPerDay} caps only the chips.  A timed chip
+ * carries a leading {@code HH:mm} label and sorts after the day's all-day chips.
+ *
+ * <h5 class='section'>Legend toggle-filter:</h5>
+ * <p>
+ * Each legend entry is a real {@code <button aria-pressed>} so the category filter is keyboard-reachable before any
+ * script runs; the runtime wires the presses and filters client-side with no refetch.  A no-JS reader sees the
+ * legend as a plain, all-pressed list.
  *
  * <p>
  * This is the views-module emitter (parent decision L5 B / i1 A): {@link CalendarDef} and friends are
@@ -73,7 +87,7 @@ public class CalendarTable {
 	/** Marker attribute the {@code juneau-calendar.js} runtime looks for; value = the instance {@link CalendarDef#id}. */
 	public static final String MARKER_ATTR = "data-juneau-calendar";
 
-	/** Attribute carrying the baked contract-version string {@code "1"}; the runtime fails loud on mismatch. */
+	/** Attribute carrying the baked contract-version string; the runtime fails loud on mismatch. */
 	public static final String CONTRACT_ATTR = "data-juneau-calendar-contract";
 
 	/** Attribute carrying the server-stamped civil today {@code yyyy-MM-dd} (from the injected clock). */
@@ -88,8 +102,20 @@ public class CalendarTable {
 	/** Attribute carrying the week-start token ({@code sunday}/{@code monday}). */
 	public static final String WEEKSTART_ATTR = "data-juneau-calendar-weekstart";
 
-	/** Attribute carrying the integer chip cap before "+N more". */
+	/** Attribute carrying the integer chip cap before "+N more" (non-spanning chips only). */
 	public static final String MAXPERDAY_ATTR = "data-juneau-calendar-maxperday";
+
+	/** Attribute carrying the derived per-week spanning-bar lane budget (never author-set; see {@link CalendarDef#effectiveLaneBudget()}). */
+	public static final String LANEBUDGET_ATTR = "data-juneau-calendar-lanebudget";
+
+	/** Attribute carrying an event's id on every chip and on every piece of its spanning bar. */
+	public static final String EVENT_ID_ATTR = "data-juneau-calendar-event-id";
+
+	/** Marker attribute on a legend entry's {@code aria-pressed} category toggle. */
+	public static final String LEGEND_TOGGLE_ATTR = "data-juneau-calendar-legend-toggle";
+
+	/** Marker attribute on the spanning-bar {@code <template>} skeleton. */
+	public static final String BAR_TEMPLATE_ATTR = "data-juneau-calendar-bar";
 
 	/** Marker attribute on the nav {@code <div>} wrapping the prev/next/today buttons. */
 	public static final String NAV_ATTR = "data-juneau-calendar-nav";
@@ -158,10 +184,11 @@ public class CalendarTable {
 
 		var root = div(
 			header(year, month, def.endpoint != null),
-			grid(def, year, month, weekStart, today, maxPerDay),
+			grid(def, year, month, weekStart, today),
 			legend(def),
 			dayTemplate(),
-			eventTemplate()
+			eventTemplate(),
+			barTemplate()
 		).class_("jc-cal").attr("role", "group").attr("aria-label", "Calendar");
 
 		root.attr(MARKER_ATTR, def.id);
@@ -172,6 +199,7 @@ public class CalendarTable {
 		root.attr(VIEW_ATTR, def.effectiveView().name().toLowerCase(Locale.ROOT));
 		root.attr(WEEKSTART_ATTR, weekStart.token());
 		root.attr(MAXPERDAY_ATTR, String.valueOf(maxPerDay));
+		root.attr(LANEBUDGET_ATTR, String.valueOf(def.effectiveLaneBudget()));
 
 		var seed = seedSidecar(def, year, month);
 		if (seed != null)
@@ -198,34 +226,38 @@ public class CalendarTable {
 		).class_("jc-cal-header");
 	}
 
-	/** The month grid: a weekday header row plus six week rows of day cells with painted seed chips. */
-	private static Div grid(CalendarDef def, int year, int month, WeekStart weekStart, LocalDate today, int maxPerDay) {
-		var byDay = seedByDay(def, year, month);
+	/** The month grid: a weekday header row plus six week rows of day cells with painted seed bars and chips. */
+	private static Div grid(CalendarDef def, int year, int month, WeekStart weekStart, LocalDate today) {
+		var layout = CalendarLayout.of(def, year, month);
 
 		var headerCells = new ArrayList<>(7);
 		for (var name : weekStart == WeekStart.MONDAY ? WEEKDAYS_MONDAY : WEEKDAYS_SUNDAY)
 			headerCells.add(span(name).attr("role", "columnheader").class_("jc-cal-weekday"));
 		var headerRow = div(headerCells.toArray()).attr("role", "row").class_("jc-cal-weekdays");
 
-		var gridStart = LocalDate.of(year, month, 1).minusDays(leadingOffset(year, month, weekStart));
-
 		var rows = new ArrayList<>(7);
 		rows.add(headerRow);
-		for (var w = 0; w < 6; w++) {
+		for (var w = 0; w < CalendarLayout.GRID_WEEKS; w++) {
+			var lanes = layout.laneCount(w);
+			var barsByColumn = new HashMap<Integer,List<CalendarLayout.Segment>>();
+			for (var s : layout.segmentsForWeek(w))
+				barsByColumn.computeIfAbsent(s.startColumn(), k -> new ArrayList<>()).add(s);
+
 			var cells = new ArrayList<>(7);
-			for (var d = 0; d < 7; d++) {
-				var date = gridStart.plusDays((long) w * 7 + d);
+			for (var d = 0; d < CalendarLayout.WEEK_DAYS; d++) {
+				var date = layout.gridStart().plusDays((long) w * CalendarLayout.WEEK_DAYS + d);
 				var inMonth = date.getMonthValue() == month && date.getYear() == year;
-				cells.add(dayCell(def, date, inMonth, date.equals(today), inMonth ? byDay.get(date) : null, maxPerDay));
+				cells.add(dayCell(def, date, inMonth, date.equals(today), layout.day(date), lanes,
+					barsByColumn.get(d)));
 			}
 			rows.add(div(cells.toArray()).attr("role", "row").class_("jc-cal-week"));
 		}
 		return div(rows.toArray()).attr(GRID_ATTR, "1").attr("role", "grid").class_("jc-cal-grid");
 	}
 
-	/** One painted day cell: the day number and, for in-month cells, up to {@code maxPerDay} chips + "+N more". */
+	/** One painted day cell: the day number, the bar pieces starting here, the capped chips, and "+N more". */
 	private static Div dayCell(CalendarDef def, LocalDate date, boolean inMonth, boolean isToday,
-			List<CalendarEvent> events, int maxPerDay) {
+			CalendarLayout.DayCell cell, int lanes, List<CalendarLayout.Segment> bars) {
 		var cls = "jc-cal-day";
 		if (!inMonth)
 			cls += " jc-cal-day--adjacent";
@@ -235,49 +267,96 @@ public class CalendarTable {
 		var kids = new ArrayList<>();
 		kids.add(span(String.valueOf(date.getDayOfMonth())).class_("jc-cal-day-num"));
 
+		// Every cell of a week row reserves the same lane band so the bars line up across the row.
+		if (lanes > 0) {
+			var pieces = new ArrayList<>();
+			if (bars != null)
+				for (var s : bars)
+					pieces.add(bar(def, s));
+			kids.add(div(pieces.toArray()).class_("jc-cal-day-lanes"));
+		}
+
 		var chips = new ArrayList<>();
-		if (events != null && !events.isEmpty()) {
-			var shown = Math.min(maxPerDay, events.size());
-			for (var i = 0; i < shown; i++)
-				chips.add(chip(def, events.get(i)));
-			if (events.size() > shown)
-				chips.add(button("button", "+" + (events.size() - shown) + " more")
+		if (inMonth && cell != null) {
+			for (var e : cell.chips())
+				chips.add(chip(def, e));
+			if (cell.overflow() > 0)
+				chips.add(button("button", "+" + cell.overflow() + " more")
 					.attr("data-juneau-calendar-more", "1").class_("jc-cal-more"));
 		}
 		kids.add(div(chips.toArray()).class_("jc-cal-day-events"));
 
-		var cell = div(kids.toArray()).attr("role", "gridcell").class_(cls);
+		var el = div(kids.toArray()).attr("role", "gridcell").class_(cls);
+		if (lanes > 0)
+			el.attr("style", "--jc-cal-lanes:" + lanes);
 		if (isToday)
-			cell.attr("aria-current", "date");
-		return cell;
+			el.attr("aria-current", "date");
+		return el;
 	}
 
-	/** One painted event chip: a same-origin anchor when {@code href} is a safe document URL, else a span. */
+	/** One painted piece of a spanning bar, anchored in the day cell where the piece starts. */
+	private static HtmlElement<?> bar(CalendarDef def, CalendarLayout.Segment s) {
+		var e = s.event();
+		var cls = new StringBuilder("jc-cal-bar jc-cal-cat--").append(colorToken(def, e.categoryId));
+		if (s.continuesLeft())
+			cls.append(" jc-cal-bar--continues-left");
+		if (s.continuesRight())
+			cls.append(" jc-cal-bar--continues-right");
+		var el = anchorOrSpan(e, cls.toString(), null, e.title);
+		el.attr("style", "--jc-cal-span:" + s.columnSpan() + ";--jc-cal-lane:" + s.lane());
+		el.attr(EVENT_ID_ATTR, e.id);
+		if (s.continuesLeft() || s.continuesRight())
+			el.attr("aria-label", e.title + " (continues)");
+		decorate(el, e);
+		return el;
+	}
+
+	/** One painted event chip; a timed chip carries a leading {@code HH:mm} label ahead of its title. */
 	private static HtmlElement<?> chip(CalendarDef def, CalendarEvent e) {
 		var cls = "jc-cal-event jc-cal-cat--" + colorToken(def, e.categoryId);
-		HtmlElement<?> el;
-		if (e.href != null && !e.href.isBlank() && SafePathTemplate.isSafeDocumentUrl(e.href))
-			el = a(e.href, e.title).class_(cls);
-		else
-			el = span(e.title).class_(cls);
+		var time = e.startTimeLabel();
+		if (time != null)
+			cls += " jc-cal-event--timed";
+		var el = anchorOrSpan(e, cls, time, e.title);
+		el.attr(EVENT_ID_ATTR, e.id);
+		decorate(el, e);
+		return el;
+	}
+
+	/** A same-origin anchor when {@code href} is a safe document URL, else a span; with an optional time label. */
+	private static HtmlElement<?> anchorOrSpan(CalendarEvent e, String cls, String time, String title) {
+		Object[] body = time == null
+			? new Object[]{title}
+			: new Object[]{span(time).class_("jc-cal-event-time"), span(title).class_("jc-cal-event-title")};
+		var linked = e.href != null && !e.href.isBlank() && SafePathTemplate.isSafeDocumentUrl(e.href);
+		HtmlElement<?> el = linked ? a(e.href, body) : span(body);
+		return el.class_(cls);
+	}
+
+	/** Stamps the category hook and the tooltip shared by chips and bar pieces. */
+	private static void decorate(HtmlElement<?> el, CalendarEvent e) {
 		if (e.categoryId != null && !e.categoryId.isBlank())
 			el.attr(CAT_ATTR, e.categoryId);
 		if (e.tooltip != null && !e.tooltip.isBlank())
 			el.attr("title", e.tooltip);
-		return el;
 	}
 
-	/** The display-only legend: one item per declared category, in declared order, each with its color class. */
+	/** The legend: one {@code aria-pressed} category toggle per declared category, in declared order. */
 	private static Ul legend(CalendarDef def) {
 		var items = new ArrayList<>();
 		if (def.categories != null) {
 			for (var c : def.categories) {
-				var item = li(span().class_("jc-cal-legend-swatch"), span(c.label).class_("jc-cal-legend-label"))
+				var toggle = button("button",
+					span().class_("jc-cal-legend-swatch"), span(c.label).class_("jc-cal-legend-label"))
+					.attr(LEGEND_TOGGLE_ATTR, "1")
 					.attr(CAT_ATTR, c.id)
-					.class_("jc-cal-legend-item jc-cal-cat--" + c.effectiveColor().token());
+					.attr("aria-pressed", "true")
+					.class_("jc-cal-legend-toggle");
 				if (c.description != null && !c.description.isBlank())
-					item.attr("title", c.description);
-				items.add(item);
+					toggle.attr("title", c.description);
+				items.add(li(toggle)
+					.attr(CAT_ATTR, c.id)
+					.class_("jc-cal-legend-item jc-cal-cat--" + c.effectiveColor().token()));
 			}
 		}
 		return ul(items.toArray()).attr(LEGEND_ATTR, "1").class_("jc-cal-legend");
@@ -288,6 +367,7 @@ public class CalendarTable {
 		return template().attr(DAY_TEMPLATE_ATTR, "1").children(
 			div(
 				span().class_("jc-cal-day-num"),
+				div().class_("jc-cal-day-lanes"),
 				div().class_("jc-cal-day-events")
 			).attr("role", "gridcell").class_("jc-cal-day"));
 	}
@@ -298,12 +378,21 @@ public class CalendarTable {
 			span().class_("jc-cal-event"));
 	}
 
+	/** The spanning-bar skeleton the runtime clones for a navigated month's bar pieces. */
+	private static Template barTemplate() {
+		return template().attr(BAR_TEMPLATE_ATTR, "1").children(
+			span().class_("jc-cal-bar"));
+	}
+
 	/** The optional {@code escapeForScript}-encoded initial-month seed envelope, or {@code null} when no seed events. */
 	private static Script seedSidecar(CalendarDef def, int year, int month) {
-		if (def.events == null || def.events.isEmpty())
+		// Only the events the server actually painted: a malformed one is dropped here too, so the sidecar the
+		// runtime rehydrates from can never disagree with the server-painted month.
+		var wellFormed = def.wellFormedEvents();
+		if (wellFormed.isEmpty())
 			return null;
 		var events = new ArrayList<java.util.Map<String,Object>>();
-		for (var e : def.events)
+		for (var e : wellFormed)
 			events.add(eventMap(e));
 		var envelope = new LinkedHashMap<String,Object>();
 		envelope.put("contractVersion", CalendarDef.CONTRACT_VERSION);
@@ -332,21 +421,6 @@ public class CalendarTable {
 		return m;
 	}
 
-	/** Groups the seed events falling in the initial month by their civil start date, sorted by start. */
-	private static java.util.Map<LocalDate,List<CalendarEvent>> seedByDay(CalendarDef def, int year, int month) {
-		var byDay = new HashMap<LocalDate,List<CalendarEvent>>();
-		if (def.events != null) {
-			var sorted = new ArrayList<>(def.events);
-			sorted.sort(Comparator.comparing(e -> e.start));
-			for (var e : sorted) {
-				var d = e.civilStart();
-				if (d.getYear() == year && d.getMonthValue() == month)
-					byDay.computeIfAbsent(d, k -> new ArrayList<>()).add(e);
-			}
-		}
-		return byDay;
-	}
-
 	/** The color token for an event's category, defaulting to {@code neutral} for an unknown/absent category. */
 	private static String colorToken(CalendarDef def, String categoryId) {
 		if (categoryId != null && def.categories != null)
@@ -354,12 +428,6 @@ public class CalendarTable {
 				if (categoryId.equals(c.id))
 					return c.effectiveColor().token();
 		return CategoryColor.NEUTRAL.token();
-	}
-
-	/** The number of leading adjacent-month cells before the 1st, given the week-start column. */
-	private static int leadingOffset(int year, int month, WeekStart weekStart) {
-		var dow = LocalDate.of(year, month, 1).getDayOfWeek().getValue(); // MONDAY=1 .. SUNDAY=7
-		return weekStart == WeekStart.MONDAY ? dow - 1 : dow % 7;
 	}
 
 	/** The English month/year title, e.g. {@code "August 2026"}. */

@@ -72,6 +72,28 @@ import jakarta.servlet.http.*;
  * re-serializable &mdash; it survives a serialize&rarr;object&rarr;serialize cycle and the full {@code HtmlDoc} page
  * path.
  *
+ * <h5 class='section'>Cell overflow contract:</h5>
+ * <p>
+ * Every emitted {@code <table>} &mdash; top-level and nested alike &mdash; carries {@link #TABLE_CLASS
+ * class="juneau-view-table"}, and {@code juneau-views.css} clips cell content off that class:
+ * {@code .juneau-view-table td} declares a constrained box plus {@code overflow: hidden}, {@code text-overflow:
+ * ellipsis}, and {@code white-space: nowrap}.  <b>Clip with an ellipsis is the default, not wrap</b>, and it is the
+ * same policy on both DataTables generations, so a table does not change shape depending on which generation the
+ * host application supplied.
+ *
+ * <p>
+ * Wrapping is available per cell as an <b>opt-out</b>: {@link #CELL_WRAP_CLASS class="juneau-cell-wrap"} on a
+ * {@code <td>} restores the wrap.  The named renderers whose output is a chip / bar / link rather than prose
+ * ({@code progress}, {@code pill}, {@code tag}, {@code linked}) stamp it themselves through their {@code class}
+ * facet, and an author who wants a wrapping prose column stamps it through that column's own class.  The
+ * {@code truncate} renderer is unaffected and composes with this: it shortens the value, while the CSS clips
+ * whatever still overflows the box.
+ *
+ * <p>
+ * The selector is deliberately named rather than a global unnamed {@code td} rule, so the contract reaches only
+ * tables this emitter produced.  Note this governs cell <i>content</i> only &mdash; the table's own horizontal
+ * scroll region is separate and unchanged.
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link ViewDef}
@@ -87,6 +109,28 @@ public class ViewTable {
 
 	/** Prefix of the sidecar {@code <script>} element id: {@code juneau-view:<viewId>}. */
 	public static final String SIDECAR_ID_PREFIX = "juneau-view:";
+
+	/**
+	 * Class stamped on every emitted {@code <table>} &mdash; top-level and nested alike &mdash; and the anchor of the
+	 * toolkit's cell-overflow contract.
+	 *
+	 * <p>
+	 * {@code juneau-views.css} clips cell content through the <b>named</b> selector {@code .juneau-view-table td}
+	 * rather than a global unnamed {@code td} rule, so the contract reaches only tables this emitter produced and
+	 * never app markup the toolkit does not own.  See {@link #CELL_WRAP_CLASS} for the opt-out.
+	 */
+	public static final String TABLE_CLASS = "juneau-view-table";
+
+	/**
+	 * Per-cell opt-out from the clip/ellipsis default: {@code .juneau-view-table td.juneau-cell-wrap} restores the
+	 * pre-10.0 wrapping behavior.
+	 *
+	 * <p>
+	 * The named renderers whose output is a chip / bar / link rather than prose ({@code progress}, {@code pill},
+	 * {@code tag}, {@code linked}) stamp this themselves through their {@code class} facet; an author who wants a
+	 * wrapping prose column stamps it through that column's own class.
+	 */
+	public static final String CELL_WRAP_CLASS = "juneau-cell-wrap";
 
 	/**
 	 * Attribute the auto-embedded CSRF token is stamped into on the emitted {@code <table>}.
@@ -275,7 +319,72 @@ public class ViewTable {
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef) {
-		return emit(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req);
+		return emit(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req,
+			null);
+	}
+
+	/**
+	 * Builds the view-table shell for a server-side view from a {@link RestRequest}, auto-embedding the CSRF token
+	 * and resolving {@code $FV} chrome against a per-response sibling session.
+	 *
+	 * <p>
+	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef)}.  CSRF, saved-views, and {@code $FV}
+	 * resolution are identical; this overload exists so callers can name the RestRequest host path directly
+	 * (see {@link PageTable#of(RestRequest, PageDef)}).
+	 *
+	 * @param req The current request.  Must not be <jk>null</jk>.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
+	 */
+	public static Div of(RestRequest req, ViewDef viewDef) {
+		return of((HttpServletRequest) req, viewDef);
+	}
+
+	/**
+	 * Builds the view-table shell for a server-side view whose emitted DOM identity is qualified by an enclosing
+	 * host, so two tables built from the SAME {@link ViewDef} can coexist on one page.
+	 *
+	 * <p>
+	 * Identical to {@link #of(HttpServletRequest, ViewDef)} except that the emitted {@code <table>} html {@code id}
+	 * and both sidecar element ids become {@code <qualifier>:<viewId>} instead of the bare {@link ViewDef#id}.  The
+	 * {@link #MARKER_ATTR} attribute is <b>not</b> qualified: it stays the author's own {@link ViewDef#id}, which is
+	 * what the serialized VIEW_META carries and what author-keyed runtime lookups resolve against.  The two id
+	 * spaces therefore diverge on purpose &mdash; minted identity is for the DOM's uniqueness rules, authored
+	 * identity is for the contract.
+	 *
+	 * <p>
+	 * A host that uses this must scope its own runtime lookups to its own subtree; a qualified id is not an
+	 * invitation to reach for it document-wide.
+	 *
+	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the token.
+	 * 	Can be <jk>null</jk> (no token embedded).
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param idQualifier The host-supplied id prefix, or <jk>null</jk>/blank to mint exactly the unqualified ids
+	 * 	{@link #of(HttpServletRequest, ViewDef)} mints.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
+	 */
+	static Div of(HttpServletRequest req, ViewDef viewDef, String idQualifier) {
+		return emit(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req,
+			idQualifier);
+	}
+
+	/**
+	 * Builds the view-table shell for a view rendered inside an enclosing shell, keeping that shell's marshalling
+	 * context <b>and</b> propagating its request.
+	 *
+	 * <p>
+	 * The entry point {@link PageTable} uses for each child view.  A {@code null} {@code req} makes this exactly
+	 * equivalent to {@link #of(MarshallingContext, ViewDef, Collection) of(ctx, viewDef, null)} &mdash; no token, no
+	 * saved-views stamp, no {@code $FV} resolution &mdash; so a request-free host emits byte-identical output to what
+	 * it always has, and only a request-bearing host gains the request-scoped behavior.
+	 *
+	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
+	 * @param req The enclosing request, or <jk>null</jk> for a request-free emit.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
+	 */
+	static Div of(MarshallingContext ctx, HttpServletRequest req, ViewDef viewDef) {
+		return emit(ctx, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req, null);
 	}
 
 	/**
@@ -293,7 +402,25 @@ public class ViewTable {
 	 * 	JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows) {
-		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), null, null, savedViewsBase(req), req);
+		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), null, null, savedViewsBase(req), req,
+			null);
+	}
+
+	/**
+	 * Builds the view-table shell and renders {@code rows} from a {@link RestRequest}, auto-embedding the CSRF token
+	 * and resolving {@code $FV} chrome against a per-response sibling session.
+	 *
+	 * <p>
+	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef, Collection)}.
+	 *
+	 * @param req The current request.  Must not be <jk>null</jk>.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>}, an optional {@code <tbody>}, and the
+	 * 	JSON sidecar.
+	 */
+	public static Div of(RestRequest req, ViewDef viewDef, Collection<?> rows) {
+		return of((HttpServletRequest) req, viewDef, rows);
 	}
 
 	/**
@@ -319,7 +446,8 @@ public class ViewTable {
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, SelectionDef selection) {
 		if (selection == null)
 			throw iaex("selection must not be null; use one of the other of(...) overloads for a table with no selection.");
-		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null, savedViewsBase(req), req);
+		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null, savedViewsBase(req), req,
+			null);
 	}
 
 	/**
@@ -345,7 +473,7 @@ public class ViewTable {
 		if (bulkMutate == null)
 			throw iaex("bulkMutate must not be null; use the SelectionDef overload for selection without bulk mutation.");
 		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), bulkMutate.selection(), bulkMutate,
-			savedViewsBase(req), req);
+			savedViewsBase(req), req, null);
 	}
 
 	/**
@@ -466,19 +594,42 @@ public class ViewTable {
 	 */
 	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
 			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase) {
-		return emit(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, null);
+		return emit(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, null, null);
 	}
 
 	/**
-	 * The shared core.  Validates and reconciles selection/bulk-mutate, then &mdash; when {@code viewDef} declares
-	 * {@link ViewDef#serverValues} and {@code req} is a {@link RestRequest} &mdash; resolves the declared
-	 * {@code $FV} chrome (titles/labels) against a per-response <b>sibling</b> {@link VarResolverSession} before
-	 * building both the painted {@code <th>}/labels and the VIEW_META sidecar, so the two agree (W1).  The
-	 * resolved chrome is a per-response snapshot: the author's {@code $FV{...}} templates are restored on the
-	 * shared {@link ViewDef} once this response's markup has captured the resolved strings.
+	 * The shared core.  Validates and reconciles selection/bulk-mutate, then &mdash; when a {@code $FV} host is
+	 * declared and {@code req} is a {@link RestRequest} &mdash; resolves that host's declared chrome
+	 * (titles/labels) against a per-response <b>sibling</b> {@link VarResolverSession} before building both the
+	 * painted {@code <th>}/labels and the VIEW_META sidecar, so the two agree (W1).  The resolved chrome is a
+	 * per-response snapshot: each host's author {@code $FV{...}} templates are restored once this response's markup
+	 * has captured the resolved strings.
+	 *
+	 * <h5 class='section'>Two hosts, one written lock order:</h5>
+	 * <p>
+	 * Two definitions reachable from here can host {@link ServerValues}: {@link ViewDef#serverValues} (the shipped
+	 * host, whose chrome is the column/action/ribbon titles) and {@link RowDetailDef#serverValues} (the row-detail
+	 * panel's own titles, painted into the {@code <template>} below).  They are resolved in the order
+	 * <b>{@link RowDetailDef} then {@link ViewDef}</b> &mdash; the tail of the toolkit-wide
+	 * {@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef} order that {@link PageTable} opens.
+	 * Because that order is the same on every path that can reach either lock, no two threads can take the pair in
+	 * opposite orders, so the nested emit below (which resolves nothing of its own) cannot deadlock against a
+	 * concurrent {@code ViewTable.of} on any view involved.
+	 *
+	 * <p>
+	 * The two windows are <b>siblings, not nested sessions</b>: each builds its own {@link VarResolverSession} with
+	 * its own registry, each resolves only its own allowlisted fields (there is no inheritance either way), and each
+	 * restores strictly LIFO in a {@code finally} before its caller returns &mdash; so the outer host can never
+	 * observe the inner host's resolved strings, and a throwing provider still leaves the author's templates intact.
+	 *
+	 * <p>
+	 * {@code idQualifier} is the optional host-supplied DOM-identity prefix (see
+	 * {@link #of(HttpServletRequest, ViewDef, String)}); <jk>null</jk> on every non-hosted path, which is what keeps
+	 * an ordinary table's emitted ids exactly what they have always been.
 	 */
 	private static Div emit(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
-			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, HttpServletRequest req) {
+			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, HttpServletRequest req,
+			String idQualifier) {
 		viewDef.validate();
 		if (bulkMutate != null) {
 			if (selection != null && selection != bulkMutate.selection())
@@ -487,25 +638,60 @@ public class ViewTable {
 			selection = bulkMutate.selection();
 		}
 
-		if (viewDef.serverValues != null && req instanceof RestRequest rr) {
-			var session = serverValuesSession(rr, viewDef.serverValues);
-			// A shared ViewDef may be rendered concurrently; the mutate-serialize-restore window is guarded so
-			// two responses cannot interleave resolved chrome onto the same instance.
-			synchronized (viewDef) {
-				var restore = resolveChrome(viewDef, session);
+		var rr = req instanceof RestRequest r ? r : null;
+		var detail = viewDef.details;
+		if (rr != null && detail != null && detail.serverValues != null) {
+			var session = serverValuesSession(rr, detail.serverValues);
+			// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
+			synchronized (detail) {
+				var restore = resolveDetailChrome(detail, session);
 				try {
-					return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase);
+					return emitViewHost(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, rr,
+						idQualifier);
 				} finally {
 					restore.run();
 				}
 			}
 		}
-		return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase);
+		return emitViewHost(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, rr, idQualifier);
+	}
+
+	/**
+	 * The innermost {@code $FV} host: {@link ViewDef#serverValues} resolved around {@link #build}.
+	 *
+	 * <p>
+	 * A shared {@link ViewDef} may be rendered concurrently, so the mutate-serialize-restore window is guarded and
+	 * two responses cannot interleave resolved chrome onto the same instance.
+	 */
+	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
+			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, RestRequest req,
+			String idQualifier) {
+		if (viewDef.serverValues != null && req != null) {
+			var session = serverValuesSession(req, viewDef.serverValues);
+			synchronized (viewDef) {
+				var restore = resolveChrome(viewDef, session);
+				try {
+					return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, idQualifier);
+				} finally {
+					restore.run();
+				}
+			}
+		}
+		return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, idQualifier);
+	}
+
+	/**
+	 * The emitted DOM identity of a table: the author's {@link ViewDef#id} unless a host qualified it, in which case
+	 * {@code <qualifier>:<viewId>}.  A blank qualifier is treated as absent, so a host that has nothing to qualify
+	 * with cannot accidentally mint a leading-colon id.
+	 */
+	private static String mintedId(String idQualifier, String viewId) {
+		return idQualifier == null || idQualifier.isBlank() ? viewId : idQualifier + ":" + viewId;
 	}
 
 	private static Div build(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
-			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase) {
-		var id = viewDef.id;
+			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, String idQualifier) {
+		var id = mintedId(idQualifier, viewDef.id);
 		var cols = viewDef.columns == null ? List.<Column>of() : viewDef.columns;
 
 		// <thead> of column titles (falling back to the data key when no title was set).  Leading synthetic
@@ -539,7 +725,10 @@ public class ViewTable {
 			tableChildren.add(tbody(bodyRows.toArray()));
 		}
 
-		var table = table(tableChildren.toArray()).id(id).attr(MARKER_ATTR, id);
+		// The html id is the minted (possibly host-qualified) identity; the marker attribute stays the AUTHOR's id,
+		// which is what the VIEW_META sidecar carries and what author-keyed lookups resolve against.  With no
+		// qualifier the two are the same string, so an ordinary table emits exactly what it always has.
+		var table = table(tableChildren.toArray()).id(id).attr(MARKER_ATTR, viewDef.id).class_(TABLE_CLASS);
 
 		// Auto-embed the CSRF token (MED-10/HIGH-1) so a row-action submit can attach it; a blank token stamps
 		// nothing, so the runtime fails closed rather than shipping an empty header the boundary would 403.
@@ -560,9 +749,13 @@ public class ViewTable {
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
 		var children = new ArrayList<>();
+		// The quick-stats strip leads the wrapper, so it sits above the DataTables control row this emitter's
+		// <table> grows at init time rather than inside it.  Server-painted once and inert (QuickStatsTable).
+		if (viewDef.quickStats != null)
+			children.add(QuickStatsTable.of(viewDef.quickStats));
 		children.add(table);
 		if (viewDef.details != null)
-			children.add(emitDetailTemplate(viewDef));
+			children.add(emitDetailTemplate(viewDef, csrfToken));
 
 		// Bulk-mutate opt-in: its OWN independently-versioned sidecar (BulkMutateDef.CONTRACT_VERSION), never
 		// merged into VIEW_META - a version bump here can never force a ViewDef.CONTRACT_VERSION bump (R2).
@@ -587,16 +780,34 @@ public class ViewTable {
 	 * Emits the one {@code <template data-juneau-row-detail>} sibling: empty field slots, {@link ActionRef}
 	 * buttons initially disabled, {@link org.apache.juneau.rest.server.widgets.SafeAction#COLLAPSE} enabled.
 	 * Labels are HtmlBuilder text children (never poured in as markup).
+	 *
+	 * <p>
+	 * {@code csrfToken} is the enclosing response's token; it is painted onto any nested table in this template so a
+	 * nested row action can submit with it.  Once that token has rotated the nested action fails closed through the
+	 * ordinary 403 path &mdash; a nested table never mints or refreshes a token of its own.
+	 *
+	 * <p>
+	 * A declared {@link RowDetailDef#barSlot} adds two children: the region, at whichever of the two anchors applies
+	 * ({@link BarSlotTable#ANCHOR_RIBBON} for a multi-section detail, {@link BarSlotTable#ANCHOR_SECTION_TITLE} for a
+	 * single-section one), and its {@code id}-less {@link BarSlotTable#detailSidecar sidecar}.  Neither reaches the
+	 * archived {@code .juneau-view-toolbar-*} control row and neither is a nav tab.
 	 */
-	private static Template emitDetailTemplate(ViewDef viewDef) {
+	private static Template emitDetailTemplate(ViewDef viewDef, String csrfToken) {
 		var d = viewDef.details;
 		var children = new ArrayList<>();
 		if (hasDetailHeader(d))
 			children.add(emitDetailHeader(d, viewDef.rowActions));
+		// The detail ribbon is assembled CLIENT-side, and only from two or more sections, so the bar-slot region has
+		// two server anchors: a ribbon-anchored last direct child the runtime relocates, or - with no ribbon to trail
+		// and none synthesized for it - a section-title-anchored child of the lone section.
+		var ribbonAnchored = d.barSlot != null && d.sections.size() > 1;
+		var sectionAnchored = d.barSlot != null && !ribbonAnchored;
 		for (var s : d.sections) {
 			var kids = new ArrayList<>();
 			kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
 				.class_("juneau-view-detail-section-title"));
+			if (sectionAnchored)
+				kids.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
 			if (s.actions != null && s.actions.items != null && !s.actions.items.isEmpty())
 				kids.add(emitActionBar(s.actions, viewDef.rowActions));
 			var fieldSlots = new ArrayList<>();
@@ -608,14 +819,20 @@ public class ViewTable {
 			kids.add(div(fieldSlots.toArray())
 				.class_("juneau-view-detail-fields")
 				.attr("style", "grid-template-columns:repeat(" + s.columns + ",minmax(0,1fr))"));
-			// Nested read-only table, appended last (after the fields grid) - the runtime instantiates it once
-			// the detail GET succeeds and this section's pane is visible (TODO fold g5 DOM order).
+			// Nested table, appended last (after the fields grid) - the runtime instantiates it once the detail GET
+			// succeeds and this section's pane is visible.
 			if (s.table != null)
-				kids.add(emitNestedTable(s.table));
+				kids.add(emitNestedTable(s.table, csrfToken));
 			children.add(section(kids.toArray())
 				.attr(DETAIL_SECTION_ATTR, s.id)
 				.class_("juneau-view-detail-section"));
 		}
+		if (ribbonAnchored)
+			children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_RIBBON));
+		// The sidecar is id-less and found by attribute, exactly like the nested-table VIEW_META sidecar above: this
+		// whole subtree is cloned per expanded row, so the runtime mints the document-unique id.
+		if (d.barSlot != null)
+			children.add(BarSlotTable.detailSidecar(d.barSlot));
 		return template()
 			.attr(DETAIL_TEMPLATE_ATTR, "1")
 			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
@@ -647,27 +864,82 @@ public class ViewTable {
 	/**
 	 * Emits the nested-table shell inside a detail section: a {@code data-juneau-view} {@code <table>} with a
 	 * {@code <thead>} of the nested view's column titles (no HTML {@code id} &mdash; a {@code <template>} clone would
-	 * collide; the runtime mints one at instantiation), plus a sibling, {@code id}-less VIEW_META sidecar found via
-	 * {@link #NESTED_META_ATTR}.  The wrapper carries the marker, the independent {@link NestedTableDef#CONTRACT_VERSION},
-	 * and the parent-scope parameter name.
+	 * collide; the runtime mints a row-qualified one per expanded row), plus a sibling, {@code id}-less VIEW_META
+	 * sidecar found via {@link #NESTED_META_ATTR}.  The wrapper carries the marker, the independent
+	 * {@link NestedTableDef#CONTRACT_VERSION}, and the parent-scope parameter name.
+	 *
+	 * <p>
+	 * The nested table gets the same leading synthetic header cells the enclosing table gets &mdash; an expander cell
+	 * when the nested view declares its own detail sections, then a selection cell when {@link NestedTableDef#selection}
+	 * is declared &mdash; plus its own row-detail {@code <template>} when it declares one.  It deliberately gets
+	 * <b>no</b> column-chooser host and <b>no</b> bulk sidecar: both stay bound to the enclosing table's id, so two
+	 * expanded rows share one parent affordance instead of minting one per nested table.
+	 *
+	 * <p>
+	 * {@code csrfToken} is the enclosing response's token.  When it is absent (a non-request {@code of(...)} overload
+	 * emitted this shell) the nested sidecar is serialized with {@link ViewDef#rowActions} withheld, so the runtime
+	 * cannot paint an action affordance that has no token to submit with &mdash; the fail-closed half of the token
+	 * contract, one step earlier than the runtime's own visible refusal.
 	 */
-	private static Div emitNestedTable(NestedTableDef nt) {
+	private static Div emitNestedTable(NestedTableDef nt, String csrfToken) {
 		var v = nt.view;
 		var cols = v.columns == null ? List.<Column>of() : v.columns;
-		var headerCells = new ArrayList<>(cols.size());
+		var headerCells = new ArrayList<>(cols.size() + 2);
+		if (v.details != null)
+			headerCells.add(th().attr("class", DETAIL_TH_CLASS).attr("aria-label", "Expand"));
+		if (nt.selection != null)
+			headerCells.add(th().attr("class", "juneau-view-select-th").attr("aria-label", "Select"));
 		for (var c : cols)
 			headerCells.add(th(c.title == null ? c.data : c.title));
-		var table = table(thead(tr(headerCells.toArray()))).attr(MARKER_ATTR, v.id);
+		var table = table(thead(tr(headerCells.toArray()))).attr(MARKER_ATTR, v.id).class_(TABLE_CLASS);
+
+		var tokenless = csrfToken == null || csrfToken.isBlank();
+		if (! tokenless)
+			table.attr(CSRF_ATTR, csrfToken);
+
+		if (nt.selection != null) {
+			table.attr(SELECT_ATTR, "1");
+			table.attr(ROW_ID_FIELD_ATTR, nt.selection.rowIdField());
+			table.attr(SELECT_ALL_ATTR, nt.selection.selectAll() ? "1" : "0");
+		}
 
 		// Sidecar: same VIEW_META contract as a top-level view; neutralize break-outs, insert as RAW (class javadoc).
-		var json = escapeForScript(Json.of(v));
-		var sidecar = script().type("application/json").attr(NESTED_META_ATTR, v.id).text(rawText(json));
+		var sidecar = script().type("application/json").attr(NESTED_META_ATTR, v.id)
+			.text(rawText(escapeForScript(nestedJson(v, tokenless))));
 
-		return div(table, sidecar)
+		var children = new ArrayList<>();
+		children.add(table);
+		if (v.details != null)
+			children.add(emitDetailTemplate(v, csrfToken));
+		children.add(sidecar);
+
+		return div(children.toArray())
 			.class_("juneau-view-detail-nested")
 			.attr(NESTED_ATTR, "1")
 			.attr(NESTED_CONTRACT_ATTR, NestedTableDef.CONTRACT_VERSION)
 			.attr(NESTED_SCOPE_PARAM_ATTR, nt.parentScopeParam);
+	}
+
+	/**
+	 * Serializes a nested view's VIEW_META, withholding {@link ViewDef#rowActions} on the token-less path.
+	 *
+	 * <p>
+	 * A shared {@link ViewDef} may be rendered concurrently, so the withhold is a guarded
+	 * mutate&rarr;serialize&rarr;restore window (the same discipline the {@code $FV} chrome resolution uses) rather
+	 * than a lasting edit of the author's definition.
+	 */
+	private static String nestedJson(ViewDef v, boolean tokenless) {
+		if (! tokenless || v.rowActions == null)
+			return Json.of(v);
+		synchronized (v) {
+			var restore = v.rowActions;
+			v.rowActions = null;
+			try {
+				return Json.of(v);
+			} finally {
+				v.rowActions = restore;
+			}
+		}
 	}
 
 	private static Div emitDetailField(DetailField f) {
@@ -750,8 +1022,15 @@ public class ViewTable {
 	 * Mirrors {@link RestRequest#getVarResolverSession()}'s recipe (same {@link RestContext} resolver, same
 	 * request-scoped {@code RestRequest}/{@code RestSession} beans, request bean store as parent) but never mutates
 	 * the cached request session, so provider values cannot leak across requests.
+	 *
+	 * <p>
+	 * Package-private rather than private because {@link PageTable} hosts {@link PageDef#serverValues} on the same
+	 * terms: sharing this one recipe is what keeps the sibling sessions from drifting apart.
 	 */
-	private static VarResolverSession serverValuesSession(RestRequest rr, ServerValues serverValues) {
+	@SuppressWarnings({
+		"resource" // False positive: RestSession/RestContext owns the parent BeanStore; this sibling session must not close it.
+	})
+	static VarResolverSession serverValuesSession(RestRequest rr, ServerValues serverValues) {
 		var restSession = rr.getVarResolverSession().getBean(RestSession.class).orElse(null);
 		var parentStore = restSession != null ? restSession.getBeanStore() : rr.getContext().getBeanStore();
 		var s = rr.getContext().getVarResolver().createSession(parentStore).bean(RestRequest.class, rr);
@@ -786,14 +1065,48 @@ public class ViewTable {
 						if (o != null)
 							resolveField(restores, session, o.title, v -> o.title = v);
 			}
-		return () -> {
-			for (var i = restores.size() - 1; i >= 0; i--)
-				restores.get(i).run();
-		};
+		return lifoRestore(restores);
 	}
 
-	/** Resolves one chrome field through {@code session}; on change, applies the resolved value and records a restore. */
-	private static void resolveField(List<Runnable> restores, VarResolverSession session, String current,
+	/**
+	 * Resolves the row-detail panel's own {@code $FV} chrome (the closed title list: {@link RowDetailDef#title},
+	 * {@link DetailSection#title}, {@link DetailField#title}) in place on the shared {@code detail}, so the
+	 * server-emitted {@code <template>} below is painted with the resolved strings and the expand GET is left
+	 * carrying row data only.
+	 *
+	 * <p>
+	 * Deliberately narrower than it could be: {@link RowDetailDef#icon} is an icon-registry name,
+	 * {@link org.apache.juneau.rest.server.widgets.ActionRef} is an id, and
+	 * {@link org.apache.juneau.rest.server.widgets.SafeAction} is an enum, so none of them are interpolated.  The
+	 * allowlist is hard-coded on purpose &mdash; there is no reflective bean walk and no author-extensible field set.
+	 *
+	 * @return A {@link Runnable} restoring every mutated field to its author {@code $FV{...}} template, LIFO.
+	 */
+	private static Runnable resolveDetailChrome(RowDetailDef detail, VarResolverSession session) {
+		var restores = new ArrayList<Runnable>();
+		resolveField(restores, session, detail.title, v -> detail.title = v);
+		if (detail.sections != null)
+			for (var s : detail.sections) {
+				if (s == null)
+					continue;
+				resolveField(restores, session, s.title, v -> s.title = v);
+				if (s.fields != null)
+					for (var f : s.fields)
+						if (f != null)
+							resolveField(restores, session, f.title, v -> f.title = v);
+			}
+		return lifoRestore(restores);
+	}
+
+	/**
+	 * Resolves one chrome field through {@code session}; on change, applies the resolved value and records a restore.
+	 *
+	 * <p>
+	 * Package-private so {@link PageTable}'s host resolves its own allowlist through the identical rule &mdash;
+	 * including the cheap {@code indexOf('$')} skip, which is what keeps a field with no template from paying for a
+	 * resolve or recording a restore.
+	 */
+	static void resolveField(List<Runnable> restores, VarResolverSession session, String current,
 			Consumer<String> setter) {
 		if (current == null || current.indexOf('$') < 0)
 			return;
@@ -802,6 +1115,19 @@ public class ViewTable {
 			return;
 		setter.accept(resolved);
 		restores.add(() -> setter.accept(current));
+	}
+
+	/**
+	 * Wraps recorded restores into a single strictly-LIFO undo, so a field touched twice ends on its author value.
+	 *
+	 * <p>
+	 * Package-private for the same reason as {@link #resolveField}: every host unwinds its window identically.
+	 */
+	static Runnable lifoRestore(List<Runnable> restores) {
+		return () -> {
+			for (var i = restores.size() - 1; i >= 0; i--)
+				restores.get(i).run();
+		};
 	}
 
 	/** Reads a column value from a row: a direct key lookup for a {@code Map}, a bean-property read otherwise. */

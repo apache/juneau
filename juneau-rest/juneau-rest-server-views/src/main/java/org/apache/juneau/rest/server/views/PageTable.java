@@ -23,10 +23,12 @@ import java.util.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * Builds the HTML delivery shell for a {@link PageDef} &mdash; the self-contained, class-based tab/sub-tab shell
@@ -204,15 +206,29 @@ public class PageTable {
 	}
 
 	/**
-	 * Builds the page shell, stamping the request's resolved saved-views REST base onto the page shell so
-	 * nested view tables can discover it via {@code closest(...)}.
+	 * Builds the page shell for the current request, propagating that request into every child view.
 	 *
-	 * @param req The current request, supplying the URI resolver.  Must not be <jk>null</jk>.
+	 * <p>
+	 * This is the <b>request-aware</b> entry point: besides stamping the resolved saved-views REST base onto the page
+	 * shell (so nested view tables can discover it via {@code closest(...)}), it hands {@code req} to each child
+	 * {@code ViewTable.of(req, ...)} instead of dropping it.  A page-hosted table therefore now behaves exactly like a
+	 * standalone one: it receives the request's CSRF token stamp, its own {@link ViewTable#SAVED_VIEWS_ATTR} stamp, and
+	 * &mdash; the reason the propagation matters &mdash; its declared {@link ViewDef#serverValues} chrome actually
+	 * resolves.  Those are intended consequences of being request-aware, not incidental extras.  Use
+	 * {@link #of(MarshallingContext, PageDef, String)} for a request-free emit.
+	 *
+	 * <p>
+	 * When {@link PageDef#serverValues} is declared, this method also resolves the page's own closed chrome allowlist
+	 * for the duration of this response; see {@link PageDef#serverValues} for the allowlist and the no-inheritance
+	 * semantics.
+	 *
+	 * @param req The current request, supplying the URI resolver, the CSRF token, and the {@code $FV} session.  Must
+	 * 	not be <jk>null</jk>.
 	 * @param pageDef The built page definition.  Must not be <jk>null</jk>.
 	 * @return A new {@link Div} carrying the {@code [data-juneau-page]} shell and {@link #SAVED_VIEWS_ATTR}.
 	 */
 	public static Div of(RestRequest req, PageDef pageDef) {
-		return of(MarshallingContext.DEFAULT, pageDef, SavedViewsMixin.resolvedBaseUrl(req));
+		return emit(MarshallingContext.DEFAULT, pageDef, SavedViewsMixin.resolvedBaseUrl(req), req);
 	}
 
 	/**
@@ -238,7 +254,44 @@ public class PageTable {
 	 * @return A new {@link Div} carrying the {@code [data-juneau-page]} shell and optional {@link #SAVED_VIEWS_ATTR}.
 	 */
 	public static Div of(MarshallingContext ctx, PageDef pageDef, String savedViewsBase) {
+		return emit(ctx, pageDef, savedViewsBase, null);
+	}
+
+	/**
+	 * The shared core, and the <b>outermost</b> {@code $FV} host of a page response.
+	 *
+	 * <p>
+	 * When {@link PageDef#serverValues} is declared and a request is in hand, the page's closed chrome allowlist is
+	 * resolved in place on the shared {@link PageDef} for the duration of this response, then restored strictly LIFO in
+	 * a {@code finally}.  The lock order is <b>{@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef}</b>:
+	 * this method takes the page's monitor first and only then descends into the children, each of which takes its own
+	 * def's monitor in that same order (see {@code ViewTable}'s emit core).  Because that order is identical on every
+	 * path that can reach these monitors, a concurrent {@code ViewTable.of} on a child view acquires a strict suffix of
+	 * the order and can never hold a lock this method still wants &mdash; so the pair can never be taken in opposite
+	 * directions and there is no cycle to deadlock on.
+	 *
+	 * <p>
+	 * The hosts are <b>siblings, not nested sessions</b>: this one resolves only the page's own allowlisted fields, a
+	 * child resolves only its own, and neither inherits the other's names.  Restoring before returning is what
+	 * guarantees a shared definition is handed to the next response exactly as its author wrote it.
+	 */
+	private static Div emit(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req) {
 		pageDef.validate();
+		if (pageDef.serverValues != null && req != null) {
+			var session = ViewTable.serverValuesSession(req, pageDef.serverValues);
+			synchronized (pageDef) {
+				var restore = resolveChrome(pageDef, session);
+				try {
+					return build(ctx, pageDef, savedViewsBase, req);
+				} finally {
+					restore.run();
+				}
+			}
+		}
+		return build(ctx, pageDef, savedViewsBase, req);
+	}
+
+	private static Div build(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req) {
 		var id = pageDef.id;
 		var tabs = pageDef.tabs == null ? List.<Tab>of() : pageDef.tabs;
 
@@ -252,7 +305,7 @@ public class PageTable {
 
 		var panelsChildren = new ArrayList<>();
 		for (var t : tabs)
-			panelsChildren.add(buildTabPanel(ctx, id, t, pageDef.barSlot));
+			panelsChildren.add(buildTabPanel(ctx, id, t, pageDef.barSlot, req));
 		var panels = div(panelsChildren.toArray()).class_("jc-panels");
 
 		var json = escapeForScript(Json.of(buildMeta(pageDef)));
@@ -283,10 +336,15 @@ public class PageTable {
 	 * Builds one top-level tab's panel: a leaf view panel, a leaf raw-content panel, or a (optionally
 	 * content-prefaced) sub-tab bar + one sub-panel per subtab &mdash; the {@code Tab} panel-body matrix
 	 * ({@code {view} | {subtabs} | {content} | {content+subtabs}}, TODO-420) mirrored from {@link Tab#validate()}.
+	 *
+	 * <p>
+	 * {@code req} is the enclosing request, or <jk>null</jk> on a request-free emit; it is handed to each child view so
+	 * a page-hosted table is emitted through the same request-aware path a standalone one is.  A <jk>null</jk> request
+	 * makes the child call equivalent to the context-only one, so request-free output is unchanged.
 	 */
-	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t, org.apache.juneau.rest.server.widgets.BarSlot barSlot) {
+	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t, BarSlot barSlot, RestRequest req) {
 		if (t.view != null) {
-			var body = ViewTable.of(ctx, t.view, null);
+			var body = ViewTable.of(ctx, req, t.view);
 			return div(body).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 		}
 
@@ -309,7 +367,7 @@ public class PageTable {
 		var subpanelsChildren = new ArrayList<>();
 		for (var s : subtabs) {
 			// Subtab = {view} | {content} (Subtab#validate()): exactly one of these is non-null here.
-			Object body = s.view != null ? ViewTable.of(ctx, s.view, null) : rawText(s.content);
+			Object body = s.view != null ? ViewTable.of(ctx, req, s.view) : rawText(s.content);
 			subpanelsChildren.add(
 				div(body).class_(SUBPANEL_CLASS).attr(PANEL_TAB_ATTR, t.id).attr(PANEL_SUBTAB_ATTR, s.id));
 		}
@@ -331,6 +389,104 @@ public class PageTable {
 			outerChildren.add(BarSlotTable.of(barSlot));
 		outerChildren.add(subpanels);
 		return div(outerChildren.toArray()).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
+	}
+
+	/**
+	 * Resolves the page's own {@code $FV} chrome in place on the shared {@code pageDef}, so both the painted shell and
+	 * the PAGE_META sidecar carry the same resolved strings.
+	 *
+	 * <p>
+	 * The allowlist is <b>closed and hard-coded</b>, in the same style as {@code ViewTable}'s: {@link PageDef#title},
+	 * {@link Tab#label}, {@link Subtab#label}, and the Java-only page chrome named in
+	 * {@link #resolveHeaderChrome} / {@link #resolveBarSlotChrome}.  There is no reflective bean walk and no
+	 * author-extensible field set, so adding a field here is a deliberate, reviewable act.  Notably absent:
+	 * {@link MenuItem#label} and {@link org.apache.juneau.rest.server.widgets.Badge#label} (both painted, neither on
+	 * the list), every id/token/href, and {@code QuickStats}, which is never an {@code $FV} host.
+	 *
+	 * @return A {@link Runnable} restoring every mutated field to its author {@code $FV{...}} template, LIFO.
+	 */
+	private static Runnable resolveChrome(PageDef pageDef, VarResolverSession session) {
+		var restores = new ArrayList<Runnable>();
+		// Resolved first, so a value provider invoked for a later field observes a fully resolved page title.
+		ViewTable.resolveField(restores, session, pageDef.title, v -> pageDef.title = v);
+		if (pageDef.tabs != null)
+			for (var t : pageDef.tabs) {
+				if (t == null)
+					continue;
+				ViewTable.resolveField(restores, session, t.label, v -> t.label = v);
+				if (t.subtabs != null)
+					for (var s : t.subtabs)
+						if (s != null)
+							ViewTable.resolveField(restores, session, s.label, v -> s.label = v);
+			}
+		resolveHeaderChrome(restores, session, pageDef.header);
+		resolveBarSlotChrome(restores, session, pageDef.barSlot);
+		return ViewTable.lifoRestore(restores);
+	}
+
+	/**
+	 * The widgets-owned header chrome resolved under {@link PageDef#serverValues}: {@link Brand#title}, each
+	 * {@link Brand#crumbs} element, {@link HeaderAction#tooltip}, {@link AvatarChip#displayName}, and
+	 * {@link AvatarChip#initials}.  An action's icon/href/safe token and any attached {@link MenuItem} are not chrome
+	 * text on this list and stay literal.
+	 */
+	private static void resolveHeaderChrome(List<Runnable> restores, VarResolverSession session, AppHeaderDef header) {
+		if (header == null)
+			return;
+		var brand = header.brand;
+		if (brand != null) {
+			ViewTable.resolveField(restores, session, brand.title, v -> brand.title = v);
+			resolveCrumbs(restores, session, brand);
+		}
+		if (header.actions != null)
+			for (var a : header.actions)
+				if (a != null)
+					ViewTable.resolveField(restores, session, a.tooltip, v -> a.tooltip = v);
+		var avatar = header.avatar;
+		if (avatar != null) {
+			ViewTable.resolveField(restores, session, avatar.displayName, v -> avatar.displayName = v);
+			ViewTable.resolveField(restores, session, avatar.initials, v -> avatar.initials = v);
+		}
+	}
+
+	/**
+	 * Resolves the crumb segments by swapping the whole list for a resolved copy and restoring the original reference.
+	 *
+	 * <p>
+	 * Deliberately not an in-place {@code List.set(...)}: {@link Brand#crumbs} is a public field an author may have
+	 * assigned an immutable list to, and a render must not fail on that.  Replacing the reference keeps this exactly as
+	 * reversible as every other field on the allowlist.
+	 */
+	private static void resolveCrumbs(List<Runnable> restores, VarResolverSession session, Brand brand) {
+		var crumbs = brand.crumbs;
+		if (crumbs == null || crumbs.isEmpty())
+			return;
+		var resolved = new ArrayList<String>(crumbs.size());
+		var changed = false;
+		for (var c : crumbs) {
+			var r = c == null || c.indexOf('$') < 0 ? c : session.resolve(c);
+			changed |= ! Objects.equals(r, c);
+			resolved.add(r);
+		}
+		if (! changed)
+			return;
+		brand.crumbs = resolved;
+		restores.add(() -> brand.crumbs = crumbs);
+	}
+
+	/**
+	 * The widgets-owned bar-slot chrome resolved under {@link PageDef#serverValues}: {@link BarText#text} and
+	 * {@link BarBadge#label}.  A badge's own count/tone/aria-label is not on the list.
+	 */
+	private static void resolveBarSlotChrome(List<Runnable> restores, VarResolverSession session, BarSlot barSlot) {
+		if (barSlot == null || barSlot.widgets == null)
+			return;
+		for (var w : barSlot.widgets) {
+			if (w instanceof BarText t)
+				ViewTable.resolveField(restores, session, t.text, v -> t.text = v);
+			else if (w instanceof BarBadge b)
+				ViewTable.resolveField(restores, session, b.label, v -> b.label = v);
+		}
 	}
 
 	/** Builds the deep-linkable hash href: {@code #pageId/tabId} or {@code #pageId/tabId/subtabId}. */

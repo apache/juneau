@@ -24,10 +24,13 @@
  * independent.  Load order: juneau-icons.js -> juneau-cards.js (the refresh button's glyph is resolved from the icon
  * registry), and juneau-views.js before juneau-cards.js if the page also carries view tables that add a body type.
  *
- * On DOMContentLoaded it scans [data-juneau-card][data-juneau-card-refresh] (refreshable cards only) and, per card,
- * performs a fail-loud contract-version handshake against the baked-in JUNEAU_CARDS_CONTRACT_VERSION before wiring
- * the built-in refresh button and (when data-juneau-card-poll-ms is present) an own per-card poll loop.  A static
- * card (no refresh endpoint) is left exactly as the server rendered it.
+ * On DOMContentLoaded it scans [data-juneau-card] and, for a card carrying a refresh endpoint, performs a fail-loud
+ * contract-version handshake against the baked-in JUNEAU_CARDS_CONTRACT_VERSION before wiring the built-in refresh
+ * button and (when data-juneau-card-poll-ms is present) an own per-card poll loop.  It is ALSO the enhancement owner
+ * for a card's declared action catalog, which needs no refresh wire at all - so a static card with actions is
+ * enhanced too, while a static card without them is left exactly as the server rendered it.  Card actions reuse the
+ * app-header action vocabulary, so their wiring is delegated to juneau-chrome.js's helpers (which are clients of the
+ * ONE shared views layer stack); this file stands up no popup owner and no layer stack of its own.
  *
  * The "PURE LOGIC LAYER" is DOM-free (plain data in, plain data out) and independently node-testable; the "DOM
  * BINDING LAYER" is the thin shim that scans, handshakes, and binds.
@@ -51,6 +54,16 @@
 	const CARD_BODY_ATTR = "data-juneau-card-body";
 	const CARD_FIELD_ATTR = "data-juneau-card-field";
 	const CARD_REFRESH_TRIGGER_ATTR = "data-juneau-card-refresh-trigger";
+
+	/**
+	 * Per-card action attributes - MUST equal AppHeaderTable's constants of the same names on the server, because a
+	 * card action IS a header action: `Card.actions` reuses that vocabulary rather than minting a second one.  This
+	 * runtime is the ENHANCEMENT OWNER for them (juneau-chrome.js only scans headers/bar slots at DOMContentLoaded,
+	 * and a card is neither), but it owns no popup machinery: MENU wiring is delegated to the chrome helpers, which
+	 * are themselves clients of the ONE shared views layer stack.
+	 */
+	const ACTION_MARKER = "data-juneau-header-action";
+	const BEHAVIOR_ATTR = "data-juneau-behavior";
 
 	/**
 	 * The minimum honored polling interval, in milliseconds.  COPIED from juneau-views.js (which mirrors
@@ -229,6 +242,38 @@
 		if (state.tickTimer != null) { clearInterval(state.tickTimer); state.tickTimer = null; }
 	}
 
+	/**
+	 * Resolves the chrome action helpers (window.JuneauChrome.init) or null when that bundle is not loaded.  This
+	 * runtime deliberately implements no menu/popup logic of its own: it delegates to the helpers that already speak
+	 * the shared views layer stack, so a card menu shares one z-index, one Escape depth and one light-dismiss owner
+	 * with every other popup on the page.
+	 */
+	function chromeActions() {
+		const chrome = window.JuneauChrome && window.JuneauChrome.init;
+		return chrome && typeof chrome.wireMenus === "function" && typeof chrome.wireSafeActions === "function"
+			? chrome : null;
+	}
+
+	/** True when a card declares at least one action (a static, action-less card needs no enhancement at all). */
+	function hasCardActions(card) {
+		return !!(card && card.querySelector && card.querySelector("[" + ACTION_MARKER + "]"));
+	}
+
+	/**
+	 * Enhances one card's declared actions, scoped to that card: icon hydration, SAFE host-dispatch wiring, and MENU
+	 * triggers bound to the shared layer stack.  Idempotent (the chrome helpers mark what they wire).  With chrome
+	 * absent, LINK actions still navigate natively and the rest stay inert rather than half-wired.
+	 */
+	function enhanceCardActions(card) {
+		if (!hasCardActions(card)) return false;
+		const chrome = chromeActions();
+		if (!chrome) return false;
+		if (typeof chrome.hydrateIcons === "function") chrome.hydrateIcons(card);
+		chrome.wireSafeActions(card);
+		chrome.wireMenus(card);
+		return true;
+	}
+
 	/** Wires one refreshable card: contract handshake, endpoint re-check, refresh button, optional poll loop. */
 	function initCard(card) {
 		const refreshUrl = card.getAttribute(CARD_REFRESH_ATTR);
@@ -336,19 +381,40 @@
 		return obs;
 	}
 
-	/** DOMContentLoaded entry: enhance every refreshable card, grid by grid. */
+	/**
+	 * DOMContentLoaded entry: enhance EVERY card, then install the poll observer for the refreshable ones.
+	 *
+	 * <p>The scan is per-card rather than per-grid because neither prerequisite of the old scan holds any more: a
+	 * declared action catalog needs no refresh wire (so an action-only card must be enhanced too), and a card can be
+	 * served on its own without a grid shell.  A refreshable card that fails its handshake is left entirely
+	 * un-enhanced, actions included - it was built by a different runtime.  Cards are grouped by their enclosing
+	 * grid (or, grid-less, by themselves) so the observer still watches the shell the pages runtime toggles.
+	 */
 	function initAll() {
-		const grids = window.document.querySelectorAll("[" + GRID_MARKER + "]");
-		for (let g = 0; g < grids.length; g++) {
-			const grid = grids[g];
-			const cards = grid.querySelectorAll("[" + CARD_MARKER + "][" + CARD_REFRESH_ATTR + "]");
-			const controls = [];
-			for (let i = 0; i < cards.length; i++) {
-				const ctl = initCard(cards[i]);
-				if (ctl) controls.push(ctl);
-			}
-			if (controls.length) observeGrid(grid, controls);
+		const cards = window.document.querySelectorAll("[" + CARD_MARKER + "]");
+		const groups = [];
+
+		function groupFor(card) {
+			const grid = typeof card.closest === "function" ? card.closest("[" + GRID_MARKER + "]") : null;
+			const root = grid || card;
+			for (let i = 0; i < groups.length; i++)
+				if (groups[i].root === root) return groups[i];
+			const g = { root: root, controls: [] };
+			groups.push(g);
+			return g;
 		}
+
+		for (let i = 0; i < cards.length; i++) {
+			const card = cards[i];
+			const refreshable = !!card.getAttribute(CARD_REFRESH_ATTR);
+			const ctl = refreshable ? initCard(card) : null;
+			if (refreshable && !ctl) continue;                    // refused at the handshake - enhance nothing
+			enhanceCardActions(card);
+			if (ctl) groupFor(card).controls.push(ctl);
+		}
+
+		for (let g = 0; g < groups.length; g++)
+			if (groups[g].controls.length) observeGrid(groups[g].root, groups[g].controls);
 	}
 
 	NS.init = {
@@ -364,6 +430,8 @@
 		showCardBanner: showCardBanner,
 		isElementHidden: isElementHidden,
 		renderStatus: renderStatus,
+		hasCardActions: hasCardActions,
+		enhanceCardActions: enhanceCardActions,
 		initCard: initCard,
 		observeGrid: observeGrid,
 		initAll: initAll

@@ -34,9 +34,15 @@ public final class SinkRenderAllowlist {
 
 	/**
 	 * Built-in ids safe to name on a {@link DetailField} fill sink (and the JS frozen-builtin set).
+	 *
+	 * <p>
+	 * {@code pill} is a fill-sink built-in whose sink renderer is a <b>display-only</b> variant of the cell renderer:
+	 * the client's {@code resolveSinkRenderer("pill")} never emits {@code role="button"}, and
+	 * {@link ViewDef#validateSinkPill(Render, String)} forbids a {@code meta.action} on a sink pill outright (a fill
+	 * sink has no {@code rowActions} in scope to bind one to).
 	 */
 	public static final Set<String> BUILTIN_IDS = Set.of(
-		"date", "datetime", "ts-zulu", "bool", "linked", "truncate", "json", "decimal", "tag", "progress"
+		"date", "datetime", "ts-zulu", "bool", "linked", "truncate", "json", "decimal", "tag", "progress", "pill"
 	);
 
 	/**

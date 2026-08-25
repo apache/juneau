@@ -127,9 +127,12 @@ class ViewsJs_Selection_Test extends TestBase {
 	@Test void e01_selectAll_isScopedToTheCurrentDrawsRowsOnly() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function initSelection(");
-		// The select-all header checkbox only ever iterates rows currently in the tbody - never an off-screen page.
-		assertTrue(fn.contains("tbody tr[\" + ROW_ID_ATTR + \"]"), fn);
+		// The select-all header checkbox only ever iterates rows currently in the tbody - never an off-screen page,
+		// and (via ownRowsWithId) never a nested table's rows inside an expanded row-detail panel either.
+		assertTrue(fn.contains("ownRowsWithId(table)"), fn);
 		assertTrue(fn.contains(".juneau-view-select-all-checkbox"), fn);
+		var own = functionBody(body, "function ownRowsWithId(");
+		assertTrue(own.contains("tbody tr[\" + ROW_ID_ATTR + \"]"), own);
 		var ensure = functionBody(body, "function ensureSelectAllCheckbox(");
 		assertTrue(ensure.contains("SELECT_ALL_ATTR"), ensure);
 	}

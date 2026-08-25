@@ -77,6 +77,13 @@ import org.apache.juneau.rest.server.widgets.*;
  * (rendered by {@link CardGridTable}) with a static summary card and a live, auto-refreshing metrics card backed
  * by the {@code /data/cards/summary} refresh envelope.
  *
+ * <p>
+ * A third endpoint, {@code /overview}, dogfoods the {@link QuickStats} header strip together with both display-only
+ * pill hosts: {@link #overviewView()} attaches a strip of a scalar tile, a meter and a segmented breakdown above the
+ * table's toolbar, paints a display-only status pill in a column, and repeats that chip as a fill-sink pill inside the
+ * row-detail expander &mdash; the inert contrast case for the Alerts tab's action-bound pill.  Its tones and the
+ * pills' tones come from one closed {@link StatusTone} palette.
+ *
  * @since 10.0.0
  */
 @Rest(mixins=ViewsMixin.class)
@@ -317,6 +324,85 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// Quick-stats strip + fill-sink pills (a second, non-card consumer of the status-tone palette).
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * A {@link QuickStats} strip for the alert table: one {@link StatTile} scalar, one {@link StatBar} meter, and one
+	 * {@link SegmentedBadge} breakdown, all painted from values computed here on the server.
+	 *
+	 * <p>
+	 * Every tone is one of the five {@link StatusTone} names, which are the same names a pill's {@code meta.tone}
+	 * accepts &mdash; so "warning" is one colour across the whole toolkit rather than one per surface.  The strip is
+	 * display-only: it has no refresh endpoint and no poll interval, unlike the {@link #dashboardGrid() live card}
+	 * above.  A figure that needs to move belongs on a card or in a column, not in a quick-stat.
+	 *
+	 * @return The alert overview strip.
+	 */
+	static QuickStats alertQuickStats() {
+		var open = 0L;
+		var ack = 0L;
+		var esc = 0L;
+		var critical = 0L;
+		for (var a : ALERTS) {
+			if (STATUS_OPEN.equals(a.status)) open++;
+			else if (STATUS_ACKNOWLEDGED.equals(a.status)) ack++;
+			else if (STATUS_ESCALATED.equals(a.status)) esc++;
+			if ("critical".equals(a.severity)) critical++;
+		}
+		return QuickStats.create("alert-overview").items(
+			StatTile.of("total", "Total alerts", Long.toString(ALERTS.size()))
+				.tone(StatusTone.INFO),
+			// A meter reads "how much of the budget is used": critical alerts against the whole table.
+			StatBar.of("critical", "Critical", critical, ALERTS.size())
+				.tone(critical == 0 ? StatusTone.SUCCESS : StatusTone.ERROR),
+			SegmentedBadge.of("by-status", "By status").segments(
+				SegmentedBadge.Segment.of("open", open).tone(StatusTone.WARNING),
+				SegmentedBadge.Segment.of("acknowledged", ack).tone(StatusTone.INFO),
+				SegmentedBadge.Segment.of("escalated", esc).tone(StatusTone.ERROR)));
+	}
+
+	/**
+	 * A read-only alert overview: a {@link QuickStats} strip above the toolbar, a display-only pill column, and a
+	 * row-detail whose {@code state} field is a <b>fill-sink</b> pill.
+	 *
+	 * <p>
+	 * The sink pill is the contrast case for the {@link #alertsView() Alerts} tab's action-bound pill: a fill sink has
+	 * no {@code rowActions} in scope, so its pill is display-only by construction and carries no button role, no
+	 * keyboard affordance, and no dispatch attribute.  Declaring {@code meta.action} on it would fail the view's own
+	 * {@code validate()} rather than paint a dead chip.
+	 *
+	 * @return The overview view.
+	 */
+	static ViewDef overviewView() {
+		return ViewDef.create("alert-overview")
+			.rowType(Alert.class)
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/alerts")
+			.defaultOrder("id", Dir.ASC)
+			.quickStats(alertQuickStats())
+			.columns(
+				Column.of("id").title("Id"),
+				Column.of("severity").title("Severity").render("tag:status"),
+				Column.of("title").title("Title"),
+				// A display-only pill with an explicit tone from the five-value status palette.  No meta.action, so
+				// no role/tabindex/dispatch attribute is emitted - the chip is presentation, and that is legal.
+				Column.of(COL_STATUS).title("Status")
+					.render(Render.pill(StatusTone.WARNING.wire()).meta("field", "state")))
+			.details(RowDetailDef.create()
+				.endpoint("/data/alerts/{id}")
+				.sections(DetailSection.create("overview", "Overview")
+					.columns(2)
+					.fields(
+						DetailField.of("severity").title("Severity"),
+						DetailField.of("assignee").title("Assignee"),
+						// The fill-sink pill: same chip, rendered by the sink-path renderer, unconditionally inert.
+						DetailField.of(COL_STATUS).title("Status").render(Render.pill().meta("field", "state")))
+					.actions(ActionBar.create().items(SafeAction.COLLAPSE))))
+			.build();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// HTML page (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -353,6 +439,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 			also declares a poll interval (watch the staleness chip) and a row-details expander (click any row).</p>
 			<p><a href="%s">Deep link straight to the Archived sub-tab</a> (exercises
 			<code>juneau-pages.js</code>'s hash-routing on load, not just via the tab bar's own links).</p>
+			<p>See also the <a href="dashboard">card dashboard</a> and the
+			<a href="overview">QuickStats overview</a> (a stats strip above a table, with display-only and
+			fill-sink status pills).</p>
 			%s
 			<script src="%s"></script>
 			<script src="%s"></script>
@@ -391,6 +480,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * @return The card-dashboard HTML page.
 	 */
 	@RestGet(path="/dashboard", summary="A CardGrid dashboard: a static summary card + a live, auto-refreshing metrics card")
+	@SuppressWarnings("deprecation") // Deliberate: this host composes ViewsMixin alone, so it is the in-tree proof that the relocated card asset still serves from the compatibility mount.
 	public HttpResource dashboard(RestRequest req) {
 		var gridMarkup = Html.of(CardGridTable.of(dashboardGrid()));
 		var html = """
@@ -422,6 +512,61 @@ public class ExampleViewsRest extends BasicRestServlet {
 				// Load order: the icon registry first (the refresh button's glyph is resolved from it), then cards.
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.CARDS_JS_PATH));
+		return HttpResourceBean.of(
+			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
+			list(ContentType.of("text/html;charset=utf-8")));
+	}
+
+	/**
+	 * [GET /overview] &mdash; the {@link #overviewView() alert overview}: a {@link QuickStats} strip above a table's
+	 * toolbar, a display-only status pill column, and a fill-sink pill inside the row-detail expander.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The overview HTML page.
+	 */
+	@RestGet(path="/overview", summary="A QuickStats strip above a table, with display-only and fill-sink status pills")
+	public HttpResource overview(RestRequest req) {
+		var tableMarkup = Html.of(ViewTable.of(req, overviewView(), ALERTS));
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - QuickStats Example</title>
+			<link rel="stylesheet" href="%s">
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; QuickStats Example</h1>
+			<p>The strip above the table is a <code>QuickStats</code>: a scalar tile, a meter, and a segmented
+			breakdown, all painted once on the server from the same alert rows the table lists. It is display-only
+			&mdash; no tile is clickable and nothing refreshes, unlike the
+			<a href="dashboard">live card dashboard</a>.</p>
+			<p>The <b>Status</b> column is a <b>display-only</b> pill with an explicit tone, and expanding a row shows
+			the same chip again as a <b>fill-sink</b> pill. Neither is keyboard-actionable; contrast them with the
+			action-bound pill on the <a href="./">Alerts tab</a>, which dispatches a row action on click or
+			Enter/Space. Tones on the strip and on the pills come from one palette:
+			<code>info</code>, <code>success</code>, <code>warning</code>, <code>error</code>, <code>neutral</code>.</p>
+			%s
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			</body>
+			</html>
+			""".formatted(
+				DataTablesMixin.DATATABLES_CSS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				tableMarkup,
+				DataTablesMixin.JQUERY_CDN_URL,
+				DataTablesMixin.DATATABLES_JS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH));
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
 			list(ContentType.of("text/html;charset=utf-8")));

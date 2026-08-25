@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -22,10 +22,20 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The declarative source of a row-action modal's input form (the form half of a {@code present=dialog} action).
+ *
+ * <h5 class='section'>A widget contract driven by a view-module runtime</h5>
+ * <p>
+ * Like {@link ModalDef}, this is a general widget contract that lives in this module while the browser runtime that
+ * paints it ships with the rich-view module.  Nothing here depends on that module.
+ *
+ * <h5 class='section'>Flat or sectioned</h5>
+ * <p>
+ * A form declares either a flat {@link #fields} list or an ordered list of {@link Section}s, never both: the flat list
+ * <i>is</i> the single-section case.  Sections render as a ribbon-format strip above one visible pane; they are a
+ * layout of one dialog, not a stack of dialogs, so they cost nothing against the runtime's modal-depth cap.
  *
  * <h5 class='section'>Typed inputs, not markup</h5>
  * <p>
@@ -43,10 +53,15 @@ import org.apache.juneau.rest.server.widgets.*;
  * <h5 class='section'>Per-widget contract version (fail-loud when a form is present)</h5>
  * <p>
  * This bean {@link Widget#validate() validates} fail-closed and carries an instance {@link #contractVersion}.  The
- * version is <b>null</b> until {@link #checked()} is invoked on the serving path (a raw builder therefore never leaks
- * {@code "1"} on the nested form while a modal top-level is still unversioned); {@code checked()} stamps
+ * version is <b>null</b> until {@link #checked()} is invoked on the serving path (a raw builder therefore never leaks a
+ * version on the nested form while a modal top-level is still unversioned); {@code checked()} stamps
  * {@link #CONTRACT_VERSION} then validates.  The client refuses to open a form-bearing dialog whose version does not
- * match the baked-in {@code "1"}.  A confirm-only modal (no form) stays unversioned.
+ * match the one its runtime bakes in.  A confirm-only modal (no form) stays unversioned.
+ * </p>
+ * <p>
+ * This constant moves in <b>lockstep</b> with {@link ModalDef#CONTRACT_VERSION} and the runtime's baked-in literal,
+ * because the runtime compares one literal against both the modal's and the form's version.  Bumping any two of the
+ * three makes every form-bearing dialog refuse to open.
  * </p>
  *
  * <h5 class='section'>Example:</h5>
@@ -60,19 +75,19 @@ import org.apache.juneau.rest.server.widgets.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link ModalDef}
- * 	<li class='jc'>{@link RowAction}
+ * 	<li class='jc'>{@link ActionRef}
  * </ul>
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,template,fields")
+@BeanType(properties="contractVersion,template,fields,sections")
 @SuppressWarnings({
 	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
 public class FormDef implements Widget {
 
 	/** The frozen form contract version.  Bumped only on a breaking wire change to this form contract. */
-	public static final String CONTRACT_VERSION = "1";
+	public static final String CONTRACT_VERSION = "2";
 
 	/** The cap on the length of an author-supplied {@link Input#pattern} (ReDoS defense-in-depth). */
 	static final int PATTERN_MAX_LENGTH = 256;
@@ -152,7 +167,10 @@ public class FormDef implements Widget {
 		/** An optional help hint painted with {@code textContent}; omitted from the wire otherwise. */
 		public String help;
 
-		/** The enclosing-view {@link RowAction} id an {@code action} button opens; omitted from the wire otherwise. */
+		/**
+		 * The enclosing view's row-action id an {@code action} button opens; omitted from the wire otherwise.  See
+		 * {@link ActionRef} for the typed reference the builder accepts.
+		 */
 		public String actionId;
 
 		/**
@@ -283,7 +301,7 @@ public class FormDef implements Widget {
 		}
 
 		/**
-		 * Sets the enclosing-view {@link RowAction} id this {@code action} button opens.
+		 * Sets the enclosing view's row-action id this {@code action} button opens.
 		 *
 		 * @param value The action id.  Can be <jk>null</jk> to unset.
 		 * @return This object.
@@ -371,10 +389,95 @@ public class FormDef implements Widget {
 	}
 
 	/**
+	 * One labelled group of inputs inside a sectioned form: the multi-page dialog shape.
+	 *
+	 * <p>
+	 * The client paints an ordered list of these as a <b>ribbon</b>-format strip above the form body, one visible pane
+	 * at a time.  Switching sections is visibility only &mdash; nothing is refetched and nothing is re-created, which
+	 * is why a value typed into one section survives a trip through another, and why an inline validation error stays
+	 * attached to the control that owns it rather than to whichever section happens to be showing.
+	 *
+	 * <p>
+	 * A sectioned form is <b>not</b> a stack of dialogs.  The strip opens no layer of its own, so a sectioned dialog
+	 * consumes exactly one entry of the runtime's modal-depth budget, the same as a flat one.
+	 *
+	 * @since 10.0.0
+	 */
+	@BeanType(properties="id,label,fields")
+	@SuppressWarnings({
+		"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	})
+	public static class Section {
+
+		/** The section's stable id, used as the strip tab's identity.  Must not be blank, and must be unique in the form. */
+		public String id;
+
+		/** The visible tab label, painted with {@code textContent}.  Must not be blank. */
+		public String label;
+
+		/** This section's typed inputs in display order.  Must declare at least one. */
+		public List<Input> fields;
+
+		/**
+		 * Creates an empty section (add {@link #field(Input) fields}).
+		 *
+		 * @param id The section's stable id.  Must not be <jk>null</jk> or blank.
+		 * @param label The visible tab label.  Must not be <jk>null</jk> or blank.
+		 * @return A new {@link Section}.
+		 * @throws IllegalArgumentException If {@code id} or {@code label} is <jk>null</jk> or blank.
+		 */
+		public static Section of(String id, String label) {
+			if (id == null || id.isBlank())
+				throw iaex("FormDef.Section id must not be null or blank.");
+			if (label == null || label.isBlank())
+				throw iaex("FormDef.Section label must not be null or blank.");
+			var s = new Section();
+			s.id = id;
+			s.label = label;
+			return s;
+		}
+
+		/**
+		 * Adds one typed input to this section.
+		 *
+		 * @param value The input.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+		 */
+		public Section field(Input value) {
+			if (value == null)
+				throw iaex("FormDef.Section field must not be null.");
+			if (fields == null)
+				fields = l();
+			fields.add(value);
+			return this;
+		}
+
+		/**
+		 * Fail-closed per-section validation (called from {@link FormDef#validate()}).
+		 *
+		 * @throws IllegalArgumentException If this section is not well-formed.
+		 */
+		void validate() {
+			if (id == null || id.isBlank())
+				throw iaex("FormDef.Section id must not be null or blank.");
+			if (label == null || label.isBlank())
+				throw iaex("FormDef.Section '%s' label must not be null or blank.", id);
+			if (fields == null || fields.isEmpty())
+				throw iaex("FormDef.Section '%s' must declare at least one field.", id);
+			for (var f : fields) {
+				if (f == null)
+					throw iaex("FormDef.Section '%s' field must not be null.", id);
+				f.validate();
+			}
+		}
+	}
+
+	/**
 	 * The frozen form contract version discriminator.
 	 *
 	 * <p>
-	 * <b>Null</b> until {@link #checked()} is invoked on the serving path (so a raw builder never leaks {@code "1"} on a
+	 * <b>Null</b> until {@link #checked()} is invoked on the serving path (so a raw builder never leaks the version on a
 	 * nested form while a modal top-level is still unversioned); omitted from the wire while null.
 	 */
 	public String contractVersion;
@@ -382,8 +485,23 @@ public class FormDef implements Widget {
 	/** Optional FreeMarker template reference for server authors; ignored by the client. */
 	public String template;
 
-	/** Typed inputs in display order; omitted from the wire when none are declared. */
+	/**
+	 * Typed inputs in display order for a flat, single-section form; omitted from the wire when none are declared.
+	 *
+	 * <p>
+	 * Mutually exclusive with {@link #sections} &mdash; a flat {@code fields} list <i>is</i> the single-section case,
+	 * so declaring both is an authoring error {@link #validate()} rejects rather than silently picking one.
+	 */
 	public List<Input> fields;
+
+	/**
+	 * Optional ordered sections for a multi-section form; omitted from the wire when none are declared.
+	 *
+	 * <p>
+	 * Mutually exclusive with {@link #fields} (see that field).  A single-element {@code sections} list is legal but
+	 * pointless: it renders a one-tab strip where a flat {@code fields} list would render none.
+	 */
+	public List<Section> sections;
 
 	/**
 	 * Starts an empty form (add {@link #field(Input) fields} and/or a {@link #template(String) template}).
@@ -436,17 +554,58 @@ public class FormDef implements Widget {
 	}
 
 	/**
+	 * Adds one section, making this a multi-section form.
+	 *
+	 * @param value The section.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public FormDef section(Section value) {
+		if (value == null)
+			throw iaex("FormDef section must not be null.");
+		if (sections == null)
+			sections = l();
+		sections.add(value);
+		return this;
+	}
+
+	/**
 	 * Fail-closed bean validation.
 	 *
 	 * <p>
 	 * Does <b>not</b> require {@link #contractVersion} to already be set &mdash; a raw-built form validated directly
-	 * must not false-refuse on a null version.  Validating an empty {@link #fields} list is a no-op (a template-only /
-	 * fieldless form is a shipped shape).
+	 * must not false-refuse on a null version.  A form with neither {@link #fields} nor {@link #sections} is a no-op
+	 * (a template-only / fieldless form is a shipped shape).
 	 *
-	 * @throws IllegalArgumentException If any field is not well-formed, or two fields share a {@code name}.
+	 * <p>
+	 * Field names are unique across the <b>whole</b> form, not per section: every control shares one submit body and
+	 * one dialog-scoped element-id namespace, so two sections declaring the same name would collide in both.
+	 *
+	 * @throws IllegalArgumentException If both {@link #fields} and {@link #sections} are declared, if {@link #sections}
+	 * 	is declared but empty, if two sections share an {@code id}, or if any field is not well-formed or two fields
+	 * 	share a {@code name}.
 	 */
 	@Override
 	public void validate() {
+		if (fields != null && sections != null)
+			throw iaex("FormDef declares both fields and sections; they are mutually exclusive (a flat fields list is the single-section case).");
+		if (sections != null) {
+			if (sections.isEmpty())
+				throw iaex("FormDef sections must declare at least one section.");
+			var ids = new HashSet<String>();
+			var names = new HashSet<String>();
+			for (var s : sections) {
+				if (s == null)
+					throw iaex("FormDef section must not be null.");
+				s.validate();
+				if (! ids.add(s.id))
+					throw iaex("FormDef duplicate section id '%s'.", s.id);
+				for (var f : s.fields)
+					if (! names.add(f.name))
+						throw iaex("FormDef duplicate field name '%s'.", f.name);
+			}
+			return;
+		}
 		if (fields == null)
 			return;
 		var names = new HashSet<String>();

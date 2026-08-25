@@ -28,8 +28,9 @@ import org.junit.jupiter.api.*;
 
 /**
  * {@link CalendarTable#of(CalendarDef, Clock)} serving-path coverage: stamped {@code data-juneau-calendar*} hooks,
- * a deterministic server-painted initial month with real seed chips, the two {@code <template>} skeletons, the
- * display-only legend, and the {@code escapeForScript}-encoded seed sidecar (break-out proof).
+ * a deterministic server-painted initial month with real seed chips and segmented spanning bars, the three
+ * {@code <template>} skeletons, the {@code aria-pressed} legend toggles, the split {@code maxPerDay}/lane caps, and
+ * the {@code escapeForScript}-encoded seed sidecar (break-out proof).
  */
 class CalendarDef_Serving_Test extends TestBase {
 
@@ -53,7 +54,7 @@ class CalendarDef_Serving_Test extends TestBase {
 	@Test void a01_rootHooksStamped() {
 		var html = Html.of(CalendarTable.of(good(), AUG_2026));
 		assertTrue(html.contains("data-juneau-calendar=\"cal1\""), html);
-		assertTrue(html.contains("data-juneau-calendar-contract=\"1\""), html);
+		assertTrue(html.contains("data-juneau-calendar-contract=\"2\""), html);
 		assertTrue(html.contains("data-juneau-calendar-today=\"2026-08-15\""), html);
 		assertTrue(html.contains("data-juneau-calendar-endpoint=\"/events/{year}/{month}\""), html);
 		assertTrue(html.contains("data-juneau-calendar-view=\"month\""), html);
@@ -104,7 +105,7 @@ class CalendarDef_Serving_Test extends TestBase {
 			CalendarEvent.create().id("x").title("Bad</script><b>oops</b>").start("2026-08-10").categoryId("team"));
 		var html = Html.of(CalendarTable.of(d, AUG_2026));
 		assertTrue(html.contains("data-juneau-calendar-seed"), html);
-		assertTrue(html.contains("\"contractVersion\":\"1\""), html);
+		assertTrue(html.contains("\"contractVersion\":\"2\""), html);
 		// The raw </script> must be neutralized inside the JSON sidecar so it cannot terminate the element.
 		assertFalse(html.contains("Bad</script>"), "escapeForScript must neutralize the </script> break-out: " + html);
 	}
@@ -144,5 +145,82 @@ class CalendarDef_Serving_Test extends TestBase {
 		var html = Html.of(CalendarTable.of(d, AUG_2026));
 		assertTrue(html.contains("August 2026"), html);
 		assertTrue(html.contains("data-juneau-calendar-today=\"2026-08-15\""), html);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Spanning bars, timed chips, the split caps, and the toggle-filter legend.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_laneBudgetStamped_andBarTemplatePresent() {
+		var html = Html.of(CalendarTable.of(good(), AUG_2026));
+		assertTrue(html.contains("data-juneau-calendar-lanebudget=\"3\""), html);
+		assertTrue(html.contains("data-juneau-calendar-bar"), html);
+	}
+
+	@Test void b02_multiDayEvent_paintsAsSegmentedBar_notChips() {
+		// Aug 8 is a Saturday, so a span through Aug 11 is cut into two pieces with the cut edges flagged.
+		var d = good().events(CalendarEvent.create().id("wc").title("Week crosser").start("2026-08-08")
+			.end("2026-08-11").categoryId("team"));
+		var html = Html.of(CalendarTable.of(d, AUG_2026));
+		assertEquals(2, count(html, "jc-cal-bar "), html);
+		assertTrue(html.contains("jc-cal-bar--continues-right"), html);
+		assertTrue(html.contains("jc-cal-bar--continues-left"), html);
+		// Every piece carries the same event id, so hover/focus/filter act on the whole span from either one.
+		assertEquals(2, count(html, "data-juneau-calendar-event-id=\"wc\""), html);
+		assertFalse(html.contains("jc-cal-event jc-cal-cat--blue"), "a span must not also paint a chip: " + html);
+	}
+
+	@Test void b03_timedEvent_paintsALeadingTimeLabel_afterTheAllDayChips() {
+		var d = good().events(
+			CalendarEvent.create().id("t").title("Standup").start("2026-08-14T09:30").end("2026-08-14T10:00")
+				.categoryId("team"),
+			CalendarEvent.create().id("a").title("Offsite").start("2026-08-14").categoryId("team"));
+		var html = Html.of(CalendarTable.of(d, AUG_2026));
+		assertTrue(html.contains("jc-cal-event--timed"), html);
+		assertTrue(html.contains("<span class=\"jc-cal-event-time\">09:30</span>"), html);
+		assertTrue(html.indexOf("Offsite") < html.indexOf("Standup"), "all-day chips precede timed chips: " + html);
+	}
+
+	@Test void b04_maxPerDaySplit_barsDoNotConsumeTheChipBudget() {
+		// The spec's §2.4 scenario: two bars crossing a day plus four single-day events at maxPerDay = 3.
+		var d = good().events(
+			CalendarEvent.create().id("bar1").title("Bar one").start("2026-08-03").end("2026-08-06").categoryId("team"),
+			CalendarEvent.create().id("bar2").title("Bar two").start("2026-08-02").end("2026-08-05").categoryId("team"),
+			CalendarEvent.create().id("c1").title("Chip one").start("2026-08-04").categoryId("team"),
+			CalendarEvent.create().id("c2").title("Chip two").start("2026-08-04").categoryId("team"),
+			CalendarEvent.create().id("c3").title("Chip three").start("2026-08-04").categoryId("team"),
+			CalendarEvent.create().id("c4").title("Chip four").start("2026-08-04").categoryId("team"));
+		var html = Html.of(CalendarTable.of(d, AUG_2026));
+		assertEquals(2, count(html, "jc-cal-bar "), html);
+		assertEquals(3, count(html, "jc-cal-event jc-cal-cat--blue"), html);
+		assertTrue(html.contains(">+1 more<"), html);
+		// The fourth chip is the one hidden - it is still in the seed sidecar, just not painted into the cell.
+		assertFalse(html.contains(">Chip four<"), "the fourth chip must not be painted: " + html);
+	}
+
+	@Test void b05_legendEntriesAreAriaPressedToggles() {
+		var html = Html.of(CalendarTable.of(good(), AUG_2026));
+		assertEquals(2, count(html, "data-juneau-calendar-legend-toggle=\"1\""), html);
+		assertEquals(2, count(html, "aria-pressed=\"true\""), html);
+		// The toggle is a real button, so the filter is keyboard-operable before any script runs.
+		assertTrue(html.contains("<button type=\"button\" data-juneau-calendar-legend-toggle=\"1\""), html);
+	}
+
+	@Test void b06_malformedSeedEvent_isDroppedNotFatal_theRestStillPaint() {
+		var d = good().events(
+			CalendarEvent.create().id("ok").title("Kept").start("2026-08-14").categoryId("team"),
+			CalendarEvent.create().id("bad").title("Dropped").start("2026-08-14").allDay(true)
+				.end("2026-08-14T10:00").categoryId("team"));
+		var html = assertDoesNotThrow(() -> Html.of(CalendarTable.of(d, AUG_2026)));
+		assertTrue(html.contains("Kept"), html);
+		// Dropped from the painted grid AND from the seed sidecar, so the runtime rehydrates exactly what it sees.
+		assertFalse(html.contains("Dropped"), html);
+	}
+
+	private static int count(String haystack, String needle) {
+		var n = 0;
+		for (var i = haystack.indexOf(needle); i >= 0; i = haystack.indexOf(needle, i + needle.length()))
+			n++;
+		return n;
 	}
 }

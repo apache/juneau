@@ -43,11 +43,12 @@
  * <h5 class='section'>Complex dialogs and nested popups (v1):</h5>
  * <p>
  * A {@link org.apache.juneau.rest.server.views.RowAction} whose presentation is {@code DIALOG} opens a declarative
- * popup dialog described by {@link org.apache.juneau.rest.server.views.ModalDef}.  The dialog may carry a
- * {@link org.apache.juneau.rest.server.views.FormDef} whose {@link org.apache.juneau.rest.server.views.FormDef.Input}
- * controls are the frozen v1 six-type vocabulary &mdash; {@code text}, {@code textarea}, {@code checkbox},
+ * popup dialog described by {@link org.apache.juneau.rest.server.widgets.ModalDef}.  The dialog may carry a
+ * {@link org.apache.juneau.rest.server.widgets.FormDef} whose
+ * {@link org.apache.juneau.rest.server.widgets.FormDef.Input}
+ * controls are the frozen six-type vocabulary &mdash; {@code text}, {@code textarea}, {@code checkbox},
  * {@code toggle} (a {@code role=switch}), {@code select} (single-select), and {@code action} (a button holding an
- * {@link org.apache.juneau.rest.server.views.ActionRef} that opens a further dialog for a named row action, the v1
+ * {@link org.apache.juneau.rest.server.widgets.ActionRef} that opens a further dialog for a named row action, the
  * composition trigger).  Typed inputs are always painted from the model with {@code createElement} + {@code .value} /
  * {@code .checked} / {@code textContent} &mdash; never as markup &mdash; so a live-data or hostile field value can
  * never become an element.  The client adds advisory inline validation (required, {@code maxLength}, {@code pattern})
@@ -63,17 +64,28 @@
  *
  * <p>
  * Both beans {@code implements Widget}: each declares a {@code CONTRACT_VERSION} and a {@link
- * org.apache.juneau.rest.server.views.FormDef#validate() validate()} invariant check, and the serving path stamps the
- * instance version via {@link org.apache.juneau.rest.server.views.FormDef#checked() checked()}.  When a form is
+ * org.apache.juneau.rest.server.widgets.FormDef#validate() validate()} invariant check, and the serving path stamps
+ * the instance version via {@link org.apache.juneau.rest.server.widgets.FormDef#checked() checked()}.  When a form is
  * present the client enforces a fail-loud handshake &mdash; BOTH the modal and the nested form version must match the
  * runtime's baked-in version or the dialog refuses to open; a confirm-only dialog (no form) stays unversioned.
  *
+ * <h5 class='section'>Relocated: the dialog beans now live in the widgets module</h5>
+ * <p>
+ * {@code ModalDef} and {@code FormDef} were general enough to belong to the shared widget vocabulary, so they have
+ * moved from this package to {@code org.apache.juneau.rest.server.widgets}.  This is a <b>breaking package
+ * relocation with no shim</b>: a deprecated forwarding class left behind here would re-create the views&rarr;widgets
+ * dependency in reverse, so applications update their imports instead.  Only the dialog beans moved &mdash; the
+ * table/row-action types they are used with ({@link org.apache.juneau.rest.server.views.RowAction},
+ * {@link org.apache.juneau.rest.server.views.IdempotencyKey},
+ * {@link org.apache.juneau.rest.server.views.ActionResult},
+ * {@link org.apache.juneau.rest.server.views.WritePermit}) stay here.  The dialog/form <b>runtime</b> also stays
+ * here, inside {@code juneau-views.js}: after the move a widgets-module bean is driven by a views-module script,
+ * which is deliberate rather than accidental (splitting that monolith is a separate concern).
+ *
  * <h5 class='section'>Follow-ons (not in this cut):</h5>
  * <ul>
- * 	<li>A second in-tree dialog-form consumer and the physical migrate of the shared {@code Widget}-based bean
- * 		vocabulary to {@code juneau-rest-server-widgets} are a 10.0-destination follow-on.
- * 	<li>A generic reusable detail/section strip, tabs-in-dialog, and richer controls (cron editor, rich text) are
- * 		deferred beyond v1.
+ * 	<li>A second in-tree dialog-form consumer is a 10.0-destination follow-on.
+ * 	<li>Richer controls (cron editor, rich text) are deferred.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

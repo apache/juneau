@@ -67,14 +67,22 @@
 	 * A nested-table wrapper whose data-juneau-nested-contract differs is refused (fail-loud), leaving the rest of
 	 * the detail panel fully functional - only that one nested table is withheld.
 	 */
-	const JUNEAU_NESTED_CONTRACT_VERSION = "1";
+	const JUNEAU_NESTED_CONTRACT_VERSION = "2";
+
+	/**
+	 * The maximum table nesting depth - MUST equal NestedTableDef.MAX_DEPTH on the server.  The page's root table is
+	 * depth 1 and a table inside one of its row-detail panels is depth 2; a nested shell that would sit at depth 3
+	 * (i.e. inside a depth-2 table's own detail panel) is a visible refusal here, matching the server's validate().
+	 * This is the topology, not a configurable ceiling - there is no author-declared depth on the wire.
+	 */
+	const MAX_NESTED_DEPTH = 2;
 
 	/**
 	 * Nested-table DOM attribute names - MUST equal ViewTable's constants of the same names (NESTED_ATTR,
 	 * NESTED_META_ATTR, NESTED_CONTRACT_ATTR, NESTED_SCOPE_PARAM_ATTR) on the server.  A nested table is a
-	 * read-only DataTables view (columns/paging/sort/search only) inside a row-detail section, scoped to its parent
-	 * row by merging ONE query parameter (named by NESTED_SCOPE_PARAM_ATTR) that carries the parent row id (stamped
-	 * at instantiation into NESTED_PARENT_ID_ATTR).  None of this is part of the VIEW_META wire contract.
+	 * DataTables view inside a row-detail section, scoped to its parent row by merging ONE query parameter (named by
+	 * NESTED_SCOPE_PARAM_ATTR) that carries the parent row id (stamped at instantiation into NESTED_PARENT_ID_ATTR).
+	 * None of this is part of the VIEW_META wire contract.
 	 */
 	const NESTED_ATTR = "data-juneau-nested";
 	const NESTED_META_ATTR = "data-juneau-nested-meta";
@@ -85,12 +93,15 @@
 
 	/**
 	 * The declarative dialog-form contract version (TODO-445h): ModalDef.CONTRACT_VERSION / FormDef.CONTRACT_VERSION on
-	 * the server, both "1".  Fail-loud ONLY when a form is present: a form-bearing modal-open envelope whose top-level
-	 * contractVersion or nested form.contractVersion is missing or does not equal this baked-in value is a visible
-	 * refusal and the dialog does NOT open.  A confirm-only modal (no form) is unversioned and is NEVER refused on a
-	 * missing version (h5) - the naive {@code !== "1"} test must not run on that path.
+	 * the server, both the SAME value as this one.  Fail-loud ONLY when a form is present: a form-bearing modal-open
+	 * envelope whose top-level contractVersion or nested form.contractVersion is missing or does not equal this
+	 * baked-in value is a visible refusal and the dialog does NOT open.  A confirm-only modal (no form) is unversioned
+	 * and is NEVER refused on a missing version (h5) - the naive inequality test must not run on that path.
+	 *
+	 * ONE literal is compared against BOTH versions, so all three constants move together or nothing opens.  "2" adds
+	 * the optional FormDef.sections shape (a ribbon strip over one visible pane) alongside the flat fields list.
 	 */
-	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "1";
+	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "2";
 
 	/**
 	 * TODO-428 selection/bulk DOM attribute names - MUST equal ViewTable's constants of the same names
@@ -107,12 +118,24 @@
 	const SELECT_ALL_ATTR = "data-juneau-select-all";
 	const BULK_ATTR = "data-juneau-bulk";
 	const BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
+	const SIDECAR_ID_PREFIX = "juneau-view:";
+
+	/**
+	 * The card `<article>` marker - MUST equal CardGridTable's CARD_MARKER on the server.  A view table can be hosted
+	 * inside a card, in which case the server qualifies the table's minted element id (and its sidecars') by the
+	 * enclosing card, while `data-juneau-view` stays the AUTHOR's ViewDef.id.  This runtime therefore resolves a
+	 * sidecar within the enclosing card first, so two cards hosting the same authored view never cross-wire.
+	 */
+	const CARD_MARKER = "data-juneau-card";
 
 	// TODO-445n table overflow discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
 	// CSS-only "Approach D" overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
 	const TABLE_SCROLL_CLASS = "juneau-view-table-scroll";
 	// L12 A: a generic (Juneau-vocabulary) label applied to the scroll region ONLY when it actually overflows.
 	const TABLE_SCROLL_LABEL = "Table, horizontally scrollable";
+	// Per-cell opt-out from the `.juneau-view-table td` clip/ellipsis default (see ViewTable.CELL_WRAP_CLASS).  Used
+	// by the named emitters' `class` facets and by any cell whose content is a panel rather than a line of text.
+	const CELL_WRAP_CLASS = "juneau-cell-wrap";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
@@ -580,6 +603,11 @@
 				deps.warn("Juneau view: unknown render id '" + spec.id + "' - falling back to raw value.");
 			}
 			const meta = mergeMeta(spec.meta, col);
+			// The renderer's `class` facet rides onto the column's cells, which is how the named emitters (progress /
+			// pill / tag / linked) carry the `juneau-cell-wrap` opt-out out of the table's clip/ellipsis default.
+			// Appended to any author className rather than replacing it, so a column class and a renderer class
+			// coexist; a throwing facet is ignored, exactly like a throwing `display`.
+			appendRendererClass(def, renderer, meta);
 			const popover = spec && spec.popover;
 			if ((renderer && renderer.display) || popover) {
 				def.render = function (data, type, rowData) {
@@ -596,6 +624,17 @@
 			}
 		}
 		return def;
+	}
+
+	/** Appends a renderer's `class` facet to a column def's className (no-op when the facet is absent or throws). */
+	function appendRendererClass(def, renderer, meta) {
+		if (!renderer || typeof renderer["class"] !== "function") return;
+		let cls;
+		try { cls = renderer["class"](meta); } catch (e) { return; }
+		if (cls == null) return;
+		cls = String(cls).trim();
+		if (!cls) return;
+		def.className = def.className ? def.className + " " + cls : cls;
 	}
 
 	function viewEscAttr(s) {
@@ -665,7 +704,7 @@
 			opts.ajax = { url: viewDef.dataUrl, dataSrc: "" };
 		}
 
-		// Nested-table parent scoping (445-family read-only nested ajax).  `deps.nestedScope`, present ONLY for a
+		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a
 		// nested table, merges exactly ONE extra query parameter (its declared scope-param name -> the parent row id)
 		// into the GET in BOTH data modes.  The parent id is read through a getter at REQUEST time (off the live
 		// data-juneau-parent-id attribute) so the scope stays correct even if the nested table is re-init'd against a
@@ -961,6 +1000,53 @@
 		caption.textContent = message;
 	}
 
+	// ==================================================================================================================
+	// TABLE OWNERSHIP  (a depth-2 nested table lives INSIDE its parent's row-detail child row, so every delegated
+	// listener and every descendant query on a table must first ask "is this node mine, or a nested view's?")
+	// ==================================================================================================================
+
+	/** Whether {@code node} is {@code ancestor} or one of its descendants.  Parent-walk (no Node.contains needed). */
+	function isInside(ancestor, node) {
+		for (let n = node; n; n = n.parentNode) if (n === ancestor) return true;
+		return false;
+	}
+
+	/** The view {@code <table>} that owns {@code node}, or {@code null} when it sits outside every view table. */
+	function owningViewTable(node) {
+		return node && typeof node.closest === "function" ? node.closest("table[data-juneau-view]") : null;
+	}
+
+	/**
+	 * Whether {@code table} owns the node {@code e} targeted, i.e. the event did NOT originate inside a nested view
+	 * table living in one of {@code table}'s expanded detail panels.
+	 *
+	 * <p>Every delegated listener bound on a table consults this first: a nested table's click/change bubbles up
+	 * through the parent's child-row {@code <td>}, and without the guard the parent would resolve a nested
+	 * {@code <tr>} as one of its own rows (opening the parent's action menu for a nested row, adding nested row ids
+	 * to the parent's selection, and so on).  Ownerless targets (a portalled layer, a non-DOM test double) are
+	 * treated as owned so nothing that worked before this guard stops working.
+	 */
+	function isOwnTableEvent(table, e) {
+		const owner = owningViewTable(e && e.target);
+		return !owner || owner === table;
+	}
+
+	/** {@code root.querySelectorAll(sel)}, minus anything a nested view table inside {@code table} owns. */
+	function ownNodes(root, table, sel) {
+		if (!root || typeof root.querySelectorAll !== "function") return [];
+		const out = [];
+		Array.prototype.forEach.call(root.querySelectorAll(sel), function (n) {
+			const owner = owningViewTable(n);
+			if (!owner || owner === table) out.push(n);
+		});
+		return out;
+	}
+
+	/** {@code table}'s OWN body rows carrying a stamped stable row id - never a nested view table's rows. */
+	function ownRowsWithId(table) {
+		return ownNodes(table, table, "tbody tr[" + ROW_ID_ATTR + "]");
+	}
+
 	/**
 	 * The DataTables wrapper that owns native search/length/paging chrome AND is the correct parent for the
 	 * unified toolbar row.  DT1 wraps the {@code <table>} directly in {@code .dataTables_wrapper}.  DT2 nests the
@@ -1078,6 +1164,11 @@
 	 * {@code .dt-container > .dt-layout-cell}, so {@code table.parentNode} is the cell and no longer contains
 	 * the template. After wrap, the template is a sibling of {@code .dt-container}; {@link #findViewWrapper}
 	 * plus its parent is that host. Before wrap (and in the Node harness), {@code table.parentNode} is the host.
+	 *
+	 * <p>A table's own template is always a SIBLING, never a descendant, so any candidate found inside {@code table}
+	 * belongs to a nested view whose shell was cloned into one of this table's expanded detail panels - it is skipped.
+	 * Without that skip a parent table with an open row would resolve its nested table's template as its own (the
+	 * cloned nested shell precedes the parent's sibling template in document order).
 	 */
 	function findRowDetailTemplate(table) {
 		if (!table) return null;
@@ -1085,7 +1176,11 @@
 		const host = wrapper && wrapper.parentNode && wrapper !== table.parentNode
 			? wrapper.parentNode
 			: table.parentNode;
-		return host && host.querySelector ? host.querySelector("template[data-juneau-row-detail]") : null;
+		if (!host || typeof host.querySelectorAll !== "function") return null;
+		const cands = host.querySelectorAll("template[data-juneau-row-detail]");
+		for (let i = 0; i < cands.length; i++)
+			if (!isInside(table, cands[i])) return cands[i];
+		return null;
 	}
 
 	/**
@@ -1420,6 +1515,9 @@
 	 * Roving-tabindex keyboard target: given the pressed key, the current tab index and the tab count, returns the
 	 * index to move selection to, or -1 for a key this widget does not handle.  Left/Right wrap; Home/End jump to
 	 * the ends.  Pure - no DOM - so the arrow-key contract is unit-checkable.
+	 *
+	 * <p>Generic: shared by every ribbon-format strip (row-detail sections, in-dialog form sections), not detail-only.
+	 * The name is historical - the detail strip was the first caller.
 	 */
 	function detailTabTargetIndex(key, currentIndex, count) {
 		if (count <= 0) return -1;
@@ -1433,7 +1531,9 @@
 	/**
 	 * Selects the tab whose section id === `sectionId` in a built strip: exactly one tab carries
 	 * aria-selected="true" + tabindex 0 (the rest -1), and exactly one pane is visible (the rest `hidden`).  `tabs`
-	 * is the [{btn, pane, id}] array buildDetailStrip closes over.  DOM-visibility only - never fetches.
+	 * is the [{btn, pane, id}] array buildRibbonStrip closes over.  DOM-visibility only - never fetches.
+	 *
+	 * <p>Generic, like detailTabTargetIndex: the historical name predates the second (in-dialog) caller.
 	 */
 	function activateDetailTab(tabs, sectionId) {
 		if (!tabs) return;
@@ -1448,67 +1548,75 @@
 	}
 
 	/**
-	 * Converts the stacked detail sections in a cloned detail `panel` into a tab-mode strip + one visible pane.
-	 * No-op returning null for < 2 sections (single-section details stay strip-less).  Builds a
-	 * ".juneau-view-ribbon-group[data-juneau-strip-mode=tab][role=tablist]" whose buttons are role="tab" +
-	 * aria-selected + aria-controls (the pane id) + roving tabindex; each <section> becomes role="tabpanel" +
-	 * aria-labelledby (the tab id), hidden unless it is the first (initially-selected) section.  Left/Right/Home/End
-	 * move selection.  Returns the strip element (already inserted as the panel's first child), or null.
+	 * Builds a ribbon-format strip from an ordered list of {id, label, pane} items - the SHARED strip builder, with no
+	 * knowledge of row details, dialogs, or where the strip is going to be inserted.
+	 *
+	 * <p>Given N items it returns an unattached ".juneau-view-ribbon-group[data-juneau-strip-mode=tab][role=tablist]"
+	 * whose buttons are role="tab" + aria-selected + aria-controls (the pane id) + a roving tabindex, and it stamps
+	 * each pane as role="tabpanel" + aria-labelledby (the tab id) + tabindex="0", `hidden` unless it is the initially
+	 * selected one.  Click and Left/Right/Home/End move selection (visibility only - nothing is fetched or
+	 * re-created), and `onActivate(id, pane)` fires ONCE per activation, after the pane becomes visible.
+	 *
+	 * <p>The caller owns everything positional and everything domain-specific: where the strip goes in the document,
+	 * how ids are minted, which item starts selected, and any pre-pass over the panes (a row detail hides each
+	 * section's stacked title because the tab replaces it; a dialog has no title to hide).  That division is what lets
+	 * the row-detail caller keep its exact DOM while a dialog reuses the same keyboard and aria wiring.
+	 *
+	 * <p>Opens NO layer: a strip is a layout of the surface it sits on.  An in-dialog strip therefore costs nothing
+	 * against MAX_DIALOG_DEPTH, and anything a pane's controls open goes through the shared pushLayer stack as usual.
+	 *
+	 * @param items Ordered [{id, label, pane}]; `pane` may be null for a strip with no panes to toggle.
+	 * @param opts {className, testId, tabId(i), paneId(i), activeIndex, onActivate(id, pane)} - all optional.
+	 * @return {strip, tabs, activate(id)}, or null when there is nothing to build.
 	 */
-	function buildDetailStrip(panel, onActivate) {
-		if (!panel || typeof panel.querySelectorAll !== "function") return null;
-		const sections = panel.querySelectorAll("[data-juneau-detail-section]");
-		if (!sections || sections.length < 2) return null;
-
-		const seq = ++detailStripSeq;
+	function buildRibbonStrip(items, opts) {
+		if (!items || !items.length) return null;
+		const o = opts || {};
+		const activeIndex = o.activeIndex == null ? 0 : o.activeIndex;
 		const strip = document.createElement("div");
-		strip.className = "juneau-view-ribbon-group juneau-view-detail-tabs";
+		strip.className = o.className == null ? "juneau-view-ribbon-group" : o.className;
 		strip.setAttribute("data-juneau-strip-mode", "tab");
 		strip.setAttribute("role", "tablist");
-		strip.setAttribute("data-testid", "detail-tabs");
+		if (o.testId != null) strip.setAttribute("data-testid", o.testId);
 
 		const tabs = [];
-		for (let i = 0; i < sections.length; i++) {
-			const sec = sections[i];
-			const sid = sec.getAttribute("data-juneau-detail-section");
-			const paneId = "juneau-detail-pane-" + seq + "-" + i;
-			const tabId = "juneau-detail-tab-" + seq + "-" + i;
-			const active = i === 0;
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			const pane = item.pane;
+			const paneId = o.paneId ? o.paneId(i) : ("juneau-strip-pane-" + i);
+			const tabId = o.tabId ? o.tabId(i) : ("juneau-strip-tab-" + i);
+			const active = i === activeIndex;
 
-			// The <section> becomes the tabpanel; hide all but the initially-selected one (visibility only).
-			sec.id = paneId;
-			sec.setAttribute("role", "tabpanel");
-			sec.setAttribute("aria-labelledby", tabId);
-			sec.setAttribute("tabindex", "0");
-			sec.hidden = !active;
-
-			// The tab label is the section's own title; the stacked <h2> title is hidden (the tab replaces it).
-			const titleEl = typeof sec.querySelector === "function"
-				? sec.querySelector(".juneau-view-detail-section-title") : null;
-			const label = titleEl && titleEl.textContent ? titleEl.textContent : sid;
-			if (titleEl) titleEl.hidden = true;
+			// The pane becomes the tabpanel; hide all but the initially-selected one (visibility only).
+			if (pane) {
+				pane.id = paneId;
+				pane.setAttribute("role", "tabpanel");
+				pane.setAttribute("aria-labelledby", tabId);
+				pane.setAttribute("tabindex", "0");
+				pane.hidden = !active;
+			}
 
 			const btn = document.createElement("button");
 			btn.type = "button";
 			btn.className = "juneau-view-ribbon-btn";
 			btn.id = tabId;
 			btn.setAttribute("role", "tab");
-			btn.setAttribute("data-juneau-strip-tab", sid);
+			btn.setAttribute("data-juneau-strip-tab", item.id);
 			btn.setAttribute("aria-controls", paneId);
 			btn.setAttribute("aria-selected", active ? "true" : "false");
 			btn.tabIndex = active ? 0 : -1;
-			btn.textContent = label;            // never innerHTML - labels are plain text
+			btn.textContent = item.label == null ? "" : String(item.label);   // never innerHTML - labels are plain text
 			strip.appendChild(btn);
-			tabs.push({ btn: btn, pane: sec, id: sid });
+			tabs.push({ btn: btn, pane: pane, id: item.id });
 		}
 
-		// Fires the optional onActivate(sectionId, pane) after a tab becomes visible.  The row-detail expander uses
-		// it to lazily init a newly-shown pane's nested table (a nested DataTable must never be constructed while its
-		// pane is hidden - column widths would compute to zero).
+		// Fires the optional onActivate(id, pane) after a tab becomes visible.  The row-detail expander uses it to
+		// lazily init a newly-shown pane's nested table (a nested DataTable must never be constructed while its pane
+		// is hidden - column widths would compute to zero).
 		function notifyActivate(sid) {
-			if (typeof onActivate !== "function") return;
+			if (typeof o.onActivate !== "function") return;
 			for (let i = 0; i < tabs.length; i++)
-				if (String(tabs[i].id) === String(sid)) { onActivate(tabs[i].id, tabs[i].pane); return; }
+				if (String(tabs[i].id) === String(sid)) { o.onActivate(tabs[i].id, tabs[i].pane); return; }
 		}
 
 		strip.addEventListener("click", function (e) {
@@ -1542,6 +1650,168 @@
 			if (typeof nextBtn.focus === "function") nextBtn.focus();
 		});
 
+		return {
+			strip: strip,
+			tabs: tabs,
+			activate: function (sid) { activateDetailTab(tabs, sid); notifyActivate(sid); }
+		};
+	}
+
+	/**
+	 * Converts the stacked detail sections in a cloned detail `panel` into a tab-mode strip + one visible pane.
+	 * No-op returning null for < 2 sections (single-section details stay strip-less).  The strip itself - the
+	 * ".juneau-view-ribbon-group[data-juneau-strip-mode=tab][role=tablist]", its role="tab" buttons with
+	 * aria-selected / aria-controls / roving tabindex, the role="tabpanel" panes, and Left/Right/Home/End selection -
+	 * comes from the shared {@link #buildRibbonStrip}.  Returns the strip element (already inserted into the panel),
+	 * or null.
+	 *
+	 * <p>What stays HERE is everything the {id, label, pane} model cannot express: borrowing each tab's label from the
+	 * section's stacked title and then hiding that title, minting per-expand-instance tab/pane ids from
+	 * detailStripSeq, the "first section starts selected" rule, the header-relative insertion point, and the
+	 * {@link #relocateDetailBarSlot} call so a detail-hosted bar slot ends up trailing the ribbon.  Those are DETAIL
+	 * concerns; a generic strip builder must not learn any of them.
+	 */
+	// The detail-hosted bar slot (BarSlotTable constants of the same names on the server).  DETAIL_BAR_MARKER carries
+	// the slot identity; DETAIL_BAR_META finds the id-less sidecar the <template> ships; DETAIL_BAR_SIDECAR_PREFIX is
+	// the prefix juneau-chrome.js's readSidecar() concatenates - which is exactly why the minted MARKER is
+	// suffix-only, so the prefix is never doubled.
+	const DETAIL_BAR_MARKER = "data-juneau-bar-slot";
+	const DETAIL_BAR_META = "data-juneau-bar-meta";
+	const DETAIL_BAR_SIDECAR_PREFIX = "juneau-bar:";
+	// Stamped on the ribbon once a bar slot trails it, so the stylesheet can narrow the ribbon track to its own
+	// content and let the two share a line - a styling hook, not a state machine, and no :has() selector needed.
+	const STRIP_TRAILED_ATTR = "data-juneau-strip-trailed";
+
+	/** The bar-slot region a detail panel owns directly (never one belonging to a nested table's own panel). */
+	function detailBarSlotIn(panel) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return null;
+		const found = panel.querySelectorAll("[" + DETAIL_BAR_MARKER + "]");
+		for (let i = 0; i < found.length; i++)
+			if (!found[i].closest || found[i].closest(".juneau-view-detail-panel") === panel) return found[i];
+		return found.length ? found[0] : null;
+	}
+
+	/**
+	 * Moves a detail panel's server-painted bar-slot region to the TRAILING position of the ribbon `strip`.
+	 *
+	 * <p>This step belongs to the DETAIL caller, not to a generic strip builder: the strip is assembled client-side
+	 * from a server-painted stack, so a region emitted inside the row-expand {@code <template>} would otherwise be
+	 * left behind at the bottom of the panel.  Keeping it a peer function (called by buildDetailStrip rather than
+	 * written into it) is deliberate, so a later generic strip builder does not inherit a detail-only concern.
+	 *
+	 * <p>IDEMPOTENT: the region is MOVED, never re-created, and a call that finds it already trailing the strip does
+	 * nothing - so re-running over the same panel yields no duplicate and no orphan.  With no strip (a single-section
+	 * detail has none, and none is synthesized for it) the region is left exactly where the server anchored it.
+	 *
+	 * @return true when this call actually moved the region.
+	 */
+	function relocateDetailBarSlot(panel, strip) {
+		if (!strip || !panel || typeof panel.insertBefore !== "function") return false;
+		const region = detailBarSlotIn(panel);
+		if (!region || region === strip) return false;
+		if (typeof strip.setAttribute === "function") strip.setAttribute(STRIP_TRAILED_ATTR, "1");
+		if (strip.nextSibling === region) return false;          // already trailing the ribbon
+		panel.insertBefore(region, strip.nextSibling);
+		return true;
+	}
+
+	/**
+	 * Mints per-row DOM identity on the bar-slot region a just-cloned detail panel carries, and on its id-less
+	 * sidecar.
+	 *
+	 * <p>Two rows can be expanded at once, so the author's {@code BarSlot.id} is not a usable DOM identity: both
+	 * clones would answer the same {@code getElementById("juneau-bar:" + authorId)}.  Identity is therefore per
+	 * expanded row INSTANCE: the marker becomes {@code "<parentId>:<rowId>"} and the sidecar id becomes
+	 * {@code "juneau-bar:<parentId>:<rowId>"}.  The marker is deliberately SUFFIX-ONLY - juneau-chrome.js reads a
+	 * sidecar as {@code readSidecar("juneau-bar:", marker)}, so a prefixed marker would double the prefix.
+	 *
+	 * <p>{@code parentId} is the parent table's MINTED id (its DOM identity, from viewSidecarKey), not the author
+	 * {@code ViewDef.id}, so two cards hosting the same authored view never collide.  The author {@code BarSlot.id}
+	 * itself is left untouched - the PageDef cross-host uniqueness check compares it.
+	 *
+	 * @return The minted suffix, or null when this panel carries no bar slot.
+	 */
+	function mintDetailBarSlotIdentity(panel, parentId, rowId) {
+		const region = detailBarSlotIn(panel);
+		if (!region) return null;
+		const authorId = region.getAttribute(DETAIL_BAR_MARKER);
+		const suffix = (parentId == null ? "" : String(parentId)) + ":" + (rowId == null ? "" : String(rowId));
+		region.setAttribute(DETAIL_BAR_MARKER, suffix);
+		const sidecars = panel.querySelectorAll("[" + DETAIL_BAR_META + "]");
+		for (let i = 0; i < sidecars.length; i++)
+			if (sidecars[i].getAttribute(DETAIL_BAR_META) === authorId) {
+				sidecars[i].setAttribute("id", DETAIL_BAR_SIDECAR_PREFIX + suffix);
+				break;
+			}
+		return suffix;
+	}
+
+	/**
+	 * Collapse-time teardown for a detail bar slot: drops the minted sidecar element id, so once the child row's DOM
+	 * is detached no document id lookup can still resolve into it.  The sibling rows' own sidecars are untouched, and
+	 * a later re-expand mints a fresh identity onto a fresh clone.
+	 */
+	function teardownDetailBarSlot(panel) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		const sidecars = panel.querySelectorAll("[" + DETAIL_BAR_META + "]");
+		for (let i = 0; i < sidecars.length; i++)
+			if (typeof sidecars[i].removeAttribute === "function") sidecars[i].removeAttribute("id");
+	}
+
+	/**
+	 * Enhances a freshly-INSERTED detail panel's bar slot through juneau-chrome.js's exported entry.
+	 *
+	 * <p>Chrome scans for bar slots on DOMContentLoaded only, so a slot cloned from a {@code <template>} on
+	 * row-expand would never be enhanced.  initAll() is document-wide and idempotent (it shares a wired marker with
+	 * wireSafeActions, so re-running cannot double-bind an already-wired page-header control), which makes calling it
+	 * again the correct enhance-on-insert seam.  This is DEMAND work only - no timer is started here or there.
+	 *
+	 * <p>Must run AFTER the panel is in the document (initAll queries the document) and after the relocate step.
+	 * A no-op when the panel has no bar slot, or when the optional chrome bundle is not loaded at all.
+	 *
+	 * @return true when chrome was asked to re-scan.
+	 */
+	function enhanceChromeInPanel(panel) {
+		if (!detailBarSlotIn(panel)) return false;
+		const chrome = typeof window !== "undefined" ? window.JuneauChrome : null;
+		const init = chrome && chrome.init;
+		if (!init || typeof init.initAll !== "function") return false;
+		init.initAll();
+		return true;
+	}
+
+	function buildDetailStrip(panel, onActivate) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return null;
+		const sections = panel.querySelectorAll("[data-juneau-detail-section]");
+		if (!sections || sections.length < 2) return null;
+
+		const seq = ++detailStripSeq;
+
+		// DETAIL-ONLY pre-pass (the generic builder's {id, label, pane} model is not sufficient by itself): the tab
+		// label is borrowed from the section's own stacked <h2> title, and that title is then hidden because the tab
+		// replaces it.  A generic strip has no title to borrow or hide, so this cannot move into the builder.
+		const items = [];
+		for (let i = 0; i < sections.length; i++) {
+			const sec = sections[i];
+			const sid = sec.getAttribute("data-juneau-detail-section");
+			const titleEl = typeof sec.querySelector === "function"
+				? sec.querySelector(".juneau-view-detail-section-title") : null;
+			const label = titleEl && titleEl.textContent ? titleEl.textContent : sid;
+			if (titleEl) titleEl.hidden = true;
+			items.push({ id: sid, label: label, pane: sec });
+		}
+
+		// DETAIL-ONLY id minting: ids are seeded from a monotonic sequence so N simultaneously-expanded rows never
+		// collide.  DETAIL-ONLY visibility rule: the first section starts selected (the builder's default).
+		const built = buildRibbonStrip(items, {
+			className: "juneau-view-ribbon-group juneau-view-detail-tabs",
+			testId: "detail-tabs",
+			tabId: function (i) { return "juneau-detail-tab-" + seq + "-" + i; },
+			paneId: function (i) { return "juneau-detail-pane-" + seq + "-" + i; },
+			onActivate: onActivate
+		});
+		const strip = built.strip;
+
 		var header = typeof panel.querySelector === "function"
 			? panel.querySelector(".juneau-view-detail-header") : null;
 		if (header) {
@@ -1552,6 +1822,9 @@
 		} else {
 			panel.insertBefore(strip, panel.firstChild);
 		}
+		// Detail-caller step, deliberately a peer function (see relocateDetailBarSlot): a server-painted bar-slot
+		// region must follow the ribbon that was just built out from under it.
+		relocateDetailBarSlot(panel, strip);
 		return strip;
 	}
 
@@ -1608,6 +1881,7 @@
 		table.addEventListener("click", function (e) {
 			const dt = ctx.dataTable;
 			if (!dt) return;
+			if (!isOwnTableEvent(table, e)) return;   // a nested table's own expander/collapse/action click
 			const tpl = findRowDetailTemplate(table);
 			if (!tpl) return;
 
@@ -1623,6 +1897,7 @@
 					// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
 					// their listeners/timers leak with the detached nodes).
 					teardownNestedTables(panel);
+					teardownDetailBarSlot(panel);
 					row.child.hide();
 					parentTr.classList.remove("juneau-view-detail-open");
 				}
@@ -1652,7 +1927,10 @@
 			if (!row || !row.length) return;
 			if (row.child.isShown()) {
 				// Tear down nested DataTables before hiding (their child-row DOM is about to be detached).
-				if (tr._juneauDetailPanel) teardownNestedTables(tr._juneauDetailPanel);
+				if (tr._juneauDetailPanel) {
+					teardownNestedTables(tr._juneauDetailPanel);
+					teardownDetailBarSlot(tr._juneauDetailPanel);
+				}
 				row.child.hide();
 				tr.classList.remove("juneau-view-detail-open");
 				return;
@@ -1677,10 +1955,15 @@
 	const popupLayerStack = [];
 
 	/**
-	 * The v1 modal-over-modal depth cap: an outer dialog plus ONE nested {@code type=action} dialog.  This counts
+	 * The modal-over-modal depth cap: an outer dialog plus ONE nested {@code type=action} dialog.  This counts
 	 * {@code kind === "dialog"} records ONLY - a dialog + a popover is two stack entries but ONE dialog, and a nested
 	 * dialog must still open over them.  Popovers, row-action menus, and the (off-stack) timestamp popup never consume
-	 * the cap.  A third dialog push is a visible refusal inside the current top dialog.  Unlimited dialog depth is 10.0.
+	 * the cap.  A third dialog push is a visible refusal inside the current top dialog.
+	 *
+	 * The cap is 2 and is not scheduled to be raised: it is a deliberate interaction limit, not a placeholder waiting
+	 * on a follow-on release.  A third stacked dialog has nowhere legible to put its own Escape/focus-restore
+	 * affordance, so the answer to "I need more depth" is a sectioned dialog (see the section strip below), not a
+	 * deeper stack.
 	 */
 	const MAX_DIALOG_DEPTH = 2;
 
@@ -2055,6 +2338,7 @@
 		if (table._juneauCellPopoverBound) return;
 		table._juneauCellPopoverBound = true;
 		table.addEventListener("click", function (e) {
+			if (!isOwnTableEvent(table, e)) return;   // a nested table owns its own cell popovers
 			const btn = e.target && e.target.closest ? e.target.closest("[data-juneau-popover]") : null;
 			if (!btn) return;
 			e.preventDefault();
@@ -2080,6 +2364,9 @@
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
+		// Per-row DOM identity for the shells this clone carries, before anything can look one of them up.
+		mintNestedIdentity(panel, rowId, (ctx.nestedDepth || 1) + 1);
+		mintDetailBarSlotIdentity(panel, viewSidecarKey(table), rowId);
 		resolveDetailHeaderIcon(panel);
 		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
 		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
@@ -2097,7 +2384,13 @@
 		loading.textContent = "Loading…";
 		panel.appendChild(loading);
 		row.child(panel).show();
+		// DataTables wraps the panel in a plain <td colspan> that is a descendant of this .juneau-view-table, so the
+		// table's clip/ellipsis cell default would otherwise flatten the whole expanded panel into one nowrap line.
+		// The host cell takes the same `juneau-cell-wrap` opt-out an author would use, rather than a second rule.
+		if (panel.parentNode && panel.parentNode.classList) panel.parentNode.classList.add(CELL_WRAP_CLASS);
 		tr.classList.add("juneau-view-detail-open");
+		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
+		enhanceChromeInPanel(panel);
 
 		function stillCurrent() {
 			return ctx._detailGeneration.get(tr) === gen && row.child.isShown();
@@ -2364,14 +2657,6 @@
 	 * screen) - consistent with the drop rule, it can never reach into an off-screen page.
 	 */
 	function initSelection(table, ctx) {
-		function currentRowIds() {
-			const ids = [];
-			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
-				ids.push(tr.getAttribute(ROW_ID_ATTR));
-			});
-			return ids;
-		}
-
 		function refresh() {
 			if (ctx && ctx.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
 		}
@@ -2379,9 +2664,11 @@
 		table.addEventListener("change", function (e) {
 			const selectionState = ctx.selectionState;
 			if (!selectionState) return;
+			if (!isOwnTableEvent(table, e)) return;   // a nested table's checkboxes belong to its own selection
 			const allCb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-all-checkbox") : null;
 			if (allCb) {
-				Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+				// Scoped to this table's OWN rows: select-all must never reach into a nested table's rows.
+				ownRowsWithId(table).forEach(function (tr) {
 					const id = tr.getAttribute(ROW_ID_ATTR);
 					const cb = tr.querySelector(".juneau-view-select-checkbox");
 					if (cb) cb.checked = allCb.checked;
@@ -2412,13 +2699,11 @@
 		if (!dt || !ctx.selectionState) return;
 		dt.on("draw.dt", function (e) {
 			// Guard against a nested table's draw.dt bubbling up: the parent's selection prune must ignore it (and
-			// must never scan the nested table's <tbody> rows, which the descendant query below would otherwise pick up).
+			// ownRowsWithId keeps the scan off the nested table's <tbody> rows, which a plain descendant query
+			// inside an expanded detail panel would otherwise pick up).
 			if (e && e.target !== table) return;
 			const selectionState = ctx.selectionState;
-			const ids = [];
-			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
-				ids.push(tr.getAttribute(ROW_ID_ATTR));
-			});
+			const ids = ownRowsWithId(table).map(function (tr) { return tr.getAttribute(ROW_ID_ATTR); });
 			const pruned = pruneSelection(Array.from(selectionState.selected), ids);
 			selectionState.selected = new Set(pruned);
 			if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
@@ -2428,7 +2713,7 @@
 	/** Ensures the select-all checkbox exists in the (possibly restored) selection header cell.  No listener. */
 	function ensureSelectAllCheckbox(table) {
 		if (table.getAttribute(SELECT_ALL_ATTR) !== "1") return;
-		const th = table.querySelector(".juneau-view-select-th");
+		const th = ownNodes(table, table, ".juneau-view-select-th")[0];
 		if (!th) return;
 		if (th.querySelector(".juneau-view-select-all-checkbox")) return;
 		const allCb = document.createElement("input");
@@ -2444,8 +2729,8 @@
 	 * missing or malformed sidecar (the caller treats that as "no usable bulk config" and withholds the toolbar,
 	 * rather than guessing).
 	 */
-	function readBulkDef(id) {
-		const sidecar = document.getElementById(BULK_SIDECAR_ID_PREFIX + id);
+	function readBulkDef(id, table) {
+		const sidecar = findSidecarNode(BULK_SIDECAR_ID_PREFIX + id, table);
 		if (!sidecar) return null;
 		return parseJsonSafe(sidecar.textContent);
 	}
@@ -2500,9 +2785,7 @@
 		const ids = Array.from(selectionState.selected);
 		if (!ids.length) return;
 		const byId = {};
-		Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
-			byId[tr.getAttribute(ROW_ID_ATTR)] = tr;
-		});
+		ownRowsWithId(table).forEach(function (tr) { byId[tr.getAttribute(ROW_ID_ATTR)] = tr; });
 		ids.forEach(function (id) {
 			const tr = byId[id];
 			if (!tr) return;
@@ -2877,7 +3160,7 @@
 					}
 					if (payload.form) {
 						// Form present -> fail-loud handshake: BOTH the modal top-level and nested form contractVersion
-						// must equal the baked-in "1", or a visible refusal and the dialog does not open (h5).
+						// must equal the ONE baked-in literal, or a visible refusal and the dialog does not open (h5).
 						if (payload.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION
 							|| payload.form.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION) {
 							renderActionOutcome(tr, { outcome: "refusal",
@@ -3098,53 +3381,124 @@
 	 * dialogs with the same field name do not collide and popover layers do not shift ids (N-3).
 	 */
 	function appendDialogForm(dialog, form, table, tr, ctx, seq) {
-		if (!dialog || !form || !form.fields || !form.fields.length) return;
+		if (!dialog || !form) return;
+		// A sectioned form and a flat one are mutually exclusive on the server (FormDef.validate rejects both), so
+		// sections win here without needing to reconcile the two.
+		if (form.sections && form.sections.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return; }
+		if (!form.fields || !form.fields.length) return;
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
 		wrap.setAttribute("data-testid", "dialog-form");
-		form.fields.forEach(function (f) {
-			if (!f || f.name == null || String(f.name) === "") return;
-			const type = (f.type == null || f.type === "") ? "text" : String(f.type);
-			if (! isTypedFormInputType(type)) return;
-			const row = document.createElement("div");
-			row.className = "juneau-view-dialog-form-row";
-			const id = "juneau-dialog-field-" + String(seq == null ? 0 : seq) + "-" + String(f.name);
-			if (type !== "action") {
-				const label = document.createElement("label");
-				label.setAttribute("for", id);
-				label.textContent = f.label != null ? String(f.label) : String(f.name);
-				row.appendChild(label);
-			}
-			const control = paintFormControl(row, f, id, table, tr, ctx);
-			if (! control) return;   // unknown type skipped
-			if (type !== "action") {
-				let helpId = null;
-				if (f.help != null && String(f.help) !== "") {
-					const help = document.createElement("div");
-					help.className = "juneau-view-dialog-form-help";
-					help.id = id + "-help";
-					help.setAttribute("data-juneau-help", "1");
-					help.textContent = String(f.help);
-					row.appendChild(help);
-					helpId = help.id;
-				}
-				const err = document.createElement("div");
-				err.className = "juneau-view-dialog-form-error";
-				err.id = id + "-error";
-				err.setAttribute("data-juneau-error-for", String(f.name));
-				err.setAttribute("aria-live", "polite");
-				row.appendChild(err);
-				// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
-				// error id added only when invalid - S5).
-				control._juneauErrorEl = err;
-				control._juneauHelpId = helpId;
-				if (helpId) control.setAttribute("aria-describedby", helpId);
-				bindControlValidation(dialog, control);
-			}
-			wrap.appendChild(row);
-		});
+		form.fields.forEach(function (f) { appendDialogFormRow(wrap, dialog, f, table, tr, ctx, seq); });
 		if (wrap.childNodes.length)
 			dialog.appendChild(wrap);
+	}
+
+	/**
+	 * Paints ONE label+control+help+error row for `f` into `host`, wired for inline validation against `dialog`.
+	 * A blank name or an off-allowlist type is skipped (nothing appended).  Extracted from appendDialogForm so a
+	 * sectioned form paints its rows into a per-section pane with byte-identical row markup.
+	 */
+	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq) {
+		if (!f || f.name == null || String(f.name) === "") return;
+		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
+		if (! isTypedFormInputType(type)) return;
+		const row = document.createElement("div");
+		row.className = "juneau-view-dialog-form-row";
+		const id = "juneau-dialog-field-" + String(seq == null ? 0 : seq) + "-" + String(f.name);
+		if (type !== "action") {
+			const label = document.createElement("label");
+			label.setAttribute("for", id);
+			label.textContent = f.label != null ? String(f.label) : String(f.name);
+			row.appendChild(label);
+		}
+		const control = paintFormControl(row, f, id, table, tr, ctx);
+		if (! control) return;   // unknown type skipped
+		if (type !== "action") {
+			let helpId = null;
+			if (f.help != null && String(f.help) !== "") {
+				const help = document.createElement("div");
+				help.className = "juneau-view-dialog-form-help";
+				help.id = id + "-help";
+				help.setAttribute("data-juneau-help", "1");
+				help.textContent = String(f.help);
+				row.appendChild(help);
+				helpId = help.id;
+			}
+			const err = document.createElement("div");
+			err.className = "juneau-view-dialog-form-error";
+			err.id = id + "-error";
+			err.setAttribute("data-juneau-error-for", String(f.name));
+			err.setAttribute("aria-live", "polite");
+			row.appendChild(err);
+			// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
+			// error id added only when invalid - S5).
+			control._juneauErrorEl = err;
+			control._juneauHelpId = helpId;
+			if (helpId) control.setAttribute("aria-describedby", helpId);
+			bindControlValidation(dialog, control);
+		}
+		host.appendChild(row);
+	}
+
+	/**
+	 * Paints a SECTIONED FormDef: one ribbon-format strip (built by the shared buildRibbonStrip) over one visible
+	 * pane per section, inside the same ".juneau-view-dialog-form" wrapper a flat form uses.
+	 *
+	 * <p>Every section's rows are painted UP FRONT and only hidden, never re-created, which is what makes a value
+	 * typed into one section survive a trip through another and keeps each control's error sibling attached to its own
+	 * section.  Field element ids stay the flat form's `juneau-dialog-field-<seq>-<name>` (names are unique across the
+	 * whole form, not per section - FormDef.validate enforces that), so validation and collection are unchanged and
+	 * see hidden panes too.
+	 *
+	 * <p>The strip opens NO layer: a sectioned dialog is ONE dialog and consumes exactly one MAX_DIALOG_DEPTH slot,
+	 * so a `type=action` control inside a pane still stacks a real nested dialog and still refuses at the cap.
+	 */
+	function appendSectionedDialogForm(dialog, form, table, tr, ctx, seq) {
+		const wrap = document.createElement("div");
+		wrap.className = "juneau-view-dialog-form";
+		wrap.setAttribute("data-testid", "dialog-form");
+
+		const items = [];
+		for (let i = 0; i < form.sections.length; i++) {
+			const s = form.sections[i];
+			if (!s || s.id == null || String(s.id) === "") continue;
+			const pane = document.createElement("div");
+			pane.className = "juneau-view-dialog-form-section";
+			pane.setAttribute("data-juneau-form-section", String(s.id));
+			const fields = s.fields || [];
+			for (let j = 0; j < fields.length; j++)
+				appendDialogFormRow(pane, dialog, fields[j], table, tr, ctx, seq);
+			if (! pane.childNodes.length) continue;   // every field skipped -> no empty tab
+			items.push({ id: String(s.id), label: s.label == null ? String(s.id) : String(s.label), pane: pane });
+		}
+		if (! items.length) return;
+
+		const sseq = String(seq == null ? 0 : seq);
+		const built = buildRibbonStrip(items, {
+			className: "juneau-view-ribbon-group juneau-view-dialog-sections",
+			testId: "dialog-sections",
+			tabId: function (i) { return "juneau-dialog-section-tab-" + sseq + "-" + i; },
+			paneId: function (i) { return "juneau-dialog-section-pane-" + sseq + "-" + i; }
+		});
+		wrap.appendChild(built.strip);
+		for (let i = 0; i < items.length; i++)
+			wrap.appendChild(items[i].pane);
+		// Confirm-time validation reveals the owning section before focusing an invalid control in a hidden one.
+		wrap._juneauActivateSection = built.activate;
+		dialog.appendChild(wrap);
+	}
+
+	/**
+	 * Reveals the section that owns `el` when it is currently hidden, so a confirm-time focus lands on something the
+	 * user can see.  A no-op for a flat form, and for a control whose section is already showing.
+	 */
+	function revealDialogSectionFor(el) {
+		const pane = (el && typeof el.closest === "function") ? el.closest("[data-juneau-form-section]") : null;
+		if (! pane || ! pane.hidden) return;
+		const wrap = (typeof pane.closest === "function") ? pane.closest(".juneau-view-dialog-form") : null;
+		const activate = wrap ? wrap._juneauActivateSection : null;
+		if (typeof activate === "function") activate(pane.getAttribute("data-juneau-form-section"));
 	}
 
 	/** Wires per-control blur/input revalidation (advisory, non-alert): keeps the error sibling fresh as the user types. */
@@ -3176,8 +3530,11 @@
 			applyControlValidity(el, msg, fromConfirm);
 			if (msg && ! firstInvalid) firstInvalid = el;
 		}
-		if (firstInvalid && fromConfirm && typeof firstInvalid.focus === "function") {
-			try { firstInvalid.focus(); } catch (e) { /* ignore */ }
+		if (firstInvalid && fromConfirm) {
+			revealDialogSectionFor(firstInvalid);
+			if (typeof firstInvalid.focus === "function") {
+				try { firstInvalid.focus(); } catch (e) { /* ignore */ }
+			}
 		}
 		return ! firstInvalid;
 	}
@@ -3407,6 +3764,7 @@
 
 	function initRowActions(table, viewDef, ctx) {
 		table.addEventListener("click", function (e) {
+			if (!isOwnTableEvent(table, e)) return;   // a nested table's row actions are its own, not this table's
 			// An action-bound cell pill dispatches here (NOT in initDetailsExpander, which binds only when a
 			// row-detail template is present); bind no more broadly than [data-juneau-pill] so a menu/ActionBar
 			// click is never stolen.
@@ -3433,6 +3791,7 @@
 		// Keyboard parity for the (non-native) pill button: Enter/Space activate; Space must not scroll the page.
 		table.addEventListener("keydown", function (e) {
 			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+			if (!isOwnTableEvent(table, e)) return;
 			const pill = e.target && e.target.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
 			if (!pill) return;
 			if (e.preventDefault) e.preventDefault();
@@ -3461,15 +3820,24 @@
 		Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-dialog-backdrop"), removeEl);
 	}
 
+	/**
+	 * Removes the chrome THIS table generated.  Every sweep is ownership-scoped: an expanded row-detail panel puts a
+	 * nested table's toolbar row and synthetic header cells inside this table's subtree, and a parent teardown must
+	 * not strip a nested table's chrome out from under it.
+	 */
 	function stripGeneratedDom(table) {
 		const wrapper = findViewWrapper(table);
 		if (wrapper) {
-			Array.prototype.forEach.call(wrapper.querySelectorAll(".juneau-view-toolbar-row"), removeEl);
+			Array.prototype.forEach.call(wrapper.querySelectorAll(".juneau-view-toolbar-row"), function (row) {
+				if (!isInside(table, row)) removeEl(row);
+			});
 		}
-		Array.prototype.forEach.call(table.querySelectorAll("thead tr.juneau-view-columnsearch-row"), removeEl);
-		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-actions-th"), removeEl);
-		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-select-th"), removeEl);
-		Array.prototype.forEach.call(table.querySelectorAll("thead th.juneau-view-detail-th"), removeEl);
+		[
+			"thead tr.juneau-view-columnsearch-row",
+			"thead th.juneau-view-actions-th",
+			"thead th.juneau-view-select-th",
+			"thead th.juneau-view-detail-th"
+		].forEach(function (sel) { ownNodes(table, table, sel).forEach(removeEl); });
 	}
 
 	/**
@@ -3478,7 +3846,7 @@
 	 * on first paint; the server will not re-run) then append the trailing actions {@code <th>} as JS does today.
 	 */
 	function restoreHeaderShell(table, ctx) {
-		const headRow = table.querySelector("thead tr");
+		const headRow = ownNodes(table, table, "thead tr")[0];
 		if (headRow && findRowDetailTemplate(table) && !headRow.querySelector(".juneau-view-detail-th")) {
 			const dcTh = document.createElement("th");
 			dcTh.className = "juneau-view-detail-th";
@@ -3486,7 +3854,7 @@
 			headRow.insertBefore(dcTh, headRow.firstChild);
 		}
 		if (ctx.selectionState) {
-			const row = table.querySelector("thead tr");
+			const row = headRow;
 			if (row && !row.querySelector(".juneau-view-select-th")) {
 				const selTh = document.createElement("th");
 				selTh.className = "juneau-view-select-th";
@@ -3819,7 +4187,7 @@
 	}
 
 	// ==================================================================================================================
-	// NESTED TABLES  (read-only DataTables view inside a row-detail section, scoped to its parent row)
+	// NESTED TABLES  (a DataTables view inside a row-detail section, scoped to its parent row, capped at depth 2)
 	// ==================================================================================================================
 
 	/**
@@ -3838,21 +4206,44 @@
 	}
 
 	/**
-	 * Constructs ONE nested read-only DataTables view from its wrapper.  Idempotent: a wrapper already inited (its
-	 * table carries {@code data-juneau-nested-init}) is skipped.  Fail-loud + fail-closed on a contract mismatch or a
-	 * malformed/absent sidecar - it renders a banner (or logs) and withholds just this one table, never throwing
+	 * This wrapper's table depth: the page's root table is depth 1, so a lone nested wrapper is depth 2 and a nested
+	 * wrapper reached through another nested wrapper (i.e. cloned into a depth-2 table's own detail panel) is depth 3.
+	 */
+	function nestedTableDepth(wrap) {
+		let enclosing = 0;
+		for (let n = wrap; n; n = n.parentNode)
+			if (n.nodeType === 1 && typeof n.getAttribute === "function" && n.getAttribute(NESTED_ATTR) === "1")
+				enclosing++;
+		return enclosing + 1;
+	}
+
+	/**
+	 * Constructs ONE nested DataTables view from its wrapper.  Idempotent: a wrapper already inited (its table carries
+	 * {@code data-juneau-nested-init}) is skipped.  Fail-loud + fail-closed on a depth violation, a contract mismatch,
+	 * or a malformed/absent sidecar - it renders a banner (or logs) and withholds just this one table, never throwing
 	 * into the caller's detail-panel flow.
 	 *
-	 * <p>Read-only is enforced defensively here (the server already rejects a nested {@code rowActions}/
-	 * {@code columnConfig}/non-null {@code details}, and a bare {@link ViewDef} can carry neither selection nor
-	 * bulk): any such field surviving on the wire is nulled before build, so the nested table can only ever run the
-	 * columns/paging/sort/search feature set.  The parent-row scope is applied by seeding {@code ctx.nestedScope},
-	 * which buildOptions merges into the ajax GET in both data modes.
+	 * <p>A depth-2 nested table runs the SAME init path a root table runs - row detail, cell popovers, row actions,
+	 * and (when the server stamped {@code SELECT_ATTR}) its own live selection state.  Two affordances are clamped off
+	 * instead, because they belong to the enclosing table alone: {@code columnConfig} (the column chooser and its
+	 * saved-views identity) and {@code pollIntervalMs} (a nested table refreshes with its parent, not on its own
+	 * timer).  A nested mutating action rides the token the server painted onto this table from the enclosing
+	 * response; a token-less nested table refuses visibly rather than submitting.  The parent-row scope is applied by
+	 * seeding {@code ctx.nestedScope}, which buildOptions merges into the ajax GET in both data modes.
 	 */
 	function prepareNestedTable(wrap, parentId) {
 		if (!wrap || typeof wrap.querySelector !== "function") return;
 		const table = wrap.querySelector("table[data-juneau-view]");
 		if (!table || table.getAttribute(NESTED_INIT_ATTR) === "1") return;
+
+		const depth = nestedTableDepth(wrap);
+		if (depth > MAX_NESTED_DEPTH) {
+			const m = "Juneau nested table: nesting depth " + depth + " exceeds the maximum of " + MAX_NESTED_DEPTH +
+				". Refusing to init.";
+			error(m);
+			renderBanner(table, m);
+			return;
+		}
 
 		const nestedContract = wrap.getAttribute(NESTED_CONTRACT_ATTR);
 		if (nestedContract !== JUNEAU_NESTED_CONTRACT_VERSION) {
@@ -3890,23 +4281,28 @@
 			return;
 		}
 
-		// Read-only clamp (defensive - the server already forbids all of these on a nested view).
-		viewDef.rowActions = null;
+		// Parent-only affordances (defensive - the server already forbids columnConfig on a nested view).  rowActions
+		// and details are deliberately NOT nulled: a depth-2 nested table is a full view.
 		viewDef.columnConfig = null;
 		viewDef.pollIntervalMs = null;
-		viewDef.details = null;
 
 		table.setAttribute(NESTED_PARENT_ID_ATTR, parentId == null ? "" : String(parentId));
 		const scopeParam = wrap.getAttribute(NESTED_SCOPE_PARAM_ATTR) || "parentId";
+		// Live selection state, read from the attributes the server stamped on THIS table (never from VIEW_META) -
+		// exactly as a root table reads them.  Bulk mutation is deliberately not consulted: it stays on the parent.
+		const selectionState = hasSelection(table)
+			? { selected: new Set(), rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR) }
+			: null;
 
 		const ctx = {
 			table: table,
 			viewDef: viewDef,
 			dataTable: null,
 			activeState: {},
-			selectionState: null,
+			selectionState: selectionState,
 			columnSearchOn: false,
 			nested: true,
+			nestedDepth: depth,
 			nestedScope: {
 				param: scopeParam,
 				// Read at REQUEST time off the live attribute so a re-init against a different parent stays correct.
@@ -3924,6 +4320,15 @@
 		};
 		table.__juneauCtx = ctx;
 		table.setAttribute(NESTED_INIT_ATTR, "1");
+
+		// The parent table's init path, in the same order (see beginInitTable) - minus the bulk branch.
+		if (findRowDetailTemplate(table))
+			initDetailsExpander(table, ctx, viewDef);
+		initCellPopover(table, ctx, viewDef);
+		if (viewDef.rowActions && viewDef.rowActions.length)
+			initRowActions(table, viewDef, ctx);
+		if (selectionState)
+			initSelection(table, ctx);
 
 		const effective = resolveEffectiveColumns(viewDef, null);
 		buildTable(table, viewDef, effective, ctx);
@@ -3972,24 +4377,84 @@
 	 * Called before the parent's child-row DOM is discarded - on collapse, on re-expand, and (via preDraw.dt) on any
 	 * parent redraw - so nested DataTable instances never leak their listeners with the detached nodes.  Clears the
 	 * init marker so a subsequent re-expand rebuilds cleanly.
+	 *
+	 * <p>DEPTH-FIRST: the query returns document order (a table before any table inside its own open detail panel),
+	 * so the sweep runs in REVERSE - every descendant table is destroyed before the table whose panel holds it, and a
+	 * descendant's timers/ajax handles can never be orphaned by its ancestor's destroy.
 	 */
 	function teardownNestedTables(root) {
 		if (!root || typeof root.querySelectorAll !== "function") return;
 		const tables = root.querySelectorAll("table[data-juneau-view][" + NESTED_INIT_ATTR + "]");
-		Array.prototype.forEach.call(tables, function (t) {
+		for (let i = tables.length - 1; i >= 0; i--) {
+			const t = tables[i];
 			const ctx = t.__juneauCtx;
 			if (ctx) {
 				try { teardownTable(t, ctx); } catch (e) { /* already gone */ }
 				t.__juneauCtx = null;
 			}
 			t.removeAttribute(NESTED_INIT_ATTR);
+		}
+	}
+
+	/**
+	 * Mints per-row DOM identity on the nested shells a just-cloned detail panel carries.
+	 *
+	 * <p>The server emits a nested {@code <table>} and its VIEW_META sidecar with NO html {@code id} (a
+	 * {@code <template>} clone would collide the moment a second row expands), and {@code data-juneau-view} stays the
+	 * author's {@code ViewDef.id} - so it is NOT unique either.  Identity is therefore per expanded row INSTANCE and
+	 * minted here, qualified by the parent row id and the table's depth: {@code <viewId>:<parentRowId>:<depth>}, with
+	 * the sidecar taking the same suffix under the usual {@code juneau-view:} prefix.  Because the suffix is always
+	 * present, a nested sidecar can never shadow a page-level {@code juneau-view:<viewId>} lookup for a root table
+	 * that happens to share the author id.
+	 *
+	 * <p>Runtime lookups on a nested table must still be scoped to the enclosing panel (that is what
+	 * {@link #findNestedSidecar} and the ownership helpers do); the minted ids exist for the DOM's own uniqueness
+	 * rules, testability, and a11y references - never as a document-wide selector seam.
+	 */
+	function mintNestedIdentity(panel, parentRowId, depth) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		const suffix = ":" + (parentRowId == null ? "" : String(parentRowId)) + ":" + depth;
+		Array.prototype.forEach.call(panel.querySelectorAll("[" + NESTED_ATTR + "]"), function (wrap) {
+			const table = wrap.querySelector("table[data-juneau-view]");
+			if (!table) return;
+			const id = table.getAttribute("data-juneau-view") + suffix;
+			table.setAttribute("id", id);
+			const sidecar = findNestedSidecar(wrap, table.getAttribute("data-juneau-view"));
+			if (sidecar) sidecar.setAttribute("id", "juneau-view:" + id);
 		});
+	}
+
+	/**
+	 * The sidecar KEY for a top-level table: the element id the server minted onto the table, which is the author's
+	 * {@code ViewDef.id} for a standalone table but is qualified by the enclosing card (and grid, when the grid
+	 * assembled it) for a table hosted in a card - so two cards hosting the same authored view carry two distinct
+	 * sidecars.  Falls back to the {@code data-juneau-view} author id when a table carries no minted id at all.
+	 */
+	function viewSidecarKey(table) {
+		const minted = table.getAttribute("id");
+		return minted && minted.length ? minted : table.getAttribute("data-juneau-view");
+	}
+
+	/**
+	 * Resolves a sidecar node by element id, preferring a lookup SCOPED to the enclosing card {@code <article>} and
+	 * falling back to the document only for a table that is not in a card.  The scoped branch is what keeps a card's
+	 * table reading its own configuration even if a page elsewhere happens to mint a colliding id.
+	 */
+	function findSidecarNode(elementId, table) {
+		const card = table && typeof table.closest === "function" ? table.closest("[" + CARD_MARKER + "]") : null;
+		if (card && typeof card.querySelector === "function") {
+			const scoped = card.querySelector("[id=\"" + elementId + "\"]");
+			if (scoped) return scoped;
+		}
+		return typeof document !== "undefined" && typeof document.getElementById === "function"
+			? document.getElementById(elementId) : null;
 	}
 
 	function beginInitTable(table) {
 		const $ = window.jQuery;
 		const id = table.getAttribute("data-juneau-view");
-		const sidecar = document.getElementById("juneau-view:" + id);
+		const key = viewSidecarKey(table);
+		const sidecar = findSidecarNode(SIDECAR_ID_PREFIX + key, table);
 		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
 
 		let viewDef;
@@ -4049,7 +4514,7 @@
 		if (selectionState) {
 			initSelection(table, ctx);
 			if (hasBulk(table)) {
-				const bulkDef = readBulkDef(id);
+				const bulkDef = readBulkDef(key, table);
 				if (!bulkDef) {
 					ctx._bulkError = "Juneau view '" + id + "': missing or malformed bulk-actions sidecar; bulk mutation withheld.";
 					error(ctx._bulkError);
@@ -4118,7 +4583,7 @@
 		const tables = document.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest && t.closest("[data-juneau-page]")) return;
-			// Skip nested tables (a read-only table inside a row-detail section).  They init lazily - after the
+			// Skip nested tables (a table inside a row-detail section).  They init lazily - after the
 			// parent detail GET succeeds and their pane is visible (see prepareNestedTable) - never on this eager
 			// page-load scan.  At DOMContentLoaded a nested table is still inert inside its <template> and is not
 			// matched here anyway; this guard covers a nested table already cloned into an open panel.
@@ -4157,7 +4622,15 @@
 		// TODO-445n table overflow discipline (DT1 "Approach B" wrap) - exposed for the Node harness.
 		ensureTableScroll: ensureTableScroll,
 		unwrapTableScroll: unwrapTableScroll,
+		// L12 A scroll-region a11y - exposed so the Node harness can drive the overflowing/not-overflowing fork
+		// directly (the shim cannot lay out, but it can carry scrollWidth/clientWidth as plain properties).
+		scrollRegionFor: scrollRegionFor,
+		applyScrollRegionA11y: applyScrollRegionA11y,
+		TABLE_SCROLL_LABEL: TABLE_SCROLL_LABEL,
 		beginInitTable: beginInitTable,
+		// Card-hosted identity: the minted sidecar key and the card-scoped sidecar lookup built on it.
+		viewSidecarKey: viewSidecarKey,
+		findSidecarNode: findSidecarNode,
 		// visual-parity pass: exposed for manual verification.
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
@@ -4184,7 +4657,12 @@
 		paintActionMessageIntoDetail: paintActionMessageIntoDetail,
 		detailTabTargetIndex: detailTabTargetIndex,
 		activateDetailTab: activateDetailTab,
+		buildRibbonStrip: buildRibbonStrip,
 		buildDetailStrip: buildDetailStrip,
+		relocateDetailBarSlot: relocateDetailBarSlot,
+		mintDetailBarSlotIdentity: mintDetailBarSlotIdentity,
+		teardownDetailBarSlot: teardownDetailBarSlot,
+		enhanceChromeInPanel: enhanceChromeInPanel,
 		findRowDetailTemplate: findRowDetailTemplate,
 		detailCoalesceKey: detailCoalesceKey,
 		detailContractOk: detailContractOk,
@@ -4194,15 +4672,23 @@
 		initDetailsExpander: initDetailsExpander,
 		buildDetailsControlColumnDef: buildDetailsControlColumnDef,
 		detailsControlCellMarkup: detailsControlCellMarkup,
-		// Nested read-only tables inside a row-detail section - exposed for the node harness + manual verification.
+		// Nested tables inside a row-detail section - exposed for the node harness + manual verification.
 		JUNEAU_NESTED_CONTRACT_VERSION: JUNEAU_NESTED_CONTRACT_VERSION,
+		MAX_NESTED_DEPTH: MAX_NESTED_DEPTH,
 		applyNestedScope: applyNestedScope,
 		findNestedSidecar: findNestedSidecar,
+		nestedTableDepth: nestedTableDepth,
 		prepareNestedTable: prepareNestedTable,
+		mintNestedIdentity: mintNestedIdentity,
 		adjustNestedColumns: adjustNestedColumns,
 		activateNestedTablesInPane: activateNestedTablesInPane,
 		initNestedTablesInVisiblePanes: initNestedTablesInVisiblePanes,
 		teardownNestedTables: teardownNestedTables,
+		// Table ownership (a nested table lives inside its parent's child row) - exposed for the node harness.
+		isInside: isInside,
+		owningViewTable: owningViewTable,
+		isOwnTableEvent: isOwnTableEvent,
+		ownRowsWithId: ownRowsWithId,
 		fillCellPopover: fillCellPopover,
 		initCellPopover: initCellPopover,
 		closeCellPopover: closeCellPopover,

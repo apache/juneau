@@ -27,7 +27,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
@@ -52,15 +51,32 @@ import org.apache.juneau.rest.server.widgets.EventCategory.CategoryColor;
  * 		and the painted chips.
  * 	<li>A day carrying four events against the default {@code maxPerDay} of three, so the "+N more" overflow control
  * 		is present.
+ * 	<li>A multi-day all-day event (inclusive {@code end}) crossing a week boundary, so the spanning bar is drawn as
+ * 		two continued segments, and timed events with a leading {@code HH:mm} label so chip ordering is visible.
  * 	<li>Same-origin event {@code href}s to a {@code /event/{id}} detail page, so a no-JS reader can still follow a
  * 		chip.
  * 	<li>The per-month {@code /events/{year}/{month}} GET returning the {@code {contractVersion, year, month, events}}
- * 		envelope the runtime hydrates other months from.
+ * 		envelope the runtime hydrates other months from, filtered through
+ * 		{@link CalendarEvent#retainWellFormed(java.util.Collection)} so the dynamic path drops exactly what the seed
+ * 		path drops.
  * </ul>
+ *
+ * <h5 class='section'>Script load order (a contract, not a preference):</h5>
+ * <p>
+ * {@code juneau-views.js} is loaded <b>before</b> {@code juneau-calendar.js} because the calendar's "+N more"
+ * popover registers on the <b>one shared layer stack</b> that {@code juneau-views.js} owns; the calendar defines no
+ * stack of its own and fails loud when the shared one is absent.
+ *
+ * <h5 class='section'>Why both mixins:</h5>
+ * <p>
+ * The calendar's own CSS/JS now ship in the widget module, so the page resolves those two URLs through
+ * {@link WidgetsMixin#widgetAssetUrl(RestRequest,String)}.  {@link ViewsMixin} is still composed because the calendar
+ * is not standalone: it needs that module's base stylesheet and, above all, the shared layer stack
+ * {@code juneau-views.js} publishes.
  *
  * @since 10.0.0
  */
-@Rest(mixins=ViewsMixin.class)
+@Rest(mixins={ViewsMixin.class, WidgetsMixin.class})
 public class ExampleCalendarRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -124,17 +140,21 @@ public class ExampleCalendarRest extends BasicRestServlet {
 			<h1>Apache Juneau &mdash; Reusable Calendar Example</h1>
 			<p>The current month is painted server-side with its event chips already visible (progressive
 			enhancement); <code>juneau-calendar.js</code> then hydrates prev/next/today navigation by fetching other
-			months from <code>%s</code>. A day with more events than fit shows a &quot;+N more&quot; control.</p>
+			months from <code>%s</code>. A day with more events than fit shows a &quot;+N more&quot; control, and the
+			legend entries are toggles that filter categories client-side.</p>
 			%s
+			<script src="%s"></script>
 			<script src="%s"></script>
 			</body>
 			</html>
 			""".formatted(
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.CALENDAR_CSS_PATH),
+				WidgetsMixin.widgetAssetUrl(req, WidgetsMixin.CALENDAR_CSS_PATH),
 				ENDPOINT,
 				calendarMarkup,
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.CALENDAR_JS_PATH));
+				// juneau-views.js FIRST: it owns the shared layer stack the calendar's "+N more" popover pushes onto.
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				WidgetsMixin.widgetAssetUrl(req, WidgetsMixin.CALENDAR_JS_PATH));
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
 			list(ContentType.of("text/html;charset=utf-8")));
@@ -154,7 +174,9 @@ public class ExampleCalendarRest extends BasicRestServlet {
 	@RestGet(path="/events/{year}/{month}", swagger=@OpSwagger(ignore=true))
 	public Map<String,Object> monthEvents(@Path("year") int year, @Path("month") int month) {
 		var events = new ArrayList<Map<String,Object>>();
-		for (var e : eventsFor(year, month))
+		// GET is identical to POST: a malformed event is dropped and the rest of the month still paints.  This is the
+		// same predicate CalendarDef.validate() drops on, so the dynamic path can never disagree with the seed path.
+		for (var e : CalendarEvent.retainWellFormed(eventsFor(year, month)))
 			events.add(wire(e));
 		var out = new LinkedHashMap<String,Object>();
 		out.put("contractVersion", CalendarDef.CONTRACT_VERSION);
@@ -201,27 +223,60 @@ public class ExampleCalendarRest extends BasicRestServlet {
 		out.add(event(year, month, busy, 4, "Postmortem", CAT_INCIDENT));
 		out.add(event(year, month, Math.min(22, len), 1, "Patch release", CAT_RELEASE));
 		out.add(event(year, month, Math.min(27, len), 1, "Incident retro", CAT_INCIDENT));
+		// A nine-day all-day span (inclusive end).  Longer than a week row, so it ALWAYS cuts at a week boundary and
+		// paints as continued bar segments; it also crosses the busy day, where it costs a lane, not a chip slot.
+		out.add(span(year, month, Math.min(10, len), Math.min(18, len), "Release freeze", CAT_RELEASE));
+		// Two timed events on the same day: they sort after that day's all-day chips, and ascend among themselves.
+		out.add(timed(year, month, Math.min(3, len), "16:00", "17:00", "Retro", CAT_INCIDENT));
+		out.add(timed(year, month, Math.min(3, len), "09:30", "10:30", "Standup", CAT_TEAM));
 		return out;
 	}
 
-	/** Builds one all-day event with a same-origin detail href. */
+	/** Builds one all-day, single-day event with a same-origin detail href. */
 	private static CalendarEvent event(int year, int month, int day, int seq, String title, String categoryId) {
-		var start = LocalDate.of(year, month, day).format(DateTimeFormatter.ISO_LOCAL_DATE);
-		var id = "%04d-%02d-%02d-%d".formatted(year, month, day, seq);
-		return CalendarEvent.create()
-			.id(id)
-			.title(title)
-			.start(start)
-			.categoryId(categoryId)
-			.href("event/" + id);
+		return base("%04d-%02d-%02d-%d".formatted(year, month, day, seq), title, categoryId)
+			.start(day(year, month, day));
 	}
 
-	/** The wire-envelope element shape for one event (mirrors the seed sidecar the emitter writes). */
+	/** Builds one multi-day all-day event; the date-only {@code end} is INCLUSIVE, so both endpoints are occupied. */
+	private static CalendarEvent span(int year, int month, int fromDay, int toDay, String title, String categoryId) {
+		return base("%04d-%02d-%02d-span".formatted(year, month, fromDay), title, categoryId)
+			.start(day(year, month, fromDay))
+			.end(day(year, month, toDay));
+	}
+
+	/** Builds one timed event; the date-time {@code end} is EXCLUSIVE, so {@code [from, to)} stays on the start day. */
+	private static CalendarEvent timed(int year, int month, int day, String from, String to, String title,
+			String categoryId) {
+		return base("%04d-%02d-%02d-%s".formatted(year, month, day, from.replace(":", "")), title, categoryId)
+			.start(day(year, month, day) + "T" + from)
+			.end(day(year, month, day) + "T" + to);
+	}
+
+	/** The id/title/category/href shared by every synthetic event shape. */
+	private static CalendarEvent base(String id, String title, String categoryId) {
+		return CalendarEvent.create().id(id).title(title).categoryId(categoryId).href("event/" + id);
+	}
+
+	/** The ISO {@code yyyy-MM-dd} civil date for a (year, month, day). */
+	private static String day(int year, int month, int day) {
+		return LocalDate.of(year, month, day).format(DateTimeFormatter.ISO_LOCAL_DATE);
+	}
+
+	/**
+	 * The wire-envelope element shape for one event (mirrors the seed sidecar the emitter writes).
+	 *
+	 * <p>
+	 * {@code end} was already carried by the v1 envelope for forward-compat, so making it layout-significant added
+	 * <b>no new required field</b> here &mdash; only the meaning the runtime gives it changed.
+	 */
 	private static Map<String,Object> wire(CalendarEvent e) {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("id", e.id);
 		m.put("title", e.title);
 		m.put("start", e.start);
+		if (e.end != null)
+			m.put("end", e.end);
 		m.put("allDay", e.effectiveAllDay());
 		m.put("categoryId", e.categoryId);
 		m.put("href", e.href);

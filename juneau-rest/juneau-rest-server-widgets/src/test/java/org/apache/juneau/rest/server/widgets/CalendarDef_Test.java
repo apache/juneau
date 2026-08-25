@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.widgets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.widgets.CalendarDef.*;
 import org.apache.juneau.rest.server.widgets.EventCategory.*;
@@ -37,8 +39,9 @@ class CalendarDef_Test extends TestBase {
 			.events(CalendarEvent.create().id("e1").title("Team offsite").start("2026-08-14").categoryId("team"));
 	}
 
-	@Test void a01_contractVersion_isStringOne() {
-		assertEquals("1", CalendarDef.CONTRACT_VERSION);
+	@Test void a01_contractVersion_isStringTwo() {
+		// Bumped in lockstep with JUNEAU_CALENDAR_CONTRACT_VERSION when `end` became layout-significant.
+		assertEquals("2", CalendarDef.CONTRACT_VERSION);
 	}
 
 	@Test void a02_wellFormed_validates() {
@@ -135,9 +138,14 @@ class CalendarDef_Test extends TestBase {
 			() -> good().categories(EventCategory.create().id("team").label("  ")).validate());
 	}
 
-	@Test void f01_seedEventBlankTitle_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().events(
-			CalendarEvent.create().id("e1").title("  ").start("2026-08-14").categoryId("team")).validate());
+	@Test void f01_seedEventBlankTitle_isDropped_notFatal() {
+		// A blank title is MALFORMED, and a malformed seed event is dropped so one bad event never costs the whole
+		// calendar - the same posture the per-month GET path takes (rec F / rec L / rec S).
+		var d = good().events(
+			CalendarEvent.create().id("e1").title("  ").start("2026-08-14").categoryId("team"),
+			CalendarEvent.create().id("e2").title("Kept").start("2026-08-15").categoryId("team"));
+		assertDoesNotThrow(() -> d.validate());
+		assertEquals(List.of("e2"), d.wellFormedEvents().stream().map(e -> e.id).toList());
 	}
 
 	@Test void f02_seedDupEventId_rejected() {
@@ -169,5 +177,38 @@ class CalendarDef_Test extends TestBase {
 			.events(CalendarEvent.create().id("e1").title("x").start("2026-08-14").categoryId("team"));
 		assertThrows(IllegalArgumentException.class, () -> d.validate(2026, 9));
 		assertDoesNotThrow(() -> d.validate(2026, 8));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// The derived spanning-bar lane budget, and the seed drop path.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_laneBudget_isDerivedFromMaxPerDay() {
+		assertEquals(3, CalendarDef.create().id("c").effectiveLaneBudget());
+		assertEquals(5, CalendarDef.create().id("c").maxPerDay(5).effectiveLaneBudget());
+	}
+
+	@Test void h02_laneBudget_clampedToHardCap() {
+		assertEquals(8, CalendarDef.MAX_LANES_PER_WEEK);
+		assertEquals(8, CalendarDef.create().id("c").maxPerDay(50).effectiveLaneBudget());
+	}
+
+	@Test void h03_malformedSeedEvent_isDropped_theRestStillValidate() {
+		var d = good().events(
+			CalendarEvent.create().id("a").title("Kept").start("2026-08-14").categoryId("team"),
+			// Declared allDay=true with a date-time end: malformed, and dropped rather than fatal.
+			CalendarEvent.create().id("b").title("Bad").start("2026-08-14").allDay(true).end("2026-08-14T10:00"),
+			CalendarEvent.create().id("c").title("Also kept").start("2026-08-15").categoryId("team"));
+		assertDoesNotThrow(() -> d.validate());
+		assertEquals(List.of("a", "c"), d.wellFormedEvents().stream().map(e -> e.id).toList());
+	}
+
+	@Test void h04_omittedEndAndOffsetSeedEvents_stillValidate() {
+		var d = good().events(
+			CalendarEvent.create().id("a").title("Start only").start("2026-08-14").categoryId("team"),
+			CalendarEvent.create().id("b").title("Offset").start("2026-08-15T09:00:00Z").end("2026-08-15T10:00:00Z")
+				.categoryId("team"));
+		assertDoesNotThrow(() -> d.validate());
+		assertEquals(2, d.wellFormedEvents().size());
 	}
 }

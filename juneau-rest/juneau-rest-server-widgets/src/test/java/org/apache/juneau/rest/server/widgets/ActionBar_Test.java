@@ -19,14 +19,12 @@ package org.apache.juneau.rest.server.widgets;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.*;
-
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@link ActionBar} / {@link ActionRef} / {@link SafeAction} bean contract, including the views-module isolation
- * rule (this module must never import {@code RowAction}).
+ * {@link ActionBar} / {@link ActionRef} / {@link SafeAction} bean contract.  The module-isolation rule these beans
+ * depend on is asserted in {@link Widgets_ModuleBoundary_Test}.
  */
 class ActionBar_Test extends TestBase {
 
@@ -59,20 +57,5 @@ class ActionBar_Test extends TestBase {
 	@Test void a05_safeAction_collapseWireAndLabel() {
 		assertEquals("collapse", SafeAction.COLLAPSE.wire());
 		assertEquals("Collapse", SafeAction.COLLAPSE.label());
-	}
-
-	@Test void a06_sources_doNotImportRowAction() throws Exception {
-		var root = Path.of("").toAbsolutePath();
-		var src = root;
-		if (!Files.isDirectory(src.resolve("src/main/java")))
-			src = root.resolve("juneau-rest/juneau-rest-server-widgets");
-		assertTrue(Files.isDirectory(src.resolve("src/main/java")), src::toString);
-		try (var walk = Files.walk(src.resolve("src/main/java"))) {
-			for (var f : walk.filter(p -> p.toString().endsWith(".java")).toList()) {
-				var text = Files.readString(f);
-				assertFalse(text.contains("import org.apache.juneau.rest.server.views.RowAction"),
-					() -> "widgets module must not import RowAction: " + f);
-			}
-		}
 	}
 }

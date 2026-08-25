@@ -46,13 +46,31 @@ public class CalendarDef implements Widget {
 
 	/**
 	 * The frozen contract version for the per-month event GET envelope and the stamped
-	 * {@code data-juneau-calendar-contract} attribute.  Serialized as the JSON <b>string</b> {@code "1"} (a numeric
-	 * {@code 1} would fail the client's strict {@code ===} handshake).
+	 * {@code data-juneau-calendar-contract} attribute.  Serialized as the JSON <b>string</b> {@code "2"} (a numeric
+	 * {@code 2} would fail the client's strict {@code ===} handshake).
+	 *
+	 * <p>
+	 * Bumped from {@code "1"} to {@code "2"} for the {@code end}-becomes-layout-significant change even though the
+	 * envelope gained <b>no new required field</b> ({@code end} was already carried for forward-compat).  The bump
+	 * is justified <i>because this same constant is the stamped {@code data-juneau-calendar-contract} attribute</i>:
+	 * a v1 runtime paired with a v2 server would silently ignore {@code end} and paint a multi-day event as a single
+	 * chip, so making the handshake fail loud is the point.  Do <b>not</b> copy this as a general pattern &mdash; a
+	 * wire contract that is not also a runtime-handshake stamp should not bump for a no-new-field change.
 	 */
-	public static final String CONTRACT_VERSION = "1";
+	public static final String CONTRACT_VERSION = "2";
 
 	/** The default chip cap per day cell before collapsing into "+N more". */
 	public static final int DEFAULT_MAX_PER_DAY = 3;
+
+	/**
+	 * The hard internal ceiling on spanning-bar lanes in one week row.
+	 *
+	 * <p>
+	 * The lane budget is <b>derived</b> from {@link #effectiveMaxPerDay()} and clamped here; it is deliberately not
+	 * author-controllable (there is no {@code maxLanesPerWeek} bean field).  Bars that would need a lane beyond the
+	 * budget are collapsed into the day cells' "+N more" affordance instead of stacking a week row arbitrarily tall.
+	 */
+	public static final int MAX_LANES_PER_WEEK = 8;
 
 	/** The charset every id (calendar / category) must match. */
 	private static final Pattern ID_PATTERN = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
@@ -214,6 +232,32 @@ public class CalendarDef implements Widget {
 		return maxPerDay == null ? DEFAULT_MAX_PER_DAY : maxPerDay;
 	}
 
+	/**
+	 * The per-week-row spanning-bar lane budget &mdash; {@link #effectiveMaxPerDay()} clamped to
+	 * {@link #MAX_LANES_PER_WEEK}.
+	 *
+	 * <p>
+	 * Spanning bars occupy <b>lanes</b> counted against this budget; {@link #maxPerDay} itself continues to cap the
+	 * <b>non-spanning</b> chips (single-day all-day plus timed) inside a day cell.  The two caps are separate on
+	 * purpose: a bar crossing a cell does not consume that cell's chip budget, and a hidden chip does not consume a
+	 * lane.
+	 *
+	 * @return The derived lane budget, at least 1 and at most {@link #MAX_LANES_PER_WEEK}.
+	 */
+	public int effectiveLaneBudget() {
+		return Math.min(effectiveMaxPerDay(), MAX_LANES_PER_WEEK);
+	}
+
+	/**
+	 * The seed events that are well-formed enough to paint &mdash; the malformed ones are dropped, exactly as a
+	 * per-month GET handler drops them via {@link CalendarEvent#retainWellFormed(Collection)}.
+	 *
+	 * @return A new mutable list of paintable seed events, in declaration order.  Never <jk>null</jk>.
+	 */
+	public List<CalendarEvent> wellFormedEvents() {
+		return CalendarEvent.retainWellFormed(events);
+	}
+
 	/** The declared category ids. */
 	private Set<String> categoryIds() {
 		var ids = new HashSet<String>();
@@ -282,9 +326,11 @@ public class CalendarDef implements Widget {
 			var known = categoryIds();
 			var seenEvt = new HashSet<String>();
 			for (var e : events) {
-				if (e == null)
-					throw iaex("CalendarDef event must not be null.");
-				if (e.id != null && !e.id.isBlank() && !seenEvt.add(e.id))
+				// A malformed event is DROPPED, not fatal: one bad event must never cost the whole calendar.  The
+				// per-month GET path drops the same set via CalendarEvent.retainWellFormed.
+				if (e == null || e.malformedReason() != null)
+					continue;
+				if (!seenEvt.add(e.id))
 					throw iaex("CalendarDef duplicate event id '%s'.", e.id);
 				e.validate(known, effectiveYear, effectiveMonth);
 			}

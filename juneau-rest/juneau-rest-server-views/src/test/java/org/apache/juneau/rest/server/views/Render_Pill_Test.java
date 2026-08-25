@@ -26,8 +26,9 @@ import org.junit.jupiter.api.*;
 
 /**
  * {@link Render#pill()} / {@link Render#pill(String)} factory sugar: canonical {@code {id:"pill",meta:…}} wire form
- * and boxed-omission rules (dot default on, absent/blank tone omitted).  Pill is cell-path only, so these factories
- * are pure sugar over {@link Render#of(String)} &mdash; no allowlist entry and no {@code BUILTIN_IDS} mutation.
+ * and boxed-omission rules (dot default on, absent/blank tone omitted).  These factories are pure sugar over
+ * {@link Render#of(String)} &mdash; they carry no host-specific behavior of their own; the cell/fill-sink split lives
+ * entirely in {@link ViewDef}'s serving-path validation.
  */
 class Render_Pill_Test extends TestBase {
 
@@ -43,7 +44,7 @@ class Render_Pill_Test extends TestBase {
 	}
 
 	@Test void a02_pill_withTone_emitsToneMetaOnly() {
-		for (var tone : new String[]{"ok", "warn", "exceeds", "neutral"}) {
+		for (var tone : new String[]{"info", "success", "warning", "error", "neutral"}) {
 			var r = Render.pill(tone);
 			assertEquals("pill", r.id);
 			assertEquals(Map.of("tone", tone), r.meta, tone);
@@ -61,10 +62,10 @@ class Render_Pill_Test extends TestBase {
 	}
 
 	@Test void a04_chainedMeta_carriesFieldDotAction() {
-		var r = Render.pill("ok").meta("field", "state").meta("dot", "off").meta("action", "ack");
-		assertEquals(Map.of("tone", "ok", "field", "state", "dot", "off", "action", "ack"), r.meta);
+		var r = Render.pill("success").meta("field", "state").meta("dot", "off").meta("action", "ack");
+		assertEquals(Map.of("tone", "success", "field", "state", "dot", "off", "action", "ack"), r.meta);
 		assertEquals(
-			Map.of("id", "pill", "meta", Map.of("tone", "ok", "field", "state", "dot", "off", "action", "ack")),
+			Map.of("id", "pill", "meta", Map.of("tone", "success", "field", "state", "dot", "off", "action", "ack")),
 			wire(r));
 	}
 

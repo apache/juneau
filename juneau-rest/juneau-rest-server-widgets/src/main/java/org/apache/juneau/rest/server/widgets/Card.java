@@ -18,13 +18,17 @@ package org.apache.juneau.rest.server.widgets;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.*;
+
 /**
- * A single card in a {@link CardGrid}: a stable id, a header title, and exactly one {@link CardBody} slot.
+ * A single card in a {@link CardGrid}: a stable id, a header title, exactly one {@link CardBody} slot, and an
+ * optional per-card action catalog.
  *
  * <p>
  * The refresh wire ({@code refreshEndpoint}/{@code pollIntervalMs}) is <b>not</b> on {@code Card} &mdash; it lives on
  * the refreshable body ({@link CardFieldList}) so a non-refreshable body cannot carry a dangling refresh endpoint.
- * There is <b>no</b> per-card action catalog in v1: a refresh affordance is a built-in of a refreshable card.
+ * The built-in refresh affordance of a refreshable card is likewise not an entry in {@link #actions}; it is emitted
+ * by the card emitter and the two coexist in the same header action row.
  *
  * @since 10.0.0
  */
@@ -38,6 +42,23 @@ public class Card {
 
 	/** The single body slot.  Required. */
 	public CardBody body;
+
+	/**
+	 * Optional per-card actions, in display order; action ids must be unique within the card.
+	 *
+	 * <p>
+	 * Typed as the same {@link HeaderAction} vocabulary the app header uses, because that is the vocabulary that
+	 * already carries a {@link Behavior}, an icon, an accessible tooltip, an href, a badge and an attached menu
+	 * &mdash; everything a card action needs and nothing it does not.  Note this is deliberately <b>not</b> the
+	 * view's {@link ActionBar} row-action vocabulary: an {@link ActionRef} resolves against a view's
+	 * {@code rowActions} catalog, which a card does not have, and {@link SafeAction#COLLAPSE} has no meaning on a
+	 * card.
+	 *
+	 * <p>
+	 * A {@link Behavior#MENU} action's attached list is opened on the shared client layer stack, so a card menu
+	 * shares one popup owner with every other menu and dialog on the page.
+	 */
+	public List<HeaderAction> actions;
 
 	/**
 	 * Creates a card with the given id and title.
@@ -65,7 +86,19 @@ public class Card {
 	}
 
 	/**
-	 * Fail-closed bean validation; fans out to {@link CardBody#validate()}.
+	 * Sets the per-card actions, in display order.
+	 *
+	 * @param value The actions.  Passing none leaves the card with an empty catalog, which is not an error.
+	 * @return This object.
+	 */
+	public Card actions(HeaderAction...value) {
+		actions = l(value);
+		return this;
+	}
+
+	/**
+	 * Fail-closed bean validation; fans out to {@link CardBody#validate()} and to each
+	 * {@link HeaderAction#validate()}.
 	 *
 	 * @throws IllegalArgumentException If this card is not well-formed.
 	 */
@@ -77,5 +110,15 @@ public class Card {
 		if (body == null)
 			throw iaex("Card '%s' must declare a body.", id);
 		body.validate();
+		if (actions != null) {
+			var ids = new HashSet<String>();
+			for (var a : actions) {
+				if (a == null)
+					throw iaex("Card '%s' action must not be null.", id);
+				a.validate();
+				if (!ids.add(a.id))
+					throw iaex("Card '%s' duplicate action id '%s'.", id, a.id);
+			}
+		}
 	}
 }

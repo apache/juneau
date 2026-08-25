@@ -151,4 +151,56 @@ function dt1Fixture() {
 	doc.body.removeChild(container);
 })();
 
+// L12 A - the scroll region is keyboard-reachable ONLY while it actually overflows.  The shim cannot lay out, but
+// applyScrollRegionA11y reads scrollWidth/clientWidth off the region, so the harness can set them directly and drive
+// both sides of the fork.  Also proves a DT1-shaped DOM RESOLVES a scroll region at all (there is no DT1 refusal).
+(function l12a() {
+	const f = dt1Fixture();
+	NS.init.ensureTableScroll(f.table, fakeCtx());
+	const box = f.table.parentNode;
+
+	// A DT1-shaped DOM resolves through the existing wrap path - the DT1 generation is still fully supported.
+	report.l12_dt1RegionResolves = NS.init.scrollRegionFor(f.table) === box;
+
+	// Overflowing: tabindex + a generic label appear.
+	box.scrollWidth = 800;
+	box.clientWidth = 200;
+	NS.init.applyScrollRegionA11y(f.table, fakeCtx());
+	report.l12_overflowingHasTabindex = box.getAttribute('tabindex') === '0';
+	report.l12_overflowingHasLabel = box.getAttribute('aria-label') === NS.init.TABLE_SCROLL_LABEL;
+
+	// Not overflowing: BOTH are removed again (an unconditional tab stop is a false "scrollable" announcement).
+	box.scrollWidth = 200;
+	box.clientWidth = 200;
+	NS.init.applyScrollRegionA11y(f.table, fakeCtx());
+	report.l12_notOverflowingNoTabindex = box.getAttribute('tabindex') == null;
+	report.l12_notOverflowingNoLabel = box.getAttribute('aria-label') == null;
+
+	f.wrapper.parentNode.removeChild(f.wrapper);
+})();
+
+// The clip/ellipsis opt-out has to REACH the cell to mean anything: a column bound to a named emitter must carry
+// `juneau-cell-wrap` on its DataTables column className, which is what puts the class on the rendered <td>.
+(function cellWrapOptOut() {
+	const deps = {
+		parseRenderId: NS.parseRenderId,
+		resolveRenderer: NS.resolveRenderer,
+		warn: function () { /* unknown-id path not under test here */ }
+	};
+	const classOf = function (render, extra) {
+		const col = { data: 'c', render: render };
+		if (extra) for (const k in extra) col[k] = extra[k];
+		return String(NS.init.buildColumnDef(col, deps).className || '');
+	};
+	report.wrap_pill = classOf('pill').indexOf('juneau-cell-wrap') >= 0;
+	report.wrap_progress = classOf('progress').indexOf('juneau-cell-wrap') >= 0;
+	report.wrap_tag = classOf('tag').indexOf('juneau-cell-wrap') >= 0;
+	report.wrap_linked = classOf('linked').indexOf('juneau-cell-wrap') >= 0;
+	// A plain prose column stays on the clip default - it must NOT opt out.
+	report.wrap_truncateStaysClipped = classOf('truncate').indexOf('juneau-cell-wrap') < 0;
+	report.wrap_dateStaysClipped = classOf('date').indexOf('juneau-cell-wrap') < 0;
+	// An author className is preserved, not replaced, when the renderer contributes one.
+	report.wrap_authorClassPreserved = classOf('pill', { className: 'author-col' }) === 'author-col pill-cell juneau-cell-wrap';
+})();
+
 process.stdout.write(JSON.stringify(report));

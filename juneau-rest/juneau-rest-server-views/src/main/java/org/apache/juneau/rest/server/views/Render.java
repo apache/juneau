@@ -162,6 +162,10 @@ public class Render {
 	 * ({@code currentColor}) until an explicit {@code tone} is chosen.  Chain {@link #meta(String,String)} for
 	 * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).
 	 *
+	 * <p>
+	 * {@code action} is optional and only meaningful on a {@link Column}: a pill named on a {@link DetailField} fill
+	 * sink is unconditionally display-only and rejects an {@code action} outright.
+	 *
 	 * @return A new {@link Render}.
 	 */
 	public static Render pill() {
@@ -172,11 +176,16 @@ public class Render {
 	 * Creates a {@code pill} renderer with an explicit dot tone.
 	 *
 	 * <p>
-	 * {@code tone} is one of {@code ok}|{@code warn}|{@code exceeds}|{@code neutral}.  A <jk>null</jk> or blank
-	 * {@code tone} is omitted from {@code meta} (identical to {@link #pill()}); {@code neutral} is emitted verbatim
-	 * and, like an absent tone, leaves the dot inheriting {@code currentColor}.  {@code info} is not a valid tone.
-	 * The value is validated against {@code this.rowActions} and the tone enum on the serving path by
-	 * {@code ViewDef.validate()}.
+	 * {@code tone} is one of the five status tones
+	 * {@code info}|{@code success}|{@code warning}|{@code error}|{@code neutral} (see
+	 * {@link org.apache.juneau.rest.server.widgets.StatusTone}).  A <jk>null</jk> or blank {@code tone} is omitted
+	 * from {@code meta} (identical to {@link #pill()}); {@code neutral} is emitted verbatim and, like an absent tone,
+	 * leaves the dot inheriting {@code currentColor}.  The tone is validated fail-closed on the serving path by
+	 * {@code ViewDef.validate()} &mdash; on the cell host and on a fill sink alike.
+	 *
+	 * <p>
+	 * Not to be confused with {@link #progress(int, Integer, Integer)}'s {@code warn}/{@code exceeds} meta, which are
+	 * numeric thresholds rather than tone names and share no vocabulary with this palette.
 	 *
 	 * @param tone The explicit dot tone.  Can be <jk>null</jk> or blank to inherit.
 	 * @return A new {@link Render}.

@@ -34,6 +34,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.views.ViewDef.*;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -46,7 +47,8 @@ import org.junit.jupiter.api.*;
  * cache-buster and the {@code CONTRACT_VERSION} handshake constant are asserted directly.
  */
 @SuppressWarnings({
-	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"deprecation" // Section b) deliberately exercises the deprecated compatibility mounts for the four relocated widget assets.
 })
 class ViewsMixin_Serving_Test extends TestBase {
 
@@ -244,6 +246,77 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertContent().asString().isContains("juneau-config.css");
 	}
 
+	/**
+	 * The four widget-owned runtime assets have now been <b>relocated</b> into {@code juneau-rest-server-widgets},
+	 * beside the bean contracts that drive them, so ownership of the "who ships these bytes" assertion moved with
+	 * them to {@code WidgetsMixin_Serving_Test}.  What this module still owes is the compatibility promise: an
+	 * application composing only this mixin keeps getting a {@code 200} with the right content type and caching
+	 * headers at the same URL it always used.  This is a stricter check than the pre-relocation one it replaces,
+	 * because it additionally pins the served body to the widget module's classpath bytes &mdash; so a stale copy
+	 * left behind in this module could not satisfy it.
+	 */
+	@Test void b08_relocatedWidgetAssets_stillServeFromTheDeprecatedViewsMount() throws Exception {
+		for (var e : java.util.Map.of(
+				ViewsMixin.CARDS_JS_PATH, "/org/apache/juneau/widgets/juneau-cards.js",
+				ViewsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/widgets/juneau-calendar.js",
+				ViewsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css",
+				ViewsMixin.CHROME_JS_PATH, "/org/apache/juneau/widgets/juneau-chrome.js").entrySet()) {
+			var path = e.getKey();
+			var served = cWithMixin.get(path).run()
+				.assertStatus(200)
+				.assertHeader("Content-Type").isContains(path.endsWith(".css") ? "text/css" : "text/javascript")
+				.assertHeader("Cache-Control").isContains("max-age")
+				.getContent().asBytes();
+			assertArrayEquals(widgetClasspathBytes(e.getValue()), served, () -> path + ": served body is not the widget module's bytes");
+		}
+	}
+
+	/** The compatibility mount is a mount: it only exists where this mixin is composed. */
+	@Test void b09_relocatedWidgetAssets_are404WithoutThisMixin() throws Exception {
+		cNoMixin.get(ViewsMixin.CARDS_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CALENDAR_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CALENDAR_CSS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CHROME_JS_PATH).run().assertStatus(404);
+	}
+
+	/**
+	 * The relocated four hash and version through the <b>widget</b> module's asset cache, so this mixin's deprecated
+	 * URL for one of them is character-identical to {@code WidgetsMixin}'s URL for it.  Two differently-busted URLs
+	 * for one body would make a page composing both mixins cache the same script twice.
+	 */
+	@Test void b10_relocatedWidgetAssets_carryTheSameCacheBusterAsTheWidgetMixin() throws Exception {
+		for (var path : new String[]{
+				ViewsMixin.CARDS_JS_PATH, ViewsMixin.CALENDAR_JS_PATH, ViewsMixin.CALENDAR_CSS_PATH,
+				ViewsMixin.CHROME_JS_PATH}) {
+			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
+			var expectedHash = ChecksumUtils.hash8(servedBytes);
+			var url = ViewsMixin.viewAssetUrl(path);
+			assertTrue(url.endsWith("-" + expectedHash), () -> path + ": expected suffix '-" + expectedHash + "' in '" + url + "'");
+			assertEquals(WidgetsMixin.widgetAssetUrl(path), url, () -> path + ": deprecated views URL diverged from the widget mixin's");
+		}
+	}
+
+	/**
+	 * The move must be a move, not a copy.  A duplicated asset would keep every test above green while quietly
+	 * shipping two divergent bodies, so this asserts the old coordinates are gone from this module's resources and
+	 * that the new coordinates resolve to exactly one classpath entry.
+	 */
+	@Test void b11_relocatedWidgetAssets_areGoneFromThisModulesResources() throws Exception {
+		for (var name : new String[]{"juneau-cards.js", "juneau-calendar.js", "juneau-calendar.css", "juneau-chrome.js"}) {
+			assertNull(ViewsMixin.class.getResourceAsStream("/org/apache/juneau/views/" + name),
+				() -> name + ": still present at the old views coordinates - the move left a copy behind");
+			var found = java.util.Collections.list(ViewsMixin.class.getClassLoader().getResources("org/apache/juneau/widgets/" + name));
+			assertEquals(1, found.size(), () -> name + ": expected exactly one classpath entry, found " + found);
+		}
+	}
+
+	private static byte[] widgetClasspathBytes(String resource) throws Exception {
+		try (var in = WidgetsMixin.class.getResourceAsStream(resource)) {
+			assertNotNull(in, () -> "missing classpath resource: " + resource);
+			return in.readAllBytes();
+		}
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// c) Versioned asset URL (?v=<buildVersion>) via the viewAssetUrl(...) helper
 	//------------------------------------------------------------------------------------------------------------------
@@ -273,9 +346,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 	/**
 	 * Pins {@link ViewsMixin#viewAssetUrl(String)}'s content-hash suffix against an independently-computed
 	 * {@link ChecksumUtils#hash8} of each served asset's actual bytes (fetched over the mock client, not read off
-	 * the classpath directly) - a regression guard for the {@code ClasspathAssetCache} extraction (TODO-443):
-	 * proves the shared helper still produces byte-for-byte the same hash the hand-rolled pre-refactor
-	 * {@code hash8}/{@code contentHash} pair did.
+	 * the classpath directly): proves the shared {@code ClasspathAssetCache} helper produces byte-for-byte the same
+	 * hash the hand-rolled per-mixin {@code hash8}/{@code contentHash} pair it replaced did, so no served URL's
+	 * cache-buster shifted when the hashing moved into a shared class.
 	 */
 	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
 		for (var path : new String[]{

@@ -30,9 +30,10 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the nested read-only table JS helpers (a table inside a row-detail section, scoped to its
- * parent row).  Source-shape always runs; the behavioral Node harness ({@code nested-table.cjs}) runs when
- * {@code node} is on {@code PATH} (skipped otherwise — no {@code -Pjs-tests} required).
+ * Always-on coverage for the nested table JS helpers (a table inside a row-detail section, scoped to its parent row,
+ * capped at {@link NestedTableDef#MAX_DEPTH}).  Source-shape always runs; the behavioral Node harness
+ * ({@code nested-table.cjs}) runs when {@code node} is on {@code PATH} (skipped otherwise — no {@code -Pjs-tests}
+ * required).
  */
 class ViewsJs_NestedTable_Test extends TestBase {
 
@@ -50,16 +51,76 @@ class ViewsJs_NestedTable_Test extends TestBase {
 			"applyNestedScope: applyNestedScope",
 			"findNestedSidecar: findNestedSidecar",
 			"prepareNestedTable: prepareNestedTable",
+			"mintNestedIdentity: mintNestedIdentity",
+			"nestedTableDepth: nestedTableDepth",
+			"MAX_NESTED_DEPTH: MAX_NESTED_DEPTH",
 			"adjustNestedColumns: adjustNestedColumns",
 			"activateNestedTablesInPane: activateNestedTablesInPane",
 			"initNestedTablesInVisiblePanes: initNestedTablesInVisiblePanes",
-			"teardownNestedTables: teardownNestedTables"
+			"teardownNestedTables: teardownNestedTables",
+			"isOwnTableEvent: isOwnTableEvent",
+			"ownRowsWithId: ownRowsWithId"
 		})
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
-		assertTrue(body.contains("const JUNEAU_NESTED_CONTRACT_VERSION = \"1\""),
-			"nested contract version const must be declared as \"1\"");
 		assertTrue(body.contains("NS.NESTED_CONTRACT_VERSION = JUNEAU_NESTED_CONTRACT_VERSION"),
 			"nested contract version must be published on the JuneauViews namespace");
+	}
+
+	/**
+	 * Per-widget versioning: the nested shell's version is declared in BOTH tiers and must move in lockstep, while
+	 * the view / row-detail / bulk contracts are untouched by a nested-shell revision.
+	 */
+	@Test void a03_contractVersion_lockstepWithNestedTableDef() throws Exception {
+		var body = viewsJs();
+		assertEquals("2", NestedTableDef.CONTRACT_VERSION);
+		assertTrue(body.contains("const JUNEAU_NESTED_CONTRACT_VERSION = \"" + NestedTableDef.CONTRACT_VERSION + "\""),
+			"the juneau-views.js literal must match NestedTableDef.CONTRACT_VERSION");
+		assertEquals("4", ViewDef.CONTRACT_VERSION);
+		assertTrue(body.contains("const JUNEAU_VIEW_CONTRACT_VERSION = \"" + ViewDef.CONTRACT_VERSION + "\""), body);
+		assertEquals("1", RowDetailDef.CONTRACT_VERSION);
+		assertTrue(body.contains("const JUNEAU_ROW_DETAIL_CONTRACT_VERSION = \"" + RowDetailDef.CONTRACT_VERSION + "\""),
+			body);
+	}
+
+	/** The depth cap is one number, declared on both tiers. */
+	@Test void a04_maxDepth_lockstepWithNestedTableDef() throws Exception {
+		var body = viewsJs();
+		assertEquals(2, NestedTableDef.MAX_DEPTH);
+		assertTrue(body.contains("const MAX_NESTED_DEPTH = " + NestedTableDef.MAX_DEPTH + ";"),
+			"the juneau-views.js depth cap must match NestedTableDef.MAX_DEPTH");
+	}
+
+	/**
+	 * The clamp is now parent-only: withholding {@code rowActions}/{@code details} here would make the server's
+	 * depth-2 widening a no-op, while {@code columnConfig}/{@code pollIntervalMs} must stay withheld.
+	 */
+	@Test void a05_prepareNestedTable_clampIsParentOnly_andRunsTheParentInitPath() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function prepareNestedTable(");
+		assertTrue(fn.contains("viewDef.columnConfig = null;"), fn);
+		assertTrue(fn.contains("viewDef.pollIntervalMs = null;"), fn);
+		assertFalse(fn.contains("viewDef.rowActions = null;"),
+			"a depth-2 nested table keeps its declared row actions");
+		assertFalse(fn.contains("viewDef.details = null;"),
+			"a depth-2 nested table keeps its declared detail sections");
+		assertFalse(body.contains("Read-only is enforced defensively here"),
+			"the stale read-only javadoc must be gone from the nested runtime");
+		// The same init path a root table runs (see beginInitTable) - minus the bulk branch, which stays on the parent.
+		assertTrue(fn.contains("initDetailsExpander(table, ctx, viewDef)"), fn);
+		assertTrue(fn.contains("initCellPopover(table, ctx, viewDef)"), fn);
+		assertTrue(fn.contains("initRowActions(table, viewDef, ctx)"), fn);
+		assertTrue(fn.contains("initSelection(table, ctx)"), fn);
+		assertTrue(fn.contains("selectionState: selectionState"), "ctx.selectionState must be live, not null: " + fn);
+		assertFalse(fn.contains("readBulkDef"), "bulk mutation is parent-table only: " + fn);
+		assertFalse(fn.contains("mountChooser"), "the column chooser is parent-table only: " + fn);
+	}
+
+	/** The source text of one top-level {@code function} declaration, up to its closing brace. */
+	private static String functionBody(String body, String signature) {
+		var start = body.indexOf(signature);
+		assertTrue(start >= 0, () -> "'" + signature + "' not found");
+		var end = body.indexOf("\n\t}", start);
+		return body.substring(start, end < 0 ? body.length() : end);
 	}
 
 	@Test void a02_parentDtHandlersGuarded() throws Exception {
@@ -154,12 +215,15 @@ class ViewsJs_NestedTable_Test extends TestBase {
 
 	@Test void b01_helpersPresent_andContractVersion() {
 		var r = report();
-		assertEquals("1", r.get("nestedContractVersion"));
+		assertEquals(NestedTableDef.CONTRACT_VERSION, r.get("nestedContractVersion"));
+		assertEquals(NestedTableDef.MAX_DEPTH, ((Number)r.get("maxNestedDepth")).intValue());
 		assertEquals(true, r.get("hasApplyNestedScope"));
 		assertEquals(true, r.get("hasFindNestedSidecar"));
 		assertEquals(true, r.get("hasActivate"));
 		assertEquals(true, r.get("hasInitVisible"));
 		assertEquals(true, r.get("hasTeardown"));
+		assertEquals(true, r.get("hasMint"));
+		assertEquals(true, r.get("hasDepth"));
 	}
 
 	@Test void b02_applyNestedScope_bothBranches() {
@@ -213,13 +277,75 @@ class ViewsJs_NestedTable_Test extends TestBase {
 		assertEquals(true, r.get("pnt_ok_parentStamped"));
 		assertEquals(true, r.get("pnt_ok_hasCtx"));
 		assertEquals(true, r.get("pnt_ok_nested"));
+		assertEquals(2, ((Number)r.get("pnt_ok_depth")).intValue());
 		assertEquals("alertId", r.get("pnt_ok_scopeParam"));
 		assertEquals("a1", r.get("pnt_ok_scopeReadsAttr"));
-		assertEquals(true, r.get("pnt_ok_clampRowActions"));
 		assertEquals(true, r.get("pnt_ok_clampColumnConfig"));
 		assertEquals(true, r.get("pnt_ok_clampPoll"));
-		assertEquals(true, r.get("pnt_ok_clampDetails"));
 		assertEquals(true, r.get("pnt_ok_idempotent"));
+	}
+
+	@Test void b06a_depthTwoIsAFullView_rowActionsDetailsAndLiveSelection() {
+		var r = report();
+		assertEquals(true, r.get("pnt_ok_keepsRowActions"), "rowActions must survive the depth-2 clamp");
+		assertEquals(true, r.get("pnt_ok_keepsDetails"), "details must survive the depth-2 clamp");
+		assertEquals(true, r.get("pnt_ok_selectionLive"), "ctx.selectionState must be live, not hardcoded null");
+		assertEquals("id", r.get("pnt_ok_selectionRowIdField"));
+		assertEquals(true, r.get("pnt_ok_selectionEmpty"));
+		assertEquals(true, r.get("pnt_ok_noBulkDef"), "bulk mutation stays on the enclosing table");
+		// The parent init path: details expander + cell popover + row actions on click, row actions on keydown,
+		// selection on change.
+		assertEquals(3, ((Number)r.get("pnt_ok_clickListeners")).intValue());
+		assertEquals(1, ((Number)r.get("pnt_ok_keydownListeners")).intValue());
+		assertEquals(1, ((Number)r.get("pnt_ok_changeListeners")).intValue());
+		assertEquals(true, r.get("pnt_ok_popoverBound"));
+		assertEquals(true, r.get("pnt_ok_detailInflight"));
+		// A nested table with no selection stamp gets none of it.
+		assertEquals(true, r.get("pnt_noSel_selectionNull"));
+		assertEquals(true, r.get("pnt_noSel_noChangeListener"));
+	}
+
+	@Test void b06b_depthCap_twoInstantiates_threeIsRefused() {
+		var r = report();
+		assertEquals(true, r.get("depth_loneWrapperIsTwo"));
+		assertEquals(true, r.get("depth_nestedInNestedIsThree"));
+		assertEquals(true, r.get("depth_threeRefused_banner"));
+		assertEquals(true, r.get("depth_threeRefused_noInit"));
+		assertEquals(true, r.get("depth_threeRefused_noCtx"));
+	}
+
+	@Test void b06c_mintedIdentity_isPerExpandedRow() {
+		var r = report();
+		assertEquals("events:a1:2", r.get("mint_tableIdA"));
+		assertEquals("events:a2:2", r.get("mint_tableIdB"));
+		assertEquals(true, r.get("mint_tableIdsUnique"));
+		assertEquals("juneau-view:events:a1:2", r.get("mint_sidecarIdA"));
+		assertEquals(true, r.get("mint_sidecarIdsUnique"));
+		assertEquals(true, r.get("mint_sidecarNotBarePageId"),
+			"a nested sidecar must never shadow a page-level juneau-view:<id> lookup");
+		assertEquals(true, r.get("mint_authorIdKept"));
+	}
+
+	@Test void b06d_twoRowsExpandedSimultaneously_bothInit_andRedrawIsIsolated() {
+		var r = report();
+		assertEquals(true, r.get("sim_bothInited"));
+		assertEquals(true, r.get("sim_distinctCtx"));
+		assertEquals(true, r.get("sim_distinctViewDefs"));
+		assertEquals("a1", r.get("sim_scope1"));
+		assertEquals("a2", r.get("sim_scope2"));
+		assertEquals(true, r.get("sim_redrawIsolated"), "paging one nested table must not redraw the other");
+	}
+
+	@Test void b06e_ownership_parentNeverClaimsANestedTablesRowsOrEvents() {
+		var r = report();
+		assertEquals(true, r.get("own_parentRowsExcludeNested"));
+		assertEquals(true, r.get("own_nestedRowsAreItsOwn"));
+		assertEquals(true, r.get("own_owningTableOfNestedNode"));
+		assertEquals(true, r.get("own_parentIgnoresNestedEvent"));
+		assertEquals(true, r.get("own_nestedClaimsItsOwnEvent"));
+		assertEquals(true, r.get("own_parentClaimsItsOwnEvent"));
+		assertEquals(true, r.get("own_parentTemplateNotTheNestedOne"));
+		assertEquals(true, r.get("own_nestedTemplateIsItsOwn"));
 	}
 
 	@Test void b07_teardownNestedTables_destroysAndClears() {
@@ -229,6 +355,15 @@ class ViewsJs_NestedTable_Test extends TestBase {
 		assertEquals(true, r.get("td_markerCleared1"));
 		assertEquals(true, r.get("td_ctxNulled1"));
 		assertEquals(true, r.get("td_plainUntouched"));
+		assertEquals(true, r.get("td_timersCleared"), "no poll timer may outlive teardown");
+		assertEquals(true, r.get("td_streamsClosed"), "no job stream may outlive teardown");
+	}
+
+	@Test void b07a_teardownIsDepthFirst() {
+		var r = report();
+		assertEquals("inner,outer", r.get("td_depthFirstOrder"),
+			"a table inside another table's open panel must be destroyed first");
+		assertEquals(true, r.get("td_depthFirstBothDestroyed"));
 	}
 
 	@Test void b08_paneRouting_visibleInits_hiddenDefers_reshowAdjusts() {
