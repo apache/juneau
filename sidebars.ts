@@ -400,14 +400,17 @@ const sidebars: SidebarsConfig = {
 						label: '3.19. URIs',
 					},
 					{
-						type: 'doc',
-						id: 'topics/03.20.JacksonComparison',
+						type: 'category',
 						label: '3.20. Comparison with Jackson',
-					},
-					{
-						type: 'doc',
-						id: 'topics/03.20.01.JpaAndHibernate',
-						label: '3.20.1. JPA and Hibernate',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.20.JacksonComparison' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.20.01.JpaAndHibernate',
+								label: '3.20.1. JPA and Hibernate',
+							},
+						],
 					},
 					{
 						type: 'doc',
