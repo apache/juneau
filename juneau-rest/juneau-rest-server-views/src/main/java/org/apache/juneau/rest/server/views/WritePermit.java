@@ -20,8 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The views-toolkit's own structural gate token for {@link BulkMutateDef}: proof that the caller's own write-gate
- * was consulted before a bulk-mutating affordance is configured (design doc §9.3; {@code TODO-428}'s HIGH-5
- * separability guarantee).
+ * was consulted before a bulk-mutating affordance is configured (design doc §9.3; the opt-in separability
+ * guarantee, HIGH-5).
  *
  * <h5 class='section'>Why this exists, and why it is NOT the console's own {@code WritePermit}</h5>
  * <p>

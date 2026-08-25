@@ -29,8 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Serving test for {@link AsyncJobsMixin} &mdash; the SSE progress stream and cancel endpoints (design doc §6.3;
- * {@code TODO-425}).
+ * Serving test for {@link AsyncJobsMixin} &mdash; the SSE progress stream and cancel endpoints (design doc §6.3).
  *
  * <p>
  * Drives the two endpoints through a {@link MockRestClient}: the stream replays a completed job's buffered progress

@@ -305,14 +305,29 @@ final class McpSchemaSafety {
 				future.get(CPU_POLL_INTERVAL_NANOS, NANOSECONDS);
 				return;
 			} catch (TimeoutException poll) {
-				var cpuNow = THREAD_MX.getThreadCpuTime(threadId);
-				if (cpuNow >= 0 && cpuNow - baseCpuNanos <= budgetNanos)
-					continue;  // real CPU work still within budget; preemption/scheduling doesn't count against it
-				if (future.isDone())
-					continue;  // finished inside the sampling race window; the next get() harvests its result/exception
-				throw poll;  // CPU work exceeded the DoS budget (or CPU timing was lost) while the task is still running
+				if (! stillWithinCpuBudget(future, threadId, baseCpuNanos, budgetNanos))
+					throw poll;  // CPU work exceeded the DoS budget (or CPU timing was lost) while the task is still running
 			}
 		}
+	}
+
+	/**
+	 * Whether polling should keep waiting after a {@code future.get()} poll timed out: either the validating
+	 * thread's CPU consumption since {@code baseCpuNanos} is still within {@code budgetNanos} (real CPU work,
+	 * still within budget - preemption/scheduling doesn't count against it), or the task actually finished
+	 * inside the sampling race window (the next {@code get()} will harvest its result/exception).
+	 *
+	 * @param future The running validation task.
+	 * @param threadId The validating thread's id.
+	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.
+	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.
+	 * @return <jk>true</jk> if polling should continue; <jk>false</jk> if the budget has been exceeded.
+	 */
+	private static boolean stillWithinCpuBudget(Future<?> future, long threadId, long baseCpuNanos, long budgetNanos) {
+		var cpuNow = THREAD_MX.getThreadCpuTime(threadId);
+		if (cpuNow >= 0 && cpuNow - baseCpuNanos <= budgetNanos)
+			return true;
+		return future.isDone();
 	}
 
 	/** Whether the compute budget is charged against thread CPU time (vs. the wall-clock fallback); for tests. */

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
  * The servlet pins its ops at {@code /*} and delegates to a shared {@link StaticFilesMixin} worker
  * (which reads the active {@link StaticFiles} bean at request time), so this mirrors
  * {@link StaticFilesMixin_AsMixin_Test} but exercises the standalone-servlet deployment. The
- * classpath resource {@code htdocs/javadoc.css} ships with {@code juneau-rest-server} and is visible
+ * classpath resource {@code htdocs/themes/devops.css} ships with {@code juneau-rest-server} and is visible
  * via the default {@link BasicStaticFiles} recursive classpath walk.
  * Cases:
  * <ul>
@@ -43,7 +43,7 @@ class StaticFilesServlet_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(StaticFilesServlet.class);
 
 	@Test void a01_servesClasspathFile() throws Exception {
-		c.get("/javadoc.css")
+		c.get("/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -56,14 +56,14 @@ class StaticFilesServlet_Test extends TestBase {
 	}
 
 	@Test void a03_cacheControl() throws Exception {
-		c.get("/javadoc.css")
+		c.get("/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("max-age=86400, public");
 	}
 
 	@Test void a04_headReturnsHeadersWithEmptyBody() throws Exception {
-		c.head("/javadoc.css")
+		c.head("/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().is("");

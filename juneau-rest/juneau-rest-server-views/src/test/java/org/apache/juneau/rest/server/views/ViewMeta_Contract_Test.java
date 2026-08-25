@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.views;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -27,6 +28,8 @@ import org.apache.juneau.rest.server.views.RowClassRule.Op;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Golden-fixture contract test for the {@code VIEW_META} wire format (design doc §6.10).
@@ -433,12 +436,60 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertTrue(e2.getMessage().contains("positive"), e2::getMessage);
 	}
 
-	@Test void e06_pollIntervalMs_isTheLastWireKey_afterRowClassRules() {
-		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a")).poll(60_000L).build();
+	/**
+	 * Four independent top-level-key-order pins, each building a {@link ViewDef} and asserting the exact ordered
+	 * key list its serialized VIEW_META produces: pollIntervalMs after rowClassRules, details never affecting the
+	 * order at all, rowActions after rowClassRules, and columnConfig as the last key after pollIntervalMs.
+	 */
+	@ParameterizedTest
+	@MethodSource("e06_viewDefTopLevelKeyOrderProvider")
+	void e06_viewDefTopLevelKeyOrderMatches(ViewDef v, List<String> expectedKeys) {
 		Map<?,?> actual = Json.to(Json.of(v), Map.class);
-		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs"),
-			new ArrayList<>(actual.keySet()));
+		assertEquals(expectedKeys, new ArrayList<>(actual.keySet()));
+	}
+
+	private static ViewDef withRowClassRuleAndPoll() {
+		return ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a")).poll(60_000L).build();
+	}
+
+	private static ViewDef withDetailsAndPoll() {
+		return ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowClassRule("error", Op.PRESENT, "row-flagged")
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
+			.poll(60_000L)
+			.build();
+	}
+
+	private static ViewDef withRowActionsAndDetailsAndPoll() {
+		return ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowClassRule("error", Op.PRESENT, "row-flagged")
+			.rowActions(RowAction.create("go").endpoint("u").method(RowAction.Method.POST))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
+			.poll(60_000L)
+			.build();
+	}
+
+	private static ViewDef withPollAndColumnConfig() {
+		return ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.poll(60_000L)
+			.columnConfig(ColumnConfig.create())
+			.build();
+	}
+
+	private static Stream<Arguments> e06_viewDefTopLevelKeyOrderProvider() {
+		return Stream.of(
+			Arguments.of(withRowClassRuleAndPoll(),
+				List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs")),
+			Arguments.of(withDetailsAndPoll(),
+				List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "pollIntervalMs")),
+			Arguments.of(withRowActionsAndDetailsAndPoll(),
+				List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "rowActions", "pollIntervalMs")),
+			Arguments.of(withPollAndColumnConfig(),
+				List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs", "columnConfig")));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -462,19 +513,8 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertEquals("4", v.contractVersion);
 	}
 
-	@Test void f03_details_doesNotAffectTopLevelKeyOrder() {
-		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
-			.rowClassRule("error", Op.PRESENT, "row-flagged")
-			.details(RowDetailDef.create()
-				.endpoint("/data/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
-			.poll(60_000L)
-			.build();
-		Map<?,?> actual = Json.to(Json.of(v), Map.class);
-		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "pollIntervalMs"),
-			new ArrayList<>(actual.keySet()));
-	}
+	// f03 (details never affects top-level key order) is covered by e06 above, alongside three other
+	// structurally-identical top-level-key-order pins.
 
 	@Test void f04_detailFieldTitleDefaultsToNullWhenUnset() {
 		var d = DetailField.of("owner");
@@ -485,7 +525,7 @@ class ViewMeta_Contract_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// g) Row actions: the positive assertion for the "rowActions" key (moved out of a03's negative reserved list -
 	// same positive-assertion-plus-remaining-negatives split used for "details" in section f).  This freezes the
-	// COMPLETE RowAction wire schema (TODO-399 Decision 8) so a later wave (TODO-416) can rely on it verbatim.
+	// COMPLETE RowAction wire schema (Decision 8) so later work can rely on it verbatim.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_rowActions_omittedWhenUnset() {
@@ -523,20 +563,7 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertFalse(json.contains("\"onSuccess\""), json);
 	}
 
-	@Test void g04_rowActions_isAfterRowClassRules_inTopLevelKeyOrder() {
-		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
-			.rowClassRule("error", Op.PRESENT, "row-flagged")
-			.rowActions(RowAction.create("go").endpoint("u").method(RowAction.Method.POST))
-			.details(RowDetailDef.create()
-				.endpoint("/data/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
-			.poll(60_000L)
-			.build();
-		Map<?,?> actual = Json.to(Json.of(v), Map.class);
-		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "rowActions", "pollIntervalMs"),
-			new ArrayList<>(actual.keySet()));
-	}
+	// g04 (rowActions after rowClassRules) is covered by e06 above.
 
 	@Test void g05_rowActionMethodTokensAreTheNonSafeMethods() {
 		// The Method enum makes a safe method (GET/HEAD/OPTIONS/TRACE) unexpressible - the build-time half of the
@@ -598,16 +625,7 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertTrue(json.contains("\"columnConfig\":{}"), json);
 	}
 
-	@Test void h03_columnConfig_isTheLastWireKey_afterPollIntervalMs() {
-		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
-			.poll(60_000L)
-			.columnConfig(ColumnConfig.create())
-			.build();
-		Map<?,?> actual = Json.to(Json.of(v), Map.class);
-		assertEquals(
-			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs", "columnConfig"),
-			new ArrayList<>(actual.keySet()));
-	}
+	// h03 (columnConfig as the last key after pollIntervalMs) is covered by e06 above.
 
 	@Test void h04_columnFlags_areNullableWrappers_neverEmitPrimitiveFalseWhenUnset() {
 		// pinned/defaultVisible/formats must be wrapper types left null, not primitives - a primitive boolean

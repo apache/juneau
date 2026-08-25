@@ -18,15 +18,19 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
- * Always-on source-shape coverage for the {@code juneau-views.js} row-selection + bulk-mutation plumbing
- * ({@code TODO-428}).  Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style: proves the
+ * Always-on source-shape coverage for the {@code juneau-views.js} row-selection + bulk-mutation plumbing.
+ * Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style: proves the
  * load-bearing pieces of the two-independent-opt-ins contract are present in the shipped asset, without booting a
  * browser (the behavioral proof lives in the opt-in {@code RowSelectionBulk_BrowserTest} canary).
  */
@@ -93,23 +97,29 @@ class ViewsJs_Selection_Test extends TestBase {
 		assertFalse(fn.contains("index"), fn);
 	}
 
-	@Test void c02_stampRowId_writesTheStableIdAttribute_neverAnIndex() throws Exception {
+	/**
+	 * stampRowId writes the stable id attribute (never an index); pruneSelection drops ids not in the current
+	 * draw; and the bulk toolbar disables its buttons when the selection is empty.
+	 */
+	@ParameterizedTest
+	@MethodSource("c02_functionBodyContainsTwoSubstringsProvider")
+	void c02_functionBodyContainsExpectedSubstrings(String functionSignature, String expected1, String expected2) throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function stampRowId(");
-		assertTrue(fn.contains("rowIdOf(rowData, rowIdField)"), fn);
-		assertTrue(fn.contains("rowEl.setAttribute(ROW_ID_ATTR"), fn);
+		var fn = functionBody(body, functionSignature);
+		assertTrue(fn.contains(expected1), fn);
+		assertTrue(fn.contains(expected2), fn);
+	}
+
+	static Stream<Arguments> c02_functionBodyContainsTwoSubstringsProvider() {
+		return Stream.of(
+			Arguments.of("function stampRowId(", "rowIdOf(rowData, rowIdField)", "rowEl.setAttribute(ROW_ID_ATTR"),
+			Arguments.of("function pruneSelection(", "present[String(id)] = true", "Object.hasOwn(present, String(id))"),
+			Arguments.of("function buildBulkToolbar(", "btn.disabled = true", "b.disabled = count === 0"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// d) The off-screen-id-drop persistence rule (Q2/MED-11) - pure, DOM-free.
 	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void d01_pruneSelection_dropsIdsNotInTheCurrentDraw() throws Exception {
-		var body = viewsJs();
-		var fn = functionBody(body, "function pruneSelection(");
-		assertTrue(fn.contains("present[String(id)] = true"), fn);
-		assertTrue(fn.contains("Object.hasOwn(present, String(id))"), fn);
-	}
 
 	@Test void d02_initSelection_listenerLifetimeSplit_pruneIsPerInstance() throws Exception {
 		var body = viewsJs();
@@ -147,12 +157,12 @@ class ViewsJs_Selection_Test extends TestBase {
 		var fn = functionBody(body, "function beginInitTable(");
 		var selectionIdx = fn.indexOf("const selectionState = hasSelection(table)");
 		var selectionBranchIdx = fn.indexOf("if (selectionState) {");
-		var bulkCheckIdx = fn.indexOf("hasBulk(table)");
+		var bulkCheckIdx = fn.indexOf("resolveTableBulkDef(");
 		assertTrue(selectionIdx >= 0, fn);
 		assertTrue(selectionBranchIdx > selectionIdx, fn);
 		assertTrue(bulkCheckIdx > selectionBranchIdx, fn);
-		var construct = functionBody(body, "function constructTable(");
-		assertTrue(construct.contains("buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState)"), construct);
+		var wire = functionBody(body, "function wireSelectionAndBulkToolbar(");
+		assertTrue(wire.contains("buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState)"), wire);
 	}
 
 	@Test void f02_buildTable_prependsASyntheticLeadingSelectionColumn_beforeResolveOrder() throws Exception {
@@ -170,7 +180,7 @@ class ViewsJs_Selection_Test extends TestBase {
 		var body = viewsJs();
 		var fn = functionBody(body, "function beginInitTable(");
 		var initSelectionIdx = fn.indexOf("initSelection(table, ctx)");
-		var bulkCheckIdx = fn.indexOf("hasBulk(table)");
+		var bulkCheckIdx = fn.indexOf("resolveTableBulkDef(");
 		assertTrue(initSelectionIdx >= 0 && initSelectionIdx < bulkCheckIdx, fn);
 	}
 
@@ -196,15 +206,9 @@ class ViewsJs_Selection_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// h) Bulk toolbar reflects the live selection count and gates on it (nothing to target with zero selected).
+	// h) Bulk toolbar reflects the live selection count and gates on it - see c02 above, which covers this
+	//    alongside two structurally-identical function-body-substring checks.
 	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void h01_bulkToolbar_disablesButtonsWhenSelectionIsEmpty() throws Exception {
-		var body = viewsJs();
-		var fn = functionBody(body, "function buildBulkToolbar(");
-		assertTrue(fn.contains("btn.disabled = true"), fn);
-		assertTrue(fn.contains("b.disabled = count === 0"), fn);
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// i) A missing/contract-mismatched bulk sidecar is withheld, fail-loud, WITHOUT killing selection.
@@ -212,7 +216,7 @@ class ViewsJs_Selection_Test extends TestBase {
 
 	@Test void i01_bulkContractMismatch_isLoggedAndWithheld_selectionSurvives() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function beginInitTable(");
+		var fn = functionBody(body, "function resolveTableBulkDef(");
 		assertTrue(fn.contains("bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION"), fn);
 		assertTrue(fn.contains("bulk mutation withheld"), fn);
 	}

@@ -88,17 +88,6 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 		);
 	}
 
-	@Test void a05_jwksUrlOnlyPath_builds() {
-		// Exercises the "wrap jwksUrl in a JwksCache" branch of the constructor without making a
-		// network call (no validate() is invoked).
-		var v = JwtTokenValidator.create()
-			.issuer(DEFAULT_ISSUER)
-			.audience(DEFAULT_AUDIENCE)
-			.jwksUrl(URI.create("https://issuer.example.com/.well-known/jwks.json"))
-			.build();
-		assertNotNull(v);
-	}
-
 	// -----------------------------------------------------------------------------------------
 	// Builder argument validation.
 	// -----------------------------------------------------------------------------------------
@@ -199,21 +188,25 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 		);
 	}
 
-	@Test void d02_jwksUrl_loopbackHttp_allowed() {
+	@ParameterizedTest(name = "[{index}] {0}")
+	@MethodSource("allowedJwksUrlArguments")
+	void d02_jwksUrl_allowedVariants_build(String label, URI uri) {
+		// Exercises the "wrap jwksUrl in a JwksCache" branch of the constructor without making a
+		// network call (no validate() is invoked). Covers a plaintext-remote-https URL plus the
+		// loopback/localhost http exemptions from the transport guard above.
 		var v = JwtTokenValidator.create()
 			.issuer(DEFAULT_ISSUER)
 			.audience(DEFAULT_AUDIENCE)
-			.jwksUrl(URI.create("http://127.0.0.1:8080/.well-known/jwks.json"))
+			.jwksUrl(uri)
 			.build();
-		assertNotNull(v);
+		assertNotNull(v, label);
 	}
 
-	@Test void d03_jwksUrl_localhostHttp_allowed() {
-		var v = JwtTokenValidator.create()
-			.issuer(DEFAULT_ISSUER)
-			.audience(DEFAULT_AUDIENCE)
-			.jwksUrl(URI.create("http://localhost:8080/.well-known/jwks.json"))
-			.build();
-		assertNotNull(v);
+	static Stream<Arguments> allowedJwksUrlArguments() {
+		return Stream.of(
+			Arguments.of("httpsRemote", URI.create("https://issuer.example.com/.well-known/jwks.json")),
+			Arguments.of("loopbackHttp", URI.create("http://127.0.0.1:8080/.well-known/jwks.json")),
+			Arguments.of("localhostHttp", URI.create("http://localhost:8080/.well-known/jwks.json"))
+		);
 	}
 }

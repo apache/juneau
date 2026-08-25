@@ -16,7 +16,7 @@
  */
 
 /*
- * dialog-form-browser.cjs - real-browser prober for the dialog FormDef painter + inline validation (TODO-445h).
+ * dialog-form-browser.cjs - real-browser prober for the dialog FormDef painter + inline validation.
  *
  * Never runs in a default build.  Driven by DialogForm_BrowserTest under `mvn -Pjs-tests`; see that class's javadoc
  * and the profile comment in this module's pom.xml.
@@ -36,19 +36,25 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
 	const tick = () => new Promise(r => setTimeout(r, 0));
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function rendered(el) { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
 	function drain() { while (init.topLayer()) init.popLayer(); }
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function makeRow(rowId) {
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		if (rowId != null) tr.setAttribute('data-juneau-row-id', rowId);
+		if (rowId != null) tr.dataset.juneauRowId = rowId;
 		const td = document.createElement('td');
 		td.className = 'juneau-view-actions-cell';
 		tr.appendChild(td);
@@ -62,6 +68,9 @@ const PROBE = async function () {
 	const ctx = { viewDef: { rowActions: [{ id: 'esc', present: 'dialog', label: 'Escalate', confirm: 'Escalate?' }] } };
 	const action = { id: 'ack', label: 'Acknowledge', endpoint: '/x/ack', method: 'POST', present: 'dialog' };
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function sixTypeForm() {
 		return {
 			title: 'Acknowledge?',
@@ -82,7 +91,7 @@ const PROBE = async function () {
 	}
 
 	// ---- Block A: paint the 6 types + real focus trap ----
-	{
+	async function blockPaint() {
 		const dom = makeRow('INC-1');
 		init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
 		await tick();
@@ -93,22 +102,22 @@ const PROBE = async function () {
 		const escBtn = formEl ? formEl.querySelector('button[data-juneau-form-field="esc"]') : null;
 		out.paint = {
 			formVisible: rendered(formEl),
-			hasTextarea: !!(formEl && formEl.querySelector('textarea[data-juneau-form-field="notes"]')),
-			hasText: !!(formEl && formEl.querySelector('input[data-juneau-form-field="title"]')),
-			hasCheckbox: !!(formEl && formEl.querySelector('input[data-juneau-form-field="agree"]')),
+			hasTextarea: !!formEl?.querySelector('textarea[data-juneau-form-field="notes"]'),
+			hasText: !!formEl?.querySelector('input[data-juneau-form-field="title"]'),
+			hasCheckbox: !!formEl?.querySelector('input[data-juneau-form-field="agree"]'),
 			toggleRoleSwitch: toggle ? toggle.getAttribute('role') === 'switch' : false,
 			toggleCheckedFromToken: toggle ? !!toggle.checked : false,
 			selectOptionCount: select ? select.querySelectorAll('option').length : -1,
 			selectPrefill: select ? select.value : null,
 			actionEnabled: escBtn ? !escBtn.disabled : false,
-			focusTrappedIntoDialog: !!(backdrop && backdrop.contains(document.activeElement))
+			focusTrappedIntoDialog: !!backdrop?.contains(document.activeElement)
 		};
 		// Real Tab from the last focusable wraps to the first (focus stays inside the trapping layer).
 		const focusables = Array.from(backdrop.querySelectorAll(
 			'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]'
 		)).filter(n => n.getAttribute('tabindex') !== '-1');
-		const first = focusables[0], last = focusables[focusables.length - 1];
-		if (last && last.focus) last.focus();
+		const first = focusables[0], last = focusables.at(-1);
+		last?.focus?.();
 		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
 		out.paint.tabWrapsToFirst = document.activeElement === first;
 		out.paint.tabKeepsFocusInDialog = backdrop.contains(document.activeElement);
@@ -116,14 +125,14 @@ const PROBE = async function () {
 	}
 
 	// ---- Block B: confirm on an invalid form is blocked and focuses the first invalid control ----
-	{
+	async function blockInvalid() {
 		const dom = makeRow('INC-2');
 		const fetchCalls = [];
 		const realFetch = window.fetch;
 		window.fetch = function (u, o) { fetchCalls.push({ u: u, o: o }); return Promise.resolve({ ok: true, status: 200, headers: { get: () => null }, text: () => Promise.resolve('{}') }); };
 		const ui = init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);   // notes required + empty
 		await tick();
-		dom.table.setAttribute('data-juneau-csrf', 'tok');
+		dom.table.dataset.juneauCsrf = 'tok';
 		ui.confirmBtn.click();
 		await tick(); await tick();
 		window.fetch = realFetch;
@@ -138,7 +147,7 @@ const PROBE = async function () {
 	}
 
 	// ---- Block C: a valid form submits with boolean-string field values (toggle off -> "false", checkbox on -> "true") ----
-	{
+	async function blockSubmit() {
 		const dom = makeRow('INC-3');
 		const ui = init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
 		await tick();
@@ -149,7 +158,7 @@ const PROBE = async function () {
 		const fetchCalls = [];
 		const realFetch = window.fetch;
 		window.fetch = function (u, o) { fetchCalls.push({ u: u, o: o }); return Promise.resolve({ ok: true, status: 200, headers: { get: () => null }, text: () => Promise.resolve(JSON.stringify({ contractVersion: '1', outcome: 'success' })) }); };
-		dom.table.setAttribute('data-juneau-csrf', 'tok');
+		dom.table.dataset.juneauCsrf = 'tok';
 		ui.confirmBtn.click();
 		await tick(); await tick();
 		window.fetch = realFetch;
@@ -158,13 +167,15 @@ const PROBE = async function () {
 	}
 
 	// ---- Block D: the nested type=action button opens a SECOND stacked dialog without closing the first ----
-	{
+	async function blockNested() {
 		const dom = makeRow('INC-4');
 		init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
 		await tick();
 		const before = init.dialogLayerCount();
 		const escBtn = document.querySelector('button[data-juneau-form-field="esc"]');
-		if (escBtn) escBtn.click();
+		if (escBtn) {
+			escBtn.click();
+		}
 		await tick();
 		out.nested = {
 			before: before,
@@ -173,6 +184,11 @@ const PROBE = async function () {
 		};
 		drain();
 	}
+
+	await blockPaint();
+	await blockInvalid();
+	await blockSubmit();
+	await blockNested();
 
 	return out;
 };
@@ -196,4 +212,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

@@ -34,17 +34,17 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const I = NS && NS.init;
+	const I = NS?.init;
 	const out = { hasInit: !!(I && typeof I.buildDetailStrip === 'function') };
 	if (!out.hasInit) return out;
 
 	const strip = I.buildDetailStrip(document.getElementById('panel'), null);
 	out.stripBuilt = !!strip;
-	out.stripTrailed = strip ? strip.getAttribute('data-juneau-strip-trailed') : null;
+	out.stripTrailed = strip?.dataset.juneauStripTrailed ?? null;
 
 	const slot = document.querySelector('[data-juneau-bar-slot]');
 	const badge = document.querySelector('[data-juneau-badge]');
-	out.slotTrailsStrip = strip ? strip.nextSibling === slot : false;
+	out.slotTrailsStrip = strip?.nextSibling === slot;
 
 	function rects() {
 		const tabs = Array.prototype.map.call(strip.querySelectorAll('[role="tab"]'),
@@ -52,6 +52,8 @@ const PROBE = async function () {
 		return { slot: slot.getBoundingClientRect(), badge: badge.getBoundingClientRect(), tabs: tabs };
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function overlapsAnyTab(r) {
 		return r.tabs.some(function (t) {
 			return r.slot.left < t.right && t.left < r.slot.right && r.slot.top < t.bottom && t.top < r.slot.bottom;
@@ -61,7 +63,7 @@ const PROBE = async function () {
 	const wide = rects();
 	out.wide_badgeVisible = wide.badge.width > 0 && wide.badge.height > 0;
 	out.wide_slotVisible = wide.slot.width > 0 && wide.slot.height > 0;
-	out.wide_slotBesideRibbon = wide.tabs.length > 0 && wide.slot.left >= wide.tabs[wide.tabs.length - 1].right - 1;
+	out.wide_slotBesideRibbon = wide.tabs.length > 0 && wide.slot.left >= wide.tabs.at(-1).right - 1;
 	out.wide_sameLineAsRibbon = wide.tabs.length > 0
 		&& wide.slot.top < wide.tabs[0].bottom && wide.tabs[0].top < wide.slot.bottom;
 	out.wide_noOverlap = !overlapsAnyTab(wide);
@@ -115,6 +117,6 @@ const NARROW_PROBE = function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

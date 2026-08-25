@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-config.js - opt-in column-configurator persistence + pure config-application layer (TODO-444).
+ * juneau-config.js - opt-in column-configurator persistence + pure config-application layer (design doc #444).
  *
  * This file is loaded AFTER juneau-views.js (a template <script> include the consumer adds, exactly like
  * juneau-pages.js - NOT a dynamic fetch; see design §4.1) and extends the SAME window.JuneauViews namespace.  A
@@ -32,7 +32,7 @@
  *   - Slice 7: ribbon toggle persistence routes through this file's synchronous getItem/setItem
  *     (same exact keys as juneau-ribbon.js; never a Promise).
  *
- * Every provider implements the SAME seven-method async contract (Promise-based; TODO-444 §3.2/§3.3, refined by
+ * Every provider implements the SAME seven-method async contract (Promise-based; design doc #444 §3.2/§3.3, refined by
  * the round-3 saveAndActivate addendum): list/load/save/saveAndActivate/setActive/delete/getActive.  Each method
  * takes the LIVE table element as its first argument (never a raw pageId/viewId string) - both providers derive
  * their own scope from it, mirroring how the pageId is discovered (table.closest('[data-juneau-page]')).  This is
@@ -120,11 +120,11 @@
 	 * quota/private-mode DOMException maps to 'quota'; anything else is 'unavailable' rather than swallowed.
 	 */
 	function toTypedError(e) {
-		if (e && (e.code === "quota" || e.code === "unavailable" || e.code === "network" || e.code === "malformed"))
+		if (e?.code === "quota" || e?.code === "unavailable" || e?.code === "network" || e?.code === "malformed")
 			return { code: e.code, message: e.message };
-		if (e && (e.name === "QuotaExceededError" || e.code === 22 || e.code === 1014))
+		if (e?.name === "QuotaExceededError" || e?.code === 22 || e?.code === 1014)
 			return { code: "quota", message: "localStorage quota exceeded or blocked (private mode)" };
-		return { code: "unavailable", message: (e && e.message) ? e.message : String(e) };
+		return { code: "unavailable", message: e?.message ? e.message : String(e) };
 	}
 
 	/**
@@ -196,9 +196,8 @@
 		const str = s == null ? "" : String(s);
 		const bytes = utf8Encode(str);
 		let out = "";
-		for (let i = 0; i < bytes.length; i++) {
-			const b = bytes[i];
-			const ch = b < 128 ? String.fromCharCode(b) : null;
+		for (const b of bytes) {
+			const ch = b < 128 ? String.fromCodePoint(b) : null;
 			out += (ch != null && isSafeSegmentChar(ch)) ? ch : ("%" + hex2Upper(b));
 		}
 		return out;
@@ -217,15 +216,15 @@
 		while (i < str.length) {
 			const ch = str.charAt(i);
 			if (ch === "%") {
-				const hex = str.substr(i + 1, 2);
+				const hex = str.slice(i + 1, i + 3);
 				if (!/^[0-9A-F]{2}$/.test(hex))
 					throw malformedError("non-canonical percent-encoding at offset " + i + " in '" + str + "'");
-				bytes.push(parseInt(hex, 16));
+				bytes.push(Number.parseInt(hex, 16));
 				i += 3;
 			} else {
 				if (!isSafeSegmentChar(ch))
 					throw malformedError("illegal raw character '" + ch + "' at offset " + i + " in '" + str + "'");
-				bytes.push(ch.charCodeAt(0));
+				bytes.push(ch.codePointAt(0));
 				i += 1;
 			}
 		}
@@ -294,7 +293,7 @@
 	 */
 	function resolveActiveAgainstViews(active, views) {
 		if (active == null) return { name: null, dangling: false };
-		const found = (views || []).some(function (v) { return v && v.name === active; });
+		const found = (views || []).some(function (v) { return v?.name === active; });
 		return found ? { name: active, dangling: false } : { name: null, dangling: true };
 	}
 
@@ -312,14 +311,14 @@
 	 * page-qualification must stamp this exact attribute rather than inventing a parallel one.
 	 */
 	function resolvePageId(table) {
-		const host = (table && table.closest) ? table.closest("[" + PAGE_ID_ATTR + "]") : null;
-		const v = host ? host.getAttribute(PAGE_ID_ATTR) : null;
+		const host = table?.closest ? table.closest("[" + PAGE_ID_ATTR + "]") : null;
+		const v = host ? host.dataset.juneauPage : null;
 		return isBlank(v) ? null : v;
 	}
 
 	/** Resolves the table's own stable view id - reuses the SAME attribute juneau-views.js's initTable reads. */
 	function resolveViewId(table) {
-		const v = table ? table.getAttribute(VIEW_ID_ATTR) : null;
+		const v = table ? table.dataset.juneauView : null;
 		return isBlank(v) ? null : v;
 	}
 
@@ -329,8 +328,8 @@
 	 * Returns null (never a hardcoded "/"-rooted guess) when absent/blank - the caller MUST fail closed.
 	 */
 	function resolveSavedViewsBase(table) {
-		const host = (table && table.closest) ? table.closest("[" + SAVED_VIEWS_BASE_ATTR + "]") : null;
-		const v = host ? host.getAttribute(SAVED_VIEWS_BASE_ATTR) : null;
+		const host = table?.closest ? table.closest("[" + SAVED_VIEWS_BASE_ATTR + "]") : null;
+		const v = host ? host.dataset.juneauSavedViews : null;
 		return isBlank(v) ? null : v;
 	}
 
@@ -342,8 +341,8 @@
 	function hasDuplicateEntries(arr) {
 		if (!arr || arr.length < 2) return false;
 		const seen = Object.create(null);
-		for (let i = 0; i < arr.length; i++) {
-			const k = String(arr[i]);
+		for (const v of arr) {
+			const k = String(v);
 			if (seen[k]) return true;
 			seen[k] = true;
 		}
@@ -354,35 +353,40 @@
 	function catalogByData(catalog) {
 		const map = Object.create(null);
 		(catalog || []).forEach(function (c) {
-			if (c && c.data != null && map[c.data] == null) map[c.data] = c;
+			if (c?.data != null && map[c.data] == null) map[c.data] = c;
 		});
 		return map;
+	}
+
+	/** Shallow-copies the own-enumerable keys of `meta` into a fresh object, or returns `undefined` when absent. */
+	function copyMeta(meta) {
+		if (!meta) return undefined;
+		const out = {};
+		for (const k in meta) if (Object.hasOwn(meta, k)) out[k] = meta[k];
+		return out;
+	}
+
+	/** One `popover.fields[]` entry, copied by {@link #copyPopover}. */
+	function copyPopoverField(f) {
+		if (!f || typeof f !== "object") return f;
+		const g = { data: f.data };
+		if (f.title != null) g.title = f.title;
+		if (f.render != null) {
+			if (typeof f.render === "string") {
+				g.render = f.render;
+			} else {
+				g.render = { id: f.render.id };
+				if (f.render.meta) g.render.meta = copyMeta(f.render.meta);
+			}
+		}
+		return g;
 	}
 
 	function copyPopover(p) {
 		if (!p || typeof p !== "object") return p;
 		const out = {};
 		if (p.title != null) out.title = p.title;
-		if (p.fields) {
-			out.fields = p.fields.map(function (f) {
-				if (!f || typeof f !== "object") return f;
-				const g = { data: f.data };
-				if (f.title != null) g.title = f.title;
-				if (f.render != null) {
-					if (typeof f.render === "string") {
-						g.render = f.render;
-					} else {
-						g.render = { id: f.render.id };
-						if (f.render.meta) {
-							g.render.meta = {};
-							for (const k in f.render.meta)
-								if (Object.hasOwn(f.render.meta, k)) g.render.meta[k] = f.render.meta[k];
-						}
-					}
-				}
-				return g;
-			});
-		}
+		if (p.fields) out.fields = p.fields.map(copyPopoverField);
 		return out;
 	}
 
@@ -408,13 +412,8 @@
 				out.render = col.render;
 			} else {
 				out.render = { id: col.render.id };
-				if (col.render.meta) {
-					out.render.meta = {};
-					for (const k in col.render.meta)
-						if (Object.hasOwn(col.render.meta, k)) out.render.meta[k] = col.render.meta[k];
-				}
-				if (col.render.popover)
-					out.render.popover = copyPopover(col.render.popover);
+				if (col.render.meta) out.render.meta = copyMeta(col.render.meta);
+				if (col.render.popover) out.render.popover = copyPopover(col.render.popover);
 			}
 		}
 		return out;
@@ -433,12 +432,8 @@
 			return { id: newId, meta: { field: render.substring(i + 1) } };
 		}
 		const out = { id: newId };
-		if (render.meta) {
-			out.meta = {};
-			for (const k in render.meta) if (Object.hasOwn(render.meta, k)) out.meta[k] = render.meta[k];
-		}
-		if (render.popover)
-			out.popover = copyPopover(render.popover);
+		if (render.meta) out.meta = copyMeta(render.meta);
+		if (render.popover) out.popover = copyPopover(render.popover);
 		return out;
 	}
 
@@ -453,6 +448,67 @@
 			if (c.pinned || c.defaultVisible !== false) out.push(c.data);
 		});
 		return out;
+	}
+
+	/** Resolves `view.order` (§4.3): explicit order with unknown ids dropped/catalog ids appended, or catalog order when absent. */
+	function resolveOrder(view, byData, catalogOrder) {
+		if (view.order == null) return { ok: true, order: catalogOrder.slice() };
+		if (!Array.isArray(view.order))
+			return { ok: false, code: "malformed", message: "saved-view order must be an array" };
+		if (hasDuplicateEntries(view.order))
+			return { ok: false, code: "malformed", message: "saved-view order contains duplicate column ids" };
+		const order = [];
+		view.order.forEach(function (id) {
+			if (byData[id] != null) order.push(id);
+		});
+		catalogOrder.forEach(function (id) {
+			if (order.indexOf(id) < 0) order.push(id);
+		});
+		return { ok: true, order: order };
+	}
+
+	/**
+	 * Resolves `view.visible` (§4.3) before the pinned-column / at-least-one-visible repairs: explicit visible ids
+	 * with unknowns dropped, or each column's {@code defaultVisible ?? true} when absent.
+	 */
+	function resolveVisible(view, byData, cols) {
+		if (view.visible == null) return { ok: true, visible: defaultVisibleKeys(cols) };
+		if (!Array.isArray(view.visible))
+			return { ok: false, code: "malformed", message: "saved-view visible must be an array" };
+		if (hasDuplicateEntries(view.visible))
+			return { ok: false, code: "malformed", message: "saved-view visible contains duplicate column ids" };
+		const visible = [];
+		view.visible.forEach(function (id) {
+			if (byData[id] != null) visible.push(id);
+		});
+		return { ok: true, visible: visible };
+	}
+
+	/** `view.labels` overrides for known columns only (unknown column ids are dropped). */
+	function resolveLabels(view, byData) {
+		const labels = {};
+		if (view.labels && typeof view.labels === "object") {
+			for (const k in view.labels) {
+				if (Object.hasOwn(view.labels, k) && byData[k] != null)
+					labels[k] = view.labels[k];
+			}
+		}
+		return labels;
+	}
+
+	/** `view.formats` overrides for known columns, constrained to that column's declared `formats` list. */
+	function resolveFormats(view, byData) {
+		const formats = {};
+		if (view.formats && typeof view.formats === "object") {
+			for (const k in view.formats) {
+				if (!Object.hasOwn(view.formats, k) || byData[k] == null) continue;
+				const fmt = view.formats[k];
+				const allowed = byData[k].formats;
+				// Constrain to the column's declared formats list — drop (never apply) an undeclared override.
+				if (Array.isArray(allowed) && allowed.indexOf(fmt) >= 0) formats[k] = fmt;
+			}
+		}
+		return formats;
 	}
 
 	/**
@@ -477,64 +533,22 @@
 		const byData = catalogByData(cols);
 		const catalogOrder = cols.map(function (c) { return c.data; }).filter(function (d) { return d != null; });
 
-		let order;
-		if (view.order == null) {
-			order = catalogOrder.slice();
-		} else {
-			if (!Array.isArray(view.order))
-				return { ok: false, code: "malformed", message: "saved-view order must be an array" };
-			if (hasDuplicateEntries(view.order))
-				return { ok: false, code: "malformed", message: "saved-view order contains duplicate column ids" };
-			order = [];
-			view.order.forEach(function (id) {
-				if (byData[id] != null) order.push(id);
-			});
-			catalogOrder.forEach(function (id) {
-				if (order.indexOf(id) < 0) order.push(id);
-			});
-		}
+		const orderResult = resolveOrder(view, byData, catalogOrder);
+		if (!orderResult.ok) return orderResult;
+		const order = orderResult.order;
 
-		let visible;
-		if (view.visible == null) {
-			visible = defaultVisibleKeys(cols);
-		} else {
-			if (!Array.isArray(view.visible))
-				return { ok: false, code: "malformed", message: "saved-view visible must be an array" };
-			if (hasDuplicateEntries(view.visible))
-				return { ok: false, code: "malformed", message: "saved-view visible contains duplicate column ids" };
-			visible = [];
-			view.visible.forEach(function (id) {
-				if (byData[id] != null) visible.push(id);
-			});
-		}
+		const visibleResult = resolveVisible(view, byData, cols);
+		if (!visibleResult.ok) return visibleResult;
+		let visible = visibleResult.visible;
 
 		// Pinned columns are always visible (un-hideable but reorderable).
 		cols.forEach(function (c) {
-			if (c && c.pinned && c.data != null && visible.indexOf(c.data) < 0) visible.push(c.data);
+			if (c?.pinned && c.data != null && visible.indexOf(c.data) < 0) visible.push(c.data);
 		});
 
 		// ≥1 visible — repair an all-hidden blob rather than crash the table.
 		if (visible.length === 0 && catalogOrder.length > 0)
 			visible = [catalogOrder[0]];
-
-		const labels = {};
-		if (view.labels && typeof view.labels === "object") {
-			for (const k in view.labels) {
-				if (Object.hasOwn(view.labels, k) && byData[k] != null)
-					labels[k] = view.labels[k];
-			}
-		}
-
-		const formats = {};
-		if (view.formats && typeof view.formats === "object") {
-			for (const k in view.formats) {
-				if (!Object.hasOwn(view.formats, k) || byData[k] == null) continue;
-				const fmt = view.formats[k];
-				const allowed = byData[k].formats;
-				// Constrain to the column's declared formats list — drop (never apply) an undeclared override.
-				if (Array.isArray(allowed) && allowed.indexOf(fmt) >= 0) formats[k] = fmt;
-			}
-		}
 
 		return {
 			ok: true,
@@ -542,8 +556,8 @@
 				schemaVersion: view.schemaVersion != null ? view.schemaVersion : CURRENT_SCHEMA_VERSION,
 				visible: visible,
 				order: order,
-				labels: labels,
-				formats: formats
+				labels: resolveLabels(view, byData),
+				formats: resolveFormats(view, byData)
 			}
 		};
 	}
@@ -570,7 +584,7 @@
 			visibleSet[id] = true;
 		});
 		cols.forEach(function (c) {
-			if (c && c.pinned && c.data != null) visibleSet[c.data] = true;
+			if (c?.pinned && c.data != null) visibleSet[c.data] = true;
 		});
 		const visibleKeys = Object.keys(visibleSet);
 		if (visibleKeys.length === 0 && order.length > 0) visibleSet[order[0]] = true;
@@ -582,7 +596,7 @@
 			const effective = copyCatalogColumn(col);
 
 			// Label override — blank/whitespace reverts to the catalog title (persistence-only; no wire field).
-			if (normalized && normalized.labels && Object.hasOwn(normalized.labels, dataKey)) {
+			if (normalized?.labels && Object.hasOwn(normalized.labels, dataKey)) {
 				const override = normalized.labels[dataKey];
 				if (override != null && String(override).trim() !== "")
 					effective.title = String(override);
@@ -590,7 +604,7 @@
 			}
 
 			// Format override — id swap only; meta + href preserved via copyCatalogColumn + swapRenderId.
-			if (normalized && normalized.formats && Object.hasOwn(normalized.formats, dataKey)) {
+			if (normalized?.formats && Object.hasOwn(normalized.formats, dataKey)) {
 				effective.render = swapRenderId(col.render, normalized.formats[dataKey]);
 			}
 
@@ -616,8 +630,8 @@
 			schemaVersion: blob.schemaVersion,
 			visible: blob.visible == null ? null : Array.prototype.slice.call(blob.visible),
 			order: blob.order == null ? null : Array.prototype.slice.call(blob.order),
-			labels: (blob.labels && typeof blob.labels === "object") ? Object.assign({}, blob.labels) : {},
-			formats: (blob.formats && typeof blob.formats === "object") ? Object.assign({}, blob.formats) : {}
+			labels: (blob.labels && typeof blob.labels === "object") ? { ...blob.labels } : {},
+			formats: (blob.formats && typeof blob.formats === "object") ? { ...blob.formats } : {}
 		};
 	}
 
@@ -627,28 +641,35 @@
 	 * "use catalog title"); empty {@code labels}/{@code formats} objects are still emitted so the schema stays
 	 * stable for round-trips.
 	 */
+	/** Non-blank label overrides only (a blank override means "use catalog title" and is omitted from the blob). */
+	function serializeLabels(view) {
+		const out = {};
+		if (!view || !view.labels || typeof view.labels !== "object") return out;
+		for (const k in view.labels) {
+			if (!Object.hasOwn(view.labels, k)) continue;
+			const v = view.labels[k];
+			if (v != null && String(v).trim() !== "") out[k] = String(v);
+		}
+		return out;
+	}
+
+	/** Format overrides only (nullish values are omitted from the blob). */
+	function serializeFormats(view) {
+		const out = {};
+		if (!view || !view.formats || typeof view.formats !== "object") return out;
+		for (const k in view.formats)
+			if (Object.hasOwn(view.formats, k) && view.formats[k] != null) out[k] = view.formats[k];
+		return out;
+	}
+
 	function serializeSavedView(view) {
-		const blob = {
+		return {
 			schemaVersion: CURRENT_SCHEMA_VERSION,
-			visible: (view && Array.isArray(view.visible)) ? view.visible.slice() : [],
-			order: (view && Array.isArray(view.order)) ? view.order.slice() : [],
-			labels: {},
-			formats: {}
+			visible: Array.isArray(view?.visible) ? view.visible.slice() : [],
+			order: Array.isArray(view?.order) ? view.order.slice() : [],
+			labels: serializeLabels(view),
+			formats: serializeFormats(view)
 		};
-		if (view && view.labels && typeof view.labels === "object") {
-			for (const k in view.labels) {
-				if (!Object.hasOwn(view.labels, k)) continue;
-				const v = view.labels[k];
-				if (v != null && String(v).trim() !== "") blob.labels[k] = String(v);
-			}
-		}
-		if (view && view.formats && typeof view.formats === "object") {
-			for (const k in view.formats) {
-				if (Object.hasOwn(view.formats, k) && view.formats[k] != null)
-					blob.formats[k] = view.formats[k];
-			}
-		}
-		return blob;
 	}
 
 	/**
@@ -659,9 +680,9 @@
 	 */
 	function buildOptsColumnSpace(effectiveColumns, options) {
 		const cols = [];
-		if (options && options.hasRowDetail)
+		if (options?.hasRowDetail)
 			cols.push({ data: null, _juneau: "detail" });
-		if (options && options.hasSelection)
+		if (options?.hasSelection)
 			cols.push({ data: null, _juneau: "selection" });
 		(effectiveColumns || []).forEach(function (c) {
 			cols.push({
@@ -670,7 +691,7 @@
 				title: c.title
 			});
 		});
-		if (options && options.hasActions)
+		if (options?.hasActions)
 			cols.push({ data: null, _juneau: "actions" });
 		return cols;
 	}
@@ -684,10 +705,7 @@
 	 */
 	function dtIndex(dataKey, optsColumns) {
 		if (!optsColumns) return -1;
-		for (let i = 0; i < optsColumns.length; i++) {
-			if (optsColumns[i] && optsColumns[i].data === dataKey) return i;
-		}
-		return -1;
+		return optsColumns.findIndex(function (col) { return col && col.data === dataKey; });
 	}
 
 	// ==================================================================================================================
@@ -701,56 +719,82 @@
 	 * loading placeholder for this provider), and listens for the {@code storage} event so an external tab's
 	 * write can be reconciled (last-write-wins) - see {@code watchExternalChanges} below.
 	 */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: every helper here is deliberately
+	// unreachable outside `window.JuneauViews`, and hoisting it past the closing `})()` would leak it globally.
+	function requireScope(table) {
+		const viewId = resolveViewId(table);
+		if (viewId == null)
+			throw unavailableError("table has no " + VIEW_ID_ATTR + " id; cannot resolve a persistence scope");
+		const pageId = resolvePageId(table);
+		return { pageId: pageId, viewId: viewId, scope: scopeKey(pageId, viewId) };
+	}
+
+	/** Reads the raw active pointer.  A malformed (undecodable) stored value is passed through un-decoded -
+	 *  it will simply never match a real (always-valid) view name, so it naturally resolves to the dangling/
+	 *  Default path (resolveActiveAgainstViews) rather than needing a second failure mode here. */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function readActiveRaw(scope) {
+		const raw = window.localStorage.getItem(activeKeyFor(scope));
+		if (raw == null) return null;
+		try { return decSegment(raw); } catch (e) { return raw; }
+	}
+
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function writeActiveRaw(scope, name) {
+		const key = activeKeyFor(scope);
+		if (name == null) window.localStorage.removeItem(key);
+		else window.localStorage.setItem(key, encSegment(name));
+	}
+
+	/** Every saved view currently under `scope`, decoded - an undecodable key is silently skipped (never crashes). */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function listViews(scope) {
+		const prefix = viewsPrefixKey(scope);
+		const out = [];
+		for (let i = 0; i < window.localStorage.length; i++) {
+			const k = window.localStorage.key(i);
+			if (k?.startsWith(prefix)) {
+				try { out.push({ name: decSegment(k.slice(prefix.length)) }); } catch (e) { /* skip unreadable key */ }
+			}
+		}
+		return out;
+	}
+
+	/** The per-user AGGREGATE count across every (page,view) scope (§3.2 quota-bypass fix) - a substring scan,
+	 *  never a regex, so an attacker-controlled scope/name segment cannot be mistaken for pattern syntax. */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function countAllViewsForThisUser() {
+		let count = 0;
+		for (let i = 0; i < window.localStorage.length; i++) {
+			const k = window.localStorage.key(i);
+			if (k?.startsWith(KEY_ROOT) && k.indexOf(".columns.views.") > 0) count++;
+		}
+		return count;
+	}
+
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function byteLength(str) { return utf8Encode(str).length; }
+
+	/** Runs `fn` synchronously but always returns a settled-in-a-microtask Promise, typed-error on throw. */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function localStorageAsAsync(fn) {
+		return new Promise(function (resolve, reject) {
+			// NOSONAR javascript:S6671 -- toTypedError() deliberately returns the plain {code,message}
+			// shape documented at its definition (§3.2 "typed failure" contract), not an Error subclass;
+			// every consumer (in this file and the chooser UI) reads only `.code`/`.message`, and widening
+			// this to an Error would risk changing enumerable-property/JSON-serialization behavior for
+			// callers outside this file that we cannot fully audit.
+			try { resolve(fn()); } catch (e) { reject(toTypedError(e)); }
+		});
+	}
+
 	function createLocalStorageProvider() {
-
-		function requireScope(table) {
-			const viewId = resolveViewId(table);
-			if (viewId == null)
-				throw unavailableError("table has no " + VIEW_ID_ATTR + " id; cannot resolve a persistence scope");
-			const pageId = resolvePageId(table);
-			return { pageId: pageId, viewId: viewId, scope: scopeKey(pageId, viewId) };
-		}
-
-		/** Reads the raw active pointer.  A malformed (undecodable) stored value is passed through un-decoded -
-		 *  it will simply never match a real (always-valid) view name, so it naturally resolves to the dangling/
-		 *  Default path (resolveActiveAgainstViews) rather than needing a second failure mode here. */
-		function readActiveRaw(scope) {
-			const raw = window.localStorage.getItem(activeKeyFor(scope));
-			if (raw == null) return null;
-			try { return decSegment(raw); } catch (e) { return raw; }
-		}
-
-		function writeActiveRaw(scope, name) {
-			const key = activeKeyFor(scope);
-			if (name == null) window.localStorage.removeItem(key);
-			else window.localStorage.setItem(key, encSegment(name));
-		}
-
-		/** Every saved view currently under `scope`, decoded - an undecodable key is silently skipped (never crashes). */
-		function listViews(scope) {
-			const prefix = viewsPrefixKey(scope);
-			const out = [];
-			for (let i = 0; i < window.localStorage.length; i++) {
-				const k = window.localStorage.key(i);
-				if (k != null && k.indexOf(prefix) === 0) {
-					try { out.push({ name: decSegment(k.slice(prefix.length)) }); } catch (e) { /* skip unreadable key */ }
-				}
-			}
-			return out;
-		}
-
-		/** The per-user AGGREGATE count across every (page,view) scope (§3.2 quota-bypass fix) - a substring scan,
-		 *  never a regex, so an attacker-controlled scope/name segment cannot be mistaken for pattern syntax. */
-		function countAllViewsForThisUser() {
-			let count = 0;
-			for (let i = 0; i < window.localStorage.length; i++) {
-				const k = window.localStorage.key(i);
-				if (k != null && k.indexOf(KEY_ROOT) === 0 && k.indexOf(".columns.views.") > 0) count++;
-			}
-			return count;
-		}
-
-		function byteLength(str) { return utf8Encode(str).length; }
 
 		/** Enforces the per-blob/per-scope/per-user bounds (§3.2) INSIDE the write op, never as a racy pre-flight. */
 		function enforceBounds(scope, name, blob) {
@@ -773,24 +817,17 @@
 			window.localStorage.setItem(viewKeyFor(scope, v.encoded), JSON.stringify(blob));
 		}
 
-		/** Runs `fn` synchronously but always returns a settled-in-a-microtask Promise, typed-error on throw. */
-		function asAsync(fn) {
-			return new Promise(function (resolve, reject) {
-				try { resolve(fn()); } catch (e) { reject(toTypedError(e)); }
-			});
-		}
-
 		return {
 
 			list: function (table) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					return { active: readActiveRaw(ctx.scope), views: listViews(ctx.scope) };
 				});
 			},
 
 			load: function (table, name) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					const v = validateNameForLocalStorage(name);
 					if (!v.ok) throw malformedError(v.message);
@@ -803,7 +840,7 @@
 			},
 
 			save: function (table, name, blob) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					persistBlob(ctx.scope, name, blob);
 				});
@@ -816,7 +853,7 @@
 			 * the documented localStorage consistency model.
 			 */
 			saveAndActivate: function (table, name, blob) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					persistBlob(ctx.scope, name, blob);
 					writeActiveRaw(ctx.scope, name);
@@ -824,7 +861,7 @@
 			},
 
 			setActive: function (table, name) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					if (name == null) { writeActiveRaw(ctx.scope, null); return; }
 					const v = validateNameForLocalStorage(name);
@@ -834,7 +871,7 @@
 			},
 
 			"delete": function (table, name) {
-				return asAsync(function () {
+				return localStorageAsAsync(function () {
 					const ctx = requireScope(table);
 					const v = validateNameForLocalStorage(name);
 					if (!v.ok) throw malformedError(v.message);
@@ -852,7 +889,7 @@
 				const ctx = requireScope(table);
 				const scopePrefix = KEY_ROOT + ctx.scope + ".";
 				function handler(e) {
-					if (e.key != null && e.key.indexOf(scopePrefix) === 0) onChange({ key: e.key, oldValue: e.oldValue, newValue: e.newValue });
+					if (e.key?.startsWith(scopePrefix)) onChange({ key: e.key, oldValue: e.oldValue, newValue: e.newValue });
 				}
 				window.addEventListener("storage", handler);
 				return function unwatch() { window.removeEventListener("storage", handler); };
@@ -877,31 +914,96 @@
 	 * buildActionRequest, which refuses safe methods and hard-codes the body to {action:id} (neither fits a
 	 * saved-views write).  GET (list/load) is a plain, CSRF-free fetch - never an EventSource/SSE.
 	 */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function baseFor(table) {
+		const base = resolveSavedViewsBase(table);
+		if (base == null)
+			throw unavailableError("no [" + SAVED_VIEWS_BASE_ATTR + "] shell found for this table; " +
+				"the server-persisted provider is unavailable");
+		return base;
+	}
+
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function requireViewId(table) {
+		const v = resolveViewId(table);
+		if (v == null) throw unavailableError("table has no " + VIEW_ID_ATTR + " id");
+		return v;
+	}
+
+	/** Ordinary wire-side query-string assembly - plain encodeURIComponent, deliberately never encSegment. */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function buildQuery(params) {
+		const parts = [];
+		for (const k in params) {
+			if (Object.hasOwn(params, k) && params[k] != null)
+				parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(params[k]));
+		}
+		return parts.length ? ("?" + parts.join("&")) : "";
+	}
+
+	/** HTTP-status -> typed-error-code classification (flagged for slice 3 to lock down together - see the
+	 *  implementer report: the plan does not pin exact statuses for a quota rejection vs. a plain bad request). */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function classifyStatus(status) {
+		if (status === 413 || status === 429 || status === 507) return "quota";
+		if (status >= 500) return "network";
+		if (status === 401 || status === 403) return "unavailable";
+		return "malformed";
+	}
+
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function readJsonBody(resp) {
+		return resp.text().then(function (text) {
+			if (text == null || text === "") return null;
+			try { return JSON.parse(text); } catch (e) { throw malformedError("saved-views response was not valid JSON"); }
+		});
+	}
+
+	/**
+	 * Assembles the fail-closed transport envelope for a non-safe write - JSON content type, the CSRF header
+	 * (via juneau-views.js's own resolveCsrfToken/resolveCsrfHeaderName/isBlankToken, so the two files agree
+	 * by construction), and `credentials:'same-origin'`.  The body is ALWAYS real JSON, never empty (a `{}`
+	 * for a body-less DELETE/clear-active, per §3.2/§3.3).
+	 */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function writeRequest(table, method, url, body) {
+		const init = NS.init;
+		const token = init ? init.resolveCsrfToken(table) : null;
+		if (!init || init.isBlankToken(token))
+			return { refuse: true, reason: "missing-token" };
+		const headerName = init.resolveCsrfHeaderName(table);
+		const headers = { "Content-Type": "application/json" };
+		headers[headerName] = token;
+		return { url: url, method: method, headers: headers, body: JSON.stringify(body == null ? {} : body) };
+	}
+
+	/** Runs `fn` (which may throw synchronously, e.g. baseFor's fail-closed check) as a typed-rejecting Promise. */
+	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
+	// would leak it globally.
+	function serverAsAsync(fn) {
+		// NOSONAR javascript:S4822 -- this try/catch is deliberately scoped to fn()'s SYNCHRONOUS throw only
+		// (per the doc above); the chained `.then(null, ...)` immediately below is the separate, correct
+		// handler for fn()'s promise rejecting ASYNCHRONOUSLY - rewriting this to async/await to satisfy the
+		// rule would fold both failure modes through one mechanism and change the microtask timing of the
+		// synchronous-throw path, which we cannot fully verify against every caller in this file.
+		try {
+			// NOSONAR javascript:S6671 -- toTypedError() deliberately returns the plain {code,message}
+			// shape documented at its definition (§3.2 "typed failure" contract), not an Error subclass;
+			// every consumer reads only `.code`/`.message`, and widening this to an Error would risk
+			// changing enumerable-property/JSON-serialization behavior for callers we cannot fully audit.
+			return Promise.resolve(fn()).then(null, function (e) { throw toTypedError(e); });
+		} catch (e) {
+			return Promise.reject(toTypedError(e));
+		}
+	}
+
 	function createServerProvider() {
-
-		function baseFor(table) {
-			const base = resolveSavedViewsBase(table);
-			if (base == null)
-				throw unavailableError("no [" + SAVED_VIEWS_BASE_ATTR + "] shell found for this table; " +
-					"the server-persisted provider is unavailable");
-			return base;
-		}
-
-		function requireViewId(table) {
-			const v = resolveViewId(table);
-			if (v == null) throw unavailableError("table has no " + VIEW_ID_ATTR + " id");
-			return v;
-		}
-
-		/** Ordinary wire-side query-string assembly - plain encodeURIComponent, deliberately never encSegment. */
-		function buildQuery(params) {
-			const parts = [];
-			for (const k in params) {
-				if (Object.hasOwn(params, k) && params[k] != null)
-					parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(params[k]));
-			}
-			return parts.length ? ("?" + parts.join("&")) : "";
-		}
 
 		function queryFor(table, extra) {
 			const params = { view: requireViewId(table) };
@@ -911,19 +1013,10 @@
 			return buildQuery(params);
 		}
 
-		/** HTTP-status -> typed-error-code classification (flagged for slice 3 to lock down together - see the
-		 *  implementer report: the plan does not pin exact statuses for a quota rejection vs. a plain bad request). */
-		function classifyStatus(status) {
-			if (status === 413 || status === 429 || status === 507) return "quota";
-			if (status >= 500) return "network";
-			if (status === 401 || status === 403) return "unavailable";
-			return "malformed";
-		}
-
 		function httpError(status, bodyText) {
 			let env = null;
-			try { env = bodyText ? JSON.parse(bodyText) : null; } catch (e) { env = null; }
-			const err = typedError(classifyStatus(status), (env && env.message) ? env.message : ("saved-views request failed (HTTP " + status + ")"));
+			try { env = bodyText ? JSON.parse(bodyText) : null; } catch (e) { env = null; /* non-JSON body: fall back to the generic HTTP-status message below */ }
+			const err = typedError(classifyStatus(status), env?.message ? env.message : ("saved-views request failed (HTTP " + status + ")"));
 			err.httpStatus = status;
 			return err;
 		}
@@ -940,33 +1033,9 @@
 			});
 		}
 
-		function readJsonBody(resp) {
-			return resp.text().then(function (text) {
-				if (text == null || text === "") return null;
-				try { return JSON.parse(text); } catch (e) { throw malformedError("saved-views response was not valid JSON"); }
-			});
-		}
-
 		function get(table, path, extraParams) {
 			const url = baseFor(table) + path + queryFor(table, extraParams);
 			return doFetch(url, { method: "GET", credentials: "same-origin" }).then(readJsonBody);
-		}
-
-		/**
-		 * Assembles the fail-closed transport envelope for a non-safe write - JSON content type, the CSRF header
-		 * (via juneau-views.js's own resolveCsrfToken/resolveCsrfHeaderName/isBlankToken, so the two files agree
-		 * by construction), and `credentials:'same-origin'`.  The body is ALWAYS real JSON, never empty (a `{}`
-		 * for a body-less DELETE/clear-active, per §3.2/§3.3).
-		 */
-		function writeRequest(table, method, url, body) {
-			const init = NS.init;
-			const token = init ? init.resolveCsrfToken(table) : null;
-			if (!init || init.isBlankToken(token))
-				return { refuse: true, reason: "missing-token" };
-			const headerName = init.resolveCsrfHeaderName(table);
-			const headers = { "Content-Type": "application/json" };
-			headers[headerName] = token;
-			return { url: url, method: method, headers: headers, body: JSON.stringify(body == null ? {} : body) };
 		}
 
 		function write(table, method, path, extraParams, body) {
@@ -977,33 +1046,24 @@
 			return doFetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" });
 		}
 
-		/** Runs `fn` (which may throw synchronously, e.g. baseFor's fail-closed check) as a typed-rejecting Promise. */
-		function asAsync(fn) {
-			try {
-				return Promise.resolve(fn()).then(null, function (e) { throw toTypedError(e); });
-			} catch (e) {
-				return Promise.reject(toTypedError(e));
-			}
-		}
-
 		return {
 
 			list: function (table) {
-				return asAsync(function () { return get(table, ""); });
+				return serverAsAsync(function () { return get(table, ""); });
 			},
 
 			load: function (table, name) {
-				return asAsync(function () {
+				return serverAsAsync(function () {
 					const basic = validateNameBasic(name);
 					if (!basic.ok) throw malformedError(basic.message);
 					return get(table, "/item", { name: name }).then(
 						function (blob) { return blob == null ? null : assertSupportedSchema(blob); },
-						function (e) { if (e && e.httpStatus === 404) return null; throw e; });
+						function (e) { if (e?.httpStatus === 404) { return null; } throw e; });
 				});
 			},
 
 			save: function (table, name, blob) {
-				return asAsync(function () {
+				return serverAsAsync(function () {
 					const basic = validateNameBasic(name);
 					if (!basic.ok) throw malformedError(basic.message);
 					assertSupportedSchema(blob);
@@ -1012,7 +1072,7 @@
 			},
 
 			saveAndActivate: function (table, name, blob) {
-				return asAsync(function () {
+				return serverAsAsync(function () {
 					const basic = validateNameBasic(name);
 					if (!basic.ok) throw malformedError(basic.message);
 					assertSupportedSchema(blob);
@@ -1024,7 +1084,7 @@
 			},
 
 			setActive: function (table, name) {
-				return asAsync(function () {
+				return serverAsAsync(function () {
 					if (name != null) {
 						const basic = validateNameBasic(name);
 						if (!basic.ok) throw malformedError(basic.message);
@@ -1035,7 +1095,7 @@
 			},
 
 			"delete": function (table, name) {
-				return asAsync(function () {
+				return serverAsAsync(function () {
 					const basic = validateNameBasic(name);
 					if (!basic.ok) throw malformedError(basic.message);
 					return write(table, "DELETE", "/item", { name: name }, {}).then(function () {});
@@ -1112,7 +1172,7 @@
 	NS.persistence.getItem = function (key) {
 		try {
 			return window.localStorage.getItem(key);
-		} catch (e) { return null; }
+		} catch (e) { return null; /* quota / private mode — ribbon click path stays synchronous and must not throw */ }
 	};
 	NS.persistence.setItem = function (key, value) {
 		try {
@@ -1169,7 +1229,7 @@
 			return NS.persistence.load(table, r.name).then(function (blob) {
 				if (blob == null) return null;
 				try { return deserializeSavedView(blob); }
-				catch (e) { return null; }
+				catch (e) { return null; /* stale/unknown-schema blob resolves as Default, per the doc above */ }
 			});
 		});
 	}
@@ -1179,14 +1239,14 @@
 	 * runs the destroy/reinit transaction via {@code NS.init.buildTable}.
 	 */
 	function applyView(table, savedView) {
-		const ctx = table && table.__juneauCtx;
+		const ctx = table?.__juneauCtx;
 		if (!ctx || !ctx.viewDef) return { ok: false, reason: "not-initialized" };
 		if (!NS.init || typeof NS.init.buildTable !== "function") return { ok: false, reason: "no-buildTable" };
 		let effective;
 		try {
 			effective = computeEffectiveColumns(ctx.viewDef.columns || [], savedView);
 		} catch (e) {
-			return { ok: false, reason: "malformed", message: e && e.message };
+			return { ok: false, reason: "malformed", message: e?.message };
 		}
 		return NS.init.buildTable(table, ctx.viewDef, effective, ctx);
 	}
@@ -1243,7 +1303,7 @@
 		if (typeof headRow.querySelector === "function"
 				&& (headRow.querySelector(".juneau-view-detail-th") || headRow.querySelector(".juneau-view-detail-control")))
 			offset++;
-		if (ctx && ctx.selectionState) offset++;
+		if (ctx?.selectionState) offset++;
 		(effectiveColumns || []).forEach(function (col, i) {
 			const th = ths[offset + i];
 			if (!th) return;
@@ -1254,7 +1314,7 @@
 
 	function catalogByDataLocal(catalog) {
 		const m = Object.create(null);
-		(catalog || []).forEach(function (c) { if (c && c.data != null) m[c.data] = c; });
+		(catalog || []).forEach(function (c) { if (c?.data != null) m[c.data] = c; });
 		return m;
 	}
 
@@ -1278,8 +1338,8 @@
 		return {
 			visible: validated.view.visible.slice(),
 			order: validated.view.order.slice(),
-			labels: Object.assign({}, validated.view.labels || {}),
-			formats: Object.assign({}, validated.view.formats || {})
+			labels: { ...(validated.view.labels || {}) },
+			formats: { ...(validated.view.formats || {}) }
 		};
 	}
 
@@ -1293,7 +1353,7 @@
 	}
 
 	function visibleCount(draft) {
-		return (draft && draft.visible) ? draft.visible.length : 0;
+		return draft?.visible ? draft.visible.length : 0;
 	}
 
 	/**
@@ -1302,7 +1362,7 @@
 	function canHideColumn(draft, catalog, dataKey) {
 		const byData = catalogByDataLocal(catalog);
 		const col = byData[dataKey];
-		if (col && col.pinned) return false;
+		if (col?.pinned) return false;
 		if (!draft || !draft.visible) return false;
 		if (draft.visible.indexOf(dataKey) < 0) return true;
 		return visibleCount(draft) > 1;
@@ -1341,8 +1401,8 @@
 	}
 
 	function closeChooserDialog(ctx) {
-		const backdrop = ctx && ctx._configBackdrop;
-		if (backdrop && backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+		const backdrop = ctx?._configBackdrop;
+		backdrop?.remove();
 		if (ctx) {
 			ctx._configBackdrop = null;
 			ctx._configDirtyEl = null;
@@ -1353,13 +1413,13 @@
 	}
 
 	function currentCatalog(ctx) {
-		return (ctx && ctx.viewDef && ctx.viewDef.columns) ? ctx.viewDef.columns : [];
+		return ctx?.viewDef?.columns ? ctx.viewDef.columns : [];
 	}
 
 	function renderChooserColumnList(ctx) {
 		const list = ctx._configListEl;
 		if (!list) return;
-		while (list.firstChild) list.removeChild(list.firstChild);
+		while (list.firstChild) list.firstChild.remove();
 		const catalog = currentCatalog(ctx);
 		const byData = catalogByDataLocal(catalog);
 		const draft = ctx._configDraft;
@@ -1373,7 +1433,7 @@
 	function buildChooserRow(ctx, col, draft) {
 		const row = document.createElement("div");
 		row.className = "juneau-config-col-row";
-		row.setAttribute("data-col", col.data);
+		row.dataset.col = col.data;
 
 		const vis = document.createElement("input");
 		vis.type = "checkbox";
@@ -1478,14 +1538,14 @@
 	function fillViewSelect(ctx, listing) {
 		const sel = ctx._configSelectEl;
 		if (!sel) return;
-		while (sel.firstChild) sel.removeChild(sel.firstChild);
+		while (sel.firstChild) sel.firstChild.remove();
 		const defOpt = document.createElement("option");
 		defOpt.value = "";
 		paintUserText(defOpt, DEFAULT_VIEW_LABEL);
 		sel.appendChild(defOpt);
-		const views = (listing && listing.views) ? listing.views : [];
+		const views = listing?.views ? listing.views : [];
 		views.forEach(function (v) {
-			const n = (v && v.name != null) ? String(v.name) : String(v);
+			const n = (v?.name != null) ? String(v.name) : String(v);
 			const opt = document.createElement("option");
 			opt.value = n;
 			paintUserText(opt, n);
@@ -1517,16 +1577,16 @@
 			schemaVersion: CURRENT_SCHEMA_VERSION,
 			visible: ctx._configDraft.visible.slice(),
 			order: ctx._configDraft.order.slice(),
-			labels: Object.assign({}, ctx._configDraft.labels),
-			formats: Object.assign({}, ctx._configDraft.formats)
+			labels: { ...ctx._configDraft.labels },
+			formats: { ...ctx._configDraft.formats }
 		};
 		const result = applyView(table, saved);
-		if (result && result.ok) {
+		if (result?.ok) {
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 			ctx._configDirty = false;
 			refreshChooserDirty(ctx);
 			showChooserStatus(ctx, "", false);
-		} else if (result && result.reason === "in-flight") {
+		} else if (result?.reason === "in-flight") {
 			showChooserStatus(ctx, "Finish the in-progress action first.", true);
 		} else if (result && !result.ok) {
 			showChooserStatus(ctx, result.message || "Could not apply view.", true);
@@ -1624,7 +1684,8 @@
 			}
 			const name = sel.value === "" ? null : sel.value;
 			loadNamedView(table, ctx, name).then(function () {
-				NS.persistence.setActive(table, name).catch(function () {});
+				NS.persistence.setActive(table, name).catch(function () { /* quota / private mode — the
+					chooser selection itself already applied; persisting it across reloads is best-effort */ });
 			});
 		});
 		toolbar.appendChild(sel);
@@ -1744,21 +1805,40 @@
 		});
 	}
 
+	/** Resolves the toolbar host the chooser button mounts into, or `null` when there is nowhere to mount it. */
+	function resolveChooserHost(table, toolbarRow) {
+		if (toolbarRow)
+			return toolbarRow.querySelector(".juneau-view-toolbar-right") || toolbarRow;
+		const wrapper = table?.parentNode;
+		if (!wrapper) return null;
+		return wrapper.querySelector(".juneau-view-toolbar-right") || wrapper;
+	}
+
+	/**
+	 * Replaces `btn`'s text content with the parsed `<svg>` markup, falling back to (leaving) the text label when
+	 * `markup` is absent/unparseable - mirrors the "unregistered icon -> render title as text" convention.
+	 */
+	function paintChooserIcon(btn, markup) {
+		if (markup == null || typeof DOMParser !== "function") return;
+		try {
+			const doc = new DOMParser().parseFromString(markup, "image/svg+xml");
+			const svg = doc.documentElement;
+			if (svg?.tagName?.toLowerCase() === "svg") {
+				btn.textContent = "";
+				btn.appendChild(document.importNode ? document.importNode(svg, true) : svg);
+			}
+		} catch (e) { /* text fallback already applied */ }
+	}
+
 	/**
 	 * Wires the Columns affordance onto the table toolbar when {@code columnConfig} is present.  Called from
 	 * {@code constructTable} on first init AND every Apply rebuild.
 	 */
 	function mountChooser(table, ctx, toolbarRow) {
 		if (!ctx || !ctx.viewDef || !ctx.viewDef.columnConfig) return;
-		let host = null;
-		if (toolbarRow)
-			host = toolbarRow.querySelector(".juneau-view-toolbar-right") || toolbarRow;
-		if (!host) {
-			const wrapper = table && table.parentNode;
-			if (!wrapper) return;
-			host = wrapper.querySelector(".juneau-view-toolbar-right") || wrapper;
-		}
-		if (host.querySelector && host.querySelector(".juneau-config-chooser-btn")) return;
+		const host = resolveChooserHost(table, toolbarRow);
+		if (!host) return;
+		if (host.querySelector?.(".juneau-config-chooser-btn")) return;
 
 		const btn = document.createElement("button");
 		btn.type = "button";
@@ -1766,17 +1846,8 @@
 		btn.title = "Columns";
 		btn.setAttribute("aria-label", "Columns");
 		paintUserText(btn, "Columns");
-		const markup = NS.icons && typeof NS.icons.resolveIcon === "function" ? NS.icons.resolveIcon("tune") : null;
-		if (markup != null && typeof DOMParser === "function") {
-			try {
-				const doc = new DOMParser().parseFromString(markup, "image/svg+xml");
-				const svg = doc.documentElement;
-				if (svg && svg.tagName && svg.tagName.toLowerCase() === "svg") {
-					btn.textContent = "";
-					btn.appendChild(document.importNode ? document.importNode(svg, true) : svg);
-				}
-			} catch (e) { /* text fallback already applied */ }
-		}
+		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon("tune") : null;
+		paintChooserIcon(btn, markup);
 		btn.addEventListener("click", function () { openChooser(table, ctx); });
 		host.appendChild(btn);
 

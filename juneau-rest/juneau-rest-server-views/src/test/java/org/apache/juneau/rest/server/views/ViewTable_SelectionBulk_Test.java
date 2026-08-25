@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
- * {@code TODO-428}: {@link ViewTable}'s row-selection and bulk-mutation rendering &mdash; the DOM-shape half of the
+ * The row-selection contract: {@link ViewTable}'s row-selection and bulk-mutation rendering &mdash; the DOM-shape half of the
  * separability guarantee (design-doc HIGH-5) and the R2 client-only/non-wire guard.
  */
 class ViewTable_SelectionBulk_Test extends TestBase {
@@ -100,7 +100,9 @@ class ViewTable_SelectionBulk_Test extends TestBase {
 	}
 
 	@Test void b03_nullSelection_throws() {
-		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(view(), List.of(), (SelectionDef) null));
+		var v = view();
+		var rows = List.of();
+		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v, rows, (SelectionDef) null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -129,7 +131,9 @@ class ViewTable_SelectionBulk_Test extends TestBase {
 	}
 
 	@Test void c02_nullBulkMutate_throws() {
-		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(view(), List.of(), (BulkMutateDef) null));
+		var v = view();
+		var rows = List.of();
+		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v, rows, (BulkMutateDef) null));
 	}
 
 	/**
@@ -142,8 +146,10 @@ class ViewTable_SelectionBulk_Test extends TestBase {
 		var selectionA = SelectionDef.create("incidentId");
 		var selectionB = SelectionDef.create("incidentId");   // a different instance, same field name
 		var bulk = bulkDef(selectionA);
+		var v = view();
+		var rows = List.of();
 		assertThrows(IllegalArgumentException.class,
-			() -> ViewTable.of(MarshallingContext.DEFAULT, view(), List.of(), null, selectionB, bulk));
+			() -> ViewTable.of(MarshallingContext.DEFAULT, v, rows, null, selectionB, bulk));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -60,13 +60,15 @@ class QuickStats_Test extends TestBase {
 	}
 
 	@Test void a05_emptyItemList_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> QuickStats.create("q").validate());
-		assertThrows(IllegalArgumentException.class, () -> QuickStats.create("q").items().validate());
+		var q1 = QuickStats.create("q");
+		assertThrows(IllegalArgumentException.class, () -> q1.validate());
+		var q2 = QuickStats.create("q").items();
+		assertThrows(IllegalArgumentException.class, () -> q2.validate());
 	}
 
 	@Test void a06_blankId_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> QuickStats.create("  ").items(StatTile.of("t", "T", "1")).validate());
+		var q = QuickStats.create("  ").items(StatTile.of("t", "T", "1"));
+		assertThrows(IllegalArgumentException.class, () -> q.validate());
 	}
 
 	@Test void a07_duplicateItemId_rejected() {
@@ -114,14 +116,19 @@ class QuickStats_Test extends TestBase {
 	}
 
 	@Test void c01_statTile_requiresLabelAndValue() {
-		assertThrows(IllegalArgumentException.class, () -> strip(StatTile.of("t", "  ", "1")).validate());
-		assertThrows(IllegalArgumentException.class, () -> strip(StatTile.of("t", "T", null)).validate());
-		assertThrows(IllegalArgumentException.class, () -> strip(StatTile.of("  ", "T", "1")).validate());
+		var q1 = strip(StatTile.of("t", "  ", "1"));
+		assertThrows(IllegalArgumentException.class, () -> q1.validate());
+		var q2 = strip(StatTile.of("t", "T", null));
+		assertThrows(IllegalArgumentException.class, () -> q2.validate());
+		var q3 = strip(StatTile.of("  ", "T", "1"));
+		assertThrows(IllegalArgumentException.class, () -> q3.validate());
 	}
 
 	@Test void c02_statBar_requiresNonNegativeValueAndPositiveMax() {
-		assertThrows(IllegalArgumentException.class, () -> strip(StatBar.of("b", "B", -1, 10)).validate());
-		assertThrows(IllegalArgumentException.class, () -> strip(StatBar.of("b", "B", 1, 0)).validate());
+		var q1 = strip(StatBar.of("b", "B", -1, 10));
+		assertThrows(IllegalArgumentException.class, () -> q1.validate());
+		var q2 = strip(StatBar.of("b", "B", 1, 0));
+		assertThrows(IllegalArgumentException.class, () -> q2.validate());
 	}
 
 	@Test void c03_statBar_percentIsServerComputedAndClamped() {
@@ -131,11 +138,12 @@ class QuickStats_Test extends TestBase {
 	}
 
 	@Test void c04_segmentedBadge_requiresAtLeastOneWellFormedSegment() {
-		assertThrows(IllegalArgumentException.class, () -> strip(SegmentedBadge.of("s", "S")).validate());
-		assertThrows(IllegalArgumentException.class,
-			() -> strip(SegmentedBadge.of("s", "S").segments(SegmentedBadge.Segment.of("  ", 1))).validate());
-		assertThrows(IllegalArgumentException.class,
-			() -> strip(SegmentedBadge.of("s", "S").segments(SegmentedBadge.Segment.of("x", -1))).validate());
+		var q1 = strip(SegmentedBadge.of("s", "S"));
+		assertThrows(IllegalArgumentException.class, () -> q1.validate());
+		var q2 = strip(SegmentedBadge.of("s", "S").segments(SegmentedBadge.Segment.of("  ", 1)));
+		assertThrows(IllegalArgumentException.class, () -> q2.validate());
+		var q3 = strip(SegmentedBadge.of("s", "S").segments(SegmentedBadge.Segment.of("x", -1)));
+		assertThrows(IllegalArgumentException.class, () -> q3.validate());
 	}
 
 	@Test void d01_displayOnly_noActionEndpointOrRefreshSurfaceExists() {

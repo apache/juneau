@@ -91,7 +91,8 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var xml = signedResponseWithRecipient(cred, "https://other-sp.example.com/saml/acs");
 		var validator = base(cred).build();
 		var f = SamlAuthFilter.create().validator(validator).build();
-		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req(ACS, xml)));
+		var request = req(ACS, xml);
+		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
 		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
 	}
 
@@ -106,7 +107,8 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 			.clock(CLOCK)
 			.build();
 		var f = SamlAuthFilter.create().validator(validator).build();
-		assertThrows(AuthenticationException.class, () -> f.authenticate(req(ACS, xml)));
+		var request = req(ACS, xml);
+		assertThrows(AuthenticationException.class, () -> f.authenticate(request));
 	}
 
 	@Test void a04_standaloneValidator_recipientOptedInDirectly_unaffectedByFilterOverride() throws Exception {
@@ -163,8 +165,8 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var xml = signedResponseWithRecipient(cred, "https://other-sp.example.com/saml/acs");
 		var validator = base(cred).build();
 		var f = SamlAuthFilter.create().validator(validator).build();
-		var ex = assertThrows(AuthenticationException.class,
-			() -> f.authenticate(reqNullRequestUrl("https", "sp.example.com", 443, "/saml/acs", xml)));
+		var request = reqNullRequestUrl("https", "sp.example.com", 443, "/saml/acs", xml);
+		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
 		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
 	}
 
@@ -175,8 +177,8 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var xml = signedResponseWithRecipient(cred, ACS);
 		var validator = base(cred).build();
 		var f = SamlAuthFilter.create().validator(validator).build();
-		var ex = assertThrows(AuthenticationException.class,
-			() -> f.authenticate(reqNullRequestUrl(null, null, 0, null, xml)));
+		var request = reqNullRequestUrl(null, null, 0, null, xml);
+		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
 		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
 	}
 }

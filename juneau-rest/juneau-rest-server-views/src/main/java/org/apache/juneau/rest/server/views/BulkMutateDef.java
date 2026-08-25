@@ -23,8 +23,8 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * The bulk-mutate opt-in for a {@link ViewTable} &mdash; the second, INDEPENDENT half of {@code TODO-428}'s
- * separability guarantee (design doc §9.3/§6.2; HIGH-5).
+ * The bulk-mutate opt-in for a {@link ViewTable} &mdash; the second, INDEPENDENT half of the row-selection /
+ * bulk-mutate separability guarantee (design doc §9.3/§6.2; HIGH-5).
  *
  * <h5 class='section'>Two required parameters make it structurally, not conventionally, safe</h5>
  * <p>
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.bean.*;
  * untouched by this type); {@code juneau-views.js} executes a bulk action as N independent, per-row invocations
  * of the SAME single-action submit path ({@code submitRowAction}) it already uses for the per-row action menu
  * &mdash; one fail-closed CSRF POST per selected row, each with its OWN {@code data-juneau-inflight} marker (the
- * {@code TODO-417} per-row in-flight model, driven per target) and its OWN typed {@link ActionResult}, rendered
+ * per-row in-flight model, driven per target) and its OWN typed {@link ActionResult}, rendered
  * independently into that row's own outcome banner. There is deliberately <b>no</b> aggregate "bulk result": a
  * partial failure among N targets can never be hidden behind an aggregate success, and each target's
  * {@code data-juneau-inflight} marker clears on ITS OWN terminal outcome (success/failure/refusal/unknown) so a
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.bean.*;
  * one), with its own {@link #CONTRACT_VERSION}, exactly mirroring how {@link ActionResult} versions itself
  * independently of {@link ViewDef#CONTRACT_VERSION} rather than aliasing it. A version bump here can therefore
  * NEVER force a {@link ViewDef#CONTRACT_VERSION} bump (or vice versa): the two contracts are unrelated, so this
- * opt-in cannot back the framework into the very lockstep {@code TODO-428}'s R2 guard exists to avoid. The
+ * opt-in cannot back the framework into the very lockstep the opt-in separability guard exists to avoid. The
  * {@link WritePermit} carried by this builder is a server-side-only construction guard and is <b>never</b>
  * serialized &mdash; only {@link #contractVersion} and {@link #actions} reach the wire.
  *
@@ -142,6 +142,9 @@ public final class BulkMutateDef {
 	 * @return This object.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S1845" // Fluent-builder setter intentionally mirrors the wire field name (Juneau DSL convention); part of the public fluent API.
+	})
 	public BulkMutateDef actions(RowAction...value) {
 		if (value == null || value.length == 0)
 			throw iaex("BulkMutateDef requires at least one action.");

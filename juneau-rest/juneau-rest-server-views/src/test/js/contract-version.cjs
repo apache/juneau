@@ -16,7 +16,7 @@
  */
 
 /*
- * contract-version.cjs - always-on Node harness for the dialog-form contract-version handshake (TODO-445h, h5):
+ * contract-version.cjs - always-on Node harness for the dialog-form contract-version handshake (contract-version-445h, h5):
  * a form-bearing modal opens ONLY when BOTH the modal top-level and the nested form contractVersion equal the ONE
  * baked-in literal; a wrong or missing version on either is a visible refusal and the dialog does not open.  A
  * confirm-only envelope (no form) - whether fetched or a local blank-form-token prompt - stays UNVERSIONED and
@@ -46,9 +46,9 @@ if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); 
 
 const table = env.el('table');
 function drain() { while (I.topLayer()) I.popLayer(); }
-function flush() { return new Promise(function (r) { let n = 0; (function tick() { if (n++ >= 6) return r(); setTimeout(tick, 0); })(); }); }
+function flush() { return new Promise(function (r) { let n = 0; (function tick() { if (n++ >= 6) { return r(); } setTimeout(tick, 0); })(); }); }
 function serve(body, opts) { env.setFetch(function () { return Promise.resolve(jsonResponse(body, opts)); }); }
-function refusalState(tr) { const b = tr.querySelector('[data-testid="action-outcome"]'); return b ? b.getAttribute('data-state') : null; }
+function refusalState(tr) { return tr.querySelector('[data-testid="action-outcome"]')?.dataset.state ?? null; }
 function refusalText(tr) { const b = tr.querySelector('[data-testid="action-outcome"]'); return b ? String(b.textContent || '') : ''; }
 
 // The version the runtime under test bakes in, read back out of the bundle so this harness cannot drift from it.

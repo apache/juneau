@@ -16,7 +16,7 @@
  */
 
 /*
- * column-config.cjs - real-browser XSS canary for the View-tab chooser (TODO-444, slice 6).
+ * column-config.cjs - real-browser XSS canary for the View-tab chooser.
  *
  * Never runs in a default build.  Driven by ColumnConfig_BrowserTest under `mvn -Pjs-tests`.
  *
@@ -35,7 +35,7 @@ const PROBE = async function () {
 	const XSS_NAME = '<img src=x onerror="window.__juneauChooserXss=1">';
 	const XSS_LABEL = '<img src=x onerror="window.__juneauChooserLabelXss=1">';
 	const NS = window.JuneauViews;
-	const out = { hasConfig: !!(NS && NS.config) };
+	const out = { hasConfig: !!NS?.config };
 	if (!out.hasConfig) return out;
 
 	window.__juneauChooserXss = 0;
@@ -99,6 +99,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

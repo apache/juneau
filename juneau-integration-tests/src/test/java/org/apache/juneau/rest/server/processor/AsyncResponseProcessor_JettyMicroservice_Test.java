@@ -255,7 +255,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		/** Test-controlled gate future for the delayed endpoint; completed by the test to trigger completion-path emit. */
 		static volatile CompletableFuture<String> gate;
 
-		/** Test-controlled gate future for the ad-hoc-log endpoint (TODO-364 Phase 6 tripwire). */
+		/** Test-controlled gate future for the ad-hoc-log endpoint (async-carry Phase 6 tripwire). */
 		static volatile CompletableFuture<String> adhocGate;
 
 		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
@@ -263,7 +263,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 		/**
 		 * When non-<jk>null</jk>, the async handlers open a {@link LogContext} scope carrying {@code corrId=carryValue} on
-		 * the request thread. TODO-364 v1 leaves request-id/{@code LogContext}-scope ownership to {@code [TODO-402]}'s
+		 * the request thread. Async-carry v1 leaves request-id/{@code LogContext}-scope ownership to a future
 		 * {@code RequestIdFilter}, so these Phase-6 async-carry tests establish their own request-thread scope instead of
 		 * relying on any framework-opened scope. The scope stays open across the async hand-off (so
 		 * {@code RestDebugPipeline.captureAsyncSnapshot(...)} snapshots it) and is closed in {@link #endCall()} on the same
@@ -318,7 +318,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			var g = new CompletableFuture<String>();
 			adhocGate = g;
 			// The ad-hoc app log runs inside the completion callback (the COMPLETION thread), where the request-thread
-			// LogContext scope has already closed — TODO-364 Phase 6 documented v1 edge.
+			// LogContext scope has already closed — documented Phase 6 async-carry v1 edge.
 			return g.thenApply(body -> {
 				res.setContentType("text/plain");
 				req.fine("adhoc-completion-log");
@@ -356,13 +356,18 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 	private static final class CollectingHandler extends Handler {
 		private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
 
-		@Override public void publish(LogRecord record) {
-			if (isLoggable(record))
-				records.add(record);
+		@Override public void publish(LogRecord rec) {
+			// LogRecord's own "record" identifier is a restricted identifier since records were added; use "rec" instead.
+			if (isLoggable(rec))
+				records.add(rec);
 		}
 
-		@Override public void flush() {}
-		@Override public void close() {}
+		@Override public void flush() {
+			// No buffering to flush — records are added directly to the in-memory list.
+		}
+		@Override public void close() {
+			// Nothing to release — no external resources are held by this in-memory handler.
+		}
 
 		List<LogRecord> forLogger(String name) {
 			synchronized (records) {
@@ -532,14 +537,14 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// H05/H06 (TODO-364 Phase 6): the async-completion debug record carries the request-thread's LogContext across the
+	// H05/H06 (async-carry Phase 6): the async-completion debug record carries the request-thread's LogContext across the
 	// async hop (RestDebugSnapshot carry + emit pre-seed), while ad-hoc app logging on the completion thread does NOT
 	// (the documented v1 thread-confined boundary).
 	//
-	// TODO-364 v1 does NOT open any framework LogContext scope itself (request-id / scope ownership is [TODO-402]'s
-	// RequestIdFilter, opened after @RestStartCall). These tests therefore establish their own request-thread scope in
-	// the handler (carrying a generic "corrId"), left open across the async hand-off and closed in @RestEndCall — which
-	// is exactly the shape [TODO-402] will produce — to exercise the 364-owned carry mechanism in isolation.
+	// Async-carry v1 does NOT open any framework LogContext scope itself (request-id / scope ownership is deferred to a
+	// future RequestIdFilter, opened after @RestStartCall). These tests therefore establish their own request-thread scope
+	// in the handler (carrying a generic "corrId"), left open across the async hand-off and closed in @RestEndCall — which
+	// is exactly the shape that future filter will produce — to exercise the async-carry mechanism in isolation.
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void h05_asyncCompletionRecord_carriesRequestThreadContextField() throws Exception {
@@ -575,7 +580,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals("async-corr-1", LogRecordContext.of(rec).get("corrId"),
 				"the async completion record must carry the LogContext captured on the request thread (design §8.2 carry)");
 
-			// TODO-402 Phase 10 async gate: the always-on requestId scope (opened in RestSession's constructor) is
+			// Deferred (Phase 10) async gate: the always-on requestId scope (opened in RestSession's constructor) is
 			// carried across the async hop via the same 364 snapshot, AND the completion-thread rendered message
 			// carries the [requestId=<id>] prefix (statusLine reading session.getRequestId()) — proving 364's carry
 			// and 402's statusLine read compose on the completion thread, where the live LogContext is empty.

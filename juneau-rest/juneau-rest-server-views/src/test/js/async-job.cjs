@@ -16,7 +16,7 @@
  */
 
 /*
- * async-job.cjs - real-browser prober for the juneau-views.js async-job + SSE-streaming contract (TODO-425).
+ * async-job.cjs - real-browser prober for the juneau-views.js async-job + SSE-streaming contract (async-job-425).
  *
  * Never runs in a default build.  It is driven by AsyncJob_BrowserTest, which itself only runs under
  * `mvn -Pjs-tests`; see that class's javadoc and the profile comment in this module's pom.xml.
@@ -44,7 +44,7 @@ const { chromium } = require('playwright');
 /* Runs inside the page.  Async: the settle path reads the response body via a promise. */
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
@@ -52,6 +52,8 @@ const PROBE = async function () {
 	const V = init.ACTION_RESULT_CONTRACT_VERSION;
 	const tick = () => new Promise(r => setTimeout(r, 0));
 
+	// NOSONAR javascript:S7721 -- must stay nested inside PROBE: page.evaluate(PROBE) serializes only this
+	// function's own source, so a helper moved to module scope would not exist in the browser page it runs in.
 	function rendered(el) {
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
@@ -59,13 +61,14 @@ const PROBE = async function () {
 	}
 
 	// A minimal row with an actions cell and a trigger button (setRowJobRunning disables the trigger).
+	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
 	function makeRow(rowId) {
 		const table = document.createElement('table');
-		table.setAttribute('data-juneau-view', 'v');
-		table.setAttribute('data-juneau-csrf', 'tok-xyz');   // so the fail-closed cancel POST is armed
+		table.dataset.juneauView = 'v';
+		table.dataset.juneauCsrf = 'tok-xyz';   // so the fail-closed cancel POST is armed
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		if (rowId != null) tr.setAttribute('data-juneau-row-id', rowId);
+		if (rowId != null) tr.dataset.juneauRowId = rowId;
 		const td = document.createElement('td');
 		td.className = 'juneau-view-actions-cell';
 		const trigger = document.createElement('button');
@@ -79,6 +82,7 @@ const PROBE = async function () {
 	}
 
 	// A fake fetch Response with a synchronous headers.get and an async text().
+	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
 	function resp(o) {
 		return {
 			ok: o.ok,
@@ -98,7 +102,9 @@ const PROBE = async function () {
 		esInstances.push(this);
 	}
 	FakeEventSource.prototype.addEventListener = function (type, fn) {
-		(this._listeners[type] = this._listeners[type] || []).push(fn);
+		const list = this._listeners[type] || [];
+		this._listeners[type] = list;
+		list.push(fn);
 	};
 	FakeEventSource.prototype.close = function () { this.closed = true; };
 	FakeEventSource.prototype.emit = function (type, data) {
@@ -106,7 +112,8 @@ const PROBE = async function () {
 	};
 	window.EventSource = FakeEventSource;
 
-	function lastEs() { return esInstances[esInstances.length - 1]; }
+	function lastEs() { return esInstances.at(-1); }
+	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
 	function jobBanner(dom) { return dom.td.querySelector('.juneau-view-job-progress'); }
 	function jobMsg(dom) {
 		const b = jobBanner(dom);
@@ -117,7 +124,7 @@ const PROBE = async function () {
 		const b = dom.td.querySelector('.juneau-view-action-outcome');
 		return {
 			visible: rendered(b),
-			state: b ? b.getAttribute('data-state') : null,
+			state: b ? b.dataset.state : null,
 			role: b ? b.getAttribute('role') : null,
 			text: b ? b.textContent : null
 		};
@@ -139,8 +146,8 @@ const PROBE = async function () {
 	{
 		const dom = await startJob('INC-1');
 		out.running = {
-			hasJobMarker: dom.tr.hasAttribute('data-juneau-job'),
-			hasInflightMarker: dom.tr.hasAttribute('data-juneau-inflight'),
+			hasJobMarker: 'juneauJob' in dom.tr.dataset,
+			hasInflightMarker: 'juneauInflight' in dom.tr.dataset,
 			// The load-bearing HIGH-9 fact: polling is NOT frozen while the job runs.
 			pollingFrozen: init.hasInFlightRow(dom.table),
 			progressVisible: rendered(jobBanner(dom)),
@@ -162,7 +169,7 @@ const PROBE = async function () {
 		await tick(); await tick();
 		out.settledSuccess = {
 			esClosed: lastEs().closed,
-			jobMarkerCleared: !dom.tr.hasAttribute('data-juneau-job'),
+			jobMarkerCleared: !('juneauJob' in dom.tr.dataset),
 			progressCleared: !jobBanner(dom),
 			triggerReEnabled: !dom.trigger.disabled,
 			pollingFrozen: init.hasInFlightRow(dom.table),
@@ -192,7 +199,7 @@ const PROBE = async function () {
 		lastEs().emit('result', JSON.stringify({ contractVersion: V, outcome: 'cancelled' }));
 		await tick(); await tick();
 		out.cancel.outcome = outcomeOf(dom);
-		out.cancel.jobMarkerCleared = !dom.tr.hasAttribute('data-juneau-job');
+		out.cancel.jobMarkerCleared = !('juneauJob' in dom.tr.dataset);
 	}
 
 	// ---- Scenario 3: cancelled-after-effect is a DISTINCT terminal outcome (Q4), rendered on its own ----
@@ -210,7 +217,7 @@ const PROBE = async function () {
 		await tick(); await tick();
 		out.streamError = {
 			outcome: outcomeOf(dom),
-			jobMarkerCleared: !dom.tr.hasAttribute('data-juneau-job'),
+			jobMarkerCleared: !('juneauJob' in dom.tr.dataset),
 			pollingFrozen: init.hasInFlightRow(dom.table)
 		};
 	}
@@ -243,6 +250,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

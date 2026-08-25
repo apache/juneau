@@ -78,8 +78,9 @@ class McpPromptHandler_Test {
 
 	@Test void c03_ofRejectsBlankName() {
 		BiFunction<Map<String,Object>,BeanStore,McpPromptOutcome> get = (arguments, ctx) -> new McpPromptOutcome();
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec(), get));
-		var spec = new McpPromptSpec().setName(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec, get));
+		var spec1 = new McpPromptSpec();
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec1, get));
+		var spec2 = new McpPromptSpec().setName(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec2, get));
 	}
 }

@@ -182,7 +182,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertTrue(hostileUrl.startsWith("/data/alerts/"), hostileUrl);
 	}
 
-	@Test void b03_scalarAndXssFill_usesTextContent() {
+	@Test void b03_scalarAndBasicFill_usesTextContent() {
 		var r = report();
 		assertEquals("hi", r.get("scalar_str"));
 		assertEquals("7", r.get("scalar_num"));
@@ -194,6 +194,10 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertTrue(String.valueOf(r.get("fill_xss")).contains("<img"));
 		assertEquals("42", r.get("fill_num"));
 		assertEquals("", r.get("fill_missing"));
+	}
+
+	@Test void b17_markdownSlotFill_xssSafety() {
+		var r = report();
 		assertEquals(true, r.get("hasFillMarkdown"));
 		assertEquals(false, r.get("md_hasScript"));
 		assertEquals(false, r.get("md_hasImg"));
@@ -203,12 +207,20 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("md_textHasX"));
 		assertEquals(true, r.get("md_textHasY"));
 		assertEquals(false, r.get("md_textHasAlert"));
+	}
+
+	@Test void b18_hrefAndTitleFill_xssSafety() {
+		var r = report();
 		assertEquals(false, r.get("href_js"));
 		assertEquals(true, r.get("href_https"));
 		assertEquals(false, r.get("href_data"));
 		assertEquals("Incident #42", r.get("title_filled"));
 		assertEquals(true, r.get("title_xssNotInterpreted"));
 		assertTrue(String.valueOf(r.get("title_xss")).contains("<img"));
+	}
+
+	@Test void b19_paintActionMessageAndHeaderIcon() {
+		var r = report();
 		assertEquals(true, r.get("hasPaintActionMessageIntoDetail"));
 		assertEquals("<b>disk full</b>", r.get("paint_text"));
 		assertEquals(true, r.get("paint_xssNotInterpreted"));
@@ -230,6 +242,21 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("rr_malformedMetaOk"));
 		assertEquals("", r.get("rr_missing"));
 		assertEquals(true, r.get("rr_dispatchRenderFirst"));
+	}
+
+	/**
+	 * Pins the fix for {@code javascript:S5852} in {@code copyRenderStyle}.  Its width pattern ended in three
+	 * independent {@code \s*} runs separated by optional {@code %} and {@code ;}, so a single whitespace tail
+	 * could be split among them in cubically many ways; a style attribute of {@code width:1} + 4,000 spaces +
+	 * a non-terminator backtracked for ~10.7s before the fix and ~0ms after.  The attribute must still be
+	 * rejected - it is not a bare width declaration - so this pins throughput, not a change in what is allowed.
+	 */
+	@Test void b08_fillRenderSlot_widthStylePatternIsLinearOnAWhitespaceTail() {
+		var r = report();
+		assertEquals(true, r.get("rr_slowStyleSawSpan"));    // the span survived parsing; the guard really ran
+		assertEquals(true, r.get("rr_slowStyleRejected"));   // still not copied through as a style attribute
+		var ms = ((Number) r.get("rr_slowStyleMs")).longValue();
+		assertTrue(ms < 2000, () -> "copyRenderStyle took " + ms + "ms on a 4,000-space tail; expected linear");
 	}
 
 	@Test void b04_404500_actionRefButtonless_collapseRemains() {

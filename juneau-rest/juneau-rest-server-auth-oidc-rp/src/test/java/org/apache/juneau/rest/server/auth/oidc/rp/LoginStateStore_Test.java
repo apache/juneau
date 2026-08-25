@@ -40,7 +40,7 @@ import com.nimbusds.jose.jwk.*;
  * exchange), {@link PendingLogin} redaction, and the default impl's concurrent single-use race.
  *
  * <p>
- * These are the substance ("red-on-broken") gates for TODO-397: each is constructed so a no-op setter,
+ * These are the substance ("red-on-broken") gates for the login-state-store security hardening: each is constructed so a no-op setter,
  * a mis-ordered check, or a class-only assertion would fail it.  The recording fake plus distinctive
  * hardcoded values ensure the injected instance (not the hidden default store) is actually exercised.
  *

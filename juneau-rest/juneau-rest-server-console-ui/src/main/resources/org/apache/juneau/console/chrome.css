@@ -364,6 +364,7 @@ a:hover { text-decoration: underline; }
 .jc-main {
   flex: 1 1 auto;
   padding: 20px 24px 40px;
+  min-width: 0;
 }
 
 .jc-page-header {
@@ -442,11 +443,9 @@ a:hover { text-decoration: underline; }
                                        .rm-table-scroll unwrap)
      - .jc-main                     -> widened when ANY descendant wrapper is wide
    `.jc-main` keeps its padding; `max-width:none` means edge-of-content-area, not edge-of-viewport.
-   `min-width:0` lets the main region shrink below the table's intrinsic width so the table-region scroll box
-   (juneau-views.css), not the page, absorbs overflow (INV-3). */
-.jc-main {
-  min-width: 0;
-}
+   `min-width:0` (declared on .jc-main's single rule up in "Page scaffolding") lets the main region shrink below
+   the table's intrinsic width so the table-region scroll box (juneau-views.css), not the page, absorbs overflow
+   (INV-3). */
 
 [data-juneau-layout="wide"] {
   max-width: none;

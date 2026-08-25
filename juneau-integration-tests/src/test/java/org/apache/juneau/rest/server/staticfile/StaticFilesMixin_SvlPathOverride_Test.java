@@ -55,9 +55,9 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		try {
 			var c = MockRestClient.buildLax(A01_OverridePath.class);
 
-			c.get("/static/javadoc.css").run().assertStatus(404);
+			c.get("/static/themes/devops.css").run().assertStatus(404);
 
-			c.get("/assets/javadoc.css")
+			c.get("/assets/themes/devops.css")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -82,9 +82,9 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		try {
 			var c = MockRestClient.buildLax(A02_HtdocsAliasMigration.class);
 
-			c.get("/static/javadoc.css").run().assertStatus(404);
+			c.get("/static/themes/devops.css").run().assertStatus(404);
 
-			c.get("/htdocs/javadoc.css")
+			c.get("/htdocs/themes/devops.css")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -105,7 +105,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "xxx");
 		try {
 			var c = MockRestClient.buildLax(A03_BareToken.class);
-			c.get("/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -123,7 +123,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/xxx");
 		try {
 			var c = MockRestClient.buildLax(A04_LeadingSlash.class);
-			c.get("/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -141,7 +141,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "xxx/");
 		try {
 			var c = MockRestClient.buildLax(A05_TrailingSlash.class);
-			c.get("/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -159,7 +159,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/xxx/");
 		try {
 			var c = MockRestClient.buildLax(A06_BothSlashes.class);
-			c.get("/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -177,7 +177,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/xxx/*");
 		try {
 			var c = MockRestClient.buildLax(A07_WildcardSuffix.class);
-			c.get("/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -195,7 +195,7 @@ class StaticFilesMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/api/v1/xxx/*");
 		try {
 			var c = MockRestClient.buildLax(A08_MultiSegment.class);
-			c.get("/api/v1/xxx/javadoc.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			c.get("/api/v1/xxx/themes/devops.css").run().assertStatus(200).assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);

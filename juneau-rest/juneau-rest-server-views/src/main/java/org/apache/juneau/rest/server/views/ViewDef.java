@@ -269,6 +269,14 @@ public class ViewDef {
 	private Class<?> rowTypeClass;
 
 	/**
+	 * Private lock object guarding the {@code $FV} chrome-resolution / {@code rowActions}-withhold windows this
+	 * instance may be mutated under (see {@link ViewTable}).  Synchronizing on this dedicated object rather than
+	 * on {@code this} keeps the monitor private to the toolkit even though callers hold a reference to the bean
+	 * itself.  Not a wire field.
+	 */
+	final Object lock = new Object();
+
+	/**
 	 * Starts a new {@link ViewDef} builder with the specified stable view id.
 	 *
 	 * @param id The stable view id.  Must not be <jk>null</jk> or blank.
@@ -462,21 +470,35 @@ public class ViewDef {
 			serverValues.validate();
 		if (quickStats != null)
 			quickStats.validate();
-		if (columns != null) {
-			var actionIds = new HashSet<String>();
-			if (rowActions != null)
-				for (var a : rowActions)
-					if (a != null && a.id != null)
-						actionIds.add(a.id);
-			for (var c : columns) {
-				if (c != null && c.render != null) {
-					if (c.render.popover != null)
-						c.render.popover.validate();
-					if ("pill".equals(c.render.id))
-						validatePill(c.render, actionIds);
-				}
-			}
-		}
+		if (columns != null)
+			validateColumns();
+	}
+
+	/** Validates every declared column's {@code render} spec, once {@link #columns} is known non-<jk>null</jk>. */
+	private void validateColumns() {
+		var actionIds = declaredRowActionIds();
+		for (var c : columns)
+			validateColumn(c, actionIds);
+	}
+
+	/** Collects the ids of every declared, non-<jk>null</jk> {@link #rowActions} entry. */
+	private Set<String> declaredRowActionIds() {
+		var actionIds = new HashSet<String>();
+		if (rowActions != null)
+			for (var a : rowActions)
+				if (a != null && a.id != null)
+					actionIds.add(a.id);
+		return actionIds;
+	}
+
+	/** Validates one column's {@code render} spec (a no-op when the column or its render is absent). */
+	private static void validateColumn(Column c, Set<String> actionIds) {
+		if (c == null || c.render == null)
+			return;
+		if (c.render.popover != null)
+			c.render.popover.validate();
+		if ("pill".equals(c.render.id))
+			validatePill(c.render, actionIds);
 	}
 
 	/**

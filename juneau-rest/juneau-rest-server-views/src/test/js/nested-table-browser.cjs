@@ -39,7 +39,7 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
@@ -51,19 +51,19 @@ const PROBE = async function () {
 	if (!parentTable) return out;
 
 	// ---- Block A: the served shell - a nested wrapper with a token, selection, and NO parent-only chrome ----
-	{
+	function runServedBlock() {
 		const tpl = init.findRowDetailTemplate(parentTable);
-		const wrap = tpl && tpl.content.querySelector('[data-juneau-nested]');
-		const nested = wrap && wrap.querySelector('table[data-juneau-view]');
+		const wrap = tpl?.content.querySelector('[data-juneau-nested]');
+		const nested = wrap?.querySelector('table[data-juneau-view]');
 		out.served = {
 			templateFound: !!tpl,
 			wrapFound: !!wrap,
-			nestedContract: wrap ? wrap.getAttribute('data-juneau-nested-contract') : null,
-			nestedViewId: nested ? nested.getAttribute('data-juneau-view') : null,
+			nestedContract: wrap ? wrap.dataset.juneauNestedContract : null,
+			nestedViewId: nested ? nested.dataset.juneauView : null,
 			// The enclosing response's token, painted onto the nested table by the request-aware emit.
-			token: nested ? nested.getAttribute('data-juneau-csrf') : null,
-			selectStamped: nested ? nested.getAttribute('data-juneau-select') === '1' : false,
-			rowIdField: nested ? nested.getAttribute('data-juneau-row-id-field') : null,
+			token: nested ? nested.dataset.juneauCsrf : null,
+			selectStamped: nested ? nested.dataset.juneauSelect === '1' : false,
+			rowIdField: nested ? nested.dataset.juneauRowIdField : null,
 			// Parent-only affordances: the nested shell carries neither a chooser host nor a bulk sidecar.
 			nestedChooserHosts: wrap ? wrap.querySelectorAll('.juneau-view-nested-config').length : -1,
 			nestedBulkSidecar: !!document.getElementById('juneau-view-bulk:events'),
@@ -89,7 +89,7 @@ const PROBE = async function () {
 	function openPanel(parentRowId) {
 		const tbody = parentBody();
 		const dataRow = document.createElement('tr');
-		dataRow.setAttribute('data-juneau-row-id', parentRowId);
+		dataRow.dataset.juneauRowId = parentRowId;
 		const dataCell = document.createElement('td');
 		dataCell.textContent = parentRowId;
 		dataRow.appendChild(dataCell);
@@ -118,7 +118,7 @@ const PROBE = async function () {
 		const nestedBody = document.createElement('tbody');
 		['E-1', 'E-2'].forEach(function (id) {
 			const tr = document.createElement('tr');
-			tr.setAttribute('data-juneau-row-id', id);
+			tr.dataset.juneauRowId = id;
 			const sel = document.createElement('td');
 			const cb = document.createElement('input');
 			cb.type = 'checkbox';
@@ -147,11 +147,11 @@ const PROBE = async function () {
 	// The nested view definition the page shipped in its own id-less sidecar.
 	function nestedDef(wrap) {
 		return JSON.parse(init.findNestedSidecar(wrap, wrap.querySelector('table[data-juneau-view]')
-			.getAttribute('data-juneau-view')).textContent);
+			.dataset.juneauView).textContent);
 	}
 
 	// ---- Block B: a nested row-action menu opens through the shared layer stack, unclipped by the scrolled panel ----
-	{
+	async function runMenuBlock() {
 		const dom = openPanel('A-1');
 		const def = nestedDef(dom.wrap);
 		const ctx = { table: dom.table, viewDef: def, selectionState: null };
@@ -179,13 +179,13 @@ const PROBE = async function () {
 	}
 
 	// ---- Block C: a nested selection round-trip that never reaches the enclosing table's selection ----
-	{
+	function runSelectionBlock() {
 		const dom = openPanel('A-2');
 		const def = nestedDef(dom.wrap);
 		const nestedCtx = {
 			table: dom.table,
 			viewDef: def,
-			selectionState: { selected: new Set(), rowIdField: dom.table.getAttribute('data-juneau-row-id-field') }
+			selectionState: { selected: new Set(), rowIdField: dom.table.dataset.juneauRowIdField }
 		};
 		init.initSelection(dom.table, nestedCtx);
 		// The enclosing table's own selection, bound the same way - it must stay empty throughout.
@@ -233,7 +233,7 @@ const PROBE = async function () {
 	}
 
 	// ---- Block D: two rows open at once carry distinct minted DOM identity (a bare id lookup cannot cross-wire) ----
-	{
+	function runIdentityBlock() {
 		const a = openPanel('A-3');
 		const b = openPanel('A-4');
 		out.identity = {
@@ -243,20 +243,20 @@ const PROBE = async function () {
 			// Neither clone answers a page-level lookup: the id that resolves belongs to a root table, not a clone.
 			barePageSidecarIsAClone: !!document.getElementById('juneau-view:events')
 				&& !!document.getElementById('juneau-view:events').closest('[data-juneau-nested]'),
-			authorIdKept: a.table.getAttribute('data-juneau-view') === b.table.getAttribute('data-juneau-view')
+			authorIdKept: a.table.dataset.juneauView === b.table.dataset.juneauView
 		};
 		a.remove();
 		b.remove();
 	}
 
 	// ---- Block E: a ROOT table sharing the nested view's author id does not cross-wire with the nested clone ----
-	{
+	function runPageSiblingBlock() {
 		const pageSibling = Array.prototype.filter.call(
 			document.querySelectorAll('table[data-juneau-view="events"]'),
 			function (t) { return !t.closest('[data-juneau-nested]'); })[0];
 		const dom = openPanel('A-5');
 		const pageRow = document.createElement('tr');
-		pageRow.setAttribute('data-juneau-row-id', 'E-1');   // the SAME row id the nested table uses
+		pageRow.dataset.juneauRowId = 'E-1';   // the SAME row id the nested table uses
 		pageRow.appendChild(document.createElement('td'));
 		const pageBody = document.createElement('tbody');
 		pageBody.appendChild(pageRow);
@@ -281,6 +281,12 @@ const PROBE = async function () {
 		dom.remove();
 	}
 
+	runServedBlock();
+	await runMenuBlock();
+	runSelectionBlock();
+	runIdentityBlock();
+	runPageSiblingBlock();
+
 	return out;
 };
 
@@ -303,4 +309,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

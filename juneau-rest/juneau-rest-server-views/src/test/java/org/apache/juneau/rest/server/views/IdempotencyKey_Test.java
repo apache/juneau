@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Test for the server-minted, {@code (action, targetId)}-bound {@link IdempotencyKey} (design doc §6.2; the
- * idempotency half of {@code TODO-416}, HIGH-8).
+ * idempotency half of the row-action contract, HIGH-8).
  *
  * <p>
  * The security property is the <b>binding</b>, not the width: a key submitted against a different action or target

@@ -48,7 +48,8 @@
 	const JUNEAU_ACTION_RESULT_CONTRACT_VERSION = "1";
 
 	/**
-	 * The bulk-mutate-actions contract version (BulkMutateDef.CONTRACT_VERSION on the server; {@code TODO-428}).
+	 * The bulk-mutate-actions contract version (BulkMutateDef.CONTRACT_VERSION on the server; part of the
+	 * row-selection/bulk-mutation feature's wire contract).
 	 * A THIRD, independently-versioned wire contract - deliberately not aliased to either
 	 * JUNEAU_VIEW_CONTRACT_VERSION or JUNEAU_ACTION_RESULT_CONTRACT_VERSION, so a bulk-actions-list revision can
 	 * never force a VIEW_META (ViewDef) contract bump (R2/design-doc guard). A sidecar whose contractVersion
@@ -92,7 +93,7 @@
 	const NESTED_INIT_ATTR = "data-juneau-nested-init";
 
 	/**
-	 * The declarative dialog-form contract version (TODO-445h): ModalDef.CONTRACT_VERSION / FormDef.CONTRACT_VERSION on
+	 * The declarative dialog-form contract version (shared-layer-stack feature): ModalDef.CONTRACT_VERSION / FormDef.CONTRACT_VERSION on
 	 * the server, both the SAME value as this one.  Fail-loud ONLY when a form is present: a form-bearing modal-open
 	 * envelope whose top-level contractVersion or nested form.contractVersion is missing or does not equal this
 	 * baked-in value is a visible refusal and the dialog does NOT open.  A confirm-only modal (no form) is unversioned
@@ -104,7 +105,7 @@
 	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "2";
 
 	/**
-	 * TODO-428 selection/bulk DOM attribute names - MUST equal ViewTable's constants of the same names
+	 * Row-selection/bulk-mutation feature's DOM attribute names - MUST equal ViewTable's constants of the same names
 	 * (SELECT_ATTR, ROW_ID_FIELD_ATTR, SELECT_ALL_ATTR, BULK_ATTR, BULK_SIDECAR_ID_PREFIX) on the server. Selection
 	 * and bulk-mutation are two INDEPENDENT opt-ins (HIGH-5): a table carries SELECT_ATTR with or without
 	 * BULK_ATTR, but never the reverse (ViewTable.of(..., BulkMutateDef) always stamps both, since a
@@ -128,7 +129,7 @@
 	 */
 	const CARD_MARKER = "data-juneau-card";
 
-	// TODO-445n table overflow discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
+	// DT1 table-overflow-wrap discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
 	// CSS-only "Approach D" overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
 	const TABLE_SCROLL_CLASS = "juneau-view-table-scroll";
 	// L12 A: a generic (Juneau-vocabulary) label applied to the scroll region ONLY when it actually overflows.
@@ -162,8 +163,8 @@
 	/** Resolves a column `data` key to its zero-based index in the view (-1 when absent). */
 	function columnIndexOf(viewDef, dataKey) {
 		const cols = viewDef.columns || [];
-		for (let i = 0; i < cols.length; i++)
-			if (cols[i].data === dataKey) return i;
+		for (const [i, col] of cols.entries())
+			if (col.data === dataKey) return i;
 		return -1;
 	}
 
@@ -173,11 +174,11 @@
 	 * (the no-config-js seam still has to fix the selection-offset off-by-one).  Returns -1 when absent.
 	 */
 	function liveDtIndex(dataKey, optsColumns) {
-		if (NS.config && typeof NS.config.dtIndex === "function")
+		if (typeof NS.config?.dtIndex === "function")
 			return NS.config.dtIndex(dataKey, optsColumns);
 		if (!optsColumns) return -1;
-		for (let i = 0; i < optsColumns.length; i++)
-			if (optsColumns[i] && optsColumns[i].data === dataKey) return i;
+		for (const [i, c] of optsColumns.entries())
+			if (c?.data === dataKey) return i;
 		return -1;
 	}
 
@@ -193,12 +194,11 @@
 		(viewDef.defaultOrder || []).forEach(function (e) {
 			const idx = optsColumns ? liveDtIndex(e.data, optsColumns) : columnIndexOf(viewDef, e.data);
 			if (idx < 0) return;
-			if (optsColumns && optsColumns[idx] && optsColumns[idx].visible === false) return;
+			if (optsColumns?.[idx]?.visible === false) return;
 			out.push([idx, e.dir]);
 		});
 		if (out.length === 0 && optsColumns) {
-			for (let i = 0; i < optsColumns.length; i++) {
-				const c = optsColumns[i];
+			for (const [i, c] of optsColumns.entries()) {
 				if (!c || c.data == null || c.visible === false || c.orderable === false) continue;
 				out.push([i, "asc"]);
 				break;
@@ -227,7 +227,7 @@
 				case "ne": match = !valuesEqual(v, r.value); break;
 				case "present": match = present; break;
 				case "absent": match = !present; break;
-				default: match = false;
+				default: break;
 			}
 			if (match) out.push(r["class"]);
 		});
@@ -242,7 +242,7 @@
 		if (url == null || String(url).trim() === "") return false;
 		const s = String(url);
 		if (s.indexOf("://") >= 0) return false;
-		if (s.indexOf("//") === 0) return false;
+		if (s.startsWith("//")) return false;
 		const colon = s.indexOf(":");
 		const slash = s.indexOf("/");
 		if (colon >= 0 && (slash < 0 || colon < slash)) return false;
@@ -353,7 +353,7 @@
 	 *   - otherwise the body is JSON and the headers carry `Content-Type: application/json` (so the write passes
 	 *     `LoopbackBoundary.isJson`) plus the CSRF token under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
 	 *
-	 * The optional `extra` object is merged into the JSON body - the modal submit path (TODO-416) uses it to carry
+	 * The optional `extra` object is merged into the JSON body - the declarative-modal submit path uses it to carry
 	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
 	 * same key and the server can check the key's `(action, targetId)` binding.  A bare submit (no `extra`) sends
 	 * exactly `{action}` as before.
@@ -388,7 +388,7 @@
 
 	/**
 	 * The frozen set of typed action-result outcome tokens (ActionResult.Outcome) - the four synchronous outcomes
-	 * plus the two async terminal states reserved for TODO-425 (`cancelled`, `cancelled-after-effect`).  An outcome
+	 * plus the two async terminal states reserved for the async-SSE-job feature (`cancelled`, `cancelled-after-effect`).  An outcome
 	 * token not in this set is normalized to `unknown` (a visible, non-optimistic state - never an optimistic
 	 * success).
 	 */
@@ -418,13 +418,13 @@
 	 * unknown/garbled outcome renders as a visible non-optimistic state, never as an optimistic success.
 	 */
 	function normalizeOutcome(result) {
-		const o = result && result.outcome;
+		const o = result?.outcome;
 		return (o != null && Object.hasOwn(ACTION_OUTCOMES, o)) ? o : "unknown";
 	}
 
 	/**
 	 * Parses a 2xx action-submit body into an ASYNC "job accepted" pointer (AsyncJobRef), or null when it is not
-	 * one.  Whether an action is asynchronous is a property of the RESPONSE, not the declared RowAction (TODO-425):
+	 * one.  Whether an action is asynchronous is a property of the RESPONSE, not the declared RowAction (async-SSE-job feature):
 	 * the same POST returns EITHER a terminal ActionResult (has `outcome`) OR this pointer (has `streamUrl`), so no
 	 * new RowAction wire field is needed and the two shapes are disjoint.  A job pointer MUST carry a non-blank
 	 * `streamUrl` (the SSE capability URL); a body without one is not a job pointer and falls through to the normal
@@ -463,8 +463,8 @@
 	 */
 	function transportRefusal(status, boundaryReason, envelope) {
 		const code = ! isBlankToken(boundaryReason) ? boundaryReason
-			: (envelope && envelope.reason ? envelope.reason : ("http:" + (status || 0)));
-		let message = envelope && envelope.message ? envelope.message : null;
+			: (envelope?.reason || ("http:" + (status || 0)));
+		let message = envelope?.message || null;
 		if (isBlankToken(message)) message = transportStatusMessage(status);
 		return { code: code, message: message };
 	}
@@ -495,9 +495,9 @@
 		}
 	}
 
-	/** Whether an action is presented as a modal dialog (`present=dialog`) - the TODO-416 modal/form path. */
+	/** Whether an action is presented as a modal dialog (`present=dialog`) - the declarative modal/form path. */
 	function isDialogAction(action) {
-		return !! (action && action.present === "dialog");
+		return !! (action?.present === "dialog");
 	}
 
 	/**
@@ -508,6 +508,9 @@
 	 */
 	// Deliberately kept as `var` (not `const`): TablePolling_Wiring_Test#a01 pins this exact declaration text as
 	// part of the server/client MIN_POLL_INTERVAL_MS parity contract; see that test before touching this line.
+	// NOSONAR javascript:S3504 -- the `var` keyword is load-bearing here, not an oversight; a05 of that test
+	// asserts on the literal string "var MIN_POLL_INTERVAL_MS = 5000;", so modernizing this declaration breaks
+	// the parity contract rather than tidying it.
 	var MIN_POLL_INTERVAL_MS = 5000;
 
 	/** Clamps a declared poll interval up to {@link #MIN_POLL_INTERVAL_MS} (mirrors the server-side clamp). */
@@ -608,12 +611,12 @@
 			// Appended to any author className rather than replacing it, so a column class and a renderer class
 			// coexist; a throwing facet is ignored, exactly like a throwing `display`.
 			appendRendererClass(def, renderer, meta);
-			const popover = spec && spec.popover;
-			if ((renderer && renderer.display) || popover) {
-				def.render = function (data, type, rowData) {
-					if (type && type !== "display") return data;   // SERVER mode: sort/filter/type done server-side
-					let html = data == null ? "" : String(data);
-					if (renderer && renderer.display) {
+		const popover = spec?.popover;
+		if (renderer?.display || popover) {
+			def.render = function (data, type, rowData) {
+				if (type && type !== "display") return data;   // SERVER mode: sort/filter/type done server-side
+				let html = data == null ? "" : String(data);
+				if (renderer?.display) {
 						try { html = renderer.display(data, rowData, meta); }
 						catch (e) { html = data == null ? "" : String(data); }
 						if (html == null) html = "";
@@ -638,7 +641,7 @@
 	}
 
 	function viewEscAttr(s) {
-		return (NS._render && typeof NS._render.escAttr === "function") ? NS._render.escAttr(s) : String(s);
+		return typeof NS._render?.escAttr === "function" ? NS._render.escAttr(s) : String(s);
 	}
 
 	/**
@@ -646,10 +649,10 @@
 	 * {@code linked} {@code <a>} is not nested in a button).  Dynamic bits go through escAttr.
 	 */
 	function appendPopoverTrigger(html, col, spec) {
-		const popover = spec && spec.popover;
+		const popover = spec?.popover;
 		if (!popover) return html;
 		const name = popover.title != null && String(popover.title).trim() !== "" ? String(popover.title) : "Details";
-		const colData = col && col.data != null ? String(col.data) : "";
+		const colData = col?.data != null ? String(col.data) : "";
 		return html + '<button type="button" class="jc-cell-popover-trigger"'
 			+ ' aria-expanded="false" aria-haspopup="dialog" aria-label="' + viewEscAttr(name) + '"'
 			+ ' data-juneau-popover="1" data-juneau-popover-col="' + viewEscAttr(colData) + '"></button>';
@@ -676,7 +679,7 @@
 		// full `opts.columns` array (see assembleFullColumnArray) so a leading synthetic column cannot off-by-one
 		// defaultOrder or the ribbon/search indices.  `deps.effectiveColumns` is the post-chooser model when
 		// present; otherwise the sidecar catalog.
-		const catalog = (deps && deps.effectiveColumns) || viewDef.columns || [];
+		const catalog = deps?.effectiveColumns || viewDef.columns || [];
 		opts.columns = catalog.map(function (c) { return buildColumnDef(c, deps); });
 		// Text polish (design doc §4.B): the native search input's label is blanked (searchPlaceholder replaces it
 		// as the input's placeholder attribute); the native length-select's language.lengthMenu is deliberately NOT
@@ -709,7 +712,7 @@
 		// into the GET in BOTH data modes.  The parent id is read through a getter at REQUEST time (off the live
 		// data-juneau-parent-id attribute) so the scope stays correct even if the nested table is re-init'd against a
 		// different parent row.  This is deliberately nested-only: a top-level view never carries deps.nestedScope.
-		if (deps && deps.nestedScope)
+		if (deps?.nestedScope)
 			applyNestedScope(opts, deps.nestedScope);
 
 		opts.createdRow = function (rowEl, rowData) {
@@ -767,7 +770,7 @@
 		b.className = className;
 		b.title = label;
 		b.setAttribute("aria-label", label);
-		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const icons = window.JuneauViews?.icons;
 		const markup = icons?.resolveIcon ? icons.resolveIcon(iconName) : null;
 		if (markup != null) {
 			b.innerHTML = markup;
@@ -812,7 +815,7 @@
 		infoEl.className = "juneau-view-pagingpill-info";
 		btn.appendChild(infoEl);
 
-		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const icons = window.JuneauViews?.icons;
 		const caretMarkup = icons?.resolveIcon ? icons.resolveIcon("expand_more") : null;
 		const caretEl = document.createElement("span");
 		caretEl.className = "juneau-view-pagingpill-caret";
@@ -837,12 +840,12 @@
 		});
 
 		function indexOfSelected() {
-			for (let i = 0; i < options.length; i++) if (options[i].el.getAttribute("aria-selected") === "true") return i;
+			for (const [i, opt] of options.entries()) if (opt.el.getAttribute("aria-selected") === "true") return i;
 			return -1;
 		}
 
 		function indexOfFocused() {
-			for (let i = 0; i < options.length; i++) if (options[i].el === document.activeElement) return i;
+			for (const [i, opt] of options.entries()) if (opt.el === document.activeElement) return i;
 			return -1;
 		}
 
@@ -922,7 +925,7 @@
 	function buildPagingPill(viewDef, ctx) {
 		const pill = document.createElement("div");
 		pill.className = "juneau-view-pagingpill";
-		pill.setAttribute("data-testid", "paging");
+		pill.dataset.testid = "paging";
 
 		const firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(); });
 		const prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(); });
@@ -946,7 +949,7 @@
 		}
 		// Guard against a nested table's draw.dt bubbling up the DOM to this parent-table handler (a nested
 		// DataTable lives inside the parent's expanded child row): only this table's own draw refreshes its pill.
-		ctx.dataTable.on("draw.dt", function (e) { if (e && e.target !== ctx.table) return; refreshPillState(); });
+		ctx.dataTable.on("draw.dt", function (e) { if (e && e.target !== ctx.table) { return; } refreshPillState(); });
 		refreshPillState();   // correct initial disabled state before the first draw.dt fires
 
 		return pill;
@@ -966,12 +969,12 @@
 		if (!thead) return null;
 		const row = document.createElement("tr");
 		row.className = "juneau-view-columnsearch-row";
-		row.setAttribute("data-testid", "col-search-row");
+		row.dataset.testid = "col-search-row";
 		row.style.display = "none";
 		(optsColumns || []).forEach(function (col, idx) {
 			const th = document.createElement("th");
 			const isSynthetic = !col || col.data == null;
-			const isHidden = col && col.visible === false;
+			const isHidden = col?.visible === false;
 			if (isHidden) th.style.display = "none";
 			if (!isSynthetic && !isHidden && col.searchable !== false) {
 				const input = document.createElement("input");
@@ -1013,7 +1016,7 @@
 
 	/** The view {@code <table>} that owns {@code node}, or {@code null} when it sits outside every view table. */
 	function owningViewTable(node) {
-		return node && typeof node.closest === "function" ? node.closest("table[data-juneau-view]") : null;
+		return typeof node?.closest === "function" ? node.closest("table[data-juneau-view]") : null;
 	}
 
 	/**
@@ -1027,7 +1030,7 @@
 	 * treated as owned so nothing that worked before this guard stops working.
 	 */
 	function isOwnTableEvent(table, e) {
-		const owner = owningViewTable(e && e.target);
+		const owner = owningViewTable(e?.target);
 		return !owner || owner === table;
 	}
 
@@ -1108,7 +1111,7 @@
 	 * as-is (stale, but honestly so) until that write settles.
 	 *
 	 * <p>Scoped to SYNCHRONOUS writes ONLY: it reads `data-juneau-inflight`, NOT the async job marker
-	 * (`data-juneau-job`, set by setRowJobRunning).  A long-running TODO-425 job must NOT freeze the whole table's
+	 * (`data-juneau-job`, set by setRowJobRunning).  A long-running async-SSE-job must NOT freeze the whole table's
 	 * polling for up to the 120s hard timeout - so it uses the distinct marker this function deliberately ignores
 	 * (HIGH-9).
 	 */
@@ -1132,7 +1135,10 @@
 			el = document.createElement("div");
 			el.className = "juneau-view-reinit-notice";
 			el.setAttribute("role", "alert");
-			el.setAttribute("data-testid", "reinit-notice");
+			el.dataset.testid = "reinit-notice";
+			// NOSONAR javascript:S7768 -- `table.before(el)` would be equivalent, but the Node test-harness DOM
+			// shim (views-dom-shim.cjs) and several raw-mock test doubles under src/test/js implement
+			// insertBefore/appendChild only, not `.before()`; converting would break those harnesses.
 			if (table.parentNode) table.parentNode.insertBefore(el, table);
 			else table.insertBefore(el, table.firstChild);
 		}
@@ -1142,7 +1148,7 @@
 	function clearReinitNotice(table) {
 		const host = table.parentNode || table;
 		const el = host.querySelector ? host.querySelector(".juneau-view-reinit-notice") : null;
-		if (el && el.parentNode) el.parentNode.removeChild(el);
+		if (el?.parentNode) el.remove();
 	}
 
 	/**
@@ -1152,8 +1158,8 @@
 	function buildStalenessIndicator() {
 		const el = document.createElement("span");
 		el.className = "juneau-view-staleness";
-		el.setAttribute("data-testid", "staleness");
-		el.setAttribute("data-state", "fresh");
+		el.dataset.testid = "staleness";
+		el.dataset.state = "fresh";
 		return el;
 	}
 
@@ -1173,13 +1179,13 @@
 	function findRowDetailTemplate(table) {
 		if (!table) return null;
 		const wrapper = findViewWrapper(table);
-		const host = wrapper && wrapper.parentNode && wrapper !== table.parentNode
+		const host = wrapper?.parentNode && wrapper !== table.parentNode
 			? wrapper.parentNode
 			: table.parentNode;
-		if (!host || typeof host.querySelectorAll !== "function") return null;
+		if (typeof host?.querySelectorAll !== "function") return null;
 		const cands = host.querySelectorAll("template[data-juneau-row-detail]");
-		for (let i = 0; i < cands.length; i++)
-			if (!isInside(table, cands[i])) return cands[i];
+		for (const cand of cands)
+			if (!isInside(table, cand)) return cand;
 		return null;
 	}
 
@@ -1223,7 +1229,7 @@
 			return;
 		}
 		while (el.firstChild)
-			el.removeChild(el.firstChild);
+			el.firstChild.remove();
 	}
 
 	function copyAllowedMarkdownAttrs(from, to) {
@@ -1235,31 +1241,30 @@
 		}
 	}
 
+	function appendSanitizedMarkdownChild(n, to, doc) {
+		if (!n) return;
+		if (n.nodeType === 3) {
+			const text = n.nodeValue == null ? "" : String(n.nodeValue);
+			if (typeof doc?.createTextNode === "function")
+				to.appendChild(doc.createTextNode(text));
+			return;
+		}
+		if (n.nodeType !== 1) return;
+		const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
+		if (MARKDOWN_DROP_TAGS[tag]) return;
+		if (!MARKDOWN_ALLOWED_TAGS[tag]) {
+			copySanitizedMarkdownChildren(n, to, doc);
+			return;
+		}
+		const dest = doc.createElement(tag.toLowerCase());
+		copyAllowedMarkdownAttrs(n, dest);
+		copySanitizedMarkdownChildren(n, dest, doc);
+		to.appendChild(dest);
+	}
+
 	function copySanitizedMarkdownChildren(from, to, doc) {
 		if (!from || !to || !from.childNodes) return;
-		const kids = from.childNodes;
-		for (let i = 0; i < kids.length; i++) {
-			const n = kids[i];
-			if (!n) continue;
-			if (n.nodeType === 3) {
-				const text = n.nodeValue == null ? "" : String(n.nodeValue);
-				if (doc && typeof doc.createTextNode === "function")
-					to.appendChild(doc.createTextNode(text));
-				continue;
-			}
-			if (n.nodeType !== 1) continue;
-			const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
-			if (MARKDOWN_DROP_TAGS[tag])
-				continue;
-			if (!MARKDOWN_ALLOWED_TAGS[tag]) {
-				copySanitizedMarkdownChildren(n, to, doc);
-				continue;
-			}
-			const dest = doc.createElement(tag.toLowerCase());
-			copyAllowedMarkdownAttrs(n, dest);
-			copySanitizedMarkdownChildren(n, dest, doc);
-			to.appendChild(dest);
-		}
+		for (const n of from.childNodes) appendSanitizedMarkdownChild(n, to, doc);
 	}
 
 	/**
@@ -1267,27 +1272,43 @@
 	 * execute script) and copies allowlisted nodes via {@code createElement}/{@code createTextNode}.  Never
 	 * assigns {@code innerHTML}.  Missing {@code DOMParser} fails closed to {@code textContent}.
 	 */
+	/**
+	 * Resolves `document`/`DOMParser`, wraps `html` in a `<div>`, and parses it - the shared first half of
+	 * both fillMarkdownSlot and fillRenderSlot.  `unsupported` covers both "no DOMParser/document available"
+	 * and "parseFromString threw"; both cases fail closed to the caller's plain-text fallback.  A parse that
+	 * succeeds but yields no wrapper element (`wrap` falsy) is NOT "unsupported" - callers leave the
+	 * already-cleared slot empty in that case, matching prior behavior.
+	 */
+	function parseSanitizedHtmlWrap(html) {
+		const doc = typeof document !== "undefined" ? document : null;
+		let Parser = null;
+		if (typeof DOMParser !== "undefined") {
+			Parser = DOMParser;
+		} else if (typeof window !== "undefined") {
+			Parser = window.DOMParser;
+		}
+		if (!Parser || !doc || typeof doc.createElement !== "function")
+			return { doc: doc, wrap: null, unsupported: true };
+		let parsed;
+		try {
+			parsed = new Parser().parseFromString("<div>" + String(html) + "</div>", "text/html");
+		} catch (e) {
+			return { doc: doc, wrap: null, unsupported: true };
+		}
+		return { doc: doc, wrap: parsed?.body?.firstChild || null, unsupported: false };
+	}
+
 	function fillMarkdownSlot(el, html) {
 		clearElementChildren(el);
 		if (html == null || html === "") return;
 		const src = String(html);
-		const doc = typeof document !== "undefined" ? document : null;
-		const Parser = typeof DOMParser !== "undefined" ? DOMParser
-			: (typeof window !== "undefined" ? window.DOMParser : null);
-		if (!Parser || !doc || typeof doc.createElement !== "function") {
+		const res = parseSanitizedHtmlWrap(src);
+		if (res.unsupported) {
 			el.textContent = src;
 			return;
 		}
-		let parsed;
-		try {
-			parsed = new Parser().parseFromString("<div>" + src + "</div>", "text/html");
-		} catch (e) {
-			el.textContent = src;
-			return;
-		}
-		const wrap = parsed && parsed.body && parsed.body.firstChild;
-		if (!wrap) return;
-		copySanitizedMarkdownChildren(wrap, el, doc);
+		if (!res.wrap) return;
+		copySanitizedMarkdownChildren(res.wrap, el, res.doc);
 	}
 
 	const RENDER_ALLOWED_TAGS = { SPAN: 1, A: 1, CODE: 1, DIV: 1 };
@@ -1296,7 +1317,10 @@
 		if (typeof from.getAttribute !== "function") return;
 		const raw = from.getAttribute("style");
 		if (raw == null || raw === "") return;
-		const m = /^\s*width\s*:\s*([+-]?\d+)\s*%?\s*;?\s*$/i.exec(String(raw));
+		// The trailing "%" and ";" must stay bound to their own \s* run.  Written as `\s*%?\s*;?\s*$` the three
+		// independent \s* runs can split one whitespace tail in O(n^3) ways, so a non-matching style attribute
+		// like "width:1" + 4000 spaces + "x" backtracks for ~10s (javascript:S5852).  This form is linear.
+		const m = /^\s*width\s*:\s*([+-]?\d+)\s*(?:%\s*)?(?:;\s*)?$/i.exec(String(raw));
 		if (!m) return;
 		const n = Number(m[1]);
 		if (!Number.isInteger(n) || n < 0 || n > 100) return;
@@ -1320,46 +1344,45 @@
 		const tabindex = from.getAttribute("tabindex");
 		if (tabindex === "0")
 			to.setAttribute("tabindex", "0");
-		const ts = from.getAttribute("data-juneau-ts");
+		const ts = from.dataset.juneauTs;
 		if (ts) {
-			const toDate = NS._render && NS._render.toDate;
+			const toDate = NS._render?.toDate;
 			if (typeof toDate === "function" && toDate(ts))
-				to.setAttribute("data-juneau-ts", ts);
+				to.dataset.juneauTs = ts;
 		}
+	}
+
+	function appendSanitizedRenderChild(n, to, doc) {
+		if (!n) return;
+		if (n.nodeType === 3) {
+			const text = n.nodeValue == null ? "" : String(n.nodeValue);
+			if (typeof doc?.createTextNode === "function")
+				to.appendChild(doc.createTextNode(text));
+			return;
+		}
+		if (n.nodeType !== 1) return;
+		const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
+		if (MARKDOWN_DROP_TAGS[tag]) return;
+		if (!RENDER_ALLOWED_TAGS[tag]) {
+			copySanitizedRenderChildren(n, to, doc);
+			return;
+		}
+		const dest = doc.createElement(tag.toLowerCase());
+		copyAllowedRenderAttrs(n, dest);
+		copySanitizedRenderChildren(n, dest, doc);
+		to.appendChild(dest);
 	}
 
 	function copySanitizedRenderChildren(from, to, doc) {
 		if (!from || !to || !from.childNodes) return;
-		const kids = from.childNodes;
-		for (let i = 0; i < kids.length; i++) {
-			const n = kids[i];
-			if (!n) continue;
-			if (n.nodeType === 3) {
-				const text = n.nodeValue == null ? "" : String(n.nodeValue);
-				if (doc && typeof doc.createTextNode === "function")
-					to.appendChild(doc.createTextNode(text));
-				continue;
-			}
-			if (n.nodeType !== 1) continue;
-			const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
-			if (MARKDOWN_DROP_TAGS[tag])
-				continue;
-			if (!RENDER_ALLOWED_TAGS[tag]) {
-				copySanitizedRenderChildren(n, to, doc);
-				continue;
-			}
-			const dest = doc.createElement(tag.toLowerCase());
-			copyAllowedRenderAttrs(n, dest);
-			copySanitizedRenderChildren(n, dest, doc);
-			to.appendChild(dest);
-		}
+		for (const n of from.childNodes) appendSanitizedRenderChild(n, to, doc);
 	}
 
 	function resolveFillRenderer(id) {
 		const sink = typeof NS.resolveSinkRenderer === "function" ? NS.resolveSinkRenderer(id) : null;
 		if (sink) return sink;
-		const frozen = NS._render && NS._render.frozenBuiltinIds;
-		if (frozen && frozen.indexOf(id) >= 0)
+		const frozen = NS._render?.frozenBuiltinIds;
+		if (frozen?.indexOf(id) >= 0)
 			return null;
 		return typeof NS.resolveRenderer === "function" ? NS.resolveRenderer(id) : null;
 	}
@@ -1368,6 +1391,15 @@
 	 * Paints a named-renderer detail-field slot.  Resolves built-ins through the frozen sink lookup, rebuilds
 	 * the escaped HTML string through a closed tag/attribute allowlist.  Never assigns innerHTML.
 	 */
+	function mergeRenderMeta(meta, href) {
+		const m = {};
+		if (meta && typeof meta === "object") {
+			for (const k in meta) if (Object.hasOwn(meta, k)) m[k] = meta[k];
+		}
+		if (href != null) m.href = href;
+		return m;
+	}
+
 	function fillRenderSlot(slot, value, id, meta, href, fields) {
 		clearElementChildren(slot);
 		if (value == null || value === "") return;
@@ -1376,11 +1408,7 @@
 			slot.textContent = value;
 			return;
 		}
-		const m = {};
-		if (meta && typeof meta === "object") {
-			for (const k in meta) if (Object.hasOwn(meta, k)) m[k] = meta[k];
-		}
-		if (href != null) m.href = href;
+		const m = mergeRenderMeta(meta, href);
 		let html;
 		try { html = renderer.display(value, fields, m); }
 		catch (e) {
@@ -1388,23 +1416,50 @@
 			return;
 		}
 		if (html == null || html === "") return;
-		const doc = typeof document !== "undefined" ? document : null;
-		const Parser = typeof DOMParser !== "undefined" ? DOMParser
-			: (typeof window !== "undefined" ? window.DOMParser : null);
-		if (!Parser || !doc || typeof doc.createElement !== "function") {
+		const res = parseSanitizedHtmlWrap(html);
+		if (res.unsupported) {
 			slot.textContent = value;
 			return;
 		}
-		let parsed;
+		if (!res.wrap) return;
+		copySanitizedRenderChildren(res.wrap, slot, res.doc);
+	}
+
+	function parseDetailFieldRenderMeta(slot) {
+		const metaRaw = slot.getAttribute("data-juneau-field-render-meta");
+		if (!metaRaw) return {};
 		try {
-			parsed = new Parser().parseFromString("<div>" + String(html) + "</div>", "text/html");
+			const parsed = JSON.parse(metaRaw);
+			return parsed && typeof parsed === "object" ? parsed : {};
 		} catch (e) {
-			slot.textContent = value;
-			return;
+			warn("juneau-views: malformed data-juneau-field-render-meta JSON: " + e);
+			return {};
 		}
-		const wrap = parsed && parsed.body && parsed.body.firstChild;
-		if (!wrap) return;
-		copySanitizedRenderChildren(wrap, slot, doc);
+	}
+
+	// NOSONAR javascript:S7761 -- `slot` here comes from an arbitrary caller-supplied DOM subtree (a
+	// row-detail panel, but reachable from server-rendered markup or a test double), and is read via
+	// getAttribute rather than assumed to expose the full `.dataset` API.
+	function paintDetailFieldSlot(slot, map) {
+		const key = slot.getAttribute("data-juneau-field");
+		const value = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+		const renderId = slot.getAttribute("data-juneau-field-render");
+		if (renderId) {
+			const meta = parseDetailFieldRenderMeta(slot);
+			const href = slot.getAttribute("data-juneau-field-render-href");
+			fillRenderSlot(slot, value, renderId, meta, href, map);
+		} else if (slot.getAttribute("data-juneau-field-format") === "markdown")
+			fillMarkdownSlot(slot, value);
+		else
+			slot.textContent = value;
+	}
+
+	// NOSONAR javascript:S7761 -- same caller-supplied-DOM rationale as paintDetailFieldSlot above.
+	function paintDetailTitleSlot(el, map) {
+		const tmpl = el.getAttribute("data-juneau-detail-title-template") || "";
+		el.textContent = tmpl.replace(/\{(\w+)\}/g, function (_, key) {
+			return Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+		});
 	}
 
 	/**
@@ -1415,36 +1470,8 @@
 	function fillDetailSlots(root, fields) {
 		if (!root || !root.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
-		const slots = root.querySelectorAll("[data-juneau-field]");
-		for (let i = 0; i < slots.length; i++) {
-			const slot = slots[i];
-			const key = slot.getAttribute("data-juneau-field");
-			const value = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
-			const renderId = slot.getAttribute("data-juneau-field-render");
-			if (renderId) {
-				let meta = {};
-				const metaRaw = slot.getAttribute("data-juneau-field-render-meta");
-				if (metaRaw) {
-					try {
-						const parsed = JSON.parse(metaRaw);
-						if (parsed && typeof parsed === "object") meta = parsed;
-					} catch (e) { meta = {}; }
-				}
-				const href = slot.getAttribute("data-juneau-field-render-href");
-				fillRenderSlot(slot, value, renderId, meta, href, map);
-			} else if (slot.getAttribute("data-juneau-field-format") === "markdown")
-				fillMarkdownSlot(slot, value);
-			else
-				slot.textContent = value;
-		}
-		const titles = root.querySelectorAll("[data-juneau-detail-title]");
-		for (let t = 0; t < titles.length; t++) {
-			const el = titles[t];
-			const tmpl = el.getAttribute("data-juneau-detail-title-template") || "";
-			el.textContent = tmpl.replace(/\{([A-Za-z0-9_]+)\}/g, function (_, key) {
-				return Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
-			});
-		}
+		for (const slot of root.querySelectorAll("[data-juneau-field]")) paintDetailFieldSlot(slot, map);
+		for (const el of root.querySelectorAll("[data-juneau-detail-title]")) paintDetailTitleSlot(el, map);
 	}
 
 	/**
@@ -1455,9 +1482,9 @@
 		if (!root || typeof root.querySelector !== "function") return;
 		const slot = root.querySelector("[data-juneau-detail-icon]");
 		if (!slot) return;
-		const name = slot.getAttribute("data-juneau-detail-icon");
-		const icons = window.JuneauViews && window.JuneauViews.icons;
-		const markup = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon(name) : null;
+		const name = slot.dataset.juneauDetailIcon;
+		const icons = window.JuneauViews?.icons;
+		const markup = typeof icons?.resolveIcon === "function" ? icons.resolveIcon(name) : null;
 		if (!markup) {
 			slot.hidden = true;
 			slot.textContent = "";
@@ -1472,14 +1499,14 @@
 	 * (in-tab Diagnose findings).  TEXT slots use textContent; markdown slots use fillMarkdownSlot.
 	 */
 	function paintActionMessageIntoDetail(tr, actionId, message) {
-		const panel = tr && tr._juneauDetailPanel;
+		const panel = tr?._juneauDetailPanel;
 		if (!panel || typeof panel.querySelectorAll !== "function") return;
 		const want = String(actionId == null ? "" : actionId);
 		if (!want) return;
 		const buttons = panel.querySelectorAll("[data-juneau-action]");
 		let btn = null;
-		for (let i = 0; i < buttons.length; i++) {
-			if (buttons[i].getAttribute("data-juneau-action") === want) { btn = buttons[i]; break; }
+		for (const b of buttons) {
+			if (b.dataset.juneauAction === want) { btn = b; break; }
 		}
 		if (!btn) return;
 		const section = btn.closest ? btn.closest("[data-juneau-detail-section]") : null;
@@ -1487,7 +1514,7 @@
 		const slot = section.querySelector("[data-juneau-field]");
 		if (!slot) return;
 		const value = message == null ? "" : String(message);
-		if (slot.getAttribute("data-juneau-field-format") === "markdown")
+		if (slot.dataset.juneauFieldFormat === "markdown")
 			fillMarkdownSlot(slot, value);
 		else
 			slot.textContent = value;
@@ -1538,8 +1565,7 @@
 	function activateDetailTab(tabs, sectionId) {
 		if (!tabs) return;
 		const want = String(sectionId);
-		for (let i = 0; i < tabs.length; i++) {
-			const t = tabs[i];
+		for (const t of tabs) {
 			const match = String(t.id) === want;
 			t.btn.setAttribute("aria-selected", match ? "true" : "false");
 			t.btn.tabIndex = match ? 0 : -1;
@@ -1569,45 +1595,58 @@
 	 * @param opts {className, testId, tabId(i), paneId(i), activeIndex, onActivate(id, pane)} - all optional.
 	 * @return {strip, tabs, activate(id)}, or null when there is nothing to build.
 	 */
+	// The pane becomes the tabpanel; hide all but the initially-selected one (visibility only).
+	function buildRibbonTab(item, i, o, activeIndex) {
+		const pane = item.pane;
+		const paneId = o.paneId ? o.paneId(i) : ("juneau-strip-pane-" + i);
+		const tabId = o.tabId ? o.tabId(i) : ("juneau-strip-tab-" + i);
+		const active = i === activeIndex;
+		if (pane) {
+			pane.id = paneId;
+			pane.setAttribute("role", "tabpanel");
+			pane.setAttribute("aria-labelledby", tabId);
+			pane.setAttribute("tabindex", "0");
+			pane.hidden = !active;
+		}
+		const btn = document.createElement("button");
+		btn.type = "button";
+		btn.className = "juneau-view-ribbon-btn";
+		btn.id = tabId;
+		btn.setAttribute("role", "tab");
+		btn.dataset.juneauStripTab = item.id;
+		btn.setAttribute("aria-controls", paneId);
+		btn.setAttribute("aria-selected", active ? "true" : "false");
+		btn.tabIndex = active ? 0 : -1;
+		btn.textContent = item.label == null ? "" : String(item.label);   // never innerHTML - labels are plain text
+		return { btn: btn, pane: pane, id: item.id };
+	}
+
+	// Resolves "the tab index the keyboard should treat as current" - the focused tab if one has focus,
+	// else the currently-selected tab, else the first tab.
+	function currentRibbonTabIndex(tabs) {
+		const focused = (typeof document !== "undefined") ? document.activeElement : null;
+		for (const [i, t] of tabs.entries())
+			if (t.btn === focused) return i;
+		for (const [i, t] of tabs.entries())
+			if (t.btn.getAttribute("aria-selected") === "true") return i;
+		return 0;
+	}
+
 	function buildRibbonStrip(items, opts) {
 		if (!items || !items.length) return null;
 		const o = opts || {};
 		const activeIndex = o.activeIndex == null ? 0 : o.activeIndex;
 		const strip = document.createElement("div");
 		strip.className = o.className == null ? "juneau-view-ribbon-group" : o.className;
-		strip.setAttribute("data-juneau-strip-mode", "tab");
+		strip.dataset.juneauStripMode = "tab";
 		strip.setAttribute("role", "tablist");
-		if (o.testId != null) strip.setAttribute("data-testid", o.testId);
+		if (o.testId != null) strip.dataset.testid = o.testId;
 
 		const tabs = [];
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			const pane = item.pane;
-			const paneId = o.paneId ? o.paneId(i) : ("juneau-strip-pane-" + i);
-			const tabId = o.tabId ? o.tabId(i) : ("juneau-strip-tab-" + i);
-			const active = i === activeIndex;
-
-			// The pane becomes the tabpanel; hide all but the initially-selected one (visibility only).
-			if (pane) {
-				pane.id = paneId;
-				pane.setAttribute("role", "tabpanel");
-				pane.setAttribute("aria-labelledby", tabId);
-				pane.setAttribute("tabindex", "0");
-				pane.hidden = !active;
-			}
-
-			const btn = document.createElement("button");
-			btn.type = "button";
-			btn.className = "juneau-view-ribbon-btn";
-			btn.id = tabId;
-			btn.setAttribute("role", "tab");
-			btn.setAttribute("data-juneau-strip-tab", item.id);
-			btn.setAttribute("aria-controls", paneId);
-			btn.setAttribute("aria-selected", active ? "true" : "false");
-			btn.tabIndex = active ? 0 : -1;
-			btn.textContent = item.label == null ? "" : String(item.label);   // never innerHTML - labels are plain text
-			strip.appendChild(btn);
-			tabs.push({ btn: btn, pane: pane, id: item.id });
+		for (const [i, item] of items.entries()) {
+			const tab = buildRibbonTab(item, i, o, activeIndex);
+			strip.appendChild(tab.btn);
+			tabs.push(tab);
 		}
 
 		// Fires the optional onActivate(id, pane) after a tab becomes visible.  The row-detail expander uses it to
@@ -1615,36 +1654,26 @@
 		// is hidden - column widths would compute to zero).
 		function notifyActivate(sid) {
 			if (typeof o.onActivate !== "function") return;
-			for (let i = 0; i < tabs.length; i++)
-				if (String(tabs[i].id) === String(sid)) { o.onActivate(tabs[i].id, tabs[i].pane); return; }
+			for (const t of tabs)
+				if (String(t.id) === String(sid)) { o.onActivate(t.id, t.pane); return; }
 		}
 
 		strip.addEventListener("click", function (e) {
-			const btn = e.target && e.target.closest ? e.target.closest("[role=\"tab\"]") : null;
+			const btn = e.target?.closest ? e.target.closest("[role=\"tab\"]") : null;
 			if (!btn || (strip.contains && !strip.contains(btn))) return;
-			const sid = btn.getAttribute("data-juneau-strip-tab");
+			const sid = btn.dataset.juneauStripTab;
 			activateDetailTab(tabs, sid);
 			notifyActivate(sid);
 			if (typeof btn.focus === "function") btn.focus();
 		});
 		strip.addEventListener("keydown", function (e) {
 			if (!e) return;
-			const focused = (typeof document !== "undefined") ? document.activeElement : null;
-			let idx = -1;
-			for (let i = 0; i < tabs.length; i++) {
-				if (tabs[i].btn === focused) { idx = i; break; }
-			}
-			if (idx < 0) {
-				for (let i = 0; i < tabs.length; i++) {
-					if (tabs[i].btn.getAttribute("aria-selected") === "true") { idx = i; break; }
-				}
-				if (idx < 0) idx = 0;
-			}
+			const idx = currentRibbonTabIndex(tabs);
 			const next = detailTabTargetIndex(e.key, idx, tabs.length);
 			if (next < 0) return;
 			if (typeof e.preventDefault === "function") e.preventDefault();
 			const nextBtn = tabs[next].btn;
-			const nsid = nextBtn.getAttribute("data-juneau-strip-tab");
+			const nsid = nextBtn.dataset.juneauStripTab;
 			activateDetailTab(tabs, nsid);
 			notifyActivate(nsid);
 			if (typeof nextBtn.focus === "function") nextBtn.focus();
@@ -1686,8 +1715,8 @@
 	function detailBarSlotIn(panel) {
 		if (!panel || typeof panel.querySelectorAll !== "function") return null;
 		const found = panel.querySelectorAll("[" + DETAIL_BAR_MARKER + "]");
-		for (let i = 0; i < found.length; i++)
-			if (!found[i].closest || found[i].closest(".juneau-view-detail-panel") === panel) return found[i];
+		for (const f of found)
+			if (!f.closest || f.closest(".juneau-view-detail-panel") === panel) return f;
 		return found.length ? found[0] : null;
 	}
 
@@ -1738,9 +1767,9 @@
 		const suffix = (parentId == null ? "" : String(parentId)) + ":" + (rowId == null ? "" : String(rowId));
 		region.setAttribute(DETAIL_BAR_MARKER, suffix);
 		const sidecars = panel.querySelectorAll("[" + DETAIL_BAR_META + "]");
-		for (let i = 0; i < sidecars.length; i++)
-			if (sidecars[i].getAttribute(DETAIL_BAR_META) === authorId) {
-				sidecars[i].setAttribute("id", DETAIL_BAR_SIDECAR_PREFIX + suffix);
+		for (const s of sidecars)
+			if (s.getAttribute(DETAIL_BAR_META) === authorId) {
+				s.setAttribute("id", DETAIL_BAR_SIDECAR_PREFIX + suffix);
 				break;
 			}
 		return suffix;
@@ -1754,8 +1783,8 @@
 	function teardownDetailBarSlot(panel) {
 		if (!panel || typeof panel.querySelectorAll !== "function") return;
 		const sidecars = panel.querySelectorAll("[" + DETAIL_BAR_META + "]");
-		for (let i = 0; i < sidecars.length; i++)
-			if (typeof sidecars[i].removeAttribute === "function") sidecars[i].removeAttribute("id");
+		for (const s of sidecars)
+			if (typeof s.removeAttribute === "function") s.removeAttribute("id");
 	}
 
 	/**
@@ -1774,10 +1803,33 @@
 	function enhanceChromeInPanel(panel) {
 		if (!detailBarSlotIn(panel)) return false;
 		const chrome = typeof window !== "undefined" ? window.JuneauChrome : null;
-		const init = chrome && chrome.init;
+		const init = chrome?.init;
 		if (!init || typeof init.initAll !== "function") return false;
 		init.initAll();
 		return true;
+	}
+
+	// DETAIL-ONLY pre-pass (the generic builder's {id, label, pane} model is not sufficient by itself): the tab
+	// label is borrowed from the section's own stacked <h2> title, and that title is then hidden because the tab
+	// replaces it.  A generic strip has no title to borrow or hide, so this cannot move into the builder.
+	function buildDetailStripItem(sec) {
+		const sid = sec.dataset.juneauDetailSection;
+		const titleEl = typeof sec.querySelector === "function"
+			? sec.querySelector(".juneau-view-detail-section-title") : null;
+		const label = titleEl?.textContent || sid;
+		if (titleEl) titleEl.hidden = true;
+		return { id: sid, label: label, pane: sec };
+	}
+
+	function insertDetailStrip(panel, strip) {
+		const header = typeof panel.querySelector === "function"
+			? panel.querySelector(".juneau-view-detail-header") : null;
+		if (!header) {
+			panel.insertBefore(strip, panel.firstChild);
+			return;
+		}
+		if (header.nextSibling) panel.insertBefore(strip, header.nextSibling);
+		else panel.appendChild(strip);
 	}
 
 	function buildDetailStrip(panel, onActivate) {
@@ -1786,20 +1838,8 @@
 		if (!sections || sections.length < 2) return null;
 
 		const seq = ++detailStripSeq;
-
-		// DETAIL-ONLY pre-pass (the generic builder's {id, label, pane} model is not sufficient by itself): the tab
-		// label is borrowed from the section's own stacked <h2> title, and that title is then hidden because the tab
-		// replaces it.  A generic strip has no title to borrow or hide, so this cannot move into the builder.
 		const items = [];
-		for (let i = 0; i < sections.length; i++) {
-			const sec = sections[i];
-			const sid = sec.getAttribute("data-juneau-detail-section");
-			const titleEl = typeof sec.querySelector === "function"
-				? sec.querySelector(".juneau-view-detail-section-title") : null;
-			const label = titleEl && titleEl.textContent ? titleEl.textContent : sid;
-			if (titleEl) titleEl.hidden = true;
-			items.push({ id: sid, label: label, pane: sec });
-		}
+		for (const sec of sections) items.push(buildDetailStripItem(sec));
 
 		// DETAIL-ONLY id minting: ids are seeded from a monotonic sequence so N simultaneously-expanded rows never
 		// collide.  DETAIL-ONLY visibility rule: the first section starts selected (the builder's default).
@@ -1812,41 +1852,39 @@
 		});
 		const strip = built.strip;
 
-		var header = typeof panel.querySelector === "function"
-			? panel.querySelector(".juneau-view-detail-header") : null;
-		if (header) {
-			if (header.nextSibling)
-				panel.insertBefore(strip, header.nextSibling);
-			else
-				panel.appendChild(strip);
-		} else {
-			panel.insertBefore(strip, panel.firstChild);
-		}
+		insertDetailStrip(panel, strip);
 		// Detail-caller step, deliberately a peer function (see relocateDetailBarSlot): a server-painted bar-slot
 		// region must follow the ribbon that was just built out from under it.
 		relocateDetailBarSlot(panel, strip);
 		return strip;
 	}
 
+	// A pill is a <span role="button">, where the .disabled property is inert - reflect the disabled state
+	// via aria-disabled + an .is-disabled class instead (activatePillAction ignores either).
+	// NOSONAR javascript:S7761 -- deliberately duck-types the element: hasAttribute is probed for
+	// existence first (some lightweight test-harness mocks only implement a dataset facade), falling
+	// back to dataset so both real DOM elements and those mocks are recognized uniformly.
+	function isActionRefPill(b) {
+		return b.getAttribute?.("role") === "button"
+			&& (b.hasAttribute ? b.hasAttribute("data-juneau-pill") : b.dataset.juneauPill != null);
+	}
+
+	function setPillDisabledVisual(b, enabled) {
+		if (enabled) {
+			b.removeAttribute("aria-disabled");
+			if (b.classList?.remove) b.classList.remove("is-disabled");
+		} else {
+			b.setAttribute("aria-disabled", "true");
+			if (b.classList?.add) b.classList.add("is-disabled");
+		}
+	}
+
 	/** Enables or disables ActionRef buttons; SafeAction.COLLAPSE is never touched. */
 	function setActionRefEnabled(root, enabled) {
 		if (!root || !root.querySelectorAll) return;
-		const buttons = root.querySelectorAll("[data-juneau-action]");
-		for (let i = 0; i < buttons.length; i++) {
-			const b = buttons[i];
+		for (const b of root.querySelectorAll("[data-juneau-action]")) {
 			b.disabled = !enabled;
-			// A pill is a <span role="button">, where the .disabled property is inert - reflect the disabled state
-			// via aria-disabled + an .is-disabled class instead (activatePillAction ignores either).
-			if (b.getAttribute && b.getAttribute("role") === "button"
-				&& (b.hasAttribute ? b.hasAttribute("data-juneau-pill") : b.getAttribute("data-juneau-pill") != null)) {
-				if (enabled) {
-					b.removeAttribute("aria-disabled");
-					if (b.classList && b.classList.remove) b.classList.remove("is-disabled");
-				} else {
-					b.setAttribute("aria-disabled", "true");
-					if (b.classList && b.classList.add) b.classList.add("is-disabled");
-				}
-			}
+			if (isActionRefPill(b)) setPillDisabledVisual(b, enabled);
 		}
 	}
 
@@ -1854,16 +1892,16 @@
 	function hideActionRefs(root) {
 		if (!root || !root.querySelectorAll) return;
 		const buttons = root.querySelectorAll("[data-juneau-action]");
-		for (let i = 0; i < buttons.length; i++) {
-			buttons[i].disabled = true;
-			buttons[i].hidden = true;
+		for (const b of buttons) {
+			b.disabled = true;
+			b.hidden = true;
 		}
 	}
 
 	function findRowActionById(viewDef, id) {
-		const actions = viewDef && viewDef.rowActions ? viewDef.rowActions : [];
-		for (let i = 0; i < actions.length; i++)
-			if (actions[i] && actions[i].id === id) return actions[i];
+		const actions = viewDef?.rowActions || [];
+		for (const a of actions)
+			if (a?.id === id) return a;
 		return null;
 	}
 
@@ -1874,6 +1912,64 @@
 	 *
 	 * <p>"Collapse on redraw" needs no extra code here: DataTables' child-row API does not survive a `draw.dt`.
 	 */
+	// Returns true when the click was a SafeAction.COLLAPSE click (handled here regardless of outcome).
+	function handleDetailSafeCollapseClick(e, dt) {
+		const safeBtn = e.target?.closest ? e.target.closest("[data-juneau-safe=\"collapse\"]") : null;
+		if (!safeBtn) return false;
+		e.preventDefault();
+		e.stopPropagation();
+		const panel = safeBtn.closest(".juneau-view-detail-panel");
+		const parentTr = panel?._juneauParentTr;
+		if (!parentTr) return true;
+		const row = dt.row(parentTr);
+		if (row?.child?.isShown()) {
+			// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
+			// their listeners/timers leak with the detached nodes).
+			teardownNestedTables(panel);
+			teardownDetailBarSlot(panel);
+			row.child.hide();
+			parentTr.classList.remove("juneau-view-detail-open");
+		}
+		return true;
+	}
+
+	// Returns true when the click was a detail-panel ActionRef click (handled here regardless of outcome).
+	// A cell pill also carries [data-juneau-action] but lives in a body <td>, not a panel - bail BEFORE
+	// preventDefault/stopPropagation so its own table-level handler (initRowActions) still fires and the
+	// click is not swallowed.
+	function handleDetailActionRefClick(e, table, ctx, viewDef) {
+		const actionBtn = e.target?.closest ? e.target.closest("[data-juneau-action]") : null;
+		if (!actionBtn) return false;
+		const panel = actionBtn.closest(".juneau-view-detail-panel");
+		const parentTr = panel?._juneauParentTr;
+		if (!parentTr) return true;
+		e.preventDefault();
+		e.stopPropagation();
+		if (actionBtn.disabled || actionBtn.hidden) return true;
+		const action = findRowActionById(viewDef, actionBtn.dataset.juneauAction);
+		if (!action) return true;
+		submitRowAction(action, table, parentTr, ctx);
+		return true;
+	}
+
+	function toggleDetailRow(table, ctx, viewDef, tpl, dt, e) {
+		const tr = e.target?.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
+		if (!tr) return;
+		const row = dt.row(tr);
+		if (!row || !row.length) return;
+		if (row.child.isShown()) {
+			// Tear down nested DataTables before hiding (their child-row DOM is about to be detached).
+			if (tr._juneauDetailPanel) {
+				teardownNestedTables(tr._juneauDetailPanel);
+				teardownDetailBarSlot(tr._juneauDetailPanel);
+			}
+			row.child.hide();
+			tr.classList.remove("juneau-view-detail-open");
+			return;
+		}
+		expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
+	}
+
 	function initDetailsExpander(table, ctx, viewDef) {
 		if (!ctx._detailInflight) ctx._detailInflight = new Map();
 		if (!ctx._detailGeneration) ctx._detailGeneration = new WeakMap();
@@ -1885,62 +1981,14 @@
 			const tpl = findRowDetailTemplate(table);
 			if (!tpl) return;
 
-			const safeBtn = e.target && e.target.closest ? e.target.closest("[data-juneau-safe=\"collapse\"]") : null;
-			if (safeBtn) {
-				e.preventDefault();
-				e.stopPropagation();
-				const panel = safeBtn.closest(".juneau-view-detail-panel");
-				const parentTr = panel && panel._juneauParentTr;
-				if (!parentTr) return;
-				const row = dt.row(parentTr);
-				if (row && row.child && row.child.isShown()) {
-					// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
-					// their listeners/timers leak with the detached nodes).
-					teardownNestedTables(panel);
-					teardownDetailBarSlot(panel);
-					row.child.hide();
-					parentTr.classList.remove("juneau-view-detail-open");
-				}
-				return;
-			}
-
-			const actionBtn = e.target && e.target.closest ? e.target.closest("[data-juneau-action]") : null;
-			if (actionBtn) {
-				// Only a detail-panel ActionRef is handled here.  A cell pill also carries [data-juneau-action] but
-				// lives in a body <td>, not a panel - bail BEFORE preventDefault/stopPropagation so its own
-				// table-level handler (initRowActions) still fires and the click is not swallowed.
-				const panel = actionBtn.closest(".juneau-view-detail-panel");
-				const parentTr = panel && panel._juneauParentTr;
-				if (!parentTr) return;
-				e.preventDefault();
-				e.stopPropagation();
-				if (actionBtn.disabled || actionBtn.hidden) return;
-				const action = findRowActionById(viewDef, actionBtn.getAttribute("data-juneau-action"));
-				if (!action) return;
-				submitRowAction(action, table, parentTr, ctx);
-				return;
-			}
-
-			const tr = e.target && e.target.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
-			if (!tr) return;
-			const row = dt.row(tr);
-			if (!row || !row.length) return;
-			if (row.child.isShown()) {
-				// Tear down nested DataTables before hiding (their child-row DOM is about to be detached).
-				if (tr._juneauDetailPanel) {
-					teardownNestedTables(tr._juneauDetailPanel);
-					teardownDetailBarSlot(tr._juneauDetailPanel);
-				}
-				row.child.hide();
-				tr.classList.remove("juneau-view-detail-open");
-				return;
-			}
-			expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
+			if (handleDetailSafeCollapseClick(e, dt)) return;
+			if (handleDetailActionRefClick(e, table, ctx, viewDef)) return;
+			toggleDetailRow(table, ctx, viewDef, tpl, dt, e);
 		});
 	}
 
 	// ==================================================================================================================
-	// popupLayerStack (TODO-445h): ONE shared registry for stacked light-dismiss / modal layers - dialogs, cell
+	// popupLayerStack (shared-layer-stack feature): ONE shared registry for stacked light-dismiss / modal layers - dialogs, cell
 	// popovers, and row-action menus.  Top-layer-only Escape (preventDefault) and outside-click; per-layer focus trap
 	// for modals; focus restore on pop.  Cell-anchored layers portal to document.body as position:fixed; the page-size
 	// menu (stays position:absolute in the paging pill) and the timestamp popup (initTsPopup / hideTsPopupIfPresent)
@@ -1980,8 +2028,8 @@
 			if (typeof window !== "undefined" && typeof window.getComputedStyle === "function"
 				&& typeof document !== "undefined" && document.documentElement) {
 				const v = window.getComputedStyle(document.documentElement).getPropertyValue(name);
-				const n = v ? parseInt(String(v).trim(), 10) : NaN;
-				if (! isNaN(n)) return n;
+				const n = v ? Number.parseInt(String(v).trim(), 10) : Number.NaN;
+				if (! Number.isNaN(n)) return n;
 			}
 		} catch (e) { /* fall through to the fallback */ }
 		return fallback;
@@ -1991,13 +2039,13 @@
 	function layerZStep() { return cssLayerNumber("--jc-layer-step", 10); }
 
 	function topLayer() {
-		return popupLayerStack.length ? popupLayerStack[popupLayerStack.length - 1] : null;
+		return popupLayerStack.length ? popupLayerStack.at(-1) : null;
 	}
 
 	/** The number of {@code kind === "dialog"} layers currently open (the depth cap counts these, not stack.length). */
 	function dialogLayerCount() {
 		let n = 0;
-		for (let i = 0; i < popupLayerStack.length; i++) if (popupLayerStack[i].kind === "dialog") n++;
+		for (const layer of popupLayerStack) if (layer.kind === "dialog") n++;
 		return n;
 	}
 
@@ -2007,7 +2055,7 @@
 			"textarea:not([disabled]),[tabindex]";
 		const out = [];
 		Array.prototype.forEach.call(el.querySelectorAll(sel), function (n) {
-			if (n && n.getAttribute && n.getAttribute("tabindex") === "-1") return;
+			if (n.getAttribute?.("tabindex") === "-1") return;
 			out.push(n);
 		});
 		return out;
@@ -2017,7 +2065,7 @@
 	function focusFirstInLayer(rec) {
 		const f = focusablesIn(rec.el);
 		const target = f.length ? f[0] : rec.el;
-		if (target && typeof target.focus === "function") { try { target.focus(); } catch (e) { /* ignore */ } }
+		if (typeof target?.focus === "function") { try { target.focus(); } catch (e) { /* ignore */ } }
 	}
 
 	/**
@@ -2045,7 +2093,7 @@
 		popupLayerStack.push(rec);
 		const idx = popupLayerStack.length - 1;
 		if (el.style) el.style.zIndex = String(layerZBase() + idx * layerZStep());
-		if (el.setAttribute) el.setAttribute("data-juneau-layer", String(idx));
+		if (el.dataset) el.dataset.juneauLayer = String(idx);
 		bindLayerStackDocumentListeners();
 		if (rec.trapFocus) focusFirstInLayer(rec);
 		return rec;
@@ -2057,25 +2105,36 @@
 	 * backdrop, so removing it takes exactly that dialog + its own backdrop.  Restores focus to the lowest removed
 	 * layer's {@code returnFocusTo} if it is still in the document.
 	 */
+	function findLayerIndex(el) {
+		for (let i = popupLayerStack.length - 1; i >= 0; i--) if (popupLayerStack[i].el === el) return i;
+		return -1;
+	}
+
+	function dismissRemovedLayers(removed) {
+		for (const rec of removed.slice().reverse()) {
+			if (rec.detachOnPop && rec.el?.parentNode) rec.el.remove();
+			if (rec.onDismiss) { try { rec.onDismiss(); } catch (e) { /* ignore */ } }
+		}
+	}
+
+	function restoreLayerFocus(target) {
+		if (typeof target?.focus !== "function") return;
+		if (typeof document !== "undefined" && typeof document.contains === "function" && !document.contains(target)) return;
+		try { target.focus(); } catch (e) { /* ignore */ }
+	}
+
 	function popLayer(el) {
 		if (! popupLayerStack.length) return;
 		let from = popupLayerStack.length - 1;
 		if (el) {
-			let idx = -1;
-			for (let i = popupLayerStack.length - 1; i >= 0; i--) if (popupLayerStack[i].el === el) { idx = i; break; }
+			const idx = findLayerIndex(el);
 			if (idx < 0) return;   // not a registered layer
 			from = idx;
 		}
 		const removed = popupLayerStack.splice(from);   // [from .. top]
 		const restore = removed.length ? removed[0].returnFocusTo : null;
-		for (let i = removed.length - 1; i >= 0; i--) {
-			const rec = removed[i];
-			if (rec.detachOnPop && rec.el && rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
-			if (rec.onDismiss) { try { rec.onDismiss(); } catch (e) { /* ignore */ } }
-		}
-		if (restore && typeof restore.focus === "function"
-			&& (typeof document === "undefined" || typeof document.contains !== "function" || document.contains(restore)))
-			{ try { restore.focus(); } catch (e) { /* ignore */ } }
+		dismissRemovedLayers(removed);
+		restoreLayerFocus(restore);
 	}
 
 	function handleLayerTab(e) {
@@ -2083,14 +2142,14 @@
 		if (! top || ! top.trapFocus) return;
 		const f = focusablesIn(top.el);
 		if (! f.length) { e.preventDefault(); return; }
-		const first = f[0], last = f[f.length - 1];
+		const first = f[0], last = f.at(-1);
 		const active = (typeof document !== "undefined") ? document.activeElement : null;
-		const inLayer = top.el.contains && top.el.contains(active);
-		if (e.shiftKey) {
-			if (active === first || ! inLayer) { e.preventDefault(); if (typeof last.focus === "function") last.focus(); }
-		} else {
-			if (active === last || ! inLayer) { e.preventDefault(); if (typeof first.focus === "function") first.focus(); }
-		}
+		const inLayer = top.el.contains?.(active);
+		const atEdge = e.shiftKey ? (active === first || ! inLayer) : (active === last || ! inLayer);
+		if (! atEdge) return;
+		e.preventDefault();
+		const target = e.shiftKey ? last : first;
+		if (typeof target.focus === "function") target.focus();
 	}
 
 	let _layerListenersBound = false;
@@ -2109,7 +2168,7 @@
 			const top = topLayer();
 			if (! top || ! top.lightDismiss) return;
 			const t = e.target;
-			if (t && top.el && top.el.contains && top.el.contains(t)) return;
+			if (t && top.el?.contains?.(t)) return;
 			popLayer();
 		});
 	}
@@ -2148,7 +2207,7 @@
 		if (el) {
 			el.style.display = "none";
 			if (typeof el.replaceChildren === "function") el.replaceChildren();
-			else while (el.firstChild) el.removeChild(el.firstChild);
+			else while (el.firstChild) el.firstChild.remove();
 		}
 		if (trigger) {
 			trigger.setAttribute("aria-expanded", "false");
@@ -2162,8 +2221,8 @@
 	function closeCellPopover() {
 		// The cell popover reuses ONE element; when registered as a layer, popLayer's onDismiss hides+resets it (the
 		// element is kept, detachOnPop:false).  Fall back to a direct hide when it is not on the stack.
-		for (let i = popupLayerStack.length - 1; i >= 0; i--) {
-			if (popupLayerStack[i].kind === "popover") { popLayer(popupLayerStack[i].el); return; }
+		for (const layer of popupLayerStack.slice().reverse()) {
+			if (layer.kind === "popover") { popLayer(layer.el); return; }
 		}
 		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
 			? document.getElementById(CELL_POPOVER_ID) : null;
@@ -2198,63 +2257,66 @@
 		cell.textContent = value == null || value === "" ? "" : String(value);
 	}
 
-	function paintPopoverRenderedValue(cell, field, value, rowData) {
-		const spec = typeof NS.parseRenderId === "function" ? NS.parseRenderId(field.render) : field.render;
-		const id = spec && spec.id;
-		const renderer = typeof NS.resolveSinkRenderer === "function" ? NS.resolveSinkRenderer(id) : null;
-		if (!renderer || typeof renderer.display !== "function") {
-			paintPopoverTextValue(cell, value);
-			return;
-		}
+	function popoverRenderMeta(spec) {
 		const meta = {};
 		if (spec.meta) {
 			for (const k in spec.meta) if (Object.hasOwn(spec.meta, k)) meta[k] = spec.meta[k];
 		}
 		meta.popup = "off";
+		return meta;
+	}
+
+	// Resolves DOMParser/document and parses `html`, returning the parsed `<body>` or null when parsing is
+	// unsupported/fails - both cases collapse to the same "fall back to plain text" outcome for callers.
+	function parsePopoverHtmlBody(html) {
+		let Parser = null;
+		if (typeof DOMParser !== "undefined") {
+			Parser = DOMParser;
+		} else if (typeof window !== "undefined") {
+			Parser = window.DOMParser;
+		}
+		const doc = typeof document !== "undefined" ? document : null;
+		if (!Parser || !doc) return null;
+		try {
+			const parsed = new Parser().parseFromString(String(html == null ? "" : html), "text/html");
+			return parsed?.body || null;
+		} catch (e) {
+			// Unsupported/failed parse both fall back to plain text for callers (see doc comment above).
+			warn("juneau-views: popover HTML parse failed: " + e);
+			return null;
+		}
+	}
+
+	function popoverBodyIsPlainText(body) {
+		for (const k of body.childNodes)
+			if (k?.nodeType === 1) return false;
+		return true;
+	}
+
+	function paintPopoverRenderedValue(cell, field, value, rowData) {
+		const spec = typeof NS.parseRenderId === "function" ? NS.parseRenderId(field.render) : field.render;
+		const id = spec?.id;
+		const renderer = typeof NS.resolveSinkRenderer === "function" ? NS.resolveSinkRenderer(id) : null;
+		if (!renderer || typeof renderer.display !== "function") {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		const meta = popoverRenderMeta(spec);
 		let html;
 		try { html = renderer.display(value, rowData, meta); }
 		catch (e) {
 			paintPopoverTextValue(cell, value);
 			return;
 		}
-		const Parser = typeof DOMParser !== "undefined" ? DOMParser
-			: (typeof window !== "undefined" ? window.DOMParser : null);
-		const doc = typeof document !== "undefined" ? document : null;
-		if (!Parser || !doc) {
+		const body = parsePopoverHtmlBody(html);
+		if (!body || !popoverBodyIsPlainText(body)) {
 			paintPopoverTextValue(cell, value);
 			return;
-		}
-		let parsed;
-		try { parsed = new Parser().parseFromString(String(html == null ? "" : html), "text/html"); }
-		catch (e) {
-			paintPopoverTextValue(cell, value);
-			return;
-		}
-		const body = parsed && parsed.body;
-		if (!body) {
-			paintPopoverTextValue(cell, value);
-			return;
-		}
-		const kids = body.childNodes;
-		for (let i = 0; i < kids.length; i++) {
-			if (kids[i] && kids[i].nodeType === 1) {
-				paintPopoverTextValue(cell, value);
-				return;
-			}
 		}
 		cell.textContent = body.textContent == null ? "" : String(body.textContent);
 	}
 
-	/**
-	 * Fills the cell-popover dialog from row data using createElement/textContent only.  Named so the
-	 * raw-HTML scanner can extract it.
-	 */
-	function fillCellPopover(el, popover, rowData) {
-		if (!el) return;
-		if (typeof el.replaceChildren === "function") el.replaceChildren();
-		else while (el.firstChild) el.removeChild(el.firstChild);
-		const doc = typeof document !== "undefined" ? document : null;
-		if (!doc || typeof doc.createElement !== "function") return;
+	function paintCellPopoverTitle(el, doc, popover) {
 		if (popover.title != null && String(popover.title).trim() !== "") {
 			const t = doc.createElement("div");
 			t.className = "jc-cell-popover-title";
@@ -2266,47 +2328,59 @@
 			el.setAttribute("aria-label", "Details");
 			el.removeAttribute("aria-labelledby");
 		}
-		const fields = popover.fields || [];
-		for (let i = 0; i < fields.length; i++) {
-			const f = fields[i];
-			if (!f || f.data == null) continue;
-			const row = doc.createElement("div");
-			row.className = "jc-cell-popover-row";
-			const lab = doc.createElement("div");
-			lab.className = "jc-cell-popover-label";
-			lab.textContent = f.title != null && String(f.title) !== "" ? String(f.title) : String(f.data);
-			const val = doc.createElement("div");
-			val.className = "jc-cell-popover-value";
-			const raw = popoverFieldValue(rowData, f.data);
-			if (f.render)
-				paintPopoverRenderedValue(val, f, raw, rowData);
-			else
-				paintPopoverTextValue(val, raw);
-			row.appendChild(lab);
-			row.appendChild(val);
-			el.appendChild(row);
-		}
+	}
+
+	function appendCellPopoverFieldRow(el, doc, f, rowData) {
+		if (!f || f.data == null) return;
+		const row = doc.createElement("div");
+		row.className = "jc-cell-popover-row";
+		const lab = doc.createElement("div");
+		lab.className = "jc-cell-popover-label";
+		lab.textContent = f.title != null && String(f.title) !== "" ? String(f.title) : String(f.data);
+		const val = doc.createElement("div");
+		val.className = "jc-cell-popover-value";
+		const raw = popoverFieldValue(rowData, f.data);
+		if (f.render)
+			paintPopoverRenderedValue(val, f, raw, rowData);
+		else
+			paintPopoverTextValue(val, raw);
+		row.appendChild(lab);
+		row.appendChild(val);
+		el.appendChild(row);
+	}
+
+	/**
+	 * Fills the cell-popover dialog from row data using createElement/textContent only.  Named so the
+	 * raw-HTML scanner can extract it.
+	 */
+	function fillCellPopover(el, popover, rowData) {
+		if (!el) return;
+		if (typeof el.replaceChildren === "function") el.replaceChildren();
+		else while (el.firstChild) el.firstChild.remove();
+		const doc = typeof document !== "undefined" ? document : null;
+		if (!doc || typeof doc.createElement !== "function") return;
+		paintCellPopoverTitle(el, doc, popover);
+		for (const f of (popover.fields || [])) appendCellPopoverFieldRow(el, doc, f, rowData);
 	}
 
 	function findPopoverDecl(ctx, viewDef, colData) {
-		const cols = (ctx && ctx.effectiveColumns) || (viewDef && viewDef.columns) || [];
-		for (let i = 0; i < cols.length; i++) {
-			const c = cols[i];
+		const cols = (ctx?.effectiveColumns) || (viewDef?.columns) || [];
+		for (const c of cols) {
 			if (!c || c.data !== colData) continue;
 			const spec = typeof NS.parseRenderId === "function" ? NS.parseRenderId(c.render) : c.render;
-			return spec && spec.popover ? spec.popover : null;
+			return spec?.popover ?? null;
 		}
 		return null;
 	}
 
 	function openCellPopover(btn, ctx, viewDef) {
-		const dt = ctx && ctx.dataTable;
+		const dt = ctx?.dataTable;
 		if (!dt || !btn) return;
 		const tr = btn.closest ? btn.closest("tr") : null;
 		if (!tr || typeof dt.row !== "function") return;
 		const row = dt.row(tr);
-		const rowData = row && typeof row.data === "function" ? row.data() : null;
-		const colData = btn.getAttribute("data-juneau-popover-col");
+		const rowData = typeof row?.data === "function" ? row.data() : null;
+		const colData = btn.dataset.juneauPopoverCol;
 		const popover = findPopoverDecl(ctx, viewDef, colData);
 		if (!popover) return;
 		hideTsPopupIfPresent();
@@ -2339,7 +2413,7 @@
 		table._juneauCellPopoverBound = true;
 		table.addEventListener("click", function (e) {
 			if (!isOwnTableEvent(table, e)) return;   // a nested table owns its own cell popovers
-			const btn = e.target && e.target.closest ? e.target.closest("[data-juneau-popover]") : null;
+			const btn = e.target?.closest ? e.target.closest("[data-juneau-popover]") : null;
 			if (!btn) return;
 			e.preventDefault();
 			e.stopPropagation();
@@ -2359,8 +2433,8 @@
 
 		const panel = document.createElement("div");
 		panel.className = "juneau-view-detail-panel";
-		panel.setAttribute("data-testid", "detail-panel");
-		panel.setAttribute("data-juneau-detail-state", "loading");
+		panel.dataset.testid = "detail-panel";
+		panel.dataset.juneauDetailState = "loading";
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
@@ -2376,7 +2450,7 @@
 		// GET succeeded (state "ok").  A tab clicked while the panel is still loading (or has failed) inits nothing,
 		// honoring "init nested after parent 2xx AND pane visible" (a failed parent expand yields no nested table).
 		buildDetailStrip(panel, function (sid, pane) {
-			if (panel.getAttribute("data-juneau-detail-state") !== "ok") return;
+			if (panel.dataset.juneauDetailState !== "ok") return;
 			activateNestedTablesInPane(pane, rowId);
 		});
 		const loading = document.createElement("p");
@@ -2387,7 +2461,7 @@
 		// DataTables wraps the panel in a plain <td colspan> that is a descendant of this .juneau-view-table, so the
 		// table's clip/ellipsis cell default would otherwise flatten the whole expanded panel into one nowrap line.
 		// The host cell takes the same `juneau-cell-wrap` opt-out an author would use, rather than a second rule.
-		if (panel.parentNode && panel.parentNode.classList) panel.parentNode.classList.add(CELL_WRAP_CLASS);
+		if (panel.parentNode?.classList) panel.parentNode.classList.add(CELL_WRAP_CLASS);
 		tr.classList.add("juneau-view-detail-open");
 		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
 		enhanceChromeInPanel(panel);
@@ -2403,7 +2477,7 @@
 		function failClosed(kind, message) {
 			if (!stillCurrent()) { settleMap(); return; }
 			hideActionRefs(panel);
-			panel.setAttribute("data-juneau-detail-state", kind);
+			panel.dataset.juneauDetailState = kind;
 			loading.textContent = message;
 			settleMap();
 		}
@@ -2413,7 +2487,7 @@
 			return;
 		}
 
-		const url = substituteDetailUrl(tpl.getAttribute("data-juneau-detail-url"), rowId);
+		const url = substituteDetailUrl(tpl.dataset.juneauDetailUrl, rowId);
 		if (!url) {
 			failClosed("error", "detail URL is not a same-origin path template");
 			return;
@@ -2434,11 +2508,11 @@
 				return;
 			}
 			const body = parseJsonSafe(env.text);
-			const expected = tpl.getAttribute("data-juneau-detail-contract") || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
+			const expected = tpl.dataset.juneauDetailContract || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
 			if (!detailContractOk(body, expected)) {
-				const m = "Juneau view '" + (viewDef && viewDef.id ? viewDef.id : "") +
+				const m = "Juneau view '" + (viewDef?.id || "") +
 					"': row-detail contract version mismatch (page='" +
-					(body && body.contractVersion) + "', runtime='" + expected + "').";
+					(body?.contractVersion) + "', runtime='" + expected + "').";
 				error(m);
 				renderBanner(table, m);
 				failClosed("error", m);
@@ -2450,8 +2524,8 @@
 			}
 			fillDetailSlots(panel, body.fields);
 			setActionRefEnabled(panel, true);
-			panel.setAttribute("data-juneau-detail-state", "ok");
-			if (loading.parentNode) loading.parentNode.removeChild(loading);
+			panel.dataset.juneauDetailState = "ok";
+			if (loading.parentNode) loading.remove();
 			// Now that the parent detail loaded (2xx + contract OK), init the nested tables that live in a currently
 			// VISIBLE pane (in tab mode, only the initially-selected section is visible; a hidden pane's nested table
 			// waits for its tab to be activated via the onActivate callback above).  Each nested table runs its OWN
@@ -2494,14 +2568,14 @@
 
 		function render() {
 			const age = formatStalenessAge(Date.now() - state.lastSuccessAt);
-			indicator.setAttribute("data-state", state.failed ? "error" : "fresh");
+			indicator.dataset.state = state.failed ? "error" : "fresh";
 			indicator.textContent = state.failed ? "Refresh failed - last updated " + age : "Updated " + age;
 		}
 
 		// Guard against a nested table's draw.dt/error.dt bubbling up to this parent-table poll indicator: a nested
 		// table's own round trips must not reset (or fail) the parent's staleness clock.
-		dt.on("draw.dt", function (e) { if (e && e.target !== table) return; state.lastSuccessAt = Date.now(); state.failed = false; render(); });
-		dt.on("error.dt", function (e) { if (e && e.target !== table) return; state.failed = true; render(); });
+		dt.on("draw.dt", function (e) { if (e && e.target !== table) { return; } state.lastSuccessAt = Date.now(); state.failed = false; render(); });
+		dt.on("error.dt", function (e) { if (e && e.target !== table) { return; } state.failed = true; render(); });
 
 		function poll() {
 			if (document.hidden) return;
@@ -2509,7 +2583,7 @@
 			dt.ajax.reload(null, false);
 		}
 
-		if (ctx && ctx._pollTimers) {
+		if (ctx?._pollTimers) {
 			ctx._pollTimers.forEach(function (id) { clearInterval(id); });
 		}
 		const pollId = setInterval(poll, intervalMs);
@@ -2522,7 +2596,7 @@
 
 	/** The per-row action-menu trigger markup (returned by the synthetic actions column's render). */
 	function actionTriggerMarkup() {
-		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const icons = window.JuneauViews?.icons;
 		const glyph = icons?.resolveIcon ? icons.resolveIcon("more_vert") : null;
 		const inner = glyph != null ? glyph : "\u22EF";   // horizontal ellipsis fallback when no glyph is registered
 		return '<button type="button" class="juneau-view-action-trigger" aria-haspopup="menu" ' +
@@ -2535,13 +2609,16 @@
 	 * Returns the raw attribute value (possibly null/blank); isBlankToken(...) is what decides fail-closed, so a
 	 * whitespace value is NOT normalized away here - it must reach the same blank test the server boundary uses.
 	 */
+	// NOSONAR javascript:S7761 -- this function is exported on window.JuneauViews and its doc comment
+	// specifically documents a `null` (not `undefined`) return for a missing token; `dataset.juneauCsrf`
+	// would return `undefined` instead, changing this public function's documented contract.
 	function resolveCsrfToken(table) {
 		return table.getAttribute("data-juneau-csrf");
 	}
 
 	/** The per-table CSRF header-name override (`data-juneau-csrf-header`), else the framework default. */
 	function resolveCsrfHeaderName(table) {
-		const override = table.getAttribute("data-juneau-csrf-header");
+		const override = table.dataset.juneauCsrfHeader;
 		return isBlankToken(override) ? DEFAULT_CSRF_HEADER : override.trim();
 	}
 
@@ -2556,7 +2633,7 @@
 	}
 
 	// ==================================================================================================================
-	// ROW SELECTION + BULK MUTATION (TODO-428) - two INDEPENDENT opt-ins (HIGH-5), detected purely from DOM
+	// ROW SELECTION + BULK MUTATION (row-selection/bulk-mutation feature) - two INDEPENDENT opt-ins (HIGH-5), detected purely from DOM
 	// attributes ViewTable stamps (SELECT_ATTR / BULK_ATTR) - NEVER from VIEW_META/viewDef.  Enabling selection
 	// alone can never surface a bulk-mutate control: hasBulk(...) is only ever consulted from within the
 	// `hasSelection(table)` branch of initTable, and BULK_ATTR is only ever stamped by ViewTable when a
@@ -2577,11 +2654,11 @@
 	 * Stamps the STABLE row id (MED-11) onto a just-created `<tr>`, read from that row's OWN data via the
 	 * `rowIdField` key - never a DOM/table index. A no-op when `rowIdField` is absent (selection not declared) or
 	 * the row has no such key (nothing to stamp; that row is simply unselectable). This is the ONLY place
-	 * `ROW_ID_ATTR` is written; every reader elsewhere (selection wiring, bulk execution, the TODO-416 modal path's
+	 * `ROW_ID_ATTR` is written; every reader elsewhere (selection wiring, bulk execution, the declarative-modal path's
 	 * `submitActionDialog`) treats it as already-authoritative once stamped.
 	 */
 	function stampRowId(rowEl, rowData, rowIdField) {
-		var id;
+		let id;
 		if (rowIdField) id = rowIdOf(rowData, rowIdField);
 		if (id == null && rowData) {
 			if (rowData.id != null) id = rowData.id;
@@ -2603,8 +2680,8 @@
 	 */
 	function detailsControlCellMarkup() {
 		const icons = NS.icons;
-		const collapsed = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon("chevron_right") : "";
-		const expanded = icons && typeof icons.resolveIcon === "function" ? icons.resolveIcon("expand_more") : "";
+		const collapsed = typeof icons?.resolveIcon === "function" ? icons.resolveIcon("chevron_right") : "";
+		const expanded = typeof icons?.resolveIcon === "function" ? icons.resolveIcon("expand_more") : "";
 		return '<span class="juneau-view-detail-glyphs" aria-hidden="true">'
 			+ '<span class="juneau-view-detail-collapsed">' + (collapsed || "\u25B8") + '</span>'
 			+ '<span class="juneau-view-detail-expanded">' + (expanded || "\u25BE") + '</span>'
@@ -2653,19 +2730,19 @@
 	 * Wires row selection: per-row checkbox toggle (delegated `change` listener - checkboxes are re-created on
 	 * every draw, the table element is not), the optional select-all header checkbox (only when `SelectionDef`
 	 * declared `selectAll`), and the off-screen-id-drop persistence rule (Q2/MED-11) on every `draw.dt` (sort,
-	 * page, or a TODO-426 poll tick).  Select-all is scoped to the CURRENT draw's rows only (the ones actually on
+	 * page, or an auto-refresh poll tick).  Select-all is scoped to the CURRENT draw's rows only (the ones actually on
 	 * screen) - consistent with the drop rule, it can never reach into an off-screen page.
 	 */
 	function initSelection(table, ctx) {
 		function refresh() {
-			if (ctx && ctx.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
+			if (ctx?.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
 		}
 
 		table.addEventListener("change", function (e) {
 			const selectionState = ctx.selectionState;
 			if (!selectionState) return;
 			if (!isOwnTableEvent(table, e)) return;   // a nested table's checkboxes belong to its own selection
-			const allCb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-all-checkbox") : null;
+			const allCb = e.target?.closest ? e.target.closest(".juneau-view-select-all-checkbox") : null;
 			if (allCb) {
 				// Scoped to this table's OWN rows: select-all must never reach into a nested table's rows.
 				ownRowsWithId(table).forEach(function (tr) {
@@ -2677,7 +2754,7 @@
 				refresh();
 				return;
 			}
-			const cb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-checkbox") : null;
+			const cb = e.target?.closest ? e.target.closest(".juneau-view-select-checkbox") : null;
 			if (!cb) return;
 			const tr = cb.closest("tr");
 			const id = tr ? tr.getAttribute(ROW_ID_ATTR) : null;
@@ -2743,7 +2820,7 @@
 	function buildBulkToolbar(bulkDef, table, ctx, selectionState) {
 		const bar = document.createElement("div");
 		bar.className = "juneau-view-bulk-toolbar";
-		bar.setAttribute("data-testid", "bulk-toolbar");
+		bar.dataset.testid = "bulk-toolbar";
 
 		const countEl = document.createElement("span");
 		countEl.className = "juneau-view-bulk-count";
@@ -2772,9 +2849,9 @@
 	/**
 	 * Executes ONE bulk action over the current selection as N INDEPENDENT per-row writes (HIGH-5) - it is a
 	 * plain loop calling the SAME submitRowAction(...) the single-row action-menu uses, once per selected id, each
-	 * carrying that row's stable id as `targetId` in the JSON body (the same `extra` convention the TODO-416 modal
+	 * carrying that row's stable id as `targetId` in the JSON body (the same `extra` convention the declarative-modal
 	 * submit path already uses for `idempotencyKey`/`targetId`).  There is deliberately NO aggregate request and
-	 * NO aggregate result: each row gets its own TODO-417 in-flight marker and its own typed ActionResult,
+	 * NO aggregate result: each row gets its own in-flight marker and its own typed ActionResult,
 	 * rendered independently, so one target's failure/refusal/unknown can never be hidden behind an overall
 	 * "success" - and each clears ITS OWN `data-juneau-inflight` on ITS OWN terminal outcome (MED-4), so a stuck
 	 * target can never halt the whole table's polling.  A selected id whose row is no longer on screen (e.g. it
@@ -2807,8 +2884,8 @@
 	 * buildActionRequest(...) for a request descriptor, and:
 	 *   - on a refusal marker (safe method, or blank/absent/whitespace token) renders a VISIBLE refusal and sends
 	 *     NOTHING - no silent degradation, and never an empty-header request the server would 403;
-	 *   - otherwise marks the row in-flight (TODO-417) and issues the JSON fetch with the CSRF header, then settles
-	 *     the row from the typed ActionResult / transport refusal (TODO-416).
+	 *   - otherwise marks the row in-flight and issues the JSON fetch with the CSRF header, then settles
+	 *     the row from the typed ActionResult / transport refusal (declarative-modal path).
 	 *
 	 * This is the DIRECT submit path (no confirmation dialog); a `present=dialog` action goes through
 	 * openActionDialog(...) instead.  The optional `extra` payload (idempotencyKey + targetId) is carried on the
@@ -2837,20 +2914,20 @@
 	/**
 	 * Whether `table` currently has a row marked in-flight (design doc §9.1 B5) - see hasInFlightRow above; this is
 	 * the setter half.  Marks the `<tr>` in-flight for an OUTSTANDING SYNCHRONOUS WRITE and disables its action
-	 * trigger so a double-click cannot issue a second write (TODO-417).  The marker is scoped to synchronous writes
-	 * ONLY - a long-running async job (TODO-425) uses a distinct affordance that does not inhibit table polling,
+	 * trigger so a double-click cannot issue a second write.  The marker is scoped to synchronous writes
+	 * ONLY - a long-running async-SSE-job uses a distinct affordance that does not inhibit table polling,
 	 * because initPolling skips the WHOLE table's poll while any row carries this marker.
 	 */
 	function setRowInFlight(tr, on) {
 		if (!tr) return;
-		if (on) tr.setAttribute("data-juneau-inflight", "1");
-		else tr.removeAttribute("data-juneau-inflight");
+		if (on) tr.dataset.juneauInflight = "1";
+		else delete tr.dataset.juneauInflight;
 		const trigger = tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
 		if (trigger) trigger.disabled = !!on;
 	}
 
 	/**
-	 * Settles a row from an action-submit response - the TODO-416/417 join point.  It ALWAYS clears the in-flight
+	 * Settles a row from an action-submit response - the declarative-modal / in-flight-marker join point.  It ALWAYS clears the in-flight
 	 * marker and re-enables the action FIRST (on success, failure, refusal, unknown, AND a transport refusal), so a
 	 * stuck marker can never freeze the whole table's polling (MED-4); then it renders the outcome:
 	 *   - non-2xx  -> a visible TRANSPORT refusal built from `X-Loopback-Boundary` + the `{reason,message}` envelope,
@@ -2864,7 +2941,7 @@
 		if (! resp) { renderActionOutcome(tr, { outcome: "unknown" }); return; }
 
 		if (! resp.ok) {
-			const boundaryReason = (resp.headers && typeof resp.headers.get === "function")
+			const boundaryReason = (typeof resp.headers?.get === "function")
 				? resp.headers.get("X-Loopback-Boundary") : null;
 			readBodyText(resp).then(function (text) {
 				const t = transportRefusal(resp.status, boundaryReason, parseJsonSafe(text));
@@ -2874,7 +2951,7 @@
 		}
 
 		readBodyText(resp).then(function (text) {
-			// TODO-425: an ASYNC action's start POST returns a job pointer (not a terminal result).  The in-flight
+			// Async-SSE-job feature: an ASYNC action's start POST returns a job pointer (not a terminal result).  The in-flight
 			// marker was ALREADY cleared above (first line of settle), so table polling has resumed BEFORE the long
 			// job runs - the job then uses the DISTINCT job-running affordance (data-juneau-job), never
 			// data-juneau-inflight, so hasInFlightRow/initPolling never freeze the whole table for the job's
@@ -2909,7 +2986,7 @@
 
 	/** Reads a fetch Response body as text, defensively (a stubbed/absent body resolves to "" rather than throwing). */
 	function readBodyText(resp) {
-		if (resp && typeof resp.text === "function") {
+		if (typeof resp?.text === "function") {
 			try { return Promise.resolve(resp.text()); } catch (e) { return Promise.resolve(""); }
 		}
 		return Promise.resolve("");
@@ -2917,15 +2994,15 @@
 
 	/**
 	 * Applies a successful action's onSuccess behavior: `mergeRow` re-renders the row from the result's authoritative
-	 * payload (TODO-417), `redraw` reloads the table, `navigate` is left to the consumer.  A bare success (no typed
+	 * payload, `redraw` reloads the table, `navigate` is left to the consumer.  A bare success (no typed
 	 * result) with onSuccess=redraw still redraws, preserving the pre-416 direct-submit behavior.
 	 */
 	function applySuccessBehavior(action, table, tr, ctx, result) {
-		if (result && result.message)
-			paintActionMessageIntoDetail(tr, action && action.id, result.message);
-		if (action.onSuccess === "mergeRow" && result && result.row != null) {
+		if (result?.message)
+			paintActionMessageIntoDetail(tr, action?.id, result.message);
+		if (action.onSuccess === "mergeRow" && result?.row != null) {
 			mergeRowFromResult(tr, ctx, result.row);
-		} else if (action.onSuccess === "redraw" && ctx && ctx.redraw) {
+		} else if (action.onSuccess === "redraw" && ctx?.redraw) {
 			ctx.redraw();
 		}
 	}
@@ -2939,17 +3016,17 @@
 	function mergeRowFromResult(tr, ctx, rowData) {
 		let mergedViaDt = false;
 		try {
-			if (ctx && ctx.dataTable && typeof ctx.dataTable.row === "function") {
+			if (typeof ctx?.dataTable?.row === "function") {
 				const row = ctx.dataTable.row(tr);
-				if (row && typeof row.data === "function") {
+				if (typeof row?.data === "function") {
 					row.data(rowData);
 					if (typeof row.draw === "function") row.draw(false);
 					mergedViaDt = true;
 				}
 			}
 		} catch (e) { mergedViaDt = false; }
-		if (! mergedViaDt && ctx && typeof ctx.mergeRow === "function") ctx.mergeRow(tr, rowData);
-		if (tr && tr.setAttribute) tr.setAttribute("data-juneau-row-merged", "1");
+		if (! mergedViaDt && typeof ctx?.mergeRow === "function") ctx.mergeRow(tr, rowData);
+		if (tr?.dataset) tr.dataset.juneauRowMerged = "1";
 	}
 
 	/**
@@ -2964,21 +3041,21 @@
 		if (! banner) {
 			banner = document.createElement("div");
 			banner.className = "juneau-view-action-outcome";
-			banner.setAttribute("data-testid", "action-outcome");
+			banner.dataset.testid = "action-outcome";
 			cell.appendChild(banner);
 		}
 		const state = cls.outcome || "unknown";
-		banner.setAttribute("data-state", state);
+		banner.dataset.state = state;
 		banner.setAttribute("role", state === "success" ? "status" : "alert");
 		banner.textContent = actionOutcomeMessage(cls);
 	}
 
 	// ==================================================================================================================
-	// ASYNC JOBS (TODO-425): a long-running job streamed over SSE, with a DISTINCT running affordance
+	// ASYNC JOBS (async-SSE-job feature): a long-running job streamed over SSE, with a DISTINCT running affordance
 	// ==================================================================================================================
 
 	/**
-	 * Marks a row as running a LONG async job (TODO-425) - deliberately a DIFFERENT attribute
+	 * Marks a row as running a LONG async job (async-SSE-job feature) - deliberately a DIFFERENT attribute
 	 * (`data-juneau-job`) from the synchronous in-flight marker (`data-juneau-inflight`).  This is the whole point
 	 * of HIGH-9: hasInFlightRow (and therefore initPolling) freezes the ENTIRE table's polling while ANY row
 	 * carries `data-juneau-inflight`, which is correct for a short synchronous write but catastrophic for a job
@@ -2989,8 +3066,8 @@
 	 */
 	function setRowJobRunning(tr, on) {
 		if (!tr) return;
-		if (on) tr.setAttribute("data-juneau-job", "1");
-		else tr.removeAttribute("data-juneau-job");
+		if (on) tr.dataset.juneauJob = "1";
+		else delete tr.dataset.juneauJob;
 		const trigger = tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
 		if (trigger) trigger.disabled = !!on;
 	}
@@ -3008,12 +3085,12 @@
 		if (! banner) {
 			banner = document.createElement("div");
 			banner.className = "juneau-view-job-progress";
-			banner.setAttribute("data-testid", "job-progress");
+			banner.dataset.testid = "job-progress";
 			banner.setAttribute("role", "status");
 			const msg = document.createElement("span");
 			msg.className = "juneau-view-job-progress-msg";
 			banner.appendChild(msg);
-			if (started && ! isBlankToken(started.cancelUrl)) {
+			if (! isBlankToken(started?.cancelUrl)) {
 				const cancel = document.createElement("button");
 				cancel.type = "button";
 				cancel.className = "juneau-view-job-cancel";
@@ -3031,11 +3108,11 @@
 	function clearJobProgress(tr) {
 		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
 		const banner = cell.querySelector ? cell.querySelector(".juneau-view-job-progress") : null;
-		if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+		if (banner?.parentNode) banner.remove();
 	}
 
 	/**
-	 * Opens the SSE progress stream for a started async job and drives the row through its lifecycle (TODO-425).
+	 * Opens the SSE progress stream for a started async job and drives the row through its lifecycle (async-SSE-job feature).
 	 * The stream URL ITSELF is the capability (an unguessable >=128-bit token) - a browser EventSource CANNOT set
 	 * an X-Csrf-Token header, so unguessability is the access control, not a CSRF header (HIGH-4).  `progress`
 	 * events update the live banner; the single terminal `result` event carries the typed ActionResult and settles
@@ -3058,7 +3135,7 @@
 			if (st.settled) return;
 			st.settled = true;
 			es.close();
-			if (ctx && ctx._jobSources) ctx._jobSources.delete(es);
+			if (ctx?._jobSources) ctx._jobSources.delete(es);
 			setRowJobRunning(tr, false);
 			clearJobProgress(tr);
 			if (result) finishJobFromResult(action, table, tr, ctx, result);
@@ -3067,7 +3144,7 @@
 		es.addEventListener("progress", function (e) {
 			if (! st.settled) {
 				renderJobProgress(tr, e.data, started, table);
-				paintActionMessageIntoDetail(tr, action && action.id, e.data);
+				paintActionMessageIntoDetail(tr, action?.id, e.data);
 			}
 		});
 		es.addEventListener("result", function (e) {
@@ -3114,7 +3191,7 @@
 	 * event, so this only asks; a blank token or missing cancelUrl renders a visible refusal and sends nothing.
 	 */
 	function cancelJob(started, table, tr) {
-		const req = buildJobCancelRequest(started && started.cancelUrl, resolveCsrfToken(table), resolveCsrfHeaderName(table));
+		const req = buildJobCancelRequest(started?.cancelUrl, resolveCsrfToken(table), resolveCsrfHeaderName(table));
 		if (req.refuse) {
 			renderRowActionRefusal(tr, { id: "cancel", label: "Cancel" }, req.reason === "missing-token" ? "missing-token" : "request-failed");
 			return;
@@ -3124,7 +3201,7 @@
 	}
 
 	/**
-	 * Opens a `present=dialog` action's modal overlay (TODO-416).  When the action declares a form-source URL, the
+	 * Opens a `present=dialog` action's modal overlay (declarative-modal path).  When the action declares a form-source URL, the
 	 * modal-open confirmation is a READ-ONLY GET that returns the typed ModalDef JSON (confirmation fields + the
 	 * server-minted idempotency key) - it never mutates (HIGH-7); its typed fields are painted with `textContent`
 	 * (never `innerHTML`, never raw markup - BLK-1/MED-9).  With no form URL the dialog is a confirm-only prompt
@@ -3143,10 +3220,10 @@
 				if (! resp || ! resp.ok) {
 					// A non-2xx on the read-only confirmation fetch is itself a visible transport refusal - the
 					// modal never opens optimistically on a boundary rejection.
-					const boundaryReason = (resp && resp.headers && typeof resp.headers.get === "function")
+					const boundaryReason = (typeof resp?.headers?.get === "function")
 						? resp.headers.get("X-Loopback-Boundary") : null;
 					return readBodyText(resp).then(function (text) {
-						const t = transportRefusal(resp ? resp.status : 0, boundaryReason, parseJsonSafe(text));
+						const t = transportRefusal(resp?.status ?? 0, boundaryReason, parseJsonSafe(text));
 						renderActionOutcome(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message });
 					});
 				}
@@ -3186,7 +3263,7 @@
 	function buildDialogOverlay(modal, action, table, tr, ctx, seq) {
 		const backdrop = document.createElement("div");
 		backdrop.className = "juneau-view-dialog-backdrop";
-		backdrop.setAttribute("data-testid", "dialog-backdrop");
+		backdrop.dataset.testid = "dialog-backdrop";
 
 		const dialog = document.createElement("div");
 		dialog.className = "juneau-view-dialog";
@@ -3195,25 +3272,25 @@
 
 		const title = document.createElement("h2");
 		title.className = "juneau-view-dialog-title";
-		title.textContent = (modal && modal.title) || (action && (action.confirm || action.label || action.id)) || "Confirm";
+		title.textContent = (modal?.title) || (action?.confirm || action?.label || action?.id) || "Confirm";
 		dialog.appendChild(title);
 
-		if (modal && modal.fields && modal.fields.length) {
+		if (modal?.fields?.length) {
 			const dl = document.createElement("dl");
 			dl.className = "juneau-view-dialog-fields";
-			dl.setAttribute("data-testid", "dialog-fields");
+			dl.dataset.testid = "dialog-fields";
 			modal.fields.forEach(function (f) {
 				const dt = document.createElement("dt");
-				dt.textContent = (f && f.label != null) ? String(f.label) : "";
+				dt.textContent = (f?.label != null) ? String(f.label) : "";
 				const dd = document.createElement("dd");
-				dd.textContent = (f && f.value != null) ? String(f.value) : "";
+				dd.textContent = (f?.value != null) ? String(f.value) : "";
 				dl.appendChild(dt);
 				dl.appendChild(dd);
 			});
 			dialog.appendChild(dl);
 		}
 
-		appendDialogForm(dialog, modal && modal.form, table, tr, ctx, seq);
+		appendDialogForm(dialog, modal?.form, table, tr, ctx, seq);
 
 		const actions = document.createElement("div");
 		actions.className = "juneau-view-dialog-actions";
@@ -3224,7 +3301,7 @@
 		const confirmBtn = document.createElement("button");
 		confirmBtn.type = "button";
 		confirmBtn.className = "juneau-view-dialog-confirm";
-		confirmBtn.textContent = (action && action.label) || "Confirm";
+		confirmBtn.textContent = action?.label || "Confirm";
 		actions.appendChild(cancelBtn);
 		actions.appendChild(confirmBtn);
 		dialog.appendChild(actions);
@@ -3257,78 +3334,92 @@
 	 * A `type=action` whose id is absent from the enclosing view's `rowActions` catalog is painted DISABLED (a visible,
 	 * fail-closed refusal at paint time; never a throw - SF-1 / H-P4-S1).
 	 */
+	function buildSelectFormControl(f) {
+		const control = document.createElement("select");
+		for (const o of (f.options || [])) {
+			if (! o || o.value == null) continue;
+			const opt = document.createElement("option");
+			opt.value = String(o.value);
+			opt.textContent = o.label != null ? String(o.label) : String(o.value);
+			control.appendChild(opt);
+		}
+		return control;
+	}
+
+	function buildCheckboxFormControl(type, f) {
+		const control = document.createElement("input");
+		control.type = "checkbox";
+		if (type === "toggle") {
+			control.setAttribute("role", "switch");
+			control.className = "juneau-view-toggle";
+		}
+		const on = isCheckedToken(f.value);
+		control.checked = on;
+		control.setAttribute("aria-checked", on ? "true" : "false");
+		control.addEventListener("change", function () {
+			control.setAttribute("aria-checked", control.checked ? "true" : "false");
+		});
+		return control;
+	}
+
+	// A `type=action` button: its name/id wiring is entirely its own (no shared tail post-processing), and
+	// a missing/non-dialog action id paints DISABLED rather than throwing (SF-1 / H-P4-S1).
+	function buildActionFormControl(f, table, tr, ctx) {
+		const control = document.createElement("button");
+		control.type = "button";
+		control.className = "juneau-view-dialog-form-action";
+		control.textContent = f.label != null ? String(f.label) : String(f.name);
+		control.name = String(f.name);
+		control.dataset.juneauFormField = String(f.name);
+		const actionId = f.actionId;
+		if (! dialogActionIsOpenable(ctx, actionId)) {
+			control.disabled = true;
+			control.setAttribute("aria-disabled", "true");
+			control.dataset.juneauActionMissing = "1";
+		}
+		control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx); });
+		return control;
+	}
+
+	function applyTextFormControlPrefill(control, f) {
+		if (f.value != null) control.value = String(f.value);
+		if (f.maxLength != null) {
+			const ml = Number.parseInt(f.maxLength, 10);
+			if (! Number.isNaN(ml) && ml > 0) control.maxLength = ml;
+		}
+		if (f.pattern != null) control.dataset.juneauPattern = String(f.pattern);
+	}
+
 	function paintFormControl(row, f, id, table, tr, ctx) {
 		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
 		if (! isTypedFormInputType(type)) return null;
-		let control;
-		if (type === "textarea") {
-			control = document.createElement("textarea");
-		} else if (type === "select") {
-			control = document.createElement("select");
-			const options = f.options || [];
-			for (let i = 0; i < options.length; i++) {
-				const o = options[i];
-				if (! o || o.value == null) continue;
-				const opt = document.createElement("option");
-				opt.value = String(o.value);
-				opt.textContent = o.label != null ? String(o.label) : String(o.value);
-				control.appendChild(opt);
-			}
-		} else if (type === "checkbox" || type === "toggle") {
-			control = document.createElement("input");
-			control.type = "checkbox";
-			if (type === "toggle") {
-				control.setAttribute("role", "switch");
-				control.className = "juneau-view-toggle";
-			}
-			const on = isCheckedToken(f.value);
-			control.checked = on;
-			control.setAttribute("aria-checked", on ? "true" : "false");
-			control.addEventListener("change", function () {
-				control.setAttribute("aria-checked", control.checked ? "true" : "false");
-			});
-		} else if (type === "action") {
-			control = document.createElement("button");
-			control.type = "button";
-			control.className = "juneau-view-dialog-form-action";
-			control.textContent = f.label != null ? String(f.label) : String(f.name);
-			control.name = String(f.name);
-			control.setAttribute("data-juneau-form-field", String(f.name));
-			const actionId = f.actionId;
-			if (! dialogActionIsOpenable(ctx, actionId)) {
-				control.disabled = true;
-				control.setAttribute("aria-disabled", "true");
-				control.setAttribute("data-juneau-action-missing", "1");
-			}
-			control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx); });
+		// `action` has no shared id/name/value tail below - it wires its own name/dataset and returns early.
+		if (type === "action") {
+			const control = buildActionFormControl(f, table, tr, ctx);
 			row.appendChild(control);
 			return control;
-		} else {
-			control = document.createElement("input");
-			control.type = "text";
 		}
+		let control;
+		if (type === "textarea") control = document.createElement("textarea");
+		else if (type === "select") control = buildSelectFormControl(f);
+		else if (type === "checkbox" || type === "toggle") control = buildCheckboxFormControl(type, f);
+		else { control = document.createElement("input"); control.type = "text"; }
+
 		control.id = id;
 		control.name = String(f.name);
-		control.setAttribute("data-juneau-form-field", String(f.name));
+		control.dataset.juneauFormField = String(f.name);
 		if (f.required) { control.required = true; control.setAttribute("aria-required", "true"); }
 		if (type === "select" && f.value != null) control.value = String(f.value);
-		if (type === "text" || type === "textarea") {
-			if (f.value != null) control.value = String(f.value);
-			if (f.maxLength != null) {
-				const ml = parseInt(f.maxLength, 10);
-				if (! isNaN(ml) && ml > 0) control.maxLength = ml;
-			}
-			if (f.pattern != null) control.setAttribute("data-juneau-pattern", String(f.pattern));
-		}
+		if (type === "text" || type === "textarea") applyTextFormControlPrefill(control, f);
 		row.appendChild(control);
 		return control;
 	}
 
 	/** Whether `actionId` names a present=dialog RowAction on the enclosing view (paint-time catalog check, SF-1). */
 	function dialogActionIsOpenable(ctx, actionId) {
-		const catalog = (ctx && ctx.viewDef && ctx.viewDef.rowActions) || [];
-		for (let i = 0; i < catalog.length; i++)
-			if (catalog[i] && catalog[i].id === actionId && isDialogAction(catalog[i])) return true;
+		const catalog = (ctx?.viewDef?.rowActions) || [];
+		for (const c of catalog)
+			if (c?.id === actionId && isDialogAction(c)) return true;
 		return false;
 	}
 
@@ -3340,8 +3431,8 @@
 	function openFormActionDialog(actionId, table, tr, ctx) {
 		if (! dialogActionIsOpenable(ctx, actionId)) { renderDialogActionRefusal(actionId); return; }
 		let target = null;
-		const catalog = (ctx && ctx.viewDef && ctx.viewDef.rowActions) || [];
-		for (let i = 0; i < catalog.length; i++) if (catalog[i] && catalog[i].id === actionId) { target = catalog[i]; break; }
+		const catalog = (ctx?.viewDef?.rowActions) || [];
+		for (const c of catalog) if (c?.id === actionId) { target = c; break; }
 		openActionDialog(target, table, tr, ctx);
 	}
 
@@ -3359,15 +3450,15 @@
 
 	function renderTopDialogNotice(cls, testid, text) {
 		const top = topLayer();
-		const el = top && top.el;
-		const host = (el && el.querySelector && el.querySelector(".juneau-view-dialog")) || el;
+		const el = top?.el;
+		const host = (el?.querySelector?.(".juneau-view-dialog")) || el;
 		if (! host || ! host.appendChild) return;
 		let banner = host.querySelector ? host.querySelector("." + cls) : null;
 		if (! banner) {
 			banner = document.createElement("div");
 			banner.className = cls;
 			banner.setAttribute("role", "alert");
-			banner.setAttribute("data-testid", testid);
+			banner.dataset.testid = testid;
 			host.appendChild(banner);
 		}
 		banner.textContent = text;
@@ -3384,11 +3475,11 @@
 		if (!dialog || !form) return;
 		// A sectioned form and a flat one are mutually exclusive on the server (FormDef.validate rejects both), so
 		// sections win here without needing to reconcile the two.
-		if (form.sections && form.sections.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return; }
+		if (form.sections?.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return; }
 		if (!form.fields || !form.fields.length) return;
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
-		wrap.setAttribute("data-testid", "dialog-form");
+		wrap.dataset.testid = "dialog-form";
 		form.fields.forEach(function (f) { appendDialogFormRow(wrap, dialog, f, table, tr, ctx, seq); });
 		if (wrap.childNodes.length)
 			dialog.appendChild(wrap);
@@ -3399,6 +3490,31 @@
 	 * A blank name or an off-allowlist type is skipped (nothing appended).  Extracted from appendDialogForm so a
 	 * sectioned form paints its rows into a per-section pane with byte-identical row markup.
 	 */
+	// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
+	// error id added only when invalid - S5).
+	function appendDialogFormHelpAndError(row, dialog, control, f, id) {
+		let helpId = null;
+		if (f.help != null && String(f.help) !== "") {
+			const help = document.createElement("div");
+			help.className = "juneau-view-dialog-form-help";
+			help.id = id + "-help";
+			help.dataset.juneauHelp = "1";
+			help.textContent = String(f.help);
+			row.appendChild(help);
+			helpId = help.id;
+		}
+		const err = document.createElement("div");
+		err.className = "juneau-view-dialog-form-error";
+		err.id = id + "-error";
+		err.dataset.juneauErrorFor = String(f.name);
+		err.setAttribute("aria-live", "polite");
+		row.appendChild(err);
+		control._juneauErrorEl = err;
+		control._juneauHelpId = helpId;
+		if (helpId) control.setAttribute("aria-describedby", helpId);
+		bindControlValidation(dialog, control);
+	}
+
 	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq) {
 		if (!f || f.name == null || String(f.name) === "") return;
 		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
@@ -3414,30 +3530,7 @@
 		}
 		const control = paintFormControl(row, f, id, table, tr, ctx);
 		if (! control) return;   // unknown type skipped
-		if (type !== "action") {
-			let helpId = null;
-			if (f.help != null && String(f.help) !== "") {
-				const help = document.createElement("div");
-				help.className = "juneau-view-dialog-form-help";
-				help.id = id + "-help";
-				help.setAttribute("data-juneau-help", "1");
-				help.textContent = String(f.help);
-				row.appendChild(help);
-				helpId = help.id;
-			}
-			const err = document.createElement("div");
-			err.className = "juneau-view-dialog-form-error";
-			err.id = id + "-error";
-			err.setAttribute("data-juneau-error-for", String(f.name));
-			err.setAttribute("aria-live", "polite");
-			row.appendChild(err);
-			// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
-			// error id added only when invalid - S5).
-			control._juneauErrorEl = err;
-			control._juneauHelpId = helpId;
-			if (helpId) control.setAttribute("aria-describedby", helpId);
-			bindControlValidation(dialog, control);
-		}
+		if (type !== "action") appendDialogFormHelpAndError(row, dialog, control, f, id);
 		host.appendChild(row);
 	}
 
@@ -3457,18 +3550,17 @@
 	function appendSectionedDialogForm(dialog, form, table, tr, ctx, seq) {
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
-		wrap.setAttribute("data-testid", "dialog-form");
+		wrap.dataset.testid = "dialog-form";
 
 		const items = [];
-		for (let i = 0; i < form.sections.length; i++) {
-			const s = form.sections[i];
+		for (const s of form.sections) {
 			if (!s || s.id == null || String(s.id) === "") continue;
 			const pane = document.createElement("div");
 			pane.className = "juneau-view-dialog-form-section";
-			pane.setAttribute("data-juneau-form-section", String(s.id));
+			pane.dataset.juneauFormSection = String(s.id);
 			const fields = s.fields || [];
-			for (let j = 0; j < fields.length; j++)
-				appendDialogFormRow(pane, dialog, fields[j], table, tr, ctx, seq);
+			for (const field of fields)
+				appendDialogFormRow(pane, dialog, field, table, tr, ctx, seq);
 			if (! pane.childNodes.length) continue;   // every field skipped -> no empty tab
 			items.push({ id: String(s.id), label: s.label == null ? String(s.id) : String(s.label), pane: pane });
 		}
@@ -3482,8 +3574,8 @@
 			paneId: function (i) { return "juneau-dialog-section-pane-" + sseq + "-" + i; }
 		});
 		wrap.appendChild(built.strip);
-		for (let i = 0; i < items.length; i++)
-			wrap.appendChild(items[i].pane);
+		for (const it of items)
+			wrap.appendChild(it.pane);
 		// Confirm-time validation reveals the owning section before focusing an invalid control in a hidden one.
 		wrap._juneauActivateSection = built.activate;
 		dialog.appendChild(wrap);
@@ -3494,11 +3586,11 @@
 	 * user can see.  A no-op for a flat form, and for a control whose section is already showing.
 	 */
 	function revealDialogSectionFor(el) {
-		const pane = (el && typeof el.closest === "function") ? el.closest("[data-juneau-form-section]") : null;
+		const pane = (typeof el?.closest === "function") ? el.closest("[data-juneau-form-section]") : null;
 		if (! pane || ! pane.hidden) return;
 		const wrap = (typeof pane.closest === "function") ? pane.closest(".juneau-view-dialog-form") : null;
-		const activate = wrap ? wrap._juneauActivateSection : null;
-		if (typeof activate === "function") activate(pane.getAttribute("data-juneau-form-section"));
+		const activate = wrap?._juneauActivateSection ?? null;
+		if (typeof activate === "function") activate(pane.dataset.juneauFormSection);
 	}
 
 	/** Wires per-control blur/input revalidation (advisory, non-alert): keeps the error sibling fresh as the user types. */
@@ -3518,72 +3610,78 @@
 	 * (help + error); when triggered by confirm, focuses the first invalid control and sets role=alert on its error.
 	 * Returns true when the form may submit.
 	 */
+	function focusFirstInvalidControl(el) {
+		revealDialogSectionFor(el);
+		if (typeof el.focus === "function") {
+			try { el.focus(); } catch (e) { /* ignore */ }
+		}
+	}
+
 	function validateDialogForm(dialog, fromConfirm) {
 		if (!dialog || !dialog.querySelectorAll) return true;
 		const nodes = dialog.querySelectorAll("[data-juneau-form-field]");
 		let firstInvalid = null;
-		for (let i = 0; i < nodes.length; i++) {
-			const el = nodes[i];
+		for (const el of nodes) {
 			const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
 			if (tag === "button") continue;   // type=action buttons are not values
 			const msg = validateOneControl(el);
 			applyControlValidity(el, msg, fromConfirm);
 			if (msg && ! firstInvalid) firstInvalid = el;
 		}
-		if (firstInvalid && fromConfirm) {
-			revealDialogSectionFor(firstInvalid);
-			if (typeof firstInvalid.focus === "function") {
-				try { firstInvalid.focus(); } catch (e) { /* ignore */ }
-			}
-		}
+		if (firstInvalid && fromConfirm) focusFirstInvalidControl(firstInvalid);
 		return ! firstInvalid;
+	}
+
+	/** Validates the `pattern`/`maxLength` rules against a non-blank text-ish control value. */
+	function validateTextControlValue(value, max, pat) {
+		if (typeof max === "number" && max > 0 && value.length > max)
+			return "Must be at most " + max + " characters.";
+		if (pat) {
+			let re = null;
+			try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern
+			if (re && ! re.test(value)) return "Value is not in the expected format.";
+		}
+		return null;
 	}
 
 	/** Validates one control; returns an error message string, or null when valid. */
 	function validateOneControl(el) {
 		const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
-		const required = !! el.required || (el.getAttribute && el.getAttribute("aria-required") === "true");
-		if (tag === "input" && String(el.type).toLowerCase() === "checkbox") {
-			if (required && ! el.checked) return "This must be checked.";
-			return null;
-		}
+		const required = !! el.required || (el.getAttribute?.("aria-required") === "true");
+		if (tag === "input" && String(el.type).toLowerCase() === "checkbox")
+			return (required && ! el.checked) ? "This must be checked." : null;
 		const value = el.value != null ? String(el.value) : "";
 		if (required && value.trim() === "") return "This field is required.";
-		if (value !== "") {
-			const max = el.maxLength;
-			if (typeof max === "number" && max > 0 && value.length > max)
-				return "Must be at most " + max + " characters.";
-			const pat = el.getAttribute ? el.getAttribute("data-juneau-pattern") : null;
-			if (pat) {
-				let re = null;
-				try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern
-				if (re && ! re.test(value)) return "Value is not in the expected format.";
-			}
+		if (value === "") return null;
+		return validateTextControlValue(value, el.maxLength, el.dataset?.juneauPattern ?? null);
+	}
+
+	function markControlInvalid(el, err, helpId, msg, fromConfirm) {
+		el.setAttribute("aria-invalid", "true");
+		if (err) {
+			err.textContent = msg;
+			if (fromConfirm) err.setAttribute("role", "alert");
+			else err.removeAttribute("role");
 		}
-		return null;
+		const ids = [];
+		if (helpId) ids.push(helpId);
+		if (err?.id) ids.push(err.id);
+		if (ids.length) el.setAttribute("aria-describedby", ids.join(" "));
+	}
+
+	function markControlValid(el, err, helpId) {
+		el.removeAttribute("aria-invalid");
+		if (err) { err.textContent = ""; err.removeAttribute("role"); }
+		if (helpId) el.setAttribute("aria-describedby", helpId);
+		else if (el.removeAttribute) el.removeAttribute("aria-describedby");
 	}
 
 	/** Applies (or clears) a control's validity: aria-invalid, the error sibling text/role, and aria-describedby. */
 	function applyControlValidity(el, msg, fromConfirm) {
 		const err = el._juneauErrorEl || null;
 		const helpId = el._juneauHelpId || null;
-		if (msg) {
-			el.setAttribute("aria-invalid", "true");
-			if (err) {
-				err.textContent = msg;
-				if (fromConfirm) err.setAttribute("role", "alert");
-				else err.removeAttribute("role");
-			}
-			const ids = [];
-			if (helpId) ids.push(helpId);
-			if (err && err.id) ids.push(err.id);
-			if (ids.length) el.setAttribute("aria-describedby", ids.join(" "));
-		} else {
-			el.removeAttribute("aria-invalid");
-			if (err) { err.textContent = ""; err.removeAttribute("role"); }
-			if (helpId) el.setAttribute("aria-describedby", helpId);
-			else if (el.removeAttribute) el.removeAttribute("aria-describedby");
-		}
+		if (msg) markControlInvalid(el, err, helpId, msg, fromConfirm);
+		else markControlValid(el, err, helpId);
 	}
 
 	/**
@@ -3592,25 +3690,30 @@
 	 * explicit "false", never omitted - decision 9).  `type=action` buttons are skipped.  Never reads control
 	 * textContent, never innerHTML.
 	 */
+	function controlStringValue(el) {
+		return el.value != null ? String(el.value) : "";
+	}
+
+	// Reads one collectable control's submit entry, or null when it carries no submit value (an unnamed
+	// node, a `type=action` button, or a tag outside the typed-control allowlist).
+	function collectDialogFormFieldEntry(el) {
+		const name = el.dataset?.juneauFormField ?? null;
+		if (name == null || name === "") return null;
+		const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
+		if (tag === "button") return null;   // type=action buttons carry no submit value
+		if (tag === "select" || tag === "textarea") return { name: name, value: controlStringValue(el) };
+		if (tag !== "input") return null;
+		const itype = el.type ? String(el.type).toLowerCase() : "text";
+		if (itype === "checkbox") return { name: name, value: el.checked ? "true" : "false" };
+		return { name: name, value: controlStringValue(el) };
+	}
+
 	function collectDialogFormFields(dialog) {
 		const out = {};
 		if (!dialog || !dialog.querySelectorAll) return out;
-		const nodes = dialog.querySelectorAll("[data-juneau-form-field]");
-		for (let i = 0; i < nodes.length; i++) {
-			const el = nodes[i];
-			const name = el.getAttribute ? el.getAttribute("data-juneau-form-field") : null;
-			if (name == null || name === "") continue;
-			const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
-			if (tag === "button") continue;   // type=action buttons carry no submit value
-			if (tag === "select" || tag === "textarea") {
-				out[name] = el.value != null ? String(el.value) : "";
-				continue;
-			}
-			if (tag === "input") {
-				const itype = el.type ? String(el.type).toLowerCase() : "text";
-				if (itype === "checkbox") { out[name] = el.checked ? "true" : "false"; continue; }
-				out[name] = el.value != null ? String(el.value) : "";
-			}
+		for (const el of dialog.querySelectorAll("[data-juneau-form-field]")) {
+			const entry = collectDialogFormFieldEntry(el);
+			if (entry) out[entry.name] = entry.value;
 		}
 		return out;
 	}
@@ -3643,7 +3746,7 @@
 		pushLayer(ui.backdrop, {
 			kind: "dialog", portal: true, trapFocus: true, lightDismiss: false, detachOnPop: true,
 			onDismiss: function () {
-				if (ctx && ctx._dialogStack) {
+				if (ctx?._dialogStack) {
 					const i = ctx._dialogStack.indexOf(ui.backdrop);
 					if (i >= 0) ctx._dialogStack.splice(i, 1);
 					ctx._actionDialog = ctx._dialogStack.length ? ctx._dialogStack[ctx._dialogStack.length - 1] : null;
@@ -3661,9 +3764,9 @@
 	 */
 	function submitActionDialog(modal, action, table, tr, ctx, fields) {
 		const extra = {};
-		const targetId = (tr && tr.getAttribute) ? tr.getAttribute("data-juneau-row-id") : null;
+		const targetId = tr?.dataset?.juneauRowId ?? null;
 		if (targetId != null) extra.targetId = targetId;
-		if (modal && modal.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;
+		if (modal?.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;
 		if (fields && typeof fields === "object") {
 			const keys = Object.keys(fields);
 			if (keys.length) extra.fields = fields;
@@ -3679,10 +3782,10 @@
 			banner = document.createElement("div");
 			banner.className = "juneau-view-action-refusal";
 			banner.setAttribute("role", "alert");
-			banner.setAttribute("data-testid", "action-refusal");
+			banner.dataset.testid = "action-refusal";
 			cell.appendChild(banner);
 		}
-		const name = (action && (action.label || action.id)) || "action";
+		const name = (action?.label || action?.id) || "action";
 		banner.textContent = "Action '" + name + "' not sent: " + actionRefusalMessage(reason) + ".";
 	}
 
@@ -3695,7 +3798,7 @@
 		const menu = document.createElement("ul");
 		menu.className = "juneau-view-action-menu";
 		menu.setAttribute("role", "menu");
-		menu.setAttribute("data-testid", "action-menu");
+		menu.dataset.testid = "action-menu";
 		(viewDef.rowActions || []).forEach(function (action) {
 			const li = document.createElement("li");
 			li.setAttribute("role", "none");
@@ -3703,7 +3806,7 @@
 			item.type = "button";
 			item.className = "juneau-view-action-item";
 			item.setAttribute("role", "menuitem");
-			item.setAttribute("data-action-id", action.id);
+			item.dataset.actionId = action.id;
 			item.textContent = action.label || action.id;
 			item.addEventListener("click", function () {
 				closeRowActionMenus(table);
@@ -3726,10 +3829,10 @@
 	 */
 	function closeRowActionMenus(table) {
 		const menus = [];
-		for (let i = 0; i < popupLayerStack.length; i++)
-			if (popupLayerStack[i].kind === "menu") menus.push(popupLayerStack[i].el);
+		for (const layer of popupLayerStack)
+			if (layer.kind === "menu") menus.push(layer.el);
 		menus.forEach(function (el) { popLayer(el); });
-		if (table && typeof table.querySelectorAll === "function")
+		if (typeof table?.querySelectorAll === "function")
 			Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-action-menu"), removeEl);
 		if (typeof document !== "undefined" && typeof document.querySelectorAll === "function")
 			Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-action-menu"), removeEl);
@@ -3752,12 +3855,12 @@
 	function activatePillAction(pill, table, viewDef, ctx) {
 		if (!pill) return;
 		if (pill.getAttribute("aria-disabled") === "true"
-			|| (pill.classList && pill.classList.contains && pill.classList.contains("is-disabled"))) return;
-		const action = findRowActionById(viewDef, pill.getAttribute("data-juneau-action"));
+			|| pill.classList?.contains?.("is-disabled")) return;
+		const action = findRowActionById(viewDef, pill.dataset.juneauAction);
 		if (!action) return;
 		const tr = pill.closest ? pill.closest("tr") : null;
 		if (!tr) return;
-		if (tr.getAttribute && tr.getAttribute("data-juneau-inflight")) return;   // in-flight guard (no double submit)
+		if (tr.dataset?.juneauInflight) return;   // in-flight guard (no double submit)
 		if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
 		else submitRowAction(action, table, tr, ctx);
 	}
@@ -3768,13 +3871,13 @@
 			// An action-bound cell pill dispatches here (NOT in initDetailsExpander, which binds only when a
 			// row-detail template is present); bind no more broadly than [data-juneau-pill] so a menu/ActionBar
 			// click is never stolen.
-			const pill = e.target && e.target.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
+			const pill = e.target?.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
 			if (pill) { activatePillAction(pill, table, viewDef, ctx); return; }
-			const trigger = e.target && e.target.closest ? e.target.closest(".juneau-view-action-trigger") : null;
+			const trigger = e.target?.closest ? e.target.closest(".juneau-view-action-trigger") : null;
 			if (!trigger) return;
 			const tr = trigger.closest("tr");
 			if (!tr) return;
-			const wasOpen = !! (ctx && ctx._actionMenuTrigger === trigger);
+			const wasOpen = !! (ctx?._actionMenuTrigger === trigger);
 			closeRowActionMenus(table);
 			if (wasOpen) return;   // second click on the open menu's trigger closes it (toggle)
 			const menu = buildRowActionMenu(viewDef, table, tr, ctx);
@@ -3783,7 +3886,7 @@
 				kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
 				returnFocusTo: trigger,
 				onDismiss: function () {
-					if (ctx && ctx._actionMenu === menu) { ctx._actionMenu = null; ctx._actionMenuTrigger = null; }
+					if (ctx?._actionMenu === menu) { ctx._actionMenu = null; ctx._actionMenuTrigger = null; }
 				}
 			});
 			positionCellPopover(menu, trigger);
@@ -3792,7 +3895,7 @@
 		table.addEventListener("keydown", function (e) {
 			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
 			if (!isOwnTableEvent(table, e)) return;
-			const pill = e.target && e.target.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
+			const pill = e.target?.closest ? e.target.closest("[data-juneau-pill][role=\"button\"]") : null;
 			if (!pill) return;
 			if (e.preventDefault) e.preventDefault();
 			activatePillAction(pill, table, viewDef, ctx);
@@ -3800,7 +3903,7 @@
 	}
 
 	function removeEl(el) {
-		if (el && el.parentNode) el.parentNode.removeChild(el);
+		if (el?.parentNode) el.remove();
 	}
 
 	/**
@@ -3809,13 +3912,13 @@
 	 * backdrop that was never (or is no longer) a registered layer.
 	 */
 	function closeActionDialog(ctx) {
-		if (ctx && ctx._dialogStack && ctx._dialogStack.length) {
+		if (ctx?._dialogStack?.length) {
 			const snapshot = ctx._dialogStack.slice();
 			for (let i = snapshot.length - 1; i >= 0; i--) popLayer(snapshot[i]);
 			ctx._dialogStack = [];
 		}
-		const el = ctx && ctx._actionDialog;
-		if (el && el.parentNode) el.parentNode.removeChild(el);
+		const el = ctx?._actionDialog;
+		if (el?.parentNode) el.remove();
 		if (ctx) ctx._actionDialog = null;
 		Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-dialog-backdrop"), removeEl);
 	}
@@ -3863,7 +3966,7 @@
 				row.insertBefore(selTh, after ? after.nextSibling : row.firstChild);
 			}
 		}
-		if (ctx.viewDef.rowActions && ctx.viewDef.rowActions.length) {
+		if (ctx.viewDef.rowActions?.length) {
 			appendActionsHeaderCell(table);
 		}
 	}
@@ -3875,13 +3978,13 @@
 		}
 		if (ctx._jobSources) {
 			ctx._jobSources.forEach(function (es) {
-				try { if (es && es.close) es.close(); } catch (e) { /* already closed */ }
+				try { if (es?.close) es.close(); } catch (e) { /* already closed */ }
 			});
 			ctx._jobSources.clear();
 		}
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
-		// TODO-445n: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
+		// DT1 table-overflow-wrap discipline: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
 		if (ctx._scrollRegionObserver) {
 			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
 			ctx._scrollRegionObserver = null;
@@ -3891,7 +3994,7 @@
 			ctx.dataTable = null;
 		}
 		stripGeneratedDom(table);
-		// TODO-445n: remove the DT1 wrap (INV-5) so a reconstruct cannot nest the toolbar inside the overflow box.
+		// DT1 table-overflow-wrap discipline: remove the DT1 wrap (INV-5) so a reconstruct cannot nest the toolbar inside the overflow box.
 		unwrapTableScroll(table);
 	}
 
@@ -3900,7 +4003,7 @@
 	 * {@code computeEffectiveColumns}; otherwise the no-op seam (default catalog columns, all visible).
 	 */
 	function resolveEffectiveColumns(viewDef, savedView) {
-		if (NS.config && typeof NS.config.computeEffectiveColumns === "function")
+		if (typeof NS.config?.computeEffectiveColumns === "function")
 			return NS.config.computeEffectiveColumns(viewDef.columns || [], savedView);
 		return (viewDef.columns || []).map(function (c) {
 			const copy = {};
@@ -3929,7 +4032,7 @@
 			cols.push(sel);
 		}
 		catalogCols.forEach(function (c) { cols.push(c); });
-		if (viewDef.rowActions && viewDef.rowActions.length) {
+		if (viewDef.rowActions?.length) {
 			cols.push({
 				data: null,
 				_juneau: "actions",
@@ -3945,14 +4048,14 @@
 		const priorCreatedRow = opts.createdRow;
 		opts.createdRow = function (rowEl, rowData, index) {
 			if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
-			const field = ctx.selectionState ? ctx.selectionState.rowIdField : null;
+			const field = ctx.selectionState?.rowIdField ?? null;
 			stampRowId(rowEl, rowData, field);
 		};
 		opts.order = resolveOrder(viewDef, opts.columns);
 	}
 
 	/**
-	 * TODO-445n table overflow discipline — DT1 "Approach B" single-node wrap.  Gives a DT1 {@code <table>} its own
+	 * DT1 table-overflow-wrap discipline — DT1 "Approach B" single-node wrap.  Gives a DT1 {@code <table>} its own
 	 * horizontal-scroll container ({@code .juneau-view-table-scroll}) so a table wider than its card scrolls inside
 	 * its own region while the toolbar / paging-pill menu (a sibling lineage) and the page chrome stay put (INV-1 /
 	 * INV-2).  No-op on the DT2 dogfood path: DataTables 2's flex {@code .dt-layout-cell} is ALREADY the scroll box
@@ -3975,9 +4078,11 @@
 		if (!parent) return;
 		const box = document.createElement("div");
 		box.className = TABLE_SCROLL_CLASS;
+		// NOSONAR javascript:S7768 -- `table.before(box)` would be equivalent, but the Node test-harness DOM
+		// shim (views-dom-shim.cjs) implements insertBefore/appendChild only, not `.before()`.
 		parent.insertBefore(box, table);
 		box.appendChild(table);
-		if (ctx && ctx.dataTable && ctx.dataTable.columns) {
+		if (ctx?.dataTable?.columns) {
 			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
 		}
 	}
@@ -3993,8 +4098,10 @@
 		if (!box.className || (" " + box.className + " ").indexOf(" " + TABLE_SCROLL_CLASS + " ") < 0) return;
 		const grandparent = box.parentNode;
 		if (!grandparent) return;
+		// NOSONAR javascript:S7768 -- `box.before(table)` would be equivalent, but the Node test-harness DOM
+		// shim (views-dom-shim.cjs) implements insertBefore/appendChild only, not `.before()`.
 		grandparent.insertBefore(table, box);
-		grandparent.removeChild(box);
+		box.remove();
 	}
 
 	/**
@@ -4029,7 +4136,7 @@
 			}
 		};
 		recheck();
-		if (ctx && ctx._scrollRegionObserver) {
+		if (ctx?._scrollRegionObserver) {
 			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
 			ctx._scrollRegionObserver = null;
 		}
@@ -4040,6 +4147,56 @@
 				if (ctx) ctx._scrollRegionObserver = ro;
 			} catch (e) { /* observer unavailable — the one-shot recheck above still ran */ }
 		}
+	}
+
+	function bindDetailInflightDrawGuards(table, ctx) {
+		// Guard against a nested table's draw.dt bubbling up (see the paging/poll/prune guards): only this
+		// parent table's own draw clears its in-flight detail set.
+		ctx.dataTable.on("draw.dt", function (e) {
+			if (e && e.target !== table) return;
+			if (ctx._detailInflight) ctx._detailInflight.clear();
+		});
+		// Before a parent redraw destroys its child rows (sort/search/page/poll), tear down any nested tables
+		// living inside still-open detail panels.  preDraw.dt fires while the child-row DOM still exists; draw.dt
+		// is too late (DataTables has already discarded the child rows, so the nested DataTable instances would
+		// leak their listeners/timers).  Guarded so a nested table's own preDraw never triggers this.
+		ctx.dataTable.on("preDraw.dt", function (e) {
+			if (e && e.target !== table) return;
+			teardownNestedTables(table);
+		});
+	}
+
+	function wireSelectionAndBulkToolbar(table, ctx) {
+		ensureSelectAllCheckbox(table);
+		bindSelectionPrune(table, ctx);
+		ctx.bulkToolbar = ctx._bulkDef ? buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState) : null;
+	}
+
+	function buildColumnSearchToggleHandler(columnSearchRow, ctx) {
+		return function (on) {
+			if (!columnSearchRow) return;
+			columnSearchRow.style.display = on ? "" : "none";
+			if (!on) {
+				Array.prototype.forEach.call(columnSearchRow.querySelectorAll("input"), function (inp) { inp.value = ""; });
+				if (ctx.dataTable) ctx.dataTable.columns().search("").draw();
+			}
+		};
+	}
+
+	function wireToolbarLeftCluster(toolbarRow, ctx) {
+		if (!toolbarRow) return;
+		const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
+		if (!leftCluster) return;
+		if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
+		else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
+	}
+
+	function wireTablePolling(table, ctx, viewDef, toolbarRow) {
+		if (!viewDef.pollIntervalMs || !toolbarRow) return;
+		const staleness = buildStalenessIndicator();
+		const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
+		if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
+		initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
 	}
 
 	function constructTable(table, viewDef, effectiveColumns, ctx) {
@@ -4076,72 +4233,31 @@
 		ctx.dataTable = $(table).DataTable(opts);
 		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
 			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
-		if (ctx._detailInflight) {
-			// Guard against a nested table's draw.dt bubbling up (see the paging/poll/prune guards): only this
-			// parent table's own draw clears its in-flight detail set.
-			ctx.dataTable.on("draw.dt", function (e) {
-				if (e && e.target !== table) return;
-				if (ctx._detailInflight) ctx._detailInflight.clear();
-			});
-			// Before a parent redraw destroys its child rows (sort/search/page/poll), tear down any nested tables
-			// living inside still-open detail panels.  preDraw.dt fires while the child-row DOM still exists; draw.dt
-			// is too late (DataTables has already discarded the child rows, so the nested DataTable instances would
-			// leak their listeners/timers).  Guarded so a nested table's own preDraw never triggers this.
-			ctx.dataTable.on("preDraw.dt", function (e) {
-				if (e && e.target !== table) return;
-				teardownNestedTables(table);
-			});
-		}
+		if (ctx._detailInflight) bindDetailInflightDrawGuards(table, ctx);
 		ctx.redraw = function () {
 			const d = ctx.dataTable;
 			if (!d) return;
 			if (d.ajax) d.ajax.reload(); else d.draw();
 		};
 
-		if (ctx.selectionState) {
-			ensureSelectAllCheckbox(table);
-			bindSelectionPrune(table, ctx);
-			if (ctx._bulkDef)
-				ctx.bulkToolbar = buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState);
-			else
-				ctx.bulkToolbar = null;
-		}
+		if (ctx.selectionState) wireSelectionAndBulkToolbar(table, ctx);
 
 		const pill = buildPagingPill(viewDef, ctx);
 		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
 		const columnSearchRow = buildColumnSearchRow(table, ctx.optsColumns, ctx.dataTable);
-		ctx.onColumnSearchToggle = function (on) {
-			if (!columnSearchRow) return;
-			columnSearchRow.style.display = on ? "" : "none";
-			if (!on) {
-				Array.prototype.forEach.call(columnSearchRow.querySelectorAll("input"), function (inp) { inp.value = ""; });
-				if (ctx.dataTable) ctx.dataTable.columns().search("").draw();
-			}
-		};
+		ctx.onColumnSearchToggle = buildColumnSearchToggleHandler(columnSearchRow, ctx);
 
 		const wrapper = findViewWrapper(table);
 		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
 
-		if (toolbarRow) {
-			const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
-			if (leftCluster) {
-				if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
-				else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
-			}
-		}
-
-		if (viewDef.pollIntervalMs && toolbarRow) {
-			const staleness = buildStalenessIndicator();
-			const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
-			if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
-			initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
-		}
+		wireToolbarLeftCluster(toolbarRow, ctx);
+		wireTablePolling(table, ctx, viewDef, toolbarRow);
 
 		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
-		if (viewDef.columnConfig && NS.config && typeof NS.config.mountChooser === "function")
+		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function")
 			NS.config.mountChooser(table, ctx, toolbarRow);
 
-		// TODO-445n table overflow discipline: DT1 gets its own JS-inserted scroll box (no-op on DT2 — the flex
+		// DT1 table-overflow-wrap discipline: DT1 gets its own JS-inserted scroll box (no-op on DT2 — the flex
 		// .dt-layout-cell already scrolls via CSS), then the scroll region gets an overflow-detected tabindex.
 		ensureTableScroll(table, ctx);
 		applyScrollRegionA11y(table, ctx);
@@ -4161,7 +4277,7 @@
 			return { ok: true, coalesced: true };
 		}
 
-		const already = !!( $?.fn?.dataTable?.isDataTable && $.fn.dataTable.isDataTable(table) );
+		const already = !!$?.fn?.dataTable?.isDataTable?.(table);
 		if (already) {
 			if (hasInFlightRow(table) || hasJobRow(table)) {
 				renderReinitNotice(table, "Finish the in-progress action first.");
@@ -4200,8 +4316,8 @@
 	function findNestedSidecar(wrap, id) {
 		if (!wrap || typeof wrap.querySelectorAll !== "function") return null;
 		const cands = wrap.querySelectorAll("[" + NESTED_META_ATTR + "]");
-		for (let i = 0; i < cands.length; i++)
-			if (cands[i].getAttribute(NESTED_META_ATTR) === id) return cands[i];
+		for (const cand of cands)
+			if (cand.getAttribute(NESTED_META_ATTR) === id) return cand;
 		return cands.length ? cands[0] : null;
 	}
 
@@ -4212,7 +4328,7 @@
 	function nestedTableDepth(wrap) {
 		let enclosing = 0;
 		for (let n = wrap; n; n = n.parentNode)
-			if (n.nodeType === 1 && typeof n.getAttribute === "function" && n.getAttribute(NESTED_ATTR) === "1")
+			if (n.nodeType === 1 && n.getAttribute?.(NESTED_ATTR) === "1")
 				enclosing++;
 		return enclosing + 1;
 	}
@@ -4254,7 +4370,7 @@
 			return;
 		}
 
-		const id = table.getAttribute("data-juneau-view");
+		const id = table.dataset.juneauView;
 		const sidecar = findNestedSidecar(wrap, id);
 		if (!sidecar) { error("Juneau nested table '" + id + "': missing nested sidecar; refusing to init."); return; }
 
@@ -4325,7 +4441,7 @@
 		if (findRowDetailTemplate(table))
 			initDetailsExpander(table, ctx, viewDef);
 		initCellPopover(table, ctx, viewDef);
-		if (viewDef.rowActions && viewDef.rowActions.length)
+		if (viewDef.rowActions?.length)
 			initRowActions(table, viewDef, ctx);
 		if (selectionState)
 			initSelection(table, ctx);
@@ -4336,8 +4452,8 @@
 
 	/** columns.adjust() an already-inited nested table (needed after its pane transitions from hidden to visible). */
 	function adjustNestedColumns(table) {
-		const ctx = table && table.__juneauCtx;
-		if (ctx && ctx.dataTable && ctx.dataTable.columns)
+		const ctx = table?.__juneauCtx;
+		if (ctx?.dataTable?.columns)
 			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
 	}
 
@@ -4351,7 +4467,7 @@
 		const wraps = pane.querySelectorAll("[" + NESTED_ATTR + "]");
 		Array.prototype.forEach.call(wraps, function (wrap) {
 			const table = wrap.querySelector("table[data-juneau-view]");
-			if (table && table.getAttribute(NESTED_INIT_ATTR) === "1")
+			if (table?.getAttribute(NESTED_INIT_ATTR) === "1")
 				adjustNestedColumns(table);
 			else
 				prepareNestedTable(wrap, parentId);
@@ -4367,7 +4483,7 @@
 		const wraps = panel.querySelectorAll("[" + NESTED_ATTR + "]");
 		Array.prototype.forEach.call(wraps, function (wrap) {
 			const sec = typeof wrap.closest === "function" ? wrap.closest("[data-juneau-detail-section]") : null;
-			if (sec && sec.hidden) return;   // hidden tab pane - defer to tab activation
+			if (sec?.hidden) return;   // hidden tab pane - defer to tab activation
 			prepareNestedTable(wrap, parentId);
 		});
 	}
@@ -4417,9 +4533,9 @@
 		Array.prototype.forEach.call(panel.querySelectorAll("[" + NESTED_ATTR + "]"), function (wrap) {
 			const table = wrap.querySelector("table[data-juneau-view]");
 			if (!table) return;
-			const id = table.getAttribute("data-juneau-view") + suffix;
+			const id = table.dataset.juneauView + suffix;
 			table.setAttribute("id", id);
-			const sidecar = findNestedSidecar(wrap, table.getAttribute("data-juneau-view"));
+			const sidecar = findNestedSidecar(wrap, table.dataset.juneauView);
 			if (sidecar) sidecar.setAttribute("id", "juneau-view:" + id);
 		});
 	}
@@ -4432,7 +4548,7 @@
 	 */
 	function viewSidecarKey(table) {
 		const minted = table.getAttribute("id");
-		return minted && minted.length ? minted : table.getAttribute("data-juneau-view");
+		return minted?.length ? minted : table.dataset.juneauView;
 	}
 
 	/**
@@ -4441,8 +4557,8 @@
 	 * table reading its own configuration even if a page elsewhere happens to mint a colliding id.
 	 */
 	function findSidecarNode(elementId, table) {
-		const card = table && typeof table.closest === "function" ? table.closest("[" + CARD_MARKER + "]") : null;
-		if (card && typeof card.querySelector === "function") {
+		const card = typeof table?.closest === "function" ? table.closest("[" + CARD_MARKER + "]") : null;
+		if (typeof card?.querySelector === "function") {
 			const scoped = card.querySelector("[id=\"" + elementId + "\"]");
 			if (scoped) return scoped;
 		}
@@ -4450,29 +4566,57 @@
 			? document.getElementById(elementId) : null;
 	}
 
-	function beginInitTable(table) {
-		const $ = window.jQuery;
-		const id = table.getAttribute("data-juneau-view");
-		const key = viewSidecarKey(table);
-		const sidecar = findSidecarNode(SIDECAR_ID_PREFIX + key, table);
-		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
-
+	// Parses + validates the view's JSON sidecar; a malformed sidecar or a contract-version mismatch paints a
+	// visible banner and refuses to init, returning null.
+	function loadTableViewDef(table, id, sidecar) {
 		let viewDef;
 		try {
 			viewDef = JSON.parse(sidecar.textContent);
 		} catch (e) {
 			error("Juneau view '" + id + "': malformed JSON sidecar; refusing to init.");
 			renderBanner(table, "Juneau view '" + id + "': malformed configuration.");
-			return;
+			return null;
 		}
-
 		if (viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
 			const m = "Juneau view '" + id + "': contract version mismatch (page='" + viewDef.contractVersion +
 				"', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION + "'). Refusing to init - reload to clear a stale cached script.";
 			error(m);
 			renderBanner(table, m);
-			return;
+			return null;
 		}
+		return viewDef;
+	}
+
+	function initTableWidgets(table, ctx, viewDef) {
+		if (findRowDetailTemplate(table)) initDetailsExpander(table, ctx, viewDef);
+		initCellPopover(table, ctx, viewDef);
+		if (viewDef.rowActions?.length) initRowActions(table, viewDef, ctx);
+	}
+
+	function resolveTableBulkDef(ctx, key, table, id) {
+		if (!hasBulk(table)) return;
+		const bulkDef = readBulkDef(key, table);
+		if (!bulkDef) {
+			ctx._bulkError = "Juneau view '" + id + "': missing or malformed bulk-actions sidecar; bulk mutation withheld.";
+			error(ctx._bulkError);
+		} else if (bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION) {
+			ctx._bulkError = "Juneau view '" + id + "': bulk-actions contract version mismatch (page='" +
+				bulkDef.contractVersion + "', runtime='" + JUNEAU_BULK_CONTRACT_VERSION + "'); bulk mutation withheld.";
+			error(ctx._bulkError);
+		} else {
+			ctx._bulkDef = bulkDef;
+		}
+	}
+
+	function beginInitTable(table) {
+		const $ = window.jQuery;
+		const id = table.dataset.juneauView;
+		const key = viewSidecarKey(table);
+		const sidecar = findSidecarNode(SIDECAR_ID_PREFIX + key, table);
+		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
+
+		const viewDef = loadTableViewDef(table, id, sidecar);
+		if (!viewDef) return;
 
 		if (!$?.fn?.DataTable) {
 			warn("Juneau view '" + id + "': jQuery/DataTables not present; cannot bind.");
@@ -4503,29 +4647,11 @@
 		};
 		table.__juneauCtx = ctx;
 
-		if (findRowDetailTemplate(table)) {
-			initDetailsExpander(table, ctx, viewDef);
-		}
-		initCellPopover(table, ctx, viewDef);
-		if (viewDef.rowActions && viewDef.rowActions.length) {
-			initRowActions(table, viewDef, ctx);
-		}
+		initTableWidgets(table, ctx, viewDef);
 
 		if (selectionState) {
 			initSelection(table, ctx);
-			if (hasBulk(table)) {
-				const bulkDef = readBulkDef(key, table);
-				if (!bulkDef) {
-					ctx._bulkError = "Juneau view '" + id + "': missing or malformed bulk-actions sidecar; bulk mutation withheld.";
-					error(ctx._bulkError);
-				} else if (bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION) {
-					ctx._bulkError = "Juneau view '" + id + "': bulk-actions contract version mismatch (page='" +
-						bulkDef.contractVersion + "', runtime='" + JUNEAU_BULK_CONTRACT_VERSION + "'); bulk mutation withheld.";
-					error(ctx._bulkError);
-				} else {
-					ctx._bulkDef = bulkDef;
-				}
-			}
+			resolveTableBulkDef(ctx, key, table, id);
 		}
 
 		function go(saved) {
@@ -4533,7 +4659,7 @@
 			buildTable(table, viewDef, effective, ctx);
 		}
 
-		if (viewDef.columnConfig && NS.config && typeof NS.config.resolveActiveView === "function")
+		if (viewDef.columnConfig && typeof NS.config?.resolveActiveView === "function")
 			return NS.config.resolveActiveView(table, viewDef).then(go);
 		go(null);
 	}
@@ -4551,15 +4677,15 @@
 		let proceed, fail;
 		const p = new Promise(function (res, rej) { proceed = res; fail = rej; });
 		table.__juneauInitPromise = p;
-		table.setAttribute("data-juneau-init-pending", "1");
+		table.dataset.juneauInitPending = "1";
 
 		function settleOk(v) {
-			table.removeAttribute("data-juneau-init-pending");
+			delete table.dataset.juneauInitPending;
 			table.__juneauInitPromise = null;
 			proceed(v);
 		}
 		function settleErr(err) {
-			table.removeAttribute("data-juneau-init-pending");
+			delete table.dataset.juneauInitPending;
 			table.__juneauInitPromise = null;
 			fail(err);
 		}
@@ -4582,12 +4708,12 @@
 	function initAll() {
 		const tables = document.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
-			if (t.closest && t.closest("[data-juneau-page]")) return;
+			if (t.closest?.("[data-juneau-page]")) return;
 			// Skip nested tables (a table inside a row-detail section).  They init lazily - after the
 			// parent detail GET succeeds and their pane is visible (see prepareNestedTable) - never on this eager
 			// page-load scan.  At DOMContentLoaded a nested table is still inert inside its <template> and is not
 			// matched here anyway; this guard covers a nested table already cloned into an open panel.
-			if (t.closest && (t.closest("[" + NESTED_ATTR + "]") || t.closest(".juneau-view-detail-panel"))) return;
+			if (t.closest?.("[" + NESTED_ATTR + "]") || t.closest?.(".juneau-view-detail-panel")) return;
 			initTable(t);
 		});
 	}
@@ -4619,7 +4745,7 @@
 		assembleFullColumnArray: assembleFullColumnArray,
 		restoreHeaderShell: restoreHeaderShell,
 		teardownTable: teardownTable,
-		// TODO-445n table overflow discipline (DT1 "Approach B" wrap) - exposed for the Node harness.
+		// DT1 table-overflow-wrap discipline (DT1 "Approach B" wrap) - exposed for the Node harness.
 		ensureTableScroll: ensureTableScroll,
 		unwrapTableScroll: unwrapTableScroll,
 		// L12 A scroll-region a11y - exposed so the Node harness can drive the overflowing/not-overflowing fork
@@ -4706,7 +4832,7 @@
 		initRowActions: initRowActions,
 		activatePillAction: activatePillAction,
 		findRowActionById: findRowActionById,
-		// Declarative modal + typed action-result + in-flight lifecycle (TODO-416/417) - exposed for the canary
+		// Declarative modal + typed action-result + in-flight lifecycle (declarative-modal path) - exposed for the canary
 		// and manual verification.
 		ACTION_RESULT_CONTRACT_VERSION: JUNEAU_ACTION_RESULT_CONTRACT_VERSION,
 		parseActionResult: parseActionResult,
@@ -4727,7 +4853,7 @@
 		submitActionDialog: submitActionDialog,
 		closeActionDialog: closeActionDialog,
 		closeRowActionMenus: closeRowActionMenus,
-		// Complex forms + nested popups / shared layer stack (TODO-445h) - exposed for the canary and harnesses.
+		// Complex forms + nested popups / shared layer stack (shared-layer-stack feature) - exposed for the canary and harnesses.
 		JUNEAU_DIALOG_FORM_CONTRACT_VERSION: JUNEAU_DIALOG_FORM_CONTRACT_VERSION,
 		MAX_DIALOG_DEPTH: MAX_DIALOG_DEPTH,
 		paintFormControl: paintFormControl,
@@ -4741,7 +4867,7 @@
 		popLayer: popLayer,
 		topLayer: topLayer,
 		dialogLayerCount: dialogLayerCount,
-		// Async jobs + SSE streaming (TODO-425) - exposed for the canary and manual verification.  The job-running
+		// Async jobs + SSE streaming (async-SSE-job feature) - exposed for the canary and manual verification.  The job-running
 		// affordance (setRowJobRunning) is DISTINCT from the synchronous in-flight marker: it never freezes polling.
 		parseJobStarted: parseJobStarted,
 		buildJobCancelRequest: buildJobCancelRequest,
@@ -4751,7 +4877,7 @@
 		startJobStream: startJobStream,
 		finishJobFromResult: finishJobFromResult,
 		cancelJob: cancelJob,
-		// Row selection + bulk mutation (TODO-428) - two independent opt-ins - exposed for the canary and manual
+		// Row selection + bulk mutation (row-selection/bulk-mutation feature) - two independent opt-ins - exposed for the canary and manual
 		// verification.  BULK_CONTRACT_VERSION is exposed above (NS.BULK_CONTRACT_VERSION) alongside the other two
 		// independently-versioned contracts.
 		SELECT_ATTR: SELECT_ATTR,

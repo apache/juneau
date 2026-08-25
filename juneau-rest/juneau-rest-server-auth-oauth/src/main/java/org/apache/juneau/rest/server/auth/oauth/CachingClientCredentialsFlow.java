@@ -55,6 +55,8 @@ import com.nimbusds.oauth2.sdk.http.*;
  */
 public class CachingClientCredentialsFlow {
 
+	private static final String ARG_VALUE = "value";
+
 	/**
 	 * Static creator.
 	 *
@@ -86,7 +88,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull("value", value);
+			tokenEndpoint = assertArgNotNull(ARG_VALUE, value);
 			return this;
 		}
 
@@ -97,7 +99,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = assertArgNotNullOrBlank(ARG_VALUE, value);
 			return this;
 		}
 
@@ -108,7 +110,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			assertArgNotNullOrBlank(ARG_VALUE, value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -120,7 +122,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = assertArgNotNull(ARG_VALUE, value);
 			return this;
 		}
 
@@ -146,7 +148,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenCache(TokenCache value) {
-			tokenCache = assertArgNotNull("value", value);
+			tokenCache = assertArgNotNull(ARG_VALUE, value);
 			return this;
 		}
 
@@ -157,7 +159,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder cacheSkew(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_VALUE, value);
 			if (value.isNegative())
 				throw new IllegalArgumentException("cacheSkew must be non-negative");
 			cacheSkew = value;
@@ -171,7 +173,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_VALUE, value);
 			return this;
 		}
 

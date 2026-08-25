@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
- * The row-selection opt-in for a {@link ViewTable} &mdash; the first of {@code TODO-428}'s two INDEPENDENT
+ * The row-selection opt-in for a {@link ViewTable} &mdash; the first of the view table's two INDEPENDENT
  * opt-ins (design doc §9.3/§6.2; HIGH-5).
  *
  * <h5 class='section'>Independent from bulk mutation, by construction</h5>
@@ -51,7 +51,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@link #rowIdField()} names the row-data key {@code juneau-views.js} reads to stamp a stable
  * {@code data-juneau-row-id} attribute on each rendered {@code <tr>} (see {@code createdRow} in that runtime).
  * Selection state is keyed by that value, never by a row's position in the DOM or in the DataTables draw &mdash;
- * so a poll ({@code TODO-426}), a sort, or a page change can never retarget a selection (or a bulk mutate driven
+ * so a poll refresh, a sort, or a page change can never retarget a selection (or a bulk mutate driven
  * from one) onto whichever rows now occupy those same positions. The runtime's persistence rule drops any
  * previously-selected id that is no longer present in the newly drawn row set, so a selection whose rows have
  * scrolled off screen or off the current page is never kept as a live, actionable target.

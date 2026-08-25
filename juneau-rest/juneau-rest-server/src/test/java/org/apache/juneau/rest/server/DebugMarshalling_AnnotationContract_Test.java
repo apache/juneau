@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Contract test for the {@code debugMarshalling} annotation attribute (TODO-372a).
+ * Contract test for the {@code debugMarshalling} annotation attribute.
  *
  * <p>
  * Verifies mechanical parity across all eight REST annotation types &mdash; {@link Rest} plus {@link RestOp} and the

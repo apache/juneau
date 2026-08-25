@@ -81,7 +81,9 @@ class ViewsJs_CardActions_Test extends TestBase {
 		var body = resource(ViewsMixin.CARDS_JS_RESOURCE);
 		assertTrue(body.contains("ACTION_MARKER = \"" + AppHeaderTable.ACTION_MARKER + "\""),
 			"the card action marker must equal the server's header-action marker");
-		assertTrue(body.contains("BEHAVIOR_ATTR = \"" + AppHeaderTable.BEHAVIOR_ATTR + "\""),
+		// Cards delegate MENU/SAFE wiring to chrome, which owns the behavior attribute constant.
+		var chrome = resource(ViewsMixin.CHROME_JS_RESOURCE);
+		assertTrue(chrome.contains("BEHAVIOR_ATTR = \"" + AppHeaderTable.BEHAVIOR_ATTR + "\""),
 			"the card behavior attribute must equal the server's header behavior attribute");
 	}
 

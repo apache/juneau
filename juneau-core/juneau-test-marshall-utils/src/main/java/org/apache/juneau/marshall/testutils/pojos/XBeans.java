@@ -119,7 +119,9 @@ public class XBeans {
 
 	@UrlEncoding(expandedParams=true)
 	public static class XC extends XB {
-		public static XC get() {
+
+		// Named getC() (not get()) so this static factory doesn't hide XB.get() (java:S9149).
+		public static XC getC() {
 			var t = new XC();
 			t.f01 = a("a","b");
 			t.f02 = l("c","d");
@@ -144,7 +146,7 @@ public class XBeans {
 			return t;
 		}
 
-		public static final XC INSTANCE = get();
+		public static final XC INSTANCE = getC();
 	}
 
 	@MarshalledApply(on="XD,XE,XF",value=@Marshalled)
@@ -240,7 +242,9 @@ public class XBeans {
 	}
 
 	public static class XF extends XE {
-		public static XF get() {
+
+		// Named getF() (not get()) so this static factory doesn't hide XE.get() (java:S9149).
+		public static XF getF() {
 			var t = new XF();
 			t.f01 = a("a","b");
 			t.f02 = l("c","d");
@@ -265,6 +269,6 @@ public class XBeans {
 			return t;
 		}
 
-		public static final XF INSTANCE = get();
+		public static final XF INSTANCE = getF();
 	}
 }

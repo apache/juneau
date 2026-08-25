@@ -17,6 +17,9 @@ replay_pid*.log
 # push.py generated test-run history
 **/test-run-history.tsv
 
+# Local Sonar issue dumps (no license header; Apache RAT fails the build if they leak into the tree)
+**/sonarqube-issues.txt
+
 # Temporary cursor assistant scripts
 cursor-*
 

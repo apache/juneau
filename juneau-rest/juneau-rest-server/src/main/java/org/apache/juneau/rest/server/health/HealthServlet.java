@@ -44,6 +44,13 @@ public class HealthServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final transient HealthAggregator aggregator = new HealthAggregator();
+
+	@SuppressWarnings({
+		"java:S2226", // Mutable by design: the embedded-server lifecycle publishes this post-construction, from a
+		              // thread other than the request-handling threads that read it via probe()/initReadinessState()
+		"java:S3077"  // volatile is used only to publish the reference itself (write-once, read-many); ReadinessState
+		              // is treated as an opaque handle here, never mutated through this field
+	})
 	private transient volatile ReadinessState readinessState;
 
 	/**
@@ -84,7 +91,7 @@ public class HealthServlet extends BasicRestServlet {
 	 * Health/readiness/liveness probe endpoint.
 	 *
 	 * <p>
-	 * [TODO-401] Serves all three mount paths ({@code /healthz}, {@code /readyz}, {@code /livez}) through one
+	 * Serves all three mount paths ({@code /healthz}, {@code /readyz}, {@code /livez}) through one
 	 * {@code /*} operation, dispatching on the request's last path segment.  A single zero-part,
 	 * {@code hasRemainder=true} matcher is required because this servlet is auto-mounted at three <i>exact-match</i>
 	 * top-level path-specs: a real container delivers a bare {@code GET /readyz} with a zero-segment

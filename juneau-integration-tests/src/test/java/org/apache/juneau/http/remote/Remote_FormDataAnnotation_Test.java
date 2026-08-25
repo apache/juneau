@@ -48,7 +48,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 
 	public static class Bean {
 		public int f;
-		public static Bean create() {
+		public static Bean of() {
 			var b = new Bean();
 			b.f = 1;
 			return b;
@@ -56,7 +56,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	}
 
 	public static class Bean2 extends Bean {
-		public static Bean2 create() {
+		public static Bean2 of() {
 			var b = new Bean2();
 			b.f = 1;
 			return b;
@@ -114,18 +114,18 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		var x = MockRestClient.create(A.class).allowPrivateUrls(true).build().getRemote(A1.class);
 		assertEquals("{x:'1'}",x.x1(1));
 		assertEquals("{x:'1.0'}",x.x2(1));
-		assertEquals("{x:'f=1'}",x.x3(Bean.create()));
-		assertEquals("{f:'1'}",x.x4(Bean.create()));
-		assertEquals("{f:'1'}",x.x5(Bean.create()));
-		assertEquals("{x:'f=1,f=1'}",x.x6(a(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(a(Bean.create(),Bean.create())));
-		assertEquals("{x:'f=1,f=1'}",x.x8(l(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(l(Bean.create(),Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.x10(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.x11(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.x12(map("k1",Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.x13(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.x14(map("k1",Bean.create())));
+		assertEquals("{x:'f=1'}",x.x3(Bean.of()));
+		assertEquals("{f:'1'}",x.x4(Bean.of()));
+		assertEquals("{f:'1'}",x.x5(Bean.of()));
+		assertEquals("{x:'f=1,f=1'}",x.x6(a(Bean.of(),Bean.of())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(a(Bean.of(),Bean.of())));
+		assertEquals("{x:'f=1,f=1'}",x.x8(l(Bean.of(),Bean.of())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(l(Bean.of(),Bean.of())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.x10(map("k1",Bean.of())));
+		assertEquals("{k1:'f=1'}",x.x11(map("k1",Bean.of())));
+		assertEquals("{k1:'f=1'}",x.x12(map("k1",Bean.of())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.x13(map("k1",Bean.of())));
+		assertEquals("{k1:'f=1'}",x.x14(map("k1",Bean.of())));
 		assertEquals("{x:'1'}",x.x15(reader("x=1")));
 		assertEquals("{x:'1'}",x.x16(reader("x=1")));
 		assertEquals("{x:'1'}",x.x17(inputStream("x=1")));
@@ -137,7 +137,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertEquals("{}",x.x22(null));
 		assertEquals("{foo:'bar'}",x.x23(inputStream("foo=bar")));
 		assertEquals("{foo:'bar'}",x.x24(reader("foo=bar")));
-		assertEquals("{f:'1'}",x.x25(Bean2.create()));
+		assertEquals("{f:'1'}",x.x25(Bean2.of()));
 		assertEquals("{foo:'bar'}",x.x26(l(part("foo","bar"))));
 	}
 

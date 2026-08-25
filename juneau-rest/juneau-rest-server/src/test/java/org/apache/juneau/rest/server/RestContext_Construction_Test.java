@@ -157,8 +157,8 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 	static class Fix_ObservabilityTrueNoBackend {}
 
 	@Test void e01_observabilityTrue_noBackend_throwsAtConstruction() {
-		var e = assertThrows(org.apache.juneau.http.response.InternalServerError.class,
-			() -> new RestContext(argsOf(Fix_ObservabilityTrueNoBackend.class, Fix_ObservabilityTrueNoBackend::new)));
+		var args = argsOf(Fix_ObservabilityTrueNoBackend.class, Fix_ObservabilityTrueNoBackend::new);
+		var e = assertThrows(org.apache.juneau.http.response.InternalServerError.class, () -> new RestContext(args));
 		assertTrue(e.getMessage().contains("observability"));
 	}
 
@@ -192,8 +192,8 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 	static class Fix_AsyncExecutorMissing {}
 
 	@Test void f01_asyncCompletionExecutor_missingBean_throwsAtConstruction() {
-		var e = assertThrows(IllegalStateException.class,
-			() -> new RestContext(argsOf(Fix_AsyncExecutorMissing.class, Fix_AsyncExecutorMissing::new)));
+		var args = argsOf(Fix_AsyncExecutorMissing.class, Fix_AsyncExecutorMissing::new);
+		var e = assertThrows(IllegalStateException.class, () -> new RestContext(args));
 		assertTrue(e.getMessage().contains("missingExecutor"));
 	}
 

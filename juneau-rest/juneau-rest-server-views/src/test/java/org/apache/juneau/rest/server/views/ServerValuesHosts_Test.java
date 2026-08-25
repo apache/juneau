@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -35,6 +36,8 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Serve-time {@code $FV} resolution for the {@link PageDef} and {@link RowDetailDef} hosts, alongside the shipped
@@ -292,22 +295,23 @@ class ServerValuesHosts_Test extends TestBase {
 		assertTrue(html.contains("H-crumb2:A/PAGE"), html);
 	}
 
-	@Test void b04_headerActionTooltipsResolve() throws Exception {
+	/**
+	 * Header-action tooltips, the avatar's display name/initials, and the bar-slot text/badge labels each resolve
+	 * as an independent pair of allowlisted fields on the page host.
+	 */
+	@ParameterizedTest
+	@MethodSource("b04_pageHtmlContainsTwoResolvedTemplatesProvider")
+	void b04_pageHtmlContainsTwoResolvedTemplates(String expected1, String expected2) throws Exception {
 		var html = body("/page?env=A");
-		assertTrue(html.contains("H-tooltip:A/PAGE"), html);
-		assertTrue(html.contains("H-menutip:A/PAGE"), html);
+		assertTrue(html.contains(expected1), html);
+		assertTrue(html.contains(expected2), html);
 	}
 
-	@Test void b05_avatarDisplayNameAndInitialsResolve() throws Exception {
-		var html = body("/page?env=A");
-		assertTrue(html.contains("H-avatar:A/PAGE"), html);
-		assertTrue(html.contains("H-initials:A/PAGE"), html);
-	}
-
-	@Test void b06_barTextAndBarBadgeLabelResolve() throws Exception {
-		var html = body("/page?env=A");
-		assertTrue(html.contains("B-text:A/PAGE"), html);
-		assertTrue(html.contains("B-label:A/PAGE"), html);
+	static Stream<Arguments> b04_pageHtmlContainsTwoResolvedTemplatesProvider() {
+		return Stream.of(
+			Arguments.of("H-tooltip:A/PAGE", "H-menutip:A/PAGE"),
+			Arguments.of("H-avatar:A/PAGE", "H-initials:A/PAGE"),
+			Arguments.of("B-text:A/PAGE", "B-label:A/PAGE"));
 	}
 
 	@Test void b07_pageMetaSidecarCarriesResolvedTabLabels() throws Exception {

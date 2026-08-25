@@ -17,7 +17,7 @@
 
 /*
  * config-application.cjs - always-on Node harness for the juneau-config.js pure config-application layer
- * (TODO-444, slice 4): computeEffectiveColumns / validateView / serializeSavedView / deserializeSavedView /
+ * (config-application-444, slice 4): computeEffectiveColumns / validateView / serializeSavedView / deserializeSavedView /
  * dtIndex (+ buildOptsColumnSpace).
  *
  * No Playwright / Chromium / DOM — loads the real juneau-config.js IIFE against a minimal fake `window`, then
@@ -43,10 +43,12 @@ if (!configJsPath) {
 
 const source = fs.readFileSync(path.resolve(configJsPath), 'utf8');
 const window = {};
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-config.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(source, { window: window, console: console }, { filename: 'juneau-config.js' });
 
 const NS = window.JuneauViews;
-const out = { hasConfig: !!(NS && NS.config) };
+const out = { hasConfig: !!NS?.config };
 if (!out.hasConfig) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -118,9 +120,9 @@ const reformatted = C.computeEffectiveColumns(catalog, {
 	labels: {}, formats: { C: 'ts-zulu' }
 });
 const colC = reformatted.find(function (c) { return c.data === 'C'; });
-out.g_renderId = colC && colC.render && colC.render.id;
-out.g_renderMeta = colC && colC.render && colC.render.meta;
-out.g_href = colC && colC.href;
+out.g_renderId = colC?.render?.id;
+out.g_renderMeta = colC?.render?.meta;
+out.g_href = colC?.href;
 
 // ---- h) Blank label reverts to catalog title ----
 const relabeled = C.computeEffectiveColumns(catalog, {
@@ -156,7 +158,7 @@ const serialized = C.serializeSavedView(draft);
 out.k_serialized = serialized;
 const deser = C.deserializeSavedView(JSON.stringify(serialized));
 out.k_deserialized = deser;
-out.k_blankLabelOmitted = !Object.prototype.hasOwnProperty.call(serialized.labels, 'B');
+out.k_blankLabelOmitted = !Object.hasOwn(serialized.labels, 'B');
 
 // ---- l) LOAD-BEARING dtIndex fixture: [sel, A, B(hidden), C, actions] → C is 3, NOT 2 ----
 const effForIndex = C.computeEffectiveColumns(catalog, {
@@ -189,12 +191,12 @@ const popoverCol = {
 	}
 };
 const copied = C.copyCatalogColumn(popoverCol);
-out.n_copyPreservesPopover = !!(copied.render && copied.render.popover && copied.render.popover.title === 'CPU'
-	&& copied.render.popover.fields[0].data === 'actual');
+out.n_copyPreservesPopover = copied.render?.popover?.title === 'CPU'
+	&& copied.render?.popover?.fields[0].data === 'actual';
 copied.render.popover.title = 'mutated';
 out.n_copyIsStructured = popoverCol.render.popover.title === 'CPU';
 const swapped = C.swapRenderId(popoverCol.render, 'decimal');
-out.n_swapKeepsPopover = swapped.id === 'decimal' && swapped.popover && swapped.popover.title === 'CPU';
+out.n_swapKeepsPopover = swapped.id === 'decimal' && swapped.popover?.title === 'CPU';
 out.n_hasCopyExport = typeof C.copyCatalogColumn === 'function';
 
 process.stdout.write(JSON.stringify(out));

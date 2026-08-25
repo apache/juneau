@@ -97,7 +97,7 @@
 		if (typeof path !== "string" || path.length === 0) return false;
 		if (path.indexOf("{") >= 0) return false;                 // no template placeholder
 		if (path.indexOf("://") >= 0) return false;               // absolute URL
-		if (path.charAt(0) === "/" && path.charAt(1) === "/") return false;   // protocol-relative
+		if (path.startsWith("//")) return false;                  // protocol-relative
 		const colon = path.indexOf(":");
 		const slash = path.indexOf("/");
 		if (colon >= 0 && (slash < 0 || colon < slash)) return false;   // "scheme:" before any slash (javascript:, servlet:)
@@ -112,7 +112,7 @@
 
 	/** Fail-loud handshake predicate: a sidecar/refresh envelope's contractVersion must equal the baked-in expected value. */
 	function envelopeContractOk(env, expected) {
-		return !!env && typeof env === "object" && env.contractVersion === expected;
+		return typeof env === "object" && env?.contractVersion === expected;
 	}
 
 	/**
@@ -127,7 +127,7 @@
 
 	/** Extracts the {namespaced-id -> count} map from a sidecar/refresh envelope; returns {} for a shapeless envelope. */
 	function envelopeBadges(env) {
-		return env && typeof env === "object" && env.badges && typeof env.badges === "object" ? env.badges : {};
+		return typeof env === "object" && env?.badges && typeof env.badges === "object" ? env.badges : {};
 	}
 
 	// ==================================================================================================================
@@ -136,8 +136,8 @@
 
 	/** Resolves an icon glyph from the shared juneau-icons.js registry, or null when the registry/name is absent. */
 	function resolveIconMarkup(name) {
-		const icons = window.JuneauViews && window.JuneauViews.icons;
-		return icons && icons.resolveIcon ? icons.resolveIcon(name) : null;
+		const icons = window.JuneauViews?.icons;
+		return icons?.resolveIcon?.(name) ?? null;
 	}
 
 	/**
@@ -148,8 +148,7 @@
 	function hydrateIcons(root) {
 		if (!root || !root.querySelectorAll) return;
 		const hosts = root.querySelectorAll("[" + ICON_ATTR + "]");
-		for (let i = 0; i < hosts.length; i++) {
-			const host = hosts[i];
+		for (const host of hosts) {
 			const glyph = resolveIconMarkup(host.getAttribute(ICON_ATTR));
 			if (!glyph) continue;
 			const iconSpan = host.querySelector(".jc-icon");
@@ -166,14 +165,13 @@
 	function applyCounts(root, counts) {
 		if (!root || !root.querySelectorAll || !counts || typeof counts !== "object") return;
 		const badges = root.querySelectorAll("[" + BADGE_ATTR + "]");
-		for (let i = 0; i < badges.length; i++) {
-			const b = badges[i];
+		for (const b of badges) {
 			const id = b.getAttribute(BADGE_ATTR);
 			if (!Object.hasOwn(counts, id)) continue;
 			const raw = counts[id];
 			if (typeof raw !== "number") continue;
 			const maxAttr = b.getAttribute(BADGE_MAX_ATTR);
-			const max = maxAttr != null ? parseInt(maxAttr, 10) : null;
+			const max = maxAttr != null ? Number.parseInt(maxAttr, 10) : null;
 			b.textContent = clampCount(raw, max);                 // textContent only - a fresh count never reaches innerHTML
 		}
 	}
@@ -186,7 +184,7 @@
 		try {
 			return JSON.parse(el.textContent);
 		} catch (e) {
-			return null;
+			return null;                                          // malformed/absent sidecar JSON - callers treat a null sidecar as "no sidecar"
 		}
 	}
 
@@ -196,8 +194,8 @@
 	 * the shared stack, so a chrome menu shares the same z-index / Escape / light-dismiss depth as views dialogs.
 	 */
 	function viewsLayerStack() {
-		const views = window.JuneauViews && window.JuneauViews.init;
-		return views && typeof views.pushLayer === "function" && typeof views.popLayer === "function" ? views : null;
+		const views = window.JuneauViews?.init;
+		return typeof views?.pushLayer === "function" && typeof views?.popLayer === "function" ? views : null;
 	}
 
 	/**
@@ -222,10 +220,10 @@
 
 	/** Resolves a trigger's aria-controls'd .jc-menu list node (compared by id via getElementById, never interpolated). */
 	function menuForTrigger(trigger) {
-		const id = trigger && trigger.getAttribute ? trigger.getAttribute("aria-controls") : null;
+		const id = trigger?.getAttribute ? trigger.getAttribute("aria-controls") : null;
 		if (!id || typeof document === "undefined" || typeof document.getElementById !== "function") return null;
 		const el = document.getElementById(id);
-		return el && el.classList && Array.prototype.indexOf.call(el.classList, MENU_CLASS) >= 0 ? el : null;
+		return el?.classList && Array.prototype.indexOf.call(el.classList, MENU_CLASS) >= 0 ? el : null;
 	}
 
 	// Single-open tracking: chrome menus are one-at-a-time (a new open closes any other), matching the row-action menus.
@@ -242,24 +240,23 @@
 		if (!menu || !menu.querySelectorAll || menu.getAttribute(MENU_ITEMS_WIRED_ATTR) === "1") return;
 		menu.setAttribute(MENU_ITEMS_WIRED_ATTR, "1");
 		const safeItems = menu.querySelectorAll("." + MENU_ITEM_CLASS + "[" + SAFE_ATTR + "]");
-		for (let i = 0; i < safeItems.length; i++) {
-			const item = safeItems[i];
+		for (const item of safeItems) {
 			const token = item.getAttribute(SAFE_ATTR);
 			if (!isSafeToken(token)) {
-				(window.console && console.error) && console.error(
+				window.console?.error?.(
 					"juneau-chrome.js: refusing to wire SAFE menu item with malformed token '" + token + "'.");
 				continue;
 			}
 			if (!item.addEventListener) continue;
 			item.addEventListener("click", function (ev) {
-				if (ev && ev.preventDefault) ev.preventDefault();
+				ev?.preventDefault?.();
 				dispatchSafe(trigger, token, root);
 				closeMenu();
 			});
 		}
 		const links = menu.querySelectorAll("a." + MENU_ITEM_CLASS);
-		for (let j = 0; j < links.length; j++)
-			if (links[j].addEventListener) links[j].addEventListener("click", function () { closeMenu(); });
+		for (const link of links)
+			if (link.addEventListener) link.addEventListener("click", function () { closeMenu(); });
 	}
 
 	/** Opens a trigger's menu on the shared views stack (no stack / no list -> inert, never a fake disclosure). */
@@ -272,13 +269,13 @@
 			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: false,
 			returnFocusTo: trigger,
 			onDismiss: function () {
-				if (trigger.setAttribute) trigger.setAttribute("aria-expanded", "false");
+				trigger.setAttribute?.("aria-expanded", "false");
 				if (menu.style) menu.style.display = "none";
-				if (openMenuRec && openMenuRec.menu === menu) openMenuRec = null;
+				if (openMenuRec?.menu === menu) openMenuRec = null;
 			}
 		});
 		positionMenuUnderTrigger(menu, trigger);
-		if (trigger.setAttribute) trigger.setAttribute("aria-expanded", "true");
+		trigger.setAttribute?.("aria-expanded", "true");
 		openMenuRec = { trigger: trigger, menu: menu };
 	}
 
@@ -290,7 +287,7 @@
 
 	/** Toggles a trigger's menu: a re-click on the open trigger closes it; opening one first closes any other. */
 	function toggleMenu(trigger, root) {
-		if (openMenuRec && openMenuRec.trigger === trigger) { closeMenu(); return; }
+		if (openMenuRec?.trigger === trigger) { closeMenu(); return; }
 		if (openMenuRec) closeMenu();
 		openMenu(trigger, root);
 	}
@@ -302,13 +299,12 @@
 	function wireMenus(root) {
 		if (!root || !root.querySelectorAll) return;
 		const triggers = root.querySelectorAll("[" + BEHAVIOR_ATTR + "='menu']");
-		for (let i = 0; i < triggers.length; i++) {
-			const trigger = triggers[i];
+		for (const trigger of triggers) {
 			if (trigger.getAttribute(MENU_WIRED_ATTR) === "1" || !trigger.addEventListener) continue;
 			trigger.setAttribute(MENU_WIRED_ATTR, "1");
 			(function (t) {
 				t.addEventListener("click", function (ev) {
-					if (ev && ev.preventDefault) ev.preventDefault();
+					ev?.preventDefault?.();
 					toggleMenu(t, root);
 				});
 			})(trigger);
@@ -322,14 +318,14 @@
 	function wireAvatarFallback(root) {
 		if (!root || !root.querySelectorAll) return;
 		const avatars = root.querySelectorAll("[" + AVATAR_MARKER + "]");
-		for (let i = 0; i < avatars.length; i++) {
-			const img = avatars[i].querySelector("img.jc-avatar-img");
+		for (const avatar of avatars) {
+			const img = avatar.querySelector("img.jc-avatar-img");
 			if (!img || !img.addEventListener) continue;
 			if (img.getAttribute(AVATAR_WIRED_ATTR) === "1") continue;
 			img.setAttribute(AVATAR_WIRED_ATTR, "1");
 			img.addEventListener("error", function () {
 				img.hidden = true;
-				const initials = avatars[i].querySelector(".jc-avatar-initials");
+				const initials = avatar.querySelector(".jc-avatar-initials");
 				if (initials) initials.hidden = false;
 			});
 		}
@@ -349,11 +345,10 @@
 	function wireSafeActions(root) {
 		if (!root || !root.querySelectorAll) return;
 		const actions = root.querySelectorAll("[" + ACTION_MARKER + "][" + BEHAVIOR_ATTR + "='safe']");
-		for (let i = 0; i < actions.length; i++) {
-			const el = actions[i];
+		for (const el of actions) {
 			const token = el.getAttribute(SAFE_ATTR);
 			if (!isSafeToken(token)) {
-				(window.console && console.error) && console.error(
+				window.console?.error?.(
 					"juneau-chrome.js: refusing to wire SAFE action with malformed token '" + token + "'.");
 				continue;
 			}
@@ -361,7 +356,7 @@
 			if (el.getAttribute(SAFE_WIRED_ATTR) === "1") continue;
 			el.setAttribute(SAFE_WIRED_ATTR, "1");
 			el.addEventListener("click", function (ev) {
-				if (ev && ev.preventDefault) ev.preventDefault();
+				ev?.preventDefault?.();
 				dispatchSafe(el, token, root);
 			});
 		}
@@ -402,7 +397,7 @@
 		const id = header.getAttribute(HEADER_MARKER);
 		const sidecar = readSidecar(HEADER_SIDECAR_PREFIX, id);
 		if (sidecar && !envelopeContractOk(sidecar, JUNEAU_HEADER_CONTRACT_VERSION)) {
-			(window.console && console.error) && console.error(
+			window.console?.error?.(
 				"juneau-chrome.js: app-header contract mismatch (sidecar '" + sidecar.contractVersion
 				+ "' != runtime '" + JUNEAU_HEADER_CONTRACT_VERSION + "'); leaving header un-enhanced.");
 			return null;
@@ -420,7 +415,7 @@
 		const id = bar.getAttribute(BAR_SLOT_MARKER);
 		const sidecar = readSidecar(BAR_SIDECAR_PREFIX, id);
 		if (sidecar && !envelopeContractOk(sidecar, JUNEAU_BAR_CONTRACT_VERSION)) {
-			(window.console && console.error) && console.error(
+			window.console?.error?.(
 				"juneau-chrome.js: bar-slot contract mismatch (sidecar '" + sidecar.contractVersion
 				+ "' != runtime '" + JUNEAU_BAR_CONTRACT_VERSION + "'); leaving bar slot un-enhanced.");
 			return null;
@@ -442,13 +437,13 @@
 	function initAll() {
 		const out = { headers: [], bars: [] };
 		const headers = window.document.querySelectorAll("[" + HEADER_MARKER + "]");
-		for (let i = 0; i < headers.length; i++) {
-			const ctl = initHeader(headers[i]);
+		for (const header of headers) {
+			const ctl = initHeader(header);
 			if (ctl) out.headers.push(ctl);
 		}
 		const bars = window.document.querySelectorAll("[" + BAR_SLOT_MARKER + "]");
-		for (let i = 0; i < bars.length; i++) {
-			const ctl = initBarSlot(bars[i]);
+		for (const bar of bars) {
+			const ctl = initBarSlot(bar);
 			if (ctl) out.bars.push(ctl);
 		}
 		return out;
@@ -480,7 +475,7 @@
 		initAll: initAll
 	};
 
-	if (window.document && window.document.readyState === "loading") {
+	if (window.document?.readyState === "loading") {
 		window.document.addEventListener("DOMContentLoaded", initAll);
 	} else if (window.document) {
 		initAll();

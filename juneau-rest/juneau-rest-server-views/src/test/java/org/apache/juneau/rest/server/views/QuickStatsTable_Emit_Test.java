@@ -71,9 +71,10 @@ class QuickStatsTable_Emit_Test extends TestBase {
 	@Test void a02_nullOrInvalidStats_rejected() {
 		assertThrows(IllegalArgumentException.class, () -> QuickStatsTable.of(null));
 		// The emitter validates on entry, so an unvalidated bean cannot slip into markup.
-		assertThrows(IllegalArgumentException.class, () -> QuickStatsTable.of(QuickStats.create("x")));
-		assertThrows(IllegalArgumentException.class,
-			() -> QuickStatsTable.of(QuickStats.create("x").items(offPalette("ok"))));
+		var noItems = QuickStats.create("x");
+		assertThrows(IllegalArgumentException.class, () -> QuickStatsTable.of(noItems));
+		var offPaletteItems = QuickStats.create("x").items(offPalette("ok"));
+		assertThrows(IllegalArgumentException.class, () -> QuickStatsTable.of(offPaletteItems));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

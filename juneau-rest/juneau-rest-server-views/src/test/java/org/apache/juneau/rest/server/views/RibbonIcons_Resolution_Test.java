@@ -18,11 +18,15 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Default-icon lookup + {@code resolveButtonIcon(...)} pure-function assertions for {@code juneau-ribbon.js}
@@ -61,22 +65,22 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		assertTrue(body.contains("collapse: \"unfold_less\""), body);
 	}
 
-	@Test void a02_resolveButtonIcon_explicitSymbolWinsOverDefault() throws Exception {
+	@ParameterizedTest
+	@MethodSource("a02_functionBodyContainsProvider")
+	void a02_functionBodyContainsExpectedSubstring(String functionSignature, String expectedSubstring) throws Exception {
 		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
-		var fnBody = functionBody(body, "function resolveButtonIcon(");
-		assertTrue(fnBody.contains(".symbol"), fnBody);
+		var fnBody = functionBody(body, functionSignature);
+		assertTrue(fnBody.contains(expectedSubstring), fnBody);
 	}
 
-	@Test void a03_resolveButtonIcon_customOptionWithNoSymbolFallsBackToTune() throws Exception {
-		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
-		var fnBody = functionBody(body, "function resolveButtonIcon(");
-		assertTrue(fnBody.contains("\"tune\""), fnBody);
-	}
-
-	@Test void a04_ribbonStorageKey_layoutUnchanged() throws Exception {
-		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
-		var fnBody = functionBody(body, "function ribbonStorageKey(");
-		assertTrue(fnBody.contains("\"juneau.view.\" + viewId + \".ribbon.\" + optionId"), fnBody);
+	static Stream<Arguments> a02_functionBodyContainsProvider() {
+		return Stream.of(
+			// resolveButtonIcon: an explicit symbol wins over the default.
+			Arguments.of("function resolveButtonIcon(", ".symbol"),
+			// resolveButtonIcon: a custom option with no symbol falls back to "tune".
+			Arguments.of("function resolveButtonIcon(", "\"tune\""),
+			// ribbonStorageKey: the storage-key layout is unchanged.
+			Arguments.of("function ribbonStorageKey(", "\"juneau.view.\" + viewId + \".ribbon.\" + optionId"));
 	}
 
 	@Test void a05_loadPersistedState_routesThroughSyncPersistenceSpi_sameExactKeys() throws Exception {

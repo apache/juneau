@@ -147,7 +147,10 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CARDS_JS_PATH = "/juneau-cards.js";
 
 	/**
@@ -166,7 +169,10 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CALENDAR_JS_PATH = "/juneau-calendar.js";
 
 	/**
@@ -176,7 +182,10 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CALENDAR_CSS_PATH = "/juneau-calendar.css";
 
 	/**
@@ -188,7 +197,10 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
 
 	/**
@@ -442,7 +454,10 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CARDS_JS_PATH,
 		summary="Juneau rich-view card-layout runtime (relocated)",
@@ -499,7 +514,10 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CALENDAR_JS_PATH,
 		summary="Juneau reusable-calendar runtime (relocated)",
@@ -517,7 +535,10 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CALENDAR_CSS_PATH,
 		summary="Juneau reusable-calendar stylesheet (relocated)",
@@ -535,7 +556,10 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@Deprecated
+	@SuppressWarnings({
+		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+	})
+	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CHROME_JS_PATH,
 		summary="Juneau page-chrome runtime (relocated)",

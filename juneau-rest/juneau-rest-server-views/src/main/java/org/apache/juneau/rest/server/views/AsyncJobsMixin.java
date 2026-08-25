@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
 
 /**
  * Mixin interface that exposes the async-job SSE progress stream and cancel endpoint on any Juneau REST resource
- * (design doc §6.3; {@code TODO-425}).
+ * (design doc §6.3).
  *
  * <p>
  * An implementing resource supplies its {@link AsyncJobRegistry} via {@link #asyncJobRegistry()} &mdash; typically a

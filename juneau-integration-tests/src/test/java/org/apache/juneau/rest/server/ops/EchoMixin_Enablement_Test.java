@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 /**
- * Proves {@link EchoMixin} reachability is decoupled from the JUL logger level (TODO-372a).
+ * Proves {@link EchoMixin} reachability is decoupled from the JUL logger level.
  *
  * <p>
  * Echo is <b>disabled by default</b> and is enabled only by an explicit, non-logging switch:

@@ -1346,7 +1346,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 	// =================================================================================================================
 	// Per-method content negotiation (accept / contentType attributes)
-	//   contentType SELECTS the request serializer + sets the Content-Type label (single header, no duplicate);
+	//   contentType SELECTS the request serializer + sets the Content-Type label (single header, no duplicate).
 	//   accept sets the Accept header and is the response-parser FALLBACK (response Content-Type stays authoritative).
 	//   No-match media types fall back to the default marshaller but still send the overridden label.
 	//   Method-level overrides interface-level; the dedicated attribute wins over a constant header.

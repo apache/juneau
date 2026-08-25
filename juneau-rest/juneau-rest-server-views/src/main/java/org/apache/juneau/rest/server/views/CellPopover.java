@@ -86,18 +86,29 @@ public class CellPopover {
 		if (fields == null || fields.isEmpty())
 			throw iaex("CellPopover must declare at least one field.");
 		var keys = new HashSet<String>();
-		for (var f : fields) {
-			if (f == null)
-				throw iaex("CellPopover field must not be null.");
-			if (f.data == null || f.data.isBlank())
-				throw iaex("PopoverField data must not be null or blank.");
-			if (!keys.add(f.data))
-				throw iaex("CellPopover duplicate field data key '%s'.", f.data);
-			if (f.render != null) {
-				if (f.render.id == null || f.render.id.isBlank())
-					throw iaex("PopoverField render id must not be null or blank.");
-				SinkRenderAllowlist.assertPopoverAllowed(f.render.id);
-			}
+		for (var f : fields)
+			validateField(keys, f);
+	}
+
+	/**
+	 * Validates one field slot: non-null, a non-blank {@code data} key unique within this popover, and (when a
+	 * renderer is declared) a non-blank render id present in the popover render allowlist.
+	 *
+	 * @param keys The field-data keys seen so far in this popover; mutated to add this field's key.
+	 * @param f The field to validate.
+	 * @throws IllegalArgumentException If this field is not well-formed.
+	 */
+	private static void validateField(Set<String> keys, PopoverField f) {
+		if (f == null)
+			throw iaex("CellPopover field must not be null.");
+		if (f.data == null || f.data.isBlank())
+			throw iaex("PopoverField data must not be null or blank.");
+		if (!keys.add(f.data))
+			throw iaex("CellPopover duplicate field data key '%s'.", f.data);
+		if (f.render != null) {
+			if (f.render.id == null || f.render.id.isBlank())
+				throw iaex("PopoverField render id must not be null or blank.");
+			SinkRenderAllowlist.assertPopoverAllowed(f.render.id);
 		}
 	}
 }

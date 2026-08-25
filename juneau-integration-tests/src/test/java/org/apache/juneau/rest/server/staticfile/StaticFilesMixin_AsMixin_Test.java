@@ -29,14 +29,14 @@ import org.junit.jupiter.api.*;
  * <p>
  * Acceptance:
  * <ul>
- * 	<li>{@code GET /static/javadoc.css} returns the file (single SVL-configurable default mount).
+ * 	<li>{@code GET /static/themes/devops.css} returns the file (single SVL-configurable default mount).
  * 	<li>{@code GET} on a missing path returns 404.
  * 	<li>{@code HEAD /static/...} mirrors GET headers with empty body.
  * 	<li>The host's own endpoints are unaffected by the mixin.
  * </ul>
  *
  * <p>
- * The classpath resource {@code htdocs/javadoc.css} ships with {@code juneau-rest-server} and is
+ * The classpath resource {@code htdocs/themes/devops.css} ships with {@code juneau-rest-server} and is
  * therefore visible to {@code juneau-integration-tests}'s test classpath via the
  * {@link BasicStaticFiles} default constructor's recursive {@code cp(...,"htdocs",true)} walk.
  * The default {@link BasicStaticFiles} classpath search root still walks both {@code static/}
@@ -58,7 +58,7 @@ class StaticFilesMixin_AsMixin_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_staticPathServesClasspathFile() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -80,12 +80,12 @@ class StaticFilesMixin_AsMixin_Test extends TestBase {
 
 	@Test void a04_headStaticReturnsHeadersWithEmptyBody() throws Exception {
 		// HEAD must mirror GET's Content-Type and Content-Length while suppressing the body.
-		var get = c.get("/static/javadoc.css").run();
+		var get = c.get("/static/themes/devops.css").run();
 		get.assertStatus(200);
 		var getContentType = get.getHeader("Content-Type").asString().orElse("");
 		var getContentLength = get.getHeader("Content-Length").asString().orElse("");
 
-		var head = c.head("/static/javadoc.css").run();
+		var head = c.head("/static/themes/devops.css").run();
 		head.assertStatus(200);
 		head.assertContent().is("");
 

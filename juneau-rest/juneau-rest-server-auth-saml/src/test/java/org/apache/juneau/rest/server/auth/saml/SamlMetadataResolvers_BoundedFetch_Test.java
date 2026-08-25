@@ -74,7 +74,7 @@ class SamlMetadataResolvers_BoundedFetch_Test extends TestBase {
 			try (var os = exchange.getResponseBody()) {
 				os.write(body);
 			}
-		}, url -> SamlMetadataResolvers.url(url)));
+		}, SamlMetadataResolvers::url));
 		// Rejection happens up-front on the declared Content-Length, not after a failed XML parse of the filler.
 		assertTrue(ex.getMessage().contains("cap"), "Expected a cap-rejection message, got: " + ex.getMessage());
 	}
@@ -104,7 +104,7 @@ class SamlMetadataResolvers_BoundedFetch_Test extends TestBase {
 				for (var i = 0; i < 32; i++) // 32 * 64 KiB = 2 MiB, well past the 1 MiB default cap
 					os.write(chunk);
 			}
-		}, url -> SamlMetadataResolvers.url(url)));
+		}, SamlMetadataResolvers::url));
 		assertTrue(ex.getMessage().contains("cap"), "Expected a cap-rejection message, got: " + ex.getMessage());
 	}
 

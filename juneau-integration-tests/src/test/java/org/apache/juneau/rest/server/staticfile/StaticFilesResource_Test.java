@@ -28,11 +28,11 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The child mounts at the subtree {@code /static} (op pinned at {@code /*}) and delegates to a shared
- * {@link StaticFilesMixin} worker. The classpath resource {@code htdocs/javadoc.css} ships with
+ * {@link StaticFilesMixin} worker. The classpath resource {@code htdocs/themes/devops.css} ships with
  * {@code juneau-rest-server} and is visible via the default {@link BasicStaticFiles} recursive
  * classpath walk. Cases:
  * <ul>
- * 	<li>{@code GET /static/javadoc.css} serves the classpath file.
+ * 	<li>{@code GET /static/themes/devops.css} serves the classpath file.
  * 	<li>A missing path returns {@code 404}.
  * 	<li>The host's own endpoints are unaffected by the mounted child.
  * </ul>
@@ -50,7 +50,7 @@ class StaticFilesResource_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_servesClasspathFileAsChild() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");

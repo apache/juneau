@@ -36,6 +36,9 @@ public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Mirrors the Juneau builder-factory convention (e.g. ReaderParser.create()); widely used by callers.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

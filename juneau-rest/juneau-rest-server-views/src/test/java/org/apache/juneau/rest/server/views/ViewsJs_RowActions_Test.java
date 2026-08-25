@@ -26,8 +26,8 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing
- * (TODO-415).  Mirrors {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing
+ * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing.
+ * Mirrors {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing
  * pieces of the runtime's row-menu/submit contract are present in the shipped asset, without booting a browser
  * (the behavioral proof lives in the opt-in {@code RowActionCsrf_BrowserTest} canary).
  *

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Opt-in Chromium XSS canary for row-detail slot fill (TODO-445a).  Always-on source-shape + Node coverage
+ * Opt-in Chromium XSS canary for row-detail slot fill.  Always-on source-shape + Node coverage
  * lives in {@link ViewsJs_RowDetail_Test}; this class proves the same {@code textContent} mandate against a
  * real DOM (an {@code &lt;img onerror&gt;} payload must not execute).
  *

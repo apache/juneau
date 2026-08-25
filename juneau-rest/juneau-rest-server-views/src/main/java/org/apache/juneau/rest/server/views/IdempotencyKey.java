@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * A server-minted idempotency key for a row-action submit, bound at mint time to the {@code (action, targetId)} pair
- * it was issued for (design doc §6.2; the idempotency half of {@code TODO-416}).
+ * it was issued for (design doc §6.2; the idempotency half of the row-action result contract).
  *
  * <h5 class='section'>Why the key is server-minted and bound, not a client UUID</h5>
  * <p>
@@ -75,6 +75,9 @@ public final class IdempotencyKey {
 	/** Number of random bytes behind a minted key value, derived from {@link #KEY_BITS}. */
 	private static final int KEY_BYTES = KEY_BITS / 8;
 
+	/** Shared secure random source for minting key values; {@link SecureRandom} is safe for concurrent use. */
+	private static final SecureRandom RANDOM = new SecureRandom();
+
 	private final String value;
 	private final String action;
 	private final String targetId;
@@ -97,7 +100,7 @@ public final class IdempotencyKey {
 		requireNonBlank("action", action);
 		requireNonBlank("targetId", targetId);
 		var bytes = new byte[KEY_BYTES];
-		new SecureRandom().nextBytes(bytes);
+		RANDOM.nextBytes(bytes);
 		return new IdempotencyKey(HexFormat.of().formatHex(bytes), action, targetId);
 	}
 

@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@code TODO-428}: {@link WritePermit}, {@link SelectionDef}, and {@link BulkMutateDef} &mdash; the API-shape half
+ * The row-selection contract: {@link WritePermit}, {@link SelectionDef}, and {@link BulkMutateDef} &mdash; the API-shape half
  * of the separability guarantee (design-doc HIGH-5).
  *
  * <p>

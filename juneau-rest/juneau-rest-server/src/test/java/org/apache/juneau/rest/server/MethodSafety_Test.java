@@ -42,20 +42,20 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	/** Carries one method per shape the rule cares about; group b reflects over these rather than dispatching. */
 	@SuppressWarnings("unused")
 	static class Fix_Methods {
-		@Mutating public void declared() {}
-		@Mutating("the stored credential") public void declaredWithNote() {}
-		public void undeclared() {}
+		@Mutating public void declared() { /* fixture body; only the @Mutating declaration matters to the check */ }
+		@Mutating("the stored credential") public void declaredWithNote() { /* fixture body; only the annotation/note matter */ }
+		public void undeclared() { /* fixture body; deliberately lacks @Mutating */ }
 	}
 
 	/** A superclass declaration must still be seen when the subclass overrides the method. */
 	@SuppressWarnings("unused")
 	static class Fix_Parent {
-		@Mutating public void inherited() {}
+		@Mutating public void inherited() { /* fixture body; only the @Mutating declaration matters to the check */ }
 	}
 
 	@SuppressWarnings("unused")
 	static class Fix_Child extends Fix_Parent {
-		@Override public void inherited() {}
+		@Override public void inherited() { /* fixture override; deliberately re-declares without @Mutating */ }
 	}
 
 	static java.lang.reflect.Method method(Class<?> c, String name) throws Exception {
@@ -111,8 +111,8 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	//-----------------------------------------------------------------------------------------------------------
 
 	@Test void b01_declaredMutatingOnGet_rejected() throws Exception {
-		var e = assertThrows(RuntimeException.class,
-			() -> MethodSafety.checkOperation("GET", method(Fix_Methods.class, "declared")));
+		var m = method(Fix_Methods.class, "declared");
+		var e = assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("GET", m));
 		assertTrue(e.getMessage().contains("Fix_Methods.declared"), e.getMessage());
 		assertTrue(e.getMessage().contains("safe method"), e.getMessage());
 	}
@@ -126,8 +126,8 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	@Test void b03_declaredMutatingOnWildcard_rejected() throws Exception {
 		// @RestOp(method="*") answers GET along with everything else, so the operation is reachable by a safe
 		// method and the write checks would not run for that arrival.
-		var e = assertThrows(RuntimeException.class,
-			() -> MethodSafety.checkOperation("*", method(Fix_Methods.class, "declared")));
+		var m = method(Fix_Methods.class, "declared");
+		var e = assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("*", m));
 		assertTrue(e.getMessage().contains("every method"), e.getMessage());
 	}
 
@@ -140,32 +140,34 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	@Test void b05_undeclaredOnGet_allowed() throws Exception {
 		// The documented limit, asserted so it is a stated property rather than an accident: the check finds
 		// contradictions, not omissions. A handler that mutates and says nothing is invisible here.
-		assertDoesNotThrow(() -> MethodSafety.checkOperation("GET", method(Fix_Methods.class, "undeclared")));
+		var m = method(Fix_Methods.class, "undeclared");
+		assertDoesNotThrow(() -> MethodSafety.checkOperation("GET", m));
 	}
 
 	@Test void b06_noteIsIncludedInTheFailure() throws Exception {
-		var e = assertThrows(RuntimeException.class,
-			() -> MethodSafety.checkOperation("GET", method(Fix_Methods.class, "declaredWithNote")));
+		var m = method(Fix_Methods.class, "declaredWithNote");
+		var e = assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("GET", m));
 		assertTrue(e.getMessage().contains("the stored credential"), e.getMessage());
 	}
 
 	@Test void b07_failureNamesTheRestOpInferenceTrap() throws Exception {
 		// The message has to mention it: in the @RestOp case the developer never typed GET, so a message that
 		// only says "bound to GET" reads as wrong rather than as informative.
-		var e = assertThrows(RuntimeException.class,
-			() -> MethodSafety.checkOperation("GET", method(Fix_Methods.class, "declared")));
+		var m = method(Fix_Methods.class, "declared");
+		var e = assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("GET", m));
 		assertTrue(e.getMessage().contains("infers the method"), e.getMessage());
 	}
 
 	@Test void b08_inheritedDeclarationIsSeenThroughAnOverride() throws Exception {
 		// Method.getAnnotation would return null here; the check resolves through MethodInfo for this reason.
-		assertThrows(RuntimeException.class,
-			() -> MethodSafety.checkOperation("GET", method(Fix_Child.class, "inherited")));
+		var m = method(Fix_Child.class, "inherited");
+		assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("GET", m));
 	}
 
 	@Test void b09_nullHttpMethodIsNotAContradiction() throws Exception {
 		// Not safe, so nothing is being claimed twice. Fail-closed at request time covers it.
-		assertDoesNotThrow(() -> MethodSafety.checkOperation(null, method(Fix_Methods.class, "declared")));
+		var m = method(Fix_Methods.class, "declared");
+		assertDoesNotThrow(() -> MethodSafety.checkOperation(null, m));
 	}
 
 	@Test void b10_nullJavaMethodRejected() {

@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Unit test for the in-memory one-shot {@link AsyncJob} (design doc §6.3; {@code TODO-425}).
+ * Unit test for the in-memory one-shot {@link AsyncJob} (design doc §6.3).
  *
  * <p>
  * Covers the server-side hard limits that are BOTH heap bounds and Task-11 data-egress disclosure bounds (MED-6):
@@ -158,7 +158,7 @@ class AsyncJob_Test extends TestBase {
 		assertEquals("success", u.result().outcome);
 	}
 
-	@Test void e02_awaitUpdateBlocksThenWakesOnLiveEvent() throws Exception {
+	@Test void e02_awaitUpdateBlocksThenWakesOnLiveEvent() {
 		var j = job();
 		var pool = Executors.newSingleThreadScheduledExecutor();
 		try {

@@ -154,8 +154,8 @@ class HttpException_Test extends TestBase {
 		// Same instance
 		assertEquals(x1, x1);
 
-		// Different instances, same content - equality is content-based (statusLine + headers + message);
-		// stack traces are intentionally NOT part of equality.
+		// Different instances, same content - equality is content-based (statusLine + headers + message).
+		// Stack traces are intentionally NOT part of equality.
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
 

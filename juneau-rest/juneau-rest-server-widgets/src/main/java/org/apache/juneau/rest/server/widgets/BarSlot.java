@@ -36,6 +36,9 @@ import org.apache.juneau.commons.http.*;
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,id,widgets")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class BarSlot implements Widget {
 
 	/** The frozen contract version for this widget.  Serialized as the JSON <b>string</b> {@code "1"}. */

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * The row-selection + bulk-mutation half of the module's <b>JavaScript-execution harness</b> ({@code TODO-428}):
+ * The row-selection + bulk-mutation half of the module's <b>JavaScript-execution harness</b>:
  * runs the REAL served {@code juneau-views.js} in a real headless browser and asserts, as a user would experience
  * it, that:
  * <ul>
@@ -65,7 +65,7 @@ import org.junit.jupiter.api.condition.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link ModalResult_BrowserTest} &mdash; the sibling TODO-416/417 canary this reuses the settle
+ * 	<li class='jc'>{@link ModalResult_BrowserTest} &mdash; the sibling declarative-modal canary this reuses the settle
  * 		path from.
  * </ul>
  */

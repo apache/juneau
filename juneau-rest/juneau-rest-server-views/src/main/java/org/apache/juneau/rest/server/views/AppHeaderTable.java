@@ -113,6 +113,12 @@ public class AppHeaderTable {
 	/** The badge id namespace for header badges ({@code header:<id>}), so header and bar counts never collide. */
 	public static final String BADGE_NS = "header";
 
+	/** The {@code aria-label} attribute name, shared by several emit helpers below. */
+	private static final String ARIA_LABEL = "aria-label";
+
+	/** The HTML5 builder's {@code "button"} type token, shared by several emit helpers below. */
+	private static final String TYPE_BUTTON = "button";
+
 	private AppHeaderTable() {}
 
 	/**
@@ -201,17 +207,17 @@ public class AppHeaderTable {
 			var el = a(a.href, inner.toArray()).class_("jc-icon-btn")
 				.attr(ACTION_MARKER, a.id)
 				.attr(BEHAVIOR_ATTR, behavior)
-				.attr("aria-label", a.tooltip)
+				.attr(ARIA_LABEL, a.tooltip)
 				.attr("title", a.tooltip);
 			if (a.icon != null)
 				el.attr(ICON_ATTR, a.icon);
 			return el;
 		}
 
-		var el = button("button", inner.toArray()).class_("jc-icon-btn")
+		var el = button(TYPE_BUTTON, inner.toArray()).class_("jc-icon-btn")
 			.attr(ACTION_MARKER, a.id)
 			.attr(BEHAVIOR_ATTR, behavior)
-			.attr("aria-label", a.tooltip)
+			.attr(ARIA_LABEL, a.tooltip)
 			.attr("title", a.tooltip);
 		if (a.icon != null)
 			el.attr(ICON_ATTR, a.icon);
@@ -238,7 +244,7 @@ public class AppHeaderTable {
 			s.child(clampCount(badge.count, badge.max));   // plain text child - serializer entity-escapes it
 		}
 		if (badge.label != null && ! badge.label.isBlank())
-			s.attr("aria-label", badge.label);
+			s.attr(ARIA_LABEL, badge.label);
 		return s;
 	}
 
@@ -265,10 +271,10 @@ public class AppHeaderTable {
 
 		if (avatar.menu != null && ! avatar.menu.isEmpty()) {
 			// An avatar with a menu is an enabled menu trigger; juneau-chrome.js portals its list onto the views stack.
-			return button("button", kids.toArray()).class_(cls.toString())
+			return button(TYPE_BUTTON, kids.toArray()).class_(cls.toString())
 				.attr(AVATAR_MARKER, "1")
 				.attr(BEHAVIOR_ATTR, "menu")
-				.attr("aria-label", avatar.displayName)
+				.attr(ARIA_LABEL, avatar.displayName)
 				.attr("aria-haspopup", "menu")
 				.attr("aria-expanded", "false")
 				.attr("aria-controls", menuId(headerId, "avatar"));
@@ -277,7 +283,7 @@ public class AppHeaderTable {
 		return span(kids.toArray()).class_(cls.toString())
 			.attr(AVATAR_MARKER, "1")
 			.attr("role", "img")
-			.attr("aria-label", avatar.displayName);
+			.attr(ARIA_LABEL, avatar.displayName);
 	}
 
 	/** The stable element id of an action's / the avatar's attached menu list ({@code juneau-menu:<headerId>:<key>}). */
@@ -314,7 +320,7 @@ public class AppHeaderTable {
 				el.attr(ICON_ATTR, mi.icon);
 			return el;
 		}
-		var el = button("button", kids.toArray()).class_("jc-menu-item")
+		var el = button(TYPE_BUTTON, kids.toArray()).class_("jc-menu-item")
 			.attr("role", "menuitem")
 			.attr(SAFE_ATTR, mi.safe);
 		if (mi.icon != null && ! mi.icon.isBlank())

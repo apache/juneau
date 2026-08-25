@@ -55,6 +55,9 @@ import java.util.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class NestedTableDef {
 
 	/** The frozen contract version for the nested-table shell, independent of the enclosing view/detail contracts. */
@@ -151,8 +154,8 @@ public class NestedTableDef {
 			throw iaex("NestedTableDef parentScopeParam must not be null or blank.");
 		if (RESERVED_SCOPE_PARAMS.contains(parentScopeParam))
 			throw iaex("NestedTableDef parentScopeParam '%s' is a reserved DataTables request parameter.", parentScopeParam);
-		if (!parentScopeParam.matches("[A-Za-z][A-Za-z0-9_]*"))
-			throw iaex("NestedTableDef parentScopeParam '%s' must match [A-Za-z][A-Za-z0-9_]*.", parentScopeParam);
+		if (!parentScopeParam.matches("[A-Za-z]\\w*"))
+			throw iaex("NestedTableDef parentScopeParam '%s' must match [A-Za-z]\\w*.", parentScopeParam);
 
 		if (view.dataUrl == null || view.dataUrl.isBlank())
 			throw iaex("NestedTableDef view dataUrl must not be null or blank.");
@@ -218,11 +221,10 @@ public class NestedTableDef {
 			return false;
 		var colon = dataUrl.indexOf(':');
 		var slash = dataUrl.indexOf('/');
-		if (colon >= 0 && (slash < 0 || colon < slash)) {
-			// A scheme is present (colon before any slash).  Only 'servlet:' is honored.
-			if (!"servlet".equals(dataUrl.substring(0, colon)))
-				return false;
-		}
+		// A scheme is present when colon >= 0 && (slash < 0 || colon < slash) (colon before any slash); only
+		// 'servlet:' is honored.
+		if (colon >= 0 && (slash < 0 || colon < slash) && !"servlet".equals(dataUrl.substring(0, colon)))
+			return false;
 		for (var seg : dataUrl.split("/", -1)) {
 			if ("..".equals(seg))
 				return false;

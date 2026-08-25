@@ -34,6 +34,9 @@ public class FakeStreamParser extends InputStreamParser {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Mirrors the Juneau builder-factory convention (e.g. InputStreamParser.create()); widely used by callers.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

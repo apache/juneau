@@ -41,6 +41,8 @@ import org.apache.juneau.commons.bean.*;
 @BeanType
 public class ColumnConfig {
 
+	private ColumnConfig() {}
+
 	/**
 	 * Creates a new, empty column-configurator opt-in.
 	 *

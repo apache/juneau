@@ -32,6 +32,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,label,segments")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setter mirrors the field name (Juneau DSL convention); "id" field mirrors the StatItem#id() contract for JSON emit.
+})
 public final class SegmentedBadge implements StatItem {
 
 	/**

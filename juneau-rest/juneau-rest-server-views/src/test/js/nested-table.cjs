@@ -45,6 +45,9 @@ if (!viewsJsPath) {
  * Minimal compound CSS-selector matcher for the subset the harness needs: an optional tag prefix followed by any
  * number of `.class` and `[attr]` / `[attr="v"]` conditions (e.g. `table[data-juneau-view][data-juneau-nested-init]`).
  */
+// NOSONAR javascript:S3776 -- this mini compound-selector matcher's while+branch shape mirrors the CSS grammar it
+// matches one token kind at a time (class / attr / tag); splitting the token kinds into further helpers would
+// scatter the matcher's early-return short-circuiting across files without reducing real complexity.
 function elMatchesCompound(node, sel) {
 	if (!node || node.nodeType !== 1) return false;
 	const re = /\.[\w-]+|\[[\w:-]+(?:="[^"]*")?\]|^[a-zA-Z][\w-]*/g;
@@ -53,15 +56,15 @@ function elMatchesCompound(node, sel) {
 	while ((m = re.exec(sel))) {
 		const tok = m[0];
 		matchedSomething = true;
-		if (tok.charAt(0) === '.') {
+		if (tok.startsWith('.')) {
 			const raw = ' ' + (node.className || node.getAttribute('class') || '') + ' ';
 			if (raw.indexOf(' ' + tok.slice(1) + ' ') < 0) return false;
-		} else if (tok.charAt(0) === '[') {
+		} else if (tok.startsWith('[')) {
 			const am = /^\[([\w:-]+)(?:="([^"]*)")?\]$/.exec(tok);
 			const v = node.getAttribute(am[1]);
 			if (am[2] == null ? v == null : v !== am[2]) return false;
-		} else {
-			if (node.tagName !== tok.toUpperCase()) return false;
+		} else if (node.tagName !== tok.toUpperCase()) {
+			return false;
 		}
 	}
 	return matchedSomething;
@@ -73,21 +76,30 @@ function elMatchesCompound(node, sel) {
  */
 function elMatches(node, sel) {
 	const parts = String(sel).trim().split(/\s+/);
-	if (!elMatchesCompound(node, parts[parts.length - 1])) return false;
+	if (!elMatchesCompound(node, parts.at(-1))) return false;
 	let n = node.parentNode;
 	for (let i = parts.length - 2; i >= 0; i--) {
-		while (n && n.nodeType === 1 && !elMatchesCompound(n, parts[i])) n = n.parentNode;
+		while (n?.nodeType === 1 && !elMatchesCompound(n, parts[i])) n = n.parentNode;
 		if (!n || n.nodeType !== 1) return false;
 		n = n.parentNode;
 	}
 	return true;
 }
 
+/** Walks from `node` up through ancestors (inclusive) looking for the first match of `sel`. */
+function closestFrom(node, sel) {
+	let n = node;
+	while (n?.nodeType === 1) {
+		if (elMatches(n, sel)) { return n; }
+		n = n.parentNode;
+	}
+	return null;
+}
+
 function elWalk(node, sel, acc) {
-	for (let i = 0; i < node.childNodes.length; i++) {
-		const c = node.childNodes[i];
+	for (const c of node.childNodes) {
 		if (c.nodeType === 1) {
-			if (elMatches(c, sel)) acc.push(c);
+			if (elMatches(c, sel)) { acc.push(c); }
 			elWalk(c, sel, acc);
 		}
 	}
@@ -109,6 +121,19 @@ function el(tag) {
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		removeAttribute: function (k) { delete this.attrs[k]; },
 		hasAttribute: function (k) { return Object.hasOwn(this.attrs, k); },
+		/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
+		get dataset() {
+			return new Proxy({}, {
+				get: (t, prop) => {
+					if (typeof prop !== 'string') return undefined;
+					const k = toDataAttr(prop);
+					return Object.hasOwn(this.attrs, k) ? this.attrs[k] : undefined;
+				},
+				set: (t, prop, value) => { this.setAttribute(toDataAttr(prop), value); return true; },
+				deleteProperty: (t, prop) => { this.removeAttribute(toDataAttr(prop)); return true; },
+				has: (t, prop) => typeof prop === 'string' && Object.hasOwn(this.attrs, toDataAttr(prop))
+			});
+		},
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
 		insertBefore: function (c, ref) {
 			const i = ref ? this.childNodes.indexOf(ref) : -1;
@@ -116,12 +141,16 @@ function el(tag) {
 			c.parentNode = this;
 			return c;
 		},
-		removeChild: function (c) { const i = this.childNodes.indexOf(c); if (i >= 0) this.childNodes.splice(i, 1); return c; },
+		removeChild: function (c) { const i = this.childNodes.indexOf(c); if (i >= 0) { this.childNodes.splice(i, 1); } return c; },
 		createCaption: function () { return null; },   // force renderBanner down the document.createElement path
 		querySelectorAll: function (sel) { return elWalk(this, sel, []); },
 		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
-		closest: function (sel) { let n = this; while (n && n.nodeType === 1) { if (elMatches(n, sel)) return n; n = n.parentNode; } return null; },
-		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		closest: function (sel) { return closestFrom(this, sel); },
+		addEventListener: function (type, fn) {
+			const list = this._listeners[type] || [];
+			this._listeners[type] = list;
+			list.push(fn);
+		},
 		focus: function () {},
 		set textContent(v) { this.childNodes.length = 0; this._text = v == null ? '' : String(v); },
 		get textContent() {
@@ -131,6 +160,11 @@ function el(tag) {
 	};
 	node._text = '';
 	return node;
+}
+
+/** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
+function toDataAttr(prop) {
+	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
 }
 
 function textNode(value) {
@@ -157,11 +191,13 @@ const sandbox = {
 	setInterval: function () { return 0; },
 	clearInterval: function (id) { clearedIntervals.push(id); }
 };
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-views.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
-const I = NS && NS.init;
-const out = { hasInit: !!(I && typeof I.prepareNestedTable === 'function') };
+const I = NS?.init;
+const out = { hasInit: typeof I?.prepareNestedTable === 'function' };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -255,29 +291,29 @@ function nestedWrapper(o) {
 	o = o || {};
 	const wrap = el('div');
 	wrap.className = 'juneau-view-detail-nested';
-	wrap.setAttribute('data-juneau-nested', '1');
-	wrap.setAttribute('data-juneau-nested-contract', o.contract != null ? o.contract : I.JUNEAU_NESTED_CONTRACT_VERSION);
-	wrap.setAttribute('data-juneau-nested-scope-param', o.scopeParam || 'parentId');
+	wrap.dataset.juneauNested = '1';
+	wrap.dataset.juneauNestedContract = o.contract != null ? o.contract : I.JUNEAU_NESTED_CONTRACT_VERSION;
+	wrap.dataset.juneauNestedScopeParam = o.scopeParam || 'parentId';
 	const table = el('table');
-	table.setAttribute('data-juneau-view', o.viewId || 'events');
-	if (o.inited) table.setAttribute('data-juneau-nested-init', '1');
+	table.dataset.juneauView = o.viewId || 'events';
+	if (o.inited) table.dataset.juneauNestedInit = '1';
 	if (o.selection) {
-		table.setAttribute('data-juneau-select', '1');
-		table.setAttribute('data-juneau-row-id-field', o.rowIdField || 'id');
-		table.setAttribute('data-juneau-select-all', '1');
+		table.dataset.juneauSelect = '1';
+		table.dataset.juneauRowIdField = o.rowIdField || 'id';
+		table.dataset.juneauSelectAll = '1';
 	}
-	if (o.csrf) table.setAttribute('data-juneau-csrf', o.csrf);
+	if (o.csrf) table.dataset.juneauCsrf = o.csrf;
 	wrap.appendChild(table);
 	if (o.detailTemplate) {
 		const tpl = el('template');
-		tpl.setAttribute('data-juneau-row-detail', '1');
-		tpl.setAttribute('data-juneau-detail-url', '/data/events/{id}');
+		tpl.dataset.juneauRowDetail = '1';
+		tpl.dataset.juneauDetailUrl = '/data/events/{id}';
 		tpl.content = el('div');
 		wrap.appendChild(tpl);
 	}
 	if (!o.noSidecar) {
 		const sc = el('script');
-		sc.setAttribute('data-juneau-nested-meta', o.metaId != null ? o.metaId : (o.viewId || 'events'));
+		sc.dataset.juneauNestedMeta = o.metaId != null ? o.metaId : (o.viewId || 'events');
 		sc.textContent = o.json != null ? o.json : VALID;
 		wrap.appendChild(sc);
 	}
@@ -286,7 +322,7 @@ function nestedWrapper(o) {
 
 const fnsW = nestedWrapper({ viewId: 'events' });
 out.find_byId = I.findNestedSidecar(fnsW.wrap, 'events') != null
-	&& I.findNestedSidecar(fnsW.wrap, 'events').getAttribute('data-juneau-nested-meta') === 'events';
+	&& I.findNestedSidecar(fnsW.wrap, 'events').dataset.juneauNestedMeta === 'events';
 // id skew -> falls back to first meta node (present, not silent no-init).
 const skewW = nestedWrapper({ viewId: 'events', metaId: 'other' });
 out.find_fallbackFirst = I.findNestedSidecar(skewW.wrap, 'events') != null;
@@ -301,7 +337,7 @@ function bannerText(table) {
 	const cap = table.querySelector('.juneau-view-error');
 	return cap ? cap.textContent : null;
 }
-function inited(table) { return table.getAttribute('data-juneau-nested-init') === '1'; }
+function inited(table) { return table.dataset.juneauNestedInit === '1'; }
 
 // Shell-contract mismatch -> banner, no init, no ctx.
 const badContract = nestedWrapper({ contract: WRONG_CONTRACT });
@@ -344,43 +380,43 @@ window.jQuery.fn = { DataTable: function () {} };   // truthy so the jQuery/buil
 
 const okW = nestedWrapper({ viewId: 'events', scopeParam: 'alertId', selection: true, detailTemplate: true });
 let threw = false;
-try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw = true; }
+try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw = true; out.pnt_ok_constructionError = String(e?.message || e); }
 out.pnt_ok_construction_attempted = threw;   // proves it reached buildTable -> $(table).DataTable
 out.pnt_ok_initMarked = inited(okW.table);
-out.pnt_ok_parentStamped = okW.table.getAttribute('data-juneau-parent-id') === 'a1';
+out.pnt_ok_parentStamped = okW.table.dataset.juneauParentId === 'a1';
 const okCtx = okW.table.__juneauCtx;
 out.pnt_ok_hasCtx = okCtx != null;
-out.pnt_ok_nested = !!(okCtx && okCtx.nested);
-out.pnt_ok_depth = okCtx ? okCtx.nestedDepth : null;
-out.pnt_ok_scopeParam = okCtx && okCtx.nestedScope ? okCtx.nestedScope.param : null;
-out.pnt_ok_scopeReadsAttr = okCtx && okCtx.nestedScope ? okCtx.nestedScope.parentId() : null;
+out.pnt_ok_nested = !!okCtx?.nested;
+out.pnt_ok_depth = okCtx?.nestedDepth ?? null;
+out.pnt_ok_scopeParam = okCtx?.nestedScope?.param ?? null;
+out.pnt_ok_scopeReadsAttr = okCtx?.nestedScope?.parentId() ?? null;
 // Parent-only clamp: the chooser and the poll timer stay on the enclosing table...
-out.pnt_ok_clampColumnConfig = !!okCtx && okCtx.viewDef.columnConfig === null;
-out.pnt_ok_clampPoll = !!okCtx && okCtx.viewDef.pollIntervalMs === null;
+out.pnt_ok_clampColumnConfig = okCtx?.viewDef.columnConfig === null;
+out.pnt_ok_clampPoll = okCtx?.viewDef.pollIntervalMs === null;
 // ...while row actions and detail sections survive at depth 2 (nulling them would make the server widening a no-op).
-out.pnt_ok_keepsRowActions = !!okCtx && Array.isArray(okCtx.viewDef.rowActions) && okCtx.viewDef.rowActions.length === 1;
-out.pnt_ok_keepsDetails = !!okCtx && okCtx.viewDef.details != null;
+out.pnt_ok_keepsRowActions = Array.isArray(okCtx?.viewDef.rowActions) && okCtx.viewDef.rowActions.length === 1;
+out.pnt_ok_keepsDetails = okCtx?.viewDef.details != null;
 // Live selection state, read from the stamped attributes exactly as a root table reads them (never hardcoded null).
-out.pnt_ok_selectionLive = !!(okCtx && okCtx.selectionState);
-out.pnt_ok_selectionRowIdField = okCtx && okCtx.selectionState ? okCtx.selectionState.rowIdField : null;
-out.pnt_ok_selectionEmpty = !!(okCtx && okCtx.selectionState && okCtx.selectionState.selected.size === 0);
+out.pnt_ok_selectionLive = !!okCtx?.selectionState;
+out.pnt_ok_selectionRowIdField = okCtx?.selectionState?.rowIdField ?? null;
+out.pnt_ok_selectionEmpty = okCtx?.selectionState?.selected.size === 0;
 // Bulk mutation is NOT part of the nested init path (it stays bound to the enclosing table's id).
-out.pnt_ok_noBulkDef = !!okCtx && okCtx._bulkDef === undefined;
+out.pnt_ok_noBulkDef = okCtx?._bulkDef === undefined;
 // The parent init path really ran: details expander + cell popover + row actions bound click listeners, row actions
 // also bound keydown, and selection bound change.
 out.pnt_ok_clickListeners = (okW.table._listeners.click || []).length;
 out.pnt_ok_keydownListeners = (okW.table._listeners.keydown || []).length;
 out.pnt_ok_changeListeners = (okW.table._listeners.change || []).length;
 out.pnt_ok_popoverBound = okW.table._juneauCellPopoverBound === true;
-out.pnt_ok_detailInflight = !!(okCtx && okCtx._detailInflight);
+out.pnt_ok_detailInflight = !!okCtx?._detailInflight;
 // Idempotent: a second call on an already-inited table is a no-op (no second construction throw).
 let threw2 = false;
-try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw2 = true; }
+try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw2 = true; out.pnt_ok_secondConstructionError = String(e?.message || e); }
 out.pnt_ok_idempotent = threw2 === false;
 
 // A nested table with no selection stamp gets no selection state and binds no change listener.
 const noSelW = nestedWrapper({ viewId: 'events' });
-try { I.prepareNestedTable(noSelW.wrap, 'a1'); } catch (e) { /* stubbed construction */ }
+try { I.prepareNestedTable(noSelW.wrap, 'a1'); } catch (e) { out.pnt_noSel_constructionError = String(e?.message || e); }
 out.pnt_noSel_selectionNull = noSelW.table.__juneauCtx.selectionState === null;
 out.pnt_noSel_noChangeListener = (noSelW.table._listeners.change || []).length === 0;
 
@@ -436,7 +472,7 @@ out.mint_sidecarIdsUnique = scA !== scB;
 // the page's own sidecar, so a shared data-juneau-view cannot cross-wire the two.
 out.mint_sidecarNotBarePageId = scA !== 'juneau-view:events' && scB !== 'juneau-view:events';
 // The author id on the wire is untouched (it is the ViewDef.id, not an identity).
-out.mint_authorIdKept = rowA.table.getAttribute('data-juneau-view') === 'events';
+out.mint_authorIdKept = rowA.table.dataset.juneauView === 'events';
 
 // ----------------------------------------------------------------------------------------------------------------
 // Two rows of the same parent expanded simultaneously: both init, each against its OWN parent row, and redrawing
@@ -445,8 +481,8 @@ out.mint_authorIdKept = rowA.table.getAttribute('data-juneau-view') === 'events'
 
 const sim1 = panelWithNested('events');
 const sim2 = panelWithNested('events');
-try { I.prepareNestedTable(sim1.wrap, 'a1'); } catch (e) { /* stubbed construction */ }
-try { I.prepareNestedTable(sim2.wrap, 'a2'); } catch (e) { /* stubbed construction */ }
+try { I.prepareNestedTable(sim1.wrap, 'a1'); } catch (e) { out.sim1_constructionError = String(e?.message || e); }
+try { I.prepareNestedTable(sim2.wrap, 'a2'); } catch (e) { out.sim2_constructionError = String(e?.message || e); }
 const c1 = sim1.table.__juneauCtx;
 const c2 = sim2.table.__juneauCtx;
 out.sim_bothInited = inited(sim1.table) && inited(sim2.table);
@@ -470,12 +506,12 @@ window.jQuery = undefined;   // back to no-jQuery for the routing tests below
 
 const ownWrapper = el('div');
 const parentTable = el('table');
-parentTable.setAttribute('data-juneau-view', 'alerts');
+parentTable.dataset.juneauView = 'alerts';
 ownWrapper.appendChild(parentTable);
 const pBody = el('tbody');
 parentTable.appendChild(pBody);
 const pRow = el('tr');
-pRow.setAttribute('data-juneau-row-id', 'a1');
+pRow.dataset.juneauRowId = 'a1';
 pBody.appendChild(pRow);
 // The child row holding the expanded panel, with a nested table of its own.
 const childRow = el('tr');
@@ -487,7 +523,7 @@ childCell.appendChild(ownPanel.panel);
 const nBody = el('tbody');
 ownPanel.table.appendChild(nBody);
 const nRow = el('tr');
-nRow.setAttribute('data-juneau-row-id', 'n1');
+nRow.dataset.juneauRowId = 'n1';
 nBody.appendChild(nRow);
 const nCheckbox = el('input');
 nRow.appendChild(nCheckbox);
@@ -504,10 +540,10 @@ out.own_parentClaimsItsOwnEvent = I.isOwnTableEvent(parentTable, { target: pRow 
 // findRowDetailTemplate must skip a nested view's template cloned into one of this table's expanded panels and
 // return the table's OWN sibling template.
 const parentTpl = el('template');
-parentTpl.setAttribute('data-juneau-row-detail', '1');
+parentTpl.dataset.juneauRowDetail = '1';
 ownWrapper.appendChild(parentTpl);
 const nestedTpl = el('template');
-nestedTpl.setAttribute('data-juneau-row-detail', '1');
+nestedTpl.dataset.juneauRowDetail = '1';
 ownPanel.wrap.appendChild(nestedTpl);
 out.own_parentTemplateNotTheNestedOne = I.findRowDetailTemplate(parentTable) === parentTpl;
 out.own_nestedTemplateIsItsOwn = I.findRowDetailTemplate(ownPanel.table) === nestedTpl;
@@ -520,10 +556,10 @@ const destroyOrder = [];
 
 function initedTableWithSpy(root, label) {
 	const wrap = el('div');
-	wrap.setAttribute('data-juneau-nested', '1');
+	wrap.dataset.juneauNested = '1';
 	const table = el('table');
-	table.setAttribute('data-juneau-view', 'events');
-	table.setAttribute('data-juneau-nested-init', '1');
+	table.dataset.juneauView = 'events';
+	table.dataset.juneauNestedInit = '1';
 	let destroyed = 0;
 	let closed = 0;
 	const timerId = 'timer-' + (label || 'x');
@@ -545,16 +581,16 @@ const tdRoot = el('div');
 const t1 = initedTableWithSpy(tdRoot, 't1');
 const t2 = initedTableWithSpy(tdRoot, 't2');
 // A non-inited nested table must be left untouched.
-const plainWrap = el('div'); plainWrap.setAttribute('data-juneau-nested', '1');
-const plainTable = el('table'); plainTable.setAttribute('data-juneau-view', 'events');
+const plainWrap = el('div'); plainWrap.dataset.juneauNested = '1';
+const plainTable = el('table'); plainTable.dataset.juneauView = 'events';
 plainWrap.appendChild(plainTable); tdRoot.appendChild(plainWrap);
 
 I.teardownNestedTables(tdRoot);
 out.td_destroyed1 = t1.destroyed() === 1;
 out.td_destroyed2 = t2.destroyed() === 1;
-out.td_markerCleared1 = t1.table.getAttribute('data-juneau-nested-init') == null;
+out.td_markerCleared1 = t1.table.dataset.juneauNestedInit == null;
 out.td_ctxNulled1 = t1.table.__juneauCtx == null;
-out.td_plainUntouched = plainTable.__juneauCtx == null && plainTable.getAttribute('data-juneau-nested-init') == null;
+out.td_plainUntouched = plainTable.__juneauCtx == null && plainTable.dataset.juneauNestedInit == null;
 // Zero live handles afterwards: every poll timer cleared, every job stream closed.
 out.td_timersCleared = clearedIntervals.indexOf(t1.timerId) >= 0 && clearedIntervals.indexOf(t2.timerId) >= 0;
 out.td_streamsClosed = t1.closed() === 1 && t2.closed() === 1;
@@ -578,7 +614,7 @@ out.td_depthFirstBothDestroyed = outerT.destroyed() === 1 && innerT.destroyed() 
 
 function paneWithNested(sid, hidden, contract) {
 	const sec = el('section');
-	sec.setAttribute('data-juneau-detail-section', sid);
+	sec.dataset.juneauDetailSection = sid;
 	sec.hidden = !!hidden;
 	const nw = nestedWrapper({ contract: contract != null ? contract : WRONG_CONTRACT });   // mismatch -> banner on invoke
 	sec.appendChild(nw.wrap);
@@ -602,11 +638,11 @@ out.route_activateHiddenNow = bannerText(hidPane.table) != null;
 
 // activateNestedTablesInPane on an ALREADY-inited nested table calls columns.adjust(), not prepareNestedTable.
 const adjPane = el('section');
-adjPane.setAttribute('data-juneau-detail-section', 'c');
-const adjWrap = el('div'); adjWrap.setAttribute('data-juneau-nested', '1');
+adjPane.dataset.juneauDetailSection = 'c';
+const adjWrap = el('div'); adjWrap.dataset.juneauNested = '1';
 const adjTable = el('table');
-adjTable.setAttribute('data-juneau-view', 'events');
-adjTable.setAttribute('data-juneau-nested-init', '1');   // already inited
+adjTable.dataset.juneauView = 'events';
+adjTable.dataset.juneauNestedInit = '1';   // already inited
 let adjusted = 0;
 adjTable.__juneauCtx = { dataTable: { columns: { adjust: function () { adjusted++; } } } };
 adjWrap.appendChild(adjTable);

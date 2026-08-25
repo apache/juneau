@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.server.widgets.CalendarDef.*;
 import org.apache.juneau.rest.server.widgets.EventCategory.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.*;
 
 /**
  * {@link CalendarDef#validate()} matrix and defaults.
@@ -45,7 +46,8 @@ class CalendarDef_Test extends TestBase {
 	}
 
 	@Test void a02_wellFormed_validates() {
-		assertDoesNotThrow(() -> good().validate());
+		var d = good();
+		assertDoesNotThrow((Executable) d::validate);
 	}
 
 	@Test void a03_defaults() {
@@ -56,33 +58,45 @@ class CalendarDef_Test extends TestBase {
 	}
 
 	@Test void b01_nullId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> CalendarDef.create().validate());
+		var d = CalendarDef.create();
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void b02_blankId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().id("  ").validate());
+		var d = good().id("  ");
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void b03_badCharsetId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().id("1cal").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().id("cal.1").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().id("cal 1").validate());
+		var d1 = good().id("1cal");
+		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		var d2 = good().id("cal.1");
+		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		var d3 = good().id("cal 1");
+		assertThrows(IllegalArgumentException.class, () -> d3.validate());
 	}
 
 	@Test void c01_endpointMissingTokens_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("/events/{year}").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("/events/{month}").validate());
+		var d1 = good().endpoint("/events/{year}");
+		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		var d2 = good().endpoint("/events/{month}");
+		assertThrows(IllegalArgumentException.class, () -> d2.validate());
 	}
 
 	@Test void c02_endpointNotSameOrigin_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("http://evil/{year}/{month}").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("//host/{year}/{month}").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("a:b/{year}/{month}").validate());
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("../{year}/{month}").validate());
+		var d1 = good().endpoint("http://evil/{year}/{month}");
+		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		var d2 = good().endpoint("//host/{year}/{month}");
+		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		var d3 = good().endpoint("a:b/{year}/{month}");
+		assertThrows(IllegalArgumentException.class, () -> d3.validate());
+		var d4 = good().endpoint("../{year}/{month}");
+		assertThrows(IllegalArgumentException.class, () -> d4.validate());
 	}
 
 	@Test void c03_blankEndpoint_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().endpoint("   ").validate());
+		var d = good().endpoint("   ");
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void c04_nullEndpoint_ok_seedOnly() {
@@ -93,49 +107,53 @@ class CalendarDef_Test extends TestBase {
 			.initial(2026, 8)
 			.events(CalendarEvent.create().id("e1").title("x").start("2026-08-01").categoryId("team"));
 		d.endpoint = null;
-		assertDoesNotThrow(() -> d.validate());
+		assertDoesNotThrow((Executable) d::validate);
 	}
 
 	@Test void d01_maxPerDayBelowOne_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().maxPerDay(0).validate());
+		var d = good().maxPerDay(0);
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void d02_initialMonthOutOfRange_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().initial(2026, 0).validate());
-		assertThrows(IllegalArgumentException.class, () -> good().initial(2026, 13).validate());
+		var d1 = good().initial(2026, 0);
+		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		var d2 = good().initial(2026, 13);
+		assertThrows(IllegalArgumentException.class, () -> d2.validate());
 	}
 
 	@Test void d03_initialSetOneOnly_rejected() {
 		var d = good();
 		d.initialYear = 2026;
 		d.initialMonth = null;
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, d::validate);
 	}
 
 	@Test void e01_nullCategory_rejected() {
 		var d = good().categories((EventCategory) null);
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, d::validate);
 	}
 
 	@Test void e02_blankCategoryId_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> good().categories(EventCategory.create().id("").label("x")).validate());
+		var d = good().categories(EventCategory.create().id("").label("x"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void e03_badCharsetCategoryId_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> good().categories(EventCategory.create().id("a b").label("x")).validate());
+		var d = good().categories(EventCategory.create().id("a b").label("x"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void e04_dupCategoryId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().categories(
+		var d = good().categories(
 			EventCategory.create().id("team").label("A"),
-			EventCategory.create().id("team").label("B")).validate());
+			EventCategory.create().id("team").label("B"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void e05_blankCategoryLabel_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> good().categories(EventCategory.create().id("team").label("  ")).validate());
+		var d = good().categories(EventCategory.create().id("team").label("  "));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void f01_seedEventBlankTitle_isDropped_notFatal() {
@@ -144,29 +162,33 @@ class CalendarDef_Test extends TestBase {
 		var d = good().events(
 			CalendarEvent.create().id("e1").title("  ").start("2026-08-14").categoryId("team"),
 			CalendarEvent.create().id("e2").title("Kept").start("2026-08-15").categoryId("team"));
-		assertDoesNotThrow(() -> d.validate());
+		assertDoesNotThrow((Executable) d::validate);
 		assertEquals(List.of("e2"), d.wellFormedEvents().stream().map(e -> e.id).toList());
 	}
 
 	@Test void f02_seedDupEventId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().events(
+		var d = good().events(
 			CalendarEvent.create().id("e1").title("a").start("2026-08-14").categoryId("team"),
-			CalendarEvent.create().id("e1").title("b").start("2026-08-15").categoryId("team")).validate());
+			CalendarEvent.create().id("e1").title("b").start("2026-08-15").categoryId("team"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void f03_seedOffMonth_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().events(
-			CalendarEvent.create().id("e1").title("a").start("2026-09-01").categoryId("team")).validate());
+		var d = good().events(
+			CalendarEvent.create().id("e1").title("a").start("2026-09-01").categoryId("team"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void f04_seedUnknownCategory_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().events(
-			CalendarEvent.create().id("e1").title("a").start("2026-08-14").categoryId("ghost")).validate());
+		var d = good().events(
+			CalendarEvent.create().id("e1").title("a").start("2026-08-14").categoryId("ghost"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void f05_seedUnsafeHref_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> good().events(
-			CalendarEvent.create().id("e1").title("a").start("2026-08-14").href("javascript:alert(1)")).validate());
+		var d = good().events(
+			CalendarEvent.create().id("e1").title("a").start("2026-08-14").href("javascript:alert(1)"));
+		assertThrows(IllegalArgumentException.class, () -> d.validate());
 	}
 
 	@Test void g01_offMonthCheckedAgainstResolvedWindow() {
@@ -199,7 +221,7 @@ class CalendarDef_Test extends TestBase {
 			// Declared allDay=true with a date-time end: malformed, and dropped rather than fatal.
 			CalendarEvent.create().id("b").title("Bad").start("2026-08-14").allDay(true).end("2026-08-14T10:00"),
 			CalendarEvent.create().id("c").title("Also kept").start("2026-08-15").categoryId("team"));
-		assertDoesNotThrow(() -> d.validate());
+		assertDoesNotThrow((Executable) d::validate);
 		assertEquals(List.of("a", "c"), d.wellFormedEvents().stream().map(e -> e.id).toList());
 	}
 
@@ -208,7 +230,7 @@ class CalendarDef_Test extends TestBase {
 			CalendarEvent.create().id("a").title("Start only").start("2026-08-14").categoryId("team"),
 			CalendarEvent.create().id("b").title("Offset").start("2026-08-15T09:00:00Z").end("2026-08-15T10:00:00Z")
 				.categoryId("team"));
-		assertDoesNotThrow(() -> d.validate());
+		assertDoesNotThrow((Executable) d::validate);
 		assertEquals(2, d.wellFormedEvents().size());
 	}
 }

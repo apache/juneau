@@ -16,7 +16,7 @@
  */
 
 /*
- * dialog-validation.cjs - always-on Node harness for the dialog's advisory client-side validation (TODO-445h):
+ * dialog-validation.cjs - always-on Node harness for the dialog's advisory client-side validation:
  * required-empty / pattern-mismatch / maxLength-exceeded block a confirm submit and mark aria-invalid; a confirm
  * paints role=alert and concatenates aria-describedby (help + error) and focuses the first invalid control; an
  * advisory (non-confirm) pass leaves role off; a valid form submits; and a Java-only pattern that throws in

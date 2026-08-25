@@ -50,8 +50,10 @@ class AppHeaderDef_Test extends TestBase {
 	}
 
 	@Test void a03_blankId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create("  ").validate());
-		assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create(null).validate());
+		var h1 = AppHeaderDef.create("  ");
+		assertThrows(IllegalArgumentException.class, () -> h1.validate());
+		var h2 = AppHeaderDef.create(null);
+		assertThrows(IllegalArgumentException.class, () -> h2.validate());
 	}
 
 	@Test void a04_badContractVersion_rejected() {
@@ -71,7 +73,8 @@ class AppHeaderDef_Test extends TestBase {
 	@Test void a06_linkWithoutHref_rejected() {
 		var a = HeaderAction.link("x", "i", "X", "/ok");
 		a.href = null;
-		assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create("h").actions(a).validate());
+		var h = AppHeaderDef.create("h").actions(a);
+		assertThrows(IllegalArgumentException.class, () -> h.validate());
 	}
 
 	@Test void a07_linkBadHref_rejected() {
@@ -84,19 +87,22 @@ class AppHeaderDef_Test extends TestBase {
 
 	@Test void a08_menuWithEmptyMenu_rejected() {
 		var a = HeaderAction.menu("m", "i", "M");   // no menu items attached
-		assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create("h").actions(a).validate());
+		var h = AppHeaderDef.create("h").actions(a);
+		assertThrows(IllegalArgumentException.class, () -> h.validate());
 	}
 
 	@Test void a09_safeWithHref_rejected() {
 		var a = HeaderAction.safe("s", "i", "S", "open-drawer");
 		a.href = "/x";
-		assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create("h").actions(a).validate());
+		var h = AppHeaderDef.create("h").actions(a);
+		assertThrows(IllegalArgumentException.class, () -> h.validate());
 	}
 
 	@Test void a10_safeBadTokens_rejected() {
 		for (var bad : new String[]{"", "  ", "Open", "open_drawer", "open drawer", "1open", "a".repeat(65)}) {
 			var a = HeaderAction.safe("s", "i", "S", bad);
-			assertThrows(IllegalArgumentException.class, () -> AppHeaderDef.create("h").actions(a).validate(), () -> "expected reject for '" + bad + "'");
+			var h = AppHeaderDef.create("h").actions(a);
+			assertThrows(IllegalArgumentException.class, () -> h.validate(), () -> "expected reject for '" + bad + "'");
 		}
 	}
 

@@ -1085,8 +1085,8 @@ h5.section {
 jc,jd,jt,jk,js,jf,jsf,jsm,ja,jp,jv 
 xt,xa,xc,xs,
 mc,mk,mv,
-cc,cs,ck,ce,
-c,dc,bc {
+cc,cs,ck,cv,
+c,dc,bc,property {
 	font-size: 10pt;
 	white-space: pre;
 	font-family: monospace;
@@ -1106,6 +1106,11 @@ dc {
 
 /* Bold code */
 bc {
+	font-weight: bold;
+}
+
+/* Bean property name */
+property {
 	font-weight: bold;
 }
 

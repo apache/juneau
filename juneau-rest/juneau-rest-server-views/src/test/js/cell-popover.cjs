@@ -33,6 +33,11 @@ if (!rendersJsPath || !viewsJsPath) {
 	process.exit(2);
 }
 
+/** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
+function toDataAttr(prop) {
+	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
+}
+
 function el(tag) {
 	const node = {
 		nodeType: 1,
@@ -51,6 +56,18 @@ function el(tag) {
 			if (k === 'class') this.className = this.attrs[k];
 		},
 		removeAttribute: function (k) { delete this.attrs[k]; },
+		/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
+		get dataset() {
+			const self = this;
+			return new Proxy({}, {
+				get: function (t, prop) {
+					if (typeof prop !== 'string') return undefined;
+					const k = toDataAttr(prop);
+					return Object.hasOwn(self.attrs, k) ? self.attrs[k] : undefined;
+				},
+				set: function (t, prop, value) { self.setAttribute(toDataAttr(prop), value); return true; }
+			});
+		},
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
 		removeChild: function (c) {
 			const i = this.childNodes.indexOf(c);
@@ -60,9 +77,9 @@ function el(tag) {
 		replaceChildren: function () { this.childNodes.length = 0; },
 		contains: function (n) {
 			if (n === this) return true;
-			for (let i = 0; i < this.childNodes.length; i++) {
-				if (this.childNodes[i] === n) return true;
-				if (this.childNodes[i].contains && this.childNodes[i].contains(n)) return true;
+			for (const c of this.childNodes) {
+				if (c === n) return true;
+				if (c.contains?.(n)) return true;
 			}
 			return false;
 		},
@@ -92,9 +109,13 @@ function parseAttrs(raw, node) {
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
 	while ((m = re.exec(raw)))
-		node.setAttribute(m[1], m[2] != null ? m[2] : (m[3] != null ? m[3] : (m[4] != null ? m[4] : '')));
+		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
 }
 
+// NOSONAR javascript:S5843 -- this mini tag/text tokenizer's alternation+quantifier shape is inherent to correctly
+// splitting `<tag attrs>`/`</tag>`/text runs in one pass; test fixtures are handwritten (not attacker-controlled),
+// and splitting the alternation risks subtly changing this parser's tokenization behavior without a spec to verify
+// against.
 function parseTestHtml(html) {
 	const root = el('div');
 	const stack = [root];
@@ -102,7 +123,7 @@ function parseTestHtml(html) {
 	let m;
 	while ((m = re.exec(html))) {
 		if (m[3] != null) {
-			stack[stack.length - 1].appendChild(textNode(m[3]));
+			stack.at(-1).appendChild(textNode(m[3]));
 			continue;
 		}
 		const name = m[1];
@@ -113,14 +134,14 @@ function parseTestHtml(html) {
 		}
 		const node = el(name);
 		parseAttrs(m[2], node);
-		stack[stack.length - 1].appendChild(node);
+		stack.at(-1).appendChild(node);
 		const selfClosing = VOID_TAGS[name.toLowerCase()] || /\/\s*$/.test(m[2] || '');
 		if (!selfClosing) stack.push(node);
 	}
 	return root;
 }
 
-function DOMParser() {}
+function DOMParser() { /* stateless stub; all real behavior lives on parseFromString below */ }
 DOMParser.prototype.parseFromString = function (str) {
 	return { body: parseTestHtml(str) };
 };
@@ -145,19 +166,22 @@ const document = {
 	body: el('body')
 };
 document.body.appendChild = function (c) {
-	el.prototype;
 	this.childNodes.push(c);
-	if (c.attrs && c.attrs.id) byId[c.attrs.id] = c;
+	if (c.attrs?.id) byId[c.attrs.id] = c;
 	return c;
 };
 const window = { document: document, console: console, jQuery: undefined, DOMParser: DOMParser };
 const sandbox = { window: window, document: document, console: console, DOMParser: DOMParser };
+// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js sources into a VM sandbox
+// is this harness's intended mechanism for exercising them under the local DOM shim; inputs are fixed local file
+// paths supplied by the test, never attacker-controlled data.
 vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
-const I = NS && NS.init;
-const out = { hasInit: !!(I && typeof I.appendPopoverTrigger === 'function' && typeof I.fillCellPopover === 'function') };
+const I = NS?.init;
+const out = { hasInit: typeof I?.appendPopoverTrigger === 'function' && typeof I?.fillCellPopover === 'function' };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -208,8 +232,8 @@ out.fill_missingBlank = pop.textContent.indexOf('undefined') < 0 && pop.textCont
 out.fill_noTsHost = (function () {
 	function walk(n) {
 		if (!n || n.nodeType !== 1) return false;
-		if (n.getAttribute('data-juneau-ts')) return true;
-		for (let i = 0; i < n.childNodes.length; i++) if (walk(n.childNodes[i])) return true;
+		if (n.dataset.juneauTs) return true;
+		for (const c of n.childNodes) if (walk(c)) return true;
 		return false;
 	}
 	return !walk(pop);
@@ -227,7 +251,7 @@ out.fill_noElementCopy = (function () {
 	function walk(n) {
 		if (!n || n.nodeType !== 1) return false;
 		if (n !== hostile && n.tagName === 'SPAN') return true;
-		for (let i = 0; i < n.childNodes.length; i++) if (walk(n.childNodes[i])) return true;
+		for (const c of n.childNodes) if (walk(c)) return true;
 		return false;
 	}
 	return !walk(hostile);

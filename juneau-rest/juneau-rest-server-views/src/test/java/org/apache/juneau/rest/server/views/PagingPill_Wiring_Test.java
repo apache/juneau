@@ -100,7 +100,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	@Test void b03_buildPagingPill_carriesPagingDataTestId() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildPagingPill(");
-		assertTrue(fnBody.contains("pill.setAttribute(\"data-testid\", \"paging\")"), fnBody);
+		assertTrue(fnBody.contains("pill.dataset.testid = \"paging\""), fnBody);
 	}
 
 	/**
@@ -247,11 +247,11 @@ class PagingPill_Wiring_Test extends TestBase {
 	@Test void c07_pagingAndRibbonContainers_carryDataTestIdHooks() throws Exception {
 		var viewsBody = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var pillFnBody = functionBody(viewsBody, "function buildPagingPill(");
-		assertTrue(pillFnBody.contains("pill.setAttribute(\"data-testid\", \"paging\")"), pillFnBody);
+		assertTrue(pillFnBody.contains("pill.dataset.testid = \"paging\""), pillFnBody);
 
 		var ribbonBody = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
 		var ribbonFnBody = functionBody(ribbonBody, "function buildRibbon(");
-		assertTrue(ribbonFnBody.contains("bar.setAttribute(\"data-testid\", \"ribbon\")"), ribbonFnBody);
+		assertTrue(ribbonFnBody.contains("bar.dataset.testid = \"ribbon\""), ribbonFnBody);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -302,17 +302,18 @@ class PagingPill_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildColumnSearchRow(");
 		assertTrue(fnBody.contains("juneau-view-columnsearch-row"), fnBody);
-		assertTrue(fnBody.contains("data-testid\", \"col-search-row\""), fnBody);
+		assertTrue(fnBody.contains("row.dataset.testid = \"col-search-row\""), fnBody);
 		assertTrue(fnBody.contains("juneau-view-columnsearch-input"), fnBody);
 		assertTrue(fnBody.contains("row.style.display = \"none\""), fnBody);
 		assertTrue(fnBody.contains("dt.column(idx).search(input.value).draw()"), fnBody);
 		assertTrue(fnBody.contains("col.searchable !== false"), fnBody);
-		assertTrue(fnBody.contains("col.visible === false"), fnBody);
+		assertTrue(fnBody.contains("col?.visible === false"), fnBody);
 		assertTrue(fnBody.contains("th.style.display = \"none\""), fnBody);
 
 		var initBody = functionBody(body, "function constructTable(");
 		assertTrue(initBody.contains("buildColumnSearchRow("), initBody);
-		assertTrue(initBody.contains("ctx.onColumnSearchToggle = function"), initBody);
-		assertTrue(initBody.contains("ctx.dataTable.columns().search(\"\").draw()"), initBody);
+		assertTrue(initBody.contains("ctx.onColumnSearchToggle = buildColumnSearchToggleHandler"), initBody);
+		var toggle = functionBody(body, "function buildColumnSearchToggleHandler(");
+		assertTrue(toggle.contains("ctx.dataTable.columns().search(\"\").draw()"), toggle);
 	}
 }

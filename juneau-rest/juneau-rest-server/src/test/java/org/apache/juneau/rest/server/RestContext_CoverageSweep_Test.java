@@ -494,13 +494,13 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
-	// p - mixinContexts/buildMixinContext's `catch (Exception e)` (checked, non-RuntimeException) branch is NOT
-	//     reasonably testable: every failure mode reachable from `buildMixinContext` in practice surfaces as a
+	// p - mixinContexts/buildMixinContext's checked-exception (non-RuntimeException) catch branch is NOT
+	//     reasonably testable: every failure mode reachable from buildMixinContext in practice surfaces as a
 	//     RuntimeException/BasicHttpException (bean instantiation failures are unwrapped to ExecutableException,
 	//     a RuntimeException; observability/async-executor startup checks throw InternalServerError/
-	//     IllegalStateException; reflective `setContext(...)` invocation failures are wrapped as
-	//     ExecutableException). `addRestOperationsForClass` no longer has a checked-exception path of its own
-	//     (its former non-public-`@RestOp`-method guard was dead code and has been removed).
+	//     IllegalStateException; reflective setContext invocation failures are wrapped as
+	//     ExecutableException). addRestOperationsForClass no longer has a checked-exception path of its own
+	//     (its former non-public @RestOp-method guard was dead code and has been removed).
 	//     Left uncovered as diminishing-returns.
 	//-----------------------------------------------------------------------------------------------------------
 
@@ -517,7 +517,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		public void init(java.util.concurrent.atomic.AtomicInteger notAResolvableBean) { /* never reached */ }
 	}
 
-	@Test void q01_restInit_unresolvablePrerequisite_throwsAtConstruction() throws Exception {
+	@Test void q01_restInit_unresolvablePrerequisite_throwsAtConstruction() {
 		var e = assertThrows(jakarta.servlet.ServletException.class,
 			() -> new RestContext(argsOf(Fix_RestInitMissingPrereq.class, Fix_RestInitMissingPrereq::new)));
 		assertTrue(e.getMessage().contains("Fix_RestInitMissingPrereq"));
@@ -528,11 +528,11 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		public void init() { throw new IllegalStateException("boom"); }
 	}
 
-	@Test void q02_restInit_hookThrows_wrappedAsServletException() throws Exception {
+	@Test void q02_restInit_hookThrows_wrappedAsServletException() {
 		var e = assertThrows(jakarta.servlet.ServletException.class,
 			() -> new RestContext(argsOf(Fix_RestInitThrows.class, Fix_RestInitThrows::new)));
-		// MethodInfo#inject() wraps the reflective InvocationTargetException as an ExecutableException before
-		// RestContext's own catch (Exception e) re-wraps that as the outer ServletException.
+		// MethodInfo's inject step wraps the reflective InvocationTargetException as an ExecutableException before
+		// RestContext's own top-level exception handler re-wraps that as the outer ServletException.
 		assertInstanceOf(org.apache.juneau.commons.reflect.ExecutableException.class, e.getCause());
 		assertInstanceOf(IllegalStateException.class, e.getCause().getCause());
 	}
@@ -541,11 +541,11 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	// r - destroy(): an @RestDestroy hook throwing is caught+logged rather than propagated, so that the
 	//    remaining teardown steps (mixin/child destruction, bean-store close) still run and callers destroying
 	//    multiple resources in a loop are unaffected by one resource's teardown failure.
-	//    NOTE: the sibling `beanStore.close()` catch (line ~3739) is NOT reasonably testable in isolation:
-	//    forcing that specific call to throw (without also breaking the earlier `getRestChildren()` bean-store
-	//    lookup at line ~3734, which is not itself guarded) would require swapping the internal `beanStore`
-	//    field for a custom throws-on-close stand-in, which RestContext's constructor does not expose a seam
-	//    for. Left uncovered as diminishing-returns.
+	//    NOTE: the sibling bean-store-close failure path is NOT reasonably testable in isolation: forcing that
+	//    specific close call to throw (without also breaking the earlier child-context bean-store lookup that
+	//    precedes it, which is not itself guarded) would require swapping the internal bean store field for a
+	//    custom throws-on-close stand-in, which RestContext's constructor does not expose a seam for. Left
+	//    uncovered as diminishing-returns.
 	//-----------------------------------------------------------------------------------------------------------
 
 	public static class Fix_RestDestroyThrows {

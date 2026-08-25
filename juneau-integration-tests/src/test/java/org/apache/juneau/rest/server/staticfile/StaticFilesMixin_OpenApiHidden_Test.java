@@ -74,12 +74,12 @@ class StaticFilesMixin_OpenApiHidden_Test extends TestBase {
 	}
 
 	@Test void a02_staticFilesStillServedDespiteHiddenFromSpec() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200);
 		// /htdocs/* is no longer a multi-path default; migration covered by
 		// StaticFilesMixin_SvlPathOverride_Test#a02.
-		c.get("/htdocs/javadoc.css")
+		c.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(404);
 	}
@@ -113,7 +113,7 @@ class StaticFilesMixin_OpenApiHidden_Test extends TestBase {
 
 	@Test void b02_legacyHtdocStillServedDespiteHiddenFromSpec() throws Exception {
 		// Legacy getHtdoc(...) handler still serves the file even though it's hidden from spec.
-		cb.get("/htdocs/javadoc.css")
+		cb.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(200);
 	}

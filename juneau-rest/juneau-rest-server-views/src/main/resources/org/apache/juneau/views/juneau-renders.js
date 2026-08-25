@@ -89,6 +89,10 @@
 	}
 
 	/** Interpolates a `{property}` URL template against a row, URL-encoding each substituted value. */
+	// NOSONAR javascript:S8786 -- `[^}]+` never matches `}`, so a single unterminated `{` plus non-`}` is linear
+	// (the previously cited 500KB input). The quadratic input is repeated `{` (~5s at n=80,000). The regex is left
+	// as-is: `[^}]` → `[^{}]` would change the matched language, and this is fed developer-authored `meta.href`,
+	// never row data.
 	function interpolateHref(template, rowData) {
 		return String(template).replace(/\{([^}]+)\}/g, function (m, key) {
 			const v = rowData ? rowData[key] : undefined;
@@ -106,11 +110,21 @@
 	 * hyphens trimmed - keeping the emitted token inside the same `^[a-z0-9_-]+$` shape the server enforces.
 	 * KEEP THIS IN SYNC WITH `Tag#normalize` / `TagHtmlRender#getContent`'s token algorithm.
 	 */
+	// NOSONAR javascript:S8786 -- the surviving replace() pattern is a single quantified atom over a negated
+	// class, so a match never has to backtrack; it is linear even against a 300,000-character adversarial input.
 	function normalizeTagToken(raw) {
-		return String(raw)
+		const collapsed = String(raw)
 			.toLowerCase()
-			.replace(/[^a-z0-9_-]+/g, "-")
-			.replace(/^-+|-+$/g, "");
+			.replace(/[^a-z0-9_-]+/g, "-");
+		// Trimmed by index walk rather than `.replace(/^-+|-+$/g, "")`: that pattern's `-+$` alternative retries at
+		// every offset inside a dash run, which is quadratic whenever the run is bracketed by non-dashes (an
+		// all-dash string is linear, which is why the shape hid for so long).  "a" + 80,000 dashes + "a" stalled
+		// for ~2.2s (javascript:S5852).  This walk is linear and yields exactly the same string.
+		let i = 0;
+		let j = collapsed.length;
+		while (i < j && collapsed.charCodeAt(i) === 45) i++;
+		while (j > i && collapsed.charCodeAt(j - 1) === 45) j--;
+		return collapsed.slice(i, j);
 	}
 
 	/** Coerces a cell value to a Date, accepting epoch millis, numeric strings, and ISO/parseable date strings. */
@@ -172,7 +186,7 @@
 
 	/** {@code meta.popup} of {@code off}/{@code false}/{@code 0}/{@code no} disables; any other value enables. */
 	function popupOn(meta, defaultOn) {
-		if (!meta || meta.popup == null || meta.popup === "") return defaultOn;
+		if (meta?.popup == null || meta.popup === "") return defaultOn;
 		const v = String(meta.popup).toLowerCase();
 		return v !== "off" && v !== "false" && v !== "0" && v !== "no";
 	}
@@ -234,7 +248,7 @@
 		display: function (cellData, rowData, meta) {
 			if (cellData == null) return "";
 			const text = String(cellData);
-			const href = meta && meta.href;
+			const href = meta?.href;
 			if (!href) return escHtml(text);
 			return '<a href="' + escAttr(interpolateHref(href, rowData)) + '">' + escHtml(text) + "</a>";
 		},
@@ -247,7 +261,7 @@
 		display: function (cellData, rowData, meta) {
 			if (cellData == null) return "";
 			const s = String(cellData);
-			const max = meta && meta.length ? Number.parseInt(meta.length, 10) : 64;
+			const max = meta?.length ? Number.parseInt(meta.length, 10) : 64;
 			if (max <= 0 || s.length <= max) return escHtml(s);
 			return '<span title="' + escAttr(s) + '">' + escHtml(s.substring(0, max)) + "\u2026</span>";
 		}
@@ -257,6 +271,7 @@
 		display: function (cellData) {
 			if (cellData == null) return "";
 			let s;
+			// A circular/BigInt/etc. value that JSON.stringify refuses: fall back to the plain string form.
 			try { s = JSON.stringify(cellData); } catch (e) { s = String(cellData); }
 			return "<code>" + escHtml(s) + "</code>";
 		}
@@ -267,7 +282,7 @@
 			if (cellData == null || cellData === "") return "";
 			const n = Number(cellData);
 			if (Number.isNaN(n)) return escHtml(cellData);
-			const places = meta && meta.places != null ? Number.parseInt(meta.places, 10) : 2;
+			const places = meta?.places != null ? Number.parseInt(meta.places, 10) : 2;
 			return escHtml(n.toFixed(places >= 0 ? places : 2));
 		},
 		sort: function (cellData) { const n = Number(cellData); return Number.isNaN(n) ? cellData : n; }
@@ -281,7 +296,7 @@
 		display: function (cellData, rowData, meta) {
 			if (cellData == null || cellData === "") return "";
 			const value = String(cellData);
-			const domain = meta && meta.field ? String(meta.field) : "";
+			const domain = meta?.field ? String(meta.field) : "";
 			const domainToken = normalizeTagToken(domain);
 			const valueToken = normalizeTagToken(value);
 			const cls = "tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
@@ -300,7 +315,7 @@
 	}
 
 	function progressMax(meta) {
-		if (!meta || meta.max == null) return { ok: true, value: 100 };
+		if (meta?.max == null) return { ok: true, value: 100 };
 		if (String(meta.max).trim() === "") return { ok: false };
 		const n = Number(meta.max);
 		if (!Number.isFinite(n) || n <= 0) return { ok: false };
@@ -308,7 +323,7 @@
 	}
 
 	function progressThreshold(meta, key) {
-		if (!meta || meta[key] == null || meta[key] === "") return null;
+		if (meta?.[key] == null || meta[key] === "") return null;
 		const n = Number(meta[key]);
 		return Number.isFinite(n) ? n : null;
 	}
@@ -328,7 +343,7 @@
 
 	registerRenderer("progress", {
 		display: function (cellData, rowData, meta) {
-			const fieldToken = meta && meta.field ? normalizeTagToken(meta.field) : "";
+			const fieldToken = meta?.field ? normalizeTagToken(meta.field) : "";
 			const outerClass = "jc-progress" + (fieldToken ? " progress " + fieldToken : "");
 			const maxParsed = progressMax(meta);
 			if (progressUnknown(cellData) || !maxParsed.ok)
@@ -340,7 +355,7 @@
 			const warn = progressThreshold(meta, "warn");
 			const exceeds = progressThreshold(meta, "exceeds");
 			const state = progressStateClass(actual, max, warn, exceeds);
-			let labelMode = meta && meta.label != null && meta.label !== "" ? String(meta.label) : "percent";
+			let labelMode = meta?.label != null && meta.label !== "" ? String(meta.label) : "percent";
 			if (labelMode !== "none" && labelMode !== "value" && labelMode !== "percent")
 				labelMode = "percent";
 			const bar = '<span class="jc-progress-bar ' + state + '" style="width:' + barWidth + '%"></span>';
@@ -368,11 +383,10 @@
 	// a frozen snapshot of it (see the `pill` block below).  Part of the frozen id set, absent from the snapshot pass.
 	const SINK_VARIANT_RENDER_IDS = ["pill"];
 	(function snapshotFrozenBuiltins() {
-		for (let i = 0; i < BUILTIN_RENDER_IDS.length; i++) {
-			const id = BUILTIN_RENDER_IDS[i];
+		for (const id of BUILTIN_RENDER_IDS) {
 			const def = registry[id];
 			if (!def) continue;
-			frozenBuiltins[id] = Object.freeze(Object.assign({}, def));
+			frozenBuiltins[id] = Object.freeze({ ...def });
 		}
 	})();
 
@@ -404,15 +418,15 @@
 	function pillMarkup(cellData, meta, allowAction) {
 		if (cellData == null || cellData === "") return "";
 		const value = String(cellData);
-		const domain = meta && meta.field ? String(meta.field) : "";
+		const domain = meta?.field ? String(meta.field) : "";
 		const domainToken = normalizeTagToken(domain);
 		const valueToken = normalizeTagToken(value);
 		const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
-		const toneClass = pillToneClass(meta && meta.tone ? String(meta.tone) : "");
-		const dot = (meta && meta.dot === "off")
+		const toneClass = pillToneClass(meta?.tone ? String(meta.tone) : "");
+		const dot = (meta?.dot === "off")
 			? ""
 			: '<span class="jc-pill-dot' + toneClass + '" aria-hidden="true"></span>';
-		const action = allowAction && meta && meta.action ? String(meta.action) : "";
+		const action = allowAction && meta?.action ? String(meta.action) : "";
 		const actionAttrs = action
 			? ' role="button" tabindex="0" data-juneau-action="' + escAttr(action) + '"'
 			: "";
@@ -448,7 +462,7 @@
 	const TS_POPUP_OFFSET = 12;
 
 	function tsHost(t) {
-		return (t && typeof t.closest === "function") ? t.closest("[data-juneau-ts]") : null;
+		return typeof t?.closest === "function" ? t.closest("[data-juneau-ts]") : null;
 	}
 
 	function tsPopupEl() {
@@ -491,7 +505,7 @@
 	}
 
 	function tsPopupShow(host, x, y) {
-		const d = toDate(host.getAttribute("data-juneau-ts"));
+		const d = toDate(host.dataset.juneauTs);
 		if (!d) return;
 		const el = tsPopupEl();
 		if (!el) return;

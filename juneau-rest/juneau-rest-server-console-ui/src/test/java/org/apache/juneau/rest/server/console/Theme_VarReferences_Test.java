@@ -112,8 +112,8 @@ class Theme_VarReferences_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_unknownReference_isABuildFailure_namingBothTokens() {
-		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("u").token("--jc-a", "var(--jc-missing)").build());
+		var b = Theme.create("u").token("--jc-a", "var(--jc-missing)");
+		var ex = assertThrows(IllegalArgumentException.class, b::build);
 		assertTrue(ex.getMessage().contains("--jc-a"), () -> "message must name the defining token: " + ex.getMessage());
 		assertTrue(ex.getMessage().contains("--jc-missing"), () -> "message must name the missing target: " + ex.getMessage());
 		assertTrue(ex.getMessage().contains("unknown"), () -> "message: " + ex.getMessage());
@@ -124,25 +124,24 @@ class Theme_VarReferences_Test extends TestBase {
 	@Test void c02_shadowedBrokenOverride_failsInsteadOfSilentlyFallingBackToThemeOpen() {
 		// --jc-danger EXISTS on Theme.OPEN (#c23934). Shadowing it here with a broken reference must FAIL the build,
 		// NOT silently resolve through to Theme.OPEN's value - the exact bug the reference feature exists to catch.
-		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("shadow").token("--jc-danger", "var(--jc-nonexistent)").build());
+		var b = Theme.create("shadow").token("--jc-danger", "var(--jc-nonexistent)");
+		var ex = assertThrows(IllegalArgumentException.class, b::build);
 		assertTrue(ex.getMessage().contains("--jc-nonexistent"), () -> "message: " + ex.getMessage());
 		assertTrue(ex.getMessage().contains("unknown"), () -> "message: " + ex.getMessage());
 	}
 
 	@Test void c03_selfCycle_isABuildFailure_withTheCyclePath() {
-		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("cyc").token("--jc-a", "var(--jc-a)").build());
+		var b = Theme.create("cyc").token("--jc-a", "var(--jc-a)");
+		var ex = assertThrows(IllegalArgumentException.class, b::build);
 		assertTrue(ex.getMessage().contains("cyclic"), () -> "message: " + ex.getMessage());
 		assertTrue(ex.getMessage().contains("--jc-a -> --jc-a"), () -> "message must carry the cycle path: " + ex.getMessage());
 	}
 
 	@Test void c04_twoNodeCycle_isABuildFailure_withTheFullCyclePath() {
-		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("cyc2")
-				.token("--jc-a", "var(--jc-b)")
-				.token("--jc-b", "var(--jc-a)")
-				.build());
+		var b = Theme.create("cyc2")
+			.token("--jc-a", "var(--jc-b)")
+			.token("--jc-b", "var(--jc-a)");
+		var ex = assertThrows(IllegalArgumentException.class, b::build);
 		assertTrue(ex.getMessage().contains("cyclic"), () -> "message: " + ex.getMessage());
 		assertTrue(ex.getMessage().contains("--jc-a -> --jc-b -> --jc-a"), () -> "message must carry the full cycle path: " + ex.getMessage());
 	}

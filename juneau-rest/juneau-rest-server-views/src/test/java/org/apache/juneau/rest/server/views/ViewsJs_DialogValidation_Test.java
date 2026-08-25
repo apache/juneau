@@ -57,7 +57,8 @@ class ViewsJs_DialogValidation_Test extends TestBase {
 		assertTrue(body.contains("function validateDialogForm("), body);
 		assertTrue(body.contains("function validateOneControl("), body);
 		assertTrue(body.contains("function applyControlValidity("), body);
-		var start = body.indexOf("function validateOneControl(");
+		assertTrue(body.contains("function validateTextControlValue("), body);
+		var start = body.indexOf("function validateTextControlValue(");
 		var v = body.substring(start, start + 900);
 		assertTrue(v.contains("new RegExp"), v);
 		assertTrue(v.contains("catch"), "pattern compile must fail-open in a try/catch");

@@ -267,10 +267,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
-	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
+	RestRequest(RestOpContext opContext, RestSession session) {
 		super(session.getRequest());
 		this.session = session;
 		this.opContext = opContext;
@@ -810,6 +807,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The resolved request id.  Never <jk>null</jk> (unless a custom id supplier returned <jk>null</jk>).
 	 * @since 10.0.0
 	 */
+	@Override /* Overridden from ServletRequest (jakarta.servlet-api 6.1+ default method) */
 	public String getRequestId() { return session.getRequestId(); }
 
 	/**
@@ -1646,10 +1644,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the resolved per-operation {@link RichLogger} for this request.
 	 *
 	 * <p>
-	 * This is the same logger {@link #isDebug()} queries (`opContext.getLogger()`, wired by {@code [TODO-366]} onto
+	 * This is the same logger {@link #isDebug()} queries (`opContext.getLogger()`, delegating to
 	 * {@link RestOpContext#getLogger()}), so anything logged through it &mdash; including the
 	 * {@code fine}/{@code info}/&hellip; convenience methods below &mdash; rides the existing parent-chain capture
-	 * propagation ({@code [TODO-365]}): a {@code LogRecordCapture} attached at a resource-class-level logger name still
+	 * propagation: a {@code LogRecordCapture} attached at a resource-class-level logger name still
 	 * observes these per-operation emissions.
 	 *
 	 * <p>

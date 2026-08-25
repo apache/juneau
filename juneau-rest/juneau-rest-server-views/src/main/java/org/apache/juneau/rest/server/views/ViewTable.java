@@ -146,7 +146,7 @@ public class ViewTable {
 	public static final String CSRF_ATTR = "data-juneau-csrf";
 
 	/**
-	 * Marker attribute stamped when a {@link SelectionDef} is declared ({@code TODO-428}). Pure DOM signaling
+	 * Marker attribute stamped when a {@link SelectionDef} is declared. Pure DOM signaling
 	 * &mdash; never part of the {@code VIEW_META} wire contract; see {@link SelectionDef}'s class javadoc.
 	 */
 	public static final String SELECT_ATTR = "data-juneau-select";
@@ -158,7 +158,7 @@ public class ViewTable {
 	public static final String SELECT_ALL_ATTR = "data-juneau-select-all";
 
 	/**
-	 * Marker attribute stamped when a {@link BulkMutateDef} is declared ({@code TODO-428}); pairs with the
+	 * Marker attribute stamped when a {@link BulkMutateDef} is declared; pairs with the
 	 * {@link #BULK_SIDECAR_ID_PREFIX} sidecar carrying the actual bulk-action list.
 	 */
 	public static final String BULK_ATTR = "data-juneau-bulk";
@@ -179,7 +179,8 @@ public class ViewTable {
 	public static final String SAVED_VIEWS_ATTR = "data-juneau-saved-views";
 
 	/**
-	 * Full-real-estate layout hint stamped on the wrapper {@code <div>} (TODO-445n Goal 1).  A first-class public
+	 * Full-real-estate layout hint stamped on the wrapper {@code <div>} (design doc §"Full real estate" Goal 1).
+	 * A first-class public
 	 * {@code data-juneau-*} convention: the toolkit stamps {@link #LAYOUT_WIDE} on the one stamp node
 	 * {@code ViewTable} already returns so consumer chrome (the console {@code chrome.css} full-bleed {@code :has}
 	 * rules) can widen the enclosing card/main out of its default centered {@code max-width}.  Never stamped on
@@ -276,6 +277,15 @@ public class ViewTable {
 	/** Attribute carrying {@link NestedTableDef#parentScopeParam} on the nested-table wrapper. */
 	public static final String NESTED_SCOPE_PARAM_ATTR = "data-juneau-nested-scope-param";
 
+	/** MIME type of the VIEW_META/bulk-actions/nested-VIEW_META sidecars. */
+	private static final String JSON_CONTENT_TYPE = "application/json";
+
+	/** The HTML {@code class} attribute name, as passed to {@link org.apache.juneau.bean.html5.HtmlBuilder}'s {@code attr(...)}. */
+	private static final String CLASS_ATTR = "class";
+
+	/** The HTML {@code aria-label} attribute name. */
+	private static final String ARIA_LABEL_ATTR = "aria-label";
+
 	private ViewTable() {}
 
 	/**
@@ -319,8 +329,8 @@ public class ViewTable {
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef) {
-		return emit(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req,
-			null);
+		return emit(MarshallingContext.DEFAULT, viewDef, req,
+			new RenderOptions(null, csrfToken(req), null, null, savedViewsBase(req), null));
 	}
 
 	/**
@@ -364,8 +374,8 @@ public class ViewTable {
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
 	static Div of(HttpServletRequest req, ViewDef viewDef, String idQualifier) {
-		return emit(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req,
-			idQualifier);
+		return emit(MarshallingContext.DEFAULT, viewDef, req,
+			new RenderOptions(null, csrfToken(req), null, null, savedViewsBase(req), idQualifier));
 	}
 
 	/**
@@ -384,7 +394,7 @@ public class ViewTable {
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
 	static Div of(MarshallingContext ctx, HttpServletRequest req, ViewDef viewDef) {
-		return emit(ctx, viewDef, null, csrfToken(req), null, null, savedViewsBase(req), req, null);
+		return emit(ctx, viewDef, req, new RenderOptions(null, csrfToken(req), null, null, savedViewsBase(req), null));
 	}
 
 	/**
@@ -402,8 +412,8 @@ public class ViewTable {
 	 * 	JSON sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows) {
-		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), null, null, savedViewsBase(req), req,
-			null);
+		return emit(MarshallingContext.DEFAULT, viewDef, req,
+			new RenderOptions(rows, csrfToken(req), null, null, savedViewsBase(req), null));
 	}
 
 	/**
@@ -424,7 +434,7 @@ public class ViewTable {
 	}
 
 	/**
-	 * Builds the view-table shell with row selection enabled (design doc §9.3; {@code TODO-428}), auto-embedding
+	 * Builds the view-table shell with row selection enabled (design doc §9.3), auto-embedding
 	 * the request's CSRF token.
 	 *
 	 * <p>
@@ -446,13 +456,13 @@ public class ViewTable {
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, SelectionDef selection) {
 		if (selection == null)
 			throw iaex("selection must not be null; use one of the other of(...) overloads for a table with no selection.");
-		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null, savedViewsBase(req), req,
-			null);
+		return emit(MarshallingContext.DEFAULT, viewDef, req,
+			new RenderOptions(rows, csrfToken(req), selection, null, savedViewsBase(req), null));
 	}
 
 	/**
-	 * Builds the view-table shell with row selection AND bulk mutation enabled (design doc §9.3; {@code
-	 * TODO-428}), auto-embedding the request's CSRF token.
+	 * Builds the view-table shell with row selection AND bulk mutation enabled (design doc §9.3), auto-embedding
+	 * the request's CSRF token.
 	 *
 	 * <p>
 	 * The selection this table renders is {@link BulkMutateDef#selection()} &mdash; the one {@code bulkMutate} was
@@ -465,15 +475,15 @@ public class ViewTable {
 	 * @param viewDef The built view definition. Must not be <jk>null</jk>.
 	 * @param rows The rows to render (beans or maps). Can be <jk>null</jk> (server-side mode) or empty.
 	 * @param bulkMutate The bulk-mutate opt-in. Must not be <jk>null</jk> (use the {@link SelectionDef} overload,
-	 * 	or one of the pre-{@code TODO-428} overloads, for a table with no bulk mutation).
+	 * 	or one of the earlier, selection-only overloads, for a table with no bulk mutation).
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view data-juneau-select data-juneau-bulk>},
 	 * 	its VIEW_META sidecar, AND the independently-versioned bulk-actions sidecar.
 	 */
 	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, BulkMutateDef bulkMutate) {
 		if (bulkMutate == null)
 			throw iaex("bulkMutate must not be null; use the SelectionDef overload for selection without bulk mutation.");
-		return emit(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), bulkMutate.selection(), bulkMutate,
-			savedViewsBase(req), req, null);
+		return emit(MarshallingContext.DEFAULT, viewDef, req,
+			new RenderOptions(rows, csrfToken(req), bulkMutate.selection(), bulkMutate, savedViewsBase(req), null));
 	}
 
 	/**
@@ -542,8 +552,7 @@ public class ViewTable {
 
 	/**
 	 * Builds the view-table shell, optionally stamping a CSRF token, a {@link SelectionDef}, and/or a
-	 * {@link BulkMutateDef} &mdash; the shared core every public overload (pre- and post-{@code TODO-428})
-	 * ultimately delegates to.
+	 * {@link BulkMutateDef} &mdash; the shared core every public overload ultimately delegates to.
 	 *
 	 * <p>
 	 * {@code selection}/{@code bulkMutate} are independent opt-ins (design doc §9.3; HIGH-5): passing
@@ -594,7 +603,7 @@ public class ViewTable {
 	 */
 	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
 			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase) {
-		return emit(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, null, null);
+		return emit(ctx, viewDef, null, new RenderOptions(rows, csrfToken, selection, bulkMutate, savedViewsBase, null));
 	}
 
 	/**
@@ -627,33 +636,25 @@ public class ViewTable {
 	 * {@link #of(HttpServletRequest, ViewDef, String)}); <jk>null</jk> on every non-hosted path, which is what keeps
 	 * an ordinary table's emitted ids exactly what they have always been.
 	 */
-	private static Div emit(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
-			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, HttpServletRequest req,
-			String idQualifier) {
+	private static Div emit(MarshallingContext ctx, ViewDef viewDef, HttpServletRequest req, RenderOptions opts) {
 		viewDef.validate();
-		if (bulkMutate != null) {
-			if (selection != null && selection != bulkMutate.selection())
-				throw iaex("selection must be exactly bulkMutate.selection() when both are supplied; "
-					+ "a BulkMutateDef can only render the SelectionDef it was constructed against.");
-			selection = bulkMutate.selection();
-		}
+		opts = opts.reconciled();
 
 		var rr = req instanceof RestRequest r ? r : null;
 		var detail = viewDef.details;
 		if (rr != null && detail != null && detail.serverValues != null) {
 			var session = serverValuesSession(rr, detail.serverValues);
 			// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
-			synchronized (detail) {
+			synchronized (detail.lock) {
 				var restore = resolveDetailChrome(detail, session);
 				try {
-					return emitViewHost(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, rr,
-						idQualifier);
+					return emitViewHost(ctx, viewDef, rr, opts);
 				} finally {
 					restore.run();
 				}
 			}
 		}
-		return emitViewHost(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, rr, idQualifier);
+		return emitViewHost(ctx, viewDef, rr, opts);
 	}
 
 	/**
@@ -663,21 +664,19 @@ public class ViewTable {
 	 * A shared {@link ViewDef} may be rendered concurrently, so the mutate-serialize-restore window is guarded and
 	 * two responses cannot interleave resolved chrome onto the same instance.
 	 */
-	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
-			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, RestRequest req,
-			String idQualifier) {
+	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, RestRequest req, RenderOptions opts) {
 		if (viewDef.serverValues != null && req != null) {
 			var session = serverValuesSession(req, viewDef.serverValues);
-			synchronized (viewDef) {
+			synchronized (viewDef.lock) {
 				var restore = resolveChrome(viewDef, session);
 				try {
-					return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, idQualifier);
+					return build(ctx, viewDef, opts);
 				} finally {
 					restore.run();
 				}
 			}
 		}
-		return build(ctx, viewDef, rows, csrfToken, selection, bulkMutate, savedViewsBase, idQualifier);
+		return build(ctx, viewDef, opts);
 	}
 
 	/**
@@ -689,91 +688,133 @@ public class ViewTable {
 		return idQualifier == null || idQualifier.isBlank() ? viewId : idQualifier + ":" + viewId;
 	}
 
-	private static Div build(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
-			SelectionDef selection, BulkMutateDef bulkMutate, String savedViewsBase, String idQualifier) {
-		var id = mintedId(idQualifier, viewDef.id);
+	private static Div build(MarshallingContext ctx, ViewDef viewDef, RenderOptions opts) {
+		var id = mintedId(opts.idQualifier(), viewDef.id);
 		var cols = viewDef.columns == null ? List.<Column>of() : viewDef.columns;
+		var selection = opts.selection();
 
 		// <thead> of column titles (falling back to the data key when no title was set).  Leading synthetic
 		// columns are dedicated cells that never share the first data column: expander (when details is set),
 		// then a selection checkbox.
-		var headerCells = new ArrayList<>(cols.size() + 2);
-		if (viewDef.details != null)
-			headerCells.add(th().attr("class", DETAIL_TH_CLASS).attr("aria-label", "Expand"));
-		if (selection != null)
-			headerCells.add(th().attr("class", "juneau-view-select-th").attr("aria-label", "Select"));
-		for (var c : cols)
-			headerCells.add(th(c.title == null ? c.data : c.title));
-
 		var tableChildren = new ArrayList<>();
-		tableChildren.add(thead(tr(headerCells.toArray())));
-
-		if (rows != null) {
-			var bodyRows = new ArrayList<>(rows.size());
-			for (var row : rows) {
-				var cells = new ArrayList<>(cols.size() + 2);
-				if (viewDef.details != null)
-					cells.add(td().attr("class", DETAIL_CONTROL_CLASS));
-				if (selection != null)
-					cells.add(td().attr("class", "juneau-view-select-cell"));
-				for (var c : cols) {
-					var v = value(ctx, row, c.data);
-					cells.add(td(v == null ? "" : v));
-				}
-				bodyRows.add(tr(cells.toArray()));
-			}
-			tableChildren.add(tbody(bodyRows.toArray()));
-		}
+		tableChildren.add(thead(tr(headerCells(viewDef, selection, cols).toArray())));
+		if (opts.rows() != null)
+			tableChildren.add(tbody(bodyRows(ctx, viewDef, selection, cols, opts.rows()).toArray()));
 
 		// The html id is the minted (possibly host-qualified) identity; the marker attribute stays the AUTHOR's id,
 		// which is what the VIEW_META sidecar carries and what author-keyed lookups resolve against.  With no
 		// qualifier the two are the same string, so an ordinary table emits exactly what it always has.
 		var table = table(tableChildren.toArray()).id(id).attr(MARKER_ATTR, viewDef.id).class_(TABLE_CLASS);
+		stampTableAttrs(table, opts.csrfToken(), selection, opts.bulkMutate());
 
-		// Auto-embed the CSRF token (MED-10/HIGH-1) so a row-action submit can attach it; a blank token stamps
-		// nothing, so the runtime fails closed rather than shipping an empty header the boundary would 403.
+		// Sidecar: serialize the VIEW_META, neutralize script break-outs, then insert as RAW content (class javadoc).
+		var json = escapeForScript(Json.of(viewDef));
+		var sidecar = script().type(JSON_CONTENT_TYPE).id(SIDECAR_ID_PREFIX + id).text(rawText(json));
+
+		var wrapper = div(wrapperChildren(viewDef, table, opts, id, sidecar).toArray());
+		// Full-real-estate stamp (design doc §"Full real estate" Goal 1 / N2 A): the ONE stamp node is this wrapper
+		// <div>. The console chrome full-bleed :has() rules widen the enclosing .jc-card/.jc-main off this attribute.
+		wrapper.attr(LAYOUT_ATTR, LAYOUT_WIDE);
+		if (opts.savedViewsBase() != null && ! opts.savedViewsBase().isBlank())
+			wrapper.attr(SAVED_VIEWS_ATTR, opts.savedViewsBase());
+		return wrapper;
+	}
+
+	/** Builds the {@code <thead>} row's cells: optional expander/selection cells, then one per declared column. */
+	private static List<Object> headerCells(ViewDef viewDef, SelectionDef selection, List<Column> cols) {
+		var headerCells = new ArrayList<Object>(cols.size() + 2);
+		if (viewDef.details != null)
+			headerCells.add(th().attr(CLASS_ATTR, DETAIL_TH_CLASS).attr(ARIA_LABEL_ATTR, "Expand"));
+		if (selection != null)
+			headerCells.add(th().attr(CLASS_ATTR, "juneau-view-select-th").attr(ARIA_LABEL_ATTR, "Select"));
+		for (var c : cols)
+			headerCells.add(th(c.title == null ? c.data : c.title));
+		return headerCells;
+	}
+
+	/** Builds one {@code <tr>} per row, each with the same leading synthetic cells as {@link #headerCells}. */
+	private static List<Object> bodyRows(MarshallingContext ctx, ViewDef viewDef, SelectionDef selection,
+			List<Column> cols, Collection<?> rows) {
+		var bodyRows = new ArrayList<Object>(rows.size());
+		for (var row : rows) {
+			var cells = new ArrayList<Object>(cols.size() + 2);
+			if (viewDef.details != null)
+				cells.add(td().attr(CLASS_ATTR, DETAIL_CONTROL_CLASS));
+			if (selection != null)
+				cells.add(td().attr(CLASS_ATTR, "juneau-view-select-cell"));
+			for (var c : cols) {
+				var v = value(ctx, row, c.data);
+				cells.add(td(v == null ? "" : v));
+			}
+			bodyRows.add(tr(cells.toArray()));
+		}
+		return bodyRows;
+	}
+
+	/**
+	 * Stamps the CSRF/selection/bulk DOM attributes onto the emitted {@code <table>} (never VIEW_META &mdash; see
+	 * {@link SelectionDef}'s class javadoc).  A blank token or absent opt-in stamps nothing, so an ordinary table's
+	 * markup is unaffected and the runtime fails closed rather than shipping an empty header the boundary would 403.
+	 */
+	private static void stampTableAttrs(Table table, String csrfToken, SelectionDef selection,
+			BulkMutateDef bulkMutate) {
 		if (csrfToken != null && ! csrfToken.isBlank())
 			table.attr(CSRF_ATTR, csrfToken);
-
-		// Selection opt-in: pure DOM-attribute signaling (never VIEW_META/ViewDef.CONTRACT_VERSION - see
-		// SelectionDef's class javadoc). Absent entirely when selection is null, so juneau-views.js renders no
-		// checkbox column at all for an ordinary table - the separability guarantee's "off by default" half.
 		if (selection != null) {
 			table.attr(SELECT_ATTR, "1");
 			table.attr(ROW_ID_FIELD_ATTR, selection.rowIdField());
 			table.attr(SELECT_ALL_ATTR, selection.selectAll() ? "1" : "0");
 		}
+		if (bulkMutate != null)
+			table.attr(BULK_ATTR, "1");
+	}
 
-		// Sidecar: serialize the VIEW_META, neutralize script break-outs, then insert as RAW content (class javadoc).
-		var json = escapeForScript(Json.of(viewDef));
-		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
-
-		var children = new ArrayList<>();
-		// The quick-stats strip leads the wrapper, so it sits above the DataTables control row this emitter's
-		// <table> grows at init time rather than inside it.  Server-painted once and inert (QuickStatsTable).
+	/**
+	 * Builds the wrapper {@code <div>}'s children: the optional quick-stats strip, the {@code <table>}, the
+	 * optional row-detail template, the optional bulk-actions sidecar (its OWN independently-versioned sidecar,
+	 * {@link BulkMutateDef#CONTRACT_VERSION}, never merged into VIEW_META &mdash; a version bump here can never
+	 * force a {@code ViewDef.CONTRACT_VERSION} bump), and finally the VIEW_META sidecar.
+	 */
+	private static List<Object> wrapperChildren(ViewDef viewDef, Table table, RenderOptions opts, String id,
+			Script sidecar) {
+		var children = new ArrayList<Object>();
 		if (viewDef.quickStats != null)
 			children.add(QuickStatsTable.of(viewDef.quickStats));
 		children.add(table);
 		if (viewDef.details != null)
-			children.add(emitDetailTemplate(viewDef, csrfToken));
-
-		// Bulk-mutate opt-in: its OWN independently-versioned sidecar (BulkMutateDef.CONTRACT_VERSION), never
-		// merged into VIEW_META - a version bump here can never force a ViewDef.CONTRACT_VERSION bump (R2).
-		// Absent entirely when bulkMutate is null, so an ordinary or selection-only table carries no bulk affordance.
-		if (bulkMutate != null) {
-			table.attr(BULK_ATTR, "1");
-			var bulkJson = escapeForScript(Json.of(bulkMutate));
-			children.add(script().type("application/json").id(BULK_SIDECAR_ID_PREFIX + id).text(rawText(bulkJson)));
+			children.add(emitDetailTemplate(viewDef, opts.csrfToken()));
+		if (opts.bulkMutate() != null) {
+			var bulkJson = escapeForScript(Json.of(opts.bulkMutate()));
+			children.add(script().type(JSON_CONTENT_TYPE).id(BULK_SIDECAR_ID_PREFIX + id).text(rawText(bulkJson)));
 		}
-
 		children.add(sidecar);
-		var wrapper = div(children.toArray());
-		// Full-real-estate stamp (TODO-445n Goal 1 / N2 A): the ONE stamp node is this wrapper <div>. The console
-		// chrome full-bleed :has() rules widen the enclosing .jc-card/.jc-main off this attribute.
-		wrapper.attr(LAYOUT_ATTR, LAYOUT_WIDE);
-		if (savedViewsBase != null && ! savedViewsBase.isBlank())
-			wrapper.attr(SAVED_VIEWS_ATTR, savedViewsBase);
-		return wrapper;
+		return children;
+	}
+
+	/**
+	 * Bundles the render-time options threaded through {@link #emit}/{@link #emitViewHost}/{@link #build} so those
+	 * methods stay under the parameter-count ceiling.  A purely internal parameter object: never serialized, and
+	 * no part of any wire contract.
+	 */
+	private record RenderOptions(Collection<?> rows, String csrfToken, SelectionDef selection,
+			BulkMutateDef bulkMutate, String savedViewsBase, String idQualifier) {
+
+		/**
+		 * Reconciles {@code selection} against a declared {@code bulkMutate}'s own {@link BulkMutateDef#selection()}
+		 * (design doc §9.3; HIGH-5): a caller-passed {@code selection} that is not that SAME instance is rejected,
+		 * so the two can never silently disagree about which rows a bulk action targets.
+		 *
+		 * @throws IllegalArgumentException If {@code selection} and {@code bulkMutate} are both non-<jk>null</jk>
+		 * 	but {@code selection} is not {@code bulkMutate.selection()}.
+		 */
+		RenderOptions reconciled() {
+			if (bulkMutate == null)
+				return this;
+			if (selection != null && selection != bulkMutate.selection())
+				throw iaex("selection must be exactly bulkMutate.selection() when both are supplied; "
+					+ "a BulkMutateDef can only render the SelectionDef it was constructed against.");
+			return new RenderOptions(rows, csrfToken, bulkMutate.selection(), bulkMutate, savedViewsBase, idQualifier);
+		}
 	}
 
 	/**
@@ -802,31 +843,8 @@ public class ViewTable {
 		// and none synthesized for it - a section-title-anchored child of the lone section.
 		var ribbonAnchored = d.barSlot != null && d.sections.size() > 1;
 		var sectionAnchored = d.barSlot != null && !ribbonAnchored;
-		for (var s : d.sections) {
-			var kids = new ArrayList<>();
-			kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
-				.class_("juneau-view-detail-section-title"));
-			if (sectionAnchored)
-				kids.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
-			if (s.actions != null && s.actions.items != null && !s.actions.items.isEmpty())
-				kids.add(emitActionBar(s.actions, viewDef.rowActions));
-			var fieldSlots = new ArrayList<>();
-			if (s.fields != null) {
-				for (var f : s.fields) {
-					fieldSlots.add(emitDetailField(f));
-				}
-			}
-			kids.add(div(fieldSlots.toArray())
-				.class_("juneau-view-detail-fields")
-				.attr("style", "grid-template-columns:repeat(" + s.columns + ",minmax(0,1fr))"));
-			// Nested table, appended last (after the fields grid) - the runtime instantiates it once the detail GET
-			// succeeds and this section's pane is visible.
-			if (s.table != null)
-				kids.add(emitNestedTable(s.table, csrfToken));
-			children.add(section(kids.toArray())
-				.attr(DETAIL_SECTION_ATTR, s.id)
-				.class_("juneau-view-detail-section"));
-		}
+		for (var s : d.sections)
+			children.add(buildDetailSection(viewDef, d, s, sectionAnchored, csrfToken));
 		if (ribbonAnchored)
 			children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_RIBBON));
 		// The sidecar is id-less and found by attribute, exactly like the nested-table VIEW_META sidecar above: this
@@ -840,11 +858,48 @@ public class ViewTable {
 			.children(children.toArray());
 	}
 
+	/**
+	 * Builds one detail {@code <section>}: the title, an optional section-anchored bar-slot region, an optional
+	 * action bar, the fields grid, and &mdash; appended last, after the fields grid &mdash; an optional nested
+	 * table (the runtime instantiates it only once the detail GET succeeds and this section's pane is visible).
+	 */
+	private static Section buildDetailSection(ViewDef viewDef, RowDetailDef d, DetailSection s,
+			boolean sectionAnchored, String csrfToken) {
+		var kids = new ArrayList<>();
+		kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
+			.class_("juneau-view-detail-section-title"));
+		if (sectionAnchored)
+			kids.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
+		if (hasActionBarItems(s.actions))
+			kids.add(emitActionBar(s.actions, viewDef.rowActions));
+		kids.add(buildFieldsGrid(s));
+		if (s.table != null)
+			kids.add(emitNestedTable(s.table, csrfToken));
+		return section(kids.toArray())
+			.attr(DETAIL_SECTION_ATTR, s.id)
+			.class_("juneau-view-detail-section");
+	}
+
+	/** Builds a section's fields grid: one empty field slot per {@link DetailSection#fields} entry. */
+	private static Div buildFieldsGrid(DetailSection s) {
+		var fieldSlots = new ArrayList<>();
+		if (s.fields != null)
+			for (var f : s.fields)
+				fieldSlots.add(emitDetailField(f));
+		return div(fieldSlots.toArray())
+			.class_("juneau-view-detail-fields")
+			.attr("style", "grid-template-columns:repeat(" + s.columns + ",minmax(0,1fr))");
+	}
+
+	/** Whether an {@link ActionBar} has at least one item to render (a <jk>null</jk> bar has none). */
+	private static boolean hasActionBarItems(ActionBar bar) {
+		return bar != null && bar.items != null && !bar.items.isEmpty();
+	}
+
 	private static boolean hasDetailHeader(RowDetailDef d) {
 		var titled = d.title != null && !d.title.isBlank();
 		var icon = d.icon != null && !d.icon.isBlank();
-		var actions = d.headerActions != null && d.headerActions.items != null && !d.headerActions.items.isEmpty();
-		return titled || icon || actions;
+		return titled || icon || hasActionBarItems(d.headerActions);
 	}
 
 	private static Div emitDetailHeader(RowDetailDef d, List<RowAction> rowActions) {
@@ -856,7 +911,7 @@ public class ViewTable {
 				.attr(DETAIL_TITLE_ATTR, "1")
 				.attr(DETAIL_TITLE_TEMPLATE_ATTR, d.title)
 				.class_("juneau-view-detail-title"));
-		if (d.headerActions != null && d.headerActions.items != null && !d.headerActions.items.isEmpty())
+		if (hasActionBarItems(d.headerActions))
 			kids.add(emitActionBar(d.headerActions, rowActions));
 		return div(kids.toArray()).class_("juneau-view-detail-header").attr(DETAIL_HEADER_ATTR, "1");
 	}
@@ -886,9 +941,9 @@ public class ViewTable {
 		var cols = v.columns == null ? List.<Column>of() : v.columns;
 		var headerCells = new ArrayList<>(cols.size() + 2);
 		if (v.details != null)
-			headerCells.add(th().attr("class", DETAIL_TH_CLASS).attr("aria-label", "Expand"));
+			headerCells.add(th().attr(CLASS_ATTR, DETAIL_TH_CLASS).attr(ARIA_LABEL_ATTR, "Expand"));
 		if (nt.selection != null)
-			headerCells.add(th().attr("class", "juneau-view-select-th").attr("aria-label", "Select"));
+			headerCells.add(th().attr(CLASS_ATTR, "juneau-view-select-th").attr(ARIA_LABEL_ATTR, "Select"));
 		for (var c : cols)
 			headerCells.add(th(c.title == null ? c.data : c.title));
 		var table = table(thead(tr(headerCells.toArray()))).attr(MARKER_ATTR, v.id).class_(TABLE_CLASS);
@@ -904,7 +959,7 @@ public class ViewTable {
 		}
 
 		// Sidecar: same VIEW_META contract as a top-level view; neutralize break-outs, insert as RAW (class javadoc).
-		var sidecar = script().type("application/json").attr(NESTED_META_ATTR, v.id)
+		var sidecar = script().type(JSON_CONTENT_TYPE).attr(NESTED_META_ATTR, v.id)
 			.text(rawText(escapeForScript(nestedJson(v, tokenless))));
 
 		var children = new ArrayList<>();
@@ -931,7 +986,7 @@ public class ViewTable {
 	private static String nestedJson(ViewDef v, boolean tokenless) {
 		if (! tokenless || v.rowActions == null)
 			return Json.of(v);
-		synchronized (v) {
+		synchronized (v.lock) {
 			var restore = v.rowActions;
 			v.rowActions = null;
 			try {
@@ -976,12 +1031,12 @@ public class ViewTable {
 				var label = actionLabel(ar.id, rowActions);
 				buttons.add(button("button", label)
 					.attr(DETAIL_ACTION_ATTR, ar.id)
-					.attr("class", "juneau-view-detail-action")
+					.attr(CLASS_ATTR, "juneau-view-detail-action")
 					.disabled(true));
 			} else if (item instanceof org.apache.juneau.rest.server.widgets.SafeAction sa) {
 				buttons.add(button("button", sa.label())
 					.attr(DETAIL_SAFE_ATTR, sa.wire())
-					.attr("class", "juneau-view-detail-action juneau-view-detail-safe"));
+					.attr(CLASS_ATTR, "juneau-view-detail-action juneau-view-detail-safe"));
 			}
 		}
 		return div(buttons.toArray()).class_("juneau-view-detail-actions");
@@ -1047,25 +1102,45 @@ public class ViewTable {
 	 */
 	private static Runnable resolveChrome(ViewDef viewDef, VarResolverSession session) {
 		var restores = new ArrayList<Runnable>();
-		if (viewDef.columns != null)
-			for (var c : viewDef.columns)
-				if (c != null)
-					resolveField(restores, session, c.title, v -> c.title = v);
-		if (viewDef.rowActions != null)
-			for (var a : viewDef.rowActions)
-				if (a != null)
-					resolveField(restores, session, a.label, v -> a.label = v);
-		if (viewDef.ribbon != null)
-			for (var r : viewDef.ribbon) {
-				if (r == null)
-					continue;
-				resolveField(restores, session, r.title, v -> r.title = v);
-				if (r.options != null)
-					for (var o : r.options)
-						if (o != null)
-							resolveField(restores, session, o.title, v -> o.title = v);
-			}
+		resolveColumnsChrome(restores, session, viewDef.columns);
+		resolveRowActionsChrome(restores, session, viewDef.rowActions);
+		resolveRibbonChrome(restores, session, viewDef.ribbon);
 		return lifoRestore(restores);
+	}
+
+	/** Resolves every declared column's {@link Column#title}. */
+	private static void resolveColumnsChrome(List<Runnable> restores, VarResolverSession session, List<Column> columns) {
+		if (columns == null)
+			return;
+		for (var c : columns)
+			if (c != null)
+				resolveField(restores, session, c.title, v -> c.title = v);
+	}
+
+	/** Resolves every declared row action's {@link RowAction#label}. */
+	private static void resolveRowActionsChrome(List<Runnable> restores, VarResolverSession session,
+			List<RowAction> rowActions) {
+		if (rowActions == null)
+			return;
+		for (var a : rowActions)
+			if (a != null)
+				resolveField(restores, session, a.label, v -> a.label = v);
+	}
+
+	/** Resolves every declared ribbon action's {@link RibbonAction#title} and its options' {@link RibbonAction.Opt#title}. */
+	private static void resolveRibbonChrome(List<Runnable> restores, VarResolverSession session,
+			List<RibbonAction> ribbon) {
+		if (ribbon == null)
+			return;
+		for (var r : ribbon) {
+			if (r == null)
+				continue;
+			resolveField(restores, session, r.title, v -> r.title = v);
+			if (r.options != null)
+				for (var o : r.options)
+					if (o != null)
+						resolveField(restores, session, o.title, v -> o.title = v);
+		}
 	}
 
 	/**
@@ -1085,17 +1160,31 @@ public class ViewTable {
 	private static Runnable resolveDetailChrome(RowDetailDef detail, VarResolverSession session) {
 		var restores = new ArrayList<Runnable>();
 		resolveField(restores, session, detail.title, v -> detail.title = v);
-		if (detail.sections != null)
-			for (var s : detail.sections) {
-				if (s == null)
-					continue;
-				resolveField(restores, session, s.title, v -> s.title = v);
-				if (s.fields != null)
-					for (var f : s.fields)
-						if (f != null)
-							resolveField(restores, session, f.title, v -> f.title = v);
-			}
+		resolveDetailSectionsChrome(restores, session, detail.sections);
 		return lifoRestore(restores);
+	}
+
+	/** Resolves every declared section's {@link DetailSection#title} and, in turn, each of its fields' titles. */
+	private static void resolveDetailSectionsChrome(List<Runnable> restores, VarResolverSession session,
+			List<DetailSection> sections) {
+		if (sections == null)
+			return;
+		for (var s : sections) {
+			if (s == null)
+				continue;
+			resolveField(restores, session, s.title, v -> s.title = v);
+			resolveDetailFieldsChrome(restores, session, s.fields);
+		}
+	}
+
+	/** Resolves every declared field's {@link DetailField#title}. */
+	private static void resolveDetailFieldsChrome(List<Runnable> restores, VarResolverSession session,
+			List<DetailField> fields) {
+		if (fields == null)
+			return;
+		for (var f : fields)
+			if (f != null)
+				resolveField(restores, session, f.title, v -> f.title = v);
 	}
 
 	/**

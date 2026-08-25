@@ -48,38 +48,48 @@ class CardFieldList_Test extends TestBase {
 	}
 
 	@Test void a03_columnsBelowOne_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> base().columns(0).validate());
+		var b = base().columns(0);
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a04_emptyFields_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> CardFieldList.create().validate());
-		assertThrows(IllegalArgumentException.class, () -> CardFieldList.create().fields().validate());
+		var b1 = CardFieldList.create();
+		assertThrows(IllegalArgumentException.class, b1::validate);
+		var b2 = CardFieldList.create().fields();
+		assertThrows(IllegalArgumentException.class, b2::validate);
 	}
 
 	@Test void a05_blankDataKey_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> CardFieldList.create().fields(CardField.of("  ", "L")).validate());
+		var b = CardFieldList.create().fields(CardField.of("  ", "L"));
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a06_duplicateDataKey_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> CardFieldList.create().fields(CardField.of("k", "A"), CardField.of("k", "B")).validate());
+		var b = CardFieldList.create().fields(CardField.of("k", "A"), CardField.of("k", "B"));
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a07_pollWithoutEndpoint_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> base().pollIntervalMs(10_000).validate());
+		var b = base().pollIntervalMs(10_000);
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a08_unsafeEndpoint_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("http://evil/x").validate());
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("//evil/x").validate());
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("../x").validate());
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("javascript:alert(1)").validate());
+		var b1 = base().refresh("http://evil/x");
+		assertThrows(IllegalArgumentException.class, b1::validate);
+		var b2 = base().refresh("//evil/x");
+		assertThrows(IllegalArgumentException.class, b2::validate);
+		var b3 = base().refresh("../x");
+		assertThrows(IllegalArgumentException.class, b3::validate);
+		var b4 = base().refresh("javascript:alert(1)");
+		assertThrows(IllegalArgumentException.class, b4::validate);
 	}
 
 	@Test void a09_templatedEndpoint_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("/cards/{id}").validate());
-		assertThrows(IllegalArgumentException.class, () -> base().refresh("/x/{anything}").validate());
+		var b1 = base().refresh("/cards/{id}");
+		assertThrows(IllegalArgumentException.class, b1::validate);
+		var b2 = base().refresh("/x/{anything}");
+		assertThrows(IllegalArgumentException.class, b2::validate);
 	}
 
 	@Test void a10_safeNonTemplatedEndpoint_passes() {

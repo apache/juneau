@@ -51,12 +51,15 @@ class BarSlot_Test extends TestBase {
 	}
 
 	@Test void a04_blankId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> BarSlot.create("  ").widgets(BarText.of("t", "x")).validate());
+		var b = BarSlot.create("  ").widgets(BarText.of("t", "x"));
+		assertThrows(IllegalArgumentException.class, () -> b.validate());
 	}
 
 	@Test void a05_emptySlot_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> BarSlot.create("b").validate());
-		assertThrows(IllegalArgumentException.class, () -> BarSlot.create("b").widgets().validate());
+		var b1 = BarSlot.create("b");
+		assertThrows(IllegalArgumentException.class, () -> b1.validate());
+		var b2 = BarSlot.create("b").widgets();
+		assertThrows(IllegalArgumentException.class, () -> b2.validate());
 	}
 
 	@Test void a06_duplicateWidgetId_rejected() {

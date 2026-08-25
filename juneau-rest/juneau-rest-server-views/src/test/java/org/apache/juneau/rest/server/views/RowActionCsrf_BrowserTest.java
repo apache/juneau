@@ -34,7 +34,7 @@ import org.junit.jupiter.api.condition.*;
  * The row-action half of the module's <b>JavaScript-execution harness</b>: runs the REAL served
  * {@code juneau-views.js} in a real headless browser and asserts the fail-closed CSRF submit behaves as a user
  * would experience it &mdash; a blank/absent/whitespace token issues NO request and renders a VISIBLE refusal, and
- * a valid token issues a JSON {@code POST} carrying the {@code X-Csrf-Token} header (TODO-415).
+ * a valid token issues a JSON {@code POST} carrying the {@code X-Csrf-Token} header.
  *
  * <h5 class='section'>Why this exists (beyond the always-on source-shape test):</h5>
  * <p>

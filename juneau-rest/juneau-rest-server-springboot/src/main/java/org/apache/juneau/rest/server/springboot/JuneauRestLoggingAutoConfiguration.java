@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.slf4j.*;
@@ -101,7 +102,7 @@ public class JuneauRestLoggingAutoConfiguration {
 				if (! List.class.isAssignableFrom(f.getType()) || ! f.getName().toLowerCase(Locale.ROOT).contains("listener"))
 					continue;
 				try {
-					f.setAccessible(true);
+					forceAccessible(f);
 					var out = f.get(context);
 					if (out instanceof List<?> out2)
 						return (List<Object>)out2;
@@ -111,6 +112,13 @@ public class JuneauRestLoggingAutoConfiguration {
 			}
 		}
 		return List.of();
+	}
+
+	@SuppressWarnings({
+		"java:S3011" // Reflective fallback for Logback versions predating getCopyOfListenerList(); the private listener field has no non-reflective accessor.
+	})
+	private static void forceAccessible(Field f) {
+		f.setAccessible(true);
 	}
 
 	private static Object newPropagator() {

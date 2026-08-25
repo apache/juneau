@@ -16,8 +16,8 @@
  */
 
 /*
- * views-dom-shim.cjs - a small, dependency-free DOM shim shared by the always-on Node behavioral harnesses for
- * TODO-445h (dialog forms, inline validation, the shared popup layer stack).  Rich enough for the code paths under
+ * views-dom-shim.cjs - a small, dependency-free DOM shim shared by the always-on Node behavioral harnesses that
+ * exercise dialog forms, inline validation, and the shared popup layer stack.  Rich enough for the code paths under
  * test: element/document event listeners with dispatch, focus/activeElement tracking, a class/attr/tag
  * querySelector(All), closest(), style objects, and a getComputedStyle that returns nothing (so the runtime's
  * --jc-* token reads fall back to their baked-in numeric defaults).
@@ -34,7 +34,7 @@ const vm = require('node:vm');
 function parseSimple(sel) {
 	sel = sel.trim();
 	const notDisabled = /:not\(\[disabled\]\)/.test(sel);
-	sel = sel.replace(/:not\(\[disabled\]\)/g, '');
+	sel = sel.replaceAll(/:not\(\[disabled\]\)/g, '');
 	let tag = null, cls = null, attr = null, attrVal = null;
 	const tagM = /^([a-zA-Z][\w-]*)/.exec(sel);
 	if (tagM) { tag = tagM[1].toUpperCase(); sel = sel.slice(tagM[0].length); }
@@ -52,7 +52,7 @@ function compileSelector(selector) {
 		return function (n) {
 			if (!n || n.nodeType !== 1) return false;
 			if (s.tag && n.tagName !== s.tag) return false;
-			if (s.cls && !((' ' + (n.className || '') + ' ').indexOf(' ' + s.cls + ' ') >= 0)) return false;
+			if (s.cls && (' ' + (n.className || '') + ' ').indexOf(' ' + s.cls + ' ') < 0) return false;
 			if (s.attr) {
 				const has = n.attrs && Object.hasOwn(n.attrs, s.attr);
 				if (!has) return false;
@@ -64,8 +64,13 @@ function compileSelector(selector) {
 	});
 }
 
+/** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
+function toDataAttr(prop) {
+	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
+}
+
 function matchesAny(matchers, n) {
-	for (let i = 0; i < matchers.length; i++) if (matchers[i](n)) return true;
+	for (const m of matchers) if (m(n)) return true;
 	return false;
 }
 
@@ -92,7 +97,10 @@ function makeEnv() {
 			_text: '',
 			get value() { return this._value; },
 			set value(v) { this._value = v == null ? '' : String(v); },
-			get type() { return this._type != null ? this._type : (this.tagName === 'TEXTAREA' ? 'textarea' : 'text'); },
+			get type() {
+				if (this._type != null) return this._type;
+				return this.tagName === 'TEXTAREA' ? 'textarea' : 'text';
+			},
 			set type(v) { this._type = v; },
 			get id() { return this.attrs.id || ''; },
 			set id(v) { this.setAttribute('id', v); },
@@ -109,10 +117,24 @@ function makeEnv() {
 				if (k === 'id') byId[this.attrs[k]] = this;
 			},
 			removeAttribute: function (k) { delete this.attrs[k]; if (k === 'class') this.className = ''; },
+			/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
+			get dataset() {
+				const self = this;
+				return new Proxy({}, {
+					get: function (t, prop) {
+						if (typeof prop !== 'string') return undefined;
+						const k = toDataAttr(prop);
+						return Object.hasOwn(self.attrs, k) ? self.attrs[k] : undefined;
+					},
+					set: function (t, prop, value) { self.setAttribute(toDataAttr(prop), value); return true; },
+					deleteProperty: function (t, prop) { self.removeAttribute(toDataAttr(prop)); return true; },
+					has: function (t, prop) { return typeof prop === 'string' && Object.hasOwn(self.attrs, toDataAttr(prop)); }
+				});
+			},
 			appendChild: function (c) {
-				if (c.parentNode) c.parentNode.removeChild(c);
+				c.remove();
 				this.childNodes.push(c); c.parentNode = this;
-				if (c.attrs && c.attrs.id) byId[c.attrs.id] = c;
+				if (c.attrs?.id) byId[c.attrs.id] = c;
 				return c;
 			},
 			removeChild: function (c) {
@@ -120,8 +142,11 @@ function makeEnv() {
 				if (i >= 0) { this.childNodes.splice(i, 1); c.parentNode = null; }
 				return c;
 			},
+			remove: function () {
+				if (this.parentNode) this.parentNode.removeChild(this);
+			},
 			insertBefore: function (c, ref) {
-				if (c.parentNode) c.parentNode.removeChild(c);
+				c.remove();
 				const i = this.childNodes.indexOf(ref);
 				if (i < 0) this.childNodes.push(c); else this.childNodes.splice(i, 0, c);
 				c.parentNode = this;
@@ -133,24 +158,20 @@ function makeEnv() {
 			},
 			contains: function (n) {
 				if (n === this) return true;
-				for (let i = 0; i < this.childNodes.length; i++) {
-					const c = this.childNodes[i];
+				for (const c of this.childNodes) {
 					if (c === n) return true;
-					if (c.contains && c.contains(n)) return true;
+					if (c.contains?.(n)) return true;
 				}
 				return false;
 			},
 			get lastElementChild() {
-				for (let i = this.childNodes.length - 1; i >= 0; i--)
-					if (this.childNodes[i].nodeType === 1) return this.childNodes[i];
-				return null;
+				return this.childNodes.findLast(function (c) { return c.nodeType === 1; }) || null;
 			},
 			querySelectorAll: function (selector) {
 				const matchers = compileSelector(selector);
 				const out = [];
 				(function walk(n) {
-					for (let i = 0; i < n.childNodes.length; i++) {
-						const c = n.childNodes[i];
+					for (const c of n.childNodes) {
 						if (c.nodeType !== 1) continue;
 						if (matchesAny(matchers, c)) out.push(c);
 						walk(c);
@@ -162,17 +183,21 @@ function makeEnv() {
 				const all = this.querySelectorAll(selector);
 				return all.length ? all[0] : null;
 			},
+			// NOSONAR javascript:S7740 -- `n` walks the ancestor chain starting at this node (not a self-alias for
+			// closures); it is reassigned to `n.parentNode` each iteration, so it needs its own mutable binding
+			// separate from `this`.
 			closest: function (selector) {
 				const matchers = compileSelector(selector);
 				let n = this;
-				while (n && n.nodeType === 1) {
+				while (n?.nodeType === 1) {
 					if (matchesAny(matchers, n)) return n;
 					n = n.parentNode;
 				}
 				return null;
 			},
 			addEventListener: function (type, fn) {
-				(this._listeners[type] = this._listeners[type] || []).push(fn);
+				if (!this._listeners[type]) this._listeners[type] = [];
+				this._listeners[type].push(fn);
 			},
 			removeEventListener: function (type, fn) {
 				const l = this._listeners[type];
@@ -186,6 +211,9 @@ function makeEnv() {
 				const l = this._listeners[type] || [];
 				l.slice().forEach(function (fn) { fn(ev); });
 			},
+			// NOSONAR javascript:S7740 -- this node's own `this` is captured into the shared `activeElement`
+			// tracking var (real focus-tracking state, not a self-alias workaround); an arrow function would
+			// rebind `this` to the enclosing `el()` scope and break focus tracking.
 			focus: function () { activeElement = this; },
 			getBoundingClientRect: function () { return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 }; },
 			get offsetWidth() { return 0; },
@@ -210,7 +238,10 @@ function makeEnv() {
 		readyState: 'complete',
 		documentElement: documentElement,
 		body: body,
-		addEventListener: function (type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
+		addEventListener: function (type, fn) {
+			if (!listeners[type]) listeners[type] = [];
+			listeners[type].push(fn);
+		},
 		removeEventListener: function () {},
 		getElementById: function (id) { return byId[id] || null; },
 		createElement: function (tag) { return el(tag); },
@@ -239,7 +270,7 @@ function makeEnv() {
 	};
 
 	// A test-controllable fetch: the harness installs an impl via setFetch(); the default rejects (no network).
-	let fetchImpl = function () { return Promise.reject(new Error('no fetch impl installed')); };
+	let fetchImpl = defaultFetchImpl;
 
 	return {
 		el: el, document: document, window: window, body: body, byId: byId,
@@ -247,8 +278,13 @@ function makeEnv() {
 		getActive: function () { return activeElement; },
 		setActive: function (n) { activeElement = n; },
 		setFetch: function (fn) { fetchImpl = fn; },
-		callFetch: function () { return fetchImpl.apply(null, arguments); }
+		callFetch: function (...args) { return fetchImpl(...args); }
 	};
+}
+
+/** Default `fetchImpl` for a fresh env: no network access until the harness installs one via `setFetch()`. */
+function defaultFetchImpl() {
+	return Promise.reject(new Error('no fetch impl installed'));
 }
 
 /** Builds a fetch Response-like object for the harnesses: ok/status/headers.get + a text() that resolves `body`. */
@@ -269,17 +305,24 @@ function loadViews(rendersJsPath, viewsJsPath, env) {
 	env = env || makeEnv();
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
-		setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; },
+		setTimeout: function (fn) {
+			if (typeof fn === 'function') { fn(); }
+			return 0;
+		},
 		clearTimeout: function () {},
 		setInterval: function () { return 0; },
 		clearInterval: function () {},
 		Promise: Promise,
-		fetch: function () { return env.callFetch.apply(env, arguments); }
+		fetch: function (...args) { return env.callFetch(...args); }
 	};
+	// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js sources into a VM
+	// sandbox is this harness's intended mechanism for exercising them under the DOM shim; inputs are fixed local
+	// file paths supplied by the test, never attacker-controlled data.
 	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+	// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
 	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 	const NS = env.window.JuneauViews;
-	return { env: env, NS: NS, I: NS && NS.init };
+	return { env: env, NS: NS, I: NS?.init };
 }
 
 module.exports = { makeEnv: makeEnv, loadViews: loadViews, compileSelector: compileSelector, jsonResponse: jsonResponse };

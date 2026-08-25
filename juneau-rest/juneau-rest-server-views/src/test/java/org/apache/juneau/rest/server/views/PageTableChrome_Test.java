@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Wiring tests for the TODO-445m page chrome on {@link PageTable}: the optional {@link PageDef#header} whole-header
+ * Wiring tests for the page chrome on {@link PageTable}: the optional {@link PageDef#header} whole-header
  * lead + its refresh sidecar, and the optional {@link PageDef#barSlot} region emitted as a <b>trailing sibling of
  * {@code .jc-subtab-bar}</b> (never into the archived {@code .juneau-view-toolbar-*} DataTables control row).
  *

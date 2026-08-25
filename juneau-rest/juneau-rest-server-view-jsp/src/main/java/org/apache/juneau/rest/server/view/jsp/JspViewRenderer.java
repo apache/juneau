@@ -148,9 +148,8 @@ public class JspViewRenderer implements ViewRenderer {
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
 			return FINISHED;
 		} catch (InternalServerError | IOException ex) {
-			// InternalServerError re-surfaces the specific NO_ENGINE diagnostic constructed above as-is;
-			// IOException propagates unchanged. Without this clause the generic `catch (Exception ex)` below
-			// would re-wrap them into a generic "JSP render failed for '%s'" message, discarding the diagnostic.
+			// Re-throw as-is so the specific diagnostic constructed above, or a framework-level IOException,
+			// isn't discarded by the generic fallback below.
 			throw ex;
 		} catch (NoClassDefFoundError ex) {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);

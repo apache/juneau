@@ -22,9 +22,10 @@ import static org.apache.juneau.commons.utils.Shorts.iaex;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 /**
- * The framework's non-durable, in-memory default {@link SavedViewStore} (TODO-444 §3.3, owner decision item 8).
+ * The framework's non-durable, in-memory default {@link SavedViewStore} (design doc §3.3, owner decision item 8).
  *
  * <p>
  * <b>Not persistent:</b> everything lives in heap and is lost on JVM restart.  It exists so a host composing
@@ -51,7 +52,7 @@ import java.util.concurrent.*;
  */
 public class InMemorySavedViewStore implements SavedViewStore {
 
-	private static volatile InMemorySavedViewStore shared;
+	private static final AtomicReference<InMemorySavedViewStore> SHARED = new AtomicReference<>();
 
 	/**
 	 * The process-wide shared default instance returned by {@link SavedViewsMixin#savedViewStore()}.
@@ -63,10 +64,14 @@ public class InMemorySavedViewStore implements SavedViewStore {
 	 *
 	 * @return The shared in-memory store.  Never <jk>null</jk>.
 	 */
-	static synchronized InMemorySavedViewStore shared() {
-		if (shared == null)
-			shared = new InMemorySavedViewStore();
-		return shared;
+	static InMemorySavedViewStore shared() {
+		var s = SHARED.get();
+		if (s == null) {
+			s = new InMemorySavedViewStore();
+			if (! SHARED.compareAndSet(null, s))
+				s = SHARED.get();
+		}
+		return s;
 	}
 
 	private final int maxViewsPerScope;

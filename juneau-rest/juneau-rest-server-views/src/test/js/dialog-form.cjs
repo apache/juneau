@@ -16,7 +16,7 @@
  */
 
 /*
- * dialog-form.cjs - always-on Node harness for the dialog FormDef painter (TODO-445h): appendDialogForm builds
+ * dialog-form.cjs - always-on Node harness for the dialog FormDef painter: appendDialogForm builds
  * label+control rows via createElement for the frozen 6-type allowlist (text/textarea/checkbox/toggle/select/action),
  * unknown types are skipped, a type=action with a missing id is painted disabled, and collectDialogFormFields reads
  * text/textarea/select via .value and checkbox/toggle as explicit "true"/"false" while skipping action buttons.
@@ -36,7 +36,7 @@ if (!rendersJsPath || !viewsJsPath) {
 }
 
 const { env, I } = loadViews(rendersJsPath, viewsJsPath);
-const out = { hasInit: !!(I && typeof I.appendDialogForm === 'function' && typeof I.collectDialogFormFields === 'function') };
+const out = { hasInit: !!(typeof I?.appendDialogForm === 'function' && typeof I?.collectDialogFormFields === 'function') };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
 const table = env.el('table');
@@ -89,13 +89,13 @@ out.sev_prefillValue = sev.value === 'warning';
 // text
 const title = dialog.querySelector('[data-juneau-form-field="title"]');
 out.title_value = title.value === 'T';
-out.title_patternAttr = title.getAttribute('data-juneau-pattern') === '^[A-Z].*';
+out.title_patternAttr = title.dataset.juneauPattern === '^[A-Z].*';
 
 // action button (openable) - no bound label row
 const esc = dialog.querySelector('button');
 out.esc_isButton = esc.tagName === 'BUTTON' && String(esc.type) === 'button';
 out.esc_enabled = esc.disabled === false;
-out.esc_field = esc.getAttribute('data-juneau-form-field') === 'esc';
+out.esc_field = esc.dataset.juneauFormField === 'esc';
 out.esc_noLabelForAction = dialog.querySelectorAll('label').length === 5;   // notes,notify,agree,sev,title
 
 // unknown type skipped
@@ -117,6 +117,6 @@ I.appendDialogForm(dialog2, { fields: [{ name: 'x', type: 'action', label: 'X', 
 const xbtn = dialog2.querySelector('button');
 out.missing_disabled = xbtn.disabled === true;
 out.missing_ariaDisabled = xbtn.getAttribute('aria-disabled') === 'true';
-out.missing_marker = xbtn.getAttribute('data-juneau-action-missing') === '1';
+out.missing_marker = xbtn.dataset.juneauActionMissing === '1';
 
 process.stdout.write(JSON.stringify(out));

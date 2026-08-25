@@ -20,12 +20,15 @@ import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
- * Always-on source-shape coverage for {@code juneau-config.js} (TODO-444, slice 2): the client-side async
+ * Always-on source-shape coverage for {@code juneau-config.js} (slice 2): the client-side async
  * persistence SPI, the strict localStorage key codec, and the two first-party persistence providers.
  *
  * <p>
@@ -116,19 +119,31 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertFalse(fn.contains("encodeURIComponent"), fn);
 	}
 
-	@Test void b02_decSegment_isStrict_rejectsNonCanonicalInput() throws Exception {
+	/**
+	 * Six independent single-function pinning checks, each extracting one named function's body and asserting it
+	 * contains two expected substrings: strict decSegment decoding (lowercase hex / truncated escape / unsafe char
+	 * all throw 'malformed'), the exact safe-alphabet chars, the dangling-active default+notice shape, the
+	 * cross-tab storage-event watch/unwatch pair, the shell-attribute base-URL resolution with its fail-closed
+	 * error, and the schema-version-mismatch fail-closed path.
+	 */
+	@ParameterizedTest
+	@MethodSource("b02_functionBodyContainsTwoSubstringsProvider")
+	void b02_functionBodyContainsTwoSubstrings(String functionSignature, String expected1, String expected2) throws Exception {
 		var body = configJs();
-		var fn = functionBody(body, "function decSegment(");
-		// Lowercase hex, a truncated escape, and a raw unsafe char must all throw 'malformed' - never a lenient decode.
-		assertTrue(fn.contains("[0-9A-F]{2}"), fn);
-		assertTrue(fn.contains("malformedError("), fn);
+		var fn = functionBody(body, functionSignature);
+		assertTrue(fn.contains(expected1), fn);
+		assertTrue(fn.contains(expected2), fn);
 	}
 
-	@Test void b03_safeAlphabetIsExactly_A_Za_z0_9_dash_underscore() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function isSafeSegmentChar(");
-		assertTrue(fn.contains("ch === \"_\""), fn);
-		assertTrue(fn.contains("ch === \"-\""), fn);
+	static Stream<Arguments> b02_functionBodyContainsTwoSubstringsProvider() {
+		return Stream.of(
+			Arguments.of("function decSegment(", "[0-9A-F]{2}", "malformedError("),
+			Arguments.of("function isSafeSegmentChar(", "ch === \"_\"", "ch === \"-\""),
+			Arguments.of("function resolveActiveAgainstViews(", "dangling: true", "name: null"),
+			Arguments.of("watchExternalChanges: function (table, onChange) {",
+				"window.addEventListener(\"storage\"", "function unwatch()"),
+			Arguments.of("function baseFor(table) {", "resolveSavedViewsBase(table)", "unavailableError("),
+			Arguments.of("function assertSupportedSchema(", "malformedError(", "CURRENT_SCHEMA_VERSION"));
 	}
 
 	@Test void b04_scopeKey_isPageQualified_soTwoPagesSharingAViewIdCannotCollide() throws Exception {
@@ -150,14 +165,23 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	// c) pageId/viewId/base-URL resolution (§3.1/§3.3) - cross-checked against the server-side marker constants
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_pageIdAttr_matchesPageTableMarkerAttr() throws Exception {
+	/**
+	 * Three independent single-substring pins that each read the whole served asset directly (no function-body
+	 * extraction needed): the pageId/viewId marker attributes cross-checked against their server-side constants,
+	 * and the server-provider transport's same-origin credentials mode.
+	 */
+	@ParameterizedTest
+	@MethodSource("c01_bodyContainsSingleSubstringProvider")
+	void c01_bodyContainsExpectedSubstring(String expected) throws Exception {
 		var body = configJs();
-		assertTrue(body.contains("const PAGE_ID_ATTR = \"" + PageTable.MARKER_ATTR + "\";"), body);
+		assertTrue(body.contains(expected), body);
 	}
 
-	@Test void c02_viewIdAttr_matchesViewTableMarkerAttr() throws Exception {
-		var body = configJs();
-		assertTrue(body.contains("const VIEW_ID_ATTR = \"" + ViewTable.MARKER_ATTR + "\";"), body);
+	static Stream<String> c01_bodyContainsSingleSubstringProvider() {
+		return Stream.of(
+			"const PAGE_ID_ATTR = \"" + PageTable.MARKER_ATTR + "\";",
+			"const VIEW_ID_ATTR = \"" + ViewTable.MARKER_ATTR + "\";",
+			"credentials: \"same-origin\"");
 	}
 
 	@Test void c03_resolvePageId_usesClosestOnThePageIdAttr() throws Exception {
@@ -196,19 +220,8 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertTrue(fn.contains("LOCALSTORAGE_MAX_VIEWS_PER_USER"), fn);
 	}
 
-	@Test void d03_localStorageProvider_handlesDanglingActiveAsDefaultPlusNotice() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function resolveActiveAgainstViews(");
-		assertTrue(fn.contains("dangling: true"), fn);
-		assertTrue(fn.contains("name: null"), fn);
-	}
-
-	@Test void d04_localStorageProvider_watchesStorageEventForCrossTabReconcile() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "watchExternalChanges: function (table, onChange) {");
-		assertTrue(fn.contains("window.addEventListener(\"storage\""), fn);
-		assertTrue(fn.contains("function unwatch()"), fn);
-	}
+	// d03/d04 (dangling-active default+notice; cross-tab storage watch/unwatch) are covered by b02 above,
+	// alongside four other structurally-identical single-function two-substring pins.
 
 	//------------------------------------------------------------------------------------------------------------------
 	// e) Server-persisted provider transport envelope (§3.3)
@@ -224,10 +237,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertTrue(fn.contains("refuse: true"), fn);
 	}
 
-	@Test void e02_writesUseCredentialsSameOrigin() throws Exception {
-		var body = configJs();
-		assertTrue(body.contains("credentials: \"same-origin\""), body);
-	}
+	// e02 (same-origin credentials) is covered by c01 above, alongside two other single-substring pins.
 
 	@Test void e03_getRequests_arePlainCsrfFreeFetch() throws Exception {
 		var body = configJs();
@@ -236,27 +246,26 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertFalse(fn.contains("CsrfToken"), fn);
 	}
 
-	@Test void e04_saveAndActivate_usesActivateQueryFlag_neverAFieldInsideTheBlob() throws Exception {
+	/**
+	 * Three independent server-provider-region pins: saveAndActivate uses the {@code activate} query flag (never a
+	 * blob field), setActive always sends a real JSON body (never empty), and delete sends the name as a query
+	 * param (never a path segment).
+	 */
+	@ParameterizedTest
+	@MethodSource("e04_serverProviderRegionContainsSubstringProvider")
+	void e04_serverProviderRegionContainsExpectedSubstring(String expected) throws Exception {
 		var region = factoryBody(configJs(), "createServerProvider");
-		assertTrue(region.contains("{ name: name, activate: 1 }"), region);
+		assertTrue(region.contains(expected), region);
 	}
 
-	@Test void e05_setActive_alwaysSendsARealJsonBody_neverEmpty() throws Exception {
-		var region = factoryBody(configJs(), "createServerProvider");
-		assertTrue(region.contains("name == null ? {} : { name: name }"), region);
+	static Stream<String> e04_serverProviderRegionContainsSubstringProvider() {
+		return Stream.of(
+			"{ name: name, activate: 1 }",
+			"name == null ? {} : { name: name }",
+			"write(table, \"DELETE\", \"/item\", { name: name }, {})");
 	}
 
-	@Test void e06_delete_sendsNameAsQueryParam_neverAsAPathSegment() throws Exception {
-		var region = factoryBody(configJs(), "createServerProvider");
-		assertTrue(region.contains("write(table, \"DELETE\", \"/item\", { name: name }, {})"), region);
-	}
-
-	@Test void e07_baseUrl_resolvedFromClosestShellAttribute_failsClosedWhenAbsent() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function baseFor(table) {");
-		assertTrue(fn.contains("resolveSavedViewsBase(table)"), fn);
-		assertTrue(fn.contains("unavailableError("), fn);
-	}
+	// e07 (shell-attribute base-URL resolution, fail-closed) is covered by b02 above.
 
 	@Test void e08_serverProvider_neverEmitsHttpForCrossTabReconcile() throws Exception {
 		// The server provider's own object literal must not DEFINE watchExternalChanges (that method-def token,
@@ -328,12 +337,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertFalse(body.contains("\"conflict\""), body);
 	}
 
-	@Test void g02_schemaVersionMismatch_rejectsAsMalformed_neverCrashes() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function assertSupportedSchema(");
-		assertTrue(fn.contains("malformedError("), fn);
-		assertTrue(fn.contains("CURRENT_SCHEMA_VERSION"), fn);
-	}
+	// g02 (schema-version-mismatch fail-closed) is covered by b02 above.
 
 	//------------------------------------------------------------------------------------------------------------------
 	// h) Reserved-name rule (shared by both providers, so slice 3's mixin must enforce the identical rule)

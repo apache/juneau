@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
 
 /**
  * Mixin interface that exposes the server half of the saved-views persistence SPI on any Juneau REST resource
- * (TODO-444 §3.3) &mdash; the fixed-mount REST endpoints the {@code juneau-config.js} server-persisted provider
+ * (design doc §3.3) &mdash; the fixed-mount REST endpoints the {@code juneau-config.js} server-persisted provider
  * already calls, backed by a consumer-injectable {@link SavedViewStore}.
  *
  * <p>
@@ -276,7 +276,7 @@ public interface SavedViewsMixin {
 			() -> new BadRequest("Request body is not a valid JSON object."));
 		var name = body.getString("name");
 		if (name != null)
-			name = requireValidName(name);
+			requireValidName(name);
 		savedViewStore().setActive(user, pageId, viewId, name);
 	}
 
@@ -377,11 +377,22 @@ public interface SavedViewsMixin {
 	 * @param req The REST request.
 	 */
 	static void requireJsonContentType(RestRequest req) {
-		var ct = req.getContentType();
-		var semi = ct == null ? -1 : ct.indexOf(';');
-		var base = ct == null ? null : (semi < 0 ? ct : ct.substring(0, semi)).trim();
+		var base = baseContentType(req.getContentType());
 		if (base == null || ! base.equalsIgnoreCase("application/json"))
 			throw new UnsupportedMediaType("A state-changing saved-views request must use content type 'application/json'.");
+	}
+
+	/**
+	 * Extracts the base content type (the part before any {@code ;}-delimited parameter), trimmed.
+	 *
+	 * @param ct The raw {@code Content-Type} header value.  Can be <jk>null</jk>.
+	 * @return The trimmed base content type, or <jk>null</jk> if {@code ct} is <jk>null</jk>.
+	 */
+	private static String baseContentType(String ct) {
+		if (ct == null)
+			return null;
+		var semi = ct.indexOf(';');
+		return (semi < 0 ? ct : ct.substring(0, semi)).trim();
 	}
 
 	/**

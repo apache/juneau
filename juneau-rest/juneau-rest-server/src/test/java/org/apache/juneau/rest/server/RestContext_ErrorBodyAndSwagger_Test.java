@@ -66,8 +66,9 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		var m = RestContext.class.getDeclaredMethod("getResponseWriter", HttpServletResponse.class);
 		m.setAccessible(true);
 		var res = mock(HttpServletResponse.class);
+		var os = mock(ServletOutputStream.class);
 		when(res.getWriter()).thenThrow(new IllegalStateException("already got output stream"));
-		when(res.getOutputStream()).thenReturn(mock(ServletOutputStream.class));
+		when(res.getOutputStream()).thenReturn(os);
 		var result = (PrintWriter) m.invoke(null, res);
 		assertNotNull(result);
 	}
@@ -112,7 +113,8 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		var m = RestContext.class.getDeclaredMethod("writeValidationErrorBody", HttpServletResponse.class, ValidationException.class, int.class, boolean.class);
 		m.setAccessible(true);
 		var res = mock(HttpServletResponse.class);
-		when(res.getOutputStream()).thenReturn(mock(ServletOutputStream.class));
+		var os = mock(ServletOutputStream.class);
+		when(res.getOutputStream()).thenReturn(os);
 		var result = (Boolean) m.invoke(null, res, validationException(), 400, true);
 		assertTrue(result);
 		verify(res).setContentType("application/problem+json");
@@ -122,7 +124,8 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		var m = RestContext.class.getDeclaredMethod("writeValidationErrorBody", HttpServletResponse.class, ValidationException.class, int.class, boolean.class);
 		m.setAccessible(true);
 		var res = mock(HttpServletResponse.class);
-		when(res.getOutputStream()).thenReturn(mock(ServletOutputStream.class));
+		var os = mock(ServletOutputStream.class);
+		when(res.getOutputStream()).thenReturn(os);
 		var result = (Boolean) m.invoke(null, res, validationException(), 400, false);
 		assertTrue(result);
 		verify(res).setContentType("application/json");

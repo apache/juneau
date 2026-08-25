@@ -133,6 +133,15 @@ public class CardGridTable {
 	/** Marker attribute on the built-in refresh {@code <button>} (glyph filled at runtime from {@code juneau-icons.js}). */
 	public static final String CARD_REFRESH_TRIGGER_ATTR = "data-juneau-card-refresh-trigger";
 
+	/** The {@code aria-label} attribute name, shared by several emit helpers below. */
+	private static final String ARIA_LABEL = "aria-label";
+
+	/** The shared HTML {@code title} attribute name. */
+	private static final String TITLE_KEY = "title";
+
+	/** The HTML5 builder's {@code "button"} type token, shared by several emit helpers below. */
+	private static final String TYPE_BUTTON = "button";
+
 	private CardGridTable() {}
 
 	/**
@@ -274,11 +283,11 @@ public class CardGridTable {
 			headerKids.add(span().class_("juneau-view-card-status").attr(CARD_STATUS_ATTR, "1").hidden(true));
 		var actionKids = l();
 		if (refreshable)
-			actionKids.add(button("button")
+			actionKids.add(button(TYPE_BUTTON)
 				.class_("juneau-view-card-refresh")
 				.attr(CARD_REFRESH_TRIGGER_ATTR, "1")
-				.attr("aria-label", "Refresh")
-				.attr("title", "Refresh"));
+				.attr(ARIA_LABEL, "Refresh")
+				.attr(TITLE_KEY, "Refresh"));
 		// Declared actions follow the built-in refresh button, each MENU trigger trailed by its own hidden list.
 		if (card.actions != null)
 			for (var a : card.actions) {
@@ -357,18 +366,18 @@ public class CardGridTable {
 			var link = a(a.href, inner.toArray()).class_("jc-icon-btn juneau-view-card-action")
 				.attr(AppHeaderTable.ACTION_MARKER, a.id)
 				.attr(AppHeaderTable.BEHAVIOR_ATTR, behavior)
-				.attr("aria-label", a.tooltip)
-				.attr("title", a.tooltip);
+				.attr(ARIA_LABEL, a.tooltip)
+				.attr(TITLE_KEY, a.tooltip);
 			if (a.icon != null)
 				link.attr(AppHeaderTable.ICON_ATTR, a.icon);
 			return link;
 		}
 
-		var el = button("button", inner.toArray()).class_("jc-icon-btn juneau-view-card-action")
+		var el = button(TYPE_BUTTON, inner.toArray()).class_("jc-icon-btn juneau-view-card-action")
 			.attr(AppHeaderTable.ACTION_MARKER, a.id)
 			.attr(AppHeaderTable.BEHAVIOR_ATTR, behavior)
-			.attr("aria-label", a.tooltip)
-			.attr("title", a.tooltip);
+			.attr(ARIA_LABEL, a.tooltip)
+			.attr(TITLE_KEY, a.tooltip);
 		if (a.icon != null)
 			el.attr(AppHeaderTable.ICON_ATTR, a.icon);
 		if (a.behavior == Behavior.SAFE)
@@ -416,7 +425,7 @@ public class CardGridTable {
 				link.attr(AppHeaderTable.ICON_ATTR, mi.icon);
 			return link;
 		}
-		var el = button("button", kids.toArray()).class_("jc-menu-item")
+		var el = button(TYPE_BUTTON, kids.toArray()).class_("jc-menu-item")
 			.attr("role", "menuitem")
 			.attr(AppHeaderTable.SAFE_ATTR, mi.safe);
 		if (mi.icon != null && ! mi.icon.isBlank())

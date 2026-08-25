@@ -46,17 +46,20 @@ class AvatarChip_Test extends TestBase {
 	}
 
 	@Test void a04_displayNameRequired() {
-		assertThrows(IllegalArgumentException.class, () -> AvatarChip.of("  ").initials("X").validate());
+		var a = AvatarChip.of("  ").initials("X");
+		assertThrows(IllegalArgumentException.class, () -> a.validate());
 	}
 
 	@Test void a05_neitherInitialsNorImage_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> AvatarChip.of("Ada").validate());
+		var a = AvatarChip.of("Ada");
+		var e = assertThrows(IllegalArgumentException.class, () -> a.validate());
 		assertTrue(e.getMessage().contains("initials"), e::getMessage);
 	}
 
 	@Test void a06_absoluteOrProtocolRelativeImage_rejected() {
 		for (var bad : new String[]{"http://cdn/x.png", "https://gravatar.example/x", "//cdn/x.png", "../x.png", "data:image/png;base64,AAA"}) {
-			assertThrows(IllegalArgumentException.class, () -> AvatarChip.of("Ada").imageUrl(bad).validate(), () -> "expected reject for " + bad);
+			var a = AvatarChip.of("Ada").imageUrl(bad);
+			assertThrows(IllegalArgumentException.class, () -> a.validate(), () -> "expected reject for " + bad);
 		}
 	}
 

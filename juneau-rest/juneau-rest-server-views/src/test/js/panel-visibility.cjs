@@ -64,7 +64,7 @@ const INSTRUMENTATION = function () {
 	window.__juneauInited = [];
 	window.JuneauViews = {
 		init: {
-			initTable: function (t) { window.__juneauInited.push(t.getAttribute('data-juneau-view')); }
+			initTable: function (t) { window.__juneauInited.push(t.dataset.juneauView); }
 		}
 	};
 };
@@ -81,10 +81,7 @@ const PROBE = function (attrs) {
 		classes: el.getAttribute('class'),
 		visible: rendered(el)
 	}));
-	const attr = (sel, name) => {
-		const el = document.querySelector(sel);
-		return el ? el.getAttribute(name) : null;
-	};
+	const attr = (sel, name) => document.querySelector(sel)?.getAttribute(name) ?? null;
 	// Tracked separately from the panels because the sub-tab bar is the one part of a sub-tabbed tab that lives in
 	// the OUTER panel: if it is invisible the user has no way to reach the other sub-tabs even if one renders.
 	const bars = Array.prototype.map.call(document.querySelectorAll('.jc-subtab-bar'), rendered);
@@ -138,6 +135,6 @@ const PROBE = function (attrs) {
 	}
 	process.stdout.write(JSON.stringify(reports, null, 2) + '\n');
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

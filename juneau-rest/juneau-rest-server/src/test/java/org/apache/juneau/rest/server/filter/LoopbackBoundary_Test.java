@@ -440,26 +440,32 @@ class LoopbackBoundary_Test extends TestBase {
 	}
 
 	@Test void i03_authorityRejectsASchemeOrPath() {
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority("http://127.0.0.1:8790"));
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority("127.0.0.1:8790/rest"));
+		var b = LoopbackBoundary.create();
+		assertThrows(IllegalArgumentException.class, () -> b.authority("http://127.0.0.1:8790"));
+		assertThrows(IllegalArgumentException.class, () -> b.authority("127.0.0.1:8790/rest"));
 	}
 
 	@Test void i04_authorityRejectsNullAndBlank() {
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority(null));
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority("  "));
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority(null, 8790));
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority("127.0.0.1", 0));
+		var b = LoopbackBoundary.create();
+		assertThrows(IllegalArgumentException.class, () -> b.authority(null));
+		assertThrows(IllegalArgumentException.class, () -> b.authority("  "));
+		assertThrows(IllegalArgumentException.class, () -> b.authority(null, 8790));
+		assertThrows(IllegalArgumentException.class, () -> b.authority("127.0.0.1", 0));
 	}
 
 	@Test void i05_csrfHeaderRejectsNullAndBlank() {
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().csrfHeader(null));
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().csrfHeader(" "));
+		var b = LoopbackBoundary.create();
+		assertThrows(IllegalArgumentException.class, () -> b.csrfHeader(null));
+		assertThrows(IllegalArgumentException.class, () -> b.csrfHeader(" "));
 	}
 
 	@Test void i06_buildRequiresAnAuthorityAndAToken() {
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().token(TOKEN).build());
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().authority(AUTHORITY).build());
-		assertThrows(IllegalArgumentException.class, () -> LoopbackBoundary.create().token(null));
+		var withTokenOnly = LoopbackBoundary.create().token(TOKEN);
+		assertThrows(IllegalArgumentException.class, withTokenOnly::build);
+		var withAuthorityOnly = LoopbackBoundary.create().authority(AUTHORITY);
+		assertThrows(IllegalArgumentException.class, withAuthorityOnly::build);
+		var b = LoopbackBoundary.create();
+		assertThrows(IllegalArgumentException.class, () -> b.token(null));
 	}
 
 	@Test void i07_checkRejectsANullRequest() {

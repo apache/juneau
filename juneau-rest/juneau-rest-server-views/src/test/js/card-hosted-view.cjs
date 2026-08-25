@@ -48,15 +48,19 @@ process.on('unhandledRejection', function () {});
 const env = makeEnv();
 const sandbox = {
 	window: env.window, document: env.document, console: console,
-	setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; },
+	setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
 	clearTimeout: function () {}, setInterval: function () { return 0; }, clearInterval: function () {},
 	Promise: Promise, Set: Set, JSON: JSON, Object: Object, Math: Math, Date: Date,
-	fetch: function () { return env.callFetch.apply(env, arguments); }
+	fetch: function (...args) { return env.callFetch(...args); }
 };
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-renders.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same rationale: deliberately loading the real juneau-views.js under test
+// into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
-const I = env.window.JuneauViews && env.window.JuneauViews.init;
+const I = env.window.JuneauViews?.init;
 const out = { hasInit: !!(I && typeof I.beginInitTable === 'function' && typeof I.viewSidecarKey === 'function') };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
@@ -108,8 +112,8 @@ grid.appendChild(c2);
 // A) The key IS the minted id, and the marker stays the author id (two different id spaces on one element).
 out.key_card1 = I.viewSidecarKey(c1._table);
 out.key_card2 = I.viewSidecarKey(c2._table);
-out.marker_card1 = c1._table.getAttribute('data-juneau-view');
-out.marker_card2 = c2._table.getAttribute('data-juneau-view');
+out.marker_card1 = c1._table.dataset.juneauView;
+out.marker_card2 = c2._table.dataset.juneauView;
 
 // B) Resolution is scoped to the enclosing card: each table finds the sidecar in its OWN article.
 const s1 = I.findSidecarNode('juneau-view:g1:c1:orders', c1._table);
@@ -119,8 +123,9 @@ out.scoped_card2InsideCard2 = s2 != null && c2.contains(s2);
 out.scoped_card1NotInCard2 = s1 != null && !c2.contains(s1);
 
 // C) No cross-wiring: each hosted table inits from its own config, and neither reads the page-level decoy.
-try { I.beginInitTable(c1._table); } catch (e) { /* stubbed construction */ }
-try { I.beginInitTable(c2._table); } catch (e) { /* stubbed construction */ }
+out.initErrors = [];
+try { I.beginInitTable(c1._table); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
+try { I.beginInitTable(c2._table); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
 out.init_card1DataUrl = c1._table.__juneauCtx ? c1._table.__juneauCtx.viewDef.dataUrl : null;
 out.init_card2DataUrl = c2._table.__juneauCtx ? c2._table.__juneauCtx.viewDef.dataUrl : null;
 out.init_neitherReadDecoy = out.init_card1DataUrl !== '/data/DECOY' && out.init_card2DataUrl !== '/data/DECOY';
@@ -130,7 +135,7 @@ out.init_separateContexts = c1._table.__juneauCtx !== c2._table.__juneauCtx;
 const lone = cardHosting('solo', 'orders', 'solo:orders', '/data/solo');
 env.body.appendChild(lone);
 out.key_lone = I.viewSidecarKey(lone._table);
-try { I.beginInitTable(lone._table); } catch (e) { /* stubbed construction */ }
+try { I.beginInitTable(lone._table); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
 out.init_loneDataUrl = lone._table.__juneauCtx ? lone._table.__juneauCtx.viewDef.dataUrl : null;
 
 // E) Default-preserving: a table OUTSIDE any card resolves its page-level sidecar exactly as it always did - both
@@ -141,7 +146,7 @@ plainWrap.appendChild(sidecar('juneau-view:events', 'events', '/data/events'));
 const plain = el('table', { 'id': 'events', 'data-juneau-view': 'events' });
 plainWrap.appendChild(plain);
 out.key_plain = I.viewSidecarKey(plain);
-try { I.beginInitTable(plain); } catch (e) { /* stubbed construction */ }
+try { I.beginInitTable(plain); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
 out.init_plainDataUrl = plain.__juneauCtx ? plain.__juneauCtx.viewDef.dataUrl : null;
 
 const idlessWrap = el('div', {});
@@ -150,7 +155,7 @@ idlessWrap.appendChild(sidecar('juneau-view:legacy', 'legacy', '/data/legacy'));
 const idless = el('table', { 'data-juneau-view': 'legacy' });
 idlessWrap.appendChild(idless);
 out.key_idlessFallsBackToMarker = I.viewSidecarKey(idless);
-try { I.beginInitTable(idless); } catch (e) { /* stubbed construction */ }
+try { I.beginInitTable(idless); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
 out.init_idlessDataUrl = idless.__juneauCtx ? idless.__juneauCtx.viewDef.dataUrl : null;
 
 // F) A missing card-scoped sidecar fails closed (no init, no silent fallback to a same-author-id page sidecar).
@@ -158,7 +163,7 @@ const orphan = el('article', { 'data-juneau-card': '1', 'data-juneau-card-id': '
 env.body.appendChild(orphan);
 const orphanTable = el('table', { 'id': 'g1:c9:orders', 'data-juneau-view': 'orders' });
 orphan.appendChild(orphanTable);
-try { I.beginInitTable(orphanTable); } catch (e) { /* no init expected */ }
+try { I.beginInitTable(orphanTable); } catch (e) { out.initErrors.push(String(e && e.message || e)); }
 out.init_missingSidecarRefused = orphanTable.__juneauCtx == null;
 
 process.stdout.write(JSON.stringify(out));

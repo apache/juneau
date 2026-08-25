@@ -247,12 +247,12 @@ public class RestSession extends ContextSession {
 	private UrlPathMatch urlPathMatch;
 
 	/**
-	 * [TODO-401] Tracks whether an HTTP status was explicitly assigned via {@link #status(int)} /
+	 * Tracks whether an HTTP status was explicitly assigned via {@link #status(int)} /
 	 * {@link #status(HttpStatusLine)} on this call.  The {@code NotFound} sentinel in {@link #run()} keys off this
 	 * flag instead of {@code getStatus() == 0}, so a genuine 404 stays a 404 under a real container whose response
 	 * defaults to the servlet-spec {@code 200} (not the mock's coincidental {@code 0}).  A raw
-	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag; that
-	 * broader real-container 404-status audit is TODO-403's remit, not this fix.
+	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag; a
+	 * broader real-container 404-status audit is tracked separately and is out of scope for this fix.
 	 */
 	private boolean statusExplicitlySet;
 
@@ -295,7 +295,7 @@ public class RestSession extends ContextSession {
 		// that never reach a @RestStartCall hook, and gives the debug formatter a synchronous, session-cached id to
 		// render.  Resolve the id first, then open exactly one LogContext scope (closed in finish()).
 		var settings = context.getRequestIdSettings();
-		requestId = resolveRequestId(settings, req, res);
+		requestId = resolveRequestId(settings, req);
 		req.setAttribute(REQUEST_SESSION_ATTR, this);
 		req.setAttribute(settings.getAttributeKey(), requestId);
 		res.setHeader(RequestIdConstants.HEADER, requestId);
@@ -312,10 +312,9 @@ public class RestSession extends ContextSession {
 	 *
 	 * @param settings The resolved request-id settings.  Must not be <jk>null</jk>.
 	 * @param req The servlet request.  Must not be <jk>null</jk>.
-	 * @param res The servlet response.  Must not be <jk>null</jk>.
 	 * @return The resolved id.  Never <jk>null</jk> (unless a custom supplier returns <jk>null</jk>).
 	 */
-	private static String resolveRequestId(RequestIdSettings settings, HttpServletRequest req, HttpServletResponse res) {
+	private static String resolveRequestId(RequestIdSettings settings, HttpServletRequest req) {
 		var existing = req.getAttribute(settings.getAttributeKey());
 		if (existing instanceof String s && ! s.isEmpty())
 			return s;

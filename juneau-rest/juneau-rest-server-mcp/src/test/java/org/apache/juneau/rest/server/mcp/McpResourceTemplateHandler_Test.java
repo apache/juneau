@@ -69,8 +69,9 @@ class McpResourceTemplateHandler_Test {
 
 	@Test void c03_ofRejectsBlankUriTemplate() {
 		McpResourceTemplateHandler.ReadFunction read = (uri, variables, ctx) -> new McpResourceOutcome();
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec(), read));
-		var spec = new McpResourceTemplateSpec().setUriTemplate(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec, read));
+		var spec1 = new McpResourceTemplateSpec();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec1, read));
+		var spec2 = new McpResourceTemplateSpec().setUriTemplate(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec2, read));
 	}
 }

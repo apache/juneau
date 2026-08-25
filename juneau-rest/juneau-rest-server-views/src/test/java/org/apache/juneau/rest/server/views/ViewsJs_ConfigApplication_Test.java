@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the {@code juneau-config.js} pure config-application layer (TODO-444, slice 4):
+ * Always-on coverage for the {@code juneau-config.js} pure config-application layer:
  * {@code computeEffectiveColumns} / {@code validateView} / saved-view (de)serialization / {@code dtIndex}.
  *
  * <p>
@@ -97,18 +97,23 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 
 	@Test void a01_validateView_enforcesPinnedAndAtLeastOneVisible() throws Exception {
 		var fn = functionBody(configJs(), "function validateView(");
-		assertTrue(fn.contains("c.pinned"), fn);
+		assertTrue(fn.contains("c?.pinned"), fn);
 		assertTrue(fn.contains("visible.length === 0"), fn);
 	}
 
 	@Test void a02_validateView_dropsUnknownIds_rejectsDuplicates() throws Exception {
-		var fn = functionBody(configJs(), "function validateView(");
-		assertTrue(fn.contains("hasDuplicateEntries"), fn);
-		assertTrue(fn.contains("byData[id] != null"), fn);
+		var body = configJs();
+		assertTrue(functionBody(body, "function validateView(").contains("resolveOrder("), body);
+		var order = functionBody(body, "function resolveOrder(");
+		assertTrue(order.contains("hasDuplicateEntries"), order);
+		assertTrue(order.contains("byData[id] != null"), order);
+		var visible = functionBody(body, "function resolveVisible(");
+		assertTrue(visible.contains("hasDuplicateEntries"), visible);
+		assertTrue(visible.contains("byData[id] != null"), visible);
 	}
 
 	@Test void a03_validateView_constrainsFormatsToDeclaredList() throws Exception {
-		var fn = functionBody(configJs(), "function validateView(");
+		var fn = functionBody(configJs(), "function resolveFormats(");
 		assertTrue(fn.contains("allowed.indexOf(fmt)"), fn);
 	}
 
@@ -128,7 +133,7 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 	@Test void a05_dtIndex_isIndexIntoActualOptsColumns_notVisibleOffset() throws Exception {
 		var body = configJs();
 		var fn = functionBody(body, "function dtIndex(");
-		assertTrue(fn.contains("optsColumns[i].data === dataKey"), fn);
+		assertTrue(fn.contains("col.data === dataKey"), fn);
 		assertTrue(body.contains("function buildOptsColumnSpace("), body);
 		assertTrue(body.contains("hasSelection"), body);
 		assertTrue(body.contains("hasActions"), body);
@@ -140,7 +145,8 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 		assertTrue(body.contains("function deserializeSavedView("), body);
 		var ser = functionBody(body, "function serializeSavedView(");
 		assertTrue(ser.contains("CURRENT_SCHEMA_VERSION"), ser);
-		assertTrue(ser.contains("String(v).trim()"), ser);
+		var labels = functionBody(body, "function serializeLabels(");
+		assertTrue(labels.contains("String(v).trim()"), labels);
 	}
 
 	@Test void a07_pureLayerExportedOnNsConfig() throws Exception {

@@ -92,7 +92,7 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 
 	@Test void a03_canHideColumn_refusesPinnedAndLastVisible() throws Exception {
 		var fn = functionBody(configJs(), "function canHideColumn(");
-		assertTrue(fn.contains("col.pinned"), fn);
+		assertTrue(fn.contains("col?.pinned"), fn);
 		assertTrue(fn.contains("visibleCount(draft) > 1"), fn);
 	}
 

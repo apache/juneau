@@ -16,7 +16,7 @@
  */
 
 /*
- * table-overflow.cjs - always-on Node harness for the TODO-445n table-overflow-discipline JS helpers
+ * table-overflow.cjs - always-on Node harness for the table-overflow-discipline JS helpers
  * (ensureTableScroll / unwrapTableScroll - the DT1 "Approach B" wrap).  The jsdom-style shim has NO DataTables
  * and cannot measure scrollWidth, so this harness pins ONLY the DOM-structure invariants of the wrap helper
  * (INV-1, INV-2, INV-5, N5) and the DT2 skip-guard (N-P5-B1).  Overflow-detected tabindex (L12 A) and the
@@ -44,8 +44,8 @@ const env = makeEnv();
 const { NS } = loadViews(rendersJsPath, viewsJsPath, env);
 const doc = env.document;
 
-report.hasEnsureTableScroll = !!(NS && NS.init && typeof NS.init.ensureTableScroll === 'function');
-report.hasUnwrapTableScroll = !!(NS && NS.init && typeof NS.init.unwrapTableScroll === 'function');
+report.hasEnsureTableScroll = typeof NS?.init?.ensureTableScroll === 'function';
+report.hasUnwrapTableScroll = typeof NS?.init?.unwrapTableScroll === 'function';
 
 const SCROLL = 'juneau-view-table-scroll';
 
@@ -73,7 +73,7 @@ function dt1Fixture() {
 	const menu = newEl('div', 'juneau-view-pagingpill-menu');
 	toolbar.appendChild(menu);
 	const table = newEl('table');
-	table.setAttribute('data-juneau-view', 't1');
+	table.dataset.juneauView = 't1';
 	wrapper.appendChild(toolbar);
 	wrapper.appendChild(table);
 	doc.body.appendChild(wrapper);
@@ -86,14 +86,14 @@ function dt1Fixture() {
 	const ctx = fakeCtx();
 	NS.init.ensureTableScroll(f.table, ctx);
 	const box = f.table.parentNode;
-	report.t1_boxIsScrollClass = box && box.className === SCROLL;
-	report.t1_boxParentIsWrapper = box && box.parentNode === f.wrapper;
-	report.t1_tableIsSoleElementChild = box && box.childNodes.filter(function (n) { return n.nodeType === 1; }).length === 1;
+	report.t1_boxIsScrollClass = box?.className === SCROLL;
+	report.t1_boxParentIsWrapper = box?.parentNode === f.wrapper;
+	report.t1_tableIsSoleElementChild = box?.childNodes.filter(function (n) { return n.nodeType === 1; }).length === 1;
 	// The toolbar row is a SIBLING lineage - never an ancestor of the table, and never inside the box.
 	report.t1_toolbarNotAncestorOfTable = f.table.closest('.juneau-view-toolbar-row') === null;
 	report.t1_boxDoesNotContainToolbar = !box.contains(f.toolbar);
 	report.t1_columnsAdjusted = ctx._adjusts === 1;
-	f.wrapper.parentNode.removeChild(f.wrapper);
+	f.wrapper.remove();
 })();
 
 // T-JS-3 - paging-pill menu is NOT a descendant of the scroll box / INV-2.
@@ -102,7 +102,7 @@ function dt1Fixture() {
 	NS.init.ensureTableScroll(f.table, fakeCtx());
 	const box = f.table.parentNode;
 	report.t3_pillMenuOutsideBox = !box.contains(f.menu);
-	f.wrapper.parentNode.removeChild(f.wrapper);
+	f.wrapper.remove();
 })();
 
 // T-JS-2 - idempotency across teardown / INV-5: wrap -> unwrap -> re-wrap => exactly one box, toolbar not inside.
@@ -118,20 +118,20 @@ function dt1Fixture() {
 	const box = f.table.parentNode;
 	report.t2_toolbarNotDescendantOfBox = !box.contains(f.toolbar);
 	report.t2_tableNotDuplicated = f.wrapper.querySelectorAll('table').length === 1;
-	f.wrapper.parentNode.removeChild(f.wrapper);
+	f.wrapper.remove();
 })();
 
 // T-JS-5 - nested tables / N5: a table already inside a .juneau-view-table-scroll must NOT get a second box.
 (function tjs5() {
 	const outerBox = newEl('div', SCROLL);
 	const table = newEl('table');
-	table.setAttribute('data-juneau-view', 'inner');
+	table.dataset.juneauView = 'inner';
 	outerBox.appendChild(table);
 	doc.body.appendChild(outerBox);
 	NS.init.ensureTableScroll(table, fakeCtx());
 	report.t5_noSecondBox = table.parentNode === outerBox
 		&& outerBox.querySelectorAll('.' + SCROLL).length === 0;
-	doc.body.removeChild(outerBox);
+	outerBox.remove();
 })();
 
 // N-P5-B1 - DT2 skip-guard: a DT2 table (parent is .dt-layout-cell) must NOT be wrapped (Approach D CSS owns it).
@@ -140,7 +140,7 @@ function dt1Fixture() {
 	const row = newEl('div', 'dt-layout-row dt-layout-table');
 	const cell = newEl('div', 'dt-layout-cell');
 	const table = newEl('table');
-	table.setAttribute('data-juneau-view', 'dt2');
+	table.dataset.juneauView = 'dt2';
 	cell.appendChild(table);
 	row.appendChild(cell);
 	container.appendChild(row);
@@ -148,7 +148,7 @@ function dt1Fixture() {
 	NS.init.ensureTableScroll(table, fakeCtx());
 	report.dt2_notWrapped = table.parentNode === cell;
 	report.dt2_noScrollBoxCreated = container.querySelectorAll('.' + SCROLL).length === 0;
-	doc.body.removeChild(container);
+	container.remove();
 })();
 
 // L12 A - the scroll region is keyboard-reachable ONLY while it actually overflows.  The shim cannot lay out, but
@@ -176,7 +176,7 @@ function dt1Fixture() {
 	report.l12_notOverflowingNoTabindex = box.getAttribute('tabindex') == null;
 	report.l12_notOverflowingNoLabel = box.getAttribute('aria-label') == null;
 
-	f.wrapper.parentNode.removeChild(f.wrapper);
+	f.wrapper.remove();
 })();
 
 // The clip/ellipsis opt-out has to REACH the cell to mean anything: a column bound to a named emitter must carry

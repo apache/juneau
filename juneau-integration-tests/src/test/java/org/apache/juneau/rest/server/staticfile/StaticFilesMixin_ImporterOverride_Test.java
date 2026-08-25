@@ -55,7 +55,7 @@ class StaticFilesMixin_ImporterOverride_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_overrideTakesEffect() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("no-store");
@@ -66,7 +66,7 @@ class StaticFilesMixin_ImporterOverride_Test extends TestBase {
 		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		// That handler also reads from BeanStore.getBean(StaticFiles.class), so the importer's
 		// override still applies.
-		c.get("/htdocs/javadoc.css")
+		c.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("no-store");

@@ -54,15 +54,18 @@ class ServerValues_Test extends TestBase {
 	}
 
 	@Test void a04_value_rejectsNullName() {
-		assertThrows(IllegalArgumentException.class, () -> ServerValues.create().value(null, P));
+		var sv = ServerValues.create();
+		assertThrows(IllegalArgumentException.class, () -> sv.value(null, P));
 	}
 
 	@Test void a05_value_rejectsBlankName() {
-		assertThrows(IllegalArgumentException.class, () -> ServerValues.create().value("  ", P));
+		var sv = ServerValues.create();
+		assertThrows(IllegalArgumentException.class, () -> sv.value("  ", P));
 	}
 
 	@Test void a06_value_rejectsNullProvider() {
-		assertThrows(IllegalArgumentException.class, () -> ServerValues.create().value("a", null));
+		var sv = ServerValues.create();
+		assertThrows(IllegalArgumentException.class, () -> sv.value("a", null));
 	}
 
 	@Test void a07_value_rejectsDuplicateNameAtBuilder() {

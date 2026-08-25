@@ -54,7 +54,7 @@ import jakarta.servlet.*;
  * 		response writer suppresses the body via
  * 		{@link org.apache.juneau.rest.server.server.processor.HttpResourceProcessor}.
  * 	<li><b>Real classpath resource resolution under a JAR.</b> {@code BasicStaticFiles} walks the
- * 		classloader for {@code htdocs/javadoc.css} (contributed by {@code juneau-rest-server}'s
+ * 		classloader for {@code htdocs/themes/devops.css} (contributed by {@code juneau-rest-server}'s
  * 		main resources) so the URL routing flows end-to-end through the real network stack.
  * </ul>
  *
@@ -106,7 +106,7 @@ class StaticFilesMixin_JettyMicroservice_Test extends TestBase {
 	}
 
 	@Test void a01_getStaticFileOverRealHttp() throws Exception {
-		var resp = get("/static/javadoc.css");
+		var resp = get("/static/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),
 			"Body should contain the Apache license header");
@@ -121,7 +121,7 @@ class StaticFilesMixin_JettyMicroservice_Test extends TestBase {
 	@Test void a02_getHtdocsFileViaLegacyMount() throws Exception {
 		// /htdocs/* is no longer a multi-path default on the mixin, but
 		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
-		var resp = get("/htdocs/javadoc.css");
+		var resp = get("/htdocs/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),
 			"Body should contain the Apache license header");
@@ -134,8 +134,8 @@ class StaticFilesMixin_JettyMicroservice_Test extends TestBase {
 
 	@Test void a04_headOverRealHttpReturnsHeadersWithEmptyBody() throws Exception {
 		// HEAD: identical headers to GET, empty body. Compare against the prior GET result.
-		var getResp = get("/static/javadoc.css");
-		var headResp = head("/static/javadoc.css");
+		var getResp = get("/static/themes/devops.css");
+		var headResp = head("/static/themes/devops.css");
 
 		assertEquals(200, headResp.statusCode());
 		assertEquals("", headResp.body(), "HEAD body must be empty");

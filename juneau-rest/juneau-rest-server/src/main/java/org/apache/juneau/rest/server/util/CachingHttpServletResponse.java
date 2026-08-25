@@ -99,19 +99,6 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 */
 	public long getTotalLength() { return totalLength; }
 
-	private void capture(int b) {
-		totalLength++;
-		if (buffer.size() < cap)
-			buffer.write(b);
-	}
-
-	private void capture(byte[] b, int off, int len) {
-		totalLength += len;
-		var room = cap - buffer.size();
-		if (room > 0)
-			buffer.write(b, off, Math.min(room, len));
-	}
-
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
 		if (stream == null)
@@ -175,6 +162,21 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 		public void write(byte[] b, int off, int len) throws IOException {
 			capture(b, off, len);
 			delegate.write(b, off, len);
+		}
+
+		// Only this tee touches the outer response's capture buffer, so these helpers live here rather than on the
+		// outer class.
+		private void capture(int b) {
+			totalLength++;
+			if (buffer.size() < cap)
+				buffer.write(b);
+		}
+
+		private void capture(byte[] b, int off, int len) {
+			totalLength += len;
+			var room = cap - buffer.size();
+			if (room > 0)
+				buffer.write(b, off, Math.min(room, len));
 		}
 	}
 }

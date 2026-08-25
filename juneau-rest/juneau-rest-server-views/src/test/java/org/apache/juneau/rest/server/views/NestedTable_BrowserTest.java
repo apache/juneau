@@ -199,19 +199,19 @@ class NestedTable_BrowserTest extends TestBase {
 
 	@Test void a01_runtimeLoadedAgainstTheRealEmittedShell() {
 		assertEquals(Boolean.TRUE, report.get("hasInit"), () -> "juneau-views.js did not load: " + report);
-		assertEquals(Boolean.TRUE, report.get("parentTableFound"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("parentTableFound"), report::toString);
 		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
 	}
 
 	@Test void a02_servedNestedShell_carriesTheEnclosingResponsesTokenAndItsOwnSelection() {
 		var s = block("served");
-		assertEquals(Boolean.TRUE, s.get("templateFound"), () -> s.toString());
-		assertEquals(Boolean.TRUE, s.get("wrapFound"), () -> s.toString());
-		assertEquals(NestedTableDef.CONTRACT_VERSION, s.get("nestedContract"), () -> s.toString());
-		assertEquals("events", s.get("nestedViewId"), () -> s.toString());
+		assertEquals(Boolean.TRUE, s.get("templateFound"), s::toString);
+		assertEquals(Boolean.TRUE, s.get("wrapFound"), s::toString);
+		assertEquals(NestedTableDef.CONTRACT_VERSION, s.get("nestedContract"), s::toString);
+		assertEquals("events", s.get("nestedViewId"), s::toString);
 		assertEquals(TOKEN, s.get("token"), () -> "the nested table must ride the enclosing response's token: " + s);
-		assertEquals(Boolean.TRUE, s.get("selectStamped"), () -> s.toString());
-		assertEquals("id", s.get("rowIdField"), () -> s.toString());
+		assertEquals(Boolean.TRUE, s.get("selectStamped"), s::toString);
+		assertEquals("id", s.get("rowIdField"), s::toString);
 	}
 
 	@Test void a03_servedNestedShell_hasNoChooserHostAndNoBulkSidecarOfItsOwn() {
@@ -228,21 +228,21 @@ class NestedTable_BrowserTest extends TestBase {
 	@Test void b01_nestedRowActions_surviveIntoTheRuntimeAndOpenAMenu() {
 		var m = block("menu");
 		assertEquals(1, intOf(m, "shippedRowActions"), () -> "the depth-2 clamp withheld the row actions: " + m);
-		assertEquals(Boolean.TRUE, m.get("opened"), () -> m.toString());
+		assertEquals(Boolean.TRUE, m.get("opened"), m::toString);
 		assertEquals(Boolean.TRUE, m.get("onLayerStack"), () -> "the menu must register on the shared layer stack: " + m);
 	}
 
 	@Test void b02_nestedMenu_isPortalledFixedAndClipFreeInsideAScrolledDetailPanel() {
 		var m = block("menu");
-		assertEquals(Boolean.TRUE, m.get("portalledToBody"), () -> m.toString());
-		assertEquals(Boolean.TRUE, m.get("positionFixed"), () -> m.toString());
+		assertEquals(Boolean.TRUE, m.get("portalledToBody"), m::toString);
+		assertEquals(Boolean.TRUE, m.get("positionFixed"), m::toString);
 		assertEquals(Boolean.TRUE, m.get("escapedScrollBox"), () -> "the menu is still inside the clipping panel: " + m);
-		assertEquals(Boolean.TRUE, m.get("withinViewportX"), () -> m.toString());
-		assertEquals(Boolean.TRUE, m.get("withinViewportY"), () -> m.toString());
+		assertEquals(Boolean.TRUE, m.get("withinViewportX"), m::toString);
+		assertEquals(Boolean.TRUE, m.get("withinViewportY"), m::toString);
 	}
 
 	@Test void b03_nestedMenu_unwindsThroughTheSharedStack() {
-		assertEquals(Boolean.TRUE, block("menu").get("closedOnEscape"), () -> report.toString());
+		assertEquals(Boolean.TRUE, block("menu").get("closedOnEscape"), report::toString);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -251,31 +251,31 @@ class NestedTable_BrowserTest extends TestBase {
 
 	@Test void c01_nestedSelection_roundTrips() {
 		var s = block("selection");
-		assertEquals(Boolean.TRUE, s.get("hasSelection"), () -> s.toString());
-		assertEquals("id", s.get("rowIdField"), () -> s.toString());
-		assertEquals(List.of("E-1"), s.get("afterCheck"), () -> s.toString());
-		assertEquals(0, intOf(s, "afterUncheck"), () -> s.toString());
+		assertEquals(Boolean.TRUE, s.get("hasSelection"), s::toString);
+		assertEquals("id", s.get("rowIdField"), s::toString);
+		assertEquals(List.of("E-1"), s.get("afterCheck"), s::toString);
+		assertEquals(0, intOf(s, "afterUncheck"), s::toString);
 	}
 
 	@Test void c02_nestedSelection_neverReachesTheEnclosingTablesSelection() {
 		var s = block("selection");
 		assertEquals(Boolean.TRUE, s.get("parentUntouched"), () -> "a nested check leaked into the parent: " + s);
-		assertEquals(2, intOf(s, "nestedOwnRows"), () -> s.toString());
-		assertEquals(1, intOf(s, "parentOwnRows"), () -> s.toString());
+		assertEquals(2, intOf(s, "nestedOwnRows"), s::toString);
+		assertEquals(1, intOf(s, "parentOwnRows"), s::toString);
 		// The guard is load-bearing: an unguarded descendant query sweeps the nested table's rows in as well.
-		assertEquals(3, intOf(s, "bareDescendantRows"), () -> s.toString());
-		assertEquals(Boolean.TRUE, s.get("parentOwnRowsExcludeNested"), () -> s.toString());
+		assertEquals(3, intOf(s, "bareDescendantRows"), s::toString);
+		assertEquals(Boolean.TRUE, s.get("parentOwnRowsExcludeNested"), s::toString);
 	}
 
 	@Test void c03_openPanel_showsNoNestedChooserAndNoNestedBulkToolbar() {
 		var c = block("parentOnlyChrome");
-		assertEquals(0, intOf(c, "chooserHosts"), () -> c.toString());
-		assertEquals(0, intOf(c, "chooserTriggers"), () -> c.toString());
-		assertEquals(0, intOf(c, "bulkToolbars"), () -> c.toString());
+		assertEquals(0, intOf(c, "chooserHosts"), c::toString);
+		assertEquals(0, intOf(c, "chooserTriggers"), c::toString);
+		assertEquals(0, intOf(c, "bulkToolbars"), c::toString);
 		assertEquals(0, intOf(c, "selectAllCheckboxes"),
 			() -> "select-all is bulk chrome; a nested table selects rows without it: " + c);
-		assertEquals(Boolean.TRUE, c.get("bulkDefOnNested"), () -> c.toString());
-		assertEquals(Boolean.TRUE, c.get("bulkDefOnParent"), () -> c.toString());
+		assertEquals(Boolean.TRUE, c.get("bulkDefOnNested"), c::toString);
+		assertEquals(Boolean.TRUE, c.get("bulkDefOnParent"), c::toString);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -284,24 +284,24 @@ class NestedTable_BrowserTest extends TestBase {
 
 	@Test void d01_simultaneousExpands_mintDistinctDomIdentity() {
 		var i = block("identity");
-		assertEquals("events:A-3:2", i.get("idA"), () -> i.toString());
-		assertEquals("events:A-4:2", i.get("idB"), () -> i.toString());
-		assertEquals(Boolean.TRUE, i.get("unique"), () -> i.toString());
+		assertEquals("events:A-3:2", i.get("idA"), i::toString);
+		assertEquals("events:A-4:2", i.get("idB"), i::toString);
+		assertEquals(Boolean.TRUE, i.get("unique"), i::toString);
 		assertEquals(Boolean.FALSE, i.get("barePageSidecarIsAClone"),
 			() -> "a nested sidecar must never answer a page-level juneau-view:<id> lookup: " + i);
-		assertEquals(Boolean.TRUE, i.get("authorIdKept"), () -> i.toString());
+		assertEquals(Boolean.TRUE, i.get("authorIdKept"), i::toString);
 	}
 
 	@Test void d02_aRootTableSharingTheAuthorId_doesNotCrossWire() {
 		var p = block("pageSibling");
-		assertEquals(Boolean.TRUE, p.get("found"), () -> p.toString());
+		assertEquals(Boolean.TRUE, p.get("found"), p::toString);
 		assertEquals(Boolean.TRUE, p.get("pageSidecarIsTheRootOne"),
 			() -> "the nested clone shadowed the page-level sidecar id: " + p);
 		assertEquals(Boolean.TRUE, p.get("nestedSidecarIsItsOwn"),
 			() -> "a panel-scoped lookup resolved to the page sibling's sidecar: " + p);
-		assertEquals(Boolean.TRUE, p.get("nestedTableIsNotThePageSibling"), () -> p.toString());
-		assertEquals(Boolean.TRUE, p.get("rowOwnerIsNested"), () -> p.toString());
-		assertEquals(1, intOf(p, "pageSiblingOwnRows"), () -> p.toString());
-		assertEquals(Boolean.TRUE, p.get("nestedRowsExcludedFromPageSibling"), () -> p.toString());
+		assertEquals(Boolean.TRUE, p.get("nestedTableIsNotThePageSibling"), p::toString);
+		assertEquals(Boolean.TRUE, p.get("rowOwnerIsNested"), p::toString);
+		assertEquals(1, intOf(p, "pageSiblingOwnRows"), p::toString);
+		assertEquals(Boolean.TRUE, p.get("nestedRowsExcludedFromPageSibling"), p::toString);
 	}
 }

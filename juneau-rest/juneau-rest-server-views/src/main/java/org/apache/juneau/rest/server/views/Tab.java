@@ -25,7 +25,7 @@ import org.apache.juneau.commons.bean.*;
 /**
  * A single top-level tab within a {@link PageDef}, referencing one child {@link ViewDef}, an ordered list of
  * {@link Subtab}, raw panel {@link #content}, or {@link #content} paired with {@link #subtabs} as a preamble
- * (design doc §"Bean model"; TODO-420).
+ * (design doc §"Bean model").
  *
  * <p>
  * A {@link Tab} carries a stable {@code id} (the second hash segment, {@code #pageId/<tabId>/...}) and {@code label}
@@ -153,8 +153,8 @@ public class Tab {
 	}
 
 	/**
-	 * Validates this tab in isolation (design doc §"Bean model" validation rules; TODO-420 widens this from a
-	 * three-way exclusive-or to the panel-body matrix documented in this class's javadoc):
+	 * Validates this tab in isolation (design doc §"Bean model" validation rules; the panel-body matrix documented
+	 * in this class's javadoc widens this from a three-way exclusive-or):
 	 * {@code {view} | {subtabs} | {content} | {content+subtabs}}. {@link #view} is exclusive of everything else;
 	 * {@link #content} and {@link #subtabs} may co-occur (the preamble case). Every declared sub-tab is also
 	 * validated in isolation (see {@link Subtab#validate()}), and sub-tab ids must be unique <b>within this tab</b>

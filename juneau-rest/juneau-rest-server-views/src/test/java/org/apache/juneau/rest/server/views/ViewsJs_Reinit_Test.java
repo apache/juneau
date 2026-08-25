@@ -96,12 +96,12 @@ class ViewsJs_Reinit_Test extends TestBase {
 
 	@Test void a01_initTable_alwaysReturnsAThenable_andCoalescesInFlight() throws Exception {
 		var fn = functionBody(viewsJs(), "function initTable(");
-		assertTrue(fn.contains("data-juneau-init-pending"), fn);
+		assertTrue(fn.contains("dataset.juneauInitPending"), fn);
 		assertTrue(fn.contains("table.__juneauInitPromise"), fn);
 		assertTrue(fn.contains("if (table.__juneauInitPromise) return table.__juneauInitPromise"), fn);
 		assertTrue(fn.contains("return Promise.resolve()"), fn);
 		assertTrue(fn.contains("return p"), fn);
-		assertTrue(fn.contains("removeAttribute(\"data-juneau-init-pending\")"), fn);
+		assertTrue(fn.contains("delete table.dataset.juneauInitPending"), fn);
 	}
 
 	@Test void a02_beginInitTable_awaitsResolveActiveViewWhenColumnConfigPresent() throws Exception {
@@ -193,7 +193,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	@Test void c02_buildColumnSearchRow_emitsOneThPerOptsColumn_hidesHidden() throws Exception {
 		var fn = functionBody(viewsJs(), "function buildColumnSearchRow(");
 		assertTrue(fn.contains("(optsColumns || []).forEach"), fn);
-		assertTrue(fn.contains("col.visible === false"), fn);
+		assertTrue(fn.contains("col?.visible === false"), fn);
 		assertTrue(fn.contains("th.style.display = \"none\""), fn);
 		assertTrue(fn.contains("dt.column(idx).search"), fn);
 	}
@@ -221,15 +221,19 @@ class ViewsJs_Reinit_Test extends TestBase {
 
 	@Test void c06_listenersBoundOnceInBeginInit_notInBuildTable() throws Exception {
 		var begin = functionBody(viewsJs(), "function beginInitTable(");
-		assertTrue(begin.contains("initDetailsExpander(table, ctx, viewDef)"), begin);
-		assertTrue(begin.contains("initRowActions(table, viewDef, ctx)"), begin);
+		assertTrue(begin.contains("initTableWidgets(table, ctx, viewDef)"), begin);
 		assertTrue(begin.contains("initSelection(table, ctx)"), begin);
+		var widgets = functionBody(viewsJs(), "function initTableWidgets(");
+		assertTrue(widgets.contains("initDetailsExpander(table, ctx, viewDef)"), widgets);
+		assertTrue(widgets.contains("initRowActions(table, viewDef, ctx)"), widgets);
 		var construct = functionBody(viewsJs(), "function constructTable(");
 		assertFalse(construct.contains("initDetailsExpander("), construct);
 		assertFalse(construct.contains("initRowActions("), construct);
 		assertFalse(construct.contains("initSelection("), construct);
-		assertTrue(construct.contains("bindSelectionPrune("), construct);
-		assertTrue(construct.contains("initPolling("), construct);
+		assertTrue(construct.contains("wireSelectionAndBulkToolbar("), construct);
+		assertTrue(construct.contains("wireTablePolling("), construct);
+		assertTrue(functionBody(viewsJs(), "function wireSelectionAndBulkToolbar(").contains("bindSelectionPrune("), construct);
+		assertTrue(functionBody(viewsJs(), "function wireTablePolling(").contains("initPolling("), construct);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

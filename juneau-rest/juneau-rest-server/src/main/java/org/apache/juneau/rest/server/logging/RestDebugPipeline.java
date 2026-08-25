@@ -147,17 +147,17 @@ public class RestDebugPipeline {
 		var opSession = session.getOpSessionOrNull();
 		var msg = render(session, opSession, snapshot);
 
-		var record = new LogRecord(Level.INFO, msg);
-		record.setLoggerName(snapshot.logger().getName());
+		var logRecord = new LogRecord(Level.INFO, msg);
+		logRecord.setLoggerName(snapshot.logger().getName());
 		var thrown = session.getException();
 		if (thrown != null)
-			record.setThrown(thrown);
+			logRecord.setThrown(thrown);
 		// Pre-seed the record's correlation context from the request-thread snapshot BEFORE log(). Because log()'s own
-		// attach (RichLogger, TODO-364 Phase 2) is attachIfAbsent and the completion thread's live LogContext is empty,
-		// the pre-seeded map wins — this is what carries requestId across the async hop (design §8.2). No-op / empty
-		// short-circuit inside attachIfAbsent when the map is empty (the common synchronous case).
-		LogRecordContext.attachIfAbsent(record, snapshot.context());
-		snapshot.logger().log(record);
+		// attach (RichLogger) is attachIfAbsent and the completion thread's live LogContext is empty, the pre-seeded
+		// map wins — this is what carries requestId across the async hop (design §8.2). No-op / empty short-circuit
+		// inside attachIfAbsent when the map is empty (the common synchronous case).
+		LogRecordContext.attachIfAbsent(logRecord, snapshot.context());
+		snapshot.logger().log(logRecord);
 	}
 
 	private static String render(RestSession session, RestOpSession opSession, RestDebugSnapshot snapshot) {

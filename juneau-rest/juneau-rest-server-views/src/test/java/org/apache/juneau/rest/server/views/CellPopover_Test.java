@@ -29,7 +29,8 @@ import org.junit.jupiter.api.*;
 class CellPopover_Test extends TestBase {
 
 	@Test void a01_validate_emptyFieldsRejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> CellPopover.of().validate());
+		var p = CellPopover.of();
+		var e = assertThrows(IllegalArgumentException.class, p::validate);
 		assertTrue(e.getMessage().contains("at least one field"), e::getMessage);
 	}
 
@@ -39,15 +40,15 @@ class CellPopover_Test extends TestBase {
 	}
 
 	@Test void a03_validate_duplicateDataRejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> CellPopover.of(
-			PopoverField.of("a"), PopoverField.of("a")).validate());
+		var p = CellPopover.of(PopoverField.of("a"), PopoverField.of("a"));
+		var e = assertThrows(IllegalArgumentException.class, p::validate);
 		assertTrue(e.getMessage().contains("duplicate"), e::getMessage);
 	}
 
 	@Test void a04_validate_illegalRenderIdsRejected() {
 		for (var id : new String[]{ "tag", "linked", "progress", "json", "truncate", "custom" }) {
-			var e = assertThrows(IllegalArgumentException.class, () -> CellPopover.of(
-				PopoverField.of("a").render(id)).validate());
+			var p = CellPopover.of(PopoverField.of("a").render(id));
+			var e = assertThrows(IllegalArgumentException.class, p::validate);
 			assertTrue(e.getMessage().contains(id), e::getMessage);
 		}
 	}

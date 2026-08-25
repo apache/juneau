@@ -42,26 +42,26 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void a02_emptySections_rejected() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("/data/{id}").validate(null));
+		var d = RowDetailDef.create().endpoint("/data/{id}");
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("at least one section"), e::getMessage);
 	}
 
 	@Test void a03_duplicateFieldKeys_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.sections(
 				DetailSection.create("a", "A").fields(DetailField.of("owner").title("O")),
-				DetailSection.create("b", "B").fields(DetailField.of("owner").title("O2")))
-			.validate(null));
+				DetailSection.create("b", "B").fields(DetailField.of("owner").title("O2")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("duplicate field"), e::getMessage);
 	}
 
 	@Test void a04_unknownActionRef_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(oneSection().actions(ActionBar.create().items(ActionRef.of("ack"))))
-			.validate(null));
+			.sections(oneSection().actions(ActionBar.create().items(ActionRef.of("ack"))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("ack"), e::getMessage);
 	}
 
@@ -73,52 +73,52 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void a06_missingIdPlaceholder_rejected() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("/data/x").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("/data/x").sections(oneSection());
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("{id}"), e::getMessage);
 	}
 
 	@Test void a07_blankEndpoint_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("  ").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("  ").sections(oneSection());
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void a08_absoluteUrl_rejected() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("https://evil/{id}").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("https://evil/{id}").sections(oneSection());
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("same-origin"), e::getMessage);
 	}
 
 	@Test void a09_dotDotSegment_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("/data/../x/{id}").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("/data/../x/{id}").sections(oneSection());
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void a10_schemeColon_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("servlet:/data/{id}").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("servlet:/data/{id}").sections(oneSection());
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void a11_protocolRelative_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> RowDetailDef.create().endpoint("//evil/{id}").sections(oneSection()).validate(null));
+		var d = RowDetailDef.create().endpoint("//evil/{id}").sections(oneSection());
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void a12_columnsLessThanOne_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(DetailSection.create("info", "Info").columns(0).fields(DetailField.of("a")))
-			.validate(null));
+			.sections(DetailSection.create("info", "Info").columns(0).fields(DetailField.of("a")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("columns"), e::getMessage);
 	}
 
 	@Test void a13_duplicateSectionIds_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.sections(
 				DetailSection.create("info", "A").fields(DetailField.of("a")),
-				DetailSection.create("info", "B").fields(DetailField.of("b")))
-			.validate(null));
+				DetailSection.create("info", "B").fields(DetailField.of("b")));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void a14_contractVersion_isOne() {
@@ -151,9 +151,8 @@ class RowDetailDef_Test extends TestBase {
 			.columns(Column.of("name"))
 			.details(RowDetailDef.create().endpoint("/no-placeholder").sections(oneSection()))
 			.build();
-		var e = assertThrows(IllegalArgumentException.class, () -> PageDef.create("p")
-			.tabs(Tab.create("t", "T").view(v))
-			.build());
+		var p = PageDef.create("p").tabs(Tab.create("t", "T").view(v));
+		var e = assertThrows(IllegalArgumentException.class, p::build);
 		assertTrue(e.getMessage().contains("{id}"), e::getMessage);
 	}
 
@@ -163,11 +162,11 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void b01_renderPlusMarkdown_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.sections(DetailSection.create("s", "S").fields(
-				DetailField.of("body").format(DetailField.Format.MARKDOWN).render("tag")))
-			.validate(null));
+				DetailField.of("body").format(DetailField.Format.MARKDOWN).render("tag")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("non-TEXT"), e::getMessage);
 	}
 
@@ -175,24 +174,24 @@ class RowDetailDef_Test extends TestBase {
 		var f = DetailField.of("cpu");
 		f.render = new Render();
 		f.render.id = "  ";
-		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(DetailSection.create("s", "S").fields(f))
-			.validate(null));
+			.sections(DetailSection.create("s", "S").fields(f));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void b03_unknownRenderId_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("nope")))
-			.validate(null));
+			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("nope")));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void b04_customWithoutOptIn_rejected_withOptInAccepted() {
-		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("spark")))
-			.validate(null));
+			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("spark")));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.allowCustomRenderers("spark")
@@ -201,11 +200,11 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void b05_blankCustomEntry_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.allowCustomRenderers("spark", "  ")
-			.sections(oneSection())
-			.validate(null));
+			.sections(oneSection());
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
 	@Test void b06_everyBuiltinId_accepted_withDefaultText() {
@@ -239,28 +238,28 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void c02_nestedTable_delegatesValidation() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(oneSection().table(NestedTableDef.create(nested("events")).parentScopeParam("draw")))
-			.validate(null, "alerts"));
+			.sections(oneSection().table(NestedTableDef.create(nested("events")).parentScopeParam("draw")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null, "alerts"));
 		assertTrue(e.getMessage().contains("reserved"), e::getMessage);
 	}
 
 	@Test void c03_nestedViewId_collidesWithEnclosing_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
-			.sections(oneSection().table(NestedTableDef.create(nested("alerts"))))
-			.validate(null, "alerts"));
+			.sections(oneSection().table(NestedTableDef.create(nested("alerts"))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null, "alerts"));
 		assertTrue(e.getMessage().contains("collides"), e::getMessage);
 	}
 
 	@Test void c04_duplicateNestedViewIds_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.sections(
 				DetailSection.create("a", "A").fields(DetailField.of("owner")).table(NestedTableDef.create(nested("events"))),
-				DetailSection.create("b", "B").fields(DetailField.of("host")).table(NestedTableDef.create(nested("events"))))
-			.validate(null, "alerts"));
+				DetailSection.create("b", "B").fields(DetailField.of("host")).table(NestedTableDef.create(nested("events"))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null, "alerts"));
 		assertTrue(e.getMessage().contains("duplicate nested"), e::getMessage);
 	}
 
@@ -282,11 +281,11 @@ class RowDetailDef_Test extends TestBase {
 	}
 
 	@Test void d02_headerActions_unknownActionRef_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.headerActions(ActionBar.create().items(ActionRef.of("ack")))
-			.sections(oneSection())
-			.validate(null));
+			.sections(oneSection());
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("ack"), e::getMessage);
 	}
 

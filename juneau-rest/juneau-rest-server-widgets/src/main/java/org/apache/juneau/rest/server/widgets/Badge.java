@@ -31,6 +31,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="count,dot,max,tone,label")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class Badge {
 
 	/** A count badge value (mutually exclusive with {@link #dot}); when set must be {@code >= 0}. */

@@ -208,9 +208,11 @@ class PageTable_SubtabPanelContract_Test extends TestBase {
 		// which for a panel attribute means display:none forever, and for a tab-bar attribute means a tab that never
 		// reads as selected.
 		var js = pagesJs();
-		for (var attr : List.of(PageTable.PANEL_TAB_ATTR, PageTable.PANEL_SUBTAB_ATTR, PageTable.TAB_ID_ATTR, PageTable.SUBTAB_ID_ATTR, PageTable.PARENT_TAB_ATTR))
-			assertTrue(js.contains("getAttribute(\"" + attr + "\")"),
-				() -> "juneau-pages.js does not read '" + attr + "' - the emitter and the runtime have drifted apart, and an attribute the runtime cannot recognize is one it silently ignores:\n" + js);
+		for (var attr : List.of(PageTable.PANEL_TAB_ATTR, PageTable.PANEL_SUBTAB_ATTR, PageTable.TAB_ID_ATTR, PageTable.SUBTAB_ID_ATTR, PageTable.PARENT_TAB_ATTR)) {
+			var dataset = datasetProperty(attr);
+			assertTrue(js.contains("dataset." + dataset) || js.contains("getAttribute(\"" + attr + "\")"),
+				() -> "juneau-pages.js does not read '" + attr + "' (dataset." + dataset + ") - the emitter and the runtime have drifted apart, and an attribute the runtime cannot recognize is one it silently ignores:\n" + js);
+		}
 	}
 
 	@Test void c02_theRuntimeSelectsTheSamePanelClassNamesTheEmitterWrites() throws Exception {
@@ -238,6 +240,16 @@ class PageTable_SubtabPanelContract_Test extends TestBase {
 
 	private static String pagesJs() throws Exception {
 		return c.get(ViewsMixin.PAGES_JS_PATH).run().assertStatus(200).getContent().asString();
+	}
+
+	/** {@code data-panel-tab} → {@code panelTab} — the {@code HTMLElement.dataset} camelCase of a {@code data-*} attr. */
+	private static String datasetProperty(String dataAttr) {
+		assertTrue(dataAttr.startsWith("data-"), dataAttr);
+		var parts = dataAttr.substring("data-".length()).split("-");
+		var sb = new StringBuilder(parts[0]);
+		for (var i = 1; i < parts.length; i++)
+			sb.append(Character.toUpperCase(parts[i].charAt(0))).append(parts[i].substring(1));
+		return sb.toString();
 	}
 
 	private static String viewsCss() throws Exception {

@@ -16,7 +16,7 @@
  */
 
 /*
- * row-actions.cjs - real-browser prober for the juneau-views.js row-action + fail-closed CSRF contract (TODO-415).
+ * row-actions.cjs - real-browser prober for the juneau-views.js row-action + fail-closed CSRF contract (row-actions-415).
  *
  * Never runs in a default build.  It is driven by RowActionCsrf_BrowserTest, which itself only runs under
  * `mvn -Pjs-tests`; see that class's javadoc and the profile comment in this module's pom.xml.
@@ -47,7 +47,7 @@ const { chromium } = require('playwright');
  */
 const PROBE = function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
@@ -70,10 +70,12 @@ const PROBE = function () {
 		return Promise.resolve({ ok: true });   // 415 does not act on the body; a resolved ok is enough here
 	};
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function makeTable(tokenValue) {
 		const table = document.createElement('table');
-		table.setAttribute('data-juneau-view', 'v');
-		if (tokenValue != null) table.setAttribute('data-juneau-csrf', tokenValue);
+		table.dataset.juneauView = 'v';
+		if (tokenValue != null) table.dataset.juneauCsrf = tokenValue;
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
 		const td = document.createElement('td');
@@ -85,6 +87,8 @@ const PROBE = function () {
 		return { table: table, tr: tr, td: td };
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function rendered(el) {
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
@@ -100,7 +104,7 @@ const PROBE = function () {
 	out.blankTokenFetchIssued = fetchCalls.length > before1;
 	const banner1 = dom1.td.querySelector('.juneau-view-action-refusal');
 	out.blankTokenRefusalVisible = rendered(banner1);
-	out.blankTokenRefusalText = banner1 ? banner1.textContent : null;
+	out.blankTokenRefusalText = banner1?.textContent ?? null;
 
 	// Case 2: VALID token -> fetch issued with POST + JSON content type + the CSRF header, NO refusal banner.
 	const before2 = fetchCalls.length;
@@ -108,7 +112,7 @@ const PROBE = function () {
 	const menu2 = init.buildRowActionMenu({ rowActions: [action] }, dom2.table, dom2.tr, {});
 	dom2.td.appendChild(menu2);
 	menu2.querySelector('.juneau-view-action-item').click();
-	const call = fetchCalls[fetchCalls.length - 1];
+	const call = fetchCalls.at(-1);
 	out.validTokenFetchIssued = fetchCalls.length > before2;
 	if (out.validTokenFetchIssued) {
 		out.validTokenUrl = call.url;
@@ -148,6 +152,6 @@ const PROBE = function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

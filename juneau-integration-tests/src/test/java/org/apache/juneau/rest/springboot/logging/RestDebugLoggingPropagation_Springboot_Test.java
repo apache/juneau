@@ -66,13 +66,18 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 		private final List<LogRecord> records = new ArrayList<>();
 
 		@Override
-		public void publish(LogRecord record) {
-			if (isLoggable(record))
-				records.add(record);
+		public void publish(LogRecord rec) {
+			// LogRecord's own "record" identifier is a restricted identifier since records were added; use "rec" instead.
+			if (isLoggable(rec))
+				records.add(rec);
 		}
 
-		@Override public void flush() {}
-		@Override public void close() {}
+		@Override public void flush() {
+			// No buffering to flush — records are added directly to the in-memory list.
+		}
+		@Override public void close() {
+			// Nothing to release — no external resources are held by this in-memory handler.
+		}
 
 		List<LogRecord> records() {
 			return records;
@@ -155,14 +160,14 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertTrue(resp.body().contains("phase4-body"), resp.body());
 			}
 
-			var record = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
-			assertNotNull(record, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
-			assertEquals(Level.INFO, record.getLevel());
-			// Secure-by-default (TODO-370): FINEST no longer dumps bodies without the JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES
+			var rec = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			assertNotNull(rec, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
+			assertEquals(Level.INFO, rec.getLevel());
+			// Secure-by-default: FINEST no longer dumps bodies without the JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES
 			// env-var master gate. The proof that the TRACE property drove the FINEST *tier* (not just headers) is that the
 			// body SECTION is rendered at all — here as the suppression placeholder, since the gate is unset — while the
 			// raw body never appears.
-			var msg = record.getMessage();
+			var msg = rec.getMessage();
 			assertTrue(msg.contains("---Request Content---"), msg);
 			assertTrue(msg.contains("body suppressed") && msg.contains("JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES"), msg);
 			assertFalse(msg.contains("phase4-body"), msg);
@@ -275,10 +280,10 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertTrue(resp.body().contains("phase4-body-visible"), resp.body());
 			}
 
-			var record = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
-			assertNotNull(record, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
-			assertEquals(Level.INFO, record.getLevel());
-			var msg = record.getMessage();
+			var rec = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			assertNotNull(rec, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
+			assertEquals(Level.INFO, rec.getLevel());
+			var msg = rec.getMessage();
 			assertTrue(msg.contains("---Request Content---"), msg);
 			assertTrue(msg.contains("phase4-body-visible"),
 				"gate forced on via the test-only seam should render the raw body: " + msg);

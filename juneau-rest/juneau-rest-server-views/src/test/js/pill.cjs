@@ -16,7 +16,7 @@
  */
 
 /*
- * pill.cjs - always-on Node harness for the action-bound pill dispatch wired on initRowActions (TODO-445k).  Proves
+ * pill.cjs - always-on Node harness for the action-bound pill dispatch wired on initRowActions (pill-445k).  Proves
  * an action pill submits its RowAction through the SAME fail-closed handler the row-action menu uses, on a grid with
  * rowActions and NO row-detail template; that Enter/Space activate it (Space preventDefault-ed); that a present=dialog
  * action opens the modal instead of submitting; that a disabled / in-flight pill is inert; and that setActionRefEnabled
@@ -56,18 +56,18 @@ env.setFetch(function (url, opts) { fetchCalls.push({ url: url, opts: opts }); r
  */
 function fixture(actionId, viewDef, withDetails) {
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', 'v');
-	table.setAttribute('data-juneau-csrf', 'tok-123');
+	table.dataset.juneauView = 'v';
+	table.dataset.juneauCsrf = 'tok-123';
 	const tbody = env.el('tbody');
 	const tr = env.el('tr');
 	const td = env.el('td');
 	const pill = env.el('span');
 	pill.className = 'jc-pill tag state open';
-	pill.setAttribute('data-juneau-pill', '');
+	pill.dataset.juneauPill = '';
 	if (actionId != null) {
 		pill.setAttribute('role', 'button');
 		pill.setAttribute('tabindex', '0');
-		pill.setAttribute('data-juneau-action', actionId);
+		pill.dataset.juneauAction = actionId;
 	}
 	td.appendChild(pill);
 	tr.appendChild(td);
@@ -95,7 +95,7 @@ const c1 = fixture('ack', { rowActions: [ACK] }, false);
 clickPill(c1);
 out.click_fetchIssued = fetchCalls.length > before;
 if (out.click_fetchIssued) {
-	const call = fetchCalls[fetchCalls.length - 1];
+	const call = fetchCalls.at(-1);
 	out.click_url = call.url;
 	out.click_method = call.opts.method;
 }
@@ -130,7 +130,7 @@ out.disabled_fetchIssued = fetchCalls.length > before;
 // --- Case 5: an in-flight row is inert (no double submit) -----------------------------------------------------
 before = fetchCalls.length;
 const c5 = fixture('ack', { rowActions: [ACK] }, false);
-c5.tr.setAttribute('data-juneau-inflight', '1');
+c5.tr.dataset.juneauInflight = '1';
 clickPill(c5);
 out.inflight_fetchIssued = fetchCalls.length > before;
 
@@ -174,7 +174,7 @@ out.withDetails_fetchIssued = fetchCalls.length > before;
 	const f = fixture('ack', { rowActions: [ACK] }, false);
 	f.ctx.selectionState = selectionState;
 	I.initSelection(f.table, f.ctx);
-	f.tr.setAttribute('data-juneau-row-id', 'r1');
+	f.tr.dataset.juneauRowId = 'r1';
 
 	clickPill(f);
 	out.selection_afterPillClick = selectionState.selected.size;
@@ -185,7 +185,7 @@ out.withDetails_fetchIssued = fetchCalls.length > before;
 	const d = fixture(null, { rowActions: [ACK] }, false);
 	d.ctx.selectionState = selectionState;
 	I.initSelection(d.table, d.ctx);
-	d.tr.setAttribute('data-juneau-row-id', 'r2');
+	d.tr.dataset.juneauRowId = 'r2';
 	clickPill(d);
 	out.selection_afterDisplayOnlyPillClick = selectionState.selected.size;
 

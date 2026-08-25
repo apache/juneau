@@ -65,6 +65,9 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Mirrors the Juneau builder-factory convention (e.g. WriterSerializer.create()); widely used by callers.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

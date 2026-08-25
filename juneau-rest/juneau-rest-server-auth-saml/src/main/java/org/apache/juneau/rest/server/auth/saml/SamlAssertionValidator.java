@@ -886,17 +886,26 @@ public class SamlAssertionValidator {
 		var subject = assertion.getSubject();
 		if (subject != null) {
 			for (var sc : subject.getSubjectConfirmations()) {
-				if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
-					continue;
-				var data = sc.getSubjectConfirmationData();
-				if (data == null)
-					continue;
-				var noa = data.getNotOnOrAfter();
+				var noa = bearerNotOnOrAfter(sc);
 				if (noa != null && (result == null || noa.isAfter(result)))
 					result = noa;
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Returns the {@code NotOnOrAfter} of {@code sc}'s {@code <SubjectConfirmationData>} if {@code sc} is a
+	 * bearer confirmation carrying one, or <jk>null</jk> otherwise.
+	 *
+	 * @param sc The subject confirmation.
+	 * @return The bearer confirmation's {@code NotOnOrAfter}, or <jk>null</jk>.
+	 */
+	private static Instant bearerNotOnOrAfter(SubjectConfirmation sc) {
+		if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
+			return null;
+		var data = sc.getSubjectConfirmationData();
+		return data == null ? null : data.getNotOnOrAfter();
 	}
 
 	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {

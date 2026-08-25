@@ -49,7 +49,7 @@ class StaticFilesMixin_CacheControl_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_cacheControlOnStaticMount() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("max-age=86400, public");
@@ -60,7 +60,7 @@ class StaticFilesMixin_CacheControl_Test extends TestBase {
 		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		// That handler also reads from BasicStaticFiles, so the Cache-Control default flows
 		// through unchanged.
-		c.get("/htdocs/javadoc.css")
+		c.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("max-age=86400, public");
@@ -68,7 +68,7 @@ class StaticFilesMixin_CacheControl_Test extends TestBase {
 
 	@Test void a03_cacheControlOnHeadRequest() throws Exception {
 		// HEAD must mirror the GET's headers verbatim — Cache-Control included.
-		c.head("/static/javadoc.css")
+		c.head("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().is("")

@@ -127,8 +127,8 @@ class ViewDef_Pill_Validate_Test extends TestBase {
 		var records = new CopyOnWriteArrayList<LogRecord>();
 		var handler = new Handler() {
 			@Override public void publish(LogRecord r) { records.add(r); }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* no buffering to flush; records() is capture-only */ }
+			@Override public void close() { /* nothing to release; the handler is removed in the finally below */ }
 		};
 		log.addHandler(handler);
 		try {

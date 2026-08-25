@@ -16,7 +16,7 @@
  */
 
 /*
- * nested-popup-browser.cjs - real-browser prober for the shared popup layer stack (TODO-445h, h3/h4/h5).
+ * nested-popup-browser.cjs - real-browser prober for the shared popup layer stack.
  *
  * Never runs in a default build.  Driven by NestedPopup_BrowserTest under `mvn -Pjs-tests`; see that class's javadoc
  * and the profile comment in this module's pom.xml.
@@ -37,17 +37,20 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
 	const tick = () => new Promise(r => setTimeout(r, 0));
 	function drain() { while (init.topLayer()) init.popLayer(); }
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function makeRow(rowId) {
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		if (rowId != null) tr.setAttribute('data-juneau-row-id', rowId);
+		if (rowId != null) tr.dataset.juneauRowId = rowId;
 		const td = document.createElement('td');
 		td.className = 'juneau-view-actions-cell';
 		tr.appendChild(td);
@@ -68,7 +71,7 @@ const PROBE = async function () {
 			onBody: ui.backdrop.parentElement === document.body,
 			positionFixed: ui.backdrop.style.position === 'fixed',
 			hasZIndex: !!ui.backdrop.style.zIndex,
-			dataLayer0: ui.backdrop.getAttribute('data-juneau-layer') === '0',
+			dataLayer0: ui.backdrop.dataset.juneauLayer === '0',
 			focusTrapped: ui.backdrop.contains(document.activeElement)
 		};
 		drain();
@@ -106,7 +109,7 @@ const PROBE = async function () {
 		out.outsideClick = {
 			popoverDismissed: !document.body.contains(pop),
 			modalSurvives: init.dialogLayerCount() === 1,
-			topIsDialogAfter: init.topLayer() && init.topLayer().kind === 'dialog'
+			topIsDialogAfter: init.topLayer()?.kind === 'dialog'
 		};
 		drain();
 	}
@@ -147,7 +150,7 @@ const PROBE = async function () {
 			max: init.MAX_DIALOG_DEPTH,
 			atCap: atCap,
 			afterThirdPush: init.dialogLayerCount(),
-			refusalInTopDialog: !!(top && top.el.querySelector('.juneau-view-dialog-depth-refusal'))
+			refusalInTopDialog: !!top?.el.querySelector('.juneau-view-dialog-depth-refusal')
 		};
 		drain();
 	}
@@ -182,7 +185,7 @@ const PROBE = async function () {
 		table.style.tableLayout = 'fixed';
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		tr.setAttribute('data-juneau-row-id', 'INC-G');
+		tr.dataset.juneauRowId = 'INC-G';
 		const filler = document.createElement('td');   // pushes the actions cell to the far right
 		filler.style.width = '1080px';
 		filler.textContent = 'wide';
@@ -236,4 +239,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

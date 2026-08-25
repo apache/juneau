@@ -119,19 +119,6 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 		return reader;
 	}
 
-	private void capture(int b) {
-		totalLength++;
-		if (buffer.size() < cap)
-			buffer.write(b);
-	}
-
-	private void capture(byte[] b, int off, int len) {
-		totalLength += len;
-		var room = cap - buffer.size();
-		if (room > 0)
-			buffer.write(b, off, Math.min(room, len));
-	}
-
 	private final class TeeServletInputStream extends ServletInputStream {
 
 		private final ServletInputStream delegate;
@@ -164,5 +151,20 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 
 		@Override
 		public void setReadListener(ReadListener readListener) { delegate.setReadListener(readListener); }
+
+		// Only this tee touches the outer request's capture buffer, so these helpers live here rather than on the
+		// outer class.
+		private void capture(int b) {
+			totalLength++;
+			if (buffer.size() < cap)
+				buffer.write(b);
+		}
+
+		private void capture(byte[] b, int off, int len) {
+			totalLength += len;
+			var room = cap - buffer.size();
+			if (room > 0)
+				buffer.write(b, off, Math.min(room, len));
+		}
 	}
 }

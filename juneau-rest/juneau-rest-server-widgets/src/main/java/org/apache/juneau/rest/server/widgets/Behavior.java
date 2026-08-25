@@ -23,8 +23,8 @@ package org.apache.juneau.rest.server.widgets;
  * 	<li class='jc'>{@link #LINK} &mdash; navigate to a same-origin {@code href}.
  * 	<li class='jc'>{@link #SAFE} &mdash; dispatch a format-validated client event token; the toolkit interprets none
  * 		(the host app listens and acts).
- * 	<li class='jc'>{@link #MENU} &mdash; open an attached single-level menu.  The menu manager ships with
- * 		{@code [TODO-445h]}; until then the trigger is disabled and the list is omitted (no fake disclosure).
+ * 	<li class='jc'>{@link #MENU} &mdash; open an attached single-level menu.  The menu manager has not shipped
+ * 		yet; until it lands, the trigger is disabled and the list is omitted (no fake disclosure).
  * </ul>
  *
  * @since 10.0.0
@@ -37,6 +37,6 @@ public enum Behavior {
 	/** Dispatch a format-validated client-safe event token (host-interpreted). */
 	SAFE,
 
-	/** Open an attached single-level menu (menu manager arrives with {@code [TODO-445h]}). */
+	/** Open an attached single-level menu (menu manager has not shipped yet). */
 	MENU
 }

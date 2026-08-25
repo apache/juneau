@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the TODO-445n table-overflow-discipline JS helpers ({@code ensureTableScroll} /
+ * Always-on coverage for the table-overflow-discipline JS helpers ({@code ensureTableScroll} /
  * {@code unwrapTableScroll} - the DT1 "Approach B" wrap).  Source-shape always runs; the behavioral Node harness
  * runs when {@code node} is on {@code PATH} (skipped otherwise - no {@code -Pjs-tests} required).
  *

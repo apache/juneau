@@ -75,6 +75,17 @@
 	 */
 	--jc-dialog-z: 1000;
 	--jc-layer-step: 10;
+	/*
+	 * Card grid tokens (merged here to avoid a duplicate :root selector - see the card-grid rule block below for
+	 * the full description).  Neutral greys so a grid is legible without a theme; a consumer stylesheet (or
+	 * console-ui chrome.css) may override the tokens.
+	 */
+	--jc-card-bg: #ffffff;
+	--jc-card-border: #dddddd;
+	--jc-card-radius: 6px;
+	--jc-card-gap: 1rem;
+	--jc-card-min: 280px;
+	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .jc-progress {
@@ -1365,7 +1376,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .jc-cell-popover-value {
 	flex: 1 1 auto;
 	min-width: 0;
-	word-break: break-word;
+	overflow-wrap: anywhere;
 }
 
 /*
@@ -1376,15 +1387,9 @@ table.dataTable thead .sorting_desc_disabled:after {
  * tokens.  The grid's minmax() floor reads --jc-card-min, which the emitter overrides inline per-grid from
  * CardGrid.minCardPx when set; there is deliberately no --jc-card-status-error token - the error status chip is
  * distinguished by a heavier border + bold weight, not a color, so it reads in any theme.
+ * The token values themselves are declared once, on the shared :root block near the top of this file (avoids a
+ * duplicate :root selector).
  */
-:root {
-	--jc-card-bg: #ffffff;
-	--jc-card-border: #dddddd;
-	--jc-card-radius: 6px;
-	--jc-card-gap: 1rem;
-	--jc-card-min: 280px;
-	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
 
 .juneau-view-card-grid {
 	display: grid;
@@ -1496,5 +1501,5 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-card-field dd {
 	margin: 0;
 	min-width: 0;
-	word-break: break-word;
+	overflow-wrap: anywhere;
 }

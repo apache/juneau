@@ -82,6 +82,9 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 	}
 
 	@Response(headers = @Header(name = "X-Bar", schema = @Schema(type = "string")))
+	@SuppressWarnings({
+		"java:S114" // Fix_-prefixed fixture-naming convention (see Test Helper Class Naming Convention).
+	})
 	public interface Fix_ResponseIfc {
 		// The method-level @Schema on getBar() (distinct from the interface-level @Response(headers=@Header(
 		// schema=...)) above) exercises the "rstream(ap.find(Schema.class, ecmi))" forEach-lambda body at

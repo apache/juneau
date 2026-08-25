@@ -76,10 +76,14 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 	}
 
 	@Test void a04_fillDetailSlots_usesTextContentOnly_neverInnerHTML() throws Exception {
-		var fnBody = functionBody(cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString(),
-			"function fillDetailSlots(");
-		assertTrue(fnBody.contains(".textContent"), fnBody);
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fnBody = functionBody(body, "function fillDetailSlots(");
+		assertTrue(fnBody.contains("paintDetailFieldSlot(slot, map)"), fnBody);
+		assertTrue(fnBody.contains("paintDetailTitleSlot(el, map)"), fnBody);
 		assertFalse(fnBody.contains("innerHTML"), fnBody);
+		var titleFn = functionBody(body, "function paintDetailTitleSlot(");
+		assertTrue(titleFn.contains("el.textContent"), titleFn);
+		assertFalse(titleFn.contains("innerHTML"), titleFn);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -91,7 +95,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var fnBody = functionBody(body, "function expandDetailRow(");
 		assertTrue(fnBody.contains("tpl.content.cloneNode(true)"), fnBody);
 		assertTrue(fnBody.contains("juneau-view-detail-panel"), fnBody);
-		assertTrue(fnBody.contains("\"data-testid\", \"detail-panel\""), fnBody);
+		assertTrue(fnBody.contains("panel.dataset.testid = \"detail-panel\""), fnBody);
 		assertFalse(fnBody.contains("innerHTML"), fnBody);
 	}
 
@@ -99,15 +103,20 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function initDetailsExpander(");
 		assertTrue(fnBody.contains("table.addEventListener(\"click\""), fnBody);
-		assertTrue(fnBody.contains("tr.juneau-view-detail-row"), fnBody);
+		assertTrue(fnBody.contains("toggleDetailRow("), fnBody);
+		var toggleFn = functionBody(body, "function toggleDetailRow(");
+		assertTrue(toggleFn.contains("tr.juneau-view-detail-row"), toggleFn);
 	}
 
 	@Test void b03_initDetailsExpander_usesDataTablesNativeChildRowApi() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var initFn = functionBody(body, "function initDetailsExpander(");
+		var toggleFn = functionBody(body, "function toggleDetailRow(");
+		var collapseFn = functionBody(body, "function handleDetailSafeCollapseClick(");
 		var expandFn = functionBody(body, "function expandDetailRow(");
-		assertTrue(initFn.contains("row.child.isShown()"), initFn);
-		assertTrue(initFn.contains("row.child.hide()"), initFn);
+		assertTrue(toggleFn.contains("row.child.isShown()"), toggleFn);
+		assertTrue(toggleFn.contains("row.child.hide()"), toggleFn);
+		assertTrue(collapseFn.contains("row.child.hide()"), collapseFn);
 		assertTrue(expandFn.contains("row.child(panel).show()"), expandFn);
 		assertTrue(initFn.contains("ctx.dataTable"), initFn);
 		assertTrue(expandFn.contains("encodeURIComponent") || body.contains("substituteDetailUrl"), expandFn);
@@ -115,11 +124,12 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 
 	@Test void b04_initDetailsExpander_togglesAnOpenMarkerClass_forTheCssGlyphOnly() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var initFn = functionBody(body, "function initDetailsExpander(");
+		var toggleFn = functionBody(body, "function toggleDetailRow(");
+		var collapseFn = functionBody(body, "function handleDetailSafeCollapseClick(");
 		var expandFn = functionBody(body, "function expandDetailRow(");
 		assertTrue(expandFn.contains("tr.classList.add(\"juneau-view-detail-open\")"), expandFn);
-		assertTrue(initFn.contains("tr.classList.remove(\"juneau-view-detail-open\")")
-			|| initFn.contains("parentTr.classList.remove(\"juneau-view-detail-open\")"), initFn);
+		assertTrue(toggleFn.contains("tr.classList.remove(\"juneau-view-detail-open\")"), toggleFn);
+		assertTrue(collapseFn.contains("parentTr.classList.remove(\"juneau-view-detail-open\")"), collapseFn);
 	}
 
 	@Test void b05_createdRow_marksExpandableRows_whenTemplatePresent() throws Exception {
@@ -131,23 +141,26 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 
 	@Test void b06_initTable_onlyWiresTheExpanderWhenTemplatePresent() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var initBody = functionBody(body, "function beginInitTable(");
-		assertTrue(initBody.contains("if (findRowDetailTemplate(table))"), initBody);
-		assertTrue(initBody.contains("initDetailsExpander(table, ctx, viewDef)"), initBody);
+		assertTrue(functionBody(body, "function beginInitTable(").contains("initTableWidgets("), body);
+		var widgets = functionBody(body, "function initTableWidgets(");
+		assertTrue(widgets.contains("if (findRowDetailTemplate(table))"), widgets);
+		assertTrue(widgets.contains("initDetailsExpander(table, ctx, viewDef)"), widgets);
 	}
 
 	@Test void b07_actionSubmitUsesParentTr_notJson() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var fnBody = functionBody(body, "function initDetailsExpander(");
+		var fnBody = functionBody(body, "function handleDetailActionRefClick(");
 		assertTrue(fnBody.contains("submitRowAction(action, table, parentTr, ctx)"), fnBody);
-		assertTrue(fnBody.contains("panel._juneauParentTr"), fnBody);
+		assertTrue(fnBody.contains("panel?._juneauParentTr"), fnBody);
 	}
 
 	@Test void b08_constructTable_clearsCoalesceMapOnDraw() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function constructTable(");
-		assertTrue(fn.contains("draw.dt"), fn);
-		assertTrue(fn.contains("_detailInflight"), fn);
+		assertTrue(fn.contains("bindDetailInflightDrawGuards("), fn);
+		var guards = functionBody(body, "function bindDetailInflightDrawGuards(");
+		assertTrue(guards.contains("draw.dt"), guards);
+		assertTrue(guards.contains("_detailInflight"), guards);
 	}
 
 	@Test void b09_assembleFullColumnArray_prependsDedicatedExpanderColumn() throws Exception {

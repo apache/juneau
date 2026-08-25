@@ -37,6 +37,9 @@ import org.apache.juneau.commons.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class CardFieldList implements CardBody {
 
 	/** The frozen contract version for the refresh GET envelope and the stamped {@code data-juneau-card-contract}. */
@@ -118,6 +121,12 @@ public class CardFieldList implements CardBody {
 	public void validate() {
 		if (columns < 1)
 			throw iaex("CardFieldList columns must be >= 1.");
+		validateFields();
+		validateRefresh();
+	}
+
+	/** Validates {@link #fields}: at least one, non-null, and unique data keys. */
+	private void validateFields() {
 		if (fields == null || fields.isEmpty())
 			throw iaex("CardFieldList must declare at least one field.");
 		var keys = new HashSet<String>();
@@ -129,14 +138,18 @@ public class CardFieldList implements CardBody {
 			if (!keys.add(f.data))
 				throw iaex("CardFieldList duplicate field data key '%s'.", f.data);
 		}
+	}
+
+	/** Validates the {@link #refreshEndpoint}/{@link #pollIntervalMs} pairing and clamps the poll interval. */
+	private void validateRefresh() {
 		if (pollIntervalMs != null && (refreshEndpoint == null || refreshEndpoint.isBlank()))
 			throw iaex("CardFieldList pollIntervalMs requires a refreshEndpoint.");
-		if (refreshEndpoint != null && !refreshEndpoint.isBlank()) {
-			if (!SafePathTemplate.isNonTemplatedPath(refreshEndpoint))
-				throw iaex("CardFieldList refreshEndpoint must be a same-origin, non-templated path (no absolute URL, "
-					+ "'//', scheme, '..', or '{…}' placeholder): %s", refreshEndpoint);
-			if (pollIntervalMs != null)
-				pollIntervalMs = (int) SafePathTemplate.clampPollInterval(pollIntervalMs);
-		}
+		if (refreshEndpoint == null || refreshEndpoint.isBlank())
+			return;
+		if (!SafePathTemplate.isNonTemplatedPath(refreshEndpoint))
+			throw iaex("CardFieldList refreshEndpoint must be a same-origin, non-templated path (no absolute URL, "
+				+ "'//', scheme, '..', or '{…}' placeholder): %s", refreshEndpoint);
+		if (pollIntervalMs != null)
+			pollIntervalMs = (int) SafePathTemplate.clampPollInterval(pollIntervalMs);
 	}
 }

@@ -71,6 +71,9 @@ import org.apache.juneau.commons.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class CalendarEvent {
 
 	/** Stable id; required, non-blank.  Used for de-duplication and coalesce keys. */
@@ -357,10 +360,9 @@ public class CalendarEvent {
 		if (bad != null)
 			throw iaex("CalendarEvent '%s' is malformed: %s", id, bad);
 		var startDate = civilStart();
-		if (categoryId != null && !categoryId.isBlank()) {
-			if (knownCategoryIds == null || !knownCategoryIds.contains(categoryId))
-				throw iaex("CalendarEvent '%s' categoryId '%s' is not a declared category.", id, categoryId);
-		}
+		if (categoryId != null && !categoryId.isBlank()
+				&& (knownCategoryIds == null || !knownCategoryIds.contains(categoryId)))
+			throw iaex("CalendarEvent '%s' categoryId '%s' is not a declared category.", id, categoryId);
 		if (href != null && !href.isBlank() && !SafePathTemplate.isSafeDocumentUrl(href))
 			throw iaex("CalendarEvent '%s' href must be a same-origin document URL: %s", id, href);
 		if (initialYear != null && initialMonth != null) {

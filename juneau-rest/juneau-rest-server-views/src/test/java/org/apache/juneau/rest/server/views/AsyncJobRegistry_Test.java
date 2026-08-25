@@ -20,13 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Unit test for the in-memory {@link AsyncJobRegistry} (design doc §6.3; {@code TODO-425}, Q2).
+ * Unit test for the in-memory {@link AsyncJobRegistry} (design doc §6.3, Q2).
  *
  * <p>
  * Pins the load-bearing server-side controls: the unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit
@@ -71,11 +70,12 @@ class AsyncJobRegistry_Test extends TestBase {
 		var r = registry(new TestClock(T0));
 		// Settle each job as it is minted so the concurrency cap never blocks the sample (a terminal job frees its
 		// running slot); we are pinning id uniqueness, not the cap (that is c01).
-		var seen = Stream.generate(() -> {
-				var job = r.create();
-				job.complete(ActionResult.success(null));
-				return job.id();
-			}).limit(50).collect(Collectors.toSet());
+		var seen = new HashSet<String>();
+		for (var i = 0; i < 50; i++) {
+			var job = r.create();
+			job.complete(ActionResult.success(null));
+			seen.add(job.id());
+		}
 		assertEquals(50, seen.size(), "minted capability ids must be unique (SecureRandom)");
 	}
 

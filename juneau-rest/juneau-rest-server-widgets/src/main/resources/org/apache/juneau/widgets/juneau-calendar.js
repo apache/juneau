@@ -178,7 +178,8 @@
 
 	/** The epoch day of a "yyyy-MM-dd" civil key. */
 	function keyToEpochDay(key) {
-		return toEpochDay(parseInt(key.slice(0, 4), 10), parseInt(key.slice(5, 7), 10), parseInt(key.slice(8, 10), 10));
+		return toEpochDay(Number.parseInt(key.slice(0, 4), 10), Number.parseInt(key.slice(5, 7), 10),
+			Number.parseInt(key.slice(8, 10), 10));
 	}
 
 	/** The civil date key of an epoch day. */
@@ -207,8 +208,8 @@
 		const m = /^(\d{2}):(\d{2})/.exec(s.slice(11));
 		if (!m)
 			return null;
-		const h = parseInt(m[1], 10);
-		const min = parseInt(m[2], 10);
+		const h = Number.parseInt(m[1], 10);
+		const min = Number.parseInt(m[2], 10);
 		return (h > 23 || min > 59) ? null : h * 60 + min;
 	}
 
@@ -339,7 +340,7 @@
 			return false;
 		if (url.indexOf("://") >= 0)
 			return false;
-		if (url.slice(0, 2) === "//")
+		if (url.startsWith("//"))
 			return false;
 		const colon = url.indexOf(":");
 		const slash = url.indexOf("/");
@@ -354,14 +355,18 @@
 
 	/** Substitutes {year}/{month} (1-based, unpadded integers) into a same-origin path template. */
 	function substituteEndpoint(template, y, m) {
-		return template.replace(/\{year\}/g, String(y)).replace(/\{month\}/g, String(m));
+		return template.replaceAll(/\{year\}/g, String(y)).replaceAll(/\{month\}/g, String(m));
 	}
 
 	/** Compares two strings, null-safely, for a total sort order. */
 	function cmp(a, b) {
 		const x = a == null ? "" : a;
 		const y = b == null ? "" : b;
-		return x < y ? -1 : (x > y ? 1 : 0);
+		if (x < y)
+			return -1;
+		if (x > y)
+			return 1;
+		return 0;
 	}
 
 	/**
@@ -488,8 +493,7 @@
 	function readCategoryMap(root) {
 		const map = Object.create(null);
 		const items = root.querySelectorAll("[" + CAT_ATTR + "]");
-		for (let i = 0; i < items.length; i++) {
-			const el = items[i];
+		for (const el of items) {
 			if (el.getAttribute("role") === "columnheader")
 				continue;
 			const id = el.getAttribute(CAT_ATTR);
@@ -581,8 +585,8 @@
 	 * popup.  A null return is a LOAD-ORDER violation (juneau-views.js must be loaded first), reported loudly.
 	 */
 	function viewsLayerStack() {
-		const views = window.JuneauViews && window.JuneauViews.init;
-		return views && typeof views.pushLayer === "function" && typeof views.popLayer === "function" ? views : null;
+		const views = window.JuneauViews?.init;
+		return typeof views?.pushLayer === "function" && typeof views?.popLayer === "function" ? views : null;
 	}
 
 	/** Renders a visible inline error and paints an empty month (single attempt - no retry storm; design doc §5.15). */
@@ -601,8 +605,7 @@
 	/** Clears a prior inline error, if any. */
 	function clearError(state) {
 		const err = state.root.querySelector(".jc-cal-error");
-		if (err && err.parentNode)
-			err.parentNode.removeChild(err);
+		err?.remove();
 	}
 
 	/** Caches an (already-sanitized) event list as the month's data, then paints through the category filter. */
@@ -622,8 +625,8 @@
 		const grid = state.grid;
 		// Remove prior week rows (keep the weekday header row, the first [role=row]).
 		const weeks = grid.querySelectorAll(".jc-cal-week");
-		for (let i = 0; i < weeks.length; i++)
-			weeks[i].parentNode.removeChild(weeks[i]);
+		for (const week of weeks)
+			week.remove();
 
 		let row = null;
 		for (let i = 0; i < cells.length; i++) {
@@ -681,8 +684,8 @@
 		if (box && cell.inMonth) {
 			const dayEvents = eventsForDay(events, cell.key);
 			const capped = applyCap(dayEvents, state.maxPerDay);
-			for (let i = 0; i < capped.shown.length; i++)
-				box.appendChild(fillEventNode(document, capped.shown[i], state.categoryMap));
+			for (const shown of capped.shown)
+				box.appendChild(fillEventNode(document, shown, state.categoryMap));
 			// "+N more" counts ONLY what it actually hides: the chips over the cap plus any bar crossing this day
 			// that the week's lane budget could not seat.  A seated bar costs the day cell nothing.
 			const hidden = dayEvents.slice(capped.shown.length).concat(overflowBarsAt(segments, week, column));
@@ -725,8 +728,8 @@
 		const pop = document.createElement("div");
 		pop.setAttribute("class", "jc-cal-popover");
 		pop.setAttribute("role", "dialog");
-		for (let i = 0; i < hidden.length; i++)
-			pop.appendChild(fillEventNode(document, hidden[i], state.categoryMap));
+		for (const hiddenEvent of hidden)
+			pop.appendChild(fillEventNode(document, hiddenEvent, state.categoryMap));
 		state.root.appendChild(pop);
 		trigger.setAttribute("aria-expanded", "true");
 		state.popover = pop;
@@ -778,14 +781,14 @@
 		}).then(function (resp) {
 			if (!resp.ok)
 				throw new Error("HTTP " + resp.status);
-			const ct = resp.headers && resp.headers.get ? resp.headers.get("Content-Type") : null;
+			const ct = resp.headers?.get?.("Content-Type") ?? null;
 			if (ct && ct.indexOf("application/json") < 0)
 				throw new Error("non-JSON response");
 			return resp.json();
 		}).then(function (envelope) {
 			if (generation !== state.generation)
 				return; // a newer navigation superseded this fetch - drop.
-			if (!contractOk(envelope && envelope.contractVersion)) {
+			if (!contractOk(envelope?.contractVersion)) {
 				state.pendingFilterReset = false;   // a refused body is a FAILED navigation: preserve the filter.
 				showError(state, "Calendar data version mismatch.");
 				return;
@@ -820,8 +823,8 @@
 	function clearFilter(state) {
 		state.hiddenCategories = Object.create(null);
 		const toggles = state.root.querySelectorAll("[" + LEGEND_TOGGLE_ATTR + "]");
-		for (let i = 0; i < toggles.length; i++)
-			toggles[i].setAttribute("aria-pressed", "true");
+		for (const toggle of toggles)
+			toggle.setAttribute("aria-pressed", "true");
 	}
 
 	/** Navigates by a whole-month delta (or to today when delta is null), then reloads. */
@@ -831,8 +834,8 @@
 		if (delta === null) {
 			const t = civilKey(state.today);
 			if (t) {
-				state.year = parseInt(t.slice(0, 4), 10);
-				state.month = parseInt(t.slice(5, 7), 10);
+				state.year = Number.parseInt(t.slice(0, 4), 10);
+				state.month = Number.parseInt(t.slice(5, 7), 10);
 			}
 		} else {
 			let m = state.month + delta;
@@ -869,7 +872,7 @@
 				endpoint: root.getAttribute(ENDPOINT_ATTR),
 				view: root.getAttribute(VIEW_ATTR) || "month",
 				weekStart: root.getAttribute(WEEKSTART_ATTR) === "monday" ? "monday" : "sunday",
-				maxPerDay: parseInt(root.getAttribute(MAXPERDAY_ATTR), 10) || 3,
+				maxPerDay: Number.parseInt(root.getAttribute(MAXPERDAY_ATTR), 10) || 3,
 				grid: root.querySelector("[" + GRID_ATTR + "]"),
 				dayTemplate: root.querySelector("template[" + DAY_TEMPLATE_ATTR + "]"),
 				eventTemplate: root.querySelector("template[" + EVENT_TEMPLATE_ATTR + "]"),
@@ -886,13 +889,13 @@
 			};
 			// The lane budget is DERIVED (never author-set): the server stamps it, and an absent/garbled attribute
 			// falls back to the same maxPerDay-clamped-to-8 formula rather than to an author value.
-			const stamped = parseInt(root.getAttribute(LANEBUDGET_ATTR), 10);
+			const stamped = Number.parseInt(root.getAttribute(LANEBUDGET_ATTR), 10);
 			state.laneBudget = stamped > 0 ? Math.min(stamped, MAX_LANES_PER_WEEK) : laneBudgetFor(state.maxPerDay);
 			const tk = civilKey(today);
-			state.year = tk ? parseInt(tk.slice(0, 4), 10) : fromEpochDay(0).y;
-			state.month = tk ? parseInt(tk.slice(5, 7), 10) : 1;
+			state.year = tk ? Number.parseInt(tk.slice(0, 4), 10) : fromEpochDay(0).y;
+			state.month = tk ? Number.parseInt(tk.slice(5, 7), 10) : 1;
 			// Prefer the server-painted seed month's year/month if a seed is present.
-			if (state.seed && typeof state.seed.year === "number" && typeof state.seed.month === "number") {
+			if (typeof state.seed?.year === "number" && typeof state.seed?.month === "number") {
 				state.year = state.seed.year;
 				state.month = state.seed.month;
 			}
@@ -913,7 +916,7 @@
 		try {
 			return JSON.parse(s.textContent);
 		} catch (e) {
-			console.warn("juneau-calendar: unparseable seed sidecar");
+			console.warn("juneau-calendar: unparseable seed sidecar", e);
 			return null;
 		}
 	}
@@ -938,8 +941,7 @@
 	 */
 	function wireLegend(root, state) {
 		const toggles = root.querySelectorAll("[" + LEGEND_TOGGLE_ATTR + "]");
-		for (let i = 0; i < toggles.length; i++) {
-			const btn = toggles[i];
+		for (const btn of toggles) {
 			const cat = btn.getAttribute(CAT_ATTR);
 			if (!cat)
 				continue;
@@ -958,8 +960,8 @@
 	/** Scans and initializes every calendar instance on the page. */
 	function initAll(scope) {
 		const nodes = (scope || document).querySelectorAll("[" + MARKER_ATTR + "]");
-		for (let i = 0; i < nodes.length; i++)
-			initInstance(nodes[i]);
+		for (const node of nodes)
+			initInstance(node);
 	}
 
 	// Expose the pure core (for Node harness coverage) and the DOM entry points.

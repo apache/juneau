@@ -17,7 +17,7 @@
 
 /*
  * modal-result.cjs - real-browser prober for the juneau-views.js declarative-modal + typed-action-result +
- * in-flight-row contract (TODO-416/417).
+ * in-flight-row contract.
  *
  * Never runs in a default build.  It is driven by ModalResult_BrowserTest, which itself only runs under
  * `mvn -Pjs-tests`; see that class's javadoc and the profile comment in this module's pom.xml.
@@ -41,7 +41,7 @@ const { chromium } = require('playwright');
 /* Runs inside the page.  Async: the settle/dialog paths read the response body via promises. */
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
@@ -49,19 +49,25 @@ const PROBE = async function () {
 
 	const tick = () => new Promise(r => setTimeout(r, 0));
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function rendered(el) {
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
 		return r.width > 0 && r.height > 0;
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	// A minimal row with an actions cell and a trigger button (setRowInFlight disables the trigger).
 	function makeRow(rowId) {
 		const table = document.createElement('table');
-		table.setAttribute('data-juneau-view', 'v');
+		table.dataset.juneauView = 'v';
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		if (rowId != null) tr.setAttribute('data-juneau-row-id', rowId);
+		if (rowId != null) tr.dataset.juneauRowId = rowId;
 		const td = document.createElement('td');
 		td.className = 'juneau-view-actions-cell';
 		const trigger = document.createElement('button');
@@ -74,6 +80,9 @@ const PROBE = async function () {
 		return { table: table, tr: tr, td: td, trigger: trigger };
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	// A fake fetch Response with a synchronous headers.get and an async text().
 	function resp(o) {
 		return {
@@ -88,10 +97,10 @@ const PROBE = async function () {
 		const b = dom.td.querySelector('.juneau-view-action-outcome');
 		return {
 			visible: rendered(b),
-			state: b ? b.getAttribute('data-state') : null,
+			state: b ? b.dataset.state : null,
 			role: b ? b.getAttribute('role') : null,
 			text: b ? b.textContent : null,
-			inflight: dom.tr.hasAttribute('data-juneau-inflight'),
+			inflight: 'juneauInflight' in dom.tr.dataset,
 			triggerDisabled: !!dom.trigger.disabled,
 			pollingFrozen: init.hasInFlightRow(dom.table)
 		};
@@ -138,19 +147,19 @@ const PROBE = async function () {
 	out.transport421 = await settle(resp({ ok: false, status: 421, body: '' }));
 
 	// ---- Merge re-render marked the row ----
-	{
+	async function checkMergeMarksRow() {
 		const dom = makeRow('INC-9');
 		const ctx = { mergeRow: function (tr, row) { ctx._row = row; } };
 		init.settleActionResponse(resp({ ok: true, status: 200,
 			body: JSON.stringify({ contractVersion: V, outcome: 'success', row: { id: 'INC-9', status: 's' } }) }),
 			{ id: 'ack', onSuccess: 'mergeRow' }, dom.table, dom.tr, ctx);
 		await tick(); await tick();
-		out.mergeMarkedRow = dom.tr.getAttribute('data-juneau-row-merged');
+		out.mergeMarkedRow = dom.tr.dataset.juneauRowMerged;
 		out.mergeCtxRow = ctx._row;
 	}
 
 	// ---- Modal overlay + typed-field confirmation via textContent (XSS-safe) ----
-	{
+	async function checkModalOverlay() {
 		const dom = makeRow('INC-1');
 		const evil = '<img src=x onerror=alert(1)>';
 		const modal = {
@@ -183,7 +192,7 @@ const PROBE = async function () {
 			return Promise.resolve(resp({ ok: true, status: 200,
 				body: JSON.stringify({ contractVersion: V, outcome: 'success' }) }));
 		};
-		dom.table.setAttribute('data-juneau-csrf', 'tok-xyz');
+		dom.table.dataset.juneauCsrf = 'tok-xyz';
 		ui.confirmBtn.click();
 		await tick(); await tick();
 		window.fetch = realFetch;
@@ -195,7 +204,7 @@ const PROBE = async function () {
 	}
 
 	// ---- FormDef inputs: typed textarea/text via createElement + .value; XSS prefill stays inert ----
-	{
+	async function checkFormDefInputs() {
 		const dom = makeRow('QABCDEF');
 		const evil = '<img src=x onerror=alert(1)>';
 		const modal = {
@@ -235,7 +244,7 @@ const PROBE = async function () {
 			return Promise.resolve(resp({ ok: true, status: 200,
 				body: JSON.stringify({ contractVersion: V, outcome: 'success' }) }));
 		};
-		dom.table.setAttribute('data-juneau-csrf', 'tok-xyz');
+		dom.table.dataset.juneauCsrf = 'tok-xyz';
 		ui.confirmBtn.click();
 		await tick(); await tick();
 		window.fetch = realFetch;
@@ -243,6 +252,10 @@ const PROBE = async function () {
 		if (fetchCalls.length > 0)
 			out.form.submitBody = fetchCalls[0].opts.body;
 	}
+
+	await checkMergeMarksRow();
+	await checkModalOverlay();
+	await checkFormDefInputs();
 
 	return out;
 };
@@ -272,6 +285,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

@@ -16,8 +16,8 @@
  */
 
 /*
- * config-persistence.cjs - real-browser prober for the juneau-config.js client-side persistence SPI (TODO-444,
- * slice 2): the localStorage provider (real Web Storage, not a Node shim) and the server-persisted provider's
+ * config-persistence.cjs - real-browser prober for the juneau-config.js client-side persistence SPI: the
+ * localStorage provider (real Web Storage, not a Node shim) and the server-persisted provider's
  * transport envelope (a stubbed window.fetch).
  *
  * Never runs in a default build.  It is driven by ConfigPersistence_BrowserTest, which itself only runs under
@@ -46,15 +46,18 @@ const { chromium } = require('playwright');
  */
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const out = { hasConfig: !!(NS && NS.config && NS.persistence) };
+	const out = { hasConfig: !!(NS?.config && NS.persistence) };
 	if (!out.hasConfig) return out;
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
+	// break every caller below.
 	function makeTable(pageId, viewId, savedViewsBase) {
 		const page = document.createElement('div');
-		page.setAttribute('data-juneau-page', pageId);
-		if (savedViewsBase != null) page.setAttribute('data-juneau-saved-views', savedViewsBase);
+		page.dataset.juneauPage = pageId;
+		if (savedViewsBase != null) page.dataset.juneauSavedViews = savedViewsBase;
 		const table = document.createElement('table');
-		table.setAttribute('data-juneau-view', viewId);
+		table.dataset.juneauView = viewId;
 		page.appendChild(table);
 		document.body.appendChild(page);
 		return table;
@@ -125,7 +128,7 @@ const PROBE = async function () {
 	const tableE = makeTable('serverPage', 'serverView', '/ctx/juneau-saved-views');
 	// writeRequest reads the token straight off the table (mirrors juneau-views.js's own resolveCsrfToken) - a
 	// real host stamps this from its own CSRF-issuance story, out of scope for this prober.
-	tableE.setAttribute('data-juneau-csrf', 'tok-123');
+	tableE.dataset.juneauCsrf = 'tok-123';
 
 	calls.length = 0;
 	await NS.persistence.list(tableE);
@@ -186,6 +189,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

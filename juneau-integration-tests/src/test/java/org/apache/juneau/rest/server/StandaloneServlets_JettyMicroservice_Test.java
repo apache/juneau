@@ -94,7 +94,7 @@ class StandaloneServlets_JettyMicroservice_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_staticFilesServlet() throws Exception {
-		var resp = get("/static/javadoc.css");
+		var resp = get("/static/themes/devops.css");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),
 			"static file body should contain the Apache license header");

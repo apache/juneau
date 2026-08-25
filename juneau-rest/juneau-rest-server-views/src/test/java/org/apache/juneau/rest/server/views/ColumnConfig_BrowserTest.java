@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Opt-in Chromium XSS canary for the View-tab chooser (TODO-444, slice 6).  Always-on source-shape + Node
+ * Opt-in Chromium XSS canary for the View-tab chooser.  Always-on source-shape + Node
  * coverage lives in {@link ViewsJs_ConfigChooser_Test}; this class proves the same {@code textContent} mandate
  * against a real DOM (an {@code &lt;img onerror&gt;} payload must not execute).
  *

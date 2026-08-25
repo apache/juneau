@@ -36,6 +36,9 @@ import org.apache.juneau.commons.http.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,icon,tooltip,behavior,href,safe,badge,menu")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class HeaderAction {
 
 	/** The client-safe token charset: lowercase letter, then lowercase / digit / hyphen, max 64 chars. */
@@ -155,43 +158,52 @@ public class HeaderAction {
 		if (behavior == null)
 			throw iaex("HeaderAction '%s' behavior must not be null.", id);
 		switch (behavior) {
-			case LINK -> {
-				if (href == null || href.isBlank())
-					throw iaex("HeaderAction '%s' LINK requires a same-origin href.", id);
-				if (!SafePathTemplate.isSameOriginPath(href))
-					throw iaex("HeaderAction '%s' href must be a same-origin path (no absolute URL, '//', scheme, "
-						+ "'..', 'data:', or 'javascript:'): %s", id, href);
-				if (safe != null)
-					throw iaex("HeaderAction '%s' LINK must not declare a safe token.", id);
-				if (menu != null)
-					throw iaex("HeaderAction '%s' LINK must not declare a menu.", id);
-			}
-			case SAFE -> {
-				if (safe == null || !SAFE_TOKEN.matcher(safe).matches())
-					throw iaex("HeaderAction '%s' SAFE token must match ^[a-z][a-z0-9-]{0,63}$: %s", id, safe);
-				if (href != null)
-					throw iaex("HeaderAction '%s' SAFE must not declare an href.", id);
-				if (menu != null)
-					throw iaex("HeaderAction '%s' SAFE must not declare a menu.", id);
-			}
-			case MENU -> {
-				if (menu == null || menu.isEmpty())
-					throw iaex("HeaderAction '%s' MENU requires a non-empty menu.", id);
-				if (href != null)
-					throw iaex("HeaderAction '%s' MENU must not declare an href.", id);
-				if (safe != null)
-					throw iaex("HeaderAction '%s' MENU must not declare a safe token.", id);
-				var ids = new HashSet<String>();
-				for (var mi : menu) {
-					if (mi == null)
-						throw iaex("HeaderAction '%s' menu item must not be null.", id);
-					mi.validate();
-					if (!mi.isDivider() && !ids.add(mi.id))
-						throw iaex("HeaderAction '%s' duplicate menu item id '%s'.", id, mi.id);
-				}
-			}
+			case LINK -> validateLink();
+			case SAFE -> validateSafe();
+			case MENU -> validateMenu();
 		}
 		if (badge != null)
 			badge.validate();
+	}
+
+	/** Validates the {@link Behavior#LINK}-only shape: a same-origin href, and no safe token/menu. */
+	private void validateLink() {
+		if (href == null || href.isBlank())
+			throw iaex("HeaderAction '%s' LINK requires a same-origin href.", id);
+		if (!SafePathTemplate.isSameOriginPath(href))
+			throw iaex("HeaderAction '%s' href must be a same-origin path (no absolute URL, '//', scheme, "
+				+ "'..', 'data:', or 'javascript:'): %s", id, href);
+		if (safe != null)
+			throw iaex("HeaderAction '%s' LINK must not declare a safe token.", id);
+		if (menu != null)
+			throw iaex("HeaderAction '%s' LINK must not declare a menu.", id);
+	}
+
+	/** Validates the {@link Behavior#SAFE}-only shape: a format-valid safe token, and no href/menu. */
+	private void validateSafe() {
+		if (safe == null || !SAFE_TOKEN.matcher(safe).matches())
+			throw iaex("HeaderAction '%s' SAFE token must match ^[a-z][a-z0-9-]{0,63}$: %s", id, safe);
+		if (href != null)
+			throw iaex("HeaderAction '%s' SAFE must not declare an href.", id);
+		if (menu != null)
+			throw iaex("HeaderAction '%s' SAFE must not declare a menu.", id);
+	}
+
+	/** Validates the {@link Behavior#MENU}-only shape: a non-empty menu, no href/safe token, and each menu item. */
+	private void validateMenu() {
+		if (menu == null || menu.isEmpty())
+			throw iaex("HeaderAction '%s' MENU requires a non-empty menu.", id);
+		if (href != null)
+			throw iaex("HeaderAction '%s' MENU must not declare an href.", id);
+		if (safe != null)
+			throw iaex("HeaderAction '%s' MENU must not declare a safe token.", id);
+		var ids = new HashSet<String>();
+		for (var mi : menu) {
+			if (mi == null)
+				throw iaex("HeaderAction '%s' menu item must not be null.", id);
+			mi.validate();
+			if (!mi.isDivider() && !ids.add(mi.id))
+				throw iaex("HeaderAction '%s' duplicate menu item id '%s'.", id, mi.id);
+		}
 	}
 }

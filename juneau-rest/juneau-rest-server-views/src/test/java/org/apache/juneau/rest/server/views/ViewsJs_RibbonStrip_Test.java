@@ -104,12 +104,14 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 		var generic = bodyOf(viewsJs(), "buildRibbonStrip");
 		// Title borrowing + hiding, per-expand id minting, the insertion point, and u's bar-slot relocate are DETAIL
 		// concerns; the {id, label, pane} model cannot express them and the generic builder must not learn them.
-		assertTrue(detail.contains(".juneau-view-detail-section-title"), detail);
-		assertTrue(detail.contains("titleEl.hidden = true"), detail);
+		var item = bodyOf(viewsJs(), "buildDetailStripItem");
+		var insert = bodyOf(viewsJs(), "insertDetailStrip");
+		assertTrue(item.contains(".juneau-view-detail-section-title"), item);
+		assertTrue(item.contains("titleEl.hidden = true"), item);
 		assertTrue(detail.contains("++detailStripSeq"), detail);
 		assertTrue(detail.contains("juneau-detail-tab-\" + seq"), detail);
 		assertTrue(detail.contains("juneau-detail-pane-\" + seq"), detail);
-		assertTrue(detail.contains(".juneau-view-detail-header"), detail);
+		assertTrue(insert.contains(".juneau-view-detail-header"), insert);
 		assertTrue(detail.contains("relocateDetailBarSlot(panel, strip)"), detail);
 		// detailTabTargetIndex / activateDetailTab keep their historical names (the detail strip was the first
 		// caller) and ARE generic; what must not leak in is anything that only a row detail has.
@@ -148,7 +150,7 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 
 	@Test void a06_sectionedFormIsMutuallyExclusiveWithFlatFields() throws Exception {
 		var painter = bodyOf(viewsJs(), "appendDialogForm");
-		assertTrue(painter.contains("if (form.sections && form.sections.length)"), painter);
+		assertTrue(painter.contains("if (form.sections?.length)"), painter);
 		assertTrue(painter.contains("appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return;"), painter);
 	}
 

@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
 })
-public class RestClient_Headers_Test extends TestBase {
+class RestClient_Headers_Test extends TestBase {
 
 	public static class ABean {
 		public int f;

@@ -81,8 +81,8 @@
 	/** Finds the entry in `list` whose `.id === id`, or `null` when absent/list is empty. */
 	function findById(list, id) {
 		if (!list) return null;
-		for (let i = 0; i < list.length; i++)
-			if (list[i].id === id) return list[i];
+		for (const item of list)
+			if (item.id === id) return item;
 		return null;
 	}
 
@@ -93,18 +93,18 @@
 	 * `{tabId, subtabId}` (`subtabId` is `null` for a leaf tab) or `null` when `pageMeta` has no tabs at all.
 	 */
 	function resolveInitial(pageMeta, hash) {
-		const tabs = (pageMeta && pageMeta.tabs) || [];
+		const tabs = pageMeta?.tabs || [];
 		if (!tabs.length) return null;
 
 		const parsed = parseHash(hash);
 		let tab = null;
-		if (parsed && parsed.pageId === pageMeta.id && parsed.tabId)
+		if (parsed?.pageId === pageMeta.id && parsed?.tabId)
 			tab = findById(tabs, parsed.tabId);
 		if (!tab) tab = tabs[0];
 
 		const result = { tabId: tab.id, subtabId: null };
-		if (tab.subtabs && tab.subtabs.length) {
-			let sub = (parsed && parsed.subtabId) ? findById(tab.subtabs, parsed.subtabId) : null;
+		if (tab.subtabs?.length) {
+			let sub = parsed?.subtabId ? findById(tab.subtabs, parsed.subtabId) : null;
 			if (!sub) sub = tab.subtabs[0];
 			result.subtabId = sub.id;
 		}
@@ -154,8 +154,8 @@
 	 * attribute can only name one of them.
 	 */
 	function panelMatches(panel, tabId, subtabId) {
-		if (panel.getAttribute("data-panel-tab") !== tabId) return false;
-		const panelSubtabId = panel.getAttribute("data-panel-subtab");
+		if (panel.dataset.panelTab !== tabId) return false;
+		const panelSubtabId = panel.dataset.panelSubtab;
 		if (!panelSubtabId) return true;   // sub-tab-agnostic panel: tab match is sufficient
 		return panelSubtabId === subtabId;
 	}
@@ -191,7 +191,7 @@
 				});
 			} else {
 				warn("Juneau page: juneau-views.js not loaded (or too old to expose initTable); cannot lazy-init view '" +
-					t.getAttribute("data-juneau-view") + "'.");
+					t.dataset.juneauView + "'.");
 			}
 		});
 	}
@@ -200,14 +200,14 @@
 	function showActive(root, tabId, subtabId) {
 		const tabs = root.querySelectorAll(".jc-tab");
 		Array.prototype.forEach.call(tabs, function (el) {
-			el.classList.toggle("jc-tab-active", el.getAttribute("data-tab-id") === tabId);
+			el.classList.toggle("jc-tab-active", el.dataset.tabId === tabId);
 		});
 
 		const subtabs = root.querySelectorAll(".jc-subtab");
 		Array.prototype.forEach.call(subtabs, function (el) {
 			const active = subtabId != null &&
-				el.getAttribute("data-subtab-id") === subtabId &&
-				el.getAttribute("data-parent-tab") === tabId;
+				el.dataset.subtabId === subtabId &&
+				el.dataset.parentTab === tabId;
 			el.classList.toggle("jc-subtab-active", active);
 		});
 
@@ -220,7 +220,7 @@
 	}
 
 	function initPage(root) {
-		const id = root.getAttribute("data-juneau-page");
+		const id = root.dataset.juneauPage;
 		const sidecar = document.getElementById("juneau-page:" + id);
 		if (!sidecar) { error("Juneau page '" + id + "': missing PAGE_META sidecar; refusing to init."); return; }
 
@@ -228,7 +228,7 @@
 		try {
 			pageMeta = JSON.parse(sidecar.textContent);
 		} catch (e) {
-			error("Juneau page '" + id + "': malformed PAGE_META sidecar; refusing to init.");
+			error("Juneau page '" + id + "': malformed PAGE_META sidecar (" + e.message + "); refusing to init.");
 			renderBanner(root, "Juneau page '" + id + "': malformed configuration.");
 			return;
 		}

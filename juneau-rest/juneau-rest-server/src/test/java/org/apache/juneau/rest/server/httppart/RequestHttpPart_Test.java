@@ -217,8 +217,9 @@ class RequestHttpPart_Test {
 
 	@Test void j01_equals_httpPart() {
 		var p = part("foo", "bar");
-		// p.equals(Object) is the overridden side of this comparison (it cross-checks HttpPart/HttpHeader);
-		// the counterpart is widened to Object so the assertion isn't comparing statically-unrelated types.
+		// The equals() override on RequestHttpPart is the overridden side of this comparison (it cross-checks
+		// HttpPart/HttpHeader); the counterpart is widened to Object so the assertion isn't comparing
+		// statically-unrelated types.
 		Object matchingPart = org.apache.juneau.http.part.HttpPartBean.of("foo", "bar");
 		Object differentPart = org.apache.juneau.http.part.HttpPartBean.of("foo", "baz");
 		assertEquals(p, matchingPart);

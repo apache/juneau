@@ -24,6 +24,7 @@ import java.lang.management.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.jsonschema.*;
@@ -265,8 +266,8 @@ class McpSchemaSafety_Test {
 				return sink;  // returned only so the JIT can't elide the loop
 			});
 
-			var e = assertThrows(McpException.class, () -> McpSchemaSafety.awaitBounded(
-				future, started, taskStart, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+			var budgetNanos = TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS);
+			var e = assertThrows(McpException.class, () -> McpSchemaSafety.awaitBounded(future, started, taskStart, budgetNanos));
 			assertEquals(-32602, e.getCode());
 			assertContains("exceeded " + McpSchemaSafety.MAX_VALIDATION_MILLIS + " ms", e.getMessage());
 		} finally {
@@ -402,15 +403,21 @@ class McpSchemaSafety_Test {
 			TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
 	}
 
-	/** Sleeps until {@code deadlineNanos} ({@link System#nanoTime()} units) has passed. */
+	/**
+	 * Blocks until {@code deadlineNanos} ({@link System#nanoTime()} units) has passed, re-checking the
+	 * remaining time on each iteration rather than sleeping for a single fixed guess.
+	 *
+	 * <p>
+	 * Uses {@link LockSupport#parkNanos} rather than {@code Thread.sleep} - both may return before the
+	 * requested duration elapses, but only the loop (not a caught {@code InterruptedException}) is needed to
+	 * guard against that here, since {@code parkNanos} declares no checked exception.
+	 */
 	private static void sleepPastDeadline(long deadlineNanos) {
 		while (System.nanoTime() < deadlineNanos) {
-			var remainingMs = (deadlineNanos - System.nanoTime()) / 1_000_000 + 1;
-			try {
-				Thread.sleep(Math.max(1, remainingMs));
-			} catch (InterruptedException e) {
+			LockSupport.parkNanos(deadlineNanos - System.nanoTime());
+			if (Thread.interrupted()) {
 				Thread.currentThread().interrupt();
-				throw new AssertionError(e);
+				throw new AssertionError(new InterruptedException());
 			}
 		}
 	}

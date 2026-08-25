@@ -140,7 +140,9 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	/**
 	 * Constructor.
 	 */
-	public BasicRestDebugFormatter() {}
+	public BasicRestDebugFormatter() {
+		// No state to initialize; all fields have field-level defaults.
+	}
 
 	/**
 	 * Constructor.
@@ -150,7 +152,9 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	 *
 	 * @param beanStore The bean store. Ignored by the default implementation.
 	 */
-	public BasicRestDebugFormatter(BeanStore beanStore) {}
+	public BasicRestDebugFormatter(BeanStore beanStore) {
+		// beanStore is intentionally unused; this overload only exists to satisfy constructor-injection.
+	}
 
 	/**
 	 * Overrides the redacted-header set (replaces the built-in widened set).
@@ -314,31 +318,15 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 		if (names == null || ! names.hasMoreElements())
 			return;
 		sb.append("\n---Request Headers---");
-		var emitted = 0;
-		var extra = 0L;
-		var scanned = 0;
-		var scanCapped = false;
-		while (names.hasMoreElements() && ! scanCapped) {
+		var state = new HeaderScanState();
+		while (names.hasMoreElements() && ! state.scanCapped) {
 			var name = names.nextElement();
 			var redact = isRedacted(name, normalizedRedacted);
 			var sName = DebugTextSanitizer.sanitize(name, maxFieldLength);
 			var values = sreq.getHeaders(name);
-			while (values != null && values.hasMoreElements()) {
-				if (scanned >= maxHeaderScan) {
-					scanCapped = true;
-					break;
-				}
-				scanned++;
-				var v = values.nextElement();
-				if (emitted < maxHeaders) {
-					appendHeaderLine(sb, sName, redact ? RedactedHeaders.REDACTED : v);
-					emitted++;
-				} else {
-					extra++;
-				}
-			}
+			appendHeaderValues(sb, sName, redact, values == null ? Collections.emptyIterator() : values.asIterator(), state);
 		}
-		appendOmissionMarker(sb, scanCapped, extra);
+		appendOmissionMarker(sb, state.scanCapped, state.extra);
 	}
 
 	private void appendResponseHeaders(StringBuilder sb, HttpServletResponse sres, Set<String> normalizedRedacted) {
@@ -346,30 +334,44 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 		if (names == null || names.isEmpty())
 			return;
 		sb.append("\n---Response Headers---");
-		var emitted = 0;
-		var extra = 0L;
-		var scanned = 0;
-		var scanCapped = false;
+		var state = new HeaderScanState();
 		for (var name : names) {
-			if (scanCapped)
+			if (state.scanCapped)
 				break;
 			var redact = isRedacted(name, normalizedRedacted);
 			var sName = DebugTextSanitizer.sanitize(name, maxFieldLength);
-			for (var v : sres.getHeaders(name)) {
-				if (scanned >= maxHeaderScan) {
-					scanCapped = true;
-					break;
-				}
-				scanned++;
-				if (emitted < maxHeaders) {
-					appendHeaderLine(sb, sName, redact ? RedactedHeaders.REDACTED : v);
-					emitted++;
-				} else {
-					extra++;
-				}
+			appendHeaderValues(sb, sName, redact, sres.getHeaders(name).iterator(), state);
+		}
+		appendOmissionMarker(sb, state.scanCapped, state.extra);
+	}
+
+	/**
+	 * Emits (or counts as omitted) every value for one header name, shared by the request- and response-header render
+	 * loops so neither has to nest a second scan/emit/omit loop inside its own.
+	 */
+	private void appendHeaderValues(StringBuilder sb, String sanitizedName, boolean redact, Iterator<String> values, HeaderScanState state) {
+		while (values.hasNext()) {
+			if (state.scanned >= maxHeaderScan) {
+				state.scanCapped = true;
+				return;
+			}
+			state.scanned++;
+			var v = values.next();
+			if (state.emitted < maxHeaders) {
+				appendHeaderLine(sb, sanitizedName, redact ? RedactedHeaders.REDACTED : v);
+				state.emitted++;
+			} else {
+				state.extra++;
 			}
 		}
-		appendOmissionMarker(sb, scanCapped, extra);
+	}
+
+	/** Mutable per-header-block emission/omission counters, threaded through {@link #appendHeaderValues}. */
+	private static final class HeaderScanState {
+		int emitted;
+		long extra;
+		int scanned;
+		boolean scanCapped;
 	}
 
 	private void appendHeaderLine(StringBuilder sb, String sanitizedName, String value) {

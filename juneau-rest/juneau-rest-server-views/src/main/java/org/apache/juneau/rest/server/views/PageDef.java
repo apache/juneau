@@ -124,6 +124,13 @@ public class PageDef {
 	public ServerValues serverValues;
 
 	/**
+	 * Private lock object guarding the {@code $FV} chrome-resolution window this instance may be mutated under
+	 * (see {@link PageTable}).  Synchronizing on this dedicated object rather than on {@code this} keeps the
+	 * monitor private to the toolkit even though callers hold a reference to the bean itself.  Not a wire field.
+	 */
+	final Object lock = new Object();
+
+	/**
 	 * Starts a new {@link PageDef} builder with the specified stable page id.
 	 *
 	 * @param id The stable page id.  Must not be <jk>null</jk> or blank.
@@ -206,8 +213,8 @@ public class PageDef {
 	 * Finalizes the builder, validating the composed tab tree, and returns the wire-ready {@link PageDef}.
 	 *
 	 * <p>
-	 * Validation (design doc §"Bean model"; TODO-420 widens the panel-body shape from a view/subtabs
-	 * exclusive-or to the matrix documented on {@link Tab}/{@link Subtab}): at least one tab must be declared;
+	 * Validation (design doc §"Bean model"; the panel-body matrix documented on {@link Tab}/{@link Subtab} widens
+	 * this from a view/subtabs exclusive-or): at least one tab must be declared;
 	 * every {@link Tab} must satisfy its own panel-body matrix and every declared {@link Subtab} its own
 	 * (delegated to {@link Tab#validate()}, which also checks sub-tab id uniqueness <i>within</i> that tab); every
 	 * {@link Tab#id} must be unique across the page; and every referenced {@link ViewDef#id} (from a leaf tab's
@@ -232,6 +239,13 @@ public class PageDef {
 	void validate() {
 		if (tabs == null || tabs.isEmpty())
 			throw iaex("PageDef '%s' must declare at least one tab.", id);
+		validateTabs();
+		validateChrome();
+		validateBarSlotUniqueness();
+	}
+
+	/** Validates every declared tab/subtab and collects/checks tab-id and referenced-view-id uniqueness. */
+	private void validateTabs() {
 		var tabIds = new HashSet<String>();
 		var viewIds = new HashSet<String>();
 		for (var t : tabs) {
@@ -249,24 +263,32 @@ public class PageDef {
 						s.view.validate();
 					}
 		}
-		// Java-only page-chrome fields (m1/m2): validated on the serving path, absent from the wire.
+	}
+
+	/** Validates the Java-only page-chrome fields (m1/m2): validated on the serving path, absent from the wire. */
+	private void validateChrome() {
 		if (header != null)
 			header.validate();
 		if (barSlot != null)
 			barSlot.validate();
 		if (serverValues != null)
 			serverValues.validate();
+	}
 
-		// Cross-host bar-slot id uniqueness.  This is the ONLY scope that sees both hosts: RowDetailDef.validate() has
-		// no enclosing page, so it cannot make this check.  Runs last, so both slots have already passed
-		// BarSlot.validate() and their ids are known non-blank.
-		if (barSlot != null)
-			for (var t : tabs) {
-				checkDetailBarSlotIds(t.view, 0);
-				if (t.subtabs != null)
-					for (var s : t.subtabs)
-						checkDetailBarSlotIds(s.view, 0);
-			}
+	/**
+	 * Enforces cross-host bar-slot id uniqueness.  This is the ONLY scope that sees both hosts:
+	 * {@link RowDetailDef#validate(java.util.List)} has no enclosing page, so it cannot make this check.  Runs
+	 * last, so both slots have already passed {@link BarSlot#validate()} and their ids are known non-blank.
+	 */
+	private void validateBarSlotUniqueness() {
+		if (barSlot == null)
+			return;
+		for (var t : tabs) {
+			checkDetailBarSlotIds(t.view, 0);
+			if (t.subtabs != null)
+				for (var s : t.subtabs)
+					checkDetailBarSlotIds(s.view, 0);
+		}
 	}
 
 	/**

@@ -120,7 +120,7 @@ class StaticFilesMixin_Springboot_Test {
 	}
 
 	@Test void a01_staticPathServesFileUnderSpringBoot() throws Exception {
-		var resp = get("/static/javadoc.css");
+		var resp = get("/static/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),
 			"Body should contain the Apache license header");
@@ -132,7 +132,7 @@ class StaticFilesMixin_Springboot_Test {
 	@Test void a02_htdocsPathServesFileViaLegacyMount() throws Exception {
 		// /htdocs/* is no longer a multi-path default on the mixin, but
 		// BasicSpringRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
-		var resp = get("/htdocs/javadoc.css");
+		var resp = get("/htdocs/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),
 			"Body should contain the Apache license header");
@@ -144,13 +144,13 @@ class StaticFilesMixin_Springboot_Test {
 	}
 
 	@Test void a04_headProbeUnderSpringBoot() throws Exception {
-		var resp = head("/static/javadoc.css");
+		var resp = head("/static/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertEquals("", resp.body(), "HEAD body must be empty");
 	}
 
 	@Test void a05_cacheControlPreservedUnderSpringBoot() throws Exception {
-		var resp = get("/static/javadoc.css");
+		var resp = get("/static/themes/devops.css");
 		assertEquals(200, resp.statusCode());
 		assertEquals("max-age=86400, public",
 			resp.headers().firstValue("Cache-Control").orElse(""));

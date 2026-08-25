@@ -44,11 +44,13 @@ const sandbox = {
 	String: String,
 	Object: Object,
 	Array: Array,
-	parseInt: parseInt,
+	parseInt: Number.parseInt,
 	JSON: JSON
 };
 sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-renders.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(code, sandbox);
 
 const NS = sandbox.window.JuneauViews;
@@ -221,5 +223,23 @@ out.freeze_cellHonorsOverride = String(NS.resolveRenderer('tag').display()).inde
 out.freeze_sinkStillBuiltin = builtinTag === NS.resolveSinkRenderer('tag');
 out.freeze_sinkDisplaySafe = String(NS.resolveSinkRenderer('tag').display('Released', {}, { field: 'status' })).indexOf('class="tag') >= 0;
 out.freeze_ids = (NS._render.frozenBuiltinIds || []).slice().sort().join(',');
+
+// normalizeTagToken: the emitted token shape, plus a javascript:S5852 linearity guard.  The old trim
+// (`.replace(/^-+|-+$/g, "")`) retried its `-+$` alternative at every offset inside a dash run, which is
+// quadratic once the run is bracketed by non-dashes; an all-dash string stayed linear, which is exactly why
+// the shape went unnoticed.  "a" + 160,000 dashes + "a" took ~8.8s before the fix and ~0.1ms after.
+const tagToken = NS._render.normalizeTagToken;
+out.tagToken_plain = tagToken('Released');
+out.tagToken_spaceRun = tagToken('In Progress');
+out.tagToken_edgeDashesTrimmed = tagToken('---in---progress---');
+out.tagToken_allDashes = tagToken('-----');
+out.tagToken_empty = tagToken('');
+out.tagToken_punctCollapses = tagToken('  Ready?  ');
+out.tagToken_keepsInnerSeparators = tagToken('a-b_c9');
+const dashRun = 'a' + '-'.repeat(160000) + 'a';
+const dashStart = Date.now();
+const dashToken = tagToken(dashRun);
+out.tagToken_adversarialMs = Date.now() - dashStart;
+out.tagToken_adversarialUnchanged = dashToken === dashRun;
 
 console.log(JSON.stringify(out));

@@ -26,7 +26,8 @@ import org.junit.jupiter.api.*;
 
 /**
  * Contract test for the declarative modal ({@link ModalDef}) + form ({@link FormDef}) payload the modal-open
- * confirmation fetch returns (design doc §6.2; the modal/form half of {@code TODO-416}).
+ * confirmation fetch returns (design doc §6.2). This pins the bean half of that contract; the runtime half is
+ * pinned separately in the views module.
  *
  * <p>
  * The confirmation body is typed fields painted with textContent (never innerHTML); this test pins that field
@@ -156,7 +157,8 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void c08_formDef_nullFieldThrows() {
-		assertThrows(IllegalArgumentException.class, () -> FormDef.create().field(null));
+		var form = FormDef.create();
+		assertThrows(IllegalArgumentException.class, () -> form.field(null));
 	}
 
 	@Test void c09_formDef_templateAndFieldsTogether() {
@@ -425,7 +427,8 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void f12_nullSection_isRejectedAtTheBuilder() {
-		assertThrows(IllegalArgumentException.class, () -> FormDef.create().section(null));
+		var form = FormDef.create();
+		assertThrows(IllegalArgumentException.class, () -> form.section(null));
 	}
 
 	/** Builds a minimal valid field of the given non-text type (for cross-type rejection tests). */

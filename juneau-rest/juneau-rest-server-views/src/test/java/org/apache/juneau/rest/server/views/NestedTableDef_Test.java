@@ -55,29 +55,30 @@ class NestedTableDef_Test extends TestBase {
 	}
 
 	@Test void a04_nullView_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(null).validate());
+		var nt = NestedTableDef.create(null);
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("view"), e::getMessage);
 	}
 
 	@Test void a05_blankScopeParam_rejected() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView()).parentScopeParam("  ").validate());
+		var nt = NestedTableDef.create(nestedView()).parentScopeParam("  ");
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("parentScopeParam"), e::getMessage);
 	}
 
 	@Test void a06_illegalScopeParamChars_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView()).parentScopeParam("1abc").validate());
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView()).parentScopeParam("a-b").validate());
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView()).parentScopeParam("a.b").validate());
+		var nt1 = NestedTableDef.create(nestedView()).parentScopeParam("1abc");
+		assertThrows(IllegalArgumentException.class, nt1::validate);
+		var nt2 = NestedTableDef.create(nestedView()).parentScopeParam("a-b");
+		assertThrows(IllegalArgumentException.class, nt2::validate);
+		var nt3 = NestedTableDef.create(nestedView()).parentScopeParam("a.b");
+		assertThrows(IllegalArgumentException.class, nt3::validate);
 	}
 
 	@Test void a07_reservedDataTablesKeys_rejected() {
 		for (var k : new String[]{"draw", "start", "length", "search", "columns", "order", "_"}) {
-			var e = assertThrows(IllegalArgumentException.class,
-				() -> NestedTableDef.create(nestedView()).parentScopeParam(k).validate(),
+			var nt = NestedTableDef.create(nestedView()).parentScopeParam(k);
+			var e = assertThrows(IllegalArgumentException.class, nt::validate,
 				() -> "expected '" + k + "' to be rejected");
 			assertTrue(e.getMessage().contains("reserved"), e::getMessage);
 		}
@@ -90,7 +91,8 @@ class NestedTableDef_Test extends TestBase {
 
 	@Test void a09_blankDataUrl_rejected() {
 		var v = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).columns(Column.of("name")).build();
-		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(v).validate());
+		var nt = NestedTableDef.create(v);
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("dataUrl"), e::getMessage);
 	}
 
@@ -104,29 +106,29 @@ class NestedTableDef_Test extends TestBase {
 	}
 
 	@Test void a12_absoluteDataUrl_rejected() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView("https://evil/data")).validate());
+		var nt = NestedTableDef.create(nestedView("https://evil/data"));
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("dataUrl"), e::getMessage);
 	}
 
 	@Test void a13_protocolRelativeDataUrl_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView("//evil/data")).validate());
+		var nt = NestedTableDef.create(nestedView("//evil/data"));
+		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
 	@Test void a14_javascriptScheme_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView("javascript:alert(1)")).validate());
+		var nt = NestedTableDef.create(nestedView("javascript:alert(1)"));
+		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
 	@Test void a15_dataScheme_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView("data:text/html,x")).validate());
+		var nt = NestedTableDef.create(nestedView("data:text/html,x"));
+		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
 	@Test void a16_dotDotSegment_rejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(nestedView("/data/../secrets/events")).validate());
+		var nt = NestedTableDef.create(nestedView("/data/../secrets/events"));
+		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
 	@Test void a17_nestedDetailSections_permitted() {
@@ -146,7 +148,8 @@ class NestedTableDef_Test extends TestBase {
 			.columns(Column.of("name"))
 			.columnConfig(ColumnConfig.create())
 			.build();
-		var e = assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(v).validate());
+		var nt = NestedTableDef.create(v);
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("columnConfig"), e::getMessage);
 	}
 
@@ -190,8 +193,8 @@ class NestedTableDef_Test extends TestBase {
 		// A nested view that itself declares a nested table would put that table at depth 3.
 		var leaf = NestedTableDef.create(ViewDef.create("hosts").dataMode(ViewDef.DataMode.CLIENT)
 			.dataUrl("/data/hosts").columns(Column.of("name")).build());
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> NestedTableDef.create(withDetails("events", leaf)).validate());
+		var nt = NestedTableDef.create(withDetails("events", leaf));
+		var e = assertThrows(IllegalArgumentException.class, nt::validate);
 		assertTrue(e.getMessage().contains("depth"), e::getMessage);
 	}
 
@@ -218,7 +221,8 @@ class NestedTableDef_Test extends TestBase {
 		var back = NestedTableDef.create(self);
 		self.details(RowDetailDef.create().endpoint("/data/events/{id}")
 			.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner")).table(back)));
-		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(self).validate());
+		var nt = NestedTableDef.create(self);
+		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
 	@Test void b07_mutualCycle_fails() {
@@ -231,8 +235,10 @@ class NestedTableDef_Test extends TestBase {
 			.sections(DetailSection.create("sa", "A").fields(DetailField.of("aOwner")).table(NestedTableDef.create(b))));
 		b.details(RowDetailDef.create().endpoint("/data/b/{id}")
 			.sections(DetailSection.create("sb", "B").fields(DetailField.of("bOwner")).table(NestedTableDef.create(a))));
-		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(a).validate());
-		assertThrows(IllegalArgumentException.class, () -> NestedTableDef.create(b).validate());
+		var ntA = NestedTableDef.create(a);
+		assertThrows(IllegalArgumentException.class, ntA::validate);
+		var ntB = NestedTableDef.create(b);
+		assertThrows(IllegalArgumentException.class, ntB::validate);
 	}
 
 	@Test void b08_siblingDag_reusingOneViewDefInstance_passes() {

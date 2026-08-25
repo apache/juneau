@@ -65,6 +65,9 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 	 * Reads this request's {@code env}, widening the window so a missing guard would interleave rather than
 	 * accidentally serializing.
 	 */
+	@SuppressWarnings({
+		"java:S2925" // deliberately widens the shared PageDef's mutate/restore window so an unguarded impl would interleave - the race this test exists to catch (case d).
+	})
 	private static String markFor(VarResolverSession s) {
 		var live = inWindow.incrementAndGet();
 		maxInWindow.accumulateAndGet(live, Math::max);

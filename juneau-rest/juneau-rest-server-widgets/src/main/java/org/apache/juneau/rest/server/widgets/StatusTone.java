@@ -59,6 +59,9 @@ public enum StatusTone {
 	 * The single source of truth every fail-closed tone check reads, so no caller can hand-roll a fourth or sixth
 	 * value.
 	 */
+	@SuppressWarnings({
+		"java:S2386" // Read cross-module by juneau-rest-server-views (ViewDef); narrowing visibility breaks that public API. Value is an unmodifiableSet, so it is effectively immutable despite the Set type.
+	})
 	public static final Set<String> WIRE_TOKENS = wireTokens();
 
 	private static Set<String> wireTokens() {

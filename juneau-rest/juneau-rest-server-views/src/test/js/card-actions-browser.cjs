@@ -40,9 +40,9 @@ const path = require('node:path');
 const { chromium } = require('playwright');
 
 const PROBE = async function () {
-	const views = window.JuneauViews && window.JuneauViews.init;
-	const cards = window.JuneauCards && window.JuneauCards.init;
-	const chrome = window.JuneauChrome && window.JuneauChrome.init;
+	const views = window.JuneauViews?.init;
+	const cards = window.JuneauCards?.init;
+	const chrome = window.JuneauChrome?.init;
 	const out = { hasViews: !!views, hasCards: !!cards, hasChrome: !!chrome };
 	if (!views || !cards || !chrome) return out;
 
@@ -64,17 +64,17 @@ const PROBE = async function () {
 		out.served = {
 			actionsInHostCard: hostCard.querySelectorAll('[data-juneau-header-action]').length,
 			behaviors: Array.prototype.map.call(hostCard.querySelectorAll('[data-juneau-header-action]'),
-				function (a) { return a.getAttribute('data-juneau-behavior'); }),
+				function (a) { return a.dataset.juneauBehavior; }),
 			menuIdHostCard: trigger ? trigger.getAttribute('aria-controls') : null,
 			menuIdFieldCard: otherTrigger ? otherTrigger.getAttribute('aria-controls') : null,
 			// The hosted table's element id is grid+card qualified; its marker stays the AUTHOR's view id.
 			hostedTableId: hostedTable ? hostedTable.getAttribute('id') : null,
-			hostedTableMarker: hostedTable ? hostedTable.getAttribute('data-juneau-view') : null,
+			hostedTableMarker: hostedTable ? hostedTable.dataset.juneauView : null,
 			hostedSidecarInsideCard: !!hostCard.querySelector('[id="juneau-view:g1:c1:orders"]'),
 			// The hosted body brings the table's own data path: no card refresh envelope on that card.
-			hostCardRefreshWire: hostCard.getAttribute('data-juneau-card-refresh'),
+			hostCardRefreshWire: hostCard.dataset.juneauCardRefresh,
 			// The runtimes wired themselves at DOMContentLoaded - the cards runtime is the owner for a card.
-			menuWiredAtBootstrap: trigger ? trigger.getAttribute('data-juneau-menu-wired') : null,
+			menuWiredAtBootstrap: trigger ? trigger.dataset.juneauMenuWired : null,
 			// The icon host the registry hydrates into is present (the sprite itself needs an http origin, so icon
 			// hydration is covered by the always-on Node layer rather than here).
 			iconHostPresent: trigger ? trigger.querySelector('.jc-icon') != null : false
@@ -97,14 +97,14 @@ const PROBE = async function () {
 
 	const box = clipGrid();
 
-	// ---- Block B: a card action menu escapes the scrolled grid through the SHIPPED shared layer stack ----
-	{
+	/** Block B: a card action menu escapes the scrolled grid through the SHIPPED shared layer stack. */
+	async function checkMenuEscape() {
 		const trigger = hostCard.querySelector('[data-juneau-behavior="menu"]');
 		trigger.click();
 		await tick();
 		const menu = document.getElementById(trigger.getAttribute('aria-controls'));
 		const rect = menu ? menu.getBoundingClientRect() : null;
-		out.menu = {
+		const menuOut = {
 			opened: !!menu,
 			onLayerStack: !!views.topLayer(),
 			layerKind: views.topLayer() ? views.topLayer().kind : null,
@@ -121,25 +121,30 @@ const PROBE = async function () {
 		};
 		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
 		await tick();
-		out.menu.closedOnEscape = !views.topLayer();
-		out.menu.ariaResetOnEscape = trigger.getAttribute('aria-expanded');
+		menuOut.closedOnEscape = !views.topLayer();
+		menuOut.ariaResetOnEscape = trigger.getAttribute('aria-expanded');
 		drain();
+		return menuOut;
 	}
 
-	// ---- Block C: two cards, same authored action id, two distinct menus - opening one never opens the other ----
-	{
+	/** Block C: two cards, same authored action id, two distinct menus - opening one never opens the other. */
+	async function checkPerCardMenus() {
 		const t1 = hostCard.querySelector('[data-juneau-behavior="menu"]');
 		const t2 = fieldCard.querySelector('[data-juneau-behavior="menu"]');
 		t2.click();
 		await tick();
 		const opened = views.topLayer() ? views.topLayer().el : null;
-		out.perCardMenus = {
+		const result = {
 			distinctListIds: t1.getAttribute('aria-controls') !== t2.getAttribute('aria-controls'),
 			openedTheSecondCardsList: opened === document.getElementById(t2.getAttribute('aria-controls')),
 			firstCardStillCollapsed: t1.getAttribute('aria-expanded') === 'false'
 		};
 		drain();
+		return result;
 	}
+
+	out.menu = await checkMenuEscape();
+	out.perCardMenus = await checkPerCardMenus();
 
 	/** Appends `n` synthetic body rows to the hosted table - the row set a page of that length would draw. */
 	function drawRows(table, n, cellWidth) {
@@ -160,8 +165,8 @@ const PROBE = async function () {
 		return tbody;
 	}
 
-	// ---- Block D: paging + horizontal overflow inside the card never resize the card or the grid ----
-	{
+	/** Block D: paging + horizontal overflow inside the card never resize the card or the grid. */
+	async function checkLayoutStability() {
 		const table = hostCard.querySelector('table[data-juneau-view]');
 		const gridBefore = grid.getBoundingClientRect();
 		const cardBefore = hostCard.getBoundingClientRect();
@@ -188,7 +193,7 @@ const PROBE = async function () {
 		const scrollWrap = table.parentElement;
 		const gridAfterWide = grid.getBoundingClientRect();
 
-		out.layout = {
+		return {
 			gridWidthStableOnPage: Math.abs(gridTenRows.width - gridBefore.width) < 1
 				&& Math.abs(gridThreeRows.width - gridBefore.width) < 1,
 			gridWidthStableOnSort: Math.abs(gridAfterSort.width - gridBefore.width) < 1,
@@ -199,12 +204,13 @@ const PROBE = async function () {
 			grewTallerWithRows: gridTenRows.height > gridBefore.height,
 			shrankBackOnSmallerPage: gridThreeRows.height < gridTenRows.height,
 			// The overflow is owned by the table's own scroll region, inside the card body.
-			scrollWrapIsTheRuntimes: !!scrollWrap && scrollWrap.className.indexOf('juneau-view-table-scroll') >= 0,
-			scrollWrapInsideCardBody: !!scrollWrap
-				&& !!scrollWrap.closest('[data-juneau-card-body]'),
+			scrollWrapIsTheRuntimes: scrollWrap?.className.indexOf('juneau-view-table-scroll') >= 0,
+			scrollWrapInsideCardBody: !!scrollWrap?.closest('[data-juneau-card-body]'),
 			tableOverflowsItsScrollRegion: !!scrollWrap && scrollWrap.scrollWidth > scrollWrap.clientWidth
 		};
 	}
+
+	out.layout = await checkLayoutStability();
 
 	return out;
 };
@@ -228,4 +234,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

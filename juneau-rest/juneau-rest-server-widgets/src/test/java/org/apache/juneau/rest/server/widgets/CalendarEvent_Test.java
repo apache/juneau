@@ -23,6 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * {@link CalendarEvent#validate(Set, Integer, Integer)} matrix and civil-date/all-day helpers.
@@ -36,7 +38,8 @@ class CalendarEvent_Test extends TestBase {
 	}
 
 	@Test void a01_wellFormed_validates() {
-		assertDoesNotThrow(() -> good().validate(CATS, 2026, 8));
+		var e = good();
+		assertDoesNotThrow(() -> e.validate(CATS, 2026, 8));
 	}
 
 	@Test void a02_blankId_rejected() {
@@ -49,13 +52,12 @@ class CalendarEvent_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
 	}
 
-	@Test void a04_missingStart_rejected() {
-		var e = good().start(null);
-		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
-	}
-
-	@Test void a05_badStart_rejected() {
-		var e = good().start("not-a-date");
+	/** Missing, unparseable, and off-month starts are all rejected the same way: as an invalid {@code start}. */
+	@ParameterizedTest
+	@NullSource
+	@ValueSource(strings = {"not-a-date", "2026-09-01"})
+	void a04_invalidStart_rejected(String start) {
+		var e = good().start(start);
 		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
 	}
 
@@ -65,8 +67,10 @@ class CalendarEvent_Test extends TestBase {
 	}
 
 	@Test void a07_endEqualOrAfter_ok() {
-		assertDoesNotThrow(() -> good().end("2026-08-14").validate(CATS, 2026, 8));
-		assertDoesNotThrow(() -> good().end("2026-08-20").validate(CATS, 2026, 8));
+		var e1 = good().end("2026-08-14");
+		assertDoesNotThrow(() -> e1.validate(CATS, 2026, 8));
+		var e2 = good().end("2026-08-20");
+		assertDoesNotThrow(() -> e2.validate(CATS, 2026, 8));
 	}
 
 	@Test void a08_unknownCategory_rejected() {
@@ -80,16 +84,13 @@ class CalendarEvent_Test extends TestBase {
 	}
 
 	@Test void a10_safeHref_ok() {
-		assertDoesNotThrow(() -> good().href("/events/123?x=1").validate(CATS, 2026, 8));
-	}
-
-	@Test void a11_offMonth_rejected() {
-		var e = good().start("2026-09-01");
-		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
+		var e = good().href("/events/123?x=1");
+		assertDoesNotThrow(() -> e.validate(CATS, 2026, 8));
 	}
 
 	@Test void a12_offMonthCheckSkippedWhenWindowNull() {
-		assertDoesNotThrow(() -> good().start("2026-09-01").validate(CATS, null, null));
+		var e = good().start("2026-09-01");
+		assertDoesNotThrow(() -> e.validate(CATS, null, null));
 	}
 
 	@Test void b01_civilStart_dateOnly() {
@@ -236,8 +237,9 @@ class CalendarEvent_Test extends TestBase {
 
 	@Test void d08_spanIntoTheRenderedMonth_isNotOffMonth() {
 		// `end` is layout-significant, so an event that STARTS earlier but is visible in the month is in-window.
-		assertDoesNotThrow(() -> ev("2026-07-28", "2026-08-03").id("e1").title("t").validate(Set.of(), 2026, 8));
-		assertThrows(IllegalArgumentException.class,
-			() -> ev("2026-06-01", "2026-06-05").id("e1").title("t").validate(Set.of(), 2026, 8));
+		var inWindow = ev("2026-07-28", "2026-08-03").id("e1").title("t");
+		assertDoesNotThrow(() -> inWindow.validate(Set.of(), 2026, 8));
+		var e = ev("2026-06-01", "2026-06-05").id("e1").title("t");
+		assertThrows(IllegalArgumentException.class, () -> e.validate(Set.of(), 2026, 8));
 	}
 }

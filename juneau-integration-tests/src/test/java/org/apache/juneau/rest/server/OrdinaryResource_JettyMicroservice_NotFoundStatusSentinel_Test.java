@@ -34,7 +34,7 @@ import jakarta.servlet.*;
 
 /**
  * [READY-403] Real-container regression coverage for {@link RestSession#run()}'s {@code NotFound} status
- * sentinel ([TODO-401] Bug B) on an ORDINARY single-path {@code @Rest} resource &mdash; i.e. one that relies on
+ * sentinel (Bug B) on an ORDINARY single-path {@code @Rest} resource &mdash; i.e. one that relies on
  * the default {@code @Rest.path()} mount, which normalizes to the servlet-container WILDCARD path-spec
  * {@code "/*"} (see {@code JettyServerComponent#restPathsFor}/{@code #normalizePathSpec}), as opposed to
  * {@code HealthServlet}'s auto-mounted EXACT multi-path spec.
@@ -50,7 +50,7 @@ import jakarta.servlet.*;
  * ever runs (see {@code HealthServlet_JettyHttpConnector_Test#a02_subPathUnderExactMountIsCleanContainer404}).
  *
  * <p>
- * Before the [TODO-401] Bug B fix, a real container's {@code HttpServletResponse} defaults {@code getStatus()}
+ * Before the Bug B fix, a real container's {@code HttpServletResponse} defaults {@code getStatus()}
  * to the servlet-spec {@code 200} (not the mock's coincidental {@code 0}), so the old {@code getStatus() == 0}
  * sentinel in {@code RestSession.run()}'s {@code NotFound} catch was skipped and the miss was mis-mapped to a
  * {@code 500} by {@code RestContext.handleError}. This test pins the fixed behavior &mdash; a genuine 404,
@@ -107,7 +107,7 @@ class OrdinaryResource_JettyMicroservice_NotFoundStatusSentinel_Test extends Tes
 	}
 
 	@Test void a02_unmatchedPath_returnsJuneauProduced404_notContainer404_notServerError500() throws Exception {
-		// [TODO-401] Bug B regression guard: over a real Jetty connector (200-default HttpServletResponse), a
+		// Bug B regression guard: over a real Jetty connector (200-default HttpServletResponse), a
 		// genuine unmatched-path miss on this ordinary wildcard-mounted resource must still surface as 404 —
 		// not the pre-fix 500 mis-mapping, and not a bare container-level 404 page.
 		var resp = get("/nonexistent");

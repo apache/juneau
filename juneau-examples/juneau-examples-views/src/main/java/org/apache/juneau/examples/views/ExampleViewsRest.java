@@ -102,6 +102,39 @@ public class ExampleViewsRest extends BasicRestServlet {
 	private static final String STATUS_OPEN = "open";
 	private static final String STATUS_ACKNOWLEDGED = "acknowledged";
 	private static final String STATUS_ESCALATED = "escalated";
+	private static final String COL_NAME = "name";
+	private static final String TITLE_NAME = "Name";
+	private static final String COL_SEVERITY = "severity";
+	private static final String TITLE_SEVERITY = "Severity";
+	private static final String SEVERITY_CRITICAL = "critical";
+	private static final String SEVERITY_INFO = "info";
+	private static final String COL_TITLE = "title";
+	private static final String TITLE_TITLE = "Title";
+	private static final String COL_TIMESTAMP = "timestamp";
+	private static final String COL_ASSIGNEE = "assignee";
+	private static final String TITLE_STATUS = "Status";
+	private static final String TITLE_ARCHIVED = "Archived";
+	private static final String RENDER_TAG_STATUS = "tag:status";
+	private static final String RENDER_DATE = "date";
+	private static final String META_FIELD = "field";
+	private static final String META_STATE = "state";
+	private static final String ACTION_ACK = "ack";
+	private static final String ACTION_ESC = "esc";
+	private static final String MEDIA_HTML = "text/html;charset=utf-8";
+	// Single spelling per literal value; role-specific names below alias it so java:S1192 sees one raw token
+	// per value while call sites keep role-specific names (column key vs render meta vs form input type vs view id).
+	private static final String SPELLING_ACTIVE = "active";
+	private static final String SUBTAB_ACTIVE = SPELLING_ACTIVE;
+	private static final String CARD_ACTIVE = SPELLING_ACTIVE;
+	private static final String STATUS_ACTIVE = SPELLING_ACTIVE;
+	private static final String SPELLING_ALERTS = "alerts";
+	private static final String TAB_ALERTS = SPELLING_ALERTS;
+	private static final String VIEW_ALERTS = SPELLING_ALERTS;
+	private static final String CARD_ALERTS = SPELLING_ALERTS;
+	private static final String SPELLING_ACTION = "action";
+	private static final String COL_ACTION = SPELLING_ACTION;
+	private static final String META_ACTION = SPELLING_ACTION;
+	private static final String INPUT_TYPE_ACTION = SPELLING_ACTION;
 
 	private static final List<Widget> ACTIVE_WIDGETS = buildActiveWidgets();
 	private static final List<Widget> ARCHIVED_WIDGETS = buildArchivedWidgets();
@@ -135,10 +168,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.title("Juneau Views Example")
 			.tabs(
 				Tab.create("catalog", "Catalog").subtabs(
-					Subtab.create("active", "Active").view(activeView()),
-					Subtab.create(VALUE_ARCHIVED, "Archived").view(archivedView())),
+					Subtab.create(SUBTAB_ACTIVE, "Active").view(activeView()),
+					Subtab.create(VALUE_ARCHIVED, TITLE_ARCHIVED).view(archivedView())),
 				Tab.create("audit", "Audit Log").view(auditView()),
-				Tab.create("alerts", "Alerts").view(alertsView()))
+				Tab.create(TAB_ALERTS, "Alerts").view(alertsView()))
 			.build();
 	}
 
@@ -148,12 +181,12 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.rowType(Widget.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/widgets/active")
-			.defaultOrder("name", Dir.ASC)
+			.defaultOrder(COL_NAME, Dir.ASC)
 			.columns(
-				Column.of("name").title("Name"),
-				Column.of(COL_STATUS).title("Status").render("tag:status"),
+				Column.of(COL_NAME).title(TITLE_NAME),
+				Column.of(COL_STATUS).title(TITLE_STATUS).render(RENDER_TAG_STATUS),
 				Column.of(COL_OWNER).title(TITLE_OWNER),
-				Column.of(COL_UPDATED_AT).title("Updated").render("date"))
+				Column.of(COL_UPDATED_AT).title("Updated").render(RENDER_DATE))
 			.ribbon(
 				RibbonAction.columnSearchToggle(),
 				RibbonAction.refresh())
@@ -181,10 +214,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.dataUrl("/data/widgets/archived")
 			.defaultOrder(COL_UPDATED_AT, Dir.DESC)
 			.columns(
-				Column.of("name").title("Name"),
-				Column.of(COL_STATUS).title("Status").render("tag:status"),
+				Column.of(COL_NAME).title(TITLE_NAME),
+				Column.of(COL_STATUS).title(TITLE_STATUS).render(RENDER_TAG_STATUS),
 				Column.of(COL_OWNER).title(TITLE_OWNER),
-				Column.of(COL_UPDATED_AT).title("Archived").render("date"))
+				Column.of(COL_UPDATED_AT).title(TITLE_ARCHIVED).render(RENDER_DATE))
 			.build();
 	}
 
@@ -201,10 +234,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.rowType(Widget.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/widgets/active")
-			.defaultOrder("name", Dir.ASC)
+			.defaultOrder(COL_NAME, Dir.ASC)
 			.columns(
-				Column.of("name").title("Name"),
-				Column.of(COL_STATUS).title("Status ($FV{flaggedCount} flagged)").render("tag:status"),
+				Column.of(COL_NAME).title(TITLE_NAME),
+				Column.of(COL_STATUS).title("Status ($FV{flaggedCount} flagged)").render(RENDER_TAG_STATUS),
 				Column.of(COL_OWNER).title(TITLE_OWNER))
 			.serverValues(ServerValues.create()
 				.value("flaggedCount", s -> ACTIVE_WIDGETS.stream().filter(w -> STATUS_ERROR.equals(w.status)).count()))
@@ -217,41 +250,41 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.rowType(AuditEntry.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/audit")
-			.defaultOrder("timestamp", Dir.DESC)
+			.defaultOrder(COL_TIMESTAMP, Dir.DESC)
 			.columns(
-				Column.of("timestamp").title("When").render("date"),
+				Column.of(COL_TIMESTAMP).title("When").render(RENDER_DATE),
 				Column.of("actor").title("Actor"),
-				Column.of("action").title("Action"))
+				Column.of(COL_ACTION).title("Action"))
 			.build();
 	}
 
 	/** Fake alerts table &mdash; two detail sections, two mutating ActionRefs, expand GET. */
 	static ViewDef alertsView() {
-		return ViewDef.create("alerts")
+		return ViewDef.create(VIEW_ALERTS)
 			.rowType(Alert.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/alerts")
 			.defaultOrder("id", Dir.ASC)
 			.columns(
 				Column.of("id").title("Id"),
-				Column.of("severity").title("Severity").render("tag:status"),
-				Column.of("title").title("Title"),
+				Column.of(COL_SEVERITY).title(TITLE_SEVERITY).render(RENDER_TAG_STATUS),
+				Column.of(COL_TITLE).title(TITLE_TITLE),
 				// An action-bound status pill: the chip themes via .tag.state.<value> (generic "state" domain, not
 				// an IRS probe vocabulary) and clicking (or Enter/Space on) it dispatches the "ack" RowAction through
 				// the same confirm/dialog handler the row-action menu uses - proving pill dispatch is NOT gated on a
 				// row-detail template (this view has both details AND rowActions).
-				Column.of(COL_STATUS).title("Status")
-					.render(Render.pill().meta("field", "state").meta("action", "ack")))
+				Column.of(COL_STATUS).title(TITLE_STATUS)
+					.render(Render.pill().meta(META_FIELD, META_STATE).meta(META_ACTION, ACTION_ACK)))
 			.rowActions(
 				// "ack" is a present=dialog action: clicking it fetches the form envelope (ackForm below), paints a
 				// typed input form, and submits to the POST endpoint on confirm.  The form carries a nested
 				// type=action button targeting "esc" (modal-over-modal, h3).
-				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack")
+				RowAction.create(ACTION_ACK).label("Acknowledge").endpoint("/data/alerts/{id}/ack")
 					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
 					.form("/data/alerts/{id}/ack-form").onSuccess(RowAction.OnSuccess.REDRAW),
 				// "esc" is a present=dialog CONFIRM-ONLY action (no form URL): clicking it opens a title-only
 				// confirmation, and it is also the nested trigger reached from the ack form's action button.
-				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc")
+				RowAction.create(ACTION_ESC).label("Escalate").endpoint("/data/alerts/{id}/esc")
 					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
 					.confirm("Escalate this alert to on-call?").onSuccess(RowAction.OnSuccess.REDRAW))
 			.details(RowDetailDef.create()
@@ -260,14 +293,14 @@ public class ExampleViewsRest extends BasicRestServlet {
 					DetailSection.create("overview", "Overview")
 						.columns(2)
 						.fields(
-							DetailField.of("severity").title("Severity"),
-							DetailField.of("title").title("Title"))
-						.actions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE)),
+							DetailField.of(COL_SEVERITY).title(TITLE_SEVERITY),
+							DetailField.of(COL_TITLE).title(TITLE_TITLE))
+						.actions(ActionBar.create().items(ActionRef.of(ACTION_ACK), SafeAction.COLLAPSE)),
 					DetailSection.create("context", "Context")
 						.fields(
 							DetailField.of("summary").title("Summary"),
-							DetailField.of("assignee").title("Assignee"))
-						.actions(ActionBar.create().items(ActionRef.of("esc")))
+							DetailField.of(COL_ASSIGNEE).title("Assignee"))
+						.actions(ActionBar.create().items(ActionRef.of(ACTION_ESC)))
 						// A read-only table nested in the expander: its own client-mode GET is scoped to the
 						// parent alert by the "alertId" query param (no {parentId} URL template).  It runs only
 						// after the alert's detail GET succeeds and the Context pane becomes visible.
@@ -281,9 +314,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.rowType(AlertEvent.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/alerts/events")
-			.defaultOrder("timestamp", Dir.ASC)
+			.defaultOrder(COL_TIMESTAMP, Dir.ASC)
 			.columns(
-				Column.of("timestamp").title("When").render("date"),
+				Column.of(COL_TIMESTAMP).title("When").render(RENDER_DATE),
 				Column.of("kind").title("Kind"),
 				Column.of("detail").title("Detail"))
 			.build();
@@ -307,9 +340,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 			Card.create("fleet", "Fleet Summary").body(
 				CardFieldList.create().columns(2).fields(
 					CardField.of("total", "Total widgets", Integer.toString(ACTIVE_WIDGETS.size() + ARCHIVED_WIDGETS.size())),
-					CardField.of("active", "Active", Integer.toString(ACTIVE_WIDGETS.size())),
-					CardField.of(VALUE_ARCHIVED, "Archived", Integer.toString(ARCHIVED_WIDGETS.size())),
-					CardField.of("alerts", "Total alerts", Integer.toString(ALERTS.size())))),
+					CardField.of(CARD_ACTIVE, "Active", Integer.toString(ACTIVE_WIDGETS.size())),
+					CardField.of(VALUE_ARCHIVED, TITLE_ARCHIVED, Integer.toString(ARCHIVED_WIDGETS.size())),
+					CardField.of(CARD_ALERTS, "Total alerts", Integer.toString(ALERTS.size())))),
 			Card.create("live", "Live Alert Metrics").body(
 				CardFieldList.create().columns(2)
 					.fields(
@@ -348,18 +381,18 @@ public class ExampleViewsRest extends BasicRestServlet {
 			if (STATUS_OPEN.equals(a.status)) open++;
 			else if (STATUS_ACKNOWLEDGED.equals(a.status)) ack++;
 			else if (STATUS_ESCALATED.equals(a.status)) esc++;
-			if ("critical".equals(a.severity)) critical++;
+			if (SEVERITY_CRITICAL.equals(a.severity)) critical++;
 		}
 		return QuickStats.create("alert-overview").items(
 			StatTile.of("total", "Total alerts", Long.toString(ALERTS.size()))
 				.tone(StatusTone.INFO),
 			// A meter reads "how much of the budget is used": critical alerts against the whole table.
-			StatBar.of("critical", "Critical", critical, ALERTS.size())
+			StatBar.of(SEVERITY_CRITICAL, "Critical", critical, ALERTS.size())
 				.tone(critical == 0 ? StatusTone.SUCCESS : StatusTone.ERROR),
 			SegmentedBadge.of("by-status", "By status").segments(
-				SegmentedBadge.Segment.of("open", open).tone(StatusTone.WARNING),
-				SegmentedBadge.Segment.of("acknowledged", ack).tone(StatusTone.INFO),
-				SegmentedBadge.Segment.of("escalated", esc).tone(StatusTone.ERROR)));
+				SegmentedBadge.Segment.of(STATUS_OPEN, open).tone(StatusTone.WARNING),
+				SegmentedBadge.Segment.of(STATUS_ACKNOWLEDGED, ack).tone(StatusTone.INFO),
+				SegmentedBadge.Segment.of(STATUS_ESCALATED, esc).tone(StatusTone.ERROR)));
 	}
 
 	/**
@@ -383,21 +416,21 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.quickStats(alertQuickStats())
 			.columns(
 				Column.of("id").title("Id"),
-				Column.of("severity").title("Severity").render("tag:status"),
-				Column.of("title").title("Title"),
+				Column.of(COL_SEVERITY).title(TITLE_SEVERITY).render(RENDER_TAG_STATUS),
+				Column.of(COL_TITLE).title(TITLE_TITLE),
 				// A display-only pill with an explicit tone from the five-value status palette.  No meta.action, so
 				// no role/tabindex/dispatch attribute is emitted - the chip is presentation, and that is legal.
-				Column.of(COL_STATUS).title("Status")
-					.render(Render.pill(StatusTone.WARNING.wire()).meta("field", "state")))
+				Column.of(COL_STATUS).title(TITLE_STATUS)
+					.render(Render.pill(StatusTone.WARNING.wire()).meta(META_FIELD, META_STATE)))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
 				.sections(DetailSection.create("overview", "Overview")
 					.columns(2)
 					.fields(
-						DetailField.of("severity").title("Severity"),
-						DetailField.of("assignee").title("Assignee"),
+						DetailField.of(COL_SEVERITY).title(TITLE_SEVERITY),
+						DetailField.of(COL_ASSIGNEE).title("Assignee"),
 						// The fill-sink pill: same chip, rendered by the sink-path renderer, unconditionally inert.
-						DetailField.of(COL_STATUS).title("Status").render(Render.pill().meta("field", "state")))
+						DetailField.of(COL_STATUS).title(TITLE_STATUS).render(Render.pill().meta(META_FIELD, META_STATE)))
 					.actions(ActionBar.create().items(SafeAction.COLLAPSE))))
 			.build();
 	}
@@ -467,8 +500,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 				// sub-tab's DataTable on first activation.
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.PAGES_JS_PATH));
 		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	/**
@@ -513,8 +546,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.CARDS_JS_PATH));
 		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	/**
@@ -568,8 +601,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH));
 		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	/**
@@ -587,8 +620,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	public HttpResource flagged(RestRequest req) {
 		var markup = Html.of(ViewTable.of(req, flaggedView(), ACTIVE_WIDGETS));
 		return HttpResourceBean.of(
-			ByteArrayBody.of(markup.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(markup.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -684,10 +717,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 	public Map<String,Object> alertDetail(@Path("id") String id) {
 		var a = findAlert(id);
 		return detailEnvelope(Map.of(
-			"severity", a.severity,
-			"title", a.title,
+			COL_SEVERITY, a.severity,
+			COL_TITLE, a.title,
 			"summary", a.summary,
-			"assignee", a.assignee));
+			COL_ASSIGNEE, a.assignee));
 	}
 
 	/**
@@ -705,18 +738,18 @@ public class ExampleViewsRest extends BasicRestServlet {
 	@RestGet(path="/data/alerts/{id}/ack-form", swagger=@OpSwagger(ignore=true))
 	public ModalDef ackForm(@Path("id") String id) {
 		var a = findAlert(id);
-		var key = IdempotencyKey.mint("ack", id);
+		var key = IdempotencyKey.mint(ACTION_ACK, id);
 		return ModalDef.create("Acknowledge this alert?")
 			.field("Id", a.id)
-			.field("Severity", a.severity)
-			.field("Title", a.title)
+			.field(TITLE_SEVERITY, a.severity)
+			.field(TITLE_TITLE, a.title)
 			.form(FormDef.create()
 				.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required()
 					.maxLength(500).help("Describe what you did to acknowledge this alert."))
 				.field(FormDef.Input.of("notify", "Notify on-call", "toggle").value("true"))
-				.field(FormDef.Input.of("severity", "Re-assign severity", "select")
-					.option("critical", "Critical").option("warning", "Warning").option("info", "Info").value(a.severity))
-				.field(FormDef.Input.of("escalate", "Escalate instead…", "action").action(ActionRef.of("esc"))))
+				.field(FormDef.Input.of(COL_SEVERITY, "Re-assign severity", "select")
+					.option(SEVERITY_CRITICAL, "Critical").option("warning", "Warning").option(SEVERITY_INFO, "Info").value(a.severity))
+				.field(FormDef.Input.of("escalate", "Escalate instead…", INPUT_TYPE_ACTION).action(ActionRef.of(ACTION_ESC))))
 			.idempotencyKey(key.value())
 			.checked();
 	}
@@ -768,7 +801,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 		fields.put(STATUS_OPEN, open);
 		fields.put(STATUS_ACKNOWLEDGED, ack);
 		fields.put(STATUS_ESCALATED, esc);
-		fields.put("asOf", Instant.now().toString());
+		fields.put("asOf", Instant.now(Clock.systemUTC()).toString());
 		return cardEnvelope(fields);
 	}
 
@@ -804,7 +837,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 		for (var i = 1; i <= 30; i++) {
 			// Every 7th widget is "error" (rowClassRule target); the rest alternate active/active/active for a
 			// mostly-healthy-looking table with a few flagged rows scattered through it.
-			var status = i % 7 == 0 ? STATUS_ERROR : "active";
+			var status = i % 7 == 0 ? STATUS_ERROR : STATUS_ACTIVE;
 			out.add(new Widget(
 				"widget-" + i,
 				status,
@@ -846,7 +879,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 
 	private static List<Alert> buildAlerts() {
 		var out = new ArrayList<Alert>();
-		var severities = List.of("critical", "warning", "info");
+		var severities = List.of(SEVERITY_CRITICAL, "warning", SEVERITY_INFO);
 		var assignees = List.of("alice", "bob", "carol");
 		for (var i = 1; i <= 12; i++) {
 			out.add(new Alert(
@@ -862,7 +895,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 
 	private static List<AlertEvent> buildAlertEvents() {
 		var out = new ArrayList<AlertEvent>();
-		var kinds = List.of("fired", "notified", "acknowledged", "note");
+		var kinds = List.of("fired", "notified", STATUS_ACKNOWLEDGED, "note");
 		// A handful of events per alert so the nested table has enough rows to page/sort against, and so a
 		// mis-scoped request (wrong or missing alertId) would be visibly wrong - some alerts' rows leaking into
 		// another's expander.

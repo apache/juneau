@@ -59,18 +59,22 @@ const document = {
 
 const window = { document: document, console: console, jQuery: undefined };
 const sandbox = { window: window, document: document, console: console };
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-config.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), sandbox, { filename: 'juneau-config.js' });
+// NOSONAR javascript:S1523 -- same rationale: deliberately loading the real juneau-views.js under test
+// into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
 const out = {
-	hasConfig: !!(NS && NS.config),
-	hasInit: !!(NS && NS.init),
-	hasDtIndex: !!(NS && NS.config && typeof NS.config.dtIndex === 'function'),
-	hasApplyView: !!(NS && NS.config && typeof NS.config.applyView === 'function'),
-	hasResolveActiveView: !!(NS && NS.config && typeof NS.config.resolveActiveView === 'function'),
-	hasBuildTable: !!(NS && NS.init && typeof NS.init.buildTable === 'function'),
-	hasResolveOrder: !!(NS && NS.init && typeof NS.init.resolveOrder === 'function')
+	hasConfig: !!NS?.config,
+	hasInit: !!NS?.init,
+	hasDtIndex: typeof NS?.config?.dtIndex === 'function',
+	hasApplyView: typeof NS?.config?.applyView === 'function',
+	hasResolveActiveView: typeof NS?.config?.resolveActiveView === 'function',
+	hasBuildTable: typeof NS?.init?.buildTable === 'function',
+	hasResolveOrder: typeof NS?.init?.resolveOrder === 'function'
 };
 
 if (!out.hasConfig || !out.hasInit) {
@@ -98,17 +102,17 @@ optsColumns.forEach(function (c) {
 const viewDef = { columns: catalog, defaultOrder: [{ data: 'C', dir: 'asc' }] };
 const order = I.resolveOrder(viewDef, optsColumns);
 out.order = order;
-out.orderIndex = (order && order[0]) ? order[0][0] : null;
-out.orderDir = (order && order[0]) ? order[0][1] : null;
+out.orderIndex = order?.[0] ? order[0][0] : null;
+out.orderDir = order?.[0] ? order[0][1] : null;
 out.dtIndexC = C.dtIndex('C', optsColumns);
 
 const hiddenOrder = I.resolveOrder(
 	{ columns: catalog, defaultOrder: [{ data: 'B', dir: 'desc' }] },
 	optsColumns
 );
-out.hiddenFallbackIndex = (hiddenOrder && hiddenOrder[0]) ? hiddenOrder[0][0] : null;
-out.hiddenFallbackData = (hiddenOrder && hiddenOrder[0])
-	? optsColumns[hiddenOrder[0][0]] && optsColumns[hiddenOrder[0][0]].data
+out.hiddenFallbackIndex = hiddenOrder?.[0] ? hiddenOrder[0][0] : null;
+out.hiddenFallbackData = hiddenOrder?.[0]
+	? optsColumns[hiddenOrder[0][0]]?.data
 	: null;
 
 out.applyViewNotInit = C.applyView({}, null);

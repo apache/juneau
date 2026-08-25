@@ -63,7 +63,10 @@ public class RequestIdFilter {
 	 * @deprecated The resolver now defaults to sanitize-and-accept (see {@link RequestIdSettings}); this pattern is no
 	 * 	longer applied.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0.0", forRemoval = false)
+	@SuppressWarnings({
+		"java:S1133" // Retained indefinitely for source compatibility; not scheduled for removal, so not deleted
+	})
 	public static final String DEFAULT_VALIDATOR_PATTERN = "^[A-Za-z0-9-_]{1,128}$";
 
 	/**

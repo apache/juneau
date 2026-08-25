@@ -16,10 +16,11 @@
  */
 
 /*
- * chrome-menu.cjs - always-on Node INTEGRATION harness for TODO-445m: juneau-renders.js + juneau-views.js (the ONE
- * 445h layer stack) + juneau-chrome.js loaded into a SINGLE sandbox, so a real Behavior.MENU trigger opens its
- * .jc-menu list on the shared stack - not on a chrome-local mock.  Proves the list is portalled to document.body
- * (position:fixed, escaping any overflow-clip ancestor) as a kind:"menu" light-dismiss layer, that Escape /
+ * chrome-menu.cjs - always-on Node INTEGRATION harness for the chrome/views menu-wiring contract: juneau-renders.js
+ * + juneau-views.js (the ONE 445h layer stack) + juneau-chrome.js loaded into a SINGLE sandbox, so a real
+ * Behavior.MENU trigger opens its .jc-menu list on the shared stack - not on a chrome-local mock.  Proves the list
+ * is portalled to document.body (position:fixed, escaping any overflow-clip ancestor) as a kind:"menu"
+ * light-dismiss layer, that Escape /
  * outside-click dismissal runs through that ONE stack, and - the stacking case - that a chrome menu opened OVER a
  * views dialog pops off cleanly on Escape without disturbing the dialog beneath it (a menu never inflates the
  * dialog-kind depth cap).
@@ -48,27 +49,34 @@ const env = makeEnv();
 // itself - header.cjs covers SAFE dispatch - but the constructor must exist for wiring to run cleanly).
 env.window.CustomEvent = function (type, init) {
 	this.type = type;
-	this.detail = init && init.detail;
-	this.bubbles = !!(init && init.bubbles);
+	this.detail = init?.detail;
+	this.bubbles = !!init?.bubbles;
 	this.defaultPrevented = false;
 	this.preventDefault = function () { this.defaultPrevented = true; };
 };
 
 const sandbox = {
 	window: env.window, document: env.document, console: console,
-	setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; },
+	setTimeout: function (fn) {
+		if (typeof fn === 'function') { fn(); }
+		return 0;
+	},
 	clearTimeout: function () {}, setInterval: function () { return 0; }, clearInterval: function () {},
 	Promise: Promise,
-	fetch: function () { return env.callFetch.apply(env, arguments); }
+	fetch: function (...args) { return env.callFetch(...args); }
 };
 
 // ONE sandbox: views.js publishes window.JuneauViews.init (the shared stack); chrome.js then CALLS it (never defines it).
+// NOSONAR javascript:S1523 -- loading the production juneau-*.js sources into a VM sandbox is this harness's
+// intended mechanism for exercising them together; inputs are fixed local file paths supplied by the test.
 vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-chrome.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
 
-const V = env.window.JuneauViews && env.window.JuneauViews.init;
-const C = env.window.JuneauChrome && env.window.JuneauChrome.init;
+const V = env.window.JuneauViews?.init;
+const C = env.window.JuneauChrome?.init;
 const out = {
 	hasViews: !!(V && typeof V.pushLayer === 'function' && typeof V.topLayer === 'function'),
 	hasChrome: !!(C && typeof C.wireMenus === 'function')
@@ -110,7 +118,7 @@ C.wireMenus(header);
 
 // --- open: the list is pushed onto the shared stack, portalled to body, position:fixed, as a kind:"menu" layer ------
 trigger.dispatch('click', clickEv());
-out.open_topIsMenu = V.topLayer() != null && V.topLayer().kind === 'menu';
+out.open_topIsMenu = V.topLayer()?.kind === 'menu';
 out.open_menuOnBody = menu.parentNode === env.body;
 out.open_escapedHeader = ! header.contains(menu);            // no longer clipped by any header/actions ancestor
 out.open_positionFixed = menu.style.position === 'fixed';
@@ -128,7 +136,7 @@ out.esc_menuKeptInBody = menu.parentNode === env.body;       // detachOnPop:fals
 
 // --- reopen, then an OUTSIDE pointerdown light-dismisses the top menu layer via the shared stack -------------------
 trigger.dispatch('click', clickEv());
-out.reopen_topIsMenu = V.topLayer() != null && V.topLayer().kind === 'menu';
+out.reopen_topIsMenu = V.topLayer()?.kind === 'menu';
 const outside = mkEl('div', ''); env.body.appendChild(outside);
 env.dispatchDocument('pointerdown', { target: outside });
 out.light_closed = V.topLayer() === null && trigger.getAttribute('aria-expanded') === 'false';
@@ -139,10 +147,10 @@ const table = mkEl('table', ''); const tr = mkEl('tr', '');
 V.showActionDialog({ title: 'Details' }, { id: 'd', label: 'Details' }, table, tr, {});
 out.stack_dialogFirst = V.dialogLayerCount() === 1 && V.topLayer().kind === 'dialog';
 trigger.dispatch('click', clickEv());
-out.stack_menuOverDialog = V.topLayer() != null && V.topLayer().kind === 'menu';
+out.stack_menuOverDialog = V.topLayer()?.kind === 'menu';
 out.stack_dialogCountUnchanged = V.dialogLayerCount() === 1;   // the menu stacks ABOVE without touching the dialog cap
 env.dispatchDocument('keydown', { key: 'Escape' });            // Escape pops ONLY the top (the menu)
-out.stack_menuPoppedDialogRemains = V.topLayer() != null && V.topLayer().kind === 'dialog';
+out.stack_menuPoppedDialogRemains = V.topLayer()?.kind === 'dialog';
 out.stack_dialogSurvives = V.dialogLayerCount() === 1;
 out.stack_ariaReset = trigger.getAttribute('aria-expanded');   // 'false'
 drain();

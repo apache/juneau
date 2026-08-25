@@ -60,7 +60,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 
 	private static List<Path> javaFilesUnder(String relative) throws IOException {
 		try (var s = Files.walk(sourceRoot(relative))) {
-			return s.filter(p -> p.toString().endsWith(".java")).sorted().collect(Collectors.toList());
+			return s.filter(p -> p.toString().endsWith(".java")).sorted().toList();
 		}
 	}
 
@@ -150,7 +150,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 	// d) The dialog beans live here, not next door
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_dialogBeans_resolveFromThisModulesPackage() throws Exception {
+	@Test void d01_dialogBeans_resolveFromThisModulesPackage() {
 		// The declarative dialog contracts are general widget contracts, so they belong to this module.  Resolving
 		// them by name (rather than referencing the types) is what makes this a genuine relocation guard: a stale
 		// import elsewhere cannot satisfy it.

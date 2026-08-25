@@ -70,11 +70,11 @@ const LEGEND_STATE = sel => {
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 
 		const report = await page.evaluate(() => ({
-			hasViews: !!(window.JuneauViews && window.JuneauViews.init),
+			hasViews: !!window.JuneauViews?.init,
 			hasCalendar: !!window.JuneauCalendar,
 			// Recorded by an inline script BETWEEN the two <script> tags: the load-order contract, observed.
 			viewsBeforeCalendar: window.__viewsBeforeCalendar === true,
-			contract: window.JuneauCalendar ? window.JuneauCalendar.CONTRACT_VERSION : null
+			contract: window.JuneauCalendar?.CONTRACT_VERSION ?? null
 		}));
 
 		// ---- Block A: the legend toggle is keyboard-reachable and Enter operates it, aria-pressed tracking state ----
@@ -124,14 +124,13 @@ const LEGEND_STATE = sel => {
 			return {
 				opened: !!pop,
 				onSharedStack: !!(top && pop && top.el === pop),
-				kind: top ? top.kind : null,
-				lightDismiss: top ? !!top.lightDismiss : false,
+				kind: top?.kind ?? null,
+				lightDismiss: !!top?.lightDismiss,
 				portalledToBody: pop ? pop.parentElement === document.body : false,
 				positionFixed: pop ? pop.style.position === 'fixed' : false,
 				hasZIndex: pop ? !!pop.style.zIndex : false,
-				dataLayer: pop ? pop.getAttribute('data-juneau-layer') : null,
-				triggerExpanded: (document.querySelector('.jc-cal-more') || {}).getAttribute
-					? document.querySelector('.jc-cal-more').getAttribute('aria-expanded') : null
+				dataLayer: pop?.dataset.juneauLayer ?? null,
+				triggerExpanded: document.querySelector('.jc-cal-more')?.getAttribute('aria-expanded') ?? null
 			};
 		});
 		await page.keyboard.press('Escape');
@@ -152,4 +151,4 @@ const LEGEND_STATE = sel => {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Pins the TODO-445n "full horizontal real estate" (Goal 1) CSS contract in {@code chrome.css}: the
+ * Pins the wide-table "full horizontal real estate" CSS contract in {@code chrome.css}: the
  * {@code data-juneau-layout="wide"} stamp widens the wrapper {@code <div>} {@code ViewTable} emits, and the
  * ancestor card/main expand via {@code :has(...)}.
  *
@@ -53,8 +53,25 @@ class ChromeCss_FullBleed_Test extends TestBase {
 		assertTrue(c.contains("[data-juneau-layout=\"wide\"]"),
 			"the data-juneau-layout=\"wide\" stamp must have a widening rule");
 		assertTrue(c.contains("[data-juneau-layout=\"wide\"] { max-width: none")
-			|| c.matches(".*\\[data-juneau-layout=\"wide\"\\][^{]*\\{[^}]*max-width: none.*"),
+			|| ruleBodyContains(c, "[data-juneau-layout=\"wide\"]", "max-width: none"),
 			"the wide stamp must set max-width:none on itself");
+	}
+
+	/**
+	 * Returns whether the {@code selector { ... }} rule immediately following {@code selector} in {@code css} has
+	 * a body containing {@code needle}. A plain substring scan (rather than a chained-quantifier regex) for this
+	 * "selector, then eventually needle, before the closing brace" shape, since a regex here would need
+	 * backtracking to bridge {@code needle}'s overlap with the body's not-yet-closing-brace characters.
+	 */
+	private static boolean ruleBodyContains(String css, String selector, String needle) {
+		var selIdx = css.indexOf(selector);
+		if (selIdx < 0)
+			return false;
+		var braceIdx = css.indexOf('{', selIdx + selector.length());
+		if (braceIdx < 0)
+			return false;
+		var endIdx = css.indexOf('}', braceIdx + 1);
+		return css.substring(braceIdx + 1, endIdx < 0 ? css.length() : endIdx).contains(needle);
 	}
 
 	/** The ancestor card widens only when the wide wrapper is a DIRECT child (position-dependent matrix). */

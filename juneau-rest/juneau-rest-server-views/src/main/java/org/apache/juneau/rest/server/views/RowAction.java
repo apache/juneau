@@ -22,7 +22,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * A per-row action descriptor in the {@code VIEW_META} wire contract (design doc §6.10; the transport-agnostic
- * "row-action intent" model of {@code TODO-399} Decision&nbsp;8).
+ * "row-action intent" model, Decision&nbsp;8).
  *
  * <p>
  * A {@link ViewDef} declares zero or more of these via {@link ViewDef#rowActions(RowAction...)}; the
@@ -31,8 +31,8 @@ import org.apache.juneau.commons.bean.*;
  *
  * <h5 class='section'>The frozen wire schema</h5>
  * <p>
- * This is the <b>complete</b> set of wire fields; it is pinned in full now so that later waves (the declarative
- * modal/form + typed result of {@code TODO-416}) can rely on it verbatim without forcing another fail-loud
+ * This is the <b>complete</b> set of wire fields; it is pinned in full now so that later waves (a future declarative
+ * modal/form + typed result) can rely on it verbatim without forcing another fail-loud
  * contract bump.  Only {@link #id} is required; every other field is optional and is omitted from the serialized
  * form when unset (null-valued properties are dropped).
  * <table class='styled'>
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.bean.*;
  * 		<td>The non-safe HTTP method (see {@link Method}).</td></tr>
  * 	<tr><td>{@code confirm}</td><td>string</td><td>Optional confirmation prompt shown before the submit.</td></tr>
  * 	<tr><td>{@code form}</td><td>string</td><td>Optional form-source URL supplying the action's input fields
- * 		(the declarative form {@code TODO-416} renders).</td></tr>
+ * 		(a future declarative form renders).</td></tr>
  * 	<tr><td>{@code present}</td><td>{@code page}|{@code dialog}|{@code inline}</td>
  * 		<td>How the action's form/confirmation is presented (see {@link Present}).</td></tr>
  * 	<tr><td>{@code onSuccess}</td><td>{@code redraw}|{@code mergeRow}|{@code navigate}</td>
@@ -121,7 +121,7 @@ public class RowAction {
 	 *
 	 * <p>
 	 * Each constant carries the lowercase wire token emitted for the {@code present} field.  The behavior behind
-	 * each token is implemented by a later wave ({@code TODO-416}); this type freezes the vocabulary.
+	 * each token is implemented by a later wave; this type freezes the vocabulary.
 	 */
 	public enum Present {
 
@@ -155,7 +155,7 @@ public class RowAction {
 	 *
 	 * <p>
 	 * Each constant carries the wire token emitted for the {@code onSuccess} field.  The behavior behind each
-	 * token is implemented by a later wave ({@code TODO-416}/{@code TODO-417}); this type freezes the vocabulary.
+	 * token is implemented by a later wave; this type freezes the vocabulary.
 	 */
 	public enum OnSuccess {
 

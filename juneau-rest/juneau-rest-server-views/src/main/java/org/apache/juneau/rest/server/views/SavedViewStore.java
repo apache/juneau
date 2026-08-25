@@ -20,7 +20,7 @@ import java.util.*;
 
 /**
  * The consumer-injectable persistence seam behind {@link SavedViewsMixin} &mdash; the server half of the saved-views
- * persistence SPI (TODO-444 §3.3).
+ * persistence SPI (design doc §3.3).
  *
  * <p>
  * Every operation is keyed on a <b>structured tuple</b> &mdash; {@code (principalName, pageId, viewId, name)} for the

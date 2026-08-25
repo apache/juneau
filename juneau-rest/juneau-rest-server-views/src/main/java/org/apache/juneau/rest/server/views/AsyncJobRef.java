@@ -22,7 +22,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal {@link ActionResult} when
- * the write is asynchronous (design doc §6.3; {@code TODO-425}).
+ * the write is asynchronous (design doc §6.3).
  *
  * <h5 class='section'>Why this is not a new {@code RowAction} wire field</h5>
  * <p>

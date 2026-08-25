@@ -71,10 +71,10 @@
 	/** Live {@code dtIndex} when {@code optsColumns} is the actual DataTables array; else catalog index. */
 	function indexForRibbonColumn(viewDef, columnKey, optsColumns) {
 		if (optsColumns) {
-			if (NS.config && typeof NS.config.dtIndex === "function")
+			if (typeof NS.config?.dtIndex === "function")
 				return NS.config.dtIndex(columnKey, optsColumns);
 			for (let i = 0; i < optsColumns.length; i++)
-				if (optsColumns[i] && optsColumns[i].data === columnKey) return i;
+				if (optsColumns[i]?.data === columnKey) return i;
 			return -1;
 		}
 		return columnIndex(viewDef, columnKey);
@@ -164,7 +164,7 @@
 	 * runtime contents (apps can register icons after page load).
 	 */
 	function resolveButtonIcon(actionOrOpt, defaultKey) {
-		if (actionOrOpt && actionOrOpt.symbol != null) return actionOrOpt.symbol;
+		if (actionOrOpt?.symbol != null) return actionOrOpt.symbol;
 		if (defaultKey != null && Object.hasOwn(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
 		return "tune";
 	}
@@ -174,6 +174,7 @@
 	// ==================================================================================================================
 
 	function safeStorage() {
+		// A SecurityError (private-mode/disabled storage) means no storage is available - not an error to surface.
 		try { return window.localStorage; } catch (e) { return null; }
 	}
 
@@ -183,7 +184,7 @@
 	 * non-configurable table (no config.js) keeps working and the ribbon never becomes Promise-based.
 	 */
 	function storageGet(key) {
-		if (NS.persistence && typeof NS.persistence.getItem === "function")
+		if (typeof NS.persistence?.getItem === "function")
 			return NS.persistence.getItem(key);
 		const store = safeStorage();
 		return store ? store.getItem(key) : null;
@@ -191,7 +192,7 @@
 
 	/** Writes a ribbon-toggle value; same SPI-or-localStorage split as {@link #storageGet}. */
 	function storageSet(key, value) {
-		if (NS.persistence && typeof NS.persistence.setItem === "function") {
+		if (typeof NS.persistence?.setItem === "function") {
 			NS.persistence.setItem(key, value);
 			return;
 		}
@@ -242,7 +243,7 @@
 		const features = detectExportFeatures(window);
 		const bar = document.createElement("div");
 		bar.className = "juneau-view-ribbon";
-		bar.setAttribute("data-testid", "ribbon");
+		bar.dataset.testid = "ribbon";
 
 		let openGroup = null;   // { id, el } - the currently-open adjacent-group wrapper, or null when ungrouped
 		function place(el, groupId) {
@@ -279,7 +280,7 @@
 							buttons: ids,
 							exportOptions: { columns: ":visible" }
 						});
-						const exportGroupId = a.group != null ? a.group : "__ungrouped";
+						const exportGroupId = a.group ?? "__ungrouped";
 						ids.forEach(function (id) {
 							place(button(id, resolveButtonIcon(null, id), function () {
 								ctx.dataTable.button(id).trigger();

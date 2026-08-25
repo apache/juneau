@@ -28,11 +28,11 @@ import org.junit.jupiter.api.*;
 
 /**
  * Proves REST-driven serializer/parser debug <i>behavior</i> is decoupled from the JUL logger level and is instead
- * controlled by the cascading {@code debugMarshalling} setting (TODO-372a).
+ * controlled by the cascading {@code debugMarshalling} setting.
  *
  * <p>
- * Two session-level {@code .debug()} observables are exercised (see the "Plan correction (Option A)" note in
- * {@code TODO-372a-plan.md} for why recursion&rarr;500 is <b>not</b> a valid session-debug observable):
+ * Two session-level {@code .debug()} observables are exercised (recursion&rarr;500 is intentionally <b>not</b>
+ * treated as a valid session-debug observable, per the Option-A design correction):
  * <ul>
  * 	<li><b>Serializer traversal-stack prefix</b> &mdash; when marshalling debug is engaged, a getter-invocation failure
  * 		message is prefixed with the debug traversal stack (e.g. {@code " > [0] root:..."}) and the session collects it

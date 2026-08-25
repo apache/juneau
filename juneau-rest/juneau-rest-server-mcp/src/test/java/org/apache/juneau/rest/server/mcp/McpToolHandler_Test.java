@@ -74,8 +74,9 @@ class McpToolHandler_Test {
 
 	@Test void c03_ofRejectsBlankName() {
 		BiFunction<Map<String,Object>,BeanStore,McpToolOutcome> call = (arguments, ctx) -> McpToolOutcome.text("x");
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec(), call));
-		var spec = new McpToolSpec().setName(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec, call));
+		var spec1 = new McpToolSpec();
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec1, call));
+		var spec2 = new McpToolSpec().setName(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec2, call));
 	}
 }

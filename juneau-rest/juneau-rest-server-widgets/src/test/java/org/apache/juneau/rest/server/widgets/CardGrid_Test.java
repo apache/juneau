@@ -56,8 +56,10 @@ class CardGrid_Test extends TestBase {
 	}
 
 	@Test void a05_noCards_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> CardGrid.create("g1").validate());
-		assertThrows(IllegalArgumentException.class, () -> CardGrid.create("g1").cards().validate());
+		var g1 = CardGrid.create("g1");
+		assertThrows(IllegalArgumentException.class, () -> g1.validate());
+		var g2 = CardGrid.create("g1").cards();
+		assertThrows(IllegalArgumentException.class, () -> g2.validate());
 	}
 
 	@Test void a06_duplicateCardId_rejected() {

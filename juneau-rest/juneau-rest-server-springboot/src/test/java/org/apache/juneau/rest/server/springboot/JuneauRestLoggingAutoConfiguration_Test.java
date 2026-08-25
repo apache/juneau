@@ -116,9 +116,15 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 		var prevUseParentHandlers = jul.getUseParentHandlers();
 		var prevHandlers = jul.getHandlers();
 		var marker = new Handler() {
-			@Override public void publish(java.util.logging.LogRecord record) {}
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void publish(java.util.logging.LogRecord rec) {
+				// No-op: this handler only marks its presence to verify it survives cfg.install(...).
+			}
+			@Override public void flush() {
+				// No-op: marker handler; nothing to flush.
+			}
+			@Override public void close() {
+				// No-op: marker handler; nothing to close.
+			}
 		};
 		try {
 			for (var h : prevHandlers)

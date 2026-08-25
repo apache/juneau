@@ -43,7 +43,7 @@ class HtdocMixin_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_existingFileResolvesViaLegacyMount() throws Exception {
-		c.get("/htdocs/javadoc.css")
+		c.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -57,7 +57,7 @@ class HtdocMixin_Test extends TestBase {
 
 	@Test void a03_headNotSupported() throws Exception {
 		// HtdocMixin keeps its legacy GET-only contract (unlike StaticFilesMixin, which also serves HEAD).
-		c.head("/htdocs/javadoc.css")
+		c.head("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(404);
 	}

@@ -67,16 +67,16 @@ class RowDetailDef_SinkPill_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void b01_sinkPill_withAction_failsClosed() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> sink(Render.pill().meta("action", "ack")).validate(null));
+		var d = sink(Render.pill().meta("action", "ack"));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("meta.action"), e::getMessage);
 		assertTrue(e.getMessage().contains("ack"), e::getMessage);
 	}
 
 	/** The failure message must name the offending sink, not just the renderer, so an author can find it. */
 	@Test void b02_sinkPill_actionFailure_namesTheHost() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> sink(Render.pill().meta("action", "ack")).validate(null));
+		var d = sink(Render.pill().meta("action", "ack"));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("info.state"), e::getMessage);
 	}
 
@@ -112,8 +112,8 @@ class RowDetailDef_SinkPill_Test extends TestBase {
 	@Test void c02_sinkPill_offPaletteTone_failsClosed() {
 		// The retired v1 palette (ok/warn/exceeds) plus the Badge overlay names, plus wrong-cased variants.
 		for (var tone : new String[]{"ok", "warn", "exceeds", "accent", "danger", "INFO", "Success", "bogus"}) {
-			var e = assertThrows(IllegalArgumentException.class,
-				() -> sink(Render.pill().meta("tone", tone)).validate(null), tone);
+			var d = sink(Render.pill().meta("tone", tone));
+			var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null), tone);
 			assertTrue(e.getMessage().contains(tone), e::getMessage);
 			assertTrue(e.getMessage().contains("info|success|warning|error|neutral"), e::getMessage);
 		}

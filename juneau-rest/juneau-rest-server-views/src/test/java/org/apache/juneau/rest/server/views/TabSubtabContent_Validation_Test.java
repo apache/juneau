@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-420: validation-matrix tests for {@link Tab#content}/{@link Subtab#content}.
+ * Validation-matrix tests for {@link Tab#content}/{@link Subtab#content}.
  *
  * <p>
  * Pins the panel-body matrices stated on {@link Tab} and {@link Subtab}'s javadoc and mirrored across all three
@@ -61,7 +61,7 @@ class TabSubtabContent_Validation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Tab matrix: {view} | {subtabs} | {content} | {content+subtabs}
+	// Tab matrix: exactly one of view, subtabs, or content - except content may co-occur with subtabs
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_tabWithContentOnly_accepted() {
@@ -125,7 +125,7 @@ class TabSubtabContent_Validation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Subtab matrix: {view} | {content}
+	// Subtab matrix: exactly one of view or content
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_subtabWithContentOnly_accepted() {

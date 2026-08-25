@@ -42,11 +42,14 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
 	const tick = () => new Promise(r => setTimeout(r, 0));
+	// NOSONAR javascript:S7721 -- shown()/makeRow()/parts() below stay nested inside PROBE even though they
+	// close over no outer locals: page.evaluate() serializes only PROBE's own source text across the
+	// Playwright process boundary, so a module-scope sibling would be undefined inside the browser.
 	function shown(el) { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
 	function drain() { while (init.topLayer()) init.popLayer(); }
 	function displayOf(el) { return el ? window.getComputedStyle(el).display : null; }
@@ -55,7 +58,7 @@ const PROBE = async function () {
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		tr.setAttribute('data-juneau-row-id', rowId);
+		tr.dataset.juneauRowId = rowId;
 		const td = document.createElement('td');
 		td.className = 'juneau-view-actions-cell';
 		tr.appendChild(td);
@@ -90,6 +93,7 @@ const PROBE = async function () {
 		};
 	}
 
+	// NOSONAR javascript:S7721 -- same cross-process-boundary reason as shown()/makeRow() above.
 	function parts() {
 		const backdrop = document.querySelector('.juneau-view-dialog-backdrop');
 		const wrap = backdrop ? backdrop.querySelector('.juneau-view-dialog-form') : null;
@@ -184,7 +188,7 @@ const PROBE = async function () {
 		await tick();
 		p.tabs[0].click();
 		await tick();
-		dom.table.setAttribute('data-juneau-csrf', 'tok');
+		dom.table.dataset.juneauCsrf = 'tok';
 		ui.confirmBtn.click();
 		await tick(); await tick();
 		window.fetch = realFetch;
@@ -196,9 +200,9 @@ const PROBE = async function () {
 			dialogStillOpen: !!document.querySelector('.juneau-view-dialog-backdrop'),
 			notesAriaInvalid: notes.getAttribute('aria-invalid') === 'true',
 			// The error is painted in the section that owns the control, and the other section stays clean.
-			notesErrorInOwnSection: !!notesErr && notesErr.textContent.length > 0,
+			notesErrorInOwnSection: notesErr?.textContent.length > 0,
 			notesErrorNotInOtherSection: !p.panes[0].querySelector('[data-juneau-error-for="notes"]'),
-			titleErrorEmpty: !!titleErr && titleErr.textContent === '',
+			titleErrorEmpty: titleErr?.textContent === '',
 			// Confirm revealed the owning section so the focus target is actually visible.
 			offendingSectionRevealed: shown(p.panes[1]) && !shown(p.panes[0]),
 			focusOnFirstInvalid: document.activeElement === notes,
@@ -215,9 +219,9 @@ const PROBE = async function () {
 		await tick();
 		const p = parts();
 		function label(n) {
-			return n.getAttribute('data-juneau-strip-tab')
-				|| n.getAttribute('data-juneau-form-field')
-				|| (n.hasAttribute('data-juneau-form-section') ? 'pane:' + n.getAttribute('data-juneau-form-section') : null)
+			return n.dataset.juneauStripTab
+				|| n.dataset.juneauFormField
+				|| (n.dataset.juneauFormSection !== undefined ? 'pane:' + n.dataset.juneauFormSection : null)
 				|| (n.className || n.tagName);
 		}
 		function inHiddenSection(n) {
@@ -239,17 +243,17 @@ const PROBE = async function () {
 			stripTabsInSequence: tabbables.filter(n => n.getAttribute('role') === 'tab').length,
 			// Nothing inside a hidden section is reachable, and the hidden pane itself is not either.
 			hiddenSectionControlsReachable: tabbables.filter(inHiddenSection).length,
-			hiddenPanesReachable: tabbables.filter(n => n.hasAttribute('data-juneau-form-section') && n.hasAttribute('hidden')).length,
+			hiddenPanesReachable: tabbables.filter(n => n.dataset.juneauFormSection !== undefined && n.hasAttribute('hidden')).length,
 			// The trap only intervenes at the boundaries, so BOTH boundary elements must themselves be rendered -
 			// otherwise a Tab wrap would try to focus something invisible and focus would go nowhere.
 			trapFirstIsRendered: candidates.length > 0 && candidates[0].getClientRects().length > 0,
-			trapLastIsRendered: candidates.length > 0 && candidates[candidates.length - 1].getClientRects().length > 0,
+			trapLastIsRendered: candidates.length > 0 && candidates.at(-1).getClientRects().length > 0,
 			stripPrecedesBody: order.indexOf('basics') === 0 && order.indexOf('title') > order.indexOf('basics'),
 			focusTrappedIntoDialog: p.backdrop.contains(document.activeElement)
 		};
 		// Real Tab from the last tabbable wraps back to the first, inside the layer.
-		const first = candidates[0], last = candidates[candidates.length - 1];
-		if (last && last.focus) last.focus();
+		const first = candidates[0], last = candidates.at(-1);
+		if (last?.focus) { last.focus(); }
 		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
 		out.focus.tabWrapsToFirst = document.activeElement === first;
 		out.focus.tabKeepsFocusInDialog = p.backdrop.contains(document.activeElement);
@@ -311,7 +315,7 @@ const PROBE = async function () {
 		out.nested.afterThird = init.dialogLayerCount();
 		out.nested.stillTwoBackdrops = document.querySelectorAll('.juneau-view-dialog-backdrop').length;
 		const top = init.topLayer();
-		out.nested.refusalInTopDialog = !!(top && top.el.querySelector('.juneau-view-dialog-depth-refusal'));
+		out.nested.refusalInTopDialog = !!top?.el.querySelector('.juneau-view-dialog-depth-refusal');
 		drain();
 	}
 
@@ -337,4 +341,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

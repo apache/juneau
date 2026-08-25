@@ -74,7 +74,7 @@ public final class Theme {
 	 * the unchanged grammar. There is no fallback branch &mdash; {@code var(--jc-x, #fff)} simply fails to match
 	 * (comma inside the parens) and falls through to grammar rejection.
 	 */
-	private static final Pattern VAR_REFERENCE = Pattern.compile("^(?i:var)\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
+	private static final Pattern VAR_REFERENCE = Pattern.compile("^[Vv][Aa][Rr]\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
 
 	/**
 	 * The maximum number of reference hops resolved before {@code build()} fails, enforced independently of cycle

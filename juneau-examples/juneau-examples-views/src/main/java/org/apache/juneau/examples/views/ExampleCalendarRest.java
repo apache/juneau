@@ -91,6 +91,9 @@ public class ExampleCalendarRest extends BasicRestServlet {
 	private static final String CAT_RELEASE = "release";
 	private static final String CAT_INCIDENT = "incident";
 
+	/** The content type of the hand-built HTML pages this class returns. */
+	private static final String MEDIA_HTML = "text/html;charset=utf-8";
+
 	//------------------------------------------------------------------------------------------------------------------
 	// The calendar definition.
 	//------------------------------------------------------------------------------------------------------------------
@@ -122,7 +125,7 @@ public class ExampleCalendarRest extends BasicRestServlet {
 	 */
 	@RestGet(path="/", summary="The reusable-calendar demo page (current month, server-painted)")
 	public HttpResource index(RestRequest req) {
-		var now = LocalDate.now();
+		var now = LocalDate.now(Clock.systemUTC());
 		var calendarMarkup = Html.of(CalendarTable.of(calendar(now.getYear(), now.getMonthValue())));
 		var html = """
 			<!DOCTYPE html>
@@ -156,8 +159,8 @@ public class ExampleCalendarRest extends BasicRestServlet {
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
 				WidgetsMixin.widgetAssetUrl(req, WidgetsMixin.CALENDAR_JS_PATH));
 		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -201,8 +204,8 @@ public class ExampleCalendarRest extends BasicRestServlet {
 			<p><a href="../">Back to the calendar</a></p></body></html>
 			""".formatted(id, id);
 		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), "text/html;charset=utf-8"),
-			list(ContentType.of("text/html;charset=utf-8")));
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

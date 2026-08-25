@@ -890,11 +890,22 @@ class ConsoleChromeMixin_Test extends TestBase {
 		return MockRestClient.createLax(host).servletPath("/rest").build();
 	}
 
-	/** Extracts the single {@code url("...")} value the served CSS emits for the given asset endpoint. */
+	/**
+	 * Extracts the single {@code url("...")} value the served CSS emits for the given asset endpoint. Scans by
+	 * substring rather than regex - the mount-prefix text before {@code assetPathSuffix} isn't disjoint from an
+	 * unbounded {@code [^"]*} lead-in, so a single find()-based pattern would need backtracking to bridge it.
+	 */
 	private static String emittedUrl(String body, String assetPathSuffix) {
-		var m = Pattern.compile("url\\(\"([^\"]*" + Pattern.quote(assetPathSuffix) + "\\?v=[^\"]+)\"\\)").matcher(body);
-		assertTrue(m.find(), () -> "no emitted url() for " + assetPathSuffix + " in body:\n" + body);
-		return m.group(1);
+		var needle = assetPathSuffix + "?v=";
+		var needleIdx = body.indexOf(needle);
+		assertTrue(needleIdx >= 0, () -> "no emitted url() for " + assetPathSuffix + " in body:\n" + body);
+		var prefix = "url(\"";
+		var urlOpenIdx = body.lastIndexOf(prefix, needleIdx);
+		assertTrue(urlOpenIdx >= 0, () -> "no url(\" prefix before the emitted asset path, body:\n" + body);
+		var contentStart = urlOpenIdx + prefix.length();
+		var contentEnd = body.indexOf('"', contentStart);
+		assertTrue(contentEnd >= 0, () -> "unterminated url(\"...\") value, body:\n" + body);
+		return body.substring(contentStart, contentEnd);
 	}
 
 	/**

@@ -51,7 +51,7 @@ if (!rendersJsPath || !viewsJsPath) {
 
 const { env, I } = loadViews(rendersJsPath, viewsJsPath);
 const out = {
-	hasInit: !!(I && typeof I.buildRibbonStrip === 'function' && typeof I.buildDetailStrip === 'function')
+	hasInit: !!(typeof I?.buildRibbonStrip === 'function' && typeof I.buildDetailStrip === 'function')
 };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
@@ -73,17 +73,17 @@ function dump(n, depth) {
 		+ (parts.length ? ' ' + parts.join(' ') : '') + '>';
 	if (n.childNodes.length === 0 && n._text) s += n._text;
 	s += '\n';
-	for (let i = 0; i < n.childNodes.length; i++) s += dump(n.childNodes[i], depth + 1);
+	for (const c of n.childNodes) s += dump(c, depth + 1);
 	return s;
 }
 
 function tabsOf(strip) {
-	return strip.childNodes.filter(function (c) { return c.getAttribute && c.getAttribute('role') === 'tab'; });
+	return strip.childNodes.filter(function (c) { return c.getAttribute?.('role') === 'tab'; });
 }
 
 function detailSection(sid, title) {
 	const sec = env.el('section');
-	sec.setAttribute('data-juneau-detail-section', sid);
+	sec.dataset.juneauDetailSection = sid;
 	sec.className = 'juneau-view-detail-section';
 	const h2 = env.el('h2');
 	h2.className = 'juneau-view-detail-section-title';
@@ -125,13 +125,13 @@ const generic = I.buildRibbonStrip([
 	paneId: function (i) { return 'pp-' + i; },
 	onActivate: function (id, pane) { activations.push({ id: id, pane: pane }); }
 });
-out.generic_returnsStripTabsActivate = !!(generic && generic.strip && generic.tabs && typeof generic.activate === 'function');
+out.generic_returnsStripTabsActivate = !!(generic?.strip && generic.tabs && typeof generic.activate === 'function');
 const gStrip = generic.strip;
 const gTabs = tabsOf(gStrip);
 
 out.generic_stripRole = gStrip.getAttribute('role');
-out.generic_stripMode = gStrip.getAttribute('data-juneau-strip-mode');
-out.generic_stripTestId = gStrip.getAttribute('data-testid');
+out.generic_stripMode = gStrip.dataset.juneauStripMode;
+out.generic_stripTestId = gStrip.dataset.testid;
 out.generic_stripClass = gStrip.className;
 out.generic_tabCount = gTabs.length;
 out.generic_labels = gTabs.map(function (b) { return b.textContent; }).join(',');
@@ -146,7 +146,7 @@ out.generic_paneLabelledby = panes.map(function (p) { return p.getAttribute('ari
 out.generic_paneTabindexAttr = panes.map(function (p) { return p.getAttribute('tabindex'); }).join(',');
 out.generic_paneHidden = panes.map(function (p) { return p.hidden === true; }).join(',');
 out.generic_stripDetached = gStrip.parentNode === null;
-out.generic_stripHasNoDetailTestId = gStrip.getAttribute('data-testid') !== 'detail-tabs';
+out.generic_stripHasNoDetailTestId = gStrip.dataset.testid !== 'detail-tabs';
 
 // The activation callback fires EXACTLY once per activation, with the activated pane.
 activations = [];
@@ -207,7 +207,7 @@ out.null_returnsNull = I.buildRibbonStrip(null, {}) === null;
 // Spy the export before painting anything: the dialog path must never route through it.
 let detailStripCalls = 0;
 const realBuildDetailStrip = I.buildDetailStrip;
-I.buildDetailStrip = function () { detailStripCalls++; return realBuildDetailStrip.apply(null, arguments); };
+I.buildDetailStrip = function (...args) { detailStripCalls++; return realBuildDetailStrip(...args); };
 
 const table = env.el('table');
 const tr = env.el('tr');
@@ -231,7 +231,7 @@ out.sectioned_wrapPresent = wrap != null;
 const dStrip = sectionedDialog.querySelector('[data-testid="dialog-sections"]');
 out.sectioned_stripPresent = dStrip != null;
 out.sectioned_stripRole = dStrip ? dStrip.getAttribute('role') : null;
-out.sectioned_stripMode = dStrip ? dStrip.getAttribute('data-juneau-strip-mode') : null;
+out.sectioned_stripMode = dStrip ? dStrip.dataset.juneauStripMode : null;
 out.sectioned_stripClass = dStrip ? dStrip.className : null;
 out.sectioned_stripIsFirstChildOfWrap = wrap != null && wrap.firstChild === dStrip;
 out.sectioned_noDetailTestId = sectionedDialog.querySelector('[data-testid="detail-tabs"]') === null;
@@ -243,7 +243,7 @@ out.sectioned_labels = dTabs.map(function (b) { return b.textContent; }).join(',
 out.sectioned_tabIds = dTabs.map(function (b) { return b.id; }).join(',');
 const dPanes = sectionedDialog.querySelectorAll('[data-juneau-form-section]');
 out.sectioned_paneCount = dPanes.length;
-out.sectioned_paneIds = dPanes.map(function (p) { return p.getAttribute('data-juneau-form-section'); }).join(',');
+out.sectioned_paneIds = dPanes.map(function (p) { return p.dataset.juneauFormSection; }).join(',');
 out.sectioned_pane0Visible = dPanes.length ? dPanes[0].hidden === false : false;
 out.sectioned_pane1Hidden = dPanes.length > 1 ? dPanes[1].hidden === true : false;
 out.sectioned_pane0Role = dPanes.length ? dPanes[0].getAttribute('role') : null;

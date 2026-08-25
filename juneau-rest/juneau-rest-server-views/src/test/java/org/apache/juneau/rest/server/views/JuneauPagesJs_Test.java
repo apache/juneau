@@ -89,7 +89,7 @@ class JuneauPagesJs_Test extends TestBase {
 		var body = pagesJs();
 		var fn = functionBody(body, "resolveInitial");
 		// A hash targeting a different pageId must not be treated as this page's active tab.
-		assertTrue(fn.contains("parsed.pageId === pageMeta.id"), fn);
+		assertTrue(fn.contains("parsed?.pageId === pageMeta.id"), fn);
 	}
 
 	@Test void a04_hashForExposedAndBuildsThreeSegmentHash() throws Exception {
@@ -103,7 +103,7 @@ class JuneauPagesJs_Test extends TestBase {
 	@Test void a05_findByIdIsPureIdEqualityLookup() throws Exception {
 		var body = pagesJs();
 		var fn = functionBody(body, "findById");
-		assertTrue(fn.contains("list[i].id === id"), fn);
+		assertTrue(fn.contains("item.id === id"), fn);
 		assertFalse(fn.contains("document."), fn);
 	}
 
@@ -131,8 +131,8 @@ class JuneauPagesJs_Test extends TestBase {
 		var body = pagesJs();
 		var fn = functionBody(body, "showActive");
 		// Spelled from the emitter's constants, so these double as part of the name-correspondence pin.
-		assertTrue(fn.contains("getAttribute(\"" + PageTable.TAB_ID_ATTR + "\") === tabId"), fn);
-		assertTrue(fn.contains("getAttribute(\"" + PageTable.SUBTAB_ID_ATTR + "\") === subtabId"), fn);
+		assertTrue(fn.contains("dataset.tabId === tabId"), fn);
+		assertTrue(fn.contains("dataset.subtabId === subtabId"), fn);
 		assertFalse(fn.contains("querySelector(\"[" + PageTable.TAB_ID_ATTR + "=\""), fn);
 		assertFalse(fn.contains("innerHTML"), fn);
 	}

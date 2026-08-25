@@ -41,6 +41,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class RowDetailDef {
 
 	/** The frozen contract version for the expand GET envelope and the stamped {@code data-juneau-detail-contract}. */
@@ -121,6 +124,13 @@ public class RowDetailDef {
 	 * A top-level view served with no enclosing page has no page slot to collide with, and is a legal no-op.
 	 */
 	public BarSlot barSlot;
+
+	/**
+	 * Private lock object guarding the {@code $FV} chrome-resolution window this instance may be mutated under
+	 * (see {@link ViewTable}).  Synchronizing on this dedicated object rather than on {@code this} keeps the
+	 * monitor private to the toolkit even though callers hold a reference to the bean itself.  Not a wire field.
+	 */
+	final Object lock = new Object();
 
 	/**
 	 * Creates an empty row-detail definition.
@@ -254,21 +264,10 @@ public class RowDetailDef {
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	public void validate(List<RowAction> rowActions, String enclosingViewId) {
-		if (endpoint == null || endpoint.isBlank())
-			throw iaex("RowDetailDef endpoint must not be null or blank.");
-		if (!endpoint.contains("{id}"))
-			throw iaex("RowDetailDef endpoint must contain '{id}'.");
-		if (!isSafeDetailEndpoint(endpoint))
-			throw iaex("RowDetailDef endpoint must be a same-origin path template (no absolute URL, '..', or scheme): %s",
-				endpoint);
+		validateEndpoint();
 		if (sections == null || sections.isEmpty())
 			throw iaex("RowDetailDef must declare at least one section.");
-		if (allowedCustomRenderers != null) {
-			for (var id : allowedCustomRenderers) {
-				if (id == null || id.isBlank())
-					throw iaex("allowCustomRenderers entry must not be blank.");
-			}
-		}
+		validateAllowedCustomRenderers();
 		if (serverValues != null)
 			serverValues.validate();
 		// Cascade into the second named bar-slot host.  Cross-host id uniqueness is NOT checkable here: this scope has
@@ -276,55 +275,95 @@ public class RowDetailDef {
 		if (barSlot != null)
 			barSlot.validate();
 
+		var actionIds = collectActionIds(rowActions);
+		validateActionBar(headerActions, actionIds);
+		validateSections(actionIds, enclosingViewId);
+	}
+
+	private void validateEndpoint() {
+		if (endpoint == null || endpoint.isBlank())
+			throw iaex("RowDetailDef endpoint must not be null or blank.");
+		if (!endpoint.contains("{id}"))
+			throw iaex("RowDetailDef endpoint must contain '{id}'.");
+		if (!isSafeDetailEndpoint(endpoint))
+			throw iaex("RowDetailDef endpoint must be a same-origin path template (no absolute URL, '..', or scheme): %s",
+				endpoint);
+	}
+
+	private void validateAllowedCustomRenderers() {
+		if (allowedCustomRenderers == null)
+			return;
+		for (var id : allowedCustomRenderers)
+			if (id == null || id.isBlank())
+				throw iaex("allowCustomRenderers entry must not be blank.");
+	}
+
+	private static Set<String> collectActionIds(List<RowAction> rowActions) {
 		var actionIds = new HashSet<String>();
 		if (rowActions != null)
 			for (var a : rowActions)
 				if (a != null && a.id != null)
 					actionIds.add(a.id);
+		return actionIds;
+	}
 
-		validateActionBar(headerActions, actionIds);
-
+	private void validateSections(Set<String> actionIds, String enclosingViewId) {
 		var sectionIds = new HashSet<String>();
 		var fieldKeys = new HashSet<String>();
 		var nestedViewIds = new HashSet<String>();
-		for (var s : sections) {
-			if (s == null)
-				throw iaex("RowDetailDef section must not be null.");
-			if (s.id == null || s.id.isBlank())
-				throw iaex("DetailSection id must not be null or blank.");
-			if (!sectionIds.add(s.id))
-				throw iaex("RowDetailDef duplicate section id '%s'.", s.id);
-			if (s.columns < 1)
-				throw iaex("DetailSection '%s' columns must be >= 1.", s.id);
-			if (s.fields != null) {
-				for (var f : s.fields) {
-					if (f == null)
-						throw iaex("DetailSection '%s' field must not be null.", s.id);
-					if (f.data == null || f.data.isBlank())
-						throw iaex("DetailSection '%s' field data must not be null or blank.", s.id);
-					if (!fieldKeys.add(f.data))
-						throw iaex("RowDetailDef duplicate field data key '%s'.", f.data);
-					if (f.render != null) {
-						if (f.render.id == null || f.render.id.isBlank())
-							throw iaex("DetailField '%s' render id must not be null or blank.", f.data);
-						if (f.format != null && f.format != DetailField.Format.TEXT)
-							throw iaex("DetailField '%s' cannot set both render and a non-TEXT format.", f.data);
-						SinkRenderAllowlist.assertAllowed(f.render.id, allowedCustomRenderers);
-						if ("pill".equals(f.render.id))
-							ViewDef.validateSinkPill(f.render, s.id + "." + f.data);
-					}
-				}
-			}
-			validateActionBar(s.actions, actionIds);
-			if (s.table != null) {
-				s.table.validate();
-				var nid = s.table.view.id;
-				if (enclosingViewId != null && enclosingViewId.equals(nid))
-					throw iaex("DetailSection '%s' nested table view id '%s' collides with the enclosing view id.", s.id, nid);
-				if (!nestedViewIds.add(nid))
-					throw iaex("RowDetailDef duplicate nested table view id '%s'.", nid);
-			}
-		}
+		for (var s : sections)
+			validateSection(s, actionIds, sectionIds, fieldKeys, nestedViewIds, enclosingViewId);
+	}
+
+	private void validateSection(DetailSection s, Set<String> actionIds, Set<String> sectionIds, Set<String> fieldKeys,
+			Set<String> nestedViewIds, String enclosingViewId) {
+		if (s == null)
+			throw iaex("RowDetailDef section must not be null.");
+		if (s.id == null || s.id.isBlank())
+			throw iaex("DetailSection id must not be null or blank.");
+		if (!sectionIds.add(s.id))
+			throw iaex("RowDetailDef duplicate section id '%s'.", s.id);
+		if (s.columns < 1)
+			throw iaex("DetailSection '%s' columns must be >= 1.", s.id);
+		validateSectionFields(s, fieldKeys);
+		validateActionBar(s.actions, actionIds);
+		validateNestedTable(s, nestedViewIds, enclosingViewId);
+	}
+
+	private void validateSectionFields(DetailSection s, Set<String> fieldKeys) {
+		if (s.fields == null)
+			return;
+		for (var f : s.fields)
+			validateDetailField(f, s.id, fieldKeys);
+	}
+
+	private void validateDetailField(DetailField f, String sectionId, Set<String> fieldKeys) {
+		if (f == null)
+			throw iaex("DetailSection '%s' field must not be null.", sectionId);
+		if (f.data == null || f.data.isBlank())
+			throw iaex("DetailSection '%s' field data must not be null or blank.", sectionId);
+		if (!fieldKeys.add(f.data))
+			throw iaex("RowDetailDef duplicate field data key '%s'.", f.data);
+		if (f.render == null)
+			return;
+		if (f.render.id == null || f.render.id.isBlank())
+			throw iaex("DetailField '%s' render id must not be null or blank.", f.data);
+		if (f.format != null && f.format != DetailField.Format.TEXT)
+			throw iaex("DetailField '%s' cannot set both render and a non-TEXT format.", f.data);
+		SinkRenderAllowlist.assertAllowed(f.render.id, allowedCustomRenderers);
+		if ("pill".equals(f.render.id))
+			ViewDef.validateSinkPill(f.render, sectionId + "." + f.data);
+	}
+
+	private static void validateNestedTable(DetailSection s, Set<String> nestedViewIds, String enclosingViewId) {
+		if (s.table == null)
+			return;
+		s.table.validate();
+		var nid = s.table.view.id;
+		if (enclosingViewId != null && enclosingViewId.equals(nid))
+			throw iaex("DetailSection '%s' nested table view id '%s' collides with the enclosing view id.", s.id, nid);
+		if (!nestedViewIds.add(nid))
+			throw iaex("RowDetailDef duplicate nested table view id '%s'.", nid);
 	}
 
 	private static void validateActionBar(ActionBar bar, Set<String> actionIds) {
@@ -334,10 +373,8 @@ public class RowDetailDef {
 		if (bar.items == null)
 			return;
 		for (var item : bar.items) {
-			if (item instanceof ActionRef ar) {
-				if (!actionIds.contains(ar.id))
-					throw iaex("ActionRef '%s' is not declared on the enclosing view's rowActions.", ar.id);
-			}
+			if (item instanceof ActionRef ar && !actionIds.contains(ar.id))
+				throw iaex("ActionRef '%s' is not declared on the enclosing view's rowActions.", ar.id);
 		}
 	}
 

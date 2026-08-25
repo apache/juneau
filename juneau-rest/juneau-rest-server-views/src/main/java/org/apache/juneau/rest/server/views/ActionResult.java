@@ -22,7 +22,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * The typed result a row action's submit returns &mdash; the load-bearing half of the write-path arc (design doc
- * §6.1/§6.2; the write-path half of {@code TODO-416}).
+ * §6.1/§6.2; the write-path half of the row-action submit contract).
  *
  * <p>
  * A raw HTML fragment response cannot carry the distinction the consumer's non-optimistic UI rule requires: a row
@@ -63,8 +63,8 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * {@link Outcome#CANCELLED cancelled} and {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} are
  * <b>reserved from day one</b> (as {@code VIEW_META} reserved {@code rowActions} before it was implemented), even
- * though a synchronous write never emits them.  The async/streaming variant ({@code TODO-425}) can therefore emit
- * them without a second result-contract bump and a three-sided lockstep.
+ * though a synchronous write never emits them.  A future async/streaming variant can therefore emit them without a
+ * second result-contract bump and a three-sided lockstep.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -103,8 +103,8 @@ public class ActionResult {
 	 * <p>
 	 * Each constant carries the lowercase wire token emitted for the {@code outcome} field.  The four synchronous
 	 * outcomes ({@link #SUCCESS}, {@link #FAILURE}, {@link #REFUSAL}, {@link #UNKNOWN}) are what a synchronous write
-	 * can emit; {@link #CANCELLED} and {@link #CANCELLED_AFTER_EFFECT} are reserved for the async variant
-	 * ({@code TODO-425}) and are frozen here so that contract does not force a second result-contract bump.
+	 * can emit; {@link #CANCELLED} and {@link #CANCELLED_AFTER_EFFECT} are reserved for a future async variant
+	 * and are frozen here so that contract does not force a second result-contract bump.
 	 */
 	public enum Outcome {
 
@@ -120,10 +120,10 @@ public class ActionResult {
 		/** The write's outcome is genuinely unknown (e.g. a crash mid-write) &mdash; an honest, non-optimistic state. */
 		UNKNOWN("unknown"),
 
-		/** Reserved (async, {@code TODO-425}): the job was cancelled before any effect. */
+		/** Reserved for a future async variant: the job was cancelled before any effect. */
 		CANCELLED("cancelled"),
 
-		/** Reserved (async, {@code TODO-425}): the job was cancelled after a partial/uncertain effect. */
+		/** Reserved for a future async variant: the job was cancelled after a partial/uncertain effect. */
 		CANCELLED_AFTER_EFFECT("cancelled-after-effect");
 
 		private final String wire;

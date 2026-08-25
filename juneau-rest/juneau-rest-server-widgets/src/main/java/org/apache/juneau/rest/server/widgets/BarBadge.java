@@ -25,6 +25,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,label,badge")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public final class BarBadge implements BarWidget {
 
 	/** The stable widget id, unique within its {@link BarSlot}.  Required, non-blank. */

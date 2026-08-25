@@ -44,7 +44,8 @@ class McpOperationContext_Test {
 
 	@Test void a03_paramsViewIsUnmodifiable() {
 		var ctx = new McpOperationContext("tools/call", "echo", Map.of("k", "v"));
-		assertThrows(UnsupportedOperationException.class, () -> ctx.params().put("x", "y"));
+		var params = ctx.params();
+		assertThrows(UnsupportedOperationException.class, () -> params.put("x", "y"));
 	}
 
 	@Test void b01_nullMethodRejected() {

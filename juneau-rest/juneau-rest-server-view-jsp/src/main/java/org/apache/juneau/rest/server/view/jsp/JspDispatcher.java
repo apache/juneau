@@ -109,10 +109,8 @@ public class JspDispatcher implements RawTemplateDispatcher {
 					target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
 		} catch (InternalServerError | IOException | NotFound ex) {
-			// InternalServerError re-surfaces the specific NO_ENGINE diagnostic constructed above as-is;
-			// IOException / NotFound propagate unchanged. Without this clause the generic `catch (Exception ex)`
-			// below would re-wrap them into a generic "JSP render failed for '%s'" message, discarding the
-			// diagnostic text from the response body.
+			// Re-throw as-is so the specific diagnostic constructed above, or a framework-level IOException
+			// or NotFound, isn't discarded by the generic fallback below.
 			throw ex;
 		} catch (NoClassDefFoundError ex) {
 			throw new InternalServerError(ex, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);

@@ -241,7 +241,7 @@ class RestClientFeatures_Test {
 				assertEquals(200, response.getStatusCode());
 			}
 			assertNotNull(capture.last());
-			// Stable-INFO emission (TODO-368): the record is always stamped INFO; FINE only widens which
+			// Stable-INFO emission: the record is always stamped INFO; FINE only widens which
 			// sections the message body includes (here, the header block below).
 			assertEquals(java.util.logging.Level.INFO, capture.last().getLevel());
 			var msg = capture.last().getMessage();
@@ -261,7 +261,7 @@ class RestClientFeatures_Test {
 		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
 		var previous = logger.getLevel();
 		logger.setLevel(java.util.logging.Level.FINEST);
-		// Secret hardening (TODO-370): body dumping is secure-by-default (off) — force the master gate on for this
+		// Secret hardening: body dumping is secure-by-default (off) — force the master gate on for this
 		// test so the FINEST-tier body-inclusion behavior can be observed at all.
 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
 		try (var capture = logger.captureEvents(java.util.logging.Level.FINEST)) {
@@ -290,7 +290,7 @@ class RestClientFeatures_Test {
 				assertEquals("uvwxyz", response.body().asString());
 			}
 			assertNotNull(capture.last());
-			// Stable-INFO emission (TODO-368): the record is always stamped INFO; FINEST only widens which
+			// Stable-INFO emission: the record is always stamped INFO; FINEST only widens which
 			// sections the message body includes (here, the body blocks below).
 			assertEquals(java.util.logging.Level.INFO, capture.last().getLevel());
 			var msg = capture.last().getMessage();

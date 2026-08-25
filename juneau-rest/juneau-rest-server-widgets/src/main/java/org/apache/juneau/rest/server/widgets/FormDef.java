@@ -333,41 +333,59 @@ public class FormDef implements Widget {
 		void validate() {
 			if (name == null || name.isBlank())
 				throw iaex("FormDef.Input name must not be null or blank.");
-			var t = type;
-			if (t == null || t.isBlank())
-				t = "text";
-			if (! INPUT_TYPES.contains(t))
-				throw iaex("FormDef.Input '%s' type must be one of text, textarea, checkbox, toggle, select, action, not '%s'.", name, t);
-			var isSelect = "select".equals(t);
+			var t = resolveType();
 			var isAction = "action".equals(t);
 			var isTextual = "text".equals(t) || "textarea".equals(t);
 
-			if (isSelect) {
-				if (options == null || options.isEmpty())
-					throw iaex("FormDef.Input '%s' select must declare at least one option.", name);
-				var values = new HashSet<String>();
-				for (var o : options) {
-					if (o == null)
-						throw iaex("FormDef.Input '%s' select option must not be null.", name);
-					if (o.value == null)
-						throw iaex("FormDef.Input '%s' select option value must not be null.", name);
-					if (o.label == null || o.label.isBlank())
-						throw iaex("FormDef.Input '%s' select option label must not be null or blank.", name);
-					values.add(o.value);
-				}
-				if (value != null && ! values.contains(value))
-					throw iaex("FormDef.Input '%s' select value '%s' does not match any option.", name, value);
-			} else if (options != null) {
-				throw iaex("FormDef.Input '%s' options are only allowed on a select field.", name);
-			}
+			validateOptions("select".equals(t));
+			validateTextualOnlyFields(isTextual);
+			validatePattern();
+			validateActionField(isAction);
+		}
 
-			if (! isTextual) {
-				if (pattern != null)
-					throw iaex("FormDef.Input '%s' pattern is only allowed on a text/textarea field.", name);
-				if (maxLength != null)
-					throw iaex("FormDef.Input '%s' maxLength is only allowed on a text/textarea field.", name);
-			}
+		/** Resolves and validates {@link #type} (blank defaults to {@code text}). */
+		private String resolveType() {
+			var t = (type == null || type.isBlank()) ? "text" : type;
+			if (! INPUT_TYPES.contains(t))
+				throw iaex("FormDef.Input '%s' type must be one of text, textarea, checkbox, toggle, select, action, not '%s'.", name, t);
+			return t;
+		}
 
+		/** Validates the {@code select}-only {@link #options}/{@link #value} pairing. */
+		private void validateOptions(boolean isSelect) {
+			if (! isSelect) {
+				if (options != null)
+					throw iaex("FormDef.Input '%s' options are only allowed on a select field.", name);
+				return;
+			}
+			if (options == null || options.isEmpty())
+				throw iaex("FormDef.Input '%s' select must declare at least one option.", name);
+			var values = new HashSet<String>();
+			for (var o : options) {
+				if (o == null)
+					throw iaex("FormDef.Input '%s' select option must not be null.", name);
+				if (o.value == null)
+					throw iaex("FormDef.Input '%s' select option value must not be null.", name);
+				if (o.label == null || o.label.isBlank())
+					throw iaex("FormDef.Input '%s' select option label must not be null or blank.", name);
+				values.add(o.value);
+			}
+			if (value != null && ! values.contains(value))
+				throw iaex("FormDef.Input '%s' select value '%s' does not match any option.", name, value);
+		}
+
+		/** Validates that {@link #pattern}/{@link #maxLength} are only declared on a textual field. */
+		private void validateTextualOnlyFields(boolean isTextual) {
+			if (isTextual)
+				return;
+			if (pattern != null)
+				throw iaex("FormDef.Input '%s' pattern is only allowed on a text/textarea field.", name);
+			if (maxLength != null)
+				throw iaex("FormDef.Input '%s' maxLength is only allowed on a text/textarea field.", name);
+		}
+
+		/** Validates {@link #pattern} compiles and {@link #maxLength} is positive. */
+		private void validatePattern() {
 			if (pattern != null) {
 				if (pattern.length() > PATTERN_MAX_LENGTH)
 					throw iaex("FormDef.Input '%s' pattern must be at most %s characters.", name, PATTERN_MAX_LENGTH);
@@ -377,10 +395,12 @@ public class FormDef implements Widget {
 					throw iaex("FormDef.Input '%s' pattern does not compile: %s", name, e.getMessage());
 				}
 			}
-
 			if (maxLength != null && maxLength <= 0)
 				throw iaex("FormDef.Input '%s' maxLength must be > 0.", name);
+		}
 
+		/** Validates the {@code action}-only {@link #actionId}. */
+		private void validateActionField(boolean isAction) {
 			if (isAction && (actionId == null || actionId.isBlank()))
 				throw iaex("FormDef.Input '%s' action must declare an actionId.", name);
 			if (! isAction && actionId != null)
@@ -590,22 +610,32 @@ public class FormDef implements Widget {
 		if (fields != null && sections != null)
 			throw iaex("FormDef declares both fields and sections; they are mutually exclusive (a flat fields list is the single-section case).");
 		if (sections != null) {
-			if (sections.isEmpty())
-				throw iaex("FormDef sections must declare at least one section.");
-			var ids = new HashSet<String>();
-			var names = new HashSet<String>();
-			for (var s : sections) {
-				if (s == null)
-					throw iaex("FormDef section must not be null.");
-				s.validate();
-				if (! ids.add(s.id))
-					throw iaex("FormDef duplicate section id '%s'.", s.id);
-				for (var f : s.fields)
-					if (! names.add(f.name))
-						throw iaex("FormDef duplicate field name '%s'.", f.name);
-			}
+			validateSections();
 			return;
 		}
+		validateFlatFields();
+	}
+
+	/** Validates the sectioned-form shape: at least one section, unique section ids, unique field names overall. */
+	private void validateSections() {
+		if (sections.isEmpty())
+			throw iaex("FormDef sections must declare at least one section.");
+		var ids = new HashSet<String>();
+		var names = new HashSet<String>();
+		for (var s : sections) {
+			if (s == null)
+				throw iaex("FormDef section must not be null.");
+			s.validate();
+			if (! ids.add(s.id))
+				throw iaex("FormDef duplicate section id '%s'.", s.id);
+			for (var f : s.fields)
+				if (! names.add(f.name))
+					throw iaex("FormDef duplicate field name '%s'.", f.name);
+		}
+	}
+
+	/** Validates the flat-form shape: each field is well-formed, and field names are unique. */
+	private void validateFlatFields() {
 		if (fields == null)
 			return;
 		var names = new HashSet<String>();

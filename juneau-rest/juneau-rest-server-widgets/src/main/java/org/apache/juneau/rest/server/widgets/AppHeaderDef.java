@@ -33,13 +33,16 @@ import org.apache.juneau.commons.http.*;
  * keeps no dependency on views.
  *
  * <p>
- * There is <b>no</b> role-gated visibility in v1: there is no {@code roles()} field or drop-path.  Menus depend on the
- * shared layer manager shipped by {@code [TODO-445h]}; until then a {@link Behavior#MENU} trigger is disabled and its
+ * There is <b>no</b> role-gated visibility in v1: there is no {@code roles()} field or drop-path.  Menus depend on a
+ * shared layer manager that has not shipped yet; until it lands, a {@link Behavior#MENU} trigger is disabled and its
  * list is omitted (no fake disclosure).
  *
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,id,brand,actions,avatar")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class AppHeaderDef implements Widget {
 
 	/** The frozen contract version for this widget.  Serialized as the JSON <b>string</b> {@code "1"}. */

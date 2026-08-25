@@ -208,13 +208,18 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 	private static final class CollectingHandler extends Handler {
 		private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
 
-		@Override public void publish(LogRecord record) {
-			if (isLoggable(record))
-				records.add(record);
+		@Override public void publish(LogRecord rec) {
+			// LogRecord's own "record" identifier is a restricted identifier since records were added; use "rec" instead.
+			if (isLoggable(rec))
+				records.add(rec);
 		}
 
-		@Override public void flush() {}
-		@Override public void close() {}
+		@Override public void flush() {
+			// No buffering to flush — records are added directly to the in-memory list.
+		}
+		@Override public void close() {
+			// Nothing to release — no external resources are held by this in-memory handler.
+		}
 
 		List<LogRecord> forLogger(String name) {
 			synchronized (records) {

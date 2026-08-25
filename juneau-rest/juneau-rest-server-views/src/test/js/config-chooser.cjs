@@ -16,7 +16,7 @@
  */
 
 /*
- * config-chooser.cjs - always-on Node harness for the View-tab chooser (TODO-444 slice 6):
+ * config-chooser.cjs - always-on Node harness for the View-tab chooser:
  * last-column-hide refusal, pinned-unhideable, XSS textContent paint, Default-name reserved,
  * DataTables title sanitization.
  *
@@ -74,10 +74,13 @@ const document = {
 };
 
 const window = { document: document, console: console, prompt: function () { return null; }, confirm: function () { return true; } };
+// NOSONAR javascript:S1523 -- loading the production juneau-config.js source into a VM sandbox is this harness's
+// intended mechanism for exercising it against a minimal fake window/document; the input is a fixed local file
+// path supplied by the test, never attacker-controlled data.
 vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), { window: window, document: document, console: console }, { filename: 'juneau-config.js' });
 
 const NS = window.JuneauViews;
-const out = { hasConfig: !!(NS && NS.config) };
+const out = { hasConfig: !!NS?.config };
 if (!out.hasConfig) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -119,7 +122,7 @@ out.xssInputInnerHtmlUntouched = xssInp.innerHTML === 'UNTOUCHED';
 out.defaultReserved = C.isReservedName('Default') === true;
 out.defaultReservedCase = C.isReservedName('DEFAULT') === true;
 const basic = C.validateNameBasic('Default');
-out.saveAsDefaultRefused = basic && basic.ok === false;
+out.saveAsDefaultRefused = basic?.ok === false;
 
 const cols = [
 	{ data: 'A', title: '<img src=x onerror=alert(1)>' },

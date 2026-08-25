@@ -31,7 +31,7 @@ import org.junit.jupiter.api.condition.*;
 
 /**
  * The declarative-modal + typed-action-result + in-flight-row half of the module's <b>JavaScript-execution
- * harness</b>: runs the REAL served {@code juneau-views.js} in a real headless browser and asserts the TODO-416/417
+ * harness</b>: runs the REAL served {@code juneau-views.js} in a real headless browser and asserts the declarative-modal
  * behavior as a user would experience it &mdash; a {@code present=dialog} action opens an overlay whose typed
  * confirmation fields are painted with {@code textContent} (so an HTML-shaped value never becomes an element), every
  * settled outcome (success/failure/refusal/unknown) and a non-2xx transport refusal render a VISIBLE non-optimistic

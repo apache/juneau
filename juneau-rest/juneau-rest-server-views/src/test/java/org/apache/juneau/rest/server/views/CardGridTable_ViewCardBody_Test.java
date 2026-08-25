@@ -149,7 +149,8 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 	}
 
 	@Test void b03_nullViewRejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ViewCardBody.of(null).validate());
+		var body = ViewCardBody.of(null);
+		var e = assertThrows(IllegalArgumentException.class, body::validate);
 		assertTrue(e.getMessage().contains("view"), e::getMessage);
 	}
 
@@ -219,13 +220,16 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 	}
 
 	@Test void c06_nullArgumentsRejected() {
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(tokenRequest(), (Card)null));
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(null, viewCard("c1", view())));
+		var req = tokenRequest();
+		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(req, (Card)null));
+		var c = viewCard("c1", view());
+		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(null, c));
 	}
 
 	@Test void c07_theCardOverloadValidatesOnEntry() {
 		var c = Card.create("  ", "T").body(fieldBody());
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(tokenRequest(), c));
+		var req = tokenRequest();
+		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(req, c));
 	}
 
 	@Test void c08_theCardOverloadAlsoEmitsAFieldListBody() {
@@ -297,12 +301,14 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 		})
 		String html = "<b>hi</b>";
 
+		// Deliberately a no-op: this stand-in only needs to satisfy the CardBody contract, not carry real validation.
 		@Override public void validate() {}
 	}
 
 	@Test void e01_rawContentBodyFailsClosedOnTheRequestAwarePath() {
 		var c = Card.create("c1", "T").body(new CardContent());
-		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(tokenRequest(), c));
+		var req = tokenRequest();
+		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(req, c));
 		assertTrue(e.getMessage().contains("CardFieldList"), e::getMessage);
 		assertTrue(e.getMessage().contains(CardContent.class.getName()), e::getMessage);
 	}
@@ -439,7 +445,8 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 	@Test void g11_actionsAreValidatedBeforeEmit() {
 		var c = Card.create("c1", "T").body(fieldBody()).actions(
 			HeaderAction.link("open", "external", "  ", "/reports/1"));
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(tokenRequest(), c));
+		var req = tokenRequest();
+		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(req, c));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

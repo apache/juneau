@@ -227,7 +227,7 @@ class ViewTable_Emit_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// data-juneau-layout="wide" full-real-estate stamp (TODO-445n Goal 1 / N2 A) — the ONE stamp node is the wrapper
+	// data-juneau-layout="wide" full-real-estate stamp (Goal 1 / N2 A) — the ONE stamp node is the wrapper
 	// <div>, never the <table>, .jc-card, or .jc-main (ViewTable emits none of those classes).
 	//------------------------------------------------------------------------------------------------------------------
 

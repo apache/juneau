@@ -57,7 +57,7 @@ import org.apache.juneau.commons.utils.*;
  */
 public class RequestIdSettings {
 
-	private static final String ARG_value = "value";
+	private static final String ARG_VALUE = "value";
 
 	private final Predicate<String> validator;
 	private final String attributeKey;
@@ -131,7 +131,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder validator(Predicate<String> value) {
-			assertArgNotNull(ARG_value, value);
+			assertArgNotNull(ARG_VALUE, value);
 			validator = value;
 			return this;
 		}
@@ -147,7 +147,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder attributeKey(String value) {
-			assertArgNotNull(ARG_value, value);
+			assertArgNotNull(ARG_VALUE, value);
 			if (value.isBlank())
 				throw new IllegalArgumentException("Argument 'value' must not be blank.");
 			attributeKey = value;
@@ -165,7 +165,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder idSupplier(Supplier<String> value) {
-			assertArgNotNull(ARG_value, value);
+			assertArgNotNull(ARG_VALUE, value);
 			idSupplier = value;
 			return this;
 		}

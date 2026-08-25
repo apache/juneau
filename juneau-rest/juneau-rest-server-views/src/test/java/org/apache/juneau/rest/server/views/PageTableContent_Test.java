@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-420: emission tests for {@link Tab#content}/{@link Subtab#content} (raw, non-table panel bodies).
+ * Emission tests for {@link Tab#content}/{@link Subtab#content} (raw, non-table panel bodies).
  *
  * <p>
  * Covers the {@code PageTable.buildTabPanel} matrix ({@code Tab = {view} | {subtabs} | {content} |
@@ -77,7 +77,7 @@ class PageTableContent_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Leaf Tab = {content}
+	// Leaf Tab: content only, no subtabs
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_leafTabContent_emittedVerbatimInsidePanel() {
@@ -108,7 +108,7 @@ class PageTableContent_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Preamble: Tab = {content+subtabs}
+	// Preamble: Tab carrying both content and subtabs
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_tabPreambleContent_rendersAboveSubtabBar_inSameOuterPanel() {
@@ -154,7 +154,7 @@ class PageTableContent_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Subtab = {content}
+	// Subtab: content only, no view
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_subtabContent_emittedVerbatimInsideItsSubpanel() {

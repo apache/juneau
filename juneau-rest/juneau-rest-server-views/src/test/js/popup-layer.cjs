@@ -16,7 +16,7 @@
  */
 
 /*
- * popup-layer.cjs - always-on Node harness for the shared popupLayerStack (TODO-445h): push/pop ordering,
+ * popup-layer.cjs - always-on Node harness for the shared popupLayerStack (popup-layer-445h): push/pop ordering,
  * top-layer-only Escape / outside-click, per-dialog backdrop pop (no sibling removal), focus trap + restore,
  * per-depth inline z-index, the dialog-kind depth cap (2), and the registry-regression case (dialog + popover =
  * two entries, one dialog).
@@ -36,7 +36,7 @@ if (!rendersJsPath || !viewsJsPath) {
 }
 
 const { env, I } = loadViews(rendersJsPath, viewsJsPath);
-const out = { hasInit: !!(I && typeof I.pushLayer === 'function' && typeof I.showActionDialog === 'function') };
+const out = { hasInit: typeof I?.pushLayer === 'function' && typeof I?.showActionDialog === 'function' };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
 function drain() { while (I.topLayer()) I.popLayer(); }
@@ -50,8 +50,8 @@ const tr = env.el('tr');
 	I.pushLayer(b, { kind: 'popover', portal: true, lightDismiss: true });
 	out.push_topIsB = I.topLayer().el === b;
 	out.push_portalledToBody = a.parentNode === env.body && a.style.position === 'fixed';
-	out.z_increasesPerDepth = parseInt(b.style.zIndex, 10) > parseInt(a.style.zIndex, 10);
-	out.z_dataLayerIndex = a.getAttribute('data-juneau-layer') === '0' && b.getAttribute('data-juneau-layer') === '1';
+	out.z_increasesPerDepth = Number.parseInt(b.style.zIndex, 10) > Number.parseInt(a.style.zIndex, 10);
+	out.z_dataLayerIndex = a.dataset.juneauLayer === '0' && b.dataset.juneauLayer === '1';
 	I.popLayer();
 	out.pop_topIsA = I.topLayer().el === a;
 	I.popLayer();
@@ -94,7 +94,7 @@ const tr = env.el('tr');
 	const pop = env.el('div');
 	I.pushLayer(pop, { kind: 'popover', portal: true, lightDismiss: true });
 	env.dispatchDocument('pointerdown', { target: outside });
-	out.popover_lightDismissed = I.topLayer() != null && I.topLayer().kind === 'dialog';
+	out.popover_lightDismissed = I.topLayer()?.kind === 'dialog';
 	drain();
 })();
 
@@ -118,7 +118,7 @@ const tr = env.el('tr');
 	out.reg_dialogCountStill1 = I.dialogLayerCount() === 1;   // popover does NOT consume the dialog-kind cap
 	out.reg_topIsPopover = I.topLayer().kind === 'popover';
 	I.popLayer();   // pop the popover
-	out.reg_dialogRemains = I.topLayer() != null && I.topLayer().kind === 'dialog';
+	out.reg_dialogRemains = I.topLayer()?.kind === 'dialog';
 	drain();
 })();
 
@@ -135,10 +135,10 @@ const tr = env.el('tr');
 	I.openFormActionDialog('esc', table, tr, ctx);
 	out.cap_staysAt2 = I.dialogLayerCount() === 2;
 	const top = I.topLayer();
-	out.cap_refusalInTopDialog = top != null && top.el.querySelector('.juneau-view-dialog-depth-refusal') != null;
+	out.cap_refusalInTopDialog = top?.el.querySelector('.juneau-view-dialog-depth-refusal') != null;
 	// A missing / non-dialog actionId is a visible refusal, not a throw.
 	I.openFormActionDialog('does-not-exist', table, tr, ctx);
-	out.missing_actionRefusal = top != null && top.el.querySelector('.juneau-view-dialog-action-refusal') != null;
+	out.missing_actionRefusal = top?.el.querySelector('.juneau-view-dialog-action-refusal') != null;
 	drain();
 })();
 
@@ -162,11 +162,11 @@ const tr = env.el('tr');
 	t2.dispatch('click', { target: trigger });
 	const menu = env.body.querySelector('.juneau-view-action-menu');
 	out.rowmenu_opened = !! menu;
-	out.rowmenu_onBody = menu != null && menu.parentNode === env.body;
+	out.rowmenu_onBody = menu?.parentNode === env.body;
 	out.rowmenu_notInScrollBox = menu != null && ! scrollBox.contains(menu);   // escaped the overflow clip box
 	out.rowmenu_notInCell = menu != null && ! td.contains(menu);
-	out.rowmenu_positionFixed = menu != null && menu.style.position === 'fixed';
-	out.rowmenu_isMenuLayer = I.topLayer() != null && I.topLayer().kind === 'menu';   // a stack layer, not off-stack
+	out.rowmenu_positionFixed = menu?.style.position === 'fixed';
+	out.rowmenu_isMenuLayer = I.topLayer()?.kind === 'menu';   // a stack layer, not off-stack
 	out.rowmenu_notADialog = I.dialogLayerCount() === 0;   // a menu must not inflate the dialog-kind depth cap
 	// Light-dismiss + detach go through the shared stack (an outside pointerdown pops the top menu layer).
 	const outside = env.el('div'); env.body.appendChild(outside);

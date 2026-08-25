@@ -267,7 +267,7 @@ class ViewsJs_Renders_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// TODO-445k: pill cell renderer (display-only by default; opt-in action-binding on the cell host only)
+	// Pill cell renderer (display-only by default; opt-in action-binding on the cell host only)
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void d01_pill_displayOnlyChip_dotAndRawValue() {
@@ -382,5 +382,38 @@ class ViewsJs_Renders_Test extends TestBase {
 	@Test void d10_sinkPill_isFrozenAgainstRegisterRendererOverride() {
 		var r = report();
 		assertEquals(true, r.get("sinkPill_frozenAgainstOverride"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// normalizeTagToken: the `.tag.<domain>.<value>` token algorithm mirrored from Tag#normalize.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void e01_normalizeTagToken_lowercasesAndCollapsesDisallowedRuns() {
+		var r = report();
+		assertEquals("released", r.get("tagToken_plain"));
+		assertEquals("in-progress", r.get("tagToken_spaceRun"));
+		assertEquals("ready", r.get("tagToken_punctCollapses"));   // leading/trailing runs collapse then trim away
+		assertEquals("a-b_c9", r.get("tagToken_keepsInnerSeparators"));
+	}
+
+	@Test void e02_normalizeTagToken_trimsOnlyTheOuterDashes() {
+		var r = report();
+		assertEquals("in---progress", r.get("tagToken_edgeDashesTrimmed"));   // inner dash run is preserved verbatim
+		assertEquals("", r.get("tagToken_allDashes"));
+		assertEquals("", r.get("tagToken_empty"));
+	}
+
+	/**
+	 * Pins the fix for {@code javascript:S5852} in {@code normalizeTagToken}.  The original trim,
+	 * {@code .replace(/^-+|-+$/g, "")}, retried its {@code -+$} alternative at every offset inside a dash run,
+	 * which is quadratic as soon as the run is bracketed by non-dashes - a shape an all-dash probe cannot expose,
+	 * because {@code ^-+} swallows an all-dash string in one bite.  A 160,000-dash cell value took ~8.8s before
+	 * the fix and ~0.1ms after, so the threshold here is three orders of magnitude clear of both.
+	 */
+	@Test void e03_normalizeTagToken_isLinearAgainstABracketedDashRun() {
+		var r = report();
+		assertEquals(true, r.get("tagToken_adversarialUnchanged"));   // nothing to trim: both ends are non-dashes
+		var ms = ((Number) r.get("tagToken_adversarialMs")).longValue();
+		assertTrue(ms < 2000, () -> "normalizeTagToken took " + ms + "ms on a 160,000-dash value; expected linear");
 	}
 }

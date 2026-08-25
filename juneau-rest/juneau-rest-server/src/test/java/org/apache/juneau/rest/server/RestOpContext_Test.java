@@ -407,7 +407,7 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 	@Rest
 	public static class Fix_OpObservabilityWithRecorder {
 		@Bean public org.apache.juneau.rest.server.metrics.MetricsRecorder myRecorder() {
-			return org.mockito.Mockito.mock(org.apache.juneau.rest.server.metrics.MetricsRecorder.class);
+			return mock(org.apache.juneau.rest.server.metrics.MetricsRecorder.class);
 		}
 		@RestGet(observability = "true")
 		public String op() { return "x"; }
@@ -421,7 +421,7 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 	@Rest
 	public static class Fix_OpObservabilityWithTracer {
 		@Bean public org.apache.juneau.rest.server.tracing.TracerHook myTracer() {
-			return org.mockito.Mockito.mock(org.apache.juneau.rest.server.tracing.TracerHook.class);
+			return mock(org.apache.juneau.rest.server.tracing.TracerHook.class);
 		}
 		@RestGet(observability = "true")
 		public String op() { return "x"; }

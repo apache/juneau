@@ -34,7 +34,7 @@ class StaticFilesMixin_Standalone_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(CdnResource.class);
 
 	@Test void a01_standaloneServesFromStaticMount() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
@@ -43,7 +43,7 @@ class StaticFilesMixin_Standalone_Test extends TestBase {
 	@Test void a02_legacyHtdocsAliasNotMountedByDefault() throws Exception {
 		// /htdocs/* is no longer a multi-path default. Migration covered by
 		// StaticFilesMixin_SvlPathOverride_Test#a02.
-		c.get("/htdocs/javadoc.css")
+		c.get("/htdocs/themes/devops.css")
 			.run()
 			.assertStatus(404);
 	}
@@ -55,14 +55,14 @@ class StaticFilesMixin_Standalone_Test extends TestBase {
 	}
 
 	@Test void a04_standaloneHeadProbe() throws Exception {
-		c.head("/static/javadoc.css")
+		c.head("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertContent().is("");
 	}
 
 	@Test void a05_standaloneCacheControl() throws Exception {
-		c.get("/static/javadoc.css")
+		c.get("/static/themes/devops.css")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Cache-Control").is("max-age=86400, public");

@@ -51,6 +51,9 @@ class RrpcServlet_Test extends TestBase {
 	// Test interface and implementation
 	// =========================================================================
 
+	@SuppressWarnings({
+		"java:S114" // L_categoryName test-grouping convention (see Test Class Naming Convention), not a real naming violation.
+	})
 	public interface A_TestInterface {
 		int add(int a, int b);
 		void doNothing();

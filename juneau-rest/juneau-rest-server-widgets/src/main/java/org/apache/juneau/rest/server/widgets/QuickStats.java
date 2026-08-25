@@ -48,6 +48,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,id,items")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class QuickStats implements Widget {
 
 	/** The frozen contract version for this widget.  Serialized as the JSON <b>string</b> {@code "1"}. */
@@ -106,38 +109,48 @@ public class QuickStats implements Widget {
 	/** Fail-closed per-item validation via total {@code instanceof} dispatch over the sealed {@link StatItem}. */
 	private void validateItem(StatItem i) {
 		requireId(i.id());
-		if (i instanceof StatTile i2) {
-			requireLabel(i2.id, i2.label);
-			if (i2.value == null)
-				throw iaex("QuickStats '%s' StatTile '%s' value must not be null.", id, i2.id);
-			requireTone(i2.id, i2.tone);
-			return;
+		if (i instanceof StatTile i2)
+			validateStatTile(i2);
+		else if (i instanceof StatBar i2)
+			validateStatBar(i2);
+		else if (i instanceof SegmentedBadge i2)
+			validateSegmentedBadge(i2);
+		else
+			throw iaex("QuickStats '%s' unknown item type: %s", id, i.getClass().getName());
+	}
+
+	/** Validates a {@link StatTile}: label, non-null value, and tone. */
+	private void validateStatTile(StatTile i2) {
+		requireLabel(i2.id, i2.label);
+		if (i2.value == null)
+			throw iaex("QuickStats '%s' StatTile '%s' value must not be null.", id, i2.id);
+		requireTone(i2.id, i2.tone);
+	}
+
+	/** Validates a {@link StatBar}: label, non-negative value, positive max, and tone. */
+	private void validateStatBar(StatBar i2) {
+		requireLabel(i2.id, i2.label);
+		if (i2.value == null || i2.value < 0)
+			throw iaex("QuickStats '%s' StatBar '%s' value must be >= 0.", id, i2.id);
+		if (i2.max == null || i2.max <= 0)
+			throw iaex("QuickStats '%s' StatBar '%s' max must be > 0.", id, i2.id);
+		requireTone(i2.id, i2.tone);
+	}
+
+	/** Validates a {@link SegmentedBadge}: label, at least one segment, and each segment's shape. */
+	private void validateSegmentedBadge(SegmentedBadge i2) {
+		requireLabel(i2.id, i2.label);
+		if (i2.segments == null || i2.segments.isEmpty())
+			throw iaex("QuickStats '%s' SegmentedBadge '%s' must declare at least one segment.", id, i2.id);
+		for (var s : i2.segments) {
+			if (s == null)
+				throw iaex("QuickStats '%s' SegmentedBadge '%s' segment must not be null.", id, i2.id);
+			if (s.label == null || s.label.isBlank())
+				throw iaex("QuickStats '%s' SegmentedBadge '%s' segment label must not be null or blank.", id, i2.id);
+			if (s.count == null || s.count < 0)
+				throw iaex("QuickStats '%s' SegmentedBadge '%s' segment count must be >= 0.", id, i2.id);
+			requireTone(i2.id, s.tone);
 		}
-		if (i instanceof StatBar i2) {
-			requireLabel(i2.id, i2.label);
-			if (i2.value == null || i2.value < 0)
-				throw iaex("QuickStats '%s' StatBar '%s' value must be >= 0.", id, i2.id);
-			if (i2.max == null || i2.max <= 0)
-				throw iaex("QuickStats '%s' StatBar '%s' max must be > 0.", id, i2.id);
-			requireTone(i2.id, i2.tone);
-			return;
-		}
-		if (i instanceof SegmentedBadge i2) {
-			requireLabel(i2.id, i2.label);
-			if (i2.segments == null || i2.segments.isEmpty())
-				throw iaex("QuickStats '%s' SegmentedBadge '%s' must declare at least one segment.", id, i2.id);
-			for (var s : i2.segments) {
-				if (s == null)
-					throw iaex("QuickStats '%s' SegmentedBadge '%s' segment must not be null.", id, i2.id);
-				if (s.label == null || s.label.isBlank())
-					throw iaex("QuickStats '%s' SegmentedBadge '%s' segment label must not be null or blank.", id, i2.id);
-				if (s.count == null || s.count < 0)
-					throw iaex("QuickStats '%s' SegmentedBadge '%s' segment count must be >= 0.", id, i2.id);
-				requireTone(i2.id, s.tone);
-			}
-			return;
-		}
-		throw iaex("QuickStats '%s' unknown item type: %s", id, i.getClass().getName());
 	}
 
 	private void requireId(String itemId) {

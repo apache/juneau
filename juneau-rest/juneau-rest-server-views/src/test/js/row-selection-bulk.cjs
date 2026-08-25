@@ -16,8 +16,7 @@
  */
 
 /*
- * row-selection-bulk.cjs - real-browser prober for the juneau-views.js row-selection + bulk-mutation contract
- * (TODO-428).
+ * row-selection-bulk.cjs - real-browser prober for the juneau-views.js row-selection + bulk-mutation contract.
  *
  * Never runs in a default build.  It is driven by RowSelectionBulk_BrowserTest, which itself only runs under
  * `mvn -Pjs-tests`; see that class's javadoc and the profile comment in this module's pom.xml.
@@ -43,7 +42,7 @@ const { chromium } = require('playwright');
 /* Runs inside the page.  Async: the bulk-settle path reads response bodies via promises. */
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init };
 	if (!init) return out;
 
@@ -56,12 +55,12 @@ const PROBE = async function () {
 	function makeTable(rowIds, opts) {
 		opts = opts || {};
 		const table = document.createElement('table');
-		table.setAttribute('data-juneau-view', 'v');
+		table.dataset.juneauView = 'v';
 		if (opts.select) table.setAttribute(init.SELECT_ATTR, '1');
 		if (opts.select && opts.selectAll !== false) table.setAttribute(init.SELECT_ALL_ATTR, '1');
 		if (opts.rowIdField) table.setAttribute(init.ROW_ID_FIELD_ATTR, opts.rowIdField);
 		if (opts.bulk) table.setAttribute(init.BULK_ATTR, '1');
-		if (opts.csrf) table.setAttribute('data-juneau-csrf', opts.csrf);
+		if (opts.csrf) table.dataset.juneauCsrf = opts.csrf;
 
 		const thead = document.createElement('thead');
 		const headRow = document.createElement('tr');
@@ -95,14 +94,22 @@ const PROBE = async function () {
 
 	// A minimal fake DataTables instance exposing only `.on(event, cb)` - just enough for initSelection's
 	// draw.dt-driven off-screen-id-drop wiring; `.fire` lets the probe simulate a poll/sort/page tick.
+	// NOSONAR javascript:S7721 -- stays nested inside PROBE: page.evaluate() serializes this function
+	// source across the Playwright process boundary with no access to outer Node-module scope, so it
+	// cannot be hoisted to module level without breaking in-browser execution.
 	function fakeDt() {
 		const handlers = {};
 		return {
-			on: function (evt, cb) { (handlers[evt] = handlers[evt] || []).push(cb); },
+			on: function (evt, cb) {
+				handlers[evt] = handlers[evt] || [];
+				handlers[evt].push(cb);
+			},
 			fire: function (evt) { (handlers[evt] || []).forEach(function (cb) { cb(); }); }
 		};
 	}
 
+	// NOSONAR javascript:S7721 -- stays nested inside PROBE for the same cross-process-boundary reason
+	// as fakeDt() above.
 	function dispatchChange(el) {
 		el.dispatchEvent(new Event('change', { bubbles: true }));
 	}
@@ -121,17 +128,17 @@ const PROBE = async function () {
 
 		check('1', true);
 		check('2', true);
-		out.afterTwoChecked = Array.from(selectionState.selected).sort();
+		out.afterTwoChecked = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
 
 		const allCb = dom.selectTh.querySelector('.juneau-view-select-all-checkbox');
 		out.hasSelectAllCheckbox = !!allCb;
 		allCb.checked = true;
 		dispatchChange(allCb);
-		out.afterSelectAll = Array.from(selectionState.selected).sort();
+		out.afterSelectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
 
 		allCb.checked = false;
 		dispatchChange(allCb);
-		out.afterDeselectAll = Array.from(selectionState.selected).sort();
+		out.afterDeselectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
 	}
 
 	// ---- b) off-screen-id-drop persistence rule (MED-11/Q2): a poll/sort/page draw prunes ids no longer present ----
@@ -141,10 +148,10 @@ const PROBE = async function () {
 		const dt = fakeDt();
 		init.initSelection(dom.table, dt, selectionState, {});
 
-		dom.trs['3'].parentNode.removeChild(dom.trs['3']);   // row '3' left the current draw
+		dom.trs['3'].remove();   // row '3' left the current draw
 		dt.fire('draw.dt');
 
-		out.selectedAfterOffScreenDraw = Array.from(selectionState.selected).sort();
+		out.selectedAfterOffScreenDraw = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
 	}
 
 	// ---- c) two INDEPENDENT opt-ins (HIGH-5): a selection-only (export) table never carries the bulk marker ----
@@ -170,7 +177,7 @@ const PROBE = async function () {
 		window.fetch = function (url, opts) {
 			const body = JSON.parse(opts.body);
 			fetchCalls.push({ url: url, body: body });
-			inflightAtFetchTime[body.targetId] = dom.trs[body.targetId].hasAttribute('data-juneau-inflight');
+			inflightAtFetchTime[body.targetId] = dom.trs[body.targetId].dataset.juneauInflight !== undefined;
 			let respBody;
 			if (body.targetId === '1') respBody = { contractVersion: '1', outcome: 'success' };
 			else if (body.targetId === '2') respBody = { contractVersion: '1', outcome: 'failure', message: 'nope' };
@@ -189,18 +196,18 @@ const PROBE = async function () {
 
 		function outcomeOf(id) {
 			const cell = dom.trs[id].querySelector('.juneau-view-action-outcome');
-			return cell ? { state: cell.getAttribute('data-state'), text: cell.textContent } : null;
+			return cell ? { state: cell.dataset.state, text: cell.textContent } : null;
 		}
 
 		out.bulk = {
 			fetchCount: fetchCalls.length,
-			targetIds: fetchCalls.map(function (c) { return c.body.targetId; }).sort(),
+			targetIds: fetchCalls.map(function (c) { return c.body.targetId; }).sort((a, b) => a.localeCompare(b)),
 			actionIds: fetchCalls.map(function (c) { return c.body.action; }),
 			inflightAtFetchTime: inflightAtFetchTime,
 			inflightAfter: {
-				'1': dom.trs['1'].hasAttribute('data-juneau-inflight'),
-				'2': dom.trs['2'].hasAttribute('data-juneau-inflight'),
-				'3': dom.trs['3'].hasAttribute('data-juneau-inflight')
+				'1': dom.trs['1'].dataset.juneauInflight !== undefined,
+				'2': dom.trs['2'].dataset.juneauInflight !== undefined,
+				'3': dom.trs['3'].dataset.juneauInflight !== undefined
 			},
 			outcome1: outcomeOf('1'),
 			outcome2: outcomeOf('2'),
@@ -234,7 +241,7 @@ const PROBE = async function () {
 		const read = init.readBulkDef(id);
 		out.bulkSidecar = {
 			contractVersion: read ? read.contractVersion : null,
-			actionCount: read && read.actions ? read.actions.length : -1,
+			actionCount: read?.actions ? read.actions.length : -1,
 			missingSidecarReturnsNull: init.readBulkDef('does-not-exist') === null
 		};
 	}
@@ -267,6 +274,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

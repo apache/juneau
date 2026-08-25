@@ -36,6 +36,9 @@ import org.apache.juneau.commons.http.*;
  * @since 10.0.0
  */
 @BeanType(properties="displayName,initials,imageUrl,status,menu")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class AvatarChip {
 
 	/** The required accessible name (a display label, not an email), emitted as {@code aria-label}. */
@@ -124,15 +127,20 @@ public class AvatarChip {
 		if (hasImage && !SafePathTemplate.isSameOriginPath(imageUrl))
 			throw iaex("AvatarChip '%s' imageUrl must be a same-origin path (no absolute URL, '//', scheme, "
 				+ "'..', 'data:', or 'javascript:'): %s", displayName, imageUrl);
-		if (menu != null) {
-			var ids = new HashSet<String>();
-			for (var mi : menu) {
-				if (mi == null)
-					throw iaex("AvatarChip '%s' menu item must not be null.", displayName);
-				mi.validate();
-				if (!mi.isDivider() && !ids.add(mi.id))
-					throw iaex("AvatarChip '%s' duplicate menu item id '%s'.", displayName, mi.id);
-			}
+		validateMenu();
+	}
+
+	/** Validates the optional attached menu items: non-null, well-formed, and unique non-divider ids. */
+	private void validateMenu() {
+		if (menu == null)
+			return;
+		var ids = new HashSet<String>();
+		for (var mi : menu) {
+			if (mi == null)
+				throw iaex("AvatarChip '%s' menu item must not be null.", displayName);
+			mi.validate();
+			if (!mi.isDivider() && !ids.add(mi.id))
+				throw iaex("AvatarChip '%s' duplicate menu item id '%s'.", displayName, mi.id);
 		}
 	}
 }

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link InMemorySavedViewStore} &mdash; the non-durable in-memory default {@link SavedViewStore}
- * (TODO-444 §3.3): CRUD, the count quotas (per-scope, per-user aggregate, and the race-safe aggregate under parallel
+ * (design doc §3.3): CRUD, the count quotas (per-scope, per-user aggregate, and the race-safe aggregate under parallel
  * creates in different scopes), replace-does-not-count, dangling-active resolution, per-user isolation, and the
  * derived {@code getActive}.
  */

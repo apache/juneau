@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Always-on source-shape coverage for the {@code juneau-views.js} declarative-modal, typed-action-result and
- * in-flight-row plumbing (TODO-416/417).  Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style:
+ * in-flight-row plumbing.  Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style:
  * proves the load-bearing pieces of the modal/result/in-flight contract are present in the shipped asset, without
  * booting a browser (the behavioral proof lives in the opt-in {@code ModalResult_BrowserTest} canary).
  */
@@ -106,7 +106,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	@Test void b03_dialogIsOpenedForPresentDialogActions() throws Exception {
 		var body = viewsJs();
 		assertTrue(body.contains("function isDialogAction("), body);
-		assertTrue(body.contains("action.present === \"dialog\""), body);
+		assertTrue(body.contains("action?.present === \"dialog\""), body);
 		assertTrue(body.contains("function openActionDialog("), body);
 		// The modal-open confirmation fetch is a read-only GET.
 		var open = fn(body, "function openActionDialog(");
@@ -179,8 +179,8 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	@Test void e01_setRowInFlightTogglesMarkerAndDisablesTrigger() throws Exception {
 		var body = viewsJs();
 		var s = fn(body, "function setRowInFlight(");
-		assertTrue(s.contains("setAttribute(\"data-juneau-inflight\""), s);
-		assertTrue(s.contains("removeAttribute(\"data-juneau-inflight\")"), s);
+		assertTrue(s.contains("dataset.juneauInflight"), s);
+		assertTrue(s.contains("delete tr.dataset.juneauInflight"), s);
 		assertTrue(s.contains("trigger.disabled"), s);
 	}
 
@@ -261,9 +261,9 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var paint = fn(body, "function paintFormControl(");
 		assertTrue(paint.contains("createElement(\"input\")"), paint);
 		assertTrue(paint.contains("createElement(\"textarea\")"), paint);
-		assertTrue(paint.contains("createElement(\"select\")"), paint);
+		assertTrue(fn(body, "function buildSelectFormControl(").contains("createElement(\"select\")"), paint);
 		assertTrue(paint.contains(".value"), paint);
-		assertTrue(paint.contains(".checked"), paint);
+		assertTrue(fn(body, "function buildCheckboxFormControl(").contains(".checked"), paint);
 		assertFalse(paint.contains(".innerHTML"), () -> "paintFormControl must never use innerHTML:\n" + paint);
 		assertFalse(paint.contains("insertAdjacentHTML"), paint);
 	}
@@ -307,6 +307,6 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var body = viewsJs();
 		var build = fn(body, "function buildDialogOverlay(");
 		// The form paint is threaded the row context (table/tr/ctx) and the dialog-only field-id sequence.
-		assertTrue(build.contains("appendDialogForm(dialog, modal && modal.form, table, tr, ctx, seq)"), build);
+		assertTrue(build.contains("appendDialogForm(dialog, modal?.form, table, tr, ctx, seq)"), build);
 	}
 }

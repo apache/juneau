@@ -92,8 +92,8 @@ class TablePolling_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildStalenessIndicator(");
 		assertTrue(fnBody.contains("juneau-view-staleness"), fnBody);
-		assertTrue(fnBody.contains("\"data-testid\", \"staleness\""), fnBody);
-		assertTrue(fnBody.contains("\"data-state\", \"fresh\""), fnBody);
+		assertTrue(fnBody.contains("el.dataset.testid = \"staleness\""), fnBody);
+		assertTrue(fnBody.contains("el.dataset.state = \"fresh\""), fnBody);
 	}
 
 	/**
@@ -119,7 +119,7 @@ class TablePolling_Wiring_Test extends TestBase {
 	 * <p>
 	 * Scoped to the {@code initPolling} function body: the TABLE-POLLING transport must stay a plain
 	 * {@code setInterval} + {@code dt.ajax.reload} loop and must never itself become an {@code EventSource} stream.
-	 * The check is deliberately NOT over the whole file: the async-job feature (TODO-425) legitimately opens an
+	 * The check is deliberately NOT over the whole file: the async-job feature legitimately opens an
 	 * {@code EventSource} elsewhere (its own DISTINCT job-running affordance, HIGH-9), which must not freeze polling -
 	 * so streaming may exist in the file, just never inside the polling loop.
 	 */
@@ -145,8 +145,9 @@ class TablePolling_Wiring_Test extends TestBase {
 
 	@Test void b07_constructTable_onlyWiresPollingWhenViewDeclaresAPollInterval() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var initBody = functionBody(body, "function constructTable(");
-		assertTrue(initBody.contains("if (viewDef.pollIntervalMs && toolbarRow)"), initBody);
+		assertTrue(functionBody(body, "function constructTable(").contains("wireTablePolling("), body);
+		var initBody = functionBody(body, "function wireTablePolling(");
+		assertTrue(initBody.contains("if (!viewDef.pollIntervalMs || !toolbarRow) return"), initBody);
 		assertTrue(initBody.contains("buildStalenessIndicator()"), initBody);
 		assertTrue(initBody.contains("initPolling(table, ctx.dataTable, viewDef, staleness, ctx)"), initBody);
 		assertTrue(initBody.contains(".juneau-view-toolbar-right"), initBody);

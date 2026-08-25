@@ -55,6 +55,9 @@ public class QuickStatsTable {
 	/** Attribute carrying a {@link StatItem#id()} on each item element. */
 	public static final String STAT_MARKER = "data-juneau-stat";
 
+	/** The label span's CSS class, shared by every {@link StatItem} kind's emit branch. */
+	private static final String STAT_LABEL_CLASS = "jc-stat-label";
+
 	private QuickStatsTable() {}
 
 	/**
@@ -81,12 +84,12 @@ public class QuickStatsTable {
 	private static HtmlElement<?> emitItem(StatItem i) {
 		if (i instanceof StatTile i2)
 			return div(
-				span(i2.label).class_("jc-stat-label"),
+				span(i2.label).class_(STAT_LABEL_CLASS),
 				span(i2.value).class_(toneClass("jc-stat-value", i2.tone))
 			).class_("jc-stat jc-stat-tile").attr(STAT_MARKER, i2.id);
 		if (i instanceof StatBar i2)
 			return div(
-				span(i2.label).class_("jc-stat-label"),
+				span(i2.label).class_(STAT_LABEL_CLASS),
 				// The fill is a purely visual box with no text of its own.  It carries an empty raw-text child rather
 				// than no children at all, because the html5 serializer renders a childless element as
 				// `<span nil="true"/>` - which would read as "no value" on a bar that legitimately has one.
@@ -96,7 +99,7 @@ public class QuickStatsTable {
 			).class_("jc-stat jc-stat-bar").attr(STAT_MARKER, i2.id);
 		if (i instanceof SegmentedBadge i2) {
 			var kids = new ArrayList<>();
-			kids.add(span(i2.label).class_("jc-stat-label"));
+			kids.add(span(i2.label).class_(STAT_LABEL_CLASS));
 			for (var s : i2.segments)
 				kids.add(span(
 					span(Long.toString(s.count)).class_("jc-stat-segment-count"),

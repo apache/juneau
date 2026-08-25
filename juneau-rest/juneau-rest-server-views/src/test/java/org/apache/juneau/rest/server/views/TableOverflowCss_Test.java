@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Pins the TODO-445n table-overflow-discipline CSS contract in {@code juneau-views.css}: the DT2 "Approach D"
+ * Pins the table-overflow-discipline CSS contract in {@code juneau-views.css}: the DT2 "Approach D"
  * scoped overflow box, the {@code min-width:0} constraint chain (INV-3), and the DT1 "Approach B" wrap rule.
  *
  * <p>

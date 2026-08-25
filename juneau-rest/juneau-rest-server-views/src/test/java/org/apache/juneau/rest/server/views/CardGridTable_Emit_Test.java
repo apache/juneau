@@ -18,10 +18,14 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Markup + escaping tests for the {@link CardGridTable} emitter.
@@ -189,22 +193,24 @@ class CardGridTable_Emit_Test extends TestBase {
 
 	/** A well-formed CardBody the v1 emitter does not know how to render. */
 	static class OtherBody implements CardBody {
+		// Deliberately a no-op: this stand-in only needs to satisfy the CardBody contract, not carry real validation.
 		@Override public void validate() {}
 	}
 
-	@Test void a16_unknownBodyFailsClosed() {
-		var g = CardGrid.create("g1").cards(Card.create("c1", "T").body(new OtherBody()));
-		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(g));
-		assertTrue(e.getMessage().contains("CardFieldList"), e::getMessage);
+	@ParameterizedTest
+	@MethodSource("a16_invalidGridsProvider")
+	void a16_invalidGridsFailClosed(CardGrid invalidGrid, String expectedMessageFragment) {
+		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(invalidGrid));
+		if (expectedMessageFragment != null)
+			assertTrue(e.getMessage().contains(expectedMessageFragment), e::getMessage);
 	}
 
-	@Test void a17_nullGridRejected() {
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(null));
-	}
-
-	@Test void a18_invalidGridRejectedOnEntry() {
-		// grid.validate() runs on entry: a grid with no cards must throw before any markup is produced.
-		assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(CardGrid.create("g1")));
+	static Stream<Arguments> a16_invalidGridsProvider() {
+		return Stream.of(
+			Arguments.of(CardGrid.create("g1").cards(Card.create("c1", "T").body(new OtherBody())), "CardFieldList"),
+			Arguments.of(null, null),
+			// grid.validate() runs on entry: a grid with no cards must throw before any markup is produced.
+			Arguments.of(CardGrid.create("g1"), null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

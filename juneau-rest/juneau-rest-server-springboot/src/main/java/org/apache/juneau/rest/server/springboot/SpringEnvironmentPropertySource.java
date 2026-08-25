@@ -103,7 +103,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 
 	@Override
 	@SuppressWarnings({
-		"java:S2589" // Double-checked locking: the inner `if (!resolved)` and its else-branch look redundant to Sonar's single-threaded symbolic execution but are essential for MT correctness (another thread can set resolved=true between the outer and inner checks).
+		"java:S2589" // Double-checked locking: the inner resolved re-check and its else branch look redundant under Sonar's single-threaded symbolic execution, but are essential for correctness under concurrency — another thread can flip resolved to true between the outer and inner checks.
 	})
 	public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {
 		var e = env;

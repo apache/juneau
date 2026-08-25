@@ -31,7 +31,7 @@ import org.junit.jupiter.api.condition.*;
 
 /**
  * The persistence half of the module's <b>JavaScript-execution harness</b>: runs the REAL served
- * {@code juneau-config.js} (TODO-444, slice 2) in a real headless browser against REAL {@code window.localStorage}
+ * {@code juneau-config.js} in a real headless browser against REAL {@code window.localStorage}
  * and a stubbed {@code fetch}, and asserts the async persistence facade actually behaves as documented at
  * runtime &mdash; not merely that the shipped source CONTAINS the right shapes.
  *

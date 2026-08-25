@@ -31,7 +31,7 @@ import org.junit.jupiter.api.condition.*;
 
 /**
  * The async-job + SSE-streaming half of the module's <b>JavaScript-execution harness</b>: runs the REAL served
- * {@code juneau-views.js} in a real headless browser and asserts the TODO-425 behavior as a user would experience it
+ * {@code juneau-views.js} in a real headless browser and asserts the async-job behavior as a user would experience it
  * &mdash; an async row action's start POST returns a job pointer, the row picks up the DISTINCT
  * {@code data-juneau-job} affordance (never {@code data-juneau-inflight}, so the table KEEPS polling), streamed
  * progress renders in a visible {@code textContent} banner, the single terminal {@code result} event settles the row

@@ -20,7 +20,7 @@ package org.apache.juneau.rest.server.views;
  * Thrown by a {@link SavedViewStore} when a create would exceed one of the store's count quotas &mdash; the
  * per-scope cap ({@link SavedViewStore#MAX_VIEWS_PER_SCOPE}) or the per-user aggregate cap
  * ({@link SavedViewStore#MAX_VIEWS_PER_USER}) &mdash; so {@link SavedViewsMixin} can map it to the quota HTTP
- * status the client's server-persisted provider classifies as a {@code quota}-typed error (TODO-444 §3.2).
+ * status the client's server-persisted provider classifies as a {@code quota}-typed error (design doc §3.2).
  *
  * <p>
  * The count quotas are the store's responsibility (not the mixin's) precisely because they are stateful and

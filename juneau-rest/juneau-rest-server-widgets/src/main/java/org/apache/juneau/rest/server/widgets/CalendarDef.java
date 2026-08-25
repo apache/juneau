@@ -42,6 +42,9 @@ import org.apache.juneau.commons.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class CalendarDef implements Widget {
 
 	/**
@@ -290,50 +293,68 @@ public class CalendarDef implements Widget {
 		if (!ID_PATTERN.matcher(id).matches())
 			throw iaex("CalendarDef id '%s' must match [A-Za-z][A-Za-z0-9_-]*.", id);
 
-		if (endpoint != null) {
-			if (endpoint.isBlank())
-				throw iaex("CalendarDef endpoint must not be blank (use null for a seed-only calendar).");
-			if (!SafePathTemplate.isSafeTemplate(endpoint, "{year}", "{month}"))
-				throw iaex("CalendarDef endpoint must be a same-origin path template containing {year} and {month}: %s",
-					endpoint);
-		}
+		validateEndpoint();
 
 		if (maxPerDay != null && maxPerDay < 1)
 			throw iaex("CalendarDef maxPerDay must be >= 1.");
 
+		validateInitialMonthAndYear();
+		validateCategories();
+		validateEvents(effectiveYear, effectiveMonth);
+	}
+
+	/** Validates the optional per-month event GET template (see {@link #endpoint}). */
+	private void validateEndpoint() {
+		if (endpoint == null)
+			return;
+		if (endpoint.isBlank())
+			throw iaex("CalendarDef endpoint must not be blank (use null for a seed-only calendar).");
+		if (!SafePathTemplate.isSafeTemplate(endpoint, "{year}", "{month}"))
+			throw iaex("CalendarDef endpoint must be a same-origin path template containing {year} and {month}: %s",
+				endpoint);
+	}
+
+	/** Validates that {@link #initialMonth}/{@link #initialYear} are paired and in range. */
+	private void validateInitialMonthAndYear() {
 		if ((initialMonth == null) != (initialYear == null))
 			throw iaex("CalendarDef initialMonth and initialYear must be set together or neither.");
 		if (initialMonth != null && (initialMonth < 1 || initialMonth > 12))
 			throw iaex("CalendarDef initialMonth must be in 1..12.");
+	}
 
+	/** Validates the declared event categories, in legend order. */
+	private void validateCategories() {
+		if (categories == null)
+			return;
 		var seenCat = new HashSet<String>();
-		if (categories != null) {
-			for (var c : categories) {
-				if (c == null)
-					throw iaex("CalendarDef category must not be null.");
-				if (c.id == null || c.id.isBlank())
-					throw iaex("EventCategory id must not be null or blank.");
-				if (!ID_PATTERN.matcher(c.id).matches())
-					throw iaex("EventCategory id '%s' must match [A-Za-z][A-Za-z0-9_-]*.", c.id);
-				if (!seenCat.add(c.id))
-					throw iaex("CalendarDef duplicate category id '%s'.", c.id);
-				if (c.label == null || c.label.isBlank())
-					throw iaex("EventCategory '%s' label must not be null or blank.", c.id);
-			}
+		for (var c : categories) {
+			if (c == null)
+				throw iaex("CalendarDef category must not be null.");
+			if (c.id == null || c.id.isBlank())
+				throw iaex("EventCategory id must not be null or blank.");
+			if (!ID_PATTERN.matcher(c.id).matches())
+				throw iaex("EventCategory id '%s' must match [A-Za-z][A-Za-z0-9_-]*.", c.id);
+			if (!seenCat.add(c.id))
+				throw iaex("CalendarDef duplicate category id '%s'.", c.id);
+			if (c.label == null || c.label.isBlank())
+				throw iaex("EventCategory '%s' label must not be null or blank.", c.id);
 		}
+	}
 
-		if (events != null) {
-			var known = categoryIds();
-			var seenEvt = new HashSet<String>();
-			for (var e : events) {
-				// A malformed event is DROPPED, not fatal: one bad event must never cost the whole calendar.  The
-				// per-month GET path drops the same set via CalendarEvent.retainWellFormed.
-				if (e == null || e.malformedReason() != null)
-					continue;
-				if (!seenEvt.add(e.id))
-					throw iaex("CalendarDef duplicate event id '%s'.", e.id);
-				e.validate(known, effectiveYear, effectiveMonth);
-			}
+	/** Validates the initial-month seed events against the resolved (year, month) window. */
+	private void validateEvents(Integer effectiveYear, Integer effectiveMonth) {
+		if (events == null)
+			return;
+		var known = categoryIds();
+		var seenEvt = new HashSet<String>();
+		for (var e : events) {
+			// A malformed event is DROPPED, not fatal: one bad event must never cost the whole calendar.  The
+			// per-month GET path drops the same set via CalendarEvent.retainWellFormed.
+			if (e == null || e.malformedReason() != null)
+				continue;
+			if (!seenEvt.add(e.id))
+				throw iaex("CalendarDef duplicate event id '%s'.", e.id);
+			e.validate(known, effectiveYear, effectiveMonth);
 		}
 	}
 

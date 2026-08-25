@@ -50,18 +50,33 @@
 		<tomcat.version>11.0.21</tomcat.version>
 		<spring.version>4.1.0</spring.version>
 		<sonar.organization>apache</sonar.organization>
-		<!-- javadoc.css uses custom HTML element selectors (ja, jc, jd, ...) for Javadoc syntax highlighting; css:S4670 false positives. -->
-		<sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+		<!-- Maven scanner defaults to Java compile roots only (scanAll=false), so CSS/JS never reached SonarCloud.
+		     true indexes files outside compile roots (docs/ javadoc.css, classpath-resource CSS/JS). The Maven
+		     scanner reads these from the POM and ignores sonar-project.properties. -->
+		<sonar.maven.scanAll>true</sonar.maven.scanAll>
+		<!-- docs/src/javadoc/javadoc.css (the stylesheet fed to the javadoc tool) styles dozens of custom, non-HTML
+		     element selectors that make up Juneau's javadoc syntax-highlighting vocabulary: jc/jd/jt/jk/js/jf/jp/jv/
+		     jsf/jsm/ja (Java), xt/xa/xc/xs/xv (XML), joc/jok/jov (JSON), ua/uk/un/us (URL-encoding/UON),
+		     mc/mk/mv/mi (manifest files), cc/cs/ck/cv/ci (config files), plus c/dc/bc/l/property (misc). None of
+		     these are real HTML tags, so css:S4670 false-positives on every one of them. -->
+		<sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>css:S4670</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
 		<!-- HTTP-status response/exception beans (BasicHttpResponse/BasicHttpException CRTP+immutability hierarchy, TODO-273) are intentionally >5 ancestors deep; not a design smell to flatten. -->
 		<sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110</sonar.issue.ignore.multicriteria.e2.ruleKey>
 		<sonar.issue.ignore.multicriteria.e2.resourceKey>**/http/response/**</sonar.issue.ignore.multicriteria.e2.resourceKey>
+		<!-- javadoc.css is generated/vendor CSS fed to (and styling output of) the javadoc tool; its deprecated <tt> selector
+		     mirrors the standard Javadoc stylesheet and must stay so Javadoc's own <tt>-based markup keeps rendering. -->
+		<sonar.issue.ignore.multicriteria.e3.ruleKey>css:S1874</sonar.issue.ignore.multicriteria.e3.ruleKey>
+		<sonar.issue.ignore.multicriteria.e3.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e3.resourceKey>
 		<!-- Coverage/exclusion config for the SonarScanner-for-Maven (used by CI in .github/workflows/sonarcloud.yml). -->
 		<!-- The Maven scanner reads these from the POM and ignores sonar-project.properties. -->
 		<!-- Aggregate report (cross-module integration-test coverage) via reactor-root path, per-module report via basedir fallback. -->
 		<sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/juneau-integration-tests/target/site/jacoco-aggregate/jacoco.xml,${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-		<sonar.exclusions>**/target/**,**/doc/**,**/examples/**,**/src/main/resources/**,**/src/test/resources/**,**/generated/**,**/build/**</sonar.exclusions>
+		<!-- Removed **/doc/**, **/generated/**, **/build/** (dead globs). Dropped **/src/main/resources/** so
+		     scanAll can index CSS/JS shipped as classpath resources (views/widgets/console-ui runtimes, theme
+		     stylesheets). Test resources stay excluded. Remaining entries are live. -->
+		<sonar.exclusions>**/target/**,**/examples/**,**/src/test/resources/**</sonar.exclusions>
 		<!-- Exclude by-design parallel families from copy-paste detection (near-verbatim clones by design, not debt). Unique classes keep full CPD coverage. -->
 		<!-- 1) rest-server @RestX annotations + companion *Annotation impls (one per HTTP verb / lifecycle hook). -->
 		<!-- 2) marshaller facades (one thin Serializer+Parser pairing per format) under marshall/marshaller and marshall/jena/marshaller. -->
@@ -209,6 +224,7 @@
 						<!-- Performance baseline data file - plain text metrics, no license header syntax -->
 					<exclude>**/perf-baseline.txt</exclude>
 					<exclude>**/test-run-history.tsv</exclude>
+					<exclude>**/sonarqube-issues.txt</exclude>
 
 						<!-- JMH micro-benchmark output directory - generated result data + .gitkeep placeholder, no license header syntax -->
 					<exclude>**/jmh-results/**</exclude>

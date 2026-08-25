@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Serving/security-matrix test for {@link SavedViewsMixin} &mdash; the saved-views REST endpoints (TODO-444 §3.3).
+ * Serving/security-matrix test for {@link SavedViewsMixin} &mdash; the saved-views REST endpoints (design doc §3.3).
  *
  * <p>
  * Drives the fixed-mount endpoints through a {@link MockRestClient} and exercises the security matrix the plan

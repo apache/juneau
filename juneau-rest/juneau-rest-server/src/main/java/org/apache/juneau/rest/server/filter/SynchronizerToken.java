@@ -75,6 +75,9 @@ public final class SynchronizerToken {
 	/** Number of random bytes behind a generated token.  256 bits, well beyond guessing range. */
 	private static final int TOKEN_BYTES = 32;
 
+	/** Shared CSPRNG reused across calls to {@link #generate()}; {@link SecureRandom} is thread-safe. */
+	private static final SecureRandom RANDOM = new SecureRandom();
+
 	private final String value;
 
 	/**
@@ -93,7 +96,7 @@ public final class SynchronizerToken {
 	 */
 	public static SynchronizerToken generate() {
 		var bytes = new byte[TOKEN_BYTES];
-		new SecureRandom().nextBytes(bytes);
+		RANDOM.nextBytes(bytes);
 		return new SynchronizerToken(HexFormat.of().formatHex(bytes));
 	}
 

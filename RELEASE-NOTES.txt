@@ -173,6 +173,9 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
       builder methods on ComboRoundTrip_Tester accordingly.
     * juneau-examples-rest-jetty-ftest: SamplesMicroservice and RootResourcesTest now use
       Json5Parser to match server output (RootResources uses quoteChar="'" for testing).
+    * REST server: alongside the /htdocs/* mount no longer being a multi-path default (see
+      StaticFilesMixin), the unused, never-advertised htdocs/javadoc.css resource shipped by
+      juneau-rest-server has been removed.
 
 ** New Features - Direct Iterator/Iterable/Stream/Enumeration Serialization
 

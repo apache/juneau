@@ -24,11 +24,14 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Always-on coverage for the dialog-form contract-version handshake (h5): a form-bearing modal opens only when BOTH
@@ -170,16 +173,25 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 		assertEquals(true, r.get("bothCurrent_noRefusal"));
 	}
 
-	@Test void b02_wrongModalVersionRefusesWithoutOpening() {
+	/**
+	 * Four independent two-flag checks against the behavioral report: a wrong modal version refuses without
+	 * opening, a missing form version refuses without opening, a stale form under a current modal also refuses,
+	 * and a confirm-only fetched envelope stays unversioned and opens cleanly.
+	 */
+	@ParameterizedTest
+	@MethodSource("b02_reportHasTwoTrueFlagsProvider")
+	void b02_reportHasTwoTrueFlags(String key1, String key2) {
 		var r = report();
-		assertEquals(true, r.get("modalVersionWrong_noOpen"));
-		assertEquals(true, r.get("modalVersionWrong_refusal"));
+		assertEquals(true, r.get(key1));
+		assertEquals(true, r.get(key2));
 	}
 
-	@Test void b03_missingFormVersionRefusesWithoutOpening() {
-		var r = report();
-		assertEquals(true, r.get("formVersionMissing_noOpen"));
-		assertEquals(true, r.get("formVersionMissing_refusal"));
+	static Stream<Arguments> b02_reportHasTwoTrueFlagsProvider() {
+		return Stream.of(
+			Arguments.of("modalVersionWrong_noOpen", "modalVersionWrong_refusal"),
+			Arguments.of("formVersionMissing_noOpen", "formVersionMissing_refusal"),
+			Arguments.of("currentModalStaleForm_noOpen", "currentModalStaleForm_refusal"),
+			Arguments.of("confirmOnlyFetched_opens", "confirmOnlyFetched_noRefusal"));
 	}
 
 	/**
@@ -197,18 +209,8 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 			() -> "refusal must quote modal/form/runtime versions, got: " + r.get("staleModalCurrentForm_message"));
 	}
 
-	/** The mirror image: a stale form under a current modal is refused too, so neither half can slip through. */
-	@Test void b03c_staleFormUnderCurrentModal_alsoRefuses() {
-		var r = report();
-		assertEquals(true, r.get("currentModalStaleForm_noOpen"));
-		assertEquals(true, r.get("currentModalStaleForm_refusal"));
-	}
-
-	@Test void b04_confirmOnlyFetchedEnvelopeStaysUnversionedAndOpens() {
-		var r = report();
-		assertEquals(true, r.get("confirmOnlyFetched_opens"));
-		assertEquals(true, r.get("confirmOnlyFetched_noRefusal"));
-	}
+	// b03c (stale form under a current modal also refuses) and b04 (confirm-only fetched envelope stays
+	// unversioned and opens) are covered by b02 above, alongside two other structurally-identical two-flag checks.
 
 	@Test void b05_confirmOnlyLocalPromptOpensWithoutFetch() {
 		var r = report();

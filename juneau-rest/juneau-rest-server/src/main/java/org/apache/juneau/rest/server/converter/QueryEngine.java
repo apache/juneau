@@ -141,6 +141,11 @@ final class QueryEngine {
 	 * {@code o} is always non-null: it originates from a non-null response ({@link ProtocolQueryable} short-circuits
 	 * null responses) and every engine stage returns non-null for non-null input.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // null is a distinct, load-bearing signal from "empty": the sole caller (searchAny) uses it to
+		             // tell "not a collection/array" (return input unchanged) apart from "collection with zero rows"
+		             // (return an empty result); collapsing both to an empty list would change that behavior
+	})
 	private static List<Object> asList(Object o) {
 		if (o instanceof Collection<?> c)
 			return new ArrayList<>(c);

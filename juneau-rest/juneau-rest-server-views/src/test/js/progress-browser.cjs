@@ -34,7 +34,7 @@ const { chromium } = require('playwright');
 const PROBE = async function () {
 	const XSS = '<img src=x onerror="window.__juneauProgressXss=1">';
 	const NS = window.JuneauViews;
-	const r = NS && typeof NS.resolveRenderer === 'function' ? NS.resolveRenderer('progress') : null;
+	const r = typeof NS?.resolveRenderer === 'function' ? NS.resolveRenderer('progress') : null;
 	const out = { hasInit: !!(r && typeof r.display === 'function') };
 	if (!out.hasInit) return out;
 
@@ -83,6 +83,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

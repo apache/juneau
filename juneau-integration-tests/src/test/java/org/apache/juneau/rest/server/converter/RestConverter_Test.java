@@ -147,8 +147,8 @@ class RestConverter_Test extends TestBase {
 	// explicitly allow-listed the target method(s)). Introspectable has no allow-list configuration mechanism
 	// of its own, so invokeMethod requests are now refused with a 500 rather than dispatched. This closes the
 	// REST-exposed "reflective-invoke-over-the-wire" hole that this converter previously opened by default.
-	// See TODO-351 B-marshall-6 for the tracked follow-up decision on whether/how to add allow-list
-	// configuration to this converter.
+	// See c04_introspectableAllowListedMethod_dispatches() below for the per-resource allow-list opt-in
+	// that resolves this for callers who need reflective dispatch.
 	@Test void c02_introspectableInvokeMethod_deniedByDefault() throws Exception {
 		var c = MockRestClient.create(C.class).json().ignoreErrors().build();
 		c.get("/?invokeMethod=getName").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
@@ -159,9 +159,8 @@ class RestConverter_Test extends TestBase {
 		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
 	}
 
-	// Real per-resource allow-list configuration (TODO-351 B-marshall-6 follow-up): a resource opts specific
-	// methods in by registering an IntrospectableSettings bean in its bean store.  Default (no bean) remains
-	// deny-all, covered by c02/c03 above.
+	// Real per-resource allow-list configuration: a resource opts specific methods in by registering an
+	// IntrospectableSettings bean in its bean store.  Default (no bean) remains deny-all, covered by c02/c03 above.
 
 	@Rest(converters=Introspectable.class)
 	public static class C2 implements BasicUniversalConfig {
@@ -284,7 +283,7 @@ class RestConverter_Test extends TestBase {
 	// "?p=N" (position without limit) trips a pre-existing ObjectPaginator edge case (limit defaults to -1, yielding
 	// a subList(pos, pos-1) IllegalArgumentException -> 500) that predates and is orthogonal to the OQ2 reshape -
 	// both Queryable and ProtocolQueryable route through the same untouched ObjectPaginator, so it's not a
-	// divergence.  See TODO-355b for the tracked latent-bug note.
+	// divergence.  Deferred: this is a known latent bug in ObjectPaginator itself, not in either converter.
 	@Test void f01_protocolQueryableNativeByteEquivalence() throws Exception {
 		var native1 = MockRestClient.buildJson(B.class);
 		var generic = MockRestClient.buildJson(F.class);

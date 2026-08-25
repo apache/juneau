@@ -25,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * An in-memory, per-process registry of {@link AsyncJob async jobs} &mdash; the single-process job store the async
- * write variant runs on (design doc §6.3; {@code TODO-425}, Q2).
+ * An in-memory, per-process registry of {@link AsyncJob async jobs} &mdash; the single-process job store a future
+ * async write variant runs on (design doc §6.3, Q2).
  *
  * <h5 class='section'>Single-process, by decision</h5>
  * <p>

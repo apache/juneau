@@ -126,7 +126,7 @@ class ViewsJs_NestedTable_Test extends TestBase {
 	@Test void a02_parentDtHandlersGuarded() throws Exception {
 		var body = viewsJs();
 		// Every parent .dt handler must ignore a nested table's event bubbling up (e.target === parent-table guard).
-		assertTrue(body.contains("ctx.dataTable.on(\"draw.dt\", function (e) { if (e && e.target !== ctx.table) return; refreshPillState(); })"),
+		assertTrue(body.contains("ctx.dataTable.on(\"draw.dt\", function (e) { if (e && e.target !== ctx.table) { return; } refreshPillState(); })"),
 			"paging pill draw.dt must be guarded");
 		assertTrue(body.contains("ctx.dataTable.on(\"preDraw.dt\", function (e) {"),
 			"parent must tear down nested tables on preDraw.dt (while child rows still exist)");

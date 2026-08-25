@@ -16,7 +16,7 @@
  */
 
 /*
- * row-detail-browser.cjs - opt-in Chromium XSS canary for row-detail slot fill (TODO-445a).
+ * row-detail-browser.cjs - opt-in Chromium XSS canary for row-detail slot fill (row-detail-445a).
  *
  * Never runs in a default build.  Driven by RowDetail_BrowserTest under `mvn -Pjs-tests`.
  *
@@ -34,14 +34,14 @@ const { chromium } = require('playwright');
 const PROBE = async function () {
 	const XSS = '<img src=x onerror="window.__juneauDetailXss=1">';
 	const NS = window.JuneauViews;
-	const I = NS && NS.init;
-	const out = { hasInit: !!(I && typeof I.fillDetailSlots === 'function') };
+	const I = NS?.init;
+	const out = { hasInit: typeof I?.fillDetailSlots === 'function' };
 	if (!out.hasInit) return out;
 
 	window.__juneauDetailXss = 0;
 
 	const slot = document.createElement('div');
-	slot.setAttribute('data-juneau-field', 'title');
+	slot.dataset.juneauField = 'title';
 	document.body.appendChild(slot);
 	const root = document.createElement('div');
 	root.appendChild(slot);
@@ -81,6 +81,6 @@ const PROBE = async function () {
 		await browser.close();
 	}
 })().catch(e => {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String(e?.stack || e) + '\n');
 	process.exit(1);
 });

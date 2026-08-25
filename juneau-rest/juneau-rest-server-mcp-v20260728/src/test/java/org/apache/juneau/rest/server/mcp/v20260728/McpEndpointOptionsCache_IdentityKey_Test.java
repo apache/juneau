@@ -39,14 +39,12 @@ class McpEndpointOptionsCache_IdentityKey_Test {
 		assertEquals(key, key);
 	}
 
-	@SuppressWarnings({
-		"unlikely-arg-type" // Intentionally comparing to a mismatched type to cover the equals() type-guard branch.
-	})
 	@Test void a02_equals_notAnIdentityKey_false() {
 		var key = new McpEndpointOptionsCache.IdentityKey(new Fixture());
-		// Deliberately calls key.equals(...) directly (not assertNotEquals(key, "not a key")) so
-		// IdentityKey.equals() -- not String.equals() -- is the method actually under test.
-		assertFalse(key.equals("not a key"));
+		// assertNotEquals(key, "not a key") invokes key.equals("not a key") -- IdentityKey.equals(), not
+		// String.equals() -- because key is the "unexpected" (first) argument, and JUnit's equality check
+		// delegates to unexpected.equals(actual) to cover the equals() type-guard branch.
+		assertNotEquals(key, "not a key");
 	}
 
 	@Test void a03_equals_differentReferents_false() {

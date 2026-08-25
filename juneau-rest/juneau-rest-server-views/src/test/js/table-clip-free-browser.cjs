@@ -38,7 +38,7 @@ const { chromium } = require('playwright');
 
 const PROBE = async function () {
 	const NS = window.JuneauViews;
-	const init = NS && NS.init;
+	const init = NS?.init;
 	const out = { hasInit: !!init, hasRenders: typeof NS?.resolveRenderer === 'function' };
 	if (!init) return out;
 
@@ -50,9 +50,11 @@ const PROBE = async function () {
 	 * report any that would clip it.  A portalled layer is a child of <body>, so this list must come back EMPTY -
 	 * that is a stronger statement than "not inside THAT box", because it also catches a new clipping ancestor.
 	 */
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function clippingAncestors(el) {
 		const bad = [];
-		let n = el && el.parentElement;
+		let n = el?.parentElement;
 		while (n && n !== document.documentElement) {
 			const o = getComputedStyle(n);
 			if (o.overflow !== 'visible' || o.overflowX !== 'visible' || o.overflowY !== 'visible')
@@ -62,11 +64,15 @@ const PROBE = async function () {
 		return bad;
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function rectOf(el) {
 		const r = el.getBoundingClientRect();
 		return { left: Math.round(r.left), top: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
 	}
 
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
 	function sameRect(a, b) {
 		return a.left === b.left && a.top === b.top && a.w === b.w && a.h === b.h;
 	}
@@ -112,7 +118,7 @@ const PROBE = async function () {
 		table.style.tableLayout = 'fixed';
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
-		tr.setAttribute('data-juneau-row-id', 'INC-' + kind);
+		tr.dataset.juneauRowId = 'INC-' + kind;
 		const filler = document.createElement('td');
 		filler.style.width = '1200px';
 		filler.textContent = 'wide filler column';
@@ -182,15 +188,15 @@ const PROBE = async function () {
 		btn.type = 'button';
 		btn.className = 'jc-cell-popover-trigger';
 		btn.setAttribute('aria-expanded', 'false');
-		btn.setAttribute('data-juneau-popover', '1');
-		btn.setAttribute('data-juneau-popover-col', 'name');
+		btn.dataset.juneauPopover = '1';
+		btn.dataset.juneauPopoverCol = 'name';
 		f.td.appendChild(btn);
 		const ctx = { dataTable: { row: function () { return { data: function () { return { name: 'Ada Lovelace' }; } }; } } };
 		init.initCellPopover(f.table, ctx, viewDef);
 		btn.click();
 		await tick();
 		const el = document.getElementById('juneau-cell-popover');
-		return (el && el.style.display !== 'none') ? el : null;
+		return (el?.style.display !== 'none') ? el : null;
 	}
 
 	/** Opens the datetime renderer's timestamp popup by hovering a [data-juneau-ts] host in the anchor cell. */
@@ -198,7 +204,7 @@ const PROBE = async function () {
 		const host = document.createElement('span');
 		host.className = 'juneau-ts';
 		host.setAttribute('tabindex', '0');
-		host.setAttribute('data-juneau-ts', '2026-08-25T05:41:00.000Z');
+		host.dataset.juneauTs = '2026-08-25T05:41:00.000Z';
 		host.textContent = '2026-08-25T05:41Z';
 		f.td.appendChild(host);
 		const r = host.getBoundingClientRect();
@@ -207,7 +213,7 @@ const PROBE = async function () {
 		}));
 		await tick();
 		const el = document.getElementById('juneau-ts-popup');
-		return (el && el.style.display !== 'none') ? el : null;
+		return (el?.style.display !== 'none') ? el : null;
 	}
 
 	const openers = { Menu: openMenu, Popover: openPopover, Timestamp: openTimestamp };
@@ -223,7 +229,7 @@ const PROBE = async function () {
 			m.boxActuallyScrolled = f.box.scrollWidth > f.box.clientWidth;
 			out[kind + surface] = m;
 			drain();
-			if (f.host.parentElement) f.host.parentElement.removeChild(f.host);
+			f.host.remove();
 		}
 	}
 
@@ -232,14 +238,16 @@ const PROBE = async function () {
 	// cell is a descendant of the .juneau-view-table - so the table's own clip/ellipsis default would cut the whole
 	// expanded panel down to one nowrap line unless the runtime opts that cell out.
 	// ---------------------------------------------------------------------------------------------------------------
-	{
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
+	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
+	async function checkDetailPanelClip() {
 		const table = document.createElement('table');
 		table.className = 'juneau-view-table';
-		table.setAttribute('data-juneau-view', 'detail');
+		table.dataset.juneauView = 'detail';
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
 		tr.className = 'juneau-view-detail-row';
-		tr.setAttribute('data-juneau-row-id', 'INC-D');
+		tr.dataset.juneauRowId = 'INC-D';
 		const td = document.createElement('td');
 		td.textContent = 'row';
 		tr.appendChild(td);
@@ -249,7 +257,7 @@ const PROBE = async function () {
 		// The row-detail <template> the expander looks for, as a sibling of the table.
 		const host = document.createElement('div');
 		const tpl = document.createElement('template');
-		tpl.setAttribute('data-juneau-row-detail', '1');
+		tpl.dataset.juneauRowDetail = '1';
 		tpl.innerHTML = '<div class="juneau-view-detail-section">'
 			+ '<div data-juneau-field="title">a long detail body that must be free to wrap onto several lines</div>'
 			+ '</div>';
@@ -272,7 +280,7 @@ const PROBE = async function () {
 			} };
 		};
 		rowApi.child.isShown = function () { return shown; };
-		rowApi.child.hide = function () { if (childTr && childTr.parentNode) childTr.parentNode.removeChild(childTr); shown = false; };
+		rowApi.child.hide = function () { childTr?.remove(); shown = false; };
 
 		const ctx = { dataTable: { row: function () { return rowApi; } } };
 		const viewDef = { details: { endpoint: '/detail/{id}' }, columns: [] };
@@ -281,21 +289,23 @@ const PROBE = async function () {
 		await tick();
 
 		const panel = document.querySelector('.juneau-view-detail-panel');
-		const cell = panel && panel.parentElement;
+		const cell = panel?.parentElement;
 		const s = cell ? getComputedStyle(cell) : null;
-		out.detailPanelCell = {
+		const result = {
 			expanded: !!panel,
-			hostIsTd: cell ? cell.tagName === 'TD' : false,
-			insideViewTable: cell ? !!cell.closest('.juneau-view-table') : false,
+			hostIsTd: cell?.tagName === 'TD',
+			insideViewTable: !!cell?.closest('.juneau-view-table'),
 			// The three ways the clip default would maim an expanded panel.
-			wraps: s ? s.whiteSpace !== 'nowrap' : false,
-			notOverflowHidden: s ? s.overflow !== 'hidden' : false,
-			noMaxWidthCap: s ? (s.maxWidth === 'none') : false,
-			panelHasArea: panel ? panel.getBoundingClientRect().height > 0 : false
+			wraps: (s?.whiteSpace ?? 'nowrap') !== 'nowrap',
+			notOverflowHidden: (s?.overflow ?? 'hidden') !== 'hidden',
+			noMaxWidthCap: s?.maxWidth === 'none',
+			panelHasArea: panel?.getBoundingClientRect().height > 0
 		};
-		if (host.parentElement) host.parentElement.removeChild(host);
+		host.remove();
 		drain();
+		return result;
 	}
+	out.detailPanelCell = await checkDetailPanelClip();
 
 	return out;
 };
@@ -319,4 +329,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String((e && e.stack) || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

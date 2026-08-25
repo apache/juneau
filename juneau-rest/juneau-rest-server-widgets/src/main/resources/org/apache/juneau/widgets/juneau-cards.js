@@ -63,7 +63,6 @@
 	 * are themselves clients of the ONE shared views layer stack.
 	 */
 	const ACTION_MARKER = "data-juneau-header-action";
-	const BEHAVIOR_ATTR = "data-juneau-behavior";
 
 	/**
 	 * The minimum honored polling interval, in milliseconds.  COPIED from juneau-views.js (which mirrors
@@ -125,7 +124,7 @@
 		if (typeof path !== "string" || path.length === 0) return false;
 		if (path.indexOf("{") >= 0) return false;                 // no template placeholder (a field-list is not row-scoped)
 		if (path.indexOf("://") >= 0) return false;               // absolute URL
-		if (path.charAt(0) === "/" && path.charAt(1) === "/") return false;   // protocol-relative
+		if (path.startsWith("//")) return false;                  // protocol-relative
 		const colon = path.indexOf(":");
 		const slash = path.indexOf("/");
 		if (colon >= 0 && (slash < 0 || colon < slash)) return false;   // "scheme:" before any slash (e.g. javascript:, servlet:)
@@ -135,7 +134,7 @@
 
 	/** Fail-loud handshake predicate: the refresh envelope's contractVersion must equal the baked-in expected value. */
 	function envelopeContractOk(env, expected) {
-		return !!env && typeof env === "object" && env.contractVersion === expected;
+		return typeof env === "object" && env?.contractVersion === expected;
 	}
 
 	/**
@@ -162,8 +161,7 @@
 		if (!body || !body.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
 		const slots = body.querySelectorAll("[" + CARD_FIELD_ATTR + "]");
-		for (let i = 0; i < slots.length; i++) {
-			const slot = slots[i];
+		for (const slot of slots) {
 			const key = slot.getAttribute(CARD_FIELD_ATTR);
 			slot.textContent = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
 		}
@@ -193,14 +191,14 @@
 	 */
 	function isElementHidden(node) {
 		let n = node;
-		while (n && n.nodeType === 1) {
+		while (n?.nodeType === 1) {
 			if (n.hidden === true) return true;
-			const style = n.getAttribute && n.getAttribute("style");
+			const style = n.getAttribute?.("style");
 			if (style && /display\s*:\s*none/i.test(style)) return true;
 			if ((hasClass(n, "jc-panel") || hasClass(n, "jc-subpanel")) && !hasClass(n, "jc-active")) return true;
 			if (window.getComputedStyle) {
 				const cs = window.getComputedStyle(n);
-				if (cs && cs.display === "none") return true;
+				if (cs?.display === "none") return true;
 			}
 			n = n.parentNode;
 		}
@@ -211,7 +209,7 @@
 	function ancestorPanels(node) {
 		const panels = [];
 		let n = node ? node.parentNode : null;
-		while (n && n.nodeType === 1) {
+		while (n?.nodeType === 1) {
 			if (hasClass(n, "jc-panel") || hasClass(n, "jc-subpanel")) panels.push(n);
 			n = n.parentNode;
 		}
@@ -222,12 +220,12 @@
 	function renderStatus(status, state, nowMs) {
 		if (!status) return;
 		if (state.errored) {
-			status.setAttribute("data-state", "error");
+			status.dataset.state = "error";
 			status.textContent = "Refresh failed";
 			status.hidden = false;
 			return;
 		}
-		status.removeAttribute("data-state");
+		delete status.dataset.state;
 		if (state.lastSuccessAt == null) {
 			status.hidden = true;
 			return;
@@ -249,14 +247,14 @@
 	 * with every other popup on the page.
 	 */
 	function chromeActions() {
-		const chrome = window.JuneauChrome && window.JuneauChrome.init;
-		return chrome && typeof chrome.wireMenus === "function" && typeof chrome.wireSafeActions === "function"
+		const chrome = window.JuneauChrome?.init;
+		return typeof chrome?.wireMenus === "function" && typeof chrome?.wireSafeActions === "function"
 			? chrome : null;
 	}
 
 	/** True when a card declares at least one action (a static, action-less card needs no enhancement at all). */
 	function hasCardActions(card) {
-		return !!(card && card.querySelector && card.querySelector("[" + ACTION_MARKER + "]"));
+		return !!card?.querySelector?.("[" + ACTION_MARKER + "]");
 	}
 
 	/**
@@ -274,82 +272,111 @@
 		return true;
 	}
 
+	/** Fail-loud handshake gate for one card: contract version, then the client-side endpoint re-check. */
+	function cardRefreshRefused(card, refreshUrl, declared) {
+		if (declared !== JUNEAU_CARDS_CONTRACT_VERSION) {
+			window.console?.error?.(
+				"juneau-cards.js: card contract mismatch (card '" + declared + "' != runtime '"
+				+ JUNEAU_CARDS_CONTRACT_VERSION + "'); refusing to enhance card.");
+			showCardBanner(card, "This card was built for a different runtime version and was not enhanced.");
+			return true;
+		}
+		if (!isSafeCardEndpoint(refreshUrl)) {
+			window.console?.error?.(
+				"juneau-cards.js: unsafe refresh endpoint '" + refreshUrl + "'; refusing to enhance card.");
+			showCardBanner(card, "This card's refresh endpoint is not a safe same-origin path; it was not enhanced.");
+			return true;
+		}
+		return false;
+	}
+
+	/** Wires the refresh trigger's accessible label (from the card's titled heading) and its icon-registry glyph. */
+	function wireRefreshButton(card, btn) {
+		const labelledby = card.getAttribute("aria-labelledby");
+		const titleEl = labelledby ? card.querySelector?.("#" + labelledby) : null;
+		const titleText = titleEl ? titleEl.textContent : "";
+		btn.setAttribute("aria-label", titleText ? "Refresh " + titleText : "Refresh");
+		const icons = window.JuneauViews?.icons;
+		const glyph = icons?.resolveIcon?.("refresh") ?? null;
+		if (glyph) btn.innerHTML = glyph;                         // registry markup only - never user data
+	}
+
+	/** Applies a successful refresh envelope to a card's fields, or flags the error state on a failed handshake. */
+	function applyCardRefreshEnvelope(body, state, env) {
+		if (!envelopeContractOk(env, JUNEAU_CARDS_CONTRACT_VERSION)) { state.errored = true; return; }
+		fillCardFields(body, env.fields);
+		state.lastSuccessAt = Date.now();
+		state.errored = false;
+	}
+
+	/** Finalizes a refresh attempt (success or failure alike): clears in-flight/busy state, repaints the status chip. */
+	function finishCardRefresh(card, btn, status, state) {
+		state.inFlight = false;
+		if (btn) btn.disabled = false;
+		card.removeAttribute("aria-busy");
+		renderStatus(status, state, Date.now());
+	}
+
+	/** Performs one refresh fetch for a card, applying the envelope on success and flagging state.errored on any failure. */
+	function fetchCardRefresh(refreshUrl, card, btn, body, status, state) {
+		return window.fetch(refreshUrl, { method: "GET", credentials: "same-origin", cache: "no-store" })
+			.then(function (r) { return r.json(); })
+			.then(function (env) { applyCardRefreshEnvelope(body, state, env); })
+			.catch(function () { state.errored = true; })         // error state does NOT reset lastSuccessAt (S8)
+			.then(function () { finishCardRefresh(card, btn, status, state); });
+	}
+
+	/** Re-arms a card's poll loop for another tick, unless ctl.stop() has since flipped ctl.running off. */
+	function continuePolling(ctl) {
+		if (ctl.running) schedulePoll(ctl);
+	}
+
+	/** Runs one poll tick's refresh, then re-arms the loop once that refresh settles. */
+	function runPollTick(ctl) {
+		ctl.refresh().then(function () { continuePolling(ctl); });
+	}
+
+	/** Arms a card's next poll tick after its own jittered delay (nextPollDelay's Math.random() is UI polling jitter
+	 *  to stagger an N-card dashboard's refreshes - not security/crypto-sensitive). */
+	function schedulePoll(ctl) {
+		ctl.state.pollTimer = setTimeout(function () { runPollTick(ctl); }, nextPollDelay(ctl.intervalMs, Math.random()));
+	}
+
 	/** Wires one refreshable card: contract handshake, endpoint re-check, refresh button, optional poll loop. */
 	function initCard(card) {
 		const refreshUrl = card.getAttribute(CARD_REFRESH_ATTR);
 		if (!refreshUrl) return;                                  // static card - nothing to enhance
 
 		const declared = card.getAttribute(CARD_CONTRACT_ATTR);
-		if (declared !== JUNEAU_CARDS_CONTRACT_VERSION) {
-			(window.console && console.error) && console.error(
-				"juneau-cards.js: card contract mismatch (card '" + declared + "' != runtime '"
-				+ JUNEAU_CARDS_CONTRACT_VERSION + "'); refusing to enhance card.");
-			showCardBanner(card, "This card was built for a different runtime version and was not enhanced.");
-			return;
-		}
-		if (!isSafeCardEndpoint(refreshUrl)) {
-			(window.console && console.error) && console.error(
-				"juneau-cards.js: unsafe refresh endpoint '" + refreshUrl + "'; refusing to enhance card.");
-			showCardBanner(card, "This card's refresh endpoint is not a safe same-origin path; it was not enhanced.");
-			return;
-		}
+		if (cardRefreshRefused(card, refreshUrl, declared)) return;
 
 		const body = card.querySelector("[" + CARD_BODY_ATTR + "]");
 		const btn = card.querySelector("[" + CARD_REFRESH_TRIGGER_ATTR + "]");
 		const status = card.querySelector("[" + CARD_STATUS_ATTR + "]");
 
 		if (status) { status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite"); }
-		if (btn) {
-			const labelledby = card.getAttribute("aria-labelledby");
-			const titleEl = labelledby && card.querySelector ? card.querySelector("#" + labelledby) : null;
-			const titleText = titleEl ? titleEl.textContent : "";
-			btn.setAttribute("aria-label", titleText ? "Refresh " + titleText : "Refresh");
-			const icons = window.JuneauViews && window.JuneauViews.icons;
-			const glyph = icons && icons.resolveIcon ? icons.resolveIcon("refresh") : null;
-			if (glyph) btn.innerHTML = glyph;                     // registry markup only - never user data
-		}
+		if (btn) wireRefreshButton(card, btn);
 
 		const state = { inFlight: false, lastSuccessAt: null, errored: false, pollTimer: null, tickTimer: null };
 
 		function refresh() {
-			if (state.inFlight) return;                           // coalesce concurrent clicks / poll ticks
+			if (state.inFlight) return Promise.resolve();         // coalesce concurrent clicks / poll ticks
 			state.inFlight = true;
 			if (btn) btn.disabled = true;
 			card.setAttribute("aria-busy", "true");
-			return window.fetch(refreshUrl, { method: "GET", credentials: "same-origin", cache: "no-store" })
-				.then(function (r) { return r.json(); })
-				.then(function (env) {
-					if (!envelopeContractOk(env, JUNEAU_CARDS_CONTRACT_VERSION)) { state.errored = true; return; }
-					fillCardFields(body, env.fields);
-					state.lastSuccessAt = Date.now();
-					state.errored = false;
-				})
-				.catch(function () { state.errored = true; })     // error state does NOT reset lastSuccessAt (S8)
-				.then(function () {
-					state.inFlight = false;
-					if (btn) btn.disabled = false;
-					card.removeAttribute("aria-busy");
-					renderStatus(status, state, Date.now());
-				});
+			return fetchCardRefresh(refreshUrl, card, btn, body, status, state);
 		}
 
-		if (btn && btn.addEventListener) btn.addEventListener("click", refresh);
+		btn?.addEventListener?.("click", refresh);
 
 		const pollAttr = card.getAttribute(CARD_POLL_ATTR);
-		const intervalMs = pollAttr ? clampPollInterval(parseInt(pollAttr, 10) || 0) : 0;
+		const intervalMs = pollAttr ? clampPollInterval(Number.parseInt(pollAttr, 10) || 0) : 0;
 
 		const ctl = { card: card, state: state, refresh: refresh, status: status, intervalMs: intervalMs, running: false };
 		ctl.start = function () {
 			if (!ctl.intervalMs || ctl.running || isElementHidden(card)) return;
 			ctl.running = true;
-			function schedule() {
-				state.pollTimer = setTimeout(function () {
-					const p = refresh();
-					const after = function () { if (ctl.running) schedule(); };
-					if (p && p.then) p.then(after); else after();
-				}, nextPollDelay(ctl.intervalMs, Math.random()));
-			}
-			schedule();
+			schedulePoll(ctl);
 			state.tickTimer = setInterval(function () { renderStatus(status, state, Date.now()); }, STALENESS_TICK_MS);
 		};
 		ctl.stop = function () { ctl.running = false; stopTimers(state); };
@@ -365,20 +392,39 @@
 	 * sole fallback (a card hidden by its own `hidden` / inline `style`).
 	 */
 	function observeGrid(grid, controls) {
-		if (typeof window.MutationObserver === "undefined") return null;
+		if (window.MutationObserver === undefined) return null;
 		const obs = new window.MutationObserver(function () {
-			for (let i = 0; i < controls.length; i++) {
-				const c = controls[i];
+			for (const c of controls) {
 				if (!c || !c.intervalMs) continue;
-				if (isElementHidden(c.card) || (window.document && window.document.hidden)) c.stop();
+				if (isElementHidden(c.card) || window.document?.hidden) c.stop();
 				else c.start();
 			}
 		});
 		obs.observe(grid, { attributes: true, attributeFilter: ["hidden", "style", "class"], subtree: true, childList: true });
 		const panels = ancestorPanels(grid);
-		for (let i = 0; i < panels.length; i++)
-			obs.observe(panels[i], { attributes: true, attributeFilter: ["class"] });
+		for (const panel of panels)
+			obs.observe(panel, { attributes: true, attributeFilter: ["class"] });
 		return obs;
+	}
+
+	/** Resolves (creating if absent) the group record for a card's enclosing grid, or the card itself when grid-less. */
+	function groupFor(card, groups) {
+		const grid = typeof card.closest === "function" ? card.closest("[" + GRID_MARKER + "]") : null;
+		const root = grid || card;
+		for (const group of groups)
+			if (group.root === root) return group;
+		const g = { root: root, controls: [] };
+		groups.push(g);
+		return g;
+	}
+
+	/** Enhances one card (refresh handshake + declared actions); a refreshable card also joins its group's controls. */
+	function enhanceOneCard(card, groups) {
+		const refreshable = !!card.getAttribute(CARD_REFRESH_ATTR);
+		const ctl = refreshable ? initCard(card) : null;
+		if (refreshable && !ctl) return;                          // refused at the handshake - enhance nothing
+		enhanceCardActions(card);
+		if (ctl) groupFor(card, groups).controls.push(ctl);
 	}
 
 	/**
@@ -394,27 +440,11 @@
 		const cards = window.document.querySelectorAll("[" + CARD_MARKER + "]");
 		const groups = [];
 
-		function groupFor(card) {
-			const grid = typeof card.closest === "function" ? card.closest("[" + GRID_MARKER + "]") : null;
-			const root = grid || card;
-			for (let i = 0; i < groups.length; i++)
-				if (groups[i].root === root) return groups[i];
-			const g = { root: root, controls: [] };
-			groups.push(g);
-			return g;
-		}
+		for (const card of cards)
+			enhanceOneCard(card, groups);
 
-		for (let i = 0; i < cards.length; i++) {
-			const card = cards[i];
-			const refreshable = !!card.getAttribute(CARD_REFRESH_ATTR);
-			const ctl = refreshable ? initCard(card) : null;
-			if (refreshable && !ctl) continue;                    // refused at the handshake - enhance nothing
-			enhanceCardActions(card);
-			if (ctl) groupFor(card).controls.push(ctl);
-		}
-
-		for (let g = 0; g < groups.length; g++)
-			if (groups[g].controls.length) observeGrid(groups[g].root, groups[g].controls);
+		for (const group of groups)
+			if (group.controls.length) observeGrid(group.root, group.controls);
 	}
 
 	NS.init = {
@@ -437,7 +467,7 @@
 		initAll: initAll
 	};
 
-	if (window.document && window.document.readyState === "loading") {
+	if (window.document?.readyState === "loading") {
 		window.document.addEventListener("DOMContentLoaded", initAll);
 	} else if (window.document) {
 		initAll();

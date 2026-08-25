@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /**
- * Test-only, <b>private</b> source scanner enforcing the TODO-420 BLK-1 ownership contract &mdash; "template
+ * Test-only, <b>private</b> source scanner enforcing the raw-content-sink ownership contract &mdash; "template
  * engine, trusted / first-party content only" &mdash; on {@link Tab#content}/{@link Subtab#content}.
  *
  * <p>

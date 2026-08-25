@@ -35,6 +35,9 @@ import org.apache.juneau.commons.http.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,label,icon,href,safe,divider")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class MenuItem {
 
 	/** The client-safe token charset: lowercase letter, then lowercase / digit / hyphen, max 64 chars. */

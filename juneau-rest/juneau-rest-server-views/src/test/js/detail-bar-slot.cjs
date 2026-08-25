@@ -50,30 +50,40 @@ if (!viewsJsPath || !chromeJsPath) {
 // addEventListener/dispatchEvent so a double-bound SAFE click would be visible as two dispatches.
 // ------------------------------------------------------------------------------------------------------------------
 
+function matchesClassToken(node, tok) {
+	const raw = ' ' + (node.className || node.getAttribute('class') || '') + ' ';
+	return raw.indexOf(' ' + tok + ' ') >= 0;
+}
+
+function matchesAttrToken(node, name, value) {
+	const v = node.getAttribute(name);
+	if (v == null) return false;
+	return value === undefined || v === value;
+}
+
 function elMatches(node, sel) {
 	if (!node || node.nodeType !== 1) return false;
 	if (sel.indexOf(',') >= 0)
 		return sel.split(',').some(function (part) { return elMatches(node, part.trim()); });
-	var rest = sel.trim();
-	var tm = /^([a-zA-Z][\w-]*)(.*)$/.exec(rest);
+	let rest = sel.trim();
+	// Tag-name prefix only; the remainder is sliced off by length rather than captured by a second `(.*)$` group,
+	// which avoided a super-linear-backtracking shape (the `[\w-]*` and `.*` character classes fully overlap).
+	const tm = /^[a-zA-Z][\w-]*/.exec(rest);
 	if (tm) {
-		if (node.tagName !== tm[1].toUpperCase()) return false;
-		rest = tm[2] || '';
+		if (node.tagName !== tm[0].toUpperCase()) return false;
+		rest = rest.slice(tm[0].length);
 		if (!rest) return true;
 	}
 	while (rest.length) {
-		var cm = /^\.([\w-]+)/.exec(rest);
+		const cm = /^\.([\w-]+)/.exec(rest);
 		if (cm) {
-			var raw = ' ' + (node.className || node.getAttribute('class') || '') + ' ';
-			if (raw.indexOf(' ' + cm[1] + ' ') < 0) return false;
+			if (!matchesClassToken(node, cm[1])) return false;
 			rest = rest.slice(cm[0].length);
 			continue;
 		}
-		var am = /^\[([\w:-]+)(?:=["']?([^\]"']*)["']?)?\]/.exec(rest);
+		const am = /^\[([\w:-]+)(?:=["']?([^\]"']*)["']?)?\]/.exec(rest);
 		if (am) {
-			var v = node.getAttribute(am[1]);
-			if (v == null) return false;
-			if (am[2] !== undefined && v !== am[2]) return false;
+			if (!matchesAttrToken(node, am[1], am[2])) return false;
 			rest = rest.slice(am[0].length);
 			continue;
 		}
@@ -83,14 +93,74 @@ function elMatches(node, sel) {
 }
 
 function elWalk(node, sel, acc) {
-	for (var i = 0; i < node.childNodes.length; i++) {
-		var c = node.childNodes[i];
+	for (const c of node.childNodes) {
 		if (c.nodeType === 1) {
 			if (elMatches(c, sel)) acc.push(c);
 			elWalk(c, sel, acc);
 		}
 	}
 	return acc;
+}
+
+/** Walks from `node` up through parentNode, matching `sel` at each step. Takes the start node as a parameter
+ * (rather than aliasing `this` to a local) so the caller passes `this` in as an argument instead. */
+function closestFrom(node, sel) {
+	let n = node;
+	while (n && n.nodeType === 1) {
+		if (elMatches(n, sel)) return n;
+		n = n.parentNode;
+	}
+	return null;
+}
+
+/** Dispatches `ev` on `node`, then bubbles to parentNode when ev.bubbles is set. Takes the start node as a
+ * parameter for the same reason as closestFrom above. */
+function dispatchFrom(node, ev) {
+	let n = node;
+	while (n) {
+		(n._listeners && n._listeners[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
+		n = ev.bubbles ? n.parentNode : null;
+	}
+}
+
+function datasetKeyToAttr(key) {
+	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+}
+
+function attrToDatasetKey(attr) {
+	return attr.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+}
+
+/** A minimal live `dataset` facade over `node`'s existing attrs store, so `.dataset.x` reads/writes stay in sync
+ * with getAttribute('data-x') the way a real DOM element's dataset does. */
+function makeDataset(node) {
+	return new Proxy({}, {
+		get(_, key) {
+			if (typeof key !== 'string') return undefined;
+			const v = node.getAttribute(datasetKeyToAttr(key));
+			return v == null ? undefined : v;
+		},
+		set(_, key, val) {
+			node.setAttribute(datasetKeyToAttr(key), val);
+			return true;
+		},
+		deleteProperty(_, key) {
+			node.removeAttribute(datasetKeyToAttr(key));
+			return true;
+		},
+		has(_, key) {
+			return typeof key === 'string' && node.getAttribute(datasetKeyToAttr(key)) != null;
+		},
+		ownKeys() {
+			return Object.keys(node.attrs)
+				.filter(function (k) { return k.indexOf('data-') === 0; })
+				.map(attrToDatasetKey);
+		},
+		getOwnPropertyDescriptor(_, key) {
+			const v = node.getAttribute(datasetKeyToAttr(key));
+			return v == null ? undefined : { value: v, enumerable: true, configurable: true };
+		}
+	});
 }
 
 const byId = {};
@@ -109,10 +179,11 @@ function el(tag) {
 		get firstChild() { return this.childNodes[0] || null; },
 		get nextSibling() {
 			if (!this.parentNode) return null;
-			var kids = this.parentNode.childNodes;
-			var i = kids.indexOf(this);
+			const kids = this.parentNode.childNodes;
+			const i = kids.indexOf(this);
 			return i >= 0 && i + 1 < kids.length ? kids[i + 1] : null;
 		},
+		get dataset() { return makeDataset(this); },
 		getAttribute: function (k) {
 			if (k === 'class' && this.className) return this.className;
 			return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null;
@@ -127,8 +198,16 @@ function el(tag) {
 			delete this.attrs[k];
 			if (k === 'class') this.className = '';
 		},
+		remove: function () {
+			if (this.parentNode) {
+				const kids = this.parentNode.childNodes;
+				const i = kids.indexOf(this);
+				if (i >= 0) kids.splice(i, 1);
+				this.parentNode = null;
+			}
+		},
 		_detach: function () {
-			if (this.parentNode) this.parentNode.removeChild(this);
+			this.remove();
 		},
 		appendChild: function (c) {
 			if (c._detach) c._detach();
@@ -138,40 +217,33 @@ function el(tag) {
 		},
 		insertBefore: function (c, ref) {
 			if (c._detach) c._detach();
-			var i = ref ? this.childNodes.indexOf(ref) : -1;
+			const i = ref ? this.childNodes.indexOf(ref) : -1;
 			if (i < 0) this.childNodes.push(c); else this.childNodes.splice(i, 0, c);
 			c.parentNode = this;
 			return c;
 		},
 		removeChild: function (c) {
-			var i = this.childNodes.indexOf(c);
-			if (i >= 0) { this.childNodes.splice(i, 1); c.parentNode = null; }
+			c.remove();
 			return c;
 		},
 		querySelectorAll: function (sel) { return elWalk(this, sel, []); },
-		querySelector: function (sel) { var r = elWalk(this, sel, []); return r.length ? r[0] : null; },
-		closest: function (sel) {
-			var n = this;
-			while (n && n.nodeType === 1) { if (elMatches(n, sel)) return n; n = n.parentNode; }
-			return null;
-		},
+		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
+		closest: function (sel) { return closestFrom(this, sel); },
 		contains: function (other) {
 			if (other === this) return true;
-			for (var i = 0; i < this.childNodes.length; i++) {
-				var c = this.childNodes[i];
+			for (const c of this.childNodes) {
 				if (c === other) return true;
-				if (c.nodeType === 1 && c.contains && c.contains(other)) return true;
+				if (c.nodeType === 1 && c.contains?.(other)) return true;
 			}
 			return false;
 		},
-		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		addEventListener: function (type, fn) {
+			this._listeners[type] = this._listeners[type] || [];
+			this._listeners[type].push(fn);
+		},
 		listenerCount: function (type) { return (this._listeners[type] || []).length; },
 		dispatchEvent: function (ev) {
-			var n = this;
-			while (n) {
-				(n._listeners && n._listeners[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
-				n = ev.bubbles ? n.parentNode : null;
-			}
+			dispatchFrom(this, ev);
 			return true;
 		},
 		focus: function () { document.activeElement = this; },
@@ -234,31 +306,35 @@ const sandbox = {
 	document: document,
 	console: console,
 	CustomEvent: CustomEvent,
-	setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; },
+	setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
 	clearTimeout: function () {},
 	setInterval: function () { intervalCalls++; return 0; },
 	clearInterval: function () {},
 	Promise: Promise,
-	fetch: function () { return window.fetch.apply(window, arguments); }
+	fetch: function (...args) { return window.fetch(...args); }
 };
 
+// NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
+// repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 if (rendersJsPath)
 	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-chrome.js under test into the sandbox.
 vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
 
 const VNS = window.JuneauViews;
-const V = VNS && VNS.init;
+const V = VNS?.init;
 const CNS = window.JuneauChrome;
-const C = CNS && CNS.init;
+const C = CNS?.init;
 
 const out = {
-	hasViews: !!(V && typeof V.buildDetailStrip === 'function'),
-	hasChrome: !!(C && typeof C.initAll === 'function'),
-	hasRelocate: !!(V && typeof V.relocateDetailBarSlot === 'function'),
-	hasMint: !!(V && typeof V.mintDetailBarSlotIdentity === 'function'),
-	hasTeardown: !!(V && typeof V.teardownDetailBarSlot === 'function'),
-	hasEnhance: !!(V && typeof V.enhanceChromeInPanel === 'function')
+	hasViews: !!(typeof V?.buildDetailStrip === 'function'),
+	hasChrome: !!(typeof C?.initAll === 'function'),
+	hasRelocate: !!(typeof V?.relocateDetailBarSlot === 'function'),
+	hasMint: !!(typeof V?.mintDetailBarSlotIdentity === 'function'),
+	hasTeardown: !!(typeof V?.teardownDetailBarSlot === 'function'),
+	hasEnhance: !!(typeof V?.enhanceChromeInPanel === 'function')
 };
 if (!(out.hasViews && out.hasChrome && out.hasRelocate && out.hasMint && out.hasTeardown && out.hasEnhance)) {
 	process.stdout.write(JSON.stringify(out));
@@ -276,17 +352,17 @@ const AUTHOR_ID = 'detail-ctx';
 // ------------------------------------------------------------------------------------------------------------------
 
 function barRegion(anchor) {
-	var region = el('div');
+	const region = el('div');
 	region.setAttribute('class', 'jc-bar-slot juneau-view-detail-bar-slot');
 	region.setAttribute(BAR_MARKER, AUTHOR_ID);
 	region.setAttribute(BAR_ANCHOR, anchor);
-	region.setAttribute('data-juneau-refresh', '/chrome/bar-counts');
-	var widget = el('span');
+	region.dataset.juneauRefresh = '/chrome/bar-counts';
+	const widget = el('span');
 	widget.setAttribute('class', 'jc-bar-badge');
-	widget.setAttribute('data-juneau-bar-widget', 'open');
-	var badge = el('span');
+	widget.dataset.juneauBarWidget = 'open';
+	const badge = el('span');
 	badge.setAttribute('class', 'jc-badge');
-	badge.setAttribute('data-juneau-badge', 'bar:open');
+	badge.dataset.juneauBadge = 'bar:open';
 	badge.textContent = '0';
 	widget.appendChild(badge);
 	region.appendChild(widget);
@@ -294,7 +370,7 @@ function barRegion(anchor) {
 }
 
 function barSidecar(count) {
-	var s = el('script');
+	const s = el('script');
 	s.setAttribute('type', 'application/json');
 	s.setAttribute(BAR_META, AUTHOR_ID);
 	s.textContent = JSON.stringify({ contractVersion: '1', badges: { 'bar:open': count } });
@@ -302,10 +378,10 @@ function barSidecar(count) {
 }
 
 function detailSection(id, title) {
-	var sec = el('section');
+	const sec = el('section');
 	sec.setAttribute('class', 'juneau-view-detail-section');
-	sec.setAttribute('data-juneau-detail-section', id);
-	var h2 = el('h2');
+	sec.dataset.juneauDetailSection = id;
+	const h2 = el('h2');
 	h2.setAttribute('class', 'juneau-view-detail-section-title');
 	h2.textContent = title;
 	sec.appendChild(h2);
@@ -313,23 +389,23 @@ function detailSection(id, title) {
 }
 
 function fieldsGrid() {
-	var d = el('div');
+	const d = el('div');
 	d.setAttribute('class', 'juneau-view-detail-fields');
 	return d;
 }
 
 /** A 2-section panel: the region is the panel's LAST direct child, exactly as the ribbon-anchored emit paints it. */
 function twoSectionPanel(withHeader, count) {
-	var panel = el('div');
+	const panel = el('div');
 	panel.setAttribute('class', 'juneau-view-detail-panel');
 	if (withHeader) {
-		var hdr = el('div');
+		const hdr = el('div');
 		hdr.setAttribute('class', 'juneau-view-detail-header');
-		hdr.setAttribute('data-juneau-detail-header', '1');
+		hdr.dataset.juneauDetailHeader = '1';
 		panel.appendChild(hdr);
 	}
 	['overview', 'detail'].forEach(function (id, i) {
-		var sec = detailSection(id, i === 0 ? 'Overview' : 'Detail');
+		const sec = detailSection(id, i === 0 ? 'Overview' : 'Detail');
 		sec.appendChild(fieldsGrid());
 		panel.appendChild(sec);
 	});
@@ -340,9 +416,9 @@ function twoSectionPanel(withHeader, count) {
 
 /** A 1-section panel: no ribbon exists, so the region sits INSIDE the lone section right after its title. */
 function oneSectionPanel() {
-	var panel = el('div');
+	const panel = el('div');
 	panel.setAttribute('class', 'juneau-view-detail-panel');
-	var sec = detailSection('overview', 'Overview');
+	const sec = detailSection('overview', 'Overview');
 	sec.appendChild(barRegion('section-title'));
 	sec.appendChild(fieldsGrid());
 	panel.appendChild(sec);
@@ -363,33 +439,33 @@ function regionsIn(root) {
 // ------------------------------------------------------------------------------------------------------------------
 
 (function () {
-	var panel = twoSectionPanel(true);
-	var regionBefore = regionsIn(panel)[0];
+	const panel = twoSectionPanel(true);
+	const regionBefore = regionsIn(panel)[0];
 	out.two_regionStartsLast = indexOfChild(panel, regionBefore) === panel.childNodes.length - 2;
 
-	var strip = V.buildDetailStrip(panel, null);
+	const strip = V.buildDetailStrip(panel, null);
 	out.two_stripBuilt = !!strip;
-	out.two_stripMode = strip && strip.getAttribute('data-juneau-strip-mode');
+	out.two_stripMode = strip?.dataset.juneauStripMode;
 
-	var region = regionsIn(panel)[0];
+	const region = regionsIn(panel)[0];
 	out.two_regionCount = regionsIn(panel).length;
 	out.two_regionTrailsStrip = strip ? strip.nextSibling === region : false;
 	out.two_stripIndex = strip ? indexOfChild(panel, strip) : -1;
 	out.two_regionIndex = indexOfChild(panel, region);
 	out.two_sameNode = region === regionBefore;              // moved, never re-created (no orphan, no duplicate)
 	out.two_regionStillInPanel = panel.contains(region);
-	out.two_stripTrailedMarker = strip && strip.getAttribute('data-juneau-strip-trailed');
+	out.two_stripTrailedMarker = strip?.dataset.juneauStripTrailed;
 
 	// Idempotent: a second relocate against the same strip must not move or duplicate anything.
-	var moved = V.relocateDetailBarSlot(panel, strip);
+	const moved = V.relocateDetailBarSlot(panel, strip);
 	out.two_secondRelocateMoved = moved;
 	out.two_regionCountAfterSecond = regionsIn(panel).length;
 	out.two_regionIndexAfterSecond = indexOfChild(panel, region);
 	out.two_regionTrailsStripAfterSecond = strip.nextSibling === region;
 
 	// Idempotent across a re-render: a second panel (a fresh clone) relocates its OWN region and leaves the first alone.
-	var panel2 = twoSectionPanel(true);
-	var strip2 = V.buildDetailStrip(panel2, null);
+	const panel2 = twoSectionPanel(true);
+	const strip2 = V.buildDetailStrip(panel2, null);
 	out.two_rerenderRegionCount = regionsIn(panel2).length;
 	out.two_rerenderTrailsStrip = strip2.nextSibling === regionsIn(panel2)[0];
 	out.two_firstPanelRegionCount = regionsIn(panel).length;
@@ -398,21 +474,21 @@ function regionsIn(root) {
 
 // A header-less 2-section panel: the strip is prepended, and the region must still end up trailing it.
 (function () {
-	var panel = twoSectionPanel(false);
-	var strip = V.buildDetailStrip(panel, null);
+	const panel = twoSectionPanel(false);
+	const strip = V.buildDetailStrip(panel, null);
 	out.twoNoHeader_stripIsFirst = indexOfChild(panel, strip) === 0;
 	out.twoNoHeader_regionTrailsStrip = strip.nextSibling === regionsIn(panel)[0];
 })();
 
 // A 2-section panel with NO bar slot at all: relocate is a clean no-op, and nothing is synthesized.
 (function () {
-	var panel = twoSectionPanel(true);
-	panel.removeChild(regionsIn(panel)[0]);
-	var strip = V.buildDetailStrip(panel, null);
+	const panel = twoSectionPanel(true);
+	regionsIn(panel)[0].remove();
+	const strip = V.buildDetailStrip(panel, null);
 	out.twoNoSlot_stripBuilt = !!strip;
 	out.twoNoSlot_regionCount = regionsIn(panel).length;
 	out.twoNoSlot_relocateMoved = V.relocateDetailBarSlot(panel, strip);
-	out.twoNoSlot_stripUnmarked = strip.getAttribute('data-juneau-strip-trailed') === null;
+	out.twoNoSlot_stripUnmarked = strip.dataset.juneauStripTrailed === undefined;
 })();
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -420,10 +496,10 @@ function regionsIn(root) {
 // ------------------------------------------------------------------------------------------------------------------
 
 (function () {
-	var panel = oneSectionPanel();
-	var sec = panel.querySelector('[data-juneau-detail-section]');
-	var region = regionsIn(panel)[0];
-	var strip = V.buildDetailStrip(panel, null);
+	const panel = oneSectionPanel();
+	const sec = panel.querySelector('[data-juneau-detail-section]');
+	const region = regionsIn(panel)[0];
+	const strip = V.buildDetailStrip(panel, null);
 
 	out.one_stripIsNull = strip === null;
 	out.one_noRibbonSynthesized = panel.querySelector('[data-juneau-strip-mode]') === null;
@@ -432,7 +508,7 @@ function regionsIn(root) {
 	out.one_regionAnchor = region.getAttribute(BAR_ANCHOR);
 	out.one_regionParentIsSection = region.parentNode === sec;
 	// The 1-section contract: immediate next sibling of h2.juneau-view-detail-section-title.
-	var title = sec.querySelector('.juneau-view-detail-section-title');
+	const title = sec.querySelector('.juneau-view-detail-section-title');
 	out.one_regionFollowsTitle = title.nextSibling === region;
 	out.one_anchorSelectorResolves =
 		panel.querySelector('[' + BAR_ANCHOR + '="section-title"]') === region;
@@ -461,8 +537,8 @@ let stripB = null;
 	out.mint_suffixA = V.mintDetailBarSlotIdentity(panelA, PARENT_ID, 'a1');
 	out.mint_suffixB = V.mintDetailBarSlotIdentity(panelB, PARENT_ID, 'b2');
 
-	var regionA = regionsIn(panelA)[0];
-	var regionB = regionsIn(panelB)[0];
+	const regionA = regionsIn(panelA)[0];
+	const regionB = regionsIn(panelB)[0];
 	out.mint_markerA = regionA.getAttribute(BAR_MARKER);
 	out.mint_markerB = regionB.getAttribute(BAR_MARKER);
 	out.mint_sidecarIdA = panelA.querySelector('[' + BAR_META + ']').getAttribute('id');
@@ -476,10 +552,10 @@ let stripB = null;
 	out.mint_distinct = out.mint_markerA !== out.mint_markerB;
 
 	// Each minted id round-trips through the shipped readSidecar (prefix + marker), and the AUTHOR id no longer does.
-	var rtA = C.readSidecar(SIDECAR_PREFIX, out.mint_markerA);
-	var rtB = C.readSidecar(SIDECAR_PREFIX, out.mint_markerB);
-	out.mint_roundTripA = !!(rtA && rtA.badges && rtA.badges['bar:open'] === 3);
-	out.mint_roundTripB = !!(rtB && rtB.badges && rtB.badges['bar:open'] === 7);
+	const rtA = C.readSidecar(SIDECAR_PREFIX, out.mint_markerA);
+	const rtB = C.readSidecar(SIDECAR_PREFIX, out.mint_markerB);
+	out.mint_roundTripA = !!(rtA?.badges?.['bar:open'] === 3);
+	out.mint_roundTripB = !!(rtB?.badges?.['bar:open'] === 7);
 	out.mint_authorIdUnresolvable = document.getElementById(SIDECAR_PREFIX + AUTHOR_ID) === null;
 	out.mint_authorSidecarUnresolvable = C.readSidecar(SIDECAR_PREFIX, AUTHOR_ID) === null;
 })();
@@ -494,31 +570,31 @@ let safeFires = 0;
 
 (function () {
 	// A page header with one SAFE action: the control an expand-time initAll() must not re-bind.
-	var header = el('div');
+	const header = el('div');
 	header.setAttribute('class', 'jc-app-header');
-	header.setAttribute('data-juneau-app-header', 'main');
+	header.dataset.juneauAppHeader = 'main';
 	safeAction = el('button');
-	safeAction.setAttribute('data-juneau-header-action', 'ping');
-	safeAction.setAttribute('data-juneau-behavior', 'safe');
-	safeAction.setAttribute('data-juneau-safe', 'ping');
+	safeAction.dataset.juneauHeaderAction = 'ping';
+	safeAction.dataset.juneauBehavior = 'safe';
+	safeAction.dataset.juneauSafe = 'ping';
 	header.appendChild(safeAction);
 	body.appendChild(header);
 	header.addEventListener(C.SAFE_EVENT, function () { safeFires++; });
 
-	var badgeA = panelA.querySelector('[data-juneau-badge]');
-	var badgeB = panelB.querySelector('[data-juneau-badge]');
+	const badgeA = panelA.querySelector('[data-juneau-badge]');
+	const badgeB = panelB.querySelector('[data-juneau-badge]');
 	out.enh_countBeforeA = badgeA.textContent;
 
-	var first = C.initAll();
+	const first = C.initAll();
 	out.enh_barsFound = first.bars.length;
 	out.enh_headersFound = first.headers.length;
 	out.enh_countAfterA = badgeA.textContent;
 	out.enh_countAfterB = badgeB.textContent;
 	out.enh_safeListenersAfterFirst = safeAction.listenerCount('click');
-	out.enh_wiredMarker = safeAction.getAttribute('data-juneau-safe-wired');
+	out.enh_wiredMarker = safeAction.dataset.juneauSafeWired;
 
 	// Idempotent: a second (expand-time) initAll re-finds the same clones and must not re-bind the SAFE action.
-	var second = C.initAll();
+	const second = C.initAll();
 	out.enh_barsFoundSecond = second.bars.length;
 	out.enh_safeListenersAfterSecond = safeAction.listenerCount('click');
 	out.enh_countStillA = badgeA.textContent;
@@ -527,18 +603,18 @@ let safeFires = 0;
 	out.enh_safeFires = safeFires;
 
 	// And the views-side seam actually calls it: enhanceChromeInPanel on a panel holding a slot returns true.
-	var panelC = twoSectionPanel(true, 5);
+	const panelC = twoSectionPanel(true, 5);
 	body.appendChild(panelC);
 	V.buildDetailStrip(panelC, null);
 	V.mintDetailBarSlotIdentity(panelC, PARENT_ID, 'c3');
-	var badgeC = panelC.querySelector('[data-juneau-badge]');
+	const badgeC = panelC.querySelector('[data-juneau-badge]');
 	out.enh_seamBefore = badgeC.textContent;
 	out.enh_seamCalled = V.enhanceChromeInPanel(panelC);
 	out.enh_seamAfter = badgeC.textContent;
 	out.enh_seamSafeListeners = safeAction.listenerCount('click');
 	// A panel with no bar slot must not drag chrome in at all.
-	var plain = twoSectionPanel(true);
-	plain.removeChild(regionsIn(plain)[0]);
+	const plain = twoSectionPanel(true);
+	regionsIn(plain)[0].remove();
 	out.enh_seamSkippedWithoutSlot = V.enhanceChromeInPanel(plain);
 })();
 
@@ -547,12 +623,12 @@ let safeFires = 0;
 // ------------------------------------------------------------------------------------------------------------------
 
 (async function () {
-	var regionA = regionsIn(panelA)[0];
+	const regionA = regionsIn(panelA)[0];
 	nextEnvelope = { contractVersion: '1', badges: { 'bar:open': 11 } };
 	fetchCalls = 0;
 	out.refresh_result = await C.refresh(regionA);
 	out.refresh_fetchCalls = fetchCalls;
-	out.refresh_url = window._lastFetch && window._lastFetch.url;
+	out.refresh_url = window._lastFetch?.url;
 	out.refresh_countAfter = panelA.querySelector('[data-juneau-badge]').textContent;
 	out.refresh_otherRowUntouched = panelB.querySelector('[data-juneau-badge]').textContent;
 
@@ -562,7 +638,7 @@ let safeFires = 0;
 	out.tear_aUnresolvable = document.getElementById(SIDECAR_PREFIX + PARENT_ID + ':a1') === null;
 	out.tear_bStillResolvable = document.getElementById(SIDECAR_PREFIX + PARENT_ID + ':b2') !== null;
 	out.tear_bStillRoundTrips = !!C.readSidecar(SIDECAR_PREFIX, PARENT_ID + ':b2');
-	body.removeChild(panelA);
+	panelA.remove();
 	out.tear_bRegionStillPresent = regionsIn(panelB).length;
 	out.tear_noThrowOnNull = (function () { V.teardownDetailBarSlot(null); return true; })();
 

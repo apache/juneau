@@ -25,8 +25,8 @@ import java.util.*;
 import org.apache.juneau.rest.server.views.ActionResult.*;
 
 /**
- * A single in-memory, one-shot async job &mdash; the streamed-progress + terminal-result unit of the async write
- * variant (design doc §6.3; {@code TODO-425}).
+ * A single in-memory, one-shot async job &mdash; the streamed-progress + terminal-result unit of a future async write
+ * variant (design doc §6.3).
  *
  * <h5 class='section'>The stream URL IS the capability</h5>
  * <p>
@@ -309,8 +309,10 @@ public final class AsyncJob {
 
 	/** Settles the terminal result and wakes every waiting subscriber.  Caller must hold {@link #lock}. */
 	private void settle(ActionResult value) {
-		result = value;
-		lock.notifyAll();
+		synchronized (lock) {
+			result = value;
+			lock.notifyAll();
+		}
 	}
 
 	/** Builds a terminal {@link ActionResult} for a cancellation, reusing the frozen contract's reserved outcomes. */

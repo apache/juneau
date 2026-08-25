@@ -78,8 +78,9 @@ class McpResourceHandler_Test {
 
 	@Test void c03_ofRejectsBlankUri() {
 		BiFunction<String,BeanStore,McpResourceOutcome> read = (uri, ctx) -> new McpResourceOutcome();
-		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(new McpResourceSpec(), read));
-		var spec = new McpResourceSpec().setUri(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(spec, read));
+		var spec1 = new McpResourceSpec();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(spec1, read));
+		var spec2 = new McpResourceSpec().setUri(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(spec2, read));
 	}
 }

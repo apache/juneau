@@ -102,16 +102,17 @@ public final class SecuredExampleClient {
 		mcpClientUnauthenticatedCall(endpoint);
 
 		section("3. RFC 9728 discovery — fetch the Protected Resource Metadata the 401 pointed at");
-		McpProtectedResourceMetadata prm = null;
-		// javabugs:S6416/java:S3655 fix: capture the Optional ONCE and guard/read the SAME instance. The
-		// original code called challenge.resourceMetadata() a second time inside the if-block to call get() -
-		// a fresh Optional the isPresent() check above never actually guarded, which is exactly the discovery-
-		// driven "get() without a proven-present check on that instance" pattern the bug engine flagged.
+		// Capture the Optional ONCE and guard/read the SAME instance, rather than calling
+		// challenge.resourceMetadata() a second time inside the if-block to call get() on a fresh,
+		// unguarded Optional. Without a discovered resource_metadata pointer there is no PRM to feed step 4,
+		// so the walkthrough stops here instead of calling into step 4 with nothing to discover a token
+		// endpoint from.
 		var resourceMetadata = challenge == null ? Optional.<URI>empty() : challenge.resourceMetadata();
-		if (resourceMetadata.isPresent())
-			prm = discoverProtectedResourceMetadata(endpoint, resourceMetadata.get());
-		else
-			System.out.println("   (no resource_metadata pointer found on the challenge; skipping)");
+		if (resourceMetadata.isEmpty()) {
+			System.out.println("   (no resource_metadata pointer found on the challenge; walkthrough cannot continue)");
+			return;
+		}
+		var prm = discoverProtectedResourceMetadata(endpoint, resourceMetadata.get());
 
 		section("4. RFC 8414 discovery — resolve the authorization server's token endpoint");
 		var tokenEndpoint = discoverTokenEndpoint(prm);
@@ -195,8 +196,6 @@ public final class SecuredExampleClient {
 	 * &rarr; RFC 8414 &rarr; {@code token_endpoint} chain a compliant client walks end-to-end.
 	 */
 	private static URI discoverTokenEndpoint(McpProtectedResourceMetadata prm) {
-		if (prm == null)
-			throw new IllegalStateException("no Protected Resource Metadata was discovered in step 3");
 		var as = McpProtectedResourceMetadataClient.create().build().discoverAuthorizationServer(prm);
 		System.out.println("   issuer:         " + as.issuer());
 		System.out.println("   token_endpoint: " + as.tokenEndpoint());

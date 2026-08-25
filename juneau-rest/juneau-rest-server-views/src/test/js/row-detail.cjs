@@ -41,11 +41,13 @@ function elMatches(node, sel) {
 	if (!node || node.nodeType !== 1) return false;
 	if (sel.indexOf(',') >= 0)
 		return sel.split(',').some(function (part) { return elMatches(node, part.trim()); });
-	var rest = sel;
-	var tm = /^([a-zA-Z][\w-]*)(.*)$/.exec(sel);
+	let rest = sel;
+	// Tag-name prefix only; the remainder is sliced off by length rather than captured by a second `(.*)$` group,
+	// which avoided a super-linear-backtracking shape (the `[\w-]*` and `.*` character classes fully overlap).
+	const tm = /^[a-zA-Z][\w-]*/.exec(sel);
 	if (tm) {
-		if (node.tagName !== tm[1].toUpperCase()) return false;
-		rest = tm[2] || '';
+		if (node.tagName !== tm[0].toUpperCase()) return false;
+		rest = sel.slice(tm[0].length);
 		if (!rest) return true;
 	}
 	if (rest.charAt(0) === '.') {
@@ -62,14 +64,64 @@ function elMatches(node, sel) {
 }
 
 function elWalk(node, sel, acc) {
-	for (let i = 0; i < node.childNodes.length; i++) {
-		const c = node.childNodes[i];
+	for (const c of node.childNodes) {
 		if (c.nodeType === 1) {
 			if (elMatches(c, sel)) acc.push(c);
 			elWalk(c, sel, acc);
 		}
 	}
 	return acc;
+}
+
+function datasetKeyToAttr(key) {
+	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+}
+
+function attrToDatasetKey(attr) {
+	return attr.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+}
+
+/** A minimal live `dataset` facade over `node`'s existing attrs store, so `.dataset.x` reads/writes stay in sync
+ * with getAttribute('data-x') the way a real DOM element's dataset does. */
+function makeDataset(node) {
+	return new Proxy({}, {
+		get(_, key) {
+			if (typeof key !== 'string') return undefined;
+			const v = node.getAttribute(datasetKeyToAttr(key));
+			return v == null ? undefined : v;
+		},
+		set(_, key, val) {
+			node.setAttribute(datasetKeyToAttr(key), val);
+			return true;
+		},
+		deleteProperty(_, key) {
+			delete node.attrs[datasetKeyToAttr(key)];
+			return true;
+		},
+		has(_, key) {
+			return typeof key === 'string' && node.getAttribute(datasetKeyToAttr(key)) != null;
+		},
+		ownKeys() {
+			return Object.keys(node.attrs)
+				.filter(function (k) { return k.indexOf('data-') === 0; })
+				.map(attrToDatasetKey);
+		},
+		getOwnPropertyDescriptor(_, key) {
+			const v = node.getAttribute(datasetKeyToAttr(key));
+			return v == null ? undefined : { value: v, enumerable: true, configurable: true };
+		}
+	});
+}
+
+/** Walks from `node` up through parentNode, matching `sel` at each step. Takes the start node as a parameter
+ * (rather than aliasing `this` to a local) so the caller passes `this` in as an argument instead. */
+function closestFrom(node, sel) {
+	let n = node;
+	while (n?.nodeType === 1) {
+		if (elMatches(n, sel)) return n;
+		n = n.parentNode;
+	}
+	return null;
 }
 
 function el(tag) {
@@ -83,10 +135,11 @@ function el(tag) {
 		get firstChild() { return this.childNodes[0] || null; },
 		get nextSibling() {
 			if (!this.parentNode) return null;
-			var kids = this.parentNode.childNodes;
-			var i = kids.indexOf(this);
+			const kids = this.parentNode.childNodes;
+			const i = kids.indexOf(this);
 			return i >= 0 && i + 1 < kids.length ? kids[i + 1] : null;
 		},
+		get dataset() { return makeDataset(this); },
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		appendChild: function (c) {
@@ -108,21 +161,19 @@ function el(tag) {
 		replaceChildren: function () { this.childNodes.length = 0; },
 		querySelectorAll: function (sel) { return elWalk(this, sel, []); },
 		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
-		closest: function (sel) {
-			let n = this;
-			while (n && n.nodeType === 1) { if (elMatches(n, sel)) return n; n = n.parentNode; }
-			return null;
-		},
+		closest: function (sel) { return closestFrom(this, sel); },
 		contains: function (other) {
 			if (other === this) return true;
-			for (let i = 0; i < this.childNodes.length; i++) {
-				const c = this.childNodes[i];
+			for (const c of this.childNodes) {
 				if (c === other) return true;
-				if (c.nodeType === 1 && c.contains && c.contains(other)) return true;
+				if (c.nodeType === 1 && c.contains?.(other)) return true;
 			}
 			return false;
 		},
-		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		addEventListener: function (type, fn) {
+			this._listeners[type] = this._listeners[type] || [];
+			this._listeners[type].push(fn);
+		},
 		_fire: function (type, ev) {
 			ev = ev || {};
 			if (ev.currentTarget == null) ev.currentTarget = this;
@@ -150,12 +201,21 @@ function textNode(value) {
 
 const VOID_TAGS = { br: 1, hr: 1, img: 1, input: 1, meta: 1, link: 1, base: 1 };
 
+function firstDefined(...values) {
+	for (const v of values) if (v != null) return v;
+	return '';
+}
+
 function parseAttrs(raw, node) {
 	if (!raw) return;
+	// NOSONAR javascript:S5843 -- this regex intentionally supports double-quoted, single-quoted, and bare
+	// unquoted HTML attribute values for the test-fixture HTML parser below; collapsing the 3-way alternation
+	// (e.g. via a backreference to the opening quote) would change which characters are permitted inside quoted
+	// values with no behavior-preserving equivalent, so it is left as-is.
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
 	while ((m = re.exec(raw)))
-		node.setAttribute(m[1], m[2] != null ? m[2] : (m[3] != null ? m[3] : (m[4] != null ? m[4] : '')));
+		node.setAttribute(m[1], firstDefined(m[2], m[3], m[4]));
 }
 
 function parseTestHtml(html) {
@@ -165,7 +225,7 @@ function parseTestHtml(html) {
 	let m;
 	while ((m = re.exec(html))) {
 		if (m[3] != null) {
-			stack[stack.length - 1].appendChild(textNode(m[3]));
+			stack.at(-1).appendChild(textNode(m[3]));
 			continue;
 		}
 		const name = m[1];
@@ -176,13 +236,14 @@ function parseTestHtml(html) {
 		}
 		const node = el(name);
 		parseAttrs(m[2], node);
-		stack[stack.length - 1].appendChild(node);
+		stack.at(-1).appendChild(node);
 		const selfClosing = VOID_TAGS[name.toLowerCase()] || /\/\s*$/.test(m[2] || '');
 		if (!selfClosing) stack.push(node);
 	}
 	return root;
 }
 
+// Constructor intentionally empty: DOMParser only needs a working parseFromString(), added via the prototype below.
 function DOMParser() {}
 DOMParser.prototype.parseFromString = function (str) {
 	return { body: { firstChild: parseTestHtml(str) } };
@@ -202,13 +263,16 @@ const document = {
 const window = { document: document, console: console, jQuery: undefined, DOMParser: DOMParser };
 const sandbox = { window: window, document: document, console: console, DOMParser: DOMParser };
 const rendersJsPath = process.argv[3];
+// NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
+// repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 if (rendersJsPath)
 	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
-const I = NS && NS.init;
-const out = { hasInit: !!(I && typeof I.fillDetailSlots === 'function') };
+const I = NS?.init;
+const out = { hasInit: !!(typeof I?.fillDetailSlots === 'function') };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -263,8 +327,8 @@ out.fill_xssNotInterpreted = title.textContent === xss;
 
 const titleWrap = el('div');
 const titleH2 = el('h2');
-titleH2.setAttribute('data-juneau-detail-title', '1');
-titleH2.setAttribute('data-juneau-detail-title-template', 'Incident #{number}');
+titleH2.dataset.juneauDetailTitle = '1';
+titleH2.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
 titleH2.textContent = 'Incident #{number}';
 titleWrap.appendChild(titleH2);
 I.fillDetailSlots(titleWrap, { number: '42' });
@@ -272,8 +336,8 @@ out.title_filled = titleH2.textContent;
 
 const titleXssWrap = el('div');
 const titleXss = el('h2');
-titleXss.setAttribute('data-juneau-detail-title', '1');
-titleXss.setAttribute('data-juneau-detail-title-template', 'Incident #{number}');
+titleXss.dataset.juneauDetailTitle = '1';
+titleXss.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
 titleXssWrap.appendChild(titleXss);
 const titleXssPayload = '<img src=x onerror="window.__juneauTitleXss=1">';
 I.fillDetailSlots(titleXssWrap, { number: titleXssPayload });
@@ -284,11 +348,11 @@ out.hasPaintActionMessageIntoDetail = typeof I.paintActionMessageIntoDetail === 
 if (out.hasPaintActionMessageIntoDetail) {
 	const paintPanel = el('div');
 	const paintSec = el('section');
-	paintSec.setAttribute('data-juneau-detail-section', 'diagnose');
+	paintSec.dataset.juneauDetailSection = 'diagnose';
 	const paintSlot = el('div');
-	paintSlot.setAttribute('data-juneau-field', 'findings');
+	paintSlot.dataset.juneauField = 'findings';
 	const paintBtn = el('button');
-	paintBtn.setAttribute('data-juneau-action', 'diagnose');
+	paintBtn.dataset.juneauAction = 'diagnose';
 	paintSec.appendChild(paintSlot);
 	paintSec.appendChild(paintBtn);
 	paintPanel.appendChild(paintSec);
@@ -303,7 +367,7 @@ out.hasResolveDetailHeaderIcon = typeof I.resolveDetailHeaderIcon === 'function'
 if (out.hasResolveDetailHeaderIcon) {
 	const iconWrap = el('div');
 	const iconSlot = el('span');
-	iconSlot.setAttribute('data-juneau-detail-icon', 'no-such-icon');
+	iconSlot.dataset.juneauDetailIcon = 'no-such-icon';
 	iconWrap.appendChild(iconSlot);
 	window.JuneauViews = window.JuneauViews || {};
 	window.JuneauViews.icons = { resolveIcon: function () { return null; } };
@@ -320,13 +384,13 @@ function markdownSlot() {
 function collectTags(node, acc) {
 	if (!node || node.nodeType !== 1) return acc;
 	acc.push(node.tagName);
-	for (let i = 0; i < node.childNodes.length; i++) collectTags(node.childNodes[i], acc);
+	for (const c of node.childNodes) collectTags(c, acc);
 	return acc;
 }
 function findTag(node, tag, list) {
 	if (!node || node.nodeType !== 1) return list;
 	if (node.tagName === tag) list.push(node);
-	for (let i = 0; i < node.childNodes.length; i++) findTag(node.childNodes[i], tag, list);
+	for (const c of node.childNodes) findTag(c, tag, list);
 	return list;
 }
 const mdSlot = markdownSlot();
@@ -439,8 +503,23 @@ if (out.hasFillRender) {
 	I.fillRenderSlot(styleSlot, 'x', 'evil-style', {}, null, {});
 	out.rr_hostileStyle = findTag(styleSlot, 'SPAN', []).some(function (n) {
 		const st = n.getAttribute('style');
-		return st && st.indexOf('color') >= 0;
+		return st?.indexOf('color') >= 0;
 	});
+
+	// javascript:S5852 guard on copyRenderStyle's width pattern.  Written as `\s*%?\s*;?\s*$` the three
+	// independent whitespace runs can split one tail in O(n^3) ways, so a style attribute that ends in a long
+	// run of spaces followed by a non-terminator used to backtrack for ~10s at 4,000 spaces.  Must stay
+	// rejected (it is not a bare width declaration) AND stay fast.
+	window.JuneauViews.registerRenderer('slow-style', {
+		display: function () { return '<span style="width:1' + ' '.repeat(4000) + 'x">y</span>'; }
+	});
+	const slowSlot = renderSlot('slow-style');
+	const slowStart = Date.now();
+	I.fillRenderSlot(slowSlot, 'y', 'slow-style', {}, null, {});
+	out.rr_slowStyleMs = Date.now() - slowStart;
+	const slowSpans = findTag(slowSlot, 'SPAN', []);
+	out.rr_slowStyleSawSpan = slowSpans.length > 0;
+	out.rr_slowStyleRejected = slowSpans.every(function (n) { return n.getAttribute('style') == null; });
 
 	const trunc = renderSlot('truncate', { 'data-juneau-field-render-meta': '{"length":"4"}' });
 	I.fillDetailSlots(wrap(trunc), { v: 'abcdef' });
@@ -481,7 +560,7 @@ out.hasDetailTabTargetIndex = typeof I.detailTabTargetIndex === 'function';
 if (out.hasBuildDetailStrip) {
 	function detailSection(sid, title) {
 		const sec = el('section');
-		sec.setAttribute('data-juneau-detail-section', sid);
+		sec.dataset.juneauDetailSection = sid;
 		sec.className = 'juneau-view-detail-section';
 		const h2 = el('h2');
 		h2.className = 'juneau-view-detail-section-title';
@@ -499,7 +578,7 @@ if (out.hasBuildDetailStrip) {
 		return panel;
 	}
 	function tabButtonsOf(strip) {
-		return strip.childNodes.filter(function (c) { return c.getAttribute && c.getAttribute('role') === 'tab'; });
+		return strip.childNodes.filter(function (c) { return c.getAttribute?.('role') === 'tab'; });
 	}
 
 	// Pure keyboard-target math.
@@ -516,7 +595,7 @@ if (out.hasBuildDetailStrip) {
 	out.strip_built = !!strip;
 	out.strip_isFirstChild = multi.firstChild === strip;
 	out.strip_role = strip.getAttribute('role');
-	out.strip_mode = strip.getAttribute('data-juneau-strip-mode');
+	out.strip_mode = strip.dataset.juneauStripMode;
 	out.strip_hasRibbonGroupClass = (strip.className || '').indexOf('juneau-view-ribbon-group') >= 0;
 	const tabButtons = tabButtonsOf(strip);
 	out.strip_tabCount = tabButtons.length;
@@ -568,7 +647,7 @@ if (out.hasBuildDetailStrip) {
 	const single = detailPanel([['info', 'Info']]);
 	const singleStrip = I.buildDetailStrip(single);
 	out.single_noStrip = singleStrip === null;
-	out.single_firstStillSection = single.firstChild.getAttribute('data-juneau-detail-section') === 'info';
+	out.single_firstStillSection = single.firstChild.dataset.juneauDetailSection === 'info';
 	out.single_paneNotHidden = single.firstChild.hidden !== true;
 	out.single_noTabpanelRole = single.firstChild.getAttribute('role') == null;
 	out.single_titleNotHidden = single.firstChild.querySelector('.juneau-view-detail-section-title').hidden !== true;
@@ -584,6 +663,10 @@ if (out.hasBuildDetailStrip) {
 	// onActivate(sectionId, pane) seam - the hook a newly-shown pane's nested table rides on to run its OWN
 	// independent GET.  Here we prove both: fetch stays 0, and onActivate fires with the activated pane.
 	let fetchCalls = 0;
+	// NOSONAR javascript:S7739 -- deliberately a never-resolving thenable, not a real Promise: this verifies the
+	// strip issues no additional fetch and that chaining .then().catch() on whatever it returns never crashes; a
+	// real Promise would resolve on a later microtask and risk flakiness against this fully synchronous assertion
+	// script (there is no await boundary after this point for it to safely resolve within).
 	window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
 	const activated = [];
 	const nf = detailPanel([['a', 'A'], ['b', 'B']]);
@@ -597,7 +680,7 @@ if (out.hasBuildDetailStrip) {
 	out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
 	out.noRefetch_onActivateCount = activated.length;                                  // keyboard + click = 2
 	out.noRefetch_onActivateFirstSid = activated.length ? activated[0].sid : null;     // 'b' (ArrowRight)
-	out.noRefetch_onActivateLastSid = activated.length ? activated[activated.length - 1].sid : null;   // 'a' (click)
+	out.noRefetch_onActivateLastSid = activated.length ? activated.at(-1).sid : null;   // 'a' (click)
 	out.noRefetch_onActivatePaneMatches = activated.length >= 2
 		&& activated[0].pane === nfPanes[1] && activated[1].pane === nfPanes[0];
 	window.fetch = undefined;
@@ -617,7 +700,7 @@ if (out.hasFindRowDetailTemplate) {
 	const sibHost = el('div');
 	const sibTable = el('table');
 	const sibTmpl = el('template');
-	sibTmpl.setAttribute('data-juneau-row-detail', '1');
+	sibTmpl.dataset.juneauRowDetail = '1';
 	sibHost.appendChild(sibTable);
 	sibHost.appendChild(sibTmpl);
 	out.find_sibling = I.findRowDetailTemplate(sibTable) === sibTmpl;
@@ -629,7 +712,7 @@ if (out.hasFindRowDetailTemplate) {
 	dtCell.className = 'dt-layout-cell';
 	const dtTable = el('table');
 	const dtTmpl = el('template');
-	dtTmpl.setAttribute('data-juneau-row-detail', '1');
+	dtTmpl.dataset.juneauRowDetail = '1';
 	dtHost.appendChild(dtContainer);
 	dtContainer.appendChild(dtCell);
 	dtCell.appendChild(dtTable);

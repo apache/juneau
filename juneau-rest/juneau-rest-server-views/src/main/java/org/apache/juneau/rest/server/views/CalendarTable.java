@@ -147,6 +147,15 @@ public class CalendarTable {
 	/** English weekday abbreviations when weeks start on Monday. */
 	private static final String[] WEEKDAYS_MONDAY = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
+	/** The {@code aria-label} attribute name, shared by several emit helpers below. */
+	private static final String ARIA_LABEL = "aria-label";
+
+	/** The HTML5 builder's {@code "button"} type token, shared by several emit helpers below. */
+	private static final String TYPE_BUTTON = "button";
+
+	/** The shared HTML {@code title} attribute / seed-envelope {@code title} field name. */
+	private static final String TITLE_KEY = "title";
+
 	private CalendarTable() {}
 
 	/**
@@ -189,7 +198,7 @@ public class CalendarTable {
 			dayTemplate(),
 			eventTemplate(),
 			barTemplate()
-		).class_("jc-cal").attr("role", "group").attr("aria-label", "Calendar");
+		).class_("jc-cal").attr("role", "group").attr(ARIA_LABEL, "Calendar");
 
 		root.attr(MARKER_ATTR, def.id);
 		root.attr(CONTRACT_ATTR, CalendarDef.CONTRACT_VERSION);
@@ -209,12 +218,12 @@ public class CalendarTable {
 
 	/** Prev/next/today nav (disabled when seed-only) plus the {@code aria-live} month/year title. */
 	private static Div header(int year, int month, boolean nav) {
-		var prev = button("button", "‹").attr("data-juneau-calendar-prev", "1")
-			.attr("aria-label", "Previous month").class_("jc-cal-nav-btn");
-		var next = button("button", "›").attr("data-juneau-calendar-next", "1")
-			.attr("aria-label", "Next month").class_("jc-cal-nav-btn");
-		var todayBtn = button("button", "Today").attr("data-juneau-calendar-today-btn", "1")
-			.attr("aria-label", "Today").class_("jc-cal-nav-btn jc-cal-today-btn");
+		var prev = button(TYPE_BUTTON, "‹").attr("data-juneau-calendar-prev", "1")
+			.attr(ARIA_LABEL, "Previous month").class_("jc-cal-nav-btn");
+		var next = button(TYPE_BUTTON, "›").attr("data-juneau-calendar-next", "1")
+			.attr(ARIA_LABEL, "Next month").class_("jc-cal-nav-btn");
+		var todayBtn = button(TYPE_BUTTON, "Today").attr("data-juneau-calendar-today-btn", "1")
+			.attr(ARIA_LABEL, "Today").class_("jc-cal-nav-btn jc-cal-today-btn");
 		if (!nav) {
 			prev.disabled(true);
 			next.disabled(true);
@@ -268,23 +277,9 @@ public class CalendarTable {
 		kids.add(span(String.valueOf(date.getDayOfMonth())).class_("jc-cal-day-num"));
 
 		// Every cell of a week row reserves the same lane band so the bars line up across the row.
-		if (lanes > 0) {
-			var pieces = new ArrayList<>();
-			if (bars != null)
-				for (var s : bars)
-					pieces.add(bar(def, s));
-			kids.add(div(pieces.toArray()).class_("jc-cal-day-lanes"));
-		}
-
-		var chips = new ArrayList<>();
-		if (inMonth && cell != null) {
-			for (var e : cell.chips())
-				chips.add(chip(def, e));
-			if (cell.overflow() > 0)
-				chips.add(button("button", "+" + cell.overflow() + " more")
-					.attr("data-juneau-calendar-more", "1").class_("jc-cal-more"));
-		}
-		kids.add(div(chips.toArray()).class_("jc-cal-day-events"));
+		if (lanes > 0)
+			kids.add(laneBand(def, bars));
+		kids.add(dayEvents(def, inMonth, cell));
 
 		var el = div(kids.toArray()).attr("role", "gridcell").class_(cls);
 		if (lanes > 0)
@@ -292,6 +287,28 @@ public class CalendarTable {
 		if (isToday)
 			el.attr("aria-current", "date");
 		return el;
+	}
+
+	/** The lane band reserved by every cell of a week row, painted with any bar pieces starting in this cell. */
+	private static Div laneBand(CalendarDef def, List<CalendarLayout.Segment> bars) {
+		var pieces = new ArrayList<>();
+		if (bars != null)
+			for (var s : bars)
+				pieces.add(bar(def, s));
+		return div(pieces.toArray()).class_("jc-cal-day-lanes");
+	}
+
+	/** The capped event chips for one in-month day cell, plus a "+N more" chip when the day overflows the cap. */
+	private static Div dayEvents(CalendarDef def, boolean inMonth, CalendarLayout.DayCell cell) {
+		var chips = new ArrayList<>();
+		if (inMonth && cell != null) {
+			for (var e : cell.chips())
+				chips.add(chip(def, e));
+			if (cell.overflow() > 0)
+				chips.add(button(TYPE_BUTTON, "+" + cell.overflow() + " more")
+					.attr("data-juneau-calendar-more", "1").class_("jc-cal-more"));
+		}
+		return div(chips.toArray()).class_("jc-cal-day-events");
 	}
 
 	/** One painted piece of a spanning bar, anchored in the day cell where the piece starts. */
@@ -306,7 +323,7 @@ public class CalendarTable {
 		el.attr("style", "--jc-cal-span:" + s.columnSpan() + ";--jc-cal-lane:" + s.lane());
 		el.attr(EVENT_ID_ATTR, e.id);
 		if (s.continuesLeft() || s.continuesRight())
-			el.attr("aria-label", e.title + " (continues)");
+			el.attr(ARIA_LABEL, e.title + " (continues)");
 		decorate(el, e);
 		return el;
 	}
@@ -338,7 +355,7 @@ public class CalendarTable {
 		if (e.categoryId != null && !e.categoryId.isBlank())
 			el.attr(CAT_ATTR, e.categoryId);
 		if (e.tooltip != null && !e.tooltip.isBlank())
-			el.attr("title", e.tooltip);
+			el.attr(TITLE_KEY, e.tooltip);
 	}
 
 	/** The legend: one {@code aria-pressed} category toggle per declared category, in declared order. */
@@ -346,14 +363,14 @@ public class CalendarTable {
 		var items = new ArrayList<>();
 		if (def.categories != null) {
 			for (var c : def.categories) {
-				var toggle = button("button",
+				var toggle = button(TYPE_BUTTON,
 					span().class_("jc-cal-legend-swatch"), span(c.label).class_("jc-cal-legend-label"))
 					.attr(LEGEND_TOGGLE_ATTR, "1")
 					.attr(CAT_ATTR, c.id)
 					.attr("aria-pressed", "true")
 					.class_("jc-cal-legend-toggle");
 				if (c.description != null && !c.description.isBlank())
-					toggle.attr("title", c.description);
+					toggle.attr(TITLE_KEY, c.description);
 				items.add(li(toggle)
 					.attr(CAT_ATTR, c.id)
 					.class_("jc-cal-legend-item jc-cal-cat--" + c.effectiveColor().token()));
@@ -407,7 +424,7 @@ public class CalendarTable {
 	private static java.util.Map<String,Object> eventMap(CalendarEvent e) {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("id", e.id);
-		m.put("title", e.title);
+		m.put(TITLE_KEY, e.title);
 		m.put("start", e.start);
 		if (e.end != null)
 			m.put("end", e.end);

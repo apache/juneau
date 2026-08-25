@@ -21,12 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
- * TODO-420 BLK-1 gate: no source in this module may pour a non-literal (i.e. plausibly live-data-derived) value
+ * Raw-content-sink gate: no source in this module may pour a non-literal (i.e. plausibly live-data-derived) value
  * into {@link Tab#content}/{@link Subtab#content} &mdash; the raw-markup panel-body sink.
  *
  * <p>
@@ -45,47 +48,47 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 	// a: Unit RED/GREEN on the scanner mechanism itself
 	// -----------------------------------------------------------------------------------------------------------
 
-	/** RED: a bare identifier argument - the classic "pour a variable into content" shape - is a violation. */
-	@Test void a01_identifierArgument_isFlagged() {
-		var src = """
-			class X {
-			  void f(String incidentTitle) {
-			    Tab.create("t", "T").content(incidentTitle);
-			  }
-			}
-			""";
+	/**
+	 * RED: a bare identifier argument (the classic "pour a variable into content" shape), a method-call argument
+	 * (the shape a confirmation/detail body renderer would use), and a literal/non-literal concatenation (the
+	 * literal prefix/suffix doesn't launder it) are all violations.
+	 */
+	@ParameterizedTest
+	@MethodSource("a01_flaggedSourcesProvider")
+	void a01_nonLiteralContentArgument_isFlagged(String src, boolean expectNotLiteralOnly) {
 		var r = RawContentSinkScanner.scan(src);
 		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
 		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
-		assertFalse(r.sinks().get(0).literalOnly());
+		if (expectNotLiteralOnly)
+			assertFalse(r.sinks().get(0).literalOnly());
 	}
 
-	/** RED: a method-call argument - the shape a confirmation/detail body renderer would use - is a violation. */
-	@Test void a02_methodCallArgument_isFlagged() {
-		var src = """
-			class X {
-			  void f(Object gack) {
-			    Subtab.create("s", "S").content(renderConfirmationHtml(gack));
-			  }
-			}
-			""";
-		var r = RawContentSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
-		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
-	}
-
-	/** RED: concatenating a literal with a non-literal is still a violation - the literal prefix/suffix doesn't launder it. */
-	@Test void a03_concatenationWithNonLiteral_isFlagged() {
-		var src = """
-			class X {
-			  void f(String title) {
-			    Tab.create("t", "T").content("<p>" + title + "</p>");
-			  }
-			}
-			""";
-		var r = RawContentSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
-		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
+	static Stream<Arguments> a01_flaggedSourcesProvider() {
+		return Stream.of(
+			// A bare identifier argument.
+			Arguments.of("""
+				class X {
+				  void f(String incidentTitle) {
+				    Tab.create("t", "T").content(incidentTitle);
+				  }
+				}
+				""", true),
+			// A method-call argument.
+			Arguments.of("""
+				class X {
+				  void f(Object gack) {
+				    Subtab.create("s", "S").content(renderConfirmationHtml(gack));
+				  }
+				}
+				""", false),
+			// A literal/non-literal concatenation.
+			Arguments.of("""
+				class X {
+				  void f(String title) {
+				    Tab.create("t", "T").content("<p>" + title + "</p>");
+				  }
+				}
+				""", false));
 	}
 
 	/** GREEN: a single string literal - the FG-2 docs-prose shape - passes. */
@@ -103,15 +106,17 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		assertTrue(r.sinks().get(0).literalOnly());
 	}
 
-	/** GREEN: a text-block literal passes (built via string concatenation here to avoid nested triple-quote escaping in this fixture). */
+	/** GREEN: a text-block literal passes (the nested triple-quote delimiter is backslash-escaped so it doesn't terminate the outer block early). */
 	@Test void a05_textBlockLiteral_passes() {
-		var src = "class X {\n"
-			+ "  void f() {\n"
-			+ "    Tab.create(\"t\", \"T\").content(\"\"\"\n"
-			+ "      <p>Hello</p>\n"
-			+ "      \"\"\");\n"
-			+ "  }\n"
-			+ "}\n";
+		var src = """
+			class X {
+			  void f() {
+			    Tab.create("t", "T").content(\"""
+			      <p>Hello</p>
+			      \""");
+			  }
+			}
+			""";
 		var r = RawContentSinkScanner.scan(src);
 		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
 		assertEquals(List.of(), r.violations());
@@ -323,11 +328,16 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		var root = requireModuleRoot();
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
 		var source = Files.readString(root.resolve(rel));
-		var fn = extractFunction(source, "function fillDetailSlots(");
-		assertTrue(fn.contains(".textContent"), fn);
-		assertFalse(fn.contains("innerHTML"), fn);
-		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
-		assertEquals(List.of(), r.violations(), () -> "fillDetailSlots must not assign innerHTML: " + r.violations());
+		var fill = extractFunction(source, "function fillDetailSlots(");
+		var paintField = extractFunction(source, "function paintDetailFieldSlot(");
+		var paintTitle = extractFunction(source, "function paintDetailTitleSlot(");
+		assertTrue(paintField.contains(".textContent"), paintField);
+		assertTrue(paintTitle.contains(".textContent"), paintTitle);
+		assertFalse(fill.contains("innerHTML"), fill);
+		assertFalse(paintField.contains("innerHTML"), paintField);
+		assertFalse(paintTitle.contains("innerHTML"), paintTitle);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fill + paintField + paintTitle);
+		assertEquals(List.of(), r.violations(), () -> "fillDetailSlots painters must not assign innerHTML: " + r.violations());
 		assertEquals(List.of(), r.sinks());
 	}
 
@@ -336,25 +346,27 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
 		var source = Files.readString(root.resolve(rel));
 		var needle = "slot.textContent = value;";
-		assertTrue(source.contains(needle), "fillDetailSlots assignment moved - update this fixture");
-		var fn = extractFunction(source, "function fillDetailSlots(");
+		assertTrue(source.contains(needle), "paintDetailFieldSlot assignment moved - update this fixture");
+		var fn = extractFunction(source, "function paintDetailFieldSlot(");
 		var clean = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
 		assertEquals(List.of(), clean.violations());
 		var mutated = fn.replace("slot.textContent", "slot.innerHTML");
 		var mutatedResult = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), mutated);
 		assertTrue(mutatedResult.violations().size() >= 1,
-			() -> "mutating fillDetailSlots to innerHTML must be flagged: " + mutatedResult.violations());
+			() -> "mutating paintDetailFieldSlot to innerHTML must be flagged: " + mutatedResult.violations());
 	}
 
 	@Test void d04_fillMarkdownSlot_hasNoInnerHtml() throws Exception {
 		var root = requireModuleRoot();
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
 		var source = Files.readString(root.resolve(rel));
-		var fn = extractFunction(source, "function fillMarkdownSlot(");
-		assertTrue(fn.contains("DOMParser"), fn);
-		assertTrue(fn.contains("createElement"), fn);
-		assertFalse(fn.contains("innerHTML"), fn);
-		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		var parse = extractFunction(source, "function parseSanitizedHtmlWrap(");
+		var fill = extractFunction(source, "function fillMarkdownSlot(");
+		var append = extractFunction(source, "function appendSanitizedMarkdownChild(");
+		assertTrue(parse.contains("DOMParser"), parse);
+		assertTrue(append.contains("createElement"), append);
+		assertFalse(fill.contains("innerHTML"), fill);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fill);
 		assertEquals(List.of(), r.violations(), () -> "fillMarkdownSlot must not assign innerHTML: " + r.violations());
 	}
 
@@ -362,10 +374,11 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		var root = requireModuleRoot();
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
 		var source = Files.readString(root.resolve(rel));
-		var fn = extractFunction(source, "function fillRenderSlot(");
-		assertTrue(fn.contains("createElement"), fn);
-		assertFalse(fn.contains("innerHTML"), fn);
-		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		var fill = extractFunction(source, "function fillRenderSlot(");
+		var append = extractFunction(source, "function appendSanitizedRenderChild(");
+		assertTrue(append.contains("createElement"), append);
+		assertFalse(fill.contains("innerHTML"), fill);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fill);
 		assertEquals(List.of(), r.violations(), () -> "fillRenderSlot must not assign innerHTML: " + r.violations());
 	}
 

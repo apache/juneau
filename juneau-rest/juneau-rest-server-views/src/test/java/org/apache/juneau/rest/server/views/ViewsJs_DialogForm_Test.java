@@ -56,13 +56,15 @@ class ViewsJs_DialogForm_Test extends TestBase {
 		assertTrue(body.contains("function appendDialogForm("), body);
 		assertTrue(body.contains("function paintFormControl("), body);
 		assertTrue(body.contains("function collectDialogFormFields("), body);
+		assertTrue(body.contains("function buildSelectFormControl("), body);
+		assertTrue(body.contains("function buildActionFormControl("), body);
+		assertTrue(body.contains("createElement(\"textarea\")"), body);
+		assertTrue(body.contains("createElement(\"select\")"), body);
+		assertTrue(body.contains("createElement(\"option\")"), body);
+		assertTrue(body.contains("createElement(\"button\")"), body);
+		assertTrue(body.contains(".textContent"), body);
 		var start = body.indexOf("function paintFormControl(");
-		var painter = body.substring(start, start + 2200);
-		assertTrue(painter.contains("createElement(\"textarea\")"), painter);
-		assertTrue(painter.contains("createElement(\"select\")"), painter);
-		assertTrue(painter.contains("createElement(\"option\")"), painter);
-		assertTrue(painter.contains("createElement(\"button\")"), painter);
-		assertTrue(painter.contains(".textContent"), painter);
+		var painter = body.substring(start, start + 1500);
 		assertFalse(painter.contains("innerHTML"), "paintFormControl must not assign innerHTML");
 	}
 

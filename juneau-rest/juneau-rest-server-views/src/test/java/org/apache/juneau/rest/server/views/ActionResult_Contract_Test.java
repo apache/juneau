@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Golden-fixture contract test for the typed {@code ActionResult} wire format (design doc §6.1/§6.2; the write-path
- * half of {@code TODO-416}).
+ * half of the row-action contract).
  *
  * <p>
  * This pins the third independently-versioned wire contract of the toolkit (alongside {@code VIEW_META} and
@@ -82,7 +82,7 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	@Test void b02_reservedAsyncOutcomes_areFrozenNow() {
-		// Reserved from day one so TODO-425 (async) cannot force a second result-contract bump.
+		// Reserved from day one so the async-job feature cannot force a second result-contract bump.
 		assertEquals("cancelled", ActionResult.Outcome.CANCELLED.wire());
 		assertEquals("cancelled-after-effect", ActionResult.Outcome.CANCELLED_AFTER_EFFECT.wire());
 		assertEquals(

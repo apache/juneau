@@ -51,8 +51,8 @@ process.on('unhandledRejection', function () {});
 const env = makeEnv();
 env.window.CustomEvent = function (type, init) {
 	this.type = type;
-	this.detail = init && init.detail;
-	this.bubbles = !!(init && init.bubbles);
+	this.detail = init?.detail;
+	this.bubbles = !!init?.bubbles;
 	this.defaultPrevented = false;
 	this.preventDefault = function () { this.defaultPrevented = true; };
 };
@@ -83,14 +83,19 @@ const sandbox = {
 
 // Load order mirrors the served bundle order: views publishes the shared stack, chrome consumes it, cards consumes
 // chrome.  Nothing here calls chrome's own initAll - that is the point of the ownership assertions below.
+// NOSONAR javascript:S1523 -- loading the production juneau-*.js sources into a VM sandbox is this harness's
+// intended mechanism for exercising them together; inputs are fixed local file paths supplied by the test.
 vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-chrome.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
+// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-cards.js.
 vm.runInNewContext(fs.readFileSync(path.resolve(cardsJsPath), 'utf8'), sandbox, { filename: 'juneau-cards.js' });
 
-const V = env.window.JuneauViews && env.window.JuneauViews.init;
-const C = env.window.JuneauChrome && env.window.JuneauChrome.init;
-const K = env.window.JuneauCards && env.window.JuneauCards.init;
+const V = env.window.JuneauViews?.init;
+const C = env.window.JuneauChrome?.init;
+const K = env.window.JuneauCards?.init;
 const out = {
 	hasViews: !!(V && typeof V.pushLayer === 'function' && typeof V.topLayer === 'function'),
 	hasChrome: !!(C && typeof C.wireMenus === 'function'),
@@ -99,8 +104,8 @@ const out = {
 if (!out.hasViews || !out.hasChrome || !out.hasCards) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
 // The cards runtime must own NO layer stack of its own: it may only be a client of the views one.
-out.cards_definesNoLayerStack = typeof K.pushLayer === 'undefined' && typeof K.popLayer === 'undefined'
-	&& typeof K.topLayer === 'undefined';
+out.cards_definesNoLayerStack = K.pushLayer === undefined && K.popLayer === undefined
+	&& K.topLayer === undefined;
 
 /** The shim element lacks classList (chrome's menuForTrigger reads it); add a live view over className. */
 function mkEl(tag, className, attrs) {
@@ -128,10 +133,10 @@ function buildCard(opts) {
 	const card = mkEl('article', 'juneau-view-card', { 'data-juneau-card': '1', 'data-juneau-card-id': opts.id });
 	card.setAttribute('aria-labelledby', opts.id + '-title');
 	if (opts.refresh) {
-		card.setAttribute('data-juneau-card-contract', '1');
-		card.setAttribute('data-juneau-card-refresh', opts.refresh);
+		card.dataset.juneauCardContract = '1';
+		card.dataset.juneauCardRefresh = opts.refresh;
 	}
-	if (opts.poll) card.setAttribute('data-juneau-card-poll-ms', String(opts.poll));
+	if (opts.poll) card.dataset.juneauCardPollMs = String(opts.poll);
 
 	const header = mkEl('header', 'juneau-view-card-header');
 	const title = mkEl('span', 'juneau-view-card-title', { 'id': opts.id + '-title' });
@@ -215,16 +220,16 @@ grid.appendChild(cardB);
 // Chrome's OWN DOMContentLoaded scan (headers + bar slots) must not reach a card: it is the wrong owner.
 const chromeScan = C.initAll();
 out.chrome_scanFoundNoCards = chromeScan.headers.length === 0 && chromeScan.bars.length === 0;
-out.chrome_menuNotWiredByChromeScan = cardA._parts.trigger.getAttribute('data-juneau-menu-wired') !== '1';
+out.chrome_menuNotWiredByChromeScan = cardA._parts.trigger.dataset.juneauMenuWired !== '1';
 
 // The cards runtime IS the owner.
 K.initAll();
-out.cards_wiredMenuTrigger = cardA._parts.trigger.getAttribute('data-juneau-menu-wired') === '1';
+out.cards_wiredMenuTrigger = cardA._parts.trigger.dataset.juneauMenuWired === '1';
 out.cards_hydratedIcon = cardA._parts.trigger.querySelector('.jc-icon') != null;
 
 // MENU forwards to the shared views stack: portalled to body, position:fixed, kind "menu", no dialog-cap inflation.
 cardA._parts.trigger.dispatch('click', clickEv());
-out.menu_topIsMenu = V.topLayer() != null && V.topLayer().kind === 'menu';
+out.menu_topIsMenu = V.topLayer()?.kind === 'menu';
 out.menu_portalledToBody = cardA._parts.menu.parentNode === env.body;
 out.menu_escapedCard = !cardA.contains(cardA._parts.menu);
 out.menu_positionFixed = cardA._parts.menu.style.position === 'fixed';
@@ -242,7 +247,7 @@ out.menu_scopedIds = cardA._parts.menuId !== cardB._parts.menuId;
 out.menu_scopeA = cardA._parts.menuId;
 out.menu_scopeB = cardB._parts.menuId;
 cardB._parts.trigger.dispatch('click', clickEv());
-out.menu_secondCardOpensItsOwnList = V.topLayer() != null && V.topLayer().el === cardB._parts.menu;
+out.menu_secondCardOpensItsOwnList = V.topLayer()?.el === cardB._parts.menu;
 drain();
 
 // SAFE card action dispatches the shared host CustomEvent, carrying its own action id and the card as its root.
@@ -265,18 +270,18 @@ grid.appendChild(staticCard);
 const loneCard = buildCard({ id: 'solo', scope: 'solo', menu: true });   // the per-card emit path mints no grid
 env.body.appendChild(loneCard);
 K.initAll();
-out.static_cardEnhanced = staticCard._parts.trigger.getAttribute('data-juneau-menu-wired') === '1';
-out.gridless_cardEnhanced = loneCard._parts.trigger.getAttribute('data-juneau-menu-wired') === '1';
+out.static_cardEnhanced = staticCard._parts.trigger.dataset.juneauMenuWired === '1';
+out.gridless_cardEnhanced = loneCard._parts.trigger.dataset.juneauMenuWired === '1';
 loneCard._parts.trigger.dispatch('click', clickEv());
-out.gridless_menuOpensOnSharedStack = V.topLayer() != null && V.topLayer().kind === 'menu';
+out.gridless_menuOpensOnSharedStack = V.topLayer()?.kind === 'menu';
 drain();
 
 // A card built by a different runtime is refused whole: the handshake failure withholds action wiring too.
 const staleCard = buildCard({ id: 'c9', scope: 'g1:c9', menu: true, refresh: '/data/summary' });
-staleCard.setAttribute('data-juneau-card-contract', '2');
+staleCard.dataset.juneauCardContract = '2';
 grid.appendChild(staleCard);
 K.initAll();
-out.stale_notEnhanced = staleCard._parts.trigger.getAttribute('data-juneau-menu-wired') !== '1';
+out.stale_notEnhanced = staleCard._parts.trigger.dataset.juneauMenuWired !== '1';
 out.stale_bannerShown = staleCard._parts.banner.hidden === false;
 
 // ==================================================================================================================
@@ -300,12 +305,14 @@ hiddenGrid.appendChild(pollingSibling);
 
 out.hidden_cardIsHidden = K.isElementHidden(hostCard) === true;
 const hiddenCtl = K.initCard(pollingSibling);
-out.hidden_pollSuspended = hiddenCtl != null && hiddenCtl.running === false;
+out.hidden_pollSuspended = hiddenCtl?.running === false;
 
-try { V.initAll(); } catch (e) { /* the stubbed DataTable construction throws at hand-off */ }
+// NOSONAR javascript:S2486 -- the stub DataTable constructor is designed to throw at hand-off (there is no real
+// DataTables here); swallowing it is intentional so the ctx it already stamped can be inspected below.
+try { V.initAll(); } catch { /* stubbed DataTable construction throws at hand-off; ctx stamped before the throw */ }
 out.hidden_hostedTableInited = hostedTable.__juneauCtx != null;
 out.hidden_hostedTableReadItsOwnSidecar = hostedTable.__juneauCtx
 	? hostedTable.__juneauCtx.viewDef.dataUrl : null;
-out.hidden_markerStaysAuthorId = hostedTable.getAttribute('data-juneau-view');
+out.hidden_markerStaysAuthorId = hostedTable.dataset.juneauView;
 
 process.stdout.write(JSON.stringify(out));

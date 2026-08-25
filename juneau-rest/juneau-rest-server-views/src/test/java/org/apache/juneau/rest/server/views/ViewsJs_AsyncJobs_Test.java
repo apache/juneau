@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on source-shape coverage for the {@code juneau-views.js} async-job + SSE-streaming plumbing (TODO-425).
+ * Always-on source-shape coverage for the {@code juneau-views.js} async-job + SSE-streaming plumbing.
  * Mirrors {@link ViewsJs_ModalResult_Test}'s served-script substring style: proves the load-bearing pieces of the
  * async contract are present in the shipped asset without booting a browser (the behavioral proof lives in the opt-in
  * {@code AsyncJob_BrowserTest} canary).
@@ -65,8 +65,8 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 
 	@Test void a01_setRowJobRunning_setsDistinctJobMarker_neverTheInflightMarker() throws Exception {
 		var s = fn(viewsJs(), "function setRowJobRunning(");
-		assertTrue(s.contains("setAttribute(\"data-juneau-job\""), s);
-		assertTrue(s.contains("removeAttribute(\"data-juneau-job\")"), s);
+		assertTrue(s.contains("dataset.juneauJob"), s);
+		assertTrue(s.contains("delete tr.dataset.juneauJob"), s);
 		// The whole point of HIGH-9: a job must NEVER set the synchronous in-flight marker that freezes polling.
 		assertFalse(s.contains("data-juneau-inflight"), () -> "job affordance must NOT touch data-juneau-inflight:\n" + s);
 		// A second job can't be launched on the same row while one runs.

@@ -22,7 +22,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * A single sub-tab within a {@link Tab} that has {@link Tab#subtabs}, referencing exactly one of a child
- * {@link ViewDef} or raw panel {@link #content} (design doc §"Bean model"; TODO-420).
+ * {@link ViewDef} or raw panel {@link #content} (design doc §"Bean model").
  *
  * <p>
  * A {@link Subtab} carries a stable {@code id} (the third hash segment, {@code #pageId/tabId/<subtabId>}) and
@@ -111,7 +111,7 @@ public class Subtab {
 	}
 
 	/**
-	 * Validates this sub-tab in isolation (TODO-420): exactly one of {@link #view} or {@link #content} must be set
+	 * Validates this sub-tab in isolation: exactly one of {@link #view} or {@link #content} must be set
 	 * (matrix: {@code Subtab = {view} | {content}}).
 	 *
 	 * @throws IllegalArgumentException On any rule violation.
