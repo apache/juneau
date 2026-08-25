@@ -62,8 +62,7 @@ function elMatches(node, sel) {
 }
 
 function elWalk(node, sel, acc) {
-	for (let i = 0; i < node.childNodes.length; i++) {
-		const c = node.childNodes[i];
+	for (const c of node.childNodes) {
 		if (c.nodeType === 1) {
 			if (elMatches(c, sel)) acc.push(c);
 			elWalk(c, sel, acc);
@@ -71,6 +70,8 @@ function elWalk(node, sel, acc) {
 	}
 	return acc;
 }
+
+function toDataAttr(prop) { return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); }); }
 
 function el(tag) {
 	const node = {
@@ -82,14 +83,21 @@ function el(tag) {
 		_listeners: {},
 		__juneauCalendarInit: false,
 		get firstElementChild() {
-			for (let i = 0; i < this.childNodes.length; i++)
-				if (this.childNodes[i].nodeType === 1) return this.childNodes[i];
+			for (const c of this.childNodes)
+				if (c.nodeType === 1) return c;
 			return null;
 		},
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		removeAttribute: function (k) { delete this.attrs[k]; },
 		hasAttribute: function (k) { return Object.hasOwn(this.attrs, k); },
+		get dataset() {
+			const node = this;
+			return new Proxy({}, {
+				get: function (_t, prop) { return node.getAttribute(toDataAttr(String(prop))); },
+				set: function (_t, prop, v) { node.setAttribute(toDataAttr(String(prop)), v); return true; }
+			});
+		},
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
 		insertBefore: function (c, ref) {
 			const i = ref ? this.childNodes.indexOf(ref) : -1;
@@ -102,12 +110,14 @@ function el(tag) {
 			if (i >= 0) this.childNodes.splice(i, 1);
 			return c;
 		},
-		cloneNode: function () {
+		remove: function () { if (this.parentNode) this.parentNode.removeChild(this); },
+		// `deep` is unused: this shim always deep-clones (its only caller always passes true); the parameter
+		// exists to match the real DOM cloneNode(deep) signature the caller invokes against.
+		cloneNode: function (deep) {
 			const copy = el(this.tagName);
 			for (const k in this.attrs) copy.attrs[k] = this.attrs[k];
 			copy._text = this._text;
-			for (let i = 0; i < this.childNodes.length; i++) {
-				const c = this.childNodes[i];
+			for (const c of this.childNodes) {
 				copy.appendChild(c.nodeType === 1 ? c.cloneNode(true) : textNode(c.nodeValue));
 			}
 			return copy;
@@ -116,14 +126,16 @@ function el(tag) {
 		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
 		contains: function (other) {
 			if (other === this) return true;
-			for (let i = 0; i < this.childNodes.length; i++) {
-				const c = this.childNodes[i];
+			for (const c of this.childNodes) {
 				if (c === other) return true;
 				if (c.nodeType === 1 && c.contains(other)) return true;
 			}
 			return false;
 		},
-		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		addEventListener: function (type, fn) {
+			if (!this._listeners[type]) this._listeners[type] = [];
+			this._listeners[type].push(fn);
+		},
 		focus: function () { document.activeElement = this; },
 		style: { _p: {}, setProperty: function (k, v) { this._p[k] = v; }, getPropertyValue: function (k) { return this._p[k]; } },
 		_fire: function (type, ev) {
@@ -155,10 +167,13 @@ function parseAttrs(raw, node) {
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
 	while ((m = re.exec(raw)))
-		node.setAttribute(m[1], m[2] != null ? m[2] : (m[3] != null ? m[3] : (m[4] != null ? m[4] : '')));
+		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
 }
 
 // Parse test HTML into a tree.  A <template>'s children are attached to its .content fragment (as browsers do).
+// NOSONAR javascript:S5843 -- this tag/text tokenizer's alternation+quantifier shape is inherent to matching both
+// tag tokens and text runs in one pass; the test fixtures below are hand-written (not attacker-controlled), and
+// simplifying the regex risks subtly changing tokenization without a spec to verify against.
 function parseTestHtml(html) {
 	const root = el('div');
 	const stack = [root];
@@ -167,7 +182,7 @@ function parseTestHtml(html) {
 	while ((m = re.exec(html))) {
 		if (m[4] != null) {
 			const t = m[4];
-			if (t.trim().length) stack[stack.length - 1].appendChild(textNode(t));
+			if (t.trim().length) stack.at(-1).appendChild(textNode(t));
 			continue;
 		}
 		const name = m[1];
@@ -175,7 +190,7 @@ function parseTestHtml(html) {
 		if (closing) { if (stack.length > 1) stack.pop(); continue; }
 		const node = el(name);
 		parseAttrs(m[2], node);
-		const parent = stack[stack.length - 1];
+		const parent = stack.at(-1);
 		// <template> children live in its .content fragment, not as direct childNodes.
 		(parent.tagName === 'TEMPLATE' ? parent.content : parent).appendChild(node);
 		const selfClosing = VOID_TAGS[name.toLowerCase()] || m[3] === '/';
@@ -188,7 +203,10 @@ const documentListeners = {};
 const document = {
 	readyState: 'complete',
 	activeElement: null,
-	addEventListener: function (t, fn) { (documentListeners[t] = documentListeners[t] || []).push(fn); },
+	addEventListener: function (t, fn) {
+		if (!documentListeners[t]) documentListeners[t] = [];
+		documentListeners[t].push(fn);
+	},
 	removeEventListener: function (t, fn) {
 		const a = documentListeners[t]; if (!a) return;
 		const i = a.indexOf(fn); if (i >= 0) a.splice(i, 1);
@@ -218,7 +236,7 @@ function installViewsLayerStack() {
 				returnFocusTo: opts.returnFocusTo || document.activeElement };
 			if (node.parentNode !== document.body) document.body.appendChild(node);
 			layerStack.push(rec);
-			node.setAttribute('data-juneau-layer', String(layerStack.length - 1));
+			node.dataset.juneauLayer = String(layerStack.length - 1);
 			return rec;
 		},
 		popLayer: function (node) {
@@ -234,12 +252,12 @@ function installViewsLayerStack() {
 			const restore = removed.length ? removed[0].returnFocusTo : null;
 			for (let i = removed.length - 1; i >= 0; i--) {
 				const rec = removed[i];
-				if (rec.el && rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
+				if (rec.el?.parentNode) rec.el.remove();
 				if (rec.onDismiss) rec.onDismiss();
 			}
-			if (restore && typeof restore.focus === 'function') restore.focus();
+			if (typeof restore?.focus === 'function') restore.focus();
 		},
-		topLayer: function () { return layerStack.length ? layerStack[layerStack.length - 1] : null; }
+		topLayer: function () { return layerStack.length ? layerStack.at(-1) : null; }
 	} };
 	// The ONE document keydown the shared stack installs: Escape pops the top layer.
 	document.addEventListener('keydown', function (e) {
@@ -255,8 +273,7 @@ let pendingFetches = [];
 let abortCount = 0;
 function AbortController() {
 	this.signal = { aborted: false, addEventListener: function () {} };
-	const self = this;
-	this.abort = function () { self.signal.aborted = true; abortCount++; };
+	this.abort = () => { this.signal.aborted = true; abortCount++; };
 }
 function makeFetch(responder) {
 	return function (url, opts) {
@@ -269,7 +286,7 @@ function makeFetch(responder) {
 function settleFetches() {
 	const q = pendingFetches; pendingFetches = [];
 	q.forEach(function (f) {
-		if (f.opts && f.opts.signal && f.opts.signal.aborted) {
+		if (f.opts?.signal?.aborted) {
 			const e = new Error('aborted'); e.name = 'AbortError'; f.reject(e); return;
 		}
 		f.responder(f);
@@ -295,10 +312,13 @@ const sandbox = {
 	window: window, document: document, console: shimConsole, AbortController: AbortController,
 	fetch: undefined, Promise: Promise, setTimeout: setTimeout
 };
+// NOSONAR javascript:S1523 -- this harness's entire purpose is loading the real juneau-calendar.js (a fixed local
+// file path given on the CLI, never attacker-controlled input) into a sandboxed VM context so its runtime can be
+// exercised without a browser; there is no alternative to dynamic evaluation here.
 vm.runInNewContext(fs.readFileSync(path.resolve(calendarJsPath), 'utf8'), sandbox, { filename: 'juneau-calendar.js' });
 
 const NS = window.JuneauCalendar;
-const out = { hasNs: !!NS, hasPure: !!(NS && NS.pure) };
+const out = { hasNs: !!NS, hasPure: !!NS?.pure };
 if (!out.hasPure) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 const P = NS.pure;
 
@@ -321,7 +341,7 @@ out.off_monday = P.firstWeekdayOffset(2026, 8, 'monday');   // Sat -> 5
 
 const cells = P.buildMonthCells(2026, 8, 'sunday');
 out.cells_count = cells.length;                              // always 42
-out.cells_firstInMonth = cells.filter(function (c) { return c.inMonth; })[0].key;
+out.cells_firstInMonth = cells.find(function (c) { return c.inMonth; }).key;
 out.cells_leadingAdjacent = cells[0].inMonth === false && cells[5].inMonth === false;
 out.cells_firstOfMonthAt6 = cells[6].key === '2026-08-01' && cells[6].inMonth === true;
 out.cells_inMonthCount = cells.filter(function (c) { return c.inMonth; }).length;   // 31
@@ -460,7 +480,7 @@ const overMonth = P.buildSegments([{ id: 'om', title: 'Over month', start: '2026
 	2026, 8, 'sunday', 3);
 out.seg_clip_firstKey = P.dateKey(2026, 8, 1);
 out.seg_clip_leftmost = overMonth.length ? (overMonth[0].continuesLeft === true) : false;
-out.seg_clip_rightmost = overMonth.length ? (overMonth[overMonth.length - 1].continuesRight === true) : false;
+out.seg_clip_rightmost = overMonth.length ? (overMonth.at(-1).continuesRight === true) : false;
 out.seg_clip_allInMonth = overMonth.every(function (s) { return s.startColumn >= 0 && s.endColumn <= 6; });
 // Aug 1 (Sat, row 0 col 6) through Aug 31 (Mon, row 5 col 1) = 6 week-row pieces.
 out.seg_clip_count = overMonth.length;
@@ -569,7 +589,7 @@ function paintedBarTitles(root) {
 }
 function legendToggle(root, cat) {
 	return root.querySelectorAll('[data-juneau-calendar-legend-toggle]')
-		.filter(function (n) { return n.getAttribute('data-juneau-calendar-cat') === cat; })[0];
+		.find(function (n) { return n.dataset.juneauCalendarCat === cat; });
 }
 // A month whose seed carries a team chip, a team spanning bar, and a review chip - enough to see the filter work.
 function filterSeed() {
@@ -614,8 +634,8 @@ out.map_noHeader = !Object.hasOwn(fixMap, 'hdr');
 	const timeLabel = root.querySelector('.jc-cal-event-time');
 	out.timed_label = timeLabel ? timeLabel.textContent : null;
 	const bar = root.querySelector('.jc-cal-bar');
-	out.timed_barEventId = bar ? bar.getAttribute('data-juneau-calendar-event-id') : null;
-	out.timed_barSpan = bar && bar.style ? bar.style.getPropertyValue('--jc-cal-span') : null;
+	out.timed_barEventId = bar ? bar.dataset.juneauCalendarEventId : null;
+	out.timed_barSpan = bar?.style ? bar.style.getPropertyValue('--jc-cal-span') : null;
 }
 
 // Contract handshake fail-loud: contract !== "2" -> visible error, no fetch, no grid paint.
@@ -750,7 +770,7 @@ function afterHtmlError() {
 		out.filter_initialBars = paintedBarTitles(root).join(',');
 
 		const team = legendToggle(root, 'team');
-		out.filter_hasToggles = !!team && team.getAttribute('aria-pressed') === 'true';
+		out.filter_hasToggles = team?.getAttribute('aria-pressed') === 'true';
 		team._fire('click');
 		out.filter_hiddenChips = paintedTitles(root).join(',');
 		out.filter_hiddenBars = paintedBarTitles(root).join(',');
@@ -812,6 +832,47 @@ function afterNavReset() {
  * layer that Escape pops with focus restored to the trigger; with the stack ABSENT it FAILS LOUD instead of standing
  * up a second stack of its own.
  */
+// (a) No shared stack -> loud console.error + visible inline error, and NO popover is opened.
+function checkPopoverWithoutSharedStack(busySeed) {
+	uninstallViewsLayerStack();
+	errors.length = 0;
+	pendingFetches = [];
+	sandbox.fetch = window.fetch = makeFetch(function () { throw new Error('no fetch expected'); });
+	const bare = buildFixture({ seed: busySeed });
+	NS.initInstance(bare);
+	const bareMore = bare.querySelector('.jc-cal-more');
+	out.pop_moreLabel = bareMore ? bareMore.textContent : null;      // "+1 more" - only what it hides
+	if (bareMore) {
+		bareMore._fire('click');
+	}
+	out.pop_noStackLoud = errors.some(function (e) { return e.indexOf('pushLayer') >= 0; });
+	out.pop_noStackNoPopover = !bare.querySelector('.jc-cal-popover') && !document.body.querySelector('.jc-cal-popover');
+	out.pop_noStackVisibleError = !!bare.querySelector('.jc-cal-error');
+}
+
+// (b) With the shared stack: the popover is portalled onto it, Escape pops it and focus returns to the trigger.
+function checkPopoverWithSharedStack(busySeed) {
+	installViewsLayerStack();
+	const root = buildFixture({ seed: busySeed });
+	NS.initInstance(root);
+	const more = root.querySelector('.jc-cal-more');
+	document.activeElement = more;
+	more._fire('click');
+	const top = window.JuneauViews.init.topLayer();
+	out.pop_registered = top?.kind === 'popover';
+	out.pop_lightDismiss = top?.lightDismiss === true;
+	out.pop_expanded = more.getAttribute('aria-expanded');
+	out.pop_zOrdered = top?.el.dataset.juneauLayer === '0';
+	out.pop_listsHidden = document.body.querySelectorAll('.jc-cal-popover')
+		.map(function (p) { return p.querySelectorAll('.jc-cal-event').length; }).join(',');
+	document.activeElement = null;
+	document._fire('keydown', { key: 'Escape' });
+	out.pop_escapePopped = window.JuneauViews.init.topLayer() === null;
+	out.pop_detached = document.body.querySelectorAll('.jc-cal-popover').length === 0;
+	out.pop_focusRestored = document.activeElement === more;
+	out.pop_collapsed = more.getAttribute('aria-expanded');
+}
+
 function afterNavFail() {
 	return new Promise(function (resolve) {
 		const busySeed = { contractVersion: '2', year: 2026, month: 8, events: [
@@ -820,42 +881,10 @@ function afterNavFail() {
 			{ id: 'm3', title: 'M3', start: '2026-08-14', categoryId: 'team' },
 			{ id: 'm4', title: 'M4', start: '2026-08-14', categoryId: 'team' }
 		] };
-
-		// (a) No shared stack -> loud console.error + visible inline error, and NO popover is opened.
-		uninstallViewsLayerStack();
-		errors.length = 0;
-		pendingFetches = [];
-		sandbox.fetch = window.fetch = makeFetch(function () { throw new Error('no fetch expected'); });
-		const bare = buildFixture({ seed: busySeed });
-		NS.initInstance(bare);
-		const bareMore = bare.querySelector('.jc-cal-more');
-		out.pop_moreLabel = bareMore ? bareMore.textContent : null;      // "+1 more" - only what it hides
-		if (bareMore) bareMore._fire('click');
-		out.pop_noStackLoud = errors.some(function (e) { return e.indexOf('pushLayer') >= 0; });
-		out.pop_noStackNoPopover = !bare.querySelector('.jc-cal-popover') && !document.body.querySelector('.jc-cal-popover');
-		out.pop_noStackVisibleError = !!bare.querySelector('.jc-cal-error');
-
-		// (b) With the shared stack: the popover is portalled onto it, Escape pops it and focus returns to the trigger.
-		installViewsLayerStack();
-		const root = buildFixture({ seed: busySeed });
-		NS.initInstance(root);
-		const more = root.querySelector('.jc-cal-more');
-		document.activeElement = more;
-		more._fire('click');
-		const top = window.JuneauViews.init.topLayer();
-		out.pop_registered = !!top && top.kind === 'popover';
-		out.pop_lightDismiss = !!top && top.lightDismiss === true;
-		out.pop_expanded = more.getAttribute('aria-expanded');
-		out.pop_zOrdered = !!top && top.el.getAttribute('data-juneau-layer') === '0';
-		out.pop_listsHidden = document.body.querySelectorAll('.jc-cal-popover')
-			.map(function (p) { return p.querySelectorAll('.jc-cal-event').length; }).join(',');
-		document.activeElement = null;
-		document._fire('keydown', { key: 'Escape' });
-		out.pop_escapePopped = window.JuneauViews.init.topLayer() === null;
-		out.pop_detached = document.body.querySelectorAll('.jc-cal-popover').length === 0;
-		out.pop_focusRestored = document.activeElement === more;
-		out.pop_collapsed = more.getAttribute('aria-expanded');
-		resolve(finish());
+		checkPopoverWithoutSharedStack(busySeed);
+		checkPopoverWithSharedStack(busySeed);
+		finish();
+		resolve();
 	});
 }
 

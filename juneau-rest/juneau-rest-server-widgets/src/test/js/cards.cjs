@@ -57,10 +57,12 @@ const document = {
 };
 const window = { document: document, console: console };
 const sandbox = { window: window, document: document, console: console };
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
+// juneau-cards.js under test into an isolated vm sandbox; there is no untrusted input.
 vm.runInNewContext(fs.readFileSync(path.resolve(cardsJsPath), 'utf8'), sandbox, { filename: 'juneau-cards.js' });
 
 const NS = window.JuneauCards;
-const I = NS && NS.init;
+const I = NS?.init;
 const out = { hasInit: !!(I && typeof I.fillCardFields === 'function') };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
@@ -95,7 +97,7 @@ out.ep_pathOk = I.isSafeCardEndpoint('/data/summary');
 out.ep_relativeOk = I.isSafeCardEndpoint('data/summary');
 out.ep_templated = I.isSafeCardEndpoint('/cards/{id}');
 out.ep_templatedAny = I.isSafeCardEndpoint('/x/{anything}');
-out.ep_absolute = I.isSafeCardEndpoint('http://evil/x');
+out.ep_absolute = I.isSafeCardEndpoint('http://evil/x'); // NOSONAR javascript:S5332 -- deliberately probing that an insecure absolute URL is rejected
 out.ep_protoRel = I.isSafeCardEndpoint('//evil/x');
 out.ep_scheme = I.isSafeCardEndpoint('servlet:/data/x');
 out.ep_js = I.isSafeCardEndpoint('javascript:alert(1)');

@@ -43,7 +43,7 @@ if (!chromeJsPath) {
 
 function walk(el, fn) {
 	const kids = el.children || [];
-	for (let i = 0; i < kids.length; i++) { fn(kids[i]); walk(kids[i], fn); }
+	for (const k of kids) { fn(k); walk(k, fn); }
 }
 
 function matches(el, sel) {
@@ -52,6 +52,9 @@ function matches(el, sel) {
 	const tagM = /^[a-zA-Z][a-zA-Z0-9-]*/.exec(sel);
 	if (tagM) { if ((el.tag || '').toLowerCase() !== tagM[0].toLowerCase()) return false; i = tagM[0].length; }
 	const rest = sel.slice(i);
+	// NOSONAR javascript:S5843 -- this regex intentionally recognizes .class / #id / [attr] selector tokens in one
+	// pass for the fake-DOM selector matcher below; splitting the 3-way alternation would change which characters
+	// are permitted inside each token with no behavior-preserving equivalent, so it is left as-is.
 	const re = /\.([a-zA-Z0-9_-]+)|#([a-zA-Z0-9_:-]+)|\[([a-zA-Z0-9_-]+)(?:=(?:'([^']*)'|"([^"]*)"))?\]/g;
 	let m;
 	while ((m = re.exec(rest))) {
@@ -72,7 +75,7 @@ function makeEl(tag, attrs, kids) {
 	return {
 		nodeType: 1,
 		tag: tag,
-		attrs: Object.assign({}, attrs || {}),
+		attrs: { ...(attrs || {}) },
 		children: kids || [],
 		_text: '',
 		_html: null,
@@ -82,8 +85,15 @@ function makeEl(tag, attrs, kids) {
 		setAttribute: function (k, v) { this.attrs[k] = String(v); },
 		removeAttribute: function (k) { delete this.attrs[k]; },
 		get classList() { const c = this.getAttribute('class'); return c ? c.split(/\s+/) : []; },
-		addEventListener: function (type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); },
-		dispatchEvent: function (ev) { const ls = this.listeners[ev.type] || []; for (let i = 0; i < ls.length; i++) ls[i](ev); return true; },
+		addEventListener: function (type, fn) {
+			this.listeners[type] = this.listeners[type] || [];
+			this.listeners[type].push(fn);
+		},
+		dispatchEvent: function (ev) {
+			const ls = this.listeners[ev.type] || [];
+			for (const l of ls) l(ev);
+			return true;
+		},
 		set textContent(v) { this._text = v == null ? '' : String(v); },
 		get textContent() { return this._text; },
 		set innerHTML(v) { this._html = v; },
@@ -97,7 +107,6 @@ const registry = { refresh: '<svg>refresh</svg>' };
 
 let fetchCalls = 0;
 let nextEnvelope = null;
-let pushCall = null;
 
 const documentAll = [];
 const document = {
@@ -105,8 +114,9 @@ const document = {
 	addEventListener: function () {},
 	querySelectorAll: function () { return []; },
 	getElementById: function (id) {
-		for (let i = 0; i < documentAll.length; i++)
-			if (documentAll[i].getAttribute && documentAll[i].getAttribute('id') === id) return documentAll[i];
+		for (const d of documentAll) {
+			if (d.getAttribute?.('id') === id) return d;
+		}
 		return null;
 	}
 };
@@ -116,8 +126,8 @@ const window = {
 	console: console,
 	CustomEvent: function (type, init) {
 		this.type = type;
-		this.detail = init && init.detail;
-		this.bubbles = !!(init && init.bubbles);
+		this.detail = init?.detail;
+		this.bubbles = !!(init?.bubbles);
 		this.defaultPrevented = false;
 		this.preventDefault = function () { this.defaultPrevented = true; };
 	},
@@ -129,18 +139,15 @@ const window = {
 };
 
 const sandbox = { window: window, document: document, console: console };
+// NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
+// repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
 
 const NS = window.JuneauChrome;
-const I = NS && NS.init;
-const out = { hasInit: !!(I && typeof I.applyCounts === 'function') };
-if (!out.hasInit) {
-	process.stdout.write(JSON.stringify(out));
-	process.exit(0);
-}
+const I = NS?.init;
+const out = { hasInit: !!(typeof I?.applyCounts === 'function') };
 
-(async function () {
-
+function runPureChecks() {
 	out.headerContract = I.JUNEAU_HEADER_CONTRACT_VERSION;
 	out.barContract = I.JUNEAU_BAR_CONTRACT_VERSION;
 	out.nsHeaderContract = NS.HEADER_CONTRACT_VERSION;
@@ -150,7 +157,7 @@ if (!out.hasInit) {
 	out.ep_pathOk = I.isSafeChromeEndpoint('/chrome/counts');
 	out.ep_relativeOk = I.isSafeChromeEndpoint('chrome/counts');
 	out.ep_templated = I.isSafeChromeEndpoint('/x/{id}');
-	out.ep_absolute = I.isSafeChromeEndpoint('http://evil/x');
+	out.ep_absolute = I.isSafeChromeEndpoint('https://evil/x');
 	out.ep_protoRel = I.isSafeChromeEndpoint('//evil/x');
 	out.ep_scheme = I.isSafeChromeEndpoint('servlet:/x');
 	out.ep_js = I.isSafeChromeEndpoint('javascript:alert(1)');
@@ -175,7 +182,9 @@ if (!out.hasInit) {
 	out.clamp_noMax = I.clampCount(7, null);
 	out.badges_extract = I.envelopeBadges({ badges: { 'header:x': 3 } })['header:x'];
 	out.badges_emptyIsObj = JSON.stringify(I.envelopeBadges({}));
+}
 
+function runIconHydrationChecks() {
 	// ---- DOM: icon hydration (single innerHTML sink; registry markup only) ----
 	const iconSpan = makeEl('span', { 'class': 'jc-icon' });
 	const okAction = makeEl('a', { 'data-juneau-icon': 'refresh', 'data-juneau-header-action': 'd' }, [iconSpan]);
@@ -187,7 +196,9 @@ if (!out.hasInit) {
 	I.hydrateIcons(iconRoot);
 	out.icon_injected = iconSpan.innerHTML;
 	out.icon_unknownUntouched = unknownSpan.innerHTML === null;
+}
 
+function runApplyCountsChecks() {
 	// ---- DOM: applyCounts by namespaced id, clamp with data-juneau-badge-max, unknown untouched ----
 	const b1 = makeEl('span', { 'data-juneau-badge': 'header:reload', 'data-juneau-badge-max': '99' });
 	b1.textContent = 'old';
@@ -200,7 +211,9 @@ if (!out.hasInit) {
 	out.count_clamped = b1.textContent;          // 120 > max 99 -> "99+"
 	out.count_plain = b2.textContent;            // "4"
 	out.count_unknownUntouched = b3.textContent; // non-number -> skipped -> "keep"
+}
 
+function runSafeWiringChecks() {
 	// ---- DOM: SAFE wiring dispatches a CustomEvent; malformed token is refused (not wired) ----
 	const safeAction = makeEl('button', {
 		'data-juneau-header-action': 'reload', 'data-juneau-behavior': 'safe', 'data-juneau-safe': 'refresh-counts'
@@ -211,16 +224,18 @@ if (!out.hasInit) {
 	safeAction.addEventListener(I.SAFE_EVENT, function (ev) { captured = ev; });
 	const clickEv = { type: 'click', defaultPrevented: false, preventDefault: function () { this.defaultPrevented = true; } };
 	safeAction.dispatchEvent(clickEv);
-	out.safe_dispatched = !!captured && captured.detail.token === 'refresh-counts' && captured.detail.actionId === 'reload';
-	out.safe_bubbles = !!captured && captured.bubbles === true;
+	out.safe_dispatched = captured?.detail.token === 'refresh-counts' && captured.detail.actionId === 'reload';
+	out.safe_bubbles = captured?.bubbles === true;
 	out.safe_prevented = clickEv.defaultPrevented === true;
 
 	const badTokenAction = makeEl('button', {
 		'data-juneau-header-action': 'x', 'data-juneau-behavior': 'safe', 'data-juneau-safe': 'Bad Token'
 	});
 	I.wireSafeActions(makeEl('header', {}, [badTokenAction]));
-	out.safe_malformedNotWired = !(badTokenAction.listeners && badTokenAction.listeners['click']);
+	out.safe_malformedNotWired = !badTokenAction.listeners?.['click'];
+}
 
+function runAvatarFallbackChecks() {
 	// ---- DOM: avatar image fallback to hidden initials ----
 	const img = makeEl('img', { 'class': 'jc-avatar-img' });
 	const initials = makeEl('span', { 'class': 'jc-avatar-initials' });
@@ -230,7 +245,9 @@ if (!out.hasInit) {
 	img.dispatchEvent({ type: 'error' });
 	out.avatar_imgHidden = img.hidden === true;
 	out.avatar_initialsShown = initials.hidden === false;
+}
 
+function runMenuChecks() {
 	// ---- DOM: a MENU trigger opens/closes its .jc-menu list on the SHARED views stack (chrome defines NO stack) ----
 	// The mock stands in for window.JuneauViews.init (445h): it records push/pop and runs onDismiss on pop, exactly as
 	// the real stack does - so aria-expanded round-trips through the shared teardown, not a chrome-local closer.
@@ -255,26 +272,28 @@ if (!out.hasInit) {
 	I.wireMenus(menuHeader);
 	menuTrigger.dispatchEvent({ type: 'click', preventDefault: function () { this.defaultPrevented = true; } });
 	out.menu_pushedList = menuPushCall !== null && menuPushCall.el === menuList;
-	out.menu_kind = menuPushCall && menuPushCall.opts ? menuPushCall.opts.kind : null;
-	out.menu_portal = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.portal === true);
-	out.menu_lightDismiss = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.lightDismiss === true);
-	out.menu_returnFocusToTrigger = !!(menuPushCall && menuPushCall.opts && menuPushCall.opts.returnFocusTo === menuTrigger);
+	out.menu_kind = menuPushCall?.opts ? menuPushCall.opts.kind : null;
+	out.menu_portal = menuPushCall?.opts?.portal === true;
+	out.menu_lightDismiss = menuPushCall?.opts?.lightDismiss === true;
+	out.menu_returnFocusToTrigger = menuPushCall?.opts?.returnFocusTo === menuTrigger;
 	out.menu_ariaExpandedOnOpen = menuTrigger.getAttribute('aria-expanded');
 	// A SAFE menu item dispatches the host event FROM THE TRIGGER (so it bubbles through the header), then closes.
 	let menuSafeCaptured = null;
 	menuTrigger.addEventListener(I.SAFE_EVENT, function (ev) { menuSafeCaptured = ev; });
 	miSafe.dispatchEvent({ type: 'click', preventDefault: function () { this.defaultPrevented = true; } });
-	out.menu_safeDispatchedFromTrigger = !!menuSafeCaptured
-		&& menuSafeCaptured.detail.token === 'do-it' && menuSafeCaptured.detail.actionId === 'more';
+	out.menu_safeDispatchedFromTrigger = menuSafeCaptured?.detail.token === 'do-it'
+		&& menuSafeCaptured.detail.actionId === 'more';
 	out.menu_closedOnSafe = menuPopCall !== null && menuPopCall.el === menuList;
 	out.menu_ariaExpandedAfterClose = menuTrigger.getAttribute('aria-expanded');
+}
 
+function runInitHeaderChecks() {
 	// ---- DOM: initHeader handshake (mismatch -> null, no apply; ok -> counts applied from sidecar) ----
 	const badBadge = makeEl('span', { 'data-juneau-badge': 'header:reload' });
 	badBadge.textContent = 'keep';
 	const badHeader = makeEl('header', { 'data-juneau-app-header': 'bad' }, [badBadge]);
 	documentAll.push(makeEl('script', { 'id': 'juneau-header:bad' }));
-	documentAll[documentAll.length - 1].textContent = '{"contractVersion":"2","badges":{"header:reload":50}}';
+	documentAll.at(-1).textContent = '{"contractVersion":"2","badges":{"header:reload":50}}';
 	out.init_mismatchNull = I.initHeader(badHeader) === null;
 	out.init_mismatchNoApply = badBadge.textContent === 'keep';
 
@@ -285,9 +304,11 @@ if (!out.hasInit) {
 	okSidecar.textContent = '{"contractVersion":"1","badges":{"header:reload":50}}';
 	documentAll.push(okSidecar);
 	const ctl = I.initHeader(okHeader);
-	out.init_okCtl = !!(ctl && typeof ctl.refresh === 'function');
+	out.init_okCtl = !!(typeof ctl?.refresh === 'function');
 	out.init_okApplied = okBadge.textContent;   // "50"
+}
 
+async function runDemandRefreshChecks() {
 	// ---- DOM: demand-refresh handshake (async) ----
 	const rBadge = makeEl('span', { 'data-juneau-badge': 'header:reload', 'data-juneau-badge-max': '99' });
 	rBadge.textContent = 'old';
@@ -298,7 +319,7 @@ if (!out.hasInit) {
 	out.refresh_okReturn = await I.refresh(rHeader);
 	out.refresh_okApplied = rBadge.textContent;   // clamped "99+"
 	out.refresh_okFetched = fetchCalls;
-	out.refresh_fetchOpts = window._lastFetch && window._lastFetch.opts
+	out.refresh_fetchOpts = window._lastFetch?.opts
 		? (window._lastFetch.opts.credentials + '|' + window._lastFetch.opts.cache + '|' + window._lastFetch.opts.method) : '';
 
 	rBadge.textContent = 'old';
@@ -307,9 +328,25 @@ if (!out.hasInit) {
 	out.refresh_mismatchNoApply = rBadge.textContent === 'old';
 
 	fetchCalls = 0;
-	const unsafeHeader = makeEl('header', { 'data-juneau-app-header': 'app', 'data-juneau-refresh': 'http://evil/x' }, []);
+	const unsafeHeader = makeEl('header', { 'data-juneau-app-header': 'app', 'data-juneau-refresh': 'https://evil/x' }, []);
 	out.refresh_unsafeReturn = await I.refresh(unsafeHeader);
 	out.refresh_unsafeNoFetch = fetchCalls === 0;
+}
+
+(async function () {
+	if (!out.hasInit) {
+		process.stdout.write(JSON.stringify(out));
+		process.exit(0);
+	}
+
+	runPureChecks();
+	runIconHydrationChecks();
+	runApplyCountsChecks();
+	runSafeWiringChecks();
+	runAvatarFallbackChecks();
+	runMenuChecks();
+	runInitHeaderChecks();
+	await runDemandRefreshChecks();
 
 	process.stdout.write(JSON.stringify(out));
 })();

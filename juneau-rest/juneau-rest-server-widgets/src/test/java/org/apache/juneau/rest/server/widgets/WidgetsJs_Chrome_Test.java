@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,28 +27,28 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the {@code juneau-chrome.js} page-chrome runtime.  Source-shape + contract lockstep always
- * run; the behavioral Node harness ({@code header.cjs}) runs when {@code node} is on {@code PATH} (skipped otherwise
- * &mdash; no {@code -Pjs-tests} required).
+ * Always-on coverage for the {@code juneau-chrome.js} page-chrome runtime owned by this module.
+ * Source-shape + contract lockstep always run; the behavioral Node harness ({@code header.cjs}) runs
+ * when {@code node} is on {@code PATH} (skipped otherwise &mdash; no {@code -Pjs-tests} required).
  *
  * <p>
- * Pins the 445m locked rules on the client side: two <b>distinct</b> baked contract constants
- * ({@code JUNEAU_HEADER_CONTRACT_VERSION}/{@code JUNEAU_BAR_CONTRACT_VERSION}) kept in lockstep with the server bean
- * constants, {@code window.JuneauChrome} namespacing, working {@code Behavior.MENU} triggers that ride the ONE shared
- * {@code window.JuneauViews.init} layer stack (445h) as {@code kind:"menu"} light-dismiss layers &mdash; this runtime
- * <b>never defines its own</b> {@code pushLayer}/{@code popLayer} and carries no competing {@code popupLayerStack}
- * (Pass 5 M-P5-B1) and no fake {@code <details>}/{@code role=menu} disclosure &mdash; textContent-only count apply,
- * same-origin/non-templated refresh endpoints, format-validated SAFE tokens (L11), and no poller.
+ * Pins two <b>distinct</b> baked contract constants
+ * ({@code JUNEAU_HEADER_CONTRACT_VERSION}/{@code JUNEAU_BAR_CONTRACT_VERSION}) kept in lockstep with
+ * {@link AppHeaderDef#CONTRACT_VERSION} and {@link BarSlot#CONTRACT_VERSION}, {@code window.JuneauChrome}
+ * namespacing, working MENU triggers that ride the one shared {@code window.JuneauViews.init} layer
+ * stack as {@code kind:"menu"} light-dismiss layers &mdash; this runtime <b>never defines its own</b>
+ * {@code pushLayer}/{@code popLayer} and carries no competing {@code popupLayerStack} and no fake
+ * {@code <details>}/{@code role=menu} disclosure &mdash; textContent-only count apply,
+ * same-origin/non-templated refresh endpoints, format-validated SAFE tokens, and no poller.
  */
-class ViewsJs_Chrome_Test extends TestBase {
+class WidgetsJs_Chrome_Test extends TestBase {
 
 	private static String chromeJs() throws IOException {
-		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.CHROME_JS_RESOURCE)) {
-			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.CHROME_JS_RESOURCE);
+		try (var in = WidgetsMixin.class.getResourceAsStream(WidgetsMixin.CHROME_JS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + WidgetsMixin.CHROME_JS_RESOURCE);
 			return new String(in.readAllBytes(), UTF_8);
 		}
 	}
@@ -62,17 +62,14 @@ class ViewsJs_Chrome_Test extends TestBase {
 		assertTrue(body.contains("window.JuneauChrome"), "runtime must be namespaced as window.JuneauChrome");
 	}
 
-	@Test void a02_bakedContractsMatchServerBeans_andAreDistinct() throws Exception {
+	@Test void a02_bakedContractsMatchServerBeans() throws Exception {
 		var body = chromeJs();
 		assertTrue(body.contains("JUNEAU_HEADER_CONTRACT_VERSION = \"" + AppHeaderDef.CONTRACT_VERSION + "\""),
 			"baked header contract must equal AppHeaderDef.CONTRACT_VERSION");
 		assertTrue(body.contains("JUNEAU_BAR_CONTRACT_VERSION = \"" + BarSlot.CONTRACT_VERSION + "\""),
 			"baked bar contract must equal BarSlot.CONTRACT_VERSION");
-		assertEquals(AppHeaderDef.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
-		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-		// Header and bar envelopes are separately versionable; neither is aliased to the VIEW_META contract.
-		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
-		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+		assertEquals(AppHeaderDef.CONTRACT_VERSION, WidgetsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals(BarSlot.CONTRACT_VERSION, WidgetsMixin.BAR_CONTRACT_VERSION);
 	}
 
 	@Test void a03_callsSharedStack_neverDefinesOrCompetesWithIt() throws Exception {
@@ -144,7 +141,7 @@ class ViewsJs_Chrome_Test extends TestBase {
 		}
 		for (var rel : List.of(
 			"src/test/js/" + name,
-			"juneau-rest/juneau-rest-server-views/src/test/js/" + name
+			"juneau-rest/juneau-rest-server-widgets/src/test/js/" + name
 		)) {
 			var p = Path.of(rel);
 			if (Files.isRegularFile(p)) return p.toAbsolutePath().normalize();

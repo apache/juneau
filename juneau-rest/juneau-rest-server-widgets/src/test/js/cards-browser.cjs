@@ -50,16 +50,45 @@ function elMatches(node, sel) {
 	return false;
 }
 function elWalk(node, sel, acc) {
-	for (let i = 0; i < node.childNodes.length; i++) {
-		const c = node.childNodes[i];
-		if (c.nodeType === 1) { if (elMatches(c, sel)) acc.push(c); elWalk(c, sel, acc); }
+	for (const c of node.childNodes) {
+		if (c.nodeType === 1) {
+			if (elMatches(c, sel)) acc.push(c);
+			elWalk(c, sel, acc);
+		}
 	}
 	return acc;
+}
+function datasetKeyToAttr(key) {
+	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+}
+
+/** A minimal live `dataset` facade over `node`'s existing attrs store, so `.dataset.x` reads/writes stay in sync
+ * with getAttribute('data-x') the way a real DOM element's dataset does. */
+function makeDataset(node) {
+	return new Proxy({}, {
+		get(_, key) {
+			if (typeof key !== 'string') return undefined;
+			const v = node.getAttribute(datasetKeyToAttr(key));
+			return v == null ? undefined : v;
+		},
+		set(_, key, val) {
+			node.setAttribute(datasetKeyToAttr(key), val);
+			return true;
+		},
+		deleteProperty(_, key) {
+			delete node.attrs[datasetKeyToAttr(key)];
+			return true;
+		},
+		has(_, key) {
+			return typeof key === 'string' && node.getAttribute(datasetKeyToAttr(key)) != null;
+		}
+	});
 }
 function el(tag) {
 	const node = {
 		nodeType: 1, tagName: String(tag).toUpperCase(), childNodes: [], attrs: {}, parentNode: null,
 		hidden: false, disabled: false, innerHTML: '', _listeners: {}, _text: '',
+		get dataset() { return makeDataset(this); },
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
 		setAttribute: function (k, v) { this.attrs[k] = v == null ? '' : String(v); },
 		removeAttribute: function (k) { delete this.attrs[k]; },
@@ -67,7 +96,10 @@ function el(tag) {
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
 		querySelectorAll: function (sel) { return elWalk(this, sel, []); },
 		querySelector: function (sel) { const r = elWalk(this, sel, []); return r.length ? r[0] : null; },
-		addEventListener: function (type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); },
+		addEventListener: function (type, fn) {
+			this._listeners[type] = this._listeners[type] || [];
+			this._listeners[type].push(fn);
+		},
 		_fire: function (type, ev) { (this._listeners[type] || []).forEach(function (fn) { fn(ev || {}); }); },
 		set textContent(v) { this.childNodes.length = 0; this._text = v == null ? '' : String(v); },
 		get textContent() {
@@ -81,22 +113,22 @@ function el(tag) {
 /** Builds a refreshable card <article> DOM.  opts: {contract, refresh, poll, value}. */
 function buildCard(opts) {
 	const article = el('article');
-	article.setAttribute('data-juneau-card', '1');
-	article.setAttribute('data-juneau-card-id', 'c1');
+	article.dataset.juneauCard = '1';
+	article.dataset.juneauCardId = 'c1';
 	article.setAttribute('aria-labelledby', 'g1-c1-title');
-	if (opts.contract != null) article.setAttribute('data-juneau-card-contract', opts.contract);
-	if (opts.refresh != null) article.setAttribute('data-juneau-card-refresh', opts.refresh);
-	if (opts.poll != null) article.setAttribute('data-juneau-card-poll-ms', String(opts.poll));
+	if (opts.contract != null) article.dataset.juneauCardContract = opts.contract;
+	if (opts.refresh != null) article.dataset.juneauCardRefresh = opts.refresh;
+	if (opts.poll != null) article.dataset.juneauCardPollMs = String(opts.poll);
 
 	const header = el('header');
 	const title = el('span'); title.setAttribute('id', 'g1-c1-title'); title.textContent = 'Live';
-	const status = el('span'); status.setAttribute('data-juneau-card-status', '1'); status.hidden = true;
-	const btn = el('button'); btn.setAttribute('data-juneau-card-refresh-trigger', '1');
+	const status = el('span'); status.dataset.juneauCardStatus = '1'; status.hidden = true;
+	const btn = el('button'); btn.dataset.juneauCardRefreshTrigger = '1';
 	header.appendChild(title); header.appendChild(status); header.appendChild(btn);
 
-	const banner = el('div'); banner.setAttribute('data-juneau-card-banner', '1'); banner.hidden = true;
-	const body = el('div'); body.setAttribute('data-juneau-card-body', '1');
-	const dd = el('dd'); dd.setAttribute('data-juneau-card-field', 'k'); dd.textContent = opts.value == null ? 'OLD' : opts.value;
+	const banner = el('div'); banner.dataset.juneauCardBanner = '1'; banner.hidden = true;
+	const body = el('div'); body.dataset.juneauCardBody = '1';
+	const dd = el('dd'); dd.dataset.juneauCardField = 'k'; dd.textContent = opts.value == null ? 'OLD' : opts.value;
 	body.appendChild(dd);
 
 	article.appendChild(header); article.appendChild(banner); article.appendChild(body);
@@ -146,10 +178,12 @@ const sandbox = {
 	setTimeout: fakeSetTimeout, setInterval: fakeSetInterval, clearTimeout: fakeClear, clearInterval: fakeClear,
 	Math: Math, Date: Date, Promise: Promise, Object: Object
 };
+// NOSONAR javascript:S1523 -- this harness deliberately loads the repo-local production juneau-cards.js
+// (path given on the command line by the Java test), not untrusted/user-supplied input.
 vm.runInNewContext(fs.readFileSync(path.resolve(cardsJsPath), 'utf8'), sandbox, { filename: 'juneau-cards.js' });
 
-const I = window.JuneauCards && window.JuneauCards.init;
-const out = { hasInit: !!(I && typeof I.initCard === 'function') };
+const I = window.JuneauCards?.init;
+const out = { hasInit: typeof I?.initCard === 'function' };
 
 (async function () {
 	if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); return; }
@@ -198,7 +232,7 @@ const out = { hasInit: !!(I && typeof I.initCard === 'function') };
 	const ctlD = I.initCard(cardD);
 	await ctlD.refresh();
 	out.d_fieldUnchanged = cardD._parts.dd.textContent === 'ORIG';
-	out.d_statusError = cardD._parts.status.getAttribute('data-state') === 'error';
+	out.d_statusError = cardD._parts.status.dataset.state === 'error';
 
 	// E) Static card (no refresh attr): not enhanced, no fetch.
 	fetchCalls = [];
@@ -213,8 +247,9 @@ const out = { hasInit: !!(I && typeof I.initCard === 'function') };
 	const cardF = buildCard({ contract: '1', refresh: '/data/summary' });
 	const ctlF = I.initCard(cardF);
 	const p1 = ctlF.refresh();
-	const p2 = ctlF.refresh();       // dropped: inFlight already true
-	out.f_secondDropped = p2 === undefined;
+	const nBeforeSecond = fetchCalls.length;
+	ctlF.refresh();       // coalesced: inFlight already true (returns a resolved thenable, no second fetch)
+	out.f_secondDropped = fetchCalls.length === nBeforeSecond;
 	await p1;
 	out.f_fetchCount = fetchCalls.length;
 
@@ -223,7 +258,7 @@ const out = { hasInit: !!(I && typeof I.initCard === 'function') };
 	window.fetch = makeFetch({ contractVersion: '1', fields: { k: 'P' } });
 	observerCallback = null;
 	const cardG = buildCard({ contract: '1', refresh: '/data/summary', poll: 10000 });
-	const grid = el('section'); grid.setAttribute('data-juneau-card-grid', '1'); grid.appendChild(cardG);
+	const grid = el('section'); grid.dataset.juneauCardGrid = '1'; grid.appendChild(cardG);
 	const ctlG = I.initCard(cardG);
 	out.g_startedRunning = ctlG.running === true;
 	const obs = I.observeGrid(grid, [ctlG]);
@@ -251,7 +286,7 @@ const out = { hasInit: !!(I && typeof I.initCard === 'function') };
 	observerCallback = null;
 	const panel = el('div'); panel.setAttribute('class', 'jc-panel');       // inactive tab panel: CSS display:none
 	const cardI = buildCard({ contract: '1', refresh: '/data/summary', poll: 10000 });
-	const gridI = el('section'); gridI.setAttribute('data-juneau-card-grid', '1'); gridI.appendChild(cardI);
+	const gridI = el('section'); gridI.dataset.juneauCardGrid = '1'; gridI.appendChild(cardI);
 	panel.appendChild(gridI);
 	out.i_hiddenInInactivePanel = I.isElementHidden(cardI) === true;
 	const ctlI = I.initCard(cardI);

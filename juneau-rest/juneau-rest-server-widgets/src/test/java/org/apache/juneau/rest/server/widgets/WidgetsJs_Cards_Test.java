@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,22 +24,25 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
- * Always-on coverage for the {@code juneau-cards.js} card-layout runtime.  Source-shape always runs; the two
- * behavioral Node harnesses ({@code cards.cjs} pure helpers, {@code cards-browser.cjs} DOM binding) run when
- * {@code node} is on {@code PATH} (skipped otherwise &mdash; no {@code -Pjs-tests} required).
+ * Always-on coverage for the {@code juneau-cards.js} card-layout runtime owned by this module.
+ * Source-shape always runs; the two behavioral Node harnesses ({@code cards.cjs} pure helpers,
+ * {@code cards-browser.cjs} DOM binding) run when {@code node} is on {@code PATH} (skipped otherwise
+ * &mdash; no {@code -Pjs-tests} required).
  */
-class ViewsJs_Cards_Test extends TestBase {
+class WidgetsJs_Cards_Test extends TestBase {
 
 	private static String cardsJs() throws IOException {
-		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.CARDS_JS_RESOURCE)) {
-			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.CARDS_JS_RESOURCE);
+		try (var in = WidgetsMixin.class.getResourceAsStream(WidgetsMixin.CARDS_JS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + WidgetsMixin.CARDS_JS_RESOURCE);
 			return new String(in.readAllBytes(), UTF_8);
 		}
 	}
@@ -77,15 +80,11 @@ class ViewsJs_Cards_Test extends TestBase {
 		assertTrue(body.contains("slot.textContent ="), "field fill must be textContent-only");
 	}
 
-	@Test void a03_bakedContractMatchesCardModel_notViewMeta() throws Exception {
-		// The baked-in card contract MUST equal CardFieldList.CONTRACT_VERSION (the refresh-envelope contract) and be
-		// wired through ViewsMixin.CARDS_CONTRACT_VERSION - never the VIEW_META (ViewDef) contract.
+	@Test void a03_bakedContractMatchesCardModel() throws Exception {
 		var body = cardsJs();
 		assertTrue(body.contains("JUNEAU_CARDS_CONTRACT_VERSION = \"" + CardFieldList.CONTRACT_VERSION + "\""),
 			"baked card contract must equal CardFieldList.CONTRACT_VERSION");
-		assertEquals(CardFieldList.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
-		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION,
-			"card contract must be a distinct constant from the VIEW_META contract");
+		assertEquals(CardFieldList.CONTRACT_VERSION, WidgetsMixin.CARDS_CONTRACT_VERSION);
 	}
 
 	@Test void a04_hiddenCheckKnowsPagesTabPanels() throws Exception {
@@ -143,7 +142,7 @@ class ViewsJs_Cards_Test extends TestBase {
 		}
 		for (var rel : List.of(
 			"src/test/js/" + name,
-			"juneau-rest/juneau-rest-server-views/src/test/js/" + name
+			"juneau-rest/juneau-rest-server-widgets/src/test/js/" + name
 		)) {
 			var p = Path.of(rel);
 			if (Files.isRegularFile(p)) return p.toAbsolutePath().normalize();
@@ -302,16 +301,24 @@ class ViewsJs_Cards_Test extends TestBase {
 		assertEquals(true, r.get("c_noFetch"));
 	}
 
-	@Test void c04_wireContractMismatch_fieldNotOverwritten_errorState() {
+	/**
+	 * A bad envelope never paints stale/foreign data (wire-contract mismatch), a static card is never enhanced
+	 * (no fetch), and {@code isElementHidden} correctly walks ancestors - three independent DOM-layer checks that
+	 * each assert exactly two boolean flags from the harness result.
+	 */
+	@ParameterizedTest
+	@MethodSource("c04_domTwoTrueFlagsProvider")
+	void c04_domResultHasTwoTrueFlags(String key1, String key2) {
 		var r = dom();
-		assertEquals(true, r.get("d_fieldUnchanged"));          // a bad envelope never paints stale/foreign data
-		assertEquals(true, r.get("d_statusError"));
+		assertEquals(true, r.get(key1));
+		assertEquals(true, r.get(key2));
 	}
 
-	@Test void c05_staticCard_notEnhanced_noFetch() {
-		var r = dom();
-		assertEquals(true, r.get("e_noCtl"));
-		assertEquals(true, r.get("e_noFetch"));
+	static Stream<Arguments> c04_domTwoTrueFlagsProvider() {
+		return Stream.of(
+			Arguments.of("d_fieldUnchanged", "d_statusError"),
+			Arguments.of("e_noCtl", "e_noFetch"),
+			Arguments.of("h_hiddenViaAncestor", "h_shown"));
 	}
 
 	@Test void c06_concurrentClicksCoalesce() {
@@ -326,12 +333,6 @@ class ViewsJs_Cards_Test extends TestBase {
 		assertEquals(true, r.get("g_observerInstalled"));
 		assertEquals(true, r.get("g_stoppedWhenHidden"));       // hidden card -> timers stop
 		assertEquals(true, r.get("g_restartedWhenShown"));      // re-shown -> timers restart
-	}
-
-	@Test void c08_isElementHidden_walksAncestors() {
-		var r = dom();
-		assertEquals(true, r.get("h_hiddenViaAncestor"));
-		assertEquals(true, r.get("h_shown"));
 	}
 
 	@Test void c09_pagesTabHide_inactivePanelStopsAndRestartsPoll() {

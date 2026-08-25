@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.views;
+package org.apache.juneau.rest.server.widgets;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,20 +27,19 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the {@code juneau-calendar.js} runtime.  The source-shape layer always runs (the pure
- * helpers must be exported on {@code JuneauCalendar.pure} and event fill must be {@code textContent}, never
- * {@code innerHTML}); the behavioral Node harness runs when {@code node} is on {@code PATH} (skipped otherwise —
- * no {@code -Pjs-tests} required).
+ * Always-on coverage for the {@code juneau-calendar.js} runtime owned by this module.  The source-shape
+ * layer always runs (the pure helpers must be exported on {@code JuneauCalendar.pure} and event fill must
+ * be {@code textContent}, never {@code innerHTML}); the behavioral Node harness runs when {@code node} is
+ * on {@code PATH} (skipped otherwise — no {@code -Pjs-tests} required).
  */
 class CalendarJs_Test extends TestBase {
 
 	private static String calendarJs() throws IOException {
-		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.CALENDAR_JS_RESOURCE)) {
-			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.CALENDAR_JS_RESOURCE);
+		try (var in = WidgetsMixin.class.getResourceAsStream(WidgetsMixin.CALENDAR_JS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + WidgetsMixin.CALENDAR_JS_RESOURCE);
 			return new String(in.readAllBytes(), UTF_8);
 		}
 	}
@@ -139,7 +138,7 @@ class CalendarJs_Test extends TestBase {
 		}
 		for (var rel : List.of(
 			"src/test/js/juneau-calendar.cjs",
-			"juneau-rest/juneau-rest-server-views/src/test/js/juneau-calendar.cjs"
+			"juneau-rest/juneau-rest-server-widgets/src/test/js/juneau-calendar.cjs"
 		)) {
 			var p = Path.of(rel);
 			if (Files.isRegularFile(p)) return p.toAbsolutePath().normalize();
@@ -199,7 +198,7 @@ class CalendarJs_Test extends TestBase {
 	@Test void a05_noLocalLayerStack_popoverUsesTheSharedOne() throws Exception {
 		var code = stripComments(calendarJs());
 		// Rec 8 / rec F: the "+N more" popover is a CLIENT of the one shared stack, never a second stack.
-		assertTrue(code.contains("window.JuneauViews && window.JuneauViews.init"), code);
+		assertTrue(code.contains("window.JuneauViews?.init"), code);
 		assertTrue(code.contains("stack.pushLayer(pop,"), code);
 		assertFalse(code.contains("function pushLayer"), "the calendar must not define its own pushLayer: " + code);
 		assertFalse(code.contains("function popLayer"), "the calendar must not define its own popLayer: " + code);

@@ -378,6 +378,23 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("\"" + ViewsMixin.CONTRACT_VERSION + "\""), body);
 	}
 
+	/**
+	 * Compatibility re-exports for widget envelopes must stay aliased to {@code WidgetsMixin} / the beans,
+	 * and must stay distinct from {@link #CONTRACT_VERSION} (VIEW_META).  Behavioral JS coverage of those
+	 * runtimes lives in {@code juneau-rest-server-widgets}; this pin is the views leftover.
+	 */
+	@Test void d03_widgetContractReexports_trackWidgetsMixinAndStayDistinctFromViewMeta() {
+		assertEquals(WidgetsMixin.HEADER_CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals(AppHeaderDef.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals(WidgetsMixin.BAR_CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+		assertEquals(WidgetsMixin.CARDS_CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
+		assertEquals(CardFieldList.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
+		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// e) B.6 - juneau-renders.js registry + base juneau-views.css .tag chip
 	//------------------------------------------------------------------------------------------------------------------
