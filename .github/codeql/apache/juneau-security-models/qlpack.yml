@@ -23,7 +23,7 @@
 # `.github/workflows/codeql-analysis.yml` (see the comment there for why the
 # `packs:` field in a codeql-config.yml cannot be used for unpublished local packs).
 #
-# See TODO-240 (.work/todo/TODO-240-codeql-resolvesafely-sanitizer-model.md) for the
+# See TODO-J0240 (~/Project Work/finished/juneau/FINISHED-J0240-codeql-resolvesafely-sanitizer-model.md) for the
 # motivating context.
 name: apache/juneau-security-models
 version: 0.0.1

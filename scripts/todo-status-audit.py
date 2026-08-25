@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Best-effort status/header consistency pre-filter for this repository's .work/todo/ plan files.
+Best-effort status/header consistency pre-filter for this project's plan files under ~/Project Work/todos/juneau/.
 
 Repo-agnostic: the repository root is derived from this file's own location
 (<root>/scripts/todo-status-audit.py -> <root>), never hardcoded, so the same body works in
@@ -20,7 +20,7 @@ every repository that adopts the convention. Only the REPO_LABEL / SKILL_NAME co
 below and the license header differ between copies.
 
 Checks every TODO-<id>-*.md / READY-<id>-*.md / MAYBE-<id>-*.md / HOLD-<id>-*.md file directly
-under .work/todo/ (FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per this
+under ~/Project Work/todos/juneau/ (FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per this
 repo's TODO-management skill, "status line is not required in FINISHED archives") against that
 skill's "Per-file `Current status:` and `Complexity:` header" rules, and flags candidate
 inconsistencies. This is a PRE-FILTER, not a validator: it flags candidates for a human
@@ -63,12 +63,11 @@ trap as running `rg` over the gitignored .work/ without --no-ignore.
 Usage:
     ./scripts/todo-status-audit.py
     ./scripts/todo-status-audit.py --verbose
-    ./scripts/todo-status-audit.py --root /path/to/other/repo
+    ./scripts/todo-status-audit.py --root ~/Project Work
     ./scripts/todo-status-audit.py --dir /path/to/alternate/todo/dir
 
 Options:
-    --root <path>   Repository root; scans <root>/.work/todo/ (default: parent of this
-                    script's directory). Ignored if --dir is given.
+    --root <path>   Project Work root (default: ~/Project Work). Ignored if --dir is given.
     --dir <path>    Exact directory to scan, overriding --root. Non-recursive -- only *.md
                     files directly in this directory are considered.
     --verbose, -v   Also print files that passed every check (default: only print flagged files).
@@ -92,11 +91,12 @@ from pathlib import Path
 # copy of this script; keep it that way so a fix lands once and is copied verbatim.
 # ---------------------------------------------------------------------------------------
 REPO_LABEL = "Apache Juneau"
-SKILL_NAME = "juneau-todo-management"
+SKILL_NAME = "todo-and-waves"
+TRACKER_SLUG = "juneau"
 
-DEFAULT_REPO_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_WORK = Path.home() / "Project Work"
 
-FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE|HOLD)-\d+[a-z]*-.*\.md$")
+FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE|HOLD)-J\d+[a-z0-9]*-.*\.md$")
 
 STATUS_LINE_RE = re.compile(r"^\s*Current status:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
 COMPLEXITY_LINE_RE = re.compile(r"^\s*Complexity:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
@@ -224,11 +224,11 @@ def audit_file(path: Path) -> list:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description=f"Best-effort pre-filter for {REPO_LABEL}'s .work/todo/ header inconsistencies (see @{SKILL_NAME}).",
+        description=f"Best-effort pre-filter for {REPO_LABEL} tracker header inconsistencies (see @{SKILL_NAME}).",
         epilog=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--root", metavar="PATH", help="Repository root; scans <root>/.work/todo/ (default: parent of this script's directory).")
+    parser.add_argument("--root", metavar="PATH", help="Project Work root (default: ~/Project Work).")
     parser.add_argument("--dir", metavar="PATH", help="Exact directory to scan, overriding --root.")
     parser.add_argument("--verbose", "-v", action="store_true", help="Also print files that passed every check.")
     args = parser.parse_args()
@@ -236,8 +236,8 @@ def main() -> int:
     if args.dir:
         todo_dir = Path(args.dir).resolve()
     else:
-        repo_root = Path(args.root).resolve() if args.root else DEFAULT_REPO_ROOT
-        todo_dir = repo_root / ".work" / "todo"
+        project_work = Path(args.root).expanduser().resolve() if args.root else PROJECT_WORK
+        todo_dir = project_work / "todos" / TRACKER_SLUG
 
     # Always announce the tree actually scanned, for the same reason todo-next-id.py does:
     # bare per-repository ids make a wrong-tree run indistinguishable from a right-tree one.

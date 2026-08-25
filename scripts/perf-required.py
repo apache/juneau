@@ -14,8 +14,8 @@
 """
 "## Perf section" requirement checker, for FINISHED archive entries.
 
-Mirrors ONE of the two trigger conditions from agents/skills/juneau-todo-management/SKILL.md's
-"## Perf section in FINISHED archives": "the implementation touches any file in the perf-sensitive
+Mirrors ONE of the two trigger conditions from ~/Project Work/skills/todo-and-waves/SKILL.md
+(Juneau FINISHED `## Perf`): "the implementation touches any file in the perf-sensitive
 hot-path inventory". It deliberately does NOT attempt the OTHER trigger ("the landing changes the
 test count by more than 50 tests") -- that requires comparing against the prior FINISHED archive's
 stated test count, which isn't mechanically derivable from a diff. Keep checking that one by hand.
@@ -66,8 +66,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# Kept in sync with agents/skills/juneau-todo-management/SKILL.md's "## Perf section in FINISHED
-# archives" hot-path inventory. Matched by basename only (these class names are unique enough
+# Kept in sync with ~/Project Work/skills/todo-and-waves/SKILL.md Juneau FINISHED `## Perf`
+# hot-path inventory. Matched by basename only (these class names are unique enough
 # across the repo that a full-path match would just add fragility for no benefit).
 HOT_PATH_FILES = (
     "RestContext.java",

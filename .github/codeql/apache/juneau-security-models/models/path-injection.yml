@@ -24,7 +24,7 @@
 # (already-boundary-checked) target does not exist. It is a genuine cross-method
 # sanitizer, but CodeQL's stock java/path-injection query has no way to know that
 # without this model, so every reachable call site had to be manually dismissed as
-# a false positive (see .work/todo/finished/FINISHED-235-codeql-security-alert-remediation.md,
+# a false positive (see ~/Project Work/finished/juneau/FINISHED-J0235-codeql-security-alert-remediation.md,
 # alerts #91, #93, #321-#328) -- and those dismissals don't survive a file move, as
 # proven by TODO-236 re-spawning #322-#328 under fresh ids.
 extensions:
