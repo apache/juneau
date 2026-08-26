@@ -40,6 +40,7 @@ LINUX_FAILURE_SOUND = "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"
 import argparse
 import os
 import platform
+import shlex
 import shutil
 import subprocess
 import sys
@@ -365,48 +366,72 @@ def verify_apache_identity(repo_dir):
     return True
 
 
-def check_git_status(repo_dir):
-    """Check if there are any changes to commit."""
-    try:
-        result = subprocess.run(
-            ["git", "status", "--porcelain"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return len(result.stdout.strip()) > 0
-    except Exception as e:
-        print(f"⚠ Warning: Could not check git status: {e}")
-        return True
-
-
-def check_preexisting_staged_changes(repo_dir):
+def get_staged_paths(repo_dir):
     """
-    List paths with changes already staged in the index, before this script's own `git add .`.
+    List paths currently staged in the index.
 
-    `git commit` commits whatever is in the index regardless of which step staged it, so
-    content staged by something else before push.py runs (e.g. a concurrent session sharing
-    this working tree) would be folded into this push's commit whether or not `git add .` ran.
-    Checking this before add/commit lets the caller refuse rather than silently absorb it.
+    This is the sole definition of "what push.py is about to commit": a staged path is the
+    operator's record that they reviewed it and it's good (see commit_and_push()'s docstring),
+    so this script commits the index exactly as it finds it rather than deciding what belongs
+    in the commit itself.
 
     Returns:
-        list[str]: staged paths (possibly empty). Fails open (returns []) if the check itself
-        can't run -- the add/commit steps immediately following will surface any real git
-        problem on their own.
+        list[str]: staged paths (possibly empty).
+
+    Raises:
+        subprocess.CalledProcessError, OSError: if the check itself can't run. Deliberately not
+        caught here -- unlike the ahead/behind upstream check (a network operation that can
+        legitimately fail), an error running `git diff --cached` almost always means something
+        is fundamentally wrong with the repo, and this check exists specifically to protect an
+        invariant, so the caller should fail closed (abort) rather than silently proceed.
     """
-    try:
-        result = subprocess.run(
-            ["git", "diff", "--cached", "--name-only"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return [line for line in result.stdout.splitlines() if line.strip()]
-    except Exception as e:
-        print(f"⚠ Warning: Could not check for pre-existing staged changes: {e}")
-        return []
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only"],
+        cwd=repo_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    return [line for line in result.stdout.splitlines() if line.strip()]
+
+
+def check_unreviewed_changes(repo_dir):
+    """
+    List paths that have NOT been staged: tracked files with unstaged modifications/deletions,
+    plus untracked files that are not gitignored.
+
+    Staging is how this script knows something has been reviewed (see commit_and_push()'s
+    docstring); this is the other half of that invariant. Its presence alongside staged content
+    means the operator's review pass isn't finished, so nothing should be committed or pushed
+    yet -- not even the already-staged part -- until the tree is fully resolved one way or
+    another (staged, committed separately, stashed, or discarded).
+
+    Gitignored untracked files are deliberately excluded (via `git ls-files --exclude-standard`):
+    build output and similar noise was never going to be staged or reviewed, and flagging it
+    would make this refusal fire on essentially every real run.
+
+    Returns:
+        list[str]: unreviewed paths (possibly empty).
+
+    Raises:
+        subprocess.CalledProcessError, OSError: see get_staged_paths() -- same fail-closed
+        reasoning applies here.
+    """
+    unstaged = subprocess.run(
+        ["git", "diff", "--name-only"],
+        cwd=repo_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    ).stdout.splitlines()
+    untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=repo_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    ).stdout.splitlines()
+    return [line for line in (*unstaged, *untracked) if line.strip()]
 
 
 def check_upstream_changes(repo_dir):
@@ -596,26 +621,35 @@ def commit_and_push(
     pre_commit_hook=None,
 ):
     """
-    Commit any local changes and push, treating "clean working tree" and "nothing to push" as
-    two different things (the bug this replaces reported success without ever pushing).
+    Commit whatever is already staged and push, treating "nothing staged" and "nothing to push"
+    as two different things (the bug this replaces reported success without ever pushing).
 
-    A clean working tree means there is nothing NEW to commit -- it does NOT mean there is
-    nothing to push. A prior run could have committed successfully and then been interrupted (or
-    failed) before the push step, leaving unpushed commits sitting on the branch; treating a
-    clean tree as "nothing to do" in that situation is a false success, since the caller would
-    believe their work reached the remote when it did not. So a clean tree here skips the
-    COMMIT, not the push: if the branch is already ahead of its upstream, that gets pushed. Only
-    a clean tree with nothing already ahead (or no upstream to compare against) is truly a
-    no-op, and that is reported with text that is never confusable with an actual push having
-    happened.
+    Nothing staged means there is nothing NEW to commit -- it does NOT mean there is nothing to
+    push. A prior run could have committed successfully and then been interrupted (or failed)
+    before the push step, leaving unpushed commits sitting on the branch; treating a clean index
+    as "nothing to do" in that situation is a false success, since the caller would believe their
+    work reached the remote when it did not. So an empty index here skips the COMMIT, not the
+    push: if the branch is already ahead of its upstream, that gets pushed. Only a clean index
+    with nothing already ahead (or no upstream to compare against) is truly a no-op, and that is
+    reported with text that is never confusable with an actual push having happened.
 
-    Also refuses to stage/commit if the index already has staged changes before this call's own
-    `git add .` -- e.g. from a concurrent session sharing this working tree -- since `git commit`
-    would fold pre-existing staged content into this push's commit regardless of what `git add .`
-    stages in this run. `git add .` itself is deliberately left unconditional for genuinely
-    unstaged/untracked changes: that is this script's documented, long-standing behavior (commit
-    everything in the tree under one message), and narrowing it further without being asked would
-    risk surprising an existing caller just as badly as the bug it would replace.
+    A staged path is the operator's record that they've reviewed it and it's good -- staging as
+    they review, not as a mechanical step right before committing. So this function commits the
+    index exactly as it finds it (no `git add .`, anywhere, ever): it does not decide what
+    belongs in the commit, because the index already says. And it refuses outright -- commits
+    and pushes NOTHING -- if the working tree has any unstaged modification or any untracked,
+    non-gitignored file, since their presence means the review pass isn't finished, and this
+    script has no way to tell "safe to commit around" apart from "someone forgot to stage it."
+    That refusal applies even to a push-only run (nothing staged, only pushing prior commits):
+    unreviewed content sitting in the tree at push time isn't safe to assume away, even though
+    it isn't literally what's being pushed. This is deliberately strict with no override flag --
+    even a flag that names the exact paths being overridden is still a way to push something
+    nobody reviewed, which is the one thing this refusal exists to prevent. For genuinely partial
+    work (some files reviewed and staged, others still mid-edit), the sanctioned way out is
+    `git stash push -- <paths>` before running push.py and `git stash pop` after; the refusal
+    message itself prints that command with the actual offending paths already filled in, so the
+    recovery is discoverable at the moment of refusal rather than something the operator has to
+    already know.
 
     Shared by all three sites in this file that make this same commit-or-push decision (the
     default juneau flow, the juneau-docs follow-up in main()'s Step 6, and --docs-only's
@@ -635,14 +669,15 @@ def commit_and_push(
             operating outside the repo's own directory (e.g. main() running against the
             juneau-docs sibling while cwd is juneau) can pass a `-C <path>`-qualified form.
         pre_flight_hook: Optional zero-arg callable invoked once it's established that there is
-            something to commit and/or push (i.e. NOT the nothing_to_do case), before any git
-            state is mutated. Must return True to proceed or False to abort (and is responsible
-            for printing its own error and playing the failure sound before returning False).
-            Used for checks that must run before ANY push, including a push-only run with
-            nothing new to commit -- e.g. the juneau-docs Apache-identity gate in main()'s Step 6
-            follow-up. None (the default) means no such check is needed.
-        pre_commit_hook: Optional zero-arg callable invoked only when there ARE local changes to
-            commit, immediately before `git add .`. Same True/False contract as pre_flight_hook.
+            something to commit and/or push (i.e. NOT the nothing_to_do case) and that the tree
+            has nothing unreviewed in it, before any git state is mutated. Must return True to
+            proceed or False to abort (and is responsible for printing its own error and playing
+            the failure sound before returning False). Used for checks that must run before ANY
+            push, including a push-only run with nothing new to commit -- e.g. the juneau-docs
+            Apache-identity gate in main()'s Step 6 follow-up. None (the default) means no such
+            check is needed.
+        pre_commit_hook: Optional zero-arg callable invoked only when there ARE staged changes to
+            commit, immediately before `git commit`. Same True/False contract as pre_flight_hook.
             Used for checks that have nothing new to validate when nothing changed -- e.g. the
             juneau-docs Docusaurus smoke build, which only needs to run before a commit that
             actually contains new docs content. None (the default) means no such check is needed.
@@ -667,50 +702,60 @@ def commit_and_push(
         play_sound(success=False)
         return ("error", step_num)
 
-    # A clean tree skips the commit, not the push -- see docstring above.
-    has_changes = check_git_status(repo_dir)
-    if not has_changes and not commits_ahead:
+    try:
+        has_staged = bool(get_staged_paths(repo_dir))
+    except (subprocess.CalledProcessError, OSError) as e:
+        print(f"\n❌ ERROR: Could not check the Git index{label}: {e}")
+        play_sound(success=False)
+        return ("error", step_num)
+
+    # Nothing staged skips the commit, not the push -- see docstring above.
+    if not has_staged and not commits_ahead:
         if error_msg:
-            print(f"\nℹ Nothing to commit locally{label}, and the upstream comparison could not "
-                  "be verified (see warning above) -- assuming nothing to push.")
+            print(f"\nℹ Nothing staged{label}, and the upstream comparison could not be "
+                  "verified (see warning above) -- assuming nothing to push.")
         else:
-            print(f"\nℹ Nothing to commit and no unpushed commits{label}.")
+            print(f"\nℹ Nothing staged and no unpushed commits{label}.")
         print(f"🎉 Push{label} completed successfully (nothing to commit or push)!")
         play_sound(success=True)
         return ("nothing_to_do", step_num)
 
+    # There is something to commit and/or push -- refuse if any of it (or anything else in the
+    # tree) hasn't been reviewed (staged) yet. See docstring above for why this applies even to
+    # a push-only run.
+    try:
+        unreviewed_paths = check_unreviewed_changes(repo_dir)
+    except (subprocess.CalledProcessError, OSError) as e:
+        print(f"\n❌ ERROR: Could not check for unreviewed changes{label}: {e}")
+        play_sound(success=False)
+        return ("error", step_num)
+    if unreviewed_paths:
+        print(f"\n❌ ERROR: The working tree{label} has unreviewed changes -- staging is how "
+              "this script knows something has been reviewed, and these paths are not staged:")
+        for path in unreviewed_paths:
+            print(f"   {path}")
+        print("   Why: everything this pushes should be something you've read, not just")
+        print("   something that happened to be in the tree.")
+        print("\n   Nothing was committed or pushed. Stage each path above if you've reviewed")
+        print("   it, or set it aside for this run and restore it after:")
+        quoted_paths = " ".join(shlex.quote(path) for path in unreviewed_paths)
+        print(f"     git stash push -- {quoted_paths}")
+        print("     git stash pop")
+        play_sound(success=False)
+        return ("error", step_num)
+
     if pre_flight_hook is not None and not pre_flight_hook():
         return ("error", step_num)
 
-    if has_changes:
-        preexisting_staged = check_preexisting_staged_changes(repo_dir)
-        if preexisting_staged:
-            print(f"\n❌ ERROR: The Git index already has staged changes{label} from before this run:")
-            for path in preexisting_staged:
-                print(f"   {path}")
-            print("   Refusing to stage/commit over them -- they may belong to a concurrent")
-            print("   session sharing this working tree. Review, commit, or unstage them first,")
-            print("   then re-run push.py.")
-            play_sound(success=False)
-            return ("error", step_num)
-
+    if has_staged:
         if pre_commit_hook is not None and not pre_commit_hook():
             return ("error", step_num)
 
-        # Step N: Git add and commit
+        # Step N: Commit the index as-is -- see docstring above for why there is no `git add .`.
         print(f"\n📝 Step {step_num}: Committing changes to Git{label}...")
         if not run_command(
-            ["git", "add", "."],
-            f"  {step_num}.1: Staging all changes...",
-            repo_dir
-        ):
-            print(f"\n❌ git add failed{label} -- aborting.")
-            play_sound(success=False)
-            return ("error", step_num)
-
-        if not run_command(
             ["git", "commit", "-m", message],
-            f"  {step_num}.2: Creating commit...",
+            f"  Creating commit{label}...",
             repo_dir
         ):
             print(f"\n❌ git commit failed{label} -- aborting.")
@@ -719,7 +764,7 @@ def commit_and_push(
         print(f"✅ Step {step_num}: Git commit completed{label}.")
         step_num += 1
     else:
-        print(f"\nℹ No new changes to commit{label} -- {commits_ahead} unpushed commit(s) "
+        print(f"\nℹ Nothing staged to commit{label} -- {commits_ahead} unpushed commit(s) "
               "already on this branch will be pushed now.")
 
     # Step N (or N+1): Push to remote
@@ -735,6 +780,83 @@ def commit_and_push(
     print(f"✅ Step {step_num}: Changes pushed to remote{label}.")
     step_num += 1
 
+    return ("ok", step_num)
+
+
+def run_docs_followup(juneau_root, message, step_num):
+    """
+    juneau-docs follow-up to a default-flow juneau push: smoke check + commit + push, via
+    commit_and_push() (shared with --docs-only's run_docs_only()).
+
+    Extracted out of main() -- like run_tracker_audit_gate()/commit_and_push() -- so it's
+    independently testable without running main()'s mvn build/test steps first.
+
+    Guarded only by the juneau-docs sibling existing, NOT by whether it has local changes: a
+    clean juneau-docs tree can still have unpushed commits left over from an earlier
+    interrupted run, and this follow-up has to run for that case too or it silently never
+    pushes them -- the same false-success shape commit_and_push() exists to fix, one level up.
+
+    Uses two commit_and_push() hooks: the Apache-identity gate must run before ANY push
+    (including a push-only run with no new commit to make), so it's the pre_flight_hook; the
+    Docusaurus smoke check only has anything new to validate when there IS a commit about to be
+    made, so it's the pre_commit_hook.
+
+    Args:
+        juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
+        message: Commit message to use if a juneau-docs commit is made.
+        step_num: The current step number (for output formatting).
+
+    Returns:
+        tuple: (status, step_num)
+        - status: "ok" (juneau-docs was pushed, committed-then-pushed, or genuinely had nothing
+          to do -- caller should continue), "no_docs_root" (the juneau-docs sibling doesn't
+          exist -- a pure skip, not a failure, caller should continue), or "error" (caller
+          should exit 1 immediately).
+        - step_num: commit_and_push()'s returned step_num, unchanged for "no_docs_root".
+    """
+    docs_root = juneau_root.parent / "juneau-docs"
+    if not docs_root.exists():
+        return ("no_docs_root", step_num)
+
+    def _verify_docs_identity():
+        print("\n🔐 Verifying git identity (apache.org email) on juneau-docs...")
+        if not verify_apache_identity(docs_root):
+            play_sound(success=False)
+            return False
+        print("✅ Git identity verified")
+        return True
+
+    def _docs_smoke_check():
+        print("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
+        docs_build_script = docs_root / "scripts" / "build-docs.py"
+        docs_smoke_start = time.time()
+        try:
+            result = subprocess.run(
+                [sys.executable, str(docs_build_script), "--skip-maven"],
+                cwd=docs_root,
+                check=False
+            )
+            docs_smoke_elapsed = time.time() - docs_smoke_start
+            if result.returncode != 0:
+                print("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
+                play_sound(success=False)
+                return False
+            print(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
+            return True
+        except Exception as e:
+            print(f"\n❌ Docs smoke check failed: {e}")
+            play_sound(success=False)
+            return False
+
+    docs_status, step_num = commit_and_push(
+        docs_root, message, step_num,
+        label=" (juneau-docs)",
+        pull_hint="git -C ../juneau-docs pull",
+        pre_flight_hook=_verify_docs_identity,
+        pre_commit_hook=_docs_smoke_check,
+    )
+    if docs_status == "error":
+        return ("error", step_num)
     return ("ok", step_num)
 
 
@@ -783,7 +905,8 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
         print("  2. Check for upstream changes on juneau-docs (git fetch + compare to upstream)")
         print("  3. Check juneau-docs git status (exit 0 with a no-changes message if clean)")
         print("  4. Run docs verification gate: python3 scripts/build-docs.py --skip-maven (runs verify-docs.py)")
-        print(f"  5. Commit changes: git add . && git commit -m \"{args.message}\"  (in juneau-docs)")
+        print(f"  5. Commit whatever is already staged: git commit -m \"{args.message}\"  (in juneau-docs; "
+              "refuses if anything is unstaged/untracked-and-not-gitignored)")
         print("  6. Push to remote: git push  (in juneau-docs)")
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
@@ -795,12 +918,12 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
         return 1
     print("✅ Step 1: Git identity verified")
 
-    # Steps 2-6: upstream check, no-op detection, docs smoke check, commit, and push -- all
-    # delegated to commit_and_push() (shared with main()'s Step 6 follow-up) so the clean-tree-
-    # vs-nothing-to-push fix and the pre-existing-staged-changes guard live in one place. The
-    # Docusaurus smoke build only has anything new to validate when there IS a commit about to
-    # be made, so it's wired in as commit_and_push()'s pre_commit_hook rather than running
-    # unconditionally.
+    # Steps 2-6: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
+    # commit, and push -- all delegated to commit_and_push() (shared with main()'s Step 6
+    # follow-up) so the nothing-staged-vs-nothing-to-push fix and the unreviewed-changes guard
+    # live in one place. The Docusaurus smoke build only has anything new to validate when there
+    # IS a commit about to be made, so it's wired in as commit_and_push()'s pre_commit_hook
+    # rather than running unconditionally.
     def _docs_smoke_check():
         print("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
         docs_build_script = docs_root / "scripts" / "build-docs.py"
@@ -960,7 +1083,8 @@ Examples:
         step_num += 1
         print(f"  {step_num}. Verify external starter repos against local SNAPSHOT (./mvnw -q verify; missing paths skipped)")
         step_num += 1
-        print(f"  {step_num}. Commit changes: git add . && git commit -m \"{args.message}\"")
+        print(f"  {step_num}. Commit whatever is already staged: git commit -m \"{args.message}\" "
+              "(refuses if anything is unstaged/untracked-and-not-gitignored -- stage or discard it first)")
         step_num += 1
         print(f"  {step_num}. Push to remote: git push")
         print("\nDry run complete. Use without --dry-run to execute.")
@@ -1123,67 +1247,23 @@ Examples:
         return 1
     step_num += 1
     
-    # Step 4/5: Commit (if there's anything new) and push (if there's anything ahead) --
-    # extracted into commit_and_push() so the "clean tree != nothing to push" fix and the
-    # pre-existing-staged-changes guard are unit-testable against real git without invoking the
-    # mvn build/test steps above.
+    # Step 4/5: Commit (whatever is staged) and push (if there's anything ahead) --
+    # extracted into commit_and_push() so the "nothing staged != nothing to push" fix and the
+    # unreviewed-changes guard are unit-testable against real git without invoking the mvn
+    # build/test steps above.
     push_status, step_num = commit_and_push(juneau_root, args.message, step_num)
     if push_status == "error":
         return 1
     if push_status == "nothing_to_do":
         return 0
 
-    # Step 6 (optional): juneau-docs follow-up — smoke check + commit + push. Guarded only by
-    # docs_root existing (NOT by check_git_status(docs_root) as before): a clean juneau-docs
-    # tree can still have unpushed commits from an earlier interrupted run, and this follow-up
-    # has to run for that case too, or it silently never pushes them (the same false-success
-    # shape as the defect commit_and_push() exists to fix). Delegated to the same
-    # commit_and_push() as the default juneau flow and --docs-only, via two hooks: the identity
-    # gate must run before ANY push (including a push-only run with no new commit), and the
-    # smoke check only has anything to validate when there IS a commit about to be made.
-    docs_root = juneau_root.parent / "juneau-docs"
-    if docs_root.exists():
-        def _verify_docs_identity():
-            print("\n🔐 Verifying git identity (apache.org email) on juneau-docs...")
-            if not verify_apache_identity(docs_root):
-                play_sound(success=False)
-                return False
-            print("✅ Git identity verified")
-            return True
-
-        def _docs_smoke_check():
-            print(f"\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
-            docs_build_script = docs_root / "scripts" / "build-docs.py"
-            docs_smoke_start = time.time()
-            try:
-                result = subprocess.run(
-                    [sys.executable, str(docs_build_script), "--skip-maven"],
-                    cwd=docs_root,
-                    check=False
-                )
-                docs_smoke_elapsed = time.time() - docs_smoke_start
-                if result.returncode != 0:
-                    print("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
-                    play_sound(success=False)
-                    return False
-                print(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
-                return True
-            except Exception as e:
-                print(f"\n❌ Docs smoke check failed: {e}")
-                play_sound(success=False)
-                return False
-
-        docs_status, step_num = commit_and_push(
-            docs_root, args.message, step_num,
-            label=" (juneau-docs)",
-            pull_hint="git -C ../juneau-docs pull",
-            pre_flight_hook=_verify_docs_identity,
-            pre_commit_hook=_docs_smoke_check,
-        )
-        if docs_status == "error":
-            return 1
-        # "nothing_to_do" here just means juneau-docs itself had nothing going on -- the juneau
-        # push above already succeeded, so fall through to the overall success block below.
+    # Step 6 (optional): juneau-docs follow-up — see run_docs_followup() for why the guard is
+    # "does juneau-docs exist" rather than "does it have local changes".
+    docs_status, step_num = run_docs_followup(juneau_root, args.message, step_num)
+    if docs_status == "error":
+        return 1
+    # "no_docs_root" or "ok" (including juneau-docs itself having had nothing to do) both fall
+    # through -- the juneau push above already succeeded either way.
 
     # Success!
     print("\n" + "=" * 70)

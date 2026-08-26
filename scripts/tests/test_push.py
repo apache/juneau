@@ -12,7 +12,10 @@
 # ***************************************************************************************************************************
 """
 Tests for scripts/push.py: the --tracker-audit opt-in gate, and commit_and_push()'s
-clean-tree-vs-nothing-to-push distinction and pre-existing-staged-changes guard.
+nothing-staged-vs-nothing-to-push distinction and unreviewed-changes guard (refuses to commit
+or push while anything in the tree is unstaged or untracked-and-not-gitignored -- staging is
+the operator's record of having reviewed a path, so this script commits the index exactly as
+it finds it and never runs `git add .`).
 
 Juneau-specific exception to this directory's usual byte-for-byte-identical-across-repos rule
 (see README.md): push.py's --sonarqube-style opt-in gate pattern only exists in juneau's
@@ -68,9 +71,9 @@ def _args(tracker_audit: bool) -> argparse.Namespace:
 
 
 # ---------------------------------------------------------------------------------------
-# Real-git fixtures for commit_and_push() / check_upstream_changes() /
-# check_preexisting_staged_changes(). Mirrors test_reset_side_clones.py's hermetic_git_env
-# and _run/_commit helpers.
+# Real-git fixtures for commit_and_push() / check_upstream_changes() / get_staged_paths() /
+# check_unreviewed_changes(). Mirrors test_reset_side_clones.py's hermetic_git_env and
+# _run/_commit helpers.
 # ---------------------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
 def hermetic_git_env(monkeypatch):
@@ -127,6 +130,61 @@ def _local_only_commit(repo_dir: Path, filename: str = "local.txt", message: str
     """Commit directly to `repo_dir` without pushing -- a branch ahead of its upstream."""
     (repo_dir / filename).write_text("committed but never pushed\n", encoding="utf-8")
     return _commit(repo_dir, message)
+
+
+@pytest.fixture
+def docs_remote_repo(tmp_path: Path) -> Path:
+    """
+    A SEPARATE bare repo standing in for the juneau-docs remote -- deliberately distinct from
+    remote_repo/repo (the juneau ones), since run_docs_only()/run_docs_followup() push to the
+    juneau-docs sibling's own remote, not juneau's. A test that only reused the juneau fixtures
+    unchanged could pass by accident even if a fix wired the wrong repo_dir/remote together.
+    """
+    bare = tmp_path / "docs-remote.git"
+    _run(tmp_path, "git", "init", "--bare", "-b", "master", str(bare))
+    return bare
+
+
+@pytest.fixture
+def docs_repo(tmp_path: Path, docs_remote_repo: Path, push_module) -> Path:
+    """
+    A real clone of docs_remote_repo, seeded with a stub scripts/build-docs.py that exits 0 (so
+    tests can exercise the real pre_commit_hook smoke-check wiring without a real Docusaurus
+    site), living at <tmp_path>/juneau-docs so juneau_root.parent / "juneau-docs" resolves to
+    it. Also configures the repo-local (never global) git identity commit_and_push()'s
+    verify_apache_identity() check reads, since that check is real, pre-existing behavior this
+    task doesn't touch and unrelated tests still need it satisfied.
+    """
+    seed = tmp_path / "docs-seed"
+    seed.mkdir()
+    _run(seed, "git", "init", "-b", "master", ".")
+    (seed / "README.md").write_text("docs first\n", encoding="utf-8")
+    (seed / "scripts").mkdir()
+    (seed / "scripts" / "build-docs.py").write_text("import sys\nsys.exit(0)\n", encoding="utf-8")
+    _commit(seed, "initial docs")
+    _run(seed, "git", "remote", "add", "origin", str(docs_remote_repo))
+    _run(seed, "git", "push", "origin", "master")
+
+    work = tmp_path / "juneau-docs"
+    _run(tmp_path, "git", "clone", str(docs_remote_repo), str(work))
+    _run(work, "git", "config", "user.email", push_module.REQUIRED_GIT_EMAIL)
+    _run(work, "git", "config", "user.name", "Push Test")
+    return work
+
+
+@pytest.fixture
+def juneau_root(tmp_path: Path, docs_repo: Path) -> Path:
+    """
+    A juneau_root whose PARENT holds docs_repo at `<parent>/juneau-docs` -- the sibling-checkout
+    layout run_docs_only()/run_docs_followup() expect. Does not need to exist itself: neither
+    function dereferences juneau_root directly, only juneau_root.parent.
+    """
+    return tmp_path / "juneau"
+
+
+def _docs_args(message: str = "docs message") -> argparse.Namespace:
+    """Just enough of push.py's parsed-args surface for run_docs_only()."""
+    return argparse.Namespace(message=message, dry_run=False, skip_tests=False, sonarqube=False)
 
 
 @pytest.fixture
@@ -295,31 +353,68 @@ class TestCheckUpstreamChangesAheadBehind:
         assert (ahead, behind, error) == (None, None, None)
 
 
-class TestCheckPreexistingStagedChanges:
-    """The pre-flight check commit_and_push() uses to refuse committing over someone else's index state."""
+class TestGetStagedPaths:
+    """
+    The sole definition of "what push.py will commit" now that `git add .` is gone: whatever
+    is already in the index, because a staged path is the operator's record of having reviewed
+    it.
+    """
 
     def test_a_clean_index_reports_nothing(self, push_module, repo):
-        assert push_module.check_preexisting_staged_changes(repo) == []
+        assert push_module.get_staged_paths(repo) == []
 
     def test_a_staged_file_is_reported(self, push_module, repo):
-        (repo / "staged.txt").write_text("staged by someone else\n", encoding="utf-8")
-        _run(repo, "git", "add", "staged.txt")
+        (repo / "reviewed.txt").write_text("staged by the operator\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
 
-        assert push_module.check_preexisting_staged_changes(repo) == ["staged.txt"]
+        assert push_module.get_staged_paths(repo) == ["reviewed.txt"]
 
     def test_an_unstaged_modification_alone_is_not_reported(self, push_module, repo):
-        """Unstaged dirt is not what this guard is about -- only what's already IN the index."""
         (repo / "README.md").write_text("unstaged edit\n", encoding="utf-8")
-        assert push_module.check_preexisting_staged_changes(repo) == []
+        assert push_module.get_staged_paths(repo) == []
+
+
+class TestCheckUnreviewedChanges:
+    """
+    The other half of the invariant: anything NOT staged. Unstaged modifications to tracked
+    files and untracked, non-gitignored files are both "unreviewed"; gitignored untracked
+    files are not (see check_unreviewed_changes()'s docstring for why).
+    """
+
+    def test_a_clean_tree_reports_nothing(self, push_module, repo):
+        assert push_module.check_unreviewed_changes(repo) == []
+
+    def test_an_unstaged_modification_to_a_tracked_file_is_reported(self, push_module, repo):
+        (repo / "README.md").write_text("unstaged edit\n", encoding="utf-8")
+        assert push_module.check_unreviewed_changes(repo) == ["README.md"]
+
+    def test_an_untracked_non_ignored_file_is_reported(self, push_module, repo):
+        (repo / "scratch.txt").write_text("brand new, not staged\n", encoding="utf-8")
+        assert push_module.check_unreviewed_changes(repo) == ["scratch.txt"]
+
+    def test_a_gitignored_untracked_file_is_not_reported(self, push_module, repo):
+        (repo / ".gitignore").write_text("ignored.log\n", encoding="utf-8")
+        _commit(repo, "add gitignore")
+        (repo / "ignored.log").write_text("noise\n", encoding="utf-8")
+
+        assert push_module.check_unreviewed_changes(repo) == []
+
+    def test_a_staged_file_alone_is_not_reported(self, push_module, repo):
+        """Staged content is reviewed content -- it's the other function's (get_staged_paths()) job."""
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+
+        assert push_module.check_unreviewed_changes(repo) == []
 
 
 class TestCommitAndPushFalseSuccessRegression:
     """
-    The defect: a clean working tree with unpushed local commits used to be reported as
-    "nothing to commit and push" (returning success) without ever running `git push`.
+    The defect: a working tree with nothing staged but unpushed local commits used to be
+    reported as "nothing to commit and push" (returning success) without ever running
+    `git push`.
 
     This is the test that fails against the pre-fix code: the pre-fix push.py checked only
-    `check_git_status()` (a clean tree) and returned success without consulting how far ahead
+    whether the working tree was clean and returned success without consulting how far ahead
     of upstream the branch was, so it would report success here while the remote never moved.
     A test that only checked the return status/exit code would pass against that bug -- the
     assertion that matters is that the remote ref ACTUALLY ADVANCED.
@@ -327,7 +422,8 @@ class TestCommitAndPushFalseSuccessRegression:
 
     def test_clean_tree_with_unpushed_commits_actually_pushes(self, push_module, repo, remote_repo, git_spy):
         local_head = _local_only_commit(repo)
-        assert push_module.check_git_status(repo) is False, "tree must be clean for this to be the regression case"
+        assert push_module.get_staged_paths(repo) == [], "index must be clean for this to be the regression case"
+        assert push_module.check_unreviewed_changes(repo) == [], "tree must be clean too, or this proves nothing"
 
         status, _ = push_module.commit_and_push(repo, "irrelevant message", 4)
 
@@ -363,7 +459,7 @@ class TestCommitAndPushFalseSuccessRegression:
 
 
 class TestCommitAndPushGenuineNoOp:
-    """Clean tree AND nothing ahead of upstream is the one case that is truly a no-op."""
+    """Nothing staged AND nothing ahead of upstream is the one case that is truly a no-op."""
 
     def test_returns_nothing_to_do_and_touches_nothing(self, push_module, repo, remote_repo, git_spy):
         remote_before = _run(remote_repo, "git", "rev-parse", "master")
@@ -374,14 +470,42 @@ class TestCommitAndPushGenuineNoOp:
         assert step_num == 4, "step_num must be unchanged when nothing happened"
         assert _run(remote_repo, "git", "rev-parse", "master") == remote_before
         assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
-        assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+
+    def test_unstaged_dirt_alone_with_nothing_ahead_is_still_a_no_op_not_a_refusal(
+        self, push_module, repo, remote_repo, git_spy
+    ):
+        """
+        Nothing staged and nothing ahead means nothing is about to be committed or pushed, so
+        stray unstaged/untracked content sitting in the tree can't taint a push that isn't
+        happening -- the unreviewed-changes guard only fires once there's actually something
+        to commit and/or push (see commit_and_push()'s docstring). Deliberate scoping choice,
+        not an oversight: an unconditional refusal here would fire on essentially any run where
+        ANY file anywhere in the repo has a stray edit, whether or not that run would push
+        anything at all.
+        """
+        (repo / "mid-edit.txt").write_text("still being worked on, nothing staged, nothing ahead\n", encoding="utf-8")
+        remote_before = _run(remote_repo, "git", "rev-parse", "master")
+
+        status, _ = push_module.commit_and_push(repo, "irrelevant message", 4)
+
+        assert status == "nothing_to_do"
+        assert _run(remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
 
 
 class TestCommitAndPushDirtyTree:
-    """The ordinary path must keep working: a dirty tree still gets committed and pushed."""
+    """
+    The ordinary path must keep working: content the operator has reviewed and staged still
+    gets committed and pushed. Unlike before, staging is now the caller's job -- push.py
+    commits the index as it finds it (see commit_and_push()'s docstring) -- so every test here
+    stages explicitly rather than relying on an (now removed) `git add .`.
+    """
 
-    def test_a_dirty_tree_is_committed_with_the_given_message_and_pushed(self, push_module, repo, remote_repo):
+    def test_staged_changes_are_committed_with_the_given_message_and_pushed(self, push_module, repo, remote_repo):
         (repo / "README.md").write_text("new content\n", encoding="utf-8")
+        _run(repo, "git", "add", "README.md")
 
         status, step_num = push_module.commit_and_push(repo, "the commit message", 4)
 
@@ -390,30 +514,45 @@ class TestCommitAndPushDirtyTree:
         assert _run(repo, "git", "log", "-1", "--format=%s") == "the commit message"
         assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
 
-    def test_an_untracked_file_is_picked_up_too(self, push_module, repo, remote_repo):
-        """`git add .` staging genuinely-new untracked work is unchanged, documented behavior."""
+    def test_a_staged_untracked_file_is_committed_too(self, push_module, repo, remote_repo):
         (repo / "new-file.txt").write_text("brand new\n", encoding="utf-8")
+        _run(repo, "git", "add", "new-file.txt")
 
         status, _ = push_module.commit_and_push(repo, "add new file", 4)
 
         assert status == "ok"
         assert _run(remote_repo, "git", "show", "HEAD:new-file.txt") == "brand new"
 
+    def test_git_add_is_never_invoked(self, push_module, repo, remote_repo, git_spy):
+        """push.py no longer decides what to stage -- the index already says (see docstring)."""
+        (repo / "README.md").write_text("new content\n", encoding="utf-8")
+        _run(repo, "git", "add", "README.md")
+        git_spy.clear()  # discard the setup `git add` above; only commit_and_push()'s own git calls matter here
 
-class TestCommitAndPushPreexistingStagedGuard:
+        push_module.commit_and_push(repo, "the commit message", 4)
+
+        assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
+
+
+class TestCommitAndPushUnreviewedChangesGuard:
     """
-    Defect 2: `git add .` was unconditional, so anything unrelated already dirty (or, more
-    precisely, already staged -- since `git commit` commits the whole index regardless of what
-    THIS run's `git add .` stages) got swept into the commit. commit_and_push() now refuses
-    outright rather than guessing whether pre-existing staged content belongs to this push.
+    Defect 2, redesigned per a workflow fact that inverts the original fix: James stages files
+    as he reviews them, so a staged path is his record that he's read it and it's good. The
+    original fix refused when the index already held staged content -- which is his NORMAL
+    state, and would have fired on essentially every real run. The corrected rule refuses on
+    the opposite condition: anything UNSTAGED (an unstaged modification, or an untracked file
+    that isn't gitignored) anywhere in the tree, once there's something to commit and/or push.
+    That makes "everything committed or pushed has been reviewed" true by construction, and it
+    also means push.py no longer runs `git add .` at all -- it commits the index exactly as it
+    finds it.
     """
 
-    def test_preexisting_staged_content_aborts_before_any_add_commit_or_push(
+    def test_unstaged_modification_alongside_staged_work_aborts_before_commit_or_push(
         self, push_module, repo, remote_repo, git_spy
     ):
-        (repo / "unrelated.txt").write_text("staged by a concurrent session\n", encoding="utf-8")
-        _run(repo, "git", "add", "unrelated.txt")
-        (repo / "mine.txt").write_text("my own unstaged work\n", encoding="utf-8")
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "README.md").write_text("mid-edit, not staged\n", encoding="utf-8")
         head_before = _run(repo, "git", "rev-parse", "HEAD")
         remote_before = _run(remote_repo, "git", "rev-parse", "master")
         git_spy.clear()  # discard the setup `git add` above; only commit_and_push()'s own git calls matter here
@@ -423,37 +562,122 @@ class TestCommitAndPushPreexistingStagedGuard:
         assert status == "error"
         assert _run(repo, "git", "rev-parse", "HEAD") == head_before, "nothing should have been committed"
         assert _run(remote_repo, "git", "rev-parse", "master") == remote_before, "the remote must not move"
-        assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
         assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
         assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
 
+    def test_untracked_non_ignored_file_alongside_staged_work_aborts(self, push_module, repo, remote_repo):
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "scratch.txt").write_text("brand new, not staged\n", encoding="utf-8")
+
+        status, _ = push_module.commit_and_push(repo, "message", 4)
+
+        assert status == "error"
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
+    def test_a_gitignored_untracked_file_does_not_trip_the_guard(self, push_module, repo, remote_repo):
+        (repo / ".gitignore").write_text("build.log\n", encoding="utf-8")
+        _run(repo, "git", "add", ".gitignore")
+        (repo / "build.log").write_text("noise\n", encoding="utf-8")
+
+        status, _ = push_module.commit_and_push(repo, "add gitignore", 4)
+
+        assert status == "ok"
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
     def test_the_staged_file_remains_staged_and_the_unstaged_file_remains_unstaged(self, push_module, repo):
-        (repo / "unrelated.txt").write_text("staged by a concurrent session\n", encoding="utf-8")
-        _run(repo, "git", "add", "unrelated.txt")
-        (repo / "mine.txt").write_text("my own unstaged work\n", encoding="utf-8")
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "mine.txt").write_text("mid-edit, not staged\n", encoding="utf-8")
 
         push_module.commit_and_push(repo, "my commit message", 4)
 
-        assert _run(repo, "git", "diff", "--cached", "--name-only") == "unrelated.txt"
+        assert _run(repo, "git", "diff", "--cached", "--name-only") == "reviewed.txt"
         status_lines = _run(repo, "git", "status", "--porcelain").splitlines()
         assert "?? mine.txt" in status_lines
 
-    def test_the_error_message_names_the_staged_paths(self, push_module, repo, capsys):
-        (repo / "secret-in-progress.txt").write_text("do not touch\n", encoding="utf-8")
-        _run(repo, "git", "add", "secret-in-progress.txt")
+    def test_the_error_message_names_the_unreviewed_paths(self, push_module, repo, capsys):
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "secret-in-progress.txt").write_text("do not push yet\n", encoding="utf-8")
 
         push_module.commit_and_push(repo, "message", 4)
 
         assert "secret-in-progress.txt" in capsys.readouterr().out
 
-    def test_a_clean_index_with_only_unstaged_dirt_is_not_refused(self, push_module, repo, remote_repo):
-        """The guard is about the INDEX, not about dirtiness in general -- ordinary dirty trees must still work."""
-        (repo / "mine.txt").write_text("my own unstaged work\n", encoding="utf-8")
+    def test_the_error_message_includes_a_copy_pasteable_stash_recovery_hint(self, push_module, repo, capsys):
+        """
+        The recovery hint has to be discoverable at the moment of refusal, and it has to be the
+        REAL command for THIS refusal -- with the actual offending paths already filled in --
+        not a generic template, so this pins the exact paths into the emitted `git stash push`
+        command rather than just checking that a stash mention exists somewhere in the output.
+        """
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "one.txt").write_text("mid-edit one\n", encoding="utf-8")
+        (repo / "two.txt").write_text("mid-edit two\n", encoding="utf-8")
+
+        push_module.commit_and_push(repo, "message", 4)
+        out = capsys.readouterr().out
+
+        assert "git stash push -- one.txt two.txt" in out
+        assert "git stash pop" in out
+
+    def test_the_error_message_says_why_the_refusal_exists(self, push_module, repo, capsys):
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "mid-edit.txt").write_text("still being worked on\n", encoding="utf-8")
+
+        push_module.commit_and_push(repo, "message", 4)
+
+        assert "should be something you've read" in capsys.readouterr().out.lower()
+
+
+class TestCommitAndPushPartialReviewIsRefused:
+    """
+    The exact scenario the task named: some files reviewed and staged, others still mid-edit.
+    The strict rule refuses the WHOLE run rather than pushing just the reviewed part -- this is
+    the deliberate, current behavior (see commit_and_push()'s docstring for the reasoning, and
+    the task report for the escape-hatch question raised but not built).
+    """
+
+    def test_reviewed_and_staged_work_is_not_pushed_while_other_files_are_mid_edit(
+        self, push_module, repo, remote_repo, git_spy
+    ):
+        (repo / "reviewed-a.txt").write_text("reviewed a\n", encoding="utf-8")
+        (repo / "reviewed-b.txt").write_text("reviewed b\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed-a.txt", "reviewed-b.txt")
+        (repo / "mid-edit.txt").write_text("still being worked on\n", encoding="utf-8")
+        remote_before = _run(remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
+
+        status, _ = push_module.commit_and_push(repo, "reviewed work", 4)
+
+        assert status == "error"
+        assert _run(remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+
+class TestCommitAndPushAheadOnlyBlockedByUnreviewedChanges:
+    """
+    The false-success fix's "a clean tree with nothing staged and commits ahead must still
+    push" guarantee is specifically scoped to a CLEAN tree. If the tree isn't clean -- even
+    though nothing currently staged is what would be pushed -- the ahead-only push is refused
+    too, the same as the has-staged-work case.
+    """
+
+    def test_an_ahead_only_push_is_blocked_by_unstaged_dirt(self, push_module, repo, remote_repo, git_spy):
+        _local_only_commit(repo)  # ahead by 1, index clean
+        (repo / "mid-edit.txt").write_text("still being worked on\n", encoding="utf-8")
+        remote_before = _run(remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
 
         status, _ = push_module.commit_and_push(repo, "message", 4)
 
-        assert status == "ok"
-        assert _run(remote_repo, "git", "show", "HEAD:mine.txt") == "my own unstaged work"
+        assert status == "error"
+        assert _run(remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
 
 
 class TestCommitAndPushBehindUpstream:
@@ -474,3 +698,194 @@ class TestCommitAndPushBehindUpstream:
         assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
         assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
         assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+
+class TestRunDocsOnlyFalseSuccessRegression:
+    """
+    The same defect, replayed against run_docs_only() specifically rather than assumed to carry
+    over from the main-path test: juneau-docs pushes to ITS OWN remote (docs_remote_repo, a
+    separate bare repo from the juneau one), so this exercises commit_and_push() wired to a
+    genuinely different repo_dir/remote pair, not just a second call with the same fixture.
+
+    Manually replayed against the OLD run_docs_only() logic (Step 3's `check_git_status()`-only
+    check) before writing this test -- see the shell replay in the task history -- and confirmed
+    the old code would report success (return 0) while docs_remote_repo's `master` never moved.
+    """
+
+    def test_clean_tree_with_unpushed_docs_commits_actually_pushes(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        local_head = _local_only_commit(docs_repo)
+        git_spy.clear()  # discard the setup commit above
+
+        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
+
+        assert exit_code == 0
+        remote_head = _run(docs_remote_repo, "git", "rev-parse", "master")
+        assert remote_head == local_head, "the juneau-docs remote must actually have moved"
+        assert any(argv[:2] == ["git", "push"] for argv in git_spy), "git push must actually have run"
+
+    def test_clean_tree_with_unpushed_docs_commits_skips_the_smoke_check(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
+    ):
+        """
+        The stub build-docs.py in docs_repo always exits 0, so a passing smoke check alone
+        wouldn't prove it was skipped -- check for its own announcement text instead.
+        """
+        _local_only_commit(docs_repo)
+        capsys.readouterr()
+
+        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
+
+        assert exit_code == 0
+        assert "smoke check" not in capsys.readouterr().out.lower()
+
+
+class TestRunDocsOnlyGenuineNoOp:
+    def test_returns_zero_and_touches_nothing(self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy):
+        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
+
+        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
+
+        assert exit_code == 0
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
+
+
+class TestRunDocsOnlyUnreviewedChangesGuard:
+    def test_unstaged_docs_content_aborts_before_any_commit_or_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        (docs_repo / "reviewed.md").write_text("reviewed and staged\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "reviewed.md")
+        (docs_repo / "mid-edit.md").write_text("still being worked on\n", encoding="utf-8")
+        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
+        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
+
+        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
+
+        assert exit_code == 1
+        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+
+class TestRunDocsOnlyDirtyTree:
+    """
+    The ordinary --docs-only path (a real, staged docs change, smoke check included) must keep
+    working.
+    """
+
+    def test_staged_changes_run_the_smoke_check_commit_and_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
+    ):
+        (docs_repo / "README.md").write_text("updated docs\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "README.md")
+
+        exit_code = push_module.run_docs_only(_docs_args("docs update"), juneau_root)
+
+        assert exit_code == 0
+        assert "smoke check" in capsys.readouterr().out.lower()
+        assert _run(docs_repo, "git", "log", "-1", "--format=%s") == "docs update"
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == _run(docs_repo, "git", "rev-parse", "HEAD")
+
+
+class TestRunDocsFollowup:
+    """main()'s Step 6, extracted as run_docs_followup() so it's testable without mvn."""
+
+    def test_no_docs_root_is_a_pure_skip(self, push_module, tmp_path):
+        lone_juneau_root = tmp_path / "juneau"
+        status, step_num = push_module.run_docs_followup(lone_juneau_root, "message", 6)
+        assert (status, step_num) == ("no_docs_root", 6)
+
+    def test_clean_tree_with_unpushed_docs_commits_actually_pushes(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        """
+        Same false-success regression as TestRunDocsOnlyFalseSuccessRegression, replayed at the
+        OTHER call site (main()'s Step 6 -- previously gated on a clean-working-tree check,
+        which would have skipped this entire follow-up, never even attempting a push).
+        """
+        local_head = _local_only_commit(docs_repo)
+        git_spy.clear()
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+
+        assert status == "ok"
+        remote_head = _run(docs_remote_repo, "git", "rev-parse", "master")
+        assert remote_head == local_head, "the juneau-docs remote must actually have moved"
+        assert any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+    def test_identity_gate_still_runs_for_an_ahead_only_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root
+    ):
+        """
+        The identity gate is the pre_flight_hook specifically because it must run even when
+        there's nothing to commit -- only something to push. Breaking the repo-local identity
+        AFTER the commit (env vars, not this config, are what let the commit itself succeed)
+        proves the gate is consulted on this path, not bypassed because has_changes is False.
+        """
+        local_head = _local_only_commit(docs_repo)
+        _run(docs_repo, "git", "config", "--unset", "user.email")
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+
+        assert status == "error"
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") != local_head
+
+    def test_smoke_check_does_not_run_for_an_ahead_only_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
+    ):
+        _local_only_commit(docs_repo)
+        capsys.readouterr()
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+
+        assert status == "ok"
+        assert "smoke check" not in capsys.readouterr().out.lower()
+
+    def test_genuine_no_op_returns_ok_and_touches_nothing(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+
+        assert status == "ok"
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+    def test_unstaged_docs_content_aborts_before_any_commit_or_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        (docs_repo / "reviewed.md").write_text("reviewed and staged\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "reviewed.md")
+        (docs_repo / "mid-edit.md").write_text("still being worked on\n", encoding="utf-8")
+        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
+        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+
+        assert status == "error"
+        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+    def test_staged_changes_run_the_smoke_check_commit_and_push(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
+    ):
+        (docs_repo / "README.md").write_text("updated docs via step 6\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "README.md")
+
+        status, step_num = push_module.run_docs_followup(juneau_root, "step 6 message", 6)
+
+        assert status == "ok"
+        assert step_num == 8, "one step for the commit, one for the push"
+        assert "smoke check" in capsys.readouterr().out.lower()
+        assert _run(docs_repo, "git", "log", "-1", "--format=%s") == "step 6 message"
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == _run(docs_repo, "git", "rev-parse", "HEAD")
