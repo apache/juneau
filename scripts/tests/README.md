@@ -1,8 +1,11 @@
 # scripts/tests/
 
-Pytest harness for `scripts/todo-next-id.py` and `scripts/todo-status-audit.py`. These two
-scripts have no other automated coverage today; everything here is hermetic (temp
-directories, synthetic fixture files) and never touches the real `~/Project Work` trackers.
+Pytest harness for the `scripts/` Python that has no other automated coverage:
+`todo-next-id.py`, `todo-status-audit.py`, and the two juneau-only scripts noted below
+(`push.py`'s tracker-audit gate and `reset-side-clones.py`). Everything here is hermetic --
+temp directories, synthetic fixture files, and real temporary git repositories built in
+fixtures -- and never touches the real `~/Project Work` trackers, the real `repos.md`, or the
+real side clones.
 
 ## Running
 
@@ -50,7 +53,30 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   reaches `subprocess.run` at all -- not just that it returns early -- which is the strongest
   available proof the gate cannot affect push behavior, including runtime, while disabled.
 
-Every OTHER file in this directory (i.e. all of the above except `test_push.py`) is intended
-to be byte-for-byte identical across every repo that carries `todo-next-id.py` /
-`todo-status-audit.py` -- the tests derive the project's id letter and tracker slug from the
-scripts themselves rather than hardcoding them, so nothing here needs to differ between copies.
+- `test_reset_side_clones.py` -- **juneau-only exception** for the same reason: unlike the two
+  tracker scripts, `reset-side-clones.py` is not a per-project script. It reads the one global
+  `~/Project Work/repos.md` and drives clones by absolute path, so a single copy resets the
+  juneau, console, and IRS pools and there is nothing for a second copy to specialize. The
+  tests are about the guards, since that is where the script's value is: canonical-tree
+  refusal by resolved real path (including via a symlink and via a `..` path), `in-flight`
+  refusal, dirty/staged/untracked abort, fail-closed behavior on an unreadable or unparseable
+  board, and the unreachability of `git clean -x` and of `git config`. Those two are asserted
+  four ways -- the argv constant, a helper with no flag parameter at all, the wrapper refusing
+  every other spelling, and an audit of every argv from a real end-to-end apply. Refusals are
+  proven by monkeypatching `subprocess.run` to raise, so "it refused" means "no git ran"
+  rather than "the exit code was 1". Everything else builds real temporary git repositories
+  and lets real git run against them: a mocked test of a script whose entire risk is real git
+  behavior would prove almost nothing. Temp repos get their identity and config isolation from
+  environment variables, never `git config`, which is the same rule the script enforces.
+
+Every OTHER file in this directory (i.e. all of the above except `test_push.py` and
+`test_reset_side_clones.py`) is intended to be byte-for-byte identical across every repo that
+carries `todo-next-id.py` / `todo-status-audit.py` -- the tests derive the project's id letter
+and tracker slug from the scripts themselves rather than hardcoding them, so nothing here
+needs to differ between copies.
+
+**Intended** is not **actual**: the three copies of this README have diverged. Which repo is
+ahead of which, by exactly what text, and what restoring identity requires is recorded in
+`~/agents/AGENTS.md` under "Carried scripts (the three-repo set)" -- kept there rather than
+here because it is a fact about all three copies at once, and because a note in this file
+would itself be one of the things out of sync.
