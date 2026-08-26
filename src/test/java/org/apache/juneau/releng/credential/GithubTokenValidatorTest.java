@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * {@link GithubTokenValidator}: the token travels by environment variable rather than argv, and {@code gh}'s own
- * output does not reach the message on either path (finding F2 of
- * {@code .work/specs/2026-08-18-console-credentials-surface.md}).
+ * output does not reach the message on either path.
  */
 class GithubTokenValidatorTest {
 

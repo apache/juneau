@@ -41,13 +41,12 @@ import org.junit.jupiter.api.io.*;
  * The credential-overwrite vector, reproduced and then closed.
  *
  * <p>
- * The finding this pins down (recorded as F1 in {@code .work/specs/2026-08-18-console-credentials-surface.md}) was
- * established by reading framework defaults rather than by issuing a request: {@code CredentialRest} extends
- * {@code BasicRestResource}, whose default parser list includes {@code UrlEncodingParser} and
- * {@code PlainTextParser}, and {@code disableContentParam} defaults to {@code false}. If that reading is right,
- * then a plain cross-origin {@code <form method="POST">} in any page the operator has open can replace a stored
- * credential &mdash; no JavaScript, and no CORS preflight, because form-encoded is one of the three content types a
- * browser may send cross-origin without one.
+ * The finding this pins down was established by reading framework defaults rather than by issuing a request:
+ * {@code CredentialRest} extends {@code BasicRestResource}, whose default parser list includes
+ * {@code UrlEncodingParser} and {@code PlainTextParser}, and {@code disableContentParam} defaults to
+ * {@code false}. If that reading is right, then a plain cross-origin {@code <form method="POST">} in any page the
+ * operator has open can replace a stored credential &mdash; no JavaScript, and no CORS preflight, because
+ * form-encoded is one of the three content types a browser may send cross-origin without one.
  *
  * <p>
  * Group a reproduces it, and both of its routes are demonstrated as an <i>actual overwrite</i> &mdash; the claim is
