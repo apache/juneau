@@ -793,12 +793,27 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.substring(lcStart, body.indexOf("}", lcStart)).contains("border-bottom-right-radius: 0"), body);
 	}
 
-	@Test void o06_viewsCss_hasDetailHeaderAndIndependentDetailTabs() throws Exception {
+	/**
+	 * Detail tabs are no longer INDEPENDENT of the generic strip - they are the generic tab-mode strip,
+	 * unmodified.  The pill override this used to assert the existence of is what made the two diverge, and
+	 * deleting it is the whole of the fix, so what is pinned here is its ABSENCE.
+	 *
+	 * <p>Absence is asserted against the rule headers rather than against the bare selector, because the
+	 * bar-slot host rule below still legitimately starts with that same selector text and would satisfy a naive
+	 * {@code contains} check - the reason the original assertion here would have stayed green through the
+	 * deletion instead of failing as the change that removed it expected.
+	 */
+	@Test void o06_viewsCss_hasDetailHeaderAndNoDetailTabOverride() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-detail-header {"), body);
 		assertTrue(body.contains(".juneau-view-detail-title {"), body);
 		assertTrue(body.contains(".juneau-view-detail-icon {"), body);
-		assertTrue(body.contains(".juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode=\"tab\"]"), body);
+		var pill = ".juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode=\"tab\"]";
+		assertFalse(body.contains(pill + " {"), body);
+		assertFalse(body.contains(pill + " .juneau-view-ribbon-btn"), body);
+		// The one detail-tabs selector that survives positions a trailing bar-slot region; it does not repaint
+		// the strip.
+		assertTrue(body.contains(pill + "[data-juneau-strip-trailed]"), body);
 		assertTrue(body.contains("border-radius: 999px"), body);
 		assertTrue(body.contains(".juneau-sym-flip-x"), body);
 	}

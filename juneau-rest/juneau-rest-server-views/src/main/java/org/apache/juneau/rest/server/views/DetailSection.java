@@ -38,8 +38,35 @@ public class DetailSection {
 	/** Heading painted with {@code textContent}. */
 	public String title;
 
-	/** CSS-grid column hint; default {@code 2}.  Must be {@code >= 1}. */
+	/**
+	 * The <b>maximum</b> number of grid columns; default {@code 2}.  Must be {@code >= 1}.
+	 *
+	 * <p>
+	 * The rendered count steps down with the width of the detail panel, so this is a cap rather than a fixed
+	 * count: a section declaring {@code 4} renders four columns only where the panel is wide enough for them,
+	 * and one column at the narrowest step.  The framework's ladder tops out at four, so a larger value renders
+	 * as four.
+	 */
 	public int columns = 2;
+
+	/**
+	 * How this section's fields arrange their label and value.  <jk>null</jk> means {@link FieldLayout#INLINE}.
+	 */
+	public FieldLayout layout;
+
+	/**
+	 * Optional count rendered after this section's tab label, as a distinct element.
+	 *
+	 * <p>
+	 * <jk>null</jk> renders no suffix; <c>0</c> renders, because "checked, none" is information rather than an
+	 * empty state.  Painted with {@code textContent} into its own element by the client strip builder, so it is
+	 * never folded into the section heading &mdash; a single-section detail renders no strip at all and would
+	 * otherwise read {@code "Suspensions (0)"} as its heading.
+	 *
+	 * <p>
+	 * Definition data, not payload: it never enters the expand-GET envelope.
+	 */
+	public Integer count;
 
 	/** The field slots, in display order. */
 	public List<DetailField> fields;
@@ -74,13 +101,37 @@ public class DetailSection {
 	}
 
 	/**
-	 * Sets the CSS-grid column count.
+	 * Sets the maximum CSS-grid column count.
 	 *
-	 * @param value The column count.  Must be {@code >= 1} (enforced by {@link RowDetailDef#validate(List)}).
+	 * @param value The column cap.  Must be {@code >= 1} (enforced by {@link RowDetailDef#validate(List)}).
+	 * 	Values above four render as four.
 	 * @return This object.
 	 */
 	public DetailSection columns(int value) {
 		columns = value;
+		return this;
+	}
+
+	/**
+	 * Sets how this section's fields arrange their label and value.
+	 *
+	 * @param value The arrangement.  May be <jk>null</jk> ({@link FieldLayout#INLINE}).
+	 * @return This object.
+	 */
+	public DetailSection layout(FieldLayout value) {
+		layout = value;
+		return this;
+	}
+
+	/**
+	 * Sets the optional count rendered after this section's tab label.
+	 *
+	 * @param value The count.  May be <jk>null</jk> (no suffix).  Numbers only &mdash; a general-purpose text
+	 * 	badge is a separate feature.
+	 * @return This object.
+	 */
+	public DetailSection count(Integer value) {
+		count = value;
 		return this;
 	}
 

@@ -137,11 +137,12 @@
 	 * Type steps.  A label-smaller-than-value pairing is expressed as the STEP PAIR (-font-size-1 for the
 	 * label, -font-size-3 for the value, 0.857x) rather than as a ratio token: no CSS property could consume a
 	 * ratio, and nothing would stop a surface setting two sizes that ignore it, whereas two named steps are the
-	 * only two values on offer.  The ratio is therefore provisional for as long as -font-size-3 is.
+	 * only two values on offer.  The pairing is now spent by the detail field, which fixes -font-size-3 and the
+	 * ratio with it; -font-size-2 is still waiting on its own first consumer.
 	 */
 	--jc-chrome-font-size-1: 0.75rem;
 	--jc-chrome-font-size-2: 0.8125rem;          /* PROVISIONAL - fixed when the detail action button first renders. */
-	--jc-chrome-font-size-3: 0.875rem;           /* PROVISIONAL - fixed when the detail field value first renders. */
+	--jc-chrome-font-size-3: 0.875rem;
 	--jc-chrome-line-height: 1.2;                /* PROVISIONAL - fixed with --jc-chrome-font-size-2. */
 	/*
 	 * Glyph sizes, one per role, stated once rather than repeated per selector.  These are chrome-wide glyph
@@ -150,6 +151,24 @@
 	 */
 	--jc-chrome-glyph-size: 16px;
 	--jc-chrome-glyph-size-small: 12px;
+}
+
+/*
+ * QUERY CONTAINERS - shared, and declared here beside the scale for the same reason the scale is: containment
+ * is a property of the shell a widget renders inside, not of the widget, and an @container block is silently
+ * wrong rather than broken when its container is not the element the author had in mind.  An unnamed
+ * @container condition resolves against the NEAREST ancestor with a container-type, so every such block below
+ * is asking about one of the elements named here.
+ *
+ * A later surface that needs containment ADDS ITS SELECTOR TO THIS LIST.  It does not re-declare
+ * container-type in its own rules (a second host between a query block and this one silently retargets the
+ * query), and it emphatically does not put container-type on :root - that makes the root element the container
+ * and turns every unnamed @container query in this file into a viewport media query wearing a different name,
+ * which is the exact signal the detail panel was chosen to avoid: the panel is nested in a table cell, so its
+ * width and the viewport's are unrelated.
+ */
+.juneau-view-detail-panel {
+	container-type: inline-size;
 }
 
 .jc-progress {
@@ -519,13 +538,25 @@ table.dataTable thead .sorting_desc_disabled:after {
 	padding: 0.5em 0.75em;
 }
 
+/*
+ * Header icon TILE, not a bare glyph: a square affordance sized to anchor the title rather than to match it.
+ * Shape only - the fill and the contrasting glyph colour are chrome.css's, and there is deliberately no
+ * per-RowDetailDef colour hook, which would be author-facing colour API this item is not adding.
+ */
 .juneau-view-detail-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	flex: 0 0 auto;
-	width: 1.25em;
-	height: 1.25em;
+	width: 2em;
+	height: 2em;
+	border-radius: 6px;
+}
+
+.juneau-view-detail-icon svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	fill: currentColor;
 }
 
 .juneau-view-detail-icon[hidden] {
@@ -547,29 +578,23 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Detail section tabs: instance-detail ribbon (light track, selected pill).
- * Overrides generic tab-mode folder tabs for this consumer only; toolbar/paging stay ribbon-mode.
- * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
+ * Detail section tabs deliberately have NO shape override here.  They are the generic tab-mode strip above,
+ * unmodified: one widget, one treatment.  The pill override that used to sit at this point re-rounded the
+ * corners the generic rules had just squared and removed the floor line they had just drawn, so the detail
+ * strip and the toolbar strip diverged for no reason an author could state, and every subsequent fix had to be
+ * written twice.  Deleting it is the whole of the fix - resist adding a replacement rule here, including a
+ * "small" one.  The only detail-tabs selector left in this file is the bar-slot host below, which positions a
+ * trailing region rather than repainting the strip.
  */
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
-	gap: var(--jc-space-1);
-	width: 100%;
-	margin: 0 0 0.75em;
-	padding: 0.25em;
-	border-bottom: none;
-}
 
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
-	margin-bottom: 0;
-	border-left: 1px solid;
-	border-right: 1px solid;
-	border-radius: 999px;
-}
-
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:first-child,
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:last-child,
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:only-child {
-	border-radius: 999px;
+/*
+ * Count suffix on a detail tab (DetailSection.count).  Not a strip repaint - it styles a child the client
+ * appends, and the strip itself is untouched.  The gap is a MARGIN on purpose: the tab button is inline-flex,
+ * so a leading space in the markup would be collapsed away and the tab would read "Suspensions(0)".
+ */
+.juneau-view-detail-tab-count {
+	margin-left: var(--jc-space-1);
+	font-size: var(--jc-chrome-font-size-1);
 }
 
 .juneau-sym-flip-x { transform: scaleX(-1); }
@@ -1030,17 +1055,121 @@ table.dataTable thead .sorting_desc_disabled:after {
 	margin: 0 0 0.75em;
 }
 
+/*
+ * FIELDS GRID.  "juneau-view-detail-fields-cols-N" names the AUTHOR'S CAP (DetailSection.columns), not the
+ * rendered count: the ladder below decides how many of those N columns a given panel width can afford, and a
+ * section always starts at one.  The count is a class rather than the inline grid-template-columns this file
+ * used to receive from ViewTable, because an inline style out-ranks every rule here - a 4-column section would
+ * stay 4 columns in a 320px panel and push horizontal overflow out through the host table.
+ *
+ * There is no per-section minimum column width, and there is no way to add one: a container query condition
+ * cannot read a var(), so a per-section threshold could only be produced by generating bespoke CSS per
+ * section, which is the inline-style pattern this rewrite exists to remove.  The narrowest a field column
+ * reaches is an OUTPUT of the steps below.
+ */
 .juneau-view-detail-fields {
 	display: grid;
-	gap: var(--jc-space-2) var(--jc-space-3);
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0 var(--jc-space-3);
 }
 
-.juneau-view-detail-field-title {
-	font-weight: 600;
+/*
+ * The ladder.  Queries are unnamed and therefore resolve against .juneau-view-detail-panel, the containment
+ * host declared beside the shared scale at the top of this file.  Each step names its own column count, which
+ * is what makes an integer span clampable at all (see the span rules below).
+ *
+ * ORDER IS LOAD-BEARING: a wide panel satisfies every min-width below it, so all three blocks apply at once
+ * and the LAST match wins at equal specificity.  Narrowest step first, widest last.  Reversing them silently
+ * pins every section to two columns at every width above 560px.
+ */
+@container (min-width: 560px) {
+	.juneau-view-detail-fields-cols-2,
+	.juneau-view-detail-fields-cols-3,
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-.juneau-view-detail-field-markdown {
+@container (min-width: 800px) {
+	.juneau-view-detail-fields-cols-3,
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@container (min-width: 1040px) {
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/*
+ * A span is a MAXIMUM too.  "1 / -1" is the only span value that is well-defined without knowing the rendered
+ * column count - it means first line to last line, so it resolves correctly at four columns and at one, where
+ * it is indistinguishable from no span at all.  A markdown field carries this class from the server rather
+ * than getting its own grid-column rule; two mechanisms doing one job in one stylesheet is how the detail-tabs
+ * override started.
+ */
+.juneau-view-detail-field-span-full {
 	grid-column: 1 / -1;
+}
+
+/*
+ * One field block.  Block padding gives the row its breathing room; INLINE padding is deliberately ZERO,
+ * because inline padding insets the block's bottom border along with it and the separator is required to span
+ * the full column width including the label half.
+ */
+.juneau-view-detail-field {
+	padding: var(--jc-space-1) 0;
+	border-bottom: 1px solid;    /* currentColor separator - themed by chrome.css */
+}
+
+/*
+ * INLINE (the default): label and value side by side.  The label track is capped rather than a bare
+ * percentage - at 40% alone a full-span field gives a one-word label a track over four times a normal one's.
+ * Top-aligned so a label that wraps to two lines does not drag the value's first line down with it.
+ */
+.juneau-view-detail-fields-inline > .juneau-view-detail-field {
+	display: grid;
+	grid-template-columns: minmax(0, min(40%, 12em)) minmax(0, 1fr);
+	align-items: start;
+	column-gap: var(--jc-space-3);
+}
+
+/* STACKED: label above value.  Also how a markdown field arranges itself under either layout - its value is a
+ * prose block, not a cell. */
+.juneau-view-detail-fields-stacked > .juneau-view-detail-field,
+.juneau-view-detail-fields-inline > .juneau-view-detail-field-markdown {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
+}
+
+/*
+ * Label / value typography.  The pairing is the shared scale's -font-size-1 and -font-size-3 steps rather than
+ * two private em values, and it INVERTS the old emphasis: the label used to be the heavier of the two, which
+ * made a panel read as a wall of bold keys.  overflow-wrap on both is not polish - a single unbreakable value
+ * (a URL, a fingerprint) otherwise blows the column out and propagates horizontal overflow through the panel
+ * to the host table.
+ */
+.juneau-view-detail-field-title {
+	font-size: var(--jc-chrome-font-size-1);
+	font-weight: 400;
+	overflow-wrap: anywhere;
+}
+
+.juneau-view-detail-field-value {
+	font-size: var(--jc-chrome-font-size-3);
+	overflow-wrap: anywhere;
+	/*
+	 * An empty value div contributes no line box, so an unset field would measure short and its separator
+	 * would ride up out of line with its filled siblings.  DERIVED from the two steps the value already
+	 * spends rather than declared as a new one.
+	 */
+	min-height: calc(var(--jc-chrome-line-height) * var(--jc-chrome-font-size-3));
+}
+
+/*
+ * Empty-value affordance.  Generated content rather than markup, because the value div is a client-filled
+ * slot: the runtime assigns textContent (the empty string for a missing key), so anything the framework places
+ * INSIDE the div is overwritten on the first paint.  ::after survives that by construction.
+ */
+.juneau-view-detail-field-value:empty::after {
+	content: "\2014";
 }
 
 .juneau-view-detail-markdown {

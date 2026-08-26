@@ -1818,7 +1818,27 @@
 			? sec.querySelector(".juneau-view-detail-section-title") : null;
 		const label = titleEl?.textContent || sid;
 		if (titleEl) titleEl.hidden = true;
-		return { id: sid, label: label, pane: sec };
+		// The server-declared count rides alongside the label rather than inside it - see paintDetailStripCounts.
+		// Read as a string and passed through untouched: "0" is a real count ("checked, none"), so the only value
+		// that means "no suffix" is the attribute being absent.
+		const count = sec.dataset.juneauDetailCount;
+		return { id: sid, label: label, pane: sec, count: count == null ? null : count };
+	}
+
+	// DETAIL-ONLY post-pass, deliberately a peer function (the same shape as relocateDetailBarSlot): the generic
+	// {id, label, pane} model has no room for a count, and it must not grow one - a count is a row-detail idea.
+	// Appending it to `label` instead would be worse than a leak: the builder paints label with textContent, so
+	// the count would land inside the button's single text node where CSS cannot reach it, and because the button
+	// is inline-flex a leading space before it collapses away and the tab reads "Suspensions(0)".  Hence a real
+	// child element, spaced by margin.
+	function paintDetailStripCounts(tabs, items) {
+		for (const [i, item] of items.entries()) {
+			if (item.count == null || !tabs[i]) continue;
+			const el = document.createElement("span");
+			el.className = "juneau-view-detail-tab-count";
+			el.textContent = item.count;
+			tabs[i].btn.appendChild(el);
+		}
 	}
 
 	function insertDetailStrip(panel, strip) {
@@ -1852,6 +1872,7 @@
 		});
 		const strip = built.strip;
 
+		paintDetailStripCounts(built.tabs, items);
 		insertDetailStrip(panel, strip);
 		// Detail-caller step, deliberately a peer function (see relocateDetailBarSlot): a server-painted bar-slot
 		// region must follow the ribbon that was just built out from under it.

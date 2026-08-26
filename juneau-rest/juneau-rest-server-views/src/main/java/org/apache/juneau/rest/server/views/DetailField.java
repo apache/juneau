@@ -93,6 +93,16 @@ public class DetailField {
 	public String href;
 
 	/**
+	 * How many of the section's grid columns this field occupies.  <jk>null</jk> means {@link FieldSpan#ONE}.
+	 *
+	 * <p>
+	 * A maximum, not a fixed width: it clamps as the grid steps down, and {@link FieldSpan#FULL} is identical to
+	 * {@link FieldSpan#ONE} at one column.  A {@link Format#MARKDOWN} field spans full width whether or not this
+	 * is set.
+	 */
+	public FieldSpan span;
+
+	/**
 	 * Creates a field bound to the specified expand-JSON key.
 	 *
 	 * @param data The {@code fields} map key.  Must not be <jk>null</jk> or blank.
@@ -159,6 +169,17 @@ public class DetailField {
 	 */
 	public DetailField href(String value) {
 		href = value;
+		return this;
+	}
+
+	/**
+	 * Sets how many of the section's grid columns this field occupies.
+	 *
+	 * @param value The span.  <jk>null</jk> means {@link FieldSpan#ONE}.
+	 * @return This object.
+	 */
+	public DetailField span(FieldSpan value) {
+		span = value;
 		return this;
 	}
 }

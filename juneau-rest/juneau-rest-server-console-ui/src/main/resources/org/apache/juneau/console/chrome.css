@@ -703,26 +703,15 @@ table.dataTable.display > tbody > tr:hover {
 	border-bottom-color: var(--jc-accent);
 }
 
-/* Detail-panel tabs: instance-detail look (light track, selected pill darker blue / white text).
-   Each var(--jc-*) is the entire value of a color/border-color/background-color property (sink-property discipline). */
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
-	background-color: var(--jc-accent-wash);
-	border-bottom-color: var(--jc-accent-wash);
-}
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
-	background-color: var(--jc-control-bg);
-	color: var(--jc-text-soft);
-	border-color: var(--jc-border);
-}
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:hover {
-	background-color: var(--jc-accent-wash);
-	color: var(--jc-accent);
-}
-.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
-	background-color: var(--jc-accent);
-	color: var(--jc-on-accent);
-	border-color: var(--jc-accent);
-}
+/* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
+   track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
+   instead of a tab strip, and it also doubled the accent band under the header's own wash.  The generic
+   tab-mode rules directly above already ship exactly the intended treatment, so the fix was to remove the
+   override, not to re-theme it: the correct diff for the detail strip adds ZERO declarations to this file.
+   Note in particular that the deleted hover rule was UNGUARDED - it out-specified the disabled-guarded generic
+   hover rule above and re-lit disabled tabs.  Deleting it is what fixes that; do not re-add a guarded copy
+   here, because the guard already exists once and a second copy is the duplication that produced this block in
+   the first place. */
 
 /* Detail-panel header bar (instance-detail header wash). */
 .juneau-view-detail-header {
@@ -731,6 +720,25 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-detail-header .juneau-view-detail-title {
 	color: var(--jc-text);
 }
+
+/* Header icon tile.  -views ships the square + radius; this is the fill and the contrasting glyph.  With the
+   tab track wash gone this is the panel's only solid accent, so it anchors the title rather than competing
+   with a second band.  There is no per-record-type variant: a colour hook on RowDetailDef would be
+   author-facing colour API, which the -views/-console split keeps out of the definition beans. */
+.juneau-view-detail-icon {
+	background-color: var(--jc-accent);
+	color: var(--jc-on-accent);
+}
+
+/* Field grid.  -views ships the separator as a currentColor border, which inherits near-black body text and
+   reads as a rule rather than a hairline; --jc-border is what makes it light.  The label/value pair carries
+   the inverted emphasis in colour as -views carries it in size and weight: muted key, full-strength value.
+   The em-dash on an unset value is generated content in -views and is muted here so it reads as "known,
+   unset" rather than as a value someone typed. */
+.juneau-view-detail-field { border-bottom-color: var(--jc-border); }
+.juneau-view-detail-field-title { color: var(--jc-text-muted); }
+.juneau-view-detail-field-value { color: var(--jc-text); }
+.juneau-view-detail-field-value:empty::after { color: var(--jc-text-muted); }
 
 /* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
 .juneau-view-detail-th,

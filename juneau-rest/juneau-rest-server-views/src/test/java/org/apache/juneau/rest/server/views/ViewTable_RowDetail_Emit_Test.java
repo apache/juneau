@@ -115,9 +115,35 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertTrue(expanderAt >= 0 && idTitleAt > expanderAt, html);
 	}
 
-	@Test void a06_gridTemplateColumns_fromValidatedColumns() {
+	/**
+	 * The validated column count reaches the grid as a CLASS, not as an inline
+	 * {@code grid-template-columns}.  The inline style this used to assert is what made the count fixed: it
+	 * out-ranks every rule in {@code juneau-views.css}, so a container query could never step the grid down and
+	 * a wide section stayed wide inside a narrow panel.  The class names the author's cap; the stylesheet's
+	 * {@code @container} ladder decides how many of those columns a given panel width can afford.
+	 */
+	@Test void a06_gridColumnCap_fromValidatedColumns_isAClassNotAnInlineStyle() {
 		var html = Html.of(ViewTable.of(view()));
-		assertTrue(html.contains("grid-template-columns:repeat(2,minmax(0,1fr))"), html);
+		assertTrue(html.contains("juneau-view-detail-fields-cols-2"), html);
+		assertFalse(html.contains("grid-template-columns"), html);
+		// INLINE is the default arrangement and is stamped explicitly rather than left as an absent class, so the
+		// two arrangements are symmetric in the stylesheet.
+		assertTrue(html.contains("juneau-view-detail-fields-inline"), html);
+		// The cap is clamped to the widest step the ladder declares, so an over-large author value cannot emit a
+		// class with no rule behind it.
+		var wide = Html.of(ViewTable.of(ViewDef.create("wide")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id").title("Id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("s", "S")
+					.columns(9)
+					.layout(FieldLayout.STACKED)
+					.fields(DetailField.of("a").title("A"))))
+			.build()));
+		assertTrue(wide.contains("juneau-view-detail-fields-cols-4"), wide);
+		assertTrue(wide.contains("juneau-view-detail-fields-stacked"), wide);
 	}
 
 	@Test void a07_pageTable_alsoEmitsChildTemplate() {

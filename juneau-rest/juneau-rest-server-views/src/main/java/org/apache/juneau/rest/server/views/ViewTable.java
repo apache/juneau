@@ -277,6 +277,15 @@ public class ViewTable {
 	/** Attribute carrying {@link NestedTableDef#parentScopeParam} on the nested-table wrapper. */
 	public static final String NESTED_SCOPE_PARAM_ATTR = "data-juneau-nested-scope-param";
 
+	/**
+	 * Attribute carrying a {@link DetailSection#count} on a detail {@code <section>}.  Omitted when the count is
+	 * <jk>null</jk>, so a section that declares none serializes exactly as it did before.
+	 */
+	private static final String DETAIL_COUNT_ATTR = "data-juneau-detail-count";
+
+	/** The widest step of the fields-grid column ladder in {@code juneau-views.css}. */
+	private static final int DETAIL_MAX_COLUMNS = 4;
+
 	/** MIME type of the VIEW_META/bulk-actions/nested-VIEW_META sidecars. */
 	private static final String JSON_CONTENT_TYPE = "application/json";
 
@@ -875,20 +884,34 @@ public class ViewTable {
 		kids.add(buildFieldsGrid(s));
 		if (s.table != null)
 			kids.add(emitNestedTable(s.table, csrfToken));
-		return section(kids.toArray())
+		var out = section(kids.toArray())
 			.attr(DETAIL_SECTION_ATTR, s.id)
 			.class_("juneau-view-detail-section");
+		if (s.count != null)
+			out.attr(DETAIL_COUNT_ATTR, s.count.toString());
+		return out;
 	}
 
-	/** Builds a section's fields grid: one empty field slot per {@link DetailSection#fields} entry. */
+	/**
+	 * Builds a section's fields grid: one empty field slot per {@link DetailSection#fields} entry.
+	 *
+	 * <p>
+	 * The column count is a class rather than an inline {@code grid-template-columns}, because an inline style
+	 * cannot be stepped down by a container query &mdash; it out-ranks every rule in the stylesheet, so a
+	 * three-column section declared here would stay three columns in a 320px-wide panel.  The class names the
+	 * author's <b>cap</b>; {@code juneau-views.css} decides how many of those columns a given panel width can
+	 * actually afford.  The ladder tops out at {@value #DETAIL_MAX_COLUMNS}.
+	 */
 	private static Div buildFieldsGrid(DetailSection s) {
 		var fieldSlots = new ArrayList<>();
 		if (s.fields != null)
 			for (var f : s.fields)
 				fieldSlots.add(emitDetailField(f));
+		var cols = Math.min(Math.max(s.columns, 1), DETAIL_MAX_COLUMNS);
+		var layout = s.layout == FieldLayout.STACKED ? "stacked" : "inline";
 		return div(fieldSlots.toArray())
-			.class_("juneau-view-detail-fields")
-			.attr("style", "grid-template-columns:repeat(" + s.columns + ",minmax(0,1fr))");
+			.class_("juneau-view-detail-fields juneau-view-detail-fields-" + layout
+				+ " juneau-view-detail-fields-cols-" + cols);
 	}
 
 	/** Whether an {@link ActionBar} has at least one item to render (a <jk>null</jk> bar has none). */
@@ -997,9 +1020,17 @@ public class ViewTable {
 		}
 	}
 
+	/**
+	 * Builds one empty field slot: a title div plus a value div, whatever the section's {@link FieldLayout} is
+	 * &mdash; the arrangement is a property of the grid, so it is styled from the grid's class rather than
+	 * changing the shape emitted here.
+	 */
 	private static Div emitDetailField(DetailField f) {
 		var rendered = f.render != null;
 		var markdown = !rendered && f.format == DetailField.Format.MARKDOWN;
+		// A markdown field spans by default rather than by a parallel hardcoded CSS rule that happens to do the
+		// same thing by a different route -- one mechanism, one job.
+		var span = markdown || f.span == FieldSpan.FULL ? " juneau-view-detail-field-span-full" : "";
 		var valueSlot = div().attr(DETAIL_FIELD_ATTR, f.data);
 		if (rendered) {
 			valueSlot.attr(DETAIL_FIELD_RENDER_ATTR, f.render.id);
@@ -1016,12 +1047,12 @@ public class ViewTable {
 		}
 		var hideTitle = markdown && f.title != null && f.title.isEmpty();
 		if (hideTitle)
-			return div(valueSlot).class_("juneau-view-detail-field juneau-view-detail-field-markdown");
+			return div(valueSlot).class_("juneau-view-detail-field juneau-view-detail-field-markdown" + span);
 		var label = f.title == null || f.title.isBlank() ? f.data : f.title;
 		return div(
 			div(label).class_("juneau-view-detail-field-title"),
 			valueSlot
-		).class_(markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field");
+		).class_((markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field") + span);
 	}
 
 	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {
