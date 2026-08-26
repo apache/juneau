@@ -48,8 +48,8 @@ import java.util.regex.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	Theme <jv>salesforce</jv> = Theme.<jsm>create</jsm>(<js>"salesforce"</js>)
- * 		.token(<js>"--jc-font"</js>, <js>"'Salesforce Sans', Inter, sans-serif"</js>)
+ * 	Theme <jv>corporate</jv> = Theme.<jsm>create</jsm>(<js>"corporate"</js>)
+ * 		.token(<js>"--jc-font"</js>, <js>"'Source Sans 3', Inter, sans-serif"</js>)
  * 		.token(<js>"--jc-accent"</js>, <js>"#1589EE"</js>)
  * 		.build();
  * </p>

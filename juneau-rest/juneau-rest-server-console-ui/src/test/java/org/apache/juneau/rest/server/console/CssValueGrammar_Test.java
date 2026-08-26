@@ -130,7 +130,7 @@ class CssValueGrammar_Test extends TestBase {
 		"currentColor",
 		"26px 26px",
 		"0.25rem",
-		"'Salesforce Sans', Inter, system-ui, sans-serif",
+		"'Source Sans 3', Inter, system-ui, sans-serif",
 		"linear-gradient(180deg, #b0c4df 0%, #f5f6f9 100%)",
 	})
 	void a07_positives_acceptedVerbatim(String value) {

@@ -51,7 +51,7 @@ class CssValueEscaper_Test extends TestBase {
 	@ValueSource(strings = {
 		"linear-gradient(180deg, #eef3f8, #dde6ef)",
 		"#1589EE",
-		"'Salesforce Sans', Inter, sans-serif",
+		"'Source Sans 3', Inter, sans-serif",
 	})
 	void a03_legitimateValues_passThroughByteForByte(String value) {
 		assertEquals(value, CssValueEscaper.escape(value));
