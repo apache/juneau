@@ -46,9 +46,14 @@ Checks performed (each file may accumulate multiple flags):
                                  the majority of files once the trackers settled on descriptive prose
                                  instead of that enumerated set -- an enumeration is exactly what rots.)
   - ready_but_has_open_questions
-                                 Status starts with "Ready to execute" but the file still has a
-                                 "## Open questions" section containing at least one numbered item
-                                 whose text doesn't look answered/resolved.
+                                 The file declares itself ready -- either by its READY-*.md filename
+                                 prefix or by a status starting with "Ready to execute" -- but still
+                                 has a "## Open questions" section containing at least one numbered
+                                 item whose text doesn't look answered/resolved. The filename prefix
+                                 counts on its own because it, not the status prose, is the board's
+                                 structural declaration that nothing is left open; keying the check
+                                 to the phrase alone let a READY- file hide unresolved questions
+                                 behind different opening words.
   - ready_but_wave_already_accepted
                                  Status starts with "Ready to execute" and the file's header region
                                  (everything before the first "## " heading) declares membership in a
@@ -191,7 +196,10 @@ absent (no board file, no wave reference, or a status that isn't a pre-kickoff c
      merely mention another wave's members ("must be serialized against ...") reference the wave
      deep in the body and are not flagged.
   3. The item's status still starts with "Ready to execute" (the same narrow, already-documented
-     prefix the ready_but_has_open_questions check uses) -- i.e. it still claims not to have run.
+     READY_TO_EXECUTE_PREFIX phrase) -- i.e. it still claims not to have run. Unlike
+     ready_but_has_open_questions, this check is NOT widened to the READY- filename prefix: what it
+     needs is the item's own live claim that it has not yet run, and the filename outlives that
+     claim (a READY- file whose status has moved on to "Done." has run).
 
 Declared counts (counts_* checks)
 --------------------------------
@@ -944,12 +952,26 @@ def _flag_status_placement(text: str, status_match: "re.Match", flags: list) -> 
 
 
 def _flag_open_questions_if_ready(prefix: str, normalized_status: str, text: str, flags: list) -> None:
-    """Appends ready_but_has_open_questions if a Ready-to-execute file still has an unresolved '## Open questions'."""
-    if prefix not in ("TODO", "READY") or not normalized_status.startswith(READY_TO_EXECUTE_PREFIX):
+    """Appends ready_but_has_open_questions if a file that declares itself ready -- by READY- filename
+    prefix or by status wording -- still has an unresolved '## Open questions'."""
+    if prefix not in ("TODO", "READY"):
+        return
+    # Union of the two declarations, not the status phrase alone. The READY- prefix IS the board's
+    # structural declaration that an item has no unresolved open questions left (see the prefix table
+    # above), so gating on the prose phrase instead made the check dodgeable by wording: a READY- file
+    # whose status opens with anything else ("In progress -- ...", "No open decision blocks this item.")
+    # carried its unresolved questions straight past this check. The phrase condition is kept so an item
+    # that declares readiness in prose without the rename is still gated.
+    declares_ready = prefix == "READY" or normalized_status.startswith(READY_TO_EXECUTE_PREFIX)
+    if not declares_ready:
         return
     oq_section = extract_section(text, "Open questions")
     if oq_section is not None and open_questions_are_unresolved(oq_section):
-        flags.append(("ready_but_has_open_questions", "Status says 'Ready to execute' but '## Open questions' still has unresolved item(s)."))
+        flags.append((
+            "ready_but_has_open_questions",
+            "File declares itself ready (READY- filename prefix, or a 'Ready to execute' status) but "
+            "'## Open questions' still has unresolved item(s).",
+        ))
 
 
 def _flag_ready_but_wave_accepted(prefix: str, normalized_status: str, text: str, closed_waves: frozenset, flags: list) -> None:
