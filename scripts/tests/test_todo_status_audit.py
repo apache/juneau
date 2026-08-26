@@ -343,6 +343,52 @@ class TestLifecycleMismatchChecks:
 
         assert "ready_but_has_open_questions" not in flags
 
+    def test_ready_prefix_with_non_conforming_status_and_open_questions_is_flagged(self, audit_module, next_id_module, tmp_path):
+        """The regression the READY- filename condition exists for. While the gate keyed off the status
+        phrase alone, a READY-*.md file whose status opened with any other words skipped the check
+        entirely, so its unresolved questions rode along invisibly under the READY- name -- the real
+        corpus carried eight of them that way behind an opening "No open decision blocks this item."."""
+        path = tmp_path / _plan_filename(next_id_module, "READY", 1)
+        body = "## Open questions\n\n1. Should this use approach A or B?\n"
+        _write_plan(path, status="No open decision blocks this item.", body=body)
+
+        flags = {code for code, _ in audit_module.audit_file(path)}
+
+        assert "ready_but_has_open_questions" in flags
+
+    def test_ready_prefix_with_non_conforming_status_and_resolved_questions_is_not_flagged(self, audit_module, next_id_module, tmp_path):
+        """The READY- prefix makes the check APPLY, it doesn't presume the answer: the file reaches the
+        resolved/unresolved test, which then finds nothing open."""
+        path = tmp_path / _plan_filename(next_id_module, "READY", 1)
+        body = "## Open questions\n\n1. Should this use approach A or B? Resolved: approach A.\n"
+        _write_plan(path, status="In progress -- step 2 of 6 outstanding.", body=body)
+
+        flags = {code for code, _ in audit_module.audit_file(path)}
+
+        assert "ready_but_has_open_questions" not in flags
+
+    def test_non_ready_prefix_with_ready_status_and_open_questions_is_still_flagged(self, audit_module, next_id_module, tmp_path):
+        """The filename condition is a UNION with the status-phrase condition, not a replacement: an
+        item that declares readiness in prose without the rename stays gated."""
+        path = tmp_path / _plan_filename(next_id_module, "TODO", 1)
+        body = "## Open questions\n\n1. Should this use approach A or B?\n"
+        _write_plan(path, status="Ready to execute.", body=body)
+
+        flags = {code for code, _ in audit_module.audit_file(path)}
+
+        assert "ready_but_has_open_questions" in flags
+
+    def test_non_ready_prefix_with_ordinary_status_and_open_questions_is_not_flagged(self, audit_module, next_id_module, tmp_path):
+        """The union widened the gate to READY- names, not to every file. An item claiming neither form
+        of readiness is still allowed to hold open questions -- that is what the section is for."""
+        path = tmp_path / _plan_filename(next_id_module, "TODO", 1)
+        body = "## Open questions\n\n1. Should this use approach A or B?\n"
+        _write_plan(path, status="Not yet started.", body=body)
+
+        flags = {code for code, _ in audit_module.audit_file(path)}
+
+        assert "ready_but_has_open_questions" not in flags
+
     def test_need_input_prefix_is_exempt_from_lifecycle_mismatch_checks(self, audit_module, next_id_module, tmp_path):
         """NEED_INPUT files are scanned (structural checks apply) but deliberately not
         subject to the TODO/READY-specific Parked-/On-hold-prefix-mismatch checks."""
