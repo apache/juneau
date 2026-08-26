@@ -680,8 +680,8 @@ table.dataTable.display > tbody > tr:hover {
    inherits the body's near-black text color instead of a subtle gray; themed here with --jc-border, plus a
    white face so a button reads as a distinct control against the card's tinted background. */
 .juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
-.juneau-view-ribbon-btn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
-.juneau-view-ribbon-btn:active { background-color: var(--jc-accent); color: var(--jc-on-accent); }
+.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
 /* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
    neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
@@ -744,8 +744,8 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-border); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
-.juneau-view-pagingpill-menubtn:hover,
-.juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 .juneau-view-pagingpill-menu { border-color: var(--jc-border); background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-menu-option:hover,
 .juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
