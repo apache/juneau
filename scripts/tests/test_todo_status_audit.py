@@ -912,6 +912,14 @@ class TestDeclaredCountsGrammar:
             "  `console:matches:../outside/*.java:foo` = 1",
             "  `console:matches::foo` = 1",
             "  `console:matches:src/**/*.java:[unclosed` = 1",
+            # Operator forms that are NOT the two supported ones. Listed because a near-miss operator
+            # is the likeliest way to write a floor wrong, and tolerating any of them would mean
+            # guessing which comparison the author meant.
+            "  `console:matches:src/**/*.java:foo` >= twelve",
+            "  `console:matches:src/**/*.java:foo` > 5",
+            "  `console:matches:src/**/*.java:foo` <= 5",
+            "  `console:matches:src/**/*.java:foo` => 5",
+            "  `console:matches:src/**/*.java:foo` >= 5 or so",
         ],
     )
     def test_malformed_values_are_reported_as_malformed(self, audit_module, value):
@@ -933,6 +941,43 @@ class TestDeclaredCountsGrammar:
         _, detail = audit_module.parse_counts_value("  `nosuchrepo:paths:x/*.md` = 1")
         for token in ["board", *audit_module.REPO_TOKENS]:
             assert token in detail
+
+    def test_floor_form_parses_and_records_its_operator(self, audit_module):
+        """`>=` declares an invariant: "must never drop below N". Equality over a population that
+        can legitimately grow flags on benign growth, which invites correcting the number -- and
+        correcting an invariant is how a guard gets deleted."""
+        outcome, claim = audit_module.parse_counts_value(r"  `juneau:matches:src/**/*.java:foo\(` >= 36")
+        assert outcome == "claim"
+        assert (claim.operator, claim.expected, claim.is_floor) == (">=", 36, True)
+
+    def test_equality_is_the_default_and_is_not_a_floor(self, audit_module):
+        _, claim = audit_module.parse_counts_value(r"  `juneau:matches:src/**/*.java:foo\(` = 36")
+        assert (claim.operator, claim.is_floor) == ("=", False)
+
+    def test_floor_of_zero_is_refused(self, audit_module):
+        """The one decorative floor catchable without inventing a slack threshold: `>= 0` holds for
+        every possible derivation, so it looks like a guard while asserting nothing. Refused for the
+        same reason `paths ... = 0` is."""
+        outcome, detail = audit_module.parse_counts_value("  `juneau:matches:src/**/*.java:foo` >= 0")
+        assert outcome == "malformed"
+        assert "asserts nothing" in detail
+
+    def test_equality_may_still_declare_zero(self, audit_module):
+        """Refusing `>= 0` must not take `= 0` with it -- "no call sites remain" is a real claim."""
+        assert audit_module.parse_counts_value("  `juneau:matches:src/**/*.java:foo` = 0")[0] == "claim"
+
+    def test_rendered_shows_the_operator_actually_applied(self, audit_module):
+        """A detail message that printed `= 36` for a claim evaluated as a floor would be unactionable
+        in exactly the case where the operator response depends on knowing which it was."""
+        _, floor = audit_module.parse_counts_value("  `juneau:paths:src/*.java` >= 2")
+        _, exact = audit_module.parse_counts_value("  `juneau:paths:src/*.java` = 2")
+        assert floor.rendered().endswith(">= 2")
+        assert exact.rendered().endswith("= 2") and ">=" not in exact.rendered()
+
+    def test_malformed_detail_mentions_the_floor_form(self, audit_module):
+        """An author who wrote the operator wrong has to be told the floor form exists."""
+        _, detail = audit_module.parse_counts_value("  ten call sites")
+        assert ">=" in detail
 
 
 class TestGlobToRegex:
@@ -1178,6 +1223,60 @@ class TestDeclaredCountsFlags:
         resolver = audit_module.CountsResolver({"juneau": str(repo)})
         lines = ["Counts:  `juneau:matches:renamed/**/*.java:foo` = 0"]
         assert self._flags(audit_module, tmp_path, next_id_module, lines, resolver) == {"counts_scope_empty"}
+
+    def test_floor_that_holds_flags_nothing(self, audit_module, next_id_module, tmp_path):
+        repo = _make_repo(tmp_path / "repo", {"src/A.java": "foo()\nfoo()\n"})
+        resolver = audit_module.CountsResolver({"juneau": str(repo)})
+        lines = [r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` >= 2"]
+        assert self._flags(audit_module, tmp_path, next_id_module, lines, resolver) == set()
+
+    def test_floor_breached_by_a_decrease_is_flagged(self, audit_module, next_id_module, tmp_path):
+        """The regression a floor exists to catch: the population shrank."""
+        repo = _make_repo(tmp_path / "repo", {"src/A.java": "foo()\n"})
+        resolver = audit_module.CountsResolver({"juneau": str(repo)})
+        lines = [r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` >= 2"]
+        assert self._flags(audit_module, tmp_path, next_id_module, lines, resolver) == {"counts_below_floor"}
+
+    def test_growth_above_a_floor_stays_green_where_equality_goes_red(self, audit_module, next_id_module, tmp_path):
+        """The whole point of the operator, asserted as a contrast rather than two separate tests:
+        identical source, identical pattern, and the only difference is `>=` versus `=`. The floor
+        passes because nothing was lost; the equality form flags because the number moved. Under the
+        equality-only grammar this benign growth is what invited an operator to 'correct' an
+        invariant."""
+        repo = _make_repo(tmp_path / "repo", {"src/A.java": "foo()\nfoo()\nfoo()\nfoo()\nfoo()\n"})
+        resolver = audit_module.CountsResolver({"juneau": str(repo)})
+        floor = [r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` >= 2"]
+        exact = [r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` = 2"]
+        assert self._flags(audit_module, tmp_path, next_id_module, floor, resolver) == set()
+        assert self._flags(audit_module, tmp_path, next_id_module, exact, resolver) == {"counts_mismatch"}
+
+    def test_empty_scope_under_a_floor_is_scope_empty_not_a_breach(self, audit_module, next_id_module, tmp_path):
+        """A rotted pathspec derives 0, which is below any floor -- so without the ordering in
+        _flag_declared_counts it would be reported as a regression and send the operator hunting in
+        code that is fine. It must be neither a breach nor a pass."""
+        repo = _make_repo(tmp_path / "repo", {"src/A.java": "foo()\nfoo()\n"})
+        resolver = audit_module.CountsResolver({"juneau": str(repo)})
+        lines = ["Counts:  `juneau:matches:renamed/**/*.java:foo` >= 2"]
+        assert self._flags(audit_module, tmp_path, next_id_module, lines, resolver) == {"counts_scope_empty"}
+
+    def test_breach_and_mismatch_details_are_distinguishable(self, audit_module, next_id_module, tmp_path):
+        """The operator response differs -- investigate a regression versus possibly re-baseline -- so
+        the two details must not read alike."""
+        repo = _make_repo(tmp_path / "repo", {"src/A.java": "foo()\n"})
+        resolver = audit_module.CountsResolver({"juneau": str(repo)})
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir(exist_ok=True)
+
+        floor_path = todo_dir / _plan_filename(next_id_module, "TODO", 3, name="floored")
+        _write_plan(floor_path, status="In progress.", source=r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` >= 4", body="## Goal\n\nx\n")
+        breach = dict(audit_module.audit_file(floor_path, frozenset(), resolver))["counts_below_floor"]
+
+        exact_path = todo_dir / _plan_filename(next_id_module, "TODO", 4, name="exact")
+        _write_plan(exact_path, status="In progress.", source=r"Counts:  `juneau:matches:src/**/*.java:foo\(\)` = 4", body="## Goal\n\nx\n")
+        mismatch = dict(audit_module.audit_file(exact_path, frozenset(), resolver))["counts_mismatch"]
+
+        assert ">= 4" in breach and "BREACHED" in breach and "Do NOT lower" in breach
+        assert "= 4" in mismatch and "BREACHED" not in mismatch and "floor" not in mismatch
 
     def test_unreachable_repo_is_flagged_as_unverifiable(self, audit_module, next_id_module, tmp_path):
         resolver = audit_module.CountsResolver({"juneau": str(tmp_path / "absent")})

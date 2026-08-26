@@ -76,7 +76,13 @@ Checks performed (each file may accumulate multiple flags):
                                  Kept distinct from an absent line for the same reason the Key-symbols
                                  tri-state is: "the author wrote nothing" and "the author wrote something
                                  that did not parse" are different facts.
-  - counts_mismatch             A declared count does not equal the count re-derived from source THIS RUN.
+  - counts_mismatch             A declared count written with '=' does not equal the count re-derived
+                                 from source THIS RUN. Often routine re-baselining: an '=' declaration is
+                                 usually a BASELINE, and the item's own work is what changed the number.
+  - counts_below_floor          A declared count written with '>=' re-derived BELOW its floor. Kept
+                                 distinct from counts_mismatch because the operator response differs: a
+                                 floor breach is a regression to investigate and never a number to
+                                 correct, where an equality mismatch frequently is exactly that.
   - counts_scope_empty          A declared count's pathspec resolves to ZERO files, so the declaration is
                                  no longer anchored to anything and its number cannot be tested. Flagged
                                  loudly rather than passing vacuously -- this is the specific defence
@@ -203,8 +209,13 @@ its new symbols, and the audit does the counting. A declaration is a `Counts:` h
 
     Counts:  `console:files:src/main/java/**/rest/**/*.java:requiredConfirmation\(|armPhrase\(` = 10
 
-read as "<repo token>:<kind>:<pathspec>[:<regex>] = <expected integer>". The field may repeat, one
-declaration per line; the literal value `None.` declares "nothing here is mechanically countable".
+read as "<repo token>:<kind>:<pathspec>[:<regex>] <op> <expected integer>", where <op> is `=` or
+`>=`. Equality is the default and is the right shape for a BASELINE -- a fact about the state before
+the item's work, which the item exists to change. `>=` declares a FLOOR ("this must never drop below
+N'"), which is what an INVARIANT actually means. The floor form exists because an equality test over a
+growable population is actively harmful: benign growth flags, and the operator is then invited to
+"correct" the number, which is how a regression guard gets deleted by accident. The field may repeat,
+one declaration per line; the literal value `None.` declares "nothing here is mechanically countable".
 Kinds: `matches` (total regex occurrences), `files` (files with at least one occurrence), `paths`
 (files matching the pathspec, no regex). Repo tokens: the three tracker repos plus `board` for
 ~/Project Work itself. Full grammar and rationale: the "Declared counts" section of @todo-and-waves.
@@ -227,6 +238,16 @@ designed against -- a declaration nobody re-checks is no better than the sentenc
      instead of guessing which one it is.
   3. The grammar is strict, so a half-edited declaration becomes counts_malformed rather than being
      skipped. A line that no longer parses is reported, never quietly ignored.
+
+DELIBERATE NON-GOAL: a floor set far below reality is NOT detected. `>= 1` over a population of 500
+never fails, and nothing here reports that. Detecting it would need a threshold on how much slack is
+legitimate, and any such threshold recreates the exact failure the floor form was added to remove --
+it would flag populations that had merely grown, and invite raising the floor to match reality, which
+is re-baselining a guard. The one unambiguous case IS refused: `>= 0` is rejected at parse time,
+because it holds for every possible derivation and so asserts nothing. Past that, a floor's slack is
+a judgment the author makes and the audit does not second-guess it. What still protects a floor is
+property 2 above: a pathspec that has rotted to zero matches is counts_scope_empty -- never a pass,
+and never the misreading "well, 0 is below the floor, so it fails as a regression".
 
 Counts resolve against COMMITTED CONTENT (`HEAD`) in the named repo, never the working tree. Two
 reasons, one of them paid for the hard way: a plan file citing working-tree-only files (three .py
@@ -401,10 +422,12 @@ COUNTS_LINE_RE = re.compile(r"^\s*Counts:(.*)$", re.IGNORECASE | re.MULTILINE)
 # convention, one way to say "nothing", so a reader never has to learn a second spelling.
 COUNTS_NONE_VALUE = "none."
 
-# `<descriptor>` = <integer>, and nothing else on the line. Strict on purpose: a trailing human
+# `<descriptor>` <op> <integer>, and nothing else on the line. Strict on purpose: a trailing human
 # label or a second claim on the same line would have to be tolerated by ignoring text, and
 # ignoring text is how a half-edited declaration passes. Anything unparseable is counts_malformed.
-COUNT_CLAIM_RE = re.compile(r"^`([^`]+)`\s*=\s*(\d+)$")
+# '>=' is listed before '=' in the alternation so the two-character operator is never read as a
+# bare '=' with a stray '>' in front of it.
+COUNT_CLAIM_RE = re.compile(r"^`([^`]+)`\s*(>=|=)\s*(\d+)$")
 
 # matches = total regex occurrences; files = files with at least one occurrence; paths = files
 # matching the pathspec (no regex). These three are not a guess at what items might want to count:
@@ -442,6 +465,13 @@ SELF_REPO_ROOT = Path(__file__).resolve().parent.parent
 
 GIT_TIMEOUT_SECONDS = 60
 
+# The two comparison forms. '=' is the default and the right shape for a baseline; '>=' declares a
+# floor, which is what an invariant means. Two operators rather than a separate `kind` because the
+# thing being counted is unchanged -- only the assertion about the number differs.
+COUNT_OP_EQ = "="
+COUNT_OP_FLOOR = ">="
+COUNT_OPS = (COUNT_OP_EQ, COUNT_OP_FLOOR)
+
 # Derivation outcomes, distinguished for the same reason the tri-state is: a number that could not
 # be derived must never be reported as a number that matched.
 COUNT_OK = "ok"
@@ -450,15 +480,29 @@ COUNT_UNVERIFIABLE = "unverifiable"
 
 
 class CountClaim:
-    """One parsed `Counts:` declaration: what to count, where, and the expected total."""
+    """One parsed `Counts:` declaration: what to count, where, the operator, and the expected total."""
 
-    def __init__(self, repo: str, kind: str, pathspec: str, pattern: "re.Pattern | None", expected: int, descriptor: str):
+    def __init__(self, repo: str, kind: str, pathspec: str, pattern: "re.Pattern | None", expected: int, descriptor: str, operator: str = COUNT_OP_EQ):
         self.repo = repo
         self.kind = kind
         self.pathspec = pathspec
         self.pattern = pattern
         self.expected = expected
         self.descriptor = descriptor
+        self.operator = operator
+
+    @property
+    def is_floor(self) -> bool:
+        return self.operator == COUNT_OP_FLOOR
+
+    def rendered(self) -> str:
+        """The declaration as the author wrote it, for every flag detail.
+
+        Built from the parsed parts rather than the raw line so a detail message can never show an
+        operator the checker did not actually apply -- reporting '= 36' for a claim evaluated as a
+        floor would make the flag unactionable in the one case where the response depends on it.
+        """
+        return f"`{self.descriptor}` {self.operator} {self.expected}"
 
 
 def glob_to_regex(pathspec: str) -> "re.Pattern":
@@ -517,9 +561,9 @@ def parse_counts_value(value: str) -> tuple:
 
     claim_match = COUNT_CLAIM_RE.match(stripped)
     if claim_match is None:
-        return ("malformed", f"expected `<repo>:<kind>:<pathspec>[:<regex>]` = <integer>, got: {stripped}")
+        return ("malformed", f"expected `<repo>:<kind>:<pathspec>[:<regex>]` = <integer> (or >= <integer> for a floor), got: {stripped}")
 
-    descriptor, expected = claim_match.group(1), int(claim_match.group(2))
+    descriptor, operator, expected = claim_match.group(1), claim_match.group(2), int(claim_match.group(3))
     # maxsplit=3 so a regex containing ':' stays intact; the pathspec therefore may not contain one,
     # which also excludes git's magic-pathspec syntax (":(glob)...") -- documented, not accidental.
     fields = descriptor.split(":", 3)
@@ -556,7 +600,13 @@ def parse_counts_value(value: str) -> tuple:
         except re.error as exc:
             return ("malformed", f"regex does not compile ({exc}): {pattern_source}")
 
-    return ("claim", CountClaim(repo, kind, pathspec, pattern, expected, descriptor))
+    # A floor of 0 holds for every possible derivation, so it asserts nothing while looking like a
+    # guard -- the one decorative-floor case that can be caught without inventing a slack threshold
+    # (see the module docstring's DELIBERATE NON-GOAL). Refused for the same reason `paths ... = 0` is.
+    if operator == COUNT_OP_FLOOR and expected == 0:
+        return ("malformed", "a floor of 0 asserts nothing -- every derivation satisfies `>= 0`. Declare the floor you actually mean, or use '=' if the claim is that the count is exactly 0.")
+
+    return ("claim", CountClaim(repo, kind, pathspec, pattern, expected, descriptor, operator))
 
 
 class CountsResolver:
@@ -946,7 +996,8 @@ def _flag_status_prefix_transitions(prefix: str, status: str, normalized_status:
 
 def _flag_declared_counts(text: str, counts_resolver: "CountsResolver | None", flags: list) -> None:
     """
-    Appends counts_malformed / counts_mismatch / counts_scope_empty / counts_unverifiable.
+    Appends counts_malformed / counts_mismatch / counts_below_floor / counts_scope_empty /
+    counts_unverifiable.
 
     An ABSENT `Counts:` line produces nothing, which is the whole reason this check can be turned on
     over an existing corpus: a file that makes no declaration is making no claim. Grammar errors are
@@ -967,19 +1018,31 @@ def _flag_declared_counts(text: str, counts_resolver: "CountsResolver | None", f
         if derived_outcome == COUNT_UNVERIFIABLE:
             flags.append((
                 "counts_unverifiable",
-                f"declared count `{parsed.descriptor}` = {parsed.expected} could not be re-derived: {detail}. "
+                f"declared count {parsed.rendered()} could not be re-derived: {detail}. "
                 f"An unverified count is not a verified one -- fix the repo token/path, or pass --repo-root.",
             ))
         elif derived_outcome == COUNT_SCOPE_EMPTY:
+            # Checked BEFORE either comparison, and that ordering is load-bearing for floors: a
+            # pathspec that has rotted to nothing would otherwise derive 0 and be reported as a floor
+            # breach, sending the operator to hunt a regression in code that is fine. An unanchored
+            # declaration is its own failure whichever operator it was written with.
             flags.append((
                 "counts_scope_empty",
-                f"declared count `{parsed.descriptor}` = {parsed.expected} is no longer anchored: {detail} "
+                f"declared count {parsed.rendered()} is no longer anchored: {detail} "
                 f"at {COUNTS_REV}. The number cannot be tested, so it is flagged rather than passed.",
             ))
+        elif parsed.is_floor:
+            if derived < parsed.expected:
+                flags.append((
+                    "counts_below_floor",
+                    f"declared floor {parsed.rendered()} BREACHED -- re-derived {derived} "
+                    f"from {parsed.repo} at {COUNTS_REV}. A floor is an invariant: investigate the drop. "
+                    f"Do NOT lower the floor to match -- that deletes the guard.",
+                ))
         elif derived != parsed.expected:
             flags.append((
                 "counts_mismatch",
-                f"declared count `{parsed.descriptor}` = {parsed.expected} but re-derived {derived} "
+                f"declared count {parsed.rendered()} but re-derived {derived} "
                 f"from {parsed.repo} at {COUNTS_REV}.",
             ))
 
