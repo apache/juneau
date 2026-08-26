@@ -12,6 +12,9 @@ e2e/test-results/
 e2e/playwright-report/
 e2e/.playwright/
 
+# Python bytecode from the scripts/ tooling
+scripts/__pycache__/
+
 # Local Cursor / AI assistant working files (not part of the Apache source tree)
 AGENTS.md
 .cursor/
