@@ -37,7 +37,19 @@ import java.util.regex.*;
  * the build if any call to the {@link Tab#content(String)}/{@link Subtab#content(String)}/
  * {@link org.apache.juneau.rest.server.widgets.CardContent#content(String) CardContent#content(String)}
  * fluent-setter passes an argument that is not a compile-time string literal (or a {@code +}-concatenation of
- * literals).
+ * literals) <b>in a tree it actually walks</b>.
+ *
+ * <p>
+ * That qualifier is not pedantry, and it is the reason the sentence above used to overstate this guard. The
+ * widgets tree is reached through a <i>relative</i> path ({@link #WIDGETS_MODULE_DIR}) and
+ * {@code scanJavaSources} skips a directory that is not there with a silent {@code continue}. So renaming or
+ * relocating the widgets module would drop its sinks from every scan while the detection logic stayed perfectly
+ * correct, no exception would be thrown, and zero violations would still be reported &mdash; coverage of
+ * {@link org.apache.juneau.rest.server.widgets.CardContent} would simply cease, quietly. <b>Do not read "it
+ * scans both modules" as a guarantee that it still does.</b> The guarantee lives in the accompanying test, which
+ * asserts the crossing itself ({@code b05_realModuleTree_alsoCoversTheSiblingWidgetsModule}); it has to be
+ * asserted separately because every other real-tree check there is a floor or a universal, and both of those are
+ * satisfied <i>more</i> easily by a smaller set of sinks than by a larger one.
  *
  * <h5 class='section'>Why "is the argument a literal" is the enforcement mechanism</h5>
  * <p>

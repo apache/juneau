@@ -247,6 +247,31 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 				+ "strings would otherwise register as false-positive sinks): " + r.sinks());
 	}
 
+	/**
+	 * Anti-vacuous, module-crossing half: {@link RawContentSinkScanner#scanTree} walks the sibling widgets module
+	 * as well as this one, and without this test nothing here would notice if it stopped. The widgets root is
+	 * reached through a <i>relative</i> path and the walk skips a missing directory with a silent {@code
+	 * continue}, so a renamed or relocated module drops those sinks without erroring - and every other real-tree
+	 * assertion in this section keeps passing, because they are all floors or universals that a <i>smaller</i> set
+	 * satisfies more easily: {@code b01}'s "no violations", {@code b02}'s "all literal-only", and {@code b02}'s
+	 * {@code >= 10} floor, which today's views-only sinks clear on their own. The suite would stay green while no
+	 * longer covering {@link org.apache.juneau.rest.server.widgets.CardContent} at all.
+	 *
+	 * <p>
+	 * Asserted by <b>package directory</b> rather than by filename deliberately: naming a specific widgets test
+	 * would buy precision and pay for it with a test that breaks on a rename that harms nothing. Sink paths are
+	 * recorded relative to whichever module root produced them, so the module name is not in the path - the
+	 * package directory is the durable discriminator between the two trees.
+	 */
+	@Test void b05_realModuleTree_alsoCoversTheSiblingWidgetsModule() throws Exception {
+		var widgetsPackageDir = "org/apache/juneau/rest/server/widgets/";
+		var r = RawContentSinkScanner.scanTree(requireModuleRoot());
+		assertTrue(r.sinks().stream().anyMatch(s -> s.file().replace('\\', '/').contains(widgetsPackageDir)),
+			() -> "scanTree must reach the sibling widgets module, but no sink was found under "
+				+ widgetsPackageDir + " - the widgets half of the walk is silently scanning nothing, so the "
+				+ "CardContent raw-markup sink is unguarded even with this suite green: " + r.sinks());
+	}
+
 	// -----------------------------------------------------------------------------------------------------------
 	// c: juneau-config.js HTML-sink gate (innerHTML = / .html() never in the chooser)
 	// -----------------------------------------------------------------------------------------------------------
