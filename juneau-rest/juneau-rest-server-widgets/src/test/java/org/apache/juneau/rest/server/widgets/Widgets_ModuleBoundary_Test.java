@@ -23,7 +23,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
