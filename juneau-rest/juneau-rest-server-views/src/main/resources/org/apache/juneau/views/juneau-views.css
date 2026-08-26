@@ -86,6 +86,70 @@
 	--jc-card-gap: 1rem;
 	--jc-card-min: 280px;
 	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	/*
+	 * Shared chrome scale (merged here for the same reason the card tokens are - one :root selector).  This is
+	 * the single set of named steps every chrome surface spends, so a toolbar, a detail panel and a dialog
+	 * cannot each derive their own.  Coverage is DIMENSIONAL AND TYPE STEPS ONLY: control heights, control
+	 * horizontal padding, spacing, type sizes, line-height and glyph sizes.  The currentColor / no-palette rule
+	 * this file's header states is a SEPARATE contract and is deliberately not a member - it has no step
+	 * structure, so it could not be extended the way a step can.  The 1px border weight and the 0.25em corner
+	 * radius are likewise out: a shape value is not a density value.
+	 *
+	 * A later surface MAY add a step.  Declare it in this group, name it <family>-<role> (spelled out, never
+	 * abbreviated), and give it a one-line comment naming the surface that needed it.  What a surface may
+	 * never do:
+	 *   1. Write a literal inline that duplicates an existing step.  If a value equals a step, spend the step.
+	 *   2. Re-value or rename an existing step to suit itself.  A surface needing a different number adds a
+	 *      NEW step; it does not move one out from under the other surfaces.
+	 *   3. Introduce a surface-prefixed name for a chrome-wide value that another surface could legitimately
+	 *      spend.
+	 *   4. Declare a step anywhere but here.  A step declared only in a consumer's stylesheet is invisible to
+	 *      the themeless render this file's header exists to guarantee.
+	 *
+	 * Spacing ladder - the same six names and the same values as the console chrome's own spacing seam,
+	 * re-declared here rather than referenced so this file stays dependency-free and all three layers share one
+	 * spacing vocabulary instead of forking a second ladder.  -5 and -6 have no consumer in this file yet and
+	 * are declared anyway: the ladder is declared whole, as its upstream counterpart is.
+	 */
+	--jc-space-1: 4px;
+	--jc-space-2: 8px;
+	--jc-space-3: 12px;
+	--jc-space-4: 16px;
+	--jc-space-5: 24px;
+	--jc-space-6: 32px;
+	/*
+	 * Control heights.  BOTH are first-class steps, not a default plus a deviation - a surface spending the
+	 * compact step is not deviating from the full-height one.  Neither name mentions a surface: `compact` is a
+	 * density word, so a compact toolbar control and a full-height detail control are each expressible without
+	 * a new token.
+	 */
+	--jc-chrome-control-height: 32px;
+	--jc-chrome-control-height-compact: 28px;
+	/*
+	 * Control horizontal padding.  Deliberately OFF the 4px ladder: rounding 10px to 8px or 12px would be a
+	 * visual change no surface asked for.  Vertical padding is deliberately NOT a step - both control heights
+	 * are stated directly and `box-sizing: border-box` is already in force, so padding-y is a derived value
+	 * rather than an independent one.
+	 */
+	--jc-chrome-control-padding-x: 10px;
+	--jc-chrome-control-padding-x-wide: 14px;    /* PROVISIONAL - fixed when the detail action button first renders. */
+	/*
+	 * Type steps.  A label-smaller-than-value pairing is expressed as the STEP PAIR (-font-size-1 for the
+	 * label, -font-size-3 for the value, 0.857x) rather than as a ratio token: no CSS property could consume a
+	 * ratio, and nothing would stop a surface setting two sizes that ignore it, whereas two named steps are the
+	 * only two values on offer.  The ratio is therefore provisional for as long as -font-size-3 is.
+	 */
+	--jc-chrome-font-size-1: 0.75rem;
+	--jc-chrome-font-size-2: 0.8125rem;          /* PROVISIONAL - fixed when the detail action button first renders. */
+	--jc-chrome-font-size-3: 0.875rem;           /* PROVISIONAL - fixed when the detail field value first renders. */
+	--jc-chrome-line-height: 1.2;                /* PROVISIONAL - fixed with --jc-chrome-font-size-2. */
+	/*
+	 * Glyph sizes, one per role, stated once rather than repeated per selector.  These are chrome-wide glyph
+	 * ROLES; a widget's own internal proportions (a pill dot, a toggle knob) are sized to their own text and
+	 * are deliberately not enrolled here.
+	 */
+	--jc-chrome-glyph-size: 16px;
+	--jc-chrome-glyph-size-small: 12px;
 }
 
 .jc-progress {
@@ -167,7 +231,7 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 1.25em;
-	margin: 0 0 0.5em;
+	margin: 0 0 var(--jc-space-2);
 }
 
 .jc-stat {
@@ -275,10 +339,19 @@ table.dataTable {
 	border-top-width: 2px;        /* accented top rule */
 }
 
+/*
+ * The cell font-size is PINNED here, not merely inherited from the table rule above, because everything the
+ * DataTables child row renders (the whole detail-panel family) sizes its `em` spacing against it.  Left to
+ * inheritance, a host theme that set a cell font-size on a views table would silently re-resolve every one of
+ * those declarations.  `rem`, never `em`: at cell level an `em` would COMPOUND, so a nested views table would
+ * render its cells at 9px and its own nested cells at 6.75px.  A theme that legitimately should win can still
+ * win by matching this selector's specificity and coming later.
+ */
 table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
+	font-size: 0.75rem;
 	padding: 4px 5px;
 	font-weight: normal;
 	text-align: left;
@@ -291,6 +364,7 @@ table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
+	font-size: 0.75rem;
 	padding: 4px 5px;
 	vertical-align: middle;
 	border: 1px solid;
@@ -342,8 +416,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 	justify-content: center;
 	box-sizing: border-box;
 	min-width: 32px;
-	height: 32px;
-	padding: 0 10px;              /* ribbon-button horizontal padding between glyphs */
+	height: var(--jc-chrome-control-height);
+	padding: 0 var(--jc-chrome-control-padding-x);   /* ribbon-button horizontal padding between glyphs */
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	background: transparent;
@@ -351,7 +425,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	cursor: pointer;
 }
 
-.juneau-view-ribbon-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.juneau-view-ribbon-btn svg { width: var(--jc-chrome-glyph-size); height: var(--jc-chrome-glyph-size); fill: currentColor; }
 
 .juneau-view-ribbon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -478,7 +552,7 @@ table.dataTable thead .sorting_desc_disabled:after {
  * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
  */
 .juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"] {
-	gap: 0.25em;
+	gap: var(--jc-space-1);
 	width: 100%;
 	margin: 0 0 0.75em;
 	padding: 0.25em;
@@ -582,7 +656,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	display: inline-flex;
 	align-items: stretch;
 	box-sizing: border-box;
-	height: 32px;
+	height: var(--jc-chrome-control-height);
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
@@ -608,7 +682,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 .juneau-view-pagingpill-btn:last-child { border-right: none; }
 .juneau-view-pagingpill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.juneau-view-pagingpill-btn svg { width: 12px; height: 12px; fill: currentColor; }
+.juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /*
  * The pill's central segment (visual-parity follow-up): BOTH the compact "n-n of n" range summary AND the
@@ -637,7 +711,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-pagingpill-info { white-space: nowrap; font-family: inherit; }
 
-.juneau-view-pagingpill-caret svg { width: 12px; height: 12px; fill: currentColor; }
+.juneau-view-pagingpill-caret svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
    is enough to show/hide it, so no explicit `display` toggle rule is needed here. */
@@ -688,9 +762,9 @@ table.dataTable thead .sorting_desc_disabled:after {
 	flex-wrap: nowrap;
 	justify-content: space-between;
 	align-items: center;
-	gap: 0.5em;
-	margin: 0 0 0.5em 0;
-	font-size: 0.75rem;           /* same type size as the table / paging+search */
+	gap: var(--jc-space-2);
+	margin: 0 0 var(--jc-space-2) 0;
+	font-size: var(--jc-chrome-font-size-1);   /* same type size as the table / paging+search */
 }
 
 .juneau-view-toolbar-left,
@@ -698,7 +772,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	gap: 0.5em;
+	gap: var(--jc-space-2);
 }
 
 /* Native DT search box, once relocated into the right cluster: inline with the icon ribbon, not a
@@ -715,7 +789,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-toolbar-right .dataTables_filter input,
 .juneau-view-toolbar-right .dt-search input {
 	box-sizing: border-box;
-	height: 32px;
+	height: var(--jc-chrome-control-height);
 	margin: 0;
 	padding: 0 0.5em;
 	border: 1px solid;            /* currentColor - no palette color set here */
@@ -785,14 +859,14 @@ table.dataTable thead .sorting_desc_disabled:after {
 	overflow-x: auto;
 	white-space: nowrap;
 	gap: 0.5em;
-	margin: 0 0 0.5em 0;
+	margin: 0 0 var(--jc-space-2) 0;
 }
 
 .jc-tab,
 .jc-subtab {
 	flex: 0 0 auto;
 	display: inline-block;
-	padding: 0.35em 0.75em;
+	padding: 0.35em var(--jc-space-3);
 	text-decoration: none;
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
@@ -819,8 +893,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 /* Fail-loud PAGE_META contract-version-mismatch banner - neutral, no palette color (mirrors .juneau-view-error). */
 .jc-page-error {
 	display: block;
-	padding: 0.5em 0.75em;
-	margin: 0.25em 0;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	margin: var(--jc-space-1) 0;
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	font-weight: bold;
@@ -867,8 +941,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	gap: 0.5em;
-	margin: 0 0 0.5em 0;
+	gap: var(--jc-space-2);
+	margin: 0 0 var(--jc-space-2) 0;
 }
 
 .jc-bar-text,
@@ -937,11 +1011,11 @@ table.dataTable thead .sorting_desc_disabled:after {
 /* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`). */
 .juneau-view-detail-panel {
 	margin: 0;
-	padding: 0.5em 1em;
+	padding: var(--jc-space-2) var(--jc-space-3);
 }
 
 .juneau-view-detail-section {
-	margin: 0 0 1em;
+	margin: 0 0 var(--jc-space-3);
 }
 
 .juneau-view-detail-section-title {
@@ -958,7 +1032,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-detail-fields {
 	display: grid;
-	gap: 0.5em 1em;
+	gap: var(--jc-space-2) var(--jc-space-3);
 }
 
 .juneau-view-detail-field-title {
@@ -1016,7 +1090,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	max-width: 90vw;
 	max-height: 90vh;
 	overflow: auto;
-	padding: 1em 1.25em;
+	padding: var(--jc-space-4) 1.25em;
 	border: 1px solid;
 	border-radius: 6px;
 	background: #fff;
@@ -1044,7 +1118,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-dialog-fields {
-	margin: 0 0 1em;
+	margin: 0 0 var(--jc-space-4);
 }
 
 .juneau-view-dialog-fields dt {
@@ -1059,10 +1133,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-dialog-form {
-	margin: 0 0 1em;
+	margin: 0 0 var(--jc-space-4);
 	display: flex;
 	flex-direction: column;
-	gap: 0.75em;
+	gap: var(--jc-space-3);
 }
 
 /*
@@ -1072,10 +1146,10 @@ table.dataTable thead .sorting_desc_disabled:after {
  * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
  */
 .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
-	gap: 0.25em;
+	gap: var(--jc-space-1);
 	width: 100%;
 	margin: 0;
-	padding: 0.25em;
+	padding: var(--jc-space-1);
 	border-bottom: none;
 }
 
@@ -1089,7 +1163,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-dialog-form-section {
 	display: flex;
 	flex-direction: column;
-	gap: 0.75em;
+	gap: var(--jc-space-3);
 }
 
 /*
@@ -1103,7 +1177,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-dialog-form-row label {
 	display: block;
 	font-weight: 600;
-	margin-bottom: 0.25em;
+	margin-bottom: var(--jc-space-1);
 }
 
 .juneau-view-dialog-form-row input,
@@ -1178,7 +1252,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-dialog-actions {
 	display: flex;
-	gap: 0.5em;
+	gap: var(--jc-space-2);
 	justify-content: flex-end;
 }
 
@@ -1190,7 +1264,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-action-menu {
 	position: fixed;
 	margin: 0;
-	padding: 0.25em 0;
+	padding: var(--jc-space-1) 0;
 	list-style: none;
 	min-width: 10em;
 	border: 1px solid var(--jc-popover-border);
@@ -1417,7 +1491,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-card-header {
 	display: flex;
 	align-items: center;
-	gap: 0.5em;
+	gap: var(--jc-space-2);
 	padding: 0.5rem 0.75rem;
 	border-bottom: 1px solid var(--jc-card-border, #dddddd);
 }
@@ -1447,7 +1521,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-card-actions {
 	margin-left: auto;
 	display: flex;
-	gap: 0.25em;
+	gap: var(--jc-space-1);
 }
 
 .juneau-view-card-refresh {

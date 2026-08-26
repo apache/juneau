@@ -49,12 +49,15 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>Closed body dispatch (fail-closed):</h5>
  * <p>
- * The body dispatch is a <b>closed</b>, enumerated set: {@link CardFieldList} and {@link ViewCardBody}.  Any other
- * {@link CardBody} implementation throws at emit rather than being silently dropped, so a body type nobody taught
- * this emitter about can never reach the page.  In particular there is no raw-markup body: the toolkit has no
- * markup sanitizer, so a body that would pour author markup into a card is refused here rather than emitted
- * un-neutralized.  Each known body brings its <b>own</b> data path &mdash; {@link ViewCardBody} inherits the hosted
- * table's ajax/refresh and does not reuse the {@code CardFieldList} refresh envelope.
+ * The body dispatch is a <b>closed</b>, enumerated set: {@link CardFieldList}, {@link ViewCardBody}, and
+ * {@link CardContent}.  Any other {@link CardBody} implementation throws at emit rather than being silently
+ * dropped, so a body type nobody taught this emitter about can never reach the page.  {@link CardContent} is the
+ * one raw-markup body: it carries the "template engine, trusted / first-party content only" ownership contract
+ * documented on its own javadoc &mdash; the caller pre-sanitizes, this emitter writes {@link CardContent#content}
+ * verbatim via {@code rawText(...)}, and a build-gating scanner in this module's test tree checks that only
+ * compile-time literals reach its setter.  Each known body brings its <b>own</b> data path &mdash; {@link
+ * ViewCardBody} inherits the hosted table's ajax/refresh and does not reuse the {@code CardFieldList} refresh
+ * envelope; {@link CardContent} carries no data path at all.
  *
  * <h5 class='section'>Request-aware emit:</h5>
  * <p>
@@ -316,13 +319,15 @@ public class CardGridTable {
 	}
 
 	/**
-	 * Closed body dispatch: {@link CardFieldList} and {@link ViewCardBody}; any other {@link CardBody} fails closed
-	 * at emit.  A {@link ViewCardBody} on the request-free path also fails closed rather than emitting a hosted
-	 * table stripped of the token and server values it was declared with.
+	 * Closed body dispatch: {@link CardFieldList}, {@link ViewCardBody}, and {@link CardContent}; any other
+	 * {@link CardBody} fails closed at emit.  A {@link ViewCardBody} on the request-free path also fails closed
+	 * rather than emitting a hosted table stripped of the token and server values it was declared with.
 	 */
 	private static HtmlElement<?> emitBody(CardBody body, HttpServletRequest req, String idScope) {
 		if (body instanceof CardFieldList fl)
 			return emitFieldList(fl);
+		if (body instanceof CardContent cc)
+			return emitContent(cc);
 		if (body instanceof ViewCardBody vcb) {
 			if (req == null)
 				throw iaex("CardGridTable cannot emit a ViewCardBody without a request: the hosted table needs one "
@@ -331,7 +336,7 @@ public class CardGridTable {
 			return ViewTable.of(req, vcb.view, idScope);
 		}
 		throw iaex("CardGridTable does not know how to emit CardBody type '%s'; the known card bodies are "
-			+ "CardFieldList and ViewCardBody.", body == null ? "null" : body.getClass().getName());
+			+ "CardFieldList, ViewCardBody, and CardContent.", body == null ? "null" : body.getClass().getName());
 	}
 
 	/**
@@ -349,6 +354,17 @@ public class CardGridTable {
 		return dl(items.toArray())
 			.class_("juneau-view-card-fields")
 			.attr("style", "grid-template-columns:repeat(" + fl.columns + ",minmax(0,1fr))");
+	}
+
+	/**
+	 * Emits a {@link CardContent} as a single {@code <div class="card-content">} whose child is the body's
+	 * {@link CardContent#content} written <b>verbatim</b>, via {@code rawText(...)} &mdash; the raw-markup
+	 * ownership contract documented on {@link CardContent}.  Unlike every other human string this emitter paints
+	 * (title, field label, field value), this one is never entity-escaped; the caller is responsible for having
+	 * pre-sanitized it.
+	 */
+	private static Div emitContent(CardContent cc) {
+		return div(rawText(cc.content)).class_("card-content");
 	}
 
 	/**

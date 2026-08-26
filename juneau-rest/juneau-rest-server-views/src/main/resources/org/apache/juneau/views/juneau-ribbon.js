@@ -169,6 +169,37 @@
 		return "tune";
 	}
 
+	/**
+	 * Moves every ungrouped {@code refresh} action to the end of the list, in one trailing cluster keyed by the
+	 * reserved synthetic group {@code __refresh} (mirroring this file's {@code __ungrouped} convention), so a
+	 * refresh control reads as a self-contained control at the far right of the toolbar regardless of where a
+	 * view declared it.  Pure and DOM-free; {@link #buildRibbon} is the only caller.
+	 *
+	 * <ul>
+	 * 	<li>No {@code refresh} action - returns {@code actions} unchanged (identity no-op).
+	 * 	<li>One or more ungrouped {@code refresh} actions - all of them are removed from their declared position(s)
+	 * 		and re-appended at the end, in their original relative order, sharing the {@code __refresh} group id
+	 * 		(so {@link #buildRibbon}'s adjacent-group clustering renders them as ONE cluster, not several).
+	 * 	<li>A {@code refresh} action that already carries an explicit {@code group} opts OUT completely - it is
+	 * 		left exactly where its neighbours put it, ungrouped by this function.  This is a consumer's escape
+	 * 		hatch: a deliberate {@code .group(...)} on refresh means "I clustered this on purpose".
+	 * 	<li>A {@code divider} left dangling in trailing position by the move (nothing left to divide once refresh
+	 * 		is gone) is dropped rather than rendered as an empty seam.
+	 * </ul>
+	 *
+	 * <p>As with {@code __ungrouped}, a consumer literally naming a group {@code "__refresh"} collides with this
+	 * reserved key; that risk is tolerated here for the same reason it already is for {@code __ungrouped}.
+	 */
+	function normalizeRibbon(actions) {
+		actions = actions || [];
+		const moving = actions.filter(function (a) { return a.type === "refresh" && a.group == null; });
+		if (!moving.length) return actions;
+		const kept = actions.filter(function (a) { return !(a.type === "refresh" && a.group == null); });
+		while (kept.length && kept[kept.length - 1].type === "divider") kept.pop();
+		const moved = moving.map(function (a) { return Object.assign({}, a, { group: "__refresh" }); });
+		return kept.concat(moved);
+	}
+
 	// ==================================================================================================================
 	// DOM / JQUERY BINDING LAYER  (thin shim; not exercised by the pure unit tests)
 	// ==================================================================================================================
@@ -226,17 +257,22 @@
 	 * <p>Adjacent actions sharing a non-null {@code group} id (visual-parity design doc §4.A, item 2/5) are
 	 * clustered into ONE segmented {@code .juneau-view-ribbon-group} wrapper (shared borders, rounded only on the
 	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  Actions with no
-	 * explicit {@code group} (including an {@code export} action's resolved buttons) share the synthetic
-	 * {@code __ungrouped} id so consecutive icon buttons — refresh + copy/csv/excel/pdf — render as one connected
+	 * explicit {@code group} (excluding {@code refresh}, see below) share the synthetic {@code __ungrouped} id so
+	 * consecutive icon buttons — e.g. {@code columnSearchToggle} + copy/csv/excel/pdf — render as one connected
 	 * ribbon rather than orphan glyphs.  A {@code divider} always closes any open cluster; an explicit
 	 * {@code group} id still splits clusters the way the caller declared.
+	 *
+	 * <p>Before any of that, {@link #normalizeRibbon} moves every ungrouped {@code refresh} action into its own
+	 * trailing {@code __refresh} cluster at the far right, regardless of where the view declared it - a refresh
+	 * control reads as self-contained rather than welded to whatever ungrouped buttons happen to sit beside it.
+	 * A {@code refresh} with an explicit {@code group} opts out of that move entirely.
 	 */
 	// NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type (design doc §4.A); each branch is a
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
 	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
 	// real complexity.
 	function buildRibbon(viewDef, ctx) {
-		const actions = viewDef.ribbon || [];
+		const actions = normalizeRibbon(viewDef.ribbon || []);
 		if (!actions.length) return null;
 
 		const $ = window.jQuery;
@@ -390,6 +426,7 @@
 		resolveExportButtons: resolveExportButtons,
 		ribbonStorageKey: ribbonStorageKey,
 		resolveButtonIcon: resolveButtonIcon,
+		normalizeRibbon: normalizeRibbon,
 		// binding
 		loadPersistedState: loadPersistedState,
 		build: buildRibbon

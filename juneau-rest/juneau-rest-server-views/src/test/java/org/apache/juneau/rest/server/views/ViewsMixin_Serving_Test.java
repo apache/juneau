@@ -426,7 +426,11 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-ribbon-btn {"), body);
 		assertTrue(body.contains("min-width: 32px"), body);
-		assertTrue(body.contains("height: 32px"), body);
+		// The button's height now spends the shared control-height step rather than repeating its literal, so the
+		// shape is pinned by asserting BOTH halves - the reference here and the step's declared value - rather
+		// than dropping to the reference alone, which would pass even if the step were re-valued.
+		assertTrue(body.contains("height: var(--jc-chrome-control-height)"), body);
+		assertTrue(body.contains("--jc-chrome-control-height: 32px"), body);
 		assertTrue(body.contains("display: flex"), body);
 		assertTrue(body.contains("border: 1px solid"), body);
 		assertTrue(body.contains(".juneau-view-ribbon-btn svg {"), body);
@@ -498,8 +502,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var fnBody = functionBody(body, "function buildRibbon(");
 		assertTrue(fnBody.contains("function place("), fnBody);
 		assertTrue(fnBody.contains("juneau-view-ribbon-group"), fnBody);
-		// Ungrouped icon buttons (refresh + export, etc.) share one synthetic cluster so they render as a
-		// connected ribbon rather than orphan glyphs.  An explicit .group() still splits clusters.
+		// Ungrouped icon buttons (export, columnSearchToggle, etc.) share one synthetic cluster so they render as
+		// a connected ribbon rather than orphan glyphs.  refresh is excluded from that cluster by default - it is
+		// normalized into its own trailing group instead (see normalizeRibbon) - unless it declares an explicit
+		// .group() of its own, in which case it joins that group like any other action.
 		assertTrue(fnBody.contains("__ungrouped"), fnBody);
 		assertTrue(fnBody.contains("place("), fnBody);
 		// A divider always closes any open cluster (a divider is a deliberate visual break, not a grouping seam).

@@ -22,8 +22,14 @@
    its own. Every --jc-* token is defined by the DYNAMIC part of the served
    response: ConsoleChromeMixin always appends Theme.OPEN's token block, then
    (if a non-default theme is active) a second block of that theme's
-   overrides. Appended blocks win by CSS cascade order, so a consumer never
-   needs to out-rank a token defined in this static file.
+   overrides. Those blocks are emitted at html:root, specificity (0,0,1,1), so
+   they out-rank a same-named token declared at :root (0,0,1,0) by a
+   separately linked stylesheet — juneau-views.css, which declares its own
+   token set, included — whichever order the consumer links the two in. Do
+   not read this as "later text always wins": two :root blocks in separately
+   linked files tie on specificity and are resolved by <link> order, which
+   this framework neither sets nor can observe. The type prefix is what makes
+   the theme's value win rather than the append position.
 
    SECURITY - SINK-PROPERTY DISCIPLINE (do not casually add a new var(--jc-*)
    reference without re-reading this):

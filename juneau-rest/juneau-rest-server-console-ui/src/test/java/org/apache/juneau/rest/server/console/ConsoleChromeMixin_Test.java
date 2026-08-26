@@ -882,6 +882,49 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// q) Emitted token blocks carry the html:root type prefix, so a theme token out-ranks a same-named token
+	//    declared at :root by a separately linked stylesheet regardless of <link> order
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Both emission sites must carry the {@code html} type prefix, not just one.
+	 *
+	 * <p>
+	 * Two blocks at plain {@code :root} in separately linked stylesheets tie at specificity {@code (0,0,1,0)} and
+	 * are resolved by the order the consumer's {@code <link>} elements appear in &mdash; which this framework
+	 * neither sets nor can observe, so a theme override is silently defeated whenever a consumer links the other
+	 * way round. {@code html:root} scores {@code (0,0,1,1)} and wins in either order.
+	 *
+	 * <p>
+	 * Deliberately asserted as an <i>anchored</i> prefix rather than a {@code contains("html:root{")}: the
+	 * pre-existing helpers in this class match {@code :root\{} as a substring, and {@code html:root{} contains
+	 * that, so every one of them stays green whether or not the prefix is emitted. A substring assertion here
+	 * would inherit exactly that blind spot and pass against the unfixed emitter.
+	 */
+	@Test void q01_bothEmittedTokenBlocks_carryTheHtmlTypePrefix() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(ThemeSettingsHost.class));
+		assertEquals(2, countRootBlocks(body), () -> "expected Theme.OPEN block + THEME_A's override block, body:\n" + body);
+		var m = Pattern.compile("(.{0,5}):root\\{").matcher(body);
+		var n = 0;
+		while (m.find()) {
+			n++;
+			assertEquals("html", m.group(1), () -> "token block emitted without the html type prefix, body:\n" + body);
+		}
+		assertEquals(2, n, () -> "expected both emission sites to be checked, body:\n" + body);
+	}
+
+	/**
+	 * The static {@code chrome.css} must keep shipping no token block of its own, which is what makes appending
+	 * one work at all. Guards the other half of (q01): a {@code :root} appearing in the static file would be
+	 * counted by (q01)'s matcher and would not carry the prefix.
+	 */
+	@Test void q02_staticChromeCss_shipsNoTokenBlockOfItsOwn() throws IOException {
+		var css = readChromeCss();
+		var m = Pattern.compile("^\\s*+(html)?+:root\\s*+\\{", Pattern.MULTILINE).matcher(css);
+		assertFalse(m.find(), () -> "static chrome.css must ship no :root block of its own");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test helpers
 	//-----------------------------------------------------------------------------------------------------------------
 

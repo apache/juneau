@@ -20,11 +20,11 @@ package org.apache.juneau.rest.server.widgets;
  * The body-slot contract for a {@link Card}: the single, heterogeneous content a card hosts.
  *
  * <p>
- * This marker is the extension point future body types implement.  The v1 emitter dispatches over a <b>closed</b>
- * set of known implementations (v1: {@link CardFieldList} only) and <b>fails closed</b> on any unknown
- * {@code CardBody}; a later body type is added by implementing this interface, patching the emitter's closed
- * dispatch set, and bringing its <b>own</b> server-render and (if stateful) its <b>own</b> data path &mdash; it does
- * not share {@link CardFieldList}'s refresh envelope.
+ * This marker is the extension point future body types implement.  The emitter (in the views module,
+ * {@code CardGridTable}) dispatches over a <b>closed</b> set of known implementations and <b>fails closed</b> on
+ * any unknown {@code CardBody}; a new body type is added by implementing this interface, patching the emitter's
+ * closed dispatch set, and bringing its <b>own</b> server-render and (if stateful) its <b>own</b> data path
+ * &mdash; it does not share {@link CardFieldList}'s refresh envelope.
  *
  * @since 10.0.0
  */

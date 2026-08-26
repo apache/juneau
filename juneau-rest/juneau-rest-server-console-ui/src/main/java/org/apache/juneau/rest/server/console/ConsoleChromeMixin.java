@@ -39,8 +39,8 @@ import org.apache.juneau.rest.server.util.*;
  * {@code DataTablesMixin} in the {@code juneau-rest-server-datatables} module for the identical asset-serving
  * pattern this mirrors &mdash; not linked here since that module is not a dependency of this one). The served
  * response is the static
- * structural {@code chrome.css} (shipped in this module's classpath) with the active theme's tokens appended as a
- * {@code :root{}} block.
+ * structural {@code chrome.css} (shipped in this module's classpath) with the active theme's tokens appended as an
+ * {@code html:root{}} block.
  *
  * <h5 class='section'>Mount styles:</h5>
  * <p>
@@ -355,10 +355,21 @@ public class ConsoleChromeMixin {
 		return req.getContext().getBeanStore().getBean(ThemeSettings.class).orElse(ThemeSettings.DEFAULT).getTheme();
 	}
 
-	/** Renders one theme's tokens as an appended {@code :root{ ... }} block, escaping every value at the declaration boundary. */
+	/**
+	 * Renders one theme's tokens as an appended {@code html:root{ ... }} block, escaping every value at the
+	 * declaration boundary.
+	 *
+	 * <p>
+	 * The selector is {@code html:root} rather than a bare {@code :root} so the block scores {@code (0,0,1,1)}
+	 * instead of {@code (0,0,1,0)}. A separately-linked stylesheet that declares the same token names in its own
+	 * {@code :root} would tie a bare {@code :root} on specificity, and the cascade would then fall through to
+	 * source order &mdash; which across two stylesheets is the order the consumer's {@code <link>} elements
+	 * happen to appear in, something this framework neither sets nor can observe. The extra type selector makes
+	 * the theme's tokens out-rank such a declaration in either link order.
+	 */
 	private static String rootBlock(Theme theme) {
 		var sb = new StringBuilder();
-		sb.append(":root{");
+		sb.append("html:root{");
 		for (var e : theme.getTokens().entrySet())
 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
 		sb.append('}');
@@ -366,16 +377,17 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
-	 * Renders {@link Theme#OPEN}'s {@code :root{}} block with the framework-authored role-token alias derivations
-	 * ({@link #OPEN_ROLE_ALIASES}) appended inside the same block, immediately after the leaf tokens. The aliases
-	 * are appended as trusted framework literal text (not routed through {@code CssValueEscaper}, which is for
-	 * consumer-supplied values); folding them into {@code Theme.OPEN}'s block keeps the served response at exactly
-	 * one {@code :root{}} block for the default theme while still placing every derived default before any
-	 * active-theme override block.
+	 * Renders {@link Theme#OPEN}'s {@code html:root{}} block with the framework-authored role-token alias
+	 * derivations ({@link #OPEN_ROLE_ALIASES}) appended inside the same block, immediately after the leaf tokens.
+	 * The aliases are appended as trusted framework literal text (not routed through {@code CssValueEscaper},
+	 * which is for consumer-supplied values); folding them into {@code Theme.OPEN}'s block keeps the served
+	 * response at exactly one {@code html:root{}} block for the default theme while still placing every derived
+	 * default before any active-theme override block. See {@link #rootBlock(Theme)} for why the selector carries
+	 * the {@code html} type prefix.
 	 */
 	private static String openRootBlock() {
 		var sb = new StringBuilder();
-		sb.append(":root{");
+		sb.append("html:root{");
 		for (var e : Theme.OPEN.getTokens().entrySet())
 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
 		sb.append(OPEN_ROLE_ALIASES);

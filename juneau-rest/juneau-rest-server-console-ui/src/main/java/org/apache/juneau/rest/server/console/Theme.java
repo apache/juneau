@@ -27,8 +27,8 @@ import java.util.regex.*;
  * <p>
  * A {@link Theme} is pure data &mdash; it carries no classpath assets (fonts/logos/background images; that is a
  * fast-follow, see the design's P3) &mdash; just a name and a map of {@code --jc-*} token names to CSS values.
- * {@code ConsoleChromeMixin} appends the active theme's tokens to the served {@code chrome.css} response as a
- * {@code :root{}} block, on top of {@link #OPEN}'s own block.
+ * {@code ConsoleChromeMixin} appends the active theme's tokens to the served {@code chrome.css} response as an
+ * {@code html:root{}} block, on top of {@link #OPEN}'s own block.
  *
  * <h5 class='section'>Security:</h5>
  * <p>

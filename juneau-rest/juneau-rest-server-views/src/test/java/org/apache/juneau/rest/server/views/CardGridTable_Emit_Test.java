@@ -214,11 +214,43 @@ class CardGridTable_Emit_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// No CardContent this child (i2)
+	// CardContent: the raw-markup body, verbatim/unescaped (opposite of every field value)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a19_noCardContentEmit() {
-		assertFalse(html(grid()).contains("card-content"), "no CardContent markup this child (i2)");
+	@Test void a19_fieldListOnlyGrid_emitsNoCardContentWrapper() {
+		// The card-content wrapper is conditioned on an actual CardContent body being present, not stamped
+		// unconditionally onto every card.
+		assertFalse(html(grid()).contains("card-content"), "no card-content wrapper without a CardContent body");
+	}
+
+	@Test void a20_cardContentBodyEmitsRawMarkupVerbatim() {
+		var g = CardGrid.create("g1").cards(
+			Card.create("c1", "T").body(CardContent.create().content("<p>Raw <b>markup</b>.</p>")));
+		var h = html(g);
+		assertTrue(h.contains("class=\"card-content\""), h);
+		assertTrue(h.contains("<p>Raw <b>markup</b>.</p>"),
+			() -> "raw content must appear byte-for-byte verbatim (no escaping):\n" + h);
+	}
+
+	@Test void a21_cardContentIsNeverHtmlEntityEscaped_unlikeFieldValues() {
+		var g = CardGrid.create("g1").cards(
+			Card.create("c1", "T").body(CardContent.create().content("<script>alert(1)</script>")));
+		var h = html(g);
+		// The card TITLE is escaped (existing contract, a14) ... but CardContent's body is emitted verbatim - this
+		// is the template-engine ownership contract, not a bug.
+		assertTrue(h.contains("<script>alert(1)</script>"),
+			() -> "content must be emitted verbatim per its documented ownership contract:\n" + h);
+	}
+
+	@Test void a22_cardContentBodyCarriesNoRefreshWire() {
+		// CardContent brings no data path of its own (unlike CardFieldList); none of the refresh attributes may
+		// appear on a card whose only body is raw content.
+		var g = CardGrid.create("g1").cards(
+			Card.create("c1", "T").body(CardContent.create().content("<p>x</p>")));
+		var h = html(g);
+		assertFalse(h.contains(CardGridTable.CARD_REFRESH_ATTR), h);
+		assertFalse(h.contains(CardGridTable.CARD_CONTRACT_ATTR), h);
+		assertFalse(h.contains(CardGridTable.CARD_REFRESH_TRIGGER_ATTR), h);
 	}
 
 	private static int countOf(String haystack, String needle) {

@@ -291,13 +291,13 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) Unknown bodies still fail closed (including a raw-content body, which this child does not ship)
+	// e) Unknown bodies still fail closed; a ViewCardBody card does not spuriously emit another body's markers
 	//------------------------------------------------------------------------------------------------------------------
 
-	/** A raw-markup body shape.  There is no sanitizer in the toolkit, so the emitter must refuse it. */
-	static class CardContent implements CardBody {
+	/** A {@link CardBody} implementation this emitter has never been taught about; pins the fail-closed default. */
+	static class UnknownCardBody implements CardBody {
 		@SuppressWarnings({
-			"unused"   // The field exists to make this stand-in look exactly like the body type it stands in for.
+			"unused"   // The field exists to make this stand-in look like a real body type carrying data.
 		})
 		String html = "<b>hi</b>";
 
@@ -305,21 +305,26 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 		@Override public void validate() {}
 	}
 
-	@Test void e01_rawContentBodyFailsClosedOnTheRequestAwarePath() {
-		var c = Card.create("c1", "T").body(new CardContent());
+	@Test void e01_unknownCardBodyFailsClosedOnTheRequestAwarePath() {
+		var c = Card.create("c1", "T").body(new UnknownCardBody());
 		var req = tokenRequest();
 		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(req, c));
 		assertTrue(e.getMessage().contains("CardFieldList"), e::getMessage);
-		assertTrue(e.getMessage().contains(CardContent.class.getName()), e::getMessage);
+		assertTrue(e.getMessage().contains(UnknownCardBody.class.getName()), e::getMessage);
 	}
 
-	@Test void e02_rawContentBodyFailsClosedOnTheGridPathToo() {
-		var g = CardGrid.create("g1").cards(Card.create("c1", "T").body(new CardContent()));
+	@Test void e02_unknownCardBodyFailsClosedOnTheGridPathToo() {
+		var g = CardGrid.create("g1").cards(Card.create("c1", "T").body(new UnknownCardBody()));
 		var e = assertThrows(IllegalArgumentException.class, () -> CardGridTable.of(g));
 		assertTrue(e.getMessage().contains("CardFieldList"), e::getMessage);
 	}
 
-	@Test void e03_noRawContentMarkupIsEverEmitted() {
+	/**
+	 * Scenario-scoped, not a framework-wide guarantee: {@link CardContent} is a real body type with its own
+	 * positive coverage (see {@code CardGridTable_Emit_Test}).  This only pins that a card hosting a
+	 * {@link ViewCardBody} does not spuriously pick up the {@code card-content} marker that body type owns.
+	 */
+	@Test void e03_viewCardBodyDoesNotEmitTheCardContentMarker() {
 		var h = Html.of(CardGridTable.of(tokenRequest(), viewCard("c1", view())));
 		assertFalse(h.contains("card-content"), h);
 	}

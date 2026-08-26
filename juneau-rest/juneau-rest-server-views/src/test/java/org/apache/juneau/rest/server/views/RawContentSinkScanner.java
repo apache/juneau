@@ -31,7 +31,11 @@ import java.util.regex.*;
  * modeled on. It scans this module's own Java sources (both {@code src/main/java} and {@code src/test/java}, since
  * unlike the {@code <script>}-JSON sink this is a brand-new, forward-looking guardrail with no pre-existing
  * "known-good" callers to anchor a main-source-only scan to &mdash; see the accompanying test's anti-vacuous
- * checks) and fails the build if any call to the {@link Tab#content(String)}/{@link Subtab#content(String)}
+ * checks) &mdash; <b>and also</b> the sibling widgets module's Java sources, the same way {@link #scanShippedJs}
+ * already follows the card/calendar/chrome JS assets across the module boundary (see {@link #WIDGETS_MODULE_DIR}):
+ * a raw-markup sink is a raw-markup sink regardless of which of the two card-widget modules declares it. It fails
+ * the build if any call to the {@link Tab#content(String)}/{@link Subtab#content(String)}/
+ * {@link org.apache.juneau.rest.server.widgets.CardContent#content(String) CardContent#content(String)}
  * fluent-setter passes an argument that is not a compile-time string literal (or a {@code +}-concatenation of
  * literals).
  *
@@ -51,12 +55,13 @@ import java.util.regex.*;
  * <h5 class='section'>What counts as a sink</h5>
  * <p>
  * A sink is any source-level call whose method name is exactly {@code content} (i.e. {@code .content(...)}) &mdash;
- * scoped to this module's own tree, where (verified before this scanner was written) the only such calls are the
- * {@link Tab}/{@link Subtab} fluent setters this item adds; nothing else in this module declares or calls a
+ * scoped to this module's own tree plus the sibling widgets module's tree (see {@link #scanTree}), where (verified
+ * when each of the two callers was added) the only such calls are the {@link Tab}/{@link Subtab} fluent setters and
+ * the widgets module's {@code CardContent} fluent setter; nothing else in either tree declares or calls a
  * {@code content(...)} method. This scanner does not attempt receiver-type resolution and does not scan outside
- * this module (other Juneau modules declare unrelated {@code content(...)} methods, e.g.
- * {@code RestRequest.content(Object)}, which are out of scope by construction because they are never on this
- * module's classpath of scanned files).
+ * these two modules (other Juneau modules declare unrelated {@code content(...)} methods, e.g.
+ * {@code RestRequest.content(Object)}, which are out of scope by construction because they are never on the
+ * scanned trees).
  *
  * <h5 class='section'>Why it must also assert it is not vacuous</h5>
  * <p>
@@ -105,6 +110,14 @@ final class RawContentSinkScanner {
 	 */
 	private static final String WIDGETS_JS_DIR =
 		"../juneau-rest-server-widgets/src/main/resources/org/apache/juneau/widgets";
+
+	/**
+	 * The widgets module's root, relative to this module's root &mdash; the Java-source counterpart of
+	 * {@link #WIDGETS_JS_DIR}.  The card body beans (including the raw-markup {@code CardContent}) live there, so
+	 * {@link #scanTree} follows this path to keep scanning the file that declares the sink rather than stopping at
+	 * the module boundary the test happens to run in.
+	 */
+	private static final String WIDGETS_MODULE_DIR = "../juneau-rest-server-widgets";
 
 	/** First-party icon-registry SVG assignments; never request/app/renderer text. */
 	private static final List<AllowedJsSink> SHIPPED_JS_ALLOWLIST = List.of(
@@ -287,17 +300,31 @@ final class RawContentSinkScanner {
 	}
 
 	/**
-	 * Walks the specified module root and scans every {@code src/main/java} and {@code src/test/java} Java
-	 * source under it (both trees, per this class's javadoc: this guardrail has no pre-existing main-source-only
-	 * "known-good" anchor to lean on the way {@code ScriptJsonSinkScanner} does).
+	 * Walks the specified module root <b>and</b> the sibling widgets module root ({@link #WIDGETS_MODULE_DIR}),
+	 * scanning every {@code src/main/java} and {@code src/test/java} Java source under each (both trees per
+	 * module, per this class's javadoc: this guardrail has no pre-existing main-source-only "known-good" anchor to
+	 * lean on the way {@code ScriptJsonSinkScanner} does).  The widgets module is included because it declares its
+	 * own {@code content(...)} sink ({@code CardContent}) and this guardrail follows the sink, not the module the
+	 * test happens to run in.
 	 *
-	 * @param moduleRoot The module root (e.g. {@code juneau-rest/juneau-rest-server-views}).
-	 * @return The aggregated sinks and violations across the tree.
-	 * @throws IOException If the tree cannot be walked.
+	 * @param moduleRoot The views module root (e.g. {@code juneau-rest/juneau-rest-server-views}).
+	 * @return The aggregated sinks and violations across both trees.
+	 * @throws IOException If either tree cannot be walked.
 	 */
 	static Result scanTree(Path moduleRoot) throws IOException {
 		var sinks = new ArrayList<Sink>();
 		var violations = new ArrayList<String>();
+		scanJavaSources(moduleRoot, sinks, violations);
+		scanJavaSources(moduleRoot.resolve(WIDGETS_MODULE_DIR), sinks, violations);
+		return new Result(sinks, violations);
+	}
+
+	/**
+	 * Scans one module root's {@code src/main/java} and {@code src/test/java} trees, appending every sink and
+	 * violation found to {@code sinks}/{@code violations}.  Extracted from {@link #scanTree} so that method can
+	 * walk both this module and the sibling widgets module with identical logic.
+	 */
+	private static void scanJavaSources(Path moduleRoot, List<Sink> sinks, List<String> violations) throws IOException {
 		var target = File.separator + "target" + File.separator;
 		for (var sourceDir : List.of("main", "test")) {
 			var srcRoot = moduleRoot.resolve("src").resolve(sourceDir).resolve("java");
@@ -317,7 +344,6 @@ final class RawContentSinkScanner {
 				}
 			}
 		}
-		return new Result(sinks, violations);
 	}
 
 	/**
