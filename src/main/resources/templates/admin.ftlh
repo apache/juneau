@@ -26,10 +26,11 @@
              pre-serialized server-side and inserted as trusted markup: ?no_esc suppresses this .ftlh's HTML
              auto-escaping so the emitted [data-juneau-page]/<table data-juneau-view>/<script> markup is not
              double-escaped. juneau-pages.js hash-routes the tabs and lazy-inits each panel's DataTable on first
-             activation via juneau-views.js's initTable. -->
-        <div class="rm-table-scroll">
-            ${pageTable?no_esc}
-        </div>
+             activation via juneau-views.js's initTable.
+             TODO-445n: the toolkit now owns table-only horizontal scroll, so the old .rm-table-scroll wrapper is
+             removed — an outer overflow-x:auto here would clip the paging-pill menu (INV-2) and can produce two
+             horizontal scrollbars. Each panel's ViewTable wrapper carries data-juneau-layout="wide". -->
+        ${pageTable?no_esc}
     </div>
 </#macro>
 <#include "base.ftlh">

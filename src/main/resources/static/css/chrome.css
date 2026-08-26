@@ -114,12 +114,10 @@
 
 .rm-table-search input { width: 200px; }
 
-/* Horizontal-scroll container so wide tables stay inside the card
-   instead of bleeding past its border on narrow viewports. */
-.rm-table-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+/* TODO-445n: horizontal scroll is now owned by the toolkit (juneau-views.css — the flex .dt-layout-cell for
+   DT2, the .juneau-view-table-scroll wrap for DT1), so the .rm-table-scroll wrapper has been removed from
+   admin.ftlh / releases.ftlh. An outer overflow-x:auto here sat between .jc-card and the paging-pill menu and
+   clipped it (INV-2) / produced a second horizontal scrollbar. The rule is retired rather than restyled. */
 
 table.rm-table {
   width: 100%;

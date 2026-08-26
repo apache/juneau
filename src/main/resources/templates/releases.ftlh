@@ -25,10 +25,13 @@
         <#-- Rich-view toolkit table + JSON sidecar, pre-serialized server-side (ReleaseRest.page via
              ViewTable.of) and inserted as trusted markup: ?no_esc suppresses this .ftlh's HTML auto-escaping
              so the emitted <table data-juneau-view>/<script> markup is not double-escaped. juneau-views.js
-             hydrates it into a server-side DataTable + ribbon on DOMContentLoaded. -->
-        <div class="rm-table-scroll">
-            ${viewTable?no_esc}
-        </div>
+             hydrates it into a server-side DataTable + ribbon on DOMContentLoaded.
+             TODO-445n: the toolkit now owns table-only horizontal scroll (juneau-views.css / the flex
+             .dt-layout-cell), so the old .rm-table-scroll wrapper is removed — an outer overflow-x:auto here
+             would clip the paging-pill menu (INV-2) and can produce two horizontal scrollbars. The
+             ViewTable wrapper <div> now sits as a direct child of .jc-card and its data-juneau-layout="wide"
+             stamp widens the card to full content width. -->
+        ${viewTable?no_esc}
     </div>
 </#macro>
 <#include "base.ftlh">
