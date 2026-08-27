@@ -161,6 +161,26 @@ class RowDetailDef_Test extends TestBase {
 		assertSize(3, bar.items);
 	}
 
+	@Test void a19_countNegative_rejected_nullAndZeroAccepted() {
+		var negative = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("info", "Info").count(-1).fields(DetailField.of("a")));
+		var e = assertThrows(IllegalArgumentException.class, () -> negative.validate(null));
+		assertTrue(e.getMessage().contains("count"), e::getMessage);
+
+		// A null count is the common case (no suffix), and must not trip the guard.
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("info", "Info").count(null).fields(DetailField.of("a")))
+			.validate(null);
+
+		// Zero is meaningful and still renders.
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("info", "Info").count(0).fields(DetailField.of("a")))
+			.validate(null);
+	}
+
 	@Test void b01_renderPlusMarkdown_rejected() {
 		var d = RowDetailDef.create()
 			.endpoint("/data/{id}")

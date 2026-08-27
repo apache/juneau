@@ -325,6 +325,8 @@ public class RowDetailDef {
 			throw iaex("RowDetailDef duplicate section id '%s'.", s.id);
 		if (s.columns < 1)
 			throw iaex("DetailSection '%s' columns must be >= 1.", s.id);
+		if (s.count != null && s.count < 0)
+			throw iaex("DetailSection '%s' count must be >= 0.", s.id);
 		validateSectionFields(s, fieldKeys);
 		validateActionBar(s.actions, actionIds);
 		validateNestedTable(s, nestedViewIds, enclosingViewId);
