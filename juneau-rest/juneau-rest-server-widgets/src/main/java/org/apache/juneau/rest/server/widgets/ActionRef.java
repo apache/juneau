@@ -33,6 +33,9 @@ public class ActionRef implements ActionBarItem {
 	/** The opaque action id.  Must not be blank. */
 	public String id;
 
+	/** The visual weight this bar paints for this action.  Defaults to {@link Emphasis#SECONDARY}. */
+	public Emphasis emphasis = Emphasis.SECONDARY;
+
 	/**
 	 * Creates an action reference with the specified id.
 	 *
@@ -45,5 +48,31 @@ public class ActionRef implements ActionBarItem {
 		var a = new ActionRef();
 		a.id = id;
 		return a;
+	}
+
+	/**
+	 * Sets the visual weight this bar paints for this action.
+	 *
+	 * <p>
+	 * This is a per-bar rendering property, not a property of the action itself &mdash; the same action can be
+	 * the primary button in one bar (e.g. the Detail View header) and an ordinary item in another.  Java-only:
+	 * never marshalled into {@code VIEW_META}, so it does not move {@link ActionBar#CONTRACT_VERSION}.
+	 *
+	 * @param value The emphasis.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ActionRef emphasis(Emphasis value) {
+		this.emphasis = value;
+		return this;
+	}
+
+	/** The visual weight an {@link ActionRef} button is painted with by the {@link ActionBar} that renders it. */
+	public enum Emphasis {
+
+		/** The bar's single most prominent action &mdash; solid accent fill.  At most one per bar. */
+		PRIMARY,
+
+		/** The default weight &mdash; neutral fill, accent-coloured label. */
+		SECONDARY
 	}
 }

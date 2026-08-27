@@ -5401,6 +5401,12 @@ public class RestContext extends Context {
 			throw new PreconditionFailed("Method '%s' not found on resource%s with matching matcher.", methodUC, onPath);
 		else if (rc == SC_METHOD_NOT_ALLOWED)
 			throw new MethodNotAllowed("Method '%s' not found on resource%s.", methodUC, onPath);
+		else if (rc < SC_BAD_REQUEST)
+			// Reaching this method means no operation matched, so a still-successful or unset status must resolve to a
+			// 404 rather than a 500.  Under a real servlet container the response status defaults to 200 (never the
+			// mock response's coincidental 0), so throwing "Invalid method response" for a non-error status would turn
+			// every unmatched path into an HTTP 500 in production while staying invisible to the mock-based tests.
+			throw new NotFound("Method '%s' not found on resource with matching pattern%s.", methodUC, onPath);
 		else
 			throw new ServletException("Invalid method response: " + rc, session.getException());
 	}

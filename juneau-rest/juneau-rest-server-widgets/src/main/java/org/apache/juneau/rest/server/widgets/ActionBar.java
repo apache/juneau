@@ -64,14 +64,19 @@ public class ActionBar implements Widget {
 	public void validate() {
 		if (items == null)
 			return;
+		var primaryCount = 0;
 		for (var item : items) {
 			if (item == null)
 				throw iaex("ActionBar item must not be null.");
 			if (item instanceof ActionRef ar) {
 				if (ar.id == null || ar.id.isBlank())
 					throw iaex("ActionRef id must not be null or blank.");
+				if (ar.emphasis == ActionRef.Emphasis.PRIMARY)
+					primaryCount++;
 			} else if (!(item instanceof SafeAction))
 				throw iaex("ActionBar item must be ActionRef or SafeAction.");
 		}
+		if (primaryCount > 1)
+			throw iaex("ActionBar must not have more than one PRIMARY ActionRef.");
 	}
 }

@@ -257,4 +257,43 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		var sectionAt = html.indexOf("data-juneau-detail-section=\"details\"");
 		assertTrue(headerAt >= 0 && sectionAt > headerAt, html);
 	}
+
+	@Test void a13_primaryEmphasisStampsClass_secondaryDefaultDoesNot() {
+		var v = ViewDef.create("alerts")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/alerts")
+			.columns(Column.of("id").title("Id"))
+			.rowActions(
+				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack").method(RowAction.Method.POST),
+				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc").method(RowAction.Method.POST))
+			.details(RowDetailDef.create()
+				.endpoint("/data/alerts/{id}")
+				.sections(DetailSection.create("s", "S")
+					.fields(DetailField.of("title").title("Title"))
+					.actions(ActionBar.create().items(
+						ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
+						ActionRef.of("esc"),
+						SafeAction.COLLAPSE))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		var ackAt = html.indexOf("data-juneau-action=\"ack\"");
+		var ackTagEnd = html.indexOf('>', ackAt);
+		var ackTagStart = html.lastIndexOf('<', ackAt);
+		var ackTag = html.substring(ackTagStart, ackTagEnd);
+		assertTrue(ackTag.contains("juneau-view-detail-action-primary"), ackTag);
+		var escAt = html.indexOf("data-juneau-action=\"esc\"");
+		var escTagEnd = html.indexOf('>', escAt);
+		var escTagStart = html.lastIndexOf('<', escAt);
+		var escTag = html.substring(escTagStart, escTagEnd);
+		assertFalse(escTag.contains("juneau-view-detail-action-primary"), escTag);
+		// No data attribute for emphasis (D7): a class only.
+		assertFalse(html.contains("data-juneau-emphasis"), html);
+	}
+
+	@Test void a14_moreThanOnePrimaryInABar_rejectedAtValidate() {
+		var bar = ActionBar.create().items(
+			ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
+			ActionRef.of("esc").emphasis(ActionRef.Emphasis.PRIMARY));
+		assertThrows(IllegalArgumentException.class, bar::validate);
+	}
 }

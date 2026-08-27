@@ -1060,9 +1060,12 @@ public class ViewTable {
 		for (var item : bar.items) {
 			if (item instanceof org.apache.juneau.rest.server.widgets.ActionRef ar) {
 				var label = actionLabel(ar.id, rowActions);
+				var cls = ar.emphasis == org.apache.juneau.rest.server.widgets.ActionRef.Emphasis.PRIMARY
+					? "juneau-view-detail-action juneau-view-detail-action-primary"
+					: "juneau-view-detail-action";
 				buttons.add(button("button", label)
 					.attr(DETAIL_ACTION_ATTR, ar.id)
-					.attr(CLASS_ATTR, "juneau-view-detail-action")
+					.attr(CLASS_ATTR, cls)
 					.disabled(true));
 			} else if (item instanceof org.apache.juneau.rest.server.widgets.SafeAction sa) {
 				buttons.add(button("button", sa.label())

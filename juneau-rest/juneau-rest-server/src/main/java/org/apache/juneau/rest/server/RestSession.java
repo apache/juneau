@@ -251,8 +251,9 @@ public class RestSession extends ContextSession {
 	 * {@link #status(HttpStatusLine)} on this call.  The {@code NotFound} sentinel in {@link #run()} keys off this
 	 * flag instead of {@code getStatus() == 0}, so a genuine 404 stays a 404 under a real container whose response
 	 * defaults to the servlet-spec {@code 200} (not the mock's coincidental {@code 0}).  A raw
-	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag; a
-	 * broader real-container 404-status audit is tracked separately and is out of scope for this fix.
+	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag, but
+	 * {@link RestContext#handleNotFound(RestSession)} independently normalizes any non-error status to a 404, so an
+	 * unmatched path can no longer surface as an HTTP 500 under a real container.
 	 */
 	private boolean statusExplicitlySet;
 

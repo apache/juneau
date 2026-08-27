@@ -58,4 +58,33 @@ class ActionBar_Test extends TestBase {
 		assertEquals("collapse", SafeAction.COLLAPSE.wire());
 		assertEquals("Collapse", SafeAction.COLLAPSE.label());
 	}
+
+	@Test void a06_actionRef_emphasisDefaultsToSecondary() {
+		assertEquals(ActionRef.Emphasis.SECONDARY, ActionRef.of("ack").emphasis);
+	}
+
+	@Test void a07_actionRef_emphasisFluentSetter() {
+		var ar = ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY);
+		assertEquals(ActionRef.Emphasis.PRIMARY, ar.emphasis);
+	}
+
+	@Test void a08_validate_allowsOnePrimary() {
+		var bar = ActionBar.create().items(ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY), ActionRef.of("esc"));
+		bar.validate();
+	}
+
+	@Test void a09_validate_rejectsMoreThanOnePrimary() {
+		var bar = ActionBar.create().items(
+			ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
+			ActionRef.of("esc").emphasis(ActionRef.Emphasis.PRIMARY));
+		var e = assertThrows(IllegalArgumentException.class, bar::validate);
+		assertTrue(e.getMessage().contains("PRIMARY"), e::getMessage);
+	}
+
+	@Test void a10_validate_safeActionNeverCountsAsPrimary() {
+		// SafeAction carries no emphasis field at all, so a bar of nothing but SafeAction items can never trip
+		// the at-most-one-PRIMARY rule - the type system rules it out rather than the validator.
+		var bar = ActionBar.create().items(ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY), SafeAction.COLLAPSE);
+		bar.validate();
+	}
 }

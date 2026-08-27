@@ -132,18 +132,18 @@
 	 * rather than an independent one.
 	 */
 	--jc-chrome-control-padding-x: 10px;
-	--jc-chrome-control-padding-x-wide: 14px;    /* PROVISIONAL - fixed when the detail action button first renders. */
+	--jc-chrome-control-padding-x-wide: 14px;
 	/*
 	 * Type steps.  A label-smaller-than-value pairing is expressed as the STEP PAIR (-font-size-1 for the
 	 * label, -font-size-3 for the value, 0.857x) rather than as a ratio token: no CSS property could consume a
 	 * ratio, and nothing would stop a surface setting two sizes that ignore it, whereas two named steps are the
 	 * only two values on offer.  The pairing is now spent by the detail field, which fixes -font-size-3 and the
-	 * ratio with it; -font-size-2 is still waiting on its own first consumer.
+	 * ratio with it; -font-size-2 and -line-height are now spent by the detail action button (below).
 	 */
 	--jc-chrome-font-size-1: 0.75rem;
-	--jc-chrome-font-size-2: 0.8125rem;          /* PROVISIONAL - fixed when the detail action button first renders. */
+	--jc-chrome-font-size-2: 0.8125rem;
 	--jc-chrome-font-size-3: 0.875rem;
-	--jc-chrome-line-height: 1.2;                /* PROVISIONAL - fixed with --jc-chrome-font-size-2. */
+	--jc-chrome-line-height: 1.2;
 	/*
 	 * Glyph sizes, one per role, stated once rather than repeated per selector.  These are chrome-wide glyph
 	 * ROLES; a widget's own internal proportions (a pill dot, a toggle knob) are sized to their own text and
@@ -151,6 +151,23 @@
 	 */
 	--jc-chrome-glyph-size: 16px;
 	--jc-chrome-glyph-size-small: 12px;
+	/*
+	 * Detail action button palette (D8, option (c)): DEFAULT tokens declared here, not console-ui chrome.css
+	 * aliases, so the button reads correctly wherever this file is the only stylesheet served.  A theme MAY
+	 * override every one of these; it does not have to supply them - same precedent as --jc-card-bg /
+	 * --jc-card-shadow above.  Named --jc-detail-action-* rather than reused --jc-btn-* names because the
+	 * latter are chrome.css's own consumer-facing vocabulary (its ".jc-btn" family) and this file must not
+	 * shadow a name it does not own.
+	 */
+	--jc-detail-action-bg: #ffffff;
+	--jc-detail-action-border: #cccccc;
+	--jc-detail-action-color: #1a5297;
+	--jc-detail-action-hover-bg: #f2f2f2;
+	--jc-detail-action-primary-bg: #1a5297;
+	--jc-detail-action-primary-bg-hover: #005fb2;
+	--jc-detail-action-primary-border: #144279;
+	--jc-detail-action-primary-color: #ffffff;
+	--jc-detail-action-primary-bg-disabled: #93a8c2;
 }
 
 /*
@@ -1053,6 +1070,69 @@ table.dataTable thead .sorting_desc_disabled:after {
 	flex-wrap: wrap;
 	gap: 0.5em;
 	margin: 0 0 0.75em;
+}
+
+/*
+ * Detail action button: shape and density are LOCAL (this file's own concern - see the module-split note at
+ * this file's header); colour is routed through the self-declared --jc-detail-action-* tokens above so a theme
+ * may override every one of them without this stylesheet depending on it.  HEIGHT rather than vertical padding
+ * spends the shared control-height step directly (box-sizing: border-box already in force chrome-wide), so
+ * padding-y is derived rather than independently declared - the same reasoning the chrome scale's own :root
+ * comment states for why padding-y is not a step.
+ */
+.juneau-view-detail-action {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--jc-space-1);
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height-compact);
+	padding: 0 var(--jc-chrome-control-padding-x-wide);
+	border-radius: 4px;
+	border: 1px solid var(--jc-detail-action-border);
+	background: var(--jc-detail-action-bg);
+	color: var(--jc-detail-action-color);
+	font-family: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	font-weight: 600;
+	line-height: var(--jc-chrome-line-height);
+	cursor: pointer;
+}
+
+.juneau-view-detail-action:hover:not(:disabled) {
+	background: var(--jc-detail-action-hover-bg);
+}
+
+.juneau-view-detail-action:disabled {
+	cursor: default;
+	opacity: 0.55;
+}
+
+.juneau-view-detail-action[hidden] {
+	display: none;
+}
+
+/* Primary: solid accent fill, white label, a slightly darker border of its own fill colour (D6/D7). */
+.juneau-view-detail-action-primary {
+	background: var(--jc-detail-action-primary-bg);
+	border-color: var(--jc-detail-action-primary-border);
+	color: var(--jc-detail-action-primary-color);
+}
+
+.juneau-view-detail-action-primary:hover:not(:disabled) {
+	background: var(--jc-detail-action-primary-bg-hover);
+}
+
+/*
+ * A solid fill needs its own disabled treatment (reduced fill saturation): with UA chrome the disabled state
+ * was readable by accident, and it will not be once the button has real colour.  Reduced saturation rather
+ * than opacity so the white label stays legible against it; opacity alone would fade both toward the panel
+ * background at the same rate.
+ */
+.juneau-view-detail-action-primary:disabled {
+	background: var(--jc-detail-action-primary-bg-disabled);
+	border-color: var(--jc-detail-action-primary-bg-disabled);
+	opacity: 1;
 }
 
 /*

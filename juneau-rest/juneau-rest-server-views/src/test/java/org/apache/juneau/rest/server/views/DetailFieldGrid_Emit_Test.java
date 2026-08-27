@@ -201,9 +201,10 @@ class DetailFieldGrid_Emit_Test extends TestBase {
 		var line = css.lines().filter(x -> x.contains("--jc-chrome-font-size-3:")).findFirst().orElseThrow();
 		assertFalse(line.contains("PROVISIONAL"),
 			() -> "the detail field value is -font-size-3's first consumer, which fixes it: " + line);
-		// The other two markers belong to a different item and must not be swept up.
-		assertTrue(css.contains("--jc-chrome-font-size-2: 0.8125rem;          /* PROVISIONAL"), css);
-		assertTrue(css.contains("--jc-chrome-line-height: 1.2;                /* PROVISIONAL"), css);
+		// The other two markers were fixed by the detail action button (Detail View action button treatment),
+		// which is the sweep this method's own name predicted once it landed.
+		assertFalse(css.contains("--jc-chrome-font-size-2: 0.8125rem;          /* PROVISIONAL"), css);
+		assertFalse(css.contains("--jc-chrome-line-height: 1.2;                /* PROVISIONAL"), css);
 	}
 
 	@Test void c07_theDetailTabsPillOverrideIsGone_butTheBarSlotHostSurvives() throws Exception {
