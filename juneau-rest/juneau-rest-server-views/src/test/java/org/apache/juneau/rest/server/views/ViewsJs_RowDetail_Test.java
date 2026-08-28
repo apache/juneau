@@ -479,4 +479,62 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("rule_malformedGatesNothing"));
 		assertEquals(true, r.get("rule_emptyRulesGatesNothing"));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// d) DetailField.actions - the third ActionBar host, and the one the runtime was never taught about
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * The fill path is attribute-scoped, so a bar emitted as a sibling of the value slot is not a paint target and
+	 * cannot be disturbed by a paint.  This is the half of the claim that would fail if the bar had been emitted
+	 * inside the value slot instead: {@code textContent} assignment would destroy it on the first paint.
+	 */
+	@Test void d01_aFieldHostedBarIsInvisibleToTheFillPath() {
+		var r = report();
+		assertEquals(true, r.get("dfa_onePaintTargetInTheBlock"));
+		assertEquals(true, r.get("dfa_barIsNotAPaintTarget"));
+		assertEquals(true, r.get("dfa_barIsASiblingOfTheValueSlot"));
+	}
+
+	/**
+	 * The three-state case a blank/non-blank default could not express: after a non-blank paint the field shows its
+	 * value <b>and</b> its bar, and the shared lifecycle gate still enables the button.  Pinned in markup by
+	 * {@code DetailField_Actions_Emit_Test.d01} and behaviourally here.
+	 */
+	@Test void d02_valueAndBarCoexist_andTheBarIsStillEnabledAfterANonBlankPaint() {
+		var r = report();
+		assertEquals("alice", r.get("dfa_valuePainted"));
+		assertEquals(true, r.get("dfa_barSurvivedThePaint"));
+		// Asserting the pre-gate state is what makes the enable observable rather than assumed.
+		assertEquals(true, r.get("dfa_buttonStillDisabledBeforeTheGate"));
+		assertEquals(true, r.get("dfa_buttonEnabledByTheSharedGate"));
+	}
+
+	/** No blank/non-blank default: an unfilled field keeps its bar, and the bar still enables. */
+	@Test void d03_aBlankValueDoesNotHideTheBar() {
+		var r = report();
+		assertEquals(true, r.get("dfa_blankValueIsEmptyString"));
+		assertEquals(true, r.get("dfa_blankValueKeepsTheBar"));
+		assertEquals(true, r.get("dfa_blankValueButtonEnabled"));
+	}
+
+	/** Contract-failure fail-closed reaches the third host through the same panel-scoped pass as the other two. */
+	@Test void d04_hideActionRefsReachesAFieldHostedBar() {
+		var r = report();
+		assertEquals(true, r.get("dfa_failClosedDisabled"));
+		assertEquals(true, r.get("dfa_failClosedHidden"));
+	}
+
+	/**
+	 * Visibility for a field-hosted bar is the state-conditional predicates and nothing else, which is only true if
+	 * those predicates actually reach a bar inside a field block.  Both directions, so a pass that gated everything
+	 * would fail as loudly as one that gated nothing.
+	 */
+	@Test void d05_stateConditionalRulesReachAFieldHostedBar() {
+		var r = report();
+		assertEquals(true, r.get("dfa_gatedDisabled"));
+		assertEquals(true, r.get("dfa_gatedStillPresent"));
+		assertEquals("This record is not open.", r.get("dfa_gatedReason"));
+		assertEquals(true, r.get("dfa_passingRuleStaysEnabled"));
+	}
 }

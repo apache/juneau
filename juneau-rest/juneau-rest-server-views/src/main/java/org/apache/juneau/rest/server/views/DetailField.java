@@ -16,6 +16,8 @@ package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import org.apache.juneau.rest.server.widgets.*;
+
 /**
  * One field slot in a {@link DetailSection}.
  *
@@ -103,6 +105,24 @@ public class DetailField {
 	public FieldSpan span;
 
 	/**
+	 * Optional controls painted in this field's value column &mdash; the <b>third</b> {@link ActionBar} host,
+	 * beside {@link RowDetailDef#headerActions} and {@link DetailSection#actions}.  <jk>null</jk> / empty omits
+	 * the bar and emits byte-identical markup to a field that never declared one.
+	 *
+	 * <p>
+	 * A field may carry a value <b>and</b> a bar at once (a linked record's id beside a quiet <c>Unlink</c>): the
+	 * bar is emitted as a sibling of the value slot, not in place of it, and nothing here decides which is
+	 * visible.  Show/hide is {@link ActionRef#enabledWhen(String,Op,Object,String)}'s business alone.
+	 *
+	 * <p>
+	 * Emphasis is <b>implicit</b>: a bar in a field row is always the quiet variant, so a field row cannot be made
+	 * to out-shout the panel it is subordinate to.  {@link ActionRef} ids are validated against the enclosing
+	 * view's {@code rowActions} by {@link RowDetailDef#validate(java.util.List)}, and this does not bump
+	 * {@link RowDetailDef#CONTRACT_VERSION} &mdash; a third host is not a schema change.
+	 */
+	public ActionBar actions;
+
+	/**
 	 * Creates a field bound to the specified expand-JSON key.
 	 *
 	 * @param data The {@code fields} map key.  Must not be <jk>null</jk> or blank.
@@ -180,6 +200,17 @@ public class DetailField {
 	 */
 	public DetailField span(FieldSpan value) {
 		span = value;
+		return this;
+	}
+
+	/**
+	 * Sets the controls painted in this field's value column.
+	 *
+	 * @param value The bar.  Can be <jk>null</jk> to unset; a <jk>null</jk> or empty bar emits nothing.
+	 * @return This object.
+	 */
+	public DetailField actions(ActionBar value) {
+		actions = value;
 		return this;
 	}
 }

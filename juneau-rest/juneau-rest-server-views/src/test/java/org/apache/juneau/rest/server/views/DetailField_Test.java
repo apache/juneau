@@ -16,9 +16,11 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -57,5 +59,33 @@ class DetailField_Test extends TestBase {
 		f.render(Render.of("progress")).href(null);
 		assertEquals("progress", f.render.id);
 		assertNull(f.href);
+	}
+
+	@Test void a05_actions_nullByDefault_andFluentlySettable() {
+		var f = DetailField.of("ticketId");
+		assertNull(f.actions);
+		var bar = ActionBar.create().items(ActionRef.of("ticket-create"), ActionRef.of("ticket-assign"));
+		assertSame(f, f.actions(bar));
+		assertSame(bar, f.actions);
+		assertSize(2, f.actions.items);
+		// Unsettable, like every other optional on this bean.
+		f.actions(null);
+		assertNull(f.actions);
+	}
+
+	/**
+	 * A field may carry a value-shaping option and a bar at the same time.  The bar is an additional host on the
+	 * field, not an alternative to its value, so nothing here is mutually exclusive.
+	 */
+	@Test void a06_actions_composesWithTheValueOptions() {
+		var f = DetailField.of("ticketId").title("Linked ticket").href("/tickets/{ticketId}")
+			.render("linked")
+			.span(FieldSpan.FULL)
+			.actions(ActionBar.create().items(ActionRef.of("ticket-create")));
+		assertEquals("Linked ticket", f.title);
+		assertEquals("linked", f.render.id);
+		assertEquals("/tickets/{ticketId}", f.href);
+		assertEquals(FieldSpan.FULL, f.span);
+		assertSize(1, f.actions.items);
 	}
 }

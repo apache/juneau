@@ -1310,6 +1310,39 @@ table.dataTable thead .sorting_desc_disabled:after {
 	content: "\2014";
 }
 
+/*
+ * A FIELD-HOSTED action bar (DetailField.actions) - the third ActionBar host, and the only one that lands inside
+ * a grid row.  The bar is emitted as a plain sibling of the value slot, so three things need correcting before the
+ * shared bar rule above sits right in a field row:
+ *
+ *   1. PLACEMENT.  The inline field block is a two-column grid, label then value, and the bar arrives as a THIRD
+ *      child - which auto-places at row 2 of column ONE, directly under the label.  That is the single
+ *      arrangement a value-slot bar exists to rule out, so column 2 is named explicitly.
+ *   2. THE BOTTOM MARGIN.  The shared rule reserves space beneath itself, which is right for a panel or section
+ *      toolbar and wrong in a row whose rhythm is the field block's own padding plus separator.
+ *   3. DENSITY.  In-field emphasis is IMPLICIT: a field row is subordinate to its panel by construction and no
+ *      author may opt out, so the buttons are tightened and unbolded here rather than by a declared level.  This
+ *      LAYERS on the shared button recipe (the one rule that owns shape, colour, and every state) - it does not
+ *      fork it.
+ *
+ * A descendant combinator rather than a compound selector: it out-ranks the shared bar rule on specificity as
+ * well as on order, and it needs no new class or attribute from the server.
+ *
+ * INLINE (the default) is what this is designed against.  A one-column field block - a stacked section, or a
+ * markdown field with a title - mints an IMPLICIT second column for the placement below and widens that row; a
+ * variant for those layouts is a separate decision and is deliberately not taken here.
+ */
+.juneau-view-detail-field .juneau-view-detail-actions {
+	grid-column: 2;
+	margin: 0;
+	gap: var(--jc-space-1);
+}
+
+.juneau-view-detail-field .juneau-view-detail-action {
+	padding: 0 var(--jc-chrome-control-padding-x);
+	font-weight: 400;
+}
+
 .juneau-view-detail-markdown {
 	max-width: 96ch;
 }

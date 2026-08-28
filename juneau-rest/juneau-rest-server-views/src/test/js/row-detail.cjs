@@ -876,4 +876,102 @@ if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
 	out.rule_emptyRulesGatesNothing = emptyBar.btn.disabled === false;
 }
 
+// ----------------------------------------------------------------------------------------------------------------
+// DetailField.actions - an ActionBar hosted in a field's VALUE COLUMN, emitted as a plain SIBLING of the value
+// slot.  The claim under test is that this host needed ZERO runtime wiring: the fill path must not see the bar
+// (it selects [data-juneau-field], which the bar does not carry), and the panel-scoped [data-juneau-action]
+// lifecycles must reach it without knowing it is in a field.  Both directions are checked, because either one
+// failing alone would still leave the bar looking present.
+// ----------------------------------------------------------------------------------------------------------------
+
+/** The three-child field block ViewTable emits for a field that declares a bar: title, value slot, bar. */
+function fieldWithBar(key, actionId, rules) {
+	const panel = el('div');
+	panel.className = 'juneau-view-detail-panel';
+	const sec = el('section');
+	sec.setAttribute('data-juneau-detail-section', 'ctx');
+	const grid = el('div');
+	grid.className = 'juneau-view-detail-fields juneau-view-detail-fields-inline';
+	const block = el('div');
+	block.className = 'juneau-view-detail-field';
+	const label = el('div');
+	label.className = 'juneau-view-detail-field-title';
+	label.textContent = 'Assignee';
+	const value = el('div');
+	value.setAttribute('data-juneau-field', key);
+	value.className = 'juneau-view-detail-field-value';
+	const bar = el('div');
+	bar.className = 'juneau-view-detail-actions';
+	const btn = el('button');
+	btn.setAttribute('data-juneau-action', actionId);
+	btn.className = 'juneau-view-detail-action';
+	btn.disabled = true;                    // as emitted: disabled until the expand GET returns 2xx
+	btn.hidden = false;
+	btn.removeAttribute = function (k) { delete this.attrs[k]; };
+	const desc = el('span');
+	desc.setAttribute('data-juneau-action-desc', actionId);
+	desc.setAttribute('hidden', 'hidden');
+	if (rules) btn.setAttribute('data-juneau-action-rules', JSON.stringify(rules));
+	bar.appendChild(btn);
+	if (rules) bar.appendChild(desc);
+	block.appendChild(label);
+	block.appendChild(value);
+	block.appendChild(bar);
+	grid.appendChild(block);
+	sec.appendChild(grid);
+	panel.appendChild(sec);
+	return { panel: panel, block: block, value: value, bar: bar, btn: btn, desc: desc };
+}
+
+// (1) The fill path sees the value slot and nothing else in the block.  The bar carries no [data-juneau-field], so
+// it is not a paint target, and painting the value must not disturb it.
+const dfa = fieldWithBar('assignee', 'esc');
+out.dfa_onePaintTargetInTheBlock = dfa.panel.querySelectorAll('[data-juneau-field]').length === 1;
+out.dfa_barIsNotAPaintTarget = dfa.bar.getAttribute('data-juneau-field') == null;
+out.dfa_barIsASiblingOfTheValueSlot = dfa.block.childNodes.length === 3
+	&& dfa.block.childNodes[1] === dfa.value
+	&& dfa.block.childNodes[2] === dfa.bar
+	&& dfa.value.childNodes.length === 0;
+
+// (2) LD-4: a NON-BLANK value and a bar at once.  The value paints, the bar is untouched and still in the block,
+// and the lifecycle enable reaches it - which is the whole of "still clickable" for a delegated listener.
+I.fillDetailSlots(dfa.panel, { assignee: 'alice' });
+out.dfa_valuePainted = dfa.value.textContent;
+out.dfa_barSurvivedThePaint = dfa.block.childNodes[2] === dfa.bar && dfa.bar.childNodes[0] === dfa.btn;
+out.dfa_buttonStillDisabledBeforeTheGate = dfa.btn.disabled === true;
+I.setActionRefEnabled(dfa.panel, true);
+out.dfa_buttonEnabledByTheSharedGate = dfa.btn.disabled === false && dfa.btn.hidden === false;
+
+// (3) A BLANK value changes nothing about the bar: this host ships no blank/non-blank default, so the bar is
+// present in both states and visibility belongs to the ActionRef predicates alone.
+const dfaBlank = fieldWithBar('ticketId', 'esc');
+I.fillDetailSlots(dfaBlank.panel, {});
+out.dfa_blankValueIsEmptyString = dfaBlank.value.textContent === '';
+out.dfa_blankValueKeepsTheBar = dfaBlank.block.childNodes[2] === dfaBlank.bar;
+I.setActionRefEnabled(dfaBlank.panel, true);
+out.dfa_blankValueButtonEnabled = dfaBlank.btn.disabled === false;
+
+// (4) Fail-closed: a 404/500 or a contract mismatch hides a field-hosted bar's buttons through the same
+// panel-scoped pass that hides a header bar's, with no field-awareness of its own.
+const dfaFail = fieldWithBar('assignee', 'esc');
+I.hideActionRefs(dfaFail.panel);
+out.dfa_failClosedDisabled = dfaFail.btn.disabled === true;
+out.dfa_failClosedHidden = dfaFail.btn.hidden === true;
+
+// (5) The state-conditional predicates reach the third host too, which is why this host ships no visibility rule
+// of its own: a failing rule disables the field-hosted button and attaches its reason, exactly as in a header bar.
+if (out.hasApplyActionRefRules) {
+	const gatedRules = [{ field: 'state', op: 'eq', value: 'open', reason: 'This record is not open.' }];
+	const dfaGated = fieldWithBar('state', 'esc', gatedRules);
+	I.setActionRefEnabled(dfaGated.panel, true);
+	I.applyActionRefRules(dfaGated.panel, { state: 'closed' });
+	out.dfa_gatedDisabled = dfaGated.btn.disabled === true;
+	out.dfa_gatedStillPresent = dfaGated.btn.hidden === false;
+	out.dfa_gatedReason = dfaGated.btn.getAttribute('title');
+	const dfaPassing = fieldWithBar('state', 'esc', gatedRules);
+	I.setActionRefEnabled(dfaPassing.panel, true);
+	I.applyActionRefRules(dfaPassing.panel, { state: 'open' });
+	out.dfa_passingRuleStaysEnabled = dfaPassing.btn.disabled === false;
+}
+
 process.stdout.write(JSON.stringify(out));

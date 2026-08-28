@@ -818,6 +818,36 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains(".juneau-sym-flip-x"), body);
 	}
 
+	/**
+	 * The value-slot variant for a field-hosted {@link DetailField#actions} bar.
+	 *
+	 * <p>
+	 * Three things are asserted, and each is load-bearing rather than descriptive.  <b>Placement:</b> the inline
+	 * field block is a two-column grid of label then value, so a bar arriving as a third child auto-places under
+	 * the LABEL unless a column is named - the one arrangement a value-slot bar exists to rule out.  <b>Margin:</b>
+	 * the shared bar rule reserves space beneath itself, which breaks a field row's separator rhythm, so the
+	 * variant has to neutralise it. <b>Layering:</b> the variant is a descendant selector on top of the single
+	 * shared button recipe, which is what keeps a field bar and a panel bar sharing one treatment instead of
+	 * forking into two.
+	 */
+	@Test void o07_viewsCss_hasFieldHostedActionBarVariant() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = ".juneau-view-detail-field .juneau-view-detail-actions {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("grid-column: 2"),
+			() -> "without an explicit column the bar auto-places under the label: " + rule);
+		assertTrue(rule.contains("margin: 0"),
+			() -> "the shared bar's bottom margin has to be neutralised inside a field row: " + rule);
+		// The variant must come AFTER the un-prefixed shared rule it narrows, and must not have replaced it.
+		var shared = body.indexOf("\n.juneau-view-detail-actions {");
+		assertTrue(shared >= 0 && shared < at, body);
+		// Layered on the shared button recipe, never a fork of it.
+		assertTrue(body.contains(".juneau-view-detail-action {"), body);
+		assertTrue(body.contains(".juneau-view-detail-field .juneau-view-detail-action {"), body);
+	}
+
 	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-columnsearch-row > th {"), body);

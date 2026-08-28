@@ -306,6 +306,13 @@ public class RowDetailDef {
 		validateEnabledWhenFields(headerActions, dataKeys, "the detail header");
 		for (var s : sections)
 			validateEnabledWhenFields(s.actions, dataKeys, "section '" + s.id + "'");
+		// The third bar host.  Omitting this pass would leave a field-hosted bar's rules the only ones never
+		// cross-checked, and the runtime fails closed on a field it cannot find - right at runtime, silent forever
+		// at startup.
+		for (var s : sections)
+			if (s.fields != null)
+				for (var f : s.fields)
+					validateEnabledWhenFields(f.actions, dataKeys, "field '" + f.data + "'");
 	}
 
 	private static void validateEnabledWhenFields(ActionBar bar, Set<String> dataKeys, String where) {
@@ -369,25 +376,30 @@ public class RowDetailDef {
 			throw iaex("DetailSection '%s' columns must be >= 1.", s.id);
 		if (s.count != null && s.count < 0)
 			throw iaex("DetailSection '%s' count must be >= 0.", s.id);
-		validateSectionFields(s, fieldKeys);
+		validateSectionFields(s, fieldKeys, actionIds);
 		validateActionBar(s.actions, actionIds);
 		validateNestedTable(s, nestedViewIds, enclosingViewId);
 	}
 
-	private void validateSectionFields(DetailSection s, Set<String> fieldKeys) {
+	private void validateSectionFields(DetailSection s, Set<String> fieldKeys, Set<String> actionIds) {
 		if (s.fields == null)
 			return;
 		for (var f : s.fields)
-			validateDetailField(f, s.id, fieldKeys);
+			validateDetailField(f, s.id, fieldKeys, actionIds);
 	}
 
-	private void validateDetailField(DetailField f, String sectionId, Set<String> fieldKeys) {
+	private void validateDetailField(DetailField f, String sectionId, Set<String> fieldKeys, Set<String> actionIds) {
 		if (f == null)
 			throw iaex("DetailSection '%s' field must not be null.", sectionId);
 		if (f.data == null || f.data.isBlank())
 			throw iaex("DetailSection '%s' field data must not be null or blank.", sectionId);
 		if (!fieldKeys.add(f.data))
 			throw iaex("RowDetailDef duplicate field data key '%s'.", f.data);
+		// EVERY actions check belongs above the render early-return below.  A field carrying a bar and no renderer
+		// is the ordinary case, so a rule written under that return would be dead code for exactly the shape it
+		// exists to reject - and would still pass a new test that happened to set a renderer too.
+		validateFieldActions(f);
+		validateActionBar(f.actions, actionIds);
 		if (f.render == null)
 			return;
 		if (f.render.id == null || f.render.id.isBlank())
@@ -397,6 +409,23 @@ public class RowDetailDef {
 		SinkRenderAllowlist.assertAllowed(f.render.id, allowedCustomRenderers);
 		if ("pill".equals(f.render.id))
 			ViewDef.validateSinkPill(f.render, sectionId + "." + f.data);
+	}
+
+	/**
+	 * Rejects a field that hosts an {@link ActionBar} on a title-suppressed {@link DetailField.Format#MARKDOWN}
+	 * body: an empty {@link DetailField#title} turns the block into a full-bleed prose column, and a bar in the
+	 * value slot wants that same block.  Both want the whole row, so declaring both is an authoring error rather
+	 * than a layout the stylesheet could arbitrate.
+	 *
+	 * <p>
+	 * Keyed on the bar being <b>declared</b>, not on it having items: a bar attached to a full-bleed markdown body
+	 * is the mistake whether or not it happens to be empty on the day it is written.
+	 */
+	private static void validateFieldActions(DetailField f) {
+		if (f.actions == null)
+			return;
+		if (f.render == null && f.format == DetailField.Format.MARKDOWN && f.title != null && f.title.isEmpty())
+			throw iaex("DetailField '%s' cannot host actions on a title-suppressed MARKDOWN body.", f.data);
 	}
 
 	private static void validateNestedTable(DetailSection s, Set<String> nestedViewIds, String enclosingViewId) {

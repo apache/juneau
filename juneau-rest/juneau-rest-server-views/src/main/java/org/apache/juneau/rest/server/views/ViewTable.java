@@ -904,7 +904,7 @@ public class ViewTable {
 			kids.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
 		if (hasActionBarItems(s.actions))
 			kids.add(emitActionBar(s.actions, viewDef.rowActions));
-		kids.add(buildFieldsGrid(s));
+		kids.add(buildFieldsGrid(s, viewDef.rowActions));
 		if (s.table != null)
 			kids.add(emitNestedTable(s.table, csrfToken));
 		var out = section(kids.toArray())
@@ -925,11 +925,11 @@ public class ViewTable {
 	 * author's <b>cap</b>; {@code juneau-views.css} decides how many of those columns a given panel width can
 	 * actually afford.  The ladder tops out at {@value #DETAIL_MAX_COLUMNS}.
 	 */
-	private static Div buildFieldsGrid(DetailSection s) {
+	private static Div buildFieldsGrid(DetailSection s, List<RowAction> rowActions) {
 		var fieldSlots = new ArrayList<>();
 		if (s.fields != null)
 			for (var f : s.fields)
-				fieldSlots.add(emitDetailField(f));
+				fieldSlots.add(emitDetailField(f, rowActions));
 		var cols = Math.min(Math.max(s.columns, 1), DETAIL_MAX_COLUMNS);
 		var layout = s.layout == FieldLayout.STACKED ? "stacked" : "inline";
 		return div(fieldSlots.toArray())
@@ -1047,8 +1047,15 @@ public class ViewTable {
 	 * Builds one empty field slot: a title div plus a value div, whatever the section's {@link FieldLayout} is
 	 * &mdash; the arrangement is a property of the grid, so it is styled from the grid's class rather than
 	 * changing the shape emitted here.
+	 *
+	 * <p>
+	 * A {@link DetailField#actions} bar is appended as a plain <b>sibling</b> of the value slot rather than the two
+	 * being wrapped together.  That keeps the {@code [data-juneau-field]} node exactly where the expand-fill
+	 * painter already looks for it, so a field-hosted bar needs no runtime wiring of its own: the fill path never
+	 * sees it, and the panel-scoped {@code [data-juneau-action]} lifecycles reach it unchanged.  Seating the third
+	 * child in the value column is the stylesheet's job.
 	 */
-	private static Div emitDetailField(DetailField f) {
+	private static Div emitDetailField(DetailField f, List<RowAction> rowActions) {
 		var rendered = f.render != null;
 		var markdown = !rendered && f.format == DetailField.Format.MARKDOWN;
 		// A markdown field spans by default rather than by a parallel hardcoded CSS rule that happens to do the
@@ -1069,13 +1076,16 @@ public class ViewTable {
 			valueSlot.class_("juneau-view-detail-field-value");
 		}
 		var hideTitle = markdown && f.title != null && f.title.isEmpty();
-		if (hideTitle)
-			return div(valueSlot).class_("juneau-view-detail-field juneau-view-detail-field-markdown" + span);
-		var label = f.title == null || f.title.isBlank() ? f.data : f.title;
-		return div(
-			div(label).class_("juneau-view-detail-field-title"),
-			valueSlot
-		).class_((markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field") + span);
+		var kids = new ArrayList<>();
+		if (! hideTitle) {
+			var label = f.title == null || f.title.isBlank() ? f.data : f.title;
+			kids.add(div(label).class_("juneau-view-detail-field-title"));
+		}
+		kids.add(valueSlot);
+		if (hasActionBarItems(f.actions))
+			kids.add(emitActionBar(f.actions, rowActions));
+		return div(kids.toArray())
+			.class_((markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field") + span);
 	}
 
 	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {

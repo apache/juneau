@@ -299,7 +299,13 @@ public class ExampleViewsRest extends BasicRestServlet {
 					DetailSection.create("context", "Context")
 						.fields(
 							DetailField.of("summary").title("Summary"),
-							DetailField.of(COL_ASSIGNEE).title("Assignee"))
+							// A field-hosted ActionBar: the third bar host, painted in this row's VALUE column
+							// beside the assignee it acts on rather than up in a toolbar.  The row carries a value
+							// AND a bar at once - the same declared "esc" RowAction the section bar below offers,
+							// reached from a second host, with no new action, endpoint, or contract version.  The
+							// in-field buttons are quiet by construction; there is nothing to declare for that.
+							DetailField.of(COL_ASSIGNEE).title("Assignee")
+								.actions(ActionBar.create().items(ActionRef.of(ACTION_ESC))))
 						.actions(ActionBar.create().items(ActionRef.of(ACTION_ESC)))
 						// A read-only table nested in the expander: its own client-mode GET is scoped to the
 						// parent alert by the "alertId" query param (no {parentId} URL template).  It runs only

@@ -363,4 +363,121 @@ class RowDetailDef_Test extends TestBase {
 		assertTrue(e.getMessage().contains("state"), e::getMessage);
 		assertTrue(e.getMessage().contains("header"), e::getMessage);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) DetailField.actions - the THIRD ActionBar host.  Its rules live here rather than on DetailField, which has
+	//    no validate() of its own and would have no caller for one.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static RowDetailDef withFieldBar(ActionBar bar) {
+		return RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("info", "Info")
+				.fields(DetailField.of("owner").title("Owner").actions(bar)));
+	}
+
+	/**
+	 * The id cross-check the other two hosts already get.  Without it a typo'd id renders a real-looking button:
+	 * the emitter falls back to the raw id as the label when no {@code RowAction} matches, so the author sees a
+	 * plausible control whose click resolves to nothing instead of a startup failure.
+	 */
+	@Test void f01_fieldActions_unknownActionRef_rejected() {
+		var d = withFieldBar(ActionBar.create().items(ActionRef.of("ack")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
+		assertTrue(e.getMessage().contains("ack"), e::getMessage);
+		assertTrue(e.getMessage().contains("rowActions"), e::getMessage);
+	}
+
+	@Test void f02_fieldActions_knownActionRef_accepted() {
+		withFieldBar(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE))
+			.validate(java.util.List.of(ack()));
+	}
+
+	/**
+	 * The bar itself is validated too, not just its ids: reaching {@code validateActionBar} is what routes a field
+	 * bar through {@code ActionBar.validate()} on the same terms as a header or section bar.
+	 */
+	@Test void f03_fieldActions_barsOwnRulesAreEnforced() {
+		var d = withFieldBar(ActionBar.create().items(
+			ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
+			ActionRef.of("esc").emphasis(ActionRef.Emphasis.PRIMARY)));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack(),
+			RowAction.create("esc").endpoint("/y").method(RowAction.Method.POST))));
+		assertTrue(e.getMessage().contains("PRIMARY"), e::getMessage);
+	}
+
+	/**
+	 * The field-bar checks must sit ABOVE {@code validateDetailField}'s {@code render == null} early return.  A
+	 * field with a bar and no renderer is the ordinary case, so a rule written below that return would be dead
+	 * code for exactly the shape it exists to reject - and this method is what fails if it moves back down.
+	 */
+	@Test void f04_fieldActions_areCheckedOnAFieldWithNoRenderer() {
+		var noRender = DetailField.of("owner").title("Owner").actions(ActionBar.create().items(ActionRef.of("ack")));
+		assertNull(noRender.render);
+		var d = RowDetailDef.create().endpoint("/data/{id}")
+			.sections(DetailSection.create("info", "Info").fields(noRender));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
+	}
+
+	/** The third {@code enabledWhen} traversal: a field-hosted bar's rules are cross-checked like the other two. */
+	@Test void f05_fieldActions_enabledWhen_onUndeclaredField_rejected() {
+		var d = withFieldBar(ActionBar.create().items(
+			ActionRef.of("ack").enabledWhen("state", Op.EQ, "open", "This record is not open.")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("state"), e::getMessage);
+		assertTrue(e.getMessage().contains("field 'owner'"), e::getMessage);
+	}
+
+	@Test void f06_fieldActions_enabledWhen_mayKeyOnAFieldDeclaredByALaterSection() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(
+				DetailSection.create("a", "A").fields(DetailField.of("owner").actions(ActionBar.create().items(
+					ActionRef.of("ack").enabledWhen("state", Op.EQ, "open", "This record is not open.")))),
+				DetailSection.create("b", "B").fields(DetailField.of("state")))
+			.validate(java.util.List.of(ack()));
+	}
+
+	/**
+	 * A title-suppressed markdown body is a full-bleed prose column and a value-slot bar wants that same block, so
+	 * declaring both is an authoring error.  A markdown field that keeps its title is fine.
+	 */
+	@Test void f07_actionsOnATitleSuppressedMarkdownBody_rejected() {
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("body").title("").format(DetailField.Format.MARKDOWN)
+					.actions(ActionBar.create().items(ActionRef.of("ack")))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("MARKDOWN"), e::getMessage);
+		assertTrue(e.getMessage().contains("body"), e::getMessage);
+	}
+
+	@Test void f08_actionsOnATitledMarkdownBody_accepted() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("body").title("Notes").format(DetailField.Format.MARKDOWN)
+					.actions(ActionBar.create().items(ActionRef.of("ack")))))
+			.validate(java.util.List.of(ack()));
+	}
+
+	/** Rejected on the DECLARATION, not on the bar happening to have items today. */
+	@Test void f09_emptyBarOnASuppressedTitleMarkdownBody_isStillRejected() {
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("body").title("").format(DetailField.Format.MARKDOWN).actions(ActionBar.create())));
+		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
+	}
+
+	@Test void f10_viewTableOf_rejectsAnUnknownFieldActionRef() {
+		var v = ViewDef.create("x").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
+			.columns(Column.of("name"))
+			.details(RowDetailDef.create().endpoint("/d/{id}")
+				.sections(DetailSection.create("s", "S").fields(
+					DetailField.of("owner").actions(ActionBar.create().items(ActionRef.of("nope"))))))
+			.build();
+		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
+	}
 }
