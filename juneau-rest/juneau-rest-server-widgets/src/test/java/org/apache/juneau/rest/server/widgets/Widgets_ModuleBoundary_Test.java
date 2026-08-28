@@ -168,7 +168,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		// A {@link} from here to a table/row-action type would not resolve and would fail the javadoc gate.  a01
 		// already forbids the fully-qualified package; these are the simple names those links used, which have to
 		// have become prose or {@code} instead.
-		var link = Pattern.compile("\\{@link\\s+(RowAction|IdempotencyKey|ActionResult)\\b");
+		var link = Pattern.compile("\\{@link\\s+(RowAction|IdempotencyKey|ActionResult|RowClassRule)\\b");
 		var o = offenders(t -> link.matcher(t).find(), "src/main/java", "src/test/java");
 		assertTrue(o.isEmpty(), () -> "These files {@link} a views type by simple name, which cannot resolve here: " + o);
 	}

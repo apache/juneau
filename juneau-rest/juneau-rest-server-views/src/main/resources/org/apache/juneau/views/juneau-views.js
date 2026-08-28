@@ -1919,6 +1919,140 @@
 		}
 	}
 
+	// ==================================================================================================================
+	// STATE-CONDITIONAL ACTIONREF RULES
+	// ==================================================================================================================
+	//
+	// An author can gate one ActionRef on the row's own state (`ActionRef.enabledWhen`).  The server stamps the rules
+	// onto the button as JSON and emits a hidden sibling node per gated button for the reason text; this pass
+	// evaluates them at expand-fill time against the expand GET's `fields` map - the same already-validated payload
+	// the field slots are filled from, never the parent DataTables row.
+	//
+	// Two properties this pass must never break:
+	//
+	//   DISABLE-ONLY.  It sets `disabled = true` and never `disabled = false`, so it cannot resurrect a button that
+	//   setActionRefEnabled is holding disabled mid-lifecycle or that hideActionRefs closed after a failed expand.
+	//   It layers ON TOP of that gate rather than competing with it.  There is no hide/show branch: a gated action is
+	//   rendered present-but-disabled, never removed, so the bar's contents do not jump between rows.
+	//
+	//   BOTH REASON CHANNELS, ALWAYS.  `title` serves the pointer user and `aria-describedby` serves assistive tech -
+	//   a disabled control's tooltip is unreliable on its own.  Both are set together and cleared together, or a
+	//   re-enabled button keeps announcing why it used to be unavailable.
+
+	const ACTION_RULES_ATTR = "data-juneau-action-rules";
+	const ACTION_DESC_ATTR = "data-juneau-action-desc";
+	const ACTION_DESC_ID_PREFIX = "juneau-action-desc:";
+
+	/**
+	 * Reads one button's declared rules.  A malformed attribute warns and gates NOTHING rather than disabling the
+	 * button: the rule is presentation only (the server re-reads the row's state and refuses on its own authority),
+	 * so the safe direction here is the pre-rule behaviour, not a bar of dead buttons.  The server-side validation
+	 * makes a malformed attribute a toolkit bug in the first place.
+	 */
+	function parseActionRefRules(btn) {
+		const raw = btn.getAttribute(ACTION_RULES_ATTR);
+		if (!raw) return [];
+		try {
+			const parsed = JSON.parse(raw);
+			return Array.isArray(parsed) ? parsed : [];
+		} catch (e) {
+			warn("juneau-views: malformed " + ACTION_RULES_ATTR + " JSON: " + e);
+			return [];
+		}
+	}
+
+	/** Whether one rule matches the expand payload's `fields` map (a matching rule leaves the action offered). */
+	function actionRuleMatches(rule, map) {
+		if (!rule || rule.field == null) return true;
+		// FAIL CLOSED on a field the payload does not carry.  RowDetailDef.validate rejects a rule keyed on an
+		// undeclared field at startup, so an absent key here is a broken expand contract rather than a state to
+		// interpret - including for `absent`, which tests a field that came back empty, not one that never came.
+		if (!Object.hasOwn(map, rule.field)) return false;
+		const raw = map[rule.field];
+		const present = raw != null && String(raw) !== "";
+		switch (rule.op) {
+			case "eq": return String(raw) === String(rule.value);
+			case "ne": return String(raw) !== String(rule.value);
+			case "present": return present;
+			case "absent": return !present;
+			default: return true;
+		}
+	}
+
+	/**
+	 * The FIRST rule that does not match, in the author's declared order, or null when every rule matches.  Stopping
+	 * at the first failure is what makes the author's ordering the priority mechanism - no severity field, no
+	 * concatenated reasons, no most-specific-rule heuristic.
+	 */
+	function firstFailingActionRule(rules, map) {
+		for (const r of rules)
+			if (!actionRuleMatches(r, map)) return r;
+		return null;
+	}
+
+	/** This button's hidden reason node: the sibling in the same bar stamped with the same action id. */
+	function actionDescNodeFor(btn) {
+		const parent = btn.parentNode;
+		if (!parent || typeof parent.querySelectorAll !== "function") return null;
+		const want = btn.getAttribute("data-juneau-action");
+		for (const n of parent.querySelectorAll("[" + ACTION_DESC_ATTR + "]"))
+			if (n.getAttribute(ACTION_DESC_ATTR) === want) return n;
+		return null;
+	}
+
+	function disableActionRefForRule(btn, rule) {
+		btn.disabled = true;
+		// A pill's `.disabled` property is inert, so mirror what setActionRefEnabled does for one.
+		if (isActionRefPill(btn)) setPillDisabledVisual(btn, false);
+		const reason = rule.reason == null ? "" : String(rule.reason);
+		btn.setAttribute("title", reason);
+		const desc = actionDescNodeFor(btn);
+		if (!desc) return;
+		desc.textContent = reason;   // textContent only, like the rest of the detail fill path - never innerHTML
+		const id = desc.getAttribute("id");
+		if (id) btn.setAttribute("aria-describedby", id);
+	}
+
+	/** Drops both reason channels.  Deliberately does NOT touch `disabled` - see DISABLE-ONLY above. */
+	function clearActionRefRuleReason(btn) {
+		if (typeof btn.removeAttribute === "function") {
+			btn.removeAttribute("title");
+			btn.removeAttribute("aria-describedby");
+		}
+		const desc = actionDescNodeFor(btn);
+		if (desc) desc.textContent = "";
+	}
+
+	/**
+	 * Evaluates every gated ActionRef under `root` against the expand GET's `fields` map, disabling the ones whose
+	 * rules do not match and clearing the reason channels on the ones whose rules do.
+	 *
+	 * <p>Runs after setActionRefEnabled on the success path, so the lifecycle gate decides whether a button may be
+	 * enabled at all and this pass only ever narrows that further.  Re-runs on a post-REDRAW re-expand, which is a
+	 * fresh expand GET through the same path.
+	 */
+	function applyActionRefRules(root, fields) {
+		if (!root || !root.querySelectorAll) return;
+		const map = fields && typeof fields === "object" ? fields : {};
+		for (const b of root.querySelectorAll("[" + ACTION_RULES_ATTR + "]")) {
+			const failing = firstFailingActionRule(parseActionRefRules(b), map);
+			if (failing) disableActionRefForRule(b, failing);
+			else clearActionRefRuleReason(b);
+		}
+	}
+
+	/**
+	 * Per-row DOM identity for the reason nodes a cloned detail `<template>` carries: one id per gated button,
+	 * qualified by the parent table's sidecar key AND the row id, so N simultaneously-expanded rows never point two
+	 * buttons' `aria-describedby` at one node.  Same minting discipline as the bar-slot sidecar next door.
+	 */
+	function mintActionDescIdentity(panel, parentId, rowId) {
+		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		const suffix = (parentId == null ? "" : String(parentId)) + ":" + (rowId == null ? "" : String(rowId));
+		for (const n of panel.querySelectorAll("[" + ACTION_DESC_ATTR + "]"))
+			n.setAttribute("id", ACTION_DESC_ID_PREFIX + suffix + ":" + n.getAttribute(ACTION_DESC_ATTR));
+	}
+
 	function findRowActionById(viewDef, id) {
 		const actions = viewDef?.rowActions || [];
 		for (const a of actions)
@@ -2462,6 +2596,7 @@
 		// Per-row DOM identity for the shells this clone carries, before anything can look one of them up.
 		mintNestedIdentity(panel, rowId, (ctx.nestedDepth || 1) + 1);
 		mintDetailBarSlotIdentity(panel, viewSidecarKey(table), rowId);
+		mintActionDescIdentity(panel, viewSidecarKey(table), rowId);
 		resolveDetailHeaderIcon(panel);
 		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
 		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
@@ -2545,6 +2680,8 @@
 			}
 			fillDetailSlots(panel, body.fields);
 			setActionRefEnabled(panel, true);
+			// Layered on top of the lifecycle gate above, never competing with it: this pass only ever disables.
+			applyActionRefRules(panel, body.fields);
 			panel.dataset.juneauDetailState = "ok";
 			if (loading.parentNode) loading.remove();
 			// Now that the parent detail loaded (2xx + contract OK), init the nested tables that live in a currently
@@ -4816,6 +4953,10 @@
 		shouldDropDetailPayload: shouldDropDetailPayload,
 		setActionRefEnabled: setActionRefEnabled,
 		hideActionRefs: hideActionRefs,
+		actionRuleMatches: actionRuleMatches,
+		firstFailingActionRule: firstFailingActionRule,
+		applyActionRefRules: applyActionRefRules,
+		mintActionDescIdentity: mintActionDescIdentity,
 		initDetailsExpander: initDetailsExpander,
 		buildDetailsControlColumnDef: buildDetailsControlColumnDef,
 		detailsControlCellMarkup: detailsControlCellMarkup,

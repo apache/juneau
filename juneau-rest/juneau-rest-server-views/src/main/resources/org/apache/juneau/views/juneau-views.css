@@ -351,9 +351,24 @@
 .juneau-view-pagingpill-menu-option:focus-visible,
 .juneau-view-columnsearch-input:focus-visible,
 .jc-pill[role="button"]:focus-visible,
-.juneau-ts:focus-visible {
+.juneau-ts:focus-visible,
+.jc-tab:focus-visible,
+.jc-subtab:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
+}
+
+/*
+ * With the ribbon-format tabs now contiguous (`gap: 0` above), a focused MIDDLE tab's ring loses its right edge:
+ * non-positioned flex items paint in DOM order, so the next member's opaque background paints over it.  An
+ * INSET ring (negative offset) is drawn inside the member's own box, so neither a sibling nor the bar's clip can
+ * reach it - this restores all four sides on first, middle and last members alike.  Scoped to the tab selectors
+ * only, as a separate override after the shared rule above: the other five controls in that shared list have no
+ * `gap: 0` sibling-overpaint problem and keep their existing outset ring.
+ */
+.jc-tab:focus-visible,
+.jc-subtab:focus-visible {
+	outline-offset: -2px;
 }
 
 /*
@@ -477,6 +492,11 @@ table.dataTable thead .sorting_desc_disabled:after {
  * no inner vertical borders between glyphs.  Ends keep left/right; middles keep only top/bottom.  Rounding
  * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
  * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
+ *
+ * The end-cap rules below restore a side border with LONGHAND border-*-width / border-*-style declarations,
+ * never a one-line colourless shorthand (width + style with no colour component): such a shorthand resets
+ * border-*-color to its initial value (currentColor), which at this rule's specificity beats chrome.css's themed
+ * border-color and paints a near-black edge instead of the intended grey/accent one.
  */
 .juneau-view-ribbon-group { display: inline-flex; align-items: stretch; }
 
@@ -487,18 +507,22 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {
-	border-left: 1px solid;
+	border-left-width: 1px;       /* longhand, not a colourless `border-left` shorthand - see note above */
+	border-left-style: solid;
 	border-radius: 0.25em 0 0 0.25em;
 }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {
-	border-right: 1px solid;
+	border-right-width: 1px;
+	border-right-style: solid;
 	border-radius: 0 0.25em 0.25em 0;
 }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {
-	border-left: 1px solid;
-	border-right: 1px solid;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
 	border-radius: 0.25em;
 }
 
@@ -900,19 +924,53 @@ table.dataTable thead .sorting_desc_disabled:after {
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	white-space: nowrap;
-	gap: 0.5em;
+	gap: 0;
 	margin: 0 0 var(--jc-space-2) 0;
 }
 
+/*
+ * Ribbon-format shape: one continuous outer frame, no dividing line between members - the same segmented
+ * pattern as ".juneau-view-ribbon-group" above.  Members drop their side borders and rounding; only the outer
+ * ends restore a side border and a corner radius, with LONGHAND border-*-width / border-*-style declarations
+ * rather than a one-line colourless shorthand (see the segmented-group note above for why).
+ */
 .jc-tab,
 .jc-subtab {
 	flex: 0 0 auto;
 	display: inline-block;
 	padding: 0.35em var(--jc-space-3);
 	text-decoration: none;
-	border: 1px solid;            /* currentColor - no palette color set here */
-	border-radius: 0.25em;
+	border-top: 1px solid;        /* currentColor - no palette color set here */
+	border-bottom: 1px solid;
+	border-left: none;
+	border-right: none;
+	border-radius: 0;
 	cursor: pointer;
+}
+
+.jc-tab:first-child,
+.jc-subtab:first-child {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-top-left-radius: 0.25em;
+	border-bottom-left-radius: 0.25em;
+}
+
+.jc-tab:last-child,
+.jc-subtab:last-child {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-top-right-radius: 0.25em;
+	border-bottom-right-radius: 0.25em;
+}
+
+.jc-tab:only-child,
+.jc-subtab:only-child {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-radius: 0.25em;
 }
 
 .jc-tab-active,
@@ -1364,8 +1422,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
 	margin-bottom: 0;
-	border-left: 1px solid;
-	border-right: 1px solid;
+	border-left-width: 1px;       /* longhand, not a colourless shorthand - see the segmented-group note above */
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
 	border-radius: 999px;
 }
 

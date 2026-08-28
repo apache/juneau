@@ -278,6 +278,48 @@ public class RowDetailDef {
 		var actionIds = collectActionIds(rowActions);
 		validateActionBar(headerActions, actionIds);
 		validateSections(actionIds, enclosingViewId);
+		validateEnabledWhenFields();
+	}
+
+	/**
+	 * Cross-checks every {@link ActionRef} row-state rule's field against the {@link DetailField} data keys this
+	 * panel actually declares.
+	 *
+	 * <p>
+	 * A rule keyed on a field the expand GET never returns would disable that button on every row forever, and
+	 * would do it silently &mdash; the runtime fails closed on a field it cannot find, which is the right runtime
+	 * behaviour and the wrong startup behaviour.  So the typo fails loud here instead, at the only point that can
+	 * see both the rule and the field catalog.
+	 *
+	 * <p>
+	 * Deliberately a pass of its own, run after the section walk rather than inside it: the expand GET returns
+	 * <b>every</b> declared field, so a rule in the first section may legally key on a field the last one declares.
+	 * Checking mid-walk would reject that against a half-built catalog.
+	 */
+	private void validateEnabledWhenFields() {
+		var dataKeys = new HashSet<String>();
+		for (var s : sections)
+			if (s.fields != null)
+				for (var f : s.fields)
+					if (f.data != null)
+						dataKeys.add(f.data);
+		validateEnabledWhenFields(headerActions, dataKeys, "the detail header");
+		for (var s : sections)
+			validateEnabledWhenFields(s.actions, dataKeys, "section '" + s.id + "'");
+	}
+
+	private static void validateEnabledWhenFields(ActionBar bar, Set<String> dataKeys, String where) {
+		if (bar == null || bar.items == null)
+			return;
+		for (var item : bar.items) {
+			if (!(item instanceof ActionRef ar) || ar.enabledWhen == null)
+				continue;
+			for (var r : ar.enabledWhen)
+				if (r != null && !dataKeys.contains(r.field))
+					throw iaex(
+						"ActionRef '%s' in %s declares enabledWhen on field '%s', which no DetailField of this panel returns.",
+						ar.id, where, r.field);
+		}
 	}
 
 	private void validateEndpoint() {

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.Op;
 
 /**
  * A declarative row-decorator rule in the {@code VIEW_META} wire contract (design doc §6.3).
@@ -32,6 +33,11 @@ import org.apache.juneau.commons.bean.*;
  * {@link Op#PRESENT present}/{@link Op#ABSENT absent} operators test only whether {@code row[field]} is
  * non-null/non-empty and therefore <b>omit</b> {@code value} from the wire.
  *
+ * <p>
+ * {@link Op} is the <b>shared</b> single-field operator vocabulary and lives in the widgets module, not here: the
+ * action-bar state rule needs the same four constants, and widgets cannot depend on views.  Only the enum's package
+ * moved &mdash; this type's own factory signatures are unchanged.
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link ViewDef}
@@ -41,47 +47,6 @@ import org.apache.juneau.commons.bean.*;
  */
 @BeanType(properties="field,op,value,class")
 public class RowClassRule {
-
-	/**
-	 * The comparison operator for a {@link RowClassRule}.
-	 *
-	 * <p>
-	 * Each constant carries its lowercase wire token (the value emitted for the {@code op} field).
-	 */
-	public enum Op {
-
-		/** Row matches when {@code row[field]} equals the rule value. */
-		EQ("eq"),
-
-		/** Row matches when {@code row[field]} does not equal the rule value. */
-		NE("ne"),
-
-		/** Row matches when {@code row[field]} is non-null/non-empty (no value needed). */
-		PRESENT("present"),
-
-		/** Row matches when {@code row[field]} is missing/null (no value needed). */
-		ABSENT("absent");
-
-		private final String wire;
-
-		Op(String wire) {
-			this.wire = wire;
-		}
-
-		/**
-		 * Returns the lowercase wire token for this operator.
-		 *
-		 * @return The wire token (e.g. <c>"eq"</c>).
-		 */
-		public String wire() {
-			return wire;
-		}
-
-		/** Whether this operator requires a comparison value ({@code eq}/{@code ne}). */
-		boolean requiresValue() {
-			return this == EQ || this == NE;
-		}
-	}
 
 	/** The row field this rule tests. */
 	public String field;

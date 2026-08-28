@@ -378,4 +378,105 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("find_dt2Wrap"));
 		assertEquals(true, r.get("find_missing"));
 	}
+
+	@Test void c01_actionRuleHelpersExported_andEvaluatedAfterTheLifecycleGate() throws Exception {
+		var body = viewsJs();
+		for (var name : new String[]{
+			"actionRuleMatches: actionRuleMatches",
+			"firstFailingActionRule: firstFailingActionRule",
+			"applyActionRefRules: applyActionRefRules",
+			"mintActionDescIdentity: mintActionDescIdentity"
+		})
+			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
+		// Ordering is the whole composition story: the rule pass must run AFTER setActionRefEnabled on the success
+		// path, so it can only narrow the lifecycle gate rather than fight it.
+		var enableAt = body.indexOf("setActionRefEnabled(panel, true);");
+		var rulesAt = body.indexOf("applyActionRefRules(panel, body.fields);");
+		assertTrue(enableAt >= 0, "expand success path no longer enables ActionRefs through setActionRefEnabled");
+		assertTrue(rulesAt > enableAt, "the rule pass must run after the lifecycle enable, never before it");
+		// Disable-only (D2): no hide/show branch anywhere in the rule pass.
+		var pass = body.substring(body.indexOf("function applyActionRefRules("));
+		pass = pass.substring(0, pass.indexOf("\n\t}"));
+		assertFalse(pass.contains("hidden"), pass);
+		assertFalse(pass.contains("disabled = false"), pass);
+	}
+
+	@Test void c02_ruleEvaluation_isThreeWay_matchNoMatchAndAbsentField() {
+		var r = report();
+		assertEquals(true, r.get("hasApplyActionRefRules"));
+		assertEquals(true, r.get("hasMintActionDescIdentity"));
+		// Matching: untouched, and no reason left attached.
+		assertEquals(true, r.get("rule_matchStaysEnabled"));
+		assertEquals(true, r.get("rule_matchNoTitle"));
+		assertEquals(true, r.get("rule_matchNoDescribedby"));
+		assertEquals(true, r.get("rule_matchNoReasonText"));
+		// Not matching: PRESENT and DISABLED - asserting both is what makes this test fail on a rule that never
+		// evaluated, which a presence-only assertion would pass.
+		assertEquals(true, r.get("rule_noMatchDisabled"));
+		assertEquals(true, r.get("rule_noMatchStillPresent"));
+		assertEquals("This alert is not open.", r.get("rule_noMatchTitle"));
+		assertEquals("This alert is not open.", r.get("rule_noMatchReasonText"));
+		assertEquals(true, r.get("rule_noMatchDescribedbyPointsAtNode"));
+		// Field missing from the payload: fails closed, still present.
+		assertEquals(true, r.get("rule_absentFieldDisabled"));
+		assertEquals(true, r.get("rule_absentFieldStillPresent"));
+		assertEquals("This alert is not open.", r.get("rule_absentFieldTitle"));
+	}
+
+	@Test void c03_operatorSemantics() {
+		var r = report();
+		assertEquals(true, r.get("rule_eqYes"));
+		assertEquals(false, r.get("rule_eqNo"));
+		assertEquals(false, r.get("rule_eqAbsentKey"));       // fail closed, not fail open
+		assertEquals(true, r.get("rule_neYes"));
+		assertEquals(false, r.get("rule_neNo"));
+		assertEquals(true, r.get("rule_absentOnEmpty"));      // present/absent read emptiness, not key existence
+		assertEquals(false, r.get("rule_absentOnValue"));
+		assertEquals(true, r.get("rule_presentOnValueEnabled"));
+		assertEquals(true, r.get("rule_presentOnEmptyDisabled"));
+		assertEquals(true, r.get("rule_eqCoercesNumber"));
+	}
+
+	@Test void c04_firstDeclaredFailingRuleWins() {
+		var r = report();
+		// Two rules, both failing, DIFFERENT reasons, declared in both orders: the answer flips with the
+		// declaration, which is the only way declaration order is observable at all.
+		assertEquals("REASON-STATE", r.get("rule_firstDeclaredWins"));
+		assertEquals("REASON-TIER", r.get("rule_firstDeclaredWinsReversed"));
+		assertEquals("REASON-STATE", r.get("rule_firstFailingHelper"));
+		assertNull(r.get("rule_firstFailingHelperAllPass"));
+	}
+
+	@Test void c05_bothReasonChannelsClearTogether() {
+		var r = report();
+		assertEquals(true, r.get("rule_clearPreconditionTitleSet"));
+		assertEquals(true, r.get("rule_clearedTitle"));
+		assertEquals(true, r.get("rule_clearedDescribedby"));
+		assertEquals(true, r.get("rule_clearedReasonText"));
+	}
+
+	@Test void c06_rulePassNeverReEnablesAndNeverHides() {
+		var r = report();
+		assertEquals(true, r.get("rule_lifecycleDisabledStaysDisabled"));
+		assertEquals(true, r.get("rule_hiddenStaysHidden"));
+		assertEquals(true, r.get("rule_hiddenStaysDisabled"));
+		assertEquals(true, r.get("rule_passNeverHides"));
+	}
+
+	@Test void c07_reasonNodeIdentityIsPerRowAndPerAction() {
+		var r = report();
+		assertEquals(true, r.get("rule_descIdsUnique"));
+		assertEquals(true, r.get("rule_row1PointsAtOwnNode"));
+		assertEquals(true, r.get("rule_row2PointsAtOwnNode"));
+		assertEquals(true, r.get("rule_perActionIdsDiffer"));
+		assertEquals(true, r.get("rule_bothActionsGated"));
+		var id1 = String.valueOf(r.get("rule_descId1"));
+		assertTrue(id1.contains("alerts") && id1.contains("a1") && id1.contains("ack"), id1);
+	}
+
+	@Test void c08_malformedOrEmptyRulesGateNothing() {
+		var r = report();
+		assertEquals(true, r.get("rule_malformedGatesNothing"));
+		assertEquals(true, r.get("rule_emptyRulesGatesNothing"));
+	}
 }

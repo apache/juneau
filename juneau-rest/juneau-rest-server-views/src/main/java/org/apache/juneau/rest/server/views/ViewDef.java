@@ -380,27 +380,27 @@ public class ViewDef {
 	}
 
 	/**
-	 * Adds a value-based row-decorator rule ({@link RowClassRule.Op#EQ eq}/{@link RowClassRule.Op#NE ne}).
+	 * Adds a value-based row-decorator rule ({@link Op#EQ eq}/{@link Op#NE ne}).
 	 *
 	 * @param field The row field to test.  Must not be <jk>null</jk>.
-	 * @param op The operator.  Must be {@link RowClassRule.Op#EQ} or {@link RowClassRule.Op#NE}.
+	 * @param op The operator.  Must be {@link Op#EQ} or {@link Op#NE}.
 	 * @param value The comparison value.  Must not be <jk>null</jk>.
 	 * @param cssClass The CSS class to add to a matching row.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ViewDef rowClassRule(String field, RowClassRule.Op op, Object value, String cssClass) {
+	public ViewDef rowClassRule(String field, Op op, Object value, String cssClass) {
 		return addRowClassRule(RowClassRule.of(field, op, value, cssClass));
 	}
 
 	/**
-	 * Adds a presence-based row-decorator rule ({@link RowClassRule.Op#PRESENT present}/{@link RowClassRule.Op#ABSENT absent}).
+	 * Adds a presence-based row-decorator rule ({@link Op#PRESENT present}/{@link Op#ABSENT absent}).
 	 *
 	 * @param field The row field to test.  Must not be <jk>null</jk>.
-	 * @param op The operator.  Must be {@link RowClassRule.Op#PRESENT} or {@link RowClassRule.Op#ABSENT}.
+	 * @param op The operator.  Must be {@link Op#PRESENT} or {@link Op#ABSENT}.
 	 * @param cssClass The CSS class to add to a matching row.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ViewDef rowClassRule(String field, RowClassRule.Op op, String cssClass) {
+	public ViewDef rowClassRule(String field, Op op, String cssClass) {
 		return addRowClassRule(RowClassRule.of(field, op, cssClass));
 	}
 

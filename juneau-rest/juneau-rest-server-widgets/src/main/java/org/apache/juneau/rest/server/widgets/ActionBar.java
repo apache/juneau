@@ -73,10 +73,42 @@ public class ActionBar implements Widget {
 					throw iaex("ActionRef id must not be null or blank.");
 				if (ar.emphasis == ActionRef.Emphasis.PRIMARY)
 					primaryCount++;
+				validateEnabledRules(ar);
 			} else if (!(item instanceof SafeAction))
 				throw iaex("ActionBar item must be ActionRef or SafeAction.");
 		}
 		if (primaryCount > 1)
 			throw iaex("ActionBar must not have more than one PRIMARY ActionRef.");
+	}
+
+	/**
+	 * Fail-closed check on an {@link ActionRef}'s row-state rules: a non-blank field, a non-blank reason, and the
+	 * value/no-value shape the operator demands.
+	 *
+	 * <p>
+	 * {@link ActionRef#enabledWhen(String,Op,Object,String)} already rejects all of this at the call, so this pass
+	 * exists for a rule assembled field-by-field rather than through the fluent setter &mdash; the same reason the
+	 * blank-id check above is repeated here rather than left to {@link ActionRef#of(String)}.  The reason string in
+	 * particular is API contract, not a nicety: with a gated action disabled rather than removed, it is the only
+	 * channel that explains an inert button, so a blank one must fail loud instead of defaulting to the action
+	 * label or a generated message.
+	 */
+	private static void validateEnabledRules(ActionRef ar) {
+		if (ar.enabledWhen == null)
+			return;
+		for (var r : ar.enabledWhen) {
+			if (r == null)
+				throw iaex("ActionRef '%s' enabledWhen rule must not be null.", ar.id);
+			if (r.field == null || r.field.isBlank())
+				throw iaex("ActionRef '%s' enabledWhen field must not be null or blank.", ar.id);
+			if (r.op == null)
+				throw iaex("ActionRef '%s' enabledWhen op must not be null.", ar.id);
+			if (r.reason == null || r.reason.isBlank())
+				throw iaex("ActionRef '%s' enabledWhen reason must not be null or blank.", ar.id);
+			if (r.op.requiresValue() && r.value == null)
+				throw iaex("ActionRef '%s' enabledWhen op '%s' requires a non-null value.", ar.id, r.op.wire());
+			if (! r.op.requiresValue() && r.value != null)
+				throw iaex("ActionRef '%s' enabledWhen op '%s' does not take a value.", ar.id, r.op.wire());
+		}
 	}
 }

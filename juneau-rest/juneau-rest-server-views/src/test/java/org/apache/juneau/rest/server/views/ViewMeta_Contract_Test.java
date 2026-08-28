@@ -24,7 +24,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.datatables.*;
-import org.apache.juneau.rest.server.views.RowClassRule.Op;
+import org.apache.juneau.rest.server.widgets.Op;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.junit.jupiter.api.*;

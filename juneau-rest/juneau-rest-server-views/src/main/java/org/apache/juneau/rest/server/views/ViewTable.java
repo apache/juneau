@@ -253,6 +253,29 @@ public class ViewTable {
 	public static final String DETAIL_SAFE_ATTR = "data-juneau-safe";
 
 	/**
+	 * Attribute carrying an {@link ActionRef}'s row-state rules as a JSON array, in the author's declared order.
+	 * Omitted entirely for an ungated action.
+	 *
+	 * <p>
+	 * Each entry is <c>{"field":..., "op":..., "value"?:..., "reason":...}</c> &mdash; the same
+	 * JSON-in-a-data-attribute shape {@link #DETAIL_FIELD_RENDER_META_ATTR} uses.  Declaration order is the array
+	 * order, because the first failing rule is the one whose reason an operator sees.
+	 */
+	public static final String DETAIL_ACTION_RULES_ATTR = "data-juneau-action-rules";
+
+	/**
+	 * Attribute on the hidden node a gated {@link ActionRef}'s disabled reason is painted into, carrying that
+	 * action's id.  Emitted only alongside {@link #DETAIL_ACTION_RULES_ATTR}.
+	 *
+	 * <p>
+	 * The node exists because {@code aria-describedby} needs something real to point at.  It carries the native
+	 * HTML {@code hidden} attribute rather than a utility class, so no stylesheet rule is needed to keep it out of
+	 * view and none is added.  It carries no element {@code id} here either: this whole subtree is cloned per
+	 * expanded row, so the runtime mints the row-unique one.
+	 */
+	public static final String DETAIL_ACTION_DESC_ATTR = "data-juneau-action-desc";
+
+	/**
 	 * Marker attribute on the nested-table wrapper {@code <div>} inside a {@link DetailSection} (value {@code "1"}).
 	 *
 	 * <p>
@@ -1063,10 +1086,18 @@ public class ViewTable {
 				var cls = ar.emphasis == org.apache.juneau.rest.server.widgets.ActionRef.Emphasis.PRIMARY
 					? "juneau-view-detail-action juneau-view-detail-action-primary"
 					: "juneau-view-detail-action";
-				buttons.add(button("button", label)
+				var btn = button("button", label)
 					.attr(DETAIL_ACTION_ATTR, ar.id)
 					.attr(CLASS_ATTR, cls)
-					.disabled(true));
+					.disabled(true);
+				var gated = ar.enabledWhen != null && !ar.enabledWhen.isEmpty();
+				if (gated)
+					btn.attr(DETAIL_ACTION_RULES_ATTR, Json.of(enabledRulesJson(ar)));
+				buttons.add(btn);
+				// The reason node is a sibling rather than a child so the button's accessible NAME stays the
+				// label: this is a description, and aria-describedby is how it is reached.
+				if (gated)
+					buttons.add(span().attr(DETAIL_ACTION_DESC_ATTR, ar.id).attr("hidden", "hidden"));
 			} else if (item instanceof org.apache.juneau.rest.server.widgets.SafeAction sa) {
 				buttons.add(button("button", sa.label())
 					.attr(DETAIL_SAFE_ATTR, sa.wire())
@@ -1074,6 +1105,29 @@ public class ViewTable {
 			}
 		}
 		return div(buttons.toArray()).class_("juneau-view-detail-actions");
+	}
+
+	/**
+	 * Renders an {@link ActionRef}'s rules as the list this emitter JSON-encodes into
+	 * {@link #DETAIL_ACTION_RULES_ATTR}, preserving declaration order.
+	 *
+	 * <p>
+	 * The operator travels as its lowercase wire token rather than the enum name, matching the {@code op} token the
+	 * row-decorator rules already put on the wire, and {@code value} is omitted rather than emitted as {@code null}
+	 * for the presence-based operators that do not take one.
+	 */
+	private static List<java.util.Map<String,Object>> enabledRulesJson(org.apache.juneau.rest.server.widgets.ActionRef ar) {
+		var out = new ArrayList<java.util.Map<String,Object>>();
+		for (var r : ar.enabledWhen) {
+			var m = new LinkedHashMap<String,Object>();
+			m.put("field", r.field);
+			m.put("op", r.op.wire());
+			if (r.value != null)
+				m.put("value", r.value);
+			m.put("reason", r.reason);
+			out.add(m);
+		}
+		return out;
 	}
 
 	private static String actionLabel(String id, List<RowAction> rowActions) {

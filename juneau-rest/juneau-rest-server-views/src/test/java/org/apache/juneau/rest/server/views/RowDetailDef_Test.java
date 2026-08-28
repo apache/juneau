@@ -318,4 +318,49 @@ class RowDetailDef_Test extends TestBase {
 			.sections(oneSection())
 			.validate(java.util.List.of(ack()));
 	}
+
+	@Test void e01_enabledWhen_onUndeclaredField_rejected() {
+		// A rule keyed on a field the expand GET will never return would fail closed at runtime and disable the
+		// action forever with no way for the author to see why, so it is a startup error instead.
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(oneSection().actions(ActionBar.create().items(
+				ActionRef.of("ack").enabledWhen("state", Op.EQ, "open", "This record is not open."))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("state"), e::getMessage);
+		assertTrue(e.getMessage().contains("ack"), e::getMessage);
+	}
+
+	@Test void e02_enabledWhen_onDeclaredField_accepted() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(oneSection().actions(ActionBar.create().items(
+				ActionRef.of("ack").enabledWhen("owner", Op.PRESENT, "This record has no owner yet."))))
+			.validate(java.util.List.of(ack()));
+	}
+
+	@Test void e03_enabledWhen_mayKeyOnAFieldDeclaredByALaterSection() {
+		// The expand GET returns the whole field map at once, so a rule in the first section legally keys on a field
+		// the last one declares - the cross-check must run against the finished catalog, not a half-built one.
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(
+				DetailSection.create("a", "A")
+					.fields(DetailField.of("owner"))
+					.actions(ActionBar.create().items(
+						ActionRef.of("ack").enabledWhen("state", Op.EQ, "open", "This record is not open."))),
+				DetailSection.create("b", "B").fields(DetailField.of("state")))
+			.validate(java.util.List.of(ack()));
+	}
+
+	@Test void e04_headerActions_enabledWhen_onUndeclaredField_rejected() {
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.headerActions(ActionBar.create().items(
+				ActionRef.of("ack").enabledWhen("state", Op.EQ, "open", "This record is not open.")))
+			.sections(oneSection());
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("state"), e::getMessage);
+		assertTrue(e.getMessage().contains("header"), e::getMessage);
+	}
 }

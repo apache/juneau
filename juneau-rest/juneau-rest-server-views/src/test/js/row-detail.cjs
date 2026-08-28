@@ -721,4 +721,159 @@ if (out.hasFindRowDetailTemplate) {
 	out.find_missing = I.findRowDetailTemplate(el('table')) == null;
 }
 
+// State-conditional ActionRef rules: evaluation, reason channels, per-row reason-node identity.
+out.hasApplyActionRefRules = typeof I.applyActionRefRules === 'function';
+out.hasMintActionDescIdentity = typeof I.mintActionDescIdentity === 'function';
+if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
+	// One gated button plus its hidden reason node, in a bar, in a panel - the shape ViewTable emits.  el() has no
+	// removeAttribute (nothing needed one before the reason channels had to be CLEARED), so the fixture adds it
+	// here rather than changing the shared factory.
+	function gatedBar(actionId, rules) {
+		const bar = el('div');
+		const btn = el('button');
+		btn.setAttribute('data-juneau-action', actionId);
+		btn.setAttribute('data-juneau-action-rules', JSON.stringify(rules));
+		btn.disabled = false;
+		btn.hidden = false;
+		btn.removeAttribute = function (k) { delete this.attrs[k]; };
+		const desc = el('span');
+		desc.setAttribute('data-juneau-action-desc', actionId);
+		desc.setAttribute('hidden', 'hidden');
+		bar.appendChild(btn);
+		bar.appendChild(desc);
+		const panel = el('div');
+		panel.appendChild(bar);
+		return { panel: panel, btn: btn, desc: desc };
+	}
+
+	const OPEN_ONLY = { field: 'state', op: 'eq', value: 'open', reason: 'This alert is not open.' };
+
+	// (1) Every rule matches -> the action is left exactly as the lifecycle gate left it, with no reason attached.
+	const okBar = gatedBar('ack', [OPEN_ONLY]);
+	I.mintActionDescIdentity(okBar.panel, 'alerts', 'a1');
+	I.applyActionRefRules(okBar.panel, { state: 'open' });
+	out.rule_matchStaysEnabled = okBar.btn.disabled === false;
+	out.rule_matchNoTitle = okBar.btn.getAttribute('title') == null;
+	out.rule_matchNoDescribedby = okBar.btn.getAttribute('aria-describedby') == null;
+	out.rule_matchNoReasonText = okBar.desc.textContent === '';
+
+	// (2) A rule does not match -> disabled but STILL PRESENT (D2: gating never hides), with both reason channels
+	// set and aria-describedby pointing at this row's own reason node.
+	const failBar = gatedBar('ack', [OPEN_ONLY]);
+	I.mintActionDescIdentity(failBar.panel, 'alerts', 'a1');
+	I.applyActionRefRules(failBar.panel, { state: 'closed' });
+	out.rule_noMatchDisabled = failBar.btn.disabled === true;
+	out.rule_noMatchStillPresent = failBar.btn.hidden === false;
+	out.rule_noMatchTitle = failBar.btn.getAttribute('title');
+	out.rule_noMatchReasonText = failBar.desc.textContent;
+	out.rule_noMatchDescribedbyPointsAtNode =
+		failBar.btn.getAttribute('aria-describedby') === failBar.desc.getAttribute('id');
+
+	// (3) The keyed field is missing from the payload -> fails CLOSED, and still does not hide.
+	const absentBar = gatedBar('ack', [OPEN_ONLY]);
+	I.mintActionDescIdentity(absentBar.panel, 'alerts', 'a1');
+	I.applyActionRefRules(absentBar.panel, {});
+	out.rule_absentFieldDisabled = absentBar.btn.disabled === true;
+	out.rule_absentFieldStillPresent = absentBar.btn.hidden === false;
+	out.rule_absentFieldTitle = absentBar.btn.getAttribute('title');
+
+	// (4) present / absent read emptiness, not just key existence.
+	const presentEmpty = gatedBar('ack', [{ field: 'owner', op: 'present', reason: 'No owner yet.' }]);
+	I.applyActionRefRules(presentEmpty.panel, { owner: '' });
+	out.rule_presentOnEmptyDisabled = presentEmpty.btn.disabled === true;
+	const presentSet = gatedBar('ack', [{ field: 'owner', op: 'present', reason: 'No owner yet.' }]);
+	I.applyActionRefRules(presentSet.panel, { owner: 'jbognar' });
+	out.rule_presentOnValueEnabled = presentSet.btn.disabled === false;
+
+	// The pure predicates, independent of any DOM pass.
+	out.rule_eqYes = I.actionRuleMatches(OPEN_ONLY, { state: 'open' });
+	out.rule_eqNo = I.actionRuleMatches(OPEN_ONLY, { state: 'closed' });
+	out.rule_eqAbsentKey = I.actionRuleMatches(OPEN_ONLY, {});
+	out.rule_neYes = I.actionRuleMatches({ field: 'state', op: 'ne', value: 'open', reason: 'r' }, { state: 'closed' });
+	out.rule_neNo = I.actionRuleMatches({ field: 'state', op: 'ne', value: 'open', reason: 'r' }, { state: 'open' });
+	out.rule_absentOnEmpty = I.actionRuleMatches({ field: 'owner', op: 'absent', reason: 'r' }, { owner: '' });
+	out.rule_absentOnValue = I.actionRuleMatches({ field: 'owner', op: 'absent', reason: 'r' }, { owner: 'x' });
+	// A number in the payload against a string in the rule still compares, so an author is not forced to know how
+	// the expand GET boxed the value.
+	out.rule_eqCoercesNumber = I.actionRuleMatches({ field: 'tier', op: 'eq', value: '2', reason: 'r' }, { tier: 2 });
+
+	// (5) FIRST-DECLARED failing rule wins.  Two rules, BOTH failing, with DIFFERENT reasons, declared in both
+	// orders - identical reasons would make declaration order unobservable.
+	const R_STATE = { field: 'state', op: 'eq', value: 'open', reason: 'REASON-STATE' };
+	const R_TIER = { field: 'tier', op: 'eq', value: 'gold', reason: 'REASON-TIER' };
+	const bothFail = { state: 'closed', tier: 'silver' };
+	const orderAB = gatedBar('ack', [R_STATE, R_TIER]);
+	I.applyActionRefRules(orderAB.panel, bothFail);
+	out.rule_firstDeclaredWins = orderAB.btn.getAttribute('title');
+	const orderBA = gatedBar('ack', [R_TIER, R_STATE]);
+	I.applyActionRefRules(orderBA.panel, bothFail);
+	out.rule_firstDeclaredWinsReversed = orderBA.btn.getAttribute('title');
+	out.rule_firstFailingHelper = I.firstFailingActionRule([R_STATE, R_TIER], bothFail).reason;
+	out.rule_firstFailingHelperAllPass = I.firstFailingActionRule([R_STATE], { state: 'open' });
+
+	// (6) BOTH channels clear together when a re-expand's state passes the rules - a re-enabled button must stop
+	// announcing why it used to be unavailable.
+	const reBar = gatedBar('ack', [OPEN_ONLY]);
+	I.mintActionDescIdentity(reBar.panel, 'alerts', 'a1');
+	I.applyActionRefRules(reBar.panel, { state: 'closed' });
+	out.rule_clearPreconditionTitleSet = reBar.btn.getAttribute('title') != null;
+	I.applyActionRefRules(reBar.panel, { state: 'open' });
+	out.rule_clearedTitle = reBar.btn.getAttribute('title') == null;
+	out.rule_clearedDescribedby = reBar.btn.getAttribute('aria-describedby') == null;
+	out.rule_clearedReasonText = reBar.desc.textContent === '';
+
+	// (7) Composition with the lifecycle gate: the pass NEVER re-enables, so a button held disabled by
+	// setActionRefEnabled or hideActionRefs stays that way even when every rule matches.
+	const heldBar = gatedBar('ack', [OPEN_ONLY]);
+	heldBar.btn.disabled = true;
+	I.applyActionRefRules(heldBar.panel, { state: 'open' });
+	out.rule_lifecycleDisabledStaysDisabled = heldBar.btn.disabled === true;
+	const hiddenBar = gatedBar('ack', [OPEN_ONLY]);
+	I.hideActionRefs(hiddenBar.panel);
+	I.applyActionRefRules(hiddenBar.panel, { state: 'open' });
+	out.rule_hiddenStaysHidden = hiddenBar.btn.hidden === true;
+	out.rule_hiddenStaysDisabled = hiddenBar.btn.disabled === true;
+	// ...and the pass itself never hides: hideActionRefs remains the only thing that can.
+	out.rule_passNeverHides = heldBar.btn.hidden === false;
+
+	// (8) Two rows of the same table, expanded at once, mint DISTINCT reason-node ids, so no row's
+	// aria-describedby can resolve to another row's reason.
+	const row1 = gatedBar('ack', [OPEN_ONLY]);
+	const row2 = gatedBar('ack', [OPEN_ONLY]);
+	I.mintActionDescIdentity(row1.panel, 'alerts', 'a1');
+	I.mintActionDescIdentity(row2.panel, 'alerts', 'a2');
+	out.rule_descId1 = row1.desc.getAttribute('id');
+	out.rule_descId2 = row2.desc.getAttribute('id');
+	out.rule_descIdsUnique = out.rule_descId1 !== out.rule_descId2;
+	I.applyActionRefRules(row1.panel, { state: 'closed' });
+	I.applyActionRefRules(row2.panel, { state: 'closed' });
+	out.rule_row1PointsAtOwnNode = row1.btn.getAttribute('aria-describedby') === out.rule_descId1;
+	out.rule_row2PointsAtOwnNode = row2.btn.getAttribute('aria-describedby') === out.rule_descId2;
+	// Two gated actions in one bar get one node each, so the ids differ by action too.
+	const twoActions = gatedBar('ack', [OPEN_ONLY]);
+	const escBtn = el('button');
+	escBtn.setAttribute('data-juneau-action', 'esc');
+	escBtn.setAttribute('data-juneau-action-rules', JSON.stringify([OPEN_ONLY]));
+	escBtn.removeAttribute = function (k) { delete this.attrs[k]; };
+	const escDesc = el('span');
+	escDesc.setAttribute('data-juneau-action-desc', 'esc');
+	twoActions.panel.firstChild.appendChild(escBtn);
+	twoActions.panel.firstChild.appendChild(escDesc);
+	I.mintActionDescIdentity(twoActions.panel, 'alerts', 'a1');
+	I.applyActionRefRules(twoActions.panel, { state: 'closed' });
+	out.rule_perActionIdsDiffer = twoActions.desc.getAttribute('id') !== escDesc.getAttribute('id');
+	out.rule_bothActionsGated = twoActions.btn.disabled === true && escBtn.disabled === true;
+
+	// (9) A malformed rules attribute gates NOTHING: the rule is presentation only and the server stays
+	// authoritative, so the safe direction is the pre-rule behaviour rather than a bar of dead buttons.
+	const badBar = gatedBar('ack', [OPEN_ONLY]);
+	badBar.btn.setAttribute('data-juneau-action-rules', '{not json');
+	I.applyActionRefRules(badBar.panel, {});
+	out.rule_malformedGatesNothing = badBar.btn.disabled === false;
+	// An empty rule array is likewise inert.
+	const emptyBar = gatedBar('ack', []);
+	I.applyActionRefRules(emptyBar.panel, {});
+	out.rule_emptyRulesGatesNothing = emptyBar.btn.disabled === false;
+}
+
 process.stdout.write(JSON.stringify(out));

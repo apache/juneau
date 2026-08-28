@@ -296,4 +296,74 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 			ActionRef.of("esc").emphasis(ActionRef.Emphasis.PRIMARY));
 		assertThrows(IllegalArgumentException.class, bar::validate);
 	}
+
+	private static ViewDef gatedView() {
+		return ViewDef.create("alerts")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data/alerts")
+			.columns(Column.of("id").title("Id"))
+			.rowActions(
+				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack").method(RowAction.Method.POST),
+				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc").method(RowAction.Method.POST))
+			.details(RowDetailDef.create()
+				.endpoint("/data/alerts/{id}")
+				.sections(DetailSection.create("s", "S")
+					.fields(DetailField.of("state").title("State"), DetailField.of("owner").title("Owner"))
+					.actions(ActionBar.create().items(
+						ActionRef.of("ack")
+							.enabledWhen("state", Op.EQ, "open", "This alert is not open.")
+							.enabledWhen("owner", Op.PRESENT, "This alert has no owner yet."),
+						ActionRef.of("esc"),
+						SafeAction.COLLAPSE))))
+			.build();
+	}
+
+	private static String openTagAt(String html, String needle) {
+		var at = html.indexOf(needle);
+		assertTrue(at >= 0, () -> "not found: " + needle + " in " + html);
+		return html.substring(html.lastIndexOf('<', at), html.indexOf('>', at));
+	}
+
+	@Test void a15_gatedActionRef_stampsItsRulesAsJsonOnTheButton() {
+		var html = Html.of(ViewTable.of(gatedView()));
+		var ackTag = openTagAt(html, "data-juneau-action=\"ack\"");
+		assertTrue(ackTag.contains(ViewTable.DETAIL_ACTION_RULES_ATTR), ackTag);
+		// Both rules travel, in declaration order, with the operator as its wire token and the reason included -
+		// the reason is what the runtime shows, so it cannot be left behind on the server.
+		assertTrue(ackTag.contains("state"), ackTag);
+		assertTrue(ackTag.contains("open"), ackTag);
+		assertTrue(ackTag.contains("This alert is not open."), ackTag);
+		assertTrue(ackTag.contains("owner"), ackTag);
+		assertTrue(ackTag.contains("present"), ackTag);
+		assertTrue(ackTag.contains("This alert has no owner yet."), ackTag);
+		assertTrue(ackTag.indexOf("This alert is not open.") < ackTag.indexOf("This alert has no owner yet."), ackTag);
+		// An ungated sibling in the same bar carries no rules attribute, and neither does the SafeAction (D7).
+		assertFalse(openTagAt(html, "data-juneau-action=\"esc\"").contains(ViewTable.DETAIL_ACTION_RULES_ATTR), html);
+		assertFalse(openTagAt(html, "data-juneau-safe=\"collapse\"").contains(ViewTable.DETAIL_ACTION_RULES_ATTR), html);
+	}
+
+	@Test void a16_gatedActionRef_getsOneHiddenReasonNode_withNoIdAndNoText() {
+		var html = Html.of(ViewTable.of(gatedView()));
+		var descNeedle = ViewTable.DETAIL_ACTION_DESC_ATTR + "=\"ack\"";
+		var descTag = openTagAt(html, descNeedle);
+		// Hidden by the native attribute rather than a CSS utility class, so the template needs no stylesheet
+		// support to keep the reason out of the visual bar.
+		assertTrue(descTag.contains("hidden"), descTag);
+		// No id here: the runtime mints a row-unique one per clone, because a template id would collide across
+		// every expanded row.
+		assertFalse(descTag.contains(" id="), descTag);
+		// Exactly one per gated action, and none for the ungated ones.
+		assertEquals(html.indexOf(descNeedle), html.lastIndexOf(descNeedle), html);
+		assertFalse(html.contains(ViewTable.DETAIL_ACTION_DESC_ATTR + "=\"esc\""), html);
+		// The template never carries the reason text - it is stamped once, in the rules JSON on the button.
+		var descTagEnd = html.indexOf('>', html.indexOf(descNeedle));
+		assertEquals("", html.substring(descTagEnd + 1, html.indexOf('<', descTagEnd + 1)), html);
+	}
+
+	@Test void a17_ungatedBar_emitsNeitherAttribute() {
+		// A regression guard on the existing shape: authors who declare no rules must see byte-identical output.
+		var html = Html.of(ViewTable.of(view()));
+		assertFalse(html.contains(ViewTable.DETAIL_ACTION_RULES_ATTR), html);
+		assertFalse(html.contains(ViewTable.DETAIL_ACTION_DESC_ATTR), html);
+	}
 }

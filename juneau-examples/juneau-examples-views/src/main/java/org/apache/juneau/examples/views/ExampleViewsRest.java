@@ -33,10 +33,10 @@ import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
-import org.apache.juneau.rest.server.views.RowClassRule.Op;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.widgets.Op;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
