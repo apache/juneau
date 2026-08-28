@@ -87,6 +87,6 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@5595ccaf912efad79be6eef63a5619ff05969be3    # 4.37.6
+      uses: github/codeql-action/analyze@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28    # 4.37.8
       env:
         CODEQL_ACTION_EXTRA_OPTIONS: '{"database":{"run-queries":["--additional-packs=${{ github.workspace }}/.github/codeql","--extension-packs=apache/juneau-security-models"]}}'
