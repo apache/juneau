@@ -537,4 +537,26 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals("This record is not open.", r.get("dfa_gatedReason"));
 		assertEquals(true, r.get("dfa_passingRuleStaysEnabled"));
 	}
+
+	/**
+	 * LD-1 ({@code TODO-J0474}): a field-hosted bar's action message paints into that field's OWN slot, not the
+	 * section's first field. A second field is present precisely so "first field happens to be the bar's own
+	 * field" cannot make this pass by accident.
+	 */
+	@Test void d06_fieldHostedActionMessage_paintsIntoItsOwnFieldSlot_notTheSectionsFirst() {
+		var r = report();
+		assertEquals("ok", r.get("paintFieldHosted_ownSlotPainted"));
+		assertEquals(true, r.get("paintFieldHosted_firstFieldUntouched"));
+	}
+
+	/**
+	 * LD-1 regression guard: a section-hosted bar (no enclosing {@code .juneau-view-detail-field}) keeps painting
+	 * into the section's first field slot, byte-identically to today's behaviour. A second field is present so
+	 * this could not pass merely because there was only one field to choose from.
+	 */
+	@Test void d07_sectionHostedActionMessage_stillPaintsIntoTheSectionsFirstField() {
+		var r = report();
+		assertEquals("section message", r.get("paintSectionHosted_firstFieldPainted"));
+		assertEquals(true, r.get("paintSectionHosted_secondFieldUntouched"));
+	}
 }

@@ -1515,7 +1515,14 @@
 		if (!btn) return;
 		const section = btn.closest ? btn.closest("[data-juneau-detail-section]") : null;
 		if (!section || typeof section.querySelector !== "function") return;
-		const slot = section.querySelector("[data-juneau-field]");
+		// A field-hosted bar (DetailField.actions) paints into its OWN field's slot, not the section's first
+		// one -- otherwise a button in the second field would paint a message next to the first.  Section- and
+		// header-hosted bars are never inside a `.juneau-view-detail-field` container, so they fall through to
+		// the section-wide resolve unchanged.
+		const fieldContainer = btn.closest ? btn.closest(".juneau-view-detail-field") : null;
+		const slot = fieldContainer && section.contains(fieldContainer)
+			? fieldContainer.querySelector("[data-juneau-field]")
+			: section.querySelector("[data-juneau-field]");
 		if (!slot) return;
 		const value = message == null ? "" : String(message);
 		if (slot.dataset.juneauFieldFormat === "markdown")

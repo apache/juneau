@@ -361,6 +361,55 @@ if (out.hasPaintActionMessageIntoDetail) {
 	I.paintActionMessageIntoDetail(paintTr, 'diagnose', paintMsg);
 	out.paint_text = paintSlot.textContent;
 	out.paint_xssNotInterpreted = paintSlot.textContent === paintMsg;
+
+	// LD-1 (TODO-J0474): a field-hosted bar paints into its OWN field's slot, not the section's first field.
+	// Two fields in the section, the SECOND one hosting the bar, so "first field happens to be the bar's own
+	// field" cannot make this pass by accident -- painting the first field's slot instead of the second's would
+	// be exactly the pre-fix defect this case exists to catch.
+	const fhSection = el('section');
+	fhSection.dataset.juneauDetailSection = 'ctx';
+	const fhFirstField = el('div');
+	fhFirstField.setAttribute('class', 'juneau-view-detail-field');
+	const fhFirstSlot = el('div');
+	fhFirstSlot.dataset.juneauField = 'summary';
+	fhFirstField.appendChild(fhFirstSlot);
+	const fhSecondField = el('div');
+	fhSecondField.setAttribute('class', 'juneau-view-detail-field');
+	const fhSecondSlot = el('div');
+	fhSecondSlot.dataset.juneauField = 'assignee';
+	const fhBtn = el('button');
+	fhBtn.dataset.juneauAction = 'assignee-action';
+	fhSecondField.appendChild(fhSecondSlot);
+	fhSecondField.appendChild(fhBtn);
+	fhSection.appendChild(fhFirstField);
+	fhSection.appendChild(fhSecondField);
+	const fhPanel = el('div');
+	fhPanel.appendChild(fhSection);
+	const fhTr = { _juneauDetailPanel: fhPanel };
+	I.paintActionMessageIntoDetail(fhTr, 'assignee-action', 'ok');
+	out.paintFieldHosted_ownSlotPainted = fhSecondSlot.textContent;
+	out.paintFieldHosted_firstFieldUntouched = fhFirstSlot.textContent === '';
+
+	// LD-1 regression guard: a section-hosted bar (no enclosing `.juneau-view-detail-field`) keeps painting into
+	// the section's FIRST field slot, byte-identically to today -- with a SECOND field present so this could not
+	// pass merely because there was only one field to choose from.
+	const shSection = el('section');
+	shSection.dataset.juneauDetailSection = 'diagnose2';
+	const shFirstSlot = el('div');
+	shFirstSlot.dataset.juneauField = 'summary';
+	const shSecondSlot = el('div');
+	shSecondSlot.dataset.juneauField = 'notes';
+	const shBtn = el('button');
+	shBtn.dataset.juneauAction = 'diagnose2';
+	shSection.appendChild(shFirstSlot);
+	shSection.appendChild(shSecondSlot);
+	shSection.appendChild(shBtn);
+	const shPanel = el('div');
+	shPanel.appendChild(shSection);
+	const shTr = { _juneauDetailPanel: shPanel };
+	I.paintActionMessageIntoDetail(shTr, 'diagnose2', 'section message');
+	out.paintSectionHosted_firstFieldPainted = shFirstSlot.textContent;
+	out.paintSectionHosted_secondFieldUntouched = shSecondSlot.textContent === '';
 }
 
 out.hasResolveDetailHeaderIcon = typeof I.resolveDetailHeaderIcon === 'function';

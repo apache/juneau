@@ -118,7 +118,10 @@ const PROBE = async function () {
 	{
 		const dom = makeTable(['1', '2', '3'], { select: true, rowIdField: 'id' });
 		const selectionState = { selected: new Set(), rowIdField: 'id' };
-		init.initSelection(dom.table, fakeDt(), selectionState, {});
+		const ctx = { selectionState: selectionState, dataTable: fakeDt(), bulkToolbar: null };
+		init.ensureSelectAllCheckbox(dom.table);
+		init.bindSelectionPrune(dom.table, ctx);
+		init.initSelection(dom.table, ctx);
 
 		function check(id, checked) {
 			const cb = dom.trs[id].querySelector('.juneau-view-select-checkbox');
@@ -132,13 +135,15 @@ const PROBE = async function () {
 
 		const allCb = dom.selectTh.querySelector('.juneau-view-select-all-checkbox');
 		out.hasSelectAllCheckbox = !!allCb;
-		allCb.checked = true;
-		dispatchChange(allCb);
-		out.afterSelectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
+		if (allCb) {
+			allCb.checked = true;
+			dispatchChange(allCb);
+			out.afterSelectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
 
-		allCb.checked = false;
-		dispatchChange(allCb);
-		out.afterDeselectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
+			allCb.checked = false;
+			dispatchChange(allCb);
+			out.afterDeselectAll = Array.from(selectionState.selected).sort((a, b) => a.localeCompare(b));
+		}
 	}
 
 	// ---- b) off-screen-id-drop persistence rule (MED-11/Q2): a poll/sort/page draw prunes ids no longer present ----
@@ -146,7 +151,10 @@ const PROBE = async function () {
 		const dom = makeTable(['1', '2', '3'], { select: true, rowIdField: 'id' });
 		const selectionState = { selected: new Set(['1', '2', '3']), rowIdField: 'id' };
 		const dt = fakeDt();
-		init.initSelection(dom.table, dt, selectionState, {});
+		const ctx = { selectionState: selectionState, dataTable: dt, bulkToolbar: null };
+		init.ensureSelectAllCheckbox(dom.table);
+		init.bindSelectionPrune(dom.table, ctx);
+		init.initSelection(dom.table, ctx);
 
 		dom.trs['3'].remove();   // row '3' left the current draw
 		dt.fire('draw.dt');

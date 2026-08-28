@@ -73,6 +73,26 @@ import org.apache.juneau.rest.server.util.*;
  * active theme differs from {@link Theme#OPEN}, a second appended block carries its override tokens. Every token
  * value is run through {@code CssValueEscaper} before being written into the response.
  *
+ * <h5 class='section'>Stylesheet load-order band:</h5>
+ * <p>
+ * At equal cascade specificity, whichever of {@code juneau-views.css} and this class's {@code chrome.css} is
+ * declared later in a page's {@code <head>} wins &mdash; the exact ambiguity the {@code rootBlock} theme block
+ * below is raised to {@code html:root} to make irrelevant. Juneau's own in-tree page emitters (the examples
+ * module) don't rely on that fix alone: they declare a five-position stylesheet/script load-order band,
+ * enforced by a build-time test, so their own asset order is never left to chance in the first place:
+ * <ol>
+ * 	<li>vendor stylesheets
+ * 	<li>{@code juneau-views.css} &mdash; the views base layer
+ * 	<li>first-party widget stylesheets that build on the views layer, e.g. {@code juneau-calendar.css}
+ * 	<li>the consumer theme, e.g. this class's {@code chrome.css}
+ * 	<li>page-local {@code <style>}
+ * </ol>
+ * <p>
+ * That guard reaches only the pages Juneau itself emits. It says nothing about, and claims no control over, an
+ * arbitrary host application's own document &mdash; a consumer is free to link {@code chrome.css} and
+ * {@code juneau-views.css} in either order, which is precisely why the {@code html:root} fix exists: so the
+ * active theme wins regardless of which order the consumer's links happen to appear in.
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(mixins=ConsoleChromeMixin.<jk>class</jk>)

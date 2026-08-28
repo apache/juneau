@@ -113,11 +113,11 @@ final class ChromeScaleScanner {
 		new Step("--jc-chrome-control-height", "32px", true, Family.CONTROL_HEIGHT),
 		new Step("--jc-chrome-control-height-compact", "28px", true, Family.CONTROL_HEIGHT),
 		new Step("--jc-chrome-control-padding-x", "10px", true, Family.CONTROL_PADDING_X),
-		new Step("--jc-chrome-control-padding-x-wide", "14px", false, Family.CONTROL_PADDING_X),
+		new Step("--jc-chrome-control-padding-x-wide", "14px", true, Family.CONTROL_PADDING_X),
 		new Step("--jc-chrome-font-size-1", "0.75rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-font-size-2", "0.8125rem", false, Family.FONT_SIZE),
-		new Step("--jc-chrome-font-size-3", "0.875rem", false, Family.FONT_SIZE),
-		new Step("--jc-chrome-line-height", "1.2", false, Family.LINE_HEIGHT),
+		new Step("--jc-chrome-font-size-3", "0.875rem", true, Family.FONT_SIZE),
+		new Step("--jc-chrome-line-height", "1.2", true, Family.LINE_HEIGHT),
 		new Step("--jc-chrome-glyph-size", "16px", true, Family.GLYPH),
 		new Step("--jc-chrome-glyph-size-small", "12px", true, Family.GLYPH)
 	);
