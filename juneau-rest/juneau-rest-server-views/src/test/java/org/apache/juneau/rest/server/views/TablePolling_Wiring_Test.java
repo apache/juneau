@@ -151,7 +151,7 @@ class TablePolling_Wiring_Test extends TestBase {
 		assertTrue(initBody.contains("buildStalenessIndicator()"), initBody);
 		assertTrue(initBody.contains("initPolling(table, ctx.dataTable, viewDef, staleness, ctx)"), initBody);
 		assertTrue(initBody.contains(".juneau-view-toolbar-right"), initBody);
-		assertTrue(initBody.contains("insertBefore(staleness, rightCluster.firstChild)"), initBody);
+		assertTrue(initBody.contains("rightCluster.appendChild(staleness)"), initBody);
 	}
 
 	@Test void b08_initPolling_storesIntervalIds_andClearsLeftovers() throws Exception {

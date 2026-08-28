@@ -1093,7 +1093,11 @@
 
 		const right = document.createElement("div");
 		right.className = "juneau-view-toolbar-right";
-		if (filterEl) right.appendChild(filterEl);
+		if (filterEl) {
+			const filterInput = filterEl.querySelector("input");
+			if (filterInput) filterInput.setAttribute("aria-label", "Search table");
+			right.appendChild(filterEl);
+		}
 		if (bar) right.appendChild(bar);
 
 		row.appendChild(left);
@@ -4353,7 +4357,9 @@
 		if (!viewDef.pollIntervalMs || !toolbarRow) return;
 		const staleness = buildStalenessIndicator();
 		const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
-		if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
+		// Appended against the CLUSTER, never against a specific sibling (e.g. a trailing refresh group) - a
+		// view may declare a poll interval with no ribbon at all, so there may be no sibling to anchor to.
+		if (rightCluster) rightCluster.appendChild(staleness);
 		initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
 	}
 

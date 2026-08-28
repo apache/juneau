@@ -689,6 +689,16 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-table-scroll { overflow-x: auto; min-width: 0; }
 
 /*
+ * DataTables 2.1.8 pins an unowned .75em vertical margin on this row (Juneau vendors nothing here - each
+ * consumer supplies its own copy).  Reclaiming it makes both edges Juneau's own decision instead of the
+ * vendor's: the top edge collapses against the toolbar row's own bottom margin (already this same step), and
+ * the bottom edge would otherwise fall through to whatever padding a host theme happens to supply.  Narrow
+ * selector at specificity (0,3,0) beats the vendor's (0,2,2) on class count alone, so no !important and no
+ * stylesheet-order dependence.  A DataTables version bump should re-check this margin still exists to neutralize.
+ */
+.dt-container > .dt-layout-row.dt-layout-table { margin: 0 0 var(--jc-space-2); }
+
+/*
  * The 10.0 one-overflow-contract half: the two scroll boxes above are unchanged, but cell CONTENT now CLIPS with an
  * ellipsis instead of wrapping - the SAME policy on both DataTables generations, so a table no longer changes shape
  * depending on which generation the app supplied.
@@ -777,6 +787,15 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-pagingpill-info { white-space: nowrap; font-family: inherit; }
 
+/* Centring box for the baseline-seated inline SVG - without this the 12px glyph rides high against the
+   "n-n of n" range text beside it, since only the child svg (below) is sized and the span itself has no
+   display/vertical-align rule.  Verbatim shape of .juneau-view-paging-double above: no height here, since
+   height is a checked ChromeScale property on this glyph family and inline-flex + centred items needs none. */
+.juneau-view-pagingpill-caret {
+	display: inline-flex;
+	align-items: center;
+}
+
 .juneau-view-pagingpill-caret svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
@@ -863,6 +882,19 @@ table.dataTable thead .sorting_desc_disabled:after {
 	font-family: inherit;
 }
 
+/* Scoped to the toolkit's own toolbar search input only - never a bare `::placeholder`, which would be a
+   stronger claim on a consumer's page than a framework should make.  Two separate rules (DT1 / DT2 markup),
+   never a comma list, per this file's own comma-joined-selector caution.  Italic only; no opacity drop, since
+   the input's accessible name comes from an explicit aria-label (stamped in buildToolbarRow), not from the
+   placeholder text, so there is no accessibility reason to fade it. */
+.juneau-view-toolbar-right .dataTables_filter input::placeholder {
+	font-style: italic;
+}
+
+.juneau-view-toolbar-right .dt-search input::placeholder {
+	font-style: italic;
+}
+
 .juneau-view-ribbon-divider {
 	display: inline-block;
 	width: 0.5em;               /* pure spacing only; no visible glyph. Stays in the DOM (unchanged JS branch). */
@@ -870,12 +902,15 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 /*
  * Per-table staleness indicator (per-table, never a single page-level chip) - a small neutral text chip
- * juneau-views.js inserts at the front of the toolbar row's RIGHT cluster for any table that declares a
+ * juneau-views.js appends to the end of the toolbar row's RIGHT cluster (against the cluster itself, never
+ * against a specific sibling, since a view may poll with no ribbon at all) for any table that declares a
  * `pollIntervalMs`.  NEUTRAL - no palette color (per this file's no-color contract); the `data-state="error"`
  * case ("the last refresh attempt failed" must look visibly distinct from a merely-aging timestamp) gets a
  * heavier border/bold text instead of a color change, mirroring the
  * ".juneau-view-ribbon-btn[aria-pressed=\"true\"]" neutral-emphasis convention above; console-ui's chrome.css
- * MAY layer a themed color onto this same attribute selector when present.
+ * MAY layer a themed color onto this same attribute selector when present.  The min-width below reserves room
+ * for the longest rendered text (error-state, two-digit) so a shorter state cannot let the trailing refresh
+ * button jump sideways as the label ticks.
  */
 .juneau-view-staleness {
 	display: inline-flex;
@@ -885,6 +920,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	border-radius: 0.75em;
 	font-size: 0.8125rem;
 	white-space: nowrap;
+	min-width: 38ch;
 }
 
 .juneau-view-staleness[data-state="error"] {
@@ -909,6 +945,13 @@ table.dataTable thead .sorting_desc_disabled:after {
 	font-size: 0.8125rem;
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.2em;
+}
+
+/* Same scoped-italic-placeholder treatment as the toolbar search input above, and the same paired
+   aria-label reasoning - here the label is already stamped (input.setAttribute("aria-label", label),
+   alongside input.placeholder) where this input is built. */
+.juneau-view-columnsearch-input::placeholder {
+	font-style: italic;
 }
 
 /*
