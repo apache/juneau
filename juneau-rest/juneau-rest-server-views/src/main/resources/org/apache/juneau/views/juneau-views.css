@@ -161,13 +161,13 @@
 	 */
 	--jc-detail-action-bg: #ffffff;
 	--jc-detail-action-border: #cccccc;
-	--jc-detail-action-color: #1a5297;
+	--jc-detail-action-color: #4f4f4f;
 	--jc-detail-action-hover-bg: #f2f2f2;
-	--jc-detail-action-primary-bg: #1a5297;
-	--jc-detail-action-primary-bg-hover: #005fb2;
-	--jc-detail-action-primary-border: #144279;
+	--jc-detail-action-primary-bg: #4f4f4f;
+	--jc-detail-action-primary-bg-hover: #333333;
+	--jc-detail-action-primary-border: #333333;
 	--jc-detail-action-primary-color: #ffffff;
-	--jc-detail-action-primary-bg-disabled: #93a8c2;
+	--jc-detail-action-primary-bg-disabled: #8a8a8a;
 }
 
 /*

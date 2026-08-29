@@ -892,6 +892,27 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("border: 1px solid"), body);
 	}
 
+	/**
+	 * The nine {@code --jc-detail-action-*} defaults must fall back to neutral, not to a brand accent: a themeless
+	 * render, or a theme that supplies only a partial palette, still gets a legible button rather than a colour
+	 * that reads as "the theme didn't apply". Both the delivered neutrals and the absence of every prior accent
+	 * hex are asserted, so re-adding one of those values under a tenth name would still fail this test.
+	 */
+	@Test void o09_viewsCss_hasNeutralDetailActionDefaults() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var start = body.indexOf("--jc-detail-action-bg:");
+		assertTrue(start >= 0, body);
+		var end = body.indexOf("}", start);
+		var block = body.substring(start, end);
+		assertTrue(block.contains("--jc-detail-action-color: #4f4f4f;"), block);
+		assertTrue(block.contains("--jc-detail-action-primary-bg: #4f4f4f;"), block);
+		assertTrue(block.contains("--jc-detail-action-primary-bg-hover: #333333;"), block);
+		assertTrue(block.contains("--jc-detail-action-primary-border: #333333;"), block);
+		assertTrue(block.contains("--jc-detail-action-primary-bg-disabled: #8a8a8a;"), block);
+		for (var accent : new String[]{"#1a5297", "#005fb2", "#144279", "#93a8c2"})
+			assertFalse(block.contains(accent), () -> "accent colour leaked back into the detail-action defaults: " + accent + " in " + block);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// i) data-juneau-saved-views stamp via a real RestRequest URI resolver
 	//------------------------------------------------------------------------------------------------------------------
