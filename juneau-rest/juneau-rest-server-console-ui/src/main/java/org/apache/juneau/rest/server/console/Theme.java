@@ -176,6 +176,47 @@ public final class Theme {
 	}
 
 	/**
+	 * Starts building a new named theme that is seeded with every one of {@code seed}'s tokens, so the caller can
+	 * state only its divergences instead of restating {@code seed}'s whole palette.
+	 *
+	 * <p>
+	 * The derived theme's name is always the caller's {@code name}, <b>never</b> {@code seed}'s &mdash; a
+	 * one-argument {@code deriveFrom(Theme)} shape that inherited the seed's name would, for a theme derived from
+	 * {@link #OPEN}, be named {@code "open"}, and {@code ConsoleChromeMixin.buildBody} suppresses the emitted theme
+	 * block whenever the active theme's name equals {@link #OPEN}'s &mdash; silently dropping every override the
+	 * derived theme declares, with no exception and no failing test. The two-argument shape makes that state
+	 * unreachable: the caller must name the derived theme, and that name passes through the same guard
+	 * {@link #create(String)} already applies.
+	 *
+	 * <p>
+	 * {@code seed}'s tokens land in the returned builder's <b>own</b> map, not as a fallback, so the built theme
+	 * emits <i>all</i> of {@code seed}'s tokens (not just the caller's overrides) and any {@code var(--jc-name)}
+	 * reference the caller adds resolves against this seeded copy first &mdash; falling back to {@link #OPEN} only
+	 * for a name neither this builder nor {@code seed} defines.
+	 *
+	 * <p>
+	 * What is seeded is {@code seed}'s <b>values</b>, not its reference <i>relationships</i>: a {@code var(--jc-name)}
+	 * written on {@code seed} was already flattened to a literal by {@code seed}'s own {@link Builder#build()}, so
+	 * overriding {@code --jc-name} on the derived builder does <b>not</b> re-flow into it &mdash; only references the
+	 * caller authors on the derived builder itself resolve live.
+	 *
+	 * @param name The derived theme's own name (see {@link #create(String)}) &mdash; never {@code seed}'s name.
+	 * @param seed The theme to seed from. Must not be <jk>null</jk>. Its tokens are already-resolved literals
+	 * 	(see {@link #getTokens()}), so seeding can never smuggle an unresolved reference into the new builder.
+	 * @return A new builder, pre-populated with {@code seed}'s tokens in {@code seed}'s declaration order.
+	 * @throws IllegalArgumentException
+	 * 	If {@code name} is invalid (see {@link #create(String)}) or if {@code seed} is <jk>null</jk>.
+	 */
+	public static Builder deriveFrom(String name, Theme seed) {
+		if (seed == null)
+			throw iaex("Invalid theme seed: null.");
+		var b = create(name);
+		for (var e : seed.getTokens().entrySet())
+			b.token(e.getKey(), e.getValue());
+		return b;
+	}
+
+	/**
 	 * Returns this theme's name.
 	 *
 	 * @return This theme's name.

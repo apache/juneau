@@ -187,4 +187,47 @@ class Theme_VarReferences_Test extends TestBase {
 		for (var v : theme.getTokens().values())
 			assertFalse(v.contains("var("), () -> "resolved token value still contains 'var(': " + v);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// e) deriveFrom: the shadowing branch a derived builder's OWN (seeded) tokens now take, pinned both directions
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_deriveFrom_overriddenReferencedToken_referenceResolvesToTheOverride() {
+		// The seed's --jc-danger is shadowed by the caller's override, so a reference to it must resolve to the
+		// override - exactly as it would for a plain create("x") that defines --jc-danger itself.
+		var theme = Theme.deriveFrom("x", Theme.OPEN)
+			.token("--jc-danger", "#900000")
+			.token("--jc-tag-red-text", "var(--jc-danger)")
+			.build();
+		assertEquals("#900000", theme.getTokens().get("--jc-tag-red-text"));
+	}
+
+	@Test void e02_deriveFrom_unoverriddenReferencedToken_resolvesAgainstTheSeededCopy_notTheOpenFallback() {
+		// The seed here is deliberately NOT Theme.OPEN and gives --jc-danger a value OPEN does not have. If
+		// resolution incorrectly fell through to the Theme.OPEN fallback (instead of using this builder's OWN,
+		// seeded copy of --jc-danger), this would resolve to OPEN's "#c23934" rather than the seed's "#111111" -
+		// so this pins the case that looks identical to the fallback case but is reached by a different code path.
+		var seed = Theme.create("custom-seed").token("--jc-danger", "#111111").build();
+		var theme = Theme.deriveFrom("x", seed)
+			.token("--jc-tag-red-text", "var(--jc-danger)")
+			.build();
+		assertEquals("#111111", theme.getTokens().get("--jc-tag-red-text"));
+	}
+
+	@Test void e03_deriveFrom_seedAuthoredReference_isASeededLiteral_notRelinkedByAnOverride() {
+		// What derivation seeds is the seed's VALUES, not its reference relationships: the seed's own build()
+		// already flattened var(--jc-danger) to "#111111", so overriding --jc-danger on the derived builder does
+		// not re-flow into it. Only a reference the caller authors on the derived builder resolves live - which
+		// --jc-b does, to the override.
+		var seed = Theme.create("custom-seed")
+			.token("--jc-danger", "#111111")
+			.token("--jc-tag-red-text", "var(--jc-danger)")
+			.build();
+		var theme = Theme.deriveFrom("x", seed)
+			.token("--jc-danger", "#900000")
+			.token("--jc-b", "var(--jc-danger)")
+			.build();
+		assertEquals("#111111", theme.getTokens().get("--jc-tag-red-text"));
+		assertEquals("#900000", theme.getTokens().get("--jc-b"));
+	}
 }

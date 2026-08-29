@@ -42,7 +42,7 @@ class DetailField_Actions_Emit_Test extends TestBase {
 
 	private static final String FIELD = "assignee";
 
-	private static ViewDef view(DetailField...fields) {
+	private static ViewDef view(FieldLayout layout, DetailField...fields) {
 		return ViewDef.create("alerts")
 			.dataMode(DataMode.CLIENT)
 			.dataUrl("/data/alerts")
@@ -54,12 +54,20 @@ class DetailField_Actions_Emit_Test extends TestBase {
 					.method(RowAction.Method.POST))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.sections(DetailSection.create("ctx", "Context").fields(fields)))
+				.sections(DetailSection.create("ctx", "Context").layout(layout).fields(fields)))
 			.build();
 	}
 
+	private static ViewDef view(DetailField...fields) {
+		return view(null, fields);
+	}
+
+	private static String html(FieldLayout layout, DetailField...fields) {
+		return Html.of(ViewTable.of(view(layout, fields)));
+	}
+
 	private static String html(DetailField...fields) {
-		return Html.of(ViewTable.of(view(fields)));
+		return html(null, fields);
 	}
 
 	/** The one section's fields grid, which for these single-field fixtures is exactly one field block. */
@@ -225,5 +233,18 @@ class DetailField_Actions_Emit_Test extends TestBase {
 		assertTrue(g.contains("juneau-view-detail-field-title"), g);
 		assertTrue(g.contains("juneau-view-detail-field-markdown"), g);
 		assertTrue(g.contains("juneau-view-detail-actions"), g);
+	}
+
+	/**
+	 * A field-hosted bar under {@link FieldLayout#STACKED} is fenced from widening the row entirely,
+	 * for the same one-column-ancestor root cause as the titled-markdown case above. The bar is still a plain
+	 * sibling here, exactly as under {@code INLINE} - the CSS fix ({@code ViewsMixin_Serving_Test.o08}) is what
+	 * stops it widening the row, not a change to what gets emitted.
+	 */
+	@Test void e04_stackedLayoutFieldKeepsItsBar() {
+		var out = html(FieldLayout.STACKED, withBar(ActionRef.of("esc")));
+		// The "stacked" class sits earlier in the same attribute than grid()'s "-cols-" capture window starts at.
+		assertTrue(out.contains("juneau-view-detail-fields-stacked"), out);
+		assertTrue(grid(out).contains("juneau-view-detail-actions"), out);
 	}
 }

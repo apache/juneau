@@ -383,7 +383,7 @@
  */
 table[data-juneau-view],
 table.dataTable {
-	font-size: 0.75rem;
+	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; see the cell-level pin below */
 	border-collapse: collapse;
 	border-spacing: 0;
 	border: 1px solid;            /* currentColor; chrome.css themes the color */
@@ -402,7 +402,7 @@ table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
-	font-size: 0.75rem;
+	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; not tokenized, see comment above */
 	padding: 4px 5px;
 	font-weight: normal;
 	text-align: left;
@@ -415,7 +415,7 @@ table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-	font-size: 0.75rem;
+	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; not tokenized, see comment above */
 	padding: 4px 5px;
 	vertical-align: middle;
 	border: 1px solid;
@@ -918,7 +918,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	padding: 0.15em 0.6em;
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.75em;
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	white-space: nowrap;
 	min-width: 38ch;
 }
@@ -942,7 +942,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	box-sizing: border-box;
 	width: 100%;
 	padding: 3px 6px;
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.2em;
 }
@@ -1381,6 +1381,21 @@ table.dataTable thead .sorting_desc_disabled:after {
 	gap: var(--jc-space-1);
 }
 
+/*
+ * A ONE-COLUMN ancestor has no second column for the bar above to occupy - a STACKED-layout section and a
+ * titled MARKDOWN field under INLINE are the SAME one-column declaration (the comma-joined selector pair
+ * above, "STACKED: label above value"), so without this override the rule above's explicit column placement
+ * mints an implicit second column and widens the row.  One shared rule, using that same comma-joined selector
+ * pair, resets the bar back into the ancestor's own single column for both shapes.  Ordered AFTER the
+ * two-column rule above so it wins on source order as well as specificity - it narrows that rule, it does not
+ * replace it.  Closes the STACKED case the field-hosted-actions rule above's own comment left as "a variant
+ * for those layouts is a separate decision and is deliberately not taken here."
+ */
+.juneau-view-detail-fields-stacked > .juneau-view-detail-field .juneau-view-detail-actions,
+.juneau-view-detail-fields-inline > .juneau-view-detail-field-markdown .juneau-view-detail-actions {
+	grid-column: 1;
+}
+
 .juneau-view-detail-field .juneau-view-detail-action {
 	padding: 0 var(--jc-chrome-control-padding-x);
 	font-weight: 400;
@@ -1688,7 +1703,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-bulk-count {
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	white-space: nowrap;
 }
 
@@ -1697,7 +1712,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	background: transparent;
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	cursor: pointer;
 }
 
@@ -1727,7 +1742,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	background: #fff;
 	color: #222;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	line-height: 1.4;
 	white-space: nowrap;
 }
@@ -1772,7 +1787,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	background: var(--jc-popover-bg);
 	color: #222;
 	box-shadow: var(--jc-popover-shadow);
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 	line-height: 1.4;
 }
 
@@ -1850,7 +1865,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-card-status {
-	font-size: 0.75rem;
+	font-size: var(--jc-chrome-font-size-1);
 	color: #555;
 	padding: 0.05em 0.4em;
 	border-radius: 3px;
@@ -1892,7 +1907,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-card-banner {
 	padding: 0.4rem 0.75rem;
 	border-bottom: 1px solid var(--jc-card-border, #dddddd);
-	font-size: 0.8125rem;
+	font-size: var(--jc-chrome-font-size-2);
 }
 
 .juneau-view-card-body {
@@ -1912,7 +1927,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 .juneau-view-card-field dt {
-	font-size: 0.75rem;
+	font-size: var(--jc-chrome-font-size-1);
 	color: #555;
 	margin: 0;
 }

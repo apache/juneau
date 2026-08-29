@@ -41,6 +41,7 @@ import org.junit.jupiter.params.provider.*;
  * console-ui-freemarker-datatables → console-ui-freemarker + datatables (the ONLY module allowed to touch both)
  * datatables                       → rest-server + bean-html5          (NOT console-ui — stays generic)
  * view-freemarker                  → rest-server + freemarker          (NOT -datatables — untouched)
+ * theme-packs                      → console-ui + views                (the ONLY module allowed to touch both)
  * </pre>
  *
  * <p>
@@ -94,5 +95,25 @@ class ModuleGraph_Test extends TestBase {
 		var pom = pomOf("juneau-rest-server-console-ui-freemarker");
 		assertTrue(hasDependency(pom, "juneau-rest-server-console-ui"));
 		assertTrue(hasDependency(pom, "juneau-rest-server-view-freemarker"));
+	}
+
+	@Test void a08_themePacks_dependsOnConsoleUi() throws IOException {
+		var pom = pomOf("juneau-rest-server-theme-packs");
+		assertTrue(hasDependency(pom, "juneau-rest-server-console-ui"));
+	}
+
+	@Test void a09_themePacks_dependsOnViews() throws IOException {
+		var pom = pomOf("juneau-rest-server-theme-packs");
+		assertTrue(hasDependency(pom, "juneau-rest-server-views"));
+	}
+
+	@Test void a10_consoleUi_doesNotDependOnThemePacks() throws IOException {
+		var pom = pomOf("juneau-rest-server-console-ui");
+		assertFalse(hasDependency(pom, "juneau-rest-server-theme-packs"));
+	}
+
+	@Test void a11_views_doesNotDependOnThemePacks() throws IOException {
+		var pom = pomOf("juneau-rest-server-views");
+		assertFalse(hasDependency(pom, "juneau-rest-server-theme-packs"));
 	}
 }

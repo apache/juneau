@@ -115,7 +115,7 @@ final class ChromeScaleScanner {
 		new Step("--jc-chrome-control-padding-x", "10px", true, Family.CONTROL_PADDING_X),
 		new Step("--jc-chrome-control-padding-x-wide", "14px", true, Family.CONTROL_PADDING_X),
 		new Step("--jc-chrome-font-size-1", "0.75rem", true, Family.FONT_SIZE),
-		new Step("--jc-chrome-font-size-2", "0.8125rem", false, Family.FONT_SIZE),
+		new Step("--jc-chrome-font-size-2", "0.8125rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-font-size-3", "0.875rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-line-height", "1.2", true, Family.LINE_HEIGHT),
 		new Step("--jc-chrome-glyph-size", "16px", true, Family.GLYPH),
@@ -140,13 +140,11 @@ final class ChromeScaleScanner {
 		new RecordedLiteral("> tbody > tr > th", "font-size", "0.75rem",
 			"pins the cell type context; a token here would be overridable and the pin would stop pinning"),
 
-		// (2) The card grid sizes itself in `rem`. The membership sweep behind the spacing ladder evaluated
-		// `em`-valued declarations only, so these were never assessed against a step and routing them now would
-		// be a card-grid density decision this contract does not own.
-		new RecordedLiteral(".juneau-view-card-status", "font-size", "0.75rem",
-			"card-grid rem sizing, never assessed by the em-valued membership sweep"),
-		new RecordedLiteral(".juneau-view-card-field dt", "font-size", "0.75rem",
-			"card-grid rem sizing, never assessed by the em-valued membership sweep"),
+		// (2) The card grid's gap sizes itself in `rem`. The membership sweep behind the spacing ladder evaluated
+		// `em`-valued declarations only, so this was never assessed against a step and routing it now would be a
+		// card-grid density decision this contract does not own. (Its two sibling font-size literals, formerly
+		// recorded here for the same reason, are now tokenized onto --jc-chrome-font-size-1, so the pinning
+		// rationale above no longer applies to them and they no longer need an exception.)
 		new RecordedLiteral(".juneau-view-card-fields", "gap", "0.4rem 0.75rem",
 			"card-grid rem sizing, never assessed by the em-valued membership sweep"),
 
@@ -221,6 +219,23 @@ final class ChromeScaleScanner {
 	 * @return The violations, the declarations actually examined, and which recorded exceptions were matched.
 	 */
 	static Result scan(String css) {
+		return scan(css, SCALE);
+	}
+
+	/**
+	 * Scans against an explicit step list rather than {@link #SCALE}.
+	 *
+	 * <p>
+	 * A test-only seam: {@link #SCALE} is {@code private static final} and cannot carry a synthetic step (nor
+	 * should it - {@code a01}/{@code a02} require every declared step to be real and declared exactly once in
+	 * the shipped stylesheet). This overload lets a test exercise the provisional-exemption branch against a
+	 * scale of its own choosing, without widening {@link #SCALE} itself.
+	 *
+	 * @param css The stylesheet text.
+	 * @param scale The step list to check against, in place of {@link #SCALE}.
+	 * @return The violations, the declarations actually examined, and which recorded exceptions were matched.
+	 */
+	static Result scan(String css, List<Step> scale) {
 		var violations = new ArrayList<String>();
 		var checked = new ArrayList<Decl>();
 		var matched = new LinkedHashSet<RecordedLiteral>();
@@ -238,7 +253,7 @@ final class ChromeScaleScanner {
 				if ("width".equals(d.property()) && !isSvgSelector(selector))
 					continue;
 				checked.add(d);
-				var hit = findDuplicatedStep(d, families);
+				var hit = findDuplicatedStep(d, families, scale);
 				if (hit == null)
 					continue;
 				var record = findRecord(d);
@@ -262,12 +277,12 @@ final class ChromeScaleScanner {
 	 * {@code --jc-chrome-control-height} rather than against the numerically-identical {@code --jc-space-6}. Both
 	 * are violations either way; naming the apter one is what makes the message actionable.
 	 */
-	private static Step findDuplicatedStep(Decl d, Set<Family> families) {
+	private static Step findDuplicatedStep(Decl d, Set<Family> families, List<Step> scale) {
 		var literals = absoluteValues(d.value());
 		if (literals.isEmpty())
 			return null;
 		for (var roleNamed : List.of(true, false)) {
-			for (var s : SCALE) {
+			for (var s : scale) {
 				if (!s.confirmed() || !families.contains(s.family()) || (s.family() == Family.SPACE) == roleNamed)
 					continue;
 				var stepPx = toPx(s.value());

@@ -848,6 +848,29 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-detail-field .juneau-view-detail-action {"), body);
 	}
 
+	/**
+	 * The one-column override for a field-hosted bar: a {@code STACKED}-layout ancestor and a titled
+	 * {@code MARKDOWN} field under {@code INLINE} are the same one-column declaration, so one shared rule resets
+	 * the bar back onto column 1 for both shapes instead of letting the two-column {@code o07} variant's
+	 * explicit column placement mint an implicit second column.
+	 */
+	@Test void o08_viewsCss_hasOneColumnFieldActionBarOverride() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = ".juneau-view-detail-fields-inline > .juneau-view-detail-field-markdown .juneau-view-detail-actions {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("grid-column: 1"),
+			() -> "a one-column ancestor has no second column - the bar must be reset to column 1: " + rule);
+		// Shared with the STACKED ancestor via a comma-joined selector, not a private duplicate rule.
+		var stackedSel = ".juneau-view-detail-fields-stacked > .juneau-view-detail-field .juneau-view-detail-actions,";
+		var stackedAt = body.lastIndexOf(stackedSel, at);
+		assertTrue(stackedAt >= 0 && stackedAt < at, body);
+		// Must come AFTER the two-column INLINE rule it narrows, so it wins on source order as well as specificity.
+		var twoColumn = body.indexOf(".juneau-view-detail-field .juneau-view-detail-actions {");
+		assertTrue(twoColumn >= 0 && twoColumn < at, body);
+	}
+
 	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-columnsearch-row > th {"), body);

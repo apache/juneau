@@ -53,6 +53,7 @@
 		<module>juneau-rest-server-console-ui</module>
 		<module>juneau-rest-server-console-ui-freemarker</module>
 		<module>juneau-rest-server-console-ui-freemarker-datatables</module>
+		<module>juneau-rest-server-theme-packs</module>
 		<module>juneau-rest-server-reactive</module>
 		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>

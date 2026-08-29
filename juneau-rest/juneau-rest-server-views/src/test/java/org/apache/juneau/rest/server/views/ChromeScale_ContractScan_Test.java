@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -124,9 +125,19 @@ class ChromeScale_ContractScan_Test extends TestBase {
 		assertTrue(r.violations().isEmpty(), () -> "an em value was evaluated as a step match: " + r.violations());
 	}
 
-	/** A provisional step has no rendered consumer yet, so an existing literal must not be bound to its value. */
+	/**
+	 * A provisional step has no rendered consumer yet, so an existing literal must not be bound to its value.
+	 *
+	 * <p>
+	 * {@code SCALE} carries zero provisional steps now that {@code --jc-chrome-font-size-2} (its own fixture's
+	 * former value) has flipped from provisional to confirmed, so this exercises the exemption branch
+	 * against a synthetic still-provisional step via the {@code scan(String, List)} test seam rather than
+	 * against a real one - see that overload's javadoc.
+	 */
 	@Test void b07_provisionalStepValuesDoNotTriggerAViolation() {
-		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.8125rem; }");
+		var provisional = List.of(
+			new ChromeScaleScanner.Step("--jc-synthetic-provisional", "0.8125rem", false, ChromeScaleScanner.Family.FONT_SIZE));
+		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.8125rem; }", provisional);
 		assertTrue(r.violations().isEmpty(), () -> "a provisional step value was enforced: " + r.violations());
 	}
 
