@@ -493,17 +493,21 @@ table.dataTable thead .sorting_desc_disabled:after {
  * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
  * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
  *
- * The end-cap rules below restore a side border with LONGHAND border-*-width / border-*-style declarations,
- * never a one-line colourless shorthand (width + style with no colour component): such a shorthand resets
- * border-*-color to its initial value (currentColor), which at this rule's specificity beats chrome.css's themed
- * border-color and paints a near-black edge instead of the intended grey/accent one.
+ * This base rule and the end-cap rules below it all restore/null a side border with LONGHAND
+ * border-*-width / border-*-style declarations, never a one-line colourless shorthand (width + style with no
+ * colour component): such a shorthand resets border-*-color to its initial value (currentColor), which at this
+ * rule's specificity beats chrome.css's themed border-color and paints a near-black edge instead of the
+ * intended grey/accent one - including at the end-caps, whose own longhand rules never re-declare a color and
+ * so never re-open the fight this rule would otherwise lose.
  */
 .juneau-view-ribbon-group { display: inline-flex; align-items: stretch; }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn {
 	border-radius: 0;
-	border-left: none;
-	border-right: none;
+	border-left-width: 0;
+	border-left-style: none;
+	border-right-width: 0;
+	border-right-style: none;
 }
 
 .juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {

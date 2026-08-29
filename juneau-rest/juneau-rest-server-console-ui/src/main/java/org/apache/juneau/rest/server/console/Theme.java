@@ -74,7 +74,7 @@ public final class Theme {
 	 * the unchanged grammar. There is no fallback branch &mdash; {@code var(--jc-x, #fff)} simply fails to match
 	 * (comma inside the parens) and falls through to grammar rejection.
 	 */
-	private static final Pattern VAR_REFERENCE = Pattern.compile("^[Vv][Aa][Rr]\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
+	static final Pattern VAR_REFERENCE = Pattern.compile("^[Vv][Aa][Rr]\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
 
 	/**
 	 * The maximum number of reference hops resolved before {@code build()} fails, enforced independently of cycle
@@ -145,6 +145,13 @@ public final class Theme {
 		// gives every interactive control a WCAG 2.4.7-compliant keyboard-focus indicator by default.  Defaults to
 		// the Lightning-blue accent so the ring reads as "the same brand colour" out of the box.
 		.token("--jc-focus", "#1589EE")
+		// Accessibility: the ribbon-format selected-state face (WCAG 1.4.11 non-text 3:1 remedy).  A new, OPAQUE
+		// token rather than a re-valued --jc-accent-wash: the wash has 13 hover/table-wash consumers in chrome.css
+		// that must stay untouched (LD-4), so the selected face is confined to this independent token instead.
+		// Same literal as --jc-accent at this theme's baseline (the shipped colour choice does not change, only
+		// the mechanism, wash to opaque) - but tracked separately: a consumer overriding --jc-accent will NOT move
+		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
+		.token("--jc-accent-selected", "#1589EE")
 		.build();
 
 	private final String name;

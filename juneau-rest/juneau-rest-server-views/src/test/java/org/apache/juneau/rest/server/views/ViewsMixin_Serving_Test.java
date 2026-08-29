@@ -753,13 +753,51 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var memberEnd = body.indexOf("}", memberStart);
 		var memberRegion = body.substring(memberStart, memberEnd);
 		assertTrue(memberRegion.contains("border-radius: 0"), memberRegion);
-		assertTrue(memberRegion.contains("border-left: none"), memberRegion);
-		assertTrue(memberRegion.contains("border-right: none"), memberRegion);
+		assertTrue(memberRegion.contains("border-left-width: 0"), memberRegion);
+		assertTrue(memberRegion.contains("border-left-style: none"), memberRegion);
+		assertTrue(memberRegion.contains("border-right-width: 0"), memberRegion);
+		assertTrue(memberRegion.contains("border-right-style: none"), memberRegion);
 		assertFalse(memberRegion.contains("margin-left: -1px"), memberRegion);
 
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {"), body);
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {"), body);
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {"), body);
+	}
+
+	/**
+	 * Regression guard, mirroring {@code [FINISHED-J0449]}'s {@code A-B2}: the base group rule above must null
+	 * the side borders with LONGHAND width/style only - never a colour-resetting shorthand
+	 * ({@code border-left}/{@code border-right}) or an explicit {@code border-*-color} - so this rule's
+	 * {@code (0,0,2,0)} specificity never re-wins the border-color fight console-ui's {@code chrome.css} themes
+	 * with {@code var(--jc-border)}.  Extends {@code LD-H}'s existing end-cap longhand discipline one rule
+	 * earlier, to the base rule those end-caps sit below.
+	 */
+	@Test void o10_viewsCss_ribbonGroupBaseRuleLeavesBorderColorUnset() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var memberStart = body.indexOf(".juneau-view-ribbon-group .juneau-view-ribbon-btn {");
+		var memberEnd = body.indexOf("}", memberStart);
+		var memberRegion = body.substring(memberStart, memberEnd);
+		assertFalse(memberRegion.contains("border-left:"), memberRegion);
+		assertFalse(memberRegion.contains("border-right:"), memberRegion);
+		assertFalse(memberRegion.contains("border-left-color"), memberRegion);
+		assertFalse(memberRegion.contains("border-right-color"), memberRegion);
+		assertFalse(memberRegion.contains("border-color"), memberRegion);
+
+		// The end-cap rules must stay color-free too, so none of them re-opens the fight the base rule stays out of.
+		for (var selector : new String[]{
+			".juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {",
+			".juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {",
+			".juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {"
+		}) {
+			assertTrue(body.contains(selector), body);
+			var start = body.indexOf(selector);
+			var end = body.indexOf("}", start);
+			var region = body.substring(start, end);
+			assertFalse(region.contains("border-left:"), region);
+			assertFalse(region.contains("border-right:"), region);
+			assertFalse(region.contains("border-left-color"), region);
+			assertFalse(region.contains("border-right-color"), region);
+		}
 	}
 
 	/**

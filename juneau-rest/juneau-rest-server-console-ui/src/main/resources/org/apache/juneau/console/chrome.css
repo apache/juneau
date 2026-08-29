@@ -355,12 +355,12 @@ a:hover { text-decoration: underline; }
   text-decoration: none;
 }
 
-.jc-tab-active,
-.jc-subtab-active {
-  color: var(--jc-text);
-  background-color: var(--jc-accent-wash);
+.jc-tab.jc-tab-active,
+.jc-subtab.jc-subtab-active {
+  color: var(--jc-on-accent);
+  background-color: var(--jc-accent-selected);
   border-color: var(--jc-border);
-  border-bottom-color: var(--jc-accent);
+  border-bottom-color: var(--jc-accent-selected);
 }
 
 /* ==========================================================================
@@ -692,26 +692,28 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
    SHAPE (floor line + squared bottom caps + overlap, all via currentColor); this themes the floor line with
-   --jc-border and the ONE selected tab with the accent wash + an accent underline that paints over the floor -
-   the same subtle-accent treatment the primary .jc-tab active state uses (NOT the solid aria-pressed fill, since
-   a tablist has exactly one selection at a time rather than N independent toggles).  Each var(--jc-*) is the
-   entire value of a color/border-color property (sink-property discipline - see file header). */
+   --jc-border and the ONE selected tab with a solid, OPAQUE --jc-accent-selected fill + --jc-on-accent label/mark -
+   the SAME aria-pressed treatment used elsewhere in this file (deliberately, per the operator's WCAG 1.4.11
+   ruling: a tablist's one persistent selection reads fine with the pressed-button treatment, superseding this
+   comment's own prior "NOT the solid aria-pressed fill" framing).  Each var(--jc-*) is the entire value of a
+   color/background-color/border-color property (sink-property discipline - see file header). */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
-	background-color: var(--jc-accent-wash);
-	color: var(--jc-accent);
-	border-bottom-color: var(--jc-accent);
+	background-color: var(--jc-accent-selected);
+	color: var(--jc-on-accent);
+	border-bottom-color: var(--jc-accent-selected);
 }
 
 /* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
    track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
-   instead of a tab strip, and it also doubled the accent band under the header's own wash.  The generic
-   tab-mode rules directly above already ship exactly the intended treatment, so the fix was to remove the
-   override, not to re-theme it: the correct diff for the detail strip adds ZERO declarations to this file.
-   Note in particular that the deleted hover rule was UNGUARDED - it out-specified the disabled-guarded generic
-   hover rule above and re-lit disabled tabs.  Deleting it is what fixes that; do not re-add a guarded copy
-   here, because the guard already exists once and a second copy is the duplication that produced this block in
-   the first place. */
+   instead of a tab strip, and it also doubled the accent band under the header's own wash.  That reasoning still
+   holds for THIS strip specifically ([FINISHED-J0454]'s territory, not reopened here) - it is not a project-wide
+   "no solid fill" rule, though: the generic tab-mode rules directly above now use a solid fill too, deliberately,
+   per the ruling noted there.  The fix for the detail strip was still to remove the override, not to re-theme it:
+   the correct diff for the detail strip adds ZERO declarations to this file.  Note in particular that the deleted
+   hover rule was UNGUARDED - it out-specified the disabled-guarded generic hover rule above and re-lit disabled
+   tabs.  Deleting it is what fixes that; do not re-add a guarded copy here, because the guard already exists once
+   and a second copy is the duplication that produced this block in the first place. */
 
 /* Detail-panel header bar (instance-detail header wash). */
 .juneau-view-detail-header {

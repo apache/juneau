@@ -116,4 +116,15 @@ class ModuleGraph_Test extends TestBase {
 		var pom = pomOf("juneau-rest-server-views");
 		assertFalse(hasDependency(pom, "juneau-rest-server-theme-packs"));
 	}
+
+	/**
+	 * {@code ThemePack} lives in {@code console-ui}, and the tempting shortcut - having it reach into {@code views}
+	 * for the widget token names it aliases - would collapse the {@code theme-packs} module's whole reason for
+	 * existing: it is the only module allowed to touch both sides. The alias channel keeps those names as opaque
+	 * strings precisely so this edge stays absent.
+	 */
+	@Test void a12_consoleUi_doesNotDependOnViews() throws IOException {
+		var pom = pomOf("juneau-rest-server-console-ui");
+		assertFalse(hasDependency(pom, "juneau-rest-server-views"));
+	}
 }
