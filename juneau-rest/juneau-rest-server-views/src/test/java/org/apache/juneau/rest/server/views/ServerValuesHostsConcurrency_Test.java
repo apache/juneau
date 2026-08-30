@@ -102,7 +102,7 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 		.build();
 
 	@Rest(mixins=ViewsMixin.class)
-	public static class Host extends BasicRestServlet {
+	public static class ServerValuesHostsConcurrencyHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@Bean public VarResolver varResolver(VarResolver.Builder b) {
@@ -144,7 +144,7 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 			for (var i = 0; i < THREADS; i++) {
 				var mine = "T" + i;
 				// One client per thread so the only shared mutable state under test is the PageDef itself.
-				var client = MockRestClient.buildLax(Host.class);
+				var client = MockRestClient.buildLax(ServerValuesHostsConcurrencyHost.class);
 				futures.add(pool.submit(() -> {
 					await(start);
 					for (var r = 0; r < ROUNDS; r++) {

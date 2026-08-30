@@ -54,6 +54,21 @@ import java.util.regex.*;
  * 		{@code html}/{@code body}, so the root context is the browser default in both a themeless and a themed
  * 		render.
  * </ul>
+ * <p>
+ * <b>{@code font-size}'s {@code rem} reachability ({@code TODO-J0467}).</b> {@code font-size}'s three
+ * chrome-scale steps ({@code --jc-chrome-font-size-1/2/3}) are declared in {@code rem}, not {@code px} - the
+ * only family in {@link #scale()} that is. That is a different question from the one above: this class's own
+ * literal-duplicate matcher has admitted both {@code px} and {@code rem} on every property it checks since its
+ * original implementation (a {@code gap} literal needs the same {@code rem} reach {@link #RECORDED_LITERALS}
+ * already relies on it for), so a {@code rem}-valued {@code font-size} duplicate was never structurally invisible
+ * to <i>this</i> class the way it was to the separate, one-time manual membership audit that named the
+ * {@code em}-only {@code D9} rule when the shared chrome-scale contract now archived at {@code FINISHED-J0458}
+ * was first designed. {@link #findDuplicatedStep} still gives {@code font-size} its own named, dedicated
+ * {@link #FONT_SIZE_ABSOLUTE} matcher rather than leaning on the general {@link #ABSOLUTE} one, mirroring the
+ * {@code line-height}-scoped {@link #BARE_NUMBER} carve-out below and making the reachability an explicit,
+ * auditable, per-property fact rather than an incidental side effect - see
+ * {@code ChromeScale_ContractScan_Test.b12}/{@code b13} for the proof, in both directions, that this fix does
+ * not disturb the locked exclusion list.
  *
  * <h5 class='section'>Provisional steps are excluded from the second half</h5>
  * <p>
@@ -185,8 +200,28 @@ final class ChromeScaleScanner {
 	/** Matches a {@code var(...)} reference, including any fallback, so a fallback is not read as a bare literal. */
 	private static final Pattern VAR_REF = Pattern.compile("var\\([^()]*(?:\\([^()]*\\)[^()]*)*\\)");
 
-	/** Matches an absolute length/size token. */
+	/**
+	 * Matches an absolute {@code px} or {@code rem} length/size token. General on purpose: unlike
+	 * {@code line-height}'s unitless step (see {@link #BARE_NUMBER}), several properties this contract checks
+	 * carry a legitimate {@code rem} literal that must stay reachable regardless of which family it duplicates -
+	 * for example {@code gap}'s card-grid density declaration ({@link #RECORDED_LITERALS}), not just
+	 * {@code font-size}. See {@link #FONT_SIZE_ABSOLUTE} for the one property with its own dedicated,
+	 * additionally-documented reference to this same {@code rem} domain.
+	 */
 	private static final Pattern ABSOLUTE = Pattern.compile("(?<![\\w.-])(\\d*\\.?\\d+)(px|rem)(?![\\w-])");
+
+	/**
+	 * The {@code font-size}-scoped counterpart to {@link #ABSOLUTE}, used only for the {@code font-size}
+	 * property (see {@link #findDuplicatedStep}). Declared as its own named pattern - identical in what it
+	 * matches to {@link #ABSOLUTE} today - so that {@code font-size}'s {@code rem} reachability is an explicit,
+	 * auditable carve-out in its own right (mirroring the {@code line-height}-scoped {@link #BARE_NUMBER}
+	 * carve-out) rather than an incidental side effect of the general matcher, closing the unit-domain mismatch
+	 * named by {@code TODO-J0467}: {@code font-size}'s three chrome-scale steps
+	 * ({@code --jc-chrome-font-size-1/2/3}) are declared in {@code rem}, and a {@code rem}-valued
+	 * {@code font-size} literal that duplicates one must never go unmatched the way a tenth un-tokenized site
+	 * once did.
+	 */
+	private static final Pattern FONT_SIZE_ABSOLUTE = Pattern.compile("(?<![\\w.-])(\\d*\\.?\\d+)(px|rem)(?![\\w-])");
 
 	/**
 	 * Matches a bare, unitless decimal. {@code line-height}'s scale step ({@code --jc-chrome-line-height},
@@ -298,14 +333,21 @@ final class ChromeScaleScanner {
 		// line-height's step value is unitless, so it needs bare-number matching instead of the general
 		// px/rem literal matcher - scoped to this one property so no other property's matching widens (LD-2).
 		var lineHeight = "line-height".equals(d.property());
-		var literals = lineHeight ? bareNumberValues(d.value()) : absoluteValues(d.value());
+		// font-size's three steps are declared in rem, not px. The general ABSOLUTE matcher already admits
+		// rem (other properties, e.g. gap, rely on that too), but font-size gets its own named matcher here so
+		// its rem reachability is an explicit, font-size-scoped carve-out (TODO-J0467) rather than an
+		// incidental side effect of the shared one - mirroring the line-height carve-out above in shape.
+		var fontSize = "font-size".equals(d.property());
+		var literals = lineHeight ? bareNumberValues(d.value())
+			: fontSize ? fontSizeAbsoluteValues(d.value())
+			: absoluteValues(d.value());
 		if (literals.isEmpty())
 			return null;
 		for (var roleNamed : List.of(true, false)) {
 			for (var s : scale) {
 				if (!s.confirmed() || !families.contains(s.family()) || (s.family() == Family.SPACE) == roleNamed)
 					continue;
-				var stepValue = lineHeight ? bareValue(s.value()) : toPx(s.value());
+				var stepValue = lineHeight ? bareValue(s.value()) : fontSize ? fontSizeToPx(s.value()) : toPx(s.value());
 				if (stepValue != null && literals.contains(stepValue))
 					return s;
 			}
@@ -343,6 +385,24 @@ final class ChromeScaleScanner {
 
 	private static Double toPx(String value) {
 		var m = ABSOLUTE.matcher(value);
+		return m.find() ? px(Double.parseDouble(m.group(1)), m.group(2)) : null;
+	}
+
+	/**
+	 * The {@code font-size}-scoped counterpart to {@link #absoluteValues}: also admits {@code rem}. Only ever
+	 * called for the {@code font-size} property (see {@link #findDuplicatedStep}).
+	 */
+	private static Set<Double> fontSizeAbsoluteValues(String value) {
+		var out = new LinkedHashSet<Double>();
+		var m = FONT_SIZE_ABSOLUTE.matcher(VAR_REF.matcher(value).replaceAll(" "));
+		while (m.find())
+			out.add(px(Double.parseDouble(m.group(1)), m.group(2)));
+		return out;
+	}
+
+	/** The {@code font-size}-scoped counterpart to {@link #toPx}: also admits {@code rem}. */
+	private static Double fontSizeToPx(String value) {
+		var m = FONT_SIZE_ABSOLUTE.matcher(value);
 		return m.find() ? px(Double.parseDouble(m.group(1)), m.group(2)) : null;
 	}
 

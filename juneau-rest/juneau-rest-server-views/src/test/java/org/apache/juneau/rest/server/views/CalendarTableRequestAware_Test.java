@@ -62,7 +62,7 @@ class CalendarTableRequestAware_Test extends TestBase {
 	}
 
 	@Rest
-	public static class Host extends BasicRestServlet {
+	public static class CalendarTableRequestAwareHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@RestGet(path="/cal") public HttpResource cal(RestRequest req) {
@@ -76,7 +76,7 @@ class CalendarTableRequestAware_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient c = MockRestClient.buildLax(Host.class);
+	private static final MockRestClient c = MockRestClient.buildLax(CalendarTableRequestAwareHost.class);
 
 	@Test void a01_frenchAcceptLanguage_localizesTheMonthTitle() throws Exception {
 		var html = c.get("/cal").header("Accept-Language", "fr").accept("text/html").run()

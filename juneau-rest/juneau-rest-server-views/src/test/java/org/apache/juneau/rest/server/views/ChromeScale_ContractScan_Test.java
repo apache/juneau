@@ -177,4 +177,38 @@ class ChromeScale_ContractScan_Test extends TestBase {
 			+ r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-line-height (1.2)"), r.violations().get(0));
 	}
+
+	/**
+	 * {@code font-size}'s three chrome-scale steps are declared in {@code rem}, not {@code px} - the general
+	 * px-only literal matcher could never bind to a {@code rem}-valued {@code font-size} duplicate before this
+	 * fix (TODO-J0467), so a tenth un-tokenized {@code 0.75rem}/{@code 0.8125rem}/{@code 0.875rem} site
+	 * introduced today would have gone unnoticed exactly the same way the original twelve did. Proves the
+	 * widened, {@code font-size}-scoped {@code rem} carve-out now catches it.
+	 */
+	@Test void b12_fontSizeRemCarveOutCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.875rem; }");
+		assertEquals(1, r.violations().size(), () -> "expected the rem-valued font-size duplicate to be caught: "
+			+ r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-font-size-3 (0.875rem)"), r.violations().get(0));
+	}
+
+	/**
+	 * The {@code font-size} {@code rem} carve-out must not re-expose the three DataTables density literals that
+	 * {@code TODO-J0467}'s own locked exclusion list pins permanently - a token there would re-resolve globally
+	 * the moment a theme touches the scale, because the cell-level rule is deliberately pinned in {@code rem}
+	 * rather than left to inherit (see {@link ChromeScaleScanner#recordedLiterals()}). Reproduces the three
+	 * pinned sites synthetically, by selector shape rather than by reading the shipped stylesheet's own line
+	 * numbers (which have already drifted twice), so this proves the carve-out leaves them alone independent of
+	 * where they currently sit in the file.
+	 */
+	@Test void b13_fontSizeRemCarveOutDoesNotReExposeTheLockedExclusionList() {
+		var r = ChromeScaleScanner.scan(
+			"table[data-juneau-view], table.dataTable { font-size: 0.75rem; }"
+			+ " table[data-juneau-view] > thead > tr > th { font-size: 0.75rem; }"
+			+ " table[data-juneau-view] > tbody > tr > th { font-size: 0.75rem; }");
+		assertTrue(r.violations().isEmpty(), () -> "the locked exclusion list was re-exposed as a violation: "
+			+ r.violations());
+		assertEquals(3, r.matchedRecords().size(), () -> "expected all three pinned density literals to still "
+			+ "match their recorded exception: " + r.matchedRecords());
+	}
 }

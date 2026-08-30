@@ -78,7 +78,7 @@ class PageTableRequestAware_Test extends TestBase {
 	}
 
 	@Rest(mixins=ViewsMixin.class)
-	public static class Host extends BasicRestServlet {
+	public static class PageTableRequestAwareHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@Bean public VarResolver varResolver(VarResolver.Builder b) {
@@ -107,7 +107,7 @@ class PageTableRequestAware_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient c = MockRestClient.buildLax(Host.class);
+	private static final MockRestClient c = MockRestClient.buildLax(PageTableRequestAwareHost.class);
 
 	private static String body(String path) throws Exception {
 		return c.get(path).accept("text/html").run().assertStatus(200).getContent().asString();

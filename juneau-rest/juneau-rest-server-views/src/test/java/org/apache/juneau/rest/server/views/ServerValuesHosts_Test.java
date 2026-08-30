@@ -154,7 +154,7 @@ class ServerValuesHosts_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=ViewsMixin.class)
-	public static class Host extends BasicRestServlet {
+	public static class ServerValuesHostsHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@Bean public VarResolver varResolver(VarResolver.Builder b) {
@@ -193,7 +193,7 @@ class ServerValuesHosts_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient c = MockRestClient.buildLax(Host.class);
+	private static final MockRestClient c = MockRestClient.buildLax(ServerValuesHostsHost.class);
 
 	private static String body(String path) throws Exception {
 		return c.get(path).run().assertStatus(200).getContent().asString();

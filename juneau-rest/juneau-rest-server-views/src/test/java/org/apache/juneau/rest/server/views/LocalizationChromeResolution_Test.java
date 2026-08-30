@@ -38,7 +38,8 @@ import org.junit.jupiter.api.*;
  * scoping, {@link Column#titleKey} sugar (LD-3), and the request-free {@link Messages}-bean seam (LD-4).
  *
  * <p>
- * {@code Host.properties} (same package, {@code src/test/resources}) backs {@code RestRequest.getMessages()} and
+ * {@code LocalizationChromeResolutionHost.properties} (same package, {@code src/test/resources}) backs
+ * {@code RestRequest.getMessages()} and
  * the request-free {@link Messages#of(Class)} lookups below: {@code col.name=Name}, {@code col.status=Status},
  * {@code col.a=$L{col.b}}, {@code col.b=Leaf}, {@code page.title=Releases Page}, {@code tab.main=Main}.
  */
@@ -79,7 +80,7 @@ class LocalizationChromeResolution_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=ViewsMixin.class)
-	public static class Host extends BasicRestServlet {
+	public static class LocalizationChromeResolutionHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@RestGet(path="/view") public HttpResource view(RestRequest req) {
@@ -101,7 +102,7 @@ class LocalizationChromeResolution_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient c = MockRestClient.buildLax(Host.class);
+	private static final MockRestClient c = MockRestClient.buildLax(LocalizationChromeResolutionHost.class);
 
 	private static String body(String path) throws Exception {
 		return c.get(path).run().assertStatus(200).getContent().asString();
@@ -207,7 +208,7 @@ class LocalizationChromeResolution_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static Messages messages() {
-		return Messages.of(Host.class);
+		return Messages.of(LocalizationChromeResolutionHost.class);
 	}
 
 	@Test void d01_messagesBean_resolvesLWithNoRequest() {

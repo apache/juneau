@@ -42,6 +42,14 @@
  *   solid     pixels whose luminance is <= 60 (i.e. essentially full-strength ink)
  *   gradient  mean |luminance(x+1,y) - luminance(x,y)| over the box; higher means crisper edges
  *   mush      share of the box in the ambiguous 60..215 luminance band; higher means smeared strokes
+ *
+ * ADJACENCY PIXEL DIFF IS NOT ONE OF THE ABOVE, AND IS ASSERTABLE.  The four metrics above describe one glyph in
+ * isolation, so a Chromium pin bump that shifts antialiasing coverage globally shifts them too - that is why the
+ * Java side must not threshold them (see that class's javadoc). `adjacencyDiffs` is different in kind: it is the
+ * mean per-pixel luminance difference (0..255 scale) between two glyphs rasterised in the *same* run, at the
+ * *same* size, through the *same* Chromium build. A pin bump that changes antialiasing changes both sides of the
+ * comparison together, so the pairwise diff is far more stable across a pin bump than either side's absolute
+ * metrics are - that is what makes it safe for the Java side to assert a floor on it.
  */
 'use strict';
 
@@ -241,6 +249,45 @@ const MEASURE_AND_MAGNIFY = async function (args) {
 	};
 };
 
+/**
+ * Mean per-pixel luminance difference (0..255 scale) between two equal-size rasters, decoded fresh from their
+ * data URLs.  This is the pairwise-distinguishability half of the `adjacencies` plumbing: {@link
+ * MEASURE_AND_MAGNIFY} answers "does this glyph have ink"; this answers "do these two glyphs look different from
+ * each other" - the question family drift (e.g. `columns` redrawn to look like `settings`) actually turns on.
+ */
+const PIXEL_DIFF = async function (args) {
+	const decode = function (dataUrl) {
+		return new Promise(function (resolve, reject) {
+			const img = new Image();
+			img.onload = function () { resolve(img); };
+			img.onerror = function () { reject(new Error('could not decode a raster for pixel diff')); };
+			img.src = dataUrl;
+		});
+	};
+	const toLum = function (img) {
+		const c = document.createElement('canvas');
+		c.width = img.naturalWidth;
+		c.height = img.naturalHeight;
+		const ctx = c.getContext('2d', { willReadFrequently: true });
+		ctx.drawImage(img, 0, 0);
+		const px = ctx.getImageData(0, 0, c.width, c.height).data;
+		const lum = new Float64Array(c.width * c.height);
+		for (let i = 0; i < lum.length; i++)
+			lum[i] = 0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2];
+		return { lum: lum, width: c.width, height: c.height };
+	};
+	const [imgA, imgB] = await Promise.all([decode(args.dataUrlA), decode(args.dataUrlB)]);
+	const a = toLum(imgA);
+	const b = toLum(imgB);
+	if (a.width !== b.width || a.height !== b.height)
+		throw new Error('pixel diff requires equal-size rasters; got ' + a.width + 'x' + a.height + ' vs '
+			+ b.width + 'x' + b.height);
+	let sum = 0;
+	for (let i = 0; i < a.lum.length; i++)
+		sum += Math.abs(a.lum[i] - b.lum[i]);
+	return { meanAbsDiff: Math.round((sum / a.lum.length) * 1000) / 1000 };
+};
+
 /** Composites a sheet from already-rendered tiles.  Pure canvas drawing; no measurement happens here. */
 const COMPOSE = async function (spec) {
 	const load = function (dataUrl) {
@@ -395,7 +442,14 @@ async function shoot(page) {
 			await page.evaluate(RENDER_PAIR, { markups: pair.map(p => markup[p]), size: ribbon, ink: INK });
 			const dataUrl = await shoot(page);
 			const m = await page.evaluate(MEASURE_AND_MAGNIFY, { dataUrl: dataUrl, mag: MAG });
-			pairs.push({ names: pair, tile: m, dataUrl: dataUrl });
+			// Reuses the per-stem tiles already rasterised for sheet.png - no extra rendering needed, since
+			// PIXEL_DIFF just re-decodes the two dataUrls already sitting in `tiles`.
+			const diffRibbon = await page.evaluate(PIXEL_DIFF,
+				{ dataUrlA: tiles[pair[0]][ribbon].dataUrl, dataUrlB: tiles[pair[1]][ribbon].dataUrl });
+			const diffSmall = await page.evaluate(PIXEL_DIFF,
+				{ dataUrlA: tiles[pair[0]][small].dataUrl, dataUrlB: tiles[pair[1]][small].dataUrl });
+			pairs.push({ names: pair, tile: m, dataUrl: dataUrl,
+				pixelDiff: { ribbon: diffRibbon.meanAbsDiff, small: diffSmall.meanAbsDiff } });
 		}
 
 		const famColW = ribbon * MAG + 40;
@@ -521,6 +575,17 @@ async function shoot(page) {
 			}
 		}
 		lines.push('');
+		lines.push('NAMED ADJACENCY PIXEL DIFFS - mean per-pixel luminance diff (0..255) between two glyphs at');
+		lines.push('the same size, same run, same Chromium build; unlike the metrics above, THIS one is asserted');
+		lines.push('on (see SymbolSprite_Render_BrowserTest) because both sides move together across a pin bump.');
+		lines.push('');
+		lines.push(pad('pair', 26) + num('ribbonPx', 10) + num('smallPx', 10));
+		lines.push('-'.repeat(46));
+		pairs.forEach(function (p) {
+			lines.push(pad(p.names.join(' vs '), 26) + num(p.pixelDiff.ribbon.toFixed(3), 10)
+				+ num(p.pixelDiff.small.toFixed(3), 10));
+		});
+		lines.push('');
 		fs.writeFileSync(path.join(req.outputDir, 'metrics.txt'), lines.join('\n'));
 
 		//--------------------------------------------------------------------------------------------------------
@@ -544,6 +609,9 @@ async function shoot(page) {
 			sizes: sizes,
 			glyphs: glyphs,
 			familySpread: spreads,
+			adjacencyDiffs: pairs.map(function (p) {
+				return { names: p.names, pixelDiffRibbon: p.pixelDiff.ribbon, pixelDiffSmall: p.pixelDiff.small };
+			}),
 			outputDir: req.outputDir,
 			jsFailures: failures.slice()
 		}, null, 2) + '\n');

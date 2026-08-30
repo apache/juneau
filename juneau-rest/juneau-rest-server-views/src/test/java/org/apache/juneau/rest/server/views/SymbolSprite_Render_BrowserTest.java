@@ -50,13 +50,20 @@ import org.junit.jupiter.api.condition.*;
  * exist so a human can compare a redrawn set against its predecessor <i>as pixels</i>, and - the part per-glyph
  * review structurally cannot do - see the four document glyphs beside each other, where family drift lives.
  * <p>
- * <b>Do not add a threshold assertion on any metric in this class.</b> Antialiasing coverage is a property of the
- * Chromium build doing the rasterising. The {@code js-tests} profile pins that build, which makes these numbers
- * <i>reproducible</i> today but not <i>stable</i> across a future pin bump - so a numeric gate would convert a
- * routine Playwright version bump into a false artwork regression, and the reflex fix for a false regression is
- * to loosen the number until it passes, which leaves a gate that asserts nothing. The numbers are for a human to
- * read. The only durable assertions here are ink-is-non-zero and the anti-vacuous check that proves that
- * measurement can fail.
+ * <b>Do not add a threshold assertion on any of the four per-glyph metrics above (ink/solid/gradient/mush).</b>
+ * Antialiasing coverage is a property of the Chromium build doing the rasterising. The {@code js-tests} profile
+ * pins that build, which makes these numbers <i>reproducible</i> today but not <i>stable</i> across a future pin
+ * bump - so a numeric gate on one of them would convert a routine Playwright version bump into a false artwork
+ * regression, and the reflex fix for a false regression is to loosen the number until it passes, which leaves a
+ * gate that asserts nothing. The numbers are for a human to read.
+ * <p>
+ * <b>The one exception is {@link #c01_fourLockedGlyphsStayMutuallyDistinguishable()}</b> ({@code
+ * [TODO-J0451]}), which thresholds the prober's {@code adjacencyDiffs} - the mean per-pixel luminance
+ * difference <i>between two glyphs rasterised in the same run, same size, same Chromium build</i>, not either
+ * glyph's absolute coverage. A pin bump moves both sides of that comparison together, so the pairwise diff does
+ * not carry the non-reproducibility problem the paragraph above describes; it is safe to threshold precisely
+ * because it is relative, not absolute. Before this class, `cancel`, `columns`, `edit` and `settings` had zero
+ * glyph-specific automated coverage - only the generic non-vacuous ink check every stem gets.
  *
  * <h5 class='section'>What is real and what is restated:</h5>
  * <p>
@@ -182,7 +189,17 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 			// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose 16px
 			// distinguishability against both settings and spreadsheet is a named review check.
 			"family", List.of("csv", "pdf", "spreadsheet", "copy"),
-			"adjacencies", List.of(List.of("columns", "spreadsheet"), List.of("columns", "settings"))));
+			// [TODO-J0451] LD-1: every pairwise combination of the four locked-scope glyphs (cancel, columns,
+			// edit, settings), plus the pre-existing columns-spreadsheet review-only pair (columns-settings is
+			// reused rather than duplicated). See c01_fourLockedGlyphsStayMutuallyDistinguishable() below.
+			"adjacencies", List.of(
+				List.of("columns", "spreadsheet"),
+				List.of("cancel", "columns"),
+				List.of("cancel", "edit"),
+				List.of("cancel", "settings"),
+				List.of("columns", "edit"),
+				List.of("columns", "settings"),
+				List.of("edit", "settings"))));
 
 		report = Json.to(run(dir, harness, fixtureFile, request), Map.class);
 	}
@@ -256,6 +273,62 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 			"a stem that is not in the sprite measured as having ink, so the ink measurement is not measuring"
 				+ " the sprite");
 		assertEquals(0.0, metric(BOGUS_STEM, "ink12"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// c: the four [TODO-J0451] LD-1 glyphs stay mutually distinguishable  (real coverage, not a human PNG review)
+	//------------------------------------------------------------------------------------------------------------------
+
+	/** {@code [TODO-J0451]} LD-1's exact locked scope - these four stems, and no others. */
+	private static final List<String> FOUR_GLYPHS = List.of("cancel", "columns", "edit", "settings");
+
+	/**
+	 * Minimum acceptable mean per-pixel luminance diff (0..255 scale; see the prober's {@code PIXEL_DIFF}, in
+	 * {@code symbol-sprite-render.cjs}) between any two of {@link #FOUR_GLYPHS}, at either render size.
+	 *
+	 * <p>
+	 * Chosen against the six pairwise diffs measured on {@code HEAD} at filing time, which ranged
+	 * <b>30.66 - 50.45</b> (the tightest pair was {@code columns} vs {@code settings} at the 12px paging-pill
+	 * size). This floor sits well under half the smallest of those - loose enough that ordinary antialiasing
+	 * jitter from a future Playwright/Chromium pin bump should not trip it (both sides of the comparison move
+	 * together across a pin bump; see the class javadoc), but tight enough that two glyphs actually drifting
+	 * into each other visually - the real risk this check exists for, per the closed {@code Q2} scare where
+	 * {@code columns} briefly appeared to have been left as a copy of the {@code settings} cog - would have to
+	 * land far closer to identical than any plausible accidental redraw before this goes green.
+	 */
+	private static final double MIN_PAIR_PIXEL_DIFF = 15.0;
+
+	/** Looks up the prober's {@code adjacencyDiffs} entry for an unordered glyph pair. */
+	private static Map<?,?> adjacencyDiff(String a, String b) {
+		var diffs = (List<?>) report.get("adjacencyDiffs");
+		assertNotNull(diffs, () -> "prober report has no adjacencyDiffs section: " + report);
+		for (var d : diffs) {
+			var m = (Map<?,?>) d;
+			var names = (List<?>) m.get("names");
+			if (names != null && names.size() == 2 && names.contains(a) && names.contains(b))
+				return m;
+		}
+		return null;
+	}
+
+	@Test void c01_fourLockedGlyphsStayMutuallyDistinguishable() {
+		for (var i = 0; i < FOUR_GLYPHS.size(); i++) {
+			for (var j = i + 1; j < FOUR_GLYPHS.size(); j++) {
+				var a = FOUR_GLYPHS.get(i);
+				var b = FOUR_GLYPHS.get(j);
+				var pair = adjacencyDiff(a, b);
+				assertNotNull(pair, () -> "no adjacencyDiffs entry for " + a + " vs " + b + "; the prober's"
+					+ " adjacencies request list must carry every pairwise combination of " + FOUR_GLYPHS);
+				var ribbon = ((Number) pair.get("pixelDiffRibbon")).doubleValue();
+				var small = ((Number) pair.get("pixelDiffSmall")).doubleValue();
+				assertTrue(ribbon >= MIN_PAIR_PIXEL_DIFF, () -> a + " and " + b + " are only " + ribbon
+					+ " luminance levels apart at the ribbon (16px) render size - below the "
+					+ MIN_PAIR_PIXEL_DIFF + " distinguishability floor, i.e. they risk reading as the same glyph");
+				assertTrue(small >= MIN_PAIR_PIXEL_DIFF, () -> a + " and " + b + " are only " + small
+					+ " luminance levels apart at the paging-pill (12px) render size - below the "
+					+ MIN_PAIR_PIXEL_DIFF + " distinguishability floor");
+			}
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

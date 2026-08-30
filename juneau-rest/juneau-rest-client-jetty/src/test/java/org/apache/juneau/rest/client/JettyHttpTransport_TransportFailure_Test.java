@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
@@ -142,8 +143,12 @@ class JettyHttpTransport_TransportFailure_Test {
 	@Test
 	void d01_bodyWriteFails_requestAborted() throws Exception {
 		var serverSocket = new ServerSocket(0);
+		// Signaled once the server has actually accepted the TCP connection, so the writer thread below
+		// cannot fail before HttpClient.send() has genuinely started the exchange (see failingBody, below).
+		var connectionAccepted = new CountDownLatch(1);
 		var acceptThread = new Thread(() -> {
 			try (var socket = serverSocket.accept()) {
+				connectionAccepted.countDown();
 				// Read whatever arrives (partial request) and never respond; the client-side write failure
 				// is what we're exercising, not any particular server behavior.
 				socket.getInputStream().readAllBytes();
@@ -159,7 +164,27 @@ class JettyHttpTransport_TransportFailure_Test {
 			var transport = JettyHttpTransport.builder().responseTimeoutMs(500).build();
 			HttpBody failingBody = new HttpBody() {
 				@Override public String getContentType() { return "text/plain"; }
-				@Override public void writeTo(OutputStream out) throws IOException { throw new IOException("simulated write failure"); }
+				@Override public void writeTo(OutputStream out) throws IOException {
+					// Bound the race against HttpClient.send() deterministically instead of failing immediately:
+					// closing an OutputStreamRequestContent's stream before Jetty has started consuming it is
+					// indistinguishable from a legitimately empty body, so an immediate throw/close here can --
+					// under scheduling contention -- lose the race and never surface as an abort. Waiting for the
+					// server to have accepted the connection guarantees the exchange is already underway.
+					try {
+						connectionAccepted.await(2, TimeUnit.SECONDS);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+					// Mirrors sibling a01's Thread.sleep(200): gives Jetty's async state machine a moment to be
+					// actively mid-exchange (rather than just barely past accept()) before this thread fails, so
+					// the abort is reliably observed as a failure rather than racing the 500ms responseTimeoutMs.
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+					throw new IOException("simulated write failure");
+				}
 			};
 			var request = TransportRequest.builder()
 				.method("POST")
