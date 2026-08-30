@@ -127,7 +127,7 @@ def origin_repo(tmp_path: Path) -> Path:
     repo.mkdir()
     _run(repo, "git", "init", "-b", "master", ".")
     (repo / "scripts").mkdir()
-    (repo / "scripts" / "todo-next-id.py").write_text("# v1\n", encoding="utf-8")
+    (repo / "scripts" / "wave-survey.py").write_text("# v1\n", encoding="utf-8")
     (repo / "README.md").write_text("first\n", encoding="utf-8")
     (repo / ".gitignore").write_text(".work/\n", encoding="utf-8")
     _commit(repo, "initial")
@@ -149,7 +149,7 @@ def side_clone(tmp_path: Path, origin_repo: Path) -> Path:
 
 def advance_origin(origin_repo: Path) -> str:
     """Put a new commit on the canonical tree so the clone is genuinely behind."""
-    (origin_repo / "scripts" / "todo-next-id.py").write_text("# v2 -- the fix that mattered\n", encoding="utf-8")
+    (origin_repo / "scripts" / "wave-survey.py").write_text("# v2 -- the fix that mattered\n", encoding="utf-8")
     (origin_repo / "NEW.md").write_text("added upstream\n", encoding="utf-8")
     return _commit(origin_repo, "second")
 
@@ -616,7 +616,7 @@ class TestApplyActuallyResets:
         assert mod.main(["--clones", str(side_clone), "--board", str(board), "--apply"]) == 0
 
         assert _run(side_clone, "git", "rev-parse", "HEAD") == target
-        assert (side_clone / "scripts" / "todo-next-id.py").read_text(encoding="utf-8") == (
+        assert (side_clone / "scripts" / "wave-survey.py").read_text(encoding="utf-8") == (
             "# v2 -- the fix that mattered\n"
         )
         assert "content verified" in capsys.readouterr().out
@@ -685,14 +685,18 @@ class TestContentVerification:
         board = board_file(tmp_path, [juneau_row(side_clone)])
         assert mod.main(["--clones", str(side_clone), "--board", str(board), "--apply"]) == 0
 
-        (side_clone / "scripts" / "todo-next-id.py").write_text("# tampered\n", encoding="utf-8")
+        (side_clone / "scripts" / "wave-survey.py").write_text("# tampered\n", encoding="utf-8")
 
         with pytest.raises(mod.ResetFailed, match="content mismatch"):
             mod.verify_content(side_clone, "origin/master")
 
     def test_declared_sentinels_are_used_when_present(self, mod, side_clone):
+        # SENTINEL_PATHS moved off the (now-deleted) tracker scripts on 2026-08-30 onto files
+        # that still live in the repo -- scripts/push.py and scripts/wave-survey.py -- so the
+        # fixture's tree only carries the latter; verify_content() should still report it as a
+        # "declared sentinels" hit rather than falling back to the deterministic sample.
         paths, note = mod.verify_content(side_clone, "origin/master")
-        assert paths == ["scripts/todo-next-id.py"]
+        assert paths == ["scripts/wave-survey.py"]
         assert note == "declared sentinels"
 
     def test_a_tree_without_sentinels_still_verifies_something(self, mod, tmp_path):

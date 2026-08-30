@@ -275,15 +275,20 @@ def run_sonarqube_gate(juneau_root, step_num):
 
 def run_tracker_audit_gate(juneau_root, step_num):
     """
-    Run scripts/todo-status-audit.py against this repo's TODO tracker
-    (~/Project Work/todos/juneau/) and block the push if it flags any plan file as
-    inconsistent — a stale/misplaced status header, or a declared `Counts:` claim
+    Run ~/Project Work/scripts/todo-status-audit.py --project juneau against this repo's
+    TODO tracker (~/Project Work/todos/juneau/) and block the push if it flags any plan
+    file as inconsistent — a stale/misplaced status header, or a declared `Counts:` claim
     that no longer re-derives from committed (HEAD) content.
 
     Unlike the SonarQube gate, this is a pure local check (no network, no external
     service): it re-derives every declared count via `git cat-file --batch` against
     the CURRENT HEAD, so it reflects exactly what's about to be pushed rather than a
     ratchet against a prior CI-analyzed commit.
+
+    The audit script and the tracker it scans both live outside this repo (consolidated
+    2026-08-30 into ~/Project Work/scripts/, parameterized by --project instead of one
+    copy per repo) — so the script path and the scanned directory are both passed
+    explicitly here rather than relying on `cwd=juneau_root` to make them resolve.
 
     Args:
         juneau_root: Repository root (cwd for the subprocess).
@@ -297,10 +302,15 @@ def run_tracker_audit_gate(juneau_root, step_num):
                     exist, or the script raised unexpectedly); treated as a
                     blocking failure by the caller.
     """
-    print(f"\n📋 Step {step_num}: Running tracker audit gate (scripts/todo-status-audit.py)...")
+    print(f"\n📋 Step {step_num}: Running tracker audit gate (~/Project Work/scripts/todo-status-audit.py --project juneau)...")
 
-    audit_script = Path(__file__).parent / "todo-status-audit.py"
-    result = subprocess.run([sys.executable, str(audit_script)], cwd=juneau_root, check=False)
+    audit_script = Path.home() / "Project Work" / "scripts" / "todo-status-audit.py"
+    todo_dir = Path.home() / "Project Work" / "todos" / "juneau"
+    result = subprocess.run(
+        [sys.executable, str(audit_script), "--project", "juneau", "--dir", str(todo_dir)],
+        cwd=juneau_root,
+        check=False,
+    )
 
     # Exit-code contract (see todo-status-audit.py): 0 clean, 1 flagged, 2 hard error
     # (e.g. missing tracker directory), anything else treated as an unexpected error.
@@ -1025,9 +1035,10 @@ Examples:
         action="store_true",
         dest="tracker_audit",
         help=(
-            "Opt-in gate: run scripts/todo-status-audit.py against ~/Project Work/todos/juneau/ "
-            "and block the push if it flags any plan file (stale/misplaced status header, or a "
-            "declared Counts: claim that no longer re-derives from committed HEAD content)."
+            "Opt-in gate: run ~/Project Work/scripts/todo-status-audit.py --project juneau "
+            "against ~/Project Work/todos/juneau/ and block the push if it flags any plan file "
+            "(stale/misplaced status header, or a declared Counts: claim that no longer "
+            "re-derives from committed HEAD content)."
         )
     )
     
@@ -1066,7 +1077,7 @@ Examples:
             print(f"  {step_num}. Run SonarQube gate: python3 scripts/sonarqube.py --all --run --fail-on-issues{_branch_arg} (blocks push if any issues; skips gracefully if this branch has no SonarCloud analysis yet)")
             step_num += 1
         if args.tracker_audit:
-            print(f"  {step_num}. Run tracker audit gate: python3 scripts/todo-status-audit.py (blocks push if any plan file is flagged)")
+            print(f"  {step_num}. Run tracker audit gate: python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau (blocks push if any plan file is flagged)")
             step_num += 1
         print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
         step_num += 1
@@ -1132,8 +1143,8 @@ Examples:
         if tracker_gate_status == "fail":
             print("\n❌ Push aborted: the tracker audit flagged at least one plan file "
                   "under ~/Project Work/todos/juneau/.")
-            print("   Run `python3 scripts/todo-status-audit.py` for details, or omit "
-                  "--tracker-audit to push without this gate.")
+            print("   Run `python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau` for "
+                  "details, or omit --tracker-audit to push without this gate.")
             play_sound(success=False)
             return 1
         if tracker_gate_status == "error":

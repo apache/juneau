@@ -45,7 +45,13 @@ with unresolved numbered items marks a file NOT actually ready despite its filen
 prefix) marks a high-priority item per @todo-and-waves's "High-priority (HIPRI) TODOs" section.
 Unlike that script, the id LETTER here is captured from each filename rather than hardcoded --
 one copy of this script has to recognize "J"/"R"/"C" across the three trackers it surveys in a
-single run, where each copy of todo-status-audit.py only ever needs its own repo's letter.
+single run, where each copy of todo-status-audit.py only ever needs its own repo's letter. This
+also means the 2026-08-30 consolidation of todo-status-audit.py into a single --project-
+parameterized copy (see ~/Project Work/scripts/todo-status-audit.py) changed nothing FILENAME_RE
+here needs to track: that script went from one hardcoded letter per repo copy to one letter
+resolved per --project run, but the shape it produces for any single letter (e.g. "J") is the
+same shape this file's already-generic "[A-Z]" capture already matched -- re-verified at that
+migration, not overlooked.
 
 This file deliberately DUPLICATES (in a minimal, single-purpose form) the small pieces of
 parsing logic it needs from todo-status-audit.py -- the open-questions-unresolved check and the

@@ -42,5 +42,9 @@ AGENTS.md
 
 # Release script generated history files
 scripts/release-history-*.json
+
+# Tracker scripts, consolidated 2026-08-30 into ~/Project Work/scripts/ (--project juneau)
+scripts/todo-next-id.py
+scripts/todo-status-audit.py
 /SONARQUBE_ISSUES.txt
 /.superpowers/

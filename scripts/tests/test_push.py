@@ -313,7 +313,14 @@ class TestRunTrackerAuditGateExitCodeMapping:
         assert captured["cwd"] == Path("/repo")
         assert captured["check"] is False
         assert captured["cmd"][0] == push_module.sys.executable
-        assert captured["cmd"][1] == str(SCRIPTS_DIR / "todo-status-audit.py")
+        # The audit script and the tracker it scans both moved out of this repo on 2026-08-30,
+        # consolidated into ~/Project Work/scripts/ and parameterized by --project instead of
+        # one copy per repo (see run_tracker_audit_gate()'s docstring).
+        assert captured["cmd"][1] == str(Path.home() / "Project Work" / "scripts" / "todo-status-audit.py")
+        assert captured["cmd"][2:] == [
+            "--project", "juneau",
+            "--dir", str(Path.home() / "Project Work" / "todos" / "juneau"),
+        ]
 
 
 class TestCheckUpstreamChangesAheadBehind:

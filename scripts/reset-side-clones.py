@@ -159,7 +159,11 @@ GIT_CLEAN_ARGV = ("clean", "-fd")
 FORBIDDEN_GIT_SUBCOMMANDS = frozenset({"config"})
 
 # Content-verified after the reset when the target ref carries them (see verify_content()).
-SENTINEL_PATHS = ("scripts/todo-next-id.py", "scripts/todo-status-audit.py")
+# Was ("scripts/todo-next-id.py", "scripts/todo-status-audit.py") until 2026-08-30, when those
+# two moved out of this repo to ~/Project Work/scripts/ (consolidated, parameterized by
+# --project) -- swapped for two files that DO still live in this repo, so clone-reset
+# verification keeps the same teeth instead of silently checking sentinels that no longer exist.
+SENTINEL_PATHS = ("scripts/push.py", "scripts/wave-survey.py")
 SENTINEL_SAMPLE_SIZE = 5
 
 WAVE_TOKEN_RE = re.compile(r"\bWAVE-\d{4}\b")
