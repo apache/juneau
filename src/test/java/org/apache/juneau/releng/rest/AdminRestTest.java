@@ -54,7 +54,7 @@ class AdminRestTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	void adminPageComposesOneTabPerExistingView() {
+	void a01_adminPageComposesOneTabPerExistingView() {
 		var page = AdminRest.adminPage();
 		assertEquals("admin", page.id);
 		assertEquals(2, page.tabs.size());
@@ -65,7 +65,7 @@ class AdminRestTest {
 	}
 
 	@Test
-	void adminPageBuildsWithoutValidationErrors() {
+	void a02_adminPageBuildsWithoutValidationErrors() {
 		// PageDef.build() rejects duplicate tab ids / duplicate referenced ViewDef ids (Phase C task 2 rules);
 		// building here (rather than only in AdminRest.adminPage()) proves the composition is actually valid,
 		// not just that adminPage() happens not to throw.
@@ -77,7 +77,7 @@ class AdminRestTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	void pageServesPageTableShellWithBothPanelsAndSidecars() throws Exception {
+	void b01_pageServesPageTableShellWithBothPanelsAndSidecars() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -93,7 +93,7 @@ class AdminRestTest {
 	}
 
 	@Test
-	void wrappedReleasesViewMarkupIsByteForByteIdenticalToStandalone() {
+	void b02_wrappedReleasesViewMarkupIsByteForByteIdenticalToStandalone() {
 		var wrapped = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
 		var standalone = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(ReleaseRest.releasesView()));
 		assertTrue(wrapped.contains(standalone),
@@ -101,7 +101,7 @@ class AdminRestTest {
 	}
 
 	@Test
-	void wrappedCredentialsViewMarkupIsByteForByteIdenticalToStandalone() {
+	void b03_wrappedCredentialsViewMarkupIsByteForByteIdenticalToStandalone() {
 		var wrapped = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
 		var standalone = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(CredentialRest.credentialsView()));
 		assertTrue(wrapped.contains(standalone),
@@ -109,7 +109,7 @@ class AdminRestTest {
 	}
 
 	@Test
-	void assetsAreServedAtTheAdminMount() throws Exception {
+	void b04_assetsAreServedAtTheAdminMount() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", ViewsMixin.PAGES_JS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -131,12 +131,12 @@ class AdminRestTest {
 	// -----------------------------------------------------------------------------------------------------------
 	// Task 12: the composed page uses the self-contained -views tab shell (PageTable's classes), not hand-rolled
 	// per-page tab markup — verified here structurally (the shell's own marker classes); base.ftlh's nav-link and
-	// asset-include wiring for the Admin tab is exercised end-to-end by pageServesPageTableShellWithBothPanelsAndSidecars
+	// asset-include wiring for the Admin tab is exercised end-to-end by b01_pageServesPageTableShellWithBothPanelsAndSidecars
 	// once rendered through the FreeMarker template at /admin.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	void composedPageUsesTheSharedTabShellClassesNotBespokeMarkup() {
+	void c01_composedPageUsesTheSharedTabShellClassesNotBespokeMarkup() {
 		var html = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
 		assertTrue(html.contains("class='" + PageTable.TAB_BAR_CLASS + "'") || html.contains(PageTable.TAB_BAR_CLASS));
 		assertTrue(html.contains(PageTable.TAB_CLASS));
@@ -148,11 +148,11 @@ class AdminRestTest {
 	 * in the opt-in {@code juneau-pages.js} runtime after {@code juneau-views.js} &mdash; the top-level nav
 	 * mechanism itself (real links across {@code @Rest(children=...)} resources) is intentionally unchanged
 	 * (design doc non-goal: no top-level cross-resource navigation redesign; Phase C owns only the in-page tab
-	 * switch, which {@link #composedPageUsesTheSharedTabShellClassesNotBespokeMarkup()} already verifies uses the
+	 * switch, which {@link #c01_composedPageUsesTheSharedTabShellClassesNotBespokeMarkup()} already verifies uses the
 	 * shared shell classes).
 	 */
 	@Test
-	void baseTemplateWiresTheAdminNavLinkAndPagesRuntime() throws IOException {
+	void c02_baseTemplateWiresTheAdminNavLinkAndPagesRuntime() throws IOException {
 		String base;
 		try (var in = AdminRestTest.class.getResourceAsStream("/templates/base.ftlh")) {
 			assertNotNull(in, "templates/base.ftlh not found on the test classpath");
@@ -179,7 +179,7 @@ class AdminRestTest {
 	 * (the ribbon/pill buttons resolve their icons from the registry when they're built, so it must already exist).
 	 */
 	@Test
-	void baseTemplateIncludesIconsJsBeforeRibbonJs() throws IOException {
+	void c03_baseTemplateIncludesIconsJsBeforeRibbonJs() throws IOException {
 		String base;
 		try (var in = AdminRestTest.class.getResourceAsStream("/templates/base.ftlh")) {
 			assertNotNull(in, "templates/base.ftlh not found on the test classpath");

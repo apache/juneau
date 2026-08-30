@@ -46,31 +46,31 @@ class BranchResolverTest {
 	}
 
 	@Test
-	void newMinorReleasesResolveToMaster() {
+	void a01_newMinorReleasesResolveToMaster() {
 		var r = new BranchResolver(runner(0, "<sha>\trefs/heads/master\n"), "/repo");
 		assertEquals("master", r.resolve("10.0.0"));
 	}
 
 	@Test
-	void maintenanceReleasesResolveToVersionBranch() {
+	void a02_maintenanceReleasesResolveToVersionBranch() {
 		var r = new BranchResolver(runner(0, "<sha>\trefs/heads/juneau-9.2.1-branch\n"), "/repo");
 		assertEquals("juneau-9.2.1-branch", r.resolve("9.2.1"));
 	}
 
 	@Test
-	void existsWhenLsRemoteReturnsARef() {
+	void b01_existsWhenLsRemoteReturnsARef() {
 		var r = new BranchResolver(runner(0, "abc123\trefs/heads/juneau-9.2.1-branch\n"), "/repo");
 		assertTrue(r.remoteBranchExists("juneau-9.2.1-branch"));
 	}
 
 	@Test
-	void missingWhenLsRemoteEmpty() {
+	void b02_missingWhenLsRemoteEmpty() {
 		var r = new BranchResolver(runner(0, ""), "/repo");
 		assertFalse(r.remoteBranchExists("juneau-9.9.9-branch"));
 	}
 
 	@Test
-	void missingBranchInstructionsNameTheBranch() {
+	void c01_missingBranchInstructionsNameTheBranch() {
 		var r = new BranchResolver(runner(0, ""), "/repo");
 		var msg = r.missingBranchInstructions("juneau-9.9.9-branch");
 		assertTrue(msg.contains("juneau-9.9.9-branch"));

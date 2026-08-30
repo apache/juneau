@@ -70,7 +70,7 @@ class TestWorkspaceVerifyStepTest {
 	}
 
 	@Test
-	void unzipsAllFourReactorWorkspaceTemplatesFromTheirPreReleaseSnapshotPaths() {
+	void a01_unzipsAllFourReactorWorkspaceTemplatesFromTheirPreReleaseSnapshotPaths() {
 		var res = new TestWorkspaceVerifyStep().apply(ctx());
 		assertTrue(res.success, res.message);
 		assertEquals(4, calls.size());

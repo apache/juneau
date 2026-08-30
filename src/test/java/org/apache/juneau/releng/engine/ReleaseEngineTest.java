@@ -96,7 +96,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void startCreatesRunSeededPending(@TempDir Path dir) {
+	void a01_startCreatesRunSeededPending(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
 		assertEquals("juneau-9.2.1-branch", rs.branch);
@@ -105,7 +105,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void startWithMilestoneNumberPersistsIt(@TempDir Path dir) {
+	void a02_startWithMilestoneNumberPersistsIt(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null, 42);
 		assertEquals(42, rs.milestoneNumber);
@@ -113,35 +113,35 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void startWithoutMilestoneNumberLeavesItNull(@TempDir Path dir) {
+	void a03_startWithoutMilestoneNumberLeavesItNull(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
 		assertNull(rs.milestoneNumber);
 	}
 
 	@Test
-	void startDefaultsToSafeEvenOnALiveBox(@TempDir Path dir) {
+	void a04_startDefaultsToSafeEvenOnALiveBox(@TempDir Path dir) {
 		var eng = engineLive(dir);
 		var rs = eng.start("9.2.1", null);
 		assertEquals(ExecutionMode.SAFE, rs.mode);
 	}
 
 	@Test
-	void startLiveIsCappedToSafeWhenTheBoxIsSafe(@TempDir Path dir) {
+	void a05_startLiveIsCappedToSafeWhenTheBoxIsSafe(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertEquals(ExecutionMode.SAFE, rs.mode, "a SAFE box cannot mint a LIVE run");
 	}
 
 	@Test
-	void startLiveIsHonoredWhenTheBoxIsLive(@TempDir Path dir) {
+	void a06_startLiveIsHonoredWhenTheBoxIsLive(@TempDir Path dir) {
 		var eng = engineLive(dir);
 		var rs = eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertEquals(ExecutionMode.LIVE, rs.mode);
 	}
 
 	@Test
-	void secondStartWhileActiveIsRejected(@TempDir Path dir) {
+	void a07_secondStartWhileActiveIsRejected(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var ex = assertThrows(IllegalStateException.class, () -> eng.start("9.2.2", null));
@@ -149,7 +149,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void applyStepAdvancesAndPersists(@TempDir Path dir) {
+	void b01_applyStepAdvancesAndPersists(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var res = eng.apply("9.2.1", "preflight", Map.of());
@@ -160,7 +160,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void restartDemotesRunningStepToFailed(@TempDir Path dir) {
+	void b02_restartDemotesRunningStepToFailed(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch",
 				StepRegistry.standard(new BranchResolver(okRunner(), "/repo")).ids());
@@ -177,7 +177,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void z0StartRequiresDevelopmentVersionAtPrepare(@TempDir Path dir) {
+	void a08_z0StartRequiresDevelopmentVersionAtPrepare(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("10.0.0", null); // start allowed; enforcement is at release-prepare
 		// (preflight would fail on branch check for a real 10.0.0; here master resolves + ls-remote canned)
@@ -185,7 +185,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void applyIsIndividuallyInvokableOnAnyStepRegardlessOfPointer(@TempDir Path dir) {
+	void b03_applyIsIndividuallyInvokableOnAnyStepRegardlessOfPointer(@TempDir Path dir) {
 		// A step can be run on its own, out of pipeline order, as long as its own required predecessors
 		// have already succeeded — currentStepId is bookkeeping only, never a gate.
 		var eng = engine(dir);
@@ -200,7 +200,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void reRunningASucceededStepOverwritesStatusAndLogInPlace(@TempDir Path dir) {
+	void b04_reRunningASucceededStepOverwritesStatusAndLogInPlace(@TempDir Path dir) {
 		// No separate "manual run" track; status and log overwrite in place.
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
@@ -216,7 +216,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void eachStepGetsItsOwnBroadcasterAndLogPath(@TempDir Path dir) {
+	void b05_eachStepGetsItsOwnBroadcasterAndLogPath(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		eng.apply("9.2.1", "preflight", Map.of());
@@ -233,7 +233,7 @@ class ReleaseEngineTest {
 	 * {@code tally-vote-result} step, with a {@code passed} outcome.
 	 */
 	@Test
-	void voteGateApplyAloneNeverAdvancesPastAwaitingVote(@TempDir Path dir) {
+	void c01_voteGateApplyAloneNeverAdvancesPastAwaitingVote(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "vote-gate");
@@ -256,7 +256,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void rejectedTallyLeavesVoteGateAwaitingVote(@TempDir Path dir) {
+	void c02_rejectedTallyLeavesVoteGateAwaitingVote(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "vote-gate");
@@ -270,7 +270,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void forwardApplyIsBlockedPastAnUnsatisfiedRequiredPredecessor(@TempDir Path dir) {
+	void d01_forwardApplyIsBlockedPastAnUnsatisfiedRequiredPredecessor(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		// "preflight" (index 0) is still PENDING; "workspace-setup" (index 2) must be refused.
@@ -282,7 +282,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void reRunningAnAlreadySucceededStepIsNotBlockedByTheForwardApplyGuard(@TempDir Path dir) {
+	void d02_reRunningAnAlreadySucceededStepIsNotBlockedByTheForwardApplyGuard(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		eng.apply("9.2.1", "preflight", Map.of());
@@ -301,7 +301,7 @@ class ReleaseEngineTest {
 	 * offending predecessor, and must not touch {@code RunStatus} while refusing.
 	 */
 	@Test
-	void finalizeRunRefusesWhenARequiredPriorStepIsNotTerminal(@TempDir Path dir) {
+	void e01_finalizeRunRefusesWhenARequiredPriorStepIsNotTerminal(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var rs = eng.state("9.2.1");
@@ -323,7 +323,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void finalizeRunSucceedsWhenAllRequiredPriorStepsAreTerminal(@TempDir Path dir) {
+	void e02_finalizeRunSucceedsWhenAllRequiredPriorStepsAreTerminal(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var rs = eng.state("9.2.1");
@@ -342,7 +342,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void startPublishesASnapshotToStateBroadcasterSubscribers(@TempDir Path dir) {
+	void f01_startPublishesASnapshotToStateBroadcasterSubscribers(@TempDir Path dir) {
 		var eng = engine(dir);
 		var seen = subscribeSnapshots(eng, "9.2.1");
 
@@ -355,7 +355,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void applyPublishesARunningSnapshotThenATerminalOne(@TempDir Path dir) {
+	void f02_applyPublishesARunningSnapshotThenATerminalOne(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var seen = subscribeSnapshots(eng, "9.2.1");
@@ -368,7 +368,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void skipAndConfirmReviewEachPublishASnapshot(@TempDir Path dir) {
+	void f03_skipAndConfirmReviewEachPublishASnapshot(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
@@ -385,7 +385,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void armPublishesTheUpdatedArmedFlagEvenThoughItNeverCallsSave(@TempDir Path dir) {
+	void f04_armPublishesTheUpdatedArmedFlagEvenThoughItNeverCallsSave(@TempDir Path dir) {
 		var eng = engineLive(dir);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		var seen = subscribeSnapshots(eng, "9.2.1");
@@ -399,7 +399,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void aRejectedArmAttemptPublishesNothing(@TempDir Path dir) {
+	void f05_aRejectedArmAttemptPublishesNothing(@TempDir Path dir) {
 		var eng = engineLive(dir);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		var seen = subscribeSnapshots(eng, "9.2.1");
@@ -411,7 +411,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void successfulApplyClearsAPriorFailedRunStatusAndStepError(@TempDir Path dir) {
+	void c03_successfulApplyClearsAPriorFailedRunStatusAndStepError(@TempDir Path dir) {
 		// Fingerprint of the 9.2.1 rehearsal: tally-vote-result failed once (empty voteOutcome →
 		// rs.status=FAILED + ss.error set), then succeeded later — but the success path left the run
 		// FAILED and the leftover error on a SUCCEEDED step, so the New-Release rail vanished.
@@ -435,7 +435,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void unknownStepApplyReturnsFailRatherThanThrowing(@TempDir Path dir) {
+	void g01_unknownStepApplyReturnsFailRatherThanThrowing(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var res = assertDoesNotThrow(() -> eng.apply("9.2.1", "nexus-staging-release", Map.of()));
@@ -445,7 +445,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void snapshotJsonIsEmptyForAnUnknownVersionAndReflectsArmedForAKnownOne(@TempDir Path dir) {
+	void g02_snapshotJsonIsEmptyForAnUnknownVersionAndReflectsArmedForAKnownOne(@TempDir Path dir) {
 		var eng = engineLive(dir);
 		assertTrue(eng.snapshotJson("nope").isEmpty());
 

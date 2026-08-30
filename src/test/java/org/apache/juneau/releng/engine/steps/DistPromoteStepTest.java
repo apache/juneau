@@ -78,7 +78,7 @@ class DistPromoteStepTest {
 	}
 
 	@Test
-	void liveMovesArtifactsAndRemovesPriorReleaseOnSameLine(@TempDir Path dir) {
+	void a01_liveMovesArtifactsAndRemovesPriorReleaseOnSameLine(@TempDir Path dir) {
 		var tags = List.of("juneau-9.2.0", "juneau-9.1.5", "juneau-9.2.1-RC1", "juneau-9.0.0");
 		var c = ctx(ExecutionMode.LIVE, dir, tags);
 		var res = new DistPromoteStep().apply(c);
@@ -122,7 +122,7 @@ class DistPromoteStepTest {
 	}
 
 	@Test
-	void noPriorReleaseOnLineSkipsRemoval(@TempDir Path dir) {
+	void a02_noPriorReleaseOnLineSkipsRemoval(@TempDir Path dir) {
 		var c = ctx(ExecutionMode.LIVE, dir, List.of());
 		var res = new DistPromoteStep().apply(c);
 		assertTrue(res.success, res.message);
@@ -130,7 +130,7 @@ class DistPromoteStepTest {
 	}
 
 	@Test
-	void safeSpawnsNothingAndLogsWouldRun(@TempDir Path dir) {
+	void a03_safeSpawnsNothingAndLogsWouldRun(@TempDir Path dir) {
 		var c = ctx(ExecutionMode.SAFE, dir, List.of("juneau-9.2.0"));
 		var res = new DistPromoteStep().apply(c);
 		assertTrue(res.success, res.message);

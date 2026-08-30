@@ -29,7 +29,7 @@ class ReleaseListServiceTest {
 	}
 
 	@Test
-	void enrichesTagReleaseWithGithubUrlAndKeepsSingleRow() {
+	void a01_enrichesTagReleaseWithGithubUrlAndKeepsSingleRow() {
 		Supplier<List<Release>> tags = () -> List.of(rel("9.2.0", "RELEASED", "tag"), rel("9.1.0", "RELEASED", "tag"));
 		var gh = rel("9.2.0", "RELEASED", "github");
 		gh.githubReleaseUrl = "https://x/9.2.0";
@@ -47,7 +47,7 @@ class ReleaseListServiceTest {
 	}
 
 	@Test
-	void inProgressStateRowsSortAboveReleasedOfSameVersion() {
+	void a02_inProgressStateRowsSortAboveReleasedOfSameVersion() {
 		Supplier<List<Release>> tags = () -> List.of(rel("9.2.0", "RELEASED", "tag"));
 		Supplier<List<Release>> github = List::of;
 		var rc = rel("9.2.1", "VOTING", "state");

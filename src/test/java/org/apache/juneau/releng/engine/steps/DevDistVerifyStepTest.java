@@ -85,14 +85,14 @@ class DevDistVerifyStepTest {
 	}
 
 	@Test
-	void liveWithAllSixFilesPresentSucceedsWithoutOpeningWhenHeadless(@TempDir Path dir) throws Exception {
+	void a01_liveWithAllSixFilesPresentSucceedsWithoutOpeningWhenHeadless(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
 		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
 		assertTrue(res.success, res.message);
 	}
 
 	@Test
-	void liveWithMissingFileFails(@TempDir Path dir) throws Exception {
+	void a02_liveWithMissingFileFails(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
 		Files.delete(dir.resolve("dist/source/juneau-9.2.1-RC1/apache-juneau-9.2.1-src.zip.sha512"));
 		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
@@ -101,7 +101,7 @@ class DevDistVerifyStepTest {
 	}
 
 	@Test
-	void liveWithEmptyFileFails(@TempDir Path dir) throws Exception {
+	void a03_liveWithEmptyFileFails(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
 		Files.writeString(dir.resolve("dist/binaries/juneau-9.2.1-RC1/apache-juneau-9.2.1-bin.zip"), "");
 		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
@@ -109,7 +109,7 @@ class DevDistVerifyStepTest {
 	}
 
 	@Test
-	void safeWithArtifactsNotStagedSoftNotesRatherThanFails(@TempDir Path dir) {
+	void a04_safeWithArtifactsNotStagedSoftNotesRatherThanFails(@TempDir Path dir) {
 		// No dist/ working copy at all -- SAFE's binary-artifacts-stage was command-logged, so it never
 		// really staged anything.
 		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.SAFE, dir));

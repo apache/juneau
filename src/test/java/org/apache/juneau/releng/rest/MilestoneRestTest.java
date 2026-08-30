@@ -48,7 +48,7 @@ class MilestoneRestTest {
 	}
 
 	@Test
-	void resolveReturnsMatchedMilestoneNumber() {
+	void a01_resolveReturnsMatchedMilestoneNumber() {
 		var runner = runnerReturning("[{\"number\":13,\"title\":\"9.2.1\"}]");
 		var rest = new MilestoneRest(new MilestoneService(), new GithubPrSource(runner, "apache/juneau"), runner,
 				"/repo");
@@ -57,7 +57,7 @@ class MilestoneRestTest {
 	}
 
 	@Test
-	void resolveReturnsNullWhenNoMatch() {
+	void a02_resolveReturnsNullWhenNoMatch() {
 		var runner = runnerReturning("[]");
 		var rest = new MilestoneRest(new MilestoneService(), new GithubPrSource(runner, "apache/juneau"), runner,
 				"/repo");

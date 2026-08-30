@@ -29,7 +29,7 @@ class StepRegistryTest {
 	}
 
 	@Test
-	void hasTwentyFourStepsInSpecOrder() {
+	void a01_hasTwentyFourStepsInSpecOrder() {
 		var ids = registry().ids();
 		assertEquals(24, ids.size());
 		assertEquals("preflight", ids.get(0));
@@ -41,13 +41,13 @@ class StepRegistryTest {
 	}
 
 	@Test
-	void lookupByIdWorks() {
+	void a02_lookupByIdWorks() {
 		assertEquals("build-verify", registry().byId("build-verify").id());
 		assertNull(registry().byId("nope"));
 	}
 
 	@Test
-	void dropRcResetRangeStartsAtWorkspaceSetup() {
+	void a03_dropRcResetRangeStartsAtWorkspaceSetup() {
 		var ids = registry().ids();
 		// Steps 0-1 kept; reset from index 2 (workspace-setup) onward.
 		assertEquals(List.of("preflight", "compose-propose-email"), ids.subList(0, 2));

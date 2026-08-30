@@ -62,14 +62,14 @@ class ReleaseRestTest {
 	}
 
 	@Test
-	void detailReturnsAViewCarryingTheMatchingRelease() {
+	void a01_detailReturnsAViewCarryingTheMatchingRelease() {
 		var rest = rest(List.of(release("9.2.1", "RELEASED")));
 		var view = rest.detail("9.2.1", "1", req());
 		assertNotNull(view);
 	}
 
 	@Test
-	void detailForAnUnknownVersionIs404() {
+	void a02_detailForAnUnknownVersionIs404() {
 		var rest = rest(List.of(release("9.2.1", "RELEASED")));
 		var httpReq = req();
 		var ex = assertThrows(NotFound.class, () -> rest.detail("9.9.9", "1", httpReq));
@@ -85,7 +85,7 @@ class ReleaseRestTest {
 	 * so this is the layer that actually proves the route is reachable and renders.
 	 */
 	@Test
-	void detailRendersOverRealHttpDispatch() throws Exception {
+	void a03_detailRendersOverRealHttpDispatch() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/9.2.1/1").run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -96,7 +96,7 @@ class ReleaseRestTest {
 	}
 
 	@Test
-	void detailForAnUnknownVersionIs404OverRealHttpDispatch() throws Exception {
+	void a04_detailForAnUnknownVersionIs404OverRealHttpDispatch() throws Exception {
 		try (var client = client(rest(List.of()))) {
 			try (var resp = client.request("GET", "/9.9.9/1").run()) {
 				assertEquals(404, resp.getStatusCode());
@@ -112,7 +112,7 @@ class ReleaseRestTest {
 	 * builds its buttons, so the registry must already exist).
 	 */
 	@Test
-	void pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
+	void b01_pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -136,7 +136,7 @@ class ReleaseRestTest {
 	 * ahead of {@code buttons.html5.min.js}.
 	 */
 	@Test
-	void pageIncludesExportDependencyScriptsBeforeButtonsHtml5() throws Exception {
+	void b02_pageIncludesExportDependencyScriptsBeforeButtonsHtml5() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -167,7 +167,7 @@ class ReleaseRestTest {
 	 * {@code ProtocolQueryable}); this proves the envelope shape and that filtering happens on the server.
 	 */
 	@Test
-	void dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
+	void c01_dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
 		var releases = List.of(release("9.2.1", "RELEASED"), release("9.3.0", "VOTING"));
 		try (var client = client(rest(releases))) {
 			try (var resp = client.request("GET",

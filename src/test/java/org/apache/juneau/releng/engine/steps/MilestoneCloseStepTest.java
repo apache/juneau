@@ -70,14 +70,14 @@ class MilestoneCloseStepTest {
 	}
 
 	@Test
-	void noMilestoneNumberLegitimatelyNoOps() {
+	void a01_noMilestoneNumberLegitimatelyNoOps() {
 		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.LIVE, null));
 		assertTrue(res.success);
 		assertEquals(0, calls.size());
 	}
 
 	@Test
-	void liveClosesResolvedMilestoneNumber() {
+	void a02_liveClosesResolvedMilestoneNumber() {
 		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.LIVE, 13));
 		assertTrue(res.success, res.message);
 		var cmd = calls.get(0);
@@ -87,7 +87,7 @@ class MilestoneCloseStepTest {
 	}
 
 	@Test
-	void safeLogsWouldRunAndSpawnsNothing() {
+	void a03_safeLogsWouldRunAndSpawnsNothing() {
 		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.SAFE, 13));
 		assertTrue(res.success, res.message);
 		assertEquals(0, calls.size());

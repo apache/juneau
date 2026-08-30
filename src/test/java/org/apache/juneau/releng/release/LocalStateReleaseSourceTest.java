@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
 class LocalStateReleaseSourceTest {
 
 	@Test
-	void mapsRunningRunStateToAnInProgressReleaseRowWithoutParseError(@TempDir Path dir) {
+	void a01_mapsRunningRunStateToAnInProgressReleaseRowWithoutParseError(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "javadoc-verify"));
 		store.save(rs);
@@ -50,7 +50,7 @@ class LocalStateReleaseSourceTest {
 	}
 
 	@Test
-	void mapsAwaitingVoteRunStateToAVotingRow(@TempDir Path dir) {
+	void a02_mapsAwaitingVoteRunStateToAVotingRow(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		rs.status = RunStatus.AWAITING_VOTE;
@@ -66,7 +66,7 @@ class LocalStateReleaseSourceTest {
 	}
 
 	@Test
-	void emptyStateDirYieldsNoRows(@TempDir Path dir) {
+	void a03_emptyStateDirYieldsNoRows(@TempDir Path dir) {
 		var rows = new LocalStateReleaseSource(new RunStateStore(dir)).list();
 		assertTrue(rows.isEmpty());
 	}

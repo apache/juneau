@@ -32,22 +32,22 @@ import org.junit.jupiter.api.Test;
 class SseLogServletTest {
 
 	@Test
-	void framesALineAsAnSseDataEvent() {
+	void a01_framesALineAsAnSseDataEvent() {
 		assertEquals("data: hello\n\n", SseLogServlet.sse("hello"));
 	}
 
 	@Test
-	void framesMultilinePayloadWithPerLineDataPrefix() {
+	void a02_framesMultilinePayloadWithPerLineDataPrefix() {
 		assertEquals("data: a\ndata: b\n\n", SseLogServlet.sse("a\nb"));
 	}
 
 	@Test
-	void heartbeatIsAnSseComment() {
+	void a03_heartbeatIsAnSseComment() {
 		assertEquals(": heartbeat\n\n", SseLogServlet.HEARTBEAT);
 	}
 
 	@Test
-	void stateSegmentConstantIsNeverARealStepId() {
+	void a04_stateSegmentConstantIsNeverARealStepId() {
 		// StepRegistry.standard()'s 24 step ids never collide with this; doGet's routing relies on that.
 		assertEquals("state", SseLogServlet.STATE_SEGMENT);
 	}
@@ -68,7 +68,7 @@ class SseLogServletTest {
 	}
 
 	@Test
-	void consoleOnlyConstructorTreatsStateSegmentAsNoActiveRun() throws IOException {
+	void b01_consoleOnlyConstructorTreatsStateSegmentAsNoActiveRun() throws IOException {
 		// The 2-arg (pre-existing) constructor defaults the state resolvers to always-empty, so a client
 		// hitting .../state against a servlet built the old way gets the same graceful fallback as an
 		// unknown step — never a 500 or an unrecognized-route surprise.
@@ -82,7 +82,7 @@ class SseLogServletTest {
 	}
 
 	@Test
-	void stateChannelSendsNoActiveRunWhenNoBroadcasterResolves() throws IOException {
+	void b02_stateChannelSendsNoActiveRunWhenNoBroadcasterResolves() throws IOException {
 		var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty(),
 				v -> Optional.empty(), v -> Optional.empty());
 		var capture = new java.io.StringWriter();
@@ -132,7 +132,7 @@ class SseLogServletTest {
 	}
 
 	@Test
-	void stateChannelSendsInitialSnapshotThenTailsLiveUpdatesUntilTheClientDisconnects() throws Exception {
+	void b03_stateChannelSendsInitialSnapshotThenTailsLiveUpdatesUntilTheClientDisconnects() throws Exception {
 		var initialSeen = new CountDownLatch(1);
 		var updateSeen = new CountDownLatch(1);
 		var writer = new FailableWriter(initialSeen, updateSeen);

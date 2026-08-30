@@ -68,11 +68,11 @@ import org.junit.jupiter.api.io.*;
  * configuration every other Juneau consumer has.
  *
  * <p>
- * The route (b) remedy is asserted twice. {@link #contentQueryParameterIsRefusedByTheResource()} asserts it against
+ * The route (b) remedy is asserted twice. {@link #a04_contentQueryParameterIsRefusedByTheResource()} asserts it against
  * the real {@code CredentialRest}, which is correct and kept, but {@code CredentialRest} differs from
  * {@link DefaultConfigCredentialResource} in more than {@code disableContentParam} &mdash; its full parser list,
  * filters and view config are also live &mdash; so a pass there does not by itself prove {@code disableContentParam}
- * is the control doing the work. {@link #contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} closes
+ * is the control doing the work. {@link #a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} closes
  * that gap: it asserts the same remedy against {@link HardenedConfigCredentialResource}, a twin of
  * {@link DefaultConfigCredentialResource} with only {@code disableContentParam} flipped to {@code "true"}. Because
  * reproduction and remedy subjects then differ by exactly the one control under test, that pairing is airtight.
@@ -129,7 +129,7 @@ class CredentialWriteVectorTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	void formEncodedPostOverwritesAStoredCredential() throws Exception {
+	void a01_formEncodedPostOverwritesAStoredCredential() throws Exception {
 		// The whole finding in one assertion. This is the body a cross-origin <form> submits, with the content
 		// type a browser sets for it, and it lands in the Keychain slot in a real deployment.
 		try (var c = client();
@@ -141,7 +141,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void plainTextPostOverwritesAStoredCredential() throws Exception {
+	void a02_plainTextPostOverwritesAStoredCredential() throws Exception {
 		// text/plain is the second of the three no-preflight content types, and PlainTextParser is in the same
 		// default list. Included because closing only the urlencoded shape would leave the vector open.
 		try (var c = client();
@@ -153,7 +153,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void contentQueryParameterOverwritesAStoredCredentialWhenDisableContentParamIsDefault() throws Exception {
+	void a03_contentQueryParameterOverwritesAStoredCredentialWhenDisableContentParamIsDefault() throws Exception {
 		// Route (b) of F1, reproduced as an actual overwrite -- the half that contentQueryParameterIsRefusedByThe
 		// Resource (below) cannot demonstrate. That test runs against the real CredentialRest, which sets
 		// disableContentParam="true", so it can only ever show the fix working; a &content= reproduction there
@@ -177,7 +177,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void contentQueryParameterIsRefusedByTheResource() throws Exception {
+	void a04_contentQueryParameterIsRefusedByTheResource() throws Exception {
 		// The second half of F1, asserted closed rather than reproduced. disableContentParam defaults to false, so
 		// the body can travel in the URL instead; CredentialRest now sets it to "true", and this fails if that is
 		// removed.
@@ -204,7 +204,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue() throws Exception {
+	void a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue() throws Exception {
 		// The airtight version of contentQueryParameterIsRefusedByTheResource (above), which stays because it is
 		// also correct. That test's subject is the real CredentialRest, which differs from the reproduction
 		// subject (DefaultConfigCredentialResource) in more than disableContentParam -- so a pass there does not,
@@ -247,7 +247,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void theBoundaryRefusesTheFormEncodedPost() {
+	void b01_theBoundaryRefusesTheFormEncodedPost() {
 		// The exact request from group a, as it would arrive from a hostile page: refused on content type, so it
 		// never reaches CredentialRest and the store is never opened.
 		var res = boundary().check(req("POST", "application/x-www-form-urlencoded", Map.of(
@@ -258,7 +258,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void theBoundaryRefusesTheFormEncodedPostEvenFromOurOwnOrigin() {
+	void b02_theBoundaryRefusesTheFormEncodedPostEvenFromOurOwnOrigin() {
 		// With the origin corrected, the content-type check is what stops it. This is the assertion that the
 		// no-preflight form shape is unreachable, rather than merely that this particular attacker got the Origin
 		// wrong.
@@ -272,7 +272,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void theBoundaryRefusesTheContentQueryParameterPost() {
+	void b03_theBoundaryRefusesTheContentQueryParameterPost() {
 		// The content= variant carries no body and therefore no content type, which is itself a no-preflight
 		// shape. It has to be refused on that absence rather than exempted for it -- and note the server would
 		// otherwise rewrite the content type to UON itself, so there is nothing downstream to catch it either.
@@ -287,7 +287,7 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void theBoundaryAllowsTheLegitimateJsonPost() {
+	void b04_theBoundaryAllowsTheLegitimateJsonPost() {
 		// The other direction, so this class cannot pass by refusing everything.
 		var res = boundary().check(req("POST", "application/json", Map.of(
 			"Host", "127.0.0.1:8790",
@@ -302,7 +302,7 @@ class CredentialWriteVectorTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	void absentContentTypeOnAWriteIsRefusedAsNotJson() {
+	void c01_absentContentTypeOnAWriteIsRefusedAsNotJson() {
 		// A state-changing request that is otherwise entirely in order -- right Host and Origin, same-origin
 		// Sec-Fetch-Site, valid CSRF token -- but carries no Content-Type at all. It is refused 415, on the
 		// content-type check, because isJson(null) is false: the check is an allowlist (base type must equal
@@ -376,7 +376,7 @@ class CredentialWriteVectorTest {
 	 * &mdash; parser list, method, path, body shape &mdash; is copy-identical, so this is the honest subject for
 	 * asserting route (b)'s remedy: the only difference between the reproduction subject
 	 * ({@link DefaultConfigCredentialResource}) and this remedy subject is {@code disableContentParam} itself,
-	 * which is what {@link #contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} relies on.
+	 * which is what {@link #a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} relies on.
 	 */
 	@Rest(disableContentParam = "true")
 	public static class HardenedConfigCredentialResource extends BasicRestResource {

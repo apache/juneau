@@ -52,7 +52,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void storeThenStatusShowsPresentWithoutLeakingSecret(@TempDir Path dir) {
+	void a01_storeThenStatusShowsPresentWithoutLeakingSecret(@TempDir Path dir) {
 		var stores = stores();
 		var service = svc(stores, (s, a) -> ValidationResult.ok("x"), (s, a) -> ValidationResult.ok("x"),
 				(s, a) -> ValidationResult.ok("x"), dir);
@@ -66,7 +66,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void validateReadsSecretAndRecordsResult(@TempDir Path dir) {
+	void a02_validateReadsSecretAndRecordsResult(@TempDir Path dir) {
 		var stores = stores();
 		var service = svc(stores, (s, a) -> ValidationResult.fail("nope"), (s, a) -> ValidationResult.ok("x"),
 				(secret, acct) -> secret.equals("good") ? ValidationResult.ok("ok") : ValidationResult.fail("bad"),
@@ -81,7 +81,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void validateMissingCredentialFails(@TempDir Path dir) {
+	void a03_validateMissingCredentialFails(@TempDir Path dir) {
 		var service = svc(stores(), (s, a) -> ValidationResult.ok("x"), (s, a) -> ValidationResult.ok("x"),
 				(s, a) -> ValidationResult.ok("x"), dir);
 		var res = service.validate("apache");
@@ -90,7 +90,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void apacheStoresAvailidAsAccount(@TempDir Path dir) {
+	void b01_apacheStoresAvailidAsAccount(@TempDir Path dir) {
 		var stores = stores();
 		var service = svc(stores, (s, a) -> ValidationResult.ok("x"), (s, a) -> ValidationResult.ok("x"),
 				(s, a) -> ValidationResult.ok("x"), dir);
@@ -99,7 +99,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void apacheAccountIsPersistedAndSurvivesRestart(@TempDir Path dir) {
+	void b02_apacheAccountIsPersistedAndSurvivesRestart(@TempDir Path dir) {
 		var stores = stores();
 		var service = svc(stores, (s, a) -> ValidationResult.ok("x"), (s, a) -> ValidationResult.ok("x"),
 				(s, a) -> ValidationResult.ok("x"), dir);
@@ -118,7 +118,7 @@ class CredentialServiceTest {
 	}
 
 	@Test
-	void deleteForgetsThePersistedAccount(@TempDir Path dir) {
+	void b03_deleteForgetsThePersistedAccount(@TempDir Path dir) {
 		var stores = stores();
 		var service = svc(stores, (s, a) -> ValidationResult.ok("x"), (s, a) -> ValidationResult.ok("x"),
 				(s, a) -> ValidationResult.ok("x"), dir);

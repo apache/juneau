@@ -45,7 +45,7 @@ class GitTagReleaseSourceTest {
 	}
 
 	@Test
-	void listsReleasedVersionsExcludingRcs() {
+	void a01_listsReleasedVersionsExcludingRcs() {
 		var runner = stub(
 				List.of("juneau-9.2.0", "juneau-9.2.0-RC3", "juneau-9.1.0", "juneau-9.0.1", "juneau-8.2.0-RC1"));
 		var src = new GitTagReleaseSource(runner, "/repo");

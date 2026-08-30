@@ -51,7 +51,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void writesEmlAndInvokesOpen(@TempDir Path dir) throws Exception {
+	void a01_writesEmlAndInvokesOpen(@TempDir Path dir) throws Exception {
 		var calls = new ArrayList<List<String>>();
 		var svc = new EmailService(dir, recording(calls));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
@@ -66,7 +66,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void voteEmailIncludesChecksumsAndDeadline(@TempDir Path dir) {
+	void a02_voteEmailIncludesChecksumsAndDeadline(@TempDir Path dir) {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		rs.nexusRepoId = "orgapachejuneau-1042";
@@ -79,7 +79,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void proposeBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
+	void b01_proposeBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		var expected = Files.readString(Path.of("src/test/resources/email/propose.expected.txt"));
@@ -87,7 +87,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void voteBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
+	void b02_voteBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		rs.nexusRepoId = "orgapachejuneau-1042";
@@ -98,7 +98,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void resultBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
+	void b03_resultBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		var expected = Files.readString(Path.of("src/test/resources/email/result.expected.txt"));
@@ -107,7 +107,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void announcementBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
+	void b04_announcementBodyMatchesFixtureByteForByte(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		rs.githubReleaseUrl = "https://github.com/apache/juneau/releases/tag/9.2.1";
@@ -132,14 +132,14 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void proposeBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
+	void c01_proposeBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var expected = Files.readString(Path.of("src/test/resources/email/propose.populated.expected.txt"));
 		assertEquals(expected, svc.renderBody(EmailTemplate.PROPOSE, populatedRun(), Map.of()));
 	}
 
 	@Test
-	void voteBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
+	void c02_voteBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = populatedRun();
 		rs.nexusRepoId = "orgapachejuneau-1042";
@@ -150,7 +150,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void resultBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
+	void c03_resultBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var expected = Files.readString(Path.of("src/test/resources/email/result.populated.expected.txt"));
 		assertEquals(expected, svc.renderBody(EmailTemplate.RESULT, populatedRun(),
@@ -158,7 +158,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void announcementBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
+	void c04_announcementBodyWithNarrativeMatchesFixture(@TempDir Path dir) throws Exception {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = populatedRun();
 		rs.githubReleaseUrl = "https://github.com/apache/juneau/releases/tag/9.2.1";
@@ -168,7 +168,7 @@ class EmailServiceTest {
 	}
 
 	@Test
-	void blankNarrativeFieldsAreOmittedEntirely(@TempDir Path dir) {
+	void d01_blankNarrativeFieldsAreOmittedEntirely(@TempDir Path dir) {
 		var svc = new EmailService(dir, recording(new ArrayList<>()));
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		rs.releaseSummary = "   "; // whitespace-only counts as blank

@@ -57,7 +57,7 @@ class GpgValidatorTest {
 	}
 
 	@Test
-	void passesPassphraseOnStdinAndReportsSuccess() {
+	void a01_passesPassphraseOnStdinAndReportsSuccess() {
 		var runner = new RecordingRunner(List.of(new ProcessRunner.ProcResult(0, "sec ...\n"), // list-secret-keys
 				new ProcessRunner.ProcResult(0, ""))); // test-sign
 		var result = new GpgValidator(runner).validate("s3cret", "ABCD1234");
@@ -68,14 +68,14 @@ class GpgValidatorTest {
 	}
 
 	@Test
-	void failsWhenKeyMissing() {
+	void a02_failsWhenKeyMissing() {
 		var runner = new RecordingRunner(List.of(new ProcessRunner.ProcResult(2, "gpg: error")));
 		var result = new GpgValidator(runner).validate("s3cret", "NOPE");
 		assertFalse(result.valid());
 	}
 
 	@Test
-	void failsWhenSignRejected() {
+	void a03_failsWhenSignRejected() {
 		var runner = new RecordingRunner(List.of(new ProcessRunner.ProcResult(0, "sec ...\n"),
 				new ProcessRunner.ProcResult(2, "bad passphrase")));
 		var result = new GpgValidator(runner).validate("wrong", "ABCD1234");
@@ -95,7 +95,7 @@ class GpgValidatorTest {
 	}
 
 	@Test
-	void subprocessOutputNeverReachesTheMessage() {
+	void b01_subprocessOutputNeverReachesTheMessage() {
 		// The regression guard for F2, in the shape SecretsOffArgvTest uses: a sentinel that must not appear. The
 		// sentinel stands in for anything gpg might print -- and the reason this matters is not that gpg is known
 		// to echo a passphrase, but that the message is an unbounded channel from another program's stderr into a
@@ -107,7 +107,7 @@ class GpgValidatorTest {
 	}
 
 	@Test
-	void failureReasonsAreEnumerated() {
+	void b02_failureReasonsAreEnumerated() {
 		assertEquals("The passphrase was rejected by gpg.", signFailureMessage(2, "gpg: Bad passphrase"));
 		assertEquals("gpg could not read the passphrase non-interactively (pinentry).",
 				signFailureMessage(2, "gpg: problem with pinentry"));
@@ -117,13 +117,13 @@ class GpgValidatorTest {
 	}
 
 	@Test
-	void unrecognizedFailureCarriesTheExitCodeAndNothingElse() {
+	void b03_unrecognizedFailureCarriesTheExitCodeAndNothingElse() {
 		// The fallback still has to be actionable, and an exit code is a bounded integer rather than free text.
 		assertEquals("gpg refused to sign (exit code 42).", signFailureMessage(42, "something entirely unexpected"));
 	}
 
 	@Test
-	void missingToolIsDistinguishedFromMissingKey() {
+	void b04_missingToolIsDistinguishedFromMissingKey() {
 		// Both fail the first gpg call, and telling the user "no secret key for X" when gpg is not installed sends
 		// them to generate a key they may already have.
 		var absent = new RecordingRunner(List.of(new ProcessRunner.ProcResult(127, "gpg: command not found")));

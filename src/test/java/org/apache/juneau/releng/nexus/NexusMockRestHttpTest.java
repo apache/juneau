@@ -71,7 +71,7 @@ class NexusMockRestHttpTest {
 	}
 
 	@Test
-	void discoveryResponseIsARawJsonArrayNotADoubleEncodedString() throws Exception {
+	void a01_discoveryResponseIsARawJsonArrayNotADoubleEncodedString() throws Exception {
 		try (var client = client()) {
 			try (var resp = client
 					.request("GET", "/service/local/staging/profile_repositories/" + NexusStagingClient.JUNEAU_PROFILE_ID)
@@ -89,7 +89,7 @@ class NexusMockRestHttpTest {
 	}
 
 	@Test
-	void nexusStagingClientDiscoverCloseAndReleaseRoundTripOverRealHttpDispatch() throws Exception {
+	void a02_nexusStagingClientDiscoverCloseAndReleaseRoundTripOverRealHttpDispatch() throws Exception {
 		try (var client = client()) {
 			var nexus = NexusStagingClient.forTests(overHttp(client), NexusStagingClient.JUNEAU_PROFILE_ID);
 

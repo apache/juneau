@@ -91,7 +91,7 @@ class SecretsOffArgvTest {
 	}
 
 	@Test
-	void noSecretEverAppearsInArgv(@org.junit.jupiter.api.io.TempDir Path dir) {
+	void a01_noSecretEverAppearsInArgv(@org.junit.jupiter.api.io.TempDir Path dir) {
 		var r = recorder();
 		var c = ctx(r, dir);
 		new DeploySnapshotStep().apply(c); // gpg passphrase must be on stdin

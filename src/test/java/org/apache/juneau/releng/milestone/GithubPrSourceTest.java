@@ -49,21 +49,21 @@ class GithubPrSourceTest {
 	}
 
 	@Test
-	void resolvesExactTitleMatch() {
+	void a01_resolvesExactTitleMatch() {
 		var json = "[{\"number\":12,\"title\":\"9.2.0\"},{\"number\":13,\"title\":\"9.2.1\"}]";
 		var src = new GithubPrSource(runnerReturning(json), "apache/juneau");
 		assertEquals(13, src.resolveMilestoneNumber("9.2.1"));
 	}
 
 	@Test
-	void noMatchReturnsNull() {
+	void a02_noMatchReturnsNull() {
 		var json = "[{\"number\":12,\"title\":\"9.2.0\"}]";
 		var src = new GithubPrSource(runnerReturning(json), "apache/juneau");
 		assertNull(src.resolveMilestoneNumber("10.0.0"));
 	}
 
 	@Test
-	void blankResponseReturnsNull() {
+	void a03_blankResponseReturnsNull() {
 		var src = new GithubPrSource(runnerReturning(""), "apache/juneau");
 		assertNull(src.resolveMilestoneNumber("9.2.1"));
 	}

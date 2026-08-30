@@ -25,7 +25,7 @@ class NexusStagingClientTest {
 
 	/** The client is built around a String->String "send JSON request, get JSON response" seam we can stub. */
 	@Test
-	void discoversMostRecentOpenRepoForProfile() {
+	void a01_discoversMostRecentOpenRepoForProfile() {
 		var json = "[{\"repositoryId\":\"orgapachejuneau-1041\",\"type\":\"closed\",\"created\":\"2026-08-10\"},"
 				+ "{\"repositoryId\":\"orgapachejuneau-1042\",\"type\":\"open\",\"created\":\"2026-08-14\"}]";
 		var client = NexusStagingClient.forTests((method, path, body) -> json);
@@ -35,7 +35,7 @@ class NexusStagingClientTest {
 	}
 
 	@Test
-	void closeIssuesCloseCallForRepoId() {
+	void b01_closeIssuesCloseCallForRepoId() {
 		var calls = new ArrayList<String>();
 		var client = NexusStagingClient.forTests((method, path, body) -> {
 			calls.add(method + " " + path);
@@ -46,7 +46,7 @@ class NexusStagingClientTest {
 	}
 
 	@Test
-	void dropIssuesDropCall() {
+	void b02_dropIssuesDropCall() {
 		var calls = new ArrayList<String>();
 		var client = NexusStagingClient.forTests((method, path, body) -> {
 			calls.add(method + " " + path);
@@ -57,7 +57,7 @@ class NexusStagingClientTest {
 	}
 
 	@Test
-	void promoteIssuesReleaseCall() {
+	void b03_promoteIssuesReleaseCall() {
 		var calls = new ArrayList<String>();
 		var client = NexusStagingClient.forTests((method, path, body) -> {
 			calls.add(method + " " + path);
@@ -74,7 +74,7 @@ class NexusStagingClientTest {
 	 * until a method like {@code close()}/{@code drop()} is actually invoked).
 	 */
 	@Test
-	void createWithDirectCredentialsNeedsNoSettingsXml() {
+	void c01_createWithDirectCredentialsNeedsNoSettingsXml() {
 		assertNotNull(NexusStagingClient.create("https://repository.apache.org", NexusStagingClient.JUNEAU_PROFILE_ID,
 				"jbognar", "s3cr3t"));
 	}

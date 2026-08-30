@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class RunStateSnapshotTest {
 
 	@Test
-	void projectsVersionStatusRcModeArmedAndOrderedSteps() {
+	void a01_projectsVersionStatusRcModeArmedAndOrderedSteps() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "workspace-setup"));
 		rs.rc = 2;
 		rs.status = RunStatus.AWAITING_VOTE;
@@ -46,7 +46,7 @@ class RunStateSnapshotTest {
 	}
 
 	@Test
-	void serializesToTheCompactJsonShapeTheClientPatchesAgainst() {
+	void a02_serializesToTheCompactJsonShapeTheClientPatchesAgainst() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
 		var snap = RunStateSnapshot.of(rs, ExecutionMode.SAFE, false);
 

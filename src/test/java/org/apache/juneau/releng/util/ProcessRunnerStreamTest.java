@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class ProcessRunnerStreamTest {
 
 	@Test
-	void streamsEachLineToSinkAndReturnsExitCode() {
+	void a01_streamsEachLineToSinkAndReturnsExitCode() {
 		var runner = new ProcessRunner.Default();
 		var lines = new ArrayList<String>();
 		var res = runner.run(List.of("sh", "-c", "printf 'a\\nb\\nc\\n'"), null, null, lines::add);
@@ -35,7 +35,7 @@ class ProcessRunnerStreamTest {
 	}
 
 	@Test
-	void nonZeroExitStillStreamsAndReports() {
+	void a02_nonZeroExitStillStreamsAndReports() {
 		var runner = new ProcessRunner.Default();
 		var lines = new ArrayList<String>();
 		var res = runner.run(List.of("sh", "-c", "echo hi; exit 7"), null, null, lines::add);

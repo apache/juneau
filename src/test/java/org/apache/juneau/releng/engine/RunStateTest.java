@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class RunStateTest {
 
 	@Test
-	void newRunSeedsAllStepsPending() {
+	void a01_newRunSeedsAllStepsPending() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch",
 				List.of("preflight", "compose-propose-email", "workspace-setup"));
 		assertEquals("9.2.1", rs.version);
@@ -37,7 +37,7 @@ class RunStateTest {
 	}
 
 	@Test
-	void jsonWithoutModeFieldLeavesModeNull() {
+	void a02_jsonWithoutModeFieldLeavesModeNull() {
 		var rs = RunState.create("9.2.1", "b", List.of("preflight"));
 		var json = Json.DEFAULT.write(rs);
 		var back = Json.DEFAULT.read(json, RunState.class);
@@ -45,14 +45,14 @@ class RunStateTest {
 	}
 
 	@Test
-	void stepLookupByIdWorks() {
+	void a03_stepLookupByIdWorks() {
 		var rs = RunState.create("9.2.1", "b", List.of("preflight", "workspace-setup"));
 		assertEquals(StepStatus.PENDING, rs.step("workspace-setup").status);
 		assertNull(rs.step("nope"));
 	}
 
 	@Test
-	void jsonRoundTripPreservesStepsAndHistory() {
+	void a04_jsonRoundTripPreservesStepsAndHistory() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "workspace-setup"));
 		rs.rc = 2;
 		rs.rcHistory.add(new RcHistoryEntry(1, "2026-08-15T14:02:11Z", "vote rejected"));

@@ -194,14 +194,14 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void getStateForNonexistentRunIs404(@TempDir Path dir) {
+	void a01_getStateForNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var ex = assertThrows(NotFound.class, () -> rest.state("9.9.9"));
 		assertEquals(404, ex.getStatusCode());
 	}
 
 	@Test
-	void previewAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a02_previewAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		Map<String, String> form = Map.of();
 		var ex = assertThrows(NotFound.class, () -> rest.preview("9.9.9", "preflight", form));
@@ -209,7 +209,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void applyAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a03_applyAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		Map<String, String> form = Map.of();
 		var ex = assertThrows(NotFound.class, () -> rest.apply("9.9.9", "preflight", form));
@@ -217,21 +217,21 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void skipAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a04_skipAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var ex = assertThrows(NotFound.class, () -> rest.skip("9.9.9", "preflight"));
 		assertEquals(404, ex.getStatusCode());
 	}
 
 	@Test
-	void dropRcPreviewAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a05_dropRcPreviewAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var ex = assertThrows(NotFound.class, () -> rest.dropRcPreview("9.9.9"));
 		assertEquals(404, ex.getStatusCode());
 	}
 
 	@Test
-	void previewAgainstRealRunStillWorks(@TempDir Path dir) {
+	void b01_previewAgainstRealRunStillWorks(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 		var preview = rest.preview("9.2.1", "preflight", Map.of());
@@ -239,7 +239,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void startPersistsFormSuppliedMilestoneNumber(@TempDir Path dir) {
+	void b02_startPersistsFormSuppliedMilestoneNumber(@TempDir Path dir) {
 		var rest = rest(dir);
 		var body = startRequest("9.2.1");
 		body.milestoneNumber = 42;
@@ -248,7 +248,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void startPersistsNarrativeFields(@TempDir Path dir) {
+	void b03_startPersistsNarrativeFields(@TempDir Path dir) {
 		var rest = rest(dir);
 		var body = startRequest("9.2.1");
 		body.releaseSummary = "Patch release.";
@@ -265,13 +265,13 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void startDefaultsToSafeMode(@TempDir Path dir) {
+	void b04_startDefaultsToSafeMode(@TempDir Path dir) {
 		var rs = rest(dir).start(startRequest("9.2.1"));
 		assertEquals(ExecutionMode.SAFE, rs.mode);
 	}
 
 	@Test
-	void startLiveIsCappedOnASafeEngine(@TempDir Path dir) {
+	void b05_startLiveIsCappedOnASafeEngine(@TempDir Path dir) {
 		var body = startRequest("9.2.1");
 		body.mode = "live";
 		var rs = rest(dir).start(body);
@@ -279,7 +279,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void startLiveIsHonoredOnALiveEngine(@TempDir Path dir) {
+	void b06_startLiveIsHonoredOnALiveEngine(@TempDir Path dir) {
 		var body = startRequest("9.2.1");
 		body.mode = "live";
 		var rs = rest(dir, ExecutionMode.LIVE).start(body);
@@ -287,7 +287,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void detailsEndpointUpdatesNarrativeFieldsOnActiveRun(@TempDir Path dir) {
+	void c01_detailsEndpointUpdatesNarrativeFieldsOnActiveRun(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 
@@ -307,7 +307,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void detailsAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a06_detailsAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var body = new ReleaseRunRest.DetailsRequest();
 		var ex = assertThrows(NotFound.class, () -> rest.details("9.9.9", body));
@@ -315,14 +315,14 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void confirmReviewAgainstNonexistentRunIs404(@TempDir Path dir) {
+	void a07_confirmReviewAgainstNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var ex = assertThrows(NotFound.class, () -> rest.confirmReview("9.9.9", "javadoc-verify"));
 		assertEquals(404, ex.getStatusCode());
 	}
 
 	@Test
-	void confirmReviewAdvancesAReviewGateStepHeldAtAwaitingReview(@TempDir Path dir) {
+	void c02_confirmReviewAdvancesAReviewGateStepHeldAtAwaitingReview(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
@@ -336,7 +336,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void secondConcurrentStartIs409(@TempDir Path dir) {
+	void b07_secondConcurrentStartIs409(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 
@@ -362,7 +362,7 @@ class ReleaseRunRestTest {
 					 // test exists to catch -- that the SAME run legitimately clears every required step.
 	})
 	@Test
-	void safeVoteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
+	void d01_safeVoteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var rest = restWithNexus(dir, model);
 		var start = startRequest("9.2.1");
@@ -456,7 +456,7 @@ class ReleaseRunRestTest {
 	 * legitimately succeeded.
 	 */
 	@Test
-	void finalizeRunRefusesAndListsOffendingStepsWhenRequiredStepsAreUnresolved(@TempDir Path dir) {
+	void d02_finalizeRunRefusesAndListsOffendingStepsWhenRequiredStepsAreUnresolved(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 		satisfyAllPredecessorsOf(dir, "9.2.1", "finalize-run");
@@ -475,7 +475,7 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void applyUnknownStepReturnsJsonFailRatherThanThrowing(@TempDir Path dir) {
+	void d03_applyUnknownStepReturnsJsonFailRatherThanThrowing(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 		var res = assertDoesNotThrow(() -> rest.apply("9.2.1", "nexus-staging-release", Map.of()));
@@ -488,7 +488,7 @@ class ReleaseRunRestTest {
 	 *  contract itself is unchanged, so a rejected outcome still forks away from the linear step list
 	 *  instead of quietly advancing. */
 	@Test
-	void voteResultWithRejectedOutcomeDoesNotAdvanceButRecordsTheOutcome(@TempDir Path dir) {
+	void d04_voteResultWithRejectedOutcomeDoesNotAdvanceButRecordsTheOutcome(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
 		satisfyAllPredecessorsOf(dir, "9.2.1", "vote-gate");
@@ -517,7 +517,7 @@ class ReleaseRunRestTest {
 	 * neutralization, not merely that a benign title round-trips.
 	 */
 	@Test
-	void stepMetaJsonNeutralizesScriptBreakoutInAStepTitle() throws Exception {
+	void e01_stepMetaJsonNeutralizesScriptBreakoutInAStepTitle() throws Exception {
 		var evilTitle = "</script><script>alert(1)</script>\u2028x";
 		var step = new org.apache.juneau.releng.engine.ReleaseStep() {
 			@Override public String id() { return "evil"; }

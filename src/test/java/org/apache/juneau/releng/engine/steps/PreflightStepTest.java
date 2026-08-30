@@ -68,7 +68,7 @@ class PreflightStepTest {
 	}
 
 	@Test
-	void previewPassesWhenBranchExists() {
+	void a01_previewPassesWhenBranchExists() {
 		var step = new PreflightStep(new BranchResolver(runner("sha\trefs/heads/juneau-9.2.1-branch\n"), "/repo"));
 		var c = ctx(runner("sha\trefs/heads/juneau-9.2.1-branch\n"));
 		var p = step.preview(c);
@@ -77,7 +77,7 @@ class PreflightStepTest {
 	}
 
 	@Test
-	void applyFailsWithInstructionsWhenBranchMissing() {
+	void a02_applyFailsWithInstructionsWhenBranchMissing() {
 		var step = new PreflightStep(new BranchResolver(runner(""), "/repo"));
 		var c = ctx(runner(""));
 		var res = step.apply(c);

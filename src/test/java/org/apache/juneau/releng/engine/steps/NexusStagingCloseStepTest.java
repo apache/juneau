@@ -55,7 +55,7 @@ class NexusStagingCloseStepTest {
 	}
 
 	@Test
-	void discoversAndRecordsRepoIdThenCloses() {
+	void a01_discoversAndRecordsRepoIdThenCloses() {
 		var json = "[{\"repositoryId\":\"orgapachejuneau-1042\",\"type\":\"open\",\"created\":\"2026-08-14\"}]";
 		var nexus = NexusStagingClient.forTests((m, p, b) -> json);
 		var c = ctx(nexus, Map.of());
@@ -65,7 +65,7 @@ class NexusStagingCloseStepTest {
 	}
 
 	@Test
-	void manualOverrideWins() {
+	void a02_manualOverrideWins() {
 		var nexus = NexusStagingClient.forTests((m, p, b) -> "[]");
 		var c = ctx(nexus, Map.of("repoIdOverride", "orgapachejuneau-9999"));
 		var res = new NexusStagingCloseStep().apply(c);

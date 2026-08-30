@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class RunStateBroadcasterTest {
 
 	@Test
-	void publishDeliversToEverySubscriber() throws Exception {
+	void a01_publishDeliversToEverySubscriber() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var a = new ArrayList<String>();
 		var b = new ArrayList<String>();
@@ -38,7 +38,7 @@ class RunStateBroadcasterTest {
 	}
 
 	@Test
-	void unsubscribeStopsFurtherDelivery() throws Exception {
+	void a02_unsubscribeStopsFurtherDelivery() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var seen = new ArrayList<String>();
 		var subscription = bc.subscribe(seen::add);
@@ -51,7 +51,7 @@ class RunStateBroadcasterTest {
 	}
 
 	@Test
-	void aThrowingSubscriberDoesNotBreakOthers() throws Exception {
+	void a03_aThrowingSubscriberDoesNotBreakOthers() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var seen = new ArrayList<String>();
 		try (var s1 = bc.subscribe(s -> {
@@ -64,7 +64,7 @@ class RunStateBroadcasterTest {
 	}
 
 	@Test
-	void subscriberCountTracksSubscribeAndUnsubscribe() throws Exception {
+	void a04_subscriberCountTracksSubscribeAndUnsubscribe() throws Exception {
 		var bc = new RunStateBroadcaster();
 		assertEquals(0, bc.subscriberCount());
 		var s1 = bc.subscribe(x -> {

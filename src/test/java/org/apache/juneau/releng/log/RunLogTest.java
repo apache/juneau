@@ -31,7 +31,7 @@ class RunLogTest {
 	// convention is applied by the caller when constructing one RunLog per step.
 
 	@Test
-	void appendsToDiskAndFansOutToBroadcaster(@TempDir Path dir) throws Exception {
+	void a01_appendsToDiskAndFansOutToBroadcaster(@TempDir Path dir) throws Exception {
 		var bc = new LogBroadcaster();
 		var got = new ArrayList<String>();
 		try (var subscription = bc.subscribe(got::add)) {
@@ -47,14 +47,14 @@ class RunLogTest {
 	}
 
 	@Test
-	void sizeReportsCurrentByteOffset(@TempDir Path dir) {
+	void a02_sizeReportsCurrentByteOffset(@TempDir Path dir) {
 		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"), new LogBroadcaster());
 		log.append("abc");
 		assertEquals(4, log.size()); // "abc\n"
 	}
 
 	@Test
-	void lineSinkFeedsBothDiskAndBroadcaster(@TempDir Path dir) throws Exception {
+	void a03_lineSinkFeedsBothDiskAndBroadcaster(@TempDir Path dir) throws Exception {
 		var bc = new LogBroadcaster();
 		var got = new ArrayList<String>();
 		try (var subscription = bc.subscribe(got::add)) {
@@ -66,7 +66,7 @@ class RunLogTest {
 	}
 
 	@Test
-	void resetTruncatesOnDiskContentForInPlaceOverwrite(@TempDir Path dir) throws Exception {
+	void b01_resetTruncatesOnDiskContentForInPlaceOverwrite(@TempDir Path dir) throws Exception {
 		// An ad-hoc re-run overwrites the step's log from scratch.
 		var log = new RunLog(dir.resolve("9.2.1-RC1-release-prepare.log"), new LogBroadcaster());
 		log.append("first invocation, line 1");
@@ -79,7 +79,7 @@ class RunLogTest {
 	}
 
 	@Test
-	void resetOnANeverWrittenLogIsANoOp(@TempDir Path dir) {
+	void b02_resetOnANeverWrittenLogIsANoOp(@TempDir Path dir) {
 		// A step's first-ever invocation also calls reset() before appending; must not fail
 		// just because the file doesn't exist yet.
 		var log = new RunLog(dir.resolve("9.2.1-RC1-build-verify.log"), new LogBroadcaster());

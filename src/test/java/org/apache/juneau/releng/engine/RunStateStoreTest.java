@@ -27,7 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
 class RunStateStoreTest {
 
 	@Test
-	void savesAndLoadsByVersion(@TempDir Path dir) {
+	void a01_savesAndLoadsByVersion(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "workspace-setup"));
 		store.save(rs);
@@ -39,7 +39,7 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void loadAllReturnsEveryRelease(@TempDir Path dir) {
+	void a02_loadAllReturnsEveryRelease(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		store.save(RunState.create("9.2.1", "b1", List.of("preflight")));
 		store.save(RunState.create("9.2.2", "b2", List.of("preflight")));
@@ -50,12 +50,12 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void loadMissingIsEmpty(@TempDir Path dir) {
+	void a03_loadMissingIsEmpty(@TempDir Path dir) {
 		assertTrue(new RunStateStore(dir).load("9.9.9").isEmpty());
 	}
 
 	@Test
-	void activeRunIsTheRunningOrAwaitingVoteOne(@TempDir Path dir) {
+	void b01_activeRunIsTheRunningOrAwaitingVoteOne(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var released = RunState.create("9.2.0", "b0", List.of("preflight"));
 		released.status = RunStatus.RELEASED;
@@ -66,7 +66,7 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void displayRunFallsBackToAFailedRunSoTheRailStaysVisible(@TempDir Path dir) {
+	void b02_displayRunFallsBackToAFailedRunSoTheRailStaysVisible(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var released = RunState.create("9.2.0", "b0", List.of("preflight"));
 		released.status = RunStatus.RELEASED;
@@ -79,7 +79,7 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void displayRunPrefersAnActiveRunOverAFailedOne(@TempDir Path dir) {
+	void b03_displayRunPrefersAnActiveRunOverAFailedOne(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var failed = RunState.create("9.2.0", "b0", List.of("preflight"));
 		failed.status = RunStatus.FAILED;
@@ -90,14 +90,14 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void saveIsANoOpTowardTheOnSaveHookByDefault(@TempDir Path dir) {
+	void c01_saveIsANoOpTowardTheOnSaveHookByDefault(@TempDir Path dir) {
 		// No hook installed: save() must not throw just because nothing is listening.
 		var store = new RunStateStore(dir);
 		assertDoesNotThrow(() -> store.save(RunState.create("9.2.1", "b1", List.of("preflight"))));
 	}
 
 	@Test
-	void setOnSaveIsInvokedWithTheJustSavedRunOnEverySave(@TempDir Path dir) {
+	void c02_setOnSaveIsInvokedWithTheJustSavedRunOnEverySave(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		// rs is mutated in place across the two save() calls below, so the hook must capture each step's
 		// status at call time (an enum value, immutable) rather than a reference into the shared RunState.
@@ -113,7 +113,7 @@ class RunStateStoreTest {
 	}
 
 	@Test
-	void setOnSaveWithNullRestoresTheNoOpDefault(@TempDir Path dir) {
+	void c03_setOnSaveWithNullRestoresTheNoOpDefault(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var seen = new ArrayList<RunState>();
 		store.setOnSave(seen::add);

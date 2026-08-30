@@ -76,7 +76,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void liveUnarmedRefusesMutatingStep(@TempDir Path dir) {
+	void a01_liveUnarmedRefusesMutatingStep(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
@@ -86,7 +86,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void liveArmedRunsMutatingStep(@TempDir Path dir) {
+	void a02_liveArmedRunsMutatingStep(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);
@@ -97,7 +97,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void safeAllowsMutatingStepWithoutArming(@TempDir Path dir) {
+	void a03_safeAllowsMutatingStepWithoutArming(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.SAFE);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
@@ -106,7 +106,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void armIsRejectedInSafeMode(@TempDir Path dir) {
+	void a04_armIsRejectedInSafeMode(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.SAFE);
 		eng.start("9.2.1", null);
 		var res = eng.arm("9.2.1", "9.2.1 LIVE");
@@ -115,7 +115,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void liveBoxSafeRunAllowsMutatingWithoutArming(@TempDir Path dir) {
+	void a05_liveBoxSafeRunAllowsMutatingWithoutArming(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null); // defaults Dry-run even on a LIVE box
 		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
@@ -124,7 +124,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void armIsRejectedOnASafeRunEvenOnALiveBox(@TempDir Path dir) {
+	void a06_armIsRejectedOnASafeRunEvenOnALiveBox(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null);
 		var res = eng.arm("9.2.1", "9.2.1 LIVE");
@@ -133,7 +133,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
+	void a07_armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertFalse(eng.arm("9.2.1", "yes").success);
@@ -141,7 +141,7 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void armDoesNotSurviveARestart(@TempDir Path dir) {
+	void a08_armDoesNotSurviveARestart(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);

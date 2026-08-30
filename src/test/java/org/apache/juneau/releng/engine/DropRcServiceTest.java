@@ -73,7 +73,7 @@ class DropRcServiceTest {
 	}
 
 	@Test
-	void previewNamesRepoTagAndNextRc(@TempDir Path dir) {
+	void a01_previewNamesRepoTagAndNextRc(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
@@ -86,7 +86,7 @@ class DropRcServiceTest {
 	}
 
 	@Test
-	void applyResetsFromWorkspaceSetupAndBumpsRc(@TempDir Path dir) {
+	void a02_applyResetsFromWorkspaceSetupAndBumpsRc(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
@@ -114,7 +114,7 @@ class DropRcServiceTest {
 
 	/** §7.3/fidelity fix: Drop-RC's SVN cleanup + Tier-B log sink (was previously a silent no-op in SAFE). */
 	@Test
-	void safeSvnCleanupSpawnsNothingButCommandLogsToItsOwnLogFile(@TempDir Path dir) throws java.io.IOException {
+	void a03_safeSvnCleanupSpawnsNothingButCommandLogsToItsOwnLogFile(@TempDir Path dir) throws java.io.IOException {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var runCount = new int[] { 0 };
@@ -162,7 +162,7 @@ class DropRcServiceTest {
 	}
 
 	@Test
-	void safeSvnCleanupPathsIncludeCurrentRcTag(@TempDir Path dir) throws java.io.IOException {
+	void a04_safeSvnCleanupPathsIncludeCurrentRcTag(@TempDir Path dir) throws java.io.IOException {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
@@ -175,7 +175,7 @@ class DropRcServiceTest {
 	}
 
 	@Test
-	void liveBoxSafeRunDoesNotSpawnSubprocess(@TempDir Path dir) {
+	void a05_liveBoxSafeRunDoesNotSpawnSubprocess(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var rs = seededThroughReleasePrepare(store);
 		rs.mode = ExecutionMode.SAFE;
@@ -224,7 +224,7 @@ class DropRcServiceTest {
 	@SuppressWarnings({
 		"resource" // The subscription stays open for the whole test; the JVM tears it down. Closing it would stop collecting snapshots.
 	})
-	void applyPublishesAResetSnapshotViaTheEngineSSharedRunStateStoreHook(@TempDir Path dir) {
+	void a06_applyPublishesAResetSnapshotViaTheEngineSSharedRunStateStoreHook(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var branches = new BranchResolver(runner(), "/repo");
 		var eng = ReleaseEngine.forTests(store, StepRegistry.standard(branches), runner(), branches, dir,

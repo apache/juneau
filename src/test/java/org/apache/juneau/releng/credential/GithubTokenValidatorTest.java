@@ -57,7 +57,7 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void tokenTravelsByEnvironmentAndNotArgv() {
+	void a01_tokenTravelsByEnvironmentAndNotArgv() {
 		var runner = new StubRunner(new ProcessRunner.ProcResult(0, "octocat\n"));
 		assertTrue(new GithubTokenValidator(runner).validate("ghp_s3cret", "token").valid());
 		assertEquals("ghp_s3cret", runner.env.get("GH_TOKEN"));
@@ -65,12 +65,12 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void successReportsAWellFormedLogin() {
+	void b01_successReportsAWellFormedLogin() {
 		assertEquals("GitHub token OK (user octocat).", message(0, "octocat\n"));
 	}
 
 	@Test
-	void successWithUnexpectedOutputOmitsIt() {
+	void b02_successWithUnexpectedOutputOmitsIt() {
 		// The success path echoed gh's stdout too. It is normally the login, but "normally" is not a rule, so the
 		// value is shown only when it looks like a GitHub username and dropped otherwise.
 		assertEquals("GitHub token OK.", message(0, "octocat\nwarning: something unexpected"));
@@ -79,7 +79,7 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void subprocessOutputNeverReachesTheFailureMessage() {
+	void c01_subprocessOutputNeverReachesTheFailureMessage() {
 		var sentinel = "SENTINEL-b41e07-DO-NOT-SURFACE";
 		for (var output : List.of(sentinel, "gh: 401 " + sentinel, "HTTP 403: " + sentinel))
 			assertFalse(message(1, output).contains(sentinel),
@@ -87,7 +87,7 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void theSuccessPathIsBoundedByGithubsUsernameGrammar() {
+	void b03_theSuccessPathIsBoundedByGithubsUsernameGrammar() {
 		// The success path echoed gh's stdout too, and the bound on it is a grammar rather than a blanket refusal:
 		// a value that GitHub could actually have issued as a username is displayed, because showing which account
 		// the token belongs to is the useful half of the message.
@@ -105,7 +105,7 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void failureReasonsAreEnumerated() {
+	void c02_failureReasonsAreEnumerated() {
 		assertEquals("GitHub rejected the token (401 \u2014 not accepted).", message(1, "gh: Bad credentials"));
 		assertEquals("The token was accepted but lacks the required scope (403).", message(1, "HTTP 403: Forbidden"));
 		assertEquals("GitHub was unreachable \u2014 check the network.", message(1, "dial tcp: connection refused"));
@@ -113,7 +113,7 @@ class GithubTokenValidatorTest {
 	}
 
 	@Test
-	void unrecognizedFailureCarriesTheExitCodeAndNothingElse() {
+	void c03_unrecognizedFailureCarriesTheExitCodeAndNothingElse() {
 		assertEquals("GitHub rejected the token (gh exit code 9).", message(9, "something entirely unexpected"));
 	}
 }

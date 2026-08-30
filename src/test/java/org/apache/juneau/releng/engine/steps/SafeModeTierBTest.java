@@ -77,7 +77,7 @@ class SafeModeTierBTest {
 	}
 
 	@Test
-	void safeMutatingStepSpawnsNothingButLogsBuiltCommand() {
+	void a01_safeMutatingStepSpawnsNothingButLogsBuiltCommand() {
 		var res = new ReleasePrepareStep().apply(safeCtx());
 
 		assertTrue(res.success, "SAFE simulation should synthesize success");

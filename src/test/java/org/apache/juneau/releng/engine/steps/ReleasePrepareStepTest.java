@@ -65,7 +65,7 @@ class ReleasePrepareStepTest {
 	}
 
 	@Test
-	void maintenanceReleaseDerivesNextDevVersion() {
+	void a01_maintenanceReleaseDerivesNextDevVersion() {
 		var calls = new ArrayList<List<String>>();
 		var res = new ReleasePrepareStep().apply(ctx("9.2.1", Map.of(), calls));
 		assertTrue(res.success);
@@ -75,7 +75,7 @@ class ReleasePrepareStepTest {
 	}
 
 	@Test
-	void newMinorReleaseRequiresExplicitDevelopmentVersion() {
+	void a02_newMinorReleaseRequiresExplicitDevelopmentVersion() {
 		var calls = new ArrayList<List<String>>();
 		var res = new ReleasePrepareStep().apply(ctx("10.0.0", Map.of(), calls));
 		assertFalse(res.success, "z==0 without developmentVersion must fail");
@@ -83,7 +83,7 @@ class ReleasePrepareStepTest {
 	}
 
 	@Test
-	void newMinorReleaseUsesSuppliedDevelopmentVersion() {
+	void a03_newMinorReleaseUsesSuppliedDevelopmentVersion() {
 		var calls = new ArrayList<List<String>>();
 		var res = new ReleasePrepareStep().apply(ctx("10.0.0", Map.of("developmentVersion", "10.1.0-SNAPSHOT"), calls));
 		assertTrue(res.success);

@@ -29,20 +29,20 @@ import org.junit.jupiter.api.io.TempDir;
 class AccountStoreTest {
 
 	@Test
-	void unsetAccountIsEmpty(@TempDir Path dir) {
+	void a01_unsetAccountIsEmpty(@TempDir Path dir) {
 		var store = new AccountStore(dir);
 		assertTrue(store.get(CredentialSpec.APACHE_LDAP).isEmpty());
 	}
 
 	@Test
-	void putThenGetReturnsTheAccount(@TempDir Path dir) {
+	void a02_putThenGetReturnsTheAccount(@TempDir Path dir) {
 		var store = new AccountStore(dir);
 		store.put(CredentialSpec.APACHE_LDAP, "jbognar");
 		assertEquals("jbognar", store.get(CredentialSpec.APACHE_LDAP).orElseThrow());
 	}
 
 	@Test
-	void survivesAFreshInstancePointedAtTheSameDir(@TempDir Path dir) {
+	void a03_survivesAFreshInstancePointedAtTheSameDir(@TempDir Path dir) {
 		new AccountStore(dir).put(CredentialSpec.GPG, "ABCD1234");
 
 		var reloaded = new AccountStore(dir);
@@ -50,7 +50,7 @@ class AccountStoreTest {
 	}
 
 	@Test
-	void distinctSpecsAreStoredIndependently(@TempDir Path dir) {
+	void a04_distinctSpecsAreStoredIndependently(@TempDir Path dir) {
 		var store = new AccountStore(dir);
 		store.put(CredentialSpec.APACHE_LDAP, "jbognar");
 		store.put(CredentialSpec.GPG, "ABCD1234");
@@ -61,7 +61,7 @@ class AccountStoreTest {
 	}
 
 	@Test
-	void removeForgetsThePersistedAccount(@TempDir Path dir) {
+	void a05_removeForgetsThePersistedAccount(@TempDir Path dir) {
 		var store = new AccountStore(dir);
 		store.put(CredentialSpec.APACHE_LDAP, "jbognar");
 		store.remove(CredentialSpec.APACHE_LDAP);
@@ -71,7 +71,7 @@ class AccountStoreTest {
 	}
 
 	@Test
-	void createsTheStateDirIfAbsent(@TempDir Path dir) {
+	void a06_createsTheStateDirIfAbsent(@TempDir Path dir) {
 		var nested = dir.resolve("nested/state");
 		var store = new AccountStore(nested);
 		store.put(CredentialSpec.APACHE_LDAP, "jbognar");
@@ -84,7 +84,7 @@ class AccountStoreTest {
 
 	@Test
 	@EnabledOnOs({ OS.MAC, OS.LINUX })
-	void accountsFileIsOwnerOnly(@TempDir Path dir) throws Exception {
+	void b01_accountsFileIsOwnerOnly(@TempDir Path dir) throws Exception {
 		// The file holds no secret, so this is hygiene -- but under a default umask it lands world-readable, and
 		// it names the Apache account this machine releases as.
 		new AccountStore(dir).put(CredentialSpec.APACHE_LDAP, "jbognar");
@@ -94,7 +94,7 @@ class AccountStoreTest {
 
 	@Test
 	@EnabledOnOs({ OS.MAC, OS.LINUX })
-	void stateDirIsOwnerOnly(@TempDir Path dir) throws Exception {
+	void b02_stateDirIsOwnerOnly(@TempDir Path dir) throws Exception {
 		var nested = dir.resolve("nested/state");
 		new AccountStore(nested).put(CredentialSpec.GPG, "ABCD1234");
 		assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(nested));
@@ -102,7 +102,7 @@ class AccountStoreTest {
 
 	@Test
 	@EnabledOnOs({ OS.MAC, OS.LINUX })
-	void anExistingWideOpenFileIsNarrowedOnTheNextWrite(@TempDir Path dir) throws Exception {
+	void b03_anExistingWideOpenFileIsNarrowedOnTheNextWrite(@TempDir Path dir) throws Exception {
 		// A file written before this change keeps its mode unless something narrows it, and the natural mistake is
 		// to set permissions only at creation time.
 		var store = new AccountStore(dir);

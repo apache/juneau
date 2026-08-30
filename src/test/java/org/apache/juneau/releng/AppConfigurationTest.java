@@ -67,7 +67,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void broadcasterResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
+	void a01_broadcasterResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		var resolver = AppConfiguration.broadcasterForStep(eng, store);
@@ -75,7 +75,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void broadcasterResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
+	void a02_broadcasterResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
@@ -84,7 +84,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void broadcasterResolverIsPresentForRealActiveRunAndStep(@TempDir Path dir) {
+	void a03_broadcasterResolverIsPresentForRealActiveRunAndStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
@@ -95,7 +95,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void stateBroadcasterResolverIsEmptyForUnknownVersion(@TempDir Path dir) {
+	void b01_stateBroadcasterResolverIsEmptyForUnknownVersion(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		var resolver = AppConfiguration.stateBroadcasterForVersion(eng, store);
@@ -103,7 +103,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void stateBroadcasterResolverIsPresentAndSharedForAKnownVersion(@TempDir Path dir) {
+	void b02_stateBroadcasterResolverIsPresentAndSharedForAKnownVersion(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
@@ -114,14 +114,14 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void logPathResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
+	void c01_logPathResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var resolver = AppConfiguration.logPathForStep(store);
 		assertTrue(resolver.apply("nope", "nope").isEmpty());
 	}
 
 	@Test
-	void logPathResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
+	void c02_logPathResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
@@ -130,7 +130,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void nexusClientUsesKeychainCredsWhenBothPresent() {
+	void d01_nexusClientUsesKeychainCredsWhenBothPresent() {
 		var fallbackCalled = new boolean[] { false };
 		var client = AppConfiguration.nexusClient(TargetProfile.prodDefault(), "jbognar", "s3cr3t", () -> {
 			fallbackCalled[0] = true;
@@ -141,7 +141,7 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void nexusClientFallsBackToSettingsXmlWhenKeychainEntryAbsent() {
+	void d02_nexusClientFallsBackToSettingsXmlWhenKeychainEntryAbsent() {
 		var target = TargetProfile.prodDefault();
 		var sentinel = NexusStagingClient.forTests((m, p, b) -> "");
 		var client = AppConfiguration.nexusClient(target, "", "", () -> sentinel);

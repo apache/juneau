@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 class ReleaseVersionTest {
 
 	@Test
-	void parsesPlainVersionFromTag() {
+	void a01_parsesPlainVersionFromTag() {
 		var v = ReleaseVersion.ofTag("juneau-9.2.0");
 		assertEquals("9.2.0", v.version());
 		assertFalse(v.isPrerelease());
@@ -32,7 +32,7 @@ class ReleaseVersionTest {
 	}
 
 	@Test
-	void parsesRcFromTag() {
+	void a02_parsesRcFromTag() {
 		var v = ReleaseVersion.ofTag("juneau-9.2.0-RC3");
 		assertEquals("9.2.0", v.version());
 		assertTrue(v.isPrerelease());
@@ -40,33 +40,33 @@ class ReleaseVersionTest {
 	}
 
 	@Test
-	void parsesBetaAsPrerelease() {
+	void a03_parsesBetaAsPrerelease() {
 		var v = ReleaseVersion.ofTag("juneau-9.0-B1");
 		assertEquals("9.0", v.version());
 		assertTrue(v.isPrerelease());
 	}
 
 	@Test
-	void ordersBySemver() {
+	void b01_ordersBySemver() {
 		assertTrue(ReleaseVersion.ofTag("juneau-9.2.0").compareTo(ReleaseVersion.ofTag("juneau-9.1.0")) > 0);
 		assertTrue(ReleaseVersion.ofTag("juneau-10.0.0").compareTo(ReleaseVersion.ofTag("juneau-9.2.0")) > 0);
 		assertTrue(ReleaseVersion.ofTag("juneau-9.0.1").compareTo(ReleaseVersion.ofTag("juneau-9.0.0")) > 0);
 	}
 
 	@Test
-	void highestReleasedExcludesPrereleases() {
+	void b02_highestReleasedExcludesPrereleases() {
 		var tags = List.of("juneau-9.2.0", "juneau-9.2.0-RC3", "juneau-9.1.0", "juneau-9.0.1", "juneau-8.2.0-RC1");
 		assertEquals("9.2.0", ReleaseVersion.highestReleasedBelow(tags, "10.0.0").version());
 	}
 
 	@Test
-	void highestReleasedBelowCeiling() {
+	void b03_highestReleasedBelowCeiling() {
 		var tags = List.of("juneau-9.2.0", "juneau-9.1.0", "juneau-9.0.1");
 		assertEquals("9.1.0", ReleaseVersion.highestReleasedBelow(tags, "9.2.0").version());
 	}
 
 	@Test
-	void exposesNumericParts() {
+	void c01_exposesNumericParts() {
 		var v = ReleaseVersion.of("9.2.1");
 		assertEquals(9, v.major());
 		assertEquals(2, v.minor());
@@ -74,7 +74,7 @@ class ReleaseVersionTest {
 	}
 
 	@Test
-	void maintenanceDefaultsToZeroWhenAbsent() {
+	void c02_maintenanceDefaultsToZeroWhenAbsent() {
 		var v = ReleaseVersion.of("10.0");
 		assertEquals(10, v.major());
 		assertEquals(0, v.minor());

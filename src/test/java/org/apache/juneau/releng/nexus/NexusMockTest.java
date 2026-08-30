@@ -33,7 +33,7 @@ class NexusMockTest {
 	}
 
 	@Test
-	void discoveryLazilySynthesizesOpenRepo() {
+	void a01_discoveryLazilySynthesizesOpenRepo() {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var repo = clientFor(model).findLatestRepo().orElseThrow();
 		assertTrue(repo.id.startsWith("orgapachejuneau-"));
@@ -41,7 +41,7 @@ class NexusMockTest {
 	}
 
 	@Test
-	void openToClosedToReleasedTransitions() {
+	void a02_openToClosedToReleasedTransitions() {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var client = clientFor(model);
 		var id = client.findLatestRepo().orElseThrow().id;
@@ -54,7 +54,7 @@ class NexusMockTest {
 	}
 
 	@Test
-	void openToDroppedTransition() {
+	void a03_openToDroppedTransition() {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var client = clientFor(model);
 		var id = client.findLatestRepo().orElseThrow().id;
@@ -64,7 +64,7 @@ class NexusMockTest {
 	}
 
 	@Test
-	void illegalTransitionSurfacesError() {
+	void a04_illegalTransitionSurfacesError() {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var client = clientFor(model);
 		var id = client.findLatestRepo().orElseThrow().id;
@@ -77,7 +77,7 @@ class NexusMockTest {
 	}
 
 	@Test
-	void resetSynthesizesAFreshRepoForTheNextRun() {
+	void a05_resetSynthesizesAFreshRepoForTheNextRun() {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var client = clientFor(model);
 		var first = client.findLatestRepo().orElseThrow().id;

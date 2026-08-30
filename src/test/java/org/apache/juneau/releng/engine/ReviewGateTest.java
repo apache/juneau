@@ -75,7 +75,7 @@ class ReviewGateTest {
 	}
 
 	@Test
-	void reviewGateStepHoldsUntilConfirmed(@TempDir Path dir) {
+	void a01_reviewGateStepHoldsUntilConfirmed(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
@@ -90,7 +90,7 @@ class ReviewGateTest {
 	}
 
 	@Test
-	void confirmReviewOnAStepNotAwaitingReviewFails(@TempDir Path dir) {
+	void a02_confirmReviewOnAStepNotAwaitingReviewFails(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		eng.apply("9.2.1", "preflight", Map.of()); // not a review gate; goes straight to SUCCEEDED

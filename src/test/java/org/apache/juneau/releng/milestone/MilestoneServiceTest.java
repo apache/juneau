@@ -26,13 +26,13 @@ class MilestoneServiceTest {
 	private final MilestoneService svc = new MilestoneService();
 
 	@Test
-	void previousTagIsHighestReleasedBelowVersion() {
+	void a01_previousTagIsHighestReleasedBelowVersion() {
 		var tags = List.of("juneau-9.2.0", "juneau-9.1.0", "juneau-9.0.1", "juneau-9.2.0-RC3");
 		assertEquals("juneau-9.2.0", svc.previousTag(tags, "9.2.1"));
 	}
 
 	@Test
-	void groupsDependabotBumpsForSameDependency() {
+	void b01_groupsDependabotBumpsForSameDependency() {
 		var prs = List.of(new PullRequest(308, "Bump spring.version from 4.0.1 to 4.0.3", "dependabot[bot]"),
 				new PullRequest(316, "Bump spring.version from 4.0.3 to 4.0.6", "dependabot[bot]"),
 				new PullRequest(306, "Bump org.apache:apache from 35 to 37", "dependabot[bot]"),
@@ -49,7 +49,7 @@ class MilestoneServiceTest {
 	}
 
 	@Test
-	void preservesInPathQualifier() {
+	void b02_preservesInPathQualifier() {
 		var prs = List
 				.of(new PullRequest(282, "Bump js-yaml from 3.14.1 to 3.14.2 in /juneau-docs", "dependabot[bot]"));
 		var entries = svc.generateChanges(prs);
@@ -58,7 +58,7 @@ class MilestoneServiceTest {
 	}
 
 	@Test
-	void rendersChangesSectionSortedByDependency() {
+	void b03_rendersChangesSectionSortedByDependency() {
 		var prs = List.of(new PullRequest(316, "Bump spring.version from 4.0.3 to 4.0.6", "dependabot[bot]"),
 				new PullRequest(306, "Bump org.apache:apache from 35 to 37", "dependabot[bot]"));
 		var section = svc.renderChangesSection(prs);

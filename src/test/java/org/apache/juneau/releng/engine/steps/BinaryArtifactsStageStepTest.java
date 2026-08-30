@@ -81,7 +81,7 @@ class BinaryArtifactsStageStepTest {
 	}
 
 	@Test
-	void liveBuildsCanonicalSvnWgetRenameGpgAddCommitSequence(@TempDir Path dir) {
+	void a01_liveBuildsCanonicalSvnWgetRenameGpgAddCommitSequence(@TempDir Path dir) {
 		var c = ctx(ExecutionMode.LIVE, dir);
 		var res = new BinaryArtifactsStageStep().apply(c);
 		assertTrue(res.success, res.message);
@@ -137,7 +137,7 @@ class BinaryArtifactsStageStepTest {
 	}
 
 	@Test
-	void safeSpawnsNothingAndLogsWouldRunForEveryMutation(@TempDir Path dir) {
+	void a02_safeSpawnsNothingAndLogsWouldRunForEveryMutation(@TempDir Path dir) {
 		var c = ctx(ExecutionMode.SAFE, dir);
 		var res = new BinaryArtifactsStageStep().apply(c);
 		assertTrue(res.success, res.message);

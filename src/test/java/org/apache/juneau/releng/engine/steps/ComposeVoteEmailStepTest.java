@@ -67,7 +67,7 @@ class ComposeVoteEmailStepTest {
 	}
 
 	@Test
-	void readsShaFromDistWorkingCopyNotFormInput(@TempDir Path dir) throws Exception {
+	void a01_readsShaFromDistWorkingCopyNotFormInput(@TempDir Path dir) throws Exception {
 		var rc = "juneau-9.2.1-RC1";
 		var srcDir = dir.resolve("dist/source/" + rc);
 		var binDir = dir.resolve("dist/binaries/" + rc);
@@ -87,7 +87,7 @@ class ComposeVoteEmailStepTest {
 	}
 
 	@Test
-	void absentShaFilesSoftNoteRatherThanFail(@TempDir Path dir) {
+	void a02_absentShaFilesSoftNoteRatherThanFail(@TempDir Path dir) {
 		var c = ctx(dir); // no dist/ working copy at all (e.g. under a SAFE rehearsal)
 		var res = new ComposeVoteEmailStep().apply(c);
 		assertTrue(res.success, "absent checksums must not hard-fail the draft");
