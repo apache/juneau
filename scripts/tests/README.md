@@ -33,7 +33,9 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   can't be `import`ed by name) via `next_id_module` / `audit_module` fixtures.
 - `test_todo_next_id.py` -- the id allocator: concurrent-claim uniqueness (25/30/60-way),
   every recognized filename prefix (including the `finished/` archive), the
-  unrecognized-prefix id-reuse hazard, and bounded retry/collision behavior.
+  unrecognized-prefix id-reuse hazard, bounded retry/collision behavior, and the `--hipri`
+  flag's marker placement in the finalized filename (plus its harmless no-op-with-a-note
+  behavior when used without `--finalize`).
 - `test_todo_status_audit.py` -- the status/header pre-filter: every documented prefix is
   actually scanned (cross-checked against the module's own docstring, not hand-duplicated),
   every documented reason code is actually emittable (same cross-check, one level up),
@@ -45,7 +47,9 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   cross-reference to another wave's members, a non-`Ready to execute` umbrella that names the
   wave in its header, a wave still in flight (live `waves/WAVE-nnnn-*.md`), and a negated
   board line ("not accepted"). A regression test also pins that naming pre-existing symbols is
-  never a signal, since this check reads tracker records only and never the source tree.
+  never a signal, since this check reads tracker records only and never the source tree. The
+  `HIPRI` marker is covered too: it's accepted for every lifecycle prefix without ever being
+  flagged malformed, and the summary's HIPRI count/listing is exercised end-to-end.
 
 - `test_push.py` -- **juneau-only exception** to the byte-for-byte-identical rule below: covers
   the `--tracker-audit` opt-in gate in `scripts/push.py`, which only exists in juneau's copy

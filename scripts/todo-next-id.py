@@ -81,6 +81,7 @@ Usage:
     ./scripts/todo-next-id.py --list-claims
     ./scripts/todo-next-id.py --check 12
     ./scripts/todo-next-id.py --finalize 12 short-slug
+    ./scripts/todo-next-id.py --finalize 12 short-slug --hipri
     ./scripts/todo-next-id.py --root ~/Project Work
 
 Options:
@@ -100,6 +101,15 @@ Options:
                     Fails loudly (never falls back to a permissive outcome) if <id> is
                     malformed or lettered, if no stub exists for it, or if the final path
                     already exists. See do_finalize() and the module docstring above.
+    --hipri         High-priority marker. Combined with --finalize, inserts "HIPRI-" between
+                    the id and the slug in the finalized filename
+                    ("TODO-<id>-HIPRI-<slug>.md") instead of "TODO-<id>-<slug>.md" -- see
+                    @todo-and-waves's "High-priority (HIPRI) TODOs" section for the semantics
+                    (soft-strong wave inclusion, not a hard gate) and for how the same marker
+                    composes with every other lifecycle prefix (MAYBE-/READY-/FINISHED-/...),
+                    including ones this script never renders itself. Has no effect without
+                    --finalize; a bare id-granting call's printed token never carries the
+                    marker, so this flag alone does not change what that call prints.
     --allow-missing Treat an absent ~/Project Work/todos/juneau/ as empty instead of an error.
     --help, -h      Show this help message.
 
@@ -331,7 +341,7 @@ def claim_next_id(todo_dir: Path, numeric_ids: set) -> int:
     )
 
 
-def do_finalize(todo_dir: Path, raw_id: str, raw_slug: str) -> int:
+def do_finalize(todo_dir: Path, raw_id: str, raw_slug: str, *, hipri: bool = False) -> int:
     """
     Perform the stub -> real-plan transition as a single atomic operation (os.rename), so no
     calling convention -- a manual rename, or (the bug this closes) writing the real plan
@@ -344,6 +354,11 @@ def do_finalize(todo_dir: Path, raw_id: str, raw_slug: str) -> int:
     would be unwieldy and buys no extra safety -- the risky step was never "writing content"
     (safe under a name only the claimant can rename), it was "which filename ends up holding
     the final state", which this makes the one atomic step the script itself owns.
+
+    hipri: when true, inserts the "HIPRI-" high-priority marker between the id and the slug in
+    the final filename ("TODO-<id>-HIPRI-<slug>.md" instead of "TODO-<id>-<slug>.md") -- see
+    @todo-and-waves's "High-priority (HIPRI) TODOs" section. Purely a filename-shape choice; it
+    changes nothing else about finalize's atomicity or its failure modes below.
 
     Fails loudly on each of the following -- an ambiguous or unreadable state must not resolve
     to the permissive outcome -- rather than guessing or silently overwriting:
@@ -385,7 +400,8 @@ def do_finalize(todo_dir: Path, raw_id: str, raw_slug: str) -> int:
 
     formatted = format_id(digits)
     stub_path = todo_dir / f"TODO-{formatted}{CLAIM_SUFFIX}"
-    final_path = todo_dir / f"TODO-{formatted}-{raw_slug}.md"
+    slug_segment = f"HIPRI-{raw_slug}" if hipri else raw_slug
+    final_path = todo_dir / f"TODO-{formatted}-{slug_segment}.md"
 
     if not stub_path.is_file():
         print(
@@ -434,8 +450,18 @@ def main():
         help="Atomically rename ID's claim stub to 'TODO-<ID>-<SLUG>.md' (see do_finalize()). "
              "The real plan must already be written into the stub file in place.",
     )
+    parser.add_argument(
+        "--hipri",
+        action="store_true",
+        help="High-priority marker. With --finalize, insert 'HIPRI-' between the id and the "
+             "slug in the finalized filename ('TODO-<id>-HIPRI-<slug>.md'). No effect without "
+             "--finalize. See @todo-and-waves's 'High-priority (HIPRI) TODOs' section.",
+    )
     parser.add_argument("--allow-missing", action="store_true", help="Treat an absent tracker as empty instead of an error.")
     args = parser.parse_args()
+
+    if args.hipri and args.finalize is None:
+        print("NOTE: --hipri has no effect without --finalize (it only changes the finalized filename).", file=sys.stderr)
 
     project_work = Path(args.root).expanduser().resolve() if args.root else PROJECT_WORK
     todo_dir = project_work / "todos" / TRACKER_SLUG
@@ -457,7 +483,7 @@ def main():
         print(f"WARNING: {todo_dir} does not exist; treating as empty (--allow-missing).", file=sys.stderr)
 
     if args.finalize is not None:
-        return do_finalize(todo_dir, args.finalize[0], args.finalize[1])
+        return do_finalize(todo_dir, args.finalize[0], args.finalize[1], hipri=args.hipri)
 
     if args.list_claims:
         claim_re = re.compile(rf"^TODO-{re.escape(ID_PROJECT_LETTER)}(\d+){re.escape(CLAIM_SUFFIX)}$")

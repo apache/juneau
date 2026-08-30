@@ -29,6 +29,12 @@ candidate inconsistencies. This is a PRE-FILTER, not a validator: it flags candi
 human (or agent) to look at, and will not catch everything on format-drifted files -- tolerant,
 best-effort markdown-header parsing throughout.
 
+A filename's optional "-HIPRI-" segment (immediately after the id, before the slug -- see
+@todo-and-waves's "High-priority (HIPRI) TODOs" section) is accepted as an ordinary slug
+component by FILENAME_RE for every lifecycle prefix above; it is never flagged malformed. The
+scan summary reports a HIPRI count/listing (see HIPRI_MARKER_RE and main() below) purely as a
+convenience -- it is not itself a check and never contributes a flag.
+
 Checks performed (each file may accumulate multiple flags):
   - missing_status_header       No "Current status:" line found anywhere in the file.
   - missing_complexity_header   No "Complexity:" line found anywhere in the file.
@@ -323,9 +329,10 @@ from pathlib import Path
 
 # ---------------------------------------------------------------------------------------
 # The ONLY repo-specific values in this file: REPO_LABEL / TRACKER_SLUG / FILENAME_RE (which
-# embeds this project's id letter) and CLAIM_STUB_RE (the same letter, one more place it
-# appears). Everything below is identical across every copy of this script; keep it that way
-# so a fix lands once and is copied verbatim.
+# embeds this project's id letter), CLAIM_STUB_RE (the same letter, one more place it
+# appears), and HIPRI_MARKER_RE (the same letter again, purely for the HIPRI count/listing --
+# see below). Everything below is identical across every copy of this script; keep it that
+# way so a fix lands once and is copied verbatim.
 # ---------------------------------------------------------------------------------------
 REPO_LABEL = "Apache Juneau"
 SKILL_NAME = "todo-and-waves"
@@ -343,6 +350,17 @@ FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE|HOLD|NEED_INPUT)-J\d+[a-z0-9]*-.*\
 # reservation must keep counting as "taken"), but is routed to audit_claim_stub() below
 # instead of audit_file(): it is a distinct file kind, not a malformed plan file.
 CLAIM_STUB_RE = re.compile(r"^TODO-J\d+-CLAIMED\.md$")
+
+# A HIGH-PRIORITY marker: "-HIPRI-" immediately after the id (and any letter-child suffix),
+# before the slug, composing with every lifecycle prefix -- READY-J0447-HIPRI-slug.md,
+# MAYBE-J0447-HIPRI-slug.md, and (deliberately kept through archival) FINISHED-J0447-HIPRI-slug.md.
+# See @todo-and-waves's "High-priority (HIPRI) TODOs" section.
+#
+# FILENAME_RE's trailing ".*" already accepts "-HIPRI-<slug>" as an ordinary slug component --
+# a HIPRI filename was never flagged malformed, before or after this pattern existed, for any
+# lifecycle prefix. This regex is not a stricter gate and changes no file's flags; it exists
+# solely so main() can count/list HIPRI items in the scan summary below.
+HIPRI_MARKER_RE = re.compile(r"^(?:TODO|READY|MAYBE|HOLD|NEED_INPUT)-J\d+[a-z0-9]*-HIPRI-.*\.md$")
 
 # The leading numeric id shared by a claim stub and any real (non-stub) plan filename for the
 # same numbered item -- letter suffix and slug excluded. Used only to group files by id for the
@@ -1251,6 +1269,15 @@ def main() -> int:
             print()
         elif args.verbose:
             print(f"{path.name}  OK")
+
+    # HIPRI is a convenience listing, never a flag (see HIPRI_MARKER_RE above): it does not
+    # affect flagged_count or the exit code, only what gets printed in the summary.
+    hipri_files = [p for p in files if HIPRI_MARKER_RE.match(p.name)]
+    if hipri_files:
+        names = ", ".join(p.name for p in hipri_files)
+        print(f"HIPRI: {len(hipri_files)} of {len(files)} file(s): {names}")
+    else:
+        print(f"HIPRI: 0 of {len(files)} file(s).")
 
     print(f"Scanned {len(files)} file(s); {flagged_count} flagged.")
     return 1 if flagged_count else 0

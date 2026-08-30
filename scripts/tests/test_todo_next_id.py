@@ -346,6 +346,85 @@ class TestFinalize:
         assert not stub_2.exists()
 
 
+class TestFinalizeHipri:
+    """Covers --hipri: the high-priority marker inserted between the id and the slug in the
+    finalized filename. See @todo-and-waves's "High-priority (HIPRI) TODOs" section -- the
+    marker composes with every lifecycle prefix the same way, but this script only ever
+    renders the TODO- form itself (via --finalize), so that is all that is tested here."""
+
+    def test_hipri_true_inserts_the_marker_between_id_and_slug(self, next_id_module, tmp_path):
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        letter = next_id_module.ID_PROJECT_LETTER
+        stub = todo_dir / f"TODO-{letter}0001-CLAIMED.md"
+        stub.write_text("# Real plan\n", encoding="utf-8")
+
+        exit_code = next_id_module.do_finalize(todo_dir, "1", "short-slug", hipri=True)
+
+        assert exit_code == 0
+        assert not stub.exists()
+        final_path = todo_dir / f"TODO-{letter}0001-HIPRI-short-slug.md"
+        assert final_path.is_file()
+        assert final_path.read_text(encoding="utf-8") == "# Real plan\n"
+
+    def test_hipri_false_is_the_default_and_omits_the_marker(self, next_id_module, tmp_path):
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        letter = next_id_module.ID_PROJECT_LETTER
+        stub = todo_dir / f"TODO-{letter}0001-CLAIMED.md"
+        stub.write_text("placeholder\n", encoding="utf-8")
+
+        exit_code = next_id_module.do_finalize(todo_dir, "1", "short-slug")
+
+        assert exit_code == 0
+        assert (todo_dir / f"TODO-{letter}0001-short-slug.md").is_file()
+        assert not (todo_dir / f"TODO-{letter}0001-HIPRI-short-slug.md").exists()
+
+    def test_hipri_cli_flag_end_to_end(self, scripts_dir, next_id_module, tmp_path):
+        """The full --hipri path through the CLI, not just do_finalize() directly."""
+        project_work = tmp_path / "Project Work"
+        claim_result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-next-id.py"), "--root", str(project_work), "--allow-missing"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        assert claim_result.returncode == 0, claim_result.stderr
+        claimed_id = claim_result.stdout.strip()
+
+        todo_dir = project_work / "todos" / next_id_module.TRACKER_SLUG
+        stub = todo_dir / f"TODO-{claimed_id}-CLAIMED.md"
+        stub.write_text("# The real plan\n", encoding="utf-8")
+
+        finalize_result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-next-id.py"), "--root", str(project_work), "--finalize", claimed_id, "short-slug", "--hipri"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+
+        assert finalize_result.returncode == 0, finalize_result.stderr
+        final_path = todo_dir / f"TODO-{claimed_id}-HIPRI-short-slug.md"
+        assert final_path.is_file()
+        assert final_path.read_text(encoding="utf-8") == "# The real plan\n"
+
+    def test_hipri_without_finalize_is_a_harmless_noop_with_a_note(self, scripts_dir, tmp_path):
+        """--hipri only affects the finalized filename; used alone it must not change the
+        bare id-granting call's behavior or its stdout token, but should say so on stderr."""
+        project_work = tmp_path / "Project Work"
+
+        result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-next-id.py"), "--root", str(project_work), "--allow-missing", "--hipri"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+
+        assert result.returncode == 0, result.stderr
+        assert "HIPRI" not in result.stdout  # the printed id token is unaffected
+        assert "--hipri has no effect without --finalize" in result.stderr
+
+
 class TestCliEndToEnd:
     """A couple of real subprocess invocations, to catch bugs hiding in argument parsing /
     main() wiring that direct function calls above can't see."""
