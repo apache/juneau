@@ -15,6 +15,10 @@ e2e/.playwright/
 # Python bytecode from the scripts/ tooling
 scripts/__pycache__/
 
+# Tracker scripts, consolidated 2026-08-30 into ~/Project Work/scripts/ (--project release-manager)
+scripts/todo-next-id.py
+scripts/todo-status-audit.py
+
 # Local Cursor / AI assistant working files (not part of the Apache source tree)
 AGENTS.md
 .cursor/
