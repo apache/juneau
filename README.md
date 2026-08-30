@@ -20,7 +20,7 @@ build/verify, staging, vote orchestration, and promotion.
 
 This tooling currently depends on `10.0.0-SNAPSHOT` of several Juneau modules
 (`juneau-rest-server-springboot`, `juneau-rest-server-view-freemarker`,
-`juneau-secret-keychain`). The `<juneau.version>` property will be pinned to
+`juneau-secret-macos-keychain`). The `<juneau.version>` property will be pinned to
 `10.0.0` once Juneau 10.0 GA is published. The project's own version
 (`1.0.0-SNAPSHOT`) is intentionally unreleased.
 

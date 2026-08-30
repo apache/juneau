@@ -230,15 +230,16 @@ tr.detail-row dd {
    DataTables integration (Release Manager app only — not part of the mockup)
    ==========================================================================
 
-   The app keeps its real vendored jQuery + DataTables (static/datatables/*)
-   and existing per-tab init JS; nothing below changes DataTables' markup,
-   classes, or behavior. These rules only restyle DataTables' own generated
-   controls (div.dt-container, .dt-length, .dt-search, .dt-info, .dt-paging —
-   the DataTables 2.x class names) with the chrome tokens so the enhanced
-   grid matches the mockup. table.rm-table's rules above already apply to
-   the DataTables-enhanced table itself, since DataTables adds its own
-   "dataTable" class alongside — not instead of — the "rm-table" class this
-   app puts on the <table> element.
+   The app keeps its real vendored jQuery + DataTables (static/datatables/*);
+   the juneau-views toolkit owns initialization and hides DataTables' own
+   length-select, paging row, and entry-count controls in favour of its own
+   toolbar and paging pill (see juneau-views.css / juneau-views.js). These
+   rules only restyle the controls DataTables still renders — the search
+   field (div.dt-container, .dt-search, the DataTables 2.x class names) —
+   plus the enhanced table's own sort-affordance header. table.rm-table's
+   rules above already apply to the DataTables-enhanced table itself, since
+   DataTables adds its own "dataTable" class alongside — not instead of —
+   the "rm-table" class this app puts on the <table> element.
    ========================================================================== */
 
 div.dt-container {
@@ -247,17 +248,12 @@ div.dt-container {
   font-size: 0.8125rem;
 }
 
-div.dt-container .dt-length,
-div.dt-container .dt-search,
-div.dt-container .dt-info,
-div.dt-container .dt-paging {
+div.dt-container .dt-search {
   color: #3e3e3c;
   padding: 6px 2px;
 }
 
 div.dt-container .dt-search input,
-div.dt-container .dt-length select,
-div.dt-container select.dt-input,
 div.dt-container input.dt-input {
   font-family: var(--jc-font);
   font-size: 0.8125rem;
@@ -288,24 +284,6 @@ table.dataTable.rm-table thead > tr > th .dt-column-order:after {
 table.dataTable.rm-table thead > tr > th.dt-ordering-asc .dt-column-order:before,
 table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after {
   color: var(--jc-accent);
-}
-
-div.dt-container .dt-paging .dt-paging-button {
-  font-family: var(--jc-font);
-  border-radius: var(--jc-radius);
-}
-
-div.dt-container .dt-paging .dt-paging-button.current,
-div.dt-container .dt-paging .dt-paging-button.current:hover {
-  background: var(--jc-accent) !important;
-  border-color: var(--jc-accent) !important;
-  color: var(--jc-white) !important;
-}
-
-div.dt-container .dt-paging .dt-paging-button:not(.current):not(.disabled):hover {
-  background: var(--jc-accent-wash) !important;
-  border-color: var(--jc-accent) !important;
-  color: var(--jc-text) !important;
 }
 
 /* ==========================================================================

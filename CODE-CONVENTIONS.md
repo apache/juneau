@@ -1,10 +1,11 @@
 # Code conventions
 
-These conventions derive from Apache Juneau's `juneau-code-conventions` skill
-(in `apache/juneau` at `.claude/skills/juneau-code-conventions/SKILL.md`), adapted for this
-**standalone Spring Boot + Apache Juneau application**. They are the checklist for a "READY-0
-review" of this repo: a future session can run the review against this file without re-deriving
-the rules from the upstream skill.
+**Release Manager follows `@juneau-code-conventions` as its baseline** (James, 2026-08-30: "rm and ssc
+should follow juneau-code-conventions" — `apache/juneau` at `agents/skills/juneau-code-conventions/SKILL.md`,
+canonical; the `.claude/skills/` path is a symlink into it), adapted for this **standalone Spring Boot +
+Apache Juneau application** since this repo depends only on Juneau's public API rather than being part of
+`apache/juneau` itself. This file is the checklist for a "READY-0 review" of this repo: a future session can
+run the review against this file without re-deriving the rules from the upstream skill.
 
 This project depends only on Apache Juneau's **public API** (Juneau `10.0.0-SNAPSHOT`) plus Spring
 Boot; it is **not** part of `apache/juneau`. Some upstream conventions rely on Juneau's *internal*

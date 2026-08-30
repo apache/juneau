@@ -1,0 +1,62 @@
+<h2>Detail panel — what happens when you click a pill?</h2>
+<p class="subtitle">Layout B is set. Now the interaction: clicking a pill selects it and shows its detail on the right. Prerequisite pills and credential pills need slightly different panels. Does this model look right? (Click either panel to confirm it, or tell me what to change in the terminal.)</p>
+
+<style>
+  .dp-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .dp-ok{background:#2e7d32}.dp-fail{background:#c62828}.dp-warn{background:#e6a100}.dp-gray{background:#9aa0a6}
+  .dp-tabs{display:flex;gap:4px;margin-bottom:0}
+  .dp-tab{font-size:11px;padding:3px 10px;border:1px solid #d0d3d6;border-bottom:none;border-radius:6px 6px 0 0;background:#f2f4f6}
+  .dp-tab.act{background:#fff;border-color:#89b7e8;border-bottom:1px solid #fff;font-weight:600;color:#1a4f86}
+  .dp-body{border:1px solid #89b7e8;border-radius:0 6px 6px 6px;padding:10px;background:#fff;min-height:150px}
+  .dp-title{font-weight:600;margin-bottom:2px}
+  .dp-line{font-size:12px;color:#4a4f54;margin:3px 0;font-family:ui-monospace,Menlo,monospace}
+  .dp-input{width:100%;box-sizing:border-box;border:1px solid #c0c4c8;border-radius:6px;padding:6px 8px;font-family:ui-monospace,Menlo,monospace;margin:6px 0}
+  .dp-btn{display:inline-block;font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #c0c4c8;background:#f7f8f9;margin:2px 4px 2px 0}
+  .dp-btn.pri{background:#1a6fc4;border-color:#1a6fc4;color:#fff}
+  .dp-btn.danger{color:#c62828}
+  .dp-meta{font-size:11px;color:#6b7075;margin-top:8px}
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="prereq-panel" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#eef1f4">
+      <div class="dp-tabs"><span class="dp-tab act">Result</span></div>
+      <div class="dp-body">
+        <div class="dp-title"><span class="dp-dot dp-warn"></span>apache/juneau checkout</div>
+        <div class="dp-line">path: ~/git/apache/juneau</div>
+        <div class="dp-line">git -C &lt;path&gt; rev-parse &rarr; not a work tree</div>
+        <div style="margin-top:10px">
+          <span class="dp-btn pri">Clone now</span>
+          <span class="dp-btn">Re-check</span>
+        </div>
+        <div class="dp-meta">Self-heal: the app already clones the staging repo, so it can clone this too. Tools like <code>gh</code>/<code>gpg</code> that can't be auto-installed show an install hint + Re-check only.</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Prerequisite pill</h3>
+      <p>Result tab only. Shows the check output; offers <b>Re-check</b>, plus a self-heal action (e.g. <b>Clone now</b>) where the app can fix it.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="cred-panel" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#eef1f4">
+      <div class="dp-tabs"><span class="dp-tab">Result</span><span class="dp-tab act">Value</span></div>
+      <div class="dp-body">
+        <div class="dp-title"><span class="dp-dot dp-fail"></span>GitHub token</div>
+        <input class="dp-input" type="password" value="ghp_xxxxxxxxxxxxxxxx" />
+        <div>
+          <span class="dp-btn pri">Store to Keychain</span>
+          <span class="dp-btn">Validate</span>
+          <span class="dp-btn danger">Delete</span>
+        </div>
+        <div class="dp-meta">Value tab: enter the secret &rarr; stored to macOS Keychain (never shown back). Result tab shows the last validation (<code>gh api user &rarr; 401</code>).</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Credential pill</h3>
+      <p>Adds a <b>Value</b> tab for secret entry (Keychain-backed), plus <b>Validate</b> / <b>Delete</b>. This is what replaces the old Credentials tab.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:14px">Open questions I'll ask next (one at a time): does the top-level <b>Credentials</b> tab disappear entirely once these are pills? And should cheap checks auto-run on page load (IRS "short probe" style) while network validations stay manual/gray until clicked?</p>

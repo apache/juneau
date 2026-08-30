@@ -78,7 +78,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.juneau</groupId>
-            <artifactId>juneau-secret-keychain</artifactId>
+            <artifactId>juneau-secret-macos-keychain</artifactId>
             <version>${juneau.version}</version>
         </dependency>
         <!-- FreeMarker engine (provided-scope in the bridge module; supply it here). -->

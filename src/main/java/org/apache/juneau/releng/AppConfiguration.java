@@ -60,7 +60,7 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
 import org.apache.juneau.rest.server.filter.SynchronizerToken;
-import org.apache.juneau.secret.keychain.KeychainSecretStore;
+import org.apache.juneau.secret.macos.keychain.KeychainSecretStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
