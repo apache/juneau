@@ -183,6 +183,100 @@ class TestDocumentedPrefixesAreScanned:
         assert audit_module.find_plan_files(todo_dir) == []
 
 
+class TestHipriMarker:
+    """Covers HIPRI_MARKER_RE and the scan summary's HIPRI count/listing. See @todo-and-waves's
+    "High-priority (HIPRI) TODOs" section: the "-HIPRI-" segment sits immediately after the id,
+    before the slug, and composes with every lifecycle prefix -- never flagged malformed."""
+
+    @pytest.mark.parametrize("prefix", ["TODO", "READY", "MAYBE", "HOLD", "NEED_INPUT"])
+    def test_hipri_filename_is_never_flagged_malformed_for_any_prefix(self, audit_module, next_id_module, tmp_path, prefix):
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        letter = next_id_module.ID_PROJECT_LETTER
+        path = todo_dir / f"{prefix}-{letter}0001-HIPRI-sample.md"
+        # Whatever status this prefix requires to be lifecycle-clean; the point is that the
+        # filename itself never trips any check, HIPRI or otherwise.
+        status = {
+            "TODO": "Not yet started.",
+            "MAYBE": "Parked -- low priority.",
+            "HOLD": "On hold pending a decision.",
+        }.get(prefix, "Ready to execute.")
+        _write_plan(path, status=status)
+
+        assert audit_module.FILENAME_RE.match(path.name)
+        assert path in audit_module.find_plan_files(todo_dir)
+        flags = {code for code, _ in audit_module.audit_file(path)}
+        assert not flags, f"a HIPRI filename must never itself be flagged, got {flags}"
+
+    def test_hipri_marker_re_matches_every_lifecycle_prefix(self, audit_module, next_id_module):
+        letter = next_id_module.ID_PROJECT_LETTER
+        for prefix in ("TODO", "READY", "MAYBE", "HOLD", "NEED_INPUT"):
+            name = f"{prefix}-{letter}0007-HIPRI-sample-slug.md"
+            assert audit_module.HIPRI_MARKER_RE.match(name), f"HIPRI_MARKER_RE should match {name}"
+
+    def test_hipri_marker_re_does_not_match_a_non_hipri_filename(self, audit_module, next_id_module):
+        letter = next_id_module.ID_PROJECT_LETTER
+        assert not audit_module.HIPRI_MARKER_RE.match(f"TODO-{letter}0007-sample-slug.md")
+
+    def test_hipri_marker_re_matches_a_lettered_child(self, audit_module, next_id_module):
+        """The marker sits after any letter-child suffix too, e.g. TODO-J0174a-HIPRI-slug.md."""
+        letter = next_id_module.ID_PROJECT_LETTER
+        assert audit_module.HIPRI_MARKER_RE.match(f"TODO-{letter}0174a-HIPRI-sample-slug.md")
+
+    def test_summary_reports_zero_hipri_files_when_none_present(self, scripts_dir, next_id_module, tmp_path):
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        _write_plan(todo_dir / _plan_filename(next_id_module, "TODO", 1), status="Not yet started.")
+
+        result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-status-audit.py"), "--dir", str(todo_dir)],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+
+        assert result.returncode == 0, result.stdout
+        assert "HIPRI: 0 of 1 file(s)." in result.stdout
+
+    def test_summary_counts_and_lists_hipri_files(self, scripts_dir, next_id_module, tmp_path):
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        letter = next_id_module.ID_PROJECT_LETTER
+        hipri_name = f"READY-{letter}0002-HIPRI-urgent-fix.md"
+        _write_plan(todo_dir / hipri_name, status="Ready to execute.")
+        _write_plan(todo_dir / _plan_filename(next_id_module, "TODO", 1), status="Not yet started.")
+
+        result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-status-audit.py"), "--dir", str(todo_dir)],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+
+        assert result.returncode == 0, result.stdout
+        assert f"HIPRI: 1 of 2 file(s): {hipri_name}" in result.stdout
+
+    def test_hipri_count_never_contributes_a_flag_or_changes_exit_code(self, scripts_dir, next_id_module, tmp_path):
+        """The listing is a convenience, not a check: a HIPRI file with a real problem is still
+        flagged for that problem (and only that problem), and a clean one keeps the run green."""
+        todo_dir = tmp_path / "todos"
+        todo_dir.mkdir()
+        letter = next_id_module.ID_PROJECT_LETTER
+        clean = todo_dir / f"READY-{letter}0001-HIPRI-clean.md"
+        _write_plan(clean, status="Ready to execute.")
+
+        result = subprocess.run(
+            [sys.executable, str(scripts_dir / "todo-status-audit.py"), "--dir", str(todo_dir)],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+
+        assert result.returncode == 0, result.stdout
+        assert "HIPRI: 1 of 1 file(s)" in result.stdout
+        assert "Scanned 1 file(s); 0 flagged." in result.stdout
+
+
 class TestEmptyStatusValue:
     """Both directions matter: a check that never fires is as useless as one that always
     does. empty_status_value must fire on structurally-blank values and stay silent on the
