@@ -109,16 +109,15 @@ jobs:
     - name: Show Node version
       run: node --version && npm --version
     # -pl/-am rather than -f: -f would resolve the module's SNAPSHOT dependencies from ~/.m2, which a cold runner does
-    # not have.  -Dtest= narrows Surefire to the harness so the upstream modules are built but not re-tested; the
-    # matrix job above is what runs their suites, including the always-on markup/CSS half of this same contract.
+    # not have.  -pl -am builds the upstream modules but does not re-test them; the matrix job above is what runs
+    # their suites, including the always-on markup/CSS half of this same contract.  This step runs the module's
+    # full *_BrowserTest suite.
     - name: Run JS harness
       run: >
         mvn --no-transfer-progress --batch-mode --show-version
         -Pjs-tests
         -pl juneau-rest/juneau-rest-server-views -am
         test
-        -Dtest=PagePanelVisibility_BrowserTest
-        -Dsurefire.failIfNoSpecifiedTests=false
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
     # Surefire already prints each failed assertion with the full rendered-state JSON attached, which is the actual
     # diagnosis (a panel reported as "jc-subpanel jc-active" with "visible":false is the blank-tab defect, stated).
@@ -141,6 +140,6 @@ jobs:
         echo 'Contract being asserted: PageTable.java javadoc, "Panel markup contract".'
         echo '================================================================================'
         echo '--- Surefire report ---'
-        cat "${VIEWS}"/target/surefire-reports/*PagePanelVisibility_BrowserTest.txt 2>/dev/null || echo '(none - the failure was before the tests ran)'
+        cat "${VIEWS}"/target/surefire-reports/*_BrowserTest.txt 2>/dev/null || echo '(none - the failure was before the tests ran)'
         echo '--- Prober stderr (non-empty only if Chromium or Node itself failed) ---'
         cat "${VIEWS}/target/js/prober-stderr.txt" 2>/dev/null || echo '(none)'

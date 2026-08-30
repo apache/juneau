@@ -157,14 +157,23 @@ final class ChromeScaleScanner {
 			"a third small-glyph consumer; enrolling it widens a named glyph role and is not this contract's call")
 	);
 
-	/** Properties a chrome surface sizes with, and the step families each may legitimately spend. */
+	/**
+	 * Properties a chrome surface sizes with, and the step families each may legitimately spend.
+	 *
+	 * <p>
+	 * {@code padding-left}/{@code padding-right} are the longhand-only reading of {@code CONTROL_PADDING_X}
+	 * (the {@code padding} shorthand is not parsed to isolate its horizontal component - a shorthand
+	 * declaration hiding the value is an accepted, stated limitation).
+	 */
 	private static final Map<String,Set<Family>> CHECKED_PROPERTIES = Map.of(
 		"height", Set.of(Family.CONTROL_HEIGHT, Family.SPACE, Family.GLYPH),
 		"min-height", Set.of(Family.CONTROL_HEIGHT, Family.SPACE),
 		"font-size", Set.of(Family.FONT_SIZE),
 		"gap", Set.of(Family.SPACE),
 		"line-height", Set.of(Family.LINE_HEIGHT),
-		"width", Set.of(Family.GLYPH)
+		"width", Set.of(Family.GLYPH),
+		"padding-left", Set.of(Family.CONTROL_PADDING_X),
+		"padding-right", Set.of(Family.CONTROL_PADDING_X)
 	);
 
 	/** {@code width} is only a scale property on an SVG glyph; elsewhere it is a content measure. */
@@ -178,6 +187,14 @@ final class ChromeScaleScanner {
 
 	/** Matches an absolute length/size token. */
 	private static final Pattern ABSOLUTE = Pattern.compile("(?<![\\w.-])(\\d*\\.?\\d+)(px|rem)(?![\\w-])");
+
+	/**
+	 * Matches a bare, unitless decimal. {@code line-height}'s scale step ({@code --jc-chrome-line-height},
+	 * {@code 1.2}) is the only step value in the ladder with no {@code px}/{@code rem} unit, so this pattern is
+	 * used only for the {@code line-height} property (see {@link #findDuplicatedStep}) - it must never widen
+	 * matching for any other property.
+	 */
+	private static final Pattern BARE_NUMBER = Pattern.compile("(?<![\\w.-])(\\d*\\.?\\d+)(?![\\w.%-])");
 
 	/** The steps this contract declares. */
 	static List<Step> scale() {
@@ -278,15 +295,18 @@ final class ChromeScaleScanner {
 	 * are violations either way; naming the apter one is what makes the message actionable.
 	 */
 	private static Step findDuplicatedStep(Decl d, Set<Family> families, List<Step> scale) {
-		var literals = absoluteValues(d.value());
+		// line-height's step value is unitless, so it needs bare-number matching instead of the general
+		// px/rem literal matcher - scoped to this one property so no other property's matching widens (LD-2).
+		var lineHeight = "line-height".equals(d.property());
+		var literals = lineHeight ? bareNumberValues(d.value()) : absoluteValues(d.value());
 		if (literals.isEmpty())
 			return null;
 		for (var roleNamed : List.of(true, false)) {
 			for (var s : scale) {
 				if (!s.confirmed() || !families.contains(s.family()) || (s.family() == Family.SPACE) == roleNamed)
 					continue;
-				var stepPx = toPx(s.value());
-				if (stepPx != null && literals.contains(stepPx))
+				var stepValue = lineHeight ? bareValue(s.value()) : toPx(s.value());
+				if (stepValue != null && literals.contains(stepValue))
 					return s;
 			}
 		}
@@ -324,6 +344,24 @@ final class ChromeScaleScanner {
 	private static Double toPx(String value) {
 		var m = ABSOLUTE.matcher(value);
 		return m.find() ? px(Double.parseDouble(m.group(1)), m.group(2)) : null;
+	}
+
+	/**
+	 * Every bare unitless number in a declaration's value, {@code var(...)} fallbacks excluded. Only ever called
+	 * for the {@code line-height} property (see {@link #findDuplicatedStep}).
+	 */
+	private static Set<Double> bareNumberValues(String value) {
+		var out = new LinkedHashSet<Double>();
+		var m = BARE_NUMBER.matcher(VAR_REF.matcher(value).replaceAll(" "));
+		while (m.find())
+			out.add(Double.parseDouble(m.group(1)));
+		return out;
+	}
+
+	/** The step-value counterpart to {@link #bareNumberValues}: a step's own value read as a bare number. */
+	private static Double bareValue(String value) {
+		var m = BARE_NUMBER.matcher(value);
+		return m.find() ? Double.parseDouble(m.group(1)) : null;
 	}
 
 	/** Normalises to px. {@code rem} resolves at the browser default because nothing here sets a root font-size. */

@@ -546,12 +546,24 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(onAccentVsFace >= 3.0, () -> "--jc-on-accent/selected-face contrast " + onAccentVsFace + ":1 is below WCAG 1.4.11's 3:1 floor");
 
 		// Substring pin: both rewritten selected-state selectors consume var(--jc-accent-selected), with no
-		// var() fallback (requirement 3) - exactly two "background-color: var(--jc-accent-selected)" sinks.
+		// var() fallback (requirement 3) - exactly three "background-color: var(--jc-accent-selected)" sinks.
 		var css = readChromeCss();
 		assertTrue(css.contains(".jc-tab.jc-tab-active,\n.jc-subtab.jc-subtab-active {"), () -> "missing raised-specificity selected selector, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {"), () -> "missing widget selected selector, css:\n" + css);
-		assertEquals(2, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
-			() -> "expected exactly the two selected-face rules to consume --jc-accent-selected, css:\n" + css);
+		assertEquals(3, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
+			() -> "expected exactly the three consumers of --jc-accent-selected: the two ribbon-format selected-state selectors plus .jc-nav-tab.active (added by J0484), css:\n" + css);
+	}
+
+	@Test void j05_navTabActive_consumesAccentSelectedToken_andNoLongerConsumesAccentWash() throws Exception {
+		var css = readChromeCss();
+		var navTabActiveStart = css.indexOf(".jc-nav-tab.active {");
+		assertTrue(navTabActiveStart != -1, () -> "missing .jc-nav-tab.active rule, css:\n" + css);
+		var navTabActiveEnd = css.indexOf("}", navTabActiveStart);
+		var navTabActiveBlock = css.substring(navTabActiveStart, navTabActiveEnd);
+		assertTrue(navTabActiveBlock.contains("background-color: var(--jc-accent-selected)"),
+			() -> "expected .jc-nav-tab.active to consume --jc-accent-selected, block:\n" + navTabActiveBlock);
+		assertFalse(navTabActiveBlock.contains("var(--jc-accent-wash)"),
+			() -> "expected .jc-nav-tab.active to no longer consume --jc-accent-wash, block:\n" + navTabActiveBlock);
 	}
 
 	/** WCAG 2.x contrast ratio between two {@code "#rrggbb"} literals: {@code (lighter+0.05)/(darker+0.05)}. */

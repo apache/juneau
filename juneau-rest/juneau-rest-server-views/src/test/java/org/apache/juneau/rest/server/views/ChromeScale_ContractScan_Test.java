@@ -152,4 +152,29 @@ class ChromeScale_ContractScan_Test extends TestBase {
 		assertTrue(ChromeScaleScanner.scan(".synthetic-cell { width: 16px; }").violations().isEmpty());
 		assertEquals(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 16px; }").violations().size());
 	}
+
+	/**
+	 * {@code CONTROL_PADDING_X} was structurally unscored before this fix - no property mapped onto it in
+	 * {@code CHECKED_PROPERTIES}, so a duplicated value could never be caught regardless of a step's
+	 * {@code confirmed} flag. Exercises both newly-wired longhand properties.
+	 */
+	@Test void b10_controlPaddingXCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-control { padding-left: 10px; padding-right: 14px; }");
+		assertEquals(2, r.violations().size(), () -> "expected both padding-left and padding-right to be caught: "
+			+ r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-control-padding-x (10px)"), r.violations().get(0));
+		assertTrue(r.violations().get(1).contains("--jc-chrome-control-padding-x-wide (14px)"), r.violations().get(1));
+	}
+
+	/**
+	 * {@code LINE_HEIGHT}'s only step value is unitless, so the general px/rem literal matcher could never bind
+	 * to it before this fix - {@code line-height} was already mapped in {@code CHECKED_PROPERTIES}, but nothing
+	 * could ever match. Proves the widened, {@code line-height}-scoped value-matching now catches it.
+	 */
+	@Test void b11_lineHeightCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-control { line-height: 1.2; }");
+		assertEquals(1, r.violations().size(), () -> "expected the duplicated line-height value to be caught: "
+			+ r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-line-height (1.2)"), r.violations().get(0));
+	}
 }

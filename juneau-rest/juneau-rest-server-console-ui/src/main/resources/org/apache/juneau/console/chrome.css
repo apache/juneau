@@ -324,9 +324,9 @@ a:hover { text-decoration: underline; }
 }
 
 .jc-nav-tab.active {
-  background-color: var(--jc-accent-wash);
+  background-color: var(--jc-accent-selected);
   border-top-color: var(--jc-accent);
-  color: var(--jc-text);
+  color: var(--jc-on-accent);
 }
 
 /* ==========================================================================
