@@ -1,8 +1,9 @@
 # scripts/tests/
 
 Pytest harness for the `scripts/` Python that has no other automated coverage:
-`todo-next-id.py`, `todo-status-audit.py`, and the two juneau-only scripts noted below
-(`push.py`'s tracker-audit gate and `reset-side-clones.py`). Everything here is hermetic --
+`todo-next-id.py`, `todo-status-audit.py`, and the three juneau-only scripts noted below
+(`push.py`'s tracker-audit gate, `reset-side-clones.py`, and `repin-consumers.py`). Everything
+here is hermetic --
 temp directories, synthetic fixture files, and real temporary git repositories built in
 fixtures -- and never touches the real `~/Project Work` trackers, the real `repos.md`, or the
 real side clones.
@@ -69,11 +70,25 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   behavior would prove almost nothing. Temp repos get their identity and config isolation from
   environment variables, never `git config`, which is the same rule the script enforces.
 
-Every OTHER file in this directory (i.e. all of the above except `test_push.py` and
-`test_reset_side_clones.py`) is intended to be byte-for-byte identical across every repo that
-carries `todo-next-id.py` / `todo-status-audit.py` -- the tests derive the project's id letter
-and tracker slug from the scripts themselves rather than hardcoding them, so nothing here
-needs to differ between copies.
+- `test_repin_consumers.py` -- **juneau-only exception** for the same reason: `repin-consumers.py`
+  re-pins the *other* two repos (Release Manager, Support Console) to a fresh local Juneau
+  build, so it lives and is tested only here. Covers the script's whole reason to exist -- the
+  dirty-tree guard that refuses to `mvn install` Juneau into the shared `~/.m2` unless
+  `git status --porcelain` is empty (modified tracked files, staged-only changes, and untracked
+  non-ignored files are each proven to trip it; a gitignored untracked file is proven not to) --
+  plus the small pure helpers around it (pom `<version>` parsing, HEAD-vs-`origin/master`
+  comparison) and `main()`'s exit-code contract. The refusal path is proven by monkeypatching
+  `run_streaming` to raise if it is ever called, so "refused" means "mvn was never invoked", not
+  just "the exit code was 1" -- the same style `test_push.py` and `test_reset_side_clones.py`
+  use. Built against real temporary git repositories for the same reason those two are: the
+  guard's entire risk is real `git status --porcelain` behavior, which a mocked subprocess
+  would let pass while proving nothing. Never runs a real `mvn` command.
+
+Every OTHER file in this directory (i.e. all of the above except `test_push.py`,
+`test_reset_side_clones.py`, and `test_repin_consumers.py`) is intended to be byte-for-byte
+identical across every repo that carries `todo-next-id.py` / `todo-status-audit.py` -- the
+tests derive the project's id letter and tracker slug from the scripts themselves rather than
+hardcoding them, so nothing here needs to differ between copies.
 
 **Intended** is not **actual**: the three copies of this README have diverged. Which repo is
 ahead of which, by exactly what text, and what restoring identity requires is recorded in

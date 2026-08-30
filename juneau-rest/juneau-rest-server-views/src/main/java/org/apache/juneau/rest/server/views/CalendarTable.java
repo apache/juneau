@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.apache.juneau.rest.server.widgets.CalendarDef.*;
 import org.apache.juneau.rest.server.widgets.EventCategory.*;
@@ -181,6 +182,43 @@ public class CalendarTable {
 	 * @return A new {@link Div} carrying the month grid, legend, {@code <template>}s, and optional seed sidecar.
 	 */
 	public static Div of(CalendarDef def, Clock clock) {
+		return of(def, clock, Locale.ENGLISH);
+	}
+
+	/**
+	 * Builds the calendar shell for the current request, localizing the month/year title against
+	 * {@link RestRequest#getLocale()} (honors {@code Accept-Language}).
+	 *
+	 * <p>
+	 * Everything else &mdash; weekday abbreviations, ARIA labels, seed events &mdash; is unaffected by this locale;
+	 * only the month/year title text (e.g. {@code "August 2026"}) localizes.  Uses the system-UTC clock; see
+	 * {@link #of(RestRequest, CalendarDef, Clock)} to supply a different one.
+	 *
+	 * @param req The current request, whose {@link RestRequest#getLocale()} supplies the title locale.  Must not be
+	 * 	<jk>null</jk>.
+	 * @param def The built calendar definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the month grid, legend, {@code <template>}s, and optional seed sidecar.
+	 */
+	public static Div of(RestRequest req, CalendarDef def) {
+		return of(req, def, Clock.systemUTC());
+	}
+
+	/**
+	 * Builds the calendar shell for the current request and the specified clock, localizing the month/year title
+	 * against {@link RestRequest#getLocale()} (honors {@code Accept-Language}).
+	 *
+	 * @param req The current request, whose {@link RestRequest#getLocale()} supplies the title locale.  Must not be
+	 * 	<jk>null</jk>.
+	 * @param def The built calendar definition.  Must not be <jk>null</jk>.
+	 * @param clock The clock supplying civil today and the default month.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the month grid, legend, {@code <template>}s, and optional seed sidecar.
+	 */
+	public static Div of(RestRequest req, CalendarDef def, Clock clock) {
+		return of(def, clock, req.getLocale());
+	}
+
+	/** The shared core of the {@code of(...)} overloads above; {@code locale} governs only the month/year title. */
+	private static Div of(CalendarDef def, Clock clock, Locale locale) {
 		var today = LocalDate.now(clock);
 		var year = def.initialYear != null ? def.initialYear : today.getYear();
 		var month = def.initialMonth != null ? def.initialMonth : today.getMonthValue();
@@ -192,7 +230,7 @@ public class CalendarTable {
 		var maxPerDay = def.effectiveMaxPerDay();
 
 		var root = div(
-			header(year, month, def.endpoint != null),
+			header(year, month, def.endpoint != null, locale),
 			grid(def, year, month, weekStart, today),
 			legend(def),
 			dayTemplate(),
@@ -217,7 +255,7 @@ public class CalendarTable {
 	}
 
 	/** Prev/next/today nav (disabled when seed-only) plus the {@code aria-live} month/year title. */
-	private static Div header(int year, int month, boolean nav) {
+	private static Div header(int year, int month, boolean nav, Locale locale) {
 		var prev = button(TYPE_BUTTON, "‹").attr("data-juneau-calendar-prev", "1")
 			.attr(ARIA_LABEL, "Previous month").class_("jc-cal-nav-btn");
 		var next = button(TYPE_BUTTON, "›").attr("data-juneau-calendar-next", "1")
@@ -231,7 +269,7 @@ public class CalendarTable {
 		}
 		return div(
 			div(prev, next, todayBtn).attr(NAV_ATTR, "1").class_("jc-cal-nav"),
-			div(monthTitle(year, month)).attr(TITLE_ATTR, "1").attr("aria-live", "polite").class_("jc-cal-title")
+			div(monthTitle(year, month, locale)).attr(TITLE_ATTR, "1").attr("aria-live", "polite").class_("jc-cal-title")
 		).class_("jc-cal-header");
 	}
 
@@ -447,8 +485,8 @@ public class CalendarTable {
 		return CategoryColor.NEUTRAL.token();
 	}
 
-	/** The English month/year title, e.g. {@code "August 2026"}. */
-	private static String monthTitle(int year, int month) {
-		return Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + year;
+	/** The month/year title in the given locale, e.g. {@code "August 2026"} for {@link Locale#ENGLISH}. */
+	private static String monthTitle(int year, int month, Locale locale) {
+		return Month.of(month).getDisplayName(TextStyle.FULL, locale) + " " + year;
 	}
 }

@@ -21,15 +21,18 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.filter.*;
+import org.apache.juneau.rest.server.vars.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 import jakarta.servlet.http.*;
@@ -383,6 +386,28 @@ public class ViewTable {
 	}
 
 	/**
+	 * Builds the view-table shell with no request in hand, resolving {@code $L} chrome against a caller-supplied,
+	 * already-locale-bound {@link Messages} bean (view-def string i18n, LD-4: the request-free localization seam).
+	 *
+	 * <p>
+	 * There is no {@link RestRequest} on this path, so the CSRF auto-embed, saved-views stamp, and {@code $FV}
+	 * server-values resolution the request-bearing overloads provide are not available here &mdash; only
+	 * {@code $L{key}} chrome (see {@link Column#titleKey}) resolves, against {@code messages}. {@code $L} resolved
+	 * this way is non-recursive (a resolved bundle value is emitted literally, never re-parsed as SVL); with
+	 * {@code messages} <jk>null</jk>, or for any chrome field with no {@code $L{...}} template, this is exactly
+	 * {@link #of(ViewDef) of(viewDef)} &mdash; no resolution, no lock, byte-identical output.
+	 *
+	 * @param messages The locale-bound message bundle to resolve {@code $L{...}} chrome against, or <jk>null</jk>
+	 * 	for none.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
+	 */
+	public static Div of(Messages messages, ViewDef viewDef) {
+		return emit(MarshallingContext.DEFAULT, viewDef, null, messages,
+			new RenderOptions(null, null, null, null, null, null));
+	}
+
+	/**
 	 * Builds the view-table shell for a server-side view whose emitted DOM identity is qualified by an enclosing
 	 * host, so two tables built from the SAME {@link ViewDef} can coexist on one page.
 	 *
@@ -639,18 +664,35 @@ public class ViewTable {
 	}
 
 	/**
-	 * The shared core.  Validates and reconciles selection/bulk-mutate, then &mdash; when a {@code $FV} host is
-	 * declared and {@code req} is a {@link RestRequest} &mdash; resolves that host's declared chrome
-	 * (titles/labels) against a per-response <b>sibling</b> {@link VarResolverSession} before building both the
-	 * painted {@code <th>}/labels and the VIEW_META sidecar, so the two agree (W1).  The resolved chrome is a
-	 * per-response snapshot: each host's author {@code $FV{...}} templates are restored once this response's markup
-	 * has captured the resolved strings.
+	 * The shared core, request/{@code Messages}-free overload.  Delegates to the {@code messages}-carrying core
+	 * with no message bundle, so every pre-existing caller keeps its exact current behavior.
+	 */
+	private static Div emit(MarshallingContext ctx, ViewDef viewDef, HttpServletRequest req, RenderOptions opts) {
+		return emit(ctx, viewDef, req, null, opts);
+	}
+
+	/**
+	 * The shared core.  Validates and reconciles selection/bulk-mutate, then &mdash; when a chrome-resolution
+	 * session is available (see {@link #chromeSession}) <b>and</b> that host's allowlisted chrome actually
+	 * contains a {@code $}-prefixed template (the lock-free pre-scan, view-def string i18n LD-1) &mdash; resolves
+	 * that host's declared chrome (titles/labels) against a per-response <b>sibling</b> {@link VarResolverSession}
+	 * before building both the painted {@code <th>}/labels and the VIEW_META sidecar, so the two agree (W1).  The
+	 * resolved chrome is a per-response snapshot: each host's author {@code $FV{...}}/{@code $L{...}} templates
+	 * are restored once this response's markup has captured the resolved strings.
+	 *
+	 * <p>
+	 * Resolution is no longer conditioned on {@link ViewDef#serverValues} being declared (LD-1): the pre-scan
+	 * alone gates it, so a def whose chrome carries only {@code $L{...}} (localization, no server-values provider)
+	 * is resolved exactly like one that also declares {@code serverValues}.  A def with no {@code $} anywhere in
+	 * its allowlisted chrome is never resolved, never mutated, never locked &mdash; the {@code indexOf('$') < 0}
+	 * guard in {@link #resolveField} plus this pre-scan mean that is structural, not merely expected (byte
+	 * stability).
 	 *
 	 * <h5 class='section'>Two hosts, one written lock order:</h5>
 	 * <p>
-	 * Two definitions reachable from here can host {@link ServerValues}: {@link ViewDef#serverValues} (the shipped
-	 * host, whose chrome is the column/action/ribbon titles) and {@link RowDetailDef#serverValues} (the row-detail
-	 * panel's own titles, painted into the {@code <template>} below).  They are resolved in the order
+	 * Two definitions reachable from here can host chrome resolution: {@link ViewDef} (the shipped host, whose
+	 * chrome is the column/action/ribbon titles) and {@link RowDetailDef} (the row-detail panel's own titles,
+	 * painted into the {@code <template>} below).  They are resolved in the order
 	 * <b>{@link RowDetailDef} then {@link ViewDef}</b> &mdash; the tail of the toolkit-wide
 	 * {@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef} order that {@link PageTable} opens.
 	 * Because that order is the same on every path that can reach either lock, no two threads can take the pair in
@@ -668,43 +710,49 @@ public class ViewTable {
 	 * {@link #of(HttpServletRequest, ViewDef, String)}); <jk>null</jk> on every non-hosted path, which is what keeps
 	 * an ordinary table's emitted ids exactly what they have always been.
 	 */
-	private static Div emit(MarshallingContext ctx, ViewDef viewDef, HttpServletRequest req, RenderOptions opts) {
+	private static Div emit(MarshallingContext ctx, ViewDef viewDef, HttpServletRequest req, Messages messages,
+			RenderOptions opts) {
 		viewDef.validate();
 		opts = opts.reconciled();
 
 		var rr = req instanceof RestRequest r ? r : null;
 		var detail = viewDef.details;
-		if (rr != null && detail != null && detail.serverValues != null) {
-			var session = serverValuesSession(rr, detail.serverValues);
-			// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
-			synchronized (detail.lock) {
-				var restore = resolveDetailChrome(detail, session);
-				try {
-					return emitViewHost(ctx, viewDef, rr, opts);
-				} finally {
-					restore.run();
+		if (detail != null && detailChromeHasVar(detail)) {
+			var session = chromeSession(rr, detail.serverValues, messages);
+			if (session != null) {
+				// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
+				synchronized (detail.lock) {
+					var restore = resolveDetailChrome(detail, session);
+					try {
+						return emitViewHost(ctx, viewDef, rr, messages, opts);
+					} finally {
+						restore.run();
+					}
 				}
 			}
 		}
-		return emitViewHost(ctx, viewDef, rr, opts);
+		return emitViewHost(ctx, viewDef, rr, messages, opts);
 	}
 
 	/**
-	 * The innermost {@code $FV} host: {@link ViewDef#serverValues} resolved around {@link #build}.
+	 * The innermost chrome host: {@link ViewDef}'s own column/action/ribbon titles resolved around {@link #build}.
 	 *
 	 * <p>
 	 * A shared {@link ViewDef} may be rendered concurrently, so the mutate-serialize-restore window is guarded and
 	 * two responses cannot interleave resolved chrome onto the same instance.
 	 */
-	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, RestRequest req, RenderOptions opts) {
-		if (viewDef.serverValues != null && req != null) {
-			var session = serverValuesSession(req, viewDef.serverValues);
-			synchronized (viewDef.lock) {
-				var restore = resolveChrome(viewDef, session);
-				try {
-					return build(ctx, viewDef, opts);
-				} finally {
-					restore.run();
+	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, RestRequest req, Messages messages,
+			RenderOptions opts) {
+		if (chromeHasVar(viewDef)) {
+			var session = chromeSession(req, viewDef.serverValues, messages);
+			if (session != null) {
+				synchronized (viewDef.lock) {
+					var restore = resolveChrome(viewDef, session);
+					try {
+						return build(ctx, viewDef, opts);
+					} finally {
+						restore.run();
+					}
 				}
 			}
 		}
@@ -1186,10 +1234,82 @@ public class ViewTable {
 	static VarResolverSession serverValuesSession(RestRequest rr, ServerValues serverValues) {
 		var restSession = rr.getVarResolverSession().getBean(RestSession.class).orElse(null);
 		var parentStore = restSession != null ? restSession.getBeanStore() : rr.getContext().getBeanStore();
-		var s = rr.getContext().getVarResolver().createSession(parentStore).bean(RestRequest.class, rr);
+		var s = chromeResolver(rr.getContext().getVarResolver()).createSession(parentStore).bean(RestRequest.class, rr);
 		if (restSession != null)
 			s.bean(RestSession.class, restSession);
-		return s.bean(ServerValuesRegistry.class, ServerValuesRegistry.of(serverValues));
+		// serverValues is null whenever the host declares no $FV provider (view-def string i18n LD-1 decoupled
+		// resolution from that condition); with no registry bound, $FV{...} simply reports canResolve()==false
+		// and stays literal (ServerValuesVar's own fail-open contract) -- $L{...} localization is unaffected.
+		if (serverValues != null)
+			s.bean(ServerValuesRegistry.class, ServerValuesRegistry.of(serverValues));
+		return s;
+	}
+
+	/**
+	 * The request-free {@code $L} localization seam (view-def string i18n LD-4): a chrome-resolution session bound
+	 * to a caller-supplied, already-locale-bound {@link Messages} bean, with no {@link RestRequest} in hand.
+	 * Carries only the chrome-scoped, non-recursive {@code $L} var (LD-2, see {@link #chromeResolver}); there is no
+	 * {@link ServerValuesRegistry} on this path, so {@code $FV} chrome does not resolve here (unchanged &mdash;
+	 * {@code $FV} has always required a request).
+	 */
+	private static final VarResolver MESSAGES_ONLY_RESOLVER = VarResolver.create().vars(new ChromeLocalizationVar()).build();
+
+	private static VarResolverSession messagesSession(Messages messages) {
+		return MESSAGES_ONLY_RESOLVER.createSession().bean(Messages.class, messages);
+	}
+
+	/**
+	 * Resolves the chrome-resolution session to use for one host, or {@code null} when there is nothing to resolve
+	 * against.  View-def string i18n LD-1 decouples this from {@code serverValues != null}: a
+	 * {@link RestRequest} alone is now enough (the pre-scans in {@link #chromeHasVar}/{@link #detailChromeHasVar}
+	 * gate whether this is even called).  LD-4 adds the {@code req == null} fallback: with no request, a
+	 * caller-supplied {@link Messages} bean still resolves {@code $L{...}}, via {@link #messagesSession}.  With
+	 * neither, {@code null} &mdash; the caller skips locking/resolving entirely, so a request-free,
+	 * {@code Messages}-free render is exactly as before this item.
+	 *
+	 * @param req The request, or <jk>null</jk>.
+	 * @param serverValues The host's own declared {@code $FV} provider, or <jk>null</jk> (LD-1: no longer gates
+	 * 	whether a session is built at all &mdash; only whether {@code $FV} itself can resolve within it).
+	 * @param messages A locale-bound message bundle for the {@code req == null} path, or <jk>null</jk>.
+	 * @return A session to resolve chrome against, or {@code null} if there is no context to resolve with.
+	 */
+	static VarResolverSession chromeSession(RestRequest req, ServerValues serverValues, Messages messages) {
+		if (req != null)
+			return serverValuesSession(req, serverValues);
+		if (messages != null)
+			return messagesSession(messages);
+		return null;
+	}
+
+	private static final ConcurrentHashMap<VarResolver, VarResolver> CHROME_RESOLVERS = new ConcurrentHashMap<>();
+
+	/**
+	 * Returns a chrome-resolution variant of {@code base} with {@code $L} swapped to {@link ChromeLocalizationVar}
+	 * (view-def string i18n LD-2, security).  Scoped to sessions built through this method (and
+	 * {@link #MESSAGES_ONLY_RESOLVER}, built the same way) only: {@code base} itself, and any session built
+	 * directly from it anywhere else in the framework, keeps {@code $L}'s ordinary recursive default &mdash; this
+	 * is not a change to {@link LocalizationVar#allowRecurse()} itself. {@link VarResolver.Builder#copy()} copies
+	 * {@code base}'s registered vars in order, and later-registered same-name vars win
+	 * ({@code VarResolver}'s own var-map construction), so appending {@link ChromeLocalizationVar} here overrides
+	 * exactly {@code base}'s own {@code "L"} registration in the copy, nothing else. Cached per {@code base}
+	 * (typically one {@link RestContext}'s memoized resolver) so the swap is paid at most once per resource.
+	 */
+	private static VarResolver chromeResolver(VarResolver base) {
+		return CHROME_RESOLVERS.computeIfAbsent(base, b -> b.copy().vars(new ChromeLocalizationVar()).build());
+	}
+
+	/**
+	 * {@code $L}, scoped non-recursive (view-def string i18n LD-2, security): a resolved bundle value is emitted
+	 * literally and never re-parsed as SVL, matching {@link ServerValuesVar#allowRecurse()}'s own precedent
+	 * (untrusted/locale-dependent bundle content must not be recursively resolved). Registered only into the
+	 * resolvers {@link #chromeResolver} and {@link #MESSAGES_ONLY_RESOLVER} build for the view-def
+	 * chrome-resolution path; {@code $L} used anywhere else in the framework keeps its ordinary recursive default.
+	 */
+	private static final class ChromeLocalizationVar extends LocalizationVar {
+		@Override /* Overridden from Var */
+		protected boolean allowRecurse() {
+			return false;
+		}
 	}
 
 	/**
@@ -1283,6 +1403,96 @@ public class ViewTable {
 		for (var f : fields)
 			if (f != null)
 				resolveField(restores, session, f.title, v -> f.title = v);
+	}
+
+	/**
+	 * The lock-free pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code viewDef}'s allowlisted
+	 * chrome ({@link #resolveChrome}'s exact field set: column/action/ribbon titles) contains at least one
+	 * {@code $}-prefixed template.  Read-only, no lock, no session &mdash; this is what lets
+	 * {@link #emitViewHost} skip locking and resolving entirely for a def with no template anywhere (byte
+	 * stability), and is what decouples resolution from {@link ViewDef#serverValues} being declared: a def with a
+	 * bare {@code $L{...}} title and no server-values provider now resolves too.  Must stay in lock-step with
+	 * {@link #resolveChrome}'s own field walk &mdash; every field the latter can mutate, this must also inspect.
+	 */
+	private static boolean chromeHasVar(ViewDef viewDef) {
+		return columnsChromeHasVar(viewDef.columns) || rowActionsChromeHasVar(viewDef.rowActions)
+			|| ribbonChromeHasVar(viewDef.ribbon);
+	}
+
+	private static boolean columnsChromeHasVar(List<Column> columns) {
+		if (columns == null)
+			return false;
+		for (var c : columns)
+			if (c != null && hasVar(c.title))
+				return true;
+		return false;
+	}
+
+	private static boolean rowActionsChromeHasVar(List<RowAction> rowActions) {
+		if (rowActions == null)
+			return false;
+		for (var a : rowActions)
+			if (a != null && hasVar(a.label))
+				return true;
+		return false;
+	}
+
+	private static boolean ribbonChromeHasVar(List<RibbonAction> ribbon) {
+		if (ribbon == null)
+			return false;
+		for (var r : ribbon) {
+			if (r == null)
+				continue;
+			if (hasVar(r.title))
+				return true;
+			if (r.options != null)
+				for (var o : r.options)
+					if (o != null && hasVar(o.title))
+						return true;
+		}
+		return false;
+	}
+
+	/**
+	 * The row-detail counterpart of {@link #chromeHasVar}: {@code true} only if {@code detail}'s allowlisted
+	 * chrome ({@link #resolveDetailChrome}'s exact field set: {@link RowDetailDef#title}, section titles, field
+	 * titles) contains at least one {@code $}-prefixed template.  Must stay in lock-step with
+	 * {@link #resolveDetailChrome}'s own field walk for the same reason {@link #chromeHasVar} must.
+	 */
+	private static boolean detailChromeHasVar(RowDetailDef detail) {
+		return hasVar(detail.title) || detailSectionsChromeHasVar(detail.sections);
+	}
+
+	private static boolean detailSectionsChromeHasVar(List<DetailSection> sections) {
+		if (sections == null)
+			return false;
+		for (var s : sections) {
+			if (s == null)
+				continue;
+			if (hasVar(s.title) || detailFieldsChromeHasVar(s.fields))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean detailFieldsChromeHasVar(List<DetailField> fields) {
+		if (fields == null)
+			return false;
+		for (var f : fields)
+			if (f != null && hasVar(f.title))
+				return true;
+		return false;
+	}
+
+	/**
+	 * The cheap allowlist pre-scan primitive (view-def string i18n LD-1 §5.1): {@code true} only if {@code s} is
+	 * non-<jk>null</jk> and carries a {@code $}-prefixed template.  The exact same structural check
+	 * {@link #resolveField} already uses to skip a template-free field; shared here so pre-scan and resolve can
+	 * never disagree about what counts as "has a template."  Package-private so {@link PageTable}'s own
+	 * page-chrome pre-scan uses the identical rule.
+	 */
+	static boolean hasVar(String s) {
+		return s != null && s.indexOf('$') >= 0;
 	}
 
 	/**

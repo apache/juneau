@@ -26,6 +26,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.widgets.*;
@@ -232,6 +233,29 @@ public class PageTable {
 	}
 
 	/**
+	 * Builds the page shell with no request in hand, resolving the page's own {@code $L} chrome (title, tab/sub-tab
+	 * labels, header, bar slot) against a caller-supplied, already-locale-bound {@link Messages} bean (view-def
+	 * string i18n, LD-4: the request-free localization seam).
+	 *
+	 * <p>
+	 * There is no {@link RestRequest} on this path, so the saved-views stamp and {@code $FV} server-values
+	 * resolution the request-aware overload provides are not available here, and &mdash; unlike that overload
+	 * &mdash; {@code req} is not propagated into child views, so a page-hosted table's own chrome does not resolve
+	 * through this seam (child views remain exactly as request-free as {@link #of(PageDef)} leaves them). With
+	 * {@code messages} <jk>null</jk>, or for any chrome field with no {@code $L{...}} template, this is exactly
+	 * {@link #of(PageDef) of(pageDef)} &mdash; no resolution, no lock, byte-identical output.
+	 *
+	 * @param messages The locale-bound message bundle to resolve {@code $L{...}} chrome against, or <jk>null</jk>
+	 * 	for none.
+	 * @param pageDef The built page definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code [data-juneau-page]} shell, tab/sub-tab bars, one panel per
+	 * 	referenced view, and the PAGE_META sidecar.
+	 */
+	public static Div of(Messages messages, PageDef pageDef) {
+		return emit(MarshallingContext.DEFAULT, pageDef, null, null, messages);
+	}
+
+	/**
 	 * Builds the page shell using the specified marshalling context for the wrapped child views' cell reads.
 	 *
 	 * @param ctx The marshalling context passed through to each child {@code ViewTable.of(...)} call.  Must not be
@@ -258,33 +282,49 @@ public class PageTable {
 	}
 
 	/**
-	 * The shared core, and the <b>outermost</b> {@code $FV} host of a page response.
+	 * The shared core, request/{@code Messages}-free overload.  Delegates to the {@code messages}-carrying core
+	 * with no message bundle, so every pre-existing caller keeps its exact current behavior.
+	 */
+	private static Div emit(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req) {
+		return emit(ctx, pageDef, savedViewsBase, req, null);
+	}
+
+	/**
+	 * The shared core, and the <b>outermost</b> chrome host of a page response.
 	 *
 	 * <p>
-	 * When {@link PageDef#serverValues} is declared and a request is in hand, the page's closed chrome allowlist is
-	 * resolved in place on the shared {@link PageDef} for the duration of this response, then restored strictly LIFO in
-	 * a {@code finally}.  The lock order is <b>{@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef}</b>:
-	 * this method takes the page's monitor first and only then descends into the children, each of which takes its own
-	 * def's monitor in that same order (see {@code ViewTable}'s emit core).  Because that order is identical on every
-	 * path that can reach these monitors, a concurrent {@code ViewTable.of} on a child view acquires a strict suffix of
-	 * the order and can never hold a lock this method still wants &mdash; so the pair can never be taken in opposite
-	 * directions and there is no cycle to deadlock on.
+	 * When a chrome-resolution session is available (see {@link ViewTable#chromeSession}) <b>and</b> the page's
+	 * allowlisted chrome actually contains a {@code $}-prefixed template (the lock-free pre-scan, view-def string
+	 * i18n LD-1 &mdash; see {@link #pageChromeHasVar}), the page's closed chrome allowlist is resolved in place on
+	 * the shared {@link PageDef} for the duration of this response, then restored strictly LIFO in a
+	 * {@code finally}.  Resolution is no longer conditioned on {@link PageDef#serverValues} being declared (LD-1):
+	 * the pre-scan alone gates it, so a page whose chrome carries only {@code $L{...}} (localization, no
+	 * server-values provider) resolves exactly like one that also declares {@code serverValues}.  The lock order is
+	 * <b>{@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef}</b>: this method takes the page's
+	 * monitor first and only then descends into the children, each of which takes its own def's monitor in that
+	 * same order (see {@code ViewTable}'s emit core).  Because that order is identical on every path that can reach
+	 * these monitors, a concurrent {@code ViewTable.of} on a child view acquires a strict suffix of the order and
+	 * can never hold a lock this method still wants &mdash; so the pair can never be taken in opposite directions
+	 * and there is no cycle to deadlock on.
 	 *
 	 * <p>
 	 * The hosts are <b>siblings, not nested sessions</b>: this one resolves only the page's own allowlisted fields, a
 	 * child resolves only its own, and neither inherits the other's names.  Restoring before returning is what
 	 * guarantees a shared definition is handed to the next response exactly as its author wrote it.
 	 */
-	private static Div emit(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req) {
+	private static Div emit(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req,
+			Messages messages) {
 		pageDef.validate();
-		if (pageDef.serverValues != null && req != null) {
-			var session = ViewTable.serverValuesSession(req, pageDef.serverValues);
-			synchronized (pageDef.lock) {
-				var restore = resolveChrome(pageDef, session);
-				try {
-					return build(ctx, pageDef, savedViewsBase, req);
-				} finally {
-					restore.run();
+		if (pageChromeHasVar(pageDef)) {
+			var session = ViewTable.chromeSession(req, pageDef.serverValues, messages);
+			if (session != null) {
+				synchronized (pageDef.lock) {
+					var restore = resolveChrome(pageDef, session);
+					try {
+						return build(ctx, pageDef, savedViewsBase, req);
+					} finally {
+						restore.run();
+					}
 				}
 			}
 		}
@@ -499,6 +539,74 @@ public class PageTable {
 			else if (w instanceof BarBadge b)
 				ViewTable.resolveField(restores, session, b.label, v -> b.label = v);
 		}
+	}
+
+	/**
+	 * The lock-free pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code pageDef}'s allowlisted
+	 * chrome ({@link #resolveChrome}'s exact field set: title, tab/sub-tab labels, header, bar slot) contains at
+	 * least one {@code $}-prefixed template.  Read-only, no lock, no session &mdash; this is what lets
+	 * {@link #emit} skip locking and resolving entirely for a page with no template anywhere (byte stability), and
+	 * is what decouples resolution from {@link PageDef#serverValues} being declared.  Must stay in lock-step with
+	 * {@link #resolveChrome}'s own field walk &mdash; every field the latter can mutate, this must also inspect.
+	 */
+	private static boolean pageChromeHasVar(PageDef pageDef) {
+		return ViewTable.hasVar(pageDef.title) || tabsChromeHasVar(pageDef.tabs)
+			|| headerChromeHasVar(pageDef.header) || barSlotChromeHasVar(pageDef.barSlot);
+	}
+
+	private static boolean tabsChromeHasVar(List<Tab> tabs) {
+		if (tabs == null)
+			return false;
+		for (var t : tabs) {
+			if (t == null)
+				continue;
+			if (ViewTable.hasVar(t.label) || subtabsChromeHasVar(t.subtabs))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean subtabsChromeHasVar(List<Subtab> subtabs) {
+		if (subtabs == null)
+			return false;
+		for (var s : subtabs)
+			if (s != null && ViewTable.hasVar(s.label))
+				return true;
+		return false;
+	}
+
+	private static boolean headerChromeHasVar(AppHeaderDef header) {
+		if (header == null)
+			return false;
+		var brand = header.brand;
+		if (brand != null) {
+			if (ViewTable.hasVar(brand.title))
+				return true;
+			if (brand.crumbs != null)
+				for (var c : brand.crumbs)
+					if (ViewTable.hasVar(c))
+						return true;
+		}
+		if (header.actions != null)
+			for (var a : header.actions)
+				if (a != null && ViewTable.hasVar(a.tooltip))
+					return true;
+		var avatar = header.avatar;
+		if (avatar != null && (ViewTable.hasVar(avatar.displayName) || ViewTable.hasVar(avatar.initials)))
+			return true;
+		return false;
+	}
+
+	private static boolean barSlotChromeHasVar(BarSlot barSlot) {
+		if (barSlot == null || barSlot.widgets == null)
+			return false;
+		for (var w : barSlot.widgets) {
+			if (w instanceof BarText t && ViewTable.hasVar(t.text))
+				return true;
+			if (w instanceof BarBadge b && ViewTable.hasVar(b.label))
+				return true;
+		}
+		return false;
 	}
 
 	/** Builds the deep-linkable hash href: {@code #pageId/tabId} or {@code #pageId/tabId/subtabId}. */

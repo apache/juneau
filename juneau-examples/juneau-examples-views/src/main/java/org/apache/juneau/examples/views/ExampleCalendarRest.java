@@ -126,7 +126,7 @@ public class ExampleCalendarRest extends BasicRestServlet {
 	@RestGet(path="/", summary="The reusable-calendar demo page (current month, server-painted)")
 	public HttpResource index(RestRequest req) {
 		var now = LocalDate.now(Clock.systemUTC());
-		var calendarMarkup = Html.of(CalendarTable.of(calendar(now.getYear(), now.getMonthValue())));
+		var calendarMarkup = Html.of(CalendarTable.of(req, calendar(now.getYear(), now.getMonthValue())));
 		var html = """
 			<!DOCTYPE html>
 			<html lang="en">

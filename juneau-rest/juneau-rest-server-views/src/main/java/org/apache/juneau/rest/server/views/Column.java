@@ -131,6 +131,24 @@ public class Column {
 	}
 
 	/**
+	 * Sets the header text to the {@code $L{key}} localization template (view-def string i18n, LD-3).
+	 *
+	 * <p>
+	 * Thin sugar over {@link #title(String) title}{@code ("$L{" + key + "}")} &mdash; it stores the same template
+	 * string into {@link #title}, so it resolves through the identical chrome-resolution path (per-request, in the
+	 * viewer's locale, via {@code RestRequest.getMessages()} or a bound {@code Messages} bean;
+	 * see {@code org.apache.juneau.rest.server.vars.LocalizationVar}) and needs no field of its own. Raw
+	 * {@code title("$L{...}")} remains the equivalent longhand form.
+	 *
+	 * @param key The bundle key.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Column titleKey(String key) {
+		title = "$L{" + key + "}";
+		return this;
+	}
+
+	/**
 	 * Sets whether the column is orderable.
 	 *
 	 * @param value The new value.
