@@ -674,7 +674,7 @@ public class ViewTable {
 	/**
 	 * The shared core.  Validates and reconciles selection/bulk-mutate, then &mdash; when a chrome-resolution
 	 * session is available (see {@link #chromeSession}) <b>and</b> that host's allowlisted chrome actually
-	 * contains a {@code $}-prefixed template (the lock-free pre-scan, view-def string i18n LD-1) &mdash; resolves
+	 * contains a {@code $}-prefixed template (the pre-scan, view-def string i18n LD-1) &mdash; resolves
 	 * that host's declared chrome (titles/labels) against a per-response <b>sibling</b> {@link VarResolverSession}
 	 * before building both the painted {@code <th>}/labels and the VIEW_META sidecar, so the two agree (W1).  The
 	 * resolved chrome is a per-response snapshot: each host's author {@code $FV{...}}/{@code $L{...}} templates
@@ -684,9 +684,12 @@ public class ViewTable {
 	 * Resolution is no longer conditioned on {@link ViewDef#serverValues} being declared (LD-1): the pre-scan
 	 * alone gates it, so a def whose chrome carries only {@code $L{...}} (localization, no server-values provider)
 	 * is resolved exactly like one that also declares {@code serverValues}.  A def with no {@code $} anywhere in
-	 * its allowlisted chrome is never resolved, never mutated, never locked &mdash; the {@code indexOf('$') < 0}
+	 * its allowlisted chrome is never resolved and never mutated &mdash; the {@code indexOf('$') < 0}
 	 * guard in {@link #resolveField} plus this pre-scan mean that is structural, not merely expected (byte
-	 * stability).
+	 * stability).  The pre-scan itself runs <b>under that host's monitor</b>, because it reads the same fields
+	 * resolution mutates in place: scanned unlocked, it can observe a concurrent response's resolved chrome, find
+	 * no template, and then build the shared def with no guard at all.  A def found template-free under the
+	 * monitor is one no response can mutate, so it is built after releasing it.
 	 *
 	 * <h5 class='section'>Two hosts, one written lock order:</h5>
 	 * <p>
@@ -717,16 +720,18 @@ public class ViewTable {
 
 		var rr = req instanceof RestRequest r ? r : null;
 		var detail = viewDef.details;
-		if (detail != null && detailChromeHasVar(detail)) {
-			var session = chromeSession(rr, detail.serverValues, messages);
-			if (session != null) {
-				// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
-				synchronized (detail.lock) {
-					var restore = resolveDetailChrome(detail, session);
-					try {
-						return emitViewHost(ctx, viewDef, rr, messages, opts);
-					} finally {
-						restore.run();
+		if (detail != null) {
+			// The row-detail host takes its lock OUTSIDE the view host's, per the written order.
+			synchronized (detail.lock) {
+				if (detailChromeHasVar(detail)) {
+					var session = chromeSession(rr, detail.serverValues, messages);
+					if (session != null) {
+						var restore = resolveDetailChrome(detail, session);
+						try {
+							return emitViewHost(ctx, viewDef, rr, messages, opts);
+						} finally {
+							restore.run();
+						}
 					}
 				}
 			}
@@ -743,10 +748,10 @@ public class ViewTable {
 	 */
 	private static Div emitViewHost(MarshallingContext ctx, ViewDef viewDef, RestRequest req, Messages messages,
 			RenderOptions opts) {
-		if (chromeHasVar(viewDef)) {
-			var session = chromeSession(req, viewDef.serverValues, messages);
-			if (session != null) {
-				synchronized (viewDef.lock) {
+		synchronized (viewDef.lock) {
+			if (chromeHasVar(viewDef)) {
+				var session = chromeSession(req, viewDef.serverValues, messages);
+				if (session != null) {
 					var restore = resolveChrome(viewDef, session);
 					try {
 						return build(ctx, viewDef, opts);
@@ -1406,12 +1411,14 @@ public class ViewTable {
 	}
 
 	/**
-	 * The lock-free pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code viewDef}'s allowlisted
+	 * The pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code viewDef}'s allowlisted
 	 * chrome ({@link #resolveChrome}'s exact field set: column/action/ribbon titles) contains at least one
-	 * {@code $}-prefixed template.  Read-only, no lock, no session &mdash; this is what lets
-	 * {@link #emitViewHost} skip locking and resolving entirely for a def with no template anywhere (byte
-	 * stability), and is what decouples resolution from {@link ViewDef#serverValues} being declared: a def with a
-	 * bare {@code $L{...}} title and no server-values provider now resolves too.  Must stay in lock-step with
+	 * {@code $}-prefixed template.  Read-only and session-free, but <b>not lock-free</b>: it reads exactly the
+	 * fields {@link #resolveChrome} mutates in place, so callers must hold {@code viewDef.lock} (see
+	 * {@link #emitViewHost}).  This is what lets {@link #emitViewHost} skip resolving entirely for a def with no
+	 * template anywhere (byte stability), and is what decouples resolution from {@link ViewDef#serverValues}
+	 * being declared: a def with a bare {@code $L{...}} title and no server-values provider now resolves too.
+	 * Must stay in lock-step with
 	 * {@link #resolveChrome}'s own field walk &mdash; every field the latter can mutate, this must also inspect.
 	 */
 	private static boolean chromeHasVar(ViewDef viewDef) {
@@ -1456,7 +1463,8 @@ public class ViewTable {
 	/**
 	 * The row-detail counterpart of {@link #chromeHasVar}: {@code true} only if {@code detail}'s allowlisted
 	 * chrome ({@link #resolveDetailChrome}'s exact field set: {@link RowDetailDef#title}, section titles, field
-	 * titles) contains at least one {@code $}-prefixed template.  Must stay in lock-step with
+	 * titles) contains at least one {@code $}-prefixed template.  Callers must hold {@code detail.lock} for the
+	 * same reason {@link #chromeHasVar}'s callers must hold the view's.  Must stay in lock-step with
 	 * {@link #resolveDetailChrome}'s own field walk for the same reason {@link #chromeHasVar} must.
 	 */
 	private static boolean detailChromeHasVar(RowDetailDef detail) {

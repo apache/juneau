@@ -294,12 +294,21 @@ public class PageTable {
 	 *
 	 * <p>
 	 * When a chrome-resolution session is available (see {@link ViewTable#chromeSession}) <b>and</b> the page's
-	 * allowlisted chrome actually contains a {@code $}-prefixed template (the lock-free pre-scan, view-def string
+	 * allowlisted chrome actually contains a {@code $}-prefixed template (the pre-scan, view-def string
 	 * i18n LD-1 &mdash; see {@link #pageChromeHasVar}), the page's closed chrome allowlist is resolved in place on
 	 * the shared {@link PageDef} for the duration of this response, then restored strictly LIFO in a
 	 * {@code finally}.  Resolution is no longer conditioned on {@link PageDef#serverValues} being declared (LD-1):
 	 * the pre-scan alone gates it, so a page whose chrome carries only {@code $L{...}} (localization, no
-	 * server-values provider) resolves exactly like one that also declares {@code serverValues}.  The lock order is
+	 * server-values provider) resolves exactly like one that also declares {@code serverValues}.
+	 *
+	 * <p>
+	 * The pre-scan runs <b>under the page's monitor</b>, not ahead of it.  It inspects the very fields
+	 * {@link #resolveChrome} mutates in place, so an unlocked scan can observe a concurrent response's
+	 * fully-resolved chrome, conclude there is no template to resolve, and then render the shared definition with
+	 * no guard at all &mdash; emitting either the author's raw {@code $FV{...}}/{@code $L{...}} templates or the
+	 * other response's values.  Scanning inside the monitor means the decision is always made against author
+	 * state, because a restore is only ever visible to the next holder.  A definition found template-free under
+	 * the monitor is one no response can mutate, so it is built after releasing it.  The lock order is
 	 * <b>{@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef}</b>: this method takes the page's
 	 * monitor first and only then descends into the children, each of which takes its own def's monitor in that
 	 * same order (see {@code ViewTable}'s emit core).  Because that order is identical on every path that can reach
@@ -315,10 +324,10 @@ public class PageTable {
 	private static Div emit(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req,
 			Messages messages) {
 		pageDef.validate();
-		if (pageChromeHasVar(pageDef)) {
-			var session = ViewTable.chromeSession(req, pageDef.serverValues, messages);
-			if (session != null) {
-				synchronized (pageDef.lock) {
+		synchronized (pageDef.lock) {
+			if (pageChromeHasVar(pageDef)) {
+				var session = ViewTable.chromeSession(req, pageDef.serverValues, messages);
+				if (session != null) {
 					var restore = resolveChrome(pageDef, session);
 					try {
 						return build(ctx, pageDef, savedViewsBase, req);
@@ -542,12 +551,14 @@ public class PageTable {
 	}
 
 	/**
-	 * The lock-free pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code pageDef}'s allowlisted
+	 * The pre-scan (view-def string i18n LD-1 §5.1): {@code true} only if {@code pageDef}'s allowlisted
 	 * chrome ({@link #resolveChrome}'s exact field set: title, tab/sub-tab labels, header, bar slot) contains at
-	 * least one {@code $}-prefixed template.  Read-only, no lock, no session &mdash; this is what lets
-	 * {@link #emit} skip locking and resolving entirely for a page with no template anywhere (byte stability), and
-	 * is what decouples resolution from {@link PageDef#serverValues} being declared.  Must stay in lock-step with
-	 * {@link #resolveChrome}'s own field walk &mdash; every field the latter can mutate, this must also inspect.
+	 * least one {@code $}-prefixed template.  Read-only and session-free, but <b>not lock-free</b>: it reads
+	 * exactly the fields {@link #resolveChrome} mutates in place, so callers must hold {@code pageDef.lock} (see
+	 * {@link #emit}).  This is what lets {@link #emit} skip resolving entirely for a page with no template
+	 * anywhere (byte stability), and is what decouples resolution from {@link PageDef#serverValues} being
+	 * declared.  Must stay in lock-step with {@link #resolveChrome}'s own field walk &mdash; every field the
+	 * latter can mutate, this must also inspect.
 	 */
 	private static boolean pageChromeHasVar(PageDef pageDef) {
 		return ViewTable.hasVar(pageDef.title) || tabsChromeHasVar(pageDef.tabs)
