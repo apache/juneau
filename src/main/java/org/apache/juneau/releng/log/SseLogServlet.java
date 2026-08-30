@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.log;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -192,7 +193,7 @@ public class SseLogServlet extends HttpServlet {
 
 	/** Splits {@code /{version}/{stepId}} into {@code [version, stepId]}; either may be empty if absent. */
 	private static String[] trailingTwoSegments(String pathInfo) {
-		if (pathInfo == null || pathInfo.isBlank())
+		if (ib(pathInfo))
 			return new String[] { "", "" };
 		var p = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
 		var parts = p.split("/", 2);

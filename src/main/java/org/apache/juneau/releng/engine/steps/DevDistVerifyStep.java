@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class DevDistVerifyStep implements ReleaseStep {
 	private static long fileSize(Path file) {
 		try {
 			return Files.size(file);
-		} catch (java.io.IOException e) {
+		} catch (IOException e) {
 			return 0;
 		}
 	}

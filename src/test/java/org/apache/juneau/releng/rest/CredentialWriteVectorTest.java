@@ -105,17 +105,23 @@ class CredentialWriteVectorTest {
 		service.store("apache", KEYCHAIN_FREE_ACCOUNT, "the-real-password");
 	}
 
-	@SuppressWarnings("resource") // Caller closes via try-with-resources; MockRestClient caches RestContext per class, so opt out with a fresh StackOverlay.
+	@SuppressWarnings({
+		"resource" // Caller closes via try-with-resources; MockRestClient caches RestContext per class, so opt out with a fresh StackOverlay.
+	})
 	private MockRestClient client() {
 		return MockRestClient.builder(new CredentialRest(service)).overridingBeanStore(new StackOverlay()).build();
 	}
 
-	@SuppressWarnings("resource") // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	@SuppressWarnings({
+		"resource" // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	})
 	private MockRestClient defaultConfigClient() {
 		return MockRestClient.builder(new DefaultConfigCredentialResource(service)).overridingBeanStore(new StackOverlay()).build();
 	}
 
-	@SuppressWarnings("resource") // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	@SuppressWarnings({
+		"resource" // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	})
 	private MockRestClient hardenedConfigClient() {
 		return MockRestClient.builder(new HardenedConfigCredentialResource(service)).overridingBeanStore(new StackOverlay()).build();
 	}

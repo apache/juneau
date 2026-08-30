@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.log;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -44,7 +45,7 @@ public class VoteDeadlineTimer {
 
 	/** Arm (or re-arm) a ping for the given version at {@code deadline}. No-op if webhook empty or deadline past. */
 	public void arm(String version, Instant deadline) {
-		if (slackWebhook == null || slackWebhook.isBlank())
+		if (ib(slackWebhook))
 			return;
 		var delay = Duration.between(Instant.now(), deadline).toMillis();
 		if (delay <= 0)

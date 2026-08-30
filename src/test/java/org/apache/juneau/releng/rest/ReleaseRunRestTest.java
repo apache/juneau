@@ -537,7 +537,9 @@ class ReleaseRunRestTest {
 		// Still valid, round-trippable JSON: a JSON parser decodes \u003c back to the original title verbatim
 		// (this is exactly what FreeMarker's HTML entity-encoding would have corrupted).
 		var parsed = org.apache.juneau.marshall.marshaller.Json.to(json, Map.class);
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Assigning a raw Json.to(..., Map.class) result to its known parameterized shape.
+		})
 		var entry = (Map<String,Object>) parsed.get("evil");
 		assertEquals(evilTitle, entry.get("title"));
 		assertEquals(Boolean.TRUE, entry.get("mutating"));

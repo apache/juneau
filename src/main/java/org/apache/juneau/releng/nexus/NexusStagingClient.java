@@ -141,7 +141,7 @@ public class NexusStagingClient {
 	})
 	public Optional<StagingRepo> findLatestRepo() {
 		var json = transport.send("GET", "/service/local/staging/profile_repositories/" + profileId, null);
-		if (json == null || json.isBlank())
+		if (ib(json))
 			return Optional.empty();
 		List<Map<String, Object>> parsed = Json.DEFAULT.read(json, List.class);
 		return parsed.stream().map(m -> {

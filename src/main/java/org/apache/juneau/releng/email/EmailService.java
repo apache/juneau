@@ -131,10 +131,10 @@ public class EmailService {
 	 * produces a dangling blank line in the email.
 	 */
 	private static String narrative(String primary, Map<String, String> extra, String key) {
-		if (primary != null && !primary.isBlank())
+		if (inb(primary))
 			return primary.stripTrailing();
 		var e = extra == null ? null : extra.get(key);
-		return (e != null && !e.isBlank()) ? e.stripTrailing() : null;
+		return inb(e) ? e.stripTrailing() : null;
 	}
 
 	private static String nz(String s) {

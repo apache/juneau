@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import org.apache.juneau.releng.engine.Preview;
 import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
@@ -41,7 +42,7 @@ public class NexusStagingCloseStep implements ReleaseStep {
 
 	private String resolveRepoId(StepContext ctx) {
 		var override = ctx.formInputs.get("repoIdOverride");
-		if (override != null && !override.isBlank())
+		if (inb(override))
 			return override;
 		return ctx.nexus.findLatestRepo().map(r -> r.id).orElse(null);
 	}

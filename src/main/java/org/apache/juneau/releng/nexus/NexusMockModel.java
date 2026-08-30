@@ -113,7 +113,7 @@ public class NexusMockModel {
 	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned to its known generic shape.
 	})
 	static String repoIdFromBody(String body) {
-		if (body == null || body.isBlank())
+		if (ib(body))
 			return null;
 		Map<String, Object> parsed = Json.DEFAULT.read(body, Map.class);
 		var data = (Map<String, Object>) parsed.get("data");

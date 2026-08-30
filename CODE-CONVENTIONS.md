@@ -47,9 +47,20 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   codebase.
 - **`@SuppressWarnings` format** — Always the multiline brace/array form with a `//` rationale on every
   token, even a single token (except the inline catch-parameter `"unused"` case). **Applied.** Converted
-  the four `@SuppressWarnings("unchecked")` (parsed-JSON casts) to the multiline form with rationale.
+  the `@SuppressWarnings("unchecked")` (parsed-JSON casts) in `src/main` to the multiline form with
+  rationale, plus **four more found in `src/test`** on a later verification pass (2026-08-30) — this
+  pass's original sweep only covered `src/main`; `ReleaseRunRestTest.java` (one bare `"unchecked"`) and
+  `CredentialWriteVectorTest.java` (three `"resource"` sites, each already carrying a rationale comment
+  but still in the disallowed single-string form) are now also converted. Verify with
+  `rg -n '@SuppressWarnings\("[^"]+"\)' --type java src` (should be empty).
 - **Delete dead code** — Remove unreachable branches / unused fields & imports rather than leaving them.
   **Applied** (none found).
+- **FQCN inline usage (leftover)** — **Applied.** One leftover found on a later verification pass
+  (2026-08-30): `DevDistVerifyStep.java`'s caught `java.io.IOException` was FQCN'd inline with no
+  `IOException` import elsewhere in the file (not a name-collision case) — added the import and switched
+  to the simple name. Verify with
+  `` rg -n '\bjava\.[a-z][a-zA-Z]+\.[A-Z]' --type java -g '!**/test/**' src `` (filter out
+  `import`/`package` lines).
 - **Indentation: tabs** — **Applied (tabs)** — full Juneau parity; enforced by the checked-in Eclipse
   formatter + save-action profile in `.settings/`. The whole tree (98 Java files) was reformatted with the
   real Eclipse formatter using Juneau's tab profile (`org.eclipse.jdt.core.formatter.tabulation.char=tab`),
@@ -60,6 +71,30 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   `scripts/eclipse-preferences/` baseline; upstream keeps the formatter/cleanup as workspace-imported XML,
   but here they're inlined into the project `.settings/` so the profile is enforced project-scoped and
   travels with the repo. Only `.classpath` and `.project` remain git-ignored.
+
+## Pre-release cleanup pass idioms
+
+Additional `Shorts`/idiom conventions from `@juneau-code-conventions`'s "Pre-release cleanup pass idioms"
+subsection (added 2026-08-30, upstream `TODO-J0000`), verified against this repo on 2026-08-30:
+
+- **Null/blank guards (`Shorts.ib`/`Shorts.inb`)** — **Applied.** Collapsed `x == null || x.isBlank()` /
+  `x != null && !x.isBlank()` to `ib(x)` / `inb(x)` (`import static
+  org.apache.juneau.commons.utils.Shorts.*;`) at all 8 sites found: `ReleasePrepareStep`,
+  `SseLogServlet`, `NexusStagingClient`, `VoteDeadlineTimer`, `NexusMockModel` (the `ib` guards), and
+  `EmailService` (×2), `NexusStagingCloseStep` (the `inb` guards).
+- **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (none found).** No `x == null ? null : f(x)`
+  ternary candidates in `src/main`.
+- **Injectable wall-clock `Clock`** — **N/A (none found).** No direct `System.currentTimeMillis()` calls
+  in `src/main`.
+- **Size assertions (`assertSize`)** — **N/A**, same reason as `assertBean`/`TestBase` below: neither
+  Juneau-side implementation is reachable from this repo's test classpath. `BctAssertions`
+  (`org.apache.juneau.test.bct`) would require adding `juneau-bct` as a new dependency — confirmed absent
+  from `mvn dependency:tree -Dscope=test` — and `TestAssertions` (`org.apache.juneau.commons`) lives in
+  `juneau-commons`'s **test** sources, not its published main jar, so it isn't on this repo's classpath
+  either. Per this doc's own general rule (below), a new dependency is not added solely to satisfy this
+  idiom; the ~28 `assertEquals(N, x.size())` sites stay as-is.
+- **No diff-narration comments** — **N/A (none found).** No "behaviour-preserving" / "renders
+  pixel-identically" / "appended after X so Y" phrasing in the codebase.
 
 ## Javadoc
 

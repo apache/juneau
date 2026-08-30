@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.List;
 import org.apache.juneau.releng.engine.Preview;
 import org.apache.juneau.releng.engine.ReleaseStep;
@@ -49,7 +50,7 @@ public class ReleasePrepareStep implements ReleaseStep {
 		var supplied = ctx.formInputs.get("developmentVersion");
 		if (supplied == null && ctx.run.developmentVersion != null)
 			supplied = ctx.run.developmentVersion;
-		return (supplied == null || supplied.isBlank()) ? null : supplied;
+		return ib(supplied) ? null : supplied;
 	}
 
 	@Override
