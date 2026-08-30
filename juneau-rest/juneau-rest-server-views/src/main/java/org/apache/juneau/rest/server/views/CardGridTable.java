@@ -24,6 +24,8 @@ import java.util.*;
 import jakarta.servlet.http.*;
 
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
@@ -237,12 +239,60 @@ public class CardGridTable {
 		return emitCard(gridId, card, req);
 	}
 
-	/** The shared grid emit; {@code req} is <jk>null</jk> on the request-free path. */
+	/**
+	 * The shared grid emit; {@code req} is <jk>null</jk> on the request-free path.
+	 *
+	 * <p>
+	 * The grid is the outermost chrome host of a card response: when a chrome-resolution session is available and
+	 * this grid's own {@link CardGrid#title} carries a {@code $}-prefixed template, the title is resolved in place
+	 * for the duration of this response and restored strictly LIFO in a {@code finally}.  The pre-scan runs
+	 * <b>under the grid's monitor</b>, not ahead of it, because it reads the very field resolution mutates: an
+	 * unlocked scan can observe a concurrent response's resolved title, conclude there is nothing to resolve, and
+	 * then paint the shared grid with no guard at all.  A grid found template-free under the monitor is one no
+	 * response can mutate, so it is painted after releasing it.
+	 */
 	private static Section emitGrid(CardGrid grid, HttpServletRequest req) {
 		if (grid == null)
 			throw iaex("grid must not be null.");
 		grid.validate();
 
+		synchronized (grid.lock) {
+			if (ViewTable.hasVar(grid.title)) {
+				var session = chromeSession(req);
+				if (session != null) {
+					var restore = resolveGridChrome(grid, session);
+					try {
+						return buildGrid(grid, req);
+					} finally {
+						restore.run();
+					}
+				}
+			}
+		}
+		return buildGrid(grid, req);
+	}
+
+	/** Resolves the grid's own chrome: {@link CardGrid#title}, the one string a grid paints itself. */
+	private static Runnable resolveGridChrome(CardGrid grid, VarResolverSession session) {
+		var restores = new ArrayList<Runnable>();
+		ViewTable.resolveField(restores, session, grid.title, v -> grid.title = v);
+		return ViewTable.lifoRestore(restores);
+	}
+
+	/**
+	 * The chrome-resolution session for a card host, or {@code null} when there is nothing to resolve against.
+	 *
+	 * <p>
+	 * Neither {@link CardGrid} nor {@link Card} declares a {@code $FV} provider of its own, so the session carries
+	 * only what the request itself brings &mdash; which is what makes {@code $L{...}} chrome localizable here.  On
+	 * the request-free {@link #of(CardGrid)} path there is no context at all and this returns {@code null}, so a
+	 * request-free render never locks, never resolves, and stays byte-identical.
+	 */
+	private static VarResolverSession chromeSession(HttpServletRequest req) {
+		return ViewTable.chromeSession(req instanceof RestRequest r ? r : null, null, null);
+	}
+
+	private static Section buildGrid(CardGrid grid, HttpServletRequest req) {
 		var children = l();
 		if (grid.title != null && ! grid.title.isBlank())
 			children.add(h2(grid.title).class_("juneau-view-card-grid-title"));
@@ -269,10 +319,78 @@ public class CardGridTable {
 	}
 
 	/**
-	 * Emits one card {@code <article>}; refresh wiring is stamped only for a refreshable {@link CardFieldList} body.
-	 * {@code req} is <jk>null</jk> on the request-free path, which is what makes a request-needing body fail closed.
+	 * Emits one card {@code <article>}, resolving the card's own chrome around the paint.
+	 *
+	 * <p>
+	 * The card is the middle chrome host: its monitor is taken inside the enclosing grid's and outside any hosted
+	 * view's, so the written order is <b>{@code CardGrid} &rarr; {@code Card} &rarr; {@code ViewDef}</b>.  Because
+	 * that order is the same on every path that can reach these monitors &mdash; the grid walk, the public
+	 * per-card overload, and a concurrent {@code ViewTable.of} on a hosted view, which takes a strict suffix of it
+	 * &mdash; no two threads can take a pair in opposite directions and there is no cycle to deadlock on.
+	 *
+	 * <p>
+	 * The grid and the card are <b>sibling</b> hosts, not nested sessions: each resolves only its own allowlisted
+	 * fields and restores them before its caller returns, so neither can observe the other's resolved strings.
 	 */
 	private static Article emitCard(String gridId, Card card, HttpServletRequest req) {
+		synchronized (card.lock) {
+			if (cardChromeHasVar(card)) {
+				var session = chromeSession(req);
+				if (session != null) {
+					var restore = resolveCardChrome(card, session);
+					try {
+						return buildCard(gridId, card, req);
+					} finally {
+						restore.run();
+					}
+				}
+			}
+		}
+		return buildCard(gridId, card, req);
+	}
+
+	/**
+	 * Resolves the card's own chrome: {@link Card#title} and, when the body is a {@link CardFieldList}, each
+	 * {@link CardField#label}.
+	 *
+	 * <p>
+	 * Deliberately narrower than every string a card paints.  A {@link CardField#value} is the field's data, not
+	 * chrome, and is excluded the same way a view's row-cell values are.  {@link CardContent#content} is excluded
+	 * because it is written verbatim through {@code rawText(...)} under the caller-pre-sanitizes ownership
+	 * contract: putting an SVL-resolved value into a trusted raw-HTML sink is not something this pass may do.
+	 * {@link HeaderAction#tooltip} and {@link MenuItem#label} are off the allowlist here for the same reason they
+	 * are off it in the view hosts.
+	 */
+	private static Runnable resolveCardChrome(Card card, VarResolverSession session) {
+		var restores = new ArrayList<Runnable>();
+		ViewTable.resolveField(restores, session, card.title, v -> card.title = v);
+		if (card.body instanceof CardFieldList fl && fl.fields != null)
+			for (var f : fl.fields)
+				if (f != null)
+					ViewTable.resolveField(restores, session, f.label, v -> f.label = v);
+		return ViewTable.lifoRestore(restores);
+	}
+
+	/**
+	 * The card counterpart of the grid pre-scan, walking exactly {@link #resolveCardChrome}'s field set.  Must stay
+	 * in lock-step with it: every field that walk can mutate, this one must also inspect, or a card whose only
+	 * template sits on a field label would be painted unresolved.
+	 */
+	private static boolean cardChromeHasVar(Card card) {
+		if (ViewTable.hasVar(card.title))
+			return true;
+		if (card.body instanceof CardFieldList fl && fl.fields != null)
+			for (var f : fl.fields)
+				if (f != null && ViewTable.hasVar(f.label))
+					return true;
+		return false;
+	}
+
+	/**
+	 * Paints one card {@code <article>}; refresh wiring is stamped only for a refreshable {@link CardFieldList} body.
+	 * {@code req} is <jk>null</jk> on the request-free path, which is what makes a request-needing body fail closed.
+	 */
+	private static Article buildCard(String gridId, Card card, HttpServletRequest req) {
 		var scope = idScope(gridId, card.id);
 		var titleId = (gridId == null || gridId.isBlank() ? card.id : gridId + "-" + card.id) + "-title";
 		var body = emitBody(card.body, req, scope);   // closed dispatch: throws (fail-closed) on an unknown CardBody

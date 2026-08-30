@@ -64,6 +64,19 @@ public class Card {
 	public List<HeaderAction> actions;
 
 	/**
+	 * Monitor guarding the emitter's chrome-resolution window over this card's own chrome ({@link #title} and, when
+	 * the body is a {@link CardFieldList}, each of its field labels).
+	 *
+	 * <p>
+	 * A card instance is typically shared across responses, and resolution mutates those strings in place for the
+	 * duration of one response before restoring the author's templates, so the resolve/paint/restore window has to
+	 * be serialized.  Held inside the enclosing grid's monitor and outside any hosted view's, which is the one
+	 * written lock order every path takes.  Not a bean property and never serialized &mdash; a card carries no JSON
+	 * sidecar.
+	 */
+	public final Object lock = new Object();
+
+	/**
 	 * Creates a card with the given id and title.
 	 *
 	 * @param id The stable card id.  Must not be <jk>null</jk> or blank.

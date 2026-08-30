@@ -566,6 +566,18 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "expected .jc-nav-tab.active to no longer consume --jc-accent-wash, block:\n" + navTabActiveBlock);
 	}
 
+	@Test void j06_tabBaseThemingRule_outranksTheViewsBaseRule_soLinkOrderCannotDecideIt() throws Exception {
+		// juneau-views.css declares a bare ".jc-tab,\n.jc-subtab" base rule whose colourless "border-top: 1px
+		// solid" shorthand resets the border to currentColor.  A single-class selector here would tie it at
+		// (0,0,1,0), leaving the winner to whichever <link> a consumer places second; the doubled class lifts this
+		// rule to (0,0,2,0) so the theming wins on specificity alone.
+		var css = readChromeCss();
+		assertTrue(css.contains(".jc-tab.jc-tab,\n.jc-subtab.jc-subtab {"),
+			() -> "missing raised-specificity tab theming selector, css:\n" + css);
+		assertFalse(css.contains("\n.jc-tab,\n.jc-subtab {"),
+			() -> "the tab theming rule must not fall back to a single-class selector, css:\n" + css);
+	}
+
 	/** WCAG 2.x contrast ratio between two {@code "#rrggbb"} literals: {@code (lighter+0.05)/(darker+0.05)}. */
 	private static double contrastRatio(String hex1, String hex2) {
 		var l1 = relativeLuminance(hex1);

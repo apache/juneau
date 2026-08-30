@@ -1318,8 +1318,9 @@ public class ViewTable {
 	}
 
 	/**
-	 * Resolves the {@code $FV} chrome fields (the closed title/label list: {@link Column#title},
-	 * {@link RowAction#label}, {@link RibbonAction#title} and its {@link RibbonAction.Opt#title}) in place on the
+	 * Resolves the {@code $FV} chrome fields (the closed title/label list: {@link Column#title}, its cell
+	 * popover's {@link CellPopover#title} and {@link PopoverField#title}, {@link RowAction#label},
+	 * {@link RowAction#confirm}, {@link RibbonAction#title} and its {@link RibbonAction.Opt#title}) in place on the
 	 * shared {@code viewDef} so both the painted chrome and the VIEW_META sidecar carry the same resolved strings
 	 * (W1).  Returns a {@link Runnable} that restores every mutated field to its author {@code $FV{...}} template.
 	 */
@@ -1331,23 +1332,27 @@ public class ViewTable {
 		return lifoRestore(restores);
 	}
 
-	/** Resolves every declared column's {@link Column#title}. */
+	/** Resolves every declared column's {@link Column#title} and the chrome of its cell popover, if any. */
 	private static void resolveColumnsChrome(List<Runnable> restores, VarResolverSession session, List<Column> columns) {
 		if (columns == null)
 			return;
 		for (var c : columns)
-			if (c != null)
+			if (c != null) {
 				resolveField(restores, session, c.title, v -> c.title = v);
+				resolvePopoverChrome(restores, session, c.render);
+			}
 	}
 
-	/** Resolves every declared row action's {@link RowAction#label}. */
+	/** Resolves every declared row action's {@link RowAction#label} and {@link RowAction#confirm}. */
 	private static void resolveRowActionsChrome(List<Runnable> restores, VarResolverSession session,
 			List<RowAction> rowActions) {
 		if (rowActions == null)
 			return;
 		for (var a : rowActions)
-			if (a != null)
+			if (a != null) {
 				resolveField(restores, session, a.label, v -> a.label = v);
+				resolveField(restores, session, a.confirm, v -> a.confirm = v);
+			}
 	}
 
 	/** Resolves every declared ribbon action's {@link RibbonAction#title} and its options' {@link RibbonAction.Opt#title}. */
@@ -1368,7 +1373,8 @@ public class ViewTable {
 
 	/**
 	 * Resolves the row-detail panel's own {@code $FV} chrome (the closed title list: {@link RowDetailDef#title},
-	 * {@link DetailSection#title}, {@link DetailField#title}) in place on the shared {@code detail}, so the
+	 * {@link DetailSection#title}, {@link DetailField#title}, and each field's cell-popover
+	 * {@link CellPopover#title}/{@link PopoverField#title}) in place on the shared {@code detail}, so the
 	 * server-emitted {@code <template>} below is painted with the resolved strings and the expand GET is left
 	 * carrying row data only.
 	 *
@@ -1400,14 +1406,36 @@ public class ViewTable {
 		}
 	}
 
-	/** Resolves every declared field's {@link DetailField#title}. */
+	/** Resolves every declared field's {@link DetailField#title} and the chrome of its cell popover, if any. */
 	private static void resolveDetailFieldsChrome(List<Runnable> restores, VarResolverSession session,
 			List<DetailField> fields) {
 		if (fields == null)
 			return;
 		for (var f : fields)
-			if (f != null)
+			if (f != null) {
 				resolveField(restores, session, f.title, v -> f.title = v);
+				resolvePopoverChrome(restores, session, f.render);
+			}
+	}
+
+	/**
+	 * Resolves a cell popover's own chrome &mdash; {@link CellPopover#title} and each
+	 * {@link PopoverField#title} &mdash; reached through the owning {@link Column}'s or {@link DetailField}'s
+	 * {@link Render}.  Shared by both hosts' walks because the descent is identical from either side.
+	 *
+	 * <p>
+	 * The popover's data bindings ({@link PopoverField#data}) and nested per-field {@link PopoverField#render}
+	 * are deliberately not touched: only the two heading strings a reader actually sees are chrome.
+	 */
+	private static void resolvePopoverChrome(List<Runnable> restores, VarResolverSession session, Render render) {
+		if (render == null || render.popover == null)
+			return;
+		var popover = render.popover;
+		resolveField(restores, session, popover.title, v -> popover.title = v);
+		if (popover.fields != null)
+			for (var f : popover.fields)
+				if (f != null)
+					resolveField(restores, session, f.title, v -> f.title = v);
 	}
 
 	/**
@@ -1430,7 +1458,7 @@ public class ViewTable {
 		if (columns == null)
 			return false;
 		for (var c : columns)
-			if (c != null && hasVar(c.title))
+			if (c != null && (hasVar(c.title) || popoverChromeHasVar(c.render)))
 				return true;
 		return false;
 	}
@@ -1439,7 +1467,7 @@ public class ViewTable {
 		if (rowActions == null)
 			return false;
 		for (var a : rowActions)
-			if (a != null && hasVar(a.label))
+			if (a != null && (hasVar(a.label) || hasVar(a.confirm)))
 				return true;
 		return false;
 	}
@@ -1487,8 +1515,21 @@ public class ViewTable {
 		if (fields == null)
 			return false;
 		for (var f : fields)
-			if (f != null && hasVar(f.title))
+			if (f != null && (hasVar(f.title) || popoverChromeHasVar(f.render)))
 				return true;
+		return false;
+	}
+
+	/** The pre-scan counterpart of {@link #resolvePopoverChrome}, walking the identical two-title field set. */
+	private static boolean popoverChromeHasVar(Render render) {
+		if (render == null || render.popover == null)
+			return false;
+		if (hasVar(render.popover.title))
+			return true;
+		if (render.popover.fields != null)
+			for (var f : render.popover.fields)
+				if (f != null && hasVar(f.title))
+					return true;
 		return false;
 	}
 

@@ -338,10 +338,20 @@ a:hover { text-decoration: underline; }
    base-shape-in-views / colours-in-chrome split as .tag and the ribbon buttons.
    The active tab's 3px bottom edge (border-bottom-width, set neutrally in
    -views) becomes the accent, echoing .jc-nav-tab.active's accent top edge.
+
+   The selector below repeats its class deliberately.  The -views base rule for
+   these same two classes is a bare .jc-tab/.jc-subtab, so a single class here
+   would tie it at (0,0,1,0) and the winner would be decided by which <link> a
+   consumer happens to place second - and -views' colourless "border-top: 1px
+   solid" shorthand resets the border back to currentColor whenever it wins.
+   Doubling the class lifts this rule to (0,0,2,0) so it beats the base rule on
+   specificity, matching exactly the same elements either way.  The :hover and
+   .jc-tab-active rules below need no such bump: they already outrank anything
+   -views declares for the same state.
    ========================================================================== */
 
-.jc-tab,
-.jc-subtab {
+.jc-tab.jc-tab,
+.jc-subtab.jc-subtab {
   color: var(--jc-text-soft);
   background-color: var(--jc-control-bg);
   border-color: var(--jc-border);

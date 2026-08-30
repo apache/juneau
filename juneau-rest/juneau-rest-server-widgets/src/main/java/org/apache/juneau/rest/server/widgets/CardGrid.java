@@ -54,6 +54,16 @@ public class CardGrid implements Widget {
 	public Integer minCardPx;
 
 	/**
+	 * Monitor guarding the emitter's chrome-resolution window over this grid's own {@link #title}.
+	 *
+	 * <p>
+	 * A grid instance is typically shared across responses, and resolution mutates {@link #title} in place for the
+	 * duration of one response before restoring the author's template, so the resolve/paint/restore window has to
+	 * be serialized.  Not a bean property and never serialized &mdash; a grid carries no JSON sidecar.
+	 */
+	public final Object lock = new Object();
+
+	/**
 	 * Creates an empty grid with the given id.
 	 *
 	 * @param id The stable grid id.  Must not be <jk>null</jk> or blank.
