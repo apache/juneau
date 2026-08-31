@@ -311,4 +311,25 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("\"actionId\":\"esc\""), body);
 		assertTrue(body.contains("\"idempotencyKey\""), body);
 	}
+
+	@Test
+	void d07_ackForm_barSlotHost_ridesTheWireAsAnAdditiveField() throws Exception {
+		// The example's ackForm() dialog also declares ModalDef.barSlot - the THIRD named BarSlot host.  Unlike
+		// PageDef/RowDetailDef (Java-only, server-rendered), a dialog is a fetched JSON payload, so the bean must
+		// actually be present on the wire for juneau-views.js to paint it client-side.  BarSlot carries its OWN
+		// independently-frozen contract version (never bumped alongside ModalDef's), so this is a distinct stamp
+		// from the modal/form one already asserted in d06.
+		var res = getJson("/data/alerts/ALRT-2/ack-form");
+		assertEquals(200, res.statusCode(), res.body());
+		var body = res.body();
+		assertTrue(body.contains("\"barSlot\":{"), body);
+		assertTrue(body.contains("\"contractVersion\":\"" + BarSlot.CONTRACT_VERSION + "\""), body);
+		assertTrue(body.contains("\"id\":\"ack-form-bar\""), body);
+		// ALRT-2 (severities cycle critical/warning/info) is "info" severity, so the widget mirrors that AND the
+		// non-critical (WARN, not DANGER) tone - proving the tone/text are actually DERIVED from the alert, not
+		// a copy-pasted literal.
+		assertTrue(body.contains("\"text\":\"Severity: info\""), body);
+		assertTrue(body.contains("\"label\":\"other open at this severity\""), body);
+		assertTrue(body.contains("\"tone\":\"WARN\""), body);
+	}
 }

@@ -3423,6 +3423,128 @@
 			.catch(function () { renderRowActionRefusal(tr, action, "request-failed"); });
 	}
 
+	// THIRD bar-slot host: a dialog's ModalDef.barSlot (BarSlotTable constants of the same names on the server).
+	// Unlike the row-detail host, this one travels the wire as JSON - the modal itself IS the fetched payload, with
+	// no server-rendered pass to ride into - so the dialog caller paints the region + its id-less dynamic-count
+	// sidecar from that JSON, mirroring BarSlotTable.detailRegion(bar, ANCHOR_DIALOG_TITLE) +
+	// BarSlotTable.detailSidecar(bar)'s exact shape, rather than relocating server-painted markup.  Identity minting,
+	// enhance-on-insert, and collapse teardown are NOT reimplemented here: this caller reuses
+	// mintDetailBarSlotIdentity / enhanceChromeInPanel / teardownDetailBarSlot verbatim (see showActionDialog below),
+	// exactly as spec'd - the shared strip builder never learns ANY bar-slot host exists (FINISHED-J0445u/J0445w).
+	const DIALOG_BAR_SLOT_CLASS = "juneau-view-dialog-bar-slot";
+	const DIALOG_BAR_ANCHOR = "dialog-title";
+	const BAR_SLOT_ANCHOR_ATTR = "data-juneau-bar-slot-anchor";
+	const BAR_WIDGET_MARKER = "data-juneau-bar-widget";
+	const JUNEAU_BAR_SLOT_CONTRACT_VERSION = "1";
+	const BAR_BADGE_NS = "bar";
+	const BAR_BADGE_ATTR = "data-juneau-badge";
+	const BAR_BADGE_TONE_ATTR = "data-juneau-badge-tone";
+	const BAR_BADGE_MAX_ATTR = "data-juneau-badge-max";
+
+	/** Clamps a fresh count above `max` to "<max>+", exactly as the server's AppHeaderTable.clampCount does.  Pure. */
+	function clampDialogBarCount(count, max) {
+		if (typeof count !== "number") return "";
+		if (typeof max === "number" && count > max) return max + "+";
+		return String(count);
+	}
+
+	/** True for a BarText-shaped widget: duck-typed on `text` presence, since a BarBadge JSON never carries one. */
+	function isDialogBarTextWidget(w) {
+		return !! w && typeof w.text === "string";
+	}
+
+	/** Paints one BarBadge's count/tone overlay from JSON, mirroring BarSlotTable's private emitBadge(). */
+	function buildDialogBarBadgeEl(id, badge) {
+		const span = document.createElement("span");
+		span.className = "jc-badge";
+		span.setAttribute(BAR_BADGE_ATTR, BAR_BADGE_NS + ":" + id);
+		if (badge.tone != null) span.setAttribute(BAR_BADGE_TONE_ATTR, String(badge.tone).toLowerCase());
+		if (badge.dot) {
+			span.className = "jc-badge jc-badge-dot";
+		} else if (typeof badge.count === "number") {
+			const max = typeof badge.max === "number" ? badge.max : null;
+			if (max != null) span.setAttribute(BAR_BADGE_MAX_ATTR, String(max));
+			span.textContent = clampDialogBarCount(badge.count, max);
+		}
+		if (typeof badge.label === "string" && badge.label !== "") span.setAttribute("aria-label", badge.label);
+		return span;
+	}
+
+	/** Paints one BarWidget (BarText or BarBadge) from JSON, mirroring BarSlotTable's private emitWidget(). */
+	function buildDialogBarWidgetEl(w) {
+		if (! w || typeof w.id !== "string" || w.id === "") return null;
+		const span = document.createElement("span");
+		span.setAttribute(BAR_WIDGET_MARKER, w.id);
+		if (isDialogBarTextWidget(w)) {
+			span.className = "jc-bar-text";
+			span.textContent = w.text;
+			return span;
+		}
+		span.className = "jc-bar-badge";
+		if (typeof w.label === "string" && w.label !== "") {
+			const label = document.createElement("span");
+			label.className = "jc-bar-label";
+			label.textContent = w.label;
+			span.appendChild(label);
+		}
+		if (w.badge) span.appendChild(buildDialogBarBadgeEl(w.id, w.badge));
+		return span;
+	}
+
+	/**
+	 * Builds a dialog's bar-slot region + id-less sidecar from the JSON `bar` (a {@code ModalDef.barSlot}), mirroring
+	 * {@code BarSlotTable.detailRegion(bar, BarSlotTable.ANCHOR_DIALOG_TITLE)} +
+	 * {@code BarSlotTable.detailSidecar(bar)}'s exact shape - {@code createElement}/{@code textContent} only, NEVER
+	 * {@code innerHTML} (BLK-1/MED-9: this is fetched, attacker-influenceable data, the same reasoning
+	 * {@code buildDialogOverlay} states for the confirmation fields below).  Returns <jk>null</jk> for a
+	 * missing/malformed/empty bar - a peripheral, additive feature failing closed must never block the confirm/cancel
+	 * dialog itself from opening.
+	 */
+	function buildDialogBarSlotRegion(bar) {
+		if (! bar || typeof bar.id !== "string" || bar.id === "") return null;
+		if (bar.contractVersion !== JUNEAU_BAR_SLOT_CONTRACT_VERSION) return null;
+		if (! Array.isArray(bar.widgets) || ! bar.widgets.length) return null;
+		const region = document.createElement("div");
+		region.className = "jc-bar-slot " + DIALOG_BAR_SLOT_CLASS;
+		region.setAttribute(DETAIL_BAR_MARKER, bar.id);
+		region.setAttribute(BAR_SLOT_ANCHOR_ATTR, DIALOG_BAR_ANCHOR);
+		const badges = {};
+		let any = false;
+		bar.widgets.forEach(function (w) {
+			const el = buildDialogBarWidgetEl(w);
+			if (! el) return;
+			region.appendChild(el);
+			any = true;
+			if (! isDialogBarTextWidget(w) && w.badge && typeof w.badge.count === "number")
+				badges[BAR_BADGE_NS + ":" + w.id] = w.badge.count;
+		});
+		if (! any) return null;
+		const sidecar = document.createElement("script");
+		sidecar.setAttribute("type", "application/json");
+		sidecar.setAttribute(DETAIL_BAR_META, bar.id);
+		sidecar.textContent = JSON.stringify({ contractVersion: bar.contractVersion, badges: badges });
+		return { region: region, sidecar: sidecar };
+	}
+
+	/**
+	 * Inserts a dialog's bar slot as the immediate next sibling of `titleEl` (the {@code ANCHOR_DIALOG_TITLE}
+	 * placement - the dialog OWNS this call site, exactly as the row-detail caller owns its own ribbon-trailing
+	 * relocation; the shared strip builder never learns a dialog bar slot exists), appends its sidecar, and mints its
+	 * clone-time identity via the SAME {@code mintDetailBarSlotIdentity} the row-detail host uses - reused verbatim
+	 * rather than reimplemented.  Two stacked dialogs need the same per-instance identity a cloned detail row does,
+	 * and `dialogSeq` already namespaces other per-dialog state (the form field ids), so it namespaces this too.
+	 *
+	 * @return true when a region was painted, inserted, and minted.
+	 */
+	function insertDialogBarSlot(dialog, titleEl, bar, seq) {
+		const built = buildDialogBarSlotRegion(bar);
+		if (! built) return false;
+		dialog.insertBefore(built.region, titleEl.nextSibling);
+		dialog.appendChild(built.sidecar);
+		mintDetailBarSlotIdentity(dialog, "dialog", seq);
+		return true;
+	}
+
 	/**
 	 * Builds a `present=dialog` overlay DOM node (a backdrop + a `role=dialog` box) from a ModalDef, painting the
 	 * title and each typed confirmation field with `textContent` ONLY - never `innerHTML`, never raw markup, never a
@@ -3443,6 +3565,8 @@
 		title.className = "juneau-view-dialog-title";
 		title.textContent = (modal?.title) || (action?.confirm || action?.label || action?.id) || "Confirm";
 		dialog.appendChild(title);
+
+		insertDialogBarSlot(dialog, title, modal?.barSlot, seq);
 
 		if (modal?.fields?.length) {
 			const dl = document.createElement("dl");
@@ -3915,6 +4039,7 @@
 		pushLayer(ui.backdrop, {
 			kind: "dialog", portal: true, trapFocus: true, lightDismiss: false, detachOnPop: true,
 			onDismiss: function () {
+				teardownDetailBarSlot(ui.dialog);   // reused verbatim from the row-detail host - see insertDialogBarSlot
 				if (ctx?._dialogStack) {
 					const i = ctx._dialogStack.indexOf(ui.backdrop);
 					if (i >= 0) ctx._dialogStack.splice(i, 1);
@@ -3922,6 +4047,10 @@
 				}
 			}
 		});
+		// Enhance-on-insert for a dialog-hosted bar slot: MUST run after pushLayer has portalled the dialog into the
+		// document (initAll() scans document-wide), reusing the SAME chrome entry + shared wired marker the
+		// row-detail host's enhanceChromeInPanel already uses - mirroring FINISHED-J0445u.
+		enhanceChromeInPanel(ui.dialog);
 		return ui;
 	}
 
@@ -5021,6 +5150,9 @@
 		renderActionOutcome: renderActionOutcome,
 		openActionDialog: openActionDialog,
 		buildDialogOverlay: buildDialogOverlay,
+		// Dialog-hosted bar slot (the THIRD named host) - exposed for manual verification and the node harness.
+		buildDialogBarSlotRegion: buildDialogBarSlotRegion,
+		insertDialogBarSlot: insertDialogBarSlot,
 		appendDialogForm: appendDialogForm,
 		collectDialogFormFields: collectDialogFormFields,
 		isTypedFormInputType: isTypedFormInputType,

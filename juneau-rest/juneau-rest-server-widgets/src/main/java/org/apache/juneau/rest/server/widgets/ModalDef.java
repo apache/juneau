@@ -72,9 +72,23 @@ import org.apache.juneau.commons.bean.*;
  * 	<li class='jc'>{@link Widget}
  * </ul>
  *
+ * <h5 class='section'>The third named bar-slot host</h5>
+ * <p>
+ * {@link #barSlot} is the <i>third</i> named {@link BarSlot} attachment &mdash; alongside the rich-view module's page
+ * and row-detail hosts (that module never depends on this one, so they are not linked here).  Unlike those two
+ * &mdash; Java-only fields a server-side emitter paints directly, omitted from their wire &mdash; this modal itself
+ * <b>is</b> the wire payload the modal-open confirmation fetch returns, with no separate server-rendered pass the
+ * dialog could ride into.  So this field <b>is</b> carried on the wire (additive-only: {@code null} when unset, and
+ * its presence does not bump {@link #CONTRACT_VERSION}), and the {@code juneau-views.js} runtime paints the region
+ * and its dynamic-count sidecar client-side from the JSON, the same way it already paints typed confirmation
+ * {@link #fields} and {@link #form} controls &mdash; {@code textContent} only, never {@code innerHTML}.  The dialog
+ * anchors its own region immediately after the title (the rich-view module's {@code
+ * BarSlotTable.ANCHOR_DIALOG_TITLE}), owning that placement itself rather than leaning on the shared strip builder,
+ * exactly as the row-detail host owns its own ribbon-trailing relocation.
+ *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,title,fields,form,idempotencyKey")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,barSlot")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ModalDef implements Widget {
 
@@ -148,6 +162,13 @@ public class ModalDef implements Widget {
 	public String idempotencyKey;
 
 	/**
+	 * Optional additive bar slot anchored to this dialog's title &mdash; the <i>third</i> named {@link BarSlot}
+	 * attachment (see the class Javadoc for how this host differs from the other two).  Omitted from the wire when
+	 * unset; painted by the runtime immediately after {@link #title}, ahead of {@link #fields} and {@link #form}.
+	 */
+	public BarSlot barSlot;
+
+	/**
 	 * Starts a new {@link ModalDef} with the specified title / confirmation prompt.
 	 *
 	 * @param title The modal title / confirmation prompt.  Must not be <jk>null</jk> or blank.
@@ -199,6 +220,21 @@ public class ModalDef implements Widget {
 	}
 
 	/**
+	 * Declares the additive bar slot anchored to this dialog's title.
+	 *
+	 * <p>
+	 * See {@link #barSlot} &mdash; a third named host for the same {@link BarSlot} bean, not a re-use of the
+	 * rich-view module's page or row-detail hosts.
+	 *
+	 * @param value The bar slot.  Can be <jk>null</jk> (no dialog bar slot).
+	 * @return This object.
+	 */
+	public ModalDef barSlot(BarSlot value) {
+		barSlot = value;
+		return this;
+	}
+
+	/**
 	 * Fail-closed bean validation.
 	 *
 	 * <p>
@@ -222,6 +258,8 @@ public class ModalDef implements Widget {
 			}
 		if (form != null)
 			form.validate();
+		if (barSlot != null)
+			barSlot.validate();
 	}
 
 	/**

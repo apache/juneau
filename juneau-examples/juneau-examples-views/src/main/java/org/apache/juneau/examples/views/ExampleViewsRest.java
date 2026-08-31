@@ -738,6 +738,13 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * The serving-path {@link ModalDef#checked() checked()} hook stamps the contract version and fail-closed validates
 	 * the modal/form &mdash; a malformed form fails here at serve time, not silently on the wire.
 	 *
+	 * <p>
+	 * This is also the toolkit's example of the <b>third</b> named {@link BarSlot} host, {@link ModalDef#barSlot}:
+	 * a static {@link BarText} for severity context beside a {@link BarBadge} whose count
+	 * ({@link #countOtherOpen(Alert)}) is live, painted client-side from this same JSON by
+	 * {@code insertDialogBarSlot} the moment the dialog opens &mdash; unlike {@link PageDef#barSlot}/
+	 * {@link RowDetailDef#barSlot}, there is no server-rendered pass to ride into.
+	 *
 	 * @param id The alert id.
 	 * @return The validated, version-stamped modal definition.
 	 */
@@ -756,8 +763,26 @@ public class ExampleViewsRest extends BasicRestServlet {
 				.field(FormDef.Input.of(COL_SEVERITY, "Re-assign severity", "select")
 					.option(SEVERITY_CRITICAL, "Critical").option("warning", "Warning").option(SEVERITY_INFO, "Info").value(a.severity))
 				.field(FormDef.Input.of("escalate", "Escalate instead…", INPUT_TYPE_ACTION).action(ActionRef.of(ACTION_ESC))))
+			.barSlot(BarSlot.create("ack-form-bar").widgets(
+				BarText.of("severity-note", "Severity: " + a.severity),
+				BarBadge.of("other-open").label("other open at this severity").badge(Badge.count(countOtherOpen(a))
+					.tone(SEVERITY_CRITICAL.equals(a.severity) ? Tone.DANGER : Tone.WARN))))
 			.idempotencyKey(key.value())
 			.checked();
+	}
+
+	/**
+	 * Counts other {@link #STATUS_OPEN} alerts sharing {@code a}'s severity, for the {@link #ackForm(String)}
+	 * dialog's live {@link BarBadge} count.
+	 *
+	 * @param a The alert being acknowledged (excluded from its own count).
+	 * @return The number of other open alerts at the same severity.
+	 */
+	private static int countOtherOpen(Alert a) {
+		var n = 0;
+		for (var o : ALERTS)
+			if (o != a && STATUS_OPEN.equals(o.status) && a.severity.equals(o.severity)) n++;
+		return n;
 	}
 
 	/**

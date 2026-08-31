@@ -1479,6 +1479,16 @@ table.dataTable thead .sorting_desc_disabled:after {
 	font-size: 1.1em;
 }
 
+/*
+ * THIRD bar-slot host: a bar slot anchored to a dialog's title (ModalDef.barSlot), painted client-side from JSON
+ * (juneau-views.js buildDialogBarSlotRegion) rather than relocated like the row-detail host - so only the block
+ * bottom-margin needs tuning here to match the dialog's own vertical rhythm; .jc-bar-slot already supplies the
+ * shared flex/wrap/gap shape.  NEUTRAL - shape only.
+ */
+.juneau-view-dialog-bar-slot {
+	margin: 0 0 0.75em;
+}
+
 .juneau-view-dialog-fields {
 	margin: 0 0 var(--jc-space-4);
 }

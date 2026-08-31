@@ -31,14 +31,21 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code data-juneau-bar-slot} region {@link PageTable} emits as a <b>trailing sibling of {@code .jc-subtab-bar}</b>
  * (concept #9), plus a data-only sidecar for its dynamic counts.
  *
- * <h5 class='section'>Two named hosts, one emitter:</h5>
+ * <h5 class='section'>Three named hosts, one emitter:</h5>
  * <p>
  * {@link PageDef#barSlot} is the page host: {@link #of(BarSlot)} + {@link #sidecar(BarSlot)}, emitted once per page
  * with a document-unique sidecar {@code id}.  {@link RowDetailDef#barSlot} is the row-detail host:
- * {@link #detailRegion(BarSlot, String)} + {@link #detailSidecar(BarSlot)}, emitted into the row-expand
- * {@code <template>} and therefore cloned per expanded row &mdash; so its sidecar ships {@code id}-less and the
- * runtime mints a row-qualified identity after cloning.  Sharing the bean and the emitter is the point; the hosts and
- * their placements stay distinct.
+ * {@link #detailRegion(BarSlot, String)} with {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE} +
+ * {@link #detailSidecar(BarSlot)}, emitted into the row-expand {@code <template>} and therefore cloned per expanded
+ * row &mdash; so its sidecar ships {@code id}-less and the runtime mints a row-qualified identity after cloning. The
+ * <i>third</i> host is a dialog's {@code ModalDef.barSlot} (in {@code juneau-rest-server-widgets}): unlike the other
+ * two, that field travels the wire (the modal itself is a fetched payload with no server-rendered pass to ride into),
+ * so this emitter's {@link #detailRegion(BarSlot, String)} with {@link #ANCHOR_DIALOG_TITLE} +
+ * {@link #detailSidecar(BarSlot)} shape is instead mirrored client-side by the {@code juneau-views.js} runtime,
+ * which paints the region from the fetched JSON and reuses the SAME {@code id}-less clone-time id minting the
+ * row-detail host uses (there is no per-dialog {@code <template>} to clone from server-rendered markup, but two
+ * stacked dialogs need the same per-instance identity a cloned row does).  Sharing the bean and this shape is the
+ * point; the hosts and their placements stay distinct.
  *
  * <p>
  * The bar beans live in {@code juneau-rest-server-widgets}; this emitter is the only place that turns them into markup.
@@ -80,6 +87,16 @@ public class BarSlotTable {
 	 */
 	public static final String ANCHOR_SECTION_TITLE = "section-title";
 
+	/**
+	 * Anchor for a dialog's {@code ModalDef.barSlot}: the region is placed as the immediate next sibling of the
+	 * dialog's {@code h2.juneau-view-dialog-title}.  Unlike {@link #ANCHOR_RIBBON} / {@link #ANCHOR_SECTION_TITLE},
+	 * no server-rendered markup ever carries this anchor value &mdash; the dialog is a fetched JSON payload, so the
+	 * {@code juneau-views.js} runtime paints the region (and stamps this same anchor attribute onto it) client-side,
+	 * mirroring {@link #detailRegion(BarSlot, String)}'s shape.  The dialog owns that placement itself, exactly as
+	 * the row-detail host owns its own ribbon-trailing relocation; the shared strip builder never learns of it.
+	 */
+	public static final String ANCHOR_DIALOG_TITLE = "dialog-title";
+
 	/** Class added to a detail-hosted region, so CSS and the runtime address it by name rather than by position. */
 	public static final String DETAIL_SLOT_CLASS = "juneau-view-detail-bar-slot";
 
@@ -114,16 +131,18 @@ public class BarSlotTable {
 	}
 
 	/**
-	 * Builds the {@code data-juneau-bar-slot} region for a bar slot hosted on the <b>row-detail ribbon</b>.
+	 * Builds the {@code data-juneau-bar-slot} region for a bar slot hosted on the <b>row-detail ribbon</b> (or, for
+	 * the {@link #ANCHOR_DIALOG_TITLE} shape a dialog's client-side painting mirrors, a dialog title).
 	 *
 	 * <p>
 	 * Same region as {@link #of(BarSlot)}, plus {@link #DETAIL_SLOT_CLASS} and the declared
 	 * {@link #BAR_SLOT_ANCHOR_ATTR}.  The marker still carries the <b>author</b> {@link BarSlot#id}; the runtime
-	 * rewrites it to a row-qualified suffix once the enclosing {@code <template>} has been cloned, since one document
-	 * can hold one such region per expanded row.
+	 * rewrites it to an instance-qualified suffix once the enclosing {@code <template>} has been cloned (row-detail)
+	 * or the dialog has been built (dialog), since one document can hold one such region per expanded row / open
+	 * dialog instance.
 	 *
 	 * @param bar The built bar slot.  Must not be <jk>null</jk>.
-	 * @param anchor {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE}.
+	 * @param anchor {@link #ANCHOR_RIBBON}, {@link #ANCHOR_SECTION_TITLE}, or {@link #ANCHOR_DIALOG_TITLE}.
 	 * @return A new {@link Div} carrying the detail-hosted region.
 	 * @throws IllegalArgumentException If {@code bar} is <jk>null</jk> or fails {@link BarSlot#validate()}.
 	 */
