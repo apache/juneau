@@ -28,8 +28,8 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * A single bean discriminated by {@link #type}; only the fields relevant to a given action type are populated, and
  * the serializer omits the rest (null-valued properties are dropped).  Build actions via the static factory methods
- * ({@link #export(String...)}, {@link #refresh()}, {@link #columnSearchToggle()}, {@link #option(String)},
- * {@link #optionGroup(String)}, {@link #divider()}).
+ * ({@link #export(String...)}, {@link #refresh()}, {@link #columnSearchToggle()}, {@link #pausePolling()},
+ * {@link #option(String)}, {@link #optionGroup(String)}, {@link #divider()}).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RibbonAction {
 
-	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code option}/{@code optionGroup}/{@code divider}. */
+	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code option}/{@code optionGroup}/{@code divider}. */
 	public String type;
 
 	/** For {@code export}: the always-on button ids (e.g. {@code ["copy","csv"]}). */
@@ -246,6 +246,29 @@ public class RibbonAction {
 	}
 
 	/**
+	 * Creates a {@code pausePolling} action &mdash; a stateful pause/resume toggle over this view's poll timer.
+	 *
+	 * <p>
+	 * View-local and non-mutating, like {@link #refresh()} and {@link #columnSearchToggle()}: it holds the table
+	 * still so the operator can read or type without a tick redrawing underneath them, and holds it until they
+	 * press it again.  While paused the staleness indicator reads {@code "Paused - updated 42s ago"} with the age
+	 * still advancing &mdash; a suspended poll must never be able to pass for a healthy one, or for a broken one.
+	 *
+	 * <p>
+	 * Only meaningful on a view that declares {@link ViewDef#poll(long)}; on any other view the client renders no
+	 * button at all rather than an inert one.  The toggle survives a column-config Apply (the view stays paused,
+	 * and the rebuilt button comes back pressed), and it is independent of
+	 * {@link ViewDef#pausePollingWhileEditing()} &mdash; resuming does not override an editor that is still open.
+	 *
+	 * @return A new {@link RibbonAction}.
+	 */
+	public static RibbonAction pausePolling() {
+		var a = new RibbonAction();
+		a.type = "pausePolling";
+		return a;
+	}
+
+	/**
 	 * Creates an {@code option} action (a server-query toggle) with the specified id.
 	 *
 	 * @param id The option id.  Must not be <jk>null</jk>.
@@ -410,7 +433,7 @@ public class RibbonAction {
 	 *
 	 * <p>
 	 * An option carrying no {@code value} (or neither a {@code column} nor a {@code param}) contributes nothing;
-	 * {@code refresh}/{@code columnSearchToggle}/{@code divider}/{@code export} actions are not query-contributing and
+	 * {@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code divider}/{@code export} actions are not query-contributing and
 	 * are skipped.  {@code optionGroup} member options are mapped uniformly with top-level options.
 	 *
 	 * @param viewDef The built view whose ribbon + columns are read.  Must not be <jk>null</jk>.

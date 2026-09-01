@@ -933,6 +933,17 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Suspended polling (the pausePolling ribbon toggle, or an open editor on a view that opted into
+ * ViewDef.pausePollingWhileEditing).  Distinct from BOTH neighbours without a palette color, and deliberately
+ * quieter than the error state: a pause is a state the operator chose, a failed refresh is one that happened to
+ * them.  The dashed border is the tell that the age you are reading is not being refreshed - it keeps ticking up.
+ */
+.juneau-view-staleness[data-state="paused"] {
+	border-style: dashed;
+	font-style: italic;
+}
+
+/*
  * Per-column search row (design doc §4, item 4): one text input per searchable column, inserted
  * into <thead> by buildColumnSearchRow(...) (juneau-views.js) and shown/hidden by the columnSearchToggle ribbon
  * button.  NEUTRAL - shape only; console-ui's chrome.css themes the input's border/background/focus colors.

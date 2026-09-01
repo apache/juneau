@@ -19,7 +19,7 @@
  * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit.
  *
  * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv via DataTables Buttons, with excel/pdf
- * lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, option/optionGroup server-query toggles
+ * lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, pausePolling, option/optionGroup server-query toggles
  * (with persisted state), and divider.
  *
  * CONSISTENCY REQUIREMENT (mirrors the server): when a column-scoped `option`/`optionGroup` toggle is ACTIVE, the
@@ -85,7 +85,7 @@
 	 * client's ACTIVE toggle state.  `activeState` is a map keyed by option/group id:
 	 *   - a top-level `option` contributes iff activeState[option.id] is truthy;
 	 *   - an `optionGroup` contributes its member whose id === activeState[group.id] (the selected radio value).
-	 * refresh/columnSearchToggle/divider/export are not query-contributing and are skipped.
+	 * refresh/columnSearchToggle/pausePolling/divider/export are not query-contributing and are skipped.
 	 */
 	function ribbonToQueryParams(viewDef, activeState, optsColumns) {
 		const out = {};
@@ -149,10 +149,22 @@
 	 * columnSearchToggle (each renders exactly one button).  `collapse` is not wired to any RibbonAction.type today -
 	 * it ships here purely for forward-compatibility with a possible future (deferred) row-expander "collapse all"
 	 * affordance; inert until that action type exists.
+	 *
+	 * <p>{@code pausePolling} maps to {@code cancel} - "stop the auto-refresh" - and NOT to the neutral "tune"
+	 * fallback, which would be an outright bug rather than a cosmetic compromise: "tune" resolves to the settings
+	 * gear, which is the very glyph the column chooser already paints (juneau-config.js's mountChooser).  A view
+	 * declaring both {@code pausePolling} and {@code columnConfig} would show two identical gears in an icon-only
+	 * ribbon, one pausing the poll and one opening the column list.
+	 *
+	 * <p>{@code cancel} is a reused existing stem, not new artwork: juneau-symbols.svg carries no dedicated pause
+	 * glyph, and that sprite is provenance-guarded (juneau-symbols-provenance.md + SymbolSprite_Provenance_Test),
+	 * so adding one is its own reviewed act rather than a detail of this feature.  A consumer wanting a true pause
+	 * glyph registers one and passes {@code .symbol("...")}.
 	 */
 	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf",
-		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less"
+		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less",
+		pausePolling: "cancel"
 	};
 
 	/**
@@ -336,6 +348,29 @@
 				});
 				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
 				place(csBtn, a.group || "__ungrouped");
+				return;
+			}
+			if (a.type === "pausePolling") {
+				// A pause control on a view that never polls is a lie - wireTablePolling only calls initPolling when
+				// viewDef.pollIntervalMs is set, so there would be no timer for the button to hold.  Skip it.
+				if (! viewDef.pollIntervalMs) return;
+				// The name stays put across the toggle, as it does for Column search above: an accessible name that
+				// swapped to "Resume auto-refresh" on press would move the state INTO the name, and a screen reader
+				// reading the name and aria-pressed together would then announce it twice and contradict itself.
+				// Naming the mode and letting aria-pressed carry the state is the toggle-button pattern.  Note the
+				// name has to be the MODE ("Pause auto-refresh", pressed = the pause is on) and not the feature
+				// ("Auto-refresh"), which would read as pressed = refreshing - the exact inverse of the truth.
+				const ppBtn = button(a.title || "Pause auto-refresh", resolveButtonIcon(a, "pausePolling"), function () {
+					ctx._pollPaused = ! ctx._pollPaused;
+					ppBtn.setAttribute("aria-pressed", ctx._pollPaused ? "true" : "false");
+					// initPolling installs this so the staleness pill flips on the click; absent only if this ribbon
+					// outlived its poll wiring, in which case there is nothing to repaint.
+					if (typeof ctx._onPollPausedChange === "function") ctx._onPollPausedChange();
+				});
+				// Read the flag back rather than assume false: ctx survives a column-config Apply, so a view paused
+				// before the rebuild stays paused - and its button has to come back already pressed to say so.
+				ppBtn.setAttribute("aria-pressed", ctx._pollPaused ? "true" : "false");
+				place(ppBtn, a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "option") {

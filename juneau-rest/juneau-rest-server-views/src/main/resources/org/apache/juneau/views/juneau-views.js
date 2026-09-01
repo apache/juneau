@@ -1129,6 +1129,102 @@
 	}
 
 	/**
+	 * Whether `table` currently has an expanded Detail View row.
+	 *
+	 * <p>Reads the PANEL's presence, not the `.juneau-view-detail-open` marker class on the parent `<tr>`,
+	 * and the difference is load-bearing rather than a matter of taste.  Nothing clears that class on
+	 * `draw.dt` - only the collapse/toggle click handlers do - while DataTables reuses its `<tr>` nodes across
+	 * draws in client-side mode.  So any redraw that is NOT a collapse click (the refresh ribbon button, a sort,
+	 * a search, paging) discards the child row and leaves the class behind on a row that no longer has a panel.
+	 * Suspending on the class would then suspend this view's polling FOREVER, with the pill sitting on
+	 * "Paused - updated 14m ago" - the exact "live but looks frozen" failure this feature exists to avoid.  The
+	 * panel is created per expand and discarded by DataTables on redraw, so it cannot go stale that way.
+	 *
+	 * <p>No `tbody` qualifier, unlike {@link #hasInFlightRow}: a panel is only ever created into a child row by
+	 * {@link #expandDetailRow}, so it cannot appear in a `thead`/`tfoot` for the qualifier to exclude - and the
+	 * class alone keeps this a single simple selector, which is what lets the shared Node harness shim exercise it.
+	 *
+	 * <p>Scoped the same way {@link #hasInFlightRow} is - a descendant match inside an open detail panel counts,
+	 * so a nested view's open row holds the PARENT's poll too.  That is the wanted reading rather than an
+	 * oversight: a parent redraw discards the whole detail panel, nested table and all.  A nested table asking
+	 * this question about ITSELF is unaffected: its ancestor panel is not one of its own descendants.
+	 */
+	function hasOpenDetailRow(table) {
+		return !!table.querySelector(".juneau-view-detail-panel");
+	}
+
+	/** Whether `el` is still attached; true in an environment whose document has no `contains` (the Node harness). */
+	function isAttachedNode(el) {
+		if (typeof document === "undefined" || typeof document.contains !== "function") return true;
+		return document.contains(el);
+	}
+
+	/**
+	 * Whether this view currently hosts an open action dialog, read off the `ctx._dialogStack` that
+	 * {@link #showActionDialog} already maintains (pushed on open, spliced in the layer's `onDismiss`).
+	 *
+	 * <p>Each entry must still be attached to count.  `popLayer` runs every `onDismiss` inside a `try`, so a
+	 * handler that threw could leave an entry behind; without the attachment check that stale entry would suspend
+	 * this view's polling permanently, which is exactly the "live but looks frozen" failure the staleness
+	 * indicator exists to prevent.
+	 */
+	function hasOpenActionDialog(ctx) {
+		const stack = ctx?._dialogStack;
+		if (! stack?.length) return false;
+		for (const el of stack)
+			if (isAttachedNode(el)) return true;
+		return false;
+	}
+
+	/**
+	 * Whether this view's poll tick is currently suspended - the THIRD skip condition in {@link #initPolling}'s
+	 * `poll()`, alongside `document.hidden` and {@link #hasInFlightRow}.  Two independent sources:
+	 *
+	 * <ul>
+	 * 	<li><b>Manual</b> - `ctx._pollPaused`, flipped by the {@code pausePolling} ribbon toggle
+	 * 		(juneau-ribbon.js).  A view that declares no such action never sets the flag.
+	 * 	<li><b>Automatic</b> - an editing surface bound to this view is open (an expanded Detail View row, or an
+	 * 		action dialog), and ONLY when the view opted in with {@code ViewDef.pausePollingWhileEditing()}.  A poll
+	 * 		landing under an open editor collapses the detail row (DataTables' child-row API does not survive a
+	 * 		`draw.dt`) and takes any half-typed input with it.
+	 * </ul>
+	 *
+	 * <p>The opt-in gate is load-bearing, not timidity: this file is shared by every Juneau views consumer, and
+	 * silently freezing a table that has always redrawn on schedule is a behavior change none of them asked for.
+	 * A view that sets neither the flag nor the toggle takes the same two branches it always did - the DOM query
+	 * below is not even reached, since the opt-in check short-circuits first.
+	 *
+	 * <p>The automatic half is deliberately NOT gated on the manual toggle's position (there is no forcing a
+	 * refresh out from under an open editor); the manual half is deliberately NOT cleared when an editor closes.
+	 *
+	 * <p>The manual half is not additionally gated on the view having declared a {@code pausePolling} action,
+	 * because `_pollPaused` is a key this feature introduced and only that toggle ever writes: an existing
+	 * consumer cannot arrive here with it already set, and the toggle that would set it refuses to render on a
+	 * view with no {@code pollIntervalMs}.  Reading the flag unconditionally also keeps the programmatic door
+	 * open for a consumer that wants to hold a poll from its own chrome instead of the stock button.
+	 */
+	/**
+	 * Repaints the staleness pill right now, because something that {@link #isPollSuspended} reads just changed.
+	 *
+	 * <p>The 1s render tick would repaint anyway, which is why this is only a nicety - but it is the same nicety
+	 * the manual toggle already gets, and the gap it closes is the wrong way round to leave open: for up to a
+	 * second after a row is expanded the pill still reads "Updated 3s ago" in the `fresh` state while ticks are
+	 * already being skipped, i.e. a held view briefly claiming to be a live one.  (After a collapse it is the
+	 * harmless direction - "Paused" lingering a beat after polling resumed.)
+	 *
+	 * <p>No-op for every view that never opted in: {@link #initPolling} is what installs the hook.
+	 */
+	function notifyPollPausedChange(ctx) {
+		if (typeof ctx?._onPollPausedChange === "function") ctx._onPollPausedChange();
+	}
+
+	function isPollSuspended(table, ctx, viewDef) {
+		if (ctx?._pollPaused) return true;
+		if (! viewDef?.pausePollingWhileEditing) return false;
+		return hasOpenDetailRow(table) || hasOpenActionDialog(ctx);
+	}
+
+	/**
 	 * Visible Apply-refused notice (teardown step 1).  Never queued; the user re-applies once in-flight / job
 	 * markers clear.  Painted with {@code textContent} only.
 	 */
@@ -2161,7 +2257,7 @@
 	 * <p>"Collapse on redraw" needs no extra code here: DataTables' child-row API does not survive a `draw.dt`.
 	 */
 	// Returns true when the click was a SafeAction.COLLAPSE click (handled here regardless of outcome).
-	function handleDetailSafeCollapseClick(e, dt) {
+	function handleDetailSafeCollapseClick(e, dt, ctx) {
 		const safeBtn = e.target?.closest ? e.target.closest("[data-juneau-safe=\"collapse\"]") : null;
 		if (!safeBtn) return false;
 		e.preventDefault();
@@ -2177,6 +2273,7 @@
 			teardownDetailBarSlot(panel);
 			row.child.hide();
 			parentTr.classList.remove("juneau-view-detail-open");
+			notifyPollPausedChange(ctx);
 		}
 		return true;
 	}
@@ -2213,6 +2310,7 @@
 			}
 			row.child.hide();
 			tr.classList.remove("juneau-view-detail-open");
+			notifyPollPausedChange(ctx);
 			return;
 		}
 		expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
@@ -2229,7 +2327,7 @@
 			const tpl = findRowDetailTemplate(table);
 			if (!tpl) return;
 
-			if (handleDetailSafeCollapseClick(e, dt)) return;
+			if (handleDetailSafeCollapseClick(e, dt, ctx)) return;
 			if (handleDetailActionRefClick(e, table, ctx, viewDef)) return;
 			toggleDetailRow(table, ctx, viewDef, tpl, dt, e);
 		});
@@ -2712,6 +2810,9 @@
 		// The host cell takes the same `juneau-cell-wrap` opt-out an author would use, rather than a second rule.
 		if (panel.parentNode?.classList) panel.parentNode.classList.add(CELL_WRAP_CLASS);
 		tr.classList.add("juneau-view-detail-open");
+		// The panel is in the document now, so an opted-in view is already suspending its poll - say so on this
+		// click rather than up to a second later, when the pill would still be claiming to be live.
+		notifyPollPausedChange(ctx);
 		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
 		enhanceChromeInPanel(panel);
 
@@ -2808,10 +2909,17 @@
 	 * <p>Any successful DataTables draw resets the "last refreshed" clock - whether it was triggered by this
 	 * timer, the refresh ribbon button, paging, or a search - because each one really did just complete a fresh
 	 * server round trip. Only the timer's OWN tick additionally (a) skips entirely while the tab/page is hidden
-	 * (Page Visibility API - no fetch, no cost, while backgrounded) and (b) skips entirely while
-	 * {@link #hasInFlightRow} is true. A failed round trip (`error.dt`) flips the indicator to a distinct
-	 * "error" state without touching the last-success timestamp, so a frozen clock and a broken poll never look
-	 * identical to a healthy one (the whole point of this function).
+	 * (Page Visibility API - no fetch, no cost, while backgrounded), (b) skips entirely while
+	 * {@link #hasInFlightRow} is true, and (c) skips entirely while {@link #isPollSuspended} is true (the manual
+	 * {@code pausePolling} ribbon toggle, or an open editing surface on a view that opted in). A failed round trip
+	 * (`error.dt`) flips the indicator to a distinct "error" state without touching the last-success timestamp, so
+	 * a frozen clock and a broken poll never look identical to a healthy one (the whole point of this function).
+	 *
+	 * <p>Suspension deliberately stops the FETCH only, never the 1s render tick: the age label has to keep
+	 * advancing, because a frozen "Updated 5s ago" is precisely how a broken poll looks. A suspended view says so
+	 * ("Paused - updated 42s ago", `data-state="paused"`), and an already-failed poll keeps saying THAT instead -
+	 * a pause the operator asked for is the less urgent of the two truths, and suppressing the error state to
+	 * announce the pause would hide a real failure behind a deliberate one.
 	 */
 	function initPolling(table, dt, viewDef, indicator, ctx) {
 		const intervalMs = clampPollInterval(viewDef.pollIntervalMs);
@@ -2819,18 +2927,66 @@
 
 		function render() {
 			const age = formatStalenessAge(Date.now() - state.lastSuccessAt);
-			indicator.dataset.state = state.failed ? "error" : "fresh";
-			indicator.textContent = state.failed ? "Refresh failed - last updated " + age : "Updated " + age;
+			const paused = ! state.failed && isPollSuspended(table, ctx, viewDef);
+			indicator.dataset.state = state.failed ? "error" : (paused ? "paused" : "fresh");
+			if (state.failed) indicator.textContent = "Refresh failed - last updated " + age;
+			else indicator.textContent = (paused ? "Paused \u2014 updated " : "Updated ") + age;
 		}
 
 		// Guard against a nested table's draw.dt/error.dt bubbling up to this parent-table poll indicator: a nested
 		// table's own round trips must not reset (or fail) the parent's staleness clock.
-		dt.on("draw.dt", function (e) { if (e && e.target !== table) { return; } state.lastSuccessAt = Date.now(); state.failed = false; render(); });
-		dt.on("error.dt", function (e) { if (e && e.target !== table) { return; } state.failed = true; render(); });
+		dt.on("draw.dt", function (e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.lastSuccessAt = Date.now(); state.failed = false; render(); });
+		dt.on("error.dt", function (e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.failed = true; render(); });
 
+		/**
+		 * Whether a draw that is ALREADY on its way back must be thrown away instead of painted.
+		 *
+		 * <p>Closes the one hole the tick-time guards cannot: a reload that left before the operator expanded a row
+		 * still lands, and its draw discards the child row they just opened.  On a 5s tick that is not a corner
+		 * case - expanding during the last round trip looks like "expand did nothing", and anything typed in that
+		 * window is gone.  Skipping the next tick does not help, because the damage is done by the previous one.
+		 *
+		 * <p>Three conditions, each load-bearing:
+		 * <ul>
+		 * 	<li>`_pollDrawPending` - only the TIMER's own reload is discardable.  A refresh the operator asked for,
+		 * 		a sort, a page or a search must always paint, including while manually paused.
+		 * 	<li>`pausePollingWhileEditing` - opted-in views only, so no existing consumer starts losing draws.
+		 * 	<li>an open detail panel - NOT an open dialog.  A dialog is portalled to `document.body`, so a redraw
+		 * 		never touched it; only the child row is at risk.
+		 * </ul>
+		 *
+		 * <p>Cancelling at `preDraw.dt` rather than aborting the XHR is deliberate: an abort surfaces as `error.dt`
+		 * and would paint "Refresh failed" over a refresh that did not fail.  A cancelled draw fires neither event,
+		 * so the clock simply keeps climbing - which is the honest reading, since the visible table did NOT update.
+		 */
+		ctx._shouldCancelPollDraw = function () {
+			return !! ctx._pollDrawPending && !! viewDef.pausePollingWhileEditing && hasOpenDetailRow(table);
+		};
+
+		// Both preDraw.dt handlers consult the SAME predicate, so their binding order stops mattering.  It would
+		// otherwise: bindDetailInflightDrawGuards tears down nested tables at preDraw and binds first, so a naive
+		// cancel here would leave the still-open panel holding destroyed nested tables.
+		dt.on("preDraw.dt", function (e) {
+			if (e && e.target !== table) return;
+			if (! ctx._shouldCancelPollDraw()) return;
+			ctx._pollDrawPending = false;
+			return false;
+		});
+
+		// All three guards suppress the NEXT tick; none of them cancels a reload already in flight.  A fetch that
+		// left before the editor opened still lands and still redraws, so the first row expansion inside a poll
+		// window can lose a detail panel that every subsequent one keeps.  Left as-is on purpose: this is the same
+		// residual the pre-existing hasInFlightRow guard has always carried, and closing it means teaching shared
+		// code to cancel or discard an in-flight DataTables draw - materially more blast radius across every
+		// consumer than the paper cut it removes.  Worth revisiting only if the narrowed window is still a problem
+		// in practice.
 		function poll() {
 			if (document.hidden) return;
 			if (hasInFlightRow(table)) return;
+			if (isPollSuspended(table, ctx, viewDef)) return;
+			// Marks the reload as timer-originated so ctx._shouldCancelPollDraw can tell it apart from a draw the
+			// operator asked for, and discard it if an editor opens before it lands.
+			ctx._pollDrawPending = true;
 			dt.ajax.reload(null, false);
 		}
 
@@ -2842,6 +2998,11 @@
 		// fetch cadence - a short, fixed, network-free tick keeps the label honest without any extra ajax cost.
 		const renderId = setInterval(render, 1000);
 		if (ctx) ctx._pollTimers = [pollId, renderId];
+		// Late-bound repaint hook for the pausePolling ribbon toggle. constructTable builds the ribbon BEFORE it
+		// wires polling, so the toggle cannot capture `render` at build time; it flips ctx._pollPaused and calls
+		// back through here so the pill flips on the click rather than up to a second later. Reassigned on every
+		// re-init, which is what keeps a rebuilt ribbon talking to the CURRENT indicator rather than a detached one.
+		if (ctx) ctx._onPollPausedChange = render;
 		render();
 	}
 
@@ -4140,8 +4301,10 @@
 					if (i >= 0) ctx._dialogStack.splice(i, 1);
 					ctx._actionDialog = ctx._dialogStack.length ? ctx._dialogStack[ctx._dialogStack.length - 1] : null;
 				}
+				notifyPollPausedChange(ctx);
 			}
 		});
+		notifyPollPausedChange(ctx);
 		// Enhance-on-insert for a dialog-hosted bar slot: MUST run after pushLayer has portalled the dialog into the
 		// document (initAll() scans document-wide), reusing the SAME chrome entry + shared wired marker the
 		// row-detail host's enhanceChromeInPanel already uses - mirroring FINISHED-J0445u.
@@ -4570,6 +4733,10 @@
 		// leak their listeners/timers).  Guarded so a nested table's own preDraw never triggers this.
 		ctx.dataTable.on("preDraw.dt", function (e) {
 			if (e && e.target !== table) return;
+			// A draw initPolling is about to cancel must not be torn down for: the child rows are staying, and
+			// tearing down now would leave the still-open panel holding dead nested tables.  Same predicate the
+			// cancelling handler uses, so it does not matter which of the two jQuery runs first.
+			if (ctx._shouldCancelPollDraw?.()) return;
 			teardownNestedTables(table);
 		});
 	}
@@ -4647,6 +4814,9 @@
 		ctx.redraw = function () {
 			const d = ctx.dataTable;
 			if (!d) return;
+			// This draw is the operator's, not the timer's - clear the marker so a poll still in flight cannot make
+			// ctx._shouldCancelPollDraw swallow a refresh that was explicitly asked for.
+			ctx._pollDrawPending = false;
 			if (d.ajax) d.ajax.reload(); else d.draw();
 		};
 
@@ -5178,6 +5348,9 @@
 		formatStalenessAge: formatStalenessAge,
 		hasInFlightRow: hasInFlightRow,
 		hasJobRow: hasJobRow,
+		hasOpenDetailRow: hasOpenDetailRow,
+		hasOpenActionDialog: hasOpenActionDialog,
+		isPollSuspended: isPollSuspended,
 		buildStalenessIndicator: buildStalenessIndicator,
 		initPolling: initPolling,
 		// Row-details expander - exposed for manual verification.

@@ -67,7 +67,7 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,pollIntervalMs,columnConfig")
+@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,pollIntervalMs,pausePollingWhileEditing,columnConfig")
 @SuppressWarnings({
 	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
@@ -253,6 +253,12 @@ public class ViewDef {
 	public Long pollIntervalMs;
 
 	/**
+	 * Whether a poll tick is suspended while an editing surface bound to this view is open; omitted from the wire
+	 * when unset (no suspension) &mdash; see {@link #pausePollingWhileEditing()}.
+	 */
+	public Boolean pausePollingWhileEditing;
+
+	/**
 	 * The opt-in column-configurator settings; omitted from the wire when unset (no chooser).
 	 *
 	 * <p>
@@ -376,6 +382,37 @@ public class ViewDef {
 		if (intervalMs <= 0)
 			throw iaex("ViewDef.poll(...) interval must be positive.");
 		pollIntervalMs = Math.max(intervalMs, MIN_POLL_INTERVAL_MS);
+		return this;
+	}
+
+	/**
+	 * Suspends this table's poll tick while an editing surface bound to it is open &mdash; an expanded Detail View
+	 * row, or an action dialog.
+	 *
+	 * <p>
+	 * A poll landing under an open editor is destructive rather than merely untimely: DataTables' child-row API
+	 * does not survive a {@code draw.dt}, so the redraw collapses the expanded detail and takes whatever the
+	 * operator had half-typed with it.  This is the same trade {@link #poll(long)} already makes for an in-flight
+	 * row &mdash; hold the table still, honestly, until the interaction settles &mdash; extended from "a write is
+	 * pending" to "someone is typing".
+	 *
+	 * <p>
+	 * Opt-in rather than default-on, because a table that has always redrawn on schedule freezing on a row
+	 * expansion is a behavior change every existing consumer of this toolkit would inherit without asking for it.
+	 * The suspension applies whole-view (mirroring the in-flight rule, which skips the entire redraw when ANY row
+	 * is in flight), is independent of the manual {@link RibbonAction#pausePolling()} toggle if that is also
+	 * declared, and ends the moment the editor closes &mdash; the next tick fetches normally, with no manual
+	 * refresh needed.
+	 *
+	 * <p>
+	 * The staleness indicator keeps ticking throughout, reading {@code "Paused - updated 42s ago"}: the age must
+	 * keep advancing while suspended, since a frozen clock is how a BROKEN poll looks and the two states have to
+	 * stay tellable apart.
+	 *
+	 * @return This object.
+	 */
+	public ViewDef pausePollingWhileEditing() {
+		pausePollingWhileEditing = true;
 		return this;
 	}
 
