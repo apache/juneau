@@ -2071,6 +2071,88 @@
 		return null;
 	}
 
+	// ==================================================================================================================
+	// ROWACTION.ENABLEDWHEN - row-state disable-with-reason gate
+	// ==================================================================================================================
+	//
+	// A RowAction can declare `enabledWhen` rules gating it on the row's OWN already-fetched data (never a new
+	// server round trip).  This reuses the SAME fail-closed evaluator the detail-panel ActionRef state rules use
+	// above (actionRuleMatches / firstFailingActionRule) - never evaluateRowClassRules, which is not fail-closed on
+	// a missing key.  Every one of the three RowAction activation surfaces (buildRowActionMenu, activatePillAction,
+	// openFormActionDialog) evaluates this per row and re-checks it again right before firing, so a gated-and-failing
+	// action can never activate even if its visual disabled state is somehow bypassed.  Disabled, never hidden - both
+	// reason channels (native `title` + `aria-describedby`), same convention as the ActionRef rules above.
+
+	const ROW_ACTION_DESC_ATTR = "data-juneau-row-action-desc";
+	const ROW_ACTION_DESC_ID_PREFIX = "juneau-row-action-desc:";
+	let rowActionDescSeq = 0;
+
+	/**
+	 * The FIRST declared `enabledWhen` rule that does not match `rowData`, or null when the action is ungated or
+	 * every rule matches.  `rowData` missing/not-an-object evaluates against `{}`, which fails closed on every
+	 * field-keyed rule (Object.hasOwn({}, field) is always false) - so a row whose data could not be resolved never
+	 * lets a gated action through.
+	 */
+	function firstFailingRowActionRule(action, rowData) {
+		const rules = action?.enabledWhen;
+		if (!rules || !rules.length) return null;
+		const map = rowData && typeof rowData === "object" ? rowData : {};
+		return firstFailingActionRule(rules, map);
+	}
+
+	/** This table's already-fetched data for `tr` via DataTables' own row API (the openCellPopover lookup pattern). */
+	function rowDataForTr(ctx, tr) {
+		const dt = ctx?.dataTable;
+		if (!dt || !tr || typeof dt.row !== "function") return null;
+		const row = dt.row(tr);
+		return typeof row?.data === "function" ? row.data() : null;
+	}
+
+	/**
+	 * Creates a fresh hidden sibling reason node right after `el` and wires `el`'s `aria-describedby` at it; also
+	 * sets `el`'s `title`.  Both reason channels, always - mirrors disableActionRefForRule's convention above.  A
+	 * fresh node per call is safe here: every call site re-paints `el` itself on each draw/open, so the old sibling
+	 * is discarded with it rather than accumulating.
+	 */
+	function attachRowActionDescNode(el, reason) {
+		const text = reason == null ? "" : String(reason);
+		el.setAttribute("title", text);
+		const desc = document.createElement("span");
+		desc.setAttribute(ROW_ACTION_DESC_ATTR, "1");
+		desc.setAttribute("hidden", "hidden");
+		const id = ROW_ACTION_DESC_ID_PREFIX + String(++rowActionDescSeq);
+		desc.setAttribute("id", id);
+		desc.textContent = text;   // textContent only, never innerHTML
+		if (el.parentNode) el.parentNode.insertBefore(desc, el.nextSibling);
+		el.setAttribute("aria-describedby", id);
+	}
+
+	/** Disables a row-action `<button>` (menu item / dialog-action control) for a failing `enabledWhen` rule. */
+	function disableRowActionControl(control, reason) {
+		control.disabled = true;
+		attachRowActionDescNode(control, reason);
+	}
+
+	/** Visually disables an action-bound cell pill (no native `disabled`) for a failing `enabledWhen` rule. */
+	function disableRowActionPill(pill, reason) {
+		setPillDisabledVisual(pill, false);
+		attachRowActionDescNode(pill, reason);
+	}
+
+	/**
+	 * Client-side visual gate for action-bound cell pills, evaluated once per drawn row against the SAME rowData
+	 * DataTables just handed `createdRow` - no lookup needed.  Runs from the createdRow hook (assembleFullColumnArray),
+	 * alongside stampRowId, so every row action's pills are gated at the same point stampRowId already runs at.
+	 */
+	function applyRowActionPillGates(rowEl, rowData, viewDef) {
+		if (!rowEl || typeof rowEl.querySelectorAll !== "function" || !viewDef?.rowActions?.length) return;
+		for (const pill of rowEl.querySelectorAll("[data-juneau-pill][data-juneau-action]")) {
+			const action = findRowActionById(viewDef, pill.dataset.juneauAction);
+			const failing = firstFailingRowActionRule(action, rowData);
+			if (failing) disableRowActionPill(pill, failing.reason);
+		}
+	}
+
 	/**
 	 * Wires the row-details expander via DataTables' native child-row API.  ONE delegated click listener on
 	 * `table` toggles expand, collapse, and ActionRef submit.  Expand GETs the stamped URL; ActionRef buttons
@@ -3656,19 +3738,25 @@
 	}
 
 	// A `type=action` button: its name/id wiring is entirely its own (no shared tail post-processing), and
-	// a missing/non-dialog action id paints DISABLED rather than throwing (SF-1 / H-P4-S1).
-	function buildActionFormControl(f, table, tr, ctx) {
+	// a missing/non-dialog action id paints DISABLED rather than throwing (SF-1 / H-P4-S1).  A resolvable action
+	// gated-and-failing for this row paints disabled too, with both enabledWhen reason channels.
+	function buildActionFormControl(f, table, tr, ctx, row) {
 		const control = document.createElement("button");
 		control.type = "button";
 		control.className = "juneau-view-dialog-form-action";
 		control.textContent = f.label != null ? String(f.label) : String(f.name);
 		control.name = String(f.name);
 		control.dataset.juneauFormField = String(f.name);
+		row.appendChild(control);   // attach BEFORE gating: attachRowActionDescNode needs control.parentNode to insert the reason sibling
 		const actionId = f.actionId;
 		if (! dialogActionIsOpenable(ctx, actionId)) {
 			control.disabled = true;
 			control.setAttribute("aria-disabled", "true");
 			control.dataset.juneauActionMissing = "1";
+		} else {
+			const target = findRowActionById(ctx?.viewDef, actionId);
+			const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
+			if (failing) disableRowActionControl(control, failing.reason);
 		}
 		control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx); });
 		return control;
@@ -3688,9 +3776,7 @@
 		if (! isTypedFormInputType(type)) return null;
 		// `action` has no shared id/name/value tail below - it wires its own name/dataset and returns early.
 		if (type === "action") {
-			const control = buildActionFormControl(f, table, tr, ctx);
-			row.appendChild(control);
-			return control;
+			return buildActionFormControl(f, table, tr, ctx, row);
 		}
 		let control;
 		if (type === "textarea") control = document.createElement("textarea");
@@ -3719,20 +3805,29 @@
 	/**
 	 * A `type=action` button click: opens a nested dialog for the named RowAction on the enclosing view WITHOUT
 	 * closing the parent dialog (pushes a child layer).  A missing / non-dialog action is a visible refusal painted
-	 * into the current top dialog - never a throw (SF-1).
+	 * into the current top dialog - never a throw (SF-1).  A resolvable action gated-and-failing for this row is
+	 * the SAME kind of visible refusal (fresh, fail-closed re-check - never a silent no-op, never a throw): the
+	 * button's own disabled state (buildActionFormControl) is defense in depth, not the only gate.
 	 */
 	function openFormActionDialog(actionId, table, tr, ctx) {
 		if (! dialogActionIsOpenable(ctx, actionId)) { renderDialogActionRefusal(actionId); return; }
 		let target = null;
 		const catalog = (ctx?.viewDef?.rowActions) || [];
 		for (const c of catalog) if (c?.id === actionId) { target = c; break; }
+		const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
+		if (failing) { renderDialogActionRefusal(actionId, failing.reason); return; }
 		openActionDialog(target, table, tr, ctx);
 	}
 
-	/** Paints a visible fail-closed refusal into the current top dialog (used for a missing/non-dialog action id). */
-	function renderDialogActionRefusal(actionId) {
+	/**
+	 * Paints a visible fail-closed refusal into the current top dialog: a missing/non-dialog action id (no
+	 * `reason`), or a resolvable action gated-and-failing for this row (`reason` is the failing enabledWhen rule's
+	 * reason text).
+	 */
+	function renderDialogActionRefusal(actionId, reason) {
+		const suffix = reason == null ? "" : ": " + String(reason);
 		renderTopDialogNotice("juneau-view-dialog-action-refusal", "dialog-action-refusal",
-			"Action '" + String(actionId) + "' is not available.");
+			"Action '" + String(actionId) + "' is not available" + suffix + ".");
 	}
 
 	/** Paints the depth-cap refusal into the CURRENT top dialog (H-P5-S5), not a row-cell banner behind two backdrops. */
@@ -4091,12 +4186,18 @@
 	 * Builds the row-action menu element (`<ul role="menu">`) from a view's rowActions.  Each item's activation
 	 * routes to submitRowAction(...); a safe-method or token-less action still renders (so the menu is honest
 	 * about what is declared) but visibly refuses on activation rather than silently doing nothing.
+	 *
+	 * <p>Each item is also gated on `action.enabledWhen` against this row's already-fetched data (rowDataForTr):
+	 * a failing item renders present but disabled with both reason channels, never removed from the menu, and its
+	 * click handler re-checks the SAME rule fresh before firing so a stale disabled state can never let a gated
+	 * action through.
 	 */
 	function buildRowActionMenu(viewDef, table, tr, ctx) {
 		const menu = document.createElement("ul");
 		menu.className = "juneau-view-action-menu";
 		menu.setAttribute("role", "menu");
 		menu.dataset.testid = "action-menu";
+		const rowData = rowDataForTr(ctx, tr);
 		(viewDef.rowActions || []).forEach(function (action) {
 			const li = document.createElement("li");
 			li.setAttribute("role", "none");
@@ -4106,14 +4207,19 @@
 			item.setAttribute("role", "menuitem");
 			item.dataset.actionId = action.id;
 			item.textContent = action.label || action.id;
+			li.appendChild(item);   // attach BEFORE gating: attachRowActionDescNode needs item.parentNode to insert the reason sibling
+			const failing = firstFailingRowActionRule(action, rowData);
+			if (failing) disableRowActionControl(item, failing.reason);
 			item.addEventListener("click", function () {
+				// Fresh, fail-closed re-check: a gated-and-failing action must never fire, even if its disabled
+				// state was somehow bypassed or the menu is stale.
+				if (firstFailingRowActionRule(action, rowDataForTr(ctx, tr))) return;
 				closeRowActionMenus(table);
 				// A present=dialog action opens the modal (confirmation + optional form) before its submit;
 				// everything else is the direct fail-closed submit.
 				if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
 				else submitRowAction(action, table, tr, ctx);
 			});
-			li.appendChild(item);
 			menu.appendChild(li);
 		});
 		return menu;
@@ -4148,7 +4254,9 @@
 	 * Resolves the row from the pill's {@code <tr>} (as the row-action menu resolves it from the trigger's row), looks
 	 * the action up via {@link #findRowActionById}, then takes the SAME confirm / {@code present=dialog} branch the
 	 * menu takes ({@link #isDialogAction} → {@link #openActionDialog}, else {@link #submitRowAction}) - so a pill can
-	 * never skip a confirmation or a form dialog.  A disabled pill (capability-gated or already in-flight) is ignored.
+	 * never skip a confirmation or a form dialog.  A disabled pill (capability-gated or already in-flight) is ignored;
+	 * a `enabledWhen`-gated-and-failing pill is re-checked fresh here too (defense in depth alongside the visual gate
+	 * applyRowActionPillGates already applied at draw time), so a stale disabled state can never let it fire.
 	 */
 	function activatePillAction(pill, table, viewDef, ctx) {
 		if (!pill) return;
@@ -4159,6 +4267,7 @@
 		const tr = pill.closest ? pill.closest("tr") : null;
 		if (!tr) return;
 		if (tr.dataset?.juneauInflight) return;   // in-flight guard (no double submit)
+		if (firstFailingRowActionRule(action, rowDataForTr(ctx, tr))) return;
 		if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
 		else submitRowAction(action, table, tr, ctx);
 	}
@@ -4348,6 +4457,7 @@
 			if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
 			const field = ctx.selectionState?.rowIdField ?? null;
 			stampRowId(rowEl, rowData, field);
+			applyRowActionPillGates(rowEl, rowData, viewDef);
 		};
 		opts.order = resolveOrder(viewDef, opts.columns);
 	}
@@ -5136,6 +5246,9 @@
 		initRowActions: initRowActions,
 		activatePillAction: activatePillAction,
 		findRowActionById: findRowActionById,
+		firstFailingRowActionRule: firstFailingRowActionRule,
+		rowDataForTr: rowDataForTr,
+		applyRowActionPillGates: applyRowActionPillGates,
 		// Declarative modal + typed action-result + in-flight lifecycle (declarative-modal path) - exposed for the canary
 		// and manual verification.
 		ACTION_RESULT_CONTRACT_VERSION: JUNEAU_ACTION_RESULT_CONTRACT_VERSION,

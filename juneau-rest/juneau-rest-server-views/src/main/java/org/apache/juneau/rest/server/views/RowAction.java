@@ -18,7 +18,10 @@ package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.*;
+
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.Op;
 
 /**
  * A per-row action descriptor in the {@code VIEW_META} wire contract (design doc §6.10; the transport-agnostic
@@ -50,7 +53,15 @@ import org.apache.juneau.commons.bean.*;
  * 		<td>How the action's form/confirmation is presented (see {@link Present}).</td></tr>
  * 	<tr><td>{@code onSuccess}</td><td>{@code redraw}|{@code mergeRow}|{@code navigate}</td>
  * 		<td>What the runtime does with a successful result (see {@link OnSuccess}).</td></tr>
+ * 	<tr><td>{@code enabledWhen}</td><td>{@code [{field,op,value?,reason}, ...]}</td>
+ * 		<td>Row-state disable-with-reason rules (see {@link #enabledWhen(String,Op,Object,String)}).</td></tr>
  * </table>
+ *
+ * <p>
+ * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is
+ * additive-only (<jk>null</jk> when unset, omitted from the serialized form) and its presence does not bump
+ * {@link ViewDef#CONTRACT_VERSION} &mdash; a {@link RowAction} declared before this field existed is
+ * byte-identical on the wire, and old {@code juneau-views.js} ignores the unknown key.
  *
  * <h5 class='section'>Why {@link #method} cannot be a safe method</h5>
  * <p>
@@ -79,7 +90,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,label,icon,endpoint,method,confirm,form,present,onSuccess")
+@BeanType(properties="id,label,icon,endpoint,method,confirm,form,present,onSuccess,enabledWhen")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RowAction {
 
@@ -212,6 +223,17 @@ public class RowAction {
 	public String onSuccess;
 
 	/**
+	 * The row-state rules that must all match for this action to render enabled.
+	 *
+	 * <p>
+	 * <jk>null</jk> or empty means "never gated" &mdash; the action renders exactly as it does today.  See
+	 * {@link #enabledWhen(String,Op,Object,String)} for the semantics, which mirror
+	 * {@code ActionRef.enabledWhen} on the detail-panel {@code ActionBar} (widgets module): presentation only,
+	 * disabled never hidden, first-declared-rule-wins, and a field the row does not carry fails closed.
+	 */
+	public List<RowActionEnabledRule> enabledWhen;
+
+	/**
 	 * Starts a new {@link RowAction} with the specified stable action id.
 	 *
 	 * @param id The stable action id.  Must not be <jk>null</jk> or blank.
@@ -315,6 +337,52 @@ public class RowAction {
 	 */
 	public RowAction onSuccess(OnSuccess value) {
 		onSuccess = value.wire();
+		return this;
+	}
+
+	/**
+	 * Gates this action on the row's own state, comparing one field against one value.
+	 *
+	 * <p>
+	 * Mirrors {@code ActionRef.enabledWhen(String,Op,Object,String)} on the detail-panel {@code ActionBar}
+	 * (widgets module).  This is presentation only, never the authorization gate: the endpoint behind this
+	 * action must still perform its own real check and refuse on its own authority.  A row whose field does
+	 * not satisfy every declared rule renders this action present but disabled, carrying {@code reason} as its
+	 * explanation; disabled, never hidden.  Call this more than once to declare more than one rule &mdash; all
+	 * of them must match, and when several fail, the runtime shows the first-declared failing reason.
+	 *
+	 * @param field The row field to test.  Must not be <jk>null</jk> or blank.
+	 * @param op The comparison operator.  Must be {@link Op#EQ} or {@link Op#NE}.
+	 * @param value The comparison value.  Must not be <jk>null</jk>.
+	 * @param reason Why the action is unavailable when this rule does not match.  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @return This object.
+	 */
+	public RowAction enabledWhen(String field, Op op, Object value, String reason) {
+		return addEnabledRule(RowActionEnabledRule.of(field, op, value, reason));
+	}
+
+	/**
+	 * Gates this action on the presence or absence of a row field.
+	 *
+	 * <p>
+	 * The presence-based counterpart of {@link #enabledWhen(String,Op,Object,String)}, which carries the full
+	 * semantics.
+	 *
+	 * @param field The row field to test.  Must not be <jk>null</jk> or blank.
+	 * @param op The comparison operator.  Must be {@link Op#PRESENT} or {@link Op#ABSENT}.
+	 * @param reason Why the action is unavailable when this rule does not match.  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @return This object.
+	 */
+	public RowAction enabledWhen(String field, Op op, String reason) {
+		return addEnabledRule(RowActionEnabledRule.of(field, op, reason));
+	}
+
+	private RowAction addEnabledRule(RowActionEnabledRule rule) {
+		if (enabledWhen == null)
+			enabledWhen = l();
+		enabledWhen.add(rule);
 		return this;
 	}
 }

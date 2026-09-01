@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -635,5 +637,126 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertFalse(json.contains("\"pinned\""), json);
 		assertFalse(json.contains("\"defaultVisible\""), json);
 		assertFalse(json.contains("\"formats\""), json);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i) RowAction.enabledWhen: the row-state disable-with-reason gate (mirrors ActionRef.enabledWhen on the
+	// detail-panel ActionBar, widgets module).  Additive-only, like ModalDef#barSlot - its presence must not bump
+	// CONTRACT_VERSION (i11 pins the working decision), and it reuses the shared Op vocabulary without pulling in a
+	// new widgets->views dependency (i12 pins that guard).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_enabledWhen_omittedWhenUnset() {
+		// The golden fixture view never calls .enabledWhen(...) - confirms the new field doesn't leak when absent,
+		// and that a01/a02's frozen contract is untouched by this additive field.
+		var json = Json.of(releasesView());
+		assertFalse(json.contains("\"enabledWhen\""), json);
+	}
+
+	@Test void i02_enabledWhen_valueBasedRule_serializesInPinnedOrder() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(
+				RowAction.create("ack").endpoint("u").method(RowAction.Method.POST)
+					.enabledWhen("status", Op.EQ, "open", "Only open items can be acknowledged."))
+			.build();
+		var json = Json.of(v);
+		assertTrue(json.contains(
+			"\"enabledWhen\":[{\"field\":\"status\",\"op\":\"eq\",\"value\":\"open\","
+			+ "\"reason\":\"Only open items can be acknowledged.\"}]"), json);
+	}
+
+	@Test void i03_enabledWhen_presenceBasedRule_omitsValue() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(
+				RowAction.create("close").endpoint("u").method(RowAction.Method.POST)
+					.enabledWhen("assignee", Op.PRESENT, "Needs an assignee first."))
+			.build();
+		var json = Json.of(v);
+		assertTrue(json.contains(
+			"\"enabledWhen\":[{\"field\":\"assignee\",\"op\":\"present\",\"reason\":\"Needs an assignee first.\"}]"),
+			json);
+		assertFalse(json.contains("\"value\""), json);
+	}
+
+	@Test void i04_enabledWhen_multipleRules_preserveDeclarationOrder() {
+		var action = RowAction.create("ack").endpoint("u").method(RowAction.Method.POST)
+			.enabledWhen("status", Op.EQ, "open", "reason1")
+			.enabledWhen("owner", Op.PRESENT, "reason2");
+		assertEquals(2, action.enabledWhen.size());
+		assertEquals("status", action.enabledWhen.get(0).field);
+		assertEquals("owner", action.enabledWhen.get(1).field);
+	}
+
+	@Test void i05_enabledWhen_valueForm_nullValueThrows() {
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> RowAction.create("x").enabledWhen("status", Op.EQ, null, "reason"));
+		assertTrue(e.getMessage().contains("value"), e::getMessage);
+	}
+
+	@Test void i06_enabledWhen_valueForm_rejectsPresenceOp() {
+		// Misusing the (field, op, value, reason) form with a presence-based op must be rejected.
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> RowAction.create("x").enabledWhen("assignee", Op.PRESENT, "someone", "reason"));
+		assertTrue(e.getMessage().contains("does not take a value"), e::getMessage);
+	}
+
+	@Test void i07_enabledWhen_presenceForm_rejectsValueOp() {
+		// Misusing the (field, op, reason) form with a value-based op must be rejected.
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> RowAction.create("x").enabledWhen("status", Op.EQ, "reason"));
+		assertTrue(e.getMessage().contains("requires a value"), e::getMessage);
+	}
+
+	@Test void i08_enabledWhen_blankFieldThrows() {
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> RowAction.create("x").enabledWhen("  ", Op.EQ, "open", "reason"));
+		assertTrue(e.getMessage().contains("field"), e::getMessage);
+	}
+
+	@Test void i09_enabledWhen_blankReasonThrows() {
+		var e = assertThrows(IllegalArgumentException.class,
+			() -> RowAction.create("x").enabledWhen("status", Op.EQ, "open", "  "));
+		assertTrue(e.getMessage().contains("reason"), e::getMessage);
+	}
+
+	@Test void i10_enabledWhen_beanTypeMembership_lastInPinnedOrder() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(
+				RowAction.create("ack").label("Acknowledge").icon("check").endpoint("servlet:/x/{id}/ack")
+					.method(RowAction.Method.POST).confirm("Acknowledge this?").form("servlet:/x/ack-form")
+					.present(RowAction.Present.DIALOG).onSuccess(RowAction.OnSuccess.MERGE_ROW)
+					.enabledWhen("status", Op.EQ, "open", "Only open items can be acknowledged."))
+			.build();
+		Map<?,?> action = Json.to(Json.of(v.rowActions.get(0)), Map.class);
+		assertEquals(
+			List.of("id", "label", "icon", "endpoint", "method", "confirm", "form", "present", "onSuccess", "enabledWhen"),
+			new ArrayList<>(action.keySet()));
+	}
+
+	@Test void i11_enabledWhen_isAdditive_doesNotBumpContractVersion() {
+		// Per ModalDef#barSlot's precedent (its presence does not bump CONTRACT_VERSION): a RowAction declaring
+		// enabledWhen must still stamp the SAME contractVersion as the frozen golden fixture (a01/g02) - pinning the
+		// working decision so a future contributor cannot silently couple the two.
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(RowAction.create("ack").endpoint("u").method(RowAction.Method.POST)
+				.enabledWhen("status", Op.EQ, "open", "reason"))
+			.build();
+		assertEquals("4", v.contractVersion);
+		assertEquals(ViewDef.CONTRACT_VERSION, v.contractVersion);
+	}
+
+	@Test void i12_enabledWhen_reusesSharedOpWithoutNewWidgetsActionTypeDependency() throws IOException {
+		// enabledWhen shares the Op vocabulary with the widgets module's ActionRef.enabledWhen, and the Javadoc
+		// documents that mirror in {@code} prose (as Widgets_ModuleBoundary_Test's own cross-module docs do) - but
+		// the widgets->views dependency must still not exist: no import, and no {@link ActionRef}/{@link ActionBar}
+		// (which would not even resolve, since neither type is imported here).
+		var root = Path.of("src/main/java/org/apache/juneau/rest/server/views");
+		for (var name : List.of("RowAction.java", "RowActionEnabledRule.java")) {
+			var src = Files.readString(root.resolve(name));
+			assertFalse(src.matches("(?s).*\\bimport\\b[^;]*\\b(ActionRef|ActionBar)\\b.*"),
+				() -> name + " must not import widgets.ActionRef/ActionBar - only Op is shared.");
+			assertFalse(src.contains("{@link ActionRef") || src.contains("{@link ActionBar"),
+				() -> name + " must not {@link} widgets.ActionRef/ActionBar - only Op is shared.");
+		}
 	}
 }

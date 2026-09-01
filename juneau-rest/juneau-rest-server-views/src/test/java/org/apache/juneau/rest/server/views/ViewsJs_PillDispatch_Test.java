@@ -208,6 +208,97 @@ class ViewsJs_PillDispatch_Test extends TestBase {
 	}
 
 	/**
+	 * {@code RowAction.enabledWhen} draw-time visual pass ({@code applyRowActionPillGates}, the runtime's
+	 * {@code createdRow}-time hook).  A failing rule disables the pill, sets a native {@code title} tooltip, and
+	 * attaches an {@code aria-describedby} reason node carrying the same text - never hidden.  A passing rule leaves
+	 * the pill exactly as an ungated action would render.
+	 */
+	@Test void b08_pillDrawTimeGate_disablesWithTitleAndDescNode_neverHidden() {
+		var r = report();
+		assertEquals(true, r.get("drawGate_failingAriaDisabled"));
+		assertEquals("Only open items can be acknowledged.", r.get("drawGate_failingTitle"));
+		assertEquals(true, r.get("drawGate_failingNeverHidden"));
+		assertEquals(true, r.get("drawGate_failingDescNodeExists"));
+		assertEquals(true, r.get("drawGate_failingDescNodeIdMatches"));
+		assertEquals("Only open items can be acknowledged.", r.get("drawGate_failingDescText"));
+		assertEquals(true, r.get("drawGate_passingAriaDisabledAbsent"));
+		assertEquals(true, r.get("drawGate_passingNoTitle"));
+	}
+
+	/**
+	 * When more than one rule fails, the first-declared rule wins, in either declared order - proven with the same
+	 * two rules swapped so the outcome tracks declaration order, not field name or map iteration order.
+	 */
+	@Test void b09_firstDeclaredFailingRuleWins_inEitherDeclaredOrder() {
+		var r = report();
+		assertEquals("REASON-STATUS", r.get("firstFailing_forward"));
+		assertEquals("REASON-OWNER", r.get("firstFailing_reversed"));
+	}
+
+	/**
+	 * Fail-closed: a rule's field simply absent from the row payload, or a row payload that could not be resolved at
+	 * all ({@code null}), both gate the action - mirrors the {@code ActionRef} evaluator's fail-closed semantics
+	 * ({@code Object.hasOwn}) rather than treating a missing key as trivially non-matching.
+	 */
+	@Test void b10_failClosedOnMissingFieldOrUnresolvedRowData() {
+		var r = report();
+		assertEquals(true, r.get("failClosed_missingFieldDisabled"));
+		assertEquals(true, r.get("failClosed_nullRowDataDisabled"));
+	}
+
+	/**
+	 * {@code activatePillAction} re-checks the gate fresh at click time, independent of the draw-time visual pass -
+	 * defense in depth so a gated-and-failing action can never fire even if its disabled state were somehow bypassed.
+	 */
+	@Test void b11_activatePillActionReChecksFreshAtClickTime() {
+		var r = report();
+		assertEquals(true, r.get("reCheck_failingNeverFires"));
+		assertEquals(true, r.get("reCheck_passingStillFires"));
+	}
+
+	/**
+	 * {@code buildRowActionMenu}: a gated-and-failing item is disabled and reasoned but still present in the menu
+	 * (never removed/hidden), carries a real {@code aria-describedby} target node, and its click never fires. A
+	 * gated-and-passing item renders enabled and its click fires normally.
+	 */
+	@Test void b12_menuGate_failingDisabledButPresent_passingEnabled() {
+		var r = report();
+		assertEquals(true, r.get("menu_failingItemDisabled"));
+		assertEquals("Only open items can be acknowledged.", r.get("menu_failingItemTitle"));
+		assertEquals(true, r.get("menu_failingItemStillPresent"));
+		assertEquals(true, r.get("menu_failingItemNeverHidden"));
+		assertEquals(true, r.get("menu_failingDescNodeExists"));
+		assertEquals(true, r.get("menu_failingDescNodeIdMatches"));
+		assertEquals(true, r.get("menu_failingClickNeverFires"));
+		assertEquals(true, r.get("menu_passingItemEnabled"));
+		assertEquals(true, r.get("menu_passingClickFires"));
+	}
+
+	/**
+	 * Pins that {@code buildRowActionMenu} resolves per-row data via {@code ctx.dataTable.row(tr).data()} (the exact
+	 * DataTables lookup {@code openCellPopover} also uses), passing the SAME {@code tr} it was given; and that it
+	 * fails closed - the action renders disabled - when no {@code dataTable} is wired on {@code ctx} at all.
+	 */
+	@Test void b13_menuResolvesRowDataViaDataTableRowLookup_failsClosedWithoutOne() {
+		var r = report();
+		assertEquals(true, r.get("menu_dataTableRowCalledWithSameTr"));
+		assertEquals(true, r.get("menu_noDataTableFailsClosed"));
+	}
+
+	/**
+	 * {@code openFormActionDialog}: a gated-and-failing dialog action paints a visible refusal (naming the reason)
+	 * into the current top dialog and opens no new dialog layer; a gated-and-passing dialog action opens its confirm
+	 * dialog exactly as an ungated action would.
+	 */
+	@Test void b14_openFormActionDialogGate_failingRefusesInPlace_passingOpens() {
+		var r = report();
+		assertEquals(true, r.get("dialogGate_failingNoNewLayer"));
+		var refusal = (String) r.get("dialogGate_failingRefusalText");
+		assertTrue(refusal != null && refusal.contains("Only open items can be acknowledged."), refusal);
+		assertEquals(true, r.get("dialogGate_passingOpensDialog"));
+	}
+
+	/**
 	 * {@code initSelection} listens for {@code change} on the two checkbox classes and nothing else: no pill branch,
 	 * no {@code data-juneau-pill-select} attribute, no click path.  Source-shape half of the lock above, so a
 	 * re-grown select-pill protocol fails even if it happened to leave {@code selectionState} alone in the probe.

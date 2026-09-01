@@ -200,4 +200,144 @@ out.withDetails_fetchIssued = fetchCalls.length > before;
 	out.selection_checkboxSelectedR1 = selectionState.selected.has('r1');
 })();
 
+// ================================================================================================================
+// RowAction.enabledWhen - disable-with-reason gate, evaluated client-side by the shared ActionRef-rule evaluator
+// (firstFailingActionRule/actionRuleMatches, NOT evaluateRowClassRules), across all three activation surfaces:
+// the draw-time pill pass, the row-action menu, and the dialog-form action button (openFormActionDialog).
+// ================================================================================================================
+
+const GATED = {
+	id: 'ack', label: 'Acknowledge', endpoint: '/x/ack', method: 'POST',
+	enabledWhen: [{ field: 'status', op: 'eq', value: 'open', reason: 'Only open items can be acknowledged.' }]
+};
+const DIALOG_GATED = {
+	id: 'esc', label: 'Escalate', present: 'dialog', confirm: 'Escalate this row?',
+	enabledWhen: [{ field: 'status', op: 'eq', value: 'open', reason: 'Only open items can be acknowledged.' }]
+};
+
+function dataTableOf(rowData) {
+	return { row: function () { return { data: function () { return rowData; } }; } };
+}
+
+// --- draw-time visual pass (applyRowActionPillGates, the createdRow-time hook) ---------------------------------
+const dg1 = fixture('ack', { rowActions: [GATED] }, false);
+I.applyRowActionPillGates(dg1.tr, { status: 'closed' }, { rowActions: [GATED] });
+out.drawGate_failingAriaDisabled = dg1.pill.getAttribute('aria-disabled') === 'true';
+out.drawGate_failingTitle = dg1.pill.getAttribute('title');
+out.drawGate_failingNeverHidden = dg1.pill.hidden !== true;
+const dg1DescId = dg1.pill.getAttribute('aria-describedby');
+const dg1Desc = dg1.td.querySelector('[data-juneau-row-action-desc]');
+out.drawGate_failingDescNodeExists = !!dg1Desc;
+out.drawGate_failingDescNodeIdMatches = !!dg1Desc && dg1DescId === dg1Desc.getAttribute('id');
+out.drawGate_failingDescText = dg1Desc ? dg1Desc.textContent : null;
+
+const dg2 = fixture('ack', { rowActions: [GATED] }, false);
+I.applyRowActionPillGates(dg2.tr, { status: 'open' }, { rowActions: [GATED] });
+out.drawGate_passingAriaDisabledAbsent = dg2.pill.getAttribute('aria-disabled') == null;
+out.drawGate_passingNoTitle = dg2.pill.getAttribute('title') == null;
+
+// --- first-declared-failing-rule wins, in both declared orders --------------------------------------------------
+const R_STATUS = { field: 'status', op: 'eq', value: 'open', reason: 'REASON-STATUS' };
+const R_OWNER = { field: 'owner', op: 'present', reason: 'REASON-OWNER' };
+const bothFail = { status: 'closed', owner: '' };
+const forwardAction = { id: 'ack', endpoint: '/x/ack', method: 'POST', enabledWhen: [R_STATUS, R_OWNER] };
+const reversedAction = { id: 'ack', endpoint: '/x/ack', method: 'POST', enabledWhen: [R_OWNER, R_STATUS] };
+
+const dg3 = fixture('ack', { rowActions: [forwardAction] }, false);
+I.applyRowActionPillGates(dg3.tr, bothFail, { rowActions: [forwardAction] });
+out.firstFailing_forward = dg3.pill.getAttribute('title');
+
+const dg4 = fixture('ack', { rowActions: [reversedAction] }, false);
+I.applyRowActionPillGates(dg4.tr, bothFail, { rowActions: [reversedAction] });
+out.firstFailing_reversed = dg4.pill.getAttribute('title');
+
+// --- fail-closed: the rule's field is absent from rowData, or rowData itself could not be resolved -------------
+const dg5 = fixture('ack', { rowActions: [GATED] }, false);
+I.applyRowActionPillGates(dg5.tr, { unrelated: 'x' }, { rowActions: [GATED] });
+out.failClosed_missingFieldDisabled = dg5.pill.getAttribute('aria-disabled') === 'true';
+
+const dg6 = fixture('ack', { rowActions: [GATED] }, false);
+I.applyRowActionPillGates(dg6.tr, null, { rowActions: [GATED] });
+out.failClosed_nullRowDataDisabled = dg6.pill.getAttribute('aria-disabled') === 'true';
+
+// --- activatePillAction re-checks fresh at click time, independent of the draw-time pass (defense in depth) ----
+const rc1 = fixture('ack', { rowActions: [GATED] }, false);
+rc1.ctx.dataTable = dataTableOf({ status: 'closed' });
+before = fetchCalls.length;
+clickPill(rc1);
+out.reCheck_failingNeverFires = fetchCalls.length === before;
+
+const rc2 = fixture('ack', { rowActions: [GATED] }, false);
+rc2.ctx.dataTable = dataTableOf({ status: 'open' });
+before = fetchCalls.length;
+clickPill(rc2);
+out.reCheck_passingStillFires = fetchCalls.length > before;
+
+// --- buildRowActionMenu: a gated+failing item is disabled+reasoned but STILL PRESENT (never removed); its click
+// never fires.  A gated+passing item renders enabled and its click fires normally.
+const menuTr1 = env.el('tr');
+const menuCtx1 = { viewDef: { rowActions: [GATED] }, dataTable: dataTableOf({ status: 'closed' }) };
+const menu1 = I.buildRowActionMenu(menuCtx1.viewDef, env.el('table'), menuTr1, menuCtx1);
+const menuItem1 = menu1.querySelector('.juneau-view-action-item');
+out.menu_failingItemDisabled = menuItem1.disabled === true;
+out.menu_failingItemTitle = menuItem1.getAttribute('title');
+out.menu_failingItemStillPresent = menu1.querySelectorAll('.juneau-view-action-item').length === 1;
+out.menu_failingItemNeverHidden = menuItem1.hidden !== true;
+const menuDescId1 = menuItem1.getAttribute('aria-describedby');
+const menuDesc1 = menu1.querySelector('[data-juneau-row-action-desc]');
+out.menu_failingDescNodeExists = !!menuDesc1;
+out.menu_failingDescNodeIdMatches = !!menuDesc1 && menuDescId1 === menuDesc1.getAttribute('id');
+before = fetchCalls.length;
+menuItem1.dispatch('click', {});
+out.menu_failingClickNeverFires = fetchCalls.length === before;
+
+const menuTr2 = env.el('tr');
+const menuTable2 = env.el('table');
+menuTable2.dataset.juneauCsrf = 'tok-123';   // submitRowAction refuses without a CSRF token; irrelevant to the gate itself
+const menuCtx2 = { viewDef: { rowActions: [GATED] }, dataTable: dataTableOf({ status: 'open' }) };
+const menu2 = I.buildRowActionMenu(menuCtx2.viewDef, menuTable2, menuTr2, menuCtx2);
+const menuItem2 = menu2.querySelector('.juneau-view-action-item');
+out.menu_passingItemEnabled = menuItem2.disabled === false;
+before = fetchCalls.length;
+menuItem2.dispatch('click', {});
+out.menu_passingClickFires = fetchCalls.length > before;
+
+// --- pin: the menu path resolves row data via ctx.dataTable.row(tr).data(), and fails closed when that lookup
+// yields nothing (no dataTable wired at all).
+const pinCalls = [];
+const menuTr3 = env.el('tr');
+const menuCtx3 = {
+	viewDef: { rowActions: [GATED] },
+	dataTable: { row: function (tr) { pinCalls.push(tr); return { data: function () { return { status: 'open' }; } }; } }
+};
+I.buildRowActionMenu(menuCtx3.viewDef, env.el('table'), menuTr3, menuCtx3);
+out.menu_dataTableRowCalledWithSameTr = pinCalls.length === 1 && pinCalls[0] === menuTr3;
+
+const menuTr4 = env.el('tr');
+const menuCtx4 = { viewDef: { rowActions: [GATED] } };   // no dataTable wired at all
+const menu4 = I.buildRowActionMenu(menuCtx4.viewDef, env.el('table'), menuTr4, menuCtx4);
+out.menu_noDataTableFailsClosed = menu4.querySelector('.juneau-view-action-item').disabled === true;
+
+// --- openFormActionDialog: gated+failing paints a visible refusal in the current top dialog and opens no new
+// dialog layer; gated+passing opens the confirm dialog exactly as an ungated action would.
+const preExistingDialogDepth = I.dialogLayerCount();
+const parentDialogEl = env.el('div');
+parentDialogEl.className = 'juneau-view-dialog';
+I.pushLayer(parentDialogEl, { kind: 'dialog', portal: false });
+
+const dlgTr1 = env.el('tr');
+const dlgCtx1 = { viewDef: { rowActions: [DIALOG_GATED] }, dataTable: dataTableOf({ status: 'closed' }) };
+I.openFormActionDialog('esc', env.el('table'), dlgTr1, dlgCtx1);
+out.dialogGate_failingNoNewLayer = I.dialogLayerCount() === preExistingDialogDepth + 1;
+const refusal = parentDialogEl.querySelector('.juneau-view-dialog-action-refusal');
+out.dialogGate_failingRefusalText = refusal ? refusal.textContent : null;
+
+const dlgTr2 = env.el('tr');
+const dlgCtx2 = { viewDef: { rowActions: [DIALOG_GATED] }, dataTable: dataTableOf({ status: 'open' }) };
+I.openFormActionDialog('esc', env.el('table'), dlgTr2, dlgCtx2);
+out.dialogGate_passingOpensDialog = I.dialogLayerCount() === preExistingDialogDepth + 2;
+I.closeActionDialog(dlgCtx2);
+I.popLayer(parentDialogEl);
+out.dialogGate_cleanedUp = I.dialogLayerCount() === preExistingDialogDepth;
+
 process.stdout.write(JSON.stringify(out));

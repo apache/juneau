@@ -120,4 +120,50 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-csrf"), body);
 		assertEquals("data-juneau-csrf", ViewTable.CSRF_ATTR);
 	}
+
+	@Test void a09_enabledWhenGateReusesTheActionRefEvaluator_notRowClassRules() throws Exception {
+		// firstFailingRowActionRule must delegate to the SAME evaluator the detail-panel ActionBar uses
+		// (firstFailingActionRule/actionRuleMatches), never the row-class-highlight evaluator - the two rule
+		// families are unrelated (row.class painting vs. action disable-with-reason).
+		var body = viewsJs();
+		var start = body.indexOf("function firstFailingRowActionRule(");
+		assertTrue(start >= 0, () -> "firstFailingRowActionRule not found:\n" + body);
+		var end = body.indexOf("\n\t}", start);
+		var fn = body.substring(start, end < 0 ? body.length() : end);
+		assertTrue(fn.contains("firstFailingActionRule("), fn);
+		assertFalse(fn.contains("evaluateRowClassRules"), fn);
+	}
+
+	@Test void a10_enabledWhenGateCoversAllThreeActivationSurfaces() throws Exception {
+		// The gate must be re-checked, per row, on every surface that can fire a RowAction: the row-menu item, the
+		// action-bound pill (both draw-time paint and click-time re-check), and the dialog-form action button.
+		var body = viewsJs();
+		assertTrue(functionBody(body, "function buildRowActionMenu(").contains("firstFailingRowActionRule("), body);
+		assertTrue(functionBody(body, "function activatePillAction(").contains("firstFailingRowActionRule("), body);
+		assertTrue(functionBody(body, "function applyRowActionPillGates(").contains("firstFailingRowActionRule("), body);
+		assertTrue(functionBody(body, "function openFormActionDialog(").contains("firstFailingRowActionRule("), body);
+	}
+
+	@Test void a11_gatedActionIsDisabledNeverHidden() throws Exception {
+		// Disabled, never hidden - a gated-and-failing action must stay visible in place, only inert.
+		var body = viewsJs();
+		var control = functionBody(body, "function disableRowActionControl(");
+		var pill = functionBody(body, "function disableRowActionPill(");
+		assertFalse(control.contains(".hidden = true") || control.contains(".hidden=true"), control);
+		assertFalse(pill.contains(".hidden = true") || pill.contains(".hidden=true"), pill);
+	}
+
+	@Test void a12_gatedActionCarriesBothTitleAndAriaDescribedbyReasonChannels() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function attachRowActionDescNode(");
+		assertTrue(fn.contains("setAttribute(\"title\""), fn);
+		assertTrue(fn.contains("aria-describedby"), fn);
+	}
+
+	private static String functionBody(String body, String signature) {
+		var start = body.indexOf(signature);
+		assertTrue(start >= 0, () -> signature + " not found:\n" + body);
+		var end = body.indexOf("\n\t}", start);
+		return body.substring(start, end < 0 ? body.length() : end);
+	}
 }
