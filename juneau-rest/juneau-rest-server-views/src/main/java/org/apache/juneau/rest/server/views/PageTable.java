@@ -90,7 +90,10 @@ import org.apache.juneau.rest.server.widgets.*;
  * this is a stronger guarantee than reserve-and-omit (there is nothing to omit because there is no code path that
  * copies it), and it is why the field is also simply absent from {@link Tab}/{@link Subtab}'s own
  * {@code @BeanType} property lists, so the framework's wire contract (and {@link PageDef#CONTRACT_VERSION}) needs
- * no bump to add it.
+ * no bump to add it.  {@link Tab#badge} is likewise never copied into {@link TabMeta} &mdash; unlike {@code content}
+ * it <i>is</i> on {@link Tab}'s {@code @BeanType} property list, but it decorates the tab-bar link this emitter
+ * already paints directly, and (like every other badge host in this framework) is not a hash-routing concern, so
+ * there is nothing for the client runtime to re-derive from PAGE_META.
  *
  * <h5 class='section'>Panel-body content: template engine, trusted / first-party content only</h5>
  * <p>
@@ -192,6 +195,12 @@ public class PageTable {
 	 * Same spelling as {@link ViewTable#SAVED_VIEWS_ATTR} (the shared contract with {@code juneau-config.js}).
 	 */
 	public static final String SAVED_VIEWS_ATTR = ViewTable.SAVED_VIEWS_ATTR;
+
+	/**
+	 * The badge id namespace for tab-bar badges ({@code tab:<tabId>}), so tab counts never collide with
+	 * {@link AppHeaderTable#BADGE_NS header} or {@link BarSlotTable#BADGE_NS bar} badge ids sharing the same page.
+	 */
+	public static final String TAB_BADGE_NS = "tab";
 
 	private PageTable() {}
 
@@ -345,11 +354,16 @@ public class PageTable {
 		var tabs = pageDef.tabs == null ? List.<Tab>of() : pageDef.tabs;
 
 		var tabBarChildren = new ArrayList<>();
-		for (var t : tabs)
+		for (var t : tabs) {
+			var linkChildren = new ArrayList<>();
+			linkChildren.add(t.label == null ? t.id : t.label);
+			if (t.badge != null)
+				linkChildren.add(emitBadge(t.id, t.badge));
 			tabBarChildren.add(
-				a(hashHref(id, t.id, null), t.label == null ? t.id : t.label)
+				a(hashHref(id, t.id, null), linkChildren.toArray())
 					.class_(TAB_CLASS)
 					.attr(TAB_ID_ATTR, t.id));
+		}
 		var tabBar = nav(tabBarChildren.toArray()).class_(TAB_BAR_CLASS).attr("role", "tablist");
 
 		var panelsChildren = new ArrayList<>();
@@ -438,6 +452,30 @@ public class PageTable {
 			outerChildren.add(BarSlotTable.of(barSlot));
 		outerChildren.add(subpanels);
 		return div(outerChildren.toArray()).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
+	}
+
+	/**
+	 * Emits one tab's overlay badge, mirroring {@code AppHeaderTable}/{@code BarSlotTable}'s own private
+	 * {@code emitBadge} helpers &mdash; same {@code .jc-badge} class, same dot/count/tone/max/aria-label rules, and
+	 * the same {@link AppHeaderTable#clampCount(int, Integer) clampCount} clamp &mdash; just namespaced under
+	 * {@link #TAB_BADGE_NS} instead of {@code header}/{@code bar} so ids never collide across the three hosts (the
+	 * namespace is hardcoded below rather than taken as a parameter, since this emitter, unlike
+	 * {@code AppHeaderTable}/{@code BarSlotTable}, has exactly one badge host).
+	 */
+	private static Span emitBadge(String id, Badge badge) {
+		var s = span().class_("jc-badge").attr(AppHeaderTable.BADGE_ATTR, TAB_BADGE_NS + ":" + id);
+		if (badge.tone != null)
+			s.attr(AppHeaderTable.BADGE_TONE_ATTR, badge.tone.name().toLowerCase(Locale.ROOT));
+		if (badge.dot != null && badge.dot) {
+			s.attr("class", "jc-badge jc-badge-dot");
+		} else if (badge.count != null) {
+			if (badge.max != null)
+				s.attr(AppHeaderTable.BADGE_MAX_ATTR, Integer.toString(badge.max));
+			s.child(AppHeaderTable.clampCount(badge.count, badge.max));
+		}
+		if (badge.label != null && ! badge.label.isBlank())
+			s.attr("aria-label", badge.label);
+		return s;
 	}
 
 	/**

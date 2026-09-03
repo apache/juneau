@@ -24,6 +24,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
+import org.apache.juneau.rest.server.widgets.Badge;
+import org.apache.juneau.rest.server.widgets.Tone;
 import org.junit.jupiter.api.*;
 
 /**
@@ -217,5 +219,62 @@ class PageTable_Emit_Test extends TestBase {
 	@Test void c02_absentBase_doesNotStamp() {
 		var html = Html.of(PageTable.of(leafPage()));
 		assertFalse(html.contains("data-juneau-saved-views"), html);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Tab badge (Tab#badge)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_tabWithBadgeRendersBadgeMarkup() {
+		var page = PageDef.create("admin")
+			.tabs(
+				Tab.create("releases", "Releases").view(view("releases")).badge(Badge.count(7).tone(Tone.WARN).max(9)),
+				Tab.create("users", "Users").view(view("users")))
+			.build();
+		var html = Html.of(PageTable.of(page));
+		assertTrue(html.contains("jc-badge"), html);
+		assertTrue(html.contains("data-juneau-badge=\"" + PageTable.TAB_BADGE_NS + ":releases\""), html);
+		assertTrue(html.contains("data-juneau-badge-tone=\"warn\""), html);
+		assertTrue(html.contains(">7<"), () -> "expected the count text child painted between tags:\n" + html);
+		// The badge is scoped to its own tab only - the "users" tab (no badge) carries no badge markers at all.
+		assertFalse(html.contains("data-juneau-badge=\"" + PageTable.TAB_BADGE_NS + ":users\""), html);
+	}
+
+	@Test void d02_tabWithDotBadgeRendersDotMarkupNoCount() {
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("releases", "Releases").view(view("releases")).badge(Badge.dot()))
+			.build();
+		var html = Html.of(PageTable.of(page));
+		assertTrue(html.contains("jc-badge-dot"), html);
+		assertTrue(html.contains("data-juneau-badge=\"" + PageTable.TAB_BADGE_NS + ":releases\""), html);
+	}
+
+	@Test void d03_tabWithoutBadgeRendersExactlyAsBefore() {
+		// No-regression pin: the existing label-only rendering (Foundry's "Review (N)" text-hack path) is unchanged.
+		var html = Html.of(PageTable.of(leafPage()));
+		assertFalse(html.contains("jc-badge"), html);
+		assertFalse(html.contains("data-juneau-badge"), html);
+		assertTrue(html.contains(">Releases</a>"), html);
+	}
+
+	@Test void d04_badgeCountIsClampedToMaxLikeHeaderAndBarBadges() {
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("releases", "Releases").view(view("releases")).badge(Badge.count(120).max(99)))
+			.build();
+		var html = Html.of(PageTable.of(page));
+		assertTrue(html.contains(">99+<"), () -> "expected the clamped '99+' count text child:\n" + html);
+		assertTrue(html.contains("data-juneau-badge-max=\"99\""), html);
+	}
+
+	@Test void d05_tabBadgeLabelIsNotInPageMeta() {
+		// Badges decorate the tab-bar button directly (this emitter, d01/d02 above); PAGE_META stays id/label/subtabs
+		// only, exactly as documented on PageTable's class javadoc - no wire-contract bump for adding Tab#badge.
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("releases", "Releases").view(view("releases")).badge(Badge.count(7).label("pending")))
+			.build();
+		var html = Html.of(PageTable.of(page));
+		var body = sidecarBody(html, "juneau-page:admin");
+		assertFalse(body.contains("pending"), () -> "badge label leaked into PAGE_META:\n" + body);
+		assertFalse(body.contains("badge"), () -> "'badge' key leaked into PAGE_META:\n" + body);
 	}
 }

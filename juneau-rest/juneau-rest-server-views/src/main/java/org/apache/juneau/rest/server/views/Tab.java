@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.Badge;
 
 /**
  * A single top-level tab within a {@link PageDef}, referencing one child {@link ViewDef}, an ordered list of
@@ -57,7 +58,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,label,view,subtabs")
+@BeanType(properties="id,label,view,subtabs,badge")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Tab {
 
@@ -101,6 +102,17 @@ public class Tab {
 	 * guard in this module's test tree).
 	 */
 	public String content;
+
+	/**
+	 * An optional overlay badge (a pending-count indicator, for example) painted beside {@link #label} in the
+	 * tab-bar button.
+	 *
+	 * <p>
+	 * Orthogonal to the panel-body matrix documented in this class's javadoc: a badge decorates the tab-bar button
+	 * itself, not the panel body, so it may be combined with {@link #view}, {@link #subtabs}, or {@link #content}
+	 * interchangeably.
+	 */
+	public Badge badge;
 
 	/**
 	 * Starts a new {@link Tab} builder with the specified stable id and display label.
@@ -153,6 +165,17 @@ public class Tab {
 	}
 
 	/**
+	 * Sets the overlay badge painted beside {@link #label} in the tab-bar button.
+	 *
+	 * @param value The badge.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public Tab badge(Badge value) {
+		badge = value;
+		return this;
+	}
+
+	/**
 	 * Validates this tab in isolation (design doc §"Bean model" validation rules; the panel-body matrix documented
 	 * in this class's javadoc widens this from a three-way exclusive-or):
 	 * {@code {view} | {subtabs} | {content} | {content+subtabs}}. {@link #view} is exclusive of everything else;
@@ -182,5 +205,7 @@ public class Tab {
 					throw iaex("Tab '%s': duplicate subtab id '%s'.", id, s.id);
 			}
 		}
+		if (badge != null)
+			badge.validate();
 	}
 }
