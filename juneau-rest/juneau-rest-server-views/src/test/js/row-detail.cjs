@@ -156,6 +156,7 @@ function el(tag) {
 		removeChild: function (c) {
 			const i = this.childNodes.indexOf(c);
 			if (i >= 0) this.childNodes.splice(i, 1);
+			c.parentNode = null;
 			return c;
 		},
 		replaceChildren: function () { this.childNodes.length = 0; },
@@ -1021,6 +1022,48 @@ if (out.hasApplyActionRefRules) {
 	I.setActionRefEnabled(dfaPassing.panel, true);
 	I.applyActionRefRules(dfaPassing.panel, { state: 'open' });
 	out.dfa_passingRuleStaysEnabled = dfaPassing.btn.disabled === false;
+}
+
+// ----------------------------------------------------------------------------------------------------------------
+// Async status - a consumer-owned container keeps its content while this primitive creates, updates, and removes
+// only its marked direct-child status paragraph.
+// ----------------------------------------------------------------------------------------------------------------
+
+out.hasRenderAsyncStatus = typeof I.renderAsyncStatus === 'function';
+if (out.hasRenderAsyncStatus) {
+	const asyncContainer = el('div');
+	const consumerContent = el('strong');
+	consumerContent.textContent = 'Existing content';
+	asyncContainer.appendChild(consumerContent);
+
+	I.renderAsyncStatus(asyncContainer, 'loading');
+	const loading = asyncContainer.childNodes[1];
+	out.async_defaultLoadingText = loading.textContent === 'Loading…';
+	out.async_statusRole = loading.getAttribute('role') === 'status';
+	out.async_marker = loading.getAttribute('data-juneau-async-status') === '';
+	out.async_spinnerDecorative = loading.firstChild.className === 'juneau-view-spinner'
+		&& loading.firstChild.getAttribute('aria-hidden') === 'true';
+
+	I.renderAsyncStatus(asyncContainer, 'loading', 'Refreshing…');
+	out.async_loadingOverride = loading.textContent === 'Refreshing…';
+	out.async_noDuplicateLoading = asyncContainer.childNodes.length === 2 && asyncContainer.childNodes[1] === loading;
+
+	I.renderAsyncStatus(asyncContainer, 'error', 'Request failed');
+	out.async_errorText = loading.textContent === 'Request failed';
+	out.async_errorHasNoSpinner = loading.childNodes.length === 0;
+
+	I.renderAsyncStatus(asyncContainer, 'empty', 'No results');
+	out.async_emptyText = loading.textContent === 'No results';
+	out.async_emptyHasNoSpinner = loading.childNodes.length === 0;
+
+	I.renderAsyncStatus(asyncContainer, 'ok');
+	out.async_okRemovesStatus = asyncContainer.childNodes.length === 1;
+	out.async_preservesConsumerContent = asyncContainer.firstChild === consumerContent
+		&& consumerContent.textContent === 'Existing content';
+
+	I.renderAsyncStatus(asyncContainer, 'loading');
+	I.renderAsyncStatus(asyncContainer, 'loading');
+	out.async_noDuplicateAfterRefetch = asyncContainer.childNodes.length === 2;
 }
 
 process.stdout.write(JSON.stringify(out));

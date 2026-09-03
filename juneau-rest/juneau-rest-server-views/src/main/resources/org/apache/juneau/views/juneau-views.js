@@ -137,6 +137,7 @@
 	// Per-cell opt-out from the `.juneau-view-table td` clip/ellipsis default (see ViewTable.CELL_WRAP_CLASS).  Used
 	// by the named emitters' `class` facets and by any cell whose content is a panel rather than a line of text.
 	const CELL_WRAP_CLASS = "juneau-cell-wrap";
+	const ASYNC_STATUS_ATTR = "data-juneau-async-status";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
@@ -1330,6 +1331,43 @@
 		}
 		while (el.firstChild)
 			el.firstChild.remove();
+	}
+
+	/**
+	 * Renders this runtime's one owned async-status paragraph in {@code container}.  The success state removes the
+	 * paragraph, leaving caller-owned success content untouched.
+	 */
+	function renderAsyncStatus(container, state, message) {
+		if (!container || typeof container.appendChild !== "function") return null;
+		let status = null;
+		for (const child of container.childNodes || []) {
+			if (child.nodeType === 1 && child.tagName === "P"
+				&& child.getAttribute(ASYNC_STATUS_ATTR) !== null && child.getAttribute("role") === "status") {
+				status = child;
+				break;
+			}
+		}
+		if (state === "ok") {
+			if (status?.parentNode) status.parentNode.removeChild(status);
+			return null;
+		}
+		if (!status) {
+			status = document.createElement("p");
+			status.setAttribute(ASYNC_STATUS_ATTR, "");
+			status.setAttribute("role", "status");
+			container.appendChild(status);
+		}
+		clearElementChildren(status);
+		if (state === "loading") {
+			const spinner = document.createElement("span");
+			spinner.className = "juneau-view-spinner";
+			spinner.setAttribute("aria-hidden", "true");
+			status.appendChild(spinner);
+			status.appendChild(document.createTextNode(message == null ? "Loading…" : String(message)));
+		} else {
+			status.textContent = message;
+		}
+		return status;
 	}
 
 	function copyAllowedMarkdownAttrs(from, to) {
@@ -2800,10 +2838,7 @@
 			if (panel.dataset.juneauDetailState !== "ok") return;
 			activateNestedTablesInPane(pane, rowId);
 		});
-		const loading = document.createElement("p");
-		loading.className = "juneau-view-detail-status";
-		loading.textContent = "Loading…";
-		panel.appendChild(loading);
+		renderAsyncStatus(panel, "loading").className = "juneau-view-detail-status";
 		row.child(panel).show();
 		// DataTables wraps the panel in a plain <td colspan> that is a descendant of this .juneau-view-table, so the
 		// table's clip/ellipsis cell default would otherwise flatten the whole expanded panel into one nowrap line.
@@ -2828,7 +2863,7 @@
 			if (!stillCurrent()) { settleMap(); return; }
 			hideActionRefs(panel);
 			panel.dataset.juneauDetailState = kind;
-			loading.textContent = message;
+			renderAsyncStatus(panel, kind, message);
 			settleMap();
 		}
 
@@ -2877,7 +2912,7 @@
 			// Layered on top of the lifecycle gate above, never competing with it: this pass only ever disables.
 			applyActionRefRules(panel, body.fields);
 			panel.dataset.juneauDetailState = "ok";
-			if (loading.parentNode) loading.remove();
+			renderAsyncStatus(panel, "ok");
 			// Now that the parent detail loaded (2xx + contract OK), init the nested tables that live in a currently
 			// VISIBLE pane (in tab mode, only the initially-selected section is visible; a hidden pane's nested table
 			// waits for its tab to be activated via the onActivate callback above).  Each nested table runs its OWN
@@ -5492,7 +5527,8 @@
 		readBulkDef: readBulkDef,
 		buildBulkToolbar: buildBulkToolbar,
 		executeBulkAction: executeBulkAction,
-		renderInlineError: renderInlineError
+		renderInlineError: renderInlineError,
+		renderAsyncStatus: renderAsyncStatus
 	};
 
 	if (document.readyState === "loading") {

@@ -1425,6 +1425,61 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Empty consumer-owned mount for an async-status indicator placed below a ribbon or subtab bar.  The shared
+ * control-height and type steps give the region chrome-adjacent dimensions without declaring another scale step;
+ * paint inherits currentColor unless a consumer supplies either role token.
+ */
+.juneau-view-loading-region {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	min-height: var(--jc-chrome-control-height);
+	padding: 0 var(--jc-chrome-control-padding-x);
+	font-size: var(--jc-chrome-font-size-2);
+	color: var(--jc-loading-region-color, currentColor);
+	border-bottom: 1px solid var(--jc-loading-region-border, currentColor);
+}
+
+/*
+ * Async-status loading spinner.  A widget-internal proportion sized off its own text, not a
+ * --jc-chrome-glyph-size step - the same carve-out the scale's own header comment gives a pill dot or toggle
+ * knob, because this glyph is not an SVG icon role shared across surfaces.  NO palette color: the ring is drawn
+ * with `currentColor` so it inherits whatever text color the status paragraph already has, consistent with this
+ * file's dependency-free/neutral contract.
+ *
+ * juneau-views.js appends this span only for the `loading` state; `error` and `empty` replace the status
+ * paragraph's content with plain text, and `ok` removes the status paragraph entirely.
+ */
+.juneau-view-spinner {
+	display: inline-block;
+	width: 0.9em;
+	height: 0.9em;
+	margin-right: 0.5em;
+	vertical-align: -0.15em;
+	border: 0.15em solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: juneau-view-spin 0.75s linear infinite;
+}
+
+@keyframes juneau-view-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/*
+ * Motion-sensitive users get a static ring instead of an infinite spin - the loading state is still visible
+ * (and still announced via the paragraph's role="status"), it just doesn't animate.
+ */
+@media (prefers-reduced-motion: reduce) {
+	.juneau-view-spinner {
+		animation: none;
+		border-right-color: currentColor;
+	}
+}
+
+/*
  * Nested read-only table inside a row-detail section (a table[data-juneau-view] + its id-less sidecar, appended
  * after the section's fields grid).  NEUTRAL - layout only, no palette color.  Full-width within the panel; the
  * `min-width: 0` lets the nested table shrink below its content's intrinsic width (a grid/flex child otherwise

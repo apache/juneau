@@ -49,6 +49,13 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		}
 	}
 
+	private static String viewsCss() throws IOException {
+		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.VIEWS_CSS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.VIEWS_CSS_RESOURCE);
+			return new String(in.readAllBytes(), UTF_8);
+		}
+	}
+
 	@Test void a01_helpersExportedOnNsInit() throws Exception {
 		var body = viewsJs();
 		for (var name : new String[]{
@@ -65,6 +72,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"detailTabTargetIndex: detailTabTargetIndex",
 			"activateDetailTab: activateDetailTab",
 			"buildDetailStrip: buildDetailStrip",
+			"renderAsyncStatus: renderAsyncStatus",
 			"JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION"
 		})
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
@@ -72,6 +80,19 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertFalse(body.contains("function buildDetailPanel("), body);
 		assertTrue(body.contains("submitRowAction(action, table, parentTr"),
 			"write path must target the expanded DataTables row, not expand JSON");
+	}
+
+	@Test void a02_loadingRegionUsesTheSharedScaleWithoutDeclaringChromeTokens() throws Exception {
+		var css = viewsCss();
+		var start = css.indexOf(".juneau-view-loading-region {");
+		assertTrue(start >= 0, css);
+		var rule = css.substring(start, css.indexOf("}", start));
+		assertTrue(rule.contains("min-height: var(--jc-chrome-control-height)"), rule);
+		assertTrue(rule.contains("padding: 0 var(--jc-chrome-control-padding-x)"), rule);
+		assertTrue(rule.contains("font-size: var(--jc-chrome-font-size-2)"), rule);
+		assertTrue(rule.contains("currentColor"), rule);
+		assertFalse(rule.matches("(?s).*--jc-chrome-[\\w-]+\\s*:.*"), rule);
+		assertFalse(rule.contains("#"), rule);
 	}
 
 	private static Map<?,?> report;
@@ -226,6 +247,24 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("paint_xssNotInterpreted"));
 		assertEquals(true, r.get("hasResolveDetailHeaderIcon"));
 		assertEquals(true, r.get("icon_unknownHidden"));
+	}
+
+	@Test void b20_asyncStatusRendersAllStatesWithoutTouchingConsumerContent() {
+		var r = report();
+		assertEquals(true, r.get("hasRenderAsyncStatus"));
+		assertEquals(true, r.get("async_defaultLoadingText"));
+		assertEquals(true, r.get("async_statusRole"));
+		assertEquals(true, r.get("async_marker"));
+		assertEquals(true, r.get("async_spinnerDecorative"));
+		assertEquals(true, r.get("async_loadingOverride"));
+		assertEquals(true, r.get("async_noDuplicateLoading"));
+		assertEquals(true, r.get("async_errorText"));
+		assertEquals(true, r.get("async_errorHasNoSpinner"));
+		assertEquals(true, r.get("async_emptyText"));
+		assertEquals(true, r.get("async_emptyHasNoSpinner"));
+		assertEquals(true, r.get("async_okRemovesStatus"));
+		assertEquals(true, r.get("async_preservesConsumerContent"));
+		assertEquals(true, r.get("async_noDuplicateAfterRefetch"));
 	}
 
 	@Test void b07_fillRenderSlot_tagProgressLinkedAndCanary() {
