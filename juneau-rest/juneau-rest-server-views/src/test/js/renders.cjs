@@ -224,6 +224,14 @@ out.freeze_sinkStillBuiltin = builtinTag === NS.resolveSinkRenderer('tag');
 out.freeze_sinkDisplaySafe = String(NS.resolveSinkRenderer('tag').display('Released', {}, { field: 'status' })).indexOf('class="tag') >= 0;
 out.freeze_ids = (NS._render.frozenBuiltinIds || []).slice().sort().join(',');
 
+// WORK-J0508 (Foundry WORK-P0063 row-detail-subtabs follow-up): `code` renderer - HTML-escaped, whitespace-
+// preserving, monospace via `.juneau-code`; a frozen fill-sink built-in like `json`/`tag`/`pill` above.
+out.code_escapesHtml = NS.resolveRenderer('code').display('<script>alert(1)</script>');
+out.code_preservesWhitespaceAndNewlines = NS.resolveRenderer('code').display('line1\n  line2\tindented');
+out.code_nullIsEmpty = NS.resolveRenderer('code').display(null);
+out.code_sinkRendererExists = NS.resolveSinkRenderer('code') != null;
+out.code_sinkMatchesCellOutput = NS.resolveSinkRenderer('code').display('<b>x</b>') === NS.resolveRenderer('code').display('<b>x</b>');
+
 // normalizeTagToken: the emitted token shape, plus a javascript:S5852 linearity guard.  The old trim
 // (`.replace(/^-+|-+$/g, "")`) retried its `-+$` alternative at every offset inside a dash run, which is
 // quadratic once the run is bracketed by non-dashes; an all-dash string stayed linear, which is exactly why

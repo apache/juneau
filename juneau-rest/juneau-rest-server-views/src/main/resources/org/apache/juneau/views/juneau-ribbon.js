@@ -18,9 +18,9 @@
 /*
  * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit.
  *
- * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv via DataTables Buttons, with excel/pdf
- * lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, pausePolling, option/optionGroup server-query toggles
- * (with persisted state), and divider.
+ * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv/print via DataTables Buttons, with
+ * excel/pdf lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, pausePolling, collapseAll,
+ * option/optionGroup server-query toggles (with persisted state), and divider.
  *
  * CONSISTENCY REQUIREMENT (mirrors the server): when a column-scoped `option`/`optionGroup` toggle is ACTIVE, the
  * client contributes the SAME `columns[N][search][value]=<value>` request param that the server-side
@@ -146,9 +146,12 @@
 	/**
 	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
 	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh/
-	 * columnSearchToggle (each renders exactly one button).  `collapse` is not wired to any RibbonAction.type today -
-	 * it ships here purely for forward-compatibility with a possible future (deferred) row-expander "collapse all"
-	 * affordance; inert until that action type exists.
+	 * columnSearchToggle (each renders exactly one button).  `print` is a button id like `copy`/`csv`/`excel`/`pdf` -
+	 * a caller opts into it via `RibbonAction.export("copy", "csv", "print")`; unlike `excel`/`pdf` it needs no extra
+	 * dependency (DataTables Buttons ships a native `print` button that opens the browser print dialog), so a
+	 * caller may put it in the always-on `buttons` list rather than the feature-gated `optional` one. `collapse` IS
+	 * now wired, to the `collapseAll` action type below (added alongside `print` for the same Foundry WORK-P0063
+	 * toolbar follow-up, `WORK-J0507`) - it no longer ships purely for forward-compatibility.
 	 *
 	 * <p>{@code pausePolling} maps to {@code cancel} - "stop the auto-refresh" - and NOT to the neutral "tune"
 	 * fallback, which would be an outright bug rather than a cosmetic compromise: "tune" resolves to the settings
@@ -162,7 +165,7 @@
 	 * glyph registers one and passes {@code .symbol("...")}.
 	 */
 	const DEFAULT_ICONS = {
-		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf",
+		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
 		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less",
 		pausePolling: "cancel"
 	};
@@ -340,6 +343,12 @@
 			}
 			if (a.type === "refresh") {
 				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }), a.group || "__ungrouped");
+				return;
+			}
+			if (a.type === "collapseAll") {
+				place(button(a.title || "Collapse all", resolveButtonIcon(a, "collapse"), function () {
+					if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
+				}), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "columnSearchToggle") {

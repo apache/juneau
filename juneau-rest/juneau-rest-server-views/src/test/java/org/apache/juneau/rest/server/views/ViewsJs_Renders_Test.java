@@ -262,8 +262,43 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("freeze_cellHonorsOverride"));
 		assertEquals(true, r.get("freeze_sinkStillBuiltin"));
 		assertEquals(true, r.get("freeze_sinkDisplaySafe"));
-		// 11 ids, lockstep with SinkRenderAllowlist.BUILTIN_IDS.  `pill` is the hand-registered display-only variant.
-		assertEquals("bool,date,datetime,decimal,json,linked,pill,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
+		// 12 ids, lockstep with SinkRenderAllowlist.BUILTIN_IDS.  `pill` is the hand-registered display-only
+		// variant; `code` (WORK-J0508) is the twelfth, added alongside the snapshot-pass ids.
+		assertEquals(
+			"bool,code,date,datetime,decimal,json,linked,pill,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// `code` renderer (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) - minimal monospace,
+	// whitespace-preserving, HTML-escaped source-text fill-sink built-in.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void c07_code_escapesHtml() {
+		var r = report();
+		assertEquals("<pre class=\"juneau-code\"><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></pre>",
+			r.get("code_escapesHtml"));
+	}
+
+	@Test void c08_code_preservesWhitespaceAndNewlines() {
+		var r = report();
+		// The renderer does not collapse/escape whitespace itself - preservation is delegated to the `.juneau-code`
+		// CSS class's `white-space: pre` (juneau-views.css), so the raw text (tab, newline, spaces) passes through
+		// verbatim into the escaped <code> body.
+		assertEquals("<pre class=\"juneau-code\"><code>line1\n  line2\tindented</code></pre>",
+			r.get("code_preservesWhitespaceAndNewlines"));
+	}
+
+	@Test void c09_code_nullIsEmpty() {
+		var r = report();
+		assertEquals("", r.get("code_nullIsEmpty"));
+	}
+
+	@Test void c10_code_sinkRendererMatchesCellOutput() {
+		var r = report();
+		assertEquals(true, r.get("code_sinkRendererExists"));
+		assertEquals(true, r.get("code_sinkMatchesCellOutput"),
+			() -> "code has no distinct sink variant (unlike pill) - the frozen snapshot must render identically "
+				+ "to the live cell renderer: " + r);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

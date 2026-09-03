@@ -122,6 +122,18 @@ if (out.hasNormalizeRibbon) {
 	const nonTrailingDivider = [action('refresh'), action('divider'), action('export', { buttons: ['copy'] })];
 	const nonTrailingDividerResult = normalizeRibbon(nonTrailingDivider);
 	out.pure_nonTrailingDivider_order = nonTrailingDividerResult.map(function (x) { return x.type; }).join(',');
+
+	// 6) WORK-J0507 (Foundry WORK-P0063) - resolveButtonIcon('print') resolves via DEFAULT_ICONS to its own "print"
+	// key, not the neutral "tune" fallback; and it needs no extra dep (unlike excel/pdf), so it survives
+	// resolveExportButtons' feature gate even with jszip/pdfmake both absent, as long as Buttons itself is present.
+	out.pure_print_icon = first.NS.ribbon.resolveButtonIcon(null, 'print');
+	out.pure_print_resolvedFromAlwaysOnButtons = first.NS.ribbon.resolveExportButtons(
+		action('export', { buttons: ['copy', 'print'] }), { buttons: true, jszip: false, pdfmake: false }
+	).join(',');
+
+	// 7) WORK-J0507 - resolveButtonIcon('collapse') resolves to the wired "collapse" icon key (no longer purely
+	// forward-compatible now that the collapseAll action type dispatches to it).
+	out.pure_collapse_icon = first.NS.ribbon.resolveButtonIcon(null, 'collapse');
 }
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -202,6 +214,36 @@ function buildBar(NS, ribbon) {
 	out.dom_trailingDivider_groupCount = groups.length;
 	out.dom_trailingDivider_dividerCount = dividersOf(bar).length;
 	out.dom_trailingDivider_lastGroupButtonCount = groups.length > 0 ? groups[groups.length - 1].childNodes.length : -1;
+}
+
+// Case 6 (WORK-J0507, Foundry WORK-P0063 toolbar follow-up) - a `print` id in an `export` action's always-on
+// `buttons` list (no `optional` feature-gating needed, unlike excel/pdf) renders as its OWN button in the export
+// cluster, alongside `copy` - it is not silently dropped for lack of an extra dependency.
+{
+	const { NS } = loadRibbon(true);
+	const bar = buildBar(NS, [action('export', { buttons: ['copy', 'print'] })]);
+	const groups = groupsOf(bar);
+	out.dom_print_groupCount = groups.length;
+	out.dom_print_buttonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
+	out.dom_print_buttonTitles = groups.length > 0
+		? groups[0].childNodes.map(function (b) { return b.title; }).join(',')
+		: null;
+}
+
+// Case 7 (WORK-J0507) - a `collapseAll` action renders one "Collapse all" button that, on click, calls
+// ctx.collapseAllDetailRows() (the juneau-views.js-side wiring) rather than ctx.redraw() or any export path.
+{
+	const { NS } = loadRibbon(true);
+	let collapseAllCalled = 0;
+	const bar = NS.ribbon.build({ ribbon: [action('collapseAll')] }, {
+		dataTable: {}, redraw: function () {}, collapseAllDetailRows: function () { collapseAllCalled++; }
+	});
+	const groups = groupsOf(bar);
+	out.dom_collapseAll_groupCount = groups.length;
+	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
+	out.dom_collapseAll_title = btn ? btn.title : null;
+	if (btn) btn.dispatch('click');
+	out.dom_collapseAll_clickInvokedHook = collapseAllCalled;
 }
 
 process.stdout.write(JSON.stringify(out));

@@ -773,7 +773,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-pagingpill-menuwrap {
 	position: relative;
 	display: flex;
-	border-right: 1px solid;      /* currentColor - segment divider */
+	border-right-width: 1px;      /* longhand, not a colourless shorthand - see the segmented-group note above */
+	border-right-style: solid;
 }
 
 .juneau-view-pagingpill-menubtn {
@@ -1179,6 +1180,26 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-detail-section-title {
 	margin: 0 0 0.5em;
 	font-size: 1em;
+}
+
+/*
+ * `code` fill-sink renderer output (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up): a monospace,
+ * whitespace-preserving block for source text, scoped to its own class rather than styling the bare
+ * `<pre><code>` the renderer emits - a caller nesting unrelated `<pre>`/`<code>` markup elsewhere in a detail
+ * section is untouched.  NEUTRAL - no new palette color; reuses the existing --jc-popover-bg/-border light-
+ * neutral-surface tokens rather than declaring a third near-identical pair.
+ */
+.juneau-code {
+	margin: 0;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	background: var(--jc-popover-bg);
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	overflow-x: auto;
+	font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: var(--jc-chrome-font-size-2);
+	line-height: 1.4;
+	white-space: pre;
 }
 
 .juneau-view-detail-actions {

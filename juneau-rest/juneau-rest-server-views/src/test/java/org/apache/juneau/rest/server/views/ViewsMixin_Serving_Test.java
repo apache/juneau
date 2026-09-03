@@ -951,6 +951,27 @@ class ViewsMixin_Serving_Test extends TestBase {
 			assertFalse(block.contains(accent), () -> "accent colour leaked back into the detail-action defaults: " + accent + " in " + block);
 	}
 
+	/**
+	 * Regression guard (Foundry WORK-P0063 follow-up, {@code WORK-J0506}): the paging-pill's central-segment
+	 * divider must null its border color with LONGHAND width/style only - never a colour-resetting shorthand -
+	 * for the same reason {@code o10} guards the ribbon-group base rule: a colourless {@code border-right: 1px
+	 * solid} shorthand resets {@code border-right-color} to {@code currentColor}, which paints a near-black
+	 * divider instead of the intended themed neutral border wherever the consuming app's own CSS softens this
+	 * element's text color without also declaring an explicit {@code border-color} override.
+	 */
+	@Test void o11_viewsCss_pagingpillMenuwrapDividerLeavesBorderColorUnset() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains(".juneau-view-pagingpill-menuwrap {"), body);
+		var start = body.indexOf(".juneau-view-pagingpill-menuwrap {");
+		var end = body.indexOf("}", start);
+		var region = body.substring(start, end);
+		assertTrue(region.contains("border-right-width: 1px"), region);
+		assertTrue(region.contains("border-right-style: solid"), region);
+		assertFalse(region.contains("border-right:"), region);
+		assertFalse(region.contains("border-right-color"), region);
+		assertFalse(region.contains("border-color"), region);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// i) data-juneau-saved-views stamp via a real RestRequest URI resolver
 	//------------------------------------------------------------------------------------------------------------------

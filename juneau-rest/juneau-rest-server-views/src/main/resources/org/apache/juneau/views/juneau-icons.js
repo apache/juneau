@@ -121,6 +121,7 @@
 	registerIcon("spreadsheet", host("spreadsheet"));
 	registerIcon("picture_as_pdf", host("pdf"));
 	registerIcon("pdf", host("pdf"));
+	registerIcon("print", host("print"));
 	registerIcon("refresh", host("refresh"));
 	registerIcon("manage_search", host("toggle_column_search"));
 	registerIcon("toggle_column_search", host("toggle_column_search"));

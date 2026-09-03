@@ -29,7 +29,7 @@ import org.apache.juneau.commons.bean.*;
  * A single bean discriminated by {@link #type}; only the fields relevant to a given action type are populated, and
  * the serializer omits the rest (null-valued properties are dropped).  Build actions via the static factory methods
  * ({@link #export(String...)}, {@link #refresh()}, {@link #columnSearchToggle()}, {@link #pausePolling()},
- * {@link #option(String)}, {@link #optionGroup(String)}, {@link #divider()}).
+ * {@link #collapseAll()}, {@link #option(String)}, {@link #optionGroup(String)}, {@link #divider()}).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RibbonAction {
 
-	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code option}/{@code optionGroup}/{@code divider}. */
+	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code option}/{@code optionGroup}/{@code divider}. */
 	public String type;
 
 	/** For {@code export}: the always-on button ids (e.g. {@code ["copy","csv"]}). */
@@ -269,6 +269,25 @@ public class RibbonAction {
 	}
 
 	/**
+	 * Creates a {@code collapseAll} action (Foundry WORK-P0063 toolbar follow-up, {@code WORK-J0507}) &mdash;
+	 * collapses every currently-open row-detail expansion in this view's table back down in one click.
+	 *
+	 * <p>
+	 * View-local and non-mutating, like {@link #refresh()}/{@link #columnSearchToggle()}/{@link #pausePolling()}:
+	 * it only tears down open detail rows in the CALLING table (never reaches into a nested table's own child
+	 * rows, which - if it has its own toolbar - would need its own {@code collapseAll} click), and contributes
+	 * nothing to the server query ({@link #toQueryParams(ViewDef)} skips it like every other non-query-contributing
+	 * action type).
+	 *
+	 * @return A new {@link RibbonAction}.
+	 */
+	public static RibbonAction collapseAll() {
+		var a = new RibbonAction();
+		a.type = "collapseAll";
+		return a;
+	}
+
+	/**
 	 * Creates an {@code option} action (a server-query toggle) with the specified id.
 	 *
 	 * @param id The option id.  Must not be <jk>null</jk>.
@@ -433,8 +452,9 @@ public class RibbonAction {
 	 *
 	 * <p>
 	 * An option carrying no {@code value} (or neither a {@code column} nor a {@code param}) contributes nothing;
-	 * {@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code divider}/{@code export} actions are not query-contributing and
-	 * are skipped.  {@code optionGroup} member options are mapped uniformly with top-level options.
+	 * {@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code divider}/
+	 * {@code export} actions are not query-contributing and are skipped.  {@code optionGroup} member options are
+	 * mapped uniformly with top-level options.
 	 *
 	 * @param viewDef The built view whose ribbon + columns are read.  Must not be <jk>null</jk>.
 	 * @return An insertion-ordered map of contributed request param name &rarr; value (possibly empty).

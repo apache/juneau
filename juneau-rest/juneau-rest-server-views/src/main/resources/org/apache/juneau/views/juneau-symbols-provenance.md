@@ -2,7 +2,7 @@
 
 This file pins the **approved artwork** of every glyph in `juneau-symbols.svg`.
 
-Its job is not attribution. All twenty glyphs are Juneau-original, so no third-party attribution is incurred and
+Its job is not attribution. All twenty-one glyphs are Juneau-original, so no third-party attribution is incurred and
 neither `LICENSE` nor `NOTICE` names anything on account of this sprite. Its job is to be a **guard**: to make a
 future paste of foreign path data over one of these glyphs fail the build until someone deliberately edits this
 file. `SymbolSprite_Provenance_Test` reads it and asserts it against the sprite on every default-profile run.
@@ -84,8 +84,9 @@ crisp pixels at 16px:
 
 ## Glyphs
 
-`origin` is `juneau-original` for all twenty: eighteen redrawn from scratch under `READY-J0451`, and `check` and
-`collapse_all`, which were already Juneau-original and are **byte-unchanged** by that work.
+`origin` is `juneau-original` for all twenty-one: eighteen redrawn from scratch under `READY-J0451`, one
+(`print`) drawn from scratch under `WORK-J0507` (Foundry `WORK-P0063` toolbar print/collapse-all follow-up), and
+`check` and `collapse_all`, which were already Juneau-original and are **byte-unchanged** by that work.
 
 | Stem | Origin | Fingerprint (SHA-256 of the `<symbol>` element) |
 |---|---|---|
@@ -103,6 +104,7 @@ crisp pixels at 16px:
 | `filter` | `juneau-original` | `498dd4f95d4a0d1c3208098bac405b6ff5e6b46ce132a418afc0c3f813ff3847` |
 | `new` | `juneau-original` | `703a4403c820d2d6b6a21e578eaeb410c262572ea0d0f60aef9ffef7bb726754` |
 | `pdf` | `juneau-original` | `a1cdef16b4c57ff0d9da9af5d3fd93416bc8752fdd5388345d601986d4c7667a` |
+| `print` | `juneau-original` | `236eb8a210324db18c969faaf9623765586b84464850f026d2e5918d3650dc9e` |
 | `refresh` | `juneau-original` | `33073e39fa8e58ab295b13dc18a8b7c28cbc7bf3c91ddb6ccc8290cb45d720cc` |
 | `search` | `juneau-original` | `03f04247d886a8f95fbf48e21968957c7115b002d770f6d67b39b2ea0296ab7f` |
 | `settings` | `juneau-original` | `d1fa0d3ebe2c1638425c35593379320634d11ae83a58c5b415d9e4d4fc12bc2a` |
@@ -132,6 +134,7 @@ its coordinates".
 | `filter` | a funnel: a full-width mouth, two symmetric slopes to a 3-unit throat, and an offset spout. |
 | `new` | the `cancel` circle with an inscribed plus instead of a cross. |
 | `pdf` | family frame, plus three filled rules on the declared mark rhythm, the last one short. |
+| `print` | a printer: an open-bottomed paper flap peeking above the body, a stroked body box, and an open-topped output-tray flap below it — three axis-aligned rectilinear shapes, all edges on the 24×24 lattice, symmetric about both the horizontal and vertical centreline. |
 | `refresh` | two 150° arcs of r=7.5 in 180° rotational symmetry, with a 30° gap at each end, each terminating in a filled triangular arrowhead whose base is radial and whose apex points along the direction of travel. |
 | `search` | circle r=6 about (9.75, 9.75) with a 45° handle from its lower-right quadrant. |
 | `settings` | a filled 6-tooth gear about (11.25, 11.25): outer radius 7.5, root radius 5.25, tooth half-angles 13°/22°, with an `evenodd` hole of r=2.25 knocked out of the centre. |

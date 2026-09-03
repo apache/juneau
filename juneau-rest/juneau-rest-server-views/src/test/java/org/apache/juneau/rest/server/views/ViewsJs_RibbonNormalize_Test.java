@@ -229,4 +229,43 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 			() -> "a divider stranded before the moved refresh must not render as an empty seam: " + r);
 		assertEquals(1L, ((Number)r.get("dom_trailingDivider_lastGroupButtonCount")).longValue(), r::toString);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// WORK-J0507 (Foundry WORK-P0063 toolbar follow-up): print export button + collapseAll action
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_printIconResolvesToItsOwnKey_notTheNeutralFallback() {
+		var r = report();
+		assertEquals("print", r.get("pure_print_icon"),
+			() -> "resolveButtonIcon(null, 'print') must resolve via DEFAULT_ICONS, not fall back to 'tune': " + r);
+	}
+
+	@Test void d02_printSurvivesExportButtonResolutionWithNoExtraDepsPresent() {
+		var r = report();
+		assertEquals("copy,print", r.get("pure_print_resolvedFromAlwaysOnButtons"),
+			() -> "print needs no extra dep (unlike excel/pdf), so it must resolve from an always-on `buttons` "
+				+ "list even with jszip/pdfmake both absent: " + r);
+	}
+
+	@Test void d03_collapseIconIsWiredNotJustReserved() {
+		var r = report();
+		assertEquals("unfold_less", r.get("pure_collapse_icon"),
+			() -> "resolveButtonIcon(null, 'collapse') must resolve to the wired icon key: " + r);
+	}
+
+	@Test void d04_printButtonRendersAsItsOwnButtonAlongsideCopy() {
+		var r = report();
+		assertEquals(1L, ((Number)r.get("dom_print_groupCount")).longValue(), r::toString);
+		assertEquals(2L, ((Number)r.get("dom_print_buttonCount")).longValue(),
+			() -> "print must render as its own button, not be silently dropped: " + r);
+		assertEquals("copy,print", r.get("dom_print_buttonTitles"), r::toString);
+	}
+
+	@Test void d05_collapseAllRendersOneButtonThatInvokesCtxCollapseAllDetailRowsOnClick() {
+		var r = report();
+		assertEquals(1L, ((Number)r.get("dom_collapseAll_groupCount")).longValue(), r::toString);
+		assertEquals("Collapse all", r.get("dom_collapseAll_title"), r::toString);
+		assertEquals(1L, ((Number)r.get("dom_collapseAll_clickInvokedHook")).longValue(),
+			() -> "clicking the collapseAll button must invoke ctx.collapseAllDetailRows() exactly once: " + r);
+	}
 }

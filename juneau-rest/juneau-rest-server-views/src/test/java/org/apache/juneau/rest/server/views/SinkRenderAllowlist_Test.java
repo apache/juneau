@@ -69,8 +69,8 @@ class SinkRenderAllowlist_Test extends TestBase {
 		var expected = String.join(",", SinkRenderAllowlist.BUILTIN_IDS.stream().sorted().toList());
 		// The JS array is not sorted the same way as Set.of iteration; pin membership via the snapshot list.
 		assertTrue(body.contains("\"progress\""), body);
-		// Lockstep count: 11 built-in fill-sink ids, the eleventh being "pill".
-		assertEquals(11, SinkRenderAllowlist.BUILTIN_IDS.size());
+		// Lockstep count: 12 built-in fill-sink ids, the eleventh being "pill" and the twelfth "code" (WORK-J0508).
+		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(expected.contains("progress"));
 		assertTrue(expected.contains("tag"));
 		// Bidirectional lockstep against the two source arrays that together drive frozenBuiltinIds: the snapshot
@@ -96,12 +96,23 @@ class SinkRenderAllowlist_Test extends TestBase {
 
 	@Test void a08_pillIsABuiltinFillSink_withADisplayOnlySinkRenderer() {
 		// "pill" is now a fill-sink built-in; the count moved 10 -> 11 with this addition and nothing else.
-		assertEquals(11, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must be a fill-sink built-in");
 		SinkRenderAllowlist.assertAllowed("pill", null);
 		// Still not popover text - a pill is a chip, not a text-shaped built-in.
 		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("pill"));
 		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("pill"));
+	}
+
+	@Test void a09_codeIsABuiltinFillSink_minimalMonospaceSourceRenderer() {
+		// "code" (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) is a fill-sink built-in; the count
+		// moved 11 -> 12 with this addition and nothing else.
+		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("code"), "code must be a fill-sink built-in");
+		SinkRenderAllowlist.assertAllowed("code", null);
+		// Not popover text - the popover surface is a small text-shaped bubble, not a place for a source block.
+		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("code"));
+		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("code"));
 	}
 
 	@Test void a07_servingPath_detailFieldUnknownIdFailsViewTableOf() {

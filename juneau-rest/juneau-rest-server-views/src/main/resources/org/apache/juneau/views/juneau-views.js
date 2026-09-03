@@ -2354,6 +2354,39 @@
 		expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
 	}
 
+	/**
+	 * Collapses every currently-open row-detail expansion in {@code table} back down, in one call - the DOM/
+	 * DataTables counterpart of {@code RibbonAction.collapseAll()} / {@code juneau-ribbon.js}'s {@code "collapseAll"}
+	 * dispatch (Foundry {@code WORK-P0063} toolbar follow-up, {@code WORK-J0507}).
+	 *
+	 * <p>Table-scoped like every other per-table detail helper here ({@code hasInFlightRow}/{@code hasJobRow}):
+	 * {@link #ownNodes} excludes any row a NESTED view table owns, so a nested table's own open child rows are
+	 * left untouched - a nested table with its own toolbar needs its own {@code collapseAll} click to collapse
+	 * its own children. Mirrors {@link #toggleDetailRow}'s own collapse branch exactly (tear down nested
+	 * DataTables + the detail bar slot BEFORE {@code row.child.hide()}, so their listeners/timers do not leak with
+	 * the detached child-row DOM) but walks every open row instead of one, and notifies poll-paused state ONCE at
+	 * the end rather than per row.
+	 */
+	function collapseAllDetailRows(table, ctx) {
+		const dt = ctx.dataTable;
+		if (!dt) return;
+		const openRows = ownNodes(table, table, "tbody > tr.juneau-view-detail-open");
+		if (!openRows.length) return;
+		let collapsedAny = false;
+		openRows.forEach(function (tr) {
+			const row = dt.row(tr);
+			if (!row || !row.length || !row.child.isShown()) return;
+			if (tr._juneauDetailPanel) {
+				teardownNestedTables(tr._juneauDetailPanel);
+				teardownDetailBarSlot(tr._juneauDetailPanel);
+			}
+			row.child.hide();
+			tr.classList.remove("juneau-view-detail-open");
+			collapsedAny = true;
+		});
+		if (collapsedAny) notifyPollPausedChange(ctx);
+	}
+
 	function initDetailsExpander(table, ctx, viewDef) {
 		if (!ctx._detailInflight) ctx._detailInflight = new Map();
 		if (!ctx._detailGeneration) ctx._detailGeneration = new WeakMap();
@@ -4854,6 +4887,7 @@
 			ctx._pollDrawPending = false;
 			if (d.ajax) d.ajax.reload(); else d.draw();
 		};
+		ctx.collapseAllDetailRows = function () { collapseAllDetailRows(table, ctx); };
 
 		if (ctx.selectionState) wireSelectionAndBulkToolbar(table, ctx);
 

@@ -40,9 +40,15 @@ public final class SinkRenderAllowlist {
 	 * the client's {@code resolveSinkRenderer("pill")} never emits {@code role="button"}, and
 	 * {@link ViewDef#validateSinkPill(Render, String)} forbids a {@code meta.action} on a sink pill outright (a fill
 	 * sink has no {@code rowActions} in scope to bind one to).
+	 *
+	 * <p>
+	 * {@code code} (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) is a minimal monospace,
+	 * whitespace-preserving, HTML-escaped source-text renderer intended for a {@link DetailField} inside a
+	 * row-detail subtab &mdash; no language hint or syntax highlighting on this first pass.
 	 */
 	public static final Set<String> BUILTIN_IDS = Set.of(
-		"date", "datetime", "ts-zulu", "bool", "linked", "truncate", "json", "decimal", "tag", "progress", "pill"
+		"date", "datetime", "ts-zulu", "bool", "linked", "truncate", "json", "decimal", "tag", "progress", "pill",
+		"code"
 	);
 
 	/**

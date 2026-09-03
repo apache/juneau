@@ -277,6 +277,17 @@
 		}
 	});
 
+	// WORK-J0508 (Foundry WORK-P0063 row-detail-subtabs follow-up): minimal `code` renderer for source text -
+	// plain-text, HTML-escaped, whitespace-preserving, monospace via the `.juneau-code` class (juneau-views.css).
+	// Intentionally NO language hint / syntax-highlighting param on this first pass (see the corresponding
+	// board item's design-fork note); a future `meta.lang` can be layered on without changing this shape.
+	registerRenderer("code", {
+		display: function (cellData) {
+			if (cellData == null) return "";
+			return '<pre class="juneau-code"><code>' + escHtml(String(cellData)) + "</code></pre>";
+		}
+	});
+
 	registerRenderer("decimal", {
 		display: function (cellData, rowData, meta) {
 			if (cellData == null || cellData === "") return "";
@@ -377,7 +388,7 @@
 
 	const frozenBuiltins = Object.create(null);
 	const BUILTIN_RENDER_IDS = [
-		"bool", "date", "datetime", "decimal", "json", "linked", "progress", "tag", "truncate", "ts-zulu"
+		"bool", "code", "date", "datetime", "decimal", "json", "linked", "progress", "tag", "truncate", "ts-zulu"
 	];
 	// Fill-sink built-ins whose sink renderer is a distinct, hand-registered variant of the cell renderer rather than
 	// a frozen snapshot of it (see the `pill` block below).  Part of the frozen id set, absent from the snapshot pass.

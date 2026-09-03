@@ -401,6 +401,19 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertFalse(Json.of(ungrouped).contains("\"group\""), Json.of(ungrouped));
 	}
 
+	@Test void d17_ribbonActionCollapseAllFactory_typeOnlyBean() {
+		// Foundry WORK-P0063 toolbar follow-up (WORK-J0507): a type-only bean like refresh()/pausePolling(), so it
+		// serializes with ONLY "type" set - no buttons/id/title/etc leak through as accidental defaults.
+		var a = RibbonAction.collapseAll();
+		assertEquals("collapseAll", a.type);
+		assertEquals("{\"type\":\"collapseAll\"}", Json.of(a));
+
+		// Not query-contributing: toQueryParams(ViewDef) skips it exactly like refresh/columnSearchToggle/
+		// pausePolling/divider/export - contributes nothing on its own.
+		var viewDef = ViewDef.create("t").ribbon(RibbonAction.collapseAll()).build();
+		assertEquals(Map.of(), RibbonAction.toQueryParams(viewDef));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// e) Declarable poll interval: floor clamp + wire presence/omission
 	//------------------------------------------------------------------------------------------------------------------

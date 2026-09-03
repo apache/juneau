@@ -48,8 +48,8 @@ class SymbolSprite_StemIds_Test extends TestBase {
 		"juneau-sym-cancel", "juneau-sym-check", "juneau-sym-chevrondown", "juneau-sym-chevronright",
 		"juneau-sym-close", "juneau-sym-collapse_all", "juneau-sym-columns", "juneau-sym-copy", "juneau-sym-csv",
 		"juneau-sym-download", "juneau-sym-edit", "juneau-sym-filter", "juneau-sym-new", "juneau-sym-pdf",
-		"juneau-sym-refresh", "juneau-sym-search", "juneau-sym-settings", "juneau-sym-spreadsheet",
-		"juneau-sym-toggle-deleted", "juneau-sym-toggle_column_search"
+		"juneau-sym-print", "juneau-sym-refresh", "juneau-sym-search", "juneau-sym-settings",
+		"juneau-sym-spreadsheet", "juneau-sym-toggle-deleted", "juneau-sym-toggle_column_search"
 	);
 
 	private static final Pattern SYMBOL_ID_PATTERN = Pattern.compile("<symbol\\s+id=\"([^\"]+)\"");
