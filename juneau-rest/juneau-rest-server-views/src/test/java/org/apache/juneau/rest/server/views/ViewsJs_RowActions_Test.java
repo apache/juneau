@@ -16,9 +16,17 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.filter.*;
@@ -26,10 +34,13 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing.
- * Mirrors {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing
- * pieces of the runtime's row-menu/submit contract are present in the shipped asset, without booting a browser
- * (the behavioral proof lives in the opt-in {@code RowActionCsrf_BrowserTest} canary).
+ * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing, plus
+ * (WORK-J0509) the {@code RowAction.endpoint} {@code {property}} substitution.  Source-shape always runs;
+ * the substitution's behavioral proof runs via a Node harness when {@code node} is on {@code PATH} (no
+ * {@code -Pjs-tests}/browser required - {@code buildActionRequest} is pure).  Mirrors
+ * {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing pieces of the
+ * runtime's row-menu/submit contract are present in the shipped asset, without booting a browser (the
+ * fail-closed-CSRF behavioral proof lives in the opt-in {@code RowActionCsrf_BrowserTest} canary).
  *
  * <p>
  * The client refusal these tests pin is <b>defense-against-consumer-omission</b>, not the security control: the
@@ -160,10 +171,210 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(fn.contains("aria-describedby"), fn);
 	}
 
+	// -----------------------------------------------------------------------------------------------------------
+	// WORK-J0509: RowAction.endpoint `{property}` substitution, mirroring Column.href's `linked`-renderer
+	// mechanism exactly (same interpolateHref helper, same token grammar, same escaping, same no-value behavior).
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void a13_buildActionRequestSubstitutesEndpointViaTheSameHelperColumnHrefUses() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function buildActionRequest(");
+		// The 5th param + the substitution call - not `action.endpoint` issued verbatim anymore.
+		assertTrue(fn.contains("buildActionRequest(action, token, headerName, extra, rowData)"), fn);
+		assertTrue(fn.contains("url: substituteRowActionEndpoint(action.endpoint, rowData)"), fn);
+		assertFalse(fn.contains("url: action.endpoint"), fn);
+	}
+
+	@Test void a14_substituteRowActionEndpointDelegatesToTheSharedColumnHrefHelper() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function substituteRowActionEndpoint(");
+		// The SAME interpolateHref helper juneau-renders.js exposes for Column.href's `linked` renderer - not a
+		// second, divergent template implementation.
+		assertTrue(fn.contains("NS._render?.interpolateHref"), fn);
+		assertTrue(fn.contains("NS._render.interpolateHref(endpoint, rowData)"), fn);
+		// A null/undefined endpoint is returned as-is, never stringified.
+		assertTrue(fn.contains("if (endpoint == null) return endpoint;"), fn);
+	}
+
+	@Test void a15_submitRowActionResolvesTheClickedRowsOwnDataForSubstitution() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function submitRowAction(");
+		// Must pass THIS row's own already-fetched data (the same lookup the enabledWhen gate uses) - never a
+		// stale/global row, and never re-implementing its own DataTables lookup.
+		assertTrue(fn.contains("rowDataForTr(ctx, tr)"), fn);
+		assertTrue(fn.contains("buildActionRequest("), fn);
+	}
+
 	private static String functionBody(String body, String signature) {
 		var start = body.indexOf(signature);
 		assertTrue(start >= 0, () -> signature + " not found:\n" + body);
 		var end = body.indexOf("\n\t}", start);
 		return body.substring(start, end < 0 ? body.length() : end);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// Node behavioral harness (row-action-endpoint.cjs) - pure, DOM/browser-free; runs when `node` is on PATH.
+	// -----------------------------------------------------------------------------------------------------------
+
+	private static String rendersJs() throws Exception {
+		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.RENDERS_JS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.RENDERS_JS_RESOURCE);
+			return new String(in.readAllBytes(), UTF_8);
+		}
+	}
+
+	private static Map<?,?> report;
+	private static Map<?,?> reportNoRendersJs;
+
+	@BeforeAll
+	static void probeIfNodeAvailable() throws Exception {
+		if (!nodeAvailable())
+			return;
+		var harness = locateHarness();
+		if (harness == null)
+			return;
+		var viewsFile = Files.createTempFile("juneau-views-", ".js");
+		var rendersFile = Files.createTempFile("juneau-renders-", ".js");
+		try {
+			Files.writeString(viewsFile, viewsJs(), UTF_8);
+			Files.writeString(rendersFile, rendersJs(), UTF_8);
+			report = Json.to(runNode(harness, viewsFile, rendersFile), Map.class);
+			reportNoRendersJs = Json.to(runNode(harness, viewsFile, null), Map.class);
+		} finally {
+			Files.deleteIfExists(viewsFile);
+			Files.deleteIfExists(rendersFile);
+		}
+	}
+
+	private static boolean nodeAvailable() {
+		try {
+			var p = new ProcessBuilder("node", "--version").redirectErrorStream(true).start();
+			if (!p.waitFor(5, TimeUnit.SECONDS)) {
+				p.destroyForcibly();
+				return false;
+			}
+			return p.exitValue() == 0;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private static Path locateHarness() {
+		var basedir = System.getProperty("basedir");
+		if (basedir != null) {
+			var p = Path.of(basedir, "src/test/js/row-action-endpoint.cjs");
+			if (Files.isRegularFile(p)) return p.toAbsolutePath().normalize();
+		}
+		for (var rel : List.of(
+			"src/test/js/row-action-endpoint.cjs",
+			"juneau-rest/juneau-rest-server-views/src/test/js/row-action-endpoint.cjs"
+		)) {
+			var p = Path.of(rel);
+			if (Files.isRegularFile(p)) return p.toAbsolutePath().normalize();
+		}
+		return null;
+	}
+
+	private static String runNode(Path harness, Path viewsJs, Path rendersJs) throws Exception {
+		var stdout = Files.createTempFile("row-action-endpoint-stdout-", ".json");
+		var stderr = Files.createTempFile("row-action-endpoint-stderr-", ".txt");
+		try {
+			var args = new ArrayList<String>(List.of("node", harness.toString(), viewsJs.toString()));
+			if (rendersJs != null) args.add(rendersJs.toString());
+			var pb = new ProcessBuilder(args)
+				.redirectOutput(stdout.toFile())
+				.redirectError(stderr.toFile());
+			var p = pb.start();
+			if (!p.waitFor(30, TimeUnit.SECONDS)) {
+				p.destroyForcibly();
+				fail("row-action-endpoint.cjs did not finish within 30s; stderr:\n" + quietRead(stderr));
+			}
+			if (p.exitValue() != 0)
+				fail("row-action-endpoint.cjs exited " + p.exitValue() + "; stderr:\n" + quietRead(stderr)
+					+ "\nstdout:\n" + quietRead(stdout));
+			return Files.readString(stdout, UTF_8);
+		} finally {
+			Files.deleteIfExists(stdout);
+			Files.deleteIfExists(stderr);
+		}
+	}
+
+	private static String quietRead(Path p) {
+		try { return Files.readString(p, UTF_8); }
+		catch (IOException e) { return "(unreadable: " + e.getMessage() + ")"; }
+	}
+
+	private static Map<?,?> report() {
+		assumeTrue(report != null, "node not available or row-action-endpoint.cjs not found — behavioral layer skipped");
+		return report;
+	}
+
+	private static Map<?,?> reportNoRendersJs() {
+		assumeTrue(reportNoRendersJs != null, "node not available or row-action-endpoint.cjs not found — behavioral layer skipped");
+		return reportNoRendersJs;
+	}
+
+	@Test void b01_idTemplateResolvesAgainstTheCurrentRow_exactlyLikeColumnHref() {
+		assertEquals("servlet:/incidents/a1/ack", report().get("idTemplate_resolved"));
+	}
+
+	@Test void b02_literalEndpointWithNoTokenIsPreservedByteIdentical_backwardCompat() {
+		var r = report();
+		// With rowData, without rowData, and via the pre-J0509 4-argument call signature - all three unaffected.
+		assertEquals("servlet:/incidents/ack", r.get("literal_withRowData"));
+		assertEquals("servlet:/incidents/ack", r.get("literal_noRowData"));
+		assertEquals("servlet:/incidents/ack", r.get("literal_preFeatureCallSignature"));
+	}
+
+	@Test void b03_noIdOrNullIdRowSubstitutesToEmptyString_matchingColumnHref() {
+		var r = report();
+		// Missing key, explicit null, absent rowData, and undefined rowData all substitute `{id}` to "" - the
+		// SAME behavior Column.href's interpolateHref has for a row with no id - never a thrown error.
+		assertEquals("servlet:/incidents//ack", r.get("noId_missingKey"));
+		assertEquals("servlet:/incidents//ack", r.get("noId_explicitNull"));
+		assertEquals("servlet:/incidents//ack", r.get("noId_absentRowData"));
+		assertEquals("servlet:/incidents//ack", r.get("noId_undefinedRowData"));
+	}
+
+	@Test void b04_substitutedValueIsUrlEncodedPerToken_matchingColumnHref() {
+		assertEquals("servlet:/incidents/a%2F1%20b/ack", report().get("encoded_slashAndSpace"));
+	}
+
+	@Test void b05_genericPropertyGrammar_notAHardcodedIdOnlyToken() {
+		// Column.href's template is `{property}` (any row key), not a hardcoded `{id}` - proving RowAction.endpoint
+		// resolves a second, unrelated token in the same template confirms this mirrors the generic grammar.
+		assertEquals("/x/a1/status/open", report().get("multiToken_resolved"));
+	}
+
+	@Test void b06_nullOrUndefinedEndpointIsReturnedAsIs_neverStringified() {
+		var r = report();
+		assertNull(r.get("nullEndpoint_helper"));
+		assertEquals(true, r.get("undefinedEndpointIsUndefined_helper"));
+	}
+
+	@Test void b07_refusalNeverReachesSubstitution() {
+		var r = report();
+		assertEquals(true, ((Map<?,?>) r.get("refusal_safeMethod")).get("refuse"));
+		assertEquals("safe-method", ((Map<?,?>) r.get("refusal_safeMethod")).get("reason"));
+		assertEquals(true, ((Map<?,?>) r.get("refusal_blankToken")).get("refuse"));
+		assertEquals("missing-token", ((Map<?,?>) r.get("refusal_blankToken")).get("reason"));
+		assertFalse(((Map<?,?>) r.get("refusal_safeMethod")).containsKey("url"));
+		assertFalse(((Map<?,?>) r.get("refusal_blankToken")).containsKey("url"));
+	}
+
+	@Test void b08_substituteRowActionEndpointHelperDirect() {
+		var r = report();
+		assertEquals("/x/a1", r.get("helper_direct"));
+		assertEquals("/x/ack", r.get("helper_noToken"));
+	}
+
+	@Test void b09_gracefullyDegradesToVerbatimEndpoint_whenRendersJsIsNotLoaded() {
+		// If a caller ships juneau-views.js without its juneau-renders.js peer, substitution is unavailable -
+		// the SAME graceful-degradation shape as viewEscAttr - and the endpoint is issued verbatim (the token
+		// left in place) rather than throwing or silently corrupting the URL.
+		var r = reportNoRendersJs();
+		assertEquals(false, r.get("hasInterpolateHref"));
+		assertEquals("servlet:/incidents/{id}/ack", r.get("idTemplate_resolved"));
+		assertEquals("servlet:/incidents/ack", r.get("literal_withRowData"));
 	}
 }

@@ -345,21 +345,44 @@
 	}
 
 	/**
-	 * Builds the fail-closed row-action request descriptor from a RowAction intent, a token, and a header name -
-	 * pure, DOM/fetch-free (plain data in, plain data out) so the fail-closed contract is unit-testable without a
-	 * browser.  Returns EITHER a `{refuse:true, reason}` marker (the caller renders a VISIBLE refusal) OR a
-	 * ready-to-issue `{url, method, headers, body}`:
+	 * Substitutes `{property}` tokens in a RowAction's `endpoint` against the row's own already-fetched data
+	 * (WORK-J0509) - delegating to the EXACT SAME `interpolateHref` helper {@code Column.href}'s `linked` renderer
+	 * uses (juneau-renders.js; also reused by the row-detail field-grid `href` slot).  Same token grammar (any
+	 * `{property}`, not a special-cased `{id}`), same per-value `encodeURIComponent` escaping, and the same
+	 * "row lacks the field, or its value is null" -> empty-string substitution - never a throw, never a literal
+	 * `{property}` left in the URL.  A template with no `{...}` token round-trips byte-identical (`interpolateHref`'s
+	 * `replace` is a no-op without a match), which is the backward-compatibility guarantee for every `endpoint`
+	 * declared before this substitution existed.  A `null`/`undefined` endpoint is returned as-is (never
+	 * stringified to `"undefined"`/`"null"`).  When `juneau-renders.js` is not on the page (a caller shipping
+	 * juneau-views.js alone), this degrades to the endpoint verbatim - the same graceful-degradation shape as
+	 * {@link #viewEscAttr} above; the plain-fetch-URL destination means NO extra HTML-attribute escaping layer is
+	 * needed here (unlike `Column.href`'s `escAttr(interpolateHref(...))`, which exists only because that result is
+	 * written into an `<a href="...">` DOM attribute).
+	 */
+	function substituteRowActionEndpoint(endpoint, rowData) {
+		if (endpoint == null) return endpoint;
+		return typeof NS._render?.interpolateHref === "function" ? NS._render.interpolateHref(endpoint, rowData) : endpoint;
+	}
+
+	/**
+	 * Builds the fail-closed row-action request descriptor from a RowAction intent, a token, a header name, and
+	 * the row's own data - pure, DOM/fetch-free (plain data in, plain data out) so the fail-closed contract is
+	 * unit-testable without a browser.  Returns EITHER a `{refuse:true, reason}` marker (the caller renders a
+	 * VISIBLE refusal) OR a ready-to-issue `{url, method, headers, body}`:
 	 *   - a missing or SAFE method refuses (`reason:"safe-method"`) - HIGH-7;
 	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - HIGH-1 fail-closed;
-	 *   - otherwise the body is JSON and the headers carry `Content-Type: application/json` (so the write passes
-	 *     `LoopbackBoundary.isJson`) plus the CSRF token under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
+	 *   - otherwise `url` is `action.endpoint` with any `{property}` token substituted via
+	 *     {@link #substituteRowActionEndpoint} (WORK-J0509), and the body is JSON with the headers carrying
+	 *     `Content-Type: application/json` (so the write passes `LoopbackBoundary.isJson`) plus the CSRF token
+	 *     under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
 	 *
 	 * The optional `extra` object is merged into the JSON body - the declarative-modal submit path uses it to carry
 	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
 	 * same key and the server can check the key's `(action, targetId)` binding.  A bare submit (no `extra`) sends
-	 * exactly `{action}` as before.
+	 * exactly `{action}` as before.  `rowData` is optional (absent/`null` mirrors a Column-href row with no id: every
+	 * `{property}` token substitutes to `""`), so every pre-WORK-J0509 caller of this pure function keeps working.
 	 */
-	function buildActionRequest(action, token, headerName, extra) {
+	function buildActionRequest(action, token, headerName, extra, rowData) {
 		if (!action || isSafeMethod(action.method) || !action.method)
 			return { refuse: true, reason: "safe-method" };
 		if (isBlankToken(token))
@@ -369,7 +392,7 @@
 		const payload = { action: action.id };
 		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) payload[k] = extra[k];
 		return {
-			url: action.endpoint,
+			url: substituteRowActionEndpoint(action.endpoint, rowData),
 			method: action.method,
 			headers: headers,
 			body: JSON.stringify(payload)
@@ -3360,8 +3383,10 @@
 	}
 
 	/**
-	 * Issues one row action, FAIL-CLOSED.  Resolves the table's token + header name, asks the pure
-	 * buildActionRequest(...) for a request descriptor, and:
+	 * Issues one row action, FAIL-CLOSED.  Resolves the table's token + header name and this row's own
+	 * already-fetched data (rowDataForTr - the SAME lookup the `enabledWhen` gate uses, so no second DataTables
+	 * read), asks the pure buildActionRequest(...) for a request descriptor - which substitutes any `{property}`
+	 * token in `action.endpoint` against that row data (WORK-J0509, mirroring Column.href) - and:
 	 *   - on a refusal marker (safe method, or blank/absent/whitespace token) renders a VISIBLE refusal and sends
 	 *     NOTHING - no silent degradation, and never an empty-header request the server would 403;
 	 *   - otherwise marks the row in-flight and issues the JSON fetch with the CSRF header, then settles
@@ -3373,7 +3398,8 @@
 	 * real control.
 	 */
 	function submitRowAction(action, table, tr, ctx, extra) {
-		const req = buildActionRequest(action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra);
+		const req = buildActionRequest(
+			action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra, rowDataForTr(ctx, tr));
 		if (req.refuse) {
 			renderRowActionRefusal(tr, action, req.reason);
 			return;
@@ -5479,6 +5505,7 @@
 		DEFAULT_CSRF_HEADER: DEFAULT_CSRF_HEADER,
 		isSafeMethod: isSafeMethod,
 		isBlankToken: isBlankToken,
+		substituteRowActionEndpoint: substituteRowActionEndpoint,
 		buildActionRequest: buildActionRequest,
 		actionRefusalMessage: actionRefusalMessage,
 		resolveCsrfToken: resolveCsrfToken,

@@ -43,7 +43,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 	<tr><td>{@code id}</td><td>string</td><td>Stable action id (menu-item key; also the submit's logical name).</td></tr>
  * 	<tr><td>{@code label}</td><td>string</td><td>The menu-item text.</td></tr>
  * 	<tr><td>{@code icon}</td><td>string</td><td>Optional glyph name (resolved by the shared icon registry).</td></tr>
- * 	<tr><td>{@code endpoint}</td><td>string</td><td>The URL the action submits to.</td></tr>
+ * 	<tr><td>{@code endpoint}</td><td>string</td><td>The URL the action submits to; may carry a {@code {property}}
+ * 		token substituted from the current row (see {@link #endpoint(String) endpoint}).</td></tr>
  * 	<tr><td>{@code method}</td><td>{@code POST}|{@code PUT}|{@code PATCH}|{@code DELETE}</td>
  * 		<td>The non-safe HTTP method (see {@link Method}).</td></tr>
  * 	<tr><td>{@code confirm}</td><td>string</td><td>Optional confirmation prompt shown before the submit.</td></tr>
@@ -71,6 +72,14 @@ import org.apache.juneau.rest.server.widgets.Op;
  * startup, and {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} applies its Origin/CSRF/JSON checks
  * only to non-safe methods.  A mutating action bound to {@code GET} would be a CSRF-able write; the type system
  * forbids expressing one.
+ *
+ * <h5 class='section'>Per-row {@code {property}} substitution in {@link #endpoint}</h5>
+ * <p>
+ * {@link #endpoint(String) endpoint} may carry a {@code {property}} token (e.g. {@code {id}}, as in the example
+ * below) that the client-side runtime substitutes from the row before submitting &mdash; the SAME mechanism, same
+ * escaping, and same no-value behavior as {@link Column#href(String) Column.href}'s {@code linked} renderer
+ * (WORK-J0509); see {@link #endpoint(String) endpoint}'s javadoc for the full contract.  An endpoint with no token
+ * is unaffected and submits exactly as it always has.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -204,7 +213,10 @@ public class RowAction {
 	/** Optional glyph/icon name (resolved by the shared icon registry). */
 	public String icon;
 
-	/** The URL this action submits to. */
+	/**
+	 * The URL this action submits to (see {@link #endpoint(String) endpoint} for the {@code {property}}
+	 * substitution grammar).
+	 */
 	public String endpoint;
 
 	/** The non-safe HTTP method wire token (see {@link Method#wire()}). */
@@ -272,6 +284,21 @@ public class RowAction {
 
 	/**
 	 * Sets the URL this action submits to.
+	 *
+	 * <p>
+	 * May contain one or more {@code {property}} tokens (e.g. {@code "servlet:/incidents/{id}/ack"}), substituted
+	 * from the CURRENT ROW's own already-fetched data at submit time &mdash; the client-side ({@code
+	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical
+	 * {@code interpolateHref} helper {@link Column#href(String) Column.href}'s {@code linked} renderer uses
+	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}), the SAME
+	 * per-value {@code encodeURIComponent} escaping, and the SAME "row lacks the field, or its value is
+	 * <jk>null</jk>" &rarr; substitutes to an empty string behavior &mdash; never a request-time exception, and
+	 * never a literal {@code {property}} left in the issued URL.
+	 *
+	 * <p>
+	 * <b>Backward compatible by construction:</b> an {@code endpoint} with no {@code {...}} token is issued
+	 * byte-identical to how it always was &mdash; substitution is a no-op replace over a template with nothing to
+	 * match.
 	 *
 	 * @param value The new value.
 	 * @return This object.

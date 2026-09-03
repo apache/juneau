@@ -148,6 +148,14 @@
 	registerIcon("new", host("new"));
 	registerIcon("toggle-deleted", host("toggle-deleted"));
 
+	// Row-action icons (WORK-J0511): referenced by row-action buttons (e.g. Foundry) but not previously
+	// registered, so those actions rendered a blank glyph before these five were added to the sprite.
+	registerIcon("pause", host("pause"));
+	registerIcon("stop", host("stop"));
+	registerIcon("forceStop", host("forceStop"));
+	registerIcon("push", host("push"));
+	registerIcon("openPr", host("openPr"));
+
 	if (typeof document !== "undefined") {
 		if (document.readyState === "loading")
 			document.addEventListener("DOMContentLoaded", loadSymbolSprite);
