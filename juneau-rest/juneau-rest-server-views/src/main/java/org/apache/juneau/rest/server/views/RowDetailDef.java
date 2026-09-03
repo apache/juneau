@@ -39,6 +39,15 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@link #title} may contain <code>{field}</code> placeholders filled from the expand GET {@code fields} map
  * via {@code textContent}.
  *
+ * <p>
+ * These section tabs always render in tab format &mdash; the client-side strip builder unconditionally stamps
+ * {@code data-juneau-strip-mode="tab"}, so there is no ribbon-format (connected-pill) option for them and no
+ * per-view toggle.  The base {@code juneau-views.css} supplies the folder-tab <i>shape</i> only (a
+ * {@code currentColor} floor line); the visible themed look &mdash; floor color plus the selected-tab accent
+ * fill &mdash; is layered by the console-ui chrome stylesheet's {@code --jc-*} tokens, so a consumer that pulls
+ * in this module without that chrome layer (or equivalent {@code --jc-*} theming) gets the correct tab structure
+ * but an unthemed floor and no selected-tab fill.
+ *
  * @since 10.0.0
  */
 @SuppressWarnings({

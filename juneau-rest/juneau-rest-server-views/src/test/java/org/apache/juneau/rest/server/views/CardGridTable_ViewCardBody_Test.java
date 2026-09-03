@@ -407,13 +407,22 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 
 	@Test void g07_actionTooltipStaysInAttributePositionAndNeverBecomesMarkup() {
 		// A tooltip is emitted the one way the header vocabulary emits it: as attribute values, never as a child.
-		// So a tag-shaped tooltip cannot open an element, because it is not in element-content position at all.
+		// The serializer entity-escapes attribute values, so a tag-shaped tooltip stays inert text inside the attribute.
 		var c = Card.create("c1", "T").body(fieldBody()).actions(
 			HeaderAction.link("open", "external", "<b>x</b>", "/reports/1"));
 		var h = Html.of(CardGridTable.of(tokenRequest(), c));
-		assertTrue(h.contains("aria-label=\"<b>x</b>\""), h);
-		assertTrue(h.contains("title=\"<b>x</b>\""), h);
+		assertTrue(h.contains("aria-label=\"&lt;b&gt;x&lt;/b&gt;\""), h);
+		assertTrue(h.contains("title=\"&lt;b&gt;x&lt;/b&gt;\""), h);
 		assertFalse(h.contains("><b>x</b><"), "a tooltip must never reach element-content position:\n" + h);
+	}
+
+	@Test void g07c_aQuoteBearingTooltipCannotBreakOutOfItsAttribute() {
+		// The breakout case the entity-escaping exists for: a tooltip whose text closes the attribute and opens a tag.
+		var c = Card.create("c1", "T").body(fieldBody()).actions(
+			HeaderAction.link("open", "external", "\"><script>alert(1)</script>", "/reports/1"));
+		var h = Html.of(CardGridTable.of(tokenRequest(), c));
+		assertFalse(h.contains("<script>"), "a tooltip must never open a live tag:\n" + h);
+		assertTrue(h.contains("aria-label=\"&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;\""), h);
 	}
 
 	@Test void g07b_menuItemLabelsAreEscapedAsText() {

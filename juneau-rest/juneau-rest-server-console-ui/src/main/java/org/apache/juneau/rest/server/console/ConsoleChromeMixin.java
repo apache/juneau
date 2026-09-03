@@ -185,10 +185,20 @@ public class ConsoleChromeMixin {
 	 * emitted verbatim (never routed through {@code CssValueGrammar}, which exists to validate <i>consumer</i>
 	 * input, not the framework's own stylesheet). {@code Theme.OPEN} owns leaf values; this block owns derived
 	 * values; no token name is declared by both.
+	 *
+	 * <p>
+	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) derives from {@code --jc-chrome-bg}, not
+	 * {@code --jc-surface}: the header/nav strip is chrome, not page content, so it must recolor with every
+	 * consumer theme that overrides {@code --jc-chrome-bg} (e.g. {@link Theme#LIGHT_BROWN}, {@link Theme#RED},
+	 * {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} and {@code --jc-table-header-bg} already do, rather
+	 * than staying pinned to {@code --jc-white} regardless of the active theme's chrome color. An earlier revision
+	 * derived {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
+	 * and nav strip white under every themed chrome &mdash; a latent bug a themed-header/nav test now guards
+	 * against.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",
-		"--jc-header-bg:var(--jc-surface);",
+		"--jc-header-bg:var(--jc-chrome-bg);",
 		"--jc-nav-bg:var(--jc-header-bg);",
 		"--jc-control-bg:var(--jc-surface);",
 		"--jc-table-bg:var(--jc-surface);",

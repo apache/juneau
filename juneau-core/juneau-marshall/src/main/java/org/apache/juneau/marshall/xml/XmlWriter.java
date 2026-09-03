@@ -83,18 +83,18 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
-	 * @param value The attribute value.
+	 * @param value The attribute value.  Encoded as described in {@link #attr(String, String, Object, boolean)}.
 	 * @return This object.
 	 */
 	public SELF attr(Namespace ns, String name, Object value) {
-		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
+		return attr(ns == null ? null : ns.name, name, value);
 	}
 
 	/**
-	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
+	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>true</jk>);</code>
 	 *
 	 * @param name The attribute name.
-	 * @param value The attribute value.
+	 * @param value The attribute value.  Encoded as described in {@link #attr(String, String, Object, boolean)}.
 	 * @return This object.
 	 */
 	public SELF attr(String name, Object value) {
@@ -102,11 +102,11 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	}
 
 	/**
-	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
+	 * Shortcut for <code>attr(<jk>null</jk>, name, value, valNeedsEncoding);</code>
 	 *
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
+	 * @param valNeedsEncoding If <jk>true</jk>, the attribute value will be encoded.
 	 * @return This object.
 	 */
 	public SELF attr(String name, Object value, boolean valNeedsEncoding) {
@@ -114,24 +114,29 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	}
 
 	/**
-	 * Shortcut for <code>attr(ns, name, value, <jk>false</jk>);</code>
+	 * Shortcut for <code>attr(ns, name, value, <jk>true</jk>);</code>
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
-	 * @param value The attribute value.
+	 * @param value The attribute value.  Encoded as described in {@link #attr(String, String, Object, boolean)}.
 	 * @return This object.
 	 */
 	public SELF attr(String ns, String name, Object value) {
-		return oAttr(ns, name).q().attrValue(value, false).q();
+		return attr(ns, name, value, true);
 	}
 
 	/**
 	 * Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
 	 *
+	 * <p>
+	 * Encoding defends against markup injection: an unencoded value containing a quote character terminates the
+	 * attribute early and lets the remainder of the value be interpreted as markup.  Pass <jk>false</jk> only for
+	 * values that are already known to be safe attribute text.
+	 *
 	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
+	 * @param valNeedsEncoding If <jk>true</jk>, the attribute value will be encoded.
 	 * @return This object.
 	 */
 	public SELF attr(String ns, String name, Object value, boolean valNeedsEncoding) {
@@ -565,13 +570,19 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 		return out.toString();
 	}
 
+	/**
+	 * Writes an attribute value to the output, optionally encoding it.
+	 *
+	 * @param value The attribute value.  {@link URI} and {@link URL} values are resolved against the URI resolver first.
+	 * @param needsEncoding If <jk>true</jk>, the value is encoded via {@link XmlUtils#encodeAttrValue(Writer, Object, boolean)}.
+	 * @return This object.
+	 */
 	protected SELF attrValue(Object value, boolean needsEncoding) {
+		var value2 = (value instanceof URI || value instanceof URL) ? uriResolver.resolve(value) : value;
 		if (needsEncoding)
-			XmlUtils.encodeAttrValue(out, value, this.trimStrings);
-		else if (value instanceof URI || value instanceof URL)
-			append(uriResolver.resolve(value));
+			XmlUtils.encodeAttrValue(out, value2, trimStrings);
 		else
-			append(value);
+			append(value2);
 		return self();
 	}
 }

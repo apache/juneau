@@ -154,6 +154,117 @@ public final class Theme {
 		.token("--jc-accent-selected", "#1589EE")
 		.build();
 
+	/**
+	 * A warm, light-brown ("parchment") retint of {@link #OPEN}'s structure.
+	 *
+	 * <p>
+	 * Recolors the chrome, accent, links, text, borders, and primary button to a warm brown palette, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
+	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
+	 * deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding
+	 * only the 16 browned tokens below; the other 32 &mdash; including all five tag triads and every structural
+	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
+	 * identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: like {@link #OPEN}'s own {@code --jc-accent}, this theme's {@code --jc-accent} (<c>#a9772f</c>) clears
+	 * WCAG AA only for non-text/large-surface use (its {@code --jc-focus}/{@code --jc-accent-selected} consumers); a
+	 * consumer repurposing it as small body text should use {@code --jc-link} (<c>#8a5a1a</c>) instead, which
+	 * passes AA normal-text contrast.
+	 */
+	public static final Theme LIGHT_BROWN = deriveFrom("light-brown", OPEN)
+		.token("--jc-page-bg", "linear-gradient(180deg, #dccaa6 0%, #e8dcc4 22%, #f2ebdc 55%, #faf6ee 100%)")
+		.token("--jc-accent", "#a9772f")
+		.token("--jc-accent-wash", "rgba(169,119,47,0.1)")
+		.token("--jc-link", "#8a5a1a")
+		.token("--jc-text", "#2e2415")
+		.token("--jc-text-soft", "#2e2415cc")
+		.token("--jc-text-muted", "#7a6a4f")
+		.token("--jc-border", "#d8cbb0")
+		.token("--jc-border-2", "#c9b896")
+		.token("--jc-card-bg", "#fbf8f1")
+		.token("--jc-chrome-bg", "#efe6d4")
+		.token("--jc-btn-primary", "#8a6d3b")
+		.token("--jc-btn-primary-hover", "#74592f")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #a9772f, #8a6d3b)")
+		.token("--jc-focus", "#a9772f")
+		.token("--jc-accent-selected", "#a9772f")
+		.build();
+
+	/**
+	 * A Jira-inspired red retint of {@link #OPEN}'s structure.
+	 *
+	 * <p>
+	 * "Jira-inspired" describes the structural feel &mdash; white content, a distinctly-colored top nav, subtle
+	 * neutral borders, a restrained accent &mdash; rendered in a red key color (Jira's own brand is blue); no
+	 * Atlassian trademark appears in this theme's name or token values. Recolors the chrome, accent, links, brand,
+	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
+	 * green, danger red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
+	 * {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 16 recolored tokens below;
+	 * the other 32 &mdash; including all five tag triads and every structural token &mdash; are inherited from
+	 * {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: {@code --jc-btn-primary} (<c>#BF2600</c>) sits close in hue to {@link #OPEN}'s unchanged semantic
+	 * {@code --jc-danger} (<c>#c23934</c>); a primary button and a danger button rendered side by side rely on
+	 * shape/label conventions (solid brand vs. danger-wash hover), not color alone, to stay distinguishable &mdash;
+	 * {@code --jc-danger} itself is deliberately left untouched.
+	 */
+	public static final Theme RED = deriveFrom("red", OPEN)
+		.token("--jc-page-bg", "linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%)")
+		.token("--jc-accent", "#FF5630")
+		.token("--jc-accent-wash", "rgba(255,86,48,0.1)")
+		.token("--jc-link", "#BF2600")
+		.token("--jc-text", "#172B4D")
+		.token("--jc-text-soft", "#172B4Dcc")
+		.token("--jc-text-muted", "#5E6C84")
+		.token("--jc-border", "#DFE1E6")
+		.token("--jc-border-2", "#c1c7d0")
+		// Chrome-scale token, consumed by chrome.css's --jc-hover-bg / --jc-table-header-bg role aliases and,
+		// since ConsoleChromeMixin.OPEN_ROLE_ALIASES pins --jc-header-bg to this token, by .jc-header/.jc-nav
+		// themselves - so this override legitimately paints the header/nav strip, the table header row, and the
+		// hover fill all red.
+		.token("--jc-chrome-bg", "#BF2600")
+		.token("--jc-btn-primary", "#BF2600")
+		.token("--jc-btn-primary-hover", "#a01f00")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #FF5630, #BF2600)")
+		.token("--jc-radius", "0.1875rem")
+		.token("--jc-focus", "#FF5630")
+		.token("--jc-accent-selected", "#FF5630")
+		.build();
+
+	/**
+	 * A neutral, general-purpose light-gray retint of {@link #OPEN}'s structure &mdash; the ASF Jira-inspired
+	 * "clean neutral" member of the stock-theme set.
+	 *
+	 * <p>
+	 * Neutralizes the chrome, page background, text, and borders to a coherent grayscale ramp, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning
+	 * amber, neutral gray) <b>and</b> {@link #OPEN}'s blue interactive affordances (accent, link, primary button,
+	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
+	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
+	 * "8 grayed / 40 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
+	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 8 grayed tokens below;
+	 * the other 40 &mdash; including all five tag triads, every structural token, and the blue affordance set
+	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
+	 * identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: like {@link #OPEN}'s own {@code --jc-accent}, this theme's (unchanged, kept-from-OPEN)
+	 * {@code --jc-accent} clears WCAG AA only for non-text/large-surface use; a consumer repurposing it as small
+	 * body text should use {@code --jc-link} instead, which passes AA normal-text contrast.
+	 */
+	public static final Theme GRAY = deriveFrom("gray", OPEN)
+		.token("--jc-page-bg", "linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 55%, #ffffff 100%)")
+		.token("--jc-text", "#262626")
+		.token("--jc-text-soft", "#262626cc")
+		.token("--jc-text-muted", "#737373")
+		.token("--jc-border", "#e0e0e0")
+		.token("--jc-border-2", "#d0d0d0")
+		.token("--jc-card-bg", "#f7f7f7")
+		.token("--jc-chrome-bg", "#f4f4f4")
+		.build();
+
 	private final String name;
 	private final Map<String,String> tokens;
 

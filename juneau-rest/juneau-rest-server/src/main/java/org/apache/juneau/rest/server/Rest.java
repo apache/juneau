@@ -46,6 +46,21 @@ import org.apache.juneau.rest.server.swagger.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  *
+ * <h5 class='section'>Default response format (content negotiation):</h5>
+ * <p>
+ * The response format is <b>not</b> hardwired to JSON.  The serializer used to render a response body is chosen by
+ * ordinary HTTP content negotiation &mdash; the request's <c>Accept</c> header is best-matched against the media types
+ * of the configured {@link #serializers() serializers} (see {@link Serializer#getMediaTypeRanges()}).  A request that
+ * sends no <c>Accept</c> header (or a non-specific one such as <c>*&#47;*</c>, which browsers send by default) is
+ * treated as <c>*&#47;*</c> and matches the <b>first</b> serializer in the set.
+ *
+ * <p>
+ * In the default configuration ({@link BasicRestServlet} / {@link BasicRestResource}, via
+ * {@link org.apache.juneau.rest.server.config.BasicUniversalConfig}) the serializer set lists HTML first, so a browser
+ * &mdash; or any client that omits <c>Accept</c> &mdash; receives <b>HTML</b>, not JSON.  To always get JSON, send an
+ * explicit <c>Accept: application/json</c> header.  See {@link #serializers()} for how serializer ordering determines
+ * this default.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
 
@@ -1539,6 +1554,19 @@ public @interface Rest {
 	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
 	 *
+	 * <p>
+	 * These processors run in order and are the extension point that turns a method's return value into the response
+	 * body.  The built-in {@link SerializedPojoProcessor} is the default POJO handler &mdash; it runs the
+	 * content-negotiated {@link #serializers() serializer}, so for ordinary POJO returns the effective response format
+	 * is governed by serializer ordering and the request <c>Accept</c> header (see {@link #serializers()}), not by this
+	 * list.
+	 *
+	 * <p>
+	 * A custom view-renderer {@link ResponseProcessor} installed here (for example a template-rendering processor
+	 * contributed by a view mixin &mdash; see {@link #mergeResponseProcessorsIntoHost()}) can instead claim a return
+	 * value and render it directly (e.g. as HTML from a template) before serializer negotiation is reached, changing the
+	 * effective response for the returns it handles.
+	 *
 	 * @return The annotation value.
 	 */
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};
@@ -1643,6 +1671,14 @@ public @interface Rest {
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
 	 * </ul>
+	 *
+	 * <p>
+	 * <b>Ordering determines the default response format.</b>  A request that sends no <c>Accept</c> header (or a
+	 * non-specific one such as <c>*&#47;*</c>, which browsers send by default) is treated as <c>*&#47;*</c> and matches
+	 * the <b>first</b> serializer in this list.  That is why the default configuration
+	 * ({@link org.apache.juneau.rest.server.config.BasicUniversalConfig}) lists HTML first &mdash; so a browser, or any
+	 * client that omits <c>Accept</c>, receives HTML rather than JSON.  Order this list deliberately, and send an
+	 * explicit <c>Accept: application/json</c> to force JSON regardless of ordering.
 	 *
 	 * <p>
 	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes

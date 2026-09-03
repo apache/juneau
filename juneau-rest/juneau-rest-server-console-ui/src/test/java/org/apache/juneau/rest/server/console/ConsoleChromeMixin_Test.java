@@ -200,6 +200,42 @@ class ConsoleChromeMixin_Test extends TestBase {
 		return out;
 	}
 
+	/**
+	 * The header/nav-recolor fix (WORK-J0504): {@code --jc-header-bg} must key off {@code --jc-chrome-bg}, not
+	 * {@code --jc-surface} (&rarr; {@code --jc-white}), so a theme overriding {@code --jc-chrome-bg} (light-brown,
+	 * red, gray, ...) actually recolors the served {@code .jc-header}/{@code .jc-nav} strip - the CSS custom
+	 * property cascade resolves {@code var(--jc-chrome-bg)} against whichever block's {@code --jc-chrome-bg}
+	 * declaration wins at the browser, so pinning the alias's <i>target</i> here is what proves the fix; a browser
+	 * is not available to this suite to observe the resulting paint directly.
+	 */
+	@Test void c04_headerBgAlias_derivesFromChromeBg_soThemedChromeBgRecolorsHeaderNav() {
+		var m = Pattern.compile("--jc-header-bg:(var\\(--jc-[a-z0-9-]++\\));").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertTrue(m.find(), () -> "no --jc-header-bg alias declaration found in OPEN_ROLE_ALIASES: " + ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertEquals("var(--jc-chrome-bg)", m.group(1),
+			() -> "expected --jc-header-bg to key off --jc-chrome-bg (so LIGHT_BROWN/RED/GRAY chrome-bg overrides recolor the header/nav strip), got: " + m.group(1));
+	}
+
+	/** {@code --jc-nav-bg} derives from {@code --jc-header-bg}, so it inherits the chrome-bg fix transitively. */
+	@Test void c05_navBgAlias_stillDerivesFromHeaderBg_soItInheritsTheChromeBgFixToo() {
+		var m = Pattern.compile("--jc-nav-bg:(var\\(--jc-[a-z0-9-]++\\));").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertTrue(m.find(), () -> "no --jc-nav-bg alias declaration found in OPEN_ROLE_ALIASES: " + ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertEquals("var(--jc-header-bg)", m.group(1));
+	}
+
+	/**
+	 * Confirms each stock theme beyond {@link Theme#OPEN} actually overrides {@code --jc-chrome-bg} - combined
+	 * with (c04)'s alias-wiring proof, this is what makes light-brown/red/gray's header/nav strip legitimately
+	 * recolor rather than the fix having no observable effect for the shipped themes.
+	 */
+	@Test void c06_stockThemesBeyondOpen_overrideChromeBg_soTheHeaderNavFixHasVisibleEffect() {
+		for (var theme : List.of(Theme.LIGHT_BROWN, Theme.RED, Theme.GRAY)) {
+			var openChromeBg = Theme.OPEN.getTokens().get("--jc-chrome-bg");
+			var themeChromeBg = theme.getTokens().get("--jc-chrome-bg");
+			assertNotEquals(openChromeBg, themeChromeBg,
+				() -> theme.getName() + " must override --jc-chrome-bg for the header/nav-recolor fix to visibly apply");
+		}
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// d) Value positives, end-to-end (grammar-accepted then escaper-emitted)
 	//-----------------------------------------------------------------------------------------------------------------
