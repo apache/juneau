@@ -1203,11 +1203,23 @@ public class ViewTable {
 		return id;
 	}
 
-	/** Reads the boundary-stamped CSRF token off the request, or {@code null} when absent. */
+	/**
+	 * Reads the boundary-stamped CSRF token off the request, or {@code null} when absent.
+	 *
+	 * <p>
+	 * {@link RestRequest#getAttribute(String)} covariantly narrows the servlet contract to a
+	 * {@link org.apache.juneau.rest.server.httppart.RequestAttribute} wrapper: it is never {@code null} (an absent
+	 * attribute yields a wrapper holding a {@code null} value) and its {@code toString()} is
+	 * {@code "name=value"}.  Reading it through the {@link HttpServletRequest} declaration would stamp that whole
+	 * name/value pair as the token &mdash; and stamp a non-blank placeholder even when there is no token at all,
+	 * defeating the runtime's fail-closed refusal.  Aiming the read at the wrapped servlet request instead makes
+	 * both request flavors yield exactly the value {@link LoopbackBoundaryFilter} published.
+	 */
 	private static String csrfToken(HttpServletRequest req) {
 		if (req == null)
 			return null;
-		var v = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
+		var req2 = req instanceof RestRequest req3 ? req3.getHttpServletRequest() : req;
+		var v = req2.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
 		return v == null ? null : v.toString();
 	}
 

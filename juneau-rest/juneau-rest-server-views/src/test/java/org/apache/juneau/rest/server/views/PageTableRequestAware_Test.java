@@ -118,14 +118,15 @@ class PageTableRequestAware_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts the emitted {@code <table>} carries a CSRF stamp holding this request's token.  The stamp's exact text is
-	 * whatever the boundary filter published; the propagation contract is that the child sees it at all.
+	 * Asserts the emitted {@code <table>} carries a CSRF stamp holding this request's token, and nothing else: a stamp
+	 * that merely <i>contains</i> the token still 403s, because the server compares the attribute's whole text against
+	 * the token it published (see {@code ViewTableCsrfStamp_Test} for the stamp's own contract).
 	 */
 	private static void assertChildCarriesToken(String html) {
 		var at = html.indexOf(ViewTable.CSRF_ATTR + "=\"");
 		assertTrue(at >= 0, () -> "no CSRF stamp on the page-hosted table:\n" + html);
 		var value = html.substring(at + ViewTable.CSRF_ATTR.length() + 2, html.indexOf('"', at + ViewTable.CSRF_ATTR.length() + 2));
-		assertTrue(value.contains(TOKEN), () -> "CSRF stamp does not carry this request's token: " + value);
+		assertEquals(TOKEN, value, () -> "CSRF stamp does not carry this request's token: " + value);
 	}
 
 	@Test void a01_pageHostedLeafTableNowCarriesTheCsrfStamp() throws Exception {
