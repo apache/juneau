@@ -3600,7 +3600,10 @@
 		const req = buildActionRequest(
 			action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra, rowDataForTr(ctx, tr));
 		if (req.refuse) {
-			renderActionRefusalFor(tr, action, req.reason, ctx);
+			// T1 - the ONE terminal where nothing was even SENT: this guard returns before fetch is ever called, so
+			// a held dialog can re-enable Confirm and let the operator retry once the declaration is corrected.
+			if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(actionRefusalMessage(req.reason));
+			else renderActionRefusalFor(tr, action, req.reason, ctx);
 			return;
 		}
 		setRowInFlight(tr, true);
@@ -3612,7 +3615,11 @@
 				// A network-level failure is itself a terminal outcome: clear the marker (so polling resumes) and
 				// render a visible refusal rather than leaving the row stuck in-flight.
 				setRowInFlight(tr, false);
-				renderActionRefusalFor(tr, action, "request-failed", ctx);
+				// T2 - AMBIGUOUS, not retryable.  fetch rejects on a connection dropped AFTER the request was fully
+				// sent and processed, so this does NOT prove the write didn't land; re-enabling Confirm would hand
+				// the operator a one-click duplicate of a non-idempotent write.  Terminal + Close-only instead.
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(REQUEST_UNCONFIRMED_NOTICE);
+				else renderActionRefusalFor(tr, action, "request-failed", ctx);
 			});
 	}
 
@@ -3643,15 +3650,26 @@
 	 */
 	function settleActionResponse(resp, action, table, tr, ctx) {
 		setRowInFlight(tr, false);   // EVERY terminal outcome clears the marker first - polling must always resume.
-		if (! resp) { renderActionOutcomeFor(tr, { outcome: "unknown" }, ctx); return; }
+		if (! resp) {
+			// T3: an absent response does not prove the write didn't land, so `unknown` never re-enables Confirm.
+			const o = { outcome: "unknown" };
+			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(actionOutcomeMessage(o));
+			else renderActionOutcomeFor(tr, o, ctx);
+			return;
+		}
 
 		if (! resp.ok) {
 			const boundaryReason = (typeof resp.headers?.get === "function")
 				? resp.headers.get("X-Loopback-Boundary") : null;
 			readBodyText(resp).then(function (text) {
 				const t = transportRefusal(resp.status, boundaryReason, parseJsonSafe(text));
-				renderActionOutcomeFor(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message }, ctx);
-			});
+				const o = { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message };
+				// T4: a boundary/transport refusal is a gate saying no - nothing was written, so retry is safe and
+				// is the point.  The hand-off sits INSIDE this callback, next to the paint it replaces: at the
+				// arm's outer `return` the refusal text does not exist yet and the notice would race the button.
+				if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(actionOutcomeMessage(o));
+				else renderActionOutcomeFor(tr, o, ctx);
+			}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // T9
 			return;
 		}
 
@@ -3663,30 +3681,75 @@
 			// duration (HIGH-9).
 			const started = parseJobStarted(text);
 			if (started) {
+				// T5: CLOSE FIRST, then stream.  The order is load-bearing, not cosmetic - startJobStream paints
+				// setRowJobRunning/renderJobProgress into the ROW, so a still-open backdrop would hide the whole
+				// progress affordance behind a dialog that can never settle (a job pointer is not a terminal
+				// result and can never carry a resultForm), and a throw in stream setup would strand that busy
+				// modal permanently over a running job.
+				settleDialogResultHold(ctx, "closeCommitted");
 				startJobStream(started, action, table, tr, ctx);
 				return;
 			}
 			const result = parseActionResult(text);
 			if (! result) {                    // bare 2xx, no typed result -> pre-416 success behavior.
 				applySuccessBehavior(action, table, tr, ctx, null);
+				// T6: a bare 2xx IS a success carrying no typed body and therefore no resultForm - the matrix's
+				// "success, no resultForm" cell.  Whole-stack close, and the row render is left exactly as today
+				// (closeCommitted returns false, so nothing downstream is skipped).
+				settleDialogResultHold(ctx, "closeCommitted");
 				return;
 			}
 			if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
-				renderActionOutcomeFor(tr, { outcome: "unknown",
+				const o = { outcome: "unknown",
 					message: "action-result contract mismatch (page='" + result.contractVersion +
-						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" }, ctx);
+						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" };
+				// T7: same family as T3 - the mismatch text is carried into the dialog notice verbatim.
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(actionOutcomeMessage(o));
+				else renderActionOutcomeFor(tr, o, ctx);
 				return;
 			}
 			const outcome = normalizeOutcome(result);
-			if (outcome === "success") {
+			// T8, the one terminal with more than one disposition.  Keyed on the hold's ABSENCE rather than on a
+			// falsy hand-off return, because closeCommitted also returns false and must emit NO F4 diagnostic.
+			const held = ctx?._resultHold != null;
+			if (outcome === "success")
 				applySuccessBehavior(action, table, tr, ctx, result);
-				renderActionOutcomeFor(tr, { outcome: "success", replay: !! result.replay, message: result.message }, ctx);
-			} else {
-				renderActionOutcomeFor(tr, {
-					outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
-				}, ctx);
+			const o = (outcome === "success")
+				? { outcome: "success", replay: !! result.replay, message: result.message }
+				: { outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay };
+			if (held && outcome === "success" && ! isBlankToken(result.resultForm)) {
+				// The RECEIPT branch, and it FETCHES BEFORE IT SETTLES.  Settling here would clear ctx._resultHold
+				// before the GET resolves, so every arm inside fetchResultForm would take the layer-gone escape and
+				// a committed write with a perfectly good receipt payload would paint no receipt at all, silently.
+				fetchResultForm(result.resultForm, action, table, tr, ctx);
+				return;
 			}
-		});
+			const disposition = (outcome === "success")
+				? "closeCommitted" : (outcome === "refusal" ? "retryable" : "terminal");
+			if (settleDialogResultHold(ctx, disposition)) renderHeldResultNotice(actionOutcomeMessage(o));
+			else renderActionOutcomeFor(tr, o, ctx);
+			// F4: an UNHELD success carrying a resultForm keeps its success banner byte-identical and adds ONE
+			// non-alarming diagnostic - a consumer authoring mistake must not make a committed write look failed.
+			if (! held && outcome === "success" && ! isBlankToken(result.resultForm))
+				renderResultFormIgnored(tr, ctx);
+		}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // T9
+	}
+
+	/**
+	 * T9 - the shared terminal for a REJECTED response-body read, on either of settleActionResponse's two
+	 * readBodyText(...) chains.  readBodyText is defensive about `resp.text` being absent or throwing
+	 * synchronously, but it returns the real {@code Response.text()} promise for a real response, and that
+	 * REJECTS on a truncated / aborted body stream, a decode error, or an already-consumed body.  With no handler
+	 * such a failure bypasses T4 on the non-2xx chain and T5-T8 on the 2xx chain entirely: no hand-off runs,
+	 * ctx._resultHold is never cleared, and a held dialog sits disabled + busy forever.
+	 *
+	 * <p>Terminal, for the same reason T2 is: to have a body to read at all the response HEADERS were already
+	 * received, so the request reached the server and the server answered - the write is not provably absent and
+	 * Confirm must not re-enable.  Unheld, it falls back to today's honest non-optimistic `unknown` render.
+	 */
+	function settleBodyReadFailure(action, table, tr, ctx) {
+		if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(BODY_UNREADABLE_NOTICE);
+		else renderActionOutcomeFor(tr, { outcome: "unknown", message: BODY_UNREADABLE_NOTICE }, ctx);
 	}
 
 	/** Reads a fetch Response body as text, defensively (a stubbed/absent body resolves to "" rather than throwing). */
@@ -4229,14 +4292,19 @@
 				const dt = document.createElement("dt");
 				dt.textContent = (f?.label != null) ? String(f.label) : "";
 				const dd = document.createElement("dd");
-				dd.textContent = (f?.value != null) ? String(f.value) : "";
+				// The ONE line that changed here: the value now goes through the shared kind-aware painter, so a
+				// `code` field is monospaced and copyable in the confirmation dialog and in the receipt alike.
+				buildModalFieldValueNode(dd, f);
 				dl.appendChild(dt);
 				dl.appendChild(dd);
 			});
 			dialog.appendChild(dl);
 		}
 
-		appendDialogForm(dialog, modal?.form, table, tr, ctx, seq);
+		// The dialog-scoped child-action catalog rides the form paint as a trailing optional parameter, so a
+		// `type=action` input inside this dialog's form can resolve a STACKED step that is not a row action.
+		const childCatalog = modal?.childActions ?? null;
+		appendDialogForm(dialog, modal?.form, table, tr, ctx, seq, childCatalog);
 
 		const actions = document.createElement("div");
 		actions.className = "juneau-view-dialog-actions";
@@ -4311,7 +4379,7 @@
 	// A `type=action` button: its name/id wiring is entirely its own (no shared tail post-processing), and
 	// a missing/non-dialog action id paints DISABLED rather than throwing (SF-1 / H-P4-S1).  A resolvable action
 	// gated-and-failing for this row paints disabled too, with both enabledWhen reason channels.
-	function buildActionFormControl(f, table, tr, ctx, row) {
+	function buildActionFormControl(f, table, tr, ctx, row, childCatalog) {
 		const control = document.createElement("button");
 		control.type = "button";
 		control.className = "juneau-view-dialog-form-action";
@@ -4320,16 +4388,23 @@
 		control.dataset.juneauFormField = String(f.name);
 		row.appendChild(control);   // attach BEFORE gating: attachRowActionDescNode needs control.parentNode to insert the reason sibling
 		const actionId = f.actionId;
-		if (! dialogActionIsOpenable(ctx, actionId)) {
-			control.disabled = true;
-			control.setAttribute("aria-disabled", "true");
-			control.dataset.juneauActionMissing = "1";
-		} else {
+		// Resolution order, and the order is the whole security property.  (1) Today's row-action check runs FIRST
+		// and unchanged, enabledWhen included, so a served payload can never shadow - and thereby bypass the gating
+		// of - a declared row action.  (2) A collision with a NON-dialog row action is a fail-closed miss and the
+		// child catalog is NOT consulted, because rescuing it there would be the same shadowing hole through a
+		// narrower door (a payload shadowing, say, a gated direct-submit Delete).  (3) Only an id that resolves to
+		// nothing today reaches the dialog-scoped catalog - which is exactly the case that fails closed with no
+		// signal to its author today.  (4) A miss in both stays today's fail-closed disabled+marked paint.
+		if (dialogActionIsOpenable(ctx, actionId)) {
 			const target = findRowActionById(ctx?.viewDef, actionId);
 			const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
 			if (failing) disableRowActionControl(control, failing.reason);
+		} else if (rowActionIdExists(ctx, actionId) || ! childActionById(childCatalog, actionId)) {
+			control.disabled = true;
+			control.setAttribute("aria-disabled", "true");
+			control.dataset.juneauActionMissing = "1";
 		}
-		control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx); });
+		control.addEventListener("click", function () { openFormActionDialog(actionId, table, tr, ctx, childCatalog); });
 		return control;
 	}
 
@@ -4342,12 +4417,12 @@
 		if (f.pattern != null) control.dataset.juneauPattern = String(f.pattern);
 	}
 
-	function paintFormControl(row, f, id, table, tr, ctx) {
+	function paintFormControl(row, f, id, table, tr, ctx, childCatalog) {
 		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
 		if (! isTypedFormInputType(type)) return null;
 		// `action` has no shared id/name/value tail below - it wires its own name/dataset and returns early.
 		if (type === "action") {
-			return buildActionFormControl(f, table, tr, ctx, row);
+			return buildActionFormControl(f, table, tr, ctx, row, childCatalog);
 		}
 		let control;
 		if (type === "textarea") control = document.createElement("textarea");
@@ -4422,14 +4497,60 @@
 	 * the SAME kind of visible refusal (fresh, fail-closed re-check - never a silent no-op, never a throw): the
 	 * button's own disabled state (buildActionFormControl) is defense in depth, not the only gate.
 	 */
-	function openFormActionDialog(actionId, table, tr, ctx) {
-		if (! dialogActionIsOpenable(ctx, actionId)) { renderDialogActionRefusal(actionId); return; }
+	function openFormActionDialog(actionId, table, tr, ctx, childCatalog) {
+		// A dialog whose write is in flight or already settled into a receipt has no live form to branch FROM, so a
+		// stale `type=action` click (a child button the hold could not reach, an enter-key replay) must not stack a
+		// child onto a committed layer.  Cheapest correct answer is the no-op: the busy marker is the same one the
+		// hold paints, so there is no second piece of state to keep in sync.
+		if (topDialogEl()?.dataset?.juneauDialogBusy === "1") return;
+		if (! dialogActionIsOpenable(ctx, actionId)) {
+			// Fail-closed ordering mirrors buildActionFormControl exactly: a collision with a NON-dialog row action
+			// refuses OUTRIGHT rather than falling through to the dialog-scoped catalog, so a served child-action
+			// payload can never shadow a declared row action.  See that function's comment for why.
+			const child = rowActionIdExists(ctx, actionId) ? null : childActionById(childCatalog, actionId);
+			if (! child) { renderDialogActionRefusal(actionId); return; }
+			openChildActionDialog(child, table, tr, ctx);
+			return;
+		}
 		let target = null;
 		const catalog = (ctx?.viewDef?.rowActions) || [];
 		for (const c of catalog) if (c?.id === actionId) { target = c; break; }
 		const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
 		if (failing) { renderDialogActionRefusal(actionId, failing.reason); return; }
 		openActionDialog(target, table, tr, ctx);
+	}
+
+	/**
+	 * Opens a STACKED step declared in the enclosing dialog's own `childActions` catalog (WORK-J0513 Scope B).
+	 *
+	 * <p>Deliberately NOT a RowAction: a child action is reachable only from the form of the dialog that declares it,
+	 * so it never surfaces in buildRowActionMenu, never surfaces in the ribbon resolver, and needs no exclusion
+	 * filter in either - the same disjoint-catalog argument that keeps J0512's ribbon dialogs out of the row menus.
+	 * The ChildAction shape is then adapted to the RowAction shape openActionDialog already takes, so the child rides
+	 * the SAME reviewed dialog machinery (confirmation GET, typed fields, optional form, fail-closed CSRF submit,
+	 * typed-result settling) rather than a parallel implementation of it.
+	 *
+	 * <p>`carryDrafts` encodes the PARENT dialog's current form values onto the child's form URL, so a wizard step
+	 * can prefill from what the user has typed but not yet submitted.  It is capped, and an over-cap carry is a
+	 * visible refusal rather than a silently truncated - and therefore silently wrong - prefill.
+	 */
+	function openChildActionDialog(child, table, tr, ctx) {
+		let resolved = child;
+		// The server rejects carryDrafts on a child with no form, so the second half of this guard is defense in
+		// depth against a hand-rolled payload - not a shape the validator lets through.
+		if (child.carryDrafts && child.form != null) {
+			resolved = withDraftQuery(child, collectDialogFormFields(topDialogEl()));
+			if (! resolved) { renderDialogDraftRefusal(child.id); return; }
+		}
+		openActionDialog({
+			id: String(resolved.id),
+			label: resolved.label == null ? String(resolved.id) : String(resolved.label),
+			type: "dialog",
+			form: resolved.form == null ? null : String(resolved.form),
+			endpoint: resolved.endpoint == null ? null : String(resolved.endpoint),
+			method: resolved.method == null ? null : String(resolved.method),
+			onSuccess: resolved.onSuccess == null ? null : String(resolved.onSuccess)
+		}, table, tr, ctx);
 	}
 
 	/**
@@ -4472,16 +4593,16 @@
 	 * per-control error sibling.  Field ids use a dialog-only sequence (`juneau-dialog-field-<seq>-<name>`) so stacked
 	 * dialogs with the same field name do not collide and popover layers do not shift ids (N-3).
 	 */
-	function appendDialogForm(dialog, form, table, tr, ctx, seq) {
+	function appendDialogForm(dialog, form, table, tr, ctx, seq, childCatalog) {
 		if (!dialog || !form) return;
 		// A sectioned form and a flat one are mutually exclusive on the server (FormDef.validate rejects both), so
 		// sections win here without needing to reconcile the two.
-		if (form.sections?.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return; }
+		if (form.sections?.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq, childCatalog); return; }
 		if (!form.fields || !form.fields.length) return;
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
 		wrap.dataset.testid = "dialog-form";
-		form.fields.forEach(function (f) { appendDialogFormRow(wrap, dialog, f, table, tr, ctx, seq); });
+		form.fields.forEach(function (f) { appendDialogFormRow(wrap, dialog, f, table, tr, ctx, seq, childCatalog); });
 		if (wrap.childNodes.length)
 			dialog.appendChild(wrap);
 	}
@@ -4516,7 +4637,7 @@
 		bindControlValidation(dialog, control);
 	}
 
-	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq) {
+	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq, childCatalog) {
 		if (!f || f.name == null || String(f.name) === "") return;
 		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
 		if (! isTypedFormInputType(type)) return;
@@ -4529,7 +4650,7 @@
 			label.textContent = f.label != null ? String(f.label) : String(f.name);
 			row.appendChild(label);
 		}
-		const control = paintFormControl(row, f, id, table, tr, ctx);
+		const control = paintFormControl(row, f, id, table, tr, ctx, childCatalog);
 		if (! control) return;   // unknown type skipped
 		if (type !== "action") appendDialogFormHelpAndError(row, dialog, control, f, id);
 		host.appendChild(row);
@@ -4548,7 +4669,7 @@
 	 * <p>The strip opens NO layer: a sectioned dialog is ONE dialog and consumes exactly one MAX_DIALOG_DEPTH slot,
 	 * so a `type=action` control inside a pane still stacks a real nested dialog and still refuses at the cap.
 	 */
-	function appendSectionedDialogForm(dialog, form, table, tr, ctx, seq) {
+	function appendSectionedDialogForm(dialog, form, table, tr, ctx, seq, childCatalog) {
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
 		wrap.dataset.testid = "dialog-form";
@@ -4561,7 +4682,7 @@
 			pane.dataset.juneauFormSection = String(s.id);
 			const fields = s.fields || [];
 			for (const field of fields)
-				appendDialogFormRow(pane, dialog, field, table, tr, ctx, seq);
+				appendDialogFormRow(pane, dialog, field, table, tr, ctx, seq, childCatalog);
 			if (! pane.childNodes.length) continue;   // every field skipped -> no empty tab
 			items.push({ id: String(s.id), label: s.label == null ? String(s.id) : String(s.label), pane: pane });
 		}
@@ -4736,7 +4857,15 @@
 		ui.confirmBtn.addEventListener("click", function () {
 			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
 			const fields = collectDialogFormFields(ui.dialog);
-			close();
+			// A modal that opted in to hosting its own result KEEPS ITS LAYER and registers a hold instead of
+			// closing; the settle then decides that layer's fate from the outcome.  Registration happens BEFORE the
+			// submit because the submit's client-refusal terminal can settle synchronously.  The hold is passed
+			// ctx-scoped rather than as a submit parameter on purpose: submitActionDialog stays byte-identical, so
+			// J0512's targetId precedence and its tripwire keep covering the only submit path there is.
+			// No ctx means no hold registry AND no dialog stack to check liveness against, so it closes as today -
+			// the fail-safe direction: today's behavior, not a dialog nothing can ever settle.
+			if (modal?.keepOpenOnSubmit && ctx) beginDialogResultHold(ui, action, modal, ctx);
+			else close();
 			submitActionDialog(modal, action, table, tr, ctx, fields);
 		});
 		if (ctx) {
@@ -4793,6 +4922,459 @@
 			if (keys.length) extra.fields = fields;
 		}
 		submitRowAction(action, table, tr, ctx, extra);
+	}
+
+	// ==================================================================================================================
+	// THE NON-SUBMITTABLE IN-DIALOG RESULT HOST (WORK-J0513 Scope A): one mechanism, terminal by construction
+	// ==================================================================================================================
+	//
+	// A dialog that opted in with ModalDef.keepOpenOnSubmit is NOT closed at confirm-click time; instead its Confirm
+	// is disabled, the dialog is marked busy, and a HOLD is registered on ctx.  Every terminal of the submit graph
+	// then settles that hold to exactly one of five named dispositions, so a held dialog can always be exited: it
+	// either re-enables Confirm, or offers a Close-only surface, or is removed.  There is no fourth state.
+	//
+	// The hold is registered on `ctx` rather than passed as a callback parameter ON PURPOSE: submitActionDialog is a
+	// shared submit seam with its own pinned target-precedence rule, and threading a completion callback through it
+	// would couple this feature's diff to that one.  Coupling through ctx._resultHold leaves it byte-identical.
+	//
+	// WHY THE RESULT HOST IS NOT THE PREVIOUSLY-REJECTED "open a follow-up dialog from the response" shape: the
+	// distinguishing property is POSITION RELATIVE TO THE COMMIT, and it is enforced by three independently-testable
+	// absences rather than by documentation.  (1) The host never opens a new dialog - it swaps the body of the dialog
+	// that is already open, at the same layer depth, so the layer count is unchanged across the swap.  (2) It is
+	// reached ONLY after outcome === "success", i.e. only after a committed write, so no pre-commit path can produce
+	// it and there is nothing for a dry-run response mode to serve.  (3) The host it paints CANNOT submit -
+	// paintDialogReceipt creates no confirm control, references no submit function, and refuses outright to paint a
+	// payload that carries a `form`.  A pre-write follow-up step is a different thing entirely: it is a stacked child
+	// dialog opened BEFORE submit (Scope B, below), and the two are structurally disjoint.
+
+	/** The in-dialog held-outcome notice: ONE node per dialog, overwritten - never a growing pile of siblings. */
+	const DIALOG_RESULT_NOTICE_CLASS = "juneau-view-dialog-result-notice";
+	const DIALOG_RESULT_NOTICE_TESTID = "dialog-result-notice";
+
+	/** T2's wording: the request WAS sent, so the outcome is ambiguous rather than a plain "try again". */
+	const REQUEST_UNCONFIRMED_NOTICE =
+		"The request was sent but no response came back.  It may or may not have been applied - re-check before retrying.";
+
+	/** T9's wording: headers arrived, so the server answered; only the body was unreadable. */
+	const BODY_UNREADABLE_NOTICE =
+		"The server answered but the response body could not be read.  The action may or may not have been applied.";
+
+	/** F12: the write COMMITTED and only the follow-up read failed - nothing here casts doubt on the write. */
+	const RESULT_FORM_UNAVAILABLE_NOTICE =
+		"The action completed, but its result could not be loaded.";
+
+	/** F1c: a well-formed payload of the FORBIDDEN shape - a consumer authoring bug, diagnosed as one. */
+	const RESULT_FORM_REFUSED_NOTICE =
+		"The action completed, but its result was not shown: a result form must not carry inputs.";
+
+	/** Paints (or OVERWRITES) the one in-dialog held-outcome notice, through the shared top-dialog notice painter. */
+	function renderHeldResultNotice(text) {
+		renderTopDialogNotice(DIALOG_RESULT_NOTICE_CLASS, DIALOG_RESULT_NOTICE_TESTID, text);
+	}
+
+	/** The `.juneau-view-dialog` element of the CURRENT top layer, or null when no layer is open. */
+	function topDialogEl() {
+		const el = topLayer()?.el;
+		return (el?.querySelector?.(".juneau-view-dialog")) || el || null;
+	}
+
+	/** Removes a dialog's actions row outright - which detaches Confirm AND its listener, not merely disables it. */
+	function removeDialogActionsRow(dialog) {
+		if (! dialog?.querySelectorAll) return;
+		for (const el of dialog.querySelectorAll(".juneau-view-dialog-actions")) removeEl(el);
+	}
+
+	/**
+	 * Tears down a COMMITTED write's body before a terminal post-commit surface is painted over it.
+	 *
+	 * <p>Removing the actions row is not sufficient teardown: the submitted inputs live in a SEPARATE
+	 * `.juneau-view-dialog-form` wrapper (and, for a sectioned form, a live section ribbon), which nothing else
+	 * here touches and the receipt paint does not repaint.  Without this a receipt would render the server's
+	 * result UNDERNEATH the still-populated, still-editable form the operator just submitted - a terminal surface
+	 * carrying live inputs for a write that already committed, i.e. the forbidden shape leaking back in through
+	 * sloppy teardown rather than through a submit control.  The old field list goes too, since the receipt
+	 * repaints one from its own payload and a surviving `dl` would double it.
+	 */
+	function teardownCommittedWriteBody(dialog) {
+		if (! dialog?.querySelectorAll) return;
+		for (const el of dialog.querySelectorAll(".juneau-view-dialog-form")) removeEl(el);
+		for (const el of dialog.querySelectorAll(".juneau-view-dialog-fields")) removeEl(el);
+	}
+
+	/**
+	 * The ONE Close-only action row every non-receipt `terminal` surface uses (T2, T3, T7, T9, T8-failure,
+	 * T8-unknown, plus the two post-commit cells F12 and F1c).  Its only listener is the WHOLE-STACK teardown, so
+	 * the operator's exit from a terminal held dialog is identical everywhere and lives in exactly one place.
+	 *
+	 * <p>Factoring it here is also what makes the terminal dispositions buildable at all: the automatic-teardown
+	 * paths are forbidden from calling closeActionDialog themselves, so they delegate their Close button to this
+	 * helper.  A Close button the operator has to press is that operator's exit, not an automatic teardown.
+	 */
+	function appendDialogCloseOnlyRow(dialog, ctx) {
+		if (! dialog?.appendChild) return null;
+		const actions = document.createElement("div");
+		actions.className = "juneau-view-dialog-actions";
+		const close = document.createElement("button");
+		close.type = "button";
+		close.className = "juneau-view-dialog-close";
+		close.dataset.testid = "dialog-result-close";
+		close.textContent = "Close";
+		close.addEventListener("click", function () { closeActionDialog(ctx); });
+		actions.appendChild(close);
+		dialog.appendChild(actions);
+		return close;
+	}
+
+	/**
+	 * Registers the click-time hold: disable Confirm, mark the dialog busy, and disable every child-action button
+	 * in it - RECORDING which were already disabled, so the re-enable path restores the PRIOR state and can never
+	 * enable a child that was gated before the submit started.
+	 *
+	 * <p>Cancel deliberately stays enabled.  Escape pops the top layer through the shared stack regardless, so the
+	 * design has to tolerate "dialog gone before settle" anyway; given that, disabling Cancel would only remove the
+	 * operator's obvious exit.  The layer-gone case is handled at settle time.
+	 *
+	 * <p>Child-action buttons are disabled because the row in-flight marker cannot help here (it disables a trigger
+	 * inside a `tr`, and a ribbon-hosted dialog has no row), and because a live child button during the in-flight
+	 * parent write lets an operator push a child layer on top of a dialog that is about to be swapped into a
+	 * receipt - the parent settles, the body is torn down under a live child, and the operator is typing into a
+	 * step whose parent already committed.
+	 */
+	function beginDialogResultHold(ui, action, modal, ctx) {
+		ui.confirmBtn.disabled = true;
+		ui.dialog.dataset.juneauDialogBusy = "1";
+		const disabledChildren = [];
+		if (ui.dialog.querySelectorAll)
+			for (const c of ui.dialog.querySelectorAll(".juneau-view-dialog-form-action")) {
+				if (c.disabled) { disabledChildren.push(c); continue; }
+				c.disabled = true;
+				c.setAttribute("aria-disabled", "true");
+			}
+		ctx._resultHold = {
+			backdrop: ui.backdrop, dialog: ui.dialog, confirmBtn: ui.confirmBtn,
+			action: action, modal: modal, disabledChildren: disabledChildren
+		};
+	}
+
+	/** Whether the held dialog's layer is still on this ctx's dialog stack (it is not, after Cancel or Escape). */
+	function heldLayerIsLive(ctx, hold) {
+		const stack = ctx?._dialogStack;
+		return !! (stack && stack.indexOf(hold.backdrop) >= 0);
+	}
+
+	/** Drops the busy marker a hold stamped on its dialog. */
+	function clearDialogBusyMarker(hold) {
+		if (hold?.dialog?.dataset) delete hold.dialog.dataset.juneauDialogBusy;
+	}
+
+	/** Restores child-action buttons to their PRE-HOLD state - never enabling one that was already gated. */
+	function restoreHeldChildActions(hold) {
+		const dialog = hold?.dialog;
+		if (! dialog?.querySelectorAll) return;
+		const prior = hold.disabledChildren || [];
+		for (const c of dialog.querySelectorAll(".juneau-view-dialog-form-action")) {
+			if (prior.indexOf(c) >= 0) continue;
+			c.disabled = false;
+			c.removeAttribute("aria-disabled");
+		}
+	}
+
+	/**
+	 * Settles the registered hold to one named disposition, and reports whether the calling terminal's OWN row /
+	 * ribbon painter was superseded.
+	 *
+	 * <p>The hold is cleared FIRST, which is what guarantees exactly one hand-off per submit even though the
+	 * submit graph has nine terminals: they are mutually exclusive paths through one submitRowAction call, and a
+	 * second settle on the same hold finds nothing.
+	 *
+	 * <p>Returns <code>false</code>, having done nothing, when there is no hold at all or when the registered layer
+	 * is no longer on the stack (the operator pressed Cancel or Escape mid-flight).  The caller then paints into
+	 * the row / ribbon host exactly as it does today, which is what makes leaving Cancel enabled safe.
+	 *
+	 * <p>Returns <code>true</code> for `retryable` / `terminal` / `receipt` - the three dispositions that leave the
+	 * dialog ON SCREEN, so the notice belongs in the dialog where the operator can read it and painting the row
+	 * banner too would render one outcome twice, once behind a backdrop.  Returns <code>false</code> for
+	 * `closeCommitted`, because the dialog is GONE and the row / ribbon banner is then the only surviving signal -
+	 * suppressing it there would leave a committed write with no visible confirmation anywhere.
+	 *
+	 * <p>applySuccessBehavior is never skipped under any disposition; only the BANNER moves.  That is safe for an
+	 * open receipt because an onSuccess=redraw is a data reload, not a DOM teardown, and a portalled dialog is a
+	 * body-level layer a row repaint cannot remove.
+	 */
+	function settleDialogResultHold(ctx, disposition) {
+		const hold = ctx?._resultHold ?? null;
+		if (ctx) ctx._resultHold = null;   // cleared FIRST: no terminal may settle the same hold twice
+		if (! hold || ! heldLayerIsLive(ctx, hold)) return false;
+		clearDialogBusyMarker(hold);
+		if (disposition === "closeCommitted") {
+			// The ONE automatic teardown in the whole graph, and it takes the WHOLE stack: a terminal surface for a
+			// committed write must not drop the operator back onto a now-stale parent dialog underneath it.  At
+			// depth 1 this is observably identical to popping the single layer.
+			closeActionDialog(ctx);
+			return false;
+		}
+		if (disposition === "retryable" || disposition === "release") {
+			// `release` is RESERVED and currently passed by nothing - a defined name for "let the caller's UI run,
+			// dialog untouched".  It is deliberately NOT the no-hold escape above, which returns false.
+			if (hold.confirmBtn) hold.confirmBtn.disabled = false;
+			restoreHeldChildActions(hold);
+			return true;
+		}
+		if (disposition === "terminal") {
+			// Actions row only.  The form body is left standing on purpose: T2/T3/T7/T9 are not confirmed-commit
+			// surfaces, so the operator keeps their typed values on screen to copy out before Close.  The two
+			// post-commit `terminal` cells (F12, F1c) run the body teardown themselves, in fetchResultForm.
+			removeDialogActionsRow(hold.dialog);
+			appendDialogCloseOnlyRow(hold.dialog, ctx);
+		}
+		return true;
+	}
+
+	/**
+	 * F4 - a result carried a resultForm but its dialog never opted in with keepOpenOnSubmit.
+	 *
+	 * <p>The write SUCCEEDED, so the success banner is left byte-identical and this adds exactly one non-alarming
+	 * `role=status` diagnostic into the SAME outcome host the success already used.  Never a new layer (that is the
+	 * forbidden shape), and never a refusal (which would make a successful write look failed for what is purely a
+	 * consumer-authoring mistake).  One node, overwritten.
+	 */
+	function renderResultFormIgnored(tr, ctx) {
+		const host = tr
+			? (tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr)
+			: ribbonBannerHost(ctx);
+		if (! host?.appendChild) return;
+		let el = host.querySelector ? host.querySelector(".juneau-view-result-form-ignored") : null;
+		if (! el) {
+			el = document.createElement("div");
+			el.className = "juneau-view-result-form-ignored";
+			el.dataset.testid = "result-form-ignored";
+			el.setAttribute("role", "status");
+			host.appendChild(el);
+		}
+		el.textContent = "This action returned a result to show, but its dialog did not opt in to staying open"
+			+ " (ModalDef.keepOpenOnSubmit), so the result was not shown.";
+	}
+
+	/** Whether `kind` is a legal ModalDef.Field display kind (the frozen 2-token allowlist: text, code). */
+	function isModalFieldKind(kind) {
+		return kind === "text" || kind === "code";
+	}
+
+	/**
+	 * A guarded clipboard copy button for a `code`-kind field.  Feature-detected, `.catch()`ed, and wrapped so it
+	 * can never throw out of a click handler; the `<pre>` beside it stays selectable, so manual copy always works
+	 * even where the clipboard API is absent or permission is denied.
+	 */
+	function buildFieldCopyButton(value) {
+		const btn = document.createElement("button");
+		btn.type = "button";
+		btn.className = "juneau-view-dialog-field-copy";
+		btn.dataset.testid = "dialog-field-copy";
+		btn.textContent = "Copy";
+		btn.addEventListener("click", function () {
+			const clip = (typeof navigator === "undefined") ? null : navigator?.clipboard;
+			if (typeof clip?.writeText !== "function") return;
+			try {
+				Promise.resolve(clip.writeText(value)).catch(function () { /* denied - the <pre> stays selectable */ });
+			} catch (e) { /* a copy affordance never throws */ }
+		});
+		return btn;
+	}
+
+	/**
+	 * Paints ONE confirmation field's value into its `<dd>`: plain text by default, and for `kind="code"` a
+	 * monospaced `<pre>` plus a copy button.  createElement / textContent ONLY - never innerHTML, for exactly the
+	 * reason the whole dialog payload is painted that way (live data is attacker-influenceable and this origin
+	 * holds the CSRF token).  An UNRECOGNIZED kind token falls back to `text` rather than being trusted.
+	 */
+	function buildModalFieldValueNode(dd, f) {
+		const value = (f?.value != null) ? String(f.value) : "";
+		const kind = (f?.kind == null || f.kind === "") ? "text" : String(f.kind);
+		if (! isModalFieldKind(kind) || kind === "text") { dd.textContent = value; return dd; }
+		const pre = document.createElement("pre");
+		pre.className = "juneau-view-dialog-field-code";
+		pre.textContent = value;
+		dd.appendChild(pre);
+		dd.appendChild(buildFieldCopyButton(value));
+		return dd;
+	}
+
+	/**
+	 * Paints a `<dl>` of typed confirmation fields for the RECEIPT.
+	 *
+	 * <p>The confirmation overlay keeps its own `dl` shell rather than calling this: its shell is pinned where it
+	 * stands, and what actually needed sharing is the per-value painter above (the `kind` dispatch), not the three
+	 * lines of `dl` around it.
+	 */
+	function buildModalFieldList(fields) {
+		const dl = document.createElement("dl");
+		dl.className = "juneau-view-dialog-fields";
+		dl.dataset.testid = "dialog-fields";
+		fields.forEach(function (f) {
+			const dt = document.createElement("dt");
+			dt.textContent = (f?.label != null) ? String(f.label) : "";
+			const dd = document.createElement("dd");
+			buildModalFieldValueNode(dd, f);
+			dl.appendChild(dt);
+			dl.appendChild(dd);
+		});
+		return dl;
+	}
+
+	/**
+	 * Paints the RECEIPT into the dialog that is already open - the enforcement, and it enforces by ABSENCE.
+	 *
+	 * <p>This function creates no confirm control, names no submit function, and pushes no layer.  A structural
+	 * marker would enforce by veto (a later change can delete the check, and a DOM attribute a fixture can forge);
+	 * an absence is what a test can pin cheaply and what a careless edit cannot silently undo.  The
+	 * `data-juneau-receipt` stamp is for tests and CSS - it is NOT the enforcement.
+	 *
+	 * <p>A payload carrying a `form` is refused outright rather than painted read-only or silently stripped: inputs
+	 * on a terminal post-commit surface are the forbidden shape arriving through the receipt door, and refusing
+	 * loudly makes it a visible authoring bug instead of a silently-degraded surface.  That refusal is the caller's
+	 * (fetchResultForm), which never reaches this function for such a payload.
+	 */
+	function paintDialogReceipt(dialog, modal, ctx) {
+		if (! dialog?.appendChild) return false;
+		removeDialogActionsRow(dialog);
+		teardownCommittedWriteBody(dialog);
+		const title = dialog.querySelector ? dialog.querySelector(".juneau-view-dialog-title") : null;
+		if (title) title.textContent = isBlankToken(modal?.title) ? "Done" : String(modal.title);
+		if (modal?.fields?.length)
+			dialog.appendChild(buildModalFieldList(modal.fields));
+		const actions = document.createElement("div");
+		actions.className = "juneau-view-dialog-actions";
+		const close = document.createElement("button");
+		close.type = "button";
+		close.className = "juneau-view-dialog-close";
+		close.dataset.testid = "dialog-receipt-close";
+		close.textContent = "Close";
+		// The WHOLE stack, not this one layer: a terminal receipt for a committed write must not drop the operator
+		// back onto the now-stale parent dialog underneath, showing pre-write values for a write that committed.
+		close.addEventListener("click", function () { closeActionDialog(ctx); });
+		actions.appendChild(close);
+		dialog.appendChild(actions);
+		dialog.className = dialog.className + " juneau-view-dialog-receipt";
+		dialog.dataset.testid = "dialog-receipt";
+		dialog.dataset.juneauReceipt = "1";
+		return true;
+	}
+
+	/**
+	 * Issues the follow-up READ-ONLY receipt GET and routes its four outcomes.
+	 *
+	 * <p>Three of them are the same F12 terminal - "the write committed, we just could not show you the result":
+	 * a non-2xx, an unparseable payload, and a REJECTED promise.  The third arm matters as much as the other two:
+	 * without it a single dropped packet on the follow-up read leaves the promise rejected, the terminal unreached,
+	 * and Confirm stuck disabled + busy on a write that had ALREADY COMMITTED.
+	 *
+	 * <p>The fourth is distinct and must stay distinct: a 2xx that parses fine but carries a `form` is a
+	 * SUCCESSFUL read of a payload of the forbidden shape.  It shares F12's disposition, teardown and Close-only
+	 * row, but it carries its own wording, because folding a consumer authoring bug into a transport-failure
+	 * message hides it.
+	 *
+	 * <p>No automatic teardown here: every arm ends with the dialog OPEN, and the Close row's listener is the
+	 * operator's exit rather than a terminal closing the stack behind their back.
+	 */
+	function fetchResultForm(url, action, table, tr, ctx) {
+		const dialog = ctx?._resultHold?.dialog ?? null;
+		function resultFormTerminal(text) {
+			teardownCommittedWriteBody(dialog);   // post-commit surface: the submitted inputs come out
+			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(text);
+		}
+		fetch(url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
+			.then(function (resp) {
+				if (! resp || ! resp.ok) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return null; }
+				return readBodyText(resp).then(function (text) {
+					const payload = parseJsonSafe(text);
+					if (! payload) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return; }
+					if (payload.form) { resultFormTerminal(RESULT_FORM_REFUSED_NOTICE); return; }
+					if (! settleDialogResultHold(ctx, "receipt")) return;   // the layer went away mid-GET
+					paintDialogReceipt(dialog, payload, ctx);
+				});
+			})
+			.catch(function () {
+				// F12's third arm, written out here rather than delegated: the pin on this function slices from its
+				// last `.catch(` to the end and requires the SETTLE inside it, because a `.catch` that merely logs
+				// would satisfy a bare "has a catch" check while leaving the hold uncleared on a committed write.
+				teardownCommittedWriteBody(dialog);
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(RESULT_FORM_UNAVAILABLE_NOTICE);
+			});
+	}
+
+	// ==================================================================================================================
+	// THE DIALOG-SCOPED CHILD-ACTION CATALOG (WORK-J0513 Scope B): reaching a stacked step from inside a dialog
+	// ==================================================================================================================
+	//
+	// A `type=action` input resolves its actionId against ctx.viewDef.rowActions and nothing else, so a stacked
+	// Review step inside an already-open dialog has nothing legal to resolve against.  ModalDef.childActions is that
+	// missing catalog, and it is DIALOG-SCOPED: it arrives on the per-open payload, so buildRowActionMenu and the
+	// ribbon resolver never see it and there is no exclusion filter to maintain (or to forget).
+	//
+	// It reaches the click site as a TRAILING OPTIONAL parameter threaded through both row-painting paths.  Not
+	// stamped on the dialog element (framework state on a DOM node, forgeable from the document), and not looked up
+	// from topLayer() at click time (that assumes the button's dialog is topmost - true today, but an assumption a
+	// popover push could break).  Threaded and captured in the click closure, it is unforgeable; and because the
+	// parameter is trailing and optional, every existing positional call site keeps resolving exactly as today.
+
+	/** The client-side cap on the draft query, measured on the ENCODED value.  See withDraftQuery. */
+	const MAX_DRAFT_QUERY_BYTES = 2048;
+
+	/** Resolves `actionId` against a dialog-scoped child catalog, or null. */
+	function childActionById(childCatalog, actionId) {
+		for (const c of (childCatalog || []))
+			if (c?.id === actionId) return c;
+		return null;
+	}
+
+	/** Whether `actionId` names ANY entry in this view's row-action catalog (dialog-presenting or not). */
+	function rowActionIdExists(ctx, actionId) {
+		for (const c of ((ctx?.viewDef?.rowActions) || []))
+			if (c?.id === actionId) return true;
+		return false;
+	}
+
+	/**
+	 * The byte length of an encoded draft query value.
+	 *
+	 * <p>The cap is measured on the ENCODED value - the bytes that actually land in the URL, the access log and
+	 * the browser's history entry - and not on the raw JSON.  Percent-encoding is up to 3x expansion per byte for
+	 * non-ASCII and for the braces / quotes / colons JSON is made of, so a cap applied to the raw string would let
+	 * a ~2KB draft become a ~6KB query and blow a server or proxy request-line limit AFTER the client had already
+	 * told the operator it was fine: a refusal arriving as an opaque transport error instead of a visible,
+	 * actionable one.
+	 */
+	function draftQueryByteLength(encoded) {
+		if (typeof TextEncoder === "function") return new TextEncoder().encode(encoded).length;
+		return encoded.length;   // the encoded form is ASCII-only by construction, so the two agree
+	}
+
+	/**
+	 * A SHALLOW COPY of `childAction` whose form URL already carries the parent's drafts as one `juneauDrafts`
+	 * query parameter; null when the encoded value exceeds the cap (the caller then refuses visibly and opens
+	 * nothing).
+	 *
+	 * <p>A copy, rather than a parameter on the dialog opener: the opener is a shared surface with its own pinned
+	 * shape, and a descriptor whose `form` is already final needs nothing from it.
+	 *
+	 * <p>Without this channel a Review step opens EMPTY and loses everything the operator typed.  Drafts land in
+	 * access logs and browser history, so no secret may ride here.
+	 */
+	function withDraftQuery(childAction, drafts) {
+		const encoded = encodeURIComponent(JSON.stringify(drafts || {}));
+		if (draftQueryByteLength(encoded) > MAX_DRAFT_QUERY_BYTES) return null;
+		const copy = {};
+		for (const k of Object.keys(childAction)) copy[k] = childAction[k];
+		const url = String(childAction.form);
+		copy.form = url + (url.indexOf("?") >= 0 ? "&" : "?") + "juneauDrafts=" + encoded;
+		return copy;
+	}
+
+	/** The visible over-cap refusal: the child does not open, and the operator is told why. */
+	function renderDialogDraftRefusal(actionId) {
+		renderTopDialogNotice("juneau-view-dialog-action-refusal", "dialog-action-refusal",
+			"Action '" + String(actionId) + "' was not opened: its form draft exceeds "
+			+ MAX_DRAFT_QUERY_BYTES + " bytes.");
 	}
 
 	/** Renders a VISIBLE row-action refusal (anti-silent-degradation) into the row's actions cell. */
@@ -5941,6 +6523,22 @@
 		renderActionOutcomeFor: renderActionOutcomeFor,
 		renderDialogActionRefusal: renderDialogActionRefusal,
 		renderDialogDepthRefusal: renderDialogDepthRefusal,
+		// In-dialog result receipt + dialog-scoped child-action catalog (WORK-J0513) - exposed for the harnesses.
+		MAX_DRAFT_QUERY_BYTES: MAX_DRAFT_QUERY_BYTES,
+		isModalFieldKind: isModalFieldKind,
+		buildModalFieldValueNode: buildModalFieldValueNode,
+		buildModalFieldList: buildModalFieldList,
+		beginDialogResultHold: beginDialogResultHold,
+		settleDialogResultHold: settleDialogResultHold,
+		settleBodyReadFailure: settleBodyReadFailure,
+		appendDialogCloseOnlyRow: appendDialogCloseOnlyRow,
+		paintDialogReceipt: paintDialogReceipt,
+		fetchResultForm: fetchResultForm,
+		renderResultFormIgnored: renderResultFormIgnored,
+		childActionById: childActionById,
+		rowActionIdExists: rowActionIdExists,
+		withDraftQuery: withDraftQuery,
+		openChildActionDialog: openChildActionDialog,
 		pushLayer: pushLayer,
 		popLayer: popLayer,
 		topLayer: topLayer,

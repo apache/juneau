@@ -151,7 +151,9 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 	@Test void a06_sectionedFormIsMutuallyExclusiveWithFlatFields() throws Exception {
 		var painter = bodyOf(viewsJs(), "appendDialogForm");
 		assertTrue(painter.contains("if (form.sections?.length)"), painter);
-		assertTrue(painter.contains("appendSectionedDialogForm(dialog, form, table, tr, ctx, seq); return;"), painter);
+		// The trailing `childCatalog` is threaded straight through to the sectioned painter (WORK-J0513): a
+		// `type=action` control inside a pane resolves against the same dialog-scoped catalog a flat form's does.
+		assertTrue(painter.contains("appendSectionedDialogForm(dialog, form, table, tr, ctx, seq, childCatalog); return;"), painter);
 	}
 
 	private static int count(String haystack, String needle) {

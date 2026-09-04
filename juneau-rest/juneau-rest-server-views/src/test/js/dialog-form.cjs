@@ -119,4 +119,17 @@ out.missing_disabled = xbtn.disabled === true;
 out.missing_ariaDisabled = xbtn.getAttribute('aria-disabled') === 'true';
 out.missing_marker = xbtn.dataset.juneauActionMissing === '1';
 
+// --- the trailing childCatalog parameter is OPTIONAL: every existing positional call is unchanged -----------
+// The call above passes six arguments, exactly as it did before WORK-J0513, and still paints today's fail-closed
+// control.  With the catalog supplied, the SAME field resolves instead - so the parameter is additive at the call
+// site as well as in the signature.
+const dialog3 = env.el('div');
+I.appendDialogForm(dialog3, { fields: [{ name: 'x', type: 'action', label: 'X', actionId: 'nope' }] },
+	table, tr, ctx, 3, [{ id: 'nope', label: 'Child', form: '/x/child-form' }]);
+const cbtn = dialog3.querySelector('button');
+out.catalog_enabled = cbtn.disabled === false;
+out.catalog_notMarkedMissing = cbtn.dataset.juneauActionMissing === undefined;
+// ...and it still carries no submit value, so the collection path is untouched by any of this.
+out.catalog_stillSkippedByCollect = !Object.hasOwn(I.collectDialogFormFields(dialog3), 'x');
+
 process.stdout.write(JSON.stringify(out));

@@ -192,6 +192,18 @@ class ViewsJs_DialogForm_Test extends TestBase {
 		assertEquals(true, r.get("missing_marker"));
 	}
 
+	/**
+	 * The trailing {@code childCatalog} parameter (WORK-J0513) is additive at the CALL SITE, not just in the
+	 * signature: the six-argument calls above are byte-identical to their pre-J0513 form and still paint today's
+	 * fail-closed control, while the same field resolves once a catalog is supplied.
+	 */
+	@Test void b04a_theTrailingChildCatalogParameterIsOptional() {
+		var r = report();
+		assertEquals(true, r.get("catalog_enabled"), r::toString);
+		assertEquals(true, r.get("catalog_notMarkedMissing"), r::toString);
+		assertEquals(true, r.get("catalog_stillSkippedByCollect"), r::toString);
+	}
+
 	@Test void b05_collectReadsTypedValuesAndSkipsActions() {
 		var r = report();
 		assertEquals(true, r.get("collect_notes"));

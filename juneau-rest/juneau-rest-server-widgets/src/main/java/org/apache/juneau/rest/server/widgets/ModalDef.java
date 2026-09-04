@@ -66,10 +66,43 @@ import org.apache.juneau.commons.bean.*;
  * Set it <b>only</b> on a modal whose key came from the self-targeted mint helper.  Setting it on a modal carrying
  * an artifact-bound key silently discards the real target and makes the server's binding check vacuous.
  *
+ * <h5 class='section'>{@link #keepOpenOnSubmit} &mdash; the opt-in for an in-dialog result receipt</h5>
+ * <p>
+ * By default the runtime closes a dialog at confirm-click time and then submits, so every dialog is gone before its
+ * result exists.  {@link #keepOpenOnSubmit} suppresses that close, and the runtime instead paints the write's
+ * <b>result</b> into the dialog that is already open &mdash; a <i>receipt</i>.
+ * <p>
+ * A receipt host is <b>non-submittable by construction</b>, not by convention: the runtime paints it with a distinct
+ * function that creates no confirm control at all, and it refuses to paint one whose payload carries a
+ * {@link #form}.  It is reached <b>only</b> after a committed write (an
+ * {@code ActionResult} whose outcome is {@code success}), so a result host can never appear for a write that did not
+ * happen.  A follow-up read-only form source is named by that result's {@code resultForm}.
+ * <p>
+ * The opt-in has to live here rather than on the action bean, because the confirm handler must decide whether to
+ * close <i>before</i> any response exists.  A dialog synthesized from a {@code confirm} string alone (no form-source
+ * URL) therefore cannot opt in &mdash; a receipt-bearing action must serve a real {@link ModalDef}.
+ * <p>
+ * Additive, and named degradation, accepted: an older runtime ignoring this flag closes the dialog and drops the
+ * receipt.  The write still happens; the receipt is simply not shown.
+ *
+ * <h5 class='section'>{@link #childActions} &mdash; the dialog-scoped child-action catalog</h5>
+ * <p>
+ * A {@code type="action"} form input names an action id, and the runtime resolves it against the enclosing view's
+ * row-action catalog.  A <b>stacked</b> step reached from inside an already-open dialog (a Review step in a wizard)
+ * has nothing legal to resolve against there: it is not a row action, and publishing it as one would surface it in
+ * every row's action menu.  {@link #childActions} is that missing catalog, scoped to <b>one open dialog</b>.
+ * <p>
+ * Scoping is <b>structural</b>, not a flag some menu builder has to remember to filter on: this catalog rides on a
+ * per-open payload, so the row-action menu and the ribbon resolver never see it and there is no exclusion logic to
+ * rot.  Resolution precedence is likewise fail-safe: the existing row-action check runs <b>first</b> and unchanged,
+ * so a served payload can never shadow &mdash; and thereby bypass the gating of &mdash; a declared row action.
+ *
  * <h5 class='section'>Not a new row-action wire field</h5>
  * <p>
  * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
  * schema: the modal's declaration lives in this separately-served payload so the row-action contract stays frozen.
+ * The same reasoning is why {@link #keepOpenOnSubmit} and {@link #childActions} land here rather than on
+ * {@code RowAction} / {@code RibbonAction}, which stay frozen and untouched.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -104,7 +137,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ModalDef implements Widget {
 
@@ -118,13 +151,19 @@ public class ModalDef implements Widget {
 	 */
 	public static final String CONTRACT_VERSION = "2";
 
+	/** The {@link Field#kind} token for an ordinary text value &mdash; the default when the field declares none. */
+	public static final String FIELD_KIND_TEXT = "text";
+
+	/** The {@link Field#kind} token for a monospaced, copyable value (an id, a URL, a generated token). */
+	public static final String FIELD_KIND_CODE = "code";
+
 	/**
 	 * A single typed confirmation field: a label and a value, painted client-side with {@code textContent} (never
 	 * {@code innerHTML}).
 	 *
 	 * @since 10.0.0
 	 */
-	@BeanType(properties="label,value")
+	@BeanType(properties="label,value,kind")
 	public static class Field {
 
 		/** The field label shown to the user. */
@@ -132,6 +171,22 @@ public class ModalDef implements Widget {
 
 		/** The field value, read back from the current authoritative record. */
 		public String value;
+
+		/**
+		 * How this field's value is <i>displayed</i>; omitted from the wire when unset (which reads as
+		 * {@link ModalDef#FIELD_KIND_TEXT text}).
+		 *
+		 * <p>
+		 * The allowlist is exactly {@link ModalDef#FIELD_KIND_TEXT text} and {@link ModalDef#FIELD_KIND_CODE code};
+		 * {@link ModalDef#validate()} rejects anything else server-side, and the runtime falls back to
+		 * {@code text} for an unrecognized token rather than trusting it.
+		 *
+		 * <p>
+		 * This is a <b>display</b> kind on a confirmation field, deliberately <b>not</b> a new
+		 * {@code FormDef.Input} type: a {@code code} field carries no submit value, so expressing it as an input
+		 * would mean teaching the collection, validation, prefill and submit paths about a control that is not one.
+		 */
+		public String kind;
 
 		/**
 		 * Creates a typed confirmation field.
@@ -148,6 +203,177 @@ public class ModalDef implements Widget {
 			f.label = label;
 			f.value = value;
 			return f;
+		}
+
+		/**
+		 * Creates a typed confirmation field displayed as monospaced, copyable {@link ModalDef#FIELD_KIND_CODE code}.
+		 *
+		 * <p>
+		 * The runtime paints the value into a {@code <pre>} with {@code textContent} (never {@code innerHTML}) and
+		 * adds a copy button that is feature-detected and never throws; the {@code <pre>} stays selectable, so
+		 * manual copy always works.
+		 *
+		 * @param label The field label.  Must not be <jk>null</jk> or blank.
+		 * @param value The field value.  Can be <jk>null</jk> (rendered as an empty value).
+		 * @return A new {@link Field}.
+		 * @throws IllegalArgumentException If {@code label} is <jk>null</jk> or blank.
+		 */
+		public static Field code(String label, String value) {
+			var f = of(label, value);
+			f.kind = FIELD_KIND_CODE;
+			return f;
+		}
+	}
+
+	/**
+	 * One entry in a dialog's {@link ModalDef#childActions} catalog &mdash; a stacked step a {@code type="action"}
+	 * input inside <i>this</i> dialog's form may open.
+	 *
+	 * <h5 class='section'>Dialog-presenting by construction</h5>
+	 * <p>
+	 * A child action carries no {@code present} field: opening a stacked dialog is the only thing it does.  A child
+	 * with no {@link #form} is a legal confirm-only child dialog.
+	 *
+	 * <h5 class='section'>No gating vocabulary, on purpose</h5>
+	 * <p>
+	 * There is deliberately no {@code enabledWhen} here, for three independent reasons.  The rule type lives in the
+	 * rich-view module, which this module must not reference.  A dialog opened where there is no row has no row data
+	 * to evaluate against, so a field-keyed rule would fail closed forever with no signal to its author.  And the
+	 * subject of a child step is the <i>draft in the open dialog</i>, not the parent row &mdash; so evaluating the
+	 * parent row's data would answer a question nobody asked.  Gating a child step is the <b>server's</b> job at
+	 * child-form-GET time; it already owns that GET and can refuse it.
+	 *
+	 * @since 10.0.0
+	 */
+	@BeanType(properties="id,label,form,endpoint,method,onSuccess,carryDrafts")
+	@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	public static class ChildAction {
+
+		/** The action id a {@code type="action"} input in this dialog's form names.  Required, non-blank. */
+		public String id;
+
+		/** The label painted on the button that opens this child.  Required, non-blank. */
+		public String label;
+
+		/**
+		 * The child dialog's read-only form-source URL; omitted from the wire when unset (a confirm-only child).
+		 *
+		 * <p>
+		 * Required if this child declares {@link #carryDrafts} &mdash; with no URL there is nothing for the draft
+		 * query to ride on, so the drafts would vanish silently.
+		 */
+		public String form;
+
+		/** The child's submit endpoint; omitted from the wire when unset.  See {@link #endpoint(String)}. */
+		public String endpoint;
+
+		/** The child's submit method; omitted from the wire when unset.  See {@link #method(String)}. */
+		public String method;
+
+		/** The child's on-success behaviour token; omitted from the wire when unset. */
+		public String onSuccess;
+
+		/**
+		 * Whether opening this child carries the <b>parent dialog's current draft values</b> to its form-source GET
+		 * as one query parameter; omitted from the wire when unset or <jk>false</jk>.
+		 *
+		 * <p>
+		 * Without it a Review step opens <b>empty</b> and loses everything the operator typed.  With it, the
+		 * runtime serializes the parent's collected form values, URL-encodes them, and appends them as a single
+		 * {@code juneauDrafts} parameter, refusing visibly (and not opening the child) above a client-side byte cap
+		 * measured on the <i>encoded</i> value.
+		 *
+		 * <p>
+		 * <b>Drafts land in access logs and browser history.</b>  No secret may ride this channel.
+		 */
+		public Boolean carryDrafts;
+
+		/**
+		 * Creates a child action.
+		 *
+		 * @param id The action id a {@code type="action"} input names.  Must not be <jk>null</jk> or blank.
+		 * @param label The button label.  Must not be <jk>null</jk> or blank.
+		 * @return A new {@link ChildAction}.
+		 * @throws IllegalArgumentException If {@code id} or {@code label} is <jk>null</jk> or blank.
+		 */
+		public static ChildAction of(String id, String label) {
+			if (id == null || id.isBlank())
+				throw iaex("ModalDef.ChildAction id must not be null or blank.");
+			if (label == null || label.isBlank())
+				throw iaex("ModalDef.ChildAction label must not be null or blank.");
+			var c = new ChildAction();
+			c.id = id;
+			c.label = label;
+			return c;
+		}
+
+		/**
+		 * Sets the child dialog's read-only form-source URL.
+		 *
+		 * @param value The URL.  Can be <jk>null</jk> to unset (a confirm-only child).
+		 * @return This object.
+		 */
+		public ChildAction form(String value) {
+			form = value;
+			return this;
+		}
+
+		/**
+		 * Sets the child's submit endpoint.
+		 *
+		 * <p>
+		 * Optional individually; a child action whose dialog is meant to be <b>submittable</b> must declare both a
+		 * non-safe {@link #method} and an {@code endpoint}, or its Confirm visibly refuses with {@code safe-method}
+		 * and sends nothing.  A display-only child that never submits needs neither, which is why this is not a
+		 * {@link ModalDef#validate()} rule &mdash; this bean cannot know which of its children are meant to submit.
+		 *
+		 * @param value The endpoint.  Can be <jk>null</jk> to unset.
+		 * @return This object.
+		 */
+		public ChildAction endpoint(String value) {
+			endpoint = value;
+			return this;
+		}
+
+		/**
+		 * Sets the child's submit method.
+		 *
+		 * <p>
+		 * Optional individually; see {@link #endpoint(String)} &mdash; a submittable child needs both, and a
+		 * missing or safe method is a visible client-side refusal before any request is sent.
+		 *
+		 * @param value The method.  Can be <jk>null</jk> to unset.
+		 * @return This object.
+		 */
+		public ChildAction method(String value) {
+			method = value;
+			return this;
+		}
+
+		/**
+		 * Sets the child's on-success behaviour token.
+		 *
+		 * @param value The token.  Can be <jk>null</jk> to unset.
+		 * @return This object.
+		 */
+		public ChildAction onSuccess(String value) {
+			onSuccess = value;
+			return this;
+		}
+
+		/**
+		 * Declares that opening this child carries the parent dialog's drafts (see {@link #carryDrafts}).
+		 *
+		 * <p>
+		 * Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit {@code false}, so an
+		 * un-opted-in child's payload is byte-identical to one that never mentioned it.
+		 *
+		 * @param value <jk>true</jk> to carry the parent's drafts; <jk>false</jk> (or unset) to open empty.
+		 * @return This object.
+		 */
+		public ChildAction carryDrafts(boolean value) {
+			carryDrafts = value ? Boolean.TRUE : null;
+			return this;
 		}
 	}
 
@@ -194,6 +420,22 @@ public class ModalDef implements Widget {
 	public BarSlot barSlot;
 
 	/**
+	 * Whether the runtime must <b>not</b> close this dialog at confirm-click time, so the write's result can be
+	 * painted into it as a receipt (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.
+	 *
+	 * <p>
+	 * Additive-only: like {@link #barSlot} and {@link #selfTargeted}, its presence does not bump
+	 * {@link #CONTRACT_VERSION}.
+	 */
+	public Boolean keepOpenOnSubmit;
+
+	/**
+	 * The dialog-scoped catalog of stacked child actions a {@code type="action"} input in {@link #form} may open
+	 * (see the class Javadoc); omitted from the wire when unset or empty.
+	 */
+	public List<ChildAction> childActions;
+
+	/**
 	 * Starts a new {@link ModalDef} with the specified title / confirmation prompt.
 	 *
 	 * @param title The modal title / confirmation prompt.  Must not be <jk>null</jk> or blank.
@@ -219,6 +461,52 @@ public class ModalDef implements Widget {
 		if (fields == null)
 			fields = l();
 		fields.add(Field.of(label, value));
+		return this;
+	}
+
+	/**
+	 * Adds one typed confirmation field displayed as monospaced, copyable {@link #FIELD_KIND_CODE code}.
+	 *
+	 * @param label The field label.  Must not be <jk>null</jk> or blank.
+	 * @param value The field value.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ModalDef codeField(String label, String value) {
+		if (fields == null)
+			fields = l();
+		fields.add(Field.code(label, value));
+		return this;
+	}
+
+	/**
+	 * Adds one entry to this dialog's child-action catalog.
+	 *
+	 * @param value The child action.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public ModalDef childAction(ChildAction value) {
+		if (value == null)
+			throw iaex("ModalDef.ChildAction must not be null.");
+		if (childActions == null)
+			childActions = l();
+		childActions.add(value);
+		return this;
+	}
+
+	/**
+	 * Declares that the runtime must keep this dialog open across its submit so the result can be painted into it
+	 * as a receipt (see the class Javadoc).
+	 *
+	 * <p>
+	 * Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit {@code false}: the wire
+	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.
+	 *
+	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps today's close-then-submit behaviour.
+	 * @return This object.
+	 */
+	public ModalDef keepOpenOnSubmit(boolean value) {
+		keepOpenOnSubmit = value ? Boolean.TRUE : null;
 		return this;
 	}
 
@@ -288,6 +576,14 @@ public class ModalDef implements Widget {
 	 * (a raw-built form-bearing modal validated directly must not false-refuse on a null version &mdash;
 	 * {@link #checked()} stamps the version first, then validates).
 	 *
+	 * <p>
+	 * Also rejects, fail-closed at serve time rather than silently on the wire: a {@link Field#kind} outside the
+	 * {@link #FIELD_KIND_TEXT text}/{@link #FIELD_KIND_CODE code} allowlist; a blank, duplicate or unlabelled
+	 * {@link ChildAction} id; {@link ChildAction#carryDrafts} on a modal that declares no {@link #form} (nothing to
+	 * collect <i>from</i>); and {@link ChildAction#carryDrafts} on a child that declares no
+	 * {@link ChildAction#form} (nowhere to put them &mdash; the runtime would take its confirm-only branch, issue
+	 * no GET, and the drafts would vanish silently).
+	 *
 	 * @throws IllegalArgumentException If this modal is not well-formed.
 	 */
 	@Override
@@ -300,11 +596,47 @@ public class ModalDef implements Widget {
 					throw iaex("ModalDef field must not be null.");
 				if (f.label == null || f.label.isBlank())
 					throw iaex("ModalDef.Field label must not be null or blank.");
+				if (f.kind != null && ! (FIELD_KIND_TEXT.equals(f.kind) || FIELD_KIND_CODE.equals(f.kind)))
+					throw iaex("ModalDef.Field kind must be '" + FIELD_KIND_TEXT + "' or '" + FIELD_KIND_CODE
+						+ "', not '" + f.kind + "'.");
 			}
+		validateChildActions();
 		if (form != null)
 			form.validate();
 		if (barSlot != null)
 			barSlot.validate();
+	}
+
+	/**
+	 * The {@link #childActions} half of {@link #validate()}.
+	 *
+	 * <p>
+	 * {@link ChildAction#of(String,String)} already argument-checks {@code id} and {@code label}; they are
+	 * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the
+	 * factory.
+	 */
+	private void validateChildActions() {
+		if (childActions == null)
+			return;
+		var seen = new HashSet<String>();
+		for (var c : childActions) {
+			if (c == null)
+				throw iaex("ModalDef.ChildAction must not be null.");
+			if (c.id == null || c.id.isBlank())
+				throw iaex("ModalDef.ChildAction id must not be null or blank.");
+			if (c.label == null || c.label.isBlank())
+				throw iaex("ModalDef.ChildAction label must not be null or blank.");
+			if (! seen.add(c.id))
+				throw iaex("ModalDef.ChildAction id '" + c.id + "' is declared more than once on this modal.");
+			if (Boolean.TRUE.equals(c.carryDrafts)) {
+				if (form == null)
+					throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but this modal declares "
+						+ "no form - there is nothing to collect drafts from.");
+				if (c.form == null || c.form.isBlank())
+					throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but declares no form URL "
+						+ "- a confirm-only child issues no form GET, so the drafts would be dropped silently.");
+			}
+		}
 	}
 
 	/**

@@ -306,7 +306,8 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	@Test void h05_buildDialogOverlayPaintsForm() throws Exception {
 		var body = viewsJs();
 		var build = fn(body, "function buildDialogOverlay(");
-		// The form paint is threaded the row context (table/tr/ctx) and the dialog-only field-id sequence.
-		assertTrue(build.contains("appendDialogForm(dialog, modal?.form, table, tr, ctx, seq)"), build);
+		// The form paint is threaded the row context (table/tr/ctx), the dialog-only field-id sequence, and - since
+		// WORK-J0513 - this dialog's own child-action catalog, read from the per-open payload.
+		assertTrue(build.contains("appendDialogForm(dialog, modal?.form, table, tr, ctx, seq, childCatalog)"), build);
 	}
 }

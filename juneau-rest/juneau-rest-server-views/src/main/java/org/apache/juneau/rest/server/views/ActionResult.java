@@ -87,7 +87,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,outcome,replay,refusalCode,message,row")
+@BeanType(properties="contractVersion,outcome,replay,refusalCode,message,row,resultForm")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ActionResult {
 
@@ -170,6 +170,31 @@ public class ActionResult {
 	 * the wire when unset.  This is the row as the remote system actually reports it, not what the request asked for.
 	 */
 	public Object row;
+
+	/**
+	 * The follow-up <b>read-only</b> form-source URL a receipt is painted from; omitted from the wire when unset.
+	 *
+	 * <h5 class='section'>Honored on {@link Outcome#SUCCESS success} only</h5>
+	 * <p>
+	 * This is the mechanical form of <i>a receipt must never look like a receipt for a write that didn't happen</i>.
+	 * On a failure, a refusal, an unknown, or a transport failure this field is <b>ignored</b>, no follow-up GET is
+	 * issued, and nothing is swapped &mdash; so no result host can appear for a write that did not commit.
+	 *
+	 * <h5 class='section'>The served payload must not carry a form</h5>
+	 * <p>
+	 * The URL serves a {@code ModalDef}, and that payload <b>must not</b> declare a {@code form}.  A result host is
+	 * terminal by definition: the write already committed, so there is nothing left to gate.  A payload carrying
+	 * inputs is refused <i>visibly</i> rather than rendered read-only or silently stripped, because it is a consumer
+	 * authoring bug and should be visible as one.
+	 *
+	 * <h5 class='section'>It is a swap, not a new dialog</h5>
+	 * <p>
+	 * The runtime paints the receipt into the dialog that is <b>already open</b>, at the same layer depth, and only
+	 * when that dialog opted in with {@code ModalDef.keepOpenOnSubmit}.  Set on a result whose dialog did not opt in,
+	 * the swap is dropped, the success is reported unchanged, and the runtime emits one non-alarming diagnostic
+	 * rather than either opening a layer or making a successful write look failed.
+	 */
+	public String resultForm;
 
 	/**
 	 * Starts a {@link Outcome#SUCCESS success} result carrying the authoritative row read back from the remote system.
@@ -265,6 +290,17 @@ public class ActionResult {
 	 */
 	public ActionResult refusalCode(String value) {
 		refusalCode = value;
+		return this;
+	}
+
+	/**
+	 * Sets the follow-up read-only form-source URL a receipt is painted from (see {@link #resultForm}).
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public ActionResult resultForm(String value) {
+		resultForm = value;
 		return this;
 	}
 }

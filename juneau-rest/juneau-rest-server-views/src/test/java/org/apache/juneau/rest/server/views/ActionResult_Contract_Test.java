@@ -64,10 +64,44 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	@Test void a04_topLevelKeyOrder_fullResult_matchesBeanTypeOrder() {
-		// contractVersion,outcome,replay,refusalCode,message,row (the @BeanType-pinned order).
+		// contractVersion,outcome,replay,refusalCode,message,row,resultForm (the @BeanType-pinned order).
 		var r = ActionResult.success(Map.of("id", "x")).replay(true).message("done");
 		Map<?,?> actual = Json.to(Json.of(r), Map.class);
 		assertEquals(List.of("contractVersion", "outcome", "replay", "message", "row"), new ArrayList<>(actual.keySet()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// resultForm - the additive receipt pointer (WORK-J0513 Scope A)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a05_resultForm_isAppendedLast_neverInterleaved() {
+		// APPENDED, not interleaved: a reader positioned on the frozen prefix keeps reading the same keys in the
+		// same order, which is what makes this additive rather than a contract change.
+		var r = ActionResult.success(Map.of("id", "x")).replay(true).message("done").resultForm("/x/receipt");
+		Map<?,?> actual = Json.to(Json.of(r), Map.class);
+		assertEquals(List.of("contractVersion", "outcome", "replay", "message", "row", "resultForm"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void a06_resultForm_omittedWhenUnset() {
+		for (var r : List.of(ActionResult.success(null), ActionResult.failure(), ActionResult.unknown())) {
+			var json = Json.of(r);
+			assertFalse(json.contains("resultForm"), () -> "unset resultForm leaked:\n" + json);
+		}
+		assertFalse(Json.of(ActionResult.success(null).resultForm(null)).contains("resultForm"));
+	}
+
+	@Test void a07_resultForm_doesNotBumpTheContractVersion() {
+		// The no-bump is the whole additive claim: an older runtime that has never heard of resultForm keeps
+		// accepting these payloads and simply ignores the key.
+		assertEquals("1", ActionResult.CONTRACT_VERSION);
+		var json = Json.of(ActionResult.success(null).resultForm("/x/receipt"));
+		assertTrue(json.contains("\"contractVersion\":\"1\""), json);
+		assertTrue(json.contains("\"resultForm\":\"/x/receipt\""), json);
+	}
+
+	@Test void a08_resultForm_isFluentAndReadable() {
+		assertEquals("/x/receipt", ActionResult.success(null).resultForm("/x/receipt").resultForm);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
