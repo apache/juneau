@@ -2548,7 +2548,12 @@
 		if (actionBtn.disabled || actionBtn.hidden) return true;
 		const action = findRowActionById(viewDef, actionBtn.dataset.juneauAction);
 		if (!action) return true;
-		submitRowAction(action, table, parentTr, ctx);
+		// A present=dialog action must open the SAME dialog seam the row-action menu / cell-pill paths use
+		// (isDialogAction -> openActionDialog -> ... -> submitActionDialog), not submit directly - otherwise the
+		// confirmation/form never shows and submitActionDialog's targetId/idempotencyKey attachment (:4609-4618)
+		// is skipped entirely.  Everything else keeps the pre-existing direct fail-closed submit.
+		if (isDialogAction(action)) openActionDialog(action, table, parentTr, ctx);
+		else submitRowAction(action, table, parentTr, ctx);
 		return true;
 	}
 
