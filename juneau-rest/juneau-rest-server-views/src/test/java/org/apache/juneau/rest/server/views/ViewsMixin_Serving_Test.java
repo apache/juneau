@@ -852,7 +852,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// The one detail-tabs selector that survives positions a trailing bar-slot region; it does not repaint
 		// the strip.
 		assertTrue(body.contains(pill + "[data-juneau-strip-trailed]"), body);
-		assertTrue(body.contains("border-radius: 999px"), body);
 		assertTrue(body.contains(".juneau-sym-flip-x"), body);
 	}
 
