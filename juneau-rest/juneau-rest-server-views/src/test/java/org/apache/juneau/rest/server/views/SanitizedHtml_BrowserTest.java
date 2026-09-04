@@ -124,4 +124,107 @@ class SanitizedHtml_BrowserTest extends TestBase {
 		assertEquals(Boolean.FALSE, report.get("okTextHasMarkup"),
 			() -> "markup must be real elements, not literal angle brackets in the text layer: " + report);
 	}
+
+	// ---------------------------------------------------------------------------------------------------
+	// WORK-J0517: entity decoding - a regex shim cannot decode "&lt;script&gt;" the way a real HTML
+	// parser does, so this proves the decoded text stays literal text and is never re-parsed as markup.
+	// ---------------------------------------------------------------------------------------------------
+
+	@Test void a04_entityEncodedScript_decodesToLiteralText_notReparsedToElement() {
+		assertEquals(Boolean.TRUE, report.get("entityNoScriptElement"),
+			() -> "an entity-encoded <script> must never decode into a real <script> element: " + report);
+		assertEquals(Boolean.TRUE, report.get("entityPSurvived"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("entityTextIsLiteral"),
+			() -> "decoded text must contain the literal '<script>alert(1)</script>' characters: " + report);
+	}
+
+	// ---------------------------------------------------------------------------------------------------
+	// WORK-J0517: <table> foster-parenting - the HTML5 tree builder relocates a misplaced non-table-
+	// structure child to a PRECEDING SIBLING of the table before the copier ever walks the tree. a05
+	// proves that is real-parser ground truth (not a harness assumption); a06 proves the copier's output
+	// mirrors that already-fostered shape rather than assuming a naive nested read.
+	// ---------------------------------------------------------------------------------------------------
+
+	@Test void a05_tableForeignChild_fosterParentedBeforeTable_byRealParser() {
+		assertEquals(Boolean.TRUE, report.get("fosterSrcBBeforeTable"),
+			() -> "real-parser ground truth: <b> must be foster-parented to precede <table>, order was "
+				+ report.get("fosterSrcOrder"));
+	}
+
+	@Test void a06_copierMirrorsFosteredTreeShape_notNaiveNestedRead() {
+		assertEquals(Boolean.TRUE, report.get("fosterCopyBBeforeTable"),
+			() -> "copier output must mirror the fostered order, was " + report.get("fosterCopyOrder"));
+		assertEquals(Boolean.TRUE, report.get("fosterCopyBNotNestedInTable"),
+			() -> "the foster-parented <b> must not appear nested inside <table> in the copy: " + report);
+		assertEquals(Boolean.TRUE, report.get("fosterCopyCellSurvived"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("fosterCopySpanSurvived"), () -> report.toString());
+	}
+
+	// ---------------------------------------------------------------------------------------------------
+	// WORK-J0517: <template> - content lives in an inert DocumentFragment, never the element's own
+	// childNodes (real-parser property a regex shim's substring view cannot model). a07 proves that
+	// ground truth; a08 proves the copier drops the (DROP_TAGS) tag and its content wholesale.
+	// ---------------------------------------------------------------------------------------------------
+
+	@Test void a07_templateContent_livesInInertFragment_neverOwnChildNodes_realParser() {
+		assertEquals(Boolean.TRUE, report.get("templateOwnChildNodesEmpty"),
+			() -> "a <template>'s own childNodes must be empty; content lives in .content instead: " + report);
+		assertEquals(Boolean.TRUE, report.get("templateContentHasChildren"),
+			() -> "the inert .content fragment must still hold the parsed children: " + report);
+	}
+
+	@Test void a08_templateAndContents_droppedWholesale_noExecutionNoLeak() {
+		assertEquals(Boolean.TRUE, report.get("templateNotExecuted"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("templateNoTemplateTag"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("templateNoScriptTag"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("templateHiddenTextNotLeaked"),
+			() -> "template content must not leak into the copy's text layer: " + report);
+		assertEquals(Boolean.TRUE, report.get("templateSiblingSurvived"), () -> report.toString());
+	}
+
+	// ---------------------------------------------------------------------------------------------------
+	// WORK-J0517: <noscript> - a DOMParser document has no browsing context, so scripting is DISABLED,
+	// which per spec means <noscript> content parses as REAL child elements (opposite of a scripting-
+	// enabled page's raw-text treatment). a09 proves that ground truth; a10 proves the copier drops the
+	// (DROP_TAGS) tag and its now-real-element children wholesale regardless.
+	// ---------------------------------------------------------------------------------------------------
+
+	@Test void a09_noscriptContent_parsedAsRealElements_scriptingDisabled_realParser() {
+		assertEquals(Boolean.TRUE, report.get("noscriptParsedAsRealElements"),
+			() -> "with scripting disabled (a DOMParser doc), <noscript> content must parse as real "
+				+ "elements, not raw text: " + report);
+	}
+
+	@Test void a10_noscriptAndContents_droppedWholesale_noExecutionNoLeak() {
+		assertEquals(Boolean.TRUE, report.get("noscriptNotExecuted"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("noscriptNoScriptTag"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("noscriptHiddenTextNotLeaked"),
+			() -> "noscript content must not leak into the copy's text layer: " + report);
+		assertEquals(Boolean.TRUE, report.get("noscriptSiblingSurvived"), () -> report.toString());
+	}
+
+	// ---------------------------------------------------------------------------------------------------
+	// WORK-J0517: namespace / foreign content - <svg> switches the HTML5 tree builder into the
+	// foreign-content algorithm, producing REAL SVG-namespace nodes. a11 proves that ground truth; a12
+	// proves the (DROP_TAGS) tag-name-only allowlist match drops the whole foreign subtree wholesale,
+	// never smuggling a same-named allowed HTML tag (e.g. an SVG-namespace <a>) through by namespace-blind
+	// matching.
+	// ---------------------------------------------------------------------------------------------------
+
+	@Test void a11_svgForeignContent_isRealForeignNamespace_realParser() {
+		assertEquals(Boolean.TRUE, report.get("svgIsRealForeignNamespace"),
+			() -> "<svg> must parse into a real SVG-namespace element: " + report);
+		assertEquals(Boolean.TRUE, report.get("svgScriptIsForeignNamespace"),
+			() -> "the nested <script> inside <svg> must be a real SVG-namespace node: " + report);
+	}
+
+	@Test void a12_svgSubtree_droppedWholesale_noScriptNoAnchorSmuggled() {
+		assertEquals(Boolean.TRUE, report.get("svgNotExecuted"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("svgNoScriptTag"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("svgNoAnchorSmuggled"),
+			() -> "an SVG-namespace <a> must not be smuggled through as an allowed HTML <a>: " + report);
+		assertEquals(Boolean.TRUE, report.get("svgClickTextNotLeaked"),
+			() -> "the dropped foreign subtree's text must not leak into the copy: " + report);
+		assertEquals(Boolean.TRUE, report.get("svgSiblingSurvived"), () -> report.toString());
+	}
 }
