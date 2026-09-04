@@ -152,6 +152,25 @@
 	--jc-chrome-glyph-size: 16px;
 	--jc-chrome-glyph-size-small: 12px;
 	/*
+	 * Chrome-wide disabled-state grey (WORK-J0518 DF-2): a solid, legible grey rather than a dimming opacity,
+	 * for a disabled control whose glyph or text must still read clearly (the paging-pill nav buttons are the
+	 * first consumer). Declared here rather than paging-pill-scoped so a later disabled affordance can spend the
+	 * same token instead of inventing its own; matches the existing --jc-tone-warning / --jc-detail-action-
+	 * primary-bg-disabled grey already used elsewhere in this file for the same "disabled but visible" register.
+	 */
+	--jc-chrome-disabled-color: #8a8a8a;
+	/*
+	 * Chrome-wide control border/text grey (WORK-J0518 DF-3): the toolbar search input previously painted
+	 * `border: 1px solid` with no colour (currentColor) and inherited whatever text colour surrounded it - IRS
+	 * parity wants a neutral grey control border and grey input text at passing contrast (WCAG AA, ~8:1 on
+	 * white). Named "control", not "search-input": a text control's border/text grey is a chrome-wide role like
+	 * --jc-chrome-control-height above, not a single-widget colour - not --jc-detail-action-* (that pair is the
+	 * detail action BUTTON's own self-declared palette per this file's header note on not shadowing a name it
+	 * does not own) and not --jc-popover-border (that one is the floating-surface family).
+	 */
+	--jc-chrome-control-border: #cccccc;
+	--jc-chrome-control-text: #4f4f4f;
+	/*
 	 * Detail action button palette (D8, option (c)): DEFAULT tokens declared here, not console-ui chrome.css
 	 * aliases, so the button reads correctly wherever this file is the only stylesheet served.  A theme MAY
 	 * override every one of these; it does not have to supply them - same precedent as --jc-card-bg /
@@ -372,7 +391,7 @@
 }
 
 /*
- * DataTables table density/shape (compact 4px 5px cells, 0.75rem type,
+ * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px IRS body type - WORK-J0518 DF-4,
  * outer frame + cell grid).  NEUTRAL - shape only (font-size,
  * padding, border WIDTH/style); no color/background-color/border-color palette here (console-ui's
  * chrome.css themes the SAME selectors with --jc-* colors).  Selectors list BOTH
@@ -383,7 +402,7 @@
  */
 table[data-juneau-view],
 table.dataTable {
-	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; see the cell-level pin below */
+	font-size: 0.8333rem;         /* IRS body-type parity (13.333px/10pt, WORK-J0518 DF-4); see the cell-level pin below */
 	border-collapse: collapse;
 	border-spacing: 0;
 	border: 1px solid;            /* currentColor; chrome.css themes the color */
@@ -402,7 +421,7 @@ table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
-	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; not tokenized, see comment above */
+	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
 	padding: 4px 5px;
 	font-weight: normal;
 	text-align: left;
@@ -415,7 +434,7 @@ table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-	font-size: 0.75rem;           /* deliberate duplicate of --jc-chrome-font-size-1; not tokenized, see comment above */
+	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
 	padding: 4px 5px;
 	vertical-align: middle;
 	border: 1px solid;
@@ -650,6 +669,18 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
+ * Skip glyph correction (WORK-J0518 DF-2): each "chevronright" host's visible stroke sits centred in its own
+ * 24x24 viewBox (path spans x=8.25..15.75 - roughly a third of the box on either side is empty), so two hosts
+ * placed edge-to-edge with no overlap read as two separated arrows ("&gt;  &gt;") rather than one merged
+ * double-chevron ("&gt;&gt;") the way IRS's own skip glyph does. Rather than ship a second IRS-sourced path (the
+ * dual-hat rule this item is under), the SAME sprite glyph is reused twice and the second host is pulled left
+ * to cancel most of that built-in padding - no new artwork, just correct spacing for the artwork already here.
+ */
+.juneau-view-paging-double svg + svg {
+	margin-left: -6px;
+}
+
+/*
  * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
  * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
  * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]
@@ -747,6 +778,14 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-pagingpill > *:first-child { border-radius: 0.25em 0 0 0.25em; }
 .juneau-view-pagingpill > *:last-child { border-radius: 0 0.25em 0.25em 0; }
 
+/*
+ * No inner divider between the four nav buttons (First/Prev/Next/Last) - WORK-J0518 DF-2. The segmented-group
+ * treatment above (".juneau-view-ribbon-group") already dropped this same inner-border pattern for the ribbon;
+ * J0449 was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
+ * per-button "border-right: 1px solid" divider this rule used to carry. The menu-button segment
+ * (".juneau-view-pagingpill-menuwrap") is a DIFFERENT widget riding the same pill, not one of the four nav
+ * buttons, and keeps its own divider unchanged.
+ */
 .juneau-view-pagingpill-btn {
 	display: flex;
 	align-items: center;
@@ -755,13 +794,20 @@ table.dataTable thead .sorting_desc_disabled:after {
 	min-width: 32px;
 	padding: 0 8px;
 	border: none;
-	border-right: 1px solid;      /* currentColor - segment divider; last-child override below */
 	background: transparent;
 	font-family: inherit;
 	cursor: pointer;
 }
-.juneau-view-pagingpill-btn:last-child { border-right: none; }
-.juneau-view-pagingpill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/*
+ * Disabled First/Prev/Next/Last read a solid neutral grey rather than a dimming opacity (WORK-J0518 DF-2): at
+ * 12px an opacity-faded glyph reads as barely-there rather than "disabled but legible", which is the same
+ * readability miss IRS does not have. --jc-chrome-disabled-color is declared chrome-wide (with the rest of the
+ * scale tokens above), not paging-pill-scoped, so a later disabled affordance elsewhere can spend the same grey
+ * rather than each widget inventing its own. `color` (not a background) because the glyph paints via the
+ * svg rule's own `fill: currentColor` below - setting the button's text colour re-colours the icon for free.
+ */
+.juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color); cursor: not-allowed; }
 .juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /*
@@ -876,14 +922,22 @@ table.dataTable thead .sorting_desc_disabled:after {
 	align-items: center;
 }
 
+/*
+ * Grey control border + grey text at passing contrast (WORK-J0518 DF-3) - this input previously had no colour
+ * of its own (border: 1px solid resolved to currentColor; text inherited whatever colour surrounded it), which
+ * is why console-ui's own MT-11 fix had to fork a second border colour in console.css rather than getting one
+ * from here. Fixing the framework default instead: --jc-chrome-control-border/-text are still overridable by a
+ * host theme exactly like every other token in this file.
+ */
 .juneau-view-toolbar-right .dataTables_filter input,
 .juneau-view-toolbar-right .dt-search input {
 	box-sizing: border-box;
 	height: var(--jc-chrome-control-height);
 	margin: 0;
 	padding: 0 0.5em;
-	border: 1px solid;            /* currentColor - no palette color set here */
+	border: 1px solid var(--jc-chrome-control-border);
 	border-radius: 0.25em;
+	color: var(--jc-chrome-control-text);
 	font-family: inherit;
 }
 
@@ -1167,10 +1221,29 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-detail-open .juneau-view-detail-collapsed { display: none; }
 .juneau-view-detail-open .juneau-view-detail-expanded { display: inline; }
 
+/*
+ * The DataTables-native child row created by `row.child(panel).show()` (juneau-views.js) - class "child", per
+ * DataTables' own row.child() API, not one of this file's own "juneau-view-detail-*" names: Juneau never gets a
+ * handle on this <tr>/<td> to stamp its own class onto it, so it has to be reached by DataTables' own default
+ * shape instead.  Explicit opaque white (WORK-J0518 DF-12.1): without a background of its own the row/cell is
+ * transparent, so ANY ancestor row styling - a zebra stripe, an "open" indicator, a hover wash on the row that
+ * owns the expander - paints straight through it, including while that same row's hover state is still live.
+ * The same "opaque floating/panel surface" exception this file already grants `.juneau-view-dialog` /
+ * `.jc-cell-popover` / `.juneau-ts-popup`, extended to the one row DataTables itself creates rather than one
+ * this file's own emit owns.
+ */
+table[data-juneau-view] > tbody > tr.child,
+table[data-juneau-view] > tbody > tr.child > td,
+table.dataTable > tbody > tr.child,
+table.dataTable > tbody > tr.child > td {
+	background: #fff;
+}
+
 /* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`). */
 .juneau-view-detail-panel {
 	margin: 0;
 	padding: var(--jc-space-2) var(--jc-space-3);
+	background: #fff;
 }
 
 .juneau-view-detail-section {

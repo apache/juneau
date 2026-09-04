@@ -921,7 +921,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("padding: 4px 5px"), body);
-		assertTrue(body.contains("font-size: 0.75rem"), body);
+		// IRS body-type parity (WORK-J0518 DF-4): 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
+		// (unchanged, C0016b) via var(--jc-chrome-font-size-1) rather than this cell-level literal.
+		assertTrue(body.contains("font-size: 0.8333rem"), body);
+		assertFalse(body.contains("font-size: 0.75rem"), body);
 		assertTrue(body.contains("font-weight: normal"), body);
 		assertTrue(body.contains("flex-direction: row !important"), body);
 		assertTrue(body.contains("content: none"), body);
@@ -970,6 +973,53 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertFalse(region.contains("border-right:"), region);
 		assertFalse(region.contains("border-right-color"), region);
 		assertFalse(region.contains("border-color"), region);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// p) WORK-J0518 - ViewTable/Detail chrome IRS leftovers (toolbar search colour, detail expander opacity)
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * DF-3: the toolbar search input gets a grey control border and grey text at passing contrast, via new
+	 * chrome-wide tokens rather than a bare colourless {@code border: 1px solid} - fixing the framework default
+	 * so console-ui's own MT-11 fix does not have to fork a second border colour in {@code console.css}.
+	 */
+	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("--jc-chrome-control-border: #cccccc;"), body);
+		assertTrue(body.contains("--jc-chrome-control-text: #4f4f4f;"), body);
+		assertTrue(body.contains(".juneau-view-toolbar-right .dataTables_filter input,\n"
+			+ ".juneau-view-toolbar-right .dt-search input {"), body);
+		var start = body.indexOf(".juneau-view-toolbar-right .dataTables_filter input,");
+		var end = body.indexOf("}", start);
+		var region = body.substring(start, end);
+		assertTrue(region.contains("border: 1px solid var(--jc-chrome-control-border)"), region);
+		assertTrue(region.contains("color: var(--jc-chrome-control-text)"), region);
+	}
+
+	/**
+	 * DF-12.1: the DataTables-native child row (row.child(...).show()) and this module's own detail panel are
+	 * explicit opaque white, so no ancestor row colouring (a zebra stripe, an "open" indicator, a parent-row
+	 * hover wash) can show through the expanded surface - the same "opaque floating/panel surface" exception
+	 * this file already grants the dialog/popover/timestamp-popup families, extended to the row DataTables
+	 * itself creates.
+	 */
+	@Test void p02_viewsCss_detailExpanderSurfaceIsOpaqueWhite() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("table[data-juneau-view] > tbody > tr.child,\n"
+			+ "table[data-juneau-view] > tbody > tr.child > td,\n"
+			+ "table.dataTable > tbody > tr.child,\n"
+			+ "table.dataTable > tbody > tr.child > td {"), body);
+		var start = body.indexOf("table[data-juneau-view] > tbody > tr.child,");
+		var end = body.indexOf("}", start);
+		assertTrue(body.substring(start, end).contains("background: #fff"), body);
+
+		// ".juneau-view-detail-panel {" appears TWICE (the container-query host near the top of the file, and
+		// the expanded-body rule this test targets) - anchor on the body rule's own first declaration.
+		assertTrue(body.contains(".juneau-view-detail-panel {\n\tmargin: 0;"), body);
+		var panelStart = body.indexOf(".juneau-view-detail-panel {\n\tmargin: 0;");
+		var panelEnd = body.indexOf("}", panelStart);
+		assertTrue(body.substring(panelStart, panelEnd).contains("background: #fff"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -193,22 +193,25 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	}
 
 	/**
-	 * The {@code font-size} {@code rem} carve-out must not re-expose the three DataTables density literals that
-	 * {@code TODO-J0467}'s own locked exclusion list pins permanently - a token there would re-resolve globally
-	 * the moment a theme touches the scale, because the cell-level rule is deliberately pinned in {@code rem}
-	 * rather than left to inherit (see {@link ChromeScaleScanner#recordedLiterals()}). Reproduces the three
-	 * pinned sites synthetically, by selector shape rather than by reading the shipped stylesheet's own line
-	 * numbers (which have already drifted twice), so this proves the carve-out leaves them alone independent of
-	 * where they currently sit in the file.
+	 * The three DataTables density literals ({@code table[data-juneau-view]}/{@code thead}/{@code tbody} cell
+	 * type context) moved from {@code 0.75rem} (a duplicate of {@code --jc-chrome-font-size-1}) to
+	 * {@code 0.8333rem} - IRS body-type parity, {@code WORK-J0518} DF-4. {@code 0.8333rem} does not equal any
+	 * declared step, so the {@code font-size} {@code rem} carve-out never even reaches
+	 * {@link ChromeScaleScanner#recordedLiterals()} for these three sites any more: no duplicate, no violation,
+	 * no exception needed. Reproduces the three pinned sites synthetically, by selector shape rather than by
+	 * reading the shipped stylesheet's own line numbers, so this proves the new value is clean of the scale
+	 * independent of where the sites currently sit in the file - and would start failing loudly (a real,
+	 * unexcused violation, since these are no longer in the recorded table) if the value ever drifted back onto
+	 * an existing step.
 	 */
-	@Test void b13_fontSizeRemCarveOutDoesNotReExposeTheLockedExclusionList() {
+	@Test void b13_movedTableCellPinNoLongerDuplicatesAStepOrNeedsAnException() {
 		var r = ChromeScaleScanner.scan(
-			"table[data-juneau-view], table.dataTable { font-size: 0.75rem; }"
-			+ " table[data-juneau-view] > thead > tr > th { font-size: 0.75rem; }"
-			+ " table[data-juneau-view] > tbody > tr > th { font-size: 0.75rem; }");
-		assertTrue(r.violations().isEmpty(), () -> "the locked exclusion list was re-exposed as a violation: "
-			+ r.violations());
-		assertEquals(3, r.matchedRecords().size(), () -> "expected all three pinned density literals to still "
-			+ "match their recorded exception: " + r.matchedRecords());
+			"table[data-juneau-view], table.dataTable { font-size: 0.8333rem; }"
+			+ " table[data-juneau-view] > thead > tr > th { font-size: 0.8333rem; }"
+			+ " table[data-juneau-view] > tbody > tr > th { font-size: 0.8333rem; }");
+		assertTrue(r.violations().isEmpty(), () -> "0.8333rem does not equal any declared step and must not be "
+			+ "reported as a violation: " + r.violations());
+		assertTrue(r.matchedRecords().isEmpty(), () -> "0.8333rem does not duplicate a step, so it needs no "
+			+ "recorded exception any more: " + r.matchedRecords());
 	}
 }

@@ -142,20 +142,18 @@ final class ChromeScaleScanner {
 	 *
 	 * <p>
 	 * Grouped by reason rather than by file order, so a reader can see how many distinct reasons there actually
-	 * are. Three, at present.
+	 * are. Two, at present.
+	 *
+	 * <p>
+	 * The table/cell type-context pin (formerly recorded here as a duplicate of {@code --jc-chrome-font-size-1})
+	 * moved to {@code 0.8333rem} - IRS body-type parity, {@code WORK-J0518} DF-4 - which does not equal any
+	 * declared step, so it no longer triggers {@link #findDuplicatedStep} at all and needs no exception here.
+	 * The pin itself is still a deliberate literal in the stylesheet (still not a token, for the same {@code em}-
+	 * context reason that first recorded it); it simply no longer needs an ENTRY IN THIS TABLE, because that
+	 * table only ever excuses a literal the scan would otherwise flag.
 	 */
 	private static final List<RecordedLiteral> RECORDED_LITERALS = List.of(
-		// (1) The table cell type context. This value is what every `em` in the DataTables child row resolves
-		// against, so it is deliberately NOT a token: a theme that overrode the token would silently re-resolve
-		// the whole detail-panel family, which is the exact dependency pinning it was meant to remove.
-		new RecordedLiteral("table[data-juneau-view], table.dataTable", "font-size", "0.75rem",
-			"anchors the table type context; a token here would be overridable and the pin would stop pinning"),
-		new RecordedLiteral("> thead > tr > th", "font-size", "0.75rem",
-			"pins the cell type context; a token here would be overridable and the pin would stop pinning"),
-		new RecordedLiteral("> tbody > tr > th", "font-size", "0.75rem",
-			"pins the cell type context; a token here would be overridable and the pin would stop pinning"),
-
-		// (2) The card grid's gap sizes itself in `rem`. The membership sweep behind the spacing ladder evaluated
+		// (1) The card grid's gap sizes itself in `rem`. The membership sweep behind the spacing ladder evaluated
 		// `em`-valued declarations only, so this was never assessed against a step and routing it now would be a
 		// card-grid density decision this contract does not own. (Its two sibling font-size literals, formerly
 		// recorded here for the same reason, are now tokenized onto --jc-chrome-font-size-1, so the pinning
@@ -163,7 +161,7 @@ final class ChromeScaleScanner {
 		new RecordedLiteral(".juneau-view-card-fields", "gap", "0.4rem 0.75rem",
 			"card-grid rem sizing, never assessed by the em-valued membership sweep"),
 
-		// (3) A third glyph site at the small glyph size, in a widget the glyph-role naming enumerated only two
+		// (2) A third glyph site at the small glyph size, in a widget the glyph-role naming enumerated only two
 		// consumers for. Routing it is pixel-neutral but adds a consumer to a named role, which is a decision
 		// for whoever owns the row-detail control rather than one to take in passing.
 		new RecordedLiteral(".juneau-view-detail-control svg", "width", "12px",
