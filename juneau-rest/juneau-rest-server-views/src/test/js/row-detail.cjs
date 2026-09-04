@@ -469,6 +469,24 @@ out.href_js = I.isSafeMarkdownHref('javascript:alert(1)');
 out.href_https = I.isSafeMarkdownHref('https://x');
 out.href_data = I.isSafeMarkdownHref('data:text/html,x');
 
+// WORK-J0516: protocol-relative hrefs -- literal and backslash/tab/CR/LF/triple-slash/leading-whitespace
+// obfuscated -- resolve to a THIRD-PARTY origin under the WHATWG URL parser, not the same-site relative path a
+// bare single leading "/" is.  All of these must be rejected.  '\u005C\u005C' below is two literal backslash
+// characters (the classic "\\host" bypass, equivalent to "//host").
+out.href_protoRel = I.isSafeMarkdownHref('//evil.example/x');
+out.href_backslash = I.isSafeMarkdownHref('\u005C\u005Cevil.example');
+out.href_tabObfuscated = I.isSafeMarkdownHref('/\t/evil.example');
+out.href_lfObfuscated = I.isSafeMarkdownHref('/\n/evil.example');
+out.href_crObfuscated = I.isSafeMarkdownHref('/\r/evil.example');
+out.href_tripleSlash = I.isSafeMarkdownHref('///evil.example');
+out.href_leadingSpaceProtoRel = I.isSafeMarkdownHref('   //evil.example');
+// Legit cases that must NOT regress: a true single-leading-slash path, a scheme-less relative path, the
+// allowlisted mailto: scheme, and a bare fragment.
+out.href_singleSlashPath = I.isSafeMarkdownHref('/path/to/thing');
+out.href_relativePath = I.isSafeMarkdownHref('path/to/thing');
+out.href_mailto = I.isSafeMarkdownHref('mailto:x@example.com');
+out.href_fragment = I.isSafeMarkdownHref('#frag');
+
 // ----------------------------------------------------------------------------------------------------------
 // SANITIZED_HTML format (DetailField.Format.SANITIZED_HTML)
 // ----------------------------------------------------------------------------------------------------------
@@ -667,6 +685,16 @@ out.shSrc_leadingSpaceJs = I.isSafeImageSrc('   javascript:alert(1)');
 out.shSrc_mixedCaseJs = I.isSafeImageSrc('JaVaScRiPt:alert(1)');
 out.shSrc_empty = I.isSafeImageSrc('');
 out.shSrc_null = I.isSafeImageSrc(null);
+
+// WORK-J0516: same protocol-relative variant list as isSafeMarkdownHref above (literal "//" is already rejected
+// by shSrc_protoRel above -- that predates this item -- but the backslash/tab/CR/LF-obfuscated variants are not,
+// per the WORK-J0515 adversarial review that widened this item to isSafeImageSrc too).
+out.shSrc_backslashProtoRel = I.isSafeImageSrc('\u005C\u005Cevil.example');
+out.shSrc_tabProtoRel = I.isSafeImageSrc('/\t/evil.example');
+out.shSrc_lfProtoRel = I.isSafeImageSrc('/\n/evil.example');
+out.shSrc_crProtoRel = I.isSafeImageSrc('/\r/evil.example');
+out.shSrc_tripleSlashProtoRel = I.isSafeImageSrc('///evil.example');
+out.shSrc_leadingSpaceProtoRel = I.isSafeImageSrc('   //evil.example');
 
 // 7. End-to-end through fillDetailSlots: the wire token "sanitizedHtml" must actually dispatch to the
 //    sanitized painter (not silently fall through to textContent, which would look "safe" but prove nothing).

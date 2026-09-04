@@ -1329,21 +1329,35 @@
 	};
 
 	/**
+	 * Whether `t` (already known to start with "/" or "\") is a protocol-relative URL once the obfuscation a
+	 * browser's WHATWG URL/HTML parser normalizes away is stripped: ASCII tab/CR/LF removed wherever they occur
+	 * (URL spec "remove all ASCII tab or newline from input"), and backslash treated as forward slash (a
+	 * special-scheme URL parser folds "\" into "/" before resolving).  A resulting SECOND slash right after the
+	 * first -- a literal "//host", a triple-slash "///host", a two-backslash "\\host", or an interior-obfuscated
+	 * "/\t/host" -- resolves to a THIRD-PARTY origin, not the same-site relative/absolute path a bare single
+	 * leading "/" is.  Used by both {@link #isSafeMarkdownHref} and {@link #isSafeImageSrc} -- see
+	 * {@code WORK-J0516}.
+	 */
+	function isProtocolRelativeUrl(t) {
+		return t.replace(/[\t\r\n]/g, "").replace(/\\/g, "/").charAt(1) === "/";
+	}
+
+	/**
 	 * Whether `href` is safe to copy onto an {@code <a>}: http(s), mailto, a fragment, or a path (relative or
-	 * absolute).  javascript:/data:/vbscript: are rejected by the explicit prefix check below, but that prefix
-	 * check is NOT the load-bearing defense against an obfuscated spelling of one of those schemes (e.g.
-	 * "java\tscript:", "da\nta:") -- a browser's URL parser strips ASCII tab/newline/CR before resolving, so a
-	 * literal prefix match on the un-stripped string can miss it.  What actually catches that case is the final
-	 * fallback below: `indexOf(":") < 0`.  An obfuscated scheme still contains a colon and matches none of the
-	 * three allowed absolute prefixes, so it still fails closed.  A future "simplification" that drops this
-	 * fallback in favor of a longer explicit deny-list would silently reopen that hole.
+	 * absolute, but NOT protocol-relative -- see below).  javascript:/data:/vbscript: are rejected by the
+	 * explicit prefix check below, but that prefix check is NOT the load-bearing defense against an obfuscated
+	 * spelling of one of those schemes (e.g. "java\tscript:", "da\nta:") -- a browser's URL parser strips ASCII
+	 * tab/newline/CR before resolving, so a literal prefix match on the un-stripped string can miss it.  What
+	 * actually catches that case is the final fallback below: `indexOf(":") < 0`.  An obfuscated scheme still
+	 * contains a colon and matches none of the three allowed absolute prefixes, so it still fails closed.  A
+	 * future "simplification" that drops this fallback in favor of a longer explicit deny-list would silently
+	 * reopen that hole.
 	 *
-	 * <p>This function does NOT reject a leading "//" -- a protocol-relative URL ("//evil.example/x") resolves
-	 * to a THIRD-PARTY origin, not the "relative path" this accepts it as, and the same is true of
-	 * backslash/tab/CR/LF-obfuscated variants ("\\evil.example", "/\t/evil.example") that a browser's HTML
-	 * parser normalizes to the same third-party-origin URL. That is a real, tracked gap -- phishing/open-redirect
-	 * severity, not script execution, since a protocol-relative URL cannot run JS -- see {@code WORK-J0516}. It
-	 * is intentionally not fixed here; do not read this doc as a claim that protocol-relative hrefs are rejected.
+	 * <p>A leading "/" is accepted ONLY when {@link #isProtocolRelativeUrl} says it is not protocol-relative --
+	 * a bare "//evil.example/x" resolves to a THIRD-PARTY origin, not the "relative path" a naive check would
+	 * accept it as, and the same is true of its backslash/tab/CR/LF/triple-slash-obfuscated equivalents.  This is
+	 * a phishing/open-redirect defense, not an XSS one: a protocol-relative URL cannot run JS.  See
+	 * {@code WORK-J0516}.
 	 */
 	function isSafeMarkdownHref(href) {
 		if (href == null) return false;
@@ -1354,10 +1368,10 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))
 			return true;
-		// NOTE: a leading "/" is accepted unconditionally here, including "//evil.example" (protocol-relative,
-		// third-party origin) and backslash/tab/CR/LF-obfuscated equivalents -- see the doc comment above.
-		if (t.charAt(0) === "#" || t.charAt(0) === "/")
+		if (t.charAt(0) === "#")
 			return true;
+		if (t.charAt(0) === "/" || t.charAt(0) === "\\")
+			return !isProtocolRelativeUrl(t);
 		return lower.indexOf(":") < 0;
 	}
 
@@ -1527,14 +1541,20 @@
 	};
 
 	/**
-	 * Whether `src` is safe to copy onto an {@code <img>}: http(s), a path (relative or absolute -- see the
-	 * leading-"/" handling below), or a scheme-less relative URL.  Stricter than isSafeMarkdownHref --
+	 * Whether `src` is safe to copy onto an {@code <img>}: http(s), a path (relative or absolute, but NOT
+	 * protocol-relative -- see below), or a scheme-less relative URL.  Stricter than isSafeMarkdownHref --
 	 * `mailto:` and bare `#fragment` are meaningless for an image, and `data:` is rejected here as it is there
 	 * (it would also let one field inline unbounded bytes).  As with isSafeMarkdownHref, the explicit
 	 * `javascript:`/`data:`/`vbscript:` prefix check below is backed by a colon-fallback (`indexOf(":") < 0`)
 	 * that is the actual load-bearing defense against an obfuscated spelling of one of those schemes (a
 	 * browser's URL parser strips ASCII tab/newline/CR before resolving, so a literal prefix match on the
 	 * un-stripped string can miss it, but an obfuscated scheme still contains a colon and still fails closed).
+	 *
+	 * <p>A leading "/" is accepted ONLY when {@link #isProtocolRelativeUrl} says it is not protocol-relative --
+	 * a literal "//host/x", its backslash/tab/CR/LF/triple-slash-obfuscated equivalents ("\\host", "/\t/host"),
+	 * and a leading-whitespace variant (stripped by `trim()` above, then caught by the same check) all resolve
+	 * to a THIRD-PARTY origin, which for an {@code <img>} is a silent tracking-pixel/pixel-leak fetch.  See
+	 * {@code WORK-J0516}.
 	 */
 	function isSafeImageSrc(src) {
 		if (src == null) return false;
@@ -1545,18 +1565,8 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://"))
 			return true;
-		// A LITERAL leading "//" ("//host/x") is rejected here: it reads as a path but resolves to a
-		// third-party origin, which for an <img> is a silent tracking-pixel/pixel-leak fetch.  This is NOT a
-		// comprehensive check, though: a backslash- or tab/CR/LF-obfuscated protocol-relative path ("\\host",
-		// "/\t/host") does not match this literal two-character prefix and falls through to the leading-"/" or
-		// scheme-less branches below, BOTH of which accept it -- a browser's HTML parser normalizes backslashes
-		// to "/" and strips ASCII tab/newline/CR before resolving, so those variants resolve to the SAME
-		// third-party origin this check exists to reject.  That gap is real and tracked (WORK-J0516, widened to
-		// cover this helper too); it is intentionally not fixed here.
-		if (t.startsWith("//"))
-			return false;
-		if (t.charAt(0) === "/")
-			return true;
+		if (t.charAt(0) === "/" || t.charAt(0) === "\\")
+			return !isProtocolRelativeUrl(t);
 		return t.charAt(0) !== "#" && lower.indexOf(":") < 0;
 	}
 

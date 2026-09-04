@@ -372,6 +372,30 @@ class ViewsJs_RowDetail_Test extends TestBase {
 	}
 
 	/**
+	 * {@code WORK-J0516}: {@code isSafeImageSrc} must reject protocol-relative {@code img[src]} values,
+	 * including backslash/tab/CR/LF/triple-slash/leading-whitespace-obfuscated variants that the WHATWG URL
+	 * parser normalizes to the same third-party origin as a literal {@code //host} - a naive
+	 * {@code startsWith("//")} check alone is insufficient. A true single-leading-slash path and other
+	 * legitimate srcs must not regress.
+	 */
+	@Test void b17e2_imageSrcProtocolRelativeVariantsRejected() {
+		var r = report();
+		assertEquals(false, r.get("shSrc_protoRel"), "literal //host must be rejected");
+		assertEquals(false, r.get("shSrc_backslashProtoRel"),
+			"backslash-obfuscated (two literal backslashes before the host) must resolve like //host and be rejected");
+		assertEquals(false, r.get("shSrc_tabProtoRel"), "tab-obfuscated (/<TAB>/host) must be rejected");
+		assertEquals(false, r.get("shSrc_lfProtoRel"), "LF-obfuscated (/<LF>/host) must be rejected");
+		assertEquals(false, r.get("shSrc_crProtoRel"), "CR-obfuscated (/<CR>/host) must be rejected");
+		assertEquals(false, r.get("shSrc_tripleSlashProtoRel"), "triple-slash (///host) must be rejected");
+		assertEquals(false, r.get("shSrc_leadingSpaceProtoRel"), "leading-whitespace (' //host') must be rejected");
+		// Legit cases must not regress.
+		assertEquals(true, r.get("shSrc_absPath"), "a true single-leading-slash path must still be accepted");
+		assertEquals(true, r.get("shSrc_relative"), "a scheme-less relative path must still be accepted");
+		assertEquals(true, r.get("shSrc_https"));
+		assertEquals(true, r.get("shSrc_http"));
+	}
+
+	/**
 	 * End-to-end through {@code fillDetailSlots}: the {@code "sanitizedHtml"} wire token must really dispatch to
 	 * the sanitized painter.  Without this, a broken dispatch would silently fall through to {@code textContent}
 	 * - which looks safe and would leave every assertion above passing while the format did nothing.  The
@@ -394,6 +418,33 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals("Incident #42", r.get("title_filled"));
 		assertEquals(true, r.get("title_xssNotInterpreted"));
 		assertTrue(String.valueOf(r.get("title_xss")).contains("<img"));
+	}
+
+	/**
+	 * {@code WORK-J0516}: {@code isSafeMarkdownHref} must reject protocol-relative {@code a[href]} values,
+	 * including backslash/tab/CR/LF/triple-slash/leading-whitespace-obfuscated variants that the WHATWG URL
+	 * parser normalizes to the same third-party origin as a literal {@code //host}. This is a phishing/
+	 * open-redirect fix, not an XSS one - {@code javascript:} is already rejected via the colon-fallback rule
+	 * exercised by {@link #b18_hrefAndTitleFill_xssSafety()}. A true single-leading-slash path, a scheme-less
+	 * relative path, the allowlisted {@code mailto:} scheme, and a bare fragment must not regress - this
+	 * changes existing MARKDOWN-format behavior deliberately (see the item).
+	 */
+	@Test void b18a_hrefProtocolRelativeVariantsRejected() {
+		var r = report();
+		assertEquals(false, r.get("href_protoRel"), "literal //host must be rejected");
+		assertEquals(false, r.get("href_backslash"),
+			"backslash-obfuscated (two literal backslashes before the host) must resolve like //host and be rejected");
+		assertEquals(false, r.get("href_tabObfuscated"), "tab-obfuscated (/<TAB>/host) must be rejected");
+		assertEquals(false, r.get("href_lfObfuscated"), "LF-obfuscated (/<LF>/host) must be rejected");
+		assertEquals(false, r.get("href_crObfuscated"), "CR-obfuscated (/<CR>/host) must be rejected");
+		assertEquals(false, r.get("href_tripleSlash"), "triple-slash (///host) must be rejected");
+		assertEquals(false, r.get("href_leadingSpaceProtoRel"), "leading-whitespace (' //host') must be rejected");
+		// Legit cases must not regress.
+		assertEquals(true, r.get("href_singleSlashPath"), "a true single-leading-slash path must still be accepted");
+		assertEquals(true, r.get("href_relativePath"), "a scheme-less relative path must still be accepted");
+		assertEquals(true, r.get("href_mailto"), "the allowlisted mailto: scheme must still be accepted");
+		assertEquals(true, r.get("href_fragment"), "a bare fragment must still be accepted");
+		assertEquals(true, r.get("href_https"));
 	}
 
 	@Test void b19_paintActionMessageAndHeaderIcon() {
