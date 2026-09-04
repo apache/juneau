@@ -27,6 +27,8 @@ import org.apache.juneau.rest.server.widgets.*;
  * slot; the runtime copies allowlisted nodes from a {@code DOMParser} document and never assigns
  * {@code innerHTML}.  The expand JSON value for a markdown field is the HTML produced by a sanitizing markdown
  * renderer (see {@code juneau-rest-server-views-markdown}); it is not the raw markdown source.
+ * {@link Format#SANITIZED_HTML} paints caller-sanitized rich HTML through the same never-{@code innerHTML}
+ * allowlist-copy discipline, against a wider allowlist that admits {@code <img>} and the full table set.
  *
  * <p>
  * This does not bump {@link RowDetailDef#CONTRACT_VERSION}: the expand envelope is unchanged, the format
@@ -55,7 +57,51 @@ public class DetailField {
 		 * Treat the expand-JSON value as sanitizing-markdown HTML and copy allowlisted nodes into the slot.
 		 * Never {@code innerHTML}.
 		 */
-		MARKDOWN("markdown");
+		MARKDOWN("markdown"),
+
+		/**
+		 * Treat the expand-JSON value as rich HTML the <b>caller has already sanitized server-side</b>, and paint it
+		 * through this runtime's own second allowlist &mdash; a wider one than {@link #MARKDOWN}'s, admitting
+		 * {@code <img>} and the remaining table/typographic tags a full-fidelity rich-text body needs.
+		 *
+		 * <p>
+		 * <b>This is not a raw-HTML sink.</b>  Like {@link #MARKDOWN}, the client parses the value with
+		 * {@code DOMParser} into an inert document and copies allowlisted nodes via {@code createElement}/
+		 * {@code createTextNode}; it never assigns {@code innerHTML}, and it never serializes back to a string (so
+		 * the mutation-XSS class that a parse&rarr;serialize&rarr;reparse sanitizer is prone to cannot arise).
+		 * Attributes are copied by an explicit per-tag allowlist, so {@code on*} handlers, {@code srcdoc},
+		 * {@code style} and every other unnamed attribute cannot survive <i>by construction</i> rather than by a
+		 * deny-list that has to anticipate them.  {@code href} and {@code src} are scheme-checked in two layers,
+		 * not one: an explicit prefix reject for {@code javascript:}, {@code data:} and {@code vbscript:}, plus a
+		 * <b>colon-fallback</b> rule underneath it that rejects any value containing a colon outside the
+		 * explicitly allowlisted absolute prefixes ({@code http:}/{@code https:}/{@code mailto:} for
+		 * {@code href}; {@code http:}/{@code https:} for {@code src}).  <b>The colon-fallback, not the named-
+		 * scheme prefix check, is the load-bearing defense</b>: it is what still rejects an obfuscated spelling
+		 * of one of those three schemes (e.g. one split by a stray whitespace/control character that a browser's
+		 * URL parser strips before resolving, such as {@code java\tscript:}) &mdash; the prefix check alone would
+		 * miss it, but the obfuscated string still contains a colon and matches none of the allowed prefixes, so
+		 * it still fails closed. A future "simplification" to a longer bare {@code javascript:}/{@code data:}/
+		 * {@code vbscript:} deny-list that drops the colon-fallback as apparently redundant would silently
+		 * reopen that hole.
+		 *
+		 * <p>
+		 * <b>The contract is nonetheless caller-sanitizes-first.</b>  This runtime's allowlist is a second,
+		 * independent gate &mdash; defense in depth &mdash; not a substitute for a real server-side sanitizer.  Juneau
+		 * takes on no HTML-sanitizer dependency and makes no claim to sanitize hostile input on the caller's behalf:
+		 * an application pointing this format at externally-authored HTML is expected to have run that HTML through
+		 * a dedicated allowlist sanitizer at its own trust boundary first.  What this format guarantees is narrower
+		 * and worth stating exactly: <i>if that upstream pass is wrong, a script still does not execute here.</i>
+		 *
+		 * <p>
+		 * Fidelity is bounded by the allowlist.  Tags outside it are unwrapped (their children are kept), so an
+		 * unexpected element degrades to its text rather than rendering &mdash; a body that needs an element this
+		 * allowlist does not name will silently lose that element's markup, not its content.
+		 *
+		 * <p>
+		 * Like {@link #MARKDOWN}, a field with this format spans full width and may suppress its title with an empty
+		 * {@link DetailField#title}.
+		 */
+		SANITIZED_HTML("sanitizedHtml");
 
 		private final String wire;
 
@@ -99,8 +145,8 @@ public class DetailField {
 	 *
 	 * <p>
 	 * A maximum, not a fixed width: it clamps as the grid steps down, and {@link FieldSpan#FULL} is identical to
-	 * {@link FieldSpan#ONE} at one column.  A {@link Format#MARKDOWN} field spans full width whether or not this
-	 * is set.
+	 * {@link FieldSpan#ONE} at one column.  A {@link Format#MARKDOWN} or {@link Format#SANITIZED_HTML} field spans
+	 * full width whether or not this is set.
 	 */
 	public FieldSpan span;
 

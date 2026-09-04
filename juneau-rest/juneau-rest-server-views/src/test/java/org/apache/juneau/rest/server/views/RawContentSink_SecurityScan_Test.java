@@ -395,6 +395,64 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		assertEquals(List.of(), r.violations(), () -> "fillMarkdownSlot must not assign innerHTML: " + r.violations());
 	}
 
+	/**
+	 * The SANITIZED_HTML painter is held to the SAME never-{@code innerHTML} discipline as the markdown painter,
+	 * and this test is the reason that is a fact rather than an intention.
+	 *
+	 * <p>
+	 * The format's name invites the opposite implementation - "the caller already sanitized it, so just assign
+	 * {@code innerHTML}" - which is precisely the shape this module's whole raw-content-sink gate exists to
+	 * prevent, and which would have required punching a hole in {@link RawContentSinkScanner#shippedJsAllowlist()}
+	 * to land. It does not: it parses into an inert {@code DOMParser} document and rebuilds the subtree with
+	 * {@code createElement}, so the caller's server-side sanitizer is the first gate and this copier is a second,
+	 * independent one. Asserted here rather than only in the behavioral JS harness because a future edit that
+	 * "simplifies" the copier into an {@code innerHTML} assignment would still pass every render assertion in
+	 * {@code ViewsJs_RowDetail_Test} that checks benign markup renders - it is only the vector tests and this
+	 * structural gate that would catch it.
+	 */
+	@Test void d07_fillSanitizedHtmlSlot_hasNoInnerHtml() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var fill = extractFunction(source, "function fillSanitizedHtmlSlot(");
+		var append = extractFunction(source, "function appendSanitizedHtmlChild(");
+		var attrs = extractFunction(source, "function copyAllowedSanitizedHtmlAttrs(");
+		assertTrue(append.contains("createElement"), append);
+		assertTrue(append.contains("SANITIZED_HTML_DROP_TAGS"), append);
+		assertTrue(append.contains("SANITIZED_HTML_ALLOWED_TAGS"), append);
+		assertFalse(fill.contains("innerHTML"), fill);
+		assertFalse(append.contains("innerHTML"), append);
+		assertFalse(attrs.contains("innerHTML"), attrs);
+		for (var fn : List.of(fill, append, attrs)) {
+			var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+			assertEquals(List.of(), r.violations(),
+				() -> "the SANITIZED_HTML painter must not assign innerHTML: " + r.violations());
+			assertEquals(List.of(), r.sinks());
+		}
+	}
+
+	/**
+	 * The attribute copier is an ALLOWLIST, and this pins the property the format's safety rests on: it reaches
+	 * {@code setAttribute} only for names it spells out literally, so an {@code on*} handler cannot ride along on
+	 * an otherwise-allowed tag. A refactor to a deny-list (copy everything, then remove {@code on*}) would be a
+	 * materially weaker design even if the vector suite still passed, so it is caught structurally here.
+	 */
+	@Test void d08_sanitizedHtmlAttrCopier_isAnAllowlist_notADenylist() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var attrs = extractFunction(source, "function copyAllowedSanitizedHtmlAttrs(");
+		assertTrue(attrs.contains("isSafeMarkdownHref"), "href must stay scheme-checked: " + attrs);
+		assertTrue(attrs.contains("isSafeImageSrc"), "img src must stay scheme-checked: " + attrs);
+		assertFalse(attrs.contains("attributes"), "must not enumerate the source node's attributes: " + attrs);
+		assertFalse(attrs.contains("removeAttribute"), "a deny-list shape (copy-then-remove) is not allowed: " + attrs);
+		// Every setAttribute target is a literal name or a value already run through a scheme/range check.
+		assertFalse(attrs.contains("setAttribute(name"), attrs);
+
+		var src = extractFunction(source, "function isSafeImageSrc(");
+		assertTrue(src.contains("javascript:") && src.contains("data:") && src.contains("vbscript:"), src);
+	}
+
 	@Test void d05_fillRenderSlot_hasNoHtmlSinks() throws Exception {
 		var root = requireModuleRoot();
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");

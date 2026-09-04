@@ -175,6 +175,57 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertFalse(html.contains(">body</div>"), "empty markdown title must not fall back to the data key: " + html);
 	}
 
+	/**
+	 * SANITIZED_HTML stamps its own wire token and otherwise emits the same full-bleed prose shape as MARKDOWN:
+	 * both are rich-text bodies, and they differ in which client-side allowlist the value is copied through, not
+	 * in layout.  The token is asserted exactly, since the client dispatches on it and an unrecognized token
+	 * falls back to textContent - a typo here would silently disable the format rather than fail.
+	 */
+	@Test void a08b_sanitizedHtmlFormat_stampsOwnToken_andProseShape() {
+		var v = ViewDef.create("gacks")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id").title("Id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("description", "Description")
+					.columns(1)
+					.fields(
+						DetailField.of("name").title("Name"),
+						DetailField.of("descriptionHtml").title("").format(DetailField.Format.SANITIZED_HTML))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("data-juneau-field=\"descriptionHtml\""), html);
+		assertTrue(html.contains("data-juneau-field-format=\"sanitizedHtml\""), html);
+		assertFalse(html.contains("data-juneau-field-format=\"markdown\""), html);
+		assertFalse(html.contains("data-juneau-field-format=\"text\""), html);
+		// Same full-bleed prose treatment as markdown: span-full, prose classes, suppressible title.
+		assertTrue(html.contains("juneau-view-detail-field-span-full"), html);
+		assertTrue(html.contains("juneau-view-detail-markdown"), html);
+		assertTrue(html.contains("jc-prose"), html);
+		assertFalse(html.contains(">descriptionHtml</div>"),
+			"empty SANITIZED_HTML title must not fall back to the data key: " + html);
+		// The server emits the value slot only - it never inlines the field's HTML into the page.
+		assertFalse(html.contains("innerHTML"), html);
+	}
+
+	/** Adding SANITIZED_HTML must not perturb what a plain TEXT field emits. */
+	@Test void a08c_textFormat_unchangedByNewFormat() {
+		var v = ViewDef.create("skills")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id").title("Id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("s", "S")
+					.fields(DetailField.of("name").title("Name").format(DetailField.Format.TEXT))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertFalse(html.contains("data-juneau-field-format"), html);
+		assertFalse(html.contains("juneau-view-detail-field-span-full"), html);
+		assertFalse(html.contains("jc-prose"), html);
+	}
+
 	@Test void a09_renderStamp_tagMeta_noFormat() {
 		var v = ViewDef.create("alerts")
 			.dataMode(DataMode.CLIENT)

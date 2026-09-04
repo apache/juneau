@@ -230,6 +230,162 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(false, r.get("md_textHasAlert"));
 	}
 
+	/**
+	 * The hostile half of {@link DetailField.Format#SANITIZED_HTML}: a battery of real XSS vectors painted
+	 * through the format's own allowlist copier.  This is the second, independent gate behind the caller's
+	 * server-side sanitizer &mdash; if that upstream pass is wrong, nothing here may execute.
+	 */
+	@Test void b17a_sanitizedHtmlSlotFill_xssVectorsAreStripped() {
+		var r = report();
+		assertEquals(true, r.get("hasFillSanitizedHtmlSlot"), "fillSanitizedHtmlSlot must be exported");
+
+		// Dangerous elements are dropped WITH their children (a script body must not survive as text).
+		assertEquals(false, r.get("sh_hasScript"), "<script> (and <ScRiPt>) must not survive");
+		assertEquals(false, r.get("sh_hasSvg"), "<svg/onload> must not survive");
+		assertEquals(false, r.get("sh_hasIframe"));
+		assertEquals(false, r.get("sh_hasForm"));
+		assertEquals(false, r.get("sh_hasInput"));
+		assertEquals(false, r.get("sh_hasTemplate"));
+		assertEquals(false, r.get("sh_hasNoscript"));
+		assertEquals(false, r.get("sh_hasObject"));
+		assertEquals(false, r.get("sh_hasEmbed"));
+		assertEquals(false, r.get("sh_textHasAlert"), "no alert(n) payload may survive as visible text");
+
+		// The structural guarantee: attributes are copied by an explicit allowlist, so NO on* handler, style,
+		// class or id can be present anywhere in the painted subtree - by construction, not by deny-list.
+		assertEquals(false, r.get("sh_anyOnAttr"),
+			() -> "an on* handler attribute survived; painted attrs were: " + r.get("sh_attrNames"));
+		assertEquals(false, r.get("sh_anyStyleAttr"),
+			() -> "a style attribute survived; painted attrs were: " + r.get("sh_attrNames"));
+		assertEquals(false, r.get("sh_anyClassAttr"));
+
+		// javascript: URLs - both literal and entity-encoded - lose their href, but keep their link text.
+		assertNum(2, r.get("sh_anchorCount"));
+		assertEquals(false, r.get("sh_anyJsHref"), "no javascript: href may be copied");
+		assertEquals(true, r.get("sh_anchorTextKept"));
+
+		// data: and protocol-relative image sources are rejected; the <img> stays as a visible gap.  The count is
+		// asserted so this pair cannot pass vacuously by the images having been dropped entirely.
+		assertNum(3, r.get("sh_imgCount"));
+		assertEquals(false, r.get("sh_dataUriSrc"),
+			() -> "a data: img src survived; srcs were: " + r.get("sh_imgSrcs"));
+		assertEquals(false, r.get("sh_protoRelSrc"),
+			() -> "a protocol-relative img src survived; srcs were: " + r.get("sh_imgSrcs"));
+
+		assertEquals(true, r.get("sh_textHasStyled"), "an element loses its attrs, not its content");
+	}
+
+	/**
+	 * Benign markup nested inside and beside hostile markup survives intact.  Deliberately its own fixture: when
+	 * this rode at the end of the big battery above, an earlier vector's parse swallowed it and the assertion
+	 * passed on an empty subtree.
+	 */
+	@Test void b17a2_sanitizedHtmlSlotFill_benignSurvivesNestedHostileMarkup() {
+		var r = report();
+		assertEquals(true, r.get("sh_survivorBold"), "<b> beside a dropped <script> must survive");
+		assertEquals(true, r.get("sh_textHasSurvivor"));
+		assertEquals(true, r.get("sh_nestedDeepKept"), "nesting depth must not defeat the copier");
+		assertEquals(true, r.get("sh_nestedNoScript"));
+		assertEquals(true, r.get("sh_nestedNoAlert"));
+		assertEquals(false, r.get("sh_nestedNoOnAttr"), "a nested onerror must not survive");
+	}
+
+	/**
+	 * Recursion-depth bound on the copier ({@code appendSanitizedHtmlChild}/{@code copySanitizedHtmlChildren},
+	 * mutually recursive, one call-frame pair per level of input nesting). A payload nested far beyond any real
+	 * document must degrade safely - dropping everything past the copier's depth cap - rather than exhausting
+	 * the JS call stack and throwing an uncaught {@code RangeError}. Asserted two ways: it must not throw, AND
+	 * the copied result must be bounded well below the input depth (not "didn't throw because nothing survived
+	 * at all," and not "didn't throw because it copied the whole thing" - both of which a weaker assertion would
+	 * miss).
+	 */
+	@Test void b17a3_sanitizedHtmlSlotFill_deepNestingDegradesSafely() {
+		var r = report();
+		assertEquals(true, r.get("sh_deepNesting_doesNotThrow"),
+			"a deeply-nested payload must degrade safely, not throw an uncaught RangeError");
+		assertEquals(true, r.get("sh_deepNesting_depthIsPositive"), () -> r.toString());
+		assertEquals(true, r.get("sh_deepNesting_depthIsBounded"),
+			() -> "copied depth must be bounded well below the input depth: " + r.get("sh_deepNesting_depth"));
+	}
+
+	/** The benign half: SANITIZED_HTML must actually render as HTML, not as escaped text. */
+	@Test void b17b_sanitizedHtmlSlotFill_benignMarkupSurvives() {
+		var r = report();
+		assertEquals(true, r.get("sh_ok_hasB"), () -> "tags: " + r.get("sh_ok_tags"));
+		assertEquals(true, r.get("sh_ok_hasI"));
+		assertEquals(true, r.get("sh_ok_hasList"));
+		assertEquals(true, r.get("sh_ok_hasTable"), () -> "tags: " + r.get("sh_ok_tags"));
+		assertEquals(true, r.get("sh_ok_hasImg"), "the whole point of this format over MARKDOWN is <img>");
+		assertEquals(true, r.get("sh_ok_hasBlockquote"));
+		assertEquals(true, r.get("sh_ok_hasPreCode"));
+		assertEquals(true, r.get("sh_ok_hasHr"));
+
+		// Rendered as markup, not escaped into the text layer.
+		assertEquals(false, r.get("sh_ok_textHasMarkup"), "markup must be elements, not literal angle brackets");
+		assertEquals(true, r.get("sh_ok_textHasWords"));
+
+		// Allowlisted attributes are carried through with their values intact.
+		assertEquals("https://example.com/x", r.get("sh_ok_href"));
+		assertEquals("t", r.get("sh_ok_title"));
+		assertEquals("https://cdn.example/p.png", r.get("sh_ok_imgSrc"));
+		assertEquals("shot", r.get("sh_ok_imgAlt"));
+		assertEquals("640", r.get("sh_ok_imgWidth"));
+		assertEquals("2", r.get("sh_ok_colspan"));
+		assertEquals("3", r.get("sh_ok_rowspan"));
+	}
+
+	/** Bounded-integer attributes reject non-numeric, negative, and out-of-range values rather than copying them. */
+	@Test void b17c_sanitizedHtmlSlotFill_boundedIntAttrsRejectJunk() {
+		var r = report();
+		assertNull(r.get("sh_badColspan"), "colspan=\"abc\" must not be copied");
+		assertNull(r.get("sh_badRowspan"), "rowspan=\"-1\" must not be copied");
+		assertNull(r.get("sh_oobColspan"), "colspan=\"99999\" is out of range and must not be copied");
+		assertNull(r.get("sh_badWidth"), "width=\"1e9\" must not be copied");
+		assertNull(r.get("sh_badHeight"), "height=\"-5\" must not be copied");
+	}
+
+	/** Unknown tags unwrap (children kept) and empty/null values clear the slot - same contract as markdown. */
+	@Test void b17d_sanitizedHtmlSlotFill_unwrapAndEmptyHandling() {
+		var r = report();
+		assertEquals(true, r.get("sh_unknownUnwrapped"));
+		assertEquals(true, r.get("sh_unknownChildKept"));
+		assertEquals(true, r.get("sh_emptyClears"));
+		assertEquals(true, r.get("sh_nullClears"));
+	}
+
+	/** {@code isSafeImageSrc} directly: http(s) and same-origin only; no data:, no protocol-relative. */
+	@Test void b17e_sanitizedHtml_imageSrcSchemeAllowlist() {
+		var r = report();
+		assertEquals(true, r.get("shSrc_https"));
+		assertEquals(true, r.get("shSrc_http"));
+		assertEquals(true, r.get("shSrc_absPath"));
+		assertEquals(true, r.get("shSrc_relative"));
+		assertEquals(false, r.get("shSrc_data"));
+		assertEquals(false, r.get("shSrc_js"));
+		assertEquals(false, r.get("shSrc_vbscript"));
+		assertEquals(false, r.get("shSrc_protoRel"));
+		assertEquals(false, r.get("shSrc_fragment"));
+		assertEquals(false, r.get("shSrc_leadingSpaceJs"), "leading whitespace must not launder javascript:");
+		assertEquals(false, r.get("shSrc_mixedCaseJs"), "case must not launder javascript:");
+		assertEquals(false, r.get("shSrc_empty"));
+		assertEquals(false, r.get("shSrc_null"));
+	}
+
+	/**
+	 * End-to-end through {@code fillDetailSlots}: the {@code "sanitizedHtml"} wire token must really dispatch to
+	 * the sanitized painter.  Without this, a broken dispatch would silently fall through to {@code textContent}
+	 * - which looks safe and would leave every assertion above passing while the format did nothing.  The
+	 * near-miss token asserts the fail-safe default is still textContent for anything unrecognized.
+	 */
+	@Test void b17f_sanitizedHtml_wireTokenDispatchesEndToEnd() {
+		var r = report();
+		assertEquals(true, r.get("sh_e2e_renderedAsHtml"), "\"sanitizedHtml\" must dispatch to the HTML painter");
+		assertEquals(true, r.get("sh_e2e_scriptDropped"));
+		assertEquals(true, r.get("sh_e2e_textNoAlert"));
+		assertEquals(true, r.get("sh_unknownFormatIsText"),
+			"an unrecognized format token must still fall back to textContent");
+	}
+
 	@Test void b18_hrefAndTitleFill_xssSafety() {
 		var r = report();
 		assertEquals(false, r.get("href_js"));

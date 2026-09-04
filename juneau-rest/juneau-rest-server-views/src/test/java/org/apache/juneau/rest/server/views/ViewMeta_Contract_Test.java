@@ -594,6 +594,19 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertTrue(e.getMessage().contains("blank"), e::getMessage);
 	}
 
+	/**
+	 * The {@link DetailField.Format} wire tokens are a client-dispatch contract: {@code juneau-views.js} switches
+	 * on these exact strings and treats anything unrecognized as TEXT.  A renamed token would therefore not fail
+	 * loudly - it would silently downgrade the field to escaped text - so each is pinned literally here.
+	 */
+	@Test void g07b_detailFieldFormatTokens() {
+		assertEquals("text", DetailField.Format.TEXT.wire());
+		assertEquals("markdown", DetailField.Format.MARKDOWN.wire());
+		assertEquals("sanitizedHtml", DetailField.Format.SANITIZED_HTML.wire());
+		// Adding a format is additive; this pins the set so a new one is a deliberate contract change.
+		assertEquals(3, DetailField.Format.values().length);
+	}
+
 	@Test void g07_rowActionPresentAndOnSuccessTokens() {
 		assertEquals("page", RowAction.Present.PAGE.wire());
 		assertEquals("dialog", RowAction.Present.DIALOG.wire());

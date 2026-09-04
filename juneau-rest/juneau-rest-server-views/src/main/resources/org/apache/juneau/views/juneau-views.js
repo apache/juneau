@@ -1329,8 +1329,21 @@
 	};
 
 	/**
-	 * Whether `href` is safe to copy onto an {@code <a>}: http(s), mailto, same-origin path, fragment, or a
-	 * scheme-less relative URL.  javascript:/data:/vbscript: and other schemes are rejected.
+	 * Whether `href` is safe to copy onto an {@code <a>}: http(s), mailto, a fragment, or a path (relative or
+	 * absolute).  javascript:/data:/vbscript: are rejected by the explicit prefix check below, but that prefix
+	 * check is NOT the load-bearing defense against an obfuscated spelling of one of those schemes (e.g.
+	 * "java\tscript:", "da\nta:") -- a browser's URL parser strips ASCII tab/newline/CR before resolving, so a
+	 * literal prefix match on the un-stripped string can miss it.  What actually catches that case is the final
+	 * fallback below: `indexOf(":") < 0`.  An obfuscated scheme still contains a colon and matches none of the
+	 * three allowed absolute prefixes, so it still fails closed.  A future "simplification" that drops this
+	 * fallback in favor of a longer explicit deny-list would silently reopen that hole.
+	 *
+	 * <p>This function does NOT reject a leading "//" -- a protocol-relative URL ("//evil.example/x") resolves
+	 * to a THIRD-PARTY origin, not the "relative path" this accepts it as, and the same is true of
+	 * backslash/tab/CR/LF-obfuscated variants ("\\evil.example", "/\t/evil.example") that a browser's HTML
+	 * parser normalizes to the same third-party-origin URL. That is a real, tracked gap -- phishing/open-redirect
+	 * severity, not script execution, since a protocol-relative URL cannot run JS -- see {@code WORK-J0516}. It
+	 * is intentionally not fixed here; do not read this doc as a claim that protocol-relative hrefs are rejected.
 	 */
 	function isSafeMarkdownHref(href) {
 		if (href == null) return false;
@@ -1341,6 +1354,8 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))
 			return true;
+		// NOTE: a leading "/" is accepted unconditionally here, including "//evil.example" (protocol-relative,
+		// third-party origin) and backslash/tab/CR/LF-obfuscated equivalents -- see the doc comment above.
 		if (t.charAt(0) === "#" || t.charAt(0) === "/")
 			return true;
 		return lower.indexOf(":") < 0;
@@ -1470,6 +1485,179 @@
 		}
 		if (!res.wrap) return;
 		copySanitizedMarkdownChildren(res.wrap, el, res.doc);
+	}
+
+	// ------------------------------------------------------------------------------------------------------
+	// SANITIZED_HTML detail-field format
+	// ------------------------------------------------------------------------------------------------------
+	//
+	// The contract (see DetailField.Format.SANITIZED_HTML) is caller-sanitizes-first: the value is expected to
+	// have already passed a real server-side allowlist sanitizer at the application's own trust boundary.  This
+	// is the SECOND, independent gate, not the only one -- if that upstream pass is wrong, a script still must
+	// not execute here.
+	//
+	// It is deliberately NOT an innerHTML sink.  It reuses the same discipline as the markdown painter above:
+	// parse into an INERT DOMParser document (no script runs, no subresource loads), then rebuild the subtree
+	// with createElement/createTextNode.  Two properties follow structurally rather than by vigilance:
+	//   - Attributes are copied by an explicit per-tag allowlist, so `on*` handlers, `srcdoc`, `formaction`,
+	//     `style`, `xlink:href` and everything else unnamed cannot survive.  Nothing is copied unless named.
+	//   - The value is never serialized back to a string, so there is no parse->serialize->reparse round trip
+	//     and therefore none of the mutation-XSS (mXSS) class that such a round trip is prone to.
+	//
+	// The allowlist is wider than MARKDOWN_ALLOWED_TAGS because the point of this format is full-fidelity rich
+	// text: it admits <img> (which markdown drops outright) plus the remaining table and typographic tags.
+
+	/** Tag names (uppercase) the sanitized-HTML copier will create.  Everything else is unwrapped (children kept). */
+	const SANITIZED_HTML_ALLOWED_TAGS = {
+		P: 1, BR: 1, H1: 1, H2: 1, H3: 1, H4: 1, H5: 1, H6: 1,
+		UL: 1, OL: 1, LI: 1, DL: 1, DT: 1, DD: 1, PRE: 1, CODE: 1,
+		EM: 1, STRONG: 1, B: 1, I: 1, U: 1, S: 1, DEL: 1, INS: 1, SUP: 1, SUB: 1, SMALL: 1, MARK: 1,
+		A: 1, BLOCKQUOTE: 1, HR: 1, SPAN: 1, DIV: 1, IMG: 1,
+		TABLE: 1, THEAD: 1, TBODY: 1, TFOOT: 1, TR: 1, TH: 1, TD: 1, CAPTION: 1
+	};
+
+	/**
+	 * Tags whose children are discarded, not unwrapped.  MARKDOWN_DROP_TAGS minus IMG: an <img> is allowed
+	 * content for this format (scheme-checked below), but SCRIPT/STYLE/IFRAME/SVG/form controls are not, and a
+	 * script body must not survive as text.
+	 */
+	const SANITIZED_HTML_DROP_TAGS = {
+		SCRIPT: 1, STYLE: 1, IFRAME: 1, OBJECT: 1, EMBED: 1, LINK: 1, META: 1, BASE: 1, FORM: 1, INPUT: 1,
+		BUTTON: 1, TEXTAREA: 1, SELECT: 1, OPTION: 1, SVG: 1, MATH: 1, TEMPLATE: 1, NOSCRIPT: 1
+	};
+
+	/**
+	 * Whether `src` is safe to copy onto an {@code <img>}: http(s), a path (relative or absolute -- see the
+	 * leading-"/" handling below), or a scheme-less relative URL.  Stricter than isSafeMarkdownHref --
+	 * `mailto:` and bare `#fragment` are meaningless for an image, and `data:` is rejected here as it is there
+	 * (it would also let one field inline unbounded bytes).  As with isSafeMarkdownHref, the explicit
+	 * `javascript:`/`data:`/`vbscript:` prefix check below is backed by a colon-fallback (`indexOf(":") < 0`)
+	 * that is the actual load-bearing defense against an obfuscated spelling of one of those schemes (a
+	 * browser's URL parser strips ASCII tab/newline/CR before resolving, so a literal prefix match on the
+	 * un-stripped string can miss it, but an obfuscated scheme still contains a colon and still fails closed).
+	 */
+	function isSafeImageSrc(src) {
+		if (src == null) return false;
+		const t = String(src).trim();
+		if (!t) return false;
+		const lower = t.toLowerCase();
+		if (lower.startsWith("javascript:") || lower.startsWith("data:") || lower.startsWith("vbscript:"))
+			return false;
+		if (lower.startsWith("http://") || lower.startsWith("https://"))
+			return true;
+		// A LITERAL leading "//" ("//host/x") is rejected here: it reads as a path but resolves to a
+		// third-party origin, which for an <img> is a silent tracking-pixel/pixel-leak fetch.  This is NOT a
+		// comprehensive check, though: a backslash- or tab/CR/LF-obfuscated protocol-relative path ("\\host",
+		// "/\t/host") does not match this literal two-character prefix and falls through to the leading-"/" or
+		// scheme-less branches below, BOTH of which accept it -- a browser's HTML parser normalizes backslashes
+		// to "/" and strips ASCII tab/newline/CR before resolving, so those variants resolve to the SAME
+		// third-party origin this check exists to reject.  That gap is real and tracked (WORK-J0516, widened to
+		// cover this helper too); it is intentionally not fixed here.
+		if (t.startsWith("//"))
+			return false;
+		if (t.charAt(0) === "/")
+			return true;
+		return t.charAt(0) !== "#" && lower.indexOf(":") < 0;
+	}
+
+	/** Copies `name` from `from` to `to` when its value is an integer in [min,max].  Rejects everything else. */
+	function copyBoundedIntAttr(from, to, name, min, max) {
+		const raw = from.getAttribute(name);
+		if (raw == null || raw === "") return;
+		if (!/^\d{1,6}$/.test(String(raw).trim())) return;
+		const n = Number(String(raw).trim());
+		if (!Number.isInteger(n) || n < min || n > max) return;
+		to.setAttribute(name, String(n));
+	}
+
+	/**
+	 * The per-tag attribute allowlist.  Nothing reaches the live DOM that is not named here, so no `on*`
+	 * handler, `style`, `id`, `class` or `target` can ride along on an otherwise-allowed tag.
+	 */
+	function copyAllowedSanitizedHtmlAttrs(from, to) {
+		if (!from || !to || typeof to.setAttribute !== "function") return;
+		if (typeof from.getAttribute !== "function") return;
+		const tag = from.tagName ? String(from.tagName).toUpperCase() : "";
+		if (tag === "A") {
+			const href = from.getAttribute("href");
+			if (isSafeMarkdownHref(href))
+				to.setAttribute("href", href);
+		} else if (tag === "IMG") {
+			const src = from.getAttribute("src");
+			// An <img> whose src is rejected keeps its alt text (below) and renders as a broken-image
+			// placeholder rather than vanishing -- a dropped image should be visible as a gap, not silent.
+			if (isSafeImageSrc(src))
+				to.setAttribute("src", src);
+			const alt = from.getAttribute("alt");
+			if (alt != null)
+				to.setAttribute("alt", alt);
+			copyBoundedIntAttr(from, to, "width", 1, 100000);
+			copyBoundedIntAttr(from, to, "height", 1, 100000);
+		} else if (tag === "TH" || tag === "TD") {
+			copyBoundedIntAttr(from, to, "colspan", 1, 1000);
+			copyBoundedIntAttr(from, to, "rowspan", 1, 1000);
+		}
+		const title = from.getAttribute("title");
+		if (title != null && title !== "")
+			to.setAttribute("title", title);
+	}
+
+	/**
+	 * Hard cap on the copier's rebuild-tree depth.  {@code appendSanitizedHtmlChild}/{@code
+	 * copySanitizedHtmlChildren} are mutually recursive, one call frame pair per level of nesting in the
+	 * attacker-controlled input; with no cap, a payload nested deep enough (a few thousand levels of a single
+	 * allowed tag, e.g. {@code <div>} x N) exhausts the JS call stack and throws an uncaught {@code RangeError}
+	 * instead of degrading safely.  200 is deliberately generous for any real document (ordinary rich text
+	 * nests at most a few dozen levels deep) while being far below where a stack overflow becomes a risk.
+	 * Nodes past this depth are dropped (with their subtree) rather than copied -- fail-closed, matching this
+	 * copier's drop-on-unknown discipline elsewhere, not a partial/best-effort copy.
+	 */
+	const SANITIZED_HTML_MAX_DEPTH = 200;
+
+	function appendSanitizedHtmlChild(n, to, doc, depth) {
+		if (!n) return;
+		if (n.nodeType === 3) {
+			const text = n.nodeValue == null ? "" : String(n.nodeValue);
+			if (typeof doc?.createTextNode === "function")
+				to.appendChild(doc.createTextNode(text));
+			return;
+		}
+		if (n.nodeType !== 1) return;
+		if (depth > SANITIZED_HTML_MAX_DEPTH) return;
+		const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
+		if (SANITIZED_HTML_DROP_TAGS[tag]) return;
+		if (!SANITIZED_HTML_ALLOWED_TAGS[tag]) {
+			copySanitizedHtmlChildren(n, to, doc, depth + 1);
+			return;
+		}
+		const dest = doc.createElement(tag.toLowerCase());
+		copyAllowedSanitizedHtmlAttrs(n, dest);
+		copySanitizedHtmlChildren(n, dest, doc, depth + 1);
+		to.appendChild(dest);
+	}
+
+	function copySanitizedHtmlChildren(from, to, doc, depth) {
+		if (!from || !to || !from.childNodes) return;
+		for (const n of from.childNodes) appendSanitizedHtmlChild(n, to, doc, depth);
+	}
+
+	/**
+	 * Paints a SANITIZED_HTML field slot.  Parses with {@code DOMParser} (does not execute script) and copies
+	 * allowlisted nodes via {@code createElement}/{@code createTextNode}.  Never assigns {@code innerHTML}.
+	 * Missing {@code DOMParser} fails closed to {@code textContent} -- the value is shown as escaped text rather
+	 * than painted unchecked, matching fillMarkdownSlot.
+	 */
+	function fillSanitizedHtmlSlot(el, html) {
+		clearElementChildren(el);
+		if (html == null || html === "") return;
+		const src = String(html);
+		const res = parseSanitizedHtmlWrap(src);
+		if (res.unsupported) {
+			el.textContent = src;
+			return;
+		}
+		if (!res.wrap) return;
+		copySanitizedHtmlChildren(res.wrap, el, res.doc, 0);
 	}
 
 	const RENDER_ALLOWED_TAGS = { SPAN: 1, A: 1, CODE: 1, DIV: 1 };
@@ -1609,10 +1797,15 @@
 			const meta = parseDetailFieldRenderMeta(slot);
 			const href = slot.getAttribute("data-juneau-field-render-href");
 			fillRenderSlot(slot, value, renderId, meta, href, map);
-		} else if (slot.getAttribute("data-juneau-field-format") === "markdown")
-			fillMarkdownSlot(slot, value);
-		else
-			slot.textContent = value;
+		} else {
+			const fmt = slot.getAttribute("data-juneau-field-format");
+			if (fmt === "markdown")
+				fillMarkdownSlot(slot, value);
+			else if (fmt === "sanitizedHtml")
+				fillSanitizedHtmlSlot(slot, value);
+			else
+				slot.textContent = value;
+		}
 	}
 
 	// NOSONAR javascript:S7761 -- same caller-supplied-DOM rationale as paintDetailFieldSlot above.
@@ -1626,7 +1819,8 @@
 	/**
 	 * Fills `[data-juneau-field]` slots from an expand JSON `fields` map.  TEXT slots (the default, and any
 	 * unknown format) use textContent only.  {@code data-juneau-field-format="markdown"} slots use
-	 * fillMarkdownSlot.  Unknown keys are dropped; missing keys and non-scalars become empty.
+	 * fillMarkdownSlot and {@code "sanitizedHtml"} slots use fillSanitizedHtmlSlot; both copy allowlisted nodes
+	 * and neither assigns innerHTML.  Unknown keys are dropped; missing keys and non-scalars become empty.
 	 */
 	function fillDetailSlots(root, fields) {
 		if (!root || !root.querySelectorAll) return;
@@ -5454,7 +5648,9 @@
 		substituteDetailUrl: substituteDetailUrl,
 		scalarFieldValue: scalarFieldValue,
 		isSafeMarkdownHref: isSafeMarkdownHref,
+		isSafeImageSrc: isSafeImageSrc,
 		fillMarkdownSlot: fillMarkdownSlot,
+		fillSanitizedHtmlSlot: fillSanitizedHtmlSlot,
 		fillRenderSlot: fillRenderSlot,
 		fillDetailSlots: fillDetailSlots,
 		resolveDetailHeaderIcon: resolveDetailHeaderIcon,

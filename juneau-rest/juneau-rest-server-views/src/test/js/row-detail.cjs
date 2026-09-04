@@ -468,6 +468,229 @@ out.md_textHasAlert = mdSlot.textContent.indexOf('alert(1)') >= 0;
 out.href_js = I.isSafeMarkdownHref('javascript:alert(1)');
 out.href_https = I.isSafeMarkdownHref('https://x');
 out.href_data = I.isSafeMarkdownHref('data:text/html,x');
+
+// ----------------------------------------------------------------------------------------------------------
+// SANITIZED_HTML format (DetailField.Format.SANITIZED_HTML)
+// ----------------------------------------------------------------------------------------------------------
+//
+// NOTE ON FIDELITY OF THIS HARNESS: the DOMParser above is a regex FIXTURE parser, not a browser HTML parser.
+// It does not decode entities and does not do implicit tag nesting.  Vectors that depend on real parser
+// behavior (entity-decoded `javascript:`, mXSS) are still asserted here and still fail closed under BOTH
+// parsers, but a green result here is evidence about the ALLOWLIST COPIER, not proof about a browser's parser.
+// That gap is why the copier is written to allowlist attributes by name rather than deny `on*` by pattern.
+
+/** Every attribute name present anywhere in the painted subtree - the global "no handler survived" sweep. */
+function collectAttrNames(node, acc) {
+	if (!node || node.nodeType !== 1) return acc;
+	for (const k in node.attrs || {}) acc.push(k.toLowerCase());
+	for (const c of node.childNodes) collectAttrNames(c, acc);
+	return acc;
+}
+
+function sanitizedPaint(html) {
+	const s = el('div');
+	s.attrs['data-juneau-field'] = 'body';
+	s.attrs['data-juneau-field-format'] = 'sanitizedHtml';
+	I.fillSanitizedHtmlSlot(s, html);
+	return s;
+}
+
+out.hasFillSanitizedHtmlSlot = typeof I.fillSanitizedHtmlSlot === 'function';
+
+// 1. The full hostile battery in one document: script, event handler, javascript:/data: URLs, svg/onload,
+//    iframe, form controls, template/noscript, style attribute, protocol-relative image.
+const shXss = sanitizedPaint(
+	'<p>lead</p>'
+	+ '<script>alert(1)</script>'
+	+ '<ScRiPt>alert(2)</ScRiPt>'
+	+ '<img src=x onerror="alert(3)">'
+	+ '<a href="javascript:alert(4)">jslink</a>'
+	+ '<a href="&#106;avascript:alert(5)">entlink</a>'
+	+ '<svg/onload=alert(6)></svg>'
+	+ '<img src="data:text/html;base64,PHNjcmlwdD4=">'
+	+ '<iframe src="javascript:alert(7)"></iframe>'
+	+ '<form><input onfocus="alert(8)" autofocus></form>'
+	+ '<template><img src=y onerror="alert(9)"></template>'
+	+ '<noscript><img src=z onerror="alert(10)"></noscript>'
+	+ '<p style="background:url(javascript:alert(11))" onclick="alert(12)">styled</p>'
+	+ '<img src="//evil.example/pixel.png">'
+	+ '<object data="javascript:alert(13)"></object>'
+	// <embed> LAST, deliberately: this fixture's parser does not know <embed> is a void element, so it pushes
+	// it and swallows everything that follows into its (dropped) subtree.  Anything appended after this line
+	// would be silently untested.  The nested-survivor case is a separate paint below for exactly that reason.
+	+ '<embed src="javascript:alert(14)">'
+);
+const xssTags = collectTags(shXss, []);
+const xssAttrs = collectAttrNames(shXss, []);
+out.sh_hasScript = xssTags.indexOf('SCRIPT') >= 0;
+out.sh_hasSvg = xssTags.indexOf('SVG') >= 0;
+out.sh_hasIframe = xssTags.indexOf('IFRAME') >= 0;
+out.sh_hasForm = xssTags.indexOf('FORM') >= 0;
+out.sh_hasInput = xssTags.indexOf('INPUT') >= 0;
+out.sh_hasTemplate = xssTags.indexOf('TEMPLATE') >= 0;
+out.sh_hasNoscript = xssTags.indexOf('NOSCRIPT') >= 0;
+out.sh_hasObject = xssTags.indexOf('OBJECT') >= 0;
+out.sh_hasEmbed = xssTags.indexOf('EMBED') >= 0;
+// The structural assertion: NO attribute anywhere in the output begins with "on", and no style/id/class rode along.
+out.sh_anyOnAttr = xssAttrs.some(function (a) { return a.indexOf('on') === 0; });
+out.sh_anyStyleAttr = xssAttrs.indexOf('style') >= 0;
+out.sh_anyClassAttr = xssAttrs.indexOf('class') >= 0;
+out.sh_attrNames = xssAttrs.slice().sort().join(',');
+// No alert(...) payload survived as TEXT either (a dropped <script> must not become visible text).
+out.sh_textHasAlert = /alert\(\d+\)/.test(shXss.textContent);
+// Anchors: neither the plain nor the entity-encoded javascript: URL kept an href.
+const xssAnchors = findTag(shXss, 'A', []);
+out.sh_anchorCount = xssAnchors.length;
+out.sh_anyJsHref = xssAnchors.some(function (a) { return a.getAttribute('href') != null; });
+out.sh_anchorTextKept = shXss.textContent.indexOf('jslink') >= 0 && shXss.textContent.indexOf('entlink') >= 0;
+// Images: the onerror/data:/protocol-relative ones all lost their src.
+const xssImgs = findTag(shXss, 'IMG', []);
+out.sh_imgCount = xssImgs.length;
+out.sh_imgSrcs = xssImgs.map(function (i) { return String(i.getAttribute('src')); }).join('|');
+out.sh_dataUriSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').indexOf('data:') === 0; });
+out.sh_protoRelSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').indexOf('//') === 0; });
+out.sh_textHasStyled = shXss.textContent.indexOf('styled') >= 0;
+
+// 1b. Benign markup nested INSIDE and BESIDE hostile markup survives - its own paint so no earlier vector's
+//     parse can swallow it (see the <embed> note above).
+const shNested = sanitizedPaint(
+	'<div><p><script>alert(15)</script><b>survivor</b></p>'
+	+ '<blockquote><em>deep</em><img src=q onerror="alert(16)"></blockquote></div>'
+);
+out.sh_survivorBold = findTag(shNested, 'B', []).length === 1;
+out.sh_textHasSurvivor = shNested.textContent.indexOf('survivor') >= 0;
+out.sh_nestedNoScript = collectTags(shNested, []).indexOf('SCRIPT') < 0;
+out.sh_nestedNoAlert = /alert\(\d+\)/.test(shNested.textContent) === false;
+out.sh_nestedDeepKept = findTag(shNested, 'EM', []).length === 1
+	&& shNested.textContent.indexOf('deep') >= 0;
+out.sh_nestedNoOnAttr = collectAttrNames(shNested, []).some(function (a) { return a.indexOf('on') === 0; });
+
+// 1c. Recursion-depth bound: appendSanitizedHtmlChild/copySanitizedHtmlChildren are mutually recursive, one
+//     call-frame pair per level of input nesting.  A payload nested far beyond any real document (here: a
+//     single allowed tag repeated DEEP_N times) must degrade safely - dropping everything past the copier's
+//     depth cap - rather than exhausting the JS call stack and throwing an uncaught RangeError.  DEEP_N is
+//     chosen well past where the pre-fix unbounded recursion would have overflowed a typical V8 stack.
+const DEEP_N = 20000;
+const deepHtml = '<div>'.repeat(DEEP_N) + 'x' + '</div>'.repeat(DEEP_N);
+let deepThrew = false;
+let deepResult = null;
+try {
+	deepResult = sanitizedPaint(deepHtml);
+} catch (e) {
+	deepThrew = true;
+}
+out.sh_deepNesting_doesNotThrow = !deepThrew;
+function maxElementDepth(node) {
+	if (!node || node.nodeType !== 1 || !node.childNodes || node.childNodes.length === 0) return 0;
+	let m = 0;
+	for (const c of node.childNodes) m = Math.max(m, maxElementDepth(c));
+	return 1 + m;
+}
+// The copied subtree must be bounded WAY below DEEP_N - i.e. the cap actually dropped the excess, this isn't
+// merely "didn't throw because the whole thing got dropped to nothing" (checked positively via a depth > 0).
+out.sh_deepNesting_depth = deepResult ? maxElementDepth(deepResult) : -1;
+out.sh_deepNesting_depthIsPositive = out.sh_deepNesting_depth > 0;
+out.sh_deepNesting_depthIsBounded = out.sh_deepNesting_depth >= 0 && out.sh_deepNesting_depth < DEEP_N / 10;
+
+// 2. Benign rich text renders as HTML (elements), not as escaped text - the "it actually renders" half.
+const ok = sanitizedPaint(
+	'<p>intro</p><b>bold</b><i>ital</i>'
+	+ '<ul><li>one</li><li>two</li></ul>'
+	+ '<a href="https://example.com/x" title="t">link</a>'
+	+ '<table><caption>cap</caption><thead><tr><th colspan="2">h</th></tr></thead>'
+	+ '<tbody><tr><td rowspan="3">c</td></tr></tbody></table>'
+	+ '<img src="https://cdn.example/p.png" alt="shot" width="640" height="480">'
+	+ '<blockquote>quoted</blockquote><pre><code>code</code></pre><hr>'
+);
+const okTags = collectTags(ok, []);
+out.sh_ok_tags = okTags.join(',');
+out.sh_ok_hasB = okTags.indexOf('B') >= 0;
+out.sh_ok_hasI = okTags.indexOf('I') >= 0;
+out.sh_ok_hasList = okTags.indexOf('UL') >= 0 && okTags.indexOf('LI') >= 0;
+out.sh_ok_hasTable = okTags.indexOf('TABLE') >= 0 && okTags.indexOf('THEAD') >= 0
+	&& okTags.indexOf('TBODY') >= 0 && okTags.indexOf('TH') >= 0 && okTags.indexOf('TD') >= 0
+	&& okTags.indexOf('CAPTION') >= 0;
+out.sh_ok_hasImg = okTags.indexOf('IMG') >= 0;
+out.sh_ok_hasBlockquote = okTags.indexOf('BLOCKQUOTE') >= 0;
+out.sh_ok_hasPreCode = okTags.indexOf('PRE') >= 0 && okTags.indexOf('CODE') >= 0;
+out.sh_ok_hasHr = okTags.indexOf('HR') >= 0;
+// It is real markup, not text: the slot's own textContent must not contain the angle brackets.
+out.sh_ok_textHasMarkup = ok.textContent.indexOf('<b>') >= 0 || ok.textContent.indexOf('<table') >= 0;
+out.sh_ok_textHasWords = ok.textContent.indexOf('intro') >= 0 && ok.textContent.indexOf('bold') >= 0
+	&& ok.textContent.indexOf('quoted') >= 0;
+const okA = findTag(ok, 'A', [])[0];
+out.sh_ok_href = okA ? okA.getAttribute('href') : null;
+out.sh_ok_title = okA ? okA.getAttribute('title') : null;
+const okImg = findTag(ok, 'IMG', [])[0];
+out.sh_ok_imgSrc = okImg ? okImg.getAttribute('src') : null;
+out.sh_ok_imgAlt = okImg ? okImg.getAttribute('alt') : null;
+out.sh_ok_imgWidth = okImg ? okImg.getAttribute('width') : null;
+const okTh = findTag(ok, 'TH', [])[0];
+out.sh_ok_colspan = okTh ? okTh.getAttribute('colspan') : null;
+const okTd = findTag(ok, 'TD', [])[0];
+out.sh_ok_rowspan = okTd ? okTd.getAttribute('rowspan') : null;
+
+// 3. Non-integer / out-of-range span and dimension attributes are rejected, not copied through.
+const spans = sanitizedPaint('<table><tr><td colspan="abc" rowspan="-1">a</td>'
+	+ '<td colspan="99999">b</td></tr></table><img src="/p.png" width="1e9" height="-5">');
+const spanTds = findTag(spans, 'TD', []);
+out.sh_badColspan = spanTds[0] ? spanTds[0].getAttribute('colspan') : 'MISSING-TD';
+out.sh_badRowspan = spanTds[0] ? spanTds[0].getAttribute('rowspan') : 'MISSING-TD';
+out.sh_oobColspan = spanTds[1] ? spanTds[1].getAttribute('colspan') : 'MISSING-TD';
+const spanImg = findTag(spans, 'IMG', [])[0];
+out.sh_badWidth = spanImg ? spanImg.getAttribute('width') : 'MISSING-IMG';
+out.sh_badHeight = spanImg ? spanImg.getAttribute('height') : 'MISSING-IMG';
+
+// 4. Unknown tags are UNWRAPPED (children kept), matching the markdown copier's contract.
+const unk = sanitizedPaint('<unknowntag><b>kept</b>tail</unknowntag>');
+out.sh_unknownUnwrapped = collectTags(unk, []).indexOf('UNKNOWNTAG') < 0;
+out.sh_unknownChildKept = findTag(unk, 'B', []).length === 1 && unk.textContent.indexOf('tail') >= 0;
+
+// 5. Empty / null / whitespace inputs clear the slot without throwing.
+const blank = sanitizedPaint('<b>x</b>');
+I.fillSanitizedHtmlSlot(blank, '');
+out.sh_emptyClears = blank.childNodes.length === 0;
+I.fillSanitizedHtmlSlot(blank, null);
+out.sh_nullClears = blank.childNodes.length === 0;
+
+// 6. isSafeImageSrc directly.
+out.shSrc_https = I.isSafeImageSrc('https://x/p.png');
+out.shSrc_http = I.isSafeImageSrc('http://x/p.png');
+out.shSrc_data = I.isSafeImageSrc('data:image/png;base64,AAA');
+out.shSrc_js = I.isSafeImageSrc('javascript:alert(1)');
+out.shSrc_vbscript = I.isSafeImageSrc('vbscript:msgbox(1)');
+out.shSrc_protoRel = I.isSafeImageSrc('//evil.example/p.png');
+out.shSrc_absPath = I.isSafeImageSrc('/img/p.png');
+out.shSrc_relative = I.isSafeImageSrc('p.png');
+out.shSrc_fragment = I.isSafeImageSrc('#x');
+out.shSrc_leadingSpaceJs = I.isSafeImageSrc('   javascript:alert(1)');
+out.shSrc_mixedCaseJs = I.isSafeImageSrc('JaVaScRiPt:alert(1)');
+out.shSrc_empty = I.isSafeImageSrc('');
+out.shSrc_null = I.isSafeImageSrc(null);
+
+// 7. End-to-end through fillDetailSlots: the wire token "sanitizedHtml" must actually dispatch to the
+//    sanitized painter (not silently fall through to textContent, which would look "safe" but prove nothing).
+const e2eSlot = el('div');
+e2eSlot.attrs['data-juneau-field'] = 'body';
+e2eSlot.attrs['data-juneau-field-format'] = 'sanitizedHtml';
+const e2eWrap = {
+	querySelectorAll: function (sel) { return sel === '[data-juneau-field]' ? [e2eSlot] : []; }
+};
+I.fillDetailSlots(e2eWrap, { body: '<b>bold</b><script>alert(1)</script>' });
+out.sh_e2e_renderedAsHtml = findTag(e2eSlot, 'B', []).length === 1;
+out.sh_e2e_scriptDropped = collectTags(e2eSlot, []).indexOf('SCRIPT') < 0;
+out.sh_e2e_textNoAlert = e2eSlot.textContent.indexOf('alert(1)') < 0;
+
+// 8. An UNKNOWN format token must still fall back to textContent (fail-safe default preserved).
+const unkFmtSlot = el('div');
+unkFmtSlot.attrs['data-juneau-field'] = 'body';
+unkFmtSlot.attrs['data-juneau-field-format'] = 'sanitized-html';  // near-miss token, deliberately wrong
+const unkFmtWrap = {
+	querySelectorAll: function (sel) { return sel === '[data-juneau-field]' ? [unkFmtSlot] : []; }
+};
+I.fillDetailSlots(unkFmtWrap, { body: '<b>bold</b>' });
+out.sh_unknownFormatIsText = collectTags(unkFmtSlot, []).indexOf('B') < 0
+	&& unkFmtSlot.textContent === '<b>bold</b>';
 out.hasFillMarkdown = typeof I.fillMarkdownSlot === 'function';
 
 function btn(id) {

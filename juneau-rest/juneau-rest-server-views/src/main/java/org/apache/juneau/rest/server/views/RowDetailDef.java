@@ -427,14 +427,18 @@ public class RowDetailDef {
 	 * than a layout the stylesheet could arbitrate.
 	 *
 	 * <p>
-	 * Keyed on the bar being <b>declared</b>, not on it having items: a bar attached to a full-bleed markdown body
-	 * is the mistake whether or not it happens to be empty on the day it is written.
+	 * Keyed on the bar being <b>declared</b>, not on it having items: a bar attached to a full-bleed prose body
+	 * is the mistake whether or not it happens to be empty on the day it is written.  Both rich-text formats
+	 * ({@link DetailField.Format#MARKDOWN} and {@link DetailField.Format#SANITIZED_HTML}) are full-bleed the same
+	 * way, so both are rejected the same way.
 	 */
 	private static void validateFieldActions(DetailField f) {
 		if (f.actions == null)
 			return;
-		if (f.render == null && f.format == DetailField.Format.MARKDOWN && f.title != null && f.title.isEmpty())
-			throw iaex("DetailField '%s' cannot host actions on a title-suppressed MARKDOWN body.", f.data);
+		if (f.render != null || f.title == null || !f.title.isEmpty())
+			return;
+		if (f.format == DetailField.Format.MARKDOWN || f.format == DetailField.Format.SANITIZED_HTML)
+			throw iaex("DetailField '%s' cannot host actions on a title-suppressed %s body.", f.data, f.format);
 	}
 
 	private static void validateNestedTable(DetailSection s, Set<String> nestedViewIds, String enclosingViewId) {

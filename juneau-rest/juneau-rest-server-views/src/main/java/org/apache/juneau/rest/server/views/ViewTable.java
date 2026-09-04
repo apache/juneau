@@ -1111,9 +1111,13 @@ public class ViewTable {
 	private static Div emitDetailField(DetailField f, List<RowAction> rowActions) {
 		var rendered = f.render != null;
 		var markdown = !rendered && f.format == DetailField.Format.MARKDOWN;
-		// A markdown field spans by default rather than by a parallel hardcoded CSS rule that happens to do the
+		var sanitizedHtml = !rendered && f.format == DetailField.Format.SANITIZED_HTML;
+		// Both rich-text formats are full-bleed prose bodies and are emitted identically apart from the wire token
+		// the painter dispatches on -- they differ in which allowlist the client copies through, not in layout.
+		var prose = markdown || sanitizedHtml;
+		// A prose field spans by default rather than by a parallel hardcoded CSS rule that happens to do the
 		// same thing by a different route -- one mechanism, one job.
-		var span = markdown || f.span == FieldSpan.FULL ? " juneau-view-detail-field-span-full" : "";
+		var span = prose || f.span == FieldSpan.FULL ? " juneau-view-detail-field-span-full" : "";
 		var valueSlot = div().attr(DETAIL_FIELD_ATTR, f.data);
 		if (rendered) {
 			valueSlot.attr(DETAIL_FIELD_RENDER_ATTR, f.render.id);
@@ -1122,13 +1126,13 @@ public class ViewTable {
 			if (f.href != null)
 				valueSlot.attr(DETAIL_FIELD_RENDER_HREF_ATTR, f.href);
 			valueSlot.class_("juneau-view-detail-field-value");
-		} else if (markdown) {
-			valueSlot.attr(DETAIL_FIELD_FORMAT_ATTR, DetailField.Format.MARKDOWN.wire());
+		} else if (prose) {
+			valueSlot.attr(DETAIL_FIELD_FORMAT_ATTR, f.format.wire());
 			valueSlot.class_("juneau-view-detail-field-value juneau-view-detail-markdown jc-prose");
 		} else {
 			valueSlot.class_("juneau-view-detail-field-value");
 		}
-		var hideTitle = markdown && f.title != null && f.title.isEmpty();
+		var hideTitle = prose && f.title != null && f.title.isEmpty();
 		var kids = new ArrayList<>();
 		if (! hideTitle) {
 			var label = f.title == null || f.title.isBlank() ? f.data : f.title;

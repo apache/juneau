@@ -471,6 +471,40 @@ class RowDetailDef_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 	}
 
+	/**
+	 * SANITIZED_HTML is full-bleed prose exactly like MARKDOWN, so the same authoring error is rejected the same
+	 * way - the rule follows the layout, not the format name.
+	 */
+	@Test void f09b_actionsOnATitleSuppressedSanitizedHtmlBody_rejected() {
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("descriptionHtml").title("").format(DetailField.Format.SANITIZED_HTML)
+					.actions(ActionBar.create().items(ActionRef.of("ack")))));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("SANITIZED_HTML"), e::getMessage);
+		assertTrue(e.getMessage().contains("descriptionHtml"), e::getMessage);
+	}
+
+	@Test void f09c_actionsOnATitledSanitizedHtmlBody_accepted() {
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("descriptionHtml").title("Description").format(DetailField.Format.SANITIZED_HTML)
+					.actions(ActionBar.create().items(ActionRef.of("ack")))))
+			.validate(java.util.List.of(ack()));
+	}
+
+	/** A named renderer and SANITIZED_HTML are mutually exclusive, same as for MARKDOWN. */
+	@Test void f09d_sanitizedHtmlWithRender_rejected() {
+		var d = RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("body").format(DetailField.Format.SANITIZED_HTML).render("tag")));
+		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
+		assertTrue(e.getMessage().contains("render"), e::getMessage);
+	}
+
 	@Test void f10_viewTableOf_rejectsAnUnknownFieldActionRef() {
 		var v = ViewDef.create("x").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
 			.columns(Column.of("name"))
