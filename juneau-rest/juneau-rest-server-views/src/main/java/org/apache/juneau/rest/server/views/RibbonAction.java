@@ -29,7 +29,8 @@ import org.apache.juneau.commons.bean.*;
  * A single bean discriminated by {@link #type}; only the fields relevant to a given action type are populated, and
  * the serializer omits the rest (null-valued properties are dropped).  Build actions via the static factory methods
  * ({@link #export(String...)}, {@link #refresh()}, {@link #columnSearchToggle()}, {@link #pausePolling()},
- * {@link #collapseAll()}, {@link #option(String)}, {@link #optionGroup(String)}, {@link #divider()}).
+ * {@link #collapseAll()}, {@link #dialog(String)}, {@link #option(String)}, {@link #optionGroup(String)},
+ * {@link #divider()}).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -38,11 +39,11 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="type,buttons,optional,id,title,group,column,value,param,persist,symbol,color,deselectable,options")
+@BeanType(properties="type,buttons,optional,id,title,group,column,value,param,persist,symbol,color,deselectable,options,form,endpoint,method,onSuccess")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RibbonAction {
 
-	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code option}/{@code optionGroup}/{@code divider}. */
+	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code dialog}/{@code option}/{@code optionGroup}/{@code divider}. */
 	public String type;
 
 	/** For {@code export}: the always-on button ids (e.g. {@code ["copy","csv"]}). */
@@ -90,6 +91,31 @@ public class RibbonAction {
 
 	/** For {@code optionGroup}: the member options. */
 	public List<Opt> options;
+
+	/**
+	 * For {@code dialog}: the READ-ONLY form-source URL whose response is the dialog's declaration; omitted from the
+	 * wire when unset.
+	 *
+	 * <p>
+	 * Also the discriminator between a form-bearing and a confirm-only dialog: with no {@code form} the runtime
+	 * paints a confirm-only prompt instead of issuing the modal-open confirmation GET.
+	 */
+	public String form;
+
+	/** For {@code dialog}: the submit target the confirm button posts to; omitted from the wire when unset. */
+	public String endpoint;
+
+	/**
+	 * For {@code dialog}: the submit verb; omitted from the wire when unset.
+	 *
+	 * <p>
+	 * A safe method is refused client-side rather than submitted &mdash; a mutation must not ride a verb the CSRF
+	 * contract does not cover.
+	 */
+	public String method;
+
+	/** For {@code dialog}: the post-submit behaviour token ({@code mergeRow}/{@code redraw}/{@code navigate}); omitted from the wire when unset. */
+	public String onSuccess;
 
 	/**
 	 * A member option of an {@code optionGroup} (design doc §6.5).
@@ -288,6 +314,39 @@ public class RibbonAction {
 	}
 
 	/**
+	 * Creates a {@code dialog} action &mdash; a ribbon-hosted dialog with NO row behind it ({@code WORK-J0512}).
+	 *
+	 * <p>
+	 * The ninth action type, and the only mutating one.  It reuses the whole already-reviewed row-action dialog
+	 * machinery &mdash; the modal-open confirmation GET, the typed confirmation fields, the optional form, the
+	 * fail-closed CSRF submit, the typed action-result settling &mdash; with one difference: there is no
+	 * {@code <tr>}.  A ribbon is built with the view's own context, which already carries the {@code <table>} the
+	 * CSRF token is resolved from, so a ribbon-hosted dialog has everything a row-hosted one has except a row; its
+	 * refusals and settled outcomes therefore render into a ribbon-anchored banner host rather than a row's actions
+	 * cell.
+	 *
+	 * <p>
+	 * Resolution is keyed on this view's own {@code ribbon} catalog, NOT on {@link ViewDef#rowActions} &mdash; a
+	 * dialog action injected into the row-action catalog would also surface in every row's action menu and in the
+	 * cell-pill activation path.
+	 *
+	 * <p>
+	 * Sets {@link #type} and {@link #id} only; {@link #title(String)}, {@link #form(String)},
+	 * {@link #endpoint(String)}, {@link #method(String)} and {@link #onSuccess(String)} are fluent, and an unset
+	 * field stays <jk>null</jk> and stays off the wire.  Ribbon buttons are icon-only by construction, so
+	 * {@link #title(String)} becomes the button's tooltip and accessible name rather than visible text.
+	 *
+	 * @param id The action id &mdash; the ribbon-catalog resolution key.  Must not be <jk>null</jk>.
+	 * @return A new {@link RibbonAction}.
+	 */
+	public static RibbonAction dialog(String id) {
+		var a = new RibbonAction();
+		a.type = "dialog";
+		a.id = id;
+		return a;
+	}
+
+	/**
 	 * Creates an {@code option} action (a server-query toggle) with the specified id.
 	 *
 	 * @param id The option id.  Must not be <jk>null</jk>.
@@ -435,6 +494,50 @@ public class RibbonAction {
 	}
 
 	/**
+	 * Sets a {@code dialog} action's read-only form-source URL.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset (a confirm-only dialog).
+	 * @return This object.
+	 */
+	public RibbonAction form(String value) {
+		form = value;
+		return this;
+	}
+
+	/**
+	 * Sets a {@code dialog} action's submit target.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RibbonAction endpoint(String value) {
+		endpoint = value;
+		return this;
+	}
+
+	/**
+	 * Sets a {@code dialog} action's submit verb.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RibbonAction method(String value) {
+		method = value;
+		return this;
+	}
+
+	/**
+	 * Sets a {@code dialog} action's post-submit behaviour token.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RibbonAction onSuccess(String value) {
+		onSuccess = value;
+		return this;
+	}
+
+	/**
 	 * Maps a view's ribbon <b>option</b>/<b>optionGroup</b> toggles to the DataTables request parameters they
 	 * contribute <b>when active</b> (design doc §6.5, Task B.5).
 	 *
@@ -452,8 +555,8 @@ public class RibbonAction {
 	 *
 	 * <p>
 	 * An option carrying no {@code value} (or neither a {@code column} nor a {@code param}) contributes nothing;
-	 * {@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code divider}/
-	 * {@code export} actions are not query-contributing and are skipped.  {@code optionGroup} member options are
+	 * {@code refresh}/{@code columnSearchToggle}/{@code pausePolling}/{@code collapseAll}/{@code dialog}/
+	 * {@code divider}/{@code export} actions are not query-contributing and are skipped.  {@code optionGroup} member options are
 	 * mapped uniformly with top-level options.
 	 *
 	 * @param viewDef The built view whose ribbon + columns are read.  Must not be <jk>null</jk>.

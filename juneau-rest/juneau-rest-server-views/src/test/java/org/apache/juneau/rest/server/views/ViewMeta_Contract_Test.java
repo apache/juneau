@@ -414,6 +414,35 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertEquals(Map.of(), RibbonAction.toQueryParams(viewDef));
 	}
 
+	@Test void d18_ribbonActionDialogFactory_andItsAppendedFields() {
+		// The ninth ribbon type: a dialog opened from the ribbon with no row behind it.  Bare, it is a type+id bean -
+		// the four submit fields stay omitted, so the wire shape of every existing ribbon is untouched.
+		var bare = RibbonAction.dialog("add-project");
+		assertEquals("dialog", bare.type);
+		assertEquals("add-project", bare.id);
+		assertEquals("{\"type\":\"dialog\",\"id\":\"add-project\"}", Json.of(bare));
+		for (var k : List.of("form", "endpoint", "method", "onSuccess", "title"))
+			assertFalse(Json.of(bare).contains("\"" + k + "\""), () -> "unset field leaked: " + k + "\n" + Json.of(bare));
+
+		// Fully declared: an optional confirmation-form GET, the submit endpoint/method, and the success behavior.
+		var full = RibbonAction.dialog("add-project").title("Add project").form("servlet:/projects/new-form")
+			.endpoint("/projects").method("POST").onSuccess("redraw");
+		assertEquals("Add project", full.title);
+		assertEquals("servlet:/projects/new-form", full.form);
+		assertEquals("/projects", full.endpoint);
+		assertEquals("POST", full.method);
+		assertEquals("redraw", full.onSuccess);
+		// Appended to the @BeanType list, so the four new fields serialize last and nothing above them moves.
+		assertEquals(
+			List.of("type", "id", "title", "form", "endpoint", "method", "onSuccess"),
+			new ArrayList<>(Json.to(Json.of(full), Map.class).keySet()));
+
+		// Not query-contributing: like refresh/columnSearchToggle/pausePolling/collapseAll/divider/export, it
+		// contributes nothing to the data-URL query - it is a control, not a filter.
+		var view = ViewDef.create("t").ribbon(RibbonAction.dialog("add-project")).build();
+		assertEquals(Map.of(), RibbonAction.toQueryParams(view));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// e) Declarable poll interval: floor clamp + wire presence/omission
 	//------------------------------------------------------------------------------------------------------------------

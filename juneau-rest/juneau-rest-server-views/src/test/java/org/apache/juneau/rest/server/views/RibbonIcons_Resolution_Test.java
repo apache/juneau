@@ -53,7 +53,7 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		return body.substring(start, end < 0 ? body.length() : end);
 	}
 
-	@Test void a01_ribbonJs_hasDefaultIconsMapWithAllSevenEntries() throws Exception {
+	@Test void a01_ribbonJs_hasDefaultIconsMapWithAnEntryPerNamedGlyph() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("DEFAULT_ICONS"), body);
 		assertTrue(body.contains("copy: \"content_copy\""), body);
@@ -63,6 +63,22 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		assertTrue(body.contains("refresh: \"refresh\""), body);
 		assertTrue(body.contains("columnSearchToggle: \"manage_search\""), body);
 		assertTrue(body.contains("collapse: \"unfold_less\""), body);
+		assertTrue(body.contains("dialog: \"new\""), body);
+	}
+
+	/**
+	 * Naming the row-less dialog trigger's glyph is load-bearing for the same reason the pause control's is (see
+	 * {@code TablePolling_Wiring_Test.e06}): an unnamed type falls through to {@code resolveButtonIcon}'s neutral
+	 * "tune" default, which paints the settings gear the column chooser already owns - so an icon-only ribbon
+	 * carrying both would show two identical gears, one opening a create dialog and one opening the column list.
+	 */
+	@Test void a03_defaultIcons_dialogDoesNotCollideWithTheColumnChooserGear() throws Exception {
+		var ribbon = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		var start = ribbon.indexOf("const DEFAULT_ICONS = {");
+		var defaults = ribbon.substring(start, ribbon.indexOf("};", start));
+		assertTrue(defaults.contains("dialog:"), defaults);
+		assertFalse(defaults.contains("dialog: \"tune\""), defaults);
+		assertFalse(defaults.contains("dialog: \"settings\""), defaults);
 	}
 
 	@ParameterizedTest

@@ -47,7 +47,7 @@ import java.util.*;
  * hex-encoded &mdash; well beyond the ≥128-bit bar, matching {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s
  * 256-bit reference.  The binding is what makes it safe; the width is what makes it unguessable.
  *
- * <h5 class='section'>Example:</h5>
+ * <h5 class='section'>Example &mdash; the artifact-bound pattern (the default):</h5>
  * <p class='bjava'>
  * 	<jc>// At modal-open: mint a key bound to this action + this row.</jc>
  * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mint</jsm>(<js>"ack"</js>, <jv>incidentId</jv>);
@@ -57,6 +57,50 @@ import java.util.*;
  * 	<jk>if</jk> (! <jv>recorded</jv>.matches(<jv>submittedAction</jv>, <jv>submittedTargetId</jv>))
  * 		<jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
  * </p>
+ *
+ * <h5 class='section'>The row-less, self-targeted pattern (the opt-in)</h5>
+ * <p>
+ * A dialog opened from a view's <b>ribbon</b> has no row, so at mint time there is no artifact id to bind to.
+ * {@link #mintSelfTargeted(String)} mints a key whose {@link #targetId()} <b>is its own {@link #value()}</b>, and
+ * the client sends that value back as the submitted target &mdash; so {@link #matches(String, String)} still has a
+ * real, agreed binding to check rather than a null target.
+ *
+ * <p>
+ * <b>Two call sites have to honour one pairing contract, and it is not enforceable by either alone:</b>
+ * <ul class='spaced-list'>
+ * 	<li>A {@link #mintSelfTargeted(String)} key MUST be carried by a modal that also sets its
+ * 		{@code selfTargeted} flag &mdash; that flag is what tells the client to send the key's own value as the
+ * 		target.  Without it the client sends the row's id (or nothing at all, row-less), and the key's binding can
+ * 		never match.
+ * 	<li>A {@link #mint(String, String)} key must <b>NEVER</b> be paired with {@code selfTargeted} &mdash; that
+ * 		pairing makes the client stop sending the real target the key was bound to, silently discarding the artifact
+ * 		identity and making {@link #matches(String, String)} vacuous.  This is exactly why the flag is an explicit
+ * 		per-dialog opt-in rather than a blanket client-side precedence rule.
+ * </ul>
+ *
+ * <h5 class='section'>Example &mdash; the self-targeted pattern:</h5>
+ * <p class='bjava'>
+ * 	<jc>// At modal-open on a ribbon-hosted dialog: there is no row, so the key targets itself.</jc>
+ * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
+ * 	<jv>modal</jv>.idempotencyKey(<jv>key</jv>.value()).selfTargeted(<jk>true</jk>);
+ *
+ * 	<jc>// At submit: the submitted target IS the key value the client echoed back.</jc>
+ * 	<jk>if</jk> (! <jv>recorded</jv>.matches(<jv>submittedAction</jv>, <jv>submittedTargetId</jv>))
+ * 		<jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
+ * </p>
+ *
+ * <h5 class='section'>What a self-targeted key does and does not guarantee</h5>
+ * <p>
+ * A self-targeted key binds to {@code (action, one-opened-dialog)} &mdash; <b>not</b> {@code (action, artifact)}.
+ * It is minted per modal-open, and it is <b>single-execution, replay-on-duplicate</b>: it stops one opened dialog's
+ * submission from being <i>re-executed</i>, and a duplicate submit <b>replays</b> the recorded outcome rather than
+ * failing.  It is <b>not</b> "single-use," and it does not answer <i>"is this submission for the artifact the key
+ * was minted for?"</i> &mdash; at mint time there is no artifact.
+ *
+ * <p>
+ * A self-targeted key must therefore <b>never</b> be described as equivalent to a row-scoped one.  A key minted via
+ * the unchanged {@link #mint(String, String)} binds to a real artifact identity, and that guarantee is strictly
+ * stronger; it stays available to any consumer that has an artifact to bind to.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -102,6 +146,40 @@ public final class IdempotencyKey {
 		var bytes = new byte[KEY_BYTES];
 		RANDOM.nextBytes(bytes);
 		return new IdempotencyKey(HexFormat.of().formatHex(bytes), action, targetId);
+	}
+
+	/**
+	 * Mints a fresh key that is bound to <b>itself</b>: its {@link #targetId()} is its own {@link #value()}.
+	 *
+	 * <p>
+	 * For a dialog opened where there is no artifact to bind to &mdash; a ribbon-hosted, row-less dialog whose
+	 * submit creates the thing it is about.  {@link #mint(String, String)} cannot express this, since it requires a
+	 * non-blank target that does not exist yet, and there is nothing gained by minting a <i>second</i> random string
+	 * to serve as the target: one opaque, unguessable value plays both roles, and the client already has it as the
+	 * modal's carried key.
+	 *
+	 * <p>
+	 * <b>The pairing contract is not optional</b> &mdash; a key from this factory must be carried by a modal that
+	 * also sets its {@code selfTargeted} flag, or the client will not send the key's value back as the submitted
+	 * target and the binding can never match.  Conversely, {@code selfTargeted} must never be set on a modal
+	 * carrying a {@link #mint(String, String)} key.  See the class Javadoc, which also states what this key does
+	 * and does not guarantee (single-execution replay protection for one opened dialog &mdash; not artifact
+	 * identity).
+	 *
+	 * <p>
+	 * {@link #mint(String, String)}, {@link #of(String, String, String)} and {@link #matches(String, String)} are
+	 * unchanged by this capability: it arrives entirely as this additional factory.
+	 *
+	 * @param action The stable action id this key is issued for.  Must not be <jk>null</jk> or blank.
+	 * @return A new key holding a fresh {@value #KEY_BITS}-bit secret, hex-encoded, bound to that same value as its target.
+	 * @throws IllegalArgumentException If {@code action} is <jk>null</jk> or blank.
+	 */
+	public static IdempotencyKey mintSelfTargeted(String action) {
+		requireNonBlank("action", action);
+		var bytes = new byte[KEY_BYTES];
+		RANDOM.nextBytes(bytes);
+		var value = HexFormat.of().formatHex(bytes);
+		return new IdempotencyKey(value, action, value);
 	}
 
 	/**

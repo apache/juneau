@@ -77,10 +77,19 @@ class ViewsJs_DetailActionDialogRouting_Test extends TestBase {
 		assertTrue(fnBody.contains("panel?._juneauParentTr"), fnBody);
 	}
 
-	/** {@code submitActionDialog} (the targetId/idempotency seam WORK-J0512 owns) must stay byte-identical. */
-	@Test void a02_submitActionDialogIsUntouched_thisFixOnlyRoutesIntoIt() throws Exception {
+	/**
+	 * The routing fix above only ROUTES INTO {@code submitActionDialog} - it changes nothing inside it.  What has to
+	 * hold is the seam itself: the submit is assembled into one {@code extra} envelope and handed to the shared
+	 * {@code submitRowAction}, so every activation surface settles through the same already-reviewed path.
+	 *
+	 * <p>The {@code targetId} computation is the one part of this body that is NOT frozen here - it is owned by the
+	 * row-less dialog seam, whose {@code ViewsJs_SelfTargetedIdempotency_Test} pins its exact shape and, more to the
+	 * point, drives all three of its branches behaviorally.  Duplicating that pin here would just mean two places to
+	 * update; what this test cares about is that a target is still computed and attached at all.
+	 */
+	@Test void a02_submitActionDialogIsStillTheOneSubmitSeam() throws Exception {
 		var fnBody = functionBody(viewsJs(), "function submitActionDialog(");
-		assertTrue(fnBody.contains("const targetId = tr?.dataset?.juneauRowId ?? null;"), fnBody);
+		assertTrue(fnBody.contains("if (targetId != null) extra.targetId = targetId;"), fnBody);
 		assertTrue(fnBody.contains("if (modal?.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;"), fnBody);
 		assertTrue(fnBody.contains("submitRowAction(action, table, tr, ctx, extra);"), fnBody);
 	}

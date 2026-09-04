@@ -63,6 +63,49 @@ class IdempotencyKey_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// Self-targeted minting: a key for a submit that has no artifact to bind to yet
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a05_mintSelfTargeted_isBoundToItsOwnValue() {
+		// The whole point: at mint time there is no artifact id (the submit CREATES the thing), so the key binds to
+		// itself.  targetId == value BY CONSTRUCTION - not by a convention a caller has to remember to honour.
+		var k = IdempotencyKey.mintSelfTargeted("create-project");
+		assertEquals("create-project", k.action());
+		assertEquals(k.value(), k.targetId());
+		assertTrue(k.matches("create-project", k.value()));
+	}
+
+	@Test void a06_mintSelfTargeted_hasTheSameUnforgeableWidthAsMint() {
+		// Same 256-bit width and same lowercase-hex alphabet as mint(...): the fixed-width property is what makes a
+		// key unguessable, and a self-bound key is no less security-relevant for being self-bound.
+		var v = IdempotencyKey.mintSelfTargeted("create-project").value();
+		assertEquals(64, v.length(), v);
+		assertTrue(v.matches("[0-9a-f]{64}"), v);
+	}
+
+	@Test void a07_mintSelfTargeted_valuesAreUnique() {
+		// Freshness matters more here than for mint(...): the key IS the target, so a repeated value would make two
+		// distinct creates look like one replayed create.
+		var seen = Stream.generate(() -> IdempotencyKey.mintSelfTargeted("create-project").value()).limit(50)
+			.collect(Collectors.toSet());
+		assertEquals(50, seen.size(), "self-targeted key values must be unique (SecureRandom)");
+	}
+
+	@Test void a08_mintSelfTargeted_stillRefusesAForeignTarget() {
+		// Self-bound does NOT mean unbound: the binding check is exactly as strict, so a key replayed against a real
+		// artifact id (or another key's value) is still a refusal.
+		var k = IdempotencyKey.mintSelfTargeted("create-project");
+		assertFalse(k.matches("create-project", "INC-1"));
+		assertFalse(k.matches("create-project", IdempotencyKey.mintSelfTargeted("create-project").value()));
+		assertFalse(k.matches("delete-project", k.value()));
+	}
+
+	@Test void a09_mintSelfTargeted_blankActionThrows() {
+		assertThrows(IllegalArgumentException.class, () -> IdempotencyKey.mintSelfTargeted(null));
+		assertThrows(IllegalArgumentException.class, () -> IdempotencyKey.mintSelfTargeted("  "));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Binding check (HIGH-8): mismatch is a refusal, never a replayed success
 	//------------------------------------------------------------------------------------------------------------------
 

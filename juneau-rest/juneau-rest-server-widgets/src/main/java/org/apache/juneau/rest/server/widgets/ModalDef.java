@@ -50,6 +50,22 @@ import org.apache.juneau.commons.bean.*;
  * refusal, never a replayed success.  The minting/binding helper itself is a table-and-row-action concern and stays
  * in the rich-view module, which is why this field is a plain {@code String} rather than that helper's type.
  *
+ * <h5 class='section'>{@link #selfTargeted} &mdash; the opt-in for a key that targets itself</h5>
+ * <p>
+ * A dialog opened where there is <b>no row</b> (a ribbon-hosted dialog whose submit creates the thing it is about)
+ * has no artifact id to bind its key to at modal-open.  The rich-view module's key helper can mint a key whose
+ * bound target <i>is its own value</i>; {@link #selfTargeted} is the signal that tells the runtime to send that
+ * value as the submitted target instead of the row's id.
+ * <p>
+ * The signal has to ride on this bean, because it cannot be inferred from the wire: {@link #idempotencyKey} is an
+ * opaque string either way, indistinguishable in shape from an artifact-bound key's value.  It is therefore an
+ * explicit, additive, per-dialog opt-in &mdash; <b>not</b> a blanket runtime precedence rule.  A dialog that leaves
+ * this unset behaves exactly as it does today, <i>including</i> one that sets {@link #idempotencyKey} for an
+ * artifact-bound reason: it keeps sending the row's real id, which is what its own mint call bound.
+ * <p>
+ * Set it <b>only</b> on a modal whose key came from the self-targeted mint helper.  Setting it on a modal carrying
+ * an artifact-bound key silently discards the real target and makes the server's binding check vacuous.
+ *
  * <h5 class='section'>Not a new row-action wire field</h5>
  * <p>
  * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
@@ -88,7 +104,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,barSlot")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ModalDef implements Widget {
 
@@ -162,6 +178,15 @@ public class ModalDef implements Widget {
 	public String idempotencyKey;
 
 	/**
+	 * Whether {@link #idempotencyKey} is a <b>self-targeted</b> key whose own value the runtime must send as the
+	 * submitted target (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.
+	 *
+	 * <p>
+	 * Additive-only: like {@link #barSlot}, its presence does not bump {@link #CONTRACT_VERSION}.
+	 */
+	public Boolean selfTargeted;
+
+	/**
 	 * Optional additive bar slot anchored to this dialog's title &mdash; the <i>third</i> named {@link BarSlot}
 	 * attachment (see the class Javadoc for how this host differs from the other two).  Omitted from the wire when
 	 * unset; painted by the runtime immediately after {@link #title}, ahead of {@link #fields} and {@link #form}.
@@ -216,6 +241,26 @@ public class ModalDef implements Widget {
 	 */
 	public ModalDef idempotencyKey(String value) {
 		idempotencyKey = value;
+		return this;
+	}
+
+	/**
+	 * Declares that {@link #idempotencyKey} is a self-targeted key &mdash; the runtime sends the key's own value as
+	 * the submitted target rather than a row id.
+	 *
+	 * <p>
+	 * Set this <b>only</b> alongside a key minted by the rich-view module's self-targeted mint helper; pairing it
+	 * with an artifact-bound key discards that key's real target.  See the class Javadoc.
+	 *
+	 * <p>
+	 * Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit {@code false}: the wire
+	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.
+	 *
+	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) leaves today's row-id behaviour untouched.
+	 * @return This object.
+	 */
+	public ModalDef selfTargeted(boolean value) {
+		selfTargeted = value ? Boolean.TRUE : null;
 		return this;
 	}
 

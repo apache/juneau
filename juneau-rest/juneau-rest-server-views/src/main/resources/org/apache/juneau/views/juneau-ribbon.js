@@ -20,6 +20,7 @@
  *
  * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv/print via DataTables Buttons, with
  * excel/pdf lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, pausePolling, collapseAll,
+ * dialog (a row-less, ribbon-hosted dialog, opened through juneau-views.js's ribbon-catalog resolver),
  * option/optionGroup server-query toggles (with persisted state), and divider.
  *
  * CONSISTENCY REQUIREMENT (mirrors the server): when a column-scoped `option`/`optionGroup` toggle is ACTIVE, the
@@ -163,11 +164,18 @@
 	 * glyph, and that sprite is provenance-guarded (juneau-symbols-provenance.md + SymbolSprite_Provenance_Test),
 	 * so adding one is its own reviewed act rather than a detail of this feature.  A consumer wanting a true pause
 	 * glyph registers one and passes {@code .symbol("...")}.
+	 *
+	 * <p>{@code dialog} maps to {@code new} for the same two reasons, and NAMING it is load-bearing rather than
+	 * cosmetic: an unlisted key does not fall through to a text label, it falls through resolveButtonIcon's
+	 * {@code "tune"} default - which resolves to the settings gear the column chooser already paints, i.e. the
+	 * documented outright-bug case above, not a compromise.  {@code new} is already registered
+	 * (juneau-icons.js's registerIcon("new", ...)) and already backed by the existing {@code juneau-sym-new} sprite
+	 * id, so this needs zero new artwork and never touches the provenance-guarded sprite.
 	 */
 	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
 		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less",
-		pausePolling: "cancel"
+		pausePolling: "cancel", dialog: "new"
 	};
 
 	/**
@@ -348,6 +356,18 @@
 			if (a.type === "collapseAll") {
 				place(button(a.title || "Collapse all", resolveButtonIcon(a, "collapse"), function () {
 					if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
+				}), a.group || "__ungrouped");
+				return;
+			}
+			if (a.type === "dialog") {
+				// The ninth type, and the only mutating one: a ribbon-hosted dialog with NO row behind it
+				// (WORK-J0512).  The dialog machinery itself lives in juneau-views.js (openActionDialog and the
+				// whole already-reviewed submit/settle path), so this branch only renders the trigger and hands the
+				// action id to that module's ribbon-catalog resolver - the same one-way NS.<module> hop this file
+				// already makes for NS.config/NS.persistence.  A page that somehow loaded the ribbon runtime without
+				// the view runtime renders an inert button rather than throwing on click.
+				place(button(a.title || a.id, resolveButtonIcon(a, "dialog"), function () {
+					if (typeof NS.init?.openRibbonDialog === "function") NS.init.openRibbonDialog(a.id, ctx.table, ctx);
 				}), a.group || "__ungrouped");
 				return;
 			}

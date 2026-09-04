@@ -1826,6 +1826,21 @@ table.dataTable > tbody > tr.child > td {
 }
 
 /*
+ * The RIBBON-ANCHORED banner host and its two banners - where a ROW-LESS (ribbon-hosted) dialog's refusals and
+ * settled outcomes land, since there is no row actions cell to put them in (WORK-J0512).  Sits directly under the
+ * toolbar row that holds the ribbon, so the message reads as belonging to the control that opened the dialog.
+ * Same neutral treatment as the row banners above: the role, not the color, carries the assistive meaning.
+ */
+.juneau-view-ribbon-banner-host {
+	margin: 0 0 var(--jc-space-2) 0;
+}
+
+.juneau-view-ribbon-action-refusal,
+.juneau-view-ribbon-action-outcome {
+	font-size: 0.9em;
+}
+
+/*
  * The LIVE async-job progress banner (TODO-425) - shown while a long job streams over SSE.  Deliberately a
  * DISTINCT class from .juneau-view-action-outcome: a running job and a settled outcome are never the same visual
  * state.  The row it sits in carries `data-juneau-job` (never `data-juneau-inflight`), so table polling keeps

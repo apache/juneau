@@ -71,8 +71,41 @@ class ModalDef_FormDef_Test extends TestBase {
 		// A bare confirm-only modal (no fields, no form, no key) - every optional field omitted, not null.
 		var json = Json.of(ModalDef.create("Really delete?"));
 		assertEquals(Json.to("{\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
-		for (var k : List.of("fields", "form", "idempotencyKey", "contractVersion"))
+		for (var k : List.of("fields", "form", "idempotencyKey", "selfTargeted", "contractVersion"))
 			assertFalse(json.contains("\"" + k + "\""), () -> "unset field leaked: " + k + "\n" + json);
+	}
+
+	@Test void a06_selfTargeted_isAnOptInAndIsOtherwiseOmitted() {
+		// The row-less dialog seam's opt-in: it tells the runtime to submit the key's OWN value as the target,
+		// because a dialog with no row has no artifact id to bind to at modal-open.
+		var unset = ModalDef.create("t").idempotencyKey("k");
+		assertNull(unset.selfTargeted);
+		assertFalse(Json.of(unset).contains("selfTargeted"), () -> Json.of(unset));
+
+		// Explicit false CLEARS rather than serializing a false: an un-opted-in dialog's payload stays byte-identical
+		// to what it was before this property existed, which is why adding it doesn't bump the contract version.
+		var off = ModalDef.create("t").idempotencyKey("k").selfTargeted(false);
+		assertNull(off.selfTargeted);
+		assertFalse(Json.of(off).contains("selfTargeted"), () -> Json.of(off));
+
+		var on = ModalDef.create("t").idempotencyKey("k").selfTargeted(true);
+		assertEquals(Boolean.TRUE, on.selfTargeted);
+		assertTrue(Json.of(on).contains("\"selfTargeted\":true"), () -> Json.of(on));
+	}
+
+	@Test void a07_selfTargeted_ridesAfterTheKeyItQualifies() {
+		// It qualifies idempotencyKey, so it reads immediately after it on the wire.
+		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k")
+			.selfTargeted(true).checked();
+		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
+		assertEquals(List.of("contractVersion", "title", "fields", "form", "idempotencyKey", "selfTargeted"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void a08_selfTargeted_doesNotBumpTheContractVersion() {
+		// Additive-only, like barSlot: opting in does not change the version a v2-aware client checks.
+		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u")).idempotencyKey("k").selfTargeted(true).checked();
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 	}
 
 	@Test void a05_confirmOnlyChecked_staysUnversioned() {

@@ -107,6 +107,12 @@ function makeEnv() {
 			get name() { return this.attrs.name || ''; },
 			set name(v) { this.setAttribute('name', v); },
 			get firstChild() { return this.childNodes[0] || null; },
+			/** The node after this one among its parent's children - what an "insert right after me" call reads. */
+			get nextSibling() {
+				const sibs = this.parentNode?.childNodes;
+				if (! sibs) return null;
+				return sibs[sibs.indexOf(this) + 1] || null;
+			},
 			getAttribute: function (k) {
 				if (k === 'class') return this.className || null;
 				return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null;

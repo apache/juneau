@@ -268,4 +268,48 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 		assertEquals(1L, ((Number)r.get("dom_collapseAll_clickInvokedHook")).longValue(),
 			() -> "clicking the collapseAll button must invoke ctx.collapseAllDetailRows() exactly once: " + r);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) The ninth type: a row-less, ribbon-hosted dialog trigger
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_dialogIsNormalizerNeutral_onlyRefreshRelocates() {
+		var r = report();
+		assertEquals("dialog,refresh", r.get("pure_dialog_order"),
+			() -> "a dialog action keeps its declared position; only refresh relocates: " + r);
+		assertEquals(true, r.get("pure_dialog_groupUnset"), r::toString);
+		assertEquals(true, r.get("pure_dialog_actionObjectUnchanged"),
+			() -> "the normalizer must not rewrite a dialog action's own object: " + r);
+	}
+
+	@Test void e02_dialogIconIsNamed_notTheColumnChooserGear() {
+		var r = report();
+		assertEquals("new", r.get("pure_dialog_icon"),
+			() -> "resolveButtonIcon must resolve 'dialog' via DEFAULT_ICONS to the already-registered 'new' "
+				+ "glyph, not fall through to 'tune' (which paints the column chooser's gear): " + r);
+	}
+
+	@Test void e03_dialogRendersOneNamedButtonThatHandsItsIdToTheViewRuntime() {
+		var r = report();
+		assertEquals(1L, ((Number)r.get("dom_dialog_groupCount")).longValue(), r::toString);
+		assertEquals(1L, ((Number)r.get("dom_dialog_buttonCount")).longValue(), r::toString);
+		// Ribbon buttons are icon-only by construction, so the name lives entirely in title + aria-label.
+		assertEquals("Add project", r.get("dom_dialog_title"), r::toString);
+		assertEquals("Add project", r.get("dom_dialog_ariaLabel"), r::toString);
+		assertEquals("add-project", r.get("dom_dialog_clickHandedOffActionId"),
+			() -> "the click must hand the action id to the view runtime's ribbon-catalog resolver: " + r);
+		assertEquals(true, r.get("dom_dialog_clickHandedOffTable"),
+			() -> "and the table it was built for, so the resolver can find that view's own host: " + r);
+	}
+
+	@Test void e04_dialogButtonIsInertRatherThanThrowingWithNoViewRuntimeLoaded() {
+		var r = report();
+		assertEquals(true, r.get("dom_dialog_noViewRuntime_buttonRendered"), r::toString);
+		assertEquals(true, r.get("dom_dialog_noViewRuntime_clickDidNotThrow"),
+			() -> "the NS.init hop is optional-chained precisely so this degrades quietly: " + r);
+	}
+
+	@Test void e05_anUntitledDialogNamesItselfByIdRatherThanRenderingNameless() {
+		assertEquals(true, report().get("dom_dialog_untitled_nameFallsBackToId"), report()::toString);
+	}
 }

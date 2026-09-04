@@ -134,6 +134,18 @@ if (out.hasNormalizeRibbon) {
 	// 7) WORK-J0507 - resolveButtonIcon('collapse') resolves to the wired "collapse" icon key (no longer purely
 	// forward-compatible now that the collapseAll action type dispatches to it).
 	out.pure_collapse_icon = first.NS.ribbon.resolveButtonIcon(null, 'collapse');
+
+	// 8) WORK-J0512 - the ninth type is normalizer-neutral: only `refresh` relocates, so a `dialog` action keeps
+	// its declared position (here, ahead of the refresh that moves past it) and its group stays unset.
+	const withDialog = [action('dialog', { id: 'add-project', title: 'Add project' }), action('refresh')];
+	const withDialogResult = normalizeRibbon(withDialog);
+	out.pure_dialog_order = withDialogResult.map(function (x) { return x.type; }).join(',');
+	out.pure_dialog_groupUnset = withDialogResult[0].group == null;
+	out.pure_dialog_actionObjectUnchanged = withDialogResult[0] === withDialog[0];
+
+	// And its glyph is NAMED rather than falling through to the neutral "tune" default, which resolves to the
+	// settings gear the column chooser already paints (see the file's own javadoc, and TablePolling e06).
+	out.pure_dialog_icon = first.NS.ribbon.resolveButtonIcon(action('dialog'), 'dialog');
 }
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -244,6 +256,51 @@ function buildBar(NS, ribbon) {
 	out.dom_collapseAll_title = btn ? btn.title : null;
 	if (btn) btn.dispatch('click');
 	out.dom_collapseAll_clickInvokedHook = collapseAllCalled;
+}
+
+// Case 8 (WORK-J0512) - a `dialog` action renders one icon button that hands its id to the VIEW runtime's
+// ribbon-catalog resolver.  This harness loads the ribbon runtime alone, which is the point: the hop is
+// optional-chained, so it can be observed with a stand-in and, when the view runtime is absent entirely, the
+// button must be inert rather than throwing on click.  (The full seam, with both runtimes loaded, is
+// ribbon-dialog.cjs.)
+{
+	const { env, NS } = loadRibbon(true);
+	const calls = [];
+	NS.init = { openRibbonDialog: function (id, table, ctx) { calls.push({ id: id, table: table, ctx: ctx }); } };
+	const table = env.el('table');
+	const bar = NS.ribbon.build({ ribbon: [action('dialog', { id: 'add-project', title: 'Add project' })] },
+		{ table: table, dataTable: {}, redraw: function () {} });
+	const groups = groupsOf(bar);
+	out.dom_dialog_groupCount = groups.length;
+	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
+	out.dom_dialog_buttonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
+	out.dom_dialog_title = btn ? btn.title : null;
+	out.dom_dialog_ariaLabel = btn ? btn.getAttribute('aria-label') : null;
+	if (btn) btn.dispatch('click');
+	out.dom_dialog_clickHandedOffActionId = calls.length === 1 ? calls[0].id : null;
+	out.dom_dialog_clickHandedOffTable = calls.length === 1 && calls[0].table === table;
+}
+
+// Case 8b - the same button with NO view runtime present: the optional-chained hop makes the click a no-op
+// instead of a TypeError, so a page that somehow loaded only the ribbon runtime degrades quietly.
+{
+	const { NS } = loadRibbon(true);
+	const bar = buildBar(NS, [action('dialog', { id: 'add-project', title: 'Add project' })]);
+	const groups = groupsOf(bar);
+	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
+	out.dom_dialog_noViewRuntime_buttonRendered = btn != null;
+	let threw = false;
+	try { if (btn) btn.dispatch('click'); } catch (e) { threw = true; }
+	out.dom_dialog_noViewRuntime_clickDidNotThrow = ! threw;
+}
+
+// Case 8c - a `dialog` action with no title at all names itself by id, so the button is never nameless.
+{
+	const { NS } = loadRibbon(true);
+	const bar = buildBar(NS, [action('dialog', { id: 'add-project' })]);
+	const groups = groupsOf(bar);
+	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
+	out.dom_dialog_untitled_nameFallsBackToId = btn != null && btn.title === 'add-project';
 }
 
 process.stdout.write(JSON.stringify(out));

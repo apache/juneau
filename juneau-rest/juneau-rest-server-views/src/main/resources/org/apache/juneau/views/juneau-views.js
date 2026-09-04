@@ -3600,7 +3600,7 @@
 		const req = buildActionRequest(
 			action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra, rowDataForTr(ctx, tr));
 		if (req.refuse) {
-			renderRowActionRefusal(tr, action, req.reason);
+			renderActionRefusalFor(tr, action, req.reason, ctx);
 			return;
 		}
 		setRowInFlight(tr, true);
@@ -3612,7 +3612,7 @@
 				// A network-level failure is itself a terminal outcome: clear the marker (so polling resumes) and
 				// render a visible refusal rather than leaving the row stuck in-flight.
 				setRowInFlight(tr, false);
-				renderRowActionRefusal(tr, action, "request-failed");
+				renderActionRefusalFor(tr, action, "request-failed", ctx);
 			});
 	}
 
@@ -3643,14 +3643,14 @@
 	 */
 	function settleActionResponse(resp, action, table, tr, ctx) {
 		setRowInFlight(tr, false);   // EVERY terminal outcome clears the marker first - polling must always resume.
-		if (! resp) { renderActionOutcome(tr, { outcome: "unknown" }); return; }
+		if (! resp) { renderActionOutcomeFor(tr, { outcome: "unknown" }, ctx); return; }
 
 		if (! resp.ok) {
 			const boundaryReason = (typeof resp.headers?.get === "function")
 				? resp.headers.get("X-Loopback-Boundary") : null;
 			readBodyText(resp).then(function (text) {
 				const t = transportRefusal(resp.status, boundaryReason, parseJsonSafe(text));
-				renderActionOutcome(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message });
+				renderActionOutcomeFor(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message }, ctx);
 			});
 			return;
 		}
@@ -3672,19 +3672,19 @@
 				return;
 			}
 			if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
-				renderActionOutcome(tr, { outcome: "unknown",
+				renderActionOutcomeFor(tr, { outcome: "unknown",
 					message: "action-result contract mismatch (page='" + result.contractVersion +
-						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" });
+						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" }, ctx);
 				return;
 			}
 			const outcome = normalizeOutcome(result);
 			if (outcome === "success") {
 				applySuccessBehavior(action, table, tr, ctx, result);
-				renderActionOutcome(tr, { outcome: "success", replay: !! result.replay, message: result.message });
+				renderActionOutcomeFor(tr, { outcome: "success", replay: !! result.replay, message: result.message }, ctx);
 			} else {
-				renderActionOutcome(tr, {
+				renderActionOutcomeFor(tr, {
 					outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
-				});
+				}, ctx);
 			}
 		});
 	}
@@ -3701,13 +3701,17 @@
 	 * Applies a successful action's onSuccess behavior: `mergeRow` re-renders the row from the result's authoritative
 	 * payload, `redraw` reloads the table, `navigate` is left to the consumer.  A bare success (no typed
 	 * result) with onSuccess=redraw still redraws, preserving the pre-416 direct-submit behavior.
+	 *
+	 * <p>A ROW-LESS (ribbon-hosted) dialog declaring `mergeRow` has no row to merge into, so it redraws instead:
+	 * mergeRowFromResult is never called with a null `tr` (it dereferences it), and a successful row-less write
+	 * still shows up in the table rather than silently changing nothing.
 	 */
 	function applySuccessBehavior(action, table, tr, ctx, result) {
 		if (result?.message)
 			paintActionMessageIntoDetail(tr, action?.id, result.message);
-		if (action.onSuccess === "mergeRow" && result?.row != null) {
+		if (action.onSuccess === "mergeRow" && result?.row != null && tr) {
 			mergeRowFromResult(tr, ctx, result.row);
-		} else if (action.onSuccess === "redraw" && ctx?.redraw) {
+		} else if ((action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && ! tr)) && ctx?.redraw) {
 			ctx.redraw();
 		}
 	}
@@ -3753,6 +3757,111 @@
 		banner.dataset.state = state;
 		banner.setAttribute("role", state === "success" ? "status" : "alert");
 		banner.textContent = actionOutcomeMessage(cls);
+	}
+
+	// ==================================================================================================================
+	// ROW-LESS (RIBBON-HOSTED) DIALOG SEAM (WORK-J0512): the same dialog machinery, with no `tr` behind it
+	// ==================================================================================================================
+
+	const RIBBON_BANNER_HOST_CLASS = "juneau-view-ribbon-banner-host";
+
+	/**
+	 * The display name for an action in a message: `label` (a RowAction's field), then `title` (a RibbonAction's
+	 * field), then the raw `id`.  A RibbonAction carries `title` and no `label`, so before this widening every
+	 * ribbon-hosted message fell through to the raw id ("Action 'add-project' not sent: ...").  Widening the READ is
+	 * backward-compatible in both directions - a RowAction still resolves through `label` first, and no second name
+	 * for one concept is added to either bean.
+	 */
+	function actionDisplayName(action) {
+		return action?.label || action?.title || action?.id;
+	}
+
+	/**
+	 * This table's OWN toolbar row (the ribbon's host row), ownership-scoped: a nested table's toolbar row lives
+	 * INSIDE this table's subtree (in an expanded row-detail panel), so the one that is not inside `table` is ours -
+	 * the same discipline stripGeneratedDom already applies when sweeping it.
+	 */
+	function ownToolbarRow(table) {
+		const wrapper = findViewWrapper(table);
+		if (! wrapper || typeof wrapper.querySelectorAll !== "function") return null;
+		for (const row of wrapper.querySelectorAll(".juneau-view-toolbar-row"))
+			if (! isInside(table, row)) return row;
+		return null;
+	}
+
+	/**
+	 * Lazily creates this view's RIBBON-ANCHORED banner host - where a row-less dialog's refusals and settled
+	 * outcomes render, since there is no row actions cell to put them in.  Anchored immediately after the toolbar
+	 * row that holds the ribbon, so the message reads as belonging to the control that opened the dialog.
+	 *
+	 * <p>Tracked on `ctx` rather than looked up by selector (a re-init's teardown removes it with this table's other
+	 * generated DOM); a host whose node is no longer attached is rebuilt rather than reused.  Returns null when
+	 * there is nowhere to attach - the caller then renders nothing rather than throwing.
+	 */
+	function ribbonBannerHost(ctx) {
+		const table = ctx?.table;
+		if (! table) return null;
+		const existing = ctx._ribbonBannerHost;
+		if (existing?.parentNode) return existing;
+		const row = ownToolbarRow(table);
+		const parent = row?.parentNode || findViewWrapper(table);
+		if (! parent?.appendChild) return null;
+		const host = document.createElement("div");
+		host.className = RIBBON_BANNER_HOST_CLASS;
+		host.dataset.testid = "ribbon-banner-host";
+		if (row?.nextSibling) parent.insertBefore(host, row.nextSibling);
+		else parent.appendChild(host);
+		ctx._ribbonBannerHost = host;
+		return host;
+	}
+
+	/** Finds (or creates once) one named banner inside the ribbon-anchored host; null when there is no host. */
+	function ribbonBanner(ctx, cls, testid) {
+		const host = ribbonBannerHost(ctx);
+		if (! host) return null;
+		let banner = host.querySelector ? host.querySelector("." + cls) : null;
+		if (! banner) {
+			banner = document.createElement("div");
+			banner.className = cls;
+			banner.dataset.testid = testid;
+			host.appendChild(banner);
+		}
+		return banner;
+	}
+
+	/** The row-less twin of renderRowActionRefusal: a VISIBLE pre-flight refusal in the ribbon-anchored host. */
+	function renderRibbonActionRefusal(ctx, action, reason) {
+		const banner = ribbonBanner(ctx, "juneau-view-ribbon-action-refusal", "ribbon-action-refusal");
+		if (! banner) return;
+		banner.setAttribute("role", "alert");
+		banner.textContent = "Action '" + (actionDisplayName(action) || "action") + "' not sent: "
+			+ actionRefusalMessage(reason) + ".";
+	}
+
+	/** The row-less twin of renderActionOutcome: a VISIBLE settled outcome in the ribbon-anchored host. */
+	function renderRibbonActionOutcome(ctx, cls) {
+		const banner = ribbonBanner(ctx, "juneau-view-ribbon-action-outcome", "ribbon-action-outcome");
+		if (! banner) return;
+		const state = cls.outcome || "unknown";
+		banner.dataset.state = state;
+		banner.setAttribute("role", state === "success" ? "status" : "alert");
+		banner.textContent = actionOutcomeMessage(cls);
+	}
+
+	/**
+	 * Routes a pre-flight refusal to the host that exists: a row's actions cell when there is a row, the
+	 * ribbon-anchored host when there is not.  renderRowActionRefusal itself is left dereferencing `tr` unguarded -
+	 * a row-less caller must land in the row-less host, not in a null-tolerant version of the row one.
+	 */
+	function renderActionRefusalFor(tr, action, reason, ctx) {
+		if (tr) renderRowActionRefusal(tr, action, reason);
+		else renderRibbonActionRefusal(ctx, action, reason);
+	}
+
+	/** The settled-outcome half of renderActionRefusalFor's routing (renderActionOutcome also dereferences `tr`). */
+	function renderActionOutcomeFor(tr, cls, ctx) {
+		if (tr) renderActionOutcome(tr, cls);
+		else renderRibbonActionOutcome(ctx, cls);
 	}
 
 	// ==================================================================================================================
@@ -3911,13 +4020,21 @@
 	 * server-minted idempotency key) - it never mutates (HIGH-7); its typed fields are painted with `textContent`
 	 * (never `innerHTML`, never raw markup - BLK-1/MED-9).  With no form URL the dialog is a confirm-only prompt
 	 * from the declared `confirm` text.  The mutation is the SEPARATE non-safe submit the confirm button issues.
+	 *
+	 * <p>Also the entry point for a ROW-LESS, ribbon-hosted dialog (`tr == null`, WORK-J0512): every refusal and
+	 * outcome this function renders - on the open path as well as the submit path - is routed through
+	 * renderActionRefusalFor / renderActionOutcomeFor, which put it in the row's actions cell when there is a row
+	 * and in the ribbon-anchored host when there is not.  A ribbon click otherwise died here, on an open FAILURE,
+	 * before the submit path was ever reached.
 	 */
 	function openActionDialog(action, table, tr, ctx) {
 		// v1 depth cap (counts dialog-kind layers): a third dialog is a visible refusal inside the current top dialog.
 		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return; }
 		if (isBlankToken(action.form)) {
 			// Confirm-only LOCAL path (no form-source URL): unversioned, and never fail-loud on a missing version.
-			showActionDialog({ title: action.confirm || action.label || action.id }, action, table, tr, ctx);
+			// The name read is widened (label, then title, then id) so a ribbon-hosted action - which carries
+			// `title` and no `label` - prompts with its own name rather than its raw id.
+			showActionDialog({ title: action.confirm || actionDisplayName(action) }, action, table, tr, ctx);
 			return;
 		}
 		fetch(action.form, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
@@ -3929,7 +4046,7 @@
 						? resp.headers.get("X-Loopback-Boundary") : null;
 					return readBodyText(resp).then(function (text) {
 						const t = transportRefusal(resp?.status ?? 0, boundaryReason, parseJsonSafe(text));
-						renderActionOutcome(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message });
+						renderActionOutcomeFor(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message }, ctx);
 					});
 				}
 				return readBodyText(resp).then(function (text) {
@@ -3937,7 +4054,7 @@
 					if (! payload) {
 						// A form-source GET that did not parse: do NOT optimistically open a title-only dialog once forms
 						// exist (SF-6).  Treat as a form-bearing-expected failure -> visible refusal.
-						renderRowActionRefusal(tr, action, "request-failed");
+						renderActionRefusalFor(tr, action, "request-failed", ctx);
 						return;
 					}
 					if (payload.form) {
@@ -3945,10 +4062,10 @@
 						// must equal the ONE baked-in literal, or a visible refusal and the dialog does not open (h5).
 						if (payload.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION
 							|| payload.form.contractVersion !== JUNEAU_DIALOG_FORM_CONTRACT_VERSION) {
-							renderActionOutcome(tr, { outcome: "refusal",
+							renderActionOutcomeFor(tr, { outcome: "refusal",
 								message: "dialog-form contract mismatch (modal='" + payload.contractVersion +
 									"', form='" + payload.form.contractVersion + "', runtime='" +
-									JUNEAU_DIALOG_FORM_CONTRACT_VERSION + "')" });
+									JUNEAU_DIALOG_FORM_CONTRACT_VERSION + "')" }, ctx);
 							return;
 						}
 					}
@@ -3956,7 +4073,7 @@
 					showActionDialog(payload, action, table, tr, ctx);
 				});
 			})
-			.catch(function () { renderRowActionRefusal(tr, action, "request-failed"); });
+			.catch(function () { renderActionRefusalFor(tr, action, "request-failed", ctx); });
 	}
 
 	// THIRD bar-slot host: a dialog's ModalDef.barSlot (BarSlotTable constants of the same names on the server).
@@ -4254,6 +4371,48 @@
 		for (const c of catalog)
 			if (c?.id === actionId && isDialogAction(c)) return true;
 		return false;
+	}
+
+	/**
+	 * Resolves `actionId` against this view's RIBBON catalog (`viewDef.ribbon`), returning the `type="dialog"`
+	 * action or null (WORK-J0512).
+	 *
+	 * <p>A SEPARATE catalog on purpose, rather than widening dialogActionIsOpenable to look in `rowActions` too: a
+	 * ribbon action injected into the row-action catalog would also surface in every row's action menu
+	 * (buildRowActionMenu) and in the cell-pill activation path (activatePillAction).  Keeping the two catalogs
+	 * disjoint is structural - there is no exclusion filter to maintain, and none to forget.
+	 */
+	function findRibbonDialogAction(ctx, actionId) {
+		const catalog = (ctx?.viewDef?.ribbon) || [];
+		for (const c of catalog)
+			if (c?.type === "dialog" && c?.id === actionId) return c;
+		return null;
+	}
+
+	/** Whether `actionId` names a `type="dialog"` action on this view's ribbon (the row-less twin of dialogActionIsOpenable). */
+	function ribbonDialogActionIsOpenable(ctx, actionId) {
+		return findRibbonDialogAction(ctx, actionId) != null;
+	}
+
+	/**
+	 * Opens a ribbon-hosted dialog: the entry point juneau-ribbon.js's `dialog` branch calls on click.
+	 *
+	 * <p>Resolves from the ribbon catalog, then hands off to the SAME openActionDialog(...) the row paths use, with
+	 * `tr = null` - the whole point of the seam is that the already-reviewed dialog machinery (confirmation GET,
+	 * typed fields, optional form, fail-closed CSRF submit, typed-result settling) is reused rather than re-plumbed.
+	 * An unresolvable id is a visible refusal in the ribbon-anchored host, never a silent no-op.
+	 */
+	function openRibbonDialog(actionId, table, ctx) {
+		const target = findRibbonDialogAction(ctx, actionId);
+		if (! target) {
+			const banner = ribbonBanner(ctx, "juneau-view-ribbon-action-refusal", "ribbon-action-refusal");
+			if (banner) {
+				banner.setAttribute("role", "alert");
+				banner.textContent = "Action '" + String(actionId) + "' is not available.";
+			}
+			return;
+		}
+		openActionDialog(target, table, null, ctx);
 	}
 
 	/**
@@ -4610,10 +4769,23 @@
 	 * server can check the key's `(action, targetId)` binding (HIGH-8) - a double-click / re-submit / browser retry
 	 * therefore all carry the SAME key.  Typed FormDef values collected via `.value` ride in `extra.fields`.
 	 * Delegates the fail-closed CSRF submit + in-flight marker + typed-result settling to submitRowAction(...).
+	 *
+	 * <p>The submitted target is the row's id, EXCEPT for a modal that has explicitly opted in with
+	 * `selfTargeted` - a key minted with its own value as its bound target, because the dialog that opened it had
+	 * no artifact to bind to (WORK-J0512 B2).  Such a modal sends the key's own value as the target, uniformly
+	 * whether or not there is a row: with no row this is the difference between a submit that carries a target and
+	 * one that omits it entirely and fails closed on the server's binding check.
+	 *
+	 * <p>The opt-in gate is the whole point and must NOT be relaxed into an unconditional "key wins over row id"
+	 * precedence: this is the one function EVERY `present=dialog` submit goes through, and a dialog that mints an
+	 * artifact-bound key (`mint(action, realRowId)`) and sets `idempotencyKey` for that reason - the pattern the
+	 * example app's ack form uses - must keep sending the row's real id, or its own binding check becomes vacuous.
 	 */
 	function submitActionDialog(modal, action, table, tr, ctx, fields) {
 		const extra = {};
-		const targetId = tr?.dataset?.juneauRowId ?? null;
+		const targetId = (modal?.selfTargeted && modal?.idempotencyKey != null)
+			? modal.idempotencyKey
+			: (tr?.dataset?.juneauRowId ?? null);
 		if (targetId != null) extra.targetId = targetId;
 		if (modal?.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;
 		if (fields && typeof fields === "object") {
@@ -4634,7 +4806,8 @@
 			banner.dataset.testid = "action-refusal";
 			cell.appendChild(banner);
 		}
-		const name = (action?.label || action?.id) || "action";
+		// Widened read (label, then title, then id) so an action carrying only `title` names itself here too.
+		const name = actionDisplayName(action) || "action";
 		banner.textContent = "Action '" + name + "' not sent: " + actionRefusalMessage(reason) + ".";
 	}
 
@@ -4794,8 +4967,13 @@
 	function stripGeneratedDom(table) {
 		const wrapper = findViewWrapper(table);
 		if (wrapper) {
-			Array.prototype.forEach.call(wrapper.querySelectorAll(".juneau-view-toolbar-row"), function (row) {
-				if (!isInside(table, row)) removeEl(row);
+			// The toolbar row AND the ribbon-anchored banner host that sits under it (a row-less dialog's refusals
+			// and outcomes): both are this table's generated siblings in the wrapper, and a stale banner must not
+			// survive a re-init.  Same ownership scoping - a nested table's own chrome lives inside `table`.
+			[".juneau-view-toolbar-row", "." + RIBBON_BANNER_HOST_CLASS].forEach(function (sel) {
+				Array.prototype.forEach.call(wrapper.querySelectorAll(sel), function (el) {
+					if (!isInside(table, el)) removeEl(el);
+				});
 			});
 		}
 		[
@@ -5751,6 +5929,16 @@
 		validateDialogForm: validateDialogForm,
 		openFormActionDialog: openFormActionDialog,
 		dialogActionIsOpenable: dialogActionIsOpenable,
+		// Row-less (ribbon-hosted) dialog seam - openRibbonDialog is what juneau-ribbon.js's `dialog` branch calls.
+		actionDisplayName: actionDisplayName,
+		findRibbonDialogAction: findRibbonDialogAction,
+		ribbonDialogActionIsOpenable: ribbonDialogActionIsOpenable,
+		openRibbonDialog: openRibbonDialog,
+		ribbonBannerHost: ribbonBannerHost,
+		renderRibbonActionRefusal: renderRibbonActionRefusal,
+		renderRibbonActionOutcome: renderRibbonActionOutcome,
+		renderActionRefusalFor: renderActionRefusalFor,
+		renderActionOutcomeFor: renderActionOutcomeFor,
 		renderDialogActionRefusal: renderDialogActionRefusal,
 		renderDialogDepthRefusal: renderDialogDepthRefusal,
 		pushLayer: pushLayer,
