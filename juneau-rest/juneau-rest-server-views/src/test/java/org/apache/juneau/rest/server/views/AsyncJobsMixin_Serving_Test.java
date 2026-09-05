@@ -82,10 +82,31 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 		var ref = Json.to(body, Map.class);
 		var jobId = String.valueOf(ref.get("jobId"));
 		assertTrue(jobId.matches("[0-9a-f]{64}"), jobId);
-		assertEquals("servlet:" + AsyncJobsMixin.streamPath(jobId), ref.get("streamUrl"));
-		assertEquals("servlet:" + AsyncJobsMixin.cancelPath(jobId), ref.get("cancelUrl"));
+		// streamUrl/cancelUrl are @Uri-annotated (WORK-J0519): Juneau's serializer resolves the "servlet:"
+		// pseudo-scheme against the request's UriContext before the value ever reaches the wire, so under this
+		// root-mounted MockRestClient (no context/servlet path) the resolved, browser-usable form is identical
+		// to the un-prefixed mixin path - see a02 below for the literal-scheme regression guard.
+		assertEquals(AsyncJobsMixin.streamPath(jobId), ref.get("streamUrl"));
+		assertEquals(AsyncJobsMixin.cancelPath(jobId), ref.get("cancelUrl"));
 		// The pointer carries NO ActionResult outcome discriminator - the two 2xx shapes are disjoint.
 		assertNull(ref.get("outcome"));
+	}
+
+	@Test void a02_streamUrlAndCancelUrl_areResolved_notLiteralServletScheme() throws Exception {
+		// WORK-J0519 regression guard: AsyncJobRef.streamUrl/cancelUrl used to be plain, un-annotated Strings, so
+		// no serializer ever resolved the "servlet:" pseudo-scheme - the browser EventSource received the literal
+		// "servlet:/juneau-jobs/<id>/stream" and silently rejected the unsupported scheme (Hank's report). @Uri
+		// opts these fields into the same per-request URI resolution ViewsMixin's asset URLs already rely on
+		// (SerializedPojoProcessor wires req.getUriContext() into every serializer session, not just HTML's).
+		var body = c.post("/start", "").header("Accept", "application/json").run().assertStatus(200).getContent().asString();
+		var ref = Json.to(body, Map.class);
+		var streamUrl = String.valueOf(ref.get("streamUrl"));
+		var cancelUrl = String.valueOf(ref.get("cancelUrl"));
+		assertFalse(streamUrl.startsWith("servlet:"), streamUrl);
+		assertFalse(cancelUrl.startsWith("servlet:"), cancelUrl);
+		// Root-relative ("/...") or absolute (has a scheme+authority) are both browser-usable EventSource targets.
+		assertTrue(streamUrl.startsWith("/") || streamUrl.matches("^[a-zA-Z][a-zA-Z0-9+.-]*://.*"), streamUrl);
+		assertTrue(cancelUrl.startsWith("/") || cancelUrl.matches("^[a-zA-Z][a-zA-Z0-9+.-]*://.*"), cancelUrl);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

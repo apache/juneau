@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal {@link ActionResult} when
@@ -56,15 +57,22 @@ public class AsyncJobRef {
 	public String jobId;
 
 	/** The URL of the SSE progress stream (a browser {@code EventSource} target); embeds {@link #jobId}. */
+	@Uri
 	public String streamUrl;
 
 	/** The URL of the cancel endpoint (a non-safe POST); embeds {@link #jobId}. */
+	@Uri
 	public String cancelUrl;
 
 	/**
 	 * Builds a reference to the given job using {@code servlet:}-relative URLs against the {@link AsyncJobsMixin}
-	 * mount &mdash; the same {@code servlet:} convention {@code ViewsMixin} uses for its asset URLs, resolved by
-	 * Juneau's serializer against the current request.
+	 * mount &mdash; the same {@code servlet:} convention {@code ViewsMixin} uses for its asset URLs. {@link #streamUrl}
+	 * and {@link #cancelUrl} are {@link Uri &#64;Uri}-annotated, which is what opts them into resolution: Juneau's
+	 * serializer only rewrites the {@code servlet:} pseudo-scheme for a property whose {@code ClassMeta} or
+	 * {@code BeanPropertyMeta} reports {@code isUri()==true}, and a plain {@code String} field reports that only
+	 * via an explicit {@code @Uri} (see {@code MarshalledPropertyPostProcessor}); without it the literal
+	 * {@code "servlet:..."} string would reach the wire unresolved.  With the annotation present, every REST
+	 * response serializer (JSON, HTML, XML, ...) resolves it against the current request's {@code UriContext}.
 	 *
 	 * @param job The started job.  Must not be <jk>null</jk>.
 	 * @return A new reference carrying the job's id and its {@code servlet:}-relative stream + cancel URLs.
