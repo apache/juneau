@@ -58,6 +58,18 @@
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 
+	/**
+	 * The region container marker - MUST equal RegionDef's REGION_ATTR constant on the server
+	 * (juneau-rest-server-views).  Duplicated locally per juneau-views.js's own PANEL_SELECTOR-style convention
+	 * rather than reaching into juneau-regions.js's export for a string literal it already carries: this file may
+	 * run before that module's IIFE has (this file's own docstring already documents the analogous case for
+	 * juneau-views.js's `NS.init` not yet existing).
+	 */
+	const REGION_MARKER = "data-juneau-region";
+
+	/** This runtime's own name, for the barrier's ready()/registerRuntime() protocol and for a missing-runtime error. */
+	const RUNTIME_TOKEN = "juneau-pages.js";
+
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM)
 	// ==================================================================================================================
@@ -196,6 +208,63 @@
 		});
 	}
 
+	/**
+	 * Design §9.3's missing-runtime failure mode, at the panel enrolment site: a `[data-juneau-region]` node with
+	 * no `juneau-regions.js` loaded to run it renders loud, not blank - mirrors juneau-cards.js's own
+	 * `reportRegionsWithoutRuntime`, duplicated rather than shared for the same reason `activatePanelViews`'s
+	 * `warn()` helper above isn't shared with juneau-cards.js: no cross-module JS dependency exists to carry it.
+	 */
+	function reportRegionsWithoutRuntime(nodes) {
+		Array.prototype.forEach.call(nodes, function (el) {
+			error(RUNTIME_TOKEN + ": juneau-regions.js is not loaded; the region '"
+				+ (el.getAttribute(REGION_MARKER) || "") + "' cannot populate.");
+			el.setAttribute("data-juneau-region-state", "error");
+			const message = "This region could not be populated: juneau-regions.js is not loaded.";
+			const render = NS.init?.renderAsyncStatus;
+			if (typeof render === "function") render(el, "error", message);
+			else el.textContent = message;
+		});
+	}
+
+	/**
+	 * Region-container equivalent of `activatePanelViews` above (design §9.3's round-4 fix, caller #2 of 3): walks
+	 * `panel` for `[data-juneau-region]` nodes and enrols each one exactly once via `initRegion` directly (NOT
+	 * `enrolIn`, which re-derives its own `querySelectorAll` from `panel` - calling it here would re-walk a set this
+	 * function has already filtered, undoing the filtering).  This existed because the ORIGINAL two call sites -
+	 * `initCard` (never reached by a static, action-less card) and `activatePanelViews` (a table-only walk) - never
+	 * covered a table-free panel's region at all; this function IS the fix, not a supplement to it.
+	 *
+	 * Four exclusions decide ownership, the first three mirroring `activatePanelViews`'s own table exclusions
+	 * exactly (same rationale, same selectors, applied to `[data-juneau-region]` instead of
+	 * `table[data-juneau-view]`):
+	 *   1. `closest(PANEL_SELECTOR) !== panel` - a region belonging to a nested sub-panel is that sub-panel's own;
+	 *      it enrols when ITS OWN panel is activated, not when its sub-tab-agnostic ancestor is.
+	 *   2. `closest("[data-juneau-nested]")` - a region inside a nested/read-only table body is that table's own
+	 *      lazy-init concern, not this runtime's.
+	 *   3. `closest(".juneau-view-detail-panel")` - a row-detail panel's regions are the detail expander's
+	 *      (juneau-views.js's `expandDetailRow`), enrolled/torn-down on that panel's own open/close.
+	 *   4. `closest("[data-juneau-card]")` - the new exclusion this fix adds: a card-body region is
+	 *      juneau-cards.js's own (`enhanceOneCard`'s `enrolIn(card)` call); a page composing cards inside a tab
+	 *      must not double-enrol what the cards runtime already owns.  `initRegion` is idempotent per node, so a
+	 *      double-enrol would be harmless in isolation - the exclusion is about OWNERSHIP (which runtime's removal
+	 *      path tears it down), not merely about avoiding a redundant call.
+	 */
+	function activatePanelRegions(panel) {
+		const api = window.JuneauViews?.regions;
+		const nodes = panel.querySelectorAll("[" + REGION_MARKER + "]");
+		if (!api) {
+			if (nodes.length) reportRegionsWithoutRuntime(nodes);
+			return;
+		}
+		Array.prototype.forEach.call(nodes, function (el) {
+			if (el.closest(PANEL_SELECTOR) !== panel) return;
+			if (el.closest("[data-juneau-nested]")) return;
+			if (el.closest(".juneau-view-detail-panel")) return;
+			if (el.closest("[data-juneau-card]")) return;
+			api.initRegion(el);
+		});
+	}
+
 	/** Applies the resolved (tabId, subtabId) to `root`: toggles active classes, shows/hides panels, lazy-inits. */
 	function showActive(root, tabId, subtabId) {
 		const tabs = root.querySelectorAll(".jc-tab");
@@ -215,7 +284,10 @@
 		Array.prototype.forEach.call(panels, function (p) {
 			const active = panelMatches(p, tabId, subtabId);
 			p.classList.toggle("jc-active", active);
-			if (active) activatePanelViews(p);
+			if (active) {
+				activatePanelViews(p);
+				activatePanelRegions(p);
+			}
 		});
 	}
 
@@ -253,6 +325,10 @@
 	function initAllPages() {
 		const pages = document.querySelectorAll("[data-juneau-page]");
 		Array.prototype.forEach.call(pages, function (p) { initPage(p); });
+
+		// Design §10.11.1 rule 4: every page's synchronous showActive()->activatePanelRegions() walk above has
+		// already run by the time this line executes, so this runtime can truthfully declare its walk complete.
+		window.JuneauViews?.regions?.ready?.(RUNTIME_TOKEN);
 	}
 
 	// ==================================================================================================================
@@ -265,8 +341,13 @@
 		findById: findById,
 		resolveInitial: resolveInitial,
 		hashFor: hashFor,
+		activatePanelRegions: activatePanelRegions,
 		initAllPages: initAllPages
 	};
+
+	// Design §10.11.1 rule 4: presence is established by the asset loading and registering itself at parse time.
+	// Guarded so a page that never loads juneau-regions.js (a pages-only page with no region on it) loses nothing.
+	window.JuneauViews?.regions?.registerRuntime?.(RUNTIME_TOKEN);
 
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", initAllPages);

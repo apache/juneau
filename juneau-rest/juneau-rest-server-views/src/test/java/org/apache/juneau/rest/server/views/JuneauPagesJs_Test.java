@@ -165,4 +165,58 @@ class JuneauPagesJs_Test extends TestBase {
 		assertTrue(body.contains("querySelectorAll(\"[data-juneau-page]\")"), body);
 		assertTrue(body.contains("DOMContentLoaded"), body);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// WORK-J0522d: activatePanelRegions - real caller #2 of the design §9.3 enrolment walk, + the barrier's
+	// ready()/registerRuntime() protocol.  Source-shape only, matching this file's existing pattern for this
+	// module (activatePanelViews above gets the same treatment); the behavioral proof of the walk itself against
+	// the real juneau-regions.js runtime lives in the views module's Regions_* Node-harness tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_activatePanelRegionsWalksRegionMarkerAndCallsInitRegionDirectly() throws Exception {
+		var body = pagesJs();
+		var fn = functionBody(body, "activatePanelRegions");
+		assertTrue(fn.contains("querySelectorAll(\"[\" + REGION_MARKER + \"]\")"), fn);
+		// initRegion, NOT enrolIn - enrolIn re-derives its own querySelectorAll from the scope, which would re-walk
+		// (and un-filter) the set this function has already applied its four exclusions to.
+		assertTrue(fn.contains("api.initRegion(el)"), fn);
+		assertFalse(fn.contains("enrolIn("), fn);
+	}
+
+	@Test void c02_activatePanelRegionsAppliesAllFourOwnershipExclusions() throws Exception {
+		var body = pagesJs();
+		var fn = functionBody(body, "activatePanelRegions");
+		// 1: nested sub-panel ownership (same selector activatePanelViews's own table exclusion uses).
+		assertTrue(fn.contains("el.closest(PANEL_SELECTOR) !== panel"), fn);
+		// 2: a nested/read-only table body's own region.
+		assertTrue(fn.contains("el.closest(\"[data-juneau-nested]\")"), fn);
+		// 3: a row-detail panel's region is the detail expander's, not this runtime's.
+		assertTrue(fn.contains("el.closest(\".juneau-view-detail-panel\")"), fn);
+		// 4 (the NEW exclusion this fix adds): a card-body region is juneau-cards.js's own.
+		assertTrue(fn.contains("el.closest(\"[data-juneau-card]\")"), fn);
+	}
+
+	@Test void c03_activatePanelRegionsReportsLoudWhenRuntimeMissing() throws Exception {
+		var body = pagesJs();
+		var fn = functionBody(body, "activatePanelRegions");
+		assertTrue(fn.contains("reportRegionsWithoutRuntime(nodes)"), fn);
+		var report = functionBody(body, "reportRegionsWithoutRuntime");
+		assertTrue(report.contains("juneau-regions.js is not loaded"), report);
+		assertTrue(report.contains("data-juneau-region-state"), report);
+	}
+
+	@Test void c04_showActiveCallsActivatePanelRegionsAlongsideActivatePanelViews() throws Exception {
+		var body = pagesJs();
+		var fn = functionBody(body, "showActive");
+		assertTrue(fn.contains("activatePanelViews(p)"), fn);
+		assertTrue(fn.contains("activatePanelRegions(p)"), fn);
+		assertTrue(body.contains("activatePanelRegions: activatePanelRegions"), body);
+	}
+
+	@Test void c05_barrierProtocolWired() throws Exception {
+		var body = pagesJs();
+		assertTrue(body.contains("RUNTIME_TOKEN = \"juneau-pages.js\""), body);
+		assertTrue(body.contains("registerRuntime?.(RUNTIME_TOKEN)"), body);
+		assertTrue(body.contains("ready?.(RUNTIME_TOKEN)"), body);
+	}
 }

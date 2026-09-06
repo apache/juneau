@@ -129,6 +129,12 @@
 	 */
 	const CARD_MARKER = "data-juneau-card";
 
+	// The region container marker - MUST equal RegionDef's REGION_ATTR constant, and juneau-cards.js's/
+	// juneau-pages.js's own REGION_MARKER copies, on the server and in each sibling asset respectively.  Used only
+	// at the detail-expand enrolment call site below (expandDetailRow); this file is not itself a region-hosting
+	// runtime and never registers with the ready()/registerRuntime() barrier.
+	const REGION_MARKER = "data-juneau-region";
+
 	// DT1 table-overflow-wrap discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
 	// CSS-only "Approach D" overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
 	const TABLE_SCROLL_CLASS = "juneau-view-table-scroll";
@@ -2532,6 +2538,11 @@
 		if (!parentTr) return true;
 		const row = dt.row(parentTr);
 		if (row?.child?.isShown()) {
+			// Removal path 1/5 (design §9.3's teardown table): tear down any enrolled regions in this panel
+			// BEFORE the child row DOM is discarded, same reason as the nested-DataTables teardown right below -
+			// a torn-down region's in-flight fetch is aborted and its bus subscription released while the panel
+			// is still attached, never left to leak with the detached nodes.
+			NS.regions?.teardownRegionsIn(panel);
 			// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
 			// their listeners/timers leak with the detached nodes).
 			teardownNestedTables(panel);
@@ -2573,8 +2584,11 @@
 		const row = dt.row(tr);
 		if (!row || !row.length) return;
 		if (row.child.isShown()) {
-			// Tear down nested DataTables before hiding (their child-row DOM is about to be detached).
+			// Removal path 2/5: tear down enrolled regions + nested DataTables before hiding (their child-row
+			// DOM is about to be detached).  Region teardown ordered first, matching handleDetailSafeCollapseClick's
+			// own collapse branch above.
 			if (tr._juneauDetailPanel) {
+				NS.regions?.teardownRegionsIn(tr._juneauDetailPanel);
 				teardownNestedTables(tr._juneauDetailPanel);
 				teardownDetailBarSlot(tr._juneauDetailPanel);
 			}
@@ -2608,7 +2622,9 @@
 		openRows.forEach(function (tr) {
 			const row = dt.row(tr);
 			if (!row || !row.length || !row.child.isShown()) return;
+			// Removal path 3/5: same region-teardown-first ordering as toggleDetailRow's own collapse branch.
 			if (tr._juneauDetailPanel) {
+				NS.regions?.teardownRegionsIn(tr._juneauDetailPanel);
 				teardownNestedTables(tr._juneauDetailPanel);
 				teardownDetailBarSlot(tr._juneauDetailPanel);
 			}
@@ -3074,6 +3090,24 @@
 		});
 	}
 
+	/**
+	 * Design §9.3's missing-runtime failure mode, at the detail-panel enrolment site: a `[data-juneau-region]`
+	 * node with no `juneau-regions.js` loaded to run it renders loud, not blank - mirrors juneau-cards.js's and
+	 * juneau-pages.js's own `reportRegionsWithoutRuntime`, duplicated for the same reason those two don't share
+	 * it with each other: no cross-module JS dependency exists to carry it, and this file itself uses its own
+	 * already-local `renderAsyncStatus` rather than reaching through `NS.init` for a function this very module
+	 * defines.
+	 */
+	function reportRegionsWithoutRuntime(nodes) {
+		for (const el of nodes) {
+			if (window.console && console.error)
+				console.error("juneau-views.js: juneau-regions.js is not loaded; the region '"
+					+ (el.getAttribute(REGION_MARKER) || "") + "' cannot populate.");
+			el.setAttribute("data-juneau-region-state", "error");
+			renderAsyncStatus(el, "error", "This region could not be populated: juneau-regions.js is not loaded.");
+		}
+	}
+
 	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row) {
 		const gen = (ctx._detailGeneration.get(tr) || 0) + 1;
 		ctx._detailGeneration.set(tr, gen);
@@ -3115,6 +3149,12 @@
 		notifyPollPausedChange(ctx);
 		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
 		enhanceChromeInPanel(panel);
+		// Enrolment call site 3/3 (design §9.3): only now is the clone in the document, so a detail-panel region
+		// can find its host and its data-* declaration.  Runtime-agnostic like juneau-cards.js's own
+		// `enrolCardRegions`: `enrolIn` itself is idempotent per node and a no-op walk when the template carried
+		// no region at all, so this call is unconditional rather than gated on the template being known to have one.
+		if (NS.regions) NS.regions.enrolIn(panel);
+		else reportRegionsWithoutRuntime(panel.querySelectorAll("[" + REGION_MARKER + "]"));
 
 		function stillCurrent() {
 			return ctx._detailGeneration.get(tr) === gen && row.child.isShown();
@@ -5605,6 +5645,11 @@
 	}
 
 	function teardownTable(table, ctx) {
+		// Removal path 5/5 (B3, design §9.3): the reinit/destroy path.  First and unguarded - unlike the preDraw.dt
+		// guard below, there is no in-flight redraw to protect against here, and every region this table (or any
+		// open row-detail panel beneath it) still owns must be torn down before the DataTable instance is
+		// destroyed a few lines down, discarding the DOM structure regions were enrolled against.
+		NS.regions?.teardownRegionsIn(table);
 		if (ctx._pollTimers) {
 			ctx._pollTimers.forEach(function (id) { clearInterval(id); });
 			ctx._pollTimers = [];
@@ -5800,6 +5845,11 @@
 			// tearing down now would leave the still-open panel holding dead nested tables.  Same predicate the
 			// cancelling handler uses, so it does not matter which of the two jQuery runs first.
 			if (ctx._shouldCancelPollDraw?.()) return;
+			// Removal path 4/5: enrolled regions inside a still-open detail panel share the nested-table's own
+			// fate here - a redraw this handler does NOT cancel is about to discard the child-row DOM, so any
+			// region living in it is torn down in the same guarded branch, right before the nested-table teardown
+			// it has always run alongside.
+			NS.regions?.teardownRegionsIn(table);
 			teardownNestedTables(table);
 		});
 	}

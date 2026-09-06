@@ -67,10 +67,21 @@ class WidgetsJs_Cards_Test extends TestBase {
 			"isElementHidden: isElementHidden",
 			"renderStatus: renderStatus",
 			"initCard: initCard",
+			"enhanceOneCard: enhanceOneCard",
 			"observeGrid: observeGrid",
 			"initAll: initAll"
 		})
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
+	}
+
+	@Test void a05_regionEnrolmentCallSitesPresent() throws Exception {
+		// WORK-J0522d: design §9.3's card-body enrolment call site + barrier ready()/registerRuntime() protocol.
+		var body = cardsJs();
+		assertTrue(body.contains("enrolCardRegions(card)"), "enhanceOneCard must enrol a card's own regions");
+		assertTrue(body.contains("api.enrolIn(card)"), "region enrolment must go through the real regions.enrolIn");
+		assertTrue(body.contains("registerRuntime?.(RUNTIME_TOKEN)"), "must register with the barrier at load");
+		assertTrue(body.contains("ready?.(RUNTIME_TOKEN)"), "must declare ready() once the card walk completes");
+		assertTrue(body.contains("RUNTIME_TOKEN = \"juneau-cards.js\""));
 	}
 
 	@Test void a02_namespaceIsCardsNotViews() throws Exception {
@@ -346,5 +357,44 @@ class WidgetsJs_Cards_Test extends TestBase {
 		assertEquals(true, r.get("i_startedWhenActivated"));        // pages adds .jc-active -> timers restart
 		assertEquals(true, r.get("i_shownWhenActive"));
 		assertEquals(true, r.get("i_stoppedWhenDeactivated"));      // pages removes .jc-active -> timers stop
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Region enrolment (WORK-J0522d, design §9.3 round-5/round-6 fix) - driven against a fake JuneauViews.regions,
+	// since this module never depends on juneau-rest-server-views (see this module's pom.xml); the real region
+	// runtime's own contract is proven in the views module's Regions_* tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_registerRuntimeCalledAtModuleLoad() {
+		var r = dom();
+		assertEquals(true, r.get("regionsRegisterRuntimeCalledAtLoad"));
+	}
+
+	@Test void d02_enhanceOneCardEnrolsCardRegionsEvenWhenStatic() {
+		// A static card (no refresh attr) never reaches initCard at all - this is exactly the gap the round-5/6
+		// fix closes: groupFor now runs unconditionally, and the region still gets enrolled.
+		var r = dom();
+		assertEquals(true, r.get("j_enrolInCalledWithCard"));
+		assertEquals(true, r.get("j_groupHasRegion"));
+		assertEquals(true, r.get("j_staticCardStillNoControls"));
+	}
+
+	@Test void d03_missingRegionRuntimeFailsLoudNotBlank() {
+		var r = dom();
+		assertEquals(true, r.get("k_errorReported"));
+		assertEquals(true, r.get("k_stateError"));
+		assertEquals(true, r.get("k_hasErrorText"));
+	}
+
+	@Test void d04_observeGridActivatesConnectedVisibleRegionsOnly() {
+		var r = dom();
+		assertEquals(true, r.get("l_observerInstalledForRegionsOnly"));
+		assertEquals(true, r.get("l_visibleActivated"));
+		assertEquals(true, r.get("l_detachedNotActivated"));
+	}
+
+	@Test void d05_initAllDeclaresReadyOnceItsWalkCompletes() {
+		var r = dom();
+		assertEquals(true, r.get("m_readyCalledWithToken"));
 	}
 }

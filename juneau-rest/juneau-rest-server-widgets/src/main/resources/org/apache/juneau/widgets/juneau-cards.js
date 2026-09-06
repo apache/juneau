@@ -56,6 +56,17 @@
 	const CARD_REFRESH_TRIGGER_ATTR = "data-juneau-card-refresh-trigger";
 
 	/**
+	 * The region container marker - MUST equal RegionDef's REGION_ATTR constant on the server (juneau-rest-server-views).
+	 * This module never depends on that module (see this file's own header), so the identity attribute is a small,
+	 * deliberate copy rather than an import - the same convention CARD_MARKER/GRID_MARKER already follow for the
+	 * server-side constants they mirror.
+	 */
+	const REGION_MARKER = "data-juneau-region";
+
+	/** This runtime's own name, for the barrier's ready()/registerRuntime() protocol and for a missing-runtime error. */
+	const RUNTIME_TOKEN = "juneau-cards.js";
+
+	/**
 	 * Per-card action attributes - MUST equal AppHeaderTable's constants of the same names on the server, because a
 	 * card action IS a header action: `Card.actions` reuses that vocabulary rather than minting a second one.  This
 	 * runtime is the ENHANCEMENT OWNER for them (juneau-chrome.js only scans headers/bar slots at DOMContentLoaded,
@@ -258,6 +269,48 @@
 	}
 
 	/**
+	 * Resolves the region runtime, or null when juneau-regions.js is not loaded.  Deliberately read fresh on every
+	 * call rather than cached at module scope: this module's own IIFE may run before juneau-regions.js's does if a
+	 * page ever got the load order wrong, and a load-time cache would freeze that mistake in permanently.
+	 */
+	function regionsApi() {
+		return window.JuneauViews?.regions || null;
+	}
+
+	/**
+	 * Design §9.3's missing-runtime failure mode, at the card enrolment site: a `[data-juneau-region]` node with no
+	 * `juneau-regions.js` loaded to run it must not render as a silent blank card - it renders as a loud one.  One
+	 * console error naming the missing asset, per node, plus that node's own visible error state (the same
+	 * treatment an unknown populator name gets once the runtime IS present).  A card with no region pays nothing:
+	 * this is called only when at least one `[data-juneau-region]` node was actually found under the card.
+	 */
+	function reportRegionsWithoutRuntime(nodes) {
+		for (const el of nodes) {
+			window.console?.error?.(RUNTIME_TOKEN + ": juneau-regions.js is not loaded; the region '"
+				+ (el.getAttribute(REGION_MARKER) || "") + "' cannot populate.");
+			el.setAttribute("data-juneau-region-state", "error");
+			const message = "This region could not be populated: juneau-regions.js is not loaded.";
+			const render = window.JuneauViews?.init?.renderAsyncStatus;
+			if (typeof render === "function") render(el, "error", message);
+			else el.textContent = message;
+		}
+	}
+
+	/**
+	 * Enrols a card's region body/bodies (design §9.3: card-body regions enrol from `enhanceOneCard`, NOT from
+	 * `initCard` - a static card never reaches `initCard` at all).  Returns the minted handles so the caller can
+	 * push them onto its own group record; this function stays runtime-agnostic and owns no group of its own.
+	 */
+	function enrolCardRegions(card) {
+		const api = regionsApi();
+		if (!api) {
+			reportRegionsWithoutRuntime(card.querySelectorAll("[" + REGION_MARKER + "]"));
+			return [];
+		}
+		return api.enrolIn(card);
+	}
+
+	/**
 	 * Enhances one card's declared actions, scoped to that card: icon hydration, SAFE host-dispatch wiring, and MENU
 	 * triggers bound to the shared layer stack.  Idempotent (the chrome helpers mark what they wire).  With chrome
 	 * absent, LINK actions still navigate natively and the rest stay inert rather than half-wired.
@@ -386,18 +439,31 @@
 
 	/**
 	 * Installs a MutationObserver so a card's poll timers stop when it is hidden/removed and restart on re-show (no
-	 * juneau-pages.js hook).  It watches the grid subtree (own `hidden` / `style` / `class`) AND every ancestor pages
-	 * tab panel's `class`: a pages tab hide toggles `.jc-active` on an ancestor `.jc-panel` / `.jc-subpanel` that sits
-	 * ABOVE the grid, so a grid-subtree-only observer would never see it.  With no panel ancestor the grid watch is the
-	 * sole fallback (a card hidden by its own `hidden` / inline `style`).
+	 * juneau-pages.js hook), AND runs the deferred first populate for an enrolled region that has just become
+	 * visible (design §9.3 rule 5's cards-runtime half: a region enrolled hidden defers its first populate until
+	 * `reason:"activate"`, and this observer is the only signal the cards runtime has for "my panel just activated").
+	 * It watches the grid subtree (own `hidden` / `style` / `class`) AND every ancestor pages tab panel's `class`: a
+	 * pages tab hide toggles `.jc-active` on an ancestor `.jc-panel` / `.jc-subpanel` that sits ABOVE the grid, so a
+	 * grid-subtree-only observer would never see it.  With no panel ancestor the grid watch is the sole fallback (a
+	 * card hidden by its own `hidden` / inline `style`).
+	 *
+	 * <p>The two loops are independent and neither may short-circuit the other: a grid with both a polling card and
+	 * a static region-only card runs both on every tick.  `region.el.isConnected && !isElementHidden(region.el)` is
+	 * stated positively rather than borrowed from `controls`' own predicate, which is missing the `isConnected`
+	 * conjunct and would otherwise run a deferred POPULATE (not merely restart a timer) against a detached host.
 	 */
-	function observeGrid(grid, controls) {
+	function observeGrid(grid, controls, regions) {
 		if (window.MutationObserver === undefined) return null;
+		const regionList = regions || [];
 		const obs = new window.MutationObserver(function () {
 			for (const c of controls) {
 				if (!c || !c.intervalMs) continue;
 				if (isElementHidden(c.card) || window.document?.hidden) c.stop();
 				else c.start();
+			}
+			for (const r of regionList) {
+				if (!r || !r.el) continue;
+				if (r.el.isConnected && !isElementHidden(r.el)) regionsApi()?.activateRegion?.(r);
 			}
 		});
 		obs.observe(grid, { attributes: true, attributeFilter: ["hidden", "style", "class"], subtree: true, childList: true });
@@ -407,24 +473,38 @@
 		return obs;
 	}
 
-	/** Resolves (creating if absent) the group record for a card's enclosing grid, or the card itself when grid-less. */
+	/**
+	 * Resolves (creating if absent) the group record for a card's enclosing grid, or the card itself when grid-less.
+	 * `regions` is the enrolled-region list this card's grid owns (design §9.3's round-6/round-7 correction): it is
+	 * a real field written by `enhanceOneCard` after `enrolIn` returns, not a `querySelectorAll` re-derived on every
+	 * observer tick - which would both re-derive a set `enrolIn` already computed synchronously and reach region
+	 * nodes this grid does not own (e.g. one inside a cloned row-detail panel, which is the expander's).
+	 */
 	function groupFor(card, groups) {
 		const grid = typeof card.closest === "function" ? card.closest("[" + GRID_MARKER + "]") : null;
 		const root = grid || card;
 		for (const group of groups)
 			if (group.root === root) return group;
-		const g = { root: root, controls: [] };
+		const g = { root: root, controls: [], regions: [] };
 		groups.push(g);
 		return g;
 	}
 
-	/** Enhances one card (refresh handshake + declared actions); a refreshable card also joins its group's controls. */
+	/**
+	 * Enhances one card (refresh handshake + declared actions + its region body/bodies); a refreshable card also
+	 * joins its group's controls.  `groupFor` runs UNCONDITIONALLY (design §9.3 round-5 correction) - a static
+	 * card's region is exactly the kind of per-card capability, unrelated to refreshability, that a declared action
+	 * catalog already is, and the observer install predicate below depends on `group.regions` being populated for
+	 * a grid of all-static cards too.
+	 */
 	function enhanceOneCard(card, groups) {
 		const refreshable = !!card.getAttribute(CARD_REFRESH_ATTR);
 		const ctl = refreshable ? initCard(card) : null;
-		if (refreshable && !ctl) return;                          // refused at the handshake - enhance nothing
+		if (refreshable && !ctl) return;                          // refused at the handshake - enhance nothing, regions included
 		enhanceCardActions(card);
-		if (ctl) groupFor(card, groups).controls.push(ctl);
+		const group = groupFor(card, groups);
+		if (ctl) group.controls.push(ctl);
+		for (const handle of enrolCardRegions(card)) group.regions.push(handle);
 	}
 
 	/**
@@ -444,7 +524,11 @@
 			enhanceOneCard(card, groups);
 
 		for (const group of groups)
-			if (group.controls.length) observeGrid(group.root, group.controls);
+			if (group.controls.length || group.regions.length) observeGrid(group.root, group.controls, group.regions);
+
+		// Design §10.11.1 rule 4: enrolment is synchronous and every card above has already been walked by the time
+		// this line runs, so declaring readiness here is a statement this runtime can make truthfully.
+		regionsApi()?.ready?.(RUNTIME_TOKEN);
 	}
 
 	NS.init = {
@@ -463,9 +547,15 @@
 		hasCardActions: hasCardActions,
 		enhanceCardActions: enhanceCardActions,
 		initCard: initCard,
+		enhanceOneCard: enhanceOneCard,
 		observeGrid: observeGrid,
 		initAll: initAll
 	};
+
+	// Design §10.11.1 rule 4: presence is established by the asset loading and registering itself at parse time,
+	// not by a document scan - so there is no list to keep in sync and a page that never enrols a region never
+	// arms the barrier this call feeds.  Guarded so a page that never loads juneau-regions.js loses nothing.
+	regionsApi()?.registerRuntime?.(RUNTIME_TOKEN);
 
 	if (window.document?.readyState === "loading") {
 		window.document.addEventListener("DOMContentLoaded", initAll);

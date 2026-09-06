@@ -157,6 +157,31 @@ function fakeClear(id) { delete timers[id]; }
 let observerCallback = null;
 function FakeMutationObserver(cb) { observerCallback = cb; this.observe = function () {}; this.disconnect = function () {}; }
 
+// A fake JuneauViews.regions - juneau-cards.js never depends on the real juneau-regions.js (widgets never depends
+// on views; see this module's pom.xml), so its region-enrolment call sites are proven against a stand-in that
+// records every call, the same division of labour the fake fetch/MutationObserver above already use.  `enrolIn`
+// mints a plain handle per `[data-juneau-region]` node under the given scope and marks it, mirroring the real
+// runtime's `el._juneauRegion` idempotency mark closely enough for these tests (this file does not re-prove
+// juneau-regions.js's own contract - that lives in the views module's Regions_* tests).
+const regionCalls = { enrolIn: [], activateRegion: [], teardownRegionsIn: [], registerRuntime: [], ready: [] };
+let nextRegionId = 1;
+function makeFakeRegions() {
+	return {
+		enrolIn: function (scopeEl) {
+			regionCalls.enrolIn.push(scopeEl);
+			return scopeEl.querySelectorAll('[data-juneau-region]').map(function (regionEl) {
+				const handle = { el: regionEl, key: regionEl.getAttribute('data-juneau-region'), deferred: false, torn: false, id: nextRegionId++ };
+				regionEl._juneauRegion = handle;
+				return handle;
+			});
+		},
+		activateRegion: function (region) { regionCalls.activateRegion.push(region); },
+		teardownRegionsIn: function (root) { regionCalls.teardownRegionsIn.push(root); },
+		registerRuntime: function (token) { regionCalls.registerRuntime.push(token); },
+		ready: function (token) { regionCalls.ready.push(token); }
+	};
+}
+
 const iconsResolved = [];
 const document = {
 	readyState: 'loading',
@@ -168,7 +193,10 @@ const window = {
 	document: document,
 	console: console,
 	MutationObserver: FakeMutationObserver,
-	JuneauViews: { icons: { resolveIcon: function (n) { iconsResolved.push(n); return '<svg data-icon="' + n + '"></svg>'; } } },
+	JuneauViews: {
+		icons: { resolveIcon: function (n) { iconsResolved.push(n); return '<svg data-icon="' + n + '"></svg>'; } },
+		regions: makeFakeRegions()
+	},
 	setTimeout: fakeSetTimeout, setInterval: fakeSetInterval, clearTimeout: fakeClear, clearInterval: fakeClear
 };
 window.fetch = makeFetch({ contractVersion: '1', fields: { k: 'FRESH' } });
@@ -184,6 +212,9 @@ vm.runInNewContext(fs.readFileSync(path.resolve(cardsJsPath), 'utf8'), sandbox, 
 
 const I = window.JuneauCards?.init;
 const out = { hasInit: typeof I?.initCard === 'function' };
+// Captured immediately: registerRuntime() runs once at IIFE top level, during the vm.runInNewContext load above,
+// not from any test action below.
+out.regionsRegisterRuntimeCalledAtLoad = regionCalls.registerRuntime.indexOf('juneau-cards.js') >= 0;
 
 (async function () {
 	if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); return; }
@@ -300,6 +331,59 @@ const out = { hasInit: typeof I?.initCard === 'function' };
 	panel.setAttribute('class', 'jc-panel');                               // pages hides this tab again
 	observerCallback();
 	out.i_stoppedWhenDeactivated = ctlI.running === false;
+
+	// J) Region enrolment (design §9.3 round-5/round-6 fix): a STATIC card (no refresh attr - never reaches
+	// initCard) with a region body still gets its region enrolled, and `groupFor` runs unconditionally so the
+	// group record exists with `regions` populated even though `controls` stays empty.
+	regionCalls.enrolIn = [];
+	const cardJ = buildCard({ contract: null, refresh: null });
+	const regionElJ = el('div'); regionElJ.setAttribute('data-juneau-region', 'stats');
+	cardJ._parts.body.appendChild(regionElJ);
+	const groupsJ = [];
+	I.enhanceOneCard(cardJ, groupsJ);
+	out.j_enrolInCalledWithCard = regionCalls.enrolIn.length === 1 && regionCalls.enrolIn[0] === cardJ;
+	out.j_groupHasRegion = groupsJ.length === 1 && groupsJ[0].regions.length === 1
+		&& groupsJ[0].regions[0].el === regionElJ;
+	out.j_staticCardStillNoControls = groupsJ[0].controls.length === 0;
+
+	// K) Missing region runtime (design §9.3's failure mode): with no `JuneauViews.regions` loaded, a
+	// `[data-juneau-region]` node renders LOUD (one console.error naming the missing asset + a visible error
+	// state), never silently blank.
+	const cardK = buildCard({ contract: null, refresh: null });
+	const regionElK = el('div'); regionElK.setAttribute('data-juneau-region', 'missing');
+	cardK._parts.body.appendChild(regionElK);
+	const errorsK = [];
+	const savedRegions = window.JuneauViews.regions;
+	const origError = window.console.error;
+	window.console.error = function (msg) { errorsK.push(String(msg)); };
+	window.JuneauViews.regions = null;
+	I.enhanceOneCard(cardK, []);
+	window.JuneauViews.regions = savedRegions;
+	window.console.error = origError;
+	out.k_errorReported = errorsK.some(function (m) { return m.indexOf('juneau-regions.js is not loaded') >= 0; });
+	out.k_stateError = regionElK.getAttribute('data-juneau-region-state') === 'error';
+	out.k_hasErrorText = regionElK.textContent.indexOf('juneau-regions.js is not loaded') >= 0;
+
+	// L) observeGrid's region loop (design §9.3 rule 5's cards-runtime half): a connected, visible enrolled region
+	// gets activateRegion() called on it every tick; a detached one never does.
+	regionCalls.activateRegion = [];
+	const visibleRegionEl = el('div'); visibleRegionEl.isConnected = true;
+	const detachedRegionEl = el('div'); detachedRegionEl.isConnected = false;
+	const rVisible = { el: visibleRegionEl, deferred: true, torn: false };
+	const rDetached = { el: detachedRegionEl, deferred: true, torn: false };
+	const gridL = el('section'); gridL.dataset.juneauCardGrid = '1';
+	observerCallback = null;
+	const obsL = I.observeGrid(gridL, [], [rVisible, rDetached]);
+	out.l_observerInstalledForRegionsOnly = obsL != null && observerCallback != null;
+	observerCallback();
+	out.l_visibleActivated = regionCalls.activateRegion.indexOf(rVisible) >= 0;
+	out.l_detachedNotActivated = regionCalls.activateRegion.indexOf(rDetached) < 0;
+
+	// M) ready() protocol: initAll()'s card walk in this harness sees no cards (document.querySelectorAll is
+	// stubbed to return []), but that walk still completes synchronously, so ready() must fire regardless.
+	regionCalls.ready = [];
+	I.initAll();
+	out.m_readyCalledWithToken = regionCalls.ready.indexOf('juneau-cards.js') >= 0;
 
 	process.stdout.write(JSON.stringify(out));
 })();
