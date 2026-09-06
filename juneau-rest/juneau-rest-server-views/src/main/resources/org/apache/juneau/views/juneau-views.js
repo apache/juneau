@@ -96,8 +96,8 @@
 	 * The declarative dialog-form contract version (shared-layer-stack feature): ModalDef.CONTRACT_VERSION / FormDef.CONTRACT_VERSION on
 	 * the server, both the SAME value as this one.  Fail-loud ONLY when a form is present: a form-bearing modal-open
 	 * envelope whose top-level contractVersion or nested form.contractVersion is missing or does not equal this
-	 * baked-in value is a visible refusal and the dialog does NOT open.  A confirm-only modal (no form) is unversioned
-	 * and is NEVER refused on a missing version (h5) - the naive inequality test must not run on that path.
+	 * baked-in value is a visible refusal and the dialog does NOT open.  A confirm-only modal (no form) may be
+	 * unversioned and is NEVER refused on a missing version (h5) - the naive inequality test must not run on that path.
 	 *
 	 * ONE literal is compared against BOTH versions, so all three constants move together or nothing opens.  "2" adds
 	 * the optional FormDef.sections shape (a ribbon strip over one visible pane) alongside the flat fields list.
@@ -4142,7 +4142,7 @@
 							return;
 						}
 					}
-					// Confirm-only fetched envelope (no form): unversioned; do NOT test contractVersion.
+					// Confirm-only fetched envelope (no form): may be unversioned; do NOT test contractVersion.
 					showActionDialog(payload, action, table, tr, ctx);
 				});
 			})

@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.*;
  * Always-on coverage for the dialog-form contract-version handshake (h5): a form-bearing modal opens only when BOTH
  * the modal top-level and the nested form {@code contractVersion} equal the ONE literal the runtime bakes in; a wrong
  * or missing version on either is a visible refusal and the dialog does not open.  A confirm-only envelope (no form) -
- * whether fetched or a local blank-form-token prompt - stays unversioned and always opens.
+ * whether fetched or a local blank-form-token prompt - may be unversioned and always opens.
  *
  * <p>
  * Because one literal is compared against both halves, the three constants ({@link ModalDef#CONTRACT_VERSION},
@@ -176,7 +176,7 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 	/**
 	 * Four independent two-flag checks against the behavioral report: a wrong modal version refuses without
 	 * opening, a missing form version refuses without opening, a stale form under a current modal also refuses,
-	 * and a confirm-only fetched envelope stays unversioned and opens cleanly.
+	 * and a confirm-only fetched envelope may be unversioned and opens cleanly.
 	 */
 	@ParameterizedTest
 	@MethodSource("b02_reportHasTwoTrueFlagsProvider")

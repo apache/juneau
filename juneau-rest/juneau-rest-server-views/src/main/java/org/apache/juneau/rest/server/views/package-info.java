@@ -64,10 +64,12 @@
  *
  * <p>
  * Both beans {@code implements Widget}: each declares a {@code CONTRACT_VERSION} and a {@link
- * org.apache.juneau.rest.server.widgets.FormDef#validate() validate()} invariant check, and the serving path stamps
- * the instance version via {@link org.apache.juneau.rest.server.widgets.FormDef#checked() checked()}.  When a form is
- * present the client enforces a fail-loud handshake &mdash; BOTH the modal and the nested form version must match the
- * runtime's baked-in version or the dialog refuses to open; a confirm-only dialog (no form) stays unversioned.
+ * org.apache.juneau.rest.server.widgets.FormDef#validate() validate()} invariant check, and each guarantees the
+ * instance version is present from construction, confirm-only or form-bearing alike &mdash; independent of whether
+ * the serving path calls {@link org.apache.juneau.rest.server.widgets.FormDef#checked() checked()} (WORK-J0520).
+ * When a form is present the client enforces a fail-loud handshake &mdash; BOTH the modal and the nested form
+ * version must match the runtime's baked-in version or the dialog refuses to open; a confirm-only dialog (no form)
+ * is never version-gated, even though it now carries the same version.
  *
  * <h5 class='section'>Relocated: the dialog beans now live in the widgets module</h5>
  * <p>

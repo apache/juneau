@@ -19,7 +19,7 @@
  * contract-version.cjs - always-on Node harness for the dialog-form contract-version handshake (contract-version-445h, h5):
  * a form-bearing modal opens ONLY when BOTH the modal top-level and the nested form contractVersion equal the ONE
  * baked-in literal; a wrong or missing version on either is a visible refusal and the dialog does not open.  A
- * confirm-only envelope (no form) - whether fetched or a local blank-form-token prompt - stays UNVERSIONED and
+ * confirm-only envelope (no form) - whether fetched or a local blank-form-token prompt - may be UNVERSIONED and
  * always opens.
  *
  * The three constants (ModalDef.CONTRACT_VERSION, FormDef.CONTRACT_VERSION, and the runtime literal) move in
@@ -115,7 +115,7 @@ const FORM = { contractVersion: CURRENT, fields: FIELDS };
 	out.currentModalStaleForm_refusal = refusalState(tr3c) === 'refusal';
 	drain();
 
-	// Case 4: confirm-only FETCHED envelope (no form) -> unversioned, opens even with no contractVersion.
+	// Case 4: confirm-only FETCHED envelope (no form) -> may be unversioned, opens even with no contractVersion.
 	serve({ title: 'Escalate?' });
 	const tr4 = env.el('tr');
 	I.openActionDialog({ id: 'esc', label: 'Escalate', form: '/data/x/esc-form' }, table, tr4, {});
