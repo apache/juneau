@@ -89,8 +89,12 @@ function clickAction(fx) {
 
 	// --- A dialog-declared action clicked from the detail header MUST open the dialog seam, not submit direct ---
 	(function () {
+		// Literal (non-templated) endpoint deliberately: this fixture's `ctx.dataTable` is a bare `{}` stub with no
+		// real row lookup, so a `{property}`-templated endpoint would now (WORK-J0521, B1b) refuse the submission
+		// as empty-substitution - a fact about the fixture, not about dialog routing, which is what this test
+		// actually exercises.
 		const action = {
-			id: 'esc', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/{id}/esc',
+			id: 'esc', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/42/esc',
 			confirm: 'Escalate this row?'
 		};
 		const fx = buildFixture(action);
@@ -132,7 +136,7 @@ function clickAction(fx) {
 
 	// --- Control: a NON-dialog detail action must keep going straight through submitRowAction, unchanged --------
 	(function () {
-		const action = { id: 'ack', label: 'Ack', method: 'POST', endpoint: '/rows/{id}/ack' };
+		const action = { id: 'ack', label: 'Ack', method: 'POST', endpoint: '/rows/42/ack' };   // literal, see note above
 		const fx = buildFixture(action);
 		const fetchCalls = [];
 		env.setFetch(function (url, opts) {
@@ -153,7 +157,7 @@ function clickAction(fx) {
 	// --- minted idempotencyKey it returns rides the eventual submit alongside targetId (HIGH-8) ------------------
 	await (async function () {
 		const action = {
-			id: 'esc2', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/{id}/esc2',
+			id: 'esc2', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/42/esc2',   // literal, see note above
 			form: '/data/x/esc2-form'
 		};
 		const fx = buildFixture(action);

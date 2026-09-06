@@ -44,7 +44,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 	<tr><td>{@code label}</td><td>string</td><td>The menu-item text.</td></tr>
  * 	<tr><td>{@code icon}</td><td>string</td><td>Optional glyph name (resolved by the shared icon registry).</td></tr>
  * 	<tr><td>{@code endpoint}</td><td>string</td><td>The URL the action submits to; may carry a {@code {property}}
- * 		token substituted from the current row (see {@link #endpoint(String) endpoint}).</td></tr>
+ * 		token substituted from the current row - a value that cannot be resolved refuses the submission (see
+ * 		{@link #endpoint(String) endpoint}).</td></tr>
  * 	<tr><td>{@code method}</td><td>{@code POST}|{@code PUT}|{@code PATCH}|{@code DELETE}</td>
  * 		<td>The non-safe HTTP method (see {@link Method}).</td></tr>
  * 	<tr><td>{@code confirm}</td><td>string</td><td>Optional confirmation prompt shown before the submit.</td></tr>
@@ -77,9 +78,11 @@ import org.apache.juneau.rest.server.widgets.Op;
  * <p>
  * {@link #endpoint(String) endpoint} may carry a {@code {property}} token (e.g. {@code {id}}, as in the example
  * below) that the client-side runtime substitutes from the row before submitting &mdash; the SAME mechanism, same
- * escaping, and same no-value behavior as {@link Column#href(String) Column.href}'s {@code linked} renderer
- * (WORK-J0509); see {@link #endpoint(String) endpoint}'s javadoc for the full contract.  An endpoint with no token
- * is unaffected and submits exactly as it always has.
+ * token grammar, and same per-value escaping as {@link Column#href(String) Column.href}'s {@code linked} renderer
+ * (WORK-J0509).  Unlike {@code Column.href}, this URL is <i>submitted</i> rather than rendered, so an unresolved
+ * substitution <b>refuses the submission</b> (WORK-J0521) instead of firing a malformed write; see
+ * {@link #endpoint(String) endpoint}'s javadoc for the full contract.  An endpoint with no token is unaffected and
+ * submits exactly as it always has.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -290,15 +293,30 @@ public class RowAction {
 	 * from the CURRENT ROW's own already-fetched data at submit time &mdash; the client-side ({@code
 	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical
 	 * {@code interpolateHref} helper {@link Column#href(String) Column.href}'s {@code linked} renderer uses
-	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}), the SAME
-	 * per-value {@code encodeURIComponent} escaping, and the SAME "row lacks the field, or its value is
-	 * <jk>null</jk>" &rarr; substitutes to an empty string behavior &mdash; never a request-time exception, and
-	 * never a literal {@code {property}} left in the issued URL.
+	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and the
+	 * SAME per-value {@code encodeURIComponent} escaping &mdash; unchanged.
 	 *
 	 * <p>
-	 * <b>Backward compatible by construction:</b> an {@code endpoint} with no {@code {...}} token is issued
-	 * byte-identical to how it always was &mdash; substitution is a no-op replace over a template with nothing to
-	 * match.
+	 * <b>Divergence from {@code Column.href} is deliberate (WORK-J0521):</b> because this URL is <i>submitted</i>
+	 * rather than merely rendered, the runtime <b>refuses the submission</b> (renders a visible refusal; issues no
+	 * request; never a request-time exception) instead of firing a malformed or undeclared write, when:
+	 * <ul>
+	 * 	<li>a {@code {property}} token's row value is absent, <jk>null</jk>, or blank;
+	 * 	<li>the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped
+	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer);
+	 * 	<li>the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise
+	 * 		normalize into a different, undeclared endpoint); or
+	 * 	<li>no {@code endpoint} is declared at all.
+	 * </ul>
+	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is
+	 * not a write.
+	 *
+	 * <p>
+	 * <b>Backward compatible, narrowed (WORK-J0521):</b> an {@code endpoint} with no {@code {...}} token is still
+	 * issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,
+	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now
+	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a
+	 * row with no {@code id}) rather than issuing it.
 	 *
 	 * @param value The new value.
 	 * @return This object.

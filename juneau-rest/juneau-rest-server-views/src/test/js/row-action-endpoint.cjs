@@ -76,8 +76,10 @@ const ackAction = { id: 'ack', label: 'Acknowledge', endpoint: 'servlet:/inciden
 const literalAction = { id: 'ack', label: 'Acknowledge', endpoint: 'servlet:/incidents/ack', method: 'POST' };
 const multiAction = { id: 'ack', endpoint: '/x/{id}/status/{status}', method: 'POST' };
 
-// Case 1: a `{id}` template resolves against the current row - same token grammar as Column.href.
-out.idTemplate_resolved = I.buildActionRequest(ackAction, TOKEN, null, null, { id: 'a1' }).url;
+// Case 1: a `{id}` template resolves against the current row - same token grammar as Column.href.  The whole
+// marker is captured (not `.url`) because this SAME call, re-run by the harness a second time with
+// juneau-renders.js absent, becomes a WORK-J0521/S5 refusal (`unresolved-endpoint`) rather than a fired URL.
+out.idTemplate_resolved = I.buildActionRequest(ackAction, TOKEN, null, null, { id: 'a1' });
 
 // Case 2: backward compatibility - a literal endpoint with NO `{...}` token is preserved byte-identical,
 // with or without a rowData argument at all.
@@ -85,12 +87,13 @@ out.literal_withRowData = I.buildActionRequest(literalAction, TOKEN, null, null,
 out.literal_noRowData = I.buildActionRequest(literalAction, TOKEN, null, null).url;
 out.literal_preFeatureCallSignature = I.buildActionRequest(literalAction, TOKEN, null).url;   // pre-J0509 4-arg call
 
-// Case 3: no-id / null-id row behavior mirrors Column.href's interpolateHref exactly - missing key, explicit
-// null, and no rowData at all every substitute to "" (never a thrown error, never a literal `{id}` surviving).
-out.noId_missingKey = I.buildActionRequest(ackAction, TOKEN, null, null, {}).url;
-out.noId_explicitNull = I.buildActionRequest(ackAction, TOKEN, null, null, { id: null }).url;
-out.noId_absentRowData = I.buildActionRequest(ackAction, TOKEN, null, null, null).url;
-out.noId_undefinedRowData = I.buildActionRequest(ackAction, TOKEN, null, null, undefined).url;
+// Case 3 (WORK-J0521, B1b flip): a missing/null/absent-rowData row value for a `{property}` token now REFUSES
+// the write (empty-substitution would otherwise collapse the URL to a malformed "/x//y") rather than firing the
+// substituted-to-empty-string URL - so the whole marker is captured, not `.url` (a refusal carries no `url`).
+out.noId_missingKey = I.buildActionRequest(ackAction, TOKEN, null, null, {});
+out.noId_explicitNull = I.buildActionRequest(ackAction, TOKEN, null, null, { id: null });
+out.noId_absentRowData = I.buildActionRequest(ackAction, TOKEN, null, null, null);
+out.noId_undefinedRowData = I.buildActionRequest(ackAction, TOKEN, null, null, undefined);
 
 // Case 4: the substituted value is URL-encoded per-token, exactly like Column.href's interpolateHref.
 out.encoded_slashAndSpace = I.buildActionRequest(ackAction, TOKEN, null, null, { id: 'a/1 b' }).url;
@@ -112,5 +115,48 @@ out.refusal_blankToken = I.buildActionRequest(ackAction, '   ', null, null, { id
 // Case 8: substituteRowActionEndpoint itself, direct - the exact helper buildActionRequest delegates to.
 out.helper_direct = I.substituteRowActionEndpoint('/x/{id}', { id: 'a1' });
 out.helper_noToken = I.substituteRowActionEndpoint('/x/ack', { id: 'a1' });
+
+// -----------------------------------------------------------------------------------------------------------
+// WORK-J0521: write-path URL-safety hardening for RowAction.endpoint substitution - B1 (`..` path-walk +
+// empty-substitution refusal), S3 (row-less inheritance, closed for free), S5 (residual-token refusal).
+// -----------------------------------------------------------------------------------------------------------
+
+// Case 9 (B1a, the headline): a row value of `..` rides encodeURIComponent unescaped (`.` is RFC 3986
+// unreserved) and must be refused, not fired at the browser-normalized `/ack`.
+out.dotdot_rowValue = I.buildActionRequest(ackAction, TOKEN, null, null, { id: '..' });
+
+// Case 10: an author-declared `..` in the template itself, no row value involved - the deliberate consequence
+// noted in the design (§4.5): the resolved-URL check also catches a nonsensical declared endpoint.
+out.dotdot_inTemplate = I.buildActionRequest(
+	{ id: 'ack', endpoint: 'servlet:/incidents/../ack', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+
+// Case 11 (B1b trim widening): a whitespace-only row value is blank per isBlankToken, so it refuses exactly
+// like a missing/null value - never a real target.
+out.whitespaceOnly_rowValue = I.buildActionRequest(ackAction, TOKEN, null, null, { id: '   ' });
+
+// Case 12 (B1c, the no-endpoint guard): a blank/absent/whitespace action.endpoint refuses before any
+// substitution work, mirroring buildJobCancelRequest's no-cancel-url precedent.
+out.blankEndpoint_absent = I.buildActionRequest({ id: 'ack', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+out.blankEndpoint_null = I.buildActionRequest({ id: 'ack', endpoint: null, method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+out.blankEndpoint_empty = I.buildActionRequest({ id: 'ack', endpoint: '', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+out.blankEndpoint_whitespace = I.buildActionRequest({ id: 'ack', endpoint: '   ', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+
+// Case 13 (Terra should-fix, query-context coverage): a row value cannot inject `&`/`=`/`#` into a query
+// string - encodeURIComponent already blocks this; pinning it as explicit coverage per the design's §8.1.
+out.queryContext_resolved = I.buildActionRequest(
+	{ id: 'ack', endpoint: 'servlet:/incidents/ack?target={id}', method: 'POST' }, TOKEN, null, null, { id: 'a&b=c#d' });
+
+// Case 14 (S3, row-less ribbon-dialog inheritance): rowData === null, matching rowDataForTr(ctx, null) on the
+// row-less ribbon-dialog seam - the SAME guard (empty-substitution) that b03/noId_absentRowData proves, named
+// separately so a reader tracing S3 finds a case for it.
+out.rowLess_idTemplate = I.buildActionRequest(ackAction, TOKEN, null, null, null);
+
+// Case 15: `..` INSIDE an encodeURIComponent-escaped value must NOT refuse - proves hasDotDotSegment is not
+// over-broad (a careless `url.includes("..")` implementation would get this wrong; the encoded slashes mean
+// there is no `..` PATH SEGMENT in the resolved URL).
+out.dotdot_encodedInsideValue = I.buildActionRequest(ackAction, TOKEN, null, null, { id: 'a/../b' });
+
+// Case 16: one blank token among several - the guard is per-token, not "the first token".
+out.multiToken_oneBlank = I.buildActionRequest(multiAction, TOKEN, null, null, { id: 'a1' });
 
 console.log(JSON.stringify(out));

@@ -179,9 +179,11 @@ class ViewsJs_RowActions_Test extends TestBase {
 	@Test void a13_buildActionRequestSubstitutesEndpointViaTheSameHelperColumnHrefUses() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function buildActionRequest(");
-		// The 5th param + the substitution call - not `action.endpoint` issued verbatim anymore.
+		// The 5th param, and the substitution call hoisted into a local (WORK-J0521, so the resolved-URL guards
+		// can see it) - `url: url`, not `url: action.endpoint` and not the inline substitution call anymore.
 		assertTrue(fn.contains("buildActionRequest(action, token, headerName, extra, rowData)"), fn);
-		assertTrue(fn.contains("url: substituteRowActionEndpoint(action.endpoint, rowData)"), fn);
+		assertTrue(fn.contains("substituteRowActionEndpoint(action.endpoint, rowData)"), fn);
+		assertTrue(fn.contains("url: url"), fn);
 		assertFalse(fn.contains("url: action.endpoint"), fn);
 	}
 
@@ -210,6 +212,74 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(start >= 0, () -> signature + " not found:\n" + body);
 		var end = body.indexOf("\n\t}", start);
 		return body.substring(start, end < 0 ? body.length() : end);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// WORK-J0521: write-path URL-safety hardening - four fail-closed guards appended to buildActionRequest
+	// (no-endpoint, empty-substitution, unresolved-endpoint, unsafe-endpoint), a shared hasDotDotSegment
+	// predicate adopted by both the read path (isSafeDetailUrl) and this write path, and a shared
+	// `{property}` token-grammar literal that MUST stay in sync with juneau-renders.js's interpolateHref.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void a16_buildActionRequestGuardsAllFourNewReasonsAfterTheOriginalTwo() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function buildActionRequest(");
+		var safeMethodIdx = fn.indexOf("isSafeMethod(action.method)");
+		var tokenIdx = fn.indexOf("isBlankToken(token)");
+		var noEndpointIdx = fn.indexOf("reason: \"no-endpoint\"");
+		var emptySubIdx = fn.indexOf("reason: \"empty-substitution\"");
+		var unresolvedIdx = fn.indexOf("reason: \"unresolved-endpoint\"");
+		var unsafeIdx = fn.indexOf("reason: \"unsafe-endpoint\"");
+		assertTrue(safeMethodIdx >= 0 && tokenIdx >= 0 && noEndpointIdx >= 0 && emptySubIdx >= 0
+			&& unresolvedIdx >= 0 && unsafeIdx >= 0, fn);
+		// b07's invariant: a refusal never reaches substitution work - the original two guards stay first, and
+		// the four new guards are strictly ordered after them.
+		assertTrue(safeMethodIdx < tokenIdx, fn);
+		assertTrue(tokenIdx < noEndpointIdx, fn);
+		assertTrue(noEndpointIdx < emptySubIdx, fn);
+		assertTrue(emptySubIdx < unresolvedIdx, fn);
+		assertTrue(unresolvedIdx < unsafeIdx, fn);
+	}
+
+	@Test void a17_hasDotDotSegmentIsTheOneSharedPredicate_isSafeDetailUrlDelegatesToIt() throws Exception {
+		var body = viewsJs();
+		var hasDotDot = functionBody(body, "function hasDotDotSegment(");
+		assertTrue(hasDotDot.contains("/(^|\\/)\\.\\.(\\/|$)/"), hasDotDot);
+		var isSafeDetailUrl = functionBody(body, "function isSafeDetailUrl(");
+		assertTrue(isSafeDetailUrl.contains("hasDotDotSegment("), isSafeDetailUrl);
+		// Divergence made structurally impossible: isSafeDetailUrl no longer carries its OWN copy of the regex.
+		assertFalse(isSafeDetailUrl.contains("/(^|\\/)\\.\\.(\\/|$)/"), isSafeDetailUrl);
+	}
+
+	@Test void a18_rowActionTokenGrammarStaysByteIdenticalToInterpolateHrefs() throws Exception {
+		// The ONE test that catches the failure mode of hasBlankSubstitution/hasResidualToken diverging from
+		// interpolateHref's own token grammar: a token the guard misses would substitute empty (or stay
+		// unresolved) and still be issued.
+		var viewsBody = viewsJs();
+		var rendersBody = rendersJs();
+		var viewsPattern = extractRegexPattern(viewsBody, "const ROW_ACTION_TOKEN_RE = ");
+		var rendersPattern = extractRegexPattern(rendersBody, "String(template).replace(");
+		assertEquals(rendersPattern, viewsPattern);
+		assertEquals("\\{([^}]+)\\}", viewsPattern);
+	}
+
+	/** Extracts the bare regex pattern text (no leading/trailing `/`, no flags) immediately following {@code marker}. */
+	private static String extractRegexPattern(String body, String marker) {
+		var markerIdx = body.indexOf(marker);
+		assertTrue(markerIdx >= 0, () -> marker + " not found:\n" + body);
+		var slashStart = body.indexOf('/', markerIdx);
+		var slashEnd = body.indexOf('/', slashStart + 1);
+		assertTrue(slashStart >= 0 && slashEnd > slashStart, () -> "regex literal not found after " + marker);
+		return body.substring(slashStart + 1, slashEnd);
+	}
+
+	@Test void a19_actionRefusalMessageHasABranchForEachOfTheFourNewReasons() throws Exception {
+		var body = viewsJs();
+		var fn = functionBody(body, "function actionRefusalMessage(");
+		assertTrue(fn.contains("reason === \"no-endpoint\""), fn);
+		assertTrue(fn.contains("reason === \"empty-substitution\""), fn);
+		assertTrue(fn.contains("reason === \"unresolved-endpoint\""), fn);
+		assertTrue(fn.contains("reason === \"unsafe-endpoint\""), fn);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
@@ -315,7 +385,9 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	@Test void b01_idTemplateResolvesAgainstTheCurrentRow_exactlyLikeColumnHref() {
-		assertEquals("servlet:/incidents/a1/ack", report().get("idTemplate_resolved"));
+		// The whole marker is captured (not a bare url string) because this SAME call, re-run by the harness a
+		// second time with juneau-renders.js absent, becomes a WORK-J0521/S5 refusal instead (see b09).
+		assertEquals("servlet:/incidents/a1/ack", ((Map<?,?>) report().get("idTemplate_resolved")).get("url"));
 	}
 
 	@Test void b02_literalEndpointWithNoTokenIsPreservedByteIdentical_backwardCompat() {
@@ -326,14 +398,24 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertEquals("servlet:/incidents/ack", r.get("literal_preFeatureCallSignature"));
 	}
 
-	@Test void b03_noIdOrNullIdRowSubstitutesToEmptyString_matchingColumnHref() {
+	@Test void b03_noIdOrNullIdRowRefusesTheSubmission_WORK_J0521_B1b() {
+		// WORK-J0521 (B1b): this REPLACES the previous empty-substitution SUCCESS pin.  Column.href's
+		// interpolateHref still substitutes a missing/null/absent-rowData `{id}` to "" - that part is unchanged
+		// and correct for RENDERING - but firing a WRITE against the resulting malformed "/x//y" is not a safe
+		// default, so the runtime now refuses the submission instead: no `url` key at all on the marker, the
+		// same "a refusal carries no url, so it can never leak" assertion style b07 already uses.
 		var r = report();
-		// Missing key, explicit null, absent rowData, and undefined rowData all substitute `{id}` to "" - the
-		// SAME behavior Column.href's interpolateHref has for a row with no id - never a thrown error.
-		assertEquals("servlet:/incidents//ack", r.get("noId_missingKey"));
-		assertEquals("servlet:/incidents//ack", r.get("noId_explicitNull"));
-		assertEquals("servlet:/incidents//ack", r.get("noId_absentRowData"));
-		assertEquals("servlet:/incidents//ack", r.get("noId_undefinedRowData"));
+		assertRefusal((Map<?,?>) r.get("noId_missingKey"), "empty-substitution");
+		assertRefusal((Map<?,?>) r.get("noId_explicitNull"), "empty-substitution");
+		assertRefusal((Map<?,?>) r.get("noId_absentRowData"), "empty-substitution");
+		assertRefusal((Map<?,?>) r.get("noId_undefinedRowData"), "empty-substitution");
+	}
+
+	/** Common assertion shape for a buildActionRequest refusal marker: refuse===true, the named reason, no `url`. */
+	private static void assertRefusal(Map<?,?> marker, String reason) {
+		assertEquals(true, marker.get("refuse"), marker::toString);
+		assertEquals(reason, marker.get("reason"), marker::toString);
+		assertFalse(marker.containsKey("url"), marker::toString);
 	}
 
 	@Test void b04_substitutedValueIsUrlEncodedPerToken_matchingColumnHref() {
@@ -368,13 +450,83 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertEquals("/x/ack", r.get("helper_noToken"));
 	}
 
-	@Test void b09_gracefullyDegradesToVerbatimEndpoint_whenRendersJsIsNotLoaded() {
+	@Test void b09_gracefullyDegradesButRefusesATemplatedEndpoint_whenRendersJsIsNotLoaded_WORK_J0521_S5() {
 		// If a caller ships juneau-views.js without its juneau-renders.js peer, substitution is unavailable -
-		// the SAME graceful-degradation shape as viewEscAttr - and the endpoint is issued verbatim (the token
-		// left in place) rather than throwing or silently corrupting the URL.
+		// the SAME degradation DETECTION as before (hasInterpolateHref stays false) - but WORK-J0521/S5 FLIPS
+		// what happens to a TEMPLATED endpoint: it now REFUSES (reason "unresolved-endpoint", no `url`) instead
+		// of firing the literal-token URL `servlet:/incidents/{id}/ack`, which is a URL the action's author
+		// demonstrably did not write.  The valuable, UNCHANGED half is the real point of this test: a
+		// non-templated (literal) endpoint still fires byte-identical - shipping juneau-views.js alone remains
+		// fully backward compatible for every endpoint that has no `{property}` token at all.
 		var r = reportNoRendersJs();
 		assertEquals(false, r.get("hasInterpolateHref"));
-		assertEquals("servlet:/incidents/{id}/ack", r.get("idTemplate_resolved"));
+		assertRefusal((Map<?,?>) r.get("idTemplate_resolved"), "unresolved-endpoint");
 		assertEquals("servlet:/incidents/ack", r.get("literal_withRowData"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// WORK-J0521 behavioral coverage: B1a (`..` path-walk), B1c (blank endpoint), S3 (row-less inheritance),
+	// S5 (residual token, above), plus Terra's query-context should-fix and two false-positive boundary checks.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void b10_dotDotRowValueRefuses_WORK_J0521_B1a() {
+		// The headline finding: encodeURIComponent('..') === '..' (`.` is RFC 3986 unreserved, never escaped), so
+		// a row value of `..` would otherwise turn `servlet:/incidents/{id}/ack` into
+		// `servlet:/incidents/../ack`, which browser URL resolution normalizes to `/ack` - a DIFFERENT, undeclared
+		// mutating endpoint - and submitRowAction would fire it as an authenticated, CSRF-headered POST.
+		assertRefusal((Map<?,?>) report().get("dotdot_rowValue"), "unsafe-endpoint");
+	}
+
+	@Test void b11_dotDotDeclaredInTemplateAlsoRefuses_deliberateConsequence() {
+		// The resolved-URL check also refuses an author-DECLARED `..`, with no row value involved at all - a
+		// deliberate consequence of checking the result rather than only the substituted token (design §4.5).
+		assertRefusal((Map<?,?>) report().get("dotdot_inTemplate"), "unsafe-endpoint");
+	}
+
+	@Test void b12_whitespaceOnlyRowValueRefuses_theTrimWidening() {
+		// isBlankToken is trim-based, so a whitespace-only row value refuses exactly like a missing/null one -
+		// a deliberate slight widening beyond "null/undefined/empty string" (a whitespace-only id is never a
+		// real target, and isBlankToken is already this file's one generic blankness predicate).
+		assertRefusal((Map<?,?>) report().get("whitespaceOnly_rowValue"), "empty-substitution");
+	}
+
+	@Test void b13_blankOrAbsentEndpointRefuses_WORK_J0521_B1c() {
+		// No test previously pinned today's fetch(null) -> the relative path "null" for a blank/absent endpoint.
+		// The exact precedent for refusing sits at buildJobCancelRequest's "no-cancel-url".
+		var r = report();
+		assertRefusal((Map<?,?>) r.get("blankEndpoint_absent"), "no-endpoint");
+		assertRefusal((Map<?,?>) r.get("blankEndpoint_null"), "no-endpoint");
+		assertRefusal((Map<?,?>) r.get("blankEndpoint_empty"), "no-endpoint");
+		assertRefusal((Map<?,?>) r.get("blankEndpoint_whitespace"), "no-endpoint");
+	}
+
+	@Test void b14_queryContextInjectionIsSafelyEncoded_terraShouldFix() {
+		// Terra's should-fix: a row value must not be able to inject `&`, `=`, or `#` into a query string. This
+		// should already pass via encodeURIComponent - pinned as explicit coverage so a future "optimization"
+		// that swaps it for something cheaper cannot silently break this property.
+		var marker = (Map<?,?>) report().get("queryContext_resolved");
+		assertEquals("servlet:/incidents/ack?target=a%26b%3Dc%23d", marker.get("url"));
+	}
+
+	@Test void b15_rowLessRibbonDialogInheritsTheSameGuard_WORK_J0521_S3() {
+		// S3: the row-less ribbon-dialog seam (openRibbonDialog -> openActionDialog(..., null, ...) ->
+		// submitActionDialog -> submitRowAction -> rowDataForTr(ctx, null) === null) reaches this SAME guard
+		// with no extra code, closing it for free - named separately (even though b03's noId_absentRowData
+		// proves the identical input shape) so a reader tracing S3 finds a dedicated case.
+		assertRefusal((Map<?,?>) report().get("rowLess_idTemplate"), "empty-substitution");
+	}
+
+	@Test void b16_dotDotEncodedInsideAValueIsNotAPathSegment_falsePositiveBoundary() {
+		// Proves hasDotDotSegment is not over-broad: a `..` that ENCODING has placed inside a single path
+		// segment (surrounded by encoded slashes, not literal ones) is not a `..` PATH SEGMENT and must fire -
+		// exactly the case a careless `url.includes("..")` implementation would get wrong.
+		var marker = (Map<?,?>) report().get("dotdot_encodedInsideValue");
+		assertEquals("servlet:/incidents/a%2F..%2Fb/ack", marker.get("url"));
+	}
+
+	@Test void b17_emptySubstitutionGuardIsPerToken_notJustTheFirstToken() {
+		// /x/{id}/status/{status} with only {id} present must still refuse - the guard checks EVERY token, not
+		// just the first one in the template.
+		assertRefusal((Map<?,?>) report().get("multiToken_oneBlank"), "empty-substitution");
 	}
 }

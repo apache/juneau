@@ -242,6 +242,15 @@
 	}
 
 	/**
+	 * True when `url` contains a `..` path segment.  The ONE dot-dot predicate in this file (WORK-J0521) - the
+	 * read path ({@link #isSafeDetailUrl}) and the row-action write path ({@link #buildActionRequest}) MUST agree,
+	 * so neither carries its own copy of the regex and the two can never drift apart.
+	 */
+	function hasDotDotSegment(url) {
+		return /(^|\/)\.\.(\/|$)/.test(url == null ? "" : String(url));
+	}
+
+	/**
 	 * Whether `endpoint` is a same-origin path template: no `://`, no `//` prefix, no scheme colon-before-slash,
 	 * and no `..` path segments.  Mirrors {@code RowDetailDef.isSafeDetailEndpoint}.
 	 */
@@ -253,7 +262,7 @@
 		const colon = s.indexOf(":");
 		const slash = s.indexOf("/");
 		if (colon >= 0 && (slash < 0 || colon < slash)) return false;
-		if (/(^|\/)\.\.(\/|$)/.test(s)) return false;
+		if (hasDotDotSegment(s)) return false;
 		return true;
 	}
 
@@ -399,16 +408,71 @@
 	}
 
 	/**
+	 * The `{property}` token grammar (WORK-J0521) - MUST stay byte-identical to juneau-renders.js's
+	 * `interpolateHref` literal (`/\{([^}]+)\}/g`), or this guard and the substitution itself would disagree about
+	 * what counts as a token: a token this regex missed would substitute empty (or stay unresolved) and still be
+	 * issued.  Pinned by a source-shape test that compares both literals in the two shipped assets.  Declared
+	 * non-global and cloned with the `g` flag per call in {@link #hasBlankSubstitution} - a module-level `/g`
+	 * regex shared across `.exec`/`.test` calls carries `lastIndex` state between calls, which is a real bug
+	 * source; `.test` against this literal directly (as {@link #hasResidualToken} does) is safe with no `g` flag.
+	 */
+	// NOSONAR javascript:S8786 -- same rationale as juneau-renders.js's interpolateHref (see its own NOSONAR):
+	// `[^}]+` is fed developer-authored `endpoint` templates, never row data, and `[^}]` -> `[^{}]` would change
+	// the matched language and break grammar parity with interpolateHref.
+	const ROW_ACTION_TOKEN_RE = /\{([^}]+)\}/;
+
+	/**
+	 * True when `template` carries a `{property}` token whose row value is absent, `null`, or blank
+	 * (WORK-J0521, B1b).  Judged on the token INPUTS, not the substituted output string, because
+	 * `interpolateHref` returns a plain string with no record of which tokens collapsed to `""` - an output-side
+	 * `//`-detector would both false-positive on a template that legitimately contains `//` and false-negative on
+	 * a trailing empty segment.  Blankness uses {@link #isBlankToken} (trim-based), a deliberate slight widening
+	 * beyond "null/undefined/empty string": a whitespace-only row value is never a real target, and this file's
+	 * other fail-closed checks already use the same predicate.
+	 */
+	function hasBlankSubstitution(template, rowData) {
+		if (template == null) return false;
+		for (const m of String(template).matchAll(new RegExp(ROW_ACTION_TOKEN_RE, "g")))
+			if (isBlankToken(rowData ? rowData[m[1]] : undefined)) return true;
+		return false;
+	}
+
+	/**
+	 * True when a resolved endpoint still carries an unsubstituted `{property}` token (WORK-J0521, S5) - the
+	 * `juneau-renders.js`-absent degradation path, where the row value may be perfectly present but the token was
+	 * never replaced at all, so the fired URL is not the one the action's author declared.
+	 */
+	function hasResidualToken(url) {
+		return ROW_ACTION_TOKEN_RE.test(url == null ? "" : String(url));
+	}
+
+	/**
 	 * Builds the fail-closed row-action request descriptor from a RowAction intent, a token, a header name, and
 	 * the row's own data - pure, DOM/fetch-free (plain data in, plain data out) so the fail-closed contract is
 	 * unit-testable without a browser.  Returns EITHER a `{refuse:true, reason}` marker (the caller renders a
 	 * VISIBLE refusal) OR a ready-to-issue `{url, method, headers, body}`:
 	 *   - a missing or SAFE method refuses (`reason:"safe-method"`) - HIGH-7;
 	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - HIGH-1 fail-closed;
+	 *   - a blank/absent `action.endpoint` refuses (`reason:"no-endpoint"`) - WORK-J0521, mirrors
+	 *     {@link #buildJobCancelRequest}'s `no-cancel-url`;
+	 *   - a `{property}` token whose row value is absent/`null`/blank refuses (`reason:"empty-substitution"`) -
+	 *     WORK-J0521 B1b: refusing a mutating write against a malformed `/x//y` is the safe default, unlike
+	 *     `Column.href`'s rendering use of the SAME `interpolateHref` helper, where empty substitution is correct;
+	 *   - a resolved endpoint still carrying an unsubstituted `{property}` token refuses
+	 *     (`reason:"unresolved-endpoint"`) - WORK-J0521 S5: the `juneau-renders.js`-absent degradation must not
+	 *     fire a literal-token URL the author never wrote;
+	 *   - a resolved endpoint containing a `..` path segment refuses (`reason:"unsafe-endpoint"`) - WORK-J0521
+	 *     B1a: a row value of `..` would otherwise ride `encodeURIComponent` unescaped (`.` is RFC 3986
+	 *     unreserved) and browser URL resolution would normalize it to a different, undeclared endpoint;
 	 *   - otherwise `url` is `action.endpoint` with any `{property}` token substituted via
 	 *     {@link #substituteRowActionEndpoint} (WORK-J0509), and the body is JSON with the headers carrying
 	 *     `Content-Type: application/json` (so the write passes `LoopbackBoundary.isJson`) plus the CSRF token
 	 *     under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
+	 *
+	 * The four WORK-J0521 guards are appended AFTER the two original guards (`b07`'s invariant: a refusal never
+	 * reaches substitution work), and are judged against the resolved URL where relevant - which is what closes
+	 * the row-less ribbon-dialog seam (S3) for free, since every row-less path funnels through this same pure
+	 * builder without needing its own guard.
 	 *
 	 * The optional `extra` object is merged into the JSON body - the declarative-modal submit path uses it to carry
 	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
@@ -421,12 +485,21 @@
 			return { refuse: true, reason: "safe-method" };
 		if (isBlankToken(token))
 			return { refuse: true, reason: "missing-token" };
+		if (isBlankToken(action.endpoint))
+			return { refuse: true, reason: "no-endpoint" };
+		if (hasBlankSubstitution(action.endpoint, rowData))
+			return { refuse: true, reason: "empty-substitution" };
+		const url = substituteRowActionEndpoint(action.endpoint, rowData);
+		if (hasResidualToken(url))
+			return { refuse: true, reason: "unresolved-endpoint" };
+		if (hasDotDotSegment(url))
+			return { refuse: true, reason: "unsafe-endpoint" };
 		const headers = { "Content-Type": "application/json" };
 		headers[headerName || DEFAULT_CSRF_HEADER] = token;
 		const payload = { action: action.id };
 		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) payload[k] = extra[k];
 		return {
-			url: substituteRowActionEndpoint(action.endpoint, rowData),
+			url: url,
 			method: action.method,
 			headers: headers,
 			body: JSON.stringify(payload)
@@ -439,6 +512,14 @@
 			return "action must use a non-safe method (POST/PUT/PATCH/DELETE)";
 		if (reason === "missing-token")
 			return "no CSRF token available - the page did not supply one, so the request was not sent";
+		if (reason === "no-endpoint")
+			return "the action declares no URL to submit to, so the request was not sent";
+		if (reason === "empty-substitution")
+			return "the action's URL could not be completed from this row (a required value is missing), so the request was not sent";
+		if (reason === "unresolved-endpoint")
+			return "the action's URL could not be resolved (its page is missing juneau-renders.js), so the request was not sent";
+		if (reason === "unsafe-endpoint")
+			return "the action's URL resolved to an unsafe path, so the request was not sent";
 		if (reason === "request-failed")
 			return "the request could not be completed";
 		return "the action was refused";
