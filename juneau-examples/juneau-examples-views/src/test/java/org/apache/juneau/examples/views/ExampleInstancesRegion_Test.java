@@ -166,7 +166,10 @@ class ExampleInstancesRegion_Test extends TestBase {
 		assertEquals(200, r.statusCode(), r::body);
 		assertTrue(r.body().contains("contractVersion"),
 			"the expand GET is the SHARED envelope the eager tab joins, so it must be contract-stamped");
-		assertTrue(r.body().contains("\"values\""), "the envelope must carry a values map");
+		assertTrue(r.body().contains("\"fields\""),
+			"the envelope must carry its values map under the \"fields\" key - the SAME key the client region "
+				+ "readers unwrap (juneau-regions.js's resolveDeclaredEnvelope / juneau-views.js's toValuesMap "
+				+ "both read body.fields, never body.values)");
 		assertTrue(r.body().contains("dbVendor"),
 			"the Details tab reads expand-GET-only fields; if they are absent the eager pane renders blanks");
 	}

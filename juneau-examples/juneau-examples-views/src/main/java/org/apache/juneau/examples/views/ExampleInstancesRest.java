@@ -188,20 +188,20 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	@RestGet(path="/data/instances/{id}", swagger=@OpSwagger(ignore=true))
 	public Map<String,Object> instanceDetail(@Path("id") String id) {
 		var i = findInstance(id);
-		var values = new LinkedHashMap<String,Object>();
-		values.put("name", i.name);
-		values.put("environment", i.environment);
-		values.put("type", i.type);
-		values.put("dbVendor", i.dbVendor);
-		values.put("version", i.version);
-		values.put("releaseCycle", i.releaseCycle);
-		values.put(COL_STATUS, i.status);
-		values.put("modified", i.modified);
-		values.put("zone", i.zone);
-		values.put("lastSeen", i.lastSeen);
+		var fields = new LinkedHashMap<String,Object>();
+		fields.put("name", i.name);
+		fields.put("environment", i.environment);
+		fields.put("type", i.type);
+		fields.put("dbVendor", i.dbVendor);
+		fields.put("version", i.version);
+		fields.put("releaseCycle", i.releaseCycle);
+		fields.put(COL_STATUS, i.status);
+		fields.put("modified", i.modified);
+		fields.put("zone", i.zone);
+		fields.put("lastSeen", i.lastSeen);
 		var out = new LinkedHashMap<String,Object>();
 		out.put("contractVersion", RowDetailDef.CONTRACT_VERSION);
-		out.put("values", values);
+		out.put("fields", fields);
 		return out;
 	}
 
