@@ -12,8 +12,10 @@ e2e/test-results/
 e2e/playwright-report/
 e2e/.playwright/
 
-# Python bytecode from the scripts/ tooling
-scripts/__pycache__/
+# Python bytecode -- from the scripts/ tooling, and from importing root push.py (e.g. via
+# scripts/tests/test_push.py's importlib load, which generates a root-level __pycache__/ that
+# scripts/__pycache__/ alone would not cover, since push.py lives at the repo root, not scripts/)
+__pycache__/
 
 # Tracker scripts, consolidated 2026-08-30 into ~/Project Work/scripts/ (--project release-manager)
 scripts/todo-next-id.py
