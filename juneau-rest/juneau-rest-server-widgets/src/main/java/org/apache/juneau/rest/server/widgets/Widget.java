@@ -24,6 +24,17 @@ package org.apache.juneau.rest.server.widgets;
  * implements {@link #validate()} as a fail-closed bean-level check.  Serving-path call sites (for example a
  * table emitter) must invoke {@code validate()} rather than treating it as documentation-only.
  *
+ * <p>
+ * The REST serving path now enforces this independently of any one call site: every classpath that carries this
+ * module registers a {@code ResponseProcessor} (see
+ * {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
+ * WidgetsMixin.WidgetValidationProcessor}, WORK-J0525) that calls {@link #validate()} on any REST response content
+ * that is a {@code Widget}, fail-closed with a 500 on failure.  That closes the gap for the two implementations
+ * that ride the wire as a JSON response body ({@code ModalDef}/{@code FormDef}) rather than being consumed by a
+ * server-side emitter that already validates on the way in; a non-REST producer (a direct {@code Json.of(...)}
+ * serialization, for example) is untouched by construction and still relies on an explicit {@code validate()} /
+ * {@code checked()} call.
+ *
  * @since 10.0.0
  */
 public interface Widget {

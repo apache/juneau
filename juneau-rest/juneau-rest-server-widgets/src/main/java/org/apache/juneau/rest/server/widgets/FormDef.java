@@ -653,10 +653,16 @@ public class FormDef implements Widget {
 	 * repairs a version a caller explicitly cleared) then {@link #validate() validates}.
 	 *
 	 * <p>
-	 * {@link #contractVersion} no longer depends on this being called, but this is still the only fail-closed
-	 * structural {@link #validate() validation} the serving path has &mdash; every app {@code @RestGet} that returns
-	 * a form-bearing {@link ModalDef} should still reach this (via {@link ModalDef#checked()}) so a malformed form
-	 * fails at serve time, not silently on the wire.
+	 * {@link #contractVersion} no longer depends on this being called. As of WORK-J0525, structural validation
+	 * no longer depends on it either for a form served over REST: nested inside a returned {@link ModalDef},
+	 * this form is reached by
+	 * {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
+	 * WidgetsMixin.WidgetValidationProcessor}'s call to {@link ModalDef#validate()}, which recurses into this
+	 * bean's own {@link #validate()}, fail-closed with a 500, whether or not the producing endpoint called
+	 * {@link ModalDef#checked()}. This method (via {@link ModalDef#checked()}) remains the only fail-closed
+	 * structural {@link #validate() validation} a <b>non-REST</b> producer has &mdash; a direct
+	 * {@code Json.of(...)} serialization, for instance &mdash; and calling it for a REST-bound form stays safe
+	 * (validation is idempotent) even though it is no longer strictly required there.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException If this form is not well-formed.

@@ -19,7 +19,9 @@ package org.apache.juneau.rest.server.widgets;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.util.*;
 
 /**
@@ -63,18 +65,38 @@ import org.apache.juneau.rest.server.util.*;
  * {@code buildVersion} resolves this module's implementation version rather than a neighbouring module's.  The two
  * modules share the hash function, not a cache.
  *
+ * <h5 class='section'>The serving-path {@code Widget.validate()} gate (WORK-J0525)</h5>
+ * <p>
+ * This class also nests {@link WidgetValidationProcessor}, a {@link ResponseProcessor} that calls
+ * {@link Widget#validate()} on any REST response content that is a {@link Widget}, fail-closed, ahead of every
+ * byte-writing processor. It is registered two ways &mdash; both belt-and-braces, not redundant duplicates, since
+ * {@code ResponseProcessorList} de-duplicates by class:
+ * <ul>
+ * 	<li>Via {@code ServiceLoader} ({@code META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor}),
+ * 		so it applies to <b>every</b> resource on a classpath that carries this module, with no consumer opt-in.
+ * 	<li>Via this class's own {@link Rest#responseProcessors() @Rest(responseProcessors=...)} +
+ * 		{@link Rest#mergeResponseProcessorsIntoHost() mergeResponseProcessorsIntoHost=true}, so a host that composes
+ * 		this mixin is covered even if its classpath loses the services file (a shading/repackaging step, for example).
+ * </ul>
+ * It is declared as a <b>nested</b> class here &mdash; rather than a new top-level file &mdash; because
+ * {@code Widgets_ModuleBoundary_Test.b01_onlyTheMixinReferencesTheRestServingFramework} allowlists exactly this file
+ * as the module's single exception to "the beans stay independent of the REST serving framework"; a response
+ * processor is itself a serving-framework type, so nesting it here keeps that rule literally true rather than
+ * requiring an amendment.
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link CardFieldList}
  * 	<li class='jc'>{@link CalendarDef}
  * 	<li class='jc'>{@link AppHeaderDef}
  * 	<li class='jc'>{@link BarSlot}
+ * 	<li class='jc'>{@link WidgetValidationProcessor}
  * </ul>
  *
  * @since 10.0.0
  */
 // @formatter:off
-@Rest
+@Rest(responseProcessors=WidgetsMixin.WidgetValidationProcessor.class, mergeResponseProcessorsIntoHost=true)
 public class WidgetsMixin {
 
 	/**
@@ -281,5 +303,72 @@ public class WidgetsMixin {
 		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
 		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;
 		throw iaex("Widget asset ''%s'' is not served by this mixin.", path);
+	}
+
+	/**
+	 * The serving-path {@link Widget#validate()} gate (WORK-J0525): fail-closed structural validation for any
+	 * REST response content that is a {@link Widget}, giving the JSON serving path the same gate the
+	 * {@code juneau-rest-server-views} HTML emitters already give every {@code Widget} they consume.
+	 *
+	 * <h5 class='section'>Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook</h5>
+	 * <p>
+	 * {@code juneau-rest-server} does not (and must not) depend on this module, so a hard-coded validation step
+	 * inside it cannot see {@link Widget} without inverting that dependency. A {@link ResponseProcessor} declared
+	 * here, discovered by every classpath that carries this module via {@code ServiceLoader}, needs no such
+	 * reflection or hoisted marker interface &mdash; see the class Javadoc.
+	 *
+	 * <h5 class='section'>Why {@code NEXT}, never {@code FINISHED}</h5>
+	 * <p>
+	 * This processor validates and declines to handle: it never claims the response, so it cannot perturb chain
+	 * ordering, content-type negotiation, or the {@code NotImplemented} fallthrough. Non-{@link Widget} content
+	 * (including the unrelated {@code examples.views.Widget} demo row bean and the legacy
+	 * {@code org.apache.juneau.rest.server.widget.Widget} SVL resolver &mdash; see the module Javadoc's naming
+	 * collision note) costs one {@code instanceof} test and is otherwise untouched.
+	 *
+	 * <h5 class='section'>Why {@code InternalServerError} (500), not the caller's problem</h5>
+	 * <p>
+	 * A malformed {@link Widget} reaching the serving path is a <b>server</b> defect &mdash; the client asked for
+	 * a dialog correctly and the server built a broken one &mdash; not an inbound-validation failure of the kind
+	 * {@code ValidationException} (400) is scoped to. The underlying {@link IllegalArgumentException} rides as the
+	 * cause so the message names the failing rule.
+	 *
+	 * <h5 class='section'>Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}</h5>
+	 * <p>
+	 * A widget that already called {@code checked()} is validated twice per response: once at build time, once
+	 * here. No {@code validated} flag is added to skip the second pass &mdash; a mutable "already validated" flag
+	 * on a wire bean would re-introduce an order-dependence bug in the validation dimension (mutate-after-checked)
+	 * that this module's contract deliberately avoids elsewhere. {@code validate()} is cheap and idempotent, so the
+	 * repeat costs nothing worth building around.
+	 *
+	 * <h5 class='section'>Traversal is top-level only</h5>
+	 * <p>
+	 * Only {@code res.getContent()} itself is tested. Nested widgets are covered by the beans' own recursive
+	 * {@code validate()} (e.g. {@link ModalDef#validate()} &rarr; {@link FormDef#validate()}); a {@link Widget}
+	 * inside a {@code Collection}/{@code Map} envelope is not walked into &mdash; no endpoint in this tree returns
+	 * that shape, and walking one would collide with the unrelated {@code examples.views.Widget} row-bean lists
+	 * some example endpoints do return.
+	 *
+	 * <h5 class='section'>Escape hatch</h5>
+	 * <p>
+	 * A resource that must serve a deliberately-invalid {@link Widget} can override the response-processor chain
+	 * entirely with a {@code @Bean ResponseProcessorList} factory method, which replaces the whole list. There is
+	 * no narrower, dedicated opt-out.
+	 *
+	 * @since 10.0.0
+	 */
+	public static class WidgetValidationProcessor implements ResponseProcessor {
+
+		@Override /* ResponseProcessor */
+		public int process(RestOpSession opSession) {
+			var o = opSession.getResponse().getContent().orElse(null);
+			if (o instanceof Widget w) {
+				try {
+					w.validate();
+				} catch (IllegalArgumentException e) {
+					throw new InternalServerError(e, "Malformed %s in response: %s", w.getClass().getSimpleName(), e.getMessage());
+				}
+			}
+			return NEXT;  // Validate and decline; the normal chain serializes.
+		}
 	}
 }

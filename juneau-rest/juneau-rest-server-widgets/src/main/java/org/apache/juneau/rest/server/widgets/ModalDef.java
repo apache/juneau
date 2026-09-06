@@ -646,12 +646,22 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * {@link #contractVersion} is guaranteed present on every modal from construction, so this is <b>no longer
-	 * required for versioning</b> (WORK-J0520).  It stays <b>strongly recommended</b> for its other duty: it is
-	 * the only fail-closed structural {@link #validate() validation} the serving path has, and skipping it means
-	 * a malformed modal/form now serializes as contract-<i>valid</i> and reaches the client instead of being
-	 * refused (see {@link #validate()}; {@code WORK-J0525} tracks closing this gap for the serving path
-	 * generally).  When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and
-	 * recurses into {@link FormDef#checked()}.
+	 * required for versioning</b> (WORK-J0520).  It stays <b>strongly recommended</b> for one remaining duty and
+	 * is <b>redundant-but-harmless</b> for another:
+	 * <ul>
+	 * 	<li><b>Non-REST producers</b> (a direct {@code Json.of(...)} serialization, or any consumer marshalling a
+	 * 		modal outside a REST response) have no other gate: calling this is the only fail-closed structural
+	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as
+	 * 		contract-<i>valid</i> with no complaint.
+	 * 	<li><b>REST responses</b> are validated independently as of WORK-J0525:
+	 * 		{@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
+	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a
+	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.
+	 * 		Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case
+	 * 		above.
+	 * </ul>
+	 * When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and recurses into
+	 * {@link FormDef#checked()}.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException If this modal (or its form) is not well-formed.
