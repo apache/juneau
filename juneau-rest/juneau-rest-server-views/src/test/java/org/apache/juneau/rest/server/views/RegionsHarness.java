@@ -27,14 +27,16 @@ import java.util.concurrent.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * Shared Node plumbing for the three {@code juneau-regions.js} behavioral harnesses.
+ * Shared Node plumbing for the {@code juneau-regions.js} behavioral harnesses.
  *
  * <p>
- * The region runtime's behavioral coverage is split across three harness scripts by SUBJECT - the populate primitive,
- * the message bus, the initial-broadcast barrier - and each one is driven by its own test class so a failure names the
- * layer that broke.  Splitting the driver plumbing out of those three classes is not just deduplication: it means the
- * three run the SAME loader against the SAME three assets in the same order, so a "passes in one class, fails in
- * another" result can only come from the harness under test.
+ * The region runtime's behavioral coverage is split across harness scripts by SUBJECT - the populate primitive,
+ * the message bus, the initial-broadcast barrier, the declarative default populator - and each one is driven by its
+ * own test class so a failure names the layer that broke.  Splitting the driver plumbing out of those classes is not
+ * just deduplication: it means every harness runs the SAME loader against the SAME assets in the same order, so a
+ * "passes in one class, fails in another" result can only come from the harness under test.  The declarative default's
+ * harness alone also loads {@code juneau-helpers.js} (via {@link #reportWithHelpers}), because the reserved default
+ * paints through {@code ctx.helpers[...]} - the other three harnesses deliberately do not carry that dependency.
  *
  * <p>
  * Each harness is spawned once per JVM and its JSON report cached, because the barrier harness alone builds
@@ -52,19 +54,33 @@ final class RegionsHarness {
 	 * is not on any of the paths a Maven or IDE working directory produces).  Callers turn a null into a skip.
 	 */
 	static Map<?,?> report(String harnessName) {
-		if (FAILED.contains(harnessName))
+		return reportImpl(harnessName, false);
+	}
+
+	/**
+	 * Runs the named harness with {@code juneau-helpers.js} ALSO loaded (a fourth argv path), for the declarative
+	 * default's own harness - the reserved default paints via {@code ctx.helpers[...]}, so its harness needs the
+	 * helper library the three original harnesses (primitive/bus/barrier) deliberately do not load.
+	 */
+	static Map<?,?> reportWithHelpers(String harnessName) {
+		return reportImpl(harnessName, true);
+	}
+
+	private static Map<?,?> reportImpl(String harnessName, boolean withHelpers) {
+		var cacheKey = (withHelpers ? "helpers:" : "") + harnessName;
+		if (FAILED.contains(cacheKey))
 			return null;
-		var cached = CACHE.get(harnessName);
+		var cached = CACHE.get(cacheKey);
 		if (cached != null)
 			return cached;
 		try {
 			if (!nodeAvailable())
-				return markUnavailable(harnessName);
+				return markUnavailable(cacheKey);
 			var harness = locate(harnessName);
 			if (harness == null)
-				return markUnavailable(harnessName);
-			var report = Json.to(run(harness, harnessName), Map.class);
-			CACHE.put(harnessName, report);
+				return markUnavailable(cacheKey);
+			var report = Json.to(run(harness, harnessName, withHelpers), Map.class);
+			CACHE.put(cacheKey, report);
 			return report;
 		} catch (Exception e) {
 			// A harness that cannot be READ is a skip; a harness that RAN and failed has already called fail().
@@ -77,18 +93,24 @@ final class RegionsHarness {
 		return null;
 	}
 
-	private static String run(Path harness, String harnessName) throws Exception {
+	private static String run(Path harness, String harnessName, boolean withHelpers) throws Exception {
 		var renders = Files.createTempFile("juneau-renders-", ".js");
 		var views = Files.createTempFile("juneau-views-", ".js");
 		var regions = Files.createTempFile("juneau-regions-", ".js");
+		var helpers = withHelpers ? Files.createTempFile("juneau-helpers-", ".js") : null;
 		var stdout = Files.createTempFile("regions-stdout-", ".json");
 		var stderr = Files.createTempFile("regions-stderr-", ".txt");
 		try {
 			Files.writeString(renders, asset(ViewsMixin.RENDERS_JS_RESOURCE), UTF_8);
 			Files.writeString(views, asset(ViewsMixin.VIEWS_JS_RESOURCE), UTF_8);
 			Files.writeString(regions, asset(ViewsMixin.REGIONS_JS_RESOURCE), UTF_8);
-			var p = new ProcessBuilder(List.of(
-					"node", harness.toString(), renders.toString(), views.toString(), regions.toString()))
+			var args = new ArrayList<String>(List.of(
+				"node", harness.toString(), renders.toString(), views.toString(), regions.toString()));
+			if (helpers != null) {
+				Files.writeString(helpers, asset(ViewsMixin.HELPERS_JS_RESOURCE), UTF_8);
+				args.add(helpers.toString());
+			}
+			var p = new ProcessBuilder(args)
 				.redirectOutput(stdout.toFile())
 				.redirectError(stderr.toFile())
 				.start();
@@ -101,7 +123,10 @@ final class RegionsHarness {
 					+ "\nstdout:\n" + quietRead(stdout));
 			return Files.readString(stdout, UTF_8);
 		} finally {
-			for (var f : List.of(renders, views, regions, stdout, stderr))
+			var cleanup = new ArrayList<Path>(List.of(renders, views, regions, stdout, stderr));
+			if (helpers != null)
+				cleanup.add(helpers);
+			for (var f : cleanup)
 				Files.deleteIfExists(f);
 		}
 	}

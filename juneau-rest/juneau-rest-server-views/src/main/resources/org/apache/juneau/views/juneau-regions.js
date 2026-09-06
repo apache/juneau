@@ -71,6 +71,37 @@
 	const REGION_POPULATE_ATTR = "data-juneau-region-populate";
 
 	/**
+	 * The declarative descriptor placeholder attribute: a per-region JSON envelope, exactly
+	 * {@code RegionDef.toContractMap()}'s shape (design &sect;8.2) carrying `dataUrl`, `params`, `renderer`,
+	 * `lazy`, `refreshMs`, `fields` and `titleFields` &mdash; everything {@code mintRegion} needs to populate
+	 * {@code region.declared}/{@code region.params} without a second server round trip.  Absent (an
+	 * identity-only region, today's shape) is legal and means every {@code declared.*} member stays at its
+	 * type-scoped default.
+	 *
+	 * <p>
+	 * <b>Deliberately NOT &sect;12.2's real wire shape.</b> &sect;12.2 stamps the container with a bare version
+	 * marker (`data-juneau-region-contract="1"`) and carries the actual descriptor in a SEPARATE per-HOST sidecar
+	 * (`&lt;script type="application/json" id="juneau-region:{host}"&gt;{contractVersion,regions:[...]}`), because
+	 * one sidecar per host beats one per region (the same reasoning `VIEW_META`/`PAGE_META` already follow). That
+	 * is emitter behavior, and &sect;19.2 assigns every emitter change to `WORK-J0522d` ("host enrolment walks").
+	 * This child owns the boundary L12 exists to prove is safe to change independently of everything on the other
+	 * side of it: whatever ATTACHES a descriptor to a region is free to change (`d`'s host-enrolment walk will
+	 * replace this attribute with a real per-host sidecar lookup) without touching `ctx.declared`,
+	 * {@code fetchDeclared()}, {@code defaultPopulate()} or the registry - the READ side this child builds.  A
+	 * full per-region JSON blob directly on the container is the simplest placeholder ATTACH mechanism that makes
+	 * that READ side concretely testable today.
+	 */
+	const REGION_DECLARED_ATTR = "data-juneau-region-declared";
+
+	/**
+	 * The minimum honored {@code declared.refreshMs}, in milliseconds &mdash; the client twin of
+	 * {@code RegionDef.MIN_REFRESH_MS} (itself an alias of the toolkit-wide {@code SafePathTemplate}
+	 * floor).  Belt-and-suspenders: the server already clamps before it ever serializes the sidecar, but a value
+	 * is re-clamped here too, exactly as {@code juneau-views.js}'s own poll floor is enforced on both sides.
+	 */
+	const MIN_REFRESH_MS = 5000;
+
+	/**
 	 * The enrolment mark, reflected as an attribute so the region's own loading/ok/error state is assertable from a
 	 * test and visible in devtools.  Cleared by teardown and by nothing else, so a marked-but-disconnected node is a
 	 * detectable bug rather than an invisible one.
@@ -176,6 +207,7 @@
 
 	/** Juneau-shipped populators, resolved ahead of the consumer registry.  The reserved default lands here. */
 	const builtins = {};
+	builtins[DEFAULT_POPULATOR_NAME] = function (ctx, container) { return runDefaultPopulate(ctx, container); };
 
 	/** Every live region on the page, in enrolment order.  The bus resolves a `{to}` against this. */
 	const liveRegions = [];
@@ -877,14 +909,110 @@
 	}
 
 	/**
-	 * Performs the region's declared fetch, using the current invocation's signal.  A region that declared no dataUrl
-	 * has nothing to fetch, so this resolves null - which is every region under the identity-only descriptor this
-	 * runtime reads today.  It does not touch the region's loading/ok/error state: a fetch is not a paint.
+	 * Serializes `params` to a query-string fragment (no leading `?`/`&`), under the closed rules of design
+	 * &sect;8.2.1 - identically to the Java server's twin (`RegionDef.serializeParams`, test 16a's golden).
+	 * `null`/empty `params` serializes to an empty string.
+	 *
+	 * <p>Rules: a `null`/`undefined` value omits the key entirely; an empty string serializes as `k=`; a scalar
+	 * (string/number/boolean) serializes as `k=<percent-encoded value>`; an array repeats the key once per
+	 * element, in order (`k=a&k=b`); a plain object (a nested map) is dropped defensively - the server already
+	 * rejects it at {@code RegionDef.validate()}, so reaching this function is not the normal path. Encoding is
+	 * `encodeURIComponent`, which already encodes a space as `%20` rather than `+`, matching the server's
+	 * `URLEncoder`-minus-the-`+` twin.
+	 */
+	function serializeParams(params) {
+		if (!params) return "";
+		const parts = [];
+		for (const key of Object.keys(params)) {
+			const value = params[key];
+			if (value == null) continue;
+			if (Array.isArray(value)) {
+				for (const el of value) if (el != null) parts.push(encodeParam(key) + "=" + encodeParam(String(el)));
+			} else if (typeof value === "object") {
+				continue;   // A nested map/object: rejected server-side at RegionDef.validate(); dropped defensively.
+			} else {
+				parts.push(encodeParam(key) + "=" + encodeParam(String(value)));
+			}
+		}
+		return parts.join("&");
+	}
+
+	function encodeParam(s) {
+		return encodeURIComponent(s);
+	}
+
+	/** Appends {@link #serializeParams}'s fragment of `region.params` to `region.declared.dataUrl`. */
+	function resolveDeclaredUrl(region) {
+		const dataUrl = region.declared.dataUrl;
+		if (blank(dataUrl)) return dataUrl;
+		const q = serializeParams(region.params);
+		if (q === "") return dataUrl;
+		return dataUrl + (dataUrl.indexOf("?") >= 0 ? "&" : "?") + q;
+	}
+
+	/** A never-throwing JSON parse - a malformed body is a fail-closed rejection, not an uncaught exception. */
+	function safeParseJson(text) {
+		if (blank(text)) return null;
+		try { return JSON.parse(text); } catch (e) { return null; }
+	}
+
+	function declaredFetchError(kind, message) {
+		const e = new Error(message);
+		e.kind = kind;
+		return e;
+	}
+
+	/** The current invocation's signal (design &sect;6.6.1/&sect;8.5): `messageSignal` under reason "message". */
+	function declaredFetchSignal(region) {
+		return (region.ctx && region.ctx.reason === "message" && region.messageCtl)
+			? region.messageCtl.signal : region.signalCtl.signal;
+	}
+
+	/**
+	 * The handshake-checked resolution of one declared-fetch response: 404 -> a rejection carrying `kind:"empty"`;
+	 * any other non-`ok` -> `kind:"error"`; a `contractVersion` mismatch (or an unparseable/non-object body) ->
+	 * `kind:"error"`, logged exactly like the existing detail/action-result handshakes; otherwise the envelope's
+	 * `fields` member, UNWRAPPED - the VALUES MAP, never the envelope and never the `{status,ok,text}` transport
+	 * triple (design &sect;8.5's normative pin).
+	 */
+	function resolveDeclaredEnvelope(region, env) {
+		if (env.status === 404)
+			return Promise.reject(declaredFetchError("empty", "the declared fetch for '" + region.key
+				+ "' returned no data (404)."));
+		if (!env.ok)
+			return Promise.reject(declaredFetchError("error", "the declared fetch for '" + region.key
+				+ "' was refused (" + env.status + ")."));
+		const body = safeParseJson(env.text);
+		if (!body || typeof body !== "object" || body.contractVersion !== REGION_CONTRACT_VERSION) {
+			const message = "JuneauViews.regions: region '" + region.key + "' - the declared fetch's contract "
+				+ "version ('" + (body && typeof body === "object" ? body.contractVersion : null)
+				+ "') does not match this runtime's ('" + REGION_CONTRACT_VERSION + "').";
+			window.console.error(message);
+			return Promise.reject(declaredFetchError("error", message));
+		}
+		return body.fields || {};
+	}
+
+	/**
+	 * Performs the region's declared fetch: `region.declared.dataUrl` with `region.params` appended (design
+	 * &sect;8.2.1), under the CURRENT invocation's signal, plus the `{contractVersion, ...}` handshake.
+	 *
+	 * <p>A region that declared no `dataUrl` has nothing to fetch, so this resolves `null` - a legal state, not a
+	 * throw.  Calling it twice fetches twice: there is no caching here, by design (&sect;8.5) - a consumer that
+	 * wants the pre-fetched value reads `ctx.data`.  It does not touch the region's loading/ok/error state: a
+	 * fetch is not a paint.
 	 */
 	function fetchDeclared(region) {
 		if (blank(region.declared.dataUrl)) return Promise.resolve(null);
-		return Promise.reject(new Error("JuneauViews.regions: ctx.fetchDeclared() cannot run a declared fetch for '"
-			+ region.key + "' because no declarative region descriptor is served to this runtime."));
+		const url = resolveDeclaredUrl(region);
+		return fetch(url, {
+			method: "GET",
+			credentials: "same-origin",
+			headers: { "Accept": "application/json" },
+			signal: declaredFetchSignal(region)
+		}).then(function (resp) {
+			return resp.text().then(function (text) { return { status: resp.status, ok: resp.ok, text: text }; });
+		}).then(function (env) { return resolveDeclaredEnvelope(region, env); });
 	}
 
 	/**
@@ -901,6 +1029,35 @@
 			return Promise.reject(new Error(message));
 		}
 		return Promise.resolve(fn(ctx, container));
+	}
+
+	/**
+	 * The reserved default's own implementation (design &sect;8.3, NORMATIVE per &sect;8.5).  Registered under
+	 * {@link DEFAULT_POPULATOR_NAME} at load, and reachable identically through `ctx.defaultPopulate` and
+	 * `JuneauViews.regions.defaultPopulate` (both resolve here through {@link #defaultPopulate}) - ONE call path,
+	 * no branch on the reserved name (L12 property 1).
+	 *
+	 * <p>THE ALGORITHM: `const payload = ctx.data ?? await ctx.fetchDeclared()` - exactly ONE `fetchDeclared()`
+	 * call site, guarded by the nullish check (test 16g).  Either operand resolves to the VALUES MAP (&sect;8.5's
+	 * shape table), never the envelope. `container.appendChild(ctx.helpers[ctx.declared.renderer](
+	 * ctx.declared.fields, {values: payload}))` - catalog first, two arguments (&sect;9.1.1).  This function reads
+	 * only `ctx.data`/`ctx.declared.dataUrl`/`.renderer`/`.fields`/`ctx.fetchDeclared()`/`ctx.helpers` - it is an
+	 * ORDINARY populate, callable against a hand-built `ctx` with no DOM ancestry (L12 property 3, test 12) - and
+	 * it never reads `ctx.declared.titleFields`, which is chrome's alone (&sect;8.4 property 4's partition, test
+	 * 16).
+	 */
+	function runDefaultPopulate(ctx, container) {
+		const prefetched = ctx.data != null ? Promise.resolve(ctx.data) : ctx.fetchDeclared();
+		return prefetched.then(function (payload) {
+			const rendererName = ctx.declared.renderer;
+			if (rendererName == null) return;
+			const helperFn = ctx.helpers ? ctx.helpers[rendererName] : null;
+			if (typeof helperFn !== "function")
+				throw new Error("JuneauViews.regions: the declarative default for '" + ctx.key
+					+ "' cannot find helper '" + rendererName + "' on JuneauViews.helpers.");
+			const node = helperFn(ctx.declared.fields, { values: payload });
+			if (node != null) container.appendChild(node);
+		});
 	}
 
 	/**
@@ -992,6 +1149,59 @@
 	// ==================================================================================================================
 
 	/**
+	 * The type-scoped default for {@code declared.lazy} (design fork F9) - `false` for
+	 * {@link REGION_TYPES row-detail and card-body}, `true` for tab-body.  The client TWIN of
+	 * {@code RegionDef.effectiveLazy()}; needed only for an identity-only region (no descriptor at all), because
+	 * a descriptor's own {@code lazy} member is always the SERVER's already-resolved {@code effectiveLazy()}
+	 * value - see {@code RegionDef.toContractMap()}, which never omits the key.
+	 */
+	function defaultLazyFor(type) {
+		return type === "tab-body";
+	}
+
+	/**
+	 * Reads {@link REGION_DECLARED_ATTR}'s per-region JSON placeholder (see its own doc) into
+	 * `{declared, params}`.  Absent, blank, unparseable, or a `contractVersion` that does not match this
+	 * runtime's own - each is a LEGAL, silent fall-through to the identity-only shape (every `declared.*` member
+	 * at its default, `params` an empty object) rather than a throw: an identity-only region is region a/b's own
+	 * shape and must keep working with no descriptor at all.  A version MISMATCH (as opposed to a plain
+	 * absence) additionally logs one console error, on the same fail-safe-not-fail-loud reasoning
+	 * {@code detailContractOk} uses for a stale cached page.
+	 */
+	function readDeclaredDescriptor(el, id, type) {
+		const empty = {
+			declared: { dataUrl: null, renderer: null, lazy: defaultLazyFor(type), refreshMs: null, fields: null, titleFields: null },
+			params: {}
+		};
+		const raw = el.getAttribute(REGION_DECLARED_ATTR);
+		if (blank(raw)) return empty;
+		const body = safeParseJson(raw);
+		if (!body || typeof body !== "object") return empty;
+		if (Object.hasOwn(body, "contractVersion") && body.contractVersion !== REGION_CONTRACT_VERSION) {
+			window.console.error("JuneauViews.regions: region '" + id + "' - its declared descriptor's contract "
+				+ "version ('" + body.contractVersion + "') does not match this runtime's ('"
+				+ REGION_CONTRACT_VERSION + "'); it is read as identity-only.");
+			return empty;
+		}
+		return {
+			declared: {
+				dataUrl: body.dataUrl != null ? String(body.dataUrl) : null,
+				renderer: body.renderer != null ? String(body.renderer) : null,
+				lazy: typeof body.lazy === "boolean" ? body.lazy : defaultLazyFor(type),
+				refreshMs: typeof body.refreshMs === "number" ? clampRefreshMs(body.refreshMs) : null,
+				fields: Array.isArray(body.fields) ? body.fields : null,
+				titleFields: Array.isArray(body.titleFields) ? body.titleFields : null
+			},
+			params: (body.params && typeof body.params === "object" && !Array.isArray(body.params)) ? body.params : {}
+		};
+	}
+
+	/** The client twin of {@code RegionDef.MIN_REFRESH_MS}'s clamp - belt-and-suspenders over the server's own. */
+	function clampRefreshMs(ms) {
+		return ms < MIN_REFRESH_MS ? MIN_REFRESH_MS : ms;
+	}
+
+	/**
 	 * Mints a region from its container.  `key` is the framework's own stable, opaque identity for the region -
 	 * unique on the page and the value a fully-qualified emit target names - which is what makes a second expanded
 	 * row's region a different subscriber from the first's.
@@ -1000,15 +1210,17 @@
 		const id = el.getAttribute(REGION_ATTR) || "";
 		const declaredType = el.getAttribute(REGION_TYPE_ATTR);
 		const host = el.getAttribute(REGION_HOST_ATTR) || "";
+		const type = REGION_TYPES.indexOf(declaredType) >= 0 ? declaredType : "card-body";
+		const descriptor = readDeclaredDescriptor(el, id, type);
 		return {
 			el: el,
 			id: id,
-			type: REGION_TYPES.indexOf(declaredType) >= 0 ? declaredType : "card-body",
+			type: type,
 			host: host,
 			key: host ? host + "/" + id : id,
 			ids: readIds(el),
-			params: {},
-			declared: { dataUrl: null, renderer: null, lazy: false, refreshMs: null, fields: null, titleFields: null },
+			params: descriptor.params,
+			declared: descriptor.declared,
 			data: null,
 			selection: null,
 			populateName: el.getAttribute(REGION_POPULATE_ATTR),
@@ -1184,6 +1396,39 @@
 		disposeInvocation(region, REPOPULATE_REASON);
 		beginInvocation(region, reason);
 		setRegionState(region, "loading");
+
+		// R14a's pre-fetch (design §6.2.1's matrix, §8.5): keyed ONLY on the DESCRIPTOR - `dataUrl` set, and this
+		// is the region's first-ever populate call - never on which populator resolved.  A consumer-registered
+		// populator gets the IDENTICAL pre-fetch the reserved default gets (test 15a's second half; test 11's
+		// non-privilege proof: conditioning this on `populate == null` instead would be exactly the privileged
+		// fast path L12 exists to rule out).  `region.data`/`ctx.data` were just reset to `null` by
+		// `beginInvocation`, so every OTHER call (a poll tick, a message, a manual refresh, or any call once
+		// `firstPopulateDone`) reaches the populate with `ctx.data === null` and falls through to
+		// `ctx.fetchDeclared()` on its own - exactly R14a's "no pre-fetch on a re-populate" rule.
+		if (!region.firstPopulateDone && !blank(region.declared.dataUrl)) {
+			region.inFlight = fetchDeclared(region).then(
+				function (payload) {
+					region.data = payload;
+					region.ctx.data = payload;
+					invokePopulator(region, fn);
+				},
+				function (e) {
+					// A pre-fetch abort (teardown, or a re-populate that raced ahead of it) is not a failure of
+					// ANYTHING - the populate never ran, so there is nothing to blame and nothing to paint.  Any
+					// OTHER rejection (a 404, a refusal, a handshake mismatch, a transport failure) fails the
+					// whole invocation closed (R5): the pre-fetch runs before the populate is ever called, so a
+					// failure here is the framework's own contained throw, not the populate's.
+					if (e && e.name === "AbortError") { settlePrefetchAbort(region); return; }
+					failPopulate(region, e);
+				});
+			return;
+		}
+
+		invokePopulator(region, fn);
+	}
+
+	/** Calls the resolved populate fn and wires its return value through the four accepted shapes (§6.5). */
+	function invokePopulator(region, fn) {
 		let returned;
 		region.invoking = true;
 		try {
@@ -1202,6 +1447,13 @@
 			return;
 		}
 		settlePopulate(region, returned);
+	}
+
+	/** A pre-fetch superseded by teardown or by a re-populate: settle with no state change and no paint. */
+	function settlePrefetchAbort(region) {
+		region.inFlight = null;
+		if (region.torn) return;
+		finishInvocation(region);
 	}
 
 	/**
@@ -1232,6 +1484,10 @@
 			region.messageCtl = new AbortController();
 			linkToParent(region.signalCtl.signal, region.messageCtl);
 		}
+		// R14a: `ctx.data` is the PRE-FETCHED payload and only the pre-fetch below may set it - every other call
+		// (any call once `firstPopulateDone`, or a first call with no declared `dataUrl`) starts `null` and, if
+		// it wants the declared payload, calls `ctx.fetchDeclared()` itself.
+		region.data = null;
 		region.ctx = buildCtx(region, reason);
 	}
 
@@ -1264,7 +1520,46 @@
 		if (pending != null) {
 			region.pendingReason = null;
 			runPopulate(region, pending);
+			return;
 		}
+		armPollTimer(region);
+	}
+
+	/**
+	 * Poll lifecycle (design &sect;8.3.1): one timer per region, ever, keyed on `region.pollTimer` - the SAME
+	 * field the framework's own teardown step 0 already clears (landed in `a`/`b`), so this function's whole job
+	 * is to ARM it, never to clear it on teardown's behalf.
+	 *
+	 * <p>CLEAR-THEN-SET, called from every settle (`finishInvocation`, so "initial"/"activate"/"message"/
+	 * "refresh" all re-arm identically): a region re-populated ten times ends with ONE live timer, not ten (test
+	 * 14a), and the observable effect of a message- or manually-triggered refresh is the timer's PHASE resetting
+	 * rather than a second timer starting.  A region with no declared `refreshMs` arms nothing.  Torn down is a
+	 * no-op: there is nothing left to arm for.
+	 */
+	function armPollTimer(region) {
+		if (region.pollTimer !== null) {
+			window.clearTimeout(region.pollTimer);
+			region.pollTimer = null;
+		}
+		if (region.torn || region.declared.refreshMs == null) return;
+		region.pollTimer = window.setTimeout(function () { onPollTick(region); }, region.declared.refreshMs);
+	}
+
+	/**
+	 * One tick.  SKIPPED, not queued, while a populate is in flight - the tick is simply dropped and the timer
+	 * re-armed for the next interval, rather than routed through `runPopulate`'s pending-reason coalesce (which
+	 * exists for `ctx.refresh()`/bus-driven re-populates, not for a poll's own tick).  On error the timer keeps
+	 * running: `runPopulate`'s own settle (via `finishInvocation`) re-arms it regardless of whether the region
+	 * ended in its `ok` or its `error` state, so a transient failure is a retry, not a dead card.
+	 */
+	function onPollTick(region) {
+		region.pollTimer = null;
+		if (region.torn) return;
+		if (region.invoking || region.inFlight) {
+			armPollTimer(region);
+			return;
+		}
+		runPopulate(region, "refresh");
 	}
 
 	/**
@@ -1386,6 +1681,8 @@
 		registerRuntime: registerRuntime,
 		ready: ready,
 		defaultPopulate: defaultPopulate,
+		serializeParams: serializeParams,
+		MIN_REFRESH_MS: MIN_REFRESH_MS,
 		builtins: builtins,
 		emitFramework: emitFramework,
 		selectionChangedMessage: selectionChangedMessage,

@@ -101,6 +101,8 @@ function makeConsole() {
  * Loads juneau-renders.js, juneau-views.js and juneau-regions.js into one fresh environment.
  *
  * `opts.noAbortController` withholds the platform baseline for the fail-loud test.
+ * `opts.helpersJsPath` ALSO loads juneau-helpers.js into the same sandbox (afterward, same load order the browser
+ * uses) - only the declarative-default harness needs this, since the reserved default paints via `ctx.helpers[...]`.
  */
 function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 	opts = opts || {};
@@ -129,15 +131,18 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 		sandbox.DOMException = DOMException;
 	}
 
-	for (const file of [rendersJsPath, viewsJsPath, regionsJsPath]) {
+	const files = [rendersJsPath, viewsJsPath, regionsJsPath];
+	if (opts.helpersJsPath) files.push(opts.helpersJsPath);
+	for (const file of files) {
 		// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js/juneau-regions.js
-		// sources into a VM sandbox is this harness's intended mechanism for exercising them under the DOM shim;
-		// inputs are fixed local file paths supplied by the test, never attacker-controlled data.
+		// (and, when supplied, juneau-helpers.js) sources into a VM sandbox is this harness's intended mechanism
+		// for exercising them under the DOM shim; inputs are fixed local file paths supplied by the test, never
+		// attacker-controlled data.
 		vm.runInNewContext(fs.readFileSync(path.resolve(file), 'utf8'), sandbox, { filename: path.basename(file) });
 	}
 
 	const NS = env.window.JuneauViews;
-	return { env: env, NS: NS, R: NS?.regions, I: NS?.init, rec: rec, clock: clock };
+	return { env: env, NS: NS, R: NS?.regions, H: NS?.helpers, I: NS?.init, rec: rec, clock: clock };
 }
 
 /**
@@ -151,6 +156,9 @@ function mkRegion(env, opts) {
 	if (opts.type) el.setAttribute('data-juneau-region-type', opts.type);
 	if (opts.host) el.setAttribute('data-juneau-region-host', opts.host);
 	if (opts.populate) el.setAttribute('data-juneau-region-populate', opts.populate);
+	// `opts.declared` is the placeholder per-region descriptor JSON (see REGION_DECLARED_ATTR's own doc in
+	// juneau-regions.js for why this is a placeholder and not §12.2's real per-host sidecar wire shape).
+	if (opts.declared) el.setAttribute('data-juneau-region-declared', JSON.stringify(opts.declared));
 	let parent = opts.parent || env.body;
 	if (opts.hiddenPanel) {
 		const panel = env.el('div');

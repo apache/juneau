@@ -691,15 +691,22 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * <p>
 	 * <b>One deliberate deviation from the design snippet, flagged rather than silently applied:</b> the design's
 	 * "Details" tab loader is {@code () => ctx.data ?? ctx.fetchDeclared()}, joining the panel's own expand GET.
-	 * That join, and the declarative {@code dataUrl}/{@code fields} descriptor {@code ctx.fetchDeclared()} would
-	 * read, are the "separate, larger contract" {@link org.apache.juneau.rest.server.views.RegionDef}'s own
-	 * Javadoc defers to a later revision (WORK-J0522c/d scope, not this item) &mdash; today {@code ctx.data} is
-	 * always <jk>null</jk> and {@code ctx.fetchDeclared()} always resolves <jk>null</jk> for every region, so the
-	 * design's exact line would paint every "Details" tab as permanently empty rather than demonstrating
-	 * {@code fieldGrid} at all. This example's "Details" tab instead uses the SAME author-owned {@code fetch} the
-	 * other nine tabs use ({@code at("details")}), which is a test-normative substitution (it demonstrates the
-	 * thing &sect;11.1a is FOR &mdash; a populated field grid &mdash; using only mechanisms this repository has
-	 * actually landed) rather than a silent resolution of a real design/code gap; see this child's build report.
+	 * {@link org.apache.juneau.rest.server.views.RegionDef}/{@code ctx.fetchDeclared()}/{@code ctx.declared} are
+	 * now real (WORK-J0522c) and proven non-privileged (design &sect;8.4's L12 property, tests 11/12) &mdash; but
+	 * wiring THIS example to the design's exact line is still not a clean win, for a reason specific to this
+	 * page's shape rather than a missing primitive: R14a's pre-fetch is keyed on the descriptor attached to the
+	 * WHOLE region, not on any one pane inside it, so giving this region a declared {@code dataUrl} (the only way
+	 * to make {@code ctx.data}/{@code ctx.fetchDeclared()} resolve to anything but <jk>null</jk> here) would gate
+	 * the ENTIRE ten-tab strip's first paint behind the "Details" tab's own fetch &mdash; every one of the other
+	 * nine tabs would wait on it too, which is the opposite of what this page exists to demonstrate (a tab strip
+	 * that paints immediately and lazy-fetches per tab). The design's "joins the panel's own expand GET" framing
+	 * describes a host (a real {@code RowDetailDef} expand click) that already carries a payload for R14a to
+	 * reuse; this standalone, hand-enrolled region has no such host and no such GET to join, so the join this
+	 * snippet demonstrates does not actually exist for this example's shape &mdash; a WORK-J0522d
+	 * (host-enrolment) concern to resolve, not a WORK-J0522c one. This example's "Details" tab therefore keeps
+	 * the SAME author-owned {@code fetch} the other nine tabs use ({@code at("details")}), unchanged from `b`'s
+	 * landing, rather than accepting that page-wide regression for a partial demonstration; see this child's
+	 * build report for the full reasoning.
 	 *
 	 * @return The {@code <script>} body (no surrounding tag).
 	 */
