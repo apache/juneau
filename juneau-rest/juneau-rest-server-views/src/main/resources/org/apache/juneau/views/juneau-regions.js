@@ -941,10 +941,33 @@
 		return encodeURIComponent(s);
 	}
 
-	/** Appends {@link #serializeParams}'s fragment of `region.params` to `region.declared.dataUrl`. */
+	/**
+	 * Substitutes `{id}` then appends {@link #serializeParams}'s fragment of `region.params` to
+	 * `region.declared.dataUrl`.
+	 *
+	 * <p>SUBSTITUTION FIRST, and it is not optional for a row-detail region.  `RowDetailDef` projects its
+	 * `endpoint` onto the panel's one region as that region's `dataUrl` (design &sect;12.3.3 rule 1), and an endpoint
+	 * is a TEMPLATE - `RowDetailDef.validate` requires it to contain `{id}`.  The server has no row to substitute at
+	 * emit time (the container ships inside a `<template>` that is cloned per expanded row), so the substitution is
+	 * the client's, and without it the projected URL would be fetched with a literal `{id}` in the path.
+	 *
+	 * <p>Reuses the view runtime's own `substituteDetailUrl`, which re-runs the same-origin check on the SUBSTITUTED
+	 * result rather than only on the template - so a row id carrying a `..` segment or a scheme cannot smuggle one
+	 * in.  An unsafe result yields `null` and the caller refuses the fetch rather than issuing it.
+	 *
+	 * <p>A URL with no `{id}`, or a region with no row id, passes through untouched: an ordinary card/tab region's
+	 * `dataUrl` is a plain path and has nothing to substitute.
+	 */
 	function resolveDeclaredUrl(region) {
-		const dataUrl = region.declared.dataUrl;
+		let dataUrl = region.declared.dataUrl;
 		if (blank(dataUrl)) return dataUrl;
+		const rowId = region.ids ? region.ids.rowId : null;
+		if (dataUrl.indexOf("{id}") >= 0) {
+			const init = NS.init;
+			if (rowId == null || typeof init?.substituteDetailUrl !== "function") return null;
+			dataUrl = init.substituteDetailUrl(dataUrl, rowId);
+			if (blank(dataUrl)) return null;
+		}
 		const q = serializeParams(region.params);
 		if (q === "") return dataUrl;
 		return dataUrl + (dataUrl.indexOf("?") >= 0 ? "&" : "?") + q;
@@ -1002,9 +1025,35 @@
 	 * wants the pre-fetched value reads `ctx.data`.  It does not touch the region's loading/ok/error state: a
 	 * fetch is not a paint.
 	 */
+	/**
+	 * The shared-envelope join (design &sect;12.3.3 rule 2): a row-detail region whose declared URL is the panel's own
+	 * substituted endpoint reads the panel's already-in-flight expand envelope instead of issuing a second request.
+	 *
+	 * <p>Returns the joined promise, or `null` when there is nothing to join - which is every region that is not a
+	 * row-detail region, and any row-detail region whose author set an explicit `dataUrl` (the priced opt-out: that
+	 * author asked for a separate GET and gets one).  The seam is stamped on the panel by `juneau-views.js`'s
+	 * `expandDetailRow` BEFORE enrolment, so a region can never race the map's creation and there is no
+	 * "entry not there yet, fetch it myself" branch to get wrong.
+	 *
+	 * <p>One GET per panel, and chrome and content read the SAME body: a `{field}` title the chrome projects and a
+	 * value this region paints cannot disagree, which they could if the region issued its own request and the two
+	 * responses differed.
+	 */
+	function joinDetailEnvelope(region, url) {
+		const host = region.el && region.el.closest ? region.el.closest(".juneau-view-detail-panel") : null;
+		const join = host && host._juneauDetailJoin;
+		if (!join || join.url !== url) return null;
+		return join.payload();
+	}
+
 	function fetchDeclared(region) {
 		if (blank(region.declared.dataUrl)) return Promise.resolve(null);
 		const url = resolveDeclaredUrl(region);
+		if (blank(url))
+			return Promise.reject(new Error("region '" + region.key + "': the declared dataUrl '"
+				+ region.declared.dataUrl + "' could not be resolved to a safe same-origin path for this row."));
+		const joined = joinDetailEnvelope(region, url);
+		if (joined) return joined;
 		return fetch(url, {
 			method: "GET",
 			credentials: "same-origin",

@@ -923,6 +923,29 @@ public class ViewTable {
 		var children = new ArrayList<>();
 		if (hasDetailHeader(d))
 			children.add(emitDetailHeader(d, viewDef.rowActions));
+		if (d.isRegionBody()) {
+			// Chrome plus EXACTLY ONE empty region container.  No section frames, no field slots, and no strip: a
+			// region panel has no [data-juneau-detail-section] nodes at all, so the client's multi-section ->
+			// tab-mode conversion no-ops on it with no edit (buildDetailStrip returns null below two sections).
+			//
+			// No CSRF stamp on this container: a row-detail region sits beneath the view table, which already
+			// carries the response's token, and a second stamp on the same subtree is the F22 hazard rather than the
+			// fix for it.  The non-table hosts (card/tab bodies) are the ones that need it.
+			children.add(RegionTable.of(projectDetailRegion(d), null));
+			// The lone region IS the body, so there is no ribbon for a bar slot to trail and no section title to
+			// anchor to.  ANCHOR_SECTION_TITLE is the closer of the two - a single-section panel has no ribbon
+			// either - so a region panel's bar slot rides the same anchor a one-section panel's does.
+			if (d.barSlot != null)
+				children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
+			children.add(RegionTable.detailSidecar(List.of(projectDetailRegion(d))));
+			if (d.barSlot != null)
+				children.add(BarSlotTable.detailSidecar(d.barSlot));
+			return template()
+				.attr(DETAIL_TEMPLATE_ATTR, "1")
+				.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
+				.attr(DETAIL_URL_ATTR, d.endpoint)
+				.children(children.toArray());
+		}
 		// The detail ribbon is assembled CLIENT-side, and only from two or more sections, so the bar-slot region has
 		// two server anchors: a ribbon-anchored last direct child the runtime relocates, or - with no ribbon to trail
 		// and none synthesized for it - a section-title-anchored child of the lone section.
@@ -941,6 +964,52 @@ public class ViewTable {
 			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
 			.attr(DETAIL_URL_ATTR, d.endpoint)
 			.children(children.toArray());
+	}
+
+	/**
+	 * Projects {@link RowDetailDef#endpoint} onto the panel's one region as its {@link RegionDef#dataUrl}, unless the
+	 * author set one explicitly.
+	 *
+	 * <p>
+	 * Without this projection the flagship shape paints <b>nothing</b>: the Java sets an {@code endpoint} and no
+	 * {@code dataUrl}, the JS does {@code ctx.data ?? await ctx.fetchDeclared()}, and {@code fetchDeclared()}
+	 * resolves {@code null} for an unset {@code dataUrl} &mdash; so the region has no payload and the panel is blank.
+	 * Projecting the endpoint is what makes {@code ctx.declared.dataUrl} non-null for a row-detail region under a
+	 * {@link RowDetailDef} that has an endpoint.
+	 *
+	 * <p>
+	 * The projected value is the endpoint <b>template</b>, {@code {id}} and all: row substitution is the client's
+	 * existing {@code substituteDetailUrl} / {@code isSafeDetailUrl} path, which already runs per expanded row, and
+	 * the server has no row to substitute at emit time.  Because the projected URL is then <i>equal to</i> the
+	 * panel's own substituted endpoint, the region's declared fetch <b>joins</b> the panel's in-flight expand
+	 * envelope instead of issuing a second request &mdash; one GET per panel, and chrome and content read the same
+	 * body.  An author who sets an explicit {@code dataUrl} opts out and gets a genuinely separate GET; that is the
+	 * priced opt-out, and it is the only one (there is deliberately no {@code shared} flag).
+	 *
+	 * <p>
+	 * Returns a <b>copy</b> rather than mutating the author's bean: this runs on every emit, and writing a projected
+	 * {@code dataUrl} back onto a shared {@link RegionDef} would make the author's own "did I set this?" state
+	 * depend on how many times the view had been served.
+	 *
+	 * @param d The detail definition.  Must declare a {@link RowDetailDef#region}.
+	 * @return The region to emit, with {@code dataUrl} projected when the author left it unset.
+	 */
+	private static RegionDef projectDetailRegion(RowDetailDef d) {
+		var r = d.region;
+		if (r.dataUrl != null && ! r.dataUrl.isBlank())
+			return r;
+		var copy = RegionDef.create(r.id);
+		copy.populate = r.populate;
+		copy.type = r.type;
+		copy.dataUrl = d.endpoint;
+		copy.params = r.params;
+		copy.renderer = r.renderer;
+		copy.lazy = r.lazy;
+		copy.refreshMs = r.refreshMs;
+		copy.fields = r.fields;
+		copy.titleFields = r.titleFields;
+		copy.allowedPopulators = r.allowedPopulators;
+		return copy;
 	}
 
 	/**

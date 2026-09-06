@@ -96,6 +96,14 @@ final class RawContentSinkScanner {
 	/** Matches a {@code .content(} call (the {@code Tab}/{@code Subtab} raw-content fluent setter). */
 	private static final Pattern CONTENT_CALL = Pattern.compile("\\.content\\s*\\(");
 
+	/**
+	 * Matches a {@code rawText(} call &mdash; the html5 primitive that writes its argument <b>verbatim</b>, bypassing
+	 * Juneau's normal XML/HTML text escaping.  This is the sink the emitter-purity scan
+	 * ({@code EmitterPurity_ScanTest}) reasons about: {@link #CONTENT_CALL} above asks "what is poured <i>into</i> a
+	 * declarative content bean", this one asks "what does the <i>emitter</i> hand to the verbatim writer".
+	 */
+	private static final Pattern RAW_TEXT_CALL = Pattern.compile("\\brawText\\s*\\(");
+
 	/** Matches an {@code innerHTML =} assignment in JavaScript (the XSS sink the chooser must never use). */
 	private static final Pattern JS_INNERHTML_ASSIGN = Pattern.compile("\\.innerHTML\\s*=");
 
@@ -151,6 +159,12 @@ final class RawContentSinkScanner {
 		VIEWS_JS_DIR + "/juneau-views.js",
 		VIEWS_JS_DIR + "/juneau-ribbon.js",
 		VIEWS_JS_DIR + "/juneau-helpers.js",
+		// The REGION RUNTIME.  Omitted until WORK-J0522d, which is backwards: this is the one shipped asset that
+		// takes an author-supplied populator NAME off a DOM attribute and hands a container to author-registered
+		// populate functions, so it is the file where an HTML sink would matter most (R11/R36, design §13.5).  It
+		// has zero sinks today - every state message goes out through renderAsyncStatus's textContent - and listing
+		// it here is what keeps that true rather than merely currently-so.
+		VIEWS_JS_DIR + "/juneau-regions.js",
 		WIDGETS_JS_DIR + "/juneau-cards.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
 		WIDGETS_JS_DIR + "/juneau-chrome.js"
@@ -331,6 +345,127 @@ final class RawContentSinkScanner {
 		scanJavaSources(moduleRoot, sinks, violations);
 		scanJavaSources(moduleRoot.resolve(WIDGETS_MODULE_DIR), sinks, violations);
 		return new Result(sinks, violations);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// rawText(...) emitter-purity scanning (design test 33).
+	//
+	// The .content(...) scan above guards the AUTHOR-facing beans: what may be poured into a declarative content
+	// field.  This scan guards the EMITTER: what an emitter is allowed to hand to the verbatim writer.  They are
+	// complementary halves of the same claim, which is why they share this file's stripper and argument extractor
+	// rather than growing a second, subtly-divergent copy of both.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Argument identifiers that are provably a JSON <b>sidecar payload</b> rather than content: the local holding a
+	 * serialized descriptor, immediately before it is written into a {@code <script type="application/json">}.
+	 *
+	 * <p>
+	 * The other sidecar shape is recognized structurally instead of by name &mdash; any argument beginning
+	 * {@code escapeForScript(} is a sidecar by construction, since that helper exists only to make a JSON payload
+	 * safe for a {@code <script>} body.
+	 */
+	private static final Set<String> SIDECAR_PAYLOAD_ARGS = Set.of("json", "bulkJson");
+
+	/**
+	 * One {@code rawText(...)} call site, classified.
+	 *
+	 * @param file The simple file name (e.g. {@code PageTable.java}).
+	 * @param line The 1-based line number of the call.
+	 * @param arg The argument source text, verbatim.
+	 */
+	record RawTextSite(String file, int line, String arg) {
+
+		/** Stable identity of this sink for allowlisting: file plus argument shape, independent of line number. */
+		String key() {
+			return file + ":" + arg;
+		}
+
+		/** True if the argument is a serialized JSON sidecar descriptor. */
+		boolean isSidecarPayload() {
+			return SIDECAR_PAYLOAD_ARGS.contains(arg) || arg.startsWith("escapeForScript(");
+		}
+
+		/** True if the argument is the empty string literal &mdash; a structural placeholder carrying nothing. */
+		boolean isEmptyLiteral() {
+			return "\"\"".equals(arg);
+		}
+
+		/** True if this site writes something that is neither a sidecar payload nor provably empty. */
+		boolean isContentBearing() {
+			return !isSidecarPayload() && !isEmptyLiteral();
+		}
+
+		@Override
+		public String toString() {
+			return file + ":" + line + " -> rawText(" + arg + ")";
+		}
+	}
+
+	/**
+	 * Scans a single Java source string for {@code rawText(...)} call sites.
+	 *
+	 * @param file A label for the source (used in messages).
+	 * @param source The Java source text.
+	 * @return Every {@code rawText(...)} site found, in source order.
+	 */
+	static List<RawTextSite> scanRawText(String file, String source) {
+		var out = new ArrayList<RawTextSite>();
+		var code = stripComments(source);
+		var m = RAW_TEXT_CALL.matcher(code);
+		while (m.find()) {
+			var openParen = m.end() - 1;
+			var arg = balancedArg(code, openParen).trim();
+			var line = 1 + (int) code.substring(0, m.start()).chars().filter(c -> c == '\n').count();
+			out.add(new RawTextSite(file, line, arg));
+		}
+		return out;
+	}
+
+	/**
+	 * Walks the specified module root <b>and</b> the sibling widgets module root, scanning every
+	 * {@code src/main/java} source under each for {@code rawText(...)} sites.
+	 *
+	 * <p>
+	 * <b>Main sources only</b>, deliberately, and unlike {@link #scanTree}: the claim under test is about what the
+	 * shipped emitters do.  A test fixture that hands live-looking data to {@code rawText} is exercising the
+	 * emitter, not violating the contract.
+	 *
+	 * @param moduleRoot The views module root.
+	 * @return Every site found across both modules' main trees, in stable (per-tree, sorted-by-path) order.
+	 * @throws IOException If either tree cannot be walked.
+	 */
+	static List<RawTextSite> scanRawTextTree(Path moduleRoot) throws IOException {
+		var out = new ArrayList<RawTextSite>();
+		collectRawText(moduleRoot, out);
+		collectRawText(moduleRoot.resolve(WIDGETS_MODULE_DIR), out);
+		return out;
+	}
+
+	private static void collectRawText(Path moduleRoot, List<RawTextSite> out) throws IOException {
+		var target = File.separator + "target" + File.separator;
+		var srcRoot = moduleRoot.resolve("src").resolve("main").resolve("java");
+		if (!Files.isDirectory(srcRoot))
+			return;
+		try (var stream = Files.walk(srcRoot)) {
+			var files = stream
+				.filter(p -> p.toString().endsWith(".java"))
+				.filter(p -> !p.toString().contains(target))
+				.sorted()
+				.toList();
+			for (var f : files)
+				out.addAll(scanRawText(f.getFileName().toString(), Files.readString(f)));
+		}
+	}
+
+	/**
+	 * Resolves the sibling widgets module root, so a test can assert the cross-module crossing actually happened.
+	 *
+	 * @param moduleRoot The views module root.
+	 * @return The widgets module root (which may not exist &mdash; that is the thing worth asserting).
+	 */
+	static Path widgetsModuleRoot(Path moduleRoot) {
+		return moduleRoot.resolve(WIDGETS_MODULE_DIR);
 	}
 
 	/**

@@ -273,6 +273,34 @@
 		return String(rowId) + ":" + generation;
 	}
 
+	/**
+	 * Whether {@code el} sits inside a `[data-juneau-region]` container that is itself inside {@code scopeEl} - the
+	 * subtree-exclusion predicate the framework's own click delegates use to keep their hands off author-drawn DOM.
+	 *
+	 * <p>Scoped to {@code scopeEl} on purpose rather than testing `closest("[data-juneau-region]")` globally: a
+	 * region ancestor ABOVE the scope (a detail panel nested inside some outer card-body region, say) does not make
+	 * this panel's own chrome author-drawn, and treating it as if it did would silently disable the framework's
+	 * ActionRef bar for every panel that happened to be hosted inside a region.
+	 */
+	// True when `el` is inside (or IS) a region container that lives within `scopeEl` - i.e. the click landed on
+	// author-drawn DOM that a populate owns, not on framework-emitted chrome.
+	//
+	// `closest` includes `el` itself DELIBERATELY.  An earlier form excluded the self-match (`region !== el`), which
+	// protected nothing - the framework's own region container is always a bare <div> from RegionTable.of(), never
+	// carrying [data-juneau-action] - while opening a bypass: a populate painting
+	// `<button data-juneau-action="x" data-juneau-region="y">` would self-match, be treated as NOT in a region, and
+	// have its click routed straight into submitRowAction, which is the exact thing §13.6 exists to prevent.
+	//
+	// The `scopeEl.contains(region)` bound is equally load-bearing in the other direction: a whole view TABLE may
+	// itself be hosted inside a region, and in that case the detail panel's own framework-emitted action buttons
+	// must keep working.  Scoping the lookup to the panel means an ancestor region above the table never suppresses
+	// them - only a region NESTED INSIDE the panel does.
+	function isInRegionSubtree(el, scopeEl) {
+		if (!el || !scopeEl || typeof el.closest !== "function") return false;
+		const region = el.closest("[data-juneau-region]");
+		return !!region && scopeEl.contains(region);
+	}
+
 	/** Scalar expand-JSON values become strings; objects/arrays/undefined become "". */
 	function scalarFieldValue(v) {
 		if (v == null) return "";
@@ -2564,6 +2592,17 @@
 		const panel = actionBtn.closest(".juneau-view-detail-panel");
 		const parentTr = panel?._juneauParentTr;
 		if (!parentTr) return true;
+		// REGION EXCLUSION: the framework does not act on author-drawn DOM.  This delegate is bound at the TABLE
+		// level and matches [data-juneau-action] anywhere beneath it - including inside a region container in a
+		// detail panel - so a populate that paints its own action button would otherwise have its click routed
+		// into submitRowAction, i.e. a POST with no idempotency key and no dialog seam.  A populate that WANTS
+		// the library's write path calls ctx.write(...) / showActionDialog(...) explicitly.
+		//
+		// Return true (handled) rather than false: falling through would reach toggleDetailRow below and could
+		// collapse the row out from under the author's own click.  But deliberately WITHOUT preventDefault or
+		// stopPropagation - the author's own listener and the element's native behavior are none of our business.
+		// Same subtree-exclusion shape activatePanelViews already applies to nested tables and detail panels.
+		if (isInRegionSubtree(actionBtn, panel)) return true;
 		e.preventDefault();
 		e.stopPropagation();
 		if (actionBtn.disabled || actionBtn.hidden) return true;
@@ -3149,12 +3188,6 @@
 		notifyPollPausedChange(ctx);
 		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
 		enhanceChromeInPanel(panel);
-		// Enrolment call site 3/3 (design §9.3): only now is the clone in the document, so a detail-panel region
-		// can find its host and its data-* declaration.  Runtime-agnostic like juneau-cards.js's own
-		// `enrolCardRegions`: `enrolIn` itself is idempotent per node and a no-op walk when the template carried
-		// no region at all, so this call is unconditional rather than gated on the template being known to have one.
-		if (NS.regions) NS.regions.enrolIn(panel);
-		else reportRegionsWithoutRuntime(panel.querySelectorAll("[" + REGION_MARKER + "]"));
 
 		function stillCurrent() {
 			return ctx._detailGeneration.get(tr) === gen && row.child.isShown();
@@ -3226,6 +3259,17 @@
 			settleMap();
 		}
 
+		// CREATION BEFORE ENROLMENT (design §12.3.3 rule 2a).  This block used to sit BELOW the enrolment walk, and
+		// that ordering was the bug: a row-detail region's `fetchDeclared()` for the panel's own projected endpoint
+		// is specified to JOIN this in-flight entry rather than issue a second request, and a region that enrolled
+		// (and populated) before the entry existed would find nothing to join and fetch the same URL again - exactly
+		// the duplicate request the join exists to eliminate, and unreachable in testing because it depends on
+		// ordering rather than on any contract.
+		//
+		// The motion is smaller than it looks because `stillCurrent` / `settleMap` / `failClosed` / `handleEnvelope`
+		// are FUNCTION DECLARATIONS and are therefore hoisted to the top of expandDetailRow's body - callable from
+		// here regardless of textual position, which is what lets the fetch move above its own handler.  The one
+		// binding that could have been read early is `url`, and it moves WITH the block that reads it.
 		const inflight = ctx._detailInflight;
 		let req = inflight.get(key);
 		if (!req) {
@@ -3240,6 +3284,57 @@
 		req.then(handleEnvelope).catch(function () {
 			failClosed("error", "the detail request could not be completed");
 		});
+
+		// The join seam a row-detail region reads, stamped on the panel BEFORE enrolment for the same reason the
+		// entry itself is created before it.  `juneau-regions.js`'s fetchDeclared consults this (and only this) to
+		// decide whether its declared URL is the panel's own; anything else fetches normally.
+		panel._juneauDetailJoin = {
+			url: url,
+			// The map keeps storing the TRANSPORT TRIPLE, because the chrome's own fail-closed branches above need
+			// env.status / env.ok.  The transform to the values map is the REGION's, and it memoizes on this seam so
+			// the parse happens once per panel rather than once per region.
+			payload: function () {
+				if (!this._p) this._p = req.then(toValuesMap);
+				return this._p;
+			}
+		};
+		// A joined read must never observe a settle the chrome has dropped, so it inherits the chrome's own currency
+		// gate: a collapsed-and-reexpanded row's stale envelope resolves nothing into a region that no longer exists.
+		function toValuesMap(env) {
+			if (!env) return Promise.reject(new Error("the detail request could not be completed"));
+			if (env.status === 404) return Promise.reject(emptyKindError("this row is gone"));
+			if (!env.ok) return Promise.reject(new Error("the detail request was refused (" + env.status + ")"));
+			const body = parseJsonSafe(env.text);
+			const expected = tpl.dataset.juneauDetailContract || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
+			if (!detailContractOk(body, expected))
+				return Promise.reject(new Error("row-detail contract version mismatch"));
+			if (!stillCurrent()) return Promise.reject(new Error("this detail panel is no longer current"));
+			// The SAME object the chrome projects its {field} titles from, so a title and a region value painted from
+			// one expand can never disagree.
+			return body.fields;
+		}
+
+		// Enrolment call site 3/3 (design §9.3), and LAST on purpose: only now is the clone in the document (so a
+		// detail-panel region can find its host and its declaration) AND the in-flight entry created (so a region
+		// never races the map).  Runtime-agnostic like juneau-cards.js's own `enrolCardRegions`: `enrolIn` itself is
+		// idempotent per node and a no-op walk when the template carried no region at all, so this call is
+		// unconditional rather than gated on the template being known to have one.
+		//
+		// One consequence, stated rather than left to be discovered: a panel that FAILS CLOSED enrols NO regions.
+		// Both rejections above `return` out of expandDetailRow before reaching here, so a null-row or unsafe-URL
+		// panel renders its error state and its region containers stay empty and un-enrolled.  That is the right
+		// answer and it is already the rule elsewhere (a card whose refresh handshake was refused enrols nothing),
+		// and it matters to the page barrier: such a panel contributes ZERO outstanding regions rather than
+		// contributing regions that would never settle.
+		if (NS.regions) NS.regions.enrolIn(panel);
+		else reportRegionsWithoutRuntime(panel.querySelectorAll("[" + REGION_MARKER + "]"));
+	}
+
+	/** An Error carrying the framework's `empty` kind, so a joined region renders the empty state, not a failure. */
+	function emptyKindError(message) {
+		const e = new Error(message);
+		e.juneauKind = "empty";
+		return e;
 	}
 
 	/**

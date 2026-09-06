@@ -86,7 +86,7 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
-@Rest(mixins=ViewsMixin.class)
+@Rest(mixins=ViewsMixin.class, children=ExampleInstancesRest.class)
 public class ExampleViewsRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

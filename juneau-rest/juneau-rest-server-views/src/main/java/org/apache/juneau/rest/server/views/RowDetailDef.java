@@ -61,8 +61,60 @@ public class RowDetailDef {
 	/** Same-origin path template; {@code {id}} is substituted with {@code encodeURIComponent(rowId)}. */
 	public String endpoint;
 
-	/** The named sections, in display order.  At least one is required. */
+	/**
+	 * The named sections, in display order.
+	 *
+	 * <p>
+	 * Required <b>unless</b> {@link #region} is set &mdash; the two are mutually exclusive, and exactly one of them
+	 * must be present.  See {@link #region} for the coexistence rules.
+	 *
+	 * <p>
+	 * The <b>setter</b> ({@link #sections(DetailSection...)}) is deprecated in favor of {@link #region(RegionDef)};
+	 * this field deliberately is not.  Deprecating the field would warn at every one of the framework's own internal
+	 * read sites &mdash; the emitter, the {@code $FV} chrome pre-scan, the validation pass &mdash; all of which
+	 * <b>must</b> keep reading it for the whole deprecation window, so the warning would carry no signal and would
+	 * have to be suppressed everywhere it fired.  The deprecation belongs on the authoring surface.
+	 */
 	public List<DetailSection> sections;
+
+	/**
+	 * The <b>one</b> region this panel's body is, or <jk>null</jk> for a {@link #sections}-declaring panel.
+	 *
+	 * <h5 class='section'>Exactly one of {@link #sections} / {@link #region}, and neither wins over the other:</h5>
+	 * <p>
+	 * A bean setting <b>both</b> is rejected by {@link #validate(List)} rather than resolved by a precedence rule.
+	 * A precedence rule is a state in which one of the two declarations is <i>silently unread</i>, and a bean that
+	 * says both things is a bean whose author does not know which system they are in.  The loud answer is free here
+	 * &mdash; both fields are on the same bean.
+	 *
+	 * <h5 class='section'>What the emitter does differently:</h5>
+	 * <p>
+	 * A {@link #sections}-declaring panel emits today's section frames, field slots and (client-side, from two or
+	 * more sections) a framework-drawn section-tab strip.  A {@code region}-declaring panel emits <b>chrome plus
+	 * exactly one empty region container</b> &mdash; no section frames, no field slots, and no framework strip.  The
+	 * author paints the body, and draws their own strip with {@code JuneauViews.helpers.tabStrip} if they want one.
+	 * Both shapes emit, in the same build, for the whole deprecation window: a view migrates when its owner is
+	 * ready, not on the day this ships.
+	 *
+	 * <h5 class='section'>{@link ActionRef#enabledWhen} is rejected on this path:</h5>
+	 * <p>
+	 * The startup cross-check {@link #validateEnabledWhenFields()} performs needs a declared
+	 * {@link DetailField} catalog to check <i>against</i>, and a {@code region}-declaring panel has none &mdash; its
+	 * catalog is an author JS literal.  Rather than let the rules through unchecked (which is the
+	 * disabled-on-every-row-forever-and-silently failure this class refuses on the {@link #sections} path), an
+	 * {@code enabledWhen} rule anywhere on a {@code region}-declaring panel <b>fails at startup</b>, naming the
+	 * replacement: paint the buttons inside the region body and gate them from {@code ctx.data}'s values map in the
+	 * populate itself, writing through {@code ctx.write(...)}.  This rejection is <b>per bean</b>: a
+	 * {@link #sections}-declaring panel keeps {@code enabledWhen}, keeps its rules, and keeps this cross-check,
+	 * unchanged, for the entire window.
+	 *
+	 * <p>
+	 * The region's {@link RegionDef#type} is set to {@link RegionDef#TYPE_ROW_DETAIL} by {@link #region(RegionDef)}
+	 * &mdash; an author never sets it &mdash; and {@link RegionDef#dataUrl} is projected from {@link #endpoint} at
+	 * emit time unless the author set one explicitly, so the region shares the panel's own expand GET rather than
+	 * issuing a second one.
+	 */
+	public RegionDef region;
 
 	/**
 	 * Optional expander-panel title.  May contain <code>{field}</code> placeholders filled from the expand GET
@@ -166,10 +218,50 @@ public class RowDetailDef {
 	 *
 	 * @param value The sections, in display order.  Must not be <jk>null</jk>.
 	 * @return This object.
+	 * @deprecated Use {@link #region(RegionDef)} instead &mdash; one region, painted by a client populator.  Still
+	 * 	fully supported and still emitting for the whole deprecation window; this marks the direction, not a removal.
 	 */
+	@Deprecated
 	public RowDetailDef sections(DetailSection...value) {
 		sections = l(value);
 		return this;
+	}
+
+	/**
+	 * Sets the one region this panel's body is, replacing {@link #sections(DetailSection...)}.
+	 *
+	 * <p>
+	 * Stamps {@link RegionDef#type} to {@link RegionDef#TYPE_ROW_DETAIL} on the caller's behalf: the type is the
+	 * enclosing host's fact, not the region author's, and stamping it here is what lets
+	 * {@link RegionDef#validate()} enforce the row-detail-scoped catalog rule (no projected {@link RegionDef#fields}
+	 * &mdash; a row-detail catalog is an author JS literal) without every caller remembering to declare it.
+	 *
+	 * <p>
+	 * See {@link #region} for the mutual exclusion with {@link #sections}, the startup XOR rejection, and the
+	 * per-bean {@code enabledWhen} rejection this path carries.
+	 *
+	 * @param value The region.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowDetailDef region(RegionDef value) {
+		if (value == null)
+			throw iaex("RowDetailDef.region(...) must not be null.");
+		value.type = RegionDef.TYPE_ROW_DETAIL;
+		region = value;
+		return this;
+	}
+
+	/**
+	 * Whether this panel declares its body as a single {@link #region} rather than as {@link #sections}.
+	 *
+	 * <p>
+	 * The one predicate the emitter, the {@code $FV} chrome pre-scan and the validation pass all branch on, so they
+	 * can never disagree about which of the two shapes a bean is.
+	 *
+	 * @return <jk>true</jk> if {@link #region} is set.
+	 */
+	public boolean isRegionBody() {
+		return region != null;
 	}
 
 	/**
@@ -274,8 +366,7 @@ public class RowDetailDef {
 	 */
 	public void validate(List<RowAction> rowActions, String enclosingViewId) {
 		validateEndpoint();
-		if (sections == null || sections.isEmpty())
-			throw iaex("RowDetailDef must declare at least one section.");
+		validateBodyShape();
 		validateAllowedCustomRenderers();
 		if (serverValues != null)
 			serverValues.validate();
@@ -286,8 +377,59 @@ public class RowDetailDef {
 
 		var actionIds = collectActionIds(rowActions);
 		validateActionBar(headerActions, actionIds);
+		if (isRegionBody()) {
+			region.validate();
+			// The absorb, scoped to THIS bean.  A region body has no declared field catalog to cross-check
+			// enabledWhen against, so the rules are rejected rather than let through unchecked.
+			rejectEnabledWhen(headerActions, "the detail header");
+			return;
+		}
 		validateSections(actionIds, enclosingViewId);
 		validateEnabledWhenFields();
+	}
+
+	/**
+	 * The body-shape gate: exactly one of {@link #sections} / {@link #region}, and both directions are loud.
+	 *
+	 * <p>
+	 * Deliberately an XOR rather than a precedence rule &mdash; see {@link #region}.  The "at least one section"
+	 * requirement is conditioned on {@link #region} being unset rather than removed, which is what keeps a
+	 * {@link #sections}-declaring bean validating byte for byte as it does today while letting a
+	 * {@code region}-declaring one construct at all.
+	 */
+	private void validateBodyShape() {
+		var hasSections = sections != null && !sections.isEmpty();
+		if (hasSections && isRegionBody())
+			throw iaex("RowDetailDef declares both sections(...) and region(...); they are mutually exclusive.  "
+				+ "Declare exactly one - region(...) for a client-painted body, or the deprecated sections(...) "
+				+ "for the framework-painted field slots.");
+		if (!hasSections && !isRegionBody())
+			throw iaex("RowDetailDef must declare at least one section, or a region.");
+	}
+
+	/**
+	 * Rejects every {@link ActionRef#enabledWhen} rule on a {@link #region}-declaring panel, naming the replacement.
+	 *
+	 * <p>
+	 * The mirror image of {@link #validateEnabledWhenFields()}: that pass rejects a rule whose field <b>no</b>
+	 * declared {@link DetailField} returns, and this one rejects a rule on a bean that declares <b>no catalog at
+	 * all</b>.  Both refuse the same failure &mdash; a gate that would be evaluated against a field the panel never
+	 * supplies, disabling its button on every row forever and doing it silently.  Ignoring the rule instead would be
+	 * that exact failure arriving from the other side.
+	 */
+	private static void rejectEnabledWhen(ActionBar bar, String where) {
+		if (bar == null || bar.items == null)
+			return;
+		for (var item : bar.items) {
+			if (!(item instanceof ActionRef ar) || ar.enabledWhen == null || ar.enabledWhen.isEmpty())
+				continue;
+			throw iaex(
+				"ActionRef '%s' in %s declares enabledWhen, which a region(...) detail panel does not support: "
+				+ "there is no declared DetailField catalog to cross-check the rule against, so honoring it would "
+				+ "disable the button on every row forever and do it silently.  Paint the button inside the region "
+				+ "body instead and gate it from ctx.data's values map in your populate, writing through "
+				+ "ctx.write(...).", ar.id, where);
+		}
 	}
 
 	/**
