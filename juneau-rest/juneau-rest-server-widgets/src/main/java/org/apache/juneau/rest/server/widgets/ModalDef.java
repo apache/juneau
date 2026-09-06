@@ -381,11 +381,12 @@ public class ModalDef implements Widget {
 	 * The frozen modal contract version discriminator.
 	 *
 	 * <p>
-	 * <b>Null</b> on a confirm-only modal (no {@link #form}) &mdash; confirm-only stays unversioned and is not
-	 * fail-loud on a missing version; omitted from the wire while null.  Set to {@link #CONTRACT_VERSION} by
-	 * {@link #checked()} when a form is present.
+	 * Defaults to {@link #CONTRACT_VERSION} on <b>every</b> modal, confirm-only or form-bearing, from the instant
+	 * it is constructed &mdash; the guarantee does not depend on {@link #checked()} being called (WORK-J0520).
+	 * Guaranteed <b>present</b> is not the same as guaranteed <b>valid</b>: presence is this field's whole job,
+	 * structural well-formedness is {@link #validate()}'s (see {@link #checked()}).
 	 */
-	public String contractVersion;
+	public String contractVersion = CONTRACT_VERSION;
 
 	/** The modal title / confirmation prompt. */
 	public String title;
@@ -572,9 +573,10 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * Requires a non-blank {@link #title} and a non-blank label on each {@link Field}; when a {@link #form} is present
-	 * it delegates to {@link FormDef#validate()}.  Does <b>not</b> require {@link #contractVersion} to already be set
-	 * (a raw-built form-bearing modal validated directly must not false-refuse on a null version &mdash;
-	 * {@link #checked()} stamps the version first, then validates).
+	 * it delegates to {@link FormDef#validate()}.  Does <b>not</b> require {@link #contractVersion} to be set to
+	 * {@link #CONTRACT_VERSION} (or set at all) &mdash; a modal whose version was explicitly cleared, or that
+	 * arrived from a foreign producer that never set one, must not false-refuse on that alone.  Version-presence
+	 * and structural well-formedness are deliberately independent properties (design note, WORK-J0520 &sect;5.4).
 	 *
 	 * <p>
 	 * Also rejects, fail-closed at serve time rather than silently on the wire: a {@link Field#kind} outside the
@@ -640,12 +642,16 @@ public class ModalDef implements Widget {
 	}
 
 	/**
-	 * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} must invoke.
+	 * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} should invoke.
 	 *
 	 * <p>
-	 * When a {@link #form} is present it stamps {@link #CONTRACT_VERSION} on this modal and its form (the fail-loud
-	 * handshake baseline); a confirm-only modal is left <b>unversioned</b> ({@code contractVersion} null).  Then it
-	 * {@link #validate() validates}, so a malformed modal/form fails at serve time rather than silently on the wire.
+	 * {@link #contractVersion} is guaranteed present on every modal from construction, so this is <b>no longer
+	 * required for versioning</b> (WORK-J0520).  It stays <b>strongly recommended</b> for its other duty: it is
+	 * the only fail-closed structural {@link #validate() validation} the serving path has, and skipping it means
+	 * a malformed modal/form now serializes as contract-<i>valid</i> and reaches the client instead of being
+	 * refused (see {@link #validate()}; {@code WORK-J0525} tracks closing this gap for the serving path
+	 * generally).  When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and
+	 * recurses into {@link FormDef#checked()}.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException If this modal (or its form) is not well-formed.
@@ -654,8 +660,6 @@ public class ModalDef implements Widget {
 		if (form != null) {
 			contractVersion = CONTRACT_VERSION;
 			form.checked();
-		} else {
-			contractVersion = null;
 		}
 		validate();
 		return this;

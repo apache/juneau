@@ -87,9 +87,12 @@ class ModalDef_BarSlot_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_barSlotIsAdditiveOnTheWire() {
+		// WORK-J0520: the raw modal is never checked() here, so its OWN contractVersion (now stamped by construction)
+		// is the new top-level first key -- BarSlot's already-initialized "1" is unrelated and unaffected.
 		var json = Json.of(ModalDef.create("Really delete?").barSlot(bar("dialog-bar")));
 		var expected = Json.to("""
-			{"title":"Really delete?",
+			{"contractVersion":"2",
+			 "title":"Really delete?",
 			 "barSlot":{"contractVersion":"1","id":"dialog-bar",
 			            "widgets":[{"id":"open","label":"Open","badge":{"count":3}}]}}
 			""", Map.class);

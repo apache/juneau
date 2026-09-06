@@ -41,6 +41,8 @@ class ModalDef_FormDef_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_fullModal_serializesToFrozenShape() {
+		// WORK-J0520: raw builder, never .checked() -- both levels are stamped by construction now, not by the
+		// serving-path hook, which is the incident this design closes.
 		var modal = ModalDef.create("Acknowledge this incident?")
 			.field("Incident", "INC-42")
 			.field("Title", "API latency")
@@ -50,17 +52,19 @@ class ModalDef_FormDef_Test extends TestBase {
 			.idempotencyKey("deadbeef");
 		var json = Json.of(modal);
 		var expected = Json.to("""
-			{"title":"Acknowledge this incident?",
+			{"contractVersion":"2",
+			 "title":"Acknowledge this incident?",
 			 "fields":[{"label":"Incident","value":"INC-42"},{"label":"Title","value":"API latency"},
 			           {"label":"Service","value":"gateway"},{"label":"Current status","value":"triggered"}],
-			 "form":{"template":"servlet:/incidents/ack-form.ftl"},
+			 "form":{"contractVersion":"2","template":"servlet:/incidents/ack-form.ftl"},
 			 "idempotencyKey":"deadbeef"}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);
 	}
 
 	@Test void a02_topLevelKeyOrder() {
-		// A form-bearing modal run through checked() stamps contractVersion FIRST on both beans.
+		// WORK-J0520: contractVersion is stamped FIRST on both beans by construction now; checked() merely
+		// re-affirms it (and still validates) -- key order comes from @BeanType, which is unchanged.
 		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
 		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
 		assertEquals(List.of("contractVersion", "title", "fields", "form", "idempotencyKey"), new ArrayList<>(actual.keySet()));
@@ -69,9 +73,11 @@ class ModalDef_FormDef_Test extends TestBase {
 
 	@Test void a03_confirmOnlyModal_omitsFieldsFormAndKey() {
 		// A bare confirm-only modal (no fields, no form, no key) - every optional field omitted, not null.
+		// WORK-J0520: contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on
+		// every modal, confirm-only included.
 		var json = Json.of(ModalDef.create("Really delete?"));
-		assertEquals(Json.to("{\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
-		for (var k : List.of("fields", "form", "idempotencyKey", "selfTargeted", "contractVersion"))
+		assertEquals(Json.to("{\"contractVersion\":\"2\",\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
+		for (var k : List.of("fields", "form", "idempotencyKey", "selfTargeted"))
 			assertFalse(json.contains("\"" + k + "\""), () -> "unset field leaked: " + k + "\n" + json);
 	}
 
@@ -104,16 +110,20 @@ class ModalDef_FormDef_Test extends TestBase {
 
 	@Test void a08_selfTargeted_doesNotBumpTheContractVersion() {
 		// Additive-only, like barSlot: opting in does not change the version a v2-aware client checks.
+		// WORK-J0520 note: this is now true by construction rather than by checked() -- kept because it still pins
+		// the constant's value, not because it exercises the stamping path.
 		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u")).idempotencyKey("k").selfTargeted(true).checked();
 		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 	}
 
-	@Test void a05_confirmOnlyChecked_staysUnversioned() {
-		// A confirm-only modal (no form) stays unversioned even after checked() - contractVersion is not on the wire.
+	@Test void a05_confirmOnlyChecked_keepsTheStamp() {
+		// WORK-J0520 anti-drift pin: checked()'s else-branch that used to NULL a confirm-only modal's version is
+		// deleted.  If it were left in, checked() would un-stamp what the initializer had just stamped -- this test
+		// is what catches that regression.
 		var modal = ModalDef.create("Really delete?").field("Note", "gone").checked();
-		assertNull(modal.contractVersion);
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 		var json = Json.of(modal);
-		assertFalse(json.contains("contractVersion"), json);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
 	}
 
 	@Test void a04_fieldNullValue_serializesLabelOnly() {
@@ -143,8 +153,9 @@ class ModalDef_FormDef_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_formDef_serializesTemplateOnly() {
+		// WORK-J0520: a pure FormDef golden with no modal in sight -- stamped by construction too.
 		var json = Json.of(FormDef.ofTemplate("servlet:/x/form.ftl"));
-		assertEquals(Json.to("{\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
+		assertEquals(Json.to("{\"contractVersion\":\"2\",\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
 	}
 
 	@Test void c02_formDef_reservedBeanTypeIsNotOnTheWireYet() {
@@ -163,7 +174,8 @@ class ModalDef_FormDef_Test extends TestBase {
 			.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required().value("done"));
 		var json = Json.of(form);
 		var expected = Json.to("""
-			{"fields":[{"name":"resolution","label":"Resolution comment","type":"textarea","required":true,"value":"done"}]}
+			{"contractVersion":"2",
+			 "fields":[{"name":"resolution","label":"Resolution comment","type":"textarea","required":true,"value":"done"}]}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);
 		assertFalse(json.contains("\"template\""), json);
@@ -302,7 +314,8 @@ class ModalDef_FormDef_Test extends TestBase {
 			.field(FormDef.Input.of("sev", "Severity", "select").options(
 				FormDef.Input.Option.of("p1", "P1"), FormDef.Input.Option.of("p2", "P2")).value("p1")));
 		var expected = Json.to("""
-			{"fields":[{"name":"sev","label":"Severity","type":"select","value":"p1",
+			{"contractVersion":"2",
+			 "fields":[{"name":"sev","label":"Severity","type":"select","value":"p1",
 			            "options":[{"value":"p1","label":"P1"},{"value":"p2","label":"P2"}]}]}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);
@@ -322,14 +335,16 @@ class ModalDef_FormDef_Test extends TestBase {
 		assertEquals("2", ModalDef.CONTRACT_VERSION);
 	}
 
-	@Test void e02_rawFormDefLeaksNoVersion() {
-		// A raw builder never leaks a version on the nested form until checked() is called on the serving path.
+	@Test void e02_rawFormDefIsStamped() {
+		// WORK-J0520 headline: a raw builder carries the version from construction, independent of checked().
 		var form = FormDef.create().field(FormDef.Input.of("r", "R", "textarea"));
-		assertNull(form.contractVersion);
-		assertFalse(Json.of(form).contains("contractVersion"), Json.of(form));
+		assertEquals(FormDef.CONTRACT_VERSION, form.contractVersion);
+		assertTrue(Json.of(form).contains("\"contractVersion\":\"2\""), Json.of(form));
 	}
 
 	@Test void e03_checkedStampsBothVersionsFirst() {
+		// WORK-J0520 note: both are stamped by construction already; checked() re-affirms rather than originates
+		// the stamp.  Kept because it still pins that checked() does not disturb it.
 		var modal = ModalDef.create("t")
 			.form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea"))).checked();
 		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
@@ -341,9 +356,12 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void e04_validateDoesNotRequireVersionSet() {
-		// A raw-built form-bearing modal that validates directly must NOT false-refuse on a null version.
+		// WORK-J0520: the initializer now stamps at construction, so the null case must be re-created deliberately --
+		// validate() must still not false-refuse a modal whose version was explicitly cleared (or that arrived from a
+		// producer that never stamped one).  This is the pin on fork F3 -- validate() gains no version check.
 		var modal = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea")));
-		assertNull(modal.contractVersion);
+		modal.contractVersion = null;
+		modal.form.contractVersion = null;
 		assertDoesNotThrow(modal::validate);
 	}
 
@@ -367,6 +385,87 @@ class ModalDef_FormDef_Test extends TestBase {
 		var form = FormDef.ofTemplate("servlet:/x.ftl");
 		assertDoesNotThrow(form::validate);
 		assertEquals(FormDef.CONTRACT_VERSION, form.checked().contractVersion);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) Per-widget contract version (cont'd) - WORK-J0520 construction-time stamping guarantee
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e08_nestedFormStampsIndependentlyOfModal() {
+		// The modal level and the nested form level each carry their own field initializer; the version is present at
+		// both without either being reached through checked()'s recursion.
+		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u"));
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+		assertEquals(FormDef.CONTRACT_VERSION, modal.form.contractVersion);
+	}
+
+	@Test void e09_orderIndependent_formAttachedAfterChecked() {
+		// The second, independent bug class this design closes: create(t).checked().form(f) used to ship unstamped
+		// and leave the later-attached form unvalidated, because checked() ran before form existed.  Construction-time
+		// stamping does not depend on ordering.
+		var modal = ModalDef.create("t").checked().form(FormDef.ofTemplate("u"));
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		@SuppressWarnings("unchecked")
+		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
+		assertEquals("2", formMap.get("contractVersion"));
+	}
+
+	@Test void e10_checkedVsUnchecked_formBearing_byteForByteEqual() {
+		// No drift between the checked() and non-checked() serving paths for a form-bearing modal.
+		var unchecked = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k");
+		var checked = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
+		assertEquals(Json.of(checked), Json.of(unchecked));
+	}
+
+	@Test void e11_checkedVsUnchecked_confirmOnly_byteForByteEqual() {
+		// Same pin for a confirm-only modal.  This is the test that fails if checked()'s else-branch is left in.
+		var unchecked = ModalDef.create("Really delete?").field("Note", "gone");
+		var checked = ModalDef.create("Really delete?").field("Note", "gone").checked();
+		assertEquals(Json.of(checked), Json.of(unchecked));
+	}
+
+	@Test void e12_deserializeOmittedVersion_normalizesToCurrent() {
+		// Deserialization runs the constructor first, so a foreign payload that omits contractVersion parses to the
+		// initializer's default and re-serializes with it -- the same normalize-on-parse behavior ViewDef and
+		// ActionResult already have.
+		var parsed = Json.to("{\"title\":\"t\"}", ModalDef.class);
+		assertEquals(ModalDef.CONTRACT_VERSION, parsed.contractVersion);
+		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"2\""), Json.of(parsed));
+	}
+
+	@Test void e13_deserializeExplicitWrongVersion_roundTrips() {
+		// The initializer is a default, not a clobber: a parsed value overrides it, so the server can still model a
+		// foreign payload carrying a different version.
+		var parsed = Json.to("{\"contractVersion\":\"1\",\"title\":\"t\"}", ModalDef.class);
+		assertEquals("1", parsed.contractVersion);
+		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"1\""), Json.of(parsed));
+	}
+
+	/**
+	 * The accepted cost of construction-time stamping (design WORK-J0520, fork F5): version-presence is guaranteed,
+	 * structural validity is NOT.  A malformed form that never reached checked() now serializes as contract-VALID
+	 * and the client will render it, where before the missing version refused it.  This test exists so that
+	 * behavior is a recorded decision rather than a discovery.  See WORK-J0525 for the serving-path
+	 * Widget.validate() hook that closes it.
+	 */
+	@Test void e14_malformedUncheckedForm_serializesAsContractValid() {
+		var badForm = FormDef.create().field(FormDef.Input.of("sev", "Severity", "select"));
+		var modal = ModalDef.create("Pick one").form(badForm);
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		@SuppressWarnings("unchecked")
+		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
+		assertEquals("2", formMap.get("contractVersion"));
+	}
+
+	@Test void e15_malformedForm_stillThrowsFromCheckedAndValidate() {
+		// The other half of the e14 pair: the structural gate still exists and still works -- only whether anything
+		// reaches it, absent an explicit checked() call, has changed.
+		var badForm = FormDef.create().field(FormDef.Input.of("sev", "Severity", "select"));
+		var modal = ModalDef.create("Pick one").form(badForm);
+		assertThrows(IllegalArgumentException.class, modal::validate);
+		assertThrows(IllegalArgumentException.class, modal::checked);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -448,7 +547,8 @@ class ModalDef_FormDef_Test extends TestBase {
 			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
 			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea"))));
 		var expected = Json.to("""
-			{"sections":[{"id":"basics","label":"Basics","fields":[{"name":"name","label":"Name","type":"text"}]},
+			{"contractVersion":"2",
+			 "sections":[{"id":"basics","label":"Basics","fields":[{"name":"name","label":"Name","type":"text"}]},
 			             {"id":"advanced","label":"Advanced","fields":[{"name":"notes","label":"Notes","type":"textarea"}]}]}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);

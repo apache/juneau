@@ -53,10 +53,9 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>Per-widget contract version (fail-loud when a form is present)</h5>
  * <p>
  * This bean {@link Widget#validate() validates} fail-closed and carries an instance {@link #contractVersion}.  The
- * version is <b>null</b> until {@link #checked()} is invoked on the serving path (a raw builder therefore never leaks a
- * version on the nested form while a modal top-level is still unversioned); {@code checked()} stamps
- * {@link #CONTRACT_VERSION} then validates.  The client refuses to open a form-bearing dialog whose version does not
- * match the one its runtime bakes in.  A confirm-only modal (no form) stays unversioned.
+ * version defaults to {@link #CONTRACT_VERSION} from the instant the form is constructed (WORK-J0520) &mdash; a raw
+ * builder no longer leaks an unversioned form regardless of whether {@link #checked()} is invoked.  The client
+ * refuses to open a form-bearing dialog whose version does not match the one its runtime bakes in.
  * </p>
  * <p>
  * This constant moves in <b>lockstep</b> with {@link ModalDef#CONTRACT_VERSION} and the runtime's baked-in literal,
@@ -497,10 +496,11 @@ public class FormDef implements Widget {
 	 * The frozen form contract version discriminator.
 	 *
 	 * <p>
-	 * <b>Null</b> until {@link #checked()} is invoked on the serving path (so a raw builder never leaks the version on a
-	 * nested form while a modal top-level is still unversioned); omitted from the wire while null.
+	 * Defaults to {@link #CONTRACT_VERSION} from the instant this form is constructed, independent of
+	 * {@link #checked()} (WORK-J0520).  Guaranteed <b>present</b> is not the same as guaranteed <b>valid</b>: presence
+	 * is this field's whole job, structural well-formedness is {@link #validate()}'s (see {@link #checked()}).
 	 */
-	public String contractVersion;
+	public String contractVersion = CONTRACT_VERSION;
 
 	/** Optional FreeMarker template reference for server authors; ignored by the client. */
 	public String template;
@@ -649,11 +649,14 @@ public class FormDef implements Widget {
 	}
 
 	/**
-	 * The serving-path hook: stamps {@link #CONTRACT_VERSION} then {@link #validate() validates}.
+	 * The serving-path hook: re-stamps {@link #CONTRACT_VERSION} (already set by construction, WORK-J0520; this
+	 * repairs a version a caller explicitly cleared) then {@link #validate() validates}.
 	 *
 	 * <p>
-	 * Every app {@code @RestGet} that returns a form-bearing {@link ModalDef} must reach this (via
-	 * {@link ModalDef#checked()}) so a malformed form fails at serve time, not silently on the wire.
+	 * {@link #contractVersion} no longer depends on this being called, but this is still the only fail-closed
+	 * structural {@link #validate() validation} the serving path has &mdash; every app {@code @RestGet} that returns
+	 * a form-bearing {@link ModalDef} should still reach this (via {@link ModalDef#checked()}) so a malformed form
+	 * fails at serve time, not silently on the wire.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException If this form is not well-formed.
