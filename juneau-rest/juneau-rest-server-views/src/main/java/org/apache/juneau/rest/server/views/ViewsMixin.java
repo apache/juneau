@@ -24,9 +24,10 @@ import org.apache.juneau.rest.server.widgets.*;
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
- * {@code juneau-pages.js} tabs/sub-tabs page runtime, the opt-in {@code juneau-config.js}/
- * {@code juneau-config.css} column-chooser runtime &mdash; each at its stable path (design doc §6.1), plus
- * deprecated compatibility mounts for the four assets that have since moved to the widget module.
+ * {@code juneau-pages.js} tabs/sub-tabs page runtime, the opt-in {@code juneau-regions.js} region-populate runtime,
+ * the opt-in {@code juneau-config.js}/{@code juneau-config.css} column-chooser runtime &mdash; each at its stable
+ * path (design doc §6.1), plus deprecated compatibility mounts for the four assets that have since moved to the
+ * widget module.
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -126,6 +127,18 @@ public class ViewsMixin {
 	 * separate, opt-in asset (Decision 2(A)): single-view pages never load it.
 	 */
 	public static final String PAGES_JS_PATH = "/juneau-pages.js";
+
+	/**
+	 * The URL path at which the opt-in region-populate runtime is served (relative to the host mount).  A page with
+	 * no {@code data-juneau-region} element never needs to load it.
+	 *
+	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <p>
+	 * This {@code <script>} MUST come after {@code juneau-views.js}.  The region runtime publishes onto the same
+	 * {@code window.JuneauViews} namespace that {@code juneau-views.js} creates, and reuses that runtime's
+	 * {@code renderAsyncStatus} status renderer rather than defining one of its own.
+	 */
+	public static final String REGIONS_JS_PATH = "/juneau-regions.js";
 
 	/**
 	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
@@ -252,6 +265,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped page runtime. */
 	static final String PAGES_JS_RESOURCE = "/org/apache/juneau/views/juneau-pages.js";
+
+	/** Classpath location of the shipped region-populate runtime. */
+	static final String REGIONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-regions.js";
 
 	/** Classpath location of the shipped column-chooser runtime. */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
@@ -418,6 +434,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-regions.js] &mdash; serve the opt-in region-populate runtime.
+	 *
+	 * @return The region-populate runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=REGIONS_JS_PATH,
+		summary="Juneau rich-view region-populate runtime",
+		description="First-party, opt-in JavaScript that resolves a name-keyed populator against a data-juneau-region container.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getRegionsScript() {
+		return serve(REGIONS_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser / saved-views runtime.
 	 *
 	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
@@ -475,8 +506,8 @@ public class ViewsMixin {
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #PAGES_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #PAGES_JS_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -499,8 +530,8 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #PAGES_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH}, {@link #CARDS_JS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #PAGES_JS_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -594,6 +625,7 @@ public class ViewsMixin {
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
 		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
+		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
 		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;

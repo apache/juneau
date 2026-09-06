@@ -420,6 +420,37 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		return HTTP.send(req, BodyHandlers.ofString());
 	}
 
+	/**
+	 * Polls {@code handler.forLogger(loggerName)} until at least {@code minCount} records have been captured, or a
+	 * 5-second deadline elapses.
+	 *
+	 * <p>
+	 * {@code AsyncResponseProcessor.finalizeAsync(...)} emits the completion-path record AFTER {@code res.flushBuffer()}
+	 * has already written the response to the client (by design — see that method's javadoc: "Completion-path emission
+	 * runs AFTER the body/headers are written"). A test that calls a blocking HTTP client and then immediately inspects
+	 * the collecting handler is racing the server-side emission against the client's own wake-up from the socket read.
+	 * That race is normally unobservable (the emit is the very next statement on the same thread that just flushed), but
+	 * widens under load on the async-timeout path specifically: there, the emitting thread is the container's own
+	 * async-timeout dispatch thread (invoked via {@code AsyncListener.onTimeout}) rather than a thread whose only
+	 * remaining job is to emit-then-return, so it can be preempted between the flush and the emit. Bounded polling
+	 * (instead of loosening the assertion) keeps the "exactly one record" contract intact while tolerating that
+	 * scheduling gap; the fast, overwhelmingly common case (record already present) pays no extra latency.
+	 *
+	 * @param handler The collecting handler to poll.
+	 * @param loggerName The logger name to filter on.
+	 * @param minCount The minimum record count to wait for.
+	 * @return The current record list for {@code loggerName} (may have fewer than {@code minCount} entries if the
+	 * 	deadline elapsed).
+	 * @throws InterruptedException If interrupted while waiting.
+	 */
+	private static List<LogRecord> awaitRecords(CollectingHandler handler, String loggerName, int minCount) throws InterruptedException {
+		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+		List<LogRecord> recs;
+		while ((recs = handler.forLogger(loggerName)).size() < minCount && System.nanoTime() < deadline)
+			Thread.sleep(10);
+		return recs;
+	}
+
 	@Test void h01_delayedAsync_emitsOnCompletionPath_notOnFinish() throws Exception {
 		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".delayed");
 		var state = new LoggerState(opLogger);
@@ -524,7 +555,9 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			var resp = capGet("/asyncCap/neverCompletes");
 			assertEquals(504, resp.statusCode(), resp.body());
 
-			var recs = handler.forLogger(opLogger.getName());
+			// The timeout path emits on the container's async-timeout dispatch thread, AFTER the 504 has already been
+			// flushed to this client — poll instead of asserting immediately (see awaitRecords javadoc).
+			var recs = awaitRecords(handler, opLogger.getName(), 1);
 			assertEquals(1, recs.size(), "timeout path must still emit exactly one completion-path record");
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel());
