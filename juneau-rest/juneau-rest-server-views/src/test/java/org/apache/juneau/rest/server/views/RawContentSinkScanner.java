@@ -137,6 +137,7 @@ final class RawContentSinkScanner {
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "slot.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-ribbon.js", "b.innerHTML = markup;"),
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-helpers.js", "span.innerHTML = markup;"),
 		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-cards.js", "btn.innerHTML = glyph;"),
 		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
 	);
@@ -149,6 +150,7 @@ final class RawContentSinkScanner {
 		VIEWS_JS_DIR + "/juneau-renders.js",
 		VIEWS_JS_DIR + "/juneau-views.js",
 		VIEWS_JS_DIR + "/juneau-ribbon.js",
+		VIEWS_JS_DIR + "/juneau-helpers.js",
 		WIDGETS_JS_DIR + "/juneau-cards.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
 		WIDGETS_JS_DIR + "/juneau-chrome.js"

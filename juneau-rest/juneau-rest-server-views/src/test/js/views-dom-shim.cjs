@@ -87,7 +87,15 @@ function makeEnv() {
 			attrs: {},
 			parentNode: null,
 			className: '',
-			style: {},
+			// A plain style object PLUS the setProperty/getPropertyValue/removeProperty trio, so a CSS custom
+			// property (`--foo`, never a valid bare JS property name) round-trips the same way `el.style.display`
+			// does.  Both surfaces read/write the SAME backing object - `getPropertyValue('--foo')` sees a value
+			// set via `style['--foo'] = 'x'` and vice versa - matching the real CSSStyleDeclaration contract.
+			style: {
+				setProperty: function (k, v) { this[k] = v; },
+				getPropertyValue: function (k) { return Object.hasOwn(this, k) ? this[k] : ''; },
+				removeProperty: function (k) { const had = this[k]; delete this[k]; return had; }
+			},
 			disabled: false,
 			checked: false,
 			required: false,
@@ -237,6 +245,22 @@ function makeEnv() {
 		return node;
 	}
 
+	/** A real (nodeType 3) text node: no attrs/children/query methods - just what a helper's `text()` needs. */
+	function textNode(value) {
+		return {
+			nodeType: 3,
+			parentNode: null,
+			_text: value == null ? '' : String(value),
+			get textContent() { return this._text; },
+			set textContent(v) { this._text = v == null ? '' : String(v); },
+			get nodeValue() { return this._text; },
+			set nodeValue(v) { this._text = v == null ? '' : String(v); },
+			remove: function () {
+				if (this.parentNode) this.parentNode.removeChild(this);
+			}
+		};
+	}
+
 	const body = el('body');
 	const documentElement = el('html');
 
@@ -251,6 +275,7 @@ function makeEnv() {
 		removeEventListener: function () {},
 		getElementById: function (id) { return byId[id] || null; },
 		createElement: function (tag) { return el(tag); },
+		createTextNode: function (v) { return textNode(v); },
 		querySelector: function (selector) { return body.querySelector(selector); },
 		querySelectorAll: function (selector) { return body.querySelectorAll(selector); },
 		contains: function (n) { return body.contains(n) || n === body; },

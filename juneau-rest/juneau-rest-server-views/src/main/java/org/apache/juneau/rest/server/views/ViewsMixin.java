@@ -141,6 +141,19 @@ public class ViewsMixin {
 	public static final String REGIONS_JS_PATH = "/juneau-regions.js";
 
 	/**
+	 * The URL path at which the opt-in region-populate paint library is served (relative to the host mount).  A
+	 * page of purely custom regions (every populate hand-writes its own DOM) never needs to load it.
+	 *
+	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <p>
+	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}).
+	 * {@code fieldGrid}'s renderer dispatch reads the renderer registry {@code juneau-views.js} publishes and its
+	 * markdown/sanitized-HTML paths reuse that runtime's allowlist copiers, and {@code ctx.helpers}
+	 * (a bare pass-through of this asset's exports) is a field of the {@code ctx} {@code juneau-regions.js} freezes.
+	 */
+	public static final String HELPERS_JS_PATH = "/juneau-helpers.js";
+
+	/**
 	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
 	 * consumer adds this {@code <script>} after {@code juneau-views.js}; a non-configurable table never loads it.
 	 */
@@ -268,6 +281,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped region-populate runtime. */
 	static final String REGIONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-regions.js";
+
+	/** Classpath location of the shipped region-populate paint library. */
+	static final String HELPERS_JS_RESOURCE = "/org/apache/juneau/views/juneau-helpers.js";
 
 	/** Classpath location of the shipped column-chooser runtime. */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
@@ -449,6 +465,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-helpers.js] &mdash; serve the opt-in region-populate paint library.
+	 *
+	 * @return The paint library as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=HELPERS_JS_PATH,
+		summary="Juneau rich-view region-populate paint library",
+		description="First-party, opt-in JavaScript helper library (fieldGrid, kvTable, tabStrip, dataPane, recordTable, and the rest of JuneauViews.helpers) for a data-juneau-region populator.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getHelpersScript() {
+		return serve(HELPERS_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser / saved-views runtime.
 	 *
 	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
@@ -626,6 +657,7 @@ public class ViewsMixin {
 		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
 		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
+		if (HELPERS_JS_PATH.equals(path)) return HELPERS_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
 		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;

@@ -611,6 +611,180 @@ public class ExampleViewsRest extends BasicRestServlet {
 			list(ContentType.of(MEDIA_HTML)));
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Region + helpers demo (WORK-J0522b): a hand-authored [data-juneau-region] container, populated by
+	// juneau-regions.js (WORK-J0522a) via a JuneauViews.helpers.tabStrip (WORK-J0522b), following design
+	// section 11.1a's "ten tabs, clean slate" worked example (genericized there; reproduced verbatim here).
+	//------------------------------------------------------------------------------------------------------------------
+
+	/** The one demo "instance" the region's ten tabs describe; every data endpoint below 404s on any other id. */
+	static final String INSTANCE_ID = "svc-42";
+
+	/**
+	 * [GET /instance-detail] &mdash; a standalone region container (no {@code RowDetailDef}/{@code PageDef} host:
+	 * automatic host enrolment is WORK-J0522d, not this item) that a page-local script enrols by hand via
+	 * {@code JuneauViews.regions.enrolIn}, after registering a populator that builds a ten-tab strip from
+	 * {@code JuneauViews.helpers.tabStrip}/{@code dataPane}/{@code fieldGrid}/{@code kvTable}/{@code recordTable}
+	 * &mdash; design &sect;11.1a's worked example, reproduced with one deliberate deviation: see
+	 * {@link #instanceDetailScript()}'s Javadoc for why the "Details" tab uses the same author-owned
+	 * {@code fetch} as the other nine tabs rather than the design snippet's {@code ctx.data ?? ctx.fetchDeclared()}.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The region-demo HTML page.
+	 */
+	@RestGet(path="/instance-detail", summary="A region + helpers demo: a hand-enrolled tabStrip, ten tabs, one register() call")
+	public HttpResource instanceDetail(RestRequest req) {
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - Region + Helpers Example</title>
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			\t[data-juneau-region] { border: 1px solid #ccc; border-radius: 4px; padding: 1em; max-width: 48em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; Region + Helpers Example</h1>
+			<p>A ten-tab detail panel built with <b>zero framework-drawn DOM</b>: the page below is one
+			<code>[data-juneau-region]</code> container, hand-enrolled (automatic host enrolment from a
+			<code>RowDetailDef</code>/<code>PageDef</code> is a later item, not this one), whose populator is a
+			single <code>JuneauViews.regions.register(...)</code> call building a
+			<code>JuneauViews.helpers.tabStrip(...)</code> from ten one-line tab entries. One tab is a declared
+			field grid, two are ad-hoc value maps, and seven are record lists that fetch only when first opened
+			(open more than one tab to see the lazy fetch fire). See also the <a href="/">Catalog demo</a>,
+			the <a href="dashboard">card dashboard</a> and the <a href="overview">QuickStats overview</a>.</p>
+			<div data-juneau-region="instance-demo" data-juneau-region-type="row-detail"
+				data-juneau-region-populate="instance-detail" data-juneau-row-id="%s">Loading&hellip;</div>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>%s</script>
+			</body>
+			</html>
+			""".formatted(
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				INSTANCE_ID,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				// Load order is a contract (ViewsMixin#HELPERS_JS_PATH): regions.js after views.js, helpers.js
+				// after regions.js.  AssetLoadOrderBand_Test#a07/a08 pin this page's emitted <script src>
+				// sequence so a future edit cannot silently reorder it.
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				instanceDetailScript());
+		return HttpResourceBean.of(
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
+	}
+
+	/**
+	 * The inline populator script for {@link #instanceDetail(RestRequest)} &mdash; design &sect;11.1a's worked
+	 * example, reproduced with the tab labels and field/column shapes exactly as genericized there (no
+	 * trademarks, no observed-product vocabulary; see {@code @dual-hat-irs}).
+	 *
+	 * <p>
+	 * <b>One deliberate deviation from the design snippet, flagged rather than silently applied:</b> the design's
+	 * "Details" tab loader is {@code () => ctx.data ?? ctx.fetchDeclared()}, joining the panel's own expand GET.
+	 * That join, and the declarative {@code dataUrl}/{@code fields} descriptor {@code ctx.fetchDeclared()} would
+	 * read, are the "separate, larger contract" {@link org.apache.juneau.rest.server.views.RegionDef}'s own
+	 * Javadoc defers to a later revision (WORK-J0522c/d scope, not this item) &mdash; today {@code ctx.data} is
+	 * always <jk>null</jk> and {@code ctx.fetchDeclared()} always resolves <jk>null</jk> for every region, so the
+	 * design's exact line would paint every "Details" tab as permanently empty rather than demonstrating
+	 * {@code fieldGrid} at all. This example's "Details" tab instead uses the SAME author-owned {@code fetch} the
+	 * other nine tabs use ({@code at("details")}), which is a test-normative substitution (it demonstrates the
+	 * thing &sect;11.1a is FOR &mdash; a populated field grid &mdash; using only mechanisms this repository has
+	 * actually landed) rather than a silent resolution of a real design/code gap; see this child's build report.
+	 *
+	 * @return The {@code <script>} body (no surrounding tag).
+	 */
+	private static String instanceDetailScript() {
+		return """
+			(function () {
+				var H = function () { return JuneauViews.helpers; };
+				var DETAIL_FIELDS = [
+					{ data: "name",         label: "Name" },
+					{ data: "environment",  label: "Environment" },
+					{ data: "type",         label: "Type" },
+					{ data: "dbVendor",     label: "DB Vendor" },
+					{ data: "appVersion",   label: "App Version" },
+					{ data: "releaseCycle", label: "Release Cycle" },
+					{ data: "status",       label: "Status",  render: "pill" },
+					{ data: "modified",     label: "Modified" },
+					{ data: "dbId",         label: "DB ID" },
+					{ data: "dbModel",      label: "DB Model" }
+				];
+				var LIST_COLUMNS = {
+					suspensions:    [ {data:"reason",  label:"Reason"},    {data:"since",  label:"Since"},
+					                  {data:"actor",   label:"By"} ],
+					directives:     [ {data:"name",    label:"Directive"}, {data:"value",  label:"Value"} ],
+					releases:       [ {data:"version", label:"Version"},   {data:"applied",label:"Applied"} ],
+					orgRequests:    [ {data:"kind",    label:"Kind"},      {data:"state",  label:"State"},
+					                  {data:"created", label:"Created"} ],
+					pendingChanges: [ {data:"change",  label:"Change"},    {data:"queued", label:"Queued"} ],
+					checks:         [ {data:"check",   label:"Check"},     {data:"result", label:"Result",
+					                  render:"pill"} ],
+					auditTrail:     [ {data:"at",      label:"When"},      {data:"actor",  label:"Who"},
+					                  {data:"what",    label:"What"} ]
+				};
+				JuneauViews.regions.register("instance-detail", function (ctx, container) {
+					var h = H();
+					var id = encodeURIComponent(ctx.ids.rowId);
+					// ONE loader, reused ten times (including "details" - see this method's Javadoc for why,
+					// unlike the design snippet, the open tab uses this too rather than ctx.fetchDeclared()).
+					// The 404 arm is load-bearing: it resolves null (dataPane's EMPTY arm), never rejects, so a
+					// missing sub-resource paints the empty state rather than the error state.
+					var at = function (path) {
+						return function (t) {
+							// Accept: application/json is REQUIRED, not a nicety: this endpoint is content-
+							// negotiated like every other Juneau data URL (juneau-views.js's own fetch calls set
+							// the same header), and a bare fetch() with no Accept sends "*/*", which this server
+							// resolves to its default HTML view rather than JSON.
+							return fetch("/data/instance/" + id + "/" + path,
+								{ signal: t.signal, headers: { "Accept": "application/json" } }).then(function (r) {
+								return r.status === 404 ? null : r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status));
+							});
+						};
+					};
+					var mapPane = function (path) {
+						return h.dataPane({ load: at(path), render: function (d) { return h.kvTable(d); } });
+					};
+					var listPane = function (path, cat) {
+						return h.dataPane({ load: at(path), render: function (rows) { return h.recordTable(cat, rows); } });
+					};
+					container.replaceChildren(h.tabStrip([
+						{ id: "details",         label: "Details",
+						  populate: h.dataPane({ load: at("details"),
+						      render: function (d) { return h.fieldGrid(DETAIL_FIELDS, { values: d }); } }),
+						  lazy: false },
+						{ id: "core-metrics",    label: "Core Metrics",    populate: mapPane("metrics/core") },
+						{ id: "extra-metrics",   label: "Extra Metrics",   populate: mapPane("metrics/extra") },
+						{ id: "suspensions",     label: "Suspensions",
+						  populate: listPane("suspensions", LIST_COLUMNS.suspensions) },
+						{ id: "directives",      label: "Directives",
+						  populate: listPane("directives", LIST_COLUMNS.directives) },
+						{ id: "releases",        label: "Releases",
+						  populate: listPane("releases", LIST_COLUMNS.releases) },
+						{ id: "org-requests",    label: "Org Requests",
+						  populate: listPane("org-requests", LIST_COLUMNS.orgRequests) },
+						{ id: "pending-changes", label: "Pending Changes",
+						  populate: listPane("pending-changes", LIST_COLUMNS.pendingChanges) },
+						{ id: "checks",          label: "Checks",
+						  populate: listPane("checks", LIST_COLUMNS.checks) },
+						{ id: "audit-trail",     label: "Audit Trail",
+						  populate: listPane("audit-trail", LIST_COLUMNS.auditTrail) }
+					], { active: "details", signal: ctx.signal }));
+				});
+				JuneauViews.regions.enrolIn(document);
+			})();
+			""";
+	}
+
 	/**
 	 * [GET /flagged] &mdash; a standalone {@link ViewTable} whose column title resolves a {@code $FV} server value.
 	 *
@@ -834,6 +1008,179 @@ public class ExampleViewsRest extends BasicRestServlet {
 		fields.put(STATUS_ESCALATED, esc);
 		fields.put("asOf", Instant.now(Clock.systemUTC()).toString());
 		return cardEnvelope(fields);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Region + helpers demo data (WORK-J0522b): each endpoint backs one instanceDetailScript() tab.  Every one
+	// returns a BARE values map or a BARE array of values maps - no {contractVersion,fields} envelope, no
+	// "items" wrapper - because dataPane's contract (design section 8.5) is unwrapped shapes; an envelope is
+	// unwrapped in the AUTHOR's own loader, never invented by the endpoint.  Any id but INSTANCE_ID 404s, so the
+	// client's at(path) helper's 404-to-null arm (dataPane's EMPTY state) is real, not defensive dead code.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static void requireDemoInstance(String id) {
+		if (!INSTANCE_ID.equals(id))
+			throw new NotFound("No such instance: %s", id);
+	}
+
+	/**
+	 * [GET /data/instance/{id}/details] &mdash; the "Details" tab's field-grid values map.
+	 *
+	 * @param id The instance id ({@link #INSTANCE_ID} is the only one that resolves).
+	 * @return The values map {@link #instanceDetailScript()}'s {@code DETAIL_FIELDS} catalog joins against.
+	 */
+	@RestGet(path="/data/instance/{id}/details", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> instanceDetails(@Path("id") String id) {
+		requireDemoInstance(id);
+		var out = new LinkedHashMap<String,Object>();
+		out.put("name", "svc-42");
+		out.put("environment", "staging");
+		out.put("type", "worker");
+		out.put("dbVendor", "postgres");
+		out.put("appVersion", "4.12.0");
+		out.put("releaseCycle", "weekly");
+		out.put(COL_STATUS, STATUS_ACTIVE);
+		out.put("modified", "2026-09-01T10:00:00Z");
+		out.put("dbId", "db-9981");
+		out.put("dbModel", "shared");
+		return out;
+	}
+
+	/**
+	 * [GET /data/instance/{id}/metrics/core] &mdash; the "Core Metrics" tab's value map.
+	 *
+	 * @param id The instance id.
+	 * @return The core metrics.
+	 */
+	@RestGet(path="/data/instance/{id}/metrics/core", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> instanceCoreMetrics(@Path("id") String id) {
+		requireDemoInstance(id);
+		var out = new LinkedHashMap<String,Object>();
+		out.put("cpuPercent", 34);
+		out.put("memoryPercent", 58);
+		out.put("requestsPerSecond", 210);
+		return out;
+	}
+
+	/**
+	 * [GET /data/instance/{id}/metrics/extra] &mdash; the "Extra Metrics" tab's value map (the design's own
+	 * genericization of what an internal draft named after a specific product acronym; see
+	 * {@link #instanceDetailScript()}'s Javadoc and design &sect;11.1a's "transfer rule").
+	 *
+	 * @param id The instance id.
+	 * @return The extra metrics.
+	 */
+	@RestGet(path="/data/instance/{id}/metrics/extra", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> instanceExtraMetrics(@Path("id") String id) {
+		requireDemoInstance(id);
+		var out = new LinkedHashMap<String,Object>();
+		out.put("queueDepth", 3);
+		out.put("cacheHitRate", "0.92");
+		return out;
+	}
+
+	/**
+	 * [GET /data/instance/{id}/suspensions] &mdash; the "Suspensions" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The suspensions.
+	 */
+	@RestGet(path="/data/instance/{id}/suspensions", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceSuspensions(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(
+			rowOf("reason", "Scheduled maintenance", "since", "2026-08-20T02:00:00Z", "actor", "alice"),
+			rowOf("reason", "Quota exceeded", "since", "2026-07-11T14:30:00Z", "actor", "system"));
+	}
+
+	/**
+	 * [GET /data/instance/{id}/directives] &mdash; the "Directives" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The directives.
+	 */
+	@RestGet(path="/data/instance/{id}/directives", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceDirectives(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(
+			rowOf("name", "max-connections", "value", "200"),
+			rowOf("name", "read-only", "value", "false"));
+	}
+
+	/**
+	 * [GET /data/instance/{id}/releases] &mdash; the "Releases" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The releases.
+	 */
+	@RestGet(path="/data/instance/{id}/releases", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceReleases(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(
+			rowOf("version", "4.12.0", "applied", "2026-09-01T10:00:00Z"),
+			rowOf("version", "4.11.2", "applied", "2026-08-15T09:00:00Z"),
+			rowOf("version", "4.11.1", "applied", "2026-08-02T09:00:00Z"));
+	}
+
+	/**
+	 * [GET /data/instance/{id}/org-requests] &mdash; the "Org Requests" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The org requests.
+	 */
+	@RestGet(path="/data/instance/{id}/org-requests", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceOrgRequests(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(rowOf("kind", "resize", "state", "completed", "created", "2026-08-28T00:00:00Z"));
+	}
+
+	/**
+	 * [GET /data/instance/{id}/pending-changes] &mdash; the "Pending Changes" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The pending changes.
+	 */
+	@RestGet(path="/data/instance/{id}/pending-changes", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instancePendingChanges(@Path("id") String id) {
+		requireDemoInstance(id);
+		return List.of();
+	}
+
+	/**
+	 * [GET /data/instance/{id}/checks] &mdash; the "Checks" tab's record list; {@code result} renders as a pill.
+	 *
+	 * @param id The instance id.
+	 * @return The checks.
+	 */
+	@RestGet(path="/data/instance/{id}/checks", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceChecks(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(
+			rowOf("check", "Disk space", "result", STATUS_ACTIVE),
+			rowOf("check", "Health probe", "result", STATUS_ACTIVE),
+			rowOf("check", "Backup age", "result", STATUS_ERROR));
+	}
+
+	/**
+	 * [GET /data/instance/{id}/audit-trail] &mdash; the "Audit Trail" tab's record list.
+	 *
+	 * @param id The instance id.
+	 * @return The audit trail.
+	 */
+	@RestGet(path="/data/instance/{id}/audit-trail", swagger=@OpSwagger(ignore=true))
+	public List<Map<String,Object>> instanceAuditTrail(@Path("id") String id) {
+		requireDemoInstance(id);
+		return list(
+			rowOf("at", "2026-09-01T10:00:00Z", "actor", "alice", "what", "deployed 4.12.0"),
+			rowOf("at", "2026-08-28T00:00:00Z", "actor", "bob", "what", "resized instance"));
+	}
+
+	/** Builds a {@code LinkedHashMap} from alternating key/value pairs, preserving the given key order. */
+	private static Map<String,Object> rowOf(Object... kv) {
+		var out = new LinkedHashMap<String,Object>();
+		for (var i = 0; i < kv.length; i += 2)
+			out.put((String)kv[i], kv[i + 1]);
+		return out;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

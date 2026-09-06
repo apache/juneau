@@ -157,7 +157,7 @@ class AssetLoadOrderBand_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a0x - the live pages, over real HTTP, against the four in-tree templates the band governs.
+	// a0x - the live pages, over real HTTP, against the in-tree templates the band governs.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
@@ -204,6 +204,33 @@ class AssetLoadOrderBand_Test extends TestBase {
 		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-calendar.js", 2));
 		assertEquals(2, hits.size(), () -> "expected both the views and calendar scripts to be linked: " + hits);
 		assertBandOrder(hits, "Calendar script order");
+	}
+
+	/**
+	 * juneau-regions.js must load after juneau-views.js (WORK-J0522a's own load-order contract) - the region
+	 * runtime reuses {@code juneau-views.js}'s renderer registry and {@code renderAsyncStatus} rather than
+	 * defining second copies of them.
+	 */
+	@Test
+	void a07_instanceDetailPage_scriptOrder_viewsBeforeRegions() throws Exception {
+		var body = bodyOf(viewsServer.getRootUrl(), "/instance-detail");
+		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-regions.js", 2));
+		assertEquals(2, hits.size(), () -> "expected both the views and regions scripts to be linked: " + hits);
+		assertBandOrder(hits, "Instance-detail script order (views before regions)");
+	}
+
+	/**
+	 * juneau-helpers.js must load after BOTH juneau-views.js (whose format copiers and async-status painter it
+	 * reuses) and juneau-regions.js (WORK-J0522b's own load-order contract, {@code ViewsMixin#HELPERS_JS_PATH}).
+	 * This is the only in-tree page that links all three, so it is the one witness to the full three-asset band.
+	 */
+	@Test
+	void a08_instanceDetailPage_scriptOrder_viewsThenRegionsThenHelpers() throws Exception {
+		var body = bodyOf(viewsServer.getRootUrl(), "/instance-detail");
+		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-regions.js", 2, "/juneau-helpers.js", 3));
+		assertEquals(3, hits.size(),
+			() -> "expected the views, regions and helpers scripts to all be linked: " + hits);
+		assertBandOrder(hits, "Instance-detail script order (views, then regions, then helpers)");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
