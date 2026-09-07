@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.secret.macos.keychain;
 
+import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -30,58 +31,111 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link KeychainSecretStore}.
  *
  * <p>
- * The round-trip tests are guarded by JUnit assumptions so they skip cleanly when not on macOS or when the
- * {@code security} CLI is unavailable.  The {@link FailMode} and validation tests use a deliberately bad binary path
- * so they run deterministically on any platform without touching a real keychain.
+ * The round-trip tests run against an in-memory {@link FakeKeychain} (via {@link KeychainSecretStore}'s
+ * package-private {@code CommandRunner} seam) rather than the real {@code security} CLI, so they exercise this
+ * store's real argument construction and output parsing deterministically on every OS &mdash; no
+ * {@code /usr/bin/security}, no login-keychain mutation, and no GUI unlock/auth prompt.  The {@link FailMode} and
+ * validation tests use a deliberately bad binary path so they also run deterministically on any platform without
+ * touching a real keychain.  There is intentionally no test against the real {@code security} binary: doing so
+ * without risking a hung, unattended GUI prompt on an interactive/locked login keychain would require this store to
+ * support targeting an isolated, freshly-created keychain, which is out of scope here.
  */
 class KeychainSecretStore_Test {
-
-	private static boolean keychainAvailable() {
-		return System.getProperty("os.name", "").toLowerCase().contains("mac") && new File("/usr/bin/security").canExecute();
-	}
 
 	private static boolean posixShellAvailable() {
 		return new File("/bin/sh").canExecute();
 	}
 
-	private static String uniqueService() {
-		return "org.apache.juneau.test." + UUID.randomUUID();
-	}
-
 	// -----------------------------------------------------------------------------------------------------------------
-	// Round-trip against the real keychain (assumption-guarded).
+	// Round-trip against an in-memory fake keychain (deterministic on every OS; never touches a real keychain).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_roundTrip() {
-		assumeTrue(keychainAvailable(), "macOS keychain CLI not available");
-		var service = uniqueService();
-		var store = new KeychainSecretStore(service);
-		try {
-			assertFalse(store.exists("acct"));
-			assertTrue(store.find("acct").isEmpty());
+	/**
+	 * An in-memory fake of the real {@code security} CLI, keyed by service+account, that models the
+	 * {@code add-generic-password}/{@code find-generic-password}/{@code delete-generic-password} argument shapes
+	 * and exit-code/stdout contract that {@link KeychainSecretStore} depends on &mdash; including {@code -U}
+	 * update-in-place and the doubled value/confirmation {@code -w} stdin payload &mdash; so tests can exercise the
+	 * store's real argument-construction and output-parsing logic without shelling out to a real keychain.
+	 */
+	private static final class FakeKeychain implements KeychainSecretStore.CommandRunner {
 
-			store.store("acct", "hunter2".toCharArray());
-			assertTrue(store.exists("acct"));
-			assertArrayEquals("hunter2".toCharArray(), store.find("acct").orElseThrow());
+		private final Map<String,char[]> entries = new HashMap<>();
 
-			// Update-in-place.
-			store.store("acct", "s3cr3t".toCharArray());
-			assertArrayEquals("s3cr3t".toCharArray(), store.find("acct").orElseThrow());
+		@Override
+		public KeychainSecretStore.Result run(byte[] stdin, String[] args) {
+			return switch (args[0]) {
+				case "add-generic-password" -> addGenericPassword(stdin, args);
+				case "find-generic-password" -> findGenericPassword(args);
+				case "delete-generic-password" -> deleteGenericPassword(args);
+				default -> throw new IllegalArgumentException("Unsupported command: " + args[0]);
+			};
+		}
 
-			assertTrue(store.delete("acct"));
-			assertFalse(store.exists("acct"));
-			assertTrue(store.find("acct").isEmpty());
-			assertFalse(store.delete("acct"));
-		} finally {
-			try {
-				store.delete("acct");
-			} catch (RuntimeException ignored) { /* best-effort cleanup */ }
+		private KeychainSecretStore.Result addGenericPassword(byte[] stdin, String[] args) {
+			// The value and its CLI confirmation re-entry arrive doubled and newline-delimited (see
+			// KeychainSecretStore.store's javadoc); both copies must match, mirroring the real prompt.
+			var lines = new String(stdin, UTF_8).split("\n", -1);
+			var value = lines[0];
+			var confirmation = lines[1];
+			if (! value.equals(confirmation))
+				return new KeychainSecretStore.Result(1, new byte[0], "Password confirmation did not match.");
+			entries.put(key(args), value.toCharArray());
+			return new KeychainSecretStore.Result(0, new byte[0], "");
+		}
+
+		private KeychainSecretStore.Result findGenericPassword(String[] args) {
+			var value = entries.get(key(args));
+			if (value == null)
+				return notFound();
+			if (! Arrays.asList(args).contains("-w"))
+				return new KeychainSecretStore.Result(0, new byte[0], "");
+			return new KeychainSecretStore.Result(0, (new String(value) + "\n").getBytes(UTF_8), "");
+		}
+
+		private KeychainSecretStore.Result deleteGenericPassword(String[] args) {
+			if (entries.remove(key(args)) == null)
+				return notFound();
+			return new KeychainSecretStore.Result(0, new byte[0], "");
+		}
+
+		private static KeychainSecretStore.Result notFound() {
+			return new KeychainSecretStore.Result(KeychainSecretStore.NOT_FOUND, new byte[0], "The specified item could not be found in the keychain.");
+		}
+
+		private static String key(String[] args) {
+			return opt(args, "-s") + "\u0000" + opt(args, "-a");
+		}
+
+		private static String opt(String[] args, String flag) {
+			for (var i = 0; i < args.length - 1; i++)
+				if (args[i].equals(flag))
+					return args[i + 1];
+			return null;
 		}
 	}
 
+	@Test void a01_roundTrip() {
+		var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, new FakeKeychain());
+
+		assertFalse(store.exists("acct"));
+		assertTrue(store.find("acct").isEmpty());
+
+		store.store("acct", "hunter2".toCharArray());
+		assertTrue(store.exists("acct"));
+		assertArrayEquals("hunter2".toCharArray(), store.find("acct").orElseThrow());
+
+		// Update-in-place.
+		store.store("acct", "s3cr3t".toCharArray());
+		assertArrayEquals("s3cr3t".toCharArray(), store.find("acct").orElseThrow());
+
+		assertTrue(store.delete("acct"));
+		assertFalse(store.exists("acct"));
+		assertTrue(store.find("acct").isEmpty());
+		assertFalse(store.delete("acct"));
+	}
+
 	@Test void a02_absentKeyIsCleanlyAbsent() {
-		assumeTrue(keychainAvailable(), "macOS keychain CLI not available");
-		var store = new KeychainSecretStore(uniqueService());
+		var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, new FakeKeychain());
 		assertTrue(store.find("missing").isEmpty());
 		assertFalse(store.exists("missing"));
 		assertFalse(store.delete("missing"));

@@ -175,23 +175,37 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	/**
-	 * Regression (WORK-J0518 DF-2): disabled First/Prev/Next/Last read a solid neutral grey, not a dimming
-	 * opacity - an opacity fade on a 12px glyph reads as barely-there rather than "disabled but legible".
+	 * Regression (WORK-J0518 DF-2, extended by an IRS visual-parity follow-up): disabled First/Prev/Next/Last
+	 * read a solid neutral grey, not a dimming opacity - an opacity fade on a 12px glyph reads as barely-there
+	 * rather than "disabled but legible". The follow-up adds a grey BACKGROUND fill too (a new chrome-wide
+	 * {@code --jc-chrome-disabled-bg} token, declared beside {@code --jc-chrome-disabled-color}): IRS's own
+	 * disabled paging arrows paint a visibly greyed-out button, not merely a greyed-out glyph on an otherwise
+	 * white one.
 	 */
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledGrey() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-pagingpill {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color)"), body);
+		assertTrue(body.contains("background-color: var(--jc-chrome-disabled-bg)"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-bg:"), body);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:disabled { opacity:"), body);
 		assertTrue(body.contains("font-family: inherit"), body);
 	}
 
 	/**
-	 * Regression (WORK-J0518 DF-2): no inner vertical border between the four nav buttons (First/Prev/Next/Last) -
-	 * J0449 dropped this same inner-border pattern for the ribbon group but never reached the paging pill's own
-	 * nav buttons, which kept a per-button "border-right" segment divider.  The menu-button segment's own divider
-	 * (a different widget riding the same pill) is untouched.
+	 * Regression (WORK-J0518 DF-2, superseded by the IRS visual-parity follow-up below): no inner vertical
+	 * border between the four nav buttons (First/Prev/Next/Last) - J0449 dropped this same inner-border pattern
+	 * for the ribbon group but never reached the paging pill's own nav buttons, which kept a per-button
+	 * "border-right" segment divider.
+	 *
+	 * <p>The menu-button segment ({@code .juneau-view-pagingpill-menuwrap}) USED to keep its own divider on the
+	 * theory that a different widget riding the same pill warranted a visible seam - but IRS's own center range
+	 * segment ({@code .ribbon-button-center}) has no side border at all, seamless against its neighbours exactly
+	 * like the four nav buttons. That divider was the real root cause of a visual-parity item that repeated
+	 * console-side band-aids never fixed (a color/override in the CONSUMING app cannot zero out a width+style
+	 * pair the FRAMEWORK's own shipped rule re-asserts): it is now removed here too, so the whole pill - all five
+	 * segments - is one seamless control.
 	 */
 	@Test void c08_viewsCss_pagingPillNavButtonsHaveNoInnerDivider() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
@@ -201,11 +215,14 @@ class PagingPill_Wiring_Test extends TestBase {
 		var region = body.substring(start, end);
 		assertFalse(region.contains("border-right"), region);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:last-child"), body);
-		// The menu-button segment's divider is a different widget and keeps its own border-right.
+		// The menu-button segment's own former divider is gone too (IRS visual-parity follow-up) - the whole
+		// pill is now seamless, matching IRS's borderless center range segment.
 		assertTrue(body.contains(".juneau-view-pagingpill-menuwrap {"), body);
 		var wrapStart = body.indexOf(".juneau-view-pagingpill-menuwrap {");
 		var wrapEnd = body.indexOf("}", wrapStart);
-		assertTrue(body.substring(wrapStart, wrapEnd).contains("border-right-width: 1px"), body);
+		var wrapRegion = body.substring(wrapStart, wrapEnd);
+		assertFalse(wrapRegion.contains("border-right"), wrapRegion);
+		assertFalse(wrapRegion.contains("border-left"), wrapRegion);
 	}
 
 	/** Skip-glyph correction (WORK-J0518 DF-2): the doubled chevron pulls its second host left to close the gap. */

@@ -160,6 +160,15 @@
 	 */
 	--jc-chrome-disabled-color: #8a8a8a;
 	/*
+	 * Chrome-wide disabled-state BACKGROUND grey (IRS visual-parity follow-up to DF-2 above): a visibly
+	 * greyed-out button body, not merely a greyed-out glyph on an otherwise-normal white button - the
+	 * paging-pill nav buttons are again the first consumer.  A distinct step from --jc-chrome-disabled-color
+	 * (that one is a foreground/glyph colour; this one is the button's own fill) rather than one token doing
+	 * both jobs, matching this scale's own "one named step per role" discipline.  Light enough that the grey
+	 * glyph (--jc-chrome-disabled-color) still reads clearly on top of it.
+	 */
+	--jc-chrome-disabled-bg: #e9e9e9;
+	/*
 	 * Chrome-wide control border/text grey (WORK-J0518 DF-3): the toolbar search input previously painted
 	 * `border: 1px solid` with no colour (currentColor) and inherited whatever text colour surrounded it - IRS
 	 * parity wants a neutral grey control border and grey input text at passing contrast (WCAG AA, ~8:1 on
@@ -421,15 +430,35 @@ table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
-	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
+	/*
+	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (IRS visual-parity pass,
+	 * WORK-J0518 DF-4 follow-up): IRS's own `table.dataTable thead th` sets 0.75rem/12px, one notch below
+	 * its 0.8333rem/13.333px body row - a header/body size split this toolkit's shared cell rule below did
+	 * not have.  Declared here, not folded into the shared rule, precisely BECAUSE it must NOT match the
+	 * body pin: this file's own em-spacing warning on that rule is about the tbody cell only (the child-row/
+	 * detail-panel family sizes against the BODY row it renders inside, never against the header).  0.75rem
+	 * equals the already-declared --jc-chrome-font-size-1 step, so it spends that token rather than writing a
+	 * second literal of the same value (this file's own "if a value equals a step, spend the step" rule).
+	 */
+	font-size: var(--jc-chrome-font-size-1);   /* IRS header-type parity (12px) - see comment above */
 	padding: 4px 5px;
 	font-weight: normal;
 	text-align: left;
 	vertical-align: middle;
 	min-width: 20px;
-	border: 1px solid;            /* currentColor - cell grid; chrome.css themes the color */
+	border: none;                  /* IRS header cells carry no grid line at all - see the tbody rule's comment below */
 }
 
+/*
+ * NO cell grid (IRS visual-parity pass, WORK-J0518 DF-4 follow-up): IRS's own tbody/thead cells carry no
+ * border on any side - `table.dataTable thead th` zeroes all four sides explicitly, and IRS's tbody td
+ * simply never receives one.  The one row-to-row line IRS DOES keep is the header/body boundary (the first
+ * body row's own top edge, restored just below) - not a per-row divider repeated down the table, and not a
+ * per-column divider either.  This rule used to also carry a `border: 1px solid` cell grid (an intentional
+ * "outer frame + cell grid" DF-4 decision at the time); that decision is superseded by this parity pass, so
+ * REMOVING it here is the whole of the fix - do not restore a `border-bottom` in its place.  The outer
+ * `<table>` frame two rules above is untouched (IRS keeps that top/bottom pair too).
+ */
 table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
@@ -437,7 +466,23 @@ table.dataTable > tbody > tr > td {
 	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
 	padding: 4px 5px;
 	vertical-align: middle;
-	border: 1px solid;
+	border: none;
+}
+
+/*
+ * The header/body boundary - the ONE row-to-row line IRS's borderless table keeps (see the tbody rule's
+ * comment above), painted on the first body row's own top edge rather than the header row's bottom edge
+ * (mirrors IRS's own `table.dataTable>tbody>tr:first-child>td` exactly).  Needed now more than when the
+ * header carried its own background tint: a white-on-white header/body pair has nothing else marking where
+ * one ends and the other begins.  Longhand, not a colourless `border-top` shorthand - see the segmented-
+ * group note earlier in this file for why a colourless shorthand would fight a themed border-color.
+ */
+table[data-juneau-view] > tbody > tr:first-child > th,
+table[data-juneau-view] > tbody > tr:first-child > td,
+table.dataTable > tbody > tr:first-child > th,
+table.dataTable > tbody > tr:first-child > td {
+	border-top-width: 1px;
+	border-top-style: solid;
 }
 
 /* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
@@ -784,7 +829,14 @@ table.dataTable thead .sorting_desc_disabled:after {
  * J0449 was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
  * per-button "border-right: 1px solid" divider this rule used to carry. The menu-button segment
  * (".juneau-view-pagingpill-menuwrap") is a DIFFERENT widget riding the same pill, not one of the four nav
- * buttons, and keeps its own divider unchanged.
+ * buttons - it USED to keep its own divider on the theory that a different widget warranted a visible seam,
+ * but IRS's own center range segment (".ribbon-paging-info"/".ribbon-button-center") has NO side border at
+ * all: `.ribbon-button-center { border-left: none; border-right: none; }`, seamless against its neighbours
+ * exactly like the four nav buttons.  This was the real root cause of the visual-parity item that "never
+ * stuck": every console-side attempt targeted the WRONG layer (a color/override in console.css cannot zero
+ * out a width+style pair the framework's own shipped rule below re-asserts) - the divider was never a console
+ * bug to band-aid, it was this framework rule.  Removed below; the pill is now one fully seamless five-
+ * segment control, matching every other segmented control in this file.
  */
 .juneau-view-pagingpill-btn {
 	display: flex;
@@ -806,8 +858,15 @@ table.dataTable thead .sorting_desc_disabled:after {
  * scale tokens above), not paging-pill-scoped, so a later disabled affordance elsewhere can spend the same grey
  * rather than each widget inventing its own. `color` (not a background) because the glyph paints via the
  * svg rule's own `fill: currentColor` below - setting the button's text colour re-colours the icon for free.
+ *
+ * A light grey FILL is layered on top (IRS visual-parity follow-up): a disabled nav button reading only via a
+ * greyed-out glyph, with the same white button background as every enabled sibling, does not read as
+ * "disabled" until the pointer is already over it and the cursor changes - IRS's own disabled paging arrows
+ * paint a visibly greyed-out button, not just a greyed-out glyph.  --jc-chrome-disabled-bg is a NEW chrome-wide
+ * token (declared beside --jc-chrome-disabled-color above), not paging-pill-scoped, for the same reason that
+ * one is chrome-wide.
  */
-.juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color); cursor: not-allowed; }
+.juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color); background-color: var(--jc-chrome-disabled-bg); cursor: not-allowed; }
 .juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /*
@@ -819,8 +878,6 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-pagingpill-menuwrap {
 	position: relative;
 	display: flex;
-	border-right-width: 1px;      /* longhand, not a colourless shorthand - see the segmented-group note above */
-	border-right-style: solid;
 }
 
 .juneau-view-pagingpill-menubtn {

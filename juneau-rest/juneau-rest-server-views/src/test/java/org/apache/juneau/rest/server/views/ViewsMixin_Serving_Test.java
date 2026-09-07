@@ -941,13 +941,91 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// IRS body-type parity (WORK-J0518 DF-4): 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
 		// (unchanged, C0016b) via var(--jc-chrome-font-size-1) rather than this cell-level literal.
 		assertTrue(body.contains("font-size: 0.8333rem"), body);
-		assertFalse(body.contains("font-size: 0.75rem"), body);
 		assertTrue(body.contains("font-weight: normal"), body);
 		assertTrue(body.contains("flex-direction: row !important"), body);
 		assertTrue(body.contains("content: none"), body);
 		assertTrue(body.contains("border-collapse: collapse"), body);
 		assertTrue(body.contains("border-top-width: 2px"), body);
+		// Outer table frame keeps its own border (currentColor; chrome.css themes it) - the per-CELL grid this
+		// docstring used to call a "hairline grid" is gone; see o04b/o04c below for that removal and its one
+		// surviving line (the header/body boundary).
 		assertTrue(body.contains("border: 1px solid"), body);
+	}
+
+	/**
+	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 1+2 (header): the header cell's own background
+	 * is left unset (white/transparent, matching IRS's {@code table.dataTable thead th} exactly - no
+	 * background-color at all), and its font-size is its OWN, smaller step ({@code var(--jc-chrome-font-size-1)},
+	 * 0.75rem/12px) rather than the body row's 0.8333rem/13.333px pin from {@code o04} above. Scoped to the
+	 * thead cell rule specifically, not the shared table-level font-size at the top of the file (which stays the
+	 * body-row size - see {@code o04}'s comment).
+	 */
+	@Test void o04b_viewsCss_headerCellIsWhiteAndUsesSmallerTypeStep() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = "table[data-juneau-view] > thead > tr > th,\n"
+			+ "table[data-juneau-view] > thead > tr > td,\n"
+			+ "table.dataTable > thead > tr > th,\n"
+			+ "table.dataTable > thead > tr > td {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("font-size: var(--jc-chrome-font-size-1)"),
+			() -> "header type is its own smaller step (IRS: 0.75rem/12px), spent via the existing token rather "
+				+ "than a duplicate literal: " + rule);
+		assertFalse(rule.contains("background"),
+			() -> "IRS's header cell carries no background-color at all (white/transparent): " + rule);
+		assertFalse(rule.contains("font-size: 0.8333rem"),
+			() -> "the header must NOT inherit the body row's larger type step: " + rule);
+	}
+
+	/**
+	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 3 (no row dividers): neither the thead nor the
+	 * tbody cell rule carries a border on any side - IRS's own tbody/thead cells never paint one, on any edge,
+	 * so there is no per-row (or per-column) grid line left anywhere in the body of the table. The ONE line IRS
+	 * keeps - the header/body boundary - is a SEPARATE rule scoped to the first body row only; see o04d below.
+	 */
+	@Test void o04c_viewsCss_headerAndBodyCellsHaveNoBorder() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var theadSel = "table[data-juneau-view] > thead > tr > th,\n"
+			+ "table[data-juneau-view] > thead > tr > td,\n"
+			+ "table.dataTable > thead > tr > th,\n"
+			+ "table.dataTable > thead > tr > td {";
+		var theadAt = body.indexOf(theadSel);
+		assertTrue(theadAt >= 0, body);
+		var theadRule = body.substring(theadAt, body.indexOf("}", theadAt));
+		assertTrue(theadRule.contains("border: none"), theadRule);
+
+		var tbodySel = "table[data-juneau-view] > tbody > tr > th,\n"
+			+ "table[data-juneau-view] > tbody > tr > td,\n"
+			+ "table.dataTable > tbody > tr > th,\n"
+			+ "table.dataTable > tbody > tr > td {";
+		var tbodyAt = body.indexOf(tbodySel);
+		assertTrue(tbodyAt >= 0, body);
+		var tbodyRule = body.substring(tbodyAt, body.indexOf("}", tbodyAt));
+		assertTrue(tbodyRule.contains("border: none"), tbodyRule);
+	}
+
+	/**
+	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up): the header/body boundary is painted on the first BODY
+	 * row's own top edge (mirroring IRS's {@code table.dataTable>tbody>tr:first-child>td} exactly), not on the
+	 * header row's bottom edge, and not repeated on every row - a plain colourless {@code border-top} shorthand
+	 * is avoided in favor of the longhand width+style pair (see the segmented-group note in the CSS itself for
+	 * why a colourless shorthand fights a themed {@code border-color}).
+	 */
+	@Test void o04d_viewsCss_hasHeaderBodyBoundaryOnFirstRowOnly() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = "table[data-juneau-view] > tbody > tr:first-child > th,\n"
+			+ "table[data-juneau-view] > tbody > tr:first-child > td,\n"
+			+ "table.dataTable > tbody > tr:first-child > th,\n"
+			+ "table.dataTable > tbody > tr:first-child > td {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("border-top-width: 1px"), rule);
+		assertTrue(rule.contains("border-top-style: solid"), rule);
+		assertFalse(rule.contains("border-top-color"),
+			() -> "longhand width/style only - never a colour-resetting declaration - so chrome.css's themed "
+				+ "border-color still applies: " + rule);
 	}
 
 	/**
@@ -972,23 +1050,22 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Regression guard (Foundry WORK-P0063 follow-up, {@code WORK-J0506}): the paging-pill's central-segment
-	 * divider must null its border color with LONGHAND width/style only - never a colour-resetting shorthand -
-	 * for the same reason {@code o10} guards the ribbon-group base rule: a colourless {@code border-right: 1px
-	 * solid} shorthand resets {@code border-right-color} to {@code currentColor}, which paints a near-black
-	 * divider instead of the intended themed neutral border wherever the consuming app's own CSS softens this
-	 * element's text color without also declaring an explicit {@code border-color} override.
+	 * Regression guard, superseded (Foundry WORK-P0063 follow-up {@code WORK-J0506}, replaced by an IRS
+	 * visual-parity follow-up): {@code o11} used to guard the paging-pill's central-segment divider's border
+	 * color null-out. That divider is now removed outright rather than recoloured - it was the actual root
+	 * cause of a visual-parity item that repeated console-side band-aids never fixed, since a color/override in
+	 * the CONSUMING app cannot zero out a width+style pair the FRAMEWORK's own shipped rule re-asserts. IRS's
+	 * own center range segment ({@code .ribbon-button-center}) has no side border at all, so the menu-button
+	 * segment now matches it exactly: no {@code border-right}/{@code border-left} declaration of any kind.
 	 */
-	@Test void o11_viewsCss_pagingpillMenuwrapDividerLeavesBorderColorUnset() throws Exception {
+	@Test void o11_viewsCss_pagingpillMenuwrapHasNoDivider() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-pagingpill-menuwrap {"), body);
 		var start = body.indexOf(".juneau-view-pagingpill-menuwrap {");
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
-		assertTrue(region.contains("border-right-width: 1px"), region);
-		assertTrue(region.contains("border-right-style: solid"), region);
-		assertFalse(region.contains("border-right:"), region);
-		assertFalse(region.contains("border-right-color"), region);
+		assertFalse(region.contains("border-right"), region);
+		assertFalse(region.contains("border-left"), region);
 		assertFalse(region.contains("border-color"), region);
 	}
 

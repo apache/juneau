@@ -78,8 +78,7 @@ public class KeychainSecretStore implements SecretStore {
 
 	private final String service;
 	private final FailMode failMode;
-	private final long timeoutSeconds;
-	private final String binary;
+	private final CommandRunner commandRunner;
 
 	/**
 	 * Constructor using {@link FailMode#FAIL_CLOSED} and the {@link #DEFAULT_TIMEOUT_SECONDS default} timeout.
@@ -112,11 +111,30 @@ public class KeychainSecretStore implements SecretStore {
 	}
 
 	KeychainSecretStore(String service, FailMode failMode, long timeoutSeconds, String binary) {
+		this(service, failMode, new ProcessCommandRunner(validateTimeout(timeoutSeconds), binary));
+	}
+
+	/**
+	 * Constructor that bypasses the {@code security} subprocess entirely, invoking {@code commandRunner} directly.
+	 *
+	 * <p>
+	 * This is the seam tests use to exercise this store's argument construction and output parsing against an
+	 * in-memory fake keychain, so round-trip coverage runs deterministically on every OS without shelling out to
+	 * {@code security} or touching a real keychain.
+	 *
+	 * @param service The keychain service name that namespaces this store's items.  Must not be <jk>null</jk> or blank.
+	 * @param failMode The policy applied on a backend failure.  Must not be <jk>null</jk>.
+	 * @param commandRunner The command invocation seam.  Must not be <jk>null</jk>.
+	 */
+	KeychainSecretStore(String service, FailMode failMode, CommandRunner commandRunner) {
 		this.service = assertArgNotNullOrBlank("service", service);
 		this.failMode = assertArgNotNull("failMode", failMode);
+		this.commandRunner = assertArgNotNull("commandRunner", commandRunner);
+	}
+
+	private static long validateTimeout(long timeoutSeconds) {
 		assertArg(timeoutSeconds > 0, "Argument 'timeoutSeconds' must be > 0.");
-		this.timeoutSeconds = timeoutSeconds;
-		this.binary = binary;
+		return timeoutSeconds;
 	}
 
 	@Override /* SecretStore */
@@ -191,52 +209,93 @@ public class KeychainSecretStore implements SecretStore {
 		}
 	}
 
+	/**
+	 * The seam through which this store invokes the underlying keychain command.
+	 *
+	 * <p>
+	 * Production code always runs against {@link ProcessCommandRunner}, which shells out to the real
+	 * {@code security} CLI.  Tests substitute an in-memory fake keychain instead (via the package-private
+	 * {@link #KeychainSecretStore(String,FailMode,CommandRunner) constructor}), so this store's argument
+	 * construction and output parsing run deterministically on every OS without shelling out or touching a real
+	 * keychain.
+	 */
+	@FunctionalInterface
+	interface CommandRunner {
+
+		/**
+		 * Invokes the command with the given arguments, optionally writing {@code stdin} to it first.
+		 *
+		 * @param stdin The bytes to write to the command's stdin before closing it, or <jk>null</jk> to close stdin
+		 * 	immediately without writing anything.
+		 * @param args The command's arguments (not including the executable path/name itself).
+		 * @return The command's exit code, captured stdout, and captured stderr.
+		 */
+		Result run(byte[] stdin, String[] args);
+	}
+
 	/** The outcome of a single {@code security} invocation. */
 	@SuppressWarnings({
 		"java:S6218" // stdout can hold retrieved SECRET bytes; identity-based equals/hashCode/toString are intentional so a content-based toString can never surface the secret. Result instances are never compared or printed.
 	})
-	private record Result(int exit, byte[] stdout, String stderr) {}
+	record Result(int exit, byte[] stdout, String stderr) {}
+
+	/** {@link CommandRunner} that shells out to the real {@code security} binary via {@link ProcessBuilder}. */
+	private static final class ProcessCommandRunner implements CommandRunner {
+
+		private final long timeoutSeconds;
+		private final String binary;
+
+		ProcessCommandRunner(long timeoutSeconds, String binary) {
+			this.timeoutSeconds = timeoutSeconds;
+			this.binary = binary;
+		}
+
+		/**
+		 * Invokes {@link #binary} with the given arguments, optionally writing {@code stdin} to the child process
+		 * before closing its input stream.  {@code stdin}, when non-<jk>null</jk>, is written and the stream closed
+		 * <i>before</i> waiting on the process so a CLI that blocks on a stdin prompt (as {@code -w} with no value
+		 * does) does not deadlock against this method.
+		 */
+		@Override /* CommandRunner */
+		public Result run(byte[] stdin, String[] args) {
+			var cmd = new ArrayList<String>(args.length + 1);
+			cmd.add(binary);
+			cmd.addAll(Arrays.asList(args));
+			try {
+				var p = new ProcessBuilder(cmd).start();
+				if (stdin != null) {
+					try (var os = p.getOutputStream()) {
+						os.write(stdin);
+					}
+				} else {
+					p.getOutputStream().close();
+				}
+				if (! p.waitFor(timeoutSeconds, SECONDS)) {
+					p.destroyForcibly();
+					throw isex("Timed out invoking '%s' after %s seconds.", binary, timeoutSeconds);
+				}
+				byte[] out;
+				String err;
+				try (var is = p.getInputStream(); var es = p.getErrorStream()) {
+					out = is.readAllBytes();
+					err = new String(es.readAllBytes(), UTF_8);
+				}
+				return new Result(p.exitValue(), out, err);
+			} catch (IOException e) {
+				throw rex(e, "Unable to invoke '%s' (is this macOS with the keychain CLI available?).", binary);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw rex(e, "Interrupted while invoking '%s'.", binary);
+			}
+		}
+	}
 
 	private Result run(String... args) {
 		return run(null, args);
 	}
 
-	/**
-	 * Invokes {@link #binary} with the given arguments, optionally writing {@code stdin} to the child process
-	 * before closing its input stream.  {@code stdin}, when non-<jk>null</jk>, is written and the stream closed
-	 * <i>before</i> waiting on the process so a CLI that blocks on a stdin prompt (as {@code -w} with no value
-	 * does) does not deadlock against this method.
-	 */
 	private Result run(byte[] stdin, String... args) {
-		var cmd = new ArrayList<String>(args.length + 1);
-		cmd.add(binary);
-		cmd.addAll(Arrays.asList(args));
-		try {
-			var p = new ProcessBuilder(cmd).start();
-			if (stdin != null) {
-				try (var os = p.getOutputStream()) {
-					os.write(stdin);
-				}
-			} else {
-				p.getOutputStream().close();
-			}
-			if (! p.waitFor(timeoutSeconds, SECONDS)) {
-				p.destroyForcibly();
-				throw isex("Timed out invoking '%s' after %s seconds.", binary, timeoutSeconds);
-			}
-			byte[] out;
-			String err;
-			try (var is = p.getInputStream(); var es = p.getErrorStream()) {
-				out = is.readAllBytes();
-				err = new String(es.readAllBytes(), UTF_8);
-			}
-			return new Result(p.exitValue(), out, err);
-		} catch (IOException e) {
-			throw rex(e, "Unable to invoke '%s' (is this macOS with the keychain CLI available?).", binary);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw rex(e, "Interrupted while invoking '%s'.", binary);
-		}
+		return commandRunner.run(stdin, args);
 	}
 
 	private static RuntimeException backendFailure(String subcommand, Result r) {

@@ -2698,9 +2698,37 @@
 		return true;
 	}
 
+	/**
+	 * Whether `target` is (or is inside) an interactive control that owns its own click behavior - the row-action
+	 * menu trigger, a rendered link, a form control, or anything painted with {@code role="button"}.  A bare click
+	 * on the row body still expands the detail (the {@code .juneau-view-detail-row} whole-row click, pinned by
+	 * {@code RowDetailsExpander_Wiring_Test}'s {@code cursor: pointer} CSS assertion) - but a click that lands on
+	 * one of the row's OWN controls is that control's click, not the row's, and must not ALSO toggle expansion.
+	 *
+	 * <p>Without this guard the row-actions trigger ({@link #actionTriggerMarkup}) both opens its menu (via
+	 * {@code initRowActions}'s own delegated listener on the same table) AND expands the row - it carries no
+	 * {@code [data-juneau-action]}/{@code [data-juneau-safe]} attribute for {@link #handleDetailActionRefClick}/
+	 * {@link #handleDetailSafeCollapseClick} above to recognize, so it fell through to here unguarded.  A
+	 * selection checkbox and a {@code Column.href} link in the row body had the same gap.
+	 *
+	 * <p>Deliberately WITHOUT preventDefault/stopPropagation here (mirrors handleDetailActionRefClick's own
+	 * region-exclusion return): the control's own handling - initRowActions' delegated click, the checkbox's
+	 * `change` listener, the anchor's native navigation - must still fire untouched.  This function only decides
+	 * whether toggleDetailRow's SEPARATE expand/collapse also fires; it never suppresses the control itself.
+	 *
+	 * <p>{@code [data-juneau-action]} is deliberately NOT listed in the selector below - handleDetailActionRefClick
+	 * already owns that whole surface (both the in-panel ActionRef click and the return-true bail for a row-body
+	 * action pill) and always runs before toggleDetailRow is ever reached.
+	 */
+	function isInteractiveRowControl(target) {
+		return !!(target?.closest
+			&& target.closest('button, a[href], [role="button"], input, select, textarea, label'));
+	}
+
 	function toggleDetailRow(table, ctx, viewDef, tpl, dt, e) {
 		const tr = e.target?.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
 		if (!tr) return;
+		if (isInteractiveRowControl(e.target)) return;
 		const row = dt.row(tr);
 		if (!row || !row.length) return;
 		if (row.child.isShown()) {
@@ -3241,6 +3269,17 @@
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
+		// The panel's OWN row-id stamp, and the reason it cannot be inherited: DataTables inserts a child row as a
+		// SIBLING `<tr>` of `tr`, not as a descendant of it, so nothing inside this panel is beneath the row element
+		// that carries `ROW_ID_ATTR`.  Every consumer that resolves a row id by `closest("[data-juneau-row-id]")` -
+		// `juneau-regions.js`'s own `readIds`, which feeds `region.ids.rowId` and therefore `resolveDeclaredUrl`'s
+		// `{id}` substitution - would otherwise read `null` here and either refuse the fetch or build a `/.../null/...`
+		// path.  Stamping the panel re-establishes the containment the child-row insertion breaks.
+		//
+		// Guarded exactly as `stampRowId` guards its own write: a row with no stable id stamps nothing rather than the
+		// string "null", which would be a third state every reader would have to know about.  Such a panel fails
+		// closed a few lines below anyway.
+		if (rowId != null && String(rowId) !== "") panel.setAttribute(ROW_ID_ATTR, String(rowId));
 		// Per-row DOM identity for the shells this clone carries, before anything can look one of them up.
 		mintNestedIdentity(panel, rowId, (ctx.nestedDepth || 1) + 1);
 		mintDetailBarSlotIdentity(panel, viewSidecarKey(table), rowId);
@@ -3581,9 +3620,14 @@
 	/**
 	 * Stamps the STABLE row id (MED-11) onto a just-created `<tr>`, read from that row's OWN data via the
 	 * `rowIdField` key - never a DOM/table index. A no-op when `rowIdField` is absent (selection not declared) or
-	 * the row has no such key (nothing to stamp; that row is simply unselectable). This is the ONLY place
-	 * `ROW_ID_ATTR` is written; every reader elsewhere (selection wiring, bulk execution, the declarative-modal path's
+	 * the row has no such key (nothing to stamp; that row is simply unselectable). This is where `ROW_ID_ATTR`
+	 * ORIGINATES; every reader elsewhere (selection wiring, bulk execution, the declarative-modal path's
 	 * `submitActionDialog`) treats it as already-authoritative once stamped.
+	 *
+	 * <p>One other place writes the attribute, and only ever by COPYING what this function already stamped:
+	 * {@link #expandDetailRow} re-stamps the row's id onto the detail panel, because DataTables inserts that panel as
+	 * a sibling `<tr>` rather than a descendant, putting it outside the `closest(...)` reach of the row it belongs to.
+	 * That write derives its value from this one and never invents an id.
 	 */
 	function stampRowId(rowEl, rowData, rowIdField) {
 		let id;

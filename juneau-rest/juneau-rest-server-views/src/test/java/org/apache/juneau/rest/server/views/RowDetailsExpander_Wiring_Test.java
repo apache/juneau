@@ -113,6 +113,28 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertTrue(toggleFn.contains("tr.juneau-view-detail-row"), toggleFn);
 	}
 
+	/**
+	 * Row-body click-to-expand stays intact (b02 above), but a click on one of the row's OWN interactive
+	 * controls - the row-actions trigger, a rendered link, a selection checkbox, anything the guard's selector
+	 * matches - must never ALSO toggle expansion.  Behavioral proof (real click, real guard) lives in
+	 * {@code ViewsJs_RowDetailClickGuard_Test}; this is the source-shape pin that the guard is wired at all,
+	 * BEFORE {@code dt.row(tr)} is ever called.
+	 */
+	@Test void b02b_toggleDetailRow_ignoresClicksOnInteractiveRowControls() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var toggleFn = functionBody(body, "function toggleDetailRow(");
+		assertTrue(toggleFn.contains("isInteractiveRowControl(e.target)"), toggleFn);
+		var trIdx = toggleFn.indexOf("tr.juneau-view-detail-row");
+		var guardIdx = toggleFn.indexOf("isInteractiveRowControl(e.target)");
+		var rowIdx = toggleFn.indexOf("dt.row(tr)");
+		assertTrue(trIdx >= 0 && guardIdx > trIdx && rowIdx > guardIdx,
+			() -> "the guard must run AFTER the tr lookup and BEFORE dt.row(tr) is ever called: " + toggleFn);
+		var guardFn = functionBody(body, "function isInteractiveRowControl(");
+		assertTrue(guardFn.contains("button"), guardFn);
+		assertTrue(guardFn.contains("a[href]"), guardFn);
+		assertTrue(guardFn.contains("input"), guardFn);
+	}
+
 	@Test void b03_initDetailsExpander_usesDataTablesNativeChildRowApi() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var initFn = functionBody(body, "function initDetailsExpander(");
