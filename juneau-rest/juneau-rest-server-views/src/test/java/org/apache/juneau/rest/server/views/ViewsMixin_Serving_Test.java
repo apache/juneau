@@ -448,7 +448,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// shape is pinned by asserting BOTH halves - the reference here and the step's declared value - rather
 		// than dropping to the reference alone, which would pass even if the step were re-valued.
 		assertTrue(body.contains("height: var(--jc-chrome-control-height)"), body);
-		assertTrue(body.contains("--jc-chrome-control-height: 32px"), body);
+		// IRS visual-parity follow-up: 31px, not 32px - IRS's own paging-pill nav buttons/range segment are
+		// pinned to `height: 31px` (pages/style.css), and that same step now drives every full-height control
+		// this toolkit ships (ribbon buttons here, the paging pill, the toolbar search input).
+		assertTrue(body.contains("--jc-chrome-control-height: 31px"), body);
 		assertTrue(body.contains("display: flex"), body);
 		assertTrue(body.contains("border: 1px solid"), body);
 		assertTrue(body.contains(".juneau-view-ribbon-btn svg {"), body);
@@ -953,12 +956,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 1+2 (header): the header cell's own background
-	 * is left unset (white/transparent, matching IRS's {@code table.dataTable thead th} exactly - no
-	 * background-color at all), and its font-size is its OWN, smaller step ({@code var(--jc-chrome-font-size-1)},
-	 * 0.75rem/12px) rather than the body row's 0.8333rem/13.333px pin from {@code o04} above. Scoped to the
-	 * thead cell rule specifically, not the shared table-level font-size at the top of the file (which stays the
-	 * body-row size - see {@code o04}'s comment).
+	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 1+2 (header): its font-size is its OWN, smaller
+	 * step ({@code var(--jc-chrome-font-size-1)}, 0.75rem/12px) rather than the body row's 0.8333rem/13.333px
+	 * pin from {@code o04} above. Scoped to the thead cell rule specifically, not the shared table-level
+	 * font-size at the top of the file (which stays the body-row size - see {@code o04}'s comment).
+	 *
+	 * <p>
+	 * A LATER visual-parity follow-up (issues 1+2 revisited) makes the header cell's background EXPLICIT opaque
+	 * white, rather than merely unset: a host cannot be assumed never to tint it ambiently the way IRS's own
+	 * rendering happens to avoid. The same follow-up reserves a 24px content-box on the header cell's own
+	 * {@code line-height} (spending the previously-unspent {@code --jc-space-5} step) so the header row totals
+	 * IRS's own rendered 32px (4+4 padding + 24 content) even on a host whose vendored DataTables build ships
+	 * no sort-icon spacer of its own to imply that height.
 	 */
 	@Test void o04b_viewsCss_headerCellIsWhiteAndUsesSmallerTypeStep() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
@@ -972,8 +981,11 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(rule.contains("font-size: var(--jc-chrome-font-size-1)"),
 			() -> "header type is its own smaller step (IRS: 0.75rem/12px), spent via the existing token rather "
 				+ "than a duplicate literal: " + rule);
-		assertFalse(rule.contains("background"),
-			() -> "IRS's header cell carries no background-color at all (white/transparent): " + rule);
+		assertTrue(rule.contains("background-color: #fff"),
+			() -> "the header cell must be EXPLICIT opaque white, matching IRS's rendered white header: " + rule);
+		assertTrue(rule.contains("line-height: var(--jc-space-5)"),
+			() -> "the header row must reserve IRS's own 24px sort-icon-spacer content height, spent via the "
+				+ "existing --jc-space-5 step (4+4 padding + 24 content = IRS's rendered 32px): " + rule);
 		assertFalse(rule.contains("font-size: 0.8333rem"),
 			() -> "the header must NOT inherit the body row's larger type step: " + rule);
 	}
@@ -1026,6 +1038,33 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertFalse(rule.contains("border-top-color"),
 			() -> "longhand width/style only - never a colour-resetting declaration - so chrome.css's themed "
 				+ "border-color still applies: " + rule);
+	}
+
+	/**
+	 * IRS visual-parity follow-up (issue 3, row striping): IRS's own vendored DataTables Bootstrap-5 theme
+	 * shades every ODD {@code tbody} row (1st, 3rd, 5th, ...) with a flat {@code rgba(0, 0, 0, 0.05)} wash via
+	 * {@code box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-stripe), 0.05)} and {@code --dt-row-stripe: 0, 0,
+	 * 0} (datatables/datatables.css), so the FIRST data row is always one of the shaded ones. This toolkit
+	 * declares the same wash directly (not IRS's own {@code table-striped} class name, so a host need not have
+	 * vendored that exact theme or stamped that class at all), and excludes the DataTables-native
+	 * {@code tr.child} row so an expanded detail row landing on an odd index stays the opaque white
+	 * {@code p02}/{@code o04c}-adjacent rule declares for it, never a shaded-then-white double-paint.
+	 */
+	@Test void o04e_viewsCss_stripesOddRowsIncludingTheFirstButExcludesTheChildRow() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > th,\n"
+			+ "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > td,\n"
+			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) > th,\n"
+			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.05)"),
+			() -> "the odd-row stripe must match IRS's own rendered shade exactly (a flat 5%-black wash): " + rule);
+		// :nth-child is 1-indexed, so "odd" is 1st, 3rd, 5th, ... - the FIRST data row is always shaded,
+		// matching IRS's own tr:nth-of-type(2n+1) semantics.
+		assertFalse(body.contains("tr:nth-child(even)"),
+			() -> "the shaded rows must be the ODD ones (first row dark), not the even ones: " + body);
 	}
 
 	/**

@@ -122,8 +122,17 @@
 	 * compact step is not deviating from the full-height one.  Neither name mentions a surface: `compact` is a
 	 * density word, so a compact toolbar control and a full-height detail control are each expressible without
 	 * a new token.
+	 *
+	 * --jc-chrome-control-height is 31px (IRS visual-parity follow-up), not 32px: IRS's own paging-pill nav
+	 * buttons and center range segment are explicitly pinned to `height: 31px` (pages/style.css's
+	 * `.dataTables_wrapper .dataTables_paginate .page-item`/`.page-link` rules and `.ribbon-paging-info` /
+	 * `.ribbon-paging-container .ribbon-button`), and a sibling comment on IRS's own search-bar "Go" button
+	 * states outright that 31px is "the same ... height as ribbon buttons" - i.e. IRS's one canonical control
+	 * height, not a paging-only one-off.  This single step drives every full-height control this toolkit
+	 * ships (ribbon buttons, the paging pill, the toolbar search input, the async-status loading region), so
+	 * re-valuing it here is the whole of the fix - no per-consumer override.
 	 */
-	--jc-chrome-control-height: 32px;
+	--jc-chrome-control-height: 31px;
 	--jc-chrome-control-height-compact: 28px;
 	/*
 	 * Control horizontal padding.  Deliberately OFF the 4px ladder: rounding 10px to 8px or 12px would be a
@@ -447,6 +456,34 @@ table.dataTable > thead > tr > td {
 	vertical-align: middle;
 	min-width: 20px;
 	border: none;                  /* IRS header cells carry no grid line at all - see the tbody rule's comment below */
+	/*
+	 * Header row HEIGHT (IRS visual-parity follow-up): this rule's own `padding: 4px 5px` above is already
+	 * IDENTICAL to IRS's own thead-th padding declaration (pages/style.css), so the padding was never the gap
+	 * between the two.  The extra height IRS renders comes from its VENDORED DataTables theme's sort-icon
+	 * spacer - `span.dt-column-order`, a fixed 12px-wide by 24px-tall box (datatables/datatables.css) holding
+	 * the stacked up/down-chevron pair inside `div.dt-column-header` - sitting in a `display:flex;
+	 * align-items:center` header row, that 24px content-box sets the header ROW's cross-size regardless of
+	 * the label text's own shorter line-height, so IRS's rendered header cell totals 4+4 padding + 24 content
+	 * = 32px.  A host with an older/absent DataTables build has no such spacer to reserve that height, so
+	 * this toolkit reserves the SAME 24px directly on the cell's own text line-box instead - a plain, generic
+	 * `line-height`, not a copy of IRS's markup/selectors - so the header renders the same 32px total whether
+	 * or not the host's DataTables build happens to ship that spacer.  24px equals the already-declared,
+	 * previously-unspent --jc-space-5 step, so it spends that token rather than writing a second literal of
+	 * the same value (this file's own "if a value equals a step, spend the step" rule).
+	 */
+	line-height: var(--jc-space-5);
+	/*
+	 * Header background: EXPLICIT opaque white (IRS visual-parity follow-up), not merely "no color set" the
+	 * way the rest of this NEUTRAL file's shape rules stay silent on colour.  IRS's own `table.dataTable
+	 * thead th` never needs an explicit background either, but only because nothing ambient ever tints it
+	 * there; this toolkit cannot assume the same is true of every host, so the header is pinned white here
+	 * rather than left to inherit whatever a host theme (or this file's own new row-stripe rule two blocks
+	 * below, which is scoped to tbody only but is exactly the kind of ambient tint a header must never pick
+	 * up) happens to leave in the cascade.  The same "opaque surface" exception this file already grants
+	 * `.juneau-view-dialog` / `.juneau-view-detail-panel` / the DataTables-native child row (below) - not a
+	 * new precedent.
+	 */
+	background-color: #fff;
 }
 
 /*
@@ -483,6 +520,30 @@ table.dataTable > tbody > tr:first-child > th,
 table.dataTable > tbody > tr:first-child > td {
 	border-top-width: 1px;
 	border-top-style: solid;
+}
+
+/*
+ * Row striping (IRS visual-parity follow-up): IRS's own zebra shade is its vendored DataTables Bootstrap-5
+ * theme's default, wired up by the `table-striped` class IRS's own markup carries (views.js:
+ * `<table id='main-table' class='table table-striped table-bordered'/>`) - `table.table.dataTable.table-
+ * striped > tbody > tr:nth-of-type(2n+1) > * { box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-stripe),
+ * 0.05); }`, with `--dt-row-stripe: 0, 0, 0` (datatables/datatables.css's `:root` block and its
+ * `.table-striped` rule) - i.e. a flat rgba(0, 0, 0, 0.05) wash on every ODD row (1st, 3rd, 5th, ...), so the
+ * FIRST data row is always one of the shaded ones, and the shade itself is a plain 5%-black wash rather than
+ * a tinted colour.  This toolkit does not depend on a host having vendored that exact theme (or having
+ * stamped `table-striped` at all), so the same wash is declared directly against this toolkit's own
+ * selectors - `:nth-child`, not IRS's own class name, and a bare box-shadow value rather than a copied
+ * selector/rule.  A box-shadow (not `background`) keeps the borderless-rows treatment above intact: it
+ * paints INSIDE the cell's own border box without needing a background-color that would then have to be
+ * un-set again for the DataTables-native child row exception below - `:not(.child)` excludes that row here
+ * instead, so an expanded detail row landing on an odd index stays the opaque white that rule declares,
+ * never a shaded-then-white double-paint.
+ */
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > th,
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > td,
+table.dataTable > tbody > tr:nth-child(odd):not(.child) > th,
+table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {
+	box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.05);
 }
 
 /* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
@@ -969,8 +1030,9 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /* Native DT search box, once relocated into the right cluster: inline with the icon ribbon, not a
-   full-width / floated block that drops onto its own line. Same 32px control class as the paging
-   pill and icon ribbon (box-sizing so the 1px border is inside the 32px, not added on top). */
+   full-width / floated block that drops onto its own line. Same --jc-chrome-control-height (31px) control
+   class as the paging pill and icon ribbon (box-sizing so the 1px border is inside that height, not added
+   on top). */
 .juneau-view-toolbar-right .dataTables_filter,
 .juneau-view-toolbar-right .dt-search {
 	float: none;

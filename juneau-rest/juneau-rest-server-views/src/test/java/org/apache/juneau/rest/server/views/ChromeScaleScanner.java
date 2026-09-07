@@ -125,7 +125,7 @@ final class ChromeScaleScanner {
 		new Step("--jc-space-4", "16px", true, Family.SPACE),
 		new Step("--jc-space-5", "24px", true, Family.SPACE),
 		new Step("--jc-space-6", "32px", true, Family.SPACE),
-		new Step("--jc-chrome-control-height", "32px", true, Family.CONTROL_HEIGHT),
+		new Step("--jc-chrome-control-height", "31px", true, Family.CONTROL_HEIGHT),
 		new Step("--jc-chrome-control-height-compact", "28px", true, Family.CONTROL_HEIGHT),
 		new Step("--jc-chrome-control-padding-x", "10px", true, Family.CONTROL_PADDING_X),
 		new Step("--jc-chrome-control-padding-x-wide", "14px", true, Family.CONTROL_PADDING_X),
@@ -323,9 +323,11 @@ final class ChromeScaleScanner {
 	 * The confirmed step of an eligible family whose value the declaration writes out as a literal.
 	 *
 	 * <p>
-	 * Role-named families are searched before the spacing ladder, so a 32px {@code height} is reported against
-	 * {@code --jc-chrome-control-height} rather than against the numerically-identical {@code --jc-space-6}. Both
-	 * are violations either way; naming the apter one is what makes the message actionable.
+	 * Role-named families are searched before the spacing ladder, so a 31px {@code height} is reported against
+	 * {@code --jc-chrome-control-height} rather than falling through to the spacing ladder (which has no 31px
+	 * step to collide with in the first place - unlike this step's former 32px value, which happened to
+	 * numerically coincide with {@code --jc-space-6}). Both are violations either way; naming the apter one is
+	 * what makes the message actionable.
 	 */
 	private static Step findDuplicatedStep(Decl d, Set<Family> families, List<Step> scale) {
 		// line-height's step value is unitless, so it needs bare-number matching instead of the general

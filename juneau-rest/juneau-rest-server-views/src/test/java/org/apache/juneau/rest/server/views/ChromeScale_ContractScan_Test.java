@@ -109,7 +109,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	 * works or merely never fires.
 	 */
 	@Test void b05_syntheticDuplicateLiteralIsCaught() {
-		var r = ChromeScaleScanner.scan(".synthetic-surface { height: 32px; }");
+		var r = ChromeScaleScanner.scan(".synthetic-surface { height: 31px; }");
 		assertEquals(1, r.violations().size(), () -> "expected the synthetic duplicate to be caught: " + r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-control-height"), r.violations().get(0));
 	}
