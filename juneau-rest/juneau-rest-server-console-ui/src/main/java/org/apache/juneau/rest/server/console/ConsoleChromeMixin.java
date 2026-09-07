@@ -190,11 +190,13 @@ public class ConsoleChromeMixin {
 	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) derives from {@code --jc-chrome-bg}, not
 	 * {@code --jc-surface}: the header/nav strip is chrome, not page content, so it must recolor with every
 	 * consumer theme that overrides {@code --jc-chrome-bg} (e.g. {@link Theme#LIGHT_BROWN}, {@link Theme#RED},
-	 * {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} and {@code --jc-table-header-bg} already do, rather
-	 * than staying pinned to {@code --jc-white} regardless of the active theme's chrome color. An earlier revision
-	 * derived {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
+	 * {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} already does, rather than staying pinned to
+	 * {@code --jc-white} regardless of the active theme's chrome color. An earlier revision derived
+	 * {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
 	 * and nav strip white under every themed chrome &mdash; a latent bug a themed-header/nav test now guards
-	 * against.
+	 * against. {@code --jc-table-header-bg} is the opposite: it keys off {@code --jc-white} so DataTable /
+	 * views-table column headers stay white (IRS {@code table.dataTable thead th} has no background), not the
+	 * page-chrome grey.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",
@@ -207,7 +209,10 @@ public class ConsoleChromeMixin {
 		"--jc-on-btn-primary:var(--jc-on-accent);",
 		"--jc-table-stripe-bg:var(--jc-card-bg);",
 		"--jc-hover-bg:var(--jc-chrome-bg);",
-		"--jc-table-header-bg:var(--jc-chrome-bg);",
+		// DataTable / views-table headers are white (IRS `table.dataTable thead th` carries no background;
+		// the white card shows through). Do not key this off --jc-chrome-bg — that page-chrome grey tints
+		// every column header and is the wrong IRS surface (detail-table thead #f6f4f4 is a different widget).
+		"--jc-table-header-bg:var(--jc-white);",
 		"--jc-control-border:var(--jc-border-2);",
 		"--jc-header-icon-text:var(--jc-header-icon-color);",
 		"--jc-btn-primary-bg:var(--jc-btn-primary);",

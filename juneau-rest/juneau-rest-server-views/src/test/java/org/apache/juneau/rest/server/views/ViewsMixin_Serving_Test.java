@@ -1119,7 +1119,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 */
 	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains("--jc-chrome-control-border: #cccccc;"), body);
+		assertTrue(body.contains("--jc-chrome-control-border: #ced4da;"), body);
 		assertTrue(body.contains("--jc-chrome-control-text: #4f4f4f;"), body);
 		assertTrue(body.contains(".juneau-view-toolbar-right .dataTables_filter input,\n"
 			+ ".juneau-view-toolbar-right .dt-search input {"), body);

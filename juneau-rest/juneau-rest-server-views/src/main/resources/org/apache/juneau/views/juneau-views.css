@@ -161,32 +161,29 @@
 	--jc-chrome-glyph-size: 16px;
 	--jc-chrome-glyph-size-small: 12px;
 	/*
-	 * Chrome-wide disabled-state grey (WORK-J0518 DF-2): a solid, legible grey rather than a dimming opacity,
-	 * for a disabled control whose glyph or text must still read clearly (the paging-pill nav buttons are the
-	 * first consumer). Declared here rather than paging-pill-scoped so a later disabled affordance can spend the
-	 * same token instead of inventing its own; matches the existing --jc-tone-warning / --jc-detail-action-
-	 * primary-bg-disabled grey already used elsewhere in this file for the same "disabled but visible" register.
+	 * Chrome-wide disabled-state grey (WORK-J0518 DF-2, corrected to IRS opacity compositing): IRS's own
+	 * `.ribbon-button` idle colour is `#666` and `.ribbon-button:disabled` / `.ribbon-button.disabled` applies
+	 * `opacity: 0.6` over a white face (pages/style.css) - i.e. the visible disabled glyph is the composite
+	 * of #666 at 0.6 onto #fff, which is #a3a3a3.  Kept as a solid token so a consumer that cannot use opacity
+	 * (or that paints a disabled glyph without dimming the whole control) can spend the same value; the paging
+	 * pill itself prefers the IRS opacity rule below rather than this solid.
 	 */
-	--jc-chrome-disabled-color: #8a8a8a;
+	--jc-chrome-disabled-color: #a3a3a3;
 	/*
-	 * Chrome-wide disabled-state BACKGROUND grey (IRS visual-parity follow-up to DF-2 above): a visibly
-	 * greyed-out button body, not merely a greyed-out glyph on an otherwise-normal white button - the
-	 * paging-pill nav buttons are again the first consumer.  A distinct step from --jc-chrome-disabled-color
-	 * (that one is a foreground/glyph colour; this one is the button's own fill) rather than one token doing
-	 * both jobs, matching this scale's own "one named step per role" discipline.  Light enough that the grey
-	 * glyph (--jc-chrome-disabled-color) still reads clearly on top of it.
+	 * Chrome-wide disabled-state BACKGROUND: IRS keeps the ribbon/paging button face white when disabled
+	 * (only opacity dims the control) - pages/style.css `.ribbon-button { background-color: #fff }` is not
+	 * overridden by the `:disabled` rule.  Previously a grey fill (#e9e9e9) made disabled paging chevrons read
+	 * heavier than IRS; white matches the source.
 	 */
-	--jc-chrome-disabled-bg: #e9e9e9;
+	--jc-chrome-disabled-bg: #ffffff;
 	/*
-	 * Chrome-wide control border/text grey (WORK-J0518 DF-3): the toolbar search input previously painted
-	 * `border: 1px solid` with no colour (currentColor) and inherited whatever text colour surrounded it - IRS
-	 * parity wants a neutral grey control border and grey input text at passing contrast (WCAG AA, ~8:1 on
-	 * white). Named "control", not "search-input": a text control's border/text grey is a chrome-wide role like
-	 * --jc-chrome-control-height above, not a single-widget colour - not --jc-detail-action-* (that pair is the
-	 * detail action BUTTON's own self-declared palette per this file's header note on not shadowing a name it
-	 * does not own) and not --jc-popover-border (that one is the floating-surface family).
+	 * Chrome-wide control border/text grey (WORK-J0518 DF-3, IRS visual-parity follow-up): IRS's own main
+	 * toolbar search pins `border-color: rgb(206, 212, 218)` (= #ced4da) on `.dt-container .dt-search input`
+	 * (pages/style.css), matching the ribbon control border.  The previous #cccccc default read darker/heavier
+	 * than that IRS search field. Named "control", not "search-input": a text control's border/text grey is a
+	 * chrome-wide role like --jc-chrome-control-height above, not a single-widget colour.
 	 */
-	--jc-chrome-control-border: #cccccc;
+	--jc-chrome-control-border: #ced4da;
 	--jc-chrome-control-text: #4f4f4f;
 	/*
 	 * Detail action button palette (D8, option (c)): DEFAULT tokens declared here, not console-ui chrome.css
@@ -603,7 +600,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-ribbon-btn svg { width: var(--jc-chrome-glyph-size); height: var(--jc-chrome-glyph-size); fill: currentColor; }
 
-.juneau-view-ribbon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+/* IRS `.ribbon-button:disabled` / `.ribbon-button.disabled` uses opacity: 0.6 (pages/style.css). */
+.juneau-view-ribbon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Neutral shape for an ACTIVE toggle (`option`/`optionGroup` member button's aria-pressed="true") - a thicker
  * border only (no palette color here); console-ui's chrome.css layers the themed background/color accent over
@@ -913,19 +911,13 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Disabled First/Prev/Next/Last read a solid neutral grey rather than a dimming opacity (WORK-J0518 DF-2): at
- * 12px an opacity-faded glyph reads as barely-there rather than "disabled but legible", which is the same
- * readability miss IRS does not have. --jc-chrome-disabled-color is declared chrome-wide (with the rest of the
- * scale tokens above), not paging-pill-scoped, so a later disabled affordance elsewhere can spend the same grey
- * rather than each widget inventing its own. `color` (not a background) because the glyph paints via the
- * svg rule's own `fill: currentColor` below - setting the button's text colour re-colours the icon for free.
- *
- * A light grey FILL is layered on top (IRS visual-parity follow-up): a disabled nav button reading only via a
- * greyed-out glyph, with the same white button background as every enabled sibling, does not read as
- * "disabled" until the pointer is already over it and the cursor changes - IRS's own disabled paging arrows
- * paint a visibly greyed-out button, not just a greyed-out glyph.  --jc-chrome-disabled-bg is a NEW chrome-wide
- * token (declared beside --jc-chrome-disabled-color above), not paging-pill-scoped, for the same reason that
- * one is chrome-wide.
+ * Disabled First/Prev/Next/Last (WORK-J0518 DF-2, IRS-corrected): IRS's own `.ribbon-button:disabled`
+ * applies `opacity: 0.6` on idle colour `#666` over a white face (pages/style.css) - the visible glyph is
+ * the composite #a3a3a3.  This rule spends the solid chrome-wide tokens rather than opacity so a 12px
+ * glyph stays crisply anti-aliased (an opacity fade on a tiny SVG can look muddy), while matching the
+ * IRS composite exactly: --jc-chrome-disabled-color is #a3a3a3 and --jc-chrome-disabled-bg is #ffffff
+ * (IRS does not grey the button fill - only the glyph dims). `color` (not a fill on the svg) because the
+ * glyph paints via `fill: currentColor` below.
  */
 .juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color); background-color: var(--jc-chrome-disabled-bg); cursor: not-allowed; }
 .juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }

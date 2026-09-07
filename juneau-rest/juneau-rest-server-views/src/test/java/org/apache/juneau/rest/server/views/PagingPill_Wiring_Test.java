@@ -175,12 +175,12 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	/**
-	 * Regression (WORK-J0518 DF-2, extended by an IRS visual-parity follow-up): disabled First/Prev/Next/Last
-	 * read a solid neutral grey, not a dimming opacity - an opacity fade on a 12px glyph reads as barely-there
-	 * rather than "disabled but legible". The follow-up adds a grey BACKGROUND fill too (a new chrome-wide
-	 * {@code --jc-chrome-disabled-bg} token, declared beside {@code --jc-chrome-disabled-color}): IRS's own
-	 * disabled paging arrows paint a visibly greyed-out button, not merely a greyed-out glyph on an otherwise
-	 * white one.
+	 * Regression (WORK-J0518 DF-2, IRS-corrected): disabled First/Prev/Next/Last spend the solid chrome-wide
+	 * {@code --jc-chrome-disabled-color} / {@code --jc-chrome-disabled-bg} tokens. IRS's own
+	 * {@code .ribbon-button:disabled} uses {@code opacity: 0.6} on idle {@code #666} over white
+	 * ({@code pages/style.css}); the tokens are the composite of that rule ({@code #a3a3a3} glyph,
+	 * {@code #ffffff} face) so a 12px SVG stays crisply anti-aliased rather than opacity-muddy, while
+	 * matching the IRS look. Solid colour, not opacity, on this selector.
 	 */
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledGrey() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
@@ -188,7 +188,8 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-pagingpill-btn {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color)"), body);
 		assertTrue(body.contains("background-color: var(--jc-chrome-disabled-bg)"), body);
-		assertTrue(body.contains("--jc-chrome-disabled-bg:"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-bg: #ffffff;"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-color: #a3a3a3;"), body);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:disabled { opacity:"), body);
 		assertTrue(body.contains("font-family: inherit"), body);
 	}
