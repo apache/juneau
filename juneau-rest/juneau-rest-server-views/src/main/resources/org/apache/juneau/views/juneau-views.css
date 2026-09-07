@@ -498,9 +498,32 @@ table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
 	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
-	padding: 4px 5px;
+	padding: 4px 5px;             /* IRS pages/style.css: table.dataTable thead th, tbody td */
+	/*
+	 * Body row HEIGHT (IRS visual-parity follow-up): IRS does not set an explicit min-height on tbody td.
+	 * Its taller body rows come from Bootstrap reboot's body line-height:1.5 (documented in IRS
+	 * style_tags.css as "10pt from .main-section-inner, line-height:1.5 => a 20px line box") plus the same
+	 * 4px vertical padding this rule already shares.  Hosts without Bootstrap inherit a tighter UA
+	 * `normal` (~1.2), so pin 1.5 here — a generic ratio, not an SLDS token — so every views table matches
+	 * IRS's ~28px text-only row (4+4 padding + 20 content) without depending on a host Bootstrap load.
+	 */
+	line-height: 1.5;
 	vertical-align: middle;
 	border: none;
+}
+
+/*
+ * Linked key column (IRS visual-parity follow-up): IRS stamps `className: 'table-key'` on ID columns with
+ * `.table-key { font-weight: bold }` (pages/style.css) — typically 700.  This toolkit has no author-facing
+ * key-class stamp required of every consumer, but the common pattern is a linked first data column
+ * immediately after the dedicated expander cell (and optional selection cell).  Use 600 (semibold) — one
+ * step lighter than IRS bold — and leave link color alone so blue PD/GUS hyperlinks stay blue.
+ */
+table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td > a,
+table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a,
+table.dataTable > tbody > tr > td.juneau-view-detail-control + td > a,
+table.dataTable > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a {
+	font-weight: 600;
 }
 
 /*

@@ -1015,6 +1015,27 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(tbodyAt >= 0, body);
 		var tbodyRule = body.substring(tbodyAt, body.indexOf("}", tbodyAt));
 		assertTrue(tbodyRule.contains("border: none"), tbodyRule);
+		// IRS body row height: Bootstrap reboot line-height:1.5 (style_tags.css documents the 20px line box).
+		assertTrue(tbodyRule.contains("line-height: 1.5"),
+			() -> "tbody cells must pin IRS Bootstrap body line-height 1.5 (no IRS min-height on td): " + tbodyRule);
+	}
+
+	/**
+	 * Linked first-data-column key weight (IRS visual-parity): IRS {@code .table-key} is {@code font-weight: bold}
+	 * (~700). This toolkit uses 600 on the linked cell immediately after the expander (and optional selection)
+	 * column — one step lighter — without forcing black ink over hyperlink color.
+	 */
+	@Test void o04c2_viewsCss_linkedKeyColumnAfterExpanderIsSemibold() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = "table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td > a,\n"
+			+ "table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a,\n"
+			+ "table.dataTable > tbody > tr > td.juneau-view-detail-control + td > a,\n"
+			+ "table.dataTable > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a {";
+		var at = body.indexOf(sel);
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("font-weight: 600"),
+			() -> "linked key column must be semibold (600), one step under IRS .table-key bold/700: " + rule);
 	}
 
 	/**
