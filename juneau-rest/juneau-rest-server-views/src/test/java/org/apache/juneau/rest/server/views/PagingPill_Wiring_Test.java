@@ -184,7 +184,12 @@ class PagingPill_Wiring_Test extends TestBase {
 	 */
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledGrey() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-pagingpill {"), body);
+		var start = body.indexOf(".juneau-view-pagingpill {");
+		assertTrue(start >= 0, body);
+		var end = body.indexOf("}", start);
+		var region = body.substring(start, end);
+		assertTrue(region.contains("border: none"), region);
+		assertFalse(region.contains("border: 1px solid"), region);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn {"), body);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color)"), body);
 		assertTrue(body.contains("background-color: var(--jc-chrome-disabled-bg)"), body);
@@ -214,9 +219,9 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(start >= 0, body);
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
-		assertFalse(region.contains("border-right"), region);
 		assertFalse(region.contains("border: none"), region);
 		assertTrue(region.contains("border-top-width"), region);
+		assertTrue(region.contains("border-right-width: 0"), region);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:last-child"), body);
 		// The menu-button segment's own former divider is gone too (IRS visual-parity follow-up) - the whole
 		// pill is now seamless, matching IRS's borderless center range segment.

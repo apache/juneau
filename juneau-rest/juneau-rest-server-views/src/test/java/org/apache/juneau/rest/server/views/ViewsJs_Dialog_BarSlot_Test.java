@@ -76,7 +76,7 @@ class ViewsJs_Dialog_BarSlot_Test extends TestBase {
 		var body = viewsJs();
 		// buildDialogOverlay calls the dialog's own insert helper; the generic strip builders must never learn a
 		// dialog bar slot exists (FINISHED-J0445u/J0445w locks this the same way for the row-detail host).
-		assertTrue(body.contains("insertDialogBarSlot(dialog, title, modal?.barSlot, seq)"), body);
+		assertTrue(body.contains("insertDialogBarSlot(dialog, header, modal?.barSlot, seq)"), body);
 		var buildRibbonAt = body.indexOf("function buildRibbonStrip(");
 		var buildDetailAt = body.indexOf("function buildDetailStrip(");
 		assertTrue(buildRibbonAt >= 0 && buildDetailAt >= 0, body);

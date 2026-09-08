@@ -130,6 +130,25 @@ function leave(target, related) {
 	out.outside_tipHidden = !tipNode() || tipNode().style.display === 'none';
 })();
 
+(function helperButtonRowTitle() {
+	const row = env.document.createElement('div');
+	row.className = 'juneau-view-helper-btn-row';
+	const btn = env.document.createElement('button');
+	btn.className = 'juneau-view-helper-btn';
+	btn.title = 'Acknowledge';
+	btn.setAttribute('aria-label', 'Acknowledge');
+	row.appendChild(btn);
+	env.body.appendChild(row);
+
+	hover(btn, 10, 20);
+	out.helper_titleMovedOff = btn.getAttribute('title') == null;
+	out.helper_tipAttr = btn.getAttribute('data-jc-tip');
+	out.helper_ariaKept = btn.getAttribute('aria-label') === 'Acknowledge';
+	out.helper_tipText = tipNode() ? tipNode().textContent : null;
+	out.helper_tipVisible = tipNode() && tipNode().style.display === 'block';
+	leave(btn, env.body);
+})();
+
 (function explicitDataTip() {
 	const span = env.document.createElement('span');
 	span.setAttribute('data-jc-tip', 'Explicit label');

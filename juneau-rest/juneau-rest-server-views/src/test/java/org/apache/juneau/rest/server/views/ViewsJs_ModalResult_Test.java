@@ -310,4 +310,19 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		// WORK-J0513 - this dialog's own child-action catalog, read from the per-open payload.
 		assertTrue(build.contains("appendDialogForm(dialog, modal?.form, table, tr, ctx, seq, childCatalog)"), build);
 	}
+
+	@Test void h06_buildDialogOverlayPaintsHeaderWithDismiss() throws Exception {
+		var body = viewsJs();
+		var build = fn(body, "function buildDialogOverlay(");
+		assertTrue(build.contains("juneau-view-dialog-header"), build);
+		assertTrue(build.contains("juneau-view-dialog-dismiss"), build);
+		assertTrue(build.contains("buildDialogHeaderFigure(action)"), build);
+		assertTrue(build.contains("insertDialogBarSlot(dialog, header, modal?.barSlot, seq)"), build);
+		assertTrue(build.contains("dismissBtn: dismissBtn"), build);
+		var figure = fn(body, "function buildDialogHeaderFigure(");
+		assertTrue(figure.contains("juneau-view-dialog-figure"), figure);
+		assertTrue(figure.contains("b.innerHTML = markup"), figure);
+		var show = fn(body, "function showActionDialog(");
+		assertTrue(show.contains("ui.dismissBtn.addEventListener(\"click\", close)"), show);
+	}
 }

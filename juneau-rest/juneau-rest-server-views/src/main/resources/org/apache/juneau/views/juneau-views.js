@@ -4513,12 +4513,13 @@
 	}
 
 	/**
-	 * Inserts a dialog's bar slot as the immediate next sibling of `titleEl` (the {@code ANCHOR_DIALOG_TITLE}
-	 * placement - the dialog OWNS this call site, exactly as the row-detail caller owns its own ribbon-trailing
-	 * relocation; the shared strip builder never learns a dialog bar slot exists), appends its sidecar, and mints its
-	 * clone-time identity via the SAME {@code mintDetailBarSlotIdentity} the row-detail host uses - reused verbatim
-	 * rather than reimplemented.  Two stacked dialogs need the same per-instance identity a cloned detail row does,
-	 * and `dialogSeq` already namespaces other per-dialog state (the form field ids), so it namespaces this too.
+	 * Inserts a dialog's bar slot as the immediate next sibling of `anchorEl` (the header row, historically the
+	 * title - {@code ANCHOR_DIALOG_TITLE} placement - the dialog OWNS this call site, exactly as the row-detail
+	 * caller owns its own ribbon-trailing relocation; the shared strip builder never learns a dialog bar slot
+	 * exists), appends its sidecar, and mints its clone-time identity via the SAME
+	 * {@code mintDetailBarSlotIdentity} the row-detail host uses - reused verbatim rather than reimplemented.
+	 * Two stacked dialogs need the same per-instance identity a cloned detail row does, and `dialogSeq` already
+	 * namespaces other per-dialog state (the form field ids), so it namespaces this too.
 	 *
 	 * @return true when a region was painted, inserted, and minted.
 	 */
@@ -4535,7 +4536,9 @@
 	 * Builds a `present=dialog` overlay DOM node (a backdrop + a `role=dialog` box) from a ModalDef, painting the
 	 * title and each typed confirmation field with `textContent` ONLY - never `innerHTML`, never raw markup, never a
 	 * live-data HTML blob (BLK-1/MED-9): live/remote data is attacker-influenceable and this origin holds the CSRF
-	 * token, so a typed/escaped path is the only safe one here.  Returns the pieces so the caller can wire buttons.
+	 * token, so a typed/escaped path is the only safe one here.  The optional header figure is the one exception:
+	 * icon-registry sprite markup via {@code buildDialogHeaderFigure} (same as toolbarButton).  Returns the pieces
+	 * so the caller can wire buttons.
 	 */
 	function buildDialogOverlay(modal, action, table, tr, ctx, seq) {
 		const backdrop = document.createElement("div");
@@ -4547,12 +4550,24 @@
 		dialog.setAttribute("role", "dialog");
 		dialog.setAttribute("aria-modal", "true");
 
+		const header = document.createElement("div");
+		header.className = "juneau-view-dialog-header";
+		const figure = buildDialogHeaderFigure(action);
+		if (figure) header.appendChild(figure);
 		const title = document.createElement("h2");
 		title.className = "juneau-view-dialog-title";
 		title.textContent = (modal?.title) || (action?.confirm || action?.label || action?.id) || "Confirm";
-		dialog.appendChild(title);
+		header.appendChild(title);
+		const dismissBtn = document.createElement("button");
+		dismissBtn.type = "button";
+		dismissBtn.className = "juneau-view-dialog-dismiss";
+		dismissBtn.setAttribute("aria-label", "Close");
+		dismissBtn.dataset.testid = "dialog-dismiss";
+		dismissBtn.textContent = "\u00D7";
+		header.appendChild(dismissBtn);
+		dialog.appendChild(header);
 
-		insertDialogBarSlot(dialog, title, modal?.barSlot, seq);
+		insertDialogBarSlot(dialog, header, modal?.barSlot, seq);
 
 		if (modal?.fields?.length) {
 			const dl = document.createElement("dl");
@@ -4591,7 +4606,32 @@
 		dialog.appendChild(actions);
 
 		backdrop.appendChild(dialog);
-		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn };
+		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn,
+			dismissBtn: dismissBtn };
+	}
+
+	/** Icon name for the optional circular leading glyph on a dialog header; null when none should paint. */
+	function dialogHeaderIconName(action) {
+		if (action?.icon != null && String(action.icon) !== "") return String(action.icon);
+		if (action?.symbol != null && String(action.symbol) !== "") return String(action.symbol);
+		if (action?.type === "dialog") return "new";
+		return null;
+	}
+
+	/**
+	 * Optional leading figure on the dialog header.  Markup is ALWAYS from the icon registry (same trusted
+	 * innerHTML path as toolbarButton) - never live/remote data.
+	 */
+	function buildDialogHeaderFigure(action) {
+		const name = dialogHeaderIconName(action);
+		if (! name) return null;
+		const markup = window.JuneauViews?.icons?.resolveIcon ? window.JuneauViews.icons.resolveIcon(name) : null;
+		if (! markup) return null;
+		const b = document.createElement("span");
+		b.className = "juneau-view-dialog-figure";
+		b.setAttribute("aria-hidden", "true");
+		b.innerHTML = markup;
+		return b;
 	}
 
 	/**
@@ -5124,6 +5164,7 @@
 		const ui = buildDialogOverlay(modal, action, table, tr, ctx, seq);
 		function close() { popLayer(ui.backdrop); }
 		ui.cancelBtn.addEventListener("click", close);
+		if (ui.dismissBtn) ui.dismissBtn.addEventListener("click", close);
 		ui.confirmBtn.addEventListener("click", function () {
 			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
 			const fields = collectDialogFormFields(ui.dialog);
@@ -6633,14 +6674,15 @@
 	}
 
 	// ==================================================================================================================
-	// Instant cursor tooltip (icon-only ribbon / paging chrome)
+	// Instant cursor tooltip (icon-only ribbon / paging / helper-button chrome)
 	//
 	// Native `title` waits about a second and lives in the browser's own bubble.  Icon-only paging
-	// chevrons and ribbon glyphs need the label immediately, next to the pointer.  This helper:
+	// chevrons, ribbon glyphs, and helpers.button / buttonRow icon clusters need the label
+	// immediately, next to the pointer.  This helper:
 	//   - installs one set of document listeners (survives table redraws that replace buttons)
-	//   - on first hover inside ribbon/paging/toolbar hosts, moves `title` onto `data-jc-tip`
-	//     so existing buttons keep setting `title` + `aria-label` and pick this up with no
-	//     per-call-site rewrite; `aria-label` is left alone
+	//   - on first hover inside ribbon/paging/toolbar/helper-btn hosts, moves `title` onto
+	//     `data-jc-tip` so existing buttons keep setting `title` + `aria-label` and pick this up
+	//     with no per-call-site rewrite; `aria-label` is left alone
 	//   - paints one floating `.jc-tip` node with the label as plain text (never HTML)
 	//   - does not promote titles on form fields, or on nodes outside those hosts (so a
 	//     delayed native title on a random page control stays native)
@@ -6657,7 +6699,9 @@
 		"juneau-view-toolbar-row": true,
 		"juneau-view-toolbar-left": true,
 		"juneau-view-toolbar-right": true,
-		"juneau-view-detail-actions": true
+		"juneau-view-detail-actions": true,
+		"juneau-view-helper-btn": true,
+		"juneau-view-helper-btn-row": true
 	};
 
 	var cursorTipBound = false;

@@ -33,10 +33,10 @@ import org.junit.jupiter.api.*;
  * Always-on coverage for the instant cursor tooltip on ribbon/paging icon chrome.
  *
  * <p>
- * Paging and ribbon buttons already set native {@code title} plus {@code aria-label}.  The helper promotes
- * {@code title} to {@code data-jc-tip} on first hover inside those hosts, paints one floating {@code .jc-tip}
- * bubble immediately, and leaves {@code aria-label} alone.  Titles on form fields and on nodes outside
- * ribbon/paging/toolbar chrome stay native.
+ * Paging, ribbon, and helper {@code buttonRow} buttons already set native {@code title} plus
+ * {@code aria-label}.  The helper promotes {@code title} to {@code data-jc-tip} on first hover inside
+ * those hosts, paints one floating {@code .jc-tip} bubble immediately, and leaves {@code aria-label}
+ * alone.  Titles on form fields and on nodes outside ribbon/paging/toolbar/helper-btn chrome stay native.
  */
 class ViewsJs_CursorTip_Test extends TestBase {
 
@@ -71,6 +71,8 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		assertTrue(body.contains("initCursorTooltip: initCursorTooltip"), body);
 		assertTrue(body.contains("data-jc-tip"), body);
 		assertTrue(body.contains("jc-cursor-tip"), body);
+		assertTrue(body.contains("\"juneau-view-helper-btn\": true"), body);
+		assertTrue(body.contains("\"juneau-view-helper-btn-row\": true"), body);
 	}
 
 	@Test void a02_doesNotUseInnerHtmlForTipText() throws Exception {
@@ -246,5 +248,13 @@ class ViewsJs_CursorTip_Test extends TestBase {
 
 	@Test void b08_initIsIdempotent() {
 		assertTrueKey("reinit_stillWorks");
+	}
+
+	@Test void b09_helperButtonRow_samePromotion() {
+		assertTrueKey("helper_titleMovedOff");
+		assertEquals("Acknowledge", report().get("helper_tipAttr"));
+		assertTrueKey("helper_ariaKept");
+		assertEquals("Acknowledge", report().get("helper_tipText"));
+		assertTrueKey("helper_tipVisible");
 	}
 }

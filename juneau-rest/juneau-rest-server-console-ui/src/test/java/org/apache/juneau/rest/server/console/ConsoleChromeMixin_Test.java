@@ -683,17 +683,52 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	/**
-	 * Icon-button hover chrome: toolbar ribbons and paging nav segments paint {@code --jc-accent} on the
-	 * button's own border, matching the detail-ribbon hover (blue square around the hovered icon).
+	 * Icon-button hover chrome: toolbar ribbons paint {@code --jc-accent} on the button's own border.
+	 * Paging segments ARE the pill outline (no container stroke): idle gray on those edges, hover
+	 * recolors the same top/bottom (plus end-cap sides) — not {@code border-color} on all four sides.
 	 */
 	@Test void k05_chromeCss_ribbonAndPagingHoverPaintAccentBorder() throws Exception {
 		var css = readChromeCss();
 		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
 			() -> "missing ribbon-btn hover accent border, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
-			() -> "missing pagingpill-btn hover accent border, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-color: var(--jc-accent); }"),
-			() -> "missing paging menuwrap hover accent border, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill { background-color: var(--jc-control-bg); }"),
+			() -> "pagingpill container must not stroke; fill only, css:\n" + css);
+		assertFalse(css.contains(".juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }"),
+			() -> "container border-color would halo hover in a second outline, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }"),
+			() -> "idle pagingpill-btn edges are the pill outline, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
+			() -> "pagingpill-btn hover must recolor top/bottom only, css:\n" + css);
+		assertFalse(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+			() -> "shorthand border-color on hover invents chevron L/R, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }"),
+			() -> "missing first-child hover end-cap, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }"),
+			() -> "missing last-child hover end-cap, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }"),
+			() -> "idle paging menuwrap edges are the pill outline, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
+			() -> "menuwrap hover must recolor top/bottom only, css:\n" + css);
+	}
+
+	@Test void k07_chromeCss_dialogHeaderToggleAndFooterUseThemeTokens() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains(".juneau-view-dialog-header"),
+			() -> "missing dialog header theme, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-dialog-dismiss:hover"),
+			() -> "missing dialog dismiss hover, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-dialog-confirm {"),
+			() -> "missing dialog confirm theme, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-toggle:checked {"),
+			() -> "missing themed toggle-on, css:\n" + css);
+		assertTrue(css.contains("background-color: var(--jc-success);"),
+			() -> "toggle-on must use --jc-success, css:\n" + css);
+		assertTrue(css.contains("background-color: var(--jc-chrome-bg);"),
+			() -> "dialog header/footer must use --jc-chrome-bg, css:\n" + css);
+		assertTrue(css.contains("input[aria-invalid=\"true\"]"),
+			() -> "dialog invalid fields must theme aria-invalid, css:\n" + css);
+		assertTrue(css.contains("border-color: var(--jc-danger);"),
+			() -> "dialog invalid border must use --jc-danger, css:\n" + css);
 	}
 
 	/**

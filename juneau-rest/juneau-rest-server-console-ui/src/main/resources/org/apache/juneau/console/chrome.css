@@ -802,12 +802,17 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-detail-control:hover { color: var(--jc-accent); }
 
 /* Unified paging ribbon (nav + page-size menu) - same --jc-control-border/white-face treatment as the
-   icon ribbon and toolbar search. */
+   icon ribbon and toolbar search.  Segment borders ARE the pill (views.css: no container stroke).
+   Idle gray is top/bottom on every segment plus first left / last right.  Hover recolors those same
+   edges — longhand top/bottom only, so a UA leftover left/right on a chevron cannot turn into extra
+   verticals.  End-caps add the outer side.  Do not restore border-color:accent on all four sides. */
 .juneau-view-pagingpill { background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
-.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
+.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
+.juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }
+.juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
-.juneau-view-pagingpill-menuwrap:hover { border-color: var(--jc-accent); }
+.juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
@@ -943,4 +948,88 @@ table.dataTable.display > tbody > tr:hover {
   background-color: var(--jc-table-header-bg);
   color: var(--jc-text-soft);
   font-weight: 600;
+}
+
+/* ==========================================================================
+   Dialog chrome (ModalDef / .juneau-view-dialog)
+   Palette only — shape lives in juneau-views.css. Light gray header/footer bars,
+   green toggle-on, Cancel outline / Confirm primary. Original tokens, no slds-*.
+   ========================================================================== */
+
+.juneau-view-dialog-header,
+.juneau-view-dialog-actions {
+  background-color: var(--jc-chrome-bg);
+  border-bottom-color: var(--jc-text-muted);
+  border-top-color: var(--jc-text-muted);
+}
+
+.juneau-view-dialog-figure {
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+}
+
+.juneau-view-dialog-title {
+  color: var(--jc-text);
+}
+
+.juneau-view-dialog-dismiss {
+  color: var(--jc-text-muted);
+}
+.juneau-view-dialog-dismiss:hover {
+  color: var(--jc-danger);
+}
+
+.juneau-view-dialog-cancel,
+.juneau-view-dialog-close {
+  background-color: var(--jc-white);
+  color: var(--jc-btn-primary-bg);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+}
+.juneau-view-dialog-cancel:hover,
+.juneau-view-dialog-close:hover {
+  background-color: var(--jc-hover-bg);
+}
+
+.juneau-view-dialog-confirm {
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+}
+.juneau-view-dialog-confirm:hover {
+  background-color: var(--jc-btn-primary-bg-hover);
+}
+
+.juneau-view-dialog-form-row input:not([type="checkbox"]):not([type="hidden"]),
+.juneau-view-dialog-form-row textarea,
+.juneau-view-dialog-form-row select {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+}
+
+.juneau-view-dialog-form-row input[aria-invalid="true"]:not([type="checkbox"]),
+.juneau-view-dialog-form-row textarea[aria-invalid="true"],
+.juneau-view-dialog-form-row select[aria-invalid="true"],
+.juneau-view-dialog-form-row input:not([type="checkbox"]):invalid,
+.juneau-view-dialog-form-row textarea:invalid,
+.juneau-view-dialog-form-row select:invalid {
+  border-color: var(--jc-danger);
+}
+
+.juneau-view-toggle {
+  background-color: var(--jc-border-2);
+  border-color: var(--jc-border-2);
+  color: var(--jc-white);
+}
+.juneau-view-toggle:checked {
+  background-color: var(--jc-success);
+  border-color: var(--jc-success);
+  color: var(--jc-white);
+}
+.juneau-view-toggle::after {
+  background-color: var(--jc-white);
 }

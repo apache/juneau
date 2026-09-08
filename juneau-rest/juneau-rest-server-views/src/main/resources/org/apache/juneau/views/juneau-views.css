@@ -911,15 +911,16 @@ table.dataTable thead .sorting_desc_disabled:after {
 	align-items: stretch;
 	box-sizing: border-box;
 	height: var(--jc-chrome-control-height);
+	border: none;                 /* segment borders ARE the pill — a container stroke + hover on the
+	                                 buttons paints an inner blue box inside a gray halo */
 	border-radius: 0.25em;
 	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
 }
 
-/* Outer outline lives on the segments (not the container) so a hovered First/Prev/Next/Last can recolor
-   its own visible sides — the same left/center/right treatment as ".juneau-view-ribbon-group".  Longhand
-   width/style only: a colourless shorthand would reset border-*-color and steal chrome.css's theme.
-   No inner verticals (WORK-J0518 DF-2).  End-cap left/right + per-segment top/bottom; no overflow:hidden
-   (that would clip the page-size menu, positioned absolute from a segment inside the pill). */
+/* Same model as .juneau-view-ribbon-group: rest = top/bottom on every segment + first left + last
+   right.  chrome.css colors those edges gray, then recolors the same edges --jc-accent on hover.
+   Longhand width/style only; a colourless shorthand would reset border-*-color and steal the theme.
+   No inner verticals (WORK-J0518 DF-2).  No overflow:hidden (that would clip the page-size menu). */
 .juneau-view-pagingpill > *:first-child {
 	border-radius: 0.25em 0 0 0.25em;
 	border-left-width: 1px;
@@ -953,10 +954,14 @@ table.dataTable thead .sorting_desc_disabled:after {
 	box-sizing: border-box;
 	min-width: 32px;
 	padding: 0 8px;
-	border-top-width: 1px;        /* longhand, not a colourless shorthand — hover border-color needs a painted edge */
+	border-top-width: 1px;        /* longhand, not a colourless shorthand — hover recolors this same edge */
 	border-top-style: solid;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
+	border-left-width: 0;         /* kill UA button sides; first/last restore the end-caps */
+	border-left-style: none;
+	border-right-width: 0;
+	border-right-style: none;
 	background: transparent;
 	font-family: inherit;
 	cursor: pointer;
@@ -1893,14 +1898,17 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-view-dialog {
-	min-width: 20em;
+	min-width: 28em;
 	max-width: 90vw;
 	max-height: 90vh;
-	overflow: auto;
-	padding: var(--jc-space-4) 1.25em;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	padding: 0;
 	border: 1px solid;
-	border-radius: 6px;
+	border-radius: 8px;
 	background: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /*
@@ -1919,9 +1927,49 @@ input[type="checkbox"].jc-editable-field-input {
 	font-size: 0.9em;
 }
 
+.juneau-view-dialog-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex: 0 0 auto;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+}
+
+.juneau-view-dialog-figure {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: var(--jc-chrome-control-height-compact);
+	height: var(--jc-chrome-control-height-compact);
+	border-radius: 50%;
+}
+
+.juneau-view-dialog-figure svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	display: block;
+}
+
 .juneau-view-dialog-title {
-	margin: 0 0 0.75em;
-	font-size: 1.1em;
+	margin: 0;
+	font-size: 0.95rem;
+	font-weight: 600;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.juneau-view-dialog-dismiss {
+	flex: 0 0 auto;
+	margin-left: auto;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	font-size: 1.25rem;
+	line-height: 1;
+	padding: 0 2px;
 }
 
 /*
@@ -1931,11 +1979,14 @@ input[type="checkbox"].jc-editable-field-input {
  * shared flex/wrap/gap shape.  NEUTRAL - shape only.
  */
 .juneau-view-dialog-bar-slot {
-	margin: 0 0 0.75em;
+	margin: 0;
+	padding: 0 1.25em 0.75em;
 }
 
 .juneau-view-dialog-fields {
-	margin: 0 0 var(--jc-space-4);
+	margin: 0;
+	padding: var(--jc-space-3) var(--jc-space-4);
+	overflow: auto;
 }
 
 .juneau-view-dialog-fields dt {
@@ -1950,10 +2001,13 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-view-dialog-form {
-	margin: 0 0 var(--jc-space-4);
+	margin: 0;
+	padding: var(--jc-space-3) var(--jc-space-4) var(--jc-space-2);
 	display: flex;
 	flex-direction: column;
 	gap: var(--jc-space-3);
+	overflow: auto;
+	flex: 1 1 auto;
 }
 
 /*
@@ -1993,26 +2047,53 @@ input[type="checkbox"].jc-editable-field-input {
 	display: none;
 }
 
-.juneau-view-dialog-form-row label {
-	display: block;
-	font-weight: 600;
-	margin-bottom: var(--jc-space-1);
+.juneau-view-dialog-form-row {
+	display: grid;
+	grid-template-columns: minmax(6em, 8em) minmax(0, 1fr);
+	align-items: center;
+	column-gap: 0.75em;
+	row-gap: 0.15em;
 }
 
-.juneau-view-dialog-form-row input,
+.juneau-view-dialog-form-row:has(textarea) {
+	align-items: start;
+}
+
+.juneau-view-dialog-form-row label {
+	display: block;
+	font-weight: 400;
+	font-size: var(--jc-chrome-font-size-1);
+	margin-bottom: 0;
+}
+
+.juneau-view-dialog-form-row label::after {
+	content: ":";
+}
+
+.juneau-view-dialog-form-row input:not([type="checkbox"]):not([type="hidden"]),
 .juneau-view-dialog-form-row textarea,
 .juneau-view-dialog-form-row select {
 	width: 100%;
 	box-sizing: border-box;
+	/* 36px border-box: 2px shorter than Bootstrap 5.3 .form-control (38px at 16px root). */
+	height: 36px;
+	padding: 6px 10px;
+	font-size: var(--jc-chrome-font-size-3);
+	line-height: 1.5;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 4px;
 }
 
 .juneau-view-dialog-form-row textarea {
+	height: auto;
 	min-height: 6em;
 }
 
 /* A checkbox and a checkbox styled as a switch are inline (auto width), not full-width form controls. */
 .juneau-view-dialog-form-row input[type="checkbox"] {
 	width: auto;
+	justify-self: start;
 }
 
 /*
@@ -2054,6 +2135,7 @@ input[type="checkbox"].jc-editable-field-input {
 	font-size: 0.85em;
 	font-weight: normal;
 	margin-top: 0.2em;
+	grid-column: 2;
 }
 
 /* The per-field inline validation error sibling; empty until a rule fails (role=alert set on confirm-time). */
@@ -2062,6 +2144,7 @@ input[type="checkbox"].jc-editable-field-input {
 	font-weight: normal;
 	margin-top: 0.2em;
 	min-height: 1em;
+	grid-column: 2;
 }
 
 /* A type=action button rendered inside a dialog form. */
@@ -2073,6 +2156,22 @@ input[type="checkbox"].jc-editable-field-input {
 	display: flex;
 	gap: var(--jc-space-2);
 	justify-content: flex-end;
+	flex: 0 0 auto;
+	padding: var(--jc-chrome-control-padding-x) var(--jc-space-3);
+	border-top-width: 2px;
+	border-top-style: solid;
+}
+
+.juneau-view-dialog-cancel,
+.juneau-view-dialog-confirm,
+.juneau-view-dialog-close {
+	font: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	font-weight: 600;
+	padding: 7px var(--jc-chrome-control-padding-x-wide);
+	border-radius: 4px;
+	cursor: pointer;
+	min-width: 5.5em;
 }
 
 /*
