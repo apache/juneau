@@ -687,9 +687,12 @@ table.dataTable.display > tbody > tr:hover {
    ========================================================================== */
 
 /* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
-   inherits the body's near-black text color instead of a subtle gray; themed here with --jc-border, plus a
-   white face so a button reads as a distinct control against the card's tinted background. */
-.juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
+   inherits the body's near-black text color instead of a subtle gray; themed here with
+   --jc-control-border (same role token as .jc-btn-outline / toolbar search / paging), plus a
+   white face so a button reads as a distinct control against the card's tinted background.
+   Using --jc-border here made ribbon/paging lighter than search whenever a theme split
+   --jc-border from --jc-border-2 (SSC --jc-border #e5e5e5 vs --jc-border-2 #ced4da). */
+.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
 .juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
@@ -757,23 +760,31 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-detail-control { color: var(--jc-text-muted); }
 .juneau-view-detail-control:hover { color: var(--jc-accent); }
 
-/* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
-   buttons. */
-.juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-control-bg); }
-.juneau-view-pagingpill-btn { border-color: var(--jc-border); color: var(--jc-text-soft); }
+/* Unified paging ribbon (nav + page-size menu) - same --jc-control-border/white-face treatment as the
+   icon ribbon and toolbar search. */
+.juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
-.juneau-view-pagingpill-menuwrap { border-color: var(--jc-border); }
+.juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
-.juneau-view-pagingpill-menu { border-color: var(--jc-border); background-color: var(--jc-control-bg); }
+.juneau-view-pagingpill-menu { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-menu-option:hover,
 .juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
 
-/* Per-column search row inputs - same thin-neutral-border treatment, themed accent on focus. */
-.juneau-view-columnsearch-input { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text); }
+/* Per-column search row inputs - same control-border treatment, themed accent on focus. */
+.juneau-view-columnsearch-input { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text); }
 .juneau-view-columnsearch-input:focus { border-color: var(--jc-accent); }
+
+/* Toolbar Search - same --jc-control-border as ribbon/paging so a theme that splits --jc-border from
+   --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.
+   appearance:none / background / box-shadow resets live in juneau-views.css (structural). */
+.juneau-view-toolbar-right .dataTables_filter input,
+.juneau-view-toolbar-right .dt-search input {
+  border-color: var(--jc-control-border);
+}
 
 /* ==========================================================================
    Footer

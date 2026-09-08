@@ -1137,6 +1137,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * DF-3: the toolbar search input gets a grey control border and grey text at passing contrast, via new
 	 * chrome-wide tokens rather than a bare colourless {@code border: 1px solid} - fixing the framework default
 	 * so console-ui's own MT-11 fix does not have to fork a second border colour in {@code console.css}.
+	 * Also pins {@code appearance:none} so macOS/WebKit UA text-field chrome cannot paint a darker platform
+	 * border over the authored token (the Search-vs-ribbon mismatch James reported after the #ced4da retoken).
 	 */
 	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
@@ -1149,6 +1151,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var region = body.substring(start, end);
 		assertTrue(region.contains("border: 1px solid var(--jc-chrome-control-border)"), region);
 		assertTrue(region.contains("color: var(--jc-chrome-control-text)"), region);
+		assertTrue(region.contains("appearance: none"), region);
+		assertTrue(region.contains("-webkit-appearance: none"), region);
+		assertTrue(region.contains("box-shadow: none"), region);
 	}
 
 	/**

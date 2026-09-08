@@ -177,11 +177,13 @@
 	 */
 	--jc-chrome-disabled-bg: #ffffff;
 	/*
-	 * Chrome-wide control border/text grey (WORK-J0518 DF-3, IRS visual-parity follow-up): IRS's own main
-	 * toolbar search pins `border-color: rgb(206, 212, 218)` (= #ced4da) on `.dt-container .dt-search input`
-	 * (pages/style.css), matching the ribbon control border.  The previous #cccccc default read darker/heavier
-	 * than that IRS search field. Named "control", not "search-input": a text control's border/text grey is a
-	 * chrome-wide role like --jc-chrome-control-height above, not a single-widget colour.
+	 * Chrome-wide control border/text grey (WORK-J0518 DF-3, IRS visual-parity follow-up): IRS ribbon /
+	 * paging / toolbar search all use #ced4da (pages/style.css `.ribbon-button-*` and
+	 * `.dt-container .dt-search input`).  Same hex is the console-ui `--jc-control-border` leaf
+	 * (`--jc-border-2`); chrome.css paints ribbon/paging/column-search/toolbar-search from that role
+	 * token so themed apps cannot drift.  This views-local default keeps the themeless render IRS-matched
+	 * when chrome.css is not linked.  Named "control", not "search-input": a text control's border/text
+	 * grey is a chrome-wide role like --jc-chrome-control-height above, not a single-widget colour.
 	 */
 	--jc-chrome-control-border: #ced4da;
 	--jc-chrome-control-text: #4f4f4f;
@@ -1062,6 +1064,11 @@ table.dataTable thead .sorting_desc_disabled:after {
  * is why console-ui's own MT-11 fix had to fork a second border colour in console.css rather than getting one
  * from here. Fixing the framework default instead: --jc-chrome-control-border/-text are still overridable by a
  * host theme exactly like every other token in this file.
+ *
+ * appearance:none is load-bearing on macOS/WebKit: without it, the UA text-field chrome paints a darker
+ * platform border (~#aaa) that outranks / composites over the authored #ced4da, so the toolbar Search reads
+ * heavier than the adjacent ribbon buttons that already use an explicit CSS border.  background + box-shadow
+ * resets finish neutralizing the native field so only the shared control border shows.
  */
 .juneau-view-toolbar-right .dataTables_filter input,
 .juneau-view-toolbar-right .dt-search input {
@@ -1069,6 +1076,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 	height: var(--jc-chrome-control-height);
 	margin: 0;
 	padding: 0 0.5em;
+	appearance: none;
+	-webkit-appearance: none;
+	background: #ffffff;
+	box-shadow: none;
 	border: 1px solid var(--jc-chrome-control-border);
 	border-radius: 0.25em;
 	color: var(--jc-chrome-control-text);
