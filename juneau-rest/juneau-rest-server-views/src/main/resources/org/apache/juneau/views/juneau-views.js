@@ -6633,6 +6633,184 @@
 	}
 
 	// ==================================================================================================================
+	// Instant cursor tooltip (icon-only ribbon / paging chrome)
+	//
+	// Native `title` waits about a second and lives in the browser's own bubble.  Icon-only paging
+	// chevrons and ribbon glyphs need the label immediately, next to the pointer.  This helper:
+	//   - installs one set of document listeners (survives table redraws that replace buttons)
+	//   - on first hover inside ribbon/paging/toolbar hosts, moves `title` onto `data-jc-tip`
+	//     so existing buttons keep setting `title` + `aria-label` and pick this up with no
+	//     per-call-site rewrite; `aria-label` is left alone
+	//   - paints one floating `.jc-tip` node with the label as plain text (never HTML)
+	//   - does not promote titles on form fields, or on nodes outside those hosts (so a
+	//     delayed native title on a random page control stays native)
+	// ==================================================================================================================
+
+	const JC_TIP_ID = "jc-cursor-tip";
+	const JC_TIP_OFFSET = 12;
+	const JC_TIP_CHROME = {
+		"juneau-view-pagingpill": true,
+		"juneau-view-pagingpill-btn": true,
+		"juneau-view-pagingpill-menubtn": true,
+		"juneau-view-ribbon-group": true,
+		"juneau-view-ribbon-btn": true,
+		"juneau-view-toolbar-row": true,
+		"juneau-view-toolbar-left": true,
+		"juneau-view-toolbar-right": true,
+		"juneau-view-detail-actions": true
+	};
+
+	var cursorTipBound = false;
+
+	function isFormFieldTag(el) {
+		const tag = el && el.tagName ? String(el.tagName).toUpperCase() : "";
+		return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || tag === "OPTION";
+	}
+
+	function hasChromeTipClass(el) {
+		const cn = el && el.className;
+		if (!cn || typeof cn !== "string") return false;
+		const parts = cn.split(/\s+/);
+		for (let i = 0; i < parts.length; i++)
+			if (JC_TIP_CHROME[parts[i]]) return true;
+		return false;
+	}
+
+	function inChromeHost(el) {
+		let n = el;
+		while (n && n.nodeType === 1) {
+			if (hasChromeTipClass(n)) return true;
+			n = n.parentNode;
+		}
+		return false;
+	}
+
+	function readTitle(el) {
+		if (!el) return "";
+		const attr = typeof el.getAttribute === "function" ? el.getAttribute("title") : null;
+		if (attr != null && String(attr) !== "") return String(attr);
+		if (el.title != null && String(el.title) !== "") return String(el.title);
+		return "";
+	}
+
+	function clearNativeTitle(el) {
+		if (typeof el.removeAttribute === "function") el.removeAttribute("title");
+		el.title = "";
+	}
+
+	function promoteTitle(el, text) {
+		el.setAttribute("data-jc-tip", text);
+		clearNativeTitle(el);
+	}
+
+	function elementFromEventTarget(t) {
+		if (!t) return null;
+		if (t.nodeType === 1) return t;
+		return t.parentNode && t.parentNode.nodeType === 1 ? t.parentNode : null;
+	}
+
+	/**
+	 * Resolves the tooltip host for a hover target: an ancestor with {@code data-jc-tip} (explicit),
+	 * or a titled node inside ribbon/paging/toolbar chrome whose {@code title} is then moved onto
+	 * {@code data-jc-tip}.  Form fields never qualify.
+	 */
+	function cursorTipHost(t) {
+		const start = elementFromEventTarget(t);
+		if (!start) return null;
+
+		let n = start;
+		while (n && n.nodeType === 1) {
+			if (isFormFieldTag(n)) return null;
+			const explicit = typeof n.getAttribute === "function" ? n.getAttribute("data-jc-tip") : null;
+			if (explicit != null) return String(explicit).trim() === "" ? null : n;
+			n = n.parentNode;
+		}
+
+		n = start;
+		while (n && n.nodeType === 1) {
+			if (isFormFieldTag(n)) return null;
+			const title = readTitle(n);
+			if (title && inChromeHost(n)) {
+				promoteTitle(n, title);
+				return n;
+			}
+			n = n.parentNode;
+		}
+		return null;
+	}
+
+	function cursorTipEl() {
+		if (typeof document === "undefined" || typeof document.getElementById !== "function") return null;
+		let el = document.getElementById(JC_TIP_ID);
+		if (!el && document.body) {
+			el = document.createElement("div");
+			el.id = JC_TIP_ID;
+			el.className = "jc-tip";
+			el.setAttribute("role", "tooltip");
+			el.style.display = "none";
+			document.body.appendChild(el);
+		}
+		return el || null;
+	}
+
+	function cursorTipPosition(el, x, y) {
+		if (!el) return;
+		const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1024;
+		const vh = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 768;
+		const w = el.offsetWidth || 0;
+		const h = el.offsetHeight || 0;
+		let left = x + JC_TIP_OFFSET;
+		let top = y + JC_TIP_OFFSET;
+		if (left + w > vw - 4) left = Math.max(4, x - JC_TIP_OFFSET - w);
+		if (top + h > vh - 4) top = Math.max(4, y - JC_TIP_OFFSET - h);
+		el.style.left = left + "px";
+		el.style.top = top + "px";
+	}
+
+	function cursorTipHide() {
+		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
+			? document.getElementById(JC_TIP_ID) : null;
+		if (el) el.style.display = "none";
+	}
+
+	function cursorTipShow(text, x, y) {
+		const content = text == null ? "" : String(text);
+		if (content.trim() === "") { cursorTipHide(); return; }
+		const el = cursorTipEl();
+		if (!el) return;
+		el.textContent = content;
+		el.style.display = "block";
+		cursorTipPosition(el, x, y);
+	}
+
+	/**
+	 * Installs (once) the document listeners that drive the cursor tooltip.  DOM-guarded and
+	 * idempotent; safe to call from tests after the automatic bootstrap has already run.
+	 */
+	function initCursorTooltip() {
+		if (cursorTipBound) return;
+		if (typeof document === "undefined" || typeof document.addEventListener !== "function") return;
+		cursorTipBound = true;
+		document.addEventListener("mouseover", function (e) {
+			const host = cursorTipHost(e.target);
+			if (host) cursorTipShow(host.getAttribute("data-jc-tip") || "", e.clientX, e.clientY);
+		});
+		document.addEventListener("mousemove", function (e) {
+			const el = document.getElementById(JC_TIP_ID);
+			if (!el || el.style.display === "none") return;
+			if (cursorTipHost(e.target)) cursorTipPosition(el, e.clientX, e.clientY);
+			else cursorTipHide();
+		});
+		document.addEventListener("mouseout", function (e) {
+			const host = cursorTipHost(e.target);
+			if (!host) return;
+			const to = e.relatedTarget;
+			if (to && typeof host.contains === "function" && host.contains(to)) return;
+			cursorTipHide();
+		});
+	}
+
+	// ==================================================================================================================
 	// PUBLIC API + bootstrap
 	// ==================================================================================================================
 
@@ -6674,6 +6852,7 @@
 		// visual-parity pass: exposed for manual verification.
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
+		initCursorTooltip: initCursorTooltip,
 		buildColumnSearchRow: buildColumnSearchRow,
 		buildToolbarRow: buildToolbarRow,
 		// Table polling + visible staleness indicator - exposed for manual verification.
@@ -6859,6 +7038,7 @@
 		renderAsyncStatus: renderAsyncStatus
 	};
 
+	initCursorTooltip();
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", initAll);
 	} else {

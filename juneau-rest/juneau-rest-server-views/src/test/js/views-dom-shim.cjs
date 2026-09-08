@@ -114,6 +114,11 @@ function makeEnv() {
 			set id(v) { this.setAttribute('id', v); },
 			get name() { return this.attrs.name || ''; },
 			set name(v) { this.setAttribute('name', v); },
+			get title() { return Object.hasOwn(this.attrs, 'title') ? this.attrs.title : ''; },
+			set title(v) {
+				if (v == null || v === '') this.removeAttribute('title');
+				else this.setAttribute('title', v);
+			},
 			get firstChild() { return this.childNodes[0] || null; },
 			/** The node after this one among its parent's children - what an "insert right after me" call reads. */
 			get nextSibling() {

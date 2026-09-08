@@ -67,6 +67,11 @@
 	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
 	--jc-popover-z: 1200;
 	/*
+	 * Cursor tooltip for icon-only ribbon/paging chrome (.jc-tip).  Sits above dialogs (1000) and cell
+	 * popovers (1200) so a paging chevron label is never clipped under an open layer.
+	 */
+	--jc-tip-z: 1400;
+	/*
 	 * The base z-index of the shared popup layer stack (TODO-445h) and the per-layer step.  juneau-views.js stamps
 	 * each registered layer an INLINE z-index of (--jc-dialog-z + rawStackIndex * --jc-layer-step); these tokens are
 	 * the single source of truth the runtime reads (with the same numeric fallbacks baked into the script for the
@@ -1951,6 +1956,28 @@ table.dataTable > tbody > tr.child > td {
 	background: var(--jc-popover-bg);
 	box-shadow: var(--jc-popover-shadow);
 	z-index: var(--jc-popover-z, 1200);
+}
+
+/*
+ * Instant cursor tooltip for icon-only ribbon/paging controls.  Light grey rounded bubble using the
+ * existing popover tokens; no delay (display toggles, no transition).  pointer-events:none so the
+ * bubble never steals the hover that keeps it visible.
+ */
+.jc-tip {
+	position: fixed;
+	z-index: var(--jc-tip-z, 1400);
+	display: none;
+	pointer-events: none;
+	background: var(--jc-popover-bg);
+	color: var(--jc-chrome-control-text, #4f4f4f);
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	box-shadow: var(--jc-popover-shadow);
+	padding: var(--jc-space-1) var(--jc-space-2);
+	font-size: var(--jc-chrome-font-size-1, 0.75rem);
+	line-height: 1.35;
+	max-width: 20rem;
+	white-space: nowrap;
 }
 
 .juneau-view-action-item {
