@@ -501,6 +501,16 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertFalse(buttonFnBody.contains("b.textContent = label"), buttonFnBody);
 	}
 
+	@Test void f02b_ribbonJs_stampsIconAppearanceClassWhenRequested() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		var buttonFnStart = body.indexOf("function button(");
+		assertTrue(buttonFnStart >= 0, () -> "function button( not found:\n" + body);
+		var buttonFnEnd = body.indexOf("\n\t}", buttonFnStart);
+		var buttonFnBody = body.substring(buttonFnStart, buttonFnEnd < 0 ? body.length() : buttonFnEnd);
+		assertTrue(buttonFnBody.contains("juneau-view-ribbon-btn--icon"), buttonFnBody);
+		assertTrue(buttonFnBody.contains("appearance === \"icon\""), buttonFnBody);
+	}
+
 	@Test void f03_ribbonJs_exportButtonsTriggerDataTablesButtonsApi() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
 		var exportStart = body.indexOf("a.type === \"export\"");

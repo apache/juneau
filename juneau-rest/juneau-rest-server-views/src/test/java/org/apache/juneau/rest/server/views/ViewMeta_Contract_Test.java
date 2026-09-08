@@ -401,6 +401,16 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertFalse(Json.of(ungrouped).contains("\"group\""), Json.of(ungrouped));
 	}
 
+	@Test void d16b_ribbonActionAppearanceSetter_andOmittedWhenUnset() {
+		var icon = RibbonAction.refresh().appearance("icon");
+		assertEquals("icon", icon.appearance);
+		assertTrue(Json.of(icon).contains("\"appearance\":\"icon\""), Json.of(icon));
+
+		var chrome = RibbonAction.refresh();
+		assertNull(chrome.appearance);
+		assertFalse(Json.of(chrome).contains("\"appearance\""), Json.of(chrome));
+	}
+
 	@Test void d17_ribbonActionCollapseAllFactory_typeOnlyBean() {
 		// Foundry WORK-P0063 toolbar follow-up (WORK-J0507): a type-only bean like refresh()/pausePolling(), so it
 		// serializes with ONLY "type" set - no buttons/id/title/etc leak through as accidental defaults.

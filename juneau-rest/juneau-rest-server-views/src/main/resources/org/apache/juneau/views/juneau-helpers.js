@@ -25,25 +25,30 @@
  * juneau-views.js (whose format copiers, renderer-slot filler and async-status painter it reuses) and after
  * juneau-regions.js (a page of purely custom regions can load the bus/primitive without the paint library).
  *
- * TEN HELPERS:
+ * TWELVE HELPERS:
  *   fieldGrid, kvTable, button, buttonRow, text, pill, icon         - promoted (export work)
  *   tabStrip                                                        - promoted AND WIDENED (lazy per-tab
  *                                                                     populate, fill-once, contained throws)
  *   dataPane, recordTable                                           - net-new
  *   dateRange, dropdown, filterBuilder                               - net-new controls
+ *   editableField, toast                                            - net-new (editable detail leaf + error toast)
  *
  * INVARIANTS (design §9.2), enforced by this file's own shape as much as by test 29's source scan:
  *   - Pure data -> DOM.  No fetch (dataPane's `load` is an author-supplied thunk; this file never
  *     constructs a URL or calls `fetch` itself), no bus, no PAGE-GLOBAL state.
  *   - The one amendment (SD-3): a helper MAY hold per-instance state confined to the node it returned
- *     (tabStrip's fill-once bookkeeping).  That state lives in a closure captured by the returned node's
- *     event listeners - never in a module-level Map/Set/WeakMap/counter.
+ *     (tabStrip's fill-once bookkeeping; editableField's view/edit/dirty/error; fieldGrid's coordinator).
+ *     That state lives in a closure captured by the returned node's event listeners - never in a
+ *     module-level Map/Set/WeakMap/counter.
  *   - No HTML-string sink, ever (R16).  Every helper builds with `createElement`/`textContent`.  The one
  *     exception is `icon()`, which paints TRUSTED icon-registry sprite markup only, exactly as
  *     `resolveDetailHeaderIcon` already does in juneau-views.js.
  *   - Themable by class, not by inline style.  The one exception is `fieldGrid`'s `columns` option, which
  *     is a CSS CUSTOM PROPERTY (`--juneau-view-detail-columns`), not a `grid-template-columns` inline
  *     style - the mechanism fork F13 asks for.
+ *   - The second named exception: `toast()` is the only helper that writes under `document.body`.  It finds
+ *     or replaces a single `.jc-toast` via `document.querySelector`, appends that ephemeral node to
+ *     `document.body`, and stores its dismiss timer on the node itself - never a module-level registry.
  */
 (function () {
 	"use strict";
@@ -71,6 +76,28 @@
 
 	function isPlainObject(v) {
 		return v != null && typeof v === "object" && !Array.isArray(v);
+	}
+
+	function copyPlain(src) {
+		var out = {};
+		if (!isPlainObject(src)) return out;
+		var keys = Object.keys(src);
+		for (var i = 0; i < keys.length; i++) out[keys[i]] = src[keys[i]];
+		return out;
+	}
+
+	function hasClass(el, name) {
+		return (" " + (el.className || "") + " ").indexOf(" " + name + " ") !== -1;
+	}
+
+	function setClass(el, name, on) {
+		if (!el) return;
+		if (on) {
+			if (!hasClass(el, name)) el.className = el.className ? el.className + " " + name : name;
+			return;
+		}
+		if (hasClass(el, name))
+			el.className = (" " + el.className + " ").split(" " + name + " ").join(" ").replace(/^\s+|\s+$/g, "");
 	}
 
 	/** Interpolates a `{key}` URL template against a flat values map, then scheme-checks the result. */
@@ -172,9 +199,14 @@
 
 	function button(spec) {
 		spec = spec || {};
+		var appearance = spec.appearance;
+		if (appearance != null && appearance !== "" && appearance !== "chrome" && appearance !== "icon")
+			throw new TypeError("JuneauViews.helpers: button(spec) appearance must be \"icon\" or \"chrome\" (or omitted).");
 		var btn = document.createElement("button");
 		btn.type = "button";
-		btn.className = "juneau-view-helper-btn" + (spec.tone ? " juneau-view-helper-btn--" + spec.tone : "");
+		btn.className = "juneau-view-helper-btn"
+			+ (spec.tone ? " juneau-view-helper-btn--" + spec.tone : "")
+			+ (appearance === "icon" ? " juneau-view-helper-btn--icon" : "");
 		if (spec.id != null) btn.id = spec.id;
 		var canClick = typeof spec.onClick === "function" && !spec.disabled;
 		btn.disabled = !canClick;
@@ -208,10 +240,405 @@
 			bar.appendChild(button({
 				id: a.id,
 				label: a.label,
+				appearance: a.appearance,
 				onClick: typeof onAction === "function" ? function (id) { return function () { onAction(id, fieldData); }; }(a.id) : null
 			}));
 		}
 		return bar;
+	}
+
+	// ================================================================================================
+	// toast(message, opts) - the only helper that writes under document.body.  One ephemeral `.jc-toast`
+	// node, found by class query and reused rather than stacked.  Dismiss timer lives on the node.
+	// ================================================================================================
+
+	function toast(message, opts) {
+		opts = opts || {};
+		var tone = opts.tone === "error" || opts.tone === "success" || opts.tone === "info" ? opts.tone : "info";
+		var timeoutMs = opts.timeoutMs == null ? 4000 : Number(opts.timeoutMs);
+		var text = message == null ? "" : String(message);
+		if (!document.body) return;
+
+		var node = document.querySelector(".jc-toast");
+		if (!node) {
+			node = document.createElement("div");
+			node.addEventListener("click", function () { dismissToast(node); });
+			node.addEventListener("keydown", function (e) {
+				if (e.key === "Escape" || e.key === "Esc") dismissToast(node);
+			});
+		}
+		node.className = "jc-toast" + (tone === "error" ? " is-error" : tone === "success" ? " is-success" : " is-info");
+		node.setAttribute("role", tone === "error" ? "alert" : "status");
+		node.textContent = text;
+		if (!node.parentNode) document.body.appendChild(node);
+		if (node._jcToastTimer) clearTimeout(node._jcToastTimer);
+		if (timeoutMs > 0) {
+			node._jcToastTimer = setTimeout(function () { dismissToast(node); }, timeoutMs);
+		}
+	}
+
+	function dismissToast(node) {
+		if (!node) return;
+		if (node._jcToastTimer) {
+			clearTimeout(node._jcToastTimer);
+			node._jcToastTimer = null;
+		}
+		if (node.parentNode) node.parentNode.removeChild(node);
+	}
+
+	function saveErrorMessage(err) {
+		if (err != null && typeof err === "object" && typeof err.message === "string" && err.message)
+			return err.message;
+		if (err == null) return "Save failed.";
+		return String(err);
+	}
+
+	function selectOptionLabel(options, value) {
+		if (!Array.isArray(options)) return value == null ? "" : String(value);
+		for (var i = 0; i < options.length; i++) {
+			if (String(options[i].value) === String(value))
+				return options[i].label != null ? String(options[i].label) : String(options[i].value);
+		}
+		return value == null ? "" : String(value);
+	}
+
+	// ================================================================================================
+	// editableField(opts) - one Detail Subview value as view-or-edit.  UI state lives in this closure.
+	// Persistence is the consumer's `onSave` thunk; this helper never fetches.
+	// ================================================================================================
+
+	function editableField(opts) {
+		opts = opts || {};
+		if (typeof opts.onSave !== "function")
+			throw new TypeError("JuneauViews.helpers: editableField(opts) requires opts.onSave to be a function.");
+		var type = opts.type == null || opts.type === "" ? "text" : String(opts.type);
+		if (type !== "text" && type !== "select" && type !== "checkbox")
+			throw new TypeError("JuneauViews.helpers: editableField(opts) unknown type '" + type + "'.");
+		if (type === "select" && (!Array.isArray(opts.options) || opts.options.length === 0))
+			throw new TypeError("JuneauViews.helpers: editableField(opts) type 'select' requires a non-empty options array.");
+
+		var options = opts.options;
+		var multiline = type === "text" && !!opts.multiline;
+		var persist = type === "checkbox" ? "blur" : (opts.persist === "explicit" ? "explicit" : "blur");
+		var onSave = opts.onSave;
+		var label = opts.label == null ? "" : String(opts.label);
+		var name = opts.name == null ? "" : String(opts.name);
+		var disabled = !!opts.disabled;
+		var displayValue = opts.displayValue != null ? String(opts.displayValue) : null;
+		var committed = type === "checkbox" ? !!opts.value : (opts.value == null ? "" : String(opts.value));
+
+		var root = document.createElement("div");
+		root.className = "jc-editable-field";
+		var errorId = "jc-editable-field-error-" + Math.random().toString(36).slice(2, 10);
+		var mode = "view";
+		var control = null;
+		var pencil = null;
+		var errorEl = null;
+		var saveBtn = null;
+		var cancelBtn = null;
+		var valueAtOpen = committed;
+		var errorText = "";
+		var saveGen = 0;
+		var inFlight = null;
+
+		function swallow(p) {
+			if (p && typeof p.then === "function") p.then(function () {}, function () {});
+			return p;
+		}
+
+		function viewLabel() {
+			if (displayValue != null) return displayValue;
+			if (type === "select") return selectOptionLabel(options, committed);
+			return committed == null ? "" : String(committed);
+		}
+
+		function readControl() {
+			if (!control) return committed;
+			if (type === "checkbox") return !!control.checked;
+			return control.value == null ? "" : String(control.value);
+		}
+
+		function isDirty() {
+			var cur = readControl();
+			if (type === "checkbox") return !!cur !== !!valueAtOpen;
+			return String(cur) !== String(valueAtOpen);
+		}
+
+		function clearError() {
+			errorText = "";
+			setClass(root, "is-error", false);
+			if (errorEl && errorEl.parentNode) errorEl.parentNode.removeChild(errorEl);
+			errorEl = null;
+			if (control) {
+				control.removeAttribute("aria-invalid");
+				control.removeAttribute("aria-describedby");
+			}
+		}
+
+		function showError(msg) {
+			errorText = msg;
+			setClass(root, "is-error", true);
+			if (!errorEl) {
+				errorEl = document.createElement("div");
+				errorEl.className = "jc-editable-field-error";
+				errorEl.id = errorId;
+				errorEl.setAttribute("role", "alert");
+				root.appendChild(errorEl);
+			}
+			errorEl.textContent = msg;
+			if (control) {
+				control.setAttribute("aria-invalid", "true");
+				control.setAttribute("aria-describedby", errorId);
+			}
+		}
+
+		function setSaving(on) {
+			if (on) {
+				mode = "saving";
+				setClass(root, "is-saving", true);
+				root.setAttribute("aria-busy", "true");
+				if (control) control.disabled = true;
+				if (saveBtn) saveBtn.disabled = true;
+				if (cancelBtn) cancelBtn.disabled = true;
+				return;
+			}
+			setClass(root, "is-saving", false);
+			root.removeAttribute("aria-busy");
+			if (control) control.disabled = !!disabled;
+			if (saveBtn) saveBtn.disabled = false;
+			if (cancelBtn) cancelBtn.disabled = false;
+			if (mode === "saving") mode = type === "checkbox" ? "view" : "edit";
+		}
+
+		function applySaved(submitted, result) {
+			if (result == null) return type === "checkbox" ? !!submitted : String(submitted);
+			if (type === "checkbox") return !!result;
+			return String(result);
+		}
+
+		function startSave(next) {
+			if (inFlight) return inFlight;
+			saveGen++;
+			var gen = saveGen;
+			setSaving(true);
+			inFlight = Promise.resolve()
+				.then(function () { return onSave(next); })
+				.then(function (result) {
+					if (gen !== saveGen) return;
+					inFlight = null;
+					committed = applySaved(next, result);
+					displayValue = null;
+					clearError();
+					if (type === "checkbox") {
+						setSaving(false);
+						mode = "view";
+						control.checked = committed;
+						if (control.focus) control.focus();
+						return;
+					}
+					mode = "view";
+					renderView();
+					if (pencil && pencil.focus) pencil.focus();
+				}, function (err) {
+					if (gen !== saveGen) return Promise.reject(err);
+					inFlight = null;
+					var msg = saveErrorMessage(err);
+					toast(msg, { tone: "error" });
+					if (type === "checkbox") {
+						control.checked = committed;
+						setSaving(false);
+						mode = "view";
+						showError(msg);
+						if (control.focus) control.focus();
+						return Promise.reject(err);
+					}
+					setSaving(false);
+					mode = "edit";
+					showError(msg);
+					if (control && control.focus) control.focus();
+					return Promise.reject(err);
+				});
+			return inFlight;
+		}
+
+		function requestSaveFromControl() {
+			if (mode === "saving") return inFlight || Promise.resolve();
+			if (mode !== "edit") return Promise.resolve();
+			if (!isDirty()) {
+				cancelEdit();
+				return Promise.resolve();
+			}
+			return startSave(readControl());
+		}
+
+		function cancelEdit() {
+			if (type === "checkbox") return;
+			if (mode === "saving") return;
+			saveGen++;
+			inFlight = null;
+			clearError();
+			mode = "view";
+			renderView();
+			if (pencil && pencil.focus) pencil.focus();
+		}
+
+		function onControlKeydown(e) {
+			if (mode === "saving") return;
+			var key = e.key;
+			if (key === "Escape" || key === "Esc") {
+				if (e.preventDefault) e.preventDefault();
+				cancelEdit();
+				return;
+			}
+			if (key !== "Enter") return;
+			if (!control || control.tagName === "TEXTAREA" || control.tagName === "SELECT") return;
+			if (e.preventDefault) e.preventDefault();
+			swallow(requestSaveFromControl());
+		}
+
+		function onControlInput() {
+			if (errorText) clearError();
+		}
+
+		function buildTextOrSelect(value) {
+			var el;
+			if (type === "select") {
+				el = document.createElement("select");
+				for (var i = 0; i < options.length; i++) {
+					var o = options[i];
+					var opt = document.createElement("option");
+					opt.value = o.value == null ? "" : String(o.value);
+					opt.textContent = o.label != null ? String(o.label) : String(o.value);
+					el.appendChild(opt);
+				}
+				el.value = value == null ? "" : String(value);
+			} else if (multiline) {
+				el = document.createElement("textarea");
+				el.value = value == null ? "" : String(value);
+			} else {
+				el = document.createElement("input");
+				el.type = "text";
+				el.value = value == null ? "" : String(value);
+			}
+			el.className = "jc-editable-field-input";
+			el.setAttribute("aria-label", label);
+			if (name) el.name = name;
+			el.addEventListener("keydown", onControlKeydown);
+			el.addEventListener("input", onControlInput);
+			el.addEventListener("change", onControlInput);
+			return el;
+		}
+
+		function enterEdit() {
+			if (type === "checkbox" || disabled) return;
+			if (mode === "edit" || mode === "saving") return;
+			valueAtOpen = committed;
+			mode = "edit";
+			renderEdit();
+			if (control && control.focus) control.focus();
+		}
+
+		function renderView() {
+			clear(root);
+			control = null;
+			errorEl = null;
+			saveBtn = null;
+			cancelBtn = null;
+			setClass(root, "is-editing", false);
+			setClass(root, "is-saving", false);
+			setClass(root, "is-error", false);
+			root.removeAttribute("aria-busy");
+
+			var view = document.createElement("div");
+			view.className = "jc-editable-field-view";
+			var valueNode = document.createElement("span");
+			if (typeof opts.paintView === "function") opts.paintView(valueNode, committed);
+			else valueNode.textContent = viewLabel();
+			view.appendChild(valueNode);
+
+			pencil = document.createElement("button");
+			pencil.type = "button";
+			pencil.className = "jc-editable-field-pencil";
+			pencil.setAttribute("aria-label", "Edit " + label);
+			pencil.title = "Edit " + label;
+			pencil.disabled = !!disabled;
+			pencil.appendChild(icon("edit"));
+			pencil.addEventListener("click", function (e) {
+				if (e && e.preventDefault) e.preventDefault();
+				if (disabled) return;
+				if (typeof opts.onRequestOpen === "function") swallow(opts.onRequestOpen(root));
+				else enterEdit();
+			});
+			view.appendChild(pencil);
+			root.appendChild(view);
+		}
+
+		function renderEdit() {
+			clear(root);
+			errorEl = null;
+			setClass(root, "is-editing", true);
+			setClass(root, "is-saving", false);
+			setClass(root, "is-error", false);
+			root.removeAttribute("aria-busy");
+
+			control = buildTextOrSelect(committed);
+			root.appendChild(control);
+
+			if (persist === "explicit") {
+				var actions = document.createElement("div");
+				actions.className = "jc-editable-field-explicit-actions";
+				saveBtn = button({ label: "Save", onClick: function () { swallow(requestSaveFromControl()); } });
+				cancelBtn = button({ label: "Cancel", onClick: function () { cancelEdit(); } });
+				actions.appendChild(saveBtn);
+				actions.appendChild(cancelBtn);
+				root.appendChild(actions);
+			} else {
+				saveBtn = null;
+				cancelBtn = null;
+			}
+		}
+
+		function renderCheckbox() {
+			control = document.createElement("input");
+			control.type = "checkbox";
+			control.className = "jc-editable-field-input";
+			control.checked = committed;
+			control.disabled = !!disabled;
+			control.setAttribute("aria-label", label);
+			if (name) control.name = name;
+			control.addEventListener("change", function () {
+				if (disabled || mode === "saving") {
+					control.checked = committed;
+					return;
+				}
+				if (errorText) clearError();
+				valueAtOpen = committed;
+				swallow(startSave(!!control.checked));
+			});
+			root.appendChild(control);
+		}
+
+		root.addEventListener("focusout", function (e) {
+			if (persist !== "blur" || type === "checkbox") return;
+			if (mode !== "edit") return;
+			var rel = e && e.relatedTarget;
+			if (rel && root.contains(rel)) return;
+			swallow(requestSaveFromControl());
+		});
+
+		root._jcEditable = {
+			requestOpen: function () { enterEdit(); },
+			requestCommitOrCancel: function () {
+				if (type === "checkbox") return inFlight || Promise.resolve();
+				if (mode === "view") return Promise.resolve();
+				if (mode === "saving") return inFlight || Promise.resolve();
+				return requestSaveFromControl();
+			}
+		};
+
+		if (type === "checkbox") renderCheckbox();
+		else renderView();
+		return root;
 	}
 
 	// ================================================================================================
@@ -314,14 +741,54 @@
 		opts = opts || {};
 		var values = isPlainObject(opts.values) ? opts.values : {};
 
+		var anyEditable = false;
+		var fi;
+		for (fi = 0; fi < fields.length; fi++) {
+			if (!isPlainObject(fields[fi]) || fields[fi].data == null)
+				throw new TypeError("JuneauViews.helpers: fieldGrid(fields, opts) - field " + fi + " requires a `data` key.");
+			if (fields[fi].editable) anyEditable = true;
+		}
+		if (anyEditable && typeof opts.onFieldSave !== "function")
+			throw new TypeError("JuneauViews.helpers: fieldGrid(fields, opts) requires opts.onFieldSave when a field is editable.");
+
+		var gridValues = anyEditable ? copyPlain(values) : values;
+		var editableLeaves = [];
+
+		function openEditable(leaf) {
+			var pending = [];
+			for (var j = 0; j < editableLeaves.length; j++) {
+				var other = editableLeaves[j];
+				if (other === leaf) continue;
+				if (!hasClass(other, "is-editing") && !hasClass(other, "is-saving")) continue;
+				pending.push(other._jcEditable.requestCommitOrCancel());
+			}
+			if (pending.length === 0) {
+				leaf._jcEditable.requestOpen();
+				return Promise.resolve();
+			}
+			return Promise.all(pending).then(function () { leaf._jcEditable.requestOpen(); });
+		}
+
+		function paintViewSlot(slot, field, map) {
+			clear(slot);
+			paintFieldValue(slot, field, map, opts.renderers);
+			if (!field.render && field.href) {
+				var url = substituteFieldHref(field.href, map);
+				if (url) {
+					var a = document.createElement("a");
+					a.href = url;
+					while (slot.firstChild) a.appendChild(slot.firstChild);
+					slot.appendChild(a);
+				}
+			}
+		}
+
 		var grid = document.createElement("dl");
 		grid.className = "juneau-view-detail-fields juneau-view-helper-field-grid";
 		if (opts.columns != null) grid.style.setProperty("--juneau-view-detail-columns", String(opts.columns));
 
 		for (var i = 0; i < fields.length; i++) {
 			var field = fields[i];
-			if (!isPlainObject(field) || field.data == null)
-				throw new TypeError("JuneauViews.helpers: fieldGrid(fields, opts) - field " + i + " requires a `data` key.");
 
 			var item = document.createElement("div");
 			item.className = "juneau-view-detail-field" + (field.span ? " juneau-view-detail-field-span-" + field.span : "");
@@ -337,19 +804,50 @@
 			var slot = document.createElement("span");
 			slot.className = "juneau-view-detail-field-value-slot";
 			slot.setAttribute("data-juneau-field", field.data);
-			paintFieldValue(slot, field, values, opts.renderers);
 
-			var valueNode = slot;
-			if (!field.render && field.href) {
-				var url = substituteFieldHref(field.href, values);
-				if (url) {
-					var a = document.createElement("a");
-					a.href = url;
-					a.appendChild(slot);
-					valueNode = a;
+			if (field.editable) {
+				var fieldType = field.type || "text";
+				var raw = Object.hasOwn(gridValues, field.data) ? gridValues[field.data]
+					: (fieldType === "checkbox" ? false : "");
+				var leafOpts = {
+					value: raw,
+					type: fieldType,
+					multiline: !!field.multiline,
+					options: field.options,
+					persist: field.persist || opts.persist || "blur",
+					label: field.label != null ? field.label : String(field.data),
+					onSave: (function (f) {
+						return function (next) { return opts.onFieldSave(f.data, next, f); };
+					})(field),
+					onRequestOpen: function (leafNode) { return openEditable(leafNode); }
+				};
+				if (field.render || field.format || field.href) {
+					leafOpts.paintView = (function (f) {
+						return function (viewSlot, v) {
+							gridValues[f.data] = v;
+							paintViewSlot(viewSlot, f, gridValues);
+						};
+					})(field);
 				}
+				var leaf = editableField(leafOpts);
+				slot.appendChild(leaf);
+				editableLeaves.push(leaf);
+				valueWrap.appendChild(slot);
+			} else {
+				paintFieldValue(slot, field, gridValues, opts.renderers);
+
+				var valueNode = slot;
+				if (!field.render && field.href) {
+					var url = substituteFieldHref(field.href, gridValues);
+					if (url) {
+						var a = document.createElement("a");
+						a.href = url;
+						a.appendChild(slot);
+						valueNode = a;
+					}
+				}
+				valueWrap.appendChild(valueNode);
 			}
-			valueWrap.appendChild(valueNode);
 
 			if (field.actions) valueWrap.appendChild(buildFieldActionBar(field.actions, field.data, opts.onAction));
 
@@ -837,6 +1335,8 @@
 		dateRange: dateRange,
 		dropdown: dropdown,
 		filterBuilder: filterBuilder,
+		editableField: editableField,
+		toast: toast,
 		text: text,
 		pill: pill,
 		icon: icon

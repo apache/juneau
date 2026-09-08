@@ -35,6 +35,8 @@ import org.junit.jupiter.api.*;
  * only (checked structurally in {@link RawContentSink_SecurityScan_Test}, not re-checked here).
  * <li>Themable by class, not by inline style - the one exception being {@code fieldGrid}'s {@code columns} option,
  * which is a CSS custom property, not a {@code grid-template-columns} inline style.
+ * <li>{@code toast()} is the only helper allowed to write under {@code document.body} (one ephemeral
+ * {@code .jc-toast} node, no module registry).
  * </ul>
  *
  * <p>
@@ -131,6 +133,28 @@ class Helpers_Purity_Test extends TestBase {
 		assertFalse(src.matches("(?s).*\\bdocument\\.[A-Za-z_$][\\w$]*\\s*=(?!=).*"),
 			"document.<member> = ASSIGNMENT is forbidden (document.createElement/createTextNode CALLS are fine and "
 				+ "are not this pattern - it requires an `=` after the member name): " + src);
+	}
+
+	/**
+	 * {@code toast()} is the only helper allowed to write under {@code document.body}.  The hit is the
+	 * documented exception (one ephemeral {@code .jc-toast} found by class query, not a module registry);
+	 * a second {@code document.body.appendChild} anywhere else is a free-for-all and must fail this scan.
+	 */
+	@Test void a07_toast_isTheOnlyDocumentBodyAppend() throws Exception {
+		var src = source();
+		assertTrue(src.contains("document.querySelector(\".jc-toast\")"), src);
+		var idx = 0;
+		var hits = 0;
+		while ((idx = src.indexOf("document.body.appendChild", idx)) >= 0) {
+			hits++;
+			idx++;
+		}
+		assertEquals(1, hits, "document.body.appendChild must appear exactly once (inside toast): " + hits);
+		var toastFn = src.indexOf("function toast(");
+		var appendAt = src.indexOf("document.body.appendChild");
+		var nextFn = src.indexOf("\n\tfunction ", toastFn + 1);
+		assertTrue(toastFn >= 0 && appendAt > toastFn && appendAt < nextFn,
+			"document.body.appendChild must sit inside toast(), not a sibling helper");
 	}
 
 	// =================================================================================================================

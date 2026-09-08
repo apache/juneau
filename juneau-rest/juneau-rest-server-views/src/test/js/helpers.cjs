@@ -167,6 +167,14 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 
 	const unknownIcon = H.icon('this-icon-does-not-exist');
 	out.icon_unknownIsHidden = unknownIcon.hidden === true;
+
+	const bIcon = H.button({ label: 'Go', appearance: 'icon', onClick: function () {} });
+	out.button_iconAppearanceClass = /\bjuneau-view-helper-btn--icon\b/.test(bIcon.className);
+	const bChrome = H.button({ label: 'Go', appearance: 'chrome', onClick: function () {} });
+	out.button_chromeAppearanceHasNoIconClass = !/\bjuneau-view-helper-btn--icon\b/.test(bChrome.className);
+	const bDefault = H.button({ label: 'Go', onClick: function () {} });
+	out.button_omittedAppearanceHasNoIconClass = !/\bjuneau-view-helper-btn--icon\b/.test(bDefault.className);
+	out.button_unknownAppearanceThrows = !!throws(function () { H.button({ label: 'Go', appearance: 'ghost' }); });
 })();
 
 // ================================================================================================
@@ -433,6 +441,332 @@ await (async function tabStripTests() {
 
 	out.dropdown_missingOptionsThrows = !!throws(function () { H.dropdown({}); });
 	out.filterBuilder_missingFieldsThrows = !!throws(function () { H.filterBuilder({}); });
+})();
+
+// ================================================================================================
+// editableField / toast / fieldGrid editable wiring / kvTable stays read-only
+// ================================================================================================
+function cls(el, name) {
+	return !!el && (' ' + (el.className || '') + ' ').indexOf(' ' + name + ' ') >= 0;
+}
+async function captureToasts(fn) {
+	const seen = [];
+	const body = env.document.body;
+	const orig = body.appendChild;
+	body.appendChild = function (node) {
+		if (node && (' ' + (node.className || '') + ' ').indexOf(' jc-toast ') >= 0)
+			seen.push({ text: node.textContent, role: node.getAttribute('role'), className: node.className });
+		return orig.call(body, node);
+	};
+	try { return await fn(seen); }
+	finally { body.appendChild = orig; }
+}
+function clickPencil(leaf) {
+	const btn = leaf.querySelector('.jc-editable-field-pencil');
+	btn.dispatch('click', { target: btn });
+}
+
+await (async function editableFieldTests() {
+	out.editableField_missingOnSaveThrows = !!throws(function () { H.editableField({ label: 'T', value: 'x' }); });
+	out.editableField_unknownTypeThrows = !!throws(function () { H.editableField({ type: 'date', onSave: function () {} }); });
+	out.editableField_selectWithoutOptionsThrows = !!throws(function () {
+		H.editableField({ type: 'select', onSave: function () {} });
+	});
+	out.fieldGrid_editableWithoutOnFieldSaveThrows = !!throws(function () {
+		H.fieldGrid([{ data: 'title', label: 'Title', editable: true }], { values: { title: 'x' } });
+	});
+
+	const textLeaf = H.editableField({ label: 'Title', value: 'hello', onSave: function () { return Promise.resolve(); } });
+	out.editableField_textPaintsValue = textOf(textLeaf.querySelector('.jc-editable-field-view')) === 'hello';
+	out.editableField_textHasPencil = !!textLeaf.querySelector('.jc-editable-field-pencil');
+
+	const selectLeaf = H.editableField({
+		label: 'Status', type: 'select', value: 'open',
+		options: [{ value: 'open', label: 'Open' }, { value: 'closed', label: 'Closed' }],
+		onSave: function () { return Promise.resolve(); }
+	});
+	out.editableField_selectHasPencil = !!selectLeaf.querySelector('.jc-editable-field-pencil');
+
+	const gridMissing = H.fieldGrid(
+		[{ data: 'title', label: 'Title', editable: true }],
+		{ values: {}, onFieldSave: function () { return Promise.resolve(); } }
+	);
+	out.editableField_missingValuesKeyPaintsEmpty =
+		textOf(gridMissing.querySelector('.jc-editable-field-view')).indexOf('Edit Title') === -1
+		&& textOf(gridMissing.querySelector('.jc-editable-field-view')).replace(/\s+/g, '') === '';
+
+	const cb = H.editableField({ label: 'On', type: 'checkbox', value: false, onSave: function () { return Promise.resolve(); } });
+	out.editableField_checkboxHasNoPencil = !cb.querySelector('.jc-editable-field-pencil');
+	out.editableField_checkboxIsInput = cb.querySelector('input') && cb.querySelector('input').type === 'checkbox';
+
+	let disabledSaved = 0;
+	const disabledLeaf = H.editableField({
+		label: 'X', value: 'v', disabled: true, onSave: function () { disabledSaved++; return Promise.resolve(); }
+	});
+	clickPencil(disabledLeaf);
+	out.editableField_disabledDoesNotActivate = !cls(disabledLeaf, 'is-editing') && !disabledLeaf.querySelector('input');
+
+	let blurSaves = [];
+	const blurLeaf = H.editableField({
+		label: 'Title', value: 'old',
+		onSave: function (next) { blurSaves.push(next); return Promise.resolve(); }
+	});
+	clickPencil(blurLeaf);
+	out.editableField_enterEdit = cls(blurLeaf, 'is-editing');
+	const blurInput = blurLeaf.querySelector('input');
+	blurInput.value = 'new';
+	blurLeaf.dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.editableField_blurDirtySavesOnce = blurSaves.length === 1 && blurSaves[0] === 'new';
+	out.editableField_blurDirtyReturnsToView = !cls(blurLeaf, 'is-editing');
+
+	let cleanSaves = 0;
+	const cleanLeaf = H.editableField({
+		label: 'Title', value: 'same',
+		onSave: function () { cleanSaves++; return Promise.resolve(); }
+	});
+	clickPencil(cleanLeaf);
+	cleanLeaf.dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.editableField_blurCleanDoesNotSave = cleanSaves === 0 && !cls(cleanLeaf, 'is-editing');
+
+	let escSaves = 0;
+	const escLeaf = H.editableField({
+		label: 'Title', value: 'keep',
+		onSave: function () { escSaves++; return Promise.resolve(); }
+	});
+	clickPencil(escLeaf);
+	escLeaf.querySelector('input').value = 'gone';
+	escLeaf.querySelector('input').dispatch('keydown', { key: 'Escape', preventDefault: function () {} });
+	out.editableField_escDiscards = escSaves === 0 && !cls(escLeaf, 'is-editing')
+		&& textOf(escLeaf.querySelector('.jc-editable-field-view')).indexOf('keep') >= 0;
+
+	let enterSaves = [];
+	const enterLeaf = H.editableField({
+		label: 'Title', value: 'a',
+		onSave: function (next) { enterSaves.push(next); return Promise.resolve(); }
+	});
+	clickPencil(enterLeaf);
+	enterLeaf.querySelector('input').value = 'b';
+	enterLeaf.querySelector('input').dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+	await flush();
+	out.editableField_enterOnInputSaves = enterSaves.length === 1 && enterSaves[0] === 'b';
+
+	let taSaves = 0;
+	const taLeaf = H.editableField({
+		label: 'Body', value: 'line', multiline: true,
+		onSave: function () { taSaves++; return Promise.resolve(); }
+	});
+	clickPencil(taLeaf);
+	out.editableField_multilineIsTextarea = !!taLeaf.querySelector('textarea');
+	taLeaf.querySelector('textarea').value = 'line\n2';
+	taLeaf.querySelector('textarea').dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+	await flush();
+	out.editableField_enterOnTextareaDoesNotSave = taSaves === 0 && cls(taLeaf, 'is-editing');
+
+	let explicitSaves = [];
+	const explicitLeaf = H.editableField({
+		label: 'Title', value: 'old', persist: 'explicit',
+		onSave: function (next) { explicitSaves.push(next); return Promise.resolve(); }
+	});
+	clickPencil(explicitLeaf);
+	explicitLeaf.querySelector('input').value = 'typed';
+	explicitLeaf.dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.editableField_explicitBlurDoesNotSave = explicitSaves.length === 0 && cls(explicitLeaf, 'is-editing');
+	const explicitBtns = explicitLeaf.querySelectorAll('button');
+	const saveBtn = explicitBtns.filter(b => textOf(b).indexOf('Save') >= 0)[0];
+	saveBtn.dispatch('click', {});
+	await flush();
+	out.editableField_explicitSaveButtonSaves = explicitSaves.length === 1 && explicitSaves[0] === 'typed';
+
+	let cancelSaves = 0;
+	const cancelLeaf = H.editableField({
+		label: 'Title', value: 'keep', persist: 'explicit',
+		onSave: function () { cancelSaves++; return Promise.resolve(); }
+	});
+	clickPencil(cancelLeaf);
+	cancelLeaf.querySelector('input').value = 'nope';
+	cancelLeaf.querySelectorAll('button').filter(b => textOf(b).indexOf('Cancel') >= 0)[0].dispatch('click', {});
+	out.editableField_explicitCancelDiscards = cancelSaves === 0 && !cls(cancelLeaf, 'is-editing');
+
+	let selectSaved = [];
+	const sel = H.editableField({
+		label: 'Status', type: 'select', value: 'open',
+		options: [{ value: 'open', label: 'Open' }, { value: 'closed', label: 'Closed' }],
+		onSave: function (next) { selectSaved.push(next); return Promise.resolve(); }
+	});
+	clickPencil(sel);
+	out.editableField_selectOptionsRendered = sel.querySelectorAll('option').length === 2;
+	sel.querySelector('select').value = 'closed';
+	sel.dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.editableField_selectSavesOptionValue = selectSaved.length === 1 && selectSaved[0] === 'closed';
+
+	let cbSaved = [];
+	const cb2 = H.editableField({
+		label: 'On', type: 'checkbox', value: false,
+		onSave: function (next) { cbSaved.push(next); return Promise.resolve(); }
+	});
+	out.editableField_checkboxNoPencil = !cb2.querySelector('.jc-editable-field-pencil');
+	const box = cb2.querySelector('input');
+	box.checked = true;
+	box.dispatch('change', {});
+	await flush();
+	out.editableField_checkboxToggleSavesBoolean = cbSaved.length === 1 && cbSaved[0] === true;
+
+	let cbRejectToasts = [];
+	const cb3 = H.editableField({
+		label: 'On', type: 'checkbox', value: false,
+		onSave: function () { return Promise.reject(new Error('nope')); }
+	});
+	await captureToasts(async function (seen) {
+		const box3 = cb3.querySelector('input');
+		box3.checked = true;
+		box3.dispatch('change', {});
+		await flush();
+		cbRejectToasts = seen.slice();
+	});
+	await flush();
+	out.editableField_checkboxRejectReverts = cb3.querySelector('input').checked === false;
+	out.editableField_checkboxRejectInline = !!cb3.querySelector('.jc-editable-field-error')
+		&& textOf(cb3.querySelector('.jc-editable-field-error')) === 'nope';
+	out.editableField_checkboxRejectToast = cbRejectToasts.length === 1 && cbRejectToasts[0].role === 'alert';
+
+	let gridSaves = [];
+	let resolveA;
+	const gridSwitch = H.fieldGrid(
+		[{ data: 'a', label: 'A', editable: true }, { data: 'b', label: 'B', editable: true }],
+		{
+			values: { a: 'one', b: 'two' },
+			onFieldSave: function (key, next) {
+				gridSaves.push({ key: key, next: next });
+				if (key === 'a') return new Promise(function (res) { resolveA = res; });
+				return Promise.resolve();
+			}
+		}
+	);
+	const switchLeaves = gridSwitch.querySelectorAll('.jc-editable-field');
+	clickPencil(switchLeaves[0]);
+	switchLeaves[0].querySelector('input').value = 'changed';
+	clickPencil(switchLeaves[1]);
+	await flush(1);
+	out.fieldGrid_openBWhileDirtyA_waits = cls(switchLeaves[0], 'is-saving') && !cls(switchLeaves[1], 'is-editing') && typeof resolveA === 'function';
+	resolveA();
+	await flush();
+	out.fieldGrid_openBAfterASave_BEditing = cls(switchLeaves[1], 'is-editing') && !cls(switchLeaves[0], 'is-editing');
+	out.fieldGrid_openBSavedA = gridSaves.length === 1 && gridSaves[0].key === 'a' && gridSaves[0].next === 'changed';
+
+	let cleanGridSaves = 0;
+	const gridClean = H.fieldGrid(
+		[{ data: 'a', label: 'A', editable: true }, { data: 'b', label: 'B', editable: true }],
+		{ values: { a: 'one', b: 'two' }, onFieldSave: function () { cleanGridSaves++; return Promise.resolve(); } }
+	);
+	const cleanLeaves = gridClean.querySelectorAll('.jc-editable-field');
+	clickPencil(cleanLeaves[0]);
+	clickPencil(cleanLeaves[1]);
+	await flush();
+	out.fieldGrid_openBWhileCleanA_noSave = cleanGridSaves === 0 && !cls(cleanLeaves[0], 'is-editing') && cls(cleanLeaves[1], 'is-editing');
+
+	const gridReject = H.fieldGrid(
+		[{ data: 'a', label: 'A', editable: true }, { data: 'b', label: 'B', editable: true }],
+		{ values: { a: 'one', b: 'two' }, onFieldSave: function () { return Promise.reject(new Error('fail-a')); } }
+	);
+	const rejectLeaves = gridReject.querySelectorAll('.jc-editable-field');
+	clickPencil(rejectLeaves[0]);
+	rejectLeaves[0].querySelector('input').value = 'changed';
+	clickPencil(rejectLeaves[1]);
+	await flush();
+	out.fieldGrid_openBWhenARejects_BStaysView = cls(rejectLeaves[0], 'is-editing') && !cls(rejectLeaves[1], 'is-editing');
+
+	let doubleSaves = 0;
+	const gridDouble = H.fieldGrid(
+		[{ data: 'a', label: 'A', editable: true }, { data: 'b', label: 'B', editable: true }],
+		{ values: { a: 'one', b: 'two' }, onFieldSave: function () { doubleSaves++; return Promise.resolve(); } }
+	);
+	const dblLeaves = gridDouble.querySelectorAll('.jc-editable-field');
+	clickPencil(dblLeaves[0]);
+	dblLeaves[0].querySelector('input').value = 'x';
+	dblLeaves[0].dispatch('focusout', { relatedTarget: null });
+	clickPencil(dblLeaves[1]);
+	await flush();
+	out.fieldGrid_blurPlusCoordinator_savesOnce = doubleSaves === 1;
+
+	let errToasts = [];
+	const errLeaf = H.editableField({
+		label: 'Title', value: 'old',
+		onSave: function () { return Promise.reject(new Error('bad title')); }
+	});
+	await captureToasts(async function (seen) {
+		clickPencil(errLeaf);
+		errLeaf.querySelector('input').value = 'typed';
+		errLeaf.dispatch('focusout', { relatedTarget: null });
+		await flush();
+		errToasts = seen.slice();
+	});
+	await flush();
+	out.editableField_rejectStaysInEdit = cls(errLeaf, 'is-editing') && errLeaf.querySelector('input').value === 'typed';
+	out.editableField_rejectInline = textOf(errLeaf.querySelector('.jc-editable-field-error')) === 'bad title';
+	out.editableField_rejectToast = errToasts.length === 1 && errToasts[0].text === 'bad title' && errToasts[0].role === 'alert';
+
+	let successToasts = [];
+	const okLeaf = H.editableField({
+		label: 'Title', value: 'old',
+		onSave: function () { return Promise.resolve(); }
+	});
+	await captureToasts(async function (seen) {
+		clickPencil(okLeaf);
+		okLeaf.querySelector('input').value = 'kept';
+		okLeaf.dispatch('focusout', { relatedTarget: null });
+		await flush();
+		successToasts = seen.slice();
+	});
+	await flush();
+	out.editableField_fulfillUndefinedKeepsSubmitted =
+		textOf(okLeaf.querySelector('.jc-editable-field-view')).indexOf('kept') >= 0;
+	out.editableField_successIsQuiet = successToasts.length === 0;
+
+	const coerceLeaf = H.editableField({
+		label: 'Title', value: 'old',
+		onSave: function () { return Promise.resolve('coerced'); }
+	});
+	clickPencil(coerceLeaf);
+	coerceLeaf.querySelector('input').value = 'typed';
+	coerceLeaf.dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.editableField_fulfillStringUsesIt =
+		textOf(coerceLeaf.querySelector('.jc-editable-field-view')).indexOf('coerced') >= 0;
+
+	let explicitGridSaves = 0;
+	const explicitGrid2 = H.fieldGrid(
+		[{ data: 'a', label: 'A', editable: true, persist: 'explicit' }, { data: 'b', label: 'B', editable: true }],
+		{
+			values: { a: 'one', b: 'two' },
+			onFieldSave: function (key, next) { explicitGridSaves++; return Promise.resolve(); }
+		}
+	);
+	const exLeaves = explicitGrid2.querySelectorAll('.jc-editable-field');
+	clickPencil(exLeaves[0]);
+	exLeaves[0].querySelector('input').value = 'from-a';
+	exLeaves[0].dispatch('focusout', { relatedTarget: null });
+	await flush();
+	out.fieldGrid_explicitBlurStillNoSave = explicitGridSaves === 0 && cls(exLeaves[0], 'is-editing');
+	clickPencil(exLeaves[1]);
+	await flush();
+	out.fieldGrid_coordinatorSavesExplicitA = explicitGridSaves === 1 && cls(exLeaves[1], 'is-editing');
+
+	const kv = H.kvTable([['k', 'v']]);
+	out.kvTable_stillNoPencil = !kv.querySelector('.jc-editable-field-pencil') && !kv.querySelector('.jc-editable-field');
+
+	const linger = env.el('div');
+	linger.className = 'jc-toast';
+	env.document.body.appendChild(linger);
+	H.toast('hello', { tone: 'error', timeoutMs: 0 });
+	out.toast_reusesExistingNode = env.document.body.querySelectorAll('.jc-toast').length === 1
+		&& textOf(env.document.body.querySelector('.jc-toast')) === 'hello'
+		&& env.document.body.querySelector('.jc-toast').getAttribute('role') === 'alert';
+	H.toast('info-msg', { tone: 'info', timeoutMs: 0 });
+	out.toast_infoRoleIsStatus = env.document.body.querySelector('.jc-toast').getAttribute('role') === 'status';
 })();
 
 process.stdout.write(JSON.stringify(out));

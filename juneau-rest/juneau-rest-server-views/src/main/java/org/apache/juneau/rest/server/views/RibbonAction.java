@@ -39,7 +39,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="type,buttons,optional,id,title,group,column,value,param,persist,symbol,color,deselectable,options,form,endpoint,method,onSuccess")
+@BeanType(properties="type,buttons,optional,id,title,group,appearance,column,value,param,persist,symbol,color,deselectable,options,form,endpoint,method,onSuccess")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RibbonAction {
 
@@ -67,6 +67,16 @@ public class RibbonAction {
 	 * can be clustered into one ribbon too.  A {@code divider} always breaks an open cluster.
 	 */
 	public String group;
+
+	/**
+	 * Hover appearance of the rendered icon button; omitted from the wire when unset.
+	 *
+	 * <p>
+	 * {@code "icon"} is ghost/icon-only: hover recolors the glyph and does not change fill or border.
+	 * Unset / {@code "chrome"} keeps the default bordered control (wash, and blue border when the theme
+	 * paints one).
+	 */
+	public String appearance;
 
 	/** For a column-scoped {@code option}: the target column key. */
 	public String column;
@@ -403,6 +413,21 @@ public class RibbonAction {
 	 */
 	public RibbonAction group(String value) {
 		group = value;
+		return this;
+	}
+
+	/**
+	 * Sets the hover appearance of the rendered icon button.
+	 *
+	 * <p>
+	 * {@code "icon"} opts into glyph-only hover (no fill, no border shift). Unset or {@code "chrome"}
+	 * keeps the default bordered chrome hover. Omitted from the wire when unset.
+	 *
+	 * @param value {@code "icon"} or {@code "chrome"}.
+	 * @return This object.
+	 */
+	public RibbonAction appearance(String value) {
+		appearance = value;
 		return this;
 	}
 

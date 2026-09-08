@@ -682,6 +682,40 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(css.contains("var(--jc-text-muted)"), () -> "missing muted expander color, css:\n" + css);
 	}
 
+	/**
+	 * Icon-button hover chrome: toolbar ribbons and paging nav segments paint {@code --jc-accent} on the
+	 * button's own border, matching the detail-ribbon hover (blue square around the hovered icon).
+	 */
+	@Test void k05_chromeCss_ribbonAndPagingHoverPaintAccentBorder() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+			() -> "missing ribbon-btn hover accent border, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+			() -> "missing pagingpill-btn hover accent border, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-color: var(--jc-accent); }"),
+			() -> "missing paging menuwrap hover accent border, css:\n" + css);
+	}
+
+	/**
+	 * Default ribbon hover keeps chrome wash (PD Ack / paging lock). {@code --icon} appearance is a
+	 * separate opt-in that recolors the glyph only — no fill, no border shift.
+	 */
+	@Test void k06_chromeCss_iconAppearanceHoverRecolorsGlyphOnly() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+			() -> "default ribbon hover must keep chrome wash (icon-only is opt-in --icon), css:\n" + css);
+		var iconStart = css.indexOf(".juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled)");
+		assertTrue(iconStart >= 0, () -> "missing ribbon-btn--icon hover rule, css:\n" + css);
+		var iconEnd = css.indexOf("}", iconStart);
+		var iconRegion = css.substring(iconStart, iconEnd);
+		assertTrue(iconRegion.contains("color: var(--jc-accent)"), iconRegion);
+		assertTrue(iconRegion.contains("background-color: var(--jc-control-bg)"), iconRegion);
+		assertTrue(iconRegion.contains("border-color: var(--jc-control-border)"), iconRegion);
+		assertFalse(iconRegion.contains("var(--jc-accent-wash)"), iconRegion);
+		assertTrue(css.contains(".juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled)"),
+			() -> "missing helper-btn--icon hover rule, css:\n" + css);
+	}
+
 	private static String readChromeCss() throws IOException {
 		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream("/org/apache/juneau/console/chrome.css")) {
 			assertNotNull(in);

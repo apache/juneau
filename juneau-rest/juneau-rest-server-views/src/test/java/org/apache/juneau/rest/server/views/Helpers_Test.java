@@ -152,6 +152,14 @@ class Helpers_Test extends TestBase {
 		assertAllTrue(report(), "icon_unknownIsHidden");
 	}
 
+	@Test void d06_button_iconAppearanceClass_unknownThrows() {
+		assertAllTrue(report(),
+			"button_iconAppearanceClass",
+			"button_chromeAppearanceHasNoIconClass",
+			"button_omittedAppearanceHasNoIconClass",
+			"button_unknownAppearanceThrows");
+	}
+
 	// =================================================================================================================
 	// recordTable - static/read-only, catalog vocabulary, empty state.
 	// =================================================================================================================
@@ -283,5 +291,68 @@ class Helpers_Test extends TestBase {
 	@Test void h03_filterBuilder_addAndRemovePredicates() {
 		assertAllTrue(report(), "filterBuilder_addFiresOnChangeWithOnePredicate", "filterBuilder_chipRendered",
 			"filterBuilder_removeFiresOnChangeWithZeroPredicates", "filterBuilder_missingFieldsThrows");
+	}
+
+	// =================================================================================================================
+	// editableField / toast / fieldGrid editable wiring.
+	// =================================================================================================================
+
+	@Test void i01_editableField_loudArgumentErrors() {
+		assertAllTrue(report(), "editableField_missingOnSaveThrows", "editableField_unknownTypeThrows",
+			"editableField_selectWithoutOptionsThrows", "fieldGrid_editableWithoutOnFieldSaveThrows");
+	}
+
+	@Test void i02_editableField_view_textSelectPencil_checkboxHasNone_disabledDoesNotActivate() {
+		assertAllTrue(report(), "editableField_textPaintsValue", "editableField_textHasPencil",
+			"editableField_selectHasPencil", "editableField_missingValuesKeyPaintsEmpty",
+			"editableField_checkboxHasNoPencil", "editableField_checkboxIsInput",
+			"editableField_disabledDoesNotActivate");
+	}
+
+	@Test void i03_editableField_blurPersist_enterTypeBlurEscEnter_textareaEnterIsNewline() {
+		assertAllTrue(report(), "editableField_enterEdit", "editableField_blurDirtySavesOnce",
+			"editableField_blurDirtyReturnsToView", "editableField_blurCleanDoesNotSave",
+			"editableField_escDiscards", "editableField_enterOnInputSaves",
+			"editableField_multilineIsTextarea", "editableField_enterOnTextareaDoesNotSave");
+	}
+
+	@Test void i04_editableField_explicitPersist_blurDoesNotSave_saveAndCancel_coordinatorStillSaves() {
+		assertAllTrue(report(), "editableField_explicitBlurDoesNotSave", "editableField_explicitSaveButtonSaves",
+			"editableField_explicitCancelDiscards", "fieldGrid_explicitBlurStillNoSave",
+			"fieldGrid_coordinatorSavesExplicitA");
+	}
+
+	@Test void i05_editableField_select_rendersOptions_savesOptionValue() {
+		assertAllTrue(report(), "editableField_selectOptionsRendered", "editableField_selectSavesOptionValue");
+	}
+
+	@Test void i06_editableField_checkbox_toggleSavesBoolean_rejectRevertsWithInlineAndToast() {
+		assertAllTrue(report(), "editableField_checkboxNoPencil", "editableField_checkboxToggleSavesBoolean",
+			"editableField_checkboxRejectReverts", "editableField_checkboxRejectInline",
+			"editableField_checkboxRejectToast");
+	}
+
+	@Test void i07_fieldGrid_switchFields_dirtySaves_cleanCancels_rejectKeepsBInView() {
+		assertAllTrue(report(), "fieldGrid_openBWhileDirtyA_waits", "fieldGrid_openBAfterASave_BEditing",
+			"fieldGrid_openBSavedA", "fieldGrid_openBWhileCleanA_noSave",
+			"fieldGrid_openBWhenARejects_BStaysView");
+	}
+
+	@Test void i08_fieldGrid_blurPlusCoordinator_doesNotDoubleSave() {
+		assertAllTrue(report(), "fieldGrid_blurPlusCoordinator_savesOnce");
+	}
+
+	@Test void i09_editableField_reject_inlinePlusToast_staysEditing_successIsQuiet() {
+		assertAllTrue(report(), "editableField_rejectStaysInEdit", "editableField_rejectInline",
+			"editableField_rejectToast", "editableField_fulfillUndefinedKeepsSubmitted",
+			"editableField_successIsQuiet", "editableField_fulfillStringUsesIt");
+	}
+
+	@Test void i10_kvTable_stillReadOnly_noPencil() {
+		assertAllTrue(report(), "kvTable_stillNoPencil");
+	}
+
+	@Test void i11_toast_reusesExistingNode_errorIsAlert_infoIsStatus() {
+		assertAllTrue(report(), "toast_reusesExistingNode", "toast_infoRoleIsStatus");
 	}
 }

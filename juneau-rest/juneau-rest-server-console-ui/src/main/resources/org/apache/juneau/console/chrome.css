@@ -693,8 +693,20 @@ table.dataTable.display > tbody > tr:hover {
    Using --jc-border here made ribbon/paging lighter than search whenever a theme split
    --jc-border from --jc-border-2 (SSC --jc-border #e5e5e5 vs --jc-border-2 #ced4da). */
 .juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
-.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
+
+/* Icon/ghost appearance: hover recolors the glyph only. Restates idle fill + border so this wins over
+   the default chrome hover (and over a later blue-border hover on the same selector). Opt-in via
+   RibbonAction.appearance("icon") / helpers.button({appearance:"icon"}). */
+.juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled) {
+	background-color: var(--jc-control-bg);
+	border-color: var(--jc-control-border);
+	color: var(--jc-accent);
+}
+.juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled) {
+	color: var(--jc-accent);
+}
 
 /* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
    neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
@@ -755,6 +767,35 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-detail-field-value { color: var(--jc-text); }
 .juneau-view-detail-field-value:empty::after { color: var(--jc-text-muted); }
 
+.jc-editable-field-pencil { color: var(--jc-text-muted); }
+.jc-editable-field:hover .jc-editable-field-pencil,
+.jc-editable-field:focus-within .jc-editable-field-pencil,
+.jc-editable-field-pencil:hover,
+.jc-editable-field-pencil:focus-visible {
+  color: var(--jc-text);
+  background-color: var(--jc-hover-bg);
+}
+.jc-editable-field-input {
+  background-color: var(--jc-control-bg);
+  border-color: var(--jc-control-border);
+  color: var(--jc-text);
+}
+.jc-editable-field.is-error .jc-editable-field-input { border-color: var(--jc-danger); }
+.jc-editable-field-error { color: var(--jc-danger); }
+.jc-toast {
+  background-color: var(--jc-card-bg);
+  border-color: var(--jc-border);
+  color: var(--jc-text);
+  box-shadow: var(--jc-card-shadow);
+}
+.jc-toast.is-error {
+  color: var(--jc-danger);
+  border-color: var(--jc-danger);
+  background-color: var(--jc-danger-wash);
+}
+.jc-toast.is-success { color: var(--jc-success); }
+.jc-toast.is-info { color: var(--jc-text); }
+
 /* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
 .juneau-view-detail-th,
 .juneau-view-detail-control { color: var(--jc-text-muted); }
@@ -762,10 +803,11 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Unified paging ribbon (nav + page-size menu) - same --jc-control-border/white-face treatment as the
    icon ribbon and toolbar search. */
-.juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
+.juneau-view-pagingpill { background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
-.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
+.juneau-view-pagingpill-menuwrap:hover { border-color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }

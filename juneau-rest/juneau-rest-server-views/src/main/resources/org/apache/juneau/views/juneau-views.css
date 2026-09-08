@@ -81,6 +81,11 @@
 	--jc-dialog-z: 1000;
 	--jc-layer-step: 10;
 	/*
+	 * Toast sits below dialogs (1000) so a confirmation dialog is never covered by a save-error toast.
+	 * Neutral greys for a themeless page; chrome.css sinks --jc-* colour tokens onto the same classes.
+	 */
+	--jc-toast-z: 900;
+	/*
 	 * Card grid tokens (merged here to avoid a duplicate :root selector - see the card-grid rule block below for
 	 * the full description).  Neutral greys so a grid is legible without a theme; a consumer stylesheet (or
 	 * console-ui chrome.css) may override the tokens.
@@ -630,6 +635,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-ribbon-btn svg { width: var(--jc-chrome-glyph-size); height: var(--jc-chrome-glyph-size); fill: currentColor; }
 
+/* Modifier ".juneau-view-ribbon-btn--icon" / ".juneau-view-helper-btn--icon" (RibbonAction.appearance("icon")
+ * / helpers.button({appearance:"icon"})): chrome.css hover recolors the glyph only — no wash, no border
+ * shift. Default (no modifier) keeps the bordered chrome hover. */
+
 /* IRS `.ribbon-button:disabled` / `.ribbon-button.disabled` uses opacity: 0.6 (pages/style.css). */
 .juneau-view-ribbon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -902,15 +911,25 @@ table.dataTable thead .sorting_desc_disabled:after {
 	align-items: stretch;
 	box-sizing: border-box;
 	height: var(--jc-chrome-control-height);
-	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
 }
 
-/* Corner-rounding on the outer segments only (no `overflow: hidden` on the pill itself - that would clip the
-   page-size menu's popup, which is positioned absolute relative to a segment INSIDE the pill). */
-.juneau-view-pagingpill > *:first-child { border-radius: 0.25em 0 0 0.25em; }
-.juneau-view-pagingpill > *:last-child { border-radius: 0 0.25em 0.25em 0; }
+/* Outer outline lives on the segments (not the container) so a hovered First/Prev/Next/Last can recolor
+   its own visible sides — the same left/center/right treatment as ".juneau-view-ribbon-group".  Longhand
+   width/style only: a colourless shorthand would reset border-*-color and steal chrome.css's theme.
+   No inner verticals (WORK-J0518 DF-2).  End-cap left/right + per-segment top/bottom; no overflow:hidden
+   (that would clip the page-size menu, positioned absolute from a segment inside the pill). */
+.juneau-view-pagingpill > *:first-child {
+	border-radius: 0.25em 0 0 0.25em;
+	border-left-width: 1px;
+	border-left-style: solid;
+}
+.juneau-view-pagingpill > *:last-child {
+	border-radius: 0 0.25em 0.25em 0;
+	border-right-width: 1px;
+	border-right-style: solid;
+}
 
 /*
  * No inner divider between the four nav buttons (First/Prev/Next/Last) - WORK-J0518 DF-2. The segmented-group
@@ -934,7 +953,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 	box-sizing: border-box;
 	min-width: 32px;
 	padding: 0 8px;
-	border: none;
+	border-top-width: 1px;        /* longhand, not a colourless shorthand — hover border-color needs a painted edge */
+	border-top-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
 	background: transparent;
 	font-family: inherit;
 	cursor: pointer;
@@ -961,6 +983,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-pagingpill-menuwrap {
 	position: relative;
 	display: flex;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
 }
 
 .juneau-view-pagingpill-menubtn {
@@ -1658,6 +1684,115 @@ table.dataTable > tbody > tr.child > td {
 .juneau-view-detail-field .juneau-view-detail-action {
 	padding: 0 var(--jc-chrome-control-padding-x);
 	font-weight: 400;
+}
+
+/*
+ * Editable detail leaf (`helpers.editableField`).  Palette-neutral shape: currentColor / chrome-scale
+ * tokens only.  Colour theming lives in chrome.css.  Pencil is always in the layout in text/select view
+ * (opacity, never display:none / visibility:hidden); it is omitted from the DOM while that leaf is in edit.
+ */
+.jc-editable-field {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--jc-space-1);
+	min-width: 0;
+	width: 100%;
+}
+
+.jc-editable-field-view {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-1);
+	min-width: 0;
+}
+
+.jc-editable-field-pencil {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: var(--jc-chrome-control-height-compact);
+	height: var(--jc-chrome-control-height-compact);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	color: currentColor;
+	opacity: 0.75;
+	border-radius: var(--jc-radius, 4px);
+}
+
+.jc-editable-field-pencil .juneau-view-helper-icon,
+.jc-editable-field-pencil svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	fill: currentColor;
+}
+
+.jc-editable-field:hover .jc-editable-field-pencil,
+.jc-editable-field:focus-within .jc-editable-field-pencil,
+.jc-editable-field-pencil:hover,
+.jc-editable-field-pencil:focus-visible {
+	opacity: 1;
+}
+
+.jc-editable-field-input {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height);
+	margin: 0;
+	padding: 0 var(--jc-space-2);
+	font-family: var(--jc-font, inherit);
+	font-size: var(--jc-chrome-font-size-3);
+	border: 1px solid currentColor;
+	border-radius: var(--jc-radius, 4px);
+	background: transparent;
+}
+
+textarea.jc-editable-field-input {
+	height: auto;
+	min-height: calc(3 * var(--jc-chrome-line-height) * var(--jc-chrome-font-size-3));
+	padding: var(--jc-space-1) var(--jc-space-2);
+	resize: vertical;
+}
+
+input[type="checkbox"].jc-editable-field-input {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	padding: 0;
+}
+
+.jc-editable-field-error {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.jc-editable-field-explicit-actions {
+	display: flex;
+	gap: var(--jc-space-1);
+}
+
+.jc-toast {
+	position: fixed;
+	bottom: var(--jc-space-4);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: var(--jc-toast-z, 900);
+	max-width: min(36rem, calc(100% - 2 * var(--jc-space-4)));
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border: 1px solid var(--jc-popover-border, #ccc);
+	border-radius: var(--jc-radius, 4px);
+	background: var(--jc-card-bg, #ffffff);
+	box-shadow: var(--jc-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.jc-editable-field-pencil,
+	.jc-toast {
+		transition: none;
+		animation: none;
+	}
 }
 
 .juneau-view-detail-markdown {

@@ -215,6 +215,8 @@ class PagingPill_Wiring_Test extends TestBase {
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
 		assertFalse(region.contains("border-right"), region);
+		assertFalse(region.contains("border: none"), region);
+		assertTrue(region.contains("border-top-width"), region);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:last-child"), body);
 		// The menu-button segment's own former divider is gone too (IRS visual-parity follow-up) - the whole
 		// pill is now seamless, matching IRS's borderless center range segment.

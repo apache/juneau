@@ -343,20 +343,20 @@
 						ids.forEach(function (id) {
 							place(button(id, resolveButtonIcon(null, id), function () {
 								ctx.dataTable.button(id).trigger();
-							}), exportGroupId);
+							}, a.appearance), exportGroupId);
 						});
 					} catch (e) { /* Buttons present but init failed - degrade silently */ }
 				}
 				return;
 			}
 			if (a.type === "refresh") {
-				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }), a.group || "__ungrouped");
+				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }, a.appearance), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "collapseAll") {
 				place(button(a.title || "Collapse all", resolveButtonIcon(a, "collapse"), function () {
 					if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
-				}), a.group || "__ungrouped");
+				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "dialog") {
@@ -368,13 +368,13 @@
 				// the view runtime renders an inert button rather than throwing on click.
 				place(button(a.title || a.id, resolveButtonIcon(a, "dialog"), function () {
 					if (typeof NS.init?.openRibbonDialog === "function") NS.init.openRibbonDialog(a.id, ctx.table, ctx);
-				}), a.group || "__ungrouped");
+				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "columnSearchToggle") {
 				const csBtn = button(a.title || "Column search", resolveButtonIcon(a, "columnSearchToggle"), function () {
 					csBtn.setAttribute("aria-pressed", toggleColumnSearch(viewDef, ctx) ? "true" : "false");
-				});
+				}, a.appearance);
 				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
 				place(csBtn, a.group || "__ungrouped");
 				return;
@@ -395,7 +395,7 @@
 					// initPolling installs this so the staleness pill flips on the click; absent only if this ribbon
 					// outlived its poll wiring, in which case there is nothing to repaint.
 					if (typeof ctx._onPollPausedChange === "function") ctx._onPollPausedChange();
-				});
+				}, a.appearance);
 				// Read the flag back rather than assume false: ctx survives a column-config Apply, so a view paused
 				// before the rebuild stays paused - and its button has to come back already pressed to say so.
 				ppBtn.setAttribute("aria-pressed", ctx._pollPaused ? "true" : "false");
@@ -423,7 +423,7 @@
 	 * label as text (mirrors the "unknown render id -> warn once, fall back to raw value" convention already
 	 * documented for juneau-renders.js).
 	 */
-	function button(label, iconName, onClick) {
+	function button(label, iconName, onClick, appearance) {
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
@@ -435,6 +435,7 @@
 		} else {
 			b.textContent = b.title;
 		}
+		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");
 		b.addEventListener("click", onClick);
 		return b;
 	}
@@ -445,7 +446,7 @@
 			b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
 			if (action.persist) persist(viewDef, action.id, !!ctx.activeState[action.id]);
 			ctx.redraw();
-		});
+		}, action.appearance);
 		b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
 		return b;
 	}
@@ -458,7 +459,7 @@
 				ctx.activeState[group.id] = (ctx.activeState[group.id] === o.id && group.deselectable) ? null : o.id;
 				if (group.persist) persist(viewDef, group.id, ctx.activeState[group.id]);
 				ctx.redraw();
-			});
+			}, group.appearance);
 			wrap.appendChild(b);
 		});
 		return wrap;
