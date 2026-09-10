@@ -26,8 +26,16 @@ package org.apache.juneau.rest.server.widgets;
  * closed dispatch set, and bringing its <b>own</b> server-render and (if stateful) its <b>own</b> data path
  * &mdash; it does not share {@link CardFieldList}'s refresh envelope.
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java card-layout type.  The annotation exists so Support Console, foundry,
+ * 	and release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
+@Deprecated
+@SuppressWarnings({
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+})
 public interface CardBody {
 
 	/**

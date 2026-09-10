@@ -18,6 +18,11 @@
 /*
  * juneau-pages.js - opt-in tabs/sub-tabs page runtime for the Apache Juneau rich-view toolkit.
  *
+ * @deprecated Use author HTML slots plus JuneauViews.regions.mount({ id: populator }) and a full
+ * page load per nav pair.  This hash-swap runtime remains so Support Console, foundry, and
+ * release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * Juneau item deletes it after those consumers migrate.
+ *
  * Separate, opt-in asset: a page composing multiple ViewDef views into tabs/sub-tabs loads this file IN ADDITION
  * to juneau-views.js; a plain single-view page never loads it and pays nothing for hash-routing/lazy-init
  * complexity.
@@ -335,6 +340,10 @@
 	// PUBLIC API + bootstrap
 	// ==================================================================================================================
 
+	/**
+	 * @deprecated Hash-swap page runtime.  Replacement: author HTML nav (full page load per pair) plus
+	 * JuneauViews.regions.mount.  Remains so consumers can grep removal sites; not a long-term shim.
+	 */
 	NS.pages = {
 		CONTRACT_VERSION: JUNEAU_PAGE_CONTRACT_VERSION,
 		parseHash: parseHash,

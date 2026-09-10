@@ -6673,6 +6673,9 @@
 		});
 	}
 
+	// HTML-slot page nav is author markup, not a runtime: the current section/child already carry
+	// aria-current="page", CSS styles that attribute, and clicks are ordinary hrefs (full page load).
+
 	// ==================================================================================================================
 	// Instant cursor tooltip (icon-only ribbon / paging / helper-button chrome)
 	//

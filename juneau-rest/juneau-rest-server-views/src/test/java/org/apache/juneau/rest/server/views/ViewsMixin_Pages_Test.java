@@ -32,7 +32,8 @@ import org.junit.jupiter.api.*;
  * {@code ?v=<buildVersion>} cache-buster via {@link ViewsMixin#viewAssetUrl(String)}.
  */
 @SuppressWarnings({
-	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"deprecation" // This class serves the deprecated hash-swap asset so consumers can still load it during the sweep.
 })
 class ViewsMixin_Pages_Test extends TestBase {
 

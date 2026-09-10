@@ -56,10 +56,19 @@ import org.apache.juneau.rest.server.widgets.Badge;
  * 	<li class='jc'>{@link PageTable}
  * </ul>
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java tab emitter.  Replacement: one nav construct in author HTML and a full
+ * 	page load per pair.  The annotation exists so Support Console, foundry, and release-manager
+ * 	can grep removal sites.  It is not a supported long-term shim; a follow-up Juneau item deletes
+ * 	this type after those consumers migrate.
  * @since 10.0.0
  */
 @BeanType(properties="id,label,view,subtabs,badge")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+})
+@Deprecated
 public class Tab {
 
 	/** The stable tab id (the second hash segment), unique across the page. */

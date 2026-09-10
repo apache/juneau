@@ -374,6 +374,42 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
+   HTML-slot page nav (two text rows; not Page Tabs / Page Subtabs pills)
+   Shape lives in juneau-views.css.  Selected section = light wash + accent
+   underline, no pill fill.  Selected child = accent text, not a filled pill.
+   ========================================================================== */
+
+.juneau-page-nav-section {
+  color: var(--jc-text-soft);
+}
+
+.juneau-page-nav-section:hover {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-accent);
+  text-decoration: none;
+}
+
+.juneau-page-nav-section[aria-current="page"] {
+  background-color: var(--jc-accent-wash);
+  border-bottom-color: var(--jc-accent);
+  color: var(--jc-text);
+}
+
+.juneau-page-nav-child {
+  color: var(--jc-text-muted);
+}
+
+.juneau-page-nav-child:hover {
+  color: var(--jc-accent);
+  text-decoration: none;
+}
+
+.juneau-page-nav-child[aria-current="page"] {
+  color: var(--jc-accent);
+  background-color: transparent;
+}
+
+/* ==========================================================================
    Page scaffolding
    ========================================================================== */
 

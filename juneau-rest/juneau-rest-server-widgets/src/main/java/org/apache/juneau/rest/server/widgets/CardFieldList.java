@@ -35,11 +35,17 @@ import org.apache.juneau.commons.http.*;
  * The refresh wire lives here &mdash; not on {@link Card} &mdash; so a non-refreshable body can never carry a
  * dangling refresh endpoint.
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java card-layout type.  The annotation exists so Support Console, foundry,
+ * 	and release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
+@Deprecated
 public class CardFieldList implements CardBody {
 
 	/** The frozen contract version for the refresh GET envelope and the stamped {@code data-juneau-card-contract}. */

@@ -614,6 +614,33 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "the tab theming rule must not fall back to a single-class selector, css:\n" + css);
 	}
 
+	@Test void j07_htmlSlotPageNav_selectedSectionIsWashAndUnderline_selectedChildIsAccentTextNotPill() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains(".juneau-page-nav-section[aria-current=\"page\"] {"), css);
+		var sectionStart = css.indexOf(".juneau-page-nav-section[aria-current=\"page\"] {");
+		var sectionBlock = css.substring(sectionStart, css.indexOf("}", sectionStart));
+		assertTrue(sectionBlock.contains("background-color: var(--jc-accent-wash)"), sectionBlock);
+		assertTrue(sectionBlock.contains("border-bottom-color: var(--jc-accent)"), sectionBlock);
+		assertFalse(sectionBlock.contains("var(--jc-accent-selected)"),
+			() -> "selected section must not use the pill-fill token, block:\n" + sectionBlock);
+
+		assertTrue(css.contains(".juneau-page-nav-child[aria-current=\"page\"] {"), css);
+		var childStart = css.indexOf(".juneau-page-nav-child[aria-current=\"page\"] {");
+		var childBlock = css.substring(childStart, css.indexOf("}", childStart));
+		assertTrue(childBlock.contains("color: var(--jc-accent)"), childBlock);
+		assertTrue(childBlock.contains("background-color: transparent"), childBlock);
+		assertFalse(css.contains("juneau-page-nav-section-selected"), css);
+		assertFalse(css.contains("juneau-page-nav-child-selected"), css);
+		var navMarker = "HTML-slot page nav";
+		var navStart = css.indexOf(navMarker);
+		assertTrue(navStart != -1, () -> "missing HTML-slot page nav comment, css:\n" + css);
+		var navEnd = css.indexOf("Page scaffolding", navStart);
+		assertTrue(navEnd != -1, () -> "missing Page scaffolding marker after page-nav, css:\n" + css);
+		var navRules = css.substring(navStart, navEnd);
+		assertFalse(navRules.contains("slds-"), () -> "chrome page-nav rules must not introduce slds-* classes:\n" + navRules);
+		assertFalse(navRules.toLowerCase().contains("salesforce sans"), navRules);
+	}
+
 	/** WCAG 2.x contrast ratio between two {@code "#rrggbb"} literals: {@code (lighter+0.05)/(darker+0.05)}. */
 	private static double contrastRatio(String hex1, String hex2) {
 		var l1 = relativeLuminance(hex1);

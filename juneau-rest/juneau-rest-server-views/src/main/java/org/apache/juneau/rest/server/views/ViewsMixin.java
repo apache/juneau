@@ -125,7 +125,16 @@ public class ViewsMixin {
 	/**
 	 * The URL path at which the opt-in tabs/sub-tabs page runtime is served (relative to the host mount).  A
 	 * separate, opt-in asset (Decision 2(A)): single-view pages never load it.
+	 *
+	 * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })} and a full
+	 * 	page load per nav pair.  This hash-swap runtime remains so Support Console, foundry, and
+	 * 	release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+	 * 	Juneau item deletes it after those consumers migrate.
 	 */
+	@SuppressWarnings({
+		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+	})
+	@Deprecated
 	public static final String PAGES_JS_PATH = "/juneau-pages.js";
 
 	/**
@@ -438,7 +447,15 @@ public class ViewsMixin {
 	 * [GET /juneau-pages.js] &mdash; serve the opt-in tabs/sub-tabs page runtime.
 	 *
 	 * @return The page runtime as a JavaScript {@link HttpResource}.
+	 * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })} and a full
+	 * 	page load per nav pair.  This hash-swap runtime remains so Support Console, foundry, and
+	 * 	release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+	 * 	Juneau item deletes it after those consumers migrate.
 	 */
+	@SuppressWarnings({
+		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+	})
+	@Deprecated
 	@RestGet(
 		path=PAGES_JS_PATH,
 		summary="Juneau rich-view tabs/sub-tabs page runtime",

@@ -24,8 +24,16 @@ package org.apache.juneau.rest.server.widgets;
  * JavaScript disabled; a refresh GET (when the enclosing {@link CardFieldList} carries a {@code refreshEndpoint})
  * overwrites the same {@code [data-juneau-card-field]} slot.
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java card-layout type.  The annotation exists so Support Console, foundry,
+ * 	and release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+})
+@Deprecated
 public class CardField {
 
 	/** The fill key &mdash; matches the refresh envelope's {@code fields[data]} entry.  Required, non-blank. */

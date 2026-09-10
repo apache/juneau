@@ -95,8 +95,16 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<li class='jc'>{@link ViewTable}
  * </ul>
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java card-layout type.  The annotation exists so Support Console, foundry,
+ * 	and release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
+@Deprecated
+@SuppressWarnings({
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+})
 public class CardGridTable {
 
 	/** Marker attribute on the grid {@code <section>} the {@code juneau-cards.js} runtime scans from. */

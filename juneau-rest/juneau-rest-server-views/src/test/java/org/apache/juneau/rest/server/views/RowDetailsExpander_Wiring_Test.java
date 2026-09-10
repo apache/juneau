@@ -50,6 +50,23 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		return body.substring(start, end < 0 ? body.length() : end);
 	}
 
+	/**
+	 * Dedicated expander-column + dual-chevron glyph rules: from the column selector through the
+	 * open-state swap.  Glyphs stay CSS-only ({@code url(} is forbidden here); other stylesheet
+	 * {@code url(} uses (e.g. the page-nav cloud bar) are out of scope.
+	 */
+	private static String expanderColumnCss(String body) {
+		var start = body.indexOf(".juneau-view-detail-th,");
+		if (start < 0)
+			start = body.indexOf(".juneau-view-detail-control {");
+		assertTrue(start >= 0, () -> "expander-column selector not found:\n" + body);
+		var last = ".juneau-view-detail-open .juneau-view-detail-expanded";
+		var lastIdx = body.indexOf(last);
+		assertTrue(lastIdx >= 0, () -> "'" + last + "' not found:\n" + body);
+		var end = body.indexOf("}", lastIdx);
+		return body.substring(start, end < 0 ? body.length() : end + 1);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Pure layer: URL safety / scalar fill
 	//------------------------------------------------------------------------------------------------------------------
@@ -221,7 +238,8 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertTrue(body.contains(".juneau-view-detail-open .juneau-view-detail-expanded"), body);
 		assertTrue(body.contains("width: 20px"), body);
 		assertFalse(body.contains("td:first-child::before"), body);
-		assertFalse(body.contains("url("), body);
+		var expander = expanderColumnCss(body);
+		assertFalse(expander.contains("url("), expander);
 	}
 
 	@Test void c03_viewsCss_detailPanelShapeIsNeutral_noPaletteColor() throws Exception {

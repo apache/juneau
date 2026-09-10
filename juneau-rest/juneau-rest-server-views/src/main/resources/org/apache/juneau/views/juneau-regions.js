@@ -1702,6 +1702,61 @@
 			if (el._juneauRegion) teardownRegion(el._juneauRegion);
 	}
 
+	/**
+	 * Binds author-HTML slot ids to registered region populators.
+	 *
+	 * HTML ids are places; the hookup map names the populator for each place.  Missing element ids and
+	 * unregistered (or blank) populator names fail loud and enrol nothing on the page - they do not skip
+	 * the bad entry and they do not fall through to defaultPopulate.  After every entry validates, this
+	 * stamps the existing enrolment attributes from JS (not from RegionTable.of) and calls initRegion per
+	 * node so populate, the bus, and teardown stay the region runtime.
+	 *
+	 * Bus targeting `{to: slotId}` uses the slot id (the map key), which is the region id after mount.
+	 *
+	 * @param {Object<string,string>} hookup Map of element id → registered populator name.
+	 * @returns {Array} The region handles initRegion minted, in map-key order.
+	 */
+	function mount(hookup) {
+		if (hookup == null || typeof hookup !== "object" || Array.isArray(hookup)) {
+			const message = "JuneauViews.regions.mount: expected a map of slot id -> populator name.";
+			window.console.error(message);
+			throw new Error(message);
+		}
+		const ids = Object.keys(hookup);
+		const planned = [];
+		for (let i = 0; i < ids.length; i++) {
+			const id = ids[i];
+			const name = hookup[id];
+			const el = window.document.getElementById(id);
+			if (!el) {
+				const message = "JuneauViews.regions.mount: no element with id '" + id + "'.";
+				window.console.error(message);
+				throw new Error(message);
+			}
+			if (typeof name !== "string" || blank(name)) {
+				const message = "JuneauViews.regions.mount: slot '" + id + "' has a blank or missing populator name.";
+				window.console.error(message);
+				throw new Error(message);
+			}
+			if (typeof resolve(name) !== "function") {
+				const message = "JuneauViews.regions.mount: no populator is registered under the name '"
+					+ name + "'.";
+				window.console.error(message);
+				throw new Error(message);
+			}
+			planned.push({ el: el, id: id, name: name });
+		}
+		const handles = [];
+		for (let i = 0; i < planned.length; i++) {
+			const item = planned[i];
+			item.el.setAttribute(REGION_ATTR, item.id);
+			item.el.setAttribute(REGION_POPULATE_ATTR, item.name);
+			const handle = initRegion(item.el);
+			if (handle) handles.push(handle);
+		}
+		return handles;
+	}
+
 	// ==================================================================================================================
 	// EXPORTS
 	// ==================================================================================================================
@@ -1722,6 +1777,7 @@
 		BARRIER_DEADLINE_MS: BARRIER_DEADLINE_MS,
 		register: register,
 		resolve: resolve,
+		mount: mount,
 		initRegion: initRegion,
 		activateRegion: activateRegion,
 		enrolIn: enrolIn,

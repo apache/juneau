@@ -2532,3 +2532,63 @@ input[type="checkbox"].jc-editable-field-input {
 	min-width: 0;
 	overflow-wrap: anywhere;
 }
+
+/*
+ * HTML-slot page nav: one construct, two text rows, cloud-pattern bar below the pair.
+ * Shape only in this file (no hue palette).  Selected section = underline + light wash (themed
+ * in console chrome).  Selected child = text colour, not a pill.  Not .jc-tab / .jc-subtab
+ * ribbon-format; those classes remain for the deprecated PageTable hash-swap shell.
+ */
+.juneau-page-nav {
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+}
+
+.juneau-page-nav-sections,
+.juneau-page-nav-children {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	white-space: nowrap;
+	align-items: stretch;
+	gap: 0;
+	margin: 0;
+	padding: 0 var(--jc-space-3, 0.75rem);
+}
+
+.juneau-page-nav-section,
+.juneau-page-nav-child {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	padding: 0.45em var(--jc-space-3, 0.75rem);
+	text-decoration: none;
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.juneau-page-nav-section {
+	border-bottom: 3px solid transparent;
+}
+
+.juneau-page-nav-section[aria-current="page"] {
+	border-bottom-color: currentColor;
+	font-weight: 600;
+}
+
+.juneau-page-nav-child[aria-current="page"] {
+	font-weight: 600;
+}
+
+.juneau-page-nav-cloud {
+	height: 14px;
+	margin: 0;
+	padding: 0;
+	background-color: #c5d0dc;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='14' viewBox='0 0 160 14'%3E%3Cellipse cx='24' cy='11' rx='22' ry='7' fill='%23d5deea'/%3E%3Cellipse cx='70' cy='9' rx='26' ry='8' fill='%23e4ebf3'/%3E%3Cellipse cx='118' cy='11' rx='24' ry='7' fill='%23d5deea'/%3E%3Cellipse cx='150' cy='10' rx='18' ry='6' fill='%23e4ebf3'/%3E%3C/svg%3E");
+	background-repeat: repeat-x;
+	background-position: center bottom;
+}

@@ -30,11 +30,17 @@ import java.util.*;
  * The built-in refresh affordance of a refreshable card is likewise not an entry in {@link #actions}; it is emitted
  * by the card emitter and the two coexist in the same header action row.
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java card-layout type.  The annotation exists so Support Console, foundry,
+ * 	and release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
+@Deprecated
 public class Card {
 
 	/** The stable card id, unique within its grid.  Required, non-blank. */

@@ -59,10 +59,19 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<li class='jc'>{@link ViewDef}
  * </ul>
  *
+ * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })}
+ * 	instead of this Java tab/sub-tab page type.  Replacement: one nav construct in author HTML
+ * 	and a full page load per pair.  The annotation exists so Support Console, foundry, and
+ * 	release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
+ * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,id,title,tabs")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
+})
+@Deprecated
 public class PageDef {
 
 	/** The frozen contract version, reusing {@link ViewDef#CONTRACT_VERSION} as the single source of truth. */
