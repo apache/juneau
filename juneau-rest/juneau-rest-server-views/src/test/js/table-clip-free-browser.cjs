@@ -248,8 +248,18 @@ const PROBE = async function () {
 		const tr = document.createElement('tr');
 		tr.className = 'juneau-view-detail-row';
 		tr.dataset.juneauRowId = 'INC-D';
+		// Dedicated first-column chevron cell — expand/collapse is chevron-only.
 		const td = document.createElement('td');
-		td.textContent = 'row';
+		td.className = 'juneau-view-detail-control';
+		const toggle = document.createElement('button');
+		toggle.type = 'button';
+		toggle.className = 'juneau-view-detail-toggle';
+		toggle.setAttribute('aria-label', 'Expand or collapse row');
+		toggle.setAttribute('aria-expanded', 'false');
+		const glyphs = document.createElement('span');
+		glyphs.className = 'juneau-view-detail-glyphs';
+		toggle.appendChild(glyphs);
+		td.appendChild(toggle);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		table.appendChild(tbody);
@@ -285,7 +295,7 @@ const PROBE = async function () {
 		const ctx = { dataTable: { row: function () { return rowApi; } } };
 		const viewDef = { details: { endpoint: '/detail/{id}' }, columns: [] };
 		init.initDetailsExpander(table, ctx, viewDef);
-		td.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+		td.dispatchEvent(new MouseEvent('click', { bubbles: true }));  // chevron cell, not a plain data td
 		await tick();
 
 		const panel = document.querySelector('.juneau-view-detail-panel');
