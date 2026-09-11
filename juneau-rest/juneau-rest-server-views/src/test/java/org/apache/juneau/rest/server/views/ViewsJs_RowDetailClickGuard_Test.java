@@ -30,38 +30,21 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * A click on one of a row's OWN interactive controls (the row-actions "..." trigger, a rendered link, a
- * selection checkbox) must NOT ALSO toggle the row's detail expansion.
- *
- * <p>
- * Bug report: clicking the row-level actions "..." button on a table with {@link RowDetailDef} both opened the
- * action menu AND expanded the row's detail - because {@code actionTriggerMarkup}'s trigger {@code <button>}
- * carries neither {@code data-juneau-action} nor {@code data-juneau-safe}, the two attributes the pre-existing
- * click-side guards ({@code handleDetailActionRefClick}, {@code handleDetailSafeCollapseClick}) recognize ahead
- * of {@code toggleDetailRow}. Its click fell through to {@code toggleDetailRow} completely unguarded. A
- * selection checkbox and a rendered {@code Column.href} link in the row body had the same gap.
- *
- * <p>
- * The fix is deliberately NOT "expand only via the chevron" - {@code RowDetailsExpander_Wiring_Test}'s
- * {@code c01_viewsCss_detailRowIsMarkedClickable} (whole-row {@code cursor: pointer}) and
- * {@code b02_initDetailsExpander_delegatesOneClickListener_offTheDetailRowMarkerClass} (the delegate scoped to
- * {@code tr.juneau-view-detail-row}, not a chevron-only target) pin whole-row-click-to-expand as the existing,
- * tested design. Instead, {@code isInteractiveRowControl} adds one guard in {@code toggleDetailRow}: a click
- * landing on a {@code button}, {@code a[href]}, {@code [role="button"]}, {@code input}, {@code select},
- * {@code textarea}, or {@code label} never ALSO toggles the row - leaving the rest of the row (including the
- * chevron cell, which carries no special click handling of its own) clicking exactly as before.
+ * Expand/collapse is chevron-only.  A click on the row body, ID link, title/status cell, row-actions
+ * trigger, or selection checkbox must NOT toggle the row's detail expansion.  Only a click on
+ * {@code td.juneau-view-detail-control} (the first-column chevron / {@code .juneau-view-detail-toggle}
+ * button) reaches {@code toggleDetailRow}'s {@code dt.row(tr)} gate.
  *
  * <p>
  * Behavioral layer, driven through the always-on Node harness {@code row-detail-click-guard.cjs} against the
- * <b>real</b> {@code juneau-views.js}, in the shape {@link ViewsJs_DetailRegionActionIsolation_Test} established:
- * it runs whenever {@code node} is on {@code PATH} and is skipped (not failed) otherwise.
+ * <b>real</b> {@code juneau-views.js}.  It runs whenever {@code node} is on {@code PATH} and is skipped
+ * (not failed) otherwise.
  *
  * <h5 class='section'>Every claim here is paired with an inverted control</h5>
  * <p>
- * "The gate was not reached" is the assertion a <b>broken harness</b> satisfies most easily - a fixture that
- * never wires the delegate, or never dispatches the click, produces zero gate calls for entirely the wrong
- * reason. So each no-toggle claim below has a sibling proving the SAME fixture shape DOES reach the gate when
- * the click lands on plain row body (or the chevron cell) instead.
+ * "The gate was not reached" is the assertion a <b>broken harness</b> satisfies most easily.  So each
+ * no-toggle claim below has a sibling proving the SAME fixture shape DOES reach the gate when the click
+ * lands on the chevron cell instead.
  */
 class ViewsJs_RowDetailClickGuard_Test extends TestBase {
 
@@ -170,25 +153,22 @@ class ViewsJs_RowDetailClickGuard_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Controls first: without these, every "does not toggle" claim below would pass against a harness that never
+	// Control first: without this, every "does not toggle" claim below would pass against a harness that never
 	// reaches the gate for ANY click.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_control_plainRowBodyClickStillReachesTheToggleGate() {
-		assertEquals(true, report().get("control_plainCellClick_reachesGate"),
-			"a bare click on plain row body must still reach toggleDetailRow's dt.row(tr) gate - the pinned "
-				+ "whole-row-click design must be untouched by this guard");
+	@Test void b01_control_chevronCellClickReachesTheToggleGate() {
+		assertEquals(true, report().get("chevronClick_reachesGate"),
+			"a click on the dedicated first-column chevron must reach toggleDetailRow's dt.row(tr) gate");
 	}
 
-	@Test void b02_control_chevronCellClickAlsoReachesTheGate() {
-		assertEquals(true, report().get("chevronClick_reachesGate"),
-			"the dedicated chevron cell is not a specially-recognized target - it is ordinary row body that "
-				+ "happens not to be an interactive control, so a click there must reach the gate exactly like "
-				+ "any other row-body click");
+	@Test void b02_plainRowBodyClickDoesNotReachTheGate() {
+		assertEquals(true, report().get("plainCellClick_doesNotReachGate"),
+			"a bare click on plain row body / title cell must NOT expand the row");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// THE BUG and its two siblings (link, checkbox) - the claims the controls above make meaningful.
+	// ID link, row-actions trigger, checkbox — same "not the chevron" claim.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_rowActionsTriggerClickDoesNotAlsoToggleTheRow() {

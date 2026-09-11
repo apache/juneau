@@ -126,7 +126,9 @@ function buildAndExpand(env, NS, I, opts) {
 	const tr = withClassList(env.el('tr'));
 	tr.className = 'juneau-view-detail-row';
 	tr.setAttribute('data-juneau-row-id', ROW_ID);
+	// Dedicated first-column chevron cell — expand/collapse is chevron-only.
 	const td = env.el('td');
+	td.className = 'juneau-view-detail-control';
 	tr.appendChild(td);
 	tbody.appendChild(tr);
 
@@ -152,7 +154,7 @@ function buildAndExpand(env, NS, I, opts) {
 	const ctx = { dataTable: { row: function () { return { length: 1, child: child }; } } };
 	I.initDetailsExpander(table, ctx, { id: 'v1' });
 
-	// Click the row body (a <td>, not a control) - the ordinary expand gesture.
+	// Click the chevron cell — the production expand gesture after chevron-only expand.
 	table.dispatch('click', { target: td, preventDefault: function () {}, stopPropagation: function () {} });
 
 	const panel = state.panel;

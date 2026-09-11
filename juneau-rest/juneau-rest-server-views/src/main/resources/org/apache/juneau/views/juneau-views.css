@@ -106,17 +106,20 @@
 	--jc-card-min: 280px;
 	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	/*
-	 * Summary-view zebra: white rows stay #FFFFFF; the alternate is #FAFAF9, not a 5%-black
-	 * wash (~#F4F4F4) and not --jc-card-bg (a card surface, a different role).
+	 * Summary-view zebra: even rows stay #FFFFFF; the odd/first-body stripe is #FAFAF9 so
+	 * row 1 does not blend into the white header.  DataTables may stamp the first row `even`;
+	 * paint by :nth-child, not by those class names.
 	 */
 	--jc-table-row-bg: #ffffff;
 	--jc-table-stripe-bg: #fafaf9;
 	/*
 	 * Summary-view cell grid: IRS Instances tables use Bootstrap's bordered-table stroke
 	 * (`--bs-border-color` / DataTables last-child right edge `#dee2e6`).  Token so a
-	 * host theme can retint; no Salesforce class names.
+	 * host theme can retint; no Salesforce class names.  Vertical column edges only —
+	 * the header/body seam and table floor use --jc-table-rule.
 	 */
 	--jc-table-border: #dee2e6;
+	--jc-table-rule: #bbbbbb;
 	/*
 	 * Shared chrome scale (merged here for the same reason the card tokens are - one :root selector).  This is
 	 * the single set of named steps every chrome surface spends, so a toolbar, a detail panel and a dialog
@@ -198,21 +201,27 @@
 	--jc-chrome-glyph-size: 16px;
 	--jc-chrome-glyph-size-small: 12px;
 	/*
-	 * Chrome-wide disabled-state grey (WORK-J0518 DF-2, corrected to IRS opacity compositing): IRS's own
-	 * `.ribbon-button` idle colour is `#666` and `.ribbon-button:disabled` / `.ribbon-button.disabled` applies
-	 * `opacity: 0.6` over a white face (pages/style.css) - i.e. the visible disabled glyph is the composite
-	 * of #666 at 0.6 onto #fff, which is #a3a3a3.  Kept as a solid token so a consumer that cannot use opacity
-	 * (or that paints a disabled glyph without dimming the whole control) can spend the same value; the paging
-	 * pill itself prefers the IRS opacity rule below rather than this solid.
+	 * Idle paging/ribbon glyph (IRS `.ribbon-button { color: #666 }` / `.ribbon-paging-container
+	 * .ribbon-button { color: #666 }`, pages/style.css).  Not --jc-text-soft: chrome.css themes that
+	 * token for prose, which is darker than IRS chevrons on SSC.
 	 */
-	--jc-chrome-disabled-color: #a3a3a3;
+	--jc-chrome-icon: #666666;
 	/*
-	 * Chrome-wide disabled-state BACKGROUND: IRS keeps the ribbon/paging button face white when disabled
-	 * (only opacity dims the control) - pages/style.css `.ribbon-button { background-color: #fff }` is not
-	 * overridden by the `:disabled` rule.  Previously a grey fill (#e9e9e9) made disabled paging chevrons read
-	 * heavier than IRS; white matches the source.
+	 * Disabled paging solids.  IRS source (pages/style.css) is NOT these hexes: `.ribbon-button` is
+	 * `color: #666`, `background-color: #fff`, segment borders `#ced4da`, and
+	 * `.ribbon-button:disabled` / `.ribbon-button.disabled` is `opacity: 0.6` with no fill override.
+	 * That opacity composites against the grey toolbar canvas (#f6f6f9 / IRS Runtime dashboard,
+	 * SSC `.ssc-table-shell`) into the solids below — NOT the white-canvas composite (#a3a3a3 glyph
+	 * on #ffffff) the previous pin used.  Kept as solids so a 12px SVG stays crisply anti-aliased
+	 * (opacity on a tiny glyph reads muddy) and so a consumer that cannot use opacity spends the
+	 * same look.  #a0a0a1 is #666 @ 0.6 over #f6f6f9.  Pager/ribbon border is #cfd4d9 in BOTH
+	 * states (measured idle; do not fade it to #dfe2e6 when disabled).  Search stays on
+	 * --jc-chrome-control-border (#ced4da) below.
 	 */
-	--jc-chrome-disabled-bg: #ffffff;
+	--jc-chrome-disabled-color: #a0a0a1;
+	--jc-chrome-disabled-bg: #f6f6f9;
+	--jc-chrome-button-border: #cfd4d9;
+	--jc-chrome-disabled-border: #cfd4d9;
 	/*
 	 * Chrome-wide control border/text grey (WORK-J0518 DF-3, IRS visual-parity follow-up): IRS ribbon /
 	 * paging / toolbar search all use #ced4da (pages/style.css `.ribbon-button-*` and
@@ -464,6 +473,7 @@ table.dataTable {
 	border-spacing: 0;
 	border: 1px solid;            /* currentColor; chrome.css themes the color */
 	border-top-width: 2px;        /* accented top rule */
+	border-bottom-color: var(--jc-table-rule, #bbbbbb);
 }
 
 /*
@@ -523,6 +533,7 @@ table.dataTable > thead > tr > td {
 	 * new precedent.
 	 */
 	background-color: #fff;
+	border-bottom-color: var(--jc-table-rule, #bbbbbb);
 }
 
 /*
@@ -548,7 +559,10 @@ table.dataTable > tbody > tr > td {
 	 */
 	line-height: 1.5;
 	vertical-align: middle;
-	border: 1px solid var(--jc-table-border, #dee2e6);
+	border-left: 1px solid var(--jc-table-border, #dee2e6);
+	border-right: 1px solid var(--jc-table-border, #dee2e6);
+	border-top: none;
+	border-bottom: none;
 }
 
 /*
@@ -573,28 +587,46 @@ table.dataTable > tbody > tr > td.juneau-view-detail-control + td.juneau-view-se
  * one ends and the other begins.  Longhand, not a colourless `border-top` shorthand - see the segmented-
  * group note earlier in this file for why a colourless shorthand would fight a themed border-color.
  */
-table[data-juneau-view] > tbody > tr:first-child > th,
-table[data-juneau-view] > tbody > tr:first-child > td,
-table.dataTable > tbody > tr:first-child > th,
-table.dataTable > tbody > tr:first-child > td {
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > th,
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > td,
+table.dataTable > tbody > tr:first-child:not(.child) > th,
+table.dataTable > tbody > tr:first-child:not(.child) > td {
 	border-top-width: 1px;
 	border-top-style: solid;
+	border-top-color: var(--jc-table-rule, #bbbbbb);
 }
 
 /*
- * Summary-view zebra: odd rows #FFFFFF, even rows #FAFAF9.  Painted on the <tr> (cells stay
- * transparent so hover/selected tokens still show through).  The previous 5%-black cell
- * box-shadow composited to ~#F4F4F4 on white; that wash is killed below so a pin that still
- * ships it cannot darken the white row.  `:not(.child)` keeps the DataTables expander row
- * on the opaque white the child-row rule declares.
+ * Summary-view zebra: first data row MUST be the stripe (#FAFAF9) so it does not blend into
+ * the white header.  CSS :nth-child is 1-based, so odd = stripe, even = white.  DataTables
+ * often stamps the first row `even` (0-based); inverted tr.even/tr.odd fall back for that,
+ * then `nth-child(odd of :not(.child))` wins so an inserted expander `tr.child` does not
+ * shift the stripe.  `:not(.child)` keeps the expander row on the opaque white the child-row
+ * rule declares.  The previous 5%-black cell box-shadow is killed below.
  */
+table[data-juneau-view] > tbody > tr.even:not(.child),
+table.dataTable > tbody > tr.even:not(.child) {
+	background-color: var(--jc-table-stripe-bg, #fafaf9);
+}
+table[data-juneau-view] > tbody > tr.odd:not(.child),
+table.dataTable > tbody > tr.odd:not(.child) {
+	background-color: var(--jc-table-row-bg, #ffffff);
+}
 table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
 table.dataTable > tbody > tr:nth-child(odd):not(.child) {
-	background-color: var(--jc-table-row-bg, #ffffff);
+	background-color: var(--jc-table-stripe-bg, #fafaf9);
 }
 table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),
 table.dataTable > tbody > tr:nth-child(even):not(.child) {
+	background-color: var(--jc-table-row-bg, #ffffff);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable > tbody > tr:nth-child(odd of :not(.child)) {
 	background-color: var(--jc-table-stripe-bg, #fafaf9);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable > tbody > tr:nth-child(even of :not(.child)) {
+	background-color: var(--jc-table-row-bg, #ffffff);
 }
 table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > th,
 table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > td,
@@ -993,15 +1025,53 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Disabled First/Prev/Next/Last (WORK-J0518 DF-2, IRS-corrected): IRS's own `.ribbon-button:disabled`
- * applies `opacity: 0.6` on idle colour `#666` over a white face (pages/style.css) - the visible glyph is
- * the composite #a3a3a3.  This rule spends the solid chrome-wide tokens rather than opacity so a 12px
- * glyph stays crisply anti-aliased (an opacity fade on a tiny SVG can look muddy), while matching the
- * IRS composite exactly: --jc-chrome-disabled-color is #a3a3a3 and --jc-chrome-disabled-bg is #ffffff
- * (IRS does not grey the button fill - only the glyph dims). `color` (not a fill on the svg) because the
- * glyph paints via `fill: currentColor` below.
+ * Paging chevrons vs DataTables.  `div.dt-container .dt-paging .dt-paging-button` (and
+ * `.dt-paging-button.disabled`) ships `color: inherit !important` / `rgba(0,0,0,0.5) !important`
+ * plus `background: transparent`.  The previous pin's `.juneau-view-pagingpill-btn:disabled`
+ * (0,2,1) restated only `color` + `background-color` on the BUTTON, so (a) segment-edge
+ * `border-*-color` stayed `--jc-control-border` (#ced4da), (b) SVG `fill` could lose to a
+ * more specific `svg`/`use` rule, (c) white-canvas composites (#a3a3a3 / #ffffff) never
+ * matched IRS's grey-canvas opacity look.  These selectors are (0,4,1)/(0,4,2) on the
+ * pill's own classes (not `.dt-paging-button`) and restate button, svg, and border.
  */
-.juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color); background-color: var(--jc-chrome-disabled-bg); cursor: not-allowed; }
+div.dt-container .juneau-view-ribbon-btn,
+.juneau-view-ribbon-group .juneau-view-ribbon-btn {
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-menuwrap,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn,
+.juneau-view-pagingpill .juneau-view-pagingpill-menuwrap {
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled),
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) {
+	color: var(--jc-chrome-icon);
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) svg {
+	color: var(--jc-chrome-icon);
+	fill: currentColor;
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled],
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] {
+	color: var(--jc-chrome-disabled-color);
+	background-color: var(--jc-chrome-disabled-bg);
+	border-color: var(--jc-chrome-disabled-border);
+	opacity: 1;
+	cursor: not-allowed;
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled svg,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] svg {
+	color: var(--jc-chrome-disabled-color);
+	fill: currentColor;
+	background-color: transparent;
+}
 .juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
 
 /*
@@ -1457,12 +1527,9 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
  * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
  * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; the
  * chevron lives in a dedicated leading column (`.juneau-view-detail-control`), never jammed into
- * the first data cell.  Dual-chevron swap via `.juneau-view-detail-open`.  NEUTRAL - no palette color.
+ * the first data cell.  Dual-chevron swap via `.juneau-view-detail-open`.  Expand/collapse is
+ * chevron-only (the row body is not a click target).  NEUTRAL - no palette color.
  */
-.juneau-view-detail-row {
-	cursor: pointer;
-}
-
 .juneau-view-detail-th,
 .juneau-view-detail-control {
 	width: 20px;
@@ -1472,6 +1539,20 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	text-align: center;
 	vertical-align: middle;
 	cursor: pointer;
+}
+
+.juneau-view-detail-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	line-height: 0;
 }
 
 .juneau-view-detail-control svg {

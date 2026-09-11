@@ -16,27 +16,18 @@
  */
 
 /*
- * row-detail-click-guard.cjs - always-on Node harness: a click on one of the row's OWN interactive controls (the
- * row-actions "..." trigger, a rendered link, a selection checkbox) must NOT ALSO toggle the row's detail
- * expansion - while a bare click on the row body (including the dedicated chevron cell, which carries no special
- * click handling of its own) still does, per the pinned whole-row-click design (RowDetailsExpander_Wiring_Test's
- * c01 `cursor: pointer` CSS pin and b02's `toggleFn.contains("tr.juneau-view-detail-row")` pin).
- *
- * Previously the row-actions trigger button (built by actionTriggerMarkup) carried no [data-juneau-action]/
- * [data-juneau-safe] attribute for handleDetailActionRefClick/handleDetailSafeCollapseClick (the two existing
- * click-side guards ahead of toggleDetailRow) to recognize, so its click fell through to toggleDetailRow
- * completely unguarded: opening the row-action menu ALSO expanded the row.  A selection checkbox and a rendered
- * link in the row body had the same gap - isInteractiveRowControl closes all three at once.
+ * row-detail-click-guard.cjs - always-on Node harness: expand/collapse is chevron-only.
+ * A click on the first-column .juneau-view-detail-control (or .juneau-view-detail-toggle) reaches
+ * toggleDetailRow's dt.row(tr) gate; a click on plain row body, ID link, row-actions trigger, or
+ * selection checkbox must not.
  *
  *   Usage:  node row-detail-click-guard.cjs <juneau-renders.js> <juneau-views.js>
  *
- * Spies on ctx.dataTable.row(...) - toggleDetailRow's own gate to the actual expand/collapse, called immediately
- * after the guard this test pins - rather than standing up a real DataTables child-row API: whether that gate is
- * even REACHED is exactly what the guard decides, so a call count is the direct, honest signal.  The spy returns
- * `{ length: 0 }`, which short-circuits toggleDetailRow one line later (`if (!row || !row.length) return;`) -
- * this harness only needs to prove the gate was reached, never a real expand.  Paired-control style throughout:
- * every "does not reach the gate" claim below has a sibling proving the SAME fixture shape DOES reach it when the
- * click lands on plain row body instead.
+ * Spies on ctx.dataTable.row(...) - toggleDetailRow's own gate to the actual expand/collapse —
+ * rather than standing up a real DataTables child-row API.  The spy returns `{ length: 0 }`, which
+ * short-circuits toggleDetailRow one line later.  Paired-control style: every "does not reach the
+ * gate" claim has a sibling proving the SAME fixture DOES reach it when the click lands on the
+ * chevron.
  */
 'use strict';
 
@@ -78,13 +69,19 @@ function buildFixture() {
 	tr.className = 'juneau-view-detail-row';
 	tbody.appendChild(tr);
 
-	// The dedicated expander-chevron cell: a <span>, not a button/link/input, so the guard must NOT catch it -
-	// a click here is an ordinary row-body click, not a click on one of the row's OWN controls.
+	// Dedicated expander-chevron cell: a real <button class="juneau-view-detail-toggle"> inside
+	// td.juneau-view-detail-control — the only click target that may expand the row.
 	const chevronTd = env.el('td');
 	chevronTd.className = 'juneau-view-detail-control';
+	const toggle = env.el('button');
+	toggle.setAttribute('type', 'button');
+	toggle.className = 'juneau-view-detail-toggle';
+	toggle.setAttribute('aria-label', 'Expand or collapse row');
+	toggle.setAttribute('aria-expanded', 'false');
 	const glyphs = env.el('span');
 	glyphs.className = 'juneau-view-detail-glyphs';
-	chevronTd.appendChild(glyphs);
+	toggle.appendChild(glyphs);
+	chevronTd.appendChild(toggle);
 	tr.appendChild(chevronTd);
 
 	const plainTd = env.el('td');
@@ -122,7 +119,7 @@ function buildFixture() {
 	};
 	const viewDef = { rowActions: [{ id: 'ack', label: 'Ack', endpoint: '/x/ack', method: 'POST' }] };
 	I.initDetailsExpander(table, ctx, viewDef);
-	return { table: table, tr: tr, chevron: glyphs, plain: plainTd, trigger: trigger, link: link,
+	return { table: table, tr: tr, chevron: toggle, chevronTd: chevronTd, plain: plainTd, trigger: trigger, link: link,
 		checkbox: checkbox, calls: calls };
 }
 
@@ -131,16 +128,19 @@ function click(fx, target) {
 	fx.table.dispatch('click', { target: target });
 }
 
-// --- CONTROL: a bare click on plain row body still reaches toggleDetailRow's gate ------------------------------
-const fxPlain = buildFixture();
-click(fxPlain, fxPlain.plain);
-out.control_plainCellClick_reachesGate = fxPlain.calls.length === 1;
-
-// --- CONTROL: the dedicated chevron cell reaches the gate too - it is not a specially-recognized target, just --
-// --- an ordinary part of the row body that happens not to be an interactive control -----------------------------
+// --- CONTROL: the dedicated chevron (button or cell) reaches toggleDetailRow's gate -----------------------------
 const fxChevron = buildFixture();
 click(fxChevron, fxChevron.chevron);
 out.chevronClick_reachesGate = fxChevron.calls.length === 1;
+
+const fxChevronTd = buildFixture();
+click(fxChevronTd, fxChevronTd.chevronTd);
+out.chevronTdClick_reachesGate = fxChevronTd.calls.length === 1;
+
+// --- Plain row body / title cell must NOT expand ----------------------------------------------------------------
+const fxPlain = buildFixture();
+click(fxPlain, fxPlain.plain);
+out.plainCellClick_doesNotReachGate = fxPlain.calls.length === 0;
 
 // --- THE BUG: clicking the row-actions "..." trigger must NOT also toggle the row's detail ---------------------
 const fxTrigger = buildFixture();

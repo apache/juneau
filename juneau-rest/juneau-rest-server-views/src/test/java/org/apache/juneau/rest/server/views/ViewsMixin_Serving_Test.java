@@ -1027,8 +1027,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var tbodyAt = body.indexOf(tbodySel);
 		assertTrue(tbodyAt >= 0, body);
 		var tbodyRule = body.substring(tbodyAt, body.indexOf("}", tbodyAt));
-		assertTrue(tbodyRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"), tbodyRule);
-		assertFalse(tbodyRule.contains("border: none"), tbodyRule);
+		assertTrue(tbodyRule.contains("border-left: 1px solid var(--jc-table-border, #dee2e6)"), tbodyRule);
+		assertTrue(tbodyRule.contains("border-right: 1px solid var(--jc-table-border, #dee2e6)"), tbodyRule);
+		assertTrue(tbodyRule.contains("border-top: none"), tbodyRule);
+		assertTrue(tbodyRule.contains("border-bottom: none"), tbodyRule);
+		assertFalse(tbodyRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"),
+			() -> "tbody must not restore horizontal cell hairlines via border shorthand: " + tbodyRule);
 		assertTrue(tbodyRule.contains("line-height: 1.5"),
 			() -> "tbody cells must pin IRS Bootstrap body line-height 1.5 (no IRS min-height on td): " + tbodyRule);
 		assertFalse(body.contains(".table-bordered"),
@@ -1055,33 +1059,31 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	/**
 	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up): the header/body boundary is painted on the first BODY
-	 * row's own top edge (mirroring IRS's {@code table.dataTable>tbody>tr:first-child>td} exactly), not on the
-	 * header row's bottom edge, and not repeated on every row - a plain colourless {@code border-top} shorthand
-	 * is avoided in favor of the longhand width+style pair (see the segmented-group note in the CSS itself for
-	 * why a colourless shorthand fights a themed {@code border-color}).
+	 * row's own top edge (mirroring IRS's {@code table.dataTable>tbody>tr:first-child>td} exactly), not repeated
+	 * on every row.  Colour is {@code --jc-table-rule} / {@code #bbbbbb} — the same stroke as the table floor —
+	 * so a later chrome {@code border-color: --jc-table-border} cannot restore {@code #dee2e6} on the seam.
 	 */
 	@Test void o04d_viewsCss_hasHeaderBodyBoundaryOnFirstRowOnly() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		var sel = "table[data-juneau-view] > tbody > tr:first-child > th,\n"
-			+ "table[data-juneau-view] > tbody > tr:first-child > td,\n"
-			+ "table.dataTable > tbody > tr:first-child > th,\n"
-			+ "table.dataTable > tbody > tr:first-child > td {";
+		var sel = "table[data-juneau-view] > tbody > tr:first-child:not(.child) > th,\n"
+			+ "table[data-juneau-view] > tbody > tr:first-child:not(.child) > td,\n"
+			+ "table.dataTable > tbody > tr:first-child:not(.child) > th,\n"
+			+ "table.dataTable > tbody > tr:first-child:not(.child) > td {";
 		var at = body.indexOf(sel);
 		assertTrue(at >= 0, body);
 		var rule = body.substring(at, body.indexOf("}", at));
 		assertTrue(rule.contains("border-top-width: 1px"), rule);
 		assertTrue(rule.contains("border-top-style: solid"), rule);
-		assertFalse(rule.contains("border-top-color"),
-			() -> "longhand width/style only - never a colour-resetting declaration - so chrome.css's themed "
-				+ "border-color still applies: " + rule);
+		assertTrue(rule.contains("border-top-color: var(--jc-table-rule, #bbbbbb)"), rule);
 	}
 
 	/**
-	 * Summary-view zebra: odd rows {@code #FFFFFF}, even rows {@code #FAFAF9}. Painted on the {@code <tr>}
-	 * so hover/selected tokens still show through transparent cells. The old 5%-black cell box-shadow
-	 * (which composited to ~{@code #F4F4F4}) is gone; {@code :not(.child)} keeps the expander row white.
+	 * Summary-view zebra: first data row is {@code #FAFAF9} (CSS odd / stripe token) so it does not blend
+	 * into the white header; even rows stay {@code #FFFFFF}. DataTables may stamp the first row {@code even};
+	 * inverted {@code tr.even}/{@code tr.odd} plus {@code nth-child} (and {@code nth-child(odd of :not(.child))})
+	 * keep visual odd starting at row 1. {@code :not(.child)} keeps the expander row white.
 	 */
-	@Test void o04e_viewsCss_stripesOddRowsWhiteAndEvenRowsFafaf9ExcludingChild() throws Exception {
+	@Test void o04e_viewsCss_stripesFirstBodyRowFafaf9ExcludingChild() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("--jc-table-row-bg: #ffffff;"), body);
 		assertTrue(body.contains("--jc-table-stripe-bg: #fafaf9;"), body);
@@ -1090,14 +1092,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var oddAt = body.indexOf(oddSel);
 		assertTrue(oddAt >= 0, body);
 		var oddRule = body.substring(oddAt, body.indexOf("}", oddAt));
-		assertTrue(oddRule.contains("background-color: var(--jc-table-row-bg, #ffffff)"), oddRule);
+		assertTrue(oddRule.contains("background-color: var(--jc-table-stripe-bg, #fafaf9)"), oddRule);
 		assertFalse(oddRule.contains("rgba(0, 0, 0, 0.05)"), oddRule);
 		var evenSel = "table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),\n"
 			+ "table.dataTable > tbody > tr:nth-child(even):not(.child) {";
 		var evenAt = body.indexOf(evenSel);
 		assertTrue(evenAt >= 0, body);
 		var evenRule = body.substring(evenAt, body.indexOf("}", evenAt));
-		assertTrue(evenRule.contains("background-color: var(--jc-table-stripe-bg, #fafaf9)"), evenRule);
+		assertTrue(evenRule.contains("background-color: var(--jc-table-row-bg, #ffffff)"), evenRule);
+		assertTrue(body.contains("nth-child(odd of :not(.child))"),
+			() -> "expander child rows must not steal odd/even from data rows: " + body);
+		assertTrue(body.contains("tr.even:not(.child)"),
+			() -> "DataTables first-row-is-even class must paint the stripe, not white: " + body);
 		assertFalse(body.contains("box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.05)"),
 			() -> "the 5%-black odd-row wash must not remain: " + body);
 	}
@@ -1134,13 +1140,13 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 */
 	@Test void o11_viewsCss_pagingpillMenuwrapHasNoDivider() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-pagingpill-menuwrap {"), body);
-		var start = body.indexOf(".juneau-view-pagingpill-menuwrap {");
+		var sel = ".juneau-view-pagingpill-menuwrap {\n	position: relative;";
+		assertTrue(body.contains(sel), body);
+		var start = body.indexOf(sel);
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
 		assertFalse(region.contains("border-right"), region);
 		assertFalse(region.contains("border-left"), region);
-		assertFalse(region.contains("border-color"), region);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

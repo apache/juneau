@@ -662,8 +662,8 @@ table.jc-table tbody td {
   vertical-align: middle;
 }
 
-table.jc-table tbody tr:nth-child(odd) { background-color: var(--jc-table-row-bg); }
-table.jc-table tbody tr:nth-child(even) { background-color: var(--jc-table-stripe-bg); }
+table.jc-table tbody tr:nth-child(odd) { background-color: var(--jc-table-stripe-bg); }
+table.jc-table tbody tr:nth-child(even) { background-color: var(--jc-table-row-bg); }
 table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
 table.jc-table tbody tr:last-child td { border-bottom: none; }
 
@@ -696,6 +696,7 @@ table.dataTable {
   color: var(--jc-text);
   border-color: var(--jc-border);          /* outer/grid frame */
   border-top-color: var(--jc-border-2);    /* accented 2px top rule */
+  border-bottom-color: var(--jc-table-rule, #bbbbbb);
   --dt-row-stripe: 255, 255, 255;
   --dt-row-hover: 255, 255, 255;
 }
@@ -707,33 +708,64 @@ table.dataTable > thead > tr > td {
   background-color: var(--jc-table-header-bg);
   color: var(--jc-text-soft);
   border-color: var(--jc-table-border, #dee2e6);
+  border-bottom-color: var(--jc-table-rule, #bbbbbb);
 }
 
 table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-  border-color: var(--jc-table-border, #dee2e6);
+  border-left-color: var(--jc-table-border, #dee2e6);
+  border-right-color: var(--jc-table-border, #dee2e6);
+  border-top: none;
+  border-bottom: none;
 }
 
-/* Zebra striping - bare nth-child (the mechanism actually in effect today, see comment above), tr.odd/tr.even
-   (DT1.x), and table.dataTable.stripe/.display nth-child (DT2.x's own convenience-class opt-in form). */
-table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > th,
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > td,
+table.dataTable > tbody > tr:first-child:not(.child) > th,
+table.dataTable > tbody > tr:first-child:not(.child) > td {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: var(--jc-table-rule, #bbbbbb);
+}
+
+/* Zebra: first data row is the stripe (#FAFAF9) so it does not blend into the white
+   header.  CSS :nth-child is 1-based (odd = stripe).  DataTables often stamps the first
+   row `even` (0-based) — invert those classes, then `nth-child` / `nth-child(odd of
+   :not(.child))` so visual position wins and an inserted expander row does not shift
+   the stripe.  .stripe/.display convenience-class forms kept for future consumers. */
+table[data-juneau-view] > tbody > tr.even:not(.child),
+table.dataTable > tbody > tr.even:not(.child) {
+  background-color: var(--jc-table-stripe-bg);
+}
 table[data-juneau-view] > tbody > tr.odd:not(.child),
-table.dataTable > tbody > tr:nth-child(odd):not(.child),
-table.dataTable > tbody > tr.odd:not(.child),
-table.dataTable.stripe > tbody > tr:nth-child(odd):not(.child),
-table.dataTable.display > tbody > tr:nth-child(odd):not(.child) {
+table.dataTable > tbody > tr.odd:not(.child) {
   background-color: var(--jc-table-row-bg);
 }
-
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
+table.dataTable > tbody > tr:nth-child(odd):not(.child),
+table.dataTable.stripe > tbody > tr:nth-child(odd):not(.child),
+table.dataTable.display > tbody > tr:nth-child(odd):not(.child) {
+  background-color: var(--jc-table-stripe-bg);
+}
 table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),
-table[data-juneau-view] > tbody > tr.even:not(.child),
 table.dataTable > tbody > tr:nth-child(even):not(.child),
-table.dataTable > tbody > tr.even:not(.child),
 table.dataTable.stripe > tbody > tr:nth-child(even):not(.child),
 table.dataTable.display > tbody > tr:nth-child(even):not(.child) {
+  background-color: var(--jc-table-row-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable.stripe > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable.display > tbody > tr:nth-child(odd of :not(.child)) {
   background-color: var(--jc-table-stripe-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable.stripe > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable.display > tbody > tr:nth-child(even of :not(.child)) {
+  background-color: var(--jc-table-row-bg);
 }
 
 /* Row hover - bare :hover (the mechanism actually in effect today) plus the .hover/.display convenience-class
@@ -755,11 +787,11 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
    inherits the body's near-black text color instead of a subtle gray; themed here with
-   --jc-control-border (same role token as .jc-btn-outline / toolbar search / paging), plus a
-   white face so a button reads as a distinct control against the card's tinted background.
-   Using --jc-border here made ribbon/paging lighter than search whenever a theme split
-   --jc-border from --jc-border-2 (SSC --jc-border #e5e5e5 vs --jc-border-2 #ced4da). */
-.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
+   --jc-chrome-button-border (#cfd4d9) for ribbon/pager enabled AND disabled.  Search keeps
+   --jc-control-border (#ced4da).  White face so a button reads as a distinct control against
+   the card's tinted background. */
+.juneau-view-ribbon-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
+.juneau-view-ribbon-btn:disabled { border-color: var(--jc-chrome-button-border, #cfd4d9); }
 .juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
@@ -768,7 +800,7 @@ table.dataTable.display > tbody > tr:hover {
    RibbonAction.appearance("icon") / helpers.button({appearance:"icon"}). */
 .juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled) {
 	background-color: var(--jc-control-bg);
-	border-color: var(--jc-control-border);
+	border-color: var(--jc-chrome-button-border, #cfd4d9);
 	color: var(--jc-accent);
 }
 .juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled) {
@@ -874,11 +906,12 @@ table.dataTable.display > tbody > tr:hover {
    edges — longhand top/bottom only, so a UA leftover left/right on a chevron cannot turn into extra
    verticals.  End-caps add the outer side.  Do not restore border-color:accent on all four sides. */
 .juneau-view-pagingpill { background-color: var(--jc-control-bg); }
-.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); color: var(--jc-text-soft); }
+.juneau-view-pagingpill-btn:disabled { border-color: var(--jc-chrome-button-border, #cfd4d9); }
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
-.juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
+.juneau-view-pagingpill-menuwrap { border-color: var(--jc-chrome-button-border, #cfd4d9); }
 .juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }

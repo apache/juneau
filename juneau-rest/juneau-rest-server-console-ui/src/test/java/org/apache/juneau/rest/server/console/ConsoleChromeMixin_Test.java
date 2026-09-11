@@ -783,7 +783,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "pagingpill container must not stroke; fill only, css:\n" + css);
 		assertFalse(css.contains(".juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }"),
 			() -> "container border-color would halo hover in a second outline, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }"),
+		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); color: var(--jc-text-soft); }"),
 			() -> "idle pagingpill-btn edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "pagingpill-btn hover must recolor top/bottom only, css:\n" + css);
@@ -793,7 +793,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "missing first-child hover end-cap, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }"),
 			() -> "missing last-child hover end-cap, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }"),
+		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap { border-color: var(--jc-chrome-button-border, #cfd4d9); }"),
 			() -> "idle paging menuwrap edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "menuwrap hover must recolor top/bottom only, css:\n" + css);
@@ -855,7 +855,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var iconRegion = css.substring(iconStart, iconEnd);
 		assertTrue(iconRegion.contains("color: var(--jc-accent)"), iconRegion);
 		assertTrue(iconRegion.contains("background-color: var(--jc-control-bg)"), iconRegion);
-		assertTrue(iconRegion.contains("border-color: var(--jc-control-border)"), iconRegion);
+		assertTrue(iconRegion.contains("border-color: var(--jc-chrome-button-border, #cfd4d9)"), iconRegion);
 		assertFalse(iconRegion.contains("var(--jc-accent-wash)"), iconRegion);
 		assertTrue(css.contains(".juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled)"),
 			() -> "missing helper-btn--icon hover rule, css:\n" + css);

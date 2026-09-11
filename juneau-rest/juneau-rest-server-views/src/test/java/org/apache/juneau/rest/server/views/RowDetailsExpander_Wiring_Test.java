@@ -120,35 +120,38 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertFalse(fnBody.contains("innerHTML"), fnBody);
 	}
 
-	@Test void b02_initDetailsExpander_delegatesOneClickListener_offTheDetailRowMarkerClass() throws Exception {
+	@Test void b02_initDetailsExpander_delegatesOneClickListener_offTheDetailControl() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function initDetailsExpander(");
 		assertTrue(fnBody.contains("table.addEventListener(\"click\""), fnBody);
 		assertTrue(fnBody.contains("toggleDetailRow("), fnBody);
 		var toggleFn = functionBody(body, "function toggleDetailRow(");
+		assertTrue(toggleFn.contains("td.juneau-view-detail-control"), toggleFn);
 		assertTrue(toggleFn.contains("tr.juneau-view-detail-row"), toggleFn);
+		var controlIdx = toggleFn.indexOf("td.juneau-view-detail-control");
+		var trIdx = toggleFn.indexOf("tr.juneau-view-detail-row");
+		assertTrue(controlIdx >= 0 && trIdx > controlIdx,
+			() -> "chevron cell lookup must run BEFORE the parent-row lookup: " + toggleFn);
 	}
 
 	/**
-	 * Row-body click-to-expand stays intact (b02 above), but a click on one of the row's OWN interactive
-	 * controls - the row-actions trigger, a rendered link, a selection checkbox, anything the guard's selector
-	 * matches - must never ALSO toggle expansion.  Behavioral proof (real click, real guard) lives in
-	 * {@code ViewsJs_RowDetailClickGuard_Test}; this is the source-shape pin that the guard is wired at all,
-	 * BEFORE {@code dt.row(tr)} is ever called.
+	 * Expand/collapse is chevron-only.  Clicks on the row-actions trigger, a rendered link, a selection
+	 * checkbox, title/status cells, or the row background must never toggle.  Behavioral proof (real click)
+	 * lives in {@code ViewsJs_RowDetailClickGuard_Test}; this is the source-shape pin that
+	 * {@code toggleDetailRow} requires {@code td.juneau-view-detail-control} BEFORE {@code dt.row(tr)}.
 	 */
-	@Test void b02b_toggleDetailRow_ignoresClicksOnInteractiveRowControls() throws Exception {
+	@Test void b02b_toggleDetailRow_requiresChevronCell() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var toggleFn = functionBody(body, "function toggleDetailRow(");
-		assertTrue(toggleFn.contains("isInteractiveRowControl(e.target)"), toggleFn);
-		var trIdx = toggleFn.indexOf("tr.juneau-view-detail-row");
-		var guardIdx = toggleFn.indexOf("isInteractiveRowControl(e.target)");
+		assertTrue(toggleFn.contains("td.juneau-view-detail-control"), toggleFn);
+		assertFalse(toggleFn.contains("isInteractiveRowControl(e.target)"),
+			() -> "whole-row + interactive-control guard is replaced by chevron-only: " + toggleFn);
+		var controlIdx = toggleFn.indexOf("td.juneau-view-detail-control");
 		var rowIdx = toggleFn.indexOf("dt.row(tr)");
-		assertTrue(trIdx >= 0 && guardIdx > trIdx && rowIdx > guardIdx,
-			() -> "the guard must run AFTER the tr lookup and BEFORE dt.row(tr) is ever called: " + toggleFn);
-		var guardFn = functionBody(body, "function isInteractiveRowControl(");
-		assertTrue(guardFn.contains("button"), guardFn);
-		assertTrue(guardFn.contains("a[href]"), guardFn);
-		assertTrue(guardFn.contains("input"), guardFn);
+		assertTrue(controlIdx >= 0 && rowIdx > controlIdx,
+			() -> "the chevron cell gate must run BEFORE dt.row(tr): " + toggleFn);
+		assertTrue(body.contains("juneau-view-detail-toggle"), body);
+		assertTrue(body.contains("aria-expanded"), body);
 	}
 
 	@Test void b03_initDetailsExpander_usesDataTablesNativeChildRowApi() throws Exception {
@@ -214,18 +217,26 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		assertTrue(body.contains("function detailsControlCellMarkup("), body);
 		assertTrue(body.contains("juneau-view-detail-control"), body);
 		assertTrue(body.contains("juneau-view-detail-glyphs"), body);
+		assertTrue(body.contains("juneau-view-detail-toggle"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// CSS shape (neutral, no palette color; dual-chevron swap on a dedicated expander column)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_viewsCss_detailRowIsMarkedClickable() throws Exception {
+	@Test void c01_viewsCss_detailChevronIsMarkedClickable_notTheRow() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-detail-row {"), body);
-		var start = body.indexOf(".juneau-view-detail-row {");
+		assertFalse(body.contains(".juneau-view-detail-row {\n	cursor: pointer;"),
+			() -> "the data row must not be a click-to-expand target: " + body);
+		var start = body.indexOf(".juneau-view-detail-control {");
+		assertTrue(start >= 0, body);
 		var end = body.indexOf("}", start);
 		assertTrue(body.substring(start, end).contains("cursor: pointer"), body.substring(start, end));
+		assertTrue(body.contains(".juneau-view-detail-toggle {"), body);
+		var toggleStart = body.indexOf(".juneau-view-detail-toggle {");
+		var toggleEnd = body.indexOf("}", toggleStart);
+		assertTrue(body.substring(toggleStart, toggleEnd).contains("cursor: pointer"),
+			body.substring(toggleStart, toggleEnd));
 	}
 
 	@Test void c02_viewsCss_openStateFlipsGlyph_onDedicatedExpanderColumn() throws Exception {

@@ -177,12 +177,14 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	/**
-	 * Regression (WORK-J0518 DF-2, IRS-corrected): disabled First/Prev/Next/Last spend the solid chrome-wide
-	 * {@code --jc-chrome-disabled-color} / {@code --jc-chrome-disabled-bg} tokens. IRS's own
-	 * {@code .ribbon-button:disabled} uses {@code opacity: 0.6} on idle {@code #666} over white
-	 * ({@code pages/style.css}); the tokens are the composite of that rule ({@code #a3a3a3} glyph,
-	 * {@code #ffffff} face) so a 12px SVG stays crisply anti-aliased rather than opacity-muddy, while
-	 * matching the IRS look. Solid colour, not opacity, on this selector.
+	 * Disabled First/Prev/Next/Last spend grey-canvas IRS solids, not the white-canvas composite
+	 * ({@code #a3a3a3}/{@code #ffffff}) and not {@code opacity: 0.6}. IRS source is
+	 * {@code .ribbon-button} {@code #666}/{@code #fff}/{@code #ced4da} plus {@code :disabled}
+	 * {@code opacity: 0.6} (pages/style.css); those values over the {@code #f6f6f9} toolbar canvas
+	 * are {@code #a0a0a1}/{@code #f6f6f9}; pager/ribbon border stays {@code #cfd4d9} enabled
+	 * and disabled (not the faded {@code #dfe2e6} composite). Selectors include
+	 * {@code div.dt-container .juneau-view-pagingpill} plus {@code svg} so they beat DataTables
+	 * {@code .dt-paging-button} and so fill/border cannot stick on the wrong node.
 	 */
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledGrey() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
@@ -193,11 +195,25 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(region.contains("border: none"), region);
 		assertFalse(region.contains("border: 1px solid"), region);
 		assertTrue(body.contains(".juneau-view-pagingpill-btn {"), body);
-		assertTrue(body.contains(".juneau-view-pagingpill-btn:disabled { color: var(--jc-chrome-disabled-color)"), body);
+		assertTrue(body.contains("div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled"), body);
+		assertTrue(body.contains("div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled svg"), body);
+		assertTrue(body.contains("div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) svg"), body);
 		assertTrue(body.contains("background-color: var(--jc-chrome-disabled-bg)"), body);
-		assertTrue(body.contains("--jc-chrome-disabled-bg: #ffffff;"), body);
-		assertTrue(body.contains("--jc-chrome-disabled-color: #a3a3a3;"), body);
-		assertFalse(body.contains(".juneau-view-pagingpill-btn:disabled { opacity:"), body);
+		assertTrue(body.contains("border-color: var(--jc-chrome-disabled-border)"), body);
+		assertTrue(body.contains("color: var(--jc-chrome-icon)"), body);
+		assertTrue(body.contains("--jc-chrome-icon: #666666;"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-bg: #f6f6f9;"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-color: #a0a0a1;"), body);
+		assertTrue(body.contains("--jc-chrome-button-border: #cfd4d9;"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-border: #cfd4d9;"), body);
+		assertFalse(body.contains("--jc-chrome-disabled-border: #dfe2e6;"), body);
+		assertFalse(body.contains("--jc-chrome-disabled-bg: #ffffff;"), body);
+		assertFalse(body.contains("--jc-chrome-disabled-color: #a3a3a3;"), body);
+		var disabledStart = body.indexOf("div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled,");
+		assertTrue(disabledStart >= 0, body);
+		var disabledBlock = body.substring(disabledStart, body.indexOf("}", disabledStart));
+		assertTrue(disabledBlock.contains("opacity: 1"), disabledBlock);
+		assertFalse(disabledBlock.contains("opacity: 0.6"), disabledBlock);
 		assertTrue(body.contains("font-family: inherit"), body);
 	}
 

@@ -2657,6 +2657,7 @@
 			teardownDetailBarSlot(panel);
 			row.child.hide();
 			parentTr.classList.remove("juneau-view-detail-open");
+			setDetailToggleExpanded(parentTr, false);
 			notifyPollPausedChange(ctx);
 		}
 		return true;
@@ -2698,36 +2699,26 @@
 	}
 
 	/**
-	 * Whether `target` is (or is inside) an interactive control that owns its own click behavior - the row-action
-	 * menu trigger, a rendered link, a form control, or anything painted with {@code role="button"}.  A bare click
-	 * on the row body still expands the detail (the {@code .juneau-view-detail-row} whole-row click, pinned by
-	 * {@code RowDetailsExpander_Wiring_Test}'s {@code cursor: pointer} CSS assertion) - but a click that lands on
-	 * one of the row's OWN controls is that control's click, not the row's, and must not ALSO toggle expansion.
-	 *
-	 * <p>Without this guard the row-actions trigger ({@link #actionTriggerMarkup}) both opens its menu (via
-	 * {@code initRowActions}'s own delegated listener on the same table) AND expands the row - it carries no
-	 * {@code [data-juneau-action]}/{@code [data-juneau-safe]} attribute for {@link #handleDetailActionRefClick}/
-	 * {@link #handleDetailSafeCollapseClick} above to recognize, so it fell through to here unguarded.  A
-	 * selection checkbox and a {@code Column.href} link in the row body had the same gap.
-	 *
-	 * <p>Deliberately WITHOUT preventDefault/stopPropagation here (mirrors handleDetailActionRefClick's own
-	 * region-exclusion return): the control's own handling - initRowActions' delegated click, the checkbox's
-	 * `change` listener, the anchor's native navigation - must still fire untouched.  This function only decides
-	 * whether toggleDetailRow's SEPARATE expand/collapse also fires; it never suppresses the control itself.
-	 *
-	 * <p>{@code [data-juneau-action]} is deliberately NOT listed in the selector below - handleDetailActionRefClick
-	 * already owns that whole surface (both the in-panel ActionRef click and the return-true bail for a row-body
-	 * action pill) and always runs before toggleDetailRow is ever reached.
+	 * Syncs {@code aria-expanded} on the dedicated first-column chevron button after expand/collapse.
+	 * The glyphs themselves stay {@code aria-hidden}; the button is the accessible name.
 	 */
-	function isInteractiveRowControl(target) {
-		return !!(target?.closest
-			&& target.closest('button, a[href], [role="button"], input, select, textarea, label'));
+	function setDetailToggleExpanded(tr, expanded) {
+		const btn = tr.querySelector(".juneau-view-detail-toggle");
+		if (btn) btn.setAttribute("aria-expanded", expanded ? "true" : "false");
 	}
 
+	/**
+	 * Expands/collapses a detail row only when the click landed on the first-column chevron
+	 * ({@code td.juneau-view-detail-control} / {@code .juneau-view-detail-toggle}).  Clicks on the
+	 * ID link, title/status cells, or row background must not toggle.  The chevron is a real
+	 * {@code <button>} so Enter/Space still fire a click (and this same path) without a separate
+	 * keydown listener.
+	 */
 	function toggleDetailRow(table, ctx, viewDef, tpl, dt, e) {
-		const tr = e.target?.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
+		const control = e.target?.closest ? e.target.closest("td.juneau-view-detail-control") : null;
+		if (!control) return;
+		const tr = control.closest("tr.juneau-view-detail-row");
 		if (!tr) return;
-		if (isInteractiveRowControl(e.target)) return;
 		const row = dt.row(tr);
 		if (!row || !row.length) return;
 		if (row.child.isShown()) {
@@ -2741,6 +2732,7 @@
 			}
 			row.child.hide();
 			tr.classList.remove("juneau-view-detail-open");
+			setDetailToggleExpanded(tr, false);
 			notifyPollPausedChange(ctx);
 			return;
 		}
@@ -2777,6 +2769,7 @@
 			}
 			row.child.hide();
 			tr.classList.remove("juneau-view-detail-open");
+			setDetailToggleExpanded(tr, false);
 			collapsedAny = true;
 		});
 		if (collapsedAny) notifyPollPausedChange(ctx);
@@ -3302,6 +3295,7 @@
 		// The host cell takes the same `juneau-cell-wrap` opt-out an author would use, rather than a second rule.
 		if (panel.parentNode?.classList) panel.parentNode.classList.add(CELL_WRAP_CLASS);
 		tr.classList.add("juneau-view-detail-open");
+		setDetailToggleExpanded(tr, true);
 		// The panel is in the document now, so an opted-in view is already suspending its poll - say so on this
 		// click rather than up to a second later, when the pill would still be claiming to be live.
 		notifyPollPausedChange(ctx);
@@ -3647,16 +3641,18 @@
 	/**
 	 * Dual-chevron markup for the dedicated row-expand cell (the .juneau-view-detail-control column).  Collapsed (right)
 	 * and expanded (down) glyphs; CSS on {@code .juneau-view-detail-open} swaps which one shows.  Falls back to
-	 * unicode triangles when the icon registry has not loaded.
+	 * unicode triangles when the icon registry has not loaded.  A real {@code <button>} so keyboard (Enter/Space)
+	 * activates expand without making the rest of the row a click target.
 	 */
 	function detailsControlCellMarkup() {
 		const icons = NS.icons;
 		const collapsed = typeof icons?.resolveIcon === "function" ? icons.resolveIcon("chevron_right") : "";
 		const expanded = typeof icons?.resolveIcon === "function" ? icons.resolveIcon("expand_more") : "";
-		return '<span class="juneau-view-detail-glyphs" aria-hidden="true">'
+		return '<button type="button" class="juneau-view-detail-toggle" aria-label="Expand or collapse row" aria-expanded="false">'
+			+ '<span class="juneau-view-detail-glyphs" aria-hidden="true">'
 			+ '<span class="juneau-view-detail-collapsed">' + (collapsed || "\u25B8") + '</span>'
 			+ '<span class="juneau-view-detail-expanded">' + (expanded || "\u25BE") + '</span>'
-			+ '</span>';
+			+ '</span></button>';
 	}
 
 	/**
