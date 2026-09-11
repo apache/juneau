@@ -126,7 +126,7 @@ function buildFixture(env, NS, dialogAction, opts) {
 	return { wrapper: wrapper, table: table, ctx: ctx, viewDef: viewDef, bar: bar };
 }
 
-/** The one ribbon button the `dialog` branch rendered (icon-only: its name rides `title`/`aria-label`). */
+/** The one ribbon button the `dialog` branch rendered (icon-only: its name rides data-jc-tip/aria-label). */
 function dialogButton(fx) {
 	return fx.bar ? fx.bar.querySelector('.juneau-view-ribbon-btn') : null;
 }
@@ -156,7 +156,7 @@ function anyRowBanner(env) {
 
 		out.open_ribbonRenderedOneButton = fx.bar != null && fx.bar.querySelectorAll('.juneau-view-ribbon-btn').length === 1;
 		const btn = dialogButton(fx);
-		out.open_buttonNameIsTitleNotId = btn != null && btn.title === 'Add project'
+		out.open_buttonNameIsTitleNotId = btn != null && (btn.getAttribute('data-jc-tip') === 'Add project' || btn.title === 'Add project')
 			&& btn.getAttribute('aria-label') === 'Add project';
 
 		const postBodies = [];

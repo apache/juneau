@@ -39,7 +39,7 @@
        url(var(--jc-x)) are all forbidden shapes).
      - Color/font/length tokens sink ONLY into color, background-color,
        border-color (+ border-top-color/border-bottom-color), font-family,
-       or border-radius - never a url-capable property.
+       font-size, or border-radius - never a url-capable property.
      - The ONLY url-capable property that takes a var(--jc-*) value is
        background-image, and only for the two gradient tokens
        --jc-page-bg / --jc-avatar-bg (their values are locked to
@@ -90,6 +90,21 @@ a:hover { text-decoration: underline; }
   position: sticky;
   top: 0;
   z-index: 20;
+}
+
+/* Title row + HTML-slot page nav as one sticky stack. Consumers wrap both in this class
+   (header, then .juneau-page-nav) so they cannot scroll apart. Opaque background so page
+   content does not show through. Inner .jc-header sticky is then redundant. */
+.jc-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: var(--jc-header-bg);
+}
+
+.jc-chrome .jc-header,
+.jc-chrome .juneau-page-nav {
+  position: static; /* the wrapper is the sticky unit */
 }
 
 .jc-brand {
@@ -297,7 +312,7 @@ a:hover { text-decoration: underline; }
   display: flex;
   align-items: stretch;
   background-color: var(--jc-nav-bg);
-  border-bottom: var(--jc-nav-indicator-width) solid var(--jc-accent);
+  border-bottom: var(--jc-nav-indicator-width) solid var(--jc-page-nav-accent);
   padding: 0 16px;
   position: sticky;
   top: var(--jc-header-height);
@@ -325,7 +340,7 @@ a:hover { text-decoration: underline; }
 
 .jc-nav-tab.active {
   background-color: var(--jc-accent-selected);
-  border-top-color: var(--jc-accent);
+  border-top-color: var(--jc-page-nav-accent);
   color: var(--jc-on-accent);
 }
 
@@ -375,12 +390,25 @@ a:hover { text-decoration: underline; }
 
 /* ==========================================================================
    HTML-slot page nav (two text rows; not Page Tabs / Page Subtabs pills)
-   Shape lives in juneau-views.css.  Selected section = light wash + accent
-   underline, no pill fill.  Selected child = accent text, not a filled pill.
+   Shape lives in juneau-views.css.  Selected section = light wash + indicator
+   accent on the TOP edge, no pill fill.  Hairline under the sections row is
+   --jc-page-nav-hairline (2px) and --jc-page-nav-accent.  The pair's floor uses
+   the same accent.  Selected child = accent wash behind the label, not accent type.
    ========================================================================== */
+
+.juneau-page-nav {
+  background-color: var(--jc-nav-bg);
+  border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-sections {
+  border-bottom-width: var(--jc-page-nav-hairline);
+  border-bottom-color: var(--jc-page-nav-accent);
+}
 
 .juneau-page-nav-section {
   color: var(--jc-text-soft);
+  font-size: var(--jc-page-nav-section-font-size);
 }
 
 .juneau-page-nav-section:hover {
@@ -391,22 +419,24 @@ a:hover { text-decoration: underline; }
 
 .juneau-page-nav-section[aria-current="page"] {
   background-color: var(--jc-accent-wash);
-  border-bottom-color: var(--jc-accent);
+  border-top-color: var(--jc-page-nav-accent);
   color: var(--jc-text);
 }
 
 .juneau-page-nav-child {
-  color: var(--jc-text-muted);
+  color: var(--jc-text-soft);
+  font-size: var(--jc-page-nav-child-font-size);
 }
 
 .juneau-page-nav-child:hover {
-  color: var(--jc-accent);
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-text);
   text-decoration: none;
 }
 
 .juneau-page-nav-child[aria-current="page"] {
-  color: var(--jc-accent);
-  background-color: transparent;
+  color: var(--jc-text);
+  background-color: var(--jc-accent-wash);
 }
 
 /* ==========================================================================
@@ -459,7 +489,7 @@ a:hover { text-decoration: underline; }
   max-width: 1180px;
   margin: 0 auto;
   background-color: var(--jc-card-bg);
-  border: 1px solid var(--jc-border);
+  border: none;
   border-radius: var(--jc-radius);
   box-shadow: var(--jc-card-shadow);
   padding: 18px 20px 8px;
@@ -632,7 +662,8 @@ table.jc-table tbody td {
   vertical-align: middle;
 }
 
-table.jc-table tbody tr:nth-child(odd) { background-color: #fbfbfc; }
+table.jc-table tbody tr:nth-child(odd) { background-color: var(--jc-table-row-bg); }
+table.jc-table tbody tr:nth-child(even) { background-color: var(--jc-table-stripe-bg); }
 table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
 table.jc-table tbody tr:last-child td { border-bottom: none; }
 
@@ -675,33 +706,33 @@ table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
   background-color: var(--jc-table-header-bg);
   color: var(--jc-text-soft);
-  border-color: var(--jc-border);
+  border-color: var(--jc-table-border, #dee2e6);
 }
 
 table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-  border-color: var(--jc-border);
+  border-color: var(--jc-table-border, #dee2e6);
 }
 
 /* Zebra striping - bare nth-child (the mechanism actually in effect today, see comment above), tr.odd/tr.even
    (DT1.x), and table.dataTable.stripe/.display nth-child (DT2.x's own convenience-class opt-in form). */
-table[data-juneau-view] > tbody > tr:nth-child(odd),
-table[data-juneau-view] > tbody > tr.odd,
-table.dataTable > tbody > tr:nth-child(odd),
-table.dataTable > tbody > tr.odd,
-table.dataTable.stripe > tbody > tr:nth-child(odd),
-table.dataTable.display > tbody > tr:nth-child(odd) {
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
+table[data-juneau-view] > tbody > tr.odd:not(.child),
+table.dataTable > tbody > tr:nth-child(odd):not(.child),
+table.dataTable > tbody > tr.odd:not(.child),
+table.dataTable.stripe > tbody > tr:nth-child(odd):not(.child),
+table.dataTable.display > tbody > tr:nth-child(odd):not(.child) {
   background-color: var(--jc-table-row-bg);
 }
 
-table[data-juneau-view] > tbody > tr:nth-child(even),
-table[data-juneau-view] > tbody > tr.even,
-table.dataTable > tbody > tr:nth-child(even),
-table.dataTable > tbody > tr.even,
-table.dataTable.stripe > tbody > tr:nth-child(even),
-table.dataTable.display > tbody > tr:nth-child(even) {
+table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),
+table[data-juneau-view] > tbody > tr.even:not(.child),
+table.dataTable > tbody > tr:nth-child(even):not(.child),
+table.dataTable > tbody > tr.even:not(.child),
+table.dataTable.stripe > tbody > tr:nth-child(even):not(.child),
+table.dataTable.display > tbody > tr:nth-child(even):not(.child) {
   background-color: var(--jc-table-stripe-bg);
 }
 
@@ -863,10 +894,22 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Toolbar Search - same --jc-control-border as ribbon/paging so a theme that splits --jc-border from
    --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.
-   appearance:none / background / box-shadow resets live in juneau-views.css (structural). */
-.juneau-view-toolbar-right .dataTables_filter input,
-.juneau-view-toolbar-right .dt-search input {
+   appearance:none / background / box-shadow resets live in juneau-views.css (structural).
+   Selectors beat DataTables `div.dt-container .dt-search input` (0,2,2 / #aaa) at (0,2,3). */
+div.dt-container div.dt-search input,
+div.dataTables_wrapper div.dataTables_filter input {
   border-color: var(--jc-control-border);
+}
+
+/* Toolbar Search focus: field border turns accent; kill the generic 2px :focus-visible ring.
+   outline/box-shadow are literals (none) — token only in border-color (sink-property discipline). */
+div.dt-container div.dt-search input:focus,
+div.dt-container div.dt-search input:focus-visible,
+div.dataTables_wrapper div.dataTables_filter input:focus,
+div.dataTables_wrapper div.dataTables_filter input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--jc-accent);
 }
 
 /* ==========================================================================

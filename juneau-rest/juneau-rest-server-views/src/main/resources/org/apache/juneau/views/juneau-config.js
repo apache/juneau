@@ -1830,6 +1830,18 @@
 		} catch (e) { /* text fallback already applied */ }
 	}
 
+	function stampChromeTip(el, text) {
+		const t = text == null ? "" : String(text);
+		if (t !== "") {
+			el.setAttribute("data-jc-tip", t);
+			el.setAttribute("aria-label", t);
+		} else if (typeof el.removeAttribute === "function") {
+			el.removeAttribute("data-jc-tip");
+		}
+		if (typeof el.removeAttribute === "function") el.removeAttribute("title");
+		el.title = "";
+	}
+
 	/**
 	 * Wires the Columns affordance onto the table toolbar when {@code columnConfig} is present.  Called from
 	 * {@code constructTable} on first init AND every Apply rebuild.
@@ -1843,8 +1855,7 @@
 		const btn = document.createElement("button");
 		btn.type = "button";
 		btn.className = "juneau-view-ribbon-btn juneau-config-chooser-btn";
-		btn.title = "Columns";
-		btn.setAttribute("aria-label", "Columns");
+		stampChromeTip(btn, "Columns");
 		paintUserText(btn, "Columns");
 		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon("tune") : null;
 		paintChooserIcon(btn, markup);

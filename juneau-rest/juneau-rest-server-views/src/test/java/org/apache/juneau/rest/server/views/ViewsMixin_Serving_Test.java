@@ -491,14 +491,15 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void f02_ribbonJs_rendersIconOnlyButtonsWithAriaLabel() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("setAttribute(\"aria-label\""), body);
-		assertTrue(body.contains(".title = "), body);
+		assertTrue(body.contains("stampChromeTip("), body);
 		assertTrue(body.contains("resolveButtonIcon("), body);
 		assertTrue(body.contains("NS.icons.resolveIcon("), body);
 		var buttonFnStart = body.indexOf("function button(");
 		assertTrue(buttonFnStart >= 0, () -> "function button( not found:\n" + body);
 		var buttonFnEnd = body.indexOf("\n\t}", buttonFnStart);
 		var buttonFnBody = body.substring(buttonFnStart, buttonFnEnd < 0 ? body.length() : buttonFnEnd);
-		assertFalse(buttonFnBody.contains("b.textContent = label"), buttonFnBody);
+		assertTrue(buttonFnBody.contains("stampChromeTip(b, label)"), buttonFnBody);
+		assertFalse(buttonFnBody.contains("b.title ="), buttonFnBody);
 	}
 
 	@Test void f02b_ribbonJs_stampsIconAppearanceClassWhenRequested() throws Exception {
@@ -738,7 +739,11 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var rowStart = body.indexOf(".juneau-view-toolbar-row {");
 		var rowEnd = body.indexOf("}", rowStart);
 		var rowRegion = body.substring(rowStart, rowEnd);
-		assertTrue(rowRegion.contains("flex-wrap: nowrap"), rowRegion);
+		assertTrue(rowRegion.contains("flex-wrap: wrap"), rowRegion);
+		assertTrue(rowRegion.contains("min-width: 0"), rowRegion);
+		assertTrue(rowRegion.contains("overflow-x: visible"), rowRegion);
+		assertFalse(rowRegion.contains("flex-wrap: nowrap"), rowRegion);
+		assertFalse(rowRegion.contains("overflow-x: auto"), rowRegion);
 		// Control-row layout: LEFT cluster + RIGHT cluster, pushed apart so the right cluster stays right-aligned
 		// (superseded the old single-cluster "justify-content: flex-start").
 		assertTrue(rowRegion.contains("justify-content: space-between"), rowRegion);
@@ -761,7 +766,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
 		assertTrue(region.contains("display: flex"), region);
-		assertTrue(region.contains("flex-wrap: nowrap"), region);
+		assertTrue(region.contains("flex-wrap: wrap"), region);
+		assertFalse(region.contains("flex-wrap: nowrap"), region);
 
 		assertTrue(body.contains(".juneau-view-toolbar-right .dataTables_filter,"), body);
 		assertTrue(body.contains(".juneau-view-toolbar-right .dt-search {"), body);
@@ -959,9 +965,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("content: none"), body);
 		assertTrue(body.contains("border-collapse: collapse"), body);
 		assertTrue(body.contains("border-top-width: 2px"), body);
-		// Outer table frame keeps its own border (currentColor; chrome.css themes it) - the per-CELL grid this
-		// docstring used to call a "hairline grid" is gone; see o04b/o04c below for that removal and its one
-		// surviving line (the header/body boundary).
+		assertTrue(body.contains("--jc-table-border: #dee2e6"), body);
 		assertTrue(body.contains("border: 1px solid"), body);
 	}
 
@@ -1001,12 +1005,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 3 (no row dividers): neither the thead nor the
-	 * tbody cell rule carries a border on any side - IRS's own tbody/thead cells never paint one, on any edge,
-	 * so there is no per-row (or per-column) grid line left anywhere in the body of the table. The ONE line IRS
-	 * keeps - the header/body boundary - is a SEPARATE rule scoped to the first body row only; see o04d below.
+	 * IRS Instances tables are Bootstrap {@code table-bordered} at {@code #dee2e6}. Header and body
+	 * cells carry that 1px grid ({@code --jc-table-border}); expander {@code tr.child} cells do not.
 	 */
-	@Test void o04c_viewsCss_headerAndBodyCellsHaveNoBorder() throws Exception {
+	@Test void o04c_viewsCss_headerAndBodyCellsHaveDee2e6Grid() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		var theadSel = "table[data-juneau-view] > thead > tr > th,\n"
 			+ "table[data-juneau-view] > thead > tr > td,\n"
@@ -1015,7 +1017,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var theadAt = body.indexOf(theadSel);
 		assertTrue(theadAt >= 0, body);
 		var theadRule = body.substring(theadAt, body.indexOf("}", theadAt));
-		assertTrue(theadRule.contains("border: none"), theadRule);
+		assertTrue(theadRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"), theadRule);
+		assertFalse(theadRule.contains("border: none"), theadRule);
 
 		var tbodySel = "table[data-juneau-view] > tbody > tr > th,\n"
 			+ "table[data-juneau-view] > tbody > tr > td,\n"
@@ -1024,10 +1027,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var tbodyAt = body.indexOf(tbodySel);
 		assertTrue(tbodyAt >= 0, body);
 		var tbodyRule = body.substring(tbodyAt, body.indexOf("}", tbodyAt));
-		assertTrue(tbodyRule.contains("border: none"), tbodyRule);
-		// IRS body row height: Bootstrap reboot line-height:1.5 (style_tags.css documents the 20px line box).
+		assertTrue(tbodyRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"), tbodyRule);
+		assertFalse(tbodyRule.contains("border: none"), tbodyRule);
 		assertTrue(tbodyRule.contains("line-height: 1.5"),
 			() -> "tbody cells must pin IRS Bootstrap body line-height 1.5 (no IRS min-height on td): " + tbodyRule);
+		assertFalse(body.contains(".table-bordered"),
+			() -> "do not copy the Bootstrap bordered-table class into Juneau CSS: " + body);
 	}
 
 	/**
@@ -1072,30 +1077,29 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity follow-up (issue 3, row striping): IRS's own vendored DataTables Bootstrap-5 theme
-	 * shades every ODD {@code tbody} row (1st, 3rd, 5th, ...) with a flat {@code rgba(0, 0, 0, 0.05)} wash via
-	 * {@code box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-stripe), 0.05)} and {@code --dt-row-stripe: 0, 0,
-	 * 0} (datatables/datatables.css), so the FIRST data row is always one of the shaded ones. This toolkit
-	 * declares the same wash directly (not IRS's own {@code table-striped} class name, so a host need not have
-	 * vendored that exact theme or stamped that class at all), and excludes the DataTables-native
-	 * {@code tr.child} row so an expanded detail row landing on an odd index stays the opaque white
-	 * {@code p02}/{@code o04c}-adjacent rule declares for it, never a shaded-then-white double-paint.
+	 * Summary-view zebra: odd rows {@code #FFFFFF}, even rows {@code #FAFAF9}. Painted on the {@code <tr>}
+	 * so hover/selected tokens still show through transparent cells. The old 5%-black cell box-shadow
+	 * (which composited to ~{@code #F4F4F4}) is gone; {@code :not(.child)} keeps the expander row white.
 	 */
-	@Test void o04e_viewsCss_stripesOddRowsIncludingTheFirstButExcludesTheChildRow() throws Exception {
+	@Test void o04e_viewsCss_stripesOddRowsWhiteAndEvenRowsFafaf9ExcludingChild() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		var sel = "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > th,\n"
-			+ "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > td,\n"
-			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) > th,\n"
-			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {";
-		var at = body.indexOf(sel);
-		assertTrue(at >= 0, body);
-		var rule = body.substring(at, body.indexOf("}", at));
-		assertTrue(rule.contains("box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.05)"),
-			() -> "the odd-row stripe must match IRS's own rendered shade exactly (a flat 5%-black wash): " + rule);
-		// :nth-child is 1-indexed, so "odd" is 1st, 3rd, 5th, ... - the FIRST data row is always shaded,
-		// matching IRS's own tr:nth-of-type(2n+1) semantics.
-		assertFalse(body.contains("tr:nth-child(even)"),
-			() -> "the shaded rows must be the ODD ones (first row dark), not the even ones: " + body);
+		assertTrue(body.contains("--jc-table-row-bg: #ffffff;"), body);
+		assertTrue(body.contains("--jc-table-stripe-bg: #fafaf9;"), body);
+		var oddSel = "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),\n"
+			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) {";
+		var oddAt = body.indexOf(oddSel);
+		assertTrue(oddAt >= 0, body);
+		var oddRule = body.substring(oddAt, body.indexOf("}", oddAt));
+		assertTrue(oddRule.contains("background-color: var(--jc-table-row-bg, #ffffff)"), oddRule);
+		assertFalse(oddRule.contains("rgba(0, 0, 0, 0.05)"), oddRule);
+		var evenSel = "table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),\n"
+			+ "table.dataTable > tbody > tr:nth-child(even):not(.child) {";
+		var evenAt = body.indexOf(evenSel);
+		assertTrue(evenAt >= 0, body);
+		var evenRule = body.substring(evenAt, body.indexOf("}", evenAt));
+		assertTrue(evenRule.contains("background-color: var(--jc-table-stripe-bg, #fafaf9)"), evenRule);
+		assertFalse(body.contains("box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.05)"),
+			() -> "the 5%-black odd-row wash must not remain: " + body);
 	}
 
 	/**
@@ -1149,21 +1153,39 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * so console-ui's own MT-11 fix does not have to fork a second border colour in {@code console.css}.
 	 * Also pins {@code appearance:none} so macOS/WebKit UA text-field chrome cannot paint a darker platform
 	 * border over the authored token (the Search-vs-ribbon mismatch James reported after the #ced4da retoken).
+	 * Selectors are {@code div.dt-container div.dt-search input} (0,2,3) so they beat DataTables'
+	 * {@code div.dt-container .dt-search input { border: 1px solid #aaa }} (0,2,2).
 	 */
 	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("--jc-chrome-control-border: #ced4da;"), body);
 		assertTrue(body.contains("--jc-chrome-control-text: #4f4f4f;"), body);
-		assertTrue(body.contains(".juneau-view-toolbar-right .dataTables_filter input,\n"
-			+ ".juneau-view-toolbar-right .dt-search input {"), body);
-		var start = body.indexOf(".juneau-view-toolbar-right .dataTables_filter input,");
+		assertTrue(body.contains("div.dt-container div.dt-search input,\n"
+			+ "div.dataTables_wrapper div.dataTables_filter input {"), body);
+		var start = body.indexOf("div.dt-container div.dt-search input,");
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
 		assertTrue(region.contains("border: 1px solid var(--jc-chrome-control-border)"), region);
 		assertTrue(region.contains("color: var(--jc-chrome-control-text)"), region);
+		assertTrue(region.contains("border-radius: var(--jc-chrome-control-radius)"), region);
 		assertTrue(region.contains("appearance: none"), region);
 		assertTrue(region.contains("-webkit-appearance: none"), region);
 		assertTrue(region.contains("box-shadow: none"), region);
+		assertTrue(body.contains("--jc-chrome-control-radius: 3.2px"), body);
+		assertTrue(body.contains("color: #b4b5b6"), body);
+		assertTrue(body.contains(".dt-search input::placeholder"), body);
+		assertTrue(body.contains(".dt-search input::-webkit-input-placeholder"), body);
+		assertTrue(body.contains("div.dt-container div.dt-search input:focus,"), body);
+		assertTrue(body.contains("div.dt-container div.dt-search input:focus-visible,"), body);
+		var focusStart = body.indexOf("div.dt-container div.dt-search input:focus,");
+		var focusEnd = body.indexOf("}", focusStart);
+		var focusRegion = body.substring(focusStart, focusEnd);
+		assertTrue(focusRegion.contains("outline: none"), focusRegion);
+		assertTrue(focusRegion.contains("box-shadow: none"), focusRegion);
+		assertTrue(focusRegion.contains("border-color: var(--jc-accent)"), focusRegion);
+		assertFalse(focusRegion.contains("#1589EE"), focusRegion);
+		assertFalse(focusRegion.contains("outline-offset"), focusRegion);
+		assertFalse(focusRegion.contains("2px"), focusRegion);
 	}
 
 	/**
@@ -1182,6 +1204,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var start = body.indexOf("table[data-juneau-view] > tbody > tr.child,");
 		var end = body.indexOf("}", start);
 		assertTrue(body.substring(start, end).contains("background: #fff"), body);
+		assertTrue(body.substring(start, end).contains("border: none"),
+			() -> "expander child cells must not carry the summary-view grid: " + body.substring(start, end));
 
 		// ".juneau-view-detail-panel {" appears TWICE (the container-query host near the top of the file, and
 		// the expanded-body rule this test targets) - anchor on the body rule's own first declaration.

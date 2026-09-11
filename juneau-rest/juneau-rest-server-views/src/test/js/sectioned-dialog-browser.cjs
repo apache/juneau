@@ -212,7 +212,7 @@ const PROBE = async function () {
 		drain();
 	}
 
-	// ---- Block D: real Tab order is strip-then-body and stays inside the trapping layer ----
+	// ---- Block D: real Tab order is ribbon-then-body (header dismiss may precede the ribbon) and stays inside the trapping layer ----
 	{
 		const dom = makeRow('INC-4');
 		init.showActionDialog(sectionedForm(), action, dom.table, dom.tr, ctx);
@@ -248,7 +248,8 @@ const PROBE = async function () {
 			// otherwise a Tab wrap would try to focus something invisible and focus would go nowhere.
 			trapFirstIsRendered: candidates.length > 0 && candidates[0].getClientRects().length > 0,
 			trapLastIsRendered: candidates.length > 0 && candidates.at(-1).getClientRects().length > 0,
-			stripPrecedesBody: order.indexOf('basics') === 0 && order.indexOf('title') > order.indexOf('basics'),
+			// Header dismiss may precede the ribbon; the ribbon must still precede the form body.
+			stripPrecedesBody: order.indexOf('basics') !== -1 && order.indexOf('title') > order.indexOf('basics'),
 			focusTrappedIntoDialog: p.backdrop.contains(document.activeElement)
 		};
 		// Real Tab from the last tabbable wraps back to the first, inside the layer.

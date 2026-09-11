@@ -123,6 +123,8 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("\"Escape\""), fnBody);
 		assertTrue(fnBody.contains("ctx.dataTable.page.len("), fnBody);
 		assertTrue(fnBody.contains(".focus()"), fnBody);
+		assertTrue(fnBody.contains("stampChromeTip(btn, \"Rows per page\")"), fnBody);
+		assertFalse(fnBody.contains("btn.title"), fnBody);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

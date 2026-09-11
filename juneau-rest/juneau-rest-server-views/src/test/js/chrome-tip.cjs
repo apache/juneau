@@ -179,4 +179,22 @@ function leave(target, related) {
 	leave(btn, env.body);
 })();
 
+(function pagingMenubtnEmitStamped() {
+	const pill = env.document.createElement('div');
+	pill.className = 'juneau-view-pagingpill';
+	const btn = env.document.createElement('button');
+	btn.className = 'juneau-view-pagingpill-menubtn';
+	btn.setAttribute('data-jc-tip', 'Rows per page');
+	btn.setAttribute('aria-label', 'Rows per page');
+	pill.appendChild(btn);
+	env.body.appendChild(pill);
+
+	out.menubtn_noNativeTitleBeforeHover = btn.getAttribute('title') == null && (btn.title === '' || btn.title == null);
+	hover(btn, 40, 50);
+	out.menubtn_stillNoNativeTitle = btn.getAttribute('title') == null && (btn.title === '' || btn.title == null);
+	out.menubtn_tipText = tipNode() ? tipNode().textContent : null;
+	out.menubtn_tipVisible = !!(tipNode() && tipNode().style.display === 'block');
+	leave(btn, env.body);
+})();
+
 process.stdout.write(JSON.stringify(out));

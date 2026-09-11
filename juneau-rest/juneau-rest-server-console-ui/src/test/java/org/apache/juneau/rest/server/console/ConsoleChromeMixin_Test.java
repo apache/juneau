@@ -222,6 +222,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertEquals("var(--jc-header-bg)", m.group(1));
 	}
 
+	/** {@code --jc-page-nav-accent} defaults to {@code --jc-accent} so apps can retint the bar without buttons. */
+	@Test void c05b_pageNavAccentAlias_derivesFromAccent() {
+		var m = Pattern.compile("--jc-page-nav-accent:(var\\(--jc-[a-z0-9-]++\\));").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertTrue(m.find(), () -> "no --jc-page-nav-accent alias declaration found in OPEN_ROLE_ALIASES: " + ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		assertEquals("var(--jc-accent)", m.group(1));
+	}
+
 	/**
 	 * Confirms each stock theme beyond {@link Theme#OPEN} actually overrides {@code --jc-chrome-bg} - combined
 	 * with (c04)'s alias-wiring proof, this is what makes light-brown/red/gray's header/nav strip legitimately
@@ -556,12 +563,17 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// NOT part of the Theme token model (finding 4 of the design doc). If this count ever changes, it must be
 		// a DIFFERENT, deliberate change to Theme.OPEN - not a side effect of the asset feature.
 		//
-		// 48 = the original 32, plus the three-token red tag triad, plus the eleven additive
-		// token gaps (--jc-header-height, --jc-nav-indicator-width, --jc-card-shadow, --jc-danger-wash,
-		// --jc-success-wash, and the six-step --jc-space-1..6 scale), plus the --jc-focus focus-ring colour,
-		// plus the --jc-accent-selected ribbon-format selected-state face (WCAG 1.4.11 non-text contrast remedy).
+		// 52 = the original 32, plus the three-token red tag triad, plus the fourteen additive
+		// token gaps (--jc-header-height, --jc-nav-indicator-width, --jc-page-nav-hairline,
+		// --jc-page-nav-section-font-size, --jc-page-nav-child-font-size, --jc-card-shadow,
+		// --jc-danger-wash, --jc-success-wash, and the six-step --jc-space-1..6 scale), plus the --jc-focus
+		// focus-ring colour, plus the --jc-accent-selected ribbon-format selected-state face (WCAG 1.4.11
+		// non-text contrast remedy), plus --jc-table-stripe-bg (#fafaf9; not aliased to --jc-card-bg).
 		// Bumping this number is only ever correct alongside a reviewed edit to Theme.OPEN itself.
-		assertEquals(48, Theme.OPEN.getTokens().size());
+		assertEquals(52, Theme.OPEN.getTokens().size());
+		assertEquals("2px", Theme.OPEN.getTokens().get("--jc-page-nav-hairline"));
+		assertEquals("13px", Theme.OPEN.getTokens().get("--jc-page-nav-section-font-size"));
+		assertEquals("12px", Theme.OPEN.getTokens().get("--jc-page-nav-child-font-size"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 	}
@@ -614,31 +626,78 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "the tab theming rule must not fall back to a single-class selector, css:\n" + css);
 	}
 
-	@Test void j07_htmlSlotPageNav_selectedSectionIsWashAndUnderline_selectedChildIsAccentTextNotPill() throws Exception {
+	@Test void j07_htmlSlotPageNav_selectedSectionIsWashAndTopAccent_selectedChildIsWashNotAccentText() throws Exception {
 		var css = readChromeCss();
 		assertTrue(css.contains(".juneau-page-nav-section[aria-current=\"page\"] {"), css);
 		var sectionStart = css.indexOf(".juneau-page-nav-section[aria-current=\"page\"] {");
 		var sectionBlock = css.substring(sectionStart, css.indexOf("}", sectionStart));
 		assertTrue(sectionBlock.contains("background-color: var(--jc-accent-wash)"), sectionBlock);
-		assertTrue(sectionBlock.contains("border-bottom-color: var(--jc-accent)"), sectionBlock);
+		assertTrue(sectionBlock.contains("border-top-color: var(--jc-page-nav-accent)"), sectionBlock);
+		assertFalse(sectionBlock.contains("border-bottom-color: var(--jc-page-nav-accent)"),
+			() -> "selected section accent is the top edge, not a bottom underline, block:\n" + sectionBlock);
 		assertFalse(sectionBlock.contains("var(--jc-accent-selected)"),
 			() -> "selected section must not use the pill-fill token, block:\n" + sectionBlock);
 
 		assertTrue(css.contains(".juneau-page-nav-child[aria-current=\"page\"] {"), css);
 		var childStart = css.indexOf(".juneau-page-nav-child[aria-current=\"page\"] {");
 		var childBlock = css.substring(childStart, css.indexOf("}", childStart));
-		assertTrue(childBlock.contains("color: var(--jc-accent)"), childBlock);
-		assertTrue(childBlock.contains("background-color: transparent"), childBlock);
+		assertTrue(childBlock.contains("background-color: var(--jc-accent-wash)"), childBlock);
+		assertTrue(childBlock.contains("color: var(--jc-text)"), childBlock);
+		assertFalse(childBlock.contains("color: var(--jc-accent)"),
+			() -> "selected child is a wash, not accent type, block:\n" + childBlock);
 		assertFalse(css.contains("juneau-page-nav-section-selected"), css);
 		assertFalse(css.contains("juneau-page-nav-child-selected"), css);
-		var navMarker = "HTML-slot page nav";
+		assertFalse(css.contains("juneau-page-nav-cloud"), css);
+		var navMarker = "HTML-slot page nav (two text rows";
 		var navStart = css.indexOf(navMarker);
 		assertTrue(navStart != -1, () -> "missing HTML-slot page nav comment, css:\n" + css);
 		var navEnd = css.indexOf("Page scaffolding", navStart);
 		assertTrue(navEnd != -1, () -> "missing Page scaffolding marker after page-nav, css:\n" + css);
 		var navRules = css.substring(navStart, navEnd);
+		assertTrue(navRules.contains("\n.juneau-page-nav {"), navRules);
+		var floorStart = navRules.indexOf("\n.juneau-page-nav {");
+		var floorBlock = navRules.substring(floorStart, navRules.indexOf("}", floorStart));
+		assertTrue(floorBlock.contains("background-color: var(--jc-nav-bg)"),
+			() -> "nav rows must spend --jc-nav-bg, block:\n" + floorBlock);
+		assertTrue(floorBlock.contains("border-bottom-color: var(--jc-page-nav-accent)"),
+			() -> "the pair's floor must be --jc-page-nav-accent, block:\n" + floorBlock);
+		assertFalse(floorBlock.contains("#1589EE"),
+			() -> "floor colour is a theme token, not a hex literal, block:\n" + floorBlock);
+		assertTrue(navRules.contains(".juneau-page-nav-sections {"), navRules);
+		var hairlineStart = navRules.indexOf(".juneau-page-nav-sections {");
+		var hairlineBlock = navRules.substring(hairlineStart, navRules.indexOf("}", hairlineStart));
+		assertTrue(hairlineBlock.contains("border-bottom-width: var(--jc-page-nav-hairline)"),
+			() -> "hairline between tabs and children must be --jc-page-nav-hairline, block:\n" + hairlineBlock);
+		assertTrue(hairlineBlock.contains("border-bottom-color: var(--jc-page-nav-accent)"),
+			() -> "hairline between tabs and children must be --jc-page-nav-accent, block:\n" + hairlineBlock);
+		var sectionTypeStart = navRules.indexOf("\n.juneau-page-nav-section {");
+		assertTrue(sectionTypeStart >= 0, navRules);
+		var sectionTypeBlock = navRules.substring(sectionTypeStart, navRules.indexOf("}", sectionTypeStart));
+		assertTrue(sectionTypeBlock.contains("font-size: var(--jc-page-nav-section-font-size)"),
+			() -> "sections spend --jc-page-nav-section-font-size, block:\n" + sectionTypeBlock);
+		assertFalse(sectionTypeBlock.contains("--jc-chrome-font-size-2"),
+			() -> "sections must not share --jc-chrome-font-size-2, block:\n" + sectionTypeBlock);
+		var childTypeStart = navRules.indexOf("\n.juneau-page-nav-child {");
+		assertTrue(childTypeStart >= 0, navRules);
+		var childTypeBlock = navRules.substring(childTypeStart, navRules.indexOf("}", childTypeStart));
+		assertTrue(childTypeBlock.contains("font-size: var(--jc-page-nav-child-font-size)"),
+			() -> "children spend --jc-page-nav-child-font-size, block:\n" + childTypeBlock);
+		assertFalse(childTypeBlock.contains("--jc-chrome-font-size-2"),
+			() -> "children must not share --jc-chrome-font-size-2, block:\n" + childTypeBlock);
 		assertFalse(navRules.contains("slds-"), () -> "chrome page-nav rules must not introduce slds-* classes:\n" + navRules);
 		assertFalse(navRules.toLowerCase().contains("salesforce sans"), navRules);
+	}
+
+	@Test void j08_jcCard_keepsShadowAndRadius_dropsGreyStroke() throws Exception {
+		var css = readChromeCss();
+		var start = css.indexOf(".jc-card {");
+		assertTrue(start >= 0, () -> "missing .jc-card rule, css:\n" + css);
+		var block = css.substring(start, css.indexOf("}", start));
+		assertTrue(block.contains("border: none"), () -> "default card must not paint a grey outline, block:\n" + block);
+		assertFalse(block.contains("var(--jc-border)"),
+			() -> "default card must not spend --jc-border as an outer stroke, block:\n" + block);
+		assertTrue(block.contains("border-radius: var(--jc-radius)"), block);
+		assertTrue(block.contains("box-shadow: var(--jc-card-shadow)"), block);
 	}
 
 	/** WCAG 2.x contrast ratio between two {@code "#rrggbb"} literals: {@code (lighter+0.05)/(darker+0.05)}. */
@@ -703,6 +762,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(css.contains("table.dataTable {"), () -> "missing table.dataTable base rule, css:\n" + css);
 		assertTrue(css.contains("font-family: var(--jc-font);"), () -> "missing themed font-family, css:\n" + css);
 		assertTrue(css.contains("table.dataTable > thead > tr > th"), () -> "missing themed header rule, css:\n" + css);
+		assertTrue(css.contains("border-color: var(--jc-table-border, #dee2e6);"),
+			() -> "cell grid must spend IRS #dee2e6, not --jc-border: " + css);
 		assertTrue(css.contains("border-color: var(--jc-border);"), () -> "missing themed table/cell border-color, css:\n" + css);
 		assertTrue(css.contains("border-top-color: var(--jc-border-2);"), () -> "missing themed table top border, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-detail-control"), () -> "missing expander column theme, css:\n" + css);
@@ -736,6 +797,28 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "idle paging menuwrap edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "menuwrap hover must recolor top/bottom only, css:\n" + css);
+	}
+
+	/**
+	 * Toolbar Search focus paints the field's 1px border, not a second outset ring. The generic
+	 * {@code :focus-visible} rule is 2px / offset 2px; these selectors (0,3,3) kill outline/box-shadow
+	 * with literals and sink {@code --jc-accent} only into {@code border-color}.
+	 */
+	@Test void k08_chromeCss_toolbarSearchFocusRecolorsBorderNotOutline() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains("div.dt-container div.dt-search input:focus,"),
+			() -> "missing search :focus selector, css:\n" + css);
+		assertTrue(css.contains("div.dt-container div.dt-search input:focus-visible,"),
+			() -> "missing search :focus-visible selector, css:\n" + css);
+		var start = css.indexOf("div.dt-container div.dt-search input:focus,");
+		var end = css.indexOf("}", start);
+		var region = css.substring(start, end);
+		assertTrue(region.contains("outline: none"), () -> "search focus must drop the outer ring, region:\n" + region);
+		assertTrue(region.contains("box-shadow: none"), () -> "search focus must drop the outer shadow, region:\n" + region);
+		assertTrue(region.contains("border-color: var(--jc-accent)"),
+			() -> "search focus must recolor the field border, region:\n" + region);
+		assertFalse(region.contains("outline: 2px"), () -> "must not restyle as a 2px ring, region:\n" + region);
+		assertFalse(region.contains("outline-offset"), () -> "must not add outline-offset, region:\n" + region);
 	}
 
 	@Test void k07_chromeCss_dialogHeaderToggleAndFooterUseThemeTokens() throws Exception {

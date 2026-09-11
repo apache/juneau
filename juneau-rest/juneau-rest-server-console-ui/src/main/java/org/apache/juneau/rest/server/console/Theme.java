@@ -131,7 +131,10 @@ public final class Theme {
 		// triads stay contiguous (see Theme_TokenOrdering_Test.a02).  All are behaviour-preserving: each default
 		// equals the literal it replaces in chrome.css, so the shipped chrome renders pixel-identically.
 		.token("--jc-header-height", "56px")               // (a) keeps .jc-header height and .jc-nav sticky offset in sync
-		.token("--jc-nav-indicator-width", "3px")          // (g) nav underline / active-tab indicator thickness
+		.token("--jc-nav-indicator-width", "3px")          // (g) .jc-nav floor, .jc-nav-tab top bar, HTML-slot page-nav floor + selected-section top
+		.token("--jc-page-nav-hairline", "2px")            // line between page-nav sections row and children row
+		.token("--jc-page-nav-section-font-size", "13px")  // Page Tabs (top row) type; independent of children
+		.token("--jc-page-nav-child-font-size", "12px")    // page-nav children (second row) type; independent of sections
 		.token("--jc-card-shadow", "none")                 // (c) card elevation seam; flat by default (relies on the "none" keyword)
 		.token("--jc-danger-wash", "#fdeceb")              // (d) themeable .jc-btn-danger:hover fill (was a hardcoded hex)
 		.token("--jc-success-wash", "#eaf6ee")             // (d) themeable .jc-btn-success:hover fill (was a hardcoded hex)
@@ -152,6 +155,7 @@ public final class Theme {
 		// the mechanism, wash to opaque) - but tracked separately: a consumer overriding --jc-accent will NOT move
 		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
 		.token("--jc-accent-selected", "#1589EE")
+		.token("--jc-table-stripe-bg", "#fafaf9")
 		.build();
 
 	/**
@@ -162,7 +166,7 @@ public final class Theme {
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
 	 * deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding
-	 * only the 16 browned tokens below; the other 32 &mdash; including all five tag triads and every structural
+	 * only the 16 browned tokens below; the other 36 &mdash; including all five tag triads and every structural
 	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *
@@ -201,7 +205,7 @@ public final class Theme {
 	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
 	 * green, danger red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
 	 * {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 16 recolored tokens below;
-	 * the other 32 &mdash; including all five tag triads and every structural token &mdash; are inherited from
+	 * the other 35 &mdash; including all five tag triads and every structural token &mdash; are inherited from
 	 * {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably identical to {@link #OPEN}'s.
 	 *
 	 * <p>
@@ -243,9 +247,9 @@ public final class Theme {
 	 * amber, neutral gray) <b>and</b> {@link #OPEN}'s blue interactive affordances (accent, link, primary button,
 	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
 	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
-	 * "8 grayed / 40 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
+	 * "8 grayed / 44 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
 	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 8 grayed tokens below;
-	 * the other 40 &mdash; including all five tag triads, every structural token, and the blue affordance set
+	 * the other 44 &mdash; including all five tag triads, every structural token, and the blue affordance set
 	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *

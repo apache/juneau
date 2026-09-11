@@ -151,6 +151,12 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 		assertFalse(body.contains("CHOOSER_BACKDROP_CLASS = \"juneau-view-dialog-backdrop\""), body);
 	}
 
+	@Test void a11_mountChooser_stampsChromeTipNotNativeTitle() throws Exception {
+		var fn = functionBody(configJs(), "function mountChooser(");
+		assertTrue(fn.contains("stampChromeTip(btn, \"Columns\")"), fn);
+		assertFalse(fn.contains("btn.title = \"Columns\""), fn);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// b) Behavioral — Node harness (skipped when node is absent)
 	//------------------------------------------------------------------------------------------------------------------

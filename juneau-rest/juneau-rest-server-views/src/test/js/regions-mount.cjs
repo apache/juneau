@@ -204,11 +204,8 @@ function slot(env, id) {
 		settings.setAttribute('aria-current', 'page');
 		children.appendChild(dash);
 		children.appendChild(settings);
-		const cloud = env.el('div');
-		cloud.className = 'juneau-page-nav-cloud';
 		nav.appendChild(sections);
 		nav.appendChild(children);
-		nav.appendChild(cloud);
 		env.body.appendChild(nav);
 		if (typeof NS.init !== 'undefined' && typeof NS.init.initAll === 'function')
 			NS.init.initAll();

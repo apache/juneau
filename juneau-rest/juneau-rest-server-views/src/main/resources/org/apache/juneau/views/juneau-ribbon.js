@@ -414,9 +414,22 @@
 		return bar;
 	}
 
+	function stampChromeTip(el, text) {
+		const t = text == null ? "" : String(text);
+		if (t !== "") {
+			el.setAttribute("data-jc-tip", t);
+			el.setAttribute("aria-label", t);
+		} else if (typeof el.removeAttribute === "function") {
+			el.removeAttribute("data-jc-tip");
+		}
+		if (typeof el.removeAttribute === "function") el.removeAttribute("title");
+		el.title = "";
+	}
+
 	/**
 	 * Builds one icon-only 32px ribbon/pill button (visual-parity design doc §4.A/§2.2).  No visible text label -
-	 * `label` becomes the button's native `title` (tooltip) and `aria-label` (screen-reader text) only.  Resolves
+	 * `label` becomes data-jc-tip (custom cursor tooltip) and aria-label only — never a native `title`
+	 * (browsers cannot style that bubble).  Resolves
 	 * `iconName` via the icon registry (`NS.icons.resolveIcon`); the markup assigned to `innerHTML` is ALWAYS a
 	 * static, first-party, build-time-authored SVG string from that registry - never request-/app-supplied - so
 	 * this is not an HTML-injection sink (design doc §7).  An unregistered icon name falls back to rendering the
@@ -427,13 +440,12 @@
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
-		b.title = label;
-		b.setAttribute("aria-label", label);
+		stampChromeTip(b, label);
 		const markup = NS.icons?.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
 		if (markup != null) {
 			b.innerHTML = markup;
 		} else {
-			b.textContent = b.title;
+			b.textContent = label;
 		}
 		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");
 		b.addEventListener("click", onClick);

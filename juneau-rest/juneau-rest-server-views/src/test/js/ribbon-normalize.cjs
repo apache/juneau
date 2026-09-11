@@ -79,6 +79,10 @@ if (!out.hasBuild) { process.stdout.write(JSON.stringify(out)); process.exit(0);
 /** A minimal RibbonAction-shaped action literal, mirroring the RibbonAction wire shape. */
 function action(type, extra) { return Object.assign({ type: type }, extra || {}); }
 
+function chromeTip(b) {
+	return b ? (b.getAttribute('data-jc-tip') || b.title || '') : '';
+}
+
 // ------------------------------------------------------------------------------------------------------------------
 // Pure function: normalizeRibbon(actions) - DOM-free, run only when the export exists (pre-fix it does not).
 // ------------------------------------------------------------------------------------------------------------------
@@ -184,7 +188,7 @@ function buildBar(NS, ribbon) {
 	out.dom_oneRefresh_firstGroupButtonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
 	out.dom_oneRefresh_lastGroupButtonCount = groups.length > 0 ? groups[groups.length - 1].childNodes.length : -1;
 	const lastGroupBtn = groups.length > 0 ? groups[groups.length - 1].childNodes[0] : null;
-	out.dom_oneRefresh_lastGroupIsRefreshGlyph = lastGroupBtn != null && lastGroupBtn.title === 'Refresh';
+	out.dom_oneRefresh_lastGroupIsRefreshGlyph = lastGroupBtn != null && chromeTip(lastGroupBtn) === 'Refresh';
 	out.dom_oneRefresh_lastGroupIsLastChildOfBar = groups.length > 0 && bar.lastElementChild === groups[groups.length - 1];
 }
 
@@ -198,7 +202,7 @@ function buildBar(NS, ribbon) {
 	out.dom_twoRefresh_groupCount = groups.length;
 	const lastGroup = groups.length > 0 ? groups[groups.length - 1] : null;
 	out.dom_twoRefresh_lastGroupButtonCount = lastGroup ? lastGroup.childNodes.length : -1;
-	out.dom_twoRefresh_lastGroupTitles = lastGroup ? lastGroup.childNodes.map(function (b) { return b.title; }).join(',') : null;
+	out.dom_twoRefresh_lastGroupTitles = lastGroup ? lastGroup.childNodes.map(function (b) { return chromeTip(b); }).join(',') : null;
 }
 
 // Case 4 - refresh carries an explicit group shared with a neighbour: opts out completely, stays put (here,
@@ -213,7 +217,7 @@ function buildBar(NS, ribbon) {
 	out.dom_explicitGroup_groupCount = groups.length;
 	const firstGroup = groups.length > 0 ? groups[0] : null;
 	out.dom_explicitGroup_firstGroupButtonCount = firstGroup ? firstGroup.childNodes.length : -1;
-	out.dom_explicitGroup_firstGroupTitles = firstGroup ? firstGroup.childNodes.map(function (b) { return b.title; }).join(',') : null;
+	out.dom_explicitGroup_firstGroupTitles = firstGroup ? firstGroup.childNodes.map(function (b) { return chromeTip(b); }).join(',') : null;
 	out.dom_explicitGroup_isNotLastChildOfBar = groups.length > 0 && bar.lastElementChild !== groups[0];
 }
 
@@ -238,7 +242,7 @@ function buildBar(NS, ribbon) {
 	out.dom_print_groupCount = groups.length;
 	out.dom_print_buttonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
 	out.dom_print_buttonTitles = groups.length > 0
-		? groups[0].childNodes.map(function (b) { return b.title; }).join(',')
+		? groups[0].childNodes.map(function (b) { return chromeTip(b); }).join(',')
 		: null;
 }
 
@@ -253,7 +257,7 @@ function buildBar(NS, ribbon) {
 	const groups = groupsOf(bar);
 	out.dom_collapseAll_groupCount = groups.length;
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
-	out.dom_collapseAll_title = btn ? btn.title : null;
+	out.dom_collapseAll_title = btn ? chromeTip(btn) : null;
 	if (btn) btn.dispatch('click');
 	out.dom_collapseAll_clickInvokedHook = collapseAllCalled;
 }
@@ -274,7 +278,7 @@ function buildBar(NS, ribbon) {
 	out.dom_dialog_groupCount = groups.length;
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
 	out.dom_dialog_buttonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
-	out.dom_dialog_title = btn ? btn.title : null;
+	out.dom_dialog_title = btn ? chromeTip(btn) : null;
 	out.dom_dialog_ariaLabel = btn ? btn.getAttribute('aria-label') : null;
 	if (btn) btn.dispatch('click');
 	out.dom_dialog_clickHandedOffActionId = calls.length === 1 ? calls[0].id : null;
@@ -300,7 +304,7 @@ function buildBar(NS, ribbon) {
 	const bar = buildBar(NS, [action('dialog', { id: 'add-project' })]);
 	const groups = groupsOf(bar);
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
-	out.dom_dialog_untitled_nameFallsBackToId = btn != null && btn.title === 'add-project';
+	out.dom_dialog_untitled_nameFallsBackToId = btn != null && chromeTip(btn) === 'add-project';
 }
 
 process.stdout.write(JSON.stringify(out));

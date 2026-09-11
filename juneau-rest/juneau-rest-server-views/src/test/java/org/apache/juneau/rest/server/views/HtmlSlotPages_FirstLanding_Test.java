@@ -78,7 +78,8 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		var css = resource(ViewsMixin.VIEWS_CSS_RESOURCE);
 		assertTrue(css.contains(".juneau-page-nav-sections"), css);
 		assertTrue(css.contains(".juneau-page-nav-children"), css);
-		assertTrue(css.contains(".juneau-page-nav-cloud"), css);
+		assertFalse(css.contains(".juneau-page-nav-cloud"), css);
+		assertFalse(css.contains("url("), () -> "page-nav cloud SVG was the last url() in views CSS:\n" + css);
 		assertTrue(css.contains(".juneau-page-nav-section[aria-current=\"page\"]"), css);
 		assertTrue(css.contains(".juneau-page-nav-child[aria-current=\"page\"]"), css);
 		assertFalse(css.contains("juneau-page-nav-section-selected"), css);
@@ -88,6 +89,35 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		var childBlock = css.substring(childStart, css.indexOf("}", childStart));
 		assertTrue(childBlock.contains("border-radius: 0"),
 			() -> "child links must be square text, not pills, block:\n" + childBlock);
+		assertFalse(childBlock.contains("font-size"),
+			() -> "shared section/child shape must not share a font-size, block:\n" + childBlock);
+		var childFontStart = css.indexOf(".juneau-page-nav-child {", childStart + 1);
+		assertTrue(childFontStart >= 0, css);
+		var childFontBlock = css.substring(childFontStart, css.indexOf("}", childFontStart));
+		assertTrue(childFontBlock.contains("font-size: var(--jc-page-nav-child-font-size, 12px)"),
+			() -> "children spend --jc-page-nav-child-font-size, block:\n" + childFontBlock);
+		assertTrue(css.contains(".juneau-page-nav-sections {"), css);
+		var hairlineRule = css.indexOf(".juneau-page-nav-sections {");
+		assertTrue(hairlineRule >= 0, css);
+		var hairlineShape = css.substring(hairlineRule, css.indexOf("}", hairlineRule));
+		assertTrue(hairlineShape.contains("border-bottom: var(--jc-page-nav-hairline, 2px) solid"),
+			() -> "sections row must carry a 2px hairline under it:\n" + hairlineShape);
+		var navRule = css.indexOf(".juneau-page-nav {");
+		assertTrue(navRule >= 0, css);
+		var navBlock = css.substring(navRule, css.indexOf("}", navRule));
+		assertTrue(navBlock.contains("border-bottom: var(--jc-nav-indicator-width, 3px) solid"),
+			() -> "the pair's floor spends --jc-nav-indicator-width, block:\n" + navBlock);
+		assertFalse(navBlock.contains("#ffffff"),
+			() -> "nav background is a chrome hue, not a views hex, block:\n" + navBlock);
+		var sectionRule = css.indexOf(".juneau-page-nav-section {");
+		assertTrue(sectionRule >= 0, css);
+		var sectionBlock = css.substring(sectionRule, css.indexOf("}", sectionRule));
+		assertTrue(sectionBlock.contains("border-top: var(--jc-nav-indicator-width, 3px) solid transparent"),
+			() -> "selected-section accent sits on the top edge, block:\n" + sectionBlock);
+		assertTrue(sectionBlock.contains("font-size: var(--jc-page-nav-section-font-size, 13px)"),
+			() -> "sections spend --jc-page-nav-section-font-size, block:\n" + sectionBlock);
+		assertFalse(sectionBlock.contains("border-bottom"),
+			() -> "section tabs must not use a bottom underline, block:\n" + sectionBlock);
 		assertFalse(css.contains("slds-"), css);
 		assertFalse(css.toLowerCase().contains("salesforce sans"), css);
 		assertFalse(css.contains("#1589EE"), css);

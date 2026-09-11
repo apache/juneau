@@ -33,10 +33,10 @@ import org.junit.jupiter.api.*;
  * Always-on coverage for the instant cursor tooltip on ribbon/paging icon chrome.
  *
  * <p>
- * Paging, ribbon, and helper {@code buttonRow} buttons already set native {@code title} plus
- * {@code aria-label}.  The helper promotes {@code title} to {@code data-jc-tip} on first hover inside
- * those hosts, paints one floating {@code .jc-tip} bubble immediately, and leaves {@code aria-label}
- * alone.  Titles on form fields and on nodes outside ribbon/paging/toolbar/helper-btn chrome stay native.
+ * Paging, ribbon, and helper {@code buttonRow} buttons stamp {@code data-jc-tip} plus
+ * {@code aria-label} at emit and never a native {@code title} (browsers cannot style that bubble).
+ * Leftover {@code title} attributes on chrome hosts are still promoted to {@code data-jc-tip} on
+ * first hover.  The helper paints one floating {@code .jc-tip} bubble immediately.
  */
 class ViewsJs_CursorTip_Test extends TestBase {
 
@@ -69,7 +69,9 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		var body = viewsJs();
 		assertTrue(body.contains("function initCursorTooltip("), body);
 		assertTrue(body.contains("initCursorTooltip: initCursorTooltip"), body);
-		assertTrue(body.contains("data-jc-tip"), body);
+		assertTrue(body.contains("function stampChromeTip("), body);
+		assertTrue(body.contains("stampChromeTip(btn, \"Rows per page\")"), body);
+		assertTrue(body.contains("stampChromeTip(b, label)"), body);
 		assertTrue(body.contains("jc-cursor-tip"), body);
 		assertTrue(body.contains("\"juneau-view-helper-btn\": true"), body);
 		assertTrue(body.contains("\"juneau-view-helper-btn-row\": true"), body);
@@ -89,7 +91,11 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		var css = viewsCss();
 		assertTrue(css.contains(".jc-tip {"), css);
 		assertTrue(css.contains("--jc-tip-z:"), css);
-		assertTrue(css.contains("var(--jc-popover-bg)"), css);
+		assertTrue(css.contains("--jc-tip-bg: #ffffff"), css);
+		assertTrue(css.contains("--jc-tip-text: #222222"), css);
+		assertTrue(css.contains("--jc-tip-border: #cccccc"), css);
+		assertTrue(css.contains("padding: 6px 9px"), css);
+		assertTrue(css.contains("font-size: 0.78em"), css);
 		assertFalse(css.contains("slds-"), css);
 		assertFalse(css.contains("sbx-cursor-tip"), css);
 		assertFalse(css.contains("data-sbx-tip"), css);
@@ -256,5 +262,12 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		assertTrueKey("helper_ariaKept");
 		assertEquals("Acknowledge", report().get("helper_tipText"));
 		assertTrueKey("helper_tipVisible");
+	}
+
+	@Test void b10_pagingMenubtn_emitStamped_noNativeTitle() {
+		assertTrueKey("menubtn_noNativeTitleBeforeHover");
+		assertTrueKey("menubtn_stillNoNativeTitle");
+		assertEquals("Rows per page", report().get("menubtn_tipText"));
+		assertTrueKey("menubtn_tipVisible");
 	}
 }

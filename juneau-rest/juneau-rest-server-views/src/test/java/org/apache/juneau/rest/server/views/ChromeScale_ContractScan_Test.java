@@ -59,7 +59,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 		var css = viewsCss();
 		assertTrue(css.contains("--jc-space-5: 24px;"), "the spacing ladder is declared whole, unused steps included");
 		assertTrue(css.contains("--jc-space-6: 32px;"), "the spacing ladder is declared whole, unused steps included");
-		assertEquals(16, ChromeScaleScanner.scale().size());
+		assertEquals(17, ChromeScaleScanner.scale().size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

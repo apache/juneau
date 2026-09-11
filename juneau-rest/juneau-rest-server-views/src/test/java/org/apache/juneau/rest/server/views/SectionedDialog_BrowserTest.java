@@ -214,9 +214,10 @@ class SectionedDialog_BrowserTest extends TestBase {
 			() -> "a roving tabindex means exactly ONE ribbon tab is in the Tab sequence: " + report);
 		assertEquals(Boolean.TRUE, f.get("stripPrecedesBody"),
 			() -> "the ribbon must come before the form body in the Tab order: " + report);
-		// The ribbon tab, then the visible section's pane (role=tabpanel is itself tabbable), then that section's
-		// controls, then the dialog's own buttons.  The hidden section contributes nothing.
-		assertEquals("basics,pane:basics,title,sev,juneau-view-dialog-cancel,juneau-view-dialog-confirm",
+		// Header dismiss may precede the ribbon. Then the ribbon tab, then the visible section's pane
+		// (role=tabpanel is itself tabbable), then that section's controls, then the dialog's own buttons.
+		// The hidden section contributes nothing.
+		assertEquals("juneau-view-dialog-dismiss,basics,pane:basics,title,sev,juneau-view-dialog-cancel,juneau-view-dialog-confirm",
 			f.get("tabbableOrder"), () -> "unexpected real Tab order: " + report);
 		assertEquals(0L, num(f, "hiddenSectionControlsReachable"),
 			() -> "a hidden section's controls must not be reachable by Tab: " + report);

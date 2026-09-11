@@ -907,14 +907,13 @@
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = className;
-		b.title = label;
-		b.setAttribute("aria-label", label);
+		stampChromeTip(b, label);
 		const icons = window.JuneauViews?.icons;
 		const markup = icons?.resolveIcon ? icons.resolveIcon(iconName) : null;
 		if (markup != null) {
 			b.innerHTML = markup;
 		} else {
-			b.textContent = b.title;
+			b.textContent = label;
 		}
 		b.addEventListener("click", onClick);
 		return b;
@@ -946,7 +945,7 @@
 		const btn = document.createElement("button");
 		btn.type = "button";
 		btn.className = "juneau-view-pagingpill-menubtn";
-		btn.title = "Rows per page";
+		stampChromeTip(btn, "Rows per page");
 		btn.setAttribute("aria-haspopup", "listbox");
 		btn.setAttribute("aria-expanded", "false");
 
@@ -6680,12 +6679,11 @@
 	// Instant cursor tooltip (icon-only ribbon / paging / helper-button chrome)
 	//
 	// Native `title` waits about a second and lives in the browser's own bubble.  Icon-only paging
-	// chevrons, ribbon glyphs, and helpers.button / buttonRow icon clusters need the label
-	// immediately, next to the pointer.  This helper:
+	// chevrons, ribbon glyphs, and the paging "Rows per page" menu stamp `data-jc-tip` at emit
+	// (never `title`) so the compact `.jc-tip` is the only hover box.  This helper:
 	//   - installs one set of document listeners (survives table redraws that replace buttons)
-	//   - on first hover inside ribbon/paging/toolbar/helper-btn hosts, moves `title` onto
-	//     `data-jc-tip` so existing buttons keep setting `title` + `aria-label` and pick this up
-	//     with no per-call-site rewrite; `aria-label` is left alone
+	//   - also promotes leftover `title` onto `data-jc-tip` on first hover inside ribbon/paging/
+	//     toolbar/helper-btn hosts (pin-lag / third-party buttons); `aria-label` is left alone
 	//   - paints one floating `.jc-tip` node with the label as plain text (never HTML)
 	//   - does not promote titles on form fields, or on nodes outside those hosts (so a
 	//     delayed native title on a random page control stays native)
@@ -6715,12 +6713,30 @@
 	}
 
 	function hasChromeTipClass(el) {
-		const cn = el && el.className;
-		if (!cn || typeof cn !== "string") return false;
+		if (!el) return false;
+		const attr = typeof el.getAttribute === "function" ? el.getAttribute("class") : null;
+		const cn = attr != null && attr !== "" ? attr
+			: (typeof el.className === "string" ? el.className : "");
+		if (!cn) return false;
 		const parts = cn.split(/\s+/);
 		for (let i = 0; i < parts.length; i++)
 			if (JC_TIP_CHROME[parts[i]]) return true;
 		return false;
+	}
+
+	/**
+	 * Accessible name + custom cursor tip, never a native `title` (browsers cannot style that
+	 * bubble; it is taller than IRS's compact tooltip).
+	 */
+	function stampChromeTip(el, text) {
+		const t = text == null ? "" : String(text);
+		if (t !== "") {
+			el.setAttribute("data-jc-tip", t);
+			el.setAttribute("aria-label", t);
+		} else {
+			el.removeAttribute("data-jc-tip");
+		}
+		clearNativeTitle(el);
 	}
 
 	function inChromeHost(el) {

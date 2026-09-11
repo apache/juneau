@@ -87,4 +87,15 @@ class CardGridCss_Test extends TestBase {
 			assertTrue(css.contains("." + cls), () -> "emitted class has no CSS rule (drift): " + cls);
 		}
 	}
+
+	@Test void a06_viewCardHasNoOuterGreyStroke() throws Exception {
+		var c = css();
+		var start = c.indexOf(".juneau-view-card {");
+		assertTrue(start >= 0, c);
+		var block = c.substring(start, c.indexOf("}", start));
+		assertTrue(block.contains("border: none"),
+			() -> "default view card must not paint a full grey outline, block:\n" + block);
+		assertTrue(block.contains("border-radius: var(--jc-card-radius"), block);
+		assertTrue(block.contains("box-shadow: var(--jc-card-shadow"), block);
+	}
 }

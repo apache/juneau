@@ -52,8 +52,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 
 	/**
 	 * Dedicated expander-column + dual-chevron glyph rules: from the column selector through the
-	 * open-state swap.  Glyphs stay CSS-only ({@code url(} is forbidden here); other stylesheet
-	 * {@code url(} uses (e.g. the page-nav cloud bar) are out of scope.
+	 * open-state swap.  Glyphs stay CSS-only ({@code url(} is forbidden here).
 	 */
 	private static String expanderColumnCss(String body) {
 		var start = body.indexOf(".juneau-view-detail-th,");

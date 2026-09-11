@@ -90,7 +90,7 @@ final class ChromeScaleScanner {
 	private ChromeScaleScanner() {}
 
 	/** The family a step belongs to, which decides the properties it can legitimately be spent on. */
-	enum Family { SPACE, CONTROL_HEIGHT, CONTROL_PADDING_X, FONT_SIZE, LINE_HEIGHT, GLYPH }
+	enum Family { SPACE, CONTROL_HEIGHT, CONTROL_PADDING_X, CONTROL_RADIUS, FONT_SIZE, LINE_HEIGHT, GLYPH }
 
 	/**
 	 * One named step.
@@ -129,6 +129,7 @@ final class ChromeScaleScanner {
 		new Step("--jc-chrome-control-height-compact", "28px", true, Family.CONTROL_HEIGHT),
 		new Step("--jc-chrome-control-padding-x", "10px", true, Family.CONTROL_PADDING_X),
 		new Step("--jc-chrome-control-padding-x-wide", "14px", true, Family.CONTROL_PADDING_X),
+		new Step("--jc-chrome-control-radius", "3.2px", true, Family.CONTROL_RADIUS),
 		new Step("--jc-chrome-font-size-1", "0.75rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-font-size-2", "0.8125rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-font-size-3", "0.875rem", true, Family.FONT_SIZE),
@@ -186,7 +187,8 @@ final class ChromeScaleScanner {
 		"line-height", Set.of(Family.LINE_HEIGHT),
 		"width", Set.of(Family.GLYPH),
 		"padding-left", Set.of(Family.CONTROL_PADDING_X),
-		"padding-right", Set.of(Family.CONTROL_PADDING_X)
+		"padding-right", Set.of(Family.CONTROL_PADDING_X),
+		"border-radius", Set.of(Family.CONTROL_RADIUS)
 	);
 
 	/** {@code width} is only a scale property on an SVG glyph; elsewhere it is a content measure. */

@@ -194,20 +194,21 @@ public class ConsoleChromeMixin {
 	 * {@code --jc-white} regardless of the active theme's chrome color. An earlier revision derived
 	 * {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
 	 * and nav strip white under every themed chrome &mdash; a latent bug a themed-header/nav test now guards
-	 * against. {@code --jc-table-header-bg} is the opposite: it keys off {@code --jc-white} so DataTable /
-	 * views-table column headers stay white (IRS {@code table.dataTable thead th} has no background), not the
-	 * page-chrome grey.
+	 * against. {@code --jc-page-nav-accent} defaults to {@code --jc-accent} so a consumer can retint the
+	 * page-nav floor / selected-section bar without recoloring buttons. {@code --jc-table-header-bg} is the
+	 * opposite of header-bg: it keys off {@code --jc-white} so DataTable / views-table column headers stay
+	 * white (IRS {@code table.dataTable thead th} has no background), not the page-chrome grey.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",
 		"--jc-header-bg:var(--jc-chrome-bg);",
 		"--jc-nav-bg:var(--jc-header-bg);",
+		"--jc-page-nav-accent:var(--jc-accent);",
 		"--jc-control-bg:var(--jc-surface);",
 		"--jc-table-bg:var(--jc-surface);",
 		"--jc-table-row-bg:var(--jc-surface);",
 		"--jc-on-accent:var(--jc-white);",
 		"--jc-on-btn-primary:var(--jc-on-accent);",
-		"--jc-table-stripe-bg:var(--jc-card-bg);",
 		"--jc-hover-bg:var(--jc-chrome-bg);",
 		// DataTable / views-table headers are white (IRS `table.dataTable thead th` carries no background;
 		// the white card shows through). Do not key this off --jc-chrome-bg — that page-chrome grey tints
