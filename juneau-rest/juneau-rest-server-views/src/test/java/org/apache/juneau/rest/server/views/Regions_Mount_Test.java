@@ -51,6 +51,8 @@ class Regions_Mount_Test extends TestBase {
 		assertFalse(body.contains("NS.pages.mount"), "mount must not publish under NS.pages");
 		assertTrue(body.contains("no populator is registered under the name"), body);
 		assertTrue(body.contains("no element with id"), body);
+		assertTrue(body.contains("the string 'juneau-table' is not a populator"), body);
+		assertTrue(body.contains("{ table: url }"), body);
 	}
 
 	@Test void a02_sourceShape_mountDoesNotFallThroughToDefaultPopulate() throws Exception {
@@ -67,7 +69,8 @@ class Regions_Mount_Test extends TestBase {
 	@Test void b01_mountStampsAttrsAndPopulatesBodies() {
 		var r = report();
 		assertAllTrue(r, "t1_mountIsOnRegions", "t1_notOnPages", "t1_probesKeyIsSlotId", "t1_detailsKeyIsSlotId",
-			"t1_containerEmptyAtPopulate", "t1_probesPainted", "t1_detailsPainted", "t1_noErrors");
+			"t1_containerEmptyAtPopulate", "t1_probesPainted", "t1_detailsPainted", "t1_noErrors",
+			"t1_thenable", "t1_regionEnrolmentWasSync");
 		assertEquals(2, ((Number)r.get("t1_handleCount")).intValue(), r::toString);
 		assertEquals("probes", r.get("t1_probesAttr"));
 		assertEquals("ssc-probes", r.get("t1_probesPopulate"));
@@ -100,5 +103,11 @@ class Regions_Mount_Test extends TestBase {
 	@Test void b06_pageNavIsAuthorMarkedAriaCurrentWithoutPills() {
 		var r = report();
 		assertAllTrue(r, "t6_pageNavNotExported", "t6_authorAriaPreserved", "t6_noSelectedClass", "t6_noPillClass");
+	}
+
+	@Test void b07_juneauTableStringThrowsNewMessageAndEnrolsNothing() {
+		var r = report();
+		assertAllTrue(r, "t7_threw", "t7_pointsAtTableUrl", "t7_notUnregisteredName", "t7_consoleError",
+			"t7_notStamped", "t7_defaultDidNotRun");
 	}
 }

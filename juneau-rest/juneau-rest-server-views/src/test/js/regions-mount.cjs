@@ -60,7 +60,11 @@ function slot(env, id) {
 		});
 		const probes = slot(env, 'probes');
 		const details = slot(env, 'details');
-		const handles = R.mount({ probes: 'ssc-probes', details: 'ssc-probe-details' });
+		const mounted = R.mount({ probes: 'ssc-probes', details: 'ssc-probe-details' });
+		out.t1_thenable = !!(mounted && typeof mounted.then === 'function');
+		out.t1_regionEnrolmentWasSync = probes.getAttribute('data-juneau-region') === 'probes'
+			&& details.getAttribute('data-juneau-region') === 'details';
+		const handles = await Promise.resolve(mounted);
 		out.t1_mountIsOnRegions = typeof R.mount === 'function' && NS.regions.mount === R.mount;
 		out.t1_notOnPages = NS.pages == null || NS.pages.mount == null;
 		out.t1_handleCount = handles.length;
@@ -219,6 +223,30 @@ function slot(env, id) {
 			&& instances.className.indexOf('selected') < 0
 			&& dash.className.indexOf('selected') < 0;
 		out.t6_noPillClass = nav.className.indexOf('jc-subtab') < 0 && settings.className.indexOf('jc-subtab') < 0;
+	}
+
+	// =================================================================================================================
+	// String "juneau-table" throws a NEW message pointing at { table: url }; enrols nothing.
+	// =================================================================================================================
+	{
+		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		let defaultRan = false;
+		R.builtins.default = function () { defaultRan = true; };
+		const incidents = slot(env, 'incidents');
+		let threw = false;
+		let message = '';
+		try {
+			R.mount({ incidents: 'juneau-table' });
+		} catch (e) {
+			threw = true;
+			message = String(e && e.message ? e.message : e);
+		}
+		out.t7_threw = threw;
+		out.t7_pointsAtTableUrl = message.indexOf('{ table: url }') >= 0;
+		out.t7_notUnregisteredName = message.indexOf('no populator is registered under the name') < 0;
+		out.t7_consoleError = rec.errorsMatching('juneau-table').length >= 1;
+		out.t7_notStamped = incidents.getAttribute('data-juneau-region') == null;
+		out.t7_defaultDidNotRun = defaultRan === false;
 	}
 
 	process.stdout.write(JSON.stringify(out));

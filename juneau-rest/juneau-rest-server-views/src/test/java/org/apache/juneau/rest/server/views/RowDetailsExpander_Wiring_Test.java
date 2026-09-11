@@ -187,7 +187,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 
 	@Test void b06_initTable_onlyWiresTheExpanderWhenTemplatePresent() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(functionBody(body, "function beginInitTable(").contains("initTableWidgets("), body);
+		assertTrue(functionBody(body, "function initTableFromDef(").contains("initTableWidgets("), body);
 		var widgets = functionBody(body, "function initTableWidgets(");
 		assertTrue(widgets.contains("if (findRowDetailTemplate(table))"), widgets);
 		assertTrue(widgets.contains("initDetailsExpander(table, ctx, viewDef)"), widgets);

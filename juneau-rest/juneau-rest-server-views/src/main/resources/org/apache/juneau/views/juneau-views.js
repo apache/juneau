@@ -79,6 +79,16 @@
 	const MAX_NESTED_DEPTH = 2;
 
 	/**
+	 * The slot-envelope contract version ({@code ViewSlot.CONTRACT_VERSION} on the server).  Independently
+	 * versioned from VIEW_META {@code "4"} so a slot-delivery revision cannot force every sidecar page to
+	 * handshake-fail.
+	 */
+	const JUNEAU_SLOT_CONTRACT_VERSION = "1";
+
+	/** QuickStats handshake, independently {@code "1"} ({@code QuickStats.CONTRACT_VERSION}). */
+	const JUNEAU_QUICKSTATS_CONTRACT_VERSION = "1";
+
+	/**
 	 * Nested-table DOM attribute names - MUST equal ViewTable's constants of the same names (NESTED_ATTR,
 	 * NESTED_META_ATTR, NESTED_CONTRACT_ATTR, NESTED_SCOPE_PARAM_ATTR) on the server.  A nested table is a
 	 * DataTables view inside a row-detail section, scoped to its parent row by merging ONE query parameter (named by
@@ -151,6 +161,7 @@
 	NS.BULK_CONTRACT_VERSION = JUNEAU_BULK_CONTRACT_VERSION;
 	NS.ROW_DETAIL_CONTRACT_VERSION = JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
 	NS.NESTED_CONTRACT_VERSION = JUNEAU_NESTED_CONTRACT_VERSION;
+	NS.SLOT_CONTRACT_VERSION = JUNEAU_SLOT_CONTRACT_VERSION;
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -6558,15 +6569,25 @@
 		}
 	}
 
-	function beginInitTable(table) {
+	/**
+	 * Inits a table from an already-loaded VIEW_META object.  Assumes CSRF/selection/bulk attrs, wrapper
+	 * saved-views/layout, optional detail {@code <template>}, and optional QuickStats are already stamped.
+	 * {@code extras.bulk} is the envelope bulk object (slot path) or the sidecar parse (HTML path); mismatch
+	 * withholds bulk only.
+	 */
+	function initTableFromDef(table, viewDef, extras) {
+		extras = extras || {};
 		const $ = window.jQuery;
+		if ($?.fn?.dataTable?.isDataTable(table)) return;
 		const id = table.dataset.juneauView;
-		const key = viewSidecarKey(table);
-		const sidecar = findSidecarNode(SIDECAR_ID_PREFIX + key, table);
-		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
-
-		const viewDef = loadTableViewDef(table, id, sidecar);
-		if (!viewDef) return;
+		if (!viewDef || viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
+			const m = "Juneau view '" + id + "': contract version mismatch (page='" +
+				(viewDef && viewDef.contractVersion) + "', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION
+				+ "'). Refusing to init - reload to clear a stale cached script.";
+			error(m);
+			renderBanner(table, m);
+			return;
+		}
 
 		if (!$?.fn?.DataTable) {
 			warn("Juneau view '" + id + "': jQuery/DataTables not present; cannot bind.");
@@ -6601,7 +6622,19 @@
 
 		if (selectionState) {
 			initSelection(table, ctx);
-			resolveTableBulkDef(ctx, key, table, id);
+			if (hasBulk(table)) {
+				const bulkDef = extras.bulk;
+				if (!bulkDef) {
+					ctx._bulkError = "Juneau view '" + id + "': missing or malformed bulk-actions sidecar; bulk mutation withheld.";
+					error(ctx._bulkError);
+				} else if (bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION) {
+					ctx._bulkError = "Juneau view '" + id + "': bulk-actions contract version mismatch (page='" +
+						bulkDef.contractVersion + "', runtime='" + JUNEAU_BULK_CONTRACT_VERSION + "'); bulk mutation withheld.";
+					error(ctx._bulkError);
+				} else {
+					ctx._bulkDef = bulkDef;
+				}
+			}
 		}
 
 		function go(saved) {
@@ -6612,6 +6645,526 @@
 		if (viewDef.columnConfig && typeof NS.config?.resolveActiveView === "function")
 			return NS.config.resolveActiveView(table, viewDef).then(go);
 		go(null);
+	}
+
+	function beginInitTable(table) {
+		const id = table.dataset.juneauView;
+		const key = viewSidecarKey(table);
+		const sidecar = findSidecarNode(SIDECAR_ID_PREFIX + key, table);
+		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
+
+		const viewDef = loadTableViewDef(table, id, sidecar);
+		if (!viewDef) return;
+		const extras = {};
+		if (hasBulk(table)) extras.bulk = readBulkDef(key, table);
+		return initTableFromDef(table, viewDef, extras);
+	}
+
+	function renderSlotBanner(slot, message) {
+		if (!slot) return;
+		slot.textContent = "";
+		const p = document.createElement("p");
+		p.className = "juneau-view-error";
+		p.textContent = message;
+		slot.appendChild(p);
+	}
+
+	function fetchSlotEnvelope(url) {
+		const fetchFn = window.fetch || fetch;
+		return fetchFn(url, { credentials: "same-origin", headers: { Accept: "application/json" } })
+			.then(function (resp) {
+				if (!resp || !resp.ok)
+					throw new Error("Juneau slot: envelope GET failed (" + (resp && resp.status) + ").");
+				return resp.text();
+			})
+			.then(function (text) {
+				try {
+					return JSON.parse(text);
+				} catch (e) {
+					throw new Error("Juneau slot: malformed JSON envelope.");
+				}
+			});
+	}
+
+	/**
+	 * Builds the table widget into an empty slot from a URL or inline SLOT_META envelope, then inits it.
+	 * Handshake / fetch failures paint a banner in {@code slot} and reject so the mount caller can log.
+	 */
+	function mountTableSlot(slot, tableValue) {
+		slot.textContent = "";
+		const loaded = typeof tableValue === "string" ? fetchSlotEnvelope(tableValue) : Promise.resolve(tableValue);
+		return loaded.then(function (envelope) {
+			return paintSlotTable(slot, envelope);
+		}).catch(function (err) {
+			const message = String(err && err.message ? err.message : err);
+			error(message);
+			renderSlotBanner(slot, message);
+		});
+	}
+
+	function paintSlotTable(slot, envelope) {
+		if (!envelope || typeof envelope !== "object")
+			throw new Error("Juneau slot: envelope is not an object.");
+		if (envelope.contractVersion !== JUNEAU_SLOT_CONTRACT_VERSION) {
+			throw new Error("Juneau slot: contract version mismatch (page='" + envelope.contractVersion
+				+ "', runtime='" + JUNEAU_SLOT_CONTRACT_VERSION + "'). Refusing to init.");
+		}
+		const viewDef = envelope.view;
+		if (!viewDef || typeof viewDef !== "object")
+			throw new Error("Juneau slot: missing view.");
+		if (!viewDef.id || String(viewDef.id).trim() === "")
+			throw new Error("Juneau slot: view.id is blank.");
+		if (viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
+			throw new Error("Juneau view '" + viewDef.id + "': contract version mismatch (page='" +
+				viewDef.contractVersion + "', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION + "'). Refusing to init.");
+		}
+		const colliding = document.querySelector("table[data-juneau-view=\"" + viewDef.id + "\"]");
+		if (colliding)
+			throw new Error("Juneau slot: view.id '" + viewDef.id + "' collides with an existing table.");
+
+		const extras = {};
+		let bulkOk = true;
+		if (envelope.bulk) {
+			if (envelope.bulk.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION) {
+				error("Juneau view '" + viewDef.id + "': bulk-actions contract version mismatch; bulk mutation withheld.");
+				bulkOk = false;
+			} else extras.bulk = envelope.bulk;
+		}
+
+		let detail = envelope.detail;
+		if (detail && detail.contractVersion !== JUNEAU_ROW_DETAIL_CONTRACT_VERSION) {
+			error("Juneau view '" + viewDef.id + "': detail contract version mismatch; detail panel withheld.");
+			detail = null;
+		}
+
+		let quickStats = envelope.quickStats;
+		if (quickStats && quickStats.contractVersion !== JUNEAU_QUICKSTATS_CONTRACT_VERSION) {
+			error("Juneau view '" + viewDef.id + "': QuickStats contract version mismatch; strip withheld.");
+			quickStats = null;
+		}
+
+		const wrapper = document.createElement("div");
+		wrapper.setAttribute("data-juneau-layout", envelope.layout || "wide");
+		wrapper.setAttribute("data-juneau-slot-table", "1");
+		if (envelope.savedViewsBase)
+			wrapper.setAttribute("data-juneau-saved-views", envelope.savedViewsBase);
+
+		if (quickStats) wrapper.appendChild(paintQuickStats(quickStats));
+
+		const table = buildSlotTableEl(viewDef, envelope.selection, detail, envelope.rows);
+		copyCsrfOntoTable(slot, table);
+		if (envelope.selection) {
+			table.setAttribute(SELECT_ATTR, "1");
+			table.setAttribute(ROW_ID_FIELD_ATTR, envelope.selection.rowIdField);
+			table.setAttribute(SELECT_ALL_ATTR, envelope.selection.selectAll === false ? "0" : "1");
+		}
+		if (envelope.bulk && bulkOk)
+			table.setAttribute(BULK_ATTR, "1");
+		wrapper.appendChild(table);
+
+		if (detail) wrapper.appendChild(buildDetailTemplate(detail, table));
+
+		slot.appendChild(wrapper);
+		return Promise.resolve(initTableFromDef(table, viewDef, extras));
+	}
+
+	function copyCsrfOntoTable(slot, table) {
+		const ancestor = typeof slot.closest === "function" ? slot.closest("[data-juneau-csrf]") : null;
+		if (!ancestor) return;
+		const token = ancestor.getAttribute("data-juneau-csrf");
+		if (token == null || token === "") return;
+		table.setAttribute("data-juneau-csrf", token);
+		const header = ancestor.getAttribute("data-juneau-csrf-header");
+		if (header != null && header !== "")
+			table.setAttribute("data-juneau-csrf-header", header);
+	}
+
+	function buildSlotTableEl(viewDef, selection, detail, rows) {
+		const table = document.createElement("table");
+		table.id = viewDef.id;
+		table.setAttribute("data-juneau-view", viewDef.id);
+		table.className = "juneau-view-table";
+		const thead = document.createElement("thead");
+		const tr = document.createElement("tr");
+		if (detail) {
+			const th = document.createElement("th");
+			th.className = "juneau-view-detail-th";
+			th.setAttribute("aria-label", "Expand");
+			tr.appendChild(th);
+		}
+		if (selection) {
+			const th = document.createElement("th");
+			th.className = "juneau-view-select-th";
+			th.setAttribute("aria-label", "Select");
+			tr.appendChild(th);
+		}
+		const cols = viewDef.columns || [];
+		for (let i = 0; i < cols.length; i++) {
+			const c = cols[i];
+			const th = document.createElement("th");
+			th.textContent = c.title == null || c.title === "" ? c.data : c.title;
+			tr.appendChild(th);
+		}
+		thead.appendChild(tr);
+		table.appendChild(thead);
+		if (rows && rows.length) {
+			const tbody = document.createElement("tbody");
+			for (let r = 0; r < rows.length; r++) {
+				const row = rows[r];
+				const bodyTr = document.createElement("tr");
+				if (detail) {
+					const td = document.createElement("td");
+					td.className = "juneau-view-detail-control";
+					bodyTr.appendChild(td);
+				}
+				if (selection) {
+					const td = document.createElement("td");
+					td.className = "juneau-view-select-cell";
+					bodyTr.appendChild(td);
+				}
+				for (let i = 0; i < cols.length; i++) {
+					const td = document.createElement("td");
+					const v = row ? row[cols[i].data] : null;
+					td.textContent = v == null ? "" : String(v);
+					bodyTr.appendChild(td);
+				}
+				tbody.appendChild(bodyTr);
+			}
+			table.appendChild(tbody);
+		}
+		return table;
+	}
+
+	function paintQuickStats(stats) {
+		if (!stats || !Array.isArray(stats.items))
+			throw new Error("Juneau QuickStats: missing items.");
+		const strip = document.createElement("div");
+		strip.className = "jc-quickstats";
+		strip.setAttribute("data-juneau-quickstats", stats.id);
+		strip.setAttribute("data-juneau-quickstats-contract", JUNEAU_QUICKSTATS_CONTRACT_VERSION);
+		for (let i = 0; i < stats.items.length; i++)
+			strip.appendChild(paintQuickStatItem(stats.items[i]));
+		return strip;
+	}
+
+	function paintQuickStatItem(item) {
+		if (!item || typeof item !== "object")
+			throw new Error("Juneau QuickStats: unknown item type.");
+		if (item.segments)
+			return paintStatSegments(item);
+		if (Object.hasOwn(item, "max"))
+			return paintStatBar(item);
+		if (item.type && item.type !== "tile")
+			throw new Error("Juneau QuickStats: unknown item type '" + item.type + "'.");
+		return paintStatTile(item);
+	}
+
+	function toneClass(base, tone) {
+		return !tone || tone === "neutral" ? base : base + " is-" + tone;
+	}
+
+	function paintStatTile(item) {
+		const div = document.createElement("div");
+		div.className = "jc-stat jc-stat-tile";
+		div.setAttribute("data-juneau-stat", item.id);
+		const label = document.createElement("span");
+		label.className = "jc-stat-label";
+		label.textContent = item.label == null ? "" : String(item.label);
+		const value = document.createElement("span");
+		value.className = toneClass("jc-stat-value", item.tone);
+		value.textContent = item.value == null ? "" : String(item.value);
+		div.appendChild(label);
+		div.appendChild(value);
+		return div;
+	}
+
+	function paintStatBar(item) {
+		const div = document.createElement("div");
+		div.className = "jc-stat jc-stat-bar";
+		div.setAttribute("data-juneau-stat", item.id);
+		const label = document.createElement("span");
+		label.className = "jc-stat-label";
+		label.textContent = item.label == null ? "" : String(item.label);
+		const max = Number(item.max) || 0;
+		const value = Number(item.value) || 0;
+		const pct = max <= 0 ? 0 : Math.max(0, Math.min(100, Math.round((value * 100.0) / max)));
+		const track = document.createElement("span");
+		track.className = "jc-stat-track";
+		track.setAttribute("aria-hidden", "true");
+		const fill = document.createElement("span");
+		fill.className = toneClass("jc-stat-fill", item.tone);
+		fill.setAttribute("style", "width:" + pct + "%");
+		track.appendChild(fill);
+		const val = document.createElement("span");
+		val.className = "jc-stat-value";
+		val.textContent = value + " / " + max;
+		div.appendChild(label);
+		div.appendChild(track);
+		div.appendChild(val);
+		return div;
+	}
+
+	function paintStatSegments(item) {
+		const div = document.createElement("div");
+		div.className = "jc-stat jc-stat-segments";
+		div.setAttribute("data-juneau-stat", item.id);
+		const label = document.createElement("span");
+		label.className = "jc-stat-label";
+		label.textContent = item.label == null ? "" : String(item.label);
+		div.appendChild(label);
+		const segs = item.segments || [];
+		for (let i = 0; i < segs.length; i++) {
+			const s = segs[i];
+			const seg = document.createElement("span");
+			seg.className = toneClass("jc-stat-segment", s.tone);
+			const count = document.createElement("span");
+			count.className = "jc-stat-segment-count";
+			count.textContent = s.count == null ? "" : String(s.count);
+			const sl = document.createElement("span");
+			sl.className = "jc-stat-segment-label";
+			sl.textContent = s.label == null ? "" : String(s.label);
+			seg.appendChild(count);
+			seg.appendChild(sl);
+			div.appendChild(seg);
+		}
+		return div;
+	}
+
+	function buildDetailTemplate(detail, parentTable) {
+		const tpl = document.createElement("template");
+		tpl.setAttribute("data-juneau-row-detail", "1");
+		tpl.setAttribute("data-juneau-detail-contract", detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION);
+		if (detail.endpoint) tpl.setAttribute("data-juneau-detail-url", detail.endpoint);
+		if (detail.title || detail.icon || (detail.headerActions && detail.headerActions.items && detail.headerActions.items.length))
+			tpl.appendChild(buildDetailHeader(detail));
+		if (detail.region)
+			tpl.appendChild(buildDetailRegion(detail.region));
+		const sections = detail.sections || [];
+		const ribbonAnchored = detail.barSlot && sections.length > 1;
+		const sectionAnchored = detail.barSlot && !ribbonAnchored && sections.length;
+		for (let i = 0; i < sections.length; i++)
+			tpl.appendChild(buildDetailSection(sections[i], sectionAnchored && i === 0 ? detail.barSlot : null, parentTable));
+		if (ribbonAnchored) {
+			const painted = paintDetailBarSlot(detail.barSlot, "ribbon");
+			if (painted) {
+				tpl.appendChild(painted.region);
+				tpl.appendChild(painted.sidecar);
+			}
+		} else if (detail.barSlot && detail.region) {
+			const painted = paintDetailBarSlot(detail.barSlot, "section-title");
+			if (painted) {
+				tpl.appendChild(painted.region);
+				tpl.appendChild(painted.sidecar);
+			}
+		}
+		return tpl;
+	}
+
+	function buildDetailHeader(detail) {
+		const header = document.createElement("div");
+		header.className = "juneau-view-detail-header";
+		header.setAttribute("data-juneau-detail-header", "1");
+		if (detail.icon) {
+			const icon = document.createElement("span");
+			icon.setAttribute("data-juneau-detail-icon", detail.icon);
+			icon.className = "juneau-view-detail-icon";
+			header.appendChild(icon);
+		}
+		if (detail.title) {
+			const h2 = document.createElement("h2");
+			h2.textContent = detail.title;
+			h2.setAttribute("data-juneau-detail-title", "1");
+			h2.setAttribute("data-juneau-detail-title-template", detail.title);
+			h2.className = "juneau-view-detail-title";
+			header.appendChild(h2);
+		}
+		if (detail.headerActions)
+			header.appendChild(buildActionBar(detail.headerActions));
+		return header;
+	}
+
+	function buildDetailRegion(region) {
+		const d = document.createElement("div");
+		d.className = "juneau-region";
+		d.setAttribute("data-juneau-region", region.id);
+		d.setAttribute("data-juneau-region-contract", "1");
+		d.setAttribute("data-juneau-region-type", region.type || "row-detail");
+		if (region.populate)
+			d.setAttribute("data-juneau-region-populate", region.populate);
+		const declared = {};
+		if (region.dataUrl) declared.dataUrl = region.dataUrl;
+		d.setAttribute("data-juneau-region-declared", JSON.stringify(declared));
+		return d;
+	}
+
+	function buildDetailSection(section, barSlot, parentTable) {
+		const sec = document.createElement("section");
+		sec.setAttribute("data-juneau-detail-section", section.id);
+		sec.className = "juneau-view-detail-section";
+		if (section.count != null)
+			sec.setAttribute("data-juneau-detail-count", String(section.count));
+		const h2 = document.createElement("h2");
+		h2.className = "juneau-view-detail-section-title";
+		h2.textContent = section.title == null || section.title === "" ? section.id : section.title;
+		sec.appendChild(h2);
+		if (barSlot) {
+			const painted = paintDetailBarSlot(barSlot, "section-title");
+			if (painted) {
+				sec.appendChild(painted.region);
+				sec.appendChild(painted.sidecar);
+			}
+		}
+		if (section.actions) sec.appendChild(buildActionBar(section.actions));
+		sec.appendChild(buildFieldsGrid(section));
+		if (section.table) sec.appendChild(buildNestedSlot(section.table, parentTable));
+		return sec;
+	}
+
+	function buildFieldsGrid(section) {
+		const cols = Math.min(Math.max(section.columns || 2, 1), 4);
+		const layout = section.layout === "stacked" ? "stacked" : "inline";
+		const grid = document.createElement("div");
+		grid.className = "juneau-view-detail-fields juneau-view-detail-fields-" + layout
+			+ " juneau-view-detail-fields-cols-" + cols;
+		const fields = section.fields || [];
+		for (let i = 0; i < fields.length; i++)
+			grid.appendChild(buildDetailField(fields[i]));
+		return grid;
+	}
+
+	function buildDetailField(f) {
+		const rendered = !!f.render;
+		const markdown = !rendered && f.format === "markdown";
+		const sanitizedHtml = !rendered && (f.format === "sanitizedHtml" || f.format === "sanitized-html");
+		const prose = markdown || sanitizedHtml;
+		const wrap = document.createElement("div");
+		wrap.className = "juneau-view-detail-field"
+			+ (markdown ? " juneau-view-detail-field-markdown" : "")
+			+ (prose || f.span === "full" ? " juneau-view-detail-field-span-full" : "");
+		const hideTitle = prose && f.title === "";
+		if (!hideTitle) {
+			const title = document.createElement("div");
+			title.className = "juneau-view-detail-field-title";
+			title.textContent = f.title == null || f.title === "" ? f.data : f.title;
+			wrap.appendChild(title);
+		}
+		const value = document.createElement("div");
+		value.setAttribute("data-juneau-field", f.data);
+		if (rendered) {
+			value.setAttribute("data-juneau-field-render", f.render.id);
+			if (f.render.meta)
+				value.setAttribute("data-juneau-field-render-meta", JSON.stringify(f.render.meta));
+			if (f.href)
+				value.setAttribute("data-juneau-field-render-href", f.href);
+			value.className = "juneau-view-detail-field-value";
+		} else if (prose) {
+			value.setAttribute("data-juneau-field-format", f.format === "sanitized-html" ? "sanitizedHtml" : f.format);
+			value.className = "juneau-view-detail-field-value juneau-view-detail-markdown jc-prose";
+		} else {
+			value.className = "juneau-view-detail-field-value";
+		}
+		wrap.appendChild(value);
+		if (f.actions) wrap.appendChild(buildActionBar(f.actions));
+		return wrap;
+	}
+
+	function buildActionBar(bar) {
+		const div = document.createElement("div");
+		div.className = "juneau-view-detail-actions";
+		const items = (bar && bar.items) || [];
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			if (item && item.safe) {
+				const btn = document.createElement("button");
+				btn.setAttribute("type", "button");
+				btn.setAttribute("data-juneau-safe", item.safe);
+				btn.className = "juneau-view-detail-action juneau-view-detail-safe";
+				btn.textContent = item.safe === "collapse" ? "Collapse" : item.safe;
+				div.appendChild(btn);
+				continue;
+			}
+			if (!item || !item.id) continue;
+			const btn = document.createElement("button");
+			btn.setAttribute("type", "button");
+			btn.setAttribute("data-juneau-action", item.id);
+			btn.className = item.emphasis === "primary"
+				? "juneau-view-detail-action juneau-view-detail-action-primary"
+				: "juneau-view-detail-action";
+			btn.disabled = true;
+			btn.textContent = item.id;
+			if (item.enabledWhen && item.enabledWhen.length) {
+				btn.setAttribute("data-juneau-action-rules", JSON.stringify(item.enabledWhen));
+				const desc = document.createElement("span");
+				desc.setAttribute("data-juneau-action-desc", item.id);
+				desc.setAttribute("hidden", "hidden");
+				div.appendChild(btn);
+				div.appendChild(desc);
+			} else {
+				div.appendChild(btn);
+			}
+		}
+		return div;
+	}
+
+	function paintDetailBarSlot(bar, anchor) {
+		if (!bar || typeof bar.id !== "string" || bar.id === "") return null;
+		if (bar.contractVersion && bar.contractVersion !== "1") return null;
+		const built = buildDialogBarSlotRegion(bar);
+		if (!built) return null;
+		built.region.className = "jc-bar-slot juneau-view-detail-bar-slot";
+		built.region.setAttribute("data-juneau-bar-slot-anchor", anchor);
+		return built;
+	}
+
+	function buildNestedSlot(nested, parentTable) {
+		const wrap = document.createElement("div");
+		wrap.className = "juneau-view-detail-nested";
+		wrap.setAttribute("data-juneau-nested", "1");
+		wrap.setAttribute("data-juneau-nested-contract", nested.contractVersion || JUNEAU_NESTED_CONTRACT_VERSION);
+		wrap.setAttribute("data-juneau-nested-scope-param", nested.parentScopeParam || "parentId");
+		const v = nested.view || {};
+		if (nested.contractVersion && nested.contractVersion !== JUNEAU_NESTED_CONTRACT_VERSION) {
+			error("Juneau nested table '" + v.id + "': contract version mismatch; nested table withheld.");
+			return wrap;
+		}
+		const table = document.createElement("table");
+		table.setAttribute("data-juneau-view", v.id);
+		table.className = "juneau-view-table";
+		const csrf = parentTable && parentTable.getAttribute("data-juneau-csrf");
+		if (csrf) table.setAttribute("data-juneau-csrf", csrf);
+		const csrfHeader = parentTable && parentTable.getAttribute("data-juneau-csrf-header");
+		if (csrfHeader) table.setAttribute("data-juneau-csrf-header", csrfHeader);
+		if (nested.selection) {
+			table.setAttribute(SELECT_ATTR, "1");
+			table.setAttribute(ROW_ID_FIELD_ATTR, nested.selection.rowIdField);
+			table.setAttribute(SELECT_ALL_ATTR, nested.selection.selectAll === false ? "0" : "1");
+		}
+		const thead = document.createElement("thead");
+		const tr = document.createElement("tr");
+		const nestedDetail = nested.detail;
+		if (nestedDetail) {
+			const th = document.createElement("th");
+			th.className = "juneau-view-detail-th";
+			th.setAttribute("aria-label", "Expand");
+			tr.appendChild(th);
+		}
+		if (nested.selection) {
+			const th = document.createElement("th");
+			th.className = "juneau-view-select-th";
+			th.setAttribute("aria-label", "Select");
+			tr.appendChild(th);
+		}
+		const cols = v.columns || [];
+		for (let i = 0; i < cols.length; i++) {
+			const th = document.createElement("th");
+			th.textContent = cols[i].title == null || cols[i].title === "" ? cols[i].data : cols[i].title;
+			tr.appendChild(th);
+		}
+		thead.appendChild(tr);
+		table.appendChild(thead);
+		wrap.appendChild(table);
+		if (nestedDetail) wrap.appendChild(buildDetailTemplate(nestedDetail, table));
+		return wrap;
 	}
 
 	/**
@@ -6891,6 +7444,8 @@
 		// promise (data-juneau-init-pending).  Already idempotent (isDataTable guard), so re-entry from the page
 		// runtime after the DOMContentLoaded scan has already run is always safe.
 		initTable: initTable,
+		initTableFromDef: initTableFromDef,
+		mountTableSlot: mountTableSlot,
 		buildTable: buildTable,
 		liveDtIndex: liveDtIndex,
 		assembleFullColumnArray: assembleFullColumnArray,

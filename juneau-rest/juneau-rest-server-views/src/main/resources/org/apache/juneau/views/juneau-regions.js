@@ -1703,18 +1703,23 @@
 	}
 
 	/**
-	 * Binds author-HTML slot ids to registered region populators.
+	 * Binds author-HTML slot ids to registered region populators and/or table widgets.
 	 *
-	 * HTML ids are places; the hookup map names the populator for each place.  Missing element ids and
-	 * unregistered (or blank) populator names fail loud and enrol nothing on the page - they do not skip
-	 * the bad entry and they do not fall through to defaultPopulate.  After every entry validates, this
-	 * stamps the existing enrolment attributes from JS (not from RegionTable.of) and calls initRegion per
-	 * node so populate, the bus, and teardown stay the region runtime.
+	 * HTML ids are places.  A string value is a registered populator name.  A `{ table: url | inlineEnvelope }`
+	 * value mounts a table widget into that empty slot.  The string `"juneau-table"` is not a populator and
+	 * throws.  Missing element ids, blank names, unregistered populators, and unrecognized value shapes fail
+	 * loud and enrol nothing on the page - they do not skip the bad entry and they do not fall through to
+	 * defaultPopulate.
+	 *
+	 * Region enrolment is synchronous through initRegion (populate has already run before the returned
+	 * thenable is handed back).  Table entries are fetched/inited asynchronously.  The return is a thenable
+	 * that resolves to the region-handle array (map-key order among region entries).  A table fetch/handshake
+	 * failure paints a banner in that slot and does not unroll already-enrolled regions.
 	 *
 	 * Bus targeting `{to: slotId}` uses the slot id (the map key), which is the region id after mount.
 	 *
-	 * @param {Object<string,string>} hookup Map of element id → registered populator name.
-	 * @returns {Array} The region handles initRegion minted, in map-key order.
+	 * @param {Object<string, string|{table: string|Object}>} hookup Map of element id → populator name or table binding.
+	 * @returns {Promise<Array>} Thenable resolving to the region handles initRegion minted.
 	 */
 	function mount(hookup) {
 		if (hookup == null || typeof hookup !== "object" || Array.isArray(hookup)) {
@@ -1726,35 +1731,102 @@
 		const planned = [];
 		for (let i = 0; i < ids.length; i++) {
 			const id = ids[i];
-			const name = hookup[id];
+			const value = hookup[id];
 			const el = window.document.getElementById(id);
 			if (!el) {
 				const message = "JuneauViews.regions.mount: no element with id '" + id + "'.";
 				window.console.error(message);
 				throw new Error(message);
 			}
-			if (typeof name !== "string" || blank(name)) {
-				const message = "JuneauViews.regions.mount: slot '" + id + "' has a blank or missing populator name.";
+			if (value === "juneau-table") {
+				const message = "JuneauViews.regions.mount: the string 'juneau-table' is not a populator; "
+					+ "use { table: url } (or an inline envelope) as the slot value.";
 				window.console.error(message);
 				throw new Error(message);
 			}
-			if (typeof resolve(name) !== "function") {
-				const message = "JuneauViews.regions.mount: no populator is registered under the name '"
-					+ name + "'.";
-				window.console.error(message);
-				throw new Error(message);
+			if (typeof value === "string") {
+				const name = value;
+				if (blank(name)) {
+					const message = "JuneauViews.regions.mount: slot '" + id + "' has a blank or missing populator name.";
+					window.console.error(message);
+					throw new Error(message);
+				}
+				if (typeof resolve(name) !== "function") {
+					const message = "JuneauViews.regions.mount: no populator is registered under the name '"
+						+ name + "'.";
+					window.console.error(message);
+					throw new Error(message);
+				}
+				planned.push({ kind: "region", el: el, id: id, name: name });
+				continue;
 			}
-			planned.push({ el: el, id: id, name: name });
+			if (value != null && typeof value === "object" && !Array.isArray(value) && Object.hasOwn(value, "table")) {
+				const table = value.table;
+				if (typeof table === "string") {
+					if (blank(table)) {
+						const message = "JuneauViews.regions.mount: slot '" + id + "' has a blank or missing table URL.";
+						window.console.error(message);
+						throw new Error(message);
+					}
+					planned.push({ kind: "table", el: el, id: id, table: table });
+					continue;
+				}
+				if (table != null && typeof table === "object" && !Array.isArray(table)) {
+					planned.push({ kind: "table", el: el, id: id, table: table });
+					continue;
+				}
+			}
+			const message = "JuneauViews.regions.mount: slot '" + id + "' has an unrecognized binding "
+				+ "(expected a populator name or { table: url | envelope }).";
+			window.console.error(message);
+			throw new Error(message);
 		}
 		const handles = [];
+		const tableJobs = [];
 		for (let i = 0; i < planned.length; i++) {
 			const item = planned[i];
-			item.el.setAttribute(REGION_ATTR, item.id);
-			item.el.setAttribute(REGION_POPULATE_ATTR, item.name);
-			const handle = initRegion(item.el);
-			if (handle) handles.push(handle);
+			if (item.kind === "region") {
+				item.el.setAttribute(REGION_ATTR, item.id);
+				item.el.setAttribute(REGION_POPULATE_ATTR, item.name);
+				const handle = initRegion(item.el);
+				if (handle) handles.push(handle);
+				continue;
+			}
+			tableJobs.push(mountTableSlot(item.el, item.table));
 		}
-		return handles;
+		const done = tableJobs.length ? Promise.all(tableJobs) : Promise.resolve();
+		return done.then(function () { return handles; });
+	}
+
+	/**
+	 * Delegates table-slot construction to juneau-views.js.  Fetch/handshake failures are swallowed here so
+	 * Promise.all still resolves (the views helper paints the slot banner).  A missing helper is a banner +
+	 * console.error, not an unroll of already-enrolled regions.
+	 */
+	function mountTableSlot(slot, tableValue) {
+		const init = window.JuneauViews && window.JuneauViews.init;
+		if (!init || typeof init.mountTableSlot !== "function") {
+			const message = "JuneauViews.regions.mount: table slots require JuneauViews.init.mountTableSlot.";
+			window.console.error(message);
+			paintMountBanner(slot, message);
+			return Promise.resolve();
+		}
+		return Promise.resolve()
+			.then(function () { return init.mountTableSlot(slot, tableValue); })
+			.catch(function (err) {
+				const message = String(err && err.message ? err.message : err);
+				window.console.error("JuneauViews.regions.mount: table slot failed: " + message);
+				paintMountBanner(slot, message);
+			});
+	}
+
+	function paintMountBanner(slot, message) {
+		if (!slot) return;
+		slot.textContent = "";
+		const p = window.document.createElement("p");
+		p.className = "juneau-view-error";
+		p.textContent = message;
+		slot.appendChild(p);
 	}
 
 	// ==================================================================================================================

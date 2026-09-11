@@ -267,6 +267,14 @@ public class ViewsMixin {
 	 */
 	public static final String BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION;
 
+	/**
+	 * The slot-envelope contract-version handshake constant that {@code juneau-views.js} bakes in, kept in one
+	 * source of truth with the value the slot model emits ({@link ViewSlot#CONTRACT_VERSION}).  Deliberately a
+	 * distinct constant from {@link #CONTRACT_VERSION} (the {@code VIEW_META} sidecar): a slot-envelope revision
+	 * must never force a view-sidecar bump, or vice-versa.
+	 */
+	public static final String SLOT_CONTRACT_VERSION = ViewSlot.CONTRACT_VERSION;
+
 	/** Classpath location of the shipped initializer. */
 	static final String VIEWS_JS_RESOURCE = "/org/apache/juneau/views/juneau-views.js";
 

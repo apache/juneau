@@ -408,9 +408,13 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
 		assertEquals(WidgetsMixin.CARDS_CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
 		assertEquals(CardFieldList.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
+		assertEquals(ViewSlot.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
+		assertEquals("1", ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
+		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
+		assertNotEquals(ViewsMixin.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -664,6 +664,58 @@ public class ViewTable {
 	}
 
 	/**
+	 * Runs {@code action} inside the same {@code $FV}/{@code $L} chrome-resolution window
+	 * {@link #of(RestRequest, ViewDef)} uses, then restores author templates before returning.
+	 *
+	 * <p>
+	 * Package-private so {@link ViewSlot} can snapshot resolved titles onto the slot envelope without inventing a
+	 * second chrome host.  {@code action} must not retain live builder beans that would observe the restore.
+	 *
+	 * @param <T> The snapshot type {@code action} returns.
+	 * @param viewDef The view being serialized.  Must not be <jk>null</jk>.
+	 * @param req The current request, or <jk>null</jk>.
+	 * @param messages A locale-bound bundle for the request-free {@code $L} seam, or <jk>null</jk>.
+	 * @param action Runs while resolved chrome is visible on {@code viewDef} (and its detail, when set).
+	 * @return Whatever {@code action} returns.
+	 */
+	static <T> T withResolvedChrome(ViewDef viewDef, RestRequest req, Messages messages, Supplier<T> action) {
+		var detail = viewDef.details;
+		if (detail != null) {
+			synchronized (detail.lock) {
+				if (detailChromeHasVar(detail)) {
+					var session = chromeSession(req, detail.serverValues, messages);
+					if (session != null) {
+						var restore = resolveDetailChrome(detail, session);
+						try {
+							return withResolvedViewChrome(viewDef, req, messages, action);
+						} finally {
+							restore.run();
+						}
+					}
+				}
+			}
+		}
+		return withResolvedViewChrome(viewDef, req, messages, action);
+	}
+
+	private static <T> T withResolvedViewChrome(ViewDef viewDef, RestRequest req, Messages messages, Supplier<T> action) {
+		synchronized (viewDef.lock) {
+			if (chromeHasVar(viewDef)) {
+				var session = chromeSession(req, viewDef.serverValues, messages);
+				if (session != null) {
+					var restore = resolveChrome(viewDef, session);
+					try {
+						return action.get();
+					} finally {
+						restore.run();
+					}
+				}
+			}
+		}
+		return action.get();
+	}
+
+	/**
 	 * The shared core, request/{@code Messages}-free overload.  Delegates to the {@code messages}-carrying core
 	 * with no message bundle, so every pre-existing caller keeps its exact current behavior.
 	 */
@@ -1300,7 +1352,7 @@ public class ViewTable {
 	 * Resolves the saved-views REST base when {@code req} is a {@link RestRequest}; otherwise {@code null}
 	 * (a plain {@link HttpServletRequest} has no URI resolver).
 	 */
-	private static String savedViewsBase(HttpServletRequest req) {
+	static String savedViewsBase(HttpServletRequest req) {
 		if (!(req instanceof RestRequest rr))
 			return null;
 		return SavedViewsMixin.resolvedBaseUrl(rr);

@@ -154,10 +154,10 @@ class ViewsJs_Selection_Test extends TestBase {
 
 	@Test void f01_initTable_bulkIsOnlyEverConsultedInsideTheSelectionBranch() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function beginInitTable(");
+		var fn = functionBody(body, "function initTableFromDef(");
 		var selectionIdx = fn.indexOf("const selectionState = hasSelection(table)");
 		var selectionBranchIdx = fn.indexOf("if (selectionState) {");
-		var bulkCheckIdx = fn.indexOf("resolveTableBulkDef(");
+		var bulkCheckIdx = fn.indexOf("if (hasBulk(table))");
 		assertTrue(selectionIdx >= 0, fn);
 		assertTrue(selectionBranchIdx > selectionIdx, fn);
 		assertTrue(bulkCheckIdx > selectionBranchIdx, fn);
@@ -178,9 +178,9 @@ class ViewsJs_Selection_Test extends TestBase {
 		// initSelection(...) must run whenever selection was declared, REGARDLESS of whether the bulk sidecar is
 		// present/healthy - selection (e.g. for export) must keep working even if bulk mutation is withheld.
 		var body = viewsJs();
-		var fn = functionBody(body, "function beginInitTable(");
+		var fn = functionBody(body, "function initTableFromDef(");
 		var initSelectionIdx = fn.indexOf("initSelection(table, ctx)");
-		var bulkCheckIdx = fn.indexOf("resolveTableBulkDef(");
+		var bulkCheckIdx = fn.indexOf("if (hasBulk(table))");
 		assertTrue(initSelectionIdx >= 0 && initSelectionIdx < bulkCheckIdx, fn);
 	}
 

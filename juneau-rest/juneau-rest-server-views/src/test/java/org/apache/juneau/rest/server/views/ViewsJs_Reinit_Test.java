@@ -105,7 +105,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	}
 
 	@Test void a02_beginInitTable_awaitsResolveActiveViewWhenColumnConfigPresent() throws Exception {
-		var fn = functionBody(viewsJs(), "function beginInitTable(");
+		var fn = functionBody(viewsJs(), "function initTableFromDef(");
 		assertTrue(fn.contains("viewDef.columnConfig"), fn);
 		assertTrue(fn.contains("NS.config.resolveActiveView"), fn);
 		assertTrue(fn.contains("buildTable(table, viewDef, effective, ctx)"), fn);
@@ -151,7 +151,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	}
 
 	@Test void b04_selectionStateLivesOnCtx_notRebuilt() throws Exception {
-		var fn = functionBody(viewsJs(), "function beginInitTable(");
+		var fn = functionBody(viewsJs(), "function initTableFromDef(");
 		assertTrue(fn.contains("selected: new Set()"), fn);
 		assertTrue(fn.contains("selectionState: selectionState"), fn);
 		var assemble = functionBody(viewsJs(), "function assembleFullColumnArray(");
@@ -220,7 +220,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	}
 
 	@Test void c06_listenersBoundOnceInBeginInit_notInBuildTable() throws Exception {
-		var begin = functionBody(viewsJs(), "function beginInitTable(");
+		var begin = functionBody(viewsJs(), "function initTableFromDef(");
 		assertTrue(begin.contains("initTableWidgets(table, ctx, viewDef)"), begin);
 		assertTrue(begin.contains("initSelection(table, ctx)"), begin);
 		var widgets = functionBody(viewsJs(), "function initTableWidgets(");
