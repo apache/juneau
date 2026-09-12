@@ -254,11 +254,6 @@ public final class ViewSlot {
 			out.headerActions = header;
 		if (d.isRegionBody())
 			out.region = projectRegion(d);
-		else if (d.sections != null) {
-			out.sections = new ArrayList<>();
-			for (var s : d.sections)
-				out.sections.add(sectionOf(s, req, messages));
-		}
 		if (d.barSlot != null)
 			out.barSlot = barSlotMap(d.barSlot);
 		return out;
@@ -277,68 +272,8 @@ public final class ViewSlot {
 		if (r.populate != null && ! r.populate.isBlank())
 			out.populate = r.populate;
 		out.dataUrl = (r.dataUrl != null && ! r.dataUrl.isBlank()) ? r.dataUrl : d.endpoint;
-		return out;
-	}
-
-	private static Section sectionOf(DetailSection s, RestRequest req, Messages messages) {
-		var out = new Section();
-		out.id = s.id;
-		if (s.title != null && ! s.title.isBlank())
-			out.title = s.title;
-		out.columns = s.columns;
-		if (s.layout == FieldLayout.STACKED)
-			out.layout = "stacked";
-		if (s.count != null)
-			out.count = s.count;
-		if (s.fields != null) {
-			out.fields = new ArrayList<>();
-			for (var f : s.fields)
-				out.fields.add(fieldOf(f));
-		}
-		var actions = actionBar(s.actions);
-		if (actions != null)
-			out.actions = actions;
-		if (s.table != null)
-			out.table = nestedOf(s.table, req, messages);
-		return out;
-	}
-
-	private static Field fieldOf(DetailField f) {
-		var out = new Field();
-		out.data = f.data;
-		if (f.title != null)
-			out.title = f.title;
-		if (f.format != null && f.format != DetailField.Format.TEXT)
-			out.format = f.format.wire();
-		if (f.render != null)
-			out.render = renderMap(f.render);
-		if (f.href != null && ! f.href.isBlank())
-			out.href = f.href;
-		if (f.span == FieldSpan.FULL)
-			out.span = "full";
-		var actions = actionBar(f.actions);
-		if (actions != null)
-			out.actions = actions;
-		return out;
-	}
-
-	private static Map<String,Object> renderMap(Render render) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("id", render.id);
-		if (render.meta != null && ! render.meta.isEmpty())
-			m.put("meta", render.meta);
-		return m;
-	}
-
-	private static Nested nestedOf(NestedTableDef nt, RestRequest req, Messages messages) {
-		var out = new Nested();
-		out.contractVersion = NestedTableDef.CONTRACT_VERSION;
-		out.parentScopeParam = nt.parentScopeParam;
-		if (nt.selection != null)
-			out.selection = Selection.from(nt.selection);
-		out.view = ViewTable.withResolvedChrome(nt.view, req, messages, () -> snapshotMap(nt.view));
-		if (nt.view.details != null)
-			out.detail = ViewTable.withResolvedChrome(nt.view, req, messages, () -> detailOf(nt.view.details, req, messages));
+		if (r.titleFields != null && ! r.titleFields.isEmpty())
+			out.titleFields = r.titleFields;
 		return out;
 	}
 
@@ -429,30 +364,12 @@ public final class ViewSlot {
 		if (node instanceof Detail d) {
 			d.endpoint = resolveOne(d.endpoint, req);
 			resolveUrls(d.region, req);
-			resolveUrls(d.sections, req);
 			resolveUrls(d.headerActions, req);
 			resolveUrls(d.barSlot, req);
 			return;
 		}
 		if (node instanceof Region r) {
 			r.dataUrl = resolveOne(r.dataUrl, req);
-			return;
-		}
-		if (node instanceof Section s) {
-			resolveUrls(s.fields, req);
-			resolveUrls(s.actions, req);
-			resolveUrls(s.table, req);
-			return;
-		}
-		if (node instanceof Field f) {
-			f.href = resolveOne(f.href, req);
-			resolveUrls(f.render, req);
-			resolveUrls(f.actions, req);
-			return;
-		}
-		if (node instanceof Nested n) {
-			resolveUrls(n.view, req);
-			resolveUrls(n.detail, req);
 		}
 	}
 
@@ -483,7 +400,7 @@ public final class ViewSlot {
 	}
 
 	/** DETAIL_SLOT wire.  Not {@code Json.of(RowDetailDef)} (that bean carries {@code ServerValues} / {@code lock}). */
-	@BeanType(properties="contractVersion,endpoint,title,icon,headerActions,region,sections,barSlot")
+	@BeanType(properties="contractVersion,endpoint,title,icon,headerActions,region,barSlot")
 	public static final class Detail {
 		/** {@link RowDetailDef#CONTRACT_VERSION}. */
 		public String contractVersion;
@@ -495,16 +412,14 @@ public final class ViewSlot {
 		public String icon;
 		/** Header action bar; omitted when unset. */
 		public Map<String,Object> headerActions;
-		/** SD-3 region; mutually exclusive with {@link #sections}. */
+		/** The one region this panel's body is. */
 		public Region region;
-		/** Sections; mutually exclusive with {@link #region}. */
-		public List<Section> sections;
 		/** Optional detail bar slot snapshot. */
 		public Map<String,Object> barSlot;
 	}
 
 	/** DETAIL_SLOT.region: identity + populate + {@code type=row-detail} + projected {@code dataUrl}. */
-	@BeanType(properties="id,type,populate,dataUrl")
+	@BeanType(properties="id,type,populate,dataUrl,titleFields")
 	public static final class Region {
 		/** Region id. */
 		public String id;
@@ -514,60 +429,7 @@ public final class ViewSlot {
 		public String populate;
 		/** Projected fetch URL template. */
 		public String dataUrl;
-	}
-
-	/** DETAIL_SECTION wire.  {@code count} is omitted when null, never emitted as {@code null}. */
-	@BeanType(properties="id,title,columns,layout,count,fields,actions,table")
-	public static final class Section {
-		/** Section id. */
-		public String id;
-		/** Heading; omitted when unset (client falls back to id). */
-		public String title;
-		/** Author column cap. */
-		public int columns;
-		/** {@code stacked} when STACKED; omitted for INLINE. */
-		public String layout;
-		/** Optional tab-count suffix; omitted when null. */
-		public Integer count;
-		/** Field slots. */
-		public List<Field> fields;
-		/** Per-section action bar. */
-		public Map<String,Object> actions;
-		/** Nested table slot; omitted when unset. */
-		public Nested table;
-	}
-
-	/** DETAIL_FIELD wire.  {@code format} omitted when TEXT; {@code span} omitted when ONE. */
-	@BeanType(properties="data,title,format,render,href,span,actions")
-	public static final class Field {
-		/** Expand-JSON key. */
-		public String data;
-		/** Label. */
-		public String title;
-		/** Wire token from {@link DetailField.Format#wire()}. */
-		public String format;
-		/** {@code {id, meta?}}. */
-		public Map<String,Object> render;
-		/** Optional href template. */
-		public String href;
-		/** {@code full} when FULL; omitted for ONE. */
-		public String span;
-		/** Field-hosted action bar. */
-		public Map<String,Object> actions;
-	}
-
-	/** Nested-table slot: {@link NestedTableDef#CONTRACT_VERSION} plus nested VIEW_META and optional detail. */
-	@BeanType(properties="contractVersion,parentScopeParam,selection,view,detail")
-	public static final class Nested {
-		/** {@link NestedTableDef#CONTRACT_VERSION}. */
-		public String contractVersion;
-		/** Parent-scope query parameter name. */
-		public String parentScopeParam;
-		/** Optional nested selection. */
-		public Selection selection;
-		/** Nested VIEW_META snapshot. */
-		public Map<String,Object> view;
-		/** Optional nested DETAIL_SLOT. */
-		public Detail detail;
+		/** Header-title {@code {field}} allowlist; omitted when unset. */
+		public List<String> titleFields;
 	}
 }

@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -70,16 +69,8 @@ class ServerValuesResolution_Test extends TestBase {
 	}
 
 	/**
-	 * Counts how often the row-detail host asks for its popover titles.  A detail field's popover is reachable
-	 * chrome but has no painted output in the emitted {@code <template>} today, so the provider call is the only
-	 * externally observable evidence that the traversal descends into it (see {@code b03}).
-	 */
-	static final AtomicInteger DETAIL_POPOVER_READS = new AtomicInteger();
-
-	/**
 	 * The chrome fields reached beyond a column's own title: a row action's confirmation prompt, and the two title
-	 * strings a cell popover owns, hung off both a {@link Column}'s and a {@link DetailField}'s {@code render}.
-	 * The row-detail host declares its own {@link ServerValues} because it resolves against its own session.
+	 * strings a cell popover owns, hung off a {@link Column}'s {@code render}.
 	 */
 	static final ViewDef WIDENED = ViewDef.create("widened")
 		.columns(
@@ -91,13 +82,7 @@ class ServerValuesResolution_Test extends TestBase {
 		.details(RowDetailDef.create()
 			.endpoint("/data/{id}")
 			.title("Detail")
-			.serverValues(ServerValues.create()
-				.value("detailPopoverTitle", s -> { DETAIL_POPOVER_READS.incrementAndGet(); return "Note detail"; })
-				.value("detailFieldTitle", s -> { DETAIL_POPOVER_READS.incrementAndGet(); return "Note text"; }))
-			.sections(DetailSection.create("main", "Main").fields(
-				DetailField.of("actual").title("Actual").render(Render.of("bool").popover(
-					CellPopover.of(PopoverField.of("note").title("$FV{detailFieldTitle}"))
-						.title("$FV{detailPopoverTitle}"))))))
+			.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 		.serverValues(ServerValues.create()
 			.value("confirmPrompt", s -> "Acknowledge this incident?")
 			.value("popoverTitle", s -> "Usage detail")
@@ -220,23 +205,11 @@ class ServerValuesResolution_Test extends TestBase {
 		assertFalse(sidecar.contains("$FV{fieldTitle}"), () -> sidecar);
 	}
 
-	@Test void b03_detailFieldPopover_isReachedByTheRowDetailHostsOwnWalk() throws Exception {
-		// A detail field's popover has nothing painted into the emitted <template> today, so its resolution is
-		// observable only through the provider being asked for both titles.
-		DETAIL_POPOVER_READS.set(0);
+	@Test void b03_columnPopoverTitles_areRestoredAfterTheResponse() throws Exception {
 		body("/widened");
-		assertEquals(2, DETAIL_POPOVER_READS.get());
-	}
-
-	@Test void b04_widenedChrome_restoredAfterTheResponse() throws Exception {
-		body("/widened");
-		// Every shared def must be back on its author templates once the response is written.
 		assertEquals("$FV{confirmPrompt}", WIDENED.rowActions.get(0).confirm);
 		assertEquals("$FV{popoverTitle}", WIDENED.columns.get(1).render.popover.title);
 		assertEquals("$FV{fieldTitle}", WIDENED.columns.get(1).render.popover.fields.get(0).title);
-		var detailPopover = WIDENED.details.sections.get(0).fields.get(0).render.popover;
-		assertEquals("$FV{detailPopoverTitle}", detailPopover.title);
-		assertEquals("$FV{detailFieldTitle}", detailPopover.fields.get(0).title);
 	}
 
 	@Test void b05_popoverWithNoTemplate_isNeverMutated() {

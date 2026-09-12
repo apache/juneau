@@ -304,7 +304,7 @@ function envelope(NS, extra) {
 	}
 
 	// =================================================================================================================
-	// Nested: contract "2", no html id on the nested table.
+	// Leftover detail.sections[].table must not reconstruct a nested table (F24 host retired with .sections()).
 	// =================================================================================================================
 	{
 		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
@@ -313,6 +313,11 @@ function envelope(NS, extra) {
 		envl.detail = {
 			contractVersion: NS.ROW_DETAIL_CONTRACT_VERSION,
 			endpoint: '/data/{id}',
+			region: {
+				id: 'pd-mine-detail',
+				type: 'row-detail',
+				dataUrl: '/data/{id}'
+			},
 			sections: [{
 				id: 'children',
 				title: 'Children',
@@ -331,11 +336,9 @@ function envelope(NS, extra) {
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
 		const dest = tpl && tpl.content ? tpl.content : tpl;
-		const nested = dest && dest.querySelector('[data-juneau-nested]');
-		const nestedTable = nested && nested.querySelector('table[data-juneau-view="child-rows"]');
-		out.t13_nestedContract = nested != null && nested.getAttribute('data-juneau-nested-contract') === '2';
-		out.t13_nestedNoHtmlId = nestedTable != null && !nestedTable.getAttribute('id');
-		out.t13_scopeParam = nested != null && nested.getAttribute('data-juneau-nested-scope-param') === 'parentId';
+		out.t13_noNested = dest == null || dest.querySelector('[data-juneau-nested]') == null;
+		out.t13_hasRegion = dest != null && dest.querySelector('[data-juneau-region="pd-mine-detail"]') != null;
+		out.t13_noSectionFrame = dest == null || dest.querySelector('[data-juneau-detail-section]') == null;
 	}
 
 	// =================================================================================================================

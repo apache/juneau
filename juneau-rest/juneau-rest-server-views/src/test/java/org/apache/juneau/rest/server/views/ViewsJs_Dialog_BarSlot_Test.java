@@ -78,12 +78,10 @@ class ViewsJs_Dialog_BarSlot_Test extends TestBase {
 		// dialog bar slot exists (FINISHED-J0445u/J0445w locks this the same way for the row-detail host).
 		assertTrue(body.contains("insertDialogBarSlot(dialog, header, modal?.barSlot, seq)"), body);
 		var buildRibbonAt = body.indexOf("function buildRibbonStrip(");
-		var buildDetailAt = body.indexOf("function buildDetailStrip(");
-		assertTrue(buildRibbonAt >= 0 && buildDetailAt >= 0, body);
+		assertTrue(buildRibbonAt >= 0, body);
 		var ribbonBody = body.substring(buildRibbonAt, body.indexOf("\n\t}", buildRibbonAt));
-		var detailStripBody = body.substring(buildDetailAt, body.indexOf("\n\t}", buildDetailAt));
 		assertFalse(ribbonBody.contains("Dialog"), "buildRibbonStrip must not learn about dialogs");
-		assertFalse(detailStripBody.contains("insertDialogBarSlot"), "buildDetailStrip must not learn about dialogs");
+		assertFalse(body.contains("function buildDetailStrip("), body);
 	}
 
 	@Test void a03_identityMintingIsReusedVerbatim_notReimplemented() throws Exception {

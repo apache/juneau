@@ -43,8 +43,8 @@ import org.apache.juneau.rest.server.views.*;
  * the convenience layer bought nothing.
  *
  * <p>
- * <b>What is absent from {@link #instancesView()} is the entire point.</b> No {@code .sections(...)}, no
- * {@link DetailField}, no {@link DetailSection}, no {@link ActionBar}, and no tab declared anywhere in Java &mdash;
+ * <b>What is absent from {@link #instancesView()} is the entire point.</b> No field-slot catalog in Java, no
+ * {@link ActionBar}, and no tab declared anywhere in Java &mdash;
  * yet the rendered panel has ten working tabs. The per-tab cost is <b>one line of JavaScript and zero lines of
  * Java</b>, because pane <i>shape</i> (grid / map / list) picks the recipe rather than tab <i>identity</i>. Adding an
  * eleventh tab is one more line.

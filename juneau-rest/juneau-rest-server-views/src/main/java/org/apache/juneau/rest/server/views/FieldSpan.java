@@ -17,12 +17,11 @@
 package org.apache.juneau.rest.server.views;
 
 /**
- * How many of a {@link DetailSection}'s grid columns one {@link DetailField} occupies.
+ * How many of a field-grid's columns one catalog entry occupies.
  *
  * <p>
- * A span is a <b>maximum</b>, exactly as {@link DetailSection#columns} is: it clamps downward as the grid steps
- * down, and it never creates a column beyond the rendered count.  At one column {@link #FULL} and {@link #ONE}
- * render identically.
+ * A span is a <b>maximum</b>: it clamps downward as the grid steps down, and it never creates a column beyond the
+ * rendered count.  At one column {@link #FULL} and {@link #ONE} render identically.
  *
  * <p>
  * A closed vocabulary the framework translates to a class, never a CSS value an author supplies.

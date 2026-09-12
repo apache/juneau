@@ -47,7 +47,7 @@ import java.util.*;
  * The rendered HTML is intended to be dropped inside a <c>.jc-prose</c> container so it picks up the console's
  * prose typography.  Raw HTML in the source is escaped; {@code javascript:} / {@code data:} URLs are stripped.
  * The row-detail runtime still allowlist-copies the fragment (never {@code innerHTML}) when
- * {@code DetailField.Format.MARKDOWN} is set.
+ * {@code FieldFormat.MARKDOWN} is set.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

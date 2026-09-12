@@ -100,7 +100,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function fillDetailSlots(");
 		assertTrue(fnBody.contains("paintDetailFieldSlot(slot, map)"), fnBody);
-		assertTrue(fnBody.contains("paintDetailTitleSlot(el, map)"), fnBody);
+		assertTrue(fnBody.contains("paintDetailTitleSlot(el, map, allow)"), fnBody);
 		assertFalse(fnBody.contains("innerHTML"), fnBody);
 		var titleFn = functionBody(body, "function paintDetailTitleSlot(");
 		assertTrue(titleFn.contains("el.textContent"), titleFn);

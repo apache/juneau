@@ -585,7 +585,7 @@ public class ViewDef {
 
 	/**
 	 * Serving-path fail-closed check for a {@code pill} named on a <b>fill sink</b>
-	 * ({@link DetailField#render(String)}).
+	 * (a field-grid catalog {@code render} entry).
 	 *
 	 * <p>
 	 * A fill sink has no {@link #rowActions} in scope, so a {@code meta.action} there could never resolve to anything

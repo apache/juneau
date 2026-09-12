@@ -317,10 +317,7 @@ public class PageDef {
 		var detailSlot = view.details.barSlot;
 		if (detailSlot != null && barSlot.id.equals(detailSlot.id))
 			throw iaex("PageDef '%s': RowDetailDef bar slot id '%s' duplicates the page bar slot id.", id, barSlot.id);
-		if (view.details.sections != null)
-			for (var s : view.details.sections)
-				if (s != null && s.table != null)
-					checkDetailBarSlotIds(s.table.view, depth + 1);
+		// Nested-table seeding on row-detail is deferred (F24); there is no hosted nested view to walk.
 	}
 
 	private void addViewId(Set<String> viewIds, String viewId) {

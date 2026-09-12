@@ -64,14 +64,12 @@ class ServerValuesHosts_Test extends TestBase {
 	// Shared definitions: a page host, a row-detail host, and a view host, all live in one response.
 	//------------------------------------------------------------------------------------------------------------------
 
-	/** The row-detail host: {@code title} / {@code DetailSection.title} / {@code DetailField.title} are on the allowlist. */
+	/** The row-detail host: {@code title} is on the allowlist. */
 	static final RowDetailDef DETAIL = RowDetailDef.create()
 		.endpoint("/alerts/{id}/detail")
 		.title("D-title:$FV{env}")
 		.icon("D-icon:$FV{env}")           // NOT on the allowlist - must stay literal
-		.sections(
-			DetailSection.create("main", "D-section:$FV{env}")
-				.fields(DetailField.of("k").title("D-field:$FV{env}")))
+		.region(RegionDef.create("d").allowPopulators("p").populate("p"))
 		.serverValues(envValues("/DETAIL"));
 
 	/** The view host (the shipped v1 host), which must resolve independently of the page host. */
@@ -139,7 +137,7 @@ class ServerValuesHosts_Test extends TestBase {
 	static final RowDetailDef THROWING_DETAIL = RowDetailDef.create()
 		.endpoint("/boom/{id}")
 		.title("T:$FV{bad}")
-		.sections(DetailSection.create("main", "S").fields(DetailField.of("k")))
+		.region(RegionDef.create("d").allowPopulators("p").populate("p"))
 		.serverValues(ServerValues.create().value("bad", s -> {
 			throw new IllegalStateException("provider blew up");
 		}));
@@ -227,12 +225,6 @@ class ServerValuesHosts_Test extends TestBase {
 		}
 		out.add(DETAIL.title);
 		out.add(DETAIL.icon);
-		for (var s : DETAIL.sections) {
-			out.add(s.title);
-			if (s.fields != null)
-				for (var f : s.fields)
-					out.add(f.title);
-		}
 		out.add(ALERTS.columns.get(0).title);
 		out.add(ORPHAN.columns.get(0).title);
 		return out;
@@ -260,7 +252,7 @@ class ServerValuesHosts_Test extends TestBase {
 	@Test void a02_rowDetailDefValidate_cascadesIntoServerValuesValidate() {
 		var d = RowDetailDef.create()
 			.endpoint("/x/{id}")
-			.sections(DetailSection.create("main", "Main").fields(DetailField.of("k")))
+			.region(RegionDef.create("d").allowPopulators("p").populate("p"))
 			.serverValues(brokenValues());
 		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
 		assertTrue(e.getMessage().contains("ServerValues"), e.getMessage());
@@ -337,11 +329,9 @@ class ServerValuesHosts_Test extends TestBase {
 	// d) RowDetailDef allowlist, resolved into the server-emitted <template> at parent paint time
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_detailTitleSectionAndFieldTitlesResolve() throws Exception {
+	@Test void d01_detailTitleResolves() throws Exception {
 		var html = body("/page?env=A");
 		assertTrue(html.contains("D-title:A/DETAIL"), html);
-		assertTrue(html.contains("D-section:A/DETAIL"), html);
-		assertTrue(html.contains("D-field:A/DETAIL"), html);
 	}
 
 	@Test void d02_detailIcon_isNotOnTheAllowlist_staysLiteral() throws Exception {
@@ -352,8 +342,6 @@ class ServerValuesHosts_Test extends TestBase {
 	@Test void d03_detailHostAlsoResolvesForAStandaloneViewTable() throws Exception {
 		var html = body("/view?env=Z");
 		assertTrue(html.contains("D-title:Z/DETAIL"), html);
-		assertTrue(html.contains("D-section:Z/DETAIL"), html);
-		assertTrue(html.contains("D-field:Z/DETAIL"), html);
 	}
 
 	@Test void d04_detailTitleTemplateAttributeCarriesTheResolvedString() throws Exception {
@@ -369,7 +357,7 @@ class ServerValuesHosts_Test extends TestBase {
 		var html = body("/page?env=A");
 		// One response, three hosts, one shared name: each host's own declaration wins.
 		assertTrue(html.contains("P-tab2:A/PAGE"), "page host");
-		assertTrue(html.contains("D-section:A/DETAIL"), "row-detail host");
+		assertTrue(html.contains("D-title:A/DETAIL"), "row-detail host");
 		assertTrue(html.contains("V-col:A/VIEW"), "view host");
 	}
 
@@ -389,7 +377,7 @@ class ServerValuesHosts_Test extends TestBase {
 		assertEquals(before, authorTemplates(), "author $FV templates must be restored byte-identically");
 		// And they really are templates, not already-resolved strings.
 		assertTrue(before.contains("P-title:$FV{env}"), before::toString);
-		assertTrue(before.contains("D-field:$FV{env}"), before::toString);
+		assertTrue(before.contains("D-title:$FV{env}"), before::toString);
 	}
 
 	@Test void f02_twoSequentialRequestsResolveFreshly_noCarryOver() throws Exception {
@@ -414,7 +402,7 @@ class ServerValuesHosts_Test extends TestBase {
 		var d = RowDetailDef.create()
 			.endpoint("/x/{id}")
 			.title("$FV{nope}")
-			.sections(DetailSection.create("main", "$FV{nope,dflt}").fields(DetailField.of("k")))
+			.region(RegionDef.create("d").allowPopulators("p").populate("p"))
 			.serverValues(ServerValues.create().value("known", s -> "k"));
 		assertDoesNotThrow(() -> d.validate(null));
 	}
@@ -450,8 +438,6 @@ class ServerValuesHosts_Test extends TestBase {
 			.getContent().asString();
 		// Chrome is painted into the server-emitted <template>; the expand GET is row data only.
 		assertFalse(json.contains("D-title"), () -> json);
-		assertFalse(json.contains("D-section"), () -> json);
-		assertFalse(json.contains("D-field"), () -> json);
 		assertTrue(json.contains("row-value-a1"), () -> json);
 	}
 

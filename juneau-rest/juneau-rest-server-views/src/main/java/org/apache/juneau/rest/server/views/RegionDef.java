@@ -571,8 +571,8 @@ public class RegionDef {
 		 * that reads it). Independent of {@link #render}. */
 		public String href;
 
-		/** How the value is painted. <jk>null</jk> means {@link DetailField.Format#TEXT}. */
-		public DetailField.Format format;
+		/** How the value is painted. <jk>null</jk> means {@link FieldFormat#TEXT}. */
+		public FieldFormat format;
 
 		/** How many of the grid's columns this field occupies. <jk>null</jk> means {@link FieldSpan#ONE}. */
 		public FieldSpan span;
@@ -644,10 +644,10 @@ public class RegionDef {
 		/**
 		 * Sets the paint format.
 		 *
-		 * @param value The format. <jk>null</jk> means {@link DetailField.Format#TEXT}.
+		 * @param value The format. <jk>null</jk> means {@link FieldFormat#TEXT}.
 		 * @return This object.
 		 */
-		public Field format(DetailField.Format value) {
+		public Field format(FieldFormat value) {
 			format = value;
 			return this;
 		}
@@ -700,7 +700,7 @@ public class RegionDef {
 				m.put("renderMeta", renderMeta);
 			if (href != null)
 				m.put("href", href);
-			if (format != null && format != DetailField.Format.TEXT)
+			if (format != null && format != FieldFormat.TEXT)
 				m.put("format", format.wire());
 			if (span == FieldSpan.FULL)
 				m.put("span", "full");

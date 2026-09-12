@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * Serving-path allowlist of renderer ids that may be <em>named</em> on a fill sink
- * ({@link DetailField#render} or {@link PopoverField#render}).
+ * (a field-grid catalog {@code render} entry or {@link PopoverField#render}).
  *
  * <p>
  * This does not freeze JavaScript functions; the client {@code resolveSinkRenderer} lookup owns that.  The
@@ -33,7 +33,7 @@ import java.util.*;
 public final class SinkRenderAllowlist {
 
 	/**
-	 * Built-in ids safe to name on a {@link DetailField} fill sink (and the JS frozen-builtin set).
+	 * Built-in ids safe to name on a field-grid fill sink (and the JS frozen-builtin set).
 	 *
 	 * <p>
 	 * {@code pill} is a fill-sink built-in whose sink renderer is a <b>display-only</b> variant of the cell renderer:
@@ -43,8 +43,8 @@ public final class SinkRenderAllowlist {
 	 *
 	 * <p>
 	 * {@code code} (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) is a minimal monospace,
-	 * whitespace-preserving, HTML-escaped source-text renderer intended for a {@link DetailField} inside a
-	 * row-detail subtab &mdash; no language hint or syntax highlighting on this first pass.
+	 * whitespace-preserving, HTML-escaped source-text renderer intended for a field-grid catalog entry inside a
+	 * row-detail region &mdash; no language hint or syntax highlighting on this first pass.
 	 */
 	public static final Set<String> BUILTIN_IDS = Set.of(
 		"date", "datetime", "ts-zulu", "bool", "linked", "truncate", "json", "decimal", "tag", "progress", "pill",

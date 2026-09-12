@@ -75,7 +75,7 @@ class RowDetail_ActionButton_BrowserTest extends TestBase {
 					ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
 					ActionRef.of("esc"),
 					SafeAction.COLLAPSE))
-				.sections(DetailSection.create("s", "S").fields(DetailField.of("title").title("Title"))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.build();
 	}
 

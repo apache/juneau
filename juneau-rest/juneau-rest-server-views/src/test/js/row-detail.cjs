@@ -327,6 +327,7 @@ out.fill_missing = extra.textContent;
 out.fill_xssNotInterpreted = title.textContent === xss;
 
 const titleWrap = el('div');
+titleWrap.setAttribute('data-juneau-title-fields', 'number');
 const titleH2 = el('h2');
 titleH2.dataset.juneauDetailTitle = '1';
 titleH2.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
@@ -336,6 +337,7 @@ I.fillDetailSlots(titleWrap, { number: '42' });
 out.title_filled = titleH2.textContent;
 
 const titleXssWrap = el('div');
+titleXssWrap.setAttribute('data-juneau-title-fields', 'number');
 const titleXss = el('h2');
 titleXss.dataset.juneauDetailTitle = '1';
 titleXss.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
@@ -851,149 +853,102 @@ if (out.hasFillRender) {
 }
 
 // ----------------------------------------------------------------------------------------------------------------
-// Shared strip widget - tab-mode (multi-section row-detail pane switcher).
+// Ribbon primitives that outlived the detail strip: keyboard math + activateDetailTab + buildRibbonStrip.
 // ----------------------------------------------------------------------------------------------------------------
 
 out.hasBuildDetailStrip = typeof I.buildDetailStrip === 'function';
 out.hasActivateDetailTab = typeof I.activateDetailTab === 'function';
 out.hasDetailTabTargetIndex = typeof I.detailTabTargetIndex === 'function';
 
-if (out.hasBuildDetailStrip) {
-	function detailSection(sid, title) {
-		const sec = el('section');
-		sec.dataset.juneauDetailSection = sid;
-		sec.className = 'juneau-view-detail-section';
-		const h2 = el('h2');
-		h2.className = 'juneau-view-detail-section-title';
-		h2.textContent = title;
-		sec.appendChild(h2);
-		const fields = el('div');
-		fields.className = 'juneau-view-detail-fields';
-		sec.appendChild(fields);
-		return sec;
-	}
-	function detailPanel(pairs) {
-		const panel = el('div');
-		panel.className = 'juneau-view-detail-panel';
-		pairs.forEach(function (p) { panel.appendChild(detailSection(p[0], p[1])); });
-		return panel;
-	}
-	function tabButtonsOf(strip) {
-		return strip.childNodes.filter(function (c) { return c.getAttribute?.('role') === 'tab'; });
-	}
+out.tti_right = I.detailTabTargetIndex('ArrowRight', 0, 3);
+out.tti_rightWrap = I.detailTabTargetIndex('ArrowRight', 2, 3);
+out.tti_left = I.detailTabTargetIndex('ArrowLeft', 0, 3);
+out.tti_home = I.detailTabTargetIndex('Home', 2, 3);
+out.tti_end = I.detailTabTargetIndex('End', 0, 3);
+out.tti_other = I.detailTabTargetIndex('Enter', 0, 3);
 
-	// Pure keyboard-target math.
-	out.tti_right = I.detailTabTargetIndex('ArrowRight', 0, 3);
-	out.tti_rightWrap = I.detailTabTargetIndex('ArrowRight', 2, 3);
-	out.tti_left = I.detailTabTargetIndex('ArrowLeft', 0, 3);
-	out.tti_home = I.detailTabTargetIndex('Home', 2, 3);
-	out.tti_end = I.detailTabTargetIndex('End', 0, 3);
-	out.tti_other = I.detailTabTargetIndex('Enter', 0, 3);
-
-	// Multi-section (Alerts Overview | Context) -> one tablist, one visible pane.
-	const multi = detailPanel([['overview', 'Overview'], ['context', 'Context']]);
-	const strip = I.buildDetailStrip(multi);
-	out.strip_built = !!strip;
-	out.strip_isFirstChild = multi.firstChild === strip;
-	out.strip_role = strip.getAttribute('role');
-	out.strip_mode = strip.dataset.juneauStripMode;
-	out.strip_hasRibbonGroupClass = (strip.className || '').indexOf('juneau-view-ribbon-group') >= 0;
-	const tabButtons = tabButtonsOf(strip);
-	out.strip_tabCount = tabButtons.length;
-	out.strip_labels = tabButtons.map(function (b) { return b.textContent; }).join(',');
-	out.strip_btnClass = tabButtons[0].className;
-	out.strip_firstSelected = tabButtons[0].getAttribute('aria-selected');
-	out.strip_secondSelected = tabButtons[1].getAttribute('aria-selected');
-	out.strip_firstTabindex = tabButtons[0].tabIndex;
-	out.strip_secondTabindex = tabButtons[1].tabIndex;
-	const panes = multi.querySelectorAll('[data-juneau-detail-section]');
-	out.strip_pane0Hidden = panes[0].hidden === true;
-	out.strip_pane1Hidden = panes[1].hidden === true;
-	out.strip_pane0Role = panes[0].getAttribute('role');
-	out.strip_pane0Labelledby = panes[0].getAttribute('aria-labelledby') === tabButtons[0].id;
-	out.strip_tab0Controls = tabButtons[0].getAttribute('aria-controls') === panes[0].id;
-	out.strip_titleHidden = panes[0].querySelector('.juneau-view-detail-section-title').hidden === true;
-
-	// activateDetailTab flips exactly one selection + one visible pane (visibility only).
-	const fakeTabs = [
-		{ btn: tabButtons[0], pane: panes[0], id: 'overview' },
-		{ btn: tabButtons[1], pane: panes[1], id: 'context' }
-	];
-	I.activateDetailTab(fakeTabs, 'context');
-	out.act_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
-	out.act_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
-	out.act_pane1Visible = panes[1].hidden === false;
-	out.act_pane0Hidden = panes[0].hidden === true;
-	// reset to first for the keyboard walk
-	I.activateDetailTab(fakeTabs, 'overview');
-
-	// Keyboard: Right/Home/End/Left via the strip's own delegated keydown (roving tabindex).
-	document.activeElement = null;                 // fall back to the aria-selected tab (index 0)
-	strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
-	out.kbd_right_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
-	out.kbd_right_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
-	out.kbd_right_pane1Visible = panes[1].hidden === false;
-	out.kbd_right_focusMoved = document.activeElement === tabButtons[1];
-	strip._fire('keydown', { key: 'Home', preventDefault: function () {} });
-	out.kbd_home_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
-	strip._fire('keydown', { key: 'End', preventDefault: function () {} });
-	out.kbd_end_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
-	strip._fire('keydown', { key: 'ArrowLeft', preventDefault: function () {} });
-	out.kbd_left_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
-	// An unhandled key is a no-op (selection stays on tab0).
-	strip._fire('keydown', { key: 'Enter', preventDefault: function () {} });
-	out.kbd_enter_noop = tabButtons[0].getAttribute('aria-selected') === 'true';
-
-	// Single-section (Widgets "Active" Info) stays strip-less; sections are untouched.
-	const single = detailPanel([['info', 'Info']]);
-	const singleStrip = I.buildDetailStrip(single);
-	out.single_noStrip = singleStrip === null;
-	out.single_firstStillSection = single.firstChild.dataset.juneauDetailSection === 'info';
-	out.single_paneNotHidden = single.firstChild.hidden !== true;
-	out.single_noTabpanelRole = single.firstChild.getAttribute('role') == null;
-	out.single_titleNotHidden = single.firstChild.querySelector('.juneau-view-detail-section-title').hidden !== true;
-
-	// Skills fixture: Skill | SKILL.md (matches Support Console SkillsView).
-	const skills = detailPanel([['skill', 'Skill'], ['body', 'SKILL.md']]);
-	const skillsStrip = I.buildDetailStrip(skills);
-	out.skills_labels = tabButtonsOf(skillsStrip).map(function (b) { return b.textContent; }).join(',');
-	out.skills_tabCount = tabButtonsOf(skillsStrip).length;
-
-	// Tab switch is visibility-only for the PARENT detail envelope: activating a tab (click or keyboard) never
-	// re-GETs the parent detail (the strip itself issues no fetch).  It DOES, however, fire the optional
-	// onActivate(sectionId, pane) seam - the hook a newly-shown pane's nested table rides on to run its OWN
-	// independent GET.  Here we prove both: fetch stays 0, and onActivate fires with the activated pane.
-	let fetchCalls = 0;
-	// NOSONAR javascript:S7739 -- deliberately a never-resolving thenable, not a real Promise: this verifies the
-	// strip issues no additional fetch and that chaining .then().catch() on whatever it returns never crashes; a
-	// real Promise would resolve on a later microtask and risk flakiness against this fully synchronous assertion
-	// script (there is no await boundary after this point for it to safely resolve within).
-	window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
-	const activated = [];
-	const nf = detailPanel([['a', 'A'], ['b', 'B']]);
-	const nfStrip = I.buildDetailStrip(nf, function (sid, pane) { activated.push({ sid: sid, pane: pane }); });
-	const nfTabs = tabButtonsOf(nfStrip);
-	const nfPanes = nf.querySelectorAll('[data-juneau-detail-section]');
-	document.activeElement = null;
-	nfStrip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });   // -> section 'b'
-	nfStrip._fire('click', { target: nfTabs[0] });                                     // -> section 'a'
-	out.noRefetch_fetchCalls = fetchCalls;
-	out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
-	out.noRefetch_onActivateCount = activated.length;                                  // keyboard + click = 2
-	out.noRefetch_onActivateFirstSid = activated.length ? activated[0].sid : null;     // 'b' (ArrowRight)
-	out.noRefetch_onActivateLastSid = activated.length ? activated.at(-1).sid : null;   // 'a' (click)
-	out.noRefetch_onActivatePaneMatches = activated.length >= 2
-		&& activated[0].pane === nfPanes[1] && activated[1].pane === nfPanes[0];
-	window.fetch = undefined;
-
-	const headed = detailPanel([['overview', 'Overview'], ['context', 'Context']]);
-	const hdr = el('div');
-	hdr.className = 'juneau-view-detail-header';
-	headed.insertBefore(hdr, headed.firstChild);
-	const headedStrip = I.buildDetailStrip(headed);
-	out.header_firstIsHeader = headed.firstChild === hdr;
-	out.header_stripAfterHeader = headed.childNodes[1] === headedStrip;
+function tabButtonsOf(strip) {
+	return strip.childNodes.filter(function (c) { return c.getAttribute?.('role') === 'tab'; });
 }
+
+const ribbonPanes = [el('div'), el('div')];
+const ribbon = I.buildRibbonStrip([
+	{ id: 'overview', label: 'Overview', pane: ribbonPanes[0] },
+	{ id: 'context', label: 'Context', pane: ribbonPanes[1] }
+], {
+	className: 'juneau-view-ribbon-group juneau-view-detail-tabs',
+	testId: 'detail-tabs',
+	onActivate: function () {}
+});
+const strip = ribbon.strip;
+const tabButtons = tabButtonsOf(strip);
+out.strip_built = !!strip;
+out.strip_role = strip.getAttribute('role');
+out.strip_mode = strip.dataset.juneauStripMode;
+out.strip_hasRibbonGroupClass = (strip.className || '').indexOf('juneau-view-ribbon-group') >= 0;
+out.strip_tabCount = tabButtons.length;
+out.strip_labels = tabButtons.map(function (b) { return b.textContent; }).join(',');
+out.strip_btnClass = tabButtons[0].className;
+out.strip_firstSelected = tabButtons[0].getAttribute('aria-selected');
+out.strip_secondSelected = tabButtons[1].getAttribute('aria-selected');
+out.strip_firstTabindex = tabButtons[0].tabIndex;
+out.strip_secondTabindex = tabButtons[1].tabIndex;
+out.strip_pane0Hidden = ribbonPanes[0].hidden === true;
+out.strip_pane1Hidden = ribbonPanes[1].hidden === true;
+out.strip_pane0Role = ribbonPanes[0].getAttribute('role');
+out.strip_pane0Labelledby = ribbonPanes[0].getAttribute('aria-labelledby') === tabButtons[0].id;
+out.strip_tab0Controls = tabButtons[0].getAttribute('aria-controls') === ribbonPanes[0].id;
+
+I.activateDetailTab(ribbon.tabs, 'context');
+out.act_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+out.act_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
+out.act_pane1Visible = ribbonPanes[1].hidden === false;
+out.act_pane0Hidden = ribbonPanes[0].hidden === true;
+I.activateDetailTab(ribbon.tabs, 'overview');
+
+document.activeElement = null;
+strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+out.kbd_right_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+out.kbd_right_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
+out.kbd_right_pane1Visible = ribbonPanes[1].hidden === false;
+out.kbd_right_focusMoved = document.activeElement === tabButtons[1];
+strip._fire('keydown', { key: 'Home', preventDefault: function () {} });
+out.kbd_home_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
+strip._fire('keydown', { key: 'End', preventDefault: function () {} });
+out.kbd_end_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
+strip._fire('keydown', { key: 'ArrowLeft', preventDefault: function () {} });
+out.kbd_left_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
+strip._fire('keydown', { key: 'Enter', preventDefault: function () {} });
+out.kbd_enter_noop = tabButtons[0].getAttribute('aria-selected') === 'true';
+
+const skillsPanes = [el('div'), el('div')];
+const skills = I.buildRibbonStrip([
+	{ id: 'skill', label: 'Skill', pane: skillsPanes[0] },
+	{ id: 'body', label: 'SKILL.md', pane: skillsPanes[1] }
+], {});
+out.skills_labels = tabButtonsOf(skills.strip).map(function (b) { return b.textContent; }).join(',');
+out.skills_tabCount = tabButtonsOf(skills.strip).length;
+
+let fetchCalls = 0;
+window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
+const activated = [];
+const nfPanes = [el('div'), el('div')];
+const nf = I.buildRibbonStrip([
+	{ id: 'a', label: 'A', pane: nfPanes[0] },
+	{ id: 'b', label: 'B', pane: nfPanes[1] }
+], { onActivate: function (sid, pane) { activated.push({ sid: sid, pane: pane }); } });
+const nfTabs = tabButtonsOf(nf.strip);
+document.activeElement = null;
+nf.strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+nf.strip._fire('click', { target: nfTabs[0] });
+out.noRefetch_fetchCalls = fetchCalls;
+out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
+out.noRefetch_onActivateCount = activated.length;
+out.noRefetch_onActivateFirstSid = activated.length ? activated[0].sid : null;
+out.noRefetch_onActivateLastSid = activated.length ? activated.at(-1).sid : null;
+out.noRefetch_onActivatePaneMatches = activated.length >= 2
+	&& activated[0].pane === nfPanes[1] && activated[1].pane === nfPanes[0];
+window.fetch = undefined;
 
 // findRowDetailTemplate: sibling of the table (pre-wrap) AND sibling of .dt-container (DataTables 2 wrap).
 out.hasFindRowDetailTemplate = typeof I.findRowDetailTemplate === 'function';

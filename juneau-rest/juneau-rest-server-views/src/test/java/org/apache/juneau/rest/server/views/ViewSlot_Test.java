@@ -306,37 +306,34 @@ class ViewSlot_Test extends TestBase {
 	}
 
 	@Test void d03_countNull_isOmitted() {
-		@SuppressWarnings("deprecation")
 		var d = RowDetailDef.create()
 			.endpoint("/q/{id}")
-			.sections(DetailSection.create("details", "Details").fields(DetailField.of("status").title("Status")));
+			.region(RegionDef.create("d").allowPopulators("p").populate("p"));
 		var view = ViewDef.create("q").columns(Column.of("id").title("Id")).details(d).build();
 		var json = Json.of(ViewSlot.envelope(view).detail);
 		assertFalse(json.contains("\"count\""), json);
 		assertFalse(json.contains("null"), json);
 	}
 
-	@Test void d04_formatUsesWireToken() {
-		@SuppressWarnings("deprecation")
+	@Test void d04_titleFieldsRideTheRegionWire() {
 		var d = RowDetailDef.create()
 			.endpoint("/q/{id}")
-			.sections(DetailSection.create("d", "D").fields(
-				DetailField.of("body").title("").format(DetailField.Format.SANITIZED_HTML)));
+			.region(RegionDef.create("d").allowPopulators("p").populate("p").titleFields("body"));
 		var view = ViewDef.create("q").columns(Column.of("id").title("Id")).details(d).build();
 		var json = Json.of(ViewSlot.envelope(view).detail);
-		assertTrue(json.contains("\"" + DetailField.Format.SANITIZED_HTML.wire() + "\""), json);
+		assertTrue(json.contains("\"titleFields\""), json);
+		assertTrue(json.contains("body"), json);
 	}
 
 	@Test void d05_headerActions_primaryAndSafeCollapse() {
 		var ack = RowAction.create("ack").label("Ack").endpoint("/ack").method(RowAction.Method.POST);
-		@SuppressWarnings("deprecation")
 		var d = RowDetailDef.create()
 			.endpoint("/d/{id}")
 			.title("T")
 			.headerActions(ActionBar.create().items(
 				ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
 				SafeAction.COLLAPSE))
-			.sections(DetailSection.create("d", "D").fields(DetailField.of("x").title("X")));
+			.region(RegionDef.create("d").allowPopulators("p").populate("p"));
 		var view = ViewDef.create("q").columns(Column.of("id").title("Id")).rowActions(ack).details(d).build();
 		var json = Json.of(ViewSlot.envelope(view).detail);
 		assertTrue(json.contains("\"emphasis\":\"primary\""), json);

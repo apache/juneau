@@ -16,22 +16,18 @@
  */
 
 /*
- * ribbon-strip.cjs - always-on Node harness for the SHARED ribbon-format strip builder and its two callers.
+ * ribbon-strip.cjs - always-on Node harness for the SHARED ribbon-format strip builder.
  *
- * Three things are proved here:
+ * Two things are proved here:
  *
  *   1. buildRibbonStrip is a real generic: given {id, label, pane} tuples it wires role=tab / aria-selected /
  *      aria-controls / role=tabpanel / aria-labelledby / roving tabindex, moves selection on
  *      Left/Right/Home/End (wrapping), ignores keys it does not own, and fires onActivate exactly once per
  *      activation - with no knowledge of row details or dialogs.
  *
- *   2. buildDetailStrip, now a thin caller of that builder, still emits DOM that is IDENTICAL to what it emitted
- *      before: the harness serializes the whole panel (element order, attribute insertion order, the properties the
- *      runtime sets rather than attributes) and the Java side pins it against an exact expected string.
- *
- *   3. A SECTIONED dialog form is built by the generic builder, and buildDetailStrip is NOT on that call path (the
- *      export is spied and must stay at zero calls), while a nested dialog opened from inside a sectioned dialog
- *      still refuses at MAX_DIALOG_DEPTH rather than stacking a third overlay.
+ *   2. A SECTIONED dialog form is built by the generic builder, and buildDetailStrip is gone (the dialog path
+ *      must not resurrect it), while a nested dialog opened from inside a sectioned dialog still refuses at
+ *      MAX_DIALOG_DEPTH rather than stacking a third overlay.
  *
  *   Usage:  node ribbon-strip.cjs <juneau-renders.js> <juneau-views.js>
  *
@@ -51,62 +47,13 @@ if (!rendersJsPath || !viewsJsPath) {
 
 const { env, I } = loadViews(rendersJsPath, viewsJsPath);
 const out = {
-	hasInit: !!(typeof I?.buildRibbonStrip === 'function' && typeof I.buildDetailStrip === 'function')
+	hasInit: typeof I?.buildRibbonStrip === 'function'
 };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
-
-/**
- * Canonical serialization of a subtree: tag, attributes in INSERTION order, then the properties the runtime sets
- * directly rather than through setAttribute (class, hidden, tabindex, input type), then text, then children.  A
- * change in the order the builder sets things therefore shows up as a diff, which is what makes this usable as a
- * byte-for-byte pin on the refactor.
- */
-function dump(n, depth) {
-	if (!n || n.nodeType !== 1) return '';
-	const parts = [];
-	Object.keys(n.attrs).forEach(function (k) { parts.push(k + '="' + n.attrs[k] + '"'); });
-	if (n.className) parts.push('.class="' + n.className + '"');
-	if (n.hidden === true) parts.push('.hidden');
-	if (n.tabIndex != null) parts.push('.tabindex=' + n.tabIndex);
-	if (n._type != null) parts.push('.type="' + n._type + '"');
-	let s = new Array(depth + 1).join('  ') + '<' + n.tagName.toLowerCase()
-		+ (parts.length ? ' ' + parts.join(' ') : '') + '>';
-	if (n.childNodes.length === 0 && n._text) s += n._text;
-	s += '\n';
-	for (const c of n.childNodes) s += dump(c, depth + 1);
-	return s;
-}
 
 function tabsOf(strip) {
 	return strip.childNodes.filter(function (c) { return c.getAttribute?.('role') === 'tab'; });
 }
-
-function detailSection(sid, title) {
-	const sec = env.el('section');
-	sec.dataset.juneauDetailSection = sid;
-	sec.className = 'juneau-view-detail-section';
-	const h2 = env.el('h2');
-	h2.className = 'juneau-view-detail-section-title';
-	h2.textContent = title;
-	sec.appendChild(h2);
-	return sec;
-}
-
-function detailPanel(pairs) {
-	const panel = env.el('div');
-	panel.className = 'juneau-view-detail-panel';
-	pairs.forEach(function (p) { panel.appendChild(detailSection(p[0], p[1])); });
-	return panel;
-}
-
-// ------------------------------------------------------------------------------------------------------------------
-// 2) buildDetailStrip's DOM, pinned.  FIRST buildDetailStrip call in this process, so detailStripSeq is 1 and the
-//    minted ids are stable - the pin is on the shape and the ordering, not on a run-dependent counter.
-// ------------------------------------------------------------------------------------------------------------------
-
-const pinned = detailPanel([['overview', 'Overview'], ['context', 'Context']]);
-I.buildDetailStrip(pinned);
-out.detailStrip_dump = dump(pinned, 0);
 
 // ------------------------------------------------------------------------------------------------------------------
 // 1) The generic builder, driven directly - no panel, no dialog, no titles to hide.
@@ -204,10 +151,8 @@ out.null_returnsNull = I.buildRibbonStrip(null, {}) === null;
 // 3) A sectioned dialog form: generic builder, and buildDetailStrip NOT on the call path.
 // ------------------------------------------------------------------------------------------------------------------
 
-// Spy the export before painting anything: the dialog path must never route through it.
-let detailStripCalls = 0;
-const realBuildDetailStrip = I.buildDetailStrip;
-I.buildDetailStrip = function (...args) { detailStripCalls++; return realBuildDetailStrip(...args); };
+// A sectioned dialog form uses the generic builder; buildDetailStrip is retired.
+out.sectioned_buildDetailStripNotCalled = typeof I.buildDetailStrip !== 'function';
 
 const table = env.el('table');
 const tr = env.el('tr');
@@ -235,7 +180,6 @@ out.sectioned_stripMode = dStrip ? dStrip.dataset.juneauStripMode : null;
 out.sectioned_stripClass = dStrip ? dStrip.className : null;
 out.sectioned_stripIsFirstChildOfWrap = wrap != null && wrap.firstChild === dStrip;
 out.sectioned_noDetailTestId = sectionedDialog.querySelector('[data-testid="detail-tabs"]') === null;
-out.sectioned_buildDetailStripNotCalled = detailStripCalls === 0;
 
 const dTabs = dStrip ? tabsOf(dStrip) : [];
 out.sectioned_tabCount = dTabs.length;
@@ -282,7 +226,7 @@ I.appendDialogForm(flatDialog, { fields: [{ name: 'only', type: 'text', label: '
 out.flat_noStrip = flatDialog.querySelector('[data-testid="dialog-sections"]') === null;
 out.flat_noSectionPanes = flatDialog.querySelectorAll('[data-juneau-form-section]').length === 0;
 out.flat_stillPaintsTheRow = flatDialog.querySelector('[data-juneau-form-field="only"]') != null;
-out.flat_buildDetailStripStillNotCalled = detailStripCalls === 0;
+out.flat_buildDetailStripStillNotCalled = typeof I.buildDetailStrip !== 'function';
 
 // ------------------------------------------------------------------------------------------------------------------
 // Depth accounting: a sectioned dialog is ONE dialog.  Opening from inside it reaches the cap, and the third
@@ -319,8 +263,7 @@ const topEl = I.topLayer() ? I.topLayer().el : null;
 const refusal = topEl ? topEl.querySelector('.juneau-view-dialog-depth-refusal') : null;
 out.depth_refusalInTopDialog = refusal != null;
 out.depth_refusalNamesTheCap = refusal != null && String(refusal.textContent).indexOf('2') >= 0;
-out.depth_buildDetailStripNeverCalled = detailStripCalls === 0;
+out.depth_buildDetailStripNeverCalled = typeof I.buildDetailStrip !== 'function';
 while (I.topLayer()) I.popLayer();
 
-I.buildDetailStrip = realBuildDetailStrip;
 process.stdout.write(JSON.stringify(out));

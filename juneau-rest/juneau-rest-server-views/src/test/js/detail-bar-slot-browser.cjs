@@ -22,8 +22,8 @@
  *
  *   Usage:  node detail-bar-slot-browser.cjs <page.html>
  *
- * Loads the REAL served juneau-views.js + juneau-views.css in headless Chromium, runs buildDetailStrip over a
- * server-shaped 2-section detail panel, and measures the result: the BarBadge must be visible BESIDE the ribbon at a
+ * Loads the REAL served juneau-views.js + juneau-views.css in headless Chromium, builds an author ribbon via
+ * buildRibbonStrip + relocateDetailBarSlot over a server-shaped 2-section detail panel, and measures the result: the BarBadge must be visible BESIDE the ribbon at a
  * wide viewport, and must never overlap a ribbon tab at a narrow one (it wraps below instead).
  */
 'use strict';
@@ -35,10 +35,26 @@ const { chromium } = require('playwright');
 const PROBE = async function () {
 	const NS = window.JuneauViews;
 	const I = NS?.init;
-	const out = { hasInit: !!(I && typeof I.buildDetailStrip === 'function') };
+	const out = { hasInit: !!(I && typeof I.buildRibbonStrip === 'function' && typeof I.relocateDetailBarSlot === 'function') };
 	if (!out.hasInit) return out;
 
-	const strip = I.buildDetailStrip(document.getElementById('panel'), null);
+	const panel = document.getElementById('panel');
+	const secs = panel.querySelectorAll('[data-juneau-detail-section]');
+	const items = Array.prototype.map.call(secs, function (s) {
+		const title = s.querySelector('.juneau-view-detail-section-title');
+		return { id: s.dataset.juneauDetailSection, label: title ? title.textContent : s.dataset.juneauDetailSection, pane: s };
+	});
+	const built = I.buildRibbonStrip(items, {
+		className: 'juneau-view-ribbon-group juneau-view-detail-tabs',
+		testId: 'detail-tabs'
+	});
+	const header = panel.querySelector('.juneau-view-detail-header');
+	if (header)
+		panel.insertBefore(built.strip, header.nextSibling);
+	else
+		panel.insertBefore(built.strip, panel.firstChild);
+	I.relocateDetailBarSlot(panel, built.strip);
+	const strip = built.strip;
 	out.stripBuilt = !!strip;
 	out.stripTrailed = strip?.dataset.juneauStripTrailed ?? null;
 

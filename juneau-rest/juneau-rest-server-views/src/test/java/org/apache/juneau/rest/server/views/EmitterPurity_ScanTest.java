@@ -125,8 +125,10 @@ class EmitterPurity_ScanTest extends TestBase {
 		var args = sites().stream().map(RawContentSinkScanner.RawTextSite::arg).toList();
 		assertTrue(args.contains("json"),
 			() -> "expected the plain per-host sidecar payload shape to still exist: " + args);
-		assertTrue(args.stream().anyMatch(a -> a.startsWith("escapeForScript(")),
-			() -> "expected the inline escapeForScript(...) sidecar shape to still exist: " + args);
+		assertTrue(args.contains("bulkJson"),
+			() -> "expected the bulk sidecar payload shape to still exist: " + args);
+		// The inline rawText(escapeForScript(nestedJson(...))) shape retired with F24 nested-table emit.
+		// The classifier still recognizes it (a05 / a07); the live tree no longer has a call site.
 	}
 
 	@Test void a04_scanFindsTheKnownContentSinks() throws Exception {

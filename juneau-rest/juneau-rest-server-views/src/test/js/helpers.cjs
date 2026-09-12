@@ -95,6 +95,10 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	const unsafeHrefGrid = H.fieldGrid([{ data: 'id', label: 'Id', href: 'javascript:alert(1)//{id}' }], { values: { id: '1' } });
 	out.fieldGrid_unsafeHrefNotWrapped = !unsafeHrefGrid.querySelector('a');
 
+	const spanGrid = H.fieldGrid([{ data: 's', label: 'S', span: 'full' }], { values: { s: '1' } });
+	out.fieldGrid_spanFullClass = (spanGrid.querySelector('.juneau-view-detail-field').className || '')
+		.indexOf('juneau-view-detail-field-span-full') >= 0;
+
 	// actions: no onAction -> rendered disabled, never live-and-inert
 	// NOTE: this shim's querySelector only understands ONE simple selector token (tag/class/attr) - no
 	// descendant combinator - so every multi-part selector below is a two-step "container, then tag" query

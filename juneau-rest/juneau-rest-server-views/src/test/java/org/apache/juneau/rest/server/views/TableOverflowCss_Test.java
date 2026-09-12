@@ -161,26 +161,19 @@ class TableOverflowCss_Test extends TestBase {
 		}
 	}
 
-	/** Rec U: the emitted top-level and nested {@code <table>}s both carry {@code class="juneau-view-table"}. */
+	/** Rec U: the emitted top-level {@code <table>} carries {@code class="juneau-view-table"}. */
 	@Test void a09_emittedTablesCarryTheNamedClass() {
-		var nested = ViewDef.create("events")
-			.dataMode(ViewDef.DataMode.CLIENT)
-			.dataUrl("/data/events")
-			.columns(Column.of("when").title("When"))
-			.build();
 		var view = ViewDef.create("alerts")
 			.dataMode(ViewDef.DataMode.CLIENT)
 			.dataUrl("/data/alerts")
 			.columns(Column.of("id").title("Id"))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.sections(DetailSection.create("related", "Related events")
-					.fields(DetailField.of("owner").title("Owner"))
-					.table(NestedTableDef.create(nested))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.build();
 		var html = Html.of(ViewTable.of(view));
-		// Both the top-level table and the nested-table shell clip by the same named selector.
-		assertEquals(2, countTablesWithClass(html), () -> "both emitted <table>s must carry class=\"juneau-view-table\": " + html);
+		// F24: nested tables are not hosted inside row-detail, so only the parent table is emitted.
+		assertEquals(1, countTablesWithClass(html), () -> "the emitted <table> must carry class=\"juneau-view-table\": " + html);
 	}
 
 	/** Counts {@code <table ...>} open tags carrying the named clip class. */

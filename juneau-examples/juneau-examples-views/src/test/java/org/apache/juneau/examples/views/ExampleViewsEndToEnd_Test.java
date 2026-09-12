@@ -82,9 +82,14 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-action=\"ack\""), "ack ActionRef");
 		assertTrue(body.contains("data-juneau-action=\"esc\""), "esc ActionRef");
 		assertTrue(body.contains("data-juneau-safe=\"collapse\""), "COLLAPSE");
-		assertTrue(body.contains("data-juneau-nested"), "nested-table shell in the alert expander");
-		assertTrue(body.contains("data-juneau-nested-scope-param=\"alertId\""), "custom nested scope param");
-		assertTrue(body.contains("data-juneau-nested-meta=\"alert-events\""), "nested sidecar keyed by author view id");
+		// F24: alerts expander is region-only (named populator). Nested-table seeding inside a
+		// row-detail pane is deferred; the shell attributes must not appear on this page.
+		assertTrue(body.contains("data-juneau-region=\"detail\""), "row-detail region container");
+		assertTrue(body.contains("data-juneau-region-populate=\"alerts-detail\""), "alerts named region populator");
+		assertTrue(body.contains("JuneauViews.regions.register(\"alerts-detail\""), "alerts-detail populator registered");
+		assertFalse(body.contains("data-juneau-nested"), "F24: no nested-table shell in the alert expander");
+		assertFalse(body.contains("data-juneau-nested-scope-param=\"alertId\""), "F24: no nested scope param");
+		assertFalse(body.contains("data-juneau-nested-meta=\"alert-events\""), "F24: no nested sidecar");
 	}
 
 	@Test

@@ -1630,7 +1630,7 @@
 	// SANITIZED_HTML detail-field format
 	// ------------------------------------------------------------------------------------------------------
 	//
-	// The contract (see DetailField.Format.SANITIZED_HTML) is caller-sanitizes-first: the value is expected to
+	// The contract (see FieldFormat.SANITIZED_HTML) is caller-sanitizes-first: the value is expected to
 	// have already passed a real server-side allowlist sanitizer at the application's own trust boundary.  This
 	// is the SECOND, independent gate, not the only one -- if that upstream pass is wrong, a script still must
 	// not execute here.
@@ -1944,11 +1944,18 @@
 	}
 
 	// NOSONAR javascript:S7761 -- same caller-supplied-DOM rationale as paintDetailFieldSlot above.
-	function paintDetailTitleSlot(el, map) {
+	function paintDetailTitleSlot(el, map, allow) {
 		const tmpl = el.getAttribute("data-juneau-detail-title-template") || "";
 		el.textContent = tmpl.replace(/\{(\w+)\}/g, function (_, key) {
+			if (!allow || !allow.has(key)) return "";
 			return Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
 		});
+	}
+
+	function titleFieldAllowlist(root) {
+		const raw = root && root.getAttribute ? root.getAttribute("data-juneau-title-fields") : null;
+		if (raw == null || raw === "") return new Set();
+		return new Set(String(raw).split(",").map(function (s) { return s.trim(); }).filter(Boolean));
 	}
 
 	/**
@@ -1956,12 +1963,16 @@
 	 * unknown format) use textContent only.  {@code data-juneau-field-format="markdown"} slots use
 	 * fillMarkdownSlot and {@code "sanitizedHtml"} slots use fillSanitizedHtmlSlot; both copy allowlisted nodes
 	 * and neither assigns innerHTML.  Unknown keys are dropped; missing keys and non-scalars become empty.
+	 *
+	 * Header `{field}` titles are a separate chrome channel: only keys named on the panel's
+	 * `data-juneau-title-fields` allowlist (copied from the template at expand time) are substituted.
 	 */
 	function fillDetailSlots(root, fields) {
 		if (!root || !root.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
 		for (const slot of root.querySelectorAll("[data-juneau-field]")) paintDetailFieldSlot(slot, map);
-		for (const el of root.querySelectorAll("[data-juneau-detail-title]")) paintDetailTitleSlot(el, map);
+		const allow = titleFieldAllowlist(root);
+		for (const el of root.querySelectorAll("[data-juneau-detail-title]")) paintDetailTitleSlot(el, map, allow);
 	}
 
 	/**
@@ -2001,7 +2012,7 @@
 		if (!btn) return;
 		const section = btn.closest ? btn.closest("[data-juneau-detail-section]") : null;
 		if (!section || typeof section.querySelector !== "function") return;
-		// A field-hosted bar (DetailField.actions) paints into its OWN field's slot, not the section's first
+		// A field-hosted bar (fieldGrid catalog actions) paints into its OWN field's slot, not the section's first
 		// one -- otherwise a button in the second field would paint a message next to the first.  Section- and
 		// header-hosted bars are never inside a `.juneau-view-detail-field` container, so they fall through to
 		// the section-wide resolve unchanged.
@@ -2018,22 +2029,17 @@
 	}
 
 	// ==================================================================================================================
-	// SHARED STRIP WIDGET - TAB-MODE (row-detail multi-section pane switcher)
+	// SHARED STRIP WIDGET - TAB-MODE (sectioned FormDef dialogs; helpers.tabStrip)
 	// ==================================================================================================================
 	//
-	// The row-detail template emits its sections as a stack of <section data-juneau-detail-section> blocks (all
-	// visible).  For a MULTI-section detail (>= 2 sections) buildDetailStrip(...) converts that stack, client-side,
-	// into ONE tab-mode strip of the shared ".juneau-view-ribbon-group" widget plus a single visible pane; a
-	// single-section detail is left strip-less (title + body, no lone tab).  This is the same widget the toolbar/
-	// paging use in ribbon-mode - here it carries data-juneau-strip-mode="tab" (visual) + role="tablist" (a11y),
-	// keeping the visual mode decoupled from the a11y role.
+	// Row-detail no longer converts stacked sections into a framework strip: a region panel is one empty container
+	// and the author paints tabs with JuneauViews.helpers.tabStrip.  buildRibbonStrip remains for sectioned FormDef
+	// dialogs (appendSectionedDialogForm) and as the primitive helpers.tabStrip wraps.  The widget carries
+	// data-juneau-strip-mode="tab" (visual) + role="tablist" (a11y), keeping the visual mode decoupled from the
+	// a11y role.
 	//
-	// Switching tabs is VISIBILITY ONLY: it toggles the `hidden` flag on panes and never refetches (Juneau already
-	// loads every field in one expand GET; fillDetailSlots still fills EVERY pane's slots, including hidden ones,
-	// so switching shows already-populated content).  Labels are painted with textContent, never innerHTML.
-
-	/** Monotonic id seed so simultaneously-expanded rows get unique tab/pane ids (DataTables allows N open rows). */
-	let detailStripSeq = 0;
+	// Switching tabs is VISIBILITY ONLY: it toggles the `hidden` flag on panes and never refetches.  Labels are
+	// painted with textContent, never innerHTML.
 
 	/**
 	 * Roving-tabindex keyboard target: given the pressed key, the current tab index and the tab count, returns the
@@ -2183,20 +2189,6 @@
 		};
 	}
 
-	/**
-	 * Converts the stacked detail sections in a cloned detail `panel` into a tab-mode strip + one visible pane.
-	 * No-op returning null for < 2 sections (single-section details stay strip-less).  The strip itself - the
-	 * ".juneau-view-ribbon-group[data-juneau-strip-mode=tab][role=tablist]", its role="tab" buttons with
-	 * aria-selected / aria-controls / roving tabindex, the role="tabpanel" panes, and Left/Right/Home/End selection -
-	 * comes from the shared {@link #buildRibbonStrip}.  Returns the strip element (already inserted into the panel),
-	 * or null.
-	 *
-	 * <p>What stays HERE is everything the {id, label, pane} model cannot express: borrowing each tab's label from the
-	 * section's stacked title and then hiding that title, minting per-expand-instance tab/pane ids from
-	 * detailStripSeq, the "first section starts selected" rule, the header-relative insertion point, and the
-	 * {@link #relocateDetailBarSlot} call so a detail-hosted bar slot ends up trailing the ribbon.  Those are DETAIL
-	 * concerns; a generic strip builder must not learn any of them.
-	 */
 	// The detail-hosted bar slot (BarSlotTable constants of the same names on the server).  DETAIL_BAR_MARKER carries
 	// the slot identity; DETAIL_BAR_META finds the id-less sidecar the <template> ships; DETAIL_BAR_SIDECAR_PREFIX is
 	// the prefix juneau-chrome.js's readSidecar() concatenates - which is exactly why the minted MARKER is
@@ -2222,8 +2214,9 @@
 	 *
 	 * <p>This step belongs to the DETAIL caller, not to a generic strip builder: the strip is assembled client-side
 	 * from a server-painted stack, so a region emitted inside the row-expand {@code <template>} would otherwise be
-	 * left behind at the bottom of the panel.  Keeping it a peer function (called by buildDetailStrip rather than
-	 * written into it) is deliberate, so a later generic strip builder does not inherit a detail-only concern.
+	 * left behind at the bottom of the panel.  Keeping it a peer function (callable after an author-painted ribbon
+	 * rather than baked into a generic strip builder) is deliberate, so a later generic strip builder does not
+	 * inherit a detail-only concern.
 	 *
 	 * <p>IDEMPOTENT: the region is MOVED, never re-created, and a call that finds it already trailing the strip does
 	 * nothing - so re-running over the same panel yields no duplicate and no orphan.  With no strip (a single-section
@@ -2304,77 +2297,6 @@
 		if (!init || typeof init.initAll !== "function") return false;
 		init.initAll();
 		return true;
-	}
-
-	// DETAIL-ONLY pre-pass (the generic builder's {id, label, pane} model is not sufficient by itself): the tab
-	// label is borrowed from the section's own stacked <h2> title, and that title is then hidden because the tab
-	// replaces it.  A generic strip has no title to borrow or hide, so this cannot move into the builder.
-	function buildDetailStripItem(sec) {
-		const sid = sec.dataset.juneauDetailSection;
-		const titleEl = typeof sec.querySelector === "function"
-			? sec.querySelector(".juneau-view-detail-section-title") : null;
-		const label = titleEl?.textContent || sid;
-		if (titleEl) titleEl.hidden = true;
-		// The server-declared count rides alongside the label rather than inside it - see paintDetailStripCounts.
-		// Read as a string and passed through untouched: "0" is a real count ("checked, none"), so the only value
-		// that means "no suffix" is the attribute being absent.
-		const count = sec.dataset.juneauDetailCount;
-		return { id: sid, label: label, pane: sec, count: count == null ? null : count };
-	}
-
-	// DETAIL-ONLY post-pass, deliberately a peer function (the same shape as relocateDetailBarSlot): the generic
-	// {id, label, pane} model has no room for a count, and it must not grow one - a count is a row-detail idea.
-	// Appending it to `label` instead would be worse than a leak: the builder paints label with textContent, so
-	// the count would land inside the button's single text node where CSS cannot reach it, and because the button
-	// is inline-flex a leading space before it collapses away and the tab reads "Suspensions(0)".  Hence a real
-	// child element, spaced by margin.
-	function paintDetailStripCounts(tabs, items) {
-		for (const [i, item] of items.entries()) {
-			if (item.count == null || !tabs[i]) continue;
-			const el = document.createElement("span");
-			el.className = "juneau-view-detail-tab-count";
-			el.textContent = item.count;
-			tabs[i].btn.appendChild(el);
-		}
-	}
-
-	function insertDetailStrip(panel, strip) {
-		const header = typeof panel.querySelector === "function"
-			? panel.querySelector(".juneau-view-detail-header") : null;
-		if (!header) {
-			panel.insertBefore(strip, panel.firstChild);
-			return;
-		}
-		if (header.nextSibling) panel.insertBefore(strip, header.nextSibling);
-		else panel.appendChild(strip);
-	}
-
-	function buildDetailStrip(panel, onActivate) {
-		if (!panel || typeof panel.querySelectorAll !== "function") return null;
-		const sections = panel.querySelectorAll("[data-juneau-detail-section]");
-		if (!sections || sections.length < 2) return null;
-
-		const seq = ++detailStripSeq;
-		const items = [];
-		for (const sec of sections) items.push(buildDetailStripItem(sec));
-
-		// DETAIL-ONLY id minting: ids are seeded from a monotonic sequence so N simultaneously-expanded rows never
-		// collide.  DETAIL-ONLY visibility rule: the first section starts selected (the builder's default).
-		const built = buildRibbonStrip(items, {
-			className: "juneau-view-ribbon-group juneau-view-detail-tabs",
-			testId: "detail-tabs",
-			tabId: function (i) { return "juneau-detail-tab-" + seq + "-" + i; },
-			paneId: function (i) { return "juneau-detail-pane-" + seq + "-" + i; },
-			onActivate: onActivate
-		});
-		const strip = built.strip;
-
-		paintDetailStripCounts(built.tabs, items);
-		insertDetailStrip(panel, strip);
-		// Detail-caller step, deliberately a peer function (see relocateDetailBarSlot): a server-painted bar-slot
-		// region must follow the ribbon that was just built out from under it.
-		relocateDetailBarSlot(panel, strip);
-		return strip;
 	}
 
 	// A pill is a <span role="button">, where the .disabled property is inert - reflect the disabled state
@@ -3272,6 +3194,9 @@
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
+		const titleFields = tpl.getAttribute("data-juneau-title-fields");
+		if (titleFields != null && titleFields !== "")
+			panel.setAttribute("data-juneau-title-fields", titleFields);
 		// The panel's OWN row-id stamp, and the reason it cannot be inherited: DataTables inserts a child row as a
 		// SIBLING `<tr>` of `tr`, not as a descendant of it, so nothing inside this panel is beneath the row element
 		// that carries `ROW_ID_ATTR`.  Every consumer that resolves a row id by `closest("[data-juneau-row-id]")` -
@@ -3288,17 +3213,6 @@
 		mintDetailBarSlotIdentity(panel, viewSidecarKey(table), rowId);
 		mintActionDescIdentity(panel, viewSidecarKey(table), rowId);
 		resolveDetailHeaderIcon(panel);
-		// Multi-section details become a tab-mode strip + one visible pane (single-section stays strip-less).
-		// Built now, before the field slots fill, so the strip is present during loading; fillDetailSlots still
-		// fills EVERY pane's slots (including the hidden ones) so switching tabs shows populated content.
-		//
-		// The onActivate callback lazily inits a newly-shown pane's nested table - but ONLY after the parent detail
-		// GET succeeded (state "ok").  A tab clicked while the panel is still loading (or has failed) inits nothing,
-		// honoring "init nested after parent 2xx AND pane visible" (a failed parent expand yields no nested table).
-		buildDetailStrip(panel, function (sid, pane) {
-			if (panel.dataset.juneauDetailState !== "ok") return;
-			activateNestedTablesInPane(pane, rowId);
-		});
 		renderAsyncStatus(panel, "loading").className = "juneau-view-detail-status";
 		row.child(panel).show();
 		// DataTables wraps the panel in a plain <td colspan> that is a descendant of this .juneau-view-table, so the
@@ -6935,6 +6849,8 @@
 		tpl.setAttribute("data-juneau-row-detail", "1");
 		tpl.setAttribute("data-juneau-detail-contract", detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION);
 		if (detail.endpoint) tpl.setAttribute("data-juneau-detail-url", detail.endpoint);
+		if (detail.region && detail.region.titleFields && detail.region.titleFields.length)
+			tpl.setAttribute("data-juneau-title-fields", detail.region.titleFields.join(","));
 		// Expand clones tpl.content (expandDetailRow). Chromium's template.appendChild
 		// leaves that fragment empty - the HTML parser is what fills .content. Paint
 		// into the fragment the expander clones, never the template element's light DOM.
@@ -6943,18 +6859,7 @@
 			dest.appendChild(buildDetailHeader(detail));
 		if (detail.region)
 			dest.appendChild(buildDetailRegion(detail.region));
-		const sections = detail.sections || [];
-		const ribbonAnchored = detail.barSlot && sections.length > 1;
-		const sectionAnchored = detail.barSlot && !ribbonAnchored && sections.length;
-		for (let i = 0; i < sections.length; i++)
-			dest.appendChild(buildDetailSection(sections[i], sectionAnchored && i === 0 ? detail.barSlot : null, parentTable));
-		if (ribbonAnchored) {
-			const painted = paintDetailBarSlot(detail.barSlot, "ribbon");
-			if (painted) {
-				dest.appendChild(painted.region);
-				dest.appendChild(painted.sidecar);
-			}
-		} else if (detail.barSlot && detail.region) {
+		if (detail.barSlot && detail.region) {
 			const painted = paintDetailBarSlot(detail.barSlot, "section-title");
 			if (painted) {
 				dest.appendChild(painted.region);
@@ -6999,77 +6904,6 @@
 		if (region.dataUrl) declared.dataUrl = region.dataUrl;
 		d.setAttribute("data-juneau-region-declared", JSON.stringify(declared));
 		return d;
-	}
-
-	function buildDetailSection(section, barSlot, parentTable) {
-		const sec = document.createElement("section");
-		sec.setAttribute("data-juneau-detail-section", section.id);
-		sec.className = "juneau-view-detail-section";
-		if (section.count != null)
-			sec.setAttribute("data-juneau-detail-count", String(section.count));
-		const h2 = document.createElement("h2");
-		h2.className = "juneau-view-detail-section-title";
-		h2.textContent = section.title == null || section.title === "" ? section.id : section.title;
-		sec.appendChild(h2);
-		if (barSlot) {
-			const painted = paintDetailBarSlot(barSlot, "section-title");
-			if (painted) {
-				sec.appendChild(painted.region);
-				sec.appendChild(painted.sidecar);
-			}
-		}
-		if (section.actions) sec.appendChild(buildActionBar(section.actions));
-		sec.appendChild(buildFieldsGrid(section));
-		if (section.table) sec.appendChild(buildNestedSlot(section.table, parentTable));
-		return sec;
-	}
-
-	function buildFieldsGrid(section) {
-		const cols = Math.min(Math.max(section.columns || 2, 1), 4);
-		const layout = section.layout === "stacked" ? "stacked" : "inline";
-		const grid = document.createElement("div");
-		grid.className = "juneau-view-detail-fields juneau-view-detail-fields-" + layout
-			+ " juneau-view-detail-fields-cols-" + cols;
-		const fields = section.fields || [];
-		for (let i = 0; i < fields.length; i++)
-			grid.appendChild(buildDetailField(fields[i]));
-		return grid;
-	}
-
-	function buildDetailField(f) {
-		const rendered = !!f.render;
-		const markdown = !rendered && f.format === "markdown";
-		const sanitizedHtml = !rendered && (f.format === "sanitizedHtml" || f.format === "sanitized-html");
-		const prose = markdown || sanitizedHtml;
-		const wrap = document.createElement("div");
-		wrap.className = "juneau-view-detail-field"
-			+ (markdown ? " juneau-view-detail-field-markdown" : "")
-			+ (prose || f.span === "full" ? " juneau-view-detail-field-span-full" : "");
-		const hideTitle = prose && f.title === "";
-		if (!hideTitle) {
-			const title = document.createElement("div");
-			title.className = "juneau-view-detail-field-title";
-			title.textContent = f.title == null || f.title === "" ? f.data : f.title;
-			wrap.appendChild(title);
-		}
-		const value = document.createElement("div");
-		value.setAttribute("data-juneau-field", f.data);
-		if (rendered) {
-			value.setAttribute("data-juneau-field-render", f.render.id);
-			if (f.render.meta)
-				value.setAttribute("data-juneau-field-render-meta", JSON.stringify(f.render.meta));
-			if (f.href)
-				value.setAttribute("data-juneau-field-render-href", f.href);
-			value.className = "juneau-view-detail-field-value";
-		} else if (prose) {
-			value.setAttribute("data-juneau-field-format", f.format === "sanitized-html" ? "sanitizedHtml" : f.format);
-			value.className = "juneau-view-detail-field-value juneau-view-detail-markdown jc-prose";
-		} else {
-			value.className = "juneau-view-detail-field-value";
-		}
-		wrap.appendChild(value);
-		if (f.actions) wrap.appendChild(buildActionBar(f.actions));
-		return wrap;
 	}
 
 	function buildActionBar(bar) {
@@ -7500,7 +7334,6 @@
 		detailTabTargetIndex: detailTabTargetIndex,
 		activateDetailTab: activateDetailTab,
 		buildRibbonStrip: buildRibbonStrip,
-		buildDetailStrip: buildDetailStrip,
 		relocateDetailBarSlot: relocateDetailBarSlot,
 		mintDetailBarSlotIdentity: mintDetailBarSlotIdentity,
 		teardownDetailBarSlot: teardownDetailBarSlot,

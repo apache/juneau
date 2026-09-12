@@ -329,7 +329,7 @@ const CNS = window.JuneauChrome;
 const C = CNS?.init;
 
 const out = {
-	hasViews: !!(typeof V?.buildDetailStrip === 'function'),
+	hasViews: !!(typeof V?.buildRibbonStrip === 'function' && typeof V?.relocateDetailBarSlot === 'function'),
 	hasChrome: !!(typeof C?.initAll === 'function'),
 	hasRelocate: !!(typeof V?.relocateDetailBarSlot === 'function'),
 	hasMint: !!(typeof V?.mintDetailBarSlotIdentity === 'function'),
@@ -434,6 +434,33 @@ function regionsIn(root) {
 	return root.querySelectorAll('[' + BAR_MARKER + ']');
 }
 
+/** Author-painted ribbon (helpers.tabStrip's primitive) + relocate — the post-collapse stand-in for buildDetailStrip. */
+function authorStrip(panel) {
+	const secs = panel.querySelectorAll('[data-juneau-detail-section]');
+	if (!secs || secs.length < 2) return null;
+	const items = [];
+	for (const s of secs) {
+		const title = s.querySelector('.juneau-view-detail-section-title');
+		items.push({
+			id: s.dataset.juneauDetailSection,
+			label: title ? title.textContent : s.dataset.juneauDetailSection,
+			pane: s
+		});
+	}
+	const built = V.buildRibbonStrip(items, {
+		className: 'juneau-view-ribbon-group juneau-view-detail-tabs',
+		testId: 'detail-tabs'
+	});
+	if (!built) return null;
+	const header = panel.querySelector('.juneau-view-detail-header');
+	if (header && header.parentNode === panel)
+		panel.insertBefore(built.strip, header.nextSibling);
+	else
+		panel.insertBefore(built.strip, panel.firstChild);
+	V.relocateDetailBarSlot(panel, built.strip);
+	return built.strip;
+}
+
 // ------------------------------------------------------------------------------------------------------------------
 // 1. Two sections: the relocate step moves the region to the ribbon's trailing position, exactly once.
 // ------------------------------------------------------------------------------------------------------------------
@@ -443,7 +470,7 @@ function regionsIn(root) {
 	const regionBefore = regionsIn(panel)[0];
 	out.two_regionStartsLast = indexOfChild(panel, regionBefore) === panel.childNodes.length - 2;
 
-	const strip = V.buildDetailStrip(panel, null);
+	const strip = authorStrip(panel, null);
 	out.two_stripBuilt = !!strip;
 	out.two_stripMode = strip?.dataset.juneauStripMode;
 
@@ -465,7 +492,7 @@ function regionsIn(root) {
 
 	// Idempotent across a re-render: a second panel (a fresh clone) relocates its OWN region and leaves the first alone.
 	const panel2 = twoSectionPanel(true);
-	const strip2 = V.buildDetailStrip(panel2, null);
+	const strip2 = authorStrip(panel2, null);
 	out.two_rerenderRegionCount = regionsIn(panel2).length;
 	out.two_rerenderTrailsStrip = strip2.nextSibling === regionsIn(panel2)[0];
 	out.two_firstPanelRegionCount = regionsIn(panel).length;
@@ -475,7 +502,7 @@ function regionsIn(root) {
 // A header-less 2-section panel: the strip is prepended, and the region must still end up trailing it.
 (function () {
 	const panel = twoSectionPanel(false);
-	const strip = V.buildDetailStrip(panel, null);
+	const strip = authorStrip(panel, null);
 	out.twoNoHeader_stripIsFirst = indexOfChild(panel, strip) === 0;
 	out.twoNoHeader_regionTrailsStrip = strip.nextSibling === regionsIn(panel)[0];
 })();
@@ -484,7 +511,7 @@ function regionsIn(root) {
 (function () {
 	const panel = twoSectionPanel(true);
 	regionsIn(panel)[0].remove();
-	const strip = V.buildDetailStrip(panel, null);
+	const strip = authorStrip(panel, null);
 	out.twoNoSlot_stripBuilt = !!strip;
 	out.twoNoSlot_regionCount = regionsIn(panel).length;
 	out.twoNoSlot_relocateMoved = V.relocateDetailBarSlot(panel, strip);
@@ -499,7 +526,7 @@ function regionsIn(root) {
 	const panel = oneSectionPanel();
 	const sec = panel.querySelector('[data-juneau-detail-section]');
 	const region = regionsIn(panel)[0];
-	const strip = V.buildDetailStrip(panel, null);
+	const strip = authorStrip(panel, null);
 
 	out.one_stripIsNull = strip === null;
 	out.one_noRibbonSynthesized = panel.querySelector('[data-juneau-strip-mode]') === null;
@@ -531,8 +558,8 @@ let stripB = null;
 (function () {
 	body.appendChild(panelA);
 	body.appendChild(panelB);
-	stripA = V.buildDetailStrip(panelA, null);
-	stripB = V.buildDetailStrip(panelB, null);
+	stripA = authorStrip(panelA, null);
+	stripB = authorStrip(panelB, null);
 
 	out.mint_suffixA = V.mintDetailBarSlotIdentity(panelA, PARENT_ID, 'a1');
 	out.mint_suffixB = V.mintDetailBarSlotIdentity(panelB, PARENT_ID, 'b2');
@@ -605,7 +632,7 @@ let safeFires = 0;
 	// And the views-side seam actually calls it: enhanceChromeInPanel on a panel holding a slot returns true.
 	const panelC = twoSectionPanel(true, 5);
 	body.appendChild(panelC);
-	V.buildDetailStrip(panelC, null);
+	authorStrip(panelC, null);
 	V.mintDetailBarSlotIdentity(panelC, PARENT_ID, 'c3');
 	const badgeC = panelC.querySelector('[data-juneau-badge]');
 	out.enh_seamBefore = badgeC.textContent;

@@ -115,13 +115,4 @@ class SinkRenderAllowlist_Test extends TestBase {
 		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("code"));
 	}
 
-	@Test void a07_servingPath_detailFieldUnknownIdFailsViewTableOf() {
-		var v = ViewDef.create("x").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
-			.columns(Column.of("name"))
-			.details(RowDetailDef.create().endpoint("/d/{id}")
-				.sections(DetailSection.create("s", "S")
-					.fields(DetailField.of("cpu").render("nope"))))
-			.build();
-		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
-	}
 }

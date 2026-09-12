@@ -72,16 +72,15 @@ class ViewsJs_RowDetail_BarSlot_Test extends TestBase {
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
 	}
 
-	@Test void a02_relocateLivesInTheDetailCallerNotTheGenericBuilder() throws Exception {
+	@Test void a02_relocateIsAPeerOfTheGenericBuilder() throws Exception {
 		var body = viewsJs();
-		// buildDetailStrip calls the relocate helper; the helper is a PEER function, so slice `w` can lift a generic
-		// strip builder out of buildDetailStrip without inheriting the detail-only bar-slot step.
-		assertTrue(body.contains("relocateDetailBarSlot(panel, strip)"), body);
 		assertTrue(body.contains("function relocateDetailBarSlot("), body);
-		var builderAt = body.indexOf("function buildDetailStrip(");
-		var relocateDefAt = body.indexOf("function relocateDetailBarSlot(");
-		assertTrue(relocateDefAt >= 0 && builderAt >= 0, body);
-		assertTrue(relocateDefAt < builderAt, "relocateDetailBarSlot must be its own function, defined outside buildDetailStrip");
+		assertTrue(body.contains("relocateDetailBarSlot: relocateDetailBarSlot"), body);
+		var generic = body.substring(body.indexOf("function buildRibbonStrip("),
+			body.indexOf("\n\t}", body.indexOf("function buildRibbonStrip(")));
+		assertFalse(generic.contains("relocateDetailBarSlot"),
+			() -> "the generic strip builder must not inherit the detail-only bar-slot step: " + generic);
+		assertFalse(body.contains("function buildDetailStrip("), body);
 	}
 
 	@Test void a03_parentIdIsTheMintedTableIdNotTheAuthorViewId() throws Exception {

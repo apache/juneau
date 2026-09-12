@@ -163,7 +163,7 @@ public class Render {
 	 * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).
 	 *
 	 * <p>
-	 * {@code action} is optional and only meaningful on a {@link Column}: a pill named on a {@link DetailField} fill
+	 * {@code action} is optional and only meaningful on a {@link Column}: a pill named on a field-grid fill
 	 * sink is unconditionally display-only and rejects an {@code action} outright.
 	 *
 	 * @return A new {@link Render}.

@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 /**
- * A DataTables view nested inside a {@link DetailSection} of a row-detail panel.
+ * A DataTables view nested inside a row-detail region pane (host deferred &mdash; F24).
  *
  * <p>
  * The wrapped {@link #view} is an ordinary {@link ViewDef} that the {@code juneau-views.js} runtime instantiates
@@ -33,15 +33,15 @@ import java.util.*;
  * <p>
  * Table nesting is capped at {@link #MAX_DEPTH}: the enclosing (root) table is depth 1 and a nested table is
  * depth 2.  The depth is the contract, not an author knob &mdash; there is no {@code maxDepth} field and no way to
- * clamp it downward.  A nested view may declare its own {@link ViewDef#details} sections, but none of those sections
- * may declare a further {@link NestedTableDef} (that table would be depth 3).  {@link #validate()} walks the graph
+ * clamp it downward.  A nested view may declare its own {@link ViewDef#details} region, but that region
+ * may not declare a further {@link NestedTableDef} (that table would be depth 3).  {@link #validate()} walks the graph
  * with a <b>path-scoped</b> identity set (pushed on descent, popped on unwind), so a self-referencing or
  * mutually-referencing author graph fails closed while a sibling DAG that reuses one {@link ViewDef} instance under
  * two different parents stays legal.
  *
  * <h5 class='section'>What a nested view may declare</h5>
  * <p>
- * A nested view may declare columns, paging, sort, search, {@link ViewDef#rowActions}, detail sections, and (via
+ * A nested view may declare columns, paging, sort, search, {@link ViewDef#rowActions}, a detail region, and (via
  * {@link #selection}) row selection.  {@link ViewDef#columnConfig} is <b>not</b> permitted: the column chooser and
  * its saved-views identity live on the enclosing table only, as does bulk mutation &mdash; which is why there is no
  * {@link BulkMutateDef} field here.  A nested mutating action rides the enclosing response's CSRF token; once that
@@ -193,12 +193,9 @@ public class NestedTableDef {
 			if (depth > MAX_DEPTH)
 				throw iaex("NestedTableDef nesting exceeds the maximum depth of %s: view '%s' would be at depth %s "
 					+ "(a nested view may not itself declare a nested table).", MAX_DEPTH, view.id, depth);
-			if (view.details == null || view.details.sections == null)
+			if (view.details == null)
 				return;
-			for (var s : view.details.sections) {
-				if (s != null && s.table != null && s.table.view != null)
-					assertWithinDepth(s.table.view, depth + 1, path);
-			}
+			// Nested-table seeding on a row-detail region is deferred (F24); there is no host to descend.
 		} finally {
 			path.remove(view);
 		}

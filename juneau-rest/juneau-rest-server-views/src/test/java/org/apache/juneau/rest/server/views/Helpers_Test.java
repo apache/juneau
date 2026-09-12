@@ -95,6 +95,10 @@ class Helpers_Test extends TestBase {
 		assertAllTrue(report(), "fieldGrid_hrefWrapsSafeUrl", "fieldGrid_unsafeHrefNotWrapped");
 	}
 
+	@Test void b07b_fieldGrid_span_stampsFullClass() {
+		assertAllTrue(report(), "fieldGrid_spanFullClass");
+	}
+
 	@Test void b08_fieldGrid_actions_disabledWithoutHandler_firesWithOnAction() {
 		assertAllTrue(report(), "fieldGrid_actionDisabledWithoutHandler", "fieldGrid_actionFiresOnAction");
 	}

@@ -30,26 +30,13 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the SHARED ribbon-format strip builder and its two callers.
+ * Always-on coverage for the SHARED ribbon-format strip builder.
  *
  * <p>The strip used to exist only inside the row-detail expander.  It is now {@code buildRibbonStrip(items, opts)} -
  * given an ordered {@code [{id, label, pane}]} it wires {@code role=tab} / {@code aria-selected} /
  * {@code aria-controls} / {@code role=tabpanel} / a roving tabindex, moves selection on Left/Right/Home/End, and
- * fires {@code onActivate} once per activation.  Two callers use it: {@code buildDetailStrip} (row details) and
- * {@code appendSectionedDialogForm} (a sectioned dialog form).
- *
- * <p>Two things here are load-bearing and deliberately strict:
- *
- * <ul>
- *    <li>{@code buildDetailStrip} is on the shipped row-detail path, so the refactor must be DOM-invisible.  The
- *        harness serializes a whole built panel - elements, attributes in insertion order, and the properties the
- *        runtime sets instead of attributes - and {@link #c01_detailStripDom_isByteForByteUnchanged()} pins that
- *        serialization against an exact expected string.  A reordered attribute or a dropped property fails it.
- *    <li>A dialog must NEVER reuse the detail strip.  The harness spies the {@code buildDetailStrip} export and
- *        requires zero calls while painting sectioned dialogs, and
- *        {@link #a04_dialogPathNeverRoutesThroughTheDetailStrip()} additionally pins that the runtime has exactly
- *        one textual call site for it - the row-detail expander.
- * </ul>
+ * fires {@code onActivate} once per activation.  After the detail-strip deletion, the remaining caller is
+ * {@code appendSectionedDialogForm} (a sectioned dialog form); {@code helpers.tabStrip} wraps the same builder.
  */
 class ViewsJs_RibbonStrip_Test extends TestBase {
 
@@ -86,57 +73,39 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 		assertTrue(body.contains("buildRibbonStrip: buildRibbonStrip"), "buildRibbonStrip must be exported on NS.init");
 	}
 
-	@Test void a02_detailStripIsAThinCaller_notASecondStripImplementation() throws Exception {
-		var detail = bodyOf(viewsJs(), "buildDetailStrip");
-		assertTrue(detail.contains("buildRibbonStrip(items, {"), () -> "buildDetailStrip must delegate: " + detail);
-		// The strip element, its role/tablist/mode attributes, the tab buttons and the keyboard listeners are the
-		// GENERIC builder's job now - none of them may be re-implemented in the detail caller.
-		for (var forbidden : new String[]{
-			"createElement(\"div\")", "createElement(\"button\")", "\"tablist\"", "data-juneau-strip-mode",
-			"addEventListener(\"keydown\"", "addEventListener(\"click\"", "detailTabTargetIndex("
-		})
-			assertFalse(detail.contains(forbidden),
-				() -> "buildDetailStrip must not re-implement '" + forbidden + "': " + detail);
+	@Test void a02_detailStripIsGone() throws Exception {
+		var body = viewsJs();
+		assertFalse(body.contains("function buildDetailStrip("), body);
+		assertFalse(body.contains("function buildDetailStripItem("), body);
+		assertFalse(body.contains("function insertDetailStrip("), body);
+		assertFalse(body.contains("buildDetailStrip: buildDetailStrip"), body);
+		assertFalse(body.contains("detailStripSeq"), body);
 	}
 
-	@Test void a03_theEscapeHatchStaysInTheDetailCaller() throws Exception {
-		var detail = bodyOf(viewsJs(), "buildDetailStrip");
-		var generic = bodyOf(viewsJs(), "buildRibbonStrip");
-		// Title borrowing + hiding, per-expand id minting, the insertion point, and u's bar-slot relocate are DETAIL
-		// concerns; the {id, label, pane} model cannot express them and the generic builder must not learn them.
-		var item = bodyOf(viewsJs(), "buildDetailStripItem");
-		var insert = bodyOf(viewsJs(), "insertDetailStrip");
-		assertTrue(item.contains(".juneau-view-detail-section-title"), item);
-		assertTrue(item.contains("titleEl.hidden = true"), item);
-		assertTrue(detail.contains("++detailStripSeq"), detail);
-		assertTrue(detail.contains("juneau-detail-tab-\" + seq"), detail);
-		assertTrue(detail.contains("juneau-detail-pane-\" + seq"), detail);
-		assertTrue(insert.contains(".juneau-view-detail-header"), insert);
-		assertTrue(detail.contains("relocateDetailBarSlot(panel, strip)"), detail);
-		// detailTabTargetIndex / activateDetailTab keep their historical names (the detail strip was the first
-		// caller) and ARE generic; what must not leak in is anything that only a row detail has.
+	@Test void a03_genericBuilderDoesNotKnowDetailChrome() throws Exception {
+		var body = viewsJs();
+		var generic = bodyOf(body, "buildRibbonStrip");
 		for (var leaked : new String[]{
 			"data-juneau-detail-section", "juneau-view-detail-section-title", "juneau-view-detail-header",
 			"detailStripSeq", "relocateDetailBarSlot", "bar-slot"
 		})
 			assertFalse(generic.contains(leaked),
 				() -> "the generic builder must not know about '" + leaked + "': " + generic);
+		assertTrue(body.contains("function relocateDetailBarSlot("), body);
+		assertTrue(body.contains("function detailTabTargetIndex("), body);
+		assertTrue(body.contains("function activateDetailTab("), body);
+		assertTrue(body.contains("detailTabTargetIndex: detailTabTargetIndex"), body);
+		assertTrue(body.contains("activateDetailTab: activateDetailTab"), body);
+		assertTrue(body.contains("buildRibbonStrip: buildRibbonStrip"), body);
 	}
 
-	@Test void a04_dialogPathNeverRoutesThroughTheDetailStrip() throws Exception {
+	@Test void a04_dialogPathUsesTheGenericBuilder() throws Exception {
 		var body = viewsJs();
 		var sectioned = bodyOf(body, "appendSectionedDialogForm");
 		assertTrue(sectioned.contains("buildRibbonStrip(items, {"), sectioned);
 		assertFalse(sectioned.contains("buildDetailStrip"),
-			() -> "a dialog must never call the row-detail strip: " + sectioned);
-		// One definition, one export, and exactly ONE call site - the row-detail expander.  A second call site
-		// appearing here is exactly the "reuse shortcut" this slice prohibits.
-		assertEquals(1, count(body, "\tfunction buildDetailStrip("), body);
-		assertEquals(1, count(body, "\t\tbuildDetailStrip: buildDetailStrip,"), body);
-		assertEquals(2, count(body, "buildDetailStrip(panel"),
-			() -> "buildDetailStrip must have exactly one definition and one call site: " + body);
-		assertTrue(body.contains("\t\tbuildDetailStrip(panel, function (sid, pane) {"),
-			() -> "the one call site must be the row-detail expander: " + body);
+			() -> "a dialog must never call a retired row-detail strip: " + sectioned);
+		assertEquals(0, count(body, "\tfunction buildDetailStrip("), body);
 	}
 
 	@Test void a05_theInDialogStripOpensNoLayer() throws Exception {
@@ -320,34 +289,6 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// The detail strip's DOM, pinned
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * The exact serialization {@code buildDetailStrip} produced BEFORE it was reduced to a caller of the generic
-	 * builder, for a two-section panel.  Attributes appear in insertion order and a leading {@code .} marks a
-	 * property the runtime sets directly rather than through {@code setAttribute} - so a reordered attribute, a
-	 * class moved onto {@code setAttribute}, or a lost {@code hidden} / roving {@code tabindex} all fail here.
-	 */
-	private static final String DETAIL_STRIP_DOM = String.join("\n",
-		"<div .class=\"juneau-view-detail-panel\">",
-		"  <div data-juneau-strip-mode=\"tab\" role=\"tablist\" data-testid=\"detail-tabs\" .class=\"juneau-view-ribbon-group juneau-view-detail-tabs\">",
-		"    <button id=\"juneau-detail-tab-1-0\" role=\"tab\" data-juneau-strip-tab=\"overview\" aria-controls=\"juneau-detail-pane-1-0\" aria-selected=\"true\" .class=\"juneau-view-ribbon-btn\" .tabindex=0 .type=\"button\">Overview",
-		"    <button id=\"juneau-detail-tab-1-1\" role=\"tab\" data-juneau-strip-tab=\"context\" aria-controls=\"juneau-detail-pane-1-1\" aria-selected=\"false\" .class=\"juneau-view-ribbon-btn\" .tabindex=-1 .type=\"button\">Context",
-		"  <section data-juneau-detail-section=\"overview\" id=\"juneau-detail-pane-1-0\" role=\"tabpanel\" aria-labelledby=\"juneau-detail-tab-1-0\" tabindex=\"0\" .class=\"juneau-view-detail-section\">",
-		"    <h2 .class=\"juneau-view-detail-section-title\" .hidden>Overview",
-		"  <section data-juneau-detail-section=\"context\" id=\"juneau-detail-pane-1-1\" role=\"tabpanel\" aria-labelledby=\"juneau-detail-tab-1-1\" tabindex=\"0\" .class=\"juneau-view-detail-section\" .hidden>",
-		"    <h2 .class=\"juneau-view-detail-section-title\" .hidden>Context",
-		"");
-
-	@Test void c01_detailStripDom_isByteForByteUnchanged() {
-		var r = report();
-		assertEquals(DETAIL_STRIP_DOM, r.get("detailStrip_dump"),
-			"buildDetailStrip's DOM changed - the row-detail strip is on the shipped path and must be "
-			+ "DOM-invisible across the generic-builder refactor");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Sectioned dialog form
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -373,7 +314,7 @@ class ViewsJs_RibbonStrip_Test extends TestBase {
 	@Test void d02_sectionedForm_usesTheGenericBuilderNotTheDetailStrip() {
 		var r = report();
 		assertEquals(true, r.get("sectioned_buildDetailStripNotCalled"),
-			() -> "the spied buildDetailStrip export must stay at zero calls: " + r);
+			() -> "buildDetailStrip must stay retired (the dialog path must not resurrect it): " + r);
 		assertEquals(true, r.get("sectioned_noDetailTestId"),
 			() -> "a dialog must not paint the row-detail strip's test id: " + r);
 	}

@@ -223,10 +223,10 @@ public class ViewTable {
 	/** Attribute carrying the server-stamped expand GET path template on the row-detail template. */
 	public static final String DETAIL_URL_ATTR = "data-juneau-detail-url";
 
-	/** Attribute carrying a {@link DetailSection#id} on each {@code <section>}. */
+	/** Historical section-id marker; no longer emitted (row-detail bodies are one region). */
 	public static final String DETAIL_SECTION_ATTR = "data-juneau-detail-section";
 
-	/** Attribute carrying a {@link DetailField#data} key on each empty field slot. */
+	/** Marker on a client-painted field-grid value slot ({@code fieldGrid} catalog {@code data} key). */
 	public static final String DETAIL_FIELD_ATTR = "data-juneau-field";
 
 	/** Marker on the optional detail-panel header (title + header actions). */
@@ -238,16 +238,22 @@ public class ViewTable {
 	/** Attribute carrying the header title template (placeholders filled at expand time). */
 	public static final String DETAIL_TITLE_TEMPLATE_ATTR = "data-juneau-detail-title-template";
 
+	/**
+	 * Comma-separated {@link RegionDef#titleFields} allowlist stamped on the row-detail {@code <template>}.
+	 * Copied onto the cloned panel at expand time; {@code paintDetailTitleSlot} substitutes only these keys.
+	 */
+	public static final String DETAIL_TITLE_FIELDS_ATTR = "data-juneau-title-fields";
+
 	/** Attribute carrying the header icon registry name. */
 	public static final String DETAIL_ICON_ATTR = "data-juneau-detail-icon";
 
 	/**
-	 * Attribute carrying a {@link DetailField.Format} wire token.  Omitted for {@link DetailField.Format#TEXT}
+	 * Attribute carrying a {@link FieldFormat} wire token.  Omitted for {@link FieldFormat#TEXT}
 	 * (the default).
 	 */
 	public static final String DETAIL_FIELD_FORMAT_ATTR = "data-juneau-field-format";
 
-	/** Attribute carrying a {@link DetailField#render} id.  Omitted when render is unset. */
+	/** Attribute carrying a field-grid render id.  Omitted when render is unset. */
 	public static final String DETAIL_FIELD_RENDER_ATTR = "data-juneau-field-render";
 
 	/**
@@ -255,7 +261,7 @@ public class ViewTable {
 	 */
 	public static final String DETAIL_FIELD_RENDER_META_ATTR = "data-juneau-field-render-meta";
 
-	/** Attribute carrying a {@link DetailField#href} template.  Omitted when href is unset. */
+	/** Attribute carrying a field-grid href template.  Omitted when href is unset. */
 	public static final String DETAIL_FIELD_RENDER_HREF_ATTR = "data-juneau-field-render-href";
 
 	/** Attribute carrying an {@link org.apache.juneau.rest.server.widgets.ActionRef} id on a write button. */
@@ -288,12 +294,11 @@ public class ViewTable {
 	public static final String DETAIL_ACTION_DESC_ATTR = "data-juneau-action-desc";
 
 	/**
-	 * Marker attribute on the nested-table wrapper {@code <div>} inside a {@link DetailSection} (value {@code "1"}).
+	 * Marker attribute on the nested-table wrapper {@code <div>} (value {@code "1"}).
 	 *
 	 * <p>
-	 * The {@code juneau-views.js} runtime auto-init pass skips any {@code data-juneau-view} table under this marker
-	 * &mdash; a nested table is instantiated only after the enclosing row's detail GET succeeds and its pane becomes
-	 * visible, scoped to the parent row (see {@link NestedTableDef}).
+	 * Nested-table seeding inside a row-detail panel is deferred (F24); this marker remains so a later host can
+	 * skip auto-init of a nested {@code data-juneau-view} table until its pane is visible.
 	 */
 	public static final String NESTED_ATTR = "data-juneau-nested";
 
@@ -311,15 +316,6 @@ public class ViewTable {
 
 	/** Attribute carrying {@link NestedTableDef#parentScopeParam} on the nested-table wrapper. */
 	public static final String NESTED_SCOPE_PARAM_ATTR = "data-juneau-nested-scope-param";
-
-	/**
-	 * Attribute carrying a {@link DetailSection#count} on a detail {@code <section>}.  Omitted when the count is
-	 * <jk>null</jk>, so a section that declares none serializes exactly as it did before.
-	 */
-	private static final String DETAIL_COUNT_ATTR = "data-juneau-detail-count";
-
-	/** The widest step of the fields-grid column ladder in {@code juneau-views.css}. */
-	private static final int DETAIL_MAX_COLUMNS = 4;
 
 	/** MIME type of the VIEW_META/bulk-actions/nested-VIEW_META sidecars. */
 	private static final String JSON_CONTENT_TYPE = "application/json";
@@ -971,7 +967,7 @@ public class ViewTable {
 			children.add(QuickStatsTable.of(viewDef.quickStats));
 		children.add(table);
 		if (viewDef.details != null)
-			children.add(emitDetailTemplate(viewDef, opts.csrfToken()));
+			children.add(emitDetailTemplate(viewDef));
 		if (opts.bulkMutate() != null) {
 			var bulkJson = escapeForScript(Json.of(opts.bulkMutate()));
 			children.add(script().type(JSON_CONTENT_TYPE).id(BULK_SIDECAR_ID_PREFIX + id).text(rawText(bulkJson)));
@@ -1007,67 +1003,40 @@ public class ViewTable {
 	}
 
 	/**
-	 * Emits the one {@code <template data-juneau-row-detail>} sibling: empty field slots, {@link ActionRef}
-	 * buttons initially disabled, {@link org.apache.juneau.rest.server.widgets.SafeAction#COLLAPSE} enabled.
-	 * Labels are HtmlBuilder text children (never poured in as markup).
+	 * Emits the one {@code <template data-juneau-row-detail>} sibling: header chrome plus exactly one empty
+	 * region container.  Labels are HtmlBuilder text children (never poured in as markup).
 	 *
 	 * <p>
-	 * {@code csrfToken} is the enclosing response's token; it is painted onto any nested table in this template so a
-	 * nested row action can submit with it.  Once that token has rotated the nested action fails closed through the
-	 * ordinary 403 path &mdash; a nested table never mints or refreshes a token of its own.
-	 *
-	 * <p>
-	 * A declared {@link RowDetailDef#barSlot} adds two children: the region, at whichever of the two anchors applies
-	 * ({@link BarSlotTable#ANCHOR_RIBBON} for a multi-section detail, {@link BarSlotTable#ANCHOR_SECTION_TITLE} for a
-	 * single-section one), and its {@code id}-less {@link BarSlotTable#detailSidecar sidecar}.  Neither reaches the
-	 * archived {@code .juneau-view-toolbar-*} control row and neither is a nav tab.
+	 * A declared {@link RowDetailDef#barSlot} adds two children: the region, anchored at
+	 * {@link BarSlotTable#ANCHOR_SECTION_TITLE} (a region panel has no framework ribbon), and its {@code id}-less
+	 * {@link BarSlotTable#detailSidecar sidecar}.  Neither reaches the archived {@code .juneau-view-toolbar-*}
+	 * control row and neither is a nav tab.
 	 */
-	private static Template emitDetailTemplate(ViewDef viewDef, String csrfToken) {
+	private static Template emitDetailTemplate(ViewDef viewDef) {
 		var d = viewDef.details;
 		var children = new ArrayList<>();
 		if (hasDetailHeader(d))
 			children.add(emitDetailHeader(d, viewDef.rowActions));
-		if (d.isRegionBody()) {
-			// Chrome plus EXACTLY ONE empty region container.  No section frames, no field slots, and no strip: a
-			// region panel has no [data-juneau-detail-section] nodes at all, so the client's multi-section ->
-			// tab-mode conversion no-ops on it with no edit (buildDetailStrip returns null below two sections).
-			//
-			// No CSRF stamp on this container: a row-detail region sits beneath the view table, which already
-			// carries the response's token, and a second stamp on the same subtree is the F22 hazard rather than the
-			// fix for it.  The non-table hosts (card/tab bodies) are the ones that need it.
-			children.add(RegionTable.of(projectDetailRegion(d), null));
-			// The lone region IS the body, so there is no ribbon for a bar slot to trail and no section title to
-			// anchor to.  ANCHOR_SECTION_TITLE is the closer of the two - a single-section panel has no ribbon
-			// either - so a region panel's bar slot rides the same anchor a one-section panel's does.
-			if (d.barSlot != null)
-				children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
-			children.add(RegionTable.detailSidecar(List.of(projectDetailRegion(d))));
-			if (d.barSlot != null)
-				children.add(BarSlotTable.detailSidecar(d.barSlot));
-			return template()
-				.attr(DETAIL_TEMPLATE_ATTR, "1")
-				.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
-				.attr(DETAIL_URL_ATTR, d.endpoint)
-				.children(children.toArray());
-		}
-		// The detail ribbon is assembled CLIENT-side, and only from two or more sections, so the bar-slot region has
-		// two server anchors: a ribbon-anchored last direct child the runtime relocates, or - with no ribbon to trail
-		// and none synthesized for it - a section-title-anchored child of the lone section.
-		var ribbonAnchored = d.barSlot != null && d.sections.size() > 1;
-		var sectionAnchored = d.barSlot != null && !ribbonAnchored;
-		for (var s : d.sections)
-			children.add(buildDetailSection(viewDef, d, s, sectionAnchored, csrfToken));
-		if (ribbonAnchored)
-			children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_RIBBON));
-		// The sidecar is id-less and found by attribute, exactly like the nested-table VIEW_META sidecar above: this
-		// whole subtree is cloned per expanded row, so the runtime mints the document-unique id.
+		// Chrome plus EXACTLY ONE empty region container.  No section frames, no field slots, and no framework
+		// strip: the author paints the body (and their own strip via helpers.tabStrip if they want one).
+		//
+		// No CSRF stamp on this container: a row-detail region sits beneath the view table, which already
+		// carries the response's token, and a second stamp on the same subtree is the F22 hazard rather than the
+		// fix for it.  The non-table hosts (card/tab bodies) are the ones that need it.
+		children.add(RegionTable.of(projectDetailRegion(d), null));
+		if (d.barSlot != null)
+			children.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
+		children.add(RegionTable.detailSidecar(List.of(projectDetailRegion(d))));
 		if (d.barSlot != null)
 			children.add(BarSlotTable.detailSidecar(d.barSlot));
-		return template()
+		var tpl = template()
 			.attr(DETAIL_TEMPLATE_ATTR, "1")
 			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
 			.attr(DETAIL_URL_ATTR, d.endpoint)
 			.children(children.toArray());
+		if (d.region != null && d.region.titleFields != null && !d.region.titleFields.isEmpty())
+			tpl.attr(DETAIL_TITLE_FIELDS_ATTR, String.join(",", d.region.titleFields));
+		return tpl;
 	}
 
 	/**
@@ -1116,53 +1085,6 @@ public class ViewTable {
 		return copy;
 	}
 
-	/**
-	 * Builds one detail {@code <section>}: the title, an optional section-anchored bar-slot region, an optional
-	 * action bar, the fields grid, and &mdash; appended last, after the fields grid &mdash; an optional nested
-	 * table (the runtime instantiates it only once the detail GET succeeds and this section's pane is visible).
-	 */
-	private static Section buildDetailSection(ViewDef viewDef, RowDetailDef d, DetailSection s,
-			boolean sectionAnchored, String csrfToken) {
-		var kids = new ArrayList<>();
-		kids.add(h2(s.title == null || s.title.isBlank() ? s.id : s.title)
-			.class_("juneau-view-detail-section-title"));
-		if (sectionAnchored)
-			kids.add(BarSlotTable.detailRegion(d.barSlot, BarSlotTable.ANCHOR_SECTION_TITLE));
-		if (hasActionBarItems(s.actions))
-			kids.add(emitActionBar(s.actions, viewDef.rowActions));
-		kids.add(buildFieldsGrid(s, viewDef.rowActions));
-		if (s.table != null)
-			kids.add(emitNestedTable(s.table, csrfToken));
-		var out = section(kids.toArray())
-			.attr(DETAIL_SECTION_ATTR, s.id)
-			.class_("juneau-view-detail-section");
-		if (s.count != null)
-			out.attr(DETAIL_COUNT_ATTR, s.count.toString());
-		return out;
-	}
-
-	/**
-	 * Builds a section's fields grid: one empty field slot per {@link DetailSection#fields} entry.
-	 *
-	 * <p>
-	 * The column count is a class rather than an inline {@code grid-template-columns}, because an inline style
-	 * cannot be stepped down by a container query &mdash; it out-ranks every rule in the stylesheet, so a
-	 * three-column section declared here would stay three columns in a 320px-wide panel.  The class names the
-	 * author's <b>cap</b>; {@code juneau-views.css} decides how many of those columns a given panel width can
-	 * actually afford.  The ladder tops out at {@value #DETAIL_MAX_COLUMNS}.
-	 */
-	private static Div buildFieldsGrid(DetailSection s, List<RowAction> rowActions) {
-		var fieldSlots = new ArrayList<>();
-		if (s.fields != null)
-			for (var f : s.fields)
-				fieldSlots.add(emitDetailField(f, rowActions));
-		var cols = Math.min(Math.max(s.columns, 1), DETAIL_MAX_COLUMNS);
-		var layout = s.layout == FieldLayout.STACKED ? "stacked" : "inline";
-		return div(fieldSlots.toArray())
-			.class_("juneau-view-detail-fields juneau-view-detail-fields-" + layout
-				+ " juneau-view-detail-fields-cols-" + cols);
-	}
-
 	/** Whether an {@link ActionBar} has at least one item to render (a <jk>null</jk> bar has none). */
 	private static boolean hasActionBarItems(ActionBar bar) {
 		return bar != null && bar.items != null && !bar.items.isEmpty();
@@ -1186,136 +1108,6 @@ public class ViewTable {
 		if (hasActionBarItems(d.headerActions))
 			kids.add(emitActionBar(d.headerActions, rowActions));
 		return div(kids.toArray()).class_("juneau-view-detail-header").attr(DETAIL_HEADER_ATTR, "1");
-	}
-
-	/**
-	 * Emits the nested-table shell inside a detail section: a {@code data-juneau-view} {@code <table>} with a
-	 * {@code <thead>} of the nested view's column titles (no HTML {@code id} &mdash; a {@code <template>} clone would
-	 * collide; the runtime mints a row-qualified one per expanded row), plus a sibling, {@code id}-less VIEW_META
-	 * sidecar found via {@link #NESTED_META_ATTR}.  The wrapper carries the marker, the independent
-	 * {@link NestedTableDef#CONTRACT_VERSION}, and the parent-scope parameter name.
-	 *
-	 * <p>
-	 * The nested table gets the same leading synthetic header cells the enclosing table gets &mdash; an expander cell
-	 * when the nested view declares its own detail sections, then a selection cell when {@link NestedTableDef#selection}
-	 * is declared &mdash; plus its own row-detail {@code <template>} when it declares one.  It deliberately gets
-	 * <b>no</b> column-chooser host and <b>no</b> bulk sidecar: both stay bound to the enclosing table's id, so two
-	 * expanded rows share one parent affordance instead of minting one per nested table.
-	 *
-	 * <p>
-	 * {@code csrfToken} is the enclosing response's token.  When it is absent (a non-request {@code of(...)} overload
-	 * emitted this shell) the nested sidecar is serialized with {@link ViewDef#rowActions} withheld, so the runtime
-	 * cannot paint an action affordance that has no token to submit with &mdash; the fail-closed half of the token
-	 * contract, one step earlier than the runtime's own visible refusal.
-	 */
-	private static Div emitNestedTable(NestedTableDef nt, String csrfToken) {
-		var v = nt.view;
-		var cols = v.columns == null ? List.<Column>of() : v.columns;
-		var headerCells = new ArrayList<>(cols.size() + 2);
-		if (v.details != null)
-			headerCells.add(th().attr(CLASS_ATTR, DETAIL_TH_CLASS).attr(ARIA_LABEL_ATTR, "Expand"));
-		if (nt.selection != null)
-			headerCells.add(th().attr(CLASS_ATTR, "juneau-view-select-th").attr(ARIA_LABEL_ATTR, "Select"));
-		for (var c : cols)
-			headerCells.add(th(c.title == null ? c.data : c.title));
-		var table = table(thead(tr(headerCells.toArray()))).attr(MARKER_ATTR, v.id).class_(TABLE_CLASS);
-
-		var tokenless = csrfToken == null || csrfToken.isBlank();
-		if (! tokenless)
-			table.attr(CSRF_ATTR, csrfToken);
-
-		if (nt.selection != null) {
-			table.attr(SELECT_ATTR, "1");
-			table.attr(ROW_ID_FIELD_ATTR, nt.selection.rowIdField());
-			table.attr(SELECT_ALL_ATTR, nt.selection.selectAll() ? "1" : "0");
-		}
-
-		// Sidecar: same VIEW_META contract as a top-level view; neutralize break-outs, insert as RAW (class javadoc).
-		var sidecar = script().type(JSON_CONTENT_TYPE).attr(NESTED_META_ATTR, v.id)
-			.text(rawText(escapeForScript(nestedJson(v, tokenless))));
-
-		var children = new ArrayList<>();
-		children.add(table);
-		if (v.details != null)
-			children.add(emitDetailTemplate(v, csrfToken));
-		children.add(sidecar);
-
-		return div(children.toArray())
-			.class_("juneau-view-detail-nested")
-			.attr(NESTED_ATTR, "1")
-			.attr(NESTED_CONTRACT_ATTR, NestedTableDef.CONTRACT_VERSION)
-			.attr(NESTED_SCOPE_PARAM_ATTR, nt.parentScopeParam);
-	}
-
-	/**
-	 * Serializes a nested view's VIEW_META, withholding {@link ViewDef#rowActions} on the token-less path.
-	 *
-	 * <p>
-	 * A shared {@link ViewDef} may be rendered concurrently, so the withhold is a guarded
-	 * mutate&rarr;serialize&rarr;restore window (the same discipline the {@code $FV} chrome resolution uses) rather
-	 * than a lasting edit of the author's definition.
-	 */
-	private static String nestedJson(ViewDef v, boolean tokenless) {
-		if (! tokenless || v.rowActions == null)
-			return Json.of(v);
-		synchronized (v.lock) {
-			var restore = v.rowActions;
-			v.rowActions = null;
-			try {
-				return Json.of(v);
-			} finally {
-				v.rowActions = restore;
-			}
-		}
-	}
-
-	/**
-	 * Builds one empty field slot: a title div plus a value div, whatever the section's {@link FieldLayout} is
-	 * &mdash; the arrangement is a property of the grid, so it is styled from the grid's class rather than
-	 * changing the shape emitted here.
-	 *
-	 * <p>
-	 * A {@link DetailField#actions} bar is appended as a plain <b>sibling</b> of the value slot rather than the two
-	 * being wrapped together.  That keeps the {@code [data-juneau-field]} node exactly where the expand-fill
-	 * painter already looks for it, so a field-hosted bar needs no runtime wiring of its own: the fill path never
-	 * sees it, and the panel-scoped {@code [data-juneau-action]} lifecycles reach it unchanged.  Seating the third
-	 * child in the value column is the stylesheet's job.
-	 */
-	private static Div emitDetailField(DetailField f, List<RowAction> rowActions) {
-		var rendered = f.render != null;
-		var markdown = !rendered && f.format == DetailField.Format.MARKDOWN;
-		var sanitizedHtml = !rendered && f.format == DetailField.Format.SANITIZED_HTML;
-		// Both rich-text formats are full-bleed prose bodies and are emitted identically apart from the wire token
-		// the painter dispatches on -- they differ in which allowlist the client copies through, not in layout.
-		var prose = markdown || sanitizedHtml;
-		// A prose field spans by default rather than by a parallel hardcoded CSS rule that happens to do the
-		// same thing by a different route -- one mechanism, one job.
-		var span = prose || f.span == FieldSpan.FULL ? " juneau-view-detail-field-span-full" : "";
-		var valueSlot = div().attr(DETAIL_FIELD_ATTR, f.data);
-		if (rendered) {
-			valueSlot.attr(DETAIL_FIELD_RENDER_ATTR, f.render.id);
-			if (f.render.meta != null && !f.render.meta.isEmpty())
-				valueSlot.attr(DETAIL_FIELD_RENDER_META_ATTR, Json.of(f.render.meta));
-			if (f.href != null)
-				valueSlot.attr(DETAIL_FIELD_RENDER_HREF_ATTR, f.href);
-			valueSlot.class_("juneau-view-detail-field-value");
-		} else if (prose) {
-			valueSlot.attr(DETAIL_FIELD_FORMAT_ATTR, f.format.wire());
-			valueSlot.class_("juneau-view-detail-field-value juneau-view-detail-markdown jc-prose");
-		} else {
-			valueSlot.class_("juneau-view-detail-field-value");
-		}
-		var hideTitle = prose && f.title != null && f.title.isEmpty();
-		var kids = new ArrayList<>();
-		if (! hideTitle) {
-			var label = f.title == null || f.title.isBlank() ? f.data : f.title;
-			kids.add(div(label).class_("juneau-view-detail-field-title"));
-		}
-		kids.add(valueSlot);
-		if (hasActionBarItems(f.actions))
-			kids.add(emitActionBar(f.actions, rowActions));
-		return div(kids.toArray())
-			.class_((markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field") + span);
 	}
 
 	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {
@@ -1561,11 +1353,9 @@ public class ViewTable {
 	}
 
 	/**
-	 * Resolves the row-detail panel's own {@code $FV} chrome (the closed title list: {@link RowDetailDef#title},
-	 * {@link DetailSection#title}, {@link DetailField#title}, and each field's cell-popover
-	 * {@link CellPopover#title}/{@link PopoverField#title}) in place on the shared {@code detail}, so the
-	 * server-emitted {@code <template>} below is painted with the resolved strings and the expand GET is left
-	 * carrying row data only.
+	 * Resolves the row-detail panel's own {@code $FV} chrome (the closed title list: {@link RowDetailDef#title})
+	 * in place on the shared {@code detail}, so the server-emitted {@code <template>} below is painted with the
+	 * resolved strings and the expand GET is left carrying row data only.
 	 *
 	 * <p>
 	 * Deliberately narrower than it could be: {@link RowDetailDef#icon} is an icon-registry name,
@@ -1578,39 +1368,12 @@ public class ViewTable {
 	private static Runnable resolveDetailChrome(RowDetailDef detail, VarResolverSession session) {
 		var restores = new ArrayList<Runnable>();
 		resolveField(restores, session, detail.title, v -> detail.title = v);
-		resolveDetailSectionsChrome(restores, session, detail.sections);
 		return lifoRestore(restores);
-	}
-
-	/** Resolves every declared section's {@link DetailSection#title} and, in turn, each of its fields' titles. */
-	private static void resolveDetailSectionsChrome(List<Runnable> restores, VarResolverSession session,
-			List<DetailSection> sections) {
-		if (sections == null)
-			return;
-		for (var s : sections) {
-			if (s == null)
-				continue;
-			resolveField(restores, session, s.title, v -> s.title = v);
-			resolveDetailFieldsChrome(restores, session, s.fields);
-		}
-	}
-
-	/** Resolves every declared field's {@link DetailField#title} and the chrome of its cell popover, if any. */
-	private static void resolveDetailFieldsChrome(List<Runnable> restores, VarResolverSession session,
-			List<DetailField> fields) {
-		if (fields == null)
-			return;
-		for (var f : fields)
-			if (f != null) {
-				resolveField(restores, session, f.title, v -> f.title = v);
-				resolvePopoverChrome(restores, session, f.render);
-			}
 	}
 
 	/**
 	 * Resolves a cell popover's own chrome &mdash; {@link CellPopover#title} and each
-	 * {@link PopoverField#title} &mdash; reached through the owning {@link Column}'s or {@link DetailField}'s
-	 * {@link Render}.  Shared by both hosts' walks because the descent is identical from either side.
+	 * {@link PopoverField#title} &mdash; reached through the owning {@link Column}'s {@link Render}.
 	 *
 	 * <p>
 	 * The popover's data bindings ({@link PopoverField#data}) and nested per-field {@link PopoverField#render}
@@ -1679,34 +1442,13 @@ public class ViewTable {
 
 	/**
 	 * The row-detail counterpart of {@link #chromeHasVar}: {@code true} only if {@code detail}'s allowlisted
-	 * chrome ({@link #resolveDetailChrome}'s exact field set: {@link RowDetailDef#title}, section titles, field
-	 * titles) contains at least one {@code $}-prefixed template.  Callers must hold {@code detail.lock} for the
-	 * same reason {@link #chromeHasVar}'s callers must hold the view's.  Must stay in lock-step with
+	 * chrome ({@link #resolveDetailChrome}'s exact field set: {@link RowDetailDef#title}) contains at least one
+	 * {@code $}-prefixed template.  Callers must hold {@code detail.lock} for the same reason
+	 * {@link #chromeHasVar}'s callers must hold the view's.  Must stay in lock-step with
 	 * {@link #resolveDetailChrome}'s own field walk for the same reason {@link #chromeHasVar} must.
 	 */
 	private static boolean detailChromeHasVar(RowDetailDef detail) {
-		return hasVar(detail.title) || detailSectionsChromeHasVar(detail.sections);
-	}
-
-	private static boolean detailSectionsChromeHasVar(List<DetailSection> sections) {
-		if (sections == null)
-			return false;
-		for (var s : sections) {
-			if (s == null)
-				continue;
-			if (hasVar(s.title) || detailFieldsChromeHasVar(s.fields))
-				return true;
-		}
-		return false;
-	}
-
-	private static boolean detailFieldsChromeHasVar(List<DetailField> fields) {
-		if (fields == null)
-			return false;
-		for (var f : fields)
-			if (f != null && (hasVar(f.title) || popoverChromeHasVar(f.render)))
-				return true;
-		return false;
+		return hasVar(detail.title);
 	}
 
 	/** The pre-scan counterpart of {@link #resolvePopoverChrome}, walking the identical two-title field set. */

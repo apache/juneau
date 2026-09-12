@@ -317,7 +317,7 @@ class RegionDef_Test extends TestBase {
 				RegionDef.Field.of("severity").label("Severity").render("pill")
 					.renderMeta(Map.of("tone", "warn")),
 				RegionDef.Field.of("host").label("Host").href("servlet:/hosts/{host}"),
-				RegionDef.Field.of("summary").label("Summary").format(DetailField.Format.MARKDOWN)
+				RegionDef.Field.of("summary").label("Summary").format(FieldFormat.MARKDOWN)
 					.span(FieldSpan.FULL),
 				RegionDef.Field.of("actions").label("").actions("ack", "resolve"));
 		r.validate();

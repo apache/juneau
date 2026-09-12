@@ -39,7 +39,7 @@ class RowDetailDef_BarSlot_Test extends TestBase {
 	private static RowDetailDef details(BarSlot bar) {
 		return RowDetailDef.create()
 			.endpoint("/data/alerts/{id}")
-			.sections(DetailSection.create("overview", "Overview").fields(DetailField.of("title").title("Title")))
+			.region(RegionDef.create("d").allowPopulators("p").populate("p"))
 			.barSlot(bar);
 	}
 
@@ -114,26 +114,6 @@ class RowDetailDef_BarSlot_Test extends TestBase {
 		var page = PageDef.create("admin")
 			.barSlot(bar("ctx"))
 			.tabs(Tab.create("t", "T").subtabs(Subtab.create("s", "S").view(view("alerts", bar("ctx")))));
-		var e = assertThrows(IllegalArgumentException.class, page::build);
-		assertTrue(e.getMessage().contains("ctx"), e::getMessage);
-	}
-
-	@Test void b03_duplicateIdInsideANestedDetailTableView_rejected() {
-		var nested = ViewDef.create("nested")
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/nested")
-			.columns(Column.of("id").title("Id"))
-			.details(details(bar("ctx")));
-		var outer = ViewDef.create("alerts")
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/alerts")
-			.columns(Column.of("id").title("Id"))
-			.details(RowDetailDef.create()
-				.endpoint("/data/alerts/{id}")
-				.sections(DetailSection.create("overview", "Overview")
-					.fields(DetailField.of("title").title("Title"))
-					.table(NestedTableDef.create(nested))));
-		var page = PageDef.create("admin").barSlot(bar("ctx")).tabs(Tab.create("t", "T").view(outer));
 		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("ctx"), e::getMessage);
 	}

@@ -168,22 +168,23 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	 * This proves the guard is genuinely exercising that sink rather than passing it by accident.
 	 *
 	 * <p>
-	 * {@code ViewTable} currently has three escaped {@code <script>}-JSON sinks: the top-level VIEW_META sidecar,
-	 * the independently versioned {@code BulkMutateDef} sidecar, and the nested-table VIEW_META sidecar emitted
-	 * inside a row-detail {@code <template>}. The blanket {@code escapeForScript}&rarr;{@code noEscape} mutation
-	 * (which hits every occurrence in the file) must flag all three.
+	 * {@code ViewTable} currently has two escaped {@code <script>}-JSON sinks: the top-level VIEW_META sidecar
+	 * and the independently versioned {@code BulkMutateDef} sidecar. Nested-table VIEW_META inside a row-detail
+	 * {@code <template>} retired with F24 (no nested-table host on the region path). The blanket
+	 * {@code escapeForScript}&rarr;{@code noEscape} mutation (which hits every occurrence in the file) must flag
+	 * both remaining sinks.
 	 */
 	@Test void a12_realViewTable_passesButFailsWhenEscaperRemoved() throws Exception {
 		var root = requireRepoRoot();
 		var source = Files.readString(root.resolve(VIEW_TABLE));
 
 		var clean = ScriptJsonSinkScanner.scan(VIEW_TABLE, source);
-		assertEquals(3, clean.sinks().size(), () -> "sinks: " + clean.sinks());
+		assertEquals(2, clean.sinks().size(), () -> "sinks: " + clean.sinks());
 		assertEquals(java.util.List.of(), clean.violations());
 
 		var mutated = ScriptJsonSinkScanner.scan(VIEW_TABLE, source.replace("escapeForScript", "noEscape"));
-		assertEquals(3, mutated.sinks().size(), () -> "sinks: " + mutated.sinks());
-		assertEquals(3, mutated.violations().size(),
+		assertEquals(2, mutated.sinks().size(), () -> "sinks: " + mutated.sinks());
+		assertEquals(2, mutated.violations().size(),
 			() -> "removing escapeForScript from ViewTable should be flagged: " + mutated.violations());
 	}
 

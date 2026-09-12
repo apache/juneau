@@ -17,7 +17,7 @@
 
 /*
  * sanitized-html-browser.cjs - opt-in Chromium XSS canary for the SANITIZED_HTML detail-field format
- * (DetailField.Format.SANITIZED_HTML), driven by SanitizedHtml_BrowserTest under `mvn -Pjs-tests`.
+ * (FieldFormat.SANITIZED_HTML), driven by SanitizedHtml_BrowserTest under `mvn -Pjs-tests`.
  *
  * Never runs in a default build.  ViewsJs_RowDetail_Test's b17* battery already proves the copier's
  * behavior against this module's own regex-fixture DOMParser shim (row-detail.cjs) - a hand-rolled test

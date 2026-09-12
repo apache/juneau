@@ -71,12 +71,13 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"findRowDetailTemplate: findRowDetailTemplate",
 			"detailTabTargetIndex: detailTabTargetIndex",
 			"activateDetailTab: activateDetailTab",
-			"buildDetailStrip: buildDetailStrip",
 			"renderAsyncStatus: renderAsyncStatus",
 			"JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION"
 		})
 			assertTrue(body.contains(name), () -> "missing export '" + name + "'");
 		assertFalse(body.contains("function buildDetailFields("), body);
+		assertFalse(body.contains("function buildDetailStrip("), body);
+		assertFalse(body.contains("buildDetailStrip: buildDetailStrip"), body);
 		assertFalse(body.contains("function buildDetailPanel("), body);
 		assertTrue(body.contains("submitRowAction(action, table, parentTr"),
 			"write path must target the expanded DataTables row, not expand JSON");
@@ -231,7 +232,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 	}
 
 	/**
-	 * The hostile half of {@link DetailField.Format#SANITIZED_HTML}: a battery of real XSS vectors painted
+	 * The hostile half of {@link FieldFormat#SANITIZED_HTML}: a battery of real XSS vectors painted
 	 * through the format's own allowlist copier.  This is the second, independent gate behind the caller's
 	 * server-side sanitizer &mdash; if that upstream pass is wrong, nothing here may execute.
 	 */
@@ -540,27 +541,25 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertNum(-1, r.get("tti_other"));        // unhandled key
 	}
 
-	@Test void b09_multiSection_buildsTabStrip_oneVisiblePane() {
+	@Test void b09_buildRibbonStrip_paintsATablist() {
 		var r = report();
-		assertEquals(true, r.get("hasBuildDetailStrip"));
+		assertEquals(false, r.get("hasBuildDetailStrip"));
 		assertEquals(true, r.get("strip_built"));
-		assertEquals(true, r.get("strip_isFirstChild"));
 		assertEquals("tablist", r.get("strip_role"));
 		assertEquals("tab", r.get("strip_mode"));
-		assertEquals(true, r.get("strip_hasRibbonGroupClass"));   // shared strip widget - not a new grammar
+		assertEquals(true, r.get("strip_hasRibbonGroupClass"));
 		assertNum(2, r.get("strip_tabCount"));
 		assertEquals("Overview,Context", r.get("strip_labels"));
 		assertEquals("juneau-view-ribbon-btn", r.get("strip_btnClass"));
 		assertEquals("true", r.get("strip_firstSelected"));
 		assertEquals("false", r.get("strip_secondSelected"));
 		assertNum(0, r.get("strip_firstTabindex"));
-		assertNum(-1, r.get("strip_secondTabindex"));         // roving tabindex
-		assertEquals(false, r.get("strip_pane0Hidden"));          // first pane initially visible
+		assertNum(-1, r.get("strip_secondTabindex"));
+		assertEquals(false, r.get("strip_pane0Hidden"));
 		assertEquals(true, r.get("strip_pane1Hidden"));
 		assertEquals("tabpanel", r.get("strip_pane0Role"));
 		assertEquals(true, r.get("strip_pane0Labelledby"));
 		assertEquals(true, r.get("strip_tab0Controls"));
-		assertEquals(true, r.get("strip_titleHidden"));           // stacked <h2> hidden - the tab replaces it
 	}
 
 	@Test void b10_activateDetailTab_visibilityOnly() {
@@ -584,13 +583,9 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(true, r.get("kbd_enter_noop"));
 	}
 
-	@Test void b12_singleSection_staysStripLess() {
+	@Test void b12_frameworkDetailStripIsGone() {
 		var r = report();
-		assertEquals(true, r.get("single_noStrip"));
-		assertEquals(true, r.get("single_firstStillSection"));
-		assertEquals(true, r.get("single_paneNotHidden"));
-		assertEquals(true, r.get("single_noTabpanelRole"));       // no lone tab, no tabpanel role
-		assertEquals(true, r.get("single_titleNotHidden"));
+		assertEquals(false, r.get("hasBuildDetailStrip"));
 	}
 
 	@Test void b13_skillsFixture_becomesTabs() {
@@ -609,12 +604,6 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals("b", r.get("noRefetch_onActivateFirstSid"));
 		assertEquals("a", r.get("noRefetch_onActivateLastSid"));
 		assertEquals(true, r.get("noRefetch_onActivatePaneMatches"));
-	}
-
-	@Test void b15_headerKeepsStripAfterHeader() {
-		var r = report();
-		assertEquals(true, r.get("header_firstIsHeader"));
-		assertEquals(true, r.get("header_stripAfterHeader"));
 	}
 
 	@Test void b16_findRowDetailTemplate_survivesDataTablesWrap() {

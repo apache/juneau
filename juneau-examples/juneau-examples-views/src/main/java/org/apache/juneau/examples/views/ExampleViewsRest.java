@@ -57,10 +57,9 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<li>The "Archived" sub-tab and the "Audit Log" tab are deliberately PLAIN (no ribbon/poll/details), both to
  * 		satisfy the "at least one sibling plain tab" requirement and to keep a contrasting baseline the sub-tabbed
  * 		panel's blank-panel regression would show up against.
- * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with two named sections, two mutating {@link ActionRef}s,
- * 		{@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.  Its "Context" section further
- * 		dogfoods a read-only {@link NestedTableDef}: a "related events" table with its own client-mode GET
- * 		{@code /data/alerts/events}, scoped to the parent alert by the {@code alertId} query parameter.
+ * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with a named region populator, two mutating {@link ActionRef}s
+ * 		in the header, {@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.  Nested-table seeding
+ * 		inside a row-detail pane is deferred (F24).
  * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) are composed into one page,
  * 		rather than one type reused everywhere.
  * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
@@ -92,6 +91,51 @@ public class ExampleViewsRest extends BasicRestServlet {
 
 	/** The stable page id &mdash; also the first hash segment of a deep link, e.g. {@code #widgets-demo/catalog/archived}. */
 	public static final String PAGE_ID = "widgets-demo";
+
+	/**
+	 * Named populators for the three in-tree row-detail regions.  Must load after {@code juneau-regions.js} and
+	 * {@code juneau-helpers.js}.
+	 */
+	private static final String DETAIL_POPULATE_SCRIPT = """
+		(function () {
+			var H = function () { return JuneauViews.helpers; };
+			function paintGrid(fields) {
+				return function (ctx, container) {
+					container.replaceChildren(H().fieldGrid(fields, { values: ctx.data || {} }));
+				};
+			}
+			JuneauViews.regions.register("widgets-active-detail", paintGrid([
+				{ data: "owner", label: "Owner" },
+				{ data: "updatedAt", label: "Last updated" },
+				{ data: "notes", label: "Notes" }
+			]));
+			JuneauViews.regions.register("alerts-detail", function (ctx, container) {
+				var h = H();
+				var values = function () { return ctx.data || {}; };
+				container.replaceChildren(h.tabStrip([
+					{ id: "overview", label: "Overview", lazy: false,
+					  populate: function (c, el) {
+					    el.replaceChildren(h.fieldGrid([
+					      { data: "severity", label: "Severity" },
+					      { data: "title", label: "Title" }
+					    ], { values: values() }));
+					  } },
+					{ id: "context", label: "Context",
+					  populate: function (c, el) {
+					    el.replaceChildren(h.fieldGrid([
+					      { data: "summary", label: "Summary" },
+					      { data: "assignee", label: "Assignee" }
+					    ], { values: values() }));
+					  } }
+				], { active: "overview", signal: ctx.signal }));
+			});
+			JuneauViews.regions.register("alert-overview-detail", paintGrid([
+				{ data: "severity", label: "Severity" },
+				{ data: "assignee", label: "Assignee" },
+				{ data: "status", label: "Status", render: "pill", renderMeta: { field: "state" } }
+			]));
+		})();
+		""";
 
 	private static final String COL_UPDATED_AT = "updatedAt";
 	private static final String COL_STATUS = "status";
@@ -197,12 +241,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 			// "notes" is intentionally not a table column; the expander GET is the only place it appears.
 			.details(RowDetailDef.create()
 				.endpoint("/data/widgets/active/{id}")
-				.sections(DetailSection.create("info", "Info")
-					.fields(
-						DetailField.of(COL_OWNER).title(TITLE_OWNER),
-						DetailField.of(COL_UPDATED_AT).title("Last updated"),
-						DetailField.of("notes").title("Notes"))
-					.actions(ActionBar.create().items(SafeAction.COLLAPSE))))
+				.headerActions(ActionBar.create().items(SafeAction.COLLAPSE))
+				.region(detailRegion("widgets-active-detail")))
 			.build();
 	}
 
@@ -289,32 +329,13 @@ public class ExampleViewsRest extends BasicRestServlet {
 					.confirm("Escalate this alert to on-call?").onSuccess(RowAction.OnSuccess.REDRAW))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.sections(
-					DetailSection.create("overview", "Overview")
-						.columns(2)
-						.fields(
-							DetailField.of(COL_SEVERITY).title(TITLE_SEVERITY),
-							DetailField.of(COL_TITLE).title(TITLE_TITLE))
-						.actions(ActionBar.create().items(ActionRef.of(ACTION_ACK), SafeAction.COLLAPSE)),
-					DetailSection.create("context", "Context")
-						.fields(
-							DetailField.of("summary").title("Summary"),
-							// A field-hosted ActionBar: the third bar host, painted in this row's VALUE column
-							// beside the assignee it acts on rather than up in a toolbar.  The row carries a value
-							// AND a bar at once - the same declared "esc" RowAction the section bar below offers,
-							// reached from a second host, with no new action, endpoint, or contract version.  The
-							// in-field buttons are quiet by construction; there is nothing to declare for that.
-							DetailField.of(COL_ASSIGNEE).title("Assignee")
-								.actions(ActionBar.create().items(ActionRef.of(ACTION_ESC))))
-						.actions(ActionBar.create().items(ActionRef.of(ACTION_ESC)))
-						// A read-only table nested in the expander: its own client-mode GET is scoped to the
-						// parent alert by the "alertId" query param (no {parentId} URL template).  It runs only
-						// after the alert's detail GET succeeds and the Context pane becomes visible.
-						.table(NestedTableDef.create(relatedEventsView()).parentScopeParam("alertId"))))
+				.headerActions(ActionBar.create().items(
+					ActionRef.of(ACTION_ACK), ActionRef.of(ACTION_ESC), SafeAction.COLLAPSE))
+				.region(detailRegion("alerts-detail")))
 			.build();
 	}
 
-	/** The read-only nested "related events" table dogfooded inside the Alerts expander's Context section. */
+	/** The read-only nested "related events" table (F24: no row-detail host until nested-table seeding is scoped). */
 	static ViewDef relatedEventsView() {
 		return ViewDef.create("alert-events")
 			.rowType(AlertEvent.class)
@@ -326,6 +347,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 				Column.of("kind").title("Kind"),
 				Column.of("detail").title("Detail"))
 			.build();
+	}
+
+	private static RegionDef detailRegion(String populator) {
+		return RegionDef.create("detail").allowPopulators(populator).populate(populator);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -430,14 +455,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 					.render(Render.pill(StatusTone.WARNING.wire()).meta(META_FIELD, META_STATE)))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.sections(DetailSection.create("overview", "Overview")
-					.columns(2)
-					.fields(
-						DetailField.of(COL_SEVERITY).title(TITLE_SEVERITY),
-						DetailField.of(COL_ASSIGNEE).title("Assignee"),
-						// The fill-sink pill: same chip, rendered by the sink-path renderer, unconditionally inert.
-						DetailField.of(COL_STATUS).title(TITLE_STATUS).render(Render.pill().meta(META_FIELD, META_STATE)))
-					.actions(ActionBar.create().items(SafeAction.COLLAPSE))))
+				.headerActions(ActionBar.create().items(SafeAction.COLLAPSE))
+				.region(detailRegion("alert-overview-detail")))
 			.build();
 	}
 
@@ -489,6 +508,11 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<script src="%s"></script>
 			<script src="%s"></script>
 			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			%s
+			</script>
+			<script src="%s"></script>
 			</body>
 			</html>
 			""".formatted(
@@ -502,6 +526,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.RIBBON_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				DETAIL_POPULATE_SCRIPT,
 				// Must load AFTER juneau-views.js - it calls the public NS.init.initTable to lazy-init a
 				// sub-tab's DataTable on first activation.
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.PAGES_JS_PATH));
@@ -596,7 +623,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<script src="%s"></script>
 			<script src="%s"></script>
 			<script src="%s"></script>
+			<script src="%s"></script>
 			<script>
+			%s
 			JuneauViews.regions.mount({ "alert-overview": { table: "%s" } });
 			</script>
 			</body>
@@ -610,6 +639,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				DETAIL_POPULATE_SCRIPT,
 				envelopeUrl);
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),

@@ -82,20 +82,16 @@ class SlotDetailChevron_BrowserTest extends TestBase {
 	}
 
 	/**
-	 * A slot envelope whose DETAIL_SLOT carries a header title plus one field section &mdash; the chrome
+	 * A slot envelope whose DETAIL_SLOT carries a header title plus one region body &mdash; the chrome
 	 * {@code buildDetailTemplate} must place on {@code tpl.content}.
 	 */
-	@SuppressWarnings({
-		"deprecation" // sections() still emits header+section chrome; this canary is that paint, not the region successor.
-	})
 	private static ViewSlot envelope() {
 		return ViewSlot.envelope(ViewDef.create("gacks")
 			.columns(Column.of("name").title("Name"))
 			.details(RowDetailDef.create()
 				.endpoint("/data/{id}")
 				.title("Incident detail")
-				.sections(DetailSection.create("details", "Details")
-					.fields(DetailField.of("status").title("Status"))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.build());
 	}
 
@@ -170,7 +166,7 @@ class SlotDetailChevron_BrowserTest extends TestBase {
 		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
 	}
 
-	@Test void b01_templateContentHasHeaderAndSections_lightDomEmpty() {
+	@Test void b01_templateContentHasHeaderAndRegion_lightDomEmpty() {
 		assertEquals(Boolean.TRUE, report.get("hasTemplate"), () -> "mount did not emit a row-detail template: " + report);
 		assertEquals(Boolean.TRUE, report.get("lightDomEmpty"),
 			() -> "the <template> light DOM is not empty; Chromium expand clones tpl.content, not light DOM: " + report);
@@ -178,8 +174,8 @@ class SlotDetailChevron_BrowserTest extends TestBase {
 			() -> "tpl.content has no children; buildDetailTemplate must append into the fragment expand clones: " + report);
 		assertEquals(Boolean.TRUE, report.get("contentHasHeader"),
 			() -> "tpl.content has no .juneau-view-detail-header: " + report);
-		assertEquals(Boolean.TRUE, report.get("contentHasSection"),
-			() -> "tpl.content has no .juneau-view-detail-section: " + report);
+		assertEquals(Boolean.TRUE, report.get("contentHasRegion"),
+			() -> "tpl.content has no [data-juneau-region]: " + report);
 	}
 
 	@Test void c01_chevronClickClonesPopulatedPanel() {

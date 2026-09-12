@@ -66,7 +66,7 @@ class LocalizationChromeResolution_Test extends TestBase {
 		.details(RowDetailDef.create()
 			.endpoint("/detailed/{id}")
 			.title("$L{col.name}")
-			.sections(DetailSection.create("main", "$L{col.status}").fields(DetailField.of("k").title("$L{col.name}"))))
+			.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 		.build();
 
 	static final PageDef PAGE = PageDef.create("admin")
@@ -151,11 +151,10 @@ class LocalizationChromeResolution_Test extends TestBase {
 
 	@Test void a05_rowDetailHost_resolvesItsOwnLTemplatesIndependently() throws Exception {
 		// The row-detail host (ViewTable's OTHER gate site) - a second, independent decoupled gate.
+		// Header title is the remaining chrome channel after section/field titles retired.
 		var html = body("/detailed");
 		assertTrue(html.contains("Name"), html);
-		assertTrue(html.contains("Status"), html);
 		assertFalse(html.contains("$L{col.name}"), html);
-		assertFalse(html.contains("$L{col.status}"), html);
 	}
 
 	@Test void a06_pageHost_resolvesItsOwnLTemplates() throws Exception {

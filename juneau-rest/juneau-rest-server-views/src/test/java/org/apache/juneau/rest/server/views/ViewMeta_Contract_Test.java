@@ -511,7 +511,7 @@ class ViewMeta_Contract_Test extends TestBase {
 			.rowClassRule("error", Op.PRESENT, "row-flagged")
 			.details(RowDetailDef.create()
 				.endpoint("/data/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.poll(60_000L)
 			.build();
 	}
@@ -522,7 +522,7 @@ class ViewMeta_Contract_Test extends TestBase {
 			.rowActions(RowAction.create("go").endpoint("u").method(RowAction.Method.POST))
 			.details(RowDetailDef.create()
 				.endpoint("/data/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.poll(60_000L)
 			.build();
 	}
@@ -559,7 +559,7 @@ class ViewMeta_Contract_Test extends TestBase {
 		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
 			.details(RowDetailDef.create()
 				.endpoint("/data/{id}")
-				.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner").title("Owner"))))
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.build();
 		var json = Json.of(v);
 		assertFalse(json.contains("\"details\""), json);
@@ -570,10 +570,9 @@ class ViewMeta_Contract_Test extends TestBase {
 	// f03 (details never affects top-level key order) is covered by e06 above, alongside three other
 	// structurally-identical top-level-key-order pins.
 
-	@Test void f04_detailFieldTitleDefaultsToNullWhenUnset() {
-		var d = DetailField.of("owner");
-		assertEquals("owner", d.data);
-		assertNull(d.title);
+	@Test void f04_fieldFormatDefaultIsText() {
+		assertEquals("text", FieldFormat.TEXT.wire());
+		assertNull(RegionDef.Field.of("owner").format);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -634,16 +633,15 @@ class ViewMeta_Contract_Test extends TestBase {
 	}
 
 	/**
-	 * The {@link DetailField.Format} wire tokens are a client-dispatch contract: {@code juneau-views.js} switches
+	 * The {@link FieldFormat} wire tokens are a client-dispatch contract: {@code juneau-views.js} switches
 	 * on these exact strings and treats anything unrecognized as TEXT.  A renamed token would therefore not fail
 	 * loudly - it would silently downgrade the field to escaped text - so each is pinned literally here.
 	 */
-	@Test void g07b_detailFieldFormatTokens() {
-		assertEquals("text", DetailField.Format.TEXT.wire());
-		assertEquals("markdown", DetailField.Format.MARKDOWN.wire());
-		assertEquals("sanitizedHtml", DetailField.Format.SANITIZED_HTML.wire());
-		// Adding a format is additive; this pins the set so a new one is a deliberate contract change.
-		assertEquals(3, DetailField.Format.values().length);
+	@Test void g07b_fieldFormatTokens() {
+		assertEquals("text", FieldFormat.TEXT.wire());
+		assertEquals("markdown", FieldFormat.MARKDOWN.wire());
+		assertEquals("sanitizedHtml", FieldFormat.SANITIZED_HTML.wire());
+		assertEquals(3, FieldFormat.values().length);
 	}
 
 	@Test void g07_rowActionPresentAndOnSuccessTokens() {

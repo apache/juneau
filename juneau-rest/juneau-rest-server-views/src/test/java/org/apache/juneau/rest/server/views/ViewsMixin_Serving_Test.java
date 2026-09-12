@@ -897,7 +897,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * The value-slot variant for a field-hosted {@link DetailField#actions} bar.
+	 * The value-slot variant for a field-hosted {@code fieldGrid} catalog {@code actions} bar.
 	 *
 	 * <p>
 	 * Three things are asserted, and each is load-bearing rather than descriptive.  <b>Placement:</b> the inline

@@ -62,7 +62,7 @@ const PROBE = async function () {
 	out.lightDomEmpty = tpl != null && tpl.childNodes.length === 0;
 	out.contentChildCount = dest ? dest.childNodes.length : 0;
 	out.contentHasHeader = dest != null && dest.querySelector('.juneau-view-detail-header') != null;
-	out.contentHasSection = dest != null && dest.querySelector('.juneau-view-detail-section') != null;
+	out.contentHasRegion = dest != null && dest.querySelector('[data-juneau-region]') != null;
 
 	const table = slot.querySelector('table[data-juneau-view]');
 	out.hasTable = table != null;

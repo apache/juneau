@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Opt-in Chromium XSS canary for {@link DetailField.Format#SANITIZED_HTML}.
+ * Opt-in Chromium XSS canary for {@link FieldFormat#SANITIZED_HTML}.
  *
  * <p>
  * {@link ViewsJs_RowDetail_Test}'s {@code b17*} battery already proves the copier's behavior against this

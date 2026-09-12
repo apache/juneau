@@ -131,9 +131,9 @@ class NestedTableDef_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, nt::validate);
 	}
 
-	@Test void a17_nestedDetailSections_permitted() {
-		// A nested view may declare its own detail sections, as long as none of them is another nested table.
-		NestedTableDef.create(withDetails("events", null)).validate();
+	@Test void a17_nestedDetailRegion_permitted() {
+		// A nested view may declare its own region body; F24 left no nested-table host inside that region.
+		NestedTableDef.create(withRegionDetails("events")).validate();
 	}
 
 	@Test void a18_rowActions_permitted() {
@@ -166,17 +166,12 @@ class NestedTableDef_Test extends TestBase {
 		assertFalse(NestedTableDef.isSafeNestedDataUrl(null));
 	}
 
-	/**
-	 * A view with one detail section whose nested table is {@code inner} (or which is table-less when
-	 * {@code inner} is <jk>null</jk>).
-	 */
-	private static ViewDef withDetails(String id, NestedTableDef inner) {
-		var section = DetailSection.create("info", "Info").fields(DetailField.of(id + "Owner"));
-		if (inner != null)
-			section.table(inner);
+	/** A nested view whose row-detail body is a region (F24: no nested-table host inside it). */
+	private static ViewDef withRegionDetails(String id) {
 		return ViewDef.create(id).dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/" + id)
 			.columns(Column.of("name"))
-			.details(RowDetailDef.create().endpoint("/data/" + id + "/{id}").sections(section))
+			.details(RowDetailDef.create().endpoint("/data/" + id + "/{id}")
+				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 			.build();
 	}
 
@@ -189,13 +184,10 @@ class NestedTableDef_Test extends TestBase {
 		NestedTableDef.create(nestedView()).validate();
 	}
 
-	@Test void b03_depthThree_fails() {
-		// A nested view that itself declares a nested table would put that table at depth 3.
-		var leaf = NestedTableDef.create(ViewDef.create("hosts").dataMode(ViewDef.DataMode.CLIENT)
-			.dataUrl("/data/hosts").columns(Column.of("name")).build());
-		var nt = NestedTableDef.create(withDetails("events", leaf));
-		var e = assertThrows(IllegalArgumentException.class, nt::validate);
-		assertTrue(e.getMessage().contains("depth"), e::getMessage);
+	@Test void b03_depthThreeHostIsGone_regionDetailsDoNotDescend() {
+		// F24 deferred nested-table seeding on a row-detail region: assertWithinDepth no longer walks a
+		// section-hosted NestedTableDef, so a nested view with its own details.region is still depth 2.
+		NestedTableDef.create(withRegionDetails("events")).validate();
 	}
 
 	@Test void b04_noAuthorMaxDepthField() {
@@ -212,45 +204,6 @@ class NestedTableDef_Test extends TestBase {
 			assertNotEquals("bulkMutate", f.getName(), "bulk mutation is parent-table only");
 		for (var m : NestedTableDef.class.getMethods())
 			assertNotEquals("bulkMutate", m.getName(), "bulk mutation is parent-table only");
-	}
-
-	@Test void b06_selfCycle_fails() {
-		// A nested view whose own detail section points back at itself.
-		var self = ViewDef.create("events").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/events")
-			.columns(Column.of("name")).build();
-		var back = NestedTableDef.create(self);
-		self.details(RowDetailDef.create().endpoint("/data/events/{id}")
-			.sections(DetailSection.create("info", "Info").fields(DetailField.of("owner")).table(back)));
-		var nt = NestedTableDef.create(self);
-		assertThrows(IllegalArgumentException.class, nt::validate);
-	}
-
-	@Test void b07_mutualCycle_fails() {
-		// a -> b -> a.
-		var a = ViewDef.create("a").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/a")
-			.columns(Column.of("name")).build();
-		var b = ViewDef.create("b").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/data/b")
-			.columns(Column.of("name")).build();
-		a.details(RowDetailDef.create().endpoint("/data/a/{id}")
-			.sections(DetailSection.create("sa", "A").fields(DetailField.of("aOwner")).table(NestedTableDef.create(b))));
-		b.details(RowDetailDef.create().endpoint("/data/b/{id}")
-			.sections(DetailSection.create("sb", "B").fields(DetailField.of("bOwner")).table(NestedTableDef.create(a))));
-		var ntA = NestedTableDef.create(a);
-		assertThrows(IllegalArgumentException.class, ntA::validate);
-		var ntB = NestedTableDef.create(b);
-		assertThrows(IllegalArgumentException.class, ntB::validate);
-	}
-
-	@Test void b08_siblingDag_reusingOneViewDefInstance_passes() {
-		// Cycle detection is PATH-scoped (pushed on descent, popped on unwind), not a global visited set: the same
-		// nested ViewDef instance reached from two different parents is a legal DAG, not a cycle.
-		var shared = nestedView();
-		var p1 = withDetails("alerts", NestedTableDef.create(shared));
-		var p2 = withDetails("hosts", NestedTableDef.create(shared));
-		p1.validate();
-		p2.validate();
-		p2.validate();
-		p1.validate();
 	}
 
 	@Test void b09_selection_isCarriedAndCascadesIntoValidate() {

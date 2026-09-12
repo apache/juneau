@@ -133,9 +133,9 @@ class ViewsJs_SlotMount_Test extends TestBase {
 			"t12_regionContract");
 	}
 
-	@Test void b10_nestedTableHasContractTwoAndNoHtmlId() {
+	@Test void b10_leftoverSectionsDoNotReconstructNestedTable() {
 		var r = report();
-		assertAllTrue(r, "t13_nestedContract", "t13_nestedNoHtmlId", "t13_scopeParam");
+		assertAllTrue(r, "t13_noNested", "t13_hasRegion", "t13_noSectionFrame");
 	}
 
 	@Test void b11_bulkMismatchWithholdsBulkOnly() {
