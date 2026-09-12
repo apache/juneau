@@ -247,6 +247,11 @@ function makeEnv() {
 				return this.childNodes.map(function (c) { return c.textContent; }).join('');
 			}
 		};
+		// HTMLTemplateElement.content is the inert DocumentFragment expand clones.
+		// A template-tag node must expose it so slot paint can dest.appendChild into
+		// the same fragment browsers clone, not the element's light-DOM children.
+		if (node.tagName === 'TEMPLATE')
+			node.content = el('template-content');
 		return node;
 	}
 

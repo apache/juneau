@@ -6935,26 +6935,30 @@
 		tpl.setAttribute("data-juneau-row-detail", "1");
 		tpl.setAttribute("data-juneau-detail-contract", detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION);
 		if (detail.endpoint) tpl.setAttribute("data-juneau-detail-url", detail.endpoint);
+		// Expand clones tpl.content (expandDetailRow). Chromium's template.appendChild
+		// leaves that fragment empty - the HTML parser is what fills .content. Paint
+		// into the fragment the expander clones, never the template element's light DOM.
+		const dest = tpl.content;
 		if (detail.title || detail.icon || (detail.headerActions && detail.headerActions.items && detail.headerActions.items.length))
-			tpl.appendChild(buildDetailHeader(detail));
+			dest.appendChild(buildDetailHeader(detail));
 		if (detail.region)
-			tpl.appendChild(buildDetailRegion(detail.region));
+			dest.appendChild(buildDetailRegion(detail.region));
 		const sections = detail.sections || [];
 		const ribbonAnchored = detail.barSlot && sections.length > 1;
 		const sectionAnchored = detail.barSlot && !ribbonAnchored && sections.length;
 		for (let i = 0; i < sections.length; i++)
-			tpl.appendChild(buildDetailSection(sections[i], sectionAnchored && i === 0 ? detail.barSlot : null, parentTable));
+			dest.appendChild(buildDetailSection(sections[i], sectionAnchored && i === 0 ? detail.barSlot : null, parentTable));
 		if (ribbonAnchored) {
 			const painted = paintDetailBarSlot(detail.barSlot, "ribbon");
 			if (painted) {
-				tpl.appendChild(painted.region);
-				tpl.appendChild(painted.sidecar);
+				dest.appendChild(painted.region);
+				dest.appendChild(painted.sidecar);
 			}
 		} else if (detail.barSlot && detail.region) {
 			const painted = paintDetailBarSlot(detail.barSlot, "section-title");
 			if (painted) {
-				tpl.appendChild(painted.region);
-				tpl.appendChild(painted.sidecar);
+				dest.appendChild(painted.region);
+				dest.appendChild(painted.sidecar);
 			}
 		}
 		return tpl;

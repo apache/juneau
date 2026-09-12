@@ -71,6 +71,15 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		var paintFn = body.substring(paintStart, paintEnd);
 		assertFalse(paintFn.contains("initTable(table)"), "slot paint must not load a VIEW_META sidecar");
 		assertFalse(paintFn.contains("data-juneau-region-meta"), paintFn);
+		var buildStart = body.indexOf("function buildDetailTemplate(");
+		assertTrue(buildStart >= 0, body);
+		var buildEnd = body.indexOf("\n\tfunction buildDetailHeader(", buildStart);
+		assertTrue(buildEnd > buildStart, body);
+		var buildFn = body.substring(buildStart, buildEnd);
+		assertTrue(buildFn.contains("const dest = tpl.content"), buildFn);
+		assertTrue(buildFn.contains("dest.appendChild"), buildFn);
+		assertFalse(buildFn.contains("tpl.appendChild"),
+			() -> "detail chrome must go into tpl.content, the fragment expand clones: " + buildFn);
 	}
 
 	@Test void b01_inlineEnvelopePaintsTableWithoutRegionStamp() {
@@ -119,8 +128,9 @@ class ViewsJs_SlotMount_Test extends TestBase {
 
 	@Test void b09_detailTemplateUsesExistingExpanderDomAndDeclaredDataUrl() {
 		var r = report();
-		assertAllTrue(r, "t12_hasTemplate", "t12_hasHeader", "t12_regionType",
-			"t12_declaredDataUrlOnly", "t12_noRegionMeta", "t12_regionContract");
+		assertAllTrue(r, "t12_hasTemplate", "t12_lightDomEmpty", "t12_contentHasChildren",
+			"t12_hasHeader", "t12_regionType", "t12_declaredDataUrlOnly", "t12_noRegionMeta",
+			"t12_regionContract");
 	}
 
 	@Test void b10_nestedTableHasContractTwoAndNoHtmlId() {

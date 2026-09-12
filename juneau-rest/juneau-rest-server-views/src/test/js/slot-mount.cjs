@@ -284,9 +284,12 @@ function envelope(NS, extra) {
 		};
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
+		const dest = tpl && tpl.content ? tpl.content : null;
 		out.t12_hasTemplate = tpl != null;
-		out.t12_hasHeader = tpl != null && tpl.querySelector('.juneau-view-detail-header') != null;
-		const region = tpl && tpl.querySelector('[data-juneau-region="pd-mine-detail"]');
+		out.t12_lightDomEmpty = tpl != null && tpl.childNodes.length === 0;
+		out.t12_contentHasChildren = dest != null && dest.childNodes.length > 0;
+		out.t12_hasHeader = dest != null && dest.querySelector('.juneau-view-detail-header') != null;
+		const region = dest && dest.querySelector('[data-juneau-region="pd-mine-detail"]');
 		out.t12_regionType = region != null && region.getAttribute('data-juneau-region-type') === 'row-detail';
 		let declared = null;
 		try {
@@ -295,7 +298,8 @@ function envelope(NS, extra) {
 		out.t12_declaredDataUrlOnly = !!(declared && declared.dataUrl === '/data/{id}'
 			&& Object.keys(declared).length === 1);
 		out.t12_noRegionMeta = incidents.querySelector('[data-juneau-region-meta]') == null
-			&& (tpl == null || tpl.querySelector('[data-juneau-region-meta]') == null);
+			&& (tpl == null || tpl.querySelector('[data-juneau-region-meta]') == null)
+			&& (dest == null || dest.querySelector('[data-juneau-region-meta]') == null);
 		out.t12_regionContract = region != null && region.getAttribute('data-juneau-region-contract') === '1';
 	}
 
@@ -325,7 +329,9 @@ function envelope(NS, extra) {
 			}]
 		};
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
-		const nested = incidents.querySelector('[data-juneau-nested]');
+		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
+		const dest = tpl && tpl.content ? tpl.content : tpl;
+		const nested = dest && dest.querySelector('[data-juneau-nested]');
 		const nestedTable = nested && nested.querySelector('table[data-juneau-view="child-rows"]');
 		out.t13_nestedContract = nested != null && nested.getAttribute('data-juneau-nested-contract') === '2';
 		out.t13_nestedNoHtmlId = nestedTable != null && !nestedTable.getAttribute('id');
