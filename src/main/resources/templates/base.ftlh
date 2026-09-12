@@ -48,15 +48,14 @@
          feature-detects window.JSZip / window.pdfMake and lights the Excel/PDF icon buttons. -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
     <#-- First-party toolkit base .tag chip stylesheet (neutral); the app's console-ui palette themes the same
-         .tag.<domain>.<value> classes. This same stylesheet also carries the TODO-399 Phase C .jc-tab/.jc-panel
-         page-shell base rules the Admin tab's juneau-pages.js runtime relies on. -->
+         .tag.<domain>.<value> classes. The same stylesheet also carries .juneau-page-nav rules for the Admin pair pages. -->
     <link rel="stylesheet" href="${viewsCssUrl!'/rest/releases/juneau-views.css'}">
     <link rel="stylesheet" href="${configCssUrl!'/rest/releases/juneau-config.css'}">
     </#if>
     <link rel="stylesheet" href="/juneau-console/chrome.css">
     <link rel="stylesheet" href="/css/chrome.css">
 </head>
-<body>
+<body data-juneau-csrf="${csrfToken}" data-juneau-csrf-header="${csrfHeader}">
     <header class="jc-header">
         <div class="jc-brand">
             <div class="jc-logo" role="img" aria-label="Apache Juneau"></div>
@@ -89,12 +88,11 @@
 
     <#if activeTab?? && (activeTab == 'releases' || activeTab == 'admin')>
     <#-- Caller-provided libs: self-hosted jQuery + DataTables, plus the DataTables Buttons extension (copy/csv)
-         from CDN. Then the first-party toolkit runtime in load order renders -> icons -> ribbon -> views;
-         juneau-views.js scans table[data-juneau-view] on DOMContentLoaded and hydrates the server-side table +
-         ribbon. juneau-icons.js MUST load before juneau-ribbon.js: the ribbon/paging-pill buttons resolve their
-         glyphs from the icon registry (window.JuneauViews.icons) at build time, so the registry must already
-         exist when juneau-ribbon.js/juneau-views.js render them. The old hand-rolled /js/releases.js DataTable
-         init is retired — the toolkit owns initialization now. -->
+         from CDN. Then the first-party toolkit runtime in load order renders -> icons -> ribbon -> views ->
+         config -> regions -> helpers; juneau-regions.js mounts empty slots via
+         JuneauViews.regions.mount({ [slotId]: { table: url } }). juneau-icons.js MUST load before juneau-ribbon.js:
+         the ribbon/paging-pill buttons resolve their glyphs from the icon registry (window.JuneauViews.icons) at
+         build time, so the registry must already exist when juneau-ribbon.js/juneau-views.js render them. -->
     <script src="/datatables/jquery.min.js"></script>
     <script src="/datatables/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
@@ -110,12 +108,11 @@
     <script src="${ribbonJsUrl!'/rest/releases/juneau-ribbon.js'}"></script>
     <script src="${viewsJsUrl!'/rest/releases/juneau-views.js'}"></script>
     <script src="${configJsUrl!'/rest/releases/juneau-config.js'}"></script>
+    <script src="${regionsJsUrl!'/rest/releases/juneau-regions.js'}"></script>
+    <script src="${helpersJsUrl!'/rest/releases/juneau-helpers.js'}"></script>
+    <#if tableSlotJsUrl??>
+    <script src="${tableSlotJsUrl}"></script>
     </#if>
-    <#if activeTab?? && activeTab == 'admin'>
-    <#-- TODO-399 Phase C: the opt-in tabs/sub-tabs page runtime — only the Admin tab's composed PageDef page loads
-         this; the single-view Releases tab above does not. Must load after juneau-views.js (it calls the
-         now-public NS.init.initTable to lazy-init a panel's DataTable on first activation). -->
-    <script src="${pagesJsUrl!'/rest/admin/juneau-pages.js'}"></script>
     </#if>
     <#if activeTab?? && activeTab == 'credentials'>
     <script src="/js/credentials.js"></script>

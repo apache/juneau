@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.rest;
 
+import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 
@@ -55,6 +56,8 @@ final class ConsolePage {
 	 */
 	static FreemarkerView of(String template, HttpServletRequest req) {
 		var token = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
-		return FreemarkerView.of(template).attr("csrfToken", token == null ? "" : token);
+		return FreemarkerView.of(template)
+			.attr("csrfToken", token == null ? "" : token)
+			.attr("csrfHeader", LoopbackBoundary.DEFAULT_CSRF_HEADER);
 	}
 }

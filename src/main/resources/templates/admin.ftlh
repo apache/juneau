@@ -22,15 +22,17 @@
             <h2>Admin</h2>
         </div>
 
-        <#-- TODO-399 Phase C: the composed tabs/sub-tabs page shell (PageTable.of(...) via AdminRest.page()),
-             pre-serialized server-side and inserted as trusted markup: ?no_esc suppresses this .ftlh's HTML
-             auto-escaping so the emitted [data-juneau-page]/<table data-juneau-view>/<script> markup is not
-             double-escaped. juneau-pages.js hash-routes the tabs and lazy-inits each panel's DataTable on first
-             activation via juneau-views.js's initTable.
-             TODO-445n: the toolkit now owns table-only horizontal scroll, so the old .rm-table-scroll wrapper is
-             removed — an outer overflow-x:auto here would clip the paging-pill menu (INV-2) and can produce two
-             horizontal scrollbars. Each panel's ViewTable wrapper carries data-juneau-layout="wide". -->
-        ${pageTable?no_esc}
+        <nav class="juneau-page-nav" aria-label="Admin">
+            <div class="juneau-page-nav-sections">
+                <a class="juneau-page-nav-section" href="/rest/admin/releases" aria-current="page">Admin</a>
+            </div>
+            <div class="juneau-page-nav-children">
+                <a class="juneau-page-nav-child" href="/rest/admin/releases"<#if selectedChild == 'releases'> aria-current="page"</#if>>Releases</a>
+                <a class="juneau-page-nav-child" href="/rest/admin/credentials"<#if selectedChild == 'credentials'> aria-current="page"</#if>>Credentials</a>
+            </div>
+        </nav>
+        <div id="${slotId}"></div>
+        <script type="application/json" id="rm-table-slot">${tableSlotJson?no_esc}</script>
     </div>
 </#macro>
 <#include "base.ftlh">

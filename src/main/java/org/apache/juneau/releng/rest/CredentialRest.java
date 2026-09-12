@@ -21,11 +21,13 @@ import java.util.List;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
+import org.apache.juneau.marshall.json.JsonSerializer;
 import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestDelete;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
+import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
@@ -36,6 +38,7 @@ import org.apache.juneau.rest.server.views.RibbonAction;
 import org.apache.juneau.rest.server.views.ViewDef;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
+import org.apache.juneau.rest.server.views.ViewSlot;
 import org.apache.juneau.releng.credential.CredentialService;
 import org.apache.juneau.releng.credential.CredentialStatus;
 import org.apache.juneau.releng.credential.Validator.ValidationResult;
@@ -69,7 +72,7 @@ public class CredentialRest extends BasicRestResource {
 
 	/**
 	 * The rich-view toolkit's declarative view of the Credentials list: a second, independently-composable
-	 * {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, wired into the RM {@code Admin} tab page
+	 * {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, mounted into the Admin Credentials pair
 	 * ({@code AdminRest}). Client-side data mode: {@link #status()} already returns the bare
 	 * {@code List<CredentialStatus>} the toolkit's client-mode ajax (({@code dataSrc: ""})) expects, so no new
 	 * server-side query wiring is needed.
@@ -101,6 +104,18 @@ public class CredentialRest extends BasicRestResource {
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
 		return ConsolePage.of(NAME, req).attr(NAME, service.status());
+	}
+
+	/**
+	 * Slot envelope for the Admin Credentials table. JSON on this resource; the secret-store page does not
+	 * compose {@code ViewsMixin}.
+	 *
+	 * @param req The current request. Must not be {@code null}.
+	 * @return SLOT_META wrapping {@link #credentialsView()}.
+	 */
+	@RestGet(path = "/view", produces = "application/json", serializers = JsonSerializer.class)
+	public ViewSlot credentialsViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, credentialsView());
 	}
 
 	/** JSON status for all credentials (no secrets). */

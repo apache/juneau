@@ -21,11 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.http.response.NotFound;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
+import org.apache.juneau.rest.server.filter.LoopbackBoundary;
+import org.apache.juneau.rest.server.views.ViewSlot;
 import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -123,6 +127,15 @@ class ReleaseRestTest {
 				assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js script include: " + body);
 				assertTrue(iconsIdx < ribbonIdx,
 					"juneau-icons.js must be included before juneau-ribbon.js: " + body);
+				assertTrue(body.contains("id=\"releases\""), "Missing empty releases slot: " + body);
+				assertFalse(body.contains("juneau-view:releases"), "ViewTable sidecar leaked: " + body);
+				assertFalse(body.contains("data-juneau-view"), "Marker table leaked: " + body);
+				assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);
+				assertTrue(body.contains("/js/table-slot.js"), body);
+				assertTrue(body.contains("\"tableUrl\":\"/rest/releases/view\""), body);
+				assertTrue(body.contains("data-juneau-csrf="), body);
+				assertTrue(body.contains("data-juneau-csrf-header=\"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
+				assertFalse(body.contains("class=\"juneau-page-nav\""), "Standalone Releases must not carry Admin page nav: " + body);
 			}
 		}
 	}
@@ -182,5 +195,30 @@ class ReleaseRestTest {
 				assertFalse(body.contains("9.3.0"), "Filtered-out row present: " + body);
 			}
 		}
+	}
+
+	@Test
+	void d01_viewEnvelopeIsSlotMetaWithoutCsrf() throws Exception {
+		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
+			try (var resp = client.request("GET", "/view").header("Accept", "application/json").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertSlotEnvelope(body, "releases");
+			}
+		}
+	}
+
+	@SuppressWarnings({
+		"unchecked" // Json.DEFAULT.read to Map is an unchecked conversion from the raw parser result.
+	})
+	static void assertSlotEnvelope(String body, String viewId) {
+		var slot = Json.DEFAULT.read(body, Map.class);
+		assertEquals(ViewSlot.CONTRACT_VERSION, slot.get("contractVersion"), body);
+		assertEquals("wide", slot.get("layout"), body);
+		assertFalse(slot.containsKey("csrf"), body);
+		var view = (Map<String,Object>) slot.get("view");
+		assertNotNull(view, body);
+		assertEquals("4", view.get("contractVersion"), body);
+		assertEquals(viewId, view.get("id"), body);
 	}
 }

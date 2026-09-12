@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.marshall.html.HtmlSerializer;
+import org.apache.juneau.marshall.json.JsonSerializer;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestRequest;
@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.views.RibbonAction;
 import org.apache.juneau.rest.server.views.ViewDef;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
-import org.apache.juneau.rest.server.views.ViewTable;
+import org.apache.juneau.rest.server.views.ViewSlot;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
@@ -50,10 +50,11 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * <p>
  * Built on the {@code juneau-rest-server-views} rich-view toolkit: {@link #releasesView()} declares the typed
- * {@link ViewDef} (columns + renderers + ribbon), {@link #page(RestRequest)} emits its {@link ViewTable} shell as trusted markup
- * into the FreeMarker template, and {@link #data()} serves the {@code DataTablesResults} envelope via
- * {@link ProtocolQueryable} + the view's {@link ViewDef#queryableSettings() queryable settings}. The four runtime
- * assets are served by the composed {@link ViewsMixin} at this resource's mount.
+ * {@link ViewDef} (columns + renderers + ribbon), {@link #page(RestRequest)} serves an empty slot that
+ * {@code JuneauViews.regions.mount} fills from {@link #releasesViewEnvelope(RestRequest)}, and {@link #data()}
+ * serves the {@code DataTablesResults} envelope via {@link ProtocolQueryable} + the view's
+ * {@link ViewDef#queryableSettings() queryable settings}. Toolkit assets are served by the composed
+ * {@link ViewsMixin} at this resource's mount.
  */
 @Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
 public class ReleaseRest extends BasicRestResource {
@@ -91,7 +92,7 @@ public class ReleaseRest extends BasicRestResource {
 	 * rendered Status/Stage pills (emitting the shared {@code .tag.<domain>.<value>} classes the app's console-ui
 	 * palette themes), timestamp/date columns, and a copy/csv export + column-search + status quick-filter + refresh
 	 * ribbon. Data arrives via ajax draws against {@link #data()}. Static (no instance state) so {@code AdminRest}
-	 * can reuse this same declarative definition when composing the {@code Admin} tab page.
+	 * can reuse this same declarative definition when mounting the Admin Releases pair.
 	 */
 	static ViewDef releasesView() {
 		return ViewDef.create("releases")
@@ -124,30 +125,21 @@ public class ReleaseRest extends BasicRestResource {
 			.build();
 	}
 
-	/** Human page — the rich-view table shell (emitted as trusted markup) + JSON sidecar, hydrated by the toolkit JS. */
+	/** Human page — empty {@code #releases} slot; the table is mounted from {@link #releasesViewEnvelope}. */
 	@RestGet("/")
 	public View page(RestRequest req) {
-		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(req, releasesView()));
-		return ConsolePage.of("releases", req)
-			.attr("viewTable", markup)
-			.attr("viewsCssUrl", asset(req, ViewsMixin.VIEWS_CSS_PATH))
-			.attr("configCssUrl", asset(req, ViewsMixin.CONFIG_CSS_PATH))
-			.attr("rendersJsUrl", asset(req, ViewsMixin.RENDERS_JS_PATH))
-			.attr("iconsJsUrl", asset(req, ViewsMixin.ICONS_JS_PATH))
-			.attr("ribbonJsUrl", asset(req, ViewsMixin.RIBBON_JS_PATH))
-			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH))
-			.attr("configJsUrl", asset(req, ViewsMixin.CONFIG_JS_PATH));
+		return TableSlotPage.of("releases", req, "releases", MOUNT + "/view");
 	}
 
 	/**
-	 * Resolves a toolkit asset to an absolute, cache-busted URL for the FreeMarker head block via the
-	 * request-aware {@link ViewsMixin#viewAssetUrl(RestRequest, String)}, resolved per-request against
-	 * this resource's actual mount/context path rather than a hardcoded string-replace of the {@code servlet:}
-	 * scheme &mdash; the FreeMarker template is rendered outside Juneau's {@code HtmlDoc} URL-resolution, which is
-	 * why the URL must already be resolved before it reaches the template.
+	 * Slot envelope for the Releases table (Admin pair and this standalone page share this URL).
+	 *
+	 * @param req The current request. Must not be {@code null}.
+	 * @return SLOT_META wrapping {@link #releasesView()}.
 	 */
-	private static String asset(RestRequest req, String path) {
-		return ViewsMixin.viewAssetUrl(req, path);
+	@RestGet(path = "/view", produces = "application/json", serializers = JsonSerializer.class)
+	public ViewSlot releasesViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, releasesView());
 	}
 
 	/**

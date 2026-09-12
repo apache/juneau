@@ -17,8 +17,10 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.http.HttpResponses.*;
+
 import org.apache.juneau.commons.inject.Bean;
-import org.apache.juneau.marshall.html.HtmlSerializer;
+import org.apache.juneau.http.response.Found;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestRequest;
@@ -27,28 +29,23 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.rest.server.views.PageDef;
-import org.apache.juneau.rest.server.views.PageTable;
-import org.apache.juneau.rest.server.views.Tab;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 
 /**
- * Admin tab: a single multi-tab page composing the app's existing
- * {@link ReleaseRest#releasesView() Releases} and {@link CredentialRest#credentialsView() Credentials} rich views
- * into one {@link PageDef}, rendered by {@link PageTable}.
+ * Admin tab: author-HTML pair pages that mount the app's existing
+ * {@link ReleaseRest#releasesView() Releases} and {@link CredentialRest#credentialsView() Credentials} tables
+ * into empty slots via {@code JuneauViews.regions.mount}.
  *
  * <p>
- * This resource references each tab's child {@link org.apache.juneau.rest.server.views.ViewDef ViewDef} by calling
- * the sibling resources' declarative view-builder methods directly &mdash; it does not duplicate their column/ribbon
- * definitions, and each child view's {@code dataUrl} stays absolute (its owning resource's own mount), so the
- * ajax data draws still hit {@link ReleaseRest#data()} / {@link CredentialRest#status()} exactly as they do from
- * the standalone Releases/Credentials pages. Per {@link PageTable}'s contract, the emitted per-view markup (marker
- * table + VIEW_META sidecar) is byte-for-byte identical to what {@link ReleaseRest#page(RestRequest)} /
- * {@code CredentialRest}'s own view would emit standalone &mdash; this resource only adds the tab-bar/panel shell
- * and the PAGE_META sidecar around them.
+ * Each pair is a full page load. {@code GET /} 302s to the Releases pair. Tables are fetched as
+ * {@code ViewSlot} JSON from the owning resources; this resource does not emit {@code ViewTable} markup
+ * or load {@code juneau-pages.js}.
  */
 @Rest(path = "/admin", title = "Admin", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
 public class AdminRest extends BasicRestResource {
+
+	static final String RELEASES_URL = "/rest/admin/releases";
+	static final String CREDENTIALS_URL = "/rest/admin/credentials";
 
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
@@ -57,42 +54,25 @@ public class AdminRest extends BasicRestResource {
 		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
-	/**
-	 * The composed page definition: one leaf tab per existing rich view. {@code build()} validates unique tab ids
-	 * and unique referenced {@code ViewDef} ids across the page.
-	 */
-	static PageDef adminPage() {
-		return PageDef.create("admin")
-			.title("Admin")
-			.tabs(
-				Tab.create("releases", "Releases").view(ReleaseRest.releasesView()),
-				Tab.create("credentials", "Credentials").view(CredentialRest.credentialsView()))
-			.build();
-	}
-
-	/** Human page &mdash; the composed tab/sub-tab page shell (emitted as trusted markup) + PAGE_META sidecar. */
+	/** Default Admin URL — 302 to the Releases pair. */
 	@RestGet("/")
-	public View page(RestRequest req) {
-		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(req, adminPage()));
-		return ConsolePage.of("admin", req)
-			.attr("pageTable", markup)
-			.attr("viewsCssUrl", asset(req, ViewsMixin.VIEWS_CSS_PATH))
-			.attr("configCssUrl", asset(req, ViewsMixin.CONFIG_CSS_PATH))
-			.attr("rendersJsUrl", asset(req, ViewsMixin.RENDERS_JS_PATH))
-			.attr("iconsJsUrl", asset(req, ViewsMixin.ICONS_JS_PATH))
-			.attr("ribbonJsUrl", asset(req, ViewsMixin.RIBBON_JS_PATH))
-			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH))
-			.attr("configJsUrl", asset(req, ViewsMixin.CONFIG_JS_PATH))
-			.attr("pagesJsUrl", asset(req, ViewsMixin.PAGES_JS_PATH));
+	public Found redirectToReleases() {
+		return found(RELEASES_URL);
 	}
 
-	/**
-	 * Resolves a toolkit asset to an absolute, cache-busted URL for the FreeMarker head block via the
-	 * request-aware {@link ViewsMixin#viewAssetUrl(RestRequest, String)} &mdash; resolved per-request
-	 * against this resource's actual mount/context path, rather than a hardcoded {@code MOUNT} constant string-
-	 * replace, so moving this resource no longer silently breaks asset loading.
-	 */
-	private static String asset(RestRequest req, String path) {
-		return ViewsMixin.viewAssetUrl(req, path);
+	/** Admin / Releases pair: empty {@code #releases} slot mounted from {@code /rest/releases/view}. */
+	@RestGet("/releases")
+	public View releases(RestRequest req) {
+		return pairPage(req, "releases", ReleaseRest.MOUNT + "/view", "releases");
+	}
+
+	/** Admin / Credentials pair: empty {@code #credentials} slot mounted from {@code /rest/credentials/view}. */
+	@RestGet("/credentials")
+	public View credentials(RestRequest req) {
+		return pairPage(req, "credentials", CredentialRest.MOUNT + "/view", "credentials");
+	}
+
+	private static View pairPage(RestRequest req, String slotId, String tableUrl, String selectedChild) {
+		return TableSlotPage.of("admin", req, slotId, tableUrl).attr("selectedChild", selectedChild);
 	}
 }

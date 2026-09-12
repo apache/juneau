@@ -24,17 +24,14 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.utils.IoUtils;
-import org.apache.juneau.marshall.html.HtmlSerializer;
 import org.apache.juneau.rest.mock.MockRestClient;
+import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.views.PageTable;
-import org.apache.juneau.rest.server.views.ViewTable;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.junit.jupiter.api.Test;
 
 /**
- * The RM {@code Admin} tab composes the existing Releases/Credentials
- * {@link org.apache.juneau.rest.server.views.ViewDef ViewDef}s into one {@link org.apache.juneau.rest.server.views.PageDef PageDef}
- * page, rendered by {@link PageTable} and served through {@link AdminRest}.
+ * Admin pair pages: path-per-child, local {@code .juneau-page-nav}, empty slots, no {@code PageTable} shell.
  */
 class AdminRestTest {
 
@@ -49,71 +46,71 @@ class AdminRestTest {
 		return MockRestClient.builder(new AdminRest()).overridingBeanStore(new StackOverlay()).build();
 	}
 
-	// -----------------------------------------------------------------------------------------------------------
-	// Task 10: PageDef composition
-	// -----------------------------------------------------------------------------------------------------------
-
 	@Test
-	void a01_adminPageComposesOneTabPerExistingView() {
-		var page = AdminRest.adminPage();
-		assertEquals("admin", page.id);
-		assertEquals(2, page.tabs.size());
-		assertEquals("releases", page.tabs.get(0).id);
-		assertEquals("releases", page.tabs.get(0).view.id);
-		assertEquals("credentials", page.tabs.get(1).id);
-		assertEquals("credentials", page.tabs.get(1).view.id);
-	}
-
-	@Test
-	void a02_adminPageBuildsWithoutValidationErrors() {
-		// PageDef.build() rejects duplicate tab ids / duplicate referenced ViewDef ids (Phase C task 2 rules);
-		// building here (rather than only in AdminRest.adminPage()) proves the composition is actually valid,
-		// not just that adminPage() happens not to throw.
-		assertDoesNotThrow(AdminRest::adminPage);
-	}
-
-	// -----------------------------------------------------------------------------------------------------------
-	// Task 11: PageTable wiring + no regression to the standalone per-view output
-	// -----------------------------------------------------------------------------------------------------------
-
-	@Test
-	void b01_pageServesPageTableShellWithBothPanelsAndSidecars() throws Exception {
+	void a01_defaultAdminUrlRedirectsToReleasesPair() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/").run()) {
-				assertEquals(200, resp.getStatusCode());
-				var body = resp.getBodyAsString();
-				assertTrue(body.contains("data-juneau-page='admin'"), "Missing page shell: " + body);
-				assertTrue(body.contains("data-juneau-view='releases'"), "Missing releases panel: " + body);
-				assertTrue(body.contains("data-juneau-view='credentials'"), "Missing credentials panel: " + body);
-				assertTrue(body.contains("juneau-page:admin"), "Missing PAGE_META sidecar: " + body);
-				assertTrue(body.contains("juneau-view:releases"), "Missing releases VIEW_META sidecar: " + body);
-				assertTrue(body.contains("juneau-view:credentials"), "Missing credentials VIEW_META sidecar: " + body);
+				assertEquals(302, resp.getStatusCode());
+				assertEquals(AdminRest.RELEASES_URL, resp.header("Location").getValue());
 			}
 		}
 	}
 
 	@Test
-	void b02_wrappedReleasesViewMarkupIsByteForByteIdenticalToStandalone() {
-		var wrapped = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
-		var standalone = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(ReleaseRest.releasesView()));
-		assertTrue(wrapped.contains(standalone),
-			"Page-wrapped Releases view markup diverged from the standalone ViewTable.of(...) output.");
-	}
-
-	@Test
-	void b03_wrappedCredentialsViewMarkupIsByteForByteIdenticalToStandalone() {
-		var wrapped = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
-		var standalone = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(CredentialRest.credentialsView()));
-		assertTrue(wrapped.contains(standalone),
-			"Page-wrapped Credentials view markup diverged from the standalone ViewTable.of(...) output.");
-	}
-
-	@Test
-	void b04_assetsAreServedAtTheAdminMount() throws Exception {
+	void a02_unknownAdminChildIs404() throws Exception {
 		try (var client = client()) {
-			try (var resp = client.request("GET", ViewsMixin.PAGES_JS_PATH).run()) {
+			try (var resp = client.request("GET", "/foo").run()) {
+				assertEquals(404, resp.getStatusCode());
+			}
+		}
+	}
+
+	@Test
+	void b01_releasesPairServesAuthorNavAndEmptySlot() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/releases").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertAdminShell(body, "releases", "/rest/releases/view");
+				assertTrue(body.contains("href=\"/rest/admin/releases\" aria-current=\"page\">Releases</a>"), body);
+				assertFalse(body.contains("href=\"/rest/admin/credentials\" aria-current=\"page\""), body);
+			}
+		}
+	}
+
+	@Test
+	void b02_credentialsPairServesAuthorNavAndEmptySlot() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/credentials").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertAdminShell(body, "credentials", "/rest/credentials/view");
+				assertTrue(body.contains("href=\"/rest/admin/credentials\" aria-current=\"page\">Credentials</a>"), body);
+				assertFalse(body.contains("href=\"/rest/admin/releases\" aria-current=\"page\">Releases</a>"), body);
+			}
+		}
+	}
+
+	@Test
+	void b03_releasesPairMountsTheSharedReleasesEnvelopeUrl() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/releases").run()) {
+				var body = resp.getBodyAsString();
+				assertTrue(body.contains("\"tableUrl\":\"/rest/releases/view\""), body);
+				assertTrue(body.contains("\"slotId\":\"releases\""), body);
+			}
+		}
+	}
+
+	@Test
+	void b04_regionsAndHelpersAreServedAtTheAdminMount() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", ViewsMixin.REGIONS_JS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
 				assertTrue(resp.getBodyAsString().contains("JuneauViews"));
+			}
+			try (var resp = client.request("GET", ViewsMixin.HELPERS_JS_PATH).run()) {
+				assertEquals(200, resp.getStatusCode());
 			}
 			try (var resp = client.request("GET", ViewsMixin.VIEWS_JS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -128,31 +125,19 @@ class AdminRestTest {
 		}
 	}
 
-	// -----------------------------------------------------------------------------------------------------------
-	// Task 12: the composed page uses the self-contained -views tab shell (PageTable's classes), not hand-rolled
-	// per-page tab markup — verified here structurally (the shell's own marker classes); base.ftlh's nav-link and
-	// asset-include wiring for the Admin tab is exercised end-to-end by b01_pageServesPageTableShellWithBothPanelsAndSidecars
-	// once rendered through the FreeMarker template at /admin.
-	// -----------------------------------------------------------------------------------------------------------
-
 	@Test
-	void c01_composedPageUsesTheSharedTabShellClassesNotBespokeMarkup() {
-		var html = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(AdminRest.adminPage()));
-		assertTrue(html.contains("class='" + PageTable.TAB_BAR_CLASS + "'") || html.contains(PageTable.TAB_BAR_CLASS));
-		assertTrue(html.contains(PageTable.TAB_CLASS));
-		assertTrue(html.contains(PageTable.PANEL_CLASS));
+	void c01_releasesPairStampsCsrfOnBody() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/releases").run()) {
+				var body = resp.getBodyAsString();
+				assertTrue(body.contains("data-juneau-csrf="), body);
+				assertTrue(body.contains("data-juneau-csrf-header=\"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
+			}
+		}
 	}
 
-	/**
-	 * The app's own cross-resource nav (base.ftlh's {@code .jc-nav}) gains an Admin entry, and the Admin tab pulls
-	 * in the opt-in {@code juneau-pages.js} runtime after {@code juneau-views.js} &mdash; the top-level nav
-	 * mechanism itself (real links across {@code @Rest(children=...)} resources) is intentionally unchanged
-	 * (design doc non-goal: no top-level cross-resource navigation redesign; Phase C owns only the in-page tab
-	 * switch, which {@link #c01_composedPageUsesTheSharedTabShellClassesNotBespokeMarkup()} already verifies uses the
-	 * shared shell classes).
-	 */
 	@Test
-	void c02_baseTemplateWiresTheAdminNavLinkAndPagesRuntime() throws IOException {
+	void c02_baseTemplateWiresTheAdminNavLinkAndRegionsRuntime() throws IOException {
 		String base;
 		try (var in = AdminRestTest.class.getResourceAsStream("/templates/base.ftlh")) {
 			assertNotNull(in, "templates/base.ftlh not found on the test classpath");
@@ -160,16 +145,24 @@ class AdminRestTest {
 		}
 		assertTrue(base.contains("href=\"/rest/admin\""), "Missing Admin nav link: " + base);
 		assertTrue(base.contains("activeTab == 'admin'"), "Missing admin-tab conditional asset wiring: " + base);
-		assertTrue(base.contains("pagesJsUrl"), "Missing juneau-pages.js include for the Admin tab: " + base);
+		assertFalse(base.contains("pagesJsUrl"), "juneau-pages.js must not be included: " + base);
+		assertFalse(base.contains("juneau-pages.js"), "juneau-pages.js must not be referenced: " + base);
+		assertTrue(base.contains("regionsJsUrl"), "Missing juneau-regions.js include: " + base);
+		assertTrue(base.contains("helpersJsUrl"), "Missing juneau-helpers.js include: " + base);
+		assertTrue(base.contains("data-juneau-csrf="), "Missing CSRF ancestor stamp: " + base);
+		assertTrue(base.contains("data-juneau-csrf-header="), "Missing CSRF header stamp: " + base);
 		assertTrue(base.contains("configJsUrl"), "Missing juneau-config.js include: " + base);
 		assertTrue(base.contains("configCssUrl"), "Missing juneau-config.css include: " + base);
 		var viewsJsIdx = base.indexOf("viewsJsUrl");
 		var configJsIdx = base.indexOf("configJsUrl");
-		var pagesJsIdx = base.indexOf("pagesJsUrl");
+		var regionsJsIdx = base.indexOf("regionsJsUrl");
+		var helpersJsIdx = base.indexOf("helpersJsUrl");
 		assertTrue(viewsJsIdx >= 0 && configJsIdx > viewsJsIdx,
 			"juneau-config.js must load after juneau-views.js: " + base);
-		assertTrue(pagesJsIdx > configJsIdx,
-			"juneau-pages.js must load after juneau-config.js: " + base);
+		assertTrue(regionsJsIdx > configJsIdx,
+			"juneau-regions.js must load after juneau-config.js: " + base);
+		assertTrue(helpersJsIdx > regionsJsIdx,
+			"juneau-helpers.js must load after juneau-regions.js: " + base);
 	}
 
 	/**
@@ -191,5 +184,32 @@ class AdminRestTest {
 		assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js include: " + base);
 		assertTrue(iconsIdx < ribbonIdx,
 			"juneau-icons.js must be included before juneau-ribbon.js (icon registry must exist when the ribbon builds its buttons): " + base);
+	}
+
+	@Test
+	void c04_newFixturesContainNoSalesforceTokens() throws IOException {
+		String js;
+		try (var in = AdminRestTest.class.getResourceAsStream("/static/js/table-slot.js")) {
+			assertNotNull(in, "table-slot.js not found on the test classpath");
+			js = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
+		}
+		assertFalse(js.contains("slds-"), js);
+		assertFalse(js.toLowerCase().contains("salesforce"), js);
+	}
+
+	private static void assertAdminShell(String body, String slotId, String tableUrl) {
+		assertTrue(body.contains("class=\"juneau-page-nav\""), "Missing page nav: " + body);
+		assertTrue(body.contains("aria-label=\"Admin\""), body);
+		assertTrue(body.contains("id=\"" + slotId + "\""), "Missing empty slot: " + body);
+		assertTrue(body.contains("id=\"rm-table-slot\""), body);
+		assertTrue(body.contains("\"tableUrl\":\"" + tableUrl + "\""), body);
+		assertFalse(body.contains("data-juneau-page"), "Page sidecar leaked: " + body);
+		assertFalse(body.contains("juneau-page:admin"), "PAGE_META leaked: " + body);
+		assertFalse(body.contains(PageTable.TAB_BAR_CLASS), "Tab bar class leaked: " + body);
+		assertFalse(body.contains("juneau-pages.js"), "juneau-pages.js leaked: " + body);
+		assertFalse(body.contains("data-juneau-region"), "Do not stamp data-juneau-region on the table slot: " + body);
+		assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);
+		assertTrue(body.contains("/js/table-slot.js"), body);
+		assertFalse(body.contains("slds-"), body);
 	}
 }
