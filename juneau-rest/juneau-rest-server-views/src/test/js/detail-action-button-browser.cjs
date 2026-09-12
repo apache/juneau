@@ -23,8 +23,8 @@
  *   Usage:  node detail-action-button-browser.cjs <page.html>
  *
  * What this measures is unreachable from a fake DOM: computed colour resolution through the CSS cascade, and
- * the difference between an enabled and a disabled solid-fill button.  The fixture's buttons are emitted
- * `disabled` exactly as the server emits them (real ActionRef markup, never faked), so the disabled reading
+ * the difference between an enabled and a disabled solid-fill button.  The fixture's buttons are static HTML
+ * using the same CSS classes authors paint in a region body, starting `disabled` so the disabled reading
  * comes first and the enabled reading is taken only after the harness clears the attribute itself.
  */
 'use strict';

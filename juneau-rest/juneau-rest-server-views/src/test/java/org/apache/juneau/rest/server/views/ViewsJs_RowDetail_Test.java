@@ -78,6 +78,8 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertFalse(body.contains("function buildDetailFields("), body);
 		assertFalse(body.contains("function buildDetailStrip("), body);
 		assertFalse(body.contains("buildDetailStrip: buildDetailStrip"), body);
+		assertFalse(body.contains("function buildActionBar("), body);
+		assertFalse(body.contains("detail.headerActions"), body);
 		assertFalse(body.contains("function buildDetailPanel("), body);
 		assertTrue(body.contains("submitRowAction(action, table, parentTr"),
 			"write path must target the expanded DataTables row, not expand JSON");

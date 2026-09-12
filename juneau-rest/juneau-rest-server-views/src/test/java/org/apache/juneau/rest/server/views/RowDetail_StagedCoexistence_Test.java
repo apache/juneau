@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -28,16 +27,12 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The surviving assertions are the {@code .region(...)}-only arms: named populator stamp, exactly one region
- * container, no section frames, no field slots, {@code enabledWhen} rejected on the region path, and a missing
+ * container, no section frames, no field slots, no {@code headerActions}, and a missing
  * region fails startup.  XOR / sections coexistence cases retired with {@code RowDetailDef.sections(...)}.
  */
 class RowDetail_StagedCoexistence_Test extends TestBase {
 
 	private static final String ENDPOINT = "/things/{id}";
-
-	private static RowAction ack() {
-		return RowAction.create("ack").endpoint("/things/{id}/ack").method(RowAction.Method.POST);
-	}
 
 	private static ViewDef regionView() {
 		return ViewDef.create("modern")
@@ -155,32 +150,9 @@ class RowDetail_StagedCoexistence_Test extends TestBase {
 			() -> "two row-detail templates, one per view, on one page:\n" + h);
 	}
 
-	@Test void d01_regionBean_declaringEnabledWhen_isRejectedAtStartup() {
-		var v = ViewDef.create("modern")
-			.columns(Column.of("id").title("ID"))
-			.rowActions(ack())
-			.details(RowDetailDef.create()
-				.endpoint(ENDPOINT)
-				.headerActions(ActionBar.create().items(
-					ActionRef.of("ack").enabledWhen("status", Op.EQ, "open", "Not open.")))
-				.region(RegionDef.create("detail").populate("thing-detail").allowPopulators("thing-detail")))
-			.build();
-		var e = assertThrows(IllegalArgumentException.class, v::validate);
-		assertTrue(e.getMessage().contains("enabledWhen"), e.getMessage());
-		assertTrue(e.getMessage().contains("ctx.write"), e.getMessage());
-		assertTrue(e.getMessage().contains("region body"), e.getMessage());
-	}
-
-	@Test void d02_regionBean_withNoEnabledWhen_keepsItsUngatedHeaderBar() {
-		var v = ViewDef.create("modern")
-			.columns(Column.of("id").title("ID"))
-			.rowActions(ack())
-			.details(RowDetailDef.create()
-				.endpoint(ENDPOINT)
-				.headerActions(ActionBar.create().items(ActionRef.of("ack")))
-				.region(RegionDef.create("detail").populate("thing-detail").allowPopulators("thing-detail")))
-			.build();
-		assertDoesNotThrow(v::validate);
+	@Test void d01_noHeaderActionsMethod() {
+		for (var m : RowDetailDef.class.getMethods())
+			assertNotEquals("headerActions", m.getName());
 	}
 
 	@Test void e01_missingRegion_failsStartup() {

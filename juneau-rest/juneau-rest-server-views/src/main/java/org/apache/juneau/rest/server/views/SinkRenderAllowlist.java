@@ -62,19 +62,15 @@ public final class SinkRenderAllowlist {
 	private SinkRenderAllowlist() {}
 
 	/**
-	 * Accepts a frozen built-in id, or an id present in {@code allowedCustomIds}.
+	 * Accepts a frozen built-in id.
 	 *
 	 * @param renderId The renderer id.  Must not be <jk>null</jk> or blank.
-	 * @param allowedCustomIds Opt-in custom ids (e.g. {@link RowDetailDef#allowCustomRenderers}).  Can be
-	 * 	<jk>null</jk>.
-	 * @throws IllegalArgumentException If the id is neither a built-in nor an opted-in custom id.
+	 * @throws IllegalArgumentException If the id is not a built-in.
 	 */
-	public static void assertAllowed(String renderId, Collection<String> allowedCustomIds) {
+	public static void assertAllowed(String renderId) {
 		if (renderId == null || renderId.isBlank())
 			throw iaex("Render id must not be null or blank.");
 		if (BUILTIN_IDS.contains(renderId))
-			return;
-		if (allowedCustomIds != null && allowedCustomIds.contains(renderId))
 			return;
 		throw iaex("Render id '%s' is not an allowed fill-sink renderer.", renderId);
 	}

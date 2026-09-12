@@ -58,8 +58,8 @@ import org.apache.juneau.rest.server.widgets.*;
  * 		satisfy the "at least one sibling plain tab" requirement and to keep a contrasting baseline the sub-tabbed
  * 		panel's blank-panel regression would show up against.
  * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with a named region populator, two mutating {@link ActionRef}s
- * 		in the header, {@link SafeAction#COLLAPSE}, and expand GET {@code /data/alerts/{id}}.  Nested-table seeding
- * 		inside a row-detail pane is deferred (F24).
+ * 		on {@link ViewDef#rowActions} (and the ack dialog form), and expand GET {@code /data/alerts/{id}}.
+ * 		Nested-table seeding inside a row-detail pane is deferred (F24).
  * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) are composed into one page,
  * 		rather than one type reused everywhere.
  * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
@@ -241,7 +241,6 @@ public class ExampleViewsRest extends BasicRestServlet {
 			// "notes" is intentionally not a table column; the expander GET is the only place it appears.
 			.details(RowDetailDef.create()
 				.endpoint("/data/widgets/active/{id}")
-				.headerActions(ActionBar.create().items(SafeAction.COLLAPSE))
 				.region(detailRegion("widgets-active-detail")))
 			.build();
 	}
@@ -298,7 +297,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.build();
 	}
 
-	/** Fake alerts table &mdash; two detail sections, two mutating ActionRefs, expand GET. */
+	/** Fake alerts table &mdash; named region populator, two mutating ActionRefs on rowActions, expand GET. */
 	static ViewDef alertsView() {
 		return ViewDef.create(VIEW_ALERTS)
 			.rowType(Alert.class)
@@ -329,8 +328,6 @@ public class ExampleViewsRest extends BasicRestServlet {
 					.confirm("Escalate this alert to on-call?").onSuccess(RowAction.OnSuccess.REDRAW))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.headerActions(ActionBar.create().items(
-					ActionRef.of(ACTION_ACK), ActionRef.of(ACTION_ESC), SafeAction.COLLAPSE))
 				.region(detailRegion("alerts-detail")))
 			.build();
 	}
@@ -455,7 +452,6 @@ public class ExampleViewsRest extends BasicRestServlet {
 					.render(Render.pill(StatusTone.WARNING.wire()).meta(META_FIELD, META_STATE)))
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
-				.headerActions(ActionBar.create().items(SafeAction.COLLAPSE))
 				.region(detailRegion("alert-overview-detail")))
 			.build();
 	}

@@ -31,24 +31,23 @@ class SinkRenderAllowlist_Test extends TestBase {
 
 	@Test void a01_builtinIdsAccepted() {
 		for (var id : SinkRenderAllowlist.BUILTIN_IDS)
-			SinkRenderAllowlist.assertAllowed(id, null);
+			SinkRenderAllowlist.assertAllowed(id);
 	}
 
 	@Test void a02_unknownRejected() {
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> SinkRenderAllowlist.assertAllowed("evil", null));
+			() -> SinkRenderAllowlist.assertAllowed("evil"));
 		assertTrue(e.getMessage().contains("evil"), e::getMessage);
 	}
 
-	@Test void a03_customRejectedWithoutOptIn_acceptedWith() {
+	@Test void a03_customIdsRejected() {
 		assertThrows(IllegalArgumentException.class,
-			() -> SinkRenderAllowlist.assertAllowed("spark", null));
-		SinkRenderAllowlist.assertAllowed("spark", java.util.Set.of("spark"));
+			() -> SinkRenderAllowlist.assertAllowed("spark"));
 	}
 
 	@Test void a04_blankRejected() {
-		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed("", null));
-		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed(null, null));
+		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed(""));
+		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertAllowed(null));
 	}
 
 	@Test void a05_popoverSubset() {
@@ -98,7 +97,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 		// "pill" is now a fill-sink built-in; the count moved 10 -> 11 with this addition and nothing else.
 		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must be a fill-sink built-in");
-		SinkRenderAllowlist.assertAllowed("pill", null);
+		SinkRenderAllowlist.assertAllowed("pill");
 		// Still not popover text - a pill is a chip, not a text-shaped built-in.
 		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("pill"));
 		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("pill"));
@@ -109,7 +108,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 		// moved 11 -> 12 with this addition and nothing else.
 		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("code"), "code must be a fill-sink built-in");
-		SinkRenderAllowlist.assertAllowed("code", null);
+		SinkRenderAllowlist.assertAllowed("code");
 		// Not popover text - the popover surface is a small text-shaped bubble, not a place for a source block.
 		assertThrows(IllegalArgumentException.class, () -> SinkRenderAllowlist.assertPopoverAllowed("code"));
 		assertFalse(SinkRenderAllowlist.POPOVER_TEXT_IDS.contains("code"));

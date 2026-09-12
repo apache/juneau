@@ -6855,7 +6855,7 @@
 		// leaves that fragment empty - the HTML parser is what fills .content. Paint
 		// into the fragment the expander clones, never the template element's light DOM.
 		const dest = tpl.content;
-		if (detail.title || detail.icon || (detail.headerActions && detail.headerActions.items && detail.headerActions.items.length))
+		if (detail.title || detail.icon)
 			dest.appendChild(buildDetailHeader(detail));
 		if (detail.region)
 			dest.appendChild(buildDetailRegion(detail.region));
@@ -6887,8 +6887,6 @@
 			h2.className = "juneau-view-detail-title";
 			header.appendChild(h2);
 		}
-		if (detail.headerActions)
-			header.appendChild(buildActionBar(detail.headerActions));
 		return header;
 	}
 
@@ -6904,44 +6902,6 @@
 		if (region.dataUrl) declared.dataUrl = region.dataUrl;
 		d.setAttribute("data-juneau-region-declared", JSON.stringify(declared));
 		return d;
-	}
-
-	function buildActionBar(bar) {
-		const div = document.createElement("div");
-		div.className = "juneau-view-detail-actions";
-		const items = (bar && bar.items) || [];
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			if (item && item.safe) {
-				const btn = document.createElement("button");
-				btn.setAttribute("type", "button");
-				btn.setAttribute("data-juneau-safe", item.safe);
-				btn.className = "juneau-view-detail-action juneau-view-detail-safe";
-				btn.textContent = item.safe === "collapse" ? "Collapse" : item.safe;
-				div.appendChild(btn);
-				continue;
-			}
-			if (!item || !item.id) continue;
-			const btn = document.createElement("button");
-			btn.setAttribute("type", "button");
-			btn.setAttribute("data-juneau-action", item.id);
-			btn.className = item.emphasis === "primary"
-				? "juneau-view-detail-action juneau-view-detail-action-primary"
-				: "juneau-view-detail-action";
-			btn.disabled = true;
-			btn.textContent = item.id;
-			if (item.enabledWhen && item.enabledWhen.length) {
-				btn.setAttribute("data-juneau-action-rules", JSON.stringify(item.enabledWhen));
-				const desc = document.createElement("span");
-				desc.setAttribute("data-juneau-action-desc", item.id);
-				desc.setAttribute("hidden", "hidden");
-				div.appendChild(btn);
-				div.appendChild(desc);
-			} else {
-				div.appendChild(btn);
-			}
-		}
-		return div;
 	}
 
 	function paintDetailBarSlot(bar, anchor) {

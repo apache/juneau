@@ -26,7 +26,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
@@ -36,10 +35,11 @@ import org.junit.jupiter.api.condition.*;
  * from the enabled one, once real CSS resolves against the real served stylesheet.
  *
  * <p>
- * A fake DOM can prove the right class lands on the right button ({@link ViewTable_RowDetail_Emit_Test}) but
- * cannot prove the two classes paint two different colours, or that a disabled solid-fill button reads as
- * disabled &mdash; both require a real cascade.  The markup comes from the real {@link ViewTable} emitter and
- * the stylesheet is the real served {@code juneau-views.css}, so neither can drift from what a consumer gets.
+ * A fake DOM can prove the right class lands on the right button but cannot prove the two classes paint two
+ * different colours, or that a disabled solid-fill button reads as disabled &mdash; both require a real cascade.
+ * The markup is static HTML using the same CSS classes authors paint on region-body buttons
+ * ({@code juneau-view-detail-action}, {@code juneau-view-detail-action-primary}, {@code data-juneau-action},
+ * {@code data-juneau-safe}); the stylesheet is the real served {@code juneau-views.css}.
  *
  * <p>
  * Disabled unless the {@value #GATE} system property is set (the module's {@code js-tests} Maven profile).
@@ -60,35 +60,17 @@ class RowDetail_ActionButton_BrowserTest extends TestBase {
 		}
 	}
 
-	/** A header action bar carrying one PRIMARY button, one default-SECONDARY button, and a SafeAction. */
-	private static ViewDef view() {
-		return ViewDef.create("alerts")
-			.dataMode(ViewDef.DataMode.CLIENT)
-			.dataUrl("/data/alerts")
-			.columns(Column.of("id").title("Id"))
-			.rowActions(
-				RowAction.create("ack").label("Acknowledge").endpoint("/data/alerts/{id}/ack").method(RowAction.Method.POST),
-				RowAction.create("esc").label("Escalate").endpoint("/data/alerts/{id}/esc").method(RowAction.Method.POST))
-			.details(RowDetailDef.create()
-				.endpoint("/data/alerts/{id}")
-				.headerActions(ActionBar.create().items(
-					ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
-					ActionRef.of("esc"),
-					SafeAction.COLLAPSE))
-				.region(RegionDef.create("d").allowPopulators("p").populate("p")))
-			.build();
-	}
-
-	/** The server-painted detail template's contents - what the runtime clones into a panel div. */
-	private static String templateInner(ViewDef v) {
-		var html = Html.of(ViewTable.of(v));
-		var at = html.indexOf(ViewTable.DETAIL_TEMPLATE_ATTR);
-		assertTrue(at >= 0, html);
-		var open = html.indexOf('>', at);
-		var close = html.indexOf("</template>", open);
-		assertTrue(close > open, html);
-		return html.substring(open + 1, close);
-	}
+	/**
+	 * Author-painted body buttons using the same classes the stylesheet styles: one PRIMARY, one default
+	 * SECONDARY, and a SafeAction.COLLAPSE.  Start {@code disabled} exactly as the former header emitter did.
+	 */
+	private static final String ACTION_BUTTONS = """
+		<div class="juneau-view-detail-actions">
+			<button type="button" class="juneau-view-detail-action juneau-view-detail-action-primary" data-juneau-action="ack" disabled>Acknowledge</button>
+			<button type="button" class="juneau-view-detail-action" data-juneau-action="esc" disabled>Escalate</button>
+			<button type="button" class="juneau-view-detail-action juneau-view-detail-safe" data-juneau-safe="collapse">Collapse</button>
+		</div>
+		""";
 
 	@BeforeAll
 	static void probe() throws Exception {
@@ -99,7 +81,7 @@ class RowDetail_ActionButton_BrowserTest extends TestBase {
 		var fixture = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>\n"
 			+ resource(ViewsMixin.VIEWS_CSS_RESOURCE)
 			+ "\n</style></head><body>\n"
-			+ "<div class=\"juneau-view-detail-panel\" id=\"panel\">" + templateInner(view()) + "</div>\n"
+			+ "<div class=\"juneau-view-detail-panel\" id=\"panel\">" + ACTION_BUTTONS + "</div>\n"
 			+ "</body></html>";
 		var fixtureFile = Files.createDirectories(dir.resolve("fixtures")).resolve("detail-action-button.html");
 		Files.write(fixtureFile, fixture.getBytes(UTF_8));

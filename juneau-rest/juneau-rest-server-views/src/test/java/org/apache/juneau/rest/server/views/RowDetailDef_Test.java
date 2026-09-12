@@ -19,21 +19,16 @@ package org.apache.juneau.rest.server.views;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@link RowDetailDef#validate(java.util.List)} after the sections path retired: region is required, endpoint
- * safety still holds, header {@code enabledWhen} is rejected, and there is no replacement catalog cross-check.
+ * {@link RowDetailDef#validate(java.util.List)} after the sections path and {@code headerActions} retired:
+ * region is required, endpoint safety still holds, and there is no header action bar.
  */
 class RowDetailDef_Test extends TestBase {
 
 	private static RegionDef region() {
 		return RegionDef.create("d").allowPopulators("p").populate("p");
-	}
-
-	private static RowAction ack() {
-		return RowAction.create("ack").endpoint("/x").method(RowAction.Method.POST);
 	}
 
 	@Test void a01_valid_minimal() {
@@ -50,21 +45,12 @@ class RowDetailDef_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create().region(null));
 	}
 
-	@Test void a04_unknownHeaderActionRef_rejected() {
-		var d = RowDetailDef.create()
-			.endpoint("/data/{id}")
-			.region(region())
-			.headerActions(ActionBar.create().items(ActionRef.of("ack")));
-		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(null));
-		assertTrue(e.getMessage().contains("ack"), e::getMessage);
-	}
-
-	@Test void a05_knownHeaderActionRef_accepted() {
-		RowDetailDef.create()
-			.endpoint("/data/{id}")
-			.region(region())
-			.headerActions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE))
-			.validate(java.util.List.of(ack()));
+	@Test void a04_noHeaderActions() {
+		for (var m : RowDetailDef.class.getMethods())
+			assertNotEquals("headerActions", m.getName(),
+				"headerActions retired with F35(a); authors paint body buttons");
+		for (var f : RowDetailDef.class.getFields())
+			assertNotEquals("headerActions", f.getName());
 	}
 
 	@Test void a06_missingIdPlaceholder_rejected() {
@@ -97,17 +83,6 @@ class RowDetailDef_Test extends TestBase {
 	@Test void a11_protocolRelative_rejected() {
 		var d = RowDetailDef.create().endpoint("//evil/{id}").region(region());
 		assertThrows(IllegalArgumentException.class, () -> d.validate(null));
-	}
-
-	@Test void a12_headerEnabledWhen_rejected() {
-		var d = RowDetailDef.create()
-			.endpoint("/data/{id}")
-			.region(region())
-			.headerActions(ActionBar.create().items(
-				ActionRef.of("ack").enabledWhen("status", Op.EQ, "open", "Not open.")));
-		var e = assertThrows(IllegalArgumentException.class, () -> d.validate(java.util.List.of(ack())));
-		assertTrue(e.getMessage().contains("enabledWhen"), e::getMessage);
-		assertTrue(e.getMessage().contains("region"), e::getMessage);
 	}
 
 	@Test void a13_noAllowCustomRenderers() {

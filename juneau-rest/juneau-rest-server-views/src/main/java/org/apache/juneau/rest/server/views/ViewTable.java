@@ -1016,7 +1016,7 @@ public class ViewTable {
 		var d = viewDef.details;
 		var children = new ArrayList<>();
 		if (hasDetailHeader(d))
-			children.add(emitDetailHeader(d, viewDef.rowActions));
+			children.add(emitDetailHeader(d));
 		// Chrome plus EXACTLY ONE empty region container.  No section frames, no field slots, and no framework
 		// strip: the author paints the body (and their own strip via helpers.tabStrip if they want one).
 		//
@@ -1085,18 +1085,14 @@ public class ViewTable {
 		return copy;
 	}
 
-	/** Whether an {@link ActionBar} has at least one item to render (a <jk>null</jk> bar has none). */
-	private static boolean hasActionBarItems(ActionBar bar) {
-		return bar != null && bar.items != null && !bar.items.isEmpty();
-	}
-
+	/** Whether an expander panel should emit a header (title and/or icon). */
 	private static boolean hasDetailHeader(RowDetailDef d) {
 		var titled = d.title != null && !d.title.isBlank();
 		var icon = d.icon != null && !d.icon.isBlank();
-		return titled || icon || hasActionBarItems(d.headerActions);
+		return titled || icon;
 	}
 
-	private static Div emitDetailHeader(RowDetailDef d, List<RowAction> rowActions) {
+	private static Div emitDetailHeader(RowDetailDef d) {
 		var kids = new ArrayList<>();
 		if (d.icon != null && !d.icon.isBlank())
 			kids.add(span().attr(DETAIL_ICON_ATTR, d.icon).class_("juneau-view-detail-icon"));
@@ -1105,71 +1101,7 @@ public class ViewTable {
 				.attr(DETAIL_TITLE_ATTR, "1")
 				.attr(DETAIL_TITLE_TEMPLATE_ATTR, d.title)
 				.class_("juneau-view-detail-title"));
-		if (hasActionBarItems(d.headerActions))
-			kids.add(emitActionBar(d.headerActions, rowActions));
 		return div(kids.toArray()).class_("juneau-view-detail-header").attr(DETAIL_HEADER_ATTR, "1");
-	}
-
-	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {
-		var buttons = new ArrayList<>();
-		for (var item : bar.items) {
-			if (item instanceof org.apache.juneau.rest.server.widgets.ActionRef ar) {
-				var label = actionLabel(ar.id, rowActions);
-				var cls = ar.emphasis == org.apache.juneau.rest.server.widgets.ActionRef.Emphasis.PRIMARY
-					? "juneau-view-detail-action juneau-view-detail-action-primary"
-					: "juneau-view-detail-action";
-				var btn = button("button", label)
-					.attr(DETAIL_ACTION_ATTR, ar.id)
-					.attr(CLASS_ATTR, cls)
-					.disabled(true);
-				var gated = ar.enabledWhen != null && !ar.enabledWhen.isEmpty();
-				if (gated)
-					btn.attr(DETAIL_ACTION_RULES_ATTR, Json.of(enabledRulesJson(ar)));
-				buttons.add(btn);
-				// The reason node is a sibling rather than a child so the button's accessible NAME stays the
-				// label: this is a description, and aria-describedby is how it is reached.
-				if (gated)
-					buttons.add(span().attr(DETAIL_ACTION_DESC_ATTR, ar.id).attr("hidden", "hidden"));
-			} else if (item instanceof org.apache.juneau.rest.server.widgets.SafeAction sa) {
-				buttons.add(button("button", sa.label())
-					.attr(DETAIL_SAFE_ATTR, sa.wire())
-					.attr(CLASS_ATTR, "juneau-view-detail-action juneau-view-detail-safe"));
-			}
-		}
-		return div(buttons.toArray()).class_("juneau-view-detail-actions");
-	}
-
-	/**
-	 * Renders an {@link ActionRef}'s rules as the list this emitter JSON-encodes into
-	 * {@link #DETAIL_ACTION_RULES_ATTR}, preserving declaration order.
-	 *
-	 * <p>
-	 * The operator travels as its lowercase wire token rather than the enum name, matching the {@code op} token the
-	 * row-decorator rules already put on the wire, and {@code value} is omitted rather than emitted as {@code null}
-	 * for the presence-based operators that do not take one.
-	 */
-	private static List<java.util.Map<String,Object>> enabledRulesJson(org.apache.juneau.rest.server.widgets.ActionRef ar) {
-		var out = new ArrayList<java.util.Map<String,Object>>();
-		for (var r : ar.enabledWhen) {
-			var m = new LinkedHashMap<String,Object>();
-			m.put("field", r.field);
-			m.put("op", r.op.wire());
-			if (r.value != null)
-				m.put("value", r.value);
-			m.put("reason", r.reason);
-			out.add(m);
-		}
-		return out;
-	}
-
-	private static String actionLabel(String id, List<RowAction> rowActions) {
-		if (rowActions != null) {
-			for (var a : rowActions) {
-				if (a != null && id.equals(a.id) && a.label != null && !a.label.isBlank())
-					return a.label;
-			}
-		}
-		return id;
 	}
 
 	/**

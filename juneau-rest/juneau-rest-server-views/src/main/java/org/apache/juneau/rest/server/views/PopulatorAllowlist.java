@@ -30,8 +30,8 @@ import java.util.*;
  * it write. A populator has no such copier anywhere in its path &mdash; {@code JuneauViews.regions.resolve(name)}
  * hands the resolved function the region's container element outright, and from that point the populator owns the
  * container completely. This class therefore controls only <i>which name is resolved</i>; it says nothing whatever
- * about what the resolved populator then does with the container it is handed. A reader who transfers
- * {@link RowDetailDef#allowCustomRenderers}'s security value onto this allowlist will over-trust it.
+ * about what the resolved populator then does with the container it is handed. A reader who treats this allowlist
+ * as a security boundary equivalent to {@link SinkRenderAllowlist} will over-trust it.
  *
  * @since 10.0.0
  */

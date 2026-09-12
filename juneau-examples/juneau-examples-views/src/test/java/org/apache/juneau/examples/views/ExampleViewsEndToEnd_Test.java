@@ -79,9 +79,9 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-row-detail"), "row-detail template");
 		assertTrue(body.contains("data-juneau-detail-url=\"/data/alerts/{id}\""), "alerts expand URL");
 		assertTrue(body.contains("data-juneau-detail-url=\"/data/widgets/active/{id}\""), "widget expand URL");
-		assertTrue(body.contains("data-juneau-action=\"ack\""), "ack ActionRef");
-		assertTrue(body.contains("data-juneau-action=\"esc\""), "esc ActionRef");
-		assertTrue(body.contains("data-juneau-safe=\"collapse\""), "COLLAPSE");
+		assertTrue(body.contains("\"action\":\"ack\""), "ack pill meta.action in VIEW_META");
+		assertFalse(body.contains("data-juneau-action="), "no header ActionRef buttons after F35(a)");
+		assertFalse(body.contains("data-juneau-safe=\"collapse\""), "no header COLLAPSE after F35(a)");
 		// F24: alerts expander is region-only (named populator). Nested-table seeding inside a
 		// row-detail pane is deferred; the shell attributes must not appear on this page.
 		assertTrue(body.contains("data-juneau-region=\"detail\""), "row-detail region container");

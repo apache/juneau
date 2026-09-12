@@ -249,9 +249,6 @@ public final class ViewSlot {
 			out.title = d.title;
 		if (d.icon != null && ! d.icon.isBlank())
 			out.icon = d.icon;
-		var header = actionBar(d.headerActions);
-		if (header != null)
-			out.headerActions = header;
 		if (d.isRegionBody())
 			out.region = projectRegion(d);
 		if (d.barSlot != null)
@@ -275,45 +272,6 @@ public final class ViewSlot {
 		if (r.titleFields != null && ! r.titleFields.isEmpty())
 			out.titleFields = r.titleFields;
 		return out;
-	}
-
-	private static Map<String,Object> actionBar(ActionBar bar) {
-		if (bar == null || bar.items == null || bar.items.isEmpty())
-			return null;
-		var items = new ArrayList<Map<String,Object>>();
-		for (var item : bar.items) {
-			if (item instanceof ActionRef ar) {
-				var m = new LinkedHashMap<String,Object>();
-				m.put("id", ar.id);
-				if (ar.emphasis == ActionRef.Emphasis.PRIMARY)
-					m.put("emphasis", "primary");
-				if (ar.enabledWhen != null && ! ar.enabledWhen.isEmpty()) {
-					var rules = new ArrayList<Map<String,Object>>();
-					for (var r : ar.enabledWhen)
-						rules.add(enabledRule(r));
-					m.put("enabledWhen", rules);
-				}
-				items.add(m);
-			} else if (item instanceof SafeAction sa) {
-				var m = new LinkedHashMap<String,Object>();
-				m.put("safe", sa.wire());
-				items.add(m);
-			}
-		}
-		var out = new LinkedHashMap<String,Object>();
-		out.put("contractVersion", ActionBar.CONTRACT_VERSION);
-		out.put("items", items);
-		return out;
-	}
-
-	private static Map<String,Object> enabledRule(ActionRef.EnabledRule r) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("field", r.field);
-		m.put("op", r.op.wire());
-		if (r.value != null)
-			m.put("value", r.value);
-		m.put("reason", r.reason);
-		return m;
 	}
 
 	private static Map<String,Object> barSlotMap(BarSlot bar) {
@@ -364,7 +322,6 @@ public final class ViewSlot {
 		if (node instanceof Detail d) {
 			d.endpoint = resolveOne(d.endpoint, req);
 			resolveUrls(d.region, req);
-			resolveUrls(d.headerActions, req);
 			resolveUrls(d.barSlot, req);
 			return;
 		}
@@ -400,7 +357,7 @@ public final class ViewSlot {
 	}
 
 	/** DETAIL_SLOT wire.  Not {@code Json.of(RowDetailDef)} (that bean carries {@code ServerValues} / {@code lock}). */
-	@BeanType(properties="contractVersion,endpoint,title,icon,headerActions,region,barSlot")
+	@BeanType(properties="contractVersion,endpoint,title,icon,region,barSlot")
 	public static final class Detail {
 		/** {@link RowDetailDef#CONTRACT_VERSION}. */
 		public String contractVersion;
@@ -410,8 +367,6 @@ public final class ViewSlot {
 		public String title;
 		/** Header icon name; omitted when unset. */
 		public String icon;
-		/** Header action bar; omitted when unset. */
-		public Map<String,Object> headerActions;
 		/** The one region this panel's body is. */
 		public Region region;
 		/** Optional detail bar slot snapshot. */

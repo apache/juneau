@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The row-details expander definition: one {@link #region} body, an expand GET endpoint, and optional header
- * chrome (title template, icon, and {@link ActionBar}).
+ * chrome (title template and icon).
  *
  * <p>
  * Structure is emitted as a {@code <template data-juneau-row-detail>} sibling of the view table.  The panel body
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * assigns {@code innerHTML}.  This type is Java-only &mdash; it is not part of the {@code VIEW_META} JSON sidecar.
  *
  * <p>
- * When {@link #title}, {@link #icon}, and/or {@link #headerActions} are set, the template emits a
+ * When {@link #title} and/or {@link #icon} are set, the template emits a
  * {@code .juneau-view-detail-header} above the region.  {@link #title} may contain <code>{field}</code>
  * placeholders filled from the expand GET {@code fields} map via {@code textContent}, but only for keys the
  * region's {@link RegionDef#titleFields} allowlist names.
@@ -63,15 +63,9 @@ public class RowDetailDef {
 	 * <p>
 	 * The emitter paints chrome plus exactly one empty region container &mdash; no section frames, no field slots,
 	 * and no framework strip.  The author paints the body, and draws their own strip with
-	 * {@code JuneauViews.helpers.tabStrip} if they want one.
-	 *
-	 * <h5 class='section'>{@link ActionRef#enabledWhen} is rejected on this path:</h5>
-	 * <p>
-	 * A region body has no declared field catalog to cross-check {@code enabledWhen} against.  Rather than let
-	 * the rules through unchecked (which is the disabled-on-every-row-forever-and-silently failure), an
-	 * {@code enabledWhen} rule on {@link #headerActions} <b>fails at startup</b>, naming the replacement: paint
-	 * the buttons inside the region body and gate them from {@code ctx.data}'s values map in the populate
-	 * itself, writing through {@code ctx.write(...)}.
+	 * {@code JuneauViews.helpers.tabStrip} if they want one.  Panel-header action bars are not a framework
+	 * surface: authors paint buttons inside the region body and gate them from {@code ctx.data}'s values map
+	 * in the populate itself, writing through {@code ctx.write(...)}.
 	 *
 	 * <p>
 	 * The region's {@link RegionDef#type} is set to {@link RegionDef#TYPE_ROW_DETAIL} by {@link #region(RegionDef)}
@@ -95,12 +89,6 @@ public class RowDetailDef {
 	public String icon;
 
 	/**
-	 * Optional action bar in the detail header, above the region body.  {@code null} / empty omits header actions.
-	 * {@link ActionRef} ids are validated against the enclosing view's {@code rowActions}.
-	 */
-	public ActionBar headerActions;
-
-	/**
 	 * Author-declared server-side scalar values interpolated into <b>this panel's own</b> chrome (titles) as
 	 * <js>"$FV{name}"</js> at serve time.  Java-only, like the rest of this type &mdash; lambda providers never
 	 * marshal, and this does not bump {@link #CONTRACT_VERSION}.
@@ -110,8 +98,8 @@ public class RowDetailDef {
 	 * per-response <b>sibling</b> {@link org.apache.juneau.commons.svl.VarResolverSession} carrying its own registry.
 	 * The panel's labels are painted into the server-emitted {@code <template>}, so the expand GET carries row data
 	 * only and has no chrome left to resolve; a {@code $FV} template must never reach the expand envelope.  The closed
-	 * allowlist is {@link #title} &mdash; nothing else.  {@link #icon} is an icon-registry name, {@link ActionRef} is
-	 * an id, and {@link SafeAction} is an enum, so none of them are interpolated.
+	 * allowlist is {@link #title} &mdash; nothing else.  {@link #icon} is an icon-registry name, so it is not
+	 * interpolated.
 	 *
 	 * <h5 class='section'>There is no inheritance, and same-name collisions are legal:</h5>
 	 * <p>
@@ -228,17 +216,6 @@ public class RowDetailDef {
 	}
 
 	/**
-	 * Sets the header action bar (right of the title, above the region body).
-	 *
-	 * @param value The action bar.  May be <jk>null</jk> (no header actions).
-	 * @return This object.
-	 */
-	public RowDetailDef headerActions(ActionBar value) {
-		headerActions = value;
-		return this;
-	}
-
-	/**
 	 * Declares the server-side scalar values interpolated into this panel's own titles as <js>"$FV{name}"</js>.
 	 *
 	 * <p>
@@ -269,13 +246,15 @@ public class RowDetailDef {
 	}
 
 	/**
-	 * Fail-closed bean validation, including {@link ActionRef} existence against the enclosing view's action
-	 * catalog.
+	 * Fail-closed bean validation.
 	 *
-	 * @param rowActions The enclosing {@link ViewDef#rowActions}, or <jk>null</jk> (any {@link ActionRef} then
-	 * 	fails).
+	 * @param rowActions The enclosing {@link ViewDef#rowActions}.  Unused after {@code headerActions} retired;
+	 * 	kept so existing {@link ViewDef} call sites do not change signature.
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
+	@SuppressWarnings({
+		"unused" // rowActions kept so ViewDef call sites do not change signature after headerActions retired.
+	})
 	public void validate(List<RowAction> rowActions) {
 		validate(rowActions, null);
 	}
@@ -283,14 +262,14 @@ public class RowDetailDef {
 	/**
 	 * Fail-closed bean validation.
 	 *
-	 * @param rowActions The enclosing {@link ViewDef#rowActions}, or <jk>null</jk> (any {@link ActionRef} then
-	 * 	fails).
+	 * @param rowActions The enclosing {@link ViewDef#rowActions}.  Unused after {@code headerActions} retired;
+	 * 	kept so existing {@link ViewDef} call sites do not change signature.
 	 * @param enclosingViewId The enclosing {@link ViewDef#id}.  Unused after nested-in-section emit retired (F24);
 	 * 	kept so existing {@link ViewDef} call sites do not change signature.
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	@SuppressWarnings({
-		"unused" // enclosingViewId kept so ViewDef call sites do not change signature after F24 nested-in-section retired.
+		"unused" // rowActions / enclosingViewId kept so ViewDef call sites do not change signature.
 	})
 	public void validate(List<RowAction> rowActions, String enclosingViewId) {
 		validateEndpoint();
@@ -302,35 +281,7 @@ public class RowDetailDef {
 		// no enclosing page, so PageDef.validate() owns that rejection.
 		if (barSlot != null)
 			barSlot.validate();
-
-		var actionIds = collectActionIds(rowActions);
-		validateActionBar(headerActions, actionIds);
 		region.validate();
-		// A region body has no declared field catalog to cross-check enabledWhen against, so the rules are
-		// rejected rather than let through unchecked.
-		rejectEnabledWhen(headerActions, "the detail header");
-	}
-
-	/**
-	 * Rejects every {@link ActionRef#enabledWhen} rule on a region panel, naming the replacement.
-	 *
-	 * <p>
-	 * A region body declares no field catalog, so honoring a rule would disable its button on every row forever
-	 * and do it silently.  Ignoring the rule instead would be that exact failure arriving from the other side.
-	 */
-	private static void rejectEnabledWhen(ActionBar bar, String where) {
-		if (bar == null || bar.items == null)
-			return;
-		for (var item : bar.items) {
-			if (!(item instanceof ActionRef ar) || ar.enabledWhen == null || ar.enabledWhen.isEmpty())
-				continue;
-			throw iaex(
-				"ActionRef '%s' in %s declares enabledWhen, which a region(...) detail panel does not support: "
-				+ "there is no declared field catalog to cross-check the rule against, so honoring it would "
-				+ "disable the button on every row forever and do it silently.  Paint the button inside the region "
-				+ "body instead and gate it from ctx.data's values map in your populate, writing through "
-				+ "ctx.write(...).", ar.id, where);
-		}
 	}
 
 	private void validateEndpoint() {
@@ -341,27 +292,6 @@ public class RowDetailDef {
 		if (!isSafeDetailEndpoint(endpoint))
 			throw iaex("RowDetailDef endpoint must be a same-origin path template (no absolute URL, '..', or scheme): %s",
 				endpoint);
-	}
-
-	private static Set<String> collectActionIds(List<RowAction> rowActions) {
-		var actionIds = new HashSet<String>();
-		if (rowActions != null)
-			for (var a : rowActions)
-				if (a != null && a.id != null)
-					actionIds.add(a.id);
-		return actionIds;
-	}
-
-	private static void validateActionBar(ActionBar bar, Set<String> actionIds) {
-		if (bar == null)
-			return;
-		bar.validate();
-		if (bar.items == null)
-			return;
-		for (var item : bar.items) {
-			if (item instanceof ActionRef ar && !actionIds.contains(ar.id))
-				throw iaex("ActionRef '%s' is not declared on the enclosing view's rowActions.", ar.id);
-		}
 	}
 
 	/**

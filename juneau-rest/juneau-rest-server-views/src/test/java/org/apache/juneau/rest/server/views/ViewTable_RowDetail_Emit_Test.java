@@ -41,7 +41,6 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 			.details(RowDetailDef.create()
 				.endpoint("/data/alerts/{id}")
 				.title("Alert {severity}")
-				.headerActions(ActionBar.create().items(ActionRef.of("ack"), SafeAction.COLLAPSE))
 				.region(RegionDef.create("detail").allowPopulators("alerts-detail").populate("alerts-detail")
 					.titleFields("severity")))
 			.build();
@@ -68,23 +67,14 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertTrue(html.contains("data-juneau-detail-header"), html);
 		assertTrue(html.contains("data-juneau-detail-title"), html);
 		assertTrue(html.contains("data-juneau-title-fields=\"severity\""), html);
-		assertTrue(html.contains("data-juneau-action=\"ack\""), html);
-		assertTrue(html.contains("data-juneau-safe=\"collapse\""), html);
-		assertTrue(html.contains("Acknowledge"), html);
-		assertTrue(html.contains("Collapse"), html);
+		assertFalse(html.contains("data-juneau-action="), html);
+		assertFalse(html.contains("data-juneau-safe="), html);
 	}
 
-	@Test void a04_actionRefStartsDisabled_collapseDoesNot() {
+	@Test void a04_noHeaderActionBar() {
 		var html = Html.of(ViewTable.of(view()));
-		assertTrue(html.contains("data-juneau-action=\"ack\""), html);
-		assertTrue(html.contains("disabled=\"disabled\"") || html.contains(" disabled"), html);
-		var collapseAt = html.indexOf("data-juneau-safe=\"collapse\"");
-		assertTrue(collapseAt > 0, html);
-		var collapseStart = html.lastIndexOf("<button", collapseAt);
-		var collapseEnd = html.indexOf('>', collapseAt);
-		assertTrue(collapseStart >= 0 && collapseEnd > collapseStart, html);
-		var collapseTag = html.substring(collapseStart, collapseEnd + 1);
-		assertFalse(collapseTag.contains("disabled"), collapseTag);
+		assertFalse(html.contains("juneau-view-detail-actions"), html);
+		assertFalse(html.contains("data-juneau-action="), html);
 	}
 
 	@Test void a05_templateDoesNotPourFieldValues() {

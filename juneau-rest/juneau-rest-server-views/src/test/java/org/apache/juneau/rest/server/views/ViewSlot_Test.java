@@ -325,19 +325,14 @@ class ViewSlot_Test extends TestBase {
 		assertTrue(json.contains("body"), json);
 	}
 
-	@Test void d05_headerActions_primaryAndSafeCollapse() {
-		var ack = RowAction.create("ack").label("Ack").endpoint("/ack").method(RowAction.Method.POST);
+	@Test void d05_noHeaderActionsOnWire() {
 		var d = RowDetailDef.create()
 			.endpoint("/d/{id}")
 			.title("T")
-			.headerActions(ActionBar.create().items(
-				ActionRef.of("ack").emphasis(ActionRef.Emphasis.PRIMARY),
-				SafeAction.COLLAPSE))
 			.region(RegionDef.create("d").allowPopulators("p").populate("p"));
-		var view = ViewDef.create("q").columns(Column.of("id").title("Id")).rowActions(ack).details(d).build();
+		var view = ViewDef.create("q").columns(Column.of("id").title("Id")).details(d).build();
 		var json = Json.of(ViewSlot.envelope(view).detail);
-		assertTrue(json.contains("\"emphasis\":\"primary\""), json);
-		assertTrue(json.contains("\"safe\":\"collapse\""), json);
-		assertTrue(json.contains("\"contractVersion\":\"1\""), json);
+		assertFalse(json.contains("headerActions"), json);
+		assertTrue(json.contains("\"title\":\"T\""), json);
 	}
 }
