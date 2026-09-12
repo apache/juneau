@@ -24,6 +24,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
+import org.apache.commons.xml.secure.SecureTransformerFactory;
 import org.opensaml.core.config.*;
 import org.opensaml.core.xml.config.*;
 import org.opensaml.core.xml.io.*;
@@ -291,7 +292,7 @@ final class SamlTestSupport {
 
 	private static String serialize(org.w3c.dom.Element dom) throws Exception {
 		var sw = new StringWriter();
-		var tf = TransformerFactory.newInstance();
+		var tf = SecureTransformerFactory.newInstance();
 		var transformer = tf.newTransformer();
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		transformer.transform(new DOMSource(dom), new StreamResult(sw));
@@ -352,7 +353,7 @@ final class SamlTestSupport {
 
 		// Serialize to XML string.
 		var sw = new StringWriter();
-		var tf = TransformerFactory.newInstance();
+		var tf = SecureTransformerFactory.newInstance();
 		var transformer = tf.newTransformer();
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		transformer.transform(new DOMSource(dom), new StreamResult(sw));

@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import javax.xml.parsers.*;
-
+import org.apache.commons.xml.secure.SecureDocumentBuilderFactory;
 import org.apache.juneau.commons.utils.*;
 import org.opensaml.saml.metadata.resolver.*;
 import org.opensaml.saml.metadata.resolver.filter.*;
@@ -196,13 +196,7 @@ public final class SamlMetadataResolvers {
 			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
 				throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());
 
-			var dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-			dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-			dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-			dbf.setXIncludeAware(false);
-			dbf.setExpandEntityReferences(false);
+			var dbf = SecureDocumentBuilderFactory.newNSInstance();
 			var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));
 			Element root = doc.getDocumentElement();
 
