@@ -97,9 +97,18 @@ import jakarta.servlet.http.*;
  * tables this emitter produced.  Note this governs cell <i>content</i> only &mdash; the table's own horizontal
  * scroll region is separate and unchanged.
  *
+ * <h5 class='section'>Page layout vs HTML renderer:</h5>
+ * <p>
+ * A table that <i>is</i> a page body is {@link ViewSlot#envelope(RestRequest, ViewDef)} plus
+ * {@code JuneauViews.regions.mount({ id: { table: url } })}.  {@code of} is the HTML renderer for tests,
+ * nested emit, and deprecated {@link PageTable}/{@link CardGridTable} children.  It is not
+ * {@code @Deprecated}: the renderer and those hosts still call it.
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link ViewDef}
+ * 	<li class='jc'>{@link ViewSlot}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.DataTablesTable}
  * </ul>
  *
@@ -326,6 +335,11 @@ public class ViewTable {
 	/**
 	 * Builds the view-table shell for a server-side view (no up-front rows), using the default marshalling context.
 	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
 	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
 	 */
@@ -336,6 +350,11 @@ public class ViewTable {
 	/**
 	 * Builds the view-table shell and renders {@code rows} into the {@code <tbody>} (client-side datasets), using the
 	 * default marshalling context.
+	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
 	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
@@ -358,6 +377,11 @@ public class ViewTable {
 	 * auto-embed entry point of the token contract; a {@link #CSRF_ATTR} the host sets itself is the
 	 * override/fallback.
 	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the token.
 	 * 	Can be <jk>null</jk> (no token embedded).
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
@@ -376,6 +400,11 @@ public class ViewTable {
 	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef)}.  CSRF, saved-views, and {@code $FV}
 	 * resolution are identical; this overload exists so callers can name the RestRequest host path directly
 	 * (see {@link PageTable#of(RestRequest, PageDef)}).
+	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param req The current request.  Must not be <jk>null</jk>.
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
@@ -396,6 +425,11 @@ public class ViewTable {
 	 * this way is non-recursive (a resolved bundle value is emitted literally, never re-parsed as SVL); with
 	 * {@code messages} <jk>null</jk>, or for any chrome field with no {@code $L{...}} template, this is exactly
 	 * {@link #of(ViewDef) of(viewDef)} &mdash; no resolution, no lock, byte-identical output.
+	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param messages The locale-bound message bundle to resolve {@code $L{...}} chrome against, or <jk>null</jk>
 	 * 	for none.
@@ -461,6 +495,11 @@ public class ViewTable {
 	 * The request-bearing counterpart of {@link #of(ViewDef, Collection)}; see {@link #of(HttpServletRequest, ViewDef)}
 	 * for the token-embed and fail-closed contract.
 	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the token.
 	 * 	Can be <jk>null</jk> (no token embedded).
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
@@ -478,7 +517,10 @@ public class ViewTable {
 	 * and resolving {@code $FV} chrome against a per-response sibling session.
 	 *
 	 * <p>
-	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef, Collection)}.
+	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef, Collection)}.  HTML renderer, not a
+	 * page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)} plus
+	 * {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param req The current request.  Must not be <jk>null</jk>.
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
@@ -500,6 +542,11 @@ public class ViewTable {
 	 * checkbox). Use {@link #of(HttpServletRequest, ViewDef, Collection, BulkMutateDef)} when bulk mutation is
 	 * also required (that overload requires its own {@link SelectionDef}, supplied via
 	 * {@link BulkMutateDef#create(WritePermit, SelectionDef)}).
+	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the CSRF
 	 * 	token. Can be <jk>null</jk> (no token embedded).
@@ -526,6 +573,11 @@ public class ViewTable {
 	 * itself constructed against ({@link BulkMutateDef#create(WritePermit, SelectionDef)} requires one) &mdash; so
 	 * there is exactly one {@link SelectionDef} in play and no way for it to disagree with what the bulk actions
 	 * target.
+	 *
+	 * <p>
+	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
+	 * plus {@code JuneauViews.regions.mount({ id: { table: url } })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the CSRF
 	 * 	token. Can be <jk>null</jk> (no token embedded).

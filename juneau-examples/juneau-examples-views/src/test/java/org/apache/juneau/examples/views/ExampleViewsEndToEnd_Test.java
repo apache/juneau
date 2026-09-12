@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
+import java.util.List;
 
 import org.apache.juneau.TestBase;
 import org.apache.juneau.rest.server.widgets.*;
@@ -231,46 +232,47 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
-	void f01_overviewPage_paintsAQuickStatsStripAboveTheTable() throws Exception {
+	void f01_overviewPage_isAnEmptySlotBeforeMount() throws Exception {
 		var res = get("/overview");
 		assertEquals(200, res.statusCode());
 		var body = res.body();
-		assertTrue(body.contains("data-juneau-quickstats=\"alert-overview\""), "strip marker");
-		assertTrue(body.contains("data-juneau-quickstats-contract=\"1\""), "QuickStats' own contract stamp");
-		assertTrue(body.contains("data-juneau-stat=\"total\""), "scalar tile");
-		assertTrue(body.contains("data-juneau-stat=\"critical\""), "meter");
-		assertTrue(body.contains("data-juneau-stat=\"by-status\""), "segmented breakdown");
-		// Server-painted once, so the figures read with JavaScript disabled.
-		assertTrue(body.contains(">Total alerts<"), "tile label painted server-side");
-		assertTrue(body.contains("jc-stat-fill"), "meter fill painted server-side");
-		// The strip leads the wrapper, so it lands above the toolbar row DataTables grows at init.
-		assertTrue(body.indexOf("jc-quickstats") < body.indexOf("<table"), "strip precedes the table");
+		assertTrue(body.contains("id=\"alert-overview\""), "empty slot");
+		assertFalse(body.contains("data-juneau-view"), "page GET must not serialize ViewTable.of into the body");
+		assertFalse(body.contains("data-juneau-quickstats"), "QuickStats paints from the envelope after mount");
+		assertTrue(body.contains("JuneauViews.regions.mount({ \"alert-overview\": { table:"), "mount hookup");
+		var views = body.indexOf("/juneau-views.js?v=");
+		var regions = body.indexOf("/juneau-regions.js?v=");
+		assertTrue(views >= 0 && regions >= 0, "views.js and regions.js linked");
+		assertTrue(regions > views, "juneau-regions.js must load AFTER juneau-views.js");
 	}
 
 	@Test
-	void f02_overviewPage_stripAndPillsUseTheFiveValueToneVocabulary() throws Exception {
-		var body = get("/overview").body();
-		// At least one of each coloured tone the page declares, and none of the retired v1 pill tone names.
-		assertTrue(body.contains("is-info"), "info tone");
-		assertTrue(body.contains("is-warning"), "warning tone");
-		assertTrue(body.contains("is-error"), "error tone");
-		assertFalse(body.contains("is-ok\""), "retired 'ok' tone");
-		assertFalse(body.contains("is-exceeds"), "retired 'exceeds' tone");
-		assertFalse(body.contains("is-accent"), "badge-palette 'accent' is not a status tone");
+	void f02_overviewEnvelope_isViewSlotWithQuickStatsAndDisplayOnlyPill() throws Exception {
+		var res = getJson("/overview/view");
+		assertEquals(200, res.statusCode(), res.body());
+		var body = res.body();
+		assertTrue(body.contains("\"contractVersion\""), body);
+		assertTrue(body.contains("\"id\":\"alert-overview\""), body);
+		assertTrue(body.contains("\"quickStats\""), body);
+		assertTrue(body.contains("Total alerts"), body);
+		assertTrue(body.contains("\"tone\":\"info\"") || body.contains("INFO") || body.contains("is-info")
+			|| body.contains("info"), body);
+		assertTrue(body.contains("warning"), body);
+		assertTrue(body.contains("error"), body);
+		assertTrue(body.contains("pill"), "pill renderer declared");
+		assertFalse(body.contains("\"actionId\""), "no pill action on this page's view");
 	}
 
 	@Test
-	void f03_overviewPage_quickStatsAndItsPillsCarryNoActionAffordance() throws Exception {
-		var body = get("/overview").body();
-		var strip = body.substring(body.indexOf("jc-quickstats"), body.indexOf("<table"));
-		assertFalse(strip.contains("role="), "no button semantics on a stat");
-		assertFalse(strip.contains("tabindex"), "a stat is not focusable");
-		assertFalse(strip.contains("<a "), "a stat is not a link");
-		assertFalse(strip.contains("data-juneau-action"), "a stat dispatches nothing");
-		// The overview's own pills are display-only too: no action id anywhere in its sidecar.
-		assertFalse(body.contains("\"action\""), "no pill action on this page's view");
-		// And the sink pill is declared in the row-detail template rather than as a column renderer.
-		assertTrue(body.contains("\"id\":\"pill\""), "pill renderer declared");
+	void f03_flaggedPage_isAnEmptySlotAndEnvelopeResolvesFv() throws Exception {
+		var page = get("/flagged").body();
+		assertTrue(page.contains("id=\"widgets-flagged\""), "empty slot");
+		assertFalse(page.contains("data-juneau-view"), "page GET must not serialize ViewTable.of into the body");
+		assertTrue(page.contains("JuneauViews.regions.mount({ \"widgets-flagged\": { table:"), "mount hookup");
+		var envelope = getJson("/flagged/view").body();
+		assertTrue(envelope.contains("\"contractVersion\""), envelope);
+		assertFalse(envelope.contains("$FV{"), () -> "envelope must resolve $FV chrome: " + envelope);
+		assertTrue(envelope.contains("flagged"), envelope);
 	}
 
 	@Test
@@ -331,5 +333,21 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("\"text\":\"Severity: info\""), body);
 		assertTrue(body.contains("\"label\":\"other open at this severity\""), body);
 		assertTrue(body.contains("\"tone\":\"WARN\""), body);
+	}
+
+	@Test
+	void g01_exampleRestSourcesHaveNoPageBodyViewTableOf() throws Exception {
+		for (var rel : List.of(
+				"src/main/java/org/apache/juneau/examples/views/ExampleViewsRest.java",
+				"juneau-examples/juneau-examples-views/src/main/java/org/apache/juneau/examples/views/ExampleViewsRest.java")) {
+			var p = java.nio.file.Path.of(rel);
+			if (java.nio.file.Files.isRegularFile(p)) {
+				var text = java.nio.file.Files.readString(p);
+				assertFalse(text.contains("ViewTable.of("),
+					() -> "page-body ViewTable.of must be gone from ExampleViewsRest: " + p);
+				return;
+			}
+		}
+		fail("could not locate ExampleViewsRest.java");
 	}
 }

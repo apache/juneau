@@ -56,6 +56,16 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		assertNoDeprecatedMethods(ViewTable.class, "of");
 		assertNoDeprecatedMethods(RegionDef.class, "create");
 		assertNoDeprecatedMethods(RegionTable.class, "of");
+		assertNoDeprecatedMethods(RegionTable.class, "sidecar");
+		assertNoDeprecatedMethods(RegionTable.class, "detailSidecar");
+	}
+
+	@Test void a02b_dualUseJavadocNamesEnvelopeAndMount() throws Exception {
+		assertPageBodyClassification(ViewTable.class);
+		assertTrue(sourceOf(ViewTable.class).contains("ViewSlot#envelope"),
+			"ViewTable javadoc must name ViewSlot.envelope as the page-body factory");
+		assertPageBodyClassification(RegionDef.class);
+		assertPageBodyClassification(RegionTable.class);
 	}
 
 	@Test void a03_deprecatedJavadocNamesMountAndSweep() throws Exception {
@@ -147,6 +157,14 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 			if (m.getName().equals(name) && Modifier.isPublic(m.getModifiers()))
 				assertNull(m.getAnnotation(Deprecated.class), m::toString);
 		}
+	}
+
+	private static void assertPageBodyClassification(Class<?> c) throws Exception {
+		var src = sourceOf(c);
+		assertTrue(src.contains("JuneauViews.regions.mount"),
+			() -> c.getName() + " javadoc must name mount as the page-slot factory:\n" + src);
+		assertTrue(src.contains("Not {@code @Deprecated}"),
+			() -> c.getName() + " javadoc must say the dual-use method is not @Deprecated:\n" + src);
 	}
 
 	private static void assertJavadocSweep(Class<?> c) throws Exception {

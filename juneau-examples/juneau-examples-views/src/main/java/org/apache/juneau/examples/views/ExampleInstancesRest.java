@@ -26,7 +26,6 @@ import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
@@ -97,6 +96,9 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	/** The view id, also the region host's identity scope. */
 	static final String VIEW_ID = "instances";
 
+	/** Empty page slot {@code JuneauViews.regions.mount} paints the table into. */
+	static final String TABLE_SLOT_ID = "instances-table";
+
 	private static final String COL_STATUS = "status";
 
 	private static final List<ServiceInstance> INSTANCES = buildInstances();
@@ -144,11 +146,9 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	 */
 	@RestGet(path="/", summary="Design 11.1a: a ten-tab detail panel drawn entirely by one region populate")
 	public HttpResource index(RestRequest req) {
-		var tableMarkup = Html.of(ViewTable.of(req, instancesView()));
 		var html = PAGE.formatted(
 			DataTablesMixin.DATATABLES_CSS_CDN_URL,
 			ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-			tableMarkup,
 			DataTablesMixin.JQUERY_CDN_URL,
 			DataTablesMixin.DATATABLES_JS_CDN_URL,
 			ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
@@ -159,10 +159,23 @@ public class ExampleInstancesRest extends BasicRestServlet {
 			ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
 			ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
 			POPULATOR,
-			req.getContextPath() + "/instances/data/instances");
+			req.getContextPath() + "/instances/data/instances",
+			req.getContextPath() + "/instances/view");
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
 			list(ContentType.of(MEDIA_HTML)));
+	}
+
+	/**
+	 * [GET /instances/view] &mdash; the {@link ViewSlot} envelope {@code JuneauViews.regions.mount} fetches into
+	 * {@link #TABLE_SLOT_ID}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot instancesViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, instancesView());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -347,7 +360,7 @@ public class ExampleInstancesRest extends BasicRestServlet {
 		<code>RegionDef</code> &mdash; no sections, no fields, no tabs in Java. <b>Details</b> paints eagerly by
 		joining the row's own expand GET, so expanding costs one request rather than two; the other nine fetch on
 		first activation and never refetch when you switch back. Collapsing the row aborts anything in flight.</p>
-		%s
+		<div id="instances-table"></div>
 		<script src="%s"></script>
 		<script src="%s"></script>
 		<script src="%s"></script>
@@ -433,6 +446,7 @@ public class ExampleInstancesRest extends BasicRestServlet {
 		\t\t\t  populate: listPane("audit-trail",     LIST_COLUMNS.auditTrail) }
 		\t\t], { active: "details", signal: ctx.signal }));
 		\t});
+		\tJuneauViews.regions.mount({ "instances-table": { table: "%s" } });
 		})();
 		</script>
 		</body>

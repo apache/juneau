@@ -107,26 +107,37 @@ class ExampleInstancesRegion_Test extends TestBase {
 		assertTrue(r.body().contains("Ten Tabs, Zero Server Knowledge"), "served something other than the example");
 	}
 
-	@Test void a02_theRowDetailTemplateCarriesExactlyOneRegionContainer() {
-		var count = page.split("data-juneau-region=\"detail\"", -1).length - 1;
-		assertEquals(1, count,
-			() -> "the detail template must carry EXACTLY ONE empty region container (SD-3 / design item 10); found "
-				+ count);
-		assertTrue(page.contains("data-juneau-region-type=\"row-detail\""),
-			"the region's ctx.type must be row-detail (SF-G)");
-		assertTrue(page.contains("data-juneau-region-contract=\"1\""),
-			"RegionDef.CONTRACT_VERSION stays \"1\" and must be stamped on the container");
+	@Test void a02_thePageIsAnEmptySlotBeforeMount() {
+		assertTrue(page.contains("id=\"" + ExampleInstancesRest.TABLE_SLOT_ID + "\""),
+			"the page body is an empty slot, not a server-serialized table");
+		assertFalse(page.contains("data-juneau-view"),
+			"page GET must not serialize ViewTable.of into the body; the slot is empty before mount");
+		assertTrue(page.contains("JuneauViews.regions.mount({ \"" + ExampleInstancesRest.TABLE_SLOT_ID
+			+ "\": { table:"),
+			"the page must mount the envelope into the empty slot");
 	}
 
-	@Test void a03_theRegionPanelHasNoSectionChromeAndNoFieldSlots() {
-		// This is the assertion that fails if the emitter quietly kept emitting the old shape alongside the new one.
-		// A region panel with section frames would render its body TWICE - the exact blank-or-double-render window
-		// SF-E's staged emitter table exists to close.
+	@Test void a02b_theEnvelopeCarriesExactlyOneRowDetailRegion() throws Exception {
+		var r = getJson("instances/view");
+		assertEquals(200, r.statusCode(), r::body);
+		var body = r.body();
+		assertTrue(body.contains("\"contractVersion\""), body);
+		assertTrue(body.contains("\"id\":\"detail\""), body);
+		assertTrue(body.contains("\"type\":\"row-detail\""), body);
+		assertTrue(body.contains("\"populate\":\"" + ExampleInstancesRest.POPULATOR + "\""), body);
+		assertEquals(1, body.split("\"type\":\"row-detail\"", -1).length - 1,
+			() -> "the envelope must carry EXACTLY ONE row-detail region: " + body);
+	}
+
+	@Test void a03_theRegionPanelHasNoSectionChromeAndNoFieldSlots() throws Exception {
 		assertFalse(page.contains("data-juneau-detail-section"),
 			"a .region(...) panel must emit NO section frames - no strip is drawn for it and a frame would be a "
 				+ "second body");
 		assertFalse(page.contains("data-juneau-field="),
 			"a .region(...) panel must emit NO field slots - the author's populate paints every value");
+		var envelope = getJson("instances/view").body();
+		assertFalse(envelope.contains("\"sections\""),
+			() -> "SD-3 region body is mutually exclusive with sections: " + envelope);
 	}
 
 	@Test void a04_thePageLoadsTheRegionRuntimeAndHelpersAfterTheViewRuntime() {
@@ -141,11 +152,12 @@ class ExampleInstancesRegion_Test extends TestBase {
 		assertTrue(helpers > views, "juneau-helpers.js must load AFTER juneau-views.js");
 	}
 
-	@Test void a05_theAuthorRegistersExactlyThePopulatorTheViewNames() {
+	@Test void a05_theAuthorRegistersExactlyThePopulatorTheViewNames() throws Exception {
 		assertTrue(page.contains("JuneauViews.regions.register(\"" + ExampleInstancesRest.POPULATOR + "\""),
 			"the page must register the populator name the RegionDef declares, or the panel paints nothing");
-		assertTrue(page.contains("data-juneau-region-populate=\"" + ExampleInstancesRest.POPULATOR + "\""),
-			"the emitted container must carry the populator name the author registered");
+		var envelope = getJson("instances/view").body();
+		assertTrue(envelope.contains("\"populate\":\"" + ExampleInstancesRest.POPULATOR + "\""),
+			() -> "the envelope's region must name the populator the author registered: " + envelope);
 	}
 
 	@Test void a06_tenTabsAreDeclaredClientSideAndNoneServerSide() {
@@ -155,6 +167,16 @@ class ExampleInstancesRegion_Test extends TestBase {
 			assertTrue(page.contains("id: \"" + id + "\""), () -> "missing client-side tab declaration: " + id);
 		assertTrue(page.contains("lazy: false"),
 			"the Details tab must opt OUT of lazy so it paints eagerly; the other nine inherit lazy=true");
+	}
+
+	@Test void a07_sd3RegionDefCreateStaysAndPageBodyViewTableOfIsGone() throws Exception {
+		var src = exampleSource();
+		assertNotNull(src);
+		var text = Files.readString(src, UTF_8);
+		assertTrue(text.contains("RegionDef.create("),
+			"SD-3 RowDetailDef.region(RegionDef.create(...)) stays on this view");
+		assertFalse(text.contains("ViewTable.of("),
+			"page-body ViewTable.of must be gone from this example");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

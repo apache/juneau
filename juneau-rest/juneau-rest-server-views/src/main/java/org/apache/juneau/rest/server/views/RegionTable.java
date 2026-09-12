@@ -122,6 +122,11 @@ public class RegionTable {
 	/**
 	 * Emits one empty region container.
 	 *
+	 * <p>
+	 * In-table region HTML ({@link ViewTable}'s detail template).  Page slots: author HTML plus
+	 * {@code JuneauViews.regions.mount({ id: populatorName })}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param region The region. Must not be <jk>null</jk>.
 	 * @return An empty {@code <div class='juneau-region'>} carrying identity, type and the handshake stamp.
 	 */
@@ -131,6 +136,11 @@ public class RegionTable {
 
 	/**
 	 * Emits one empty region container, optionally carrying the non-table host's CSRF stamp (F22).
+	 *
+	 * <p>
+	 * In-table region HTML ({@link ViewTable}'s detail template).  Page slots: author HTML plus
+	 * {@code JuneauViews.regions.mount({ id: populatorName })}.  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param region The region. Must not be <jk>null</jk>.
 	 * @param csrfToken The enclosing response's token for a non-table host, or <jk>null</jk> to omit the stamp
@@ -161,6 +171,11 @@ public class RegionTable {
 	/**
 	 * Emits the per-host sidecar with a document-unique HTML {@code id}.
 	 *
+	 * <p>
+	 * No in-table keeper in this module's production emit path; leftover page-slot callers migrate to
+	 * {@code JuneauViews.regions.mount}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param hostId The host's own id (a page id, a card-grid id); the sidecar's {@code id} is
 	 * 	{@link #SIDECAR_ID_PREFIX} + this. Must not be <jk>null</jk> or blank.
 	 * @param regions Every region this host declares, in emit order. Must not be <jk>null</jk> or empty.
@@ -180,6 +195,10 @@ public class RegionTable {
 	 * <p>
 	 * See this class's Javadoc: a row-detail sidecar lives inside the cloned
 	 * {@code <template data-juneau-row-detail>}, so a stamped {@code id} would collide across every open panel.
+	 *
+	 * <p>
+	 * In-table region HTML ({@link ViewTable}'s detail template).  Not {@code @Deprecated}.
+	 * </p>
 	 *
 	 * @param regions Every region this host declares, in emit order. Must not be <jk>null</jk> or empty.
 	 * @return The {@code <script type='application/json'>} sidecar, carrying {@link #REGION_META_ATTR}.

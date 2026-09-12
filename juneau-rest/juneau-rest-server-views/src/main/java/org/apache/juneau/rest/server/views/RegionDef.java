@@ -179,6 +179,12 @@ public class RegionDef {
 	/**
 	 * Creates a region with the given id.
 	 *
+	 * <p>
+	 * SD-3 identity plus populator name for {@link RowDetailDef#region(RegionDef)} (and the table renderer's
+	 * projected copy).  Page slots do not go through this factory &mdash; author HTML plus
+	 * {@code JuneauViews.regions.mount({ id: populatorName })}.  Not {@code @Deprecated}.
+	 * </p>
+	 *
 	 * @param id This region's own id, unique within its host. Must not be <jk>null</jk> or blank.
 	 * @return A new {@link RegionDef}.
 	 */

@@ -226,8 +226,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 *
 	 * <p>
 	 * The {@code flaggedCount} provider is session-aware ({@code Function<VarResolverSession,?>}) and returns a
-	 * scalar; {@link ViewTable#of(RestRequest, ViewDef)} resolves the <js>"$FV{flaggedCount}"</js> chrome at serve
-	 * time into plain, serializer-encoded text.  {@code $FV} is registered by {@link #varResolver(VarResolver.Builder)}.
+	 * scalar; {@link ViewSlot#envelope(RestRequest, ViewDef)} resolves the <js>"$FV{flaggedCount}"</js> chrome at
+	 * serve time into plain, serializer-encoded text.  {@code $FV} is registered by {@link #varResolver(VarResolver.Builder)}.
 	 */
 	static ViewDef flaggedView() {
 		return ViewDef.create("widgets-flagged")
@@ -565,7 +565,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 */
 	@RestGet(path="/overview", summary="A QuickStats strip above a table, with display-only and fill-sink status pills")
 	public HttpResource overview(RestRequest req) {
-		var tableMarkup = Html.of(ViewTable.of(req, overviewView(), ALERTS));
+		var envelopeUrl = req.getContextPath() + "/overview/view";
 		var html = """
 			<!DOCTYPE html>
 			<html lang="en">
@@ -581,7 +581,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<body>
 			<h1>Apache Juneau &mdash; QuickStats Example</h1>
 			<p>The strip above the table is a <code>QuickStats</code>: a scalar tile, a meter, and a segmented
-			breakdown, all painted once on the server from the same alert rows the table lists. It is display-only
+			breakdown, painted from the same alert rows the table lists. It is display-only
 			&mdash; no tile is clickable and nothing refreshes, unlike the
 			<a href="dashboard">live card dashboard</a>.</p>
 			<p>The <b>Status</b> column is a <b>display-only</b> pill with an explicit tone, and expanding a row shows
@@ -589,26 +589,43 @@ public class ExampleViewsRest extends BasicRestServlet {
 			action-bound pill on the <a href="./">Alerts tab</a>, which dispatches a row action on click or
 			Enter/Space. Tones on the strip and on the pills come from one palette:
 			<code>info</code>, <code>success</code>, <code>warning</code>, <code>error</code>, <code>neutral</code>.</p>
-			%s
+			<div id="alert-overview"></div>
 			<script src="%s"></script>
 			<script src="%s"></script>
 			<script src="%s"></script>
 			<script src="%s"></script>
 			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			JuneauViews.regions.mount({ "alert-overview": { table: "%s" } });
+			</script>
 			</body>
 			</html>
 			""".formatted(
 				DataTablesMixin.DATATABLES_CSS_CDN_URL,
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-				tableMarkup,
 				DataTablesMixin.JQUERY_CDN_URL,
 				DataTablesMixin.DATATABLES_JS_CDN_URL,
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH));
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				envelopeUrl);
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
 			list(ContentType.of(MEDIA_HTML)));
+	}
+
+	/**
+	 * [GET /overview/view] &mdash; the {@link ViewSlot} envelope {@code JuneauViews.regions.mount} fetches into
+	 * the overview page slot.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/overview/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot overviewViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, overviewView());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -793,22 +810,69 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /flagged] &mdash; a standalone {@link ViewTable} whose column title resolves a {@code $FV} server value.
+	 * [GET /flagged] &mdash; a standalone table whose column title resolves a {@code $FV} server value.
 	 *
 	 * <p>
-	 * Uses {@link ViewTable#of(RestRequest, ViewDef)} (the {@code ViewDef} host path) so the declared
-	 * {@code $FV{flaggedCount}} chrome is resolved against a per-response sibling session; the standalone
-	 * {@code ViewTable.of(view)} / {@link PageTable} paths intentionally do not resolve {@code $FV}.
+	 * Uses {@link ViewSlot#envelope(RestRequest, ViewDef)} so the declared {@code $FV{flaggedCount}} chrome is
+	 * resolved against a per-response sibling session; the standalone {@link ViewTable#of(ViewDef)} /
+	 * {@link PageTable} paths intentionally do not resolve {@code $FV}.
 	 *
 	 * @param req The current request, whose var resolver knows {@code $FV}.
-	 * @return The rendered standalone view.
+	 * @return The HTML page with an empty slot.
 	 */
 	@RestGet(path="/flagged", swagger=@OpSwagger(ignore=true))
 	public HttpResource flagged(RestRequest req) {
-		var markup = Html.of(ViewTable.of(req, flaggedView(), ACTIVE_WIDGETS));
+		var envelopeUrl = req.getContextPath() + "/flagged/view";
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - Flagged Widgets</title>
+			<link rel="stylesheet" href="%s">
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; Flagged Widgets</h1>
+			<div id="widgets-flagged"></div>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			JuneauViews.regions.mount({ "widgets-flagged": { table: "%s" } });
+			</script>
+			</body>
+			</html>
+			""".formatted(
+				DataTablesMixin.DATATABLES_CSS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				DataTablesMixin.JQUERY_CDN_URL,
+				DataTablesMixin.DATATABLES_JS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				envelopeUrl);
 		return HttpResourceBean.of(
-			ByteArrayBody.of(markup.getBytes(UTF_8), MEDIA_HTML),
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
 			list(ContentType.of(MEDIA_HTML)));
+	}
+
+	/**
+	 * [GET /flagged/view] &mdash; the {@link ViewSlot} envelope for {@link #flaggedView()}.
+	 *
+	 * @param req The current request, whose var resolver knows {@code $FV}.
+	 * @return The slot envelope with resolved {@code $FV} chrome.
+	 */
+	@RestGet(path="/flagged/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot flaggedViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, flaggedView());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

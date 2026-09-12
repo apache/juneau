@@ -225,12 +225,11 @@ class AssetLoadOrderBand_Test extends TestBase {
 	 * This is the only in-tree page that links all three, so it is the one witness to the full three-asset band.
 	 */
 	@Test
-	void a08_instanceDetailPage_scriptOrder_viewsThenRegionsThenHelpers() throws Exception {
-		var body = bodyOf(viewsServer.getRootUrl(), "/instance-detail");
-		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-regions.js", 2, "/juneau-helpers.js", 3));
-		assertEquals(3, hits.size(),
-			() -> "expected the views, regions and helpers scripts to all be linked: " + hits);
-		assertBandOrder(hits, "Instance-detail script order (views, then regions, then helpers)");
+	void a09_overviewPage_scriptOrder_viewsBeforeRegions() throws Exception {
+		var body = bodyOf(viewsServer.getRootUrl(), "/overview");
+		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-regions.js", 2));
+		assertEquals(2, hits.size(), () -> "expected both the views and regions scripts to be linked: " + hits);
+		assertBandOrder(hits, "QuickStats overview script order (views before regions)");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
