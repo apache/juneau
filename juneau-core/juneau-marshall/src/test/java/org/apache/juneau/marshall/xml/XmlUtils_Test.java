@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.xml.secure.SecureXMLInputFactory;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -426,7 +427,7 @@ class XmlUtils_Test extends TestBase {
 	@Test void h01_toReadableEvent() throws Exception {
 		// Use a real XMLStreamReader to walk through events.
 		var xml = "<root><child>text</child></root>";
-		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		var f = SecureXMLInputFactory.newInstance();
 		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // START_ELEMENT (root)
@@ -446,7 +447,7 @@ class XmlUtils_Test extends TestBase {
 	// PROCESSING_INSTRUCTION (event type 3)
 	@Test void h02_toReadableEvent_processingInstruction() throws Exception {
 		var xml = "<?pi target?><root/>";
-		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		var f = SecureXMLInputFactory.newInstance();
 		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // PROCESSING_INSTRUCTION
@@ -458,7 +459,7 @@ class XmlUtils_Test extends TestBase {
 	// COMMENT (event type 5) — need coalescing=false and IS_SUPPORTING_EXTERNAL_ENTITIES=false
 	@Test void h03_toReadableEvent_comment() throws Exception {
 		var xml = "<!-- my comment --><root/>";
-		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		var f = SecureXMLInputFactory.newInstance();
 		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
 		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
@@ -472,7 +473,7 @@ class XmlUtils_Test extends TestBase {
 	// CDATA (event type 12)
 	@Test void h04_toReadableEvent_cdata() throws Exception {
 		var xml = "<root><![CDATA[cdata text]]></root>";
-		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		var f = SecureXMLInputFactory.newInstance();
 		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
 		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
