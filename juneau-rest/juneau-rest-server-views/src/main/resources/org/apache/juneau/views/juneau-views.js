@@ -4268,6 +4268,24 @@
 	}
 
 	/**
+	 * Resolves a dialog form-source URL for the confirmation GET: substitutes `{property}` tokens via
+	 * {@link #substituteRowActionEndpoint}, then applies the same three malformed-URL guards the write path
+	 * uses (blank token value, residual `{...}`, `..` path segment).  Returns either `{refuse:true, reason}` or
+	 * `{url}`.  A token-less form is returned byte-identical.  Blank/absent `form` is the caller's confirm-only
+	 * local path, not this helper's job.
+	 */
+	function resolveRowActionFormUrl(form, rowData) {
+		if (hasBlankSubstitution(form, rowData))
+			return { refuse: true, reason: "empty-substitution" };
+		const url = substituteRowActionEndpoint(form, rowData);
+		if (hasResidualToken(url))
+			return { refuse: true, reason: "unresolved-endpoint" };
+		if (hasDotDotSegment(url))
+			return { refuse: true, reason: "unsafe-endpoint" };
+		return { url };
+	}
+
+	/**
 	 * Opens a `present=dialog` action's modal overlay (declarative-modal path).  When the action declares a form-source URL, the
 	 * modal-open confirmation is a READ-ONLY GET that returns the typed ModalDef JSON (confirmation fields + the
 	 * server-minted idempotency key) - it never mutates (HIGH-7); its typed fields are painted with `textContent`
@@ -4290,7 +4308,13 @@
 			showActionDialog({ title: action.confirm || actionDisplayName(action) }, action, table, tr, ctx);
 			return;
 		}
-		fetch(action.form, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
+		const rowData = rowDataForTr(ctx, tr);
+		const resolved = resolveRowActionFormUrl(action.form, rowData);
+		if (resolved.refuse) {
+			renderActionRefusalFor(tr, action, resolved.reason, ctx);
+			return;
+		}
+		fetch(resolved.url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
 			.then(function (resp) {
 				if (! resp || ! resp.ok) {
 					// A non-2xx on the read-only confirmation fetch is itself a visible transport refusal - the

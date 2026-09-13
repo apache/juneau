@@ -49,8 +49,9 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 	<tr><td>{@code method}</td><td>{@code POST}|{@code PUT}|{@code PATCH}|{@code DELETE}</td>
  * 		<td>The non-safe HTTP method (see {@link Method}).</td></tr>
  * 	<tr><td>{@code confirm}</td><td>string</td><td>Optional confirmation prompt shown before the submit.</td></tr>
- * 	<tr><td>{@code form}</td><td>string</td><td>Optional form-source URL supplying the action's input fields
- * 		(a future declarative form renders).</td></tr>
+ * 	<tr><td>{@code form}</td><td>string</td><td>Optional form-source URL supplying the action's input fields;
+ * 		may carry a {@code {property}} token substituted from the current row before the confirmation GET
+ * 		(see {@link #form(String) form}).  Blank/absent {@code form} is the confirm-only local path.</td></tr>
  * 	<tr><td>{@code present}</td><td>{@code page}|{@code dialog}|{@code inline}</td>
  * 		<td>How the action's form/confirmation is presented (see {@link Present}).</td></tr>
  * 	<tr><td>{@code onSuccess}</td><td>{@code redraw}|{@code mergeRow}|{@code navigate}</td>
@@ -74,15 +75,16 @@ import org.apache.juneau.rest.server.widgets.Op;
  * only to non-safe methods.  A mutating action bound to {@code GET} would be a CSRF-able write; the type system
  * forbids expressing one.
  *
- * <h5 class='section'>Per-row {@code {property}} substitution in {@link #endpoint}</h5>
+ * <h5 class='section'>Per-row {@code {property}} substitution in {@link #endpoint} and {@link #form}</h5>
  * <p>
- * {@link #endpoint(String) endpoint} may carry a {@code {property}} token (e.g. {@code {id}}, as in the example
- * below) that the client-side runtime substitutes from the row before submitting &mdash; the SAME mechanism, same
- * token grammar, and same per-value escaping as {@link Column#href(String) Column.href}'s {@code linked} renderer
- * (WORK-J0509).  Unlike {@code Column.href}, this URL is <i>submitted</i> rather than rendered, so an unresolved
- * substitution <b>refuses the submission</b> (WORK-J0521) instead of firing a malformed write; see
- * {@link #endpoint(String) endpoint}'s javadoc for the full contract.  An endpoint with no token is unaffected and
- * submits exactly as it always has.
+ * {@link #endpoint(String) endpoint} and {@link #form(String) form} may each carry a {@code {property}} token
+ * (e.g. {@code {id}}, as in the example below) that the client-side runtime substitutes from the row &mdash; the
+ * SAME mechanism, same token grammar, and same per-value escaping as {@link Column#href(String) Column.href}'s
+ * {@code linked} renderer.  Unlike {@code Column.href}, these URLs are <i>fetched</i> (form: confirmation GET) or
+ * <i>submitted</i> (endpoint: mutating write), so an unresolved substitution <b>refuses</b> instead of issuing a
+ * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and
+ * is used byte-identical to how it always was.  A blank/absent {@code form} is the confirm-only local path (no
+ * GET), not a refusal.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -355,7 +357,34 @@ public class RowAction {
 	/**
 	 * Sets the form-source URL supplying the action's input fields.
 	 *
-	 * @param value The new value.
+	 * <p>
+	 * May contain one or more {@code {property}} tokens (e.g. {@code "/data/alerts/{id}/ack-form"}), substituted
+	 * from the CURRENT ROW's own already-fetched data before the confirmation GET &mdash; the client-side
+	 * ({@code juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the
+	 * identical {@code interpolateHref} helper {@link Column#href(String) Column.href}'s {@code linked} renderer
+	 * uses (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and
+	 * the SAME per-value {@code encodeURIComponent} escaping.
+	 *
+	 * <p>
+	 * <b>Divergence from {@code Column.href}:</b> because this URL is <i>fetched</i> (the confirmation GET) rather
+	 * than merely rendered, the runtime <b>refuses the open</b> (renders a visible refusal; issues no {@code
+	 * fetch}) instead of GETting a malformed or undeclared path, when:
+	 * <ul>
+	 * 	<li>a {@code {property}} token's row value is absent, <jk>null</jk>, or blank;
+	 * 	<li>the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped
+	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer); or
+	 * 	<li>the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise
+	 * 		normalize into a different, undeclared endpoint).
+	 * </ul>
+	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is
+	 * not a fetch.
+	 *
+	 * <p>
+	 * <b>Divergence from {@link #endpoint(String) endpoint}:</b> a blank/absent {@code form} is still the
+	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched
+	 * byte-identical to how it always was.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> or blank for a confirm-only dialog.
 	 * @return This object.
 	 */
 	public RowAction form(String value) {

@@ -109,6 +109,11 @@ public class RibbonAction {
 	 * <p>
 	 * Also the discriminator between a form-bearing and a confirm-only dialog: with no {@code form} the runtime
 	 * paints a confirm-only prompt instead of issuing the modal-open confirmation GET.
+	 *
+	 * <p>
+	 * Tokens are substituted by the same {@code openActionDialog} runtime as {@link RowAction#form(String)
+	 * RowAction.form}.  A row-less ribbon dialog has no row, so any {@code {property}} token refuses the open
+	 * (visible refusal, no GET).  Token-less create-forms are unchanged.
 	 */
 	public String form;
 
@@ -520,6 +525,11 @@ public class RibbonAction {
 
 	/**
 	 * Sets a {@code dialog} action's read-only form-source URL.
+	 *
+	 * <p>
+	 * Tokens follow {@link RowAction#form(String) RowAction.form}: the same {@code openActionDialog} runtime
+	 * substitutes {@code {property}} tokens and refuses a malformed result.  A row-less ribbon dialog has no
+	 * row, so any token refuses.  Token-less create-forms are fetched byte-identical.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> to unset (a confirm-only dialog).
 	 * @return This object.
