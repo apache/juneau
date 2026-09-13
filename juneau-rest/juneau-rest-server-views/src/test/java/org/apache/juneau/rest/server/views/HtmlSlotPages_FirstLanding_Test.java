@@ -32,6 +32,10 @@ import org.junit.jupiter.api.*;
  * naming {@code JuneauViews.regions.mount}; dual-use methods do not; views CSS/JS introduce no {@code slds-*}
  * or Salesforce Sans.
  */
+@SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"java:S5961" // Contract test is intentionally dense; splitting would hide landing-page pins.
+})
 class HtmlSlotPages_FirstLanding_Test extends TestBase {
 
 	@Test void a01_pageOnlyTypesAreDeprecated() {

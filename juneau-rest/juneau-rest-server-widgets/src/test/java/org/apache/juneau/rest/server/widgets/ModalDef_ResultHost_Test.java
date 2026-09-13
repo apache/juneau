@@ -45,6 +45,9 @@ import org.junit.jupiter.api.*;
  * silently-empty client surface is rejected by {@link ModalDef#validate()} at serve time, where the author sees it,
  * rather than degrading quietly in a browser.
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class ModalDef_ResultHost_Test extends TestBase {
 
 	private static FormDef form() {

@@ -51,7 +51,7 @@ function page(h, opts) {
 		ctx.on(function (msg, meta) {
 			received[ctx.id].push({ msg: msg, meta: meta });
 			order.push(ctx.id);
-			if (opts && opts.onMessage) opts.onMessage(ctx, msg, meta);
+			if (opts?.onMessage) opts.onMessage(ctx, msg, meta);
 		});
 	});
 	R.register('silent', function (ctx) { ctxs[ctx.id] = ctx; received[ctx.id] = []; });
@@ -249,7 +249,7 @@ function kinds(list) {
 		p.ctxs.driver.emit({ kind: 'two' });
 		out.t26_receivedBeforeOff = got.slice();
 		out.t26_regionStillLive = sm._juneauRegion !== undefined;
-		out.t26_stateStillOk = sm.getAttribute('data-juneau-region-state');
+		out.t26_stateStillOk = sm.dataset.juneauRegionState;
 	}
 
 	// =================================================================================================================
@@ -340,9 +340,9 @@ function kinds(list) {
 			for (const label of ['one', 'two', 'three']) {
 				const b = h.env.el('button');
 				b.textContent = label;
-				b.setAttribute('data-author-action', label);
+				b.dataset.authorAction = label;
 				// The author's OWN listener - the framework must not add one of its own beside it.
-				b.addEventListener('click', function () { b.setAttribute('data-clicked', '1'); });
+				b.addEventListener('click', function () { b.dataset.clicked = '1'; });
 				container.appendChild(b);
 				buttons.push(b);
 			}
@@ -351,7 +351,7 @@ function kinds(list) {
 		h.R.initRegion(el);
 
 		for (const b of buttons) b.dispatch('click');
-		out.t27b_authorHandlersRan = buttons.every(function (b) { return b.getAttribute('data-clicked') === '1'; });
+		out.t27b_authorHandlersRan = buttons.every(function (b) { return b.dataset.clicked === '1'; });
 		out.t27b_zeroBusTraffic = p.received.watcher.length === 0;
 		// The framework bound NO listener of its own inside the region container: every listener on every painted
 		// node is the author's single click handler.
@@ -424,6 +424,6 @@ function kinds(list) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

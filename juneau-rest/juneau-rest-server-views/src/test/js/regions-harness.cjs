@@ -152,13 +152,13 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
  */
 function mkRegion(env, opts) {
 	const el = env.el('div');
-	el.setAttribute('data-juneau-region', opts.id);
-	if (opts.type) el.setAttribute('data-juneau-region-type', opts.type);
-	if (opts.host) el.setAttribute('data-juneau-region-host', opts.host);
-	if (opts.populate) el.setAttribute('data-juneau-region-populate', opts.populate);
+	el.dataset.juneauRegion = opts.id;
+	if (opts.type) el.dataset.juneauRegionType = opts.type;
+	if (opts.host) el.dataset.juneauRegionHost = opts.host;
+	if (opts.populate) el.dataset.juneauRegionPopulate = opts.populate;
 	// `opts.declared` is the placeholder per-region descriptor JSON (see REGION_DECLARED_ATTR's own doc in
 	// juneau-regions.js for why this is a placeholder and not §12.2's real per-host sidecar wire shape).
-	if (opts.declared) el.setAttribute('data-juneau-region-declared', JSON.stringify(opts.declared));
+	if (opts.declared) el.dataset.juneauRegionDeclared = JSON.stringify(opts.declared);
 	let parent = opts.parent || env.body;
 	if (opts.hiddenPanel) {
 		const panel = env.el('div');

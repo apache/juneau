@@ -56,7 +56,8 @@ import java.util.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S125" // Comments are explanatory; they are not commented-out code.
 })
 public class NestedTableDef {
 
@@ -193,8 +194,6 @@ public class NestedTableDef {
 			if (depth > MAX_DEPTH)
 				throw iaex("NestedTableDef nesting exceeds the maximum depth of %s: view '%s' would be at depth %s "
 					+ "(a nested view may not itself declare a nested table).", MAX_DEPTH, view.id, depth);
-			if (view.details == null)
-				return;
 			// Nested-table seeding on a row-detail region is deferred (F24); there is no host to descend.
 		} finally {
 			path.remove(view);

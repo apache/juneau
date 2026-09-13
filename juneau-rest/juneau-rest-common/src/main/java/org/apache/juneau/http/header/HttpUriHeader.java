@@ -46,6 +46,9 @@ public class HttpUriHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value. May be {@code null} or empty.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpUriHeader of(String name, String wireValue) {
 		return new HttpUriHeader(name, wireValue);
 	}
@@ -57,6 +60,9 @@ public class HttpUriHeader extends HttpHeaderBean {
 	 * @param typedValue The URI value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpUriHeader of(String name, URI typedValue) {
 		return new HttpUriHeader(name, typedValue);
 	}

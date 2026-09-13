@@ -61,6 +61,9 @@ import org.junit.jupiter.api.condition.*;
  */
 @EnabledIfSystemProperty(named=CardActions_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardActions_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */

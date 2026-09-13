@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 
-import javax.xml.*;
 import javax.xml.namespace.*;
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;

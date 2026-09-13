@@ -37,6 +37,7 @@ import org.junit.jupiter.api.*;
  * so the harness could also drive them directly should these particular assertions ever need that depth.
  */
 @SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class JuneauPagesJs_Test extends TestBase {

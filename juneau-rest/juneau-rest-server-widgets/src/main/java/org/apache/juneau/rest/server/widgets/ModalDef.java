@@ -589,6 +589,9 @@ public class ModalDef implements Widget {
 	 * @throws IllegalArgumentException If this modal is not well-formed.
 	 */
 	@Override
+	@SuppressWarnings({
+		"java:S3776" // Modal validation encodes dialog contract; complexity is inherent.
+	})
 	public void validate() {
 		if (title == null || title.isBlank())
 			throw iaex("ModalDef title must not be null or blank.");
@@ -617,6 +620,9 @@ public class ModalDef implements Widget {
 	 * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the
 	 * factory.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Child-action validation encodes dialog contract; complexity is inherent.
+	})
 	private void validateChildActions() {
 		if (childActions == null)
 			return;

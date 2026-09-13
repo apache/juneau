@@ -170,7 +170,7 @@ function makeFakeRegions() {
 		enrolIn: function (scopeEl) {
 			regionCalls.enrolIn.push(scopeEl);
 			return scopeEl.querySelectorAll('[data-juneau-region]').map(function (regionEl) {
-				const handle = { el: regionEl, key: regionEl.getAttribute('data-juneau-region'), deferred: false, torn: false, id: nextRegionId++ };
+				const handle = { el: regionEl, key: regionEl.dataset.juneauRegion, deferred: false, torn: false, id: nextRegionId++ };
 				regionEl._juneauRegion = handle;
 				return handle;
 			});
@@ -337,7 +337,7 @@ out.regionsRegisterRuntimeCalledAtLoad = regionCalls.registerRuntime.indexOf('ju
 	// group record exists with `regions` populated even though `controls` stays empty.
 	regionCalls.enrolIn = [];
 	const cardJ = buildCard({ contract: null, refresh: null });
-	const regionElJ = el('div'); regionElJ.setAttribute('data-juneau-region', 'stats');
+	const regionElJ = el('div'); regionElJ.dataset.juneauRegion = 'stats';
 	cardJ._parts.body.appendChild(regionElJ);
 	const groupsJ = [];
 	I.enhanceOneCard(cardJ, groupsJ);
@@ -350,7 +350,7 @@ out.regionsRegisterRuntimeCalledAtLoad = regionCalls.registerRuntime.indexOf('ju
 	// `[data-juneau-region]` node renders LOUD (one console.error naming the missing asset + a visible error
 	// state), never silently blank.
 	const cardK = buildCard({ contract: null, refresh: null });
-	const regionElK = el('div'); regionElK.setAttribute('data-juneau-region', 'missing');
+	const regionElK = el('div'); regionElK.dataset.juneauRegion = 'missing';
 	cardK._parts.body.appendChild(regionElK);
 	const errorsK = [];
 	const savedRegions = window.JuneauViews.regions;
@@ -361,7 +361,7 @@ out.regionsRegisterRuntimeCalledAtLoad = regionCalls.registerRuntime.indexOf('ju
 	window.JuneauViews.regions = savedRegions;
 	window.console.error = origError;
 	out.k_errorReported = errorsK.some(function (m) { return m.indexOf('juneau-regions.js is not loaded') >= 0; });
-	out.k_stateError = regionElK.getAttribute('data-juneau-region-state') === 'error';
+	out.k_stateError = regionElK.dataset.juneauRegionState === 'error';
 	out.k_hasErrorText = regionElK.textContent.indexOf('juneau-regions.js is not loaded') >= 0;
 
 	// L) observeGrid's region loop (design §9.3 rule 5's cards-runtime half): a connected, visible enrolled region

@@ -38,7 +38,7 @@ import java.util.*;
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
-@Deprecated
+@Deprecated(since = "10.0.0")
 public class CardGrid implements Widget {
 
 	/** The frozen contract version for this widget. */

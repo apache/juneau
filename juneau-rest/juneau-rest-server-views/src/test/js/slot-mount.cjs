@@ -21,6 +21,7 @@
  *   Usage:  node slot-mount.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const H = require(path.join(__dirname, 'regions-harness.cjs'));
@@ -44,7 +45,7 @@ function envelope(NS, extra) {
 		layout: 'wide',
 		view: {
 			contractVersion: NS.CONTRACT_VERSION,
-			id: extra && extra.viewId ? extra.viewId : 'releases',
+			id: extra?.viewId ? extra.viewId : 'releases',
 			columns: [{ data: 'name', title: 'Name' }]
 		}
 	};
@@ -102,9 +103,9 @@ function envelope(NS, extra) {
 		out.t2_bannerInSlot = incidents.querySelector('.juneau-view-error') != null;
 		out.t2_noTable = incidents.querySelector('table[data-juneau-view]') == null;
 		out.t2_logged = rec.errorsMatching('envelope GET failed').length >= 1;
-		out.t2_regionStayed = probes.getAttribute('data-juneau-region') === 'probes'
+		out.t2_regionStayed = probes.dataset.juneauRegion === 'probes'
 			&& probes.childNodes.length === 1;
-		out.t2_handleCount = handles && handles.length === 1;
+		out.t2_handleCount = handles?.length === 1;
 	}
 
 	{
@@ -157,13 +158,13 @@ function envelope(NS, extra) {
 			R.mount({ incidents: { table: '' } });
 		} catch (e) {
 			threw = true;
-			message = String(e && e.message ? e.message : e);
+			message = String(e?.message ? e.message : e);
 		}
 		out.t6_blankThrew = threw;
 		out.t6_blankNamesUrl = message.indexOf('blank or missing table URL') >= 0;
 		out.t6_blankNoFetch = fetches.length === 0;
 		out.t6_blankLogged = rec.errorsMatching('blank or missing table URL').length >= 1;
-		out.t6_blankNotStamped = incidents.getAttribute('data-juneau-region') == null;
+		out.t6_blankNotStamped = incidents.dataset.juneauRegion == null;
 	}
 
 	{
@@ -198,7 +199,7 @@ function envelope(NS, extra) {
 			threw = true;
 		}
 		out.t8_missingIdThrew = threw;
-		out.t8_probesNotStamped = probes.getAttribute('data-juneau-region') == null;
+		out.t8_probesNotStamped = probes.dataset.juneauRegion == null;
 	}
 
 	{
@@ -213,7 +214,7 @@ function envelope(NS, extra) {
 			threw = true;
 		}
 		out.t9_badShapeThrew = threw;
-		out.t9_probesNotStamped = probes.getAttribute('data-juneau-region') == null;
+		out.t9_probesNotStamped = probes.dataset.juneauRegion == null;
 	}
 
 	// =================================================================================================================
@@ -222,23 +223,23 @@ function envelope(NS, extra) {
 	{
 		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const shell = env.el('div');
-		shell.setAttribute('data-juneau-csrf', 'tok-abc');
-		shell.setAttribute('data-juneau-csrf-header', 'X-CSRF-Token');
+		shell.dataset.juneauCsrf = 'tok-abc';
+		shell.dataset.juneauCsrfHeader = 'X-CSRF-Token';
 		const incidents = env.el('div');
 		incidents.id = 'incidents';
 		shell.appendChild(incidents);
 		env.body.appendChild(shell);
 		await Promise.resolve(R.mount({ incidents: { table: envelope(NS) } }));
 		const table = incidents.querySelector('table[data-juneau-view]');
-		out.t10_csrfCopied = table != null && table.getAttribute('data-juneau-csrf') === 'tok-abc';
-		out.t10_csrfHeaderCopied = table != null && table.getAttribute('data-juneau-csrf-header') === 'X-CSRF-Token';
+		out.t10_csrfCopied = table?.dataset.juneauCsrf === 'tok-abc';
+		out.t10_csrfHeaderCopied = table?.dataset.juneauCsrfHeader === 'X-CSRF-Token';
 	}
 
 	{
 		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const shell = env.el('div');
-		shell.setAttribute('data-ssc-csrf', 'ssc-secret');
-		shell.setAttribute('data-ssc-csrf-header', 'X-Ssc-Csrf');
+		shell.dataset.sscCsrf = 'ssc-secret';
+		shell.dataset.sscCsrfHeader = 'X-Ssc-Csrf';
 		const incidents = env.el('div');
 		incidents.id = 'incidents';
 		shell.appendChild(incidents);
@@ -247,15 +248,15 @@ function envelope(NS, extra) {
 		envl.view.rowActions = [{ id: 'ack', method: 'POST', endpoint: '/ack' }];
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const table = incidents.querySelector('table[data-juneau-view]');
-		const token = table ? table.getAttribute('data-juneau-csrf') : 'leaked';
+		const token = table ? table.dataset.juneauCsrf : 'leaked';
 		out.t11_noJuneauToken = token == null || token === '';
-		out.t11_didNotCopySsc = table != null && table.getAttribute('data-ssc-csrf') == null;
+		out.t11_didNotCopySsc = table?.dataset.sscCsrf == null;
 		const req = NS.init.buildActionRequest(
 			{ id: 'ack', method: 'POST', endpoint: '/ack' },
 			token,
-			table && table.getAttribute('data-juneau-csrf-header')
+			table?.dataset.juneauCsrfHeader
 		);
-		out.t11_missingToken = !!(req && req.refuse && req.reason === 'missing-token');
+		out.t11_missingToken = !!(req?.refuse && req.reason === 'missing-token');
 	}
 
 	// =================================================================================================================
@@ -353,8 +354,8 @@ function envelope(NS, extra) {
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const table = incidents.querySelector('table[data-juneau-view]');
 		out.t14_hasTable = table != null;
-		out.t14_hasSelect = table != null && table.getAttribute('data-juneau-select') === '1';
-		out.t14_noBulk = table != null && table.getAttribute('data-juneau-bulk') == null;
+		out.t14_hasSelect = table?.dataset.juneauSelect === '1';
+		out.t14_noBulk = table?.dataset.juneauBulk == null;
 		out.t14_logged = rec.errorsMatching('bulk-actions contract version mismatch').length >= 1;
 	}
 
@@ -398,6 +399,6 @@ function envelope(NS, extra) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

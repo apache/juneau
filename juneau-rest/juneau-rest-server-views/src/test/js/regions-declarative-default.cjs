@@ -328,7 +328,7 @@ function load(opts) {
 		await H.flush();
 		clock.advance(0); // drains the barrier's own 0ms backstop-check timer - see the t14a comment
 		await H.flush();
-		out.t14c_state = el.getAttribute('data-juneau-region-state');
+		out.t14c_state = el.dataset.juneauRegionState;
 		out.t14c_timerArmedAfterError = clock.pending();
 	}
 
@@ -434,6 +434,6 @@ function load(opts) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

@@ -45,7 +45,7 @@ class BeanListAssertion_Test extends TestBase {
 		public static A of(Integer a, Integer b) { return new A(a, b); }
 		@Override public String toString() { return "(a="+a+",b="+b+")"; }
 		@Override public boolean equals(Object o) { return eq(this, (A)o, (x,y)->eq(x.a,y.a) && eq(x.b,y.b)); }
-		@Override public int compareTo(A o) { return a-o.a; }
+		@Override public int compareTo(A o) { return Integer.compare(a, o.a); }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -45,6 +45,9 @@ import org.junit.jupiter.api.*;
  * Deliberately kept in its own 420-owned file (not added to the pre-existing {@code PageDef_Validation_Test}), per
  * the item's constraint to keep every new assertion in a 420-owned fixture.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class TabSubtabContent_Validation_Test extends TestBase {
 
 	public static class Release {

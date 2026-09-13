@@ -24,6 +24,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link HttpPartBean}.
  */
+@SuppressWarnings({
+	"java:S5785" // Direct equals() call is required to exercise the instanceof type-guard; assertNotEquals would not.
+})
 class HttpPartBean_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

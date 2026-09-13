@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  * marker + VIEW_META sidecar {@code ViewTable.of(...)} already emits, and one PAGE_META sidecar &mdash; and that all
  * server-emitted labels/titles are HTML-escaped with no {@code url()}/inline-style injection.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class PageTable_Emit_Test extends TestBase {
 
 	public static class Release {

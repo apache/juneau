@@ -99,6 +99,9 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 // @formatter:off
 @Rest
+@SuppressWarnings({
+	"deprecation" // Javadoc and constant aliases still name CardFieldList; the card Java types remain until consumer migration.
+})
 public class ViewsMixin {
 
 	/** The URL path at which the client initializer is served (relative to the host mount). */
@@ -134,7 +137,7 @@ public class ViewsMixin {
 	@SuppressWarnings({
 		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 	})
-	@Deprecated
+	@Deprecated(since = "10.0.0")
 	public static final String PAGES_JS_PATH = "/juneau-pages.js";
 
 	/**
@@ -463,7 +466,7 @@ public class ViewsMixin {
 	@SuppressWarnings({
 		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 	})
-	@Deprecated
+	@Deprecated(since = "10.0.0")
 	@RestGet(
 		path=PAGES_JS_PATH,
 		summary="Juneau rich-view tabs/sub-tabs page runtime",

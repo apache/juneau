@@ -134,6 +134,9 @@ public class Thrown extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Thrown of(String value) {
 		return value == null ? null : new Thrown(value);
 	}
@@ -146,6 +149,9 @@ public class Thrown extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk> or empty (treated as no thrown values).
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Thrown of(Throwable...values) {
 		return new Thrown(l(values).stream().map(Part::new).toList());
 	}
@@ -158,6 +164,9 @@ public class Thrown extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk> or empty to create a header with no value.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Thrown of(String...value) {
 		return value == null ? null : new Thrown(value);
 	}
@@ -174,6 +183,9 @@ public class Thrown extends BasicCsvHeader {
 	 * @param value2 The second CSV token.
 	 * @return A new header bean.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Thrown of(String value1, String value2) {
 		return new Thrown(value1, value2);
 	}

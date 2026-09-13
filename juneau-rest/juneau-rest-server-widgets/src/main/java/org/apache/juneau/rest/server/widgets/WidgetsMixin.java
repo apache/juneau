@@ -97,6 +97,9 @@ import org.apache.juneau.rest.server.util.*;
  */
 // @formatter:off
 @Rest(responseProcessors=WidgetsMixin.WidgetValidationProcessor.class, mergeResponseProcessorsIntoHost=true)
+@SuppressWarnings({
+	"deprecation" // Javadoc and constant aliases still name CardFieldList; the card Java types remain until consumer migration.
+})
 public class WidgetsMixin {
 
 	/**

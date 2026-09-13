@@ -26,6 +26,9 @@ import org.junit.jupiter.api.*;
 /**
  * {@link Card} bean contract and fail-closed {@link Card#validate()} branches.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class Card_Test extends TestBase {
 
 	private static CardFieldList body() {

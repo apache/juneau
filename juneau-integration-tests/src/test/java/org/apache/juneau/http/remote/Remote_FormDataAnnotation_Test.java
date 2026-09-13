@@ -48,6 +48,9 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 
 	public static class Bean {
 		public int f;
+		@SuppressWarnings({
+			"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+		})
 		public static Bean of() {
 			var b = new Bean();
 			b.f = 1;

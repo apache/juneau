@@ -46,6 +46,9 @@ public class ContentLanguage extends HttpCsvHeader {
 		super(NAME, supplier, lazyMode);
 	}
 
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static ContentLanguage of(String value) {
 		return new ContentLanguage(value);
 	}

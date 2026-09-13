@@ -42,7 +42,7 @@ class BeanAssertion_Test extends TestBase {
 		public A(int a, int b) {this.a = a; this.b = b;}
 		@Override public String toString() {return "a="+a+",b="+b;}
 		@Override public boolean equals(Object o) { return eq(this, (A)o, (x,y)->eq(x.a,y.a) && eq(x.b,y.b)); }
-		@Override public int compareTo(A o) { return a-o.a; }
+		@Override public int compareTo(A o) { return Integer.compare(a, o.a); }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

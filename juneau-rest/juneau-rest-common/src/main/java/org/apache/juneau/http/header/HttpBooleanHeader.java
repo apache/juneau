@@ -47,6 +47,9 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value (e.g. {@code "true"}). May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpBooleanHeader of(String name, String wireValue) {
 		return new HttpBooleanHeader(name, wireValue);
 	}
@@ -58,6 +61,9 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	 * @param typedValue The boolean value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpBooleanHeader of(String name, Boolean typedValue) {
 		return new HttpBooleanHeader(name, typedValue);
 	}

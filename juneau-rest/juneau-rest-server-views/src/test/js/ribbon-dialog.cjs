@@ -103,7 +103,7 @@ function buildFixture(env, NS, dialogAction, opts) {
 	env.body.appendChild(wrapper);
 
 	const table = env.el('table');
-	if (o.csrf !== false) table.setAttribute('data-juneau-csrf', 'tok-1');
+	if (o.csrf !== false) table.dataset.juneauCsrf = 'tok-1';
 
 	const viewDef = { id: 'v1', ribbon: [dialogAction], rowActions: o.rowActions || [] };
 	let redraws = 0;
@@ -154,14 +154,14 @@ function anyRowBanner(env) {
 		const action = { type: 'dialog', id: 'add-project', title: 'Add project', method: 'POST', endpoint: '/projects' };
 		const fx = buildFixture(env, NS, action);
 
-		out.open_ribbonRenderedOneButton = fx.bar != null && fx.bar.querySelectorAll('.juneau-view-ribbon-btn').length === 1;
+		out.open_ribbonRenderedOneButton = fx.bar?.querySelectorAll('.juneau-view-ribbon-btn').length === 1;
 		const btn = dialogButton(fx);
-		out.open_buttonNameIsTitleNotId = btn != null && (btn.getAttribute('data-jc-tip') === 'Add project' || btn.title === 'Add project')
+		out.open_buttonNameIsTitleNotId = btn != null && (btn.dataset.jcTip === 'Add project' || btn.title === 'Add project')
 			&& btn.getAttribute('aria-label') === 'Add project';
 
 		const postBodies = [];
 		env.setFetch(function (url, o2) {
-			postBodies.push(o2 && o2.body);
+			postBodies.push(o2?.body);
 			return Promise.resolve(jsonResponse({ outcome: 'success', message: 'created' }));
 		});
 
@@ -173,7 +173,7 @@ function anyRowBanner(env) {
 		out.open_noFetchBeforeConfirm = postBodies.length === 0;
 		const title = env.body.querySelector('.juneau-view-dialog-title');
 		// The widened name read: a RibbonAction has `title` and no `label`, so pre-widening this said 'add-project'.
-		out.open_dialogTitleFromWidenedNameRead = title != null && title.textContent === 'Add project';
+		out.open_dialogTitleFromWidenedNameRead = title?.textContent === 'Add project';
 
 		const confirmBtn = env.body.querySelector('.juneau-view-dialog-confirm');
 		if (confirmBtn) confirmBtn.dispatch('click');
@@ -237,7 +237,7 @@ function anyRowBanner(env) {
 		const text = ribbonRefusalText(env);
 		out.openParse_refusalInRibbonHost = text != null;
 		// The widened name read again: the refusal names the action, not its raw id.
-		out.openParse_refusalNamesActionByTitle = text != null && text.indexOf("'Add project'") >= 0;
+		out.openParse_refusalNamesActionByTitle = text?.indexOf("'Add project'") >= 0;
 		out.openParse_noRowBannerAnywhere = !anyRowBanner(env);
 	})();
 
@@ -259,7 +259,7 @@ function anyRowBanner(env) {
 		out.submitRefusal_nothingSent = fetches === 0;
 		const text = ribbonRefusalText(env);
 		out.submitRefusal_inRibbonHost = text != null;
-		out.submitRefusal_namesActionAndReason = text != null && text.indexOf("'Add project'") >= 0
+		out.submitRefusal_namesActionAndReason = text?.indexOf("'Add project'") >= 0
 			&& text.indexOf('not sent') >= 0;
 		out.submitRefusal_noRowBannerAnywhere = !anyRowBanner(env);
 	})();
@@ -291,7 +291,7 @@ function anyRowBanner(env) {
 		I.openRibbonDialog('nope-not-here', fx.table, fx.ctx);
 		const text = ribbonRefusalText(env);
 		out.unknownId_refusalInRibbonHost = text != null;
-		out.unknownId_refusalNamesTheId = text != null && text.indexOf("'nope-not-here'") >= 0
+		out.unknownId_refusalNamesTheId = text?.indexOf("'nope-not-here'") >= 0
 			&& text.indexOf('not available') >= 0;
 		out.unknownId_noDialogOpened = I.dialogLayerCount() === 0;
 	})();

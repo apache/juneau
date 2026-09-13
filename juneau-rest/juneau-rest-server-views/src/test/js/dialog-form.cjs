@@ -64,9 +64,9 @@ out.notes_id = notes.id === 'juneau-dialog-field-1-notes';
 out.notes_value = notes.value === 'hi';
 out.notes_required = notes.required === true && notes.getAttribute('aria-required') === 'true';
 out.notes_maxLength = notes.maxLength === 500;
-out.notes_helpText = (function () { const h = dialog.querySelector('[data-juneau-help]'); return h != null && h.textContent === 'help text'; })();
+out.notes_helpText = (function () { const h = dialog.querySelector('[data-juneau-help]'); return h?.textContent === 'help text'; })();
 out.notes_describedByHelp = (notes.getAttribute('aria-describedby') || '').indexOf('-help') >= 0;
-out.notes_errorSibling = (function () { const e = dialog.querySelector('[data-juneau-error-for]'); return e != null && e.getAttribute('aria-live') === 'polite'; })();
+out.notes_errorSibling = (function () { const e = dialog.querySelector('[data-juneau-error-for]'); return e?.getAttribute('aria-live') === 'polite'; })();
 
 // toggle
 const notify = dialog.querySelector('[data-juneau-form-field="notify"]');

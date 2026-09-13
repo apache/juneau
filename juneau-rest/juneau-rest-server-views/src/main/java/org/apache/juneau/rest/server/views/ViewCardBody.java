@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
-@Deprecated
+@Deprecated(since = "10.0.0")
 @SuppressWarnings({
 	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })

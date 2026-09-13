@@ -43,6 +43,10 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3516", // requireAllowedUrl is a validation passthrough: success returns the same URL that was supplied.
+	"java:S125" // Comments document URI-template blanking; they are not commented-out code.
+})
 public final class RemoteUrlPolicy {
 
 	private RemoteUrlPolicy() {}

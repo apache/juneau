@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-examples-views</artifactId>
 	<name>Apache Juneau Rich-Views Examples</name>
-	<description>Runnable first-party example of the juneau-rest-server-views rich-DataTables toolkit, dogfooding a sub-tabbed PageDef (TODO-430).</description>
+	<description>Runnable first-party example of the juneau-rest-server-views toolkit, dogfooding HTML-slot pair pages (ViewSlot.envelope + JuneauViews.regions.mount).</description>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -37,7 +37,7 @@
 
 	<dependencies>
 
-		<!-- The rich-view toolkit itself: ViewDef/PageDef/Tab/Subtab/PageTable/ViewsMixin. -->
+		<!-- The rich-view toolkit itself: ViewDef/ViewSlot/ViewsMixin. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-views</artifactId>

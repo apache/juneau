@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class OidcDiscoveryClient_Builder_Test extends TestBase {
 
 	@Test void a01_requireIssuer() {

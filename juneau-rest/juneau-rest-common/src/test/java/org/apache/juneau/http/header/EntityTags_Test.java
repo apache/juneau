@@ -22,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S3415" // Equals-contract tests pass the same instance or a peer fixture as both arguments; swapping is a no-op.
+})
 class EntityTags_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

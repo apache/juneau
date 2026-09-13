@@ -36,6 +36,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3415" // Equals-contract tests pass the same instance or a peer fixture as both arguments; swapping is a no-op.
+})
 class RequestHeaderList_Test {
 
 	private static HttpServletRequest servletRequest(Map<String,String> headers) {

@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.views.*;
  *
  * <p>
  * <b>What is absent from {@link #instancesView()} is the entire point.</b> No field-slot catalog in Java, no
- * {@link ActionBar}, and no tab declared anywhere in Java &mdash;
+ * {@link org.apache.juneau.rest.server.widgets.ActionBar}, and no tab declared anywhere in Java &mdash;
  * yet the rendered panel has ten working tabs. The per-tab cost is <b>one line of JavaScript and zero lines of
  * Java</b>, because pane <i>shape</i> (grid / map / list) picks the recipe rather than tab <i>identity</i>. Adding an
  * eleventh tab is one more line.
@@ -85,6 +85,9 @@ import org.apache.juneau.rest.server.views.*;
  * @since 10.0.0
  */
 @Rest(path="/instances", mixins=ViewsMixin.class)
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals are demo protocol/JSON field names; extracting them obscures the payload.
+})
 public class ExampleInstancesRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

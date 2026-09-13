@@ -33,7 +33,8 @@ import org.junit.jupiter.api.*;
  * hard-timeout sweep + retention reaping (driven by an injected clock rather than wall time).
  */
 @SuppressWarnings({
-	"resource" // AsyncJobRegistry is AutoCloseable; test-fixture lifecycle is managed by the test, not a real leak (mixed-module resource analysis on test code).
+	"resource", // AsyncJobRegistry is AutoCloseable; test-fixture lifecycle is managed by the test, not a real leak (mixed-module resource analysis on test code).
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
 })
 class AsyncJobRegistry_Test extends TestBase {
 

@@ -28,6 +28,10 @@ import org.junit.jupiter.api.*;
 /**
  * Validates {@link BasicHeader}.
  */
+@SuppressWarnings({
+	"java:S5785", // Direct equals() call is required to exercise the instanceof type-guard; assertNotEquals would not.
+	"java:S5845" // Dissimilar-type equals() is the type-guard under test.
+})
 class BasicHeader_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

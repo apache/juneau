@@ -57,6 +57,9 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static BasicMediaTypeHeader of(String name, MediaType value) {
 		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
@@ -72,6 +75,9 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static BasicMediaTypeHeader of(String name, String value) {
 		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}

@@ -123,6 +123,10 @@ import org.apache.juneau.rest.server.util.*;
  */
 // @formatter:off
 @Rest
+@SuppressWarnings({
+	"java:S1192", // Duplicated "html:root{" selector text is a CSS protocol fragment; a constant would obscure the emitter.
+	"java:S125" // Comments are explanatory; they are not commented-out code.
+})
 public class ConsoleChromeMixin {
 
 	/** The URL path at which the chrome stylesheet is served (relative to the host mount). */
@@ -262,10 +266,10 @@ public class ConsoleChromeMixin {
 		// An explicitly configured asset wins; a builder-supplied pack's asset is the fallback.  Resolved here
 		// because these fields, and the content-hash cache-busters derived from them, are fixed at construction -
 		// which is also why a bean-supplied pack's assets cannot reach them.  See Builder.pack(ThemePack).
-		this.logoResource = builder.logoResource != null ? builder.logoResource
-			: (builder.pack != null ? builder.pack.getLogoResource() : null);
-		this.pageBackgroundResource = builder.pageBackgroundResource != null ? builder.pageBackgroundResource
-			: (builder.pack != null ? builder.pack.getPageBackgroundResource() : null);
+		var packLogo = builder.pack == null ? null : builder.pack.getLogoResource();
+		this.logoResource = builder.logoResource != null ? builder.logoResource : packLogo;
+		var packBg = builder.pack == null ? null : builder.pack.getPageBackgroundResource();
+		this.pageBackgroundResource = builder.pageBackgroundResource != null ? builder.pageBackgroundResource : packBg;
 	}
 
 	/**

@@ -55,12 +55,12 @@ function flush() { return new Promise(function (r) { let n = 0; (function tick()
  */
 function buildFixture(action) {
 	const table = env.el('table');
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauCsrf = 'tok-1';
 	// A row-detail <template> must be a SIBLING of `table` for findRowDetailTemplate to recognize this as a
 	// detail-bearing table at all (see initDetailsExpander's early-return guard).
 	const host = env.el('div');
 	const tpl = env.el('template');
-	tpl.setAttribute('data-juneau-row-detail', '1');
+	tpl.dataset.juneauRowDetail = '1';
 	host.appendChild(table);
 	host.appendChild(tpl);
 
@@ -72,7 +72,7 @@ function buildFixture(action) {
 	panel._juneauParentTr = parentTr;
 
 	const actionBtn = env.el('button');
-	actionBtn.setAttribute('data-juneau-action', action.id);
+	actionBtn.dataset.juneauAction = action.id;
 	panel.appendChild(actionBtn);
 
 	const viewDef = { rowActions: [action] };
@@ -110,10 +110,10 @@ function clickAction(fx) {
 		out.dialogAction_fetchCallsBeforeConfirm = fetchCalls.length;
 		out.dialogAction_dialogOpened = I.dialogLayerCount() === 1;
 		const backdrop = env.body.querySelector('.juneau-view-dialog-backdrop');
-		out.dialogAction_backdropPortalledToBody = backdrop != null && backdrop.parentNode === env.body;
+		out.dialogAction_backdropPortalledToBody = backdrop?.parentNode === env.body;
 		out.dialogAction_ctxTracksDialog = fx.ctx._actionDialog != null;
 		const title = env.body.querySelector('.juneau-view-dialog-title');
-		out.dialogAction_titleIsConfirmText = title != null && title.textContent === 'Escalate this row?';
+		out.dialogAction_titleIsConfirmText = title?.textContent === 'Escalate this row?';
 
 		// Confirming now submits through submitActionDialog (untouched) - and that submit carries the row's
 		// targetId, which only happens when the seam (submitActionDialog) was actually reached.
@@ -164,7 +164,7 @@ function clickAction(fx) {
 		let getCalls = 0;
 		const postBodies = [];
 		env.setFetch(function (url, opts) {
-			if ((opts && opts.method) === 'POST') {
+			if ((opts?.method) === 'POST') {
 				postBodies.push(opts.body);
 				return Promise.resolve(jsonResponse({ outcome: 'success' }));
 			}

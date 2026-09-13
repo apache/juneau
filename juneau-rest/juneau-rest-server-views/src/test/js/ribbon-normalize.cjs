@@ -72,15 +72,15 @@ function loadRibbon(withExportFeature) {
 
 const out = {};
 const first = loadRibbon(false);
-out.hasBuild = !!(first.NS && first.NS.ribbon && typeof first.NS.ribbon.build === 'function');
-out.hasNormalizeRibbon = !!(first.NS && first.NS.ribbon && typeof first.NS.ribbon.normalizeRibbon === 'function');
+out.hasBuild = !!(first.NS?.ribbon && typeof first.NS.ribbon.build === 'function');
+out.hasNormalizeRibbon = !!(first.NS?.ribbon && typeof first.NS.ribbon.normalizeRibbon === 'function');
 if (!out.hasBuild) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
 /** A minimal RibbonAction-shaped action literal, mirroring the RibbonAction wire shape. */
 function action(type, extra) { return Object.assign({ type: type }, extra || {}); }
 
 function chromeTip(b) {
-	return b ? (b.getAttribute('data-jc-tip') || b.title || '') : '';
+	return b ? (b.dataset.jcTip || b.title || '') : '';
 }
 
 // ------------------------------------------------------------------------------------------------------------------

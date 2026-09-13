@@ -30,6 +30,10 @@ import org.junit.jupiter.api.*;
  * container, no section frames, no field slots, no {@code headerActions}, and a missing
  * region fails startup.  XOR / sections coexistence cases retired with {@code RowDetailDef.sections(...)}.
  */
+@SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class RowDetail_StagedCoexistence_Test extends TestBase {
 
 	private static final String ENDPOINT = "/things/{id}";

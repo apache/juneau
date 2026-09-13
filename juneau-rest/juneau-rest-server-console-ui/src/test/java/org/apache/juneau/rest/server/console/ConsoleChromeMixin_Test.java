@@ -38,7 +38,9 @@ import org.junit.jupiter.params.provider.*;
  * endpoint.
  */
 @SuppressWarnings({
-	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+	"java:S8786", // Test regex is intentional; tightening would change match semantics.
+	"java:S5961" // Contract test is intentionally dense; splitting would hide landing-page pins.
 })
 class ConsoleChromeMixin_Test extends TestBase {
 
@@ -605,7 +607,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Test void j05_navTabActive_consumesAccentSelectedToken_andNoLongerConsumesAccentWash() throws Exception {
 		var css = readChromeCss();
 		var navTabActiveStart = css.indexOf(".jc-nav-tab.active {");
-		assertTrue(navTabActiveStart != -1, () -> "missing .jc-nav-tab.active rule, css:\n" + css);
+		assertNotEquals(-1, navTabActiveStart, () -> "missing .jc-nav-tab.active rule, css:\n" + css);
 		var navTabActiveEnd = css.indexOf("}", navTabActiveStart);
 		var navTabActiveBlock = css.substring(navTabActiveStart, navTabActiveEnd);
 		assertTrue(navTabActiveBlock.contains("background-color: var(--jc-accent-selected)"),
@@ -650,9 +652,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertFalse(css.contains("juneau-page-nav-cloud"), css);
 		var navMarker = "HTML-slot page nav (two text rows";
 		var navStart = css.indexOf(navMarker);
-		assertTrue(navStart != -1, () -> "missing HTML-slot page nav comment, css:\n" + css);
+		assertNotEquals(-1, navStart, () -> "missing HTML-slot page nav comment, css:\n" + css);
 		var navEnd = css.indexOf("Page scaffolding", navStart);
-		assertTrue(navEnd != -1, () -> "missing Page scaffolding marker after page-nav, css:\n" + css);
+		assertNotEquals(-1, navEnd, () -> "missing Page scaffolding marker after page-nav, css:\n" + css);
 		var navRules = css.substring(navStart, navEnd);
 		assertTrue(navRules.contains("\n.juneau-page-nav {"), navRules);
 		var floorStart = navRules.indexOf("\n.juneau-page-nav {");
@@ -1188,8 +1190,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 	 * way round. {@code html:root} scores {@code (0,0,1,1)} and wins in either order.
 	 *
 	 * <p>
-	 * Deliberately asserted as an <i>anchored</i> prefix rather than a {@code contains("html:root{")}: the
-	 * pre-existing helpers in this class match {@code :root\{} as a substring, and {@code html:root{} contains
+	 * Deliberately asserted as an <i>anchored</i> prefix rather than a {@code contains("html:root&#123;")}: the
+	 * pre-existing helpers in this class match {@code :root&#123;} as a substring, and {@code html:root&#123;} contains
 	 * that, so every one of them stays green whether or not the prefix is emitted. A substring assertion here
 	 * would inherit exactly that blind spot and pass against the unfixed emitter.
 	 */

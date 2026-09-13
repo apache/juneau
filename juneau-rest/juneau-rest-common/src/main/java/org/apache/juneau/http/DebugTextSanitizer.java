@@ -84,6 +84,9 @@ public final class DebugTextSanitizer {
 	 * @return The sanitized (and possibly truncated) string, or the original reference if nothing needed escaping and it
 	 * 	was within the cap. <jk>null</jk> if the input was <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Sanitizer encodes a control-character state machine; complexity is inherent.
+	})
 	public static String sanitize(String value, int maxLen) {
 		if (value == null)
 			return null;

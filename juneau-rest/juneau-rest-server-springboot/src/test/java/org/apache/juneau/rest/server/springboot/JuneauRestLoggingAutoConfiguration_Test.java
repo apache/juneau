@@ -69,12 +69,7 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 
 	@Test void c01_nonLogbackBackend_noopsSilently() {
 		var cfg = new JuneauRestLoggingAutoConfiguration();
-		var backend = new ILoggerFactory() {
-			@Override
-			public org.slf4j.Logger getLogger(String name) {
-				return NOPLogger.NOP_LOGGER;
-			}
-		};
+		ILoggerFactory backend = name -> NOPLogger.NOP_LOGGER;
 		assertDoesNotThrow(() -> cfg.install(backend, false));
 	}
 
@@ -108,7 +103,11 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 		}
 	}
 
-	@Test void d02_defaultResetJulFalse_preservesExistingJulState() {
+	@Test
+	@SuppressWarnings({
+		"java:S9357" // Handler is not a SAM (publish/flush/close); a lambda cannot replace this marker fixture.
+	})
+	void d02_defaultResetJulFalse_preservesExistingJulState() {
 		var cfg = new JuneauRestLoggingAutoConfiguration();
 		var context = new LoggerContext();
 		var jul = Logger.getLogger("todo368.phase3.d02");

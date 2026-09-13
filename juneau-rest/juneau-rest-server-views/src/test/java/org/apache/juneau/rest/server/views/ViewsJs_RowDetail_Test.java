@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * Always-on coverage for the row-detail JS helpers.  Source-shape always runs; behavioral Node harness runs
  * when {@code node} is on {@code PATH} (skipped otherwise — no {@code -Pjs-tests} required).
  */
+@SuppressWarnings({
+	"java:S8786" // Test regex is intentional; tightening would change match semantics.
+})
 class ViewsJs_RowDetail_Test extends TestBase {
 
 	private static String viewsJs() throws IOException {
@@ -306,7 +309,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		var r = report();
 		assertEquals(true, r.get("sh_deepNesting_doesNotThrow"),
 			"a deeply-nested payload must degrade safely, not throw an uncaught RangeError");
-		assertEquals(true, r.get("sh_deepNesting_depthIsPositive"), () -> r.toString());
+		assertEquals(true, r.get("sh_deepNesting_depthIsPositive"), r::toString);
 		assertEquals(true, r.get("sh_deepNesting_depthIsBounded"),
 			() -> "copied depth must be bounded well below the input depth: " + r.get("sh_deepNesting_depth"));
 	}
@@ -776,7 +779,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 	}
 
 	/**
-	 * LD-1 ({@code TODO-J0474}): a field-hosted bar's action message paints into that field's OWN slot, not the
+	 * LD-1 ({@code the field-hosted bar action-message pin}): a field-hosted bar's action message paints into that field's OWN slot, not the
 	 * section's first field. A second field is present precisely so "first field happens to be the bar's own
 	 * field" cannot make this pass by accident.
 	 */

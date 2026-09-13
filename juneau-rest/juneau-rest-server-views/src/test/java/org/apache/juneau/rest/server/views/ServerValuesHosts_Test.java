@@ -49,6 +49,7 @@ import org.junit.jupiter.params.provider.*;
  * that exercises the mutate-and-restore window rather than a fresh per-request object graph.
  */
 @SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource"  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
 })
 class ServerValuesHosts_Test extends TestBase {

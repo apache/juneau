@@ -6,6 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
+ // NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -24,6 +25,7 @@
  *   Usage:  node regions-primitive.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const H = require(path.join(__dirname, 'regions-harness.cjs'));
@@ -80,9 +82,9 @@ function stateOf(el) {
 		let ctx = null;
 		R.register('capture', function (c) { ctx = c; });
 		const grid = env.el('div');
-		grid.setAttribute('data-juneau-card-grid', 'glance');
+		grid.dataset.juneauCardGrid = 'glance';
 		const card = env.el('div');
-		card.setAttribute('data-juneau-card', 'posture');
+		card.dataset.juneauCard = 'posture';
 		grid.appendChild(card);
 		env.body.appendChild(grid);
 		const el = H.mkRegion(env, { id: 'diagnose', type: 'row-detail', host: 'gacks/row-42', populate: 'capture', parent: card });
@@ -139,6 +141,7 @@ function stateOf(el) {
 		out['t8a_acceptedByRealFetch' + suffix] = await (async function () {
 			const probe = ctx.signal.fork();
 			ctx.signal.fork();   // supersedes `probe`, so it is aborted without tearing the region down
+			// NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
 			try { await fetch('http://juneau.invalid/none', { signal: probe }); return 'RESOLVED'; }
 			catch (e) { return e.name === 'AbortError'; }
 		})();
@@ -488,7 +491,7 @@ function stateOf(el) {
 		let ctx = null;
 		R.register('writer', function (c) { ctx = c; });
 		const host = env.el('div');   // a card grid, not a table: there is no table[data-juneau-csrf] to read from.
-		host.setAttribute('data-juneau-csrf', 'tok-123');
+		host.dataset.juneauCsrf = 'tok-123';
 		env.body.appendChild(host);
 		const el = H.mkRegion(env, { id: 'w', type: 'card-body', populate: 'writer', parent: host });
 		R.initRegion(el);
@@ -556,7 +559,7 @@ function stateOf(el) {
 		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath, { noAbortController: true });
 		let populates = 0;
 		const seenSignals = [];
-		R.register('never', function (ctx) { populates++; seenSignals.push(ctx && ctx.signal); });
+		R.register('never', function (ctx) { populates++; seenSignals.push(ctx?.signal); });
 		const els = ['a', 'b', 'c'].map(function (id) {
 			return H.mkRegion(env, { id: id, type: 'card-body', populate: 'never' });
 		});
@@ -590,6 +593,6 @@ function stateOf(el) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

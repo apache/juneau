@@ -50,7 +50,9 @@ import org.junit.jupiter.api.*;
  * cross-response leak is observable.
  */
 @SuppressWarnings({
-	"resource"  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"resource",  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
+	"java:S125" // Comments are explanatory; they are not commented-out code.
 })
 class ServerValuesHostsConcurrency_Test extends TestBase {
 

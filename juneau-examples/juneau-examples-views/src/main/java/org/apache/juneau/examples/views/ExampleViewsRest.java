@@ -29,7 +29,6 @@ import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
@@ -40,56 +39,61 @@ import org.apache.juneau.rest.server.widgets.Op;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * Demonstrates a {@link PageDef} with a sub-tabbed tab ("Catalog" &rarr; Active/Archived) alongside sibling
- * plain tabs ("Audit Log", "Alerts"), served on an embedded Jetty server via {@link ExampleViewsServer}.
+ * Demonstrates HTML-slot pages: one {@code .juneau-page-nav} construct (Catalog children Active/Archived, sibling
+ * leaf sections Audit Log and Alerts) served as full page loads, each mounting a {@link ViewDef} into an empty
+ * slot via {@link ViewSlot#envelope(RestRequest, ViewDef)} and {@code JuneauViews.regions.mount({ table })}.
  *
  * <p>
- * This is a real caller of {@link PageDef}'s {@link Tab#subtabs(Subtab...) subtabs} outside the views module's own
- * test sources &mdash; see the class-level scope notes below for what it deliberately exercises.
+ * This is the example-module caller of the HTML-slot path outside the views module's own test sources.  Pair
+ * URLs are {@code /catalog/active}, {@code /catalog/archived}, {@code /audit}, and {@code /alerts}; {@code GET /}
+ * is a 303 to the first pair.  Changing the selected pair is a normal {@code href}, not a {@code juneau-pages.js}
+ * hash swap.
  *
- * <h5 class='section'>What this dogfoods (beyond the bare sub-tab requirement):</h5>
+ * <h5 class='section'>What this dogfoods:</h5>
  * <ul>
- * 	<li>The "Active" sub-tab additionally declares {@link ViewDef#poll(long) poll} and
+ * 	<li>The Catalog/Active pair additionally declares {@link ViewDef#poll(long) poll} and
  * 		{@link ViewDef#details(RowDetailDef) details}, plus a ribbon and a {@code rowClassRule}, so this one view
  * 		exercises most of the toolkit's declarative surface in one place.  Expand GET
  * 		{@code /data/widgets/active/{id}} projects owner/updatedAt/notes (the expander is the only place notes
  * 		appear).
- * 	<li>The "Archived" sub-tab and the "Audit Log" tab are deliberately PLAIN (no ribbon/poll/details), both to
- * 		satisfy the "at least one sibling plain tab" requirement and to keep a contrasting baseline the sub-tabbed
- * 		panel's blank-panel regression would show up against.
- * 	<li>The "Alerts" tab dogfoods {@link RowDetailDef} with a named region populator, two mutating {@link ActionRef}s
+ * 	<li>Catalog/Archived and Audit Log are deliberately PLAIN (no ribbon/poll/details), both to keep a contrasting
+ * 		baseline and to show a leaf section (Audit Log) that omits the children row.
+ * 	<li>The Alerts pair dogfoods {@link RowDetailDef} with a named region populator, two mutating {@link ActionRef}s
  * 		on {@link ViewDef#rowActions} (and the ack dialog form), and expand GET {@code /data/alerts/{id}}.
  * 		Nested-table seeding inside a row-detail pane is deferred (F24).
- * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) are composed into one page,
- * 		rather than one type reused everywhere.
+ * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) rather than one type reused
+ * 		everywhere.
  * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
  * 		{@code ProtocolQueryable}/{@code QueryableSettings} wiring) &mdash; {@code SERVER} mode is already covered
  * 		end-to-end by {@code ViewServerWiring_Test} in the views module itself, so this example does not repeat it.
- * 	<li>Each sub-tab/tab carries enough rows (see {@link #buildActiveWidgets()}/{@link #buildArchivedWidgets()}/
- * 		{@link #buildAuditLog()}/{@link #buildAlerts()}) that a column-sizing regression from the eager-init defect
- * 		would be visibly wrong, not just theoretically present.
+ * 	<li>Each pair carries enough rows (see {@link #buildActiveWidgets()}/{@link #buildArchivedWidgets()}/
+ * 		{@link #buildAuditLog()}/{@link #buildAlerts()}) that a column-sizing regression would be visibly wrong.
  * </ul>
  *
  * <p>
- * Every panel on the composed page is a {@link ViewDef} table.  A separate {@code /dashboard} endpoint dogfoods
- * the card-layout widget as a second, non-table consumer: {@link #dashboardGrid()} builds a {@link CardGrid}
- * (rendered by {@link CardGridTable}) with a static summary card and a live, auto-refreshing metrics card backed
- * by the {@code /data/cards/summary} refresh envelope.
+ * A separate {@code /dashboard} endpoint dogfoods titled author-HTML panels (not a Java card type): a static
+ * summary panel server-rendered so it reads with JavaScript disabled, and a live metrics slot populated by
+ * {@code JuneauViews.regions.mount} against {@code /data/cards/summary}.
  *
  * <p>
  * A third endpoint, {@code /overview}, dogfoods the {@link QuickStats} header strip together with both display-only
  * pill hosts: {@link #overviewView()} attaches a strip of a scalar tile, a meter and a segmented breakdown above the
  * table's toolbar, paints a display-only status pill in a column, and repeats that chip as a fill-sink pill inside the
- * row-detail expander &mdash; the inert contrast case for the Alerts tab's action-bound pill.  Its tones and the
+ * row-detail expander &mdash; the inert contrast case for the Alerts pair's action-bound pill.  Its tones and the
  * pills' tones come from one closed {@link StatusTone} palette.
  *
  * @since 10.0.0
  */
 @Rest(mixins=ViewsMixin.class, children=ExampleInstancesRest.class)
+@SuppressWarnings({
+	"java:S1192", // Duplicated literals are demo protocol/JSON field names; extracting them obscures the payload.
+	"java:S3400", // Demo helper returns a stable fixture value; a constant would hide that it is an operation result.
+	"java:S2479" // Text-block CSS uses \t escapes for demo payloads; remaining tabs are javadoc indent.
+})
 public class ExampleViewsRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	/** The stable page id &mdash; also the first hash segment of a deep link, e.g. {@code #widgets-demo/catalog/archived}. */
+	/** Stable page identity stamped on the pair-page nav ({@code data-juneau-page}). */
 	public static final String PAGE_ID = "widgets-demo";
 
 	/**
@@ -169,12 +173,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 	// per value while call sites keep role-specific names (column key vs render meta vs form input type vs view id).
 	private static final String SPELLING_ACTIVE = "active";
 	private static final String SUBTAB_ACTIVE = SPELLING_ACTIVE;
-	private static final String CARD_ACTIVE = SPELLING_ACTIVE;
 	private static final String STATUS_ACTIVE = SPELLING_ACTIVE;
 	private static final String SPELLING_ALERTS = "alerts";
 	private static final String TAB_ALERTS = SPELLING_ALERTS;
 	private static final String VIEW_ALERTS = SPELLING_ALERTS;
-	private static final String CARD_ALERTS = SPELLING_ALERTS;
 	private static final String SPELLING_ACTION = "action";
 	private static final String COL_ACTION = SPELLING_ACTION;
 	private static final String META_ACTION = SPELLING_ACTION;
@@ -204,22 +206,28 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// The composed page: Catalog (sub-tabbed: Active/Archived) + sibling Audit Log + Alerts tabs.
+	// Pair pages: Catalog (Active/Archived children) + sibling leaf sections Audit Log and Alerts.
 	//------------------------------------------------------------------------------------------------------------------
 
-	static PageDef page() {
-		return PageDef.create(PAGE_ID)
-			.title("Juneau Views Example")
-			.tabs(
-				Tab.create("catalog", "Catalog").subtabs(
-					Subtab.create(SUBTAB_ACTIVE, "Active").view(activeView()),
-					Subtab.create(VALUE_ARCHIVED, TITLE_ARCHIVED).view(archivedView())),
-				Tab.create("audit", "Audit Log").view(auditView()),
-				Tab.create(TAB_ALERTS, "Alerts").view(alertsView()))
-			.build();
+	/** One section/child pair.  Leaf sections leave {@code child} blank and omit the children row. */
+	private enum DemoPair {
+		CATALOG_ACTIVE("/catalog/active", "catalog", SUBTAB_ACTIVE),
+		CATALOG_ARCHIVED("/catalog/archived", "catalog", VALUE_ARCHIVED),
+		AUDIT("/audit", "audit", ""),
+		ALERTS("/alerts", TAB_ALERTS, "");
+
+		private final String path;
+		private final String section;
+		private final String child;
+
+		DemoPair(String path, String section, String child) {
+			this.path = path;
+			this.section = section;
+			this.child = child;
+		}
 	}
 
-	/** The sub-tabbed tab's first (default) panel &mdash; dogfoods poll/details/ribbon/rowClassRule together. */
+	/** The Catalog/Active pair &mdash; dogfoods poll/details/ribbon/rowClassRule together. */
 	static ViewDef activeView() {
 		return ViewDef.create("widgets-active")
 			.rowType(Widget.class)
@@ -245,7 +253,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.build();
 	}
 
-	/** The sub-tabbed tab's second panel &mdash; deliberately plain (the "at least one sub-tab has no bells on it" case). */
+	/** The Catalog/Archived pair &mdash; deliberately plain (the "at least one child has no bells on it" case). */
 	static ViewDef archivedView() {
 		return ViewDef.create("widgets-archived")
 			.rowType(Widget.class)
@@ -283,7 +291,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			.build();
 	}
 
-	/** The sibling PLAIN leaf tab (no sub-tabs) - the contrast case the blank-panel regression needs. */
+	/** The sibling PLAIN leaf section (no children row) - the contrast case the blank-panel regression needs. */
 	static ViewDef auditView() {
 		return ViewDef.create("audit-log")
 			.rowType(AuditEntry.class)
@@ -351,38 +359,66 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Card dashboard (a second, non-table consumer of the toolkit): a CardGrid rendered by CardGridTable.
+	// Dashboard: author-HTML titled panels (no Java Card/CardGrid type).
 	//------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * A {@link CardGrid} dashboard: one static summary card (server-rendered, works with JavaScript disabled) and
-	 * one live metrics card that declares a same-origin refresh endpoint and a poll interval, so
-	 * {@code juneau-cards.js} wires its built-in refresh button and an auto-refresh loop.  This dogfoods the
-	 * card-layout widget as a distinct delivery shape from the {@link ViewDef} tables above &mdash; the refresh
-	 * envelope's fields are keyed by {@link CardField#data}, not table columns.
-	 *
-	 * @return The dashboard grid.
-	 */
-	static CardGrid dashboardGrid() {
-		return CardGrid.create("ops").title("Operations Dashboard").minCardPx(320).cards(
-			Card.create("fleet", "Fleet Summary").body(
-				CardFieldList.create().columns(2).fields(
-					CardField.of("total", "Total widgets", Integer.toString(ACTIVE_WIDGETS.size() + ARCHIVED_WIDGETS.size())),
-					CardField.of(CARD_ACTIVE, "Active", Integer.toString(ACTIVE_WIDGETS.size())),
-					CardField.of(VALUE_ARCHIVED, TITLE_ARCHIVED, Integer.toString(ARCHIVED_WIDGETS.size())),
-					CardField.of(CARD_ALERTS, "Total alerts", Integer.toString(ALERTS.size())))),
-			Card.create("live", "Live Alert Metrics").body(
-				CardFieldList.create().columns(2)
-					.fields(
-						CardField.of(STATUS_OPEN, "Open"),
-						CardField.of(STATUS_ACKNOWLEDGED, "Acknowledged"),
-						CardField.of(STATUS_ESCALATED, "Escalated"),
-						CardField.of("asOf", "As of"))
-					// Same-origin, non-templated path; poll well above the 5s floor so the staleness chip's advance is
-					// easy to watch.  Acknowledge/escalate an alert on the main page, then refresh to see counts move.
-					.refresh("/data/cards/summary")
-					.pollIntervalMs(10_000)));
+	private static String dashboardMarkup() {
+		var total = ACTIVE_WIDGETS.size() + ARCHIVED_WIDGETS.size();
+		return """
+			<section class="juneau-view-card-grid" style="--jc-card-min: 320px">
+			<h2 class="juneau-view-card-grid-title">Operations Dashboard</h2>
+			<article class="juneau-view-card">
+			<header class="juneau-view-card-header"><span class="juneau-view-card-title">Fleet Summary</span></header>
+			<div class="juneau-view-card-body">
+			<dl class="juneau-view-card-fields" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+			<div class="juneau-view-card-field"><dt>Total widgets</dt><dd>%d</dd></div>
+			<div class="juneau-view-card-field"><dt>Active</dt><dd>%d</dd></div>
+			<div class="juneau-view-card-field"><dt>%s</dt><dd>%d</dd></div>
+			<div class="juneau-view-card-field"><dt>Total alerts</dt><dd>%d</dd></div>
+			</dl>
+			</div>
+			</article>
+			<article class="juneau-view-card">
+			<header class="juneau-view-card-header">
+			<span class="juneau-view-card-title">Live Alert Metrics</span>
+			<div class="juneau-view-card-actions">
+			<button type="button" class="juneau-view-card-refresh" id="live-refresh">Refresh</button>
+			</div>
+			</header>
+			<div id="live-metrics" class="juneau-view-card-body"></div>
+			</article>
+			</section>
+			""".formatted(total, ACTIVE_WIDGETS.size(), TITLE_ARCHIVED, ARCHIVED_WIDGETS.size(), ALERTS.size());
 	}
+
+	private static final String DASHBOARD_POPULATE_SCRIPT = """
+		(function () {
+			var H = function () { return JuneauViews.helpers; };
+			var FIELDS = [
+				{ data: "open", label: "Open" },
+				{ data: "acknowledged", label: "Acknowledged" },
+				{ data: "escalated", label: "Escalated" },
+				{ data: "asOf", label: "As of" }
+			];
+			JuneauViews.regions.register("live-metrics", function (ctx, container) {
+				function paint(data) {
+					var values = (data && data.fields) ? data.fields : (data || {});
+					container.replaceChildren(H().fieldGrid(FIELDS, { values: values }));
+				}
+				function load() {
+					fetch("/data/cards/summary", { headers: { "Accept": "application/json" } })
+						.then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)); })
+						.then(paint);
+				}
+				load();
+				var timer = setInterval(load, 10000);
+				if (ctx && ctx.signal) ctx.signal.addEventListener("abort", function () { clearInterval(timer); });
+				var btn = document.getElementById("live-refresh");
+				if (btn) btn.addEventListener("click", load);
+			});
+			JuneauViews.regions.mount({ "live-metrics": "live-metrics" });
+		})();
+		""";
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Quick-stats strip + fill-sink pills (a second, non-card consumer of the status-tone palette).
@@ -395,8 +431,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * <p>
 	 * Every tone is one of the five {@link StatusTone} names, which are the same names a pill's {@code meta.tone}
 	 * accepts &mdash; so "warning" is one colour across the whole toolkit rather than one per surface.  The strip is
-	 * display-only: it has no refresh endpoint and no poll interval, unlike the {@link #dashboardGrid() live card}
-	 * above.  A figure that needs to move belongs on a card or in a column, not in a quick-stat.
+	 * display-only: it has no refresh endpoint and no poll interval, unlike the live dashboard metrics slot
+	 * above.  A figure that needs to move belongs on a dashboard panel or in a column, not in a quick-stat.
 	 *
 	 * @return The alert overview strip.
 	 */
@@ -428,7 +464,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * row-detail whose {@code state} field is a <b>fill-sink</b> pill.
 	 *
 	 * <p>
-	 * The sink pill is the contrast case for the {@link #alertsView() Alerts} tab's action-bound pill: a fill sink has
+	 * The sink pill is the contrast case for the {@link #alertsView() Alerts} pair's action-bound pill: a fill sink has
 	 * no {@code rowActions} in scope, so its pill is display-only by construction and carries no button role, no
 	 * keyboard affordance, and no dispatch attribute.  Declaring {@code meta.action} on it would fail the view's own
 	 * {@code validate()} rather than paint a dead chip.
@@ -457,94 +493,116 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// HTML page (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
+	// HTML pages (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * [GET /] &mdash; the composed page: tab bar + sub-tab bar + all panels, plus the DataTables/jQuery
-	 * (caller-provided, per ASF category-A discipline) and first-party toolkit asset links a real page needs.
+	 * [GET /] &mdash; 303 to the default pair {@code /catalog/active}.
 	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}
-	 * 	so the head links stay correct however this example is mounted.
-	 * @return The full HTML page.
+	 * @return A see-other pointing at the Catalog/Active pair.
 	 */
-	@RestGet(path="/", summary="The Catalog (Active/Archived sub-tabs) + Audit Log + Alerts demo page")
-	public HttpResource index(RestRequest req) {
-		var pageMarkup = Html.of(PageTable.of(req, page()));
-		var deepLink = "#" + PAGE_ID + "/catalog/archived";
-		var html = """
-			<!DOCTYPE html>
-			<html lang="en">
-			<head>
-			<meta charset="utf-8">
-			<title>Apache Juneau - Rich Views Example</title>
-			<link rel="stylesheet" href="%s">
-			<link rel="stylesheet" href="%s">
-			<style>
-			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
-			\t.jc-tab-bar, .jc-subtab-bar { margin-bottom: 1em; }
-			</style>
-			</head>
-			<body>
-			<h1>Apache Juneau &mdash; Rich Views Example</h1>
-			<p>Demonstrates a sub-tabbed <code>PageDef</code>: the <b>Catalog</b> tab holds two sub-tabs
-			(<b>Active</b>/<b>Archived</b>), <b>Audit Log</b> is a sibling plain leaf tab, and <b>Alerts</b>
-			dogfoods row-detail sections with an expand GET and mutating action-bar buttons. The Active sub-tab
-			also declares a poll interval (watch the staleness chip) and a row-details expander (click any row).</p>
-			<p><a href="%s">Deep link straight to the Archived sub-tab</a> (exercises
-			<code>juneau-pages.js</code>'s hash-routing on load, not just via the tab bar's own links).</p>
-			<p>See also the <a href="dashboard">card dashboard</a> and the
-			<a href="overview">QuickStats overview</a> (a stats strip above a table, with display-only and
-			fill-sink status pills).</p>
-			%s
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script>
-			%s
-			</script>
-			<script src="%s"></script>
-			</body>
-			</html>
-			""".formatted(
-				DataTablesMixin.DATATABLES_CSS_CDN_URL,
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-				deepLink,
-				pageMarkup,
-				DataTablesMixin.JQUERY_CDN_URL,
-				DataTablesMixin.DATATABLES_JS_CDN_URL,
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.RIBBON_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
-				DETAIL_POPULATE_SCRIPT,
-				// Must load AFTER juneau-views.js - it calls the public NS.init.initTable to lazy-init a
-				// sub-tab's DataTable on first activation.
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.PAGES_JS_PATH));
-		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
-			list(ContentType.of(MEDIA_HTML)));
+	@RestGet(path="/", summary="Redirects to the Catalog/Active pair page")
+	public SeeOther index() {
+		return new SeeOther().setLocation(DemoPair.CATALOG_ACTIVE.path);
 	}
 
 	/**
-	 * [GET /dashboard] &mdash; the {@link #dashboardGrid() card dashboard}: a static summary card plus a live,
-	 * auto-refreshing metrics card, with only the {@code juneau-icons.js} &rarr; {@code juneau-cards.js} assets a
-	 * card page needs (no DataTables/jQuery &mdash; a card grid carries no table).
+	 * [GET /catalog/active] &mdash; Catalog/Active pair: poll/details/ribbon table in an empty slot.
 	 *
 	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The card-dashboard HTML page.
+	 * @return The pair HTML page.
 	 */
-	@RestGet(path="/dashboard", summary="A CardGrid dashboard: a static summary card + a live, auto-refreshing metrics card")
-	@SuppressWarnings("deprecation") // Deliberate: this host composes ViewsMixin alone, so it is the in-tree proof that the relocated card asset still serves from the compatibility mount.
+	@RestGet(path="/catalog/active", summary="Catalog/Active pair: poll, details, ribbon, rowClassRule")
+	public HttpResource catalogActive(RestRequest req) {
+		return tablePairPage(req, DemoPair.CATALOG_ACTIVE, "widgets-active");
+	}
+
+	/**
+	 * [GET /catalog/active/view] &mdash; the {@link ViewSlot} envelope for {@link #activeView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/catalog/active/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot catalogActiveView(RestRequest req) {
+		return ViewSlot.envelope(req, activeView());
+	}
+
+	/**
+	 * [GET /catalog/archived] &mdash; Catalog/Archived pair: a plain table in an empty slot.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/catalog/archived", summary="Catalog/Archived pair: a plain table")
+	public HttpResource catalogArchived(RestRequest req) {
+		return tablePairPage(req, DemoPair.CATALOG_ARCHIVED, "widgets-archived");
+	}
+
+	/**
+	 * [GET /catalog/archived/view] &mdash; the {@link ViewSlot} envelope for {@link #archivedView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/catalog/archived/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot catalogArchivedView(RestRequest req) {
+		return ViewSlot.envelope(req, archivedView());
+	}
+
+	/**
+	 * [GET /audit] &mdash; Audit Log leaf section: a plain table, no children row.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/audit", summary="Audit Log leaf section: a plain table")
+	public HttpResource audit(RestRequest req) {
+		return tablePairPage(req, DemoPair.AUDIT, "audit-log");
+	}
+
+	/**
+	 * [GET /audit/view] &mdash; the {@link ViewSlot} envelope for {@link #auditView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/audit/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot auditViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, auditView());
+	}
+
+	/**
+	 * [GET /alerts] &mdash; Alerts leaf section: named region populator and mutating row actions.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/alerts", summary="Alerts leaf section: region populator and mutating row actions")
+	public HttpResource alerts(RestRequest req) {
+		return tablePairPage(req, DemoPair.ALERTS, VIEW_ALERTS);
+	}
+
+	/**
+	 * [GET /alerts/view] &mdash; the {@link ViewSlot} envelope for {@link #alertsView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/alerts/view", swagger=@OpSwagger(ignore=true))
+	public ViewSlot alertsViewEnvelope(RestRequest req) {
+		return ViewSlot.envelope(req, alertsView());
+	}
+
+	/**
+	 * [GET /dashboard] &mdash; author-HTML titled panels: a static Fleet Summary plus a live metrics slot
+	 * populated by {@code JuneauViews.regions.mount} (no Java card type, no {@code juneau-cards.js}).
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The dashboard HTML page.
+	 */
+	@RestGet(path="/dashboard", summary="Author-HTML dashboard: static summary panel + live metrics slot")
 	public HttpResource dashboard(RestRequest req) {
-		var gridMarkup = Html.of(CardGridTable.of(dashboardGrid()));
 		var html = """
 			<!DOCTYPE html>
 			<html lang="en">
@@ -558,22 +616,115 @@ public class ExampleViewsRest extends BasicRestServlet {
 			</head>
 			<body>
 			<h1>Apache Juneau &mdash; Card Dashboard Example</h1>
-			<p>A <code>CardGridTable</code> dashboard. The <b>Fleet Summary</b> card is static (server-rendered,
-			legible with JavaScript disabled); the <b>Live Alert Metrics</b> card declares a same-origin refresh
-			endpoint and a poll interval, so <code>juneau-cards.js</code> wires its built-in refresh button and an
-			auto-refresh loop (watch the "As of" field and the staleness chip). Acknowledge or escalate an alert on
-			the <a href="/">main page</a>, then refresh this card to see the counts move.</p>
+			<p>Titled author-HTML panels (not a Java card type). The <b>Fleet Summary</b> panel is static
+			(server-rendered, legible with JavaScript disabled); the <b>Live Alert Metrics</b> panel is an empty
+			slot that <code>JuneauViews.regions.mount</code> populates from <code>/data/cards/summary</code>, with
+			a Refresh button and a 10s poll. Acknowledge or escalate an alert on the
+			<a href="/catalog/active">Catalog</a> or <a href="/alerts">Alerts</a> pair, then refresh this panel
+			to see the counts move.</p>
 			%s
 			<script src="%s"></script>
 			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			%s
+			</script>
 			</body>
 			</html>
 			""".formatted(
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-				gridMarkup,
-				// Load order: the icon registry first (the refresh button's glyph is resolved from it), then cards.
+				dashboardMarkup(),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				DASHBOARD_POPULATE_SCRIPT);
+		return HttpResourceBean.of(
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
+	}
+
+	private static String pageNavHtml(DemoPair current) {
+		var catalogCur = "catalog".equals(current.section) ? " aria-current=\"page\"" : "";
+		var auditCur = "audit".equals(current.section) ? " aria-current=\"page\"" : "";
+		var alertsCur = TAB_ALERTS.equals(current.section) ? " aria-current=\"page\"" : "";
+		var children = "";
+		if ("catalog".equals(current.section)) {
+			var activeCur = SUBTAB_ACTIVE.equals(current.child) ? " aria-current=\"page\"" : "";
+			var archivedCur = VALUE_ARCHIVED.equals(current.child) ? " aria-current=\"page\"" : "";
+			children = """
+				<div class="juneau-page-nav-children">
+				<a class="juneau-page-nav-child" href="/catalog/active"%s>Active</a>
+				<a class="juneau-page-nav-child" href="/catalog/archived"%s>%s</a>
+				</div>
+				""".formatted(activeCur, archivedCur, TITLE_ARCHIVED);
+		}
+		return """
+			<nav class="juneau-page-nav" data-juneau-page="%s">
+			<div class="juneau-page-nav-sections">
+			<a class="juneau-page-nav-section" href="/catalog/active"%s>Catalog</a>
+			<a class="juneau-page-nav-section" href="/audit"%s>Audit Log</a>
+			<a class="juneau-page-nav-section" href="/alerts"%s>Alerts</a>
+			</div>
+			%s</nav>
+			""".formatted(PAGE_ID, catalogCur, auditCur, alertsCur, children);
+	}
+
+	private HttpResource tablePairPage(RestRequest req, DemoPair pair, String slotId) {
+		var envelopeUrl = req.getContextPath() + pair.path + "/view";
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - Rich Views Example</title>
+			<link rel="stylesheet" href="%s">
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; Rich Views Example</h1>
+			<p>HTML-slot pair pages: <b>Catalog</b> has children <b>Active</b>/<b>Archived</b>;
+			<b>Audit Log</b> and <b>Alerts</b> are leaf sections (no children row). Clicks are normal
+			<code>href</code>s (full page load). The Active pair also declares a poll interval (watch the
+			staleness chip) and a row-details expander. Alerts dogfoods a named region populator and
+			mutating row actions.</p>
+			<p><a href="/catalog/archived">Open the Archived child</a> (a full page load, not a hash swap).
+			See also the <a href="/dashboard">dashboard</a> and the
+			<a href="/overview">QuickStats overview</a>.</p>
+			%s
+			<div id="%s"></div>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			%s
+			JuneauViews.regions.mount({ "%s": { table: "%s" } });
+			</script>
+			</body>
+			</html>
+			""".formatted(
+				DataTablesMixin.DATATABLES_CSS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				pageNavHtml(pair),
+				slotId,
+				DataTablesMixin.JQUERY_CDN_URL,
+				DataTablesMixin.DATATABLES_JS_CDN_URL,
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.RENDERS_JS_PATH),
 				ViewsMixin.viewAssetUrl(req, ViewsMixin.ICONS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.CARDS_JS_PATH));
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.RIBBON_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				DETAIL_POPULATE_SCRIPT,
+				slotId,
+				envelopeUrl);
 		return HttpResourceBean.of(
 			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
 			list(ContentType.of(MEDIA_HTML)));
@@ -609,7 +760,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<a href="dashboard">live card dashboard</a>.</p>
 			<p>The <b>Status</b> column is a <b>display-only</b> pill with an explicit tone, and expanding a row shows
 			the same chip again as a <b>fill-sink</b> pill. Neither is keyboard-actionable; contrast them with the
-			action-bound pill on the <a href="./">Alerts tab</a>, which dispatches a row action on click or
+			action-bound pill on the <a href="/alerts">Alerts pair</a>, which dispatches a row action on click or
 			Enter/Space. Tones on the strip and on the pills come from one palette:
 			<code>info</code>, <code>success</code>, <code>warning</code>, <code>error</code>, <code>neutral</code>.</p>
 			<div id="alert-overview"></div>
@@ -665,7 +816,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	static final String INSTANCE_ID = "svc-42";
 
 	/**
-	 * [GET /instance-detail] &mdash; a standalone region container (no {@code RowDetailDef}/{@code PageDef} host:
+	 * [GET /instance-detail] &mdash; a standalone region container (no {@code RowDetailDef} host:
 	 * automatic host enrolment is WORK-J0522d, not this item) that a page-local script enrols by hand via
 	 * {@code JuneauViews.regions.enrolIn}, after registering a populator that builds a ten-tab strip from
 	 * {@code JuneauViews.helpers.tabStrip}/{@code dataPane}/{@code fieldGrid}/{@code kvTable}/{@code recordTable}
@@ -694,7 +845,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 			<h1>Apache Juneau &mdash; Region + Helpers Example</h1>
 			<p>A ten-tab detail panel built with <b>zero framework-drawn DOM</b>: the page below is one
 			<code>[data-juneau-region]</code> container, hand-enrolled (automatic host enrolment from a
-			<code>RowDetailDef</code>/<code>PageDef</code> is a later item, not this one), whose populator is a
+			<code>RowDetailDef</code> is a later item, not this one), whose populator is a
 			single <code>JuneauViews.regions.register(...)</code> call building a
 			<code>JuneauViews.helpers.tabStrip(...)</code> from ten one-line tab entries. One tab is a declared
 			field grid, two are ad-hoc value maps, and seven are record lists that fetch only when first opened
@@ -841,8 +992,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 *
 	 * <p>
 	 * Uses {@link ViewSlot#envelope(RestRequest, ViewDef)} so the declared {@code $FV{flaggedCount}} chrome is
-	 * resolved against a per-response sibling session; the standalone {@link ViewTable#of(ViewDef)} /
-	 * {@link PageTable} paths intentionally do not resolve {@code $FV}.
+	 * resolved against a per-response sibling session; the standalone {@link ViewTable} HTML-emitter
+	 * path intentionally does not resolve {@code $FV}.
 	 *
 	 * @param req The current request, whose var resolver knows {@code $FV}.
 	 * @return The HTML page with an empty slot.
@@ -954,7 +1105,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /data/alerts] &mdash; the Alerts tab's rows.
+	 * [GET /data/alerts] &mdash; the Alerts pair's rows.
 	 *
 	 * @return The alerts.
 	 */
@@ -1014,8 +1165,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * This is also the toolkit's example of the <b>third</b> named {@link BarSlot} host, {@link ModalDef#barSlot}:
 	 * a static {@link BarText} for severity context beside a {@link BarBadge} whose count
 	 * ({@link #countOtherOpen(Alert)}) is live, painted client-side from this same JSON by
-	 * {@code insertDialogBarSlot} the moment the dialog opens &mdash; unlike {@link PageDef#barSlot}/
-	 * {@link RowDetailDef#barSlot}, there is no server-rendered pass to ride into.
+	 * {@code insertDialogBarSlot} the moment the dialog opens &mdash; unlike a page-nav or
+	 * {@link RowDetailDef} bar slot, there is no server-rendered pass to ride into.
 	 *
 	 * @param id The alert id.
 	 * @return The validated, version-stamped modal definition.
@@ -1084,9 +1235,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /data/cards/summary] &mdash; the Live Alert Metrics card's refresh envelope: live open/acknowledged/
+	 * [GET /data/cards/summary] &mdash; the Live Alert Metrics slot's refresh envelope: live open/acknowledged/
 	 * escalated counts (moved by the {@code ack}/{@code esc} endpoints above) plus a server timestamp.  The field
-	 * keys match the {@link CardField#data} keys the {@link #dashboardGrid() dashboard} declares.
+	 * keys match the labels the {@link #dashboardMarkup() dashboard} populate script reads.
 	 *
 	 * @return {@code {contractVersion, fields}} for the card runtime.
 	 */
@@ -1131,7 +1282,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	public Map<String,Object> instanceDetails(@Path("id") String id) {
 		requireDemoInstance(id);
 		var out = new LinkedHashMap<String,Object>();
-		out.put("name", "svc-42");
+		out.put("name", INSTANCE_ID);
 		out.put("environment", "staging");
 		out.put("type", "worker");
 		out.put("dbVendor", "postgres");
@@ -1229,7 +1380,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	@RestGet(path="/data/instance/{id}/org-requests", swagger=@OpSwagger(ignore=true))
 	public List<Map<String,Object>> instanceOrgRequests(@Path("id") String id) {
 		requireDemoInstance(id);
-		return list(rowOf("kind", "resize", "state", "completed", "created", "2026-08-28T00:00:00Z"));
+		return list(rowOf("kind", "resize", META_STATE, "completed", "created", "2026-08-28T00:00:00Z"));
 	}
 
 	/**
@@ -1285,10 +1436,10 @@ public class ExampleViewsRest extends BasicRestServlet {
 	// Row generation - enough rows per panel that a column-sizing regression would be visibly wrong.
 	//------------------------------------------------------------------------------------------------------------------
 
-	/** Card refresh envelope: {@link CardFieldList#CONTRACT_VERSION} + a data-only field map (no table columns). */
+	/** Refresh envelope: a data-only field map (no table columns, no Java card type). */
 	private static Map<String,Object> cardEnvelope(Map<String,?> fields) {
 		var out = new LinkedHashMap<String,Object>();
-		out.put("contractVersion", CardFieldList.CONTRACT_VERSION);
+		out.put("contractVersion", "1");
 		out.put("fields", fields);
 		return out;
 	}

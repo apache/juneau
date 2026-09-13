@@ -30,6 +30,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -106,7 +107,7 @@ function elWalk(node, sel, acc) {
  * (rather than aliasing `this` to a local) so the caller passes `this` in as an argument instead. */
 function closestFrom(node, sel) {
 	let n = node;
-	while (n && n.nodeType === 1) {
+	while (n?.nodeType === 1) {
 		if (elMatches(n, sel)) return n;
 		n = n.parentNode;
 	}
@@ -118,7 +119,7 @@ function closestFrom(node, sel) {
 function dispatchFrom(node, ev) {
 	let n = node;
 	while (n) {
-		(n._listeners && n._listeners[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
+		(n._listeners?.[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
 		n = ev.bubbles ? n.parentNode : null;
 	}
 }
@@ -274,8 +275,8 @@ const document = {
 
 function CustomEvent(type, init) {
 	this.type = type;
-	this.detail = init && init.detail;
-	this.bubbles = !!(init && init.bubbles);
+	this.detail = init?.detail;
+	this.bubbles = !!(init?.bubbles);
 	this.defaultPrevented = false;
 	this.preventDefault = function () { this.defaultPrevented = true; };
 }
@@ -453,7 +454,7 @@ function authorStrip(panel) {
 	});
 	if (!built) return null;
 	const header = panel.querySelector('.juneau-view-detail-header');
-	if (header && header.parentNode === panel)
+	if (header?.parentNode === panel)
 		panel.insertBefore(built.strip, header.nextSibling);
 	else
 		panel.insertBefore(built.strip, panel.firstChild);
@@ -470,7 +471,7 @@ function authorStrip(panel) {
 	const regionBefore = regionsIn(panel)[0];
 	out.two_regionStartsLast = indexOfChild(panel, regionBefore) === panel.childNodes.length - 2;
 
-	const strip = authorStrip(panel, null);
+	const strip = authorStrip(panel);
 	out.two_stripBuilt = !!strip;
 	out.two_stripMode = strip?.dataset.juneauStripMode;
 
@@ -492,7 +493,7 @@ function authorStrip(panel) {
 
 	// Idempotent across a re-render: a second panel (a fresh clone) relocates its OWN region and leaves the first alone.
 	const panel2 = twoSectionPanel(true);
-	const strip2 = authorStrip(panel2, null);
+	const strip2 = authorStrip(panel2);
 	out.two_rerenderRegionCount = regionsIn(panel2).length;
 	out.two_rerenderTrailsStrip = strip2.nextSibling === regionsIn(panel2)[0];
 	out.two_firstPanelRegionCount = regionsIn(panel).length;
@@ -502,7 +503,7 @@ function authorStrip(panel) {
 // A header-less 2-section panel: the strip is prepended, and the region must still end up trailing it.
 (function () {
 	const panel = twoSectionPanel(false);
-	const strip = authorStrip(panel, null);
+	const strip = authorStrip(panel);
 	out.twoNoHeader_stripIsFirst = indexOfChild(panel, strip) === 0;
 	out.twoNoHeader_regionTrailsStrip = strip.nextSibling === regionsIn(panel)[0];
 })();
@@ -511,7 +512,7 @@ function authorStrip(panel) {
 (function () {
 	const panel = twoSectionPanel(true);
 	regionsIn(panel)[0].remove();
-	const strip = authorStrip(panel, null);
+	const strip = authorStrip(panel);
 	out.twoNoSlot_stripBuilt = !!strip;
 	out.twoNoSlot_regionCount = regionsIn(panel).length;
 	out.twoNoSlot_relocateMoved = V.relocateDetailBarSlot(panel, strip);
@@ -526,7 +527,7 @@ function authorStrip(panel) {
 	const panel = oneSectionPanel();
 	const sec = panel.querySelector('[data-juneau-detail-section]');
 	const region = regionsIn(panel)[0];
-	const strip = authorStrip(panel, null);
+	const strip = authorStrip(panel);
 
 	out.one_stripIsNull = strip === null;
 	out.one_noRibbonSynthesized = panel.querySelector('[data-juneau-strip-mode]') === null;
@@ -558,8 +559,8 @@ let stripB = null;
 (function () {
 	body.appendChild(panelA);
 	body.appendChild(panelB);
-	stripA = authorStrip(panelA, null);
-	stripB = authorStrip(panelB, null);
+	stripA = authorStrip(panelA);
+	stripB = authorStrip(panelB);
 
 	out.mint_suffixA = V.mintDetailBarSlotIdentity(panelA, PARENT_ID, 'a1');
 	out.mint_suffixB = V.mintDetailBarSlotIdentity(panelB, PARENT_ID, 'b2');
@@ -632,7 +633,7 @@ let safeFires = 0;
 	// And the views-side seam actually calls it: enhanceChromeInPanel on a panel holding a slot returns true.
 	const panelC = twoSectionPanel(true, 5);
 	body.appendChild(panelC);
-	authorStrip(panelC, null);
+	authorStrip(panelC);
 	V.mintDetailBarSlotIdentity(panelC, PARENT_ID, 'c3');
 	const badgeC = panelC.querySelector('[data-juneau-badge]');
 	out.enh_seamBefore = badgeC.textContent;
@@ -680,6 +681,6 @@ let safeFires = 0;
 
 	process.stdout.write(JSON.stringify(out, null, 2) + '\n');
 })().catch(function (e) {
-	process.stderr.write(String((e && e.stack) || e) + '\n');
+	process.stderr.write(String((e?.stack) || e) + '\n');
 	process.exit(1);
 });

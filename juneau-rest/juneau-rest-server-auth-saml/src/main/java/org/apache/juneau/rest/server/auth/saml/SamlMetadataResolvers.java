@@ -28,7 +28,6 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import javax.xml.parsers.*;
 import org.apache.juneau.commons.utils.*;
 import org.opensaml.saml.metadata.resolver.*;
 import org.opensaml.saml.metadata.resolver.filter.*;

@@ -54,12 +54,12 @@ if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); 
 function buildFixture() {
 	const table = env.el('table');
 	table.dataset.juneauView = 'v';
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauCsrf = 'tok-1';
 
 	// A row-detail <template> must be a SIBLING of `table` or initDetailsExpander early-returns.
 	const host = env.el('div');
 	const tpl = env.el('template');
-	tpl.setAttribute('data-juneau-row-detail', '1');
+	tpl.dataset.juneauRowDetail = '1';
 	host.appendChild(table);
 	host.appendChild(tpl);
 

@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
  * Tests for {@link BasicHttpResponse} constructors, copy constructor, and {@code equals()}/{@code hashCode()}/
  * {@code toString()} -- exercised via the concrete leaf {@link Ok}.
  */
+@SuppressWarnings({
+	"java:S5785" // Direct equals() call is required to exercise the type-guard; assertNotEquals would not.
+})
 class BasicHttpResponse_Test extends TestBase {
 
 	@Test void a01_ctor_noBody_defaultsToReasonPhraseBody() {

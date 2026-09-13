@@ -25,6 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * {@link CardGrid} bean contract and fail-closed {@link CardGrid#validate()} branches.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardGrid_Test extends TestBase {
 
 	private static Card card(String id) {
@@ -57,9 +60,9 @@ class CardGrid_Test extends TestBase {
 
 	@Test void a05_noCards_rejected() {
 		var g1 = CardGrid.create("g1");
-		assertThrows(IllegalArgumentException.class, () -> g1.validate());
+		assertThrows(IllegalArgumentException.class, g1::validate);
 		var g2 = CardGrid.create("g1").cards();
-		assertThrows(IllegalArgumentException.class, () -> g2.validate());
+		assertThrows(IllegalArgumentException.class, g2::validate);
 	}
 
 	@Test void a06_duplicateCardId_rejected() {

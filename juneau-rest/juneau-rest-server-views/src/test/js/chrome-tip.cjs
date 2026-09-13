@@ -67,24 +67,24 @@ function leave(target, related) {
 
 	out.paging_titleBeforeHover = btn.getAttribute('title') === 'Next page';
 	out.paging_ariaBeforeHover = btn.getAttribute('aria-label') === 'Next page';
-	out.paging_noTipAttrBeforeHover = btn.getAttribute('data-jc-tip') == null;
+	out.paging_noTipAttrBeforeHover = btn.dataset.jcTip == null;
 
 	hover(btn, 40, 50);
 	const tip = tipNode();
 	out.paging_titleMovedOff = btn.getAttribute('title') == null && btn.title === '';
-	out.paging_tipAttr = btn.getAttribute('data-jc-tip');
+	out.paging_tipAttr = btn.dataset.jcTip;
 	out.paging_ariaKept = btn.getAttribute('aria-label') === 'Next page';
 	out.paging_tipText = tip ? tip.textContent : null;
-	out.paging_tipVisible = !!(tip && tip.style.display === 'block');
+	out.paging_tipVisible = !!(tip?.style.display === 'block');
 	out.paging_tipClass = tip ? tip.className : null;
 	out.paging_tipLeft = tip ? tip.style.left : null;
 	out.paging_tipTop = tip ? tip.style.top : null;
 
 	move(btn, 80, 90);
-	out.paging_followedCursor = tip && tip.style.left === '92px' && tip.style.top === '102px';
+	out.paging_followedCursor = tip?.style.left === '92px' && tip.style.top === '102px';
 
 	leave(btn, env.body);
-	out.paging_hiddenOnLeave = tip && tip.style.display === 'none';
+	out.paging_hiddenOnLeave = tip?.style.display === 'none';
 })();
 
 (function ribbonIconTitle() {
@@ -99,7 +99,7 @@ function leave(target, related) {
 
 	hover(btn, 10, 20);
 	out.ribbon_titleMovedOff = btn.getAttribute('title') == null;
-	out.ribbon_tipAttr = btn.getAttribute('data-jc-tip');
+	out.ribbon_tipAttr = btn.dataset.jcTip;
 	out.ribbon_ariaKept = btn.getAttribute('aria-label') === 'Refresh';
 	out.ribbon_tipText = tipNode() ? tipNode().textContent : null;
 	out.ribbon_tipVisible = tipNode() && tipNode().style.display === 'block';
@@ -114,7 +114,7 @@ function leave(target, related) {
 
 	hover(input, 15, 25);
 	out.form_titleKept = input.getAttribute('title') === 'Search help';
-	out.form_noTipAttr = input.getAttribute('data-jc-tip') == null;
+	out.form_noTipAttr = input.dataset.jcTip == null;
 	out.form_tipHidden = !tipNode() || tipNode().style.display === 'none';
 	out.form_ariaKept = input.getAttribute('aria-label') === 'Search table';
 })();
@@ -126,7 +126,7 @@ function leave(target, related) {
 
 	hover(span, 5, 5);
 	out.outside_titleKept = span.getAttribute('title') === 'Random page title';
-	out.outside_noTipAttr = span.getAttribute('data-jc-tip') == null;
+	out.outside_noTipAttr = span.dataset.jcTip == null;
 	out.outside_tipHidden = !tipNode() || tipNode().style.display === 'none';
 })();
 
@@ -142,7 +142,7 @@ function leave(target, related) {
 
 	hover(btn, 10, 20);
 	out.helper_titleMovedOff = btn.getAttribute('title') == null;
-	out.helper_tipAttr = btn.getAttribute('data-jc-tip');
+	out.helper_tipAttr = btn.dataset.jcTip;
 	out.helper_ariaKept = btn.getAttribute('aria-label') === 'Acknowledge';
 	out.helper_tipText = tipNode() ? tipNode().textContent : null;
 	out.helper_tipVisible = tipNode() && tipNode().style.display === 'block';
@@ -151,7 +151,7 @@ function leave(target, related) {
 
 (function explicitDataTip() {
 	const span = env.document.createElement('span');
-	span.setAttribute('data-jc-tip', 'Explicit label');
+	span.dataset.jcTip = 'Explicit label';
 	env.body.appendChild(span);
 
 	hover(span, 30, 40);
@@ -173,7 +173,7 @@ function leave(target, related) {
 	pill.appendChild(btn);
 	env.body.appendChild(pill);
 	hover(btn, 12, 12);
-	out.reinit_stillWorks = btn.getAttribute('data-jc-tip') === 'Previous page'
+	out.reinit_stillWorks = btn.dataset.jcTip === 'Previous page'
 		&& tipNode() && tipNode().textContent === 'Previous page'
 		&& tipNode().style.display === 'block';
 	leave(btn, env.body);
@@ -184,7 +184,7 @@ function leave(target, related) {
 	pill.className = 'juneau-view-pagingpill';
 	const btn = env.document.createElement('button');
 	btn.className = 'juneau-view-pagingpill-menubtn';
-	btn.setAttribute('data-jc-tip', 'Rows per page');
+	btn.dataset.jcTip = 'Rows per page';
 	btn.setAttribute('aria-label', 'Rows per page');
 	pill.appendChild(btn);
 	env.body.appendChild(pill);

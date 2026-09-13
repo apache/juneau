@@ -33,7 +33,7 @@ package org.apache.juneau.rest.server.widgets;
 @SuppressWarnings({
 	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
-@Deprecated
+@Deprecated(since = "10.0.0")
 public class CardField {
 
 	/** The fill key &mdash; matches the refresh envelope's {@code fields[data]} entry.  Required, non-blank. */

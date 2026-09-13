@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * {@link Tab} fluent-setter coverage and {@link Tab#badge}'s validation edge cases.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class Tab_Test extends TestBase {
 
 	@Test void a01_badgeFluentSetterReturnsTab() {

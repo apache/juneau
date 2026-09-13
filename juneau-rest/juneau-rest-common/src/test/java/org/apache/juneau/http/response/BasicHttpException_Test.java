@@ -36,6 +36,9 @@ import org.junit.jupiter.api.*;
  * the constructor overloads, {@code getRootCause()}, {@code getFullStackMessage(boolean)}, and {@code equals()}/
  * {@code hashCode()} — none of which had prior coverage.
  */
+@SuppressWarnings({
+	"java:S5785" // Direct equals() call is required to exercise the type-guard; assertNotEquals would not.
+})
 class BasicHttpException_Test extends TestBase {
 
 	@Test void a01_constructor_causeOnly_nullCause() {

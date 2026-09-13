@@ -38,6 +38,9 @@ import org.junit.jupiter.api.*;
  * already disambiguated the parent, per the {@code #pageId/tabId/subtabId} hash shape) &mdash; so the same subtab
  * id may safely recur under two different tabs.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class PageDef_Validation_Test extends TestBase {
 
 	public static class Release {

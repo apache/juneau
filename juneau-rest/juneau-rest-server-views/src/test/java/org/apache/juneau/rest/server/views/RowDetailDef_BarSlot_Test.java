@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * can only live on {@link PageDef} because that is the only scope seeing both hosts; and that adding a Java-only
  * template field bumps <b>no</b> contract version (the row-expand envelope handshake is unchanged).
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class RowDetailDef_BarSlot_Test extends TestBase {
 
 	private static RowDetailDef details(BarSlot bar) {

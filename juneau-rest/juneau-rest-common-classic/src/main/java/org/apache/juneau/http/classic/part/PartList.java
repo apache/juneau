@@ -916,9 +916,9 @@ public class PartList extends ArrayList<NameValuePair> {
 		var isResolving = nn(varResolver);
 
 		if (value instanceof Supplier<?> value2) {
-			return isResolving ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
+			return new BasicPart(name, isResolving ? resolver(value2) : value2);
 		}
-		return isResolving ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
+		return new BasicPart(name, isResolving ? resolver(value) : value);
 	}
 
 	private boolean eq(String s1, String s2) {

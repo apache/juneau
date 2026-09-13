@@ -26,6 +26,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -83,8 +84,9 @@ function el(tag) {
 		_listeners: {},
 		__juneauCalendarInit: false,
 		get firstElementChild() {
-			for (const c of this.childNodes)
+			for (const c of this.childNodes) {
 				if (c.nodeType === 1) return c;
+			}
 			return null;
 		},
 		getAttribute: function (k) { return Object.hasOwn(this.attrs, k) ? this.attrs[k] : null; },
@@ -166,8 +168,9 @@ function parseAttrs(raw, node) {
 	if (!raw) return;
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
-	while ((m = re.exec(raw)))
+	while ((m = re.exec(raw))) {
 		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
+	}
 }
 
 // Parse test HTML into a tree.  A <template>'s children are attached to its .content fragment (as browsers do).
@@ -574,8 +577,9 @@ function buildFixture(opts) {
 		+ '<div class="jc-cal-day-events"></div></div></template>';
 	html += '<template data-juneau-calendar-event="1"><span class="jc-cal-event"></span></template>';
 	html += '<template data-juneau-calendar-bar="1"><span class="jc-cal-bar"></span></template>';
-	if (seed)
+	if (seed) {
 		html += '<script data-juneau-calendar-seed="1">' + JSON.stringify(seed) + '</script>';
+	}
 	html += '</div>';
 	return parseTestHtml(html).firstElementChild;
 }
@@ -663,7 +667,7 @@ out.map_noHeader = !Object.hasOwn(fixMap, 'hdr');
 	settleFetches();
 	return drainMicrotasks().then(function () {
 		out.liveNumeric_error = !!root.querySelector('.jc-cal-error');
-		return afterLiveNumeric(root);
+		return afterLiveNumeric();
 	});
 }
 

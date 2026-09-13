@@ -40,7 +40,7 @@ function load(rendersJsPath, viewsJsPath, helpersJsPath) {
 		window: env.window,
 		document: env.document,
 		console: console,
-		setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; },
+		setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
 		clearTimeout: function () {},
 		setInterval: function () { return 0; },
 		clearInterval: function () {},

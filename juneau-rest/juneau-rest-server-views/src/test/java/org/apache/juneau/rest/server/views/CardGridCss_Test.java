@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * anti-drift part &mdash; that every {@code juneau-view-card*} class the {@link CardGridTable} emitter stamps has a
  * matching CSS rule.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardGridCss_Test extends TestBase {
 
 	private static String css() throws IOException {

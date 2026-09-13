@@ -68,7 +68,8 @@ import com.nimbusds.openid.connect.sdk.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "code", "grant_type"); intentional
+	"java:S1192", // Duplicate string literals are OAuth protocol parameter names (e.g. "code", "grant_type"); intentional
+	"java:S9358" // Ternary chooses a different Scope constructor arity; moving it inside one call is not equivalent.
 })
 public class OAuthAuthorizationCodeFlow {
 

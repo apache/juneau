@@ -45,7 +45,7 @@ import org.junit.jupiter.api.*;
  * resolution that {@link HealthAggregator#aggregate} performs, per their own names.  Real-HTTP-level probe-routing
  * coverage (a real {@code GET /healthz}/{@code /readyz}/{@code /livez} over the Jetty connector) now lives in
  * {@code HealthServlet_JettyHttpConnector_Test}; the multi-path auto-mount dispatch bug that previously prevented
- * that round-trip was fixed in [TODO-401].
+ * that round-trip was fixed in the real-HTTP-connector coverage.
  *
  * @since 10.0.0
  */

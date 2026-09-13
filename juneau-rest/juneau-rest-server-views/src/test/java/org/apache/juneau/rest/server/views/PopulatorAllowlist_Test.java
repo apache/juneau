@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
 /**
  * Java name-allowlist for region populators, plus a source-level guard on the class Javadoc's honest-limit warning.
  */
+@SuppressWarnings({
+	"java:S3415" // The Set.of fixture is the expected value; BUILTIN_IDS is the actual under test.
+})
 class PopulatorAllowlist_Test extends TestBase {
 
 	@Test void a01_builtinAccepted() {

@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 

@@ -25,6 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * Validates {@link RrpcInterfaceMeta}.
  */
+@SuppressWarnings({
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class RrpcInterfaceMeta_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -138,7 +141,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 		var records = new java.util.concurrent.CopyOnWriteArrayList<java.util.logging.LogRecord>();
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
-			@Override public void flush() {}
+			@Override public void flush() { /* Test-harness no-op. */ }
 			@Override public void close() {}
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
@@ -161,7 +164,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 		var records = new java.util.concurrent.CopyOnWriteArrayList<java.util.logging.LogRecord>();
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
-			@Override public void flush() {}
+			@Override public void flush() { /* Test-harness no-op. */ }
 			@Override public void close() {}
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");

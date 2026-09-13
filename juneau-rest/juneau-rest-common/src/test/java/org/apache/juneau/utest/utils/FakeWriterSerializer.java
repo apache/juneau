@@ -40,6 +40,9 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	// Predefined types
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static final X X = new X(create());
 
 	public static class X extends FakeWriterSerializer {
@@ -65,6 +68,9 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

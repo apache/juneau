@@ -48,12 +48,12 @@ class Badge_Test extends TestBase {
 
 	@Test void a04_neitherCountNorDot_rejected() {
 		var b = new Badge();
-		assertThrows(IllegalArgumentException.class, () -> b.validate());
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a05_negativeCount_rejected() {
 		var b = Badge.count(-1);
-		assertThrows(IllegalArgumentException.class, () -> b.validate());
+		assertThrows(IllegalArgumentException.class, b::validate);
 	}
 
 	@Test void a06_maxBelowOne_rejected() {

@@ -47,6 +47,9 @@ public class HttpEntityTagsHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value (e.g. {@code "\"a\", \"b\""}). May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpEntityTagsHeader of(String name, String wireValue) {
 		return new HttpEntityTagsHeader(name, wireValue);
 	}
@@ -58,6 +61,9 @@ public class HttpEntityTagsHeader extends HttpHeaderBean {
 	 * @param typedValue The entity-tags value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpEntityTagsHeader of(String name, EntityTags typedValue) {
 		return new HttpEntityTagsHeader(name, typedValue);
 	}

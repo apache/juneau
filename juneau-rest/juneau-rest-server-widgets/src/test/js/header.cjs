@@ -25,6 +25,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -50,7 +51,7 @@ function matches(el, sel) {
 	if (el.nodeType !== 1) return false;
 	let i = 0;
 	const tagM = /^[a-zA-Z][a-zA-Z0-9-]*/.exec(sel);
-	if (tagM) { if ((el.tag || '').toLowerCase() !== tagM[0].toLowerCase()) return false; i = tagM[0].length; }
+	if (tagM) { if ((el.tag || '').toLowerCase() !== tagM[0].toLowerCase()) { return false; } i = tagM[0].length; }
 	const rest = sel.slice(i);
 	// NOSONAR javascript:S5843 -- this regex intentionally recognizes .class / #id / [attr] selector tokens in one
 	// pass for the fake-DOM selector matcher below; splitting the 3-way alternation would change which characters

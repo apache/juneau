@@ -49,6 +49,9 @@ import org.junit.jupiter.api.*;
  * <p>Source-shape checks always run; the two Node harnesses run when {@code node} is on {@code PATH} (skipped
  * otherwise &mdash; no {@code -Pjs-tests} required).
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class ViewsJs_CardActions_Test extends TestBase {
 
 	private static String resource(String name) throws IOException {

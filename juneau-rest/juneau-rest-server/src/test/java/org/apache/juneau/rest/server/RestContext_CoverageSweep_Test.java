@@ -48,6 +48,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S125" // Comments are explanatory; they are not commented-out code.
+})
 class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier) {

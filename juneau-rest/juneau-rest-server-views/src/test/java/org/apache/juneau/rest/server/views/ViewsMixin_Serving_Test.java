@@ -48,7 +48,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
-	"deprecation" // Section b) deliberately exercises the deprecated compatibility mounts for the four relocated widget assets.
+	"deprecation", // Section b) deliberately exercises the deprecated compatibility mounts for the four relocated widget assets.
+	"java:S6126" // Assertion messages concatenate a fixture fragment with a diagnostic; a text block would not improve them.
 })
 class ViewsMixin_Serving_Test extends TestBase {
 

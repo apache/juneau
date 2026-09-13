@@ -137,6 +137,9 @@ public class Via extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Via of(String value) {
 		return value == null ? null : new Via(value);
 	}
@@ -149,6 +152,9 @@ public class Via extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Via of(String...value) {
 		return value == null ? null : new Via(value);
 	}
@@ -165,6 +171,9 @@ public class Via extends BasicCsvHeader {
 	 * @param value2 The second CSV token.
 	 * @return A new header bean.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Via of(String value1, String value2) {
 		return new Via(value1, value2);
 	}
@@ -180,6 +189,9 @@ public class Via extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Via of(Supplier<String[]> value) {
 		return value == null ? null : new Via(value);
 	}

@@ -121,7 +121,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	long-term shim; a follow-up Juneau item deletes this type after those consumers migrate.
  * @since 10.0.0
  */
-@Deprecated
+@Deprecated(since = "10.0.0")
 @SuppressWarnings({
 	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
@@ -358,6 +358,9 @@ public class PageTable {
 		return build(ctx, pageDef, savedViewsBase, req);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Page emitter encodes tab/subtab chrome; complexity is inherent.
+	})
 	private static Div build(MarshallingContext ctx, PageDef pageDef, String savedViewsBase, RestRequest req) {
 		var id = pageDef.id;
 		var tabs = pageDef.tabs == null ? List.<Tab>of() : pageDef.tabs;
@@ -650,9 +653,7 @@ public class PageTable {
 				if (a != null && ViewTable.hasVar(a.tooltip))
 					return true;
 		var avatar = header.avatar;
-		if (avatar != null && (ViewTable.hasVar(avatar.displayName) || ViewTable.hasVar(avatar.initials)))
-			return true;
-		return false;
+		return avatar != null && (ViewTable.hasVar(avatar.displayName) || ViewTable.hasVar(avatar.initials));
 	}
 
 	private static boolean barSlotChromeHasVar(BarSlot barSlot) {

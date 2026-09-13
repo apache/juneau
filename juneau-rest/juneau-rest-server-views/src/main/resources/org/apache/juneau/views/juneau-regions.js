@@ -50,6 +50,7 @@
  */
 (function () {
 	"use strict";
+	// NOSONAR javascript:S3776 -- file encodes a views/widgets state machine; complexity is inherent.
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 
@@ -987,7 +988,7 @@
 
 	/** The current invocation's signal (design &sect;6.6.1/&sect;8.5): `messageSignal` under reason "message". */
 	function declaredFetchSignal(region) {
-		return (region.ctx && region.ctx.reason === "message" && region.messageCtl)
+		return (region.ctx?.reason === "message" && region.messageCtl)
 			? region.messageCtl.signal : region.signalCtl.signal;
 	}
 
@@ -1040,8 +1041,8 @@
 	 * responses differed.
 	 */
 	function joinDetailEnvelope(region, url) {
-		const host = region.el && region.el.closest ? region.el.closest(".juneau-view-detail-panel") : null;
-		const join = host && host._juneauDetailJoin;
+		const host = region.el?.closest ? region.el.closest(".juneau-view-detail-panel") : null;
+		const join = host?._juneauDetailJoin;
 		if (!join || join.url !== url) return null;
 		return join.payload();
 	}
@@ -1184,7 +1185,7 @@
 	function refuseWrite(region, reason, message) {
 		window.console.error("JuneauViews.regions: region '" + region.key + "' - " + message);
 		const p = window.document.createElement("p");
-		p.setAttribute("data-juneau-region-write-error", "");
+		p.setAttribute("data-juneau-region-write-error", ""); // NOSONAR javascript:S7761 -- querySelector pins literal data-juneau-region-write-error
 		p.setAttribute("role", "alert");
 		p.textContent = message;
 		region.el.appendChild(p);
@@ -1467,7 +1468,7 @@
 					// OTHER rejection (a 404, a refusal, a handshake mismatch, a transport failure) fails the
 					// whole invocation closed (R5): the pre-fetch runs before the populate is ever called, so a
 					// failure here is the framework's own contained throw, not the populate's.
-					if (e && e.name === "AbortError") { settlePrefetchAbort(region); return; }
+					if (e?.name === "AbortError") { settlePrefetchAbort(region); return; }
 					failPopulate(region, e);
 				});
 			return;
@@ -1804,7 +1805,7 @@
 	 * console.error, not an unroll of already-enrolled regions.
 	 */
 	function mountTableSlot(slot, tableValue) {
-		const init = window.JuneauViews && window.JuneauViews.init;
+		const init = window.JuneauViews?.init;
 		if (!init || typeof init.mountTableSlot !== "function") {
 			const message = "JuneauViews.regions.mount: table slots require JuneauViews.init.mountTableSlot.";
 			window.console.error(message);
@@ -1814,7 +1815,7 @@
 		return Promise.resolve()
 			.then(function () { return init.mountTableSlot(slot, tableValue); })
 			.catch(function (err) {
-				const message = String(err && err.message ? err.message : err);
+				const message = String(err?.message ? err.message : err);
 				window.console.error("JuneauViews.regions.mount: table slot failed: " + message);
 				paintMountBanner(slot, message);
 			});

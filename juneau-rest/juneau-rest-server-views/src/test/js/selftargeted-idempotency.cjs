@@ -71,7 +71,7 @@ const ROW_ID = 'row-42';
 function transmit(modal, withRow) {
 	const { env, I } = loadViews(rendersJsPath, viewsJsPath);
 	const table = env.el('table');
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauCsrf = 'tok-1';
 	env.body.appendChild(table);
 
 	let tr = null;
@@ -83,7 +83,7 @@ function transmit(modal, withRow) {
 
 	const bodies = [];
 	env.setFetch(function (url, opts) {
-		bodies.push(opts && opts.body);
+		bodies.push(opts?.body);
 		return Promise.resolve(jsonResponse({ outcome: 'success' }));
 	});
 

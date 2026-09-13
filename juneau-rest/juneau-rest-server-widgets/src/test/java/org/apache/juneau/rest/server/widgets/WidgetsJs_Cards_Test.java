@@ -38,6 +38,10 @@ import org.junit.jupiter.params.provider.*;
  * {@code cards-browser.cjs} DOM binding) run when {@code node} is on {@code PATH} (skipped otherwise
  * &mdash; no {@code -Pjs-tests} required).
  */
+@SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class WidgetsJs_Cards_Test extends TestBase {
 
 	private static String cardsJs() throws IOException {

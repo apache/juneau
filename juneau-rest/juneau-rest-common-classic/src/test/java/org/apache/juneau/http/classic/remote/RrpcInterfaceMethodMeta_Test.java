@@ -24,6 +24,9 @@ import org.junit.jupiter.api.*;
 /**
  * Validates {@link RrpcInterfaceMethodMeta}.
  */
+@SuppressWarnings({
+	"java:S5785" // assertTrue/False on equals is the type-guard under test.
+})
 class RrpcInterfaceMethodMeta_Test extends TestBase {
 
 	public interface Iface {

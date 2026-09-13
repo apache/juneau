@@ -216,7 +216,7 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 			if (m.getExceptionType().isAssignableFrom(thrownClass))
 				matches.add(m);
 		}
-		matches.sort((a, b) -> hierarchyDepth(a.getExceptionType(), thrownClass) - hierarchyDepth(b.getExceptionType(), thrownClass));
+		matches.sort((a, b) -> Integer.compare(hierarchyDepth(a.getExceptionType(), thrownClass), hierarchyDepth(b.getExceptionType(), thrownClass)));
 		return matches;
 	}
 

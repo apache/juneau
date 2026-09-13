@@ -28,9 +28,10 @@ import org.junit.jupiter.api.*;
 
 /**
  * Proves the example actually works: boots {@link ExampleViewsServer} in-process on an ephemeral port and
- * drives real HTTP requests at it &mdash; the composed page, each of the three data endpoints, and the
- * first-party JS/CSS assets it links to &mdash; asserting that the sub-tabbed {@code PageDef}, request-resolved
- * asset URLs, and data for every {@code ViewDef} are actually reachable end-to-end, not just compilable.
+ * drives real HTTP requests at it &mdash; the pair pages, each of the data endpoints, and the
+ * first-party JS/CSS assets it links to &mdash; asserting that the HTML-slot {@code .juneau-page-nav},
+ * request-resolved asset URLs, and data for every {@code ViewDef} are actually reachable end-to-end, not just
+ * compilable.
  */
 @SuppressWarnings({
 	"resource" // server is opened in @BeforeAll/closed in @AfterAll.
@@ -66,48 +67,67 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
-	void a01_indexPage_rendersComposedPage_withBothTabsAndBothSubtabs() throws Exception {
-		var res = get("/");
-		assertEquals(200, res.statusCode());
-		var body = res.body();
-		assertTrue(body.contains("data-juneau-page=\"widgets-demo\""), "page marker");
-		assertTrue(body.contains("data-tab-id=\"catalog\""), "Catalog tab");
-		assertTrue(body.contains("data-tab-id=\"audit\""), "Audit Log tab");
-		assertTrue(body.contains("data-tab-id=\"alerts\""), "Alerts tab");
-		assertTrue(body.contains("data-subtab-id=\"active\""), "Active sub-tab");
-		assertTrue(body.contains("data-subtab-id=\"archived\""), "Archived sub-tab");
-		assertTrue(body.contains("data-juneau-row-detail"), "row-detail template");
-		assertTrue(body.contains("data-juneau-detail-url=\"/data/alerts/{id}\""), "alerts expand URL");
-		assertTrue(body.contains("data-juneau-detail-url=\"/data/widgets/active/{id}\""), "widget expand URL");
-		assertTrue(body.contains("\"action\":\"ack\""), "ack pill meta.action in VIEW_META");
-		assertFalse(body.contains("data-juneau-action="), "no header ActionRef buttons after F35(a)");
-		assertFalse(body.contains("data-juneau-safe=\"collapse\""), "no header COLLAPSE after F35(a)");
-		// F24: alerts expander is region-only (named populator). Nested-table seeding inside a
-		// row-detail pane is deferred; the shell attributes must not appear on this page.
-		assertTrue(body.contains("data-juneau-region=\"detail\""), "row-detail region container");
-		assertTrue(body.contains("data-juneau-region-populate=\"alerts-detail\""), "alerts named region populator");
-		assertTrue(body.contains("JuneauViews.regions.register(\"alerts-detail\""), "alerts-detail populator registered");
-		assertFalse(body.contains("data-juneau-nested"), "F24: no nested-table shell in the alert expander");
-		assertFalse(body.contains("data-juneau-nested-scope-param=\"alertId\""), "F24: no nested scope param");
-		assertFalse(body.contains("data-juneau-nested-meta=\"alert-events\""), "F24: no nested sidecar");
+	void a00_root_redirectsToCatalogActive() throws Exception {
+		var noFollow = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
+		var uri = server.getRootUrl().resolve("/");
+		var res = noFollow.send(HttpRequest.newBuilder(uri).GET().build(), BodyHandlers.ofString());
+		assertEquals(303, res.statusCode(), res.body());
+		var location = res.headers().firstValue("Location").orElse("");
+		assertTrue(location.endsWith("/catalog/active"), location);
 	}
 
 	@Test
-	void a02_indexPage_assetLinks_areResolvedFetchableUrls_notServletPrefixed() throws Exception {
+	void a01_catalogActivePage_isHtmlSlotPair_withNavAndEmptySlot() throws Exception {
+		var res = get("/catalog/active");
+		assertEquals(200, res.statusCode());
+		var body = res.body();
+		assertTrue(body.contains("class=\"juneau-page-nav\""), "page nav");
+		assertTrue(body.contains("data-juneau-page=\"widgets-demo\""), "page marker");
+		assertTrue(body.contains("href=\"/catalog/active\""), "Catalog/Active href");
+		assertTrue(body.contains("href=\"/catalog/archived\""), "Archived child");
+		assertTrue(body.contains("href=\"/audit\""), "Audit Log section");
+		assertTrue(body.contains("href=\"/alerts\""), "Alerts section");
+		assertTrue(body.contains("id=\"widgets-active\""), "empty slot");
+		assertTrue(body.contains("JuneauViews.regions.mount({ \"widgets-active\": { table:"), "mount hookup");
+		assertTrue(body.contains("JuneauViews.regions.register(\"widgets-active-detail\""), "active-detail populator");
+		assertFalse(body.contains("data-tab-id="), "no PageTable tab markers");
+		assertFalse(body.contains("data-subtab-id="), "no PageTable subtab markers");
+		assertFalse(body.contains("juneau-pages.js"), "no hash-swap runtime");
+		assertFalse(body.contains("data-juneau-view"), "page GET must not serialize ViewTable.of into the body");
+	}
+
+	@Test
+	void a01b_alertsPage_isEmptySlot_andEnvelopeCarriesDetailAndAck() throws Exception {
+		var page = get("/alerts").body();
+		assertTrue(page.contains("id=\"alerts\""), "empty slot");
+		assertTrue(page.contains("JuneauViews.regions.mount({ \"alerts\": { table:"), "mount hookup");
+		assertTrue(page.contains("JuneauViews.regions.register(\"alerts-detail\""), "alerts-detail populator");
+		assertFalse(page.contains("data-juneau-nested"), "F24: no nested-table shell in the alert expander");
+		assertFalse(page.contains("data-juneau-nested-scope-param=\"alertId\""), "F24: no nested scope param");
+		assertFalse(page.contains("data-juneau-nested-meta=\"alert-events\""), "F24: no nested sidecar");
+		var envelope = getJson("/alerts/view").body();
+		assertTrue(envelope.contains("\"id\":\"alerts\""), envelope);
+		assertTrue(envelope.contains("\"action\":\"ack\"") || envelope.contains("\"ack\""), envelope);
+		assertFalse(envelope.contains("data-juneau-action="), "no header ActionRef buttons after F35(a)");
+		assertFalse(envelope.contains("data-juneau-safe=\"collapse\""), "no header COLLAPSE after F35(a)");
+	}
+
+	@Test
+	void a02_catalogActivePage_assetLinks_areResolvedFetchableUrls_notServletPrefixed() throws Exception {
 		// viewAssetUrl(RestRequest, ...) must resolve "servlet:"-prefixed paths against the request's
 		// own URI resolver into a real, browser-fetchable URL - a literal, unfetchable "servlet:" prefix leaking
 		// into the page would be a defect. (The resolver returns an absolute-*path* URL here
 		// since this example mounts at the server root; c01/c02 below prove the resolved link is actually fetchable.)
-		var body = get("/").body();
+		var body = get("/catalog/active").body();
 		assertFalse(body.contains("servlet:"), "no unresolved servlet: URIs");
 		assertTrue(body.contains("href=\"/juneau-views.css?v="), "resolved views.css URL");
 		assertTrue(body.contains("src=\"/juneau-views.js?v="), "resolved views.js URL");
 	}
 
 	@Test
-	void a03_indexPage_containsDeepLinkToArchivedSubtab() throws Exception {
-		var body = get("/").body();
-		assertTrue(body.contains("href=\"#widgets-demo/catalog/archived\""), "deep link present");
+	void a03_catalogActivePage_containsHrefToArchivedChild() throws Exception {
+		var body = get("/catalog/active").body();
+		assertTrue(body.contains("href=\"/catalog/archived\""), "Archived pair href");
 	}
 
 	@Test
@@ -189,39 +209,42 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
-	void e01_dashboardPage_rendersCardGrid_withStaticAndRefreshableCards() throws Exception {
+	void e01_dashboardPage_rendersAuthorHtmlPanels_withStaticAndLiveSlot() throws Exception {
 		var res = get("/dashboard");
 		assertEquals(200, res.statusCode());
 		var body = res.body();
-		assertTrue(body.contains("data-juneau-card-grid"), "grid marker");
-		assertTrue(body.contains("data-juneau-card-grid-id=\"ops\""), "grid id");
-		assertTrue(body.contains("data-juneau-card-id=\"fleet\""), "static card");
-		assertTrue(body.contains("data-juneau-card-id=\"live\""), "refreshable card");
-		// Only the live card carries the refresh wire; the static card must not.
-		assertTrue(body.contains("data-juneau-card-refresh=\"/data/cards/summary\""), "refresh endpoint");
-		assertTrue(body.contains("data-juneau-card-poll-ms=\"10000\""), "poll (>= 5s floor)");
-		assertTrue(body.contains("data-juneau-card-contract=\"1\""), "per-card contract stamp");
-		// The static Fleet Summary card is server-painted so it reads with JavaScript disabled.
+		assertTrue(body.contains("juneau-view-card-grid"), "titled-panel grid look");
+		assertTrue(body.contains("Fleet Summary"), "static panel title");
+		assertTrue(body.contains("Live Alert Metrics"), "live panel title");
+		assertTrue(body.contains("id=\"live-metrics\""), "live slot");
+		assertTrue(body.contains("JuneauViews.regions.mount({ \"live-metrics\":"), "region mount");
+		assertTrue(body.contains("id=\"live-refresh\""), "author Refresh control");
+		assertFalse(body.contains("data-juneau-card-grid"), "no CardGridTable marker");
+		assertFalse(body.contains("data-juneau-card-id="), "no CardGridTable card ids");
+		assertFalse(body.contains("juneau-cards.js"), "no cards.js");
 		assertTrue(body.contains(">Total widgets<"), "static field label painted server-side");
 	}
 
 	@Test
-	void e02_dashboardPage_linksIconsThenCardsAssets_noDataTables() throws Exception {
+	void e02_dashboardPage_linksViewsThenRegionsThenHelpers_noDataTables() throws Exception {
 		var body = get("/dashboard").body();
 		assertFalse(body.contains("servlet:"), "no unresolved servlet: URIs");
-		var icons = body.indexOf("/juneau-icons.js?v=");
-		var cards = body.indexOf("/juneau-cards.js?v=");
-		assertTrue(icons >= 0, "icons.js linked");
-		assertTrue(cards >= 0, "cards.js linked");
-		assertTrue(icons < cards, "icons.js must load before cards.js (the refresh glyph comes from the icon registry)");
-		assertFalse(body.contains("datatables"), "a card page carries no table, so no DataTables");
+		var views = body.indexOf("/juneau-views.js?v=");
+		var regions = body.indexOf("/juneau-regions.js?v=");
+		var helpers = body.indexOf("/juneau-helpers.js?v=");
+		assertTrue(views >= 0, "views.js linked");
+		assertTrue(regions >= 0, "regions.js linked");
+		assertTrue(helpers >= 0, "helpers.js linked");
+		assertTrue(views < regions && regions < helpers, "views.js then regions.js then helpers.js");
+		assertFalse(body.contains("datatables"), "a titled-panel page carries no table, so no DataTables");
+		assertFalse(body.contains("juneau-cards.js"), "dashboard no longer loads cards.js");
 	}
 
 	@Test
 	void e03_cardsJsAsset_isReachable() throws Exception {
 		var res = get("/juneau-cards.js");
 		assertEquals(200, res.statusCode());
-		assertTrue(res.body().contains("window.JuneauCards"), "ships the card runtime namespace");
+		assertTrue(res.body().contains("window.JuneauCards"), "ships the card runtime namespace (still served until the delete slice)");
 	}
 
 	@Test
@@ -322,7 +345,7 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	@Test
 	void d07_ackForm_barSlotHost_ridesTheWireAsAnAdditiveField() throws Exception {
 		// The example's ackForm() dialog also declares ModalDef.barSlot - the THIRD named BarSlot host.  Unlike
-		// PageDef/RowDetailDef (Java-only, server-rendered), a dialog is a fetched JSON payload, so the bean must
+		// a page-nav or RowDetailDef bar slot (Java-only, server-rendered), a dialog is a fetched JSON payload, so the bean must
 		// actually be present on the wire for juneau-views.js to paint it client-side.  BarSlot carries its OWN
 		// independently-frozen contract version (never bumped alongside ModalDef's), so this is a distinct stamp
 		// from the modal/form one already asserted in d06.
@@ -341,7 +364,7 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
-	void g01_exampleRestSourcesHaveNoPageBodyViewTableOf() throws Exception {
+	void g01_exampleRestSourcesHaveNoDeprecatedPageChrome() throws Exception {
 		for (var rel : List.of(
 				"src/main/java/org/apache/juneau/examples/views/ExampleViewsRest.java",
 				"juneau-examples/juneau-examples-views/src/main/java/org/apache/juneau/examples/views/ExampleViewsRest.java")) {
@@ -350,6 +373,16 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 				var text = java.nio.file.Files.readString(p);
 				assertFalse(text.contains("ViewTable.of("),
 					() -> "page-body ViewTable.of must be gone from ExampleViewsRest: " + p);
+				assertFalse(text.contains("PageDef.create"),
+					() -> "PageDef.create must be gone from ExampleViewsRest: " + p);
+				assertFalse(text.contains("PageTable.of"),
+					() -> "PageTable.of must be gone from ExampleViewsRest: " + p);
+				assertFalse(text.contains("CardGrid.create"),
+					() -> "CardGrid.create must be gone from ExampleViewsRest: " + p);
+				assertFalse(text.contains("CardGridTable"),
+					() -> "CardGridTable must be gone from ExampleViewsRest: " + p);
+				assertFalse(text.contains("PAGES_JS_PATH"),
+					() -> "PAGES_JS_PATH must be gone from ExampleViewsRest: " + p);
 				return;
 			}
 		}

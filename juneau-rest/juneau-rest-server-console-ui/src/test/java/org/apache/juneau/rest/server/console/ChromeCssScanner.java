@@ -38,6 +38,9 @@ import java.util.regex.*;
  * Does NOT fail on the static {@code url("data:image/svg+xml;...")} literal in {@code .jc-logo} &mdash; there is no
  * {@code var(--jc-} there.
  */
+@SuppressWarnings({
+	"java:S8786" // Scanner regex is intentional; tightening would change match semantics.
+})
 final class ChromeCssScanner {
 
 	private ChromeCssScanner() {}

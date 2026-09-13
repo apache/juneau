@@ -52,6 +52,7 @@
  * metrics are - that is what makes it safe for the Java side to assert a floor on it.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -177,7 +178,7 @@ const RENDER_CONTEXT = function (args) {
 
 /** Reads the registry the page actually loaded.  A null here means the sprite/registry wiring broke. */
 const RESOLVE = function (names) {
-	const icons = window.JuneauViews && window.JuneauViews.icons;
+	const icons = window.JuneauViews?.icons;
 	if (!icons || typeof icons.resolveIcon !== 'function')
 		throw new Error('juneau-icons.js did not install a resolveIcon');
 	const out = {};

@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
  * {@link RegionDef#validate()} matrix: id presence, populator-name allowlisting, and blank
  * {@link RegionDef#allowedPopulators} entries.
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class RegionDef_Test extends TestBase {
 
 	@Test void a01_create_andFluentChain() {

@@ -59,6 +59,9 @@ import org.apache.juneau.http.*;
  * @serial exclude
  */
 @Header("Proxy-Authorization")
+@SuppressWarnings({
+	"secrets:S8136" // HTTP Proxy-Authorization header parser, not a stored credential.
+})
 public class ProxyAuthorization extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Proxy-Authorization";

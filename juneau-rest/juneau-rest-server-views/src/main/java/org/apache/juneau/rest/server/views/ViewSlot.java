@@ -45,7 +45,9 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 @BeanType(properties="contractVersion,view,layout,savedViewsBase,selection,bulk,detail,quickStats,rows")
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1192", // Duplicated literals are ViewSlot error/protocol text; constants would obscure the message.
+	"java:S1172" // req/messages are load-bearing envelope overloads; unused parameters keep the public signature stable.
 })
 public final class ViewSlot {
 
@@ -241,6 +243,9 @@ public final class ViewSlot {
 		return detailOf(viewDef.details, req, messages);
 	}
 
+	@SuppressWarnings({
+		"unused" // req/messages are load-bearing envelope overloads; unused parameters keep the public signature stable.
+	})
 	private static Detail detailOf(RowDetailDef d, RestRequest req, Messages messages) {
 		var out = new Detail();
 		out.contractVersion = RowDetailDef.CONTRACT_VERSION;
@@ -286,7 +291,6 @@ public final class ViewSlot {
 		return Json.to(Json.of(bean), Map.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static List<?> snapshotList(Object bean) {
 		return Json.to(Json.of(bean), List.class);
 	}

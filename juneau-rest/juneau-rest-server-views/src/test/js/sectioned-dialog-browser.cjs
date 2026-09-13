@@ -50,7 +50,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- shown()/makeRow()/parts() below stay nested inside PROBE even though they
 	// close over no outer locals: page.evaluate() serializes only PROBE's own source text across the
 	// Playwright process boundary, so a module-scope sibling would be undefined inside the browser.
-	function shown(el) { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+	function shown(el) { if (!el) { return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
 	function drain() { while (init.topLayer()) init.popLayer(); }
 	function displayOf(el) { return el ? window.getComputedStyle(el).display : null; }
 
@@ -226,7 +226,7 @@ const PROBE = async function () {
 		}
 		function inHiddenSection(n) {
 			const pane = n.closest('[data-juneau-form-section]');
-			return pane != null && pane.hasAttribute('hidden');
+			return pane?.hasAttribute('hidden');
 		}
 		// What a naive selector considers focusable, and what the BROWSER actually walks on Tab: an element inside a
 		// `display: none` section has no client rects and is skipped, which is why the real order has to be measured

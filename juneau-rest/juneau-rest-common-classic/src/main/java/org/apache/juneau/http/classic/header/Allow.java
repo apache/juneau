@@ -87,6 +87,9 @@ public class Allow extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Allow of(String value) {
 		return value == null ? null : new Allow(value);
 	}
@@ -99,6 +102,9 @@ public class Allow extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Allow of(String...value) {
 		return value == null ? null : new Allow(value);
 	}
@@ -115,6 +121,9 @@ public class Allow extends BasicCsvHeader {
 	 * @param value2 The second CSV token.
 	 * @return A new header bean.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Allow of(String value1, String value2) {
 		return new Allow(value1, value2);
 	}
@@ -130,6 +139,9 @@ public class Allow extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Allow of(Supplier<String[]> value) {
 		return value == null ? null : new Allow(value);
 	}

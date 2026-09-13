@@ -262,9 +262,7 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		public Flow.Publisher<SseEvent> sseWithNull(RestResponse res) {
 			res.setContentType("text/event-stream");
 			// null element is sandwiched between two real events — only the non-null ones should appear.
-			return new Flow.Publisher<>() {
-				@Override public void subscribe(Flow.Subscriber<? super SseEvent> sub) {
-					sub.onSubscribe(new Flow.Subscription() {
+			return sub -> sub.onSubscribe(new Flow.Subscription() {
 						int step;
 						@Override public void request(long n) {
 							if (step == 0) { step++; sub.onNext(new SseEvent("tick", "before")); }
@@ -274,16 +272,12 @@ class ReactiveResponseProcessor_Test extends TestBase {
 						}
 						@Override public void cancel() { /* test fixture — no cleanup needed */ }
 					});
-				}
-			};
 		}
 
 		@RestGet("/ndjsonWithNull")
 		public Flow.Publisher<Pojo> ndjsonWithNull(RestResponse res) {
 			res.setContentType("application/x-ndjson");
-			return new Flow.Publisher<>() {
-				@Override public void subscribe(Flow.Subscriber<? super Pojo> sub) {
-					sub.onSubscribe(new Flow.Subscription() {
+			return sub -> sub.onSubscribe(new Flow.Subscription() {
 						int step;
 						@Override public void request(long n) {
 							if (step == 0) { step++; sub.onNext(new Pojo("first", 1)); }
@@ -293,8 +287,6 @@ class ReactiveResponseProcessor_Test extends TestBase {
 						}
 						@Override public void cancel() { /* test fixture — no cleanup needed */ }
 					});
-				}
-			};
 		}
 
 		// NDJSON with content-type already set (non-null ct path in prepareStreamingHeaders line 233).

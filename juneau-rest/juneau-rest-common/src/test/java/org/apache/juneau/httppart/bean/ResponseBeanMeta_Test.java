@@ -152,11 +152,11 @@ class ResponseBeanMeta_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	static class BareStatusCode {
-		@StatusCode public void m() {}
+		@StatusCode public void m() { /* Test-harness no-op. */ }
 	}
 
 	static class ExplicitStatusCode {
-		@StatusCode(201) public void m() {}
+		@StatusCode(201) public void m() { /* Test-harness no-op. */ }
 	}
 
 	@Response
@@ -168,16 +168,22 @@ class ResponseBeanMeta_Test {
 		@SuppressWarnings({
 			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
 		})
-		public void plain(String s) {}
+		public void plain(String s) {
+			/* Test-harness no-op. */
+		}
 
 		@SuppressWarnings({
 			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
 		})
-		public void annotated(@Response ResponseBody b) {}
+		public void annotated(@Response ResponseBody b) {
+			/* Test-harness no-op. */
+		}
 
 		@SuppressWarnings({
 			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
 		})
-		public void annotatedWithStatus(@Response @StatusCode(201) ResponseBody b) {}
+		public void annotatedWithStatus(@Response @StatusCode(201) ResponseBody b) {
+			/* Test-harness no-op. */
+		}
 	}
 }

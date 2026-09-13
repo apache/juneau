@@ -23,6 +23,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class BasicCsvArrayPart_Test extends TestBase {
 
 	private static final String NAME = "X-Csv";

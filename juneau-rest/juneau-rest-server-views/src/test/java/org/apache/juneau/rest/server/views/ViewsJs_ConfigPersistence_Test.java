@@ -38,6 +38,10 @@ import org.junit.jupiter.params.provider.*;
  * (real-DOM/localStorage/fetch) proof of this contract lives in the opt-in {@code ConfigPersistence_BrowserTest}
  * canary.
  */
+@SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class ViewsJs_ConfigPersistence_Test extends TestBase {
 
 	/** Classpath location of the shipped slice-2 persistence layer (mirrors {@code ViewsMixin}'s *_JS_RESOURCE constants). */

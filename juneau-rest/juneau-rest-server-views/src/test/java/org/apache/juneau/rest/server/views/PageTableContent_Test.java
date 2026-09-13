@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  * {@code @BeanType} trick (which is what actually closes it off {@code Json.of(...)}-wise, asserted separately
  * below).
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class PageTableContent_Test extends TestBase {
 
 	public static class Release {

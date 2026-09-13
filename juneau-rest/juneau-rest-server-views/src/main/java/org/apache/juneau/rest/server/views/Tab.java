@@ -68,7 +68,7 @@ import org.apache.juneau.rest.server.widgets.Badge;
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
 })
-@Deprecated
+@Deprecated(since = "10.0.0")
 public class Tab {
 
 	/** The stable tab id (the second hash segment), unique across the page. */

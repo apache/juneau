@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * wire), the page's own {@code PageDef.CONTRACT_VERSION} / {@link ViewDef#CONTRACT_VERSION} must not bump, and a
  * page that declares neither must emit byte-identical output to before this feature existed.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class PageTableChrome_Test extends TestBase {
 
 	public static class Release {

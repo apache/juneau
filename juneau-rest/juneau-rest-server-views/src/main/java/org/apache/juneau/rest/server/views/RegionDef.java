@@ -356,6 +356,9 @@ public class RegionDef {
 	 *
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Validation encodes the region contract; complexity is inherent.
+	})
 	public void validate() {
 		if (id == null || id.isBlank())
 			throw iaex("RegionDef id must not be null or blank.");
@@ -480,7 +483,7 @@ public class RegionDef {
 	private static void appendPair(StringBuilder sb, String key, Object value) {
 		if (value == null)
 			return;
-		if (sb.length() > 0)
+		if (!sb.isEmpty())
 			sb.append('&');
 		sb.append(encode(key)).append('=').append(encode(String.valueOf(value)));
 	}
@@ -513,6 +516,9 @@ public class RegionDef {
 	 *
 	 * @return An ordered {@link Map} ready for {@code Json.of(...)}.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Contract map encodes the region wire shape; complexity is inherent.
+	})
 	public Map<String,Object> toContractMap() {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("contractVersion", CONTRACT_VERSION);

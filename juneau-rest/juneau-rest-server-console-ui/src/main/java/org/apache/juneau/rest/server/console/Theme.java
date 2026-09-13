@@ -56,6 +56,9 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
+})
 public final class Theme {
 
 	/** Anchored (full-string) guard for a theme name. Anchoring matters: an unanchored {@code find()} would accept {@code "--jc-foo;--bar"}-shaped garbage as a substring match. */

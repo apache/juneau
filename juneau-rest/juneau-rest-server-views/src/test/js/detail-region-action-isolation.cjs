@@ -69,18 +69,18 @@ function drain() { while (I.topLayer()) I.popLayer(); }
 function buildFixture(opts) {
 	const action = opts.action;
 	const table = env.el('table');
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauCsrf = 'tok-1';
 
 	// A row-detail <template> must be a SIBLING of `table` or initDetailsExpander early-returns.
 	const host = env.el('div');
 	const tpl = env.el('template');
-	tpl.setAttribute('data-juneau-row-detail', '1');
+	tpl.dataset.juneauRowDetail = '1';
 	host.appendChild(table);
 	host.appendChild(tpl);
 
 	if (opts.regionAboveTable) {
 		const outer = env.el('div');
-		outer.setAttribute('data-juneau-region', 'outer-host');
+		outer.dataset.juneauRegion = 'outer-host';
 		outer.appendChild(host);
 		env.body.appendChild(outer);
 	}
@@ -102,14 +102,14 @@ function buildFixture(opts) {
 	table.appendChild(childTr);
 
 	const actionBtn = env.el('button');
-	actionBtn.setAttribute('data-juneau-action', action.id);
+	actionBtn.dataset.juneauAction = action.id;
 	if (opts.regionOnButton)
-		actionBtn.setAttribute('data-juneau-region', 'self-region');
+		actionBtn.dataset.juneauRegion = 'self-region';
 
 	if (opts.inRegion) {
 		const region = env.el('div');
-		region.setAttribute('data-juneau-region', 'detail-body');
-		region.setAttribute('data-juneau-region-type', 'row-detail');
+		region.dataset.juneauRegion = 'detail-body';
+		region.dataset.juneauRegionType = 'row-detail';
 		region.appendChild(actionBtn);
 		panel.appendChild(region);
 	} else {

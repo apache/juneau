@@ -43,6 +43,10 @@ import org.junit.jupiter.params.provider.*;
  * {@code DataTablesResults} envelope in the server-side query protocol tests, so the emitted sidecar and this
  * fixture agree.
  */
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class ViewMeta_Contract_Test extends TestBase {
 
 	/** Row bean whose simple name drives the {@code rowType} diagnostic field. */
@@ -445,7 +449,7 @@ class ViewMeta_Contract_Test extends TestBase {
 		// Appended to the @BeanType list, so the four new fields serialize last and nothing above them moves.
 		assertEquals(
 			List.of("type", "id", "title", "form", "endpoint", "method", "onSuccess"),
-			new ArrayList<>(Json.to(Json.of(full), Map.class).keySet()));
+			new ArrayList<String>(Json.to(Json.of(full), Map.class).keySet()));
 
 		// Not query-contributing: like refresh/columnSearchToggle/pausePolling/collapseAll/divider/export, it
 		// contributes nothing to the data-URL query - it is a control, not a filter.

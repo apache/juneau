@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
  * {@code data:} / {@code ..} rejected), the {@link NestedTableDef#MAX_DEPTH} cap with path-scoped cycle detection,
  * and the remaining parent-only forbid ({@code columnConfig}).
  */
+@SuppressWarnings({
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class NestedTableDef_Test extends TestBase {
 
 	private static ViewDef nestedView() {

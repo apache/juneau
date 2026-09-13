@@ -44,6 +44,7 @@ import org.junit.jupiter.api.*;
  * {@code col.a=$L{col.b}}, {@code col.b=Leaf}, {@code page.title=Releases Page}, {@code tab.main=Main}.
  */
 @SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource"  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
 })
 class LocalizationChromeResolution_Test extends TestBase {

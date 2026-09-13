@@ -114,7 +114,8 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are OIDC protocol parameter names and claim names; intentional
+	"java:S1192", // Duplicate string literals are OIDC protocol parameter names and claim names; intentional
+	"java:S9358" // Ternary chooses a different constructor/null vs value; moving it inside one call is not equivalent.
 })
 public class OidcRelyingParty {
 

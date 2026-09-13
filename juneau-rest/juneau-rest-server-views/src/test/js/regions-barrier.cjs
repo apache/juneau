@@ -33,6 +33,7 @@
  *   Usage:  node regions-barrier.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const H = require(path.join(__dirname, 'regions-harness.cjs'));
@@ -151,7 +152,7 @@ function emitOnce(h, id, msg) {
 		await H.flush();
 		out.t49a1_drainedOnThirdSettle = [h.kinds('r1'), h.kinds('r3')];
 		out.t49a1_drainedAtZero = h.at('r1');
-		out.t49a1_throwerErrored = bad.getAttribute('data-juneau-region-state');
+		out.t49a1_throwerErrored = bad.dataset.juneauRegionState;
 		out.t49a1_noDeadlineNeeded = h.rec.warnsMatching('deadline').length === 0;
 	}
 
@@ -175,7 +176,7 @@ function emitOnce(h, id, msg) {
 		await H.flush();
 		out.t49b_drainedOnRejection = h.kinds('r1');
 		out.t49b_drainedAtZero = h.at('r1');
-		out.t49b_rejectorErrored = bad.getAttribute('data-juneau-region-state');
+		out.t49b_rejectorErrored = bad.dataset.juneauRegionState;
 		out.t49b_noDeadlineNeeded = h.rec.warnsMatching('deadline').length === 0;
 	}
 
@@ -214,7 +215,7 @@ function emitOnce(h, id, msg) {
 		// lifecycle one.
 		out.t49c_hungNotAborted = hungSignal.aborted === false;
 		out.t49c_hungContainerUntouched = hungContainer.querySelectorAll('i').length === 1;
-		out.t49c_hungStillLoading = hung.getAttribute('data-juneau-region-state');
+		out.t49c_hungStillLoading = hung.dataset.juneauRegionState;
 		// ...and a later user-driven emit is delivered normally rather than frozen for the life of the page.
 		h.clock.advance(5000);
 		emitOnce(h, 'later', { kind: 'M2' });
@@ -236,9 +237,9 @@ function emitOnce(h, id, msg) {
 		// ...nor through an attribute on the region or on its host.
 		h.R.registerRuntime('test');
 		const el = subscriber(h, 'slow', { enrol: false, returns: function () { return new Promise(function () {}); } });
-		el.setAttribute('data-juneau-region-barrier-ms', '5');
-		el.setAttribute('data-juneau-barrier-deadline', '5');
-		h.env.body.setAttribute('data-juneau-barrier-deadline', '5');
+		el.dataset.juneauRegionBarrierMs = '5';
+		el.dataset.juneauBarrierDeadline = '5';
+		h.env.body.dataset.juneauBarrierDeadline = '5';
 		h.R.initRegion(el);
 		control(h, 'ctl', { kind: 'M1' });
 		subscriber(h, 'healthy');
@@ -262,7 +263,7 @@ function emitOnce(h, id, msg) {
 
 		// The grid boots first and its control card emits during its initial populate.
 		const grid = h.env.el('div');
-		grid.setAttribute('data-juneau-card-grid', 'glance');
+		grid.dataset.juneauCardGrid = 'glance';
 		h.env.body.appendChild(grid);
 		control(h, 'ctl', { kind: 'M1' }, { parent: grid, host: 'glance' });
 		subscriber(h, 'gridChart', { parent: grid, host: 'glance' });
@@ -531,7 +532,7 @@ function emitOnce(h, id, msg) {
 		const h = scene();
 		h.R.registerRuntime('cards');
 		const grid = h.env.el('div');
-		grid.setAttribute('data-juneau-card-grid', 'glance');
+		grid.dataset.juneauCardGrid = 'glance';
 		h.env.body.appendChild(grid);
 		control(h, 'ctl', { kind: 'M1' }, { parent: grid });
 		subscriber(h, 'visible', { parent: grid });
@@ -552,7 +553,7 @@ function emitOnce(h, id, msg) {
 
 		// (iii) It has had NO populate at all while hidden - which is WHY it is not in the outstanding set, rather
 		// than by a special case.
-		out.t49j_iii_state = hidden.getAttribute('data-juneau-region-state');
+		out.t49j_iii_state = hidden.dataset.juneauRegionState;
 		out.t49j_iii_noContent = hidden.childNodes.length === 0;
 
 		// (iv) Activating its panel later produces exactly one populate, reason:"activate", and it receives NOTHING
@@ -731,6 +732,6 @@ function emitOnce(h, id, msg) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

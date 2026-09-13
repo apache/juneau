@@ -28,6 +28,9 @@ import org.junit.jupiter.api.Test;
  * normally land in distinct buckets (their hash is the referent's identity hash), so the map's internal key
  * probing rarely invokes {@code equals()}, and real GC timing cannot deterministically clear a referent either.
  */
+@SuppressWarnings({
+	"java:S3415" // Equals-contract tests pass the same instance or a peer fixture as both arguments; swapping is a no-op.
+})
 class McpEndpointOptionsCache_IdentityKey_Test {
 
 	private static class Fixture implements McpEndpoint {

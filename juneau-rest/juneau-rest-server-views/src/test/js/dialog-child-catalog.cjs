@@ -42,6 +42,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const { makeEnv, loadViews, jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
@@ -109,11 +110,11 @@ function parentPayload(opts) {
 function fixture(env, opts) {
 	const o = opts || {};
 	const table = env.el('table');
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauCsrf = 'tok-1';
 	env.body.appendChild(table);
 
 	const tr = env.el('tr');
-	tr.setAttribute('data-juneau-row-id', 'INC-1');
+	tr.dataset.juneauRowId = 'INC-1';
 	tr.dataset.juneauRowId = 'INC-1';
 	const cell = env.el('td');
 	cell.className = 'juneau-view-actions-cell';
@@ -133,7 +134,7 @@ async function openParent(opts) {
 	const fx = fixture(env, o);
 	const gets = [];
 	env.setFetch(function (url, init) {
-		const method = (init && init.method) || 'GET';
+		const method = (init?.method) || 'GET';
 		if (method === 'GET') gets.push(String(url));
 		if (method === 'GET' && url === PARENT_FORM) return Promise.resolve(jsonResponse(parentPayload(o)));
 		if (method === 'GET' && String(url).indexOf(CHILD_FORM) === 0)
@@ -158,8 +159,8 @@ async function openParent(opts) {
 		out.open_childButtonPainted = r.btn != null;
 		// The resolution that fails closed today: the id is in NEITHER row catalog, so pre-J0513 this button was
 		// painted disabled+marked with no way for its author to reach it.
-		out.open_childButtonEnabled = r.btn != null && r.btn.disabled === false;
-		out.open_childButtonNotMarkedMissing = r.btn != null && r.btn.dataset.juneauActionMissing === undefined;
+		out.open_childButtonEnabled = r.btn?.disabled === false;
+		out.open_childButtonNotMarkedMissing = r.btn?.dataset.juneauActionMissing === undefined;
 
 		if (r.btn) r.btn.dispatch('click');
 		await flush();
@@ -189,15 +190,15 @@ async function openParent(opts) {
 		// The row-action check runs FIRST and unchanged, so its enabledWhen gate still applies - which is exactly
 		// what a served payload must not be able to route around.  This fixture's row carries no `status` at all,
 		// which the shared rule evaluator fails CLOSED on.
-		out.precedence_rowActionWinsAndStaysGated = r.btn != null && r.btn.disabled === true;
+		out.precedence_rowActionWinsAndStaysGated = r.btn?.disabled === true;
 		// Gated, but not silently: the failing rule's own reason is what the control announces.
 		out.precedence_gateReasonSurfaced = (function () {
 			const el = q(env, '[data-juneau-row-action-desc]');
-			return el != null && el.textContent === 'only open records';
+			return el?.textContent === 'only open records';
 		})();
-		out.precedence_reasonOnTheControlTitle = r.btn != null && r.btn.getAttribute('title') === 'only open records';
+		out.precedence_reasonOnTheControlTitle = r.btn?.getAttribute('title') === 'only open records';
 		// NOT the fail-closed "missing" paint: the id resolved, it is the GATE that closed it.
-		out.precedence_notMarkedMissing = r.btn != null && r.btn.dataset.juneauActionMissing === undefined;
+		out.precedence_notMarkedMissing = r.btn?.dataset.juneauActionMissing === undefined;
 	}
 
 	// --- 3) Precedence: a collision with a NON-dialog row action is a fail-closed REFUSAL -------------------
@@ -207,9 +208,9 @@ async function openParent(opts) {
 		const directDelete = { id: 'review', label: 'Delete', method: 'DELETE', endpoint: '/x/rows/{id}' };
 		const r = await openParent({ extraRowActions: [directDelete] });
 		const env = r.env, I = r.I;
-		out.shadow_buttonPaintedDisabled = r.btn != null && r.btn.disabled === true;
-		out.shadow_buttonMarkedMissing = r.btn != null && r.btn.dataset.juneauActionMissing === '1';
-		out.shadow_ariaDisabled = r.btn != null && r.btn.getAttribute('aria-disabled') === 'true';
+		out.shadow_buttonPaintedDisabled = r.btn?.disabled === true;
+		out.shadow_buttonMarkedMissing = r.btn?.dataset.juneauActionMissing === '1';
+		out.shadow_ariaDisabled = r.btn?.getAttribute('aria-disabled') === 'true';
 		// Defense in depth: the click handler refuses too, rather than relying on the disabled attribute alone.
 		I.openFormActionDialog('review', r.fx.table, r.fx.tr, r.fx.ctx,
 			[{ id: 'review', label: 'Review', form: CHILD_FORM }]);
@@ -223,8 +224,8 @@ async function openParent(opts) {
 	{
 		const r = await openParent({ actionId: 'nope', childActions: [] });
 		const env = r.env, I = r.I;
-		out.unknown_buttonDisabled = r.btn != null && r.btn.disabled === true;
-		out.unknown_buttonMarkedMissing = r.btn != null && r.btn.dataset.juneauActionMissing === '1';
+		out.unknown_buttonDisabled = r.btn?.disabled === true;
+		out.unknown_buttonMarkedMissing = r.btn?.dataset.juneauActionMissing === '1';
 		I.openFormActionDialog('nope', r.fx.table, r.fx.tr, r.fx.ctx, []);
 		await flush();
 		out.unknown_clickIsAVisibleRefusal = dialogRefusalText(env) != null;
@@ -263,7 +264,7 @@ async function openParent(opts) {
 		await flush();
 		const childGet = r.gets.find(function (u) { return u.indexOf(CHILD_FORM) === 0; });
 		out.drafts_childGetUrl = childGet || null;
-		out.drafts_queryParamPresent = childGet != null && childGet.indexOf('juneauDrafts=') > 0;
+		out.drafts_queryParamPresent = childGet?.indexOf('juneauDrafts=') > 0;
 		out.drafts_carriedTheEditedValue = (function () {
 			if (childGet == null) return false;
 			const raw = decodeURIComponent(childGet.slice(childGet.indexOf('juneauDrafts=') + 'juneauDrafts='.length));
@@ -343,7 +344,7 @@ async function openParent(opts) {
 		}, fx.table, fx.tr, fx.ctx, 7, catalog);
 		const btn = dialog.querySelector('.juneau-view-dialog-form-action');
 		out.sectioned_buttonPainted = btn != null;
-		out.sectioned_buttonEnabledFromCatalog = btn != null && btn.disabled === false
+		out.sectioned_buttonEnabledFromCatalog = btn?.disabled === false
 			&& btn.dataset.juneauActionMissing === undefined;
 		// Without the catalog the same field stays today's fail-closed paint.
 		const dialog2 = env.el('div');
@@ -351,7 +352,7 @@ async function openParent(opts) {
 			sections: [{ id: 's1', label: 'One', fields: [{ name: 'go', type: 'action', label: 'Review', actionId: 'review' }] }]
 		}, fx.table, fx.tr, fx.ctx, 8);
 		const btn2 = dialog2.querySelector('.juneau-view-dialog-form-action');
-		out.sectioned_withoutCatalogStaysDisabled = btn2 != null && btn2.disabled === true
+		out.sectioned_withoutCatalogStaysDisabled = btn2?.disabled === true
 			&& btn2.dataset.juneauActionMissing === '1';
 	}
 

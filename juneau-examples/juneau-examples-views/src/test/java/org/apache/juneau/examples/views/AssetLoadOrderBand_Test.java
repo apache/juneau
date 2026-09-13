@@ -59,6 +59,9 @@ import org.junit.jupiter.api.*;
  * check fires or merely never runs (the same reason {@code ChromeScale_ContractScan_Test} in the views module
  * carries its own synthetic negative case).
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the band assertions.
+})
 class AssetLoadOrderBand_Test extends TestBase {
 
 	// The CSS band's five positions (2026-08-28 ruling: extended from four to five).
@@ -68,11 +71,20 @@ class AssetLoadOrderBand_Test extends TestBase {
 	private static final int CONSUMER_THEME = 4;
 	private static final int PAGE_LOCAL = 5;
 
+	@SuppressWarnings({
+		"resource" // JUnit @BeforeAll fixture; closed in @AfterAll.
+	})
 	private static ExampleViewsServer viewsServer;
+	@SuppressWarnings({
+		"resource" // JUnit @BeforeAll fixture; closed in @AfterAll.
+	})
 	private static ExampleCalendarServer calendarServer;
 	private static HttpClient http;
 
 	@BeforeAll
+	@SuppressWarnings({
+		"resource" // JUnit @BeforeAll fixture; servers closed in @AfterAll.
+	})
 	static void startServers() throws Exception {
 		viewsServer = ExampleViewsServer.start(0);
 		calendarServer = ExampleCalendarServer.start(0);
@@ -188,13 +200,13 @@ class AssetLoadOrderBand_Test extends TestBase {
 			() -> "expected the calendar page to exercise the widget-layer band position: " + hits);
 	}
 
-	/** The icon registry must load before the cards script - the refresh button's glyph resolves from the registry. */
+	/** juneau-views.js must load before juneau-regions.js - the dashboard populate script uses regions.mount. */
 	@Test
-	void a05_cardDashboardPage_scriptOrder_iconsBeforeCards() throws Exception {
+	void a05_dashboardPage_scriptOrder_viewsBeforeRegions() throws Exception {
 		var body = bodyOf(viewsServer.getRootUrl(), "/dashboard");
-		var hits = scriptSequence(body, Map.of("/juneau-icons.js", 1, "/juneau-cards.js", 2));
-		assertEquals(2, hits.size(), () -> "expected both the icons and cards scripts to be linked: " + hits);
-		assertBandOrder(hits, "Card Dashboard script order");
+		var hits = scriptSequence(body, Map.of("/juneau-views.js", 1, "/juneau-regions.js", 2, "/juneau-helpers.js", 3));
+		assertEquals(3, hits.size(), () -> "expected views, regions, and helpers scripts to be linked: " + hits);
+		assertBandOrder(hits, "Dashboard script order");
 	}
 
 	/** juneau-views.js must load before juneau-calendar.js - the calendar's popover registers on the shared stack. */

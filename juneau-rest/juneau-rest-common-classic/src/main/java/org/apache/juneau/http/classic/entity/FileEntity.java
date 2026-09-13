@@ -35,7 +35,8 @@ import org.apache.juneau.http.classic.header.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource" // Resource management handled externally
+	"resource", // Resource management handled externally
+	"java:S9365" // Copy ctor delegates to super; remaining fields are content caches defaulted empty by design.
 })
 public class FileEntity extends BasicHttpEntity<FileEntity> {
 

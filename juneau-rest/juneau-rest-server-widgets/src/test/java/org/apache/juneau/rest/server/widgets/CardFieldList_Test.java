@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  * {@link SafePathTemplate#MIN_POLL_INTERVAL_MS} in {@code juneau-commons} &mdash; this widgets test must never
  * import {@code ViewDef} (no widgets&rarr;views).
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardFieldList_Test extends TestBase {
 
 	private static CardFieldList base() {

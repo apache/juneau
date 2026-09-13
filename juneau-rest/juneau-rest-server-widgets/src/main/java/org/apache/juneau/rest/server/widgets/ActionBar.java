@@ -61,6 +61,9 @@ public class ActionBar implements Widget {
 	}
 
 	@Override /* Widget */
+	@SuppressWarnings({
+		"java:S3776" // ActionBar validation walks mixed item types; complexity is inherent.
+	})
 	public void validate() {
 		if (items == null)
 			return;

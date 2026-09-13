@@ -111,6 +111,9 @@ import java.util.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated "action" is a protocol key; a constant would obscure the wire contract.
+})
 public final class IdempotencyKey {
 
 	/** Width of a minted key value, in bits &mdash; well beyond the ≥128-bit bar. */

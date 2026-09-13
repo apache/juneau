@@ -49,6 +49,9 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value (e.g. {@code "gzip;q=0.5, identity"}). May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpStringRangesHeader of(String name, String wireValue) {
 		return new HttpStringRangesHeader(name, wireValue);
 	}
@@ -60,6 +63,9 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	 * @param typedValue The string-ranges value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static HttpStringRangesHeader of(String name, StringRanges typedValue) {
 		return new HttpStringRangesHeader(name, typedValue);
 	}

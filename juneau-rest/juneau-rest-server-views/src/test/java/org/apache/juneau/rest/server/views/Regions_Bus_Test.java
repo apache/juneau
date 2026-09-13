@@ -46,11 +46,6 @@ class Regions_Bus_Test extends TestBase {
 			assertEquals(true, r.get(k), () -> k + " -> " + r.get(k) + " in " + r);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static List<String> list(Map<?,?> r, String key) {
-		return (List<String>)r.get(key);
-	}
-
 	// =================================================================================================================
 	// Source shape.
 	// =================================================================================================================

@@ -60,6 +60,9 @@ import java.util.regex.*;
  * ever fetches. Both files are read from the module's own {@code src/main/resources}, the same way
  * {@link SymbolsKey_Staleness_Test} reads the sprite and its authoring key.
  */
+@SuppressWarnings({
+	"java:S8786" // Scanner regex is intentional; tightening would change match semantics.
+})
 final class SymbolProvenanceScanner {
 
 	static final String RESOURCE_DIR = "src/main/resources/org/apache/juneau/views";

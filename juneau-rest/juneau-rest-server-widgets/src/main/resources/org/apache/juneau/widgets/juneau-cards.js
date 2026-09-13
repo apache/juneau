@@ -288,7 +288,7 @@
 		for (const el of nodes) {
 			window.console?.error?.(RUNTIME_TOKEN + ": juneau-regions.js is not loaded; the region '"
 				+ (el.getAttribute(REGION_MARKER) || "") + "' cannot populate.");
-			el.setAttribute("data-juneau-region-state", "error");
+			el.setAttribute("data-juneau-region-state", "error"); // NOSONAR javascript:S7761 -- querySelector / getAttribute pins literal
 			const message = "This region could not be populated: juneau-regions.js is not loaded.";
 			const render = window.JuneauViews?.init?.renderAsyncStatus;
 			if (typeof render === "function") render(el, "error", message);

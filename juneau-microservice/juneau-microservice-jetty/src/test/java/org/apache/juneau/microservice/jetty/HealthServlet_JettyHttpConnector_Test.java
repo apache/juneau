@@ -29,7 +29,7 @@ import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * [TODO-401] Real-HTTP-connector coverage for the auto-mounted {@link HealthServlet} probe paths under a Jetty
+ * Real-HTTP-connector coverage Real-HTTP-connector coverage for the auto-mounted {@link HealthServlet} probe paths under a Jetty
  * microservice booted from {@link HealthProbeConfiguration} (the DualStore boot recipe), instead of the in-process
  * {@code ReadinessState.resolve(BeanStore)} shortcut that
  * {@link JettyServerComponent_ReadinessStateDualStorePublish_Test} deliberately used to route around the

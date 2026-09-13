@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * {@link CalendarTable#of(RestRequest, CalendarDef)} / {@link CalendarTable#of(RestRequest, CalendarDef, Clock)}
- * localize the month/year title against {@link RestRequest#getLocale()} (TODO-J0485).
+ * localize the month/year title against {@link RestRequest#getLocale()} (the request-aware month/year title localization).
  *
  * <p>
  * The request-free {@link CalendarTable#of(CalendarDef, Clock)} path is covered (and pinned to

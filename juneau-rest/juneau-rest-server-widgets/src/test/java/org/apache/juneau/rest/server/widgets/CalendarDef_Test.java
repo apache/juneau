@@ -59,44 +59,44 @@ class CalendarDef_Test extends TestBase {
 
 	@Test void b01_nullId_rejected() {
 		var d = CalendarDef.create();
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void b02_blankId_rejected() {
 		var d = good().id("  ");
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void b03_badCharsetId_rejected() {
 		var d1 = good().id("1cal");
-		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d1::validate);
 		var d2 = good().id("cal.1");
-		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d2::validate);
 		var d3 = good().id("cal 1");
-		assertThrows(IllegalArgumentException.class, () -> d3.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d3::validate);
 	}
 
 	@Test void c01_endpointMissingTokens_rejected() {
 		var d1 = good().endpoint("/events/{year}");
-		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d1::validate);
 		var d2 = good().endpoint("/events/{month}");
-		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d2::validate);
 	}
 
 	@Test void c02_endpointNotSameOrigin_rejected() {
 		var d1 = good().endpoint("http://evil/{year}/{month}");
-		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d1::validate);
 		var d2 = good().endpoint("//host/{year}/{month}");
-		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d2::validate);
 		var d3 = good().endpoint("a:b/{year}/{month}");
-		assertThrows(IllegalArgumentException.class, () -> d3.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d3::validate);
 		var d4 = good().endpoint("../{year}/{month}");
-		assertThrows(IllegalArgumentException.class, () -> d4.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d4::validate);
 	}
 
 	@Test void c03_blankEndpoint_rejected() {
 		var d = good().endpoint("   ");
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void c04_nullEndpoint_ok_seedOnly() {
@@ -112,48 +112,48 @@ class CalendarDef_Test extends TestBase {
 
 	@Test void d01_maxPerDayBelowOne_rejected() {
 		var d = good().maxPerDay(0);
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void d02_initialMonthOutOfRange_rejected() {
 		var d1 = good().initial(2026, 0);
-		assertThrows(IllegalArgumentException.class, () -> d1.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d1::validate);
 		var d2 = good().initial(2026, 13);
-		assertThrows(IllegalArgumentException.class, () -> d2.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d2::validate);
 	}
 
 	@Test void d03_initialSetOneOnly_rejected() {
 		var d = good();
 		d.initialYear = 2026;
 		d.initialMonth = null;
-		assertThrows(IllegalArgumentException.class, d::validate);
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void e01_nullCategory_rejected() {
 		var d = good().categories((EventCategory) null);
-		assertThrows(IllegalArgumentException.class, d::validate);
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void e02_blankCategoryId_rejected() {
 		var d = good().categories(EventCategory.create().id("").label("x"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void e03_badCharsetCategoryId_rejected() {
 		var d = good().categories(EventCategory.create().id("a b").label("x"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void e04_dupCategoryId_rejected() {
 		var d = good().categories(
 			EventCategory.create().id("team").label("A"),
 			EventCategory.create().id("team").label("B"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void e05_blankCategoryLabel_rejected() {
 		var d = good().categories(EventCategory.create().id("team").label("  "));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void f01_seedEventBlankTitle_isDropped_notFatal() {
@@ -170,25 +170,25 @@ class CalendarDef_Test extends TestBase {
 		var d = good().events(
 			CalendarEvent.create().id("e1").title("a").start("2026-08-14").categoryId("team"),
 			CalendarEvent.create().id("e1").title("b").start("2026-08-15").categoryId("team"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void f03_seedOffMonth_rejected() {
 		var d = good().events(
 			CalendarEvent.create().id("e1").title("a").start("2026-09-01").categoryId("team"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void f04_seedUnknownCategory_rejected() {
 		var d = good().events(
 			CalendarEvent.create().id("e1").title("a").start("2026-08-14").categoryId("ghost"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void f05_seedUnsafeHref_rejected() {
 		var d = good().events(
 			CalendarEvent.create().id("e1").title("a").start("2026-08-14").href("javascript:alert(1)"));
-		assertThrows(IllegalArgumentException.class, () -> d.validate());
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
 	}
 
 	@Test void g01_offMonthCheckedAgainstResolvedWindow() {

@@ -782,7 +782,7 @@
 			if (!resp.ok)
 				throw new Error("HTTP " + resp.status);
 			const ct = resp.headers?.get?.("Content-Type") ?? null;
-			if (ct && ct.indexOf("application/json") < 0)
+			if (ct?.indexOf("application/json") < 0)
 				throw new Error("non-JSON response");
 			return resp.json();
 		}).then(function (envelope) {
@@ -797,7 +797,7 @@
 				return; // echo-check: the body is for a different month - drop.
 			commitMonth(state, sanitizeEvents(envelope.events));
 		}).catch(function (e) {
-			if (e && e.name === "AbortError")
+			if (e?.name === "AbortError")
 				return;
 			if (generation === state.generation) {
 				state.pendingFilterReset = false;   // failed navigation: the category filter is PRESERVED.

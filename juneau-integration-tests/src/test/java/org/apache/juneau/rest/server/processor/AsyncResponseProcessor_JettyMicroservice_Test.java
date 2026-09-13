@@ -56,6 +56,9 @@ import jakarta.servlet.*;
  * @since 10.0.0
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"java:S2925" // Short sleep waits for the Jetty microservice; a latch is not available at this seam.
+})
 class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------

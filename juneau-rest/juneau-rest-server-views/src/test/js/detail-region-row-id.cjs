@@ -100,8 +100,8 @@ function buildAndExpand(env, NS, I, opts) {
 	env.body.appendChild(host);
 
 	const tpl = env.el('template');
-	tpl.setAttribute('data-juneau-row-detail', '1');
-	tpl.setAttribute('data-juneau-detail-url', DETAIL_URL);
+	tpl.dataset.juneauRowDetail = '1';
+	tpl.dataset.juneauDetailUrl = DETAIL_URL;
 	host.appendChild(tpl);
 
 	// The shim models no DocumentFragment, so the template's clone is a wrapper <div> holding the region rather
@@ -112,12 +112,12 @@ function buildAndExpand(env, NS, I, opts) {
 		cloneNode: function () {
 			const wrap = env.el('div');
 			const region = env.el('div');
-			region.setAttribute('data-juneau-region', 'source');
-			region.setAttribute('data-juneau-region-type', 'row-detail');
-			region.setAttribute('data-juneau-region-declared', JSON.stringify({
+			region.dataset.juneauRegion = 'source';
+			region.dataset.juneauRegionType = 'row-detail';
+			region.dataset.juneauRegionDeclared = JSON.stringify({
 				contractVersion: '1',
 				dataUrl: REGION_DATA_URL
-			}));
+			});
 			wrap.appendChild(region);
 			return wrap;
 		}
@@ -125,7 +125,7 @@ function buildAndExpand(env, NS, I, opts) {
 
 	const tr = withClassList(env.el('tr'));
 	tr.className = 'juneau-view-detail-row';
-	tr.setAttribute('data-juneau-row-id', ROW_ID);
+	tr.dataset.juneauRowId = ROW_ID;
 	// Dedicated first-column chevron cell — expand/collapse is chevron-only.
 	const td = env.el('td');
 	td.className = 'juneau-view-detail-control';
@@ -162,12 +162,12 @@ function buildAndExpand(env, NS, I, opts) {
 		panel.removeAttribute('data-juneau-row-id');
 		// Re-enrol a SECOND, freshly-added region so enrolIn's per-node idempotence mark does not make this a no-op.
 		const region2 = env.el('div');
-		region2.setAttribute('data-juneau-region', 'source2');
-		region2.setAttribute('data-juneau-region-type', 'row-detail');
-		region2.setAttribute('data-juneau-region-declared', JSON.stringify({
+		region2.dataset.juneauRegion = 'source2';
+		region2.dataset.juneauRegionType = 'row-detail';
+		region2.dataset.juneauRegionDeclared = JSON.stringify({
 			contractVersion: '1',
 			dataUrl: REGION_DATA_URL
-		}));
+		});
 		panel.appendChild(region2);
 		NS.regions.enrolIn(panel);
 	}
@@ -198,7 +198,7 @@ async function run(opts) {
 	out.hasFixture = !!ok.fx.panel;
 	if (!out.hasFixture) { process.stdout.write(JSON.stringify(out)); return; }
 
-	out.panelCarriesRowId = ok.fx.panel.getAttribute('data-juneau-row-id') === ROW_ID;
+	out.panelCarriesRowId = ok.fx.panel.dataset.juneauRowId === ROW_ID;
 
 	// The property every consumer actually depends on, asserted the way they resolve it.
 	const region = ok.fx.panel.querySelector('[data-juneau-region]');

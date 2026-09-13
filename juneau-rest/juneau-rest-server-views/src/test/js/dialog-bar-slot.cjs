@@ -31,6 +31,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -101,7 +102,7 @@ function elWalk(node, sel, acc) {
 
 function closestFrom(node, sel) {
 	let n = node;
-	while (n && n.nodeType === 1) {
+	while (n?.nodeType === 1) {
 		if (elMatches(n, sel)) return n;
 		n = n.parentNode;
 	}
@@ -111,7 +112,7 @@ function closestFrom(node, sel) {
 function dispatchFrom(node, ev) {
 	let n = node;
 	while (n) {
-		(n._listeners && n._listeners[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
+		(n._listeners?.[ev.type] || []).slice().forEach(function (fn) { fn(ev); });
 		n = ev.bubbles ? n.parentNode : null;
 	}
 }
@@ -263,8 +264,8 @@ const document = {
 
 function CustomEvent(type, init) {
 	this.type = type;
-	this.detail = init && init.detail;
-	this.bubbles = !!(init && init.bubbles);
+	this.detail = init?.detail;
+	this.bubbles = !!(init?.bubbles);
 	this.defaultPrevented = false;
 	this.preventDefault = function () { this.defaultPrevented = true; };
 }

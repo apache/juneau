@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * tab/subtab lists, and the serialized shape (baked {@code contractVersion}, preserved ids) without over-specifying
  * whitespace/key-order beyond the top-level discriminator fields.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class PageDef_Contract_Test extends TestBase {
 
 	public static class Release {

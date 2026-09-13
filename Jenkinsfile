@@ -28,7 +28,10 @@ timestamps {
 	
 			withEnv(["JAVA_HOME=${ tool 'JDK 17 (latest)' }", "PATH=$PATH:${env.JAVA_HOME}/bin"]) { 
 	
-				withMaven(jdk: 'JDK 17 (latest)', maven: 'Maven 3.6.3') { 
+				// maven_3_latest is the ASF Jenkins tool installed on every agent (INFRA:
+				// do not rely on a system mvn on PATH). Prefer this over maven_latest so
+				// the job stays on Maven 3, matching the Java 17 / mvn-3 goals.
+				withMaven(jdk: 'JDK 17 (latest)', maven: 'maven_3_latest') { 
 					sh "echo hello"
 					sh "mvn -ntp clean install deploy"
 				}

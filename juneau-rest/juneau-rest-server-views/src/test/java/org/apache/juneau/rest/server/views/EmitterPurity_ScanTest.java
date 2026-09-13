@@ -65,6 +65,9 @@ import org.junit.jupiter.api.*;
  * directory in silence. So the checks proving the scan still sees both trees are as load-bearing as the violation
  * check itself, and they run first.
  */
+@SuppressWarnings({
+	"java:S3415" // The Set.of/List.of fixture is the expected value; the constant/field is the actual under test.
+})
 class EmitterPurity_ScanTest extends TestBase {
 
 	/**

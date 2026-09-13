@@ -47,6 +47,7 @@
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const { makeEnv, loadViews, jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
@@ -107,11 +108,11 @@ function modalPayload(opts) {
 function fixture(env, opts) {
 	const o = opts || {};
 	const table = env.el('table');
-	if (o.csrf !== false) table.setAttribute('data-juneau-csrf', 'tok-1');
+	if (o.csrf !== false) table.dataset.juneauCsrf = 'tok-1';
 	env.body.appendChild(table);
 
 	const tr = env.el('tr');
-	tr.setAttribute('data-juneau-row-id', 'INC-1');
+	tr.dataset.juneauRowId = 'INC-1';
 	tr.dataset.juneauRowId = 'INC-1';
 	const cell = env.el('td');
 	cell.className = 'juneau-view-actions-cell';
@@ -148,7 +149,7 @@ async function openAndConfirm(opts) {
 	const { env, I } = load();
 	const fx = fixture(env, o);
 	env.setFetch(function (url, init) {
-		const method = (init && init.method) || 'GET';
+		const method = (init?.method) || 'GET';
 		if (method === 'GET' && url === FORM_URL)
 			return Promise.resolve(jsonResponse(modalPayload(o)));
 		if (method === 'GET' && String(url).indexOf(RECEIPT_URL) === 0)
@@ -183,7 +184,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse(Object.assign({ ou
 		const env = r.env, d = dialogEl(env);
 		out.receipt_dialogOpened = r.opened;
 		out.receipt_stillOpenAtSameDepth = r.I.dialogLayerCount() === 1;
-		out.receipt_marked = d != null && d.dataset.juneauReceipt === '1' && d.dataset.testid === 'dialog-receipt';
+		out.receipt_marked = d?.dataset.juneauReceipt === '1' && d.dataset.testid === 'dialog-receipt';
 		// The ENFORCEMENT, and it is an absence: no confirm control anywhere in the receipt.
 		out.receipt_noConfirmButton = confirmBtn(env) === null;
 		out.receipt_noInputsAtAll = env.body.querySelectorAll('[data-juneau-form-field]').length === 0;
@@ -191,11 +192,11 @@ const success = (extra) => () => Promise.resolve(jsonResponse(Object.assign({ ou
 		out.receipt_closeButtonPresent = q(env, '[data-testid="dialog-receipt-close"]') != null;
 		out.receipt_titleFromPayload = (function () {
 			const t = q(env, '.juneau-view-dialog-title');
-			return t != null && t.textContent === 'Deleted';
+			return t?.textContent === 'Deleted';
 		})();
 		out.receipt_fieldsRepainted = (function () {
 			const dl = q(env, '.juneau-view-dialog-fields');
-			return dl != null && dl.querySelectorAll('dd').length === 2 && dl.querySelectorAll('dt').length === 2;
+			return dl?.querySelectorAll('dd').length === 2 && dl.querySelectorAll('dt').length === 2;
 		})();
 		out.receipt_exactlyOneFieldList = env.body.querySelectorAll('.juneau-view-dialog-fields').length === 1;
 		out.receipt_codeFieldIsPre = q(env, '.juneau-view-dialog-field-code') != null
@@ -203,7 +204,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse(Object.assign({ ou
 		out.receipt_codeFieldHasCopyButton = q(env, '[data-testid="dialog-field-copy"]') != null;
 		// The row banner is SUPPRESSED: the dialog is on screen, so rendering it too would show one outcome twice.
 		out.receipt_noRowBanner = !anyRowBanner(env);
-		out.receipt_busyMarkerCleared = d != null && d.dataset.juneauDialogBusy === undefined;
+		out.receipt_busyMarkerCleared = d?.dataset.juneauDialogBusy === undefined;
 		// Pressing Close takes the whole stack down.
 		const closeBtn = q(env, '[data-testid="dialog-receipt-close"]');
 		if (closeBtn) closeBtn.dispatch('click');
@@ -236,7 +237,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse(Object.assign({ ou
 		const diag = q(env, '[data-testid="result-form-ignored"]');
 		out.f4_diagnosticPresent = diag != null;
 		// role=status, not alert: the write SUCCEEDED, and a consumer authoring bug must not look like a failure.
-		out.f4_diagnosticIsStatusNotAlert = diag != null && diag.getAttribute('role') === 'status';
+		out.f4_diagnosticIsStatusNotAlert = diag?.getAttribute('role') === 'status';
 		out.f4_noNewLayer = r.I.dialogLayerCount() === 0 && env.body.querySelector('[data-juneau-receipt]') === null;
 	}
 

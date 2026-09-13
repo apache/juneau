@@ -65,6 +65,9 @@ import org.junit.jupiter.api.*;
  * profile. This test is cheap, needs nothing, and therefore runs on every build &mdash; which is the right split,
  * because a provenance guard that only runs under an opt-in profile guards nothing on the default gate.
  */
+@SuppressWarnings({
+	"java:S8786" // Test regex is intentional; tightening would change match semantics.
+})
 class SymbolSprite_Provenance_Test extends TestBase {
 
 	/** How to put it back, quoted in every failure message rather than left for the reader to find. */

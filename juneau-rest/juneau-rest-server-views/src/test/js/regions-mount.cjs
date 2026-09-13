@@ -23,6 +23,7 @@
  *   Usage:  node regions-mount.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const H = require(path.join(__dirname, 'regions-harness.cjs'));
@@ -62,19 +63,19 @@ function slot(env, id) {
 		const details = slot(env, 'details');
 		const mounted = R.mount({ probes: 'ssc-probes', details: 'ssc-probe-details' });
 		out.t1_thenable = !!(mounted && typeof mounted.then === 'function');
-		out.t1_regionEnrolmentWasSync = probes.getAttribute('data-juneau-region') === 'probes'
-			&& details.getAttribute('data-juneau-region') === 'details';
+		out.t1_regionEnrolmentWasSync = probes.dataset.juneauRegion === 'probes'
+			&& details.dataset.juneauRegion === 'details';
 		const handles = await Promise.resolve(mounted);
 		out.t1_mountIsOnRegions = typeof R.mount === 'function' && NS.regions.mount === R.mount;
 		out.t1_notOnPages = NS.pages == null || NS.pages.mount == null;
 		out.t1_handleCount = handles.length;
-		out.t1_probesAttr = probes.getAttribute('data-juneau-region');
-		out.t1_probesPopulate = probes.getAttribute('data-juneau-region-populate');
-		out.t1_detailsAttr = details.getAttribute('data-juneau-region');
-		out.t1_detailsPopulate = details.getAttribute('data-juneau-region-populate');
-		out.t1_probesKeyIsSlotId = painted.probes && painted.probes.key === 'probes';
-		out.t1_detailsKeyIsSlotId = painted.details && painted.details.key === 'details';
-		out.t1_containerEmptyAtPopulate = painted.probes && painted.probes.childCountBefore === 0;
+		out.t1_probesAttr = probes.dataset.juneauRegion;
+		out.t1_probesPopulate = probes.dataset.juneauRegionPopulate;
+		out.t1_detailsAttr = details.dataset.juneauRegion;
+		out.t1_detailsPopulate = details.dataset.juneauRegionPopulate;
+		out.t1_probesKeyIsSlotId = painted.probes?.key === 'probes';
+		out.t1_detailsKeyIsSlotId = painted.details?.key === 'details';
+		out.t1_containerEmptyAtPopulate = painted.probes?.childCountBefore === 0;
 		out.t1_probesPainted = probes.childNodes.length === 1;
 		out.t1_detailsPainted = details.childNodes.length === 1;
 		out.t1_noErrors = rec.errors.length === 0;
@@ -95,13 +96,13 @@ function slot(env, id) {
 			R.mount({ probes: 'ssc-probes', details: 'ssc-probe-details' });
 		} catch (e) {
 			threw = true;
-			message = String(e && e.message ? e.message : e);
+			message = String(e?.message ? e.message : e);
 		}
 		out.t2_threw = threw;
 		out.t2_namesMissingId = message.indexOf("id 'details'") >= 0;
 		out.t2_consoleError = rec.errorsMatching("id 'details'").length >= 1;
-		out.t2_probesNotStamped = probes.getAttribute('data-juneau-region') == null;
-		out.t2_probesNotEnrolled = probes.getAttribute('data-juneau-region-state') == null;
+		out.t2_probesNotStamped = probes.dataset.juneauRegion == null;
+		out.t2_probesNotEnrolled = probes.dataset.juneauRegionState == null;
 		out.t2_defaultDidNotRun = defaultRan === false;
 	}
 
@@ -121,13 +122,13 @@ function slot(env, id) {
 			R.mount({ probes: 'ssc-probes', details: 'no-such-populator' });
 		} catch (e) {
 			threw = true;
-			message = String(e && e.message ? e.message : e);
+			message = String(e?.message ? e.message : e);
 		}
 		out.t3_threw = threw;
 		out.t3_namesBadPopulator = message.indexOf('no-such-populator') >= 0;
 		out.t3_consoleError = rec.errorsMatching('no-such-populator').length >= 1;
-		out.t3_probesNotStamped = probes.getAttribute('data-juneau-region') == null;
-		out.t3_detailsNotStamped = details.getAttribute('data-juneau-region') == null;
+		out.t3_probesNotStamped = probes.dataset.juneauRegion == null;
+		out.t3_detailsNotStamped = details.dataset.juneauRegion == null;
 		out.t3_defaultDidNotRun = defaultRan === false;
 	}
 
@@ -239,18 +240,18 @@ function slot(env, id) {
 			R.mount({ incidents: 'juneau-table' });
 		} catch (e) {
 			threw = true;
-			message = String(e && e.message ? e.message : e);
+			message = String(e?.message ? e.message : e);
 		}
 		out.t7_threw = threw;
 		out.t7_pointsAtTableUrl = message.indexOf('{ table: url }') >= 0;
 		out.t7_notUnregisteredName = message.indexOf('no populator is registered under the name') < 0;
 		out.t7_consoleError = rec.errorsMatching('juneau-table').length >= 1;
-		out.t7_notStamped = incidents.getAttribute('data-juneau-region') == null;
+		out.t7_notStamped = incidents.dataset.juneauRegion == null;
 		out.t7_defaultDidNotRun = defaultRan === false;
 	}
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String(e && e.stack ? e.stack : e));
+	process.stderr.write(String(e?.stack ? e.stack : e));
 	process.exit(1);
 });

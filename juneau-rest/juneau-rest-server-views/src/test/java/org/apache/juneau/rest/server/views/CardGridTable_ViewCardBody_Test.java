@@ -47,6 +47,9 @@ import org.junit.jupiter.api.*;
  * 		stays the author's own id.
  * </ul>
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardGridTable_ViewCardBody_Test extends TestBase {
 
 	private static final String TOKEN = "tok-123";
@@ -302,7 +305,7 @@ class CardGridTable_ViewCardBody_Test extends TestBase {
 		String html = "<b>hi</b>";
 
 		// Deliberately a no-op: this stand-in only needs to satisfy the CardBody contract, not carry real validation.
-		@Override public void validate() {}
+		@Override public void validate() { /* Test-harness no-op; satisfies CardBody. */ }
 	}
 
 	@Test void e01_unknownCardBodyFailsClosedOnTheRequestAwarePath() {

@@ -403,6 +403,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * @param pathSpecs The context paths of the servlet.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"deprecation" // Context.addServletMappingDecoded is deprecated in Tomcat 11 in favor of Wrapper.addMapping, which does not populate Context.findServletMappings() during embed startup.
+	})
 	public TomcatServerComponent addServlet(Servlet servlet, String...pathSpecs) {
 		var context = getContext();
 		var servletName = cn(servlet) + "#" + UUID.randomUUID();

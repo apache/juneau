@@ -35,37 +35,42 @@ import org.junit.jupiter.api.*;
  */
 class XmlWriter_AttrEncoding_Test extends TestBase {
 
-	@Test void a01_hostileValueCannotBreakOutOfTheAttribute() {
-		var w = new SimpleHtmlWriter();
-		w.oTag("div").attr("aria-label", "\"><script>alert(1)</script>").ceTag();
-		var r = w.toString();
-		assertEquals("<div aria-label='&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;'/>", r);
-		assertFalse(r.contains("<script>"), r);
+	@Test void a01_hostileValueCannotBreakOutOfTheAttribute() throws Exception {
+		try (var w = new SimpleHtmlWriter()) {
+			w.oTag("div").attr("aria-label", "\"><script>alert(1)</script>").ceTag();
+			var r = w.toString();
+			assertEquals("<div aria-label='&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;'/>", r);
+			assertFalse(r.contains("<script>"), r);
+		}
 	}
 
-	@Test void a02_theXmlSpecialCharactersBecomeEntities() {
-		var w = new SimpleHtmlWriter();
-		w.oTag("div").attr("title", "&\"<>'").ceTag();
-		assertEquals("<div title='&amp;&quot;&lt;&gt;&apos;'/>", w.toString());
+	@Test void a02_theXmlSpecialCharactersBecomeEntities() throws Exception {
+		try (var w = new SimpleHtmlWriter()) {
+			w.oTag("div").attr("title", "&\"<>'").ceTag();
+			assertEquals("<div title='&amp;&quot;&lt;&gt;&apos;'/>", w.toString());
+		}
 	}
 
-	@Test void a03_ordinaryValuesArePassedThroughUnchanged() {
-		var w = new SimpleHtmlWriter();
-		w.oTag("div").attr("class", "btn btn-primary").attr("data-id", "c1:more").ceTag();
-		assertEquals("<div class='btn btn-primary' data-id='c1:more'/>", w.toString());
+	@Test void a03_ordinaryValuesArePassedThroughUnchanged() throws Exception {
+		try (var w = new SimpleHtmlWriter()) {
+			w.oTag("div").attr("class", "btn btn-primary").attr("data-id", "c1:more").ceTag();
+			assertEquals("<div class='btn btn-primary' data-id='c1:more'/>", w.toString());
+		}
 	}
 
-	@Test void a04_valuesAreTakenAsRawTextSoAPreEscapedValueIsEscapedAgain() {
+	@Test void a04_valuesAreTakenAsRawTextSoAPreEscapedValueIsEscapedAgain() throws Exception {
 		// Documents the caller contract: attr() owns the escaping, so callers must hand it raw text.
-		var w = new SimpleHtmlWriter();
-		w.oTag("div").attr("title", "a &amp; b").ceTag();
-		assertEquals("<div title='a &amp;amp; b'/>", w.toString());
+		try (var w = new SimpleHtmlWriter()) {
+			w.oTag("div").attr("title", "a &amp; b").ceTag();
+			assertEquals("<div title='a &amp;amp; b'/>", w.toString());
+		}
 	}
 
-	@Test void a05_theNoEncodeOverloadStillEmitsVerbatim() {
-		var w = new SimpleHtmlWriter();
-		w.oTag("div").attr("data-json", "{\"a\":1}", false).ceTag();
-		assertEquals("<div data-json='{\"a\":1}'/>", w.toString());
+	@Test void a05_theNoEncodeOverloadStillEmitsVerbatim() throws Exception {
+		try (var w = new SimpleHtmlWriter()) {
+			w.oTag("div").attr("data-json", "{\"a\":1}", false).ceTag();
+			assertEquals("<div data-json='{\"a\":1}'/>", w.toString());
+		}
 	}
 
 	@Marshalled(typeName = "A")

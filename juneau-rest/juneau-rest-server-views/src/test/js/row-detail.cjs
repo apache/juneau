@@ -6,6 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
+ // NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -245,7 +246,7 @@ function parseTestHtml(html) {
 }
 
 // Constructor intentionally empty: DOMParser only needs a working parseFromString(), added via the prototype below.
-function DOMParser() {}
+function DOMParser() { /* test-harness stub; parseFromString lives on the prototype */ }
 DOMParser.prototype.parseFromString = function (str) {
 	return { body: { firstChild: parseTestHtml(str) } };
 };
@@ -288,6 +289,7 @@ out.url_protoRel = I.isSafeDetailUrl('//evil/{id}');
 out.url_scheme = I.isSafeDetailUrl('servlet:/data/{id}');
 out.url_dotdot = I.isSafeDetailUrl('/data/../x/{id}');
 
+// NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
 const hostile = '../etc/passwd?x=http://evil';
 out.sub_hostile = I.substituteDetailUrl('/data/alerts/{id}', hostile);
 out.sub_hostileEncoded = out.sub_hostile === '/data/alerts/' + encodeURIComponent(hostile);
@@ -327,7 +329,7 @@ out.fill_missing = extra.textContent;
 out.fill_xssNotInterpreted = title.textContent === xss;
 
 const titleWrap = el('div');
-titleWrap.setAttribute('data-juneau-title-fields', 'number');
+titleWrap.dataset.juneauTitleFields = 'number';
 const titleH2 = el('h2');
 titleH2.dataset.juneauDetailTitle = '1';
 titleH2.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
@@ -337,7 +339,7 @@ I.fillDetailSlots(titleWrap, { number: '42' });
 out.title_filled = titleH2.textContent;
 
 const titleXssWrap = el('div');
-titleXssWrap.setAttribute('data-juneau-title-fields', 'number');
+titleXssWrap.dataset.juneauTitleFields = 'number';
 const titleXss = el('h2');
 titleXss.dataset.juneauDetailTitle = '1';
 titleXss.dataset.juneauDetailTitleTemplate = 'Incident #{number}';
@@ -675,6 +677,7 @@ out.sh_nullClears = blank.childNodes.length === 0;
 
 // 6. isSafeImageSrc directly.
 out.shSrc_https = I.isSafeImageSrc('https://x/p.png');
+// NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
 out.shSrc_http = I.isSafeImageSrc('http://x/p.png');
 out.shSrc_data = I.isSafeImageSrc('data:image/png;base64,AAA');
 out.shSrc_js = I.isSafeImageSrc('javascript:alert(1)');
@@ -987,13 +990,13 @@ if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
 	function gatedBar(actionId, rules) {
 		const bar = el('div');
 		const btn = el('button');
-		btn.setAttribute('data-juneau-action', actionId);
-		btn.setAttribute('data-juneau-action-rules', JSON.stringify(rules));
+		btn.dataset.juneauAction = actionId;
+		btn.dataset.juneauActionRules = JSON.stringify(rules);
 		btn.disabled = false;
 		btn.hidden = false;
 		btn.removeAttribute = function (k) { delete this.attrs[k]; };
 		const desc = el('span');
-		desc.setAttribute('data-juneau-action-desc', actionId);
+		desc.dataset.juneauActionDesc = actionId;
 		desc.setAttribute('hidden', 'hidden');
 		bar.appendChild(btn);
 		bar.appendChild(desc);
@@ -1108,11 +1111,11 @@ if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
 	// Two gated actions in one bar get one node each, so the ids differ by action too.
 	const twoActions = gatedBar('ack', [OPEN_ONLY]);
 	const escBtn = el('button');
-	escBtn.setAttribute('data-juneau-action', 'esc');
-	escBtn.setAttribute('data-juneau-action-rules', JSON.stringify([OPEN_ONLY]));
+	escBtn.dataset.juneauAction = 'esc';
+	escBtn.dataset.juneauActionRules = JSON.stringify([OPEN_ONLY]);
 	escBtn.removeAttribute = function (k) { delete this.attrs[k]; };
 	const escDesc = el('span');
-	escDesc.setAttribute('data-juneau-action-desc', 'esc');
+	escDesc.dataset.juneauActionDesc = 'esc';
 	twoActions.panel.firstChild.appendChild(escBtn);
 	twoActions.panel.firstChild.appendChild(escDesc);
 	I.mintActionDescIdentity(twoActions.panel, 'alerts', 'a1');
@@ -1123,7 +1126,7 @@ if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
 	// (9) A malformed rules attribute gates NOTHING: the rule is presentation only and the server stays
 	// authoritative, so the safe direction is the pre-rule behaviour rather than a bar of dead buttons.
 	const badBar = gatedBar('ack', [OPEN_ONLY]);
-	badBar.btn.setAttribute('data-juneau-action-rules', '{not json');
+	badBar.btn.dataset.juneauActionRules = '{not json';
 	I.applyActionRefRules(badBar.panel, {});
 	out.rule_malformedGatesNothing = badBar.btn.disabled === false;
 	// An empty rule array is likewise inert.
@@ -1145,7 +1148,7 @@ function fieldWithBar(key, actionId, rules) {
 	const panel = el('div');
 	panel.className = 'juneau-view-detail-panel';
 	const sec = el('section');
-	sec.setAttribute('data-juneau-detail-section', 'ctx');
+	sec.dataset.juneauDetailSection = 'ctx';
 	const grid = el('div');
 	grid.className = 'juneau-view-detail-fields juneau-view-detail-fields-inline';
 	const block = el('div');
@@ -1154,20 +1157,20 @@ function fieldWithBar(key, actionId, rules) {
 	label.className = 'juneau-view-detail-field-title';
 	label.textContent = 'Assignee';
 	const value = el('div');
-	value.setAttribute('data-juneau-field', key);
+	value.dataset.juneauField = key;
 	value.className = 'juneau-view-detail-field-value';
 	const bar = el('div');
 	bar.className = 'juneau-view-detail-actions';
 	const btn = el('button');
-	btn.setAttribute('data-juneau-action', actionId);
+	btn.dataset.juneauAction = actionId;
 	btn.className = 'juneau-view-detail-action';
 	btn.disabled = true;                    // as emitted: disabled until the expand GET returns 2xx
 	btn.hidden = false;
 	btn.removeAttribute = function (k) { delete this.attrs[k]; };
 	const desc = el('span');
-	desc.setAttribute('data-juneau-action-desc', actionId);
+	desc.dataset.juneauActionDesc = actionId;
 	desc.setAttribute('hidden', 'hidden');
-	if (rules) btn.setAttribute('data-juneau-action-rules', JSON.stringify(rules));
+	if (rules) btn.dataset.juneauActionRules = JSON.stringify(rules);
 	bar.appendChild(btn);
 	if (rules) bar.appendChild(desc);
 	block.appendChild(label);

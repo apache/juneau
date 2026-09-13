@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
  * {@link CardContent} bean contract: the raw-markup {@link CardBody}.  This widgets test must never import
  * {@code ViewDef} (no widgets&rarr;views), mirroring {@code CardFieldList_Test}'s equivalent check.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardContent_Test extends TestBase {
 
 	@Test void a01_builder_roundTrip() {

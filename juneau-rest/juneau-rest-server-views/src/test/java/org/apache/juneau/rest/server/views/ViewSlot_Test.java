@@ -28,7 +28,6 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.apache.juneau.rest.server.views.ViewDef.Dir;
@@ -39,7 +38,8 @@ import org.junit.jupiter.api.*;
  * Golden-fixture and envelope-behavior tests for {@link ViewSlot} / {@code SLOT_META}.
  */
 @SuppressWarnings({
-	"resource" // Closeable MockRestClient fixtures held for the class lifetime.
+	"resource", // Closeable MockRestClient fixtures held for the class lifetime.
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
 })
 class ViewSlot_Test extends TestBase {
 
@@ -149,7 +149,7 @@ class ViewSlot_Test extends TestBase {
 		var slot = ViewSlot.envelope(releasesView());
 		var json = Json.of(slot);
 		var actual = Json.to(json, Map.class);
-		assertEquals(List.of("contractVersion", "view", "layout"), new ArrayList<>(actual.keySet()), json);
+		assertEquals(List.of("contractVersion", "view", "layout"), new ArrayList<String>(actual.keySet()), json);
 		assertEquals(ViewSlot.CONTRACT_VERSION, actual.get("contractVersion"));
 		assertEquals(ViewTable.LAYOUT_WIDE, actual.get("layout"));
 		var expectedView = Json.to(Json.of(releasesView()), Map.class);
@@ -171,8 +171,7 @@ class ViewSlot_Test extends TestBase {
 		var messages = Messages.of(LocalizationChromeResolution_Test.LocalizationChromeResolutionHost.class);
 		var slot = ViewSlot.envelope(messages, lView());
 		var html = Html.of(ViewTable.of(messages, lView()));
-		@SuppressWarnings("unchecked")
-		var view = (Map<String,Object>) slot.view;
+		var view = slot.view;
 		@SuppressWarnings("unchecked")
 		var cols = (List<Map<String,Object>>) view.get("columns");
 		assertEquals("Name", cols.get(0).get("title"));

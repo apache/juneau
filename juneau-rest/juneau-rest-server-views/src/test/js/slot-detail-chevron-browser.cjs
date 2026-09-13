@@ -31,6 +31,7 @@
  * Prints ONE JSON object to stdout; every assertion is in Java.
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -60,12 +61,12 @@ const PROBE = async function () {
 	await Promise.resolve(R.mount({ gacks: { table: envelope } }));
 
 	const tpl = slot.querySelector('template[data-juneau-row-detail]');
-	const dest = tpl && tpl.content ? tpl.content : null;
+	const dest = tpl?.content ? tpl.content : null;
 	out.hasTemplate = tpl != null;
-	out.lightDomEmpty = tpl != null && tpl.childNodes.length === 0;
+	out.lightDomEmpty = tpl?.childNodes.length === 0;
 	out.contentChildCount = dest ? dest.childNodes.length : 0;
-	out.contentHasHeader = dest != null && dest.querySelector('.juneau-view-detail-header') != null;
-	out.contentHasRegion = dest != null && dest.querySelector('[data-juneau-region]') != null;
+	out.contentHasHeader = dest?.querySelector('.juneau-view-detail-header') != null;
+	out.contentHasRegion = dest?.querySelector('[data-juneau-region]') != null;
 
 	const table = slot.querySelector('table[data-juneau-view]');
 	out.hasTable = table != null;
@@ -129,12 +130,12 @@ const PROBE = async function () {
 		toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 	for (let i = 0; i < 30; i++) {
 		const p = document.querySelector('.juneau-view-detail-panel');
-		if (p && p.dataset.juneauDetailState === 'ok') break;
+		if (p?.dataset.juneauDetailState === 'ok') break;
 		await tick();
 	}
 
 	const panel = document.querySelector('.juneau-view-detail-panel');
-	const header = panel && panel.querySelector('.juneau-view-detail-header');
+	const header = panel?.querySelector('.juneau-view-detail-header');
 	out.expanded = !!panel;
 	out.clonedHasHeader = !!header;
 	out.headerHeight = header ? Math.round(header.getBoundingClientRect().height) : 0;

@@ -32,7 +32,7 @@ class HttpBody_Test extends TestBase {
 	// interface's default method bodies (getContentLength()/isRepeatable()) rather than any subclass override.
 	private static final class MinimalBody implements HttpBody {
 		@Override public String getContentType() { return null; }
-		@Override public void writeTo(OutputStream out) {}
+		@Override public void writeTo(OutputStream out) { /* Test double; body is unused. */ }
 	}
 
 	@Test void a01_getContentLength_defaultIsUnknown() {

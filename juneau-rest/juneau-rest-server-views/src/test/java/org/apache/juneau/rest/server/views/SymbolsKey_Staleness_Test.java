@@ -56,6 +56,9 @@ import org.junit.jupiter.api.*;
  * {@code src/main/resources} instead, the way {@link RawContentSinkScanner#locateModuleRoot()} already does for
  * this module's shipped assets.
  */
+@SuppressWarnings({
+	"java:S8786" // Test regex is intentional; tightening would change match semantics.
+})
 class SymbolsKey_Staleness_Test extends TestBase {
 
 	private static final String RESOURCE_DIR = "src/main/resources/org/apache/juneau/views";

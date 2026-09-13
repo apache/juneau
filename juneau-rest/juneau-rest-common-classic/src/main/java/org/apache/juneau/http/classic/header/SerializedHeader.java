@@ -48,6 +48,9 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static SerializedHeader of(String name, Object value) {
 		return new SerializedHeader(name, value, null, null, false);
 	}
@@ -71,6 +74,9 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static SerializedHeader of(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
@@ -88,6 +94,9 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static SerializedHeader of(String name, Supplier<?> value) {
 		return new SerializedHeader(name, value, null, null, false);
 	}
@@ -114,6 +123,9 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}

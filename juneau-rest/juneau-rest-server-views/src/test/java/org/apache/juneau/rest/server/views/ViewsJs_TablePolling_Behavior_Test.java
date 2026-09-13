@@ -45,6 +45,9 @@ import org.junit.jupiter.api.*;
  * 		substring assertion can distinguish a label that ticks from one that does not.
  * </ul>
  */
+@SuppressWarnings({
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 
 	private static Map<?,?> report;

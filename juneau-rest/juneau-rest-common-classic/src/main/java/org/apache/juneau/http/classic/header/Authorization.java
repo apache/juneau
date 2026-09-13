@@ -79,6 +79,9 @@ import org.apache.juneau.http.*;
  * @serial exclude
  */
 @Header("Authorization")
+@SuppressWarnings({
+	"secrets:S8136" // HTTP Authorization header parser, not a stored credential.
+})
 public class Authorization extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Authorization";

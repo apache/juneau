@@ -43,7 +43,9 @@ import org.junit.jupiter.api.*;
  * {@code card.tooltip=Open full report}, {@code card.pin=Pin card}.
  */
 @SuppressWarnings({
-	"resource"  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"resource",  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
 })
 class CardGridChromeResolution_Test extends TestBase {
 

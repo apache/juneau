@@ -25,6 +25,9 @@ import org.junit.jupiter.api.*;
  * {@link CardField} factory contract: the two-arg form defaults {@code value} to the empty string, the three-arg
  * form round-trips and normalizes a <jk>null</jk> value.
  */
+@SuppressWarnings({
+	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+})
 class CardField_Test extends TestBase {
 
 	@Test void a01_of_twoArg_defaultsValueToEmpty() {

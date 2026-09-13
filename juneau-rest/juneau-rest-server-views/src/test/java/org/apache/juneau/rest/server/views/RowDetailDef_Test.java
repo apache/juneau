@@ -25,6 +25,10 @@ import org.junit.jupiter.api.*;
  * {@link RowDetailDef#validate(java.util.List)} after the sections path and {@code headerActions} retired:
  * region is required, endpoint safety still holds, and there is no header action bar.
  */
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class RowDetailDef_Test extends TestBase {
 
 	private static RegionDef region() {

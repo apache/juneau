@@ -32,4 +32,4 @@
  *
  * @since 10.0.0
  */
-package org.apache.juneau.rest.server.themepacks;
+package org.apache.juneau.rest.server.themepacks; // NOSONAR java:S4032 -- empty package-info is the module javadoc hook

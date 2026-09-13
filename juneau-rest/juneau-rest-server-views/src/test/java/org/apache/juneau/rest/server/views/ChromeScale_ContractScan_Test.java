@@ -181,7 +181,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	/**
 	 * {@code font-size}'s three chrome-scale steps are declared in {@code rem}, not {@code px} - the general
 	 * px-only literal matcher could never bind to a {@code rem}-valued {@code font-size} duplicate before this
-	 * fix (TODO-J0467), so a tenth un-tokenized {@code 0.75rem}/{@code 0.8125rem}/{@code 0.875rem} site
+	 * fix (the font-size rem-reachability carve-out), so a tenth un-tokenized {@code 0.75rem}/{@code 0.8125rem}/{@code 0.875rem} site
 	 * introduced today would have gone unnoticed exactly the same way the original twelve did. Proves the
 	 * widened, {@code font-size}-scoped {@code rem} carve-out now catches it.
 	 */

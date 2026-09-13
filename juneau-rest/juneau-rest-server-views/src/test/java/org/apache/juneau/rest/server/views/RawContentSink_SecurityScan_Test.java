@@ -42,6 +42,9 @@ import org.junit.jupiter.params.provider.*;
  * mechanism itself (section a), then pointed at this module's real tree (section b) to lock in that today's
  * sources - main <i>and</i> test - are clean, and to prove the live scan is not accidentally vacuous.
  */
+@SuppressWarnings({
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class RawContentSink_SecurityScan_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------

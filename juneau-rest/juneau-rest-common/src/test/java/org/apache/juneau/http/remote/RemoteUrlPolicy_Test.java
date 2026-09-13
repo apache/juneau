@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Every test here fails against the pre-guardrail scheme-only behavior and passes with the deny-private policy in
- * place; see {@code TODO-392-remote-url-ssrf-resolved-address.md} "Test notes" for the source checklist.
+ * place; see the remote-URL SSRF resolved-address design notes "Test notes" for the source checklist.
  */
 class RemoteUrlPolicy_Test extends TestBase {
 
@@ -179,25 +179,25 @@ class RemoteUrlPolicy_Test extends TestBase {
 		return InetAddress.getByAddress(new byte[]{(byte) a, (byte) b, (byte) c, (byte) d});
 	}
 
-	@Test void d01_selectAllowedAddress_dnsNameResolvesToBlockedAddress_rejected() throws Exception {
+	@Test void d01_selectAllowedAddress_dnsNameResolvesToBlockedAddress_rejected() {
 		RemoteUrlPolicy.AddressResolver resolver = host -> new InetAddress[]{addr(127, 0, 0, 1)};
 		assertThrowsWithMessage(IllegalArgumentException.class, "No allowed address",
 			() -> RemoteUrlPolicy.selectAllowedAddress("internal.example.com", false, resolver));
 	}
 
-	@Test void d02_selectAllowedAddress_dnsNameResolvesToBlockedAddress_acceptedWithAllowPrivateUrls() throws Exception {
+	@Test void d02_selectAllowedAddress_dnsNameResolvesToBlockedAddress_acceptedWithAllowPrivateUrls() throws UnknownHostException {
 		RemoteUrlPolicy.AddressResolver resolver = host -> new InetAddress[]{addr(127, 0, 0, 1)};
 		assertEquals(addr(127, 0, 0, 1), RemoteUrlPolicy.selectAllowedAddress("internal.example.com", true, resolver));
 	}
 
-	@Test void d03_selectAllowedAddress_mixedCandidates_oneLoopbackOnePublic_selectsPublic() throws Exception {
+	@Test void d03_selectAllowedAddress_mixedCandidates_oneLoopbackOnePublic_selectsPublic() throws UnknownHostException {
 		var loopback = addr(127, 0, 0, 1);
 		var pub = addr(93, 184, 216, 34);
 		RemoteUrlPolicy.AddressResolver resolver = host -> new InetAddress[]{loopback, pub};
 		assertEquals(pub, RemoteUrlPolicy.selectAllowedAddress("mixed.example.com", false, resolver));
 	}
 
-	@Test void d04_selectAllowedAddress_mixedCandidates_publicFirst_stillSelectsPublic_neverBlocked() throws Exception {
+	@Test void d04_selectAllowedAddress_mixedCandidates_publicFirst_stillSelectsPublic_neverBlocked() throws UnknownHostException {
 		var pub = addr(93, 184, 216, 34);
 		var loopback = addr(127, 0, 0, 1);
 		var selected = RemoteUrlPolicy.selectAllowedAddress("mixed2.example.com", false, host -> new InetAddress[]{pub, loopback});
@@ -205,7 +205,7 @@ class RemoteUrlPolicy_Test extends TestBase {
 		assertNotEquals(loopback, selected);
 	}
 
-	@Test void d05_selectAllowedAddress_rebinding_stringCheckPassed_butConnectTimeBlocked() throws Exception {
+	@Test void d05_selectAllowedAddress_rebinding_stringCheckPassed_butConnectTimeBlocked() {
 		// Simulates DNS rebinding: the hostname itself is not in the lexical deny-list (isDeniedHost("rebind.example.com")
 		// is false), so requireAllowedUrl's pre-check passes -- but the address actually resolved at connect time is
 		// loopback, so pin-on-connect must still reject it.
@@ -215,7 +215,7 @@ class RemoteUrlPolicy_Test extends TestBase {
 			() -> RemoteUrlPolicy.selectAllowedAddress("rebind.example.com", false, rebindingResolver));
 	}
 
-	@Test void d06_selectAllowedAddress_decimalIpLiteralForLoopback_rejectedViaResolver() throws Exception {
+	@Test void d06_selectAllowedAddress_decimalIpLiteralForLoopback_rejectedViaResolver() {
 		// http://2130706433 is the decimal form of 127.0.0.1. isDeniedHost() intentionally does not special-case
 		// decimal/octal/hex literals (they don't look like a dotted IPv4 literal); pin-on-connect via the resolver
 		// (which is what a real InetAddress.getAllByName("2130706433") would resolve to) is what catches this.

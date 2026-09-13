@@ -62,7 +62,7 @@ const PROBE = async function () {
 
 	const slot = document.createElement('div');
 	slot.dataset.juneauField = 'body';
-	slot.setAttribute('data-juneau-field-format', 'sanitizedHtml');
+	slot.dataset.juneauFieldFormat = 'sanitizedHtml';
 	document.body.appendChild(slot);
 
 	// Hostile half: a real <script> plus an <img onerror> - neither may produce an executable node, and a

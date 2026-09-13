@@ -45,6 +45,7 @@ import org.junit.jupiter.api.*;
  * {@code ViewServerWiring_Test}/{@code ViewsMixin_Serving_Test}'s end-to-end coverage style).
  */
 @SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class PageServerWiring_Test extends TestBase {

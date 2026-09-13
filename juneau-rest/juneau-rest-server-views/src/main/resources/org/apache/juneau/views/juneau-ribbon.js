@@ -417,7 +417,7 @@
 	function stampChromeTip(el, text) {
 		const t = text == null ? "" : String(text);
 		if (t !== "") {
-			el.setAttribute("data-jc-tip", t);
+			el.dataset.jcTip = t;
 			el.setAttribute("aria-label", t);
 		} else if (typeof el.removeAttribute === "function") {
 			el.removeAttribute("data-jc-tip");

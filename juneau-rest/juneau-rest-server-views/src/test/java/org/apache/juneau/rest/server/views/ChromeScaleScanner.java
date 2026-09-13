@@ -55,7 +55,7 @@ import java.util.regex.*;
  * 		render.
  * </ul>
  * <p>
- * <b>{@code font-size}'s {@code rem} reachability ({@code TODO-J0467}).</b> {@code font-size}'s three
+ * <b>{@code font-size}'s {@code rem} reachability ({@code the font-size rem-reachability carve-out}).</b> {@code font-size}'s three
  * chrome-scale steps ({@code --jc-chrome-font-size-1/2/3}) are declared in {@code rem}, not {@code px} - the
  * only family in {@link #scale()} that is. That is a different question from the one above: this class's own
  * literal-duplicate matcher has admitted both {@code px} and {@code rem} on every property it checks since its
@@ -85,6 +85,9 @@ import java.util.regex.*;
  * ladder and why. The table is asserted to be non-vacuous by the accompanying test: an entry matching nothing is
  * itself a failure, so the list cannot rot into a silent allow-everything.
  */
+@SuppressWarnings({
+	"java:S8786" // Scanner regex is intentional; tightening would change match semantics.
+})
 final class ChromeScaleScanner {
 
 	private ChromeScaleScanner() {}
@@ -216,7 +219,7 @@ final class ChromeScaleScanner {
 	 * matches to {@link #ABSOLUTE} today - so that {@code font-size}'s {@code rem} reachability is an explicit,
 	 * auditable carve-out in its own right (mirroring the {@code line-height}-scoped {@link #BARE_NUMBER}
 	 * carve-out) rather than an incidental side effect of the general matcher, closing the unit-domain mismatch
-	 * named by {@code TODO-J0467}: {@code font-size}'s three chrome-scale steps
+	 * named by {@code the font-size rem-reachability carve-out}: {@code font-size}'s three chrome-scale steps
 	 * ({@code --jc-chrome-font-size-1/2/3}) are declared in {@code rem}, and a {@code rem}-valued
 	 * {@code font-size} literal that duplicates one must never go unmatched the way a tenth un-tokenized site
 	 * once did.
@@ -308,9 +311,9 @@ final class ChromeScaleScanner {
 				var hit = findDuplicatedStep(d, families, scale);
 				if (hit == null)
 					continue;
-				var record = findRecord(d);
-				if (record != null) {
-					matched.add(record);
+				var recorded = findRecord(d);
+				if (recorded != null) {
+					matched.add(recorded);
 					continue;
 				}
 				violations.add(d.selector() + " { " + d.property() + ": " + d.value() + " } duplicates the step "
@@ -337,7 +340,7 @@ final class ChromeScaleScanner {
 		var lineHeight = "line-height".equals(d.property());
 		// font-size's three steps are declared in rem, not px. The general ABSOLUTE matcher already admits
 		// rem (other properties, e.g. gap, rely on that too), but font-size gets its own named matcher here so
-		// its rem reachability is an explicit, font-size-scoped carve-out (TODO-J0467) rather than an
+		// its rem reachability is an explicit, font-size-scoped carve-out (the font-size rem-reachability carve-out) rather than an
 		// incidental side effect of the shared one - mirroring the line-height carve-out above in shape.
 		var fontSize = "font-size".equals(d.property());
 		var literals = lineHeight ? bareNumberValues(d.value())

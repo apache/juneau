@@ -49,6 +49,10 @@ import org.junit.jupiter.api.*;
  * {@code META-INF/services} entry on the test classpath, with no consumer opt-in, which is the point of the
  * design (design doc &sect;4.1 reason 1).
  */
+@SuppressWarnings({
+	"java:S125", // Comments are explanatory; they are not commented-out code.
+	"resource" // Closeable MockRestClient fixtures held for the class lifetime.
+})
 class ModalDef_ServingPathValidation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -37,6 +37,10 @@ import org.junit.jupiter.params.provider.*;
  * &mdash; the security-critical part &mdash; that human strings and the server-painted initial value are
  * entity-escaped so a {@code <script>}-shaped value can never become a live tag.
  */
+@SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
+	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
+})
 class CardGridTable_Emit_Test extends TestBase {
 
 	private static CardFieldList staticBody() {
@@ -194,7 +198,7 @@ class CardGridTable_Emit_Test extends TestBase {
 	/** A well-formed CardBody the v1 emitter does not know how to render. */
 	static class OtherBody implements CardBody {
 		// Deliberately a no-op: this stand-in only needs to satisfy the CardBody contract, not carry real validation.
-		@Override public void validate() {}
+		@Override public void validate() { /* Test-harness no-op; satisfies CardBody. */ }
 	}
 
 	@ParameterizedTest

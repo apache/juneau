@@ -115,7 +115,7 @@ async function openForm(opts) {
 	const env = loaded.env, I = loaded.I;
 	const fetches = [];
 	env.setFetch(function (url, init) {
-		fetches.push({ url: url, method: (init && init.method) || 'GET', headers: init && init.headers });
+		fetches.push({ url: url, method: (init?.method) || 'GET', headers: init?.headers });
 		return Promise.resolve(jsonResponse({ title: 'ok' }));
 	});
 	const action = { id: 'ack', label: 'Acknowledge', present: 'dialog', method: 'POST',
@@ -135,8 +135,8 @@ async function openForm(opts) {
 		fetched: fetches.length > 0,
 		url: fetches.length ? fetches[0].url : null,
 		method: fetches.length ? fetches[0].method : null,
-		accept: fetches.length ? (fetches[0].headers && fetches[0].headers.Accept) : null,
-		credentials: fetches.length ? fetches[0].headers && fetches[0].headers : null,
+		accept: fetches.length ? fetches[0].headers?.Accept : null,
+		credentials: fetches.length ? fetches[0].headers : null,
 		fetchCount: fetches.length,
 		refusalReason: reasonOf(refusalText),
 		dialogCount: typeof I.dialogLayerCount === 'function' ? I.dialogLayerCount() : -1,
@@ -229,6 +229,6 @@ async function openForm(opts) {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (err) {
-	console.error(err && err.stack ? err.stack : err);
+	console.error(err?.stack ? err.stack : err);
 	process.exit(1);
 });

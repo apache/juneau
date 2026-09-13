@@ -22,6 +22,7 @@
  *   Usage:  node helpers.cjs <juneau-renders.js> <juneau-views.js> <juneau-helpers.js>
  */
 'use strict';
+// NOSONAR javascript:S3776 -- test harness encodes a fixture state machine; complexity is inherent.
 
 const path = require('node:path');
 const { load, flush } = require(path.join(__dirname, 'helpers-harness.cjs'));
@@ -113,7 +114,7 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	});
 	const actionBtn2 = actionGrid2.querySelector('.juneau-view-helper-field-actions').querySelector('button');
 	actionBtn2.dispatch('click', { target: actionBtn2 });
-	out.fieldGrid_actionFiresOnAction = actionFired && actionFired.id === 'unlink' && actionFired.data === 'z';
+	out.fieldGrid_actionFiresOnAction = actionFired?.id === 'unlink' && actionFired.data === 'z';
 
 	// columns -> a CSS CUSTOM PROPERTY, not an inline grid-template-columns
 	const colGrid = H.fieldGrid([{ data: 'a', label: 'A' }], { values: { a: '1' }, columns: 3 });

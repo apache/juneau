@@ -58,7 +58,7 @@ import org.junit.jupiter.api.condition.*;
  * gate that asserts nothing. The numbers are for a human to read.
  * <p>
  * <b>The one exception is {@link #c01_fourLockedGlyphsStayMutuallyDistinguishable()}</b> ({@code
- * [TODO-J0451]}), which thresholds the prober's {@code adjacencyDiffs} - the mean per-pixel luminance
+ * the locked-scope glyph distinguishability pin}), which thresholds the prober's {@code adjacencyDiffs} - the mean per-pixel luminance
  * difference <i>between two glyphs rasterised in the same run, same size, same Chromium build</i>, not either
  * glyph's absolute coverage. A pin bump moves both sides of that comparison together, so the pairwise diff does
  * not carry the non-reproducibility problem the paragraph above describes; it is safe to threshold precisely
@@ -189,7 +189,7 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 			// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose 16px
 			// distinguishability against both settings and spreadsheet is a named review check.
 			"family", List.of("csv", "pdf", "spreadsheet", "copy"),
-			// [TODO-J0451] LD-1: every pairwise combination of the four locked-scope glyphs (cancel, columns,
+			// the locked-scope glyph distinguishability pin LD-1: every pairwise combination of the four locked-scope glyphs (cancel, columns,
 			// edit, settings), plus the pre-existing columns-spreadsheet review-only pair (columns-settings is
 			// reused rather than duplicated). See c01_fourLockedGlyphsStayMutuallyDistinguishable() below.
 			"adjacencies", List.of(
@@ -276,10 +276,10 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c: the four [TODO-J0451] LD-1 glyphs stay mutually distinguishable  (real coverage, not a human PNG review)
+	// c: the four the locked-scope glyph distinguishability pin LD-1 glyphs stay mutually distinguishable  (real coverage, not a human PNG review)
 	//------------------------------------------------------------------------------------------------------------------
 
-	/** {@code [TODO-J0451]} LD-1's exact locked scope - these four stems, and no others. */
+	/** {@code the locked-scope glyph distinguishability pin} LD-1's exact locked scope - these four stems, and no others. */
 	private static final List<String> FOUR_GLYPHS = List.of("cancel", "columns", "edit", "settings");
 
 	/**

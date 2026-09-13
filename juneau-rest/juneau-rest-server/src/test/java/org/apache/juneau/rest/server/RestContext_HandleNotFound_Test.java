@@ -42,6 +42,9 @@ import jakarta.servlet.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+})
 class RestContext_HandleNotFound_Test extends org.apache.juneau.TestBase {
 
 	@Rest
@@ -67,11 +70,11 @@ class RestContext_HandleNotFound_Test extends org.apache.juneau.TestBase {
 	// a - A still-successful or unset status resolves to a clean 404, never a 500.
 	//-----------------------------------------------------------------------------------------------------------
 
-	@Test void a01_successStatus_realContainerDefault200_throwsNotFound() throws Exception {
+	@Test void a01_successStatus_realContainerDefault200_throwsNotFound() {
 		assertThrows(NotFound.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_OK)));
 	}
 
-	@Test void a02_unsetStatus_mockDefault0_throwsNotFound() throws Exception {
+	@Test void a02_unsetStatus_mockDefault0_throwsNotFound() {
 		assertThrows(NotFound.class, () -> bareContext().handleNotFound(sessionWithStatus(0)));
 	}
 
@@ -79,15 +82,15 @@ class RestContext_HandleNotFound_Test extends org.apache.juneau.TestBase {
 	// b - The recognized status codes keep their existing, distinct exceptions.
 	//-----------------------------------------------------------------------------------------------------------
 
-	@Test void b01_notFoundStatus_throwsNotFound() throws Exception {
+	@Test void b01_notFoundStatus_throwsNotFound() {
 		assertThrows(NotFound.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_NOT_FOUND)));
 	}
 
-	@Test void b02_preconditionFailedStatus_throwsPreconditionFailed() throws Exception {
+	@Test void b02_preconditionFailedStatus_throwsPreconditionFailed() {
 		assertThrows(PreconditionFailed.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_PRECONDITION_FAILED)));
 	}
 
-	@Test void b03_methodNotAllowedStatus_throwsMethodNotAllowed() throws Exception {
+	@Test void b03_methodNotAllowedStatus_throwsMethodNotAllowed() {
 		assertThrows(MethodNotAllowed.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_METHOD_NOT_ALLOWED)));
 	}
 
@@ -95,7 +98,7 @@ class RestContext_HandleNotFound_Test extends org.apache.juneau.TestBase {
 	// c - A genuinely unexpected error status still surfaces the "invalid method response" 500.
 	//-----------------------------------------------------------------------------------------------------------
 
-	@Test void c01_unexpectedErrorStatus_throwsServletException() throws Exception {
+	@Test void c01_unexpectedErrorStatus_throwsServletException() {
 		var e = assertThrows(ServletException.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_INTERNAL_SERVER_ERROR)));
 		assertTrue(e.getMessage().contains("Invalid method response"));
 	}

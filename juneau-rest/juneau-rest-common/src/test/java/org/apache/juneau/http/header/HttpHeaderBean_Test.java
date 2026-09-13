@@ -24,6 +24,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link HttpHeaderBean}.
  */
+@SuppressWarnings({
+	"java:S3415" // Equals-contract tests pass the same instance or a peer fixture as both arguments; swapping is a no-op.
+})
 class HttpHeaderBean_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

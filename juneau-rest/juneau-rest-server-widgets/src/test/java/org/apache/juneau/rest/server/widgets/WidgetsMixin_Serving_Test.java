@@ -39,6 +39,7 @@ import org.junit.jupiter.api.*;
  * producing the same version+content-hash cache-buster shape the views mixin does.
  */
 @SuppressWarnings({
+	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class WidgetsMixin_Serving_Test extends TestBase {

@@ -873,6 +873,9 @@ public class ViewTable {
 		return idQualifier == null || idQualifier.isBlank() ? viewId : idQualifier + ":" + viewId;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Table emitter encodes column/row/chrome assembly; complexity is inherent.
+	})
 	private static Div build(MarshallingContext ctx, ViewDef viewDef, RenderOptions opts) {
 		var id = mintedId(opts.idQualifier(), viewDef.id);
 		var cols = viewDef.columns == null ? List.<Column>of() : viewDef.columns;

@@ -1586,7 +1586,8 @@ table.dataTable > tbody > tr.child > td {
 	border: none;
 }
 
-/* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`). */
+/* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`).
+ * NOSONAR css:S4666 -- this block is visual padding/background; the earlier rule is the containment-host list. */
 .juneau-view-detail-panel {
 	margin: 0;
 	padding: var(--jc-space-2) var(--jc-space-3);
