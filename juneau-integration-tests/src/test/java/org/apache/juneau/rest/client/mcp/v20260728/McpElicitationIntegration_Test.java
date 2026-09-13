@@ -28,6 +28,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.client.RestCallInterceptor;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.apache.juneau.rest.server.mcp.v20260728.*;
@@ -123,11 +124,26 @@ class McpElicitationIntegration_Test extends TestBase {
 	static MicroserviceTestFixture fixture = MicroserviceTestFixture.create()
 		.configurations(FixtureConfig.class);
 
+	// Forces a fresh TCP connection per request instead of reusing a pooled keep-alive one: a client that
+	// issues two or more requests (pause then resume) can otherwise race the embedded Jetty fixture
+	// tearing down an idle pooled connection between calls. That surfaces as NoHttpResponseException /
+	// ApacheHc45Transport$StaleConnectionException on the elicitation resume POST. Resume is a mutating
+	// tools/call (requestState + ElicitAction, including cancel) and must not be replayed, so this test
+	// client disables keep-alive rather than retrying. Same interceptor as McpMrtrIntegration_Test.
+	private static final RestCallInterceptor CLOSE_CONNECTION_PER_REQUEST = new RestCallInterceptor() {
+		@Override public void onInit(org.apache.juneau.rest.client.RestRequest req) {
+			req.header("Connection", "close");
+		}
+	};
+
 	private static McpClient.Builder clientBuilder(boolean withElicitation) {
 		var caps = new ClientCapabilities();
 		if (withElicitation)
 			caps.setElicitation(new ElicitationCapability());
-		return McpClient.builder().endpoint(fixture.getRootUrl() + "/").clientCapabilities(caps);
+		return McpClient.builder()
+			.endpoint(fixture.getRootUrl() + "/")
+			.clientCapabilities(caps)
+			.interceptor(CLOSE_CONNECTION_PER_REQUEST);
 	}
 
 	/**

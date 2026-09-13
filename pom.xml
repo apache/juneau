@@ -412,7 +412,8 @@
 				<plugin>
 					<groupId>org.openrewrite.maven</groupId>
 					<artifactId>rewrite-maven-plugin</artifactId>
-					<version>5.42.0</version>
+					<!-- 6.46.1 is the last 6.x on Maven Central; 6.47+ is Code Genome only. -->
+					<version>6.46.1</version>
 					<configuration>
 						<activeRecipes/>
 						<exportDatatables>false</exportDatatables>
@@ -421,12 +422,23 @@
 						<dependency>
 							<groupId>org.openrewrite</groupId>
 							<artifactId>rewrite-java</artifactId>
-							<version>8.38.0</version>
+							<version>8.90.4</version>
 						</dependency>
 						<dependency>
 							<groupId>org.openrewrite</groupId>
 							<artifactId>rewrite-java-17</artifactId>
-							<version>8.38.0</version>
+							<version>8.90.4</version>
+						</dependency>
+						<!-- Plugin 6.x also loads these parsers; pin with 8.90.4 so CI JDKs 21/25 are not mixed with 8.89.0. -->
+						<dependency>
+							<groupId>org.openrewrite</groupId>
+							<artifactId>rewrite-java-21</artifactId>
+							<version>8.90.4</version>
+						</dependency>
+						<dependency>
+							<groupId>org.openrewrite</groupId>
+							<artifactId>rewrite-java-25</artifactId>
+							<version>8.90.4</version>
 						</dependency>
 					</dependencies>
 				</plugin>
