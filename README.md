@@ -2,13 +2,13 @@
 
 > **Maintainer dev-tooling — NOT an Apache Juneau release artifact.**
 >
-> This branch (`release-manager`) is project-owned release-automation tooling for
-> Apache Juneau maintainers. It is **not** an official Apache Juneau release
-> artifact: it does **not** ride the release train, is **not** part of the signed
-> source/binary distribution or the release assembly, is **not** published to
-> Maven Central, and carries **no** ASF release guarantees. It lives on an orphan
-> branch of `apache/juneau` (mirroring the `docs` branch) with no history from
-> `master` and no CI/deploy pipeline.
+> This branch (`juneau-release-manager`, formerly `release-manager`) is
+> project-owned release-automation tooling for Apache Juneau maintainers. It is
+> **not** an official Apache Juneau release artifact: it does **not** ride the
+> release train, is **not** part of the signed source/binary distribution or the
+> release assembly, is **not** published to Maven Central, and carries **no** ASF
+> release guarantees. It lives on an orphan branch of `apache/juneau` (mirroring
+> the `docs` branch) with no history from `master` and no CI/deploy pipeline.
 
 ## What it is
 
@@ -31,10 +31,10 @@ just this orphan branch, sibling to your `master` checkout:
 
 ```bash
 # Dedicated single-branch clone:
-git clone -b release-manager --single-branch https://github.com/apache/juneau.git juneau-release-manager
+git clone -b juneau-release-manager --single-branch https://github.com/apache/juneau.git juneau-release-manager
 
 # ...or, from an existing apache/juneau checkout, add a worktree:
-git worktree add ../release-manager release-manager
+git worktree add ../juneau-release-manager juneau-release-manager
 ```
 
 ## Building / running
