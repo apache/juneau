@@ -54,6 +54,9 @@ const PROBE = async function () {
 	out.hasEnvelope = envelopeEl != null && slot != null;
 	if (!out.hasEnvelope) return out;
 	const envelope = JSON.parse(envelopeEl.textContent);
+	// The canary's RegionDef.populate("p") is a named populator; register a stub so chevron expand
+	// does not console.error "no populator is registered under the name 'p'" into jsFailures.
+	R.register('p', function () { /* stub: region-only DETAIL_SLOT chrome is what this canary asserts */ });
 	await Promise.resolve(R.mount({ gacks: { table: envelope } }));
 
 	const tpl = slot.querySelector('template[data-juneau-row-detail]');
