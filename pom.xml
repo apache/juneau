@@ -32,6 +32,9 @@
         <juneau.version>10.0.0-SNAPSHOT</juneau.version>
         <spring.boot.version>4.1.0</spring.boot.version>
         <freemarker.version>2.3.34</freemarker.version>
+        <sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria.e1.ruleKey>css:S7924</sonar.issue.ignore.multicriteria.e1.ruleKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
     </properties>
 
     <dependencyManagement>
