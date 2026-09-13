@@ -27,7 +27,7 @@ import java.util.logging.*;
 
 import javax.xml.namespace.*;
 import javax.xml.parsers.*;
-
+import org.apache.commons.xml.secure.SecureDocumentBuilderFactory;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.opensaml.core.criterion.*;
@@ -562,13 +562,7 @@ public class SamlAssertionValidator {
 
 	private Response parseResponse(String xml) throws AuthenticationException {
 		try {
-			var dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-			dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-			dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-			dbf.setXIncludeAware(false);
-			dbf.setExpandEntityReferences(false);
+			var dbf = SecureDocumentBuilderFactory.newNSInstance();
 			var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
 			Element root = doc.getDocumentElement();
 			var registry = org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport.getUnmarshallerFactory();

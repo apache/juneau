@@ -24,6 +24,7 @@ import java.util.*;
 
 import javax.xml.stream.*;
 
+import org.apache.commons.xml.secure.SecureXMLInputFactory;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
@@ -89,11 +90,8 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	protected XMLStreamReader getStaxReader(Reader in) throws Exception {
-		var factory = XMLInputFactory.newInstance();
+		var factory = SecureXMLInputFactory.newInstance();
 		factory.setProperty("javax.xml.stream.isNamespaceAware", false);
-		// This validator only checks well-formedness of serializer output (which never contains DTDs), so DTD processing and external-entity resolution are disabled to close the XXE surface.
-		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
 		var parser = factory.createXMLStreamReader(in);
 		parser.nextTag();
 		return parser;
