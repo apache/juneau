@@ -29,8 +29,8 @@ import org.apache.juneau.releng.release.ReleaseVersion;
 public class MilestoneService {
 
 	// "Bump <dep> from <old> to <new>" with optional trailing " in <path>".
-	private static final Pattern BUMP = Pattern
-			.compile("^Bump (?<dep>.+?) from (?<from>\\S+) to (?<to>\\S+?)(?: in (?<path>\\S+))?$");
+	// Capture groups: 1=dependency, 2=from-version, 3=to-version, 4=optional path.
+	private static final Pattern BUMP = Pattern.compile("^Bump (.+?) from (\\S+) to (\\S+?)(?: in (\\S+))?$");
 
 	/** The release tag immediately preceding {@code version} (prereleases excluded). */
 	public String previousTag(List<String> tags, String version) {
@@ -49,10 +49,10 @@ public class MilestoneService {
 			var m = BUMP.matcher(pr.title == null ? "" : pr.title.strip());
 			if (!m.matches())
 				continue; // non-bump / human PR -> excluded from ** Changes
-			var dep = m.group("dep");
-			var path = m.group("path");
+			var dep = m.group(1);
+			var path = m.group(4);
 			var key = path == null ? dep : dep + " in " + path;
-			groups.computeIfAbsent(key, ChangelogEntry.Builder::new).add(m.group("from"), m.group("to"), pr.number);
+			groups.computeIfAbsent(key, ChangelogEntry.Builder::new).add(m.group(2), m.group(3), pr.number);
 		}
 
 		var out = new ArrayList<ChangelogEntry>();

@@ -54,7 +54,7 @@ public class JavadocVerifyStep implements ReleaseStep {
 	public StepResult apply(StepContext ctx) {
 		var res = ctx.exec(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "javadoc:aggregate"));
 		// Non-zero-but-noisy javadoc historically continues; require human "looks clean" via the review gate.
-		return res.ok() ? StepResult.ok("Javadoc generated — review the log, then confirm.")
-				: StepResult.ok("Javadoc finished with warnings/errors — review the log carefully, then confirm.");
+		return StepResult.ok(res.ok() ? "Javadoc generated — review the log, then confirm."
+				: "Javadoc finished with warnings/errors — review the log carefully, then confirm.");
 	}
 }

@@ -62,8 +62,14 @@ public class ReleaseRest extends BasicRestResource {
 	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /releases}), used to resolve asset/data URLs. */
 	static final String MOUNT = "/rest/releases";
 
+	/** This resource's page/view id, shared by {@link #releasesView()}'s {@link ViewDef} id and {@link #page(RestRequest)}'s template/slot name. */
+	static final String NAME = "releases";
+
 	/** The rich-view toolkit's cell renderer id for a clickable/href-bearing column (see {@link Column#render(String)}). */
 	static final String RENDER_LINKED = "linked";
+
+	/** Cell renderer / format id for a Zulu timestamp column (see {@link Column#render(String)}). */
+	static final String RENDER_TS_ZULU = "ts-zulu";
 
 	private final ReleaseListService service;
 
@@ -95,7 +101,7 @@ public class ReleaseRest extends BasicRestResource {
 	 * can reuse this same declarative definition when mounting the Admin Releases pair.
 	 */
 	static ViewDef releasesView() {
-		return ViewDef.create("releases")
+		return ViewDef.create(NAME)
 			.rowType(Release.class)
 			.dataMode(DataMode.SERVER)
 			.dataUrl(MOUNT + "/data")
@@ -105,8 +111,8 @@ public class ReleaseRest extends BasicRestResource {
 				Column.of("rc").title("RC"),
 				Column.of("status").title("Status").render("tag:status"),
 				Column.of("stage").title("Stage").render("tag:stage"),
-				Column.of("voteCloses").title("Vote closes").render("ts-zulu").formats("ts-zulu", "datetime", "date"),
-				Column.of("released").title("Released").render("date").formats("date", "datetime", "ts-zulu"),
+				Column.of("voteCloses").title("Vote closes").render(RENDER_TS_ZULU).formats(RENDER_TS_ZULU, "datetime", "date"),
+				Column.of("released").title("Released").render("date").formats("date", "datetime", RENDER_TS_ZULU),
 				Column.of("githubReleaseUrl").title("GitHub").render(RENDER_LINKED).href("{githubReleaseUrl}").orderable(false)
 					.defaultVisible(false),
 				Column.of("milestoneUrl").title("Milestone").render(RENDER_LINKED).href("{milestoneUrl}").orderable(false)
@@ -128,7 +134,7 @@ public class ReleaseRest extends BasicRestResource {
 	/** Human page — empty {@code #releases} slot; the table is mounted from {@link #releasesViewEnvelope}. */
 	@RestGet("/")
 	public View page(RestRequest req) {
-		return TableSlotPage.of("releases", req, "releases", MOUNT + "/view");
+		return TableSlotPage.of(NAME, req, NAME, MOUNT + "/view");
 	}
 
 	/**
