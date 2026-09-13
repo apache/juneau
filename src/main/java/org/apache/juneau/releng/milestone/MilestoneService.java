@@ -20,8 +20,8 @@ package org.apache.juneau.releng.milestone;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.juneau.releng.release.ReleaseVersion;
 
@@ -44,7 +44,7 @@ public class MilestoneService {
 		var sorted = cp(prs);
 		sorted.sort((a, b) -> Integer.compare(a.number, b.number));
 
-		var groups = new LinkedHashMap<String, ChangelogEntry.Builder>();
+		Map<String, ChangelogEntry.Builder> groups = m();
 		for (var pr : sorted) {
 			var m = BUMP.matcher(pr.title == null ? "" : pr.title.strip());
 			if (!m.matches())

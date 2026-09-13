@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.release;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.List;
@@ -40,7 +41,7 @@ class LocalStateReleaseSourceTest {
 
 		var rows = assertDoesNotThrow(() -> new LocalStateReleaseSource(store).list());
 
-		assertEquals(1, rows.size());
+		assertSize(1, rows);
 		var row = rows.get(0);
 		assertEquals("9.2.1", row.version);
 		assertEquals("RC1", row.rc);
@@ -59,7 +60,7 @@ class LocalStateReleaseSourceTest {
 
 		var rows = new LocalStateReleaseSource(store).list();
 
-		assertEquals(1, rows.size());
+		assertSize(1, rows);
 		assertEquals("VOTING", rows.get(0).status);
 		assertEquals("Awaiting vote", rows.get(0).stage);
 		assertEquals("2026-08-20T00:00:00Z", rows.get(0).voteCloses);

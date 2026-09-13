@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -118,7 +119,7 @@ class BinaryArtifactsStageStepTest {
 						dist + "/binaries/" + rc + "/apache-juneau-9.2.1-bin.zip"))));
 
 		var gpgCalls = calls.stream().filter(x -> x.contains("gpg")).toList();
-		assertEquals(2, gpgCalls.size());
+		assertSize(2, gpgCalls);
 		assertEquals(List.of("gpg", "--print-md", "SHA512", dist + "/source/" + rc + "/apache-juneau-9.2.1-src.zip"),
 				gpgCalls.get(0));
 
@@ -141,7 +142,7 @@ class BinaryArtifactsStageStepTest {
 		var c = ctx(ExecutionMode.SAFE, dir);
 		var res = new BinaryArtifactsStageStep().apply(c);
 		assertTrue(res.success, res.message);
-		assertEquals(0, calls.size(), "no real subprocess may be spawned in SAFE");
+		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
 
 		var wouldRun = logLines.stream().filter(l -> l.startsWith("would run:")).toList();
 		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("checkout")));

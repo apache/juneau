@@ -33,7 +33,21 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   `new IllegalArgumentException(...)` etc. **Applied.** `org.apache.juneau.commons.utils.Shorts` is on the
   compile classpath (transitive via `juneau-commons 10.0.0-SNAPSHOT`); migrated 32 throw sites across 11
   files. Note: `Shorts` routes through `StringUtils.format`, which is **pure printf** — single quotes are
-  literal, so do **not** double them (`''` is only for the MessageFormat `mf()`/`mfs()` path).
+  literal, so do **not** double them (`''` is only for the MessageFormat `mf()`/`mfs()` path). Leftover
+  pass (2026-09-13): three remaining `throw new` sites are all test mock fault injectors
+  (`NexusMockRestHttpTest` wrapping a caught `Exception`, `SseLogServletTest` simulated broken-pipe
+  `IOException`, `RunStateBroadcasterTest` `"dead client"` subscriber) — constructors stay; `rex`/`ioex`
+  would not be clearer there.
+- **Collection factories (`Shorts` `l`/`m`/`tl`/`los`/`cp`)** — **Applied** at real candidates only
+  (leftover pass 2026-09-13). Copy constructor → `tl` (`ReleaseListService`); empty insertion-ordered
+  map → `m()` (`MilestoneService`, `ReleaseListService`, `ReleaseRunRest` meta); known ≤10-pair map →
+  `m(k,v,…)` (`TableSlotPage.slotJson`, `ReleaseRunRest` step-meta entry); presized list → `los(n)`
+  (`StepContext.redactArgv`). Empty `m()`/`los(n)` on `var` infers `Object` — write the target type on
+  the left. **Left as-is (false positives):** loop-filled `new ArrayList<T>()` builders, marshaller/bean
+  field initializers (`RunState.steps`, `Preview.lines`, `ChangelogEntry.Builder.prNumbers`), test
+  recording lists, and JDK `List.of`/`Map.of` at fail-closed / immutable-constant / argv sites. No
+  `HashMap`/`HashSet` constructor sites in the tree. Verify remaining raw constructors with
+  `rg -n 'new (ArrayList|HashMap|LinkedHashMap|HashSet)<' --type java src`.
 - **No process/planning vocabulary in code** — No work-item IDs, phase/wave/session markers, dated
   "revision" notes, decision numbers, or internal design-spec section citations (`spec §N`) in comments or
   Javadoc; rewrite as neutral standalone English. **Applied.** Removed all `Task N`, `spec §N`, `decision
@@ -75,26 +89,32 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
 ## Pre-release cleanup pass idioms
 
 Additional `Shorts`/idiom conventions from `@juneau-code-conventions`'s "Pre-release cleanup pass idioms"
-subsection (added 2026-08-30, upstream `TODO-J0000`), verified against this repo on 2026-08-30:
+subsection (added 2026-08-30, upstream `TODO-J0000`), verified against this repo on 2026-08-30
+and re-swept 2026-09-13 (WORK-R0008 leftover pass):
 
 - **Null/blank guards (`Shorts.ib`/`Shorts.inb`)** — **Applied.** Collapsed `x == null || x.isBlank()` /
   `x != null && !x.isBlank()` to `ib(x)` / `inb(x)` (`import static
   org.apache.juneau.commons.utils.Shorts.*;`) at all 8 sites found: `ReleasePrepareStep`,
   `SseLogServlet`, `NexusStagingClient`, `VoteDeadlineTimer`, `NexusMockModel` (the `ib` guards), and
-  `EmailService` (×2), `NexusStagingCloseStep` (the `inb` guards).
-- **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (none found).** No `x == null ? null : f(x)`
-  ternary candidates in `src/main`.
-- **Injectable wall-clock `Clock`** — **N/A (none found).** No direct `System.currentTimeMillis()` calls
-  in `src/main`.
-- **Size assertions (`assertSize`)** — **N/A**, same reason as `assertBean`/`TestBase` below: neither
-  Juneau-side implementation is reachable from this repo's test classpath. `BctAssertions`
-  (`org.apache.juneau.test.bct`) would require adding `juneau-bct` as a new dependency — confirmed absent
-  from `mvn dependency:tree -Dscope=test` — and `TestAssertions` (`org.apache.juneau.commons`) lives in
-  `juneau-commons`'s **test** sources, not its published main jar, so it isn't on this repo's classpath
-  either. Per this doc's own general rule (below), a new dependency is not added solely to satisfy this
-  idiom; the ~28 `assertEquals(N, x.size())` sites stay as-is.
-- **No diff-narration comments** — **N/A (none found).** No "behaviour-preserving" / "renders
-  pixel-identically" / "appended after X so Y" phrasing in the codebase.
+  `EmailService` (×2), `NexusStagingCloseStep` (the `inb` guards). Reconfirmed 2026-09-13: 0 remaining
+  `== null || …isBlank()` / `!= null && !…isBlank()` sites.
+- **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (not a null-safe mapper).** Re-triaged
+  2026-09-13: ~12 `x == null ? null : f(x)` ternaries remain in `src/main` (`EmailService`,
+  `NexusStagingClient`, `MilestoneService`, `ReleaseRunRest`, `ReleaseEngine`, `DistPromoteStep`,
+  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper (`f(x)` is not
+  independently null-safe). `or(x, f(x))` still evaluates `f(x)` when `x` is null and would change
+  behavior; leave the ternary.
+- **Injectable wall-clock `Clock`** — **N/A (none found).** Reconfirmed 2026-09-13: no direct
+  `System.currentTimeMillis()` calls in `src/main`.
+- **Size assertions (`assertSize`)** — **Applied** (leftover pass 2026-09-13). R0005 recorded N/A
+  because `juneau-bct` is not a declared dependency and was not added solely for the idiom. Reconfirm
+  at pickup: `BctAssertions` (`org.apache.juneau.test.bct`) is already on the test classpath as a
+  compile-scope transitive of `juneau-rest-mock` → `juneau-test` (no new dependency added). Migrated
+  26 `assertEquals(N, x.size())` collection sites to `assertSize(N, x)` / `assertSize(() -> "msg", N,
+  x)`. Left `RunLogTest.assertEquals(4, log.size())` — `RunLog.size()` is file-byte length, not a
+  collection. Message overload is `assertSize(Supplier<String>, int, Object)`, not a raw `String`.
+- **No diff-narration comments** — **N/A (none found).** Reconfirmed 2026-09-13: no "behaviour-preserving"
+  / "renders pixel-identically" / "appended after X so Y" phrasing in the codebase.
 
 ## Javadoc
 
@@ -116,14 +136,16 @@ subsection (added 2026-08-30, upstream `TODO-J0000`), verified against this repo
 - **`TestBase` base class** — **N/A.** Juneau's `TestBase` lives in Juneau's internal test sources and is
   not published as a consumable test-jar dependency. Tests use plain JUnit 5 (`spring-boot-starter-test`).
 - **`assertBean` / `assertMap` / DPPAP assertions** — **N/A.** Same reason as `TestBase` — Juneau's
-  assertion helpers are not on this app's test classpath. Tests use JUnit 5 `Assertions.*`
-  (`assertEquals`, `assertTrue`, `assertThrows`, `assertDoesNotThrow`).
+  assertion helpers other than `BctAssertions.assertSize` (see pre-release cleanup pass above) are
+  not adopted here. Tests use JUnit 5 `Assertions.*` (`assertEquals`, `assertTrue`, `assertThrows`,
+  `assertDoesNotThrow`) plus `assertSize` for collection cardinality.
 - **`assertThrowsWithMessage`** — **N/A** (not available). Use JUnit 5 `assertThrows(...)` plus a
   `getMessage()`/`contains` check where message content matters.
 - **`Flag` / `IntegerValue` for lambda state capture** — **N/A.** Not on the test classpath; use local
   mutable holders (e.g. `ArrayList`, `AtomicInteger`) where state capture is needed.
 - **Exception factories in tests** — **Applied** where a test stub throws (e.g. `throw uoex()`), since
-  `Shorts` is on the test classpath too.
+  `Shorts` is on the test classpath too. Leftover pass (2026-09-13): three mock fault-injector
+  constructors stay as `throw new` (see exception-factories row above).
 
 ## SonarQube findings policy
 

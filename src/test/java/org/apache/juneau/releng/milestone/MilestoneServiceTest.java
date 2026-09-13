@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.milestone;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class MilestoneServiceTest {
 
 		var entries = svc.generateChanges(prs);
 
-		assertEquals(2, entries.size(), "human PR excluded; spring bumps collapse to one");
+		assertSize(() -> "human PR excluded; spring bumps collapse to one", 2, entries);
 		var spring = entries.stream().filter(e -> e.dependency.equals("spring.version")).findFirst().orElseThrow();
 		assertEquals("4.0.1", spring.fromVersion);
 		assertEquals("4.0.6", spring.toVersion);

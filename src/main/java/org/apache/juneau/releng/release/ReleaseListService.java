@@ -17,10 +17,11 @@
 
 package org.apache.juneau.releng.release;
 
-import java.util.ArrayList;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /** Merges historical (git-tag), promoted (GitHub Releases), and in-progress (local state) rows. */
@@ -39,7 +40,7 @@ public class ReleaseListService {
 
 	public List<Release> list() {
 		// 1. Released rows keyed by version; git tags first, then enriched by GitHub Releases.
-		var released = new LinkedHashMap<String, Release>();
+		Map<String, Release> released = m();
 		for (var r : tags.get())
 			released.put(r.version, r);
 		for (var g : github.get()) {
@@ -57,7 +58,7 @@ public class ReleaseListService {
 
 		// 2. In-progress rows (local state) are kept as distinct rows (an RC/DROPPED attempt can
 		//    coexist with a later RELEASED row of the same version — see the design mockup).
-		var out = new ArrayList<Release>(released.values());
+		var out = tl(released.values());
 		out.addAll(state.get());
 
 		// 3. Sort: version desc; within a version, in-progress (non-RELEASED) rows first.

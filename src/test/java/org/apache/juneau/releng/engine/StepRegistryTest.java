@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class StepRegistryTest {
 	@Test
 	void a01_hasTwentyFourStepsInSpecOrder() {
 		var ids = registry().ids();
-		assertEquals(24, ids.size());
+		assertSize(24, ids);
 		assertEquals("preflight", ids.get(0));
 		assertEquals("compose-propose-email", ids.get(1));
 		assertEquals("workspace-setup", ids.get(2));

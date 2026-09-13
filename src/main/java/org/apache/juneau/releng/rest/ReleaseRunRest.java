@@ -17,9 +17,9 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -102,13 +102,9 @@ public class ReleaseRunRest extends BasicRestResource {
 	 * @return The break-out-safe, {@code JSON.parse}-able sidecar payload.
 	 */
 	static String stepMetaJson(Iterable<? extends org.apache.juneau.releng.engine.ReleaseStep> steps) {
-		var meta = new LinkedHashMap<String,Object>();
-		for (var step : steps) {
-			var entry = new LinkedHashMap<String,Object>();
-			entry.put("title", step.title());
-			entry.put("mutating", Boolean.valueOf(step.mutating()));
-			meta.put(step.id(), entry);
-		}
+		Map<String, Object> meta = m();
+		for (var step : steps)
+			meta.put(step.id(), m("title", step.title(), "mutating", Boolean.valueOf(step.mutating())));
 		return escapeForScript(Json.of(meta));
 	}
 

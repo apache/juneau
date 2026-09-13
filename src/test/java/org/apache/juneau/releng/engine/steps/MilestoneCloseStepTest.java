@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ class MilestoneCloseStepTest {
 	void a01_noMilestoneNumberLegitimatelyNoOps() {
 		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.LIVE, null));
 		assertTrue(res.success);
-		assertEquals(0, calls.size());
+		assertSize(0, calls);
 	}
 
 	@Test
@@ -90,7 +91,7 @@ class MilestoneCloseStepTest {
 	void a03_safeLogsWouldRunAndSpawnsNothing() {
 		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.SAFE, 13));
 		assertTrue(res.success, res.message);
-		assertEquals(0, calls.size());
+		assertSize(0, calls);
 		assertTrue(logLines.stream().anyMatch(l -> l.startsWith("would run:") && l.contains("milestones/13")));
 	}
 }

@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,6 +116,6 @@ class DevDistVerifyStepTest {
 		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.SAFE, dir));
 		assertTrue(res.success, "SAFE must soft-note absent artifacts, not fail the rehearsal");
 		assertTrue(logLines.stream().anyMatch(l -> l.contains("SAFE") && l.contains("not staged")));
-		assertEquals(0, calls.size(), "no real subprocess may be spawned in SAFE");
+		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
 	}
 }

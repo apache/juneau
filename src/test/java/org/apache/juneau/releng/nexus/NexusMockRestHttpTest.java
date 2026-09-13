@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.nexus;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -81,7 +82,7 @@ class NexusMockRestHttpTest {
 				// A double-encoded body starts with a quote ("[{...) instead of the array itself ([{...).
 				assertTrue(body.startsWith("["), "Expected a raw JSON array, got double-encoded text: " + body);
 				var parsed = Json.DEFAULT.read(body, List.class);
-				assertEquals(1, parsed.size());
+				assertSize(1, parsed);
 				var repo = (Map<?, ?>) parsed.get(0);
 				assertEquals("open", repo.get("state"));
 			}

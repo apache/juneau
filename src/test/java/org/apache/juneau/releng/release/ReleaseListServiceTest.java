@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.release;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.function.Supplier;
@@ -39,7 +40,7 @@ class ReleaseListServiceTest {
 
 		var result = new ReleaseListService(tags, github, state).list();
 
-		assertEquals(2, result.size(), "9.2.0 from tag+github must collapse to one row");
+		assertSize(() -> "9.2.0 from tag+github must collapse to one row", 2, result);
 		var top = result.get(0);
 		assertEquals("9.2.0", top.version);
 		assertEquals("https://x/9.2.0", top.githubReleaseUrl);

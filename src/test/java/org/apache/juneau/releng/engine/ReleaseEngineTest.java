@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ class ReleaseEngineTest {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
 		assertEquals("juneau-9.2.1-branch", rs.branch);
-		assertEquals(24, rs.steps.size());
+		assertSize(24, rs.steps);
 		assertEquals(StepStatus.PENDING, rs.step("preflight").status);
 	}
 
@@ -348,7 +349,7 @@ class ReleaseEngineTest {
 
 		eng.start("9.2.1", null);
 
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		assertEquals("9.2.1", seen.get(0).version);
 		assertEquals(RunStatus.RUNNING, seen.get(0).status);
 		assertEquals(StepStatus.PENDING, seen.get(0).steps.get(0).status);
@@ -362,7 +363,7 @@ class ReleaseEngineTest {
 
 		eng.apply("9.2.1", "preflight", Map.of());
 
-		assertEquals(2, seen.size(), "one snapshot when the step flips to RUNNING, one when it lands terminal");
+		assertSize(() -> "one snapshot when the step flips to RUNNING, one when it lands terminal", 2, seen);
 		assertEquals(StepStatus.RUNNING, statusOf(seen.get(0), "preflight"));
 		assertEquals(StepStatus.SUCCEEDED, statusOf(seen.get(1), "preflight"));
 	}
@@ -376,11 +377,11 @@ class ReleaseEngineTest {
 		var seen = subscribeSnapshots(eng, "9.2.1");
 
 		eng.confirmReview("9.2.1", "javadoc-verify");
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		assertEquals(StepStatus.SUCCEEDED, statusOf(seen.get(0), "javadoc-verify"));
 
 		eng.skip("9.2.1", "test-workspace-verify"); // a skippable step
-		assertEquals(2, seen.size());
+		assertSize(2, seen);
 		assertEquals(StepStatus.SKIPPED, statusOf(seen.get(1), "test-workspace-verify"));
 	}
 
@@ -393,7 +394,7 @@ class ReleaseEngineTest {
 		var res = eng.arm("9.2.1", "9.2.1 LIVE");
 
 		assertTrue(res.success, res.message);
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		assertTrue(seen.get(0).armed);
 		assertEquals(ExecutionMode.LIVE, seen.get(0).mode);
 	}

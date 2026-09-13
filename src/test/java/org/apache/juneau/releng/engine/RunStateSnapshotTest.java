@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -38,7 +39,7 @@ class RunStateSnapshotTest {
 		assertEquals(2, snap.rc);
 		assertEquals(ExecutionMode.LIVE, snap.mode);
 		assertTrue(snap.armed);
-		assertEquals(2, snap.steps.size());
+		assertSize(2, snap.steps);
 		assertEquals("preflight", snap.steps.get(0).stepId);
 		assertEquals(StepStatus.SUCCEEDED, snap.steps.get(0).status);
 		assertEquals("workspace-setup", snap.steps.get(1).stepId);

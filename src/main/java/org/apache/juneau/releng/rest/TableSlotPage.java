@@ -17,7 +17,8 @@
 
 package org.apache.juneau.releng.rest;
 
-import java.util.LinkedHashMap;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
@@ -61,10 +62,7 @@ final class TableSlotPage {
 	}
 
 	static String slotJson(String slotId, String tableUrl) {
-		var m = new LinkedHashMap<String,String>();
-		m.put("slotId", slotId);
-		m.put("tableUrl", tableUrl);
-		return Json.DEFAULT.write(m);
+		return Json.DEFAULT.write(m("slotId", slotId, "tableUrl", tableUrl));
 	}
 
 	private static String asset(RestRequest req, String path) {

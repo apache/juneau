@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ class DropRcServiceTest {
 
 		var rs = store.load("9.2.1").orElseThrow();
 		assertEquals(2, rs.rc);
-		assertEquals(1, rs.rcHistory.size());
+		assertSize(1, rs.rcHistory);
 		assertEquals(RunStatus.RUNNING, rs.status);
 		// steps 1-2 kept, including their logRef (their output genuinely didn't change for this RC)
 		assertEquals(StepStatus.SUCCEEDED, rs.step("preflight").status);
@@ -239,7 +240,7 @@ class DropRcServiceTest {
 
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
 
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		var snap = seen.get(0);
 		assertEquals(RunStatus.RUNNING, snap.status);
 		assertEquals(StepStatus.PENDING, snap.steps.stream().filter(s -> s.stepId.equals("workspace-setup"))

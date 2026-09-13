@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ class TestWorkspaceVerifyStepTest {
 	void a01_unzipsAllFourReactorWorkspaceTemplatesFromTheirPreReleaseSnapshotPaths() {
 		var res = new TestWorkspaceVerifyStep().apply(ctx());
 		assertTrue(res.success, res.message);
-		assertEquals(4, calls.size());
+		assertSize(4, calls);
 
 		var base = "/staging/git/juneau/";
 		assertUnzip(base + "juneau-examples/juneau-examples-core/target/juneau-examples-core-9.2.1-SNAPSHOT-bin.zip",

@@ -17,8 +17,9 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -101,7 +102,7 @@ public class StepContext {
 	 * placing a credential immediately after a {@code --password}/{@code --token}-style flag.
 	 */
 	public static List<String> redactArgv(List<String> command) {
-		var out = new ArrayList<String>(command.size());
+		List<String> out = los(command.size());
 		var redactNext = false;
 		for (var token : command) {
 			if (redactNext) {

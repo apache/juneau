@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine.steps;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -134,7 +135,7 @@ class DistPromoteStepTest {
 		var c = ctx(ExecutionMode.SAFE, dir, List.of("juneau-9.2.0"));
 		var res = new DistPromoteStep().apply(c);
 		assertTrue(res.success, res.message);
-		assertEquals(0, calls.size(), "no real subprocess may be spawned in SAFE");
+		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
 		var wouldRun = logLines.stream().filter(l -> l.startsWith("would run:")).toList();
 		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("mv")));
 		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("commit")));

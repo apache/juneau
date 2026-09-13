@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -31,7 +32,7 @@ class RunStateTest {
 		assertEquals("9.2.1", rs.version);
 		assertEquals(1, rs.rc);
 		assertEquals(RunStatus.RUNNING, rs.status);
-		assertEquals(3, rs.steps.size());
+		assertSize(3, rs.steps);
 		assertTrue(rs.steps.stream().allMatch(s -> s.status == StepStatus.PENDING));
 		assertNull(rs.mode, "create() must leave mode unset so pre-toggle JSON and Drop-RC tests fall back to constructor mode");
 	}
@@ -68,7 +69,7 @@ class RunStateTest {
 		var back = Json.DEFAULT.read(json, RunState.class);
 
 		assertEquals(2, back.rc);
-		assertEquals(1, back.rcHistory.size());
+		assertSize(1, back.rcHistory);
 		assertEquals("vote rejected", back.rcHistory.get(0).reason);
 		assertEquals(StepStatus.SUCCEEDED, back.step("preflight").status);
 		assertEquals("orgapachejuneau-1042", back.nexusRepoId);
