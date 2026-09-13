@@ -35,7 +35,7 @@
 		<!--
 			Nimbus OAuth 2.0 SDK pin.  Mirrors the juneau-rest-server-auth-oauth pin (11.37.2, May 2026).
 		-->
-		<nimbus-oauth2-oidc-sdk.version>11.37.2</nimbus-oauth2-oidc-sdk.version>
+		<nimbus-oauth2-oidc-sdk.version>11.38.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
 	<dependencies>
