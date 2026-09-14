@@ -199,6 +199,47 @@ public final class Theme {
 		.build();
 
 	/**
+	 * A light-chrome red retint of {@link #OPEN}'s structure &mdash; the sibling of {@link #LIGHT_BROWN}.
+	 *
+	 * <p>
+	 * Recolors the chrome, accent, links, text, borders, and primary button to a wine/rose palette, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
+	 * neutral gray) verbatim &mdash; a red "danger" pill that matched the brand would stop reading as danger, so
+	 * the status palette is deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}),
+	 * overriding only the 16 recolored tokens below; the other 36 &mdash; including all five tag triads and every
+	 * structural token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
+	 * provably identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Unlike {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (not {@code #BF2600}): header and
+	 * nav stay parchment-light, with red reserved for accent, links, focus, and the primary button.
+	 *
+	 * <p>
+	 * Caveat: {@link #RED}'s {@code --jc-btn-primary} sits close in hue to {@link #OPEN}'s unchanged semantic
+	 * {@code --jc-danger} (<c>#c23934</c>). This theme avoids that collision by using a darker wine primary
+	 * (<c>#6B1D2A</c>) rather than danger red or the mockup placeholder <c>#a31f34</c>; {@code --jc-danger} itself
+	 * is deliberately left untouched. A consumer still should not reuse {@code --jc-danger} as brand.
+	 */
+	public static final Theme LIGHT_RED = deriveFrom("light-red", OPEN)
+		.token("--jc-page-bg", "linear-gradient(180deg, #e8cfd3 0%, #f0dfe3 22%, #f6eef0 55%, #faf7f8 100%)")
+		.token("--jc-accent", "#B42348")
+		.token("--jc-accent-wash", "rgba(180,35,72,0.1)")
+		.token("--jc-link", "#8B1538")
+		.token("--jc-text", "#2a181c")
+		.token("--jc-text-soft", "#2a181ccc")
+		.token("--jc-text-muted", "#6e585c")
+		.token("--jc-border", "#e4d4d7")
+		.token("--jc-border-2", "#d4c2c6")
+		.token("--jc-card-bg", "#fbf8f9")
+		.token("--jc-chrome-bg", "#f3ecee")
+		.token("--jc-btn-primary", "#6B1D2A")
+		.token("--jc-btn-primary-hover", "#541620")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #B42348, #6B1D2A)")
+		.token("--jc-focus", "#B42348")
+		.token("--jc-accent-selected", "#B42348")
+		.build();
+
+	/**
 	 * A Jira-inspired red retint of {@link #OPEN}'s structure.
 	 *
 	 * <p>

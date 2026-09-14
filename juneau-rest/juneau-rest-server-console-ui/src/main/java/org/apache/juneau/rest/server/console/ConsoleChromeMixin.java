@@ -193,8 +193,8 @@ public class ConsoleChromeMixin {
 	 * <p>
 	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) derives from {@code --jc-chrome-bg}, not
 	 * {@code --jc-surface}: the header/nav strip is chrome, not page content, so it must recolor with every
-	 * consumer theme that overrides {@code --jc-chrome-bg} (e.g. {@link Theme#LIGHT_BROWN}, {@link Theme#RED},
-	 * {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} already does, rather than staying pinned to
+	 * consumer theme that overrides {@code --jc-chrome-bg} (e.g. {@link Theme#LIGHT_BROWN}, {@link Theme#LIGHT_RED},
+	 * {@link Theme#RED}, {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} already does, rather than staying pinned to
 	 * {@code --jc-white} regardless of the active theme's chrome color. An earlier revision derived
 	 * {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
 	 * and nav strip white under every themed chrome &mdash; a latent bug a themed-header/nav test now guards
