@@ -74,8 +74,7 @@
          assigns before including this layout — no hardcoded per-page string
          compares here. -->
     <nav class="jc-nav">
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'home'> active</#if>" href="/rest/home">Home</a>
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'credentials'> active</#if>" href="/rest/credentials">Credentials</a>
+        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'setup'> active</#if>" href="/rest/setup">Setup</a>
         <a class="jc-nav-tab<#if activeTab?? && activeTab == 'releases'> active</#if>" href="/rest/releases">Releases</a>
         <a class="jc-nav-tab<#if activeTab?? && activeTab == 'new'> active</#if>" href="/rest/runs">New Release</a>
         <a class="jc-nav-tab<#if activeTab?? && activeTab == 'admin'> active</#if>" href="/rest/admin">Admin</a>
@@ -114,8 +113,9 @@
     <script src="${tableSlotJsUrl}"></script>
     </#if>
     </#if>
-    <#if activeTab?? && activeTab == 'credentials'>
+    <#if activeTab?? && activeTab == 'setup'>
     <script src="/js/credentials.js"></script>
+    <script src="/js/rm-setup.js"></script>
     </#if>
     <#if activeTab?? && activeTab == 'new'>
     <link rel="stylesheet" href="/css/new-release.css">

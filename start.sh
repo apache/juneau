@@ -26,9 +26,8 @@
 #
 # The Juneau REST resources are mounted under /rest/*, e.g.:
 #
-#   http://127.0.0.1:8790/rest/home
+#   http://127.0.0.1:8790/rest/setup
 #   http://127.0.0.1:8790/rest/releases
-#   http://127.0.0.1:8790/rest/credentials
 #
 # Bind address/port come from src/main/resources/application.properties.
 #

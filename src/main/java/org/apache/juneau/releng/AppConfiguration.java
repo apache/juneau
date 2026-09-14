@@ -54,6 +54,8 @@ import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.releng.rest.CredentialRest;
 import org.apache.juneau.releng.rest.HomeRest;
 import org.apache.juneau.releng.rest.MilestoneRest;
+import org.apache.juneau.releng.rest.SetupRest;
+import org.apache.juneau.releng.setup.SetupProbeService;
 import org.apache.juneau.releng.rest.ReleaseRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -192,6 +194,18 @@ public class AppConfiguration {
 	@Bean
 	public HomeRest homeRest() {
 		return new HomeRest();
+	}
+
+	@Bean
+	public SetupProbeService setupProbeService(ProcessRunner runner, CredentialService credentials,
+			@Value("${rm.repo.dir}") String repoDir) {
+		return new SetupProbeService(runner, credentials, Path.of(repoDir),
+				Path.of(System.getProperty("user.home"), ".m2", "settings.xml"));
+	}
+
+	@Bean
+	public SetupRest setupRest(SetupProbeService setup) {
+		return new SetupRest(setup);
 	}
 
 	@Bean

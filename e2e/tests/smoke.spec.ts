@@ -46,24 +46,24 @@ test.describe('Smoke: primary content renders without console errors', () => {
     expect(response?.status()).toBe(200);
 
     await expect(page.getByRole('heading', { name: 'Admin' })).toBeVisible();
-    // Composed tab bar (PageTable) — leaf tabs for the two dogfooded views. Scoped to .jc-tab-bar (the
-    // PageTable-owned tablist) since the top nav also has same-named "Releases"/"Credentials" links.
-    const adminTabBar = page.locator('.jc-tab-bar');
-    await expect(adminTabBar.getByText('Releases', { exact: true })).toBeVisible();
-    await expect(adminTabBar.getByText('Credentials', { exact: true })).toBeVisible();
+    const adminNav = page.locator('.juneau-page-nav');
+    await expect(adminNav.getByText('Releases', { exact: true })).toBeVisible();
+    await expect(adminNav.getByText('Credentials', { exact: true })).toHaveCount(0);
 
     expect(errors, `console errors on /rest/admin: ${errors.join('; ')}`).toEqual([]);
   });
 
-  test('Credentials page renders its primary content', async ({ page }) => {
-    const errors = collectConsoleErrors(page);
+  test('Credentials human page is 404', async ({ page }) => {
     const response = await page.goto('/rest/credentials');
+    expect(response?.status()).toBe(404);
+  });
+
+  test('Setup page renders probes', async ({ page }) => {
+    const errors = collectConsoleErrors(page);
+    const response = await page.goto('/rest/setup');
     expect(response?.status()).toBe(200);
-
-    // One card per managed credential (Apache LDAP / GPG / GitHub) — assert on the label text rather than a
-    // specific count, since the set of managed credentials could grow.
-    await expect(page.getByText(/GitHub token/i)).toBeVisible();
-
-    expect(errors, `console errors on /rest/credentials: ${errors.join('; ')}`).toEqual([]);
+    await expect(page.getByRole('heading', { name: 'Probes' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'GitHub token' })).toBeVisible();
+    expect(errors, `console errors on /rest/setup: ${errors.join('; ')}`).toEqual([]);
   });
 });

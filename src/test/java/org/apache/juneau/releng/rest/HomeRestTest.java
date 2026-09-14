@@ -15,21 +15,30 @@
  * limitations under the License.
  */
 
-import { test, expect } from '@playwright/test';
+package org.apache.juneau.releng.rest;
 
-test.describe('Setup page', () => {
-  test('boots probes and details; home 302s here', async ({ page }) => {
-    const home = await page.goto('/rest/home');
-    expect(home?.status()).toBe(200);
-    await expect(page).toHaveURL(/\/rest\/setup/);
+import static org.junit.jupiter.api.Assertions.*;
 
-    const response = await page.goto('/rest/setup');
-    expect(response?.status()).toBe(200);
+import org.apache.juneau.commons.inject.StackOverlay;
+import org.apache.juneau.rest.mock.MockRestClient;
+import org.junit.jupiter.api.Test;
 
-    await expect(page.getByRole('heading', { name: 'Probes' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Details' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Workflow' })).toHaveCount(0);
+class HomeRestTest {
 
-    await expect(page.getByRole('link', { name: 'Setup' })).toHaveClass(/active/);
-  });
-});
+	@SuppressWarnings({
+		"resource" // Caller owns and closes the returned MockRestClient (via try-with-resources).
+	})
+	private static MockRestClient client() {
+		return MockRestClient.builder(new HomeRest()).overridingBeanStore(new StackOverlay()).build();
+	}
+
+	@Test
+	void a01_homeRedirectsToSetup() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(302, resp.getStatusCode());
+				assertEquals("/rest/setup", resp.header("Location").getValue());
+			}
+		}
+	}
+}

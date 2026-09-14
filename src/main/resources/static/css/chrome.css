@@ -25,9 +25,9 @@
    /juneau-console/chrome.css (see base.ftlh's <head> link). This file holds
    only what's genuinely app-specific and has no console-ui equivalent:
    DataTables-chrome integration, credential cards, the release-detail list
-   grid, two app-only tag values, and Home-tab content styling. Every
+   grid, two app-only tag values, and Setup-tab probe styling. Every
    var(--jc-*) reference below resolves against the tokens the shipped chrome
-   response appends (Theme.OPEN, overridden by ReleaseManagerTheme).
+   response appends (Theme.LIGHT_RED, overridden by ReleaseManagerTheme).
    ========================================================================== */
 
 /* ==========================================================================
@@ -287,41 +287,102 @@ table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after
 }
 
 /* ==========================================================================
-   Home tab (welcome / instructions)
+   Setup tab (probes + details)
    ========================================================================== */
 
-.rm-home-steps,
-.rm-home-prereqs {
+.rm-setup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.rm-setup > .jc-card {
+  max-width: none;
   margin: 0;
-  padding: 4px 0 4px 20px;
+  min-width: 0;
+}
+
+.rm-probe-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 4px 0 8px;
+  overflow-x: auto;
+}
+
+.rm-probe-pill {
+  font-family: var(--jc-font);
   font-size: 0.8125rem;
-  color: var(--jc-text);
-  line-height: 1.6;
+  font-weight: 600;
+  border: 1px solid var(--jc-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: var(--jc-tag-neutral-bg);
+  color: var(--jc-tag-neutral-text);
+  cursor: pointer;
 }
 
-.rm-home-steps li,
-.rm-home-prereqs li {
-  margin-bottom: 8px;
+.rm-probe-pill-pass {
+  background: var(--jc-tag-green-bg);
+  color: var(--jc-tag-green-text);
+  border-color: var(--jc-tag-green-border);
 }
 
-.rm-home-steps li:last-child,
-.rm-home-prereqs li:last-child {
-  margin-bottom: 4px;
+.rm-probe-pill-fail {
+  background: var(--jc-tag-red-bg);
+  color: var(--jc-tag-red-text);
+  border-color: var(--jc-tag-red-border);
 }
 
-.rm-home-steps code,
-.rm-home-prereqs code,
-.rm-page-sub code {
+.rm-probe-pill-warn {
+  background: var(--jc-tag-amber-bg);
+  color: var(--jc-tag-amber-text);
+  border-color: var(--jc-tag-amber-border);
+}
+
+.rm-probe-pill-pending {
+  background: var(--jc-tag-neutral-bg);
+  color: var(--jc-tag-neutral-text);
+}
+
+.rm-probe-pill-selected {
+  box-shadow: 0 0 0 2px var(--jc-accent);
+  background: var(--jc-accent-wash);
+}
+
+.rm-probe-placeholder {
+  color: var(--jc-text-muted);
+  font-size: 0.875rem;
+  margin: 8px 0;
+}
+
+.rm-probe-copy,
+.rm-probe-install-out {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.75rem;
   background: var(--jc-chrome-bg);
   border: 1px solid var(--jc-border);
-  border-radius: 3px;
-  padding: 1px 5px;
+  border-radius: var(--jc-radius);
+  padding: 8px 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+#rm-probe-copy-btn,
+#rm-probe-install-btn {
+  margin: 8px 8px 0 0;
+}
+
+@media (max-width: 720px) {
+  .rm-setup { grid-template-columns: 1fr; }
 }
 
 /* ==========================================================================
-   Credential cards (Credentials tab)
+   Credential cards (Setup Details write UI)
    ==========================================================================
 
    Not shown in the design mockup (which only covers the Releases tab), so

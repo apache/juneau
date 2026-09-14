@@ -15,23 +15,27 @@
   limitations under the License.
 -->
 
-<#assign activeTab = "admin">
+<#assign activeTab = "setup">
 <#macro content>
-    <div class="jc-card">
-        <div class="jc-card-header">
-            <h2>Admin</h2>
+    <div class="rm-setup">
+        <div class="jc-card rm-setup-probes">
+            <div class="jc-card-header">
+                <h2>Probes</h2>
+            </div>
+            <div class="rm-probe-row" id="rm-probe-row">
+                <#list inventory as p>
+                <button type="button" class="rm-probe-pill rm-probe-pill-pending" data-probe-id="${p.id}" data-kind="${p.kind}">${p.label}</button>
+                </#list>
+            </div>
         </div>
-
-        <nav class="juneau-page-nav" aria-label="Admin">
-            <div class="juneau-page-nav-sections">
-                <a class="juneau-page-nav-section" href="/rest/admin/releases" aria-current="page">Admin</a>
+        <div class="jc-card rm-setup-details">
+            <div class="jc-card-header">
+                <h2>Details</h2>
             </div>
-            <div class="juneau-page-nav-children">
-                <a class="juneau-page-nav-child" href="/rest/admin/releases"<#if selectedChild == 'releases'> aria-current="page"</#if>>Releases</a>
+            <div id="rm-probe-details">
+                <p class="rm-probe-placeholder">Select a probe.</p>
             </div>
-        </nav>
-        <div id="${slotId}"></div>
-        <script type="application/json" id="rm-table-slot">${tableSlotJson?no_esc}</script>
+        </div>
     </div>
 </#macro>
 <#include "base.ftlh">

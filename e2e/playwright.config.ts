@@ -68,7 +68,7 @@ export default defineConfig({
   webServer: {
     command:
       `mvn -q spring-boot:run -Dspring-boot.run.arguments=--server.port=${TEST_PORT}`,
-    url: BASE_URL + '/rest/home',
+    url: BASE_URL + '/rest/setup',
     cwd: APP_ROOT,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,

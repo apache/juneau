@@ -43,4 +43,26 @@ class ProcessRunnerStreamTest {
 		assertFalse(res.ok());
 		assertEquals(List.of("hi"), lines);
 	}
+
+	@Test
+	void a03_timeoutKillsAHungProcess() {
+		var runner = new ProcessRunner.Default();
+		var start = System.nanoTime();
+		var res = runner.run(List.of("sleep", "30"), null, null, java.time.Duration.ofMillis(400));
+		var elapsedMs = (System.nanoTime() - start) / 1_000_000;
+		assertFalse(res.ok());
+		assertEquals(124, res.exitCode());
+		assertTrue(res.output().contains("Timed out"), res.output());
+		assertTrue(elapsedMs < 8_000, "timeout path hung: " + elapsedMs + "ms");
+	}
+
+	@Test
+	void a04_nullStdinClosesSoReadDoesNotHang() {
+		var runner = new ProcessRunner.Default();
+		var start = System.nanoTime();
+		var res = runner.run(List.of("sh", "-c", "read line; echo after"), null, null, java.time.Duration.ofSeconds(3));
+		var elapsedMs = (System.nanoTime() - start) / 1_000_000;
+		assertTrue(elapsedMs < 2_500, "stdin was left open: " + elapsedMs + "ms");
+		assertTrue(res.output().contains("after") || res.exitCode() != 0, res.output());
+	}
 }

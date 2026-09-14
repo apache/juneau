@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Credentials envelope JSON lives on this resource without {@code ViewsMixin}; the human page stays the secret-store UI.
+ * Human Credentials page is 404; write/status APIs stay.
  */
 class CredentialRestTest {
 
@@ -56,25 +56,30 @@ class CredentialRestTest {
 	}
 
 	@Test
-	void a01_viewEnvelopeIsSlotMetaWithoutCsrf() throws Exception {
+	void a01_viewEnvelopeIsGone() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/view").header("Accept", "application/json").run()) {
-				assertEquals(200, resp.getStatusCode());
-				ReleaseRestTest.assertSlotEnvelope(resp.getBodyAsString(), "credentials");
+				assertEquals(404, resp.getStatusCode());
 			}
 		}
 	}
 
 	@Test
-	void a02_pageRemainsTheSecretStoreUi() throws Exception {
+	void a02_humanPageIs404() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(404, resp.getStatusCode());
+			}
+		}
+	}
+
+	@Test
+	void a03_statusRemains() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/status").header("Accept", "application/json").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("/js/credentials.js"), body);
-				assertFalse(body.contains("class=\"juneau-page-nav\""), body);
-				assertFalse(body.contains("id=\"rm-table-slot\""), body);
-				assertFalse(body.contains("juneau-view:credentials"), body);
+				assertTrue(body.contains("apache") || body.contains("GitHub") || body.contains("github"), body);
 			}
 		}
 	}
