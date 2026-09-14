@@ -51,10 +51,6 @@ import org.junit.jupiter.api.condition.*;
  * ({@code row-actions.cjs}) from the profile's {@code juneau.jsTests.harness} directory, so no pom change is needed
  * to add this second canary.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='jc'>{@link PagePanelVisibility_BrowserTest} &mdash; the sibling {@code juneau-pages.js} canary.
- * </ul>
  */
 @EnabledIfSystemProperty(named=RowActionCsrf_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
@@ -75,10 +71,7 @@ class RowActionCsrf_BrowserTest extends TestBase {
 	@BeforeAll
 	static void probe() throws Exception {
 		var dir = Path.of(requiredProperty("juneau.jsTests.dir"));
-		// The pom's js-tests profile provisions ONE harness property (the panel-visibility prober); this second
-		// canary lives beside it in src/test/js, so it is derived from that property's directory rather than adding
-		// a new pom property.
-		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("row-actions.cjs");
+		var harness = Path.of(requiredProperty("juneau.jsTests.harness"));
 
 		// The fixture restates nothing under test: it loads the REAL served juneau-views.js.  No jQuery/DataTables
 		// is needed - the prober drives the runtime's exposed pure + DOM helpers directly.

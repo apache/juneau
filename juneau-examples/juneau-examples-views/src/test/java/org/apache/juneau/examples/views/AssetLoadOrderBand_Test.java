@@ -258,8 +258,8 @@ class AssetLoadOrderBand_Test extends TestBase {
 
 	@Test
 	void b02_syntheticScriptBandViolation_isCaught() {
-		var reversed = "<script src=\"/juneau-cards.js\"></script><script src=\"/juneau-icons.js\"></script>";
-		var hits = scriptSequence(reversed, Map.of("/juneau-icons.js", 1, "/juneau-cards.js", 2));
+		var reversed = "<script src=\"/juneau-calendar.js\"></script><script src=\"/juneau-icons.js\"></script>";
+		var hits = scriptSequence(reversed, Map.of("/juneau-icons.js", 1, "/juneau-calendar.js", 2));
 		var err = assertThrows(AssertionError.class, () -> assertBandOrder(hits, "synthetic"));
 		assertTrue(err.getMessage().contains("juneau-icons.js"), err.getMessage());
 	}

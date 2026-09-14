@@ -73,8 +73,7 @@ public class RegionDef {
 	 *
 	 * <p>
 	 * A declared interval below this floor is clamped up to it rather than honored as configured &mdash; the same
-	 * reasoning and the same shared floor as {@link ViewDef#MIN_POLL_INTERVAL_MS} and
-	 * {@code CardFieldList.java:152-153}'s {@code pollIntervalMs} clamp.
+	 * reasoning and the same shared floor as {@link ViewDef#MIN_POLL_INTERVAL_MS}.
 	 */
 	public static final long MIN_REFRESH_MS = SafePathTemplate.MIN_POLL_INTERVAL_MS;
 
@@ -144,7 +143,7 @@ public class RegionDef {
 	 *
 	 * <p>
 	 * A value below {@link #MIN_REFRESH_MS} is silently clamped up to the floor rather than rejected, exactly as
-	 * {@link ViewDef#poll(long)} and {@code CardFieldList.pollIntervalMs}'s setter already clamp.
+	 * {@link ViewDef#poll(long)} already clamps.
 	 */
 	public Long refreshMs;
 

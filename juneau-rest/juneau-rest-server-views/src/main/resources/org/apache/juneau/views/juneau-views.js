@@ -132,17 +132,17 @@
 	const SIDECAR_ID_PREFIX = "juneau-view:";
 
 	/**
-	 * The card `<article>` marker - MUST equal CardGridTable's CARD_MARKER on the server.  A view table can be hosted
-	 * inside a card, in which case the server qualifies the table's minted element id (and its sidecars') by the
-	 * enclosing card, while `data-juneau-view` stays the AUTHOR's ViewDef.id.  This runtime therefore resolves a
-	 * sidecar within the enclosing card first, so two cards hosting the same authored view never cross-wire.
+	 * Optional enclosing-card `<article>` marker.  A view table hosted inside a card qualifies the table's minted
+	 * element id (and its sidecars') by the enclosing card, while `data-juneau-view` stays the AUTHOR's ViewDef.id.
+	 * This runtime therefore resolves a sidecar within the enclosing card first, so two cards hosting the same
+	 * authored view never cross-wire.  There is no Java card emitter; HTML authors who wrap a table this way stamp
+	 * the attribute themselves.
 	 */
 	const CARD_MARKER = "data-juneau-card";
 
-	// The region container marker - MUST equal RegionDef's REGION_ATTR constant, and juneau-cards.js's/
-	// juneau-pages.js's own REGION_MARKER copies, on the server and in each sibling asset respectively.  Used only
-	// at the detail-expand enrolment call site below (expandDetailRow); this file is not itself a region-hosting
-	// runtime and never registers with the ready()/registerRuntime() barrier.
+	// The region container marker - MUST equal RegionDef's REGION_ATTR constant (and juneau-regions.js's copy).
+	// Used only at the detail-expand enrolment call site below (expandDetailRow); this file is not itself a
+	// region-hosting runtime and never registers with the ready()/registerRuntime() barrier.
 	const REGION_MARKER = "data-juneau-region";
 
 	// DT1 table-overflow-wrap discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
@@ -2248,7 +2248,7 @@
 	 *
 	 * <p>{@code parentId} is the parent table's MINTED id (its DOM identity, from viewSidecarKey), not the author
 	 * {@code ViewDef.id}, so two cards hosting the same authored view never collide.  The author {@code BarSlot.id}
-	 * itself is left untouched - the PageDef cross-host uniqueness check compares it.
+	 * itself is left untouched; uniqueness is enforced at {@code RowDetailDef} / {@code ModalDef} validate.
 	 *
 	 * @return The minted suffix, or null when this panel carries no bar slot.
 	 */
@@ -3167,11 +3167,9 @@
 
 	/**
 	 * Design §9.3's missing-runtime failure mode, at the detail-panel enrolment site: a `[data-juneau-region]`
-	 * node with no `juneau-regions.js` loaded to run it renders loud, not blank - mirrors juneau-cards.js's and
-	 * juneau-pages.js's own `reportRegionsWithoutRuntime`, duplicated for the same reason those two don't share
-	 * it with each other: no cross-module JS dependency exists to carry it, and this file itself uses its own
-	 * already-local `renderAsyncStatus` rather than reaching through `NS.init` for a function this very module
-	 * defines.
+	 * node with no `juneau-regions.js` loaded to run it renders loud, not blank.  Duplicated here because no
+	 * cross-module JS dependency exists to share it, and this file itself uses its own already-local
+	 * `renderAsyncStatus` rather than reaching through `NS.init` for a function this very module defines.
 	 */
 	function reportRegionsWithoutRuntime(nodes) {
 		for (const el of nodes) {
@@ -3357,7 +3355,7 @@
 
 		// Enrolment call site 3/3 (design §9.3), and LAST on purpose: only now is the clone in the document (so a
 		// detail-panel region can find its host and its declaration) AND the in-flight entry created (so a region
-		// never races the map).  Runtime-agnostic like juneau-cards.js's own `enrolCardRegions`: `enrolIn` itself is
+		// never races the map).  Runtime-agnostic: `enrolIn` itself is
 		// idempotent per node and a no-op walk when the template carried no region at all, so this call is
 		// unconditional rather than gated on the template being known to have one.
 		//
@@ -7031,11 +7029,12 @@
 	}
 
 	/**
-	 * Inits every table[data-juneau-view] on the page, EXCEPT one scoped inside a [data-juneau-page] shell: a
-	 * page shell's juneau-pages.js runtime owns first-init for its own panels (lazy, on first tab activation -
-	 * DataTables mis-sizes columns initialized inside a display:none panel), rather than the eager
-	 * DOMContentLoaded scan below.  A standalone page with no page shell is unaffected - every one of its tables is
-	 * still inited exactly as before.
+	 * Inits every table[data-juneau-view] on the page, EXCEPT one scoped inside a [data-juneau-page] ancestor.
+	 * A host that stamps that attribute around lazy/hidden tables owns first-init via `initTable` /
+	 * `initTableFromDef` (HTML-slot `JuneauViews.regions.mount` uses the latter) rather than the eager
+	 * DOMContentLoaded scan below - DataTables mis-sizes columns initialized inside a display:none panel.
+	 * A standalone page with no page-id ancestor is unaffected - every one of its tables is still inited
+	 * exactly as before.  HTML-slot nav stamps `data-juneau-page` on the nav itself, not around tables.
 	 */
 	function initAll() {
 		const tables = document.querySelectorAll("table[data-juneau-view]");
@@ -7270,10 +7269,10 @@
 		mergeMeta: mergeMeta,
 		buildOptions: buildOptions,
 		initAll: initAll,
-		// Previously private - exposed so juneau-pages.js can init one specific view's table on demand (lazy,
-		// on first tab activation).  Always returns a thenable; overlapping calls coalesce on the in-flight
-		// promise (data-juneau-init-pending).  Already idempotent (isDataTable guard), so re-entry from the page
-		// runtime after the DOMContentLoaded scan has already run is always safe.
+		// Previously private - exposed so a host (HTML-slot `regions.mount`, or any lazy panel) can init one
+		// specific view's table on demand.  Always returns a thenable; overlapping calls coalesce on the in-flight
+		// promise (data-juneau-init-pending).  Already idempotent (isDataTable guard), so re-entry after the
+		// DOMContentLoaded scan has already run is always safe.
 		initTable: initTable,
 		initTableFromDef: initTableFromDef,
 		mountTableSlot: mountTableSlot,

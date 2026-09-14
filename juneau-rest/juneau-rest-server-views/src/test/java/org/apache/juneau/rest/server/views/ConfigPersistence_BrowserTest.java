@@ -80,9 +80,8 @@ class ConfigPersistence_BrowserTest extends TestBase {
 	@BeforeAll
 	static void probe() throws Exception {
 		var dir = Path.of(requiredProperty("juneau.jsTests.dir"));
-		// The pom's js-tests profile provisions ONE harness property (the panel-visibility prober); this third
-		// canary lives beside it in src/test/js, so it is derived from that property's directory rather than
-		// adding a new pom property - the same trick RowActionCsrf_BrowserTest already uses.
+		// The pom's js-tests profile provisions ONE harness property; this canary lives beside it in src/test/js,
+		// so it is derived from that property's directory rather than adding a new pom property.
 		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("config-persistence.cjs");
 
 		// The fixture restates nothing under test: it loads the REAL served juneau-views.js (for NS.init's CSRF

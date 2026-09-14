@@ -27,11 +27,10 @@ import org.apache.juneau.commons.http.*;
  * An additive trailing region beside the subtab ribbon: a small row of {@link BarWidget}s (concept #9).
  *
  * <p>
- * A pure data bean.  The views emitter renders a {@code data-juneau-bar-slot} region as a <b>trailing sibling of
- * {@code .jc-subtab-bar}</b> (never into the archived {@code .juneau-view-toolbar-*} DataTables control row) and, only
- * when the slot is non-empty, a tiny JSON sidecar for any dynamic counts.  The accessor ({@code PageDef.barSlot(...)})
- * is a Java-only builder field in the views module &mdash; omitted from the wire, and it does not bump any
- * {@code CONTRACT_VERSION}.
+ * A pure data bean.  The views emitter renders a {@code data-juneau-bar-slot} region (never into the archived
+ * {@code .juneau-view-toolbar-*} DataTables control row) and, only when the slot is non-empty, a tiny JSON sidecar
+ * for any dynamic counts.  The remaining Java-only accessor is {@code RowDetailDef.barSlot(...)} in the views
+ * module &mdash; omitted from the wire, and it does not bump any {@code CONTRACT_VERSION}.
  *
  * @since 10.0.0
  */

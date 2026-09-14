@@ -18,8 +18,8 @@
 /*
  * juneau-config.js - opt-in column-configurator persistence + pure config-application layer (design doc #444).
  *
- * This file is loaded AFTER juneau-views.js (a template <script> include the consumer adds, exactly like
- * juneau-pages.js - NOT a dynamic fetch; see design §4.1) and extends the SAME window.JuneauViews namespace.  A
+ * This file is loaded AFTER juneau-views.js (a template <script> include the consumer adds - NOT a dynamic
+ * fetch; see design §4.1) and extends the SAME window.JuneauViews namespace.  A
  * non-configurable table never loads it and pays nothing.
  *
  * LANDED SLICES:
@@ -81,11 +81,11 @@
 	const LOCALSTORAGE_MAX_BLOB_BYTES = 64 * 1024;    // mirrors the server default per-blob cap (64 KB)
 	const LOCALSTORAGE_MAX_VIEWS_PER_USER = 500;      // mirrors the server default MAX_VIEWS_PER_USER (aggregate)
 
-	/** The shell attribute juneau-pages.js/PageTable stamp the page id onto (§3.1) - read via closest(...). */
+	/** The shell attribute a page host stamps the page id onto (§3.1) - read via closest(...). */
 	const PAGE_ID_ATTR = "data-juneau-page";
 
 	/**
-	 * The shell attribute the slice-3 emitter (ViewTable/PageTable) stamps the resolved, context-path-aware
+	 * The shell attribute the slice-3 emitter (ViewTable) stamps the resolved, context-path-aware
 	 * saved-views REST base onto (§3.3 DECISION option (b)) - read via closest(...), mirroring PAGE_ID_ATTR
 	 * exactly.  Absent/blank means the server-persisted provider is UNAVAILABLE for this table - never a
 	 * hardcoded "/"-rooted fallback path.
@@ -305,10 +305,10 @@
 	}
 
 	/**
-	 * Resolves the enclosing page id (§3.1): {@code table.closest('[data-juneau-page]')}'s OWN attribute value -
-	 * the SAME shell attribute juneau-pages.js/PageTable stamp - falling back to null (standalone) when there is
-	 * no page shell.  This is the CONTRACT, not a convenience read: a future non-juneau-pages.js host that wants
-	 * page-qualification must stamp this exact attribute rather than inventing a parallel one.
+	 * Resolves the enclosing page id (§3.1): {@code table.closest('[data-juneau-page]')}'s OWN attribute value,
+	 * falling back to null (standalone) when there is no page shell.  This is the CONTRACT, not a convenience
+	 * read: a host that wants page-qualification must stamp this exact attribute rather than inventing a parallel
+	 * one.  HTML-slot nav stamps it on {@code .juneau-page-nav}.
 	 */
 	function resolvePageId(table) {
 		const host = table?.closest ? table.closest("[" + PAGE_ID_ATTR + "]") : null;

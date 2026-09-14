@@ -146,14 +146,12 @@ final class RawContentSinkScanner {
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "slot.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-ribbon.js", "b.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-helpers.js", "span.innerHTML = markup;"),
-		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-cards.js", "btn.innerHTML = glyph;"),
 		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
 	);
 
 	/** Shipped JS assets scanned by {@link #scanShippedJs(Path)}, each as a reactor-root-relative path. */
 	private static final List<String> SHIPPED_JS_FILES = List.of(
 		VIEWS_JS_DIR + "/juneau-config.js",
-		VIEWS_JS_DIR + "/juneau-pages.js",
 		VIEWS_JS_DIR + "/juneau-icons.js",
 		VIEWS_JS_DIR + "/juneau-renders.js",
 		VIEWS_JS_DIR + "/juneau-views.js",
@@ -165,7 +163,6 @@ final class RawContentSinkScanner {
 		// has zero sinks today - every state message goes out through renderAsyncStatus's textContent - and listing
 		// it here is what keeps that true rather than merely currently-so.
 		VIEWS_JS_DIR + "/juneau-regions.js",
-		WIDGETS_JS_DIR + "/juneau-cards.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
 		WIDGETS_JS_DIR + "/juneau-chrome.js"
 	);
@@ -370,7 +367,7 @@ final class RawContentSinkScanner {
 	/**
 	 * One {@code rawText(...)} call site, classified.
 	 *
-	 * @param file The simple file name (e.g. {@code PageTable.java}).
+	 * @param file The simple file name (e.g. {@code ViewTable.java}).
 	 * @param line The 1-based line number of the call.
 	 * @param arg The argument source text, verbatim.
 	 */

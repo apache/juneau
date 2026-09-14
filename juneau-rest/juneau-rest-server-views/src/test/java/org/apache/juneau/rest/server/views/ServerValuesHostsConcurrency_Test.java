@@ -39,18 +39,15 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Genuinely concurrent requests against <b>one shared</b> {@link PageDef} instance &mdash; the realistic application
+ * Genuinely concurrent requests against <b>one shared</b> {@link ViewDef} instance &mdash; the realistic application
  * pattern of a static/field-held definition.
  *
  * <p>
  * Resolution mutates that shared instance in place and restores it, so these are the tests that matter: real threads
  * released from a common latch, many rounds, and a provider that deliberately widens the mutate/restore window so an
- * unguarded implementation would interleave.  A sequential simulation cannot fail either way &mdash; it never puts two
- * resolve windows on the same object at the same time, which is the only condition under which a lost restore or a
- * cross-response leak is observable.
+ * unguarded implementation would interleave.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource",  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
 	"java:S125" // Comments are explanatory; they are not commented-out code.
 })
@@ -59,7 +56,7 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 	private static final int THREADS = 8;
 	private static final int ROUNDS = 12;
 
-	/** Live occupancy of the shared page's resolve window, and the high-water mark across the run. */
+	/** Live occupancy of the shared view's resolve window, and the high-water mark across the run. */
 	private static final AtomicInteger inWindow = new AtomicInteger();
 	private static final AtomicInteger maxInWindow = new AtomicInteger();
 
@@ -68,7 +65,7 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 	 * accidentally serializing.
 	 */
 	@SuppressWarnings({
-		"java:S2925" // deliberately widens the shared PageDef's mutate/restore window so an unguarded impl would interleave - the race this test exists to catch (case d).
+		"java:S2925" // deliberately widens the shared ViewDef's mutate/restore window so an unguarded impl would interleave - the race this test exists to catch.
 	})
 	private static String markFor(VarResolverSession s) {
 		var live = inWindow.incrementAndGet();
@@ -84,22 +81,9 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 		}
 	}
 
+	/** The one shared, field-held view every thread renders concurrently. */
 	static final ViewDef VIEW = ViewDef.create("shared")
-		.columns(Column.of("name").title("Name"))
-		.build();
-
-	/** The one shared, field-held page every thread renders concurrently. */
-	static final PageDef PAGE = PageDef.create("shared-page")
-		.title("MARK:$FV{env}")
-		.tabs(
-			Tab.create("a", "TAB:$FV{env}").view(VIEW),
-			Tab.create("b", "TAB2:$FV{env}").subtabs(
-				Subtab.create("s", "SUB:$FV{env}").view(
-					ViewDef.create("shared-sub").columns(Column.of("name").title("Name")).build())))
-		.header(AppHeaderDef.create("app")
-			.brand(Brand.create().title("BRAND:$FV{env}").crumbs("CRUMB:$FV{env}"))
-			.avatar(AvatarChip.of("AVATAR:$FV{env}").initials("AV:$FV{env}"))
-			.build())
+		.columns(Column.of("name").title("TAB:$FV{env}"))
 		.serverValues(ServerValues.create().value("env", ServerValuesHostsConcurrency_Test::markFor))
 		.build();
 
@@ -111,31 +95,18 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 			return b.vars(ServerValuesVar.class).build();
 		}
 
-		@RestGet(path="/page") public HttpResource page(RestRequest req) {
+		@RestGet(path="/view") public HttpResource view(RestRequest req) {
 			return HttpResourceBean.of(
-				ByteArrayBody.of(Html.of(PageTable.of(req, PAGE)).getBytes(UTF_8), "text/html;charset=utf-8"),
+				ByteArrayBody.of(Html.of(ViewTable.of(req, VIEW)).getBytes(UTF_8), "text/html;charset=utf-8"),
 				list(ContentType.of("text/html;charset=utf-8")));
 		}
 	}
 
-	/** The author templates that must survive every round untouched. */
 	private static List<String> authorTemplates() {
-		var out = new ArrayList<String>();
-		out.add(PAGE.title);
-		for (var t : PAGE.tabs) {
-			out.add(t.label);
-			if (t.subtabs != null)
-				for (var s : t.subtabs)
-					out.add(s.label);
-		}
-		out.add(PAGE.header.brand.title);
-		out.addAll(PAGE.header.brand.crumbs);
-		out.add(PAGE.header.avatar.displayName);
-		out.add(PAGE.header.avatar.initials);
-		return out;
+		return list(VIEW.columns.get(0).title);
 	}
 
-	@Test void a01_simultaneousRequestsOnOneSharedPageDefResolveIndependently() throws Exception {
+	@Test void a01_simultaneousRequestsOnOneSharedViewDefResolveIndependently() throws Exception {
 		var before = authorTemplates();
 		var pool = Executors.newFixedThreadPool(THREADS);
 		var start = new CountDownLatch(1);
@@ -145,13 +116,12 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 			var futures = new ArrayList<Future<?>>();
 			for (var i = 0; i < THREADS; i++) {
 				var mine = "T" + i;
-				// One client per thread so the only shared mutable state under test is the PageDef itself.
 				var client = MockRestClient.buildLax(ServerValuesHostsConcurrencyHost.class);
 				futures.add(pool.submit(() -> {
 					await(start);
 					for (var r = 0; r < ROUNDS; r++) {
 						try {
-							var html = client.get("/page?env=" + mine).run().assertStatus(200).getContent().asString();
+							var html = client.get("/view?env=" + mine).run().assertStatus(200).getContent().asString();
 							responses.incrementAndGet();
 							check(failures, html, mine);
 						} catch (Exception e) {
@@ -167,24 +137,18 @@ class ServerValuesHostsConcurrency_Test extends TestBase {
 			pool.shutdownNow();
 		}
 
-		// Failures first: they carry the reason (a leak, an unresolved template, or a request that threw), where the
-		// response count only reports that something went wrong.
-		assertTrue(failures.isEmpty(), () -> "concurrent requests on one shared PageDef interfered:\n" + String.join("\n", failures));
+		assertTrue(failures.isEmpty(), () -> "concurrent requests on one shared ViewDef interfered:\n" + String.join("\n", failures));
 		assertEquals(THREADS * ROUNDS, responses.get(), "every request must have completed");
-		assertEquals(before, authorTemplates(), "the shared PageDef must be restored to its author templates");
+		assertEquals(before, authorTemplates(), "the shared ViewDef must be restored to its author templates");
 
-		// Every provider call above ran inside the shared def's mutate/restore window and counted its own occupancy,
-		// so the high-water mark is a direct measurement of whether that window is mutually exclusive.
 		assertTrue(maxInWindow.get() > 0, "the concurrency run must have exercised the resolve window");
 		assertEquals(1, maxInWindow.get(),
-			"two responses were inside the same shared PageDef's mutate/restore window simultaneously");
+			"two responses were inside the same shared ViewDef's mutate/restore window simultaneously");
 	}
 
-	/** Asserts a response carries only its OWN resolved chrome, on every allowlisted page field. */
 	private static void check(List<String> failures, String html, String mine) {
-		for (var field : list("MARK", "TAB", "TAB2", "SUB", "BRAND", "CRUMB", "AVATAR", "AV")) {
-			// MARK is PageDef.title, which the shell paints nowhere - skip its presence check, keep its leak check.
-			if (! "MARK".equals(field) && ! html.contains(field + ":" + mine))
+		for (var field : list("TAB")) {
+			if (! html.contains(field + ":" + mine))
 				failures.add(mine + ": missing own " + field);
 			for (var t = 0; t < THREADS; t++) {
 				var other = "T" + t;

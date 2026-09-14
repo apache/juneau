@@ -183,7 +183,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 
 	static Stream<String> c01_bodyContainsSingleSubstringProvider() {
 		return Stream.of(
-			"const PAGE_ID_ATTR = \"" + PageTable.MARKER_ATTR + "\";",
+			"const PAGE_ID_ATTR = \"data-juneau-page\";",
 			"const VIEW_ID_ATTR = \"" + ViewTable.MARKER_ATTR + "\";",
 			"credentials: \"same-origin\"");
 	}

@@ -129,10 +129,10 @@ jobs:
         VIEWS: juneau-rest/juneau-rest-server-views
       run: |
         echo '================================================================================'
-        echo 'The JavaScript-execution harness failed.  It renders real PageTable output with'
-        echo 'the real juneau-views.css and juneau-pages.js in headless Chromium and asserts on'
-        echo 'what is actually visible, so a failure here means the browser disagreed with the'
-        echo 'panel-visibility or lazy-init contract - not that a source pattern stopped matching.'
+        echo 'The JavaScript-execution harness failed.  It runs the real juneau-views.js'
+        echo 'runtime in headless Chromium and asserts on what is actually visible, so a'
+        echo 'failure here means the browser disagreed with the client contract - not that a'
+        echo 'source pattern stopped matching.'
         echo
         echo 'Reproduce locally (needs Node and npm on the PATH; first run downloads Chromium):'
         echo "  mvn -Pjs-tests -f ${VIEWS}/pom.xml test"

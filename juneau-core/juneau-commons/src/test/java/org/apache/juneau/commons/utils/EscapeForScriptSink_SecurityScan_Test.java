@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * Pairs a set of unit RED/GREEN checks on {@link ScriptJsonSinkScanner} (proving it flags an unescaped sink, passes
  * an escaped one, ignores non-{@code <script>} raw text, and is not fooled by a comment mention of the escaper) with
  * a live scan of the real source tree that both asserts zero violations <i>and</i> asserts the scanner still finds
- * the known-good {@code ViewTable}/{@code PageTable} sinks &mdash; so a green result can never mean "nothing was
+ * the known-good {@code ViewTable} sinks &mdash; so a green result can never mean "nothing was
  * examined".
  */
 class EscapeForScriptSink_SecurityScan_Test extends TestBase {
@@ -56,7 +56,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 		assertFalse(r.sinks().get(0).escaped());
 	}
 
-	/** GREEN: the ViewTable/PageTable shape - escaped via a same-source variable assignment - passes. */
+	/** GREEN: the ViewTable shape - escaped via a same-source variable assignment - passes. */
 	@Test void a02_escapedViaVariable_passes() {
 		var src = """
 			class X {
@@ -139,7 +139,6 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------
 
 	private static final String VIEW_TABLE = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/ViewTable.java";
-	private static final String PAGE_TABLE = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/PageTable.java";
 
 	/** GREEN: every {@code <script>}-JSON sink in the real framework tree routes through escapeForScript. */
 	@Test void a10_realTree_hasNoViolations() throws Exception {
@@ -156,11 +155,9 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	@Test void a11_realTree_findsKnownSinks_notVacuous() throws Exception {
 		var root = requireRepoRoot();
 		var r = ScriptJsonSinkScanner.scanTree(root);
-		assertTrue(r.sinks().size() >= 2, () -> "expected >=2 framework <script> sinks, found: " + r.sinks());
+		assertTrue(r.sinks().size() >= 1, () -> "expected >=2 framework <script> sinks, found: " + r.sinks());
 		assertTrue(r.sinks().stream().anyMatch(s -> s.file().replace('\\', '/').equals(VIEW_TABLE)),
 			() -> "ViewTable sink not found; scanner may have stopped matching. sinks: " + r.sinks());
-		assertTrue(r.sinks().stream().anyMatch(s -> s.file().replace('\\', '/').equals(PAGE_TABLE)),
-			() -> "PageTable sink not found; scanner may have stopped matching. sinks: " + r.sinks());
 	}
 
 	/**

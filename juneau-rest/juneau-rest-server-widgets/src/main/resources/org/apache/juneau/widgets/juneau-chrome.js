@@ -18,7 +18,7 @@
 /*
  * juneau-chrome.js - opt-in client runtime for the Apache Juneau page-chrome widgets (AppHeaderDef app-header /
  * AvatarChip / BarSlot).  Namespace-scoped as window.JuneauChrome, no ES import - a SEPARATE served bundle in the
- * same sense as juneau-pages.js / juneau-cards.js.  It does NOT refactor, extract from, or modify juneau-views.js.
+ * same sense as juneau-calendar.js.  It does NOT refactor, extract from, or modify juneau-views.js.
  * Load order: juneau-icons.js -> juneau-chrome.js (header action glyphs resolve from the icon registry), and
  * juneau-views.js before juneau-chrome.js if the page also wants the shared layer manager for menus (see below).
  *

@@ -1427,7 +1427,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	border-bottom-width: 3px;
 }
 
-/* Panels are hidden by default; juneau-pages.js toggles ".jc-active" on the one panel that should be visible. */
+/* Historical leftover from the deleted hash-swap shell: panels stay hidden until ".jc-active". HTML-slot pages do not use these classes. */
 .jc-panel,
 .jc-subpanel {
 	display: none;
@@ -2577,12 +2577,10 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * Card-layout widget (CardGrid / Card / CardFieldList).  Shape classes are views-owned
- * (.juneau-view-card-*); a refreshable card's runtime behavior is driven by the data-juneau-card-* attributes
- * the CardGridTable emitter stamps and juneau-cards.js reads.  Neutral, dependency-free defaults via --jc-card-*
- * tokens so a grid is legible without a theme; a consumer stylesheet (or console-ui chrome.css) may override the
- * tokens.  The grid's minmax() floor reads --jc-card-min, which the emitter overrides inline per-grid from
- * CardGrid.minCardPx when set; there is deliberately no --jc-card-status-error token - the error status chip is
+ * Card-layout shape classes (.juneau-view-card-*), kept for HTML-authored dashboards after the Java Card*
+ * emitters were deleted.  Neutral, dependency-free defaults via --jc-card-* tokens so a grid is legible without
+ * a theme; a consumer stylesheet (or console-ui chrome.css) may override the tokens.  The grid's minmax() floor
+ * reads --jc-card-min.  There is deliberately no --jc-card-status-error token - the error status chip is
  * distinguished by a heavier border + bold weight, not a color, so it reads in any theme.
  * The token values themselves are declared once, on the shared :root block near the top of this file (avoids a
  * duplicate :root selector).
@@ -2678,7 +2676,7 @@ input[type="checkbox"].jc-editable-field-input {
 	min-width: 0;
 }
 
-/* Field list: the emitter stamps grid-template-columns inline from CardFieldList.columns. */
+/* Field list: HTML authors may stamp grid-template-columns inline. */
 .juneau-view-card-fields {
 	display: grid;
 	gap: 0.4rem 0.75rem;
@@ -2707,7 +2705,7 @@ input[type="checkbox"].jc-editable-field-input {
  * on the TOP edge plus light wash (themed in console chrome).  A 2px hairline sits under
  * the sections row (between tabs and children).  Selected child = light wash behind the
  * label, not blue type and not a connected pill ribbon.  Not .jc-tab / .jc-subtab
- * ribbon-format; those classes remain for the deprecated PageTable hash-swap shell.
+ * ribbon-format; leftover .jc-tab / .jc-subtab rules are historical (hash-swap shell deleted).
  */
 .juneau-page-nav {
 	display: flex;

@@ -35,27 +35,12 @@ import org.junit.jupiter.api.*;
  * other half &mdash; what an <i>author</i> may pour into a declarative content bean. Both share
  * {@link RawContentSinkScanner}'s stripper and argument extractor rather than keeping two divergent copies.
  *
- * <h5 class='section'>Why this is a pinned floor rather than the universal the design states, and what that still buys</h5>
+ * <h5 class='section'>The design's universal is now the pin</h5>
  * <p>
  * The design states test 33 as a universal &mdash; <i>every</i> {@code rawText} takes a sidecar payload, i.e. the
- * content-bearing count is <b>zero</b>. That universal is not reachable in this item, and the reason is a
- * contradiction between two written requirements rather than a shortfall here. Reaching zero requires deleting
- * {@code Tab.content}, {@code Subtab.content} and {@code CardContent.content}; this item's scope says in as many
- * words that nothing is deprecated and no old path is removed, with two named exceptions, and these are not among
- * them. Those deletions are the deprecation-window close, and they belong to the item that owns it.
- *
- * <p>
- * The detail arm <i>did</i> reach the end state here (see {@link #b04_detailEmitterIsAtZeroContentSinks()}) because
- * it was given a staged mechanism where both shapes emit simultaneously. Cards and tabs were never given the
- * equivalent, so collapsing them now would break every existing consumer the day it landed.
- *
- * <p>
- * So this scan is written as the strongest checkable form available today, in the shape that makes the universal a
- * one-line change later: the content-bearing set is pinned <b>exactly</b>, by name, at the four deprecated
- * declarative-content sites. A <b>new</b> content-bearing {@code rawText} anywhere in either tree fails this test
- * &mdash; which is the property that actually matters between now and the window's close, since it freezes the
- * verbatim-markup surface and lets it only shrink. When the four are deleted,
- * {@link #KNOWN_CONTENT_SINKS} becomes empty and this scan <i>is</i> the design's universal, unrestructured.
+ * content-bearing count is <b>zero</b>.  That is now true: the page/card declarative-content emitters
+ * ({@code Tab}/{@code Subtab}/{@code CardContent}) are gone, {@link #KNOWN_CONTENT_SINKS} is empty, and a
+ * <b>new</b> content-bearing {@code rawText} anywhere in either tree fails this test.
  *
  * <h5 class='section'>Why the anti-vacuity checks come first</h5>
  * <p>
@@ -75,23 +60,18 @@ class EmitterPurity_ScanTest extends TestBase {
 	 * unnamed allowance is indistinguishable from a hole.
 	 *
 	 * <p>
-	 * Keyed as {@code <SimpleFileName>:<argument source text>}, so the pin survives line-number drift. All are the
-	 * deprecated declarative-content path: {@code Tab.content} and {@code Subtab.content} in the page emitter, and
-	 * {@code CardContent.content} in the card emitter. <b>This set must only ever shrink.</b>
+	 * Empty: the page/card declarative-content emitters are gone.  <b>This set must stay empty.</b>
 	 */
-	private static final Set<String> KNOWN_CONTENT_SINKS = Set.of(
-		"PageTable.java:t.content",
-		"PageTable.java:s.content",
-		"CardGridTable.java:cc.content");
+	private static final Set<String> KNOWN_CONTENT_SINKS = Set.of();
 
 	/**
-	 * Floor on the total number of {@code rawText(...)} sites, well under the 13 present when this was written.
+	 * Floor on the total number of {@code rawText(...)} sites, matching the seven sidecar/empty writes that remain.
 	 *
 	 * <p>
 	 * Deliberately slack: sidecars legitimately come and go as emitters are refactored, so pinning the total exactly
 	 * would make this a change-detector. Its only job is to fail loudly if the scan stops seeing the tree at all.
 	 */
-	private static final int MINIMUM_EXPECTED_SITES = 10;
+	private static final int MINIMUM_EXPECTED_SITES = 7;
 
 	private static Path moduleRoot() {
 		var root = RawContentSinkScanner.locateModuleRoot();
@@ -155,8 +135,8 @@ class EmitterPurity_ScanTest extends TestBase {
 	}
 
 	@Test void a06_commentMentionsAreNotCounted() {
-		// The real tree mentions rawText(...) in javadoc on Tab, Subtab, CardContent, ViewTable, PageTable and
-		// CardGridTable.  Counting prose would both inflate the floor and manufacture phantom violations.
+		// The real tree mentions rawText(...) in javadoc on ViewTable and siblings.  Counting prose would both
+		// inflate the floor and manufacture phantom violations.
 		var found = RawContentSinkScanner.scanRawText("X.java", """
 			class X {
 				/** Writes via {@link HtmlBuilder#rawText(String) rawText} verbatim. */
@@ -196,17 +176,14 @@ class EmitterPurity_ScanTest extends TestBase {
 				+ "exists to shrink to empty - never to grow:\n  " + String.join("\n  ", violations));
 	}
 
-	@Test void b02_theContentBearingSurfaceIsFrozenAtExactlyFourSites() throws Exception {
+	@Test void b02_theContentBearingSurfaceIsEmpty() throws Exception {
 		var content = sites().stream()
 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
 			.map(RawContentSinkScanner.RawTextSite::toString)
 			.toList();
-		// FOUR call sites over THREE distinct argument shapes: Tab.content is read twice - once for the leaf
-		// content-only panel, once for the content-plus-subtabs preamble.
-		assertEquals(4, content.size(),
-			() -> "the content-bearing rawText surface must stay exactly the known four.  It may SHRINK (that is the "
-				+ "deprecation window closing, and KNOWN_CONTENT_SINKS should shrink with it in the same commit) but "
-				+ "it must never grow:\n  " + String.join("\n  ", content));
+		assertEquals(List.of(), content,
+			() -> "the content-bearing rawText surface closed with the page/card emitters.  It must stay empty:\n  "
+				+ String.join("\n  ", content));
 	}
 
 	@Test void b03_theRegionEmitterIsPureFromDayOne() throws Exception {
@@ -239,9 +216,8 @@ class EmitterPurity_ScanTest extends TestBase {
 			.distinct()
 			.sorted()
 			.toList();
-		assertEquals(List.of("CardGridTable.java", "PageTable.java"), files,
-			"content-bearing rawText may only live in the two emitters that still serve the deprecated "
-				+ "declarative-content path");
+		assertEquals(List.of(), files,
+			"content-bearing rawText must not return: the page/card declarative-content emitters are gone");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -282,9 +258,8 @@ class EmitterPurity_ScanTest extends TestBase {
 
 	@Test void d01_knownContentSinksAreOnlyTheDeprecatedDeclarativeContentFields() {
 		assertEquals(
-			Set.of("PageTable.java:t.content", "PageTable.java:s.content", "CardGridTable.java:cc.content"),
+			Set.of(),
 			KNOWN_CONTENT_SINKS,
-			"widening this set is how the guard dies quietly.  It exists to shrink to empty when the deprecation "
-				+ "window closes, at which point this scan becomes the design's universal with no other change");
+			"the page/card declarative-content emitters are gone; this set must stay empty");
 	}
 }

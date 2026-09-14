@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * {@code ViewsMixin_Serving_Test}.
  *
  * <p>
- * This mixin now ships the four widget runtime assets ({@code juneau-cards.js}, {@code juneau-calendar.js},
+ * This mixin now ships the three widget runtime assets ({@code juneau-calendar.js},
  * {@code juneau-calendar.css}, {@code juneau-chrome.js}), relocated here from the views module beside the bean
  * contracts that drive them.  Serving tests follow the file owner, so the 200 matrix and the "these bytes are on this
  * module's classpath" assertions live here now, alongside what this mixin already owned: clean composition into a
@@ -39,7 +39,6 @@ import org.junit.jupiter.api.*;
  * producing the same version+content-hash cache-buster shape the views mixin does.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class WidgetsMixin_Serving_Test extends TestBase {
@@ -64,7 +63,7 @@ class WidgetsMixin_Serving_Test extends TestBase {
 	public static class AssetUrlHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/echo-asset-url") public String echoAssetUrl(RestRequest req) {
-			return WidgetsMixin.assetUrl(req, WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
+			return WidgetsMixin.assetUrl(req, WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		}
 	}
 
@@ -76,14 +75,13 @@ class WidgetsMixin_Serving_Test extends TestBase {
 
 	/** Every asset path this mixin declares, paired with the classpath resource it must serve. */
 	private static final java.util.Map<String,String> DECLARED_ASSETS = java.util.Map.of(
-		WidgetsMixin.CARDS_JS_PATH, "/org/apache/juneau/widgets/juneau-cards.js",
 		WidgetsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/widgets/juneau-calendar.js",
 		WidgetsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css",
 		WidgetsMixin.CHROME_JS_PATH, "/org/apache/juneau/widgets/juneau-chrome.js");
 
 	/** Every asset path this mixin declares. */
 	private static final String[] DECLARED_PATHS = {
-		WidgetsMixin.CARDS_JS_PATH, WidgetsMixin.CALENDAR_JS_PATH, WidgetsMixin.CALENDAR_CSS_PATH,
+		WidgetsMixin.CALENDAR_JS_PATH, WidgetsMixin.CALENDAR_CSS_PATH,
 		WidgetsMixin.CHROME_JS_PATH};
 
 	private static final MockRestClient cNoMixin = MockRestClient.buildLax(NoMixin.class);
@@ -135,10 +133,6 @@ class WidgetsMixin_Serving_Test extends TestBase {
 	// b) Contract-version re-exports equal the bean constants they mirror
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_cardsContractVersion_equalsCardFieldListContractVersion() {
-		assertEquals(CardFieldList.CONTRACT_VERSION, WidgetsMixin.CARDS_CONTRACT_VERSION);
-	}
-
 	@Test void b02_calendarContractVersion_equalsCalendarDefContractVersion() {
 		assertEquals(CalendarDef.CONTRACT_VERSION, WidgetsMixin.CALENDAR_CONTRACT_VERSION);
 	}
@@ -185,19 +179,19 @@ class WidgetsMixin_Serving_Test extends TestBase {
 
 	@Test void d01_assetUrl_carriesVersionAndContentHashCacheBuster() {
 		var v = WidgetsMixin.class.getPackage().getImplementationVersion();
-		var expectedPrefix = "servlet:" + WidgetsMixin.CARDS_JS_PATH + "?v=" + (v == null ? "dev" : v) + "-";
-		var url = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
+		var expectedPrefix = "servlet:" + WidgetsMixin.CALENDAR_JS_PATH + "?v=" + (v == null ? "dev" : v) + "-";
+		var url = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		assertTrue(url.startsWith(expectedPrefix), url);
 		assertTrue(url.substring(expectedPrefix.length()).matches("[0-9a-f]{8}"), url);
 	}
 
 	@Test void d02_assetUrl_contentHash_isStableForIdenticalContent_andTracksTheBytes() {
-		var url1 = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
-		var url2 = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
+		var url1 = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
+		var url2 = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		assertEquals(url1, url2, "hash must be stable across repeated calls for identical content");
 
 		// A different resource's bytes must produce a different hash - i.e. the buster tracks content, not the path.
-		var other = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, "/org/apache/juneau/rest/server/widgets/CalendarDef.class");
+		var other = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/rest/server/widgets/CalendarDef.class");
 		assertNotEquals(url1, other, "the cache-buster must change when the resource's bytes change");
 	}
 
@@ -205,7 +199,7 @@ class WidgetsMixin_Serving_Test extends TestBase {
 		// The hash is not a private re-implementation: it is the commons content-hash function applied to exactly the
 		// bytes this module would serve, which is what keeps the two modules' cache-buster URLs directly comparable.
 		var bytes = new ClasspathAssetCache(WidgetsMixin.class).bytes(PROBE_RESOURCE);
-		var url = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
+		var url = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		assertTrue(url.endsWith("-" + ChecksumUtils.hash8(bytes)), url);
 	}
 
@@ -213,14 +207,14 @@ class WidgetsMixin_Serving_Test extends TestBase {
 		var url = MockRestClient.buildLax(AssetUrlHost.class).get("/echo-asset-url").accept("text/plain").run()
 			.assertStatus(200).getContent().asString();
 		assertFalse(url.startsWith("servlet:"), url);
-		var staticForm = WidgetsMixin.assetUrl(WidgetsMixin.CARDS_JS_PATH, PROBE_RESOURCE);
+		var staticForm = WidgetsMixin.assetUrl(WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		assertTrue(url.endsWith(staticForm.substring(staticForm.indexOf("?v="))), url);
 	}
 
 	@Test void d05_requestAwareOverload_resolvesUnderANonRootHostMount() throws Exception {
 		var c = MockRestClient.createLax(AssetUrlHost.class).servletPath("/rest/admin").build();
 		var url = c.get("/echo-asset-url").accept("text/plain").run().assertStatus(200).getContent().asString();
-		assertTrue(url.startsWith("/rest/admin" + WidgetsMixin.CARDS_JS_PATH), url);
+		assertTrue(url.startsWith("/rest/admin" + WidgetsMixin.CALENDAR_JS_PATH), url);
 	}
 
 	@Test void d06_moduleCache_isAnchoredOnThisModule_notASharedSingleton() {

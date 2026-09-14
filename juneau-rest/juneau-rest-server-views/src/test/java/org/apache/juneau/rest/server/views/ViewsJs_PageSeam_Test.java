@@ -28,13 +28,9 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Asserts on the served script text: {@code initTable} must be reachable off the public {@code NS.init} namespace
- * (previously private), and {@code initAll} must skip tables scoped under a {@code [data-juneau-page]} shell.
- * <p>
- * The <i>consequences</i> of this seam &mdash; that a panel lazy-inits exactly the view tables it owns, and that a
- * sub-tabbed tab's outer panel does not claim its sub-panels' tables &mdash; are verified behaviourally in
- * {@link PagePanelVisibility_BrowserTest}, which stubs {@code NS.init.initTable} in a real browser and records which
- * views it is called for.  These text assertions remain as always-on tripwires for the seam's <i>shape</i>, since
- * that harness is opt-in.
+ * (previously private), and {@code initAll} must skip tables scoped under a {@code [data-juneau-page]} ancestor so
+ * a host can lazy-init via {@code initTable}/{@code initTableFromDef} (HTML-slot {@code regions.mount} uses the
+ * latter).  These text assertions are always-on tripwires for the seam's <i>shape</i>.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.

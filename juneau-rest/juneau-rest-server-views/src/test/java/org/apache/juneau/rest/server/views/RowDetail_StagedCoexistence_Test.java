@@ -31,7 +31,6 @@ import org.junit.jupiter.api.*;
  * region fails startup.  XOR / sections coexistence cases retired with {@code RowDetailDef.sections(...)}.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
 })
 class RowDetail_StagedCoexistence_Test extends TestBase {
@@ -137,21 +136,18 @@ class RowDetail_StagedCoexistence_Test extends TestBase {
 			() -> "the author's catalog is a JS literal; the server emits no field slots on this path:\n" + h);
 	}
 
-	@Test void c02_twoRegionViewsOnOnePage_eachEmitOneBody() {
-		var page = PageDef.create("p1").tabs(
-			Tab.create("a", "A").view(regionView()),
-			Tab.create("b", "B").view(ViewDef.create("other")
-				.columns(Column.of("id").title("ID"))
-				.details(RowDetailDef.create()
-					.endpoint(ENDPOINT)
-					.region(RegionDef.create("other").populate("other-detail").allowPopulators("other-detail")))
-				.build()));
-		page.validate();
-		var h = Html.of(PageTable.of(page));
+	@Test void c02_twoRegionViews_eachEmitOneBody() {
+		var other = ViewDef.create("other")
+			.columns(Column.of("id").title("ID"))
+			.details(RowDetailDef.create()
+				.endpoint(ENDPOINT)
+				.region(RegionDef.create("other").populate("other-detail").allowPopulators("other-detail")))
+			.build();
+		var h = html(regionView()) + Html.of(ViewTable.of(other));
 		assertEquals(0, count(h, ViewTable.DETAIL_SECTION_ATTR + "=\""), h);
 		assertEquals(2, count(h, RegionTable.REGION_ATTR + "=\""), h);
 		assertEquals(2, count(h, ViewTable.DETAIL_TEMPLATE_ATTR + "=\""),
-			() -> "two row-detail templates, one per view, on one page:\n" + h);
+			() -> "two row-detail templates, one per view:\n" + h);
 	}
 
 	@Test void d01_noHeaderActionsMethod() {

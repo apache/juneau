@@ -101,8 +101,8 @@ import jakarta.servlet.http.*;
  * <p>
  * A table that <i>is</i> a page body is {@link ViewSlot#envelope(RestRequest, ViewDef)} plus
  * {@code JuneauViews.regions.mount({ id: { table: url } })}.  {@code of} is the HTML renderer for tests,
- * nested emit, and deprecated {@link PageTable}/{@link CardGridTable} children.  It is not
- * {@code @Deprecated}: the renderer and those hosts still call it.
+ * nested emit, and HTML-slot page bodies.  It is not {@code @Deprecated}: tests, nested emit, and
+ * {@link ViewSlot#envelope} still call it.
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -185,8 +185,8 @@ public class ViewTable {
 	 *
 	 * <p>
 	 * The mount is fixed at {@link SavedViewsMixin#SAVED_VIEWS_PREFIX}; only the resolved URL varies with the
-	 * servlet context path.  Page-embedded tables find the same attribute on the enclosing {@link PageTable}
-	 * shell instead.  Absent/blank means the JS server-provider is unavailable for this table (fail closed).
+	 * servlet context path.  Slot-mounted tables find the same attribute on an ancestor stamped by the page
+	 * author.  Absent/blank means the JS server-provider is unavailable for this table (fail closed).
 	 */
 	public static final String SAVED_VIEWS_ATTR = "data-juneau-saved-views";
 
@@ -394,8 +394,7 @@ public class ViewTable {
 	 *
 	 * <p>
 	 * The RestRequest counterpart of {@link #of(HttpServletRequest, ViewDef)}.  CSRF, saved-views, and {@code $FV}
-	 * resolution are identical; this overload exists so callers can name the RestRequest host path directly
-	 * (see {@link PageTable#of(RestRequest, PageDef)}).
+	 * resolution are identical; this overload exists so callers can name the RestRequest host path directly.
 	 *
 	 * <p>
 	 * HTML renderer, not a page-body factory.  Page-layout callers use {@link ViewSlot#envelope(RestRequest, ViewDef)}
@@ -470,7 +469,7 @@ public class ViewTable {
 	 * context <b>and</b> propagating its request.
 	 *
 	 * <p>
-	 * The entry point {@link PageTable} uses for each child view.  A {@code null} {@code req} makes this exactly
+	 * The entry point nested emit uses for a child view.  A {@code null} {@code req} makes this exactly
 	 * equivalent to {@link #of(MarshallingContext, ViewDef, Collection) of(ctx, viewDef, null)} &mdash; no token, no
 	 * saved-views stamp, no {@code $FV} resolution &mdash; so a request-free host emits byte-identical output to what
 	 * it always has, and only a request-bearing host gains the request-scoped behavior.
@@ -691,8 +690,8 @@ public class ViewTable {
 	 *
 	 * <p>
 	 * A non-blank {@code savedViewsBase} is stamped into {@link #SAVED_VIEWS_ATTR} on the wrapper (not the
-	 * {@code <table>}) so page-embedded tables still discover a page-shell stamp via {@code closest(...)}
-	 * without this emitter having to thread a per-child request into {@link PageTable}.
+	 * {@code <table>}) so nested tables still discover an ancestor stamp via {@code closest(...)}
+	 * without this emitter having to thread a per-child request into the host.
 	 *
 	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
 	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
@@ -796,8 +795,7 @@ public class ViewTable {
 	 * Two definitions reachable from here can host chrome resolution: {@link ViewDef} (the shipped host, whose
 	 * chrome is the column/action/ribbon titles) and {@link RowDetailDef} (the row-detail panel's own titles,
 	 * painted into the {@code <template>} below).  They are resolved in the order
-	 * <b>{@link RowDetailDef} then {@link ViewDef}</b> &mdash; the tail of the toolkit-wide
-	 * {@code PageDef} &rarr; {@code RowDetailDef} &rarr; {@code ViewDef} order that {@link PageTable} opens.
+	 * <b>{@link RowDetailDef} then {@link ViewDef}</b>.
 	 * Because that order is the same on every path that can reach either lock, no two threads can take the pair in
 	 * opposite orders, so the nested emit below (which resolves nothing of its own) cannot deadlock against a
 	 * concurrent {@code ViewTable.of} on any view involved.
@@ -1146,7 +1144,7 @@ public class ViewTable {
 	 * the cached request session, so provider values cannot leak across requests.
 	 *
 	 * <p>
-	 * Package-private rather than private because {@link PageTable} hosts {@link PageDef#serverValues} on the same
+	 * Package-private rather than private because nested emit and {@link RowDetailDef} host {@code $FV} on the same
 	 * terms: sharing this one recipe is what keeps the sibling sessions from drifting apart.
 	 */
 	@SuppressWarnings({
@@ -1403,8 +1401,8 @@ public class ViewTable {
 	 * The cheap allowlist pre-scan primitive (view-def string i18n LD-1 §5.1): {@code true} only if {@code s} is
 	 * non-<jk>null</jk> and carries a {@code $}-prefixed template.  The exact same structural check
 	 * {@link #resolveField} already uses to skip a template-free field; shared here so pre-scan and resolve can
-	 * never disagree about what counts as "has a template."  Package-private so {@link PageTable}'s own
-	 * page-chrome pre-scan uses the identical rule.
+	 * never disagree about what counts as "has a template."  Package-private so a host's own chrome pre-scan
+	 * uses the identical rule.
 	 */
 	static boolean hasVar(String s) {
 		return s != null && s.indexOf('$') >= 0;
@@ -1414,7 +1412,7 @@ public class ViewTable {
 	 * Resolves one chrome field through {@code session}; on change, applies the resolved value and records a restore.
 	 *
 	 * <p>
-	 * Package-private so {@link PageTable}'s host resolves its own allowlist through the identical rule &mdash;
+	 * Package-private so a host resolves its own allowlist through the identical rule &mdash;
 	 * including the cheap {@code indexOf('$')} skip, which is what keeps a field with no template from paying for a
 	 * resolve or recording a restore.
 	 */

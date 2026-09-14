@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Always-on coverage for the destroy/reinit transaction and async {@code initTable} handshake: source-shape
- * pins on {@code juneau-views.js}/{@code juneau-config.js}/{@code juneau-pages.js}/{@code juneau-ribbon.js},
+ * pins on {@code juneau-views.js}/{@code juneau-config.js}/{@code juneau-ribbon.js},
  * plus a Node behavioral check that {@code resolveOrder} uses the live {@code dtIndex} (selection + hidden
  * column → C is 3).
  *
@@ -52,10 +52,6 @@ class ViewsJs_Reinit_Test extends TestBase {
 
 	private static String configJs() throws IOException {
 		return resource(ViewsJs_ConfigPersistence_Test.CONFIG_JS_RESOURCE);
-	}
-
-	private static String pagesJs() throws IOException {
-		return resource(ViewsMixin.PAGES_JS_RESOURCE);
 	}
 
 	private static String ribbonJs() throws IOException {
@@ -111,12 +107,6 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertTrue(fn.contains("buildTable(table, viewDef, effective, ctx)"), fn);
 	}
 
-	@Test void a03_pagesJs_activatePanelViews_awaitsInitTableThenAdjustsIffDataTable() throws Exception {
-		var fn = functionBody(pagesJs(), "function activatePanelViews(");
-		assertTrue(fn.contains("Promise.resolve(NS.init.initTable(t))"), fn);
-		assertTrue(fn.contains("isDataTable(t)"), fn);
-		assertTrue(fn.contains("columns.adjust()"), fn);
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// b) Teardown protocol + mutex + selection survival

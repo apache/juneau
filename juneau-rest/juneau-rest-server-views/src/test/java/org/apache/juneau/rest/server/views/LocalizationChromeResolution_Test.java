@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Serve-time {@code $L} resolution through the {@link ViewTable}/{@link PageTable} chrome-resolution path
+ * Serve-time {@code $L} resolution through the {@link ViewTable} chrome-resolution path
  * (view-def string i18n, READY-J0483): the gate decoupled from {@code serverValues} (LD-1), the LD-2 non-recursive
  * scoping, {@link Column#titleKey} sugar (LD-3), and the request-free {@link Messages}-bean seam (LD-4).
  *
@@ -41,10 +41,9 @@ import org.junit.jupiter.api.*;
  * {@code LocalizationChromeResolutionHost.properties} (same package, {@code src/test/resources}) backs
  * {@code RestRequest.getMessages()} and
  * the request-free {@link Messages#of(Class)} lookups below: {@code col.name=Name}, {@code col.status=Status},
- * {@code col.a=$L{col.b}}, {@code col.b=Leaf}, {@code page.title=Releases Page}, {@code tab.main=Main}.
+ * {@code col.a=$L{col.b}}, {@code col.b=Leaf}.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"resource"  // Closeable test fixtures held in static fields; lifecycle managed by the test/framework.
 })
 class LocalizationChromeResolution_Test extends TestBase {
@@ -70,11 +69,6 @@ class LocalizationChromeResolution_Test extends TestBase {
 			.region(RegionDef.create("d").allowPopulators("p").populate("p")))
 		.build();
 
-	static final PageDef PAGE = PageDef.create("admin")
-		.title("$L{page.title}")
-		.tabs(Tab.create("main", "$L{tab.main}").view(VIEW))
-		.build();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Host servlet.  No @Bean varResolver override: $L (LocalizationVar) is already part of the default REST var
 	// set (unlike $FV/ServerValuesVar, which every ServerValues*_Test host must opt in explicitly).
@@ -90,10 +84,6 @@ class LocalizationChromeResolution_Test extends TestBase {
 
 		@RestGet(path="/detailed") public HttpResource detailed(RestRequest req) {
 			return html(Html.of(ViewTable.of(req, DETAILED)));
-		}
-
-		@RestGet(path="/page") public HttpResource page(RestRequest req) {
-			return html(Html.of(PageTable.of(req, PAGE)));
 		}
 
 		private static HttpResource html(String markup) {
@@ -119,7 +109,7 @@ class LocalizationChromeResolution_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// LD-1: the gate is decoupled from serverValues - none of VIEW/DETAILED/PAGE declares one, yet $L still resolves.
+	// LD-1: the gate is decoupled from serverValues - none of VIEW/DETAILED declares one, yet $L still resolves.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_titleKey_resolvesThroughRestRequestMessages() throws Exception {
@@ -156,16 +146,6 @@ class LocalizationChromeResolution_Test extends TestBase {
 		var html = body("/detailed");
 		assertTrue(html.contains("Name"), html);
 		assertFalse(html.contains("$L{col.name}"), html);
-	}
-
-	@Test void a06_pageHost_resolvesItsOwnLTemplates() throws Exception {
-		// PageTable's gate site: the painted tab label, again with no serverValues declared anywhere.  (PageDef#title
-		// is on the same resolveChrome/pageChromeHasVar allowlist but is never painted into the shell or PAGE_META
-		// by this emitter - see PageTable_Emit_Test's b03 "if rendered" caveat - so it has nothing externally
-		// observable to assert here; its presence in PAGE still exercises that allowlist entry's resolve/restore.)
-		var html = body("/page");
-		assertTrue(html.contains("Main"), html);
-		assertFalse(html.contains("$L{tab.main}"), html);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -226,19 +206,6 @@ class LocalizationChromeResolution_Test extends TestBase {
 
 	@Test void d03_nullMessages_isExactlyTheNoRequestOverload() {
 		assertEquals(Html.of(ViewTable.of(VIEW)), Html.of(ViewTable.of((Messages) null, VIEW)));
-	}
-
-	@Test void d04_pageHost_messagesBean_resolvesWithNoRequest() {
-		var html = Html.of(PageTable.of(messages(), PAGE));
-		assertTrue(html.contains("Main"), html);
-		assertFalse(html.contains("$L{tab.main}"), html);
-		// The request-free page overload does not propagate into child views (see PageTable#of(Messages,PageDef)
-		// javadoc): the tab's own hosted ViewTable renders exactly as request-free/messages-free as of(PageDef).
-		assertTrue(html.contains("$L{col.name}"), html);
-	}
-
-	@Test void d05_pageHost_nullMessages_isExactlyTheNoRequestOverload() {
-		assertEquals(Html.of(PageTable.of(PAGE)), Html.of(PageTable.of((Messages) null, PAGE)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

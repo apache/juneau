@@ -24,33 +24,40 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * First-landing deprecation + dual-hat pins for HTML-slot pages: page-only types carry {@code @Deprecated}
- * naming {@code JuneauViews.regions.mount}; dual-use methods do not; views CSS/JS introduce no {@code slds-*}
- * or Salesforce Sans.
+ * HTML-slot pages first-landing pins after the page-only Java types were deleted: those types are gone, dual-use
+ * methods stay unannotated, and views CSS/JS introduce no {@code slds-*} or Salesforce Sans.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"java:S5961" // Contract test is intentionally dense; splitting would hide landing-page pins.
 })
 class HtmlSlotPages_FirstLanding_Test extends TestBase {
 
-	@Test void a01_pageOnlyTypesAreDeprecated() {
-		assertDeprecated(Card.class);
-		assertDeprecated(CardGrid.class);
-		assertDeprecated(CardBody.class);
-		assertDeprecated(CardFieldList.class);
-		assertDeprecated(CardField.class);
-		assertDeprecated(CardContent.class);
-		assertDeprecated(ViewCardBody.class);
-		assertDeprecated(CardGridTable.class);
-		assertDeprecated(PageDef.class);
-		assertDeprecated(Tab.class);
-		assertDeprecated(Subtab.class);
-		assertDeprecated(PageTable.class);
+	private static final List<String> GONE = List.of(
+		"org.apache.juneau.rest.server.views.PageDef",
+		"org.apache.juneau.rest.server.views.Tab",
+		"org.apache.juneau.rest.server.views.Subtab",
+		"org.apache.juneau.rest.server.views.PageTable",
+		"org.apache.juneau.rest.server.views.ViewCardBody",
+		"org.apache.juneau.rest.server.views.CardGridTable",
+		"org.apache.juneau.rest.server.widgets.Card",
+		"org.apache.juneau.rest.server.widgets.CardBody",
+		"org.apache.juneau.rest.server.widgets.CardContent",
+		"org.apache.juneau.rest.server.widgets.CardField",
+		"org.apache.juneau.rest.server.widgets.CardFieldList",
+		"org.apache.juneau.rest.server.widgets.CardGrid"
+	);
+
+	@Test void a01_pageOnlyTypesAreGone() {
+		for (var name : GONE)
+			assertThrows(ClassNotFoundException.class, () -> Class.forName(name), name);
+		assertThrows(NoSuchFieldException.class, () -> ViewsMixin.class.getDeclaredField("PAGES_JS_PATH"));
+		assertThrows(NoSuchFieldException.class, () -> ViewsMixin.class.getDeclaredField("CARDS_JS_PATH"));
+		assertThrows(NoSuchMethodException.class, () -> ViewsMixin.class.getDeclaredMethod("getPagesScript"));
+		assertNull(ViewsMixin.class.getResource("/org/apache/juneau/views/juneau-pages.js"));
+		assertNull(ViewsMixin.class.getResource("/org/apache/juneau/widgets/juneau-cards.js"));
 	}
 
 	@Test void a02_dualUseMethodsAreNotDeprecated() {
@@ -70,22 +77,6 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 			"ViewTable javadoc must name ViewSlot.envelope as the page-body factory");
 		assertPageBodyClassification(RegionDef.class);
 		assertPageBodyClassification(RegionTable.class);
-	}
-
-	@Test void a03_deprecatedJavadocNamesMountAndSweep() throws Exception {
-		assertJavadocSweep(Card.class);
-		assertJavadocSweep(CardField.class);
-		assertJavadocSweep(PageDef.class);
-		assertJavadocSweep(PageTable.class);
-		assertJavadocSweep(CardGridTable.class);
-	}
-
-	@Test void a04_pagesJsIsDeprecatedForHashSwap() throws Exception {
-		var body = resource(ViewsMixin.PAGES_JS_RESOURCE);
-		assertTrue(body.contains("@deprecated"), body);
-		assertTrue(body.contains("JuneauViews.regions.mount"), body);
-		assertTrue(body.contains("grep removal sites"), body);
-		assertTrue(ViewsMixin.class.getDeclaredField("PAGES_JS_PATH").isAnnotationPresent(Deprecated.class));
 	}
 
 	@Test void b01_viewsCssHasTwoRowNavWithoutPillsOrSlds() throws Exception {
@@ -152,10 +143,6 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		assertTrue(js.contains("aria-current=\"page\""), js);
 	}
 
-	private static void assertDeprecated(Class<?> c) {
-		assertNotNull(c.getAnnotation(Deprecated.class), () -> c.getName() + " must be @Deprecated");
-	}
-
 	private static void assertNoDeprecatedMethods(Class<?> c, String name) {
 		for (var m : c.getDeclaredMethods()) {
 			if (m.getName().equals(name) && Modifier.isPublic(m.getModifiers()))
@@ -169,13 +156,6 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 			() -> c.getName() + " javadoc must name mount as the page-slot factory:\n" + src);
 		assertTrue(src.contains("Not {@code @Deprecated}"),
 			() -> c.getName() + " javadoc must say the dual-use method is not @Deprecated:\n" + src);
-	}
-
-	private static void assertJavadocSweep(Class<?> c) throws Exception {
-		var src = sourceOf(c);
-		assertTrue(src.contains("@deprecated"), () -> c.getName() + " javadoc must contain @deprecated:\n" + src);
-		assertTrue(src.contains("JuneauViews.regions.mount"), () -> c.getName() + " javadoc must name mount:\n" + src);
-		assertTrue(src.contains("grep removal sites"), () -> c.getName() + " javadoc must name the sweep:\n" + src);
 	}
 
 	private static String sourceOf(Class<?> c) throws Exception {

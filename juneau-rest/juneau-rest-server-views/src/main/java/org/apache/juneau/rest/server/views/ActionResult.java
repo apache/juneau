@@ -35,11 +35,10 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>Its own, independent contract version</h5>
  * <p>
  * The action-result is a <b>third</b> independently-versioned wire contract, alongside {@code VIEW_META}
- * ({@link ViewDef#CONTRACT_VERSION}) and {@code PAGE_META} ({@link PageDef#CONTRACT_VERSION}).  Its
+ * ({@link ViewDef#CONTRACT_VERSION}) and the slot envelope ({@link ViewSlot#CONTRACT_VERSION}).  Its
  * {@link #CONTRACT_VERSION} is deliberately its <b>own</b> constant and is <b>not</b> aliased to
  * {@link ViewDef#CONTRACT_VERSION}: aliasing a per-view contract's version onto a separate contract couples two
- * unrelated client/server locksteps (the exact mechanism behind the {@code PageDef}&rarr;{@code ViewDef} alias risk),
- * so this contract versions itself.
+ * unrelated client/server locksteps, so this contract versions itself.
  *
  * <h5 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h5>
  * <p>

@@ -28,24 +28,23 @@ import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * Builds the server-rendered html5 delivery tree for a {@link BarSlot} &mdash; the additive
- * {@code data-juneau-bar-slot} region {@link PageTable} emits as a <b>trailing sibling of {@code .jc-subtab-bar}</b>
- * (concept #9), plus a data-only sidecar for its dynamic counts.
+ * {@code data-juneau-bar-slot} region plus a data-only sidecar for its dynamic counts.
  *
- * <h5 class='section'>Three named hosts, one emitter:</h5>
+ * <h5 class='section'>Two named hosts, one emitter:</h5>
  * <p>
- * {@link PageDef#barSlot} is the page host: {@link #of(BarSlot)} + {@link #sidecar(BarSlot)}, emitted once per page
- * with a document-unique sidecar {@code id}.  {@link RowDetailDef#barSlot} is the row-detail host:
- * {@link #detailRegion(BarSlot, String)} with {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE} +
- * {@link #detailSidecar(BarSlot)}, emitted into the row-expand {@code <template>} and therefore cloned per expanded
- * row &mdash; so its sidecar ships {@code id}-less and the runtime mints a row-qualified identity after cloning. The
- * <i>third</i> host is a dialog's {@code ModalDef.barSlot} (in {@code juneau-rest-server-widgets}): unlike the other
- * two, that field travels the wire (the modal itself is a fetched payload with no server-rendered pass to ride into),
- * so this emitter's {@link #detailRegion(BarSlot, String)} with {@link #ANCHOR_DIALOG_TITLE} +
- * {@link #detailSidecar(BarSlot)} shape is instead mirrored client-side by the {@code juneau-views.js} runtime,
- * which paints the region from the fetched JSON and reuses the SAME {@code id}-less clone-time id minting the
- * row-detail host uses (there is no per-dialog {@code <template>} to clone from server-rendered markup, but two
- * stacked dialogs need the same per-instance identity a cloned row does).  Sharing the bean and this shape is the
- * point; the hosts and their placements stay distinct.
+ * {@link RowDetailDef#barSlot} is the row-detail host: {@link #detailRegion(BarSlot, String)} with
+ * {@link #ANCHOR_RIBBON} or {@link #ANCHOR_SECTION_TITLE} + {@link #detailSidecar(BarSlot)}, emitted into the
+ * row-expand {@code <template>} and therefore cloned per expanded row &mdash; so its sidecar ships {@code id}-less
+ * and the runtime mints a row-qualified identity after cloning.  The <i>second</i> host is a dialog's
+ * {@code ModalDef.barSlot} (in {@code juneau-rest-server-widgets}): that field travels the wire (the modal itself
+ * is a fetched payload with no server-rendered pass to ride into), so this emitter's
+ * {@link #detailRegion(BarSlot, String)} with {@link #ANCHOR_DIALOG_TITLE} + {@link #detailSidecar(BarSlot)}
+ * shape is instead mirrored client-side by the {@code juneau-views.js} runtime, which paints the region from the
+ * fetched JSON and reuses the SAME {@code id}-less clone-time id minting the row-detail host uses (there is no
+ * per-dialog {@code <template>} to clone from server-rendered markup, but two stacked dialogs need the same
+ * per-instance identity a cloned row does).  Sharing the bean and this shape is the point; the hosts and their
+ * placements stay distinct.  {@link #of(BarSlot)} + {@link #sidecar(BarSlot)} remain the request-free emit used by
+ * tests and any host that wants a document-unique sidecar {@code id}.
  *
  * <p>
  * The bar beans live in {@code juneau-rest-server-widgets}; this emitter is the only place that turns them into markup.

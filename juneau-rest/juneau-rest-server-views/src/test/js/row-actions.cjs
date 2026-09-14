@@ -27,7 +27,7 @@
  * headless Chromium, then, entirely inside the page, exercises the runtime's row-action pipeline and its
  * fail-closed CSRF submit via the real DOM and a stubbed window.fetch.  Prints ONE JSON object to stdout.
  *
- * DIVISION OF LABOUR (mirrors panel-visibility.cjs): this script only OBSERVES; every assertion lives in the Java
+ * DIVISION OF LABOUR: this script only OBSERVES; every assertion lives in the Java
  * test.  It reports facts (was fetch issued, with what method/headers/body; did a visible refusal banner appear)
  * and lets JUnit decide pass/fail, so the expectations live next to the runtime they constrain.
  *

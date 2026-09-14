@@ -20,10 +20,7 @@
  *
  * <p>
  * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker, the
- * {@link org.apache.juneau.rest.server.widgets.ActionBar} primitive, the card-layout beans
- * ({@link org.apache.juneau.rest.server.widgets.CardGrid} / {@link org.apache.juneau.rest.server.widgets.Card} /
- * {@link org.apache.juneau.rest.server.widgets.CardBody} / {@link org.apache.juneau.rest.server.widgets.CardFieldList}
- * / {@link org.apache.juneau.rest.server.widgets.CardField}), and the bean-only definitions for the reusable
+ * {@link org.apache.juneau.rest.server.widgets.ActionBar} primitive, and the bean-only definitions for the reusable
  * calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef},
  * {@link org.apache.juneau.rest.server.widgets.EventCategory},
  * {@link org.apache.juneau.rest.server.widgets.CalendarEvent}).  Table-specific types (row-detail defs, row actions)
@@ -36,7 +33,6 @@
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.Widget}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ActionBar}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CardGrid}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CalendarDef}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ServerValues}
  * </ul>

@@ -28,9 +28,9 @@ import org.apache.juneau.commons.http.*;
  * {@link HeaderAction}s, and an optional trailing {@link AvatarChip}.
  *
  * <p>
- * A pure data bean.  The html5 emitter lives in {@code juneau-rest-server-views} (composed by {@code PageTable} from
- * {@code PageDef.header}); the opt-in {@code juneau-chrome.js} client runtime is served by {@code ViewsMixin}.  Widgets
- * keeps no dependency on views.
+ * A pure data bean.  The html5 emitter lives in {@code juneau-rest-server-views} ({@code AppHeaderTable}); the
+ * opt-in {@code juneau-chrome.js} client runtime is served by {@code ViewsMixin}.  Widgets keeps no dependency on
+ * views.
  *
  * <p>
  * There is <b>no</b> role-gated visibility in v1: there is no {@code roles()} field or drop-path.  Menus depend on a

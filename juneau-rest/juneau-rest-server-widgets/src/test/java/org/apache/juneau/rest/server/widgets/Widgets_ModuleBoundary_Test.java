@@ -117,14 +117,13 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		// and would silently stop tracking the bean when the bean's wire contract is revised.  The assignment shape
 		// is therefore checked in the source.
 		var src = mixinSource();
-		assertTrue(src.contains("CARDS_CONTRACT_VERSION = CardFieldList.CONTRACT_VERSION"), src);
 		assertTrue(src.contains("CALENDAR_CONTRACT_VERSION = CalendarDef.CONTRACT_VERSION"), src);
 		assertTrue(src.contains("HEADER_CONTRACT_VERSION = AppHeaderDef.CONTRACT_VERSION"), src);
 		assertTrue(src.contains("BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION"), src);
 	}
 
 	/**
-	 * The handler and the bytes arrive together.  This module now ships the four relocated widget runtime assets, so
+	 * The handler and the bytes arrive together.  This module now ships the three relocated widget runtime assets, so
 	 * the mixin must declare a serving endpoint for each: a declared mount with no accessor would answer 404, and an
 	 * accessor with no bytes would answer an empty 200.  Pinning the resource set as well as the endpoint count is
 	 * what keeps the two halves from drifting apart in either direction.
@@ -134,7 +133,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		assertTrue(Files.isDirectory(dir), () -> "This module must ship its widget assets at " + dir);
 		try (var s = Files.list(dir)) {
 			assertEquals(
-				List.of("juneau-calendar.css", "juneau-calendar.js", "juneau-cards.js", "juneau-chrome.js"),
+				List.of("juneau-calendar.css", "juneau-calendar.js", "juneau-chrome.js"),
 				s.map(x -> x.getFileName().toString()).sorted().toList());
 		}
 		// Anchored to the start of a line so a javadoc mention of the annotation is not a hit.
@@ -142,7 +141,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		var endpoints = 0;
 		while (m.find())
 			endpoints++;
-		assertEquals(4, endpoints, "One serving endpoint per shipped asset, no more and no fewer.");
+		assertEquals(3, endpoints, "One serving endpoint per shipped asset, no more and no fewer.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

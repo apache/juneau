@@ -62,9 +62,7 @@ class LayerStackSingleton_Test extends TestBase {
 		ViewsMixin.RENDERS_JS_RESOURCE,
 		ViewsMixin.RIBBON_JS_RESOURCE,
 		ViewsMixin.ICONS_JS_RESOURCE,
-		ViewsMixin.PAGES_JS_RESOURCE,
 		ViewsMixin.CONFIG_JS_RESOURCE,
-		ViewsMixin.CARDS_JS_RESOURCE,
 		ViewsMixin.CALENDAR_JS_RESOURCE,
 		ViewsMixin.CHROME_JS_RESOURCE
 	);

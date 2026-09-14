@@ -25,18 +25,13 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Bean contract for the <b>second</b> named {@link BarSlot} attachment, {@link RowDetailDef#barSlot}.
+ * Bean contract for {@link RowDetailDef#barSlot}.
  *
  * <p>
- * The type is deliberately shared with {@link PageDef#barSlot} while the <i>host</i> is not: a detail slot rides the
- * client-built detail ribbon inside the row-expand {@code <template>}, a page slot trails the page sub-tab bar.  This
- * class pins three things: the cascade into {@link BarSlot#validate()}; the cross-host duplicate-id rejection, which
- * can only live on {@link PageDef} because that is the only scope seeing both hosts; and that adding a Java-only
- * template field bumps <b>no</b> contract version (the row-expand envelope handshake is unchanged).
+ * Pins the cascade into {@link BarSlot#validate()}, that a top-level view with no enclosing page is a legal
+ * no-op, and that adding a Java-only template field bumps <b>no</b> contract version (the row-expand envelope
+ * handshake is unchanged).
  */
-@SuppressWarnings({
-	"deprecation" // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
-})
 class RowDetailDef_BarSlot_Test extends TestBase {
 
 	private static RowDetailDef details(BarSlot bar) {
@@ -100,39 +95,6 @@ class RowDetailDef_BarSlot_Test extends TestBase {
 		assertTrue(e.getMessage().contains("BarSlot"), e::getMessage);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Cross-host duplicate id: rejected on PageDef, since only PageDef sees both hosts
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void b01_duplicateIdAcrossHosts_rejected() {
-		var page = PageDef.create("admin")
-			.barSlot(bar("ctx"))
-			.tabs(Tab.create("t", "T").view(view("alerts", bar("ctx"))));
-		var e = assertThrows(IllegalArgumentException.class, page::build);
-		assertTrue(e.getMessage().contains("ctx"), e::getMessage);
-		assertTrue(e.getMessage().contains("bar slot"), e::getMessage);
-	}
-
-	@Test void b02_duplicateIdUnderASubtabView_rejected() {
-		var page = PageDef.create("admin")
-			.barSlot(bar("ctx"))
-			.tabs(Tab.create("t", "T").subtabs(Subtab.create("s", "S").view(view("alerts", bar("ctx")))));
-		var e = assertThrows(IllegalArgumentException.class, page::build);
-		assertTrue(e.getMessage().contains("ctx"), e::getMessage);
-	}
-
-	@Test void b04_distinctIdsAcrossHosts_accepted() {
-		var page = PageDef.create("admin")
-			.barSlot(bar("page-ctx"))
-			.tabs(Tab.create("t", "T").view(view("alerts", bar("detail-ctx"))));
-		assertDoesNotThrow(page::build);
-	}
-
-	@Test void b05_pageWithoutBarSlot_hasNothingToCollideWith() {
-		var page = PageDef.create("admin").tabs(Tab.create("t", "T").view(view("alerts", bar("ctx"))));
-		assertDoesNotThrow(page::build);
-	}
-
 	@Test void b06_topLevelViewWithNoEnclosingPage_isALegalNoOp() {
 		// No page => no page bar slot => no cross-host collision to check.  This must NOT be an error, and the
 		// detail slot's own cascade must still run.
@@ -146,10 +108,6 @@ class RowDetailDef_BarSlot_Test extends TestBase {
 
 	@Test void c01_rowDetailContractVersionUnchanged() {
 		assertEquals("1", RowDetailDef.CONTRACT_VERSION);
-	}
-
-	@Test void c02_pageContractVersionUnchanged() {
-		assertEquals("4", PageDef.CONTRACT_VERSION);
 	}
 
 	@Test void c03_barSlotContractVersionUnchanged() {

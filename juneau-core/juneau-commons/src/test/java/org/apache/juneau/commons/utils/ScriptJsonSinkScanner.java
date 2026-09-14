@@ -38,14 +38,14 @@ import java.util.regex.*;
  * and {@code new RawText(...)}. A {@code <script type="application/json">} sidecar's body is exactly such content.
  * A <b>sink</b> is therefore a statement that builds a {@code script(...)} element <i>and</i> inserts a
  * {@code rawText(...)} / {@code new RawText(...)} payload &mdash; which is precisely the shape
- * {@code ViewTable}/{@code PageTable} use. For each sink the payload argument must resolve to an
+ * {@code ViewTable} use. For each sink the payload argument must resolve to an
  * {@code escapeForScript(...)} result (directly, or via a same-file {@code var = escapeForScript(...)} assignment).
  *
  * <h5 class='section'>Why it must also assert it still finds the known-good sites</h5>
  * <p>
  * A scanner that silently stops matching reads as a passing test, which is worse than no scanner. Comments are
  * therefore stripped before analysis (so a {@code escapeForScript} mention in a javadoc cannot vacuously satisfy the
- * guard), and the accompanying test asserts the scan still finds the real {@code ViewTable}/{@code PageTable} sinks
+ * guard), and the accompanying test asserts the scan still finds the real {@code ViewTable} sinks
  * and that removing the escaper from one of them turns it into a violation &mdash; so "zero violations" can never mean
  * "zero files examined".
  *

@@ -26,8 +26,8 @@ import org.apache.juneau.rest.server.util.*;
 
 /**
  * The widget toolkit's serving-path mixin: the mount, asset-URL API and serving endpoints for the widget-owned
- * browser runtime ({@code juneau-cards.js}, {@code juneau-calendar.js}, {@code juneau-calendar.css},
- * {@code juneau-chrome.js}), plus the contract-version handshake constants those runtimes bake in.
+ * browser runtime ({@code juneau-calendar.js}, {@code juneau-calendar.css}, {@code juneau-chrome.js}), plus the
+ * contract-version handshake constants those runtimes bake in.
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=WidgetsMixin.class)}; the asset URLs then become
@@ -35,10 +35,10 @@ import org.apache.juneau.rest.server.util.*;
  *
  * <h5 class='section'>These assets still need the view runtime beside them</h5>
  * <p>
- * The bytes live here, but they are <b>not</b> a standalone widget runtime: the card, calendar and chrome scripts
+ * The bytes live here, but they are <b>not</b> a standalone widget runtime: the calendar and chrome scripts
  * resolve their glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and push their
- * popovers onto the ONE shared layer stack that {@code juneau-views.js} publishes.  A page that loads any of these
- * three scripts must therefore <b>also</b> load the view module's {@code juneau-icons.js} and
+ * popovers onto the ONE shared layer stack that {@code juneau-views.js} publishes.  A page that loads either of
+ * these scripts must therefore <b>also</b> load the view module's {@code juneau-icons.js} and
  * {@code juneau-views.js}.  "Widgets without views" is deliberately not a goal here; what this module owns is the
  * bean contracts and the bytes, not independence from views.
  *
@@ -50,8 +50,8 @@ import org.apache.juneau.rest.server.util.*;
  * <h5 class='section'>Contract-version handshake:</h5>
  * <p>
  * Each {@code *_CONTRACT_VERSION} constant is an <b>alias</b> of the bean constant it mirrors, never a copied
- * literal, so revising a bean's wire contract cannot leave a stale duplicate behind here.  The four are deliberately
- * distinct from one another: a card-envelope revision must never force a calendar, header, or bar-sidecar bump, or
+ * literal, so revising a bean's wire contract cannot leave a stale duplicate behind here.  The three are deliberately
+ * distinct from one another: a calendar-envelope revision must never force a header or bar-sidecar bump, or
  * vice-versa.
  *
  * <h5 class='section'>Cache-busting + versioned URLs:</h5>
@@ -86,7 +86,6 @@ import org.apache.juneau.rest.server.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link CardFieldList}
  * 	<li class='jc'>{@link CalendarDef}
  * 	<li class='jc'>{@link AppHeaderDef}
  * 	<li class='jc'>{@link BarSlot}
@@ -97,16 +96,7 @@ import org.apache.juneau.rest.server.util.*;
  */
 // @formatter:off
 @Rest(responseProcessors=WidgetsMixin.WidgetValidationProcessor.class, mergeResponseProcessorsIntoHost=true)
-@SuppressWarnings({
-	"deprecation" // Javadoc and constant aliases still name CardFieldList; the card Java types remain until consumer migration.
-})
 public class WidgetsMixin {
-
-	/**
-	 * The URL path at which the card-layout runtime is served (relative to the host mount).  Load it after the view
-	 * module's icon registry &mdash; the refresh button's glyph resolves from there.
-	 */
-	public static final String CARDS_JS_PATH = "/juneau-cards.js";
 
 	/**
 	 * The URL path at which the reusable-calendar runtime is served (relative to the host mount).
@@ -130,12 +120,6 @@ public class WidgetsMixin {
 	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
 
 	/**
-	 * The card refresh-envelope contract-version handshake constant that the card runtime bakes in, aliased from the
-	 * value the card model emits ({@link CardFieldList#CONTRACT_VERSION}).
-	 */
-	public static final String CARDS_CONTRACT_VERSION = CardFieldList.CONTRACT_VERSION;
-
-	/**
 	 * The per-month calendar-event envelope contract-version handshake constant that the calendar runtime bakes in,
 	 * aliased from the value the calendar model emits ({@link CalendarDef#CONTRACT_VERSION}).
 	 */
@@ -152,9 +136,6 @@ public class WidgetsMixin {
 	 * from the value the bar model emits ({@link BarSlot#CONTRACT_VERSION}).
 	 */
 	public static final String BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION;
-
-	/** Classpath location of the shipped card-layout runtime. */
-	static final String CARDS_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-cards.js";
 
 	/** Classpath location of the shipped reusable-calendar runtime. */
 	static final String CALENDAR_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-calendar.js";
@@ -180,21 +161,6 @@ public class WidgetsMixin {
 	 * javadoc's version-anchor section).  Independent of any other module's cache by construction.
 	 */
 	private static final ClasspathAssetCache ASSET_CACHE = new ClasspathAssetCache(WidgetsMixin.class);
-
-	/**
-	 * [GET /juneau-cards.js] &mdash; serve the card-layout runtime.
-	 *
-	 * @return The card-layout runtime as a JavaScript {@link HttpResource}.
-	 */
-	@RestGet(
-		path=CARDS_JS_PATH,
-		summary="Juneau widget card-layout runtime",
-		description="First-party, opt-in JavaScript that enhances a card grid's refreshable cards: contract handshake, built-in refresh button, and an optional per-card poll loop.",
-		swagger=@OpSwagger(ignore=true)
-	)
-	public HttpResource getCardsScript() {
-		return serve(CARDS_JS_RESOURCE, JS_CONTENT_TYPE);
-	}
 
 	/**
 	 * [GET /juneau-calendar.js] &mdash; serve the reusable-calendar runtime.
@@ -245,7 +211,7 @@ public class WidgetsMixin {
 	 * Returns the servlet-relative URL for a widget asset served by this mixin, carrying a
 	 * {@code ?v=<buildVersion>-<hash8>} content-sensitive cache-buster suitable for a page's {@code head=} block.
 	 *
-	 * @param path One of the asset path constants ({@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
+	 * @param path One of the asset path constants ({@link #CALENDAR_JS_PATH},
 	 * 	{@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 * @throws IllegalArgumentException If this mixin does not ship the bytes for the given path.
@@ -269,7 +235,7 @@ public class WidgetsMixin {
 	 * without a live request.
 	 *
 	 * @param req The current request, supplying the context path/mount to resolve against.
-	 * @param path One of the asset path constants ({@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH},
+	 * @param path One of the asset path constants ({@link #CALENDAR_JS_PATH},
 	 * 	{@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 * @throws IllegalArgumentException If this mixin does not ship the bytes for the given path.
@@ -301,7 +267,6 @@ public class WidgetsMixin {
 	 * bytes always arrive together and no declared path can resolve to an empty response.
 	 */
 	private static String resourceFor(String path) {
-		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;
 		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
 		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
 		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;

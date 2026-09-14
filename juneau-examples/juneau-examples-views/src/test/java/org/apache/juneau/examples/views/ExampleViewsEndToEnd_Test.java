@@ -241,10 +241,9 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 	}
 
 	@Test
-	void e03_cardsJsAsset_isReachable() throws Exception {
+	void e03_cardsJsAsset_isGone() throws Exception {
 		var res = get("/juneau-cards.js");
-		assertEquals(200, res.statusCode());
-		assertTrue(res.body().contains("window.JuneauCards"), "ships the card runtime namespace (still served until the delete slice)");
+		assertEquals(404, res.statusCode());
 	}
 
 	@Test

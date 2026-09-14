@@ -59,7 +59,7 @@
 		     jsf/jsm/ja (Java), xt/xa/xc/xs/xv (XML), joc/jok/jov (JSON), ua/uk/un/us (URL-encoding/UON),
 		     mc/mk/mv/mi (manifest files), cc/cs/ck/cv/ci (config files), plus c/dc/bc/l/property (misc). None of
 		     these are real HTML tags, so css:S4670 false-positives on every one of them. -->
-		<sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria>e1,e2,e3,e4</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>css:S4670</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
 		<!-- HTTP-status response/exception beans (BasicHttpResponse/BasicHttpException CRTP+immutability hierarchy, TODO-273) are intentionally >5 ancestors deep; not a design smell to flatten. -->
@@ -69,6 +69,15 @@
 		     mirrors the standard Javadoc stylesheet and must stay so Javadoc's own <tt>-based markup keeps rendering. -->
 		<sonar.issue.ignore.multicriteria.e3.ruleKey>css:S1874</sonar.issue.ignore.multicriteria.e3.ruleKey>
 		<sonar.issue.ignore.multicriteria.e3.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e3.resourceKey>
+		<!-- css:S7924 (WCAG text/background contrast) fires on theme/runtime CSS palettes that are
+		     intentional product styling. Quality profile cannot be edited here, and we do not
+		     change theme colors or use CSS NOSONAR. The Maven scanner (CI, sonarcloud.yml) reads
+		     this ignore from the POM. Eclipse SonarLint Connected Mode does not consume POM
+		     analysis properties; if the issue still appears in the IDE, add the same ruleKey/
+		     resourceKey pair under Project Analysis Scope extra properties (or the SonarCloud
+		     project's Analysis Scope so Connected Mode can sync it). -->
+		<sonar.issue.ignore.multicriteria.e4.ruleKey>css:S7924</sonar.issue.ignore.multicriteria.e4.ruleKey>
+		<sonar.issue.ignore.multicriteria.e4.resourceKey>**/*.css</sonar.issue.ignore.multicriteria.e4.resourceKey>
 		<!-- Coverage/exclusion config for the SonarScanner-for-Maven (used by CI in .github/workflows/sonarcloud.yml). -->
 		<!-- The Maven scanner reads these from the POM and ignores sonar-project.properties. -->
 		<!-- Aggregate report (cross-module integration-test coverage) via reactor-root path, per-module report via basedir fallback. -->

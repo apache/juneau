@@ -104,31 +104,25 @@ public class RowDetailDef {
 	 * <h5 class='section'>There is no inheritance, and same-name collisions are legal:</h5>
 	 * <p>
 	 * This host resolves only its own allowlisted fields.  It neither sees nor is seen by the enclosing
-	 * {@link PageDef#serverValues} or the enclosing {@link ViewDef#serverValues}; all three sessions are
-	 * <b>siblings</b>.  A name declared here and a same-name value on either of those hosts resolve independently and
+	 * {@link ViewDef#serverValues}; the two sessions are
+	 * <b>siblings</b>.  A name declared here and a same-name value on the view host resolve independently and
 	 * may differ within one response &mdash; a documented semantic, not an accident.
 	 */
 	public ServerValues serverValues;
 
 	/**
-	 * Optional additive bar slot riding this panel's region body &mdash; the <i>second</i> named
-	 * {@link BarSlot} attachment, distinct from {@link PageDef#barSlot}.
+	 * Optional additive bar slot riding this panel's region body.
 	 *
 	 * <p>
-	 * Same bean, same {@link BarSlotTable} emitter, different host and placement: the page slot trails
-	 * {@code .jc-subtab-bar} once per page, while this one is painted into the row-expand {@code <template>} and is
-	 * therefore <b>cloned per expanded row</b>, anchored with {@link BarSlotTable#ANCHOR_SECTION_TITLE} because a
-	 * region panel has no framework ribbon.
+	 * Same bean, same {@link BarSlotTable} emitter, different placement: this one is painted into the row-expand
+	 * {@code <template>} and is therefore <b>cloned per expanded row</b>, anchored with
+	 * {@link BarSlotTable#ANCHOR_SECTION_TITLE} because a region panel has no framework ribbon.
 	 *
 	 * <p>
 	 * Java-only, like the rest of this type &mdash; it never appears on the expand GET envelope, so it does not bump
-	 * {@link #CONTRACT_VERSION}.  {@link BarSlot#id} stays the author's own id: it is what the enclosing
-	 * {@link PageDef} uniqueness check compares, and the runtime mints per-row DOM identities from the parent table's
-	 * id rather than from it.  {@link BarSlot#refreshUrl} powers <b>demand</b> refresh only; there is no poller.
-	 *
-	 * <p>
-	 * Cross-host id collisions are rejected by {@link PageDef#validate()} &mdash; the only scope that sees both hosts.
-	 * A top-level view served with no enclosing page has no page slot to collide with, and is a legal no-op.
+	 * {@link #CONTRACT_VERSION}.  {@link BarSlot#id} stays the author's own id; the runtime mints per-row DOM
+	 * identities from the parent table's id rather than from it.  {@link BarSlot#refreshUrl} powers <b>demand</b>
+	 * refresh only; there is no poller.
 	 */
 	public BarSlot barSlot;
 
@@ -234,8 +228,7 @@ public class RowDetailDef {
 	 * Declares the additive bar slot riding this panel's region body.
 	 *
 	 * <p>
-	 * See {@link #barSlot} &mdash; a second named host for the same {@link BarSlot} bean, not a re-use of
-	 * {@link PageDef#barSlot}.
+	 * See {@link #barSlot}.
 	 *
 	 * @param value The bar slot.  Can be <jk>null</jk> (no detail bar slot).
 	 * @return This object.
@@ -277,8 +270,7 @@ public class RowDetailDef {
 			throw iaex("RowDetailDef must declare a region.");
 		if (serverValues != null)
 			serverValues.validate();
-		// Cascade into the second named bar-slot host.  Cross-host id uniqueness is NOT checkable here: this scope has
-		// no enclosing page, so PageDef.validate() owns that rejection.
+		// Cascade into the bar-slot host.
 		if (barSlot != null)
 			barSlot.validate();
 		region.validate();

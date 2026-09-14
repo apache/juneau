@@ -42,13 +42,13 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Option-A coverage (mirrors {@code DataTablesMixin}/{@code ConsoleChromeMixin}'s serving tests): a host composing
- * the mixin exposes each of the four runtime assets at its stable path with a {@code 200} + correct content-type +
+ * the mixin exposes each runtime asset at its stable path with a {@code 200} + correct content-type +
  * {@code Cache-Control}; a host without the mixin {@code 404}s the same paths.  The {@code ?v=<buildVersion>}
  * cache-buster and the {@code CONTRACT_VERSION} handshake constant are asserted directly.
  */
 @SuppressWarnings({
 	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
-	"deprecation", // Section b) deliberately exercises the deprecated compatibility mounts for the four relocated widget assets.
+	"deprecation", // Section b) deliberately exercises the deprecated compatibility mounts for the three relocated widget assets.
 	"java:S6126" // Assertion messages concatenate a fixture fragment with a diagnostic; a text block would not improve them.
 })
 class ViewsMixin_Serving_Test extends TestBase {
@@ -120,7 +120,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Request-bearing {@link ViewTable}/{@link PageTable} {@code of(req, ...)} host so the
+	 * Request-bearing {@link ViewTable} {@code of(req, ...)} host so the
 	 * {@code data-juneau-saved-views} stamp is resolved through a real {@link RestRequest} URI resolver
 	 * (the emit tests only exercise the already-resolved-base overload).
 	 */
@@ -129,11 +129,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/releases") public Div releases(RestRequest req) {
 			return ViewTable.of(req, releasesView());
-		}
-		@RestGet(path="/admin") public Div admin(RestRequest req) {
-			return PageTable.of(req, PageDef.create("admin")
-				.tabs(Tab.create("releases", "Releases").view(releasesView()))
-				.build());
 		}
 	}
 
@@ -266,7 +261,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * The four widget-owned runtime assets have now been <b>relocated</b> into {@code juneau-rest-server-widgets},
+	 * The three widget-owned runtime assets have now been <b>relocated</b> into {@code juneau-rest-server-widgets},
 	 * beside the bean contracts that drive them, so ownership of the "who ships these bytes" assertion moved with
 	 * them to {@code WidgetsMixin_Serving_Test}.  What this module still owes is the compatibility promise: an
 	 * application composing only this mixin keeps getting a {@code 200} with the right content type and caching
@@ -276,7 +271,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 */
 	@Test void b08_relocatedWidgetAssets_stillServeFromTheDeprecatedViewsMount() throws Exception {
 		for (var e : java.util.Map.of(
-				ViewsMixin.CARDS_JS_PATH, "/org/apache/juneau/widgets/juneau-cards.js",
 				ViewsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/widgets/juneau-calendar.js",
 				ViewsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css",
 				ViewsMixin.CHROME_JS_PATH, "/org/apache/juneau/widgets/juneau-chrome.js").entrySet()) {
@@ -292,20 +286,19 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	/** The compatibility mount is a mount: it only exists where this mixin is composed. */
 	@Test void b09_relocatedWidgetAssets_are404WithoutThisMixin() throws Exception {
-		cNoMixin.get(ViewsMixin.CARDS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CALENDAR_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CALENDAR_CSS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CHROME_JS_PATH).run().assertStatus(404);
 	}
 
 	/**
-	 * The relocated four hash and version through the <b>widget</b> module's asset cache, so this mixin's deprecated
+	 * The relocated three hash and version through the <b>widget</b> module's asset cache, so this mixin's deprecated
 	 * URL for one of them is character-identical to {@code WidgetsMixin}'s URL for it.  Two differently-busted URLs
 	 * for one body would make a page composing both mixins cache the same script twice.
 	 */
 	@Test void b10_relocatedWidgetAssets_carryTheSameCacheBusterAsTheWidgetMixin() throws Exception {
 		for (var path : new String[]{
-				ViewsMixin.CARDS_JS_PATH, ViewsMixin.CALENDAR_JS_PATH, ViewsMixin.CALENDAR_CSS_PATH,
+				ViewsMixin.CALENDAR_JS_PATH, ViewsMixin.CALENDAR_CSS_PATH,
 				ViewsMixin.CHROME_JS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -321,7 +314,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * that the new coordinates resolve to exactly one classpath entry.
 	 */
 	@Test void b11_relocatedWidgetAssets_areGoneFromThisModulesResources() throws Exception {
-		for (var name : new String[]{"juneau-cards.js", "juneau-calendar.js", "juneau-calendar.css", "juneau-chrome.js"}) {
+		for (var name : new String[]{"juneau-calendar.js", "juneau-calendar.css", "juneau-chrome.js"}) {
 			assertNull(ViewsMixin.class.getResourceAsStream("/org/apache/juneau/views/" + name),
 				() -> name + ": still present at the old views coordinates - the move left a copy behind");
 			var found = java.util.Collections.list(ViewsMixin.class.getClassLoader().getResources("org/apache/juneau/widgets/" + name));
@@ -372,7 +365,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
 		for (var path : new String[]{
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
-				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.PAGES_JS_PATH,
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
 				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -407,13 +400,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertEquals(AppHeaderDef.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertEquals(WidgetsMixin.BAR_CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
 		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-		assertEquals(WidgetsMixin.CARDS_CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
-		assertEquals(CardFieldList.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
 		assertEquals(ViewSlot.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertEquals("1", ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.CARDS_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertNotEquals(ViewsMixin.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
 	}
@@ -467,9 +457,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// Regression: the `tag` renderer must mirror console-ui's Tag#normalize/TagHtmlRender token algorithm
 		// (lowercase both <domain> and <value> into the `.tag.<domain>.<value>` CSS token) so themed chrome.css
 		// rules (e.g. `.tag.status.released`) match - a raw "RELEASED" cell must no longer render as an
-		// unthemed neutral chip.  Content-substring coverage only: the module's browser harness
-		// (PagePanelVisibility_BrowserTest) covers the page runtime, not the renderer registry, so executing this
-		// renderer to check its exact lowercased/hyphenated output would need a second fixture there.
+		// unthemed neutral chip.  Content-substring coverage only: executing this renderer to check its exact
+		// lowercased/hyphenated output would need a browser fixture.
 		var body = cWithMixin.get(ViewsMixin.RENDERS_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("normalizeTagToken("), body);
 		var tagRendererStart = body.indexOf("registerRenderer(\"tag\"");
@@ -1238,10 +1227,4 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertFalse(html.contains("<table id='releases' data-juneau-saved-views"), html);
 	}
 
-	@Test void i02_requestBearingPageTable_stampsPageShell() throws Exception {
-		var html = cStampHost.get("/admin").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertTrue(html.contains("data-juneau-saved-views="), html);
-		assertTrue(html.contains(SavedViewsMixin.SAVED_VIEWS_PREFIX), html);
-		assertTrue(html.contains("data-juneau-page"), html);
-	}
 }

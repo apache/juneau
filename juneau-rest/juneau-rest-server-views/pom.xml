@@ -78,7 +78,7 @@
 			the reactor's .mvn/maven.config also-make flag otherwise drags sibling modules into the run.)
 
 			A default `mvn install` - including an offline build from a source tarball - needs no Node, no npm, no
-			browser and no network for this module: the profile is off, so PagePanelVisibility_BrowserTest sees no
+			browser and no network for this module: the profile is off, so RowActionCsrf_BrowserTest sees no
 			"juneau.jsTests" system property and JUnit skips it.  It still compiles, because it drives the prober
 			through plain java.lang.ProcessBuilder rather than any new Maven dependency; the module's default
 			dependency set is unchanged by this profile.
@@ -87,7 +87,7 @@
 			the Chromium download), which the repo already ignores via "**/target/" and Apache RAT already skips via
 			"**/target/**" - so no new .gitignore entry, no new RAT exclusion, and nothing fetched can reach the
 			source distribution (juneau-distrib's src assembly packages only the sources jars under its own
-			target/src).  Both committed files - src/test/js/panel-visibility.cjs and the Java test - carry the
+			target/src).  Both committed files - src/test/js/row-actions.cjs and the Java test - carry the
 			standard ASF header.
 
 			Prerequisites when you DO opt in: Node and npm on the PATH (override the launcher with
@@ -171,7 +171,7 @@
 							<systemPropertyVariables>
 								<juneau.jsTests>true</juneau.jsTests>
 								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
-								<juneau.jsTests.harness>${project.basedir}/src/test/js/panel-visibility.cjs</juneau.jsTests.harness>
+								<juneau.jsTests.harness>${project.basedir}/src/test/js/row-actions.cjs</juneau.jsTests.harness>
 								<juneau.jsTests.node>${juneau.jsTests.node}</juneau.jsTests.node>
 								<juneau.jsTests.browsers>${juneau.jsTests.browsers}</juneau.jsTests.browsers>
 							</systemPropertyVariables>

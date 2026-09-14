@@ -24,10 +24,9 @@ import org.apache.juneau.rest.server.widgets.*;
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
- * {@code juneau-pages.js} tabs/sub-tabs page runtime, the opt-in {@code juneau-regions.js} region-populate runtime,
- * the opt-in {@code juneau-config.js}/{@code juneau-config.css} column-chooser runtime &mdash; each at its stable
- * path (design doc §6.1), plus deprecated compatibility mounts for the four assets that have since moved to the
- * widget module.
+ * {@code juneau-regions.js} region-populate runtime, the opt-in {@code juneau-config.js}/{@code juneau-config.css}
+ * column-chooser runtime &mdash; each at its stable path (design doc §6.1), plus deprecated compatibility mounts
+ * for the three assets that have since moved to the widget module.
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -44,23 +43,23 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code chrome.css} themes the same {@code .tag.<domain>.<value>} classes when present, but this module takes
  * <b>no</b> dependency on it.
  *
- * <h5 class='section'>Relocated: four assets now ship in the widget module</h5>
+ * <h5 class='section'>Relocated: three assets now ship in the widget module</h5>
  * <p>
- * {@code juneau-cards.js}, {@code juneau-calendar.js}, {@code juneau-calendar.css} and {@code juneau-chrome.js} are
- * widget runtimes, not table runtimes, and their bytes now live in {@code juneau-rest-server-widgets} beside the bean
- * contracts that drive them.  {@link WidgetsMixin} is where a new application gets them.
+ * {@code juneau-calendar.js}, {@code juneau-calendar.css} and {@code juneau-chrome.js} are widget runtimes, not
+ * table runtimes, and their bytes now live in {@code juneau-rest-server-widgets} beside the bean contracts that
+ * drive them.  {@link WidgetsMixin} is where a new application gets them.
  *
  * <p>
- * This mixin keeps a <b>deprecated</b> mount and path constant for each of the four so that an existing
+ * This mixin keeps a <b>deprecated</b> mount and path constant for each of the three so that an existing
  * {@code @Rest(mixins=ViewsMixin.class)} application keeps working with no change: the mount reads the widget
  * module's bytes off the classpath (that module is a compile-scope dependency of this one) rather than holding a
  * second copy, so the body and the cache-buster are identical to what {@link WidgetsMixin} serves.  Composing both
  * mixins is therefore harmless.
  *
  * <p>
- * The relocation does <b>not</b> make those three scripts standalone: they still resolve glyphs through this module's
+ * The relocation does <b>not</b> make those scripts standalone: they still resolve glyphs through this module's
  * {@code juneau-icons.js} and push their popovers onto the ONE shared layer stack {@code juneau-views.js} publishes.
- * A page loading the widget card/calendar/chrome runtime must still load this module's {@code juneau-icons.js} and
+ * A page loading the widget calendar/chrome runtime must still load this module's {@code juneau-icons.js} and
  * {@code juneau-views.js} first.
  *
  * <h5 class='section'>Cache-busting + versioned URLs:</h5>
@@ -99,9 +98,6 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 // @formatter:off
 @Rest
-@SuppressWarnings({
-	"deprecation" // Javadoc and constant aliases still name CardFieldList; the card Java types remain until consumer migration.
-})
 public class ViewsMixin {
 
 	/** The URL path at which the client initializer is served (relative to the host mount). */
@@ -124,21 +120,6 @@ public class ViewsMixin {
 	 * {@code juneau-icons.js} fetches this next to itself; the key/legend file is not served to browsers.
 	 */
 	public static final String SYMBOLS_SVG_PATH = "/juneau-symbols.svg";
-
-	/**
-	 * The URL path at which the opt-in tabs/sub-tabs page runtime is served (relative to the host mount).  A
-	 * separate, opt-in asset (Decision 2(A)): single-view pages never load it.
-	 *
-	 * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })} and a full
-	 * 	page load per nav pair.  This hash-swap runtime remains so Support Console, foundry, and
-	 * 	release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
-	 * 	Juneau item deletes it after those consumers migrate.
-	 */
-	@SuppressWarnings({
-		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
-	})
-	@Deprecated(since = "10.0.0")
-	public static final String PAGES_JS_PATH = "/juneau-pages.js";
 
 	/**
 	 * The URL path at which the opt-in region-populate runtime is served (relative to the host mount).  A page with
@@ -175,21 +156,6 @@ public class ViewsMixin {
 	 * The URL path at which the opt-in column-chooser stylesheet is served (relative to the host mount).
 	 */
 	public static final String CONFIG_CSS_PATH = "/juneau-config.css";
-
-	/**
-	 * The URL path at which the opt-in card-layout runtime is served (relative to the host mount).  A consumer adds
-	 * this {@code <script>} after {@code juneau-icons.js} (the refresh button's glyph is resolved from the icon
-	 * registry); a page with no {@code data-juneau-card-grid} never loads it.
-	 *
-	 * @deprecated The card runtime now ships in the widget module; compose
-	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
-	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
-	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
-	@Deprecated(since = "10.0.0", forRemoval = false)
-	public static final String CARDS_JS_PATH = "/juneau-cards.js";
 
 	/**
 	 * The URL path at which the opt-in reusable-calendar runtime is served (relative to the host mount).  A page
@@ -248,14 +214,6 @@ public class ViewsMixin {
 	public static final String CONTRACT_VERSION = ViewDef.CONTRACT_VERSION;
 
 	/**
-	 * The card refresh-envelope contract-version handshake constant that {@code juneau-cards.js} bakes in, kept in one
-	 * source of truth with the value the card model emits ({@link CardFieldList#CONTRACT_VERSION}).  Deliberately a
-	 * distinct constant from {@link #CONTRACT_VERSION} (the {@code VIEW_META} sidecar contract): a card-envelope
-	 * revision must never force a view-sidecar bump, or vice-versa.
-	 */
-	public static final String CARDS_CONTRACT_VERSION = CardFieldList.CONTRACT_VERSION;
-
-	/**
 	 * The app-header refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in, kept
 	 * in one source of truth with the value the header model emits ({@link AppHeaderDef#CONTRACT_VERSION}).
 	 * Deliberately distinct from {@link #CONTRACT_VERSION} and {@link #BAR_CONTRACT_VERSION}: a header-envelope
@@ -296,9 +254,6 @@ public class ViewsMixin {
 	/** Classpath location of the shipped SVG symbol sprite. */
 	static final String SYMBOLS_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols.svg";
 
-	/** Classpath location of the shipped page runtime. */
-	static final String PAGES_JS_RESOURCE = "/org/apache/juneau/views/juneau-pages.js";
-
 	/** Classpath location of the shipped region-populate runtime. */
 	static final String REGIONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-regions.js";
 
@@ -312,23 +267,20 @@ public class ViewsMixin {
 	static final String CONFIG_CSS_RESOURCE = "/org/apache/juneau/views/juneau-config.css";
 
 	/**
-	 * Classpath location of the card-layout runtime, which the <b>widget</b> module now ships.
+	 * Classpath location of the reusable-calendar runtime, which the <b>widget</b> module now ships.
 	 *
 	 * <p>
-	 * The four widget-owned assets below are read out of the widget module's classpath (a compile-scope dependency of
+	 * The three widget-owned assets below are read out of the widget module's classpath (a compile-scope dependency of
 	 * this one), never copied into this module's resources.  Reading rather than copying is what makes this mixin's
 	 * deprecated accessor serve the same bytes the widget mixin serves, and it is why the absent-from-this-module
 	 * guard in the serving test can assert a move rather than a duplication.
 	 */
-	static final String CARDS_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-cards.js";
-
-	/** Classpath location of the reusable-calendar runtime, which the widget module now ships (see {@link #CARDS_JS_RESOURCE}). */
 	static final String CALENDAR_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-calendar.js";
 
-	/** Classpath location of the reusable-calendar stylesheet, which the widget module now ships (see {@link #CARDS_JS_RESOURCE}). */
+	/** Classpath location of the reusable-calendar stylesheet, which the widget module now ships (see {@link #CALENDAR_JS_RESOURCE}). */
 	static final String CALENDAR_CSS_RESOURCE = "/org/apache/juneau/widgets/juneau-calendar.css";
 
-	/** Classpath location of the page-chrome runtime, which the widget module now ships (see {@link #CARDS_JS_RESOURCE}). */
+	/** Classpath location of the page-chrome runtime, which the widget module now ships (see {@link #CALENDAR_JS_RESOURCE}). */
 	static final String CHROME_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-chrome.js";
 
 	/** Content type emitted for the JavaScript assets. */
@@ -351,14 +303,14 @@ public class ViewsMixin {
 	private static final ClasspathAssetCache ASSET_CACHE = new ClasspathAssetCache(ViewsMixin.class);
 
 	/**
-	 * The same helper, but anchored on the <b>widget</b> mixin, for the four assets that module now ships and this
+	 * The same helper, but anchored on the <b>widget</b> mixin, for the three assets that module now ships and this
 	 * one only keeps deprecated mounts for.
 	 *
 	 * <p>
 	 * The anchor governs two things: which classpath the bytes are read from (irrelevant here &mdash; the widget
 	 * module is a compile-scope dependency, so either anchor finds the same bytes) and which module's
 	 * implementation version the {@code ?v=<buildVersion>-<hash8>} cache-buster carries.  Anchoring the relocated
-	 * four on the widget mixin makes this mixin's deprecated URL for an asset <b>byte-identical</b> to the widget
+	 * three on the widget mixin makes this mixin's deprecated URL for an asset <b>byte-identical</b> to the widget
 	 * mixin's URL for it, buster included, rather than merely serving the same body behind two differently-versioned
 	 * URLs.  A page that mixes both mixins therefore cannot end up caching the same script twice.
 	 */
@@ -455,29 +407,6 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-pages.js] &mdash; serve the opt-in tabs/sub-tabs page runtime.
-	 *
-	 * @return The page runtime as a JavaScript {@link HttpResource}.
-	 * @deprecated Use author HTML slots plus {@code JuneauViews.regions.mount({ id: populator })} and a full
-	 * 	page load per nav pair.  This hash-swap runtime remains so Support Console, foundry, and
-	 * 	release-manager can grep removal sites.  It is not a supported long-term shim; a follow-up
-	 * 	Juneau item deletes it after those consumers migrate.
-	 */
-	@SuppressWarnings({
-		"java:S1133" // Deprecated for a cross-repo sweep, not as a forever shim; removal is a follow-up item.
-	})
-	@Deprecated(since = "10.0.0")
-	@RestGet(
-		path=PAGES_JS_PATH,
-		summary="Juneau rich-view tabs/sub-tabs page runtime",
-		description="First-party, opt-in JavaScript that hash-routes a PageDef's tabs/sub-tabs and lazy-inits each panel's view table on first activation.",
-		swagger=@OpSwagger(ignore=true)
-	)
-	public HttpResource getPagesScript() {
-		return serve(PAGES_JS_RESOURCE, JS_CONTENT_TYPE);
-	}
-
-	/**
 	 * [GET /juneau-regions.js] &mdash; serve the opt-in region-populate runtime.
 	 *
 	 * @return The region-populate runtime as a JavaScript {@link HttpResource}.
@@ -538,35 +467,14 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-cards.js] &mdash; serve the opt-in card-layout runtime from the widget module's classpath.
-	 *
-	 * @return The card-layout runtime as a JavaScript {@link HttpResource}.
-	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
-	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
-	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
-	@Deprecated(since = "10.0.0", forRemoval = false)
-	@RestGet(
-		path=CARDS_JS_PATH,
-		summary="Juneau rich-view card-layout runtime (relocated)",
-		description="Deprecated compatibility mount. The card-layout runtime now ships in juneau-rest-server-widgets; these bytes are read from that module and are identical to the ones WidgetsMixin serves.",
-		swagger=@OpSwagger(ignore=true)
-	)
-	public HttpResource getCardsScript() {
-		return WIDGET_ASSET_CACHE.serve(CARDS_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
-	}
-
-	/**
 	 * Returns the servlet-relative URL for a served asset, carrying a {@code ?v=<buildVersion>-<hash8>} content-
 	 * sensitive cache-buster suitable for a page's {@code head=} block (see the class Javadoc's cache-busting
 	 * section for why the buster is content- rather than purely version-keyed).
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #PAGES_JS_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -589,8 +497,8 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #PAGES_JS_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CARDS_JS_PATH}, {@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}).
+	 * 	{@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -666,11 +574,11 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * Selects the cache that owns the given asset path: the four relocated widget assets hash and version through
+	 * Selects the cache that owns the given asset path: the three relocated widget assets hash and version through
 	 * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), everything else through this module's own.
 	 */
 	private static ClasspathAssetCache cacheFor(String path) {
-		if (CARDS_JS_PATH.equals(path) || CALENDAR_JS_PATH.equals(path) || CALENDAR_CSS_PATH.equals(path) || CHROME_JS_PATH.equals(path))
+		if (CALENDAR_JS_PATH.equals(path) || CALENDAR_CSS_PATH.equals(path) || CHROME_JS_PATH.equals(path))
 			return WIDGET_ASSET_CACHE;
 		return ASSET_CACHE;
 	}
@@ -683,12 +591,10 @@ public class ViewsMixin {
 		if (VIEWS_CSS_PATH.equals(path)) return VIEWS_CSS_RESOURCE;
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
 		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
-		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
 		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
 		if (HELPERS_JS_PATH.equals(path)) return HELPERS_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
-		if (CARDS_JS_PATH.equals(path)) return CARDS_JS_RESOURCE;
 		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
 		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
 		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;
