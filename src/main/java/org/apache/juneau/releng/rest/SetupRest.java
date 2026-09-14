@@ -17,32 +17,36 @@
 
 package org.apache.juneau.releng.rest;
 
-import static org.apache.juneau.http.HttpResponses.*;
-
 import org.apache.juneau.commons.inject.Bean;
-import org.apache.juneau.http.response.Found;
+import org.apache.juneau.http.Path;
+import org.apache.juneau.marshall.json.JsonSerializer;
+import org.apache.juneau.releng.setup.SetupProbeService;
+import org.apache.juneau.releng.setup.SetupProbeService.InstallResult;
+import org.apache.juneau.releng.setup.SetupProbeService.SetupData;
+import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
-import org.apache.juneau.rest.server.RestRequest;
+import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.rest.server.views.ViewsMixin;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * Admin tab: author-HTML pair page that mounts the app's existing
- * {@link ReleaseRest#releasesView() Releases} table into an empty slot via {@code JuneauViews.regions.mount}.
- *
- * <p>
- * {@code GET /} 302s to the Releases pair. The Credentials Admin child is gone; credential writes live
- * under Setup Details.
+ * Setup tab: probe inventory + Details. Install is a loopback-mutating local shell (CSRF + loopback
+ * filter), not the LIVE arm phrase.
  */
-@Rest(path = "/admin", title = "Admin", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
-public class AdminRest extends BasicRestResource {
+@Rest(path = "/setup", title = "Setup", responseProcessors = FreemarkerViewRenderer.class)
+public class SetupRest extends BasicRestResource {
 
-	static final String RELEASES_URL = "/rest/admin/releases";
+	private final SetupProbeService setup;
+
+	public SetupRest(SetupProbeService setup) {
+		this.setup = setup;
+	}
 
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
@@ -51,15 +55,22 @@ public class AdminRest extends BasicRestResource {
 		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
-	/** Default Admin URL — 302 to the Releases pair. */
+	/** Human page: probe pills only; browser then GET {@code /data}. */
 	@RestGet("/")
-	public Found redirectToReleases() {
-		return found(RELEASES_URL);
+	public View page(HttpServletRequest req) {
+		return ConsolePage.of("setup", req).attr("inventory", setup.inventory());
 	}
 
-	/** Admin / Releases pair: empty {@code #releases} slot mounted from {@code /rest/releases/view}. */
-	@RestGet("/releases")
-	public View releases(RestRequest req) {
-		return TableSlotPage.of("admin", req, "releases", ReleaseRest.MOUNT + "/view").attr("selectedChild", "releases");
+	/** Eager verdicts. */
+	@RestGet(path = "/data", produces = "application/json", serializers = JsonSerializer.class)
+	public SetupData data() {
+		return setup.data();
+	}
+
+	/** Install a PATH tool via brew or apt-get. */
+	@Mutating("installs a local PATH prerequisite via brew or apt-get")
+	@RestPost(path = "/install/{probeId}", produces = "application/json", serializers = JsonSerializer.class)
+	public InstallResult install(@Path("probeId") String probeId) {
+		return setup.install(probeId);
 	}
 }

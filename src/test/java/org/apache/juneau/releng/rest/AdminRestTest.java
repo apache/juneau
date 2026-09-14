@@ -26,7 +26,6 @@ import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.utils.IoUtils;
 import org.apache.juneau.rest.mock.MockRestClient;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
-import org.apache.juneau.rest.server.views.PageTable;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.junit.jupiter.api.Test;
 
@@ -73,20 +72,16 @@ class AdminRestTest {
 				var body = resp.getBodyAsString();
 				assertAdminShell(body, "releases", "/rest/releases/view");
 				assertTrue(body.contains("href=\"/rest/admin/releases\" aria-current=\"page\">Releases</a>"), body);
-				assertFalse(body.contains("href=\"/rest/admin/credentials\" aria-current=\"page\""), body);
+				assertFalse(body.contains("/rest/admin/credentials"), body);
 			}
 		}
 	}
 
 	@Test
-	void b02_credentialsPairServesAuthorNavAndEmptySlot() throws Exception {
+	void b02_credentialsChildIsGone() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/credentials").run()) {
-				assertEquals(200, resp.getStatusCode());
-				var body = resp.getBodyAsString();
-				assertAdminShell(body, "credentials", "/rest/credentials/view");
-				assertTrue(body.contains("href=\"/rest/admin/credentials\" aria-current=\"page\">Credentials</a>"), body);
-				assertFalse(body.contains("href=\"/rest/admin/releases\" aria-current=\"page\">Releases</a>"), body);
+				assertEquals(404, resp.getStatusCode());
 			}
 		}
 	}
@@ -144,6 +139,9 @@ class AdminRestTest {
 			base = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
 		}
 		assertTrue(base.contains("href=\"/rest/admin\""), "Missing Admin nav link: " + base);
+		assertTrue(base.contains("href=\"/rest/setup\""), "Missing Setup nav link: " + base);
+		assertFalse(base.contains("href=\"/rest/home\""), "Home Page Tab must be gone: " + base);
+		assertFalse(base.contains("href=\"/rest/credentials\""), "Credentials Page Tab must be gone: " + base);
 		assertTrue(base.contains("activeTab == 'admin'"), "Missing admin-tab conditional asset wiring: " + base);
 		assertFalse(base.contains("pagesJsUrl"), "juneau-pages.js must not be included: " + base);
 		assertFalse(base.contains("juneau-pages.js"), "juneau-pages.js must not be referenced: " + base);
@@ -205,7 +203,7 @@ class AdminRestTest {
 		assertTrue(body.contains("\"tableUrl\":\"" + tableUrl + "\""), body);
 		assertFalse(body.contains("data-juneau-page"), "Page sidecar leaked: " + body);
 		assertFalse(body.contains("juneau-page:admin"), "PAGE_META leaked: " + body);
-		assertFalse(body.contains(PageTable.TAB_BAR_CLASS), "Tab bar class leaked: " + body);
+		assertFalse(body.contains("jc-tab-bar"), "Tab bar class leaked: " + body);
 		assertFalse(body.contains("juneau-pages.js"), "juneau-pages.js leaked: " + body);
 		assertFalse(body.contains("data-juneau-region"), "Do not stamp data-juneau-region on the table slot: " + body);
 		assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);

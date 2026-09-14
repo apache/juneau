@@ -22,9 +22,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public interface ProcessRunner {
@@ -45,6 +47,9 @@ public interface ProcessRunner {
 	/**
 	 * Runs a command with optional stdin and extra environment variables, returning the exit code and
 	 * output without throwing. Keeps secrets off argv (pass them via {@code stdin} or {@code env}).
+	 *
+	 * <p>Child stdin is always closed after any {@code stdin} bytes are written, so a process that
+	 * prompts {@code [Y/n]} cannot hang the caller waiting for a tty.
 	 */
 	ProcResult run(List<String> command, String stdin, Map<String, String> env);
 
@@ -56,6 +61,15 @@ public interface ProcessRunner {
 	 */
 	default ProcResult run(List<String> command, String stdin, Map<String, String> env, Consumer<String> lineSink) {
 		return runStreamingDefault(command, stdin, env, lineSink);
+	}
+
+	/**
+	 * Timeout-capable variant of {@link #run(List, String, Map)}. {@code timeout} {@code null} or non-positive
+	 * means unbounded. Default ignores the timeout and delegates to {@link #run(List, String, Map)};
+	 * {@link Default} honors it and destroy-forcibly on expiry.
+	 */
+	default ProcResult run(List<String> command, String stdin, Map<String, String> env, Duration timeout) {
+		return run(command, stdin, env);
 	}
 
 	/** Default streaming impl for stubs that don't override it: falls back to a buffered run then replays. */
@@ -73,6 +87,7 @@ public interface ProcessRunner {
 	class Default implements ProcessRunner {
 		private static final String MSG_INTERRUPTED = "Interrupted running: %s";
 		private static final String MSG_ERROR = "Error running: %s";
+		private static final int CODE_TIMEOUT = 124;
 
 		@Override
 		public List<String> runLines(List<String> command) {
@@ -87,81 +102,68 @@ public interface ProcessRunner {
 
 		@Override
 		public String runText(List<String> command) {
-			try {
-				var p = new ProcessBuilder(command).redirectErrorStream(true).start();
-				String text;
-				try (var r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-					var sb = new StringBuilder();
-					String line;
-					while ((line = r.readLine()) != null)
-						sb.append(line).append('\n');
-					text = sb.toString();
-				}
-				var code = p.waitFor();
-				if (code != 0)
-					throw isex("Command failed (exit %s): %s\n%s", code, command, text);
-				return text;
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-				throw isex(e, MSG_INTERRUPTED, command);
-			} catch (Exception e) {
-				throw isex(e, MSG_ERROR, command);
-			}
+			var res = execute(command, null, null, null, null);
+			if (!res.ok())
+				throw isex("Command failed (exit %s): %s\n%s", res.exitCode(), command, res.output());
+			return res.output();
 		}
 
 		@Override
 		public ProcResult run(List<String> command, String stdin, Map<String, String> env) {
-			try {
-				var pb = new ProcessBuilder(command).redirectErrorStream(true);
-				if (env != null)
-					pb.environment().putAll(env);
-				var p = pb.start();
-				if (stdin != null) {
-					try (var os = p.getOutputStream()) {
-						os.write(stdin.getBytes(StandardCharsets.UTF_8));
-					}
-				}
-				String text;
-				try (var r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-					var sb = new StringBuilder();
-					String line;
-					while ((line = r.readLine()) != null)
-						sb.append(line).append('\n');
-					text = sb.toString();
-				}
-				var code = p.waitFor();
-				return new ProcResult(code, text);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-				throw isex(e, MSG_INTERRUPTED, command);
-			} catch (Exception e) {
-				throw isex(e, MSG_ERROR, command);
-			}
+			return execute(command, stdin, env, null, null);
+		}
+
+		@Override
+		public ProcResult run(List<String> command, String stdin, Map<String, String> env, Duration timeout) {
+			return execute(command, stdin, env, timeout, null);
 		}
 
 		@Override
 		public ProcResult run(List<String> command, String stdin, Map<String, String> env, Consumer<String> lineSink) {
+			return execute(command, stdin, env, null, lineSink);
+		}
+
+		private ProcResult execute(List<String> command, String stdin, Map<String, String> env, Duration timeout,
+				Consumer<String> lineSink) {
 			try {
 				var pb = new ProcessBuilder(command).redirectErrorStream(true);
 				if (env != null)
 					pb.environment().putAll(env);
 				var p = pb.start();
-				if (stdin != null) {
-					try (var os = p.getOutputStream()) {
+				// Always close child stdin (after optional bytes) so apt-get/brew cannot block on [Y/n].
+				try (var os = p.getOutputStream()) {
+					if (stdin != null)
 						os.write(stdin.getBytes(StandardCharsets.UTF_8));
-					}
 				}
-				var sb = new StringBuilder();
-				try (var r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-					String line;
-					while ((line = r.readLine()) != null) {
-						sb.append(line).append('\n');
-						if (lineSink != null)
-							lineSink.accept(line);
+				var sb = new StringBuffer();
+				var reader = new Thread(() -> {
+					try (var r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+						String line;
+						while ((line = r.readLine()) != null) {
+							sb.append(line).append('\n');
+							if (lineSink != null)
+								lineSink.accept(line);
+						}
+					} catch (Exception e) {
+						// Destroyed process or closed stream — accumulated output is still returned.
 					}
+				}, "rm-process-stdout");
+				reader.setDaemon(true);
+				reader.start();
+				boolean finished;
+				if (timeout == null || timeout.isZero() || timeout.isNegative()) {
+					p.waitFor();
+					finished = true;
+				} else {
+					finished = p.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
 				}
-				var code = p.waitFor();
-				return new ProcResult(code, sb.toString());
+				if (!finished) {
+					p.destroyForcibly();
+					reader.join(1000);
+					return new ProcResult(CODE_TIMEOUT, sb + "Timed out after " + timeout + "\n");
+				}
+				reader.join();
+				return new ProcResult(p.exitValue(), sb.toString());
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				throw isex(e, MSG_INTERRUPTED, command);

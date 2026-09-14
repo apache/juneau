@@ -17,36 +17,24 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.http.HttpResponses.*;
+
 import java.util.List;
-import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
-import org.apache.juneau.marshall.json.JsonSerializer;
+import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestDelete;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
-import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
-import org.apache.juneau.rest.server.view.View;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
-import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.rest.server.views.Column;
-import org.apache.juneau.rest.server.views.RibbonAction;
-import org.apache.juneau.rest.server.views.ViewDef;
-import org.apache.juneau.rest.server.views.ViewDef.DataMode;
-import org.apache.juneau.rest.server.views.ViewDef.Dir;
-import org.apache.juneau.rest.server.views.ViewSlot;
 import org.apache.juneau.releng.credential.CredentialService;
 import org.apache.juneau.releng.credential.CredentialStatus;
 import org.apache.juneau.releng.credential.Validator.ValidationResult;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
- * Credentials tab: store + live-validate Apache/GPG/GitHub secrets. Never returns secret values.
+ * Credential write APIs for Setup Details. The human page is gone (404).
  *
  * <p>{@code disableContentParam} is set because Juneau's default allows a {@code POST} body to arrive in a
  * {@code &content=} query parameter instead, and a secret that travels in a URL lands in browser history, in any
@@ -54,15 +42,11 @@ import jakarta.servlet.http.HttpServletRequest;
  * from a hostile page (it carries no JSON content type), so this is not the attack control — it closes the accident
  * of a developer, a curl line or a copied URL doing it. See {@code CredentialWriteVectorTest}.
  */
-@Rest(path = "/credentials", title = "Credentials", responseProcessors = FreemarkerViewRenderer.class,
-	disableContentParam = "true")
+@Rest(path = "/credentials", title = "Credentials", disableContentParam = "true")
 public class CredentialRest extends BasicRestResource {
 
-	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}), used by {@link #credentialsView()}. */
+	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}). */
 	static final String MOUNT = "/rest/credentials";
-
-	/** This resource's page/view id, shared by {@link #credentialsView()}'s {@link ViewDef} id and {@link #page(HttpServletRequest)}'s page/attribute name. */
-	static final String NAME = "credentials";
 
 	private final CredentialService service;
 
@@ -70,52 +54,16 @@ public class CredentialRest extends BasicRestResource {
 		this.service = service;
 	}
 
-	/**
-	 * The rich-view toolkit's declarative view of the Credentials list: a second, independently-composable
-	 * {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, mounted into the Admin Credentials pair
-	 * ({@code AdminRest}). Client-side data mode: {@link #status()} already returns the bare
-	 * {@code List<CredentialStatus>} the toolkit's client-mode ajax (({@code dataSrc: ""})) expects, so no new
-	 * server-side query wiring is needed.
-	 */
-	static ViewDef credentialsView() {
-		return ViewDef.create(NAME)
-			.rowType(CredentialStatus.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl(MOUNT + "/status")
-			.defaultOrder("name", Dir.ASC)
-			.columns(
-				Column.of("name").title("Name"),
-				Column.of("label").title("Label"),
-				Column.of("present").title("Present"),
-				Column.of("lastValid").title("Valid"),
-				Column.of("lastMessage").title("Message"))
-			.ribbon(RibbonAction.refresh())
-			.build();
-	}
-
-	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
-	// ConsoleFreemarkerMixin's class Javadoc).
-	@Bean
-	public FreemarkerMixin freemarker() {
-		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
-	}
-
-	/** Human page. */
+	/** Human page retired — bookmarks dead-end. */
 	@RestGet("/")
-	public View page(HttpServletRequest req) {
-		return ConsolePage.of(NAME, req).attr(NAME, service.status());
+	public NotFound pageGone() {
+		return notFound();
 	}
 
-	/**
-	 * Slot envelope for the Admin Credentials table. JSON on this resource; the secret-store page does not
-	 * compose {@code ViewsMixin}.
-	 *
-	 * @param req The current request. Must not be {@code null}.
-	 * @return SLOT_META wrapping {@link #credentialsView()}.
-	 */
-	@RestGet(path = "/view", produces = "application/json", serializers = JsonSerializer.class)
-	public ViewSlot credentialsViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, credentialsView());
+	/** Admin table envelope retired with the Admin Credentials child. */
+	@RestGet("/view")
+	public NotFound viewGone() {
+		return notFound();
 	}
 
 	/** JSON status for all credentials (no secrets). */

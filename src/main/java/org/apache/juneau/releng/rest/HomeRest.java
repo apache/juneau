@@ -17,31 +17,20 @@
 
 package org.apache.juneau.releng.rest;
 
-import org.apache.juneau.commons.inject.Bean;
+import static org.apache.juneau.http.HttpResponses.*;
+
+import org.apache.juneau.http.response.Found;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
-import org.apache.juneau.rest.server.view.View;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
-import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 
-import jakarta.servlet.http.HttpServletRequest;
-
-/** Home tab: default landing page with basic usage instructions. */
-@Rest(path = "/home", title = "Home", responseProcessors = FreemarkerViewRenderer.class)
+/** Retired Home tab: HTTP 302 to Setup. */
+@Rest(path = "/home", title = "Home")
 public class HomeRest extends BasicRestResource {
 
-	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
-	// ConsoleFreemarkerMixin's class Javadoc).
-	@Bean
-	public FreemarkerMixin freemarker() {
-		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
-	}
-
-	/** Human page. */
+	/** Old Home bookmarks still work via 302. */
 	@RestGet("/")
-	public View page(HttpServletRequest req) {
-		return ConsolePage.of("home", req);
+	public Found redirectToSetup() {
+		return found("/rest/setup");
 	}
 }
