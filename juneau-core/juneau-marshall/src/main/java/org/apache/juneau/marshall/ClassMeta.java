@@ -186,10 +186,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		this.marshallingContext = marshallingContext;
 		this.cat = new Categories();
 
-		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-		if (nn(marshallingContext) && nn(marshallingContext.getCmCache()) && isCacheable(innerClass))
-			marshallingContext.getCmCache().put(innerClass, this);
-
 		var ap = marshallingContext.getAnnotationProvider();
 
 		if (isAssignableTo(Delegate.class)) {
@@ -272,6 +268,12 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		swaps = memoize(this::findSwaps);
 
 		this.args = null;
+
+		// Publish after fields are assigned so concurrent getClassMeta callers never observe
+		// this instance with swaps == null.  Recursive bean-property lookups still resolve:
+		// they run from the lazy suppliers after construction, once this entry is cached.
+		if (nn(marshallingContext) && nn(marshallingContext.getCmCache()) && isCacheable(innerClass))
+			marshallingContext.getCmCache().put(innerClass, this);
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
