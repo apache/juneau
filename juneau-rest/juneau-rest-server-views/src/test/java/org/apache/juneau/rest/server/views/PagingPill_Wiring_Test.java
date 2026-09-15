@@ -127,6 +127,30 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertFalse(fnBody.contains("btn.title"), fnBody);
 	}
 
+	/**
+	 * DataTables 2.1.8 {@code draw()} defaults to {@code resetPaging=true}, which jumps {@code _iDisplayStart}
+	 * back to 0 after an explicit {@code page("next")} (and first/previous/last).  The four nav handlers must
+	 * hold the current page with {@code draw(false)}.  Page-size changes keep the default {@code draw()} so a
+	 * length change still returns to page 0.
+	 */
+	@Test void b05_buildPagingPill_navDrawHoldsCurrentPage_pageSizeDrawResets() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var pillFnBody = functionBody(body, "function buildPagingPill(");
+		assertTrue(pillFnBody.contains(".page(\"first\").draw(false)"), pillFnBody);
+		assertTrue(pillFnBody.contains(".page(\"previous\").draw(false)"), pillFnBody);
+		assertTrue(pillFnBody.contains(".page(\"next\").draw(false)"), pillFnBody);
+		assertTrue(pillFnBody.contains(".page(\"last\").draw(false)"), pillFnBody);
+		// The no-arg form ends `draw();` — `draw(false);` must not satisfy these.
+		assertFalse(pillFnBody.contains(".page(\"first\").draw();"), pillFnBody);
+		assertFalse(pillFnBody.contains(".page(\"previous\").draw();"), pillFnBody);
+		assertFalse(pillFnBody.contains(".page(\"next\").draw();"), pillFnBody);
+		assertFalse(pillFnBody.contains(".page(\"last\").draw();"), pillFnBody);
+
+		var menuFnBody = functionBody(body, "function buildPageSizeMenu(");
+		assertTrue(menuFnBody.contains("ctx.dataTable.page.len(value).draw();"), menuFnBody);
+		assertFalse(menuFnBody.contains("ctx.dataTable.page.len(value).draw(false)"), menuFnBody);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Top-toolbar-row regression (paging pill must sit ABOVE the table, in the SAME row as search + ribbon)
 	//------------------------------------------------------------------------------------------------------------------

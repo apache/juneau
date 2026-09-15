@@ -1077,11 +1077,13 @@
 		pill.className = "juneau-view-pagingpill";
 		pill.dataset.testid = "paging";
 
-		const firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(); });
-		const prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(); });
+		// draw() defaults to resetPaging=true (DataTables 2.1.8), which would jump back to page 0 after
+		// an explicit page("next") / first / previous / last.  false holds the page those calls just set.
+		const firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(false); });
+		const prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(false); });
 		const sizeMenu = buildPageSizeMenu(ctx);
-		const nextBtn = pagingPillButton("Next page", "chevron_right", function () { ctx.dataTable.page("next").draw(); });
-		const lastBtn = pagingPillButton("Last page", "last_page", function () { ctx.dataTable.page("last").draw(); });
+		const nextBtn = pagingPillButton("Next page", "chevron_right", function () { ctx.dataTable.page("next").draw(false); });
+		const lastBtn = pagingPillButton("Last page", "last_page", function () { ctx.dataTable.page("last").draw(false); });
 		pill.appendChild(firstBtn);
 		pill.appendChild(prevBtn);
 		pill.appendChild(sizeMenu.el);
