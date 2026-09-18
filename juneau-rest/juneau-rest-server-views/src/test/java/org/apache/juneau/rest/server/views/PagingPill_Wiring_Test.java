@@ -205,8 +205,9 @@ class PagingPill_Wiring_Test extends TestBase {
 	 * ({@code #a3a3a3}/{@code #ffffff}) and not {@code opacity: 0.6}. IRS source is
 	 * {@code .ribbon-button} {@code #666}/{@code #fff}/{@code #ced4da} plus {@code :disabled}
 	 * {@code opacity: 0.6} (pages/style.css); those values over the {@code #f6f6f9} toolbar canvas
-	 * are {@code #a0a0a1}/{@code #f6f6f9}; pager/ribbon border stays {@code #cfd4d9} enabled
-	 * and disabled (not the faded {@code #dfe2e6} composite). Selectors include
+	 * are {@code #a0a0a1}/{@code #f6f6f9}; pager/ribbon/search share
+	 * {@code --jc-chrome-control-border} ({@code var(--jc-control-border, #ced4da)}) enabled
+	 * and disabled (not a second measured grey, not the faded {@code #dfe2e6} composite). Selectors include
 	 * {@code div.dt-container .juneau-view-pagingpill} plus {@code svg} so they beat DataTables
 	 * {@code .dt-paging-button} and so fill/border cannot stick on the wrong node.
 	 */
@@ -228,8 +229,11 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(body.contains("--jc-chrome-icon: #666666;"), body);
 		assertTrue(body.contains("--jc-chrome-disabled-bg: #f6f6f9;"), body);
 		assertTrue(body.contains("--jc-chrome-disabled-color: #a0a0a1;"), body);
-		assertTrue(body.contains("--jc-chrome-button-border: #cfd4d9;"), body);
-		assertTrue(body.contains("--jc-chrome-disabled-border: #cfd4d9;"), body);
+		assertTrue(body.contains("--jc-chrome-control-border: var(--jc-control-border, #ced4da);"), body);
+		assertTrue(body.contains("--jc-chrome-button-border: var(--jc-chrome-control-border);"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-border: var(--jc-chrome-control-border);"), body);
+		assertFalse(body.contains("--jc-chrome-button-border: #cfd4d9;"), body);
+		assertFalse(body.contains("--jc-chrome-disabled-border: #cfd4d9;"), body);
 		assertFalse(body.contains("--jc-chrome-disabled-border: #dfe2e6;"), body);
 		assertFalse(body.contains("--jc-chrome-disabled-bg: #ffffff;"), body);
 		assertFalse(body.contains("--jc-chrome-disabled-color: #a3a3a3;"), body);

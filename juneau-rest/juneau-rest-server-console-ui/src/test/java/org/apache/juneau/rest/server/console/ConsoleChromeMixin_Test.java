@@ -614,11 +614,12 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 53 = previous 52 plus --jc-main-bg (inner-main well). --jc-card-bg is now
-		// content-card white; do not retarget old card tints onto --jc-main-bg.
-		assertEquals(53, Theme.OPEN.getTokens().size());
+		// 54 = previous 53 plus --jc-card-padding (content-card / title-card inset).
+		assertEquals(54, Theme.OPEN.getTokens().size());
 		assertEquals("#f5f6f9", Theme.OPEN.getTokens().get("--jc-main-bg"));
 		assertEquals("#ffffff", Theme.OPEN.getTokens().get("--jc-card-bg"));
+		assertEquals("16px 16px 8px", Theme.OPEN.getTokens().get("--jc-card-padding"));
+		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", Theme.OPEN.getTokens().get("--jc-card-shadow"));
 		assertEquals("2px", Theme.OPEN.getTokens().get("--jc-page-nav-hairline"));
 		assertEquals("13px", Theme.OPEN.getTokens().get("--jc-page-nav-section-font-size"));
 		assertEquals("12px", Theme.OPEN.getTokens().get("--jc-page-nav-child-font-size"));
@@ -764,6 +765,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "default card must not spend --jc-border as an outer stroke, block:\n" + block);
 		assertTrue(block.contains("border-radius: var(--jc-radius)"), block);
 		assertTrue(block.contains("box-shadow: var(--jc-card-shadow)"), block);
+		assertTrue(block.contains("padding: var(--jc-card-padding)"),
+			() -> "content cards spend --jc-card-padding, block:\n" + block);
+		assertFalse(block.contains("padding: 18px 20px"),
+			() -> "off-scale 18px 20px 8px inset must not remain, block:\n" + block);
 	}
 
 	/** WCAG 2.x contrast ratio between two {@code "#rrggbb"} literals: {@code (lighter+0.05)/(darker+0.05)}. */
@@ -849,7 +854,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "pagingpill container must not stroke; fill only, css:\n" + css);
 		assertFalse(css.contains(".juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }"),
 			() -> "container border-color would halo hover in a second outline, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); color: var(--jc-text-soft); }"),
+		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }"),
 			() -> "idle pagingpill-btn edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "pagingpill-btn hover must recolor top/bottom only, css:\n" + css);
@@ -859,7 +864,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "missing first-child hover end-cap, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }"),
 			() -> "missing last-child hover end-cap, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap { border-color: var(--jc-chrome-button-border, #cfd4d9); }"),
+		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }"),
 			() -> "idle paging menuwrap edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "menuwrap hover must recolor top/bottom only, css:\n" + css);
@@ -921,10 +926,21 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var iconRegion = css.substring(iconStart, iconEnd);
 		assertTrue(iconRegion.contains("color: var(--jc-accent)"), iconRegion);
 		assertTrue(iconRegion.contains("background-color: var(--jc-control-bg)"), iconRegion);
-		assertTrue(iconRegion.contains("border-color: var(--jc-chrome-button-border, #cfd4d9)"), iconRegion);
+		assertTrue(iconRegion.contains("border-color: var(--jc-control-border)"), iconRegion);
 		assertFalse(iconRegion.contains("var(--jc-accent-wash)"), iconRegion);
 		assertTrue(css.contains(".juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled)"),
 			() -> "missing helper-btn--icon hover rule, css:\n" + css);
+	}
+
+	@Test void k09_chromeCss_headerSortSearchSpendAccentAndControlBorder() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains("th.dt-ordering-asc span.dt-column-order:before"),
+			() -> "missing active sort chevron theme, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-col-search-icon.is-active { color: var(--jc-accent); }"),
+			() -> "missing active column-search icon theme, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-col-search-popover {"),
+			() -> "missing column-search popover theme, css:\n" + css);
+		assertTrue(css.contains("border-color: var(--jc-control-border);"), css);
 	}
 
 	private static String readChromeCss() throws IOException {

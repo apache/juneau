@@ -178,6 +178,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.SYMBOLS_SVG_PATH).run().assertStatus(404);
 	}
 
+	@Test void h01c_hostWithoutMixin_symbolsMaterialSvgRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH).run().assertStatus(404);
+	}
+
 	@Test void h02_hostWithoutMixin_configAssetsAre404() throws Exception {
 		cNoMixin.get(ViewsMixin.CONFIG_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
@@ -342,7 +346,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -366,6 +370,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		for (var path : new String[]{
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
+				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
 				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -635,6 +640,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("registerIcon("), body);
 		assertTrue(body.contains("resolveIcon("), body);
 		assertTrue(body.contains("juneau-symbols.svg"), body);
+		assertTrue(body.contains("juneau-symbols-material.svg"), body);
+		assertTrue(body.contains("function pack("), body);
 		for (var name : new String[]{
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
 				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more"})
@@ -648,6 +655,19 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertHeader("Cache-Control").isContains("max-age")
 			.assertContent().asString().isContains("juneau-sym-copy");
 		cWithMixin.get("/juneau-symbols-key.svg").run().assertStatus(404);
+	}
+
+	@Test void h05_symbolsMaterialSvg_served() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("juneau-sym-copy"), body);
+		assertTrue(body.contains("viewBox=\"0 -960 960 960\""), body);
+		assertFalse(body.contains("slds-"), body);
+		assertFalse(body.contains("irs-icon-overrides"), body);
+		assertFalse(body.contains("irs-symbols.svg"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1158,7 +1178,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 */
 	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains("--jc-chrome-control-border: #ced4da;"), body);
+		assertTrue(body.contains("--jc-chrome-control-border: var(--jc-control-border, #ced4da);"), body);
+		assertTrue(body.contains("--jc-chrome-button-border: var(--jc-chrome-control-border);"), body);
+		assertTrue(body.contains("--jc-chrome-disabled-border: var(--jc-chrome-control-border);"), body);
 		assertTrue(body.contains("--jc-chrome-control-text: #4f4f4f;"), body);
 		assertTrue(body.contains("div.dt-container div.dt-search input,\n"
 			+ "div.dataTables_wrapper div.dataTables_filter input {"), body);
@@ -1216,8 +1238,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 			"nested .jc-card inside the detail panel must be pinned");
 		var nestedStart = body.indexOf(".juneau-view-detail-panel .jc-card");
 		var nestedEnd = body.indexOf("}", nestedStart);
-		assertTrue(body.substring(nestedStart, nestedEnd).contains("margin: 0"),
-			body.substring(nestedStart, nestedEnd));
+		var nested = body.substring(nestedStart, nestedEnd);
+		assertTrue(nested.contains("margin: 0"), nested);
+		assertFalse(nested.contains("padding:"),
+			"expanded-row cards inherit content-card padding; this rule must not add a fatter inset: " + nested);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

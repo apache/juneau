@@ -1,11 +1,13 @@
 # `juneau-symbols.svg` — provenance manifest
 
-This file pins the **approved artwork** of every glyph in `juneau-symbols.svg`.
+This file pins the **approved artwork** of every glyph in `juneau-symbols.svg` (the default, Juneau-original pack).
 
-Its job is not attribution. All twenty-six glyphs are Juneau-original, so no third-party attribution is incurred and
-neither `LICENSE` nor `NOTICE` names anything on account of this sprite. Its job is to be a **guard**: to make a
-future paste of foreign path data over one of these glyphs fail the build until someone deliberately edits this
-file. `SymbolSprite_Provenance_Test` reads it and asserts it against the sprite on every default-profile run.
+Its job is not attribution. All twenty-six glyphs are Juneau-original, so no third-party attribution is incurred on
+**this** sprite. The opt-in Material Symbols sprite is a sibling file (`juneau-symbols-material.svg`); `NOTICE`
+names that pack, not this one. Do not paste Material (or any other) path data into this file — swap packs instead.
+This file is a **guard**: a future paste of foreign path data over one of these glyphs fails the build until someone
+deliberately edits this file. `SymbolSprite_Provenance_Test` reads it and asserts it against the sprite on every
+default-profile run.
 
 > **If a fingerprint check has failed and you are here to make it pass:** do not update the row until you can say,
 > for the glyph in question, what this file's *Authoring rules* say you must be able to say. A fingerprint edit is

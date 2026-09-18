@@ -175,8 +175,8 @@ class Helpers_Purity_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// Themable by class, not inline style - fieldGrid's `columns` is the one documented exception, and it is a
-	// CSS custom property, never a `grid-template-columns` inline style.
+	// Themable by class, not inline style - fieldGrid's `columns` stamps .juneau-view-detail-fields-cols-N
+	// (what juneau-views.css keys off) and also a CSS custom property, never a `grid-template-columns` inline style.
 	// =================================================================================================================
 
 	@Test void c01_noStyleDisplayOrOtherInlineStyleAssignment() throws Exception {
@@ -189,6 +189,7 @@ class Helpers_Purity_Test extends TestBase {
 	@Test void c02_columnsIsACssCustomProperty() throws Exception {
 		var src = source();
 		assertTrue(src.contains("grid.style.setProperty(\"--juneau-view-detail-columns\""), src);
+		assertTrue(src.contains("juneau-view-detail-fields-cols-"), src);
 	}
 
 	// =================================================================================================================

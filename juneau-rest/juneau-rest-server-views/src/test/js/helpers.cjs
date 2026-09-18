@@ -116,10 +116,17 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	actionBtn2.dispatch('click', { target: actionBtn2 });
 	out.fieldGrid_actionFiresOnAction = actionFired?.id === 'unlink' && actionFired.data === 'z';
 
-	// columns -> a CSS CUSTOM PROPERTY, not an inline grid-template-columns
+	// columns stamps .juneau-view-detail-fields-cols-N (CSS) plus a CSS custom property
 	const colGrid = H.fieldGrid([{ data: 'a', label: 'A' }], { values: { a: '1' }, columns: 3 });
 	out.fieldGrid_columnsIsCustomProperty = colGrid.style['--juneau-view-detail-columns'] === '3'
 		|| (typeof colGrid.style.getPropertyValue === 'function' && colGrid.style.getPropertyValue('--juneau-view-detail-columns') === '3');
+	out.fieldGrid_columns3Class = /\bjuneau-view-detail-fields-cols-3\b/.test(colGrid.className);
+	const colGrid2 = H.fieldGrid([{ data: 'a', label: 'A' }], { values: { a: '1' }, columns: 2 });
+	out.fieldGrid_columns2Class = /\bjuneau-view-detail-fields-cols-2\b/.test(colGrid2.className);
+	const colGrid1 = H.fieldGrid([{ data: 'a', label: 'A' }], { values: { a: '1' }, columns: 1 });
+	out.fieldGrid_columns1Class = /\bjuneau-view-detail-fields-cols-1\b/.test(colGrid1.className);
+	const colGridDefault = H.fieldGrid([{ data: 'a', label: 'A' }], { values: { a: '1' } });
+	out.fieldGrid_columnsOmittedHasNoColsClass = !/juneau-view-detail-fields-cols-/.test(colGridDefault.className);
 
 	// loud argument errors
 	out.fieldGrid_nonArrayThrows = !!throws(function () { H.fieldGrid('nope', {}); });

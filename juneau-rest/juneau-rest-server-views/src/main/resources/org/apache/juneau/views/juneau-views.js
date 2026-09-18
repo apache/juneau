@@ -840,6 +840,8 @@
 		// Disable DataTables' own "Showing X to Y of Z entries" line at the source (rather than CSS-hiding it
 		// after the fact) - the unified paging pill (buildPagingPill/buildToolbarRow below) fully replaces it.
 		opts.info = false;
+		// Only the top header row is orderable.  The column-search row (second thead tr) must not sort.
+		opts.orderCellsTop = true;
 
 		if (viewDef.dataMode === "server") {
 			opts.serverSide = true;
@@ -1142,6 +1144,178 @@
 		});
 		thead.appendChild(row);
 		return row;
+	}
+
+	/**
+	 * Header sort + per-column search icons (WORK-J0547).  DataTables sorts on a click anywhere in the
+	 * {@code th}; we capture-stop that unless the click is on the sort control ({@code span.dt-column-order}
+	 * or a DT1 fallback {@code .juneau-view-col-sort-icon}).  Searchable columns get a Juneau {@code search}
+	 * glyph that opens a small popover (not an IRS/SLDS copy).  Idempotent per header cell.
+	 */
+	function wireHeaderSortSearch(table, ctx) {
+		if (!table || !ctx?.dataTable) return;
+		if (table.dataset.juneauHeaderSortSearch === "1") return;
+		table.dataset.juneauHeaderSortSearch = "1";
+		table.addEventListener("click", function (e) {
+			if (!isOwnTableEvent(table, e)) return;
+			const closest = e.target && e.target.closest;
+			if (!closest) return;
+			if (closest.call(e.target, "thead tr.juneau-view-columnsearch-row")) return;
+			const th = closest.call(e.target, "thead tr:first-child th, thead tr:first-child td");
+			if (!th || !table.contains(th)) return;
+			if (th.classList.contains("juneau-view-select-th")
+				|| th.classList.contains("juneau-view-detail-th")
+				|| th.classList.contains("juneau-view-actions-th")) return;
+			if (closest.call(e.target, "input, button, a, .juneau-view-col-search-icon, .juneau-view-col-sort-icon, span.dt-column-order"))
+				return;
+			e.stopImmediatePropagation();
+			e.preventDefault();
+		}, true);
+		table.addEventListener("keydown", function (e) {
+			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+			if (!isOwnTableEvent(table, e)) return;
+			const th = e.target.closest && e.target.closest("thead tr:first-child th, thead tr:first-child td");
+			if (!th || !table.contains(th)) return;
+			if (e.target.closest("input, button, a, .juneau-view-col-search-icon, .juneau-view-col-sort-icon, span.dt-column-order"))
+				return;
+			e.stopImmediatePropagation();
+			e.preventDefault();
+		}, true);
+		ctx.dataTable.columns().every(function () {
+			const col = this;
+			const header = typeof col.header === "function" ? col.header() : null;
+			if (!header) return;
+			const def = (ctx.optsColumns || [])[col.index()];
+			const isSynthetic = !def || def.data == null;
+			const hidden = def && def.visible === false;
+			if (hidden) return;
+			if (!isSynthetic && def.orderable !== false)
+				ensureHeaderSortControl(header, col, ctx.dataTable);
+			if (!isSynthetic && def.searchable !== false)
+				renderHeaderSearchIcon(header, col, ctx, table);
+		});
+	}
+
+	/** DT2 already emits {@code span.dt-column-order}; DT1 does not, so inject a Juneau chevron control. */
+	function ensureHeaderSortControl(header, col, dt) {
+		let orderSpan = header.querySelector("span.dt-column-order");
+		if (!orderSpan) {
+			orderSpan = document.createElement("span");
+			orderSpan.className = "dt-column-order juneau-view-col-sort-icon";
+			const markup = window.JuneauViews?.icons?.resolveIcon?.("expand_more")
+				|| window.JuneauViews?.icons?.resolveIcon?.("chevrondown");
+			if (markup) orderSpan.innerHTML = markup;
+			const flex = header.querySelector("div.dt-column-header") || header;
+			flex.appendChild(orderSpan);
+			orderSpan.addEventListener("click", function (e) {
+				e.stopPropagation();
+				cycleColumnOrder(dt, col.index());
+			});
+		}
+		if (!orderSpan.getAttribute("role")) orderSpan.setAttribute("role", "button");
+		orderSpan.setAttribute("tabindex", "0");
+		const title = header.querySelector(".dt-column-title");
+		const name = (title && title.textContent.trim()) || "column";
+		orderSpan.setAttribute("aria-label", "Sort " + name);
+		if (!orderSpan.dataset.juneauSortKey) {
+			orderSpan.dataset.juneauSortKey = "1";
+			orderSpan.addEventListener("keydown", function (e) {
+				if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+				e.preventDefault();
+				e.stopPropagation();
+				orderSpan.click();
+			});
+		}
+	}
+
+	function cycleColumnOrder(dt, idx) {
+		if (!dt || typeof dt.order !== "function") return;
+		const current = dt.order() || [];
+		let dir = null;
+		for (let i = 0; i < current.length; i++) {
+			if (current[i] && current[i][0] === idx) { dir = current[i][1]; break; }
+		}
+		if (dir === "asc") dt.order([[idx, "desc"]]).draw();
+		else if (dir === "desc") dt.order([]).draw();
+		else dt.order([[idx, "asc"]]).draw();
+	}
+
+	function renderHeaderSearchIcon(header, col, ctx, table) {
+		if (header.querySelector(".juneau-view-col-search-icon")) return;
+		const flex = header.querySelector("div.dt-column-header") || header;
+		const icon = document.createElement("span");
+		icon.className = "juneau-view-col-search-icon";
+		icon.setAttribute("role", "button");
+		icon.setAttribute("tabindex", "0");
+		icon.setAttribute("aria-label", "Search this column");
+		icon.dataset.testid = "col-search-icon";
+		const markup = window.JuneauViews?.icons?.resolveIcon?.("search");
+		if (markup) icon.innerHTML = markup;
+		const orderSpan = flex.querySelector("span.dt-column-order");
+		if (orderSpan) orderSpan.before(icon); else flex.appendChild(icon);
+		const open = function (e) {
+			if (e) { e.preventDefault(); e.stopPropagation(); }
+			openColumnSearchPopover(icon, col, ctx, table);
+		};
+		icon.addEventListener("click", open);
+		icon.addEventListener("keydown", function (e) {
+			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+			open(e);
+		});
+	}
+
+	function closeColumnSearchPopover(ctx) {
+		const el = ctx && ctx._colSearchPopover;
+		if (!el) return;
+		if (ctx) ctx._colSearchPopover = null;
+		popLayer(el);
+	}
+
+	function openColumnSearchPopover(iconEl, col, ctx, table) {
+		closeColumnSearchPopover(ctx);
+		const idx = col.index();
+		const header = typeof col.header === "function" ? col.header() : iconEl.closest("th,td");
+		const titleEl = header && header.querySelector(".dt-column-title");
+		const title = (titleEl && titleEl.textContent.trim()) || "Column";
+		const current = (typeof col.search === "function" ? col.search() : "") || "";
+		const el = document.createElement("div");
+		el.className = "juneau-view-col-search-popover";
+		el.setAttribute("role", "dialog");
+		el.setAttribute("aria-label", "Search " + title);
+		const heading = document.createElement("div");
+		heading.className = "juneau-view-col-search-popover-title";
+		heading.textContent = title;
+		const input = document.createElement("input");
+		input.type = "text";
+		input.className = "juneau-view-col-search-popover-input";
+		input.setAttribute("aria-label", "Search " + title);
+		input.value = current;
+		el.appendChild(heading);
+		el.appendChild(input);
+		const apply = function () {
+			const v = input.value || "";
+			col.search(v).draw();
+			iconEl.classList.toggle("is-active", !!v);
+			syncColumnSearchRowInput(table, idx, v);
+		};
+		input.addEventListener("input", apply);
+		ctx._colSearchPopover = el;
+		pushLayer(el, {
+			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
+			returnFocusTo: iconEl,
+			onDismiss: function () { if (ctx._colSearchPopover === el) ctx._colSearchPopover = null; }
+		});
+		positionCellPopover(el, iconEl);
+		input.focus();
+		input.select();
+	}
+
+	function syncColumnSearchRowInput(table, idx, value) {
+		const row = table && table.querySelector && table.querySelector("thead tr.juneau-view-columnsearch-row");
+		if (!row) return;
+		const th = row.children[idx];
+		const inp = th && th.querySelector && th.querySelector("input.juneau-view-columnsearch-input");
+		if (inp && inp.value !== value) inp.value = value;
 	}
 
 	/** Renders the fail-loud, visible in-table banner used on a contract-version mismatch (or a parse failure). */
@@ -5874,6 +6048,8 @@
 		}
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
+		closeColumnSearchPopover(ctx);
+		if (table && table.dataset) delete table.dataset.juneauHeaderSortSearch;
 		// DT1 table-overflow-wrap discipline: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
 		if (ctx._scrollRegionObserver) {
 			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
@@ -6135,6 +6311,7 @@
 		ctx.dataTable = $(table).DataTable(opts);
 		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
 			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
+		wireHeaderSortSearch(table, ctx);
 		if (ctx._detailInflight) bindDetailInflightDrawGuards(table, ctx);
 		ctx.redraw = function () {
 			const d = ctx.dataTable;

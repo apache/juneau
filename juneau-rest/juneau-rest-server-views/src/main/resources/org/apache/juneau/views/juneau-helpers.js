@@ -43,9 +43,9 @@
  *   - No HTML-string sink, ever (R16).  Every helper builds with `createElement`/`textContent`.  The one
  *     exception is `icon()`, which paints TRUSTED icon-registry sprite markup only, exactly as
  *     `resolveDetailHeaderIcon` already does in juneau-views.js.
- *   - Themable by class, not by inline style.  The one exception is `fieldGrid`'s `columns` option, which
- *     is a CSS CUSTOM PROPERTY (`--juneau-view-detail-columns`), not a `grid-template-columns` inline
- *     style - the mechanism fork F13 asks for.
+ *   - Themable by class, not by inline style.  `fieldGrid`'s `columns` option stamps
+ *     `.juneau-view-detail-fields-cols-N` (what `juneau-views.css` keys off) and also sets the CSS custom
+ *     property `--juneau-view-detail-columns`.  It never writes an inline `grid-template-columns`.
  *   - The second named exception: `toast()` is the only helper that writes under `document.body`.  It finds
  *     or replaces a single `.jc-toast` via `document.querySelector`, appends that ephemeral node to
  *     `document.body`, and stores its dismiss timer on the node itself - never a module-level registry.
@@ -790,7 +790,13 @@
 
 		const grid = document.createElement("dl");
 		grid.className = "juneau-view-detail-fields juneau-view-helper-field-grid";
-		if (opts.columns != null) grid.style.setProperty("--juneau-view-detail-columns", String(opts.columns));
+		if (opts.columns != null) {
+			const n = Number(opts.columns);
+			if (n >= 1 && n === Math.floor(n)) {
+				grid.className += " juneau-view-detail-fields-cols-" + n;
+				grid.style.setProperty("--juneau-view-detail-columns", String(n));
+			}
+		}
 
 		for (let i = 0; i < fields.length; i++) {
 			const field = fields[i];

@@ -26,8 +26,8 @@ import java.util.regex.*;
  * accept-known-safe allowlist grammar &mdash; the opposite of a {@code url(} blocklist.
  *
  * <p>
- * {@code url()} is deliberately not a production in any of the six allowed value shapes (hex color, functional
- * color, named/global keyword color, length/number list, font-family list, gradient function): every spelling of
+ * {@code url()} is deliberately not a production in any of the seven allowed value shapes (hex color, functional
+ * color, named/global keyword color, length/number list, font-family list, gradient function, box-shadow): every spelling of
  * {@code url(...)} REJECTs by construction, not by pattern-matching the threat.  Two ordered stages:
  *
  * <ol>
@@ -38,7 +38,7 @@ import java.util.regex.*;
  * 		(<code>/&#42; &#42;/</code>, dotall &mdash; kills the {@code url/**&#47;(} vector); REJECT if the
  * 		comment-stripped remainder matches <code>(?i)url\s*\(</code> anywhere (belt-and-suspenders for {@code url (}
  * 		and any residual whitespace-before-paren form).
- * 	<li><b>Allowlist grammar (accept-known-safe):</b> the normalized value must match exactly one of the six shapes
+ * 	<li><b>Allowlist grammar (accept-known-safe):</b> the normalized value must match exactly one of the seven shapes
  * 		below. Every production is a full-string {@code Pattern.matches(...)}-equivalent (anchored {@code ^...$}),
  * 		never {@code find(...)}.
  * </ol>
@@ -138,6 +138,16 @@ final class CssValueGrammar {
 	private static final Pattern LENGTH_LIST = Pattern.compile(
 		"^-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?(?:\\s+-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?)*$");
 
+	// Optional inset, 2-4 lengths, then a color.  Color is checked against hex / functional / named-color
+	// productions (not CSS-wide keywords), so this cannot smuggle url() or an arbitrary ident(.
+	@SuppressWarnings({
+		"java:S5998" // Box-shadow input is a short, author-set theme-token config value (never attacker-controlled request data), so the group-repetition backtracking cannot be driven to a stack overflow; rewriting this security allowlist regex risks altering the set of validated inputs.
+	})
+	private static final Pattern BOX_SHADOW = Pattern.compile(
+		"^(?:inset\\s+)?-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?(?:\\s+-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?){1,3}\\s+(.+)$");
+
+	private static final Set<String> NOT_SHADOW_COLORS = Set.of("none", "inherit", "initial", "unset");
+
 	// Comma-separated font-family list: each item a quoted string (no control/quote breakout) or a bare identifier.
 	private static final Pattern FONT_FAMILY_ITEM_SQ = Pattern.compile("^'[^'\\\\]*'$");
 	private static final Pattern FONT_FAMILY_ITEM_DQ = Pattern.compile("^\"[^\"\\\\]*\"$");
@@ -158,7 +168,19 @@ final class CssValueGrammar {
 			|| NAMED_COLORS_AND_KEYWORDS.contains(v.toLowerCase(Locale.ROOT))
 			|| LENGTH_LIST.matcher(v).matches()
 			|| isFontFamilyList(v)
-			|| isGradient(v);
+			|| isGradient(v)
+			|| isBoxShadow(v);
+	}
+
+	private static boolean isBoxShadow(String v) {
+		var m = BOX_SHADOW.matcher(v);
+		if (! m.matches())
+			return false;
+		var color = m.group(1);
+		if (HEX_COLOR.matcher(color).matches() || FUNCTIONAL_COLOR.matcher(color).matches())
+			return true;
+		var lower = color.toLowerCase(Locale.ROOT);
+		return NAMED_COLORS_AND_KEYWORDS.contains(lower) && ! NOT_SHADOW_COLORS.contains(lower);
 	}
 
 	private static boolean isFontFamilyList(String v) {

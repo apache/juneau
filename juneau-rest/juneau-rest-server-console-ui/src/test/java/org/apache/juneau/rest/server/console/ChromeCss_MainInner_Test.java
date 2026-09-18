@@ -91,6 +91,12 @@ class ChromeCss_MainInner_Test extends TestBase {
 		assertTrue(body.contains("width: 100%"), "title card must fill the well: " + body);
 		assertFalse(body.contains("margin: 0 auto"), "no leftover 1180px-era centering: " + body);
 		assertTrue(body.contains("background-color: var(--jc-card-bg)"), body);
+		assertTrue(body.contains("box-shadow: var(--jc-card-shadow)"),
+			"title card spends --jc-card-shadow: " + body);
+		assertTrue(body.contains("padding: var(--jc-card-padding)"),
+			"title card spends --jc-card-padding: " + body);
+		assertFalse(body.contains("padding: 18px 20px"),
+			"off-scale 18px 20px title-card inset must not remain: " + body);
 	}
 
 	@Test void a02_cardAndPageHeader_haveNo1180MaxWidth() throws Exception {
@@ -108,5 +114,7 @@ class ChromeCss_MainInner_Test extends TestBase {
 		var body = c.substring(brace, end);
 		assertTrue(body.contains("background-color: transparent"), body);
 		assertTrue(body.contains("padding: 0"), body);
+		assertTrue(body.contains("box-shadow: none"),
+			"table-chrome must not lift as a white card: " + body);
 	}
 }

@@ -475,7 +475,7 @@ a:hover { text-decoration: underline; }
   background-color: var(--jc-card-bg);
   border-radius: var(--jc-radius);
   box-shadow: var(--jc-card-shadow);
-  padding: 18px 20px;
+  padding: var(--jc-card-padding);
 }
 
 .jc-page-header h1 {
@@ -510,7 +510,7 @@ a:hover { text-decoration: underline; }
   border: none;
   border-radius: var(--jc-radius);
   box-shadow: var(--jc-card-shadow);
-  padding: 18px 20px 8px;
+  padding: var(--jc-card-padding);
 }
 
 .jc-card-header {
@@ -542,7 +542,7 @@ a:hover { text-decoration: underline; }
    Position-dependent matrix:
      - the wrapper itself           -> still widened (self-match)
      - outer .jc-card containing the stamp (HTML-slot: stamp may sit inside a slot <div>)
-                                    -> table-chrome (transparent, padding 0); descendant :has
+                                    -> table-chrome (transparent, padding 0, no card shadow); descendant :has
      - nested .jc-card              -> never table-chrome
      - .jc-main                     -> max-width:none when ANY descendant wrapper is wide (harmless;
                                        .jc-main has no max-width of its own)
@@ -558,6 +558,7 @@ a:hover { text-decoration: underline; }
 .jc-card:has([data-juneau-layout="wide"]):not(.jc-card .jc-card) {
   background-color: transparent;
   padding: 0;
+  box-shadow: none;
 }
 
 .jc-main:has([data-juneau-layout="wide"]) {
@@ -812,11 +813,11 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
    inherits the body's near-black text color instead of a subtle gray; themed here with
-   --jc-chrome-button-border (#cfd4d9) for ribbon/pager enabled AND disabled.  Search keeps
-   --jc-control-border (#ced4da).  White face so a button reads as a distinct control against
-   the card's tinted background. */
-.juneau-view-ribbon-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
-.juneau-view-ribbon-btn:disabled { border-color: var(--jc-chrome-button-border, #cfd4d9); }
+   --jc-control-border (same leaf as toolbar Search / --jc-border-2) for ribbon/pager enabled
+   AND disabled.  White face so a button reads as a distinct control against the card's
+   tinted background. */
+.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
+.juneau-view-ribbon-btn:disabled { border-color: var(--jc-control-border); }
 .juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
@@ -825,7 +826,7 @@ table.dataTable.display > tbody > tr:hover {
    RibbonAction.appearance("icon") / helpers.button({appearance:"icon"}). */
 .juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled) {
 	background-color: var(--jc-control-bg);
-	border-color: var(--jc-chrome-button-border, #cfd4d9);
+	border-color: var(--jc-control-border);
 	color: var(--jc-accent);
 }
 .juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled) {
@@ -931,12 +932,12 @@ table.dataTable.display > tbody > tr:hover {
    edges — longhand top/bottom only, so a UA leftover left/right on a chevron cannot turn into extra
    verticals.  End-caps add the outer side.  Do not restore border-color:accent on all four sides. */
 .juneau-view-pagingpill { background-color: var(--jc-control-bg); }
-.juneau-view-pagingpill-btn { border-color: var(--jc-chrome-button-border, #cfd4d9); color: var(--jc-text-soft); }
-.juneau-view-pagingpill-btn:disabled { border-color: var(--jc-chrome-button-border, #cfd4d9); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
+.juneau-view-pagingpill-btn:disabled { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
-.juneau-view-pagingpill-menuwrap { border-color: var(--jc-chrome-button-border, #cfd4d9); }
+.juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
@@ -965,6 +966,34 @@ div.dt-container div.dt-search input:focus,
 div.dt-container div.dt-search input:focus-visible,
 div.dataTables_wrapper div.dataTables_filter input:focus,
 div.dataTables_wrapper div.dataTables_filter input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--jc-accent);
+}
+
+/* Header sort / column-search icons: idle is views.css opacity; active direction and a live
+   column filter spend accent so they match within each stock theme. */
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+  color: var(--jc-accent);
+  opacity: 1;
+}
+.juneau-view-col-search-icon.is-active { color: var(--jc-accent); }
+.juneau-view-col-search-popover {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  box-shadow: var(--jc-card-shadow);
+}
+.juneau-view-col-search-popover-input {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+}
+.juneau-view-col-search-popover-input:focus,
+.juneau-view-col-search-popover-input:focus-visible {
   outline: none;
   box-shadow: none;
   border-color: var(--jc-accent);

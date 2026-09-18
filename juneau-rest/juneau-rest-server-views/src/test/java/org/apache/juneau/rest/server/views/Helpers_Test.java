@@ -107,6 +107,12 @@ class Helpers_Test extends TestBase {
 		assertAllTrue(report(), "fieldGrid_columnsIsCustomProperty");
 	}
 
+	@Test void b09b_fieldGrid_columns_stampsColsClass() {
+		assertAllTrue(report(),
+			"fieldGrid_columns3Class", "fieldGrid_columns2Class", "fieldGrid_columns1Class",
+			"fieldGrid_columnsOmittedHasNoColsClass");
+	}
+
 	@Test void b10_fieldGrid_loudArgumentErrors() {
 		assertAllTrue(report(), "fieldGrid_nonArrayThrows", "fieldGrid_missingDataKeyThrows");
 	}

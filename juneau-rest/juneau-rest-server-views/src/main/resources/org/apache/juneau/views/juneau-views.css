@@ -214,24 +214,25 @@
 	 * SSC `.ssc-table-shell`) into the solids below — NOT the white-canvas composite (#a3a3a3 glyph
 	 * on #ffffff) the previous pin used.  Kept as solids so a 12px SVG stays crisply anti-aliased
 	 * (opacity on a tiny glyph reads muddy) and so a consumer that cannot use opacity spends the
-	 * same look.  #a0a0a1 is #666 @ 0.6 over #f6f6f9.  Pager/ribbon border is #cfd4d9 in BOTH
-	 * states (measured idle; do not fade it to #dfe2e6 when disabled).  Search stays on
-	 * --jc-chrome-control-border (#ced4da) below.
+	 * same look.  #a0a0a1 is #666 @ 0.6 over #f6f6f9.  Pager/ribbon/search share one control-chrome
+	 * border (do not fade it to #dfe2e6 when disabled, and do not keep a second measured grey on
+	 * buttons).  --jc-chrome-control-border below is the leaf.
 	 */
 	--jc-chrome-disabled-color: #a0a0a1;
 	--jc-chrome-disabled-bg: #f6f6f9;
-	--jc-chrome-button-border: #cfd4d9;
-	--jc-chrome-disabled-border: #cfd4d9;
 	/*
-	 * Chrome-wide control border/text grey (WORK-J0518 DF-3, IRS visual-parity follow-up): IRS ribbon /
-	 * paging / toolbar search all use #ced4da (pages/style.css `.ribbon-button-*` and
-	 * `.dt-container .dt-search input`).  Same hex is the console-ui `--jc-control-border` leaf
-	 * (`--jc-border-2`); chrome.css paints ribbon/paging/column-search/toolbar-search from that role
-	 * token so themed apps cannot drift.  This views-local default keeps the themeless render IRS-matched
-	 * when chrome.css is not linked.  Named "control", not "search-input": a text control's border/text
-	 * grey is a chrome-wide role like --jc-chrome-control-height above, not a single-widget colour.
+	 * Chrome-wide control border/text grey (WORK-J0518 DF-3 / WORK-J0546): toolbar Search, ribbon
+	 * buttons, and paging-pill edges are one role.  Themeless default is #ced4da.  When console-ui
+	 * chrome.css is linked, --jc-control-border (alias of themed --jc-border-2) wins via the var()
+	 * fallback so OPEN/RED/LIGHT_RED/LIGHT_BROWN/GRAY keep search vs ribbon matched *within* that
+	 * theme — including the tinted --jc-border-2 leaves.  Named "control", not "search-input": a
+	 * text control's border/text grey is a chrome-wide role like --jc-chrome-control-height above,
+	 * not a single-widget colour.
 	 */
-	--jc-chrome-control-border: #ced4da;
+	--jc-chrome-control-border: var(--jc-control-border, #ced4da);
+	--jc-chrome-button-border: var(--jc-chrome-control-border);
+	--jc-chrome-disabled-border: var(--jc-chrome-control-border);
+	--jc-chrome-control-text: #4f4f4f;
 	--jc-chrome-control-text: #4f4f4f;
 	/*
 	 * Detail action button palette (D8, option (c)): DEFAULT tokens declared here, not console-ui chrome.css
@@ -636,12 +637,49 @@ table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {
 }
 
 /* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
-   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs. */
+   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs.
+   Idle chevrons must be visible (DataTables' 0.125 opacity reads as "no sort icon"). Sort is a
+   click on the order control only — views.js capture-stops a click on the rest of the th. */
 table[data-juneau-view] thead th div.dt-column-header,
 table[data-juneau-view] thead td div.dt-column-header,
 table.dataTable thead th div.dt-column-header,
 table.dataTable thead td div.dt-column-header {
 	flex-direction: row !important;   /* DT2 numeric columns otherwise reverse and put the chevron on the left */
+	align-items: center;
+	gap: var(--jc-space-1);
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc,
+table.dataTable thead > tr > th.dt-orderable-desc,
+table.dataTable thead > tr > td.dt-orderable-asc,
+table.dataTable thead > tr > td.dt-orderable-desc {
+	cursor: default;
+	padding-right: 5px;
+}
+
+table.dataTable thead span.dt-column-order,
+.juneau-view-col-sort-icon {
+	position: relative;
+	right: auto;
+	top: auto;
+	bottom: auto;
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-space-5);
+	flex: 0 0 var(--jc-chrome-glyph-size-small);
+	cursor: pointer;
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after {
+	opacity: 0.45;
+}
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+	opacity: 1;
 }
 
 table.dataTable thead .sorting:before,
@@ -1357,6 +1395,60 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
    alongside input.placeholder) where this input is built. */
 .juneau-view-columnsearch-input::placeholder {
 	font-style: italic;
+}
+
+/*
+ * Per-column header search icon (WORK-J0547): Juneau search glyph in the header flex row, immediately
+ * left of the sort control.  Click opens .juneau-view-col-search-popover (not a second search row).
+ * NEUTRAL shape; chrome.css tints idle/active/popover.
+ */
+.juneau-view-col-search-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 var(--jc-chrome-glyph-size-small);
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-space-5);
+	margin: 0;
+	cursor: pointer;
+	opacity: 0.45;
+	color: var(--jc-chrome-icon);
+}
+.juneau-view-col-search-icon:hover,
+.juneau-view-col-search-icon:focus-visible {
+	opacity: 0.85;
+}
+.juneau-view-col-search-icon.is-active {
+	opacity: 1;
+}
+.juneau-view-col-search-icon svg {
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-chrome-glyph-size-small);
+	display: block;
+	fill: currentColor;
+}
+
+.juneau-view-col-search-popover {
+	min-width: 220px;
+	max-width: 340px;
+	padding: 8px 10px;
+	border: 1px solid;
+	box-sizing: border-box;
+	text-align: left;
+}
+.juneau-view-col-search-popover-title {
+	font-weight: 600;
+	font-size: var(--jc-chrome-font-size-2);
+	margin-bottom: 6px;
+}
+.juneau-view-col-search-popover-input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 3px 6px;
+	font: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	border: 1px solid;
+	border-radius: var(--jc-chrome-control-radius);
 }
 
 /*

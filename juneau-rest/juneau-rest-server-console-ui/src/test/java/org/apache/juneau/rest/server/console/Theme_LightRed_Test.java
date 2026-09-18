@@ -36,8 +36,8 @@ class Theme_LightRed_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.LIGHT_RED.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is53_mirroringOpensPin() {
-		assertEquals(53, Theme.LIGHT_RED.getTokens().size());
+	@Test void a02_tokenCount_is54_mirroringOpensPin() {
+		assertEquals(54, Theme.LIGHT_RED.getTokens().size());
 	}
 
 	@Test void a03_name_isLightRed() {
@@ -54,6 +54,10 @@ class Theme_LightRed_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
 		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
+		assertEquals("16px 16px 8px", tokens.get("--jc-card-padding"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
+		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", tokens.get("--jc-card-shadow"));
 	}
 
 	@Test void b02_keptFromOpen_statusAndTagValues_areUnchanged() {

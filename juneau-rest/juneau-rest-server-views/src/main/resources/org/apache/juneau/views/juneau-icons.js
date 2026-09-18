@@ -25,7 +25,11 @@
  *
  * The sprite is fetched once at boot from the same directory as this script and injected
  * into the document so every <use href="#juneau-sym-{stem}"/> resolves with no per-icon
- * network request.  Bundled names cover the ViewTable ribbon, paging pill, column chooser,
+ * network request.  Default pack is Juneau-original (`juneau-symbols.svg`).  Material
+ * Symbols Outlined is opt-in via `JuneauViews.icons.pack("material")` or
+ * `data-juneau-icon-pack="material"` on this script tag — it fetches `juneau-symbols-material.svg`
+ * (NOTICE-attributed, recovered from this repo's git history).  Not IRS / SLDS art.
+ * Bundled names cover the ViewTable ribbon, paging pill, column chooser,
  * and search-clear glyphs this runtime actually paints.
  */
 (function () {
@@ -36,7 +40,64 @@
 	var registry = NS._icons = NS._icons || {};
 
 	var SPRITE_ID = "juneau-symbol-sprite";
+	var PACK_ORIGINAL = "original";
+	var PACK_MATERIAL = "material";
+	var PACK_FILES = {};
+	PACK_FILES[PACK_ORIGINAL] = "juneau-symbols.svg";
+	PACK_FILES[PACK_MATERIAL] = "juneau-symbols-material.svg";
+	var _pack = PACK_ORIGINAL;
 	var _spritePromise = null;
+
+	function normalizePack(name) {
+		if (name == null || name === "")
+			return PACK_ORIGINAL;
+		if (name === PACK_ORIGINAL || name === PACK_MATERIAL)
+			return name;
+		throw new TypeError("JuneauViews.icons.pack: unknown pack '" + name + "' (original|material)");
+	}
+
+	function detectPackFromScript() {
+		if (typeof document === "undefined")
+			return PACK_ORIGINAL;
+		var scripts = document.getElementsByTagName("script");
+		var i, src, attr;
+		for (i = 0; i < scripts.length; i++) {
+			src = scripts[i].src || "";
+			attr = scripts[i].getAttribute("data-juneau-icon-pack");
+			if (attr && src.indexOf("juneau-icons.js") !== -1)
+				return normalizePack(attr);
+		}
+		for (i = 0; i < scripts.length; i++) {
+			attr = scripts[i].getAttribute("data-juneau-icon-pack");
+			if (attr)
+				return normalizePack(attr);
+		}
+		return PACK_ORIGINAL;
+	}
+
+	_pack = detectPackFromScript();
+
+	/**
+	 * Selects the symbol sprite pack, or returns the current pack when called with no args.
+	 * Default is `"original"` (Juneau-original art). `"material"` is the NOTICE-attributed
+	 * Material Symbols Outlined set. Changing pack after boot reloads the sprite.
+	 */
+	function pack(name) {
+		if (arguments.length === 0)
+			return _pack;
+		var next = normalizePack(name);
+		if (next === _pack)
+			return _spritePromise || Promise.resolve();
+		_pack = next;
+		_spritePromise = null;
+		if (typeof document !== "undefined") {
+			var existing = document.getElementById(SPRITE_ID);
+			if (existing && existing.parentNode)
+				existing.parentNode.removeChild(existing);
+			return loadSymbolSprite();
+		}
+		return Promise.resolve();
+	}
 
 	/** Registers (or overrides) an icon's inline-SVG markup under `name`. */
 	function registerIcon(name, svgMarkup) {
@@ -49,15 +110,16 @@
 		return Object.prototype.hasOwnProperty.call(registry, name) ? registry[name] : null;
 	}
 
-	/** Resolves juneau-symbols.svg next to this script (same cache-buster query is ignored by the serving mixin). */
+	/** Resolves the active pack's sprite next to this script (same cache-buster query is ignored by the serving mixin). */
 	function spriteUrl() {
+		var file = PACK_FILES[_pack] || PACK_FILES[PACK_ORIGINAL];
 		var scripts = document.getElementsByTagName("script");
 		for (var i = 0; i < scripts.length; i++) {
 			var src = scripts[i].src || "";
 			var m = src.match(/^(.*)juneau-icons\.js(\?.*)?$/);
-			if (m) return m[1] + "juneau-symbols.svg" + (m[2] || "");
+			if (m) return m[1] + file + (m[2] || "");
 		}
-		return "juneau-symbols.svg";
+		return file;
 	}
 
 	/** Fetches the sprite once and injects it so <use href="#juneau-sym-{stem}"/> resolves. Always resolves. */
@@ -109,7 +171,8 @@
 	NS.icons = {
 		registerIcon: registerIcon,
 		resolveIcon: resolveIcon,
-		loadSymbolSprite: loadSymbolSprite
+		loadSymbolSprite: loadSymbolSprite,
+		pack: pack
 	};
 
 	// Bundled names (ViewTable ribbon + paging pill + column chooser).  Each host is a <use> of

@@ -187,4 +187,27 @@ class CssValueGrammar_Test extends TestBase {
 		var b = Theme.create("x");
 		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", payload));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Box-shadow: 2-4 lengths plus a color.  Needed so --jc-card-shadow can be a real elevation instead of "none".
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"0 2px 2px rgba(0, 0, 0, 0.05)",
+		"0 1px 3px rgba(0,0,0,0.08)",
+		"0 2px 2px #000000",
+		"inset 0 1px 2px rgba(0, 0, 0, 0.1)",
+		"0 2px black",
+	})
+	void a13_boxShadow_acceptedVerbatim(String value) {
+		var theme = Theme.create("x").token("--jc-card-shadow", value).build();
+		assertEquals(value, theme.getTokens().get("--jc-card-shadow"));
+	}
+
+	@Test void a14_boxShadow_rejectsNonColorTail() {
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-card-shadow", "0 2px 2px image(evil)"));
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-card-shadow", "0 2px none"));
+	}
 }

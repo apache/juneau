@@ -117,9 +117,17 @@ public class ViewsMixin {
 
 	/**
 	 * The URL path at which the shared SVG symbol sprite is served (relative to the host mount).
-	 * {@code juneau-icons.js} fetches this next to itself; the key/legend file is not served to browsers.
+	 * {@code juneau-icons.js} fetches this next to itself by default (pack {@code original}); the key/legend
+	 * file is not served to browsers.
 	 */
 	public static final String SYMBOLS_SVG_PATH = "/juneau-symbols.svg";
+
+	/**
+	 * The URL path at which the opt-in Material Symbols Outlined sprite is served (relative to the host mount).
+	 * Selected by {@code JuneauViews.icons.pack("material")} / {@code data-juneau-icon-pack="material"}.
+	 * Default remains {@link #SYMBOLS_SVG_PATH} (Juneau-original).
+	 */
+	public static final String SYMBOLS_MATERIAL_SVG_PATH = "/juneau-symbols-material.svg";
 
 	/**
 	 * The URL path at which the opt-in region-populate runtime is served (relative to the host mount).  A page with
@@ -251,8 +259,11 @@ public class ViewsMixin {
 	/** Classpath location of the shipped icon registry. */
 	static final String ICONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-icons.js";
 
-	/** Classpath location of the shipped SVG symbol sprite. */
+	/** Classpath location of the shipped SVG symbol sprite (Juneau-original, default pack). */
 	static final String SYMBOLS_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols.svg";
+
+	/** Classpath location of the opt-in Material Symbols Outlined sprite. */
+	static final String SYMBOLS_MATERIAL_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols-material.svg";
 
 	/** Classpath location of the shipped region-populate runtime. */
 	static final String REGIONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-regions.js";
@@ -407,6 +418,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-symbols-material.svg] &mdash; serve the opt-in Material Symbols Outlined sprite.
+	 *
+	 * @return The Material sprite as an SVG {@link HttpResource}.
+	 */
+	@RestGet(
+		path=SYMBOLS_MATERIAL_SVG_PATH,
+		summary="Juneau rich-view Material Symbols SVG sprite (opt-in)",
+		description="NOTICE-attributed Material Symbols Outlined sprite. Opt-in via JuneauViews.icons.pack(\"material\"). Default remains juneau-symbols.svg.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSymbolsMaterialSvg() {
+		return serve(SYMBOLS_MATERIAL_SVG_RESOURCE, SVG_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-regions.js] &mdash; serve the opt-in region-populate runtime.
 	 *
 	 * @return The region-populate runtime as a JavaScript {@link HttpResource}.
@@ -473,7 +499,7 @@ public class ViewsMixin {
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -497,7 +523,7 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -591,6 +617,7 @@ public class ViewsMixin {
 		if (VIEWS_CSS_PATH.equals(path)) return VIEWS_CSS_RESOURCE;
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
 		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
+		if (SYMBOLS_MATERIAL_SVG_PATH.equals(path)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
 		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
 		if (HELPERS_JS_PATH.equals(path)) return HELPERS_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;

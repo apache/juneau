@@ -55,7 +55,7 @@ import java.util.regex.*;
  *
  * <h5 class='section'>Why it reads the source tree rather than the classpath</h5>
  * <p>
- * The manifest is not a registered servable resource &mdash; only {@code juneau-symbols.svg} is (see
+ * The original-pack manifest is not a registered servable resource &mdash; only the two sprites are (see
  * {@link ViewsMixin}) &mdash; so reading it through the resource loader would assert against a copy no consumer
  * ever fetches. Both files are read from the module's own {@code src/main/resources}, the same way
  * {@link SymbolsKey_Staleness_Test} reads the sprite and its authoring key.
