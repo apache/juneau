@@ -471,7 +471,7 @@ a:hover { text-decoration: underline; }
   width: 100%;
   margin: 0 0 14px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0;
   background-color: var(--jc-card-bg);
   border-radius: var(--jc-radius);
   box-shadow: var(--jc-card-shadow);
@@ -481,14 +481,16 @@ a:hover { text-decoration: underline; }
 .jc-page-header h1 {
   font-size: 1.375rem;
   font-weight: 700;
+  line-height: 1.2;
   color: var(--jc-text);
-  margin: 0;
+  margin: 0 0 var(--jc-space-1);
 }
 
 .jc-page-header .jc-page-sub {
   font-size: 0.8125rem;
+  line-height: 1.3;
   color: var(--jc-text-muted);
-  margin-top: 2px;
+  margin: 0;
 }
 
 .jc-breadcrumb {
@@ -816,7 +818,7 @@ table.dataTable.display > tbody > tr:hover {
    --jc-control-border (same leaf as toolbar Search / --jc-border-2) for ribbon/pager enabled
    AND disabled.  White face so a button reads as a distinct control against the card's
    tinted background. */
-.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
+.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-chrome-icon); }
 .juneau-view-ribbon-btn:disabled { border-color: var(--jc-control-border); }
 .juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
@@ -932,7 +934,7 @@ table.dataTable.display > tbody > tr:hover {
    edges — longhand top/bottom only, so a UA leftover left/right on a chevron cannot turn into extra
    verticals.  End-caps add the outer side.  Do not restore border-color:accent on all four sides. */
 .juneau-view-pagingpill { background-color: var(--jc-control-bg); }
-.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-chrome-icon); }
 .juneau-view-pagingpill-btn:disabled { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }

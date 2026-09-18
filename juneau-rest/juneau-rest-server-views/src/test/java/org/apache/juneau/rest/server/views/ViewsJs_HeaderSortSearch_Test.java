@@ -108,4 +108,21 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(body.contains("cursor: pointer;"), body);
 		assertFalse(body.contains("span.col-search-icon"), body);
 	}
+
+	@Test void b02_viewsCss_sortControlDoesNotRenderTickOrDtTriangles() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("span.dt-column-order input"), body);
+		assertTrue(body.contains("content: \"\";"), body);
+		assertTrue(body.contains("content: none;"), body);
+		assertTrue(body.contains(":not(:has(svg)):before"), body);
+		assertFalse(hasContentValue(body, "▲"), "DT2 unicode up-triangle must not remain as content");
+		assertFalse(hasContentValue(body, "▼"), "DT2 unicode down-triangle must not remain as content");
+		assertFalse(hasContentValue(body, "✓"), body);
+		assertFalse(hasContentValue(body, "✔"), body);
+		assertFalse(body.contains("content: \"\\25"), body);
+	}
+
+	private static boolean hasContentValue(String css, String glyph) {
+		return css.contains("content: \"" + glyph + "\"") || css.contains("content: '" + glyph + "'");
+	}
 }

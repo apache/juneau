@@ -161,6 +161,7 @@ public final class Theme {
 		.token("--jc-table-stripe-bg", "#fafaf9")
 		.token("--jc-main-bg", "#f5f6f9")  // inner-main well; not a retarget of old card tints
 		.token("--jc-card-padding", "16px 16px 8px")  // content-card / title-card inset; --jc-space-4 / --jc-space-4 / --jc-space-2
+		.token("--jc-chrome-icon", "#666666")  // idle ribbon / paging glyph; not --jc-text-soft (body ink)
 		.build();
 
 	/**
@@ -171,7 +172,7 @@ public final class Theme {
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
 	 * deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding
-	 * only the 15 browned tokens below; the other 39 &mdash; including all five tag triads and every structural
+	 * only the 15 browned tokens below; the other 40 &mdash; including all five tag triads and every structural
 	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *
@@ -207,7 +208,7 @@ public final class Theme {
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a red "danger" pill that matched the brand would stop reading as danger, so
 	 * the status palette is deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}),
-	 * overriding only the 15 recolored tokens below; the other 39 &mdash; including all five tag triads and every
+	 * overriding only the 15 recolored tokens below; the other 40 &mdash; including all five tag triads and every
 	 * structural token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
 	 * provably identical to {@link #OPEN}'s.
 	 *
@@ -291,9 +292,9 @@ public final class Theme {
 	 * amber, neutral gray) <b>and</b> {@link #OPEN}'s blue interactive affordances (accent, link, primary button,
 	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
 	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
-	 * "7 grayed / 47 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
+	 * "7 grayed / 48 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
 	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 7 grayed tokens below;
-	 * the other 47 &mdash; including all five tag triads, every structural token, and the blue affordance set
+	 * the other 48 &mdash; including all five tag triads, every structural token, and the blue affordance set
 	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *

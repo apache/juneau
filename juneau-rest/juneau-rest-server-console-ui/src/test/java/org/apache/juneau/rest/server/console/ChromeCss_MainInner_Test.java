@@ -97,6 +97,23 @@ class ChromeCss_MainInner_Test extends TestBase {
 			"title card spends --jc-card-padding: " + body);
 		assertFalse(body.contains("padding: 18px 20px"),
 			"off-scale 18px 20px title-card inset must not remain: " + body);
+		assertTrue(body.contains("gap: 0"), "title/sub stack with h1 margin, not flex gap: " + body);
+		assertFalse(body.contains("gap: 10px"), "10px flex gap between title and description: " + body);
+	}
+
+	@Test void a05_pageHeader_titleAndSubAreTight() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains(".jc-page-header h1"), css);
+		var h1Start = css.indexOf(".jc-page-header h1 {");
+		assertTrue(h1Start >= 0, css);
+		var h1 = css.substring(h1Start, css.indexOf('}', h1Start));
+		assertTrue(h1.contains("margin: 0 0 var(--jc-space-1);"), h1);
+		assertTrue(h1.contains("line-height: 1.2;"), h1);
+		var subStart = css.indexOf(".jc-page-header .jc-page-sub {");
+		assertTrue(subStart >= 0, css);
+		var sub = css.substring(subStart, css.indexOf('}', subStart));
+		assertTrue(sub.contains("margin: 0;"), sub);
+		assertFalse(sub.contains("margin-top: 2px"), sub);
 	}
 
 	@Test void a02_cardAndPageHeader_haveNo1180MaxWidth() throws Exception {

@@ -610,9 +610,10 @@ public class ConsoleChromeMixin {
 	 *
 	 * <p>
 	 * <b>The {@link Theme#OPEN} exemption.</b> The reserved namespace is {@code --jc-chrome-*} <i>except</i> the
-	 * names {@link Theme#OPEN} itself already declares. Exactly one name is exempt today:
-	 * {@code --jc-chrome-bg}, a shipped colour token that predates the ladder, is consumed by {@code chrome.css},
-	 * and is legitimately overridable. Without the exemption this guard would reject {@link Theme#OPEN}'s own token
+	 * names {@link Theme#OPEN} itself already declares. Two names are exempt today:
+	 * {@code --jc-chrome-bg} (page-chrome grey that predates the ladder) and {@code --jc-chrome-icon} (idle
+	 * ribbon / paging glyph ink). Both are consumed by {@code chrome.css} and are legitimately overridable.
+	 * Without the exemption this guard would reject {@link Theme#OPEN}'s own token
 	 * set &mdash; and therefore every theme built with {@link Theme#deriveFrom(String, Theme)} seeded from
 	 * {@link Theme#OPEN}, which is the normal way to author a palette. The exemption is expressed against
 	 * {@link Theme#OPEN} rather than as a hardcoded name list so it cannot drift: it needs no copy of the ladder's

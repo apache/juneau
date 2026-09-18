@@ -137,7 +137,7 @@ final class ChromeScaleScanner {
 		new Step("--jc-chrome-font-size-2", "0.8125rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-font-size-3", "0.875rem", true, Family.FONT_SIZE),
 		new Step("--jc-chrome-line-height", "1.2", true, Family.LINE_HEIGHT),
-		new Step("--jc-chrome-glyph-size", "16px", true, Family.GLYPH),
+		new Step("--jc-chrome-glyph-size", "18px", true, Family.GLYPH),
 		new Step("--jc-chrome-glyph-size-small", "12px", true, Family.GLYPH)
 	);
 

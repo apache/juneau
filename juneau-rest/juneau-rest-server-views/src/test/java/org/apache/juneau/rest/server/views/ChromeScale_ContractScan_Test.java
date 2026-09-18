@@ -150,7 +150,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	/** {@code width} is a scale property on an SVG glyph and a content measure everywhere else. */
 	@Test void b09_widthIsOnlyCheckedOnGlyphs() {
 		assertTrue(ChromeScaleScanner.scan(".synthetic-cell { width: 16px; }").violations().isEmpty());
-		assertEquals(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 16px; }").violations().size());
+		assertEquals(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 18px; }").violations().size());
 	}
 
 	/**

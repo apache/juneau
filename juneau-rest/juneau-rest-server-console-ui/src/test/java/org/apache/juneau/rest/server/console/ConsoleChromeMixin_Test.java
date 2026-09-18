@@ -614,11 +614,14 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 54 = previous 53 plus --jc-card-padding (content-card / title-card inset).
-		assertEquals(54, Theme.OPEN.getTokens().size());
+		// 55 = previous 54 plus --jc-chrome-icon (idle ribbon / paging glyph; not --jc-text-soft).
+		assertEquals(55, Theme.OPEN.getTokens().size());
 		assertEquals("#f5f6f9", Theme.OPEN.getTokens().get("--jc-main-bg"));
 		assertEquals("#ffffff", Theme.OPEN.getTokens().get("--jc-card-bg"));
 		assertEquals("16px 16px 8px", Theme.OPEN.getTokens().get("--jc-card-padding"));
+		assertEquals("#666666", Theme.OPEN.getTokens().get("--jc-chrome-icon"));
+		assertEquals("#080707", Theme.OPEN.getTokens().get("--jc-text"));
+		assertEquals("#080707cc", Theme.OPEN.getTokens().get("--jc-text-soft"));
 		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", Theme.OPEN.getTokens().get("--jc-card-shadow"));
 		assertEquals("2px", Theme.OPEN.getTokens().get("--jc-page-nav-hairline"));
 		assertEquals("13px", Theme.OPEN.getTokens().get("--jc-page-nav-section-font-size"));
@@ -854,7 +857,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "pagingpill container must not stroke; fill only, css:\n" + css);
 		assertFalse(css.contains(".juneau-view-pagingpill { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }"),
 			() -> "container border-color would halo hover in a second outline, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-text-soft); }"),
+		assertTrue(css.contains(".juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-chrome-icon); }"),
+			() -> "idle ribbon glyph spends --jc-chrome-icon, not --jc-text-soft, css:\n" + css);
+		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-chrome-icon); }"),
 			() -> "idle pagingpill-btn edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "pagingpill-btn hover must recolor top/bottom only, css:\n" + css);
@@ -1392,6 +1397,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		"--jc-chrome",         // the bare word is not the prefix
 		"--jc-tab-chrome-bg",  // the prefix appearing mid-string reserves nothing
 		"--jc-chrome-bg",      // shipped by Theme.OPEN, consumed by chrome.css, legitimately overridable
+		"--jc-chrome-icon",    // idle ribbon / paging glyph; Theme.OPEN leaf, not a ladder step
 	})
 	void r07_namesOutsideTheReservedSet_accepted(String name) {
 		var leafTheme = Theme.create("leaf").token(name, "#b45309").build();
