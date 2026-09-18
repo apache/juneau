@@ -1189,13 +1189,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * DF-12.1: the DataTables-native child row (row.child(...).show()) and this module's own detail panel are
-	 * explicit opaque white, so no ancestor row colouring (a zebra stripe, an "open" indicator, a parent-row
-	 * hover wash) can show through the expanded surface - the same "opaque floating/panel surface" exception
-	 * this file already grants the dialog/popover/timestamp-popup families, extended to the row DataTables
-	 * itself creates.
+	 * The expanded-row Detail View is a flush content card: {@code --jc-card-bg} fill, inner padding,
+	 * {@code margin: 0}, and child-row cells with {@code padding: 0} so the gray well cannot halo the panel.
 	 */
-	@Test void p02_viewsCss_detailExpanderSurfaceIsOpaqueWhite() throws Exception {
+	@Test void p02_viewsCss_detailExpanderSurfaceIsOpaqueContentCard() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("table[data-juneau-view] > tbody > tr.child,\n"
 			+ "table[data-juneau-view] > tbody > tr.child > td,\n"
@@ -1203,16 +1200,24 @@ class ViewsMixin_Serving_Test extends TestBase {
 			+ "table.dataTable > tbody > tr.child > td {"), body);
 		var start = body.indexOf("table[data-juneau-view] > tbody > tr.child,");
 		var end = body.indexOf("}", start);
-		assertTrue(body.substring(start, end).contains("background: #fff"), body);
-		assertTrue(body.substring(start, end).contains("border: none"),
-			() -> "expander child cells must not carry the summary-view grid: " + body.substring(start, end));
+		var child = body.substring(start, end);
+		assertTrue(child.contains("background-color: var(--jc-card-bg)"), child);
+		assertTrue(child.contains("padding: 0"), child);
+		assertTrue(child.contains("border: none"), child);
 
-		// ".juneau-view-detail-panel {" appears TWICE (the container-query host near the top of the file, and
-		// the expanded-body rule this test targets) - anchor on the body rule's own first declaration.
 		assertTrue(body.contains(".juneau-view-detail-panel {\n\tmargin: 0;"), body);
 		var panelStart = body.indexOf(".juneau-view-detail-panel {\n\tmargin: 0;");
 		var panelEnd = body.indexOf("}", panelStart);
-		assertTrue(body.substring(panelStart, panelEnd).contains("background: #fff"), body);
+		var panel = body.substring(panelStart, panelEnd);
+		assertTrue(panel.contains("background-color: var(--jc-card-bg)"), panel);
+		assertFalse(panel.contains("background: #fff"), panel);
+
+		assertTrue(body.contains(".juneau-view-detail-panel .jc-card"),
+			"nested .jc-card inside the detail panel must be pinned");
+		var nestedStart = body.indexOf(".juneau-view-detail-panel .jc-card");
+		var nestedEnd = body.indexOf("}", nestedStart);
+		assertTrue(body.substring(nestedStart, nestedEnd).contains("margin: 0"),
+			body.substring(nestedStart, nestedEnd));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -36,8 +36,8 @@ class Theme_LightBrown_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.LIGHT_BROWN.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is52_mirroringOpensPin() {
-		assertEquals(52, Theme.LIGHT_BROWN.getTokens().size());
+	@Test void a02_tokenCount_is53_mirroringOpensPin() {
+		assertEquals(53, Theme.LIGHT_BROWN.getTokens().size());
 	}
 
 	@Test void a03_name_isLightBrown() {
@@ -59,6 +59,9 @@ class Theme_LightBrown_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().get("--jc-success"), tokens.get("--jc-success"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-green-bg"), tokens.get("--jc-tag-green-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
+		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
 	}
 
 	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {

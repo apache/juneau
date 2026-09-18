@@ -447,13 +447,15 @@ a:hover { text-decoration: underline; }
   flex: 1 1 auto;
   padding: 20px 24px 40px;
   min-width: 0;
+  background-color: var(--jc-main-bg);
+  margin: var(--jc-space-3);
+  border-radius: var(--jc-radius);
 }
 
 .jc-page-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  max-width: 1180px;
   margin: 0 auto 14px;
   flex-wrap: wrap;
   gap: 10px;
@@ -486,7 +488,6 @@ a:hover { text-decoration: underline; }
    ========================================================================== */
 
 .jc-card {
-  max-width: 1180px;
   margin: 0 auto;
   background-color: var(--jc-card-bg);
   border: none;
@@ -512,29 +513,36 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
-   TODO-445n full horizontal real estate (Goal 1)
+   Table-chrome detector (data-juneau-layout="wide")
    ==========================================================================
-   ViewTable stamps `data-juneau-layout="wide"` on the ONE stamp node it emits (its wrapper <div>).  This is a
-   first-class public data-juneau-* convention (allowed value: "wide"; never stamped on .jc-card / .jc-main — the
-   toolkit emits neither class).  The wide wrapper widens itself, and the enclosing card/main expand off it via
-   :has(), so a wide table page uses the full content-area width instead of the default centered 1180px card.
+   ViewTable stamps `data-juneau-layout="wide"` on the ONE stamp node it emits (its wrapper <div>).
+   This is a first-class public data-juneau-* convention (allowed value: "wide"; never stamped on
+   .jc-card / .jc-main — the toolkit emits neither class).  After cards fill the main well, the
+   stamp is the table-chrome detector, not a width punch-through: the outer .jc-card that contains
+   the stamp goes transparent and unpadded so Table Toolbar + Summary View sit on the gray well.
+   Nested .jc-card descendants stay content cards (`:not(.jc-card .jc-card)`).
 
-   Position-dependent wide-stamp matrix:
-     - the wrapper itself           -> always widened
-     - .jc-card                     -> widened ONLY when the wide wrapper is a DIRECT child (typical after the RM
-                                       .rm-table-scroll unwrap)
-     - .jc-main                     -> widened when ANY descendant wrapper is wide
-   `.jc-main` keeps its padding; `max-width:none` means edge-of-content-area, not edge-of-viewport.
-   `min-width:0` (declared on .jc-main's single rule up in "Page scaffolding") lets the main region shrink below
-   the table's intrinsic width so the table-region scroll box (juneau-views.css), not the page, absorbs overflow
-   (INV-3). */
+   Position-dependent matrix:
+     - the wrapper itself           -> still widened (self-match)
+     - outer .jc-card containing the stamp (HTML-slot: stamp may sit inside a slot <div>)
+                                    -> table-chrome (transparent, padding 0); descendant :has
+     - nested .jc-card              -> never table-chrome
+     - .jc-main                     -> max-width:none when ANY descendant wrapper is wide (harmless;
+                                       .jc-main has no max-width of its own)
+   `.jc-main` keeps its padding; `min-width:0` lets the main region shrink below the table's
+   intrinsic width so the table-region scroll box (juneau-views.css), not the page, absorbs overflow.
+*/
 
 [data-juneau-layout="wide"] {
   max-width: none;
   width: 100%;
 }
 
-.jc-card:has(> [data-juneau-layout="wide"]),
+.jc-card:has([data-juneau-layout="wide"]):not(.jc-card .jc-card) {
+  background-color: transparent;
+  padding: 0;
+}
+
 .jc-main:has([data-juneau-layout="wide"]) {
   max-width: none;
 }

@@ -36,8 +36,8 @@ class Theme_Gray_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.GRAY.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is52_mirroringOpensPin() {
-		assertEquals(52, Theme.GRAY.getTokens().size());
+	@Test void a02_tokenCount_is53_mirroringOpensPin() {
+		assertEquals(53, Theme.GRAY.getTokens().size());
 	}
 
 	@Test void a03_name_isGray() {
@@ -63,6 +63,9 @@ class Theme_Gray_Test extends TestBase {
 		assertEquals("#1589EE", tokens.get("--jc-accent"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-link"), tokens.get("--jc-link"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-btn-primary"), tokens.get("--jc-btn-primary"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
+		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
 	}
 
 	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {

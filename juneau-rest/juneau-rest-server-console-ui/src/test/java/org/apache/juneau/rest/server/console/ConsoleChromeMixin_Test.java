@@ -561,23 +561,17 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// A0 must not add a --jc-logo or --jc-page-bg-image token - the logo/page-bg mechanism is deliberately
-		// NOT part of the Theme token model (finding 4 of the design doc). If this count ever changes, it must be
-		// a DIFFERENT, deliberate change to Theme.OPEN - not a side effect of the asset feature.
-		//
-		// 52 = the original 32, plus the three-token red tag triad, plus the fourteen additive
-		// token gaps (--jc-header-height, --jc-nav-indicator-width, --jc-page-nav-hairline,
-		// --jc-page-nav-section-font-size, --jc-page-nav-child-font-size, --jc-card-shadow,
-		// --jc-danger-wash, --jc-success-wash, and the six-step --jc-space-1..6 scale), plus the --jc-focus
-		// focus-ring colour, plus the --jc-accent-selected ribbon-format selected-state face (WCAG 1.4.11
-		// non-text contrast remedy), plus --jc-table-stripe-bg (#fafaf9; not aliased to --jc-card-bg).
-		// Bumping this number is only ever correct alongside a reviewed edit to Theme.OPEN itself.
-		assertEquals(52, Theme.OPEN.getTokens().size());
+		// 53 = previous 52 plus --jc-main-bg (inner-main well). --jc-card-bg is now
+		// content-card white; do not retarget old card tints onto --jc-main-bg.
+		assertEquals(53, Theme.OPEN.getTokens().size());
+		assertEquals("#f5f6f9", Theme.OPEN.getTokens().get("--jc-main-bg"));
+		assertEquals("#ffffff", Theme.OPEN.getTokens().get("--jc-card-bg"));
 		assertEquals("2px", Theme.OPEN.getTokens().get("--jc-page-nav-hairline"));
 		assertEquals("13px", Theme.OPEN.getTokens().get("--jc-page-nav-section-font-size"));
 		assertEquals("12px", Theme.OPEN.getTokens().get("--jc-page-nav-child-font-size"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
+		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
 	}
 
 	@Test void j04_accentSelectedFace_meetsWcag1411NonTextContrast_andBothSelectorsConsumeToken() throws Exception {

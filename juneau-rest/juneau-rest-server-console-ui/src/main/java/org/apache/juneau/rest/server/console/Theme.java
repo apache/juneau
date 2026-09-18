@@ -106,7 +106,7 @@ public final class Theme {
 		.token("--jc-text-muted", "#706e6b")
 		.token("--jc-border", "#dddbda")
 		.token("--jc-border-2", "#ced4da")
-		.token("--jc-card-bg", "#f5f6f9")
+		.token("--jc-card-bg", "#ffffff")
 		.token("--jc-chrome-bg", "#f3f2f2")
 		.token("--jc-white", "#ffffff")
 		.token("--jc-btn-primary", "#1a5297")
@@ -159,6 +159,7 @@ public final class Theme {
 		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
 		.token("--jc-accent-selected", "#1589EE")
 		.token("--jc-table-stripe-bg", "#fafaf9")
+		.token("--jc-main-bg", "#f5f6f9")  // inner-main well; not a retarget of old card tints
 		.build();
 
 	/**
@@ -169,7 +170,7 @@ public final class Theme {
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
 	 * deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding
-	 * only the 16 browned tokens below; the other 36 &mdash; including all five tag triads and every structural
+	 * only the 15 browned tokens below; the other 38 &mdash; including all five tag triads and every structural
 	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *
@@ -189,7 +190,6 @@ public final class Theme {
 		.token("--jc-text-muted", "#7a6a4f")
 		.token("--jc-border", "#d8cbb0")
 		.token("--jc-border-2", "#c9b896")
-		.token("--jc-card-bg", "#fbf8f1")
 		.token("--jc-chrome-bg", "#efe6d4")
 		.token("--jc-btn-primary", "#8a6d3b")
 		.token("--jc-btn-primary-hover", "#74592f")
@@ -206,7 +206,7 @@ public final class Theme {
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a red "danger" pill that matched the brand would stop reading as danger, so
 	 * the status palette is deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}),
-	 * overriding only the 16 recolored tokens below; the other 36 &mdash; including all five tag triads and every
+	 * overriding only the 15 recolored tokens below; the other 38 &mdash; including all five tag triads and every
 	 * structural token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
 	 * provably identical to {@link #OPEN}'s.
 	 *
@@ -230,7 +230,6 @@ public final class Theme {
 		.token("--jc-text-muted", "#6e585c")
 		.token("--jc-border", "#e4d4d7")
 		.token("--jc-border-2", "#d4c2c6")
-		.token("--jc-card-bg", "#fbf8f9")
 		.token("--jc-chrome-bg", "#f3ecee")
 		.token("--jc-btn-primary", "#6B1D2A")
 		.token("--jc-btn-primary-hover", "#541620")
@@ -291,9 +290,9 @@ public final class Theme {
 	 * amber, neutral gray) <b>and</b> {@link #OPEN}'s blue interactive affordances (accent, link, primary button,
 	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
 	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
-	 * "8 grayed / 44 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
-	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 8 grayed tokens below;
-	 * the other 44 &mdash; including all five tag triads, every structural token, and the blue affordance set
+	 * "7 grayed / 46 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
+	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 7 grayed tokens below;
+	 * the other 46 &mdash; including all five tag triads, every structural token, and the blue affordance set
 	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
 	 *
@@ -309,7 +308,6 @@ public final class Theme {
 		.token("--jc-text-muted", "#737373")
 		.token("--jc-border", "#e0e0e0")
 		.token("--jc-border-2", "#d0d0d0")
-		.token("--jc-card-bg", "#f7f7f7")
 		.token("--jc-chrome-bg", "#f4f4f4")
 		.build();
 

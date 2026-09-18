@@ -74,11 +74,13 @@ class ChromeCss_FullBleed_Test extends TestBase {
 		return css.substring(braceIdx + 1, endIdx < 0 ? css.length() : endIdx).contains(needle);
 	}
 
-	/** The ancestor card widens only when the wide wrapper is a DIRECT child (position-dependent matrix). */
-	@Test void a02_cardExpandsViaHasDirectChild() throws Exception {
+	/** Outer table-chrome is descendant :has plus :not nested .jc-card (HTML-slot stamp is not a direct child). */
+	@Test void a02_tableChrome_isDescendantHas_notDirectChildOnly() throws Exception {
 		var c = flat();
-		assertTrue(c.contains(".jc-card:has(> [data-juneau-layout=\"wide\"])"),
-			"the card must expand via :has(> [data-juneau-layout=\"wide\"]) - direct-child only (wide-stamp matrix)");
+		assertTrue(c.contains(".jc-card:has([data-juneau-layout=\"wide\"]):not(.jc-card .jc-card)"),
+			"outer table-chrome must be descendant :has + :not nested .jc-card");
+		assertFalse(c.contains(".jc-card:has(> [data-juneau-layout=\"wide\"])"),
+			"direct-child-only :has(>) misses HTML-slot and is not the detector");
 	}
 
 	/** The main region widens when any descendant wrapper is wide. */

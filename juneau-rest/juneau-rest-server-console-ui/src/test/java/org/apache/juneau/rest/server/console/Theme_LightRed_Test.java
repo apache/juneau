@@ -36,8 +36,8 @@ class Theme_LightRed_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.LIGHT_RED.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is52_mirroringOpensPin() {
-		assertEquals(52, Theme.LIGHT_RED.getTokens().size());
+	@Test void a02_tokenCount_is53_mirroringOpensPin() {
+		assertEquals(53, Theme.LIGHT_RED.getTokens().size());
 	}
 
 	@Test void a03_name_isLightRed() {
@@ -51,6 +51,9 @@ class Theme_LightRed_Test extends TestBase {
 		assertEquals("#6B1D2A", tokens.get("--jc-btn-primary"));
 		assertEquals("#f3ecee", tokens.get("--jc-chrome-bg"));
 		assertTrue(tokens.get("--jc-page-bg").contains("#e8cfd3"), () -> "expected the light-red gradient, got: " + tokens.get("--jc-page-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
+		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
 	}
 
 	@Test void b02_keptFromOpen_statusAndTagValues_areUnchanged() {

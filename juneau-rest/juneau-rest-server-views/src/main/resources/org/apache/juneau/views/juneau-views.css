@@ -1571,19 +1571,17 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
  * The DataTables-native child row created by `row.child(panel).show()` (juneau-views.js) - class "child", per
  * DataTables' own row.child() API, not one of this file's own "juneau-view-detail-*" names: Juneau never gets a
  * handle on this <tr>/<td> to stamp its own class onto it, so it has to be reached by DataTables' own default
- * shape instead.  Explicit opaque white (WORK-J0518 DF-12.1): without a background of its own the row/cell is
- * transparent, so ANY ancestor row styling - a zebra stripe, an "open" indicator, a hover wash on the row that
- * owns the expander - paints straight through it, including while that same row's hover state is still live.
- * The same "opaque floating/panel surface" exception this file already grants `.juneau-view-dialog` /
- * `.jc-cell-popover` / `.juneau-ts-popup`, extended to the one row DataTables itself creates rather than one
- * this file's own emit owns.
+ * shape instead.  Opaque content-card fill (`--jc-card-bg`) plus `padding: 0` so ancestor row colouring (a zebra
+ * stripe, an "open" indicator, a hover wash) cannot show through, and the gray main well cannot halo the
+ * expanded panel.
  */
 table[data-juneau-view] > tbody > tr.child,
 table[data-juneau-view] > tbody > tr.child > td,
 table.dataTable > tbody > tr.child,
 table.dataTable > tbody > tr.child > td {
-	background: #fff;
+	background-color: var(--jc-card-bg);
 	border: none;
+	padding: 0;
 }
 
 /* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`).
@@ -1591,7 +1589,13 @@ table.dataTable > tbody > tr.child > td {
 .juneau-view-detail-panel {
 	margin: 0;
 	padding: var(--jc-space-2) var(--jc-space-3);
-	background: #fff;
+	background-color: var(--jc-card-bg);
+}
+
+.juneau-view-detail-panel .jc-card,
+table[data-juneau-view] > tbody > tr.child .jc-card,
+table.dataTable > tbody > tr.child .jc-card {
+	margin: 0;
 }
 
 .juneau-view-detail-section {
