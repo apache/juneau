@@ -60,6 +60,27 @@ final class CssValueEscaper {
 		return sb.toString();
 	}
 
+	/**
+	 * Quotes {@code value} as a CSS string literal ({@code "..."}) with every declaration-boundary breakout
+	 * character escaped, including {@code "}. Safe to place as the entire value of {@code content}.
+	 *
+	 * @param value The string to quote. Must not be <jk>null</jk>.
+	 * @return A double-quoted CSS string literal.
+	 */
+	static String quotedString(String value) {
+		var sb = new StringBuilder(value.length() + 8);
+		sb.append('"');
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
+			if (isBreakout(c) || c == '"')
+				sb.append('\\').append(Integer.toHexString(c).toUpperCase(java.util.Locale.ROOT)).append(' ');
+			else
+				sb.append(c);
+		}
+		sb.append('"');
+		return sb.toString();
+	}
+
 	private static boolean isBreakout(char c) {
 		return c == ';' || c == '{' || c == '}' || c == '\\' || c == '<' || c == '>' || c <= 0x1F;
 	}

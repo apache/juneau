@@ -68,4 +68,17 @@ class CssValueEscaper_Test extends TestBase {
 		assertFalse(escaped.indexOf('\u0007') >= 0);
 		assertTrue(escaped.startsWith("red"));
 	}
+
+	@Test void a08_quotedString_wrapsAndEscapesQuoteAndBreakout() {
+		var quoted = CssValueEscaper.quotedString("say \"hi\"; } html { color:red");
+		assertTrue(quoted.startsWith("\"") && quoted.endsWith("\""), quoted);
+		assertFalse(quoted.substring(1, quoted.length() - 1).contains("\""), quoted);
+		assertFalse(quoted.contains(";"));
+		assertFalse(quoted.contains("{"));
+		assertFalse(quoted.contains("}"));
+	}
+
+	@Test void a09_quotedString_plainLine_roundTripsInsideQuotes() {
+		assertEquals("\"Internal tooling.\"", CssValueEscaper.quotedString("Internal tooling."));
+	}
 }

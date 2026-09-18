@@ -239,6 +239,7 @@ public class ConsoleChromeMixin {
 	private final ThemePack pack;
 	private final String logoResource;
 	private final String pageBackgroundResource;
+	private final String footer;
 
 	/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body, keyed by mount (see {@link #mountKey}). */
 	private final Map<String,byte[]> cachedBodies = new ConcurrentHashMap<>();
@@ -270,6 +271,7 @@ public class ConsoleChromeMixin {
 		this.logoResource = builder.logoResource != null ? builder.logoResource : packLogo;
 		var packBg = builder.pack == null ? null : builder.pack.getPageBackgroundResource();
 		this.pageBackgroundResource = builder.pageBackgroundResource != null ? builder.pageBackgroundResource : packBg;
+		this.footer = builder.footer;
 	}
 
 	/**
@@ -371,7 +373,7 @@ public class ConsoleChromeMixin {
 	/**
 	 * Builds the response body: the static structural CSS, then Theme.OPEN's block, then the active pack's block (or,
 	 * if no pack is active, the active theme's override block if it differs from Theme.OPEN), then (if configured)
-	 * the logo/page-background asset override rules. Each override
+	 * the logo/page-background asset override rules and the page-footer {@code body::after{content}} rule. Each override
 	 * rule's {@code ?v=<buildVersion>-<hash8>} cache-buster is content-sensitive (see
 	 * {@link ClasspathAssetCache#cacheBuster}, mirroring {@code ViewsMixin}) so a {@code -SNAPSHOT} rebuild of the
 	 * configured asset busts the browser cache without relying on {@code buildVersion} (stable across dev rebuilds)
@@ -405,6 +407,8 @@ public class ConsoleChromeMixin {
 			sb.append('\n').append(".jc-logo{background-image:url(\"").append(assetUrl(req, LOGO_ASSET_PATH, LOGO_ASSET_PATH_UNPREFIXED))
 				.append(ASSET_CACHE.cacheBuster(logoResource))
 				.append("\");}");
+		if (footer != null)
+			sb.append('\n').append("body::after{content:").append(CssValueEscaper.quotedString(footer)).append(";}");
 		return sb.toString().getBytes(StandardCharsets.UTF_8);
 	}
 
@@ -689,6 +693,7 @@ public class ConsoleChromeMixin {
 		ThemePack pack;
 		String logoResource;
 		String pageBackgroundResource;
+		String footer;
 
 		/**
 		 * Whether to cache the assembled response body after the first request (default <jk>true</jk>).
@@ -790,6 +795,27 @@ public class ConsoleChromeMixin {
 		 */
 		public Builder pageBackgroundImage(String value) {
 			this.pageBackgroundResource = validateAssetResource(value, "pageBackgroundImage");
+			return this;
+		}
+
+		/**
+		 * Sets a one-line page-footer string painted into the themed band below {@code .jc-main}.
+		 *
+		 * <p>
+		 * Emitted as {@code body::after{content:"..."}} on the served stylesheet, so every page that links
+		 * {@code chrome.css} shows the line without a template change. Apps that already emit
+		 * {@code <footer class="jc-page-footer">} (or the {@code .jc-footer} alias) should omit this setter
+		 * so the line is not painted twice.
+		 *
+		 * <p>
+		 * The value is a plain text line, not HTML. It is quoted as a CSS {@code content} string with
+		 * declaration-boundary breakouts escaped.
+		 *
+		 * @param value The footer line. Can be <jk>null</jk> or blank to leave the footer unset.
+		 * @return This object.
+		 */
+		public Builder footer(String value) {
+			this.footer = value == null || value.isBlank() ? null : value;
 			return this;
 		}
 

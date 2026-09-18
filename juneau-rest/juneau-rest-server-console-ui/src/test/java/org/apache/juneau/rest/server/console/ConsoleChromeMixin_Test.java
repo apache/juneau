@@ -544,6 +544,59 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// i8) Page-footer line: mixin.footer(...) emits body::after{content}, blank unsets
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class FooterHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() {
+			return ConsoleChromeMixin.create().footer("Internal tooling.").build();
+		}
+	}
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class FooterBlankHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() {
+			return ConsoleChromeMixin.create().footer("  ").build();
+		}
+	}
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class FooterBreakoutHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() {
+			return ConsoleChromeMixin.create().footer("x\";}html{color:red").build();
+		}
+	}
+
+	@Test void i08_footerConfigured_chromeCssEmitsBodyAfterContent() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(FooterHost.class));
+		assertTrue(body.contains("body::after{content:\"Internal tooling.\";}"),
+			() -> "missing footer content rule, body:\n" + body);
+	}
+
+	@Test void i09_footerBlank_chromeCssOmitsBodyAfterContent() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(FooterBlankHost.class));
+		assertFalse(body.contains("body::after{content:"),
+			() -> "blank footer must not emit content, body:\n" + body);
+	}
+
+	@Test void i10_footerBreakout_isQuotedAndEscaped() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(FooterBreakoutHost.class));
+		assertTrue(body.contains("body::after{content:"), () -> "missing content rule, body:\n" + body);
+		assertFalse(body.contains("body::after{content:\"x\";}"), () -> "quote must not terminate the string, body:\n" + body);
+		assertFalse(body.contains("}html{color:red"), () -> "breakout must not survive, body:\n" + body);
+	}
+
+	@Test void i11_noFooterConfigured_chromeCssOmitsBodyAfterContent() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(NoAssetsHost.class));
+		assertFalse(body.contains("body::after{content:"),
+			() -> "unset footer must not emit content, body:\n" + body);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// j) Security regression: Theme/CssValueGrammar untouched by this feature
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -589,25 +642,42 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var onAccentVsFace = contrastRatio("#ffffff", face);
 		assertTrue(onAccentVsFace >= 3.0, () -> "--jc-on-accent/selected-face contrast " + onAccentVsFace + ":1 is below WCAG 1.4.11's 3:1 floor");
 
-		// Substring pin: both rewritten selected-state selectors consume var(--jc-accent-selected), with no
-		// var() fallback (requirement 3) - exactly three "background-color: var(--jc-accent-selected)" sinks.
+		// Substring pin: the two ribbon-format selected-state selectors consume var(--jc-accent-selected),
+		// with no var() fallback. Page Tabs (.jc-nav-tab.active) use wash + top accent instead of this fill.
 		var css = readChromeCss();
 		assertTrue(css.contains(".jc-tab.jc-tab-active,\n.jc-subtab.jc-subtab-active {"), () -> "missing raised-specificity selected selector, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {"), () -> "missing widget selected selector, css:\n" + css);
-		assertEquals(3, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
-			() -> "expected exactly the three consumers of --jc-accent-selected: the two ribbon-format selected-state selectors plus .jc-nav-tab.active (added by J0484), css:\n" + css);
+		assertEquals(2, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
+			() -> "expected exactly the two ribbon-format selected-state selectors (Page Tabs are wash + top accent), css:\n" + css);
 	}
 
-	@Test void j05_navTabActive_consumesAccentSelectedToken_andNoLongerConsumesAccentWash() throws Exception {
+	@Test void j05_navTabActive_selectedAccentIsTopEdge_notBottomBarOrSolidFill() throws Exception {
 		var css = readChromeCss();
+		var navTabStart = css.indexOf("\n.jc-nav-tab {");
+		assertNotEquals(-1, navTabStart, () -> "missing .jc-nav-tab rule, css:\n" + css);
+		var navTabBlock = css.substring(navTabStart, css.indexOf("}", navTabStart));
+		assertTrue(navTabBlock.contains("border-top: var(--jc-nav-indicator-width) solid transparent"),
+			() -> "unselected Page Tab reserves the top indicator, block:\n" + navTabBlock);
+		assertTrue(navTabBlock.contains("border-bottom: none"),
+			() -> "Page Tab must not carry a bottom indicator, block:\n" + navTabBlock);
+
 		var navTabActiveStart = css.indexOf(".jc-nav-tab.active {");
 		assertNotEquals(-1, navTabActiveStart, () -> "missing .jc-nav-tab.active rule, css:\n" + css);
-		var navTabActiveEnd = css.indexOf("}", navTabActiveStart);
-		var navTabActiveBlock = css.substring(navTabActiveStart, navTabActiveEnd);
-		assertTrue(navTabActiveBlock.contains("background-color: var(--jc-accent-selected)"),
-			() -> "expected .jc-nav-tab.active to consume --jc-accent-selected, block:\n" + navTabActiveBlock);
-		assertFalse(navTabActiveBlock.contains("var(--jc-accent-wash)"),
-			() -> "expected .jc-nav-tab.active to no longer consume --jc-accent-wash, block:\n" + navTabActiveBlock);
+		var navTabActiveBlock = css.substring(navTabActiveStart, css.indexOf("}", navTabActiveStart));
+		assertTrue(navTabActiveBlock.contains("background-color: var(--jc-accent-wash)"),
+			() -> "selected Page Tab is a wash so the top accent is visible, block:\n" + navTabActiveBlock);
+		assertTrue(navTabActiveBlock.contains("border-top-color: var(--jc-page-nav-accent)"),
+			() -> "selected Page Tab accent sits on top, block:\n" + navTabActiveBlock);
+		assertTrue(navTabActiveBlock.contains("border-bottom: none"),
+			() -> "selected Page Tab must not carry a thick bar underneath, block:\n" + navTabActiveBlock);
+		assertTrue(navTabActiveBlock.contains("color: var(--jc-text)"),
+			() -> "wash fill needs dark ink, block:\n" + navTabActiveBlock);
+		assertFalse(navTabActiveBlock.contains("var(--jc-accent-selected)"),
+			() -> "opaque selected fill hides the top accent, block:\n" + navTabActiveBlock);
+		assertFalse(navTabActiveBlock.contains("border-bottom-color"),
+			() -> "selected Page Tab accent is the top edge, not a bottom underline, block:\n" + navTabActiveBlock);
+		assertFalse(navTabActiveBlock.contains("var(--jc-on-accent)"),
+			() -> "white-on-wash ink is illegible, block:\n" + navTabActiveBlock);
 	}
 
 	@Test void j06_tabBaseThemingRule_outranksTheViewsBaseRule_soLinkOrderCannotDecideIt() throws Exception {

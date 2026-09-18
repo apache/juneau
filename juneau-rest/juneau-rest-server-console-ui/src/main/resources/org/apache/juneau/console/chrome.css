@@ -65,6 +65,11 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
+  /* Bottom gutter lives on the flex container, not as .jc-main's margin-bottom:
+     a column-flex body's last item drops its margin from the scrollable overflow,
+     so the themed --jc-page-bg band vanished after scrolling to the end. Container
+     padding is included in that overflow. */
+  padding-bottom: var(--jc-space-3);
 }
 
 a { color: var(--jc-link); text-decoration: none; }
@@ -305,7 +310,12 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
-   Primary navigation
+   Primary navigation (Page Tabs — .jc-nav-tab)
+   Selected tab: thick accent on the TOP edge (--jc-page-nav-accent → --jc-accent
+   per stock theme), light wash, dark ink. A same-color opaque fill hid that top
+   bar and left only .jc-nav's floor reading as a bar below the tab. The floor
+   (full-width underline of the strip) stays; the selected-tab indicator does not.
+   Not .jc-tab / .jc-subtab (deprecated ribbon pills; bottom-edge accent).
    ========================================================================== */
 
 .jc-nav {
@@ -339,9 +349,10 @@ a:hover { text-decoration: underline; }
 }
 
 .jc-nav-tab.active {
-  background-color: var(--jc-accent-selected);
+  background-color: var(--jc-accent-wash);
   border-top-color: var(--jc-page-nav-accent);
-  color: var(--jc-on-accent);
+  border-bottom: none;
+  color: var(--jc-text);
 }
 
 /* ==========================================================================
@@ -448,17 +459,23 @@ a:hover { text-decoration: underline; }
   padding: 20px 24px 40px;
   min-width: 0;
   background-color: var(--jc-main-bg);
-  margin: var(--jc-space-3);
+  /* Top + sides only; body padding-bottom is the matching bottom gutter (see body rule). */
+  margin: var(--jc-space-3) var(--jc-space-3) 0;
   border-radius: var(--jc-radius);
 }
 
 .jc-page-header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin: 0 auto 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0 0 14px;
   flex-wrap: wrap;
   gap: 10px;
+  background-color: var(--jc-card-bg);
+  border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
+  padding: 18px 20px;
 }
 
 .jc-page-header h1 {
@@ -954,14 +971,26 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 }
 
 /* ==========================================================================
-   Footer
+   Page footer
+   One muted line in the themed band below .jc-main. Public class:
+   .jc-page-footer (alias .jc-footer). Apps that emit HTML use
+   <footer class="jc-page-footer">; ConsoleChromeMixin.Builder.footer(String)
+   paints the same line via body::after content so a template change is
+   not required. Use one or the other, not both. body::after has no box until
+   content is set (CSS default none). Padding is the --jc-space-3 scale —
+   tighter than a typical app-local strip; body padding-bottom is the
+   trailing gutter under the line.
    ========================================================================== */
 
-.jc-footer {
+.jc-page-footer,
+.jc-footer,
+body::after {
+  flex: 0 0 auto;
+  margin: 0;
   text-align: center;
   font-size: 0.75rem;
   color: var(--jc-text-muted);
-  padding: 24px 0 32px;
+  padding: var(--jc-space-3) var(--jc-space-3) 0;
 }
 
 /* ==========================================================================
