@@ -476,6 +476,9 @@ a:hover { text-decoration: underline; }
   border-radius: var(--jc-radius);
   box-shadow: var(--jc-card-shadow);
   padding: var(--jc-card-padding);
+  /* Tighter top than content cards (16px → 8px). SSC hero did this as a local
+     padding-top; page-header is the title-card so the inset lives here. */
+  padding-top: var(--jc-space-2);
 }
 
 .jc-page-header h1 {
@@ -974,11 +977,12 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 }
 
 /* Header sort / column-search icons: idle is views.css opacity; active direction and a live
-   column filter spend accent so they match within each stock theme. */
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+   column filter spend accent so they match within each stock theme. DT ::before/::after glyphs
+   are suppressed; color the Juneau SVG control. */
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order {
   color: var(--jc-accent);
   opacity: 1;
 }

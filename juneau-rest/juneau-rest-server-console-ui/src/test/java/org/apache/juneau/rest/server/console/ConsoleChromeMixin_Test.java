@@ -939,8 +939,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 
 	@Test void k09_chromeCss_headerSortSearchSpendAccentAndControlBorder() throws Exception {
 		var css = readChromeCss();
-		assertTrue(css.contains("th.dt-ordering-asc span.dt-column-order:before"),
+		assertTrue(css.contains("th.dt-ordering-asc span.dt-column-order"),
 			() -> "missing active sort chevron theme, css:\n" + css);
+		assertFalse(css.contains("th.dt-ordering-asc span.dt-column-order:before"),
+			() -> "active sort color must target the SVG span, not DT ::before: " + css);
 		assertTrue(css.contains(".juneau-view-col-search-icon.is-active { color: var(--jc-accent); }"),
 			() -> "missing active column-search icon theme, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-col-search-popover {"),

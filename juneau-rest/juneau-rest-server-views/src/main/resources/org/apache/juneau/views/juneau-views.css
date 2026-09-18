@@ -667,82 +667,48 @@ table.dataTable thead span.dt-column-order,
 	height: var(--jc-space-5);
 	flex: 0 0 var(--jc-chrome-glyph-size-small);
 	cursor: pointer;
+	opacity: 0.45;
+	overflow: hidden;
+	color: inherit;
+}
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order {
+	opacity: 1;
+}
+table.dataTable thead span.dt-column-order svg,
+.juneau-view-col-sort-icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order svg,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order svg {
+	transform: rotate(180deg);
 }
 
 /*
- * DataTables 2 paints stacked up/down triangles via span.dt-column-order::before/::after
- * (U+25B2 / U+25BC). Host webfonts (and leftover DT1 / Select ticks) can render that
- * content as a checkbox mashed onto the active triangle. Empty the DT content and draw
- * chevrons with borders so no unicode / icon-font glyph can substitute a check. A DT1
- * Juneau SVG already in the span is the chevron — kill the pseudos there so they do
- * not overlay it.
+ * DataTables 2 paints stacked ▲/▼ via span.dt-column-order::before/::after
+ * (`content:"▲";content:"▲"/""`). That rule's specificity
+ * (`th.dt-orderable-asc span.dt-column-order:before` = 0,3,5) beats J0548's
+ * `:has(svg){content:none}` (0,3,3), so unicode triangles stack on the Juneau
+ * SVG and read as a mashed tick. `dataTables.dataTables.css` does not use
+ * `!important` on `content`; this does, so it cannot lose. The visible control
+ * is `.juneau-view-col-sort-icon`'s SVG — not DT glyphs, not CSS-border chevrons.
  */
 table.dataTable thead span.dt-column-order input,
 .juneau-view-col-sort-icon input {
 	display: none;
 }
-table.dataTable thead span.dt-column-order:has(svg):before,
-table.dataTable thead span.dt-column-order:has(svg):after,
-.juneau-view-col-sort-icon:has(svg):before,
-.juneau-view-col-sort-icon:has(svg):after {
-	content: none;
-}
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:not(:has(svg)):after {
-	content: "";
-	display: block;
-	position: absolute;
-	left: 50%;
-	width: 0.4em;
-	height: 0.4em;
-	box-sizing: border-box;
-	border: none;
-	border-right: 0.12em solid currentColor;
-	border-bottom: 0.12em solid currentColor;
-	background: none;
-	font-size: 0.75em;
-	line-height: 0;
-}
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:not(:has(svg)):before,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:not(:has(svg)):before {
-	bottom: 52%;
-	transform: translateX(-50%) rotate(225deg);
-}
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:not(:has(svg)):after,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:not(:has(svg)):after {
-	top: 52%;
-	transform: translateX(-50%) rotate(45deg);
-}
-
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after {
-	opacity: 0.45;
-}
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
-	opacity: 1;
+table.dataTable thead > tr > th span.dt-column-order:before,
+table.dataTable thead > tr > th span.dt-column-order:after,
+table.dataTable thead > tr > td span.dt-column-order:before,
+table.dataTable thead > tr > td span.dt-column-order:after,
+.juneau-view-col-sort-icon:before,
+.juneau-view-col-sort-icon:after {
+	content: none !important;
 }
 
 table.dataTable thead .sorting:before,

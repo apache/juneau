@@ -1202,15 +1202,18 @@
 		if (!orderSpan) {
 			orderSpan = document.createElement("span");
 			orderSpan.className = "dt-column-order juneau-view-col-sort-icon";
-			const markup = window.JuneauViews?.icons?.resolveIcon?.("expand_more")
-				|| window.JuneauViews?.icons?.resolveIcon?.("chevrondown");
-			if (markup) orderSpan.innerHTML = markup;
 			const flex = header.querySelector("div.dt-column-header") || header;
 			flex.appendChild(orderSpan);
 			orderSpan.addEventListener("click", function (e) {
 				e.stopPropagation();
 				cycleColumnOrder(dt, col.index());
 			});
+		}
+		orderSpan.classList.add("juneau-view-col-sort-icon");
+		if (!orderSpan.querySelector("svg")) {
+			const markup = window.JuneauViews?.icons?.resolveIcon?.("expand_more")
+				|| window.JuneauViews?.icons?.resolveIcon?.("chevrondown");
+			if (markup) orderSpan.insertAdjacentHTML("afterbegin", markup);
 		}
 		if (!orderSpan.getAttribute("role")) orderSpan.setAttribute("role", "button");
 		orderSpan.setAttribute("tabindex", "0");

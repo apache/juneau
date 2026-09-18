@@ -95,6 +95,8 @@ class ChromeCss_MainInner_Test extends TestBase {
 			"title card spends --jc-card-shadow: " + body);
 		assertTrue(body.contains("padding: var(--jc-card-padding)"),
 			"title card spends --jc-card-padding: " + body);
+		assertTrue(body.contains("padding-top: var(--jc-space-2)"),
+			"title card top inset is --jc-space-2 (8px), not content-card 16px: " + body);
 		assertFalse(body.contains("padding: 18px 20px"),
 			"off-scale 18px 20px title-card inset must not remain: " + body);
 		assertTrue(body.contains("gap: 0"), "title/sub stack with h1 margin, not flex gap: " + body);

@@ -99,6 +99,16 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("delete table.dataset.juneauHeaderSortSearch"), fn);
 	}
 
+	@Test void a07_ensureHeaderSortControl_injectsSvgOnExistingDtOrderSpan() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function ensureHeaderSortControl(");
+		assertTrue(fn.contains("classList.add(\"juneau-view-col-sort-icon\")"), fn);
+		assertTrue(fn.contains("insertAdjacentHTML"), fn);
+		assertTrue(fn.contains("querySelector(\"svg\")"), fn);
+		assertTrue(fn.contains("resolveIcon?.(\"expand_more\")"), fn);
+		assertTrue(fn.indexOf("classList.add") > fn.indexOf("if (!orderSpan)"), fn);
+	}
+
 	@Test void b01_viewsCss_idleSortChevronsAreVisible() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("span.dt-column-order:before"), body);
@@ -111,15 +121,21 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 
 	@Test void b02_viewsCss_sortControlDoesNotRenderTickOrDtTriangles() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains("span.dt-column-order input"), body);
-		assertTrue(body.contains("content: \"\";"), body);
-		assertTrue(body.contains("content: none;"), body);
-		assertTrue(body.contains(":not(:has(svg)):before"), body);
+		assertTrue(body.contains("span.dt-column-order:before"), body);
+		assertTrue(body.contains("content: none !important"),
+			"DT ::before/::after content must be none !important so dataTables.dataTables.css cannot win:\n" + excerptSort(body));
+		assertFalse(body.contains(":not(:has(svg)):before"),
+			"J0548 :not(:has(svg)) chevrons lost to DT content:▲ when an SVG is present:\n" + excerptSort(body));
 		assertFalse(hasContentValue(body, "▲"), "DT2 unicode up-triangle must not remain as content");
 		assertFalse(hasContentValue(body, "▼"), "DT2 unicode down-triangle must not remain as content");
 		assertFalse(hasContentValue(body, "✓"), body);
 		assertFalse(hasContentValue(body, "✔"), body);
 		assertFalse(body.contains("content: \"\\25"), body);
+	}
+
+	private static String excerptSort(String css) {
+		var start = css.indexOf("span.dt-column-order");
+		return start < 0 ? css : css.substring(start, Math.min(css.length(), start + 1800));
 	}
 
 	private static boolean hasContentValue(String css, String glyph) {
