@@ -53,9 +53,20 @@ class Theme_TokenOrdering_Test extends TestBase {
 		assertEquals(NAMES, new ArrayList<>(themeWithNames().getTokens().keySet()));
 	}
 
-	@Test void a02_themeOpen_iteratesInDeclarationOrder_soTheTagPaletteStaysGrouped() {
+	@Test void a02_themeOpen_iteratesInDeclarationOrder_soThePillAndTagPalettesStayGrouped() {
 		var names = new ArrayList<>(Theme.OPEN.getTokens().keySet());
 		assertEquals("--jc-font", names.get(0), () -> "Theme.OPEN's first declared token is not first, order: " + names);
+		// The canonical pill palette (Task 15): green/blue/amber/neutral/red x bg/text/border, in that order.
+		var pills = names.stream().filter(x -> x.startsWith("--jc-pill-")).toList();
+		assertEquals(
+			List.of(
+				"--jc-pill-green-bg", "--jc-pill-green-text", "--jc-pill-green-border",
+				"--jc-pill-blue-bg", "--jc-pill-blue-text", "--jc-pill-blue-border",
+				"--jc-pill-amber-bg", "--jc-pill-amber-text", "--jc-pill-amber-border",
+				"--jc-pill-neutral-bg", "--jc-pill-neutral-text", "--jc-pill-neutral-border",
+				"--jc-pill-red-bg", "--jc-pill-red-text", "--jc-pill-red-border"),
+			pills);
+		// The legacy tag palette (aliases of the pill family) stays grouped in the same order, declared right after.
 		var tags = names.stream().filter(x -> x.startsWith("--jc-tag-")).toList();
 		assertEquals(
 			List.of(
@@ -65,6 +76,9 @@ class Theme_TokenOrdering_Test extends TestBase {
 				"--jc-tag-neutral-bg", "--jc-tag-neutral-text", "--jc-tag-neutral-border",
 				"--jc-tag-red-bg", "--jc-tag-red-text", "--jc-tag-red-border"),
 			tags);
+		// The whole pill block precedes the whole tag block (backward-reference authoring: tags alias pills).
+		assertTrue(names.indexOf("--jc-pill-red-border") < names.indexOf("--jc-tag-green-bg"),
+			() -> "pill palette must be declared before the tag palette, order: " + names);
 	}
 
 	@Test void a03_repeatedBuildsOfTheSameTokenSet_produceTheSameOrder() {

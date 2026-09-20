@@ -614,8 +614,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 55 = previous 54 plus --jc-chrome-icon (idle ribbon / paging glyph; not --jc-text-soft).
-		assertEquals(55, Theme.OPEN.getTokens().size());
+		// 70 = previous 55 plus the 15 canonical --jc-pill-* status-chip tokens (Task 15); the 15 legacy
+		// --jc-tag-* tokens are RETAINED as var(--jc-pill-*) aliases (badges/avatars/frozen calendar), so the
+		// count grows by exactly the pill family, not by a rename.
+		assertEquals(70, Theme.OPEN.getTokens().size());
 		assertEquals("#f5f6f9", Theme.OPEN.getTokens().get("--jc-main-bg"));
 		assertEquals("#ffffff", Theme.OPEN.getTokens().get("--jc-card-bg"));
 		assertEquals("16px 16px 8px", Theme.OPEN.getTokens().get("--jc-card-padding"));
@@ -1205,6 +1207,47 @@ class ConsoleChromeMixin_Test extends TestBase {
 			fills.add(fill);
 		}
 		assertEquals(4, fills.size(), () -> "pass/warn/fail/unknown collapse onto fewer than four fills: " + fills);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// n') Pill palette (Task 15): --jc-pill-* is the CANONICAL status-chip colour family the client `pill` catalog
+	//     renderer paints from; the legacy --jc-tag-* triads are retained as var(--jc-pill-*) aliases (badges/avatars/
+	//     frozen calendar), so no cross-module rename is needed and every value stays pixel-identical.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void n07_everyPillColourFamily_isACompleteTriad_ofLiteralHex() {
+		// The pill family mirrors the tag family: green/blue/amber/neutral/red x bg/text/border, all 6-digit hex.
+		for (var colour : TAG_PALETTE)
+			for (var property : TAG_TRIAD_PROPERTIES) {
+				var name = "--jc-pill-" + colour + '-' + property;
+				var value = Theme.OPEN.getTokens().get(name);
+				assertNotNull(value, () -> "Theme.OPEN is missing pill token '" + name + "'");
+				assertTrue(value.matches("#[0-9a-f]{6}"),
+					() -> name + " is not a 6-digit hex colour (canonical pill token must be a concrete literal): " + value);
+			}
+	}
+
+	@Test void n08_tagTriads_resolveToTheirPillCounterparts_soTheAliasIsIntact() {
+		// Each --jc-tag-<c>-<p> is authored as var(--jc-pill-<c>-<p>); build() resolves it, so getTokens() must carry
+		// the SAME literal for both.  This is what lets badges/avatars keep --jc-tag-* while pills move to --jc-pill-*.
+		for (var colour : TAG_PALETTE)
+			for (var property : TAG_TRIAD_PROPERTIES) {
+				var pill = Theme.OPEN.getTokens().get("--jc-pill-" + colour + '-' + property);
+				var tag = Theme.OPEN.getTokens().get("--jc-tag-" + colour + '-' + property);
+				assertEquals(pill, tag,
+					() -> "--jc-tag-" + colour + '-' + property + " must resolve to its --jc-pill-* counterpart");
+			}
+	}
+
+	@Test void n09_chromeCss_pillChips_paintFromThePillPalette_notTheTagPalette() throws IOException {
+		// The .tag.<domain>.<value> pill-chip rules (the palette the `pill` renderer's markup lands in) must consume
+		// var(--jc-pill-*): that is the migration.  (Dual-hat SLDS/lightning-naming freeze is covered separately.)
+		var css = readChromeCss();
+		assertTrue(css.contains(".tag.status.released"), () -> "no .tag.<domain>.<value> pill-chip palette rule, css:\n" + css);
+		for (var colour : TAG_PALETTE)
+			for (var property : TAG_TRIAD_PROPERTIES)
+				assertTrue(css.contains("var(--jc-pill-" + colour + '-' + property + ")"),
+					() -> "pill-chip palette never consumes var(--jc-pill-" + colour + '-' + property + "), css:\n" + css);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

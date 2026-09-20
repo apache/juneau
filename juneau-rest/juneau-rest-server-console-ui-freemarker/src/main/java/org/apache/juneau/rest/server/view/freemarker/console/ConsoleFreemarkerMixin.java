@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import java.util.*;
+
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
@@ -76,6 +78,12 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 */
 	public static final String BASE_TEMPLATE_PATH = "org/apache/juneau/console/base.ftlh";
 
+	/** Default consumer chrome template included by {@code <@page>} when none is configured. */
+	public static final String DEFAULT_CHROME_TEMPLATE = "base.ftlh";
+
+	private final String chromeTemplate;
+	private final List<ExtraPack> extraPacks;
+
 	/**
 	 * No-arg constructor &mdash; mirrors {@link FreemarkerMixin#FreemarkerMixin()} so the mixin walk's
 	 * {@code BeanInstantiator} is not forced to depend on builder-detection alone (S3).
@@ -91,7 +99,12 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 */
 	protected ConsoleFreemarkerMixin(Builder builder) {
 		super(builder);
+		this.chromeTemplate = builder.chromeTemplate;
+		this.extraPacks = List.copyOf(builder.extraPacks);
 	}
+
+	/** Extra toolkit pack registered through the builder, applied when {@code resolveConfiguration} builds the registry. */
+	private record ExtraPack(String name, List<String> cssPaths, List<String> jsPaths) {}
 
 	/**
 	 * Creates a new builder.
@@ -151,6 +164,14 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 					new ClassTemplateLoader(getClass().getClassLoader(), "")
 				}));
 				base.setSharedVariable(TagMethodModel.NAME, new TagMethodModel());
+				var packs = new ToolkitPackRegistry();
+				for (var extra : extraPacks)
+					packs.register(extra.name(), extra.cssPaths(), extra.jsPaths());
+				base.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
+				base.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel());
+				base.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
+				base.setSharedVariable(NodeDirectiveModel.NAME, new NodeDirectiveModel());
+				base.setSharedVariable(ThemeDirectiveModel.NAME, new ThemeDirectiveModel());
 				wrappedConfiguration = base;
 			}
 		}
@@ -162,8 +183,58 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 */
 	public static class Builder extends FreemarkerMixin.Builder {
 
+		String chromeTemplate = DEFAULT_CHROME_TEMPLATE;
+		final List<ExtraPack> extraPacks = new ArrayList<>();
+
 		/** Constructor &mdash; package access for {@link ConsoleFreemarkerMixin#create()}. */
 		protected Builder() {}
+
+		/**
+		 * {@inheritDoc}
+		 *
+		 * <p>
+		 * Covariantly narrowed to this {@code Builder} so a fluent chain can mix inherited setters
+		 * (e.g. {@link #basePath(String)}) with the console-specific {@link #chromeTemplate(String)} /
+		 * {@link #registerToolkitPack(String, java.util.List, java.util.List)} in any order.
+		 */
+		@Override
+		public Builder basePath(String value) {
+			super.basePath(value);
+			return this;
+		}
+
+		/**
+		 * Sets the consumer chrome template that {@code <@page>} includes after capturing its body.
+		 *
+		 * <p>
+		 * Resolved on the consumer's own {@code basePath}-rooted loader. Defaults to
+		 * {@link ConsoleFreemarkerMixin#DEFAULT_CHROME_TEMPLATE}.
+		 *
+		 * @param chromeTemplate The chrome template name. Must not be {@code null}.
+		 * @return This object.
+		 */
+		public Builder chromeTemplate(String chromeTemplate) {
+			this.chromeTemplate = chromeTemplate;
+			return this;
+		}
+
+		/**
+		 * Registers an app-supplied toolkit pack (Q7 A / I2 public seam).
+		 *
+		 * <p>
+		 * Extra packs are applied when {@code resolveConfiguration} constructs the
+		 * {@link ToolkitPackRegistry}, alongside the built-in {@code "views"} pack. A second pack after
+		 * GA must not need a new public method.
+		 *
+		 * @param name The pack name.
+		 * @param cssPaths Ordered CSS asset paths.
+		 * @param jsPaths Ordered JS asset paths.
+		 * @return This object.
+		 */
+		public Builder registerToolkitPack(String name, List<String> cssPaths, List<String> jsPaths) {
+			extraPacks.add(new ExtraPack(name, List.copyOf(cssPaths), List.copyOf(jsPaths)));
+			return this;
+		}
 
 		/**
 		 * Builds the {@link ConsoleFreemarkerMixin}.

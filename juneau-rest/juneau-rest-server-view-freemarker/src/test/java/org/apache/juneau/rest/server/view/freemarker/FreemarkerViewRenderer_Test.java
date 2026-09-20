@@ -19,6 +19,9 @@ package org.apache.juneau.rest.server.view.freemarker;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -73,5 +76,30 @@ class FreemarkerViewRenderer_Test extends TestBase {
 
 	@Test void b05_gateRejectsNestedTraversal() {
 		assertThrows(IllegalArgumentException.class, () -> FreemarkerViewRenderer.gateTemplateName("/templates/", "a/b/../../../secret"));
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section C: FreemarkerRenderScope request handle (Task 1)
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void c01_openClose_setsAndClearsRequest() throws Exception {
+		assertNull(FreemarkerRenderScope.request());
+		var c = MockRestClient.buildLax(DummyHost.class);
+		c.get("/x").run();
+		var req = DummyHost.CAPTURED.get();
+		FreemarkerRenderScope.open(req);
+		assertSame(req, FreemarkerRenderScope.request());
+		FreemarkerRenderScope.close();
+		assertNull(FreemarkerRenderScope.request());
+	}
+
+	public static class DummyHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		static final ThreadLocal<RestRequest> CAPTURED = new ThreadLocal<>();
+		@RestGet(path="/x")
+		public String x(RestRequest req) {
+			CAPTURED.set(req);
+			return "x";
+		}
 	}
 }

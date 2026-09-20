@@ -66,11 +66,14 @@ import org.apache.juneau.rest.server.widgets.*;
  * </ul>
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,pollIntervalMs,pausePollingWhileEditing,columnConfig")
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class ViewDef {
 
 	/** The frozen contract version.  Bumped only on a breaking wire change. */

@@ -57,7 +57,12 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@link Behavior#LINK} / {@link Behavior#SAFE} are fully functional.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public class AppHeaderTable {
 
 	/** Marker attribute on the {@code <header>} the {@code juneau-chrome.js} runtime scans from (carries the id). */

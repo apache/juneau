@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>
 	<name>Apache Juneau REST Server Console UI — FreeMarker</name>
-	<description>Apache Juneau REST Server - FreeMarker delivery for the themeable admin-console chrome (base.ftlh + &lt;@tag&gt; macro + ConsoleFreemarkerMixin, opt-in). Depends on console-ui + view-freemarker only — never -datatables.</description>
+	<description>Apache Juneau REST Server - FreeMarker delivery for the themeable admin-console chrome (base.ftlh + &lt;@tag&gt; macro + ConsoleFreemarkerMixin + &lt;@page&gt; / &lt;@card&gt; shared directives, opt-in). Depends on console-ui + view-freemarker + views only — never -datatables.</description>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -44,6 +44,21 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-view-freemarker</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-views</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+			The "calendar" toolkit pack resolves its asset URLs through WidgetsMixin.widgetAssetUrl and names
+			WidgetsMixin.CALENDAR_CSS_PATH / CALENDAR_JS_PATH directly (Task 14). Declared as a direct compile
+			dep for those symbols; widgets pulls only juneau-rest-server + juneau-commons (never -datatables).
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-widgets</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!--

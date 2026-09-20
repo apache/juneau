@@ -103,6 +103,8 @@ function makeConsole() {
  * `opts.noAbortController` withholds the platform baseline for the fail-loud test.
  * `opts.helpersJsPath` ALSO loads juneau-helpers.js into the same sandbox (afterward, same load order the browser
  * uses) - only the declarative-default harness needs this, since the reserved default paints via `ctx.helpers[...]`.
+ * `opts.pageCardsJsPath` ALSO loads juneau-page-cards.js LAST (the order the "views" toolkit pack emits it), so the
+ * page-cards harness can build sidecars and call `JuneauPage.boot()` against the real scanner + regions.mount.
  */
 function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 	opts = opts || {};
@@ -133,16 +135,17 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 
 	const files = [rendersJsPath, viewsJsPath, regionsJsPath];
 	if (opts.helpersJsPath) files.push(opts.helpersJsPath);
+	if (opts.pageCardsJsPath) files.push(opts.pageCardsJsPath);
 	for (const file of files) {
 		// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js/juneau-regions.js
-		// (and, when supplied, juneau-helpers.js) sources into a VM sandbox is this harness's intended mechanism
-		// for exercising them under the DOM shim; inputs are fixed local file paths supplied by the test, never
-		// attacker-controlled data.
+		// (and, when supplied, juneau-helpers.js / juneau-page-cards.js) sources into a VM sandbox is this harness's
+		// intended mechanism for exercising them under the DOM shim; inputs are fixed local file paths supplied by
+		// the test, never attacker-controlled data.
 		vm.runInNewContext(fs.readFileSync(path.resolve(file), 'utf8'), sandbox, { filename: path.basename(file) });
 	}
 
 	const NS = env.window.JuneauViews;
-	return { env: env, NS: NS, R: NS?.regions, H: NS?.helpers, I: NS?.init, rec: rec, clock: clock };
+	return { env: env, NS: NS, R: NS?.regions, H: NS?.helpers, I: NS?.init, P: env.window.JuneauPage, rec: rec, clock: clock };
 }
 
 /**

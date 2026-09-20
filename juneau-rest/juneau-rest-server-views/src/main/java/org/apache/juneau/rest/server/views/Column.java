@@ -46,9 +46,14 @@ import org.apache.juneau.commons.bean.*;
  * </ul>
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="data,name,title,orderable,searchable,render,href,className,pinned,defaultVisible,formats")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public class Column {
 
 	/** The bean-property / JSON key this column reads from each row. */

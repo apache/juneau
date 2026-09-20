@@ -27,7 +27,12 @@ package org.apache.juneau.rest.server.views;
  * A closed vocabulary the framework translates to a class, never a CSS value an author supplies.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public enum FieldSpan {
 
 	/** One column.  The default. */

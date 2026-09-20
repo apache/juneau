@@ -155,6 +155,14 @@ public class ViewsMixin {
 	public static final String HELPERS_JS_PATH = "/juneau-helpers.js";
 
 	/**
+	 * The URL path at which the page-cards runtime is served (relative to the host mount).  This
+	 * {@code <script>} is the last entry in the {@code "views"} toolkit pack (after
+	 * {@link #HELPERS_JS_PATH}): it scans {@code script.juneau-card-sidecar} envelopes emitted by the
+	 * {@code <@card>} FreeMarker directive and hands table/populate slots to {@code JuneauViews.regions.mount}.
+	 */
+	public static final String PAGE_CARDS_JS_PATH = "/juneau-page-cards.js";
+
+	/**
 	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
 	 * consumer adds this {@code <script>} after {@code juneau-views.js}; a non-configurable table never loads it.
 	 */
@@ -270,6 +278,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped region-populate paint library. */
 	static final String HELPERS_JS_RESOURCE = "/org/apache/juneau/views/juneau-helpers.js";
+
+	/** Classpath location of the shipped page-cards runtime. */
+	static final String PAGE_CARDS_JS_RESOURCE = "/org/apache/juneau/views/juneau-page-cards.js";
 
 	/** Classpath location of the shipped column-chooser runtime. */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
@@ -463,6 +474,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-page-cards.js] &mdash; serve the page-cards runtime.
+	 *
+	 * @return The page-cards runtime as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=PAGE_CARDS_JS_PATH,
+		summary="Juneau page-cards runtime",
+		description="First-party, opt-in JavaScript that scans <@card> sidecar envelopes and hands table/populate slots to JuneauViews.regions.mount.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getPageCardsScript() {
+		return serve(PAGE_CARDS_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser / saved-views runtime.
 	 *
 	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
@@ -620,6 +646,7 @@ public class ViewsMixin {
 		if (SYMBOLS_MATERIAL_SVG_PATH.equals(path)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
 		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
 		if (HELPERS_JS_PATH.equals(path)) return HELPERS_JS_RESOURCE;
+		if (PAGE_CARDS_JS_PATH.equals(path)) return PAGE_CARDS_JS_RESOURCE;
 		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
 		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
 		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;

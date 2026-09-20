@@ -168,6 +168,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.REGIONS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.HELPERS_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.PAGE_CARDS_JS_PATH).run().assertStatus(404);
 	}
 
 	@Test void h01_hostWithoutMixin_iconsJsRouteIs404() throws Exception {
@@ -233,6 +234,20 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("text/javascript")
 			.assertHeader("Cache-Control").isContains("max-age")
 			.assertContent().asString().isContains("juneau-helpers.js");
+	}
+
+	@Test void b14_pageCardsJs_served() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.PAGE_CARDS_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		// The served runtime IS the sidecar scanner: it defines JuneauPage, reads script.juneau-card-sidecar
+		// envelopes, hands slots to JuneauViews.regions.mount, and carries the sidecar contract-version handshake.
+		assertTrue(body.contains("JuneauPage"), body);
+		assertTrue(body.contains("juneau-card-sidecar"), body);
+		assertTrue(body.contains("regions.mount"), body);
+		assertTrue(body.contains("JUNEAU_PAGE_CARDS_CONTRACT_VERSION"), body);
 	}
 
 	@Test void b04_viewsCss_served() throws Exception {
@@ -346,7 +361,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.PAGE_CARDS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -371,7 +386,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
 				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
-				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
+				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.PAGE_CARDS_JS_PATH,
+				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
 			var url = ViewsMixin.viewAssetUrl(path);

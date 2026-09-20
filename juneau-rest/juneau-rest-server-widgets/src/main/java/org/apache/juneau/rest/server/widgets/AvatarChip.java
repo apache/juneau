@@ -34,11 +34,14 @@ import org.apache.juneau.commons.http.*;
  * forbidden.  A load error on the image falls back to the initials node.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="displayName,initials,imageUrl,status,menu")
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class AvatarChip {
 
 	/** The required accessible name (a display label, not an email), emitted as {@code aria-label}. */

@@ -37,8 +37,13 @@ import org.apache.juneau.commons.bean.*;
  * </ul>
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
 @BeanType
+@Deprecated(since = "10.0.0")
 public class ColumnConfig {
 
 	private ColumnConfig() {}

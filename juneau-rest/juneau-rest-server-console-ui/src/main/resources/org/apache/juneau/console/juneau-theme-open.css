@@ -1,0 +1,97 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+ * Shipped "open" theme pack for the admin-console chrome.
+ *
+ * GENERATED, drift-guarded: this html:root{} token block is provably identical to Theme.OPEN in
+ * juneau-rest-server-console-ui (see ThemePackAssets_Test).  It is linked by the FTL <@theme name="open"/>
+ * directive AFTER chrome.css, so its tokens win the cascade over chrome.css's baked-in Theme.OPEN block.
+ * Do not hand-edit; regenerate from the Theme constant instead.
+ */
+
+html:root {
+	--jc-font: 'Inter', 'Source Sans 3', system-ui, sans-serif;
+	--jc-page-bg: linear-gradient(180deg, #b0c4df 0%, #c7d5e8 22%, #e4eaf2 55%, #f5f6f9 100%);
+	--jc-header-icon-color: #747474;
+	--jc-accent: #1589EE;
+	--jc-accent-wash: rgba(21,137,238,0.1);
+	--jc-link: #0174d3;
+	--jc-text: #080707;
+	--jc-text-soft: #080707cc;
+	--jc-text-muted: #706e6b;
+	--jc-border: #dddbda;
+	--jc-border-2: #ced4da;
+	--jc-card-bg: #ffffff;
+	--jc-chrome-bg: #f3f2f2;
+	--jc-white: #ffffff;
+	--jc-btn-primary: #1a5297;
+	--jc-btn-primary-hover: #005fb2;
+	--jc-danger: #c23934;
+	--jc-success: #2e844a;
+	--jc-avatar-bg: linear-gradient(135deg, #1589EE, #1a5297);
+	--jc-radius: 0.25rem;
+	--jc-pill-green-bg: #b8e6c4;
+	--jc-pill-green-text: #155724;
+	--jc-pill-green-border: #9fd6ad;
+	--jc-pill-blue-bg: #dceefb;
+	--jc-pill-blue-text: #0c5460;
+	--jc-pill-blue-border: #c3e0f3;
+	--jc-pill-amber-bg: #fff3cd;
+	--jc-pill-amber-text: #856404;
+	--jc-pill-amber-border: #ffe69c;
+	--jc-pill-neutral-bg: #e2e3e5;
+	--jc-pill-neutral-text: #383d41;
+	--jc-pill-neutral-border: #c6c8ca;
+	--jc-pill-red-bg: #f8d7da;
+	--jc-pill-red-text: #721c24;
+	--jc-pill-red-border: #f5c6cb;
+	--jc-tag-green-bg: #b8e6c4;
+	--jc-tag-green-text: #155724;
+	--jc-tag-green-border: #9fd6ad;
+	--jc-tag-blue-bg: #dceefb;
+	--jc-tag-blue-text: #0c5460;
+	--jc-tag-blue-border: #c3e0f3;
+	--jc-tag-amber-bg: #fff3cd;
+	--jc-tag-amber-text: #856404;
+	--jc-tag-amber-border: #ffe69c;
+	--jc-tag-neutral-bg: #e2e3e5;
+	--jc-tag-neutral-text: #383d41;
+	--jc-tag-neutral-border: #c6c8ca;
+	--jc-tag-red-bg: #f8d7da;
+	--jc-tag-red-text: #721c24;
+	--jc-tag-red-border: #f5c6cb;
+	--jc-header-height: 56px;
+	--jc-nav-indicator-width: 3px;
+	--jc-page-nav-hairline: 2px;
+	--jc-page-nav-section-font-size: 13px;
+	--jc-page-nav-child-font-size: 12px;
+	--jc-card-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+	--jc-danger-wash: #fdeceb;
+	--jc-success-wash: #eaf6ee;
+	--jc-space-1: 4px;
+	--jc-space-2: 8px;
+	--jc-space-3: 12px;
+	--jc-space-4: 16px;
+	--jc-space-5: 24px;
+	--jc-space-6: 32px;
+	--jc-focus: #1589EE;
+	--jc-accent-selected: #1589EE;
+	--jc-table-stripe-bg: #fafaf9;
+	--jc-main-bg: #f5f6f9;
+	--jc-card-padding: 16px 16px 8px;
+	--jc-chrome-icon: #666666;
+}

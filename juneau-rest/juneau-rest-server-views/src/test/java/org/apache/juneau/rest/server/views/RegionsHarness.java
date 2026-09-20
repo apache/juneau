@@ -54,7 +54,7 @@ final class RegionsHarness {
 	 * is not on any of the paths a Maven or IDE working directory produces).  Callers turn a null into a skip.
 	 */
 	static Map<?,?> report(String harnessName) {
-		return reportImpl(harnessName, false);
+		return reportImpl(harnessName, null);
 	}
 
 	/**
@@ -63,11 +63,20 @@ final class RegionsHarness {
 	 * helper library the three original harnesses (primitive/bus/barrier) deliberately do not load.
 	 */
 	static Map<?,?> reportWithHelpers(String harnessName) {
-		return reportImpl(harnessName, true);
+		return reportImpl(harnessName, ViewsMixin.HELPERS_JS_RESOURCE);
 	}
 
-	private static Map<?,?> reportImpl(String harnessName, boolean withHelpers) {
-		var cacheKey = (withHelpers ? "helpers:" : "") + harnessName;
+	/**
+	 * Runs the named harness with {@code juneau-page-cards.js} ALSO loaded (a fourth argv path, loaded last - the
+	 * same order the "views" toolkit pack emits it), for the page-cards harness whose F10 cases must actually BOOT
+	 * the sidecar scanner (name-only template lookup, populate hookup) rather than pin Java strings alone.
+	 */
+	static Map<?,?> reportWithPageCards(String harnessName) {
+		return reportImpl(harnessName, ViewsMixin.PAGE_CARDS_JS_RESOURCE);
+	}
+
+	private static Map<?,?> reportImpl(String harnessName, String extraResource) {
+		var cacheKey = (extraResource == null ? "" : extraResource + ":") + harnessName;
 		if (FAILED.contains(cacheKey))
 			return null;
 		var cached = CACHE.get(cacheKey);
@@ -79,7 +88,7 @@ final class RegionsHarness {
 			var harness = locate(harnessName);
 			if (harness == null)
 				return markUnavailable(cacheKey);
-			var report = Json.to(run(harness, harnessName, withHelpers), Map.class);
+			var report = Json.to(run(harness, harnessName, extraResource), Map.class);
 			CACHE.put(cacheKey, report);
 			return report;
 		} catch (Exception e) {
@@ -93,11 +102,11 @@ final class RegionsHarness {
 		return null;
 	}
 
-	private static String run(Path harness, String harnessName, boolean withHelpers) throws Exception {
+	private static String run(Path harness, String harnessName, String extraResource) throws Exception {
 		var renders = Files.createTempFile("juneau-renders-", ".js");
 		var views = Files.createTempFile("juneau-views-", ".js");
 		var regions = Files.createTempFile("juneau-regions-", ".js");
-		var helpers = withHelpers ? Files.createTempFile("juneau-helpers-", ".js") : null;
+		var extra = extraResource != null ? Files.createTempFile("juneau-extra-", ".js") : null;
 		var stdout = Files.createTempFile("regions-stdout-", ".json");
 		var stderr = Files.createTempFile("regions-stderr-", ".txt");
 		try {
@@ -106,9 +115,9 @@ final class RegionsHarness {
 			Files.writeString(regions, asset(ViewsMixin.REGIONS_JS_RESOURCE), UTF_8);
 			var args = new ArrayList<String>(List.of(
 				"node", harness.toString(), renders.toString(), views.toString(), regions.toString()));
-			if (helpers != null) {
-				Files.writeString(helpers, asset(ViewsMixin.HELPERS_JS_RESOURCE), UTF_8);
-				args.add(helpers.toString());
+			if (extra != null) {
+				Files.writeString(extra, asset(extraResource), UTF_8);
+				args.add(extra.toString());
 			}
 			var p = new ProcessBuilder(args)
 				.redirectOutput(stdout.toFile())
@@ -124,8 +133,8 @@ final class RegionsHarness {
 			return Files.readString(stdout, UTF_8);
 		} finally {
 			var cleanup = new ArrayList<Path>(List.of(renders, views, regions, stdout, stderr));
-			if (helpers != null)
-				cleanup.add(helpers);
+			if (extra != null)
+				cleanup.add(extra);
 			for (var f : cleanup)
 				Files.deleteIfExists(f);
 		}

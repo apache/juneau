@@ -139,16 +139,39 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		try {
 			var cfg = bridge.resolveConfiguration(req);
 			var template = cfg.getTemplate(templateName);
-			template.process(content2.getAttributes(), res.getWriter());
-			res.getWriter().flush();
-			return FINISHED;
+			// Expose the in-flight request to FreeMarker TemplateDirectiveModels (e.g. <@page toolkit=...>)
+			// for the duration of the render; always cleared so open() never leaks on the thread.
+			try {
+				FreemarkerRenderScope.open(req);
+				template.process(content2.getAttributes(), res.getWriter());
+				res.getWriter().flush();
+				return FINISHED;
+			} finally {
+				FreemarkerRenderScope.close();
+			}
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);
 		} catch (IOException ex) {
 			throw ex;
 		} catch (TemplateException | RuntimeException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for '%s'", templateName);
+			// Surface the deepest cause's message in the response body.  FreeMarker's DEBUG exception handler only
+			// writes a diagnostic to the *output writer* it was rendering into; a directive that throws while a
+			// parent directive (e.g. <@page>) is capturing its body into a throwaway buffer therefore leaves no
+			// trace in the response.  Appending the root-cause message makes the diagnostic deterministic
+			// regardless of which buffer FreeMarker happened to be writing to.
+			throw new InternalServerError(ex, "FreeMarker render failed for '%s': %s", templateName, rootMessage(ex));
 		}
+	}
+
+	// Walks to the deepest cause and returns its message (falling back to the simple class name when the message
+	// is null), so a nested-directive diagnostic reaches the HTTP response body even when FreeMarker's exception
+	// handler wrote it into a discarded capture buffer.
+	static String rootMessage(Throwable t) {
+		var c = t;
+		while (c.getCause() != null && c.getCause() != c)
+			c = c.getCause();
+		var m = c.getMessage();
+		return m == null ? c.getClass().getSimpleName() : m;
 	}
 
 	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw

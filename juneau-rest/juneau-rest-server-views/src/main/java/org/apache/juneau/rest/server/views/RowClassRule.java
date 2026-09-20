@@ -44,8 +44,13 @@ import org.apache.juneau.rest.server.widgets.Op;
  * </ul>
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
 @BeanType(properties="field,op,value,class")
+@Deprecated(since = "10.0.0")
 public class RowClassRule {
 
 	/** The row field this rule tests. */

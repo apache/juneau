@@ -18,7 +18,11 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+import java.nio.charset.*;
+import java.nio.file.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -76,5 +80,30 @@ class Render_Pill_Test extends TestBase {
 		var withField = Render.parse("pill:state");
 		assertEquals("pill", withField.id);
 		assertEquals(Map.of("field", "state"), withField.meta);
+	}
+
+	/**
+	 * Task 15 companion pin: the {@code pill} block of the shipped {@code juneau-renders.js} must carry NO hardcoded
+	 * hex colour.  A pill chip's colour comes exclusively from the console-ui {@code --jc-pill-*} palette classes
+	 * (via {@code chrome.css}); the renderer only stamps the palette classes, never a literal colour.  This is the
+	 * source-scan half of the runtime check in {@code page-cards-mount.cjs} (its display facet emits no {@code #}).
+	 */
+	@Test void a06_pillBlockOfRendersJs_carriesNoHardcodedHex() throws IOException {
+		// The test CWD is the module root; the shipped renderer lives under src/main/resources.
+		var src = Paths.get("src/main/resources/org/apache/juneau/views/juneau-renders.js");
+		assertTrue(Files.exists(src), () -> "shipped juneau-renders.js not found at " + src.toAbsolutePath());
+		var js = Files.readString(src, StandardCharsets.UTF_8);
+
+		// Isolate the pill renderer block: from its banner comment to the next renderer section (TIMESTAMP POPUP).
+		var start = js.indexOf("--- pill renderer");
+		assertTrue(start >= 0, "could not locate the pill renderer block banner in juneau-renders.js");
+		var end = js.indexOf("TIMESTAMP POPUP", start);
+		assertTrue(end > start, "could not locate the end of the pill renderer block in juneau-renders.js");
+		var block = js.substring(start, end);
+
+		var hex = Pattern.compile("#[0-9a-fA-F]{3,8}\\b").matcher(block);
+		assertFalse(hex.find(),
+			() -> "pill block of juneau-renders.js must contain no hardcoded hex colour; found '"
+				+ hex.group() + "' - colour must come from the --jc-pill-* palette classes only.");
 	}
 }

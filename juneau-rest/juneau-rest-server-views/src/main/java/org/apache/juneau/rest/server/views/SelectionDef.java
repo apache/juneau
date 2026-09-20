@@ -70,7 +70,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * </ul>
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public final class SelectionDef {
 
 	private final String rowIdField;

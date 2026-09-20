@@ -42,13 +42,16 @@ import org.apache.juneau.rest.server.widgets.*;
  * when present) from a shell ancestor onto the constructed table.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="contractVersion,view,layout,savedViewsBase,selection,bulk,detail,quickStats,rows")
 @SuppressWarnings({
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S1192", // Duplicated literals are ViewSlot error/protocol text; constants would obscure the message.
-	"java:S1172" // req/messages are load-bearing envelope overloads; unused parameters keep the public signature stable.
+	"java:S1172", // req/messages are load-bearing envelope overloads; unused parameters keep the public signature stable.
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public final class ViewSlot {
 
 	/** The frozen slot-envelope contract version.  Independent of {@link ViewDef#CONTRACT_VERSION}. */

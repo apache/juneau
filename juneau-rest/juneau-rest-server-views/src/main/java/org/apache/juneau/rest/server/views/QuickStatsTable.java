@@ -43,7 +43,12 @@ import org.apache.juneau.rest.server.widgets.*;
  * quick-stats strip publishes no data for a client to refresh from.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public class QuickStatsTable {
 
 	/** Marker attribute on the strip {@code <div>} (carries the {@link QuickStats#id}). */

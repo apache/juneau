@@ -29,10 +29,13 @@ import java.util.*;
  * here.  The bar does not grow its own write protocol (no endpoint / method / csrf fields).
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class ActionRef implements ActionBarItem {
 
 	/** The opaque action id.  Must not be blank. */

@@ -153,6 +153,32 @@ public class ConsoleChromeMixin {
 	/** Classpath location of the shipped structural stylesheet. */
 	static final String CHROME_CSS_RESOURCE = "/org/apache/juneau/console/chrome.css";
 
+	/**
+	 * The URL directory the shipped stock-theme packs are served under (relative to the host mount), e.g.
+	 * {@code /juneau-console/themes/juneau-theme-light-red.css}. A subdirectory of the chrome mount so a
+	 * templated {@code {file}} path cannot collide with the fixed {@link #CHROME_CSS_PATH} endpoint. The FTL
+	 * {@code <@theme name="…"/>} directive links these; see {@link #themeAssetUrl(RestRequest, String)}.
+	 */
+	public static final String THEME_CSS_DIR = "/juneau-console/themes/";
+
+	/** {@link #THEME_CSS_DIR} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */
+	static final String THEME_CSS_DIR_UNPREFIXED = "/themes/";
+
+	/** Classpath directory the shipped theme packs live in (same package as {@link #CHROME_CSS_RESOURCE}). */
+	static final String THEME_CSS_RESOURCE_DIR = "/org/apache/juneau/console/";
+
+	/**
+	 * The built-in stock-theme names - the kebab-case of the {@link Theme} constants ({@link Theme#OPEN},
+	 * {@link Theme#LIGHT_RED}, {@link Theme#LIGHT_BROWN}, {@link Theme#RED}, {@link Theme#GRAY}). Each maps to a
+	 * shipped {@code juneau-theme-<name>.css} pack. Consumed by the FTL {@code <@theme>} directive to fail an
+	 * unknown name closed, and here to bound the served {@code {file}} to a known pack.
+	 */
+	public static final List<String> BUILTIN_THEME_NAMES = List.of("open", "light-red", "light-brown", "red", "gray");
+
+	/** The exact pack filenames {@link #getThemeCss(String)} will serve - one per {@link #BUILTIN_THEME_NAMES} entry. */
+	private static final Set<String> ALLOWED_THEME_FILES =
+		Set.of("juneau-theme-open.css", "juneau-theme-light-red.css", "juneau-theme-light-brown.css", "juneau-theme-red.css", "juneau-theme-gray.css");
+
 	/** Content type emitted for the chrome stylesheet. */
 	static final String CONTENT_TYPE = "text/css;charset=utf-8";
 
@@ -341,6 +367,53 @@ public class ConsoleChromeMixin {
 		if (pageBackgroundResource == null)
 			throw new NotFound("No page-background asset configured.");
 		return ASSET_CACHE.serve(pageBackgroundResource, MimeTypeDetector.DEFAULT.getContentType(pageBackgroundResource), CACHE_CONTROL);
+	}
+
+	/**
+	 * [GET /juneau-console/themes/{file}] &mdash; serve one of the shipped stock-theme packs.
+	 *
+	 * <p>
+	 * The {@code {file}} segment is fail-closed to the known {@link #BUILTIN_THEME_NAMES} pack filenames, so this
+	 * endpoint can never read an arbitrary classpath resource. The packs are structure-free {@code html:root{}}
+	 * token blocks (one per {@link Theme} constant); the FTL {@code <@theme name="…"/>} directive links the winning
+	 * one after {@code chrome.css} so its tokens override {@code chrome.css}'s baked-in {@link Theme#OPEN} block.
+	 *
+	 * @param file The requested pack filename (e.g. {@code juneau-theme-light-red.css}).
+	 * @return The theme pack as a CSS {@link HttpResource}.
+	 * @throws NotFound If {@code file} is not one of the shipped pack filenames.
+	 */
+	@RestGet(
+		path={THEME_CSS_DIR + "{file}", THEME_CSS_DIR_UNPREFIXED + "{file}"},
+		summary="Admin-console stock-theme pack",
+		description="One of the shipped juneau-theme-<name>.css packs (html:root token block), linked by the FTL <@theme> directive.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getThemeCss(@Path("file") String file) {
+		if (! ALLOWED_THEME_FILES.contains(file))
+			throw new NotFound("Unknown theme stylesheet: " + file);
+		return ASSET_CACHE.serve(THEME_CSS_RESOURCE_DIR + file, CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
+	 * Returns a real, browser-fetchable URL for a shipped theme pack, resolved against the given request's context
+	 * path and mount and carrying the same {@code ?v=<buildVersion>-<hash8>} content-sensitive cache-buster the
+	 * logo/page-background overrides use (see {@link #buildBody(RestRequest)}).
+	 *
+	 * <p>
+	 * Mirrors {@link #assetUrl(RestRequest, String, String)}: under the standalone mount style the container has
+	 * already consumed {@code /juneau-console} into {@code servletPath}, so the unprefixed path is resolved; under
+	 * the composed style the prefixed path is. A template-rendering consumer (the FTL {@code <@theme>} directive)
+	 * sits downstream of Juneau's {@code servlet:}-rewriting serializer, so it needs the URL already resolved here.
+	 *
+	 * @param req The current request, supplying the context path/mount to resolve against.
+	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.
+	 * @return The absolute theme-pack URL with the version+content-hash cache-buster appended.
+	 */
+	public static String themeAssetUrl(RestRequest req, String name) {
+		var file = "juneau-theme-" + name + ".css";
+		var standalone = req.getServletPath().endsWith(MOUNT_PREFIX);
+		var base = req.getUriResolver().resolve("servlet:" + (standalone ? THEME_CSS_DIR_UNPREFIXED : THEME_CSS_DIR) + file);
+		return base + ASSET_CACHE.cacheBuster(THEME_CSS_RESOURCE_DIR + file);
 	}
 
 	/**

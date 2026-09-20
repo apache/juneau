@@ -45,7 +45,7 @@ import org.junit.jupiter.api.condition.*;
  *
  * <h5 class='section'>The other half is a report, not an assertion, and that is deliberate:</h5>
  * <p>
- * These glyphs are painted at 16px (ribbon) and 12px (paging pill). At that size a stroke either lands on the
+ * These glyphs are painted at the stylesheet's ribbon and paging-pill sizes. At that size a stroke either lands on the
  * pixel grid or smears across it, and no source-level review can see which. The sheets and metrics written here
  * exist so a human can compare a redrawn set against its predecessor <i>as pixels</i>, and - the part per-glyph
  * review structurally cannot do - see the four document glyphs beside each other, where family drift lives.
@@ -111,6 +111,9 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 
 	private static Map<?,?> report;
 	private static Path outputDir;
+	/** Ribbon / paging-pill sizes from {@code juneau-views.css}; the prober keys {@code ink*} from these. */
+	private static double ribbonPx;
+	private static double pillPx;
 
 	private static String resource(String path) throws IOException {
 		try (var in = ViewsMixin.class.getResourceAsStream(path)) {
@@ -135,6 +138,18 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 		assertTrue(m.find(), () -> "no match for " + p.pattern() + " in juneau-views.css; the render sizes are"
 			+ " read from the stylesheet on purpose - if the custom property was renamed, follow it here");
 		return Double.parseDouble(m.group(1));
+	}
+
+	/**
+	 * Matches the prober's {@code 'ink' + size} JSON key so assertions follow the stylesheet, not a typed
+	 * {@code 16px}.
+	 */
+	private static String inkKey(double px) {
+		return "ink" + (px == Math.rint(px) ? Long.toString((long) Math.rint(px)) : Double.toString(px));
+	}
+
+	private static String pxLabel(double px) {
+		return (px == Math.rint(px) ? Long.toString((long) Math.rint(px)) : Double.toString(px)) + "px";
 	}
 
 	/**
@@ -179,14 +194,17 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 		// what a developer deletes to force a re-provision, while these sheets are the deliverable.
 		outputDir = Files.createDirectories(dir.getParent().resolve("symbol-sprite"));
 
+		ribbonPx = cssPx(GLYPH_SIZE, css);
+		pillPx = cssPx(GLYPH_SIZE_SMALL, css);
+
 		var request = Json.of(Map.of(
 			"outputDir", outputDir.toString(),
 			"stems", stems(sprite),
 			"bogusStem", BOGUS_STEM,
-			"sizes", List.of(cssPx(GLYPH_SIZE_SMALL, css), cssPx(GLYPH_SIZE, css), 24.0),
-			"ribbonSize", cssPx(GLYPH_SIZE, css),
-			"pillSize", cssPx(GLYPH_SIZE_SMALL, css),
-			// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose 16px
+			"sizes", List.of(pillPx, ribbonPx, 24.0),
+			"ribbonSize", ribbonPx,
+			"pillSize", pillPx,
+			// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose ribbon-size
 			// distinguishability against both settings and spreadsheet is a named review check.
 			"family", List.of("csv", "pdf", "spreadsheet", "copy"),
 			// the locked-scope glyph distinguishability pin LD-1: every pairwise combination of the four locked-scope glyphs (cancel, columns,
@@ -258,21 +276,21 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 		assertFalse(stems.isEmpty(), "prober measured no stems at all");
 		for (var s : stems) {
 			var stem = (String) s;
-			assertTrue(metric(stem, "ink16") > 0,
-				() -> stem + " rasterised to an empty 16px box; juneau-icons.js renders an unresolvable or"
-					+ " mangled glyph as nothing at all, with no error on either side");
-			assertTrue(metric(stem, "ink12") > 0,
-				() -> stem + " rasterised to an empty 12px box");
+			assertTrue(metric(stem, inkKey(ribbonPx)) > 0,
+				() -> stem + " rasterised to an empty " + pxLabel(ribbonPx) + " box; juneau-icons.js renders an"
+					+ " unresolvable or mangled glyph as nothing at all, with no error on either side");
+			assertTrue(metric(stem, inkKey(pillPx)) > 0,
+				() -> stem + " rasterised to an empty " + pxLabel(pillPx) + " box");
 		}
 	}
 
 	@Test void a02_theInkMeasurementCanActuallyFail() {
 		// Without this, a prober that silently stopped rendering would report zero ink for nothing and pass a01
 		// for every stem - a harness that measures nothing reads exactly like a harness that measures a clean set.
-		assertEquals(0.0, metric(BOGUS_STEM, "ink16"),
+		assertEquals(0.0, metric(BOGUS_STEM, inkKey(ribbonPx)),
 			"a stem that is not in the sprite measured as having ink, so the ink measurement is not measuring"
 				+ " the sprite");
-		assertEquals(0.0, metric(BOGUS_STEM, "ink12"));
+		assertEquals(0.0, metric(BOGUS_STEM, inkKey(pillPx)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -322,10 +340,10 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 				var ribbon = ((Number) pair.get("pixelDiffRibbon")).doubleValue();
 				var small = ((Number) pair.get("pixelDiffSmall")).doubleValue();
 				assertTrue(ribbon >= MIN_PAIR_PIXEL_DIFF, () -> a + " and " + b + " are only " + ribbon
-					+ " luminance levels apart at the ribbon (16px) render size - below the "
+					+ " luminance levels apart at the ribbon (" + pxLabel(ribbonPx) + ") render size - below the "
 					+ MIN_PAIR_PIXEL_DIFF + " distinguishability floor, i.e. they risk reading as the same glyph");
 				assertTrue(small >= MIN_PAIR_PIXEL_DIFF, () -> a + " and " + b + " are only " + small
-					+ " luminance levels apart at the paging-pill (12px) render size - below the "
+					+ " luminance levels apart at the paging-pill (" + pxLabel(pillPx) + ") render size - below the "
 					+ MIN_PAIR_PIXEL_DIFF + " distinguishability floor");
 			}
 		}

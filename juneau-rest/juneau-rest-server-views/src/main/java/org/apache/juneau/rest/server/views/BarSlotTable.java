@@ -52,7 +52,12 @@ import org.apache.juneau.rest.server.widgets.*;
  * The region is <b>never</b> emitted into the archived {@code .juneau-view-toolbar-*} DataTables control row.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
+@SuppressWarnings({
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+})
+@Deprecated(since = "10.0.0")
 public class BarSlotTable {
 
 	/** Marker attribute on the bar-slot region {@code <div>} the runtime scans from (carries the id). */

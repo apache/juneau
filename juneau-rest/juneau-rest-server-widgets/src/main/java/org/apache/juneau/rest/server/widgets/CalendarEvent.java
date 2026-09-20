@@ -70,10 +70,13 @@ import org.apache.juneau.commons.http.*;
  * zone.  The same parse applies on the seed path and on the per-month GET path.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class CalendarEvent {
 
 	/** Stable id; required, non-blank.  Used for de-duplication and coalesce keys. */

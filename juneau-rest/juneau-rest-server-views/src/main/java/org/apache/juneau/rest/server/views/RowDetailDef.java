@@ -45,10 +45,13 @@ import org.apache.juneau.rest.server.widgets.*;
  * until that consumer of the expand envelope has a replacement.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class RowDetailDef {
 
 	/** The frozen contract version for the expand GET envelope and the stamped {@code data-juneau-detail-contract}. */

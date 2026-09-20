@@ -34,11 +34,14 @@ import org.apache.juneau.commons.http.*;
  * hint, and no emitter drop-path.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="id,icon,tooltip,behavior,href,safe,badge,menu")
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public class HeaderAction {
 
 	/** The client-safe token charset: lowercase letter, then lowercase / digit / hyphen, max 64 chars. */

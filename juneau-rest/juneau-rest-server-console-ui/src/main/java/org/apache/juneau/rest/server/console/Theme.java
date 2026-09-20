@@ -57,7 +57,9 @@ import java.util.regex.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
+	"java:S1192", // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
+	"java:S1874", // Stock OPEN/LIGHT_*/RED/GRAY constants still construct via create()/deriveFrom(); those factories are the deprecated authoring API.
+	"deprecation" // Same: shipped palette constants are the CSS source <@theme> selects, not Java page-DSL authoring.
 })
 public final class Theme {
 
@@ -115,21 +117,44 @@ public final class Theme {
 		.token("--jc-success", "#2e844a")
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #1589EE, #1a5297)")
 		.token("--jc-radius", "0.25rem")
-		.token("--jc-tag-green-bg", "#b8e6c4")
-		.token("--jc-tag-green-text", "#155724")
-		.token("--jc-tag-green-border", "#9fd6ad")
-		.token("--jc-tag-blue-bg", "#dceefb")
-		.token("--jc-tag-blue-text", "#0c5460")
-		.token("--jc-tag-blue-border", "#c3e0f3")
-		.token("--jc-tag-amber-bg", "#fff3cd")
-		.token("--jc-tag-amber-text", "#856404")
-		.token("--jc-tag-amber-border", "#ffe69c")
-		.token("--jc-tag-neutral-bg", "#e2e3e5")
-		.token("--jc-tag-neutral-text", "#383d41")
-		.token("--jc-tag-neutral-border", "#c6c8ca")
-		.token("--jc-tag-red-bg", "#f8d7da")
-		.token("--jc-tag-red-text", "#721c24")
-		.token("--jc-tag-red-border", "#f5c6cb")
+		// Pill palette (Q16 A / Task 15): the CANONICAL status-chip colour family the client `pill` catalog renderer
+		// paints from - the ".tag.<domain>.<value>" palette rules in chrome.css consume these directly.  Declared
+		// before the legacy --jc-tag-* triads so those can be authored as var(--jc-pill-*) references to this single
+		// source of truth.  Values are the exact literals --jc-tag-* shipped, so the served chrome is pixel-identical.
+		.token("--jc-pill-green-bg", "#b8e6c4")
+		.token("--jc-pill-green-text", "#155724")
+		.token("--jc-pill-green-border", "#9fd6ad")
+		.token("--jc-pill-blue-bg", "#dceefb")
+		.token("--jc-pill-blue-text", "#0c5460")
+		.token("--jc-pill-blue-border", "#c3e0f3")
+		.token("--jc-pill-amber-bg", "#fff3cd")
+		.token("--jc-pill-amber-text", "#856404")
+		.token("--jc-pill-amber-border", "#ffe69c")
+		.token("--jc-pill-neutral-bg", "#e2e3e5")
+		.token("--jc-pill-neutral-text", "#383d41")
+		.token("--jc-pill-neutral-border", "#c6c8ca")
+		.token("--jc-pill-red-bg", "#f8d7da")
+		.token("--jc-pill-red-text", "#721c24")
+		.token("--jc-pill-red-border", "#f5c6cb")
+		// Legacy status/tag palette - RETAINED as var(--jc-pill-*) aliases (never renamed away): the .jc-badge /
+		// .jc-avatar-status-* chrome here AND the frozen widgets calendar palette (juneau-calendar.css, out of v1)
+		// still consume --jc-tag-*, so aliasing keeps one source of truth without a cross-module rename.  build()
+		// resolves each reference to the pill literal, so getTokens()/the served :root still carry a 6-hex value.
+		.token("--jc-tag-green-bg", "var(--jc-pill-green-bg)")
+		.token("--jc-tag-green-text", "var(--jc-pill-green-text)")
+		.token("--jc-tag-green-border", "var(--jc-pill-green-border)")
+		.token("--jc-tag-blue-bg", "var(--jc-pill-blue-bg)")
+		.token("--jc-tag-blue-text", "var(--jc-pill-blue-text)")
+		.token("--jc-tag-blue-border", "var(--jc-pill-blue-border)")
+		.token("--jc-tag-amber-bg", "var(--jc-pill-amber-bg)")
+		.token("--jc-tag-amber-text", "var(--jc-pill-amber-text)")
+		.token("--jc-tag-amber-border", "var(--jc-pill-amber-border)")
+		.token("--jc-tag-neutral-bg", "var(--jc-pill-neutral-bg)")
+		.token("--jc-tag-neutral-text", "var(--jc-pill-neutral-text)")
+		.token("--jc-tag-neutral-border", "var(--jc-pill-neutral-border)")
+		.token("--jc-tag-red-bg", "var(--jc-pill-red-bg)")
+		.token("--jc-tag-red-text", "var(--jc-pill-red-text)")
+		.token("--jc-tag-red-border", "var(--jc-pill-red-border)")
 		// Additive token gaps.  Appended after the tag palette so --jc-font stays first and the tag
 		// triads stay contiguous (see Theme_TokenOrdering_Test.a02).  All are behaviour-preserving: each default
 		// equals the literal it replaces in chrome.css, so the shipped chrome renders pixel-identically.
@@ -334,7 +359,13 @@ public final class Theme {
 	 * 	uppercase, whitespace, or a path-traversal-shaped segment like {@code "../evil"} &mdash; gated here, not
 	 * 	just at classpath-asset-resolution time, so a later fast-follow that interpolates the name into an asset
 	 * 	path doesn't need to re-gate).
+	 *
+	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
+	@Deprecated(since = "10.0.0")
+	@SuppressWarnings({
+		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+	})
 	public static Builder create(String name) {
 		if (name == null || ! name.matches(NAME_PATTERN))
 			throw iaex("Invalid theme name: '%s'.  Must match %s.", name, NAME_PATTERN);
@@ -372,7 +403,12 @@ public final class Theme {
 	 * @return A new builder, pre-populated with {@code seed}'s tokens in {@code seed}'s declaration order.
 	 * @throws IllegalArgumentException
 	 * 	If {@code name} is invalid (see {@link #create(String)}) or if {@code seed} is <jk>null</jk>.
+	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
+	@Deprecated(since = "10.0.0")
+	@SuppressWarnings({
+		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+	})
 	public static Builder deriveFrom(String name, Theme seed) {
 		if (seed == null)
 			throw iaex("Invalid theme seed: null.");
@@ -400,7 +436,13 @@ public final class Theme {
 
 	/**
 	 * Builder for {@link Theme}.
+	 *
+	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
+	@Deprecated(since = "10.0.0")
+	@SuppressWarnings({
+		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
+	})
 	public static final class Builder {
 		private final String name;
 		private final Map<String,String> tokens = new LinkedHashMap<>();

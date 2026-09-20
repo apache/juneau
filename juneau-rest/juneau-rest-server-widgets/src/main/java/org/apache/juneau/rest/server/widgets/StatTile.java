@@ -26,11 +26,14 @@ import org.apache.juneau.commons.bean.*;
  * interval, so there is nothing here for a runtime to click or poll.
  *
  * @since 10.0.0
+ * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="id,label,value,tone")
 @SuppressWarnings({
-	"java:S1845" // "id" field mirrors the StatItem#id() contract for JSON emit; tone setter mirrors the field name (Juneau DSL convention).
+	"java:S1845", // "id" field mirrors the StatItem#id() contract for JSON emit; tone setter mirrors the field name (Juneau DSL convention).
+	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
+@Deprecated(since = "10.0.0")
 public final class StatTile implements StatItem {
 
 	/** The stable item id, unique within its {@link QuickStats}.  Required, non-blank. */

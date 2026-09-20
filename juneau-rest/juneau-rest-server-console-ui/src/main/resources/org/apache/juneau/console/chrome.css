@@ -633,31 +633,34 @@ a:hover { text-decoration: underline; }
 }
 
 /* Example domain/value vocabulary (lifted from the release-manager dogfood) - an extension point, not a closed
-   contract. A consumer app is expected to add its own .tag.<domain>.<value> rules using the same palette tokens. */
+   contract. A consumer app is expected to add its own .tag.<domain>.<value> rules using the same palette tokens.
+   These pill/tag chips paint from the canonical --jc-pill-* family (Task 15): the client `pill` catalog renderer
+   emits ".jc-pill.tag.<domain>.<value>", so this is the palette its colour comes from.  (The --jc-tag-* triads
+   remain as aliases of --jc-pill-* for .jc-badge / .jc-avatar-status-* below.) */
 .tag.status.released,
-.tag.stage.released { background-color: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+.tag.stage.released { background-color: var(--jc-pill-green-bg); color: var(--jc-pill-green-text); border-color: var(--jc-pill-green-border); }
 
 .tag.status.voting,
 .tag.status.rc,
 .tag.stage.voting,
-.tag.stage.rc { background-color: var(--jc-tag-blue-bg); color: var(--jc-tag-blue-text); border-color: var(--jc-tag-blue-border); }
+.tag.stage.rc { background-color: var(--jc-pill-blue-bg); color: var(--jc-pill-blue-text); border-color: var(--jc-pill-blue-border); }
 
 .tag.status.draft,
 .tag.status.pending,
 .tag.stage.draft,
 .tag.stage.pending,
-.tag.stage.building { background-color: var(--jc-tag-amber-bg); color: var(--jc-tag-amber-text); border-color: var(--jc-tag-amber-border); }
+.tag.stage.building { background-color: var(--jc-pill-amber-bg); color: var(--jc-pill-amber-text); border-color: var(--jc-pill-amber-border); }
 
 .tag.status.dropped,
 .tag.status.unknown,
 .tag.stage.dropped,
 .tag.stage.unknown,
-.tag.stage.archived { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+.tag.stage.archived { background-color: var(--jc-pill-neutral-bg); color: var(--jc-pill-neutral-text); border-color: var(--jc-pill-neutral-border); }
 
 .tag.status.fail,
 .tag.status.failed,
 .tag.stage.fail,
-.tag.stage.failed { background-color: var(--jc-tag-red-bg); color: var(--jc-tag-red-text); border-color: var(--jc-tag-red-border); }
+.tag.stage.failed { background-color: var(--jc-pill-red-bg); color: var(--jc-pill-red-text); border-color: var(--jc-pill-red-border); }
 
 /* ==========================================================================
    Data table (DataTables style)
