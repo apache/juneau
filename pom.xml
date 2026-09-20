@@ -48,7 +48,7 @@
 		<jetty.version>12.1.13</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.25</tomcat.version>
-		<spring.version>4.1.0</spring.version>
+		<spring.version>4.1.1</spring.version>
 		<sonar.organization>apache</sonar.organization>
 		<!-- Maven scanner defaults to Java compile roots only (scanAll=false), so CSS/JS never reached SonarCloud.
 		     true indexes files outside compile roots (docs/ javadoc.css, classpath-resource CSS/JS). The Maven
