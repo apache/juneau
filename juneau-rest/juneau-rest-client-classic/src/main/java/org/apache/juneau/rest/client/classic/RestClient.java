@@ -8053,6 +8053,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			if (nn(bean)) {
 				for (var p : rbm.getProperties()) {
 					var val = safeSupplier(() -> p.getGetter().invoke(bean));
+					if (val instanceof Optional<?> val2)
+						val = val2.orElse(null);
 					var pt = p.getPartType();
 					var pn = p.getPartName();
 					var schema = p.getSchema();

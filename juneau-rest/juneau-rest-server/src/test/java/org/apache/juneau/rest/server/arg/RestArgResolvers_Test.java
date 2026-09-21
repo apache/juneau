@@ -158,6 +158,9 @@ class RestArgResolvers_Test extends TestBase {
 		// @Request — creates RequestBeanArg
 		public void withRequest(@Request Object req) { /* annotation carrier only */ }
 
+		// Type-level @Request (ListQuery) — no parameter annotation required
+		public void withListQuery(ListQuery q) { /* annotation carrier only */ }
+
 		// @Header on Holder — creates ResponseHeaderArg
 		public void withResponseHeader(@Header("X-Out") Holder<String> h) { /* annotation carrier only */ }
 
@@ -506,6 +509,13 @@ class RestArgResolvers_Test extends TestBase {
 	@Test void o02_requestBeanArg_create_returnsNullWhenUnannotated() {
 		var pi = firstParam(Fixture.class, "noAnnotation");
 		assertNull(RequestBeanArg.create(pi, EMPTY_AWL));
+	}
+
+	@Test void o03_requestBeanArg_create_typeLevelRequestOnListQuery() {
+		var pi = firstParam(Fixture.class, "withListQuery");
+		var arg = RequestBeanArg.create(pi, EMPTY_AWL);
+		assertNotNull(arg);
+		assertInstanceOf(RequestBeanArg.class, arg);
 	}
 
 	// -----------------------------------------------------------------------------------------

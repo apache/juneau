@@ -1377,38 +1377,146 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new request bean proxy for this REST request.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for request bean mapping logic
-	})
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
 			var c = (Class<T>)rbm.getBeanInfo().inner();
 			final MarshallingSession bs = getMarshallingSession();
-			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
-				if (nn(pm)) {
-					HttpPartParserSession pp = pm.getParser(getPartParserSession());
-					HttpPartSchema schema = pm.getSchema();
-					String name = pm.getPartName();
-					var type = bs.getClassMeta(method.getGenericReturnType());
-					HttpPartType pt = pm.getPartType();
-					if (pt == HttpPartType.BODY)
-						return getContent().setSchema(schema).as(type);
-					if (pt == QUERY)
-						return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
-					if (pt == FORMDATA)
-						return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
-					if (pt == HEADER)
-						return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
-					if (pt == PATH)
-						return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
-				}
+				if (nn(pm))
+					return resolveRequestBeanProperty(pm, method, bs);
 				return null;
 			});
 		} catch (Exception e) {
 			throw toRex(e);
 		}
+	}
+
+	@SuppressWarnings({
+		"java:S3776", // Request-bean MULTI vs last-wins vs Optional/def branching is clearer in one method than split across accessors.
+		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
+		"unchecked" // Collection/Map element types erased at the proxy boundary.
+	})
+	private Object resolveRequestBeanProperty(RequestBeanPropertyMeta pm, java.lang.reflect.Method method, MarshallingSession bs) throws Exception {
+		HttpPartParserSession pp = pm.getParser(getPartParserSession());
+		HttpPartSchema schema = pm.getSchema();
+		String name = pm.getPartName();
+		var type = bs.getClassMeta(method.getGenericReturnType());
+		HttpPartType pt = pm.getPartType();
+		if (pt == HttpPartType.BODY)
+			return getContent().setSchema(schema).as(type);
+		if (schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI) {
+			var valueType = type.isOptional() ? type.getElementType() : type;
+			if (valueType.isMap())
+				return resolveRequestBeanMultiMap(pt, name, schema, type);
+			if (valueType.isCollectionOrArray())
+				return resolveRequestBeanMultiCollection(pt, name, pp, schema, type);
+		}
+		var part = requestBeanPartLast(pt, name);
+		if (part == null)
+			return type.isOptional() ? Optional.empty() : null;
+		return part.parser(pp).schema(schema).def(schema.getDefault()).as(type).orElse(null);
+	}
+
+	private Object resolveRequestBeanMultiMap(HttpPartType pt, String name, HttpPartSchema schema, ClassMeta<?> type) {
+		try {
+			var parts = requestBeanParts(pt, name);
+			var optional = type.isOptional();
+			if (parts.isEmpty()) {
+				if (optional) {
+					if (ine(schema.getDefault()))
+						return Optional.of(UonUtils.mergePairs(schema.getDefault()));
+					return Optional.empty();
+				}
+				return JsonMap.create();
+			}
+			var dest = JsonMap.create();
+			for (var p : parts)
+				UonUtils.mergePair(dest, p.getValue());
+			return optional ? o(dest) : dest;
+		} catch (ParseException | SchemaValidationException e) {
+			throw new BadRequest(e, "Could not parse query parameter '%s'.", name);
+		}
+	}
+
+	@SuppressWarnings({
+		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
+		"unchecked" // Element adds to that collection are erased.
+	})
+	private Object resolveRequestBeanMultiCollection(HttpPartType pt, String name, HttpPartParserSession pp, HttpPartSchema schema, ClassMeta<?> type) throws Exception {
+		var optional = type.isOptional();
+		var raw = optional ? type.getElementType() : type;
+		var elemType = raw.getElementType();
+		var parts = requestBeanParts(pt, name);
+		if (parts.isEmpty()) {
+			if (optional) {
+				if (ine(schema.getDefault()))
+					return Optional.of(readDefaultCollection(schema.getDefault(), raw, elemType, pp, schema, pt));
+				return Optional.empty();
+			}
+			return emptyCollection(raw, elemType);
+		}
+		Collection c = newCollection(raw);
+		for (var p : parts) {
+			if (elemType.is(String.class)) {
+				var v = p.getValue();
+				c.add(v == null ? "" : v);
+			} else {
+				c.add(p.parser(pp).schema(schema).as(elemType).orElse(null));
+			}
+		}
+		if (optional && elemType.is(String.class) && c.stream().allMatch(x -> isBlank(s(x))))
+			return Optional.of(emptyCollection(raw, elemType));
+		var collected = raw.isArray() ? CollectionUtils.toArray(c, elemType.inner()) : c;
+		return optional ? o(collected) : collected;
+	}
+
+	private Object readDefaultCollection(String def, ClassMeta<?> raw, ClassMeta<?> elemType, HttpPartParserSession pp, HttpPartSchema schema, HttpPartType pt) throws Exception {
+		try {
+			var one = pp.read(pt, schema, def, elemType);
+			Collection c = newCollection(raw);
+			c.add(one);
+			return raw.isArray() ? CollectionUtils.toArray(c, elemType.inner()) : c;
+		} catch (ParseException | SchemaValidationException e) {
+			throw new BadRequest(e, "Could not parse %s parameter '%s'.", pt.toString().toLowerCase(), schema.getName());
+		}
+	}
+
+	@SuppressWarnings({
+		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
+		"unchecked" // newInstance() of a Collection ClassMeta.
+	})
+	private static Collection newCollection(ClassMeta<?> raw) {
+		if (raw.isArray())
+			return CollectionUtils.list();
+		if (raw.canCreateNewInstance())
+			return (Collection)raw.newInstance();
+		return new JsonList();
+	}
+
+	private static Object emptyCollection(ClassMeta<?> raw, ClassMeta<?> elemType) {
+		Collection c = newCollection(raw);
+		return raw.isArray() ? CollectionUtils.toArray(c, elemType.inner()) : c;
+	}
+
+	private List<? extends RequestHttpPart> requestBeanParts(HttpPartType pt, String name) {
+		return switch (pt) {
+			case QUERY -> getQueryParams().getAll(name);
+			case FORMDATA -> getFormParams().getAll(name);
+			case HEADER -> getHeaders().getAll(name);
+			case PATH -> getPathParams().getAll(name);
+			default -> List.of();
+		};
+	}
+
+	private RequestHttpPart requestBeanPartLast(HttpPartType pt, String name) {
+		return switch (pt) {
+			case QUERY -> getQueryParams().getLast(name);
+			case FORMDATA -> getFormParams().getLast(name);
+			case HEADER -> getHeaderParam(name);
+			case PATH -> getPathParams().getLast(name);
+			default -> null;
+		};
 	}
 
 	/**

@@ -183,8 +183,8 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		@RemoteOp(path="/b") String getX8(@Query("x") @Schema(cf="tsv") String...b);
 		@RemoteOp(path="/a") String getX9(@Query("x") @Schema(cf="pipes") String...b);
 		@RemoteOp(path="/b") String getX10(@Query("x") @Schema(cf="pipes") String...b);
-		@RemoteOp(path="/a") String getX11(@Query("x") @Schema(cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteOp(path="/b") String getX12(@Query("x") @Schema(cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/a") String getX11(@Query("x") @Schema(cf="multi") String...b); // MULTI is x=foo&x=bar; @Query("*") last-wins on duplicate keys.
+		@RemoteOp(path="/b") String getX12(@Query("x") @Schema(cf="multi") String...b); // MULTI is x=foo&x=bar (raw query string).
 		@RemoteOp(path="/a") String getX13(@Query("x") @Schema(cf="uon") String...b);
 		@RemoteOp(path="/b") String getX14(@Query("x") @Schema(cf="uon") String...b);
 	}
@@ -201,8 +201,8 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("x=foo%09bar",x.getX8("foo","bar"));
 		assertEquals("{x:'foo|bar'}",x.getX9("foo","bar"));
 		assertEquals("x=foo%7Cbar",x.getX10("foo","bar"));
-		assertEquals("{x:'foo,bar'}",x.getX11("foo","bar"));
-		assertEquals("x=foo%2Cbar",x.getX12("foo","bar"));
+		assertEquals("{x:'bar'}",x.getX11("foo","bar"));
+		assertEquals("x=foo&x=bar",x.getX12("foo","bar"));
 		assertEquals("{x:'@(foo,bar)'}",x.getX13("foo","bar"));
 		assertEquals("x=%40%28foo%2Cbar%29",x.getX14("foo","bar"));
 	}

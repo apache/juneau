@@ -17,12 +17,15 @@
 package org.apache.juneau.rest.server;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+
+import java.util.*;
 
 /**
  * Coverage tests for {@link RestRequest} accessor and helper methods.
@@ -460,5 +463,53 @@ class RestRequest_Coverage_Test extends TestBase {
 	@Test void j01_allowContentParam_default_disabled() throws Exception {
 		var c = MockRestClient.create(J.class).plainText().disableRedirectHandling().ignoreErrors().build();
 		c.post("/echo", "raw").run().assertStatus(200).assertContent("raw");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @Request getter MULTI uses getAll (not last-wins); def= on Optional getters
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Request
+	public interface MultiQueryBean {
+		@Query(schema=@Schema(collectionFormat="multi"))
+		String[] getX();
+		@Query(def="dv")
+		Optional<String> getD();
+	}
+
+	@Request
+	public interface MultiHeaderBean {
+		@Header(name="X-M", schema=@Schema(collectionFormat="multi"))
+		String[] getM();
+	}
+
+	@Rest
+	public static class K {
+		@RestGet("/q")
+		public String q(RestRequest req) {
+			var b = req.getRequest(MultiQueryBean.class);
+			return java.util.Arrays.toString(b.getX()) + "|" + b.getD().orElse("missing");
+		}
+		@RestGet("/h")
+		public String h(RestRequest req) {
+			var b = req.getRequest(MultiHeaderBean.class);
+			return java.util.Arrays.toString(b.getM());
+		}
+	}
+
+	@Test void k01_requestBean_queryMulti_getAllNotLastWins() throws Exception {
+		var c = MockRestClient.create(K.class).plainText().build();
+		c.get("/q?x=a&x=b").run().assertContent("[a, b]|dv");
+	}
+
+	@Test void k02_requestBean_queryOptionalDef() throws Exception {
+		var c = MockRestClient.create(K.class).plainText().build();
+		c.get("/q").run().assertContent("[]|dv");
+		c.get("/q?d=zz").run().assertContent("[]|zz");
+	}
+
+	@Test void k03_requestBean_headerMulti_getAll() throws Exception {
+		var c = MockRestClient.create(K.class).plainText().build();
+		c.get("/h").header("X-M", "a").header("X-M", "b").run().assertContent("[a, b]");
 	}
 }

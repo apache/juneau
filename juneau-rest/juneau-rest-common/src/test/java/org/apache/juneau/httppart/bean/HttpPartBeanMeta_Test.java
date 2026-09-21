@@ -153,6 +153,38 @@ class HttpPartBeanMeta_Test {
 		assertNotNull(meta);
 	}
 
+	// --------------------------------------------------
+	// ListQuery stock request bean
+	// --------------------------------------------------
+
+	@Test
+	void c01_listQuery_searchIsMultiNamedSearch() {
+		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
+		assertNotNull(meta);
+		var search = meta.getProperty("getSearch");
+		assertEquals("search", search.getPartName());
+		assertEquals(QUERY, search.getPartType());
+		assertEquals(HttpPartCollectionFormat.MULTI, search.getSchema().getCollectionFormat());
+	}
+
+	@Test
+	void c02_listQuery_optsIsMultiNamedOpt() {
+		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
+		var opts = meta.getProperty("getOpts");
+		assertEquals("opt", opts.getPartName());
+		assertEquals(QUERY, opts.getPartType());
+		assertEquals(HttpPartCollectionFormat.MULTI, opts.getSchema().getCollectionFormat());
+	}
+
+	@Test
+	void c03_listQuery_defaultWireNames() {
+		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
+		assertEquals("view", meta.getProperty("getView").getPartName());
+		assertEquals("sort", meta.getProperty("getSort").getPartName());
+		assertEquals("position", meta.getProperty("getPosition").getPartName());
+		assertEquals("limit", meta.getProperty("getLimit").getPartName());
+	}
+
 	// Minimal mock to avoid requiring full HttpPartParserSession instantiation
 	private static HttpPartParserSession mock() {
 		return new HttpPartParserSession() {

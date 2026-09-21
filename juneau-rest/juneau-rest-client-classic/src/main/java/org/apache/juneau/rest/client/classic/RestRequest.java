@@ -2932,6 +2932,42 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
+		if (schema != null && schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI) {
+			if (value instanceof Collection<?> value2) {
+				List<NameValuePair> l = list();
+				value2.forEach(x -> l.add(createPart(name, x, QUERY, serializer, schema, skipIfEmpty)));
+				if (skipIfEmpty)
+					l.removeIf(x -> ie(x.getValue()));
+				queryData.append(l);
+				return this;
+			}
+			if (isArray(value) && ! isNameValuePairArray(value)) {
+				List<NameValuePair> l = list();
+				for (var i = 0; i < Array.getLength(value); i++)
+					l.add(createPart(name, Array.get(value, i), QUERY, serializer, schema, skipIfEmpty));
+				if (skipIfEmpty)
+					l.removeIf(x -> ie(x.getValue()));
+				queryData.append(l);
+				return this;
+			}
+			if (value instanceof Map<?,?> value2) {
+				List<NameValuePair> l = list();
+				var sess = getPartSerializerSession(serializer);
+				for (var e : value2.entrySet()) {
+					try {
+						var uon = sess.write(QUERY, schema, e.getValue());
+						l.add(BasicPart.of(name, s(e.getKey()) + "=" + (uon == null ? "" : uon)));
+					} catch (SerializeException | SchemaValidationException ex) {
+						throw rex(ex, "Serialization error on request query part '%s'", name);
+					}
+				}
+				if (skipIfEmpty)
+					l.removeIf(x -> ie(x.getValue()));
+				queryData.append(l);
+				return this;
+			}
+		}
+
 		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
