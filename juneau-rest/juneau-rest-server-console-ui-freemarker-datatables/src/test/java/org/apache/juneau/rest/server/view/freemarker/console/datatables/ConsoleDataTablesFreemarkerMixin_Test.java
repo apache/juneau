@@ -22,8 +22,10 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bean.html5.Span;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
@@ -40,7 +42,7 @@ import freemarker.template.TemplateModel;
 
 /**
  * Ticket 361 Phase 7 gate: the {@code <@datatable>} macro (this module's only deliverable) &mdash; a golden-HTML
- * integration proof that a row bean's {@code @Html(render=TagHtmlRender.class)} enum property (Phase 4) renders as
+ * integration proof that a row bean's {@code @Html(render=...)} enum property renders as
  * pill markup (Phase 6's now-render-aware {@code DataTablesTable}) nested inside a {@code jc-table} through the
  * same trusted-HTML adapter Phase 5 built for {@code <@tag>}.
  */
@@ -49,13 +51,22 @@ import freemarker.template.TemplateModel;
 })
 class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 
-	@TagDomain(domain="status")
 	public enum Release { RELEASED, DRAFT }
 
-	/** Row bean: one plain property, one {@code @Html(render=TagHtmlRender.class)}-annotated enum property. */
+	/** Local stand-in for the retired {@code TagHtmlRender}: a status pill span. */
+	public static class StatusPillRender extends HtmlRender<Enum<?>> {
+		@Override
+		public Object getContent(SerializerSession session, Enum<?> value) {
+			if (value == null)
+				return null;
+			return new Span().class_("tag status " + value.name().toLowerCase(Locale.ROOT));
+		}
+	}
+
+	/** Row bean: one plain property, one {@code @Html(render=...)}-annotated enum property. */
 	public static class ReleaseRow {
 		public String name = "widget";
-		@Html(render=TagHtmlRender.class) public Release status = Release.RELEASED;
+		@Html(render=StatusPillRender.class) public Release status = Release.RELEASED;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

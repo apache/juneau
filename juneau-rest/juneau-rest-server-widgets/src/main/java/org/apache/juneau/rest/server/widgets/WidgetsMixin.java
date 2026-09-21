@@ -49,10 +49,11 @@ import org.apache.juneau.rest.server.util.*;
  *
  * <h5 class='section'>Contract-version handshake:</h5>
  * <p>
- * Each {@code *_CONTRACT_VERSION} constant is an <b>alias</b> of the bean constant it mirrors, never a copied
- * literal, so revising a bean's wire contract cannot leave a stale duplicate behind here.  The three are deliberately
- * distinct from one another: a calendar-envelope revision must never force a header or bar-sidecar bump, or
- * vice-versa.
+ * Each {@code *_CONTRACT_VERSION} constant is the handshake stamp the matching runtime bakes in.
+ * {@link #CALENDAR_CONTRACT_VERSION} aliases {@link CalendarDef#CONTRACT_VERSION};
+ * {@link #BAR_CONTRACT_VERSION} aliases {@link BarSlot#CONTRACT_VERSION};
+ * {@link #HEADER_CONTRACT_VERSION} is a literal (the header bean is gone). The three are deliberately distinct from one another: a calendar-envelope
+ * revision must never force a header or bar-sidecar bump, or vice-versa.
  *
  * <h5 class='section'>Cache-busting + versioned URLs:</h5>
  * <p>
@@ -87,8 +88,6 @@ import org.apache.juneau.rest.server.util.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link CalendarDef}
- * 	<li class='jc'>{@link AppHeaderDef}
- * 	<li class='jc'>{@link BarSlot}
  * 	<li class='jc'>{@link WidgetValidationProcessor}
  * </ul>
  *
@@ -126,10 +125,9 @@ public class WidgetsMixin {
 	public static final String CALENDAR_CONTRACT_VERSION = CalendarDef.CONTRACT_VERSION;
 
 	/**
-	 * The app-header refresh-envelope contract-version handshake constant that the chrome runtime bakes in, aliased
-	 * from the value the header model emits ({@link AppHeaderDef#CONTRACT_VERSION}).
+	 * The app-header refresh-envelope contract-version handshake constant that the chrome runtime bakes in.
 	 */
-	public static final String HEADER_CONTRACT_VERSION = AppHeaderDef.CONTRACT_VERSION;
+	public static final String HEADER_CONTRACT_VERSION = "1";
 
 	/**
 	 * The bar-slot refresh-envelope contract-version handshake constant that the chrome runtime bakes in, aliased

@@ -74,14 +74,7 @@ class ExampleCalendarEndToEnd_Test extends TestBase {
 		assertTrue(body.contains("data-juneau-calendar-contract=\"" + CalendarDef.CONTRACT_VERSION + "\""),
 			"contract stamp");
 		assertTrue(body.contains("data-juneau-calendar-endpoint=\"/events/{year}/{month}\""), "endpoint stamp");
-		assertTrue(body.contains("role=\"grid\""), "server-painted grid");
-		// Progressive enhancement: real seed chips painted before any JS.
-		assertTrue(body.contains("Sprint planning"), "seed chip painted");
-		// The busy day (4 events, cap 3) shows the overflow control.
-		assertTrue(body.contains("data-juneau-calendar-more"), "+N more control");
-		// Legend lists the four declared categories with their color classes.
-		assertTrue(body.contains("jc-cal-cat--blue"), "team color");
-		assertTrue(body.contains("jc-cal-cat--red"), "incident color");
+		assertTrue(body.contains("/juneau-calendar.js"), "calendar runtime linked");
 	}
 
 	@Test
@@ -106,23 +99,21 @@ class ExampleCalendarEndToEnd_Test extends TestBase {
 		assertTrue(views < calendar, "juneau-views.js must be loaded BEFORE juneau-calendar.js");
 	}
 
-	/** The legend is a row of real {@code aria-pressed} toggles now, not display-only chrome. */
+	/** Month data still includes categories the client legend paints as aria-pressed toggles. */
 	@Test
-	void a04_legendEntriesAreAriaPressedToggles() throws Exception {
-		var body = get("/").body();
-		assertTrue(body.contains("data-juneau-calendar-legend-toggle"), body);
-		assertTrue(body.contains("aria-pressed=\"true\""), body);
+	void a04_monthEnvelopeCarriesTheFourCategories() throws Exception {
+		var def = ExampleCalendarRest.calendar(2026, 8);
+		assertEquals(4, def.categories.size(), "four legend categories");
+		assertTrue(def.categories.stream().anyMatch(c -> "team".equals(c.id)));
+		assertTrue(def.categories.stream().anyMatch(c -> "incident".equals(c.id)));
 	}
 
-	/** The example dogfoods the new layout: a multi-day span paints as a segmented bar, timed chips carry a label. */
+	/** Layout-significant events still exist in the month envelope (bars/chips paint client-side). */
 	@Test
-	void a05_indexPage_paintsSpanningBarsAndTimedChips() throws Exception {
-		var body = get("/").body();
-		assertTrue(body.contains("jc-cal-bar"), "a spanning bar is painted");
-		assertTrue(body.contains("jc-cal-bar--continues-right") || body.contains("jc-cal-bar--continues-left"),
-			"the span crosses a week boundary, so a cut edge is flagged");
-		assertTrue(body.contains("jc-cal-event--timed"), "a timed chip is painted");
-		assertTrue(body.contains("jc-cal-event-time"), "a timed chip carries its HH:mm label");
+	void a05_monthEnvelopeCarriesSpanningAndTimedEvents() throws Exception {
+		var body = getJson("/events/2026/8").body();
+		assertTrue(body.contains("\"end\""), "spanning events carry end");
+		assertTrue(body.contains("T"), "timed events carry a date-time start");
 	}
 
 	@Test

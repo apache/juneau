@@ -19,20 +19,19 @@
  * Reusable widget primitives for the Juneau REST server toolkit.
  *
  * <p>
- * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker, the
- * {@link org.apache.juneau.rest.server.widgets.ActionBar} primitive, and the bean-only definitions for the reusable
- * calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef},
+ * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker and the
+ * bean-only definitions for the reusable calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef},
  * {@link org.apache.juneau.rest.server.widgets.EventCategory},
- * {@link org.apache.juneau.rest.server.widgets.CalendarEvent}).  Table-specific types (row-detail defs, row actions)
- * and the concrete html5 emitters + client runtimes stay in {@code juneau-rest-server-views}; this module has
+ * {@link org.apache.juneau.rest.server.widgets.CalendarEvent}).  Table-specific types (row actions, bulk mutate)
+ * stay in {@code juneau-rest-server-views}; this module has
  * <b>no</b> dependency on views, so a widget bean can never import a views-module type.  A
- * {@link org.apache.juneau.rest.server.widgets.CalendarDef} carries no HTML-emitter code &mdash; the calendar's
- * emitter ({@code CalendarTable}) lives in views and composes these beans.
+ * {@link org.apache.juneau.rest.server.widgets.CalendarDef} carries no HTML-emitter code &mdash; pages mount an
+ * empty {@code data-juneau-calendar} marker and {@code juneau-calendar.js} hydrates it.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.Widget}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ActionBar}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.BarSlot}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CalendarDef}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ServerValues}
  * </ul>

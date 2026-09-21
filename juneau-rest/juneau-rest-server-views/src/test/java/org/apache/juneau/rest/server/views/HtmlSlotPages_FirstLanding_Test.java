@@ -64,7 +64,6 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		assertNull(ViewTable.class.getAnnotation(Deprecated.class));
 		assertNull(RegionDef.class.getAnnotation(Deprecated.class));
 		assertNull(RegionTable.class.getAnnotation(Deprecated.class));
-		assertNoDeprecatedMethods(ViewTable.class, "of");
 		assertNoDeprecatedMethods(RegionDef.class, "create");
 		assertNoDeprecatedMethods(RegionTable.class, "of");
 		assertNoDeprecatedMethods(RegionTable.class, "sidecar");
@@ -72,9 +71,6 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 	}
 
 	@Test void a02b_dualUseJavadocNamesEnvelopeAndMount() throws Exception {
-		assertPageBodyClassification(ViewTable.class);
-		assertTrue(sourceOf(ViewTable.class).contains("ViewSlot#envelope"),
-			"ViewTable javadoc must name ViewSlot.envelope as the page-body factory");
 		assertPageBodyClassification(RegionDef.class);
 		assertPageBodyClassification(RegionTable.class);
 	}

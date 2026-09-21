@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * Pairs a set of unit RED/GREEN checks on {@link ScriptJsonSinkScanner} (proving it flags an unescaped sink, passes
  * an escaped one, ignores non-{@code <script>} raw text, and is not fooled by a comment mention of the escaper) with
  * a live scan of the real source tree that both asserts zero violations <i>and</i> asserts the scanner still finds
- * the known-good {@code ViewTable} sinks &mdash; so a green result can never mean "nothing was
+ * the known-good {@code RegionTable} sink &mdash; so a green result can never mean "nothing was
  * examined".
  */
 class EscapeForScriptSink_SecurityScan_Test extends TestBase {
@@ -138,7 +138,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	// Live gate against the real framework tree
 	// -----------------------------------------------------------------------------------------------------------
 
-	private static final String VIEW_TABLE = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/ViewTable.java";
+	private static final String REGION_TABLE = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/RegionTable.java";
 
 	/** GREEN: every {@code <script>}-JSON sink in the real framework tree routes through escapeForScript. */
 	@Test void a10_realTree_hasNoViolations() throws Exception {
@@ -155,34 +155,32 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	@Test void a11_realTree_findsKnownSinks_notVacuous() throws Exception {
 		var root = requireRepoRoot();
 		var r = ScriptJsonSinkScanner.scanTree(root);
-		assertTrue(r.sinks().size() >= 1, () -> "expected >=2 framework <script> sinks, found: " + r.sinks());
-		assertTrue(r.sinks().stream().anyMatch(s -> s.file().replace('\\', '/').equals(VIEW_TABLE)),
-			() -> "ViewTable sink not found; scanner may have stopped matching. sinks: " + r.sinks());
+		assertTrue(r.sinks().size() >= 1, () -> "expected >=1 framework <script> sinks, found: " + r.sinks());
+		assertTrue(r.sinks().stream().anyMatch(s -> s.file().replace('\\', '/').equals(REGION_TABLE)),
+			() -> "RegionTable sink not found; scanner may have stopped matching. sinks: " + r.sinks());
 	}
 
 	/**
-	 * Mutation check: the real {@code ViewTable} passes as-is, but removing the escaper turns it into a violation.
+	 * Mutation check: the real {@code RegionTable} passes as-is, but removing the escaper turns it into a violation.
 	 * This proves the guard is genuinely exercising that sink rather than passing it by accident.
 	 *
 	 * <p>
-	 * {@code ViewTable} currently has two escaped {@code <script>}-JSON sinks: the top-level VIEW_META sidecar
-	 * and the independently versioned {@code BulkMutateDef} sidecar. Nested-table VIEW_META inside a row-detail
-	 * {@code <template>} retired with F24 (no nested-table host on the region path). The blanket
-	 * {@code escapeForScript}&rarr;{@code noEscape} mutation (which hits every occurrence in the file) must flag
-	 * both remaining sinks.
+	 * {@code RegionTable} currently has one escaped {@code <script>}-JSON sidecar. ViewTable's VIEW_META /
+	 * BulkMutateDef sidecars retired with the MOVE Java delete (WORK-J0550a). The blanket
+	 * {@code escapeForScript}&rarr;{@code noEscape} mutation must flag that remaining sink.
 	 */
-	@Test void a12_realViewTable_passesButFailsWhenEscaperRemoved() throws Exception {
+	@Test void a12_realRegionTable_passesButFailsWhenEscaperRemoved() throws Exception {
 		var root = requireRepoRoot();
-		var source = Files.readString(root.resolve(VIEW_TABLE));
+		var source = Files.readString(root.resolve(REGION_TABLE));
 
-		var clean = ScriptJsonSinkScanner.scan(VIEW_TABLE, source);
-		assertEquals(2, clean.sinks().size(), () -> "sinks: " + clean.sinks());
+		var clean = ScriptJsonSinkScanner.scan(REGION_TABLE, source);
+		assertEquals(1, clean.sinks().size(), () -> "sinks: " + clean.sinks());
 		assertEquals(java.util.List.of(), clean.violations());
 
-		var mutated = ScriptJsonSinkScanner.scan(VIEW_TABLE, source.replace("escapeForScript", "noEscape"));
-		assertEquals(2, mutated.sinks().size(), () -> "sinks: " + mutated.sinks());
-		assertEquals(2, mutated.violations().size(),
-			() -> "removing escapeForScript from ViewTable should be flagged: " + mutated.violations());
+		var mutated = ScriptJsonSinkScanner.scan(REGION_TABLE, source.replace("escapeForScript", "noEscape"));
+		assertEquals(1, mutated.sinks().size(), () -> "sinks: " + mutated.sinks());
+		assertEquals(1, mutated.violations().size(),
+			() -> "removing escapeForScript from RegionTable should be flagged: " + mutated.violations());
 	}
 
 	private static Path requireRepoRoot() {

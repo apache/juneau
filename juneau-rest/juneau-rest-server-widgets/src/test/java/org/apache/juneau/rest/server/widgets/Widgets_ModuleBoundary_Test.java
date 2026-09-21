@@ -118,7 +118,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		// is therefore checked in the source.
 		var src = mixinSource();
 		assertTrue(src.contains("CALENDAR_CONTRACT_VERSION = CalendarDef.CONTRACT_VERSION"), src);
-		assertTrue(src.contains("HEADER_CONTRACT_VERSION = AppHeaderDef.CONTRACT_VERSION"), src);
+		assertTrue(src.contains("HEADER_CONTRACT_VERSION = \"1\""), src);
 		assertTrue(src.contains("BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION"), src);
 	}
 

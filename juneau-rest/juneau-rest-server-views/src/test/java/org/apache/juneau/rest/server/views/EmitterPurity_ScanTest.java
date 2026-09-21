@@ -65,13 +65,14 @@ class EmitterPurity_ScanTest extends TestBase {
 	private static final Set<String> KNOWN_CONTENT_SINKS = Set.of();
 
 	/**
-	 * Floor on the total number of {@code rawText(...)} sites, matching the seven sidecar/empty writes that remain.
+	 * Floor on the total number of {@code rawText(...)} sites, matching the remaining sidecar write
+	 * ({@code RegionTable}). ViewTable's VIEW_META / bulk sidecars retired with the MOVE Java delete.
 	 *
 	 * <p>
 	 * Deliberately slack: sidecars legitimately come and go as emitters are refactored, so pinning the total exactly
 	 * would make this a change-detector. Its only job is to fail loudly if the scan stops seeing the tree at all.
 	 */
-	private static final int MINIMUM_EXPECTED_SITES = 7;
+	private static final int MINIMUM_EXPECTED_SITES = 1;
 
 	private static Path moduleRoot() {
 		var root = RawContentSinkScanner.locateModuleRoot();
@@ -104,14 +105,11 @@ class EmitterPurity_ScanTest extends TestBase {
 				+ "out of every scan silently while the detection logic stayed perfectly correct");
 	}
 
-	@Test void a03_scanFindsBothKnownSidecarShapes() throws Exception {
+	@Test void a03_scanFindsTheKnownSidecarShape() throws Exception {
 		var args = sites().stream().map(RawContentSinkScanner.RawTextSite::arg).toList();
 		assertTrue(args.contains("json"),
-			() -> "expected the plain per-host sidecar payload shape to still exist: " + args);
-		assertTrue(args.contains("bulkJson"),
-			() -> "expected the bulk sidecar payload shape to still exist: " + args);
-		// The inline rawText(escapeForScript(nestedJson(...))) shape retired with F24 nested-table emit.
-		// The classifier still recognizes it (a05 / a07); the live tree no longer has a call site.
+			() -> "expected the RegionTable sidecar payload shape to still exist: " + args);
+		// ViewTable bulkJson sidecar retired with the MOVE Java delete (WORK-J0550a).
 	}
 
 	@Test void a04_scanFindsTheKnownContentSinks() throws Exception {
@@ -198,13 +196,10 @@ class EmitterPurity_ScanTest extends TestBase {
 			() -> "the region emitter must never be a content sink: " + s));
 	}
 
-	@Test void b04_detailEmitterIsAtZeroContentSinks() throws Exception {
-		// The detail arm is the one that reached the design's end state in this item, because it got the staged
-		// mechanism.  So for ViewTable specifically the design's universal holds, and is asserted as a universal.
-		sites().stream()
-			.filter(s -> "ViewTable.java".equals(s.file()))
-			.forEach(s -> assertTrue(s.isSidecarPayload(),
-				() -> "the detail emitter is at zero content-bearing rawText sinks and must stay there: " + s));
+	@Test void b04_viewTableIsConstantsOnly_noRawText() throws Exception {
+		var viewTable = sites().stream().filter(s -> "ViewTable.java".equals(s.file())).toList();
+		assertEquals(List.of(), viewTable,
+			() -> "ViewTable is constants-only after MOVE delete; it must not write rawText: " + viewTable);
 	}
 
 	@Test void b05_everyContentSinkIsInTheDeprecatedDeclarativePath() throws Exception {
@@ -227,12 +222,12 @@ class EmitterPurity_ScanTest extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_mutatingARealSidecarIntoAFieldRead_becomesAViolation() throws Exception {
-		var viewTable = moduleRoot().resolve("src/main/java/org/apache/juneau/rest/server/views/ViewTable.java");
-		var src = Files.readString(viewTable);
+		var regionTable = moduleRoot().resolve("src/main/java/org/apache/juneau/rest/server/views/RegionTable.java");
+		var src = Files.readString(regionTable);
 		assertTrue(src.contains("text(rawText(json))"), "the real sidecar shape moved; this mutation no longer applies");
 
 		var mutated = src.replace("text(rawText(json))", "text(rawText(row.liveValue))");
-		var sites = RawContentSinkScanner.scanRawText("ViewTable.java", mutated);
+		var sites = RawContentSinkScanner.scanRawText("RegionTable.java", mutated);
 		var offenders = sites.stream().filter(RawContentSinkScanner.RawTextSite::isContentBearing).toList();
 
 		assertEquals(1, offenders.size(),

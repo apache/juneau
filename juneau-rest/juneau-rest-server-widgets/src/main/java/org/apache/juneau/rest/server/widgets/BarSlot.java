@@ -33,14 +33,11 @@ import org.apache.juneau.commons.http.*;
  * module &mdash; omitted from the wire, and it does not bump any {@code CONTRACT_VERSION}.
  *
  * @since 10.0.0
- * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
 @BeanType(properties="contractVersion,id,widgets")
 @SuppressWarnings({
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
-	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
 })
-@Deprecated(since = "10.0.0")
 public class BarSlot implements Widget {
 
 	/** The frozen contract version for this widget.  Serialized as the JSON <b>string</b> {@code "1"}. */

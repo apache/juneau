@@ -57,9 +57,7 @@ import java.util.regex.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192", // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
-	"java:S1874", // Stock OPEN/LIGHT_*/RED/GRAY constants still construct via create()/deriveFrom(); those factories are the deprecated authoring API.
-	"deprecation" // Same: shipped palette constants are the CSS source <@theme> selects, not Java page-DSL authoring.
+	"java:S1192" // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
 })
 public final class Theme {
 
@@ -359,13 +357,7 @@ public final class Theme {
 	 * 	uppercase, whitespace, or a path-traversal-shaped segment like {@code "../evil"} &mdash; gated here, not
 	 * 	just at classpath-asset-resolution time, so a later fast-follow that interpolates the name into an asset
 	 * 	path doesn't need to re-gate).
-	 *
-	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
-	@Deprecated(since = "10.0.0")
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
-	})
 	public static Builder create(String name) {
 		if (name == null || ! name.matches(NAME_PATTERN))
 			throw iaex("Invalid theme name: '%s'.  Must match %s.", name, NAME_PATTERN);
@@ -403,12 +395,7 @@ public final class Theme {
 	 * @return A new builder, pre-populated with {@code seed}'s tokens in {@code seed}'s declaration order.
 	 * @throws IllegalArgumentException
 	 * 	If {@code name} is invalid (see {@link #create(String)}) or if {@code seed} is <jk>null</jk>.
-	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
-	@Deprecated(since = "10.0.0")
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
-	})
 	public static Builder deriveFrom(String name, Theme seed) {
 		if (seed == null)
 			throw iaex("Invalid theme seed: null.");
@@ -436,13 +423,7 @@ public final class Theme {
 
 	/**
 	 * Builder for {@link Theme}.
-	 *
-	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
-	@Deprecated(since = "10.0.0")
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
-	})
 	public static final class Builder {
 		private final String name;
 		private final Map<String,String> tokens = new LinkedHashMap<>();

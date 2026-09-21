@@ -172,14 +172,7 @@ public final class ThemePack {
 	 * 	If the id is <jk>null</jk>, empty, or not in the legal shape (e.g. contains uppercase, whitespace, or a
 	 * 	path-traversal-shaped segment like {@code "../evil"}) &mdash; gated here rather than at asset-resolution
 	 * 	time so a later feature that interpolates the id into a path or an attribute value needs no second gate.
-	 *
-	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
-	@Deprecated(since = "10.0.0")
-	@SuppressWarnings({
-		"java:S1133", // Intentional deprecation retained until consumers migrate to FTL/JS.
-		"deprecation" // Constructs the deprecated Builder; this factory is the deprecated authoring API.
-	})
 	public static Builder create(String id) {
 		if (id == null || ! id.matches(ID_PATTERN))
 			throw iaex("Invalid theme pack id: '%s'.  Must match %s.", id, ID_PATTERN);
@@ -246,13 +239,7 @@ public final class ThemePack {
 	 * <b>setter</b> wherever the offending input arrives through one, so the stack trace names the offending call;
 	 * the two that depend on both channels being populated ({@link #theme(Theme)} may be called either side of
 	 * {@link #alias(String, String)}) fire at {@link #build()}.
-	 *
-	 * @deprecated Use FTL/JS authoring; removed after consumers migrate.
 	 */
-	@Deprecated(since = "10.0.0")
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
-	})
 	public static final class Builder {
 		private final String id;
 		private final Map<String,String> aliases = new LinkedHashMap<>();

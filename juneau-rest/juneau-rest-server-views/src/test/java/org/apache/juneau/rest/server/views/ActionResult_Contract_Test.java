@@ -51,11 +51,11 @@ class ActionResult_Contract_Test extends TestBase {
 		assertEquals(expected, actual, json);
 	}
 
-	@Test void a02_contractVersion_isItsOwnValue_notAliasedToViewDef() {
-		// The whole point of MED-7: this is a SEPARATE contract from VIEW_META, so its version must not track ViewDef's.
+	@Test void a02_contractVersion_isItsOwnValue_notAliasedToViewMeta() {
+		// MED-7: this is a SEPARATE contract from VIEW_META, so its version must not track ViewsMixin.CONTRACT_VERSION.
 		assertEquals("1", ActionResult.CONTRACT_VERSION);
-		assertNotEquals(ViewDef.CONTRACT_VERSION, ActionResult.CONTRACT_VERSION,
-			"ActionResult.CONTRACT_VERSION must be its own value, never aliased to ViewDef.CONTRACT_VERSION");
+		assertNotEquals(ViewsMixin.CONTRACT_VERSION, ActionResult.CONTRACT_VERSION,
+			"ActionResult.CONTRACT_VERSION must be its own value, never aliased to VIEW_META");
 	}
 
 	@Test void a03_topLevelKeyOrder_success() {

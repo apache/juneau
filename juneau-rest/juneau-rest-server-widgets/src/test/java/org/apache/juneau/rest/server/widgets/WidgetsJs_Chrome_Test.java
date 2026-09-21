@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * Pins two <b>distinct</b> baked contract constants
  * ({@code JUNEAU_HEADER_CONTRACT_VERSION}/{@code JUNEAU_BAR_CONTRACT_VERSION}) kept in lockstep with
- * {@link AppHeaderDef#CONTRACT_VERSION} and {@link BarSlot#CONTRACT_VERSION}, {@code window.JuneauChrome}
+ * {@link WidgetsMixin#HEADER_CONTRACT_VERSION} and {@link BarSlot#CONTRACT_VERSION}, {@code window.JuneauChrome}
  * namespacing, working MENU triggers that ride the one shared {@code window.JuneauViews.init} layer
  * stack as {@code kind:"menu"} light-dismiss layers &mdash; this runtime <b>never defines its own</b>
  * {@code pushLayer}/{@code popLayer} and carries no competing {@code popupLayerStack} and no fake
@@ -64,11 +64,11 @@ class WidgetsJs_Chrome_Test extends TestBase {
 
 	@Test void a02_bakedContractsMatchServerBeans() throws Exception {
 		var body = chromeJs();
-		assertTrue(body.contains("JUNEAU_HEADER_CONTRACT_VERSION = \"" + AppHeaderDef.CONTRACT_VERSION + "\""),
-			"baked header contract must equal AppHeaderDef.CONTRACT_VERSION");
+		assertTrue(body.contains("JUNEAU_HEADER_CONTRACT_VERSION = \"" + WidgetsMixin.HEADER_CONTRACT_VERSION + "\""),
+			"baked header contract must equal WidgetsMixin.HEADER_CONTRACT_VERSION");
 		assertTrue(body.contains("JUNEAU_BAR_CONTRACT_VERSION = \"" + BarSlot.CONTRACT_VERSION + "\""),
 			"baked bar contract must equal BarSlot.CONTRACT_VERSION");
-		assertEquals(AppHeaderDef.CONTRACT_VERSION, WidgetsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals("1", WidgetsMixin.HEADER_CONTRACT_VERSION);
 		assertEquals(BarSlot.CONTRACT_VERSION, WidgetsMixin.BAR_CONTRACT_VERSION);
 	}
 

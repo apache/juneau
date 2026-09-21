@@ -33,7 +33,6 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.rest.server.views.ViewDef.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
@@ -68,75 +67,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
 
-	/** Row bean for the emitted view page. */
-	public static class Rel {
-		public String name;
-		public String status;
-		public String date;
-	}
-
-	/** The §6.10 golden-shape view the page-consumption test emits + round-trips. */
-	static ViewDef releasesView() {
-		return ViewDef.create("releases")
-			.rowType(Rel.class)
-			.dataMode(DataMode.SERVER)
-			.dataUrl("servlet:/releases/data")
-			.defaultOrder("date", Dir.DESC)
-			.columns(
-				Column.of("name").title("Name").render("linked").href("servlet:/releases/{name}"),
-				Column.of("status").title("Status").render("tag:status"),
-				Column.of("date").title("Date").render("date"))
-			.ribbon(
-				RibbonAction.export("copy", "csv").optional("excel", "pdf"),
-				RibbonAction.columnSearchToggle(),
-				RibbonAction.option("show-superseded").title("Show superseded").column("status").value("superseded").persist(true),
-				RibbonAction.refresh())
-			.build();
-	}
-
-	// Emits the view the documented way (OD-2(a)): pre-serialize the ViewTable markup and serve it as trusted markup,
-	// rather than returning the DOM bean through the full HtmlDoc page path (the sidecar's one-shot Reader content is
-	// intended to be serialized exactly once - see ViewTable's class javadoc).
-	@Rest(mixins=ViewsMixin.class)
-	public static class ViewHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@RestGet(path="/releases") public HttpResource releasesPage() {
-			var markup = Html.of(ViewTable.of(releasesView()));
-			return HttpResourceBean.of(
-				ByteArrayBody.of(markup.getBytes(StandardCharsets.UTF_8), "text/html;charset=utf-8"),
-				list(ContentType.of("text/html;charset=utf-8")));
-		}
-	}
-
-	// Regression (Task 1): returns the ViewTable Div bean DIRECTLY through the servlet's full HtmlDoc page path.
-	// Before the rawText swap this 500'd because the sidecar's one-shot StringReader content could not survive that
-	// serializer (it worked only via HtmlSerializer/Html.of); the String-backed rawText makes the bean re-serializable.
-	@Rest(mixins=ViewsMixin.class)
-	public static class ViewBeanHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@RestGet(path="/releases") public Div releasesPage() {
-			return ViewTable.of(releasesView());
-		}
-	}
-
-	/**
-	 * Request-bearing {@link ViewTable} {@code of(req, ...)} host so the
-	 * {@code data-juneau-saved-views} stamp is resolved through a real {@link RestRequest} URI resolver
-	 * (the emit tests only exercise the already-resolved-base overload).
-	 */
-	@Rest(mixins=ViewsMixin.class)
-	public static class StampHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@RestGet(path="/releases") public Div releases(RestRequest req) {
-			return ViewTable.of(req, releasesView());
-		}
-	}
 
 	private static final MockRestClient cNoMixin = MockRestClient.buildLax(NoMixin.class);
 	private static final MockRestClient cWithMixin = MockRestClient.buildLax(WithMixin.class);
-	private static final MockRestClient cViewHost = MockRestClient.buildLax(ViewHost.class);
-	private static final MockRestClient cViewBeanHost = MockRestClient.buildLax(ViewBeanHost.class);
-	private static final MockRestClient cStampHost = MockRestClient.buildLax(StampHost.class);
 
 	/** Extracts a named function's body: from `function <name>(` to the next top-level `\n\t}`. */
 	private static String functionBody(String body, String signature) {
@@ -146,14 +79,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 		return body.substring(start, end < 0 ? body.length() : end);
 	}
 
-	/** Extracts the raw text between the sidecar's opening and closing {@code <script>} tags. */
-	private static String sidecarBody(String html) {
-		var open = html.indexOf("id=\"juneau-view:releases\"");
-		assertTrue(open >= 0, () -> "sidecar script tag not found:\n" + html);
-		var contentStart = html.indexOf('>', open) + 1;
-		var contentEnd = html.indexOf("</script>", contentStart);
-		return html.substring(contentStart, contentEnd);
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// a) Opt-in / back-compat
@@ -396,11 +321,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// d) Contract-version handshake constant (single source of truth = ViewDef.CONTRACT_VERSION)
+	// d) Contract-version handshake constant
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_contractVersion_equalsViewDefContractVersion() {
-		assertEquals(ViewDef.CONTRACT_VERSION, ViewsMixin.CONTRACT_VERSION);
+	@Test void d01_contractVersion_isFrozenFour() {
 		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
 	}
 
@@ -418,10 +342,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 */
 	@Test void d03_widgetContractReexports_trackWidgetsMixinAndStayDistinctFromViewMeta() {
 		assertEquals(WidgetsMixin.HEADER_CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
-		assertEquals(AppHeaderDef.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals("1", ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertEquals(WidgetsMixin.BAR_CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
 		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-		assertEquals(ViewSlot.CONTRACT_VERSION, ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertEquals("1", ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
@@ -617,27 +540,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("pageLength"), body);
 	}
 
-	@Test void g02_hostPageEmitsSidecarThatRoundTrips() throws Exception {
-		// A ViewsMixin host page that emits a ViewTable carries the marker + sidecar the initializer consumes.
-		var html = cViewHost.get("/releases").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertTrue(html.contains("data-juneau-view=\"releases\""), html);
-		assertTrue(html.contains("id=\"juneau-view:releases\""), html);
-		// The sidecar JSON round-trips back to the same VIEW_META the model emits (structural compare).
-		var body = sidecarBody(html);
-		assertEquals(Json.to(Json.of(releasesView()), java.util.Map.class), Json.to(body, java.util.Map.class), body);
-	}
 
-	@Test void g03_beanReturnedThroughFullHtmlDocPagePath_is200AndReserializable() throws Exception {
-		// The reported bug: returning the ViewTable Div bean through the servlet's full HtmlDoc page path 500'd
-		// because the one-shot StringReader sidecar could not survive that serializer.  With rawText it is 200.
-		var html = cViewBeanHost.get("/releases").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertTrue(html.contains("data-juneau-view=\"releases\""), html);
-		assertTrue(html.contains("id=\"juneau-view:releases\""), html);
-
-		// Repeated requests re-emit + re-serialize a fresh bean each time through the page path (not one-shot).
-		var html2 = cViewBeanHost.get("/releases").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertEquals(html, html2, "full-page HtmlDoc output must be stable across repeated serializations");
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// h) Ribbon visual-parity Task 1 - juneau-icons.js icon registry
@@ -1260,16 +1163,5 @@ class ViewsMixin_Serving_Test extends TestBase {
 			"expanded-row cards inherit content-card padding; this rule must not add a fatter inset: " + nested);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// i) data-juneau-saved-views stamp via a real RestRequest URI resolver
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void i01_requestBearingViewTable_stampsWrapperNotTable() throws Exception {
-		var html = cStampHost.get("/releases").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertTrue(html.contains("data-juneau-saved-views="), html);
-		assertTrue(html.contains(SavedViewsMixin.SAVED_VIEWS_PREFIX), html);
-		assertFalse(html.contains("<table id=\"releases\" data-juneau-saved-views"), html);
-		assertFalse(html.contains("<table id='releases' data-juneau-saved-views"), html);
-	}
 
 }

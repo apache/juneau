@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
@@ -58,12 +57,6 @@ class CellPopover_Test extends TestBase {
 			CellPopover.of(PopoverField.of("a").render(id)).validate();
 	}
 
-	@Test void a06_servingPath_viewTableOfThrows() {
-		var v = ViewDef.create("x").dataMode(DataMode.CLIENT).dataUrl("/u")
-			.columns(Column.of("used").render(Render.of("progress").popover(CellPopover.of())))
-			.build();
-		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
-	}
 
 	@Test void a07_jsonRoundTrip_fieldsAndRender() {
 		var json = Json.of(CellPopover.of(
@@ -74,7 +67,4 @@ class CellPopover_Test extends TestBase {
 		assertTrue(json.contains("\"id\":\"date\""), json);
 	}
 
-	@Test void a08_contractVersionUnchanged() {
-		assertEquals("4", ViewDef.CONTRACT_VERSION);
-	}
 }

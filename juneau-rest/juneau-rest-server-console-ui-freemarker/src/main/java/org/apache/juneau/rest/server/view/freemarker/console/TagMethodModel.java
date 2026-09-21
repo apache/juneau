@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 
 import java.util.*;
 
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.bean.html5.*;
 
 import freemarker.core.*;
 import freemarker.template.*;
@@ -29,8 +29,8 @@ import freemarker.template.utility.*;
  * reserved {@code base.ftlh} template.
  *
  * <p>
- * Implements the design's <b>serialize-then-mark-trusted</b> insertion contract: (1) call {@link Tag#of(String,
- * String)}, (2) serialize the returned {@link org.apache.juneau.bean.html5.Span} via its own {@code toString()}
+ * Implements the design's <b>serialize-then-mark-trusted</b> insertion contract: (1) build a
+ * {@code <span class="tag &lt;domain&gt; &lt;value&gt;">} element, (2) serialize it via {@code toString()}
  * ({@code HtmlSerializer.DEFAULT_SIMPLE_SQ}), (3) wrap the resulting markup string via
  * {@link HTMLOutputFormat#fromMarkup(String) HTMLOutputFormat.INSTANCE.fromMarkup(...)} so a {@code .ftlh}
  * template's default {@code ${...}} auto-escaping does not double-escape it. The macro then writes the result with
@@ -48,8 +48,8 @@ import freemarker.template.utility.*;
  * Both {@code domain} and {@code value} accept either a plain FTL string literal or an arbitrary wrapped Java object
  * (e.g. an {@code Enum} constant passed directly, as in {@code value=SomeEnum.RELEASED}): each argument is resolved
  * via {@link DeepUnwrap#unwrap(TemplateModel)}, then an unwrapped {@link Enum} contributes its {@link Enum#name()}
- * and anything else contributes {@link String#valueOf(Object)}. {@link Tag#of(String, String)} does the actual
- * identifier validation (lowercase-then-anchored-match); this class does no validation of its own.
+ * and anything else contributes {@link String#valueOf(Object)}. Domain and value are lowercased then
+ * fail-closed against {@code ^[a-z0-9_-]+$}.
  *
  * @since 10.0.0
  */
@@ -66,11 +66,27 @@ final class TagMethodModel implements TemplateMethodModelEx {
 		var value = asPlainString(arguments.get(1));
 		String markup;
 		try {
-			markup = Tag.of(domain, value).toString();
+			markup = pillSpan(domain, value).toString();
 		} catch (IllegalArgumentException ex) {
 			throw new TemplateModelException(ex.getMessage(), ex);
 		}
 		return HTMLOutputFormat.INSTANCE.fromMarkup(markup);
+	}
+
+	private static Span pillSpan(String domain, String value) {
+		var d = normalize("domain", domain);
+		var v = normalize("value", value);
+		return new Span().class_("tag " + d + " " + v);
+	}
+
+	private static String normalize(String argName, String raw) {
+		if (raw == null)
+			throw new IllegalArgumentException("Tag " + argName + " must not be null.");
+		var lower = raw.toLowerCase(Locale.ROOT);
+		if (! lower.matches("^[a-z0-9_-]+$"))
+			throw new IllegalArgumentException(
+				"Invalid tag " + argName + ": '" + raw + "'.  Must match ^[a-z0-9_-]+$ (after lowercasing).");
+		return lower;
 	}
 
 	private static String asPlainString(Object arg) throws TemplateModelException {

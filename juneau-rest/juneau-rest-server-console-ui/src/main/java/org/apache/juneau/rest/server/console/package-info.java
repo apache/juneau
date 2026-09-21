@@ -17,8 +17,7 @@
 
 /**
  * Engine-agnostic themeable admin-console chrome: {@link org.apache.juneau.rest.server.console.Theme},
- * {@link org.apache.juneau.rest.server.console.ThemeSettings}, {@link org.apache.juneau.rest.server.console.Tag},
- * {@link org.apache.juneau.rest.server.console.TagHtmlRender}, the bundled {@code chrome.css} asset, and
+ * {@link org.apache.juneau.rest.server.console.ThemeSettings}, the bundled {@code chrome.css} asset, and
  * {@link org.apache.juneau.rest.server.console.ConsoleChromeMixin}.
  *
  * <p>

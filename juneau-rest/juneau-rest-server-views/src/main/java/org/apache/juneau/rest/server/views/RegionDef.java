@@ -48,9 +48,8 @@ public class RegionDef {
 	 * The frozen contract version for the region envelope.
 	 *
 	 * <p>
-	 * Deliberately independent of {@link ViewDef#CONTRACT_VERSION} and {@link RowDetailDef#CONTRACT_VERSION}, for
-	 * the same reason those two envelopes are independent of each other: a region-contract revision must never
-	 * force a view- or detail-sidecar bump, or vice-versa.
+	 * Deliberately independent of {@link ViewsMixin#CONTRACT_VERSION}: a region-contract revision must never
+	 * force a view-sidecar bump, or vice-versa.
 	 */
 	public static final String CONTRACT_VERSION = "1";
 
@@ -73,7 +72,7 @@ public class RegionDef {
 	 *
 	 * <p>
 	 * A declared interval below this floor is clamped up to it rather than honored as configured &mdash; the same
-	 * reasoning and the same shared floor as {@link ViewDef#MIN_POLL_INTERVAL_MS}.
+	 * reasoning and the same shared floor as {@link SafePathTemplate#MIN_POLL_INTERVAL_MS}.
 	 */
 	public static final long MIN_REFRESH_MS = SafePathTemplate.MIN_POLL_INTERVAL_MS;
 
@@ -110,8 +109,8 @@ public class RegionDef {
 	 * populator that fetches its own way or paints with no fetch at all.
 	 *
 	 * <p>
-	 * Validated with the same same-origin, non-cross-scheme, no-{@code ..} check as
-	 * {@link RowDetailDef#isSafeDetailEndpoint(String)}, which this reuses rather than re-implements.
+	 * Validated with {@link #isSafeDetailEndpoint(String)} (same-origin, no scheme, no leading {@code //},
+	 * no {@code ..} segment).
 	 */
 	public String dataUrl;
 
@@ -142,8 +141,7 @@ public class RegionDef {
 	 * The declared auto-refresh interval, in milliseconds, or <jk>null</jk> for no polling.
 	 *
 	 * <p>
-	 * A value below {@link #MIN_REFRESH_MS} is silently clamped up to the floor rather than rejected, exactly as
-	 * {@link ViewDef#poll(long)} already clamps.
+	 * A value below {@link #MIN_REFRESH_MS} is silently clamped up to the floor rather than rejected.
 	 */
 	public Long refreshMs;
 
@@ -179,8 +177,7 @@ public class RegionDef {
 	 * Creates a region with the given id.
 	 *
 	 * <p>
-	 * SD-3 identity plus populator name for {@link RowDetailDef#region(RegionDef)} (and the table renderer's
-	 * projected copy).  Page slots do not go through this factory &mdash; author HTML plus
+	 * SD-3 identity plus populator name.  Page slots do not go through this factory &mdash; author HTML plus
 	 * {@code JuneauViews.regions.mount({ id: populatorName })}.  Not {@code @Deprecated}.
 	 * </p>
 	 *
@@ -374,8 +371,33 @@ public class RegionDef {
 		validateFields();
 	}
 
+	/**
+	 * Whether {@code endpoint} is a same-origin path template: no {@code ://} , no {@code //} prefix, no scheme
+	 * colon-before-slash, and no {@code ..} path segments.
+	 *
+	 * @param endpoint The candidate template.  May be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is a same-origin path template.
+	 */
+	public static boolean isSafeDetailEndpoint(String endpoint) {
+		if (endpoint == null || endpoint.isBlank())
+			return false;
+		if (endpoint.contains("://"))
+			return false;
+		if (endpoint.startsWith("//"))
+			return false;
+		var colon = endpoint.indexOf(':');
+		var slash = endpoint.indexOf('/');
+		if (colon >= 0 && (slash < 0 || colon < slash))
+			return false;
+		for (var seg : endpoint.split("/", -1)) {
+			if ("..".equals(seg))
+				return false;
+		}
+		return true;
+	}
+
 	private void validateDataUrlAndParams() {
-		if (dataUrl != null && !dataUrl.isBlank() && !RowDetailDef.isSafeDetailEndpoint(dataUrl))
+		if (dataUrl != null && !dataUrl.isBlank() && !isSafeDetailEndpoint(dataUrl))
 			throw iaex("RegionDef '%s' dataUrl must be a same-origin path (no scheme, no leading '//', no '..' "
 				+ "segment): %s", id, dataUrl);
 		if (params == null || params.isEmpty())

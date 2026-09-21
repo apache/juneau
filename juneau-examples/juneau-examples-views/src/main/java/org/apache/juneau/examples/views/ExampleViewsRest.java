@@ -32,10 +32,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
-import org.apache.juneau.rest.server.views.ViewDef.DataMode;
-import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.widgets.Op;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
@@ -227,140 +224,267 @@ public class ExampleViewsRest extends BasicRestServlet {
 		}
 	}
 
-	/** The Catalog/Active pair &mdash; dogfoods poll/details/ribbon/rowClassRule together. */
-	static ViewDef activeView() {
-		return ViewDef.create("widgets-active")
-			.rowType(Widget.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/widgets/active")
-			.defaultOrder(COL_NAME, Dir.ASC)
-			.columns(
-				Column.of(COL_NAME).title(TITLE_NAME),
-				Column.of(COL_STATUS).title(TITLE_STATUS).render(RENDER_TAG_STATUS),
-				Column.of(COL_OWNER).title(TITLE_OWNER),
-				Column.of(COL_UPDATED_AT).title("Updated").render(RENDER_DATE))
-			.ribbon(
-				RibbonAction.columnSearchToggle(),
-				RibbonAction.refresh())
-			.rowClassRule(COL_STATUS, Op.EQ, STATUS_ERROR, "row-flagged")
-			// Use 10s for the per-table poll (well above the 5s floor) so the
-			// staleness chip's "Xs ago" advance is easy to observe without hammering this demo endpoint.
-			.poll(10_000L)
-			// "notes" is intentionally not a table column; the expander GET is the only place it appears.
-			.details(RowDetailDef.create()
-				.endpoint("/data/widgets/active/{id}")
-				.region(detailRegion("widgets-active-detail")))
-			.build();
+	/** Catalog JSON for the Active pair (FTL/JS destination; no Java ViewDef). */
+	static Map<String,Object> activeView() {
+		return viewCatalog("widgets-active", "/data/widgets/active",
+			col(COL_NAME, TITLE_NAME),
+			col(COL_STATUS, TITLE_STATUS, RENDER_TAG_STATUS),
+			col(COL_OWNER, TITLE_OWNER),
+			col(COL_UPDATED_AT, "Updated", RENDER_DATE));
 	}
 
-	/** The Catalog/Archived pair &mdash; deliberately plain (the "at least one child has no bells on it" case). */
-	static ViewDef archivedView() {
-		return ViewDef.create("widgets-archived")
-			.rowType(Widget.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/widgets/archived")
-			.defaultOrder(COL_UPDATED_AT, Dir.DESC)
-			.columns(
-				Column.of(COL_NAME).title(TITLE_NAME),
-				Column.of(COL_STATUS).title(TITLE_STATUS).render(RENDER_TAG_STATUS),
-				Column.of(COL_OWNER).title(TITLE_OWNER),
-				Column.of(COL_UPDATED_AT).title(TITLE_ARCHIVED).render(RENDER_DATE))
-			.build();
+	/** Catalog JSON for the Archived pair. */
+	static Map<String,Object> archivedView() {
+		return viewCatalog("widgets-archived", "/data/widgets/archived",
+			col(COL_NAME, TITLE_NAME),
+			col(COL_STATUS, TITLE_STATUS, RENDER_TAG_STATUS),
+			col(COL_OWNER, TITLE_OWNER),
+			col(COL_UPDATED_AT, TITLE_ARCHIVED, RENDER_DATE));
+	}
+
+	/** Catalog JSON whose status title bakes the current flagged-row count. */
+	static Map<String,Object> flaggedView() {
+		var flagged = ACTIVE_WIDGETS.stream().filter(w -> STATUS_ERROR.equals(w.status)).count();
+		return viewCatalog("widgets-flagged", "/data/widgets/active",
+			col(COL_NAME, TITLE_NAME),
+			col(COL_STATUS, "Status (" + flagged + " flagged)", RENDER_TAG_STATUS),
+			col(COL_OWNER, TITLE_OWNER));
+	}
+
+	/** Catalog JSON for the Audit Log leaf. */
+	static Map<String,Object> auditView() {
+		return viewCatalog("audit-log", "/data/audit",
+			col(COL_TIMESTAMP, "When", RENDER_DATE),
+			col("actor", "Actor"),
+			col(COL_ACTION, "Action"));
+	}
+
+	/** Catalog JSON for Alerts: pill-dispatched ack plus mutating row-action ids. */
+	static Map<String,Object> alertsView() {
+		var statusCol = col(COL_STATUS, TITLE_STATUS);
+		statusCol.put("render", Map.of("id", "pill", "meta", Map.of(META_FIELD, META_STATE, META_ACTION, ACTION_ACK)));
+		var catalog = viewCatalog(VIEW_ALERTS, "/data/alerts",
+			col("id", "Id"),
+			col(COL_SEVERITY, TITLE_SEVERITY, RENDER_TAG_STATUS),
+			col(COL_TITLE, TITLE_TITLE),
+			statusCol);
+		catalog.put("rowActions", List.of(
+			Map.of("id", ACTION_ACK, "label", "Acknowledge", "endpoint", "/data/alerts/{id}/ack", "method", "POST"),
+			Map.of("id", ACTION_ESC, "label", "Escalate", "endpoint", "/data/alerts/{id}/esc", "method", "POST")));
+		catalog.put("details", detailCatalog("/data/alerts/{id}", "alerts-detail"));
+		return catalog;
+	}
+
+	/** Catalog JSON for related events. */
+	static Map<String,Object> relatedEventsView() {
+		return viewCatalog("alert-events", "/data/alerts/events",
+			col(COL_TIMESTAMP, "When", RENDER_DATE),
+			col("kind", "Kind"),
+			col("detail", "Detail"));
+	}
+
+	/** Catalog JSON for the read-only overview table (display-only pill; no QuickStats Java). */
+	static Map<String,Object> overviewView() {
+		var statusCol = col(COL_STATUS, TITLE_STATUS);
+		statusCol.put("render", Map.of("id", "pill", "meta", Map.of(META_FIELD, META_STATE, "tone", "warning")));
+		var catalog = viewCatalog("alert-overview", "/data/alerts",
+			col("id", "Id"),
+			col(COL_SEVERITY, TITLE_SEVERITY, RENDER_TAG_STATUS),
+			col(COL_TITLE, TITLE_TITLE),
+			statusCol);
+		catalog.put("details", detailCatalog("/data/alerts/{id}", "alert-overview-detail"));
+		return catalog;
+	}
+
+	@SafeVarargs
+	private static Map<String,Object> viewCatalog(String id, String dataUrl, Map<String,Object> col0,
+			Map<String,Object>... rest) {
+		var cols = new ArrayList<Map<String,Object>>();
+		cols.add(col0);
+		Collections.addAll(cols, rest);
+		var view = new LinkedHashMap<String,Object>();
+		view.put("contractVersion", ViewsMixin.CONTRACT_VERSION);
+		view.put("id", id);
+		view.put("dataUrl", dataUrl);
+		view.put("columns", cols);
+		return view;
+	}
+
+	private static Map<String,Object> col(String data, String title) {
+		var c = new LinkedHashMap<String,Object>();
+		c.put("data", data);
+		c.put("title", title);
+		return c;
+	}
+
+	private static Map<String,Object> col(String data, String title, String render) {
+		var c = col(data, title);
+		c.put("render", render);
+		return c;
+	}
+
+	private static Map<String,Object> detailCatalog(String endpoint, String populator) {
+		var region = new LinkedHashMap<String,Object>();
+		region.put("id", "detail");
+		region.put("type", "row-detail");
+		region.put("populate", populator);
+		var details = new LinkedHashMap<String,Object>();
+		details.put("contractVersion", "1");
+		details.put("endpoint", endpoint);
+		details.put("region", region);
+		return details;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// HTML pages (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * [GET /] &mdash; 303 to the default pair {@code /catalog/active}.
+	 *
+	 * @return A see-other pointing at the Catalog/Active pair.
+	 */
+	@RestGet(path="/", summary="Redirects to the Catalog/Active pair page")
+	public SeeOther index() {
+		return new SeeOther().setLocation(DemoPair.CATALOG_ACTIVE.path);
 	}
 
 	/**
-	 * A standalone view whose column title interpolates a server-side scalar value via {@code $FV}.
+	 * [GET /catalog/active] &mdash; Catalog/Active pair: poll/details/ribbon table in an empty slot.
 	 *
-	 * <p>
-	 * The {@code flaggedCount} provider is session-aware ({@code Function<VarResolverSession,?>}) and returns a
-	 * scalar; {@link ViewSlot#envelope(RestRequest, ViewDef)} resolves the <js>"$FV{flaggedCount}"</js> chrome at
-	 * serve time into plain, serializer-encoded text.  {@code $FV} is registered by {@link #varResolver(VarResolver.Builder)}.
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
 	 */
-	static ViewDef flaggedView() {
-		return ViewDef.create("widgets-flagged")
-			.rowType(Widget.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/widgets/active")
-			.defaultOrder(COL_NAME, Dir.ASC)
-			.columns(
-				Column.of(COL_NAME).title(TITLE_NAME),
-				Column.of(COL_STATUS).title("Status ($FV{flaggedCount} flagged)").render(RENDER_TAG_STATUS),
-				Column.of(COL_OWNER).title(TITLE_OWNER))
-			.serverValues(ServerValues.create()
-				.value("flaggedCount", s -> ACTIVE_WIDGETS.stream().filter(w -> STATUS_ERROR.equals(w.status)).count()))
-			.build();
+	@RestGet(path="/catalog/active", summary="Catalog/Active pair: poll, details, ribbon, rowClassRule")
+	public HttpResource catalogActive(RestRequest req) {
+		return tablePairPage(req, DemoPair.CATALOG_ACTIVE, "widgets-active");
 	}
 
-	/** The sibling PLAIN leaf section (no children row) - the contrast case the blank-panel regression needs. */
-	static ViewDef auditView() {
-		return ViewDef.create("audit-log")
-			.rowType(AuditEntry.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/audit")
-			.defaultOrder(COL_TIMESTAMP, Dir.DESC)
-			.columns(
-				Column.of(COL_TIMESTAMP).title("When").render(RENDER_DATE),
-				Column.of("actor").title("Actor"),
-				Column.of(COL_ACTION).title("Action"))
-			.build();
+	/**
+	 * [GET /catalog/active/view] &mdash; the {@link ViewSlot} envelope for {@link #activeView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/catalog/active/view", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> catalogActiveView() {
+		return activeView();
 	}
 
-	/** Fake alerts table &mdash; named region populator, two mutating ActionRefs on rowActions, expand GET. */
-	static ViewDef alertsView() {
-		return ViewDef.create(VIEW_ALERTS)
-			.rowType(Alert.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/alerts")
-			.defaultOrder("id", Dir.ASC)
-			.columns(
-				Column.of("id").title("Id"),
-				Column.of(COL_SEVERITY).title(TITLE_SEVERITY).render(RENDER_TAG_STATUS),
-				Column.of(COL_TITLE).title(TITLE_TITLE),
-				// An action-bound status pill: the chip themes via .tag.state.<value> (generic "state" domain, not
-				// an IRS probe vocabulary) and clicking (or Enter/Space on) it dispatches the "ack" RowAction through
-				// the same confirm/dialog handler the row-action menu uses - proving pill dispatch is NOT gated on a
-				// row-detail template (this view has both details AND rowActions).
-				Column.of(COL_STATUS).title(TITLE_STATUS)
-					.render(Render.pill().meta(META_FIELD, META_STATE).meta(META_ACTION, ACTION_ACK)))
-			.rowActions(
-				// "ack" is a present=dialog action: clicking it fetches the form envelope (ackForm below), paints a
-				// typed input form, and submits to the POST endpoint on confirm.  The form carries a nested
-				// type=action button targeting "esc" (modal-over-modal, h3).
-				RowAction.create(ACTION_ACK).label("Acknowledge").endpoint("/data/alerts/{id}/ack")
-					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
-					.form("/data/alerts/{id}/ack-form").onSuccess(RowAction.OnSuccess.REDRAW),
-				// "esc" is a present=dialog CONFIRM-ONLY action (no form URL): clicking it opens a title-only
-				// confirmation, and it is also the nested trigger reached from the ack form's action button.
-				RowAction.create(ACTION_ESC).label("Escalate").endpoint("/data/alerts/{id}/esc")
-					.method(RowAction.Method.POST).present(RowAction.Present.DIALOG)
-					.confirm("Escalate this alert to on-call?").onSuccess(RowAction.OnSuccess.REDRAW))
-			.details(RowDetailDef.create()
-				.endpoint("/data/alerts/{id}")
-				.region(detailRegion("alerts-detail")))
-			.build();
+	/**
+	 * [GET /catalog/archived] &mdash; Catalog/Archived pair: a plain table in an empty slot.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/catalog/archived", summary="Catalog/Archived pair: a plain table")
+	public HttpResource catalogArchived(RestRequest req) {
+		return tablePairPage(req, DemoPair.CATALOG_ARCHIVED, "widgets-archived");
 	}
 
-	/** The read-only nested "related events" table (F24: no row-detail host until nested-table seeding is scoped). */
-	static ViewDef relatedEventsView() {
-		return ViewDef.create("alert-events")
-			.rowType(AlertEvent.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/alerts/events")
-			.defaultOrder(COL_TIMESTAMP, Dir.ASC)
-			.columns(
-				Column.of(COL_TIMESTAMP).title("When").render(RENDER_DATE),
-				Column.of("kind").title("Kind"),
-				Column.of("detail").title("Detail"))
-			.build();
+	/**
+	 * [GET /catalog/archived/view] &mdash; the {@link ViewSlot} envelope for {@link #archivedView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/catalog/archived/view", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> catalogArchivedView() {
+		return archivedView();
 	}
 
-	private static RegionDef detailRegion(String populator) {
-		return RegionDef.create("detail").allowPopulators(populator).populate(populator);
+	/**
+	 * [GET /audit] &mdash; Audit Log leaf section: a plain table, no children row.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/audit", summary="Audit Log leaf section: a plain table")
+	public HttpResource audit(RestRequest req) {
+		return tablePairPage(req, DemoPair.AUDIT, "audit-log");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Dashboard: author-HTML titled panels (no Java Card/CardGrid type).
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * [GET /audit/view] &mdash; the {@link ViewSlot} envelope for {@link #auditView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/audit/view", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> auditViewEnvelope() {
+		return auditView();
+	}
+
+	/**
+	 * [GET /alerts] &mdash; Alerts leaf section: named region populator and mutating row actions.
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The pair HTML page.
+	 */
+	@RestGet(path="/alerts", summary="Alerts leaf section: region populator and mutating row actions")
+	public HttpResource alerts(RestRequest req) {
+		return tablePairPage(req, DemoPair.ALERTS, VIEW_ALERTS);
+	}
+
+	/**
+	 * [GET /alerts/view] &mdash; the {@link ViewSlot} envelope for {@link #alertsView()}.
+	 *
+	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
+	 * @return The slot envelope.
+	 */
+	@RestGet(path="/alerts/view", swagger=@OpSwagger(ignore=true))
+	public Map<String,Object> alertsViewEnvelope() {
+		return alertsView();
+	}
+
+	/**
+	 * [GET /dashboard] &mdash; author-HTML titled panels: a static Fleet Summary plus a live metrics slot
+	 * populated by {@code JuneauViews.regions.mount} (no Java card type, no {@code juneau-cards.js}).
+	 *
+	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
+	 * @return The dashboard HTML page.
+	 */
+	@RestGet(path="/dashboard", summary="Author-HTML dashboard: static summary panel + live metrics slot")
+	public HttpResource dashboard(RestRequest req) {
+		var html = """
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<title>Apache Juneau - Card Dashboard Example</title>
+			<link rel="stylesheet" href="%s">
+			<style>
+			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
+			</style>
+			</head>
+			<body>
+			<h1>Apache Juneau &mdash; Card Dashboard Example</h1>
+			<p>Titled author-HTML panels (not a Java card type). The <b>Fleet Summary</b> panel is static
+			(server-rendered, legible with JavaScript disabled); the <b>Live Alert Metrics</b> panel is an empty
+			slot that <code>JuneauViews.regions.mount</code> populates from <code>/data/cards/summary</code>, with
+			a Refresh button and a 10s poll. Acknowledge or escalate an alert on the
+			<a href="/catalog/active">Catalog</a> or <a href="/alerts">Alerts</a> pair, then refresh this panel
+			to see the counts move.</p>
+			%s
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script src="%s"></script>
+			<script>
+			%s
+			</script>
+			</body>
+			</html>
+			""".formatted(
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
+				dashboardMarkup(),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
+				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
+				DASHBOARD_POPULATE_SCRIPT);
+		return HttpResourceBean.of(
+			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
+			list(ContentType.of(MEDIA_HTML)));
+	}
 
 	private static String dashboardMarkup() {
 		var total = ACTIVE_WIDGETS.size() + ARCHIVED_WIDGETS.size();
@@ -419,229 +543,6 @@ public class ExampleViewsRest extends BasicRestServlet {
 			JuneauViews.regions.mount({ "live-metrics": "live-metrics" });
 		})();
 		""";
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Quick-stats strip + fill-sink pills (a second, non-card consumer of the status-tone palette).
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * A {@link QuickStats} strip for the alert table: one {@link StatTile} scalar, one {@link StatBar} meter, and one
-	 * {@link SegmentedBadge} breakdown, all painted from values computed here on the server.
-	 *
-	 * <p>
-	 * Every tone is one of the five {@link StatusTone} names, which are the same names a pill's {@code meta.tone}
-	 * accepts &mdash; so "warning" is one colour across the whole toolkit rather than one per surface.  The strip is
-	 * display-only: it has no refresh endpoint and no poll interval, unlike the live dashboard metrics slot
-	 * above.  A figure that needs to move belongs on a dashboard panel or in a column, not in a quick-stat.
-	 *
-	 * @return The alert overview strip.
-	 */
-	static QuickStats alertQuickStats() {
-		var open = 0L;
-		var ack = 0L;
-		var esc = 0L;
-		var critical = 0L;
-		for (var a : ALERTS) {
-			if (STATUS_OPEN.equals(a.status)) open++;
-			else if (STATUS_ACKNOWLEDGED.equals(a.status)) ack++;
-			else if (STATUS_ESCALATED.equals(a.status)) esc++;
-			if (SEVERITY_CRITICAL.equals(a.severity)) critical++;
-		}
-		return QuickStats.create("alert-overview").items(
-			StatTile.of("total", "Total alerts", Long.toString(ALERTS.size()))
-				.tone(StatusTone.INFO),
-			// A meter reads "how much of the budget is used": critical alerts against the whole table.
-			StatBar.of(SEVERITY_CRITICAL, "Critical", critical, ALERTS.size())
-				.tone(critical == 0 ? StatusTone.SUCCESS : StatusTone.ERROR),
-			SegmentedBadge.of("by-status", "By status").segments(
-				SegmentedBadge.Segment.of(STATUS_OPEN, open).tone(StatusTone.WARNING),
-				SegmentedBadge.Segment.of(STATUS_ACKNOWLEDGED, ack).tone(StatusTone.INFO),
-				SegmentedBadge.Segment.of(STATUS_ESCALATED, esc).tone(StatusTone.ERROR)));
-	}
-
-	/**
-	 * A read-only alert overview: a {@link QuickStats} strip above the toolbar, a display-only pill column, and a
-	 * row-detail whose {@code state} field is a <b>fill-sink</b> pill.
-	 *
-	 * <p>
-	 * The sink pill is the contrast case for the {@link #alertsView() Alerts} pair's action-bound pill: a fill sink has
-	 * no {@code rowActions} in scope, so its pill is display-only by construction and carries no button role, no
-	 * keyboard affordance, and no dispatch attribute.  Declaring {@code meta.action} on it would fail the view's own
-	 * {@code validate()} rather than paint a dead chip.
-	 *
-	 * @return The overview view.
-	 */
-	static ViewDef overviewView() {
-		return ViewDef.create("alert-overview")
-			.rowType(Alert.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/data/alerts")
-			.defaultOrder("id", Dir.ASC)
-			.quickStats(alertQuickStats())
-			.columns(
-				Column.of("id").title("Id"),
-				Column.of(COL_SEVERITY).title(TITLE_SEVERITY).render(RENDER_TAG_STATUS),
-				Column.of(COL_TITLE).title(TITLE_TITLE),
-				// A display-only pill with an explicit tone from the five-value status palette.  No meta.action, so
-				// no role/tabindex/dispatch attribute is emitted - the chip is presentation, and that is legal.
-				Column.of(COL_STATUS).title(TITLE_STATUS)
-					.render(Render.pill(StatusTone.WARNING.wire()).meta(META_FIELD, META_STATE)))
-			.details(RowDetailDef.create()
-				.endpoint("/data/alerts/{id}")
-				.region(detailRegion("alert-overview-detail")))
-			.build();
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// HTML pages (hand-built, no template engine - this module takes no dependency on FreeMarker/console-ui).
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * [GET /] &mdash; 303 to the default pair {@code /catalog/active}.
-	 *
-	 * @return A see-other pointing at the Catalog/Active pair.
-	 */
-	@RestGet(path="/", summary="Redirects to the Catalog/Active pair page")
-	public SeeOther index() {
-		return new SeeOther().setLocation(DemoPair.CATALOG_ACTIVE.path);
-	}
-
-	/**
-	 * [GET /catalog/active] &mdash; Catalog/Active pair: poll/details/ribbon table in an empty slot.
-	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The pair HTML page.
-	 */
-	@RestGet(path="/catalog/active", summary="Catalog/Active pair: poll, details, ribbon, rowClassRule")
-	public HttpResource catalogActive(RestRequest req) {
-		return tablePairPage(req, DemoPair.CATALOG_ACTIVE, "widgets-active");
-	}
-
-	/**
-	 * [GET /catalog/active/view] &mdash; the {@link ViewSlot} envelope for {@link #activeView()}.
-	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
-	 * @return The slot envelope.
-	 */
-	@RestGet(path="/catalog/active/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot catalogActiveView(RestRequest req) {
-		return ViewSlot.envelope(req, activeView());
-	}
-
-	/**
-	 * [GET /catalog/archived] &mdash; Catalog/Archived pair: a plain table in an empty slot.
-	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The pair HTML page.
-	 */
-	@RestGet(path="/catalog/archived", summary="Catalog/Archived pair: a plain table")
-	public HttpResource catalogArchived(RestRequest req) {
-		return tablePairPage(req, DemoPair.CATALOG_ARCHIVED, "widgets-archived");
-	}
-
-	/**
-	 * [GET /catalog/archived/view] &mdash; the {@link ViewSlot} envelope for {@link #archivedView()}.
-	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
-	 * @return The slot envelope.
-	 */
-	@RestGet(path="/catalog/archived/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot catalogArchivedView(RestRequest req) {
-		return ViewSlot.envelope(req, archivedView());
-	}
-
-	/**
-	 * [GET /audit] &mdash; Audit Log leaf section: a plain table, no children row.
-	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The pair HTML page.
-	 */
-	@RestGet(path="/audit", summary="Audit Log leaf section: a plain table")
-	public HttpResource audit(RestRequest req) {
-		return tablePairPage(req, DemoPair.AUDIT, "audit-log");
-	}
-
-	/**
-	 * [GET /audit/view] &mdash; the {@link ViewSlot} envelope for {@link #auditView()}.
-	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
-	 * @return The slot envelope.
-	 */
-	@RestGet(path="/audit/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot auditViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, auditView());
-	}
-
-	/**
-	 * [GET /alerts] &mdash; Alerts leaf section: named region populator and mutating row actions.
-	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The pair HTML page.
-	 */
-	@RestGet(path="/alerts", summary="Alerts leaf section: region populator and mutating row actions")
-	public HttpResource alerts(RestRequest req) {
-		return tablePairPage(req, DemoPair.ALERTS, VIEW_ALERTS);
-	}
-
-	/**
-	 * [GET /alerts/view] &mdash; the {@link ViewSlot} envelope for {@link #alertsView()}.
-	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
-	 * @return The slot envelope.
-	 */
-	@RestGet(path="/alerts/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot alertsViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, alertsView());
-	}
-
-	/**
-	 * [GET /dashboard] &mdash; author-HTML titled panels: a static Fleet Summary plus a live metrics slot
-	 * populated by {@code JuneauViews.regions.mount} (no Java card type, no {@code juneau-cards.js}).
-	 *
-	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
-	 * @return The dashboard HTML page.
-	 */
-	@RestGet(path="/dashboard", summary="Author-HTML dashboard: static summary panel + live metrics slot")
-	public HttpResource dashboard(RestRequest req) {
-		var html = """
-			<!DOCTYPE html>
-			<html lang="en">
-			<head>
-			<meta charset="utf-8">
-			<title>Apache Juneau - Card Dashboard Example</title>
-			<link rel="stylesheet" href="%s">
-			<style>
-			\tbody { font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 2em; }
-			</style>
-			</head>
-			<body>
-			<h1>Apache Juneau &mdash; Card Dashboard Example</h1>
-			<p>Titled author-HTML panels (not a Java card type). The <b>Fleet Summary</b> panel is static
-			(server-rendered, legible with JavaScript disabled); the <b>Live Alert Metrics</b> panel is an empty
-			slot that <code>JuneauViews.regions.mount</code> populates from <code>/data/cards/summary</code>, with
-			a Refresh button and a 10s poll. Acknowledge or escalate an alert on the
-			<a href="/catalog/active">Catalog</a> or <a href="/alerts">Alerts</a> pair, then refresh this panel
-			to see the counts move.</p>
-			%s
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script src="%s"></script>
-			<script>
-			%s
-			</script>
-			</body>
-			</html>
-			""".formatted(
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_CSS_PATH),
-				dashboardMarkup(),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.REGIONS_JS_PATH),
-				ViewsMixin.viewAssetUrl(req, ViewsMixin.HELPERS_JS_PATH),
-				DASHBOARD_POPULATE_SCRIPT);
-		return HttpResourceBean.of(
-			ByteArrayBody.of(html.getBytes(UTF_8), MEDIA_HTML),
-			list(ContentType.of(MEDIA_HTML)));
-	}
 
 	private static String pageNavHtml(DemoPair current) {
 		var catalogCur = "catalog".equals(current.section) ? " aria-current=\"page\"" : "";
@@ -802,8 +703,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/overview/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot overviewViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, overviewView());
+	public Map<String,Object> overviewViewEnvelope() {
+		return overviewView();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1049,8 +950,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * @return The slot envelope with resolved {@code $FV} chrome.
 	 */
 	@RestGet(path="/flagged/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot flaggedViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, flaggedView());
+	public Map<String,Object> flaggedViewEnvelope() {
+		return flaggedView();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1446,7 +1347,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 
 	private static Map<String,Object> detailEnvelope(Map<String,?> fields) {
 		var out = new LinkedHashMap<String,Object>();
-		out.put("contractVersion", RowDetailDef.CONTRACT_VERSION);
+		out.put("contractVersion", "1");
 		out.put("fields", fields);
 		return out;
 	}

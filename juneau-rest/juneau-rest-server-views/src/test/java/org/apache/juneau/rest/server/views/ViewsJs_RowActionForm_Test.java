@@ -113,7 +113,7 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 	}
 
 	@Test void a07_contractVersionStaysFour() throws Exception {
-		assertEquals("4", ViewDef.CONTRACT_VERSION);
+		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
 		assertTrue(viewsJs().contains("JUNEAU_VIEW_CONTRACT_VERSION = \"4\""), viewsJs());
 	}
 

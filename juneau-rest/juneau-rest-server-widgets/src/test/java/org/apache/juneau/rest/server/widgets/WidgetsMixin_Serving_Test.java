@@ -137,8 +137,8 @@ class WidgetsMixin_Serving_Test extends TestBase {
 		assertEquals(CalendarDef.CONTRACT_VERSION, WidgetsMixin.CALENDAR_CONTRACT_VERSION);
 	}
 
-	@Test void b03_headerContractVersion_equalsAppHeaderDefContractVersion() {
-		assertEquals(AppHeaderDef.CONTRACT_VERSION, WidgetsMixin.HEADER_CONTRACT_VERSION);
+	@Test void b03_headerContractVersion_isLiteralOne() {
+		assertEquals("1", WidgetsMixin.HEADER_CONTRACT_VERSION);
 	}
 
 	@Test void b04_barContractVersion_equalsBarSlotContractVersion() {

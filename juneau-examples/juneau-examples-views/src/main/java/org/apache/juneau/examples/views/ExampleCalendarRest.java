@@ -27,7 +27,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.marshall.marshaller.Html;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 import org.apache.juneau.rest.server.views.*;
@@ -35,13 +34,14 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.apache.juneau.rest.server.widgets.EventCategory.CategoryColor;
 
 /**
- * Dogfoods the reusable calendar widget (parent concept #10): a real caller of {@link CalendarTable#of(CalendarDef)}
- * outside the views module's own test sources, served on an embedded Jetty server via {@link ExampleCalendarServer}.
+ * Dogfoods the reusable calendar widget (parent concept #10): a real caller of {@link CalendarDef} plus an empty
+ * {@code data-juneau-calendar} mount outside the views module's own test sources, served on an embedded Jetty
+ * server via {@link ExampleCalendarServer}.
  *
  * <p>
- * The page paints the current month server-side (true progressive enhancement &mdash; the seed chips are visible
- * before any JavaScript runs, as same-origin anchors), then {@code juneau-calendar.js} hydrates prev/next/today
- * navigation by fetching other months from the same-origin {@code /events/{year}/{month}} endpoint.  The events are
+ * The page stamps the calendar marker, contract, and month endpoint; {@code juneau-calendar.js} paints the grid
+ * and hydrates prev/next/today navigation by fetching other months from the same-origin
+ * {@code /events/{year}/{month}} endpoint.  The events are
  * generic synthetic entries (team syncs, reviews, releases, incident retros) so the example carries no
  * domain-specific vocabulary.
  *
@@ -126,7 +126,10 @@ public class ExampleCalendarRest extends BasicRestServlet {
 	@RestGet(path="/", summary="The reusable-calendar demo page (current month, server-painted)")
 	public HttpResource index(RestRequest req) {
 		var now = LocalDate.now(Clock.systemUTC());
-		var calendarMarkup = Html.of(CalendarTable.of(req, calendar(now.getYear(), now.getMonthValue())));
+		var def = calendar(now.getYear(), now.getMonthValue());
+		var calendarMarkup = """
+			<div data-juneau-calendar="%s" data-juneau-calendar-contract="%s" data-juneau-calendar-endpoint="%s"></div>
+			""".formatted(def.id, CalendarDef.CONTRACT_VERSION, def.endpoint);
 		var html = """
 			<!DOCTYPE html>
 			<html lang="en">

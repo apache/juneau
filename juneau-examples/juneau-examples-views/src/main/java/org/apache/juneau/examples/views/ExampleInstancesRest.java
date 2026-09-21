@@ -29,8 +29,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.DataTablesMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
-import org.apache.juneau.rest.server.views.ViewDef.DataMode;
-import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.apache.juneau.rest.server.views.*;
 
 /**
@@ -115,26 +113,42 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	 *
 	 * @return The ten-tab region-hosted detail view.
 	 */
-	static ViewDef instancesView() {
-		return ViewDef.create(VIEW_ID)
-			.rowType(ServiceInstance.class)
-			.dataMode(DataMode.CLIENT)
-			.dataUrl("/instances/data/instances")
-			.defaultOrder("id", Dir.ASC)
-			.columns(
-				Column.of("id").title("ID"),
-				Column.of("name").title("Name"),
-				Column.of("type").title("Type"),
-				Column.of("version").title("Version"),
-				Column.of("zone").title("Zone"),
-				Column.of(COL_STATUS).title("Status").render(Render.pill()),
-				Column.of("lastSeen").title("Last Seen"))
-			.details(RowDetailDef.create()
-				.endpoint("/instances/data/instances/{id}")   // SF-A: the base GET, shared with the region
-				.region(RegionDef.create("detail")            // ONE region.  No .sections(...)
-					.allowPopulators(POPULATOR)
-					.populate(POPULATOR)))
-			.build();
+	static Map<String,Object> instancesView() {
+		var view = new LinkedHashMap<String,Object>();
+		view.put("contractVersion", ViewsMixin.CONTRACT_VERSION);
+		view.put("id", VIEW_ID);
+		view.put("dataUrl", "/instances/data/instances");
+		view.put("columns", List.of(
+			col("id", "ID"),
+			col("name", "Name"),
+			col("type", "Type"),
+			col("version", "Version"),
+			col("zone", "Zone"),
+			col(COL_STATUS, "Status", "pill"),
+			col("lastSeen", "Last Seen")));
+		var region = RegionDef.create("detail")
+			.type(RegionDef.TYPE_ROW_DETAIL)
+			.allowPopulators(POPULATOR)
+			.populate(POPULATOR);
+		var details = new LinkedHashMap<String,Object>();
+		details.put("contractVersion", "1");
+		details.put("endpoint", "/instances/data/instances/{id}");
+		details.put("region", region);
+		view.put("details", details);
+		return view;
+	}
+
+	private static Map<String,Object> col(String data, String title) {
+		var c = new LinkedHashMap<String,Object>();
+		c.put("data", data);
+		c.put("title", title);
+		return c;
+	}
+
+	private static Map<String,Object> col(String data, String title, String render) {
+		var c = col(data, title);
+		c.put("render", render);
+		return c;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -177,8 +191,8 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/view", swagger=@OpSwagger(ignore=true))
-	public ViewSlot instancesViewEnvelope(RestRequest req) {
-		return ViewSlot.envelope(req, instancesView());
+	public Map<String,Object> instancesViewEnvelope() {
+		return instancesView();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -216,7 +230,7 @@ public class ExampleInstancesRest extends BasicRestServlet {
 		fields.put("zone", i.zone);
 		fields.put("lastSeen", i.lastSeen);
 		var out = new LinkedHashMap<String,Object>();
-		out.put("contractVersion", RowDetailDef.CONTRACT_VERSION);
+		out.put("contractVersion", "1");
 		out.put("fields", fields);
 		return out;
 	}

@@ -79,9 +79,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>Contract-version handshake:</h5>
  * <p>
- * {@link #CONTRACT_VERSION} is the single wire-contract discriminator, kept in one source of truth with the value the
- * model emits ({@link ViewDef#CONTRACT_VERSION}).  {@code juneau-views.js} bakes in the same value so the client can
- * fail loud when a served {@code VIEW_META} sidecar's {@code contractVersion} differs from the runtime's.
+ * {@link #CONTRACT_VERSION} is the single wire-contract discriminator for a {@code VIEW_META} sidecar.
+ * {@code juneau-views.js} bakes in the same value so the client can fail loud when a served sidecar's
+ * {@code contractVersion} differs from the runtime's.
  *
  * <h5 class='section'>Mixin-only deployment:</h5>
  * <p>
@@ -90,7 +90,6 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link ViewDef}
  * 	<li class='jc'>{@link ViewTable}
  * </ul>
  *
@@ -224,33 +223,30 @@ public class ViewsMixin {
 	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
 
 	/**
-	 * The frozen {@code VIEW_META} contract-version handshake constant, kept in one source of truth with the value the
-	 * model emits ({@link ViewDef#CONTRACT_VERSION}).
+	 * The frozen {@code VIEW_META} contract-version handshake constant. FTL {@code <@card type="datatables">}
+	 * catalogs emit this on the lifted {@code view} object.
 	 */
-	public static final String CONTRACT_VERSION = ViewDef.CONTRACT_VERSION;
+	public static final String CONTRACT_VERSION = "4";
 
 	/**
-	 * The app-header refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in, kept
-	 * in one source of truth with the value the header model emits ({@link AppHeaderDef#CONTRACT_VERSION}).
+	 * The app-header refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in.
 	 * Deliberately distinct from {@link #CONTRACT_VERSION} and {@link #BAR_CONTRACT_VERSION}: a header-envelope
 	 * revision must never force a view-sidecar or bar-sidecar bump, or vice-versa.
 	 */
-	public static final String HEADER_CONTRACT_VERSION = AppHeaderDef.CONTRACT_VERSION;
+	public static final String HEADER_CONTRACT_VERSION = "1";
 
 	/**
-	 * The bar-slot refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in, kept in
-	 * one source of truth with the value the bar model emits ({@link BarSlot#CONTRACT_VERSION}).  Deliberately a
-	 * distinct constant from {@link #HEADER_CONTRACT_VERSION} (see that constant).
+	 * The bar-slot refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in.
+	 * Deliberately a distinct constant from {@link #HEADER_CONTRACT_VERSION} (see that constant).
 	 */
-	public static final String BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION;
+	public static final String BAR_CONTRACT_VERSION = "1";
 
 	/**
-	 * The slot-envelope contract-version handshake constant that {@code juneau-views.js} bakes in, kept in one
-	 * source of truth with the value the slot model emits ({@link ViewSlot#CONTRACT_VERSION}).  Deliberately a
-	 * distinct constant from {@link #CONTRACT_VERSION} (the {@code VIEW_META} sidecar): a slot-envelope revision
-	 * must never force a view-sidecar bump, or vice-versa.
+	 * The slot-envelope ({@code SLOT_META}) contract-version handshake constant that {@code juneau-page-cards.js}
+	 * and {@code juneau-views.js} bake in. Deliberately a distinct constant from {@link #CONTRACT_VERSION} (the
+	 * inner {@code VIEW_META} object): a slot-envelope revision must never force a view-sidecar bump, or vice-versa.
 	 */
-	public static final String SLOT_CONTRACT_VERSION = ViewSlot.CONTRACT_VERSION;
+	public static final String SLOT_CONTRACT_VERSION = "1";
 
 	/** Classpath location of the shipped initializer. */
 	static final String VIEWS_JS_RESOURCE = "/org/apache/juneau/views/juneau-views.js";

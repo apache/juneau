@@ -47,17 +47,11 @@ import org.apache.juneau.rest.server.widgets.Op;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link RowAction}
- * 	<li class='jc'>{@link RowClassRule}
  * </ul>
  *
  * @since 10.0.0
- * @deprecated Use FTL/JS authoring; removed after consumers migrate.
  */
-@SuppressWarnings({
-	"java:S1133" // Intentional deprecation retained until consumers migrate to FTL/JS.
-})
 @BeanType(properties="field,op,value,reason")
-@Deprecated(since = "10.0.0")
 public class RowActionEnabledRule {
 
 	/** The row field this rule tests. */

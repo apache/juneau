@@ -64,7 +64,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		// The runtime constant must equal the server's ActionResult.CONTRACT_VERSION, and must NOT be the view one.
 		assertTrue(body.contains("JUNEAU_ACTION_RESULT_CONTRACT_VERSION = \"" + ActionResult.CONTRACT_VERSION + "\""), body);
 		assertEquals("1", ActionResult.CONTRACT_VERSION);
-		assertNotEquals(ViewDef.CONTRACT_VERSION, ActionResult.CONTRACT_VERSION);
+		assertNotEquals(ViewsMixin.CONTRACT_VERSION, ActionResult.CONTRACT_VERSION);
 	}
 
 	@Test void a02_contractMismatchOn2xxRendersUnknown() throws Exception {

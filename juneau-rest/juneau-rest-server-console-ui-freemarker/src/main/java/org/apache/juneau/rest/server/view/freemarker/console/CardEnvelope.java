@@ -65,8 +65,8 @@ final class CardEnvelope {
 	 *
 	 * <p>
 	 * The author writes IRS-portable catalog JSON5 (a bare {@code {dataUrl, columns:[{key,label}]}}),
-	 * <b>not</b> hand-authored VIEW_META. This method wraps it in a {@link ViewSlot#CONTRACT_VERSION}
-	 * slot carrying a {@link ViewDef#CONTRACT_VERSION} view: author {@code key}/{@code label} become
+	 * <b>not</b> hand-authored VIEW_META. This method wraps it in a {@link ViewsMixin#SLOT_CONTRACT_VERSION}
+	 * slot carrying a {@link ViewsMixin#CONTRACT_VERSION} view: author {@code key}/{@code label} become
 	 * VIEW_META {@code data}/{@code title} ({@code data}/{@code title} are also accepted verbatim). An
 	 * object that already carries both {@code contractVersion} and {@code view} is treated as a
 	 * pre-built SLOT_META envelope and passed through unchanged (escape hatch).
@@ -87,7 +87,7 @@ final class CardEnvelope {
 				"<@card type=\"datatables\"> catalog requires 'dataUrl' and 'columns'.");
 
 		var view = new JsonMap();
-		view.put("contractVersion", ViewDef.CONTRACT_VERSION);
+		view.put("contractVersion", ViewsMixin.CONTRACT_VERSION);
 		view.put("id", cardId);
 		view.put("dataUrl", dataUrl);
 		var cols = new JsonList();
@@ -105,7 +105,7 @@ final class CardEnvelope {
 				view.put(f, catalog.get(f));
 
 		var slot = new JsonMap();
-		slot.put("contractVersion", ViewSlot.CONTRACT_VERSION);
+		slot.put("contractVersion", ViewsMixin.SLOT_CONTRACT_VERSION);
 		slot.put("layout", "wide");
 		slot.put("view", view);
 		return slot;

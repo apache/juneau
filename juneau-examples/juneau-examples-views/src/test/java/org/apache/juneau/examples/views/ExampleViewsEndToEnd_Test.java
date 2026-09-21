@@ -265,7 +265,7 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		var body = res.body();
 		assertTrue(body.contains("id=\"alert-overview\""), "empty slot");
 		assertFalse(body.contains("data-juneau-view"), "page GET must not serialize ViewTable.of into the body");
-		assertFalse(body.contains("data-juneau-quickstats"), "QuickStats paints from the envelope after mount");
+		assertFalse(body.contains("data-juneau-quickstats"), "no QuickStats Java emitter");
 		assertTrue(body.contains("JuneauViews.regions.mount({ \"alert-overview\": { table:"), "mount hookup");
 		var views = body.indexOf("/juneau-views.js?v=");
 		var regions = body.indexOf("/juneau-regions.js?v=");
@@ -280,12 +280,6 @@ class ExampleViewsEndToEnd_Test extends TestBase {
 		var body = res.body();
 		assertTrue(body.contains("\"contractVersion\""), body);
 		assertTrue(body.contains("\"id\":\"alert-overview\""), body);
-		assertTrue(body.contains("\"quickStats\""), body);
-		assertTrue(body.contains("Total alerts"), body);
-		assertTrue(body.contains("\"tone\":\"info\"") || body.contains("INFO") || body.contains("is-info")
-			|| body.contains("info"), body);
-		assertTrue(body.contains("warning"), body);
-		assertTrue(body.contains("error"), body);
 		assertTrue(body.contains("pill"), "pill renderer declared");
 		assertFalse(body.contains("\"actionId\""), "no pill action on this page's view");
 	}

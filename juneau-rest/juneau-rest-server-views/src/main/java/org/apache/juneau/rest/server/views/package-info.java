@@ -20,11 +20,13 @@
  * contract consumed by the first-party client runtime.
  *
  * <p>
- * This optional module builds on {@code juneau-rest-server-datatables} (the server-side query protocol):
- * an app author declares one {@link org.apache.juneau.rest.server.views.ViewDef} &mdash; columns, ribbon actions,
- * row-decorator rules, and named cell renderers &mdash; as ordinary Juneau beans, and the model serializes to the
- * {@code VIEW_META} JSON contract that the shipped {@code juneau-views.js}/{@code juneau-ribbon.js}/
- * {@code juneau-renders.js} runtime consumes to wire up a fully-featured DataTable.
+ * This optional module builds on {@code juneau-rest-server-datatables} (the server-side query protocol).
+ * Table authoring now lives in FTL {@code <@card type="datatables">} catalogs; this module keeps the
+ * {@code VIEW_META} JSON contract constants ({@link org.apache.juneau.rest.server.views.ViewsMixin},
+ * {@link org.apache.juneau.rest.server.views.ViewTable}), region mounting
+ * ({@link org.apache.juneau.rest.server.views.RegionDef}, {@link org.apache.juneau.rest.server.views.RegionTable}),
+ * bulk-mutate / row-action / saved-view types, and the first-party
+ * {@code juneau-views.js}/{@code juneau-ribbon.js}/{@code juneau-renders.js} runtime.
  *
  * <p>
  * The module owns a dependency-free base {@code .tag} chip stylesheet and takes <b>no</b> hard dependency on
@@ -32,11 +34,10 @@
  * console-ui's palette themes the shared {@code .tag.<domain>.<value>} class-name contract when present.
  *
  * <p>
- * Alongside the DataTables view it also hosts the emitter for the reusable calendar widget:
- * {@link org.apache.juneau.rest.server.views.CalendarTable#of(org.apache.juneau.rest.server.widgets.CalendarDef)}
- * paints a {@code data-juneau-calendar} month grid (server-rendered seed chips for true progressive enhancement,
- * plus the {@code <template>} skeletons and optional {@code escapeForScript}-encoded seed sidecar) that the
- * shipped {@code juneau-calendar.js}/{@code juneau-calendar.css} runtime hydrates.  The
+ * Alongside the DataTables view it also hosts the DOM-free month-layout engine
+ * ({@link org.apache.juneau.rest.server.views.CalendarLayout}) for the reusable calendar widget.
+ * A page mounts an empty {@code data-juneau-calendar} marker; the shipped
+ * {@code juneau-calendar.js}/{@code juneau-calendar.css} runtime hydrates it.  The
  * {@link org.apache.juneau.rest.server.widgets.CalendarDef} bean itself lives in {@code juneau-rest-server-widgets}
  * (bean-only, no dependency on views); views <b>composes</b> it here.
  *
@@ -92,7 +93,7 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.CalendarTable}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.CalendarLayout}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.DataTablesQueryProtocol}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.DataTablesColumns}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/manual/server-side">DataTables Server-Side Processing</a>
