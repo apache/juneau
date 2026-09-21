@@ -2826,11 +2826,13 @@ input[type="checkbox"].jc-editable-field-input {
 
 /*
  * HTML-slot page nav: one construct, two text rows, accent floor below the pair.
- * Shape only in this file (no hue palette).  Selected section = indicator-width accent
- * on the TOP edge plus light wash (themed in console chrome).  A 2px hairline sits under
- * the sections row (between tabs and children).  Selected child = light wash behind the
- * label, not blue type and not a connected pill ribbon.  Not .jc-tab / .jc-subtab
- * ribbon-format; leftover .jc-tab / .jc-subtab rules are historical (hash-swap shell deleted).
+ * Colourless shape for views-only consumers. Console chrome.css carries the same
+ * shape plus hue so toolkit-less pages still get Page Tabs. Selected section =
+ * indicator-width accent on the TOP edge plus light wash (themed in console chrome).
+ * A 2px hairline sits under the sections row (between tabs and children). Selected
+ * child = light wash behind the label, not blue type and not a connected pill ribbon.
+ * Not .jc-tab / .jc-subtab ribbon-format; leftover .jc-tab / .jc-subtab rules are
+ * historical (hash-swap shell deleted).
  */
 .juneau-page-nav {
 	display: flex;

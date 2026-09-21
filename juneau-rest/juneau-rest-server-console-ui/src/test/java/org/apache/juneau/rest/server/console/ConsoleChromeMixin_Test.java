@@ -760,6 +760,47 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertFalse(navRules.toLowerCase().contains("salesforce sans"), navRules);
 	}
 
+	@Test void j07b_htmlSlotPageNav_chromeCarriesShapeSoToolkitLessPagesDoNotConcatenateLabels() throws Exception {
+		// <@node> emits adjacent <a> tags with no whitespace. Without flex + padding in always-on
+		// chrome.css, toolkit-less pages (Setup, New Release) render as "SetupReleasesNew Release".
+		var css = readChromeCss();
+		var navMarker = "HTML-slot page nav (two text rows";
+		var navStart = css.indexOf(navMarker);
+		assertNotEquals(-1, navStart, () -> "missing HTML-slot page nav comment, css:\n" + css);
+		var navEnd = css.indexOf("Page scaffolding", navStart);
+		assertNotEquals(-1, navEnd, () -> "missing Page scaffolding marker after page-nav, css:\n" + css);
+		var navRules = css.substring(navStart, navEnd);
+		var floorStart = navRules.indexOf("\n.juneau-page-nav {");
+		assertTrue(floorStart >= 0, navRules);
+		var floorBlock = navRules.substring(floorStart, navRules.indexOf("}", floorStart));
+		assertTrue(floorBlock.contains("display: flex"),
+			() -> "chrome must own page-nav column flex, not just hue, block:\n" + floorBlock);
+		assertTrue(floorBlock.contains("border-bottom-width: var(--jc-nav-indicator-width)"),
+			() -> "floor width must paint without views.css, block:\n" + floorBlock);
+		assertTrue(floorBlock.contains("border-bottom-style: solid"),
+			() -> "floor style must paint without views.css, block:\n" + floorBlock);
+		assertTrue(navRules.contains(".juneau-page-nav-sections, .juneau-page-nav-children {"),
+			() -> "sections and children rows must share a flex row rule:\n" + navRules);
+		var rowsStart = navRules.indexOf(".juneau-page-nav-sections, .juneau-page-nav-children {");
+		var rowsBlock = navRules.substring(rowsStart, navRules.indexOf("}", rowsStart));
+		assertTrue(rowsBlock.contains("display: flex"),
+			() -> "sections/children must be a flex row so labels do not concatenate, block:\n" + rowsBlock);
+		var sharedStart = navRules.indexOf(".juneau-page-nav-section, .juneau-page-nav-child {");
+		assertTrue(sharedStart >= 0, () -> "missing shared section/child shape rule:\n" + navRules);
+		var sharedBlock = navRules.substring(sharedStart, navRules.indexOf("}", sharedStart));
+		assertTrue(sharedBlock.contains("display: inline-flex"),
+			() -> "tab links must be inline-flex, block:\n" + sharedBlock);
+		assertTrue(sharedBlock.contains("padding-left: var(--jc-space-3)"),
+			() -> "tab links must have horizontal padding so labels do not run together, block:\n" + sharedBlock);
+		var sectionTypeStart = navRules.indexOf("\n.juneau-page-nav-section {");
+		assertTrue(sectionTypeStart >= 0, navRules);
+		var sectionTypeBlock = navRules.substring(sectionTypeStart, navRules.indexOf("}", sectionTypeStart));
+		assertTrue(sectionTypeBlock.contains("border-top-width: var(--jc-nav-indicator-width)"),
+			() -> "selected-section top accent needs a width without views.css, block:\n" + sectionTypeBlock);
+		assertTrue(sectionTypeBlock.contains("border-top-style: solid"),
+			() -> "selected-section top accent needs a style without views.css, block:\n" + sectionTypeBlock);
+	}
+
 	@Test void j08_jcCard_keepsShadowAndRadius_dropsGreyStroke() throws Exception {
 		var css = readChromeCss();
 		var start = css.indexOf(".jc-card {");

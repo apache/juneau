@@ -401,25 +401,63 @@ a:hover { text-decoration: underline; }
 
 /* ==========================================================================
    HTML-slot page nav (two text rows; not Page Tabs / Page Subtabs pills)
-   Shape lives in juneau-views.css.  Selected section = light wash + indicator
-   accent on the TOP edge, no pill fill.  Hairline under the sections row is
-   --jc-page-nav-hairline (2px) and --jc-page-nav-accent.  The pair's floor uses
-   the same accent.  Selected child = accent wash behind the label, not accent type.
+   Shape AND colour live here so toolkit-less pages still get Page Tabs.
+   juneau-views.css keeps a parallel colourless shape for views-only consumers.
+   Selected section = light wash + indicator accent on the TOP edge, no pill
+   fill. Hairline under the sections row is --jc-page-nav-hairline (2px) and
+   --jc-page-nav-accent. The pair's floor uses the same accent. Selected child
+   = accent wash behind the label, not accent type.
    ========================================================================== */
 
 .juneau-page-nav {
+  display: flex;
+  flex-direction: column;
   background-color: var(--jc-nav-bg);
+  border-bottom-width: var(--jc-nav-indicator-width);
+  border-bottom-style: solid;
   border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-sections, .juneau-page-nav-children {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  align-items: stretch;
+  gap: 0;
+  margin: 0;
+  padding-left: var(--jc-space-3);
+  padding-right: var(--jc-space-3);
 }
 
 .juneau-page-nav-sections {
   border-bottom-width: var(--jc-page-nav-hairline);
+  border-bottom-style: solid;
   border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-section, .juneau-page-nav-child {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding-top: 0.45em;
+  padding-bottom: 0.45em;
+  padding-left: var(--jc-space-3);
+  padding-right: var(--jc-space-3);
+  font-weight: 400;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .juneau-page-nav-section {
   color: var(--jc-text-soft);
   font-size: var(--jc-page-nav-section-font-size);
+  border-top-width: var(--jc-nav-indicator-width);
+  border-top-style: solid;
+  border-top-color: transparent;
 }
 
 .juneau-page-nav-section:hover {
@@ -432,6 +470,7 @@ a:hover { text-decoration: underline; }
   background-color: var(--jc-accent-wash);
   border-top-color: var(--jc-page-nav-accent);
   color: var(--jc-text);
+  font-weight: 600;
 }
 
 .juneau-page-nav-child {

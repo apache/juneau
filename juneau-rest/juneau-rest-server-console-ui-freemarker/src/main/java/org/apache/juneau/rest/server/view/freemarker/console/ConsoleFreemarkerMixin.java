@@ -58,14 +58,16 @@ import freemarker.template.*;
  * 	&lt;#include "/org/apache/juneau/console/base.ftlh"&gt;
  * </p>
  *
- * <h5 class='section'>Consumer-supplied {@code Configuration} is honored, not augmented:</h5>
+ * <h5 class='section'>Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:</h5>
  * <p>
  * When the request's {@code BeanStore} already has a {@code Configuration} bean (Spring/Spring-Boot autoconfig, or
- * a microservice {@code BasicBeanStore.put}), {@link #resolveConfiguration} returns that <b>same instance</b>
- * ({@code ==}), completely untouched &mdash; the console loader is not spliced in, and
- * {@code org/apache/juneau/console/base.ftlh} does not resolve unless the consumer adds it themselves. This is a
- * documented v1 caveat, not an oversight: augmenting an externally-owned singleton {@code Configuration} silently
- * would be a surprising side effect for a consumer.
+ * a microservice {@code BasicBeanStore.put}), {@link #resolveConfiguration} still returns that <b>same instance</b>
+ * ({@code ==}) so consumer settings win (encoding, {@code ObjectWrapper}, {@code exposeFields}, template-update
+ * delay, output format). It then fill-missing-stamps the reserved console shared variables
+ * ({@code page}, {@code card}, {@code navigation}, {@code node}, {@code theme}, {@code jcTagHtml}) and splices the
+ * reserved-path console loader only when {@link #BASE_TEMPLATE_PATH} would not already resolve. A name the
+ * consumer already set is left alone. There is no opt-out flag on this class &mdash; opt out by registering
+ * {@link FreemarkerMixin} instead of {@code ConsoleFreemarkerMixin}.
  *
  * @since 10.0.0
  */
@@ -118,64 +120,108 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		return new Builder();
 	}
 
-	// Double-checked-locking identity cache (Phase 5 should-fix S2 gate 1): resolveConfiguration is called once
-	// per request, but super.resolveConfiguration(req) returns the SAME cached Configuration object on every
-	// call for a given mixin instance when no consumer Configuration bean is registered (FreemarkerDispatcher's
-	// own lazy default-Configuration cache). Tracking that object's identity here means "have I already wrapped
-	// THIS exact object" is answered in O(1) without re-wrapping (which would otherwise nest
-	// Multi(Multi(base, console), console) on every subsequent call).
+	// Double-checked-locking identity cache: resolveConfiguration is called once per request, and
+	// super.resolveConfiguration(req) returns the SAME Configuration object on every call for a given mixin
+	// instance (consumer bean or FreemarkerDispatcher's lazy default cache). Tracking that object's identity
+	// here means "have I already stamped THIS exact object" is answered in O(1). Presence checks on the loader
+	// and shared-variable names still run on a cache miss so N Rest resources sharing one Spring singleton
+	// do not nest Multi(Multi(base, console), console).
 	@SuppressWarnings({
 		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication; the reference is publish-once (fully constructed/wrapped before assignment) and never compound-mutated.
 	})
 	private volatile Configuration wrappedConfiguration;
 
 	/**
-	 * Resolves the active {@link Configuration}, augmented with the reserved-path console loader when no
-	 * consumer-supplied {@code Configuration} bean is present.
+	 * Resolves the active {@link Configuration} and fill-missing-stamps console shared variables onto it.
 	 *
 	 * <p>
-	 * Two independent guards, both should-fix S2 gates:
+	 * Always delegates to {@code super.resolveConfiguration(req)} first so a consumer {@code Configuration} bean
+	 * wins for settings. Then:
 	 * <ol class='spaced-list'>
-	 * 	<li><b>Consumer identity honored:</b> if the request's {@code BeanStore} already has a {@code Configuration}
-	 * 		bean, it is returned {@code ==}-identical and completely untouched &mdash; no console loader is spliced
-	 * 		in, and {@link #BASE_TEMPLATE_PATH} will not resolve through it unless the consumer adds it themselves.
-	 * 	<li><b>Wrap-once:</b> otherwise, the mixin-instance-owned bridge-default {@code Configuration} is augmented
-	 * 		exactly once (identity-gated double-checked locking below); every subsequent call on the same instance
-	 * 		returns the same already-augmented object without re-wrapping its {@code TemplateLoader}.
+	 * 	<li><b>Fill-missing names:</b> {@code page}, {@code card}, {@code navigation}, {@code node},
+	 * 		{@code theme}, {@code jcTagHtml} are set only when {@code getSharedVariable(name)} is unset. A
+	 * 		consumer value is kept.
+	 * 	<li><b>Loader splice:</b> the classpath-root console {@link ClassTemplateLoader} is wrapped in only when
+	 * 		{@link #BASE_TEMPLATE_PATH} would not already resolve through the current loader.
+	 * 	<li><b>Wrap-once + presence:</b> identity-cached per mixin instance so a second call does not
+	 * 		re-wrap; presence checks so N Rest resources sharing one Spring singleton {@code Configuration} do
+	 * 		not nest {@link MultiTemplateLoader}.
 	 * </ol>
 	 *
 	 * @param req The current REST request.
 	 * @return The active FreeMarker configuration. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"resource" // False positive: req.getContext().getBeanStore() returns a borrowed, container-owned AutoCloseable, not a resource created/owned here.
-	})
 	@Override
 	public Configuration resolveConfiguration(RestRequest req) {
-		if (req.getContext().getBeanStore().getBean(Configuration.class).isPresent())
-			return super.resolveConfiguration(req);
 		var base = super.resolveConfiguration(req);
 		if (base == wrappedConfiguration)
 			return base;
 		synchronized (this) {
 			if (base != wrappedConfiguration) {
-				base.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[]{
-					base.getTemplateLoader(),
-					new ClassTemplateLoader(getClass().getClassLoader(), "")
-				}));
-				base.setSharedVariable(TagMethodModel.NAME, new TagMethodModel());
-				var packs = new ToolkitPackRegistry();
-				for (var extra : extraPacks)
-					packs.register(extra.name(), extra.cssPaths(), extra.jsPaths());
-				base.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
-				base.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel());
-				base.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
-				base.setSharedVariable(NodeDirectiveModel.NAME, new NodeDirectiveModel());
-				base.setSharedVariable(ThemeDirectiveModel.NAME, new ThemeDirectiveModel());
+				spliceConsoleLoaderIfNeeded(base);
+				fillMissingConsoleSharedVariables(base);
 				wrappedConfiguration = base;
 			}
 		}
 		return base;
+	}
+
+	/**
+	 * Wraps the current {@link TemplateLoader} with a classpath-root console loader only when
+	 * {@link #BASE_TEMPLATE_PATH} would not resolve. Presence-checked so a second mixin instance sharing the
+	 * same {@code Configuration} does not nest {@link MultiTemplateLoader}.
+	 */
+	private void spliceConsoleLoaderIfNeeded(Configuration cfg) {
+		if (reservedTemplateResolves(cfg))
+			return;
+		var console = new ClassTemplateLoader(getClass().getClassLoader(), "");
+		var existing = cfg.getTemplateLoader();
+		if (existing == null)
+			cfg.setTemplateLoader(console);
+		else
+			cfg.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[]{ existing, console }));
+	}
+
+	/**
+	 * Whether the reserved console chrome template is already visible on {@code cfg}'s loader. Uses
+	 * {@link TemplateLoader#findTemplateSource(String)} so a miss is not cached as a failed
+	 * {@link Configuration#getTemplate(String)}.
+	 */
+	private static boolean reservedTemplateResolves(Configuration cfg) {
+		var loader = cfg.getTemplateLoader();
+		if (loader == null)
+			return false;
+		try {
+			var source = loader.findTemplateSource(BASE_TEMPLATE_PATH);
+			if (source == null)
+				return false;
+			loader.closeTemplateSource(source);
+			return true;
+		} catch (@SuppressWarnings("unused") Exception e) {
+			return false; // Loader probe failed; treat as unresolved and splice.
+		}
+	}
+
+	/**
+	 * Sets each reserved console shared variable only when that name is unset on {@code cfg}.
+	 */
+	private void fillMissingConsoleSharedVariables(Configuration cfg) {
+		if (cfg.getSharedVariable(TagMethodModel.NAME) == null)
+			cfg.setSharedVariable(TagMethodModel.NAME, new TagMethodModel());
+		if (cfg.getSharedVariable(PageDirectiveModel.NAME) == null) {
+			var packs = new ToolkitPackRegistry();
+			for (var extra : extraPacks)
+				packs.register(extra.name(), extra.cssPaths(), extra.jsPaths());
+			cfg.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
+		}
+		if (cfg.getSharedVariable(CardDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel());
+		if (cfg.getSharedVariable(NavigationDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
+		if (cfg.getSharedVariable(NodeDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(NodeDirectiveModel.NAME, new NodeDirectiveModel());
+		if (cfg.getSharedVariable(ThemeDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(ThemeDirectiveModel.NAME, new ThemeDirectiveModel());
 	}
 
 	/**

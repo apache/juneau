@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -31,12 +32,14 @@ import org.junit.jupiter.api.*;
 
 import freemarker.cache.*;
 import freemarker.template.Configuration;
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateModel;
 import freemarker.template.TemplateNotFoundException;
 
 /**
  * Phase 5 gate: {@link ConsoleFreemarkerMixin} (reserved-path template loader, {@code base.ftlh}, the
- * {@code <@tag>} macro) and the two should-fix S2 gates the r2 review added (double-wrap prevention;
- * consumer-supplied {@code Configuration} identity honored).
+ * {@code <@tag>} macro), wrap-once loader splicing, and fill-missing stamping onto a consumer
+ * {@code Configuration} bean.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
@@ -237,48 +240,105 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// f) Should-fix S2 gate 2: consumer Configuration identity honored
+	// f) Consumer Configuration is the same instance, then fill-missing stamped
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=FreemarkerMixin.class)
 	public static class ConsumerConfigHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		static final Configuration USER_CFG = new Configuration(Configuration.VERSION_2_3_34);
-		static final TemplateLoader ORIGINAL_LOADER = USER_CFG.getTemplateLoader();
+		static {
+			USER_CFG.setTemplateLoader(new StringTemplateLoader());
+		}
+		static final Object ORIGINAL_WRAPPER = USER_CFG.getObjectWrapper();
+		static final String ORIGINAL_ENCODING = USER_CFG.getDefaultEncoding();
+		static final Object ORIGINAL_OUTPUT_FORMAT = USER_CFG.getOutputFormat();
+		static final long ORIGINAL_UPDATE_DELAY = USER_CFG.getTemplateUpdateDelayMilliseconds();
 		@Bean public Configuration configuration() { return USER_CFG; }
 		@Bean public FreemarkerMixin freemarker() { return ConsoleFreemarkerMixin.create().build(); }
 		@RestGet(path="/probe")
 		public String probe(RestRequest req) {
 			var mixin = (ConsoleFreemarkerMixin) req.getContext().getBeanStore().getBean(FreemarkerMixin.class).orElseThrow();
-			var cfg = mixin.resolveConfiguration(req);
-			var sameInstance = cfg == USER_CFG;
-			var loaderUnchanged = cfg.getTemplateLoader() == ORIGINAL_LOADER;
+			var cfg1 = mixin.resolveConfiguration(req);
+			var cfg2 = mixin.resolveConfiguration(req);
+			var sameInstance = cfg1 == USER_CFG && cfg2 == USER_CFG;
+			var settingsUnchanged = cfg1.getObjectWrapper() == ORIGINAL_WRAPPER
+				&& Objects.equals(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
+				&& cfg1.getOutputFormat() == ORIGINAL_OUTPUT_FORMAT
+				&& cfg1.getTemplateUpdateDelayMilliseconds() == ORIGINAL_UPDATE_DELAY;
+			var varsFilled = cfg1.getSharedVariable(PageDirectiveModel.NAME) != null
+				&& cfg1.getSharedVariable(CardDirectiveModel.NAME) != null
+				&& cfg1.getSharedVariable(NavigationDirectiveModel.NAME) != null
+				&& cfg1.getSharedVariable(NodeDirectiveModel.NAME) != null
+				&& cfg1.getSharedVariable(ThemeDirectiveModel.NAME) != null
+				&& cfg1.getSharedVariable(TagMethodModel.NAME) != null;
 			var reservedResolves = true;
 			try {
-				cfg.getTemplate(ConsoleFreemarkerMixin.BASE_TEMPLATE_PATH);
-			} catch (Exception ex) {
+				cfg1.getTemplate(ConsoleFreemarkerMixin.BASE_TEMPLATE_PATH);
+			} catch (@SuppressWarnings("unused") Exception ex) {
 				reservedResolves = false;
 			}
-			return sameInstance + ":" + loaderUnchanged + ":" + reservedResolves;
+			return sameInstance + ":" + settingsUnchanged + ":" + varsFilled + ":" + reservedResolves
+				+ ":" + loaderCount(cfg1) + ":" + loaderCount(cfg2);
 		}
 	}
 
 	/**
-	 * A host that registers its own {@code @Bean Configuration} (no console loader) plus
-	 * {@code ConsoleFreemarkerMixin}: {@code resolveConfiguration(req)} must return that SAME instance
-	 * ({@code ==}), its {@code getTemplateLoader()} must be unchanged, and the reserved console template must NOT
-	 * resolve (the consumer never added the console loader themselves).
+	 * A host that registers its own {@code @Bean Configuration} plus {@code ConsoleFreemarkerMixin}:
+	 * {@code resolveConfiguration} returns that SAME instance ({@code ==}), leaves wrapper/encoding/output-format/
+	 * update-delay alone, fill-missing-stamps the reserved console names, makes the reserved template resolve,
+	 * and a second call on the same mixin does not nest {@code MultiTemplateLoader}.
 	 */
-	@Test void f01_consumerSuppliedConfiguration_isReturnedUntouched() throws Exception {
+	@Test void f01_consumerSuppliedConfiguration_isAugmentedInPlace() throws Exception {
 		var c = MockRestClient.buildLax(ConsumerConfigHost.class);
 		var body = c.get("/probe").accept("text/plain").run().getContent().asString();
-		assertEquals("true:true:false", body,
-			() -> "expected same-instance=true, loader-unchanged=true, reserved-template-resolves=false; got " + body);
+		assertEquals("true:true:true:true:2:2", body,
+			() -> "expected same-instance, settings-unchanged, vars-filled, reserved-resolves, loader-count 2 then 2; got " + body);
+	}
+
+	@Rest(mixins=FreemarkerMixin.class)
+	public static class CollisionConfigHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		static final Configuration COLLISION_CFG = new Configuration(Configuration.VERSION_2_3_34);
+		static final TemplateModel PAGE_SENTINEL = new SimpleScalar("consumer-page");
+		static {
+			COLLISION_CFG.setSharedVariable(PageDirectiveModel.NAME, PAGE_SENTINEL);
+		}
+		@Bean public Configuration configuration() { return COLLISION_CFG; }
+		@Bean public FreemarkerMixin freemarker() { return ConsoleFreemarkerMixin.create().build(); }
+		@RestGet(path="/probe")
+		public String probe(RestRequest req) {
+			var mixin = (ConsoleFreemarkerMixin) req.getContext().getBeanStore().getBean(FreemarkerMixin.class).orElseThrow();
+			var cfg = mixin.resolveConfiguration(req);
+			var pageKept = cfg.getSharedVariable(PageDirectiveModel.NAME) == PAGE_SENTINEL;
+			var othersFilled = cfg.getSharedVariable(CardDirectiveModel.NAME) != null
+				&& cfg.getSharedVariable(NavigationDirectiveModel.NAME) != null
+				&& cfg.getSharedVariable(NodeDirectiveModel.NAME) != null
+				&& cfg.getSharedVariable(ThemeDirectiveModel.NAME) != null
+				&& cfg.getSharedVariable(TagMethodModel.NAME) != null;
+			return pageKept + ":" + othersFilled;
+		}
+	}
+
+	/**
+	 * Consumer bean already has {@code page} set: that sentinel is kept; the other Juneau reserved names are
+	 * still fill-missing stamped.
+	 */
+	@Test void f02_consumerPageSentinel_isKeptAndOtherNamesFilled() throws Exception {
+		var c = MockRestClient.buildLax(CollisionConfigHost.class);
+		var body = c.get("/probe").accept("text/plain").run().getContent().asString();
+		assertEquals("true:true", body,
+			() -> "expected page-sentinel-kept=true, other-names-filled=true; got " + body);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// helpers
 	//-----------------------------------------------------------------------------------------------------------------
+
+	private static int loaderCount(Configuration cfg) {
+		var loader = cfg.getTemplateLoader();
+		return loader instanceof MultiTemplateLoader multi ? multi.getTemplateLoaderCount() : -1;
+	}
 
 	/**
 	 * A minimal live {@link RestRequest} for in-process {@code resolveConfiguration(req)} calls (empty

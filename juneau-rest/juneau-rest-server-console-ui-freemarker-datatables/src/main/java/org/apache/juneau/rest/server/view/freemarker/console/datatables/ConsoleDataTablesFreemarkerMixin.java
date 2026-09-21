@@ -46,11 +46,13 @@ import freemarker.template.*;
  * {@code datatable.ftlh} included) &mdash; so the reserved {@link #DATATABLE_TEMPLATE_PATH} resolves through that
  * same loader without any additional wiring here.
  *
- * <h5 class='section'>Consumer-supplied {@code Configuration} is honored, not augmented (same S2 guard as the parent):</h5>
+ * <h5 class='section'>Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:</h5>
  * <p>
- * If the request's {@code BeanStore} already has a {@code Configuration} bean, {@link #resolveConfiguration} returns
- * it completely untouched (the {@code <@datatable>} shared variable is not spliced in either) &mdash; same
- * documented v1 caveat as {@link ConsoleFreemarkerMixin}.
+ * Same rule as {@link ConsoleFreemarkerMixin}: {@link #resolveConfiguration} returns the consumer bean
+ * {@code ==}-identical so settings win, then fill-missing-stamps {@code jcDataTableHtml} (and the parent
+ * reserved names) and splices the console loader only when {@link ConsoleFreemarkerMixin#BASE_TEMPLATE_PATH}
+ * would not already resolve. Opt out by registering {@link org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin}
+ * instead of this class.
  *
  * @since 10.0.0
  */
@@ -86,10 +88,9 @@ public class ConsoleDataTablesFreemarkerMixin extends ConsoleFreemarkerMixin {
 	}
 
 	// Same wrap-once identity-cache pattern as ConsoleFreemarkerMixin's own field, kept as a SEPARATE field (not
-	// shared with the parent's private one) since this class needs to answer "have I already registered the
-	// <@datatable> shared variable on THIS config" independently of the parent's "have I already spliced in the
-	// console loader" question -- the two guards happen to gate on the same underlying object in practice, but
-	// are conceptually distinct augmentations and each class owns only its own idempotency.
+	// shared with the parent's private one) since this class needs to answer "have I already fill-missing-stamped
+	// jcDataTableHtml on THIS config" independently of the parent's loader / reserved-name stamp. Presence
+	// checks still run on a cache miss so two mixin instances sharing one Spring singleton do not re-set.
 	@SuppressWarnings({
 		"java:S3077" // volatile required for correct double-checked-locking safe-publication; see ConsoleFreemarkerMixin's identical field.
 	})
@@ -97,26 +98,25 @@ public class ConsoleDataTablesFreemarkerMixin extends ConsoleFreemarkerMixin {
 
 	/**
 	 * Resolves the active {@link Configuration}: delegates to {@link ConsoleFreemarkerMixin#resolveConfiguration}
-	 * for the console-loader augmentation, then additionally registers the {@code <@datatable>} shared variable
-	 * &mdash; unless the request's {@code BeanStore} already has a consumer-supplied {@code Configuration} bean, in
-	 * which case (mirroring the parent's own guard) it is returned untouched.
+	 * for console-loader / reserved-name stamping, then fill-missing-registers {@code jcDataTableHtml}.
+	 *
+	 * <p>
+	 * A consumer {@code Configuration} bean is the same {@code ==} instance (settings win). {@code jcDataTableHtml}
+	 * is set only when unset. Identity wrap-once plus the parent's loader presence check keep a shared Spring
+	 * singleton from nesting {@code MultiTemplateLoader}.
 	 *
 	 * @param req The current REST request.
 	 * @return The active FreeMarker configuration. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"resource" // False positive: req.getContext().getBeanStore() returns a borrowed, container-owned AutoCloseable, not a resource created/owned here.
-	})
 	@Override
 	public Configuration resolveConfiguration(RestRequest req) {
 		var cfg = super.resolveConfiguration(req);
-		if (req.getContext().getBeanStore().getBean(Configuration.class).isPresent())
-			return cfg;
 		if (cfg == wrappedConfiguration)
 			return cfg;
 		synchronized (this) {
 			if (cfg != wrappedConfiguration) {
-				cfg.setSharedVariable(DataTableMethodModel.NAME, new DataTableMethodModel());
+				if (cfg.getSharedVariable(DataTableMethodModel.NAME) == null)
+					cfg.setSharedVariable(DataTableMethodModel.NAME, new DataTableMethodModel());
 				wrappedConfiguration = cfg;
 			}
 		}
