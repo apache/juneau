@@ -57,8 +57,7 @@
    ========================================================================== */
 
 .rm-run-header {
-  max-width: 1180px;
-  margin: 0 auto 16px;
+  margin: 0 0 16px;
   background: var(--jc-card-bg);
   border: 1px solid var(--jc-border);
   border-radius: var(--jc-radius);
@@ -290,8 +289,6 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  max-width: 1180px;
-  margin: 0 auto;
 }
 
 .rm-rail-col {
@@ -356,8 +353,6 @@
    ========================================================================== */
 
 .rm-stepper {
-  max-width: 1180px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -512,8 +507,7 @@ pre.rm-console {
    ========================================================================== */
 
 .rm-mode-banner {
-  max-width: 1180px;
-  margin: 0 auto 16px;
+  margin: 0 0 16px;
   padding: 10px 14px;
   border: 1px solid var(--jc-tag-neutral-border);
   border-radius: 8px;
@@ -548,8 +542,7 @@ pre.rm-console {
 .rm-subtabs {
   display: flex;
   gap: 6px;
-  max-width: 1180px;
-  margin: 0 auto 16px;
+  margin: 0 0 16px;
   padding: 4px;
   background: var(--jc-white);
   border: 1px solid var(--jc-border);
@@ -571,9 +564,13 @@ pre.rm-console {
 
 .rm-subtab:hover { background: var(--jc-accent-wash); }
 
+/* Light selected chip. Page Tabs put the heavy accent on TOP (.jc-nav-tab.active
+   in chrome.css); these Input/Execution chips are not Page Tabs, so they keep a
+   compact inset underline rather than a top bar. */
 .rm-subtab.active {
-  background: var(--jc-accent);
-  color: var(--jc-white);
+  background: var(--jc-accent-wash);
+  color: var(--jc-text);
+  box-shadow: inset 0 -2px 0 var(--jc-accent);
 }
 
 .rm-subtab-panel[hidden] { display: none; }
@@ -581,11 +578,6 @@ pre.rm-console {
 /* ==========================================================================
    Full-width "Start a new release" / "Release details" form card
    ========================================================================== */
-
-.rm-form-card {
-  max-width: 1180px;
-  margin: 0 auto;
-}
 
 .rm-form-card h2 { margin-top: 0; }
 

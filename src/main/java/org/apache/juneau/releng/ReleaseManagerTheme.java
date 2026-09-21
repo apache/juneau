@@ -30,8 +30,10 @@ import org.apache.juneau.rest.server.console.Theme;
  * OPEN's maroon tag triad and regress FAILED pills.
  *
  * <p>
- * The logo and page-background image are deliberately <b>not</b> part of this theme &mdash; those are
- * {@code ConsoleChromeMixin} builder inputs (see {@link ConsoleAssetsRest}), kept out of the token model entirely.
+ * The logo is deliberately <b>not</b> part of this theme &mdash; it is a {@code ConsoleChromeMixin} builder
+ * input (see {@link ConsoleAssetsRest}), kept out of the token model entirely. The page background comes solely
+ * from this theme's {@code --jc-page-bg} token (inherited from {@link Theme#LIGHT_RED}); {@code ConsoleAssetsRest}
+ * does not set a {@code pageBackgroundImage}.
  */
 public final class ReleaseManagerTheme {
 
@@ -43,12 +45,20 @@ public final class ReleaseManagerTheme {
 	private static Theme build() {
 		return Theme.deriveFrom("release-manager", Theme.LIGHT_RED)
 			// Overrides Theme.OPEN/LIGHT_RED's Bootstrap-maroon red default with this app's existing danger
-			// palette, so the FAILED tag/stage pill stays visually identical to .rm-mode-banner.live /
+			// palette, so the FAILED status/stage pill stays visually identical to .rm-mode-banner.live /
 			// .rm-mode-chip.live / .tag.armed / .pill.invalid, which all key off --jc-danger.
-			// --jc-tag-red-text is #c23934 rather than var(--jc-danger) because CssValueGrammar's allowlist
+			// --jc-pill-red-text is #c23934 rather than var(--jc-danger) because CssValueGrammar's allowlist
 			// grammar has no var() production - token values must be literals. Keep this literal in sync with
 			// OPEN's --jc-danger; a silent divergence between the two is exactly the bug this comment exists
 			// to prevent.
+			//
+			// The --jc-pill-red-* triad is the effective one: chrome.css's .tag.status.failed / .tag.stage.failed
+			// (and the render:"pill" cells the Releases table now emits) resolve through --jc-pill-red-*. The
+			// --jc-tag-red-* triad is kept as an alias so the .jc-badge[danger] / busy-avatar-status consumers that
+			// still read --jc-tag-red-* inherit the same palette.
+			.token("--jc-pill-red-bg", "#fdeceb")
+			.token("--jc-pill-red-text", "#c23934")
+			.token("--jc-pill-red-border", "#f3c6c2")
 			.token("--jc-tag-red-bg", "#fdeceb")
 			.token("--jc-tag-red-text", "#c23934")
 			.token("--jc-tag-red-border", "#f3c6c2")

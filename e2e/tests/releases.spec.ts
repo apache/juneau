@@ -18,12 +18,12 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
 /**
- * The Releases tab renders a rich-view toolkit table: `table#releases` / `table[data-juneau-view="releases"]`,
- * hydrated client-side from `/rest/releases/data` by juneau-views.js. Row content comes from real `git tag
- * juneau-*` history in the local apache/juneau checkout (rm.repo.dir), so "9.2.0" is expected to always be
- * present as a released version in this environment.
+ * The Releases tab renders a `<@card type="datatables" id="releases">`: the page-cards runtime mounts a
+ * DataTable inside the `#releases` card body from the page's JSON sidecar, hydrating rows client-side from
+ * `/rest/releases/data`. Row content comes from real `git tag juneau-*` history in the local apache/juneau
+ * checkout (rm.repo.dir), so "9.2.0" is expected to always be present as a released version in this environment.
  */
-const TABLE_SELECTOR = '#releases, [data-juneau-view="releases"]';
+const TABLE_SELECTOR = '#releases';
 
 function releasesTable(page: Page): Locator {
   return page.locator(TABLE_SELECTOR);
@@ -54,7 +54,8 @@ test.describe('Releases table', () => {
   });
 
   test('status pills render with expected text', async ({ page }) => {
-    // "tag:status" rendering keeps the raw status value as display text (e.g. RELEASED for tag-derived rows).
+    // The "pill:status" renderer keeps the raw status value as display text (e.g. RELEASED for tag-derived rows)
+    // and reuses the shared `.tag.<domain>.<value>` classes (so the span carries `jc-pill tag status released`).
     // Other statuses (DRAFT/DISTRIBUTED/FAILED) are state-dependent and not asserted here since they depend on
     // whatever in-progress runs happen to exist locally.
     await expect(releasesTable(page).locator('.tag.status').filter({ hasText: 'RELEASED' }).first()).toBeVisible();

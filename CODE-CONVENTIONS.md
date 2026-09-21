@@ -22,9 +22,8 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   FQCNs. Verify per file with `rg '\bjava\.[a-z][a-zA-Z]+\.[A-Z]' <file>` (should be empty outside
   `import`/`package` lines).
 - **FQCN allowed exceptions** — Name collisions, string literals (`Class.forName`, `@SuppressWarnings`),
-  `java.lang.*` (always simple). **Applied.** The one deliberate FQCN kept:
-  `freemarker.template.Configuration` in `AppConfiguration` — its simple name collides with Spring's
-  `@Configuration` used on the same class.
+  `java.lang.*` (always simple). **Applied.** None currently. (A former `freemarker.template.Configuration`
+  FQCN in `AppConfiguration` went away with that bean — do not re-add it; see the comment there.)
 - **`var` for obvious locals** — Use `var` when the RHS makes the type obvious; keep explicit types where
   readability needs it (interface-typed locals, loop `String line;`, etc.). **Applied** (codebase was
   already idiomatic; no remaining candidates).

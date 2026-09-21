@@ -15,44 +15,19 @@
   limitations under the License.
 -->
 
-<#-- Shared timestamp renderer: an ISO value renders as a compact Zulu span (progressively enhanced by
-     renderers.js into "YYYY-MM-DD HH:mmZ" with a native title tooltip showing local time), falling back
-     to the raw ISO string if JS never runs. In scope for every child template that <#include>s this file. -->
-<#macro ts value>
-    <#if !value??>&mdash;<#else><span data-render="ts-zulu" data-value="${value}">${value}</span></#if>
-</#macro>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Apache Juneau · Release Manager</title>
-    <#-- The server-held CSRF token for this boot, required back on every state-changing request by the loopback
-         write boundary (LoopbackBoundary). Supplied by ConsolePage.of(...) from the request attribute the
-         boundary's filter sets; referenced with no FreeMarker default on purpose, so a page that forgets to go
-         through ConsolePage fails to render instead of quietly shipping a UI whose writes all 403.
-
-         This is a synchronizer token, NOT a double-submit cookie. Do not "simplify" it into one: cookies ignore
-         the port, so any page on any other localhost:* could plant a value this app would read back and accept
-         as its own. csrf.js reads it from here; nothing writes it to document.cookie. -->
     <meta name="csrf-token" content="${csrfToken}">
-    <#-- Must load before any other script: it wraps window.fetch so every non-GET request carries the token
-         above, rather than leaving each call site to remember. -->
     <script src="/js/csrf.js"></script>
     <link rel="icon" type="image/svg+xml" href="/img/oakleaf.svg">
-    <#if activeTab?? && (activeTab == 'releases' || activeTab == 'admin')>
-    <link rel="stylesheet" href="/datatables/dataTables.dataTables.min.css">
-    <#-- DataTables Buttons extension (copy/csv/excel/pdf export) — caller-provided per ASF category-A discipline;
-         CDN coordinates per the toolkit design §6.11. The excel/pdf cluster additionally needs JSZip + pdfMake,
-         loaded from cdnjs in the script block below (before buttons.html5.min.js) so juneau-ribbon.js
-         feature-detects window.JSZip / window.pdfMake and lights the Excel/PDF icon buttons. -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
-    <#-- First-party toolkit base .tag chip stylesheet (neutral); the app's console-ui palette themes the same
-         .tag.<domain>.<value> classes. The same stylesheet also carries .juneau-page-nav rules for the Admin pair pages. -->
-    <link rel="stylesheet" href="${viewsCssUrl!'/rest/releases/juneau-views.css'}">
-    <link rel="stylesheet" href="${configCssUrl!'/rest/releases/juneau-config.css'}">
-    </#if>
+    <@theme name="light-red"/>
+    <link rel="stylesheet" href="${pageThemeCss}">
     <link rel="stylesheet" href="/juneau-console/chrome.css">
+    <#list pageCss as href><link rel="stylesheet" href="${href}"></#list>
+    <#list pageToolkitCss as href><link rel="stylesheet" href="${href}" data-toolkit-css></#list>
     <link rel="stylesheet" href="/css/chrome.css">
 </head>
 <body data-juneau-csrf="${csrfToken}" data-juneau-csrf-header="${csrfHeader}">
@@ -69,58 +44,16 @@
         </div>
     </header>
 
-    <#-- Primary nav: real tabs, each pointing at its actual /rest/* route.
-         Active tab is driven by the `activeTab` attribute each page template
-         assigns before including this layout — no hardcoded per-page string
-         compares here. -->
-    <nav class="jc-nav">
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'setup'> active</#if>" href="/rest/setup">Setup</a>
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'releases'> active</#if>" href="/rest/releases">Releases</a>
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'new'> active</#if>" href="/rest/runs">New Release</a>
-        <a class="jc-nav-tab<#if activeTab?? && activeTab == 'admin'> active</#if>" href="/rest/admin">Admin</a>
-    </nav>
+    <@navigation>
+        <@node id="setup" label="Setup" href="/rest/setup"/>
+        <@node id="releases" label="Releases" href="/rest/releases"/>
+        <@node id="new" label="New Release" href="/rest/runs"/>
+    </@navigation>
 
-    <main class="jc-main">
-        <#-- child templates define the "content" macro, then <#include> this layout -->
-        <@content/>
-    </main>
+    <main class="jc-main">${pageBody}</main>
 
-    <#if activeTab?? && (activeTab == 'releases' || activeTab == 'admin')>
-    <#-- Caller-provided libs: self-hosted jQuery + DataTables, plus the DataTables Buttons extension (copy/csv)
-         from CDN. Then the first-party toolkit runtime in load order renders -> icons -> ribbon -> views ->
-         config -> regions -> helpers; juneau-regions.js mounts empty slots via
-         JuneauViews.regions.mount({ [slotId]: { table: url } }). juneau-icons.js MUST load before juneau-ribbon.js:
-         the ribbon/paging-pill buttons resolve their glyphs from the icon registry (window.JuneauViews.icons) at
-         build time, so the registry must already exist when juneau-ribbon.js/juneau-views.js render them. -->
-    <script src="/datatables/jquery.min.js"></script>
-    <script src="/datatables/dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
-    <#-- JSZip (Excel export) + pdfMake (PDF export) — caller-provided category-A libs (MIT), pinned to cdnjs
-         coordinates; MUST load before buttons.html5.min.js so DataTables Buttons feature-detects window.JSZip /
-         window.pdfMake and juneau-ribbon.js lights the excel/pdf icon buttons declared .optional("excel","pdf"). -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
-    <script src="${rendersJsUrl!'/rest/releases/juneau-renders.js'}"></script>
-    <script src="${iconsJsUrl!'/rest/releases/juneau-icons.js'}"></script>
-    <script src="${ribbonJsUrl!'/rest/releases/juneau-ribbon.js'}"></script>
-    <script src="${viewsJsUrl!'/rest/releases/juneau-views.js'}"></script>
-    <script src="${configJsUrl!'/rest/releases/juneau-config.js'}"></script>
-    <script src="${regionsJsUrl!'/rest/releases/juneau-regions.js'}"></script>
-    <script src="${helpersJsUrl!'/rest/releases/juneau-helpers.js'}"></script>
-    <#if tableSlotJsUrl??>
-    <script src="${tableSlotJsUrl}"></script>
-    </#if>
-    </#if>
-    <#if activeTab?? && activeTab == 'setup'>
-    <script src="/js/credentials.js"></script>
-    <script src="/js/rm-setup.js"></script>
-    </#if>
-    <#if activeTab?? && activeTab == 'new'>
-    <link rel="stylesheet" href="/css/new-release.css">
-    <script src="/js/new-release.js"></script>
-    </#if>
+    <#list pageToolkitJs as src><script src="${src}" data-toolkit-js></script></#list>
+    <#list pageInit as src><script src="${src}"></script></#list>
     <script src="/js/renderers.js"></script>
 </body>
 </html>

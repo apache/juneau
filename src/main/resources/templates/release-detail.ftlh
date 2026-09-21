@@ -15,13 +15,13 @@
   limitations under the License.
 -->
 
-<#assign activeTab = "releases">
-<#macro content>
+<@page tab="releases">
+    <div class="jc-page-header">
+        <h1>Release ${release.version!'—'}</h1>
+        <p class="jc-page-sub">Status, stage, vote window, and the links this manager already knows about.</p>
+    </div>
     <div class="jc-card">
-        <div class="jc-card-header">
-            <h2>Release ${release.version!'—'}</h2>
-            <a href="/rest/releases">&larr; All releases</a>
-        </div>
+        <p><a href="/rest/releases">&larr; All releases</a></p>
 
         <dl class="rm-detail-list">
             <dt>Version</dt><dd>${release.version!'—'}</dd>
@@ -35,7 +35,7 @@
                     <span class="tag stage ${release.stage?lower_case?replace(' ', '-')}">${release.stage}</span>
                 </#if>
             </dd>
-            <dt>Vote closes</dt><dd><@ts value=release.voteCloses/></dd>
+            <dt>Vote closes</dt><dd><#if release.voteCloses??><span data-render="ts-zulu" data-value="${release.voteCloses}">${release.voteCloses}</span><#else>&mdash;</#if></dd>
             <dt>Released</dt><dd>${release.released!'—'}</dd>
             <dt>Links</dt>
             <dd>
@@ -45,5 +45,4 @@
             </dd>
         </dl>
     </div>
-</#macro>
-<#include "base.ftlh">
+</@page>

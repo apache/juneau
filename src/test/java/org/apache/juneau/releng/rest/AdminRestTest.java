@@ -21,193 +21,72 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
-import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.utils.IoUtils;
-import org.apache.juneau.rest.mock.MockRestClient;
-import org.apache.juneau.rest.server.filter.LoopbackBoundary;
-import org.apache.juneau.rest.server.views.ViewsMixin;
+import org.apache.juneau.releng.RootRest;
+import org.apache.juneau.rest.server.Rest;
 import org.junit.jupiter.api.Test;
 
 /**
- * Admin pair pages: path-per-child, local {@code .juneau-page-nav}, empty slots, no {@code PageTable} shell.
+ * Admin Page Tab removal: the standalone {@code AdminRest} pair (redirect + Releases-pair page) has been retired in
+ * favor of the Releases tab alone. Guards the three surfaces that carried it: {@link RootRest}'s declared children,
+ * the {@code admin.ftlh} template, and {@code base.ftlh}'s nav markup/asset wiring.
  */
 class AdminRestTest {
 
-	/**
-	 * {@link MockRestClient#create(Object)} caches its {@code RestContext} per resource class (see
-	 * {@code ReleaseRestTest}'s identical helper javadoc); pass a fresh {@link StackOverlay} to opt out.
-	 */
-	@SuppressWarnings({
-		"resource" // Caller owns and closes the returned MockRestClient (via try-with-resources); Eclipse JDT @Owning warning is by design.
-	})
-	private static MockRestClient client() {
-		return MockRestClient.builder(new AdminRest()).overridingBeanStore(new StackOverlay()).build();
+	@Test
+	void a01_rootRestNoLongerMountsAnAdminChild() {
+		var children = RootRest.class.getAnnotation(Rest.class).children();
+		var names = Arrays.stream(children).map(Class::getSimpleName).toList();
+		assertFalse(names.contains("AdminRest"), "RootRest must not mount an Admin child: " + names);
 	}
 
 	@Test
-	void a01_defaultAdminUrlRedirectsToReleasesPair() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/").run()) {
-				assertEquals(302, resp.getStatusCode());
-				assertEquals(AdminRest.RELEASES_URL, resp.header("Location").getValue());
-			}
+	void a02_adminTemplateNoLongerShips() throws IOException {
+		try (var in = AdminRestTest.class.getResourceAsStream("/templates/admin.ftlh")) {
+			assertNull(in, "admin.ftlh must not ship on the classpath");
 		}
 	}
 
 	@Test
-	void a02_unknownAdminChildIs404() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/foo").run()) {
-				assertEquals(404, resp.getStatusCode());
-			}
-		}
-	}
-
-	@Test
-	void b01_releasesPairServesAuthorNavAndEmptySlot() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/releases").run()) {
-				assertEquals(200, resp.getStatusCode());
-				var body = resp.getBodyAsString();
-				assertAdminShell(body, "releases", "/rest/releases/view");
-				assertTrue(body.contains("href=\"/rest/admin/releases\" aria-current=\"page\">Releases</a>"), body);
-				assertFalse(body.contains("/rest/admin/credentials"), body);
-			}
-		}
-	}
-
-	@Test
-	void b02_credentialsChildIsGone() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/credentials").run()) {
-				assertEquals(404, resp.getStatusCode());
-			}
-		}
-	}
-
-	@Test
-	void b03_releasesPairMountsTheSharedReleasesEnvelopeUrl() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/releases").run()) {
-				var body = resp.getBodyAsString();
-				assertTrue(body.contains("\"tableUrl\":\"/rest/releases/view\""), body);
-				assertTrue(body.contains("\"slotId\":\"releases\""), body);
-			}
-		}
-	}
-
-	@Test
-	void b04_regionsAndHelpersAreServedAtTheAdminMount() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", ViewsMixin.REGIONS_JS_PATH).run()) {
-				assertEquals(200, resp.getStatusCode());
-				assertTrue(resp.getBodyAsString().contains("JuneauViews"));
-			}
-			try (var resp = client.request("GET", ViewsMixin.HELPERS_JS_PATH).run()) {
-				assertEquals(200, resp.getStatusCode());
-			}
-			try (var resp = client.request("GET", ViewsMixin.VIEWS_JS_PATH).run()) {
-				assertEquals(200, resp.getStatusCode());
-			}
-			try (var resp = client.request("GET", ViewsMixin.CONFIG_JS_PATH).run()) {
-				assertEquals(200, resp.getStatusCode());
-				assertTrue(resp.getBodyAsString().contains("JuneauViews"));
-			}
-			try (var resp = client.request("GET", ViewsMixin.CONFIG_CSS_PATH).run()) {
-				assertEquals(200, resp.getStatusCode());
-			}
-		}
-	}
-
-	@Test
-	void c01_releasesPairStampsCsrfOnBody() throws Exception {
-		try (var client = client()) {
-			try (var resp = client.request("GET", "/releases").run()) {
-				var body = resp.getBodyAsString();
-				assertTrue(body.contains("data-juneau-csrf="), body);
-				assertTrue(body.contains("data-juneau-csrf-header=\"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
-			}
-		}
-	}
-
-	@Test
-	void c02_baseTemplateWiresTheAdminNavLinkAndRegionsRuntime() throws IOException {
-		String base;
-		try (var in = AdminRestTest.class.getResourceAsStream("/templates/base.ftlh")) {
-			assertNotNull(in, "templates/base.ftlh not found on the test classpath");
-			base = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
-		}
-		assertTrue(base.contains("href=\"/rest/admin\""), "Missing Admin nav link: " + base);
+	void b01_baseTemplateNoLongerWiresTheAdminNavLinkOrActiveTabBranches() throws IOException {
+		var base = readClasspathResource("/templates/base.ftlh");
+		assertFalse(base.contains("href=\"/rest/admin\""), "Admin nav link must be gone: " + base);
+		// The chrome is now a single <@page> shell: no activeTab if-blocks and no <#macro content>/<@content> at all.
+		assertFalse(base.contains("activeTab"), "activeTab conditional wiring must be gone: " + base);
+		assertFalse(base.contains("<@content"), "The content macro must be gone (replaced by ${pageBody}): " + base);
+		assertFalse(base.contains("<#macro content"), "The content macro must be gone: " + base);
+		assertTrue(base.contains("${pageBody}"), "Chrome must interpolate the captured ${pageBody}: " + base);
 		assertTrue(base.contains("href=\"/rest/setup\""), "Missing Setup nav link: " + base);
-		assertFalse(base.contains("href=\"/rest/home\""), "Home Page Tab must be gone: " + base);
-		assertFalse(base.contains("href=\"/rest/credentials\""), "Credentials Page Tab must be gone: " + base);
-		assertTrue(base.contains("activeTab == 'admin'"), "Missing admin-tab conditional asset wiring: " + base);
-		assertFalse(base.contains("pagesJsUrl"), "juneau-pages.js must not be included: " + base);
-		assertFalse(base.contains("juneau-pages.js"), "juneau-pages.js must not be referenced: " + base);
-		assertTrue(base.contains("regionsJsUrl"), "Missing juneau-regions.js include: " + base);
-		assertTrue(base.contains("helpersJsUrl"), "Missing juneau-helpers.js include: " + base);
-		assertTrue(base.contains("data-juneau-csrf="), "Missing CSRF ancestor stamp: " + base);
-		assertTrue(base.contains("data-juneau-csrf-header="), "Missing CSRF header stamp: " + base);
-		assertTrue(base.contains("configJsUrl"), "Missing juneau-config.js include: " + base);
-		assertTrue(base.contains("configCssUrl"), "Missing juneau-config.css include: " + base);
-		var viewsJsIdx = base.indexOf("viewsJsUrl");
-		var configJsIdx = base.indexOf("configJsUrl");
-		var regionsJsIdx = base.indexOf("regionsJsUrl");
-		var helpersJsIdx = base.indexOf("helpersJsUrl");
-		assertTrue(viewsJsIdx >= 0 && configJsIdx > viewsJsIdx,
-			"juneau-config.js must load after juneau-views.js: " + base);
-		assertTrue(regionsJsIdx > configJsIdx,
-			"juneau-regions.js must load after juneau-config.js: " + base);
-		assertTrue(helpersJsIdx > regionsJsIdx,
-			"juneau-helpers.js must load after juneau-regions.js: " + base);
-	}
-
-	/**
-	 * Regression: {@code juneau-icons.js} was never included on the page (only renders/ribbon/views were), so the
-	 * icon registry was absent at ribbon-build time and every ribbon/paging-pill button fell back to rendering its
-	 * label as plain text instead of a glyph. Asserts the include exists AND is ordered before {@code ribbonJsUrl}
-	 * (the ribbon/pill buttons resolve their icons from the registry when they're built, so it must already exist).
-	 */
-	@Test
-	void c03_baseTemplateIncludesIconsJsBeforeRibbonJs() throws IOException {
-		String base;
-		try (var in = AdminRestTest.class.getResourceAsStream("/templates/base.ftlh")) {
-			assertNotNull(in, "templates/base.ftlh not found on the test classpath");
-			base = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
-		}
-		assertTrue(base.contains("iconsJsUrl"), "Missing juneau-icons.js include: " + base);
-		var iconsIdx = base.indexOf("iconsJsUrl");
-		var ribbonIdx = base.indexOf("ribbonJsUrl");
-		assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js include: " + base);
-		assertTrue(iconsIdx < ribbonIdx,
-			"juneau-icons.js must be included before juneau-ribbon.js (icon registry must exist when the ribbon builds its buttons): " + base);
+		assertTrue(base.contains("href=\"/rest/releases\""), "Missing Releases nav link: " + base);
+		assertTrue(base.contains("href=\"/rest/runs\""), "Missing New Release nav link: " + base);
 	}
 
 	@Test
-	void c04_newFixturesContainNoSalesforceTokens() throws IOException {
-		String js;
-		try (var in = AdminRestTest.class.getResourceAsStream("/static/js/table-slot.js")) {
-			assertNotNull(in, "table-slot.js not found on the test classpath");
-			js = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
-		}
-		assertFalse(js.contains("slds-"), js);
-		assertFalse(js.toLowerCase().contains("salesforce"), js);
+	void b02_baseTemplateAuthorsExactlyThreeNavNodesOnce() throws IOException {
+		var base = readClasspathResource("/templates/base.ftlh");
+		assertTrue(base.contains("<@navigation>"), "Chrome must author the nav tree once as <@navigation>: " + base);
+		var count = base.split("<@node ", -1).length - 1;
+		assertEquals(3, count, "Expected exactly 3 <@node> nav entries (Setup, Releases, New Release): " + base);
 	}
 
-	private static void assertAdminShell(String body, String slotId, String tableUrl) {
-		assertTrue(body.contains("class=\"juneau-page-nav\""), "Missing page nav: " + body);
-		assertTrue(body.contains("aria-label=\"Admin\""), body);
-		assertTrue(body.contains("id=\"" + slotId + "\""), "Missing empty slot: " + body);
-		assertTrue(body.contains("id=\"rm-table-slot\""), body);
-		assertTrue(body.contains("\"tableUrl\":\"" + tableUrl + "\""), body);
-		assertFalse(body.contains("data-juneau-page"), "Page sidecar leaked: " + body);
-		assertFalse(body.contains("juneau-page:admin"), "PAGE_META leaked: " + body);
-		assertFalse(body.contains("jc-tab-bar"), "Tab bar class leaked: " + body);
-		assertFalse(body.contains("juneau-pages.js"), "juneau-pages.js leaked: " + body);
-		assertFalse(body.contains("data-juneau-region"), "Do not stamp data-juneau-region on the table slot: " + body);
-		assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);
-		assertTrue(body.contains("/js/table-slot.js"), body);
-		assertFalse(body.contains("slds-"), body);
+	@Test
+	void b03_releasesDetailScriptOptsIntoMaterialIconPack() throws IOException {
+		// With the views toolkit pack, base.ftlh no longer hardcodes juneau-icons.js or its pack attribute — the pack
+		// loop loads it generically (default "original"). The Material opt-in (Juneau WORK-J0545) now lives in the
+		// Releases page's init script, which selects it via JuneauViews.icons.pack() before the mount.
+		var base = readClasspathResource("/templates/base.ftlh");
+		assertFalse(base.contains("data-juneau-icon-pack"), "base.ftlh must not hardcode the icon pack anymore: " + base);
+		var script = readClasspathResource("/static/js/releases-detail.js");
+		assertTrue(script.contains("icons.pack('material')"),
+			"releases-detail.js must select the Material icon sprite: " + script);
+	}
+
+	private static String readClasspathResource(String path) throws IOException {
+		try (var in = AdminRestTest.class.getResourceAsStream(path)) {
+			assertNotNull(in, path + " not found on the test classpath");
+			return new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
+		}
 	}
 }

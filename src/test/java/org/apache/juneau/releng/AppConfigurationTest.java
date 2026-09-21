@@ -30,6 +30,7 @@ import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import freemarker.template.Configuration;
 
 class AppConfigurationTest {
 
@@ -149,5 +150,14 @@ class AppConfigurationTest {
 
 		var client2 = AppConfiguration.nexusClient(target, "jbognar", "", () -> sentinel);
 		assertSame(sentinel, client2);
+	}
+
+	@Test
+	void e01_noFreemarkerConfigurationBean() {
+		for (var m : AppConfiguration.class.getDeclaredMethods()) {
+			if (m.getReturnType() == Configuration.class)
+				fail("A @Bean Configuration is returned untouched by ConsoleFreemarkerMixin, so <@page> never registers. "
+					+ "The mixin default already sets exposeFields=true.");
+		}
 	}
 }

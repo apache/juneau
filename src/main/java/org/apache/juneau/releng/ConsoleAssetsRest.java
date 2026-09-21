@@ -22,9 +22,9 @@ import org.apache.juneau.rest.server.console.ConsoleChromeMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 
 /**
- * Serves the shared console-ui chrome stylesheet and its two themeable assets (logo, page-background image) at
- * the server root, independent of the app's own {@code /rest/*} mount, so the {@code <link>} reference in every
- * tab's {@code base.ftlh} resolves the same way regardless of which tab rendered the page.
+ * Serves the shared console-ui chrome stylesheet and its themeable logo asset at the server root, independent
+ * of the app's own {@code /rest/*} mount, so the {@code <link>} reference in every tab's {@code base.ftlh}
+ * resolves the same way regardless of which tab rendered the page.
  *
  * <p>
  * Registered directly (not composed onto {@code HomeRest}/{@code ReleaseRest}/etc.) via a dedicated
@@ -41,12 +41,15 @@ import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 public class ConsoleAssetsRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	/** Apache one-liner for {@code ConsoleChromeMixin.Builder#footer(String)} (Juneau {@code WORK-J0541}). */
+	static final String FOOTER = "Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.";
+
 	@Bean
 	public ConsoleChromeMixin consoleChrome() {
 		return ConsoleChromeMixin.create()
 			.theme(ReleaseManagerTheme.INSTANCE)
 			.logo("/static/img/oakleaf.svg")
-			.pageBackgroundImage("/static/img/topo-bg.png")
+			.footer(FOOTER)
 			.build();
 	}
 }

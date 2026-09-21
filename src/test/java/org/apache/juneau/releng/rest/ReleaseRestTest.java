@@ -20,16 +20,15 @@ package org.apache.juneau.releng.rest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
-import org.apache.juneau.rest.server.views.ViewSlot;
 import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -109,11 +108,13 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * Regression: the rendered Releases page never included {@code juneau-icons.js} (only renders/ribbon/views
-	 * were wired up), so the icon registry was absent when the ribbon built its buttons and every button fell back
-	 * to rendering its label as plain text instead of a glyph. Asserts the served page's script list carries the
-	 * icons include, ordered before {@code juneau-ribbon.js} (the ribbon resolves icons from the registry when it
-	 * builds its buttons, so the registry must already exist).
+	 * The Releases page is now a {@code <@page toolkit="views">} call: the views toolkit pack supplies the runtime
+	 * JS in load order (renders → icons → ribbon → views → config → regions → helpers → page-cards), and the table
+	 * is a {@code <@card type="datatables" id="releases">} the page-cards runtime mounts from its sidecar — there is
+	 * no {@code table-slot.js} and no {@code /view} envelope fetch. Asserts the served page carries {@code juneau-icons.js}
+	 * ordered before {@code juneau-ribbon.js} (the ribbon resolves glyphs from the icon registry as it builds its
+	 * buttons, so the registry must already exist), the page-cards runtime + sidecar mount, the shared chrome nav with
+	 * Releases current, CSRF wiring, the title, and the Detail View populator.
 	 */
 	@Test
 	void b01_pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
@@ -127,15 +128,25 @@ class ReleaseRestTest {
 				assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js script include: " + body);
 				assertTrue(iconsIdx < ribbonIdx,
 					"juneau-icons.js must be included before juneau-ribbon.js: " + body);
-				assertTrue(body.contains("id=\"releases\""), "Missing empty releases slot: " + body);
+				// The datatables card mount + page-cards runtime + sidecar (replaces the retired empty-slot + table-slot.js).
+				assertTrue(body.contains("id=\"releases\""), "Missing releases card mount: " + body);
+				assertTrue(body.contains("data-juneau-card=\"datatables\""), "Missing datatables card markup: " + body);
+				assertTrue(body.contains("data-juneau-card-sidecar=\"releases\""), "Missing page-cards sidecar: " + body);
+				assertTrue(body.contains("juneau-page-cards.js"), "Missing page-cards runtime: " + body);
+				assertFalse(body.contains("/js/table-slot.js"), "Retired table-slot.js is still wired: " + body);
 				assertFalse(body.contains("juneau-view:releases"), "ViewTable sidecar leaked: " + body);
 				assertFalse(body.contains("data-juneau-view"), "Marker table leaked: " + body);
 				assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);
-				assertTrue(body.contains("/js/table-slot.js"), body);
-				assertTrue(body.contains("\"tableUrl\":\"/rest/releases/view\""), body);
 				assertTrue(body.contains("data-juneau-csrf="), body);
 				assertTrue(body.contains("data-juneau-csrf-header=\"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
-				assertFalse(body.contains("class=\"juneau-page-nav\""), "Standalone Releases must not carry Admin page nav: " + body);
+				// Chrome now authors the primary nav once as an <@navigation> landmark; the Releases node is current.
+				assertTrue(body.contains("class=\"juneau-page-nav\""), "Chrome must render the shared page nav: " + body);
+				assertTrue(body.contains("aria-current=\"page\""), "Releases nav node must be current: " + body);
+				assertTrue(body.contains("class=\"jc-page-header\""), body);
+				assertTrue(body.contains("<h1>All Releases</h1>"), body);
+				assertTrue(body.contains("Every Apache Juneau release"), body);
+				assertFalse(body.contains("rm-card-sub"), body);
+				assertTrue(body.contains("/js/releases-detail.js"), body);
 			}
 		}
 	}
@@ -176,8 +187,8 @@ class ReleaseRestTest {
 	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
 	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
 	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used
-	 * to return. Wired via the {@code juneau-rest-server-views} toolkit ({@code ViewDef.queryableSettings()} +
-	 * {@code ProtocolQueryable}); this proves the envelope shape and that filtering happens on the server.
+	 * to return. Wired via {@link ReleaseRest#queryableSettings()} (a {@code DataTablesQueryProtocol}) +
+	 * {@code ProtocolQueryable}; this proves the envelope shape and that filtering happens on the server.
 	 */
 	@Test
 	void c01_dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
@@ -193,32 +204,73 @@ class ReleaseRestTest {
 				assertTrue(body.contains("draw"), "Missing draw: " + body);
 				assertTrue(body.contains("9.2.1"), "Filtered-in row missing: " + body);
 				assertFalse(body.contains("9.3.0"), "Filtered-out row present: " + body);
+				assertTrue(body.contains(release("9.2.1", "RELEASED").rowId()), body);
+			}
+		}
+	}
+
+	/**
+	 * The table catalog now rides in the page itself: the {@code <@card type="datatables" id="releases">} escape
+	 * hatch lifts its FTL JSON5 body into a page-cards sidecar (VIEW_META with {@code contractVersion} + {@code view}
+	 * passed through unchanged) rather than being served from a Java {@code ViewDef} at {@code /view}. Asserts the
+	 * served page's sidecar carries the view id + version-cell column, declares the Detail View expand endpoint /
+	 * populator (not a version hyperlink), and renders Status/Stage as pills, not tag chips.
+	 */
+	@Test
+	void d01_pageCardSidecarCarriesTheReleasesCatalog() throws Exception {
+		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
+			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertTrue(body.contains("data-juneau-card-sidecar=\"releases\""), body);
+				assertTrue(body.contains("\"contractVersion\":\"4\""), "Missing lifted VIEW_META view contract: " + body);
+				assertTrue(body.contains("\"id\":\"releases\""), "Missing view id in the lifted catalog: " + body);
+				assertTrue(body.contains("version-cell"), body);
+				assertTrue(body.contains("/rest/releases/expand/{id}"), body);
+				assertTrue(body.contains("releases-detail"), body);
+				assertFalse(body.contains("/rest/releases/{version}/1"), "Version cell must not be a hyperlink: " + body);
+				assertTrue(body.contains("\"id\":\"pill\""), "Status/Stage must render as pills: " + body);
+				assertFalse(body.contains("\"id\":\"tag\""), "tag renderer must be migrated to pill: " + body);
 			}
 		}
 	}
 
 	@Test
-	void d01_viewEnvelopeIsSlotMetaWithoutCsrf() throws Exception {
+	void d02_viewEndpointIsGone() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/view").header("Accept", "application/json").run()) {
-				assertEquals(200, resp.getStatusCode());
-				var body = resp.getBodyAsString();
-				assertSlotEnvelope(body, "releases");
+				assertEquals(404, resp.getStatusCode(), "The Java /view slot envelope must be retired (catalog is now FTL).");
 			}
 		}
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Json.DEFAULT.read to Map is an unchecked conversion from the raw parser result.
-	})
-	static void assertSlotEnvelope(String body, String viewId) {
-		var slot = Json.DEFAULT.read(body, Map.class);
-		assertEquals(ViewSlot.CONTRACT_VERSION, slot.get("contractVersion"), body);
-		assertEquals("wide", slot.get("layout"), body);
-		assertFalse(slot.containsKey("csrf"), body);
-		var view = (Map<String,Object>) slot.get("view");
-		assertNotNull(view, body);
-		assertEquals("4", view.get("contractVersion"), body);
-		assertEquals(viewId, view.get("id"), body);
+	@Test
+	void e01_expandReturnsJiraVersionAndKnownLinks() throws Exception {
+		var row = release("9.2.1", "RELEASED");
+		row.githubReleaseUrl = "https://github.com/apache/juneau/releases/tag/juneau-9.2.1";
+		try (var client = client(rest(List.of(row)))) {
+			try (var resp = client.request("GET", "/expand/" + URLEncoder.encode(row.rowId(), StandardCharsets.UTF_8))
+					.header("Accept", "application/json").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertTrue(body.contains("contractVersion"), body);
+				assertTrue(body.contains("jiraVersionUrl"), body);
+				assertTrue(body.contains("issues.apache.org/jira"), body);
+				assertTrue(body.contains("fixVersion"), body);
+				assertTrue(body.contains("9.2.1"), body);
+				assertTrue(body.contains("githubReleaseUrl"), body);
+				assertTrue(body.contains(Release.DIST_RELEASE_PREFIX + "9.2.1/"), body);
+				assertTrue(body.contains(Release.RELEASE_NOTES_URL), body);
+			}
+		}
+	}
+
+	@Test
+	void e02_expandUnknownIs404() throws Exception {
+		try (var client = client(rest(List.of()))) {
+			try (var resp = client.request("GET", "/expand/nope").header("Accept", "application/json").run()) {
+				assertEquals(404, resp.getStatusCode());
+			}
+		}
 	}
 }

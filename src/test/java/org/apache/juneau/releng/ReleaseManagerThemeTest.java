@@ -32,9 +32,20 @@ class ReleaseManagerThemeTest {
 		assertEquals(Theme.LIGHT_RED.getTokens().get("--jc-chrome-bg"), tokens.get("--jc-chrome-bg"));
 		assertNotEquals("#BF2600", tokens.get("--jc-chrome-bg"));
 		assertNotEquals("#1589EE", tokens.get("--jc-accent"));
+		// The effective FAILED status/stage pill triad — chrome.css's .tag.status.failed / .tag.stage.failed and the
+		// render:"pill" cells resolve through --jc-pill-red-*.
+		assertEquals("#fdeceb", tokens.get("--jc-pill-red-bg"));
+		assertEquals("#c23934", tokens.get("--jc-pill-red-text"));
+		assertEquals("#f3c6c2", tokens.get("--jc-pill-red-border"));
+		assertNotEquals(Theme.OPEN.getTokens().get("--jc-pill-red-text"), tokens.get("--jc-pill-red-text"));
+		// --jc-tag-red-* kept as an alias (same palette) for the .jc-badge[danger] / busy-avatar-status consumers.
 		assertEquals("#fdeceb", tokens.get("--jc-tag-red-bg"));
 		assertEquals("#c23934", tokens.get("--jc-tag-red-text"));
 		assertEquals("#f3c6c2", tokens.get("--jc-tag-red-border"));
 		assertNotEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
+		assertEquals(Theme.LIGHT_RED.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
+		assertEquals("16px 16px 8px", tokens.get("--jc-card-padding"));
+		assertEquals(Theme.LIGHT_RED.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
+		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", tokens.get("--jc-card-shadow"));
 	}
 }

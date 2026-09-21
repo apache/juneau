@@ -30,6 +30,8 @@ test.describe('Setup page', () => {
     await expect(page.getByRole('heading', { name: 'Details' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Workflow' })).toHaveCount(0);
 
-    await expect(page.getByRole('link', { name: 'Setup' })).toHaveClass(/active/);
+    // The shared <@navigation> chrome marks the current tab with aria-current="page" (NodeDirectiveModel), not an
+    // "active" CSS class — on /rest/setup the Setup node (id "setup") matches the page's tab="setup".
+    await expect(page.getByRole('link', { name: 'Setup' })).toHaveAttribute('aria-current', 'page');
   });
 });

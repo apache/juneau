@@ -15,8 +15,11 @@
   limitations under the License.
 -->
 
-<#assign activeTab = "setup">
-<#macro content>
+<@page tab="setup" init="/js/credentials.js,/js/rm-setup.js">
+    <div class="jc-page-header">
+        <h1>Setup</h1>
+        <p class="jc-page-sub">Every prerequisite this release manager needs, and the controls to fix them.</p>
+    </div>
     <div class="rm-setup">
         <div class="jc-card rm-setup-probes">
             <div class="jc-card-header">
@@ -37,5 +40,4 @@
             </div>
         </div>
     </div>
-</#macro>
-<#include "base.ftlh">
+</@page>

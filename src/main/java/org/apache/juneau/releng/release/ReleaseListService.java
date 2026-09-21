@@ -64,6 +64,8 @@ public class ReleaseListService {
 		// 3. Sort: version desc; within a version, in-progress (non-RELEASED) rows first.
 		out.sort(Comparator.comparing((Release r) -> ReleaseVersion.of(r.version)).reversed()
 				.thenComparing(r -> "RELEASED".equals(r.status) ? 1 : 0));
+		for (var r : out)
+			r.id = r.rowId();
 		return out;
 	}
 }

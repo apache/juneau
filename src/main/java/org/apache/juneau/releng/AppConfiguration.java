@@ -153,29 +153,10 @@ public class AppConfiguration {
 		return reg;
 	}
 
-	/**
-	 * FreeMarker engine configuration picked up by the Juneau view bridge (via BeanStore lookup).
-	 *
-	 * <p>Mirrors the bridge-default (classpath loader rooted at {@code /templates}, UTF-8, HTML output,
-	 * cached templates) but enables {@code exposeFields} so the public-field view beans
-	 * ({@code Release}, {@code CredentialStatus}) are readable from templates — the default object
-	 * wrapper only exposes bean getters, which these beans intentionally don't have.
-	 *
-	 * <p>FreeMarker's {@code Configuration} is referenced by fully-qualified name because its simple name
-	 * collides with Spring's {@link Configuration @Configuration} annotation used on this class.
-	 */
-	@Bean
-	public freemarker.template.Configuration freemarkerConfiguration() {
-		var cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_34);
-		cfg.setClassLoaderForTemplateLoading(AppConfiguration.class.getClassLoader(), "templates");
-		cfg.setDefaultEncoding("UTF-8");
-		cfg.setOutputFormat(freemarker.core.HTMLOutputFormat.INSTANCE);
-		cfg.setTemplateUpdateDelayMilliseconds(Long.MAX_VALUE);
-		var owb = new freemarker.template.DefaultObjectWrapperBuilder(freemarker.template.Configuration.VERSION_2_3_34);
-		owb.setExposeFields(true);
-		cfg.setObjectWrapper(owb.build());
-		return cfg;
-	}
+	// No @Bean freemarker.template.Configuration. ConsoleFreemarkerMixin returns a consumer-supplied
+	// Configuration untouched — no <@page>/ <@card>/ <@navigation>/ <@theme> shared variables — so a Spring
+	// bean here is exactly the "page evaluated to null or missing" startup failure. Public-field DTOs still
+	// render: the mixin's bridge-default Configuration already sets exposeFields=true.
 
 	@Bean
 	public ReleaseListService releaseListService(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir,

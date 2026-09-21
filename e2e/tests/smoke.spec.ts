@@ -40,17 +40,9 @@ test.describe('Smoke: primary content renders without console errors', () => {
     expect(errors, `console errors on /rest/runs: ${errors.join('; ')}`).toEqual([]);
   });
 
-  test('Admin page renders its primary content', async ({ page }) => {
-    const errors = collectConsoleErrors(page);
+  test('Admin page is 404', async ({ page }) => {
     const response = await page.goto('/rest/admin');
-    expect(response?.status()).toBe(200);
-
-    await expect(page.getByRole('heading', { name: 'Admin' })).toBeVisible();
-    const adminNav = page.locator('.juneau-page-nav');
-    await expect(adminNav.getByText('Releases', { exact: true })).toBeVisible();
-    await expect(adminNav.getByText('Credentials', { exact: true })).toHaveCount(0);
-
-    expect(errors, `console errors on /rest/admin: ${errors.join('; ')}`).toEqual([]);
+    expect(response?.status()).toBe(404);
   });
 
   test('Credentials human page is 404', async ({ page }) => {

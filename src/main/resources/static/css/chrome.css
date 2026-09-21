@@ -30,6 +30,12 @@
    response appends (Theme.LIGHT_RED, overridden by ReleaseManagerTheme).
    ========================================================================== */
 
+/* Page Tabs: accent-on-top + wash fill are Juneau stock (WORK-J0543). Do not override
+   border-top / border-bottom here. Keep selected-tab type a bit heavier than the rest. */
+.jc-nav-tab.active {
+  font-weight: 700;
+}
+
 /* ==========================================================================
    Detail list (release detail page)
    ========================================================================== */
@@ -106,7 +112,7 @@
   font-family: var(--jc-font);
   font-size: 0.8125rem;
   padding: 4px 8px;
-  border: 1px solid var(--jc-border-2);
+  border: 1px solid var(--jc-control-border);
   border-radius: var(--jc-radius);
   background: var(--jc-white);
   color: var(--jc-text);
@@ -116,7 +122,7 @@
 
 /* TODO-445n: horizontal scroll is now owned by the toolkit (juneau-views.css — the flex .dt-layout-cell for
    DT2, the .juneau-view-table-scroll wrap for DT1), so the .rm-table-scroll wrapper has been removed from
-   admin.ftlh / releases.ftlh. An outer overflow-x:auto here sat between .jc-card and the paging-pill menu and
+   releases.ftlh. An outer overflow-x:auto here sat between .jc-card and the paging-pill menu and
    clipped it (INV-2) / produced a second horizontal scrollbar. The rule is retired rather than restyled. */
 
 table.rm-table {
@@ -142,13 +148,8 @@ table.rm-table thead th {
   white-space: nowrap;
 }
 
-table.rm-table thead th.sortable { cursor: pointer; position: relative; }
-table.rm-table thead th.sortable::after {
-  content: '\2195';
-  margin-left: 5px;
-  color: var(--jc-border-2);
-  font-weight: 400;
-}
+/* Header sort + column-search icons are Juneau stock (WORK-J0547). Sort is the
+   order-control only — do not restore whole-cell sort arrows. */
 
 table.rm-table tbody td {
   font-size: 0.8125rem;
@@ -226,65 +227,14 @@ tr.detail-row dd {
 .links-cell a { margin-right: 10px; font-size: 0.8125rem; }
 .links-cell a:last-child { margin-right: 0; }
 
-/* ==========================================================================
-   DataTables integration (Release Manager app only — not part of the mockup)
-   ==========================================================================
+/* Toolbar Search, ribbon idle borders, and header sort+search are Juneau stock
+   (WORK-J0546 / WORK-J0547). Do not restyle the DataTables search field or order
+   control here. table.rm-table rules above still style any app-local table that
+   carries that class.
 
-   The app keeps its real vendored jQuery + DataTables (static/datatables/*);
-   the juneau-views toolkit owns initialization and hides DataTables' own
-   length-select, paging row, and entry-count controls in favour of its own
-   toolbar and paging pill (see juneau-views.css / juneau-views.js). These
-   rules only restyle the controls DataTables still renders — the search
-   field (div.dt-container, .dt-search, the DataTables 2.x class names) —
-   plus the enhanced table's own sort-affordance header. table.rm-table's
-   rules above already apply to the DataTables-enhanced table itself, since
-   DataTables adds its own "dataTable" class alongside — not instead of —
-   the "rm-table" class this app puts on the <table> element.
-   ========================================================================== */
-
-div.dt-container {
-  font-family: var(--jc-font);
-  color: #3e3e3c;
-  font-size: 0.8125rem;
-}
-
-div.dt-container .dt-search {
-  color: #3e3e3c;
-  padding: 6px 2px;
-}
-
-div.dt-container .dt-search input,
-div.dt-container input.dt-input {
-  font-family: var(--jc-font);
-  font-size: 0.8125rem;
-  padding: 4px 8px;
-  border: 1px solid var(--jc-border-2);
-  border-radius: var(--jc-radius);
-  background: var(--jc-white);
-  color: var(--jc-text);
-}
-
-div.dt-container .dt-search input { width: 200px; }
-
-table.dataTable.rm-table thead > tr > th {
-  background: var(--jc-chrome-bg);
-  color: #3e3e3c;
-}
-
-table.dataTable.rm-table thead > tr > th.dt-orderable-asc,
-table.dataTable.rm-table thead > tr > th.dt-orderable-desc {
-  cursor: pointer;
-}
-
-table.dataTable.rm-table thead > tr > th .dt-column-order:before,
-table.dataTable.rm-table thead > tr > th .dt-column-order:after {
-  color: var(--jc-border-2);
-}
-
-table.dataTable.rm-table thead > tr > th.dt-ordering-asc .dt-column-order:before,
-table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after {
-  color: var(--jc-accent);
-}
+   Card padding (--jc-card-padding 16/16/8) and card shadow (--jc-card-shadow) are
+   Juneau stock (WORK-J0544 / WORK-J0545). Table-chrome unsadows the wide-layout
+   outer card. Do not fork those tokens on content cards. */
 
 /* ==========================================================================
    Setup tab (probes + details)
@@ -296,8 +246,6 @@ table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after
   gap: 16px;
   align-items: start;
   width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
 }
 
 .rm-setup > .jc-card {
@@ -308,22 +256,27 @@ table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after
 
 .rm-probe-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 4px 0 8px;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .rm-probe-pill {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--jc-font);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
   border: 1px solid var(--jc-border);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 5px 12px;
   background: var(--jc-tag-neutral-bg);
   color: var(--jc-tag-neutral-text);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .rm-probe-pill-pass {

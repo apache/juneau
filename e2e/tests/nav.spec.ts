@@ -28,11 +28,10 @@ const NAV_TABS: { name: string; path: string; heading: string | RegExp | null }[
   // New Release has no single fixed heading — its Input-vs-Execution subtab starts on whichever one matches
   // current run state (state-dependent), so it's asserted separately below via the always-present subtab bar.
   { name: 'New Release', path: '/rest/runs', heading: null },
-  { name: 'Admin', path: '/rest/admin', heading: 'Admin' },
 ];
 
 function topNav(page: Page) {
-  return page.locator('nav.jc-nav');
+  return page.locator('nav.juneau-page-nav');
 }
 
 test.describe('Top navigation', () => {
@@ -58,7 +57,7 @@ test.describe('Top navigation', () => {
     });
   }
 
-  test('all four nav tabs are present on every page', async ({ page }) => {
+  test('all three nav tabs are present on every page', async ({ page }) => {
     for (const startTab of NAV_TABS) {
       await page.goto(startTab.path);
       for (const tab of NAV_TABS) {
@@ -66,6 +65,7 @@ test.describe('Top navigation', () => {
       }
       await expect(topNav(page).getByRole('link', { name: 'Home', exact: true })).toHaveCount(0);
       await expect(topNav(page).getByRole('link', { name: 'Credentials', exact: true })).toHaveCount(0);
+      await expect(topNav(page).getByRole('link', { name: 'Admin', exact: true })).toHaveCount(0);
     }
   });
 });

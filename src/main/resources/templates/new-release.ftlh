@@ -15,8 +15,11 @@
   limitations under the License.
 -->
 
-<#assign activeTab = "new">
-<#macro content>
+<@page tab="new" css="/css/new-release.css" init="/js/new-release.js">
+    <div class="jc-page-header">
+        <h1>New Release</h1>
+        <p class="jc-page-sub">Cut an Apache Juneau release candidate, from input through vote and publish.</p>
+    </div>
     <#assign modeLc = (mode!'SAFE')?lower_case>
     <div class="rm-mode-banner ${modeLc}" data-mode="${mode!'SAFE'}">
         <span class="rm-mode-chip ${modeLc}">${mode!'SAFE'}</span>
@@ -28,15 +31,11 @@
     </div>
 
     <#assign hasRun = run??>
-    <#-- App-local subtabs. Both panels stay in the DOM at all times; new-release.js just shows/hides them,
-         so switching to Input never tears down or reconnects the Execution panel's two EventSources. When a
-         run is active the Execution tab opens first (that's the working view); otherwise Input does. -->
     <div class="rm-subtabs" role="tablist">
         <button type="button" class="rm-subtab<#if !hasRun> active</#if>" role="tab" data-subtab="input" onclick="nrSubtab('input')">Input</button>
         <button type="button" class="rm-subtab<#if hasRun> active</#if>" role="tab" data-subtab="exec" onclick="nrSubtab('exec')">Execution</button>
     </div>
 
-    <#-- ===================== INPUT SUBTAB: release metadata + narrative ===================== -->
     <section class="rm-subtab-panel" id="nr-panel-input" data-subtab="input"<#if hasRun> hidden</#if>>
         <div class="jc-card rm-form-card">
             <#if !hasRun>
@@ -94,7 +93,6 @@
             </div>
             </#if>
 
-            <#-- The four optional narrative fields (shared IDs — only one of the two forms above ever renders). -->
             <div class="rm-field">
                 <label for="nr-releaseSummary">Release summary <span class="rm-field-opt">optional</span></label>
                 <input id="nr-releaseSummary" type="text" placeholder="Short &lsquo;why we&rsquo;re releasing&rsquo; line &mdash; used in the PROPOSE and ANNOUNCEMENT emails" value="<#if hasRun && run.releaseSummary??>${run.releaseSummary}</#if>">
@@ -123,7 +121,6 @@
         </div>
     </section>
 
-    <#-- ===================== EXECUTION SUBTAB: step rail + detail/console ===================== -->
     <section class="rm-subtab-panel" id="nr-panel-exec" data-subtab="exec"<#if !hasRun> hidden</#if>>
     <#if !hasRun>
         <div class="jc-card">
@@ -155,7 +152,6 @@
             </div>
         </div>
 
-        <!-- Left column is the step list; right column shows the selected step's detail and console. -->
         <div class="rm-rail-layout" data-version="${run.version}" data-rc="${run.rc}" data-mode="${mode!'SAFE'}" data-armed="${(armed!false)?c}">
             <div class="rm-rail-col" id="nr-rail">
                 <#list run.steps as s>
@@ -167,21 +163,12 @@
                 </div>
                 </#list>
             </div>
-            <!-- Populated by nrSelect() in new-release.js — shows exactly one step's detail and console at a time. -->
             <div class="rm-detail-col" id="nr-detail">
                 <p class="hint">Select a step to preview and run it.</p>
             </div>
         </div>
 
-        <!-- Step id -> {title, mutating} from the StepRegistry, for the detail pane's title/mutating-tag
-             rendering. Not RunState — that's already inline above. Serialized Java-side by page() with the
-             repo's JSON marshaller and passed through StringUtils.escapeForScript, then inserted here as raw
-             content (?no_esc): FreeMarker's HTML auto-escaping is the WRONG escaper for a raw-text <script>
-             (it entity-encodes &/</" into forms JSON.parse reads verbatim, corrupting the payload), and its
-             break-out protection is only incidental to the .ftlh extension. escapeForScript neutralizes the
-             </script> / <!-- break-outs while keeping the JSON valid. -->
         <script id="nr-step-meta" type="application/json">${stepMeta?no_esc}</script>
     </#if>
     </section>
-</#macro>
-<#include "base.ftlh">
+</@page>
