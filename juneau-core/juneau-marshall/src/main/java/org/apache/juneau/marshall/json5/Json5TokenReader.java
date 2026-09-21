@@ -32,8 +32,10 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Field names can be single-quoted, double-quoted, or unquoted bare identifiers.
  * 	<li>Trailing commas before <c>]</c> / <c>}</c> are allowed.
  * 	<li>Missing values in arrays / objects emit {@link TokenType#VALUE_NULL}.
- * 	<li>JavaScript comments (<c>//</c> line, <c>/* &#42;/</c> block) are tolerated &mdash; already
+ * 			<li>JavaScript comments (<c>//</c> line, <c>/* &#42;/</c> block) are tolerated &mdash; already
  * 		accepted by the parent class.
+ * 	<li>JSON5 numbers: leading <c>+</c>, leading/trailing decimal points, hexadecimal, {@code Infinity}/{@code NaN}.
+ * 	<li>String line-continuation (backslash + line terminator is omitted from the value).
  * </ul>
  *
  * <p>
@@ -84,6 +86,22 @@ public class Json5TokenReader extends JsonTokenReader {
 	}
 
 	@Override /* JsonTokenReader */
+	protected void readNumberValue() throws IOException, ParseException {
+		var s = Json5ParserSession.readJson5NumberLexeme(r);
+		if (s.isEmpty())
+			throw parseException("Invalid JSON5 number: '%s'", s);
+		currentNumberLexeme = s;
+		currentToken = TokenType.VALUE_NUMBER;
+	}
+
+	@Override /* TokenReader */
+	public Number getNumber() throws ParseException {
+		if (currentToken != TokenType.VALUE_NUMBER)
+			throw new IllegalStateException("Current token is not VALUE_NUMBER (was " + currentToken + ")");
+		return Json5ParserSession.parseJson5Number(currentNumberLexeme, null);
+	}
+
+	@Override /* JsonTokenReader */
 	protected void readValueStart(int c) throws IOException, ParseException {
 		// Missing-value: a leading comma or container-end at value position emits VALUE_NULL and
 		// re-injects the structural char so the next state transition picks it up.
@@ -101,6 +119,13 @@ public class Json5TokenReader extends JsonTokenReader {
 			afterValue();
 			return;
 		}
+		// JSON5 numbers that JSON itself would not start: leading '+', leading '.', Infinity, NaN.
+		if (c == '+' || c == '.') {
+			r.unread();
+			readNumberValue();
+			afterValue();
+			return;
+		}
 		// Bare identifier as a string value (e.g. `[foo, bar]` -> ["foo", "bar"]).
 		if (isBareStart(c)) {
 			r.unread();
@@ -110,6 +135,12 @@ public class Json5TokenReader extends JsonTokenReader {
 				case "true":  currentBoolean = true;  currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;
 				case "false": currentBoolean = false; currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;
 				case "null":  currentToken = TokenType.VALUE_NULL; afterValue(); return;
+				case "Infinity":
+				case "NaN":
+					currentNumberLexeme = word;
+					currentToken = TokenType.VALUE_NUMBER;
+					afterValue();
+					return;
 				default:
 					currentString = maybeTrimString(word);
 					currentToken = TokenType.VALUE_STRING;
@@ -196,24 +227,15 @@ public class Json5TokenReader extends JsonTokenReader {
 	}
 
 	@Override /* JsonTokenReader */
-	protected String readString() throws IOException, ParseException {
-		// Defer to the parent for double- and single-quoted strings.  Detect whether the upcoming
-		// quote character is a single or double quote, and run the same escape-handling state
-		// machine but anchored to the chosen quote.  The parent class only handles double-quoted
-		// strings, so we hand-roll a thin variant for single-quoted.
-		var qc = r.peek();
-		if (qc == '\'')
-			return readSingleQuotedString();
-		return super.readString();
-	}
-
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for single-quoted-string escape-handling state machine.
+		"java:S3776" // Cognitive complexity acceptable for JSON5 quoted-string escape-handling state machine.
 	})
-	private String readSingleQuotedString() throws IOException, ParseException {
+	protected String readString() throws IOException, ParseException {
+		// JSON5 strings may be single- or double-quoted, and a backslash before a line
+		// terminator is a line-continuation (the terminator is omitted from the value).
 		r.mark();
-		var qc = r.read();  // consume '
-		if (qc != '\'')
+		var qc = r.read();
+		if (qc != '"' && qc != '\'')
 			throw parseException("Did not find quote character marking beginning of string");
 		String s = null;
 		var inEscape = false;
@@ -231,6 +253,16 @@ public class Json5TokenReader extends JsonTokenReader {
 					case '/': r.replace('/'); break;
 					case '\'': r.replace('\''); break;
 					case '"': r.replace('"'); break;
+					case '\n':
+						r.delete();
+						break;
+					case '\r':
+						r.delete();
+						if (r.peek() == '\n') {
+							r.read();
+							r.delete();
+						}
+						break;
 					case 'u': {
 						var hex = r.read(4);
 						try {
@@ -245,10 +277,12 @@ public class Json5TokenReader extends JsonTokenReader {
 				}
 				inEscape = false;
 			} else {
+				if (c <= 0x1F && c != -1)
+					throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));
 				if (c == '\\') {
 					inEscape = true;
 					r.delete();
-				} else if (c == '\'') {
+				} else if (c == qc) {
 					s = r.getMarked(1, -1);
 					break;
 				}

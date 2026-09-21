@@ -79,9 +79,9 @@ class JsonParserEdgeCases_Test extends TestBase {
 		input(42, "n_incomplete_false", "[fals]", "Unrecognized syntax"),
 		input(43, "n_incomplete_null", "[nul]", "Unrecognized syntax"),
 		input(44, "n_incomplete_true", "[tru]", "Unrecognized syntax"),
-		input(45, "n_number_++", "[++1234]", "Unrecognized syntax"),
+		input(45, "n_number_++", "[++1234]", "Unrecognized syntax", "NumberFormatException"),
 		input(46, "n_number_+1", "[+1]", "Unrecognized syntax"),
-		input(47, "n_number_+Inf", "[+Inf]", "Unrecognized syntax"),
+		input(47, "n_number_+Inf", "[+Inf]", "Unrecognized syntax", "NumberFormatException"),
 		input(48, "n_number_-01", "[-01]", "Invalid JSON number"),
 		input(49, "n_number_-1.0.", "[-1.0.]", "NumberFormatException"),
 		input(50, "n_number_-2.", "[-2.]", "Invalid JSON number"),
@@ -108,7 +108,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 		input(71, "n_number_expression", "[1+2]", "NumberFormatException"),
 		input(72, "n_number_hex_1_digit", "[0x1]", "Invalid JSON number"),
 		input(73, "n_number_hex_2_digits", "[0x42]", "Invalid JSON number"),
-		input(74, "n_number_Inf", "[Inf]", "Unrecognized syntax"),
+		input(74, "n_number_Inf", "[Inf]", "Unrecognized syntax", "NumberFormatException"),
 		input(75, "n_number_infinity", "[Infinity]", "Unrecognized syntax"),
 		input(76, "n_number_invalid+-", "[0e+-1]", "NumberFormatException"),
 		input(77, "n_number_invalid-negative-real", "[-123.123foo]", "Expected ',' or ']'"),
@@ -360,7 +360,11 @@ class JsonParserEdgeCases_Test extends TestBase {
 	}
 
 	private static Input input(Integer testNum, String name, String jsonInput, String errorText) {
-		return new Input(testNum, name, jsonInput, errorText);
+		return input(testNum, name, jsonInput, errorText, errorText);
+	}
+
+	private static Input input(Integer testNum, String name, String jsonInput, String errorText, String laxErrorText) {
+		return new Input(testNum, name, jsonInput, errorText, laxErrorText);
 	}
 
 	public static class Input {
@@ -368,15 +372,17 @@ class JsonParserEdgeCases_Test extends TestBase {
 		public final String name;
 		public final String jsonInput;
 		public final String errorText;
+		public final String laxErrorText;
 		public final Object json;
 		public final String jsonReadable;
 		public final char expected;
 
-		public Input(Integer testNum, String name, String jsonInput, String errorText) {
+		public Input(Integer testNum, String name, String jsonInput, String errorText, String laxErrorText) {
 			this.testNum = testNum;
 			this.name = name;
 			this.jsonInput = jsonInput;
 			this.errorText = errorText;
+			this.laxErrorText = laxErrorText;
 			this.json = name.charAt(1) == 'x' ? fromSpacedHex(jsonInput) : jsonInput;
 			this.jsonReadable = name.charAt(1) == 'x' ? fromSpacedHexToUTF8(jsonInput) : jsonInput;
 			this.expected = name.charAt(0);
@@ -399,7 +405,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 		// 'n' tests should always fail.
 		} else if (input.expected == 'n') {
 			var p2 = p;
-			assertParseError(input, assertThrows(Throwable.class, () -> p2.read(input.json, Object.class), () -> "ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable));
+			assertParseError(input, assertThrows(Throwable.class, () -> p2.read(input.json, Object.class), () -> "ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable), input.errorText);
 
 		// 'i' tests may or may not fail, but should throw a ParseException and not kill the JVM.
 		} else if (input.expected == 'i') {
@@ -407,7 +413,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 			try {
 				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
-				assertParseError(input, t);
+				assertParseError(input, t, input.errorText);
 			}
 		}
 	}
@@ -431,7 +437,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 			try {
 				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
-				assertParseError(input, t);
+				assertParseError(input, t, input.laxErrorText);
 			}
 
 		// 'i' tests may or may not fail, but should throw a ParseException and not kill the JVM.
@@ -440,22 +446,22 @@ class JsonParserEdgeCases_Test extends TestBase {
 			try {
 				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
-				assertParseError(input, t);
+				assertParseError(input, t, input.laxErrorText);
 			}
 		}
 	}
 
 	/**
 	 * Verifies a Throwable caught while parsing a 'n'/'i' input is an expected {@link ParseException} or
-	 * {@link IOException} (optionally matching {@code input.errorText}), failing for any other type.
+	 * {@link IOException} (optionally matching {@code errorText}), failing for any other type.
 	 */
-	private static void assertParseError(Input input, Throwable t) {
+	private static void assertParseError(Input input, Throwable t, String errorText) {
 		if (t instanceof ParseException t2) {
-			if (input.errorText != null)
-				assertTrue(t2.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", input.errorText, input.name, input.jsonReadable, t2.getRootCause().getMessage()));
+			if (errorText != null)
+				assertTrue(t2.getRootCause().getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", errorText, input.name, input.jsonReadable, t2.getRootCause().getMessage()));
 		} else if (t instanceof IOException t2) {
-			if (input.errorText != null)
-				assertTrue(t2.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", input.errorText, input.name, input.jsonReadable, t2.getMessage()));
+			if (errorText != null)
+				assertTrue(t2.getMessage().contains(errorText), fs("Got IOException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", errorText, input.name, input.jsonReadable, t2.getMessage()));
 		} else {
 			fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + cn(t) + "," + t.getLocalizedMessage());
 		}

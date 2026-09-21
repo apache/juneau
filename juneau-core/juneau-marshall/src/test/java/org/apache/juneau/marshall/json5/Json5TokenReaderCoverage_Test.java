@@ -36,9 +36,9 @@ import org.junit.jupiter.api.*;
  * <p>
  * Targets the JSON5-specific relaxations layered on top of {@link JsonTokenReader}: single-quoted
  * strings (with the full escape matrix), bare/unquoted identifiers as both values and field names,
- * trailing commas, missing values emitted as {@code VALUE_NULL}, and the dialect-specific
- * comma/end dispatch overrides.  Also pins which JSON5-spec number forms are intentionally NOT
- * implemented by this cursor.
+ * trailing commas, missing values emitted as {@code VALUE_NULL}, JSON5 number forms (leading
+ * {@code +}, leading/trailing decimal, hexadecimal, {@code Infinity}/{@code NaN}), and string
+ * line-continuation.
  */
 class Json5TokenReaderCoverage_Test extends TestBase {
 
@@ -81,6 +81,17 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 					assertEquals(e, r.getString());
 				}
 				assertEquals(TokenType.END_ARRAY, r.next());
+			}
+		}
+
+		@Test void a02b_lineContinuation() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("'foo\\\nbar'")) {
+				assertEquals(TokenType.VALUE_STRING, r.next());
+				assertEquals("foobar", r.getString());
+			}
+			try (var r = Json5Parser.DEFAULT.readTokens("\"foo\\\nbar\"")) {
+				assertEquals(TokenType.VALUE_STRING, r.next());
+				assertEquals("foobar", r.getString());
 			}
 		}
 
@@ -302,33 +313,58 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// F. Intentionally-unsupported JSON5 number forms
+	// F. JSON5 number forms
 	// =================================================================================
 
-	@Nested class F_unsupportedNumberForms extends TestBase {
+	@Nested class F_json5NumberForms extends TestBase {
 
-		@Test void f01_infinityAndNaNAreBareStrings() throws Exception {
-			// This cursor does not implement JSON5 numeric Infinity/NaN; bare-words become strings.
-			try (var r = Json5Parser.DEFAULT.readTokens("[Infinity, NaN]")) {
+		@Test void f01_infinityAndNaNAreNumbers() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("[Infinity, NaN, -Infinity]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
-				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("Infinity", r.getString());
-				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("NaN", r.getString());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(Double.POSITIVE_INFINITY, r.getNumber().doubleValue());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertTrue(Double.isNaN(r.getNumber().doubleValue()));
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(Double.NEGATIVE_INFINITY, r.getNumber().doubleValue());
 				assertEquals(TokenType.END_ARRAY, r.next());
 			}
 		}
 
-		@Test void f02_leadingPlusRejected() {
-			// '+' is neither a bare-start nor a JSON number-start, so it is an unexpected char.
-			assertThrowsWithMessage(ParseException.class, "Unexpected character", () -> drain("[+1]"));
+		@Test void f02_leadingPlus() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("[+1]")) {
+				assertEquals(TokenType.START_ARRAY, r.next());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(1, r.getNumber().intValue());
+				assertEquals(TokenType.END_ARRAY, r.next());
+			}
 		}
 
-		@Test void f03_leadingDecimalPointRejected() {
-			assertThrowsWithMessage(ParseException.class, "Unexpected character", () -> drain("[.5]"));
+		@Test void f03_leadingDecimalPoint() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("[.5]")) {
+				assertEquals(TokenType.START_ARRAY, r.next());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(0.5, r.getNumber().doubleValue());
+				assertEquals(TokenType.END_ARRAY, r.next());
+			}
 		}
 
-		@Test void f04_hexNumberRejected() {
-			// '0' starts a number lexeme, the 'x' fails JSON number validation.
-			assertThrowsWithMessage(ParseException.class, "Invalid JSON number", () -> drain("[0x1F]"));
+		@Test void f04_hexNumber() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("[0x1F]")) {
+				assertEquals(TokenType.START_ARRAY, r.next());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(0x1F, r.getNumber().intValue());
+				assertEquals(TokenType.END_ARRAY, r.next());
+			}
+		}
+
+		@Test void f05_trailingDecimalPoint() throws Exception {
+			try (var r = Json5Parser.DEFAULT.readTokens("[5.]")) {
+				assertEquals(TokenType.START_ARRAY, r.next());
+				assertEquals(TokenType.VALUE_NUMBER, r.next());
+				assertEquals(5.0, r.getNumber().doubleValue());
+				assertEquals(TokenType.END_ARRAY, r.next());
+			}
 		}
 	}
 

@@ -171,6 +171,16 @@ public class Json5ParserSession extends JsonParserSession {
 						}
 						break;
 					}
+					case '\n':
+						r.delete();
+						break;
+					case '\r':
+						r.delete();
+						if (r.peek() == '\n') {
+							r.read();
+							r.delete();
+						}
+						break;
 					default:
 						throw new ParseException(this, "Invalid escape sequence in string.");
 				}
@@ -211,8 +221,87 @@ public class Json5ParserSession extends JsonParserSession {
 	}
 
 	@Override
+	protected boolean isNumberStartChar(int c) {
+		return super.isNumberStartChar(c) || c == '+' || c == 'I' || c == 'N';
+	}
+
+	@Override
+	protected Number readNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
+		int c = r.peek();
+		if (c == '\'' || c == '"')
+			return parseJson5Number(readString(r), type);
+		return parseJson5Number(readJson5NumberLexeme(r), type);
+	}
+
+	@Override
 	protected Number readNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
-		return StringUtils.parseNumber(s, type);
+		return parseJson5Number(s, type);
+	}
+
+	/**
+	 * Collects a JSON5 number lexeme: optional sign, then {@code Infinity}/{@code NaN}, {@code 0x}
+	 * hex, or a decimal (including leading/trailing {@code .}).
+	 *
+	 * @param r The parser reader, positioned at the first number character.
+	 * @return The number lexeme.
+	 * @throws IOException If a problem occurred reading from the underlying stream.
+	 */
+	static String readJson5NumberLexeme(ParserReader r) throws IOException {
+		r.mark();
+		var c = r.peek();
+		if (c == '+' || c == '-') {
+			r.read();
+			c = r.peek();
+		}
+		if (c == 'I' || c == 'N') {
+			while (true) {
+				c = r.read();
+				if (c == -1 || ! Character.isLetter(c)) {
+					if (c != -1)
+						r.unread();
+					break;
+				}
+			}
+			return r.getMarked();
+		}
+		while (true) {
+			c = r.read();
+			if (c == -1 || ! StringUtils.isNumberChar((char)c)) {
+				if (c != -1)
+					r.unread();
+				break;
+			}
+		}
+		return r.getMarked();
+	}
+
+	/**
+	 * Parses a JSON5 number lexeme (hex, signed {@code Infinity}/{@code NaN}, leading {@code +},
+	 * leading/trailing decimal point).
+	 *
+	 * @param s The lexeme. Must not be <jk>null</jk>.
+	 * @param type The target number type, or <jk>null</jk> / {@link Number} for auto-detect.
+	 * @return The parsed number.
+	 * @throws ParseException If the lexeme is not a JSON5 number.
+	 */
+	static Number parseJson5Number(String s, Class<? extends Number> type) throws ParseException {
+		if (s == null)
+			throw new ParseException("Invalid JSON5 number: '%s'", s);
+		// Empty quoted strings coerce to 0 via StringUtils.parseNumber (existing Json5 bean databind).
+		if (! s.isEmpty()) {
+			var signed = s.charAt(0) == '+' ? s.substring(1) : s;
+			if (signed.equals("Infinity"))
+				return Double.POSITIVE_INFINITY;
+			if (signed.equals("-Infinity"))
+				return Double.NEGATIVE_INFINITY;
+			if (signed.equals("NaN") || signed.equals("-NaN"))
+				return Double.NaN;
+		}
+		try {
+			return StringUtils.parseNumber(s, type);
+		} catch (NumberFormatException e) {
+			throw new ParseException(e);
+		}
 	}
 
 	@Override
@@ -250,6 +339,11 @@ public class Json5ParserSession extends JsonParserSession {
 	@Override
 	protected void onMissingValue() {
 		// JSON5 allows missing values, returning null.
+	}
+
+	@Override
+	protected boolean allowsTrailingComma() {
+		return true;
 	}
 
 	@Override

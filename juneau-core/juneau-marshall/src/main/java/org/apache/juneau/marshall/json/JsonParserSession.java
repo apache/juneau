@@ -199,7 +199,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				o = readString(r);
 				if (sType.isChar())
 					o = parseCharacter(o);
-			} else if (c >= '0' && c <= '9' || c == '-' || c == '.') {
+			} else if (isNumberStartChar(c)) {
 				o = readNumber(r, null);
 			} else if (c == 't') {
 				readKeyword("true", r);
@@ -454,6 +454,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else if (c == ']') {
+					if (allowsTrailingComma())
+						return l;
 					break;
 				} else if (c != -1) {
 					l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
@@ -536,6 +538,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				}
 			} else if (state == S6) {
 				if (c == '}') {
+					if (allowsTrailingComma())
+						return m;
 					break;
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
@@ -888,6 +892,20 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified character can start a number value.
+	 *
+	 * <p>
+	 * JSON numbers start with a digit, <c>-</c>, or <c>.</c>.  JSON5 subclasses also accept
+	 * <c>+</c>, <c>I</c> (<c>Infinity</c>), and <c>N</c> (<c>NaN</c>).
+	 *
+	 * @param c The next non-whitespace character.
+	 * @return <jk>true</jk> if a number lexeme should be read from this character.
+	 */
+	protected boolean isNumberStartChar(int c) {
+		return (c >= '0' && c <= '9') || c == '-' || c == '.';
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace or '/'.
 	 *
 	 * @param cp The codepoint.
@@ -938,6 +956,19 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 */
 	protected void onMissingValue() throws ParseException {
 		throw new ParseException(this, "Missing value detected.");
+	}
+
+	/**
+	 * Returns whether trailing commas are accepted before <c>]</c> / <c>}</c> in the databind path.
+	 *
+	 * <p>
+	 * Default returns <jk>false</jk> (strict RFC-8259 JSON).  {@code Json5ParserSession} overrides
+	 * this to <jk>true</jk> for the JSON5 dialect.
+	 *
+	 * @return <jk>true</jk> if a trailing comma should be silently accepted.
+	 */
+	protected boolean allowsTrailingComma() {
+		return false;
 	}
 
 	/**

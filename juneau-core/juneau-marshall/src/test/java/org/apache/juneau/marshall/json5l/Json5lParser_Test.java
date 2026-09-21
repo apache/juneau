@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
@@ -83,6 +84,17 @@ class Json5lParser_Test extends TestBase {
 	}
 
 	@Test
+	void b04_trailingCommaArrayLines() throws Exception {
+		var in = "[1,]\n[2,3,]";
+		var list = (List<JsonList>) Json5l.to(in, List.class, JsonList.class);
+		assertEquals(1, list.get(0).size());
+		assertEquals(1, list.get(0).getInt(0));
+		assertEquals(2, list.get(1).size());
+		assertEquals(2, list.get(1).getInt(0));
+		assertEquals(3, list.get(1).getInt(1));
+	}
+
+	@Test
 	void b03_mixedStrictAndSugarLines() throws Exception {
 		var in = "{name:'Alice',age:30}\n{\"name\":\"Bob\",\"age\":25}";
 		var list = (List<Person>) Json5l.to(in, List.class, Person.class);
@@ -126,6 +138,21 @@ class Json5lParser_Test extends TestBase {
 		var in = "// nothing but a comment first\n{name:'Alice',age:30}";
 		var p = Json5l.to(in, Person.class);
 		assertBean(p, "name,age", "Alice,30");
+	}
+
+	@Test
+	void c06_embeddedCommentsOnDataLine() throws Exception {
+		var in = "{name:'Alice' /* inline */,age:30}\n{/* lead */name:'Bob',age:25} // trail";
+		var list = (List<Person>) Json5l.to(in, List.class, Person.class);
+		assertBean(list, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
+	}
+
+	@Test
+	void c07_commentMarkersInsideStringsStayData() throws Exception {
+		var in = "{name:'http://x /* not a comment */ // still data',age:1}";
+		var p = Json5l.to(in, Person.class);
+		assertEquals("http://x /* not a comment */ // still data", p.name);
+		assertEquals(1, p.age);
 	}
 
 	// =================================================================================
