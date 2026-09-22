@@ -28,7 +28,6 @@ import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
-import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -114,7 +113,8 @@ class ReleaseRestTest {
 	 * no {@code table-slot.js} and no {@code /view} envelope fetch. Asserts the served page carries {@code juneau-icons.js}
 	 * ordered before {@code juneau-ribbon.js} (the ribbon resolves glyphs from the icon registry as it builds its
 	 * buttons, so the registry must already exist), the page-cards runtime + sidecar mount, the shared chrome nav with
-	 * Releases current, CSRF wiring, the title, and the Detail View populator.
+	 * Releases current, the title, and the Detail View populator. (CSRF markup is now the <@console> shell's
+	 * boundary-filter contract, absent under MockRestClient — see the assertion below.)
 	 */
 	@Test
 	void b01_pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
@@ -137,8 +137,12 @@ class ReleaseRestTest {
 				assertFalse(body.contains("juneau-view:releases"), "ViewTable sidecar leaked: " + body);
 				assertFalse(body.contains("data-juneau-view"), "Marker table leaked: " + body);
 				assertTrue(body.contains("juneau-regions.js"), "Missing regions runtime: " + body);
-				assertTrue(body.contains("data-juneau-csrf="), body);
-				assertTrue(body.contains("data-juneau-csrf-header=\"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
+				// CSRF is now Juneau's <@console> contract: the shell emits the csrf-token meta and the
+				// data-juneau-csrf body attributes only when the LoopbackBoundaryFilter published a token.
+				// MockRestClient dispatches straight at the servlet with no boundary filter, so no token is
+				// published and no CSRF markup is emitted here.
+				assertFalse(body.contains("data-juneau-csrf="),
+					"MockRestClient runs without the boundary filter, so <@console> must emit no CSRF attrs: " + body);
 				// Chrome now authors the primary nav once as an <@navigation> landmark; the Releases node is current.
 				assertTrue(body.contains("class=\"juneau-page-nav\""), "Chrome must render the shared page nav: " + body);
 				assertTrue(body.contains("aria-current=\"page\""), "Releases nav node must be current: " + body);

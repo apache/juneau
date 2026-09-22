@@ -34,13 +34,17 @@ class ConsoleAssetsRestTest {
 	}
 
 	@Test
-	void a01_chromeCssEmitsMixinFooterContent() throws Exception {
+	void a01_chromeCssBakesNoFooterPseudoElement() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", ConsoleChromeMixin.CHROME_CSS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("body::after{content:\"" + ConsoleAssetsRest.FOOTER + "\";}"),
-					"mixin footer must be live on the SNAPSHOT, not reflection: " + body);
+				// The bare mixin no longer bakes the footer copy into the stylesheet via a body::after rule; the
+				// footer is authored declaratively as real HTML in base.ftlh's <@footer> slot instead.
+				assertFalse(body.contains("body::after{content:"),
+					"bare mixin must not inject a footer pseudo-element: " + body);
+				assertFalse(body.contains("loopback tool for cutting Apache Juneau releases"),
+					"footer copy must live in the <@footer> HTML, not chrome.css: " + body);
 			}
 		}
 	}

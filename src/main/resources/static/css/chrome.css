@@ -27,7 +27,8 @@
    DataTables-chrome integration, credential cards, the release-detail list
    grid, two app-only tag values, and Setup-tab probe styling. Every
    var(--jc-*) reference below resolves against the tokens the shipped chrome
-   response appends (Theme.LIGHT_RED, overridden by ReleaseManagerTheme).
+   response appends (the stock light-red pack, with the danger-pill triad
+   overridden by base.ftlh's nested <@token> declarations).
    ========================================================================== */
 
 /* Page Tabs: accent-on-top + wash fill are Juneau stock (WORK-J0543). Do not override

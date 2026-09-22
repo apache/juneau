@@ -53,11 +53,11 @@ class AdminRestTest {
 	void b01_baseTemplateNoLongerWiresTheAdminNavLinkOrActiveTabBranches() throws IOException {
 		var base = readClasspathResource("/templates/base.ftlh");
 		assertFalse(base.contains("href=\"/rest/admin\""), "Admin nav link must be gone: " + base);
-		// The chrome is now a single <@page> shell: no activeTab if-blocks and no <#macro content>/<@content> at all.
+		// The chrome is now a thin <@console> shell: no activeTab if-blocks and no <#macro content>/<@content> at all.
 		assertFalse(base.contains("activeTab"), "activeTab conditional wiring must be gone: " + base);
-		assertFalse(base.contains("<@content"), "The content macro must be gone (replaced by ${pageBody}): " + base);
+		assertFalse(base.contains("<@content"), "The content macro must be gone (replaced by <@main/>): " + base);
 		assertFalse(base.contains("<#macro content"), "The content macro must be gone: " + base);
-		assertTrue(base.contains("${pageBody}"), "Chrome must interpolate the captured ${pageBody}: " + base);
+		assertTrue(base.contains("<@main/>"), "Chrome must emit the captured page body via <@main/>: " + base);
 		assertTrue(base.contains("href=\"/rest/setup\""), "Missing Setup nav link: " + base);
 		assertTrue(base.contains("href=\"/rest/releases\""), "Missing Releases nav link: " + base);
 		assertTrue(base.contains("href=\"/rest/runs\""), "Missing New Release nav link: " + base);

@@ -90,8 +90,10 @@ class SetupRestTest {
 				assertFalse(body.contains("juneau-views.css"),
 					"Setup must not pull the views toolkit just for Page Tabs: " + body);
 				assertTrue(body.contains("/juneau-console/chrome.css"), body);
-				assertFalse(body.contains("<footer"), "footer is mixin body::after, not HTML: " + body);
-				assertFalse(body.contains("jc-page-footer"), "footer is mixin body::after, not HTML: " + body);
+				assertTrue(body.contains("<footer class=\"jc-page-footer\""),
+					"footer is now real HTML from the <@footer> slot: " + body);
+				assertTrue(body.contains("loopback tool for cutting Apache Juneau releases"),
+					"footer copy must render in the <@footer> HTML: " + body);
 				assertTrue(body.contains("data-probe-id=\"checkout\""), body);
 				assertTrue(body.contains("data-probe-id=\"github\""), body);
 				assertTrue(body.contains("/js/rm-setup.js"), body);

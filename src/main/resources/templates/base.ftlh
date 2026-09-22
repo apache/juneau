@@ -13,47 +13,43 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
--->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Apache Juneau · Release Manager</title>
-    <meta name="csrf-token" content="${csrfToken}">
+  Thin document shell: <@console> emits the whole <!DOCTYPE html> document, its head cascade (including the CSRF
+  meta and body attributes when the LoopbackBoundaryFilter published a token), and its body scaffold.  This chrome
+  authors only the release-manager-specific pieces: the oakleaf mark (icon=) / tab icon (favicon=), the danger-pill
+  token overrides on the stock light-red pack, the app-only head/tail assets, the header actions, the nav tree, the
+  main slot, and the footer.  Child templates stay <@page> calls.
+--><@console theme="light-red" icon="/img/oakleaf.svg" favicon="/img/oakleaf.svg" brand="Apache Juneau · Release Manager">
+<@theme name="light-red">
+    <#-- The app's pre-existing danger palette (the same colors .rm-mode-banner.live / .tag.armed / .pill.invalid
+         already used).  Overrides the stock light-red pack's Bootstrap-maroon red so the FAILED status/stage pill
+         resolves through the token system without changing how it looks.  --jc-tag-red-* is kept as an alias-free
+         mirror for the .jc-badge[danger] / busy-avatar-status consumers that still read that triad. -->
+    <@token name="--jc-pill-red-bg" value="#fdeceb"/>
+    <@token name="--jc-pill-red-text" value="#c23934"/>
+    <@token name="--jc-pill-red-border" value="#f3c6c2"/>
+    <@token name="--jc-tag-red-bg" value="#fdeceb"/>
+    <@token name="--jc-tag-red-text" value="#c23934"/>
+    <@token name="--jc-tag-red-border" value="#f3c6c2"/>
+</@theme>
+<@head>
     <script src="/js/csrf.js"></script>
-    <link rel="icon" type="image/svg+xml" href="/img/oakleaf.svg">
-    <@theme name="light-red"/>
-    <link rel="stylesheet" href="${pageThemeCss}">
-    <link rel="stylesheet" href="/juneau-console/chrome.css">
-    <#list pageCss as href><link rel="stylesheet" href="${href}"></#list>
-    <#list pageToolkitCss as href><link rel="stylesheet" href="${href}" data-toolkit-css></#list>
     <link rel="stylesheet" href="/css/chrome.css">
-</head>
-<body data-juneau-csrf="${csrfToken}" data-juneau-csrf-header="${csrfHeader}">
-    <header class="jc-header">
-        <div class="jc-brand">
-            <div class="jc-logo" role="img" aria-label="Apache Juneau"></div>
-            <div class="jc-brand-title">Apache Juneau <span class="jc-brand-sep">&middot;</span> Release Manager</div>
-        </div>
-        <div class="jc-header-actions">
-            <button class="jc-icon-btn" title="Help" aria-label="Help">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16.5" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">?</text></svg>
-            </button>
-            <div class="jc-avatar" title="Release Manager">RM</div>
-        </div>
-    </header>
-
-    <@navigation>
-        <@node id="setup" label="Setup" href="/rest/setup"/>
-        <@node id="releases" label="Releases" href="/rest/releases"/>
-        <@node id="new" label="New Release" href="/rest/runs"/>
-    </@navigation>
-
-    <main class="jc-main">${pageBody}</main>
-
-    <#list pageToolkitJs as src><script src="${src}" data-toolkit-js></script></#list>
-    <#list pageInit as src><script src="${src}"></script></#list>
+</@head>
+<@actions>
+    <button class="jc-icon-btn" title="Help" aria-label="Help">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16.5" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">?</text></svg>
+    </button>
+    <div class="jc-avatar" title="Release Manager">RM</div>
+</@actions>
+<@navigation>
+    <@node id="setup" label="Setup" href="/rest/setup"/>
+    <@node id="releases" label="Releases" href="/rest/releases"/>
+    <@node id="new" label="New Release" href="/rest/runs"/>
+</@navigation>
+<@main/>
+<@footer>Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.</@footer>
+<@scripts>
     <script src="/js/renderers.js"></script>
-</body>
-</html>
+</@scripts>
+</@console>

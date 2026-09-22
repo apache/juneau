@@ -29,9 +29,9 @@
         running→blue, skipped/awaiting-vote→neutral). `pending` and `failed`
         are intentionally NOT redefined here: `pending` already exists in
         chrome.css's amber group, and `failed` in its red group — the red
-        triad is overridden in ReleaseManagerTheme to this app's own danger
-        palette (matching .tag.armed/.pill.invalid) rather than the framework's
-        Bootstrap-maroon default, so both are reused as-is.
+        triad is overridden by base.ftlh's nested <@token> declarations to this
+        app's own danger palette (matching .tag.armed/.pill.invalid) rather than
+        the framework's Bootstrap-maroon default, so both are reused as-is.
      3. Per-step console styling (shared by all 3 options).
      4. Layout-specific rules for option A (rail), B (stepper), C (datatable),
         clearly namespaced/commented per section.
