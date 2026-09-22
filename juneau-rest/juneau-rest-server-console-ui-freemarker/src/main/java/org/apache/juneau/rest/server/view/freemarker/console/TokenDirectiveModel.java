@@ -58,8 +58,7 @@ public final class TokenDirectiveModel implements TemplateDirectiveModel {
 
 	@Override
 	@SuppressWarnings({
-		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
-		"deprecation" // Theme.Builder.token is this directive's own leaf channel; the deprecation steers CONSUMER Java authoring to <@token>, which IS this directive.
+		"unchecked" // FreeMarker's raw params Map is String-keyed by contract.
 	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {

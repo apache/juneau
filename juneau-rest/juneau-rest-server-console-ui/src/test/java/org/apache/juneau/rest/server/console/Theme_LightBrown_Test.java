@@ -25,8 +25,8 @@ import org.junit.jupiter.api.*;
  * {@link Theme#LIGHT_BROWN} &mdash; the first stock token-{@link Theme} beyond {@link Theme#OPEN}.
  *
  * <p>
- * The load-bearing guard is (a01): because {@link Theme#LIGHT_BROWN} is authored via
- * {@link Theme#deriveFrom(String, Theme) deriveFrom}({@link Theme#OPEN}), its token <i>key</i> set must be
+ * The load-bearing guard is (a01): because {@link Theme#LIGHT_BROWN} is seeded from {@link Theme#OPEN},
+ * its token <i>key</i> set must be
  * provably identical to {@link Theme#OPEN}'s, which is what protects the {@code chrome.css} bidirectional
  * cross-check ({@code ConsoleChromeMixin_Test}) for this theme too.
  */

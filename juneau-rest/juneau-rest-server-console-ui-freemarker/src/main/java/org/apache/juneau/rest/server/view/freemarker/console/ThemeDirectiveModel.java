@@ -39,8 +39,8 @@ import freemarker.template.*;
  *
  * <h5 class='section'>Custom tokens (the FTL {@link ThemePack} construction path):</h5>
  * <p>
- * The named stock palette is the <b>seed</b>: this directive opens a {@link ThemeBuildContext} holding
- * {@link Theme#deriveFrom(String, Theme) Theme.deriveFrom(name, stockTheme)} (leaf channel) and
+ * The named stock palette is the <b>seed</b>: this directive opens a {@link ThemeBuildContext} holding a
+ * {@link org.apache.juneau.rest.server.console.Theme.Builder} copied from the named stock palette (leaf channel) and
  * {@link ThemePack#create(String) ThemePack.create(name)} (alias channel), renders the nested body so each
  * {@code <@token>} folds its override into the matching builder, then assembles the pack. When the body declared at
  * least one token, this directive registers the constructed pack's override block (leaves escaped + aliases
@@ -73,8 +73,7 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 
 	@Override
 	@SuppressWarnings({
-		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
-		"deprecation" // Theme.deriveFrom is the FTL construction path's own seeding primitive; the deprecation steers CONSUMER Java authoring to this directive, not this directive away from the builder.
+		"unchecked" // FreeMarker's raw params Map is String-keyed by contract.
 	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {
@@ -96,7 +95,11 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 
 		// Capture any nested <@token> overrides against the stock-palette seed.  The context is cleared afterward so a
 		// stray <@token> outside a <@theme> (e.g. in a sibling directive's body) fails its own "must be nested" guard.
-		var ctx = new ThemeBuildContext(name, Theme.deriveFrom(name, ConsoleChromeMixin.stockTheme(name)), ThemePack.create(name));
+		var seed = ConsoleChromeMixin.stockTheme(name);
+		var themeBuilder = Theme.create(name);
+		for (var e : seed.getTokens().entrySet())
+			themeBuilder.token(e.getKey(), e.getValue());
+		var ctx = new ThemeBuildContext(name, themeBuilder, ThemePack.create(name));
 		env.setCustomState(ThemeBuildContext.KEY, ctx);
 		try {
 			if (body != null)

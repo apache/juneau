@@ -95,16 +95,16 @@ import java.util.*;
  * <h5 class='section'>Assets:</h5>
  * <p>
  * {@link Builder#logo(String)} / {@link Builder#pageBackgroundImage(String)} carry classpath image paths through
- * the same fail-closed validation {@code ConsoleChromeMixin.Builder.logo(String)} applies. They are honoured
- * <b>only</b> when the pack is supplied through {@code ConsoleChromeMixin.Builder.pack(ThemePack)} &mdash; see
- * that method's javadoc for the documented limitation, and {@code ConsoleChromeMixin.Builder.logo(String)} for
- * which one wins.
+ * the same fail-closed validation {@link ConsoleChromeMixin#validateAssetResource(String, String)} applies. They
+ * are honoured <b>only</b> when the pack is supplied through {@code ConsoleChromeMixin.Builder.pack(ThemePack)}
+ * &mdash; see that method's javadoc for the documented limitation. An explicit mixin
+ * {@link ConsoleChromeMixin.Builder#pageBackgroundImage(String)} always wins over the pack's page background.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	ThemePack <jv>corporate</jv> = ThemePack.<jsm>create</jsm>(<js>"corporate"</js>)
  * 		.theme(
- * 			Theme.<jsm>deriveFrom</jsm>(<js>"corporate"</js>, Theme.<jsf>OPEN</jsf>)
+ * 			Theme.<jsm>create</jsm>(<js>"corporate"</js>)
  * 				.token(<js>"--jc-accent"</js>, <js>"#b45309"</js>)
  * 				.token(<js>"--jc-accent-wash"</js>, <js>"rgba(180,83,9,0.1)"</js>)
  * 				.build()
@@ -261,7 +261,7 @@ public final class ThemePack {
 		 * @return This object.
 		 * @throws IllegalArgumentException
 		 * 	If {@code value} is <jk>null</jk>, or if any of its token names is in the reserved chrome-scale
-		 * 	namespace (see {@code ConsoleChromeMixin.Builder.theme(Theme)}). {@link Theme} legitimately permits
+		 * 	namespace (see {@link ConsoleChromeMixin#rejectReservedChromeDeclaration(String, String)}). {@link Theme} legitimately permits
 		 * 	those names; the narrower rule lives at this layer and at the emission boundary, not in {@link Theme}.
 		 */
 		public Builder theme(Theme value) {
@@ -347,7 +347,7 @@ public final class ThemePack {
 		 *
 		 * @param value
 		 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/oakleaf.svg"}). Same
-		 * 	fail-closed validation as {@code ConsoleChromeMixin.Builder.logo(String)}: must exist on the classpath,
+		 * 	fail-closed validation as {@link ConsoleChromeMixin#validateAssetResource(String, String)}: must exist on the classpath,
 		 * 	contain no {@code ..} path segment or {@code %} character, and end in one of {@code .svg}/{@code .png}/
 		 * 	{@code .jpg}/{@code .jpeg}/{@code .webp}/{@code .gif}.
 		 * @return This object.

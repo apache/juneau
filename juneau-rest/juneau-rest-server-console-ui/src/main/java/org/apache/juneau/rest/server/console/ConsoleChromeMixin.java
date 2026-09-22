@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.util.*;
  * Five steps, in order, first match wins:
  * <ol>
  * 	<li><code>{@link Builder#pack(ThemePack) mixin.pack(...)}</code>
- * 	<li><code>{@link Builder#theme(Theme) mixin.theme(...)}</code>
+ * 	<li><code>{@link Builder#theme(String) mixin.theme(String)}</code> (a stock pack name)
  * 	<li>a {@link ThemePackSettings} {@code BeanStore} bean
  * 	<li>a {@link ThemeSettings} {@code BeanStore} bean
  * 	<li>{@link Theme#OPEN}
@@ -269,7 +269,6 @@ public class ConsoleChromeMixin {
 	private final ThemePack pack;
 	private final String logoResource;
 	private final String pageBackgroundResource;
-	private final String footer;
 
 	/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body, keyed by mount (see {@link #mountKey}). */
 	private final Map<String,byte[]> cachedBodies = new ConcurrentHashMap<>();
@@ -294,14 +293,13 @@ public class ConsoleChromeMixin {
 		this.cacheAssets = builder.cacheAssets;
 		this.theme = builder.theme;
 		this.pack = builder.pack;
-		// An explicitly configured asset wins; a builder-supplied pack's asset is the fallback.  Resolved here
-		// because these fields, and the content-hash cache-busters derived from them, are fixed at construction -
-		// which is also why a bean-supplied pack's assets cannot reach them.  See Builder.pack(ThemePack).
-		var packLogo = builder.pack == null ? null : builder.pack.getLogoResource();
-		this.logoResource = builder.logoResource != null ? builder.logoResource : packLogo;
+		// A builder-supplied pack's assets are resolved here because these fields, and the content-hash
+		// cache-busters derived from them, are fixed at construction - which is also why a bean-supplied pack's
+		// assets cannot reach them.  See Builder.pack(ThemePack). Header mark and footer copy are authored in the
+		// FTL {@code <@console>} shell ({@code icon=} / {@code <@footer>}), not on this builder.
+		this.logoResource = builder.pack == null ? null : builder.pack.getLogoResource();
 		var packBg = builder.pack == null ? null : builder.pack.getPageBackgroundResource();
 		this.pageBackgroundResource = builder.pageBackgroundResource != null ? builder.pageBackgroundResource : packBg;
-		this.footer = builder.footer;
 	}
 
 	/**
@@ -444,10 +442,10 @@ public class ConsoleChromeMixin {
 	 * Maps one of the {@link #BUILTIN_THEME_NAMES} stock names to its {@link Theme} constant.
 	 *
 	 * <p>
-	 * The single place the kebab-case stock name (as written on FTL {@code <@theme name="…">} / the deprecated
+	 * The single place the kebab-case stock name (as written on FTL {@code <@theme name="…">} / the
 	 * {@code theme(String)} builder) is resolved to its shipped {@link Theme} &mdash; so a downstream FTL
-	 * {@code ThemePack} construction path can seed {@code Theme.deriveFrom(name, stockTheme)} from the same palette
-	 * the served {@code juneau-theme-<name>.css} pack carries, without a second copy of the name&rarr;theme table.
+	 * {@code ThemePack} construction path can seed its leaf builder from the same palette the served
+	 * {@code juneau-theme-<name>.css} pack carries, without a second copy of the name&rarr;theme table.
 	 *
 	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.
 	 * @return The stock {@link Theme} for {@code name}.
@@ -490,11 +488,10 @@ public class ConsoleChromeMixin {
 	/**
 	 * Builds the response body: the static structural CSS, then Theme.OPEN's block, then the active pack's block (or,
 	 * if no pack is active, the active theme's override block if it differs from Theme.OPEN), then (if configured)
-	 * the logo/page-background asset override rules and the page-footer {@code body::after{content}} rule. Each override
-	 * rule's {@code ?v=<buildVersion>-<hash8>} cache-buster is content-sensitive (see
-	 * {@link ClasspathAssetCache#cacheBuster}, mirroring {@code ViewsMixin}) so a {@code -SNAPSHOT} rebuild of the
-	 * configured asset busts the browser cache without relying on {@code buildVersion} (stable across dev rebuilds)
-	 * alone.
+	 * the logo/page-background asset override rules. Each override rule's {@code ?v=<buildVersion>-<hash8>}
+	 * cache-buster is content-sensitive (see {@link ClasspathAssetCache#cacheBuster}, mirroring {@code ViewsMixin})
+	 * so a {@code -SNAPSHOT} rebuild of the configured asset busts the browser cache without relying on
+	 * {@code buildVersion} (stable across dev rebuilds) alone.
 	 */
 	private byte[] buildBody(RestRequest req) throws IOException {
 		buildCount.incrementAndGet();
@@ -524,8 +521,6 @@ public class ConsoleChromeMixin {
 			sb.append('\n').append(".jc-logo{background-image:url(\"").append(assetUrl(req, LOGO_ASSET_PATH, LOGO_ASSET_PATH_UNPREFIXED))
 				.append(ASSET_CACHE.cacheBuster(logoResource))
 				.append("\");}");
-		if (footer != null)
-			sb.append('\n').append("body::after{content:").append(CssValueEscaper.quotedString(footer)).append(";}");
 		return sb.toString().getBytes(StandardCharsets.UTF_8);
 	}
 
@@ -580,7 +575,7 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
-	 * Resolves the active theme via the documented precedence: builder-supplied {@code theme(Theme)} &gt;
+	 * Resolves the active theme via the documented precedence: builder-supplied {@code theme(String)} &gt;
 	 * {@link ThemeSettings} bean &gt; {@link Theme#OPEN}.
 	 *
 	 * <p>
@@ -713,8 +708,8 @@ public class ConsoleChromeMixin {
 	 * <p>
 	 * <b>Where it fires.</b> The harm is done at emission, not at construction, so this guard covers every channel
 	 * rather than just one: {@link ThemePack.Builder#alias(String, String)} and
-	 * {@link ThemePack.Builder#theme(Theme)} at pack-construction time, {@link Builder#theme(Theme)} at
-	 * mixin-construction time, and {@code rootBlock} / {@code packRootBlock} at emission.
+	 * {@link ThemePack.Builder#theme(Theme)} at pack-construction time, and {@code rootBlock} /
+	 * {@code packRootBlock} at emission.
 	 *
 	 * <p>
 	 * The four channels are <b>not</b> all closed at the same layer, and it is worth being precise about which
@@ -741,8 +736,8 @@ public class ConsoleChromeMixin {
 	 * {@code --jc-chrome-bg} (page-chrome grey that predates the ladder) and {@code --jc-chrome-icon} (idle
 	 * ribbon / paging glyph ink). Both are consumed by {@code chrome.css} and are legitimately overridable.
 	 * Without the exemption this guard would reject {@link Theme#OPEN}'s own token
-	 * set &mdash; and therefore every theme built with {@link Theme#deriveFrom(String, Theme)} seeded from
-	 * {@link Theme#OPEN}, which is the normal way to author a palette. The exemption is expressed against
+	 * set &mdash; and therefore every stock palette seeded from {@link Theme#OPEN}, which is the normal way
+	 * to author a palette. The exemption is expressed against
 	 * {@link Theme#OPEN} rather than as a hardcoded name list so it cannot drift: it needs no copy of the ladder's
 	 * names (which live in a module this one deliberately cannot see), it stays correct if a chrome-named leaf is
 	 * ever added to or removed from {@link Theme#OPEN}, and it fails <i>closed</i> for every new name &mdash; no
@@ -819,9 +814,7 @@ public class ConsoleChromeMixin {
 		boolean cacheAssets = true;
 		Theme theme;
 		ThemePack pack;
-		String logoResource;
 		String pageBackgroundResource;
-		String footer;
 
 		/**
 		 * Whether to cache the assembled response body after the first request (default <jk>true</jk>).
@@ -835,41 +828,11 @@ public class ConsoleChromeMixin {
 		}
 
 		/**
-		 * Explicitly sets the active theme, out-ranking every step below it in the precedence chain (see the class
-		 * javadoc's <i>Theme precedence</i> section) &mdash; including a {@link ThemePackSettings} bean.
-		 *
-		 * <p>
-		 * A theme set here is ignored outright if {@link #pack(ThemePack)} is also set; selection is
-		 * winner-takes-all, so the two are never merged.
-		 *
-		 * @param value The theme to use. Can be <jk>null</jk> to leave the theme unset.
-		 * @return This object.
-		 * @throws IllegalArgumentException
-		 * 	If {@code value} declares a reserved chrome-scale token name (see
-		 * 	{@link ConsoleChromeMixin#rejectReservedChromeDeclaration(String, String)}). A {@link Theme} may
-		 * 	legitimately carry such a name; what is rejected is <i>serving</i> it from this mixin, so the check sits
-		 * 	here rather than in {@link Theme}.
-		 * @deprecated Selecting a <b>stock</b> palette now goes through {@link #theme(String)} (the same names FTL
-		 * 	{@code <@theme name="…">} accepts); a <b>custom</b> palette is authored through the FTL {@code <@theme>} +
-		 * 	{@code <@token>} {@link ThemePack} construction path (or supplied as a {@link #pack(ThemePack)}). This
-		 * 	{@link Theme}-typed setter is deprecated wholesale because it cannot distinguish those two roles.
-		 */
-		@Deprecated
-		public Builder theme(Theme value) {
-			if (value != null)
-				for (var name : value.getTokens().keySet())
-					rejectReservedChromeDeclaration(name, "theme '" + value.getName() + "'");
-			this.theme = value;
-			return this;
-		}
-
-		/**
 		 * Selects one of the shipped stock palettes by name (the same names FTL {@code <@theme name="…">} accepts).
 		 *
 		 * <p>
-		 * The {@link Theme}-typed replacement for the deprecated {@link #theme(Theme)} when all that is wanted is a
-		 * stock palette. A custom palette is authored through the FTL {@code <@theme>} + {@code <@token>} path or
-		 * supplied as a {@link #pack(ThemePack)}.
+		 * A custom palette is authored through the FTL {@code <@theme>} + {@code <@token>} path or supplied as a
+		 * {@link #pack(ThemePack)}.
 		 *
 		 * @param stockName One of the {@link ConsoleChromeMixin#BUILTIN_THEME_NAMES}
 		 * 	({@code open}, {@code light-red}, {@code light-brown}, {@code red}, {@code gray}).
@@ -899,39 +862,14 @@ public class ConsoleChromeMixin {
 		 * cache-busters are already fixed &mdash; so <b>its assets are silently ignored</b> while its tokens and
 		 * aliases still apply. This is a deliberate, test-pinned limitation rather than an oversight: assets are
 		 * already a construction-time-only concern in this class (there is no settings bean for the logo either),
-		 * and an application that bundles its own logo is configuring this builder anyway. An explicit
-		 * {@link #logo(String)} / {@link #pageBackgroundImage(String)} always wins over the pack's.
+		 * and an application that bundles its own logo is configuring this builder via {@link #pack(ThemePack)}. An
+		 * explicit {@link #pageBackgroundImage(String)} always wins over the pack's.
 		 *
 		 * @param value The pack to use. Can be <jk>null</jk> to leave the pack unset.
 		 * @return This object.
 		 */
 		public Builder pack(ThemePack value) {
 			this.pack = value;
-			return this;
-		}
-
-		/**
-		 * Configures a themeable logo image, served at {@link #LOGO_ASSET_PATH} and overriding the default
-		 * {@code .jc-logo} background image in the emitted {@code chrome.css}.
-		 *
-		 * <p>
-		 * Wins over a {@link #pack(ThemePack) pack}'s own logo.
-		 *
-		 * @param value
-		 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/oakleaf.svg"}). Must exist
-		 * 	on the classpath, contain no {@code ..} path segment or {@code %} character, and end in one of
-		 * 	{@code .svg}/{@code .png}/{@code .jpg}/{@code .jpeg}/{@code .webp}/{@code .gif}.
-		 * @return This object.
-		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, empty, traversal-shaped, has an
-		 * 	unrecognized extension, or does not resolve to an existing classpath resource.
-		 * @deprecated The header mark is now supplied through the console document shell &mdash; the
-		 * 	{@code <@console icon="…">} attribute (and/or the {@code <@brand>} slot) &mdash; rather than baked into
-		 * 	the served {@code chrome.css}. The served/validated/cache-busted logo asset machinery stays available
-		 * 	through {@link #pack(ThemePack)} until this deprecation is deleted in a follow-on.
-		 */
-		@Deprecated
-		public Builder logo(String value) {
-			this.logoResource = validateAssetResource(value, "logo");
 			return this;
 		}
 
@@ -943,39 +881,15 @@ public class ConsoleChromeMixin {
 		 * Wins over a {@link #pack(ThemePack) pack}'s own page background.
 		 *
 		 * @param value
-		 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/topo-bg.png"}). Same
-		 * 	validation as {@link #logo(String)}.
+		 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/topo-bg.png"}). Must exist
+		 * 	on the classpath, contain no {@code ..} path segment or {@code %} character, and end in one of
+		 * 	{@code .svg}/{@code .png}/{@code .jpg}/{@code .jpeg}/{@code .webp}/{@code .gif}.
 		 * @return This object.
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, empty, traversal-shaped, has an
 		 * 	unrecognized extension, or does not resolve to an existing classpath resource.
 		 */
 		public Builder pageBackgroundImage(String value) {
 			this.pageBackgroundResource = validateAssetResource(value, "pageBackgroundImage");
-			return this;
-		}
-
-		/**
-		 * Sets a one-line page-footer string painted into the themed band below {@code .jc-main}.
-		 *
-		 * <p>
-		 * Emitted as {@code body::after{content:"..."}} on the served stylesheet, so every page that links
-		 * {@code chrome.css} shows the line without a template change. Apps that already emit
-		 * {@code <footer class="jc-page-footer">} (or the {@code .jc-footer} alias) should omit this setter
-		 * so the line is not painted twice.
-		 *
-		 * <p>
-		 * The value is a plain text line, not HTML. It is quoted as a CSS {@code content} string with
-		 * declaration-boundary breakouts escaped.
-		 *
-		 * @param value The footer line. Can be <jk>null</jk> or blank to leave the footer unset.
-		 * @return This object.
-		 * @deprecated The page footer is now the console {@code <@footer>} slot (the single footer), authored in the
-		 * 	document shell as plain text/HTML. Painting it here as a {@code body::after{content}} rule as well would
-		 * 	show the line twice.
-		 */
-		@Deprecated
-		public Builder footer(String value) {
-			this.footer = value == null || value.isBlank() ? null : value;
 			return this;
 		}
 

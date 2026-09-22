@@ -98,7 +98,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class MixinThemeWinsHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(THEME_A).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(THEME_A)).build(); }
 		@Bean public ThemeSettings theme() { return ThemeSettings.of(THEME_B); }
 	}
 
@@ -258,7 +258,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class PositivesHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(POSITIVES_THEME).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(POSITIVES_THEME)).build(); }
 	}
 
 	@Test void d01_valuePositives_surviveByteForByte_inServedResponse() throws Exception {
@@ -281,7 +281,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class SemicolonHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(SEMICOLON_THEME).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(SEMICOLON_THEME)).build(); }
 	}
 
 	@Test void d02_escaperIsWiredIntoHandler_semicolonInFontFamilyValue_isNeutralized() throws Exception {
@@ -304,16 +304,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	// e) url-sink gate, end-to-end
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"java:S5778" // End-to-end security gate: deliberately asserts the whole mixin-construction chain (theme(Theme.create(x).token(url).build())) rejects a url() bypass vector, so it stays robust if value validation is ever relocated between token()/build()/theme(); isolating a single call would drop that end-to-end coverage.
-	})
-	@Test void e01_bypassVector_throwsAtMixinConstructionTime_notSilentlySwallowed() {
+	@Test void e01_bypassVector_throwsAtToken_notSilentlySwallowed() {
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url(https://evil)").build()));
+			() -> Theme.create("x").token("--jc-page-bg", "url(https://evil)"));
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url (https://evil)").build()));
+			() -> Theme.create("x").token("--jc-page-bg", "url (https://evil)"));
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url/**/(https://evil)").build()));
+			() -> Theme.create("x").token("--jc-page-bg", "url/**/(https://evil)"));
 	}
 
 	@Test void e02_structuralLayer_colorTokensNeverSinkIntoUrlCapableProperty() throws IOException {
@@ -361,13 +358,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class MountXHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(THEME_A).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(THEME_A)).build(); }
 	}
 
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class MountYHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(THEME_B).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(THEME_B)).build(); }
 	}
 
 	@Test void f03_secondIndependentlyConfiguredMount_doesNotLeakFirstMountsCachedTheme() throws Exception {
@@ -380,7 +377,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// g) Builder validation: logo(...) / pageBackgroundImage(...)
+	// g) Builder validation: ThemePack.logo(...) / mixin pageBackgroundImage(...)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final String VALID_LOGO = "/testfiles/console/logo.svg";
@@ -395,12 +392,12 @@ class ConsoleChromeMixin_Test extends TestBase {
 		"/testfiles/console/nope.svg",             // resource does not exist
 	})
 	void g01_logo_invalidInputs_rejected(String value) {
-		var b = ConsoleChromeMixin.create();
+		var b = ThemePack.create("logo-cfg");
 		assertThrows(IllegalArgumentException.class, () -> b.logo(value));
 	}
 
 	@Test void g02_logo_validClasspathResource_accepted() {
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo(VALID_LOGO).build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo(VALID_LOGO).build());
 	}
 
 	@ParameterizedTest
@@ -422,11 +419,11 @@ class ConsoleChromeMixin_Test extends TestBase {
 
 	@Test void g05_allAllowlistedExtensions_accepted() {
 		// One fixture per allowlisted extension, content irrelevant - only the extension drives validation/content-type.
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.svg").build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.jpg").build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.jpeg").build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.webp").build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.gif").build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo("/testfiles/console/logo.svg").build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo("/testfiles/console/logo.jpg").build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo("/testfiles/console/logo.jpeg").build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo("/testfiles/console/logo.webp").build());
+		assertDoesNotThrow(() -> ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo("/testfiles/console/logo.gif").build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -442,7 +439,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	public static class AssetsHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public ConsoleChromeMixin console() {
-			return ConsoleChromeMixin.create().logo(VALID_LOGO).pageBackgroundImage(VALID_PAGE_BG).build();
+			return ConsoleChromeMixin.create().pack(assetPack(VALID_LOGO, VALID_PAGE_BG)).build();
 		}
 	}
 
@@ -475,7 +472,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class LogoOnlyHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().logo(VALID_LOGO).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(logoPack(VALID_LOGO)).build(); }
 	}
 
 	@Rest(mixins=ConsoleChromeMixin.class)
@@ -544,51 +541,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// i8) Page-footer line: mixin.footer(...) emits body::after{content}, blank unsets
+	// i8) Page-footer line: <@footer> is FTL-authored; chrome.css must not emit body::after
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest(mixins=ConsoleChromeMixin.class)
-	public static class FooterHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() {
-			return ConsoleChromeMixin.create().footer("Internal tooling.").build();
-		}
-	}
-
-	@Rest(mixins=ConsoleChromeMixin.class)
-	public static class FooterBlankHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() {
-			return ConsoleChromeMixin.create().footer("  ").build();
-		}
-	}
-
-	@Rest(mixins=ConsoleChromeMixin.class)
-	public static class FooterBreakoutHost extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() {
-			return ConsoleChromeMixin.create().footer("x\";}html{color:red").build();
-		}
-	}
-
-	@Test void i08_footerConfigured_chromeCssEmitsBodyAfterContent() throws Exception {
-		var body = bodyOf(MockRestClient.buildLax(FooterHost.class));
-		assertTrue(body.contains("body::after{content:\"Internal tooling.\";}"),
-			() -> "missing footer content rule, body:\n" + body);
-	}
-
-	@Test void i09_footerBlank_chromeCssOmitsBodyAfterContent() throws Exception {
-		var body = bodyOf(MockRestClient.buildLax(FooterBlankHost.class));
-		assertFalse(body.contains("body::after{content:"),
-			() -> "blank footer must not emit content, body:\n" + body);
-	}
-
-	@Test void i10_footerBreakout_isQuotedAndEscaped() throws Exception {
-		var body = bodyOf(MockRestClient.buildLax(FooterBreakoutHost.class));
-		assertTrue(body.contains("body::after{content:"), () -> "missing content rule, body:\n" + body);
-		assertFalse(body.contains("body::after{content:\"x\";}"), () -> "quote must not terminate the string, body:\n" + body);
-		assertFalse(body.contains("}html{color:red"), () -> "breakout must not survive, body:\n" + body);
-	}
 
 	@Test void i11_noFooterConfigured_chromeCssOmitsBodyAfterContent() throws Exception {
 		var body = bodyOf(MockRestClient.buildLax(NoAssetsHost.class));
@@ -605,12 +559,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertEquals(List.of(), ChromeCssScanner.scan(body), () -> "violations against assembled body:\n" + body);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // End-to-end security regression: deliberately asserts the whole mixin-construction chain rejects a url() production even with the assets feature present; isolating a single call would drop that end-to-end coverage.
-	})
 	@Test void j02_themeTokenPath_stillRejectsUrlProduction_evenWithAssetsFeaturePresent() {
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url(https://evil)").build()));
+			() -> Theme.create("x").token("--jc-page-bg", "url(https://evil)"));
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
@@ -1149,7 +1100,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(composed.endsWith(buster), () -> "composed url lost its cache-buster: " + composed);
 	}
 
-	static final ConsoleChromeMixin MOUNT_CACHE_MIXIN = ConsoleChromeMixin.create().logo(VALID_LOGO).build();
+	static final ConsoleChromeMixin MOUNT_CACHE_MIXIN = ConsoleChromeMixin.create().pack(logoPack(VALID_LOGO)).build();
 
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class MountCacheHost extends BasicRestServlet {
@@ -1224,7 +1175,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class RedOverrideHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(RED_OVERRIDE_THEME).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(RED_OVERRIDE_THEME)).build(); }
 	}
 
 	@Test void n05_redTriad_isThemeable_throughTheSameApiAsEveryOtherTriad() throws Exception {
@@ -1335,7 +1286,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class DerivedHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(DERIVED_THEME).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(DERIVED_THEME)).build(); }
 	}
 
 	@Test void p01_varReference_isResolvedToItsLiteral_inTheServedOverrideBlock() throws Exception {
@@ -1489,12 +1440,12 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var leafTheme = Theme.create("leaf").token(name, "#b45309").build();
 		assertDoesNotThrow(() -> ThemePack.create("corporate").alias(name, "var(--jc-accent)").theme(PACK_THEME).build());
 		assertDoesNotThrow(() -> ThemePack.create("corporate").theme(leafTheme).build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().theme(leafTheme).build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().pack(asPack(leafTheme)).build());
 	}
 
 	/**
 	 * The regression the {@link Theme#OPEN} exemption exists for, and the reason the reserved set cannot simply be
-	 * the whole {@code --jc-chrome-} prefix: {@link Theme#deriveFrom(String, Theme)} copies every one of
+	 * the whole {@code --jc-chrome-} prefix: seeding a builder from {@link Theme#OPEN} copies every one of
 	 * {@link Theme#OPEN}'s tokens, <b>including the shipped {@code --jc-chrome-bg} colour token</b>. An
 	 * unconditional prefix reservation would therefore reject the normal way to author a palette - on the pack
 	 * channel and the raw-theme channel alike - which is a functionality removal rather than a hole closed.
@@ -1503,12 +1454,12 @@ class ConsoleChromeMixin_Test extends TestBase {
 	 * The two construction-time channels only; the bean channels carry an already-built pack or theme, so they can
 	 * reach no guard these two have not already passed.
 	 */
-	@Test void r08_themeDerivedFromThemeOpen_isAcceptedByBothConstructionChannels() {
-		var derived = Theme.deriveFrom("corporate", Theme.OPEN).token("--jc-accent", "#b45309").build();
+	@Test void r08_themeSeededFromThemeOpen_isAcceptedByBothConstructionChannels() {
+		var derived = seedFrom("corporate", Theme.OPEN).token("--jc-accent", "#b45309").build();
 		assertTrue(derived.getTokens().containsKey("--jc-chrome-bg"),
-			"premise of this test: deriveFrom copies Theme.OPEN's chrome-named leaf");
+			"premise of this test: seeding from OPEN copies Theme.OPEN's chrome-named leaf");
 		assertDoesNotThrow(() -> ThemePack.create("corporate").theme(derived).build());
-		assertDoesNotThrow(() -> ConsoleChromeMixin.create().theme(derived).build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().pack(asPack(derived)).build());
 	}
 
 	/** The guard fires on the DECLARED name only: aliasing a pack token <i>to</i> a reserved ladder step is legal. */
@@ -1618,16 +1569,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> aliases.put("--jc-x", "var(--jc-accent)"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // End-to-end guard coverage: deliberately asserts the whole mixin-construction chain (theme(Theme.create(x).token(reserved).build())) rejects a reserved declaration, so it stays robust if the check is ever relocated between token()/build()/theme(); isolating a single call would drop that end-to-end coverage.
-	})
-	@Test void r17_rawThemeChannel_declaringAReservedChromeToken_isRejectedAtMixinConstruction() {
-		// The channel a pack-only guard would leave wide open. theme(...) is a first-class, documented, tested
-		// configuration path, so "everyone uses packs" is not an assumption the guard may rest on.
+	@Test void r17_packThemeChannel_declaringAReservedChromeToken_isRejectedAtPackConstruction() {
+		// Custom palettes now enter through ThemePack.theme(Theme). Theme itself permits --jc-chrome-* names;
+		// the reserved-namespace guard lives at the pack layer (and the emission boundary).
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-chrome-control-height", "26px").build()));
+			() -> ThemePack.create("x").theme(Theme.create("x").token("--jc-chrome-control-height", "26px").build()));
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-chrome-font-size-1", "0.9rem").build()));
+			() -> ThemePack.create("x").theme(Theme.create("x").token("--jc-chrome-font-size-1", "0.9rem").build()));
 	}
 
 	private static final Theme R18_CHROME_TOKEN_THEME = Theme.create("chrome-token").token("--jc-chrome-control-height", "26px").build();
@@ -1943,13 +1891,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class V01_PackWinsOverBuilderThemeHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(PACK_P).theme(THEME_A).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(PACK_P).theme("light-brown").build(); }
 	}
 
 	@Test void v01_builderPack_winsOverBuilderTheme_winnerTakesAll() throws Exception {
 		var body = bodyOf(MockRestClient.buildLax(V01_PackWinsOverBuilderThemeHost.class));
 		assertTrue(body.contains("--jc-accent:#dd0011;"), () -> "expected PACK_P to win, body:\n" + body);
-		assertFalse(body.contains("--jc-accent:#aa0000;"), () -> "the losing theme must contribute NOTHING, body:\n" + body);
+		assertFalse(body.contains("--jc-accent:#a9772f;"), () -> "the losing stock theme must contribute NOTHING, body:\n" + body);
 		assertEquals(2, countRootBlocks(body), () -> "a merge would have emitted a third block, body:\n" + body);
 	}
 
@@ -1971,16 +1919,17 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class V03_BuilderThemeVsPackBeanHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(THEME_A).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(THEME_A)).build(); }
 		@Bean public ThemePackSettings pack() { return ThemePackSettings.of(PACK_P); }
 	}
 
 	/**
 	 * <b>The mixed case</b> - the one configuration where axis-major and kind-major precedence disagree, and
-	 * therefore the only test that actually decides which chain is implemented. The mixin is hand-configured with a
-	 * theme and the application publishes a {@link ThemePackSettings} bean. Axis-major says the explicit builder
-	 * call wins outright, so the bean's pack must contribute neither its leaves nor its alias layer. Pinning only
-	 * the two clean cases would leave this free to flip silently.
+	 * therefore the only test that actually decides which chain is implemented. The mixin is hand-configured with an
+	 * explicit {@link ConsoleChromeMixin.Builder#pack(ThemePack)} and the application publishes a
+	 * {@link ThemePackSettings} bean. Axis-major says the explicit builder call wins outright, so the bean's pack
+	 * must contribute neither its leaves nor its alias layer. Pinning only the two clean cases would leave this
+	 * free to flip silently.
 	 */
 	@Test void v03_builderTheme_winsOverThemePackSettingsBean_theMixedCase() throws Exception {
 		var body = bodyOf(MockRestClient.buildLax(V03_BuilderThemeVsPackBeanHost.class));
@@ -2030,7 +1979,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Rest(mixins=ConsoleChromeMixin.class)
 	public static class W01_ThemeConfiguredHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(COMPAT_THEME).build(); }
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pack(asPack(COMPAT_THEME)).build(); }
 	}
 
 	@Rest(mixins=ConsoleChromeMixin.class)
@@ -2178,8 +2127,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// z) Pack-supplied assets: honoured from Builder.pack(...) at construction time, out-ranked by an explicitly
-	//    configured asset, and the documented bean-path limitation
+	// z) Pack-supplied assets: honoured from Builder.pack(...) at construction time, and the documented bean-path
+	//    limitation (pageBackgroundImage on the mixin still wins over the pack's page background)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final ThemePack ASSET_PACK = ThemePack.create("assets")
@@ -2189,7 +2138,6 @@ class ConsoleChromeMixin_Test extends TestBase {
 		.pageBackgroundImage(VALID_PAGE_BG)
 		.build();
 
-	private static final String ALTERNATE_LOGO = "/testfiles/console/logo.jpg";
 	private static final String ALTERNATE_PAGE_BG = "/testfiles/console/logo.svg";
 
 	@Rest(mixins=ConsoleChromeMixin.class)
@@ -2210,21 +2158,19 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Rest(mixins=ConsoleChromeMixin.class)
-	public static class Z02_ExplicitAssetsBeatPackAssetsHost extends BasicRestServlet {
+	public static class Z02_ExplicitPageBgBeatsPackHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public ConsoleChromeMixin console() {
-			return ConsoleChromeMixin.create().pack(ASSET_PACK).logo(ALTERNATE_LOGO).pageBackgroundImage(ALTERNATE_PAGE_BG).build();
+			return ConsoleChromeMixin.create().pack(ASSET_PACK).pageBackgroundImage(ALTERNATE_PAGE_BG).build();
 		}
 	}
 
-	/** Both assets, because the constructor resolves them through two independent ternaries - one can be inverted alone. */
-	@Test void z02_explicitlyConfiguredAssets_winOverThePacksAssets() throws Exception {
-		// Each pair of fixtures must differ, or the cache-buster comparisons below would pass vacuously.
-		assertNotEquals(expectedCacheBuster(VALID_LOGO), expectedCacheBuster(ALTERNATE_LOGO));
+	/** Mixin {@code pageBackgroundImage} still wins over the pack's page background; the pack's logo is unchanged. */
+	@Test void z02_explicitPageBackgroundImage_winsOverThePacks() throws Exception {
 		assertNotEquals(expectedCacheBuster(VALID_PAGE_BG), expectedCacheBuster(ALTERNATE_PAGE_BG));
-		var body = bodyOf(MockRestClient.buildLax(Z02_ExplicitAssetsBeatPackAssetsHost.class));
-		assertEquals(ConsoleChromeMixin.LOGO_ASSET_PATH + expectedCacheBuster(ALTERNATE_LOGO), emittedUrl(body, "/assets/logo"));
+		var body = bodyOf(MockRestClient.buildLax(Z02_ExplicitPageBgBeatsPackHost.class));
 		assertEquals(ConsoleChromeMixin.PAGE_BG_ASSET_PATH + expectedCacheBuster(ALTERNATE_PAGE_BG), emittedUrl(body, "/assets/page-bg"));
+		assertEquals(ConsoleChromeMixin.LOGO_ASSET_PATH + expectedCacheBuster(VALID_LOGO), emittedUrl(body, "/assets/logo"));
 	}
 
 	@Rest(mixins=ConsoleChromeMixin.class)
@@ -2248,6 +2194,26 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertFalse(body.contains(ConsoleChromeMixin.LOGO_ASSET_PATH), () -> "a bean-supplied pack's logo is a documented limitation, body:\n" + body);
 		assertFalse(body.contains(ConsoleChromeMixin.PAGE_BG_ASSET_PATH), () -> "a bean-supplied pack's page background is a documented limitation, body:\n" + body);
 		c.get(ConsoleChromeMixin.LOGO_ASSET_PATH).run().assertStatus(404);
+	}
+
+
+	private static Theme.Builder seedFrom(String name, Theme seed) {
+		var b = Theme.create(name);
+		for (var e : seed.getTokens().entrySet())
+			b.token(e.getKey(), e.getValue());
+		return b;
+	}
+
+	private static ThemePack asPack(Theme t) {
+		return ThemePack.create(t.getName()).theme(t).build();
+	}
+
+	private static ThemePack logoPack(String logo) {
+		return ThemePack.create("logo-cfg").theme(Theme.create("logo-cfg").build()).logo(logo).build();
+	}
+
+	private static ThemePack assetPack(String logo, String bg) {
+		return ThemePack.create("assets-cfg").theme(Theme.create("assets-cfg").build()).logo(logo).pageBackgroundImage(bg).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

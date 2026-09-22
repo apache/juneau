@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.console.*;
  *
  * <p>
  * {@code <@theme name="…">} installs a fresh instance seeded from the named stock palette
- * ({@link Theme#deriveFrom(String, Theme) Theme.deriveFrom(name, stockTheme)} for the leaf channel, and an empty
+ * (a {@link Theme.Builder} copied from the stock theme's tokens for the leaf channel, and an empty
  * {@link ThemePack#create(String) ThemePack.create(name)} for the alias channel) before rendering its body. Each
  * nested {@code <@token>} eagerly folds its declaration into the matching builder: a {@code value=} into
  * {@link #themeBuilder} (a leaf), an {@code alias=} into {@link #packBuilder} (a derived reference). After the body

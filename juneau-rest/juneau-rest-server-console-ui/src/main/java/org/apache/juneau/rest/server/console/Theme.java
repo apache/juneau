@@ -194,7 +194,7 @@ public final class Theme {
 	 * Recolors the chrome, accent, links, text, borders, and primary button to a warm brown palette, while keeping
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
-	 * deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding
+	 * deliberately untouched. Authored as seeded from {@link #OPEN}, overriding
 	 * only the 15 browned tokens below; the other 40 &mdash; including all five tag triads and every structural
 	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
@@ -230,9 +230,9 @@ public final class Theme {
 	 * Recolors the chrome, accent, links, text, borders, and primary button to a wine/rose palette, while keeping
 	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
 	 * neutral gray) verbatim &mdash; a red "danger" pill that matched the brand would stop reading as danger, so
-	 * the status palette is deliberately untouched. Authored as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}),
-	 * overriding only the 15 recolored tokens below; the other 40 &mdash; including all five tag triads and every
-	 * structural token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
+	 * the status palette is deliberately untouched. Seeded from {@link #OPEN}, overriding only the 15 recolored
+	 * tokens below; the other 40 &mdash; including all five tag triads and every structural token &mdash; are
+	 * inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
 	 * provably identical to {@link #OPEN}'s.
 	 *
 	 * <p>
@@ -272,7 +272,7 @@ public final class Theme {
 	 * Atlassian trademark appears in this theme's name or token values. Recolors the chrome, accent, links, brand,
 	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
 	 * green, danger red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
-	 * {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 16 recolored tokens below;
+	 * seeded from {@link #OPEN}, overriding only the 16 recolored tokens below;
 	 * the other 35 &mdash; including all five tag triads and every structural token &mdash; are inherited from
 	 * {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably identical to {@link #OPEN}'s.
 	 *
@@ -316,7 +316,7 @@ public final class Theme {
 	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
 	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
 	 * "7 grayed / 48 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
-	 * as {@link #deriveFrom(String, Theme) deriveFrom}({@link #OPEN}), overriding only the 7 grayed tokens below;
+	 * as seeded from {@link #OPEN}, overriding only the 7 grayed tokens below;
 	 * the other 48 &mdash; including all five tag triads, every structural token, and the blue affordance set
 	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
 	 * identical to {@link #OPEN}'s.
@@ -365,45 +365,11 @@ public final class Theme {
 	}
 
 	/**
-	 * Starts building a new named theme that is seeded with every one of {@code seed}'s tokens, so the caller can
-	 * state only its divergences instead of restating {@code seed}'s whole palette.
-	 *
-	 * <p>
-	 * The derived theme's name is always the caller's {@code name}, <b>never</b> {@code seed}'s &mdash; a
-	 * one-argument {@code deriveFrom(Theme)} shape that inherited the seed's name would, for a theme derived from
-	 * {@link #OPEN}, be named {@code "open"}, and {@code ConsoleChromeMixin.buildBody} suppresses the emitted theme
-	 * block whenever the active theme's name equals {@link #OPEN}'s &mdash; silently dropping every override the
-	 * derived theme declares, with no exception and no failing test. The two-argument shape makes that state
-	 * unreachable: the caller must name the derived theme, and that name passes through the same guard
-	 * {@link #create(String)} already applies.
-	 *
-	 * <p>
-	 * {@code seed}'s tokens land in the returned builder's <b>own</b> map, not as a fallback, so the built theme
-	 * emits <i>all</i> of {@code seed}'s tokens (not just the caller's overrides) and any {@code var(--jc-name)}
-	 * reference the caller adds resolves against this seeded copy first &mdash; falling back to {@link #OPEN} only
-	 * for a name neither this builder nor {@code seed} defines.
-	 *
-	 * <p>
-	 * What is seeded is {@code seed}'s <b>values</b>, not its reference <i>relationships</i>: a {@code var(--jc-name)}
-	 * written on {@code seed} was already flattened to a literal by {@code seed}'s own {@link Builder#build()}, so
-	 * overriding {@code --jc-name} on the derived builder does <b>not</b> re-flow into it &mdash; only references the
-	 * caller authors on the derived builder itself resolve live.
-	 *
-	 * @param name The derived theme's own name (see {@link #create(String)}) &mdash; never {@code seed}'s name.
-	 * @param seed The theme to seed from. Must not be <jk>null</jk>. Its tokens are already-resolved literals
-	 * 	(see {@link #getTokens()}), so seeding can never smuggle an unresolved reference into the new builder.
-	 * @return A new builder, pre-populated with {@code seed}'s tokens in {@code seed}'s declaration order.
-	 * @throws IllegalArgumentException
-	 * 	If {@code name} is invalid (see {@link #create(String)}) or if {@code seed} is <jk>null</jk>.
-	 * @deprecated Authoring a <b>custom</b> palette in Java is superseded by the FTL {@code <@theme name="…">} +
-	 * 	{@code <@token>} {@link ThemePack} construction path (or a {@link ThemePack} supplied to
-	 * 	{@link ConsoleChromeMixin.Builder#pack(ThemePack)}); a <b>stock</b> palette is one of the retained
-	 * 	{@link #OPEN}/{@link #LIGHT_RED}/{@link #LIGHT_BROWN}/{@link #RED}/{@link #GRAY} constants (resolved by name
-	 * 	through {@link ConsoleChromeMixin#stockTheme(String)}). This seed-and-override factory is retained only to
-	 * 	build those stock constants and to seed the FTL path internally.
+	 * Seeds a builder with every token of {@code seed} under a new name. Used to author the stock palettes
+	 * ({@link #LIGHT_RED}, {@link #LIGHT_BROWN}, {@link #RED}, {@link #GRAY}) from {@link #OPEN} without restating
+	 * the whole map.
 	 */
-	@Deprecated
-	public static Builder deriveFrom(String name, Theme seed) {
+	private static Builder deriveFrom(String name, Theme seed) {
 		if (seed == null)
 			throw iaex("Invalid theme seed: null.");
 		var b = create(name);
@@ -464,12 +430,7 @@ public final class Theme {
 		 * 	substring), if the value contains a control character or a {@code url(} production, or if the value is
 		 * 	neither a {@code var(--jc-name)} reference nor one of the allowlisted CSS value shapes. A reference whose
 		 * 	target is unknown, cyclic, or too deeply chained is instead reported at {@link #build()} time.
-		 * @deprecated Custom theme tokens are now authored through the FTL {@code <@token name="…" value="…"/>} /
-		 * 	{@code <@token name="…" alias="…"/>} directive nested in {@code <@theme>} (the {@link ThemePack} construction
-		 * 	path). This Java setter is retained as the leaf channel that path drives internally and to build the stock
-		 * 	{@link Theme} constants; consumer Java authoring a custom palette should migrate to the FTL path.
 		 */
-		@Deprecated
 		public Builder token(String name, String value) {
 			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
 				throw iaex("Invalid theme token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
