@@ -26,18 +26,18 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * Declaring a {@link SelectionDef} adds a per-row checkbox column (and, when {@link #selectAll()} is set, a
  * select-all header checkbox) to a view table &mdash; nothing else. It does <b>not</b>, by any default or
- * convenience, surface a bulk-mutate control: {@link ViewTable}'s selection-only overloads
- * ({@link ViewTable#of(ViewDef, java.util.Collection, SelectionDef)}, and the request-bearing sibling) have no code
+ * convenience, surface a bulk-mutate control: {@link ViewTable}'s selection markers
+ * ({@link ViewTable#SELECT_ATTR} and siblings) have no code
  * path that can render one. A view can therefore declare "selectable, for export" while categorically excluding
  * bulk mutation &mdash; e.g. a PagerDuty-style incident table that wants selection for a client-side export/copy
  * action but must never expose a multi-row mutate. A {@link BulkMutateDef} is a separate, independent type that
  * <b>consumes</b> a {@link SelectionDef} (it requires one to be constructed at all) but a {@link SelectionDef}
  * never requires, implies, or references one back.
  *
- * <h5 class='section'>Non-wire: never touches {@code VIEW_META} or {@link ViewDef#CONTRACT_VERSION}</h5>
+ * <h5 class='section'>Non-wire: never touches {@code VIEW_META}</h5>
  * <p>
- * A {@link SelectionDef} is deliberately <b>not</b> a bean field on {@link ViewDef} and never reaches the
- * {@code VIEW_META} JSON sidecar or its {@link ViewDef#CONTRACT_VERSION}. {@link ViewTable} instead stamps it as
+ * A {@link SelectionDef} is deliberately <b>not</b> part of {@code VIEW_META} and never reaches the
+ * JSON sidecar. {@link ViewTable} instead stamps it as
  * plain HTML attributes directly on the emitted {@code <table>} &mdash; {@link ViewTable#SELECT_ATTR},
  * {@link ViewTable#ROW_ID_FIELD_ATTR}, {@link ViewTable#SELECT_ALL_ATTR} &mdash; mirroring the existing
  * {@link ViewTable#CSRF_ATTR} auto-embed pattern. The {@code juneau-views.js} runtime reads them straight off the
@@ -60,7 +60,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p class='bjava'>
  * 	<jc>// Selectable for export, with NO bulk-mutate capability - satisfies the separability condition by construction.</jc>
  * 	SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>);
- * 	Div <jv>markup</jv> = ViewTable.<jsm>of</jsm>(<jv>req</jv>, <jv>viewDef</jv>, <jv>rows</jv>, <jv>selection</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>

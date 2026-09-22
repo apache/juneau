@@ -49,7 +49,10 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 	NodeDirectiveModel() {}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
+		"resource" // FreeMarker owns env.getOut(); closing it would close the HTTP response.
+	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {
 		var p = (Map<String, TemplateModel>) params;

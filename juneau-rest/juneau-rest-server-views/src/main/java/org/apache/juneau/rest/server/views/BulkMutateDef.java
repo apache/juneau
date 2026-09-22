@@ -60,8 +60,8 @@ import org.apache.juneau.commons.bean.*;
  * Unlike {@link SelectionDef} (which is pure DOM attributes, never wire data), a bulk action LIST is itself wire
  * data the client must parse &mdash; so it travels as its own JSON sidecar (distinct from the {@code VIEW_META}
  * one), with its own {@link #CONTRACT_VERSION}, exactly mirroring how {@link ActionResult} versions itself
- * independently of {@link ViewDef#CONTRACT_VERSION} rather than aliasing it. A version bump here can therefore
- * NEVER force a {@link ViewDef#CONTRACT_VERSION} bump (or vice versa): the two contracts are unrelated, so this
+ * independently of {@code VIEW_META} rather than aliasing it. A version bump here can therefore
+ * NEVER force a {@code VIEW_META} bump (or vice versa): the two contracts are unrelated, so this
  * opt-in cannot back the framework into the very lockstep the opt-in separability guard exists to avoid. The
  * {@link WritePermit} carried by this builder is a server-side-only construction guard and is <b>never</b>
  * serialized &mdash; only {@link #contractVersion} and {@link #actions} reach the wire.
@@ -73,7 +73,6 @@ import org.apache.juneau.commons.bean.*;
  * 	BulkMutateDef <jv>bulk</jv> = BulkMutateDef.<jsm>create</jsm>(WritePermit.<jsm>forCapability</jsm>(<js>"incident:bulk-ack"</js>), <jv>selection</jv>)
  * 		.actions(RowAction.<jsm>create</jsm>(<js>"ack"</js>).label(<js>"Acknowledge"</js>)
  * 			.endpoint(<js>"servlet:/incidents/ack"</js>).method(RowAction.Method.<jsf>POST</jsf>));
- * 	Div <jv>markup</jv> = ViewTable.<jsm>of</jsm>(<jv>req</jv>, <jv>viewDef</jv>, <jv>rows</jv>, <jv>bulk</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -91,7 +90,7 @@ public final class BulkMutateDef {
 
 	/**
 	 * The frozen bulk-actions contract version &mdash; its <b>own</b> discriminator, deliberately NOT aliased to
-	 * {@link ViewDef#CONTRACT_VERSION} (see the class javadoc). Bumped only on a breaking wire change to this
+	 * {@code VIEW_META} (see the class javadoc). Bumped only on a breaking wire change to this
 	 * contract.
 	 */
 	public static final String CONTRACT_VERSION = "1";

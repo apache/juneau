@@ -395,7 +395,14 @@ public final class Theme {
 	 * @return A new builder, pre-populated with {@code seed}'s tokens in {@code seed}'s declaration order.
 	 * @throws IllegalArgumentException
 	 * 	If {@code name} is invalid (see {@link #create(String)}) or if {@code seed} is <jk>null</jk>.
+	 * @deprecated Authoring a <b>custom</b> palette in Java is superseded by the FTL {@code <@theme name="…">} +
+	 * 	{@code <@token>} {@link ThemePack} construction path (or a {@link ThemePack} supplied to
+	 * 	{@link ConsoleChromeMixin.Builder#pack(ThemePack)}); a <b>stock</b> palette is one of the retained
+	 * 	{@link #OPEN}/{@link #LIGHT_RED}/{@link #LIGHT_BROWN}/{@link #RED}/{@link #GRAY} constants (resolved by name
+	 * 	through {@link ConsoleChromeMixin#stockTheme(String)}). This seed-and-override factory is retained only to
+	 * 	build those stock constants and to seed the FTL path internally.
 	 */
+	@Deprecated
 	public static Builder deriveFrom(String name, Theme seed) {
 		if (seed == null)
 			throw iaex("Invalid theme seed: null.");
@@ -457,7 +464,12 @@ public final class Theme {
 		 * 	substring), if the value contains a control character or a {@code url(} production, or if the value is
 		 * 	neither a {@code var(--jc-name)} reference nor one of the allowlisted CSS value shapes. A reference whose
 		 * 	target is unknown, cyclic, or too deeply chained is instead reported at {@link #build()} time.
+		 * @deprecated Custom theme tokens are now authored through the FTL {@code <@token name="…" value="…"/>} /
+		 * 	{@code <@token name="…" alias="…"/>} directive nested in {@code <@theme>} (the {@link ThemePack} construction
+		 * 	path). This Java setter is retained as the leaf channel that path drives internally and to build the stock
+		 * 	{@link Theme} constants; consumer Java authoring a custom palette should migrate to the FTL path.
 		 */
+		@Deprecated
 		public Builder token(String name, String value) {
 			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
 				throw iaex("Invalid theme token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);

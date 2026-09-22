@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.apache.juneau.rest.server.widgets.CalendarDef.*;
 
 /**
- * The DOM-free month-layout engine behind {@link CalendarTable} &mdash; it turns a {@link CalendarDef}'s events into
+ * The DOM-free month-layout engine behind {@link CalendarDef} &mdash; it turns a {@link CalendarDef}'s events into
  * per-week spanning-bar segments with lane assignments plus per-day chip lists with overflow counts.
  *
  * <p>
@@ -56,7 +56,6 @@ import org.apache.juneau.rest.server.widgets.CalendarDef.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link CalendarTable}
  * 	<li class='jc'>{@link CalendarDef}
  * </ul>
  *

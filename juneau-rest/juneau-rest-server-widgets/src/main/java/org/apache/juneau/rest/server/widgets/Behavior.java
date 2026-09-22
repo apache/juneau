@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.widgets;
 
 /**
- * How a {@link HeaderAction} behaves when the user activates it.
+ * How a header/menu action behaves when the user activates it.
  *
  * <ul>
  * 	<li class='jc'>{@link #LINK} &mdash; navigate to a same-origin {@code href}.

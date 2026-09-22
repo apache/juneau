@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.widgets;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * A labelled scalar in a {@link QuickStats} strip &mdash; the "42 open" tile.
+ * A labelled scalar in a stats strip &mdash; the "42 open" tile.
  *
  * <p>
  * Display-only: the value is server-painted once at emit time.  A tile carries no endpoint, no action, and no refresh
@@ -33,7 +33,7 @@ import org.apache.juneau.commons.bean.*;
 })
 public final class StatTile implements StatItem {
 
-	/** The stable item id, unique within its {@link QuickStats}.  Required, non-blank. */
+	/** The stable item id, unique among sibling {@link StatItem}s.  Required, non-blank. */
 	public String id;
 
 	/** The human label painted as {@code textContent} (e.g. <js>"Open"</js>).  Required, non-blank. */
@@ -42,7 +42,7 @@ public final class StatTile implements StatItem {
 	/** The server-painted value, already formatted for display (e.g. <js>"42"</js>).  Required, non-<jk>null</jk>. */
 	public String value;
 
-	/** Optional {@link StatusTone#wire()} token; off-palette values fail {@link QuickStats#validate()}. */
+	/** Optional {@link StatusTone#wire()} token; off-palette values fail serving-path validation. */
 	public String tone;
 
 	/**

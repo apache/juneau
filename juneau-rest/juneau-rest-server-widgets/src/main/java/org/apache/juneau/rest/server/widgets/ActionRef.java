@@ -25,7 +25,7 @@ import java.util.*;
  *
  * <p>
  * This type deliberately does <b>not</b> import any views-module type.  Existence of the named action on the
- * enclosing view's action catalog is checked in views ({@code RowDetailDef}/{@code ViewDef.validate()}), never
+ * enclosing view's action catalog is checked in views ({@code RegionDef} / serving-path validation), never
  * here.  The bar does not grow its own write protocol (no endpoint / method / csrf fields).
  *
  * @since 10.0.0
@@ -71,7 +71,7 @@ public class ActionRef implements ActionBarItem {
 	 * <p>
 	 * This is a per-bar rendering property, not a property of the action itself &mdash; the same action can be
 	 * the primary button in one bar (e.g. the Detail View header) and an ordinary item in another.  Java-only:
-	 * never marshalled into {@code VIEW_META}, so it does not move {@link ActionBar#CONTRACT_VERSION}.
+	 * never marshalled into {@code VIEW_META}, so it does not move a bar-contract version.
 	 *
 	 * @param value The emphasis.  Must not be <jk>null</jk>.
 	 * @return This object.
@@ -99,8 +99,8 @@ public class ActionRef implements ActionBarItem {
 	 * <p>
 	 * There is deliberately no {@code visibleWhen(...)} and no hidden mode.  Removing a momentarily-impossible
 	 * action makes the bar's contents jump between rows and hides the fact that the action exists at all.  When an
-	 * action is invalid for an <b>entire</b> view rather than per row, declare an {@link ActionBar} for that view
-	 * that simply omits it &mdash; that is the right tool, and it is why per-row hiding is not offered.
+	 * action is invalid for an <b>entire</b> view rather than per row, omit it from that view's action list
+	 * &mdash; that is the right tool, and it is why per-row hiding is not offered.
 	 *
 	 * <h5 class='section'>Which reason an operator sees:</h5>
 	 * <p>
@@ -118,7 +118,7 @@ public class ActionRef implements ActionBarItem {
 	 *
 	 * <p>
 	 * Java-only, like {@link #emphasis}: the bar is painted into server-emitted markup and is never marshalled into
-	 * the view's JSON sidecar, so this does not move {@link ActionBar#CONTRACT_VERSION}.
+	 * the view's JSON sidecar, so this does not move a bar-contract version.
 	 *
 	 * @param field The row field to test.  Must not be <jk>null</jk> or blank.
 	 * @param op The comparison operator.  Must be {@link Op#EQ} or {@link Op#NE}.
@@ -174,7 +174,7 @@ public class ActionRef implements ActionBarItem {
 		return this;
 	}
 
-	/** The visual weight an {@link ActionRef} button is painted with by the {@link ActionBar} that renders it. */
+	/** The visual weight an {@link ActionRef} button is painted with. */
 	public enum Emphasis {
 
 		/** The bar's single most prominent action &mdash; solid accent fill.  At most one per bar. */
@@ -189,7 +189,7 @@ public class ActionRef implements ActionBarItem {
 	 *
 	 * <p>
 	 * Built by {@link ActionRef#enabledWhen(String,Op,Object,String)}, which is the only shape that can produce a
-	 * well-formed one; a hand-assembled instance is checked again by {@link ActionBar#validate()}, so neither route
+	 * well-formed one; a hand-assembled instance is checked again at serve time, so neither route
 	 * can smuggle a rule with no {@link #reason} past the bar.
 	 */
 	public static class EnabledRule {

@@ -39,7 +39,6 @@ import org.junit.jupiter.params.provider.*;
  * canary.
  */
 @SuppressWarnings({
-	"deprecation", // Exercises the deprecated page/card Java types; removal is a follow-up after consumers migrate.
 	"java:S5976" // LNN_testName case names are the contract; a parameterized table would obscure them.
 })
 class ViewsJs_ConfigPersistence_Test extends TestBase {

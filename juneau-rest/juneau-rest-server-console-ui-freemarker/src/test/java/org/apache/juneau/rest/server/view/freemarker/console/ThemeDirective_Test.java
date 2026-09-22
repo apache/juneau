@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.
+})
 class ThemeDirective_Test extends TestBase {
 
 	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
@@ -93,30 +96,42 @@ class ThemeDirective_Test extends TestBase {
 	}
 
 	@Test void d01_theme_named_emitsThatPack() throws Exception {
-		var body = MockRestClient.buildLax(ThemedHost.class).get("/themed").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(ThemedHost.class);
+			var rsp = c.get("/themed").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
 		assertFalse(body.contains("juneau-theme-open.css"), () -> body);  // named pack wins; no second block
 		assertFalse(body.contains("slds-"), () -> body);
 	}
 
 	@Test void d02_omitTheme_defaultsToOpen() throws Exception {
-		var body = MockRestClient.buildLax(DefaultHost.class).get("/themed-default").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(DefaultHost.class);
+			var rsp = c.get("/themed-default").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertTrue(body.contains("juneau-theme-open.css"), () -> body);
 	}
 
 	@Test void d03_unknownThemeAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(BogusHost.class).get("/themed-bogus").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("unknown attribute") && body.contains("bogus"), () -> body);
+		try (var c = MockRestClient.buildLax(BogusHost.class);
+			var rsp = c.get("/themed-bogus").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("unknown attribute") && body.contains("bogus"), () -> body);
+		}
 	}
 
 	@Test void d04_pageThemeAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(DefaultHost.class).get("/page-theme-attr").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("unknown attribute") && body.contains("theme"), () -> body);
+		try (var c = MockRestClient.buildLax(DefaultHost.class);
+			var rsp = c.get("/page-theme-attr").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("unknown attribute") && body.contains("theme"), () -> body);
+		}
 	}
 }

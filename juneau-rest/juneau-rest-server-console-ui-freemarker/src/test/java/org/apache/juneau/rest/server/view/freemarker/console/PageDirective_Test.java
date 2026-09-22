@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.
+})
 class PageDirective_Test extends TestBase {
 
 	@Rest(mixins=FreemarkerMixin.class)
@@ -82,9 +85,10 @@ class PageDirective_Test extends TestBase {
 
 	// A live RestRequest so resolveConfiguration(...) has a request to hand the pack resolvers.
 	private static RestRequest dummyRequest() throws Exception {
-		var c = MockRestClient.buildLax(DummyHost.class);
-		c.get("/x").run();
-		return DummyHost.CAPTURED.get();
+		try (var c = MockRestClient.buildLax(DummyHost.class);
+			var rsp = c.get("/x").run()) {
+			return DummyHost.CAPTURED.get();
+		}
 	}
 
 	public static class DummyHost extends BasicRestServlet {
@@ -118,8 +122,12 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void a01_nakedHtml_isWrappedInSingleMain_noSecondMain() throws Exception {
-		var body = MockRestClient.buildLax(Host.class).get("/naked").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/naked").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertTrue(body.contains("<p class=\"naked-html\">hello</p>")
 			|| body.contains("<p class='naked-html'>hello</p>"), () -> body);
 		assertEquals(1, count(body, "<main"), () -> body);
@@ -128,8 +136,12 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void a02_tab_init_css_areEmittedGenerically() throws Exception {
-		var body = MockRestClient.buildLax(Host.class).get("/assets").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/assets").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertTrue(body.contains("name=\"page-tab\"") && body.contains("releases"), () -> body);
 		assertTrue(body.contains("href=\"a.css\""), () -> body);
 		assertTrue(body.contains("href=\"b.css\""), () -> body);
@@ -141,8 +153,12 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void a02b_sequenceLiterals_areFirstClass() throws Exception {
-		var body = MockRestClient.buildLax(Host.class).get("/assets-seq").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/assets-seq").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
 		assertTrue(body.indexOf("a.css") < body.indexOf("b.css"), () -> body);
 		assertTrue(body.contains("src=\"one.js\"") && body.contains("src=\"two.js\""), () -> body);
@@ -150,15 +166,23 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void a03_omitToolkit_doesNotInferViewsPack() throws Exception {
-		var body = MockRestClient.buildLax(Host.class).get("/naked").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/naked").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		assertFalse(body.contains("juneau-views.js"), () -> body);
 		assertFalse(body.contains("juneau-page-cards.js"), () -> body);
 	}
 
 	@Test void a05_toolkitViews_emitsViewsPack_pageCardsLast_noDatatables() throws Exception {
-		var body = MockRestClient.buildLax(ToolkitHost.class).get("/toolkit").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(ToolkitHost.class);
+			var rsp = c.get("/toolkit").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		// The "views" pack is emitted (marked so a consumer chrome can find it), page-cards is present, and
 		// page-cards.js is the LAST toolkit JS entry.
 		assertTrue(body.contains("data-toolkit-js"), () -> body);
@@ -173,10 +197,12 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void a04_unknownAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(Host.class).get("/page-unknown").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("unknown attribute") && body.contains("foo"), () -> body);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/page-unknown").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("unknown attribute") && body.contains("foo"), () -> body);
+		}
 	}
 
 	static int count(String body, String needle) {

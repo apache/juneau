@@ -110,6 +110,9 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 		var req = req("GET", Map.of("Host", AUTHORITY), null);
 		filter().doFilter(req, mock(HttpServletResponse.class), mock(FilterChain.class));
 		verify(req).setAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE, TOKEN.value());
+		// The header name the token must be echoed back under is published as a sibling attribute so the page
+		// renderer's document shell can emit it (data-juneau-csrf-header); default is DEFAULT_CSRF_HEADER.
+		verify(req).setAttribute(LoopbackBoundaryFilter.HEADER_ATTRIBUTE, LoopbackBoundary.DEFAULT_CSRF_HEADER);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

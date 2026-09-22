@@ -17,22 +17,22 @@
 package org.apache.juneau.rest.server.widgets;
 
 /**
- * One item in a {@link QuickStats} strip: a {@link StatTile} (a labelled scalar), a {@link StatBar} (a value against a
+ * One item in a stats strip: a {@link StatTile} (a labelled scalar), a {@link StatBar} (a value against a
  * maximum), or a {@link SegmentedBadge} (a labelled breakdown of counts).
  *
  * <p>
- * Sealed on the same terms as {@link BarWidget}: the permitted implementers are frozen so the views emitter's
- * {@code instanceof} dispatch and {@link QuickStats#validate()} are total.  No fourth implementer compiles.
+ * Sealed on the same terms as {@link BarWidget}: the permitted implementers are frozen so an emitter's
+ * {@code instanceof} dispatch is total.  No fourth implementer compiles.
  *
  * @since 10.0.0
  */
 public sealed interface StatItem permits StatTile, StatBar, SegmentedBadge {
 
 	/**
-	 * Returns the stable item id, unique within its {@link QuickStats}.
+	 * Returns the stable item id, unique among sibling {@link StatItem}s.
 	 *
 	 * @return The item id.  Can be <jk>null</jk> or blank on a malformed item (rejected by
-	 * 	{@link QuickStats#validate()}).
+	 * 	serving-path validation).
 	 */
 	String id();
 }

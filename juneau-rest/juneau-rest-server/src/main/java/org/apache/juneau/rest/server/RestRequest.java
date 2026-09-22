@@ -1393,9 +1393,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Request-bean MULTI vs last-wins vs Optional/def branching is clearer in one method than split across accessors.
-		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
-		"unchecked" // Collection/Map element types erased at the proxy boundary.
+		"java:S3776" // Request-bean MULTI vs last-wins vs Optional/def branching is clearer in one method than split across accessors.
 	})
 	private Object resolveRequestBeanProperty(RequestBeanPropertyMeta pm, java.lang.reflect.Method method, MarshallingSession bs) throws Exception {
 		HttpPartParserSession pp = pm.getParser(getPartParserSession());
@@ -1441,7 +1439,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	@SuppressWarnings({
 		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
-		"unchecked" // Element adds to that collection are erased.
+		"java:S3776" // Request-bean MULTI collection Optional/default/array branching is clearer in one method than split helpers.
 	})
 	private Object resolveRequestBeanMultiCollection(HttpPartType pt, String name, HttpPartParserSession pp, HttpPartSchema schema, ClassMeta<?> type) throws Exception {
 		var optional = type.isOptional();
@@ -1471,10 +1469,13 @@ public class RestRequest extends HttpServletRequestWrapper {
 		return optional ? o(collected) : collected;
 	}
 
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - HttpPartParserSession.read declares Exception
+	})
 	private Object readDefaultCollection(String def, ClassMeta<?> raw, ClassMeta<?> elemType, HttpPartParserSession pp, HttpPartSchema schema, HttpPartType pt) throws Exception {
 		try {
 			var one = pp.read(pt, schema, def, elemType);
-			Collection c = newCollection(raw);
+			var c = newCollection(raw);
 			c.add(one);
 			return raw.isArray() ? CollectionUtils.toArray(c, elemType.inner()) : c;
 		} catch (ParseException | SchemaValidationException e) {
@@ -1483,8 +1484,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	@SuppressWarnings({
-		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
-		"unchecked" // newInstance() of a Collection ClassMeta.
+		"rawtypes" // Collection constructed from ClassMeta.newInstance() is untyped.
 	})
 	private static Collection newCollection(ClassMeta<?> raw) {
 		if (raw.isArray())
@@ -1495,7 +1495,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	private static Object emptyCollection(ClassMeta<?> raw, ClassMeta<?> elemType) {
-		Collection c = newCollection(raw);
+		var c = newCollection(raw);
 		return raw.isArray() ? CollectionUtils.toArray(c, elemType.inner()) : c;
 	}
 

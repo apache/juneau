@@ -28,7 +28,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * "row-action intent" model, Decision&nbsp;8).
  *
  * <p>
- * A {@link ViewDef} declares zero or more of these via {@link ViewDef#rowActions(RowAction...)}; the
+ * An FTL {@code <@card type="datatables">} {@code VIEW_META} catalog declares zero or more of these via
+ * {@code rowActions}; the
  * {@code juneau-views.js} runtime renders each as a row-menu item and, on activation, submits the declared
  * {@link #endpoint} with the declared {@link #method} as a JSON request carrying the process's CSRF token.
  *
@@ -63,7 +64,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  * <p>
  * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is
  * additive-only (<jk>null</jk> when unset, omitted from the serialized form) and its presence does not bump
- * {@link ViewDef#CONTRACT_VERSION} &mdash; a {@link RowAction} declared before this field existed is
+ * {@code VIEW_META} &mdash; a {@link RowAction} declared before this field existed is
  * byte-identical on the wire, and old {@code juneau-views.js} ignores the unknown key.
  *
  * <h5 class='section'>Why {@link #method} cannot be a safe method</h5>
@@ -79,8 +80,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * <p>
  * {@link #endpoint(String) endpoint} and {@link #form(String) form} may each carry a {@code {property}} token
  * (e.g. {@code {id}}, as in the example below) that the client-side runtime substitutes from the row &mdash; the
- * SAME mechanism, same token grammar, and same per-value escaping as {@link Column#href(String) Column.href}'s
- * {@code linked} renderer.  Unlike {@code Column.href}, these URLs are <i>fetched</i> (form: confirmation GET) or
+ * SAME mechanism, same token grammar, and same per-value escaping as the {@code linked} cell renderer's
+ * {@code href} interpolation.  Unlike a rendered {@code href}, these URLs are <i>fetched</i> (form: confirmation GET) or
  * <i>submitted</i> (endpoint: mutating write), so an unresolved substitution <b>refuses</b> instead of issuing a
  * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and
  * is used byte-identical to how it always was.  A blank/absent {@code form} is the confirm-only local path (no
@@ -99,7 +100,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link ViewDef}
+ * 	<li class='jc'>{@link Render}
  * </ul>
  *
  * @since 10.0.0
@@ -296,12 +297,12 @@ public class RowAction {
 	 * May contain one or more {@code {property}} tokens (e.g. {@code "servlet:/incidents/{id}/ack"}), substituted
 	 * from the CURRENT ROW's own already-fetched data at submit time &mdash; the client-side ({@code
 	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical
-	 * {@code interpolateHref} helper {@link Column#href(String) Column.href}'s {@code linked} renderer uses
+	 * {@code interpolateHref} helper the {@code linked} cell renderer uses
 	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and the
 	 * SAME per-value {@code encodeURIComponent} escaping &mdash; unchanged.
 	 *
 	 * <p>
-	 * <b>Divergence from {@code Column.href} is deliberate (WORK-J0521):</b> because this URL is <i>submitted</i>
+	 * <b>Divergence from a rendered {@code href} is deliberate:</b> because this URL is <i>submitted</i>
 	 * rather than merely rendered, the runtime <b>refuses the submission</b> (renders a visible refusal; issues no
 	 * request; never a request-time exception) instead of firing a malformed or undeclared write, when:
 	 * <ul>
@@ -363,12 +364,12 @@ public class RowAction {
 	 * May contain one or more {@code {property}} tokens (e.g. {@code "/data/alerts/{id}/ack-form"}), substituted
 	 * from the CURRENT ROW's own already-fetched data before the confirmation GET &mdash; the client-side
 	 * ({@code juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the
-	 * identical {@code interpolateHref} helper {@link Column#href(String) Column.href}'s {@code linked} renderer
+	 * identical {@code interpolateHref} helper the {@code linked} cell renderer
 	 * uses (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and
 	 * the SAME per-value {@code encodeURIComponent} escaping.
 	 *
 	 * <p>
-	 * <b>Divergence from {@code Column.href}:</b> because this URL is <i>fetched</i> (the confirmation GET) rather
+	 * <b>Divergence from a rendered {@code href}:</b> because this URL is <i>fetched</i> (the confirmation GET) rather
 	 * than merely rendered, the runtime <b>refuses the open</b> (renders a visible refusal; issues no {@code
 	 * fetch}) instead of GETting a malformed or undeclared path, when:
 	 * <ul>
@@ -378,7 +379,7 @@ public class RowAction {
 	 * 	<li>the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise
 	 * 		normalize into a different, undeclared endpoint).
 	 * </ul>
-	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is
+	 * {@code href} keeps substituting to an empty string in each of these cases, because a rendered link is
 	 * not a fetch.
 	 *
 	 * <p>

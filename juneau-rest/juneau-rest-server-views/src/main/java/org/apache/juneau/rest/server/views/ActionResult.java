@@ -35,9 +35,9 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>Its own, independent contract version</h5>
  * <p>
  * The action-result is a <b>third</b> independently-versioned wire contract, alongside {@code VIEW_META}
- * ({@link ViewDef#CONTRACT_VERSION}) and the slot envelope ({@link ViewSlot#CONTRACT_VERSION}).  Its
+ * and the FTL card/slot envelope.  Its
  * {@link #CONTRACT_VERSION} is deliberately its <b>own</b> constant and is <b>not</b> aliased to
- * {@link ViewDef#CONTRACT_VERSION}: aliasing a per-view contract's version onto a separate contract couples two
+ * {@code VIEW_META}: aliasing a per-view contract's version onto a separate contract couples two
  * unrelated client/server locksteps, so this contract versions itself.
  *
  * <h5 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h5>
@@ -92,7 +92,7 @@ public class ActionResult {
 
 	/**
 	 * The frozen action-result contract version &mdash; its <b>own</b> discriminator, deliberately NOT aliased to
-	 * {@link ViewDef#CONTRACT_VERSION}.  Bumped only on a breaking wire change to this contract.
+	 * {@code VIEW_META}.  Bumped only on a breaking wire change to this contract.
 	 */
 	public static final String CONTRACT_VERSION = "1";
 

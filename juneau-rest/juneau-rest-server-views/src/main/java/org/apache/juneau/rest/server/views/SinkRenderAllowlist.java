@@ -26,7 +26,7 @@ import java.util.*;
  *
  * <p>
  * This does not freeze JavaScript functions; the client {@code resolveSinkRenderer} lookup owns that.  The
- * {@link Column#render} cell path does not call this helper (unknown ids still warn-and-fall-back).
+ * table-cell render path does not call this helper (unknown ids still warn-and-fall-back).
  *
  * @since 10.0.0
  */
@@ -38,7 +38,7 @@ public final class SinkRenderAllowlist {
 	 * <p>
 	 * {@code pill} is a fill-sink built-in whose sink renderer is a <b>display-only</b> variant of the cell renderer:
 	 * the client's {@code resolveSinkRenderer("pill")} never emits {@code role="button"}, and
-	 * {@link ViewDef#validateSinkPill(Render, String)} forbids a {@code meta.action} on a sink pill outright (a fill
+	 * serving-path validation forbids a {@code meta.action} on a sink pill outright (a fill
 	 * sink has no {@code rowActions} in scope to bind one to).
 	 *
 	 * <p>

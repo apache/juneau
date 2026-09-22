@@ -39,7 +39,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link Column}
+ * 	<li class='jc'>{@link ViewTable}
  * </ul>
  *
  * @since 10.0.0
@@ -163,7 +163,7 @@ public class Render {
 	 * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).
 	 *
 	 * <p>
-	 * {@code action} is optional and only meaningful on a {@link Column}: a pill named on a field-grid fill
+	 * {@code action} is optional and only meaningful on a table column: a pill named on a field-grid fill
 	 * sink is unconditionally display-only and rejects an {@code action} outright.
 	 *
 	 * @return A new {@link Render}.

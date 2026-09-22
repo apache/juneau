@@ -26,8 +26,9 @@ import freemarker.core.*;
 import freemarker.template.*;
 
 /**
- * The {@code <@theme name="…"/>} chrome FreeMarker directive: names the active stock theme once, in the chrome,
- * and points the chrome at that theme's shipped CSS pack.
+ * The {@code <@theme name="…">} chrome FreeMarker directive: names the active stock theme once, in the chrome,
+ * points the chrome at that theme's shipped CSS pack, and &mdash; when a nested {@code <@token>} body is present
+ * &mdash; constructs an FTL {@link ThemePack} of custom overrides on top of it.
  *
  * <p>
  * Its only attribute is {@code name}, one of {@link ConsoleChromeMixin#BUILTIN_THEME_NAMES}
@@ -36,15 +37,25 @@ import freemarker.template.*;
  * theme name are all rejected (fail closed). There is deliberately <b>no</b> {@code default=}: if the tag is
  * present, that <i>is</i> the theme.
  *
+ * <h5 class='section'>Custom tokens (the FTL {@link ThemePack} construction path):</h5>
+ * <p>
+ * The named stock palette is the <b>seed</b>: this directive opens a {@link ThemeBuildContext} holding
+ * {@link Theme#deriveFrom(String, Theme) Theme.deriveFrom(name, stockTheme)} (leaf channel) and
+ * {@link ThemePack#create(String) ThemePack.create(name)} (alias channel), renders the nested body so each
+ * {@code <@token>} folds its override into the matching builder, then assembles the pack. When the body declared at
+ * least one token, this directive registers the constructed pack's override block (leaves escaped + aliases
+ * verbatim, exactly {@link ConsoleChromeMixin#packRootBlock(ThemePack)}) so {@code <@console>} emits it inline
+ * <i>after</i> the stock pack {@code <link>}; a body-less {@code <@theme>} is just the stock pack.
+ *
  * <h5 class='section'>How the link lands:</h5>
  * <p>
- * The directive does not itself write markup; it sets the {@code pageThemeCss} chrome variable to the resolved,
- * cache-busted URL of the named pack (via {@link ConsoleChromeMixin#themeAssetUrl(org.apache.juneau.rest.server.RestRequest, String)}),
- * and the chrome shell emits {@code <link rel="stylesheet" href="${pageThemeCss}">} at the position it chooses
- * &mdash; after {@code chrome.css} and before any page-local {@code css=}, so the theme pack wins the cascade.
- * {@code <@page>} pre-seeds {@code pageThemeCss} to the {@code open} pack, so omitting {@code <@theme>} yields the
- * default {@code open} theme; because this directive must run <i>before</i> the shell expands
- * {@code ${pageThemeCss}}, author it in the chrome ahead of that {@code <link>}.
+ * Inside {@code <@console>} (a {@link ConsoleContext} is in scope) the directive writes no markup: it records the
+ * resolved stock-pack URL (via {@link ConsoleChromeMixin#themeAssetUrl(org.apache.juneau.rest.server.RestRequest, String)})
+ * and the optional override block on the {@link ConsoleContext}, and {@code <@console>} emits both in its head
+ * cascade. Absent a {@code <@console>} (the legacy {@code <@page>}-only chrome), it falls back to setting the
+ * {@code pageThemeCss} chrome variable to the resolved URL &mdash; the chrome shell then emits
+ * {@code <link rel="stylesheet" href="${pageThemeCss}">} itself. {@code <@page>} pre-seeds {@code pageThemeCss} to
+ * the {@code open} pack, so omitting {@code <@theme>} yields the default {@code open} theme.
  *
  * @since 10.0.0
  */
@@ -61,7 +72,10 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 	ThemeDirectiveModel() {}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
+		"deprecation" // Theme.deriveFrom is the FTL construction path's own seeding primitive; the deprecation steers CONSUMER Java authoring to this directive, not this directive away from the builder.
+	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {
 		var p = (Map<String, TemplateModel>) params;
@@ -79,6 +93,32 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 		var req = FreemarkerRenderScope.request();
 		if (req == null)
 			throw FtlAttrLists.reject("<@theme> needs FreemarkerRenderScope.request() (renderer wrap).");
-		env.setVariable(PAGE_THEME_CSS_VAR, env.getObjectWrapper().wrap(ConsoleChromeMixin.themeAssetUrl(req, name)));
+
+		// Capture any nested <@token> overrides against the stock-palette seed.  The context is cleared afterward so a
+		// stray <@token> outside a <@theme> (e.g. in a sibling directive's body) fails its own "must be nested" guard.
+		var ctx = new ThemeBuildContext(name, Theme.deriveFrom(name, ConsoleChromeMixin.stockTheme(name)), ThemePack.create(name));
+		env.setCustomState(ThemeBuildContext.KEY, ctx);
+		try {
+			if (body != null)
+				body.render(new StringWriter());
+		} finally {
+			env.setCustomState(ThemeBuildContext.KEY, null);
+		}
+
+		var url = ConsoleChromeMixin.themeAssetUrl(req, name);
+		String overrideBlock = null;
+		if (ctx.anyDeclared) {
+			var pack = ctx.packBuilder.theme(ctx.themeBuilder.build()).build();
+			overrideBlock = ConsoleChromeMixin.packRootBlock(pack);
+		}
+
+		var console = (ConsoleContext) env.getCustomState(ConsoleContext.KEY);
+		if (console != null) {
+			console.themePackUrl = url;
+			console.themeOverrideBlock = overrideBlock;
+		} else {
+			// Legacy <@page>-only chrome: no place for an FTL override block, so only the stock-pack URL flows through.
+			env.setVariable(PAGE_THEME_CSS_VAR, env.getObjectWrapper().wrap(url));
+		}
 	}
 }

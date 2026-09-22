@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * A labelled breakdown of counts in a {@link QuickStats} strip &mdash; the "3 failed / 12 running / 40 done" badge.
+ * A labelled breakdown of counts in a stats strip &mdash; the "3 failed / 12 running / 40 done" badge.
  *
  * <p>
  * Display-only, like every {@link StatItem}: each segment is a tone plus a server-painted count, and no segment is
@@ -51,7 +51,7 @@ public final class SegmentedBadge implements StatItem {
 		/** The segment count.  Required, {@code >= 0}. */
 		public Long count;
 
-		/** Optional {@link StatusTone#wire()} token; off-palette values fail {@link QuickStats#validate()}. */
+		/** Optional {@link StatusTone#wire()} token; off-palette values fail serving-path validation. */
 		public String tone;
 
 		/**
@@ -80,7 +80,7 @@ public final class SegmentedBadge implements StatItem {
 		}
 	}
 
-	/** The stable item id, unique within its {@link QuickStats}.  Required, non-blank. */
+	/** The stable item id, unique among sibling {@link StatItem}s.  Required, non-blank. */
 	public String id;
 
 	/** The human label painted as {@code textContent} (e.g. <js>"Jobs"</js>).  Required, non-blank. */

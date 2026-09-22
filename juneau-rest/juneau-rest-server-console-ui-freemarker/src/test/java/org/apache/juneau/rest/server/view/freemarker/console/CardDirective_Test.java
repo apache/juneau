@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.
+})
 class CardDirective_Test extends TestBase {
 
 	// renderResponseStackTraces=true so the reject() diagnostic reaches the 500 body verbatim (F1 / b02): the
@@ -103,7 +106,11 @@ class CardDirective_Test extends TestBase {
 	}
 
 	static String get(String path) throws Exception {
-		return MockRestClient.buildLax(Host.class).get(path).run().assertStatus(200).getContent().asString();
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get(path).run()) {
+			rsp.assertStatus(200);
+			return rsp.getContent().asString();
+		}
 	}
 
 	/** Extracts, script-unescapes, and parses the strict-JSON sidecar for the given card id. */
@@ -136,17 +143,21 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b02_formatAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(Host.class).get("/cards-format").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("<@card> uses type= only; format= is not a valid attribute."), () -> body);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/cards-format").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("<@card> uses type= only; format= is not a valid attribute."), () -> body);
+		}
 	}
 
 	@Test void b03_unknownAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(Host.class).get("/cards-bogus").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("unknown attribute"), () -> body);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/cards-bogus").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("unknown attribute"), () -> body);
+		}
 	}
 
 	@Test void b04_typeJson_htmlEnvelope_desugarsToJcCard_notEscaped() throws Exception {
@@ -169,11 +180,17 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b06_typeJs_missingId_is500() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/card-js-noid").run().assertStatus(500);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-js-noid").run()) {
+			rsp.assertStatus(500);
+		}
 	}
 
 	@Test void b07_typeJs_blankBody_is500() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/card-js-blank").run().assertStatus(500);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-js-blank").run()) {
+			rsp.assertStatus(500);
+		}
 	}
 
 	@Test void b08_typeDatatables_innerWide_andLiftedSlotMetaSidecar() throws Exception {
@@ -202,11 +219,17 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b09_typeDatatables_missingId_is500() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/card-datatables-noid").run().assertStatus(500);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-datatables-noid").run()) {
+			rsp.assertStatus(500);
+		}
 	}
 
 	@Test void b10_typeDatatables_missingColumns_is500() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/card-datatables-nocols").run().assertStatus(500);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-datatables-nocols").run()) {
+			rsp.assertStatus(500);
+		}
 	}
 
 	@Test void b11_htmlCard_withTemplate_emitsStrictJsonSidecar_keepsBodyMarkup() throws Exception {
@@ -236,10 +259,12 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b13_htmlCard_overrideAttr_missingId_is500() throws Exception {
-		var rsp = MockRestClient.buildLax(Host.class).get("/card-html-override-noid").run();
-		rsp.assertStatus(500);
-		var b = rsp.getContent().asString();
-		assertTrue(b.contains("requires id="), () -> b);
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-html-override-noid").run()) {
+			rsp.assertStatus(500);
+			var b = rsp.getContent().asString();
+			assertTrue(b.contains("requires id="), () -> b);
+		}
 	}
 
 	@Test void b14_markupOnlyHtml_staysSidecarFree() throws Exception {
@@ -313,10 +338,17 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b18_typeCalendar_missingId_is500() throws Exception {
-		MockRestClient.buildLax(CalendarHost.class).get("/card-calendar-noid").run().assertStatus(500);
+		try (var c = MockRestClient.buildLax(CalendarHost.class);
+			var rsp = c.get("/card-calendar-noid").run()) {
+			rsp.assertStatus(500);
+		}
 	}
 
 	private static String get2(String path) throws Exception {
-		return MockRestClient.buildLax(CalendarHost.class).get(path).run().assertStatus(200).getContent().asString();
+		try (var c = MockRestClient.buildLax(CalendarHost.class);
+			var rsp = c.get(path).run()) {
+			rsp.assertStatus(200);
+			return rsp.getContent().asString();
+		}
 	}
 }

@@ -60,7 +60,8 @@ import jakarta.servlet.http.*;
  * <h5 class='section'>Token availability to the page renderer</h5>
  * <p>
  * On an allowed request the boundary's token value is placed under the {@link #TOKEN_ATTRIBUTE} request attribute,
- * so a page-rendering endpoint can embed it without needing its own reference to the boundary.
+ * and the header name it must be sent back under is placed under the {@link #HEADER_ATTRIBUTE} sibling attribute, so
+ * a page-rendering endpoint can embed both without needing its own reference to the boundary.
  *
  * <h5 class='section'>Example (Spring Boot):</h5>
  * <p class='bjava'>
@@ -84,6 +85,18 @@ public class LoopbackBoundaryFilter implements Filter {
 
 	/** Request attribute under which an allowed request carries the boundary's CSRF token value. */
 	public static final String TOKEN_ATTRIBUTE = "org.apache.juneau.rest.server.filter.csrfToken";
+
+	/**
+	 * Request attribute under which an allowed request carries the boundary's CSRF <b>header name</b>
+	 * ({@link LoopbackBoundary#csrfHeader()}, default {@link LoopbackBoundary#DEFAULT_CSRF_HEADER}).
+	 *
+	 * <p>
+	 * Published as a sibling of {@link #TOKEN_ATTRIBUTE} on the same allowed-request path so a page-rendering
+	 * document shell (e.g. the console {@code <@console>} FTL directive) can emit both the {@code csrf-token} meta
+	 * value <b>and</b> the header name the client script must send it back under, without needing its own reference
+	 * to the {@link LoopbackBoundary}.
+	 */
+	public static final String HEADER_ATTRIBUTE = "org.apache.juneau.rest.server.filter.csrfHeader";
 
 	/** Response header naming the {@link LoopbackBoundary.Reason} a request was rejected for. */
 	public static final String REJECTION_HEADER = "X-Loopback-Boundary";
@@ -118,6 +131,7 @@ public class LoopbackBoundaryFilter implements Filter {
 			return;
 		}
 		req2.setAttribute(TOKEN_ATTRIBUTE, boundary.token().value());
+		req2.setAttribute(HEADER_ATTRIBUTE, boundary.csrfHeader());
 		chain.doFilter(req, res);
 	}
 

@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.views.*;
  *
  * <p>
  * <b>What is absent from {@link #instancesView()} is the entire point.</b> No field-slot catalog in Java, no
- * {@link org.apache.juneau.rest.server.widgets.ActionBar}, and no tab declared anywhere in Java &mdash;
+ * action-bar type, and no tab declared anywhere in Java &mdash;
  * yet the rendered panel has ten working tabs. The per-tab cost is <b>one line of JavaScript and zero lines of
  * Java</b>, because pane <i>shape</i> (grid / map / list) picks the recipe rather than tab <i>identity</i>. Adding an
  * eleventh tab is one more line.
@@ -72,9 +72,8 @@ import org.apache.juneau.rest.server.views.*;
  * <ul>
  * 	<li>★ <b>{@code endpoint} is a plain path, not {@code "servlet:/instances/{id}"}.</b> The document writes the
  * 		{@code servlet:} pseudo-scheme in this and every other §11 example, but
- * 		{@link RowDetailDef#isSafeDetailEndpoint(String)} rejects any value whose first colon precedes its first
- * 		slash &mdash; treating it as a URL scheme &mdash; and {@link RegionDef}'s {@code dataUrl} validation reuses
- * 		that same predicate. The snippet therefore throws at startup exactly as written. This example uses the
+ * 		{@link RegionDef}'s {@code dataUrl} validation rejects any value whose first colon precedes its first
+ * 		slash &mdash; treating it as a URL scheme. The snippet therefore throws at startup exactly as written. This example uses the
  * 		module's own {@code /data/...} convention instead, which is what every other view in this module already does.
  * 	<li><b>{@code allowPopulators} is explicit</b>, because a named populator has to be opted into by the bean that
  * 		references it or startup validation refuses the name.
@@ -184,10 +183,9 @@ public class ExampleInstancesRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /instances/view] &mdash; the {@link ViewSlot} envelope {@code JuneauViews.regions.mount} fetches into
+	 * [GET /instances/view] &mdash; the JSON envelope {@code JuneauViews.regions.mount} fetches into
 	 * {@link #TABLE_SLOT_ID}.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/view", swagger=@OpSwagger(ignore=true))

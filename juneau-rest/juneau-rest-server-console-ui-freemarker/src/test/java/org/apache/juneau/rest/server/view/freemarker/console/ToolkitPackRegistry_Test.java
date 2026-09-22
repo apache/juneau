@@ -24,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.rest.server.views.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -35,13 +34,17 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent run() returns this.
+})
 class ToolkitPackRegistry_Test extends TestBase {
 
 	// A live RestRequest so the built-in VIEWS_RESOLVER (ViewsMixin::viewAssetUrl) can resolve servlet URIs.
 	private static RestRequest dummyRequest() throws Exception {
-		var c = MockRestClient.buildLax(DummyHost.class);
-		c.get("/x").run();
-		return DummyHost.CAPTURED.get();
+		try (var c = MockRestClient.buildLax(DummyHost.class);
+			var rsp = c.get("/x").run()) {
+			return DummyHost.CAPTURED.get();
+		}
 	}
 
 	public static class DummyHost extends BasicRestServlet {

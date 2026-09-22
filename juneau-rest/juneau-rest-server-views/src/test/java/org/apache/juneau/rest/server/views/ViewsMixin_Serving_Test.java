@@ -18,18 +18,8 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.nio.charset.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.bean.html5.Div;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;

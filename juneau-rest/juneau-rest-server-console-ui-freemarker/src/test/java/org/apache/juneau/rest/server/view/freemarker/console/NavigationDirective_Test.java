@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.
+})
 class NavigationDirective_Test extends TestBase {
 
 	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
@@ -76,8 +79,12 @@ class NavigationDirective_Test extends TestBase {
 	}
 
 	@Test void c01_nav_isChromeOutsideMain_highlightsPath_omitsHiddenNode() throws Exception {
-		var body = MockRestClient.buildLax(Host.class).get("/nav").run()
-			.assertStatus(200).getContent().asString();
+		String body;
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/nav").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
 		// Exactly one nav landmark, emitted BEFORE <main> (outside it), and it is not a card.
 		assertEquals(1, count(body, "class=\"juneau-page-nav\""), () -> body);
 		assertTrue(body.indexOf("juneau-page-nav") < body.indexOf("<main"), () -> body);
@@ -93,9 +100,11 @@ class NavigationDirective_Test extends TestBase {
 	}
 
 	@Test void c02_unknownNodeAttr_isRejected() throws Exception {
-		var rsp = MockRestClient.buildLax(BogusHost.class).get("/nav-bogus").run();
-		rsp.assertStatus(500);
-		var body = rsp.getContent().asString();
-		assertTrue(body.contains("unknown attribute") && body.contains("bogus"), () -> body);
+		try (var c = MockRestClient.buildLax(BogusHost.class);
+			var rsp = c.get("/nav-bogus").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("unknown attribute") && body.contains("bogus"), () -> body);
+		}
 	}
 }

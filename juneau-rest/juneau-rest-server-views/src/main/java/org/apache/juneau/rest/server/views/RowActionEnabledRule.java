@@ -26,10 +26,10 @@ import org.apache.juneau.rest.server.widgets.Op;
  * {@code VIEW_META} wire contract.
  *
  * <p>
- * Mirrors {@code org.apache.juneau.rest.server.widgets.ActionRef.EnabledRule} on the detail-panel
- * {@code ActionBar} (widgets module), but rides the wire as a plain data rule the same way {@link RowClassRule}
- * does &mdash; a table row is polled/client-rendered rather than server-painted, so this type follows
- * {@link RowClassRule}'s shape, not {@code ActionRef.EnabledRule}'s Java-only one.  Serializes to
+ * Mirrors {@code org.apache.juneau.rest.server.widgets.ActionRef.EnabledRule} on a detail-panel
+ * action bar, but rides the wire as a plain data rule the same way a row-class
+ * rule does &mdash; a table row is polled/client-rendered rather than server-painted, so this type follows
+ * that wire shape, not {@code ActionRef.EnabledRule}'s Java-only one.  Serializes to
  * <c>{"field":..., "op":..., "value"?:..., "reason":...}</c>, with {@link #op} carrying {@link Op#wire()}'s
  * lowercase token (a {@link String}), not the Java enum.
  *

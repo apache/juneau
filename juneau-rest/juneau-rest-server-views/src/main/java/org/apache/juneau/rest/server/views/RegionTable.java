@@ -49,8 +49,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * (a page, a card grid). {@link #detailSidecar(List)} ships {@code id}-less and is found by attribute instead,
  * because a row-detail sidecar lives inside the {@code <template data-juneau-row-detail>} that is <b>cloned per
  * expanded row</b> &mdash; a stamped {@code id} would collide across every open panel. This is exactly the split
- * {@link BarSlotTable#sidecar(org.apache.juneau.rest.server.widgets.BarSlot)} /
- * {@link BarSlotTable#detailSidecar(org.apache.juneau.rest.server.widgets.BarSlot)} already makes, for the same
+ * {@link org.apache.juneau.rest.server.widgets.BarSlot} already makes, for the same
  * reason.
  *
  * @since 10.0.0

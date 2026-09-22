@@ -17,8 +17,6 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.widgets.*;

@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * An overlay badge on a {@link HeaderAction} (a bell count, for example) or a {@link BarBadge}.
+ * An overlay badge on a header action (a bell count, for example) or a {@link BarBadge}.
  *
  * <p>
  * A badge is exactly one of a <b>count</b> badge ({@link #count}) or a <b>dot</b> badge ({@link #dot}); it never

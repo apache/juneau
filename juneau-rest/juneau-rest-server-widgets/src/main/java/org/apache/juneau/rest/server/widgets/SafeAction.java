@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.widgets;
 
 /**
- * A client-only {@link ActionBar} item with no endpoint.
+ * A client-only {@link ActionBarItem} with no endpoint.
  *
  * <p>
  * This slice ships {@link #COLLAPSE} (collapse the child row).  Unlike an {@link ActionRef}, a safe action is

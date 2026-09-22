@@ -37,8 +37,8 @@ import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * Demonstrates HTML-slot pages: one {@code .juneau-page-nav} construct (Catalog children Active/Archived, sibling
- * leaf sections Audit Log and Alerts) served as full page loads, each mounting a {@link ViewDef} into an empty
- * slot via {@link ViewSlot#envelope(RestRequest, ViewDef)} and {@code JuneauViews.regions.mount({ table })}.
+ * leaf sections Audit Log and Alerts) served as full page loads, each mounting an FTL card catalog into an empty
+ * slot via a JSON envelope and {@code JuneauViews.regions.mount({ table })}.
  *
  * <p>
  * This is the example-module caller of the HTML-slot path outside the views module's own test sources.  Pair
@@ -48,19 +48,19 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>What this dogfoods:</h5>
  * <ul>
- * 	<li>The Catalog/Active pair additionally declares {@link ViewDef#poll(long) poll} and
- * 		{@link ViewDef#details(RowDetailDef) details}, plus a ribbon and a {@code rowClassRule}, so this one view
+ * 	<li>The Catalog/Active pair additionally declares poll and
+ * 		row-detail, plus a ribbon and a {@code rowClassRule}, so this one view
  * 		exercises most of the toolkit's declarative surface in one place.  Expand GET
  * 		{@code /data/widgets/active/{id}} projects owner/updatedAt/notes (the expander is the only place notes
  * 		appear).
  * 	<li>Catalog/Archived and Audit Log are deliberately PLAIN (no ribbon/poll/details), both to keep a contrasting
  * 		baseline and to show a leaf section (Audit Log) that omits the children row.
- * 	<li>The Alerts pair dogfoods {@link RowDetailDef} with a named region populator, two mutating {@link ActionRef}s
- * 		on {@link ViewDef#rowActions} (and the ack dialog form), and expand GET {@code /data/alerts/{id}}.
+ * 	<li>The Alerts pair dogfoods {@link RegionDef} with a named region populator, two mutating {@link ActionRef}s
+ * 		on {@code rowActions} (and the ack dialog form), and expand GET {@code /data/alerts/{id}}.
  * 		Nested-table seeding inside a row-detail pane is deferred (F24).
  * 	<li>Three distinct row types ({@link Widget}, {@link AuditEntry}, {@link Alert}) rather than one type reused
  * 		everywhere.
- * 	<li>Every view uses {@link DataMode#CLIENT} for simplicity (a static in-memory row list, no
+ * 	<li>Every view uses client-side DataTables paging for simplicity (a static in-memory row list, no
  * 		{@code ProtocolQueryable}/{@code QueryableSettings} wiring) &mdash; {@code SERVER} mode is already covered
  * 		end-to-end by {@code ViewServerWiring_Test} in the views module itself, so this example does not repeat it.
  * 	<li>Each pair carries enough rows (see {@link #buildActiveWidgets()}/{@link #buildArchivedWidgets()}/
@@ -73,7 +73,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code JuneauViews.regions.mount} against {@code /data/cards/summary}.
  *
  * <p>
- * A third endpoint, {@code /overview}, dogfoods the {@link QuickStats} header strip together with both display-only
+ * A third endpoint, {@code /overview}, dogfoods a stats-strip header together with both display-only
  * pill hosts: {@link #overviewView()} attaches a strip of a scalar tile, a meter and a segmented breakdown above the
  * table's toolbar, paints a display-only status pill in a column, and repeats that chip as a fill-sink pill inside the
  * row-detail expander &mdash; the inert contrast case for the Alerts pair's action-bound pill.  Its tones and the
@@ -361,9 +361,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /catalog/active/view] &mdash; the {@link ViewSlot} envelope for {@link #activeView()}.
+	 * [GET /catalog/active/view] &mdash; the JSON envelope for {@link #activeView()}.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/catalog/active/view", swagger=@OpSwagger(ignore=true))
@@ -383,9 +382,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /catalog/archived/view] &mdash; the {@link ViewSlot} envelope for {@link #archivedView()}.
+	 * [GET /catalog/archived/view] &mdash; the JSON envelope for {@link #archivedView()}.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/catalog/archived/view", swagger=@OpSwagger(ignore=true))
@@ -405,9 +403,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /audit/view] &mdash; the {@link ViewSlot} envelope for {@link #auditView()}.
+	 * [GET /audit/view] &mdash; the JSON envelope for {@link #auditView()}.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/audit/view", swagger=@OpSwagger(ignore=true))
@@ -427,9 +424,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /alerts/view] &mdash; the {@link ViewSlot} envelope for {@link #alertsView()}.
+	 * [GET /alerts/view] &mdash; the JSON envelope for {@link #alertsView()}.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/alerts/view", swagger=@OpSwagger(ignore=true))
@@ -632,7 +628,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /overview] &mdash; the {@link #overviewView() alert overview}: a {@link QuickStats} strip above a table's
+	 * [GET /overview] &mdash; the {@link #overviewView() alert overview}: a stats strip above a table's
 	 * toolbar, a display-only status pill column, and a fill-sink pill inside the row-detail expander.
 	 *
 	 * @param req The current request, resolved against for {@link ViewsMixin#viewAssetUrl(RestRequest,String)}.
@@ -696,10 +692,9 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /overview/view] &mdash; the {@link ViewSlot} envelope {@code JuneauViews.regions.mount} fetches into
+	 * [GET /overview/view] &mdash; the JSON envelope {@code JuneauViews.regions.mount} fetches into
 	 * the overview page slot.
 	 *
-	 * @param req The current request, used to resolve {@code $FV} / {@code servlet:} chrome.
 	 * @return The slot envelope.
 	 */
 	@RestGet(path="/overview/view", swagger=@OpSwagger(ignore=true))
@@ -892,7 +887,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * [GET /flagged] &mdash; a standalone table whose column title resolves a {@code $FV} server value.
 	 *
 	 * <p>
-	 * Uses {@link ViewSlot#envelope(RestRequest, ViewDef)} so the declared {@code $FV{flaggedCount}} chrome is
+	 * Uses a JSON envelope so the declared {@code $FV{flaggedCount}} chrome is
 	 * resolved against a per-response sibling session; the standalone {@link ViewTable} HTML-emitter
 	 * path intentionally does not resolve {@code $FV}.
 	 *
@@ -944,9 +939,8 @@ public class ExampleViewsRest extends BasicRestServlet {
 	}
 
 	/**
-	 * [GET /flagged/view] &mdash; the {@link ViewSlot} envelope for {@link #flaggedView()}.
+	 * [GET /flagged/view] &mdash; the JSON envelope for {@link #flaggedView()}.
 	 *
-	 * @param req The current request, whose var resolver knows {@code $FV}.
 	 * @return The slot envelope with resolved {@code $FV} chrome.
 	 */
 	@RestGet(path="/flagged/view", swagger=@OpSwagger(ignore=true))
@@ -1020,7 +1014,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 *
 	 * <p>
 	 * The nested table's own data GET carries the parent alert id under the {@code alertId} query parameter (the
-	 * {@code parentScopeParam} declared on its {@link NestedTableDef}).  An absent/blank scope returns nothing rather
+	 * {@code parentScopeParam} declared on the nested table).  An absent/blank scope returns nothing rather
 	 * than the whole unscoped set &mdash; a nested table without a parent id has no rows to show.
 	 *
 	 * @param alertId The parent alert id the nested table scoped its request to.
@@ -1067,7 +1061,7 @@ public class ExampleViewsRest extends BasicRestServlet {
 	 * a static {@link BarText} for severity context beside a {@link BarBadge} whose count
 	 * ({@link #countOtherOpen(Alert)}) is live, painted client-side from this same JSON by
 	 * {@code insertDialogBarSlot} the moment the dialog opens &mdash; unlike a page-nav or
-	 * {@link RowDetailDef} bar slot, there is no server-rendered pass to ride into.
+	 * {@link RegionDef} bar slot, there is no server-rendered pass to ride into.
 	 *
 	 * @param id The alert id.
 	 * @return The validated, version-stamped modal definition.

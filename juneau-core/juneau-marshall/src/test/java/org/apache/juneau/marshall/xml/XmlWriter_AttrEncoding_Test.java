@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * the value be interpreted as markup, so any caller placing dynamic text into an attribute would otherwise be an
  * injection sink.  The no-encode overloads remain available for values already known to be safe attribute text.
  */
+@SuppressWarnings({
+	"resource" // SimpleHtmlWriter is closed by try-with-resources; fluent oTag/attr/ceTag return this.
+})
 class XmlWriter_AttrEncoding_Test extends TestBase {
 
 	@Test void a01_hostileValueCannotBreakOutOfTheAttribute() throws Exception {

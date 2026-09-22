@@ -24,7 +24,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.*;
 
 /**
- * A single row in a {@link HeaderAction} or {@link AvatarChip} attached menu.
+ * A single row in an attached header or avatar menu.
  *
  * <p>
  * A menu item is exactly one of a <b>link</b> (same-origin navigation), a <b>safe</b> (format-validated client-event
@@ -125,7 +125,7 @@ public class MenuItem {
 	}
 
 	/**
-	 * Fail-closed bean validation; called by the enclosing {@link HeaderAction}/{@link AvatarChip}.
+	 * Fail-closed bean validation; called by the enclosing menu host.
 	 *
 	 * <p>
 	 * Dividers are exempt: a divider validates trivially regardless of its other (ignored) fields.

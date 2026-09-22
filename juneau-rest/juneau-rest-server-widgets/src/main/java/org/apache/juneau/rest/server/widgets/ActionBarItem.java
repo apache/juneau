@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.widgets;
 
 /**
- * One item in an {@link ActionBar}: either an {@link ActionRef} (opaque id naming a write action on the
+ * One item in an action bar: either an {@link ActionRef} (opaque id naming a write action on the
  * enclosing view) or a {@link SafeAction} (client-only, no endpoint).
  *
  * @since 10.0.0

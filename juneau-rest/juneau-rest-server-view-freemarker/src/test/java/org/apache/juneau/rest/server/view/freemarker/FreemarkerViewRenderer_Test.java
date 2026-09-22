@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent run() returns this.
+})
 class FreemarkerViewRenderer_Test extends TestBase {
 
 	/* ---------------------------------------------------------------------------------------- *
@@ -84,13 +87,14 @@ class FreemarkerViewRenderer_Test extends TestBase {
 
 	@Test void c01_openClose_setsAndClearsRequest() throws Exception {
 		assertNull(FreemarkerRenderScope.request());
-		var c = MockRestClient.buildLax(DummyHost.class);
-		c.get("/x").run();
-		var req = DummyHost.CAPTURED.get();
-		FreemarkerRenderScope.open(req);
-		assertSame(req, FreemarkerRenderScope.request());
-		FreemarkerRenderScope.close();
-		assertNull(FreemarkerRenderScope.request());
+		try (var c = MockRestClient.buildLax(DummyHost.class);
+			var rsp = c.get("/x").run()) {
+			var req = DummyHost.CAPTURED.get();
+			FreemarkerRenderScope.open(req);
+			assertSame(req, FreemarkerRenderScope.request());
+			FreemarkerRenderScope.close();
+			assertNull(FreemarkerRenderScope.request());
+		}
 	}
 
 	public static class DummyHost extends BasicRestServlet {

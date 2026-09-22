@@ -179,6 +179,10 @@ public class ConsoleChromeMixin {
 	private static final Set<String> ALLOWED_THEME_FILES =
 		Set.of("juneau-theme-open.css", "juneau-theme-light-red.css", "juneau-theme-light-brown.css", "juneau-theme-red.css", "juneau-theme-gray.css");
 
+	/** The stock name&rarr;{@link Theme} table backing {@link #stockTheme(String)} - one entry per {@link #BUILTIN_THEME_NAMES}. */
+	private static final Map<String,Theme> STOCK_THEMES = Map.of(
+		"open", Theme.OPEN, "light-red", Theme.LIGHT_RED, "light-brown", Theme.LIGHT_BROWN, "red", Theme.RED, "gray", Theme.GRAY);
+
 	/** Content type emitted for the chrome stylesheet. */
 	static final String CONTENT_TYPE = "text/css;charset=utf-8";
 
@@ -417,6 +421,46 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
+	 * Returns a real, browser-fetchable URL for the shipped {@code chrome.css}, resolved against the given request's
+	 * context path and mount and carrying the same content-sensitive {@code ?v=…} cache-buster the theme packs use.
+	 *
+	 * <p>
+	 * Mirrors {@link #themeAssetUrl(RestRequest, String)}: under the standalone mount the container has already
+	 * consumed {@code /juneau-console} into {@code servletPath}, so the unprefixed path is resolved; under the
+	 * composed mount the prefixed path is. The console document shell ({@code <@console>} FTL directive) emits this
+	 * URL as the first stylesheet in its head cascade so apps no longer hand-write the {@code chrome.css}
+	 * {@code <link>}.
+	 *
+	 * @param req The current request, supplying the context path/mount to resolve against.
+	 * @return The absolute {@code chrome.css} URL with the version+content-hash cache-buster appended.
+	 */
+	public static String chromeCssUrl(RestRequest req) {
+		var standalone = req.getServletPath().endsWith(MOUNT_PREFIX);
+		var base = req.getUriResolver().resolve("servlet:" + (standalone ? CHROME_CSS_PATH_UNPREFIXED : CHROME_CSS_PATH));
+		return base + ASSET_CACHE.cacheBuster(CHROME_CSS_RESOURCE);
+	}
+
+	/**
+	 * Maps one of the {@link #BUILTIN_THEME_NAMES} stock names to its {@link Theme} constant.
+	 *
+	 * <p>
+	 * The single place the kebab-case stock name (as written on FTL {@code <@theme name="…">} / the deprecated
+	 * {@code theme(String)} builder) is resolved to its shipped {@link Theme} &mdash; so a downstream FTL
+	 * {@code ThemePack} construction path can seed {@code Theme.deriveFrom(name, stockTheme)} from the same palette
+	 * the served {@code juneau-theme-<name>.css} pack carries, without a second copy of the name&rarr;theme table.
+	 *
+	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.
+	 * @return The stock {@link Theme} for {@code name}.
+	 * @throws IllegalArgumentException If {@code name} is not a built-in stock-theme name.
+	 */
+	public static Theme stockTheme(String name) {
+		var t = STOCK_THEMES.get(name);
+		if (t == null)
+			throw iaex("Unknown stock theme name: '%s'.  Built-in themes: %s.", name, String.join(", ", BUILTIN_THEME_NAMES));
+		return t;
+	}
+
+	/**
 	 * Returns the fully-assembled response body for the mount the request arrived under, computing (and caching) it
 	 * on first call for that mount.
 	 *
@@ -608,8 +652,18 @@ public class ConsoleChromeMixin {
 	 * reference must <b>survive</b> to the wire, or the pack's derived tokens freeze to a snapshot of the cascade
 	 * and the channel loses its purpose. Do not "unify" the two {@code var()} paths &mdash; they are deliberately
 	 * opposite. The same warning sits on {@link ThemePack} itself.
+	 *
+	 * <p>
+	 * Public so a downstream document shell (the console {@code <@theme>} / {@code <@token>} FTL directives, which
+	 * build a {@link ThemePack} at render time) can emit an FTL-constructed pack's override block inline with the
+	 * exact same escaping/anchoring rules the served {@code chrome.css} uses &mdash; rather than forking a second,
+	 * drift-prone emitter.
+	 *
+	 * @param pack The pack whose leaves-then-aliases {@code html:root{}} block to render. Must not be {@code null}.
+	 * @return The pack's {@code html:root{ ... }} declaration block.
+	 * @throws IllegalArgumentException If any token name is a reserved chrome-scale declaration.
 	 */
-	private static String packRootBlock(ThemePack pack) {
+	public static String packRootBlock(ThemePack pack) {
 		var sb = new StringBuilder();
 		sb.append("html:root{");
 		for (var e : pack.getTheme().getTokens().entrySet()) {
@@ -795,12 +849,35 @@ public class ConsoleChromeMixin {
 		 * 	{@link ConsoleChromeMixin#rejectReservedChromeDeclaration(String, String)}). A {@link Theme} may
 		 * 	legitimately carry such a name; what is rejected is <i>serving</i> it from this mixin, so the check sits
 		 * 	here rather than in {@link Theme}.
+		 * @deprecated Selecting a <b>stock</b> palette now goes through {@link #theme(String)} (the same names FTL
+		 * 	{@code <@theme name="…">} accepts); a <b>custom</b> palette is authored through the FTL {@code <@theme>} +
+		 * 	{@code <@token>} {@link ThemePack} construction path (or supplied as a {@link #pack(ThemePack)}). This
+		 * 	{@link Theme}-typed setter is deprecated wholesale because it cannot distinguish those two roles.
 		 */
+		@Deprecated
 		public Builder theme(Theme value) {
 			if (value != null)
 				for (var name : value.getTokens().keySet())
 					rejectReservedChromeDeclaration(name, "theme '" + value.getName() + "'");
 			this.theme = value;
+			return this;
+		}
+
+		/**
+		 * Selects one of the shipped stock palettes by name (the same names FTL {@code <@theme name="…">} accepts).
+		 *
+		 * <p>
+		 * The {@link Theme}-typed replacement for the deprecated {@link #theme(Theme)} when all that is wanted is a
+		 * stock palette. A custom palette is authored through the FTL {@code <@theme>} + {@code <@token>} path or
+		 * supplied as a {@link #pack(ThemePack)}.
+		 *
+		 * @param stockName One of the {@link ConsoleChromeMixin#BUILTIN_THEME_NAMES}
+		 * 	({@code open}, {@code light-red}, {@code light-brown}, {@code red}, {@code gray}).
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code stockName} is not a built-in stock-theme name.
+		 */
+		public Builder theme(String stockName) {
+			this.theme = stockTheme(stockName);
 			return this;
 		}
 
@@ -847,7 +924,12 @@ public class ConsoleChromeMixin {
 		 * @return This object.
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, empty, traversal-shaped, has an
 		 * 	unrecognized extension, or does not resolve to an existing classpath resource.
+		 * @deprecated The header mark is now supplied through the console document shell &mdash; the
+		 * 	{@code <@console icon="…">} attribute (and/or the {@code <@brand>} slot) &mdash; rather than baked into
+		 * 	the served {@code chrome.css}. The served/validated/cache-busted logo asset machinery stays available
+		 * 	through {@link #pack(ThemePack)} until this deprecation is deleted in a follow-on.
 		 */
+		@Deprecated
 		public Builder logo(String value) {
 			this.logoResource = validateAssetResource(value, "logo");
 			return this;
@@ -887,7 +969,11 @@ public class ConsoleChromeMixin {
 		 *
 		 * @param value The footer line. Can be <jk>null</jk> or blank to leave the footer unset.
 		 * @return This object.
+		 * @deprecated The page footer is now the console {@code <@footer>} slot (the single footer), authored in the
+		 * 	document shell as plain text/HTML. Painting it here as a {@code body::after{content}} rule as well would
+		 * 	show the line twice.
 		 */
+		@Deprecated
 		public Builder footer(String value) {
 			this.footer = value == null || value.isBlank() ? null : value;
 			return this;

@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.widgets;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * A value-against-a-maximum meter in a {@link QuickStats} strip &mdash; the "180 of 500 seats" bar.
+ * A value-against-a-maximum meter in a stats strip &mdash; the "180 of 500 seats" bar.
  *
  * <p>
  * Display-only: the fill percentage is computed and painted once, server-side.  There is deliberately no threshold
@@ -34,7 +34,7 @@ import org.apache.juneau.commons.bean.*;
 })
 public final class StatBar implements StatItem {
 
-	/** The stable item id, unique within its {@link QuickStats}.  Required, non-blank. */
+	/** The stable item id, unique among sibling {@link StatItem}s.  Required, non-blank. */
 	public String id;
 
 	/** The human label painted as {@code textContent} (e.g. <js>"Seats used"</js>).  Required, non-blank. */
@@ -46,7 +46,7 @@ public final class StatBar implements StatItem {
 	/** The maximum the value is measured against.  Required, {@code > 0}. */
 	public Long max;
 
-	/** Optional {@link StatusTone#wire()} token; off-palette values fail {@link QuickStats#validate()}. */
+	/** Optional {@link StatusTone#wire()} token; off-palette values fail serving-path validation. */
 	public String tone;
 
 	/**

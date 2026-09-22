@@ -64,7 +64,9 @@ import freemarker.template.*;
  * a microservice {@code BasicBeanStore.put}), {@link #resolveConfiguration} still returns that <b>same instance</b>
  * ({@code ==}) so consumer settings win (encoding, {@code ObjectWrapper}, {@code exposeFields}, template-update
  * delay, output format). It then fill-missing-stamps the reserved console shared variables
- * ({@code page}, {@code card}, {@code navigation}, {@code node}, {@code theme}, {@code jcTagHtml}) and splices the
+ * ({@code page}, {@code card}, {@code navigation}, {@code node}, {@code theme}, {@code token}, {@code console},
+ * {@code main}, the {@code <@console>} slot names {@code head}/{@code scripts}/{@code brand}/{@code actions}/
+ * {@code title}/{@code footer}/{@code body}, and {@code jcTagHtml}) and splices the
  * reserved-path console loader only when {@link #BASE_TEMPLATE_PATH} would not already resolve. A name the
  * consumer already set is left alone. There is no opt-out flag on this class &mdash; opt out by registering
  * {@link FreemarkerMixin} instead of {@code ConsoleFreemarkerMixin}.
@@ -139,7 +141,9 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 * wins for settings. Then:
 	 * <ol class='spaced-list'>
 	 * 	<li><b>Fill-missing names:</b> {@code page}, {@code card}, {@code navigation}, {@code node},
-	 * 		{@code theme}, {@code jcTagHtml} are set only when {@code getSharedVariable(name)} is unset. A
+	 * 		{@code theme}, {@code token}, {@code console}, {@code main}, the {@code <@console>} slot names
+	 * 		({@code head}, {@code scripts}, {@code brand}, {@code actions}, {@code title}, {@code footer},
+	 * 		{@code body}), and {@code jcTagHtml} are set only when {@code getSharedVariable(name)} is unset. A
 	 * 		consumer value is kept.
 	 * 	<li><b>Loader splice:</b> the classpath-root console {@link ClassTemplateLoader} is wrapped in only when
 	 * 		{@link #BASE_TEMPLATE_PATH} would not already resolve through the current loader.
@@ -222,7 +226,22 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 			cfg.setSharedVariable(NodeDirectiveModel.NAME, new NodeDirectiveModel());
 		if (cfg.getSharedVariable(ThemeDirectiveModel.NAME) == null)
 			cfg.setSharedVariable(ThemeDirectiveModel.NAME, new ThemeDirectiveModel());
+		if (cfg.getSharedVariable(TokenDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(TokenDirectiveModel.NAME, new TokenDirectiveModel());
+		if (cfg.getSharedVariable(ConsoleDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel());
+		if (cfg.getSharedVariable(MainDirectiveModel.NAME) == null)
+			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
+		// The six capture-only slot directives share one parameterized class, one instance registered per slot name.
+		for (var slot : CONSOLE_SLOT_NAMES)
+			if (cfg.getSharedVariable(slot) == null)
+				cfg.setSharedVariable(slot, new ConsoleSlotDirectiveModel(slot));
 	}
+
+	/** The {@code <@console>} capture-only slot names, each registered to a {@link ConsoleSlotDirectiveModel}. */
+	private static final List<String> CONSOLE_SLOT_NAMES =
+		List.of(ConsoleContext.HEAD, ConsoleContext.SCRIPTS, ConsoleContext.BRAND, ConsoleContext.ACTIONS,
+			ConsoleContext.TITLE, ConsoleContext.FOOTER, ConsoleContext.BODY);
 
 	/**
 	 * Builder for {@link ConsoleFreemarkerMixin}.

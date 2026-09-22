@@ -17,10 +17,10 @@
 package org.apache.juneau.rest.server.widgets;
 
 /**
- * Optional presence ring painted on an {@link AvatarChip}.
+ * Optional presence ring painted on an avatar chip.
  *
  * <p>
- * This is display chrome, <b>not</b> a directory/presence API.  A <jk>null</jk> {@link AvatarChip#status} means
+ * This is display chrome, <b>not</b> a directory/presence API.  A <jk>null</jk> status means
  * <b>no ring</b> &mdash; there is deliberately no {@code NONE} sentinel.  Each value maps to a
  * {@code .jc-avatar-status-*} CSS modifier driven by existing tone tokens; {@link #AWAY} reuses the shipped
  * {@code --jc-tag-amber-*} palette.

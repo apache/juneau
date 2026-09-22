@@ -28,7 +28,6 @@ import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
