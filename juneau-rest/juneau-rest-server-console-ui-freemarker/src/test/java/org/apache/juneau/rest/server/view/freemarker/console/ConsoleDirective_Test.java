@@ -269,9 +269,11 @@ class ConsoleDirective_Test extends TestBase {
 		// Document <title> falls back to brand= when title= is absent.
 		assertTrue(body.contains("<title>My App</title>"), () -> body);
 
-		// Head cascade.
+		// Head cascade. Chrome/theme hrefs are context-root-absolute against the standalone
+		// /juneau-console/* mount (leading slash), not servlet-relative under the page resource.
 		assertTrue(body.contains("name=\"page-tab\"") && body.contains("releases"), () -> body);
-		assertTrue(body.contains("chrome.css"), () -> body);
+		assertTrue(body.contains("href=\"/juneau-console/chrome.css"), () -> body);
+		assertTrue(body.contains("href=\"/juneau-console/themes/juneau-theme-light-red.css"), () -> body);
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
 		assertFalse(body.contains("juneau-theme-open.css"), () -> body);  // theme= wins; no default block
 		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
@@ -400,6 +402,22 @@ class ConsoleDirective_Test extends TestBase {
 
 		// Footer is a body-level child after <main>, outside the .jc-chrome wrapper.
 		assertTrue(body.indexOf("<main") < body.indexOf("jc-page-footer"), () -> body);
+	}
+
+	@Test void c13_consoleAssetHrefs_areContextRootAbsoluteUnderANestedPagePath() throws Exception {
+		// The live regression: a page resource at /rest/setup reports that path as its servlet path, so
+		// servlet:/juneau-console/chrome.css becomes /rest/setup/juneau-console/chrome.css (404). The shell
+		// must emit context-root-absolute /juneau-console/... regardless of the page resource's path.
+		String body;
+		try (var c = MockRestClient.createLax(ConsoleHost.class).servletPath("/rest/setup").build();
+			var rsp = c.get("/assets").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
+		assertTrue(body.contains("href=\"/juneau-console/chrome.css"), () -> body);
+		assertTrue(body.contains("href=\"/juneau-console/themes/juneau-theme-light-red.css"), () -> body);
+		assertFalse(body.contains("/rest/setup/juneau-console/"), () -> body);
+		assertFalse(body.contains("href=\"juneau-console/chrome.css"), () -> body);  // no leading-slash-less relative
 	}
 
 	@Test void c12_bareConsole_omitsHeaderEntirely() throws Exception {

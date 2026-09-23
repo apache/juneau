@@ -397,45 +397,55 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
-	 * Returns a real, browser-fetchable URL for a shipped theme pack, resolved against the given request's context
-	 * path and mount and carrying the same {@code ?v=<buildVersion>-<hash8>} content-sensitive cache-buster the
-	 * logo/page-background overrides use (see {@link #buildBody(RestRequest)}).
+	 * Returns a real, browser-fetchable URL for a shipped theme pack, resolved against the request's
+	 * <b>context root</b> (not the page resource) and carrying the same {@code ?v=<buildVersion>-<hash8>}
+	 * content-sensitive cache-buster the logo/page-background overrides use (see {@link #buildBody(RestRequest)}).
 	 *
 	 * <p>
-	 * Mirrors {@link #assetUrl(RestRequest, String, String)}: under the standalone mount style the container has
-	 * already consumed {@code /juneau-console} into {@code servletPath}, so the unprefixed path is resolved; under
-	 * the composed style the prefixed path is. A template-rendering consumer (the FTL {@code <@theme>} directive)
-	 * sits downstream of Juneau's {@code servlet:}-rewriting serializer, so it needs the URL already resolved here.
+	 * The console document shell ({@code <@console>} / {@code <@theme>}) emits this as a {@code <link href>} to the
+	 * standalone {@code /juneau-console/*} mount. Resolving with {@code context:} rather than {@code servlet:} is
+	 * load-bearing: a page resource at {@code /rest/setup} reports that path as its servlet path, so
+	 * {@code servlet:/juneau-console/themes/…} would become {@code /rest/setup/juneau-console/themes/…} and 404.
+	 * A template-rendering consumer sits downstream of Juneau's {@code servlet:}-rewriting serializer, so it needs
+	 * the URL already resolved here.
 	 *
-	 * @param req The current request, supplying the context path/mount to resolve against.
+	 * @param req The current request, supplying the context path to resolve against.
 	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.
-	 * @return The absolute theme-pack URL with the version+content-hash cache-buster appended.
+	 * @return The context-root-absolute theme-pack URL with the version+content-hash cache-buster appended.
 	 */
 	public static String themeAssetUrl(RestRequest req, String name) {
 		var file = "juneau-theme-" + name + ".css";
-		var standalone = req.getServletPath().endsWith(MOUNT_PREFIX);
-		var base = req.getUriResolver().resolve("servlet:" + (standalone ? THEME_CSS_DIR_UNPREFIXED : THEME_CSS_DIR) + file);
-		return base + ASSET_CACHE.cacheBuster(THEME_CSS_RESOURCE_DIR + file);
+		return consoleMountUrl(req, THEME_CSS_DIR + file, THEME_CSS_RESOURCE_DIR + file);
 	}
 
 	/**
-	 * Returns a real, browser-fetchable URL for the shipped {@code chrome.css}, resolved against the given request's
-	 * context path and mount and carrying the same content-sensitive {@code ?v=…} cache-buster the theme packs use.
+	 * Returns a real, browser-fetchable URL for the shipped {@code chrome.css}, resolved against the request's
+	 * <b>context root</b> (not the page resource) and carrying the same content-sensitive {@code ?v=…} cache-buster
+	 * the theme packs use.
 	 *
 	 * <p>
-	 * Mirrors {@link #themeAssetUrl(RestRequest, String)}: under the standalone mount the container has already
-	 * consumed {@code /juneau-console} into {@code servletPath}, so the unprefixed path is resolved; under the
-	 * composed mount the prefixed path is. The console document shell ({@code <@console>} FTL directive) emits this
-	 * URL as the first stylesheet in its head cascade so apps no longer hand-write the {@code chrome.css}
-	 * {@code <link>}.
+	 * The console document shell ({@code <@console>}) emits this as the first stylesheet in its head cascade. See
+	 * {@link #themeAssetUrl(RestRequest, String)} for why the resolution is {@code context:} rather than
+	 * {@code servlet:}.
 	 *
-	 * @param req The current request, supplying the context path/mount to resolve against.
-	 * @return The absolute {@code chrome.css} URL with the version+content-hash cache-buster appended.
+	 * @param req The current request, supplying the context path to resolve against.
+	 * @return The context-root-absolute {@code chrome.css} URL with the version+content-hash cache-buster appended.
 	 */
 	public static String chromeCssUrl(RestRequest req) {
-		var standalone = req.getServletPath().endsWith(MOUNT_PREFIX);
-		var base = req.getUriResolver().resolve("servlet:" + (standalone ? CHROME_CSS_PATH_UNPREFIXED : CHROME_CSS_PATH));
-		return base + ASSET_CACHE.cacheBuster(CHROME_CSS_RESOURCE);
+		return consoleMountUrl(req, CHROME_CSS_PATH, CHROME_CSS_RESOURCE);
+	}
+
+	/**
+	 * Context-root-absolute URL for an asset on the standalone {@code /juneau-console/*} mount.
+	 *
+	 * <p>
+	 * Always the prefixed path ({@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}), resolved with {@code context:}
+	 * so the href is {@code {contextPath}/juneau-console/…} regardless of which page resource rendered the shell.
+	 * Distinct from {@link #assetUrl(RestRequest, String, String)}, which is for {@code url()}s <i>inside</i> the
+	 * served {@code chrome.css} and must still track whichever mount served that stylesheet.
+	 */
+	private static String consoleMountUrl(RestRequest req, String prefixedPath, String resource) {
+		return req.getUriResolver().resolve("context:" + prefixedPath) + ASSET_CACHE.cacheBuster(resource);
 	}
 
 	/**
