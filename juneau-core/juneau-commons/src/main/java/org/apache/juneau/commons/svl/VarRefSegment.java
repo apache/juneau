@@ -98,24 +98,12 @@ final class VarRefSegment extends TemplateSegment {
 	@Override
 	void resolve(VarResolverSession session, StringBuilder out) {
 		var v = effectiveVar(session);
-		if (v == null) {
+		if (v == null || session.isScriptStyleRefused(prefix)) {
 			out.append(fallthrough);
 			return;
 		}
 		try {
-			var varVal = (hasInternalVar && v.allowNested()) ? body.resolve(session) : body.getSource();
-			if (v.streamed) {
-				var sw = new StringWriter();
-				v.resolveTo(session, sw, varVal);
-				out.append(sw.getBuffer());
-			} else {
-				var replacement = v.doResolve(session, varVal);
-				if (replacement == null)
-					replacement = "";
-				if (replacement.indexOf('$') != -1 && v.allowRecurse())
-					replacement = session.resolve(replacement);
-				out.append(replacement);
-			}
+			out.append(resolveReplacement(session, v));
 		} catch (Exception e) {
 			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		}
@@ -124,27 +112,43 @@ final class VarRefSegment extends TemplateSegment {
 	@Override
 	void resolveTo(VarResolverSession session, Writer w) throws IOException {
 		var v = effectiveVar(session);
-		if (v == null) {
+		if (v == null || session.isScriptStyleRefused(prefix)) {
 			w.write(fallthrough);
 			return;
 		}
 		try {
-			var varVal = (hasInternalVar && v.allowNested()) ? body.resolve(session) : body.getSource();
-			if (v.streamed) {
+			if (v.streamed && ! session.isHtmlDocEncode()) {
+				var varVal = (hasInternalVar && v.allowNested()) ? body.resolve(session) : body.getSource();
 				v.resolveTo(session, w, varVal);
-			} else {
-				var replacement = v.doResolve(session, varVal);
-				if (replacement == null)
-					replacement = "";
-				if (replacement.indexOf('$') != -1 && v.allowRecurse())
-					replacement = session.resolve(replacement);
-				w.write(replacement);
+				return;
 			}
+			w.write(resolveReplacement(session, v));
 		} catch (IOException e) {
 			throw e;
 		} catch (Exception e) {
 			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		}
+	}
+
+	/**
+	 * Resolves this var's replacement text, then XML-escapes it when HTML-doc chrome encoding is on
+	 * and the var is not an HTML-passthrough ({@code $W}, {@code $C}, {@code $RS}).
+	 */
+	private String resolveReplacement(VarResolverSession session, Var v) throws Exception {
+		var varVal = (hasInternalVar && v.allowNested()) ? body.resolve(session) : body.getSource();
+		String replacement;
+		if (v.streamed) {
+			var sw = new StringWriter();
+			v.resolveTo(session, sw, varVal);
+			replacement = sw.toString();
+		} else {
+			replacement = v.doResolve(session, varVal);
+			if (replacement == null)
+				replacement = "";
+			if (replacement.indexOf('$') != -1 && v.allowRecurse())
+				replacement = session.resolve(replacement);
+		}
+		return session.applyHtmlDocChromeEncoding(prefix, replacement);
 	}
 
 	/**

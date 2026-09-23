@@ -203,22 +203,19 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	/**
-	 * The header/nav-recolor fix (WORK-J0504): {@code --jc-header-bg} must key off {@code --jc-chrome-bg}, not
-	 * {@code --jc-surface} (&rarr; {@code --jc-white}), so a theme overriding {@code --jc-chrome-bg} (light-brown,
-	 * red, gray, ...) actually recolors the served {@code .jc-header}/{@code .jc-nav} strip - the CSS custom
-	 * property cascade resolves {@code var(--jc-chrome-bg)} against whichever block's {@code --jc-chrome-bg}
-	 * declaration wins at the browser, so pinning the alias's <i>target</i> here is what proves the fix; a browser
-	 * is not available to this suite to observe the resulting paint directly.
+	 * Header and both page-nav rows stay white on every theme: {@code --jc-header-bg} keys off {@code --jc-white},
+	 * not {@code --jc-chrome-bg}. Themed {@code --jc-chrome-bg} still tints the page fallback / hover / dialogs;
+	 * it must not wash {@code .jc-header} or {@code .juneau-page-nav}.
 	 */
-	@Test void c04_headerBgAlias_derivesFromChromeBg_soThemedChromeBgRecolorsHeaderNav() {
+	@Test void c04_headerBgAlias_derivesFromWhite_soThemedChromeBgDoesNotWashHeaderNav() {
 		var m = Pattern.compile("--jc-header-bg:(var\\(--jc-[a-z0-9-]++\\));").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
 		assertTrue(m.find(), () -> "no --jc-header-bg alias declaration found in OPEN_ROLE_ALIASES: " + ConsoleChromeMixin.OPEN_ROLE_ALIASES);
-		assertEquals("var(--jc-chrome-bg)", m.group(1),
-			() -> "expected --jc-header-bg to key off --jc-chrome-bg (so LIGHT_BROWN/LIGHT_RED/RED/GRAY chrome-bg overrides recolor the header/nav strip), got: " + m.group(1));
+		assertEquals("var(--jc-white)", m.group(1),
+			() -> "expected --jc-header-bg to key off --jc-white (header/page-nav stay white on every theme), got: " + m.group(1));
 	}
 
-	/** {@code --jc-nav-bg} derives from {@code --jc-header-bg}, so it inherits the chrome-bg fix transitively. */
-	@Test void c05_navBgAlias_stillDerivesFromHeaderBg_soItInheritsTheChromeBgFixToo() {
+	/** {@code --jc-nav-bg} derives from {@code --jc-header-bg}, so page-tab and page-subtab rows stay white too. */
+	@Test void c05_navBgAlias_stillDerivesFromHeaderBg_soPageNavRowsStayWhiteToo() {
 		var m = Pattern.compile("--jc-nav-bg:(var\\(--jc-[a-z0-9-]++\\));").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
 		assertTrue(m.find(), () -> "no --jc-nav-bg alias declaration found in OPEN_ROLE_ALIASES: " + ConsoleChromeMixin.OPEN_ROLE_ALIASES);
 		assertEquals("var(--jc-header-bg)", m.group(1));
@@ -232,16 +229,16 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	/**
-	 * Confirms each stock theme beyond {@link Theme#OPEN} actually overrides {@code --jc-chrome-bg} - combined
-	 * with (c04)'s alias-wiring proof, this is what makes light-brown/light-red/red/gray's header/nav strip
-	 * legitimately recolor rather than the fix having no observable effect for the shipped themes.
+	 * Stock {@link Theme}s must not declare {@code --jc-header-bg} / {@code --jc-nav-bg}: those roles live only
+	 * in {@link ConsoleChromeMixin#OPEN_ROLE_ALIASES} (pinned to white). A per-theme override would retint the
+	 * bars. {@code --jc-chrome-bg} may still differ per theme for other chrome.
 	 */
-	@Test void c06_stockThemesBeyondOpen_overrideChromeBg_soTheHeaderNavFixHasVisibleEffect() {
-		for (var theme : List.of(Theme.LIGHT_BROWN, Theme.LIGHT_RED, Theme.RED, Theme.GRAY)) {
-			var openChromeBg = Theme.OPEN.getTokens().get("--jc-chrome-bg");
-			var themeChromeBg = theme.getTokens().get("--jc-chrome-bg");
-			assertNotEquals(openChromeBg, themeChromeBg,
-				() -> theme.getName() + " must override --jc-chrome-bg for the header/nav-recolor fix to visibly apply");
+	@Test void c06_stockThemes_doNotDeclareHeaderOrNavBg() {
+		for (var theme : List.of(Theme.OPEN, Theme.LIGHT_BROWN, Theme.LIGHT_RED, Theme.RED, Theme.GRAY)) {
+			assertFalse(theme.getTokens().containsKey("--jc-header-bg"),
+				() -> theme.getName() + " must not declare --jc-header-bg");
+			assertFalse(theme.getTokens().containsKey("--jc-nav-bg"),
+				() -> theme.getName() + " must not declare --jc-nav-bg");
 		}
 	}
 

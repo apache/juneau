@@ -400,13 +400,15 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
-   HTML-slot page nav (two text rows; not Page Tabs / Page Subtabs pills)
+   HTML-slot page nav (two text rows; extra children rows for deeper nested
+   <@node>s; not Page Tabs / Page Subtabs pills)
    Shape AND colour live here so toolkit-less pages still get Page Tabs.
    juneau-views.css keeps a parallel colourless shape for views-only consumers.
    Selected section = light wash + indicator accent on the TOP edge, no pill
    fill. Hairline under the sections row is --jc-page-nav-hairline (2px) and
-   --jc-page-nav-accent. The pair's floor uses the same accent. Selected child
-   = accent wash behind the label, not accent type.
+   --jc-page-nav-accent. Further children rows (depth 2+) get the same hairline
+   between them. The nav's floor uses the same accent. Selected child = accent
+   wash behind the label, not accent type.
    ========================================================================== */
 
 .juneau-page-nav {
@@ -431,6 +433,12 @@ a:hover { text-decoration: underline; }
 }
 
 .juneau-page-nav-sections {
+  border-bottom-width: var(--jc-page-nav-hairline);
+  border-bottom-style: solid;
+  border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-children:not(:last-child) {
   border-bottom-width: var(--jc-page-nav-hairline);
   border-bottom-style: solid;
   border-bottom-color: var(--jc-page-nav-accent);

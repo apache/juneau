@@ -221,21 +221,19 @@ public class ConsoleChromeMixin {
 	 * values; no token name is declared by both.
 	 *
 	 * <p>
-	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) derives from {@code --jc-chrome-bg}, not
-	 * {@code --jc-surface}: the header/nav strip is chrome, not page content, so it must recolor with every
-	 * consumer theme that overrides {@code --jc-chrome-bg} (e.g. {@link Theme#LIGHT_BROWN}, {@link Theme#LIGHT_RED},
-	 * {@link Theme#RED}, {@link Theme#GRAY}) exactly as {@code --jc-hover-bg} already does, rather than staying pinned to
-	 * {@code --jc-white} regardless of the active theme's chrome color. An earlier revision derived
-	 * {@code --jc-header-bg} from {@code --jc-surface} (&rarr; {@code --jc-white}), which left the header
-	 * and nav strip white under every themed chrome &mdash; a latent bug a themed-header/nav test now guards
-	 * against. {@code --jc-page-nav-accent} defaults to {@code --jc-accent} so a consumer can retint the
-	 * page-nav floor / selected-section bar without recoloring buttons. {@code --jc-table-header-bg} is the
-	 * opposite of header-bg: it keys off {@code --jc-white} so DataTable / views-table column headers stay
-	 * white (IRS {@code table.dataTable thead th} has no background), not the page-chrome grey.
+	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) keys off {@code --jc-white}, not
+	 * {@code --jc-chrome-bg}: the header and both page-nav rows (Page Tabs and Page Subtabs) stay white on
+	 * every stock theme, matching {@link Theme#OPEN}'s blue look. Theme accent still paints the selected-tab
+	 * indicator, page-nav floor, and the rest of the page; {@code --jc-chrome-bg} remains the page-chrome
+	 * fallback under {@code --jc-page-bg}, the hover fill, and dialog chrome. Pinning header/nav to
+	 * {@code --jc-chrome-bg} washed those bars in light-red / light-brown / red / gray. {@code --jc-page-nav-accent}
+	 * defaults to {@code --jc-accent} so a consumer can retint the page-nav floor / selected-section bar without
+	 * recoloring buttons. {@code --jc-table-header-bg} also keys off {@code --jc-white} so DataTable / views-table
+	 * column headers stay white (IRS {@code table.dataTable thead th} has no background), not the page-chrome grey.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",
-		"--jc-header-bg:var(--jc-chrome-bg);",
+		"--jc-header-bg:var(--jc-white);",
 		"--jc-nav-bg:var(--jc-header-bg);",
 		"--jc-page-nav-accent:var(--jc-accent);",
 		"--jc-control-bg:var(--jc-surface);",

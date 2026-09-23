@@ -30,6 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
@@ -90,9 +91,17 @@ public class VarResolverSession {
 		return false;
 	}
 
+	private static final Set<String> HTML_DOC_PASSTHROUGH_VARS = Set.of("W", "C", "RS");
+
+	private static final Set<String> SCRIPT_STYLE_REFUSED_VARS = Set.of("RQ", "RH", "RF", "RP", "RA", "SA", "R");
+
 	private final VarResolver context;
 
 	private final WritableBeanStore beanStore;
+
+	private boolean htmlDocEncode;
+
+	private boolean scriptStyleRefuse;
 
 	/**
 	 * Constructor.
@@ -152,6 +161,50 @@ public class VarResolverSession {
 		if (s.isEmpty())
 			return s;
 		return context.compile(s).resolve(this);
+	}
+
+	/**
+	 * Resolves SVL variables for HTML-doc chrome fields that write raw HTML.
+	 *
+	 * <p>
+	 * Literal characters from the template (including tags) pass through unchanged. Each SVL
+	 * substitution is XML-escaped via {@link StringUtils#escapeXml(String)} before insert, except
+	 * the HTML-passthrough vars {@code $W}, {@code $C}, and {@code $RS}.
+	 *
+	 * <p>
+	 * Plain {@link #resolve(String)} is unchanged. Use this only for HTML-doc chrome (aside, header,
+	 * footer, nav HTML fragments, head, no-results).
+	 *
+	 * @param s The chrome template. Can be <jk>null</jk>.
+	 * @return The resolved chrome string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public String resolveHtmlDoc(String s) {
+		htmlDocEncode = true;
+		try {
+			return resolve(s);
+		} finally {
+			htmlDocEncode = false;
+		}
+	}
+
+	/**
+	 * Resolves SVL variables for {@code <script>} and {@code <style>} chrome.
+	 *
+	 * <p>
+	 * Request-derived vars ({@code $RQ}, {@code $RH}, {@code $RF}, {@code $RP}, {@code $RA},
+	 * {@code $SA}, {@code $R}) are left unresolved (same as an unknown var). Other vars including
+	 * {@code $W}, {@code $C}, and {@code $RS} still resolve.
+	 *
+	 * @param s The script or style template. Can be <jk>null</jk>.
+	 * @return The resolved string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public String resolveScriptStyle(String s) {
+		scriptStyleRefuse = true;
+		try {
+			return resolve(s);
+		} finally {
+			scriptStyleRefuse = false;
+		}
 	}
 
 	/**
@@ -331,5 +384,37 @@ public class VarResolverSession {
 	protected Var getVar(String name) {
 		Var v = this.context.getVarMap().get(name);
 		return nn(v) && v.canResolve(this) ? v : null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this session is resolving HTML-doc chrome and substitutions should be XML-escaped.
+	 *
+	 * @return <jk>true</jk> if HTML-doc chrome encoding is enabled.
+	 */
+	boolean isHtmlDocEncode() {
+		return htmlDocEncode;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@code varName} must be left unresolved in script/style chrome.
+	 *
+	 * @param varName The SVL var prefix (e.g. <js>"RQ"</js>).
+	 * @return <jk>true</jk> if the var should fall through like an unknown var.
+	 */
+	boolean isScriptStyleRefused(String varName) {
+		return scriptStyleRefuse && SCRIPT_STYLE_REFUSED_VARS.contains(varName);
+	}
+
+	/**
+	 * XML-escapes an SVL substitution when HTML-doc chrome encoding is enabled and the var is not passthrough.
+	 *
+	 * @param varName The SVL var prefix.
+	 * @param replacement The resolved substitution text.
+	 * @return The possibly escaped replacement.
+	 */
+	String applyHtmlDocChromeEncoding(String varName, String replacement) {
+		if (! htmlDocEncode || replacement == null || HTML_DOC_PASSTHROUGH_VARS.contains(varName))
+			return replacement;
+		return StringUtils.escapeXml(replacement);
 	}
 }

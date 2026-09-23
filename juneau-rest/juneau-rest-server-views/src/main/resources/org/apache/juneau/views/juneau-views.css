@@ -2825,14 +2825,15 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * HTML-slot page nav: one construct, two text rows, accent floor below the pair.
- * Colourless shape for views-only consumers. Console chrome.css carries the same
- * shape plus hue so toolkit-less pages still get Page Tabs. Selected section =
- * indicator-width accent on the TOP edge plus light wash (themed in console chrome).
- * A 2px hairline sits under the sections row (between tabs and children). Selected
- * child = light wash behind the label, not blue type and not a connected pill ribbon.
- * Not .jc-tab / .jc-subtab ribbon-format; leftover .jc-tab / .jc-subtab rules are
- * historical (hash-swap shell deleted).
+ * HTML-slot page nav: one construct, two text rows (plus extra children rows for
+ * deeper nested nodes), accent floor below the stack. Colourless shape for
+ * views-only consumers. Console chrome.css carries the same shape plus hue so
+ * toolkit-less pages still get Page Tabs. Selected section = indicator-width
+ * accent on the TOP edge plus light wash (themed in console chrome). A 2px
+ * hairline sits under the sections row (between tabs and children) and between
+ * stacked children rows. Selected child = light wash behind the label, not blue
+ * type and not a connected pill ribbon. Not .jc-tab / .jc-subtab ribbon-format;
+ * leftover .jc-tab / .jc-subtab rules are historical (hash-swap shell deleted).
  */
 .juneau-page-nav {
 	display: flex;
@@ -2854,6 +2855,10 @@ input[type="checkbox"].jc-editable-field-input {
 
 .juneau-page-nav-sections {
 	border-bottom: var(--jc-page-nav-hairline, 2px) solid; /* between tabs and children; colour in chrome */
+}
+
+.juneau-page-nav-children:not(:last-child) {
+	border-bottom: var(--jc-page-nav-hairline, 2px) solid; /* between stacked children rows; colour in chrome */
 }
 
 .juneau-page-nav-section,

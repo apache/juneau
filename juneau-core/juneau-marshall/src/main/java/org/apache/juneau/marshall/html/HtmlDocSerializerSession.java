@@ -329,6 +329,40 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	protected final boolean isResolveBodyVars() { return ctx.resolveBodyVars; }
 
+	/**
+	 * Resolves SVL variables for HTML-doc chrome fields that write raw HTML.
+	 *
+	 * <p>
+	 * Literal characters from the template (including tags) pass through unchanged. Each SVL
+	 * substitution is XML-escaped before insert, except the HTML-passthrough vars {@code $W},
+	 * {@code $C}, and {@code $RS}.
+	 *
+	 * <p>
+	 * Plain {@link #resolve(String)} is unchanged. Navlink {@code href} values should keep using
+	 * {@link #resolve(String)} plus attribute encoding.
+	 *
+	 * @param string The chrome template. Can be <jk>null</jk>.
+	 * @return The resolved chrome string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public String resolveHtmlDoc(String string) {
+		return getVarResolver().resolveHtmlDoc(string);
+	}
+
+	/**
+	 * Resolves SVL variables for {@code <script>} and {@code <style>} chrome.
+	 *
+	 * <p>
+	 * Request-derived vars ({@code $RQ}, {@code $RH}, {@code $RF}, {@code $RP}, {@code $RA},
+	 * {@code $SA}, {@code $R}) are left unresolved (same as an unknown var). Other vars including
+	 * {@code $W}, {@code $C}, and {@code $RS} still resolve.
+	 *
+	 * @param string The script or style template. Can be <jk>null</jk>.
+	 * @return The resolved string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public String resolveScriptStyle(String string) {
+		return getVarResolver().resolveScriptStyle(string);
+	}
+
 	@Override /* Overridden from HtmlStrippedDocSerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()

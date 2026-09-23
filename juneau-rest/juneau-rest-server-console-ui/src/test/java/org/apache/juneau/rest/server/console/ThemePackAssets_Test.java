@@ -84,4 +84,14 @@ class ThemePackAssets_Test extends TestBase {
 			List.of("open", "light-red", "light-brown", "red", "gray"),
 			ConsoleChromeMixin.BUILTIN_THEME_NAMES);
 	}
+
+	@Test void a07_stockPacks_doNotDeclareHeaderOrNavBg() throws Exception {
+		for (var name : ConsoleChromeMixin.BUILTIN_THEME_NAMES) {
+			var parsed = parse(read(name));
+			assertFalse(parsed.containsKey("--jc-header-bg"),
+				() -> "juneau-theme-" + name + ".css must not declare --jc-header-bg");
+			assertFalse(parsed.containsKey("--jc-nav-bg"),
+				() -> "juneau-theme-" + name + ".css must not declare --jc-nav-bg");
+		}
+	}
 }

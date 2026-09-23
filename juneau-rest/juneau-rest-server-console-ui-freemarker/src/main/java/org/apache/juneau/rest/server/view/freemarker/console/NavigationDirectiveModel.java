@@ -25,8 +25,9 @@ import freemarker.template.*;
 /**
  * The {@code <@navigation>} shared FreeMarker directive: the wrapper for a recursive {@code <@node>}
  * tree authored <b>once in chrome</b>. Opens a per-render {@link NavContext} (fresh ancestor stack),
- * renders its body, and emits exactly one {@code .juneau-page-nav} landmark whose top-level nodes are
- * a {@code .juneau-page-nav-sections} row.
+ * renders its body so nested {@code <@node>}s register on that context, and emits exactly one
+ * {@code .juneau-page-nav} landmark: depth-0 nodes as a {@code .juneau-page-nav-sections} row, then one
+ * {@code .juneau-page-nav-children} row per selected ancestor that has nested nodes (arbitrarily deep).
  *
  * <p>
  * The only attribute is {@code layout} ({@code horizontal} &mdash; the omit default &mdash; or
@@ -62,18 +63,10 @@ public final class NavigationDirectiveModel implements TemplateDirectiveModel {
 		if (! ("horizontal".equals(layout) || "vertical".equals(layout)))
 			throw FtlAttrLists.reject("<@navigation> layout= must be horizontal|vertical; got '" + layout + "'.");
 
-		env.setCustomState(NavContext.KEY, new NavContext());
-
-		var sw = new StringWriter();
+		var ctx = new NavContext();
+		env.setCustomState(NavContext.KEY, ctx);
 		if (body != null)
-			body.render(sw);
-
-		var out = env.getOut();
-		out.write("<nav class=\"juneau-page-nav\"");
-		if ("vertical".equals(layout))
-			out.write(" data-juneau-nav-layout=\"vertical\"");
-		out.write("><div class=\"juneau-page-nav-sections\">");
-		out.write(sw.toString());
-		out.write("</div></nav>");
+			body.render(new StringWriter());
+		ctx.write(env.getOut(), layout);
 	}
 }

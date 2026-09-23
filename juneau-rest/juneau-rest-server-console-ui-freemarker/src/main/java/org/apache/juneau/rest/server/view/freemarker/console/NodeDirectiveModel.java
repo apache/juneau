@@ -32,10 +32,11 @@ import freemarker.template.utility.*;
  * A node pushes its {@code id} onto the {@link NavContext} ancestor stack, renders its nested
  * {@code <@node>}s, then pops &mdash; so it knows its full slash-joined path and stamps
  * {@code aria-current="page"} when that path equals, or is an ancestor prefix of, the page's {@code tab=}
- * (read from the {@code pageTab} environment variable {@code <@page>} set). A top-level node renders as a
- * {@code .juneau-page-nav-section}; a nested node as a {@code .juneau-page-nav-child}, wrapped by its
- * parent in a {@code .juneau-page-nav-children} row. {@code visible=false} (and any unrecognized value,
- * which fails closed) omits the node and its whole subtree from the HTML.
+ * (read from the {@code pageTab} environment variable {@code <@page>} set). Nodes register themselves on
+ * {@link NavContext}; {@link NavigationDirectiveModel} emits depth-0 nodes as
+ * {@code .juneau-page-nav-section} and nested nodes as {@code .juneau-page-nav-child} rows along the
+ * selected ancestor chain. {@code visible=false} (and any unrecognized value, which fails closed) omits
+ * the node and its whole subtree from the HTML.
  *
  * @since 10.0.0
  */
@@ -50,8 +51,7 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 
 	@Override
 	@SuppressWarnings({
-		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
-		"resource" // FreeMarker owns env.getOut(); closing it would close the HTTP response.
+		"unchecked" // FreeMarker's raw params Map is String-keyed by contract.
 	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {
@@ -78,31 +78,18 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 
 		var prefix = String.join("/", ctx.ancestors);
 		var path = prefix.isEmpty() ? id : prefix + "/" + id;
-		var depth = ctx.ancestors.size();
 		var current = pathMatches(env, path);
+		var node = new NavContext.Entry(label, href, current);
 
 		ctx.ancestors.addLast(id);
-		var childBuf = new StringWriter();
+		ctx.push(node);
 		if (body != null)
-			body.render(childBuf);
+			body.render(new StringWriter());
+		ctx.pop();
 		ctx.ancestors.removeLast();
-		var children = childBuf.toString();
-		var leaf = children.isBlank();
-		if (leaf && href.isEmpty())
-			throw FtlAttrLists.reject("<@node id=\"" + id + "\"> leaf requires href=.");
 
-		var cls = depth == 0 ? "juneau-page-nav-section" : "juneau-page-nav-child";
-		var out = env.getOut();
-		out.write("<a class=\"" + cls + "\"");
-		if (! href.isEmpty())
-			out.write(" href=\"" + href + "\"");
-		if (current)
-			out.write(" aria-current=\"page\"");
-		out.write(">");
-		out.write(label);
-		out.write("</a>");
-		if (! leaf)
-			out.write("<div class=\"juneau-page-nav-children\">" + children + "</div>");
+		if (node.children.isEmpty() && href.isEmpty())
+			throw FtlAttrLists.reject("<@node id=\"" + id + "\"> leaf requires href=.");
 	}
 
 	/**

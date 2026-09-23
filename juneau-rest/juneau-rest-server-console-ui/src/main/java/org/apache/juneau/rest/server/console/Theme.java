@@ -236,8 +236,10 @@ public final class Theme {
 	 * provably identical to {@link #OPEN}'s.
 	 *
 	 * <p>
-	 * Unlike {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (not {@code #BF2600}): header and
-	 * nav stay parchment-light, with red reserved for accent, links, focus, and the primary button.
+	 * Unlike {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (not {@code #BF2600}) for the
+	 * page-chrome fallback, hover fill, and dialog chrome. Header and page-nav rows stay white via
+	 * {@code --jc-header-bg} &rarr; {@code --jc-white}; red is reserved for accent, links, focus, and the primary
+	 * button.
 	 *
 	 * <p>
 	 * Caveat: {@link #RED}'s {@code --jc-btn-primary} sits close in hue to {@link #OPEN}'s unchanged semantic
@@ -267,8 +269,9 @@ public final class Theme {
 	 * A Jira-inspired red retint of {@link #OPEN}'s structure.
 	 *
 	 * <p>
-	 * "Jira-inspired" describes the structural feel &mdash; white content, a distinctly-colored top nav, subtle
-	 * neutral borders, a restrained accent &mdash; rendered in a red key color (Jira's own brand is blue); no
+	 * "Jira-inspired" describes the structural feel &mdash; white content, a white header and page-nav with a
+	 * distinctly-colored accent floor, subtle neutral borders, a restrained accent &mdash; rendered in a red key
+	 * color (Jira's own brand is blue); no
 	 * Atlassian trademark appears in this theme's name or token values. Recolors the chrome, accent, links, brand,
 	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
 	 * green, danger red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
@@ -292,10 +295,8 @@ public final class Theme {
 		.token("--jc-text-muted", "#5E6C84")
 		.token("--jc-border", "#DFE1E6")
 		.token("--jc-border-2", "#c1c7d0")
-		// Chrome-scale token, consumed by chrome.css's --jc-hover-bg / --jc-table-header-bg role aliases and,
-		// since ConsoleChromeMixin.OPEN_ROLE_ALIASES pins --jc-header-bg to this token, by .jc-header/.jc-nav
-		// themselves - so this override legitimately paints the header/nav strip, the table header row, and the
-		// hover fill all red.
+		// Chrome-scale token consumed by --jc-hover-bg and dialog chrome. Header / page-nav rows stay white
+		// (--jc-header-bg → --jc-white); table headers stay white (--jc-table-header-bg → --jc-white).
 		.token("--jc-chrome-bg", "#BF2600")
 		.token("--jc-btn-primary", "#BF2600")
 		.token("--jc-btn-primary-hover", "#a01f00")
