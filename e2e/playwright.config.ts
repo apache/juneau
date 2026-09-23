@@ -24,7 +24,13 @@ import os from 'node:os';
  * owned by a separately-running coordinator instance of the app that this suite must never touch.
  */
 const TEST_PORT = 8791;
-const BASE_URL = `http://127.0.0.1:${TEST_PORT}`;
+/**
+ * Optional override so a spec can run against an already-serving instance (typically the
+ * coordinator on 8790) without this config starting a second JVM. Unset, the suite still
+ * boots its own app on 8791 and never binds 8790.
+ */
+const LIVE_URL = process.env.JRM_E2E_BASE_URL;
+const BASE_URL = LIVE_URL ?? `http://127.0.0.1:${TEST_PORT}`;
 
 // The app repo root is the parent of this e2e/ directory.
 const APP_ROOT = path.resolve(__dirname, '..');
@@ -65,17 +71,19 @@ export default defineConfig({
   // application.properties. Maven dependency resolution can be slow on a cold cache, but the app itself starts
   // in ~1s once the classpath is resolved — 120s covers both. `reuseExistingServer: !CI` lets a developer who
   // already has a local instance running on 8791 skip the (re)boot; it never touches 8790 either way.
-  webServer: {
-    command:
-      `mvn -q spring-boot:run -Dspring-boot.run.arguments=--server.port=${TEST_PORT}`,
-    url: BASE_URL + '/rest/setup',
-    cwd: APP_ROOT,
-    timeout: 120_000,
-    reuseExistingServer: !process.env.CI,
-    env: {
-      ...process.env,
-      JAVA_HOME,
-      PATH: `${path.join(JAVA_HOME, 'bin')}:${process.env.PATH}`,
-    },
-  },
+  webServer: LIVE_URL
+    ? undefined
+    : {
+        command:
+          `mvn -q spring-boot:run -Dspring-boot.run.arguments=--server.port=${TEST_PORT}`,
+        url: BASE_URL + '/rest/setup',
+        cwd: APP_ROOT,
+        timeout: 120_000,
+        reuseExistingServer: !process.env.CI,
+        env: {
+          ...process.env,
+          JAVA_HOME,
+          PATH: `${path.join(JAVA_HOME, 'bin')}:${process.env.PATH}`,
+        },
+      },
 });
