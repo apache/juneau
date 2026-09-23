@@ -86,7 +86,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		} else if (isEmptyObject(o)) {
 			String m = session.getNoResultsMessage();
 			if (exists(m))
-				w.append(6, session.resolve(m)).nl(6);
+				w.append(6, session.resolveHtmlDoc(m)).nl(6);
 		} else {
 			session.indent = 6;
 			w.flush();
@@ -116,7 +116,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		var aside = session.getAside();
 		for (var i = 0; i < aside.length; i++)
-			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
+			w.sIf(i > 0).appendln(4, session.resolveHtmlDoc(aside[i]));
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		var footer = session.getFooter();
 		for (var i = 0; i < footer.length; i++)
-			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
+			w.sIf(i > 0).appendln(3, session.resolveHtmlDoc(footer[i]));
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 		var head = session.getHead();
 		for (var i = 0; i < head.length; i++)
-			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
+			w.sIf(i > 0).appendln(2, session.resolveHtmlDoc(head[i]));
 
 		if (hasStyle(session)) {
 			w.sTag(2, "style").nl(2);
@@ -303,7 +303,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		// Write the title of the page.
 		var header = session.getHeader();
 		for (var i = 0; i < header.length; i++)
-			w.sIf(i > 0).appendln(3, session.resolve(header[i]));
+			w.sIf(i > 0).appendln(3, session.resolveHtmlDoc(header[i]));
 	}
 
 	/**
@@ -320,18 +320,17 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			w.sTag(3, "ol").nl(3);
 			for (var l : links) {
 				w.sTag(4, "li");
-				l = session.resolve(l);
 				if (l.matches("(?s)\\S+\\:.*")) {
 					var i = l.indexOf(':');
-					var key = l.substring(0, i);
+					var key = session.resolve(l.substring(0, i));
 					var val = l.substring(i + 1).trim();
 					if (val.startsWith("<"))
-						w.nl(4).appendln(5, val);
+						w.nl(4).appendln(5, session.resolveHtmlDoc(val));
 					else
-						w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");
+						w.oTag("a").attr("href", session.resolveUri(session.resolve(val)), true).cTag().text(key, true).eTag("a");
 					w.eTag("li").nl(4);
 				} else {
-					w.nl(4).appendln(5, l);
+					w.nl(4).appendln(5, session.resolveHtmlDoc(l));
 					w.eTag(4, "li").nl(4);
 				}
 			}
@@ -340,7 +339,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		var nav = session.getNav();
 		if (nav.length > 0) {
 			for (var i = 0; i < nav.length; i++)
-				w.sIf(i > 0).appendln(3, session.resolve(nav[i]));
+				w.sIf(i > 0).appendln(3, session.resolveHtmlDoc(nav[i]));
 		}
 	}
 
@@ -355,9 +354,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		var addSpace = Flag.create();
 		for (var s : session.getScript())
-			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
+			w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(s)).append('\n'); // Must always append a newline even if whitespace disabled!
 		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
+			w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
 		});
 	}
 
@@ -376,9 +375,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 		for (var s : session.getStyle())
-			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));
 		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver())));
 		});
 	}
 }

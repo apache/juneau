@@ -57,6 +57,10 @@ public class VarResolverSession {
 
 	private static final AsciiSet AS1 = AsciiSet.of("\\{"), AS2 = AsciiSet.of("\\${}");
 
+	private static final Set<String> HTML_DOC_PASSTHROUGH_VARS = Set.of("W", "C", "RS");
+
+	private static final Set<String> SCRIPT_STYLE_REFUSED_VARS = Set.of("RQ", "RH", "RF", "RP", "RA", "SA", "R");
+
 	private static boolean containsVars(Collection<?> c) {
 		var f = Flag.create();
 		c.forEach(x -> {
@@ -126,6 +130,10 @@ public class VarResolverSession {
 
 	private final BeanStore beanStore;
 
+	private boolean htmlDocEncode;
+
+	private boolean scriptStyleRefuse;
+
 	/**
 	 * Constructor.
 	 *
@@ -170,6 +178,38 @@ public class VarResolverSession {
 	}
 
 	/**
+	 * Enables XML-escaping of SVL substitutions for HTML-doc chrome.
+	 *
+	 * <p>
+	 * When enabled, each substitution is XML-escaped before insert, except <js>"W"</js>, <js>"C"</js>, and
+	 * <js>"RS"</js>. Literal template text is unchanged.
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to encode substitutions.
+	 * @return This object.
+	 */
+	public VarResolverSession htmlDocEncode(boolean value) {
+		htmlDocEncode = value;
+		return this;
+	}
+
+	/**
+	 * Refuses request-data vars when resolving script and style chrome.
+	 *
+	 * <p>
+	 * When enabled, <js>"RQ"</js>, <js>"RH"</js>, <js>"RF"</js>, <js>"RP"</js>, <js>"RA"</js>, <js>"SA"</js>, and
+	 * <js>"R"</js> are treated as unknown vars and left unresolved.
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to leave those markers unresolved.
+	 * @return This object.
+	 */
+	public VarResolverSession scriptStyleRefuse(boolean value) {
+		scriptStyleRefuse = value;
+		return this;
+	}
+
+	/**
 	 * Resolve all variables in the specified string.
 	 *
 	 * @param s
@@ -194,12 +234,13 @@ public class VarResolverSession {
 					if (v.streamed) {
 						var sw = new StringWriter();
 						v.resolveTo(this, sw, val);
-						return sw.toString();
+						return encodeHtmlDocReplacement(var, sw.toString());
 					}
 					s = v.doResolve(this, val);
 					if (s == null)
 						s = "";
-					return (v.allowRecurse() ? resolve(s) : s);
+					s = (v.allowRecurse() ? resolve(s) : s);
+					return encodeHtmlDocReplacement(var, s);
 				} catch (VarResolverException e) {
 					throw e;
 				} catch (Exception e) {
@@ -397,16 +438,22 @@ public class VarResolverSession {
 						} else {
 							varVal = (hasInternalVar && r.allowNested() ? resolve(varVal) : varVal);
 							try {
-								if (r.streamed)
-									r.resolveTo(this, out, varVal);
-								else {
+								if (r.streamed) {
+									if (htmlDocEncode && ! isHtmlDocPassthrough(varType)) {
+										var sw = new StringWriter();
+										r.resolveTo(this, sw, varVal);
+										out.append(escapeXml(sw.toString()));
+									} else {
+										r.resolveTo(this, out, varVal);
+									}
+								} else {
 									String replacement = r.doResolve(this, varVal);
 									if (replacement == null)
 										replacement = "";
 									// If the replacement also contains variables, replace them now.
 									if (replacement.indexOf('$') != -1 && r.allowRecurse())
 										replacement = resolve(replacement);
-									out.append(replacement);
+									out.append(encodeHtmlDocReplacement(varType, replacement));
 								}
 							} catch (VarResolverException e) {
 								throw e;
@@ -451,7 +498,19 @@ public class VarResolverSession {
 	 * @return The {@link Var} instance, or <jk>null</jk> if no <c>Var</c> is associated with the specified name.
 	 */
 	protected Var getVar(String name) {
+		if (scriptStyleRefuse && SCRIPT_STYLE_REFUSED_VARS.contains(name))
+			return null;
 		Var v = this.context.getVarMap().get(name);
 		return nn(v) && v.canResolve(this) ? v : null;
+	}
+
+	private String encodeHtmlDocReplacement(String varName, String replacement) {
+		if (! htmlDocEncode || replacement == null || isHtmlDocPassthrough(varName))
+			return replacement;
+		return escapeXml(replacement);
+	}
+
+	private static boolean isHtmlDocPassthrough(String varName) {
+		return HTML_DOC_PASSTHROUGH_VARS.contains(varName);
 	}
 }

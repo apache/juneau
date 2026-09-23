@@ -211,6 +211,49 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	public final String[] getNavLinks() { return ctx.navlinks; }
 
 	/**
+	 * Resolves SVL variables for HTML-doc chrome (aside, header, footer, nav HTML, head, no-results).
+	 *
+	 * <p>
+	 * Literal template text is unchanged. Each substitution is XML-escaped except <js>"$W"</js>, <js>"$C"</js>, and
+	 * <js>"$RS"</js>.
+	 * </p>
+	 *
+	 * @param string The string to resolve. Can be <jk>null</jk>.
+	 * @return The string with variables resolved and substitutions escaped as described.
+	 */
+	public String resolveHtmlDoc(String string) {
+		var vr = getVarResolver();
+		vr.htmlDocEncode(true);
+		try {
+			return vr.resolve(string);
+		} finally {
+			vr.htmlDocEncode(false);
+		}
+	}
+
+	/**
+	 * Resolves SVL variables for <xt>&lt;script&gt;</xt> and <xt>&lt;style&gt;</xt> chrome.
+	 *
+	 * <p>
+	 * Request-data variables (<js>"$RQ"</js>, <js>"$RH"</js>, <js>"$RF"</js>, <js>"$RP"</js>, <js>"$RA"</js>,
+	 * <js>"$SA"</js>, <js>"$R"</js>) are left unresolved. Other variables including <js>"$W"</js>, <js>"$C"</js>, and
+	 * <js>"$RS"</js> are still resolved.
+	 * </p>
+	 *
+	 * @param string The string to resolve. Can be <jk>null</jk>.
+	 * @return The string with allowed variables resolved.
+	 */
+	public String resolveScriptStyle(String string) {
+		var vr = getVarResolver();
+		vr.scriptStyleRefuse(true);
+		try {
+			return vr.resolve(string);
+		} finally {
+			vr.scriptStyleRefuse(false);
+		}
+	}
+
+	/**
 	 * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.
 	 *
 	 * @param out
