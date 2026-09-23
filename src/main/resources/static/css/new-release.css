@@ -59,8 +59,9 @@
 .rm-run-header {
   margin: 0 0 16px;
   background: var(--jc-card-bg);
-  border: 1px solid var(--jc-border);
+  border: none;
   border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
   padding: 16px 20px;
 }
 
@@ -147,7 +148,8 @@
   line-height: 1.65;
   padding: 12px 14px;
   border-radius: var(--jc-radius);
-  max-height: 240px;
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -251,8 +253,6 @@
   margin-top: 8px;
 }
 
-/* LIVE-mode vote-gate form (§5.16 tally-vote-result) — SAFE gets a single "Simulate (SAFE)" button
-   (see .rm-step-note above) instead of this form, since there's no real 72h wait or tally to record. */
 .rm-vote-form {
   display: flex;
   flex-direction: column;
@@ -286,19 +286,20 @@
    ========================================================================== */
 
 .rm-rail-layout {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  align-items: stretch;
   gap: 16px;
 }
 
 .rm-rail-col {
-  flex: 0 0 340px;
   background: var(--jc-white);
-  border: 1px solid var(--jc-border);
+  border: none;
   border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
   overflow: hidden;
-  max-height: 640px;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .rm-rail-item {
@@ -340,12 +341,23 @@
 .rm-rail-item .tag { flex: 0 0 auto; }
 
 .rm-detail-col {
-  flex: 1 1 auto;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background: var(--jc-white);
-  border: 1px solid var(--jc-border);
+  border: none;
   border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
   padding: 18px 20px;
+  overflow: hidden;
+}
+
+.rm-detail-col > .rm-step-title-row,
+.rm-detail-col > .rm-actions-row,
+.rm-detail-col > .rm-console-label {
+  flex: 0 0 auto;
 }
 
 /* ==========================================================================
@@ -503,79 +515,6 @@ pre.rm-console {
 .tag.status.awaiting-review::before { content: '\23F8'; margin-right: 3px; font-size: 9px; }
 
 /* ==========================================================================
-   Slice 3: run-level execution-mode banner + arming affordance.
-   ========================================================================== */
-
-.rm-mode-banner {
-  margin: 0 0 16px;
-  padding: 10px 14px;
-  border: 1px solid var(--jc-tag-neutral-border);
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--jc-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.rm-mode-banner.safe { background: var(--jc-tag-green-bg); border-color: var(--jc-tag-green-border); }
-.rm-mode-banner.live { background: #fdeceb; border-color: #f3c6c2; }
-
-.rm-mode-chip {
-  display: inline-flex;
-  align-items: center;
-  font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-}
-
-.rm-mode-chip.safe { background: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
-.rm-mode-chip.live { background: #fdeceb; color: var(--jc-danger); border-color: #f3c6c2; }
-
-/* ==========================================================================
-   App-local Input / Execution subtabs (client-side show/hide; see new-release.js)
-   ========================================================================== */
-
-.rm-subtabs {
-  display: flex;
-  gap: 6px;
-  margin: 0 0 16px;
-  padding: 4px;
-  background: var(--jc-white);
-  border: 1px solid var(--jc-border);
-  border-radius: 999px;
-  width: fit-content;
-}
-
-.rm-subtab {
-  font-family: var(--jc-font);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--jc-text-soft);
-  background: transparent;
-  border: none;
-  border-radius: 999px;
-  padding: 7px 18px;
-  cursor: pointer;
-}
-
-.rm-subtab:hover { background: var(--jc-accent-wash); }
-
-/* Light selected chip. Page Tabs put the heavy accent on TOP (.jc-nav-tab.active
-   in chrome.css); these Input/Execution chips are not Page Tabs, so they keep a
-   compact inset underline rather than a top bar. */
-.rm-subtab.active {
-  background: var(--jc-accent-wash);
-  color: var(--jc-text);
-  box-shadow: inset 0 -2px 0 var(--jc-accent);
-}
-
-.rm-subtab-panel[hidden] { display: none; }
-
-/* ==========================================================================
    Full-width "Start a new release" / "Release details" form card
    ========================================================================== */
 
@@ -641,43 +580,6 @@ pre.rm-console {
   color: var(--jc-text-soft);
 }
 
-.rm-mode-picker {
-  margin-top: 16px;
-}
-
-.rm-mode-picker-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--jc-text-muted);
-  margin-bottom: 8px;
-}
-
-.rm-mode-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 6px 0;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.rm-mode-option.disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.rm-field.rm-mode-picker input[type="radio"] {
-  width: auto;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-  border: none;
-  accent-color: var(--jc-accent);
-}
-
 .rm-form-actions {
   display: flex;
   align-items: center;
@@ -685,7 +587,6 @@ pre.rm-console {
   margin-top: 18px;
 }
 
-/* The run is armed for live mutation (LIVE only). */
 .tag.armed {
   background: #fdeceb;
   color: var(--jc-danger);

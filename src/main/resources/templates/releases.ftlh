@@ -18,12 +18,10 @@
 <@page tab="releases" toolkit="views"
     css="/datatables/dataTables.dataTables.min.css,https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css"
     init="/datatables/jquery.min.js,/datatables/dataTables.min.js,https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js,https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js,https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js,/js/releases-detail.js">
-    <@card>
-        <div class="jc-page-header">
-            <h1>All Releases</h1>
-            <p class="jc-page-sub">Every Apache Juneau release, from the current vote candidate back through GA history.</p>
-        </div>
-    </@card>
+    <div class="jc-page-header">
+        <h1>All Releases</h1>
+        <p class="jc-page-sub">Every Apache Juneau release, from the current vote candidate back through GA history.</p>
+    </div>
     <@card type="datatables" id="releases">
     {
         contractVersion: '1',
@@ -56,6 +54,7 @@
         detail: {
             contractVersion: '1',
             endpoint: '/rest/releases/expand/{id}',
+            icon: 'release',
             title: '{version}',
             region: { id: 'detail', type: 'row-detail', populate: 'releases-detail', dataUrl: '/rest/releases/expand/{id}', titleFields: [ 'version' ] }
         }

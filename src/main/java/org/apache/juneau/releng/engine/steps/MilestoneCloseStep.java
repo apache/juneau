@@ -51,7 +51,7 @@ public class MilestoneCloseStep implements ReleaseStep {
 		if (ctx.run.milestoneNumber == null)
 			return StepResult.ok("No milestone recorded; skipping.");
 		var env = Map.of("GH_TOKEN", ctx.githubToken);
-		var res = ctx.dryRunOr(
+		var res = ctx.exec(
 				List.of("gh", "api", "repos/" + ctx.target.repoSlug() + "/milestones/" + ctx.run.milestoneNumber, "-X",
 						"PATCH", "-f", "state=closed"),
 				null, env);

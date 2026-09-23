@@ -29,8 +29,7 @@ import org.apache.juneau.marshall.marshaller.Json;
  * and {@code bulk/drop} transitions ({@code OPEN → CLOSED → RELEASED}, with {@code DROPPED} reachable from OPEN
  * or CLOSED).
  *
- * <p>Because a SAFE {@code release-perform} is command-logged rather than executed, no real staging repo is
- * ever created; this model therefore <b>lazily synthesizes</b> the OPEN {@code orgapachejuneau-NNNN} repo that
+ * <p>This model <b>lazily synthesizes</b> the OPEN {@code orgapachejuneau-NNNN} repo that
  * {@code release-perform} would have created, on the first discovery call. After a repo reaches a terminal
  * state a fresh OPEN repo is synthesized on the next discovery so a later run starts clean.
  *

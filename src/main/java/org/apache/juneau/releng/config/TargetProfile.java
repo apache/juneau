@@ -21,9 +21,8 @@ package org.apache.juneau.releng.config;
  * Centralizes the release target's endpoints in one config-backed, auditable object, replacing the endpoint
  * literals that used to be scattered across the pipeline steps and the Nexus client.
  *
- * <p>{@code nexusBaseUrl} is mode-derived by the application wiring: it points at the in-app loopback mock
- * under SAFE mode and at real Nexus under LIVE mode. Everything else defaults to the canonical Apache Juneau
- * production endpoints (see {@link #prodDefault()}). This slice ships prod defaults only; no fork target is
+ * <p>{@code nexusBaseUrl} defaults to real Nexus ({@link #prodDefault()}). Everything else defaults to the
+ * canonical Apache Juneau production endpoints. This slice ships prod defaults only; no fork target is
  * defined.
  */
 public record TargetProfile(String cloneUrl, String repoSlug, String ghSlug, String nexusBaseUrl,
@@ -36,7 +35,7 @@ public record TargetProfile(String cloneUrl, String repoSlug, String ghSlug, Str
 				"https://dist.apache.org/repos/dist/release/juneau");
 	}
 
-	/** A copy of this profile with a different Nexus base URL (used to inject the mode-derived base). */
+	/** A copy of this profile with a different Nexus base URL. */
 	public TargetProfile withNexusBaseUrl(String url) {
 		return new TargetProfile(cloneUrl, repoSlug, ghSlug, url, nexusProfileId, distDevBase, distReleaseBase);
 	}

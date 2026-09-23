@@ -67,33 +67,33 @@ public class DistPromoteStep implements ReleaseStep {
 		var release = ctx.stateDir.resolve("dist-release");
 		var pw = ctx.ldapPassword + "\n";
 
-		var coDev = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
+		var coDev = ctx.exec(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
 				SvnArgs.PASSWORD_FROM_STDIN, ctx.target.distDevBase(), dev.toString()), pw, null);
 		if (!coDev.ok())
 			return StepResult.fail("svn checkout of dist/dev failed.");
-		var coRelease = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
+		var coRelease = ctx.exec(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
 				SvnArgs.PASSWORD_FROM_STDIN, ctx.target.distReleaseBase(), release.toString()), pw, null);
 		if (!coRelease.ok())
 			return StepResult.fail("svn checkout of dist/release failed.");
 
 		var destDir = release.resolve(version);
-		ctx.dryRunOr(List.of("mkdir", destDir.toString()));
+		ctx.exec(List.of("mkdir", destDir.toString()));
 		for (var ext : EXTENSIONS) {
 			var name = "apache-juneau-" + version + "-src.zip" + ext;
-			ctx.dryRunOr(List.of("svn", "mv", dev.resolve("source").resolve(rc).resolve(name).toString(),
+			ctx.exec(List.of("svn", "mv", dev.resolve("source").resolve(rc).resolve(name).toString(),
 					destDir.resolve(name).toString()));
 		}
 		for (var ext : EXTENSIONS) {
 			var name = "apache-juneau-" + version + "-bin.zip" + ext;
-			ctx.dryRunOr(List.of("svn", "mv", dev.resolve("binaries").resolve(rc).resolve(name).toString(),
+			ctx.exec(List.of("svn", "mv", dev.resolve("binaries").resolve(rc).resolve(name).toString(),
 					destDir.resolve(name).toString()));
 		}
 
 		var prior = priorReleaseOnLine(ctx);
 		if (prior != null)
-			ctx.dryRunOr(List.of("svn", "rm", release.resolve(prior).toString()));
+			ctx.exec(List.of("svn", "rm", release.resolve(prior).toString()));
 
-		var commit = ctx.dryRunOr(List.of("svn", "commit", dev.toString(), release.toString(), "-m",
+		var commit = ctx.exec(List.of("svn", "commit", dev.toString(), release.toString(), "-m",
 				"Apache Juneau " + version, SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN), pw,
 				Map.of());
 		return commit.ok() ? StepResult.ok("Promoted to dist/release.") : StepResult.fail("svn promote failed.");

@@ -78,7 +78,7 @@ class DropRcServiceTest {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
-				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE,
+				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""),
 				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 		var preview = svc.preview("9.2.1");
 		assertTrue(preview.lines.stream().anyMatch(l -> l.contains("orgapachejuneau-1042")));
@@ -91,7 +91,7 @@ class DropRcServiceTest {
 		var store = new RunStateStore(dir);
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
-				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE,
+				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""),
 				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
@@ -113,107 +113,8 @@ class DropRcServiceTest {
 		assertNull(rs.step("release-prepare").logRef);
 	}
 
-	/** §7.3/fidelity fix: Drop-RC's SVN cleanup + Tier-B log sink (was previously a silent no-op in SAFE). */
-	@Test
-	void a03_safeSvnCleanupSpawnsNothingButCommandLogsToItsOwnLogFile(@TempDir Path dir) throws java.io.IOException {
-		var store = new RunStateStore(dir);
-		seededThroughReleasePrepare(store);
-		var runCount = new int[] { 0 };
-		var runner = new ProcessRunner() {
-			@Override
-			public List<String> runLines(List<String> c) {
-				return List.of();
-			}
 
-			@Override
-			public String runText(List<String> c) {
-				return "";
-			}
 
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e) {
-				runCount[0]++;
-				return new ProcResult(0, "");
-			}
-
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e,
-					java.util.function.Consumer<String> k) {
-				runCount[0]++;
-				return new ProcResult(0, "");
-			}
-		};
-		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner, "/repo")), runner,
-				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.SAFE,
-				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
-
-		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "s3cr3t-ldap-password");
-
-		assertEquals(0, runCount[0], "no real subprocess may be spawned for Drop-RC's Tier-B calls in SAFE");
-		var log = java.nio.file.Files.readString(dir.resolve("logs/9.2.1-RC1-drop-rc.log"),
-				java.nio.charset.StandardCharsets.UTF_8);
-		assertTrue(log.contains("would run: svn checkout"));
-		assertTrue(log.contains("would run: svn rm") && log.contains("source/juneau-9.2.1-RC1"));
-		assertTrue(log.contains("would run: svn rm") && log.contains("binaries/juneau-9.2.1-RC1"));
-		assertTrue(log.contains("would run: svn commit"));
-		assertTrue(log.contains("would run: git") && log.contains("tag") && log.contains("-d"));
-		assertTrue(log.contains("would run: git") && log.contains("push") && log.contains(":refs/tags/"));
-		assertTrue(log.contains("would run: mvn") && log.contains("release:rollback"));
-		assertFalse(log.contains("s3cr3t-ldap-password"), "the password must never be logged");
-	}
-
-	@Test
-	void a04_safeSvnCleanupPathsIncludeCurrentRcTag(@TempDir Path dir) throws java.io.IOException {
-		var store = new RunStateStore(dir);
-		seededThroughReleasePrepare(store);
-		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
-				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.SAFE,
-				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
-		svc.apply("9.2.1", "vote rejected", () -> "avail", () -> "pw");
-		var log = java.nio.file.Files.readString(dir.resolve("logs/9.2.1-RC1-drop-rc.log"),
-				java.nio.charset.StandardCharsets.UTF_8);
-		assertTrue(log.contains("https://dist.apache.org/repos/dist/dev/juneau"));
-	}
-
-	@Test
-	void a05_liveBoxSafeRunDoesNotSpawnSubprocess(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var rs = seededThroughReleasePrepare(store);
-		rs.mode = ExecutionMode.SAFE;
-		store.save(rs);
-		var runCount = new int[] { 0 };
-		var runner = new ProcessRunner() {
-			@Override
-			public List<String> runLines(List<String> c) {
-				return List.of();
-			}
-
-			@Override
-			public String runText(List<String> c) {
-				return "";
-			}
-
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e) {
-				runCount[0]++;
-				return new ProcResult(0, "");
-			}
-
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e,
-					java.util.function.Consumer<String> k) {
-				runCount[0]++;
-				return new ProcResult(0, "");
-			}
-		};
-		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner, "/repo")), runner,
-				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE,
-				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
-
-		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
-
-		assertEquals(0, runCount[0], "a Dry-run on a LIVE box still command-logs Drop-RC; no real subprocess");
-	}
 
 	/**
 	 * Drop-RC's own {@code store.save(rs)} is the same choke point {@link ReleaseEngine} hooks in its
@@ -228,14 +129,13 @@ class DropRcServiceTest {
 	void a06_applyPublishesAResetSnapshotViaTheEngineSSharedRunStateStoreHook(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var branches = new BranchResolver(runner(), "/repo");
-		var eng = ReleaseEngine.forTests(store, StepRegistry.standard(branches), runner(), branches, dir,
-				ExecutionMode.LIVE); // installs the onSave hook on this exact store instance
+		var eng = ReleaseEngine.forTests(store, StepRegistry.standard(branches), runner(), branches, dir); // installs the onSave hook on this exact store instance
 		seededThroughReleasePrepare(store);
 		var seen = new ArrayList<RunStateSnapshot>();
 		eng.stateBroadcaster("9.2.1").subscribe(json -> seen.add(Json.DEFAULT.read(json, RunStateSnapshot.class)));
 
 		var svc = new DropRcService(store, StepRegistry.standard(branches), runner(), Path.of("/staging/git/juneau"),
-				dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE, v -> true,
+				dir, NexusStagingClient.forTests((m, p, b) -> ""), v -> true,
 				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");

@@ -33,9 +33,10 @@ test.describe('Smoke: primary content renders without console errors', () => {
     const response = await page.goto('/rest/runs');
     expect(response?.status()).toBe(200);
 
-    // Input/Execution subtabs are always present regardless of whether a run is active.
-    await expect(page.getByRole('tab', { name: 'Input' })).toBeVisible();
-    await expect(page.getByRole('tab', { name: 'Execution' })).toBeVisible();
+    // Input/Execution are Page Subtabs under New Release (nested <@node> links).
+    const nav = page.locator('nav.juneau-page-nav');
+    await expect(nav.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Execution', exact: true })).toBeVisible();
 
     expect(errors, `console errors on /rest/runs: ${errors.join('; ')}`).toEqual([]);
   });

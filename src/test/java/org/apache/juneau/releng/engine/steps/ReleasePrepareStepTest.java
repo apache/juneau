@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -31,8 +30,7 @@ class ReleasePrepareStepTest {
 
 	private StepContext ctx(String version, Map<String, String> form, List<List<String>> calls) {
 		var c = new StepContext();
-		c.mode = ExecutionMode.LIVE; // this test asserts the built command/argv, which only spawns in LIVE
-		c.run = RunState.create(version, "b", List.of("release-prepare"));
+				c.run = RunState.create(version, "b", List.of("release-prepare"));
 		c.stagingRepo = java.nio.file.Path.of("/staging/git/juneau");
 		c.formInputs = form;
 		c.log = s -> {

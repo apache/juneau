@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tier-A fidelity: the real {@link NexusStagingClient} drives the full discovery + lifecycle against the
- * in-app {@link NexusMockModel} through the same {@link NexusMockRest#route routing table} the SAFE servlet
+ * in-app {@link NexusMockModel} through the same {@link NexusMockRest#route routing table} the mock servlet
  * uses — an in-process round-trip with no HTTP server (mirrors {@code ReleaseRunRestTest}'s no-mock-dep note).
  */
 class NexusMockTest {

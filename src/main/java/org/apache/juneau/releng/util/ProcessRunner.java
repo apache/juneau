@@ -67,6 +67,11 @@ public interface ProcessRunner {
 	 * Timeout-capable variant of {@link #run(List, String, Map)}. {@code timeout} {@code null} or non-positive
 	 * means unbounded. Default ignores the timeout and delegates to {@link #run(List, String, Map)};
 	 * {@link Default} honors it and destroy-forcibly on expiry.
+	 *
+	 * @param command the command and arguments
+	 * @param stdin optional stdin bytes, or {@code null}
+	 * @param env extra environment variables, or {@code null}
+	 * @param timeout {@code null} or non-positive means unbounded. Ignored by this default; {@link Default} honors it.
 	 */
 	default ProcResult run(List<String> command, String stdin, Map<String, String> env, Duration timeout) {
 		return run(command, stdin, env);

@@ -26,8 +26,8 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** The default-safe live guard + in-memory arming (never persisted, so re-arm is required after a restart). */
-class SafeModeGuardTest {
+/** The mutating-step arming guard (never persisted, so re-arm is required after a restart). */
+class ArmGuardTest {
 
 	private ProcessRunner okRunner() {
 		return new ProcessRunner() {
@@ -56,15 +56,12 @@ class SafeModeGuardTest {
 		};
 	}
 
-	private ReleaseEngine engine(Path dir, ExecutionMode mode) {
+	private ReleaseEngine engine(Path dir) {
 		var runner = okRunner();
 		var branches = new BranchResolver(runner, "/repo");
-		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir,
-				mode);
+		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir);
 	}
 
-	// Marks every step ahead of stepId SUCCEEDED so the forward-apply guard (ReleaseEngine) doesn't refuse
-	// to run stepId in isolation; this test is about the LIVE-armed/SAFE guard, not the whole pipeline.
 	private void satisfyAllPredecessorsOf(Path dir, String version, String stepId) {
 		var store = new RunStateStore(dir);
 		var rs = store.load(version).orElseThrow();
@@ -76,9 +73,9 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void a01_liveUnarmedRefusesMutatingStep(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+	void a01_unarmedRefusesMutatingStep(@TempDir Path dir) {
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
 		assertFalse(res.success);
 		assertTrue(res.message.toLowerCase().contains("arm"));
@@ -86,9 +83,9 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void a02_liveArmedRunsMutatingStep(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+	void a02_armedRunsMutatingStep(@TempDir Path dir) {
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
@@ -97,58 +94,21 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void a03_safeAllowsMutatingStepWithoutArming(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.SAFE);
+	void a03_armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
+		var eng = engine(dir);
 		eng.start("9.2.1", null);
-		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
-		var res = eng.apply("9.2.1", "release-prepare", Map.of());
-		assertTrue(res.success, "SAFE simulates the mutating step; no arming required");
-	}
-
-	@Test
-	void a04_armIsRejectedInSafeMode(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.SAFE);
-		eng.start("9.2.1", null);
-		var res = eng.arm("9.2.1", "9.2.1 LIVE");
-		assertFalse(res.success);
-		assertFalse(eng.isArmed("9.2.1"));
-	}
-
-	@Test
-	void a05_liveBoxSafeRunAllowsMutatingWithoutArming(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null); // defaults Dry-run even on a LIVE box
-		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
-		var res = eng.apply("9.2.1", "release-prepare", Map.of());
-		assertTrue(res.success, "a Dry-run on a LIVE box still simulates; no arming required");
-	}
-
-	@Test
-	void a06_armIsRejectedOnASafeRunEvenOnALiveBox(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null);
-		var res = eng.arm("9.2.1", "9.2.1 LIVE");
-		assertFalse(res.success);
-		assertFalse(eng.isArmed("9.2.1"));
-	}
-
-	@Test
-	void a07_armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertFalse(eng.arm("9.2.1", "yes").success);
 		assertFalse(eng.isArmed("9.2.1"));
 	}
 
 	@Test
-	void a08_armDoesNotSurviveARestart(@TempDir Path dir) {
-		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+	void a04_armDoesNotSurviveARestart(@TempDir Path dir) {
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);
 		assertTrue(eng.isArmed("9.2.1"));
 
-		// A fresh engine over the same persisted store models a process restart: arm is in-memory only.
-		var restarted = engine(dir, ExecutionMode.LIVE);
+		var restarted = engine(dir);
 		assertFalse(restarted.isArmed("9.2.1"));
 		var res = restarted.apply("9.2.1", "release-prepare", Map.of());
 		assertFalse(res.success, "must re-arm after a restart");

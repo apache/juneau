@@ -48,7 +48,7 @@ public class ComposeVoteEmailStep implements ReleaseStep {
 				readSha512(ctx, "source", "src"), "binSha512", readSha512(ctx, "binaries", "bin"));
 	}
 
-	/** Reads the {@code .sha512} file §5.12 wrote for this RC; blank (SAFE soft-note) if absent. */
+	/** Reads the {@code .sha512} file §5.12 wrote for this RC; blank if the checksum file is absent. */
 	private String readSha512(StepContext ctx, String subdir, String kind) {
 		var rc = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var name = "apache-juneau-" + ctx.run.version + "-" + kind + ".zip.sha512";
@@ -71,10 +71,10 @@ public class ComposeVoteEmailStep implements ReleaseStep {
 	@Override
 	public StepResult apply(StepContext ctx) {
 		var data = gather(ctx);
-		// OQ-E: under SAFE the RC tag + dist checksums were never really produced, so fill-ins may be blank.
+		// RC tag + dist checksums may be absent if earlier steps were skipped; fill-ins may be blank.
 		// Note it and continue rather than hard-failing — the draft is still useful for a rehearsal.
 		if ("(unknown)".equals(data.get("commitHash")) || data.get("srcSha512").isBlank())
-			ctx.log.accept("Note: RC tag/checksums absent (expected under SAFE) — composing draft with placeholders.");
+			ctx.log.accept("Note: RC tag/checksums absent — composing draft with placeholders.");
 		var path = ctx.email.compose(EmailTemplate.VOTE, ctx.run, data);
 		return StepResult.ok("Opened draft: " + path);
 	}

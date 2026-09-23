@@ -228,6 +228,13 @@ tr.detail-row dd {
 .links-cell a { margin-right: 10px; font-size: 0.8125rem; }
 .links-cell a:last-child { margin-right: 0; }
 
+/* Expanded-row (row-detail) header.  Juneau's console chrome paints an accent WASH behind this header
+   (background-color:var(--jc-accent-wash)); under this app's light-red theme that wash is a pink band behind
+   the version title.  A record-detail title reads better as an icon + title on the plain panel (no coloured
+   band), so this app-local override drops the wash back to transparent.  Scoped to this app's own chrome.css
+   (loaded after the shared console chrome), so it does not change the wash for other console apps. */
+.juneau-view-detail-header { background-color: transparent; }
+
 /* Toolbar Search, ribbon idle borders, and header sort+search are Juneau stock
    (WORK-J0546 / WORK-J0547). Do not restyle the DataTables search field or order
    control here. table.rm-table rules above still style any app-local table that

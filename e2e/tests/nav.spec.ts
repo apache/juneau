@@ -47,8 +47,9 @@ test.describe('Top navigation', () => {
       expect(response?.status()).toBe(200);
 
       if (tab.name === 'New Release') {
-        await expect(page.getByRole('tab', { name: 'Input' })).toBeVisible();
-        await expect(page.getByRole('tab', { name: 'Execution' })).toBeVisible();
+        const nav = topNav(page);
+        await expect(nav.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
+        await expect(nav.getByRole('link', { name: 'Execution', exact: true })).toBeVisible();
       } else if (tab.heading instanceof RegExp) {
         await expect(page.getByText(tab.heading).first()).toBeVisible();
       } else if (tab.heading) {

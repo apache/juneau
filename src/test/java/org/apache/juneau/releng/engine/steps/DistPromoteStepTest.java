@@ -17,14 +17,12 @@
 
 package org.apache.juneau.releng.engine.steps;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -63,9 +61,8 @@ class DistPromoteStepTest {
 		};
 	}
 
-	private StepContext ctx(ExecutionMode mode, Path stateDir, List<String> tags) {
+	private StepContext ctx(Path stateDir, List<String> tags) {
 		var c = new StepContext();
-		c.mode = mode;
 		c.run = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("dist-promote"));
 		c.runner = recordingRunner(tags);
 		c.target = TargetProfile.prodDefault();
@@ -81,7 +78,7 @@ class DistPromoteStepTest {
 	@Test
 	void a01_liveMovesArtifactsAndRemovesPriorReleaseOnSameLine(@TempDir Path dir) {
 		var tags = List.of("juneau-9.2.0", "juneau-9.1.5", "juneau-9.2.1-RC1", "juneau-9.0.0");
-		var c = ctx(ExecutionMode.LIVE, dir, tags);
+		var c = ctx(dir, tags);
 		var res = new DistPromoteStep().apply(c);
 		assertTrue(res.success, res.message);
 
@@ -124,21 +121,10 @@ class DistPromoteStepTest {
 
 	@Test
 	void a02_noPriorReleaseOnLineSkipsRemoval(@TempDir Path dir) {
-		var c = ctx(ExecutionMode.LIVE, dir, List.of());
+		var c = ctx(dir, List.of());
 		var res = new DistPromoteStep().apply(c);
 		assertTrue(res.success, res.message);
 		assertFalse(calls.stream().anyMatch(x -> x.contains("rm") && x.get(0).equals("svn")));
 	}
 
-	@Test
-	void a03_safeSpawnsNothingAndLogsWouldRun(@TempDir Path dir) {
-		var c = ctx(ExecutionMode.SAFE, dir, List.of("juneau-9.2.0"));
-		var res = new DistPromoteStep().apply(c);
-		assertTrue(res.success, res.message);
-		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
-		var wouldRun = logLines.stream().filter(l -> l.startsWith("would run:")).toList();
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("mv")));
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("commit")));
-		assertTrue(logLines.stream().noneMatch(l -> l.contains("s3cr3t")));
-	}
 }

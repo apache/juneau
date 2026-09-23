@@ -57,22 +57,11 @@ public class DevDistVerifyStep implements ReleaseStep {
 	@Override
 	public StepResult apply(StepContext ctx) {
 		var missing = missingOrEmptyFiles(ctx);
-		if (!missing.isEmpty()) {
-			// SAFE fidelity note (§8): binary-artifacts-stage's staging was command-logged in SAFE, so these
-			// files were never really produced — soft-note rather than fail the rehearsal (OQ-E). In LIVE the
-			// files are expected to exist for real, so their absence is a genuine failure.
-			if (!ctx.live()) {
-				ctx.log.accept("Note (SAFE: artifacts not staged) — missing/empty: " + missing);
-			} else {
-				return StepResult.fail("Missing or empty dist/dev file(s): " + missing);
-			}
-		}
+		if (!missing.isEmpty())
+			return StepResult.fail("Missing or empty dist/dev file(s): " + missing);
 
 		var url = ctx.target.distDevBase() + "/";
-		if (ctx.live())
-			ctx.exec(List.of("open", url));
-		else
-			ctx.log.accept("SAFE: staging was command-logged, so no browser is opened for " + url);
+		ctx.exec(List.of("open", url));
 		return StepResult.ok("Dist files present — spot-check the opened URL, then confirm.");
 	}
 
@@ -80,7 +69,7 @@ public class DevDistVerifyStep implements ReleaseStep {
 	private List<String> missingOrEmptyFiles(StepContext ctx) {
 		var rc = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var dist = ctx.stateDir.resolve("dist");
-		ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
+		ctx.exec(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
 				ctx.target.distDevBase(), dist.toString()), ctx.ldapPassword + "\n", null);
 
 		var missing = new ArrayList<String>();

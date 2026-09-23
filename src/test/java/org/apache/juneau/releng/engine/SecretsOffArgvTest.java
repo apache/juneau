@@ -71,8 +71,7 @@ class SecretsOffArgvTest {
 
 	private StepContext ctx(ProcessRunner r, Path stateDir) {
 		var c = new StepContext();
-		c.mode = ExecutionMode.LIVE; // command-building + secret-routing is a LIVE concern; SAFE never spawns
-		c.run = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("deploy-snapshot"));
+				c.run = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("deploy-snapshot"));
 		c.run.nexusRepoId = "orgapachejuneau-1042";
 		c.runner = r;
 		c.log = s -> {

@@ -37,7 +37,6 @@ import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.Preview;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunState;
@@ -75,16 +74,32 @@ public class ReleaseRunRest extends BasicRestResource {
 	/** Human page — the pipeline control panel for the active run (or an empty start form). */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
-		var liveCapable = engine.mode() == ExecutionMode.LIVE;
 		var active = engine.displayRun().orElse(null);
-		var runMode = active == null ? ExecutionMode.SAFE : engine.effectiveMode(active);
+		var subtab = resolveSubtab(req.getParameter("tab"), active != null);
 		var view = ConsolePage.of("new-release", req).attr("stepMeta", stepMetaJson(engine.registry().steps()))
-				.attr("mode", runMode.name()).attr("appMode", engine.mode().name())
-				.attr("liveCapable", Boolean.valueOf(liveCapable));
+				.attr("subtab", subtab).attr("navTab", "new/" + subtab);
 		// FreemarkerView.attr() rejects null values by design; the template only checks run??
 		// (attribute presence), so omit the attribute entirely when there's no displayable run.
 		return active == null ? view
 				: view.attr("run", active).attr("armed", Boolean.valueOf(engine.isArmed(active.version)));
+	}
+
+	/**
+	 * Resolves the New Release Page Subtab. An explicit {@code ?tab=input} / {@code ?tab=exec} wins;
+	 * otherwise Input is the default with no active run and Execution is the default once a run exists
+	 * (matching the previous in-page pill selection).
+	 */
+	@SuppressWarnings({ "java:S1192" // Page-subtab query value; a constant would obscure the wire form.
+	})
+	static String resolveSubtab(String requested, boolean hasRun) {
+		if (requested != null) {
+			var t = requested.strip().toLowerCase();
+			if ("input".equals(t))
+				return "input";
+			if ("exec".equals(t) || "execution".equals(t))
+				return "exec";
+		}
+		return hasRun ? "exec" : "input";
 	}
 
 	/**
@@ -115,18 +130,15 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/**
-	 * Start a new run. Body: {version, developmentVersion?, milestoneNumber?, mode?}. {@code milestoneNumber}
+	 * Start a new run. Body: {version, developmentVersion?, milestoneNumber?}. {@code milestoneNumber}
 	 * is the New-Release form field — pre-filled client-side by title-match resolution (§8.1),
-	 * user-overridable. {@code mode} is Dry-run ({@code SAFE}, default) or Actual ({@code LIVE}); LIVE is
-	 * capped to SAFE unless the box was started with {@code rm.mode=live}. Rejects a second concurrent run
-	 * with 409.
+	 * user-overridable. Rejects a second concurrent run with 409.
 	 */
 	@Mutating("creates a run and writes its state to disk")
 	@RestPost("/")
 	public RunState start(@Content StartRequest body) {
 		try {
-			var rs = engine.start(body.version, body.developmentVersion, body.milestoneNumber,
-					ExecutionMode.fromConfig(body.mode));
+			var rs = engine.start(body.version, body.developmentVersion, body.milestoneNumber);
 			return engine.updateDetails(rs.version, body.releaseSummary, body.highlights, body.knownIssues,
 					body.acknowledgements);
 		} catch (IllegalStateException e) {
@@ -135,16 +147,21 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/**
-	 * Update the active run's optional narrative fields ({@code releaseSummary}, {@code highlights},
-	 * {@code knownIssues}, {@code acknowledgements}) so they can be edited before each email is composed.
-	 * Returns the updated run.
+	 * Update the active run's Input-form fields (version, development version, milestone, and the four
+	 * narrative fields) so they can be edited after start. Returns the updated run. A version change
+	 * renames the persisted run file; a colliding version is a 409.
 	 */
-	@Mutating("updates the run's persisted narrative fields")
+	@Mutating("updates the run's persisted identity and narrative fields")
 	@RestPost("/{version}/details")
 	public RunState details(@Path("version") String version, @Content DetailsRequest body) {
 		requireRun(version);
 		var b = body == null ? new DetailsRequest() : body;
-		return engine.updateDetails(version, b.releaseSummary, b.highlights, b.knownIssues, b.acknowledgements);
+		try {
+			return engine.updateDetails(version, b.releaseSummary, b.highlights, b.knownIssues, b.acknowledgements,
+					b.version, b.developmentVersion, b.milestoneNumber);
+		} catch (IllegalStateException e) {
+			throw new Conflict(e.getMessage());
+		}
 	}
 
 	// No @Mutating: a preview is a dry run by construction and writes nothing. The annotation is a claim about
@@ -157,7 +174,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.preview(version, stepId, form == null ? Map.of() : form);
 	}
 
-	@Mutating("executes a release step; in LIVE mode this mutates git, SVN, Nexus, GitHub or mailing lists")
+	@Mutating("executes a release step; this mutates git, SVN, Nexus, GitHub or mailing lists")
 	@RestPost("/{version}/steps/{stepId}/apply")
 	public StepResult apply(@Path("version") String version, @Path("stepId") String stepId,
 			@Content Map<String, String> form) {
@@ -193,16 +210,15 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/**
-	 * Arm this run for LIVE mutation. Requires a typed confirm phrase ({@code "<version> LIVE"}) and is
-	 * rejected unless the box is LIVE and this run is Actual (LIVE). Arming is in-memory on the engine and
-	 * drops on any restart.
+	 * Arm this run for mutation. Requires a typed confirm phrase ({@code "<version> LIVE"}). Arming is
+	 * in-memory on the engine and drops on any restart.
 	 *
 	 * <p>This is an <b>intent</b> gate: the confirm phrase shows a human deliberately typed something, and is not
 	 * a secret and not authentication — it is derivable from the page it is typed on. Whether the request came from
 	 * a page this application served is a separate question, answered by the loopback boundary in front of every
 	 * endpoint. See {@link org.apache.juneau.releng.engine.ReleaseEngine#arm(String, String)}.
 	 */
-	@Mutating("arms the run for irreversible LIVE mutation")
+	@Mutating("arms the run for irreversible mutation")
 	@RestPost("/{version}/arm")
 	public StepResult arm(@Path("version") String version, @Content ArmRequest body) {
 		requireRun(version);
@@ -243,7 +259,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		try {
 			dropRc.apply(version, body.reason, secrets::availid, secrets::ldapPassword);
 		} catch (IllegalStateException e) {
-			return StepResult.fail(e.getMessage()); // the LIVE-unarmed guard refusal
+			return StepResult.fail(e.getMessage()); // the unarmed guard refusal
 		}
 		return StepResult.ok("RC dropped; bumped to the next RC.");
 	}
@@ -267,10 +283,12 @@ public class ReleaseRunRest extends BasicRestResource {
 		public String highlights;
 		public String knownIssues;
 		public String acknowledgements;
-		public String mode; // "SAFE" (default) or "LIVE"; capped by the box-wide rm.mode
 	}
 
 	public static class DetailsRequest {
+		public String version;
+		public String developmentVersion;
+		public Integer milestoneNumber;
 		public String releaseSummary;
 		public String highlights;
 		public String knownIssues;

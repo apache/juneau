@@ -35,10 +35,10 @@ import org.apache.juneau.rest.server.RestResponse;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 
 /**
- * An in-app loopback mock of the Apache Nexus 2 staging suite, mounted at {@code /mock/nexus/*}. It
- * lets the real {@link NexusStagingClient} run its full discovery/close/promote/drop HTTP flow against a
- * stateful in-memory model ({@link NexusMockModel}) with zero canonical side effects. Always registered so
- * a Dry-run on a LIVE box can still hit it; LIVE runs use the real Nexus base URL and never call this servlet.
+ * An in-process mock of the Apache Nexus 2 staging suite used by tests. It lets the real
+ * {@link NexusStagingClient} run its full discovery/close/promote/drop HTTP flow against a
+ * stateful in-memory model ({@link NexusMockModel}) with zero canonical side effects. Not
+ * registered in the running app.
  *
  * <p>All request routing is centralized in {@link #route} so the same mapping backs both this servlet and the
  * in-process transport tests exercise.

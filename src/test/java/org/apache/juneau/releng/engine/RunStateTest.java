@@ -34,15 +34,6 @@ class RunStateTest {
 		assertEquals(RunStatus.RUNNING, rs.status);
 		assertSize(3, rs.steps);
 		assertTrue(rs.steps.stream().allMatch(s -> s.status == StepStatus.PENDING));
-		assertNull(rs.mode, "create() must leave mode unset so pre-toggle JSON and Drop-RC tests fall back to constructor mode");
-	}
-
-	@Test
-	void a02_jsonWithoutModeFieldLeavesModeNull() {
-		var rs = RunState.create("9.2.1", "b", List.of("preflight"));
-		var json = Json.DEFAULT.write(rs);
-		var back = Json.DEFAULT.read(json, RunState.class);
-		assertNull(back.mode);
 	}
 
 	@Test
@@ -63,7 +54,6 @@ class RunStateTest {
 		rs.highlights = "- One\n- Two";
 		rs.knownIssues = "- A known thing";
 		rs.acknowledgements = "Thanks all.";
-		rs.mode = ExecutionMode.LIVE;
 
 		var json = Json.DEFAULT.write(rs);
 		var back = Json.DEFAULT.read(json, RunState.class);
@@ -77,7 +67,6 @@ class RunStateTest {
 		assertEquals("- One\n- Two", back.highlights);
 		assertEquals("- A known thing", back.knownIssues);
 		assertEquals("Thanks all.", back.acknowledgements);
-		assertEquals(ExecutionMode.LIVE, back.mode);
 	}
 
 }

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -35,9 +34,8 @@ class MilestoneCloseStepTest {
 	private final List<List<String>> calls = new ArrayList<>();
 	private final List<String> logLines = new ArrayList<>();
 
-	private StepContext ctx(ExecutionMode mode, Integer milestoneNumber) {
+	private StepContext ctx(Integer milestoneNumber) {
 		var c = new StepContext();
-		c.mode = mode;
 		c.run = RunState.create("9.2.1", "b", List.of("milestone-close"));
 		c.run.milestoneNumber = milestoneNumber;
 		c.target = TargetProfile.prodDefault();
@@ -72,14 +70,14 @@ class MilestoneCloseStepTest {
 
 	@Test
 	void a01_noMilestoneNumberLegitimatelyNoOps() {
-		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.LIVE, null));
+		var res = new MilestoneCloseStep().apply(ctx(null));
 		assertTrue(res.success);
 		assertSize(0, calls);
 	}
 
 	@Test
 	void a02_liveClosesResolvedMilestoneNumber() {
-		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.LIVE, 13));
+		var res = new MilestoneCloseStep().apply(ctx(13));
 		assertTrue(res.success, res.message);
 		var cmd = calls.get(0);
 		assertTrue(cmd.contains("gh"));
@@ -87,11 +85,4 @@ class MilestoneCloseStepTest {
 		assertTrue(cmd.contains("state=closed"));
 	}
 
-	@Test
-	void a03_safeLogsWouldRunAndSpawnsNothing() {
-		var res = new MilestoneCloseStep().apply(ctx(ExecutionMode.SAFE, 13));
-		assertTrue(res.success, res.message);
-		assertSize(0, calls);
-		assertTrue(logLines.stream().anyMatch(l -> l.startsWith("would run:") && l.contains("milestones/13")));
-	}
 }

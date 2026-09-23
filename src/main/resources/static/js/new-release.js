@@ -18,13 +18,6 @@
 (function () {
   const val = (id) => document.getElementById(id)?.value ?? null;
 
-  // App-local Input/Execution subtab toggle. Only shows/hides panels — the Execution panel (and its two
-  // EventSources, wired further down) is never removed from the DOM, so switching tabs never reconnects SSE.
-  globalThis.nrSubtab = function (name) {
-    document.querySelectorAll('.rm-subtab').forEach((b) => b.classList.toggle('active', b.dataset.subtab === name));
-    document.querySelectorAll('.rm-subtab-panel').forEach((p) => { p.hidden = p.dataset.subtab !== name; });
-  };
-
   // Defined unconditionally so the start form (rendered when `run` is null, before `.rm-rail-layout`
   // exists) always has it available. Captures the release metadata plus the four optional narrative fields.
   globalThis.nrStart = async function () {
@@ -34,29 +27,42 @@
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         version: val('nr-version'), developmentVersion: val('nr-devversion'), milestoneNumber: ms,
-        mode: document.querySelector('input[name="nr-mode"]:checked')?.value || 'SAFE',
         releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
         knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
       })
     });
-    location.reload();
+    location.href = '/rest/runs?tab=exec';
   };
 
-  // Persist edits to the four narrative fields on the active run (POST /{version}/details) without leaving
-  // the page, so they can be revised before each email is composed. Surfaces a terse inline result.
+  // Persist edits on the active run (POST /{version}/details) without leaving the page.
+  // Identity fields (version, developmentVersion, milestoneNumber) were previously readonly
+  // after start — version is the store key, developmentVersion is also rewritten by
+  // release-prepare (derived for z>0), milestone is pre-filled by GitHub title-match on
+  // version blur. Save still writes all three; the form is the source of truth.
   globalThis.nrSaveDetails = async function () {
-    const ver = document.querySelector('.rm-rail-layout')?.dataset.version;
+    const form = document.querySelector('.rm-form-card');
+    const origVer = form?.dataset.runVersion;
     const msg = document.getElementById('nr-details-msg');
-    if (!ver) return;
+    if (!origVer) return;
+    const msEl = document.getElementById('nr-milestone');
+    const ms = msEl?.value ? Number(msEl.value) : null;
+    const newVer = val('nr-version');
     try {
-      const r = await fetch('/rest/runs/' + encodeURIComponent(ver) + '/details', {
+      const r = await fetch('/rest/runs/' + encodeURIComponent(origVer) + '/details', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          version: newVer,
+          developmentVersion: val('nr-devversion'),
+          milestoneNumber: Number.isFinite(ms) ? ms : null,
           releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
           knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
         })
       });
       if (msg) { msg.textContent = r.ok ? 'Saved.' : 'Save failed.'; msg.style.color = r.ok ? '' : 'var(--jc-danger)'; }
+      if (r.ok && newVer && newVer.trim() !== origVer) {
+        form.dataset.runVersion = newVer.trim();
+        location.reload();
+      }
     } catch (e) {
       if (msg) { msg.textContent = 'Save failed.'; msg.style.color = 'var(--jc-danger)'; }
     }
@@ -85,12 +91,8 @@
 
   const version = layout.dataset.version;
   const rc = layout.dataset.rc;
-  const mode = layout.dataset.mode || 'SAFE';
   const metaEl = document.getElementById('nr-step-meta');
   const STEP_META = metaEl ? JSON.parse(metaEl.textContent) : {};
-
-  // The apply affordance is mode-derived: SAFE simulates (command-log, no side effects), LIVE mutates.
-  const runLabel = mode === 'LIVE' ? 'Run (LIVE)' : 'Simulate (SAFE)';
 
   // Exactly one EventSource at a time (spec §4/§7: one console visible at a time). Switching the selected
   // step closes the old connection and opens a new one against that step's own /events/{version}/{stepId}.
@@ -121,18 +123,14 @@
       return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Re-run</button>';
     if (status === 'skipped')
       return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run anyway</button>';
-    return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">' + runLabel + '</button>';
+    return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run</button>';
   }
 
   // §5.15/§5.16: entering vote-gate only opens the vote (sets AWAITING_VOTE) — it is NOT itself the
   // advance action. The gate is only passed by recording a vote result (POST .../vote-result, which the
-  // engine applies as the separate "tally-vote-result" step). SAFE has no real 72h wait or email tally to
-  // read, so it gets a one-click "Simulate (SAFE)" that records a passing result outright; LIVE still
-  // requires the operator to pick a real outcome and type the tally summary read off the vote thread.
+  // engine applies as the separate "tally-vote-result" step). The operator picks a real outcome and types
+  // the tally summary read off the vote thread.
   function renderVoteGateActions() {
-    if (mode !== 'LIVE')
-      return '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrVoteResult(\'passed\')">' + runLabel + '</button>'
-        + '<span class="rm-step-note">Records a simulated passing vote (no real 72h wait or tally) and advances the run.</span>';
     return '<div class="rm-vote-form">'
       + '<label>Vote outcome<select id="nr-vote-outcome"><option value="passed">Passed</option><option value="rejected">Rejected</option></select></label>'
       + '<label>Tally summary<textarea id="nr-vote-tally" rows="3" placeholder="+1/0/-1 counts, binding voters, read off the vote thread"></textarea></label>'
@@ -140,13 +138,9 @@
       + '</div>';
   }
 
-  globalThis.nrVoteResult = async function (safeOutcome) {
-    var outcome = safeOutcome;
-    var tally = 'SAFE-mode simulated passing vote (no real tally read).';
-    if (!outcome) {
-      outcome = document.getElementById('nr-vote-outcome').value;
-      tally = document.getElementById('nr-vote-tally').value;
-    }
+  globalThis.nrVoteResult = async function () {
+    var outcome = document.getElementById('nr-vote-outcome').value;
+    var tally = document.getElementById('nr-vote-tally').value;
     const res = await post('/vote-result', { outcome, tally });
     if (res && res.success === false) { alert(res.message); return; }
     if (outcome === 'rejected') await nrDropRc(); // §8: a rejected vote forks to Drop-RC.
@@ -260,7 +254,7 @@
     if (runStatusEl) { applyStatusClass(runStatusEl, STATUS_CLASS(snap.status)); runStatusEl.textContent = snap.status; }
     const titleEl = document.getElementById('nr-run-title');
     if (titleEl) titleEl.textContent = snap.version + ' \u00b7 RC' + snap.rc;
-    const armArea = document.getElementById('nr-arm-area'); // only rendered server-side in LIVE mode
+    const armArea = document.getElementById('nr-arm-area');
     if (armArea) {
       armArea.innerHTML = snap.armed
         ? '<span class="tag armed" title="This run is armed for live mutation">ARMED</span>'

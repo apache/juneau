@@ -88,7 +88,7 @@ class ComposeVoteEmailStepTest {
 
 	@Test
 	void a02_absentShaFilesSoftNoteRatherThanFail(@TempDir Path dir) {
-		var c = ctx(dir); // no dist/ working copy at all (e.g. under a SAFE rehearsal)
+		var c = ctx(dir); // no dist/ working copy at all
 		var res = new ComposeVoteEmailStep().apply(c);
 		assertTrue(res.success, "absent checksums must not hard-fail the draft");
 	}

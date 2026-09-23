@@ -49,11 +49,11 @@ public class DeploySnapshotStep implements ReleaseStep {
 	@Override
 	public StepResult apply(StepContext ctx) {
 		// Prime gpg-agent once: throwaway loopback sign, passphrase via stdin (mirrors GpgValidator).
-		ctx.dryRunOr(
+		ctx.exec(
 				List.of("gpg", "--batch", "--yes", "--pinentry-mode", "loopback", "--passphrase-fd", "0",
 						"--local-user", ctx.gpgKeyId, "--sign", "--output", "/dev/null", "-"),
 				ctx.gpgPassphrase + "\n", null);
-		var res = ctx.dryRunOr(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "deploy"));
+		var res = ctx.exec(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "deploy"));
 		return res.ok() ? StepResult.ok("SNAPSHOT deployed.") : StepResult.fail("mvn deploy failed.");
 	}
 }

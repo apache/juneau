@@ -63,12 +63,10 @@ class ReleaseEngineTest {
 		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir);
 	}
 
-	private ReleaseEngine engineLive(Path dir) {
-		var runner = okRunner();
-		var branches = new BranchResolver(runner, "/repo");
-		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir,
-				ExecutionMode.LIVE);
+	private void arm(ReleaseEngine eng, String version) {
+		assertTrue(eng.arm(version, version + " LIVE").success);
 	}
+
 
 	/** Subscribes to {@code version}'s state broadcaster and decodes every published snapshot in order. */
 	@SuppressWarnings({
@@ -121,25 +119,30 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void a04_startDefaultsToSafeEvenOnALiveBox(@TempDir Path dir) {
-		var eng = engineLive(dir);
-		var rs = eng.start("9.2.1", null);
-		assertEquals(ExecutionMode.SAFE, rs.mode);
-	}
-
-	@Test
-	void a05_startLiveIsCappedToSafeWhenTheBoxIsSafe(@TempDir Path dir) {
+	void a04_updateDetailsWritesIdentityFields(@TempDir Path dir) {
 		var eng = engine(dir);
-		var rs = eng.start("9.2.1", null, null, ExecutionMode.LIVE);
-		assertEquals(ExecutionMode.SAFE, rs.mode, "a SAFE box cannot mint a LIVE run");
+		eng.start("9.2.1", "9.2.2-SNAPSHOT", 7);
+		var updated = eng.updateDetails("9.2.1", "summary", "hi", "iss", "ack", "9.2.1", "9.2.3-SNAPSHOT", 11);
+		assertEquals("9.2.1", updated.version);
+		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
+		assertEquals(11, updated.milestoneNumber);
+		assertEquals("summary", updated.releaseSummary);
+		assertEquals("9.2.3-SNAPSHOT", new RunStateStore(dir).load("9.2.1").orElseThrow().developmentVersion);
 	}
 
 	@Test
-	void a06_startLiveIsHonoredWhenTheBoxIsLive(@TempDir Path dir) {
-		var eng = engineLive(dir);
-		var rs = eng.start("9.2.1", null, null, ExecutionMode.LIVE);
-		assertEquals(ExecutionMode.LIVE, rs.mode);
+	void a05_updateDetailsRenamesRunWhenVersionChanges(@TempDir Path dir) {
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
+		var renamed = eng.updateDetails("9.2.1", null, null, null, null, "9.2.2", "9.2.3-SNAPSHOT", null);
+		assertEquals("9.2.2", renamed.version);
+		assertEquals("juneau-9.2.2-branch", renamed.branch);
+		assertTrue(new RunStateStore(dir).load("9.2.1").isEmpty(), "old store key must go away");
+		assertEquals("9.2.3-SNAPSHOT", new RunStateStore(dir).load("9.2.2").orElseThrow().developmentVersion);
 	}
+
+
+
 
 	@Test
 	void a07_secondStartWhileActiveIsRejected(@TempDir Path dir) {
@@ -191,6 +194,7 @@ class ReleaseEngineTest {
 		// have already succeeded — currentStepId is bookkeeping only, never a gate.
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
+		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		// "workspace-setup" is not currentStepId ("compose-propose-email" now is) — apply() must still
@@ -220,6 +224,7 @@ class ReleaseEngineTest {
 	void b05_eachStepGetsItsOwnBroadcasterAndLogPath(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
+		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		eng.apply("9.2.1", "workspace-setup", Map.of());
@@ -230,7 +235,7 @@ class ReleaseEngineTest {
 	/**
 	 * Root cause of the reported vote-gate stall: applying {@code vote-gate} only (re)opens the vote — it
 	 * is NOT itself the advance action, however many times it's (re-)applied. This is the exact call the
-	 * old (broken) "Simulate (SAFE)" wiring made. The actual gate-pass action is the distinct
+	 * old (broken) vote-gate-only wiring made. The actual gate-pass action is the distinct
 	 * {@code tally-vote-result} step, with a {@code passed} outcome.
 	 */
 	@Test
@@ -274,6 +279,7 @@ class ReleaseEngineTest {
 	void d01_forwardApplyIsBlockedPastAnUnsatisfiedRequiredPredecessor(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
+		arm(eng, "9.2.1");
 		// "preflight" (index 0) is still PENDING; "workspace-setup" (index 2) must be refused.
 		var res = eng.apply("9.2.1", "workspace-setup", Map.of());
 		assertFalse(res.success);
@@ -286,6 +292,7 @@ class ReleaseEngineTest {
 	void d02_reRunningAnAlreadySucceededStepIsNotBlockedByTheForwardApplyGuard(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
+		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		eng.apply("9.2.1", "workspace-setup", Map.of());
@@ -387,8 +394,8 @@ class ReleaseEngineTest {
 
 	@Test
 	void f04_armPublishesTheUpdatedArmedFlagEvenThoughItNeverCallsSave(@TempDir Path dir) {
-		var eng = engineLive(dir);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
 		var seen = subscribeSnapshots(eng, "9.2.1");
 
 		var res = eng.arm("9.2.1", "9.2.1 LIVE");
@@ -396,13 +403,12 @@ class ReleaseEngineTest {
 		assertTrue(res.success, res.message);
 		assertSize(1, seen);
 		assertTrue(seen.get(0).armed);
-		assertEquals(ExecutionMode.LIVE, seen.get(0).mode);
 	}
 
 	@Test
 	void f05_aRejectedArmAttemptPublishesNothing(@TempDir Path dir) {
-		var eng = engineLive(dir);
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
 		var seen = subscribeSnapshots(eng, "9.2.1");
 
 		var res = eng.arm("9.2.1", "wrong phrase");
@@ -447,14 +453,13 @@ class ReleaseEngineTest {
 
 	@Test
 	void g02_snapshotJsonIsEmptyForAnUnknownVersionAndReflectsArmedForAKnownOne(@TempDir Path dir) {
-		var eng = engineLive(dir);
+		var eng = engine(dir);
 		assertTrue(eng.snapshotJson("nope").isEmpty());
 
-		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
+		eng.start("9.2.1", null);
 		eng.arm("9.2.1", "9.2.1 LIVE");
 		var snap = Json.DEFAULT.read(eng.snapshotJson("9.2.1").orElseThrow(), RunStateSnapshot.class);
 		assertTrue(snap.armed);
-		assertEquals(ExecutionMode.LIVE, snap.mode);
 	}
 
 	private StepStatus statusOf(RunStateSnapshot snap, String stepId) {

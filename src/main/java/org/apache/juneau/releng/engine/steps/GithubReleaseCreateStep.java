@@ -52,18 +52,15 @@ public class GithubReleaseCreateStep implements ReleaseStep {
 	public StepResult apply(StepContext ctx) {
 		var tag = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var env = Map.of("GH_TOKEN", ctx.githubToken);
-		// Idempotency: treat "already exists" as success. Only probed LIVE; in SAFE the create is
-		// command-logged unconditionally (no gh call is made to check for a real, pre-existing release).
-		if (ctx.live()) {
-			var exists = ctx.runner.run(List.of("gh", "release", "view", tag, "--repo", ctx.target.ghSlug()), null,
-					env);
-			if (exists.ok()) {
-				ctx.log.accept("GitHub Release already exists for " + tag);
-				return StepResult.ok("Already exists.");
-			}
+		// Idempotency: treat "already exists" as success.
+		var exists = ctx.runner.run(List.of("gh", "release", "view", tag, "--repo", ctx.target.ghSlug()), null,
+				env);
+		if (exists.ok()) {
+			ctx.log.accept("GitHub Release already exists for " + tag);
+			return StepResult.ok("Already exists.");
 		}
 		var notes = ctx.formInputs.getOrDefault("releaseNotes", "See release notes.");
-		var res = ctx.dryRunOr(List.of("gh", "release", "create", tag, "--repo", ctx.target.ghSlug(), "--title",
+		var res = ctx.exec(List.of("gh", "release", "create", tag, "--repo", ctx.target.ghSlug(), "--title",
 				ctx.run.version, "--notes", notes), null, env);
 		return res.ok() ? StepResult.ok("GitHub Release created.") : StepResult.fail("gh release create failed.");
 	}

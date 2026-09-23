@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A compact projection of a {@link RunState} (plus the engine-level {@code mode}/armed posture that isn't
+ * A compact projection of a {@link RunState} (plus the engine-level armed posture that isn't
  * part of {@code RunState} itself) pushed to every connected New-Release tab over the run-state SSE
  * channel. Deliberately NOT the whole {@code RunState} — the rail only needs each step's status, not its
  * timestamps/log refs/error text, which stay on the per-step console channel and the initial page render.
@@ -31,7 +31,6 @@ public class RunStateSnapshot {
 	public String version;
 	public RunStatus status;
 	public int rc;
-	public ExecutionMode mode;
 	public boolean armed;
 	public List<StepSnapshot> steps = new ArrayList<>();
 
@@ -39,13 +38,12 @@ public class RunStateSnapshot {
 		// No-arg constructor required so the JSON parser can instantiate this bean before populating fields.
 	}
 
-	/** Projects {@code rs} down to the fields the rail needs, folding in the engine-level mode/armed posture. */
-	public static RunStateSnapshot of(RunState rs, ExecutionMode mode, boolean armed) {
+	/** Projects {@code rs} down to the fields the rail needs, folding in the engine-level armed posture. */
+	public static RunStateSnapshot of(RunState rs, boolean armed) {
 		var s = new RunStateSnapshot();
 		s.version = rs.version;
 		s.status = rs.status;
 		s.rc = rs.rc;
-		s.mode = mode;
 		s.armed = armed;
 		for (var step : rs.steps)
 			s.steps.add(new StepSnapshot(step.id, step.status));

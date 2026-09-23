@@ -67,7 +67,7 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 		var pw = ctx.ldapPassword + "\n";
 
 		// svn auth: --username <availid> --password-from-stdin (passphrase via stdin, never argv).
-		var co = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
+		var co = ctx.exec(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
 				ctx.target.distDevBase(), dist.toString()), pw, null);
 		if (!co.ok())
 			return StepResult.fail("svn checkout of dist/dev failed.");
@@ -76,17 +76,17 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 		// juneau-release.sh's shell-expanded `svn rm dist/source/*` textually; ProcessRunner has no
 		// shell, so it's passed as one literal argument (a no-op against a fresh/empty checkout, which
 		// is the common case since ASF dist working copies normally hold at most one prior RC).
-		ctx.dryRunOr(List.of("svn", "rm", source + "/*"));
-		ctx.dryRunOr(List.of("svn", "rm", binaries + "/*"));
-		ctx.dryRunOr(List.of("mkdir", sourceRc.toString()));
-		ctx.dryRunOr(List.of("mkdir", binariesRc.toString()));
+		ctx.exec(List.of("svn", "rm", source + "/*"));
+		ctx.exec(List.of("svn", "rm", binaries + "/*"));
+		ctx.exec(List.of("mkdir", sourceRc.toString()));
+		ctx.exec(List.of("mkdir", binariesRc.toString()));
 
 		var nexusUrl = ctx.target.nexusBaseUrl() + "/content/repositories/" + ctx.run.nexusRepoId
 				+ "/org/apache/juneau/";
 		ctx.log.accept("Fetching signed source + binary artifacts from " + nexusUrl);
-		ctx.dryRunOr(List.of("wget", "-e", "robots=off", "--recursive", "--no-parent", "--no-directories", "-A",
+		ctx.exec(List.of("wget", "-e", "robots=off", "--recursive", "--no-parent", "--no-directories", "-A",
 				"*-source-release*", "-P", sourceRc.toString(), nexusUrl));
-		ctx.dryRunOr(List.of("wget", "-e", "robots=off", "--recursive", "--no-parent", "--no-directories", "-A",
+		ctx.exec(List.of("wget", "-e", "robots=off", "--recursive", "--no-parent", "--no-directories", "-A",
 				"juneau-distrib*-bin.zip*", "-P", binariesRc.toString(), nexusUrl));
 
 		ctx.log.accept("Renaming to apache-juneau-" + ctx.run.version + "-{src,bin}.zip[.asc|.sha512]");
@@ -95,9 +95,9 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 		renameAndChecksum(ctx, binariesRc, "juneau-distrib-" + ctx.run.version + "-bin.zip",
 				"apache-juneau-" + ctx.run.version + "-bin.zip");
 
-		ctx.dryRunOr(List.of("svn", "add", sourceRc.toString()));
-		ctx.dryRunOr(List.of("svn", "add", binariesRc.toString()));
-		var commit = ctx.dryRunOr(List.of("svn", "commit", dist.toString(), "-m", rc, SvnArgs.USERNAME, ctx.availid,
+		ctx.exec(List.of("svn", "add", sourceRc.toString()));
+		ctx.exec(List.of("svn", "add", binariesRc.toString()));
+		var commit = ctx.exec(List.of("svn", "commit", dist.toString(), "-m", rc, SvnArgs.USERNAME, ctx.availid,
 				SvnArgs.PASSWORD_FROM_STDIN), pw, Map.of());
 		return commit.ok() ? StepResult.ok("Artifacts staged + committed to dist/dev.")
 				: StepResult.fail("svn commit to dist/dev failed.");
@@ -106,19 +106,19 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 	/**
 	 * Renames the downloaded artifact (+ its {@code .asc}) to the ASF convention, regenerates its SHA-512
 	 * checksum via {@code gpg --print-md SHA512}, and clears stray {@code .sha1}/{@code .md5} mirrors that
-	 * Nexus may have served alongside it. All mutating calls route through {@code dryRunOr} (Tier B); the
-	 * checksum file itself is only written in LIVE, since {@code ProcessRunner} has no shell to honor the
-	 * script's {@code > file.sha512} redirection.
-	 */
-	private void renameAndChecksum(StepContext ctx, Path dir, String downloaded, String renamed) {
-		ctx.dryRunOr(List.of("mv", dir.resolve(downloaded).toString(), dir.resolve(renamed).toString()));
-		ctx.dryRunOr(
-				List.of("mv", dir.resolve(downloaded + ".asc").toString(), dir.resolve(renamed + ".asc").toString()));
-		var sha = ctx.dryRunOr(List.of("gpg", "--print-md", "SHA512", dir.resolve(renamed).toString()));
-		if (ctx.live() && sha.ok())
-			writeShaFile(dir.resolve(renamed + ".sha512"), sha.output());
-		ctx.dryRunOr(List.of("rm", dir + "/*.sha1"));
-		ctx.dryRunOr(List.of("rm", dir + "/*.md5"));
+		 * Nexus may have served alongside it. Mutating calls go through {@code exec}; the
+		 * checksum file itself is written to disk because {@code ProcessRunner} has no shell to honor the
+		 * script's {@code > file.sha512} redirection.
+		 */
+		private void renameAndChecksum(StepContext ctx, Path dir, String downloaded, String renamed) {
+			ctx.exec(List.of("mv", dir.resolve(downloaded).toString(), dir.resolve(renamed).toString()));
+			ctx.exec(
+					List.of("mv", dir.resolve(downloaded + ".asc").toString(), dir.resolve(renamed + ".asc").toString()));
+			var sha = ctx.exec(List.of("gpg", "--print-md", "SHA512", dir.resolve(renamed).toString()));
+			if (sha.ok())
+				writeShaFile(dir.resolve(renamed + ".sha512"), sha.output());
+		ctx.exec(List.of("rm", dir + "/*.sha1"));
+		ctx.exec(List.of("rm", dir + "/*.md5"));
 	}
 
 	private static void writeShaFile(Path path, String content) {

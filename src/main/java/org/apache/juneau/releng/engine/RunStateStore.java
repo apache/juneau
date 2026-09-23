@@ -72,6 +72,15 @@ public class RunStateStore {
 		onSave.accept(rs);
 	}
 
+	/** Deletes the persisted file for {@code version} if it exists. Used when a run is renamed. */
+	public synchronized void delete(String version) {
+		try {
+			Files.deleteIfExists(fileFor(version));
+		} catch (IOException e) {
+			throw isex(e, "Cannot delete run state for %s", version);
+		}
+	}
+
 	public Optional<RunState> load(String version) {
 		var f = fileFor(version);
 		if (!Files.isRegularFile(f))

@@ -153,7 +153,6 @@ class SetupProbeServiceTest {
 	private static final class FakeRunner implements ProcessRunner {
 		final Set<String> onPath = new HashSet<>();
 		final List<List<String>> commands = new ArrayList<>();
-		List<String> lastCommand = List.of();
 		Map<String, String> lastEnv = Map.of();
 		Duration lastTimeout;
 		ProcResult installResult = new ProcResult(0, "ok");
@@ -171,7 +170,6 @@ class SetupProbeServiceTest {
 		@Override
 		public ProcResult run(List<String> command, String stdin, Map<String, String> env) {
 			commands.add(List.copyOf(command));
-			lastCommand = command;
 			if (env != null && !command.isEmpty() && !"which".equals(command.get(0)))
 				lastEnv = env;
 			if (!command.isEmpty() && "which".equals(command.get(0)))

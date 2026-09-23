@@ -61,7 +61,7 @@ public class NexusStagingClient {
 	 * normally the committer's Apache LDAP availid + password, resolved through the
 	 * {@link org.apache.juneau.commons.secret.SecretStore} SPI (see
 	 * {@code AppConfiguration.secretResolver()}'s {@code nexus()}), not hardcoded to any particular backend
-	 * here. Under SAFE mode {@code baseUrl} is the in-app loopback mock and the credential is a placeholder.
+	 * here. Tests may point {@code baseUrl} at an in-memory mock; production uses the real Nexus host.
 	 */
 	public static NexusStagingClient create(String baseUrl, String profileId, String username, String password) {
 		return create(baseUrl, profileId, username, password, Map.of());
@@ -71,7 +71,7 @@ public class NexusStagingClient {
 	 * As {@link #create(String, String, String, String)}, plus {@code extraHeaders} added to every request.
 	 *
 	 * <p>
-	 * Exists for the SAFE-mode loopback mock. That mock is mounted on this application's own port, behind the
+	 * Exists so a test double can sit on a loopback port, behind the
 	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary LoopbackBoundary}, which grants no exemption
 	 * to a caller merely because it happens to be this process — so the close/drop/promote {@code POST}s below
 	 * must present the same {@code Origin} and CSRF token the browser does. Pass

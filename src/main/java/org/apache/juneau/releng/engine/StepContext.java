@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.milestone.MilestoneService;
@@ -36,7 +35,6 @@ public class StepContext {
 	public ProcessRunner runner;
 	public Consumer<String> log; // This step's RunLog.lineSink(): tees to that step's own log file
 									// and that step's own SSE broadcaster.
-	public ExecutionMode mode = ExecutionMode.SAFE; // stamped by the engine; SAFE unless LIVE is configured
 	public TargetProfile target = TargetProfile.prodDefault(); // stamped by the engine
 	public Path stagingRepo; // rm.staging.dir/git/juneau
 	public Path stateDir; // rm.state.dir
@@ -59,41 +57,6 @@ public class StepContext {
 
 	public ProcessRunner.ProcResult exec(List<String> command, String stdin, Map<String, String> env) {
 		return runner.run(command, stdin, env, log);
-	}
-
-	/** Is this a LIVE run? (SAFE simulates mutating callouts; LIVE executes them.) */
-	public boolean live() {
-		return mode == ExecutionMode.LIVE;
-	}
-
-	/**
-	 * The Tier-B safe/live seam for mutating subprocess calls. In LIVE, runs the command (teed to the step
-	 * log). In SAFE, logs a redacted "would run:" line, spawns nothing, and returns synthetic success so the
-	 * downstream {@code .ok()} checks pass with zero side effects.
-	 */
-	public ProcessRunner.ProcResult dryRunOr(List<String> command) {
-		return dryRunOr(command, null, null);
-	}
-
-	public ProcessRunner.ProcResult dryRunOr(List<String> command, String stdin, Map<String, String> env) {
-		if (live())
-			return runner.run(command, stdin, env, log);
-		var line = "would run: " + String.join(" ", redactArgv(command));
-		if (stdin != null)
-			line += " <stdin:redacted>";
-		log.accept(line);
-		return new ProcessRunner.ProcResult(0, "[SAFE] simulated");
-	}
-
-	/**
-	 * The Tier-B seam for non-subprocess mutations (e.g. an in-process HTTP write): runs the supplier in
-	 * LIVE, logs the described action and returns {@code simulated} in SAFE.
-	 */
-	public <T> T dryRunOr(String describe, Supplier<T> real, T simulated) {
-		if (live())
-			return real.get();
-		log.accept("would " + describe);
-		return simulated;
 	}
 
 	/**

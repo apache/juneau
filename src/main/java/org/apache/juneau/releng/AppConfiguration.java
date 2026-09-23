@@ -36,7 +36,6 @@ import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.engine.BranchResolver;
 import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.StepRegistry;
@@ -45,7 +44,6 @@ import org.apache.juneau.releng.log.RunStateBroadcaster;
 import org.apache.juneau.releng.log.SseLogServlet;
 import org.apache.juneau.releng.milestone.GithubPrSource;
 import org.apache.juneau.releng.milestone.MilestoneService;
-import org.apache.juneau.releng.nexus.NexusMockRest;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.release.GitTagReleaseSource;
 import org.apache.juneau.releng.release.GithubReleaseSource;
@@ -77,9 +75,6 @@ import jakarta.servlet.Servlet;
 })
 public class AppConfiguration {
 
-	/** Non-secret credential stand-in handed to the Nexus client on SAFE runs, which never reach a real server. */
-	private static final String SAFE_PLACEHOLDER = "safe-placeholder";
-
 	@Bean
 	public ProcessRunner processRunner() {
 		return new ProcessRunner.Default();
@@ -91,7 +86,7 @@ public class AppConfiguration {
 	// Two independent gates protect the mutating endpoints, and they answer different questions:
 	//
 	//   - This boundary answers "did this request come from the page we served".
-	//   - The engine's per-run arming (see ReleaseEngine.arm / rm.mode) answers "did a human mean it".
+	//   - The engine's per-run arming (see ReleaseEngine.arm) answers "did a human mean it".
 	//
 	// Before this boundary existed only the second gate was present, which meant a hostile page in the
 	// operator's browser could POST the derivable "<version> LIVE" confirm phrase to /arm as a plain
@@ -103,11 +98,6 @@ public class AppConfiguration {
 	//   - The confirm phrase is not a secret and never authenticated anything. It is derivable from a page the
 	//     attacker is already reading. Making it longer or hidden would not help -- see ReleaseEngine.arm. It is
 	//     typing friction against accident, which is a real thing to want and not this boundary's job.
-	//
-	//   - rm.mode defaulting to safe is an operational safety default, not a security control, even though it was
-	//     doing real security work until this boundary landed. Its protection disappears exactly when someone
-	//     starts the app in live mode -- during a real release, when a forged request costs the most. This
-	//     boundary applies in both modes. See application.properties.
 	// ==========================================================================================
 
 	/**
@@ -266,26 +256,12 @@ public class AppConfiguration {
 	// ==========================================================================================
 
 	/**
-	 * The box-wide execution mode. Defaults to SAFE; only {@code rm.mode=live} enables real mutation (and
-	 * even then, per-run arming is still required at the guard chokepoint).
+	 * The release target's centralized endpoints. Canonical Apache Juneau production values, including
+	 * real {@code repository.apache.org} for Nexus.
 	 */
 	@Bean
-	public ExecutionMode executionMode(@Value("${rm.mode:safe}") String mode) {
-		return "live".equalsIgnoreCase(mode) ? ExecutionMode.LIVE : ExecutionMode.SAFE;
-	}
-
-	/**
-	 * The release target's centralized endpoints. Everything is the canonical Apache Juneau production value
-	 * except the Nexus base, which is the box-wide default: the in-app {@code /mock/nexus} loopback when
-	 * {@code rm.mode=safe}, real {@code repository.apache.org} when {@code rm.mode=live}. Per-run Dry-run on
-	 * a LIVE box still rewrites the Nexus base to the loopback (see {@link ReleaseEngine#setMockNexusBaseUrl}).
-	 */
-	@Bean
-	public TargetProfile targetProfile(ExecutionMode mode, @Value("${server.address:127.0.0.1}") String address,
-			@Value("${server.port:8790}") int port) {
-		var base = mode == ExecutionMode.LIVE ? TargetProfile.prodDefault().nexusBaseUrl()
-				: "http://" + address + ":" + port + "/mock/nexus";
-		return TargetProfile.prodDefault().withNexusBaseUrl(base);
+	public TargetProfile targetProfile() {
+		return TargetProfile.prodDefault();
 	}
 
 	@Bean
@@ -306,7 +282,7 @@ public class AppConfiguration {
 	/** Resolves live secrets from CredentialService's stores per mutating action. */
 	@Bean
 	public ReleaseEngine.SecretResolver secretResolver(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
-			ExecutionMode mode, TargetProfile target, LoopbackBoundary boundary) {
+			TargetProfile target) {
 		return new ReleaseEngine.SecretResolver() {
 			private String read(CredentialSpec spec, String account) {
 				return stores.get(spec).find(account).map(String::new).orElse("");
@@ -344,16 +320,9 @@ public class AppConfiguration {
 			// Nexus credentials are the committer's Apache LDAP identity — the same Keychain-backed
 			// SecretStore entry as ldapPassword() above, because an encrypted <password> in settings.xml
 			// cannot be used directly. Falls back to ~/.m2/settings.xml only when that Keychain entry
-			// hasn't been stored yet. Under SAFE the base is the loopback mock and the credential is a
-			// throwaway placeholder — the real Keychain secret is never read or sent (OQ-C).
-			//
-			// The SAFE client also carries the boundary's self-call headers: its target is the mock on this
-			// application's own port, which sits behind the same filter as everything else and exempts nobody.
+			// hasn't been stored yet.
 			@Override
 			public NexusStagingClient nexus() {
-				if (mode == ExecutionMode.SAFE)
-					return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), SAFE_PLACEHOLDER,
-							SAFE_PLACEHOLDER, boundary.selfCallHeaders());
 				return nexusClient(target, availid(), ldapPassword(), () -> NexusStagingClient
 						.create(target.nexusBaseUrl(), target.nexusProfileId(), "apache.releases.https"));
 			}
@@ -363,7 +332,7 @@ public class AppConfiguration {
 	/**
 	 * Builds the LIVE Nexus client from Keychain-backed credentials (via the {@link SecretStore} SPI, per
 	 * {@code availid}/{@code ldapPassword} above) when both are present, else defers to
-	 * {@code settingsXmlFallback}. The base URL + profile id come from the (mode-derived) {@link TargetProfile}.
+	 * {@code settingsXmlFallback}. The base URL + profile id come from {@link TargetProfile}.
 	 * Package-private for {@code AppConfigurationTest}.
 	 */
 	static NexusStagingClient nexusClient(TargetProfile target, String availid, String ldapPassword,
@@ -383,50 +352,27 @@ public class AppConfiguration {
 	})
 	public ReleaseEngine releaseEngine(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			BranchResolver branches, EmailService email, MilestoneService milestone,
-			ReleaseEngine.SecretResolver secrets, ExecutionMode mode, TargetProfile target, LoopbackBoundary boundary,
+			ReleaseEngine.SecretResolver secrets, TargetProfile target,
 			@Value("${rm.state.dir}") String stateDir, @Value("${rm.staging.dir}") String stagingDir,
-			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail,
-			@Value("${server.address:127.0.0.1}") String address, @Value("${server.port:8790}") int port) {
+			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail) {
 		var engine = new ReleaseEngine(store, registry, runner, branches, Path.of(stateDir), Path.of(stagingDir),
-				repoDir, committerEmail, email, milestone, secrets, mode, target);
-		engine.setMockNexusBaseUrl("http://" + address + ":" + port + "/mock/nexus");
-		engine.setLoopbackHeaders(boundary.selfCallHeaders());
+				repoDir, committerEmail, email, milestone, secrets, target);
 		engine.recoverOnBoot(); // Demote runs left mid-flight by a previous process on restart.
 		return engine;
 	}
 
 	@Bean
 	public DropRcService dropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner,
-			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, ExecutionMode mode, TargetProfile target,
-			LoopbackBoundary boundary, @Value("${rm.staging.dir}") String stagingDir,
+			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, TargetProfile target,
+			@Value("${rm.staging.dir}") String stagingDir,
 			@Value("${rm.state.dir}") String stateDir) {
-		var svc = new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
-				secrets.nexus(), mode, engine::isArmed, target, engine::broadcaster);
-		if (engine.mockNexusBaseUrl() != null)
-			svc.setSafeNexus(NexusStagingClient.create(engine.mockNexusBaseUrl(), target.nexusProfileId(),
-					SAFE_PLACEHOLDER, SAFE_PLACEHOLDER, boundary.selfCallHeaders()));
-		return svc;
+		return new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
+				secrets.nexus(), engine::isArmed, target, engine::broadcaster);
 	}
 
 	@Bean
 	public ReleaseRunRest releaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
 		return new ReleaseRunRest(engine, dropRc);
-	}
-
-	/**
-	 * The in-app Nexus loopback mock. Always registered so a Dry-run on a LIVE box can still hit it; LIVE
-	 * runs use the real Nexus base URL and never call this servlet.
-	 */
-	@Bean
-	public NexusMockRest nexusMockRest(TargetProfile target) {
-		return new NexusMockRest(target.nexusProfileId());
-	}
-
-	@Bean
-	public ServletRegistrationBean<Servlet> nexusMockRegistration(NexusMockRest mock, ReleaseEngine engine) {
-		// Each new run resets the mock so the lazily-synthesized staging repo starts from a clean slate.
-		engine.setRunStartHook(() -> mock.model().reset());
-		return new ServletRegistrationBean<>(mock, "/mock/nexus/*");
 	}
 
 	/**

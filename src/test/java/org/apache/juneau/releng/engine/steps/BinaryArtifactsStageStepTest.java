@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -66,9 +65,8 @@ class BinaryArtifactsStageStepTest {
 		};
 	}
 
-	private StepContext ctx(ExecutionMode mode, Path stateDir) {
+	private StepContext ctx(Path stateDir) {
 		var c = new StepContext();
-		c.mode = mode;
 		c.run = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("binary-artifacts-stage"));
 		c.run.nexusRepoId = "orgapachejuneau-1042";
 		c.runner = recordingRunner();
@@ -83,7 +81,7 @@ class BinaryArtifactsStageStepTest {
 
 	@Test
 	void a01_liveBuildsCanonicalSvnWgetRenameGpgAddCommitSequence(@TempDir Path dir) {
-		var c = ctx(ExecutionMode.LIVE, dir);
+		var c = ctx(dir);
 		var res = new BinaryArtifactsStageStep().apply(c);
 		assertTrue(res.success, res.message);
 
@@ -137,22 +135,4 @@ class BinaryArtifactsStageStepTest {
 		assertTrue(commit.contains(rc)); // svn commit -m "<RC>"
 	}
 
-	@Test
-	void a02_safeSpawnsNothingAndLogsWouldRunForEveryMutation(@TempDir Path dir) {
-		var c = ctx(ExecutionMode.SAFE, dir);
-		var res = new BinaryArtifactsStageStep().apply(c);
-		assertTrue(res.success, res.message);
-		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
-
-		var wouldRun = logLines.stream().filter(l -> l.startsWith("would run:")).toList();
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("checkout")));
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("wget") && l.contains("*-source-release*")));
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("gpg") && l.contains("SHA512")));
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("add")));
-		assertTrue(wouldRun.stream().anyMatch(l -> l.contains("svn") && l.contains("commit")));
-		assertTrue(logLines.stream().noneMatch(l -> l.contains("s3cr3t")), "the password must never be logged");
-
-		// SAFE never really staged anything, so the .sha512 file is not written to disk.
-		assertFalse(Files.exists(dir.resolve("dist")));
-	}
 }

@@ -64,11 +64,13 @@ class AdminRestTest {
 	}
 
 	@Test
-	void b02_baseTemplateAuthorsExactlyThreeNavNodesOnce() throws IOException {
+	void b02_baseTemplateAuthorsNavNodesOnce() throws IOException {
 		var base = readClasspathResource("/templates/base.ftlh");
 		assertTrue(base.contains("<@navigation>"), "Chrome must author the nav tree once as <@navigation>: " + base);
 		var count = base.split("<@node ", -1).length - 1;
-		assertEquals(3, count, "Expected exactly 3 <@node> nav entries (Setup, Releases, New Release): " + base);
+		assertEquals(5, count, "Expected 5 <@node> entries (Setup, Releases, New Release + Input/Execution subtabs): " + base);
+		assertTrue(base.contains("href=\"/rest/runs?tab=input\""), "Missing Input subtab href: " + base);
+		assertTrue(base.contains("href=\"/rest/runs?tab=exec\""), "Missing Execution subtab href: " + base);
 	}
 
 	@Test

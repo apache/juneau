@@ -21,7 +21,7 @@
   main slot, and the footer.  Child templates stay <@page> calls.
 --><@console theme="light-red" icon="/img/oakleaf.svg" favicon="/img/oakleaf.svg" brand="Apache Juneau · Release Manager">
 <@theme name="light-red">
-    <#-- The app's pre-existing danger palette (the same colors .rm-mode-banner.live / .tag.armed / .pill.invalid
+    <#-- The app's pre-existing danger palette (the same colors .tag.armed / .pill.invalid
          already used).  Overrides the stock light-red pack's Bootstrap-maroon red so the FAILED status/stage pill
          resolves through the token system without changing how it looks.  --jc-tag-red-* is kept as an alias-free
          mirror for the .jc-badge[danger] / busy-avatar-status consumers that still read that triad. -->
@@ -45,7 +45,10 @@
 <@navigation>
     <@node id="setup" label="Setup" href="/rest/setup"/>
     <@node id="releases" label="Releases" href="/rest/releases"/>
-    <@node id="new" label="New Release" href="/rest/runs"/>
+    <@node id="new" label="New Release" href="/rest/runs">
+        <@node id="input" label="Input" href="/rest/runs?tab=input"/>
+        <@node id="exec" label="Execution" href="/rest/runs?tab=exec"/>
+    </@node>
 </@navigation>
 <@main/>
 <@footer>Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.</@footer>

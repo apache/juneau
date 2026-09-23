@@ -29,7 +29,6 @@ import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.engine.BranchResolver;
 import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.RunStatus;
@@ -82,17 +81,13 @@ class ReleaseRunRestTest {
 	}
 
 	private ReleaseRunRest rest(Path dir) {
-		return rest(dir, ExecutionMode.SAFE);
-	}
-
-	private ReleaseRunRest rest(Path dir, ExecutionMode mode) {
 		var runner = okRunner();
 		var branches = new BranchResolver(runner, "/repo");
 		var store = new RunStateStore(dir);
 		var registry = StepRegistry.standard(branches);
-		var engine = ReleaseEngine.forTests(store, registry, runner, branches, dir, mode);
+		var engine = ReleaseEngine.forTests(store, registry, runner, branches, dir);
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir,
-				NexusStagingClient.forTests((m, p, b) -> ""), engine.mode(), engine::isArmed,
+				NexusStagingClient.forTests((m, p, b) -> ""), engine::isArmed,
 				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 		return new ReleaseRunRest(engine, dropRc);
 	}
@@ -150,14 +145,10 @@ class ReleaseRunRestTest {
 		};
 		var engine = new ReleaseEngine(store, registry, runner, branches, dir, dir.resolve("staging"), "/repo",
 				"test@apache.org", new EmailService(dir, runner), new MilestoneService(), secrets,
-				ExecutionMode.SAFE, TargetProfile.prodDefault());
+				TargetProfile.prodDefault());
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir, nexus,
-				engine.mode(), engine::isArmed, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				engine::isArmed, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 		return new ReleaseRunRest(engine, dropRc);
-	}
-
-	private List<String> logLines(Path dir, ReleaseRunRest rest, String version, String stepId) throws IOException {
-		return Files.readAllLines(dir.resolve(rest.state(version).step(stepId).logRef));
 	}
 
 	/**
@@ -174,6 +165,25 @@ class ReleaseRunRestTest {
 		for (var i = 0; i < idx; i++)
 			rs.step(ids.get(i)).status = StepStatus.SUCCEEDED;
 		store.save(rs);
+	}
+
+
+	private void arm(ReleaseRunRest rest, String version) {
+		var body = new ReleaseRunRest.ArmRequest();
+		body.confirm = version + " LIVE";
+		var r = rest.arm(version, body);
+		assertTrue(r.success, r.message);
+	}
+
+	private void seedDistDevFiles(Path dir, String version, int rc) throws IOException {
+		var rcDir = "juneau-" + version + "-RC" + rc;
+		for (var kind : List.of("src", "bin")) {
+			var sub = "src".equals(kind) ? "source" : "binaries";
+			var d = dir.resolve("dist").resolve(sub).resolve(rcDir);
+			Files.createDirectories(d);
+			for (var ext : List.of("", ".asc", ".sha512"))
+				Files.writeString(d.resolve("apache-juneau-" + version + "-" + kind + ".zip" + ext), "content");
+		}
 	}
 
 	/** Applies {@code stepId} with no form input and asserts it succeeded. */
@@ -265,28 +275,6 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void b04_startDefaultsToSafeMode(@TempDir Path dir) {
-		var rs = rest(dir).start(startRequest("9.2.1"));
-		assertEquals(ExecutionMode.SAFE, rs.mode);
-	}
-
-	@Test
-	void b05_startLiveIsCappedOnASafeEngine(@TempDir Path dir) {
-		var body = startRequest("9.2.1");
-		body.mode = "live";
-		var rs = rest(dir).start(body);
-		assertEquals(ExecutionMode.SAFE, rs.mode);
-	}
-
-	@Test
-	void b06_startLiveIsHonoredOnALiveEngine(@TempDir Path dir) {
-		var body = startRequest("9.2.1");
-		body.mode = "live";
-		var rs = rest(dir, ExecutionMode.LIVE).start(body);
-		assertEquals(ExecutionMode.LIVE, rs.mode);
-	}
-
-	@Test
 	void c01_detailsEndpointUpdatesNarrativeFieldsOnActiveRun(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
@@ -304,6 +292,46 @@ class ReleaseRunRestTest {
 		var reloaded = rest.state("9.2.1");
 		assertEquals("- Updated issue", reloaded.knownIssues);
 		assertEquals("Updated thanks.", reloaded.acknowledgements);
+	}
+
+	@Test
+	void c03_detailsEndpointUpdatesIdentityFieldsOnActiveRun(@TempDir Path dir) {
+		var rest = rest(dir);
+		var start = startRequest("9.2.1");
+		start.developmentVersion = "9.2.2-SNAPSHOT";
+		start.milestoneNumber = 7;
+		rest.start(start);
+
+		var body = new ReleaseRunRest.DetailsRequest();
+		body.version = "9.2.1";
+		body.developmentVersion = "9.2.3-SNAPSHOT";
+		body.milestoneNumber = 11;
+		body.releaseSummary = "Keep summary.";
+		var updated = rest.details("9.2.1", body);
+
+		assertEquals("9.2.1", updated.version);
+		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
+		assertEquals(11, updated.milestoneNumber);
+		assertEquals("Keep summary.", updated.releaseSummary);
+		var reloaded = rest.state("9.2.1");
+		assertEquals("9.2.3-SNAPSHOT", reloaded.developmentVersion);
+		assertEquals(11, reloaded.milestoneNumber);
+	}
+
+	@Test
+	void c04_detailsEndpointRenamesRunWhenVersionChanges(@TempDir Path dir) {
+		var rest = rest(dir);
+		rest.start(startRequest("9.2.1"));
+
+		var body = new ReleaseRunRest.DetailsRequest();
+		body.version = "9.2.2";
+		body.developmentVersion = "9.2.3-SNAPSHOT";
+		var renamed = rest.details("9.2.1", body);
+
+		assertEquals("9.2.2", renamed.version);
+		assertEquals("juneau-9.2.2-branch", renamed.branch);
+		assertThrows(NotFound.class, () -> rest.state("9.2.1"));
+		assertEquals("9.2.3-SNAPSHOT", rest.state("9.2.2").developmentVersion);
 	}
 
 	@Test
@@ -347,8 +375,8 @@ class ReleaseRunRestTest {
 	}
 
 	/**
-	 * The fix, end to end, under the strict forward-apply guard: {@code POST /{version}/vote-result} —
-	 * what the fixed "Simulate (SAFE)" button now calls — records a passing tally (applied as the
+	 * The fix, end to end, under the strict forward-apply guard: {@code POST /{version}/vote-result}
+	 * records a passing tally (applied as the
 	 * {@code tally-vote-result} step) and the run then proceeds through every remaining required step, in
 	 * order, to {@code finalize-run}, with no operator intervention beyond each step's own apply or
 	 * confirm-review. This is also the regression test for the reported bug: a run must legitimately clear
@@ -362,12 +390,13 @@ class ReleaseRunRestTest {
 					 // test exists to catch -- that the SAME run legitimately clears every required step.
 	})
 	@Test
-	void d01_safeVoteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
+	void d01_voteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var rest = restWithNexus(dir, model);
 		var start = startRequest("9.2.1");
 		start.milestoneNumber = 42;
 		rest.start(start);
+		arm(rest, "9.2.1");
 
 		for (var stepId : List.of("preflight", "compose-propose-email", "workspace-setup", "build-verify"))
 			applyOk(rest, "9.2.1", stepId);
@@ -390,14 +419,17 @@ class ReleaseRunRestTest {
 
 		applyOk(rest, "9.2.1", "binary-artifacts-stage");
 
+		// Mocked wget/mkdir never materialize dist files; seed the six ASF-convention artifacts
+		// so the live verify step can pass.
+		seedDistDevFiles(dir, "9.2.1", 1);
+
 		// dev-dist-verify: a required (non-skippable) review-gate step.
 		applyOk(rest, "9.2.1", "dev-dist-verify");
 		confirmOk(rest, "9.2.1", "dev-dist-verify");
 
 		applyOk(rest, "9.2.1", "compose-vote-email");
 
-		// Opening the vote only sets AWAITING_VOTE — this is the exact call the OLD "Simulate (SAFE)"
-		// wiring made, and it never advances on its own no matter how many times it's re-applied.
+		// Opening the vote only sets AWAITING_VOTE — re-applying vote-gate never advances on its own.
 		rest.apply("9.2.1", "vote-gate", Map.of());
 		rest.apply("9.2.1", "vote-gate", Map.of());
 		assertEquals(StepStatus.AWAITING_VOTE, rest.state("9.2.1").step("vote-gate").status);
@@ -405,7 +437,7 @@ class ReleaseRunRestTest {
 		// The fix: record a passing tally via the dedicated vote-result endpoint.
 		var voteBody = new ReleaseRunRest.VoteResultRequest();
 		voteBody.outcome = "passed";
-		voteBody.tally = "SAFE-mode simulated passing vote (no real tally read).";
+		voteBody.tally = "Simulated passing vote (no real tally read).";
 		var voted = rest.voteResult("9.2.1", voteBody);
 		assertTrue(voted.success, voted.message);
 		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("tally-vote-result").status);
@@ -414,24 +446,12 @@ class ReleaseRunRestTest {
 
 		applyOk(rest, "9.2.1", "compose-result-email");
 
-		// Tier A: nexus-release runs for real against the loopback mock — CLOSED -> RELEASED.
 		applyOk(rest, "9.2.1", "nexus-release", Map.of("confirmVersion", "9.2.1"));
 		assertEquals("released", model.currentState());
 
-		// Tier B: dist-promote is command-logged only (svn mv/commit), never a real subprocess.
 		applyOk(rest, "9.2.1", "dist-promote");
-		assertTrue(logLines(dir, rest, "9.2.1", "dist-promote").stream()
-				.anyMatch(l -> l.startsWith("would run:") && l.contains("svn") && l.contains("mv")));
-
-		// Tier B: github-release-create.
 		applyOk(rest, "9.2.1", "github-release-create");
-		assertTrue(logLines(dir, rest, "9.2.1", "github-release-create").stream()
-				.anyMatch(l -> l.startsWith("would run:") && l.contains("gh") && l.contains("release")));
-
-		// Tier B: milestone-close.
 		applyOk(rest, "9.2.1", "milestone-close");
-		assertTrue(logLines(dir, rest, "9.2.1", "milestone-close").stream()
-				.anyMatch(l -> l.startsWith("would run:") && l.contains("milestones/42")));
 
 		// manual-followup-checklist: a required (non-skippable) review-gate step — must be confirmed for
 		// finalize-run's strict prerequisite gate to be satisfiable. Its own apply() requires every
@@ -483,10 +503,7 @@ class ReleaseRunRestTest {
 		assertTrue(res.message.contains("Unknown step"), res.message);
 	}
 
-	/** LIVE mode must keep requiring a real recorded tally: the SAFE one-click shortcut is UI-only (the
-	 *  fixed "Simulate (SAFE)" button hard-codes {@code outcome=passed}); the {@code /vote-result} REST
-	 *  contract itself is unchanged, so a rejected outcome still forks away from the linear step list
-	 *  instead of quietly advancing. */
+	/** A rejected vote-result still records the tally and forks away from the linear step list. */
 	@Test
 	void d04_voteResultWithRejectedOutcomeDoesNotAdvanceButRecordsTheOutcome(@TempDir Path dir) {
 		var rest = rest(dir);
@@ -543,5 +560,25 @@ class ReleaseRunRestTest {
 		var entry = (Map<String,Object>) parsed.get("evil");
 		assertEquals(evilTitle, entry.get("title"));
 		assertEquals(Boolean.TRUE, entry.get("mutating"));
+	}
+
+	@Test
+	void f01_explicitTabInputWinsEvenWhenARunExists() {
+		assertEquals("input", ReleaseRunRest.resolveSubtab("input", true));
+		assertEquals("input", ReleaseRunRest.resolveSubtab("INPUT", false));
+	}
+
+	@Test
+	void f02_explicitTabExecWinsEvenWhenNoRunExists() {
+		assertEquals("exec", ReleaseRunRest.resolveSubtab("exec", false));
+		assertEquals("exec", ReleaseRunRest.resolveSubtab("execution", true));
+	}
+
+	@Test
+	void f03_defaultSubtabIsInputWithoutARunAndExecWithARun() {
+		assertEquals("input", ReleaseRunRest.resolveSubtab(null, false));
+		assertEquals("exec", ReleaseRunRest.resolveSubtab(null, true));
+		assertEquals("input", ReleaseRunRest.resolveSubtab("nope", false));
+		assertEquals("exec", ReleaseRunRest.resolveSubtab("nope", true));
 	}
 }

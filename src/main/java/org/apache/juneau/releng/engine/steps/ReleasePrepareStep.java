@@ -71,7 +71,7 @@ public class ReleasePrepareStep implements ReleaseStep {
 		if (next == null)
 			return StepResult.fail("z==0 release requires an explicit developmentVersion.");
 		ctx.run.developmentVersion = next;
-		var res = ctx.dryRunOr(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "release:prepare",
+		var res = ctx.exec(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "release:prepare",
 				"-DautoVersionSubmodules=true", "-DreleaseVersion=" + ctx.run.version,
 				"-Dtag=juneau-" + ctx.run.version + "-RC" + ctx.run.rc, "-DdevelopmentVersion=" + next));
 		return res.ok() ? StepResult.ok("release:prepare complete; tag pushed.")

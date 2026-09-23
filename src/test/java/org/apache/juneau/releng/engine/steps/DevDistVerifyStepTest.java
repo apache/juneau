@@ -17,7 +17,6 @@
 
 package org.apache.juneau.releng.engine.steps;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.engine.ExecutionMode;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.util.ProcessRunner;
@@ -38,9 +36,8 @@ class DevDistVerifyStepTest {
 	private final List<List<String>> calls = new ArrayList<>();
 	private final List<String> logLines = new ArrayList<>();
 
-	private StepContext ctx(ExecutionMode mode, Path stateDir) {
+	private StepContext ctx(Path stateDir) {
 		var c = new StepContext();
-		c.mode = mode;
 		c.run = RunState.create("9.2.1", "b", List.of("dev-dist-verify"));
 		c.target = TargetProfile.prodDefault();
 		c.stateDir = stateDir;
@@ -88,7 +85,7 @@ class DevDistVerifyStepTest {
 	@Test
 	void a01_liveWithAllSixFilesPresentSucceedsWithoutOpeningWhenHeadless(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
-		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
+		var res = new DevDistVerifyStep().apply(ctx(dir));
 		assertTrue(res.success, res.message);
 	}
 
@@ -96,8 +93,8 @@ class DevDistVerifyStepTest {
 	void a02_liveWithMissingFileFails(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
 		Files.delete(dir.resolve("dist/source/juneau-9.2.1-RC1/apache-juneau-9.2.1-src.zip.sha512"));
-		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
-		assertFalse(res.success, "a missing dist file must hard-fail in LIVE");
+		var res = new DevDistVerifyStep().apply(ctx(dir));
+		assertFalse(res.success, "a missing dist file must hard-fail");
 		assertTrue(res.message.contains("src.zip.sha512"));
 	}
 
@@ -105,17 +102,8 @@ class DevDistVerifyStepTest {
 	void a03_liveWithEmptyFileFails(@TempDir Path dir) throws Exception {
 		seedAllSixFiles(dir);
 		Files.writeString(dir.resolve("dist/binaries/juneau-9.2.1-RC1/apache-juneau-9.2.1-bin.zip"), "");
-		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.LIVE, dir));
-		assertFalse(res.success, "a zero-size dist file must hard-fail in LIVE");
+		var res = new DevDistVerifyStep().apply(ctx(dir));
+		assertFalse(res.success, "a zero-size dist file must hard-fail");
 	}
 
-	@Test
-	void a04_safeWithArtifactsNotStagedSoftNotesRatherThanFails(@TempDir Path dir) {
-		// No dist/ working copy at all -- SAFE's binary-artifacts-stage was command-logged, so it never
-		// really staged anything.
-		var res = new DevDistVerifyStep().apply(ctx(ExecutionMode.SAFE, dir));
-		assertTrue(res.success, "SAFE must soft-note absent artifacts, not fail the rehearsal");
-		assertTrue(logLines.stream().anyMatch(l -> l.contains("SAFE") && l.contains("not staged")));
-		assertSize(() -> "no real subprocess may be spawned in SAFE", 0, calls);
-	}
 }

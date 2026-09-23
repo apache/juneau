@@ -48,7 +48,7 @@ public class ReleasePerformStep implements ReleaseStep {
 
 	@Override
 	public StepResult apply(StepContext ctx) {
-		var res = ctx.dryRunOr(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "release:perform"));
+		var res = ctx.exec(List.of("mvn", "-f", ctx.stagingRepo.toString() + "/pom.xml", "release:perform"));
 		return res.ok() ? StepResult.ok("release:perform complete; staging repo populated.")
 				: StepResult.fail("mvn release:perform failed.");
 	}

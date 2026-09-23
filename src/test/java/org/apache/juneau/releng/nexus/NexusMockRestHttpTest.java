@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  * HTTP-level regression coverage for {@link NexusMockRest}: dispatches real requests through the same
  * servlet + response-processor pipeline the running app uses ({@link MockRestClient}, in-process, no
  * socket). {@link NexusMockTest} calls {@link NexusMockRest#route} directly and so never exercises how a
- * handler's return value gets serialized onto the wire — which is exactly the layer where the SAFE
+ * handler's return value gets serialized onto the wire — which is exactly the layer where the mock
  * {@code nexus-staging-close} walkthrough failed: the handlers returned already-serialized JSON text as a
  * plain {@code String}, so the framework serialized it a <em>second</em> time (quoting and escaping it)
  * before {@link NexusStagingClient} tried to parse it.

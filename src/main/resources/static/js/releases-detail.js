@@ -36,6 +36,22 @@
 			icons.pack('material');
 	}
 
+	// Row-detail header icon.  The header pattern (Juneau buildDetailHeader) shows a titled icon tile when the
+	// detail config carries an `icon` name, resolved through JuneauViews.icons.resolveIcon.  The Material pack
+	// selected above ships only the ribbon/paging glyphs, so this app registers its OWN release-marker glyph as
+	// self-contained inline SVG (not a sprite <use>), which renders under any pack.  ORIGINAL artwork authored
+	// for this app, licensed Apache-2.0 with the rest of the tree — a plain filled bookmark/ribbon, no Material
+	// path and no Salesforce/IRS/SLDS artwork.  Fill is currentColor so it takes the icon tile's contrast colour.
+	var RELEASE_ICON =
+		'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">'
+		+ '<path fill="currentColor" d="M7 4 H17 V20 L12 16.5 L7 20 Z"/></svg>';
+
+	function registerDetailIcon() {
+		var icons = globalThis.JuneauViews && globalThis.JuneauViews.icons;
+		if (icons && typeof icons.registerIcon === 'function')
+			icons.registerIcon('release', RELEASE_ICON);
+	}
+
 	var LINK_SPECS = [
 		{ data: 'jiraVersionUrl', label: 'Jira Version' },
 		{ data: 'githubTagUrl', label: 'GitHub Tag' },
@@ -100,5 +116,6 @@
 	}
 
 	selectIconPack();
+	registerDetailIcon();
 	register();
 })();
