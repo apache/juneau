@@ -202,6 +202,12 @@
 	registerIcon("filter", host("filter"));
 	registerIcon("expand_more", host("chevrondown"));
 	registerIcon("chevrondown", host("chevrondown"));
+	// Original Juneau stacked-triangle sort glyph (12×24). Not a DataTables unicode ▲/▼ pair and
+	// not an IRS/SLDS SVG — two small filled triangles matching that treatment's size.
+	registerIcon("sort", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 12 24\" class=\"juneau-view-col-sort-glyph\" aria-hidden=\"true\">"
+		+ "<path class=\"juneau-sort-asc\" fill=\"currentColor\" d=\"M6 5 L10.5 11 H1.5 Z\"/>"
+		+ "<path class=\"juneau-sort-desc\" fill=\"currentColor\" d=\"M6 19 L1.5 13 H10.5 Z\"/>"
+		+ "</svg>");
 	registerIcon("search", host("search"));
 	registerIcon("close", host("close"));
 	registerIcon("download", host("download"));

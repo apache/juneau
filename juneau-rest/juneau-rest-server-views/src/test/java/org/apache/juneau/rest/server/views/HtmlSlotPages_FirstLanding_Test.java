@@ -97,24 +97,45 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		var childFontBlock = css.substring(childFontStart, css.indexOf("}", childFontStart));
 		assertTrue(childFontBlock.contains("font-size: var(--jc-page-nav-child-font-size, 12px)"),
 			() -> "children spend --jc-page-nav-child-font-size, block:\n" + childFontBlock);
-		assertTrue(css.contains(".juneau-page-nav-sections {"), css);
-		var hairlineRule = css.indexOf(".juneau-page-nav-sections {");
+		// The 2px hairline under the sections row is gated on :not(:last-child) so it
+		// only appears BETWEEN the tabs row and a following children row. With no
+		// subtabs the sections row is the last child and draws no hairline, leaving the
+		// nav's 3px floor as the only bottom border (not 3px + 2px = 5px).
+		assertFalse(css.contains(".juneau-page-nav-sections {"),
+			() -> "sections hairline must be gated on :not(:last-child), not unconditional:\n" + css);
+		assertTrue(css.contains(".juneau-page-nav-sections:not(:last-child) {"), css);
+		var hairlineRule = css.indexOf(".juneau-page-nav-sections:not(:last-child) {");
 		assertTrue(hairlineRule >= 0, css);
 		var hairlineShape = css.substring(hairlineRule, css.indexOf("}", hairlineRule));
-		assertTrue(hairlineShape.contains("border-bottom: var(--jc-page-nav-hairline, 2px) solid"),
-			() -> "sections row must carry a 2px hairline under it:\n" + hairlineShape);
+		assertTrue(hairlineShape.contains("border-bottom-width: var(--jc-page-nav-hairline, 2px)"),
+			() -> "sections row must carry a 2px hairline when a children row follows:\n" + hairlineShape);
+		assertTrue(hairlineShape.contains("border-bottom-style: solid"),
+			() -> "hairline is longhand width/style so chrome can paint --jc-page-nav-accent:\n" + hairlineShape);
+		assertFalse(hairlineShape.contains("border-bottom-color"),
+			() -> "views must not set hairline colour (chrome paints accent):\n" + hairlineShape);
 		var navRule = css.indexOf(".juneau-page-nav {");
 		assertTrue(navRule >= 0, css);
 		var navBlock = css.substring(navRule, css.indexOf("}", navRule));
-		assertTrue(navBlock.contains("border-bottom: var(--jc-nav-indicator-width, 3px) solid"),
+		assertTrue(navBlock.contains("border-bottom-width: var(--jc-nav-indicator-width, 3px)"),
 			() -> "the pair's floor spends --jc-nav-indicator-width, block:\n" + navBlock);
+		assertTrue(navBlock.contains("border-bottom-style: solid"),
+			() -> "floor is longhand width/style so chrome can paint --jc-page-nav-accent:\n" + navBlock);
+		assertFalse(navBlock.contains("border-bottom-color"),
+			() -> "views must not set floor colour (chrome paints accent):\n" + navBlock);
 		assertFalse(navBlock.contains("#ffffff"),
 			() -> "nav background is a chrome hue, not a views hex, block:\n" + navBlock);
 		var sectionRule = css.indexOf(".juneau-page-nav-section {");
 		assertTrue(sectionRule >= 0, css);
 		var sectionBlock = css.substring(sectionRule, css.indexOf("}", sectionRule));
-		assertTrue(sectionBlock.contains("border-top: var(--jc-nav-indicator-width, 3px) solid transparent"),
+		assertTrue(sectionBlock.contains("border-top-width: var(--jc-nav-indicator-width, 3px)"),
 			() -> "selected-section accent sits on the top edge, block:\n" + sectionBlock);
+		assertTrue(sectionBlock.contains("border-top-color: transparent"),
+			() -> "unselected sections keep a transparent top edge, block:\n" + sectionBlock);
+		var selectedStart = css.indexOf(".juneau-page-nav-section[aria-current=\"page\"] {");
+		assertTrue(selectedStart >= 0, css);
+		var selectedBlock = css.substring(selectedStart, css.indexOf("}", selectedStart));
+		assertFalse(selectedBlock.contains("currentColor") || selectedBlock.contains("currentcolor"),
+			() -> "selected top edge must not paint currentColor (beats chrome accent):\n" + selectedBlock);
 		assertTrue(sectionBlock.contains("font-size: var(--jc-page-nav-section-font-size, 13px)"),
 			() -> "sections spend --jc-page-nav-section-font-size, block:\n" + sectionBlock);
 		assertFalse(sectionBlock.contains("border-bottom"),

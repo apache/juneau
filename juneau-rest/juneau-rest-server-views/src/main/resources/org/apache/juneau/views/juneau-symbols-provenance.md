@@ -96,8 +96,8 @@ Juneau-original and are **byte-unchanged** by that work.
 |---|---|---|
 | `cancel` | `juneau-original` | `a9290f19a96fb76f21ee0e7c18e8a4a86a47789cb313bfebfba5ad23f81968a8` |
 | `check` | `juneau-original` | `eb29de8eb151d13bac83a41a67d5e98e6c932cf8476b5e24168e2fc1b94da6e8` |
-| `chevrondown` | `juneau-original` | `0cff710f91e66490b2e0f9bcea8586ebe0b7358e55d58804e597189a7a28f05d` |
-| `chevronright` | `juneau-original` | `f88f4812f45ed5aec6a7f1b54e986f941b7f90ded7e92e8b0ebb9b4e2ba4d8dd` |
+| `chevrondown` | `juneau-original` | `e228bfba6879899fa859283b147a1c57eb95591f2fc1d6a4f5f285c30f0ceaca` |
+| `chevronright` | `juneau-original` | `8b0a88ba65dc460e283ad875e0eeccd1e384f5be98147c964cef2c7fe8074b7a` |
 | `close` | `juneau-original` | `fdf4be3a7918635703619708ad86d163f824f21ff4f664defd721750c7aa3fee` |
 | `collapse_all` | `juneau-original` | `3567662a623db15fcb907156f14713566f0652f7a8649815c5e137cbffe391de` |
 | `columns` | `juneau-original` | `0300d7ab7052f9079fea4eb2faa7e11663db7bbbf27a16d257f5d4edf46818f1` |

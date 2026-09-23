@@ -105,13 +105,14 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("classList.add(\"juneau-view-col-sort-icon\")"), fn);
 		assertTrue(fn.contains("insertAdjacentHTML"), fn);
 		assertTrue(fn.contains("querySelector(\"svg\")"), fn);
-		assertTrue(fn.contains("resolveIcon?.(\"expand_more\")"), fn);
+		assertTrue(fn.contains("resolveIcon?.(\"sort\")"), fn);
 		assertTrue(fn.indexOf("classList.add") > fn.indexOf("if (!orderSpan)"), fn);
 	}
 
 	@Test void b01_viewsCss_idleSortChevronsAreVisible() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("span.dt-column-order:before"), body);
+		assertTrue(body.contains(".juneau-sort-asc"), body);
 		assertTrue(body.contains("opacity: 0.45;"), body);
 		assertTrue(body.contains(".juneau-view-col-search-icon"), body);
 		assertTrue(body.contains("cursor: default;"), body);

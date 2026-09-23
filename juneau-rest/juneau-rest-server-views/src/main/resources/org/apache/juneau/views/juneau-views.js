@@ -1196,7 +1196,7 @@
 		});
 	}
 
-	/** DT2 already emits {@code span.dt-column-order}; DT1 does not, so inject a Juneau chevron control. */
+	/** DT2 already emits {@code span.dt-column-order}; DT1 does not, so inject a Juneau sort control. */
 	function ensureHeaderSortControl(header, col, dt) {
 		let orderSpan = header.querySelector("span.dt-column-order");
 		if (!orderSpan) {
@@ -1211,8 +1211,8 @@
 		}
 		orderSpan.classList.add("juneau-view-col-sort-icon");
 		if (!orderSpan.querySelector("svg")) {
-			const markup = window.JuneauViews?.icons?.resolveIcon?.("expand_more")
-				|| window.JuneauViews?.icons?.resolveIcon?.("chevrondown");
+			const markup = window.JuneauViews?.icons?.resolveIcon?.("sort")
+				|| window.JuneauViews?.icons?.resolveIcon?.("expand_more");
 			if (markup) orderSpan.insertAdjacentHTML("afterbegin", markup);
 		}
 		if (!orderSpan.getAttribute("role")) orderSpan.setAttribute("role", "button");

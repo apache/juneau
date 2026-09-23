@@ -683,8 +683,14 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "the pair's floor must be --jc-page-nav-accent, block:\n" + floorBlock);
 		assertFalse(floorBlock.contains("#1589EE"),
 			() -> "floor colour is a theme token, not a hex literal, block:\n" + floorBlock);
-		assertTrue(navRules.contains(".juneau-page-nav-sections {"), navRules);
-		var hairlineStart = navRules.indexOf(".juneau-page-nav-sections {");
+		// The 2px hairline is gated on :not(:last-child): it paints under the sections row
+		// only when a children (subtab) row follows. With no subtabs the sections row is
+		// the last child, so it draws no hairline and the nav's 3px floor is the only
+		// bottom border (not 3px + 2px = 5px stacked).
+		assertFalse(navRules.contains(".juneau-page-nav-sections {"),
+			() -> "sections hairline must be gated on :not(:last-child), not unconditional:\n" + navRules);
+		assertTrue(navRules.contains(".juneau-page-nav-sections:not(:last-child) {"), navRules);
+		var hairlineStart = navRules.indexOf(".juneau-page-nav-sections:not(:last-child) {");
 		var hairlineBlock = navRules.substring(hairlineStart, navRules.indexOf("}", hairlineStart));
 		assertTrue(hairlineBlock.contains("border-bottom-width: var(--jc-page-nav-hairline)"),
 			() -> "hairline between tabs and children must be --jc-page-nav-hairline, block:\n" + hairlineBlock);
@@ -830,7 +836,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(css.contains("border-color: var(--jc-table-border, #dee2e6);"),
 			() -> "cell grid must spend IRS #dee2e6, not --jc-border: " + css);
 		assertTrue(css.contains("border-color: var(--jc-border);"), () -> "missing themed table/cell border-color, css:\n" + css);
-		assertTrue(css.contains("border-top-color: var(--jc-border-2);"), () -> "missing themed table top border, css:\n" + css);
+		assertTrue(css.contains("border-top-color: var(--jc-table-border, #dee2e6);"),
+			() -> "table top edge must be gray --jc-table-border, not --jc-border-2 / ink: " + css);
 		assertTrue(css.contains(".juneau-view-detail-control"), () -> "missing expander column theme, css:\n" + css);
 		assertTrue(css.contains("var(--jc-text-muted)"), () -> "missing muted expander color, css:\n" + css);
 	}
@@ -930,10 +937,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 
 	@Test void k09_chromeCss_headerSortSearchSpendAccentAndControlBorder() throws Exception {
 		var css = readChromeCss();
-		assertTrue(css.contains("th.dt-ordering-asc span.dt-column-order"),
-			() -> "missing active sort chevron theme, css:\n" + css);
+		assertTrue(css.contains("th.dt-ordering-asc .juneau-sort-asc"),
+			() -> "missing active sort-triangle theme, css:\n" + css);
 		assertFalse(css.contains("th.dt-ordering-asc span.dt-column-order:before"),
-			() -> "active sort color must target the SVG span, not DT ::before: " + css);
+			() -> "active sort color must target the Juneau SVG triangle, not DT ::before: " + css);
 		assertTrue(css.contains(".juneau-view-col-search-icon.is-active { color: var(--jc-accent); }"),
 			() -> "missing active column-search icon theme, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-col-search-popover {"),

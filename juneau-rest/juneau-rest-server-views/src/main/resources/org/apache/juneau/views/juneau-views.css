@@ -31,14 +31,21 @@
  * avoids a color palette (uses currentColor / inherited text color only).
  */
 
-/* Base chip - neutral shape/padding/border-radius, NO colors. */
+/* Base chip - tight status-chip shape (not a capsule). Longhand border so a colourless
+   `border: N solid` shorthand cannot reset chrome.css border-color to currentColor.
+   3px radius / 10px / normal weight / 1px 6px padding match the IRS status-chip look
+   (no dot, regular weight) without copying IRS CSS or a hue palette. */
 .tag {
 	display: inline-block;
-	padding: 0.15em 0.6em;
-	border: 1px solid;            /* border-color falls back to currentColor - no palette color set here */
-	border-radius: 0.75em;
-	font-size: 0.85em;
-	line-height: 1.4;
+	padding: 1px 6px;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: normal;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	line-height: 14px;
 	white-space: nowrap;
 	vertical-align: baseline;
 }
@@ -201,11 +208,32 @@
 	--jc-chrome-glyph-size: 18px;
 	--jc-chrome-glyph-size-small: 12px;
 	/*
+	 * Paging-pill chevron role (first/prev/next/last arrows + the page-size caret).  Its own step, larger than
+	 * --jc-chrome-glyph-size-small, so the pager glyphs render at the visible size the IRS pager shows.  The two
+	 * pagers use the SAME 12px SVG box, but Juneau's own chevron artwork sits smaller inside its 24-unit viewBox
+	 * (path spans ~65% of height / ~42% of width) than the reference glyph does (~83% / ~50%), so at an identical
+	 * box the Juneau chevron reads noticeably smaller.  This is a reimplemented SIZE (a larger box for Juneau's own
+	 * art), NOT the reference artwork — nothing is copied.  Kept off --jc-chrome-glyph-size-small so the datatable
+	 * header sort glyphs, which share that token, are unaffected.
+	 */
+	--jc-chrome-glyph-size-pager: 16px;
+	/*
 	 * Idle paging/ribbon glyph (IRS `.ribbon-button { color: #666 }` / `.ribbon-paging-container
 	 * .ribbon-button { color: #666 }`, pages/style.css).  Not --jc-text-soft: chrome.css themes that
 	 * token for prose, which is darker than IRS chevrons on SSC.
 	 */
 	--jc-chrome-icon: #666666;
+	/*
+	 * Idle (unsorted) datatable header sort-glyph fill (IRS visual-parity follow-up).  IRS renders its idle
+	 * sort chevrons as DataTables' muted default - header ink `#3e3e3c` (its own `table.dataTable thead th`,
+	 * pages/style.css) shown through `span.dt-column-order`'s idle `opacity: 0.125` (datatables.css).  Over
+	 * this file's white header (`background-color: #fff`, below) that composites to #e7e7e7, pinned here as a
+	 * SOLID fill rather than an opacity - the same "opacity on a tiny 12px glyph reads muddy, spend a solid"
+	 * rule the disabled-glyph token below states, and what fixes the previous currentColor@0.45 idle carets
+	 * reading as a dark/brown grey.  The ACTIVE/sorted direction is deliberately NOT this grey: it spends
+	 * currentColor themeless and --jc-accent under console-ui chrome.css.
+	 */
+	--jc-sort-icon-idle: #e7e7e7;
 	/*
 	 * Disabled paging solids.  IRS source (pages/style.css) is NOT these hexes: `.ribbon-button` is
 	 * `color: #666`, `background-color: #fff`, segment borders `#ced4da`, and
@@ -251,6 +279,15 @@
 	--jc-detail-action-primary-border: #333333;
 	--jc-detail-action-primary-color: #ffffff;
 	--jc-detail-action-primary-bg-disabled: #8a8a8a;
+	/*
+	 * Row-detail field-row separator.  DEFAULT declared here (same precedent as the --jc-detail-action-* tokens
+	 * above) so every consumer of this file gets a light neutral hairline between field rows even with no theme
+	 * linked - not the near-black currentColor the separator used to inherit, which read as a rule rather than a
+	 * hairline.  The target shade is the light neutral gray (~#ddd) a record-detail field grid uses as its
+	 * between-rows separator; #dddddd is Juneau's own neutral, not a themed accent, so the separator stays a
+	 * quiet gray regardless of the page's accent colour.  A theme MAY override it; it does not have to.
+	 */
+	--jc-detail-field-border: #dddddd;
 }
 
 /*
@@ -305,27 +342,19 @@
 
 /*
  * Status pill.  Inherits the shared ".tag.<domain>.<value>" chip shape (theming/palette lives on ".tag");
- * this file adds only the inline-flex layout and the leading dot.  The dot defaults to currentColor (inheriting
- * the chip's themed color); the four painted tones map to the shared --jc-tone-* tokens.  There is deliberately
- * no .is-neutral color rule - `neutral` (like an absent tone) keeps currentColor.
+ * this file adds only the inline-flex layout.  The leading dot is intentionally hidden (IRS status chips
+ * carry no dot); the renderer still emits the `.jc-pill-dot` span for markup/tone compatibility, so it is
+ * collapsed with `display: none` rather than removed from the DOM contract.
  */
 .jc-pill {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.4em;
+	gap: var(--jc-space-1);
 }
 
 .jc-pill-dot {
-	width: 0.55em;
-	height: 0.55em;
-	border-radius: 50%;
-	background: currentColor;
+	display: none;
 }
-
-.jc-pill-dot.is-info { background: var(--jc-tone-info); }
-.jc-pill-dot.is-success { background: var(--jc-tone-success); }
-.jc-pill-dot.is-warning { background: var(--jc-tone-warning); }
-.jc-pill-dot.is-error { background: var(--jc-tone-error); }
 
 /* Action-bound pill: activatable (pointer + keyboard); focus ring via the shared currentColor :focus-visible rule below. */
 .jc-pill[role="button"] {
@@ -472,8 +501,12 @@ table.dataTable {
 	font-size: 0.8333rem;         /* IRS body-type parity (13.333px/10pt, WORK-J0518 DF-4); see the cell-level pin below */
 	border-collapse: collapse;
 	border-spacing: 0;
-	border: 1px solid;            /* currentColor; chrome.css themes the color */
-	border-top-width: 2px;        /* accented top rule */
+	/* Longhand width/style only — a colourless `border: N solid` shorthand resets the
+	   colour to currentColor (near-black --jc-text) and beats chrome.css when this file
+	   loads after chrome. Top edge is a 1px gray hairline, not a 2px ink bar. */
+	border-width: 1px;
+	border-style: solid;
+	border-top-width: 1px;
 	border-bottom-color: var(--jc-table-rule, #bbbbbb);
 }
 
@@ -637,9 +670,11 @@ table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {
 }
 
 /* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
-   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs.
-   Idle chevrons must be visible (DataTables' 0.125 opacity reads as "no sort icon"). Sort is a
-   click on the order control only — views.js capture-stops a click on the rest of the th. */
+   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs
+   AND DT2's unicode ▲/▼ (those mash with the Juneau SVG). Idle triangles must be visible
+   (DataTables' 0.125 opacity reads as "no sort icon"). Sort is a click on the order control
+   only — views.js capture-stops a click on the rest of the th. The visible control is a
+   Juneau-owned stacked-triangle SVG (two small ▲/▼ in a 12×24 box), not a 24px-tall chevron. */
 table[data-juneau-view] thead th div.dt-column-header,
 table[data-juneau-view] thead td div.dt-column-header,
 table.dataTable thead th div.dt-column-header,
@@ -667,26 +702,43 @@ table.dataTable thead span.dt-column-order,
 	height: var(--jc-space-5);
 	flex: 0 0 var(--jc-chrome-glyph-size-small);
 	cursor: pointer;
-	opacity: 0.45;
 	overflow: hidden;
 	color: inherit;
-}
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order {
-	opacity: 1;
+	/*
+	 * Center the 12x24 glyph on the header label.  DT2 lays the header out as `div.dt-column-header`
+	 * (display:flex; align-items:center above), which already centers this box; DT1 (and any host whose
+	 * build ships no `div.dt-column-header`) appends the control straight into the `th`, where a 24px-tall
+	 * inline box otherwise sits on the text BASELINE and rides high above the label.  `vertical-align:middle`
+	 * centers that inline case on the label's middle (a no-op for the flex-item case), and `inline-flex` +
+	 * `align-items:center` centers the glyph inside this box in both.
+	 */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
 }
 table.dataTable thead span.dt-column-order svg,
-.juneau-view-col-sort-icon svg {
+.juneau-view-col-sort-icon svg,
+.juneau-view-col-sort-glyph {
 	display: block;
-	width: 100%;
-	height: 100%;
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-space-5);
 	pointer-events: none;
 }
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order svg,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order svg {
-	transform: rotate(180deg);
+.juneau-sort-asc,
+.juneau-sort-desc {
+	fill: var(--jc-sort-icon-idle);
+	opacity: 1;
+}
+table.dataTable thead > tr > th.dt-ordering-asc .juneau-sort-asc,
+table.dataTable thead > tr > td.dt-ordering-asc .juneau-sort-asc {
+	fill: currentColor;
+	opacity: 1;
+}
+table.dataTable thead > tr > th.dt-ordering-desc .juneau-sort-desc,
+table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
+	fill: currentColor;
+	opacity: 1;
 }
 
 /*
@@ -936,15 +988,18 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Skip glyph correction (WORK-J0518 DF-2): each "chevronright" host's visible stroke sits centred in its own
- * 24x24 viewBox (path spans x=8.25..15.75 - roughly a third of the box on either side is empty), so two hosts
+ * Skip glyph correction (WORK-J0518 DF-2): each "chevronright" host's visible filled
+ * chevron sits in the middle of its 24x24 viewBox (path spans x=7.2..17.4), so two hosts
  * placed edge-to-edge with no overlap read as two separated arrows ("&gt;  &gt;") rather than one merged
  * double-chevron ("&gt;&gt;") the way IRS's own skip glyph does. Rather than ship a second IRS-sourced path (the
  * dual-hat rule this item is under), the SAME sprite glyph is reused twice and the second host is pulled left
  * to cancel most of that built-in padding - no new artwork, just correct spacing for the artwork already here.
+ * The overlap is -0.5 of the glyph box (the padding-cancelling ratio the artwork needs): it was -6px at the old
+ * 12px box and is -8px now that the pager glyph spends --jc-chrome-glyph-size-pager (16px), so the two chevrons
+ * stay merged at the pager's larger size instead of drifting apart.
  */
 .juneau-view-paging-double svg + svg {
-	margin-left: -6px;
+	margin-left: -8px;
 }
 
 /*
@@ -1139,7 +1194,7 @@ div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] s
 	fill: currentColor;
 	background-color: transparent;
 }
-.juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
+.juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-pager); height: var(--jc-chrome-glyph-size-pager); fill: currentColor; }
 
 /*
  * The pill's central segment (visual-parity follow-up): BOTH the compact "n-n of n" range summary AND the
@@ -1180,7 +1235,7 @@ div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] s
 	align-items: center;
 }
 
-.juneau-view-pagingpill-caret svg { width: var(--jc-chrome-glyph-size-small); height: var(--jc-chrome-glyph-size-small); fill: currentColor; }
+.juneau-view-pagingpill-caret svg { width: var(--jc-chrome-glyph-size-pager); height: var(--jc-chrome-glyph-size-pager); fill: currentColor; }
 
 /* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
    is enough to show/hide it, so no explicit `display` toggle rule is needed here. */
@@ -1680,6 +1735,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	width: 12px;
 	height: 12px;
 	fill: currentColor;
+	color: inherit;
 	vertical-align: middle;
 }
 
@@ -1878,7 +1934,7 @@ table.dataTable > tbody > tr.child .jc-card {
  */
 .juneau-view-detail-field {
 	padding: var(--jc-space-1) 0;
-	border-bottom: 1px solid;    /* currentColor separator - themed by chrome.css */
+	border-bottom: 1px solid var(--jc-detail-field-border);    /* light neutral hairline - see --jc-detail-field-border */
 }
 
 /*
@@ -2830,15 +2886,21 @@ input[type="checkbox"].jc-editable-field-input {
  * views-only consumers. Console chrome.css carries the same shape plus hue so
  * toolkit-less pages still get Page Tabs. Selected section = indicator-width
  * accent on the TOP edge plus light wash (themed in console chrome). A 2px
- * hairline sits under the sections row (between tabs and children) and between
- * stacked children rows. Selected child = light wash behind the label, not blue
+ * hairline sits BETWEEN rows only: under the sections row when children follow
+ * (:not(:last-child)) and between stacked children rows. With no children the
+ * sections row is the last child and draws no hairline, so the 3px accent floor
+ * is the sole bottom border (not 3px + 2px = 5px). Selected child = light wash behind the label, not blue
  * type and not a connected pill ribbon. Not .jc-tab / .jc-subtab ribbon-format;
  * leftover .jc-tab / .jc-subtab rules are historical (hash-swap shell deleted).
  */
 .juneau-page-nav {
 	display: flex;
 	flex-direction: column;
-	border-bottom: var(--jc-nav-indicator-width, 3px) solid; /* floor; colour in chrome */
+	/* Longhand width/style only — a colourless `border-bottom: N solid` shorthand
+	   resets the colour to currentColor and beats chrome.css's
+	   --jc-page-nav-accent when this file loads after chrome (toolkit pages). */
+	border-bottom-width: var(--jc-nav-indicator-width, 3px);
+	border-bottom-style: solid; /* floor; colour in chrome */
 }
 
 .juneau-page-nav-sections,
@@ -2853,12 +2915,14 @@ input[type="checkbox"].jc-editable-field-input {
 	padding: 0 var(--jc-space-3, 0.75rem);
 }
 
-.juneau-page-nav-sections {
-	border-bottom: var(--jc-page-nav-hairline, 2px) solid; /* between tabs and children; colour in chrome */
+.juneau-page-nav-sections:not(:last-child) {
+	border-bottom-width: var(--jc-page-nav-hairline, 2px);
+	border-bottom-style: solid; /* between tabs and children; colour in chrome */
 }
 
 .juneau-page-nav-children:not(:last-child) {
-	border-bottom: var(--jc-page-nav-hairline, 2px) solid; /* between stacked children rows; colour in chrome */
+	border-bottom-width: var(--jc-page-nav-hairline, 2px);
+	border-bottom-style: solid; /* between stacked children rows; colour in chrome */
 }
 
 .juneau-page-nav-section,
@@ -2876,7 +2940,9 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-page-nav-section {
-	border-top: var(--jc-nav-indicator-width, 3px) solid transparent;
+	border-top-width: var(--jc-nav-indicator-width, 3px);
+	border-top-style: solid;
+	border-top-color: transparent;
 	font-size: var(--jc-page-nav-section-font-size, 13px);
 }
 
@@ -2885,8 +2951,10 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-page-nav-section[aria-current="page"] {
-	border-top-color: currentColor;
 	font-weight: 600;
+	/* Top-edge accent colour lives in chrome.css as --jc-page-nav-accent.
+	   Do not set a top-edge colour here: this file loads after chrome on toolkit
+	   pages and would paint --jc-text instead of the accent. */
 }
 
 .juneau-page-nav-child[aria-current="page"] {

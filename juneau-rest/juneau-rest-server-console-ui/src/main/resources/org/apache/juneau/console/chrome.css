@@ -59,7 +59,11 @@ html, body {
   color: var(--jc-text);
   background-color: var(--jc-chrome-bg);
   background-image: var(--jc-page-bg);
+  height: 100%;
   min-height: 100vh;
+  /* The document does not scroll. Header, page nav, and the page-bg gradient stay
+     put; .jc-main is the only overflow box (the cards). */
+  overflow: hidden;
 }
 
 body {
@@ -70,6 +74,17 @@ body {
      so the themed --jc-page-bg band vanished after scrolling to the end. Container
      padding is included in that overflow. */
   padding-bottom: var(--jc-space-3);
+}
+
+/* Header, page nav (and the optional .jc-chrome sticky wrapper), and footer stay
+   outside the scrolling well. */
+.jc-header,
+.jc-chrome,
+.juneau-page-nav,
+.jc-nav,
+.jc-page-footer,
+.jc-footer {
+  flex: 0 0 auto;
 }
 
 a { color: var(--jc-link); text-decoration: none; }
@@ -405,10 +420,13 @@ a:hover { text-decoration: underline; }
    Shape AND colour live here so toolkit-less pages still get Page Tabs.
    juneau-views.css keeps a parallel colourless shape for views-only consumers.
    Selected section = light wash + indicator accent on the TOP edge, no pill
-   fill. Hairline under the sections row is --jc-page-nav-hairline (2px) and
-   --jc-page-nav-accent. Further children rows (depth 2+) get the same hairline
-   between them. The nav's floor uses the same accent. Selected child = accent
-   wash behind the label, not accent type.
+   fill. The --jc-page-nav-accent floor (--jc-nav-indicator-width, 3px) sits on
+   the nav itself, under the whole stack. A --jc-page-nav-hairline (2px) accent
+   sits BETWEEN rows only: under the sections row when children follow
+   (:not(:last-child)) and between stacked children rows. With no children the
+   sections row is the last child, so it draws no hairline and the 3px floor is
+   the only bottom border - not 3px + 2px stacked into 5px. Selected child =
+   accent wash behind the label, not accent type.
    ========================================================================== */
 
 .juneau-page-nav {
@@ -418,6 +436,11 @@ a:hover { text-decoration: underline; }
   border-bottom-width: var(--jc-nav-indicator-width);
   border-bottom-style: solid;
   border-bottom-color: var(--jc-page-nav-accent);
+  /* Pins under the sticky header when the document still scrolls (toolkit-less
+     pages without .jc-chrome). Harmless when html/body overflow is hidden. */
+  position: sticky;
+  top: var(--jc-header-height);
+  z-index: 19;
 }
 
 .juneau-page-nav-sections, .juneau-page-nav-children {
@@ -432,7 +455,7 @@ a:hover { text-decoration: underline; }
   padding-right: var(--jc-space-3);
 }
 
-.juneau-page-nav-sections {
+.juneau-page-nav-sections:not(:last-child) {
   border-bottom-width: var(--jc-page-nav-hairline);
   border-bottom-style: solid;
   border-bottom-color: var(--jc-page-nav-accent);
@@ -505,6 +528,8 @@ a:hover { text-decoration: underline; }
   flex: 1 1 auto;
   padding: 20px 24px 40px;
   min-width: 0;
+  min-height: 0; /* shrink below content so overflow:auto becomes the card scroller */
+  overflow: auto;
   background-color: var(--jc-main-bg);
   /* Top + sides only; body padding-bottom is the matching bottom gutter (see body rule). */
   margin: var(--jc-space-3) var(--jc-space-3) 0;
@@ -669,14 +694,14 @@ a:hover { text-decoration: underline; }
 .tag {
   display: inline-block;
   padding: 1px 6px;
-  border-radius: var(--jc-radius);
+  border-radius: 3px;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: normal;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border: 1px solid transparent;
   white-space: nowrap;
-  line-height: 1.5;
+  line-height: 14px;
 }
 
 /* Example domain/value vocabulary (lifted from the release-manager dogfood) - an extension point, not a closed
@@ -775,8 +800,8 @@ table[data-juneau-view],
 table.dataTable {
   font-family: var(--jc-font);
   color: var(--jc-text);
-  border-color: var(--jc-border);          /* outer/grid frame */
-  border-top-color: var(--jc-border-2);    /* accented 2px top rule */
+  border-color: var(--jc-table-border, #dee2e6);  /* outer/grid frame — gray, not --jc-text */
+  border-top-color: var(--jc-table-border, #dee2e6); /* 1px gray hairline, not --jc-border-2 / ink */
   border-bottom-color: var(--jc-table-rule, #bbbbbb);
   --dt-row-stripe: 255, 255, 255;
   --dt-row-hover: 255, 255, 255;
@@ -937,12 +962,14 @@ table.dataTable.display > tbody > tr:hover {
 	color: var(--jc-on-accent);
 }
 
-/* Field grid.  -views ships the separator as a currentColor border, which inherits near-black body text and
-   reads as a rule rather than a hairline; --jc-border is what makes it light.  The label/value pair carries
-   the inverted emphasis in colour as -views carries it in size and weight: muted key, full-strength value.
-   The em-dash on an unset value is generated content in -views and is muted here so it reads as "known,
-   unset" rather than as a value someone typed. */
-.juneau-view-detail-field { border-bottom-color: var(--jc-border); }
+/* Field grid.  -views now ships the row separator as a light NEUTRAL hairline (its --jc-detail-field-border
+   default), so it reads as a hairline rather than a rule on its own and does NOT need a console override to
+   "make it light" - the previous border-bottom-color:var(--jc-border) tinted the separator with the theme
+   accent (pinkish under light-red, brownish under light-brown), which is exactly the accent-tint this neutral
+   default removes so every theme shows the same quiet gray.  The label/value pair still carries the inverted
+   emphasis in colour as -views carries it in size and weight: muted key, full-strength value.  The em-dash on
+   an unset value is generated content in -views and is muted here so it reads as "known, unset" rather than as
+   a value someone typed. */
 .juneau-view-detail-field-title { color: var(--jc-text-muted); }
 .juneau-view-detail-field-value { color: var(--jc-text); }
 .juneau-view-detail-field-value:empty::after { color: var(--jc-text-muted); }
@@ -1026,14 +1053,14 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
   border-color: var(--jc-accent);
 }
 
-/* Header sort / column-search icons: idle is views.css opacity; active direction and a live
-   column filter spend accent so they match within each stock theme. DT ::before/::after glyphs
-   are suppressed; color the Juneau SVG control. */
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order {
-  color: var(--jc-accent);
+/* Header sort / column-search icons: idle is views.css opacity on each triangle; the
+   active direction spends accent. DT ::before/::after glyphs are suppressed; color the
+   Juneau stacked-triangle SVG, not the whole 12×24 control (that would paint both ▲ and ▼). */
+table.dataTable thead > tr > th.dt-ordering-asc .juneau-sort-asc,
+table.dataTable thead > tr > td.dt-ordering-asc .juneau-sort-asc,
+table.dataTable thead > tr > th.dt-ordering-desc .juneau-sort-desc,
+table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
+  fill: var(--jc-accent);
   opacity: 1;
 }
 .juneau-view-col-search-icon.is-active { color: var(--jc-accent); }

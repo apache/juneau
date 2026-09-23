@@ -55,6 +55,8 @@ class ChromeCss_MainInner_Test extends TestBase {
 		assertFalse(body.contains("max-width:"), "Q4: no max-width on .jc-main: " + body);
 		assertFalse(body.contains("border:"), "Q4: no extra border on .jc-main: " + body);
 		assertTrue(body.contains("padding: 20px 24px 40px"), "keep today's inner padding: " + body);
+		assertTrue(body.contains("overflow: auto"), "cards scroll inside .jc-main, not the document: " + body);
+		assertTrue(body.contains("min-height: 0"), "flex item must shrink so overflow:auto kicks in: " + body);
 	}
 
 	@Test void a01b_body_keepsBottomGutterAfterScroll() throws Exception {
@@ -62,6 +64,8 @@ class ChromeCss_MainInner_Test extends TestBase {
 		assertTrue(c.contains("padding-bottom: var(--jc-space-3)"),
 			"body must pad the bottom gutter so --jc-page-bg remains visible after scroll: " + c);
 		assertTrue(c.contains("min-height: 100vh"), c);
+		assertTrue(c.contains("overflow: hidden"),
+			"html/body must not scroll; the page-bg gradient stays put: " + c);
 		assertTrue(c.contains("display: flex"), c);
 		assertTrue(c.contains("flex-direction: column"), c);
 	}

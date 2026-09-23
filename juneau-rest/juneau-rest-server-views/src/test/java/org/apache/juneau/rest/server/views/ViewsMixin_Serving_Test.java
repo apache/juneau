@@ -362,9 +362,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	@Test void e02_viewsCss_hasNeutralTagChip() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		// A real base-chip rule (not just the header comment): neutral shape/padding, no colors.
-		assertTrue(body.contains(".tag {"), body);
-		assertTrue(body.contains("border-radius:"), body);
+		var at = body.indexOf(".tag {");
+		assertTrue(at >= 0, body);
+		var rule = body.substring(at, body.indexOf("}", at));
+		assertTrue(rule.contains("border-radius: 3px"), rule);
+		assertTrue(rule.contains("font-size: 10px"), rule);
+		assertTrue(rule.contains("font-weight: normal"), rule);
+		assertTrue(rule.contains("padding: 1px 6px"), rule);
+		assertTrue(rule.contains("border-width: 1px"), rule);
+		assertTrue(rule.contains("border-style: solid"), rule);
+		assertFalse(rule.contains("border: 1px solid"),
+			"colourless border shorthand resets chrome border-color to currentColor: " + rule);
+		assertFalse(rule.contains("border-radius: 0.75em"), rule);
 		assertTrue(body.contains(".juneau-ts-popup {"), body);
 		assertTrue(body.contains("position: fixed"), body);
 	}
@@ -553,7 +562,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("function pack("), body);
 		for (var name : new String[]{
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
-				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more"})
+				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more", "sort"})
 			assertTrue(body.contains("\"" + name + "\""), () -> "missing bundled glyph '" + name + "':\n" + body);
 	}
 
@@ -887,9 +896,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("flex-direction: row !important"), body);
 		assertTrue(body.contains("content: none"), body);
 		assertTrue(body.contains("border-collapse: collapse"), body);
-		assertTrue(body.contains("border-top-width: 2px"), body);
 		assertTrue(body.contains("--jc-table-border: #dee2e6"), body);
-		assertTrue(body.contains("border: 1px solid"), body);
+		var tableSel = "table[data-juneau-view],\ntable.dataTable {";
+		var tableAt = body.indexOf(tableSel);
+		assertTrue(tableAt >= 0, body);
+		var tableRule = body.substring(tableAt, body.indexOf("}", tableAt));
+		assertTrue(tableRule.contains("border-top-width: 1px"), tableRule);
+		assertTrue(tableRule.contains("border-width: 1px"), tableRule);
+		assertTrue(tableRule.contains("border-style: solid"), tableRule);
+		assertFalse(tableRule.contains("border: 1px solid"),
+			"colourless border shorthand paints the top edge as --jc-text: " + tableRule);
+		assertFalse(tableRule.contains("border-top-width: 2px"),
+			"table top edge is a 1px gray hairline, not a 2px ink bar: " + tableRule);
 	}
 
 	/**
