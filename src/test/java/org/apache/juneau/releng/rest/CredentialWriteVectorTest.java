@@ -160,7 +160,7 @@ class CredentialWriteVectorTest {
 
 	@Test
 	void a03_contentQueryParameterOverwritesAStoredCredentialWhenDisableContentParamIsDefault() throws Exception {
-		// Route (b) of F1, reproduced as an actual overwrite -- the half that contentQueryParameterIsRefusedByThe
+		// The content= query-parameter route, reproduced as an actual overwrite -- the half that contentQueryParameterIsRefusedByThe
 		// Resource (below) cannot demonstrate. That test runs against the real CredentialRest, which sets
 		// disableContentParam="true", so it can only ever show the fix working; a &content= reproduction there
 		// could not fail against unfixed code, which would make it a test of the remedy rather than a confirmation
@@ -184,7 +184,7 @@ class CredentialWriteVectorTest {
 
 	@Test
 	void a04_contentQueryParameterIsRefusedByTheResource() throws Exception {
-		// The second half of F1, asserted closed rather than reproduced. disableContentParam defaults to false, so
+		// The other half of the content= route, asserted closed rather than reproduced. disableContentParam defaults to false, so
 		// the body can travel in the URL instead; CredentialRest now sets it to "true", and this fails if that is
 		// removed.
 		//
@@ -332,13 +332,13 @@ class CredentialWriteVectorTest {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// Test subject for route (b)'s reproduction: BasicRestResource defaults, disableContentParam left at false
+	// Test subject for the content= route's reproduction: BasicRestResource defaults, disableContentParam left at false
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A single credential write carrying {@code BasicRestResource}'s defaults unchanged &mdash; in particular
 	 * {@code disableContentParam} at its default {@code false}, so the {@code &content=} query route is live. This
-	 * is the honest subject for reproducing route (b) of F1: the real {@code CredentialRest} sets
+	 * is the honest subject for reproducing the {@code content=} route: the real {@code CredentialRest} sets
 	 * {@code disableContentParam="true"}, so the {@code content=} route against it can only ever demonstrate the
 	 * fix. The write mirrors {@link CredentialRest#set(String, CredentialRest.StoreRequest)} and reuses its
 	 * {@link CredentialRest.StoreRequest} body so the only relevant difference from the real resource, on this

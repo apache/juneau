@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-/** Per-run in-memory pub/sub of output lines. Subscribers are SSE connections. */
+/**
+ * Per-run in-memory pub/sub of output lines. Subscribers are SSE connections.
+ */
 public class LogBroadcaster implements Broadcaster {
 
 	private final List<Consumer<String>> subscribers = new CopyOnWriteArrayList<>();
@@ -32,6 +34,9 @@ public class LogBroadcaster implements Broadcaster {
 		return () -> subscribers.remove(sink);
 	}
 
+	/**
+	 * Sends {@code line} to every current subscriber.
+	 */
 	public void publish(String line) {
 		for (var s : subscribers) {
 			try {
@@ -41,6 +46,9 @@ public class LogBroadcaster implements Broadcaster {
 		}
 	}
 
+	/**
+	 * Number of currently-subscribed SSE connections.
+	 */
 	public int subscriberCount() {
 		return subscribers.size();
 	}

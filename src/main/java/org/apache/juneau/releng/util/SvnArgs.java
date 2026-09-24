@@ -25,10 +25,14 @@ package org.apache.juneau.releng.util;
  */
 public final class SvnArgs {
 
-	/** {@code svn} flag introducing the Apache LDAP availid that follows it on argv. */
+	/**
+	 * {@code svn} flag introducing the Apache LDAP availid that follows it on argv.
+	 */
 	public static final String USERNAME = "--username";
 
-	/** {@code svn} flag directing svn to read the password from stdin instead of argv. */
+	/**
+	 * {@code svn} flag directing svn to read the password from stdin instead of argv.
+	 */
 	public static final String PASSWORD_FROM_STDIN = "--password-from-stdin";
 
 	private SvnArgs() {

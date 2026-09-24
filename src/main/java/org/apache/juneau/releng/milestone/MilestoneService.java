@@ -25,20 +25,26 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.juneau.releng.release.ReleaseVersion;
 
-/** Milestone helpers: previous-tag selection and "** Changes" changelog generation. */
+/**
+ * Milestone helpers: previous-tag selection and "** Changes" changelog generation.
+ */
 public class MilestoneService {
 
 	// "Bump <dep> from <old> to <new>" with optional trailing " in <path>".
 	// Capture groups: 1=dependency, 2=from-version, 3=to-version, 4=optional path.
 	private static final Pattern BUMP = Pattern.compile("^Bump (.+?) from (\\S+) to (\\S+?)(?: in (\\S+))?$");
 
-	/** The release tag immediately preceding {@code version} (prereleases excluded). */
+	/**
+	 * The release tag immediately preceding {@code version} (prereleases excluded).
+	 */
 	public String previousTag(List<String> tags, String version) {
 		var prev = ReleaseVersion.highestReleasedBelow(tags, version);
 		return prev == null ? null : "juneau-" + prev.version();
 	}
 
-	/** Groups Dependabot bump PRs into one {@link ChangelogEntry} per dependency, sorted by dependency. */
+	/**
+	 * Groups Dependabot bump PRs into one {@link ChangelogEntry} per dependency, sorted by dependency.
+	 */
 	public List<ChangelogEntry> generateChanges(List<PullRequest> prs) {
 		// Preserve encounter order within a group, but iterate PRs by ascending number for stable from/to + refs.
 		var sorted = cp(prs);
@@ -62,7 +68,9 @@ public class MilestoneService {
 		return out;
 	}
 
-	/** Renders the full "** Changes" section text. */
+	/**
+	 * Renders the full "** Changes" section text.
+	 */
 	public String renderChangesSection(List<PullRequest> prs) {
 		var sb = new StringBuilder("** Changes\n\n");
 		for (var e : generateChanges(prs))

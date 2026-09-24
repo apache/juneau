@@ -23,18 +23,27 @@ import java.util.Map;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Fetches merged PRs attached to a milestone via {@code gh pr list}. */
+/**
+ * Fetches merged PRs attached to a milestone via {@code gh pr list}.
+ */
 public class GithubPrSource {
 
 	private final ProcessRunner runner;
 	private final String repoSlug;
 
+	/**
+	 * Creates a source that queries {@code repoSlug} via {@code gh}.
+	 */
 	public GithubPrSource(ProcessRunner runner, String repoSlug) {
 		this.runner = runner;
 		this.repoSlug = repoSlug;
 	}
 
-	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned/cast to its known generic shape.
+	/**
+	 * Merged PRs attached to the milestone titled {@code milestoneTitle}.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is assigned/cast to its known generic shape.
 	})
 	public List<PullRequest> forMilestone(String milestoneTitle) {
 		var json = runner.runText(List.of("gh", "pr", "list", "--repo", repoSlug, "--state", "merged", "--search",
@@ -56,10 +65,11 @@ public class GithubPrSource {
 
 	/**
 	 * Resolves the GitHub milestone number whose title exactly matches {@code versionTitle} (e.g. "10.0.0"),
-	 * via {@code gh api repos/<slug>/milestones?state=all}. Returns null if none matches (§8.1) — the
+	 * via {@code gh api repos/<slug>/milestones?state=all}. Returns null if none matches — the
 	 * New-Release form field is then left blank for the human to fill in manually.
 	 */
-	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned/cast to its known generic shape.
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is assigned/cast to its known generic shape.
 	})
 	public Integer resolveMilestoneNumber(String versionTitle) {
 		var json = runner.runText(List.of("gh", "api", "repos/" + repoSlug + "/milestones?state=all"));

@@ -21,30 +21,41 @@ import java.util.List;
 import org.apache.juneau.releng.release.ReleaseVersion;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Resolves the target branch for a version and verifies (never creates) its remote existence. */
+/**
+ * Resolves the target branch for a version and verifies (never creates) its remote existence.
+ */
 public class BranchResolver {
 
 	private final ProcessRunner runner;
 	private final String repoDir; // rm.repo.dir — the maintainer's existing working clone
 
+	/**
+	 * Constructs a resolver using {@code runner} against the working clone at {@code repoDir}.
+	 */
 	public BranchResolver(ProcessRunner runner, String repoDir) {
 		this.runner = runner;
 		this.repoDir = repoDir;
 	}
 
-	/** {@code master} when z==0, else {@code juneau-<version>-branch}. */
+	/**
+	 * {@code master} when z==0, else {@code juneau-<version>-branch}.
+	 */
 	public String resolve(String version) {
 		var v = ReleaseVersion.of(version);
 		return v.maintenance() == 0 ? "master" : "juneau-" + version + "-branch";
 	}
 
-	/** {@code git ls-remote --heads origin <branch>} against {@code rm.repo.dir} — true if a ref comes back. */
+	/**
+	 * {@code git ls-remote --heads origin <branch>} against {@code rm.repo.dir} — true if a ref comes back.
+	 */
 	public boolean remoteBranchExists(String branch) {
 		var res = runner.run(List.of("git", "-C", repoDir, "ls-remote", "--heads", "origin", branch), null, null);
 		return res.ok() && res.output() != null && res.output().contains("refs/heads/" + branch);
 	}
 
-	/** Human instructions shown when the target branch is missing (never auto-created). */
+	/**
+	 * Human instructions shown when the target branch is missing (never auto-created).
+	 */
 	public String missingBranchInstructions(String branch) {
 		return "Branch '" + branch + "' does not exist on origin. This engine does not create maintenance "
 				+ "branches.\nTo create it: git checkout -b " + branch + " <appropriate-source-commit> "

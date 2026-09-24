@@ -21,7 +21,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-/** The per-target-version run record. Mirrored to {@code rm.state.dir/release-<version>.json}. */
+/**
+ * The per-target-version run record. Mirrored to {@code rm.state.dir/release-<version>.json}.
+ */
 public class RunState {
 
 	public String version; // "9.2.1"
@@ -36,7 +38,7 @@ public class RunState {
 	public String developmentVersion; // human-supplied when z==0; else null
 	public String nexusRepoId; // set by nexus-staging-close
 	public String githubReleaseUrl; // set by github-release-create
-	public Integer milestoneNumber; // New-Release form field; pre-filled by gh title-match resolution, user-editable
+	public Integer milestoneNumber; // Retained for backward compatibility with older state files; unused.
 	// Optional operator-authored narrative, captured at start and editable later; threaded into the four
 	// release emails (blank fields are omitted from every email rather than rendering empty sections).
 	public String releaseSummary; // short "why we're releasing" line
@@ -45,11 +47,16 @@ public class RunState {
 	public String acknowledgements; // multiline thanks/acknowledgements
 	public List<StepState> steps = new ArrayList<>();
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public RunState() {
 		// No-arg constructor required so the JSON parser can instantiate this bean before populating fields.
 	}
 
-	/** Build a fresh run with all steps seeded to PENDING. */
+	/**
+	 * Build a fresh run with all steps seeded to PENDING.
+	 */
 	public static RunState create(String version, String branch, List<String> stepIds) {
 		var rs = new RunState();
 		rs.version = version;
@@ -65,7 +72,9 @@ public class RunState {
 		return rs;
 	}
 
-	/** The {@link StepState} for {@code id}, or null. */
+	/**
+	 * The {@link StepState} for {@code id}, or null.
+	 */
 	public StepState step(String id) {
 		for (var s : steps)
 			if (s.id.equals(id))
@@ -73,6 +82,9 @@ public class RunState {
 		return null;
 	}
 
+	/**
+	 * Stamps {@link #updatedAt} with the current time.
+	 */
 	public void touch() {
 		updatedAt = Instant.now().toString();
 	}

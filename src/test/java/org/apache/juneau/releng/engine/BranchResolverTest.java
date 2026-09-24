@@ -25,7 +25,9 @@ import org.junit.jupiter.api.Test;
 
 class BranchResolverTest {
 
-	/** Stub whose run() returns a canned ProcResult regardless of args. */
+	/**
+	 * Stub whose run() returns a canned ProcResult regardless of args.
+	 */
 	private ProcessRunner runner(int exit, String out) {
 		return new ProcessRunner() {
 			@Override

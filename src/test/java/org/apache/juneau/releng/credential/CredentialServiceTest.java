@@ -29,7 +29,9 @@ import org.junit.jupiter.api.io.TempDir;
 
 class CredentialServiceTest {
 
-	/** One in-memory {@link SecretStore} per credential, mirroring the per-service {@code KeychainSecretStore} wiring. */
+	/**
+	 * One in-memory {@link SecretStore} per credential, mirroring the per-service {@code KeychainSecretStore} wiring.
+	 */
 	private static Map<CredentialSpec, SecretStore> stores() {
 		var stores = new EnumMap<CredentialSpec, SecretStore>(CredentialSpec.class);
 		for (var spec : CredentialSpec.values())

@@ -55,7 +55,9 @@ class NexusMockRestHttpTest {
 				.build();
 	}
 
-	/** Routes the real client through the mock servlet's actual HTTP dispatch (not {@link NexusMockRest#route}). */
+	/**
+	 * Routes the real client through the mock servlet's actual HTTP dispatch (not {@link NexusMockRest#route}).
+	 */
 	private NexusStagingClient.Transport overHttp(MockRestClient client) {
 		return (method, path, body) -> {
 			try {

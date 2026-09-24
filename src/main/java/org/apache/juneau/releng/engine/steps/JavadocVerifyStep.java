@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.5 javadoc-verify: mvn javadoc:aggregate; human confirms cleanliness. Skippable. */
+/**
+ * Javadoc-verify: mvn javadoc:aggregate; human confirms cleanliness. Skippable.
+ */
 public class JavadocVerifyStep implements ReleaseStep {
 	@Override
 	public String id() {

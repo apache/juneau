@@ -26,10 +26,12 @@ import org.apache.juneau.releng.engine.StepResult;
 import org.apache.juneau.releng.release.ReleaseVersion;
 import org.apache.juneau.releng.util.SvnArgs;
 
-/** §5.19 dist-promote: svn move dist/dev -> dist/release/<version>; remove prior release on the line. Mutating. */
+/**
+ * Dist-promote: svn move dist/dev -> dist/release/<version>; remove prior release on the line. Mutating.
+ */
 public class DistPromoteStep implements ReleaseStep {
 
-	// The six ASF-convention artifact files a fixed binary-artifacts-stage (§5.12) commits to dist/dev.
+	// The six ASF-convention artifact files a fixed binary-artifacts-stage commits to dist/dev.
 	private static final List<String> EXTENSIONS = List.of("", ".asc", ".sha512");
 
 	@Override
@@ -99,7 +101,9 @@ public class DistPromoteStep implements ReleaseStep {
 		return commit.ok() ? StepResult.ok("Promoted to dist/release.") : StepResult.fail("svn promote failed.");
 	}
 
-	/** The highest non-prerelease version on {@code ctx.run.version}'s major.minor line, strictly below it. */
+	/**
+	 * The highest non-prerelease version on {@code ctx.run.version}'s major.minor line, strictly below it.
+	 */
 	private static String priorReleaseOnLine(StepContext ctx) {
 		var tags = ctx.runner.runLines(List.of("git", "-C", ctx.repoDir, "tag", "--list", "juneau-*"));
 		var target = ReleaseVersion.of(ctx.run.version);

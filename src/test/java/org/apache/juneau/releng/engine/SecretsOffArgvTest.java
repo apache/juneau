@@ -30,7 +30,9 @@ import org.apache.juneau.releng.engine.steps.GithubReleaseCreateStep;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
-/** Asserts no secret is ever passed on a subprocess argv. */
+/**
+ * Asserts no secret is ever passed on a subprocess argv.
+ */
 class SecretsOffArgvTest {
 
 	static final String LDAP = "SENTINEL_LDAP_PW";
@@ -95,8 +97,8 @@ class SecretsOffArgvTest {
 		var c = ctx(r, dir);
 		new DeploySnapshotStep().apply(c); // gpg passphrase must be on stdin
 		new GithubReleaseCreateStep().apply(c); // token must be in env
-		new BinaryArtifactsStageStep().apply(c); // LDAP password must be on stdin (§7.1 svn auth)
-		new DistPromoteStep().apply(c); // LDAP password must be on stdin (§7.2 svn auth)
+		new BinaryArtifactsStageStep().apply(c); // LDAP password must be on stdin
+		new DistPromoteStep().apply(c); // LDAP password must be on stdin
 
 		for (var argv : argvs)
 			for (var arg : argv) {

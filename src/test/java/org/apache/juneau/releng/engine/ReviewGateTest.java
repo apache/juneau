@@ -26,7 +26,9 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** A review-gate step holds at {@code AWAITING_REVIEW} after its read-only work runs, until confirm-review. */
+/**
+ * A review-gate step holds at {@code AWAITING_REVIEW} after its read-only work runs, until confirm-review.
+ */
 class ReviewGateTest {
 
 	private ProcessRunner okRunner() {

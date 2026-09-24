@@ -79,7 +79,7 @@ class DropRcServiceTest {
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
 				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""),
-				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 		var preview = svc.preview("9.2.1");
 		assertTrue(preview.lines.stream().anyMatch(l -> l.contains("orgapachejuneau-1042")));
 		assertTrue(preview.lines.stream().anyMatch(l -> l.contains("juneau-9.2.1-RC1")));
@@ -92,7 +92,7 @@ class DropRcServiceTest {
 		seededThroughReleasePrepare(store);
 		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner(), "/repo")), runner(),
 				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""),
-				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
 
@@ -135,8 +135,8 @@ class DropRcServiceTest {
 		eng.stateBroadcaster("9.2.1").subscribe(json -> seen.add(Json.DEFAULT.read(json, RunStateSnapshot.class)));
 
 		var svc = new DropRcService(store, StepRegistry.standard(branches), runner(), Path.of("/staging/git/juneau"),
-				dir, NexusStagingClient.forTests((m, p, b) -> ""), v -> true,
-				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				dir, NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault(),
+				(v, s) -> new LogBroadcaster());
 
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
 

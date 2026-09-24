@@ -29,22 +29,32 @@ import java.util.Map;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Composes the four release emails into {@code .eml} drafts and opens them in the mail client. */
+/**
+ * Composes the four release emails into {@code .eml} drafts and opens them in the mail client.
+ */
 public class EmailService {
 
 	private final Path draftsDir; // rm.state.dir/drafts
 	private final ProcessRunner runner;
 
+	/**
+	 * Creates a service that writes drafts under {@code stateDir/drafts} and opens them via {@code runner}.
+	 */
 	public EmailService(Path stateDir, ProcessRunner runner) {
 		this.draftsDir = stateDir.resolve("drafts");
 		this.runner = runner;
 	}
 
-	/** Render + write the {@code .eml}, then {@code open} it; returns the draft path. */
+	/**
+	 * Render + write the {@code .eml}, then {@code open} it; returns the draft path.
+	 */
 	public Path compose(EmailTemplate t, RunState rs) {
 		return compose(t, rs, Map.of());
 	}
 
+	/**
+	 * Render + write the {@code .eml} using {@code extra} step-computed values, then {@code open} it; returns the draft path.
+	 */
 	public Path compose(EmailTemplate t, RunState rs, Map<String, String> extra) {
 		var body = renderBody(t, rs, extra);
 		var subject = subject(t, rs);
@@ -61,6 +71,9 @@ public class EmailService {
 		}
 	}
 
+	/**
+	 * The email subject line for template {@code t} and run {@code rs}.
+	 */
 	public String subject(EmailTemplate t, RunState rs) {
 		return t.subjectPrefix + " Apache Juneau " + rs.version + " RC" + rs.rc;
 	}
@@ -111,7 +124,9 @@ public class EmailService {
 		};
 	}
 
-	/** Joins the non-blank sections with a single blank line between each and a trailing newline. */
+	/**
+	 * Joins the non-blank sections with a single blank line between each and a trailing newline.
+	 */
 	private static String paragraphs(String... sections) {
 		var kept = new ArrayList<String>();
 		for (var s : sections)
@@ -120,7 +135,9 @@ public class EmailService {
 		return String.join("\n\n", kept) + "\n";
 	}
 
-	/** A header line above the content, or null when the content is blank (so the whole block is omitted). */
+	/**
+	 * A header line above the content, or null when the content is blank (so the whole block is omitted).
+	 */
 	private static String labeled(String header, String content) {
 		return content == null ? null : header + "\n" + content;
 	}

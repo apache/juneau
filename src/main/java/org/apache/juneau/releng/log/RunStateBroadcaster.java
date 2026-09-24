@@ -37,6 +37,9 @@ public class RunStateBroadcaster implements Broadcaster {
 		return () -> subscribers.remove(sink);
 	}
 
+	/**
+	 * Sends {@code snapshotJson} to every current subscriber.
+	 */
 	public void publish(String snapshotJson) {
 		for (var s : subscribers) {
 			try {
@@ -46,6 +49,9 @@ public class RunStateBroadcaster implements Broadcaster {
 		}
 	}
 
+	/**
+	 * Number of currently-subscribed SSE connections.
+	 */
 	public int subscriberCount() {
 		return subscribers.size();
 	}

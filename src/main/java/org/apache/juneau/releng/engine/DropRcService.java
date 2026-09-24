@@ -17,15 +17,12 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.log.LogBroadcaster;
@@ -34,10 +31,14 @@ import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.releng.util.SvnArgs;
 
-/** The one coarse Drop-RC action: drop remote state, bump RC, reset from workspace-setup. */
+/**
+ * The one coarse Drop-RC action: drop remote state, bump RC, reset from workspace-setup.
+ */
 public class DropRcService {
 
-	/** Pseudo-step id under which Drop-RC's own log file + broadcaster are keyed (it isn't a registry step). */
+	/**
+	 * Pseudo-step id under which Drop-RC's own log file + broadcaster are keyed (it isn't a registry step).
+	 */
 	public static final String LOG_STEP_ID = "drop-rc";
 
 	private final RunStateStore store;
@@ -46,14 +47,17 @@ public class DropRcService {
 	private final Path stagingRepo;
 	private final Path stateDir;
 	private final NexusStagingClient nexus;
-	private final Predicate<String> armed;
 	private final TargetProfile target;
 	private final BiFunction<String, String, LogBroadcaster> broadcasterFn;
 
-	@SuppressWarnings({ "java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
+	/**
+	 * Constructor injecting all of this service's collaborators.
+	 */
+	@SuppressWarnings({
+		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
 	})
 	public DropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner, Path stagingRepo,
-			Path stateDir, NexusStagingClient nexus, Predicate<String> armed, TargetProfile target,
+			Path stateDir, NexusStagingClient nexus, TargetProfile target,
 			BiFunction<String, String, LogBroadcaster> broadcasterFn) {
 		this.store = store;
 		this.registry = registry;
@@ -61,7 +65,6 @@ public class DropRcService {
 		this.stagingRepo = stagingRepo;
 		this.stateDir = stateDir;
 		this.nexus = nexus;
-		this.armed = armed == null ? v -> false : armed;
 		this.target = target == null ? TargetProfile.prodDefault() : target;
 		this.broadcasterFn = broadcasterFn == null ? (v, s) -> new LogBroadcaster() : broadcasterFn;
 	}
@@ -77,7 +80,9 @@ public class DropRcService {
 		return log.lineSink();
 	}
 
-	/** Compute the drop plan without executing. */
+	/**
+	 * Compute the drop plan without executing.
+	 */
 	public Preview preview(String version) {
 		var rs = store.load(version).orElseThrow();
 		var tag = "juneau-" + rs.version + "-RC" + rs.rc;
@@ -90,11 +95,11 @@ public class DropRcService {
 		return p;
 	}
 
-	/** Execute the drop, bump RC, and reset. */
+	/**
+	 * Execute the drop, bump RC, and reset.
+	 */
 	public synchronized void apply(String version, String reason, Supplier<String> availid, Supplier<String> password) {
 		var rs = store.load(version).orElseThrow();
-		if (!armed.test(version))
-			throw isex("Refused: drop-RC is a mutating action. Arm run %s first.", version);
 		var tag = "juneau-" + rs.version + "-RC" + rs.rc;
 		var git = stagingRepo.toString();
 		var pw = password.get();

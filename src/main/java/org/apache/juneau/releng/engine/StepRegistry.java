@@ -20,16 +20,23 @@ package org.apache.juneau.releng.engine;
 import java.util.List;
 import org.apache.juneau.releng.engine.steps.*;
 
-/** The ordered list of the 24 pipeline steps. */
+/**
+ * The ordered list of the 23 pipeline steps.
+ */
 public class StepRegistry {
 
 	private final List<ReleaseStep> steps;
 
+	/**
+	 * Constructs a registry over {@code steps}, copied defensively.
+	 */
 	public StepRegistry(List<ReleaseStep> steps) {
 		this.steps = List.copyOf(steps);
 	}
 
-	/** The canonical 24-step pipeline in spec order. */
+	/**
+	 * The canonical 23-step pipeline in pipeline order.
+	 */
 	public static StepRegistry standard(BranchResolver branches) {
 		return new StepRegistry(List.of(new PreflightStep(branches), // 1
 				new ComposeProposeEmailStep(), // 2
@@ -51,21 +58,29 @@ public class StepRegistry {
 				new NexusReleaseStep(), // 18
 				new DistPromoteStep(), // 19
 				new GithubReleaseCreateStep(), // 20
-				new MilestoneCloseStep(), // 21
-				new ManualFollowupChecklistStep(), // 22
-				new ComposeAnnouncementEmailStep(), // 23
-				new FinalizeRunStep() // 24
+				new ManualFollowupChecklistStep(), // 21
+				new ComposeAnnouncementEmailStep(), // 22
+				new FinalizeRunStep() // 23
 		));
 	}
 
+	/**
+	 * This registry's steps, in pipeline order.
+	 */
 	public List<ReleaseStep> steps() {
 		return steps;
 	}
 
+	/**
+	 * This registry's step ids, in pipeline order.
+	 */
 	public List<String> ids() {
 		return steps.stream().map(ReleaseStep::id).toList();
 	}
 
+	/**
+	 * The step with {@code id}, or null.
+	 */
 	public ReleaseStep byId(String id) {
 		for (var s : steps)
 			if (s.id().equals(id))
@@ -73,6 +88,8 @@ public class StepRegistry {
 		return null;
 	}
 
-	/** The 0-based index of the first step reset by Drop-RC: {@code workspace-setup}. */
+	/**
+	 * The 0-based index of the first step reset by Drop-RC: {@code workspace-setup}.
+	 */
 	public static final String DROP_RC_RESET_FROM = "workspace-setup";
 }

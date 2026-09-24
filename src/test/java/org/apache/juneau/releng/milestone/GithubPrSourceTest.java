@@ -23,7 +23,9 @@ import java.util.Map;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
-/** §8.1: resolves the milestone number by title-matching the version, for the New-Release form pre-fill. */
+/**
+ * Resolves the milestone number by title-matching the version, for the New-Release form pre-fill.
+ */
 class GithubPrSourceTest {
 
 	private ProcessRunner runnerReturning(String json) {

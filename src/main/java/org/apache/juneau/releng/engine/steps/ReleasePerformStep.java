@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.10 release-perform: build from tag + deploy to a new Nexus staging repo. Mutating. */
+/**
+ * Release-perform: build from tag + deploy to a new Nexus staging repo. Mutating.
+ */
 public class ReleasePerformStep implements ReleaseStep {
 	@Override
 	public String id() {

@@ -20,16 +20,24 @@ package org.apache.juneau.releng.release;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-/** One row in the Releases tab. */
+/**
+ * One row in the Releases tab.
+ */
 public class Release {
 
-	/** Apache Juneau's issue tracker (same URL as {@code apache/juneau} {@code issueManagement}). */
+	/**
+	 * Apache Juneau's issue tracker (same URL as {@code apache/juneau} {@code issueManagement}).
+	 */
 	public static final String JIRA_PROJECT_URL = "https://issues.apache.org/jira/browse/JUNEAU";
 
-	/** Dist-release prefix used by {@code EmailService} announcement drafts. */
+	/**
+	 * Dist-release prefix used by {@code EmailService} announcement drafts.
+	 */
 	public static final String DIST_RELEASE_PREFIX = "https://dist.apache.org/repos/dist/release/juneau/";
 
-	/** Release-notes landing used by {@code EmailService} announcement drafts. */
+	/**
+	 * Release-notes landing used by {@code EmailService} announcement drafts.
+	 */
 	public static final String RELEASE_NOTES_URL = "https://juneau.apache.org/#release-notes";
 
 	public String id; // version|rc|status — Detail View expand key
@@ -43,9 +51,15 @@ public class Release {
 	public String githubReleaseUrl; // may be null
 	public String source; // "github" | "tag" | "state"
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public Release() {
 	}
 
+	/**
+	 * Constructs a row for {@code version} with the given {@code status} and {@code source}.
+	 */
 	public Release(String version, String status, String source) {
 		this.version = version;
 		this.status = status;

@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.11 nexus-staging-close: discover the just-created staging repo + close it. Mutating. */
+/**
+ * Nexus-staging-close: discover the just-created staging repo + close it. Mutating.
+ */
 public class NexusStagingCloseStep implements ReleaseStep {
 	@Override
 	public String id() {

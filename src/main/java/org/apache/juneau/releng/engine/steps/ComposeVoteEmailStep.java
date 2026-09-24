@@ -27,7 +27,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.14 compose-vote-email: checksums + commit + staging link + 72h deadline, then draft-and-open. */
+/**
+ * Compose-vote-email: checksums + commit + staging link + 72h deadline, then draft-and-open.
+ */
 public class ComposeVoteEmailStep implements ReleaseStep {
 	@Override
 	public String id() {
@@ -42,13 +44,15 @@ public class ComposeVoteEmailStep implements ReleaseStep {
 	private Map<String, String> gather(StepContext ctx) {
 		var tag = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var commit = ctx.runner.run(List.of("git", "-C", ctx.stagingRepo.toString(), "rev-parse", tag), null, null);
-		// srcSha512/binSha512 are computed from the .sha512 files binary-artifacts-stage (§5.12) actually
+		// srcSha512/binSha512 are computed from the .sha512 files binary-artifacts-stage actually
 		// produced in the local dist/dev working copy — never pasted from a form.
 		return Map.of("commitHash", commit.ok() ? commit.output().strip() : "(unknown)", "srcSha512",
 				readSha512(ctx, "source", "src"), "binSha512", readSha512(ctx, "binaries", "bin"));
 	}
 
-	/** Reads the {@code .sha512} file §5.12 wrote for this RC; blank if the checksum file is absent. */
+	/**
+	 * Reads the {@code .sha512} file binary-artifacts-stage wrote for this RC; blank if the checksum file is absent.
+	 */
 	private String readSha512(StepContext ctx, String subdir, String kind) {
 		var rc = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var name = "apache-juneau-" + ctx.run.version + "-" + kind + ".zip.sha512";

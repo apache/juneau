@@ -22,17 +22,25 @@ import java.util.Comparator;
 import java.util.List;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Produces historical RELEASED rows from {@code git tag juneau-*} (prereleases excluded). */
+/**
+ * Produces historical RELEASED rows from {@code git tag juneau-*} (prereleases excluded).
+ */
 public class GitTagReleaseSource {
 
 	private final ProcessRunner runner;
 	private final String repoDir;
 
+	/**
+	 * Creates a source that lists tags in {@code repoDir} via {@code git}.
+	 */
 	public GitTagReleaseSource(ProcessRunner runner, String repoDir) {
 		this.runner = runner;
 		this.repoDir = repoDir;
 	}
 
+	/**
+	 * RELEASED rows for every non-prerelease {@code juneau-*} tag, newest first.
+	 */
 	public List<Release> list() {
 		var tags = runner.runLines(List.of("git", "-C", repoDir, "tag", "--list", "juneau-*"));
 		var out = new ArrayList<Release>();

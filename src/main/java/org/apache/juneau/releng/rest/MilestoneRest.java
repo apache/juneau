@@ -27,7 +27,9 @@ import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.milestone.PullRequest;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Milestone tab: preview the "** Changes" section for a version. */
+/**
+ * Milestone tab: preview the "** Changes" section for a version.
+ */
 @Rest(path = "/milestones", title = "Milestones")
 public class MilestoneRest extends BasicRestResource {
 
@@ -36,6 +38,9 @@ public class MilestoneRest extends BasicRestResource {
 	private final ProcessRunner runner;
 	private final String repoDir;
 
+	/**
+	 * Wires the changelog service, PR source, and process runner used to compute milestone changelogs.
+	 */
 	public MilestoneRest(MilestoneService service, GithubPrSource prSource, ProcessRunner runner, String repoDir) {
 		this.service = service;
 		this.prSource = prSource;
@@ -43,39 +48,30 @@ public class MilestoneRest extends BasicRestResource {
 		this.repoDir = repoDir;
 	}
 
-	/** Dry-run preview: the generated "** Changes" section for the given version's milestone. */
+	/**
+	 * The generated "** Changes" section for the given version's milestone (looked up by title).
+	 */
 	@RestGet(path = "/{version}/changelog", produces = "text/plain")
 	public String changelog(@Path("version") String version) {
 		var prs = prSource.forMilestone(version);
 		return service.renderChangesSection(prs);
 	}
 
-	/** JSON list of merged PRs for the version's milestone (curl/CLI). */
+	/**
+	 * JSON list of merged PRs for the version's milestone (curl/CLI).
+	 */
 	@RestGet("/{version}/prs")
 	public List<PullRequest> prs(@Path("version") String version) {
 		return prSource.forMilestone(version);
 	}
 
-	/** The previous release tag the changelog is computed against (diagnostic). */
+	/**
+	 * The previous release tag the changelog is computed against (diagnostic).
+	 */
 	@RestGet(path = "/{version}/previous-tag", produces = "text/plain")
 	public String previousTag(@Path("version") String version) {
 		var tags = runner.runLines(List.of("git", "-C", repoDir, "tag", "--list", "juneau-*"));
 		var prev = service.previousTag(tags, version);
 		return prev == null ? "(none)" : prev;
-	}
-
-	/**
-	 * §8.1 milestone form pre-fill: resolves the milestone number by title-matching {@code version}, for the
-	 * New-Release page to populate its (user-overridable) milestone field before starting a run.
-	 */
-	@RestGet("/{version}/resolve")
-	public MilestoneResolution resolve(@Path("version") String version) {
-		var out = new MilestoneResolution();
-		out.milestoneNumber = prSource.resolveMilestoneNumber(version);
-		return out;
-	}
-
-	public static class MilestoneResolution {
-		public Integer milestoneNumber;
 	}
 }

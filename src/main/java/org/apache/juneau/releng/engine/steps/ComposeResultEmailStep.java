@@ -24,7 +24,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.17 compose-result-email: draft-and-open [RESULT] with the tally from §5.16. */
+/**
+ * Compose-result-email: draft-and-open [RESULT] with the tally from tally-vote-result.
+ */
 public class ComposeResultEmailStep implements ReleaseStep {
 	@Override
 	public String id() {

@@ -48,9 +48,8 @@ import jakarta.servlet.http.HttpServletRequest;
  * New Release tab: pipeline control panel (View) plus JSON run/step/vote/drop-RC actions.
  *
  * <p>{@code disableContentParam} is set for the reason given on {@code CredentialRest}: Juneau's default lets a
- * {@code POST} body arrive in a {@code &content=} query parameter, which puts the arm confirmation phrase and every
- * other action payload into browser history and access logs. The boundary refuses that shape from a hostile page;
- * this closes the accidental use of it.
+ * {@code POST} body arrive in a {@code &content=} query parameter, which puts every action payload into browser
+ * history and access logs. The boundary refuses that shape from a hostile page; this closes the accidental use of it.
  */
 @Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class,
 	disableContentParam = "true")
@@ -59,11 +58,17 @@ public class ReleaseRunRest extends BasicRestResource {
 	private final ReleaseEngine engine;
 	private final DropRcService dropRc;
 
+	/**
+	 * Wires the release engine and Drop-RC service this resource's endpoints delegate to.
+	 */
 	public ReleaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
 		this.engine = engine;
 		this.dropRc = dropRc;
 	}
 
+	/**
+	 * The Freemarker mixin used to render this resource's templates.
+	 */
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
@@ -71,35 +76,31 @@ public class ReleaseRunRest extends BasicRestResource {
 		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
-	/** Human page — the pipeline control panel for the active run (or an empty start form). */
+	/**
+	 * Human page — the pipeline control panel for the active run (or an empty start form).
+	 */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
 		var active = engine.displayRun().orElse(null);
-		var subtab = resolveSubtab(req.getParameter("tab"), active != null);
+		var subtab = resolveSubtab(req.getParameter("tab"));
 		var view = ConsolePage.of("new-release", req).attr("stepMeta", stepMetaJson(engine.registry().steps()))
 				.attr("subtab", subtab).attr("navTab", "new/" + subtab);
 		// FreemarkerView.attr() rejects null values by design; the template only checks run??
 		// (attribute presence), so omit the attribute entirely when there's no displayable run.
-		return active == null ? view
-				: view.attr("run", active).attr("armed", Boolean.valueOf(engine.isArmed(active.version)));
+		return active == null ? view : view.attr("run", active);
 	}
 
 	/**
-	 * Resolves the New Release Page Subtab. An explicit {@code ?tab=input} / {@code ?tab=exec} wins;
-	 * otherwise Input is the default with no active run and Execution is the default once a run exists
-	 * (matching the previous in-page pill selection).
+	 * Resolves the New Release Page Subtab. An explicit {@code ?tab=exec} selects Execution;
+	 * {@code ?tab=input}, a missing {@code tab} query, and any unrecognized value select Input.
 	 */
-	@SuppressWarnings({ "java:S1192" // Page-subtab query value; a constant would obscure the wire form.
-	})
-	static String resolveSubtab(String requested, boolean hasRun) {
+	static String resolveSubtab(String requested) {
 		if (requested != null) {
 			var t = requested.strip().toLowerCase();
-			if ("input".equals(t))
-				return "input";
 			if ("exec".equals(t) || "execution".equals(t))
 				return "exec";
 		}
-		return hasRun ? "exec" : "input";
+		return "input";
 	}
 
 	/**
@@ -123,22 +124,24 @@ public class ReleaseRunRest extends BasicRestResource {
 		return escapeForScript(Json.of(meta));
 	}
 
-	/** JSON RunState for polling / initial page data. */
+	/**
+	 * JSON RunState for polling / initial page data.
+	 */
 	@RestGet("/{version}")
 	public RunState state(@Path("version") String version) {
 		return requireRun(version);
 	}
 
 	/**
-	 * Start a new run. Body: {version, developmentVersion?, milestoneNumber?}. {@code milestoneNumber}
-	 * is the New-Release form field — pre-filled client-side by title-match resolution (§8.1),
-	 * user-overridable. Rejects a second concurrent run with 409.
+	 * Start a new run. Body: {version, developmentVersion?, rc?}. {@code rc} is the release-candidate
+	 * integer from the Input form (tags {@code juneau-{version}-RC{rc}}); omitted or non-positive leaves
+	 * the default {@code 1}. Rejects a second concurrent run with 409.
 	 */
 	@Mutating("creates a run and writes its state to disk")
 	@RestPost("/")
 	public RunState start(@Content StartRequest body) {
 		try {
-			var rs = engine.start(body.version, body.developmentVersion, body.milestoneNumber);
+			var rs = engine.start(body.version, body.developmentVersion, body.rc);
 			return engine.updateDetails(rs.version, body.releaseSummary, body.highlights, body.knownIssues,
 					body.acknowledgements);
 		} catch (IllegalStateException e) {
@@ -147,9 +150,10 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/**
-	 * Update the active run's Input-form fields (version, development version, milestone, and the four
+	 * Update the active run's Input-form fields (version, development version, release candidate, and the four
 	 * narrative fields) so they can be edited after start. Returns the updated run. A version change
-	 * renames the persisted run file; a colliding version is a 409.
+	 * renames the persisted run file; a colliding version is a 409. A missing or non-positive {@code rc}
+	 * leaves the stored candidate number unchanged.
 	 */
 	@Mutating("updates the run's persisted identity and narrative fields")
 	@RestPost("/{version}/details")
@@ -158,22 +162,15 @@ public class ReleaseRunRest extends BasicRestResource {
 		var b = body == null ? new DetailsRequest() : body;
 		try {
 			return engine.updateDetails(version, b.releaseSummary, b.highlights, b.knownIssues, b.acknowledgements,
-					b.version, b.developmentVersion, b.milestoneNumber);
+					b.version, b.developmentVersion, b.rc);
 		} catch (IllegalStateException e) {
 			throw new Conflict(e.getMessage());
 		}
 	}
 
-	// No @Mutating: a preview is a dry run by construction and writes nothing. The annotation is a claim about
-	// effects, so putting it here to be "safe" would be a false one -- and would make the two preview endpoints
-	// indistinguishable from the apply endpoints they exist to be safer than.
-	@RestPost("/{version}/steps/{stepId}/preview")
-	public Preview preview(@Path("version") String version, @Path("stepId") String stepId,
-			@Content Map<String, String> form) {
-		requireRun(version);
-		return engine.preview(version, stepId, form == null ? Map.of() : form);
-	}
-
+	/**
+	 * Executes one release step, applying its {@code form} data; the irreversible {@code nexus-release} step requires typing the version to confirm.
+	 */
 	@Mutating("executes a release step; this mutates git, SVN, Nexus, GitHub or mailing lists")
 	@RestPost("/{version}/steps/{stepId}/apply")
 	public StepResult apply(@Path("version") String version, @Path("stepId") String stepId,
@@ -202,6 +199,9 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.apply(version, stepId, form == null ? Map.of() : form);
 	}
 
+	/**
+	 * Marks a step skipped without executing it.
+	 */
 	@Mutating("marks a step skipped in the persisted run state")
 	@RestPost("/{version}/steps/{stepId}/skip")
 	public StepResult skip(@Path("version") String version, @Path("stepId") String stepId) {
@@ -210,22 +210,8 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/**
-	 * Arm this run for mutation. Requires a typed confirm phrase ({@code "<version> LIVE"}). Arming is
-	 * in-memory on the engine and drops on any restart.
-	 *
-	 * <p>This is an <b>intent</b> gate: the confirm phrase shows a human deliberately typed something, and is not
-	 * a secret and not authentication — it is derivable from the page it is typed on. Whether the request came from
-	 * a page this application served is a separate question, answered by the loopback boundary in front of every
-	 * endpoint. See {@link org.apache.juneau.releng.engine.ReleaseEngine#arm(String, String)}.
+	 * Advance a review-gate step held in {@code AWAITING_REVIEW} once the human has confirmed the read-only work.
 	 */
-	@Mutating("arms the run for irreversible mutation")
-	@RestPost("/{version}/arm")
-	public StepResult arm(@Path("version") String version, @Content ArmRequest body) {
-		requireRun(version);
-		return engine.arm(version, body == null ? null : body.confirm);
-	}
-
-	/** Advance a review-gate step held in {@code AWAITING_REVIEW} once the human has confirmed the read-only work. */
 	@Mutating("advances a held review-gate step")
 	@RestPost("/{version}/steps/{stepId}/confirm-review")
 	public StepResult confirmReview(@Path("version") String version, @Path("stepId") String stepId) {
@@ -233,7 +219,9 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.confirmReview(version, stepId);
 	}
 
-	/** Record the vote outcome; 'rejected' triggers Drop-RC. */
+	/**
+	 * Record the vote outcome; 'rejected' triggers Drop-RC.
+	 */
 	@Mutating("records the vote outcome and runs the tally step")
 	@RestPost("/{version}/vote-result")
 	public StepResult voteResult(@Path("version") String version, @Content VoteResultRequest body) {
@@ -243,12 +231,18 @@ public class ReleaseRunRest extends BasicRestResource {
 		// UI reads outcome; if 'rejected', UI then calls drop-rc/preview + apply.
 	}
 
+	/**
+	 * Previews what a Drop-RC would remove, without changing anything.
+	 */
 	@RestPost("/{version}/drop-rc/preview")
 	public Preview dropRcPreview(@Path("version") String version) {
 		requireRun(version);
 		return dropRc.preview(version);
 	}
 
+	/**
+	 * Drops the current release candidate; requires typing the RC identifier (e.g. {@code RC1}) to confirm.
+	 */
 	@Mutating("drops the release candidate from Nexus and dist SVN, and bumps the RC number")
 	@RestPost("/{version}/drop-rc/apply")
 	public StepResult dropRcApply(@Path("version") String version, @Content DropRcRequest body) {
@@ -256,11 +250,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		if (body.confirmRc == null || !body.confirmRc.equals("RC" + rs.rc))
 			return StepResult.fail("Type the RC identifier (e.g. RC1) to confirm this destructive action.");
 		var secrets = engine.secrets();
-		try {
-			dropRc.apply(version, body.reason, secrets::availid, secrets::ldapPassword);
-		} catch (IllegalStateException e) {
-			return StepResult.fail(e.getMessage()); // the unarmed guard refusal
-		}
+		dropRc.apply(version, body.reason, secrets::availid, secrets::ldapPassword);
 		return StepResult.ok("RC dropped; bumped to the next RC.");
 	}
 
@@ -275,37 +265,45 @@ public class ReleaseRunRest extends BasicRestResource {
 		return rs;
 	}
 
+	/**
+	 * Body for {@link #start(StartRequest)}.
+	 */
 	public static class StartRequest {
 		public String version;
 		public String developmentVersion;
-		public Integer milestoneNumber;
+		public Integer rc;
 		public String releaseSummary;
 		public String highlights;
 		public String knownIssues;
 		public String acknowledgements;
 	}
 
+	/**
+	 * Body for {@link #details(String, DetailsRequest)}.
+	 */
 	public static class DetailsRequest {
 		public String version;
 		public String developmentVersion;
-		public Integer milestoneNumber;
+		public Integer rc;
 		public String releaseSummary;
 		public String highlights;
 		public String knownIssues;
 		public String acknowledgements;
 	}
 
+	/**
+	 * Body for {@link #voteResult(String, VoteResultRequest)}.
+	 */
 	public static class VoteResultRequest {
 		public String outcome;
 		public String tally;
 	}
 
+	/**
+	 * Body for {@link #dropRcApply(String, DropRcRequest)}.
+	 */
 	public static class DropRcRequest {
 		public String reason;
 		public String confirmRc;
-	}
-
-	public static class ArmRequest {
-		public String confirm;
 	}
 }

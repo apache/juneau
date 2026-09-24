@@ -17,15 +17,23 @@
 
 package org.apache.juneau.releng.milestone;
 
-/** Minimal merged-PR record used for changelog generation. */
+/**
+ * Minimal merged-PR record used for changelog generation.
+ */
 public class PullRequest {
 	public int number;
 	public String title;
 	public String authorLogin;
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public PullRequest() {
 	}
 
+	/**
+	 * Constructs a PR record from {@code number}, {@code title}, and {@code authorLogin}.
+	 */
 	public PullRequest(int number, String title, String authorLogin) {
 		this.number = number;
 		this.title = title;

@@ -31,7 +31,7 @@
    overridden by base.ftlh's nested <@token> declarations).
    ========================================================================== */
 
-/* Page Tabs: accent-on-top + wash fill are Juneau stock (WORK-J0543). Do not override
+/* Page Tabs: accent-on-top + wash fill are Juneau stock. Do not override
    border-top / border-bottom here. Keep selected-tab type a bit heavier than the rest. */
 .jc-nav-tab.active {
   font-weight: 700;
@@ -149,7 +149,7 @@ table.rm-table thead th {
   white-space: nowrap;
 }
 
-/* Header sort + column-search icons are Juneau stock (WORK-J0547). Sort is the
+/* Header sort + column-search icons are Juneau stock. Sort is the
    order-control only — do not restore whole-cell sort arrows. */
 
 table.rm-table tbody td {
@@ -235,14 +235,13 @@ tr.detail-row dd {
    (loaded after the shared console chrome), so it does not change the wash for other console apps. */
 .juneau-view-detail-header { background-color: transparent; }
 
-/* Toolbar Search, ribbon idle borders, and header sort+search are Juneau stock
-   (WORK-J0546 / WORK-J0547). Do not restyle the DataTables search field or order
-   control here. table.rm-table rules above still style any app-local table that
-   carries that class.
+/* Toolbar Search, ribbon idle borders, and header sort+search are Juneau stock.
+   Do not restyle the DataTables search field or order control here. table.rm-table
+   rules above still style any app-local table that carries that class.
 
    Card padding (--jc-card-padding 16/16/8) and card shadow (--jc-card-shadow) are
-   Juneau stock (WORK-J0544 / WORK-J0545). Table-chrome unsadows the wide-layout
-   outer card. Do not fork those tokens on content cards. */
+   Juneau stock. Table-chrome unsadows the wide-layout outer card. Do not fork those
+   tokens on content cards. */
 
 /* ==========================================================================
    Setup tab (probes + details)
@@ -407,8 +406,8 @@ tr.detail-row dd {
 .pill.invalid { background: #fdeceb; color: var(--jc-danger); }
 .pill.unset { background: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); }
 
-/* Stored but never tested. Four states need four treatments: this one used to borrow .pill.invalid, which
-   asserted the credential was bad when the app had no idea. Erring away from green is right -- an untested
+/* Stored but never tested. Four states need four treatments: borrowing .pill.invalid here would
+   assert the credential was bad when the app had no idea. Erring away from green is right -- an untested
    credential must never read as a pass -- but claiming a failure is the same error pointed the other way, and it
    sends the user to re-enter a password that was probably fine. Amber, matching chrome.css's existing amber
    group, is the "unknown" treatment. */

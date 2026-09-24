@@ -19,7 +19,9 @@ package org.apache.juneau.releng.release;
 
 import java.util.List;
 
-/** Parsed, comparable Juneau release version derived from a git tag or version string. */
+/**
+ * Parsed, comparable Juneau release version derived from a git tag or version string.
+ */
 public final class ReleaseVersion implements Comparable<ReleaseVersion> {
 
 	private final String version; // numeric core, e.g. "9.2.0" or "9.0"
@@ -34,11 +36,17 @@ public final class ReleaseVersion implements Comparable<ReleaseVersion> {
 		this.parts = parts;
 	}
 
+	/**
+	 * Parses a version from a {@code juneau-*} git tag, stripping the {@code juneau-} prefix if present.
+	 */
 	public static ReleaseVersion ofTag(String tag) {
 		var s = tag.startsWith("juneau-") ? tag.substring("juneau-".length()) : tag;
 		return of(s);
 	}
 
+	/**
+	 * Parses a version string, splitting off an optional {@code -RCn} or {@code -Bn} suffix.
+	 */
 	public static ReleaseVersion of(String s) {
 		String rc = null;
 		boolean pre = false;
@@ -61,34 +69,51 @@ public final class ReleaseVersion implements Comparable<ReleaseVersion> {
 		return new ReleaseVersion(core, rc, pre, parts);
 	}
 
+	/**
+	 * The numeric core, e.g. {@code "9.2.0"}.
+	 */
 	public String version() {
 		return version;
 	}
 
+	/**
+	 * The release-candidate suffix, e.g. {@code "RC3"}, or {@code null} if not an RC.
+	 */
 	public String rc() {
 		return rc;
 	}
 
+	/**
+	 * Whether this version is an RC or beta build.
+	 */
 	public boolean isPrerelease() {
 		return prerelease;
 	}
 
-	/** Numeric component {@code i} (0-based) of the version core, or 0 if absent. */
+	/**
+	 * Numeric component {@code i} (0-based) of the version core, or 0 if absent.
+	 */
 	public int part(int i) {
 		return i < parts.length ? parts[i] : 0;
 	}
 
-	/** Major (x in x.y.z). */
+	/**
+	 * Major (x in x.y.z).
+	 */
 	public int major() {
 		return part(0);
 	}
 
-	/** Minor (y in x.y.z). */
+	/**
+	 * Minor (y in x.y.z).
+	 */
 	public int minor() {
 		return part(1);
 	}
 
-	/** Maintenance (z in x.y.z); 0 for a two-part or major/minor version. */
+	/**
+	 * Maintenance (z in x.y.z); 0 for a two-part or major/minor version.
+	 */
 	public int maintenance() {
 		return part(2);
 	}
@@ -123,7 +148,9 @@ public final class ReleaseVersion implements Comparable<ReleaseVersion> {
 		return h;
 	}
 
-	/** Highest non-prerelease version strictly below {@code ceiling} (exclusive). */
+	/**
+	 * Highest non-prerelease version strictly below {@code ceiling} (exclusive).
+	 */
 	public static ReleaseVersion highestReleasedBelow(List<String> tags, String ceiling) {
 		var cap = of(ceiling);
 		ReleaseVersion best = null;

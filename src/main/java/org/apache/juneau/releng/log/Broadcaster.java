@@ -26,6 +26,8 @@ import java.util.function.Consumer;
  */
 public interface Broadcaster {
 
-	/** Subscribes {@code sink} to every payload published from now on; closing the return unsubscribes it. */
+	/**
+	 * Subscribes {@code sink} to every payload published from now on; closing the return unsubscribes it.
+	 */
 	AutoCloseable subscribe(Consumer<String> sink);
 }

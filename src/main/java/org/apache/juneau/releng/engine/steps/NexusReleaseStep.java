@@ -22,7 +22,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.18 nexus-release: promote the closed staging repo to the public release repo. IRREVERSIBLE. Mutating. */
+/**
+ * Nexus-release: promote the closed staging repo to the public release repo. IRREVERSIBLE. Mutating.
+ */
 public class NexusReleaseStep implements ReleaseStep {
 	@Override
 	public String id() {

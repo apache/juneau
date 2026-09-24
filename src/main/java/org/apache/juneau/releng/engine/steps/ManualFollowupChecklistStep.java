@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.22 manual-followup-checklist: reminder gate for the intentionally-manual tasks. No automation. */
+/**
+ * Manual-followup-checklist: reminder gate for the intentionally-manual tasks. No automation.
+ */
 public class ManualFollowupChecklistStep implements ReleaseStep {
 	static final List<String> ITEMS = List.of("Update juneau-docs release-notes page + site",
 			"Publish aggregate Javadoc", "Update the download page", "Edit the Confluence release wiki");

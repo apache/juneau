@@ -30,9 +30,15 @@ public class StagingRepo {
 	public boolean transitioning; // true while Nexus is still processing a close/promote/drop call
 	public String created;
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public StagingRepo() {
 	}
 
+	/**
+	 * Creates a repo with just {@code id} and {@code status} set.
+	 */
 	public StagingRepo(String id, String status) {
 		this.id = id;
 		this.status = status;

@@ -27,12 +27,17 @@ import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import org.apache.juneau.releng.engine.StepState;
 
-/** Appends output lines to the current RC's log file and fans them out to the {@link LogBroadcaster}. */
+/**
+ * Appends output lines to the current RC's log file and fans them out to the {@link LogBroadcaster}.
+ */
 public class RunLog {
 
 	private final Path file;
 	private final LogBroadcaster broadcaster;
 
+	/**
+	 * Creates a log backed by {@code file}, fanning out appended lines to {@code broadcaster}.
+	 */
 	public RunLog(Path file, LogBroadcaster broadcaster) {
 		this.file = file;
 		this.broadcaster = broadcaster;
@@ -43,7 +48,9 @@ public class RunLog {
 		}
 	}
 
-	/** Append one line (newline-terminated) to disk, flushed, then broadcast it live. */
+	/**
+	 * Append one line (newline-terminated) to disk, flushed, then broadcast it live.
+	 */
 	public synchronized void append(String line) {
 		try {
 			Files.writeString(file, line + "\n", StandardCharsets.UTF_8, StandardOpenOption.CREATE,
@@ -70,12 +77,16 @@ public class RunLog {
 		}
 	}
 
-	/** A {@link Consumer} suitable for {@code ProcessRunner.run(..., lineSink)}. */
+	/**
+	 * A {@link Consumer} suitable for {@code ProcessRunner.run(..., lineSink)}.
+	 */
 	public Consumer<String> lineSink() {
 		return this::append;
 	}
 
-	/** Current byte size of the log file (used for {@link StepState#logOffset}). */
+	/**
+	 * Current byte size of the log file (used for {@link StepState#logOffset}).
+	 */
 	public long size() {
 		try {
 			return Files.isRegularFile(file) ? Files.size(file) : 0L;
@@ -84,10 +95,16 @@ public class RunLog {
 		}
 	}
 
+	/**
+	 * The on-disk log file this instance appends to.
+	 */
 	public Path file() {
 		return file;
 	}
 
+	/**
+	 * The {@link LogBroadcaster} this instance publishes appended lines to.
+	 */
 	public LogBroadcaster broadcaster() {
 		return broadcaster;
 	}

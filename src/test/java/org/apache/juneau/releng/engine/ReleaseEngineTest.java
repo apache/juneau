@@ -63,12 +63,9 @@ class ReleaseEngineTest {
 		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir);
 	}
 
-	private void arm(ReleaseEngine eng, String version) {
-		assertTrue(eng.arm(version, version + " LIVE").success);
-	}
-
-
-	/** Subscribes to {@code version}'s state broadcaster and decodes every published snapshot in order. */
+	/**
+	 * Subscribes to {@code version}'s state broadcaster and decodes every published snapshot in order.
+	 */
 	@SuppressWarnings({
 		"resource" // The subscription stays open for the whole test; the JVM tears it down. Closing it would stop collecting snapshots.
 	})
@@ -99,23 +96,24 @@ class ReleaseEngineTest {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
 		assertEquals("juneau-9.2.1-branch", rs.branch);
-		assertSize(24, rs.steps);
+		assertSize(23, rs.steps);
+		assertEquals(1, rs.rc);
 		assertEquals(StepStatus.PENDING, rs.step("preflight").status);
 	}
 
 	@Test
-	void a02_startWithMilestoneNumberPersistsIt(@TempDir Path dir) {
+	void a02_startWithRcPersistsIt(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null, 42);
-		assertEquals(42, rs.milestoneNumber);
-		assertEquals(42, eng.state("9.2.1").milestoneNumber, "must be persisted, readable on a fresh load");
+		assertEquals(42, rs.rc);
+		assertEquals(42, eng.state("9.2.1").rc, "must be persisted, readable on a fresh load");
 	}
 
 	@Test
-	void a03_startWithoutMilestoneNumberLeavesItNull(@TempDir Path dir) {
+	void a03_startWithoutRcLeavesDefaultOne(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
-		assertNull(rs.milestoneNumber);
+		assertEquals(1, rs.rc);
 	}
 
 	@Test
@@ -125,7 +123,7 @@ class ReleaseEngineTest {
 		var updated = eng.updateDetails("9.2.1", "summary", "hi", "iss", "ack", "9.2.1", "9.2.3-SNAPSHOT", 11);
 		assertEquals("9.2.1", updated.version);
 		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
-		assertEquals(11, updated.milestoneNumber);
+		assertEquals(11, updated.rc);
 		assertEquals("summary", updated.releaseSummary);
 		assertEquals("9.2.3-SNAPSHOT", new RunStateStore(dir).load("9.2.1").orElseThrow().developmentVersion);
 	}
@@ -194,7 +192,6 @@ class ReleaseEngineTest {
 		// have already succeeded — currentStepId is bookkeeping only, never a gate.
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
-		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		// "workspace-setup" is not currentStepId ("compose-propose-email" now is) — apply() must still
@@ -224,7 +221,6 @@ class ReleaseEngineTest {
 	void b05_eachStepGetsItsOwnBroadcasterAndLogPath(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
-		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		eng.apply("9.2.1", "workspace-setup", Map.of());
@@ -279,7 +275,6 @@ class ReleaseEngineTest {
 	void d01_forwardApplyIsBlockedPastAnUnsatisfiedRequiredPredecessor(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
-		arm(eng, "9.2.1");
 		// "preflight" (index 0) is still PENDING; "workspace-setup" (index 2) must be refused.
 		var res = eng.apply("9.2.1", "workspace-setup", Map.of());
 		assertFalse(res.success);
@@ -292,7 +287,6 @@ class ReleaseEngineTest {
 	void d02_reRunningAnAlreadySucceededStepIsNotBlockedByTheForwardApplyGuard(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
-		arm(eng, "9.2.1");
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		eng.apply("9.2.1", "workspace-setup", Map.of());
@@ -393,31 +387,6 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void f04_armPublishesTheUpdatedArmedFlagEvenThoughItNeverCallsSave(@TempDir Path dir) {
-		var eng = engine(dir);
-		eng.start("9.2.1", null);
-		var seen = subscribeSnapshots(eng, "9.2.1");
-
-		var res = eng.arm("9.2.1", "9.2.1 LIVE");
-
-		assertTrue(res.success, res.message);
-		assertSize(1, seen);
-		assertTrue(seen.get(0).armed);
-	}
-
-	@Test
-	void f05_aRejectedArmAttemptPublishesNothing(@TempDir Path dir) {
-		var eng = engine(dir);
-		eng.start("9.2.1", null);
-		var seen = subscribeSnapshots(eng, "9.2.1");
-
-		var res = eng.arm("9.2.1", "wrong phrase");
-
-		assertFalse(res.success);
-		assertTrue(seen.isEmpty(), "a rejected arm attempt must not push a stale/misleading snapshot");
-	}
-
-	@Test
 	void c03_successfulApplyClearsAPriorFailedRunStatusAndStepError(@TempDir Path dir) {
 		// Fingerprint of the 9.2.1 rehearsal: tally-vote-result failed once (empty voteOutcome →
 		// rs.status=FAILED + ss.error set), then succeeded later — but the success path left the run
@@ -452,14 +421,13 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void g02_snapshotJsonIsEmptyForAnUnknownVersionAndReflectsArmedForAKnownOne(@TempDir Path dir) {
+	void g02_snapshotJsonIsEmptyForAnUnknownVersionAndReflectsRcForAKnownOne(@TempDir Path dir) {
 		var eng = engine(dir);
 		assertTrue(eng.snapshotJson("nope").isEmpty());
 
-		eng.start("9.2.1", null);
-		eng.arm("9.2.1", "9.2.1 LIVE");
+		eng.start("9.2.1", null, 3);
 		var snap = Json.DEFAULT.read(eng.snapshotJson("9.2.1").orElseThrow(), RunStateSnapshot.class);
-		assertTrue(snap.armed);
+		assertEquals(3, snap.rc);
 	}
 
 	private StepStatus statusOf(RunStateSnapshot snap, String stepId) {

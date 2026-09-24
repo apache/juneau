@@ -17,7 +17,9 @@
 
 package org.apache.juneau.releng.credential;
 
-/** UI/JSON status for one credential. Never contains the secret value. */
+/**
+ * UI/JSON status for one credential. Never contains the secret value.
+ */
 public class CredentialStatus {
 	public String name;
 	public String label;
@@ -25,9 +27,15 @@ public class CredentialStatus {
 	public Boolean lastValid; // null = not yet validated
 	public String lastMessage; // human message from last validation
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public CredentialStatus() {
 	}
 
+	/**
+	 * A status with no last-validation result yet.
+	 */
 	public CredentialStatus(String name, String label, boolean present) {
 		this.name = name;
 		this.label = label;

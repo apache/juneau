@@ -75,9 +75,9 @@ class AdminRestTest {
 
 	@Test
 	void b03_releasesDetailScriptOptsIntoMaterialIconPack() throws IOException {
-		// With the views toolkit pack, base.ftlh no longer hardcodes juneau-icons.js or its pack attribute — the pack
-		// loop loads it generically (default "original"). The Material opt-in (Juneau WORK-J0545) now lives in the
-		// Releases page's init script, which selects it via JuneauViews.icons.pack() before the mount.
+		// With the views toolkit pack, base.ftlh does not hardcode juneau-icons.js or its pack attribute — the pack
+		// loop loads it generically (default "original"). The Material opt-in lives in the Releases page's init
+		// script, which selects it via JuneauViews.icons.pack() before the mount.
 		var base = readClasspathResource("/templates/base.ftlh");
 		assertFalse(base.contains("data-juneau-icon-pack"), "base.ftlh must not hardcode the icon pack anymore: " + base);
 		var script = readClasspathResource("/static/js/releases-detail.js");

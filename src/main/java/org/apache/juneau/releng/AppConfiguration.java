@@ -70,35 +70,22 @@ import org.springframework.core.Ordered;
 
 import jakarta.servlet.Servlet;
 
+/**
+ * Bean wiring for the Release Manager application: credentials, release engine, REST resources, and servlets.
+ */
 @Configuration
-@SuppressWarnings({ "java:S6539" // Spring @Configuration legitimately aggregates cohesive bean wiring; splitting would fragment it.
+@SuppressWarnings({
+	"java:S6539" // Spring @Configuration legitimately aggregates cohesive bean wiring; splitting would fragment it.
 })
 public class AppConfiguration {
 
+	/**
+	 * The {@link ProcessRunner} used to shell out to external tools.
+	 */
 	@Bean
 	public ProcessRunner processRunner() {
 		return new ProcessRunner.Default();
 	}
-
-	// ==========================================================================================
-	// Loopback write boundary.
-	//
-	// Two independent gates protect the mutating endpoints, and they answer different questions:
-	//
-	//   - This boundary answers "did this request come from the page we served".
-	//   - The engine's per-run arming (see ReleaseEngine.arm) answers "did a human mean it".
-	//
-	// Before this boundary existed only the second gate was present, which meant a hostile page in the
-	// operator's browser could POST the derivable "<version> LIVE" confirm phrase to /arm as a plain
-	// cross-origin form submission -- no preflight, no CORS, no JavaScript needed -- and then trigger a
-	// mutating step. Arming establishes intent; it never established that the caller was us.
-	//
-	// Two framing points, because getting either wrong invites someone to "strengthen" the wrong gate:
-	//
-	//   - The confirm phrase is not a secret and never authenticated anything. It is derivable from a page the
-	//     attacker is already reading. Making it longer or hidden would not help -- see ReleaseEngine.arm. It is
-	//     typing friction against accident, which is a real thing to want and not this boundary's job.
-	// ==========================================================================================
 
 	/**
 	 * The process's CSRF secret: minted here, embedded in every page (see the page beans below), and required
@@ -143,11 +130,9 @@ public class AppConfiguration {
 		return reg;
 	}
 
-	// No @Bean freemarker.template.Configuration. ConsoleFreemarkerMixin returns a consumer-supplied
-	// Configuration untouched — no <@page>/ <@card>/ <@navigation>/ <@theme> shared variables — so a Spring
-	// bean here is exactly the "page evaluated to null or missing" startup failure. Public-field DTOs still
-	// render: the mixin's bridge-default Configuration already sets exposeFields=true.
-
+	/**
+	 * The {@link ReleaseListService} that merges git-tag, GitHub, and local-state release sources.
+	 */
 	@Bean
 	public ReleaseListService releaseListService(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir,
 			@Value("${rm.repo.slug}") String repoSlug, RunStateStore runStateStore) {
@@ -157,16 +142,25 @@ public class AppConfiguration {
 		return new ReleaseListService(tags::list, github::list, state::list);
 	}
 
+	/**
+	 * The {@link RootRest} servlet group registered at {@code /rest/*}.
+	 */
 	@Bean
 	public RootRest rootRest() {
 		return new RootRest();
 	}
 
+	/**
+	 * The {@link HomeRest} resource.
+	 */
 	@Bean
 	public HomeRest homeRest() {
 		return new HomeRest();
 	}
 
+	/**
+	 * The {@link SetupProbeService} that checks the local toolchain and credential prerequisites.
+	 */
 	@Bean
 	public SetupProbeService setupProbeService(ProcessRunner runner, CredentialService credentials,
 			@Value("${rm.repo.dir}") String repoDir) {
@@ -174,26 +168,41 @@ public class AppConfiguration {
 				Path.of(System.getProperty("user.home"), ".m2", "settings.xml"));
 	}
 
+	/**
+	 * The {@link SetupRest} resource.
+	 */
 	@Bean
 	public SetupRest setupRest(SetupProbeService setup) {
 		return new SetupRest(setup);
 	}
 
+	/**
+	 * The {@link ReleaseRest} resource.
+	 */
 	@Bean
 	public ReleaseRest releaseRest(ReleaseListService svc) {
 		return new ReleaseRest(svc);
 	}
 
+	/**
+	 * The {@link GithubPrSource} used to look up merged PRs for a milestone.
+	 */
 	@Bean
 	public GithubPrSource githubPrSource(ProcessRunner runner, @Value("${rm.repo.slug}") String repoSlug) {
 		return new GithubPrSource(runner, repoSlug);
 	}
 
+	/**
+	 * The {@link MilestoneService} that builds milestone release notes.
+	 */
 	@Bean
 	public MilestoneService milestoneService() {
 		return new MilestoneService();
 	}
 
+	/**
+	 * The {@link MilestoneRest} resource.
+	 */
 	@Bean
 	public MilestoneRest milestoneRest(MilestoneService svc, GithubPrSource prSource, ProcessRunner runner,
 			@Value("${rm.repo.dir}") String repoDir) {
@@ -221,6 +230,9 @@ public class AppConfiguration {
 		return new AccountStore(Path.of(stateDir));
 	}
 
+	/**
+	 * The {@link CredentialService} backed by the per-credential secret stores and validators.
+	 */
 	@Bean
 	public CredentialService credentialService(Map<CredentialSpec, SecretStore> stores, ProcessRunner runner,
 			AccountStore accounts) {
@@ -231,11 +243,17 @@ public class AppConfiguration {
 		return new CredentialService(stores, validators, accounts);
 	}
 
+	/**
+	 * The {@link CredentialRest} resource.
+	 */
 	@Bean
 	public CredentialRest credentialRest(CredentialService svc) {
 		return new CredentialRest(svc);
 	}
 
+	/**
+	 * Registers {@link RootRest} as a servlet at {@code /rest/*}.
+	 */
 	@Bean
 	public ServletRegistrationBean<Servlet> rootRestRegistration(RootRest rest) {
 		return new ServletRegistrationBean<>(rest, "/rest/*");
@@ -264,22 +282,33 @@ public class AppConfiguration {
 		return TargetProfile.prodDefault();
 	}
 
+	/**
+	 * The {@link RunStateStore} that persists per-version run state under {@code rm.state.dir}.
+	 */
 	@Bean
 	public RunStateStore runStateStore(@Value("${rm.state.dir}") String stateDir) {
 		return new RunStateStore(Path.of(stateDir));
 	}
 
+	/**
+	 * The {@link BranchResolver} used to derive release/maintenance branch names from the repo.
+	 */
 	@Bean
 	public BranchResolver branchResolver(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir) {
 		return new BranchResolver(runner, repoDir);
 	}
 
+	/**
+	 * The {@link EmailService} used to draft and send release-vote emails.
+	 */
 	@Bean
 	public EmailService emailService(ProcessRunner runner, @Value("${rm.state.dir}") String stateDir) {
 		return new EmailService(Path.of(stateDir), runner);
 	}
 
-	/** Resolves live secrets from CredentialService's stores per mutating action. */
+	/**
+	 * Resolves live secrets from CredentialService's stores per mutating action.
+	 */
 	@Bean
 	public ReleaseEngine.SecretResolver secretResolver(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
 			TargetProfile target) {
@@ -342,13 +371,20 @@ public class AppConfiguration {
 		return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), availid, ldapPassword);
 	}
 
+	/**
+	 * The {@link StepRegistry} of standard release steps, wired to {@code branches}.
+	 */
 	@Bean
 	public StepRegistry stepRegistry(BranchResolver branches) {
 		return StepRegistry.standard(branches);
 	}
 
+	/**
+	 * The {@link ReleaseEngine} that drives release runs, recovering any run left mid-flight on boot.
+	 */
 	@Bean
-	@SuppressWarnings({ "java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
+	@SuppressWarnings({
+		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
 	})
 	public ReleaseEngine releaseEngine(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			BranchResolver branches, EmailService email, MilestoneService milestone,
@@ -361,15 +397,21 @@ public class AppConfiguration {
 		return engine;
 	}
 
+	/**
+	 * The {@link DropRcService} that drops a staged release candidate and unwinds its RC branch/tag.
+	 */
 	@Bean
 	public DropRcService dropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, TargetProfile target,
 			@Value("${rm.staging.dir}") String stagingDir,
 			@Value("${rm.state.dir}") String stateDir) {
 		return new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
-				secrets.nexus(), engine::isArmed, target, engine::broadcaster);
+				secrets.nexus(), target, engine::broadcaster);
 	}
 
+	/**
+	 * The {@link ReleaseRunRest} resource.
+	 */
 	@Bean
 	public ReleaseRunRest releaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
 		return new ReleaseRunRest(engine, dropRc);

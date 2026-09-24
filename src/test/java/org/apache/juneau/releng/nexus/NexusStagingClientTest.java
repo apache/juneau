@@ -23,7 +23,9 @@ import org.junit.jupiter.api.Test;
 
 class NexusStagingClientTest {
 
-	/** The client is built around a String->String "send JSON request, get JSON response" seam we can stub. */
+	/**
+	 * The client is built around a String->String "send JSON request, get JSON response" seam we can stub.
+	 */
 	@Test
 	void a01_discoversMostRecentOpenRepoForProfile() {
 		var json = "[{\"repositoryId\":\"orgapachejuneau-1041\",\"type\":\"closed\",\"created\":\"2026-08-10\"},"

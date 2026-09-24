@@ -32,11 +32,16 @@ import org.apache.juneau.releng.util.ProcessRunner;
  */
 public class GithubTokenValidator implements Validator {
 
-	/** GitHub usernames: alphanumerics and single inner hyphens, 39 characters at most. */
+	/**
+	 * GitHub usernames: alphanumerics and single inner hyphens, 39 characters at most.
+	 */
 	private static final Pattern LOGIN = Pattern.compile("[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}");
 
 	private final ProcessRunner runner;
 
+	/**
+	 * Validates using {@code runner} to invoke {@code gh}.
+	 */
 	public GithubTokenValidator(ProcessRunner runner) {
 		this.runner = runner;
 	}

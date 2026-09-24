@@ -24,7 +24,9 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-/** Validates Apache LDAP creds by Basic-authenticating to Nexus (repository.apache.org) status. */
+/**
+ * Validates Apache LDAP creds by Basic-authenticating to Nexus (repository.apache.org) status.
+ */
 public class ApacheLdapValidator implements Validator {
 
 	static final String NEXUS_STATUS = "https://repository.apache.org/service/local/status";
@@ -32,6 +34,9 @@ public class ApacheLdapValidator implements Validator {
 	private final HttpClient http;
 	private final String url;
 
+	/**
+	 * Validates against the live Nexus status endpoint.
+	 */
 	public ApacheLdapValidator() {
 		this(HttpClient.newHttpClient(), NEXUS_STATUS);
 	}

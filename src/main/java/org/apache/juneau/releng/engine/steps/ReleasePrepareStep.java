@@ -25,7 +25,9 @@ import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 import org.apache.juneau.releng.release.ReleaseVersion;
 
-/** §5.8 release-prepare: version bump + RC tag + push. Mutating. z==0 requires explicit developmentVersion (§14.1). */
+/**
+ * Release-prepare: version bump + RC tag + push. Mutating. z==0 requires explicit developmentVersion.
+ */
 public class ReleasePrepareStep implements ReleaseStep {
 	@Override
 	public String id() {
@@ -42,7 +44,9 @@ public class ReleasePrepareStep implements ReleaseStep {
 		return true;
 	}
 
-	/** Next dev version: derived for maintenance (z>0), human-supplied for z==0 (returns null -> caller fails). */
+	/**
+	 * Next dev version: derived for maintenance (z>0), human-supplied for z==0 (returns null -> caller fails).
+	 */
 	static String nextDevVersion(StepContext ctx) {
 		var v = ReleaseVersion.of(ctx.run.version);
 		if (v.maintenance() > 0)

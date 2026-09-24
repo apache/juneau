@@ -20,13 +20,18 @@ package org.apache.juneau.releng.milestone;
 import java.util.ArrayList;
 import java.util.List;
 
-/** One grouped "** Changes" line (a dependency bump aggregated across PRs). */
+/**
+ * One grouped "** Changes" line (a dependency bump aggregated across PRs).
+ */
 public class ChangelogEntry {
 	public final String dependency; // "spring.version" (may include " in /juneau-docs")
 	public final String fromVersion;
 	public final String toVersion;
 	public final List<Integer> prNumbers;
 
+	/**
+	 * Constructs an entry for one dependency's bump range and the PRs that carried it.
+	 */
 	public ChangelogEntry(String dependency, String fromVersion, String toVersion, List<Integer> prNumbers) {
 		this.dependency = dependency;
 		this.fromVersion = fromVersion;
@@ -34,7 +39,9 @@ public class ChangelogEntry {
 		this.prNumbers = prNumbers;
 	}
 
-	/** Renders e.g. "    * Bump spring.version from 4.0.1 to 4.0.6 #308, #316." */
+	/**
+	 * Renders e.g. "    * Bump spring.version from 4.0.1 to 4.0.6 #308, #316."
+	 */
 	public String toLine() {
 		var refs = new StringBuilder();
 		for (var i = 0; i < prNumbers.size(); i++) {
@@ -45,17 +52,25 @@ public class ChangelogEntry {
 		return "    * Bump " + dependency + " from " + fromVersion + " to " + toVersion + " " + refs + ".";
 	}
 
-	/** Accumulates PRs for one dependency; from = oldest, to = newest (by PR order). */
+	/**
+	 * Accumulates PRs for one dependency; from = oldest, to = newest (by PR order).
+	 */
 	public static final class Builder {
 		private final String dependency;
 		private String fromVersion;
 		private String toVersion;
 		private final List<Integer> prNumbers = new ArrayList<>();
 
+		/**
+		 * Creates a builder for {@code dependency}.
+		 */
 		public Builder(String dependency) {
 			this.dependency = dependency;
 		}
 
+		/**
+		 * Records one PR's before/after version for this dependency.
+		 */
 		public void add(String from, String to, int prNumber) {
 			if (fromVersion == null)
 				fromVersion = from; // first (lowest PR#) sets the floor
@@ -63,6 +78,9 @@ public class ChangelogEntry {
 			prNumbers.add(prNumber);
 		}
 
+		/**
+		 * Builds the {@link ChangelogEntry} from the accumulated PRs.
+		 */
 		public ChangelogEntry build() {
 			return new ChangelogEntry(dependency, fromVersion, toVersion, List.copyOf(prNumbers));
 		}

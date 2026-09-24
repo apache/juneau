@@ -44,10 +44,16 @@ public class SetupRest extends BasicRestResource {
 
 	private final SetupProbeService setup;
 
+	/**
+	 * Wires the probe service backing this resource's inventory/data/install endpoints.
+	 */
 	public SetupRest(SetupProbeService setup) {
 		this.setup = setup;
 	}
 
+	/**
+	 * The Freemarker mixin used to render this resource's templates.
+	 */
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
@@ -55,19 +61,25 @@ public class SetupRest extends BasicRestResource {
 		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
-	/** Human page: probe pills only; browser then GET {@code /data}. */
+	/**
+	 * Human page: probe pills only; browser then GET {@code /data}.
+	 */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
 		return ConsolePage.of("setup", req).attr("inventory", setup.inventory());
 	}
 
-	/** Eager verdicts. */
+	/**
+	 * Eager verdicts.
+	 */
 	@RestGet(path = "/data", produces = "application/json", serializers = JsonSerializer.class)
 	public SetupData data() {
 		return setup.data();
 	}
 
-	/** Install a PATH tool via brew or apt-get. */
+	/**
+	 * Install a PATH tool via brew or apt-get.
+	 */
 	@Mutating("installs a local PATH prerequisite via brew or apt-get")
 	@RestPost(path = "/install/{probeId}", produces = "application/json", serializers = JsonSerializer.class)
 	public InstallResult install(@Path("probeId") String probeId) {

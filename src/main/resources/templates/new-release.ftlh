@@ -38,23 +38,15 @@
                     <span class="tag status ${run.status?lower_case?replace('_','-')}" id="nr-run-status">${run.status}</span>
                 </div>
                 <div class="rm-run-actions">
-                    <span id="nr-arm-area">
-                    <#if armed!false>
-                        <span class="tag armed" title="This run is armed for live mutation">ARMED</span>
-                    <#else>
-                        <button class="jc-btn jc-btn-warning" onclick="nrArm()">Arm this run</button>
-                    </#if>
-                    </span>
                     <button class="jc-btn jc-btn-danger" onclick="nrDropRc()">Drop RC</button>
                 </div>
             </div>
             <div class="rm-run-meta" style="margin-top:10px;">
                 <span class="rm-meta-chip">Branch <b>${run.branch}</b></span>
-                <#if run.milestoneNumber??><span class="rm-meta-chip">Milestone <b>#${run.milestoneNumber}</b></span></#if>
             </div>
         </div>
 
-        <div class="rm-rail-layout" data-version="${run.version}" data-rc="${run.rc}" data-armed="${(armed!false)?c}">
+        <div class="rm-rail-layout" data-version="${run.version}" data-rc="${run.rc}">
             <div class="rm-rail-col" id="nr-rail">
                 <#list run.steps as s>
                 <div class="rm-rail-item ${s.status?lower_case?replace('_','-')}" data-step="${s.id}"
@@ -66,7 +58,7 @@
                 </#list>
             </div>
             <div class="rm-detail-col" id="nr-detail">
-                <p class="hint">Select a step to preview and run it.</p>
+                <p class="hint">Select a step to run it.</p>
             </div>
         </div>
 
@@ -92,8 +84,8 @@
                     <input id="nr-devversion" type="text" placeholder="required if x.y.0 (e.g. 9.3.0-SNAPSHOT)" value="<#if hasRun && run.developmentVersion??>${run.developmentVersion}</#if>">
                 </div>
                 <div class="rm-field">
-                    <label for="nr-milestone">Milestone #</label>
-                    <input id="nr-milestone" type="number" placeholder="auto-resolved from version" value="<#if hasRun && run.milestoneNumber??>${run.milestoneNumber}</#if>">
+                    <label for="nr-rc">Release candidate</label>
+                    <input id="nr-rc" type="number" min="1" step="1" placeholder="1" value="<#if hasRun>${run.rc}<#else>1</#if>">
                 </div>
             </div>
 

@@ -24,7 +24,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.2 compose-propose-email: draft-and-open the [PROPOSE] email. */
+/**
+ * Compose-propose-email: draft-and-open the [PROPOSE] email.
+ */
 public class ComposeProposeEmailStep implements ReleaseStep {
 	@Override
 	public String id() {

@@ -79,7 +79,7 @@ class AccountStoreTest {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// Explicit permissions rather than whatever the umask happens to be (finding F4).
+	// Explicit permissions rather than whatever the umask happens to be.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test
@@ -103,8 +103,8 @@ class AccountStoreTest {
 	@Test
 	@EnabledOnOs({ OS.MAC, OS.LINUX })
 	void b03_anExistingWideOpenFileIsNarrowedOnTheNextWrite(@TempDir Path dir) throws Exception {
-		// A file written before this change keeps its mode unless something narrows it, and the natural mistake is
-		// to set permissions only at creation time.
+		// A file keeps its mode unless something narrows it, and the natural mistake is to set permissions only at
+		// creation time.
 		var store = new AccountStore(dir);
 		store.put(CredentialSpec.APACHE_LDAP, "jbognar");
 		var file = dir.resolve("accounts.properties");

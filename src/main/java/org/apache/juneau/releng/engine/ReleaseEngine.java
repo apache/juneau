@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -36,7 +35,9 @@ import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Single-active-run orchestrator. One run advances at a time; state is persisted after every step. */
+/**
+ * Single-active-run orchestrator. One run advances at a time; state is persisted after every step.
+ */
 public class ReleaseEngine {
 
 	private static final String VOTE_GATE = "vote-gate";
@@ -56,10 +57,6 @@ public class ReleaseEngine {
 	private final SecretResolver secrets;
 	private final TargetProfile target;
 
-	// The armed run, if any. Transient in-memory posture — deliberately NOT persisted, so it drops on any
-	// restart (re-arm required after a restart/crash).
-	private volatile String armedVersion;
-
 	// In-memory per-step broadcasters, keyed "version/stepId". Lost on restart; log files survive.
 	private final Map<String, LogBroadcaster> broadcasters = new ConcurrentHashMap<>();
 
@@ -67,22 +64,46 @@ public class ReleaseEngine {
 	// client gets a fresh initial snapshot instead (see AppConfiguration's state resolver).
 	private final Map<String, RunStateBroadcaster> stateBroadcasters = new ConcurrentHashMap<>();
 
-	/** Everything the REST layer must provide to build a mutating StepContext. */
+	/**
+	 * Everything the REST layer must provide to build a mutating StepContext.
+	 */
 	public interface SecretResolver {
+		/**
+		 * The maintainer's Apache LDAP account id.
+		 */
 		String availid();
 
+		/**
+		 * The maintainer's Apache LDAP password.
+		 */
 		String ldapPassword();
 
+		/**
+		 * The GPG key id used to sign release artifacts.
+		 */
 		String gpgKeyId();
 
+		/**
+		 * The passphrase for {@link #gpgKeyId()}.
+		 */
 		String gpgPassphrase();
 
+		/**
+		 * Token for GitHub API calls.
+		 */
 		String githubToken();
 
+		/**
+		 * The Nexus staging client for this run.
+		 */
 		NexusStagingClient nexus();
 	}
 
-	@SuppressWarnings({ "java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
+	/**
+	 * Constructor injecting all of this engine's collaborators.
+	 */
+	@SuppressWarnings({
+		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
 	})
 	public ReleaseEngine(RunStateStore store, StepRegistry registry, ProcessRunner runner, BranchResolver branches,
 			Path stateDir, Path stagingRoot, String repoDir, String committerEmail, EmailService email,
@@ -106,7 +127,9 @@ public class ReleaseEngine {
 		store.setOnSave(this::publishSnapshot);
 	}
 
-	/** Minimal test factory (no secrets/nexus/email). */
+	/**
+	 * Minimal test factory (no secrets/nexus/email).
+	 */
 	public static ReleaseEngine forTests(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			BranchResolver branches, Path stateDir) {
 		var noSecrets = new SecretResolver() {
@@ -139,62 +162,70 @@ public class ReleaseEngine {
 				TargetProfile.prodDefault());
 	}
 
-	/** One broadcaster per (version, step). */
+	/**
+	 * One broadcaster per (version, step).
+	 */
 	public LogBroadcaster broadcaster(String version, String stepId) {
 		return broadcasters.computeIfAbsent(version + "/" + stepId, k -> new LogBroadcaster());
 	}
 
-	/** One run-state broadcaster per version, for the New-Release tab's live rail push. */
+	/**
+	 * One run-state broadcaster per version, for the New-Release tab's live rail push.
+	 */
 	public RunStateBroadcaster stateBroadcaster(String version) {
 		return stateBroadcasters.computeIfAbsent(version, k -> new RunStateBroadcaster());
 	}
 
-	/** {@code version}'s current snapshot as JSON, or empty when there's no persisted run for it. */
+	/**
+	 * {@code version}'s current snapshot as JSON, or empty when there's no persisted run for it.
+	 */
 	public Optional<String> snapshotJson(String version) {
 		return store.load(version)
-				.map(rs -> Json.DEFAULT.write(RunStateSnapshot.of(rs, isArmed(version))));
+				.map(rs -> Json.DEFAULT.write(RunStateSnapshot.of(rs)));
 	}
 
 	/**
 	 * Builds {@code rs}'s snapshot and pushes it to that version's {@link RunStateBroadcaster}. Registered
-	 * as {@link RunStateStore}'s {@code onSave} hook (see the constructor), and also called directly from
-	 * {@link #arm}/{@link #disarm}, since arming is transient in-memory posture that never itself triggers
-	 * a {@code save()}.
+	 * as {@link RunStateStore}'s {@code onSave} hook (see the constructor).
 	 */
 	private void publishSnapshot(RunState rs) {
 		stateBroadcaster(rs.version)
-				.publish(Json.DEFAULT.write(RunStateSnapshot.of(rs, isArmed(rs.version))));
+				.publish(Json.DEFAULT.write(RunStateSnapshot.of(rs)));
 	}
 
-	/** Same as {@link #publishSnapshot(RunState)}, reloading the current persisted state for {@code version}. */
-	private void publishSnapshot(String version) {
-		store.load(version).ifPresent(this::publishSnapshot);
-	}
-
+	/**
+	 * The single active run, if any. See {@link RunStateStore#activeRun()}.
+	 */
 	public Optional<RunState> activeRun() {
 		return store.activeRun();
 	}
 
-	/** The run the New-Release page should render — see {@link RunStateStore#displayRun()}. */
+	/**
+	 * The run the New-Release page should render — see {@link RunStateStore#displayRun()}.
+	 */
 	public Optional<RunState> displayRun() {
 		return store.displayRun();
 	}
 
+	/**
+	 * The persisted run for {@code version}, or null.
+	 */
 	public RunState state(String version) {
 		return store.load(version).orElse(null);
 	}
 
-	/** Start a new run; enforces the single-active-run lock. */
+	/**
+	 * Start a new run; enforces the single-active-run lock.
+	 */
 	public synchronized RunState start(String version, String developmentVersion) {
 		return start(version, developmentVersion, null);
 	}
 
 	/**
-	 * Start a new run, recording the milestone number resolved (or overridden) on the New-Release form.
-	 * {@code milestoneNumber} may be null (no matching milestone; {@code milestone-close} then legitimately
-	 * no-ops).
+	 * Start a new run. {@code rc} is the release-candidate number from the Input form; null or a
+	 * non-positive value leaves the default {@code 1}.
 	 */
-	public synchronized RunState start(String version, String developmentVersion, Integer milestoneNumber) {
+	public synchronized RunState start(String version, String developmentVersion, Integer rc) {
 		var active = store.activeRun();
 		if (active.isPresent())
 			throw isex("A run is already active: %s (%s). Finish or drop it first.", active.get().version,
@@ -202,7 +233,7 @@ public class ReleaseEngine {
 		var branch = branches.resolve(version);
 		var rs = RunState.create(version, branch, registry.ids());
 		rs.developmentVersion = developmentVersion;
-		rs.milestoneNumber = milestoneNumber;
+		applyRc(rs, rc);
 		store.save(rs);
 		return rs;
 	}
@@ -212,7 +243,7 @@ public class ReleaseEngine {
 	 * {@code acknowledgements}) on an existing run and persist. Any of the values may be null/blank; those
 	 * are simply stored and later omitted from the composed emails. Returns the updated run.
 	 *
-	 * <p>Does not touch {@code version}, {@code developmentVersion}, or {@code milestoneNumber} — {@code start()}
+	 * <p>Does not touch {@code version}, {@code developmentVersion}, or {@code rc} — {@code start()}
 	 * uses this after already writing those identity fields.
 	 */
 	public synchronized RunState updateDetails(String version, String releaseSummary, String highlights,
@@ -235,18 +266,19 @@ public class ReleaseEngine {
 	 * ({@code z>0}) and overwrites {@code developmentVersion} at apply time. Preflight re-resolves
 	 * {@code branch} from {@code version}.
 	 */
-	@SuppressWarnings({ "java:S107" // Narrative plus identity fields from the Input form; a parameter object would obscure the persistence mapping.
+	@SuppressWarnings({
+		"java:S107" // Narrative plus identity fields from the Input form; a parameter object would obscure the persistence mapping.
 	})
 	public synchronized RunState updateDetails(String version, String releaseSummary, String highlights,
 			String knownIssues, String acknowledgements, String newVersion, String developmentVersion,
-			Integer milestoneNumber) {
+			Integer rc) {
 		var rs = require(version);
 		rs.releaseSummary = releaseSummary;
 		rs.highlights = highlights;
 		rs.knownIssues = knownIssues;
 		rs.acknowledgements = acknowledgements;
 		rs.developmentVersion = ib(developmentVersion) ? null : developmentVersion.trim();
-		rs.milestoneNumber = milestoneNumber;
+		applyRc(rs, rc);
 		var trimmed = newVersion == null ? "" : newVersion.trim();
 		if (!trimmed.isEmpty() && !trimmed.equals(version)) {
 			if (store.load(trimmed).isPresent())
@@ -255,62 +287,22 @@ public class ReleaseEngine {
 			rs.branch = branches.resolve(trimmed);
 			store.save(rs);
 			store.delete(version);
-			if (Objects.equals(armedVersion, version))
-				armedVersion = trimmed;
 		} else {
 			store.save(rs);
 		}
 		return rs;
 	}
 
+	/**
+	 * This engine's {@link TargetProfile}.
+	 */
 	public TargetProfile target() {
 		return target;
 	}
 
 	/**
-	 * Arms {@code version} for mutation. Rejected unless {@code confirm} equals the required phrase
-	 * {@code "<version> LIVE"}. Returns the outcome message-bearing result.
-	 *
-	 * <p><b>Arming is an intent gate, and only that.</b> It establishes that a human meant to do something
-	 * irreversible; it establishes nothing about who or what sent the request. The two questions are separate, and
-	 * the second one is answered by
-	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} — see {@code AppConfiguration}.
-	 *
-	 * <p>Specifically, <b>the confirm phrase is not a secret and carries no authenticity.</b> It is
-	 * {@code "<version> LIVE"}, and the version is displayed on the very page an attacker would be reading, so any
-	 * page in the operator's browser could derive it. Before the boundary existed, a hostile page could POST that
-	 * phrase to {@code /arm} as a plain cross-origin form submission and then trigger a mutating step. What the
-	 * phrase does buy is real but narrower than it looks: it makes an irreversible action require deliberate typing
-	 * rather than a misplaced click, which is worth having, and it is worth being clear that this is all it is.
-	 *
-	 * <p><b>Do not respond to that by making the phrase harder to guess.</b> A longer or hidden phrase would not
-	 * help. Anything the page must display so the operator can type it is readable by any script running in that
-	 * browser, and anything the operator memorises instead gets written down. A secret shared with the attacker is
-	 * not a secret, and dressing this gate up as authentication would obscure the fact that authentication is a
-	 * separate control that has to exist on its own — which is what the boundary is. Keep this phrase exactly as
-	 * hard to type as it needs to be to prevent an accident, and no harder.
+	 * Preview a step: no mutation, no persistence, no log reset. Used by unit tests; not exposed as a UI action.
 	 */
-	public synchronized StepResult arm(String version, String confirm) {
-		require(version);
-		if (!Objects.equals(confirm, version + " LIVE"))
-			return StepResult.fail("Type '" + version + " LIVE' to arm this run for live mutation.");
-		armedVersion = version;
-		publishSnapshot(version); // armed flag isn't part of RunState, so arming alone never calls store.save()
-		return StepResult.ok("Run " + version + " is armed for live mutation.");
-	}
-
-	public boolean isArmed(String version) {
-		return version != null && version.equals(armedVersion);
-	}
-
-	public synchronized void disarm(String version) {
-		if (isArmed(version)) {
-			armedVersion = null;
-			publishSnapshot(version); // same rationale as arm() above
-		}
-	}
-
-	/** Preview a step: no mutation, no persistence, no log reset. */
 	public Preview preview(String version, String stepId, Map<String, String> form) {
 		var rs = require(version);
 		var step = requireStep(stepId);
@@ -330,9 +322,6 @@ public class ReleaseEngine {
 		var step = registry.byId(stepId);
 		if (step == null)
 			return StepResult.fail(UNKNOWN_STEP + stepId);
-		// Default-safe guard chokepoint: a mutating step is refused until the run is armed.
-		if (step.mutating() && !isArmed(version))
-			return StepResult.fail(guardMessage(step));
 		// Strict forward-apply guard: refuses to run stepId ahead of an unsatisfied required predecessor.
 		// This is also finalize-run's own prerequisite check, since finalize-run's predecessors are every
 		// other step in the pipeline — no separate check is needed there.
@@ -347,7 +336,7 @@ public class ReleaseEngine {
 
 		StepResult result;
 		var ctx = context(rs, stepId, form, true); // true = reset (truncate) this step's log first
-		ss.logRef = stepLogRelativePath(rs, stepId); // per-step logRef
+		ss.logRef = stepLogRelativePath(rs, stepId);
 		try {
 			result = step.apply(ctx);
 		} catch (RuntimeException e) {
@@ -379,7 +368,6 @@ public class ReleaseEngine {
 			}
 			if (stepId.equals("finalize-run")) {
 				rs.status = RunStatus.RELEASED;
-				disarm(version); // the run is complete; drop the arm
 			} else if (rs.status == RunStatus.FAILED) {
 				// Unstick: a subsequent success must not leave the run FAILED, or the New-Release page
 				// (which keys off non-terminal status) hides the remaining PENDING steps.
@@ -394,7 +382,9 @@ public class ReleaseEngine {
 		return result;
 	}
 
-	/** Mark a step SKIPPED (only steps whose registry entry is skippable). */
+	/**
+	 * Mark a step SKIPPED (only steps whose registry entry is skippable).
+	 */
 	public synchronized StepResult skip(String version, String stepId) {
 		var rs = require(version);
 		var step = registry.byId(stepId);
@@ -408,7 +398,9 @@ public class ReleaseEngine {
 		return StepResult.ok(stepId + " skipped.");
 	}
 
-	/** Advance a review-gate step held in {@code AWAITING_REVIEW} to {@code SUCCEEDED}. */
+	/**
+	 * Advance a review-gate step held in {@code AWAITING_REVIEW} to {@code SUCCEEDED}.
+	 */
 	public synchronized StepResult confirmReview(String version, String stepId) {
 		var rs = require(version);
 		requireStep(stepId);
@@ -423,8 +415,12 @@ public class ReleaseEngine {
 		return StepResult.ok(stepId + " review confirmed.");
 	}
 
-	private String guardMessage(ReleaseStep step) {
-		return "Refused: '" + step.id() + "' is a mutating step. Arm this run first.";
+	/**
+	 * Persist {@code rc} only when it is a positive integer; empty/invalid input must not wipe a stored value.
+	 */
+	private static void applyRc(RunState rs, Integer rc) {
+		if (rc != null && rc >= 1)
+			rs.rc = rc;
 	}
 
 	/**
@@ -472,7 +468,9 @@ public class ReleaseEngine {
 				+ String.join(", ", offending));
 	}
 
-	/** On boot: demote any RUNNING step to FAILED (its subprocess died with the JVM). */
+	/**
+	 * On boot: demote any RUNNING step to FAILED (its subprocess died with the JVM).
+	 */
 	public void recoverOnBoot() {
 		for (var rs : store.loadAll()) {
 			var current = rs.currentStepId == null ? null : rs.step(rs.currentStepId);
@@ -485,7 +483,9 @@ public class ReleaseEngine {
 		}
 	}
 
-	/** {@code logs/<version>-RC<n>-<stepId>.log}, relative to {@code stateDir}. */
+	/**
+	 * {@code logs/<version>-RC<n>-<stepId>.log}, relative to {@code stateDir}.
+	 */
 	private String stepLogRelativePath(RunState rs, String stepId) {
 		return "logs/" + rs.version + "-RC" + rs.rc + "-" + stepId + ".log";
 	}
@@ -531,12 +531,17 @@ public class ReleaseEngine {
 		return s;
 	}
 
+	/**
+	 * This engine's {@link StepRegistry}.
+	 */
 	public StepRegistry registry() {
 		return registry;
 	}
 
-	/** Exposes the wired {@link SecretResolver} so the REST layer can plumb it into {@link DropRcService}'s
-	 *  {@code Supplier<String>} seams without duplicating the Keychain-backed resolution here. */
+	/**
+	 * Exposes the wired {@link SecretResolver} so the REST layer can plumb it into {@link DropRcService}'s
+	 * {@code Supplier<String>} seams without duplicating the Keychain-backed resolution here.
+	 */
 	public SecretResolver secrets() {
 		return secrets;
 	}

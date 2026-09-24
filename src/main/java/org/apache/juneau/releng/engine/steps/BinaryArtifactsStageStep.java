@@ -31,7 +31,9 @@ import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 import org.apache.juneau.releng.util.SvnArgs;
 
-/** §5.12 binary-artifacts-stage: pull signed artifacts, rename to ASF convention, commit to dist/dev SVN. Mutating. */
+/**
+ * Binary-artifacts-stage: pull signed artifacts, rename to ASF convention, commit to dist/dev SVN. Mutating.
+ */
 public class BinaryArtifactsStageStep implements ReleaseStep {
 	@Override
 	public String id() {

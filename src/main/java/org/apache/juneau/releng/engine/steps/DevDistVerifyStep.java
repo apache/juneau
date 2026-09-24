@@ -28,7 +28,9 @@ import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 import org.apache.juneau.releng.util.SvnArgs;
 
-/** §5.13 dev-dist-verify: confirm the 6 expected files present + non-empty; open dist URL for spot-check. */
+/**
+ * Dev-dist-verify: confirm the 6 expected files present + non-empty; open dist URL for spot-check.
+ */
 public class DevDistVerifyStep implements ReleaseStep {
 
 	private static final List<String> KINDS = List.of("src", "bin");
@@ -65,7 +67,9 @@ public class DevDistVerifyStep implements ReleaseStep {
 		return StepResult.ok("Dist files present — spot-check the opened URL, then confirm.");
 	}
 
-	/** Refreshes the local dist/dev working copy, then checks the 6 ASF-convention files for this RC. */
+	/**
+	 * Refreshes the local dist/dev working copy, then checks the 6 ASF-convention files for this RC.
+	 */
 	private List<String> missingOrEmptyFiles(StepContext ctx) {
 		var rc = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var dist = ctx.stateDir.resolve("dist");

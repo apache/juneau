@@ -17,23 +17,37 @@
 
 package org.apache.juneau.releng.engine;
 
-/** Outcome of a step's apply(). */
+/**
+ * Outcome of a step's apply().
+ */
 public class StepResult {
 	public boolean success;
 	public String message;
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public StepResult() {
 	}
 
+	/**
+	 * Constructs a result with the given outcome and message.
+	 */
 	public StepResult(boolean success, String message) {
 		this.success = success;
 		this.message = message;
 	}
 
+	/**
+	 * A successful result carrying {@code m}.
+	 */
 	public static StepResult ok(String m) {
 		return new StepResult(true, m);
 	}
 
+	/**
+	 * A failed result carrying {@code m}.
+	 */
 	public static StepResult fail(String m) {
 		return new StepResult(false, m);
 	}

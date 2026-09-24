@@ -26,9 +26,13 @@ import org.apache.juneau.releng.rest.CredentialRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
 import org.apache.juneau.releng.rest.SetupRest;
 
+/**
+ * The root REST servlet that groups all of the application's child resources under {@code /rest/*}.
+ */
 @Rest(path = "/rest/*", title = "Apache Juneau · Release Manager", children = { SetupRest.class, HomeRest.class,
 		ReleaseRest.class, MilestoneRest.class, CredentialRest.class, ReleaseRunRest.class })
-@SuppressWarnings({ "java:S110" // Inheritance depth is imposed by the Juneau REST servlet hierarchy.
+@SuppressWarnings({
+	"java:S110" // Inheritance depth is imposed by the Juneau REST servlet hierarchy.
 })
 public class RootRest extends BasicSpringRestServletGroup {
 	private static final long serialVersionUID = 1L;

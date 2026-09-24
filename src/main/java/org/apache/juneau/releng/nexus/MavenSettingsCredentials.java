@@ -36,19 +36,25 @@ import org.xml.sax.SAXException;
  */
 public final class MavenSettingsCredentials {
 
-	/** Resolved credentials for a {@code <server>} entry. */
+	/**
+	 * Resolved credentials for a {@code <server>} entry.
+	 */
 	public record Credentials(String username, String password) {
 	}
 
 	private MavenSettingsCredentials() {
 	}
 
-	/** Resolve from the default {@code ~/.m2/settings.xml}. */
+	/**
+	 * Resolve from the default {@code ~/.m2/settings.xml}.
+	 */
 	public static Credentials resolve(String serverId) {
 		return resolve(serverId, Path.of(System.getProperty("user.home"), ".m2", "settings.xml"));
 	}
 
-	/** Resolve from an explicit settings.xml path (test seam). */
+	/**
+	 * Resolve from an explicit settings.xml path (test seam).
+	 */
 	public static Credentials resolve(String serverId, Path settingsXml) {
 		if (!Files.isRegularFile(settingsXml))
 			throw isex("Maven settings file not found: %s", settingsXml);

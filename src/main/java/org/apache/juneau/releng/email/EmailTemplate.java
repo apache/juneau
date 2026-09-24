@@ -17,7 +17,9 @@
 
 package org.apache.juneau.releng.email;
 
-/** The four release emails. All draft-and-open; none auto-sent. */
+/**
+ * The four release emails. All draft-and-open; none auto-sent.
+ */
 public enum EmailTemplate {
 	PROPOSE("[PROPOSE]", Lists.DEV), VOTE("[VOTE]", Lists.DEV), RESULT("[RESULT]", Lists.DEV),
 	ANNOUNCEMENT("[ANNOUNCEMENT]", "announce@apache.org, " + Lists.DEV);

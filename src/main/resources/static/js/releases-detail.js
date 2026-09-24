@@ -26,7 +26,7 @@
 	'use strict';
 
 	// The views toolkit pack (<@page toolkit="views">) loads juneau-icons.js generically, so the icon sprite
-	// defaults to the "original" pack. This app wants Material Symbols (Juneau WORK-J0545). Select it here — this
+	// defaults to the "original" pack. This app wants Material Symbols. Select it here — this
 	// file is in the page's init= list, parsed after juneau-icons.js and before the DOMContentLoaded mount, so
 	// icons.pack() reloads the sprite in time for the ribbon/paging glyphs. (This is JuneauViews.icons.pack, the
 	// icon-sprite selector — NOT the ConsoleChromeMixin CSS ThemePack.)

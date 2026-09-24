@@ -128,7 +128,7 @@ class ReleaseRestTest {
 				assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js script include: " + body);
 				assertTrue(iconsIdx < ribbonIdx,
 					"juneau-icons.js must be included before juneau-ribbon.js: " + body);
-				// The datatables card mount + page-cards runtime + sidecar (replaces the retired empty-slot + table-slot.js).
+				// The datatables card mount + page-cards runtime + sidecar.
 				assertTrue(body.contains("id=\"releases\""), "Missing releases card mount: " + body);
 				assertTrue(body.contains("data-juneau-card=\"datatables\""), "Missing datatables card markup: " + body);
 				assertTrue(body.contains("data-juneau-card-sidecar=\"releases\""), "Missing page-cards sidecar: " + body);

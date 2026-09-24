@@ -29,7 +29,9 @@ import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Injected into every {@link ReleaseStep#preview}/{@link ReleaseStep#apply}. */
+/**
+ * Injected into every {@link ReleaseStep#preview}/{@link ReleaseStep#apply}.
+ */
 public class StepContext {
 	public RunState run;
 	public ProcessRunner runner;
@@ -50,11 +52,16 @@ public class StepContext {
 	public MilestoneService milestone;
 	public Map<String, String> formInputs; // developmentVersion, voteOutcome, tally, repoIdOverride, checklist...
 
-	/** Runs a subprocess with output teed to the SSE log (helper for step apply/preview implementations). */
+	/**
+	 * Runs a subprocess with output teed to the SSE log (helper for step apply/preview implementations).
+	 */
 	public ProcessRunner.ProcResult exec(List<String> command) {
 		return runner.run(command, null, null, log);
 	}
 
+	/**
+	 * Runs a subprocess with explicit stdin/env, output teed to the SSE log.
+	 */
 	public ProcessRunner.ProcResult exec(List<String> command, String stdin, Map<String, String> env) {
 		return runner.run(command, stdin, env, log);
 	}

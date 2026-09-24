@@ -30,7 +30,9 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** §5.13/§8.2: real existence/size check of the six ASF-convention dist/dev files. */
+/**
+ * Real existence/size check of the six ASF-convention dist/dev files.
+ */
 class DevDistVerifyStepTest {
 
 	private final List<List<String>> calls = new ArrayList<>();

@@ -31,9 +31,9 @@ import jakarta.servlet.http.HttpServletRequest;
  * installed in front of it. Wiring the two together this way means "we serve tokens" and "we check tokens" cannot
  * drift apart into the worst combination — a page that hands out a token nothing validates.
  *
- * <p>The rendered {@code <meta name="csrf-token">} and {@code data-juneau-csrf} body attributes are no longer
- * hand-written by {@code base.ftlh}: the {@code <@console>} document shell emits them itself, reading the same
- * {@link LoopbackBoundaryFilter} request attribute this class does, and only when the boundary published a token.
+ * <p>The rendered {@code <meta name="csrf-token">} and {@code data-juneau-csrf} body attributes are emitted by the
+ * {@code <@console>} document shell itself, reading the same {@link LoopbackBoundaryFilter} request attribute this
+ * class does, and only when the boundary published a token.
  * The security decision belongs to the filter; this class only threads the token through the view model (kept for
  * any template that reads {@code ${csrfToken}} / {@code ${csrfHeader}} directly, e.g. an inline form field).
  */

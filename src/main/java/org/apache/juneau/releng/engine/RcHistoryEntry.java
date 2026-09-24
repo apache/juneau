@@ -17,15 +17,23 @@
 
 package org.apache.juneau.releng.engine;
 
-/** Append-only audit record of a dropped RC. */
+/**
+ * Append-only audit record of a dropped RC.
+ */
 public class RcHistoryEntry {
 	public int rc;
 	public String droppedAt; // ISO-8601
 	public String reason;
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public RcHistoryEntry() {
 	}
 
+	/**
+	 * Constructs an audit entry for a dropped RC.
+	 */
 	public RcHistoryEntry(int rc, String droppedAt, String reason) {
 		this.rc = rc;
 		this.droppedAt = droppedAt;

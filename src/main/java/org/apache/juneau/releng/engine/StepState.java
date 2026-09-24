@@ -17,7 +17,9 @@
 
 package org.apache.juneau.releng.engine;
 
-/** One step's mutable state within a run. */
+/**
+ * One step's mutable state within a run.
+ */
 public class StepState {
 	public String id;
 	public StepStatus status = StepStatus.PENDING;
@@ -28,9 +30,15 @@ public class StepState {
 	public String logRef; // path to this step's own log file, e.g.
 							// "logs/9.2.1-RC2-release-prepare.log"; null until first run
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public StepState() {
 	}
 
+	/**
+	 * Constructs a {@code PENDING} state for step {@code id}.
+	 */
 	public StepState(String id) {
 		this.id = id;
 	}

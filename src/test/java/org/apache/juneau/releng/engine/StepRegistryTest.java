@@ -30,15 +30,16 @@ class StepRegistryTest {
 	}
 
 	@Test
-	void a01_hasTwentyFourStepsInSpecOrder() {
+	void a01_hasTwentyThreeStepsInSpecOrder() {
 		var ids = registry().ids();
-		assertSize(24, ids);
+		assertSize(23, ids);
 		assertEquals("preflight", ids.get(0));
 		assertEquals("compose-propose-email", ids.get(1));
 		assertEquals("workspace-setup", ids.get(2));
-		assertEquals("finalize-run", ids.get(23));
+		assertEquals("finalize-run", ids.get(22));
 		assertEquals("vote-gate", ids.get(14));
 		assertEquals("tally-vote-result", ids.get(15));
+		assertFalse(ids.contains("milestone-close"));
 	}
 
 	@Test

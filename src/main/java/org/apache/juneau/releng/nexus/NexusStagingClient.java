@@ -40,12 +40,19 @@ import org.apache.juneau.marshall.marshaller.Json;
  */
 public class NexusStagingClient {
 
-	/** Test seam: (method, path, jsonBody) -> jsonResponse. */
+	/**
+	 * Test seam: (method, path, jsonBody) -> jsonResponse.
+	 */
 	public interface Transport {
+		/**
+		 * Sends the request and returns the raw response body.
+		 */
 		String send(String method, String path, String body);
 	}
 
-	/** The default {@code org.apache.juneau} staging profile id. */
+	/**
+	 * The default {@code org.apache.juneau} staging profile id.
+	 */
 	public static final String JUNEAU_PROFILE_ID = "1a24bc7f954a70";
 
 	private final Transport transport;
@@ -122,12 +129,16 @@ public class NexusStagingClient {
 		};
 	}
 
-	/** Test factory (default juneau profile id). */
+	/**
+	 * Test factory (default juneau profile id).
+	 */
 	public static NexusStagingClient forTests(Transport transport) {
 		return new NexusStagingClient(transport, JUNEAU_PROFILE_ID);
 	}
 
-	/** Test factory pinned to a specific profile id. */
+	/**
+	 * Test factory pinned to a specific profile id.
+	 */
 	public static NexusStagingClient forTests(Transport transport, String profileId) {
 		return new NexusStagingClient(transport, profileId);
 	}
@@ -137,7 +148,8 @@ public class NexusStagingClient {
 	 * endpoint ({@code /profile_repositories/{profileId}}) rather than the unscoped global list, since the
 	 * account otherwise sees every ASF project's staging repos.
 	 */
-	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned to its known generic shape (unchecked conversion from the raw parse result).
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is assigned to its known generic shape (unchecked conversion from the raw parse result).
 	})
 	public Optional<StagingRepo> findLatestRepo() {
 		var json = transport.send("GET", "/service/local/staging/profile_repositories/" + profileId, null);
@@ -158,8 +170,11 @@ public class NexusStagingClient {
 		}).sorted(Comparator.comparing((StagingRepo r) -> r.created == null ? "" : r.created).reversed()).findFirst();
 	}
 
-	/** Single-repo detail read (state model OPEN/CLOSED/RELEASED + transitioning flag). */
-	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned to its known generic shape (unchecked conversion from the raw parse result).
+	/**
+	 * Single-repo detail read (state model OPEN/CLOSED/RELEASED + transitioning flag).
+	 */
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is assigned to its known generic shape (unchecked conversion from the raw parse result).
 	})
 	public StagingRepo getRepo(String repoId) {
 		var json = transport.send("GET", "/service/local/staging/repository/" + repoId, null);
@@ -172,15 +187,24 @@ public class NexusStagingClient {
 		return r;
 	}
 
+	/**
+	 * Closes staging repo {@code repoId}.
+	 */
 	// Close and promote/release are separate, deliberate calls — no auto-release-on-close.
 	public void close(String repoId) {
 		transport.send("POST", "/service/local/staging/bulk/close", body(repoId));
 	}
 
+	/**
+	 * Drops (discards) staging repo {@code repoId}.
+	 */
 	public void drop(String repoId) {
 		transport.send("POST", "/service/local/staging/bulk/drop", body(repoId));
 	}
 
+	/**
+	 * Promotes (releases) staging repo {@code repoId}.
+	 */
 	public void promote(String repoId) {
 		transport.send("POST", "/service/local/staging/bulk/promote", body(repoId));
 	}

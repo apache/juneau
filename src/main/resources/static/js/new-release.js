@@ -18,45 +18,54 @@
 (function () {
   const val = (id) => document.getElementById(id)?.value ?? null;
 
+  // Integer >= 1 from #nr-rc, else null so empty/non-numeric input does not wipe a stored rc.
+  function parseRc() {
+    const raw = val('nr-rc');
+    if (raw == null || String(raw).trim() === '') return null;
+    const n = Number(raw);
+    return Number.isInteger(n) && n >= 1 ? n : null;
+  }
+
   // Defined unconditionally so the start form (rendered when `run` is null, before `.rm-rail-layout`
   // exists) always has it available. Captures the release metadata plus the four optional narrative fields.
   globalThis.nrStart = async function () {
-    const msEl = document.getElementById('nr-milestone');
-    const ms = msEl?.value ? Number(msEl.value) : null;
+    const body = {
+      version: val('nr-version'), developmentVersion: val('nr-devversion'),
+      releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
+      knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
+    };
+    const rc = parseRc();
+    if (rc != null) body.rc = rc;
     await fetch('/rest/runs', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        version: val('nr-version'), developmentVersion: val('nr-devversion'), milestoneNumber: ms,
-        releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
-        knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
-      })
+      body: JSON.stringify(body)
     });
     location.href = '/rest/runs?tab=exec';
   };
 
   // Persist edits on the active run (POST /{version}/details) without leaving the page.
-  // Identity fields (version, developmentVersion, milestoneNumber) were previously readonly
-  // after start — version is the store key, developmentVersion is also rewritten by
-  // release-prepare (derived for z>0), milestone is pre-filled by GitHub title-match on
-  // version blur. Save still writes all three; the form is the source of truth.
+  // Identity fields (version, developmentVersion, rc) — version is the store key,
+  // developmentVersion is also rewritten by release-prepare (derived for z>0), rc is the
+  // candidate integer used in juneau-{version}-RC{rc} tags. Save writes all three; the form
+  // is the source of truth. A missing/invalid rc is omitted so the stored value is kept.
   globalThis.nrSaveDetails = async function () {
     const form = document.querySelector('.rm-form-card');
     const origVer = form?.dataset.runVersion;
     const msg = document.getElementById('nr-details-msg');
     if (!origVer) return;
-    const msEl = document.getElementById('nr-milestone');
-    const ms = msEl?.value ? Number(msEl.value) : null;
     const newVer = val('nr-version');
+    const body = {
+      version: newVer,
+      developmentVersion: val('nr-devversion'),
+      releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
+      knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
+    };
+    const rc = parseRc();
+    if (rc != null) body.rc = rc;
     try {
       const r = await fetch('/rest/runs/' + encodeURIComponent(origVer) + '/details', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          version: newVer,
-          developmentVersion: val('nr-devversion'),
-          milestoneNumber: Number.isFinite(ms) ? ms : null,
-          releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
-          knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
-        })
+        body: JSON.stringify(body)
       });
       if (msg) { msg.textContent = r.ok ? 'Saved.' : 'Save failed.'; msg.style.color = r.ok ? '' : 'var(--jc-danger)'; }
       if (r.ok && newVer && newVer.trim() !== origVer) {
@@ -68,24 +77,6 @@
     }
   };
 
-  // §8.1: auto-resolve the milestone number by version-title match as soon as the operator finishes typing
-  // the version, so the New-Release form field arrives pre-filled (still user-overridable before Start).
-  const nrVersionInput = document.getElementById('nr-version');
-  if (nrVersionInput) {
-    nrVersionInput.addEventListener('blur', async () => {
-      const v = nrVersionInput.value.trim();
-      const msEl = document.getElementById('nr-milestone');
-      if (!v || !msEl || msEl.value) return; // don't clobber an already-filled/overridden value
-      try {
-        const r = await fetch('/rest/milestones/' + encodeURIComponent(v) + '/resolve');
-        const data = await r.json();
-        if (data && data.milestoneNumber != null) msEl.value = data.milestoneNumber;
-      } catch (e) {
-        // Best-effort pre-fill only; the operator can still type the milestone number manually.
-      }
-    });
-  }
-
   const layout = document.querySelector('.rm-rail-layout');
   if (!layout) return;  // start form only; no active run yet
 
@@ -94,7 +85,7 @@
   const metaEl = document.getElementById('nr-step-meta');
   const STEP_META = metaEl ? JSON.parse(metaEl.textContent) : {};
 
-  // Exactly one EventSource at a time (spec §4/§7: one console visible at a time). Switching the selected
+  // Exactly one EventSource at a time — one console visible at a time. Switching the selected
   // step closes the old connection and opens a new one against that step's own /events/{version}/{stepId}.
   let es = null;
 
@@ -107,26 +98,24 @@
     return 'pending';
   }
 
-  // Mirrors the mockup's renderActions(step): button set is entirely a function of current status
-  // (spec §3 decisions #11/#12 — every button below is the SAME preview/apply call regardless of status).
+  // Button set is entirely a function of current status. Run always performs the live mutation.
   function renderActions(stepId, status) {
-    const dryRun = '<button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrDryRun(\'' + stepId + '\')">Dry-run</button>';
     if (status === 'running')
-      return '<button class="jc-btn jc-btn-outline jc-btn-sm" disabled>Dry-run</button> <button class="jc-btn jc-btn-primary jc-btn-sm" disabled>Running&hellip;</button>';
+      return '<button class="jc-btn jc-btn-primary jc-btn-sm" disabled>Running&hellip;</button>';
     if (status === 'failed')
-      return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Resume</button>';
+      return '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Resume</button>';
     if (status === 'awaiting-vote')
       return renderVoteGateActions();
     if (status === 'awaiting-review')
-      return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrConfirmReview(\'' + stepId + '\')">Confirm review</button>';
+      return '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrConfirmReview(\'' + stepId + '\')">Confirm review</button>';
     if (status === 'succeeded')
-      return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Re-run</button>';
+      return '<button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Re-run</button>';
     if (status === 'skipped')
-      return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run anyway</button>';
-    return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run</button>';
+      return '<button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run anyway</button>';
+    return '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run</button>';
   }
 
-  // §5.15/§5.16: entering vote-gate only opens the vote (sets AWAITING_VOTE) — it is NOT itself the
+  // Entering vote-gate only opens the vote (sets AWAITING_VOTE) — it is NOT itself the
   // advance action. The gate is only passed by recording a vote result (POST .../vote-result, which the
   // engine applies as the separate "tally-vote-result" step). The operator picks a real outcome and types
   // the tally summary read off the vote thread.
@@ -143,17 +132,16 @@
     var tally = document.getElementById('nr-vote-tally').value;
     const res = await post('/vote-result', { outcome, tally });
     if (res && res.success === false) { alert(res.message); return; }
-    if (outcome === 'rejected') await nrDropRc(); // §8: a rejected vote forks to Drop-RC.
+    if (outcome === 'rejected') await nrDropRc(); // A rejected vote forks to Drop-RC.
     location.reload();
   };
 
   // The selected step's title/status/mutating row — shared by nrSelect() (full detail-pane render) and
   // the live state-push patch (status-only refresh, below) so the two never drift apart.
   function topRowHtml(stepId, status) {
-    const meta = STEP_META[stepId] || { title: stepId, mutating: false };
+    const meta = STEP_META[stepId] || { title: stepId };
     return '<h3>' + meta.title + '</h3>' +
-      '<span class="tag status ' + status + '">' + status + '</span>' +
-      (meta.mutating ? ' <span class="tag mutating">mutating</span>' : '');
+      '<span class="tag status ' + status + '">' + status + '</span>';
   }
 
   function connectConsole(stepId) {
@@ -161,7 +149,7 @@
     const consoleEl = document.getElementById('nr-console');
     if (!consoleEl) return;
     consoleEl.textContent = '';
-    // Replay-then-tail, scoped to this one step (SseLogServlet, Task 8).
+    // Replay-then-tail, scoped to this one step (SseLogServlet).
     es = new EventSource('/events/' + encodeURIComponent(version) + '/' + encodeURIComponent(stepId));
     es.onmessage = (e) => { consoleEl.textContent += e.data + '\n'; consoleEl.scrollTop = consoleEl.scrollHeight; };
   }
@@ -189,34 +177,19 @@
     catch (e) { return { success: false, message: 'Unexpected non-JSON response from server.' }; }
   }
 
-  globalThis.nrDryRun = async function (stepId) {
-    const p = await post('/steps/' + stepId + '/preview', {});
-    // MVP surfacing of preview text; a richer inline preview panel (vs. this alert) is a fast follow, not
-    // required for the pipeline itself to work correctly.
-    alert((p.lines || []).join('\n'));
-  };
-
   globalThis.nrApply = async function (stepId) {
     // Steps needing inputs (developmentVersion, confirmVersion, voteOutcome, repoIdOverride, checklist) read here.
     const form = {};
     const dv = document.getElementById('nr-devversion');
     if (dv?.value) form.developmentVersion = dv.value;
     if (stepId === 'nexus-release') form.confirmVersion = prompt('Type the version to confirm release');
-    // Same call whether the button said Run / Resume / Re-run (spec decision #11/#12) — hits /apply, not
-    // /resume, for all three; /resume (Task 19) remains available as an equivalent alias.
+    // Same call whether the button said Run / Resume / Re-run — hits /apply, not
+    // /resume, for all three; /resume remains available as an equivalent alias.
     const res = await post('/steps/' + stepId + '/apply', form);
     // A forward-apply guard refusal (unsatisfied required predecessor) or a finalize-run refusal (some
     // required step still not terminal) comes back as success:false — surface it instead of silently
     // reloading into a run that looks unchanged and leaving the operator to guess why nothing happened.
     if (res && res.success === false) { alert(res.message); return; }
-    location.reload();
-  };
-
-  globalThis.nrArm = async function () {
-    const confirm = prompt('Type "' + version + ' LIVE" to arm this run for live mutation');
-    if (!confirm) return;
-    const res = await post('/arm', { confirm });
-    if (res && res.message) alert(res.message);
     location.reload();
   };
 
@@ -254,12 +227,6 @@
     if (runStatusEl) { applyStatusClass(runStatusEl, STATUS_CLASS(snap.status)); runStatusEl.textContent = snap.status; }
     const titleEl = document.getElementById('nr-run-title');
     if (titleEl) titleEl.textContent = snap.version + ' \u00b7 RC' + snap.rc;
-    const armArea = document.getElementById('nr-arm-area');
-    if (armArea) {
-      armArea.innerHTML = snap.armed
-        ? '<span class="tag armed" title="This run is armed for live mutation">ARMED</span>'
-        : '<button class="jc-btn jc-btn-warning" onclick="nrArm()">Arm this run</button>';
-    }
 
     let selected = null;
     (snap.steps || []).forEach((s) => {
@@ -300,7 +267,7 @@
   // Default selection on load: a step awaiting human input (review or vote) is the most urgent — without
   // this, a step that just flipped to AWAITING_REVIEW/AWAITING_VOTE is invisible behind whichever later
   // PENDING step the old running/failed/pending-only chain fell through to, hiding its Confirm review /
-  // vote-status controls. Then: the running step (mirrors option-a-rail.html's mockup default); else the
+  // vote-status controls. Then: the running step; else the
   // first failed step; else the first pending step; else the last (terminal) step.
   const initial = layout.querySelector('.rm-rail-item.awaiting-review')
     || layout.querySelector('.rm-rail-item.awaiting-vote')

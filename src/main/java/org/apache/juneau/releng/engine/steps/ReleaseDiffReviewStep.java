@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.9 release-diff-review: git diff against the RC tag; human confirms. Read-only. */
+/**
+ * Release-diff-review: git diff against the RC tag; human confirms. Read-only.
+ */
 public class ReleaseDiffReviewStep implements ReleaseStep {
 	@Override
 	public String id() {

@@ -20,7 +20,9 @@ package org.apache.juneau.releng.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A step's dry-run preview payload. */
+/**
+ * A step's dry-run preview payload.
+ */
 public class Preview {
 	public String stepId;
 	public boolean mutating; // does apply() change remote state?
@@ -28,9 +30,15 @@ public class Preview {
 	public List<String> lines = new ArrayList<>(); // human-readable preview text
 	public String overrideField; // optional manual override (e.g. Nexus repo-id), else null
 
+	/**
+	 * Constructor for the JSON parser.
+	 */
 	public Preview() {
 	}
 
+	/**
+	 * Constructs a preview for {@code stepId}.
+	 */
 	public Preview(String stepId, boolean mutating) {
 		this.stepId = stepId;
 		this.mutating = mutating;

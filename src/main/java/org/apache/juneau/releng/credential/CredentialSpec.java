@@ -19,7 +19,9 @@ package org.apache.juneau.releng.credential;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-/** The set of managed credentials and their Keychain coordinates. */
+/**
+ * The set of managed credentials and their Keychain coordinates.
+ */
 public enum CredentialSpec {
 
 	APACHE_LDAP("apache", "juneau-rm.apache", "Apache LDAP (Nexus + dist SVN)"),
@@ -35,6 +37,11 @@ public enum CredentialSpec {
 		this.label = label;
 	}
 
+	/**
+	 * The spec whose {@link #id} matches {@code name} (case-insensitive).
+	 *
+	 * @throws IllegalArgumentException if no spec matches.
+	 */
 	public static CredentialSpec byName(String name) {
 		for (var c : values())
 			if (c.id.equalsIgnoreCase(name))
@@ -42,11 +49,16 @@ public enum CredentialSpec {
 		throw iaex("Unknown credential: %s", name);
 	}
 
-	/** GitHub's account is the fixed literal "token"; the others store the account with the secret. */
+	/**
+	 * GitHub's account is the fixed literal "token"; the others store the account with the secret.
+	 */
 	public boolean accountIsFixed() {
 		return this == GITHUB;
 	}
 
+	/**
+	 * The fixed account literal for {@link #GITHUB} ({@code "token"}), or {@code null} otherwise.
+	 */
 	public String fixedAccount() {
 		return this == GITHUB ? "token" : null;
 	}

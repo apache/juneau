@@ -27,7 +27,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Fires an optional Slack ping at a run's vote deadline. Re-armed from persisted deadline on boot. */
+/**
+ * Fires an optional Slack ping at a run's vote deadline. Re-armed from persisted deadline on boot.
+ */
 public class VoteDeadlineTimer {
 
 	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -38,12 +40,17 @@ public class VoteDeadlineTimer {
 	private final ProcessRunner runner;
 	private final String slackWebhook;
 
+	/**
+	 * Creates a timer that pings {@code slackWebhook} (via {@code runner}) when a run's vote deadline arrives.
+	 */
 	public VoteDeadlineTimer(ProcessRunner runner, String slackWebhook) {
 		this.runner = runner;
 		this.slackWebhook = slackWebhook;
 	}
 
-	/** Arm (or re-arm) a ping for the given version at {@code deadline}. No-op if webhook empty or deadline past. */
+	/**
+	 * Arm (or re-arm) a ping for the given version at {@code deadline}. No-op if webhook empty or deadline past.
+	 */
 	public void arm(String version, Instant deadline) {
 		if (ib(slackWebhook))
 			return;

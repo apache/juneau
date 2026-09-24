@@ -18,8 +18,7 @@
 package org.apache.juneau.releng.config;
 
 /**
- * Centralizes the release target's endpoints in one config-backed, auditable object, replacing the endpoint
- * literals that used to be scattered across the pipeline steps and the Nexus client.
+ * Centralizes the release target's endpoints in one config-backed, auditable object.
  *
  * <p>{@code nexusBaseUrl} defaults to real Nexus ({@link #prodDefault()}). Everything else defaults to the
  * canonical Apache Juneau production endpoints. This slice ships prod defaults only; no fork target is
@@ -28,14 +27,18 @@ package org.apache.juneau.releng.config;
 public record TargetProfile(String cloneUrl, String repoSlug, String ghSlug, String nexusBaseUrl,
 		String nexusProfileId, String distDevBase, String distReleaseBase) {
 
-	/** The canonical Apache Juneau production endpoints (the former hardcoded literals). */
+	/**
+	 * The canonical Apache Juneau production endpoints.
+	 */
 	public static TargetProfile prodDefault() {
 		return new TargetProfile("https://gitbox.apache.org/repos/asf/juneau.git", "apache/juneau", "apache/juneau",
 				"https://repository.apache.org", "1a24bc7f954a70", "https://dist.apache.org/repos/dist/dev/juneau",
 				"https://dist.apache.org/repos/dist/release/juneau");
 	}
 
-	/** A copy of this profile with a different Nexus base URL. */
+	/**
+	 * A copy of this profile with a different Nexus base URL.
+	 */
 	public TargetProfile withNexusBaseUrl(String url) {
 		return new TargetProfile(cloneUrl, repoSlug, ghSlug, url, nexusProfileId, distDevBase, distReleaseBase);
 	}

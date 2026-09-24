@@ -87,8 +87,8 @@ class ReleaseRunRestTest {
 		var registry = StepRegistry.standard(branches);
 		var engine = ReleaseEngine.forTests(store, registry, runner, branches, dir);
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir,
-				NexusStagingClient.forTests((m, p, b) -> ""), engine::isArmed,
-				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault(),
+				(v, s) -> new LogBroadcaster());
 		return new ReleaseRunRest(engine, dropRc);
 	}
 
@@ -147,7 +147,7 @@ class ReleaseRunRestTest {
 				"test@apache.org", new EmailService(dir, runner), new MilestoneService(), secrets,
 				TargetProfile.prodDefault());
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir, nexus,
-				engine::isArmed, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
 		return new ReleaseRunRest(engine, dropRc);
 	}
 
@@ -167,14 +167,6 @@ class ReleaseRunRestTest {
 		store.save(rs);
 	}
 
-
-	private void arm(ReleaseRunRest rest, String version) {
-		var body = new ReleaseRunRest.ArmRequest();
-		body.confirm = version + " LIVE";
-		var r = rest.arm(version, body);
-		assertTrue(r.success, r.message);
-	}
-
 	private void seedDistDevFiles(Path dir, String version, int rc) throws IOException {
 		var rcDir = "juneau-" + version + "-RC" + rc;
 		for (var kind : List.of("src", "bin")) {
@@ -186,18 +178,24 @@ class ReleaseRunRestTest {
 		}
 	}
 
-	/** Applies {@code stepId} with no form input and asserts it succeeded. */
+	/**
+	 * Applies {@code stepId} with no form input and asserts it succeeded.
+	 */
 	private void applyOk(ReleaseRunRest rest, String version, String stepId) {
 		applyOk(rest, version, stepId, Map.of());
 	}
 
-	/** Applies {@code stepId} with {@code form} and asserts it succeeded. */
+	/**
+	 * Applies {@code stepId} with {@code form} and asserts it succeeded.
+	 */
 	private void applyOk(ReleaseRunRest rest, String version, String stepId, Map<String, String> form) {
 		var r = rest.apply(version, stepId, form);
 		assertTrue(r.success, stepId + ": " + r.message);
 	}
 
-	/** Confirms a review-gate {@code stepId} and asserts the confirm succeeded. */
+	/**
+	 * Confirms a review-gate {@code stepId} and asserts the confirm succeeded.
+	 */
 	private void confirmOk(ReleaseRunRest rest, String version, String stepId) {
 		var c = rest.confirmReview(version, stepId);
 		assertTrue(c.success, stepId + " confirm-review: " + c.message);
@@ -207,14 +205,6 @@ class ReleaseRunRestTest {
 	void a01_getStateForNonexistentRunIs404(@TempDir Path dir) {
 		var rest = rest(dir);
 		var ex = assertThrows(NotFound.class, () -> rest.state("9.9.9"));
-		assertEquals(404, ex.getStatusCode());
-	}
-
-	@Test
-	void a02_previewAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		Map<String, String> form = Map.of();
-		var ex = assertThrows(NotFound.class, () -> rest.preview("9.9.9", "preflight", form));
 		assertEquals(404, ex.getStatusCode());
 	}
 
@@ -241,20 +231,12 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void b01_previewAgainstRealRunStillWorks(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		var preview = rest.preview("9.2.1", "preflight", Map.of());
-		assertNotNull(preview);
-	}
-
-	@Test
-	void b02_startPersistsFormSuppliedMilestoneNumber(@TempDir Path dir) {
+	void b02_startPersistsFormSuppliedRc(@TempDir Path dir) {
 		var rest = rest(dir);
 		var body = startRequest("9.2.1");
-		body.milestoneNumber = 42;
+		body.rc = 42;
 		var rs = rest.start(body);
-		assertEquals(42, rs.milestoneNumber);
+		assertEquals(42, rs.rc);
 	}
 
 	@Test
@@ -299,23 +281,23 @@ class ReleaseRunRestTest {
 		var rest = rest(dir);
 		var start = startRequest("9.2.1");
 		start.developmentVersion = "9.2.2-SNAPSHOT";
-		start.milestoneNumber = 7;
+		start.rc = 7;
 		rest.start(start);
 
 		var body = new ReleaseRunRest.DetailsRequest();
 		body.version = "9.2.1";
 		body.developmentVersion = "9.2.3-SNAPSHOT";
-		body.milestoneNumber = 11;
+		body.rc = 11;
 		body.releaseSummary = "Keep summary.";
 		var updated = rest.details("9.2.1", body);
 
 		assertEquals("9.2.1", updated.version);
 		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
-		assertEquals(11, updated.milestoneNumber);
+		assertEquals(11, updated.rc);
 		assertEquals("Keep summary.", updated.releaseSummary);
 		var reloaded = rest.state("9.2.1");
 		assertEquals("9.2.3-SNAPSHOT", reloaded.developmentVersion);
-		assertEquals(11, reloaded.milestoneNumber);
+		assertEquals(11, reloaded.rc);
 	}
 
 	@Test
@@ -384,19 +366,15 @@ class ReleaseRunRestTest {
 	 * {@code compose-announcement-email} — before {@code finalize-run} accepts it.
 	 */
 	@SuppressWarnings({
-		"java:S5961" // Deliberately one continuous end-to-end run through every required pipeline step, in
-					 // order, on a single mutable run; splitting into separate @Test methods would re-derive
-					 // (or fake) the intermediate run state each time and weaken exactly the regression this
-					 // test exists to catch -- that the SAME run legitimately clears every required step.
+		"java:S5961" // Deliberately one continuous end-to-end run through every required pipeline step, in order, on a single mutable run; splitting into separate @Test methods would re-derive (or fake) the intermediate run state each time and weaken exactly the regression this test exists to catch -- that the SAME run legitimately clears every required step.
 	})
 	@Test
 	void d01_voteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
 		var rest = restWithNexus(dir, model);
 		var start = startRequest("9.2.1");
-		start.milestoneNumber = 42;
+		start.rc = 1;
 		rest.start(start);
-		arm(rest, "9.2.1");
 
 		for (var stepId : List.of("preflight", "compose-propose-email", "workspace-setup", "build-verify"))
 			applyOk(rest, "9.2.1", stepId);
@@ -451,7 +429,6 @@ class ReleaseRunRestTest {
 
 		applyOk(rest, "9.2.1", "dist-promote");
 		applyOk(rest, "9.2.1", "github-release-create");
-		applyOk(rest, "9.2.1", "milestone-close");
 
 		// manual-followup-checklist: a required (non-skippable) review-gate step — must be confirmed for
 		// finalize-run's strict prerequisite gate to be satisfiable. Its own apply() requires every
@@ -503,7 +480,9 @@ class ReleaseRunRestTest {
 		assertTrue(res.message.contains("Unknown step"), res.message);
 	}
 
-	/** A rejected vote-result still records the tally and forks away from the linear step list. */
+	/**
+	 * A rejected vote-result still records the tally and forks away from the linear step list.
+	 */
 	@Test
 	void d04_voteResultWithRejectedOutcomeDoesNotAdvanceButRecordsTheOutcome(@TempDir Path dir) {
 		var rest = rest(dir);
@@ -563,22 +542,21 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void f01_explicitTabInputWinsEvenWhenARunExists() {
-		assertEquals("input", ReleaseRunRest.resolveSubtab("input", true));
-		assertEquals("input", ReleaseRunRest.resolveSubtab("INPUT", false));
+	void f01_explicitTabInputSelectsInput() {
+		assertEquals("input", ReleaseRunRest.resolveSubtab("input"));
+		assertEquals("input", ReleaseRunRest.resolveSubtab("INPUT"));
 	}
 
 	@Test
-	void f02_explicitTabExecWinsEvenWhenNoRunExists() {
-		assertEquals("exec", ReleaseRunRest.resolveSubtab("exec", false));
-		assertEquals("exec", ReleaseRunRest.resolveSubtab("execution", true));
+	void f02_explicitTabExecSelectsExecution() {
+		assertEquals("exec", ReleaseRunRest.resolveSubtab("exec"));
+		assertEquals("exec", ReleaseRunRest.resolveSubtab("execution"));
 	}
 
 	@Test
-	void f03_defaultSubtabIsInputWithoutARunAndExecWithARun() {
-		assertEquals("input", ReleaseRunRest.resolveSubtab(null, false));
-		assertEquals("exec", ReleaseRunRest.resolveSubtab(null, true));
-		assertEquals("input", ReleaseRunRest.resolveSubtab("nope", false));
-		assertEquals("exec", ReleaseRunRest.resolveSubtab("nope", true));
+	void f03_defaultSubtabIsInputWhenTabIsAbsentOrUnknown() {
+		assertEquals("input", ReleaseRunRest.resolveSubtab(null));
+		assertEquals("input", ReleaseRunRest.resolveSubtab(""));
+		assertEquals("input", ReleaseRunRest.resolveSubtab("nope"));
 	}
 }

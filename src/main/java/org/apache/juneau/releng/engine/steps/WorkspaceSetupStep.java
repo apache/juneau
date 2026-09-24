@@ -24,7 +24,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.3 workspace-setup: clean staging clone of the resolved branch (idempotent; re-pulls on re-run). */
+/**
+ * Workspace-setup: clean staging clone of the resolved branch (idempotent; re-pulls on re-run).
+ */
 public class WorkspaceSetupStep implements ReleaseStep {
 	@Override
 	public String id() {

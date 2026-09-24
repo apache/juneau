@@ -29,16 +29,28 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+/**
+ * Shells out to external tools (git, mvn, gpg, gh, etc.), buffered or streamed, with optional stdin/env/timeout.
+ */
 public interface ProcessRunner {
 
-	/** Runs a command and returns stdout split into trimmed non-empty lines. */
+	/**
+	 * Runs a command and returns stdout split into trimmed non-empty lines.
+	 */
 	List<String> runLines(List<String> command);
 
-	/** Runs a command and returns the full stdout as one string. */
+	/**
+	 * Runs a command and returns the full stdout as one string.
+	 */
 	String runText(List<String> command);
 
-	/** Result of a raw run: exit code + combined stdout/stderr (never throws on non-zero). */
+	/**
+	 * Result of a raw run: exit code + combined stdout/stderr (never throws on non-zero).
+	 */
 	record ProcResult(int exitCode, String output) {
+		/**
+		 * Whether the command exited zero.
+		 */
 		public boolean ok() {
 			return exitCode == 0;
 		}
@@ -77,7 +89,9 @@ public interface ProcessRunner {
 		return run(command, stdin, env);
 	}
 
-	/** Default streaming impl for stubs that don't override it: falls back to a buffered run then replays. */
+	/**
+	 * Default streaming impl for stubs that don't override it: falls back to a buffered run then replays.
+	 */
 	default ProcResult runStreamingDefault(List<String> command, String stdin, Map<String, String> env,
 			Consumer<String> lineSink) {
 		var res = run(command, stdin, env);
@@ -88,7 +102,9 @@ public interface ProcessRunner {
 		return res;
 	}
 
-	/** Default real implementation using {@link ProcessBuilder}. */
+	/**
+	 * Default real implementation using {@link ProcessBuilder}.
+	 */
 	class Default implements ProcessRunner {
 		private static final String MSG_INTERRUPTED = "Interrupted running: %s";
 		private static final String MSG_ERROR = "Error running: %s";

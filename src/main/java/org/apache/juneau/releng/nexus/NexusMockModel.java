@@ -48,20 +48,31 @@ public class NexusMockModel {
 	private String repoId;
 	private String state;
 
+	/**
+	 * Creates a mock model scoped to {@code profileId}, with no repo yet seeded.
+	 */
 	public NexusMockModel(String profileId) {
 		this.profileId = profileId;
 	}
 
-	/** Clears state so the next discovery synthesizes a fresh OPEN repo (called on run-start). */
+	/**
+	 * Clears state so the next discovery synthesizes a fresh OPEN repo (called on run-start).
+	 */
 	public synchronized void reset() {
 		repoId = null;
 		state = null;
 	}
 
+	/**
+	 * The id of the currently-seeded repo, or {@code null} if none has been seeded yet.
+	 */
 	public synchronized String currentRepoId() {
 		return repoId;
 	}
 
+	/**
+	 * The current repo's state ({@link #OPEN}/{@link #CLOSED}/{@link #RELEASED}/{@link #DROPPED}), or {@code null}.
+	 */
 	public synchronized String currentState() {
 		return state;
 	}
@@ -74,19 +85,26 @@ public class NexusMockModel {
 		}
 	}
 
-	/** {@code GET /profile_repositories/{profileId}} — the discovery list (lazily seeded). */
+	/**
+	 * {@code GET /profile_repositories/{profileId}} — the discovery list (lazily seeded).
+	 */
 	public synchronized String profileRepositories() {
 		seedIfNeeded();
 		return Json.DEFAULT.write(List.of(repoView()));
 	}
 
-	/** {@code GET /repository/{repoId}} — single-repo detail. */
+	/**
+	 * {@code GET /repository/{repoId}} — single-repo detail.
+	 */
 	public synchronized String repository(String id) {
 		if (repoId == null || !repoId.equals(id))
 			throw isex("No such staging repository: %s", id);
 		return Json.DEFAULT.write(repoView());
 	}
 
+	/**
+	 * Transitions repo {@code id} from {@link #OPEN} to {@link #CLOSED}.
+	 */
 	public synchronized void close(String id) {
 		requireRepo(id);
 		if (!OPEN.equals(state))
@@ -94,6 +112,9 @@ public class NexusMockModel {
 		state = CLOSED;
 	}
 
+	/**
+	 * Transitions repo {@code id} from {@link #CLOSED} to {@link #RELEASED}.
+	 */
 	public synchronized void promote(String id) {
 		requireRepo(id);
 		if (!CLOSED.equals(state))
@@ -101,6 +122,9 @@ public class NexusMockModel {
 		state = RELEASED;
 	}
 
+	/**
+	 * Transitions repo {@code id} from {@link #OPEN} or {@link #CLOSED} to {@link #DROPPED}.
+	 */
 	public synchronized void drop(String id) {
 		requireRepo(id);
 		if (!OPEN.equals(state) && !CLOSED.equals(state))
@@ -108,8 +132,11 @@ public class NexusMockModel {
 		state = DROPPED;
 	}
 
-	/** Extracts the single staged repository id from a Nexus {@code bulk/*} request body. */
-	@SuppressWarnings({ "unchecked" // Parsed JSON is assigned to its known generic shape.
+	/**
+	 * Extracts the single staged repository id from a Nexus {@code bulk/*} request body.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is assigned to its known generic shape.
 	})
 	static String repoIdFromBody(String body) {
 		if (ib(body))

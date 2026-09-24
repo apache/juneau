@@ -17,15 +17,29 @@
 
 package org.apache.juneau.releng.credential;
 
-/** Live validation of a single stored secret. */
+/**
+ * Live validation of a single stored secret.
+ */
 public interface Validator {
+	/**
+	 * Checks {@code secret} against the live service for {@code account}.
+	 */
 	ValidationResult validate(String secret, String account);
 
+	/**
+	 * The outcome of a live validation check.
+	 */
 	record ValidationResult(boolean valid, String message) {
+		/**
+		 * A successful result with message {@code m}.
+		 */
 		public static ValidationResult ok(String m) {
 			return new ValidationResult(true, m);
 		}
 
+		/**
+		 * A failed result with message {@code m}.
+		 */
 		public static ValidationResult fail(String m) {
 			return new ValidationResult(false, m);
 		}

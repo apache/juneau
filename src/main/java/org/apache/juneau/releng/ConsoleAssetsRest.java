@@ -47,6 +47,9 @@ import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 public class ConsoleAssetsRest extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The stock {@link ConsoleChromeMixin}; the app's chrome is authored declaratively in {@code base.ftlh} instead.
+	 */
 	@Bean
 	public ConsoleChromeMixin consoleChrome() {
 		return ConsoleChromeMixin.create().build();

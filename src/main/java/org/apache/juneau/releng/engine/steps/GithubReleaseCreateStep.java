@@ -24,7 +24,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.20 github-release-create: gh release create (no binary assets); GH_TOKEN via env. Mutating; retry-safe. */
+/**
+ * Github-release-create: gh release create (no binary assets); GH_TOKEN via env. Mutating; retry-safe.
+ */
 public class GithubReleaseCreateStep implements ReleaseStep {
 	@Override
 	public String id() {

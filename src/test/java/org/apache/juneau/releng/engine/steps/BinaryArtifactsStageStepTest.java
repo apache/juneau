@@ -31,7 +31,9 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** §5.12/§7.1: full svn+wget+rename+gpg+add+commit sequence, matching juneau-release.sh:182-209. */
+/**
+ * Full svn+wget+rename+gpg+add+commit sequence, matching juneau-release.sh:182-209.
+ */
 class BinaryArtifactsStageStepTest {
 
 	private final List<List<String>> calls = new ArrayList<>();

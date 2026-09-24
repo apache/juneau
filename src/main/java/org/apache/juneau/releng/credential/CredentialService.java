@@ -43,6 +43,9 @@ public class CredentialService {
 	private final Map<CredentialSpec, ValidationResult> lastResults = new EnumMap<>(CredentialSpec.class);
 	private final AccountStore accounts;
 
+	/**
+	 * Wires the per-spec secret stores, validators, and the non-secret account store.
+	 */
 	public CredentialService(Map<CredentialSpec, SecretStore> stores, Map<CredentialSpec, Validator> validators,
 			AccountStore accounts) {
 		this.stores = stores;
@@ -50,7 +53,9 @@ public class CredentialService {
 		this.accounts = accounts;
 	}
 
-	/** Store a credential whose account is fixed (GitHub) or already known. */
+	/**
+	 * Store a credential whose account is fixed (GitHub) or already known.
+	 */
 	public void store(String name, String account, String secret) {
 		var spec = CredentialSpec.byName(name);
 		var acct = spec.accountIsFixed() ? spec.fixedAccount() : account;
@@ -65,12 +70,16 @@ public class CredentialService {
 		lastResults.remove(spec);
 	}
 
-	/** Store a credential supplying its account explicitly (Apache availid / GPG key ID). */
+	/**
+	 * Store a credential supplying its account explicitly (Apache availid / GPG key ID).
+	 */
 	public void storeWithAccount(String name, String account, String secret) {
 		store(name, account, secret);
 	}
 
-	/** Run the live validation for one credential, caching + returning the result. */
+	/**
+	 * Run the live validation for one credential, caching + returning the result.
+	 */
 	public ValidationResult validate(String name) {
 		var spec = CredentialSpec.byName(name);
 		var acct = resolveAccount(spec);
@@ -95,7 +104,9 @@ public class CredentialService {
 		}
 	}
 
-	/** Delete a credential from the store. */
+	/**
+	 * Delete a credential from the store.
+	 */
 	public void delete(String name) {
 		var spec = CredentialSpec.byName(name);
 		var acct = resolveAccount(spec);
@@ -106,7 +117,9 @@ public class CredentialService {
 		lastResults.remove(spec);
 	}
 
-	/** Presence + last-validation status for all credentials (never the secret). */
+	/**
+	 * Presence + last-validation status for all credentials (never the secret).
+	 */
 	public List<CredentialStatus> status() {
 		var out = new ArrayList<CredentialStatus>();
 		for (var spec : CredentialSpec.values()) {

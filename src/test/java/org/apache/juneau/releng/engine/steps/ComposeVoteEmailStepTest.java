@@ -29,7 +29,9 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** §5.14/§8.3: SHA-512 is computed from the {@code .sha512} files §5.12 produces, never pasted from a form. */
+/**
+ * SHA-512 is computed from the {@code .sha512} files the binary-artifacts-stage step produces, never pasted from a form.
+ */
 class ComposeVoteEmailStepTest {
 
 	private ProcessRunner okRunner() {

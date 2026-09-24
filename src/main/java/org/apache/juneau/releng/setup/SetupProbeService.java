@@ -74,6 +74,9 @@ public class SetupProbeService {
 	private final Path repoDir;
 	private final Path settingsXml;
 
+	/**
+	 * Wires the process runner, credential service, repo checkout path, and {@code settings.xml} path to probe.
+	 */
 	public SetupProbeService(ProcessRunner runner, CredentialService credentials, Path repoDir, Path settingsXml) {
 		this.runner = runner;
 		this.credentials = credentials;
@@ -81,7 +84,9 @@ public class SetupProbeService {
 		this.settingsXml = settingsXml;
 	}
 
-	/** Pill shells for first paint: labels only, nothing evaluated. */
+	/**
+	 * Pill shells for first paint: labels only, nothing evaluated.
+	 */
 	public List<Probe> inventory() {
 		var out = new ArrayList<Probe>();
 		for (var spec : specs())
@@ -89,7 +94,9 @@ public class SetupProbeService {
 		return out;
 	}
 
-	/** Eager verdicts for every probe plus the detected package manager. */
+	/**
+	 * Eager verdicts for every probe plus the detected package manager.
+	 */
 	public SetupData data() {
 		var d = new SetupData();
 		d.packageManager = detectPackageManager();
@@ -298,7 +305,9 @@ public class SetupProbeService {
 		}
 	}
 
-	/** One Setup pill / Details payload. Public fields for JSON + FreeMarker. */
+	/**
+	 * One Setup pill / Details payload. Public fields for JSON + FreeMarker.
+	 */
 	public static class Probe {
 		public String id;
 		public String kind;
@@ -312,13 +321,17 @@ public class SetupProbeService {
 		public String credentialName;
 	}
 
-	/** GET /data body. */
+	/**
+	 * GET /data body.
+	 */
 	public static class SetupData {
 		public String packageManager;
 		public List<Probe> probes;
 	}
 
-	/** POST /install/{probeId} body. */
+	/**
+	 * POST /install/{probeId} body.
+	 */
 	public static class InstallResult {
 		public boolean ok;
 		public String output;

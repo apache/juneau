@@ -34,6 +34,9 @@ public class GpgValidator implements Validator {
 
 	private final ProcessRunner runner;
 
+	/**
+	 * Validates using {@code runner} to invoke {@code gpg}.
+	 */
 	public GpgValidator(ProcessRunner runner) {
 		this.runner = runner;
 	}

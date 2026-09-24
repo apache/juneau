@@ -24,11 +24,15 @@ import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 
-/** Retired Home tab: HTTP 302 to Setup. */
+/**
+ * Retired Home tab: HTTP 302 to Setup.
+ */
 @Rest(path = "/home", title = "Home")
 public class HomeRest extends BasicRestResource {
 
-	/** Old Home bookmarks still work via 302. */
+	/**
+	 * Old Home bookmarks still work via 302.
+	 */
 	@RestGet("/")
 	public Found redirectToSetup() {
 		return found("/rest/setup");

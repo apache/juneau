@@ -36,10 +36,16 @@ public class LocalStateReleaseSource {
 
 	private final RunStateStore store;
 
+	/**
+	 * Creates a source backed by {@code store}.
+	 */
 	public LocalStateReleaseSource(RunStateStore store) {
 		this.store = store;
 	}
 
+	/**
+	 * In-progress rows, one per persisted {@link RunState}.
+	 */
 	public List<Release> list() {
 		var out = new ArrayList<Release>();
 		for (var rs : store.loadAll())
@@ -55,7 +61,9 @@ public class LocalStateReleaseSource {
 		return r;
 	}
 
-	/** Coarse Releases-tab status, per {@link Release}'s {@code "VOTING" | "RELEASED" | "DROPPED" | "DRAFT"}. */
+	/**
+	 * Coarse Releases-tab status, per {@link Release}'s {@code "VOTING" | "RELEASED" | "DROPPED" | "DRAFT"}.
+	 */
 	private static String statusOf(RunStatus status) {
 		return switch (status) {
 			case AWAITING_VOTE -> "VOTING";
@@ -65,7 +73,9 @@ public class LocalStateReleaseSource {
 		};
 	}
 
-	/** Human-readable phase, per {@link Release}'s {@code "Awaiting vote" | "Distributed" | "Cancelled"}. */
+	/**
+	 * Human-readable phase, per {@link Release}'s {@code "Awaiting vote" | "Distributed" | "Cancelled"}.
+	 */
 	private static String stageOf(RunStatus status) {
 		return switch (status) {
 			case AWAITING_VOTE -> "Awaiting vote";

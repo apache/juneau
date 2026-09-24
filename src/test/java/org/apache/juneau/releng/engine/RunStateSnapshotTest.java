@@ -26,18 +26,17 @@ import org.junit.jupiter.api.Test;
 class RunStateSnapshotTest {
 
 	@Test
-	void a01_projectsVersionStatusRcArmedAndOrderedSteps() {
+	void a01_projectsVersionStatusRcAndOrderedSteps() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "workspace-setup"));
 		rs.rc = 2;
 		rs.status = RunStatus.AWAITING_VOTE;
 		rs.step("preflight").status = StepStatus.SUCCEEDED;
 
-		var snap = RunStateSnapshot.of(rs, true);
+		var snap = RunStateSnapshot.of(rs);
 
 		assertEquals("9.2.1", snap.version);
 		assertEquals(RunStatus.AWAITING_VOTE, snap.status);
 		assertEquals(2, snap.rc);
-		assertTrue(snap.armed);
 		assertSize(2, snap.steps);
 		assertEquals("preflight", snap.steps.get(0).stepId);
 		assertEquals(StepStatus.SUCCEEDED, snap.steps.get(0).status);
@@ -48,13 +47,14 @@ class RunStateSnapshotTest {
 	@Test
 	void a02_serializesToTheCompactJsonShapeTheClientPatchesAgainst() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
-		var snap = RunStateSnapshot.of(rs, false);
+		var snap = RunStateSnapshot.of(rs);
 
 		var json = Json.DEFAULT.write(snap);
 
 		assertTrue(json.contains("\"version\":\"9.2.1\""));
 		assertTrue(json.contains("\"status\":\"RUNNING\""));
-		assertTrue(json.contains("\"armed\":false"));
+		assertTrue(json.contains("\"rc\":1"));
+		assertFalse(json.contains("\"armed\""));
 		assertTrue(json.contains("\"stepId\":\"preflight\""));
 	}
 }

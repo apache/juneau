@@ -29,7 +29,9 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** §5.19/§7.2: svn mv dev->release, prior-release-on-line removal, matching the wiki's manual dev->release move. */
+/**
+ * svn mv dev->release, prior-release-on-line removal, matching the wiki's manual dev->release move.
+ */
 class DistPromoteStepTest {
 
 	private final List<List<String>> calls = new ArrayList<>();

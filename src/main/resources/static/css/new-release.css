@@ -25,7 +25,7 @@
      2. A handful of NEW `.tag.status.*` values the 24-step pipeline needs
         that the Releases tab never used (running / succeeded / skipped /
         awaiting-vote) — each mapped onto the SAME color tokens as chrome.css's
-        existing tag domains, per the design note in §current (succeeded→green,
+        existing tag domains (succeeded→green,
         running→blue, skipped/awaiting-vote→neutral). `pending` and `failed`
         are intentionally NOT redefined here: `pending` already exists in
         chrome.css's amber group, and `failed` in its red group — the red
@@ -490,7 +490,7 @@ tr.step-detail-row td {
   font-style: italic;
 }
 
-/* Marks a step whose apply() mutates remote state (spec §3.8), slotted into
+/* Marks a step whose apply() mutates remote state, slotted into
    the same amber domain chrome.css already uses for "pending"/in-progress. */
 .tag.mutating {
   background: var(--jc-tag-amber-bg);

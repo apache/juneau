@@ -45,34 +45,47 @@ import org.apache.juneau.releng.credential.Validator.ValidationResult;
 @Rest(path = "/credentials", title = "Credentials", disableContentParam = "true")
 public class CredentialRest extends BasicRestResource {
 
-	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}). */
+	/**
+	 * This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}).
+	 */
 	static final String MOUNT = "/rest/credentials";
 
 	private final CredentialService service;
 
+	/**
+	 * Backs this resource with {@code service}.
+	 */
 	public CredentialRest(CredentialService service) {
 		this.service = service;
 	}
 
-	/** Human page retired — bookmarks dead-end. */
+	/**
+	 * Human page retired — bookmarks dead-end.
+	 */
 	@RestGet("/")
 	public NotFound pageGone() {
 		return notFound();
 	}
 
-	/** Admin table envelope retired with the Admin Credentials child. */
+	/**
+	 * Admin table envelope retired with the Admin Credentials child.
+	 */
 	@RestGet("/view")
 	public NotFound viewGone() {
 		return notFound();
 	}
 
-	/** JSON status for all credentials (no secrets). */
+	/**
+	 * JSON status for all credentials (no secrets).
+	 */
 	@RestGet("/status")
 	public List<CredentialStatus> status() {
 		return service.status();
 	}
 
-	/** Store/update a credential. Body: {account?, secret}. Apache/GPG send account (availid/keyId). */
+	/**
+	 * Store/update a credential. Body: {account?, secret}. Apache/GPG send account (availid/keyId).
+	 */
 	@Mutating("replaces a stored credential in the Keychain")
 	@RestPost("/{name}")
 	public CredentialStatus set(@Path("name") String name, @Content StoreRequest body) {
@@ -80,14 +93,18 @@ public class CredentialRest extends BasicRestResource {
 		return service.status().stream().filter(c -> c.name.equals(name)).findFirst().orElseThrow();
 	}
 
-	/** Run the live validation. */
+	/**
+	 * Run the live validation.
+	 */
 	@Mutating("caches a new validation verdict, and makes an authenticated call as the user")
 	@RestPost("/{name}/validate")
 	public ValidationResult validate(@Path("name") String name) {
 		return service.validate(name);
 	}
 
-	/** Remove a credential from the Keychain. */
+	/**
+	 * Remove a credential from the Keychain.
+	 */
 	@Mutating("deletes a stored credential from the Keychain")
 	@RestDelete("/{name}")
 	public CredentialStatus remove(@Path("name") String name) {
@@ -95,7 +112,9 @@ public class CredentialRest extends BasicRestResource {
 		return service.status().stream().filter(c -> c.name.equals(name)).findFirst().orElseThrow();
 	}
 
-	/** POST body for storing a credential. */
+	/**
+	 * POST body for storing a credential.
+	 */
 	public static class StoreRequest {
 		public String account; // availid (Apache) or key ID (GPG); ignored for GitHub
 		public String secret;

@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.4 build-verify: mvn clean verify on the checked-out branch. Fully idempotent. */
+/**
+ * Build-verify: mvn clean verify on the checked-out branch. Fully idempotent.
+ */
 public class BuildVerifyStep implements ReleaseStep {
 	@Override
 	public String id() {

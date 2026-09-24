@@ -17,33 +17,49 @@
 
 package org.apache.juneau.releng.engine;
 
-/** One discrete, resumable, idempotent pipeline step. */
+/**
+ * One discrete, resumable, idempotent pipeline step.
+ */
 public interface ReleaseStep {
 
-	/** Stable id used in run state + REST paths (e.g. "workspace-setup"). */
+	/**
+	 * Stable id used in run state + REST paths (e.g. "workspace-setup").
+	 */
 	String id();
 
-	/** Human title for the left-rail. */
+	/**
+	 * Human title for the left-rail.
+	 */
 	String title();
 
-	/** Does apply() mutate remote state (git remote / SVN / Nexus / GitHub)? Drives the confirm gate. */
+	/**
+	 * Does apply() mutate remote state (git remote / SVN / Nexus / GitHub)? Drives the confirm gate.
+	 */
 	default boolean mutating() {
 		return false;
 	}
 
-	/** Human-review gate (run then require explicit "looks good") rather than a mutation gate. */
+	/**
+	 * Human-review gate (run then require explicit "looks good") rather than a mutation gate.
+	 */
 	default boolean reviewGate() {
 		return false;
 	}
 
-	/** May the run mark this step SKIPPED? */
+	/**
+	 * May the run mark this step SKIPPED?
+	 */
 	default boolean skippable() {
 		return false;
 	}
 
-	/** Compute the dry-run preview without mutating anything. */
+	/**
+	 * Compute the dry-run preview without mutating anything.
+	 */
 	Preview preview(StepContext ctx);
 
-	/** Execute the step (idempotent/safely re-runnable per each step's §5 notes). */
+	/**
+	 * Execute the step (idempotent/safely re-runnable).
+	 */
 	StepResult apply(StepContext ctx);
 }

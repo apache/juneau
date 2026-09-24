@@ -58,8 +58,9 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   `ChangelogEntry.Builder` accumulators).
 - **`instanceof` pattern-variable naming (`o` → `o2`)** — **N/A.** No `instanceof` pattern matches in the
   codebase.
-- **`@SuppressWarnings` format** — Always the multiline brace/array form with a `//` rationale on every
-  token, even a single token (except the inline catch-parameter `"unused"` case). **Applied.** Converted
+- **`@SuppressWarnings` format** — Always the multiline brace/array form with a `//` rationale on the
+  same line as every token, even a single token (except the inline catch-parameter `"unused"` case).
+  Do not put the rationale on the line above the annotation. **Applied.** Converted
   the `@SuppressWarnings("unchecked")` (parsed-JSON casts) in `src/main` to the multiline form with
   rationale, plus **four more found in `src/test`** on a later verification pass (2026-08-30) — this
   pass's original sweep only covered `src/main`; `ReleaseRunRestTest.java` (one bare `"unchecked"`) and
@@ -117,12 +118,43 @@ and re-swept 2026-09-13 (WORK-R0008 leftover pass):
 
 ## Javadoc
 
-- **Javadoc on public types & methods** — Brief description; `@param`/`@return`/`@throws` as applicable.
-  **Applied.** Public types and non-trivial public methods are documented; trivial accessors/REST handlers
-  are self-descriptive.
+JRM, SSC, and Foundry use this comment policy. Juneau library conventions are unchanged.
+
+- **Block form (required).** Never a one-line `/** ... */`. Use a standard Java Javadoc block that matches the file's indent (tabs in this repo — do not invent a two-space-only indent that fights a tab-indented file):
+  - `/**` alone on the opening line
+  - each body line starts with ` * ` (space, asterisk, space), indented to the declaration it documents
+  - ` */` alone on the closing line
+
+Wrong:
+
+```java
+/** Bean wiring for the Release Manager application: credentials, release engine, REST resources, and servlets. */
+```
+
+Required:
+
+```java
+/**
+ * Bean wiring for the Release Manager application: credentials, release engine, REST resources, and servlets.
+ */
+```
+
+- Every public type, method, and constructor, including trivial accessors and REST handlers.
+- One-sentence summary as the first body line (ending in a period). That is content, not a license to write a one-line `/** ... */`.
+- Short `@param`, `@return`, and `@throws`.
+- A gotcha only when the caller can misuse it.
+- One short example only when the contract is easy to misuse without it.
+- Longer Javadocs (summary, blank starred line, `@param` / `@return` / `@throws`, a gotcha, one example) use that same block. Keep the existing words; wrap them. Do not add implementation walkthroughs.
+- No implementation walkthrough. Do not explain how the code works.
 - **Juneau syntax-highlight tags (`<jc>`/`<jk>`/`<jv>`/…)** — **N/A (style choice).** This app does not use
   Juneau's Javadoc syntax-highlight tags (it doesn't ship the Juneau doclet/CSS); plain Javadoc with
   `{@code ...}` and `{@link ...}` is used consistently.
+
+## Inline comments
+
+- Delete comments that restate the code or describe an edit.
+- Keep gotchas, unclear constraints, suppression rationales, `@formatter` markers, `// HTT` waivers, and license headers.
+- Suppression markers stay, including `// NOSONAR` and `# NOSONAR` (with or without a rule key and rationale on the same line), `# noqa` when it is a Sonar or linter suppression, and `@SuppressWarnings` in the brace form (a `//` rationale on the same line as each key, not a comment above the annotation).
 
 ## Tests
 
@@ -155,13 +187,14 @@ Policy (upstream `juneau-code-conventions` skill → "Sonar Suppression Policy")
 the finding matches one of Juneau's *standing* suppression rules (below).
 
 **Suppression format (required).** When you do suppress, ALWAYS use the multiline brace/array form with a
-`//` rationale comment on **every** token — even a single token. The inline single-string form
-(`@SuppressWarnings("java:Sxxx") // ...`) is **not** allowed. Scope to the smallest practical target
-(class-level for the class-shape rules). Example:
+`//` rationale comment on the same line as **every** token — even a single token. The inline single-string
+form (`@SuppressWarnings("java:Sxxx")`) and a rationale on the line **above** the annotation are **not**
+allowed. Indent inner lines the way that file already indents (tabs in this repo). Scope to the smallest
+practical target (class-level for the class-shape rules). Example:
 
 ```java
 @SuppressWarnings({
-    "java:S6539" // Spring @Configuration legitimately aggregates cohesive bean wiring; splitting would fragment it.
+	"java:S6539" // Spring @Configuration legitimately aggregates cohesive bean wiring; splitting would fragment it.
 })
 ```
 

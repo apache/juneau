@@ -27,7 +27,9 @@ import org.junit.jupiter.api.Test;
 
 class GpgValidatorTest {
 
-	/** Records invocations and returns queued results. */
+	/**
+	 * Records invocations and returns queued results.
+	 */
 	static class RecordingRunner implements ProcessRunner {
 		final List<List<String>> calls = new ArrayList<>();
 		final List<String> stdins = new ArrayList<>();
@@ -83,7 +85,7 @@ class GpgValidatorTest {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// Bounded failure messages: gpg's own output must not reach the message (finding F2).
+	// Bounded failure messages: gpg's own output must not reach the message.
 	// -----------------------------------------------------------------------------------------------------------
 
 	private static String signFailureMessage(int exitCode, String output) {

@@ -23,7 +23,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.7 deploy-snapshot: mvn deploy; primes gpg-agent once (passphrase on stdin, never argv). Mutating. */
+/**
+ * Deploy-snapshot: mvn deploy; primes gpg-agent once (passphrase on stdin, never argv). Mutating.
+ */
 public class DeploySnapshotStep implements ReleaseStep {
 	@Override
 	public String id() {

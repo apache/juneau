@@ -24,13 +24,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-/** Merges historical (git-tag), promoted (GitHub Releases), and in-progress (local state) rows. */
+/**
+ * Merges historical (git-tag), promoted (GitHub Releases), and in-progress (local state) rows.
+ */
 public class ReleaseListService {
 
 	private final Supplier<List<Release>> tags;
 	private final Supplier<List<Release>> github;
 	private final Supplier<List<Release>> state;
 
+	/**
+	 * Creates a service merging rows from {@code tags}, {@code github}, and {@code state}.
+	 */
 	public ReleaseListService(Supplier<List<Release>> tags, Supplier<List<Release>> github,
 			Supplier<List<Release>> state) {
 		this.tags = tags;
@@ -38,6 +43,9 @@ public class ReleaseListService {
 		this.state = state;
 	}
 
+	/**
+	 * The merged, sorted Releases-tab rows from all three sources.
+	 */
 	public List<Release> list() {
 		// 1. Released rows keyed by version; git tags first, then enriched by GitHub Releases.
 		Map<String, Release> released = m();

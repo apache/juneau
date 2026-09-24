@@ -39,8 +39,8 @@ class ConsoleAssetsRestTest {
 			try (var resp = client.request("GET", ConsoleChromeMixin.CHROME_CSS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				// The bare mixin no longer bakes the footer copy into the stylesheet via a body::after rule; the
-				// footer is authored declaratively as real HTML in base.ftlh's <@footer> slot instead.
+				// The bare mixin must not bake the footer copy into the stylesheet via a body::after rule; the
+				// footer is authored declaratively as real HTML in base.ftlh's <@footer> slot.
 				assertFalse(body.contains("body::after{content:"),
 					"bare mixin must not inject a footer pseudo-element: " + body);
 				assertFalse(body.contains("loopback tool for cutting Apache Juneau releases"),

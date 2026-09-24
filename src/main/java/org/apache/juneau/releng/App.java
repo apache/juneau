@@ -20,9 +20,17 @@ package org.apache.juneau.releng;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Spring Boot entry point for the Release Manager application.
+ */
 @SpringBootApplication
 public class App {
-	@SuppressWarnings({ "resource" // The application context lives for the JVM/app lifetime; Spring registers a shutdown hook to close it.
+	
+	/**
+	 * Starts the Spring application context.
+	 */
+	@SuppressWarnings({
+		"resource" // The application context lives for the JVM/app lifetime; Spring registers a shutdown hook to close it.
 	})
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);

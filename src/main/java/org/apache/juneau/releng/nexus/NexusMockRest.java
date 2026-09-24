@@ -63,37 +63,57 @@ public class NexusMockRest extends BasicRestServlet {
 
 	private final transient NexusMockModel model;
 
+	/**
+	 * Creates a mock servlet backed by a fresh {@link NexusMockModel} scoped to {@code profileId}.
+	 */
 	public NexusMockRest(String profileId) {
 		this.model = new NexusMockModel(profileId);
 	}
 
-	/** The backing model, for run-start reset wiring and tests. */
+	/**
+	 * The backing model, for run-start reset wiring and tests.
+	 */
 	public NexusMockModel model() {
 		return model;
 	}
 
+	/**
+	 * Lists the mock profile's staging repos (lazily seeding one if none exists yet).
+	 */
 	@RestGet(path = "/service/local/staging/profile_repositories/{profileId}", produces = "application/json")
 	public Reader profileRepositories(@Path("profileId") String profileId, RestResponse res) {
 		return json(res, guarded(() -> route(model, "GET", "/service/local/staging/profile_repositories/" + profileId, null)));
 	}
 
+	/**
+	 * Returns single-repo detail for {@code repoId}.
+	 */
 	@RestGet(path = "/service/local/staging/repository/{repoId}", produces = "application/json")
 	public Reader repository(@Path("repoId") String repoId, RestResponse res) {
 		return json(res, guarded(() -> route(model, "GET", "/service/local/staging/repository/" + repoId, null)));
 	}
 
+	/**
+	 * Closes the staged repo named in the request body.
+	 */
 	@RestPost(path = "/service/local/staging/bulk/close", produces = "application/json")
 	public Reader close(@Content Reader body, RestResponse res) throws IOException {
 		var text = read(body);
 		return json(res, guarded(() -> route(model, "POST", "/service/local/staging/bulk/close", text)));
 	}
 
+	/**
+	 * Promotes (releases) the staged repo named in the request body.
+	 */
 	@RestPost(path = "/service/local/staging/bulk/promote", produces = "application/json")
 	public Reader promote(@Content Reader body, RestResponse res) throws IOException {
 		var text = read(body);
 		return json(res, guarded(() -> route(model, "POST", "/service/local/staging/bulk/promote", text)));
 	}
 
+	/**
+	 * Drops the staged repo named in the request body.
+	 */
 	@RestPost(path = "/service/local/staging/bulk/drop", produces = "application/json")
 	public Reader drop(@Content Reader body, RestResponse res) throws IOException {
 		var text = read(body);
@@ -129,7 +149,9 @@ public class NexusMockRest extends BasicRestServlet {
 		return i < 0 ? path : path.substring(i + 1);
 	}
 
-	/** Wraps already-serialized JSON text so the framework streams it as-is instead of re-serializing it. */
+	/**
+	 * Wraps already-serialized JSON text so the framework streams it as-is instead of re-serializing it.
+	 */
 	private static Reader json(RestResponse res, String text) {
 		res.setHeader(ContentType.APPLICATION_JSON);
 		return new StringReader(text);

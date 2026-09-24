@@ -17,7 +17,9 @@
 
 package org.apache.juneau.releng.engine;
 
-/** Run-level status. */
+/**
+ * Run-level status.
+ */
 public enum RunStatus {
 	RUNNING, AWAITING_VOTE, FAILED, RELEASED, DROPPED
 }

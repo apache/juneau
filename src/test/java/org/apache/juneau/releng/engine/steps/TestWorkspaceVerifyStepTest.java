@@ -29,7 +29,7 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 /**
- * §5.6/§8.4 (decision S10): the four workspace-template {@code -bin.zip} modules derived from the 10.0
+ * The four workspace-template {@code -bin.zip} modules derived from the 10.0
  * reactor's actual {@code pom.xml} assembly-plugin wiring, unzipped from their {@code <module>/target/}
  * pre-{@code release-prepare} SNAPSHOT paths.
  */

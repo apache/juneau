@@ -28,7 +28,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.apache.juneau.marshall.marshaller.Json;
 
-/** Reads/writes {@code release-<version>.json} state files under {@code rm.state.dir}. */
+/**
+ * Reads/writes {@code release-<version>.json} state files under {@code rm.state.dir}.
+ */
 public class RunStateStore {
 
 	private final Path stateDir;
@@ -41,10 +43,16 @@ public class RunStateStore {
 		// No-op by default; ReleaseEngine installs a snapshot-publishing hook.
 	};
 
+	/**
+	 * Constructs a store rooted at {@code stateDir}.
+	 */
 	public RunStateStore(Path stateDir) {
 		this.stateDir = stateDir;
 	}
 
+	/**
+	 * The root directory this store reads/writes under.
+	 */
 	public Path stateDir() {
 		return stateDir;
 	}
@@ -53,14 +61,18 @@ public class RunStateStore {
 		return stateDir.resolve("release-" + version + ".json");
 	}
 
-	/** Installs the callback invoked with the just-saved run after every {@link #save}. */
+	/**
+	 * Installs the callback invoked with the just-saved run after every {@link #save}.
+	 */
 	public void setOnSave(Consumer<RunState> hook) {
 		this.onSave = hook == null ? rs -> {
 			// No-op: clearing the hook restores default behavior.
 		} : hook;
 	}
 
-	/** Persist the run (pretty JSON), creating {@code rm.state.dir} if absent. */
+	/**
+	 * Persist the run (pretty JSON), creating {@code rm.state.dir} if absent.
+	 */
 	public synchronized void save(RunState rs) {
 		try {
 			Files.createDirectories(stateDir);
@@ -72,7 +84,9 @@ public class RunStateStore {
 		onSave.accept(rs);
 	}
 
-	/** Deletes the persisted file for {@code version} if it exists. Used when a run is renamed. */
+	/**
+	 * Deletes the persisted file for {@code version} if it exists. Used when a run is renamed.
+	 */
 	public synchronized void delete(String version) {
 		try {
 			Files.deleteIfExists(fileFor(version));
@@ -81,6 +95,9 @@ public class RunStateStore {
 		}
 	}
 
+	/**
+	 * The persisted run for {@code version}, or empty if none exists.
+	 */
 	public Optional<RunState> load(String version) {
 		var f = fileFor(version);
 		if (!Files.isRegularFile(f))
@@ -92,7 +109,9 @@ public class RunStateStore {
 		}
 	}
 
-	/** Every persisted run, loaded from disk. */
+	/**
+	 * Every persisted run, loaded from disk.
+	 */
 	public List<RunState> loadAll() {
 		var out = new ArrayList<RunState>();
 		if (!Files.isDirectory(stateDir))
@@ -114,7 +133,9 @@ public class RunStateStore {
 		return out;
 	}
 
-	/** The single run whose status is RUNNING or AWAITING_VOTE, if any. Used as the start-lock. */
+	/**
+	 * The single run whose status is RUNNING or AWAITING_VOTE, if any. Used as the start-lock.
+	 */
 	public Optional<RunState> activeRun() {
 		return loadAll().stream().filter(r -> r.status == RunStatus.RUNNING || r.status == RunStatus.AWAITING_VOTE)
 				.findFirst();

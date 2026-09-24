@@ -23,18 +23,27 @@ import java.util.Map;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.util.ProcessRunner;
 
-/** Produces rows from GitHub Releases via {@code gh release list --repo <slug>}. */
+/**
+ * Produces rows from GitHub Releases via {@code gh release list --repo <slug>}.
+ */
 public class GithubReleaseSource {
 
 	private final ProcessRunner runner;
 	private final String repoSlug;
 
+	/**
+	 * Creates a source that lists releases in {@code repoSlug} via {@code gh}.
+	 */
 	public GithubReleaseSource(ProcessRunner runner, String repoSlug) {
 		this.runner = runner;
 		this.repoSlug = repoSlug;
 	}
 
-	@SuppressWarnings({ "unchecked" // Parsed JSON is cast to its known generic shape.
+	/**
+	 * Rows for every GitHub Release in {@code repoSlug}, {@code DRAFT} or {@code RELEASED}.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Parsed JSON is cast to its known generic shape.
 	})
 	public List<Release> list() {
 		var json = runner.runText(List.of("gh", "api", "repos/" + repoSlug + "/releases", "--paginate"));

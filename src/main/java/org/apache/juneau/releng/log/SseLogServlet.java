@@ -54,27 +54,44 @@ public class SseLogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final long HEARTBEAT_MS = 25_000;
 
-	/** Trailing-segment sentinel selecting the run-state channel instead of a per-step console. */
+	/**
+	 * Trailing-segment sentinel selecting the run-state channel instead of a per-step console.
+	 */
 	public static final String STATE_SEGMENT = "state";
 
-	/** SSE comment frame sent when no log line arrives within the heartbeat interval (keeps the connection alive). */
+	/**
+	 * SSE comment frame sent when no log line arrives within the heartbeat interval (keeps the connection alive).
+	 */
 	public static final String HEARTBEAT = ": heartbeat\n\n";
 
-	/** (version, stepId) -> that step's current-RC log Path (from RunStateStore's StepState.logRef). */
+	/**
+	 * (version, stepId) -> that step's current-RC log Path (from RunStateStore's StepState.logRef).
+	 */
 	private final transient BiFunction<String, String, Optional<Path>> logPathForStep;
-	/** (version, stepId) -> that step's LogBroadcaster. */
+	/**
+	 * (version, stepId) -> that step's LogBroadcaster.
+	 */
 	private final transient BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep;
-	/** version -> that run's current snapshot, as JSON. */
+	/**
+	 * version -> that run's current snapshot, as JSON.
+	 */
 	private final transient Function<String, Optional<String>> initialStateJsonForVersion;
-	/** version -> that run's RunStateBroadcaster. */
+	/**
+	 * version -> that run's RunStateBroadcaster.
+	 */
 	private final transient Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion;
 
-	/** Console-only constructor (no state channel); used where a caller has no run-state wiring to offer. */
+	/**
+	 * Console-only constructor (no state channel); used where a caller has no run-state wiring to offer.
+	 */
 	public SseLogServlet(BiFunction<String, String, Optional<Path>> logPathForStep,
 			BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep) {
 		this(logPathForStep, broadcasterForStep, version -> Optional.empty(), version -> Optional.empty());
 	}
 
+	/**
+	 * Full constructor, wiring both the per-step console channel and the run-state channel.
+	 */
 	public SseLogServlet(BiFunction<String, String, Optional<Path>> logPathForStep,
 			BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep,
 			Function<String, Optional<String>> initialStateJsonForVersion,
@@ -85,7 +102,9 @@ public class SseLogServlet extends HttpServlet {
 		this.stateBroadcasterForVersion = stateBroadcasterForVersion;
 	}
 
-	/** SSE frame for a (possibly multi-line) payload: each physical line gets its own {@code data:} prefix. */
+	/**
+	 * SSE frame for a (possibly multi-line) payload: each physical line gets its own {@code data:} prefix.
+	 */
 	public static String sse(String payload) {
 		var sb = new StringBuilder();
 		for (var line : payload.split("\n", -1))
@@ -95,7 +114,8 @@ public class SseLogServlet extends HttpServlet {
 	}
 
 	@Override
-	@SuppressWarnings({ "resource" // The servlet container owns the response writer's lifecycle; closing it here would break SSE streaming/tailing.
+	@SuppressWarnings({
+		"resource" // The servlet container owns the response writer's lifecycle; closing it here would break SSE streaming/tailing.
 	})
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		var seg = trailingTwoSegments(req.getPathInfo());
@@ -161,7 +181,9 @@ public class SseLogServlet extends HttpServlet {
 		tail(bc, out);
 	}
 
-	/** Tails {@code bc} to {@code out}, emitting a heartbeat when idle, until the client disconnects. */
+	/**
+	 * Tails {@code bc} to {@code out}, emitting a heartbeat when idle, until the client disconnects.
+	 */
 	private void tail(Broadcaster bc, PrintWriter out) {
 		var queue = new LinkedBlockingQueue<String>();
 		var subscription = bc.subscribe(queue::offer);
@@ -191,7 +213,9 @@ public class SseLogServlet extends HttpServlet {
 		}
 	}
 
-	/** Splits {@code /{version}/{stepId}} into {@code [version, stepId]}; either may be empty if absent. */
+	/**
+	 * Splits {@code /{version}/{stepId}} into {@code [version, stepId]}; either may be empty if absent.
+	 */
 	private static String[] trailingTwoSegments(String pathInfo) {
 		if (ib(pathInfo))
 			return new String[] { "", "" };

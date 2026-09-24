@@ -24,11 +24,16 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.1 preflight: verify toolchain + target branch exists (never creates). Read-only; preview == apply. */
+/**
+ * Preflight: verify toolchain + target branch exists (never creates). Read-only; preview == apply.
+ */
 public class PreflightStep implements ReleaseStep {
 
 	private final BranchResolver branches;
 
+	/**
+	 * Constructs the step with the given {@link BranchResolver}.
+	 */
 	public PreflightStep(BranchResolver branches) {
 		this.branches = branches;
 	}

@@ -24,7 +24,9 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.23 compose-announcement-email: draft-and-open [ANNOUNCEMENT]. */
+/**
+ * Compose-announcement-email: draft-and-open [ANNOUNCEMENT].
+ */
 public class ComposeAnnouncementEmailStep implements ReleaseStep {
 	@Override
 	public String id() {

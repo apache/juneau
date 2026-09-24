@@ -55,15 +55,23 @@ import jakarta.servlet.http.HttpServletRequest;
 @Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
 public class ReleaseRest extends BasicRestResource {
 
-	/** This resource's page id, shared by {@link #page(RestRequest)}'s template name and the FTL card id. */
+	/**
+	 * This resource's page id, shared by {@link #page(RestRequest)}'s template name and the FTL card id.
+	 */
 	static final String NAME = "releases";
 
 	private final ReleaseListService service;
 
+	/**
+	 * Wires the release list service backing {@link #data()}.
+	 */
 	public ReleaseRest(ReleaseListService service) {
 		this.service = service;
 	}
 
+	/**
+	 * The Freemarker mixin used to render this resource's templates.
+	 */
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
@@ -75,14 +83,16 @@ public class ReleaseRest extends BasicRestResource {
 	 * The DataTables server-side-processing settings for {@link #data()}: a {@link DataTablesQueryProtocol} bound to
 	 * {@link Release} so the protocol's positional {@code columns[i]} resolution maps to the row bean's properties.
 	 * The FTL {@code <@card type="datatables">} catalog declares the same column order client-side; this is the
-	 * server-side half, no longer sourced from a Java {@code ViewDef}.
+	 * server-side half of that contract.
 	 */
 	@Bean
 	public QueryableSettings queryableSettings() {
 		return QueryableSettings.create().protocol(new DataTablesQueryProtocol(Release.class)).build();
 	}
 
-	/** Human page — the Releases shell; the table catalog is authored in {@code releases.ftlh} and mounted client-side. */
+	/**
+	 * Human page — the Releases shell; the table catalog is authored in {@code releases.ftlh} and mounted client-side.
+	 */
 	@RestGet("/")
 	public View page(RestRequest req) {
 		return ConsolePage.of(NAME, req);
@@ -110,8 +120,8 @@ public class ReleaseRest extends BasicRestResource {
 	}
 
 	/**
-	 * Human page — a single release's standalone detail view (bookmarkable). The Summary View version cell is no
-	 * longer a hyperlink; expand uses {@link #expand(String)} instead.
+	 * Human page — a single release's standalone detail view (bookmarkable). The Summary View version cell expands
+	 * via {@link #expand(String)} rather than linking here directly.
 	 * {@code rc} is the RC number (e.g. {@code 1} for RC1); it's not currently used to pick among multiple
 	 * historical RCs of the same version (only one {@link Release} row exists per version today), but is
 	 * part of the path so a future multi-RC history view doesn't need a URL-breaking change.

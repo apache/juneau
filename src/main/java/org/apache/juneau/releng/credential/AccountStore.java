@@ -43,23 +43,32 @@ public class AccountStore {
 
 	private final Path file;
 
+	/**
+	 * Backs the store with {@code accounts.properties} under {@code stateDir}.
+	 */
 	public AccountStore(Path stateDir) {
 		this.file = stateDir.resolve("accounts.properties");
 	}
 
-	/** The persisted account for {@code spec}, or empty if never stored (or since deleted). */
+	/**
+	 * The persisted account for {@code spec}, or empty if never stored (or since deleted).
+	 */
 	public synchronized Optional<String> get(CredentialSpec spec) {
 		return Optional.ofNullable(load().getProperty(spec.id)).filter(s -> !s.isBlank());
 	}
 
-	/** Persist {@code account} for {@code spec} immediately, creating {@code rm.state.dir} if absent. */
+	/**
+	 * Persist {@code account} for {@code spec} immediately, creating {@code rm.state.dir} if absent.
+	 */
 	public synchronized void put(CredentialSpec spec, String account) {
 		var props = load();
 		props.setProperty(spec.id, account);
 		save(props);
 	}
 
-	/** Forget the persisted account for {@code spec} (credential delete). */
+	/**
+	 * Forget the persisted account for {@code spec} (credential delete).
+	 */
 	public synchronized void remove(CredentialSpec spec) {
 		var props = load();
 		if (props.remove(spec.id) != null)
@@ -99,8 +108,8 @@ public class AccountStore {
 	 * enumerates which Apache account this machine releases as, readable by every account on the host. Setting it
 	 * explicitly also means the file does not sit at different permissions depending on how the app was launched.
 	 *
-	 * <p>Applied after the write rather than via {@code createFile} attributes so that an existing file created
-	 * before this change is narrowed too, instead of keeping its original mode forever.
+	 * <p>Applied after the write rather than via {@code createFile} attributes so that an existing file with a
+	 * looser mode is narrowed too, instead of keeping its original mode forever.
 	 *
 	 * <p>Silently skipped where POSIX permissions do not apply. A non-POSIX filesystem is not a reason to fail a
 	 * credential save, and this is a hardening step on a non-secret file rather than a control something depends
