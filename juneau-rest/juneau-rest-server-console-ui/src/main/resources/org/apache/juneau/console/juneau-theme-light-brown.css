@@ -74,6 +74,18 @@ html:root {
 	--jc-tag-red-bg: #f8d7da;
 	--jc-tag-red-text: #721c24;
 	--jc-tag-red-border: #f5c6cb;
+	--jc-probe-ok-bg: #d1fae5;
+	--jc-probe-ok-text: #065f46;
+	--jc-probe-ok-dot: #10b981;
+	--jc-probe-fail-bg: #fee2e2;
+	--jc-probe-fail-text: #991b1b;
+	--jc-probe-fail-dot: #dc2626;
+	--jc-probe-warn-bg: #fef3c7;
+	--jc-probe-warn-text: #92400e;
+	--jc-probe-warn-dot: #f59e0b;
+	--jc-probe-neutral-bg: #e5e7eb;
+	--jc-probe-neutral-text: #374151;
+	--jc-probe-neutral-dot: #6b7280;
 	--jc-header-height: 56px;
 	--jc-nav-indicator-width: 3px;
 	--jc-page-nav-hairline: 2px;

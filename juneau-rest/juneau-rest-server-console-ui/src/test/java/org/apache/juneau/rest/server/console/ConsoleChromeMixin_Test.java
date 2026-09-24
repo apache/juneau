@@ -562,10 +562,11 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 70 = previous 55 plus the 15 canonical --jc-pill-* status-chip tokens (Task 15); the 15 legacy
-		// --jc-tag-* tokens are RETAINED as var(--jc-pill-*) aliases (badges/avatars/frozen calendar), so the
-		// count grows by exactly the pill family, not by a rename.
-		assertEquals(70, Theme.OPEN.getTokens().size());
+		// 82 = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
+		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
+		// token, so the probe family adds exactly 12, not a ring token.
+		assertEquals(82, Theme.OPEN.getTokens().size());
 		assertEquals("#f5f6f9", Theme.OPEN.getTokens().get("--jc-main-bg"));
 		assertEquals("#ffffff", Theme.OPEN.getTokens().get("--jc-card-bg"));
 		assertEquals("16px 16px 8px", Theme.OPEN.getTokens().get("--jc-card-padding"));

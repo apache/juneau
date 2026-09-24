@@ -734,6 +734,20 @@ a:hover { text-decoration: underline; }
 .tag.stage.fail,
 .tag.stage.failed { background-color: var(--jc-pill-red-bg); color: var(--jc-pill-red-text); border-color: var(--jc-pill-red-border); }
 
+/* Status probes.  A client-side control (see juneau-views.css .jc-probe for the shape/geometry): a status chip with a
+   visible dot, sized a touch larger than a pill.  Exactly four statuses paint from the dedicated --jc-probe-* palette
+   (light wash + ink + dot fill); the selected probe in a group draws a themed accent ring from --jc-accent-selected.
+   Selecting a probe never repaints its status colours. */
+.jc-probe-ok      { background-color: var(--jc-probe-ok-bg);      color: var(--jc-probe-ok-text); }
+.jc-probe-ok      .jc-probe-dot { background-color: var(--jc-probe-ok-dot); }
+.jc-probe-fail    { background-color: var(--jc-probe-fail-bg);    color: var(--jc-probe-fail-text); }
+.jc-probe-fail    .jc-probe-dot { background-color: var(--jc-probe-fail-dot); }
+.jc-probe-warn    { background-color: var(--jc-probe-warn-bg);    color: var(--jc-probe-warn-text); }
+.jc-probe-warn    .jc-probe-dot { background-color: var(--jc-probe-warn-dot); }
+.jc-probe-neutral { background-color: var(--jc-probe-neutral-bg); color: var(--jc-probe-neutral-text); }
+.jc-probe-neutral .jc-probe-dot { background-color: var(--jc-probe-neutral-dot); }
+.jc-probe[aria-checked="true"] { box-shadow: 0 0 0 2px var(--jc-accent-selected); }
+
 /* ==========================================================================
    Data table (DataTables style)
    ========================================================================== */

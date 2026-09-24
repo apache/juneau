@@ -369,6 +369,56 @@
 }
 
 /*
+ * Status probe.  A selectable status chip, sized a touch larger than a pill and carrying a VISIBLE status dot (unlike
+ * the pill, whose dot is collapsed above).  This file owns only shape/geometry/state mechanics and carries NO palette:
+ * the per-status wash/ink/dot fill and the themed selected ring live in console-ui chrome.css (.jc-probe-<status> and
+ * .jc-probe[aria-checked="true"]).  Standalone (no chrome), the dot inherits currentColor and the selected ring below
+ * draws in currentColor so the control is still legible and its selection still visible.  Selection is one-per-group
+ * (radiogroup/radio semantics, roving tabindex); selecting never repaints status colour.
+ */
+.jc-probe-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jc-space-2);
+}
+
+.jc-probe {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-2);
+	padding: 6px 14px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-weight: 500;
+	cursor: pointer;
+	user-select: none;
+}
+
+.jc-probe-dot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: currentColor;
+	flex-shrink: 0;
+}
+
+/* A disabled probe is dimmed and non-interactive (matches the disabled action pill); skipped in roving focus and not
+ * selectable (see juneau-views.js). */
+.jc-probe.is-disabled,
+.jc-probe[aria-disabled="true"] {
+	cursor: default;
+	opacity: 0.5;
+}
+
+/* Selected probe: an accent ring.  chrome.css recolors this to the themed --jc-accent-selected; standalone it draws in
+ * currentColor.  Selecting does NOT change the status wash/ink. */
+.jc-probe[aria-checked="true"] {
+	box-shadow: 0 0 0 2px currentColor;
+}
+
+/*
  * Quick-stats strip - the server-painted at-a-glance figures row above a table's toolbar.  Shape only; the four
  * painted tones reuse the same shared --jc-tone-* tokens the pill dot does, so a tone name is one colour across the
  * toolkit.  Nothing here is interactive: there is no cursor, no hover, and no focus rule, because the emitted markup
@@ -466,6 +516,7 @@
 .juneau-view-pagingpill-menu-option:focus-visible,
 .juneau-view-columnsearch-input:focus-visible,
 .jc-pill[role="button"]:focus-visible,
+.jc-probe:focus-visible,
 .juneau-ts:focus-visible,
 .jc-tab:focus-visible,
 .jc-subtab:focus-visible {

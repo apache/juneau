@@ -153,6 +153,23 @@ public final class Theme {
 		.token("--jc-tag-red-bg", "var(--jc-pill-red-bg)")
 		.token("--jc-tag-red-text", "var(--jc-pill-red-text)")
 		.token("--jc-tag-red-border", "var(--jc-pill-red-border)")
+		// Probe palette (client-side status probes).  A separate family from the pill/tag triads: probes SHOW a status
+		// dot and carry their own light status wash + ink, keyed to the four probe statuses ok/fail/warn/neutral.  Each
+		// status sets a background wash, a text (ink) colour, and the dot fill.  The selected-state ring reuses the
+		// existing --jc-accent-selected token (no new ring token).  Values are the measured status palette, independent
+		// of both the pill palette and the theme accent (neutral is a neutral grey, not the accent).
+		.token("--jc-probe-ok-bg", "#d1fae5")
+		.token("--jc-probe-ok-text", "#065f46")
+		.token("--jc-probe-ok-dot", "#10b981")
+		.token("--jc-probe-fail-bg", "#fee2e2")
+		.token("--jc-probe-fail-text", "#991b1b")
+		.token("--jc-probe-fail-dot", "#dc2626")
+		.token("--jc-probe-warn-bg", "#fef3c7")
+		.token("--jc-probe-warn-text", "#92400e")
+		.token("--jc-probe-warn-dot", "#f59e0b")
+		.token("--jc-probe-neutral-bg", "#e5e7eb")
+		.token("--jc-probe-neutral-text", "#374151")
+		.token("--jc-probe-neutral-dot", "#6b7280")
 		// Additive token gaps.  Appended after the tag palette so --jc-font stays first and the tag
 		// triads stay contiguous (see Theme_TokenOrdering_Test.a02).  All are behaviour-preserving: each default
 		// equals the literal it replaces in chrome.css, so the shipped chrome renders pixel-identically.

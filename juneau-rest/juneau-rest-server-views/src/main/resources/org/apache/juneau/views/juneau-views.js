@@ -2370,6 +2370,216 @@
 		};
 	}
 
+	// ==================================================================================================================
+	// STATUS PROBE GROUP - single-select status chips (enhances server-painted markup; JuneauViews.initProbeGroups)
+	// ==================================================================================================================
+	//
+	// A probe group is server-painted markup: a container carrying data-juneau-probe-group (and class .jc-probe-group)
+	// wrapping one or more .jc-probe chips, each carrying a status class (.jc-probe-ok / -fail / -warn / -neutral) and a
+	// visible .jc-probe-dot.  Juneau owns SELECTION only: exactly one probe per group is selected (radiogroup/radio
+	// semantics with a roving tabindex), and selecting one clears the rest.  The app keeps the click ACTION (a probe
+	// click can re-run the underlying check); re-running only repaints a chip's status class, which must NOT disturb
+	// selection - so selection is keyed to each probe's IDENTITY (data-juneau-probe), never its DOM order or status
+	// class.  Selecting never changes a probe's status colour (that is chrome.css's .jc-probe-<status> palette).
+	//
+	// The initially-selected probe is declared in markup (aria-checked="true") and shown on the first paint with no
+	// round-trip.  onSelect / the "juneau:probe-select" event fire on a real selection CHANGE only (a click that moves
+	// selection, or an arrow key) - never on init, on an imperative select(), or on a no-op re-click of the selected
+	// probe.  A disabled probe (.is-disabled or [aria-disabled="true"], reusing the pill disabled look) is skipped by
+	// the roving focus and is not selectable.  An empty group is a no-op: nothing is focusable and nothing is selected.
+
+	const PROBE_GROUP_ATTR = "data-juneau-probe-group";
+	const PROBE_ID_ATTR = "data-juneau-probe";
+
+	/** True if a probe is disabled: carries the shared `is-disabled` class or `aria-disabled="true"`. */
+	function probeIsDisabled(el) {
+		if (!el) return true;
+		const cls = typeof el.getAttribute === "function" ? el.getAttribute("class") : null;
+		const cn = cls != null && cls !== "" ? cls : (typeof el.className === "string" ? el.className : "");
+		if (cn && cn.split(/\s+/).indexOf("is-disabled") >= 0) return true;
+		return el.getAttribute ? el.getAttribute("aria-disabled") === "true" : false;
+	}
+
+	/** The .jc-probe chips this group OWNS - one whose nearest enclosing group is exactly `group` (nested groups keep their own). */
+	function probesInGroup(group) {
+		const out = [];
+		const all = group && group.querySelectorAll ? group.querySelectorAll(".jc-probe") : [];
+		for (const el of all) {
+			const owner = el.closest ? el.closest("[" + PROBE_GROUP_ATTR + "]") : group;
+			if (owner === group) out.push(el);
+		}
+		return out;
+	}
+
+	/** A probe's stable identity: its authored data-juneau-probe, else an index-derived id stamped once so repaints keep it. */
+	function probeIdentity(el, i) {
+		const existing = el.getAttribute ? el.getAttribute(PROBE_ID_ATTR) : null;
+		if (existing != null && existing !== "") return existing;
+		const id = "jc-probe-" + i;
+		if (el.setAttribute) el.setAttribute(PROBE_ID_ATTR, id);
+		return id;
+	}
+
+	/**
+	 * Roving-tabindex keyboard target for a probe group: given the pressed key, the current index and a per-probe
+	 * `enabled` flag array, returns the index to move selection to, or -1 for a key this widget does not handle (or when
+	 * no probe is enabled).  Right/Down step forward, Left/Up step back - both skip disabled probes and wrap; Home/End
+	 * jump to the first/last ENABLED probe.  Pure - no DOM - so the arrow-key contract is unit-checkable.
+	 */
+	function probeTargetIndex(key, currentIndex, enabled) {
+		const n = enabled.length;
+		if (n === 0 || enabled.indexOf(true) < 0) return -1;
+		if (key === "Home") {
+			for (let i = 0; i < n; i++) if (enabled[i]) return i;
+			return -1;
+		}
+		if (key === "End") {
+			for (let i = n - 1; i >= 0; i--) if (enabled[i]) return i;
+			return -1;
+		}
+		let step = 0;
+		if (key === "ArrowRight" || key === "ArrowDown") step = 1;
+		else if (key === "ArrowLeft" || key === "ArrowUp") step = -1;
+		else return -1;
+		let i = currentIndex;
+		for (let c = 0; c < n; c++) {
+			i = (i + step + n) % n;
+			if (enabled[i]) return i;
+		}
+		return -1;
+	}
+
+	/**
+	 * Enhances a server-painted probe group in place: wires radiogroup/radio roles, the roving tabindex, click and
+	 * arrow-key selection, and returns an imperative handle {group, getSelected(), select(idOrEl), repaint()}.
+	 * Idempotent - a second call on the same group returns the handle from the first (stored on group._juneauProbeCtl).
+	 *
+	 * @param group The container element carrying data-juneau-probe-group.
+	 * @param opts {onSelect(id, probe, group)} - optional; fires on a real selection change only.
+	 * @return The control handle, or null when `group` is falsy.
+	 */
+	function enhanceProbeGroup(group, opts) {
+		if (!group) return null;
+		if (group._juneauProbeCtl) return group._juneauProbeCtl;
+		const o = opts || {};
+		let onSelect = typeof o.onSelect === "function" ? o.onSelect : null;
+		let selectedId = null;
+
+		if (group.setAttribute) group.setAttribute("role", "radiogroup");
+
+		function probes() { return probesInGroup(group); }
+		function idOf(el) { return el && el.getAttribute ? el.getAttribute(PROBE_ID_ATTR) : null; }
+		function findById(id) {
+			if (id == null) return null;
+			for (const el of probes()) if (idOf(el) === id) return el;
+			return null;
+		}
+
+		// Stamp identity + role on each probe once, so selection survives status repaints (identity, not DOM order).
+		for (const [i, el] of probes().entries()) {
+			probeIdentity(el, i);
+			if (el.getAttribute && el.getAttribute("role") !== "radio" && el.setAttribute) el.setAttribute("role", "radio");
+		}
+
+		// Repaints aria-checked (by identity) and the roving tabindex: the single tab stop is the selected probe, or the
+		// first enabled probe when nothing is selected.  Selection colour is chrome.css's job; this touches only state.
+		function paint() {
+			const list = probes();
+			const enabled = list.map(function (el) { return !probeIsDisabled(el); });
+			let tabStop = -1;
+			for (const [i, el] of list.entries()) {
+				const checked = idOf(el) === selectedId;
+				if (el.setAttribute) el.setAttribute("aria-checked", checked ? "true" : "false");
+				if (checked && enabled[i]) tabStop = i;
+			}
+			if (tabStop < 0) for (let i = 0; i < list.length; i++) if (enabled[i]) { tabStop = i; break; }
+			for (const [i, el] of list.entries()) el.tabIndex = (i === tabStop) ? 0 : -1;
+		}
+
+		function emit(id) {
+			const el = findById(id);
+			if (onSelect) onSelect(id, el, group);
+			if (typeof group.dispatchEvent === "function" && typeof CustomEvent === "function")
+				group.dispatchEvent(new CustomEvent("juneau:probe-select", { detail: { id: id, probe: el, group: group } }));
+		}
+
+		// Selects by identity.  `notify` gates onSelect/the event (false for init + imperative select()); an unknown or
+		// disabled id is rejected, and re-selecting the current id is a no-op that never notifies.
+		function selectId(id, notify) {
+			const el = findById(id);
+			if (!el || probeIsDisabled(el)) return false;
+			const changed = id !== selectedId;
+			selectedId = id;
+			paint();
+			if (changed && notify) emit(id);
+			return changed;
+		}
+
+		// Initial selection: the first enabled probe marked aria-checked="true" in markup, else the first enabled probe.
+		// An empty or all-disabled group leaves nothing selected (paint still clears aria-checked and the tab stop).
+		// Named distinctly from the row-selection checkbox initializer so source-shape scanners do not collide.
+		(function initProbeSelection() {
+			const list = probes();
+			if (!list.length) return;
+			let initial = null;
+			for (const el of list)
+				if (!probeIsDisabled(el) && el.getAttribute && el.getAttribute("aria-checked") === "true") { initial = idOf(el); break; }
+			if (initial == null)
+				for (const el of list) if (!probeIsDisabled(el)) { initial = idOf(el); break; }
+			if (initial != null) selectId(initial, false);
+			else paint();
+		})();
+
+		group.addEventListener("click", function (e) {
+			const t = e && e.target;
+			const el = t && t.closest ? t.closest(".jc-probe") : null;
+			if (!el) return;
+			const owner = el.closest ? el.closest("[" + PROBE_GROUP_ATTR + "]") : group;
+			if (owner !== group) return;          // a click on a nested group's probe is not ours
+			if (probeIsDisabled(el)) return;
+			selectId(idOf(el), true);              // re-click of the selected probe is a no-op inside selectId
+			if (typeof el.focus === "function") el.focus();
+		});
+
+		group.addEventListener("keydown", function (e) {
+			if (!e) return;
+			const list = probes();
+			if (!list.length) return;
+			const enabled = list.map(function (el) { return !probeIsDisabled(el); });
+			let current = -1;
+			const focused = (typeof document !== "undefined") ? document.activeElement : null;
+			for (const [i, el] of list.entries()) if (el === focused) { current = i; break; }
+			if (current < 0) for (const [i, el] of list.entries()) if (idOf(el) === selectedId) { current = i; break; }
+			const next = probeTargetIndex(e.key, current, enabled);
+			if (next < 0) return;
+			if (typeof e.preventDefault === "function") e.preventDefault();
+			const nextEl = list[next];
+			selectId(idOf(nextEl), true);
+			if (typeof nextEl.focus === "function") nextEl.focus();
+		});
+
+		const ctl = {
+			group: group,
+			getSelected: function () { return findById(selectedId); },
+			// Imperative selection: never notifies (matches init).  Accepts an id string or a probe element.
+			select: function (idOrEl) {
+				const id = (typeof idOrEl === "string") ? idOrEl : idOf(idOrEl);
+				return selectId(id, false);
+			},
+			repaint: paint,
+			_setOnSelect: function (fn) { onSelect = (typeof fn === "function") ? fn : null; }
+		};
+		group._juneauProbeCtl = ctl;
+		return ctl;
+	}
+
+	/** Enhances every probe group under `root` (default: document).  Idempotent per group. */
+	function initProbeGroups(root) {
+		const scope = root || document;
+		const groups = scope.querySelectorAll ? scope.querySelectorAll("[" + PROBE_GROUP_ATTR + "]") : [];
+		for (const g of groups) enhanceProbeGroup(g);
+	}
+
 	// The detail-hosted bar slot (BarSlotTable constants of the same names on the server).  DETAIL_BAR_MARKER carries
 	// the slot identity; DETAIL_BAR_META finds the id-less sidecar the <template> ships; DETAIL_BAR_SIDECAR_PREFIX is
 	// the prefix juneau-chrome.js's readSidecar() concatenates - which is exactly why the minted MARKER is
@@ -7229,6 +7439,8 @@
 			if (t.closest?.("[" + NESTED_ATTR + "]") || t.closest?.(".juneau-view-detail-panel")) return;
 			initTable(t);
 		});
+		// Server-painted status probe groups are standalone chrome (not tied to a table); enhance them page-wide.
+		initProbeGroups(document);
 	}
 
 	// HTML-slot page nav is author markup, not a runtime: the current section/child already carry
@@ -7508,6 +7720,12 @@
 		detailTabTargetIndex: detailTabTargetIndex,
 		activateDetailTab: activateDetailTab,
 		buildRibbonStrip: buildRibbonStrip,
+		// Status probe groups - single-select status chips; exposed for the node harness + manual verification.
+		probeTargetIndex: probeTargetIndex,
+		probeIsDisabled: probeIsDisabled,
+		probesInGroup: probesInGroup,
+		enhanceProbeGroup: enhanceProbeGroup,
+		initProbeGroups: initProbeGroups,
 		relocateDetailBarSlot: relocateDetailBarSlot,
 		mintDetailBarSlotIdentity: mintDetailBarSlotIdentity,
 		teardownDetailBarSlot: teardownDetailBarSlot,
