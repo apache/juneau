@@ -40,52 +40,6 @@ import org.junit.jupiter.api.io.*;
 /**
  * The credential-overwrite vector, reproduced and then closed.
  *
- * <p>
- * The finding this pins down was established by reading framework defaults rather than by issuing a request:
- * {@code CredentialRest} extends {@code BasicRestResource}, whose default parser list includes
- * {@code UrlEncodingParser} and {@code PlainTextParser}, and {@code disableContentParam} defaults to
- * {@code false}. If that reading is right, then a plain cross-origin {@code <form method="POST">} in any page the
- * operator has open can replace a stored credential &mdash; no JavaScript, and no CORS preflight, because
- * form-encoded is one of the three content types a browser may send cross-origin without one.
- *
- * <p>
- * Group a reproduces it, and both of its routes are demonstrated as an <i>actual overwrite</i> &mdash; the claim is
- * integrity loss, so a {@code 200} with no write would falsify it just as much as a {@code 415} would. The store is
- * an {@link InMemorySecretStore} and never the Keychain, so running these tests cannot touch a real credential
- * &mdash; but everything between the request and the store is the real thing: a real {@code BasicRestResource}, its
- * real default parser list, real content negotiation and real {@code @Content} binding. The vector is the
- * framework's defaults doing exactly what they are configured to do, which is why it holds for any application on
- * {@code BasicUniversalConfig} and not only this one.
- *
- * <p>
- * The two routes need different subjects, and the reason is the trap this test exists to avoid. The form-encodable
- * body route is gated by nothing at the resource, so it is reproduced against the real {@code CredentialRest}. The
- * {@code &content=} query route is gated at the resource by {@code disableContentParam}, and {@code CredentialRest}
- * already sets that to {@code "true"} &mdash; so reproducing the {@code content=} route against {@code CredentialRest}
- * would demonstrate the <i>fix</i>, not the finding, and could never fail against unfixed code. That route is
- * therefore reproduced against {@link DefaultConfigCredentialResource}, a resource carrying {@code BasicRestResource}'s
- * defaults unchanged (in particular {@code disableContentParam} at its default {@code false}) &mdash; the
- * configuration every other Juneau consumer has.
- *
- * <p>
- * The route (b) remedy is asserted twice. {@link #a04_contentQueryParameterIsRefusedByTheResource()} asserts it against
- * the real {@code CredentialRest}, which is correct and kept, but {@code CredentialRest} differs from
- * {@link DefaultConfigCredentialResource} in more than {@code disableContentParam} &mdash; its full parser list,
- * filters and view config are also live &mdash; so a pass there does not by itself prove {@code disableContentParam}
- * is the control doing the work. {@link #a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} closes
- * that gap: it asserts the same remedy against {@link HardenedConfigCredentialResource}, a twin of
- * {@link DefaultConfigCredentialResource} with only {@code disableContentParam} flipped to {@code "true"}. Because
- * reproduction and remedy subjects then differ by exactly the one control under test, that pairing is airtight.
- *
- * <p>
- * Group b closes it. {@link MockRestClient} dispatches into a {@code RestContext} directly and so does not run the
- * servlet filter chain &mdash; which is the point: group a's requests reach the handler precisely because nothing
- * stands in front of it, and the fix is to put something there. The two controls are asserted against the routes
- * they close, kept separate so that the record shows <i>which</i> control closes <i>which</i> route and neither is
- * later dropped as redundant: {@link LoopbackBoundary} refuses the form-encodable shape (route a), and
- * {@code disableContentParam="true"} on {@code CredentialRest} refuses the {@code content=} route (route b). The
- * absent-{@code Content-Type} case is pinned last as a standing regression guard.
- *
  * @see LoopbackBoundary
  */
 class CredentialWriteVectorTest {
@@ -240,9 +194,8 @@ class CredentialWriteVectorTest {
 	}
 
 	/**
-	 * The content type is stubbed on {@code getContentType()} and not merely as a header, because that is what the
-	 * boundary reads. Stubbing only the header leaves it {@code null}, and every write then fails the content-type
-	 * check for the wrong reason -- which would make the refusals below pass vacuously.
+	 * Stubs {@code getContentType()} directly, not merely the header, because that is what the boundary reads;
+	 * stubbing only the header leaves it {@code null} and fails the check for the wrong reason.
 	 */
 	private static jakarta.servlet.http.HttpServletRequest req(String method, String contentType, Map<String,String> headers) {
 		var r = mock(jakarta.servlet.http.HttpServletRequest.class);
@@ -336,13 +289,10 @@ class CredentialWriteVectorTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A single credential write carrying {@code BasicRestResource}'s defaults unchanged &mdash; in particular
-	 * {@code disableContentParam} at its default {@code false}, so the {@code &content=} query route is live. This
-	 * is the honest subject for reproducing the {@code content=} route: the real {@code CredentialRest} sets
-	 * {@code disableContentParam="true"}, so the {@code content=} route against it can only ever demonstrate the
-	 * fix. The write mirrors {@link CredentialRest#set(String, CredentialRest.StoreRequest)} and reuses its
-	 * {@link CredentialRest.StoreRequest} body so the only relevant difference from the real resource, on this
-	 * route, is the one property under test.
+	 * A credential-write resource carrying {@code BasicRestResource}'s defaults unchanged, in particular
+	 * {@code disableContentParam} left at its default {@code false} so the {@code &content=} query route is
+	 * live. The write mirrors {@link CredentialRest#set(String, CredentialRest.StoreRequest)} and reuses its
+	 * {@link CredentialRest.StoreRequest} body.
 	 */
 	@Rest
 	public static class DefaultConfigCredentialResource extends BasicRestResource {
@@ -378,11 +328,8 @@ class CredentialWriteVectorTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * {@link DefaultConfigCredentialResource} with the single control under test flipped on. Every other property
-	 * &mdash; parser list, method, path, body shape &mdash; is copy-identical, so this is the honest subject for
-	 * asserting route (b)'s remedy: the only difference between the reproduction subject
-	 * ({@link DefaultConfigCredentialResource}) and this remedy subject is {@code disableContentParam} itself,
-	 * which is what {@link #a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} relies on.
+	 * {@link DefaultConfigCredentialResource} with only {@code disableContentParam} flipped to {@code "true"};
+	 * every other property &mdash; parser list, method, path, body shape &mdash; is copy-identical.
 	 */
 	@Rest(disableContentParam = "true")
 	public static class HardenedConfigCredentialResource extends BasicRestResource {

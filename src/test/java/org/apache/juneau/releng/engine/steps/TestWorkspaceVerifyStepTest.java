@@ -29,8 +29,7 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 /**
- * The four workspace-template {@code -bin.zip} modules derived from the 10.0
- * reactor's actual {@code pom.xml} assembly-plugin wiring, unzipped from their {@code <module>/target/}
+ * The four workspace-template {@code -bin.zip} modules unzipped from their {@code <module>/target/}
  * pre-{@code release-prepare} SNAPSHOT paths.
  */
 class TestWorkspaceVerifyStepTest {

@@ -77,9 +77,7 @@ class ReleaseEngineTest {
 
 	/**
 	 * Marks every step before {@code stepId} (in registry order) SUCCEEDED, so a test can exercise
-	 * {@code stepId} in isolation without needing every predecessor's own apply() to succeed for real
-	 * (e.g. steps that need a wired Nexus client). Writes straight through a fresh store pointed at the
-	 * same {@code dir}, since {@link RunStateStore} is a stateless file-backed reader/writer.
+	 * {@code stepId} in isolation without needing every predecessor's own apply() to succeed for real.
 	 */
 	private void satisfyAllPredecessorsOf(Path dir, String version, String stepId) {
 		var store = new RunStateStore(dir);
@@ -229,10 +227,8 @@ class ReleaseEngineTest {
 	}
 
 	/**
-	 * Root cause of the reported vote-gate stall: applying {@code vote-gate} only (re)opens the vote — it
-	 * is NOT itself the advance action, however many times it's (re-)applied. This is the exact call the
-	 * old (broken) vote-gate-only wiring made. The actual gate-pass action is the distinct
-	 * {@code tally-vote-result} step, with a {@code passed} outcome.
+	 * Applying {@code vote-gate} only (re)opens the vote — it is NOT itself the advance action. The
+	 * actual gate-pass action is the distinct {@code tally-vote-result} step, with a {@code passed} outcome.
 	 */
 	@Test
 	void c01_voteGateApplyAloneNeverAdvancesPastAwaitingVote(@TempDir Path dir) {
@@ -298,9 +294,8 @@ class ReleaseEngineTest {
 	}
 
 	/**
-	 * The reported bug: a run reached {@code RunStatus.RELEASED} even though {@code nexus-release} was
-	 * never run and {@code manual-followup-checklist} had failed. finalize-run must refuse and list every
-	 * offending predecessor, and must not touch {@code RunStatus} while refusing.
+	 * finalize-run must refuse and list every offending predecessor, and must not touch {@code RunStatus}
+	 * while refusing.
 	 */
 	@Test
 	void e01_finalizeRunRefusesWhenARequiredPriorStepIsNotTerminal(@TempDir Path dir) {
@@ -388,9 +383,8 @@ class ReleaseEngineTest {
 
 	@Test
 	void c03_successfulApplyClearsAPriorFailedRunStatusAndStepError(@TempDir Path dir) {
-		// Fingerprint of the 9.2.1 rehearsal: tally-vote-result failed once (empty voteOutcome →
-		// rs.status=FAILED + ss.error set), then succeeded later — but the success path left the run
-		// FAILED and the leftover error on a SUCCEEDED step, so the New-Release rail vanished.
+		// A later success must clear a prior failed RunStatus and the leftover step error, or the
+		// New-Release rail stays hidden.
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "vote-gate");

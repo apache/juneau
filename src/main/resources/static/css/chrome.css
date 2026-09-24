@@ -121,10 +121,9 @@
 
 .rm-table-search input { width: 200px; }
 
-/* TODO-445n: horizontal scroll is now owned by the toolkit (juneau-views.css — the flex .dt-layout-cell for
-   DT2, the .juneau-view-table-scroll wrap for DT1), so the .rm-table-scroll wrapper has been removed from
-   releases.ftlh. An outer overflow-x:auto here sat between .jc-card and the paging-pill menu and
-   clipped it (INV-2) / produced a second horizontal scrollbar. The rule is retired rather than restyled. */
+/* Horizontal scroll is owned by the toolkit's own CSS, not this file. Do not add an outer
+   overflow-x:auto here — it sits between .jc-card and the paging-pill menu, clipping the menu
+   and producing a second horizontal scrollbar. */
 
 table.rm-table {
   width: 100%;

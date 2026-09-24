@@ -33,21 +33,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Streams {@code text/event-stream} for two channels — per-step console log, and run/step-status
- * snapshots — registered as one servlet since both live under the same {@code /events/*} URL space, which
- * the servlet container maps exclusively.
+ * snapshots — registered as one servlet since both live under the same {@code /events/*} URL space.
  *
  * <p>The console channel replays that step's on-disk log on connect, then tails that step's
- * {@link LogBroadcaster} live. One stream per step, matching the UI's one-console-at-a-time rule. The
- * state channel (trailing segment {@value #STATE_SEGMENT}) sends the run's current snapshot on connect,
- * then tails that version's {@link RunStateBroadcaster} live, so every connected New-Release tab —
- * including a passive second browser — tracks rail status without polling or a page reload.
- *
- * <p>Registered via {@link org.springframework.boot.web.servlet.ServletRegistrationBean} alongside
- * {@code RootRest} — deliberately NOT a Juneau {@code @Rest} resource (no serializer in the way).
+ * {@link LogBroadcaster} live. The state channel (trailing segment {@value #STATE_SEGMENT}) sends the
+ * run's current snapshot on connect, then tails that version's {@link RunStateBroadcaster} live.
  *
  * <p>Mapped at {@code /events/*}; the two trailing path segments are {@code {version}/{stepId}}, where
- * {@code {stepId}} may instead be the literal {@value #STATE_SEGMENT} to select the state channel (no
- * registry step is ever named that).
+ * {@code {stepId}} may instead be the literal {@value #STATE_SEGMENT} to select the state channel.
  */
 public class SseLogServlet extends HttpServlet {
 
@@ -162,9 +155,8 @@ public class SseLogServlet extends HttpServlet {
 	}
 
 	/**
-	 * The state channel: send {@code version}'s current snapshot on connect (if a run is persisted for
-	 * it), then tail that version's {@link RunStateBroadcaster} live — mirrors the console channel's
-	 * replay-then-tail shape above, minus the on-disk replay (a snapshot has no history to replay).
+	 * The state channel: sends {@code version}'s current snapshot on connect, then tails that version's
+	 * {@link RunStateBroadcaster} live.
 	 */
 	private void streamState(String version, PrintWriter out) {
 		var initial = initialStateJsonForVersion.apply(version).orElse(null);

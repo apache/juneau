@@ -64,9 +64,8 @@ public class GithubPrSource {
 	}
 
 	/**
-	 * Resolves the GitHub milestone number whose title exactly matches {@code versionTitle} (e.g. "10.0.0"),
-	 * via {@code gh api repos/<slug>/milestones?state=all}. Returns null if none matches — the
-	 * New-Release form field is then left blank for the human to fill in manually.
+	 * Resolves the GitHub milestone number whose title exactly matches {@code versionTitle} (e.g. "10.0.0").
+	 * Returns null if none matches.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Parsed JSON is assigned/cast to its known generic shape.

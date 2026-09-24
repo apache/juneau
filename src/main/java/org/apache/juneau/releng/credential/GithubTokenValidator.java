@@ -25,10 +25,8 @@ import org.apache.juneau.releng.util.ProcessRunner;
 /**
  * Validates a GitHub token via {@code GH_TOKEN=<token> gh api user}.
  *
- * <p>Neither path carries {@code gh}'s raw output into the message. On failure the output is read only to choose
- * among fixed reasons; on success the login is shown, but only after it is checked against GitHub's own username
- * rules, so an unexpected line from {@code gh} cannot become interface text. See {@link GpgValidator} for why an
- * unbounded channel from a third-party tool's stderr into the UI is worth closing even absent a demonstrated leak.
+ * <p>Neither path carries {@code gh}'s raw output into the message; the login is validated against GitHub's
+ * username rules before being shown.
  */
 public class GithubTokenValidator implements Validator {
 

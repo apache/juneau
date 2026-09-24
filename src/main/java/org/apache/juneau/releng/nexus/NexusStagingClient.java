@@ -97,9 +97,7 @@ public class NexusStagingClient {
 	 * Fallback factory: credentials resolved from the named {@code ~/.m2/settings.xml} {@code <server>}
 	 * entry ({@code serverId="apache.releases.https"}). Used only when the Keychain-backed
 	 * {@link #create(String, String, String, String)} path has no stored Apache LDAP credential yet — see
-	 * {@code AppConfiguration.secretResolver()}. Resolution mirrors how {@code mvn deploy}/the release
-	 * plugin itself reads that same entry (a minimal local settings.xml parse, rather than pulling in the
-	 * full Maven settings-builder dependency). Does not handle settings-security.xml-encrypted passwords
+	 * {@code AppConfiguration.secretResolver()}. Does not handle settings-security.xml-encrypted passwords
 	 * (see {@link MavenSettingsCredentials}).
 	 */
 	public static NexusStagingClient create(String baseUrl, String profileId, String serverId) {

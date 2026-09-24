@@ -322,9 +322,6 @@ public class ReleaseEngine {
 		var step = registry.byId(stepId);
 		if (step == null)
 			return StepResult.fail(UNKNOWN_STEP + stepId);
-		// Strict forward-apply guard: refuses to run stepId ahead of an unsatisfied required predecessor.
-		// This is also finalize-run's own prerequisite check, since finalize-run's predecessors are every
-		// other step in the pipeline — no separate check is needed there.
 		var blocked = forwardApplyGuardMessage(rs, stepId);
 		if (blocked.isPresent())
 			return StepResult.fail(blocked.get());

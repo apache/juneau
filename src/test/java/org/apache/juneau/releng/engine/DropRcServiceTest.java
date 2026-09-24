@@ -117,10 +117,7 @@ class DropRcServiceTest {
 
 
 	/**
-	 * Drop-RC's own {@code store.save(rs)} is the same choke point {@link ReleaseEngine} hooks in its
-	 * constructor (see {@code RunStateStore.setOnSave}) — since AppConfiguration wires the SAME
-	 * {@code RunStateStore} bean into both the engine and this service, a drop-RC push must reach the
-	 * New-Release tab's rail without any drop-RC-specific broadcast wiring.
+	 * A drop-RC push must reach the New-Release tab's rail without any drop-RC-specific broadcast wiring.
 	 */
 	@Test
 	@SuppressWarnings({

@@ -357,13 +357,11 @@ class ReleaseRunRestTest {
 	}
 
 	/**
-	 * The fix, end to end, under the strict forward-apply guard: {@code POST /{version}/vote-result}
-	 * records a passing tally (applied as the
-	 * {@code tally-vote-result} step) and the run then proceeds through every remaining required step, in
-	 * order, to {@code finalize-run}, with no operator intervention beyond each step's own apply or
-	 * confirm-review. This is also the regression test for the reported bug: a run must legitimately clear
-	 * every required step — including {@code nexus-release}, {@code manual-followup-checklist}, and
-	 * {@code compose-announcement-email} — before {@code finalize-run} accepts it.
+	 * End to end under the strict forward-apply guard: {@code POST /{version}/vote-result} records a passing
+	 * tally (applied as the {@code tally-vote-result} step), and the run then proceeds through every remaining
+	 * required step, in order — including {@code nexus-release}, {@code manual-followup-checklist}, and
+	 * {@code compose-announcement-email} — to {@code finalize-run}, with no operator intervention beyond each
+	 * step's own apply or confirm-review.
 	 */
 	@SuppressWarnings({
 		"java:S5961" // Deliberately one continuous end-to-end run through every required pipeline step, in order, on a single mutable run; splitting into separate @Test methods would re-derive (or fake) the intermediate run state each time and weaken exactly the regression this test exists to catch -- that the SAME run legitimately clears every required step.
@@ -412,7 +410,7 @@ class ReleaseRunRestTest {
 		rest.apply("9.2.1", "vote-gate", Map.of());
 		assertEquals(StepStatus.AWAITING_VOTE, rest.state("9.2.1").step("vote-gate").status);
 
-		// The fix: record a passing tally via the dedicated vote-result endpoint.
+		// Records a passing tally via the dedicated vote-result endpoint.
 		var voteBody = new ReleaseRunRest.VoteResultRequest();
 		voteBody.outcome = "passed";
 		voteBody.tally = "Simulated passing vote (no real tally read).";
@@ -447,10 +445,9 @@ class ReleaseRunRestTest {
 	}
 
 	/**
-	 * Regression test for the reported bug: finalize-run must refuse — and must NOT set RunStatus to
-	 * RELEASED — when a required step ({@code nexus-release}) was never run and another required step
-	 * ({@code manual-followup-checklist}) failed, even though every step before {@code vote-gate}
-	 * legitimately succeeded.
+	 * finalize-run must refuse — and must NOT set RunStatus to RELEASED — when a required step
+	 * ({@code nexus-release}) was never run and another required step ({@code manual-followup-checklist})
+	 * failed, even though every step before {@code vote-gate} legitimately succeeded.
 	 */
 	@Test
 	void d02_finalizeRunRefusesAndListsOffendingStepsWhenRequiredStepsAreUnresolved(@TempDir Path dir) {
@@ -506,11 +503,9 @@ class ReleaseRunRestTest {
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The {@code nr-step-meta} JSON is now built Java-side by {@link ReleaseRunRest#stepMetaJson(Iterable)} and passed
-	 * through {@code escapeForScript} rather than interpolated in the {@code .ftlh}. A step title carrying a
-	 * {@code </script>} break-out must be neutralized (no raw {@code <} survives) yet remain valid, round-trippable
-	 * JSON &mdash; the property FreeMarker's HTML auto-escaping would have silently corrupted. Asserts the
-	 * neutralization, not merely that a benign title round-trips.
+	 * A step title carrying a {@code </script>} break-out must be neutralized by
+	 * {@link ReleaseRunRest#stepMetaJson(Iterable)} (no raw {@code <} survives) yet remain valid,
+	 * round-trippable JSON. Asserts the neutralization, not merely that a benign title round-trips.
 	 */
 	@Test
 	void e01_stepMetaJsonNeutralizesScriptBreakoutInAStepTitle() throws Exception {

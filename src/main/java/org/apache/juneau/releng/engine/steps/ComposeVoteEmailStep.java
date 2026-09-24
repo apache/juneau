@@ -75,8 +75,8 @@ public class ComposeVoteEmailStep implements ReleaseStep {
 	@Override
 	public StepResult apply(StepContext ctx) {
 		var data = gather(ctx);
-		// RC tag + dist checksums may be absent if earlier steps were skipped; fill-ins may be blank.
-		// Note it and continue rather than hard-failing — the draft is still useful for a rehearsal.
+		// RC tag + dist checksums may be blank if earlier steps were skipped; the draft is still
+		// useful for a rehearsal, so this doesn't hard-fail.
 		if ("(unknown)".equals(data.get("commitHash")) || data.get("srcSha512").isBlank())
 			ctx.log.accept("Note: RC tag/checksums absent — composing draft with placeholders.");
 		var path = ctx.email.compose(EmailTemplate.VOTE, ctx.run, data);

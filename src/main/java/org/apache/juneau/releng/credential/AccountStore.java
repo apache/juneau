@@ -35,8 +35,7 @@ import org.apache.juneau.commons.secret.SecretStore;
  * {@code accounts.properties} under {@code rm.state.dir}, so lookups survive an app restart even though the
  * secrets themselves live only in the Keychain (via {@link SecretStore}).
  *
- * <p>An availid/key ID isn't a secret — it's a public identifier — so it belongs in a plain state file, not
- * the Keychain. GitHub isn't tracked here: its account is the fixed literal {@code "token"}
+ * <p>GitHub isn't tracked here: its account is the fixed literal {@code "token"}
  * (see {@link CredentialSpec#accountIsFixed()}).
  */
 public class AccountStore {
@@ -102,18 +101,7 @@ public class AccountStore {
 	/**
 	 * Narrows the accounts file and its directory to the owner.
 	 *
-	 * <p>This file holds no secret &mdash; an availid and a GPG key ID are public identifiers &mdash; so this is
-	 * hygiene rather than a fix for a vulnerability. It is worth doing anyway because the alternative is whatever
-	 * the process umask happens to be, which on a default umask means world-readable: a state directory that
-	 * enumerates which Apache account this machine releases as, readable by every account on the host. Setting it
-	 * explicitly also means the file does not sit at different permissions depending on how the app was launched.
-	 *
-	 * <p>Applied after the write rather than via {@code createFile} attributes so that an existing file with a
-	 * looser mode is narrowed too, instead of keeping its original mode forever.
-	 *
-	 * <p>Silently skipped where POSIX permissions do not apply. A non-POSIX filesystem is not a reason to fail a
-	 * credential save, and this is a hardening step on a non-secret file rather than a control something depends
-	 * on &mdash; nothing here is load-bearing enough to justify refusing to persist the user's availid.
+	 * <p>Silently skipped where POSIX permissions do not apply.
 	 */
 	@SuppressWarnings({
 		"resource" // FileSystems.getDefault() returns the JVM-wide default filesystem singleton; it must not be closed (its close() throws UnsupportedOperationException), so there is no resource to release.

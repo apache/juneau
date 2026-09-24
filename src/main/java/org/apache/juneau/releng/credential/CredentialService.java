@@ -28,13 +28,6 @@ import org.apache.juneau.releng.credential.Validator.ValidationResult;
 /**
  * Stores + validates the managed credentials. Accounts: GitHub uses the fixed account "token"; Apache uses
  * the availid; GPG uses the key ID. The last validation result per credential is cached in memory for the UI.
- *
- * <p>Each {@link CredentialSpec} is backed by its own {@link SecretStore} instance, namespaced by
- * {@link CredentialSpec#keychainService}; the resolved account (availid/keyId/fixed "token") is the store key,
- * preserving the keychain service+account coordinates the app has always used.
- *
- * <p>The non-fixed accounts (availid/keyId) are not secrets, so they're persisted via {@link AccountStore}
- * rather than the Keychain — this is what lets a lookup survive an app restart.
  */
 public class CredentialService {
 

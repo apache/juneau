@@ -45,11 +45,8 @@ import org.apache.juneau.rest.server.servlet.BasicRestServlet;
  *
  * <p>{@link #route} returns pre-formatted JSON text, not a Java bean. Handler methods below return that text
  * wrapped in a {@link Reader} (rather than as a plain {@code String}) so the framework's {@code ReaderProcessor}
- * pipes it verbatim; a {@code String} return would instead be run through the JSON serializer like any other
- * POJO and come out double-encoded (quoted and escaped), which {@link NexusStagingClient} then fails to parse.
- * The {@code bulk/*} POST handlers take the request body the same way for the symmetric reason: parsing an
- * incoming {@code application/json} body into a plain {@code @Content String} would run it through the JSON
- * <em>parser</em>, which expects a quoted string literal and rejects the actual {@code {"data":...}} object.
+ * pipes it verbatim; a {@code String} return would instead be run through the JSON serializer and come out
+ * double-encoded. The {@code bulk/*} POST handlers take the request body the same way, for the same reason.
  *
  * @serial exclude
  */

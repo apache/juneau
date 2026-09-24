@@ -43,10 +43,8 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * {@link MockRestClient#create(Object)} caches its {@code RestContext} per resource class, so a second
-	 * {@code ReleaseRest} instance built with different test data would silently dispatch against the
-	 * <em>first</em> instance ever created for this class in the JVM. Passing a (no-op) {@link StackOverlay}
-	 * as the overriding bean store opts out of that cache — see {@code MockRestClient.Builder#overridingBeanStore}.
+	 * Builds a {@link MockRestClient} wired to a fresh {@code ReleaseRest}, using a no-op {@link StackOverlay}
+	 * as the overriding bean store so it does not reuse a cached {@code RestContext} from another test.
 	 */
 	@SuppressWarnings({
 		"resource" // Caller owns and closes the returned MockRestClient (via try-with-resources); Eclipse JDT @Owning warning is by design.
@@ -80,11 +78,8 @@ class ReleaseRestTest {
 
 	/**
 	 * Real HTTP dispatch (via {@code juneau-rest-mock}, in-process, no socket) through the two-segment
-	 * {@code /{version}/{rc}} route, guarding against the exact failure this endpoint originally hit:
-	 * the request fell through to {@code RestContext.handleNotFound} with a stray {@code 200} already set
-	 * ("Invalid method response: 200") because no correctly declared op returned a renderable View for it.
-	 * A direct call to {@link ReleaseRest#detail} alone wouldn't exercise Juneau's own path-matching/dispatch,
-	 * so this is the layer that actually proves the route is reachable and renders.
+	 * {@code /{version}/{rc}} route; a direct call to {@link ReleaseRest#detail} alone wouldn't exercise
+	 * Juneau's own path-matching/dispatch.
 	 */
 	@Test
 	void a03_detailRendersOverRealHttpDispatch() throws Exception {
@@ -107,14 +102,10 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * The Releases page is now a {@code <@page toolkit="views">} call: the views toolkit pack supplies the runtime
-	 * JS in load order (renders → icons → ribbon → views → config → regions → helpers → page-cards), and the table
-	 * is a {@code <@card type="datatables" id="releases">} the page-cards runtime mounts from its sidecar — there is
-	 * no {@code table-slot.js} and no {@code /view} envelope fetch. Asserts the served page carries {@code juneau-icons.js}
-	 * ordered before {@code juneau-ribbon.js} (the ribbon resolves glyphs from the icon registry as it builds its
-	 * buttons, so the registry must already exist), the page-cards runtime + sidecar mount, the shared chrome nav with
-	 * Releases current, the title, and the Detail View populator. (CSRF markup is now the <@console> shell's
-	 * boundary-filter contract, absent under MockRestClient — see the assertion below.)
+	 * Asserts the served Releases page carries {@code juneau-icons.js} ordered before {@code juneau-ribbon.js}
+	 * (the ribbon resolves glyphs from the icon registry as it builds its buttons, so the registry must
+	 * already exist), the page-cards runtime + sidecar mount, the shared chrome nav with Releases current,
+	 * the title, and the Detail View populator.
 	 */
 	@Test
 	void b01_pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
@@ -156,12 +147,10 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * The Excel/PDF export buttons are declared {@code .optional("excel","pdf")} on {@link ReleaseRest} and are
-	 * feature-detected off {@code window.JSZip} / {@code window.pdfMake} by {@code juneau-ribbon.js}, so they only
-	 * render when JSZip + pdfMake are on the page. DataTables Buttons' HTML5 export reads those globals as
-	 * {@code buttons.html5.min.js} initializes, so all three export-dependency scripts must be included and ordered
-	 * before it. Asserts the served page carries the JSZip, pdfMake, and pdfMake {@code vfs_fonts} includes, each
-	 * ahead of {@code buttons.html5.min.js}.
+	 * DataTables Buttons' HTML5 export reads {@code window.JSZip} / {@code window.pdfMake} as
+	 * {@code buttons.html5.min.js} initializes, so those scripts must be included and ordered before it.
+	 * Asserts the served page carries the JSZip, pdfMake, and pdfMake {@code vfs_fonts} includes, each ahead
+	 * of {@code buttons.html5.min.js}.
 	 */
 	@Test
 	void b02_pageIncludesExportDependencyScriptsBeforeButtonsHtml5() throws Exception {
@@ -190,9 +179,8 @@ class ReleaseRestTest {
 	/**
 	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
 	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
-	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used
-	 * to return. Wired via {@link ReleaseRest#queryableSettings()} (a {@code DataTablesQueryProtocol}) +
-	 * {@code ProtocolQueryable}; this proves the envelope shape and that filtering happens on the server.
+	 * data}}) with server-side per-column filtering applied. Wired via {@link ReleaseRest#queryableSettings()}
+	 * (a {@code DataTablesQueryProtocol}) + {@code ProtocolQueryable}.
 	 */
 	@Test
 	void c01_dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
@@ -214,11 +202,9 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * The table catalog now rides in the page itself: the {@code <@card type="datatables" id="releases">} escape
-	 * hatch lifts its FTL JSON5 body into a page-cards sidecar (VIEW_META with {@code contractVersion} + {@code view}
-	 * passed through unchanged) rather than being served from a Java {@code ViewDef} at {@code /view}. Asserts the
-	 * served page's sidecar carries the view id + version-cell column, declares the Detail View expand endpoint /
-	 * populator (not a version hyperlink), and renders Status/Stage as pills, not tag chips.
+	 * Asserts the served page's {@code <@card type="datatables" id="releases">} sidecar carries the view id +
+	 * version-cell column, declares the Detail View expand endpoint/populator (not a version hyperlink), and
+	 * renders Status/Stage as pills, not tag chips.
 	 */
 	@Test
 	void d01_pageCardSidecarCarriesTheReleasesCatalog() throws Exception {

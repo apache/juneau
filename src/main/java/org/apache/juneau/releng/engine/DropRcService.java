@@ -70,8 +70,7 @@ public class DropRcService {
 	}
 
 	/**
-	 * This action's own log — mirrors how {@code ReleaseEngine.context()} builds a step's {@link RunLog}.
-	 * Truncated at the start of every {@link #apply} so a re-drop overwrites in place.
+	 * This action's own log. Truncated at the start of every {@link #apply} so a re-drop overwrites in place.
 	 */
 	private Consumer<String> logSink(RunState rs) {
 		var path = stateDir.resolve("logs/" + rs.version + "-RC" + rs.rc + "-" + LOG_STEP_ID + ".log");
@@ -105,12 +104,10 @@ public class DropRcService {
 		var pw = password.get();
 		var log = logSink(rs);
 
-		// a) drop Nexus staging repo
 		if (rs.nexusRepoId != null && nexus != null) {
 			log.accept("Dropping Nexus staging repo " + rs.nexusRepoId);
 			nexus.drop(rs.nexusRepoId);
 		}
-		// b) svn checkout dist/dev, rm the rejected RC's directories, commit
 		var dist = stateDir.resolve("dist");
 		runner.run(List.of("svn", "checkout", SvnArgs.USERNAME, availid.get(), SvnArgs.PASSWORD_FROM_STDIN,
 				target.distDevBase(), dist.toString()), pw + "\n", Map.of());
@@ -118,13 +115,10 @@ public class DropRcService {
 		runner.run(List.of("svn", "rm", dist.resolve("binaries").resolve(tag).toString()), null, null);
 		runner.run(List.of("svn", "commit", dist.toString(), "-m", "Drop " + tag, SvnArgs.USERNAME, availid.get(),
 				SvnArgs.PASSWORD_FROM_STDIN), pw + "\n", Map.of());
-		// c) delete tag local + remote
 		runner.run(List.of("git", "-C", git, "tag", "-d", tag), null, null);
 		runner.run(List.of("git", "-C", git, "push", "origin", ":refs/tags/" + tag), null, null);
-		// d) roll back the release:prepare version-bump commits
 		runner.run(List.of("mvn", "-f", git + "/pom.xml", "release:rollback"), null, null);
 
-		// 4) reset state
 		rs.rcHistory.add(new RcHistoryEntry(rs.rc, Instant.now().toString(), reason));
 		rs.rc = rs.rc + 1;
 		rs.status = RunStatus.RUNNING;
@@ -132,9 +126,8 @@ public class DropRcService {
 		rs.voteDeadline = null;
 		// Nothing to clear at the run level here; the per-step reset below handles each stale log reference.
 
-		// 5) Reset every step from workspace-setup onward back to PENDING, keeping preflight and
-		//    compose-propose-email as they are. Clearing each step's stale log reference below also
-		//    stops the per-step SSE endpoint from replaying the previous RC's output under the new RC.
+		// Clearing each step's stale log reference below also stops the per-step SSE endpoint from
+		// replaying the previous RC's output under the new RC.
 		var ids = registry.ids();
 		var resetFrom = ids.indexOf(StepRegistry.DROP_RC_RESET_FROM);
 		for (var i = 0; i < ids.size(); i++) {

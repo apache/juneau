@@ -26,16 +26,6 @@ import org.apache.juneau.releng.engine.StepResult;
 /**
  * Test-workspace-verify: unzip the reactor's workspace-template {@code -bin.zip} artifacts; human confirms
  * clean Eclipse import. Skippable.
- *
- * <p>The four modules below are every reactor module whose {@code pom.xml} wires the
- * {@code maven-assembly-plugin} to a {@code src/assembly/bin.xml} descriptor producing a workspace-import
- * template zip: {@code juneau-examples/juneau-examples-core}, {@code juneau-examples/juneau-examples-mcp},
- * {@code juneau-petstore/juneau-petstore-jetty}, and {@code juneau-sc/juneau-sc-server}. Each assembly's
- * {@code finalName} is {@code <artifactId>-${project.version}}, so at this point in the pipeline (run
- * <b>before</b> {@code release-prepare} bumps the pom versions) the produced file is
- * {@code <artifactId>-<version>-SNAPSHOT-bin.zip} under that module's {@code target/}. {@code juneau-distrib}
- * also produces a {@code bin.zip}, but that's the full source+binary distribution artifact handled by
- * {@code binary-artifacts-stage}, not a workspace-import template, so it's excluded here.
  */
 public class TestWorkspaceVerifyStep implements ReleaseStep {
 

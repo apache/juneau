@@ -62,12 +62,8 @@ public class RunLog {
 	}
 
 	/**
-	 * Truncates this step's log file to empty: every invocation of a step — its first run or any later
-	 * ad-hoc dry-run/apply/re-run — starts by discarding the previous invocation's output, so the file
-	 * always reflects only the most recent run. A no-op if the file doesn't exist yet (a step's very first
-	 * invocation). Does not touch the broadcaster directly; any already-connected SSE client simply stops
-	 * seeing old lines replayed on its <i>next</i> reconnect (the live tail is unaffected mid-connection,
-	 * since {@code reset()} doesn't itself publish anything).
+	 * Truncates this step's log file to empty, so it always reflects only the most recent run. A no-op if
+	 * the file doesn't exist yet. Already-connected SSE clients keep seeing old lines until they reconnect.
 	 */
 	public synchronized void reset() {
 		try {

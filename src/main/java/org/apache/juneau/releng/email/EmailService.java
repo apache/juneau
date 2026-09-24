@@ -80,9 +80,9 @@ public class EmailService {
 
 	/**
 	 * The plain-text body per template. {@code extra} carries step-computed values (checksums, tally,
-	 * links). The four optional narrative fields are pulled from {@code rs} (falling back to a matching
-	 * {@code extra} value for backward-compat, e.g. announcement {@code highlights}); each block is omitted
-	 * entirely when its source value is blank, so the terse mechanical output is preserved unchanged.
+	 * links). The four optional narrative fields are pulled from {@code rs}, falling back to a matching
+	 * {@code extra} value (e.g. announcement {@code highlights}); each block is omitted entirely when its
+	 * source value is blank.
 	 */
 	public String renderBody(EmailTemplate t, RunState rs, Map<String, String> extra) {
 		var summary = narrative(rs.releaseSummary, extra, "releaseSummary");
@@ -144,8 +144,8 @@ public class EmailService {
 
 	/**
 	 * The narrative value for a field: the RunState value when non-blank, else a matching {@code extra}
-	 * value (backward-compat), else null. Trailing whitespace is trimmed so a stray textarea newline never
-	 * produces a dangling blank line in the email.
+	 * value, else null. Trailing whitespace is trimmed so a stray textarea newline never produces a
+	 * dangling blank line in the email.
 	 */
 	private static String narrative(String primary, Map<String, String> extra, String key) {
 		if (inb(primary))

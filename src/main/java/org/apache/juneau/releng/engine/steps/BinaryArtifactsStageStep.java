@@ -74,10 +74,8 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 		if (!co.ok())
 			return StepResult.fail("svn checkout of dist/dev failed.");
 
-		// Best-effort: clears whatever prior RC directories are present. The "*" here mirrors
-		// juneau-release.sh's shell-expanded `svn rm dist/source/*` textually; ProcessRunner has no
-		// shell, so it's passed as one literal argument (a no-op against a fresh/empty checkout, which
-		// is the common case since ASF dist working copies normally hold at most one prior RC).
+		// Best-effort cleanup: ProcessRunner has no shell, so the "*" is a literal argument, not a
+		// glob — a no-op unless a file literally named "*" exists.
 		ctx.exec(List.of("svn", "rm", source + "/*"));
 		ctx.exec(List.of("svn", "rm", binaries + "/*"));
 		ctx.exec(List.of("mkdir", sourceRc.toString()));
@@ -105,12 +103,9 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 				: StepResult.fail("svn commit to dist/dev failed.");
 	}
 
-	/**
-	 * Renames the downloaded artifact (+ its {@code .asc}) to the ASF convention, regenerates its SHA-512
-	 * checksum via {@code gpg --print-md SHA512}, and clears stray {@code .sha1}/{@code .md5} mirrors that
-		 * Nexus may have served alongside it. Mutating calls go through {@code exec}; the
-		 * checksum file itself is written to disk because {@code ProcessRunner} has no shell to honor the
-		 * script's {@code > file.sha512} redirection.
+		/**
+		 * Renames the downloaded artifact (+ its {@code .asc}) to the ASF convention, regenerates its
+		 * SHA-512 checksum, and clears stray {@code .sha1}/{@code .md5} mirrors.
 		 */
 		private void renameAndChecksum(StepContext ctx, Path dir, String downloaded, String renamed) {
 			ctx.exec(List.of("mv", dir.resolve(downloaded).toString(), dir.resolve(renamed).toString()));

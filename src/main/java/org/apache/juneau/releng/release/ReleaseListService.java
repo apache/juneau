@@ -47,7 +47,6 @@ public class ReleaseListService {
 	 * The merged, sorted Releases-tab rows from all three sources.
 	 */
 	public List<Release> list() {
-		// 1. Released rows keyed by version; git tags first, then enriched by GitHub Releases.
 		Map<String, Release> released = m();
 		for (var r : tags.get())
 			released.put(r.version, r);
@@ -64,12 +63,10 @@ public class ReleaseListService {
 				existing.milestoneUrl = g.milestoneUrl;
 		}
 
-		// 2. In-progress rows (local state) are kept as distinct rows (an RC/DROPPED attempt can
-		//    coexist with a later RELEASED row of the same version — see the design mockup).
+		// An RC/DROPPED attempt can coexist with a later RELEASED row of the same version.
 		var out = tl(released.values());
 		out.addAll(state.get());
 
-		// 3. Sort: version desc; within a version, in-progress (non-RELEASED) rows first.
 		out.sort(Comparator.comparing((Release r) -> ReleaseVersion.of(r.version)).reversed()
 				.thenComparing(r -> "RELEASED".equals(r.status) ? 1 : 0));
 		for (var r : out)

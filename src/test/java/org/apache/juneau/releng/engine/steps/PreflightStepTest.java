@@ -42,10 +42,9 @@ class PreflightStepTest {
 
 			@Override
 			public ProcResult run(List<String> c, String s, Map<String, String> e) {
-				// git ls-remote for branch check
 				if (c.contains("ls-remote"))
 					return new ProcResult(0, lsRemoteOut);
-				return new ProcResult(0, "ok"); // version probes
+				return new ProcResult(0, "ok");
 			}
 
 			@Override

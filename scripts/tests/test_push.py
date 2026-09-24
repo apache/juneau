@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Tests for the root push.py's refuse-on-unreviewed-changes gate (WORK-R0006), ported from the
+Tests for the root push.py's refuse-on-unreviewed-changes gate, ported from the
 already-reviewed gate in apache/juneau's scripts/push.py and sandbox-support-console's
 scripts/push.py. This repo's push.py is a bare add/commit/push helper with no other gates, so
 this file covers only: check_unreviewed_changes(), get_staged_paths(), and commit_and_push()'s
@@ -26,7 +26,7 @@ an exit code, which a mocked subprocess would let pass while proving nothing. Id
 isolated via environment variables (GIT_AUTHOR_*/GIT_COMMITTER_*), never `git config --global`.
 Nothing here touches the real release-manager checkout or a real remote.
 
-Structural difference from the juneau/ssc references (per WORK-R0006's spec): this repo's
+Structural difference from the juneau/ssc references: this repo's
 push.py lives at the repo ROOT, not under scripts/, so the module is loaded from
 Path(__file__).resolve().parents[2] / "push.py" rather than SCRIPTS_DIR / "push.py".
 """

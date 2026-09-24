@@ -31,20 +31,15 @@ import org.junit.jupiter.api.Test;
 /**
  * HTTP-level regression coverage for {@link NexusMockRest}: dispatches real requests through the same
  * servlet + response-processor pipeline the running app uses ({@link MockRestClient}, in-process, no
- * socket). {@link NexusMockTest} calls {@link NexusMockRest#route} directly and so never exercises how a
- * handler's return value gets serialized onto the wire — which is exactly the layer where the mock
- * {@code nexus-staging-close} walkthrough failed: the handlers returned already-serialized JSON text as a
- * plain {@code String}, so the framework serialized it a <em>second</em> time (quoting and escaping it)
- * before {@link NexusStagingClient} tried to parse it.
+ * socket), unlike {@link NexusMockTest}, which calls {@link NexusMockRest#route} directly and never
+ * exercises how a handler's return value is serialized onto the wire.
  */
 class NexusMockRestHttpTest {
 
 	/**
-	 * {@link MockRestClient#create(Object)} caches its {@code RestContext} per resource class, so a second
-	 * {@code NexusMockRest} instance built by another test would silently dispatch against the <em>first</em>
-	 * instance (and its already-mutated model state) ever created for this class in the JVM. Passing a
-	 * (no-op) {@link StackOverlay} as the overriding bean store opts out of that cache — see
-	 * {@code MockRestClient.Builder#overridingBeanStore}.
+	 * Builds a {@link MockRestClient} wired to a fresh {@link NexusMockRest}, using a no-op
+	 * {@link StackOverlay} as the overriding bean store so it does not reuse a cached {@code RestContext}
+	 * from another test.
 	 */
 	@SuppressWarnings({
 		"resource" // Caller owns and closes the returned MockRestClient (via try-with-resources); Eclipse JDT @Owning warning is by design.

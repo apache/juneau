@@ -23,12 +23,7 @@ import org.apache.juneau.releng.util.ProcessRunner;
 /**
  * Validates a GPG key + passphrase: key must exist, and a discard test-sign must succeed.
  *
- * <p>Failure messages are drawn from a fixed set and never include {@code gpg}'s own output. That output is a
- * third-party program's stderr heading for a JSON response, the credential card and a table column, and while
- * {@code gpg} is not known to echo a passphrase it was given, a rule that secrets stay out of the interface cannot
- * rest on another program's discretion about what it prints. The exit code is included because it is a bounded
- * integer and is the one detail that distinguishes otherwise identical failures; anyone needing more can run the
- * command themselves.
+ * <p>Failure messages are drawn from a fixed set and never include {@code gpg}'s own output.
  */
 public class GpgValidator implements Validator {
 

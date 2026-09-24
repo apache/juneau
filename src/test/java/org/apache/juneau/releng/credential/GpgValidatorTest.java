@@ -98,10 +98,8 @@ class GpgValidatorTest {
 
 	@Test
 	void b01_subprocessOutputNeverReachesTheMessage() {
-		// The regression guard for F2, in the shape SecretsOffArgvTest uses: a sentinel that must not appear. The
-		// sentinel stands in for anything gpg might print -- and the reason this matters is not that gpg is known
-		// to echo a passphrase, but that the message is an unbounded channel from another program's stderr into a
-		// JSON response, the credential card and a table column.
+		// A sentinel stands in for anything gpg might print, since the message is an unbounded channel from
+		// another program's stderr into a JSON response, the credential card, and a table column.
 		var sentinel = "SENTINEL-a7f3c9-DO-NOT-SURFACE";
 		for (var output : List.of(sentinel, "gpg: signing failed: " + sentinel, "bad passphrase\n" + sentinel))
 			assertFalse(signFailureMessage(2, output).contains(sentinel),
