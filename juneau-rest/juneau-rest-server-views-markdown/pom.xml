@@ -33,7 +33,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Latest release on Maven Central (0.30.0 exists only in an Eclipse staging repo as of this writing). -->
-		<commonmark.version>0.28.0</commonmark.version>
+		<commonmark.version>0.30.0</commonmark.version>
 	</properties>
 
 	<dependencies>
