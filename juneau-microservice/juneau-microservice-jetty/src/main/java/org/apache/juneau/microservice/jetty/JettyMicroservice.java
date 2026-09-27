@@ -562,7 +562,7 @@ public class JettyMicroservice extends Microservice {
 		if (resolveVars)
 			jettyXml = vr.resolve(jettyXml);
 
-		getLogger().info(jettyXml);
+		getLogger().config(jettyXml);
 
 		try {
 			server = factory.create(jettyXml);
