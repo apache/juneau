@@ -238,7 +238,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				if (resolveVars2)
 					jettyXml = vr.resolve(jettyXml);
 
-				ms.getLogger().info(jettyXml);
+				ms.getLogger().config(jettyXml);
 
 				try {
 					server.set(factory.create(jettyXml));
