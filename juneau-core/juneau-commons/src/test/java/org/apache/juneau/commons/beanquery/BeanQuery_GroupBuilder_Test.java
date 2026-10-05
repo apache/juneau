@@ -18,6 +18,8 @@ package org.apache.juneau.commons.beanquery;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.function.Consumer;
+
 import org.apache.juneau.commons.TestBase;
 import org.junit.jupiter.api.*;
 
@@ -62,7 +64,8 @@ class BeanQuery_GroupBuilder_Test extends TestBase {
 	@Test
 	void a07_not_twoItems_throws() {
 		var hoistedTarget2 = BeanQuery.create();
-		assertThrows(IllegalArgumentException.class, () -> hoistedTarget2.not(g -> g.eq("a", 1).eq("b", 2)));
+		Consumer<BeanQuery.GroupBuilder> hoistedArg = g -> g.eq("a", 1).eq("b", 2);
+		assertThrows(IllegalArgumentException.class, () -> hoistedTarget2.not(hoistedArg));
 	}
 
 	@Test

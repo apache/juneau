@@ -68,6 +68,9 @@ import java.util.stream.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated argument-name literals read more clearly inline than as constants.
+})
 public class BeanQuery {
 
 	private String search;

@@ -477,13 +477,13 @@ class SqlBeanQuerySession_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class NotPlannablePerson {
-		NotPlannablePerson(String name) {}
+		NotPlannablePerson(String name) { /* Intentionally empty test fixture. */ }
 	}
 
 	public static class Human {
 		private String fullName;
 		private int age;
-		public Human() {}
+		public Human() { /* Intentionally empty test fixture. */ }
 		public void setFullName(String fullName) { this.fullName = fullName; }
 		public void setAge(int age) { this.age = age; }
 		public String getFullName() { return fullName; }

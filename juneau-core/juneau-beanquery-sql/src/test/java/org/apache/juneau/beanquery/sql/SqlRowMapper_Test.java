@@ -56,7 +56,7 @@ class SqlRowMapper_Test {
 
 	static class HiddenBean {  // Non-public class with a public constructor and setters.
 		private String name;
-		public HiddenBean() {}
+		public HiddenBean() { /* Intentionally empty test fixture. */ }
 		public void setName(String name) { this.name = name; }
 		public String getName() { return name; }
 	}
@@ -105,7 +105,7 @@ class SqlRowMapper_Test {
 		private String name;
 		private int age;
 		private Status status;
-		public TaskBean() {}
+		public TaskBean() { /* Intentionally empty test fixture. */ }
 		public void setName(String name) { this.name = name; }
 		public void setAge(int age) { this.age = age; }
 		public TaskBean setStatus(Status status) { this.status = status; return this; }  // Fluent, non-void.
@@ -139,13 +139,13 @@ class SqlRowMapper_Test {
 	}
 
 	public static class Ambiguous {
-		public Ambiguous() {}
-		public void setX(String s) {}
-		public void setX(int i) {}
+		public Ambiguous() { /* Intentionally empty test fixture. */ }
+		public void setX(String s) { /* Intentionally empty test fixture. */ }
+		public void setX(int i) { /* Intentionally empty test fixture. */ }
 	}
 
 	public static class Throwing {
-		public Throwing() {}
+		public Throwing() { /* Intentionally empty test fixture. */ }
 		public void setAge(int age) { throw new IllegalStateException("nope"); }
 	}
 
@@ -156,15 +156,15 @@ class SqlRowMapper_Test {
 	interface NotConcrete {}
 
 	abstract static class Abstract {
-		public Abstract() {}
+		public Abstract() { /* Intentionally empty test fixture. */ }
 	}
 
 	static class NoNoArgCtor {
-		NoNoArgCtor(int x) {}
+		NoNoArgCtor(int x) { /* Intentionally empty test fixture. */ }
 	}
 
 	static class NonPublicCtor {
-		NonPublicCtor() {}
+		NonPublicCtor() { /* Intentionally empty test fixture. */ }
 	}
 
 	@BeforeAll

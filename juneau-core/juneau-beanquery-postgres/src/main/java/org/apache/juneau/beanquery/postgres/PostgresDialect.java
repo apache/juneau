@@ -74,6 +74,9 @@ import org.apache.juneau.beanquery.sql.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated SQL fragments read more clearly inline than as constants.
+})
 public final class PostgresDialect implements SqlDialect {
 
 	/** The singleton instance. */

@@ -166,7 +166,9 @@ class QueryResolver_Test extends TestBase {
 		// unvalidated — see SearchParser.scanBalancedUntilDelimiter's Javadoc) must surface as UNTERMINATED_QUOTE once
 		// the expression actually reaches SearchExpressionParser here, not be silently accepted as a literal filter.
 		@Test void b10_unterminatedQuoteInLeaf_throws() {
-			var e = assertThrowsWithMessage(BeanQuerySyntaxException.class, "Unterminated quoted value", () -> resolve(settings(), new BeanQuery().setSearch("name=\"abc")));
+			var hoistedSettings = settings();
+			var hoistedQuery = new BeanQuery().setSearch("name=\"abc");
+			var e = assertThrowsWithMessage(BeanQuerySyntaxException.class, "Unterminated quoted value", () -> resolve(hoistedSettings, hoistedQuery));
 			assertEquals(BeanQuerySyntaxException.Code.UNTERMINATED_QUOTE, e.code());
 		}
 	}
@@ -312,19 +314,25 @@ class QueryResolver_Test extends TestBase {
 		}
 
 		@Test void g11_badValue_hasBadValueCode() {
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(settings(), new BeanQuery().setSearch("age=abc")));
+			var hoistedSettings = settings();
+			var hoistedQuery = new BeanQuery().setSearch("age=abc");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(hoistedSettings, hoistedQuery));
 			assertEquals(BeanQuerySyntaxException.Code.BAD_VALUE, e.code());
 		}
 
 		@Test void g12_operatorTypeWinsOverBadValue() {
 			// $contains does not apply to numeric; its (would-be-bad) argument is never typed, so OPERATOR_TYPE is reported.
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(settings(), new BeanQuery().setSearch("age=$contains(abc)")));
+			var hoistedSettings = settings();
+			var hoistedQuery = new BeanQuery().setSearch("age=$contains(abc)");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(hoistedSettings, hoistedQuery));
 			assertEquals(BeanQuerySyntaxException.Code.OPERATOR_TYPE, e.code());
 		}
 
 		@Test void g12b_operatorTypeWinsOverBadValue_boolean() {
 			// $gt does not apply to boolean; its bad argument is never typed, so OPERATOR_TYPE is reported, not BAD_VALUE.
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(typedSettings(), new BeanQuery().setSearch("active=$gt(xyz)")));
+			var hoistedSettings = typedSettings();
+			var hoistedQuery = new BeanQuery().setSearch("active=$gt(xyz)");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(hoistedSettings, hoistedQuery));
 			assertEquals(BeanQuerySyntaxException.Code.OPERATOR_TYPE, e.code());
 		}
 
@@ -335,7 +343,9 @@ class QueryResolver_Test extends TestBase {
 		}
 
 		@Test void g15_badBareLiteralInCombinator_badValue() {
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(settings(), new BeanQuery().setSearch("age=$or(abc,$gt(5))")));
+			var hoistedSettings = settings();
+			var hoistedQuery = new BeanQuery().setSearch("age=$or(abc,$gt(5))");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> resolve(hoistedSettings, hoistedQuery));
 			assertEquals(BeanQuerySyntaxException.Code.BAD_VALUE, e.code());
 			assertEquals("Value 'abc' is not a valid numeric for column 'age'.", e.getMessage());
 		}

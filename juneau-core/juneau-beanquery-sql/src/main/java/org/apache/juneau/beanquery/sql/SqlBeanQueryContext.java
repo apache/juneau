@@ -90,6 +90,9 @@ import org.apache.juneau.commons.beanquery.*;
  * @param <T> The row (bean) type.
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated argument-name literals read more clearly inline than as constants.
+})
 public final class SqlBeanQueryContext<T> extends BeanQueryContext<T> implements ColumnResolver {
 
 	// Applied only when a statement's search includes $regex and no explicit queryTimeout (below) was configured.

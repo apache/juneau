@@ -57,6 +57,7 @@ import java.util.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S1192", // Duplicated argument-name literals read more clearly inline than as constants.
 	"java:S1452" // Public self-typed builder API; the concrete SELF is unknowable to callers.
 })
 public abstract class BeanQueryContext<T> {
