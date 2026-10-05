@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.releng.config.TargetProfile;
@@ -35,21 +36,21 @@ import org.apache.juneau.releng.util.ProcessRunner;
 /**
  * Setup-tab probe inventory, eager verdicts, and loopback package-manager install.
  *
- * <p>Pills are prereqs first, then credentials. PATH tools may spawn {@code brew} or {@code apt-get};
+ * <p>Probes are prereqs first, then credentials. PATH tools may spawn {@code brew} or {@code apt-get};
  * checkout and {@code settings.xml} stay instructions. Credential live Validate stays a click on
  * {@code CredentialRest}.
  */
 public class SetupProbeService {
 
-	public static final String ID_CHECKOUT = "checkout";
+	public static final String ID_CHECKOUT = "juneau-checkout";
 	public static final String ID_MVN = "mvn";
 	public static final String ID_GIT = "git";
 	public static final String ID_GH = "gh";
 	public static final String ID_GPG = "gpg";
 	public static final String ID_SETTINGS = "settings-xml";
-	public static final String ID_APACHE = "apache";
-	public static final String ID_GPG_KEY = "gpg-key";
-	public static final String ID_GITHUB = "github";
+	public static final String ID_APACHE = "apache-ldap";
+	public static final String ID_GPG_KEY = "gpg-signing-key";
+	public static final String ID_GITHUB = "github-token";
 
 	static final String KIND_PREREQ = "prereq";
 	static final String KIND_CREDENTIAL = "credential";
@@ -85,13 +86,10 @@ public class SetupProbeService {
 	}
 
 	/**
-	 * Pill shells for first paint: labels only, nothing evaluated.
+	 * Probe-chip shells for first paint: labels only, nothing evaluated.
 	 */
 	public List<Probe> inventory() {
-		var out = new ArrayList<Probe>();
-		for (var spec : specs())
-			out.add(spec.pending());
-		return out;
+		return specs().stream().map(Spec::pending).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/**
@@ -100,9 +98,7 @@ public class SetupProbeService {
 	public SetupData data() {
 		var d = new SetupData();
 		d.packageManager = detectPackageManager();
-		d.probes = new ArrayList<>();
-		for (var spec : specs())
-			d.probes.add(evaluate(spec, d.packageManager));
+		d.probes = specs().stream().map(spec -> evaluate(spec, d.packageManager)).collect(Collectors.toCollection(ArrayList::new));
 		return d;
 	}
 
@@ -273,23 +269,22 @@ public class SetupProbeService {
 	}
 
 	private static Spec spec(String id) {
-		for (var s : specs())
-			if (s.id.equals(id))
-				return s;
-		throw new NotFound("Unknown probe: %s", id);
+		return specs().stream().filter(s -> s.id.equals(id)).findFirst().orElseThrow(() -> new NotFound("Unknown probe: %s", id));
 	}
 
 	private static List<Spec> specs() {
+		// Display == id: one lowercase short-kebab token per probe (parentheticals dropped).  credentialName still
+		// keys the live Validate on CredentialSpec's own id, so the credential form/lookup is unaffected by the rename.
 		return List.of(
-			new Spec(ID_CHECKOUT, KIND_PREREQ, "Juneau checkout", null),
-			new Spec(ID_MVN, KIND_PREREQ, "mvn", null),
-			new Spec(ID_GIT, KIND_PREREQ, "git", null),
-			new Spec(ID_GH, KIND_PREREQ, "gh", null),
-			new Spec(ID_GPG, KIND_PREREQ, "gpg", null),
-			new Spec(ID_SETTINGS, KIND_PREREQ, "settings.xml", null),
-			new Spec(ID_APACHE, KIND_CREDENTIAL, CredentialSpec.APACHE_LDAP.label, CredentialSpec.APACHE_LDAP.id),
-			new Spec(ID_GPG_KEY, KIND_CREDENTIAL, CredentialSpec.GPG.label, CredentialSpec.GPG.id),
-			new Spec(ID_GITHUB, KIND_CREDENTIAL, CredentialSpec.GITHUB.label, CredentialSpec.GITHUB.id));
+			new Spec(ID_CHECKOUT, KIND_PREREQ, ID_CHECKOUT, null),
+			new Spec(ID_MVN, KIND_PREREQ, ID_MVN, null),
+			new Spec(ID_GIT, KIND_PREREQ, ID_GIT, null),
+			new Spec(ID_GH, KIND_PREREQ, ID_GH, null),
+			new Spec(ID_GPG, KIND_PREREQ, ID_GPG, null),
+			new Spec(ID_SETTINGS, KIND_PREREQ, ID_SETTINGS, null),
+			new Spec(ID_APACHE, KIND_CREDENTIAL, ID_APACHE, CredentialSpec.APACHE_LDAP.id),
+			new Spec(ID_GPG_KEY, KIND_CREDENTIAL, ID_GPG_KEY, CredentialSpec.GPG.id),
+			new Spec(ID_GITHUB, KIND_CREDENTIAL, ID_GITHUB, CredentialSpec.GITHUB.id));
 	}
 
 	private record Spec(String id, String kind, String label, String credentialName) {
@@ -306,7 +301,7 @@ public class SetupProbeService {
 	}
 
 	/**
-	 * One Setup pill / Details payload. Public fields for JSON + FreeMarker.
+	 * One Setup probe chip / Details payload. Public fields for JSON + FreeMarker.
 	 */
 	public static class Probe {
 		public String id;

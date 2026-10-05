@@ -56,7 +56,7 @@ test.describe('Smoke: primary content renders without console errors', () => {
     const response = await page.goto('/rest/setup');
     expect(response?.status()).toBe(200);
     await expect(page.getByRole('heading', { name: 'Probes' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'GitHub token' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'github-token', exact: true })).toBeVisible();
     expect(errors, `console errors on /rest/setup: ${errors.join('; ')}`).toEqual([]);
   });
 });

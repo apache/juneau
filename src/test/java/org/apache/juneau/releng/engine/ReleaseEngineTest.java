@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -93,9 +93,7 @@ class ReleaseEngineTest {
 	void a01_startCreatesRunSeededPending(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
-		assertEquals("juneau-9.2.1-branch", rs.branch);
-		assertSize(23, rs.steps);
-		assertEquals(1, rs.rc);
+		assertBean(rs, "branch,steps{length},rc", "juneau-9.2.1-branch,{23},1");
 		assertEquals(StepStatus.PENDING, rs.step("preflight").status);
 	}
 
@@ -119,10 +117,7 @@ class ReleaseEngineTest {
 		var eng = engine(dir);
 		eng.start("9.2.1", "9.2.2-SNAPSHOT", 7);
 		var updated = eng.updateDetails("9.2.1", "summary", "hi", "iss", "ack", "9.2.1", "9.2.3-SNAPSHOT", 11);
-		assertEquals("9.2.1", updated.version);
-		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
-		assertEquals(11, updated.rc);
-		assertEquals("summary", updated.releaseSummary);
+		assertBean(updated, "version,developmentVersion,rc,releaseSummary", "9.2.1,9.2.3-SNAPSHOT,11,summary");
 		assertEquals("9.2.3-SNAPSHOT", new RunStateStore(dir).load("9.2.1").orElseThrow().developmentVersion);
 	}
 
@@ -131,8 +126,7 @@ class ReleaseEngineTest {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		var renamed = eng.updateDetails("9.2.1", null, null, null, null, "9.2.2", "9.2.3-SNAPSHOT", null);
-		assertEquals("9.2.2", renamed.version);
-		assertEquals("juneau-9.2.2-branch", renamed.branch);
+		assertBean(renamed, "version,branch", "9.2.2,juneau-9.2.2-branch");
 		assertTrue(new RunStateStore(dir).load("9.2.1").isEmpty(), "old store key must go away");
 		assertEquals("9.2.3-SNAPSHOT", new RunStateStore(dir).load("9.2.2").orElseThrow().developmentVersion);
 	}
@@ -346,8 +340,7 @@ class ReleaseEngineTest {
 		eng.start("9.2.1", null);
 
 		assertSize(1, seen);
-		assertEquals("9.2.1", seen.get(0).version);
-		assertEquals(RunStatus.RUNNING, seen.get(0).status);
+		assertBean(seen.get(0), "version,status", "9.2.1,RUNNING");
 		assertEquals(StepStatus.PENDING, seen.get(0).steps.get(0).status);
 	}
 

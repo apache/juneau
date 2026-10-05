@@ -179,4 +179,14 @@ class EmailServiceTest {
 		// section with exactly one blank line between them.
 		assertTrue(body.contains("Apache Juneau 9.2.1.\n\nDownloads:"), body);
 	}
+
+	@Test
+	void z01_nullExtraDoesNotThrow(@TempDir Path dir) {
+		var svc = new EmailService(dir, recording(new ArrayList<>()));
+		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
+		assertEquals(svc.renderBody(EmailTemplate.VOTE, rs, Map.of()), svc.renderBody(EmailTemplate.VOTE, rs, null));
+		assertEquals(svc.renderBody(EmailTemplate.RESULT, rs, Map.of()), svc.renderBody(EmailTemplate.RESULT, rs, null));
+		assertEquals(svc.renderBody(EmailTemplate.ANNOUNCEMENT, rs, Map.of()), svc.renderBody(EmailTemplate.ANNOUNCEMENT, rs, null));
+		assertNotNull(svc.compose(EmailTemplate.VOTE, rs, null));
+	}
 }

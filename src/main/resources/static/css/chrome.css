@@ -260,58 +260,9 @@ tr.detail-row dd {
   min-width: 0;
 }
 
-.rm-probe-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 4px 0 8px;
-  overflow: visible;
-}
-
-.rm-probe-pill {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--jc-font);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  border: 1px solid var(--jc-border);
-  border-radius: 999px;
-  padding: 5px 12px;
-  background: var(--jc-tag-neutral-bg);
-  color: var(--jc-tag-neutral-text);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.rm-probe-pill-pass {
-  background: var(--jc-tag-green-bg);
-  color: var(--jc-tag-green-text);
-  border-color: var(--jc-tag-green-border);
-}
-
-.rm-probe-pill-fail {
-  background: var(--jc-tag-red-bg);
-  color: var(--jc-tag-red-text);
-  border-color: var(--jc-tag-red-border);
-}
-
-.rm-probe-pill-warn {
-  background: var(--jc-tag-amber-bg);
-  color: var(--jc-tag-amber-text);
-  border-color: var(--jc-tag-amber-border);
-}
-
-.rm-probe-pill-pending {
-  background: var(--jc-tag-neutral-bg);
-  color: var(--jc-tag-neutral-text);
-}
-
-.rm-probe-pill-selected {
-  box-shadow: 0 0 0 2px var(--jc-accent);
-  background: var(--jc-accent-wash);
-}
+/* The probe row/chips are the Juneau probe helper now: .jc-probe-group geometry lives in juneau-views.css and the
+   .jc-probe-<status> wash/dot/selected-ring palette in the console pack's chrome.css.  This file styles only the
+   Details-pane pieces the helper does not own. */
 
 .rm-probe-placeholder {
   color: var(--jc-text-muted);

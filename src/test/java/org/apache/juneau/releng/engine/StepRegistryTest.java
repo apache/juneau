@@ -17,9 +17,8 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class StepRegistryTest {
@@ -32,13 +31,8 @@ class StepRegistryTest {
 	@Test
 	void a01_hasTwentyThreeStepsInSpecOrder() {
 		var ids = registry().ids();
-		assertSize(23, ids);
-		assertEquals("preflight", ids.get(0));
-		assertEquals("compose-propose-email", ids.get(1));
-		assertEquals("workspace-setup", ids.get(2));
-		assertEquals("finalize-run", ids.get(22));
-		assertEquals("vote-gate", ids.get(14));
-		assertEquals("tally-vote-result", ids.get(15));
+		assertBean(ids, "length,0,1,2,14,15,22",
+			"23,preflight,compose-propose-email,workspace-setup,vote-gate,tally-vote-result,finalize-run");
 		assertFalse(ids.contains("milestone-close"));
 	}
 
@@ -52,7 +46,6 @@ class StepRegistryTest {
 	void a03_dropRcResetRangeStartsAtWorkspaceSetup() {
 		var ids = registry().ids();
 		// Steps 0-1 kept; reset from index 2 (workspace-setup) onward.
-		assertEquals(List.of("preflight", "compose-propose-email"), ids.subList(0, 2));
-		assertEquals("workspace-setup", ids.get(2));
+		assertBean(ids, "0,1,2", "preflight,compose-propose-email,workspace-setup");
 	}
 }

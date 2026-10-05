@@ -34,4 +34,22 @@ test.describe('Setup page', () => {
     // "active" CSS class — on /rest/setup the Setup node (id "setup") matches the page's tab="setup".
     await expect(page.getByRole('link', { name: 'Setup' })).toHaveAttribute('aria-current', 'page');
   });
+
+  test('clicking a probe updates Details', async ({ page }) => {
+    await page.goto('/rest/setup');
+    const details = page.locator('#rm-probe-details');
+
+    // Initial selection (first probe) must populate Details — not leave the empty placeholder.
+    await expect(details.getByRole('heading', { name: 'juneau-checkout' })).toBeVisible();
+    await expect(details.locator('.rm-probe-placeholder')).toHaveCount(0);
+
+    // Juneau's probe helper stamps role="radio" on each chip.
+    await page.getByRole('radio', { name: 'github-token', exact: true }).click();
+    await expect(details.getByRole('heading', { name: 'github-token' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'github-token', exact: true })).toHaveAttribute('aria-checked', 'true');
+
+    await page.getByRole('radio', { name: 'mvn', exact: true }).click();
+    await expect(details.getByRole('heading', { name: 'mvn' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'mvn', exact: true })).toHaveAttribute('aria-checked', 'true');
+  });
 });

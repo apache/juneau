@@ -19,6 +19,7 @@ package org.apache.juneau.releng.release;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.RunStatus;
@@ -47,10 +48,7 @@ public class LocalStateReleaseSource {
 	 * In-progress rows, one per persisted {@link RunState}.
 	 */
 	public List<Release> list() {
-		var out = new ArrayList<Release>();
-		for (var rs : store.loadAll())
-			out.add(toRelease(rs));
-		return out;
+		return store.loadAll().stream().map(LocalStateReleaseSource::toRelease).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private static Release toRelease(RunState rs) {

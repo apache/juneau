@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -34,14 +34,8 @@ class RunStateSnapshotTest {
 
 		var snap = RunStateSnapshot.of(rs);
 
-		assertEquals("9.2.1", snap.version);
-		assertEquals(RunStatus.AWAITING_VOTE, snap.status);
-		assertEquals(2, snap.rc);
-		assertSize(2, snap.steps);
-		assertEquals("preflight", snap.steps.get(0).stepId);
-		assertEquals(StepStatus.SUCCEEDED, snap.steps.get(0).status);
-		assertEquals("workspace-setup", snap.steps.get(1).stepId);
-		assertEquals(StepStatus.PENDING, snap.steps.get(1).status);
+		assertBean(snap, "version,status,rc", "9.2.1,AWAITING_VOTE,2");
+		assertBeans(snap.steps, "stepId,status", "preflight,SUCCEEDED", "workspace-setup,PENDING");
 	}
 
 	@Test

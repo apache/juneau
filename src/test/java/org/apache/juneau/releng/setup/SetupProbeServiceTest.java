@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.setup;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertBean;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;
@@ -81,7 +82,8 @@ class SetupProbeServiceTest {
 	@Test
 	void a01_inventoryHasPrereqsThenCredentials() {
 		var ids = setup.inventory().stream().map(p -> p.id).toList();
-		assertEquals(List.of("checkout", "mvn", "git", "gh", "gpg", "settings-xml", "apache", "gpg-key", "github"), ids);
+		assertEquals(List.of("juneau-checkout", "mvn", "git", "gh", "gpg", "settings-xml", "apache-ldap", "gpg-signing-key",
+			"github-token"), ids);
 		assertEquals("pending", setup.inventory().get(0).status);
 	}
 
@@ -89,14 +91,11 @@ class SetupProbeServiceTest {
 	void a02_dataEagerPassWhenToolsAndCheckoutPresent() {
 		var data = setup.data();
 		assertEquals("brew", data.packageManager);
-		assertEquals("pass", byId(data, "checkout").status);
-		assertEquals("pass", byId(data, "mvn").status);
-		assertEquals("pass", byId(data, "settings-xml").status);
-		assertEquals("fail", byId(data, "apache").status);
-		assertTrue(byId(data, "mvn").installable);
-		assertFalse(byId(data, "checkout").installable);
-		assertEquals("apache", byId(data, "apache").credentialName);
-		assertEquals("gpg", byId(data, "gpg-key").credentialName);
+		assertBean(byId(data, "juneau-checkout"), "status,installable", "pass,false");
+		assertBean(byId(data, "mvn"), "status,installable", "pass,true");
+		assertBean(byId(data, "settings-xml"), "status", "pass");
+		assertBean(byId(data, "apache-ldap"), "status,credentialName", "fail,apache");
+		assertBean(byId(data, "gpg-signing-key"), "credentialName", "gpg");
 	}
 
 	@Test
@@ -141,7 +140,7 @@ class SetupProbeServiceTest {
 
 	@Test
 	void a08_installUnknownProbeIs404() {
-		assertThrows(NotFound.class, () -> setup.install("checkout"));
+		assertThrows(NotFound.class, () -> setup.install("juneau-checkout"));
 		assertThrows(NotFound.class, () -> setup.install("settings-xml"));
 		assertThrows(NotFound.class, () -> setup.install("nope"));
 	}

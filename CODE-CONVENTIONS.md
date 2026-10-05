@@ -214,7 +214,7 @@ trailing comment.
 
 **Fix, don't suppress (rules handled by real changes in this repo):**
 
-- `java:S1192` — extract a constant for ordinary duplicated string literals (not protocol/annotation/config keys). E.g. `EmailTemplate.DEV` (dev-list address), `ProcessRunner.Default.MSG_INTERRUPTED`/`MSG_ERROR`.
+- `java:S1192` — extract a constant for ordinary duplicated string literals (not protocol/annotation/config keys). E.g. `EmailTemplate.DEV` (dev-list address), `DefaultProcessRunner.MSG_INTERRUPTED`/`MSG_ERROR`.
 - `java:S125` — delete genuinely commented-out code; if it's explanatory prose that Sonar's recognizer misclassifies (e.g. a comment containing `Type.method()`), reword it so it isn't code-shaped rather than deleting the explanation.
 - `java:S1845` — rename to remove a method/field name clash (prefer renaming the field): `CredentialSpec.name`→`id`, `StepResult.ok` field→`success` (keeping the `ok(…)`/`fail(…)` factory pair). Update all references + tests; keep behavior identical.
 - `java:S1172` — remove unused parameters and simplify callers/tests.

@@ -17,14 +17,14 @@
   Thin document shell: <@console> emits the whole <!DOCTYPE html> document, its head cascade (including the CSRF
   meta and body attributes when the LoopbackBoundaryFilter published a token), and its body scaffold.  This chrome
   authors only the release-manager-specific pieces: the oakleaf mark (icon=) / tab icon (favicon=), the danger-pill
-  token overrides on the stock light-red pack, the app-only head/tail assets, the header actions, the nav tree, the
+  token overrides on the stock light-red theme, the app-only head/tail assets, the header actions, the nav tree, the
   main slot, and the footer.  Child templates stay <@page> calls.
---><@console theme="light-red" icon="/img/oakleaf.svg" favicon="/img/oakleaf.svg" brand="Apache Juneau · Release Manager">
+--><@console icon="/img/oakleaf.svg" favicon="/img/oakleaf.svg" brand="Apache Juneau · Release Manager">
 <@theme name="light-red">
     <#-- The app's pre-existing danger palette (the same colors .tag.armed / .pill.invalid
-         already used).  Overrides the stock light-red pack's Bootstrap-maroon red so the FAILED status/stage pill
+         already used).  Overrides the stock light-red theme's Bootstrap-maroon red so the FAILED status/stage pill
          resolves through the token system without changing how it looks.  --jc-tag-red-* is kept as an alias-free
-         mirror for the .jc-badge[danger] / busy-avatar-status consumers that still read that triad. -->
+         mirror for the .jc-badge[data-juneau-badge-tone="error"] / busy-avatar-status consumers that still read that triad. -->
     <@token name="--jc-pill-red-bg" value="#fdeceb"/>
     <@token name="--jc-pill-red-text" value="#c23934"/>
     <@token name="--jc-pill-red-border" value="#f3c6c2"/>
@@ -51,7 +51,7 @@
     </@node>
 </@navigation>
 <@main/>
-<@footer>Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.</@footer>
+<@footer text="Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases."/>
 <@scripts>
     <script src="/js/renderers.js"></script>
 </@scripts>

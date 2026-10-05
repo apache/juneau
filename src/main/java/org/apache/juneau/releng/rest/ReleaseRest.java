@@ -17,10 +17,14 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import org.apache.juneau.commons.beanquery.InMemoryBeanQueryContext;
+import org.apache.juneau.commons.beanquery.SearchType;
 import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.marshall.json.JsonSerializer;
@@ -28,10 +32,12 @@ import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
+import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.rest.server.converter.ProtocolQueryable;
-import org.apache.juneau.rest.server.converter.QueryableSettings;
-import org.apache.juneau.rest.server.datatables.DataTablesQueryProtocol;
+import org.apache.juneau.rest.server.datatables.DataTablesMixin;
+import org.apache.juneau.rest.server.datatables.DataTablesRequest;
+import org.apache.juneau.rest.server.datatables.DataTablesResults;
+import org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
@@ -46,13 +52,17 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * <p>
  * The table catalog (columns + renderers + ribbon + Detail View) is authored in FTL — the
- * {@code <@card type="datatables">} escape hatch in {@code releases.ftlh} — and mounted client-side by the
- * {@code juneau-page-cards.js} runtime; there is no Java {@code ViewDef}. {@link #page(RestRequest)} serves the
- * page shell, and {@link #data()} serves the {@code DataTablesResults} envelope via {@link ProtocolQueryable} +
- * {@link #queryableSettings()}. Toolkit assets are served by the composed {@link ViewsMixin} at this resource's
- * mount and pulled in by the page's {@code toolkit="views"} pack.
+ * {@code <@card type="datatables">} escape hatch in {@code releases.ftlh} — and lifted into the page's
+ * {@code #juneau-page} contract, where {@code juneau-console.js} mounts it client-side; there is no Java
+ * {@code ViewDef}. {@link #page(RestRequest)} serves the
+ * page shell, and {@link #data(DataTablesRequest)} serves the {@link DataTablesResults} envelope: the browser's
+ * {@code JuneauDataTables.ajax()} helper POSTs a {@link DataTablesRequest} JSON body, which runs via
+ * {@link DataTablesQuery#run} against a fresh {@link InMemoryBeanQueryContext} session built from
+ * {@link ReleaseListService#list()}. Toolkit assets are served by the composed {@link ViewsMixin} at this resource's
+ * mount and pulled in by the page's {@code toolkit="views"} pack; the composed {@link DataTablesMixin} serves the
+ * {@code /juneau-datatables.js} glue that defines {@code JuneauDataTables.ajax()}.
  */
-@Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
+@Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = { ViewsMixin.class, DataTablesMixin.class })
 public class ReleaseRest extends BasicRestResource {
 
 	/**
@@ -63,7 +73,22 @@ public class ReleaseRest extends BasicRestResource {
 	private final ReleaseListService service;
 
 	/**
-	 * Wires the release list service backing {@link #data()}.
+	 * The query schema for {@link #data(DataTablesRequest)}: immutable, built once over {@link Release}; each request
+	 * opens a fresh session over {@link ReleaseListService#list()}.
+	 *
+	 * <p>
+	 * {@link Release}'s public fields become columns automatically (as {@link SearchType#TEXT}), so only the columns
+	 * that need a different search type are declared here; they still read through the bean property.  The column names
+	 * match the {@code data} keys of the FTL {@code <@card type="datatables">} catalog.
+	 */
+	private final InMemoryBeanQueryContext<Release> releaseQueryContext = InMemoryBeanQueryContext.create(Release.class)
+		.column("version", SearchType.VERSION)
+		.column("status", SearchType.ENUM)
+		.column("stage", SearchType.ENUM)
+		.build();
+
+	/**
+	 * Wires the release list service backing {@link #data(DataTablesRequest)}.
 	 */
 	public ReleaseRest(ReleaseListService service) {
 		this.service = service;
@@ -80,17 +105,6 @@ public class ReleaseRest extends BasicRestResource {
 	}
 
 	/**
-	 * The DataTables server-side-processing settings for {@link #data()}: a {@link DataTablesQueryProtocol} bound to
-	 * {@link Release} so the protocol's positional {@code columns[i]} resolution maps to the row bean's properties.
-	 * The FTL {@code <@card type="datatables">} catalog declares the same column order client-side; this is the
-	 * server-side half of that contract.
-	 */
-	@Bean
-	public QueryableSettings queryableSettings() {
-		return QueryableSettings.create().protocol(new DataTablesQueryProtocol(Release.class)).build();
-	}
-
-	/**
 	 * Human page — the Releases shell; the table catalog is authored in {@code releases.ftlh} and mounted client-side.
 	 */
 	@RestGet("/")
@@ -100,12 +114,17 @@ public class ReleaseRest extends BasicRestResource {
 
 	/**
 	 * Machine endpoint — the DataTables server-side-processing envelope ({@code {draw, recordsTotal, recordsFiltered,
-	 * data}}). The method returns the row {@code List}; {@link ProtocolQueryable} parses the DataTables request, runs
-	 * the shared query engine (search/sort/paginate), and wraps the page in a {@code DataTablesResults} envelope.
+	 * data}}). The POSTed {@link DataTablesRequest} body is run by {@link DataTablesQuery#run} (search/sort/paginate)
+	 * against a fresh session over the current release list.
+	 *
+	 * @param request The DataTables request body.
+	 * @return The DataTables results envelope.
 	 */
-	@RestGet(path = "/data", converters = ProtocolQueryable.class)
-	public List<Release> data() {
-		return service.list();
+	@RestPost("/data")
+	public DataTablesResults<Release> data(@Content DataTablesRequest request) {
+		try (var session = releaseQueryContext.getSession(service.list())) {
+			return DataTablesQuery.run(request, session);
+		}
 	}
 
 	/**
@@ -167,7 +186,7 @@ public class ReleaseRest extends BasicRestResource {
 	}
 
 	private static void put(Map<String, Object> fields, String key, String value) {
-		if (value != null && !value.isBlank())
+		if (inb(value))
 			fields.put(key, value);
 	}
 }

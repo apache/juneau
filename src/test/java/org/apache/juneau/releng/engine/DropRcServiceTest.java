@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -97,20 +97,15 @@ class DropRcServiceTest {
 		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
 
 		var rs = store.load("9.2.1").orElseThrow();
-		assertEquals(2, rs.rc);
-		assertSize(1, rs.rcHistory);
-		assertEquals(RunStatus.RUNNING, rs.status);
+		assertBean(rs, "rc,rcHistory{length},status", "2,{1},RUNNING");
 		// steps 1-2 kept, including their logRef (their output genuinely didn't change for this RC)
-		assertEquals(StepStatus.SUCCEEDED, rs.step("preflight").status);
-		assertEquals(StepStatus.SUCCEEDED, rs.step("compose-propose-email").status);
-		assertEquals("logs/9.2.1-RC1-preflight.log", rs.step("preflight").logRef);
 		// workspace-setup onward reset, including logRef cleared — each step's own log is recreated lazily
 		// on its next run under the new RC via ReleaseEngine.apply().
-		assertEquals(StepStatus.PENDING, rs.step("workspace-setup").status);
-		assertEquals(StepStatus.PENDING, rs.step("build-verify").status);
-		assertEquals(StepStatus.PENDING, rs.step("release-prepare").status);
-		assertNull(rs.step("workspace-setup").logRef);
-		assertNull(rs.step("release-prepare").logRef);
+		assertMapped(rs, (r, p) -> r.step(p).status,
+			"preflight,compose-propose-email,workspace-setup,build-verify,release-prepare",
+			"SUCCEEDED,SUCCEEDED,PENDING,PENDING,PENDING");
+		assertMapped(rs, (r, p) -> r.step(p).logRef, "preflight,workspace-setup,release-prepare",
+			"logs/9.2.1-RC1-preflight.log,<null>,<null>");
 	}
 
 

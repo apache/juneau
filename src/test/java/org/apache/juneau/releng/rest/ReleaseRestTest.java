@@ -17,17 +17,23 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.assertPage;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import org.apache.juneau.commons.inject.StackOverlay;
+import org.apache.juneau.http.entity.StringBody;
 import org.apache.juneau.http.response.NotFound;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
+import org.apache.juneau.rest.server.datatables.DataTablesRequest;
 import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -104,8 +110,9 @@ class ReleaseRestTest {
 	/**
 	 * Asserts the served Releases page carries {@code juneau-icons.js} ordered before {@code juneau-ribbon.js}
 	 * (the ribbon resolves glyphs from the icon registry as it builds its buttons, so the registry must
-	 * already exist), the page-cards runtime + sidecar mount, the shared chrome nav with Releases current,
-	 * the title, and the Detail View populator.
+	 * already exist), the releases datatables card in the {@code #juneau-page} contract (mounted client-side by
+	 * {@code juneau-console.js}, not server-rendered), the shared chrome nav with Releases current, the title, and
+	 * the Detail View populator.
 	 */
 	@Test
 	void b01_pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
@@ -119,11 +126,10 @@ class ReleaseRestTest {
 				assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js script include: " + body);
 				assertTrue(iconsIdx < ribbonIdx,
 					"juneau-icons.js must be included before juneau-ribbon.js: " + body);
-				// The datatables card mount + page-cards runtime + sidecar.
-				assertTrue(body.contains("id=\"releases\""), "Missing releases card mount: " + body);
-				assertTrue(body.contains("data-juneau-card=\"datatables\""), "Missing datatables card markup: " + body);
-				assertTrue(body.contains("data-juneau-card-sidecar=\"releases\""), "Missing page-cards sidecar: " + body);
-				assertTrue(body.contains("juneau-page-cards.js"), "Missing page-cards runtime: " + body);
+				// The datatables card is in the page contract; juneau-console.js mounts it.
+				assertPage(body).isValid().hasCard("releases", "datatables");
+				assertFalse(body.contains("juneau-page-cards.js"), "page-cards runtime was removed in C1: " + body);
+				assertTrue(body.contains("/juneau-console/juneau-console.js"), "Missing console shell: " + body);
 				assertFalse(body.contains("/js/table-slot.js"), "Retired table-slot.js is still wired: " + body);
 				assertFalse(body.contains("juneau-view:releases"), "ViewTable sidecar leaked: " + body);
 				assertFalse(body.contains("data-juneau-view"), "Marker table leaked: " + body);
@@ -134,9 +140,8 @@ class ReleaseRestTest {
 				// published and no CSRF markup is emitted here.
 				assertFalse(body.contains("data-juneau-csrf="),
 					"MockRestClient runs without the boundary filter, so <@console> must emit no CSRF attrs: " + body);
-				// Chrome now authors the primary nav once as an <@navigation> landmark; the Releases node is current.
-				assertTrue(body.contains("class=\"juneau-page-nav\""), "Chrome must render the shared page nav: " + body);
-				assertTrue(body.contains("aria-current=\"page\""), "Releases nav node must be current: " + body);
+				// Chrome now authors the primary nav once in the #juneau-page contract; the Releases node is current.
+				assertPage(body).hasActiveNav("releases");
 				assertTrue(body.contains("class=\"jc-page-header\""), body);
 				assertTrue(body.contains("<h1>All Releases</h1>"), body);
 				assertTrue(body.contains("Every Apache Juneau release"), body);
@@ -177,26 +182,60 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
-	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
-	 * data}}) with server-side per-column filtering applied. Wired via {@link ReleaseRest#queryableSettings()}
-	 * (a {@code DataTablesQueryProtocol}) + {@code ProtocolQueryable}.
+	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a POSTed
+	 * {@code DataTablesRequest} JSON body it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal,
+	 * recordsFiltered, data}}) with server-side per-column filtering applied. Wired via
+	 * {@link ReleaseRest#data(DataTablesRequest)}.
 	 */
 	@Test
 	void c01_dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
 		var releases = List.of(release("9.2.1", "RELEASED"), release("9.3.0", "VOTING"));
 		try (var client = client(rest(releases))) {
-			try (var resp = client.request("GET",
-					"/data?draw=3&start=0&length=10&columns[0][data]=status&columns[0][search][value]=RELEASED").run()) {
+			var request = "{\"draw\":3,\"start\":0,\"length\":10,\"columns\":[{\"data\":\"status\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"RELEASED\"}}]}";
+			try (var resp = client.request("POST", "/data").header("Accept", "application/json").body(StringBody.of(request, "application/json")).run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertFalse(body.trim().startsWith("["), "Expected an envelope object, not a bare array: " + body);
-				assertTrue(body.contains("recordsTotal"), "Missing recordsTotal: " + body);
-				assertTrue(body.contains("recordsFiltered"), "Missing recordsFiltered: " + body);
-				assertTrue(body.contains("draw"), "Missing draw: " + body);
-				assertTrue(body.contains("9.2.1"), "Filtered-in row missing: " + body);
-				assertFalse(body.contains("9.3.0"), "Filtered-out row present: " + body);
+				var envelope = Json.to(body, Map.class);
+				assertBean(envelope, "draw,recordsTotal,recordsFiltered", "3,2,1");
+				assertList(versions(envelope), "9.2.1");
 				assertTrue(body.contains(release("9.2.1", "RELEASED").rowId()), body);
+			}
+		}
+	}
+
+	private static List<String> versions(Map<?,?> envelope) {
+		return ((List<?>)envelope.get("data")).stream().map(r -> String.valueOf(((Map<?,?>)r).get("version"))).toList();
+	}
+
+	/**
+	 * Ordering by a VERSION column is semantic ({@code 9.10.0} after {@code 9.3.0}), not lexicographic.
+	 */
+	@Test
+	void c02_dataOrdersVersionColumnSemantically() throws Exception {
+		var releases = List.of(release("9.2.1", "RELEASED"), release("9.10.0", "VOTING"), release("9.3.0", "RELEASED"));
+		try (var client = client(rest(releases))) {
+			var request = "{\"draw\":1,\"start\":0,\"length\":10,\"columns\":[{\"data\":\"version\",\"searchable\":true,\"orderable\":true}],\"order\":[{\"column\":0,\"dir\":\"desc\"}]}";
+			try (var resp = client.request("POST", "/data").header("Accept", "application/json").body(StringBody.of(request, "application/json")).run()) {
+				assertEquals(200, resp.getStatusCode());
+				var envelope = Json.to(resp.getBodyAsString(), Map.class);
+				assertList(versions(envelope), "9.10.0", "9.3.0", "9.2.1");
+			}
+		}
+	}
+
+	/**
+	 * The DataTables global search narrows the returned rows.
+	 */
+	@Test
+	void c03_dataGlobalSearchNarrowsRows() throws Exception {
+		var releases = List.of(release("9.2.1", "RELEASED"), release("9.3.0", "VOTING"));
+		try (var client = client(rest(releases))) {
+			var request = "{\"draw\":1,\"start\":0,\"length\":10,\"search\":{\"value\":\"VOTING\"},\"columns\":[{\"data\":\"status\",\"searchable\":true,\"orderable\":true}]}";
+			try (var resp = client.request("POST", "/data").header("Accept", "application/json").body(StringBody.of(request, "application/json")).run()) {
+				assertEquals(200, resp.getStatusCode());
+				var envelope = Json.to(resp.getBodyAsString(), Map.class);
+				assertBean(envelope, "recordsTotal,recordsFiltered", "2,1");
+				assertList(versions(envelope), "9.3.0");
 			}
 		}
 	}
@@ -207,13 +246,13 @@ class ReleaseRestTest {
 	 * renders Status/Stage as pills, not tag chips.
 	 */
 	@Test
-	void d01_pageCardSidecarCarriesTheReleasesCatalog() throws Exception {
+	void d01_releasesCardCarriesTheCatalogInTheContract() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("data-juneau-card-sidecar=\"releases\""), body);
-				assertTrue(body.contains("\"contractVersion\":\"4\""), "Missing lifted VIEW_META view contract: " + body);
+				assertPage(body).isValid().hasCard("releases", "datatables");
+				assertTrue(body.contains("\"contractVersion\":\"5\""), "Missing lifted VIEW_META view contract: " + body);
 				assertTrue(body.contains("\"id\":\"releases\""), "Missing view id in the lifted catalog: " + body);
 				assertTrue(body.contains("version-cell"), body);
 				assertTrue(body.contains("/rest/releases/expand/{id}"), body);

@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -250,10 +251,8 @@ class ReleaseRunRestTest {
 		rest.start(body);
 
 		var rs = rest.state("9.2.1");
-		assertEquals("Patch release.", rs.releaseSummary);
-		assertEquals("- One\n- Two", rs.highlights);
-		assertEquals("- A known thing", rs.knownIssues);
-		assertEquals("Thanks all.", rs.acknowledgements);
+		assertBean(rs, "releaseSummary,highlights,knownIssues,acknowledgements",
+			"Patch release.,- One\n- Two,- A known thing,Thanks all.");
 	}
 
 	@Test
@@ -268,12 +267,10 @@ class ReleaseRunRestTest {
 		body.acknowledgements = "Updated thanks.";
 		var updated = rest.details("9.2.1", body);
 
-		assertEquals("Revised summary.", updated.releaseSummary);
-		assertEquals("- Updated highlight", updated.highlights);
+		assertBean(updated, "releaseSummary,highlights", "Revised summary.,- Updated highlight");
 		// Reload from the store to confirm the update was persisted, not just returned.
 		var reloaded = rest.state("9.2.1");
-		assertEquals("- Updated issue", reloaded.knownIssues);
-		assertEquals("Updated thanks.", reloaded.acknowledgements);
+		assertBean(reloaded, "knownIssues,acknowledgements", "- Updated issue,Updated thanks.");
 	}
 
 	@Test
@@ -291,13 +288,9 @@ class ReleaseRunRestTest {
 		body.releaseSummary = "Keep summary.";
 		var updated = rest.details("9.2.1", body);
 
-		assertEquals("9.2.1", updated.version);
-		assertEquals("9.2.3-SNAPSHOT", updated.developmentVersion);
-		assertEquals(11, updated.rc);
-		assertEquals("Keep summary.", updated.releaseSummary);
+		assertBean(updated, "version,developmentVersion,rc,releaseSummary", "9.2.1,9.2.3-SNAPSHOT,11,Keep summary.");
 		var reloaded = rest.state("9.2.1");
-		assertEquals("9.2.3-SNAPSHOT", reloaded.developmentVersion);
-		assertEquals(11, reloaded.rc);
+		assertBean(reloaded, "developmentVersion,rc", "9.2.3-SNAPSHOT,11");
 	}
 
 	@Test
@@ -310,8 +303,7 @@ class ReleaseRunRestTest {
 		body.developmentVersion = "9.2.3-SNAPSHOT";
 		var renamed = rest.details("9.2.1", body);
 
-		assertEquals("9.2.2", renamed.version);
-		assertEquals("juneau-9.2.2-branch", renamed.branch);
+		assertBean(renamed, "version,branch", "9.2.2,juneau-9.2.2-branch");
 		assertThrows(NotFound.class, () -> rest.state("9.2.1"));
 		assertEquals("9.2.3-SNAPSHOT", rest.state("9.2.2").developmentVersion);
 	}

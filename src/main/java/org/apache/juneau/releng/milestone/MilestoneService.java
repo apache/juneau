@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.juneau.releng.release.ReleaseVersion;
 
 /**
@@ -61,9 +62,7 @@ public class MilestoneService {
 			groups.computeIfAbsent(key, ChangelogEntry.Builder::new).add(m.group(2), m.group(3), pr.number);
 		}
 
-		var out = new ArrayList<ChangelogEntry>();
-		for (var b : groups.values())
-			out.add(b.build());
+		var out = groups.values().stream().map(ChangelogEntry.Builder::build).collect(Collectors.toCollection(ArrayList::new));
 		out.sort((a, b) -> a.dependency.compareToIgnoreCase(b.dependency));
 		return out;
 	}
@@ -72,9 +71,6 @@ public class MilestoneService {
 	 * Renders the full "** Changes" section text.
 	 */
 	public String renderChangesSection(List<PullRequest> prs) {
-		var sb = new StringBuilder("** Changes\n\n");
-		for (var e : generateChanges(prs))
-			sb.append(e.toLine()).append('\n');
-		return sb.toString();
+		return generateChanges(prs).stream().map(e -> e.toLine() + '\n').collect(Collectors.joining("", "** Changes\n\n", ""));
 	}
 }

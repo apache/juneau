@@ -20,14 +20,23 @@
     const details = document.getElementById('rm-probe-details');
     if (!row || !details) return;
 
-    let probes = [];
-    let selectedId = null;
+    // Juneau owns probe SELECTION (radiogroup / ring / keyboard).  enhanceProbeGroup lives on JuneauViews.init
+    // (not JuneauViews).  A second call is idempotent and ignores opts — Details listens for juneau:probe-select
+    // (click and keyboard) instead of relying on onSelect surviving the page-wide initProbeGroups pass.
+    const I = window.JuneauViews && window.JuneauViews.init;
+    const ctl = I && I.enhanceProbeGroup ? I.enhanceProbeGroup(row) : null;
 
+    let probes = [];
+    let selectedId = ctl && ctl.getSelected() ? ctl.getSelected().getAttribute('data-juneau-probe') : null;
+
+    const PROBE_STATUS = ['jc-probe-success', 'jc-probe-error', 'jc-probe-warning', 'jc-probe-neutral'];
+
+    // pass|fail|warn|pending verdict -> the Juneau probe status class (success|error|warning|neutral).
     function statusClass(status) {
-        if (status === 'pass') return 'rm-probe-pill-pass';
-        if (status === 'fail') return 'rm-probe-pill-fail';
-        if (status === 'warn') return 'rm-probe-pill-warn';
-        return 'rm-probe-pill-pending';
+        if (status === 'pass') return 'jc-probe-success';
+        if (status === 'fail') return 'jc-probe-error';
+        if (status === 'warn') return 'jc-probe-warning';
+        return 'jc-probe-neutral';
     }
 
     function escapeHtml(s) {
@@ -36,13 +45,25 @@
         }[c]));
     }
 
-    function renderPills() {
-        row.querySelectorAll('[data-probe-id]').forEach((el) => {
-            const p = probes.find((x) => x.id === el.getAttribute('data-probe-id'));
-            el.className = 'rm-probe-pill ' + statusClass(p ? p.status : 'pending');
-            if (el.getAttribute('data-probe-id') === selectedId)
-                el.classList.add('rm-probe-pill-selected');
+    function onSelect(id) {
+        selectedId = id;
+        renderDetails();
+    }
+
+    row.addEventListener('juneau:probe-select', (e) => {
+        const id = e && e.detail && e.detail.id;
+        if (id != null)
+            onSelect(id);
+    });
+
+    // Repaints only the status color; selection (aria-checked/tabindex) is the helper's, kept across the repaint.
+    function renderProbes() {
+        row.querySelectorAll('[data-juneau-probe]').forEach((el) => {
+            const p = probes.find((x) => x.id === el.getAttribute('data-juneau-probe'));
+            el.classList.remove(...PROBE_STATUS);
+            el.classList.add(statusClass(p ? p.status : 'pending'));
         });
+        if (ctl) ctl.repaint();
     }
 
     function credentialForm(p) {
@@ -122,18 +143,17 @@
         const r = await fetch('/rest/setup/data');
         const body = await r.json();
         probes = body.probes || [];
-        renderPills();
+        renderProbes();
+        // Init does not emit juneau:probe-select; pick up the helper's initial selection (or its aria-checked
+        // stamp if enhance raced after our first ctl read) so Details is not stuck on the placeholder.
+        if (!selectedId) {
+            const checked = row.querySelector('[data-juneau-probe][aria-checked="true"]');
+            if (checked)
+                selectedId = checked.getAttribute('data-juneau-probe');
+        }
         if (selectedId)
             renderDetails();
     }
-
-    row.addEventListener('click', (ev) => {
-        const btn = ev.target.closest('[data-probe-id]');
-        if (!btn) return;
-        selectedId = btn.getAttribute('data-probe-id');
-        renderPills();
-        renderDetails();
-    });
 
     loadData();
 })();

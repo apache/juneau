@@ -32,6 +32,7 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
+import org.apache.juneau.rest.server.views.ViewsMixin;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -39,7 +40,9 @@ import jakarta.servlet.http.HttpServletRequest;
  * Setup tab: probe inventory + Details. Install is a loopback-mutating local shell (CSRF + loopback
  * filter), not the LIVE arm phrase.
  */
-@Rest(path = "/setup", title = "Setup", responseProcessors = FreemarkerViewRenderer.class)
+// mixins=ViewsMixin serves the toolkit="views" assets (juneau-views.css/js — the probe helper) at this
+// resource's own mount, mirroring ReleaseRest.
+@Rest(path = "/setup", title = "Setup", responseProcessors = FreemarkerViewRenderer.class, mixins = ViewsMixin.class)
 public class SetupRest extends BasicRestResource {
 
 	private final SetupProbeService setup;
@@ -62,7 +65,7 @@ public class SetupRest extends BasicRestResource {
 	}
 
 	/**
-	 * Human page: probe pills only; browser then GET {@code /data}.
+	 * Human page: probe chips only; browser then GET {@code /data}.
 	 */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {

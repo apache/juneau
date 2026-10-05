@@ -146,7 +146,7 @@ public class NexusMockModel {
 		if (data == null)
 			return null;
 		var ids = (List<Object>) data.get("stagedRepositoryIds");
-		return (ids == null || ids.isEmpty()) ? null : String.valueOf(ids.get(0));
+		return ie(ids) ? null : String.valueOf(ids.get(0));
 	}
 
 	private void requireRepo(String id) {

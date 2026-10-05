@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.util.ProcessRunner;
 
@@ -82,9 +83,10 @@ public class EmailService {
 	 * The plain-text body per template. {@code extra} carries step-computed values (checksums, tally,
 	 * links). The four optional narrative fields are pulled from {@code rs}, falling back to a matching
 	 * {@code extra} value (e.g. announcement {@code highlights}); each block is omitted entirely when its
-	 * source value is blank.
+	 * source value is blank. A {@code null} {@code extra} is treated as empty.
 	 */
-	public String renderBody(EmailTemplate t, RunState rs, Map<String, String> extra) {
+	public String renderBody(EmailTemplate t, RunState rs, Map<String, String> inputExtra) {
+		var extra = inputExtra == null ? Map.<String, String>of() : inputExtra;
 		var summary = narrative(rs.releaseSummary, extra, "releaseSummary");
 		var highlights = narrative(rs.highlights, extra, "highlights");
 		var knownIssues = narrative(rs.knownIssues, extra, "knownIssues");
@@ -128,11 +130,7 @@ public class EmailService {
 	 * Joins the non-blank sections with a single blank line between each and a trailing newline.
 	 */
 	private static String paragraphs(String... sections) {
-		var kept = new ArrayList<String>();
-		for (var s : sections)
-			if (s != null && !s.isEmpty())
-				kept.add(s);
-		return String.join("\n\n", kept) + "\n";
+		return Arrays.stream(sections).filter(s -> ine(s)).collect(Collectors.joining("\n\n")) + "\n";
 	}
 
 	/**

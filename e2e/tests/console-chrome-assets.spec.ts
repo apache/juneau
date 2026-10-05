@@ -23,6 +23,8 @@ import { test, expect, type Page } from '@playwright/test';
  * `/rest/setup/juneau-console/...`) and the page paints as unstyled run-on tabs
  * ("SetupReleasesNew Release"). Root-absolute `/juneau-console/chrome.css` is
  * 200 and the chrome paints. This spec fails if that regression ships again.
+ * The same applies to the console shell `/juneau-console/juneau-console.js`, which draws the nav this
+ * test paints.
  */
 
 type CssHit = { pathname: string; status: number; contentType: string };
@@ -38,7 +40,8 @@ function collectConsoleCss(page: Page): CssHit[] {
     }
     if (
       pathname.includes('/juneau-console/chrome.css') ||
-      pathname.includes('/juneau-console/themes/juneau-theme-')
+      pathname.includes('/juneau-console/themes/juneau-theme-') ||
+      pathname.endsWith('/juneau-console/juneau-console.js')
     ) {
       hits.push({
         pathname,
@@ -72,6 +75,14 @@ test.describe('Console chrome assets on a nested page', () => {
     expect(theme[0].status).toBe(200);
     expect(chrome[0].contentType).toMatch(/text\/css/i);
     expect(theme[0].contentType).toMatch(/text\/css/i);
+
+    const shell = hits.filter((h) => h.pathname.endsWith('/juneau-console/juneau-console.js'));
+    expect(shell, `juneau-console.js requests on /rest/setup: ${JSON.stringify(hits)}`).toHaveLength(1);
+    expect(shell[0].pathname, 'the console shell must be site-root, not under /rest/setup').toBe(
+      '/juneau-console/juneau-console.js',
+    );
+    expect(shell[0].status).toBe(200);
+    expect(shell[0].contentType).toMatch(/javascript/i);
 
     const header = page.locator('header.jc-header');
     await expect(header).toBeVisible();

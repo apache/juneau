@@ -179,7 +179,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		// Extra friction for the irreversible nexus-release.
 		if (stepId.equals("nexus-release")) {
 			var confirm = form == null ? null : form.get("confirmVersion");
-			if (confirm == null || !confirm.equals(version))
+			if (neq(confirm, version))
 				return StepResult.fail("Type the version string to confirm this irreversible release.");
 		}
 		return engine.apply(version, stepId, form == null ? Map.of() : form);
@@ -247,7 +247,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	@RestPost("/{version}/drop-rc/apply")
 	public StepResult dropRcApply(@Path("version") String version, @Content DropRcRequest body) {
 		var rs = requireRun(version);
-		if (body.confirmRc == null || !body.confirmRc.equals("RC" + rs.rc))
+		if (neq(body.confirmRc, "RC" + rs.rc))
 			return StepResult.fail("Type the RC identifier (e.g. RC1) to confirm this destructive action.");
 		var secrets = engine.secrets();
 		dropRc.apply(version, body.reason, secrets::availid, secrets::ldapPassword);

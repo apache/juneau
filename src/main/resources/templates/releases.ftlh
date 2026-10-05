@@ -27,7 +27,7 @@
         contractVersion: '1',
         layout: 'wide',
         view: {
-            contractVersion: '4',
+            contractVersion: '5',
             id: 'releases',
             rowType: 'Release',
             dataMode: 'server',
@@ -44,12 +44,12 @@
                 { data: 'milestoneUrl', title: 'Milestone', orderable: false, searchable: true, render: { id: 'linked' }, href: '{milestoneUrl}', defaultVisible: false }
             ],
             ribbon: [
-                { type: 'columnSearchToggle', group: 'filters' },
                 { type: 'option', id: 'dropped-only', title: 'Dropped only', group: 'filters', column: 'status', value: 'DROPPED', persist: true, symbol: 'filter_alt' },
                 { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
                 { type: 'refresh' }
             ],
-            columnConfig: {}
+            columnConfig: true,
+            primary: true
         },
         detail: {
             contractVersion: '1',

@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -212,8 +213,7 @@ class CredentialWriteVectorTest {
 		var res = boundary().check(req("POST", "application/x-www-form-urlencoded", Map.of(
 			"Host", "127.0.0.1:8790",
 			"Origin", "http://evil.example")));
-		assertFalse(res.isAllowed());
-		assertEquals(403, res.status(), "foreign Origin is caught before the content type");
+		assertBean(() -> "foreign Origin is caught before the content type", res, "allowed,status", "false,403");
 	}
 
 	@Test
@@ -226,8 +226,7 @@ class CredentialWriteVectorTest {
 			"Origin", "http://127.0.0.1:8790",
 			"Sec-Fetch-Site", "same-origin",
 			"X-Csrf-Token", "t0ken")));
-		assertFalse(res.isAllowed());
-		assertEquals(415, res.status());
+		assertBean(res, "allowed,status", "false,415");
 	}
 
 	@Test
@@ -240,9 +239,7 @@ class CredentialWriteVectorTest {
 			"Origin", "http://127.0.0.1:8790",
 			"Sec-Fetch-Site", "same-origin",
 			"X-Csrf-Token", "t0ken")));
-		assertFalse(res.isAllowed());
-		assertEquals(415, res.status());
-		assertEquals(LoopbackBoundary.Reason.CONTENT_TYPE_NOT_JSON, res.reason(), "refused for the wrong reason");
+		assertBean(() -> "refused for the wrong reason", res, "allowed,status,reason", "false,415,CONTENT_TYPE_NOT_JSON");
 	}
 
 	@Test
@@ -279,9 +276,7 @@ class CredentialWriteVectorTest {
 			"Origin", "http://127.0.0.1:8790",
 			"Sec-Fetch-Site", "same-origin",
 			"X-Csrf-Token", "t0ken")));
-		assertFalse(res.isAllowed());
-		assertEquals(415, res.status());
-		assertEquals(LoopbackBoundary.Reason.CONTENT_TYPE_NOT_JSON, res.reason());
+		assertBean(res, "allowed,status,reason", "false,415,CONTENT_TYPE_NOT_JSON");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

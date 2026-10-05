@@ -56,6 +56,7 @@ import org.apache.juneau.releng.rest.SetupRest;
 import org.apache.juneau.releng.setup.SetupProbeService;
 import org.apache.juneau.releng.rest.ReleaseRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
+import org.apache.juneau.releng.util.DefaultProcessRunner;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
@@ -84,7 +85,7 @@ public class AppConfiguration {
 	 */
 	@Bean
 	public ProcessRunner processRunner() {
-		return new ProcessRunner.Default();
+		return new DefaultProcessRunner();
 	}
 
 	/**

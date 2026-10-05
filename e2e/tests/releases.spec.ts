@@ -18,10 +18,11 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
 /**
- * The Releases tab renders a `<@card type="datatables" id="releases">`: the page-cards runtime mounts a
- * DataTable inside the `#releases` card body from the page's JSON sidecar, hydrating rows client-side from
- * `/rest/releases/data`. Row content comes from real `git tag juneau-*` history in the local apache/juneau
- * checkout (rm.repo.dir), so "9.2.0" is expected to always be present as a released version in this environment.
+ * The Releases tab renders a `<@card type="datatables" id="releases">`: `juneau-console.js` mounts a
+ * DataTable inside the `#releases` card body from the card's entry in the `#juneau-page` contract, hydrating rows
+ * client-side from `/rest/releases/data`. Row content comes from real `git tag juneau-*` history in the local
+ * apache/juneau checkout (rm.repo.dir), so "9.2.0" is expected to always be present as a released version in this
+ * environment.
  */
 const TABLE_SELECTOR = '#releases';
 
@@ -209,5 +210,130 @@ test.describe('Releases table', () => {
         .not.toBe(initialRangeText);
       await expect(menuBtn).toHaveAttribute('aria-expanded', 'false');
     });
+  });
+});
+
+/**
+ * Column headers of the first `<thead>` row (the second row, when present, is the per-column search row). Used to
+ * locate a column by its visible title rather than by a brittle positional index.
+ */
+function headerCells(page: Page): Locator {
+  return releasesTable(page).locator('thead tr').first().locator('th');
+}
+
+async function openViewSettings(page: Page): Promise<Locator> {
+  // juneau-config.js mountChooser: a "Columns" toolbar button (aria-label "Columns") opens a role=dialog titled
+  // "View Settings" (h2#juneau-config-title) with one `.juneau-config-col-row[data-col=<data>]` per catalog column.
+  await page.getByRole('button', { name: 'Columns', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'View Settings' });
+  await expect(dialog).toBeVisible();
+  return dialog;
+}
+
+test.describe('Releases View Settings', () => {
+  // Isolation: each Playwright test gets a fresh browser context, so localStorage-persisted View Settings from one
+  // test never leak into another.
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/rest/releases');
+    await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();
+  });
+
+  test('unchecking a column and applying hides it, and the choice survives a reload', async ({ page }) => {
+    await expect(headerCells(page).filter({ hasText: /^Stage$/ })).toHaveCount(1);
+
+    const dialog = await openViewSettings(page);
+    await dialog.locator('.juneau-config-col-row[data-col="stage"] input.juneau-config-col-vis').uncheck();
+    await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
+
+    await expect(headerCells(page).filter({ hasText: /^Stage$/ })).toHaveCount(0);
+    // Other default-visible columns are untouched.
+    await expect(headerCells(page).filter({ hasText: /^Status$/ })).toHaveCount(1);
+
+    // View Settings are browser-local (localStorage), deliberately NOT carried in the shareable ?state= link
+    // (juneau-urlstate.js), so a plain reload must still come back with Stage hidden.
+    await page.reload();
+    await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();
+    await expect(headerCells(page).filter({ hasText: /^Stage$/ })).toHaveCount(0);
+    await expect(headerCells(page).filter({ hasText: /^Status$/ })).toHaveCount(1);
+  });
+
+  test('a default-hidden column (GitHub) can be shown from View Settings', async ({ page }) => {
+    await expect(headerCells(page).filter({ hasText: /^GitHub$/ })).toHaveCount(0);
+
+    const dialog = await openViewSettings(page);
+    await dialog.locator('.juneau-config-col-row[data-col="githubReleaseUrl"] input.juneau-config-col-vis').check();
+    await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
+
+    await expect(headerCells(page).filter({ hasText: /^GitHub$/ })).toHaveCount(1);
+  });
+});
+
+test.describe('Releases Copy link', () => {
+  test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
+
+  // PENDING UPSTREAM: the framework exposes JuneauViews.init.copyShareableUrl(table, ctx) but does not yet ship the
+  // "Copy link" toolbar button (juneau-views.js buildShareableUrl / juneau-config.js copyShareLink comments: the
+  // toolbar button is a follow-up). Un-fixme once the button lands upstream (or JRM wires its own).
+  // When enabled (once the upstream Copy link toolbar button lands), poll the clipboard with expect.poll rather than reading it once, since the write may
+  // land asynchronously relative to the click.
+  test.fixme('Copy link puts a ?state= URL on the clipboard', async ({ page }) => {
+    await page.goto('/rest/releases');
+    await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();
+
+    await page.getByRole('button', { name: /copy link/i }).click();
+    const clip = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clip).toContain('?state=');
+  });
+});
+
+test.describe('Releases server-side search', () => {
+  test('column header search on Status issues a POST to /rest/releases/data and only RELEASED rows remain', async ({ page }) => {
+    await page.goto('/rest/releases');
+    await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();
+
+    const statusHeader = headerCells(page).filter({ hasText: /^Status$/ });
+    await expect(statusHeader).toHaveCount(1);
+
+    // Status column index is computed from the live header row each time it is used (never a stale early snapshot).
+    const statusCells = async (): Promise<string[]> => {
+      const idx = (await headerCells(page).allInnerTexts()).findIndex(t => t.trim() === 'Status');
+      expect(idx).toBeGreaterThanOrEqual(0);
+      return (await dataRows(page).locator(`td:nth-child(${idx + 1})`).allInnerTexts()).map(t => t.trim());
+    };
+
+    // Precondition: the unfiltered table has at least one non-RELEASED Status cell, so the filtered assertion below
+    // cannot pass vacuously.
+    await expect
+      .poll(async () => (await statusCells()).some(t => t !== '' && t !== 'RELEASED'),
+        { message: 'unfiltered table should contain a non-RELEASED Status cell' })
+      .toBe(true);
+
+    // The data endpoint is POST-only JSON (DataTablesQuery); server-mode search must go over POST. Create the wait
+    // promises before the triggering action and await them via Promise.all so a rejection is never left unhandled.
+    const isSearchPost = (r: { method(): string; url(): string; postData(): string | null }) =>
+      r.method() === 'POST' && r.url().includes('/rest/releases/data') && (r.postData() ?? '').includes('RELEASED');
+    const reqPromise = page.waitForRequest(r => isSearchPost(r));
+    const respPromise = page.waitForResponse(resp => isSearchPost(resp.request()));
+    // If a step before the Promise.all throws, these promises would otherwise reject unhandled.
+    reqPromise.catch(() => {});
+    respPromise.catch(() => {});
+
+    // juneau-views.js renderHeaderSearchIcon / openColumnSearchPopover: a glyph in the header opens a popover whose
+    // input is labelled "Search <title>"; Enter commits (server tables do not fetch per keystroke).
+    await statusHeader.locator('.juneau-view-col-search-icon').click();
+    const input = page.getByRole('textbox', { name: 'Search Status', exact: true });
+    await expect(input).toBeVisible();
+    await input.fill('RELEASED');
+    const [req, resp] = await Promise.all([reqPromise, respPromise, input.press('Enter')]);
+    expect(req.method()).toBe('POST');
+    expect(resp.ok()).toBe(true);
+
+    // Every visible Status cell must say RELEASED once the filtered draw settles, and at least one row remains.
+    await expect
+      .poll(async () => {
+        const texts = await statusCells();
+        return texts.length > 0 && texts.every(t => t === 'RELEASED');
+      }, { message: 'all visible Status cells should read RELEASED' })
+      .toBe(true);
   });
 });

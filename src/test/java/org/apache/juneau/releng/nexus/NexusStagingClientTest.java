@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.nexus;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,7 @@ class NexusStagingClientTest {
 				+ "{\"repositoryId\":\"orgapachejuneau-1042\",\"type\":\"open\",\"created\":\"2026-08-14\"}]";
 		var client = NexusStagingClient.forTests((method, path, body) -> json);
 		var repo = client.findLatestRepo().orElseThrow();
-		assertEquals("orgapachejuneau-1042", repo.id);
-		assertEquals("open", repo.status);
+		assertBean(repo, "id,status", "orgapachejuneau-1042,open");
 	}
 
 	@Test

@@ -26,7 +26,7 @@ class ProcessRunnerStreamTest {
 
 	@Test
 	void a01_streamsEachLineToSinkAndReturnsExitCode() {
-		var runner = new ProcessRunner.Default();
+		var runner = new DefaultProcessRunner();
 		var lines = new ArrayList<String>();
 		var res = runner.run(List.of("sh", "-c", "printf 'a\\nb\\nc\\n'"), null, null, lines::add);
 		assertEquals(0, res.exitCode());
@@ -36,7 +36,7 @@ class ProcessRunnerStreamTest {
 
 	@Test
 	void a02_nonZeroExitStillStreamsAndReports() {
-		var runner = new ProcessRunner.Default();
+		var runner = new DefaultProcessRunner();
 		var lines = new ArrayList<String>();
 		var res = runner.run(List.of("sh", "-c", "echo hi; exit 7"), null, null, lines::add);
 		assertEquals(7, res.exitCode());
@@ -46,7 +46,7 @@ class ProcessRunnerStreamTest {
 
 	@Test
 	void a03_timeoutKillsAHungProcess() {
-		var runner = new ProcessRunner.Default();
+		var runner = new DefaultProcessRunner();
 		var start = System.nanoTime();
 		var res = runner.run(List.of("sleep", "30"), null, null, java.time.Duration.ofMillis(400));
 		var elapsedMs = (System.nanoTime() - start) / 1_000_000;
@@ -58,7 +58,7 @@ class ProcessRunnerStreamTest {
 
 	@Test
 	void a04_nullStdinClosesSoReadDoesNotHang() {
-		var runner = new ProcessRunner.Default();
+		var runner = new DefaultProcessRunner();
 		var start = System.nanoTime();
 		var res = runner.run(List.of("sh", "-c", "read line; echo after"), null, null, java.time.Duration.ofSeconds(3));
 		var elapsedMs = (System.nanoTime() - start) / 1_000_000;

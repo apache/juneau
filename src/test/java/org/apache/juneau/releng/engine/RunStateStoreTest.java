@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -35,8 +35,7 @@ class RunStateStoreTest {
 
 		assertTrue(dir.resolve("release-9.2.1.json").toFile().isFile());
 		var back = store.load("9.2.1").orElseThrow();
-		assertEquals("juneau-9.2.1-branch", back.branch);
-		assertSize(2, back.steps);
+		assertBean(back, "branch,steps{length}", "juneau-9.2.1-branch,{2}");
 	}
 
 	@Test

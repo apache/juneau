@@ -16,7 +16,8 @@
  */
 
 /*
- * Releases Detail View populator. Registers before juneau-page-cards.js mounts the table.
+ * Releases Detail View populator. Registers before juneau-console.js mounts the datatables card on
+ * DOMContentLoaded.
  * Dual-hat: look/behavior only — no slds-* / SSC class copies.
  *
  * Two-column fieldGrid (Juneau --juneau-view-detail-columns + cols-2 class; inline labels).
@@ -29,7 +30,7 @@
 	// defaults to the "original" pack. This app wants Material Symbols. Select it here — this
 	// file is in the page's init= list, parsed after juneau-icons.js and before the DOMContentLoaded mount, so
 	// icons.pack() reloads the sprite in time for the ribbon/paging glyphs. (This is JuneauViews.icons.pack, the
-	// icon-sprite selector — NOT the ConsoleChromeMixin CSS ThemePack.)
+	// icon-sprite selector — NOT the console CSS theme (<@theme>).)
 	function selectIconPack() {
 		var icons = globalThis.JuneauViews && globalThis.JuneauViews.icons;
 		if (icons && typeof icons.pack === 'function')

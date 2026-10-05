@@ -15,7 +15,9 @@
   limitations under the License.
 -->
 
-<@page tab="setup" init="/js/credentials.js,/js/rm-setup.js">
+<#-- toolkit="views" pulls juneau-views.css/js so the Setup probes can adopt the Juneau probe helper
+     (.jc-probe group + JuneauViews.enhanceProbeGroup); the console pack already ships the .jc-probe-* palette. -->
+<@page tab="setup" toolkit="views" init="/js/credentials.js,/js/rm-setup.js">
     <div class="jc-page-header">
         <h1>Setup</h1>
         <p class="jc-page-sub">Every prerequisite this release manager needs, and the controls to fix them.</p>
@@ -25,9 +27,9 @@
             <div class="jc-card-header">
                 <h2>Probes</h2>
             </div>
-            <div class="rm-probe-row" id="rm-probe-row">
+            <div class="jc-probe-group" data-juneau-probe-group id="rm-probe-row">
                 <#list inventory as p>
-                <button type="button" class="rm-probe-pill rm-probe-pill-pending" data-probe-id="${p.id}" data-kind="${p.kind}">${p.label}</button>
+                <button type="button" class="jc-probe jc-probe-neutral" data-juneau-probe="${p.id}" data-kind="${p.kind}"><span class="jc-probe-dot"></span>${p.label}</button>
                 </#list>
             </div>
         </div>

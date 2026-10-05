@@ -17,6 +17,8 @@
 
 package org.apache.juneau.releng.release;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -90,7 +92,7 @@ public class Release {
 	 * @return A Jira issue-search URL, or {@code null}.
 	 */
 	public String jiraVersionUrl() {
-		if (version == null || version.isBlank())
+		if (ib(version))
 			return null;
 		var jql = "project = JUNEAU AND fixVersion = \"" + version + "\"";
 		return "https://issues.apache.org/jira/issues/?jql=" + URLEncoder.encode(jql, StandardCharsets.UTF_8);
@@ -102,7 +104,7 @@ public class Release {
 	 * @return The dist URL when this row is {@code RELEASED}, otherwise {@code null}.
 	 */
 	public String distUrl() {
-		if (!"RELEASED".equals(status) || version == null || version.isBlank())
+		if (!"RELEASED".equals(status) || ib(version))
 			return null;
 		return DIST_RELEASE_PREFIX + version + "/";
 	}
@@ -113,12 +115,12 @@ public class Release {
 	 * @return The tag URL, or {@code null} when version is blank.
 	 */
 	public String githubTagUrl() {
-		if (version == null || version.isBlank())
+		if (ib(version))
 			return null;
 		return "https://github.com/apache/juneau/releases/tag/juneau-" + version;
 	}
 
 	private static String nz(String s) {
-		return s == null || s.isBlank() ? "—" : s;
+		return ib(s) ? "—" : s;
 	}
 }

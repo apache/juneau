@@ -17,6 +17,7 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.assertPage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ class SetupRestTest {
 	}
 
 	@Test
-	void a01_pageRendersProbePillsWithoutSldsOrSsc() throws Exception {
+	void a01_pageRendersProbeChipsWithoutSldsOrSsc() throws Exception {
 		try (var client = client()) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
@@ -79,23 +80,24 @@ class SetupRestTest {
 				assertTrue(body.contains("<h1>Setup</h1>"), body);
 				assertTrue(body.contains("jc-page-sub"), body);
 				assertTrue(body.contains("Every prerequisite this release manager needs"), body);
-				assertTrue(body.contains("class=\"juneau-page-nav\""), "Setup must render the shared page nav: " + body);
-				assertEquals(3, count(body, "class=\"juneau-page-nav-section\""),
-					() -> "Setup, Releases, and New Release must be separate section links: " + body);
-				assertTrue(body.contains(">Setup</a>"), body);
-				assertTrue(body.contains(">Releases</a>"), body);
-				assertTrue(body.contains(">New Release</a>"), body);
-				assertTrue(body.contains("href=\"/rest/setup\" aria-current=\"page\""),
-					"Setup tab must be current: " + body);
-				assertFalse(body.contains("juneau-views.css"),
-					"Setup must not pull the views toolkit just for Page Tabs: " + body);
+				var page = assertPage(body)
+					.isValid()
+					.hasActiveNav("setup")
+					.hasNavHref("setup", "/rest/setup")
+					.hasNavHref("releases", "/rest/releases")
+					.hasNavHref("new", "/rest/runs")
+					.hasNavChildren("new", "input", "exec")
+					.hasFooterText("Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.");
+				assertEquals(3, page.contract().getList("nav").size(),
+					() -> "Setup, Releases, and New Release must be the three sections: " + body);
+				assertTrue(body.contains("juneau-views.css"),
+					"Setup now pulls the views toolkit so the probes can adopt the Juneau probe helper: " + body);
 				assertTrue(body.contains("/juneau-console/chrome.css"), body);
-				assertTrue(body.contains("<footer class=\"jc-page-footer\""),
-					"footer is now real HTML from the <@footer> slot: " + body);
-				assertTrue(body.contains("loopback tool for cutting Apache Juneau releases"),
-					"footer copy must render in the <@footer> HTML: " + body);
-				assertTrue(body.contains("data-probe-id=\"checkout\""), body);
-				assertTrue(body.contains("data-probe-id=\"github\""), body);
+				assertTrue(body.contains("data-juneau-probe-group"), body);
+				assertTrue(body.contains("class=\"jc-probe jc-probe-neutral\""), body);
+				assertTrue(body.contains("data-juneau-probe=\"juneau-checkout\""), body);
+				assertTrue(body.contains("data-juneau-probe=\"github-token\""), body);
+				assertFalse(body.contains("rm-probe-pill"), "old pill markup must be gone: " + body);
 				assertTrue(body.contains("/js/rm-setup.js"), body);
 				assertFalse(body.contains("slds-"), body);
 				assertFalse(body.contains("ssc-"), body);
@@ -110,8 +112,8 @@ class SetupRestTest {
 			try (var resp = client.request("GET", "/data").header("Accept", "application/json").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("\"id\":\"checkout\""), body);
-				assertTrue(body.contains("\"id\":\"gpg-key\""), body);
+				assertTrue(body.contains("\"id\":\"juneau-checkout\""), body);
+				assertTrue(body.contains("\"id\":\"gpg-signing-key\""), body);
 			}
 		}
 	}
@@ -119,7 +121,7 @@ class SetupRestTest {
 	@Test
 	void a03_installUnknownIs404() throws Exception {
 		try (var client = client()) {
-			try (var resp = client.request("POST", "/install/checkout").run()) {
+			try (var resp = client.request("POST", "/install/juneau-checkout").run()) {
 				assertEquals(404, resp.getStatusCode());
 			}
 		}
@@ -134,6 +136,16 @@ class SetupRestTest {
 				assertFalse(text.contains("slds-"), path + " " + text);
 				assertFalse(text.contains("ssc-"), path + " " + text);
 				assertFalse(text.toLowerCase().contains("salesforce"), path);
+				if (path.endsWith("rm-setup.js")) {
+					assertTrue(text.contains("JuneauViews.init"),
+						"probe helper is on JuneauViews.init, not JuneauViews: " + path);
+					assertTrue(text.contains("juneau:probe-select"),
+						"Details must listen for the helper's selection-change event: " + path);
+					assertFalse(text.contains("views.enhanceProbeGroup"),
+						"must not call enhanceProbeGroup on JuneauViews (undefined): " + path);
+					assertFalse(text.contains("data-probe-id"),
+						"old pill click path must stay gone: " + path);
+				}
 				if (path.endsWith("chrome.css")) {
 					assertFalse(text.contains("max-width: 1180px"), "Setup grid must fill the well: " + path);
 					assertFalse(text.contains("border-top-color: var(--jc-page-nav-accent)"),
@@ -168,6 +180,19 @@ class SetupRestTest {
 					assertTrue(text.contains("<h1>New Release</h1>"), text);
 					assertTrue(text.contains("jc-page-sub"), text);
 				}
+			}
+		}
+	}
+
+	@Test
+	void a06_pageLinksTheLightRedStockThemeExactlyOnce() throws Exception {
+		try (var client = client()) {
+			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertEquals(1, count(body, "juneau-theme-light-red.css"), body);
+				assertFalse(body.contains("juneau-theme-open.css"), body);
+				assertTrue(body.contains("--jc-pill-red-bg:#fdeceb"), body);
 			}
 		}
 	}

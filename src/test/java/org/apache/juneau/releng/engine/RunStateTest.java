@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.engine;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -29,9 +29,7 @@ class RunStateTest {
 	void a01_newRunSeedsAllStepsPending() {
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch",
 				List.of("preflight", "compose-propose-email", "workspace-setup"));
-		assertEquals("9.2.1", rs.version);
-		assertEquals(1, rs.rc);
-		assertEquals(RunStatus.RUNNING, rs.status);
+		assertBean(rs, "version,rc,status", "9.2.1,1,RUNNING");
 		assertSize(3, rs.steps);
 		assertTrue(rs.steps.stream().allMatch(s -> s.status == StepStatus.PENDING));
 	}
@@ -58,15 +56,12 @@ class RunStateTest {
 		var json = Json.DEFAULT.write(rs);
 		var back = Json.DEFAULT.read(json, RunState.class);
 
-		assertEquals(2, back.rc);
 		assertSize(1, back.rcHistory);
 		assertEquals("vote rejected", back.rcHistory.get(0).reason);
 		assertEquals(StepStatus.SUCCEEDED, back.step("preflight").status);
-		assertEquals("orgapachejuneau-1042", back.nexusRepoId);
-		assertEquals("Patch release.", back.releaseSummary);
+		assertBean(back, "rc,nexusRepoId,releaseSummary,knownIssues,acknowledgements",
+			"2,orgapachejuneau-1042,Patch release.,- A known thing,Thanks all.");
 		assertEquals("- One\n- Two", back.highlights);
-		assertEquals("- A known thing", back.knownIssues);
-		assertEquals("Thanks all.", back.acknowledgements);
 	}
 
 }
