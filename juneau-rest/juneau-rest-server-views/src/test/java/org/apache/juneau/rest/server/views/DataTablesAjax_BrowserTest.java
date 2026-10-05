@@ -28,6 +28,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.http.BeanQueryRequest;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.datatables.adapter.*;
@@ -118,6 +119,8 @@ class DataTablesAjax_BrowserTest extends TestBase {
 				try (var os = ex.getResponseBody()) {
 					os.write(bytes);
 				}
+			} catch (BeanQuerySyntaxException e) {
+				sendBadRequest(ex, e);
 			} catch (Exception e) {
 				sendFailure(ex, e);
 			}
@@ -131,6 +134,20 @@ class DataTablesAjax_BrowserTest extends TestBase {
 			}
 		});
 		server.start();
+	}
+
+	/**
+	 * Answers a query syntax error the way {@code RestContext.convertThrowable} does: a 400 carrying the error code in
+	 * the {@code X-BeanQuery-Error} header and the message as the body.
+	 */
+	private static void sendBadRequest(HttpExchange ex, BeanQuerySyntaxException e) throws IOException {
+		var bytes = e.getMessage().getBytes(UTF_8);
+		ex.getResponseHeaders().add(BeanQueryRequest.ERROR_HEADER, e.code().name());
+		ex.getResponseHeaders().add("Content-Type", "text/plain;charset=utf-8");
+		ex.sendResponseHeaders(400, bytes.length);
+		try (var os = ex.getResponseBody()) {
+			os.write(bytes);
+		}
 	}
 
 	/**

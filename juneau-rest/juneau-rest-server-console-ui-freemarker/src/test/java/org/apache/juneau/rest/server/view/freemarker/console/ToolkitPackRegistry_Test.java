@@ -73,11 +73,12 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertTrue(indexOfContaining(r.cssUrls(), "juneau-views.css") >= 0, () -> r.cssUrls().toString());
 		assertTrue(indexOfContaining(r.cssUrls(), "juneau-config.css") >= 0, () -> r.cssUrls().toString());
 
-		// JS load order is a contract: renders, icons, search, pagestate, ribbon, datatables glue, views, config,
+		// JS load order is a contract: renders, icons, search, pagestate, urlstate (Copy link), ribbon, datatables glue, views, config,
 		// regions, helpers LAST.
 		var js = r.jsUrls();
 		var order = List.of(
-			"juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-ribbon.js",
+			"juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
+			"juneau-ribbon.js",
 			"juneau-datatables.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js", "juneau-helpers.js");
 		var prev = -1;
 		for (var name : order) {

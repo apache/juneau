@@ -1224,6 +1224,11 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertContent().asString().isContains("window.JuneauConsole");
 	}
 
+	@Test void q03_consoleJsPath_singleSourceOfTruth() {
+		assertEquals("/juneau-console.js", ViewsMixin.CONSOLE_JS_PATH);
+		assertEquals(org.apache.juneau.rest.server.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED, ViewsMixin.CONSOLE_JS_PATH);
+	}
+
 	@Test void q02_hostWithoutMixin_consoleJsRouteIs404() throws Exception {
 		cNoMixin.get(ViewsMixin.CONSOLE_JS_PATH).run().assertStatus(404);
 	}

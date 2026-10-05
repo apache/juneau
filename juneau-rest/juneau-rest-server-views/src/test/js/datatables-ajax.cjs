@@ -133,11 +133,11 @@ const PROBE = async function () {
 	out.t1Page2 = { firstRow: firstRowText('t1', 1) };
 
 	// 6) #t3 has a bad column (data: 'nope'); its draws surface the server's error via DataTables' default
-	// errMode dialog (window.alert), captured by the harness's page.on('dialog') listener below.  DataTables fires
-	// dt-error just before that alert, which is what this step waits on.  Searching the column makes the failure
-	// independent of the initial-order draw.
+	// errMode dialog (window.alert), captured by the harness's page.on('dialog') listener below.  DataTables
+	// (dt-error) or the Juneau glue (error.dt) fires its event just before that alert, which is what this step
+	// waits on.  Searching the column makes the failure independent of the initial-order draw.
 	let t3Errored = false;
-	window.jQuery('#t3').on('dt-error.dt', () => { t3Errored = true; });
+	window.jQuery('#t3').on('error.dt dt-error.dt', () => { t3Errored = true; });
 	window.JuneauDataTables_t3.table.column(0).search('x').draw();
 	await waitFor('t3Error', () => t3Errored, 10000);
 	await sleep(100); // let the alert itself reach page.on('dialog')
@@ -160,6 +160,12 @@ const PROBE = async function () {
 		const dialogs = [];
 		page.on('pageerror', e => failures.push(String(e)));
 		page.on('console', m => { if (m.type() === 'error') failures.push(m.text()); });
+		// #t3 (the only table sending X-Test-Header) deliberately draws a bad column, so the server answers 400 and the
+		// browser logs one "Failed to load resource" console error per response.  Those are expected; anything else is not.
+		let expectedBadColumn400s = 0;
+		page.on('response', r => {
+			if (r.status() === 400 && r.request().headers()['x-test-header']) expectedBadColumn400s++;
+		});
 		page.on('dialog', async d => { dialogs.push(d.message()); await d.dismiss(); });
 
 		let report;
@@ -176,7 +182,12 @@ const PROBE = async function () {
 			dumpDiagnostics(diag);
 			throw error;
 		}
-		report.jsFailures = failures.slice();
+		const is400 = f => /Failed to load resource.*\b400\b/.test(f);
+		const unexpected = [];
+		const expected = [];
+		for (const f of failures) (is400(f) && expected.length < expectedBadColumn400s ? expected : unexpected).push(f);
+		report.jsFailures = unexpected;
+		report.expectedBadColumnFailures = expected;
 		report.diagnostics = diag.slice();
 		report.dialogs = dialogs.slice();
 		process.stdout.write(JSON.stringify(report, null, 2) + '\n');

@@ -1248,7 +1248,7 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	/**
-	 * Saves this config file to the specified writer as an INI file.
+	 * Saves this config file to the specified writer using this config's {@link ConfigFormat} (INI, YAML, etc.).
 	 *
 	 * @param w
 	 * 	The writer to send the output to.

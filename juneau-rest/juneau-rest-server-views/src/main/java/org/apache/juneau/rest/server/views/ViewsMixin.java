@@ -309,14 +309,14 @@ public class ViewsMixin {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// A views-only application serves the console shell at the same stable path ConsoleChromeMixin uses.</jc>
+	 * 	<jc>// A views-only application serves the console shell at the same stable (unprefixed) path ConsoleChromeMixin serves it at.</jc>
 	 * 	<ja>&#64;Rest</ja>(mixins=ViewsMixin.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {}
 	 *
 	 * 	<jc>// GET /juneau-console.js now returns the shell runtime.</jc>
 	 * </p>
 	 */
-	public static final String CONSOLE_JS_PATH = "/juneau-console.js";
+	public static final String CONSOLE_JS_PATH = ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED;
 
 	/**
 	 * The frozen {@code VIEW_META} contract-version handshake constant. FTL {@code <@card type="datatables">}

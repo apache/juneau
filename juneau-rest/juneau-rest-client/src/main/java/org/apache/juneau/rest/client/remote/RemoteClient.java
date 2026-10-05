@@ -698,7 +698,7 @@ public final class RemoteClient {
 
 		private static boolean isBean(Object arg) {
 			return ! (arg instanceof CharSequence || arg instanceof Number || arg instanceof Boolean
-				|| arg instanceof Character || arg instanceof Enum || arg instanceof java.util.Date
+				|| arg instanceof Character || arg instanceof Enum || isDateTime(arg)
 				|| arg instanceof Collection || arg.getClass().isArray());
 		}
 
@@ -1146,7 +1146,12 @@ public final class RemoteClient {
 		/** Returns <jk>true</jk> if the {@code @Part} argument is a scalar that should be sent as a text field. */
 		private static boolean isScalarPart(Object arg) {
 			return arg instanceof CharSequence || arg instanceof Number || arg instanceof Boolean
-				|| arg instanceof Character || arg instanceof Enum || arg instanceof java.util.Date;
+				|| arg instanceof Character || arg instanceof Enum || isDateTime(arg);
+		}
+
+		/** Returns <jk>true</jk> for {@link java.util.Date} and {@code java.time} values (Instant, LocalDate, Duration, Period, ...), which are scalars. */
+		private static boolean isDateTime(Object arg) {
+			return arg instanceof java.util.Date || arg instanceof java.time.temporal.Temporal || arg instanceof java.time.temporal.TemporalAmount;
 		}
 
 		/**

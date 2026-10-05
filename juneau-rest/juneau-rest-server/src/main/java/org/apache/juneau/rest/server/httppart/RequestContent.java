@@ -594,6 +594,7 @@ public class RequestContent {
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				var o = session.read(in, cm);
+				drain(in);
 				if (nn(schema))
 					schema.validateOutput(o);
 				return o;
@@ -614,6 +615,33 @@ public class RequestContent {
 		var ct = req.getHeader(ContentType.class);
 		throw new UnsupportedMediaType("Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
+	}
+
+	// Reads and discards whatever remains of the request entity after a parser has returned.
+	//
+	// A parser stops as soon as the top-level value is complete, leaving the end of the entity unread: for a
+	// Transfer-Encoding: chunked request, at least the zero-length terminating chunk whenever the client flushes it
+	// separately from the content.  If that is still unread when the response completes, the container finds
+	// unconsumed request content and aborts the connection.  By then the response is usually committed, so no
+	// Connection: close can be added, and a client reusing the pooled keep-alive connection fails its next request
+	// with an immediate EOF.  Draining here (blocking until end-of-stream) keeps the connection reusable.
+	//
+	// Best effort: the stream is still bounded by @Rest(maxInput), and any failure (limit exceeded, client gone)
+	// just falls back to the container's own unconsumed-content handling.  A zero-byte read also stops the loop,
+	// since BoundedServletInputStream returns 0 rather than -1 once its limit is reached.
+	// Q: Can we move this to IOUtils?
+	private static void drain(Closeable in) {
+		try {
+			if (in instanceof Reader r) {
+				var buf = new char[256];
+				while (r.read(buf) > 0) { /* discard */ }
+			} else if (in instanceof InputStream is) {
+				var buf = new byte[256];
+				while (is.read(buf) > 0) { /* discard */ }
+			}
+		} catch (IOException ignored) {
+			// best-effort; the parsed value is already complete
+		}
 	}
 
 	/**

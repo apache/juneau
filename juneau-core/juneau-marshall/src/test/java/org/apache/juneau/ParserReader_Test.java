@@ -20,7 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.json5l.*;
+import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -159,6 +164,65 @@ class ParserReader_Test extends TestBase {
 	//====================================================================================================
 	// Utility methods
 	//====================================================================================================
+
+	//====================================================================================================
+	// Holes created by delete()/replace() are removed by position; real DEL (0x7F) characters survive.
+	//====================================================================================================
+	@Test void a03_holesPreserveRealDelCharacters() throws Exception {
+		var del = "\u007F";
+
+		// replace() with offset > 1 collapses an escape sequence; surrounding DELs are preserved.
+		var pr = createParserReader("\"a" + del + "\\u0041" + del + "b\"");
+		pr.mark();
+		read(pr, 4);                  // "a<DEL>\
+		pr.delete();                  // drop the backslash
+		read(pr, 5);                  // u0041
+		pr.replace('A', 6);           // collapse \u0041 (offset covers 6 chars read so far)
+		read(pr, 1);                  // <DEL>
+		read(pr, 2);                  // b"
+		assertEquals("a" + del + "A" + del + "b", pr.getMarked(1, -1));
+
+		// delete(count) with several holes plus real DELs.
+		pr = createParserReader("x" + del + "~~" + del + "y~" + del);
+		pr.mark();
+		read(pr, 4);
+		pr.delete(2);
+		read(pr, 3);
+		pr.delete(1);
+		read(pr, 1);
+		assertEquals("x" + del + del + "y" + del, pr.getMarked());
+
+		// Holes do not leak into a later mark.
+		pr = createParserReader("~a" + del + "b");
+		pr.mark();
+		read(pr, 1);
+		pr.delete();
+		assertEquals("", pr.getMarked());
+		pr.mark();
+		read(pr, 3);
+		assertEquals("a" + del + "b", pr.getMarked());
+	}
+
+
+	//====================================================================================================
+	// Parsers that collapse escapes through ParserReader.delete()/replace() keep real DEL (U+007F) characters.
+	// (YAML, TOML, Prototext and INI do not use delete()/replace(), so they are not exposed to this.)
+	//====================================================================================================
+	@Test void a04_delSurvivesEscapesInParsers() throws Exception {
+		var del = "\u007F";
+		var expected = "a" + del + "b\nc" + del;
+
+		assertEquals(expected, JsonParser.DEFAULT.read("\"a" + del + "b\\nc\\u007f\"", String.class));
+		assertEquals(expected, Json5Parser.DEFAULT.read("\"a" + del + "b\\nc\\u007f\"", String.class));
+		assertEquals(expected, Json5Parser.DEFAULT.read("'a" + del + "b\\nc" + del + "'", String.class));
+		assertEquals(expected, JsonParser.DEFAULT.read("\"a" + del + "b\\nc\\u007f\"", Object.class));
+		assertEquals("a" + del + "b'c" + del, UonParser.DEFAULT.read("'a" + del + "b~'c" + del + "'", String.class));
+
+		var jl = JsonlParser.DEFAULT.read("\"a" + del + "b\\nc\\u007f\"", String.class);
+		assertEquals(expected, jl);
+		var j5l = Json5lParser.DEFAULT.read("'a" + del + "b\\nc" + del + "'", String.class);
+		assertEquals(expected, j5l);
+	}
 
 	private static String read(ParserReader r) throws IOException {
 		return read(r, Integer.MAX_VALUE);

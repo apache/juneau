@@ -1205,7 +1205,7 @@ public class BeanMeta<T> {
 			// among the declared constructors; the bean-class visibility check already governs the record itself.
 			var rcon = ci.getDeclaredConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
 			if (rcon != null)
-				return new BeanConstructor(o(rcon.accessible()), components.stream().map(RecordComponent::getName).toList());
+				return new BeanConstructor(o(makeRecordConstructorAccessible(ci, rcon)), components.stream().map(RecordComponent::getName).toList());
 		}
 
 		if (implClassConstructor != null)
@@ -1426,6 +1426,37 @@ public class BeanMeta<T> {
 			}
 		});
 		return l;
+	}
+
+	/**
+	 * Makes a record's canonical constructor accessible, failing with a clear message if the module system refuses.
+	 *
+	 * @param ci The record class.
+	 * @param rcon The canonical constructor.
+	 * @return The same constructor.
+	 * @throws BeanRuntimeException If the record is non-public and its package is not opened to Juneau.
+	 */
+	static ConstructorInfo makeRecordConstructorAccessible(ClassInfo ci, ConstructorInfo rcon) {
+		return makeRecordConstructorAccessible(ci, rcon, ConstructorInfo::setAccessible);
+	}
+
+	// Package-private seam so tests can force setAccessible() to report failure.
+	static ConstructorInfo makeRecordConstructorAccessible(ClassInfo ci, ConstructorInfo rcon, Predicate<ConstructorInfo> accessor) {
+		// Always attempt setAccessible (a public record nested in a non-public class still needs it);
+		// only fail loudly when the record is not effectively public.
+		var ok = accessor.test(rcon);
+		if (! ok && ! (rcon.isPublic() && isEffectivelyPublic(ci))) {
+			var pkg = ci.getPackage() == null ? "" : ci.getPackage().getName();
+			throw brex(ci, "Could not make the canonical constructor of non-public record '%s' accessible. The package '%s' must be opened to Juneau, e.g. 'opens %s to org.apache.juneau.commons;' in module-info or '--add-opens <module>/%s=ALL-UNNAMED'.", ci.getNameFull(), pkg, pkg, pkg);
+		}
+		return rcon;
+	}
+
+	private static boolean isEffectivelyPublic(ClassInfo ci) {
+		for (Class<?> c = ci.inner(); c != null; c = c.getEnclosingClass())
+			if (! Modifier.isPublic(c.getModifiers()))
+				return false;
+		return true;
 	}
 
 	private static boolean isRecordAccessor(MethodInfo m, ClassInfo ci) {

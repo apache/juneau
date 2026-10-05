@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.commons.io.*;
 
@@ -71,7 +72,7 @@ public class ParserReader extends Reader implements Positionable {
 	private int iMark = -1;    // Mark position in buffer
 	private int iEnd;          // The last good character position in the buffer
 	private boolean endReached;
-	private boolean holesExist;
+	private BitSet holes;      // Deleted positions (relative to iMark); null unless an escape was collapsed in the current mark
 	private final boolean unbuffered;
 
 	/**
@@ -131,9 +132,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @return This object.
 	 */
 	public final ParserReader delete(int count) {
-		for (var i = 0; i < count; i++)
-			buff[iCurrent - i - 1] = 127;
-		holesExist = true;
+		markHoles(iCurrent - count, iCurrent);
 		return this;
 	}
 
@@ -160,16 +159,16 @@ public class ParserReader extends Reader implements Positionable {
 	public final String getMarked(int offsetStart, int offsetEnd) {
 		int offset = 0;
 
-		// Holes are \u00FF 'delete' characters that we need to get rid of now.
-		if (holesExist) {
+		// Holes are positions removed by delete()/replace() that we need to get rid of now.
+		// They are tracked by position (not by sentinel character) so real DEL characters are preserved.
+		if (holes != null) {
 			for (var i = iMark; i < iCurrent; i++) {
-				char c = buff[i];
-				if (c == 127)
+				if (holes.get(i - iMark))
 					offset++;
 				else
-					buff[i - offset] = c;
+					buff[i - offset] = buff[i];
 			}
-			holesExist = false;
+			holes = null;
 		}
 		int start = iMark + offsetStart;
 		int len = iCurrent - iMark + offsetEnd - offsetStart - offset;
@@ -186,6 +185,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public final void mark() {
 		iMark = iCurrent;
+		holes = null;
 	}
 
 	/**
@@ -358,20 +358,40 @@ public class ParserReader extends Reader implements Positionable {
 		if (c < 0x10000) {
 			if (offset < 1)
 				throw ioex("Buffer underflow.");
+			clearHoles(iCurrent - offset, iCurrent - offset + 1);
 			buff[iCurrent - offset] = (char)c;
 		} else {
 			if (offset < 2)
 				throw ioex("Buffer underflow.");
 			c -= 0x10000;
+			clearHoles(iCurrent - offset, iCurrent - offset + 2);
 			buff[iCurrent - offset] = (char)(0xd800 + (c >> 10));
 			buff[iCurrent - offset + 1] = (char)(0xdc00 + (c & 0x3ff));
 			offset--;
 		}
-		// Fill in the gap with DEL characters.
-		for (var i = 1; i < offset; i++)
-			buff[iCurrent - i] = 127;
-		holesExist |= (offset > 1);
+		// Mark the gap as deleted.
+		if (offset > 1)
+			markHoles(iCurrent - offset + 1, iCurrent);
 		return this;
+	}
+
+	/*
+	 * Un-deletes [from,to) because a replacement character is being written there.
+	 */
+	private void clearHoles(int from, int to) {
+		if (holes != null && iMark >= 0)
+			holes.clear(Math.max(from - iMark, 0), Math.max(to - iMark, 0));
+	}
+
+	/*
+	 * Records [from,to) as deleted; positions are stored relative to iMark so they survive buffer shifts.
+	 */
+	private void markHoles(int from, int to) {
+		if (iMark < 0)
+			return;
+		if (holes == null)
+			holes = new BitSet();
+		holes.set(Math.max(from - iMark, 0), Math.max(to - iMark, 0));
 	}
 
 	/**

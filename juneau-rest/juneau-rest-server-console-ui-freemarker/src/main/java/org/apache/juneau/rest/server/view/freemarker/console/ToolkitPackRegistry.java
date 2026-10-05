@@ -27,7 +27,10 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <p>
  * Ships the {@code "views"} pack against the real {@link ViewsMixin} path constants. Load order is a
- * contract: CSS then JS, JS in the order the JRM {@code TableSlotPage} uses. A consumer can register
+ * contract: CSS then JS, JS in the order the JRM {@code TableSlotPage} uses (renders, icons, search, pagestate,
+ * urlstate, ribbon, [datatables glue], views, config, regions, helpers). {@code juneau-urlstate.js} is required
+ * by the View Settings Copy-link button and shareable-URL state ({@code JuneauViews.urlState}); it must precede
+ * {@code juneau-views.js} / {@code juneau-config.js}. A consumer can register
  * extra packs via {@code ConsoleFreemarkerMixin.Builder.registerToolkitPack(...)}.
  *
  * <p>
@@ -89,6 +92,7 @@ public final class ToolkitPackRegistry {
 				ViewsMixin.ICONS_JS_PATH,
 				ViewsMixin.SEARCH_JS_PATH,
 				ViewsMixin.PAGESTATE_JS_PATH,
+				ViewsMixin.URLSTATE_JS_PATH,
 				ViewsMixin.RIBBON_JS_PATH,
 				ViewsMixin.DATATABLES_JS_PATH,
 				ViewsMixin.VIEWS_JS_PATH,

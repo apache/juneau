@@ -37,7 +37,13 @@ import org.apache.juneau.marshall.*;
 @ContextApply({ ParquetConfigAnnotation.SerializerApply.class, ParquetConfigAnnotation.ParserApply.class })
 public @interface ParquetConfig {
 
-	/** Compression codec (UNCOMPRESSED, GZIP). */
+	/**
+	 * Compression codec used when <b>writing</b> (<js>"UNCOMPRESSED"</js> or <js>"GZIP"</js>, case-insensitive).
+	 *
+	 * <p>
+	 * Any other value (including <js>"SNAPPY"</js>, which the parser can decode but the serializer cannot write)
+	 * falls back to <js>"UNCOMPRESSED"</js>.  The parser detects the codec from the file and ignores this setting.
+	 */
 	String compressionCodec() default "";
 
 	/** Row group size in bytes. */

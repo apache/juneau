@@ -363,6 +363,32 @@ class RemoteClient_Test extends TestBase {
 		}
 	}
 
+	@Remote
+	interface JavaTimeQueryService {
+		@RemoteGet("/echo-query")
+		String getInstant(@Query java.time.Instant when);
+
+		@RemoteGet("/echo-query")
+		String getLocalDate(@Query java.time.LocalDate d);
+
+		@RemoteGet("/echo-query")
+		String getDuration(@Query java.time.Duration d);
+
+		@RemoteGet("/echo-query")
+		String getOffsetDateTime(@Query java.time.OffsetDateTime d);
+	}
+
+	@Test void g02_query_javaTimeArgs_sentAsScalars() throws Exception {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
+			var svc = client.remote(JavaTimeQueryService.class);
+			// Blank-named parts must serialize as a single scalar value, not expand as a bean.
+			assertTrue(svc.getInstant(java.time.Instant.parse("2026-01-02T03:04:05Z")).endsWith("=2026-01-02T03:04:05Z"));
+			assertTrue(svc.getLocalDate(java.time.LocalDate.of(2026, 1, 2)).endsWith("=2026-01-02"));
+			assertTrue(svc.getDuration(java.time.Duration.ofSeconds(5)).endsWith("=PT5S"));
+			assertTrue(svc.getOffsetDateTime(java.time.OffsetDateTime.of(2026, 1, 2, 3, 4, 5, 0, java.time.ZoneOffset.UTC)).endsWith("=2026-01-02T03:04:05Z"));
+		}
+	}
+
 	// -----------------------------------------------------------------------
 	// H — Object method delegation (toString, hashCode, equals on proxy)
 	// -----------------------------------------------------------------------

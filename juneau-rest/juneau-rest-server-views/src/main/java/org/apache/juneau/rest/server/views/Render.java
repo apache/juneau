@@ -24,12 +24,15 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * A named cell-renderer reference in the {@code VIEW_META} wire contract (design doc §6.6).
+ * A named cell-renderer reference in the {@code VIEW_META} wire contract.
  *
  * <p>
- * Serializes to the canonical object form <c>{"id":"tag","meta":{"field":"status"}}</c>.  The client
+ * Serializes to the canonical object form <c>{"id":"tag","meta":{"field":"status"}}</c>; the optional
+ * {@link #meta} and {@link #popover} members are omitted from the wire when unset.  The client
  * {@code juneau-renders.js} registry looks up {@link #id} and invokes the matching renderer, passing the
- * {@link #meta} map through as per-column context.  Timestamp renderers ({@code ts-zulu}, {@code datetime})
+ * {@link #meta} map through as per-column context (and painting {@link #popover}, when present, from row data
+ * already on the client).  Typed factories exist for the renderers that take structured metadata:
+ * {@link #progress(int)} and {@link #pill(String)}.  Timestamp renderers ({@code ts-zulu}, {@code datetime})
  * honor {@code meta.popup}: {@code off} disables the local/California hover popup; {@code ts-zulu} defaults
  * the popup on, {@code datetime} defaults it off.
  *

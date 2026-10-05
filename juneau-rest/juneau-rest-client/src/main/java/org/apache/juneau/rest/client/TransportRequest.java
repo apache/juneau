@@ -147,8 +147,8 @@ public final class TransportRequest {
 	 * Returns the per-call response timeout, or {@code null} if none was set.
 	 *
 	 * <p>
-	 * Transports apply this as the response/read timeout for the request; a {@code null} value means the
-	 * transport's own default applies.  Connect timeouts remain a client-level concern.
+	 * A {@code null} value means the transport's own default applies.  Connect timeouts remain a client-level
+	 * concern.  Currently only {@link JavaHttpTransport} honors this value; other transports ignore it.
 	 *
 	 * @return The response timeout, possibly <jk>null</jk>.
 	 */

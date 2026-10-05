@@ -174,7 +174,7 @@ public class ConsoleChromeMixin {
 	public static final String CONSOLE_JS_PATH = "/juneau-console/juneau-console.js";
 
 	/** {@link #CONSOLE_JS_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */
-	static final String CONSOLE_JS_PATH_UNPREFIXED = "/juneau-console.js";
+	public static final String CONSOLE_JS_PATH_UNPREFIXED = "/juneau-console.js";
 
 	/** Classpath location of the console shell script. */
 	public static final String CONSOLE_JS_RESOURCE = "/org/apache/juneau/console/juneau-console.js";

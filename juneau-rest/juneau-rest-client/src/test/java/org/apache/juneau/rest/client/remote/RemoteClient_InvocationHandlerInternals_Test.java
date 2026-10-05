@@ -185,6 +185,19 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 		assertEquals(false, invokeStatic("isBean", new Class<?>[]{Object.class}, new int[]{1}));
 	}
 
+	@Test void e06b_isBean_javaTimeTypes_allFalse() throws Exception {
+		for (var v : javaTimeValues())
+			assertEquals(false, invokeStatic("isBean", new Class<?>[]{Object.class}, v), v.getClass().getName());
+	}
+
+	private static Object[] javaTimeValues() {
+		return new Object[]{
+			java.time.Instant.EPOCH, java.time.LocalDate.of(2026, 1, 2), java.time.LocalDateTime.of(2026, 1, 2, 3, 4),
+			java.time.OffsetDateTime.of(2026, 1, 2, 3, 4, 5, 0, java.time.ZoneOffset.UTC), java.time.ZonedDateTime.of(2026, 1, 2, 3, 4, 5, 0, java.time.ZoneOffset.UTC),
+			java.time.Duration.ofSeconds(5), java.time.Period.ofDays(3), java.time.LocalTime.NOON
+		};
+	}
+
 	private static Object TimeUnit() { return java.util.concurrent.TimeUnit.SECONDS; }
 
 	@Test void e07_isBean_plainObject_true() throws Exception {
@@ -334,6 +347,11 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 		assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, 'c'));
 		assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, TimeUnit()));
 		assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, new Date()));
+	}
+
+	@Test void j03b_isScalarPart_javaTimeTypes_true() throws Exception {
+		for (var v : javaTimeValues())
+			assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, v), v.getClass().getName());
 	}
 
 	@Test void j04_isScalarPart_nonScalar_false() throws Exception {

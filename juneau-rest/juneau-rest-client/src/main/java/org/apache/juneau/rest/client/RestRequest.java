@@ -344,8 +344,12 @@ public final class RestRequest {
 	 * Sets a per-call response timeout for this request.
 	 *
 	 * <p>
-	 * Threaded onto the {@link TransportRequest} and applied by the transport as the response/read timeout.  Connect
-	 * timeouts remain a client-level setting.
+	 * Threaded onto the {@link TransportRequest}.  Connect timeouts remain a client-level setting.
+	 *
+	 * <p>
+	 * <b>Transport support:</b> currently only {@link JavaHttpTransport} applies this value (as the JDK
+	 * {@code HttpRequest} timeout).  The Apache HttpClient, OkHttp and Jetty transports do not consult it; configure
+	 * their own timeouts on the transport builder (e.g. {@code JettyHttpTransportBuilder.responseTimeoutMs(long)}).
 	 *
 	 * @param value The response timeout. May be <jk>null</jk> to use the transport default.
 	 * @return This object.

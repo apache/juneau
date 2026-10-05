@@ -27,9 +27,9 @@ package org.apache.juneau.rest.client;
  * <p>
  * Example usage:
  * <p class='bjava'>
- * 	HttpTransport <jv>transport</jv> = ApacheHc5Transport.builder()
- * 		.connectTimeout(Duration.ofSeconds(5))
- * 		.readTimeout(Duration.ofSeconds(30))
+ * 	<jc>// Transport-specific options (here, the underlying Apache client) are set on the concrete builder.</jc>
+ * 	HttpTransport <jv>transport</jv> = ApacheHc5Transport.<jsm>builder</jsm>()
+ * 		.httpClient(<jv>myCloseableHttpClient</jv>)
  * 		.build();
  *
  * 	RestClient <jv>client</jv> = RestClient.create()

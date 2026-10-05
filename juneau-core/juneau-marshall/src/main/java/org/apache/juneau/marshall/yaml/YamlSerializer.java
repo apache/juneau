@@ -85,27 +85,27 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>serializer</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.copy().ws().build();
  *
  * 	<jc>// Serialize a POJO to YAML</jc>
- * 	String <jv>yaml</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
+ * 	<jv>yaml</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h5 class='figure'>Example output (LinkedHashMap of name/age):</h5>
  * <p class='bcode'>
  * 	name: Alice
  * 	age: 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h5 class='figure'>Complex (nested bean + array; bean properties are sorted alphabetically by default):</h5>
  * <p class='bcode'>
- * 	name: Alice
- * 	age: 30
  * 	address:
- * 	  street: 123 Main St
  * 	  city: Boston
  * 	  state: MA
+ * 	  street: "123 Main St"
+ * 	age: 30
+ * 	name: Alice
  * 	tags:
- * 	- a
- * 	- b
- * 	- c
+ * 	  - a
+ * 	  - b
+ * 	  - c
  * </p>
  *
  * <h5 class='section'>Limitations compared to JSON</h5>

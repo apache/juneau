@@ -60,6 +60,39 @@ class CardEnvelope_Test extends TestBase {
 		assertEquals("html", m.getString("type"));
 	}
 
+	private static final String BASE = "dataUrl:'/d', columns:[{key:'a',label:'A'}]";
+
+	@Test void liftTable_viewLevelKeys_roundTrip() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{" + BASE + """
+			, copyLink:false, primary:true, columnConfig:true,
+			rowActions:[{id:'del',label:'Delete'}],
+			rowClassRules:{'is-bad':'status==\\'bad\\''},
+			pausePollingWhileEditing:true
+			}"""));
+		assertBean(slot.getMap("view"), "id,copyLink,primary,columnConfig,pausePollingWhileEditing", "c1,false,true,true,true");
+		assertBean(slot.getMap("view").getList("rowActions").get(0), "id,label", "del,Delete");
+		assertTrue(slot.getMap("view").getMap("rowClassRules").containsKey("is-bad"));
+	}
+
+	@Test void liftTable_slotLevelKeys_selectionAndBulk() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{" + BASE + """
+			, selection:{rowIdField:'id', selectAll:false},
+			bulk:{contractVersion:1, actions:[{id:'x'}]}
+			}"""));
+		assertBean(slot.getMap("selection"), "rowIdField,selectAll", "id,false");
+		assertBean(slot.getMap("bulk"), "contractVersion", "1");
+		assertFalse(slot.getMap("view").containsKey("selection"));
+		assertFalse(slot.getMap("view").containsKey("bulk"));
+	}
+
+	@Test void liftTable_absentKeys_notEmitted() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{" + BASE + "}"));
+		for (var k : List.of("selection", "bulk"))
+			assertFalse(slot.containsKey(k), k);
+		for (var k : List.of("copyLink", "rowActions", "rowClassRules", "pausePollingWhileEditing"))
+			assertFalse(slot.getMap("view").containsKey(k), k);
+	}
+
 	// The new v1 main sources live here; the test CWD is the module directory (surefire).
 	private static final Path MAIN =
 		Path.of("src/main/java/org/apache/juneau/rest/server/view/freemarker/console");

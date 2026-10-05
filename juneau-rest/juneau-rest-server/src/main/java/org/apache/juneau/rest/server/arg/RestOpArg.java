@@ -26,7 +26,8 @@ import org.apache.juneau.rest.server.*;
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// A simple parameter resolver that resolves TimeZone parameters.</jc>
+ * 	<jc>// A simple parameter resolver that resolves TimeZone parameters from the Time-Zone header.</jc>
+ * 	<jc>// (TimeZone parameters are already resolved out-of-the-box; this is purely illustrative.)</jc>
  * 	<jk>public class</jk> TimeZoneArg <jk>implements</jk> RestOpArg {
  *
  * 		<jc>// Implementers must provide a static creator method that returns a RestParam if it's
@@ -41,7 +42,7 @@ import org.apache.juneau.rest.server.*;
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> Object resolve(RestOpSession <jv>opSession</jv>) <jk>throws</jk> Exception {
- * 			<jk>return</jk> <jv>opSession</jv>.getRequest().getHeaders().getTimeZone();
+ * 			<jk>return</jk> <jv>opSession</jv>.getRequest().getTimeZone().<jsm>orElse</jsm>(<jk>null</jk>);
  * 		}
  * 	}
  * </p>

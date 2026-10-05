@@ -110,11 +110,36 @@ class JsonParser_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("-0123", Number.class));
 		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("0x123", Number.class));
 		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("-0x123", Number.class));
+		assertThrows(ParseException.class, ()->p.read("017", Number.class));
+		assertThrows(ParseException.class, ()->p.read("-017", Number.class));
 	}
 
 	@Test void a06b_validJsonNumbers() throws Exception {
 		assertEquals(0, p.read("0", Number.class).intValue());
 		assertEquals(0, p.read("-0", Number.class).intValue());
+	}
+
+	@Test void a06c_laxJson5AcceptsHexAndOctal() throws Exception {
+		var p5 = Json5Parser.DEFAULT;
+		assertEquals(31, p5.read("0x1F", Number.class).intValue());
+		assertEquals(15, p5.read("017", Number.class).intValue());
+	}
+
+	//====================================================================================================
+	// DEL (U+007F) is legal unescaped in JSON strings and must survive a round-trip.
+	//====================================================================================================
+	@Test void a06d_delCharacterRoundTrip() throws Exception {
+		var s = "a\u007Fb";
+		var json = JsonSerializer.DEFAULT.toString(s);
+		assertString(s, p.read(json, String.class));
+		assertEquals(3, p.read(json, String.class).length());
+	}
+
+	@Test void a06e_delCharacterUnescaped() throws Exception {
+		var r = p.read("\"a\u007Fb\"", String.class);
+		assertString("a\u007Fb", r);
+		assertEquals(3, r.length());
+		assertEquals(0x7F, r.charAt(1));
 	}
 
 	//====================================================================================================
