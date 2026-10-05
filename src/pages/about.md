@@ -75,7 +75,7 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-rest-server-view-mustache](/docs/topics/MustacheViewSupport) | Mustache template view support. |
 | [juneau-rest-server-view-freemarker](/docs/topics/FreemarkerViewSupport) | Freemarker template view support. |
 | [juneau-rest-client](/docs/topics/NextGenRestClient) | Canonical, transport-agnostic REST client with POJO mapping and type-safe proxy interface generation (beta). |
-| [juneau-rest-client-classic](/docs/topics/JuneauRestClient) | Apache HttpClient 4.5–based classic REST client — the pre-9.5 `RestClient` implementation, retained for binary stability. |
+| [juneau-rest-client-classic](/docs/topics/JuneauRestClient) | Apache HttpClient 4.5–based classic REST client — the pre-10.0 `RestClient` implementation, retained for binary stability. |
 | [juneau-rest-client-apache-httpclient-45](/docs/topics/RestClientApacheHttpClient45) | Adapter for Apache HttpClient 4.5.x. |
 | [juneau-rest-client-apache-httpclient-50](/docs/topics/RestClientApacheHttpClient50) | Adapter for Apache HttpClient 5.x. |
 | [juneau-rest-client-okhttp](/docs/topics/RestClientOkHttp) | Adapter for OkHttp. |
@@ -100,10 +100,10 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-shaded-rest-server-springboot](/docs/topics/JuneauShadedRestServerSpringboot) | Shaded uber-jar of juneau-rest-server-springboot and its dependencies. |
 | [juneau-shaded-all](/docs/topics/JuneauShadedAll) | All-in-one shaded uber-jar of the full Juneau ecosystem. |
 | **juneau-bundles** | |
-| [juneau-microservice-jetty-bundle](/docs/topics/Bundles) | Ready-to-run Jetty microservice deployment bundle. |
-| [juneau-microservice-tomcat-bundle](/docs/topics/Bundles) | Ready-to-run Tomcat microservice deployment bundle. |
-| [juneau-springboot-bundle](/docs/topics/Bundles) | Spring Boot application bundle with REST server included. |
-| [juneau-observability-otlp-bundle](/docs/topics/Bundles) | Bundle combining OpenTelemetry and Micrometer observability modules. |
+| [juneau-microservice-jetty-bundle](/docs/topics/JuneauEcosystemOverview) | Ready-to-run Jetty microservice deployment bundle. |
+| [juneau-microservice-tomcat-bundle](/docs/topics/JuneauEcosystemOverview) | Ready-to-run Tomcat microservice deployment bundle. |
+| [juneau-springboot-bundle](/docs/topics/JuneauEcosystemOverview) | Spring Boot application bundle with REST server included. |
+| [juneau-observability-otlp-bundle](/docs/topics/JuneauEcosystemOverview) | Bundle combining OpenTelemetry and Micrometer observability modules. |
 | **Examples** | |
 | [juneau-examples-core](/docs/topics/JuneauExamples) | Standalone examples demonstrating core marshalling and configuration APIs. |
 | [juneau-examples-mcp](/docs/topics/JuneauMcpRecipes#full-example-juneau-examples-mcp) | Runnable MCP example app pairing a server and client walkthrough, including a fully offline OAuth 2.1–secured variant. |

@@ -102,21 +102,21 @@
     "is_regex": true
   },
   {
-    "comment": "Pattern A2 — V9.5 ghost refs: V9.5MigrationGuide → /docs/release-notes/9.5.0",
+    "comment": "Pattern A2 — V9.5 ghost refs: V9.5MigrationGuide → /docs/topics/V10MigrationGuide",
     "pattern": "/docs/topics/V9\\.5MigrationGuide",
-    "replacement": "/docs/release-notes/9.5.0",
+    "replacement": "/docs/topics/V10MigrationGuide",
     "is_regex": true
   },
   {
-    "comment": "Pattern A2 — V9.5 ghost refs: V95MigrationGuide (no dot) → /docs/release-notes/9.5.0",
+    "comment": "Pattern A2 — V9.5 ghost refs: V95MigrationGuide (no dot) → /docs/topics/V10MigrationGuide",
     "pattern": "/docs/topics/V95MigrationGuide",
-    "replacement": "/docs/release-notes/9.5.0",
+    "replacement": "/docs/topics/V10MigrationGuide",
     "is_regex": true
   },
   {
-    "comment": "Pattern A2 — V9.5 ghost refs: V9.5-migration-guide (hyphen form) → /docs/release-notes/9.5.0",
+    "comment": "Pattern A2 — V9.5 ghost refs: V9.5-migration-guide (hyphen form) → /docs/topics/V10MigrationGuide",
     "pattern": "/docs/topics/V9\\.5-migration-guide",
-    "replacement": "/docs/release-notes/9.5.0",
+    "replacement": "/docs/topics/V10MigrationGuide",
     "is_regex": true
   },
   {
