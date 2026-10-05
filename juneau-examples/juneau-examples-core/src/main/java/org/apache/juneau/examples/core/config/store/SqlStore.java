@@ -35,9 +35,9 @@ import org.apache.juneau.config.store.*;
  *
  */
 @SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., SQLSTORE_jdbcUrl)
 	"resource", // Resource management handled externally
-	"unused", // Builder.copy() returns null - example skeleton; abstract methods not implemented
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., SQLSTORE_jdbcUrl)
+	"unused" // Builder.copy() returns null - example skeleton; abstract methods not implemented
 })
 public class SqlStore extends ConfigStore {
 
@@ -53,11 +53,11 @@ public class SqlStore extends ConfigStore {
 		int pollInterval;
 
 		Builder() {
-			this.jdbcUrl = env(SQLSTORE_jdbcUrl, "jdbc:derby:mydb");
-			this.tableName = env(SQLSTORE_tableName, "config");
-			this.nameColumn = env(SQLSTORE_nameColumn, "name");
-			this.valueColumn = env(SQLSTORE_valueColumn, "value");
-			this.pollInterval = env(SQLSTORE_pollInterval, 600);  // Time in seconds.
+			this.jdbcUrl = env("SqlStore.jdbcUrl", "jdbc:derby:mydb");
+			this.tableName = env("SqlStore.tableName", "config");
+			this.nameColumn = env("SqlStore.nameColumn", "name");
+			this.valueColumn = env("SqlStore.valueColumn", "value");
+			this.pollInterval = env("SqlStore.pollInterval", 600);  // Time in seconds.
 		}
 
 		@Override
@@ -125,12 +125,6 @@ public class SqlStore extends ConfigStore {
 			return this;
 		}
 	}
-
-	static final String SQLSTORE_jdbcUrl = "SqlStore.jdbcUrl";
-	static final String SQLSTORE_tableName = "SqlStore.tableName";
-	static final String SQLSTORE_nameColumn = "SqlStore.nameColumn";
-	static final String SQLSTORE_valueColumn = "SqlStore.valueColumn";
-	static final String SQLSTORE_pollInterval = "SqlStore.pollInterval";
 
 	/**
 	 * Instantiates a builder for this object.

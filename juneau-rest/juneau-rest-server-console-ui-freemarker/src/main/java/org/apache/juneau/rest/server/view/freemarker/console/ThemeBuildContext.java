@@ -23,36 +23,27 @@ import org.apache.juneau.rest.server.console.*;
  * nested inside it, via {@link freemarker.core.Environment#setCustomState(Object, Object)}.
  *
  * <p>
- * {@code <@theme name="…">} installs a fresh instance seeded from the named stock palette
- * (a {@link Theme.Builder} copied from the stock theme's tokens for the leaf channel, and an empty
- * {@link ThemePack#create(String) ThemePack.create(name)} for the alias channel) before rendering its body. Each
- * nested {@code <@token>} eagerly folds its declaration into the matching builder: a {@code value=} into
- * {@link #themeBuilder} (a leaf), an {@code alias=} into {@link #packBuilder} (a derived reference). After the body
- * pass, {@code <@theme>} assembles the pack from these two builders (see the class's <i>Custom tokens and FTL
- * ThemePack construction</i> spec section).
+ * {@code <@theme name="…">} installs a fresh instance holding a {@link Theme.Builder} seeded from the named stock
+ * palette before rendering its body. Each nested {@code <@token>} eagerly folds its declaration into that builder:
+ * a {@code value=} into {@link Theme.Builder#token(String, String)} (a leaf), an {@code alias=} into
+ * {@link Theme.Builder#alias(String, String)} (a derived reference). After the body pass, {@code <@theme>} builds
+ * the theme and renders its override block.
  *
  * @since 10.0.0
  */
 final class ThemeBuildContext {
 
-	/** Identity key for {@code Environment} custom-state storage. */
-	static final Object KEY = new Object();
-
-	/** The stock-theme name {@code <@theme name="…">} named - also the assembled {@link ThemePack}'s id. */
+	/** The stock-theme name {@code <@theme name="…">} named - also the built {@link Theme}'s name. */
 	final String name;
 
-	/** The leaf-token builder, seeded with the named stock palette; {@code <@token value="…">} overrides/adds leaves here. */
+	/** The theme builder, seeded with the named stock palette; {@code <@token value="…">} adds leaves and {@code <@token alias="var(--jc-…)">} adds aliases here. */
 	final Theme.Builder themeBuilder;
-
-	/** The pack builder carrying the alias channel; {@code <@token alias="var(--jc-…)">} adds derived references here. */
-	final ThemePack.Builder packBuilder;
 
 	/** Set true by the first {@code <@token>} that fires, so {@code <@theme>} emits an override block only when the body declared one. */
 	boolean anyDeclared;
 
-	ThemeBuildContext(String name, Theme.Builder themeBuilder, ThemePack.Builder packBuilder) {
+	ThemeBuildContext(String name, Theme.Builder themeBuilder) {
 		this.name = name;
 		this.themeBuilder = themeBuilder;
-		this.packBuilder = packBuilder;
 	}
 }

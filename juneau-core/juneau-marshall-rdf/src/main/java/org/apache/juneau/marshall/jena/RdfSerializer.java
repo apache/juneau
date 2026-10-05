@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
@@ -56,27 +55,9 @@ import org.apache.juneau.marshall.xml.*;
 @SuppressWarnings({
 	"java:S100", // Builder methods use underscore-separated namespacing convention (e.g. n3_disableAbbrevBaseUri, rdfxml_xmlbase) to group related settings by Jena component
 	"java:S110", // Inheritance depth exceeds 5; necessary to participate in the serializer hierarchy
-	"java:S115"  // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
-
-	// Property name constants
-	private static final String PROP_addBeanTypes = "addBeanTypes";
-	private static final String PROP_addLiteralTypes = "addLiteralTypes";
-	private static final String PROP_addRootProperty = "addRootProperty";
-	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
-	private static final String PROP_collectionFormat = "collectionFormat";
-	private static final String PROP_juneauBpNs = "juneauBpNs";
-	private static final String PROP_juneauNs = "juneauNs";
-	private static final String PROP_language = "language";
-	private static final String PROP_looseCollections = "looseCollections";
-	private static final String PROP_namespaces = "namespaces";
-	private static final String PROP_useXmlNamespaces = "useXmlNamespaces";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String ARG_values = "values";
 
 	// Media type and language constants
 	private static final String LANG_RDF_XML_ABBREV = "RDF/XML-ABBREV";
@@ -134,7 +115,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
@@ -156,7 +137,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
@@ -293,7 +274,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = assertArgNotNull(ARG_value, value);
+			collectionFormat = reqnn("value", value);
 			return self();
 		}
 
@@ -397,7 +378,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF juneauBpNs(Namespace value) {
-			juneauBpNs = assertArgNotNull(ARG_value, value);
+			juneauBpNs = reqnn("value", value);
 			return self();
 		}
 
@@ -411,7 +392,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF juneauNs(Namespace value) {
-			juneauNs = assertArgNotNull(ARG_value, value);
+			juneauNs = reqnn("value", value);
 			return self();
 		}
 
@@ -462,7 +443,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF language(String value) {
-			language = assertArgNotNull(ARG_value, value);
+			language = reqnn("value", value);
 			return self();
 		}
 
@@ -799,7 +780,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF namespaces(Namespace...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			namespaces = addAll(namespaces, values);
 			return self();
 		}
@@ -1248,7 +1229,8 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
@@ -1503,16 +1485,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypes, addBeanTypes)
-			.a(PROP_addLiteralTypes, addLiteralTypes)
-			.a(PROP_addRootProperty, addRootProperty)
-			.a(PROP_autoDetectNamespaces, autoDetectNamespaces)
-			.a(PROP_collectionFormat, collectionFormat)
-			.a(PROP_juneauBpNs, juneauBpNs)
-			.a(PROP_juneauNs, juneauNs)
-			.a(PROP_language, language)
-			.a(PROP_looseCollections, looseCollections)
-			.a(PROP_namespaces, namespaces)
-			.a(PROP_useXmlNamespaces, useXmlNamespaces);
+			.a("addBeanTypes", addBeanTypes)
+			.a("addLiteralTypes", addLiteralTypes)
+			.a("addRootProperty", addRootProperty)
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("collectionFormat", collectionFormat)
+			.a("juneauBpNs", juneauBpNs)
+			.a("juneauNs", juneauNs)
+			.a("language", language)
+			.a("looseCollections", looseCollections)
+			.a("namespaces", namespaces)
+			.a("useXmlNamespaces", useXmlNamespaces);
 	}
 }

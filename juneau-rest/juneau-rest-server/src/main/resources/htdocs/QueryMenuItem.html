@@ -18,46 +18,37 @@
 		<tr>
 			<th><label for="field-search">Search:</label></th>
 			<td>
-				<input id="field-search" name="s" size="50" value='$RQ{s}'>
+				<input id="field-search" name="search" size="50" value='$RQ{search}'>
 			</td>
 			<td>
 				<div class="tooltip">
 					<small>&#x2753;</small>
 					<span class="tooltiptext">
-						Comma-delimited list of key/value pair search terms.
+						Comma-delimited list of <code>column=expression</code> clauses, ANDed together.
 						<br>
-						<br>Keys are column names.  Values are search terms.
+						<br><b>Example:</b>&nbsp;&nbsp;<code>name=$contains(smith), age=$gte(18)</code>
 						<br>
-						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1=foo*, column2&lt;100, column3=2013-2016.06.30]</code>
+						<br><b>Bare values (no operator):</b>
+						<br> - Text columns: case-insensitive substring; <code>'*'</code> = any run, <code>'?'</code> = one character
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[name=smi*]</code>
+						<br> - Number/date/boolean columns: typed equals
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[age=42]</code>
 						<br>
-						<br><b>String fields:</b>
-						<br> - <code>'*'</code> represents any character
-						<br> - <code>'?'</code> represents one character
-						<br> - Use single or double quotes for phrases
-						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column='foo bar']</code> - The term 'foo bar'
-						<br> - Multiple search terms are ORed 
-						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=foo bar]</code> - 'foo' OR 'bar'
-						<br> - Prepend <code>'+'</code> on tokens that must match
-						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* +*bar]</code> - Start with 'foo' AND end with 'bar'.
-						<br> - Prepend <code>'-'</code> on tokens that must not match 
-						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* -*bar]</code> - Start with 'foo' AND does not end with 'bar'.
+						<br><b>Operators:</b>
+						<br><code>$eq(v)</code> - Exact, case-sensitive match
+						<br><code>$eqic(v)</code> - Exact, case-insensitive match
+						<br><code>$ne(v,...)</code> - None of the given values match
+						<br><code>$in(v,...)</code> - Any of the given values match
+						<br><code>$contains(v)</code> - Case-insensitive substring (text only)
+						<br><code>$prefix(v)</code> - Case-insensitive prefix (text only)
+						<br><code>$regex(p[,flags])</code> - Full-string regex match (text only); quote patterns containing <code>,</code> <code>(</code> or <code>)</code>, e.g. <code>$regex("a{1,3}")</code>
+						<br><code>$blank()</code> - Empty or whitespace-only
+						<br><code>$gt(v)</code> / <code>$gte(v)</code> / <code>$lt(v)</code> / <code>$lte(v)</code> - Typed comparison (number/date only)
+						<br><code>$between(lo,hi)</code> - Inclusive range (number/date only)
 						<br>
-						<br><b>Numeric fields:</b>
-						<br><code>[column=123]</code> - A single number
-						<br><code>[column=1 2 3]</code>	- Multiple numbers
-						<br><code>[column=1-100]</code> - Between two numbers
-						<br><code>[column=1-100 200-300]</code> - Two ranges of numbers
-						<br><code>[column&gt;100]</code> - Greater than a number
-						<br><code>[column&gt;=100]</code> - Greater than or equal to a number
-						<br><code>[column=!123]</code> - Not a specific number
-						<br>
-						<br><b>Date/Calendar fields:</b>
-						<br><code>[column=2001]</code> - A specific year
-						<br><code>[column=2001.01.01.10.50]</code> - A specific time
-						<br><code>[column&gt;2001]</code> - After a specific year
-						<br><code>[column&gt;=2001]</code> - During or after a specific year
-						<br><code>[column=2001-2003.06.30]</code> - A date range
-						<br><code>[column=2001 2003 2005]</code> - Multiple ORed dates
+						<br><b>Combining:</b>
+						<br><code>$and(a,b,...)</code> / <code>$or(a,b,...)</code> / <code>$not(a)</code> - Logical grouping, nestable
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[status=$or($eqic(open),$eqic(pending))]</code>
 					</span>
 				</div>
 			</td>
@@ -65,15 +56,15 @@
 		<tr>
 			<th><label for="field-view">View:</label></th>
 			<td>
-				<input id="field-view" name="v" size="50" value='$RQ{v}'>
+				<input id="field-view" name="view" size="50" value='$RQ{view}'>
 			</td>
 			<td>
 				<div class="tooltip">
 					<small>&#x2753;</small>
 					<span class="tooltiptext">
-						Comma-delimited list of columns to display.
+						Comma-delimited list of columns to display, in order.
 						<br>
-						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2]</code>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>name, age</code>
 					</span>
 				</div>
 			</td>
@@ -81,19 +72,16 @@
 		<tr>
 			<th><label for="field-sort">Sort:</label></th>
 			<td>
-				<input id="field-sort" name="o" size="50" value='$RQ{o}'>
+				<input id="field-sort" name="sort" size="50" value='$RQ{sort}'>
 			</td>
 			<td>
 				<div class="tooltip">
 					<small>&#x2753;</small>
 					<span class="tooltiptext">
 						Comma-delimited list of columns to sort by.
-						<br>Columns can be suffixed with '-' to indicate descending order.
+						<br>Append <code>':desc'</code> (or <code>'-'</code>) to a column to sort it descending; the default is ascending.
 						<br>
-						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2-]</code>
-						<br>
-						<br><b>Notes:</b>
-						<br> - Columns containing collections/arrays/lists are sorted by size.
+						<br><b>Example:</b>&nbsp;&nbsp;<code>name, age:desc</code>
 					</span>
 				</div>
 			</td>
@@ -101,13 +89,12 @@
 		<tr>
 			<th>Page:</th>
 			<td>
-				<label for="field-position">Position:</label> <input id="field-position" name='p' type='number' style='width:50px' step=20 min=0 value='$RQ{p}'>
-				<label for="field-limit">Limit:</label> <input id="field-limit" name='l' type='number' style='width:50px' step=20 min=0 value='$RQ{l}'>
-				<span style='float:right'><label for="field-ignore-case">Ignore-case:</label> <input id="field-ignore-case" name='i' type='checkbox' value='true'></span>
+				<label for="field-position">Position:</label> <input id="field-position" name='position' type='number' style='width:50px' step=20 min=0 value='$RQ{position}'>
+				<label for="field-limit">Limit:</label> <input id="field-limit" name='limit' type='number' style='width:50px' step=20 min=0 value='$RQ{limit}'>
 			</td>
 			<td>
 			</td>
-		</tr> 
+		</tr>
 		<tr>
 			<th>
 				&nbsp;

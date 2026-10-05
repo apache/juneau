@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.rfc7807;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -24,10 +25,9 @@ import java.util.*;
  * Aggregator bean for registering multiple {@link ProblemMapper}s with a single bean-store entry.
  *
  * <p>
- * The Juneau {@code @Bean} bean-store walk pairs each {@code @Bean} method with its declared return type
- * (via the underlying {@code BeanStore.createBeanFromMethod(Class, ...)} lookup), which means multiple
- * {@code @Bean public ProblemMapper foo()} factory methods on the same resource class collide on the
- * {@code ProblemMapper.class} key. To register more than one mapper, declare a single
+ * The problem-details processor resolves only the <em>unnamed</em> {@link ProblemMapper} from the bean store, so a
+ * second {@code @Bean public ProblemMapper foo()} factory method (even a differently named one) would register a
+ * distinct bean that the processor never consults. To register more than one mapper, declare a single
  * {@code @Bean public ProblemMapperList mappers()} factory and let the list carry the dispatch order:
  *
  * <p class='bjava'>
@@ -71,10 +71,7 @@ public class ProblemMapperList {
 	 */
 	public static ProblemMapperList of(ProblemMapper<?>... mappers) {
 		var l = new ProblemMapperList();
-		if (mappers != null)
-			for (var m : mappers)
-				if (m != null)
-					l.mappers.add(m);
+		addAllNn(l.mappers, mappers);
 		return l;
 	}
 
@@ -97,10 +94,7 @@ public class ProblemMapperList {
 	 * @return This object for fluent chaining.
 	 */
 	public ProblemMapperList append(Collection<? extends ProblemMapper<?>> values) {
-		if (values != null)
-			for (var m : values)
-				if (m != null)
-					mappers.add(m);
+		addAllNn(mappers, values);
 		return this;
 	}
 

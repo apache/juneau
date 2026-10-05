@@ -83,7 +83,8 @@ import org.apache.juneau.rest.server.mcp.v20260728.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth is inherent to extending the Juneau REST server hierarchy.
+	"java:S110", // Inheritance depth is inherent to extending the Juneau REST server hierarchy.
+	"java:S2065" // authServer and resource are transient because the servlet is Serializable but these fields are not
 })
 public class SecuredExampleMcpServer extends ExampleMcpServer {
 
@@ -102,7 +103,9 @@ public class SecuredExampleMcpServer extends ExampleMcpServer {
 	 */
 	public static final String WRITE_SCOPE = "mcp.write";
 
-	@SuppressWarnings("resource") // not owned here; lifecycle is managed by the caller (SecuredExampleServer).
+	@SuppressWarnings({
+		"resource" // not owned here; lifecycle is managed by the caller (SecuredExampleServer).
+	})
 	private final transient OfflineAuthorizationServer authServer;
 	private final transient URI resource;
 

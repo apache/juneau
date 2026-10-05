@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -126,7 +128,7 @@ public abstract class AuthFilter implements Filter, Authenticator {
 	})
 	public static void sendChallenge(HttpServletResponse resp, AuthenticationException e) throws IOException {
 		e.getHeaders().stream()
-			.filter(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic(WWW_AUTHENTICATE, h.getName()))
 			.map(h -> h.getValue())
 			.findFirst()
 			.ifPresent(v -> resp.setHeader(WWW_AUTHENTICATE, v));

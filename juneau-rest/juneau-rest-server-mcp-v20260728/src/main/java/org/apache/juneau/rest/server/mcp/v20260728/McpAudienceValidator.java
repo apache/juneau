@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.security.*;
 import java.util.*;
 
 import org.apache.juneau.rest.server.auth.ClaimsPrincipal;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc8707">RFC 8707</a> audience enforcement &mdash; the
@@ -65,7 +65,7 @@ public final class McpAudienceValidator {
 	 * 	the expected audience.
 	 */
 	public static boolean matches(Principal principal, String expectedAudience, boolean requireAudienceClaim) {
-		assertArgNotNullOrBlank("expectedAudience", expectedAudience);
+		reqnb("expectedAudience", expectedAudience);
 		if (principal == null)
 			return false;
 		if (!(principal instanceof ClaimsPrincipal cp))

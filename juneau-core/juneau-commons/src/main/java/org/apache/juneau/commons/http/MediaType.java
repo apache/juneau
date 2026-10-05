@@ -38,7 +38,7 @@ import org.apache.juneau.commons.utils.*;
 @BeanIgnore
 @SuppressWarnings({
 	"java:S1700", // Field 'mediaType' intentionally shares the class name; it holds the canonical string form of this MediaType instance
-	"java:S1845"  // Field name intentionally matches method name
+	"java:S1845" // Field name intentionally matches method name
 })
 public class MediaType implements Comparable<MediaType> {
 
@@ -175,7 +175,7 @@ public class MediaType implements Comparable<MediaType> {
 		if (parameters == null) {
 			parameters = e.getParameters();
 			for (var i = 0; i < parameters.length; i++) {
-				if (parameters[i].getName().equals("q")) {
+				if (eq(parameters[i].getName(), "q")) {
 					parameters = Arrays.copyOfRange(parameters, 0, i);
 					break;
 				}
@@ -413,14 +413,14 @@ public class MediaType implements Comparable<MediaType> {
 			return -1;
 
 		// Perfect match
-		if (this == o || (type.equals(o.type) && subType.equals(o.subType)))
+		if (this == o || (eq(type, o.type) && eq(subType, o.subType)))
 			return 100000;
 
 		var c = 0;
 
-		if (type.equals(o.type))
+		if (eq(type, o.type))
 			c += 10000;
-		else if ("*".equals(type) || "*".equals(o.type))
+		else if (eq(type, "*") || eq(o.type, "*"))
 			c += 5000;
 
 		if (c == 0)
@@ -431,7 +431,7 @@ public class MediaType implements Comparable<MediaType> {
 			return c + 7500;
 
 		for (var st1 : subTypes) {
-			if ("*".equals(st1))
+			if (eq(st1, "*"))
 				c += 0;
 			else if (CollectionUtils.contains(st1, o.subTypes))
 				c += 100;
@@ -441,7 +441,7 @@ public class MediaType implements Comparable<MediaType> {
 				return 0;
 		}
 		for (var st2 : o.subTypes) {
-			if ("*".equals(st2))
+			if (eq(st2, "*"))
 				c += 0;
 			else if (CollectionUtils.contains(st2, subTypes))
 				c += 100;

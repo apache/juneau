@@ -150,7 +150,9 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read  write\"}";
 		var v = validatorBuilder().build();
 		var p = (ClaimsPrincipal) v.validate("tok-blanks");
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The 'scope' claim is a List<String> by construction of the test response.
+		})
 		var scope = (java.util.List<String>) p.getClaims().get("scope");
 		assertNotNull(scope);
 		assertTrue(scope.contains("read"));

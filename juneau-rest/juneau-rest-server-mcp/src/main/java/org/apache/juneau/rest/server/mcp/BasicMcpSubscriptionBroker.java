@@ -32,6 +32,9 @@ import java.util.concurrent.*;
  * {@code true} — this never broadcasts unconditionally the way
  * {@code org.apache.juneau.rest.server.sse.SseBroadcaster#publish} does.
  */
+@SuppressWarnings({
+	"resource" // Registered subscriptions are closed by unregister() and when replaced; the caller owns the returned subscription
+})
 public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 
 	private final int queueSize;
@@ -53,9 +56,6 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"resource" // Returned subscription is caller-owned and closed by the caller/framework; Eclipse JDT @Owning warning is by design.
-	})
 	public McpSubscription register(String subscriptionId, McpSubscriptionFilter honoredFilter) {
 		if (isEmpty(subscriptionId))
 			throw iaex("subscriptionId must not be null or empty");
@@ -80,9 +80,6 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		}
 	}
 
-	@SuppressWarnings({
-		"resource" // Returned subscription is caller-owned and closed by the caller/framework; Eclipse JDT @Owning warning is by design.
-	})
 	private McpSubscription doRegister(String subscriptionId, McpSubscriptionFilter honoredFilter) {
 		// The close callback removes this exact instance only (via the two-arg conditional ConcurrentMap.remove),
 		// so closing a stale/replaced subscription can never evict the fresher one that has since replaced it.
@@ -94,9 +91,6 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		return sub;
 	}
 
-	@SuppressWarnings({
-		"resource" // Not a leak: sub is removed from the map then explicitly closed; try-with-resources adds nothing over the remove-then-close pattern (mirrors register()'s previous.close()).
-	})
 	@Override
 	public void unregister(String subscriptionId) {
 		if (subscriptionId == null)

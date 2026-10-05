@@ -20,9 +20,11 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.bean.rfc7807.adapter.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -99,13 +101,15 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // The negotiated output stream from the response is owned and closed by the servlet container, not by this processor
+})
 public class ProblemDetailsProcessor implements ResponseProcessor {
 
 	private static final String PROBLEM_JSON = ContentType.APPLICATION_PROBLEM_JSON.getValue();
 
 	@Override /* Overridden from ResponseProcessor */
 	@SuppressWarnings({
-		"resource",  // negotiated output stream owned by the response; closed by the container/RestCall
 		"java:S3776" // Cognitive complexity acceptable for RFC-9457 problem-details response dispatch
 	})
 	public int process(RestOpSession opSession) throws IOException {
@@ -130,6 +134,9 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 				return NEXT;
 			problem = mapException(opSession, raw2);
 			isErrorPath = true;
+			// Same as the plain (HttpResponseProcessor) path: the exception's own headers (e.g. X-BeanQuery-Error) go out too.
+			if (problem != null)
+				raw2.getHeaders().forEach(res::addHeader);
 		} else if (raw instanceof Throwable raw2) {
 			if (! opSession.getContext().isProblemDetails())
 				return NEXT;
@@ -180,8 +187,8 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	 * 	{@link BasicHttpException}.
 	 */
 	@SuppressWarnings({
-		"unchecked", // ProblemMapper#map is parameterized over the matched throwable subtype.
-		"rawtypes"   // ProblemMapper#map is parameterized over the matched throwable subtype.
+		"rawtypes", // ProblemMapper#map is parameterized over the matched throwable subtype.
+		"unchecked" // ProblemMapper#map is parameterized over the matched throwable subtype.
 	})
 	private static Problem mapException(RestOpSession opSession, Throwable thrown) {
 		for (var mapper : resolveMappers(opSession, thrown.getClass())) {
@@ -190,8 +197,20 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 				return result;
 		}
 		if (thrown instanceof BasicHttpException thrown2)
-			return ProblemAdapters.fromException(thrown2);
+			return withBeanQueryCode(ProblemAdapters.fromException(thrown2), thrown2);
 		return null;
+	}
+
+	/**
+	 * Adds the RFC 7807 {@code "code"} extension member when the exception carries a
+	 * {@value BeanQueryRequest#ERROR_HEADER} header (a mapped {@code BeanQuerySyntaxException}).
+	 */
+	private static Problem withBeanQueryCode(Problem problem, BasicHttpException e) {
+		e.getHeaders().stream()
+			.filter(h -> BeanQueryRequest.ERROR_HEADER.equals(h.getName()))
+			.findFirst()
+			.ifPresent(h -> problem.set("code", h.getValue()));
+		return problem;
 	}
 
 	/**
@@ -200,9 +219,6 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	 * consulted first; a single {@link ProblemMapper} bean (if no list is registered) is consulted as a
 	 * fallback. Registration order serves as the tiebreaker for mappers at the same hierarchy depth.
 	 */
-	@SuppressWarnings({
-		"resource" // RestOpSession owns this bean store lifecycle.
-	})
 	private static List<ProblemMapper<?>> resolveMappers(RestOpSession opSession, Class<?> thrownClass) {
 		var bs = opSession.getBeanStore();
 		var candidates = new ArrayList<ProblemMapper<?>>();
@@ -211,11 +227,9 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 			bs.getBean(ProblemMapper.class).ifPresent(candidates::add);
 		if (candidates.isEmpty())
 			return List.of();
-		var matches = new ArrayList<ProblemMapper<?>>(candidates.size());
-		for (var m : candidates) {
-			if (m.getExceptionType().isAssignableFrom(thrownClass))
-				matches.add(m);
-		}
+		var matches = candidates.stream()
+			.filter(m -> m.getExceptionType().isAssignableFrom(thrownClass))
+			.collect(Collectors.toCollection(ArrayList::new));
 		matches.sort((a, b) -> Integer.compare(hierarchyDepth(a.getExceptionType(), thrownClass), hierarchyDepth(b.getExceptionType(), thrownClass)));
 		return matches;
 	}
@@ -237,9 +251,6 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	}
 
 	private static Problem localize(RestOpSession opSession, Problem problem) {
-		@SuppressWarnings({
-			"resource" // RestOpSession owns this bean store lifecycle.
-		})
 		var strategy = opSession.getBeanStore().getBean(ProblemLocalizationStrategy.class).orElse(ProblemLocalizationStrategy.IDENTITY);
 		var locale = opSession.getRequest().getLocale();
 		var result = strategy.localize(problem, locale);

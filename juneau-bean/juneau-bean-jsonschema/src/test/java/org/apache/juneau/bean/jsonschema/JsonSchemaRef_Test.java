@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
  * Tests for JsonSchemaRef fluent setter overrides.
  */
 @SuppressWarnings({
-	"rawtypes"
+	"rawtypes" // Tests use the self-typed JsonSchema<SELF> as a raw type (new JsonSchema(), getNot(), getUnevaluatedItems())
 })
 class JsonSchemaRef_Test extends TestBase {
 

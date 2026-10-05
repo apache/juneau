@@ -44,6 +44,8 @@ import com.sun.net.httpserver.*;
  * the {@code log(...)} overloads, and the checked-exception-wrapping branch of {@code onCallClose(...)}.
  */
 @SuppressWarnings({
+	"deprecation", // Tests exercise the deprecated RestClient.getParams() delegation for coverage
+	"removal", // Tests invoke RestClient.finalize() directly to cover its leak-detection branches
 	"resource" // Several tests here intentionally leave a RestClient unclosed (to exercise close()/closeQuietly()/finalize() behavior directly) rather than using try-with-resources; Eclipse JDT's @Owning warning is by design.
 })
 class RestClient_Coverage2_Test {
@@ -111,9 +113,6 @@ class RestClient_Coverage2_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"removal" // getParams() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a04_getParams_deprecated_delegatesToHttpClient() throws Exception {
 		// The default Apache HttpClient (built via HttpClientBuilder) doesn't support the legacy HttpParams API and
 		// throws on access; a custom CloseableHttpClient proves the successful delegation path completes normally.
@@ -128,12 +127,12 @@ class RestClient_Coverage2_Test {
 		}
 	}
 
-	@Test void a05_closeQuietly_suppressesExceptionFromHttpClientClose() throws Exception {
+	@Test void a05_closeQuietly_suppressesExceptionFromHttpClientClose() {
 		var c = RestClient.create().httpClient(throwingHttpClient()).build();
 		assertDoesNotThrow(c::closeQuietly);
 	}
 
-	@Test void a06_close_propagatesExceptionFromHttpClientClose() throws Exception {
+	@Test void a06_close_propagatesExceptionFromHttpClientClose() {
 		var c = RestClient.create().httpClient(throwingHttpClient()).build();
 		assertThrows(IOException.class, c::close);
 	}
@@ -149,10 +148,8 @@ class RestClient_Coverage2_Test {
 				throw new IOException("Simulated close failure.");
 			}
 			@Override
-			@SuppressWarnings("deprecation")
 			public HttpParams getParams() { return null; }
 			@Override
-			@SuppressWarnings("deprecation")
 			public ClientConnectionManager getConnectionManager() { return null; }
 		};
 	}
@@ -187,7 +184,7 @@ class RestClient_Coverage2_Test {
 
 	/**
 	 * Red-on-broken verification-gate test for the design's "caller-supplied {@code HttpClient} fails closed"
-	 * requirement (see {@code TODO-392-remote-url-ssrf-resolved-address.md} "Test notes"): a policy-covered
+	 * requirement (see the "Test notes" of work item 392, remote URL SSRF resolved-address): a policy-covered
 	 * {@code @Remote} call through an {@code httpClient(...)}-supplied client — which this {@code RestClient} did
 	 * not build and so cannot guarantee honors pin-on-connect + redirect revalidation — must be rejected before the
 	 * client is ever invoked, rather than silently connecting without the guardrail.
@@ -201,8 +198,8 @@ class RestClient_Coverage2_Test {
 				throw new UnsupportedOperationException("Not used by this test.");
 			}
 			@Override public void close() { /* no-op */ }
-			@Override @SuppressWarnings("deprecation") public HttpParams getParams() { return null; }
-			@Override @SuppressWarnings("deprecation") public ClientConnectionManager getConnectionManager() { return null; }
+			@Override public HttpParams getParams() { return null; }
+			@Override public ClientConnectionManager getConnectionManager() { return null; }
 		};
 		try (var c = RestClient.create().httpClient(stubClient).rootUrl("http://example.com").build()) {
 			var proxy = c.getRemote(EchoRemote.class, null);
@@ -255,42 +252,29 @@ class RestClient_Coverage2_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"removal" // finalize() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a15_finalize_detectLeaks_withoutCreationStack_logsWithoutStackTrace() throws Throwable {
 		var c = RestClient.create().detectLeaks().build();
-		c.finalize();  // Manually invoked (in-package access); not relying on actual GC timing.
+		// Manually invoked (in-package access); not relying on actual GC timing.
+		assertDoesNotThrow(c::finalize);
 	}
 
-	@SuppressWarnings({
-		"removal" // finalize() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a16_finalize_detectLeaks_withCreationStack_logsWithStackTrace() throws Throwable {
 		var c = RestClient.create().detectLeaks().debug().build();
-		c.finalize();  // debug() populates the creation stack trace that finalize() then walks and logs.
+		// debug() populates the creation stack trace that finalize then walks and logs.
+		assertDoesNotThrow(c::finalize);
 	}
 
-	@SuppressWarnings({
-		"removal" // finalize() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a17_finalize_notDetectLeaks_isNoOp() throws Throwable {
 		var c = RestClient.create().build();
 		assertDoesNotThrow(c::finalize);
 	}
 
-	@SuppressWarnings({
-		"removal" // finalize() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a17b_finalize_detectLeaks_butAlreadyClosed_isNoOp() throws Throwable {
 		var c = RestClient.create().detectLeaks().build();
 		c.close();
 		assertDoesNotThrow(c::finalize);
 	}
 
-	@SuppressWarnings({
-		"removal" // finalize() is marked for removal (forRemoval=true, so only the "removal" category is emitted, not "deprecation"); exercised intentionally for coverage.
-	})
 	@Test void a17c_finalize_detectLeaks_butKeepHttpClientOpen_isNoOp() throws Throwable {
 		var c = RestClient.create().detectLeaks().keepHttpClientOpen().build();
 		assertDoesNotThrow(c::finalize);
@@ -361,7 +345,7 @@ class RestClient_Coverage2_Test {
 
 	/**
 	 * A {@link RestCallInterceptor} whose {@code onClose} throws a checked (non-{@code RuntimeException}) exception,
-	 * to exercise {@code RestClient#onCallClose}'s {@code catch (Exception e)} wrapping branch (only reachable via a
+	 * to exercise the generic-exception wrapping branch of {@code RestClient#onCallClose} (only reachable via a
 	 * checked exception type, since {@code RuntimeException}/{@code RestCallException} are rethrown as-is).
 	 */
 	public static class ThrowingOnCloseInterceptor extends BasicRestCallInterceptor {
@@ -373,8 +357,8 @@ class RestClient_Coverage2_Test {
 
 	@Test void a22_onCallClose_checkedException_wrappedThenLoggedNotThrown() throws Exception {
 		// RestCallException extends org.apache.http.HttpException, a CHECKED exception, so RestResponse#close's own
-		// try/catch (RuntimeException rethrown, everything else logged) swallows it -- proving onCallClose's
-		// catch(Exception) wrapping branch executes without asserting on a exception type that never surfaces to the caller.
+		// try/catch (RuntimeException rethrown, everything else logged) swallows it -- proving the generic-exception
+		// wrapping branch of onCallClose executes without asserting on a exception type that never surfaces to the caller.
 		try (var out = new ByteArrayOutputStream();
 				var c = RestClient.create().interceptors(new ThrowingOnCloseInterceptor()).logToConsole().console(new PrintStream(out)).build();
 				var req = c.get(url() + "/echo");

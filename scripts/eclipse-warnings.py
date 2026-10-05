@@ -72,6 +72,17 @@ def find_ecj_jar():
     return DEFAULT_ECJ_JAR
 
 
+def find_java():
+    """Prefer `$JAVA_HOME/bin/java` over whatever `java` is first on PATH,
+    which on macOS may be the `/usr/local/bin/java` stub that has no JDK behind it."""
+    java_home = os.environ.get("JAVA_HOME")
+    if java_home:
+        candidate = Path(java_home) / "bin" / "java"
+        if candidate.is_file():
+            return str(candidate)
+    return "java"
+
+
 def load_apply_prefs_module(script_dir):
     """Reuse apply-eclipse-prefs.py's module discovery so both scripts agree
     on what counts as a module and how it's classified source vs. test."""
@@ -137,7 +148,7 @@ def run_ecj(ecj_jar, module_dir, module_path, classpath):
 
     with tempfile.TemporaryDirectory(prefix="ecj-out-") as out_dir:
         cmd = [
-            "java", "-jar", str(ecj_jar),
+            find_java(), "-jar", str(ecj_jar),
             "-properties", str(prefs),
             "-enableJavadoc", "-warn:+allJavadoc,invalidJavadoc,javadoc",
             "-cp", full_cp,

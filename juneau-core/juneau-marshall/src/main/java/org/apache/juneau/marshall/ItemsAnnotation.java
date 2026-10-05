@@ -26,6 +26,10 @@ import org.apache.juneau.commons.*;
  * Utility classes and methods for the {@link Items @Items} annotation.
  *
  */
+@SuppressWarnings({
+	"java:S100", // Builder and annotation members default_, enum_ and $ref mirror the JSON Schema keywords
+	"java:S116" // Field names match JSON Schema property names for API consistency
+})
 public class ItemsAnnotation {
 
 	/**
@@ -40,9 +44,6 @@ public class ItemsAnnotation {
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings({
-		"java:S116" // Field names match JSON Schema property names for API consistency
-	})
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
@@ -94,9 +95,6 @@ public class ItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-	@SuppressWarnings({
-		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-	})
 	public Builder default_(String...value) {
 		default_ = value;
 		return this;
@@ -108,9 +106,6 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-	})
 	public Builder enum_(String...value) {
 		enum_ = value;
 		return this;
@@ -122,9 +117,6 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S100" // Method name uses $ prefix to match JSON Schema keyword
-	})
 	public Builder $ref(String value) {
 		$ref = value;
 		return this;
@@ -494,8 +486,7 @@ public class ItemsAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S116",  // Field names match JSON Schema property names for API consistency
-		"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Object extends AnnotationObject implements Items {
 

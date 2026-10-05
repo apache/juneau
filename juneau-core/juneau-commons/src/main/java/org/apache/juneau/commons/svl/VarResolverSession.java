@@ -54,15 +54,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // VarResolver resources managed by calling code
-	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., PROP_contextBeanStore)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // VarResolver resources managed by calling code
 })
 public class VarResolverSession {
-
-	// Property name constants
-	private static final String PROP_contextBeanStore = "context.beanStore";
-	private static final String PROP_sessionBeanStore = "session.beanStore";
-	private static final String PROP_var = "var";
 
 	private static boolean containsVars(Collection<?> c) {
 		var f = Flag.create();
@@ -278,9 +273,9 @@ public class VarResolverSession {
 	 * needed.  Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"rawtypes",   // Raw types necessary for generic resolution
-		"unchecked",  // Type erasure requires unchecked operations
-		"java:S3776"  // Cognitive complexity acceptable for recursive resolution logic
+		"java:S3776", // Cognitive complexity acceptable for recursive resolution logic
+		"rawtypes", // Raw types necessary for generic resolution
+		"unchecked" // Type erasure requires unchecked operations
 	})
 	public <T> T resolve(T o) {
 		if (o == null)
@@ -364,9 +359,9 @@ public class VarResolverSession {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_contextBeanStore, this.context.beanStore)
-			.a(PROP_var, this.context.getVarMap().keySet())
-			.a(PROP_sessionBeanStore, beanStore);
+			.a("context.beanStore", this.context.beanStore)
+			.a("var", this.context.getVarMap().keySet())
+			.a("session.beanStore", beanStore);
 		// @formatter:on
 	}
 

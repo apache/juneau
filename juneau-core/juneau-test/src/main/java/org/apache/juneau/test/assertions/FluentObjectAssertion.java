@@ -17,7 +17,6 @@
 package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -86,13 +85,10 @@ import org.apache.juneau.commons.utils.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_parent = "parent";
-	private static final String ARG_type = "type";
 
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
 	private static final String MSG_unexpectedType = MESSAGES.getString("unexpectedType");
@@ -267,7 +263,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isExactType(Class<?> type) throws AssertionError {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		if (value().getClass() != type)
 			throw error(MSG_unexpectedType, cn(type), cn(value));
 		return returns();
@@ -404,7 +400,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		assertArgNotNull(ARG_parent, parent);
+		reqnn("parent", parent);
 		if (! info(value()).isAssignableTo(parent))
 			throw error(MSG_unexpectedType, cn(parent), cn(value));
 		return returns();

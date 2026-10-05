@@ -137,7 +137,7 @@ async function openParent(opts) {
 		const method = (init?.method) || 'GET';
 		if (method === 'GET') gets.push(String(url));
 		if (method === 'GET' && url === PARENT_FORM) return Promise.resolve(jsonResponse(parentPayload(o)));
-		if (method === 'GET' && String(url).indexOf(CHILD_FORM) === 0)
+		if (method === 'GET' && String(url).startsWith(CHILD_FORM))
 			return Promise.resolve(jsonResponse({
 				contractVersion: '2', title: 'Review',
 				form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] }
@@ -165,7 +165,7 @@ async function openParent(opts) {
 		if (r.btn) r.btn.dispatch('click');
 		await flush();
 		out.open_childStackedALayer = I.dialogLayerCount() === 2;
-		out.open_childFormWasFetched = r.gets.some(function (u) { return u.indexOf(CHILD_FORM) === 0; });
+		out.open_childFormWasFetched = r.gets.some(function (u) { return u.startsWith(CHILD_FORM); });
 		out.open_noRefusalPainted = dialogRefusalText(env) === null;
 
 		// Scope: the catalog rides the per-open payload, so no row menu can see it.
@@ -262,7 +262,7 @@ async function openParent(opts) {
 		if (note) note.value = 'edited-in-place';
 		if (r.btn) r.btn.dispatch('click');
 		await flush();
-		const childGet = r.gets.find(function (u) { return u.indexOf(CHILD_FORM) === 0; });
+		const childGet = r.gets.find(function (u) { return u.startsWith(CHILD_FORM); });
 		out.drafts_childGetUrl = childGet || null;
 		out.drafts_queryParamPresent = childGet?.indexOf('juneauDrafts=') > 0;
 		out.drafts_carriedTheEditedValue = (function () {
@@ -293,7 +293,7 @@ async function openParent(opts) {
 			&& copy.id === 'review' && copy.label === 'Review';
 		// An existing query string is appended to, not clobbered.
 		const withQuery = I.withDraftQuery({ id: 'r', label: 'R', form: '/x/f?a=1' }, { note: 'hi' });
-		out.cap_appendsToAnExistingQuery = withQuery.form.indexOf('/x/f?a=1&juneauDrafts=') === 0;
+		out.cap_appendsToAnExistingQuery = withQuery.form.startsWith('/x/f?a=1&juneauDrafts=');
 
 		// Over the cap the child does NOT open, and the refusal is visible.
 		const fx = fixture(env);

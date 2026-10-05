@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.*;
  * wrapper type.
  */
 @Marshalled
+@SuppressWarnings({
+	"java:S1452" // Intentional public API return: the concrete JsonSchema<T> self-type is not known to this bean, and JsonSchema<?> is the only type that can expose the shared bean without binding callers to one subtype.
+})
 public class Tool {
 
 	private String name;
@@ -79,9 +82,6 @@ public class Tool {
 	 *
 	 * @return The input schema, or {@code null} if not set.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Intentional public API return: the concrete JsonSchema<T> self-type is not known to this bean, and JsonSchema<?> is the only type that can expose the shared bean without binding callers to one subtype.
-	})
 	public JsonSchema<?> getInputSchema() {
 		return inputSchema;
 	}
@@ -102,9 +102,6 @@ public class Tool {
 	 *
 	 * @return The output schema, or {@code null} if not set.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Intentional public API return: the concrete JsonSchema<T> self-type is not known to this bean, and JsonSchema<?> is the only type that can expose the shared bean without binding callers to one subtype.
-	})
 	public JsonSchema<?> getOutputSchema() {
 		return outputSchema;
 	}

@@ -526,7 +526,7 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// asMap() with non-default Items.
 	//
-	// SchemaAnnotation.asMap(...) calls merge(m.getMap(PROP_items), a.items()).  When the result
+	// SchemaAnnotation.asMap(...) calls merge(m.getMap("items"), a.items()).  When the result
 	// map has no prior "items" entry, getMap(...) returns null and the private merge(JsonMap,Items)
 	// lazy-creates the inner map. Same lazy-create pattern lives in ExternalDocsAnnotation.merge
 	// and SubItemsAnnotation.merge.

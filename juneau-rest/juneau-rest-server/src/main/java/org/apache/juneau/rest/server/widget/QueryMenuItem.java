@@ -17,14 +17,26 @@
 package org.apache.juneau.rest.server.widget;
 
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.converter.*;
 
 /**
- * Widget that returns a menu-item drop-down form for entering search/view/sort arguments.
+ * Widget that returns a menu-item drop-down form for entering BeanQuery search/view/sort/paging arguments
+ * (<c>search</c>/<c>view</c>/<c>sort</c>/<c>position</c>/<c>limit</c> &mdash; see {@link Queryable} and
+ * {@link org.apache.juneau.http.BeanQueryRequest}).
  *
  * <p>
  * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<ja>@Rest</ja>(widgets=QueryMenuItem.<jk>class</jk>)
+ * 	<ja>@HtmlDocConfig</ja>(navlinks={<js>"$W{QueryMenuItem}"</js>})
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link Queryable}
+ * 	<li class='jc'>{@link org.apache.juneau.http.BeanQueryRequest}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
  * </ul>

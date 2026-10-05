@@ -79,22 +79,18 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"java:S112",  // throws Exception intentional - callback/lifecycle methods throughout this class
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
+	"java:S112", // throws Exception intentional - callback/lifecycle methods throughout this class
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S1200", // High coupling is intentional in this central operation context aggregator.
+	"java:S3776", // Branching is inherent to the RestOpContext constructor and compareTo(), which resolve many annotation-driven settings and ordering keys.
 	"java:S6539", // RestOpContext intentionally centralizes op wiring and annotation resolution.
-	"resource"   // op-level BasicBeanStores are short-lived scratch stores; the long-lived opBeanStore field is owned and closed by the parent RestContext via its bean-store hierarchy.
+	"rawtypes", // Raw types necessary for generic type handling.
+	"resource", // op-level BasicBeanStores are short-lived scratch stores; the long-lived opBeanStore field is owned and closed by the parent RestContext via its bean-store hierarchy.
+	"unchecked" // Cast is safe: type parameter is verified by caller context.
 })
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 
-	// Property name constants
-	private static final String PROP_defaultRequestFormData = "defaultRequestFormData";
-	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
-	private static final String PROP_defaultRequestQueryData = "defaultRequestQueryData";
-	private static final String PROP_httpMethod = "httpMethod";
-
-	// Argument name constants for assertArgNotNull
+	// Argument name constants for req*
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -223,7 +219,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** Effective allowed parser session-option keys for this operation. */
 	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedParserOptions;
+		var p = "allowedParserOptions";
 		if (isInherited(p))
 			l.addAll(restContext().getAllowedParserOptions());
 		getRestOpAnnotations().stream()
@@ -235,7 +231,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** Effective allowed serializer session-option keys for this operation. */
 	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedSerializerOptions;
+		var p = "allowedSerializerOptions";
 		if (isInherited(p))
 			l.addAll(restContext().getAllowedSerializerOptions());
 		getRestOpAnnotations().stream()
@@ -313,10 +309,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
 		var bs = beanStore();
 		var b = RestConverterList.create(bs);
-		if (isInherited(PROPERTY_converters))
-			restContext().getRestAnnotationsForProperty(PROPERTY_converters)
+		if (isInherited("converters"))
+			restContext().getRestAnnotationsForProperty("converters")
 				.forEach(ai -> b.append(ai.inner().converters()));
-		getRestOpAnnotationsForProperty(PROPERTY_converters)
+		getRestOpAnnotationsForProperty("converters")
 			.forEach(ai -> ai.getClassArray("converters", RestConverter.class).ifPresent(classes -> {
 				for (var c : classes)
 					b.append(classArray(c));
@@ -329,11 +325,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/** The effective default {@link Charset} for this operation, resolved from op annotations, context, or env. */
 	private final Memoizer<Charset> defaultCharset = memoizer(() -> {
-		var v = findOpString(PROPERTY_defaultCharset);
+		var v = findOpString("defaultCharset");
 		if (v.isPresent())
 			return Charset.forName(v.get());
-		if (isInherited(PROPERTY_defaultCharset)) {
-			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
+		if (isInherited("defaultCharset")) {
+			var rv = restContext().mergeReplacedStringAttribute("defaultCharset", null);
 			if (ine(rv))
 				return Charset.forName(rv);
 		}
@@ -353,11 +349,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
 		var v = Holder.of(restContext().getDefaultRequestAttributes().copy());
-		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> {
-			for (var s : ai.getStringArray(PROPERTY_defaultRequestAttributes).orElse(EMPTY_STRING_ARRAY))
+		getRestOpAnnotationsForProperty("defaultRequestAttributes").forEach(ai -> {
+			for (var s : ai.getStringArray("defaultRequestAttributes").orElse(EMPTY_STRING_ARRAY))
 				v.get().add(BasicNamedAttribute.ofPair(s));
 		});
-		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestAttributes))
+		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource(), x -> matchesInjectScope(x, "defaultRequestAttributes"))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -375,8 +371,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<HttpPartList> defaultRequestFormData = memoizer(() -> {
 		var v = Holder.of(HttpPartList.create());
-		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestFormData).forEach(ai -> {
-			for (var s : ai.getStringArray(PROPERTY_defaultRequestFormData).orElse(EMPTY_STRING_ARRAY))
+		getRestOpAnnotationsForProperty("defaultRequestFormData").forEach(ai -> {
+			for (var s : ai.getStringArray("defaultRequestFormData").orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
@@ -388,7 +384,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
+		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, "defaultRequestFormData"))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -413,11 +409,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
 		var v = Holder.of(restContext().getDefaultRequestHeaders().copy());
-		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
-			for (var s : ai.getStringArray(PROPERTY_defaultRequestHeaders).orElse(EMPTY_STRING_ARRAY))
+		getRestOpAnnotationsForProperty("defaultRequestHeaders").forEach(ai -> {
+			for (var s : ai.getStringArray("defaultRequestHeaders").orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringHeader.ofPair(s));
-			ai.getString(PROPERTY_defaultAccept).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(Accept.of(s)));
-			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(ContentType.of(s)));
+			ai.getString("defaultAccept").filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(Accept.of(s)));
+			ai.getString("defaultContentType").filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(ContentType.of(s)));
 		});
 		processParameterDefaults((paramAnn, def) -> {
 			if (paramAnn instanceof Header paramAnn2) {
@@ -428,7 +424,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, "defaultRequestHeaders"))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -446,8 +442,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<HttpPartList> defaultRequestQueryData = memoizer(() -> {
 		var v = Holder.of(HttpPartList.create());
-		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestQueryData).forEach(ai -> {
-			for (var s : ai.getStringArray(PROPERTY_defaultRequestQueryData).orElse(EMPTY_STRING_ARRAY))
+		getRestOpAnnotationsForProperty("defaultRequestQueryData").forEach(ai -> {
+			for (var s : ai.getStringArray("defaultRequestQueryData").orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
@@ -459,7 +455,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
+		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, "defaultRequestQueryData"))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -477,11 +473,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Holder.of(restContext().getDefaultResponseHeaders().copy());
-		getRestOpAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> {
-			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
+		getRestOpAnnotationsForProperty("defaultResponseHeaders").forEach(ai -> {
+			for (var s : ai.getStringArray("defaultResponseHeaders").orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringHeader.ofPair(s));
 		});
-		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, "defaultResponseHeaders"))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -500,7 +496,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
 		var bs = beanStore();
 		var b = restContext().getEncodersBuilder().copy();
-		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
+		getRestOpAnnotationsForProperty("encoders").forEach(ai -> {
 			var c = ai.getClassArray("encoders", Encoder.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
@@ -548,9 +544,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ai.getString("roleGuard").filter(StringUtils::isNotBlank).ifPresent(roleGuardStrs::add);
 		};
 
-		if (isInherited(PROPERTY_guards))
-			restContext().getRestAnnotationsForProperty(PROPERTY_guards).forEach(walk::accept);
-		getRestOpAnnotationsForProperty(PROPERTY_guards).forEach(walk);
+		if (isInherited("guards"))
+			restContext().getRestAnnotationsForProperty("guards").forEach(walk::accept);
+		getRestOpAnnotationsForProperty("guards").forEach(walk);
 
 		// When no @Rest/@RestOp(rolesDeclared) is set, pass null so RoleBasedRestGuard
 		// infers role names from the expression itself (legacy semantics — an empty
@@ -589,9 +585,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * ({@link RestGet}, etc.) imply their fixed verb. Falls back to
 	 * {@link HttpUtils#detectHttpMethod} when no annotation declares a verb.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity: annotation-driven HTTP method dispatch benefits from consolidated linear scan.
-	})
 	private final Memoizer<String> httpMethod = memoizer(() -> {
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
@@ -636,7 +629,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var b = RestMatcherList.create(bs);
 		var clientVersion = new String[]{null};
 
-		getRestOpAnnotationsForProperty(PROPERTY_matchers).forEach(ai -> {
+		getRestOpAnnotationsForProperty("matchers").forEach(ai -> {
 			ai.getClassArray("matchers", RestMatcher.class).ifPresent(classes -> {
 				for (var c : classes)
 					b.append(classArray(c));
@@ -660,11 +653,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/** The effective max-input byte limit for this operation. */
 	private final Memoizer<Long> maxInput = memoizer(() -> {
-		var v = findOpString(PROPERTY_maxInput);
+		var v = findOpString("maxInput");
 		if (v.isPresent())
 			return parseLongWithSuffix(v.get());
-		if (isInherited(PROPERTY_maxInput)) {
-			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_maxInput, null);
+		if (isInherited("maxInput")) {
+			var rv = restContext().mergeReplacedStringAttribute("maxInput", null);
 			if (ine(rv))
 				return parseLongWithSuffix(rv);
 		}
@@ -683,10 +676,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * </ul>
 	 */
 	private final Memoizer<Boolean> problemDetails = memoizer(() -> {
-		var v = findOpString(PROPERTY_problemDetails);
+		var v = findOpString("problemDetails");
 		if (v.isPresent())
 			return Boolean.parseBoolean(v.get());
-		if (isInherited(PROPERTY_problemDetails))
+		if (isInherited("problemDetails"))
 			return restContext().isProblemDetails();
 		return false;
 	});
@@ -703,10 +696,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * </ul>
 	 */
 	private final Memoizer<Boolean> debugMarshalling = memoizer(() -> {
-		var v = findOpString(PROPERTY_debugMarshalling);
+		var v = findOpString("debugMarshalling");
 		if (v.isPresent())
 			return Boolean.parseBoolean(v.get());
-		if (isInherited(PROPERTY_debugMarshalling))
+		if (isInherited("debugMarshalling"))
 			return restContext().isDebugMarshalling();
 		return false;
 	});
@@ -720,10 +713,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * only when the resource-level {@link RestContext#getVirtualThreadExecutor()} is non-{@code null} (Java 21+).
 	 */
 	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() -> {
-		var v = findOpString(PROPERTY_virtualThreads);
+		var v = findOpString("virtualThreads");
 		if (v.isPresent())
 			return Boolean.parseBoolean(v.get());
-		if (isInherited(PROPERTY_virtualThreads))
+		if (isInherited("virtualThreads"))
 			return restContext().isVirtualThreadsEnabled();
 		return false;
 	});
@@ -733,7 +726,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * annotation nor the resource declares a value (so {@code AsyncResponseProcessor}'s 30-second default applies).
 	 */
 	private final Memoizer<Long> asyncTimeoutMillis = memoizer(() -> {
-		var v = findOpString(PROPERTY_asyncTimeoutMillis);
+		var v = findOpString("asyncTimeoutMillis");
 		if (v.isPresent()) {
 			try {
 				return Long.parseLong(v.get().trim());
@@ -741,7 +734,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return -1L;
 			}
 		}
-		if (isInherited(PROPERTY_asyncTimeoutMillis))
+		if (isInherited("asyncTimeoutMillis"))
 			return restContext().getAsyncTimeoutMillis();
 		return -1L;
 	});
@@ -751,7 +744,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * resolved against the resource's bean store. {@code null} when unset (natural completion thread).
 	 */
 	private final Memoizer<Executor> asyncCompletionExecutor = memoizer(() -> {
-		var v = findOpString(PROPERTY_asyncCompletionExecutor);
+		var v = findOpString("asyncCompletionExecutor");
 		if (v.isPresent()) {
 			var name = v.get();
 			var bs = beanStore();
@@ -765,7 +758,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						+ " (or ExecutorService) bean with that name is registered in the resource's bean store.");
 			return resolved.get();
 		}
-		if (isInherited(PROPERTY_asyncCompletionExecutor))
+		if (isInherited("asyncCompletionExecutor"))
 			return restContext().getAsyncCompletionExecutor();
 		return null;
 	});
@@ -781,10 +774,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * </ul>
 	 */
 	private final Memoizer<String> observabilityAttr = memoizer(() -> {
-		var v = findOpString(PROPERTY_observability);
+		var v = findOpString("observability");
 		if (v.isPresent())
 			return v.get();
-		if (isInherited(PROPERTY_observability))
+		if (isInherited("observability"))
 			return restContext().getObservabilityAttribute();
 		return null;
 	});
@@ -794,14 +787,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Empty string (default) means the recorder uses its own default name derivation.
 	 */
 	private final Memoizer<String> metricName = memoizer(() ->
-		findOpString(PROPERTY_metricName).orElse(""));
+		findOpString("metricName").orElse(""));
 
 	/**
 	 * Per-op additional metric tags from {@code @RestOp(metricTags)}.
 	 * Format: comma-separated {@code key=value} pairs. Empty string (default) means no additional tags.
 	 */
 	private final Memoizer<String> metricTags = memoizer(() ->
-		findOpString(PROPERTY_metricTags).orElse(""));
+		findOpString("metricTags").orElse(""));
 
 	/** Aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
 	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(() -> {
@@ -841,7 +834,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var b = pb.copy();
 		if (pb.canApply(aa))
 			b.apply(aa);
-		getRestOpAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> {
+		getRestOpAnnotationsForProperty("parsers").forEach(ai -> {
 			var c = ai.getClassArray("parsers", Object.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
@@ -913,9 +906,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * (derived from the method name via {@link HttpUtils#detectHttpPath}) is intentionally
 	 * <i>not</i> SVL-resolved &mdash; it is framework-derived, not user input.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity: annotation-driven path-matcher construction benefits from consolidated linear scan.
-	})
 	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
 		var v = Holder.of(UrlPathMatcherList.create());
 		var vr = varResolver();
@@ -925,8 +915,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		// this session. If we ever switch to per-request dynamic path resolution, the seam is
 		// already in place — only the .resolve(session) call moves to the request handler.
 		var session = vr.createSession();
-		getRestOpAnnotationsForProperty(PROPERTY_path).forEach(ai -> {
-			for (var p : ai.getStringArray(PROPERTY_path).orElse(StringUtils.EMPTY_STRING_ARRAY)) {
+		getRestOpAnnotationsForProperty("path").forEach(ai -> {
+			for (var p : ai.getStringArray("path").orElse(StringUtils.EMPTY_STRING_ARRAY)) {
 				var resolved = vr.compile(p).resolve(session);
 				if (!resolved.isEmpty())
 					v.get().add(UrlPathMatcher.of(resolved));
@@ -938,7 +928,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// play (i.e. the annotation type matches), and otherwise treat value() as a plain path.
 			// SVL is applied AFTER the space-split rule so a resolved path can never be misinterpreted
 			// as a "METHOD path" pair (the method token is structural, not user-overridable via SVL).
-			ai.getString(PROPERTY_value).filter(StringUtils::isNotBlank).map(String::trim).ifPresent(s -> {
+			ai.getString("value").filter(StringUtils::isNotBlank).map(String::trim).ifPresent(s -> {
 				if (ai.inner() instanceof RestOp) {
 					var i = s.indexOf(' ');
 					if (i != -1) {
@@ -979,7 +969,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var p = HttpUtils.detectHttpPath(method(), httpMethod2);
 
 			// RRPC operations match anything below the method's URL when no explicit path is supplied
-			if ("RRPC".equalsIgnoreCase(httpMethod2) && ! p.endsWith("/*"))
+			if (eqic("RRPC", httpMethod2) && ! p.endsWith("/*"))
 				p += "/*";
 
 			v.get().add(UrlPathMatcher.of(p));
@@ -1066,7 +1056,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var b = sb.copy();
 		if (sb.canApply(aa))
 			b.apply(aa);
-		getRestOpAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> {
+		getRestOpAnnotationsForProperty("serializers").forEach(ai -> {
 			var c = ai.getClassArray("serializers", Serializer.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
@@ -1086,7 +1076,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Falls back to the supported media types of the operation's {@link SerializerSet}.
 	 */
 	private final Memoizer<List<MediaType>> supportedAcceptTypes = memoizer(() -> {
-		var result = collectAnnotationMediaTypes(PROPERTY_produces);
+		var result = collectAnnotationMediaTypes("produces");
 		if (result.isEmpty())
 			return u(getSerializers().getSupportedMediaTypes());
 		return u(result);
@@ -1101,7 +1091,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Falls back to the supported content types of the operation's {@link ParserSet}.
 	 */
 	private final Memoizer<List<MediaType>> supportedContentTypes = memoizer(() -> {
-		var result = collectAnnotationMediaTypes(PROPERTY_consumes);
+		var result = collectAnnotationMediaTypes("consumes");
 		if (result.isEmpty())
 			return u(getParsers().getSupportedMediaTypes());
 		return u(result);
@@ -1140,7 +1130,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var a = annotated.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (a != null) {
 			for (var n : a.methodScope()) {
-				if ("*".equals(n) || method.getName().equals(n))
+				if (eq(n, "*") || method.getName().equals(n))
 					return true;
 			}
 		}
@@ -1159,10 +1149,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private boolean matchesInjectScope(MethodInfo annotated, String beanName) {
 		var a = annotated.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (a != null) {
-			if (! a.name().equals(beanName))
+			if (! BeanAnnotation.name(a).equals(beanName))
 				return false;
 			for (var n : a.methodScope()) {
-				if ("*".equals(n) || method.getName().equals(n))
+				if (eq(n, "*") || method.getName().equals(n))
 					return true;
 			}
 		}
@@ -1208,7 +1198,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var annotations = getRestOpAnnotations();
 		var cutoff = annotations.size();
 		for (var i = 0; i < annotations.size(); i++) {
-			if (resolveCdl(annotations.get(i).getStringArray(PROPERTY_noInherit).orElse(StringUtils.EMPTY_STRING_ARRAY)).anyMatch(name::equalsIgnoreCase)) {
+			if (resolveCdl(annotations.get(i).getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY)).anyMatch(name::equalsIgnoreCase)) {
 				cutoff = i + 1;
 				break;
 			}
@@ -1257,7 +1247,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private void checkOpObservabilityBackendPresent() {
 		var attr = observabilityAttr.get();
-		if (!"true".equalsIgnoreCase(attr))
+		if (neqic("true", attr))
 			return;
 		var bs = beanStore();
 		var recorder = bs.getBean(org.apache.juneau.rest.server.metrics.MetricsRecorder.class).orElse(null);
@@ -1317,9 +1307,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity: reflective annotation dispatch is intentionally consolidated for JIT inlining.
-	})
 	private static String httpMethodFromAnnotation(Annotation a, VarResolver vr) {
 		if (a instanceof RestGet)
 			return "get";
@@ -1350,7 +1337,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	private static String normalizeHttpMethod(String v) {
-		if ("METHOD".equalsIgnoreCase(v))
+		if (eqic("METHOD", v))
 			return "*";
 		return ucr(v);
 	}
@@ -1429,6 +1416,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
 		// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
 		httpMethod.get();
+
+		// Fail servlet init (not the first request) if a concrete @Request bean parameter has a getter with no matching
+		// setter or no public no-arg constructor; the arg is rebuilt lazily with the invoker.
+		for (var pi : mi.getParameters())
+			org.apache.juneau.rest.server.arg.RequestBeanArg.create(pi, appliedAnnotations);
 
 			var pm = pathMatchers.get();
 			bs.add(UrlPathMatcher[].class, pm);
@@ -1697,7 +1689,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public boolean isObservabilityEnabled() {
 		var v = observabilityAttr.get();
-		return !"false".equalsIgnoreCase(v);
+		return neqic("false", v);
 	}
 
 	/**
@@ -1840,9 +1832,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var a = ClassInfo.of(c).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
-			@SuppressWarnings({
-				"unchecked" // Cast is safe: type parameter is verified by caller context.
-			})
 			var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), getPartSerializer());
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
@@ -1959,10 +1948,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_defaultRequestFormData, getDefaultRequestFormData())
-			.a(PROP_defaultRequestHeaders, getDefaultRequestHeaders())
-			.a(PROP_defaultRequestQueryData, getDefaultRequestQueryData())
-			.a(PROP_httpMethod, getHttpMethod());
+			.a("defaultRequestFormData", getDefaultRequestFormData())
+			.a("defaultRequestHeaders", getDefaultRequestHeaders())
+			.a("defaultRequestQueryData", getDefaultRequestQueryData())
+			.a("httpMethod", getHttpMethod());
 	}
 
 	RestConverter[] getConverters() { return converters.get(); }
@@ -1982,9 +1971,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return null;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified by caller context.
-	})
 	private static <T> Class<? extends T>[] classArray(Class<? extends T> value) {
 		return (Class<? extends T>[])new Class<?>[] { value };
 	}

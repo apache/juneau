@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.html;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.*;
@@ -68,7 +70,7 @@ public class HtmlDocConfigAnnotation {
 			strings(a.script()).ifPresent(b::script);
 			strings(a.style()).ifPresent(b::style);
 			strings(a.stylesheet()).ifPresent(b::stylesheet);
-			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);
+			string(a.asideFloat()).filter(x -> neqic("DEFAULT", x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);
 			string(a.noResultsMessage()).ifPresent(b::noResultsMessage);
 			bool(a.nowrap()).ifPresent(b::nowrap);
 			bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);

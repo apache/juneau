@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -424,7 +425,7 @@ class Maps_Test extends TestBase {
 	@Test
 	void i01_filtered_customPredicate() {
 		var map = Maps.create(String.class, String.class)
-			.filtered((k, v) -> v != null && !v.equals(""))
+			.filtered((k, v) -> v != null && neq(v, ""))
 			.add("a", "foo")
 			.add("b", null)     // Not added
 			.add("c", "")       // Not added

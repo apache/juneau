@@ -41,6 +41,9 @@ import org.junit.jupiter.api.*;
  * is far more targeted than driving every branch through a full {@code @Remote}-proxy HTTP round-trip (covered
  * separately in {@link RemoteClient_Test} for the request/response-integrated behavior).
  */
+@SuppressWarnings({
+	"unused" // optionalStringField, rawListField and NoUsableCtor's private constructor are never referenced directly; they exist to be reflected on by the rawClass/innerType and instantiateHttpType tests.
+})
 class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 
 	private static final Class<?> HANDLER;
@@ -163,7 +166,7 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 
 	@Test void e04_isExpandable_bean_true() throws Exception {
 		assertEquals(true, invokeStatic("isExpandable", new Class<?>[]{Object.class}, new Object() {
-			@SuppressWarnings("unused") public String getName() { return "x"; }
+			public String getName() { return "x"; }
 		}));
 	}
 
@@ -285,9 +288,7 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 	// i — rawClass(Type) / innerType(Type)
 	// ==========================================================================
 
-	@SuppressWarnings("unused")
 	private Optional<String> optionalStringField;
-	@SuppressWarnings("unused")
 	private List<String> rawListField;
 
 	@Test void i01_rawClass_plainClass_returnsItself() throws Exception {
@@ -471,7 +472,7 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 	@Test void m07b_bindParts_noExplicitName_scalarArg_evaluatesIsExpandableThenSerializes() throws Exception {
 		// Distinct from m07 (which short-circuits the "*"/isExpandable check on a non-null explicit name):
 		// here explicit is null, so isExpandable(arg) is actually evaluated (and returns false for a scalar),
-		// exercising the second operand's false outcome of the "*".equals(explicit) || (explicit==null && isExpandable(arg)) check.
+		// exercising the false outcome of the second operand of the wildcard-name-or-unnamed-expandable check.
 		var seen = new ArrayList<String>();
 		bindParts(null, null, null, "hello", "q", seen);
 		assertEquals(List.of("q=hello"), seen);
@@ -583,7 +584,7 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 		var m = HANDLER.getDeclaredMethod("serializePart", HttpPartType.class, HttpPartSchema.class, Object.class, HttpPartSerializer.class);
 		m.setAccessible(true);
 		// A non-null value with a serializer whose session.write(...) always throws reliably exercises the
-		// catch-and-wrap with the value != null (cn(value)) message-formatting branch. (A cyclic self-referencing
+		// catch-and-wrap with the non-null-value message-formatting branch. (A cyclic self-referencing
 		// array was tried first to force OpenApiSerializer to fail, but it instead overflows the stack -- a
 		// StackOverflowError, which isn't an Exception and so bypasses this catch block entirely.)
 		var ex = assertThrows(InvocationTargetException.class, () -> m.invoke(null, HttpPartType.QUERY, null, "abc", throwingSerializer()));

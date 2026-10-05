@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.time.*;
@@ -24,10 +23,14 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.sse.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Scheduled SSE heartbeat.
  */
+@SuppressWarnings({
+	"resource" // start() returns the SseHeartbeat to the caller, who closes it
+})
 public class SseHeartbeat implements Runnable, AutoCloseable {
 
 	/**
@@ -38,20 +41,14 @@ public class SseHeartbeat implements Runnable, AutoCloseable {
 	 * @param interval The heartbeat interval. Must not be <jk>null</jk>.
 	 * @return The heartbeat handle.
 	 */
-	@SuppressWarnings({
-		"resource" // Returned heartbeat handle is caller-owned and must be closed by the caller.
-	})
 	public static SseHeartbeat start(ScheduledExecutorService scheduler, Writer writer, Duration interval) {
 		var heartbeat = new SseHeartbeat(writer);
-		var i = assertArgNotNull("interval", interval).toMillis();
-		assertArg(i > 0, "interval must be > 0.");
+		var i = reqnn("interval", interval).toMillis();
+		req(i > 0, "interval must be > 0.");
 		heartbeat.future = scheduler.scheduleAtFixedRate(heartbeat, i, i, TimeUnit.MILLISECONDS);
 		return heartbeat;
 	}
 
-	@SuppressWarnings({
-		"resource" // Writer is borrowed from response lifecycle and not owned by heartbeat.
-	})
 	private final Writer writer;
 	private final AtomicBoolean closed;
 	private ScheduledFuture<?> future;
@@ -61,11 +58,8 @@ public class SseHeartbeat implements Runnable, AutoCloseable {
 	 *
 	 * @param writer The writer. Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // assertArgNotNull(...) is generic and its inferred type is conservatively treated as Closeable; the writer is caller-owned (response lifecycle) and stored for later use, not closed here.
-	})
 	public SseHeartbeat(Writer writer) {
-		this.writer = assertArgNotNull("writer", writer);
+		this.writer = reqnn("writer", writer);
 		closed = new AtomicBoolean();
 	}
 

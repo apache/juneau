@@ -17,8 +17,10 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.http.*;
 
@@ -80,7 +82,9 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	protected int bodyCap = DEFAULT_BODY_CAP;
 
 	/** Constructor. */
-	public BasicRestClientDebugFormatter() {}
+	public BasicRestClientDebugFormatter() {
+		/* no state to initialize */
+	}
 
 	/**
 	 * Overrides the redacted-header set.
@@ -133,7 +137,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 		// Prepend the resolved correlation id (same effective-id order as the emit stamp): the confirmed echoed id
 		// when present, else the sent id.  Both are already safe to interpolate (client-minted Uuid7 values are safe;
 		// a server-echoed value was sanitized server-side), so no second sanitizer pass is needed for this token.
-		var effectiveId = (res != null && res.getRequestId() != null) ? res.getRequestId() : (req != null ? req.getRequestId() : null);
+		var effectiveId = effectiveRequestId(req, res);
 		if (effectiveId != null)
 			sb.append("[requestId=").append(effectiveId).append("] ");
 		return sb
@@ -142,6 +146,13 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 			.append(uriStr)
 			.append(" (").append(req.getExecTime() != null ? req.getExecTime().toMillis() : 0).append("ms)")
 			.toString();
+	}
+
+	// The confirmed echoed id when present, else the sent id.
+	private static String effectiveRequestId(RestRequest req, RestResponse res) {
+		if (res != null && res.getRequestId() != null)
+			return res.getRequestId();
+		return req.getRequestId();
 	}
 
 	@Override /* RestClientDebugFormatter */
@@ -181,11 +192,10 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	}
 
 	private Set<String> normalizedRedactedSet() {
-		var s = new HashSet<String>();
-		for (var n : redactedHeaders)
-			if (n != null)
-				s.add(normalizeHeaderName(n));
-		return s;
+		return redactedHeaders.stream()
+			.filter(Objects::nonNull)
+			.map(BasicRestClientDebugFormatter::normalizeHeaderName)
+			.collect(Collectors.toCollection(HashSet::new));
 	}
 
 	private static boolean isRedacted(String name, Set<String> normalizedRedacted) {
@@ -284,7 +294,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 		if (contentEncoding == null)
 			return true;
 		var e = contentEncoding.trim();
-		return e.isEmpty() || e.equalsIgnoreCase("identity");
+		return e.isEmpty() || eqic(e, "identity");
 	}
 
 	/**
@@ -337,7 +347,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 		var t = raw.trim();
 		if (t.isEmpty())
 			return false;
-		return ! (t.equalsIgnoreCase("false") || t.equals("0"));
+		return ! (eqic(t, "false") || eq(t, "0"));
 	}
 
 	/**

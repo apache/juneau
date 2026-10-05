@@ -73,7 +73,7 @@ public final class AuthResultAccumulator {
 			return this;
 		}
 		var otherPrincipal = r.getPrincipal();
-		if (otherPrincipal == null || Objects.equals(principal.getName(), otherPrincipal.getName())) {
+		if (otherPrincipal == null || eq(principal.getName(), otherPrincipal.getName())) {
 			roles.addAll(r.getRoles());
 		} else {
 			var establishedName = principal.getName();

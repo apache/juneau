@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * An HTTP header name/value pair as seen by the transport layer.
@@ -43,8 +44,8 @@ public record TransportHeader(String name, String value) {
 	 * @param value The header value. Must not be <jk>null</jk>.
 	 */
 	public TransportHeader {
-		assertArgNotNull("name", name);
-		assertArgNotNull("value", value);
+		reqnn("name", name);
+		reqnn("value", value);
 	}
 
 	/**

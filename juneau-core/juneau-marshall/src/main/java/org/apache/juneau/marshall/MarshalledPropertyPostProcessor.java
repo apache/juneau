@@ -66,8 +66,12 @@ import org.apache.juneau.marshall.swaps.*;
  * ({@link BeanMeta#of(Class, BeanConfigContext)}) does not run this post-processor.
  */
 @SuppressWarnings({
+	"java:S112", // applyToMap() and xmlGregorianCalendarSwap() wrap checked ParseException/DatatypeConfigurationException in a RuntimeException because the callers cannot throw checked exceptions.
+	"java:S3776", // Branching is inherent to process(), installSwapAwareTransforms(), emptyValueFor() and the apply*Formats() dispatchers, which fan out over many format/type cases.
+	"java:S6539", // Monster Class threshold is advisory; this is a routing seam that intentionally depends on many marshalling types.
 	"java:S6548", // Intentional stateless singleton SPI implementation wired through BeanConfigContext.
-	"java:S6539"  // Monster Class threshold is advisory; this is a routing seam that intentionally depends on many marshalling types.
+	"rawtypes", // Raw Enum/Class are used in enumSwap() and asClassWildcard(), where the property class is only known at runtime.
+	"unchecked" // Casts of ObjectSwap to ObjectSwap<Object,Object> in the swap/unswap transforms, Class to Class<? extends Enum>, and the raw-Class wildcard trick are safe because the swap was selected for this property's type.
 })
 final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor {
 
@@ -97,9 +101,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @param bc The marshalling context.  Must not be <jk>null</jk>.
 	 * @param b The bean-property builder.  Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Annotation-discovery dispatch over innerField/getter/setter — branching is intentional; splitting hurts JIT inlining.
-	})
 	static void process(MarshallingContext bc, BeanPropertyMeta.Builder b) {
 		var ap = bc.getAnnotationProvider();
 		var bdClasses = new ArrayList<Class<?>>();
@@ -228,9 +229,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @param p The builder to attach swap-aware transforms to.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Centralized swap-transform wiring; branching mirrors swap/no-swap and child-swap read/write paths.
-		"unchecked",  // Wildcard ObjectSwap captured from Object-typed builder fields for runtime polymorphic dispatch.
-		"null"        // `sw` may be null but is guarded by `nn(sw)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
+		"null" // `sw` may be null but is guarded by `nn(sw)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
 	})
 	static void installSwapAwareTransforms(BeanPropertyMeta.Builder p) {
 		ObjectSwap<?,?> sw = (ObjectSwap<?,?>) p.swap;
@@ -307,9 +306,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @param propertyClass The raw property class — used to compute {@link Nulls#EMPTY} / {@link Nulls#DEFAULT}
 	 * 	substitutes.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity is acceptable; switch-over-modes is the clearest expression of the contract.
-	})
 	static void installNullCoercionTransform(BeanPropertyMeta.Builder b, Nulls perPropertyNulls, Class<?> propertyClass) {
 		var inner = b.writeTransform;
 		// Capture the full property ClassMeta so the Optional empty-default is nesting-aware (e.g.
@@ -385,9 +381,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		return null;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Type-dispatch chain; splitting into per-type helpers would obscure the single-purpose intent.
-	})
 	private static Object emptyValueFor(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
 		if (propertyClass == null || propertyClass == Object.class)
 			return null;
@@ -487,9 +480,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @param bc The marshalling context.  Must not be <jk>null</jk>.
 	 * @param b The bean-property builder.  Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Discovery branches over innerField/getter/setter mirror the swap discovery loop above.
-	})
 	static void installSchemaValidationTransforms(MarshallingContext bc, BeanPropertyMeta.Builder b) {
 		// Skip when validation is not enabled on the context.  BeanMeta is cached per-context, so contexts with
 		// validateSchema=true get their own cache slot and we don't pay the discovery / factory cost on the
@@ -545,9 +535,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"java:S112" // Rewrap as RuntimeException - ParseException at this level is a programming error in the @Schema input.
-	})
 	private static JsonMap applyToMap(JsonMap acc, Schema schema) {
 		JsonMap m;
 		try {
@@ -585,9 +572,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		return null;
 	}
 
-	@SuppressWarnings({
-		"java:S112" // throws RuntimeException intentional - callback/lifecycle method for swap initialization
-	})
 	private static ObjectSwap<?,?> swapSwap(AnnotationInfo<Swap> ai) {
 		var s = ai.inner();
 		var c = s.value();
@@ -619,9 +603,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		return null;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // @MarshalledProp format-dispatch chain — type-routing if-chain is intentional; splitting hurts JIT inlining.
-	})
 	private static void applyPropertyFormats(BeanPropertyMeta.Builder b, MarshalledProp mp, Class<?> propertyClass) {
 		if (Duration.class.equals(propertyClass) && mp.durationFormat() != DurationFormat.NOT_SET)
 			b.swap = durationSwap(mp.durationFormat());
@@ -659,9 +640,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = classSwap(mp.classFormat());
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Class-level @Marshalled format-dispatch chain — same shape as applyPropertyFormats; splitting hurts JIT inlining.
-	})
 	private static void applyClassFormats(BeanPropertyMeta.Builder b, Marshalled m, Class<?> propertyClass) {
 		if (b.swap != null)
 			return;
@@ -701,9 +679,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = classSwap(m.classFormat());
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive-complexity threshold is advisory; consolidated per-type dispatch keeps JIT inlining effective per AGENTS.md policy.
-	})
 	private static void applyContextFormats(BeanPropertyMeta.Builder b, MarshallingContext bc, Class<?> propertyClass) {
 		if (Duration.class.equals(propertyClass))
 			b.swap = durationSwap(bc.getDurationFormat());
@@ -894,9 +869,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Temporal subtype is determined at runtime via the bean property's class meta
-	})
 	private static ObjectSwap<?,?> temporalSwap(TemporalFormat format, Class<?> propertyClass) {
 		var temporalType = (Class<? extends Temporal>) propertyClass;
 		return new ObjectSwap<>(Temporal.class, Object.class) {
@@ -922,9 +894,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"unchecked" // TemporalAccessor subtype is determined at runtime via the bean property's class meta
-	})
 	private static ObjectSwap<?,?> temporalAccessorSwap(TemporalFormat format, Class<?> propertyClass) {
 		// Sibling of temporalSwap parameterized on TemporalAccessor at the source class so it accepts
 		// non-Temporal TemporalAccessor subclasses (currently MonthDay).  TemporalFormat.format / .parse
@@ -1027,9 +996,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"unchecked", "rawtypes" // Enum subtype is determined at runtime via the bean property's class meta
-	})
 	private static ObjectSwap<?,?> enumSwap(EnumFormat format, Class<?> propertyClass) {
 		var enumType = (Class<? extends Enum>) propertyClass;
 		if (format.isNumeric()) {
@@ -1092,9 +1058,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive-complexity threshold is advisory; consolidated BigInteger/BigDecimal dispatch keeps JIT inlining effective per AGENTS.md policy.
-	})
 	private static ObjectSwap<?,?> bigNumberSwap(BigNumberFormat format, Class<?> propertyClass) {
 		// Variant swap class (Object) — text serializers may receive either a Number (for NUMBER / AUTO-safe
 		// values) or a String (for STRING / AUTO-out-of-range values); binary serializers always receive the
@@ -1178,9 +1141,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive-complexity threshold is advisory; consolidated dispatch keeps JIT inlining effective per AGENTS.md policy.
-	})
 	private static ObjectSwap<?,?> floatSwap(FloatFormat format, Class<?> propertyClass) {
 		// Variant swap class (Object) — binary serializers receive native IEEE-754; textual sessions
 		// receive a boxed Float / Double, a String, or null depending on the format and value.
@@ -1234,9 +1194,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Runtime branch guarantees Float.class or Double.class, both Number subclasses.
-	})
 	private static Class<Number> numberClass(Class<? extends Number> c) {
 		return (Class<Number>)c;
 	}
@@ -1272,9 +1229,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings({
-		"unchecked", "rawtypes" // ObjectSwap constructor requires a concrete Class<T>; the wildcard captures Class.class.
-	})
 	private static Class<Class<?>> asClassWildcard() {
 		return (Class) Class.class;
 	}
@@ -1299,9 +1253,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		return acc;
 	}
 
-	@SuppressWarnings({
-		"java:S112" // Rewrap DatatypeConfigurationException as RuntimeException; we cannot recover at the swap level
-	})
 	private static ObjectSwap<?,?> xmlGregorianCalendarSwap() {
 		final DatatypeFactory df;
 		try {

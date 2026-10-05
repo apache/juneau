@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.management;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -31,8 +33,9 @@ import java.util.logging.*;
  *
  * @since 10.0.0
  */
-// Singleton is appropriate for a JUL logging backend — single shared instance per JVM.
-@SuppressWarnings("java:S6548")
+@SuppressWarnings({
+	"java:S6548" // Singleton is appropriate for a JUL logging backend — single shared instance per JVM.
+})
 public class JulLogBackend implements LogBackend {
 
 	/** Process-wide shared instance. */
@@ -80,6 +83,6 @@ public class JulLogBackend implements LogBackend {
 
 	private static String resolveName(String name) {
 		// The root logger is the empty-string-named logger; expose it under the friendlier "ROOT" alias.
-		return (name == null || name.equals("ROOT")) ? "" : name;
+		return (name == null || eq(name, "ROOT")) ? "" : name;
 	}
 }

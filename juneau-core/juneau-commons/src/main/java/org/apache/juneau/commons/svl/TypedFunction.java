@@ -56,7 +56,7 @@ import java.util.*;
  * </p>
  */
 @SuppressWarnings({
-	"java:S3776", // Cognitive complexity acceptable for the reflection-driven dispatch.
+	"java:S3776" // Cognitive complexity acceptable for the reflection-driven dispatch.
 })
 public abstract class TypedFunction implements VarFunction {
 
@@ -84,7 +84,7 @@ public abstract class TypedFunction implements VarFunction {
 		@Override /* Content-based: the 'argTypes' array must compare by content, not identity (S6218). */
 		public boolean equals(Object o) {
 			return o instanceof Overload x
-				&& Objects.equals(method, x.method)
+				&& eq(method, x.method)
 				&& Arrays.equals(argTypes, x.argTypes)
 				&& takesSession == x.takesSession
 				&& variadic == x.variadic;
@@ -165,7 +165,7 @@ public abstract class TypedFunction implements VarFunction {
 	private static Overload[] findInvokeOverloads(Class<? extends TypedFunction> cls) {
 		var found = new ArrayList<Overload>();
 		for (var m : cls.getMethods()) {
-			if (!"invoke".equals(m.getName())
+			if (neq(m.getName(), "invoke")
 				|| m.getDeclaringClass() == TypedFunction.class
 				|| m.getDeclaringClass() == Object.class
 				|| m.getDeclaringClass() == VarFunction.class)

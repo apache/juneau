@@ -21,9 +21,9 @@ import static org.apache.juneau.commons.bean.BeanMeta.MethodType.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.neq;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -77,15 +77,16 @@ import org.apache.juneau.commons.utils.*;
  * @param <T> The class type that this metadata applies to.
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_class)
+	"java:S107", // The private constructor and validateAndRegisterProperty() thread the fixed introspection context (8 parameters each); a holder object would only add indirection
+	"java:S135", // The property-discovery loops in findBeanMethods() and the constructor use independent continue guard clauses to skip ineligible members
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S1200", // Central bean-introspection type; high coupling to annotations/reflect/utils is inherent to its role
-	"java:S6539" // Monster class; BeanMeta is intentionally a single cohesive bean-introspection metadata cache
+	"java:S3776", // findBeanMethods() and the BeanMeta constructor apply the bean getter/setter/field discovery rules in a single pass; splitting them would scatter those rules
+	"java:S6539", // Monster class; BeanMeta is intentionally a single cohesive bean-introspection metadata cache
+	"rawtypes", // Raw Class is used in the BeanFactory instantiation ((Class)fc) and in Class[]::new for record constructor lookup
+	"unchecked" // Casts to T/BeanFactory in the factory-create, Proxy.newProxyInstance and BeanInstantiator paths are guaranteed by the bean class being instantiated
 })
 public class BeanMeta<T> {
-
-	// Property name constants
-	private static final String PROP_class = "class";
-	private static final String PROP_properties = "properties";
 
 	/**
 	 * Represents the result of creating a BeanMeta, including the bean metadata and any reason why it's not a bean.
@@ -136,7 +137,7 @@ public class BeanMeta<T> {
 				return false;
 
 			// Don't do further validation if this is the "*" bean property.
-			if ("*".equals(b.name))
+			if (eq(b.name, "*"))
 				return true;
 
 			// Get the bean property type from the getter/field.
@@ -163,7 +164,7 @@ public class BeanMeta<T> {
 		}
 	}
 
-	/*
+	/**
 	 * Represents a bean constructor with its associated property names.
 	 *
 	 * @param constructor The constructor information.
@@ -261,7 +262,7 @@ public class BeanMeta<T> {
 		}
 	}
 
-	/*
+	/**
 	 * Returns the property namer that should be used to derive property names for this bean.
 	 *
 	 * <p>
@@ -276,7 +277,7 @@ public class BeanMeta<T> {
 		return o(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 	}
 
-	/*
+	/**
 	 * Extracts the property name from {@link BeanProp @BeanProp} or {@link Name @Name} annotations.
 	 *
 	 * <p>
@@ -305,7 +306,7 @@ public class BeanMeta<T> {
 		return name.orElse(null);
 	}
 
-	/*
+	/**
 	 * Extracts the property name from a single {@link BeanProp @BeanProp} or {@link Name @Name} annotation.
 	 *
 	 * <p>
@@ -359,9 +360,6 @@ public class BeanMeta<T> {
 	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class that decouples bean modeling from ClassMeta.  Always non-null.
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
-	@SuppressWarnings({
-		"rawtypes" // Raw type required at this call site; generic type is verified at runtime
-	})
 	private final Class<? extends BeanFactory> factoryClass;  // @BeanType(factory=X.class) — null means no factory.
 	private final boolean fluentSetters;                                       // Whether fluent setters are enabled.
 	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
@@ -468,13 +466,9 @@ public class BeanMeta<T> {
 	 * @param config The bean-modeling configuration.  Must not be <jk>null</jk>.
 	 */
 	protected BeanMeta(Class<T> beanClass, BeanConfigContext config) {
-		this(null, info(assertArgNotNull("beanClass", beanClass)), assertArgNotNull("config", config), null, null, null, null, null);
+		this(null, info(reqnn("beanClass", beanClass)), reqnn("config", config), null, null, null, null, null);
 	}
 
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for bean metadata initialization
-		"java:S107"   // 8 parameters needed to support both construction paths plus the optional namer override
-	})
 	private BeanMeta(BeanInfo<T> cm, ClassInfo ci0, BeanConfigContext config, Object mc, BeanFilter bf, String[] pNames, ClassInfo implClass, PropertyNamer propertyNamerOverride) {
 		classMeta = cm;
 		classInfo = ci0;
@@ -508,8 +502,8 @@ public class BeanMeta<T> {
 		var resolvedTypePropertyName = config.getBeanMetaInitializer().resolveTypePropertyName(config, classInfo);
 		this.typePropertyName = nn(resolvedTypePropertyName) ? resolvedTypePropertyName : config.getBeanTypePropertyName();
 
-		// Check if constructor is required but not found (records are exempt since they use canonical constructors)
-		if (! beanConstructor.constructor().isPresent() && bf == null && config.isBeansRequireDefaultConstructor() && ! ci.isRecord())
+		// Check if constructor is required but not found (records always resolve their canonical constructor above, so they never reach this)
+		if (! beanConstructor.constructor().isPresent() && bf == null && config.isBeansRequireDefaultConstructor())
 			notABeanReasonTemp = "Class does not have the required no-arg constructor";
 
 		var bfo = o(bf);
@@ -701,9 +695,6 @@ public class BeanMeta<T> {
 		factoryClass = factoryClassTemp;
 	}
 
-	@SuppressWarnings({
-		"java:S107" // 8 parameters needed for property validation context
-	})
 	private void validateAndRegisterProperty(BeanPropertyMeta.Builder p, Class<?> c, TypeVariables typeVarImpls, Set<String> readOnlyProps, Set<String> writeOnlyProps, Iterator<BeanPropertyMeta.Builder> i, Map<Method,String> getterProps, Map<Method,String> setterProps) {
 		try {
 			if (p.field == null)
@@ -956,8 +947,8 @@ public class BeanMeta<T> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_class, classInfo.getName())
-			.a(PROP_properties, properties);
+			.a("class", classInfo.getName())
+			.a("properties", properties);
 		// @formatter:on
 	}
 
@@ -1108,10 +1099,6 @@ public class BeanMeta<T> {
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked cast
-		"rawtypes" // Raw BeanFactory type used at runtime for factory resolution
-	})
 	public T newBean(Object outer) throws ExecutableException {
 		if (factoryClass != null) {
 			try {
@@ -1138,10 +1125,6 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw BeanFactory type at runtime
-		"unchecked" // Unchecked casts required for factory class and BeanStore result
-	})
 	private BeanFactory resolveFactory(Class<? extends BeanFactory> fc) {
 		var bs = config.getBeanStore();
 		if (bs != null) {
@@ -1152,7 +1135,7 @@ public class BeanMeta<T> {
 		return (BeanFactory) BeanInstantiator.of((Class)fc).run();
 	}
 
-	/*
+	/**
 	 * Finds the appropriate constructor for this bean and determines the property names for constructor arguments.
 	 *
 	 * <p>
@@ -1190,9 +1173,6 @@ public class BeanMeta<T> {
 	 * 	the number of properties specified in {@link BeanCtor @BeanCtor} doesn't match the number of constructor parameters,
 	 * 	or if parameter names cannot be determined from the bytecode.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for constructor finding logic
-	})
 	private BeanConstructor findBeanConstructor() {
 		var ap = config.getAnnotationProvider();
 		var vis = config.getBeanConstructorVisibility();
@@ -1221,7 +1201,9 @@ public class BeanMeta<T> {
 		if (ci.isRecord()) {
 			var components = ci.getRecordComponents();
 			var paramTypes = components.stream().map(RecordComponent::getType).toArray(Class[]::new);
-			var rcon = ci.getPublicConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
+			// A record's canonical constructor has the same access as the record class (JLS 8.10.4), so look it up
+			// among the declared constructors; the bean-class visibility check already governs the record itself.
+			var rcon = ci.getDeclaredConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
 			if (rcon != null)
 				return new BeanConstructor(o(rcon.accessible()), components.stream().map(RecordComponent::getName).toList());
 		}
@@ -1252,14 +1234,14 @@ public class BeanMeta<T> {
 	 * @return Property key to use in {@link BeanMeta}.
 	 */
 	private static String resolveBeanFieldPropertyName(FieldInfo x, String nameFromAnnotations, PropertyNamer propertyNamer) {
-		if (! "*".equals(nameFromAnnotations))
+		if (neq(nameFromAnnotations, "*"))
 			return nameFromAnnotations;
 		if (x.getFieldType().isAssignableTo(Map.class))
 			return "*";
 		return propertyNamer.getPropertyName(x.getName());
 	}
 
-	/*
+	/**
 	 * Finds all bean fields in the class hierarchy.
 	 *
 	 * <p>
@@ -1296,7 +1278,7 @@ public class BeanMeta<T> {
 		// @formatter:on
 	}
 
-	/*
+	/**
 	 * Finds all bean methods (getters, setters, and extraKeys) in the class hierarchy.
 	 *
 	 * <p>
@@ -1340,9 +1322,6 @@ public class BeanMeta<T> {
 	 *
 	 * @return A list of {@link BeanMethod} objects representing all found bean methods.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean method finding logic
-	})
 	private List<BeanMethod> findBeanMethods() {
 		var l = new LinkedList<BeanMethod>();
 		var ap = config.getAnnotationProvider();
@@ -1371,7 +1350,7 @@ public class BeanMeta<T> {
 				var bpName = bpName(beanps, names);
 
 				if (params.isEmpty()) {
-					if ("*".equals(bpName)) {
+					if (eq(bpName, "*")) {
 						if (rt.isAssignableTo(Collection.class)) {
 							methodType = EXTRAKEYS;
 						} else if (rt.isAssignableTo(Map.class)) {
@@ -1399,7 +1378,7 @@ public class BeanMeta<T> {
 						}
 					}
 				} else if (params.size() == 1) {
-					if ("*".equals(bpName)) {
+					if (eq(bpName, "*")) {
 						if (params.get(0).getParameterType().isAssignableTo(Map.class)) {
 							methodType = SETTER;
 							n = bpName;
@@ -1426,7 +1405,7 @@ public class BeanMeta<T> {
 						methodType = SETTER;
 					}
 				} else if (params.size() == 2) {
-					if ("*".equals(bpName) && params.get(0).getParameterType().is(String.class) && n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
+					if (eq(bpName, "*") && params.get(0).getParameterType().is(String.class) && n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
 						methodType = SETTER;
 					} else {
 						methodType = GETTER;
@@ -1435,7 +1414,7 @@ public class BeanMeta<T> {
 				}
 				n = pn.getPropertyName(n);
 
-				if ("*".equals(bpName) && methodType == UNKNOWN)
+				if (eq(bpName, "*") && methodType == UNKNOWN)
 					throw brex(ci, "Found @BeanProp(\"*\") but could not determine method type on method '%s'.", m.getNameSimple());
 
 				if (methodType != UNKNOWN) {
@@ -1455,7 +1434,7 @@ public class BeanMeta<T> {
 				&& rc.getType().equals(m.getReturnType().inner()));
 	}
 
-	/*
+	/**
 	 * Creates a bean registry for this bean class.
 	 *
 	 * <p>
@@ -1485,7 +1464,7 @@ public class BeanMeta<T> {
 		return config.getBeanMetaInitializer().buildBeanRegistry(marshallingContext, beanFilter, classInfo, config);
 	}
 
-	/*
+	/**
 	 * Builds a list of all classes in the class hierarchy for this bean.
 	 *
 	 * <p>
@@ -1520,7 +1499,7 @@ public class BeanMeta<T> {
 		return u(result);
 	}
 
-	/*
+	/**
 	 * Recursively traverses the class hierarchy and invokes the consumer for each class found.
 	 *
 	 * <p>
@@ -1546,7 +1525,7 @@ public class BeanMeta<T> {
 		consumer.accept(c);
 	}
 
-	/*
+	/**
 	 * Finds the dictionary name (type name) for this bean class.
 	 *
 	 * <p>
@@ -1603,18 +1582,15 @@ public class BeanMeta<T> {
 		return bmi.findMarshalledTypeName(config, classInfo);
 	}
 
-	/*
+	/**
 	 * Merges standard JavaBeans {@link BeanInfo} property descriptors into {@code normalProps}, skipping the class
 	 * pseudo-property and logical names suppressed when {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
 	 */
-	@SuppressWarnings({
-		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @BeanIgnore(ignoreAccessors)
-	})
 	private void mergeJavaBeanPropertyDescriptorsIntoNormalProps(java.beans.BeanInfo bi, Map<String,BeanPropertyMeta.Builder> normalProps,
 			PropertyNamer propertyNamer) {
 		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
 		for (var pd : bi.getPropertyDescriptors()) {
-			if (PROP_class.equals(pd.getName()))
+			if (eq(pd.getName(), "class"))
 				continue;
 			if (suppressedFromBeanIgnoredFields.contains(pd.getName()))
 				continue;
@@ -1626,7 +1602,7 @@ public class BeanMeta<T> {
 		}
 	}
 
-	/*
+	/**
 	 * Property names suppressed from getter/setter discovery because a non-static field with that logical name is
 	 * annotated with {@link BeanIgnore @BeanIgnore} and {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk>.
 	 *
@@ -1635,9 +1611,6 @@ public class BeanMeta<T> {
 	 * JavaBean accessors so patterns such as {@code @BeanIgnore} on a private field with a public {@code getX()} still
 	 * expose {@code x} when field visibility excludes the field.
 	 */
-	@SuppressWarnings({
-		"java:S135" // Two continues in inner loop: skip fields without @BeanIgnore or without ignoreAccessors
-	})
 	private Set<String> findSuppressedPropertyNamesFromIgnoredFields(PropertyNamer propertyNamer) {
 		var s = new HashSet<String>();
 		var ap = config.getAnnotationProvider();
@@ -1668,7 +1641,7 @@ public class BeanMeta<T> {
 		return false;
 	}
 
-	/*
+	/**
 	 * Finds a bean field by name in the class hierarchy.
 	 *
 	 * <p>

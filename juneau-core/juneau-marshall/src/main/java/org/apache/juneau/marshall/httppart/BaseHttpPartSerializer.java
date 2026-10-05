@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.marshall.httppart;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Base class for implementations of {@link HttpPartSerializer}
@@ -34,12 +34,9 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class BaseHttpPartSerializer extends MarshallingContextable implements HttpPartSerializer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -60,7 +57,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<SELF> builder) {
-			super(assertArgNotNull(ARG_builder, builder));
+			super(reqnn("builder", builder));
 		}
 	}
 

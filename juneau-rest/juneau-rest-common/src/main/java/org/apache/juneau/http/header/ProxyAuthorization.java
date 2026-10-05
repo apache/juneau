@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
@@ -176,7 +175,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder scheme(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("scheme must not be blank");
@@ -192,8 +191,8 @@ public class ProxyAuthorization extends HttpStringHeader {
 		 * @return This object.
 		 */
 		public Builder basic(String user, String password) {
-			assertArgNotNull("user", user);
-			assertArgNotNull("password", password);
+			reqnn("user", user);
+			reqnn("password", password);
 			var encoded = Base64.getEncoder().encodeToString((user + ":" + password).getBytes(StandardCharsets.UTF_8));
 			return scheme("Basic").token(encoded);
 		}
@@ -224,7 +223,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 		 * @return This object.
 		 */
 		public Builder token(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			params.clear();
 			token68 = value;
 			return this;
@@ -347,21 +346,21 @@ public class ProxyAuthorization extends HttpStringHeader {
 		}
 
 		private Builder quotedParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			token68 = null;
 			params.put(cleanName(name), q(value));
 			return this;
 		}
 
 		private Builder tokenParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			token68 = null;
 			params.put(cleanName(name), value);
 			return this;
 		}
 
 		private static String cleanName(String name) {
-			assertArgNotNull("name", name);
+			reqnn("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("auth-param name must not be blank");

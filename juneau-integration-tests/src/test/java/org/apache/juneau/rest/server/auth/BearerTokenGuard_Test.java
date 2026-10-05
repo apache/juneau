@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.security.*;
 
 import org.apache.juneau.*;
@@ -46,7 +48,7 @@ class BearerTokenGuard_Test extends TestBase {
 
 	/** Accepts only the literal token "good"; throws for everything else. */
 	private static final TokenValidator V_GOOD = token -> {
-		if ("good".equals(token))
+		if (eq(token, "good"))
 			return ALICE;
 		throw new AuthenticationException("Bad token");
 	};

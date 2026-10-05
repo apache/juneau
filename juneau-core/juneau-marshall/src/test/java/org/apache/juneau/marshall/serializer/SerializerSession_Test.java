@@ -46,6 +46,7 @@ import org.junit.jupiter.api.*;
  * behavior; any apparent bug is documented inline for follow-up.
  */
 @SuppressWarnings({
+	"java:S5778", // assertThrows lambdas contain multiple calls; only the primary call throws.
 	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class SerializerSession_Test extends TestBase {
@@ -180,9 +181,6 @@ class SerializerSession_Test extends TestBase {
 		assertNotNull(s);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void a18_builderProperty_nullKey_fallsThrough() {
 		// Null key takes the early-return branch.
 		assertThrows(IllegalArgumentException.class,
@@ -635,9 +633,6 @@ class SerializerSession_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("BeanConsumer cannot be used as a serializer source"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void h02_serialize_runtimeException_wrapped() {
 		// A bean property getter that throws RuntimeException should bubble up as SerializeException.
 		assertThrows(SerializeException.class,
@@ -680,9 +675,6 @@ class SerializerSession_Test extends TestBase {
 		assertTrue(CapturingListener.events.isEmpty(), "Listener unexpectedly fired: " + CapturingListener.events);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void i02_listener_beanGetterException_invoked_thrown() {
 		CapturingListener.reset();
 		var s = JsonSerializer.create()

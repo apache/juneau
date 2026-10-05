@@ -66,7 +66,7 @@ function compileSelector(selector) {
 
 /** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
 function toDataAttr(prop) {
-	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
+	return 'data-' + prop.replaceAll(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
 }
 
 function matchesAny(matchers, n) {
@@ -95,6 +95,33 @@ function makeEnv() {
 				setProperty: function (k, v) { this[k] = v; },
 				getPropertyValue: function (k) { return Object.hasOwn(this, k) ? this[k] : ''; },
 				removeProperty: function (k) { const had = this[k]; delete this[k]; return had; }
+			},
+			// A DOMTokenList over the `className` string: add/remove/toggle/contains, backed by the same
+			// space-separated token set the real classList mutates.  `className` stays the source of truth so
+			// `.className = "..."`, `getAttribute('class')`, and querySelector class matching all stay in sync.
+			get classList() {
+				const tokens = () => (this.className || '').split(/\s+/).filter(Boolean);
+				const write = (set) => { this.className = Array.from(set).join(' '); };
+				return {
+					add: function () {
+							const s = new Set(tokens());
+							for (const c of arguments) { s.add(c); }
+							write(s);
+						},
+					remove: function () {
+							const s = new Set(tokens());
+							for (const c of arguments) { s.delete(c); }
+							write(s);
+						},
+					toggle: function (c, force) {
+						const s = new Set(tokens());
+						const on = force === undefined ? !s.has(c) : !!force;
+						if (on) s.add(c); else s.delete(c);
+						write(s);
+						return on;
+					},
+					contains: function (c) { return tokens().indexOf(c) >= 0; }
+				};
 			},
 			disabled: false,
 			checked: false,
@@ -138,16 +165,15 @@ function makeEnv() {
 			removeAttribute: function (k) { delete this.attrs[k]; if (k === 'class') this.className = ''; },
 			/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
 			get dataset() {
-				const self = this;
 				return new Proxy({}, {
-					get: function (t, prop) {
+					get: (t, prop) => {
 						if (typeof prop !== 'string') return undefined;
 						const k = toDataAttr(prop);
-						return Object.hasOwn(self.attrs, k) ? self.attrs[k] : undefined;
+						return Object.hasOwn(this.attrs, k) ? this.attrs[k] : undefined;
 					},
-					set: function (t, prop, value) { self.setAttribute(toDataAttr(prop), value); return true; },
-					deleteProperty: function (t, prop) { self.removeAttribute(toDataAttr(prop)); return true; },
-					has: function (t, prop) { return typeof prop === 'string' && Object.hasOwn(self.attrs, toDataAttr(prop)); }
+					set: (t, prop, value) => { this.setAttribute(toDataAttr(prop), value); return true; },
+					deleteProperty: (t, prop) => { this.removeAttribute(toDataAttr(prop)); return true; },
+					has: (t, prop) => typeof prop === 'string' && Object.hasOwn(this.attrs, toDataAttr(prop))
 				});
 			},
 			appendChild: function (c) {
@@ -162,7 +188,7 @@ function makeEnv() {
 				return c;
 			},
 			remove: function () {
-				if (this.parentNode) this.parentNode.removeChild(this);
+				if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 -- this IS the shim's remove(); it must delegate to the shim's own removeChild().
 			},
 			insertBefore: function (c, ref) {
 				c.remove();
@@ -234,6 +260,9 @@ function makeEnv() {
 			// tracking var (real focus-tracking state, not a self-alias workaround); an arrow function would
 			// rebind `this` to the enclosing `el()` scope and break focus tracking.
 			focus: function () { activeElement = this; },
+			// A text-input `select()` is a no-op here: the shim has no selection model, but popovers call it after
+			// focusing their input, so it must exist to not throw.
+			select: function () { /* no-op */ },
 			getBoundingClientRect: function () { return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 }; },
 			get offsetWidth() { return 0; },
 			get offsetHeight() { return 0; },
@@ -266,7 +295,7 @@ function makeEnv() {
 			get nodeValue() { return this._text; },
 			set nodeValue(v) { this._text = v == null ? '' : String(v); },
 			remove: function () {
-				if (this.parentNode) this.parentNode.removeChild(this);
+				if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 -- this IS the shim's remove(); it must delegate to the shim's own removeChild().
 			}
 		};
 	}
@@ -282,7 +311,7 @@ function makeEnv() {
 			if (!listeners[type]) listeners[type] = [];
 			listeners[type].push(fn);
 		},
-		removeEventListener: function () {},
+		removeEventListener: function () { /* no-op */ },
 		getElementById: function (id) { return byId[id] || null; },
 		createElement: function (tag) { return el(tag); },
 		createTextNode: function (v) { return textNode(v); },
@@ -299,15 +328,28 @@ function makeEnv() {
 		return ev;
 	}
 
+	// A minimal in-memory localStorage: enough for juneau-pagestate.js's default backing store (getItem/setItem/
+	// removeItem) plus a `_dump()` the harness reads to inspect the exact keys written.
+	const localStorage = (function () {
+		const m = {};
+		return {
+			getItem: function (k) { return Object.hasOwn(m, k) ? m[k] : null; },
+			setItem: function (k, v) { m[k] = v == null ? 'null' : String(v); },
+			removeItem: function (k) { delete m[k]; },
+			_dump: function () { return { ...m }; }
+		};
+	})();
+
 	const window = {
 		document: document,
 		console: console,
 		jQuery: undefined,
 		innerWidth: 1024,
 		innerHeight: 768,
+		localStorage: localStorage,
 		getComputedStyle: function () { return { getPropertyValue: function () { return ''; } }; },
-		addEventListener: function () {},
-		matchMedia: function () { return { matches: false, addEventListener: function () {} }; }
+		addEventListener: function () { /* no-op */ },
+		matchMedia: function () { return { matches: false, addEventListener: function () { /* no-op */ } }; }
 	};
 
 	// A test-controllable fetch: the harness installs an impl via setFetch(); the default rejects (no network).
@@ -341,8 +383,36 @@ function jsonResponse(body, opts) {
 	};
 }
 
-/** Loads juneau-renders.js then juneau-views.js into a fresh env, returns { env, NS, I }. */
-function loadViews(rendersJsPath, viewsJsPath, env) {
+/**
+ * Runs an ordered list of standalone scripts into ONE fresh sandbox (same shim window/document, immediate-fire
+ * setTimeout) and returns { env, NS }.  For a self-contained module like juneau-pagestate.js that attaches to
+ * window.JuneauViews without needing juneau-renders.js / juneau-views.js first.
+ */
+function loadScripts(scriptPaths, env) {
+	env = env || makeEnv();
+	const sandbox = {
+		window: env.window, document: env.document, console: console,
+		setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
+		clearTimeout: function () { /* no-op */ },
+		setInterval: function () { return 0; },
+		clearInterval: function () { /* no-op */ },
+		Promise: Promise,
+		fetch: function (...args) { return env.callFetch(...args); }
+	};
+	(scriptPaths || []).forEach(function (p) {
+		// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended
+		// mechanism for exercising it under the DOM shim; the path is a fixed local file supplied by the test.
+		vm.runInNewContext(fs.readFileSync(path.resolve(p), 'utf8'), sandbox, { filename: path.basename(p) });
+	});
+	return { env: env, NS: env.window.JuneauViews };
+}
+
+/**
+ * Loads juneau-renders.js then juneau-views.js into a fresh env, returns { env, NS, I }.  When `searchJsPath` is
+ * given, juneau-search.js is loaded into the SAME sandbox afterwards so `window.JuneauViews.search` is present -
+ * the column-search popover harness needs the live parse/operator engine, not a stub.
+ */
+function loadViews(rendersJsPath, viewsJsPath, env, searchJsPath) {
 	env = env || makeEnv();
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
@@ -350,9 +420,9 @@ function loadViews(rendersJsPath, viewsJsPath, env) {
 			if (typeof fn === 'function') { fn(); }
 			return 0;
 		},
-		clearTimeout: function () {},
+		clearTimeout: function () { /* no-op */ },
 		setInterval: function () { return 0; },
-		clearInterval: function () {},
+		clearInterval: function () { /* no-op */ },
 		Promise: Promise,
 		fetch: function (...args) { return env.callFetch(...args); }
 	};
@@ -362,8 +432,15 @@ function loadViews(rendersJsPath, viewsJsPath, env) {
 	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
 	// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
 	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+	if (searchJsPath) {
+		// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism, for juneau-search.js (JuneauViews.search).
+		vm.runInNewContext(fs.readFileSync(path.resolve(searchJsPath), 'utf8'), sandbox, { filename: 'juneau-search.js' });
+	}
 	const NS = env.window.JuneauViews;
 	return { env: env, NS: NS, I: NS?.init };
 }
 
-module.exports = { makeEnv: makeEnv, loadViews: loadViews, compileSelector: compileSelector, jsonResponse: jsonResponse };
+module.exports = {
+	makeEnv: makeEnv, loadViews: loadViews, loadScripts: loadScripts,
+	compileSelector: compileSelector, jsonResponse: jsonResponse
+};

@@ -175,7 +175,7 @@ class ClassMetaCoverage_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public class F01_Inner {
-		public F01_Inner() {}
+		public F01_Inner() { /* Public no-arg constructor required for bean instantiation. */ }
 	}
 
 	@Test void f01_canCreateNewBean_memberClass_wrongOuterType_returnsFalse() {

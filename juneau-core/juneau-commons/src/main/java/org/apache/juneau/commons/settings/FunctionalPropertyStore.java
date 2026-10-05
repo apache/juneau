@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -28,14 +27,9 @@ import org.apache.juneau.commons.function.*;
  * A writable {@link PropertyStore} implementation created from functional interfaces.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use ARG_lowerCamel convention to match the corresponding constructor parameter name (e.g., ARG_reader → reader).
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FunctionalPropertyStore implements PropertyStore {
-
-	private static final String ARG_reader = "reader";
-	private static final String ARG_writer = "writer";
-	private static final String ARG_unsetter = "unsetter";
-	private static final String ARG_clearer = "clearer";
 
 	private final UnaryOperator<String> reader;
 	private final BiConsumer<String,String> writer;
@@ -56,10 +50,10 @@ public class FunctionalPropertyStore implements PropertyStore {
 		Consumer<String> unsetter,
 		Snippet clearer
 	) {
-		assertArgNotNull(ARG_reader, reader);
-		assertArgNotNull(ARG_writer, writer);
-		assertArgNotNull(ARG_unsetter, unsetter);
-		assertArgNotNull(ARG_clearer, clearer);
+		reqnn("reader", reader);
+		reqnn("writer", writer);
+		reqnn("unsetter", unsetter);
+		reqnn("clearer", clearer);
 		this.reader = reader;
 		this.writer = writer;
 		this.unsetter = unsetter;

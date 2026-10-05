@@ -18,8 +18,6 @@ package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.net.*;
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.commons.http.*;
@@ -37,10 +35,29 @@ import org.apache.juneau.commons.http.*;
  * this descriptor (via {@code ctx.declared}) and nothing else &mdash; see the design's &sect;8.4 (L12)
  * non-privilege proof.
  *
+ * <h5 class='section'>Mutability</h5>
+ * <p>
+ * Deliberately mutable, like {@link Column} and {@link ViewDef} (the same rule, stated here since this class
+ * predates it): a {@link RegionDef} is a server-side authoring bean built up once via its public fields and
+ * fluent setters while constructing a page (design &sect;8.2), not an immutable value object.  Callers must not
+ * mutate one concurrently from more than one thread, and must not reuse one across requests unless every request
+ * treats it as read-only after construction.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// A lazily-activated row-detail region backed by a data URL, refreshing every 30 seconds.</jc>
+ * 	RegionDef <jv>region</jv> = RegionDef.<jsm>create</jsm>(<js>"release-notes"</js>)
+ * 		.type(RegionDef.<jsf>TYPE_ROW_DETAIL</jsf>)
+ * 		.dataUrl(<js>"/api/releases/{id}/notes"</js>)
+ * 		.lazy(<jk>true</jk>)
+ * 		.refreshMs(30_000L);
+ * </p>
+ *
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S3776" // validate*() and toContractMap() (also in Field) chain many independent null/blank guards; each is trivial, so splitting adds no clarity
 })
 public class RegionDef {
 
@@ -337,7 +354,7 @@ public class RegionDef {
 	public boolean effectiveLazy() {
 		if (lazy != null)
 			return lazy;
-		return TYPE_TAB_BODY.equals(type);
+		return eq(type, TYPE_TAB_BODY);
 	}
 
 	/**
@@ -352,9 +369,6 @@ public class RegionDef {
 	 *
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Validation encodes the region contract; complexity is inherent.
-	})
 	public void validate() {
 		if (id == null || id.isBlank())
 			throw iaex("RegionDef id must not be null or blank.");
@@ -390,7 +404,7 @@ public class RegionDef {
 		if (colon >= 0 && (slash < 0 || colon < slash))
 			return false;
 		for (var seg : endpoint.split("/", -1)) {
-			if ("..".equals(seg))
+			if (eq(seg, ".."))
 				return false;
 		}
 		return true;
@@ -423,7 +437,7 @@ public class RegionDef {
 	}
 
 	private void validateFields() {
-		if (TYPE_ROW_DETAIL.equals(type) && fields != null && !fields.isEmpty())
+		if (eq(type, TYPE_ROW_DETAIL) && fields != null && !fields.isEmpty())
 			throw iaex("RegionDef '%s' is type '%s' and must not declare fields; a row-detail region's catalog "
 				+ "is an author JS literal, never a projected one.", id, TYPE_ROW_DETAIL);
 		if (fields != null) {
@@ -436,9 +450,9 @@ public class RegionDef {
 					throw iaex("RegionDef '%s' duplicate field data key '%s'.", id, f.data);
 			}
 		}
-		var isDefaultPopulate = populate == null || "default".equals(populate);
-		var isCardOrTab = TYPE_CARD_BODY.equals(type) || TYPE_TAB_BODY.equals(type);
-		if (isDefaultPopulate && isCardOrTab && RENDERER_FIELD_GRID.equals(renderer) && (fields == null || fields.isEmpty()))
+		var isDefaultPopulate = populate == null || eq(populate, "default");
+		var isCardOrTab = eqa(type, TYPE_CARD_BODY, TYPE_TAB_BODY);
+		if (isDefaultPopulate && isCardOrTab && eq(renderer, RENDERER_FIELD_GRID) && (fields == null || fields.isEmpty()))
 			throw iaex("RegionDef '%s' declares renderer 'field-grid' under the default populator but no fields; "
 				+ "a field-grid with no catalog would silently paint an unlabeled/empty grid.", id);
 	}
@@ -461,85 +475,12 @@ public class RegionDef {
 	}
 
 	/**
-	 * Serializes {@code params} to a query-string fragment (no leading {@code ?} or {@code &}) under the closed
-	 * rules of design &sect;8.2.1, identically to the JS client's twin ({@code juneau-regions.js}'s
-	 * {@code serializeParams}, test 16a's golden). <jk>null</jk>/empty {@code params} serializes to an empty
-	 * string.
-	 *
-	 * <p>
-	 * Rules: a <jk>null</jk> value omits the key entirely; an empty string serializes as {@code k=}; a scalar
-	 * (String/Number/Boolean) serializes as {@code k=<percent-encoded value>} (booleans as {@code true}/
-	 * {@code false}); an array/{@link Collection} repeats the key once per element, in order ({@code k=a&k=b});
-	 * a nested {@link Map} is rejected (see {@link #validate()}) rather than reaching this method under normal
-	 * use. Encoding is {@code application/x-www-form-urlencoded} <b>without</b> the {@code +}-for-space
-	 * substitution: a space is {@code %20}, matching the JS client's {@code encodeURIComponent}.
-	 *
-	 * @param params The parameters to serialize. May be <jk>null</jk>.
-	 * @return The query-string fragment, e.g. {@code "scope=recent&tag=a&tag=b"}.
-	 */
-	public static String serializeParams(Map<String,Object> params) {
-		if (params == null || params.isEmpty())
-			return "";
-		var sb = new StringBuilder();
-		for (var e : params.entrySet()) {
-			var key = e.getKey();
-			var value = e.getValue();
-			if (value == null)
-				continue;
-			if (value instanceof Map)
-				throw iaex("RegionDef.serializeParams(...) params entry '%s' must not be a nested map/object.", key);
-			if (value instanceof Collection<?> coll) {
-				for (var el : coll)
-					appendPair(sb, key, el);
-			} else if (value.getClass().isArray()) {
-				for (var el : (Object[]) value)
-					appendPair(sb, key, el);
-			} else {
-				appendPair(sb, key, value);
-			}
-		}
-		return sb.toString();
-	}
-
-	private static void appendPair(StringBuilder sb, String key, Object value) {
-		if (value == null)
-			return;
-		if (!sb.isEmpty())
-			sb.append('&');
-		sb.append(encode(key)).append('=').append(encode(String.valueOf(value)));
-	}
-
-	/** {@code application/x-www-form-urlencoded} encoding, minus the {@code +}-for-space substitution. */
-	private static String encode(String s) {
-		return URLEncoder.encode(s, StandardCharsets.UTF_8).replace("+", "%20");
-	}
-
-	/**
-	 * Appends {@link #serializeParams(Map)}'s fragment to {@link #dataUrl}, joining with {@code ?} or {@code &}
-	 * as {@code dataUrl} already having a query string requires.
-	 *
-	 * @return {@link #dataUrl} with {@link #params} appended, or {@link #dataUrl} verbatim when {@link #params}
-	 * 	is <jk>null</jk>/empty, or <jk>null</jk> when {@link #dataUrl} itself is <jk>null</jk>.
-	 */
-	public String resolvedDataUrl() {
-		if (dataUrl == null)
-			return null;
-		var q = serializeParams(params);
-		if (q.isEmpty())
-			return dataUrl;
-		return dataUrl + (dataUrl.indexOf('?') >= 0 ? "&" : "?") + q;
-	}
-
-	/**
 	 * Serializes this descriptor to the compact JSON envelope the {@code data-juneau-region-contract} sidecar
 	 * attribute carries (design &sect;8.2), hand-built (rather than reflected) so the key set, order, and each
 	 * nested {@link Field}'s wire shape are exactly the ones &sect;8.2/&sect;6.2.2 specify.
 	 *
 	 * @return An ordered {@link Map} ready for {@code Json.of(...)}.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Contract map encodes the region wire shape; complexity is inherent.
-	})
 	public Map<String,Object> toContractMap() {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("contractVersion", CONTRACT_VERSION);
@@ -560,10 +501,7 @@ public class RegionDef {
 		if (titleFields != null && !titleFields.isEmpty())
 			m.put("titleFields", titleFields);
 		if (fields != null && !fields.isEmpty()) {
-			var fieldMaps = new ArrayList<Map<String,Object>>();
-			for (var f : fields)
-				fieldMaps.add(f.toContractMap());
-			m.put("fields", fieldMaps);
+			m.put("fields", fields.stream().map(f -> f.toContractMap()).toList());
 		}
 		return m;
 	}
@@ -577,9 +515,6 @@ public class RegionDef {
 	 *
 	 * @since 10.0.0
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
-	})
 	public static class Field {
 
 		/** The key into {@code ctx.data}'s values map. Unique across the enclosing {@link RegionDef}. */

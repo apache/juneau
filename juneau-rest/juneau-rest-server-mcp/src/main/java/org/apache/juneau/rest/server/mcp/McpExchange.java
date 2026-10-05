@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The inbound JSON-RPC envelope plus request-header access, with no servlet or HTTP types attached.
@@ -44,7 +44,7 @@ public final class McpExchange {
 	 * 	be <jk>null</jk>.
 	 */
 	public McpExchange(JsonRpcRequest request, UnaryOperator<String> headers) {
-		assertArgNotNull("headers", headers);
+		reqnn("headers", headers);
 		this.request = request;
 		this.headers = headers;
 	}

@@ -46,7 +46,8 @@ import org.apache.juneau.rest.client.mcp.v20260728.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S106", // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S112" // main() and run() declare throws Exception so the demo walkthrough can propagate any client/auth failure without wrapping
 })
 public final class SecuredExampleClient {
 
@@ -70,9 +71,6 @@ public final class SecuredExampleClient {
 	 * 	{@link SecuredExampleServer#main(String[])}'s startup banner.
 	 * @throws Exception If any step fails unexpectedly (a REJECTED call is expected and handled, not thrown).
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - example main() kept simple for demo readability
-	})
 	public static void main(String[] args) throws Exception {
 		if (args.length < 3) {
 			System.out.println("Usage: SecuredExampleClient <endpoint> <clientId> <clientSecret>");
@@ -90,9 +88,6 @@ public final class SecuredExampleClient {
 	 * @param clientSecret The demo OAuth client secret.
 	 * @throws Exception If an unexpected (non-auth-related) failure occurs.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
-	})
 	public static void run(String endpoint, String clientId, String clientSecret) throws Exception {
 
 		section("1. Unauthenticated call, at the raw wire level — a 401 challenge");

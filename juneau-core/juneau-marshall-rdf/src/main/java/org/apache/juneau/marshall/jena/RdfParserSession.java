@@ -49,11 +49,11 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S138",  // RDF parsing requires complex dispatch logic
+	"java:S138", // RDF parsing requires complex dispatch logic
 	"java:S3776", // Cognitive complexity - RDF graph traversal is inherently complex
 	"java:S6541", // Brain method - RDF graph-to-POJO conversion requires complex dispatch
-	"unchecked",  // Type erasure requires unchecked casts
-	"rawtypes"    // Raw types necessary for generic type handling
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class RdfParserSession extends ReaderParserSession {
 
@@ -115,9 +115,9 @@ public class RdfParserSession extends ReaderParserSession {
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
 		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
-		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), "root");
+		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), "_type");
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), "value");
 
 		// Map legacy language names to RIOT Lang
 		var langName = ctx.getLanguage();
@@ -131,7 +131,7 @@ public class RdfParserSession extends ReaderParserSession {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		if ("RDF/PROTO".equals(langName))
+		if (eq(langName, "RDF/PROTO"))
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -169,7 +169,7 @@ public class RdfParserSession extends ReaderParserSession {
 		var l = new LinkedList<Resource>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
-		var root = m.createProperty(getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		var root = m.createProperty(getJuneauNs().getUri(), "root");
 		for (ResIterator i = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());
 
@@ -471,7 +471,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var st = i.next();
 			var p = st.getPredicate();
 			var key = p.getLocalName();
-			if (! (key.equals("root") && p.getURI().equals(getJuneauNs().getUri()))) { // Bug: p.getURI() is the property's FULL URI, never equal to the bare namespace URI on the right; the inner && is therefore always false and this guard's "skip" branch is permanently unreachable.
+			if (! (eq(key, "root") && p.getURI().equals(getJuneauNs().getUri()))) { // Bug: p.getURI() is the property's FULL URI, never equal to the bare namespace URI on the right; the inner && is therefore always false and this guard's "skip" branch is permanently unreachable.
 				key = decodeString(key);
 				var o = st.getObject();
 				var key2 = convertAttrToType(m, key, keyType);

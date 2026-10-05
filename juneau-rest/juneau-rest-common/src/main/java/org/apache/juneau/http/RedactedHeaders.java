@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -75,7 +77,7 @@ public final class RedactedHeaders {
 		if (name == null || names == null)
 			return false;
 		for (var n : names)
-			if (n != null && name.equalsIgnoreCase(n))
+			if (n != null && eqic(name, n))
 				return true;
 		return false;
 	}

@@ -87,7 +87,7 @@
 	}
 
 	function hasClass(el, name) {
-		return (" " + (el.className || "") + " ").indexOf(" " + name + " ") !== -1;
+		return (" " + (el.className || "") + " ").includes(" " + name + " ");
 	}
 
 	function setClass(el, name, on) {
@@ -97,13 +97,14 @@
 			return;
 		}
 		if (hasClass(el, name))
-			el.className = (" " + el.className + " ").split(" " + name + " ").join(" ").replace(/^\s+|\s+$/g, "");
+			el.className = (" " + el.className + " ").split(" " + name + " ").join(" ").trim();
 	}
 
 	/** Interpolates a `{key}` URL template against a flat values map, then scheme-checks the result. */
 	function substituteFieldHref(template, values) {
 		if (template == null) return null;
 		const map = isPlainObject(values) ? values : {};
+		// NOSONAR javascript:S8786 -- `[^}]+` cannot match `}`; same analysis as interpolateHref in juneau-renders.js; the template is developer-authored, never row data.
 		const url = String(template).replace(/\{([^}]+)\}/g, function (m, key) {
 			const v = Object.hasOwn(map, key) ? map[key] : undefined;
 			return v == null ? "" : encodeURIComponent(String(v));
@@ -164,17 +165,14 @@
 		return document.createTextNode(value == null ? "" : String(value));
 	}
 
-	// Closed tone vocabulary for this helper.  NOTE: this is NOT the same vocabulary as the existing
-	// `pill` renderer's `meta.tone` (juneau-renders.js: info/success/warning/error/neutral) - see this
-	// child's build report for the design-internal inconsistency (design §9's own worked example at
-	// §11.5 uses ok/warn/error/idle, which this helper follows, while the "Replaces" column of the same
-	// table cites the differently-vocabularied renderer).
-	const PILL_TONES = { ok: 1, warn: 1, error: 1, idle: 1 };
+	// Closed tone vocabulary for this helper: the status-tone subset shared with the `pill` renderer's `meta.tone`
+	// (juneau-renders.js: info/success/warning/error/neutral), so one tone name is one colour across the toolkit.
+	const PILL_TONES = { success: 1, warning: 1, error: 1, neutral: 1 };
 
 	function pill(value, tone) {
 		const span = document.createElement("span");
 		span.className = "juneau-view-helper-pill";
-		let dot = document.createElement("span");
+		const dot = document.createElement("span");
 		dot.className = "juneau-view-helper-pill-dot" + (tone && Object.hasOwn(PILL_TONES, tone) ? " juneau-view-helper-pill-dot--" + tone : "");
 		dot.setAttribute("aria-hidden", "true");
 		const label = document.createElement("span");
@@ -205,7 +203,7 @@
 		const appearance = spec.appearance;
 		if (appearance != null && appearance !== "" && appearance !== "chrome" && appearance !== "icon")
 			throw new TypeError("JuneauViews.helpers: button(spec) appearance must be \"icon\" or \"chrome\" (or omitted).");
-		let btn = document.createElement("button");
+		const btn = document.createElement("button");
 		btn.type = "button";
 		btn.className = "juneau-view-helper-btn"
 			+ (spec.tone ? " juneau-view-helper-btn--" + spec.tone : "")
@@ -238,8 +236,8 @@
 		const bar = document.createElement("div");
 		bar.className = "juneau-view-helper-field-actions";
 		bar.setAttribute("role", "group");
-		for (let i = 0; i < items.length; i++) {
-			const a = items[i];
+		for (const itemsEntry of items) {
+			const a = itemsEntry;
 			bar.appendChild(button({
 				id: a.id,
 				label: a.label,
@@ -270,7 +268,10 @@
 				if (e.key === "Escape" || e.key === "Esc") dismissToast(node);
 			});
 		}
-		node.className = "jc-toast" + (tone === "error" ? " is-error" : tone === "success" ? " is-success" : " is-info");
+		let toneClass = " is-info";
+		if (tone === "error") toneClass = " is-error";
+		else if (tone === "success") toneClass = " is-success";
+		node.className = "jc-toast" + toneClass;
 		node.setAttribute("role", tone === "error" ? "alert" : "status");
 		node.textContent = text;
 		if (!node.parentNode) document.body.appendChild(node);
@@ -286,7 +287,7 @@
 			clearTimeout(node._jcToastTimer);
 			node._jcToastTimer = null;
 		}
-		if (node.parentNode) node.parentNode.removeChild(node);
+		node.remove();
 	}
 
 	function saveErrorMessage(err) {
@@ -298,9 +299,9 @@
 
 	function selectOptionLabel(options, value) {
 		if (!Array.isArray(options)) return value == null ? "" : String(value);
-		for (let i = 0; i < options.length; i++) {
-			if (String(options[i].value) === String(value))
-				return options[i].label != null ? String(options[i].label) : String(options[i].value);
+		for (const option of options) {
+			if (String(option.value) === String(value))
+				return option.label != null ? String(option.label) : String(option.value);
 		}
 		return value == null ? "" : String(value);
 	}
@@ -323,13 +324,14 @@
 
 		const options = opts.options;
 		const multiline = type === "text" && !!opts.multiline;
-		const persist = type === "checkbox" ? "blur" : (opts.persist === "explicit" ? "explicit" : "blur");
+		const persist = type !== "checkbox" && opts.persist === "explicit" ? "explicit" : "blur";
 		const onSave = opts.onSave;
 		const label = opts.label == null ? "" : String(opts.label);
 		const name = opts.name == null ? "" : String(opts.name);
 		const disabled = !!opts.disabled;
 		let displayValue = opts.displayValue != null ? String(opts.displayValue) : null;
-		let committed = type === "checkbox" ? !!opts.value : (opts.value == null ? "" : String(opts.value));
+		let committed = !!opts.value;
+		if (type !== "checkbox") committed = opts.value == null ? "" : String(opts.value);
 
 		const root = document.createElement("div");
 		root.className = "jc-editable-field";
@@ -371,7 +373,7 @@
 		function clearError() {
 			errorText = "";
 			setClass(root, "is-error", false);
-			if (errorEl?.parentNode) errorEl.parentNode.removeChild(errorEl);
+			errorEl?.remove();
 			errorEl = null;
 			if (control) {
 				control.removeAttribute("aria-invalid");
@@ -508,8 +510,8 @@
 			let el;
 			if (type === "select") {
 				el = document.createElement("select");
-				for (let i = 0; i < options.length; i++) {
-					const o = options[i];
+				for (const optionsEntry of options) {
+					const o = optionsEntry;
 					const opt = document.createElement("option");
 					opt.value = o.value == null ? "" : String(o.value);
 					opt.textContent = o.label != null ? String(o.label) : String(o.value);
@@ -555,7 +557,7 @@
 
 			const view = document.createElement("div");
 			view.className = "jc-editable-field-view";
-			let valueNode = document.createElement("span");
+			const valueNode = document.createElement("span");
 			if (typeof opts.paintView === "function") opts.paintView(valueNode, committed);
 			else valueNode.textContent = viewLabel();
 			view.appendChild(valueNode);
@@ -675,13 +677,13 @@
 			table.appendChild(caption);
 		}
 		const tbody = document.createElement("tbody");
-		for (let i = 0; i < rows.length; i++) {
+		for (const rowsEntry of rows) {
 			const tr = document.createElement("tr");
 			const th = document.createElement("th");
 			th.scope = "row";
-			th.textContent = rows[i][0] == null ? "" : String(rows[i][0]);
+			th.textContent = rowsEntry[0] == null ? "" : String(rowsEntry[0]);
 			const td = document.createElement("td");
-			td.textContent = I.scalarFieldValue(rows[i][1]);
+			td.textContent = I.scalarFieldValue(rowsEntry[1]);
 			tr.appendChild(th);
 			tr.appendChild(td);
 			tbody.appendChild(tr);
@@ -761,8 +763,8 @@
 
 		function openEditable(leaf) {
 			const pending = [];
-			for (let j = 0; j < editableLeaves.length; j++) {
-				const other = editableLeaves[j];
+			for (const editableLeave of editableLeaves) {
+				const other = editableLeave;
 				if (other === leaf) continue;
 				if (!hasClass(other, "is-editing") && !hasClass(other, "is-saving")) continue;
 				pending.push(other._jcEditable.requestCommitOrCancel());
@@ -798,8 +800,8 @@
 			}
 		}
 
-		for (let i = 0; i < fields.length; i++) {
-			const field = fields[i];
+		for (const fieldsEntry of fields) {
+			const field = fieldsEntry;
 
 			const item = document.createElement("div");
 			item.className = "juneau-view-detail-field" + (field.span ? " juneau-view-detail-field-span-" + field.span : "");
@@ -818,8 +820,8 @@
 
 			if (field.editable) {
 				const fieldType = field.type || "text";
-				const raw = Object.hasOwn(gridValues, field.data) ? gridValues[field.data]
-					: (fieldType === "checkbox" ? false : "");
+				const emptyValue = fieldType === "checkbox" ? false : "";
+				const raw = Object.hasOwn(gridValues, field.data) ? gridValues[field.data] : emptyValue;
 				const leafOpts = {
 					value: raw,
 					type: fieldType,
@@ -900,18 +902,18 @@
 
 		const thead = document.createElement("thead");
 		const headRow = document.createElement("tr");
-		for (let c = 0; c < columns.length; c++) {
+		for (const column of columns) {
 			const th = document.createElement("th");
 			th.scope = "col";
-			th.textContent = columns[c].label != null ? columns[c].label : columns[c].data;
+			th.textContent = column.label != null ? column.label : column.data;
 			headRow.appendChild(th);
 		}
 		thead.appendChild(headRow);
 		table.appendChild(thead);
 
 		const tbody = document.createElement("tbody");
-		for (let r = 0; r < rows.length; r++) {
-			const rowValues = isPlainObject(rows[r]) ? rows[r] : {};
+		for (const rowsEntry of rows) {
+			const rowValues = isPlainObject(rowsEntry) ? rowsEntry : {};
 			const tr = document.createElement("tr");
 			for (let ci = 0; ci < columns.length; ci++) {
 				const field = columns[ci];
@@ -1006,7 +1008,7 @@
 	function tabStrip(tabs, opts) {
 		validateTabs(tabs);
 		opts = opts || {};
-		let mode = opts.mode === "ribbon" ? "ribbon" : "tab";
+		const mode = opts.mode === "ribbon" ? "ribbon" : "tab";
 		const signal = opts.signal || null;
 		// A per-CALL random id, not a module-level counter: unique across co-existing strips without any
 		// state that outlives this call (test 29's amended purity scan rejects a module-level counter
@@ -1039,7 +1041,7 @@
 			const hasPane = Object.hasOwn(t, "pane") && t.pane != null;
 			const hasPopulate = typeof t.populate === "function";
 
-			let btn = document.createElement("button");
+			const btn = document.createElement("button");
 			btn.type = "button";
 			btn.id = instanceId + "-tab-" + i;
 			btn.setAttribute("role", "tab");
@@ -1116,7 +1118,7 @@
 		}
 
 		strip.addEventListener("click", function (e) {
-			let btn = e.target && typeof e.target.closest === "function" ? e.target.closest("[role=\"tab\"]") : null;
+			const btn = e.target && typeof e.target.closest === "function" ? e.target.closest("[role=\"tab\"]") : null;
 			if (!btn || (typeof strip.contains === "function" && !strip.contains(btn)) || btn.disabled) return;
 			activate(btn.dataset.juneauStripTab);
 			if (typeof btn.focus === "function") btn.focus();
@@ -1222,8 +1224,8 @@
 		labelText.textContent = spec.label == null ? "" : String(spec.label);
 		const select = document.createElement("select");
 		if (spec.multiple) select.multiple = true;
-		for (let i = 0; i < spec.options.length; i++) {
-			const o = spec.options[i];
+		for (const optionsEntry of spec.options) {
+			const o = optionsEntry;
 			const opt = document.createElement("option");
 			opt.value = o.value;
 			opt.textContent = o.label != null ? o.label : String(o.value);
@@ -1253,17 +1255,17 @@
 		let predicates = Array.isArray(spec.initial) ? spec.initial.slice() : [];
 
 		function fieldOps(fieldData) {
-			for (let i = 0; i < spec.fields.length; i++) {
-				if (spec.fields[i].data === fieldData && Array.isArray(spec.fields[i].ops)) return spec.fields[i].ops;
+			for (const field of spec.fields) {
+				if (field.data === fieldData && Array.isArray(field.ops)) return field.ops;
 			}
 			return [{ value: "eq", label: "is" }, { value: "neq", label: "is not" }, { value: "contains", label: "contains" }];
 		}
 
 		const fieldSelect = document.createElement("select");
-		for (let fi = 0; fi < spec.fields.length; fi++) {
+		for (const field of spec.fields) {
 			const fo = document.createElement("option");
-			fo.value = spec.fields[fi].data;
-			fo.textContent = spec.fields[fi].label || spec.fields[fi].data;
+			fo.value = field.data;
+			fo.textContent = field.label || field.data;
 			fieldSelect.appendChild(fo);
 		}
 
@@ -1271,10 +1273,10 @@
 		function rebuildOps() {
 			clear(opSelect);
 			const ops = fieldOps(fieldSelect.value);
-			for (let i = 0; i < ops.length; i++) {
+			for (const op of ops) {
 				const oo = document.createElement("option");
-				oo.value = ops[i].value;
-				oo.textContent = ops[i].label;
+				oo.value = op.value;
+				oo.textContent = op.label;
 				opSelect.appendChild(oo);
 			}
 		}
@@ -1301,6 +1303,12 @@
 			return opValue;
 		}
 
+		function removePredicate(idx) {
+			predicates = predicates.filter(function (_, j) { return j !== idx; });
+			renderChips();
+			if (typeof onChange === "function") onChange(predicates.slice());
+		}
+
 		function renderChips() {
 			clear(chipRow);
 			predicates.forEach(function (p, i) {
@@ -1311,13 +1319,7 @@
 				chip.appendChild(textSpan);
 				chip.appendChild(button({
 					label: "Remove",
-					onClick: function (idx) {
-						return function () {
-							predicates = predicates.filter(function (_, j) { return j !== idx; });
-							renderChips();
-							if (typeof onChange === "function") onChange(predicates.slice());
-						};
-					}(i)
+					onClick: function () { removePredicate(i); }
 				}));
 				chipRow.appendChild(chip);
 			});

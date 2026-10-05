@@ -135,7 +135,9 @@ public final class RecordAdapter {
 	 * @return A new {@link RecordReader} that yields one record per array element.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The List<?> returned by session.read(...) is cast to List<Object>; its elements are only read back as Object
+	})
 	public static RecordReader arrayReader(ParserSession session, Object input) throws IOException {
 		List<?> all;
 		try {

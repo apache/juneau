@@ -43,16 +43,16 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 
 @SuppressWarnings({
-	"java:S3008", // Static field naming follows test convention
-	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"java:S1186", // Empty method body intentional for callback testing
+	"java:S125", // Commented code kept for test documentation
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S1186", // Empty method body intentional for callback testing
 	"java:S1854", // Dead stores intentional for test verification
 	"java:S1874", // Intentional use of deprecated API to verify functionality
-	"serial", // Serialization not relevant in test code
-	"unused", // Private members and type params intentional for reflection testing
+	"java:S3008", // Static field naming follows test convention
+	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"rawtypes", // Raw types necessary for test bean handling
-	"java:S125" // Commented code kept for test documentation
+	"serial", // Serialization not relevant in test code
+	"unused" // Private members and type params intentional for reflection testing
 })
 public class ClassInfo_Test extends TestBase {
 

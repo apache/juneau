@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -81,11 +80,11 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * The instance retains no request-derived state.
  */
 @SuppressWarnings({
-	// Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
-	// (renaming this to e.g. AbstractMcpRevision was evaluated and rejected): every dated adapter binding
-	// class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
-	// package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
-	"java:S2176"
+	"java:S2176", // Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
+	              // (renaming this to e.g. AbstractMcpRevision was evaluated and rejected): every dated adapter binding
+	              // class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
+	              // package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
+	"resource" // The McpSubscription (AutoCloseable) returned by registerIfUnder is handed to the streaming publisher, which closes it
 })
 public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpRevision {
 
@@ -269,9 +268,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		"java:S3776" // Cognitive complexity acceptable for the single JSON-RPC dispatch entry point; splitting the notification/response/stream branching and the McpException/Exception recovery paths would fragment one cohesive request-to-result routine without real clarity gain.
 	})
 	public McpDispatchResult dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
-		assertArgNotNull("exchange", exchange);
-		assertArgNotNull("config", config);
-		assertArgNotNull("ctx", ctx);
+		reqnn("exchange", exchange);
+		reqnn("config", config);
+		reqnn("ctx", ctx);
 
 		var req = exchange.request();
 		if (req == null)
@@ -346,7 +345,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		McpResourceServerSupport.enforceOperationScopes(cfg, granted, new McpOperationContext(method, name, rawParams));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // castParams narrows the wildcard JSON-RPC params map to Map<String,Object>; JSON object keys are always strings
+	})
 	private static Map<String,Object> castParams(Map<?,?> m) {
 		return (Map<String,Object>)m;
 	}
@@ -406,9 +407,6 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @throws McpException If the caller never negotiated {@code text/event-stream}, the broker bean is
 	 * 	missing, or {@code maxConcurrentSubscriptions} is reached.
 	 */
-	@SuppressWarnings({
-		"resource" // subscription's ownership transfers to the returned SubscriptionsListenPublisher, which closes it in every terminal path (cancel(), terminateWithError(), checkIdle(), run()'s completion - see its own @Owning-suppressed field). Eclipse JDT @Owning warning is by design; it surfaces at the return statement, so suppress at method scope.
-	})
 	private Flow.Publisher<SseEvent> dispatchSubscriptionsListen(McpExchange exchange, Object id, Object params, McpServerConfig config, BeanStore ctx) {
 		requireEventStreamAccept(exchange);
 		var request = Json.to(Json.of(params), SubscriptionsListenRequest.class);
@@ -484,9 +482,6 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param code The JSON-RPC error code.
 	 * @param message The JSON-RPC error message.
 	 */
-	@SuppressWarnings({
-		"resource" // scope is owned/closed by RestOpInvoker's finally block after the handler returns; reading it here must not close it early.
-	})
 	private static void recordRpcError(BeanStore ctx, int code, String message) {
 		ctx.getBean(RestRequest.class).ifPresent(request -> {
 			var scope = request.getAttribute(TraceContextResponseProcessor.ATTR_SCOPE).as(Scope.class).orElse(null);
@@ -805,13 +800,13 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 	private McpCompletionRef completionRef(Map<String,Object> refMap) {
 		var type = McpParamUtils.strParam(refMap, "type");
-		if ("ref/prompt".equals(type)) {
+		if (eq(type, "ref/prompt")) {
 			var name = McpParamUtils.strParam(refMap, "name");
 			if (isEmpty(name))
 				throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing ref.name for ref/prompt");
 			return McpCompletionRef.prompt(name);
 		}
-		if ("ref/resource".equals(type)) {
+		if (eq(type, "ref/resource")) {
 			var uri = McpParamUtils.strParam(refMap, "uri");
 			if (isEmpty(uri))
 				throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing ref.uri for ref/resource");
@@ -876,9 +871,6 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param ctx The request-scoped bean store to wrap. Must not be <jk>null</jk>.
 	 * @return The resolved MRTR context. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // wrapped (both branches) is @Owning: ownership transfers to the returned MrtrContext, which the caller closes via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design; it surfaces at the two `return new MrtrContext(wrapped, ...)` statements, so suppress at method scope.
-	})
 	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
 		// Computed once, up front, from the CURRENT request's arguments: reused both for the RESUME-time
 		// comparison below and (threaded through MrtrContext) for the hash pause(...) seals into the next token,

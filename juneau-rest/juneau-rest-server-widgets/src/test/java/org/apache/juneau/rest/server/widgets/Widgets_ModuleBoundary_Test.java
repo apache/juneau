@@ -133,7 +133,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		assertTrue(Files.isDirectory(dir), () -> "This module must ship its widget assets at " + dir);
 		try (var s = Files.list(dir)) {
 			assertEquals(
-				List.of("juneau-calendar.css", "juneau-calendar.js", "juneau-chrome.js"),
+				List.of("juneau-calendar.css", "juneau-calendar.js"),
 				s.map(x -> x.getFileName().toString()).sorted().toList());
 		}
 		// Anchored to the start of a line so a javadoc mention of the annotation is not a hit.
@@ -141,7 +141,7 @@ class Widgets_ModuleBoundary_Test extends TestBase {
 		var endpoints = 0;
 		while (m.find())
 			endpoints++;
-		assertEquals(3, endpoints, "One serving endpoint per shipped asset, no more and no fewer.");
+		assertEquals(2, endpoints, "One serving endpoint per shipped asset, no more and no fewer.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

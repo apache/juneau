@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -73,18 +72,9 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class Discriminator extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_key = "key";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_mapping = "mapping";
-	private static final String PROP_propertyName = "propertyName";
 
 	private String propertyName;
 	private Map<String,String> mapping = map();
@@ -114,8 +104,8 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator addMapping(String key, String value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		mapping.put(key, value);
 		return this;
 	}
@@ -131,10 +121,10 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_propertyName -> toType(getPropertyName(), type);
-			case PROP_mapping -> toType(getMapping(), type);
+			case "propertyName" -> toType(getPropertyName(), type);
+			case "mapping" -> toType(getMapping(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -163,8 +153,8 @@ public class Discriminator extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(mapping), PROP_mapping)
-			.addIf(nn(propertyName), PROP_propertyName)
+			.addIf(ine(mapping), "mapping")
+			.addIf(nn(propertyName), "propertyName")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -172,10 +162,10 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Discriminator set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_mapping -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
-			case PROP_propertyName -> setPropertyName(s(value));
+			case "mapping" -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
+			case "propertyName" -> setPropertyName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

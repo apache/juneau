@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.jwt;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -191,7 +190,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder jwksUrl(URI value) {
-			jwksUrl = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
+			jwksUrl = UriUtils.assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -207,7 +206,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder jwkSource(JWKSource<SecurityContext> value) {
-			jwkSource = assertArgNotNull("value", value);
+			jwkSource = reqnn("value", value);
 			return this;
 		}
 
@@ -218,7 +217,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder issuer(String value) {
-			issuer = assertArgNotNullOrBlank("value", value);
+			issuer = reqnb("value", value);
 			return this;
 		}
 
@@ -229,7 +228,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder audience(String value) {
-			audience = assertArgNotNullOrBlank("value", value);
+			audience = reqnb("value", value);
 			return this;
 		}
 
@@ -246,12 +245,12 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder algorithms(JWSAlgorithm...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			if (values.length == 0)
 				throw iaex("algorithms allowlist must be non-empty");
 			Set<JWSAlgorithm> next = st();
 			for (var a : values) {
-				assertArgNotNull("algorithm", a);
+				reqnn("algorithm", a);
 				if (Algorithm.NONE.equals(a))
 					throw iaex("\"none\" algorithm is permanently rejected (RFC 7518 §3.6 unsafe)");
 				next.add(a);
@@ -267,7 +266,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clockSkew(Duration value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isNegative())
 				throw iaex("clockSkew must be non-negative");
 			if (value.compareTo(MAX_CLOCK_SKEW) > 0)
@@ -283,7 +282,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder jwksCacheTtl(Duration value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isZero() || value.isNegative())
 				throw iaex("jwksCacheTtl must be positive");
 			jwksCacheTtl = value;
@@ -329,7 +328,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder jwksEagerRefreshCooldown(Duration value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isZero() || value.isNegative())
 				throw iaex("jwksEagerRefreshCooldown must be positive");
 			if (value.compareTo(Duration.ofSeconds(60)) > 0)
@@ -346,7 +345,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -432,7 +431,7 @@ public class JwtTokenValidator implements TokenValidator {
 
 	@Override /* Overridden from TokenValidator */
 	public Principal validate(String token) throws AuthenticationException {
-		assertArgNotNull("token", token);
+		reqnn("token", token);
 		JWT jwt;
 		try {
 			jwt = JWTParser.parse(token);
@@ -481,7 +480,7 @@ public class JwtTokenValidator implements TokenValidator {
 		var iss = claims.getIssuer();
 		if (isBlank(iss))
 			throw reject("\"iss\" claim is required");
-		if (! issuer.equals(iss))
+		if (neq(issuer, iss))
 			throw reject("\"iss\" claim does not match expected issuer");
 
 		var aud = claims.getAudience();

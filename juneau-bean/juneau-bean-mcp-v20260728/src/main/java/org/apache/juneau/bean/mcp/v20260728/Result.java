@@ -41,6 +41,9 @@ import org.apache.juneau.commons.bean.*;
  *
  * @param <T> The concrete subclass, for fluent-setter self-typing.
  */
+@SuppressWarnings({
+	"unchecked" // CRTP subclasses bind T to their own concrete type.
+})
 public abstract class Result<T extends Result<T>> {
 
 	private String resultType = "complete";
@@ -65,9 +68,6 @@ public abstract class Result<T extends Result<T>> {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({
-		"unchecked" // CRTP subclasses bind T to their own concrete type.
-	})
 	public T setResultType(String value) {
 		resultType = value;
 		return (T)this;
@@ -90,9 +90,6 @@ public abstract class Result<T extends Result<T>> {
 	 * @return This object (for method chaining).
 	 */
 	@BeanProp("_meta")
-	@SuppressWarnings({
-		"unchecked" // CRTP subclasses bind T to their own concrete type.
-	})
 	public T setMeta(ResultMeta value) {
 		meta = value;
 		return (T)this;

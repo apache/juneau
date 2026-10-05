@@ -50,7 +50,8 @@ import org.apache.juneau.marshall.jsonschema.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HtmlSchemaDocSerializer hierarchy
+	"java:S110", // Inheritance depth acceptable for HtmlSchemaDocSerializer hierarchy
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 

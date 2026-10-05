@@ -38,6 +38,9 @@ import org.junit.jupiter.api.*;
  * {@code JsonlTokenReader}) work as {@code @RemoteOp} return types, and that
  * {@code RecordStreamBody} works as a {@code @Content} parameter.
  */
+@SuppressWarnings({
+	"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close. Eclipse JDT resource-leak warning is by design.
+})
 class RemoteCursorBinding_Test {
 
 	public static class Bean {
@@ -160,9 +163,6 @@ class RemoteCursorBinding_Test {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close. Eclipse JDT resource-leak warning is by design.
-	})
 	void b01_recordStreamBody_record() throws Exception {
 		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
@@ -179,9 +179,6 @@ class RemoteCursorBinding_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close. Eclipse JDT resource-leak warning is by design.
-	})
 	void b02_recordStreamBody_token() throws Exception {
 		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);

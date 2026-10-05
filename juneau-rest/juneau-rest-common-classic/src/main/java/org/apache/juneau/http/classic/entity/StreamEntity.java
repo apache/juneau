@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -34,14 +33,11 @@ import org.apache.juneau.http.classic.header.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource", // Resource management handled externally
-	"java:S9365" // Copy ctor delegates to super; remaining fields are content caches defaulted empty by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9365", // Copy ctor delegates to super; remaining fields are content caches defaulted empty by design.
+	"resource" // Resource management handled externally
 })
 public class StreamEntity extends BasicHttpEntity<StreamEntity> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_out = "out";
 
 	private byte[] byteCache;
 	private String stringCache;
@@ -131,7 +127,7 @@ public class StreamEntity extends BasicHttpEntity<StreamEntity> {
 	 */
 	@Override
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull(ARG_out, out);
+		reqnn("out", out);
 
 		if (isCached()) {
 			out.write(asBytes());

@@ -104,7 +104,8 @@ class ViewsJs_Reinit_Test extends TestBase {
 		var fn = functionBody(viewsJs(), "function initTableFromDef(");
 		assertTrue(fn.contains("viewDef.columnConfig"), fn);
 		assertTrue(fn.contains("NS.config.resolveActiveView"), fn);
-		assertTrue(fn.contains("buildTable(table, viewDef, effective, ctx)"), fn);
+		assertTrue(fn.contains("NS.init.buildTable(table, effectiveViewDef, effective, ctx)"), fn);
+		assertTrue(fn.contains("NS.config.resolveLastAppliedViewSettings(table, ctx)"), fn);
 	}
 
 
@@ -162,7 +163,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertTrue(fn.contains("appendActionsHeaderCell(table)"), fn);
 		var strip = functionBody(viewsJs(), "function stripGeneratedDom(");
 		assertTrue(strip.contains("juneau-view-toolbar-row"), strip);
-		assertTrue(strip.contains("juneau-view-columnsearch-row"), strip);
+		assertFalse(strip.contains("juneau-view-columnsearch-row"), strip);
 		assertTrue(strip.contains("juneau-view-actions-th"), strip);
 		assertTrue(strip.contains("juneau-view-select-th"), strip);
 		assertTrue(strip.contains("juneau-view-detail-th"), strip);
@@ -180,12 +181,8 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertFalse(fn.contains("unshift"), fn);
 	}
 
-	@Test void c02_buildColumnSearchRow_emitsOneThPerOptsColumn_hidesHidden() throws Exception {
-		var fn = functionBody(viewsJs(), "function buildColumnSearchRow(");
-		assertTrue(fn.contains("(optsColumns || []).forEach"), fn);
-		assertTrue(fn.contains("col?.visible === false"), fn);
-		assertTrue(fn.contains("th.style.display = \"none\""), fn);
-		assertTrue(fn.contains("dt.column(idx).search"), fn);
+	@Test void c02_legacyBuildColumnSearchRow_isGone() throws Exception {
+		assertFalse(viewsJs().contains("function buildColumnSearchRow("));
 	}
 
 	@Test void c03_ribbon_exportOptionsVisible_onButtonsConstructor() throws Exception {
@@ -334,5 +331,52 @@ class ViewsJs_Reinit_Test extends TestBase {
 		var v = (Map<?,?>)r.get("applyViewNotInit");
 		assertEquals(false, v.get("ok"));
 		assertEquals("not-initialized", v.get("reason"));
+	}
+
+	@Test void d04_applySearchMembership_downgradesAbsentColumn_neverUpgradesIncapable() {
+		var r = report();
+		assertEquals(false, r.get("searchMembershipDowngradesB"));
+		assertEquals(true, r.get("searchMembershipKeepsA"));
+		assertEquals(false, r.get("searchMembershipNeverUpgradesC"));
+		assertEquals(true, r.get("searchMembershipNullIsNoop"));
+	}
+
+	@Test void d05_defaultOrderFromSort_mapsColumnToData_emptySafe() {
+		var r = report();
+		var order = (List<?>)r.get("defaultOrderFromSort");
+		assertEquals(2, order.size());
+		assertEquals("C", ((Map<?,?>)order.get(0)).get("data"));
+		assertEquals("desc", ((Map<?,?>)order.get(0)).get("dir"));
+		assertEquals(List.of(), r.get("defaultOrderFromSortEmpty"));
+	}
+
+	@Test void d06_resolveLastAppliedViewSettings_isMemoizedPerCtx() {
+		var r = report();
+		assertEquals(true, r.get("resolveLastAppliedIsMemoized"));
+	}
+
+	@Test void d07_resolveLastAppliedViewSettings_noBlobIsNullDraft() {
+		var r = report();
+		assertNull(r.get("resolveLastAppliedNoBlobIsNull"));
+	}
+
+	@Test void d08_applyView_overridesDefaultOrder_viaNsInitBuildTable() {
+		var r = report();
+		var order = (List<?>)r.get("applyViewOverridesDefaultOrder");
+		assertEquals(1, order.size());
+		assertEquals("B", ((Map<?,?>)order.get(0)).get("data"));
+		assertEquals("desc", ((Map<?,?>)order.get(0)).get("dir"));
+	}
+
+	@Test void d09_applyView_overridesSearchMembership_viaNsInitBuildTable() {
+		var r = report();
+		assertEquals(false, r.get("applyViewOverridesSearchableB"));
+	}
+
+	@Test void d10_options_carryAutoRefreshMs_defaultOffAndRangeChecked() {
+		var r = report();
+		assertEquals(0, ((Number)r.get("defaultOptionsAutoRefreshOff")).intValue());
+		assertEquals(0, ((Number)r.get("normalizeOptionsDropsBadAutoRefresh")).intValue());
+		assertEquals(60000, ((Number)r.get("normalizeOptionsKeepsGoodAutoRefresh")).intValue());
 	}
 }

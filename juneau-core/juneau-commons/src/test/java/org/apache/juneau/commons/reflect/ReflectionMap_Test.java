@@ -27,8 +27,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S117", // Local variable names use underscores for test data
-	"rawtypes",  // Raw types used for generic testing scenarios
-	"unused"     // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"rawtypes", // Raw types used for generic testing scenarios
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ReflectionMap_Test extends TestBase {
 

@@ -35,6 +35,7 @@ import org.junit.jupiter.api.*;
  * a request-body writer failure, and an {@link HttpClient} that fails to stop.
  */
 @SuppressWarnings({
+	"java:S2925", // The 200ms sleep lets the request get in flight and block on the never-responding server before the thread is interrupted.
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
 class JettyHttpTransport_TransportFailure_Test {
@@ -77,7 +78,7 @@ class JettyHttpTransport_TransportFailure_Test {
 	}
 
 	// =================================================================================================================
-	// A: InterruptedException while awaiting response headers (JettyHttpTransport.java lines 125-128)
+	// A: InterruptedException while awaiting response headers
 	// =================================================================================================================
 
 	@Test
@@ -105,7 +106,7 @@ class JettyHttpTransport_TransportFailure_Test {
 	}
 
 	// =================================================================================================================
-	// B: TimeoutException while awaiting response headers (JettyHttpTransport.java lines 129-131)
+	// B: TimeoutException while awaiting response headers
 	// =================================================================================================================
 
 	@Test
@@ -119,8 +120,8 @@ class JettyHttpTransport_TransportFailure_Test {
 	}
 
 	// =================================================================================================================
-	// C: ExecutionException with a non-stale-connection cause — connection refused (lines 135/137, and the
-	//    EOFException==false / ClosedChannelException==false branch pair of isStaleConnectionFailure at line 147)
+	// C: ExecutionException with a non-stale-connection cause (connection refused); neither an EOFException nor a
+	//    ClosedChannelException, so isStaleConnectionFailure must report false
 	// =================================================================================================================
 
 	@Test
@@ -137,7 +138,7 @@ class JettyHttpTransport_TransportFailure_Test {
 	}
 
 	// =================================================================================================================
-	// D: request-body writer failure (JettyHttpTransport.java line 191)
+	// D: request-body writer failure
 	// =================================================================================================================
 
 	@Test
@@ -191,7 +192,7 @@ class JettyHttpTransport_TransportFailure_Test {
 				.uri(URI.create("http://localhost:" + serverSocket.getLocalPort() + "/x"))
 				.body(TransportBody.of(failingBody))
 				.build();
-			// The background writer thread hits the IOException catch (line 191) and closes the content stream,
+			// The background writer thread hits the IOException catch and closes the content stream,
 			// which surfaces to the caller as some flavor of TransportException.
 			assertThrows(TransportException.class, () -> transport.execute(request));
 		} finally {

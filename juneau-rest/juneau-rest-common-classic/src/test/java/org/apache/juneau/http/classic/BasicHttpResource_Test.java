@@ -31,9 +31,9 @@ import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S4144", // Identical methods intentional for different test scenarios
-	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BasicHttpResource_Test extends TestBase {
 

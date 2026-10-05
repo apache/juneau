@@ -396,7 +396,7 @@ class MarshalledMap_Test extends TestBase {
 		var it = outer.entrySet().iterator();
 		while (it.hasNext()) {
 			var e = it.next();
-			if (e.getKey().equals("y"))
+			if (eq(e.getKey(), "y"))
 				e.setValue(99);
 		}
 		assertEquals(99, outer.getInt("y"));

@@ -55,19 +55,6 @@ import org.apache.juneau.commons.lang.*;
  * 		.message().contains(<js>"Bad thing happened."</js>);
  * </p>
  *
- * <p>
- * Provides other assertion convenience methods such as asserting non-null method arguments.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.test.assertions.Assertions.*;
- *
- *	<jk>public</jk> String getFoo(String <jv>bar</jv>) {
- *		<jsm>assertArgNotNull</jsm>(<js>"bar"</js>, <jv>bar</jv>);
- *		...
- *	}
- * </p>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>

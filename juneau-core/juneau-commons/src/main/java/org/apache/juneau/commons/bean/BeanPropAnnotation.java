@@ -196,8 +196,8 @@ public class BeanPropAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
-		"annotationSuperInterface" // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
+		"annotationSuperInterface", // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Object extends AnnotationObject implements BeanProp {
 

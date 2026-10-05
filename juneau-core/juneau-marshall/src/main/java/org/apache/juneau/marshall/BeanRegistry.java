@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -52,14 +51,10 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard required - Class<?> for bean dictionary types
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452" // Wildcard required - Class<?> for bean dictionary types
 })
 public class BeanRegistry implements BeanRegistryLookup {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_bc = "bc";
-	private static final String ARG_classes = "classes";
 
 	private final Map<String,ClassMeta<?>> map;
 	private final Map<Class<?>,String> reverseMap;
@@ -68,8 +63,8 @@ public class BeanRegistry implements BeanRegistryLookup {
 	private final boolean isEmpty;
 
 	BeanRegistry(MarshallingContext bc, BeanRegistry parent, List<ClassInfo> classes) {
-		assertArgNotNull(ARG_bc, bc);
-		assertArgNotNull(ARG_classes, classes);
+		reqnn("bc", bc);
+		reqnn("classes", classes);
 		this.bc = bc;
 		this.ap = bc.getAnnotationProvider();
 		this.map = new ConcurrentHashMap<>();

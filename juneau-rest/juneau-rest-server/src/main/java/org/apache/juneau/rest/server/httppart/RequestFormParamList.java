@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.httppart;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -113,17 +112,10 @@ import jakarta.servlet.http.Part;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class RequestFormParamList extends ArrayList<RequestFormParam> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_parameters = "parameters";
-	private static final String ARG_part = "part";
-	private static final String ARG_name = "name";
-	private static final String ARG_names = "names";
-	private static final String ARG_headers = "headers";
 
 	private static final long serialVersionUID = 1L;
 
@@ -149,9 +141,9 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 */
 	
 	@SuppressWarnings({
-		"null", // throws Exception intentional - callback/lifecycle method
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"null" // throws Exception intentional - callback/lifecycle method
 	})
 	public RequestFormParamList(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
@@ -281,7 +273,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList add(HttpPart...parameters) {
-		assertArgNotNull(ARG_parameters, parameters);
+		reqnn("parameters", parameters);
 		for (var p : parameters)
 			if (nn(p))
 				add(p.getName(), p.getValue());
@@ -299,7 +291,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList add(Part part) {
-		assertArgNotNull(ARG_part, part);
+		reqnn("part", part);
 		add(new RequestFormParam(req, part).parser(parser));
 		return this;
 	}
@@ -316,7 +308,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList add(String name, Object value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		add(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
 	}
@@ -419,7 +411,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull(ARG_names, names);
+		reqnn("names", names);
 		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
@@ -497,7 +489,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestFormParam getFirst(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return stream(name).findFirst().orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
 	}
 
@@ -512,7 +504,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestFormParam getLast(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		var v = Holder.<RequestFormParam>empty();
 		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
@@ -557,7 +549,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList remove(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
@@ -573,7 +565,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList set(HttpPart...parameters) {
-		assertArgNotNull(ARG_headers, parameters);
+		reqnn("headers", parameters);
 		for (var p : parameters)
 			remove(p.getName());
 		for (var p : parameters)
@@ -596,7 +588,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList set(String name, Object value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		set(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
 	}

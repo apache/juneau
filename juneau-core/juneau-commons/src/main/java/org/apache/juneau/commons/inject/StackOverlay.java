@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -87,7 +86,7 @@ public final class StackOverlay implements BeanStore {
 	 * @return This object.
 	 */
 	public StackOverlay push(BeanStore overlay) {
-		assertArgNotNull("overlay", overlay);
+		reqnn("overlay", overlay);
 		frames.push(overlay);
 		return this;
 	}

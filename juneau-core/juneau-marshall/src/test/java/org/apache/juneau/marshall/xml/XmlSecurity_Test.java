@@ -120,6 +120,7 @@ class XmlSecurity_Test extends TestBase {
 	@Test
 	@Timeout(10)
 	void exponentialEntityExpansionIsRejected() {
-		assertThrows(ParseException.class, () -> XmlParser.DEFAULT.read(expansionDocument(), String.class));
+		var doc = expansionDocument();
+		assertThrows(ParseException.class, () -> XmlParser.DEFAULT.read(doc, String.class));
 	}
 }

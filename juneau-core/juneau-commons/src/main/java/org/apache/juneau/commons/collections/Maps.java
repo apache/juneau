@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -121,19 +120,12 @@ import java.util.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Map/Entry types used in utility methods where key/value types are not statically known
+	"java:S1168", // build() with sparse(), and the null-map paths, return null as the documented "absent" result instead of an empty map
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw Map/Entry types used in utility methods where key/value types are not statically known
+	"unchecked" // (K)/(V) casts in the pairs/add helpers trust the caller-supplied key and value types matching the builder's declared K,V
 })
 public class Maps<K,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
-	private static final String ARG_filter = "filter";
-	private static final String ARG_keyFunction = "keyFunction";
-	private static final String ARG_keyType = "keyType";
-	private static final String ARG_pairs = "pairs";
-	private static final String ARG_valueFunction = "valueFunction";
-	private static final String ARG_valueType = "valueType";
 
 	/**
 	 * Static creator.
@@ -145,7 +137,7 @@ public class Maps<K,V> {
 	 * @return A new builder.
 	 */
 	public static <K,V> Maps<K,V> create(Class<K> keyType, Class<V> valueType) {
-		return new Maps<>(assertArgNotNull(ARG_keyType, keyType), assertArgNotNull(ARG_valueType, valueType));
+		return new Maps<>(reqnn("keyType", keyType), reqnn("valueType", valueType));
 	}
 
 	/**
@@ -169,8 +161,7 @@ public class Maps<K,V> {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked operations
-		"rawtypes"   // Raw types necessary for generic map handling
+		"rawtypes" // Raw types necessary for generic map handling
 	})
 	public static <K,V> Maps<K,V> create() {
 		return new Maps(Object.class, Object.class);
@@ -197,8 +188,8 @@ public class Maps<K,V> {
 	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 */
 	public Maps(Class<K> keyType, Class<V> valueType) {
-		this.keyType = assertArgNotNull(ARG_keyType, keyType);
-		this.valueType = assertArgNotNull(ARG_valueType, valueType);
+		this.keyType = reqnn("keyType", keyType);
+		this.valueType = reqnn("valueType", valueType);
 	}
 
 	/**
@@ -256,9 +247,6 @@ public class Maps<K,V> {
 	 * @return This object.
 	 * @throws RuntimeException If a non-Map object is provided.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for map addition
-	})
 	public Maps<K,V> addAny(Object...values) {
 		for (var o : values) {
 			if (nn(o)) {
@@ -282,11 +270,8 @@ public class Maps<K,V> {
 	 * @param pairs The pairs to add.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for pair addition
-	})
 	public Maps<K,V> addPairs(Object...pairs) {
-		assertArgNotNull(ARG_pairs, pairs);
+		reqnn("pairs", pairs);
 		if (pairs.length % 2 != 0)
 			throw iaex("Odd number of parameters passed into Maps.addPairs(...)");
 		for (var i = 0; i < pairs.length; i += 2)
@@ -314,8 +299,7 @@ public class Maps<K,V> {
 	 * @return The built map, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
 	@SuppressWarnings({
-		"java:S1168",  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)
-		"java:S3776"   // Cognitive complexity acceptable for map builder
+		"java:S3776" // Cognitive complexity acceptable for map builder
 	})
 	public Map<K,V> build() {
 
@@ -406,9 +390,6 @@ public class Maps<K,V> {
 	 *
 	 * @return The built map as a {@link FilteredMap}, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
-	})
 	public FilteredMap<K,V> buildFiltered() {
 		var m = build();
 		if (m == null)  // sparse mode and empty
@@ -430,7 +411,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> keyFunction(Function<Object,K> keyFunction) {
-		this.keyFunction = assertArgNotNull(ARG_keyFunction, keyFunction);
+		this.keyFunction = reqnn("keyFunction", keyFunction);
 		return this;
 	}
 
@@ -444,7 +425,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> valueFunction(Function<Object,V> valueFunction) {
-		this.valueFunction = assertArgNotNull(ARG_valueFunction, valueFunction);
+		this.valueFunction = reqnn("valueFunction", valueFunction);
 		return this;
 	}
 
@@ -459,8 +440,8 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> functions(Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
-		this.keyFunction = assertArgNotNull(ARG_keyFunction, keyFunction);
-		this.valueFunction = assertArgNotNull(ARG_valueFunction, valueFunction);
+		this.keyFunction = reqnn("keyFunction", keyFunction);
+		this.valueFunction = reqnn("valueFunction", valueFunction);
 		return this;
 	}
 
@@ -547,7 +528,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> filtered(BiPredicate<K,V> filter) {
-		BiPredicate<K,V> newFilter = assertArgNotNull(ARG_filter, filter);
+		BiPredicate<K,V> newFilter = reqnn("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -564,9 +545,6 @@ public class Maps<K,V> {
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for sorted map
-	})
 	public Maps<K,V> sorted() {
 		return sorted((Comparator<K>)Comparator.naturalOrder());
 	}
@@ -582,7 +560,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> sorted(Comparator<K> comparator) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		ordered = false;
 		return this;
 	}
@@ -749,9 +727,6 @@ public class Maps<K,V> {
 	 * @param o The object to convert.
 	 * @return The converted key.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to K for key conversion
-	})
 	private K convertKey(Object o) {
 		if (keyType.isInstance(o))
 			return (K)o;
@@ -766,9 +741,6 @@ public class Maps<K,V> {
 	 * @param o The object to convert.
 	 * @return The converted value.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to V for value conversion
-	})
 	private V convertValue(Object o) {
 		if (valueType.isInstance(o))
 			return (V)o;

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -91,12 +90,9 @@ import java.nio.file.*;
  * @since 9.1.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class PathReaderBuilder {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_path = "path";
 
 	/**
 	 * Creates a new builder.
@@ -312,7 +308,7 @@ public class PathReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public PathReaderBuilder path(String path) {
-		this.path = Paths.get(assertArgNotNull(ARG_path, path));
+		this.path = Paths.get(reqnn("path", path));
 		return this;
 	}
 }

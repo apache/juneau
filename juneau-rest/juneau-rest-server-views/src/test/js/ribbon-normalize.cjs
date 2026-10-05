@@ -60,12 +60,13 @@ const ribbonJsSource = fs.readFileSync(path.resolve(ribbonJsPath), 'utf8');
 function loadRibbon(withExportFeature) {
 	const env = makeEnv();
 	if (withExportFeature)
-		env.window.jQuery = { fn: { dataTable: { Buttons: function () {} } } };
+		env.window.jQuery = { fn: { dataTable: { Buttons: function () { /* no-op */ } } } };
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
-		setTimeout: function () { return 0; }, clearTimeout: function () {},
-		setInterval: function () { return 0; }, clearInterval: function () {}
+		setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
+		setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ }
 	};
+	// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
 	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' });
 	return { env: env, NS: env.window.JuneauViews };
 }
@@ -77,7 +78,7 @@ out.hasNormalizeRibbon = !!(first.NS?.ribbon && typeof first.NS.ribbon.normalize
 if (!out.hasBuild) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
 /** A minimal RibbonAction-shaped action literal, mirroring the RibbonAction wire shape. */
-function action(type, extra) { return Object.assign({ type: type }, extra || {}); }
+function action(type, extra) { return { type: type, ...extra }; }
 
 function chromeTip(b) {
 	return b ? (b.dataset.jcTip || b.title || '') : '';
@@ -91,14 +92,14 @@ if (out.hasNormalizeRibbon) {
 	const normalizeRibbon = first.NS.ribbon.normalizeRibbon;
 
 	// 1) No refresh action - identity no-op (same array reference back).
-	const noRefresh = [action('export', { buttons: ['copy', 'csv'] }), action('columnSearchToggle')];
+	const noRefresh = [action('export', { buttons: ['copy', 'csv'] }), action('collapseAll')];
 	out.pure_noRefresh_isSameReference = normalizeRibbon(noRefresh) === noRefresh;
 
 	// 2) Exactly one refresh - moved last, into '__refresh'; the export action itself is untouched.
 	const oneRefresh = [action('refresh'), action('export', { buttons: ['copy', 'csv'] })];
 	const oneRefreshResult = normalizeRibbon(oneRefresh);
 	out.pure_oneRefresh_order = oneRefreshResult.map(function (x) { return x.type; }).join(',');
-	out.pure_oneRefresh_lastGroup = oneRefreshResult[oneRefreshResult.length - 1].group;
+	out.pure_oneRefresh_lastGroup = oneRefreshResult.at(-1).group;
 	out.pure_oneRefresh_exportGroupUnset = oneRefreshResult[0].type === 'export' && oneRefreshResult[0].group == null;
 
 	// 3) Two refresh actions - BOTH move, preserving relative order, into the SAME trailing group.
@@ -166,7 +167,7 @@ function dividersOf(bar) {
 }
 
 function buildBar(NS, ribbon) {
-	return NS.ribbon.build({ ribbon: ribbon }, { dataTable: {}, redraw: function () {} });
+	return NS.ribbon.build({ ribbon: ribbon }, { dataTable: {}, redraw: function () { /* no-op */ } });
 }
 
 // Case 1 - no refresh action: unaffected. One export cluster, nothing trailing added.
@@ -186,10 +187,10 @@ function buildBar(NS, ribbon) {
 	const groups = groupsOf(bar);
 	out.dom_oneRefresh_groupCount = groups.length;
 	out.dom_oneRefresh_firstGroupButtonCount = groups.length > 0 ? groups[0].childNodes.length : -1;
-	out.dom_oneRefresh_lastGroupButtonCount = groups.length > 0 ? groups[groups.length - 1].childNodes.length : -1;
-	const lastGroupBtn = groups.length > 0 ? groups[groups.length - 1].childNodes[0] : null;
+	out.dom_oneRefresh_lastGroupButtonCount = groups.length > 0 ? groups.at(-1).childNodes.length : -1;
+	const lastGroupBtn = groups.length > 0 ? groups.at(-1).childNodes[0] : null;
 	out.dom_oneRefresh_lastGroupIsRefreshGlyph = lastGroupBtn != null && chromeTip(lastGroupBtn) === 'Refresh';
-	out.dom_oneRefresh_lastGroupIsLastChildOfBar = groups.length > 0 && bar.lastElementChild === groups[groups.length - 1];
+	out.dom_oneRefresh_lastGroupIsLastChildOfBar = groups.length > 0 && bar.lastElementChild === groups.at(-1);
 }
 
 // Case 3 - two refresh actions around an export cluster: both move into ONE trailing group, in relative order.
@@ -200,7 +201,7 @@ function buildBar(NS, ribbon) {
 	]);
 	const groups = groupsOf(bar);
 	out.dom_twoRefresh_groupCount = groups.length;
-	const lastGroup = groups.length > 0 ? groups[groups.length - 1] : null;
+	const lastGroup = groups.length > 0 ? groups.at(-1) : null;
 	out.dom_twoRefresh_lastGroupButtonCount = lastGroup ? lastGroup.childNodes.length : -1;
 	out.dom_twoRefresh_lastGroupTitles = lastGroup ? lastGroup.childNodes.map(function (b) { return chromeTip(b); }).join(',') : null;
 }
@@ -210,7 +211,7 @@ function buildBar(NS, ribbon) {
 {
 	const { NS } = loadRibbon(true);
 	const bar = buildBar(NS, [
-		action('refresh', { group: 'filters' }), action('columnSearchToggle', { group: 'filters' }),
+		action('refresh', { group: 'filters' }), action('collapseAll', { group: 'filters' }),
 		action('export', { buttons: ['copy'] })
 	]);
 	const groups = groupsOf(bar);
@@ -229,7 +230,7 @@ function buildBar(NS, ribbon) {
 	const groups = groupsOf(bar);
 	out.dom_trailingDivider_groupCount = groups.length;
 	out.dom_trailingDivider_dividerCount = dividersOf(bar).length;
-	out.dom_trailingDivider_lastGroupButtonCount = groups.length > 0 ? groups[groups.length - 1].childNodes.length : -1;
+	out.dom_trailingDivider_lastGroupButtonCount = groups.length > 0 ? groups.at(-1).childNodes.length : -1;
 }
 
 // Case 6 (WORK-J0507, Foundry WORK-P0063 toolbar follow-up) - a `print` id in an `export` action's always-on
@@ -252,7 +253,7 @@ function buildBar(NS, ribbon) {
 	const { NS } = loadRibbon(true);
 	let collapseAllCalled = 0;
 	const bar = NS.ribbon.build({ ribbon: [action('collapseAll')] }, {
-		dataTable: {}, redraw: function () {}, collapseAllDetailRows: function () { collapseAllCalled++; }
+		dataTable: {}, redraw: function () { /* no-op */ }, collapseAllDetailRows: function () { collapseAllCalled++; }
 	});
 	const groups = groupsOf(bar);
 	out.dom_collapseAll_groupCount = groups.length;
@@ -273,7 +274,7 @@ function buildBar(NS, ribbon) {
 	NS.init = { openRibbonDialog: function (id, table, ctx) { calls.push({ id: id, table: table, ctx: ctx }); } };
 	const table = env.el('table');
 	const bar = NS.ribbon.build({ ribbon: [action('dialog', { id: 'add-project', title: 'Add project' })] },
-		{ table: table, dataTable: {}, redraw: function () {} });
+		{ table: table, dataTable: {}, redraw: function () { /* no-op */ } });
 	const groups = groupsOf(bar);
 	out.dom_dialog_groupCount = groups.length;
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
@@ -294,7 +295,7 @@ function buildBar(NS, ribbon) {
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
 	out.dom_dialog_noViewRuntime_buttonRendered = btn != null;
 	let threw = false;
-	try { if (btn) btn.dispatch('click'); } catch (e) { threw = true; }
+	try { if (btn) btn.dispatch('click'); } catch (error) { threw = true; }
 	out.dom_dialog_noViewRuntime_clickDidNotThrow = ! threw;
 }
 
@@ -305,6 +306,45 @@ function buildBar(NS, ribbon) {
 	const groups = groupsOf(bar);
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
 	out.dom_dialog_untitled_nameFallsBackToId = btn != null && chromeTip(btn) === 'add-project';
+}
+
+// ------------------------------------------------------------------------------------------------------------------
+// Pure function: ribbonToQueryParams(viewDef, activeState) - the browser JOINS multiple active toggles that target
+// the SAME single-string parameter (`search` / `opt`) into ONE comma-separated clause string (design §5.3: the wire
+// carries ONE `search` and ONE `opt`, never repeated params).  A column-scoped option stays a native
+// columns[N][search][value] param; any other custom param stays single-valued (last contribution wins).
+// ------------------------------------------------------------------------------------------------------------------
+if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonToQueryParams === 'function') {
+	const toQuery = first.NS.ribbon.ribbonToQueryParams;
+	const viewDef = {
+		columns: [{ data: 'status' }, { data: 'owner' }],
+		ribbon: [
+			{ type: 'option', id: 'onlyOpen', param: 'search', value: 'status=$eq(OPEN)' },
+			{ type: 'option', id: 'mine', param: 'search', value: 'owner=$eq(me)' },
+			{ type: 'option', id: 'withCounts', param: 'opt', value: 'counts=true' },
+			{ type: 'optionGroup', id: 'density', options: [
+				{ id: 'compact', param: 'opt', value: 'density=compact' },
+				{ id: 'roomy', param: 'opt', value: 'density=roomy' }
+			] },
+			{ type: 'option', id: 'colScoped', column: 'status', value: '$eq(OPEN)' }
+		]
+	};
+	// Two active `search`-param toggles + one `opt` option + the selected `opt` group member all join into ONE
+	// string apiece; the column-scoped toggle stays a native per-index param.
+	const joined = toQuery(viewDef, { onlyOpen: true, mine: true, withCounts: true, density: 'compact', colScoped: true });
+	out.pure_joinSearchClauses = joined.search;                            // "status=$eq(OPEN),owner=$eq(me)"
+	out.pure_joinOptClauses = joined.opt;                                  // "counts=true,density=compact"
+	out.pure_joinColumnStillNative = joined['columns[0][search][value]'];  // "$eq(OPEN)" - unaffected by the join
+
+	// One active `search` toggle -> the single clause, with no leading/trailing separator comma.
+	out.pure_joinSingleSearchNoComma = toQuery(viewDef, { onlyOpen: true }).search;
+
+	// The JOIN only inserts a TOP-LEVEL comma: a comma INSIDE a clause value's $in(...) belongs to that clause.
+	const parenView = { columns: [], ribbon: [
+		{ type: 'option', id: 'a', param: 'search', value: 'status=$in(OPEN,CLOSED)' },
+		{ type: 'option', id: 'b', param: 'search', value: 'tier=$eq(gold)' }
+	] };
+	out.pure_joinProtectsInnerCommas = toQuery(parenView, { a: true, b: true }).search;
 }
 
 process.stdout.write(JSON.stringify(out));

@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.net.*;
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Builds the pair of loopback redirect URIs (SEP-837 loopback redirect handling) an MCP native/CLI client registers
@@ -55,8 +55,8 @@ public final class LoopbackRedirectUris {
 	 * @return An immutable, order-preserving list of the two loopback redirect URIs.  Never <jk>null</jk>.
 	 */
 	public static List<URI> portAgnostic(String path) {
-		var p = assertArgNotNullOrBlank("path", path);
-		assertArg(p.startsWith("/"), "path must start with '/' (was '%s')", p);
+		var p = reqnb("path", path);
+		req(p.startsWith("/"), "path must start with '/' (was '%s')", p);
 		return List.of(
 			URI.create("http://127.0.0.1" + p),
 			URI.create("http://localhost" + p));
@@ -76,9 +76,9 @@ public final class LoopbackRedirectUris {
 	 * @return An immutable, order-preserving list of the two loopback redirect URIs.  Never <jk>null</jk>.
 	 */
 	public static List<URI> forPort(int port, String path) {
-		assertArg(port >= 1 && port <= 65535, "port must be in 1..65535 (was %s)", port);
-		var p = assertArgNotNullOrBlank("path", path);
-		assertArg(p.startsWith("/"), "path must start with '/' (was '%s')", p);
+		req(port >= 1 && port <= 65535, "port must be in 1..65535 (was %s)", port);
+		var p = reqnb("path", path);
+		req(p.startsWith("/"), "path must start with '/' (was '%s')", p);
 		return List.of(
 			URI.create("http://127.0.0.1:" + port + p),
 			URI.create("http://localhost:" + port + p));

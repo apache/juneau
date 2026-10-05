@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.yaml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -42,15 +41,14 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S3776" // Cognitive complexity acceptable for YAML serializer session methods
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for YAML serializer session methods
+	"rawtypes", // writeMap()/writeCollection() take raw Map/Collection and writeAnything() casts to raw BeanMap/Map/Collection after ClassMeta type checks
+	"resource", // Resource management handled externally
+	"unchecked" // Raw-to-generic casts in writeAnything()/writeMap()/writeCollection() are guarded by the ClassMeta isMap()/isCollection() checks
 })
 public class YamlSerializerSession extends WriterSerializerSession implements RecordWritable, ArrayRecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -64,7 +62,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(YamlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -82,7 +80,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 	 * @return A new builder.
 	 */
 	public static Builder create(YamlSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -172,10 +170,6 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 	 * @return The same writer passed in.
 	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	protected YamlWriter writeAnything(YamlWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta, boolean asField) throws SerializeException {
 
 		if (o == null) {
@@ -304,10 +298,6 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		return out;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private SerializerWriter<?> writeMap(YamlWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 		int i = indent - 1;
 
@@ -343,10 +333,6 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		return out;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private SerializerWriter<?> writeCollection(YamlWriter out, Collection c, ClassMeta<?> type, boolean asField) throws SerializeException {
 		int i = indent - 1;
 

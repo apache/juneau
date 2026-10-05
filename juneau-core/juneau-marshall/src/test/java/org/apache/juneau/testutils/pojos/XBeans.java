@@ -23,6 +23,9 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.urlencoding.*;
 
+@SuppressWarnings({
+	"java:S9149" // Test fixture's static factories intentionally shadow the parent's.
+})
 public class XBeans {
 
 	private XBeans() {}

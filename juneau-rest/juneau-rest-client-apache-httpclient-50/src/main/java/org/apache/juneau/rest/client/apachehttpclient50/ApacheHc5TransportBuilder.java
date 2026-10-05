@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient50;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.hc.client5.http.impl.classic.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fluent builder for {@link ApacheHc5Transport}.
@@ -59,7 +59,7 @@ public final class ApacheHc5TransportBuilder {
 	 * @return This object.
 	 */
 	public ApacheHc5TransportBuilder httpClient(CloseableHttpClient value) {
-		httpClient = assertArgNotNull("value", value);
+		httpClient = reqnn("value", value);
 		return this;
 	}
 

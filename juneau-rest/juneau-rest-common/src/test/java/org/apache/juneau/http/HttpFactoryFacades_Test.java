@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -117,8 +118,8 @@ class HttpFactoryFacades_Test extends TestBase {
 			if (n.contains("language") || n.contains("encoding") || n.contains("charset") || n.contains("disposition") || n.contains("te")) return () -> StringRanges.of("en");
 		}
 		if (n.contains("lazytokens")) return () -> new String[] { "a", "b" };
-		if (n.equals("ifrange")) return () -> EntityTag.of("\"foo\"");
-		if (n.equals("retryafter")) return () -> Integer.valueOf(120);
+		if (eq(n, "ifrange")) return () -> EntityTag.of("\"foo\"");
+		if (eq(n, "retryafter")) return () -> Integer.valueOf(120);
 		return () -> "value";
 	}
 }

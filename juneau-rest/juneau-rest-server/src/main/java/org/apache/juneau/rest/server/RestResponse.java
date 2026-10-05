@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -123,13 +122,15 @@ import jakarta.servlet.http.*;
  *
  */
 @SuppressWarnings({
-	"resource", // HttpServletResponseWrapper is managed by servlet container
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2789", // The Optional content field is null until setContent() is called, and null (not Optional.empty()) means 'never set'; getRawOutput() null-checks it.
+	"java:S3776", // Mainly getNegotiatedOutputStream(), whose Accept-Encoding negotiation nests several conditions.
+	"resource" // HttpServletResponseWrapper is managed by servlet container
 })
 public class RestResponse extends HttpServletResponseWrapper {
 
 	private static final String HEADER_ContentType = "Content-Type";
-	private static final String ARG_VALUE = "value";
 	private static final Pattern ENCODING_DISABLED_PATTERN = Pattern.compile("(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0)");
 
 	private HttpServletResponse inner;
@@ -151,8 +152,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Constructor.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for response initialization
-		"java:S112"   // throws Exception intentional - callback/lifecycle method
+		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
 		super(session.getResponse());
@@ -184,7 +184,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		else
 			for (var r : StringRanges.of(h).toList()) {
 				if (r.getQValue() > 0) {
-					if (r.getName().equals("*"))
+					if (eq(r.getName(), "*"))
 						charset = opContext.getDefaultCharset();
 					else if (Charset.isSupported(r.getName()))
 						charset = Charset.forName(r.getName());
@@ -397,9 +397,6 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for content negotiation
-	})
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
@@ -418,7 +415,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 					var encoding = match.getEncoding();
 
 					// Some clients don't recognize identity as an encoding, so don't set it.
-					if (! encoding.equals("identity"))
+					if (neq(encoding, "identity"))
 						setHeader("content-encoding", encoding);
 				}
 			}
@@ -630,7 +627,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (host == null || allowedHosts == null)
 			return false;
 		for (var h : allowedHosts)
-			if (host.equalsIgnoreCase(h))
+			if (eqic(host, h))
 				return true;
 		return false;
 	}
@@ -717,9 +714,6 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * 	negotiation on the next {@link #getSerializerMatch()} call.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S2789" // Null invalidates lazy Optional cache so getSerializerMatch() recomputes next access.
-	})
 	public RestResponse setSerializer(Serializer value) {
 		serializer = value;
 		serializerMatch = null;
@@ -846,7 +840,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public RestResponse eTag(EntityTag value) {
-		assertArgNotNull(ARG_VALUE, value);
+		reqnn("value", value);
 		return setHeader(ETag.of(value.toString()));
 	}
 
@@ -870,7 +864,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @see RestRequest#checkPreconditions(RestResponse)
 	 */
 	public RestResponse lastModified(Instant value) {
-		assertArgNotNull(ARG_VALUE, value);
+		reqnn("value", value);
 		return lastModified(value.atZone(ZoneOffset.UTC));
 	}
 
@@ -886,7 +880,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public RestResponse lastModified(ZonedDateTime value) {
-		assertArgNotNull(ARG_VALUE, value);
+		reqnn("value", value);
 		var z = value.withZoneSameInstant(ZoneOffset.UTC).truncatedTo(SECONDS);
 		return setHeader(LastModified.of(RFC_1123_DATE_TIME.format(z)));
 	}
@@ -905,7 +899,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @see #cacheControl(CacheControl.Builder)
 	 */
 	public RestResponse cacheControl(String value) {
-		assertArgNotNull(ARG_VALUE, value);
+		reqnn("value", value);
 		return setHeader(CacheControl.of(value));
 	}
 
@@ -923,7 +917,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public RestResponse cacheControl(CacheControl.Builder value) {
-		assertArgNotNull(ARG_VALUE, value);
+		reqnn("value", value);
 		return cacheControl(value.build());
 	}
 
@@ -1079,9 +1073,6 @@ public class RestResponse extends HttpServletResponseWrapper {
 		return this;
 	}
 
-	@SuppressWarnings({
-		"java:S2789" // null check on Optional is intentional - content field can be null if never set
-	})
 	private Object getRawOutput() { return content == null ? null : content.orElse(null); }
 
 	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
@@ -1135,8 +1126,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private static boolean isUriBearingHeader(String name) {
 		if (name == null)
 			return false;
-		return name.equalsIgnoreCase("Location")
-			|| name.equalsIgnoreCase("Content-Location")
-			|| name.equalsIgnoreCase("Referer");
+		return eqic(name, "Location")
+			|| eqic(name, "Content-Location")
+			|| eqic(name, "Referer");
 	}
 }

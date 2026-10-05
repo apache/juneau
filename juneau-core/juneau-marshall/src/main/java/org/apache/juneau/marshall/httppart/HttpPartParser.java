@@ -88,6 +88,9 @@ public interface HttpPartParser {
 	 * <p>
 	 * Used to represent the absence of a part parser in annotations.
 	 */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public interface Void extends HttpPartParser {}
 
 	/**

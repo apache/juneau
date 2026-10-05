@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.client.okhttp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import okhttp3.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fluent builder for {@link OkHttpTransport}.
@@ -61,7 +61,7 @@ public final class OkHttpTransportBuilder {
 	 * @return This object.
 	 */
 	public OkHttpTransportBuilder httpClient(OkHttpClient value) {
-		httpClient = assertArgNotNull("value", value);
+		httpClient = reqnn("value", value);
 		return this;
 	}
 

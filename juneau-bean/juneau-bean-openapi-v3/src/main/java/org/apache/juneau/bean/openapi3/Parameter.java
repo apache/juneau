@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -79,29 +78,12 @@ import org.apache.juneau.marshall.marshaller.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Parameter extends OpenApiElement {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
 	private static final String[] VALID_IN = { "query", "header", "path", "cookie" };
 	private static final String[] VALID_STYLES = { "matrix", "label", "form", "simple", "spaceDelimited", "pipeDelimited", "deepObject" };
-
-	// Property name constants
-	private static final String PROP_allowEmptyValue = "allowEmptyValue";
-	private static final String PROP_allowReserved = "allowReserved";
-	private static final String PROP_deprecated = "deprecated";
-	private static final String PROP_description = "description";
-	private static final String PROP_example = "example";
-	private static final String PROP_examples = "examples";
-	private static final String PROP_explode = "explode";
-	private static final String PROP_in = "in";
-	private static final String PROP_name = "name";
-	private static final String PROP_required = "required";
-	private static final String PROP_schema = "schema";
-	private static final String PROP_style = "style";
 
 	private String name;
 	private String in;
@@ -153,20 +135,20 @@ public class Parameter extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_name -> toType(getName(), type);
-			case PROP_in -> toType(getIn(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_required -> toType(getRequired(), type);
-			case PROP_deprecated -> toType(getDeprecated(), type);
-			case PROP_allowEmptyValue -> toType(getAllowEmptyValue(), type);
-			case PROP_style -> toType(getStyle(), type);
-			case PROP_explode -> toType(getExplode(), type);
-			case PROP_allowReserved -> toType(getAllowReserved(), type);
-			case PROP_schema -> toType(getSchema(), type);
-			case PROP_example -> toType(getExample(), type);
-			case PROP_examples -> toType(getExamples(), type);
+			case "name" -> toType(getName(), type);
+			case "in" -> toType(getIn(), type);
+			case "description" -> toType(getDescription(), type);
+			case "required" -> toType(getRequired(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
+			case "style" -> toType(getStyle(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "example" -> toType(getExample(), type);
+			case "examples" -> toType(getExamples(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -259,18 +241,18 @@ public class Parameter extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(allowEmptyValue), PROP_allowEmptyValue)
-			.addIf(nn(allowReserved), PROP_allowReserved)
-			.addIf(nn(deprecated), PROP_deprecated)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(example), PROP_example)
-			.addIf(nn(examples), PROP_examples)
-			.addIf(nn(explode), PROP_explode)
-			.addIf(nn(in), PROP_in)
-			.addIf(nn(name), PROP_name)
-			.addIf(nn(required), PROP_required)
-			.addIf(nn(schema), PROP_schema)
-			.addIf(nn(style), PROP_style)
+			.addIf(nn(allowEmptyValue), "allowEmptyValue")
+			.addIf(nn(allowReserved), "allowReserved")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(example), "example")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(explode), "explode")
+			.addIf(nn(in), "in")
+			.addIf(nn(name), "name")
+			.addIf(nn(required), "required")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(style), "style")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -278,20 +260,20 @@ public class Parameter extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Parameter set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_allowEmptyValue -> setAllowEmptyValue(toType(value, Boolean.class));
-			case PROP_allowReserved -> setAllowReserved(toType(value, Boolean.class));
-			case PROP_description -> setDescription(s(value));
-			case PROP_deprecated -> setDeprecated(toType(value, Boolean.class));
-			case PROP_example -> setExample(value);
-			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
-			case PROP_explode -> setExplode(toType(value, Boolean.class));
-			case PROP_in -> setIn(s(value));
-			case PROP_name -> setName(s(value));
-			case PROP_required -> setRequired(toType(value, Boolean.class));
-			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
-			case PROP_style -> setStyle(s(value));
+			case "allowEmptyValue" -> setAllowEmptyValue(toType(value, Boolean.class));
+			case "allowReserved" -> setAllowReserved(toType(value, Boolean.class));
+			case "description" -> setDescription(s(value));
+			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
+			case "example" -> setExample(value);
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
+			case "explode" -> setExplode(toType(value, Boolean.class));
+			case "in" -> setIn(s(value));
+			case "name" -> setName(s(value));
+			case "required" -> setRequired(toType(value, Boolean.class));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "style" -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

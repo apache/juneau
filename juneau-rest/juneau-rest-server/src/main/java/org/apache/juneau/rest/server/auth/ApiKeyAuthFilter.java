@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -94,7 +93,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 
 		private ApiKeyStore store;
 		private Source source = Source.HEADER;
-		private String name = RestServerConstants.API_KEY_HEADER;
+		private String name = "X-API-Key";
 		private String realm = "api";
 		private String rolesClaim = DEFAULT_ROLES_CLAIM;
 
@@ -110,7 +109,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder store(ApiKeyStore value) {
-			store = assertArgNotNull("value", value);
+			store = reqnn("value", value);
 			return this;
 		}
 
@@ -125,7 +124,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 */
 		public Builder fromHeader(String value) {
 			source = Source.HEADER;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -137,7 +136,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 */
 		public Builder fromQuery(String value) {
 			source = Source.QUERY;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -149,7 +148,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 */
 		public Builder fromCookie(String value) {
 			source = Source.COOKIE;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -160,7 +159,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder realm(String value) {
-			realm = assertArgNotNullOrBlank("value", value);
+			realm = reqnb("value", value);
 			return this;
 		}
 
@@ -174,7 +173,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder rolesClaim(String value) {
-			rolesClaim = assertArgNotNullOrBlank("value", value);
+			rolesClaim = reqnb("value", value);
 			return this;
 		}
 
@@ -223,7 +222,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 			principal = result.get();
 		} catch (AuthenticationException e) {
 			var hasChallenge = e.getHeaders().stream()
-				.anyMatch(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()));
+				.anyMatch(h -> eqic(WWW_AUTHENTICATE, h.getName()));
 			if (!hasChallenge)
 				e.wwwAuthenticate(challenge);
 			throw e;

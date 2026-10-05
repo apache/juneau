@@ -33,16 +33,10 @@ import org.apache.juneau.commons.collections.*;
  *
  */
 @SuppressWarnings({
-	"rawtypes",
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_detectRecursions)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes" // The protected constructor takes the raw Builder type, shared by subclasses that have different self-type parameters
 })
 public abstract class MarshallingTraverseContext extends MarshallingContextable {
-
-	// Property name constants
-	private static final String PROP_detectRecursions = "detectRecursions";
-	private static final String PROP_ignoreRecursions = "ignoreRecursions";
-	private static final String PROP_initialDepth = "initialDepth";
-	private static final String PROP_maxDepth = "maxDepth";
 
 	/**
 	 * Builder class.
@@ -380,9 +374,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_detectRecursions, detectRecursions)
-			.a(PROP_ignoreRecursions, ignoreRecursions)
-			.a(PROP_initialDepth, initialDepth)
-			.a(PROP_maxDepth, maxDepth);
+			.a("detectRecursions", detectRecursions)
+			.a("ignoreRecursions", ignoreRecursions)
+			.a("initialDepth", initialDepth)
+			.a("maxDepth", maxDepth);
 	}
 }

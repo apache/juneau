@@ -42,6 +42,9 @@ import org.opensaml.security.credential.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"unchecked" // OpenSAML builder-factory getBuilder() returns a raw XMLObjectBuilder that is cast to SAMLObjectBuilder<SubjectConfirmation>
+})
 class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 
 	private static final String ISSUER = "https://idp.example.com";
@@ -184,7 +187,6 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 		assertEquals(condNoa.plus(SKEW).toEpochMilli(), cache.lastExpiry.get());
 	}
 
-	@SuppressWarnings("unchecked")
 	private static SubjectConfirmation holderOfKeyConfirmation() {
 		var scb = (SAMLObjectBuilder<SubjectConfirmation>) SamlTestSupport.bf().getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		var sc = scb.buildObject();
@@ -192,7 +194,6 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 		return sc;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static SubjectConfirmation bearerConfirmationNoData() {
 		var scb = (SAMLObjectBuilder<SubjectConfirmation>) SamlTestSupport.bf().getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		var sc = scb.buildObject();

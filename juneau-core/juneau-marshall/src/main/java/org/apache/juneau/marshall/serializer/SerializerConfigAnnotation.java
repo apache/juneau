@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class SerializerConfigAnnotation {
 
 	/**
@@ -37,9 +40,6 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link OutputStreamSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {
 
 		/**
@@ -63,8 +63,7 @@ public class SerializerConfigAnnotation {
 	 * Applies {@link SerializerConfig} annotations to a {@link Serializer.Builder}.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Raw types required for reflective annotation application.
-		"rawtypes"   // Raw types required for reflective annotation application.
+		"unchecked" // Raw types required for reflective annotation application.
 	})
 	public static class SerializerApply extends AnnotationApplier<SerializerConfig,Serializer.Builder> {
 
@@ -104,9 +103,6 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link WriterSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class WriterSerializerApply extends AnnotationApplier<SerializerConfig,WriterSerializer.Builder> {
 
 		/**

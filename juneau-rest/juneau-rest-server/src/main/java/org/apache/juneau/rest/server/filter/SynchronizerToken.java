@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.filter;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
@@ -112,7 +111,7 @@ public final class SynchronizerToken {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 	 */
 	public static SynchronizerToken of(String value) {
-		assertArgNotNull("value", value);
+		reqnn("value", value);
 		if (value.isBlank())
 			throw iaex("Argument 'value' must not be blank.");
 		return new SynchronizerToken(value);

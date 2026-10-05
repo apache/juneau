@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.html;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -50,12 +50,10 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -78,7 +76,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -88,7 +86,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */

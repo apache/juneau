@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -112,9 +113,9 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 		assertFalse(body.contains("resolveRowActionFormUrl:"), body);
 	}
 
-	@Test void a07_contractVersionStaysFour() throws Exception {
-		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
-		assertTrue(viewsJs().contains("JUNEAU_VIEW_CONTRACT_VERSION = \"4\""), viewsJs());
+	@Test void a07_contractVersionStaysFive() throws Exception {
+		assertEquals("5", ViewsMixin.CONTRACT_VERSION);
+		assertTrue(viewsJs().contains("JUNEAU_VIEW_CONTRACT_VERSION = \"5\""), viewsJs());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -203,13 +204,21 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 		return report;
 	}
 
+	/**
+	 * CRITICAL CAVEAT: a missing key reads as {@code false} through {@code flag()}, but the SAME missing key
+	 * read directly off the report map (as {@code assertBean} does) renders as the literal string {@code <null>},
+	 * not {@code false}. Folding a {@code flag()}-backed boolean into an {@code assertBean} call is therefore only
+	 * safe where the harness unconditionally assigns that key on every path (never omits it) - verify that in
+	 * {@code row-action-form.cjs} before converting a new site, not just by analogy to this one.
+	 */
 	private static boolean flag(String key) {
 		return Boolean.TRUE.equals(report().get(key));
 	}
 
 	@Test void b01_exampleShapedFormSubstitutesId() {
-		assertEquals("/data/alerts/ALRT-2/ack-form", report().get("b01_url"));
-		assertTrue(flag("b01_fetched"));
+		// Both fields come from the harness's unconditionally-assigned `fetched`/`url` output - never omitted - so
+		// folding the flag() check in is safe (see CRITICAL CAVEAT above flag()'s definition).
+		assertBean(report(), "b01_url,b01_fetched", "/data/alerts/ALRT-2/ack-form,true");
 	}
 
 	@Test void b01b_servletSchemeIsPreserved() {
@@ -217,19 +226,13 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 	}
 
 	@Test void b02_tokenLessFormIsByteIdentical() {
-		assertEquals("/data/x/ack-form", report().get("b02_url_withRow"));
-		assertEquals("/data/x/ack-form", report().get("b02_url_noRow"));
+		assertBean(report(), "b02_url_withRow,b02_url_noRow", "/data/x/ack-form,/data/x/ack-form");
 	}
 
 	@Test void b03_blankTokenValueRefusesEmptySubstitution() {
-		assertFalse(flag("b03_missing_fetched"));
-		assertEquals("empty-substitution", report().get("b03_missing_reason"));
-		assertFalse(flag("b03_null_fetched"));
-		assertEquals("empty-substitution", report().get("b03_null_reason"));
-		assertFalse(flag("b03_absent_fetched"));
-		assertEquals("empty-substitution", report().get("b03_absent_reason"));
-		assertFalse(flag("b03_ws_fetched"));
-		assertEquals("empty-substitution", report().get("b03_ws_reason"));
+		assertBean(report(), "b03_missing_fetched,b03_missing_reason,b03_null_fetched,b03_null_reason,"
+			+ "b03_absent_fetched,b03_absent_reason,b03_ws_fetched,b03_ws_reason",
+			"false,empty-substitution,false,empty-substitution,false,empty-substitution,false,empty-substitution");
 	}
 
 	@Test void b04_valueIsEncoded() {
@@ -237,23 +240,19 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 	}
 
 	@Test void b05_omittedRendersJsRefusesTemplatedForm() {
-		assertFalse(flag("b05_fetched"));
-		assertEquals("unresolved-endpoint", report().get("b05_reason"));
+		assertBean(report(), "b05_fetched,b05_reason", "false,unresolved-endpoint");
 	}
 
 	@Test void b06_omittedRendersJsStillFetchesTokenLessForm() {
-		assertTrue(flag("b06_fetched"));
-		assertEquals("/data/x/ack-form", report().get("b06_url"));
+		assertBean(report(), "b06_fetched,b06_url", "true,/data/x/ack-form");
 	}
 
 	@Test void b07_dotDotRowValueRefuses() {
-		assertFalse(flag("b07_fetched"));
-		assertEquals("unsafe-endpoint", report().get("b07_reason"));
+		assertBean(report(), "b07_fetched,b07_reason", "false,unsafe-endpoint");
 	}
 
 	@Test void b08_authorDeclaredDotDotRefuses() {
-		assertFalse(flag("b08_fetched"));
-		assertEquals("unsafe-endpoint", report().get("b08_reason"));
+		assertBean(report(), "b08_fetched,b08_reason", "false,unsafe-endpoint");
 	}
 
 	@Test void b09_queryContextIsEncoded() {
@@ -261,23 +260,19 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 	}
 
 	@Test void b10_encodedDotDotIsNotASegment() {
-		assertTrue(flag("b10_fetched"));
-		assertEquals("/data/alerts/a%2F..%2Fb/ack-form", report().get("b10_url"));
+		assertBean(report(), "b10_fetched,b10_url", "true,/data/alerts/a%2F..%2Fb/ack-form");
 	}
 
 	@Test void b11_secondBlankTokenRefuses() {
-		assertFalse(flag("b11_fetched"));
-		assertEquals("empty-substitution", report().get("b11_reason"));
+		assertBean(report(), "b11_fetched,b11_reason", "false,empty-substitution");
 	}
 
 	@Test void b12_templatedRibbonFormRefuses() {
-		assertFalse(flag("b12_fetched"));
-		assertEquals("empty-substitution", report().get("b12_reason"));
+		assertBean(report(), "b12_fetched,b12_reason", "false,empty-substitution");
 	}
 
 	@Test void b13_tokenLessRibbonFormFetches() {
-		assertTrue(flag("b13_fetched"));
-		assertEquals("/projects/new-form", report().get("b13_url"));
+		assertBean(report(), "b13_fetched,b13_url", "true,/projects/new-form");
 	}
 
 	@Test void b14_postDraftQueryStillSubstitutesPath() {
@@ -285,9 +280,7 @@ class ViewsJs_RowActionForm_Test extends TestBase {
 	}
 
 	@Test void b15_blankFormStaysConfirmOnly() {
-		assertFalse(flag("b15_fetched"));
-		assertEquals(1, ((Number) report().get("b15_dialogCount")).intValue());
-		assertNull(report().get("b15_refusalReason"));
+		assertBean(report(), "b15_fetched,b15_dialogCount,b15_refusalReason", "false,1,<null>");
 	}
 
 	@Test void b16_resolverIsNotOnInit() {

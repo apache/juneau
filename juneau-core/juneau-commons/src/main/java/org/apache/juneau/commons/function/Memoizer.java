@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -76,14 +75,10 @@ import java.util.function.*;
  * @param <T> The type of value supplied.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
 })
 public class Memoizer<T> implements NullableSupplier<T> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_mapper = "mapper";
-	private static final String ARG_predicate = "predicate";
-	private static final String ARG_supplier = "supplier";
 
 	private final Supplier<T> supplier;
 	private final AtomicReference<Optional<T>> cache = new AtomicReference<>();
@@ -94,7 +89,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 * @param supplier The underlying supplier to call when computing values.  Must not be <jk>null</jk>.
 	 */
 	public Memoizer(Supplier<T> supplier) {
-		this.supplier = assertArgNotNull(ARG_supplier, supplier);
+		this.supplier = reqnn("supplier", supplier);
 	}
 
 	/**
@@ -103,9 +98,6 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 * @return The cached or newly computed value.
 	 */
 	@Override
-	@SuppressWarnings({
-		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
-	})
 	public T get() {
 		Optional<T> h = cache.get();
 		if (h == null) {
@@ -172,9 +164,6 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 *
 	 * @return <jk>true</jk> if the supplier has not been called yet, <jk>false</jk> if a value has been cached.
 	 */
-	@SuppressWarnings({
-		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
-	})
 	public boolean isSupplied() {
 		return cache.get() == null;
 	}
@@ -188,9 +177,6 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 *
 	 * @return A new {@link Memoizer} instance with the same state as this memoizer.
 	 */
-	@SuppressWarnings({
-		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
-	})
 	public Memoizer<T> copy() {
 		Optional<T> o = cache.get();
 		if (o == null)
@@ -211,7 +197,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 */
 	@Override
 	public <U> Memoizer<U> map(Function<? super T,? extends U> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		return new Memoizer<>(() -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -230,7 +216,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 */
 	@Override
 	public Memoizer<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull(ARG_predicate, predicate);
+		reqnn("predicate", predicate);
 		return new Memoizer<>(() -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;

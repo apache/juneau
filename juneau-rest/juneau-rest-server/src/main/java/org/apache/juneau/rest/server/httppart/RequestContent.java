@@ -98,8 +98,8 @@ import jakarta.servlet.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts in content parsing
 	"resource", // Resource management handled externally
+	"unchecked" // Type erasure requires unchecked casts in content parsing
 })
 public class RequestContent {
 

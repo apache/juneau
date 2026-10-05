@@ -410,27 +410,13 @@ class Shorts_Test extends TestBase {
 	// ---- PredicateUtils aliases ----
 
 	@Test
-	void f001_test_testValue() { assertTrue(t(s -> s.equals("x"), "x")); }
+	void f001_test_testValue() { assertTrue(t(s -> eq(s, "x"), "x")); }
 
 	@Test
 	void f002_dbk_distinctByKey() {
 		var pred = PredicateUtils.distinctByKey(CharSequence::length);
 		assertTrue(pred.test("ab"));
 		assertFalse(pred.test("cd"));
-	}
-
-	// ---- AssertionUtils (canonical; Shorts assertion aliases removed 2026-07-05) ----
-
-	@Test
-	void g001_assertArgNotNull() { assertEquals("x", AssertionUtils.assertArgNotNull("v", "x")); }
-
-	@Test
-	void g002_assertNotNull() { assertEquals("x", AssertionUtils.assertNotNull("x", "must not be null")); }
-
-	@Test
-	void g003_assertArg() {
-		assertDoesNotThrow(() -> AssertionUtils.assertArg(true, "must be true"));
-		assertThrows(IllegalArgumentException.class, () -> AssertionUtils.assertArg(false, "must be true"));
 	}
 
 	// ---- DateUtils alias ----

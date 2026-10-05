@@ -14,7 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><@page>
-<@card type="html" id="dialog" template="dialogBody">
+<@card type="html" id="dialogBody">
 <p>fallback</p>
 </@card>
+<@card type="html" id="dialog" template="dialogBody"/>
 </@page>

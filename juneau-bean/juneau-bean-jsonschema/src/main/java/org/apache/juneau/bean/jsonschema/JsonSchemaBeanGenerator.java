@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -47,6 +47,9 @@ import org.apache.juneau.marshall.parser.*;
  * 		.generate(MyBean.<jk>class</jk>);
  * </p>
  */
+@SuppressWarnings({
+	"java:S1452" // generate() and toBean() return JsonSchema<?> because the concrete SELF type is unknown to callers.
+})
 public final class JsonSchemaBeanGenerator {
 
 	/** Reusable default instance. */
@@ -69,11 +72,8 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
-	})
 	public JsonSchema<?> generate(Type type) {
-		assertArgNotNull("type", type);
+		reqnn("type", type);
 		try {
 			var session = generator.getSession();
 			var root = session.getSchema(type);
@@ -94,9 +94,6 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java class.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
-	})
 	public JsonSchema<?> generate(Class<?> type) {
 		return generate((Type)type);
 	}
@@ -110,11 +107,8 @@ public final class JsonSchemaBeanGenerator {
 	 * @param o The value to infer a schema from.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the value.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
-	})
 	public JsonSchema<?> generate(Object o) {
-		assertArgNotNull("o", o);
+		reqnn("o", o);
 		try {
 			var session = generator.getSession();
 			var root = session.getSchema(o);
@@ -138,11 +132,8 @@ public final class JsonSchemaBeanGenerator {
 	 * @param schemaMap The generated schema map.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The typed schema bean.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Self-bounded (CRTP) generic: the parsed schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
-	})
 	public static JsonSchema<?> toBean(JsonMap schemaMap) {
-		assertArgNotNull("schemaMap", schemaMap);
+		reqnn("schemaMap", schemaMap);
 		try {
 			var json = Json.of(schemaMap);
 			return JsonParser.create().ignoreUnknownBeanProperties().build().read(json, JsonSchema.class);

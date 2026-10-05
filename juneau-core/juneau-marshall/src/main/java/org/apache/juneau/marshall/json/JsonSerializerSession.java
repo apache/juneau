@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -44,20 +43,14 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // Resource management handled externally
-	"rawtypes",   // Raw types necessary for generic collection/map serialization throughout this session
-	"unchecked",  // Type erasure requires unchecked casts throughout this session
-	"java:S110",  // Inheritance depth acceptable for this class hierarchy
-	"java:S115"   // Constants use UPPER_snakeCase naming convention
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Public/protected API (create(), writeBeanMap(), writeAnything(), getJsonWriter()) returns Builder<?>/SerializerWriter<?>/JsonWriter<?>; callers only need the base type
+	"rawtypes", // Raw types necessary for generic collection/map serialization throughout this session
+	"resource", // Resource management handled externally
+	"unchecked" // Type erasure requires unchecked casts throughout this session
 })
 public class JsonSerializerSession extends WriterSerializerSession implements TokenWritable, ArrayRecordWritable {
-
-	// Property name constants
-	private static final String PROP_escapeSolidus = "escapeSolidus";
-	private static final String PROP_JsonSerializerSession_escapeSolidus = "JsonSerializerSession.escapeSolidus";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -77,7 +70,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			escapeSolidus = ctx.isEscapeSolidus();
 		}
@@ -102,7 +95,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_escapeSolidus, PROP_JsonSerializerSession_escapeSolidus:
+				case "escapeSolidus", "JsonSerializerSession.escapeSolidus":
 					return escapeSolidus(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -129,11 +122,8 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
-	})
 	public static Builder<?> create(JsonSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final JsonSerializer ctx;
@@ -150,9 +140,6 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		escapeSolidus = builder.escapeSolidus;
 	}
 
-	@SuppressWarnings({
-		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
-	})
 	protected SerializerWriter<?> writeBeanMap(JsonWriter<?> out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
 		out.w('{');
@@ -218,9 +205,6 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
-	@SuppressWarnings({
-		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
-	})
 	protected SerializerWriter<?> writeMap(JsonWriter<?> out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -265,9 +249,6 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Raw output may be any JsonWriter CRTP leaf; the concrete self-type is not nameable here.
-	})
 	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter<?> output2)
@@ -364,8 +345,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 */
 	
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	protected JsonWriter<?> writeAnything(JsonWriter<?> out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 

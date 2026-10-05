@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.child;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -48,13 +49,13 @@ class ChildInheritance_Guards_Test extends TestBase {
 
 	public static class BlockingSeedGuard extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Seed-Allowed").orElse(null));
+			return eq(req.getHeaderParam("X-Seed-Allowed").orElse(null), "yes");
 		}
 	}
 
 	public static class AllowOnlyChildHeader extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Child-Allowed").orElse(null));
+			return eq(req.getHeaderParam("X-Child-Allowed").orElse(null), "yes");
 		}
 	}
 

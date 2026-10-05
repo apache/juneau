@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.hocon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -67,12 +67,12 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // Depth comes from the shared Parser -> ReaderParser base hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class HoconParser extends ReaderParser implements HoconMetaProvider, RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -94,12 +94,12 @@ public class HoconParser extends ReaderParser implements HoconMetaProvider, Reco
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_ctx, copyFrom));
+			super(reqnn("ctx", copyFrom));
 			resolveSubstitutions = copyFrom.resolveSubstitutions;
 		}
 
 		protected Builder(HoconParser copyFrom) {
-			super(assertArgNotNull(ARG_ctx, copyFrom));
+			super(reqnn("ctx", copyFrom));
 			resolveSubstitutions = copyFrom.resolveSubstitutions;
 		}
 

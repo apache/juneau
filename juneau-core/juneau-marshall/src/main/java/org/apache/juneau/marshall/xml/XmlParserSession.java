@@ -50,19 +50,16 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",  // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
-	"unchecked", // Type erasure requires unchecked casts
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // readAnything(), readIntoBean(), getUnknown() and readIntoCollection() are branch-heavy XML event state machines; splitting them would obscure the grammar
+	"java:S6541", // readAnything() and readIntoBean() are long single-pass dispatches over XML element/attribute forms
+	"null", // Null handling verified by context or framework
 	"rawtypes", // Raw types necessary for generic type handling
-	"resource" // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"resource", // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class XmlParserSession extends ReaderParserSession implements RecordReadable, ArrayRecordReadable {
-
-	// Property name constants
-	private static final String PROP_preserveRootElement = "preserveRootElement";
-	private static final String PROP_validating = "validating";
-	private static final String PROP_XmlParserSession_preserveRootElement = "XmlParserSession.preserveRootElement";
-	private static final String PROP_XmlParserSession_validating = "XmlParserSession.validating";
 
 	/**
 	 * Builder class.
@@ -120,9 +117,9 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_preserveRootElement, PROP_XmlParserSession_preserveRootElement:
+				case "preserveRootElement", "XmlParserSession.preserveRootElement":
 					return preserveRootElement(cvt(value, Boolean.class));
-				case PROP_validating, PROP_XmlParserSession_validating:
+				case "validating", "XmlParserSession.validating":
 					return validating(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -169,15 +166,15 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			return UNKNOWN;
 		var c = s.charAt(0);
 		return switch (c) {
-			case 'o' -> (s.equals("object") ? OBJECT : UNKNOWN);
-			case 'a' -> (s.equals("array") ? ARRAY : UNKNOWN);
-			case 's' -> (s.equals("string") ? STRING : UNKNOWN);
-			case 'b' -> (s.equals("boolean") ? BOOLEAN : UNKNOWN);
+			case 'o' -> (eq(s, "object") ? OBJECT : UNKNOWN);
+			case 'a' -> (eq(s, "array") ? ARRAY : UNKNOWN);
+			case 's' -> (eq(s, "string") ? STRING : UNKNOWN);
+			case 'b' -> (eq(s, "boolean") ? BOOLEAN : UNKNOWN);
 			case 'n' -> {
 				c = s.charAt(2);
 				yield switch (c) {
-					case 'm' -> (s.equals("number") ? NUMBER : UNKNOWN);
-					case 'l' -> (s.equals("null") ? NULL : UNKNOWN);
+					case 'm' -> (eq(s, "number") ? NUMBER : UNKNOWN);
+					case 'l' -> (eq(s, "null") ? NULL : UNKNOWN);
 					default -> NUMBER;
 				};
 			}
@@ -219,7 +216,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return decodeString(r.getAttributeValue(i));
 	}
 
-	/*
+	/**
 	 * Takes the element being read from the XML stream reader and reconstructs it as XML.
 	 * Used when reconstructing bean properties of type {@link XmlFormat#XMLTEXT}.
 	 */
@@ -252,7 +249,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return decodeString(r.getAttributeValue(null, MarshallingSession.NAME_PROPERTY_NAME));
 	}
 
-	/*
+	/**
 	 * Shortcut for calling <code>getText(r, <jk>true</jk>);</code>.
 	 */
 	private String getText(XmlReader r) {
@@ -273,11 +270,6 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return decodeString(s);
 	}
 
-	@SuppressWarnings({
-		"null",        // Null handling verified by context or framework
-		"java:S3776",  // Cognitive complexity acceptable for this specific logic
-		"java:S6541",  // Brain Method — complex XML parsing logic; structural refactoring would reduce readability without meaningful benefit.
-	})
 	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
@@ -355,18 +347,13 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return key.equals(getBeanTypePropertyName(null)) || key.equals(MarshallingSession.NAME_PROPERTY_NAME);
 	}
 
-	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
-	})
 	private <T> BeanMap<T> readIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		var bMeta = m.getMeta();
 		var xmlMeta = getXmlBeanMeta(bMeta);
 
 		for (var i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
-			if (! ("nil".equals(key) || isSpecialAttr(key))) {
+			if (! (eq(key, "nil") || isSpecialAttr(key))) {
 				var val = r.getAttributeValue(i);
 				var ns = r.getAttributeNamespace(i);
 				var bpm = xmlMeta.getPropertyMeta(key);
@@ -544,9 +531,6 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return l;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
-	})
 	private <K,V> Map<K,V> readIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
@@ -897,11 +881,6 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 * @throws XMLStreamException Malformed XML encountered.
 	 */
-	@SuppressWarnings({
-		"null",        // Null handling verified by context or framework
-		"java:S3776",  // Cognitive complexity acceptable for this specific logic
-		"java:S6541",  // Brain Method — complex XML parsing logic; structural refactoring would reduce readability without meaningful benefit.
-	})
 	protected <T> T readAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -924,7 +903,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 
 		var wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		var typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
-		var isNil = "true".equals(r.getAttributeValue(null, "nil"));
+		var isNil = eq(r.getAttributeValue(null, "nil"), "true");
 		var jsonType = getJsonType(typeAttr);
 		var elementName = getElementName(r);
 		if (jsonType == 0) {

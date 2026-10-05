@@ -80,6 +80,9 @@ import org.apache.juneau.http.*;
  * @serial exclude
  */
 @Header("Content-Language")
+@SuppressWarnings({
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+})
 public class ContentLanguage extends BasicCsvHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Language";
@@ -92,9 +95,6 @@ public class ContentLanguage extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static ContentLanguage of(String value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
@@ -107,9 +107,6 @@ public class ContentLanguage extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static ContentLanguage of(String...value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
@@ -126,9 +123,6 @@ public class ContentLanguage extends BasicCsvHeader {
 	 * @param value2 The second CSV token.
 	 * @return A new header bean.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static ContentLanguage of(String value1, String value2) {
 		return new ContentLanguage(value1, value2);
 	}
@@ -144,9 +138,6 @@ public class ContentLanguage extends BasicCsvHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static ContentLanguage of(Supplier<String[]> value) {
 		return value == null ? null : new ContentLanguage(value);
 	}

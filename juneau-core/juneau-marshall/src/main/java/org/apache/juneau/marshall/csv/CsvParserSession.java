@@ -53,11 +53,11 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts in parse logic
-	"rawtypes",  // Raw types necessary for generic Map/List handling
 	"java:S3776", // Cognitive complexity acceptable for CSV parse logic; branching is inherent to format
 	"java:S6541", // Brain method acceptable for doRead; CSV parse flow is inherently sequential
-	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"rawtypes", // Raw types necessary for generic Map/List handling
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts in parse logic
 })
 public class CsvParserSession extends ReaderParserSession implements RecordReadable {
 

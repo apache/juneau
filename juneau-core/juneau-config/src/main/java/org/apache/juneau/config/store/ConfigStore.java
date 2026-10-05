@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
 */
 @SuppressWarnings({
-	"rawtypes",
+	"rawtypes", // The protected ConfigStore(Builder) constructor takes a raw Builder so subclasses can pass their concrete Builder<SELF> without naming the self-type
 	"resource" // ConfigStore manages Closeable resources
 })
 public abstract class ConfigStore extends Context implements Closeable {

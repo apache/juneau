@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -38,7 +39,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
+@SuppressWarnings({
+	"resource" // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
+})
 class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 
 	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier) {
@@ -221,8 +224,8 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 		var ctx = new RestContext(argsOf(Fix_DefaultHeaderBeans.class, Fix_DefaultHeaderBeans::new));
 		assertNotNull(ctx.getDefaultRequestAttributes().get("fromBean"));
 		assertNull(ctx.getDefaultRequestAttributes().get("fromAnno"));
-		assertTrue(ctx.getDefaultRequestHeaders().stream().anyMatch(h -> "X-From-Bean".equalsIgnoreCase(h.getName())));
-		assertTrue(ctx.getDefaultResponseHeaders().stream().anyMatch(h -> "X-From-Bean".equalsIgnoreCase(h.getName())));
+		assertTrue(ctx.getDefaultRequestHeaders().stream().anyMatch(h -> eqic("X-From-Bean", h.getName())));
+		assertTrue(ctx.getDefaultResponseHeaders().stream().anyMatch(h -> eqic("X-From-Bean", h.getName())));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------

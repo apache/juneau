@@ -64,8 +64,8 @@ import org.springframework.test.context.*;
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SuppressWarnings({
-	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
-	"java:S2093" // Cleanup calls clear() (Settings-bridge deregistration), not close() (PreDestroy lifecycle); try-with-resources would invoke the wrong method and change semantics.
+	"java:S2093", // Cleanup calls clear() (Settings-bridge deregistration), not close() (PreDestroy lifecycle); try-with-resources would invoke the wrong method and change semantics.
+	"resource" // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 })
 class SpringEnvironmentPropertySource_SpringbootIntegration_Test extends TestBase {
 

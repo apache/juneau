@@ -20,10 +20,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.dto.*;
 
@@ -37,17 +39,45 @@ import org.apache.juneau.petstore.dto.*;
  *
  * <p>
  * This is a sample/demo store — there is no persistence, no transactions, and no replication.  Restart wipes
- * state back to the seeded baseline.
+ * state back to the seeded baseline (and clears the audit trail).
+ *
+ * <p>
+ * Every successful create, update or delete is recorded in the audit trail; see {@link #getAudit()}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Returns an owned session; the caller closes it.
+})
 public class PetStore {
 
+	private static final String ACTION_CREATE = "CREATE";
+	private static final String ACTION_UPDATE = "UPDATE";
+	private static final String ACTION_DELETE = "DELETE";
+	private static final String ENTITY_ORDER = "Order";
 	private static final String SEED_PETS = "petstore/init/Pets.json";
 	private static final String SEED_ORDERS = "petstore/init/Orders.json";
 	private static final String SEED_USERS = "petstore/init/Users.json";
+
+	/** Actor recorded for mutations made through the {@code /petstore} API. */
+	public static final String ACTOR_API = "api";
+
+	/** Query context over pets; {@code tags} and {@code photo} are not searchable. */
+	public static final InMemoryBeanQueryContext<Pet> PET_QUERY = InMemoryBeanQueryContext.create(Pet.class).exclude("tags", "photo").build();
+
+	/** Query context over orders. */
+	public static final InMemoryBeanQueryContext<Order> ORDER_QUERY = InMemoryBeanQueryContext.create(Order.class).build();
+
+	/** Query context over users; {@code password} is never searchable or returned as a column. */
+	public static final InMemoryBeanQueryContext<User> USER_QUERY = InMemoryBeanQueryContext.create(User.class).exclude("password").build();
+
+	/** Query context over the audit trail. */
+	public static final InMemoryBeanQueryContext<AuditEntry> AUDIT_QUERY = InMemoryBeanQueryContext.create(AuditEntry.class).build();
+
+	/** Query context over staged changes. */
+	public static final InMemoryBeanQueryContext<PendingChange> CHANGE_QUERY = InMemoryBeanQueryContext.create(PendingChange.class).build();
 
 	private final Map<Long,Pet> pets = new ConcurrentHashMap<>();
 	private final Map<Long,Order> orders = new ConcurrentHashMap<>();
@@ -56,13 +86,28 @@ public class PetStore {
 	private final AtomicLong nextPetId = new AtomicLong();
 	private final AtomicLong nextOrderId = new AtomicLong();
 
+	private final Clock clock;
+	private final List<AuditEntry> audit = new CopyOnWriteArrayList<>();
+	private final AtomicLong nextAuditId = new AtomicLong();
+	private final PendingChanges pendingChanges = new PendingChanges(this);
+
+	/**
+	 * Constructor using the system UTC clock.
+	 *
+	 * <p>
+	 * Eagerly loads the bundled classpath seed data.  Seeding writes no audit.
+	 */
+	public PetStore() {
+		this(Clock.systemUTC());
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * Eagerly loads the bundled classpath seed data.
+	 * @param clock The clock used to timestamp audit entries.  Must not be <jk>null</jk>.
 	 */
-	public PetStore() {
+	public PetStore(Clock clock) {
+		this.clock = Objects.requireNonNull(clock, "clock");
 		var seededPets = loadList(SEED_PETS, Pet.class);
 		var maxPetId = 0L;
 		for (var p : seededPets) {
@@ -89,6 +134,9 @@ public class PetStore {
 		for (var u : seededUsers)
 			users.put(u.getUsername(), u);
 	}
+
+	/** @return The clock this store timestamps with. */
+	public Clock clock() { return clock; }
 
 	private static <T> List<T> loadList(String resourcePath, Class<T> elementType) {
 		var loader = PetStore.class.getClassLoader();
@@ -137,11 +185,23 @@ public class PetStore {
 	 * @return The created pet (same instance, with assigned ID).
 	 */
 	public Pet createPet(Pet pet) {
+		return createPet(pet, ACTOR_API);
+	}
+
+	/**
+	 * Creates a pet and records a {@code CREATE} audit entry.
+	 *
+	 * @param pet The pet.  Its ID is overwritten.  Must not be <jk>null</jk>.
+	 * @param actor Who is creating it, e.g. {@code "console:alice"}.
+	 * @return The stored pet.
+	 */
+	public Pet createPet(Pet pet, String actor) {
 		if (pet == null)
 			throw iaex("Pet must not be null");
 		var id = nextPetId.incrementAndGet();
 		pet.setId(id);
 		pets.put(id, pet);
+		recordAudit(actor, "Pet", String.valueOf(id), ACTION_CREATE, pet.getName());
 		return pet;
 	}
 
@@ -153,11 +213,24 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no pet with the given ID exists.
 	 */
 	public Pet updatePet(Pet pet) {
+		return updatePet(pet, ACTOR_API);
+	}
+
+	/**
+	 * Replaces a pet and records an {@code UPDATE} audit entry.
+	 *
+	 * @param pet The pet.  Must not be <jk>null</jk>.
+	 * @param actor Who is updating it.
+	 * @return The stored pet.
+	 * @throws PetstoreNotFoundException If no pet with the given ID exists.
+	 */
+	public Pet updatePet(Pet pet, String actor) {
 		if (pet == null)
 			throw iaex("Pet must not be null");
 		if (! pets.containsKey(pet.getId()))
 			throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());
 		pets.put(pet.getId(), pet);
+		recordAudit(actor, "Pet", String.valueOf(pet.getId()), ACTION_UPDATE, pet.getName());
 		return pet;
 	}
 
@@ -168,8 +241,21 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no pet with the given ID exists.
 	 */
 	public void deletePet(long id) {
-		if (pets.remove(id) == null)
+		deletePet(id, ACTOR_API);
+	}
+
+	/**
+	 * Deletes a pet and records a {@code DELETE} audit entry.
+	 *
+	 * @param id The pet ID.
+	 * @param actor Who is deleting it.
+	 * @throws PetstoreNotFoundException If no pet with the given ID exists.
+	 */
+	public void deletePet(long id, String actor) {
+		var removed = pets.remove(id);
+		if (removed == null)
 			throw new PetstoreNotFoundException("Pet not found: id=" + id);
+		recordAudit(actor, "Pet", String.valueOf(id), ACTION_DELETE, removed.getName());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -205,11 +291,23 @@ public class PetStore {
 	 * @return The created order (same instance, with assigned ID).
 	 */
 	public Order createOrder(Order order) {
+		return createOrder(order, ACTOR_API);
+	}
+
+	/**
+	 * Creates an order and records a {@code CREATE} audit entry.
+	 *
+	 * @param order The order.  Its ID is overwritten.  Must not be <jk>null</jk>.
+	 * @param actor Who is creating it.
+	 * @return The stored order.
+	 */
+	public Order createOrder(Order order, String actor) {
 		if (order == null)
 			throw iaex("Order must not be null");
 		var id = nextOrderId.incrementAndGet();
 		order.setId(id);
 		orders.put(id, order);
+		recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_CREATE, String.valueOf(order.getStatus()));
 		return order;
 	}
 
@@ -221,11 +319,24 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no order with the given ID exists.
 	 */
 	public Order updateOrder(Order order) {
+		return updateOrder(order, ACTOR_API);
+	}
+
+	/**
+	 * Replaces an order and records an {@code UPDATE} audit entry.
+	 *
+	 * @param order The order.  Must not be <jk>null</jk>.
+	 * @param actor Who is updating it.
+	 * @return The stored order.
+	 * @throws PetstoreNotFoundException If no order with the given ID exists.
+	 */
+	public Order updateOrder(Order order, String actor) {
 		if (order == null)
 			throw iaex("Order must not be null");
 		if (! orders.containsKey(order.getId()))
 			throw new PetstoreNotFoundException("Order not found: id=" + order.getId());
 		orders.put(order.getId(), order);
+		recordAudit(actor, ENTITY_ORDER, String.valueOf(order.getId()), ACTION_UPDATE, String.valueOf(order.getStatus()));
 		return order;
 	}
 
@@ -236,8 +347,21 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no order with the given ID exists.
 	 */
 	public void deleteOrder(long id) {
-		if (orders.remove(id) == null)
+		deleteOrder(id, ACTOR_API);
+	}
+
+	/**
+	 * Deletes an order and records a {@code DELETE} audit entry.
+	 *
+	 * @param id The order ID.
+	 * @param actor Who is deleting it.
+	 * @throws PetstoreNotFoundException If no order with the given ID exists.
+	 */
+	public void deleteOrder(long id, String actor) {
+		var removed = orders.remove(id);
+		if (removed == null)
 			throw new PetstoreNotFoundException("Order not found: id=" + id);
+		recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_DELETE, String.valueOf(removed.getStatus()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -271,12 +395,25 @@ public class PetStore {
 	 * @throws IllegalArgumentException If the username is already in use.
 	 */
 	public User createUser(User user) {
+		return createUser(user, ACTOR_API);
+	}
+
+	/**
+	 * Creates a user and records a {@code CREATE} audit entry.
+	 *
+	 * @param user The user.  Must carry a non-null username not already in use.
+	 * @param actor Who is creating it.
+	 * @return The stored user.
+	 * @throws IllegalArgumentException If the username is already in use.
+	 */
+	public User createUser(User user, String actor) {
 		if (user == null)
 			throw iaex("User must not be null");
 		if (user.getUsername() == null)
 			throw iaex("User username must not be null");
 		if (users.putIfAbsent(user.getUsername(), user) != null)
 			throw iaex("User already exists: username='%s'", user.getUsername());
+		recordAudit(actor, "User", user.getUsername(), ACTION_CREATE, user.getUsername());
 		return user;
 	}
 
@@ -288,6 +425,18 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no user with the given username exists.
 	 */
 	public User updateUser(User user) {
+		return updateUser(user, ACTOR_API);
+	}
+
+	/**
+	 * Replaces a user and records an {@code UPDATE} audit entry.
+	 *
+	 * @param user The user.  Must carry a username matching an existing user.
+	 * @param actor Who is updating it.
+	 * @return The stored user.
+	 * @throws PetstoreNotFoundException If no user with the given username exists.
+	 */
+	public User updateUser(User user, String actor) {
 		if (user == null)
 			throw iaex("User must not be null");
 		if (user.getUsername() == null)
@@ -295,6 +444,7 @@ public class PetStore {
 		if (! users.containsKey(user.getUsername()))
 			throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());
 		users.put(user.getUsername(), user);
+		recordAudit(actor, "User", user.getUsername(), ACTION_UPDATE, user.getUsername());
 		return user;
 	}
 
@@ -305,7 +455,124 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no user with the given username exists.
 	 */
 	public void deleteUser(String username) {
+		deleteUser(username, ACTOR_API);
+	}
+
+	/**
+	 * Deletes a user and records a {@code DELETE} audit entry.
+	 *
+	 * @param username The username.
+	 * @param actor Who is deleting it.
+	 * @throws PetstoreNotFoundException If no user with the given username exists.
+	 */
+	public void deleteUser(String username, String actor) {
 		if (users.remove(username) == null)
 			throw new PetstoreNotFoundException("User not found: username=" + username);
+		recordAudit(actor, "User", username, ACTION_DELETE, username);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Audit
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the audit trail.
+	 *
+	 * @return An immutable snapshot, oldest first.  Never <jk>null</jk>.
+	 */
+	public List<AuditEntry> getAudit() {
+		return List.copyOf(audit);
+	}
+
+	/**
+	 * Appends an audit entry stamped with this store's clock.
+	 *
+	 * <p>
+	 * Public so console operations that are not plain CRUD (P6 restock, P10 apply/discard) are audited too.
+	 *
+	 * @param actor Who did it.
+	 * @param entity The entity kind.
+	 * @param entityId The entity id.
+	 * @param action The action.
+	 * @param detail A short detail, or <jk>null</jk>.
+	 * @return The new entry.
+	 */
+	public AuditEntry recordAudit(String actor, String entity, String entityId, String action, String detail) {
+		// Id assignment and append are one step so the trail stays in id order under concurrent writes.
+		synchronized (audit) {
+			var e = new AuditEntry().setId(nextAuditId.incrementAndGet()).setAt(clock.instant())
+				.setActor(actor).setEntity(entity).setEntityId(entityId).setAction(action).setDetail(detail);
+			audit.add(e);
+			return e;
+		}
+	}
+
+	/**
+	 * Returns the staging area for console inline edits (P4 -> P10).
+	 *
+	 * @return The pending-changes staging area.  Never <jk>null</jk>.
+	 */
+	public PendingChanges pendingChanges() {
+		return pendingChanges;
+	}
+
+	/**
+	 * Bulk-loads rows with their ids preserved, writing no audit.  Used by {@code PetstoreSeed}.
+	 *
+	 * <p>
+	 * Id counters advance past the highest loaded id, so later creates never collide.
+	 *
+	 * @param newPets Pets to add or replace.
+	 * @param newOrders Orders to add or replace.
+	 * @param newUsers Users to add or replace.
+	 * @param newAudit Audit rows to append, in order.
+	 */
+	public void load(Collection<Pet> newPets, Collection<Order> newOrders, Collection<User> newUsers, Collection<AuditEntry> newAudit) {
+		for (var p : newPets) {
+			pets.put(p.getId(), p);
+			nextPetId.accumulateAndGet(p.getId(), Math::max);
+		}
+		for (var o : newOrders) {
+			orders.put(o.getId(), o);
+			nextOrderId.accumulateAndGet(o.getId(), Math::max);
+		}
+		for (var u : newUsers)
+			users.put(u.getUsername(), u);
+		synchronized (audit) {
+			for (var a : newAudit) {
+				audit.add(a);
+				nextAuditId.accumulateAndGet(a.getId(), Math::max);
+			}
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// BeanQuery views (D-P5)
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Opens a query session over a snapshot of the pets.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>try</jk> (<jk>var</jk> <jv>s</jv> = <jv>store</jv>.queryPets()) {
+	 * 		<jk>return</jk> DataTablesQuery.<jsm>run</jsm>(<jv>req</jv>, <jv>s</jv>);
+	 * 	}
+	 * </p>
+	 *
+	 * @return A new session; close it.
+	 */
+	public InMemoryBeanQuerySession<Pet> queryPets() { return PET_QUERY.getSession(getPets()); }
+
+	/** @return A new session over a snapshot of the orders; close it. */
+	public InMemoryBeanQuerySession<Order> queryOrders() { return ORDER_QUERY.getSession(getOrders()); }
+
+	/** @return A new session over a snapshot of the users; close it. */
+	public InMemoryBeanQuerySession<User> queryUsers() { return USER_QUERY.getSession(getUsers()); }
+
+	/** @return A new session over a snapshot of the audit trail; close it. */
+	public InMemoryBeanQuerySession<AuditEntry> queryAudit() { return AUDIT_QUERY.getSession(getAudit()); }
+
+	/** @return A new session over a snapshot of the staged changes; close it. */
+	public InMemoryBeanQuerySession<PendingChange> queryPendingChanges() { return CHANGE_QUERY.getSession(pendingChanges.list()); }
 }

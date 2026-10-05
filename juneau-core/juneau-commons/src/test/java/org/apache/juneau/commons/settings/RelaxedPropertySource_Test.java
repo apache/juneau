@@ -117,7 +117,7 @@ class RelaxedPropertySource_Test extends TestBase {
 
 	@Test void c07_presentNullValuePreserved() {
 		// A key present with a null value resolves as present-empty, not missing.
-		var s = new RelaxedPropertySource(name -> "MY_PROP".equals(name) ? PropertyLookupResult.present(oe()) : PropertyLookupResult.missing());
+		var s = new RelaxedPropertySource(name -> eq(name, "MY_PROP") ? PropertyLookupResult.present(oe()) : PropertyLookupResult.missing());
 		var r = s.get("my.prop");
 		assertTrue(r.isPresent());
 		assertTrue(r.value().isEmpty());

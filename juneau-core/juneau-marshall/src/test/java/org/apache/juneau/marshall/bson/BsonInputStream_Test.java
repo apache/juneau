@@ -32,8 +32,8 @@ import org.junit.jupiter.api.*;
  * Tests for {@link BsonInputStream}.
  */
 @SuppressWarnings({
-	"resource",  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"java:S125"  // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BsonInputStream_Test extends TestBase {
 
@@ -231,7 +231,9 @@ class BsonInputStream_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("java:S2699")  // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
+	@SuppressWarnings({
+		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
+	})
 	void b14_readDocumentTerminator_ok() throws Exception {
 		try (var is = openIs(new byte[]{0x00})) {
 			is.readDocumentTerminator();

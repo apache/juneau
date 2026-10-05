@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
@@ -78,9 +77,9 @@ public class InMemorySessionStore implements SessionStore {
 	 * @param clock The clock used for TTL comparisons.  Must not be <jk>null</jk>.
 	 */
 	public InMemorySessionStore(int maxEntries, Clock clock) {
-		assertArg(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
+		req(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.maxEntries = maxEntries;
-		this.clock = assertArgNotNull("clock", clock);
+		this.clock = reqnn("clock", clock);
 		this.byId = new LinkedHashMap<>(16, 0.75f, true) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -96,7 +95,7 @@ public class InMemorySessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public String createSessionCookieValue(OidcSession session) {
-		assertArgNotNull("session", session);
+		reqnn("session", session);
 		synchronized (lock) {
 			byId.put(session.id(), session);
 			bySubject.computeIfAbsent(session.subject(), k -> st()).add(session.id());
@@ -107,7 +106,7 @@ public class InMemorySessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public Optional<OidcSession> lookup(String cookieValue) {
-		assertArgNotNull("cookieValue", cookieValue);
+		reqnn("cookieValue", cookieValue);
 		synchronized (lock) {
 			var s = byId.get(cookieValue);
 			if (s == null)
@@ -122,7 +121,7 @@ public class InMemorySessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public void invalidate(String cookieValue) {
-		assertArgNotNull("cookieValue", cookieValue);
+		reqnn("cookieValue", cookieValue);
 		synchronized (lock) {
 			removeById(cookieValue);
 		}
@@ -135,7 +134,7 @@ public class InMemorySessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public int invalidateBySubject(String subject) {
-		assertArgNotNullOrBlank("subject", subject);
+		reqnb("subject", subject);
 		synchronized (lock) {
 			var ids = bySubject.get(subject);
 			if (ids == null)
@@ -149,7 +148,7 @@ public class InMemorySessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public int invalidateBySessionId(String sid) {
-		assertArgNotNullOrBlank("sid", sid);
+		reqnb("sid", sid);
 		synchronized (lock) {
 			var ids = bySid.get(sid);
 			if (ids == null)

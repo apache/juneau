@@ -127,6 +127,8 @@ package org.apache.juneau.bean.html5;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S3051", // Named 'main' to match the HTML element name, not a program entry point
+	"java:S6213", // Method name 'var' intentionally shadows Java keyword for HTML element factory
 	"java:S6539" // Monster class; HtmlBuilder is intentionally a single static-factory facade, one creator method per HTML5 element
 })
 public class HtmlBuilder {
@@ -1223,9 +1225,6 @@ public class HtmlBuilder {
 	 *
 	 * @return The new element.
 	 */
-	@SuppressWarnings({
-		"java:S3051" // Named 'main' to match the HTML element name, not a program entry point
-	})
 	public static final Main main() {
 		return new Main();
 	}
@@ -1236,9 +1235,6 @@ public class HtmlBuilder {
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
-	@SuppressWarnings({
-		"java:S3051" // Named 'main' to match the HTML element name, not a program entry point
-	})
 	public static final Main main(Object...children) {
 		return new Main(children);
 	}
@@ -2187,9 +2183,6 @@ public class HtmlBuilder {
 	 *
 	 * @return The new element.
 	 */
-	@SuppressWarnings({
-		"java:S6213" // Method name 'var' intentionally shadows Java keyword for HTML element factory
-	})
 	public static final Var var() {
 		return new Var();
 	}
@@ -2200,9 +2193,6 @@ public class HtmlBuilder {
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
-	@SuppressWarnings({
-		"java:S6213" // Method name 'var' intentionally shadows Java keyword for HTML element factory
-	})
 	public static final Var var(Object...children) {
 		return new Var(children);
 	}

@@ -45,7 +45,8 @@ class CborParser_ParseDepth_Test extends TestBase {
 			sb.append("81 ");
 		sb.append("00");
 		var input = sb.toString();
-		var e = assertThrows(ParseException.class, () -> CborParser.DEFAULT.read(fromSpacedHex(input), Object.class));
+		var bytes = fromSpacedHex(input);
+		var e = assertThrows(ParseException.class, () -> CborParser.DEFAULT.read(bytes, Object.class));
 		var msg = String.valueOf(e.getMessage());
 		// Graceful depth-failure ParseException; the soft maxParseDepth guard is expected to fire before any
 		// real StackOverflowError, but a constrained CI thread stack falling back to the StackOverflowError

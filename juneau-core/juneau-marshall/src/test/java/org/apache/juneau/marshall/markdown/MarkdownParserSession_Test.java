@@ -33,6 +33,9 @@ import org.junit.jupiter.params.provider.*;
  * Coverage tests for {@link MarkdownParserSession} branches not exercised by the higher-level
  * {@link MarkdownParser_Test} suite.
  */
+@SuppressWarnings({
+	"unchecked" // Parse results are cast to List<String>/LinkedList<String> after reading with List.class/String.class
+})
 class MarkdownParserSession_Test extends TestBase {
 
 	//====================================================================================================
@@ -40,9 +43,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void a01_bulletListAsterisk() {
 		var md = "* alpha\n* beta\n* gamma";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
@@ -50,9 +50,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void a02_bulletListPlus() {
 		var md = "+ one\n+ two";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
@@ -60,9 +57,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void a03_bulletListEmptyMarkers() {
 		// Bare "-", "*", "+" markers should produce empty-string entries.
 		var md = "- a\n-\n- b";
@@ -81,18 +75,12 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void a05_bulletListToCustomCollection() {
 		// Exercise the canCreateNewInstance(outer) branch in readBulletList for a concrete List type.
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var r = (LinkedList<String>) MarkdownParser.DEFAULT.read("- a\n- b", LinkedList.class, String.class);
 		assertEquals(2, r.size());
 		assertEquals("a", r.getFirst());
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void a06_bulletListNullValues() {
 		var md = "- foo\n- *null*\n- bar";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
@@ -135,9 +123,22 @@ class MarkdownParserSession_Test extends TestBase {
 		);
 	}
 
-	@Test void b05_plainTextToInteger() {
-		var r = MarkdownParser.DEFAULT.read("42", Integer.class);
-		assertEquals(42, r);
+	@ParameterizedTest
+	@MethodSource("b05_readToIntegerProvider")
+	void b05_readToInteger(String input) {
+		assertEquals(42, MarkdownParser.DEFAULT.read(input, Integer.class));
+	}
+
+	static Stream<Arguments> b05_readToIntegerProvider() {
+		return Stream.of(
+			Arguments.of("42"),         // b05: plain text to Integer
+			// z03: readBulletList's non-array, non-collection "else" branch used to unconditionally build a
+			// List and return that, even for a genuinely scalar (non-Map, non-bean) target type -- the caller's
+			// top-level cast to T then threw a ClassCastException (List cannot be cast to Integer). Only the
+			// first bullet item is meaningful for a scalar target, so it's now parsed and returned directly.
+			Arguments.of("- 42"),
+			Arguments.of("- 42\n- 43")  // z04: multiple bullet items use the first
+		);
 	}
 
 	//====================================================================================================
@@ -189,9 +190,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void c05_multiColumnAllNullRow() {
 		// A row of all *null*/empty cells should yield a null entry in the list.
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |\n| Alice | 30 |";
@@ -202,9 +200,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void c06_multiColumnToObject() {
 		// Multi-column with isObject() target → ArrayList of MarshalledMaps.
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
@@ -255,9 +250,6 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void d04_emptyCellPreservedForString() {
 		// Empty cell to a String-typed property → empty string.
 		var md = "| name | age |\n|---|---|\n|  | 1 |";
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.B.class);
 		assertEquals(1, r.size());
 		assertEquals("", r.get(0).name);
@@ -288,9 +280,6 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void e01_readOptionalString() {
 		var md = "hello";
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var r = (Optional<String>) MarkdownParser.DEFAULT.read(md, Optional.class, String.class);
 		assertNotNull(r);
 		assertTrue(r.isPresent());
@@ -302,9 +291,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void f01_keyValueToTreeMap() throws Exception {
 		// Concrete Map type that canCreateNewInstance — exercises eType.newInstance() branch.
 		var md = "| Property | Value |\n|---|---|\n| b | 2 |\n| a | 1 |";
@@ -317,9 +303,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void f02_multiColumnToTreeMap() {
 		// Single-row multi-column → Map element. Exercises readRow's isMap() branch.
 		var md = "| k1 | k2 |\n|---|---|\n| v1 | v2 |";
@@ -377,9 +360,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void h02_multiColumnTypeColumn() {
 		// _type column in multi-column table is recognized and skipped from output map keys.
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();
@@ -460,9 +440,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void i03_topLevelSwapMultiColumnTable() {
 		// Same swap exercised through readRow's needsJson5Path branch (rowToJson5).
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
@@ -532,7 +509,6 @@ class MarkdownParserSession_Test extends TestBase {
 		// _type column in multi-column table → rowToJson5 _type handling branch (lines 695-697).
 		var p = MarkdownParser.create().swaps(I07BeanSwap.class).beanDictionary(I07Bean.class).build();
 		var md = "| _type | name | count |\n|---|---|---|\n| i07bean | Carol | 9 |";
-		@SuppressWarnings("unchecked")
 		var r = (List<I07Bean>) p.read(md, List.class, I07Bean.class);
 		assertNotNull(r);
 		assertFalse(r.isEmpty());
@@ -587,9 +563,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void j01_customNullInBulletList() {
 		var p = MarkdownParser.create().nullValue("NIL").build();
 		var md = "- a\n- NIL\n- b";
@@ -616,9 +589,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void l01_multiColumnToStringList() {
 		// List<String> as multi-column target → readRow's "simple type" fall-through is hit.
 		var md = "| col1 | col2 |\n|---|---|\n| value-a | ignored |\n| value-b | ignored |";
@@ -748,9 +718,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"
-	})
 	void s01_readRow_allNullCells() {
 		// All cells are null/nullValue → allNull=true → readRow returns null at line 415 (line 371 check)
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |";
@@ -761,9 +728,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"
-	})
 	void s02_readRow_withTypeColumn_resolvesType() {
 		// Multi-column table with _type column → typeColIndex resolution (line 422)
 		var p = MarkdownParser.create().beanDictionary(PBase.class, PChild.class).build();
@@ -780,9 +744,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"
-	})
 	void t01_keyValueTable_asTypedMap() {
 		// Key-value table with typed Map target → isMap() branch in readKeyValueTable at line 306
 		// Also covers line 311 (keyType != null), 315 (cells.size() < 2)
@@ -821,20 +782,6 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 	// z - readBulletList: scalar/Number/primitive target types
 	//====================================================================================================
-
-	@Test void z03_bulletListIntoScalarTargetReturnsFirstItem() {
-		// FIXED: readBulletList's non-array, non-collection "else" branch used to unconditionally build a
-		// List and return that, even for a genuinely scalar (non-Map, non-bean) target type -- the caller's
-		// top-level cast to T then threw a ClassCastException (List cannot be cast to Integer). Only the
-		// first bullet item is meaningful for a scalar target, so it's now parsed and returned directly.
-		var r = MarkdownParser.DEFAULT.read("- 42", Integer.class);
-		assertEquals(42, r);
-	}
-
-	@Test void z04_bulletListIntoScalarTarget_multipleItemsUsesFirst() {
-		var r = MarkdownParser.DEFAULT.read("- 42\n- 43", Integer.class);
-		assertEquals(42, r);
-	}
 
 	@Test void z05_bulletListIntoScalarTarget_secondItemIgnored() {
 		// The dispatch that routes to readBulletList in the first place needs a real second bullet ("- b")

@@ -131,7 +131,8 @@ import org.apache.juneau.rest.server.beans.*;
 // @formatter:off
 @Rest
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are REST media type strings and path names; intentional
+	"java:S1192", // Duplicate string literals are REST media type strings and path names; intentional
+	"java:S3776" // isHiddenFromIndex(), readSummary() and readDescription() loop over the REST op annotations with nested try/if branches.
 })
 public class RouteIndexMixin {
 
@@ -209,9 +210,6 @@ public class RouteIndexMixin {
 		);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive-complexity: linear walk over a small annotation list; splitting hurts JIT.
-	})
 	private static boolean isHiddenFromIndex(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);
@@ -234,9 +232,6 @@ public class RouteIndexMixin {
 		return m.getDeclaringClass() == RouteIndexMixin.class;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Same as isHiddenFromIndex — short loop, single concern.
-	})
 	private static String readSummary(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);
@@ -253,9 +248,6 @@ public class RouteIndexMixin {
 		return "";
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Same as isHiddenFromIndex — short loop, single concern.
-	})
 	private static String readDescription(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);

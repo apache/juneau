@@ -68,7 +68,7 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
+	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
 })
 class RestArgResolvers_Test extends TestBase {
 
@@ -96,8 +96,8 @@ class RestArgResolvers_Test extends TestBase {
 	 * annotations are inspected reflectively.
 	 */
 	@SuppressWarnings({
-		"unused",    // Methods accessed reflectively via firstParam()
-		"java:S1186" // Empty method bodies are intentional; these are annotation carriers, not implementations
+		"java:S1186", // Empty method bodies are intentional; these are annotation carriers, not implementations
+		"unused" // Methods accessed reflectively via firstParam()
 	})
 	private static class Fixture {
 
@@ -158,8 +158,8 @@ class RestArgResolvers_Test extends TestBase {
 		// @Request — creates RequestBeanArg
 		public void withRequest(@Request Object req) { /* annotation carrier only */ }
 
-		// Type-level @Request (ListQuery) — no parameter annotation required
-		public void withListQuery(ListQuery q) { /* annotation carrier only */ }
+		// Type-level @Request (BeanQueryRequest) — no parameter annotation required
+		public void withBeanQueryRequest(BeanQueryRequest q) { /* annotation carrier only */ }
 
 		// @Header on Holder — creates ResponseHeaderArg
 		public void withResponseHeader(@Header("X-Out") Holder<String> h) { /* annotation carrier only */ }
@@ -511,8 +511,8 @@ class RestArgResolvers_Test extends TestBase {
 		assertNull(RequestBeanArg.create(pi, EMPTY_AWL));
 	}
 
-	@Test void o03_requestBeanArg_create_typeLevelRequestOnListQuery() {
-		var pi = firstParam(Fixture.class, "withListQuery");
+	@Test void o03_requestBeanArg_create_typeLevelRequestOnBeanQueryRequest() {
+		var pi = firstParam(Fixture.class, "withBeanQueryRequest");
 		var arg = RequestBeanArg.create(pi, EMPTY_AWL);
 		assertNotNull(arg);
 		assertInstanceOf(RequestBeanArg.class, arg);

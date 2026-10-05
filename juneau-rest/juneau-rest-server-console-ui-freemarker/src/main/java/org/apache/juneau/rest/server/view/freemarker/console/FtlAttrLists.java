@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import freemarker.template.*;
@@ -63,6 +65,9 @@ final class FtlAttrLists {
 		return u == null ? "" : String.valueOf(u).trim();
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // String and collection branches are parallel and read best together.
+	})
 	static List<String> list(Map<String, TemplateModel> params, String directive, String name) throws TemplateModelException {
 		var raw = params.get(name);
 		if (raw == null)
@@ -99,5 +104,49 @@ final class FtlAttrLists {
 			if (! allowed.contains(key))
 				throw reject("<@" + directive + "> unknown attribute '" + key + "'.");
 		}
+	}
+
+	/** Id grammar shared by nav nodes and cards (E-4). Mirrors {@code $defs/id} in {@code juneau-page.schema.json}. */
+	static final java.util.regex.Pattern ID_PATTERN = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
+
+	/**
+	 * Rejects an id that does not match {@link #ID_PATTERN} (E-4).
+	 *
+	 * @param directive The directive name, without {@code <@}.
+	 * @param id The id.
+	 * @throws TemplateModelException If the id is malformed.
+	 */
+	static void checkId(String directive, String id) throws TemplateModelException {
+		if (! ID_PATTERN.matcher(id).matches())
+			throw reject(String.format("<@%s> id '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", directive, id));
+	}
+
+	/**
+	 * Strict boolean attribute (E-5): absent gives {@code dflt}; a model {@code Boolean} or the scalars
+	 * {@code "true"}/{@code "false"} are accepted; anything else, including {@code ""}, is rejected.
+	 *
+	 * @param params The directive params.
+	 * @param directive The directive name, without {@code <@}.
+	 * @param name The attribute name.
+	 * @param dflt The value when the attribute is absent.
+	 * @return The parsed value.
+	 * @throws TemplateModelException If the value is not a strict boolean.
+	 */
+	static boolean strictBoolean(Map<String, TemplateModel> params, String directive, String name, boolean dflt)
+			throws TemplateModelException {
+		var raw = params.get(name);
+		if (raw == null)
+			return dflt;
+		if (raw instanceof TemplateBooleanModel b)
+			return b.getAsBoolean();
+		var u = DeepUnwrap.unwrap(raw);
+		if (u instanceof Boolean b)
+			return b;
+		var s = u == null ? "" : String.valueOf(u);
+		if (eq(s, "true"))
+			return true;
+		if (eq(s, "false"))
+			return false;
+		throw reject(String.format("<@%s> %s= must be true or false; got '%s'.", directive, name, s));
 	}
 }

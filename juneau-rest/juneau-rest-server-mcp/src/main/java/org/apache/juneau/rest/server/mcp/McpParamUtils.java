@@ -35,6 +35,9 @@ import org.apache.juneau.bean.jsonrpc.*;
  * {@link McpRevision#errorCode(McpErrorKind)}. A revision that needs a different code for malformed
  * parameters must coerce parameters itself instead of using these helpers.
  */
+@SuppressWarnings({
+	"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
+})
 public final class McpParamUtils {
 
 	private static final int CODE_INVALID_PARAMS = -32602;
@@ -48,9 +51,6 @@ public final class McpParamUtils {
 	 * @return The params as a map; an empty map when {@code params} is <jk>null</jk>. Never <jk>null</jk>.
 	 * @throws McpException If {@code params} is present but is not a JSON object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
-	})
 	public static Map<String,Object> asMap(Object params) {
 		if (params == null)
 			return Map.of();
@@ -79,9 +79,6 @@ public final class McpParamUtils {
 	 * @return The nested map; an empty map when the parameter is absent. Never <jk>null</jk>.
 	 * @throws McpException If the parameter is present but is not a JSON object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
-	})
 	public static Map<String,Object> mapParam(Map<String,Object> args, String key) {
 		var v = args.get(key);
 		if (v == null)

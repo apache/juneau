@@ -38,7 +38,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // Mock HttpServletResponse stubs return 'new PrintWriter(sw)' directly; these are in-memory test doubles never actually flushed/closed by production code.
+@SuppressWarnings({
+	"resource" // Mock HttpServletResponse stubs return 'new PrintWriter(sw)' directly; these are in-memory test doubles never actually flushed/closed by production code.
+})
 class AuthFilterChain_Test extends TestBase {
 
 	private static final Principal ALICE = () -> "alice";
@@ -288,7 +290,7 @@ class AuthFilterChain_Test extends TestBase {
 			.build();
 		var r = req("/");
 		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(r));
-		assertTrue(e.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(e.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void e05_authenticateRoleUnionAcrossSuccesses() {
@@ -326,7 +328,7 @@ class AuthFilterChain_Test extends TestBase {
 		var chain = AuthFilterChain.create(null).append(bare).build();
 		var r = req("/");
 		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(r));
-		assertTrue(e.getHeaders().stream().noneMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(e.getHeaders().stream().noneMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void e07_authenticateWithNullContextPath() {

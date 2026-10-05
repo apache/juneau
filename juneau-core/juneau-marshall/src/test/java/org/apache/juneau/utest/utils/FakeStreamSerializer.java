@@ -26,6 +26,9 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Utility class for creating mocked stream serializers.
  */
+@SuppressWarnings({
+	"java:S9149" // Test fixture's static factories intentionally shadow the parent's.
+})
 public class FakeStreamSerializer extends OutputStreamSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

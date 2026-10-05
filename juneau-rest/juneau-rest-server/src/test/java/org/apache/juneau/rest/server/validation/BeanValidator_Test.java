@@ -33,7 +33,7 @@ import jakarta.validation.constraints.*;
  * REST argument-resolver wiring covered elsewhere.
  */
 @SuppressWarnings({
-	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
 })
 class BeanValidator_Test extends TestBase {

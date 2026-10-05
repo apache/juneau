@@ -57,7 +57,9 @@ import org.apache.juneau.marshall.xml.*;
  *
  * @param <SELF> The self type for fluent setters.
  */
-@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+@SuppressWarnings({
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+})
 public class CommonEntry<SELF extends CommonEntry<SELF>> extends Common {
 
 	private Person[] authors;
@@ -72,7 +74,9 @@ public class CommonEntry<SELF extends CommonEntry<SELF>> extends Common {
 	/** Bean constructor. */
 	public CommonEntry() {}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // CRTP self cast: SELF is bound to the concrete subclass, so (SELF) this is always valid
+	})
 	private SELF self() {
 		return (SELF) this;
 	}

@@ -16,6 +16,11 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.apache.juneau.marshall.serializer.*;
+
 /**
  * Minimal module-local test utilities for <c>juneau-rest-server</c>.
  *
@@ -29,4 +34,27 @@ package org.apache.juneau;
  * deliberately NOT a copy of the full cross-module {@code TestUtils} that lives in the integration-test residual.
  */
 public class TestUtils extends BasicTestUtils {
+
+	/**
+	 * Asserts that the Json5 representation of the specified value matches the expected string.
+	 *
+	 * @param expected The expected Json5 representation.
+	 * @param value The value to serialize.
+	 * @return The expected string.
+	 */
+	public static String assertJson(String expected, Object value) {
+		assertEquals(expected, json5(value));
+		return expected;
+	}
+
+	/**
+	 * Asserts that serializing the specified object with the specified serializer produces the expected output.
+	 *
+	 * @param actual The object to serialize.
+	 * @param s The serializer to use.
+	 * @param expected The expected serialized output.
+	 */
+	public static void assertSerialized(Object actual, WriterSerializer s, String expected) {
+		assertEquals(expected, s.toString(actual));
+	}
 }

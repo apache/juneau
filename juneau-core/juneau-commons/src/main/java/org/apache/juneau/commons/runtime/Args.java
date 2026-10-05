@@ -331,8 +331,8 @@ public class Args {
 		 * @return A new immutable {@link Args} instance.
 		 */
 		@SuppressWarnings({
-			"java:S3776", // Cognitive complexity acceptable for argument prefix resolution and parsing logic
-			"java:S135"   // Argv tokenizer dispatch loop; per-token continue guards are clearer than restructuring the parse flow.
+			"java:S135", // Argv tokenizer dispatch loop; per-token continue guards are clearer than restructuring the parse flow.
+			"java:S3776" // Cognitive complexity acceptable for argument prefix resolution and parsing logic
 		})
 		public Args build(String[] argv) {
 			var prefixes = resolvePrefixes();

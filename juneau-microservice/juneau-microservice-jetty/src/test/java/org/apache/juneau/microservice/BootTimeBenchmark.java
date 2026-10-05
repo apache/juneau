@@ -56,9 +56,9 @@ import jakarta.servlet.*;
  * {@code BOOTBENCH:} so it can be greped out of surefire console output.
  */
 @SuppressWarnings({
-	"java:S5976", // Manual benchmark harness, not a real JUnit test — public visibility is intentional.
 	"java:S2699", // Manual benchmark harness — it measures boot timings and has no assertions by design.
-	"java:S3577"  // Manual benchmark harness — name intentionally excluded from the surefire *Test include pattern.
+	"java:S3577", // Manual benchmark harness — name intentionally excluded from the surefire *Test include pattern.
+	"java:S5976" // Manual benchmark harness, not a real JUnit test — public visibility is intentional.
 })
 public class BootTimeBenchmark {
 

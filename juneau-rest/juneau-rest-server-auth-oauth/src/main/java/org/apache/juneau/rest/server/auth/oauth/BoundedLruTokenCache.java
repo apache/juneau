@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -98,9 +97,9 @@ public class BoundedLruTokenCache implements TokenCache {
 
 	@Override /* Overridden from TokenCache */
 	public void putPrincipal(String key, Principal principal, Duration ttl) {
-		assertArgNotNullOrBlank("key", key);
-		assertArgNotNull("principal", principal);
-		assertArgNotNull("ttl", ttl);
+		reqnb("key", key);
+		reqnn("principal", principal);
+		reqnn("ttl", ttl);
 		if (ttl.isZero() || ttl.isNegative())
 			throw iaex("ttl must be positive (was %s)", ttl);
 		var expiresAt = Instant.now().plus(ttl);
@@ -111,7 +110,7 @@ public class BoundedLruTokenCache implements TokenCache {
 
 	@Override /* Overridden from TokenCache */
 	public Optional<Principal> getPrincipal(String key) {
-		assertArgNotNullOrBlank("key", key);
+		reqnb("key", key);
 		synchronized (lock) {
 			var v = entries.get(key);
 			if (!(v instanceof CachedPrincipal v2))
@@ -126,8 +125,8 @@ public class BoundedLruTokenCache implements TokenCache {
 
 	@Override /* Overridden from TokenCache */
 	public void putToken(String key, OAuthToken token) {
-		assertArgNotNullOrBlank("key", key);
-		assertArgNotNull("token", token);
+		reqnb("key", key);
+		reqnn("token", token);
 		synchronized (lock) {
 			entries.put(key, token);
 		}
@@ -135,9 +134,9 @@ public class BoundedLruTokenCache implements TokenCache {
 
 	@Override /* Overridden from TokenCache */
 	public Optional<OAuthToken> getToken(String key, Instant now, Duration skew) {
-		assertArgNotNullOrBlank("key", key);
-		assertArgNotNull("now", now);
-		assertArgNotNull("skew", skew);
+		reqnb("key", key);
+		reqnn("now", now);
+		reqnn("skew", skew);
 		if (skew.isNegative())
 			throw iaex("skew must be non-negative (was %s)", skew);
 		synchronized (lock) {
@@ -154,7 +153,7 @@ public class BoundedLruTokenCache implements TokenCache {
 
 	@Override /* Overridden from TokenCache */
 	public void invalidate(String key) {
-		assertArgNotNullOrBlank("key", key);
+		reqnb("key", key);
 		synchronized (lock) {
 			entries.remove(key);
 		}

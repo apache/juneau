@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -188,7 +189,7 @@ class EmitterPurity_ScanTest extends TestBase {
 		// The emitter this item ADDS must be on the right side of the line from the start.  A region container is an
 		// EMPTY div plus a descriptor sidecar; if RegionTable ever writes content verbatim, the whole
 		// "configuration rides the sidecar, not the markup" claim is gone.
-		var region = sites().stream().filter(s -> "RegionTable.java".equals(s.file())).toList();
+		var region = sites().stream().filter(s -> eq(s.file(), "RegionTable.java")).toList();
 		assertFalse(region.isEmpty(),
 			"RegionTable writes a descriptor sidecar, so at least one rawText site is expected; finding none means "
 				+ "the scan is not reaching it");
@@ -197,7 +198,7 @@ class EmitterPurity_ScanTest extends TestBase {
 	}
 
 	@Test void b04_viewTableIsConstantsOnly_noRawText() throws Exception {
-		var viewTable = sites().stream().filter(s -> "ViewTable.java".equals(s.file())).toList();
+		var viewTable = sites().stream().filter(s -> eq(s.file(), "ViewTable.java")).toList();
 		assertEquals(List.of(), viewTable,
 			() -> "ViewTable is constants-only after MOVE delete; it must not write rawText: " + viewTable);
 	}

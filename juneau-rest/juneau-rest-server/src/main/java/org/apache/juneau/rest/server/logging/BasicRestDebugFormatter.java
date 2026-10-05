@@ -17,8 +17,10 @@
 package org.apache.juneau.rest.server.logging;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
@@ -461,7 +463,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 		if (contentEncoding == null)
 			return true;
 		var e = contentEncoding.trim();
-		return e.isEmpty() || e.equalsIgnoreCase("identity");
+		return e.isEmpty() || eqic(e, "identity");
 	}
 
 	/**
@@ -478,11 +480,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	}
 
 	private Set<String> normalizedRedactedSet() {
-		var s = new HashSet<String>();
-		for (var n : redactedHeaders)
-			if (n != null)
-				s.add(normalizeHeaderName(n));
-		return s;
+		return redactedHeaders.stream().filter(Objects::nonNull).map(BasicRestDebugFormatter::normalizeHeaderName).collect(Collectors.toCollection(HashSet::new));
 	}
 
 	private static boolean isRedacted(String name, Set<String> normalizedRedacted) {
@@ -535,7 +533,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 		var t = raw.trim();
 		if (t.isEmpty())
 			return false;
-		return ! (t.equalsIgnoreCase("false") || t.equals("0"));
+		return ! (eqic(t, "false") || eq(t, "0"));
 	}
 
 	/**

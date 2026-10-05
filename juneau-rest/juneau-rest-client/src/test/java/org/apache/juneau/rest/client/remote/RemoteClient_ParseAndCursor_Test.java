@@ -138,13 +138,15 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// yields a non-null (possibly empty) body stream, so getBodyAsString() returns "" here, not null, and that
 		// empty string is handed to the parser like any other body.
 		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
-			assertThrows(ParseException.class, () -> client.remote(ParseBodyService.class).getWidgetFromEmptyBody());
+			var service = client.remote(ParseBodyService.class);
+			assertThrows(ParseException.class, service::getWidgetFromEmptyBody);
 		}
 	}
 
 	@Test void a02_parseBody_malformedJson_declaredType_rethrowsParseException() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
-			assertThrows(ParseException.class, () -> client.remote(ParseBodyService.class).getWidgetFromMalformedJson());
+			var service = client.remote(ParseBodyService.class);
+			assertThrows(ParseException.class, service::getWidgetFromMalformedJson);
 		}
 	}
 
@@ -188,8 +190,8 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// selectParser candidate misses, so getMatchingParser(...) falls all the way through to its own
 		// no-default-parser Optional.empty(), and orElseThrow's UnsupportedMediaType-construction lambda finally runs.
 		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
-			var ex = assertThrows(org.apache.juneau.http.response.UnsupportedMediaType.class,
-				() -> client.remote(WidgetService.class).getWidget());
+			var service = client.remote(WidgetService.class);
+			var ex = assertThrows(org.apache.juneau.http.response.UnsupportedMediaType.class, service::getWidget);
 			assertTrue(ex.getMessage().contains("No parser matched"), "Unexpected message: " + ex.getMessage());
 		}
 	}
@@ -229,8 +231,8 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 
 	@Test void b02_cursor_throwOnErrorBeforeHandingBackCursor_closesResponse() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
-			assertThrows(org.apache.juneau.http.response.BasicHttpException.class,
-				() -> client.remote(CursorService.class).getCursorThrowsBeforeHandingBack());
+			var service = client.remote(CursorService.class);
+			assertThrows(org.apache.juneau.http.response.BasicHttpException.class, service::getCursorThrowsBeforeHandingBack);
 		}
 	}
 
@@ -276,8 +278,9 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 
 	@Test void c02_toPartBody_beanPart_noDefaultSerializerConfigured_throwsIllegalState() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
-			var ex = assertThrows(IllegalStateException.class,
-				() -> client.remote(MultipartExtraService.class).uploadBeanPart(new RemoteClient_ReturnModesAndRetry_Test.MultipartBean()));
+			var service = client.remote(MultipartExtraService.class);
+			var bean = new RemoteClient_ReturnModesAndRetry_Test.MultipartBean();
+			var ex = assertThrows(IllegalStateException.class, () -> service.uploadBeanPart(bean));
 			assertTrue(ex.getMessage().contains("No default serializer"), "Unexpected message: " + ex.getMessage());
 		}
 	}

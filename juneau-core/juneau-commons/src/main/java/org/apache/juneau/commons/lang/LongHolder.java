@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.concurrent.atomic.*;
@@ -55,12 +54,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class LongHolder extends Holder<Long> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new long value initialized to <c>0</c>.
@@ -271,7 +267,7 @@ public class LongHolder extends Holder<Long> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Long...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

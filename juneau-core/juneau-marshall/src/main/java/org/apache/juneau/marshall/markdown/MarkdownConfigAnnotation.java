@@ -23,6 +23,9 @@ import org.apache.juneau.marshall.*;
 /**
  * Utility classes and methods for the {@link MarkdownConfig @MarkdownConfig} annotation.
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class MarkdownConfigAnnotation {
 
 	private MarkdownConfigAnnotation() {}
@@ -30,9 +33,6 @@ public class MarkdownConfigAnnotation {
 	/**
 	 * Applies {@link MarkdownConfig} annotations to a {@link MarkdownParser.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class ParserApply extends AnnotationApplier<MarkdownConfig,MarkdownParser.Builder> {
 
 		/**
@@ -54,9 +54,6 @@ public class MarkdownConfigAnnotation {
 	/**
 	 * Applies {@link MarkdownConfig} annotations to a {@link MarkdownSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<MarkdownConfig,MarkdownSerializer.Builder> {
 
 		/**

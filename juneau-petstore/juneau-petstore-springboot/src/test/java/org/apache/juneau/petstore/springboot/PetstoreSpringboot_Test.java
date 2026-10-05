@@ -45,8 +45,8 @@ import org.springframework.boot.test.web.server.*;
 @org.apache.juneau.testing.SpringbootTest
 @SpringBootTest(classes = App.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @SuppressWarnings({
-	"java:S8692", // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
-	"java:S2925" // warmUpServer() readiness loop needs a back-off between retries; without it a ConnectException would busy-spin. No event/latch to await and Awaitility isn't on the test classpath.
+	"java:S2925", // warmUpServer() readiness loop needs a back-off between retries; without it a ConnectException would busy-spin. No event/latch to await and Awaitility isn't on the test classpath.
+	"java:S8692" // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
 })
 class PetstoreSpringboot_Test {
 
@@ -172,6 +172,12 @@ class PetstoreSpringboot_Test {
 		var resp = get("/petstore/pets", "application/json");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		assertTrue(resp.body().contains("Mr. Frisky"), "expected seeded pet name in response: " + resp.body());
+	}
+
+	@Test void b01b_seededStoreReachedTheChild() throws Exception {
+		// Pet 500 exists only in the seeded store, so a 200 proves the Spring PetStore bean reached the child resource.
+		var resp = get("/petstore/pets/500", "application/json");
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 	}
 
 	@Test void b02_getPet_byId_json() throws Exception {

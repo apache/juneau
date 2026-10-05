@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -99,7 +98,7 @@ public final class RrpcInterfaceMeta {
 		"java:S1172" // 'uri' is part of the public constructor signature retained for API parity with the classic RrpcInterfaceMeta; intentionally ignored
 	})
 	public RrpcInterfaceMeta(Class<?> iface, String uri) {
-		this(assertArgNotNull("iface", iface), true);
+		this(reqnn("iface", iface), true);
 	}
 
 	private RrpcInterfaceMeta(Class<?> iface, boolean includeUnannotated) {
@@ -306,7 +305,7 @@ public final class RrpcInterfaceMeta {
 	 * @throws IllegalArgumentException If the class is not an interface or not annotated with {@link Remote}.
 	 */
 	public static RrpcInterfaceMeta of(Class<?> iface) {
-		assertArgNotNull("iface", iface);
+		reqnn("iface", iface);
 		if (!iface.isInterface())
 			throw iaex("Class %s is not an interface", iface.getName());
 		if (iface.getAnnotation(Remote.class) == null)

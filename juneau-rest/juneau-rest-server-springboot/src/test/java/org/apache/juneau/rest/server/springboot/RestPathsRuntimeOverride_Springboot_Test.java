@@ -54,7 +54,7 @@ import org.springframework.context.*;
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
-	"unchecked"  // ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.
+	"unchecked" // ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.
 })
 class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 

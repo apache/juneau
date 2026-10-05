@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.swaps;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -60,9 +62,9 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 			if (i != -1) {
 				fileName = s.substring(0, i);
 				lineNumber = Integer.parseInt(s.substring(i + 1));
-			} else if ("Native Method".equals(s)) {
+			} else if (eq(s, "Native Method")) {
 				lineNumber = -2;
-			} else if (! "Unknown Source".equals(s)) {
+			} else if (neq(s, "Unknown Source")) {
 				fileName = s;
 			}
 		}

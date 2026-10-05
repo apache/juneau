@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -33,10 +34,10 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S1186", // Empty method body intentional for callback testing
 	"java:S3008", // Static field naming follows test convention
 	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"java:S1186", // Empty method body intentional for callback testing
-	"java:S1172", // Unused parameters kept for API consistency or framework requirements
 	"unused" // Private members required for reflection/ExecutableInfo testing
 })
 class ExecutableInfo_Test extends TestBase {
@@ -350,11 +351,11 @@ class ExecutableInfo_Test extends TestBase {
 	void a011_getParameter() {
 		// bc2 is B(String s) constructor, parameter name may or may not be available in bytecode
 		var param1 = b_c2.getParameter(0).toString();
-		assertTrue(param1.equals("java.lang.String s") || param1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param1);
+		assertTrue(eqa(param1, "java.lang.String s", "java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param1);
 
 		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
 		var param2 = b_m2.getParameter(0).toString();
-		assertTrue(param2.equals("java.lang.String s") || param2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param2);
+		assertTrue(eqa(param2, "java.lang.String s", "java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param2);
 
 		// Index out of bounds
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParameter(0));
@@ -381,11 +382,11 @@ class ExecutableInfo_Test extends TestBase {
 		check("", b_c1.getParameters());
 		// bc2 is B(String s) constructor, parameter name may or may not be available in bytecode
 		var params1 = b_c2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
-		assertTrue(params1.equals("java.lang.String s") || params1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params1);
+		assertTrue(eqa(params1, "java.lang.String s", "java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params1);
 		check("", b_m1.getParameters());
 		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
 		var params2 = b_m2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
-		assertTrue(params2.equals("java.lang.String s") || params2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params2);
+		assertTrue(eqa(params2, "java.lang.String s", "java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params2);
 
 		// Test caching - should return same result
 		check("", b_c1.getParameters());

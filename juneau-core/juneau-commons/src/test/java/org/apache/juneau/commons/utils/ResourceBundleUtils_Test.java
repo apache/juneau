@@ -134,8 +134,8 @@ class ResourceBundleUtils_Test extends TestBase {
 
 	@Test
 	void a11_findBundle_nullClassLoader() {
-		// null ClassLoader should throw IllegalArgumentException from assertArgNotNull
-		// The code has assertArgNotNull, but if the test classpath uses an old compiled version,
+		// null ClassLoader should throw IllegalArgumentException from reqnn
+		// The code has reqnn, but if the test classpath uses an old compiled version,
 		// it may throw NullPointerException from ResourceBundle.getBundle instead
 		var ex = assertThrows(Exception.class, () -> {
 			ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), null);
@@ -193,8 +193,8 @@ class ResourceBundleUtils_Test extends TestBase {
 
 	@Test
 	void a17_findBundle_allNulls() {
-		// null ClassLoader should throw IllegalArgumentException from assertArgNotNull
-		// The code has assertArgNotNull, but if the test classpath uses an old compiled version,
+		// null ClassLoader should throw IllegalArgumentException from reqnn
+		// The code has reqnn, but if the test classpath uses an old compiled version,
 		// it may throw NullPointerException from ResourceBundle.getBundle instead
 		var ex = assertThrows(Exception.class, () -> {
 			ResourceBundleUtils.findBundle(null, null, null);

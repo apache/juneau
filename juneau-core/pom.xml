@@ -32,6 +32,8 @@
 
 	<modules>
 		<module>juneau-commons</module>
+		<module>juneau-beanquery-sql</module>
+		<module>juneau-beanquery-postgres</module>
 		<module>juneau-test-utils</module>
 		<module>juneau-marshall</module>
 		<module>juneau-marshall-rdf</module>

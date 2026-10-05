@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.resource;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -56,9 +55,9 @@ import org.apache.juneau.test.assertions.*;
  */
 @BeanIgnore /* Use toString() to serialize */
 @SuppressWarnings({
-	"resource", // Depends on entity (streams); value equality not practical
-	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
 	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+	"resource" // Depends on entity (streams); value equality not practical
 })
 public abstract class BasicResource<SELF extends BasicResource<SELF>> implements HttpResource {
 	BasicHttpEntity<?> entity;
@@ -214,7 +213,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * @throws IOException If content could not be retrieved.
 	 */
 	public SELF copyFrom(HttpResponse response) throws IOException {
-		assertArgNotNull("response", response);
+		reqnn("response", response);
 		addHeaders(response.getAllHeaders());
 		setContent(response.getEntity().getContent());
 		return self();

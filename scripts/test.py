@@ -28,6 +28,10 @@ Options:
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
 
+Environment:
+    JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
+                             concurrent runs on one checkout).
+
 Perf guard (per-module, TODO-160):
     Timing/perf statistics are collected PER MODULE.  write_timing_log() discovers every
     target/surefire-reports/ directory under the reactor (not just juneau-integration-tests's), attributes
@@ -60,6 +64,10 @@ def run_command(cmd, verbose=False):
 	"""Run a command and return exit code and full output."""
 	script_dir = Path(__file__).parent
 	project_root = script_dir.parent
+	# Optional command prefix (e.g. a lock script that serializes concurrent mvn runs on one checkout).
+	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
+	if wrapper and cmd.startswith("mvn "):
+		cmd = f"{wrapper} {cmd}"
 	print(f"Running: {cmd}")
 	print("-" * 80)
 	result = subprocess.run(cmd, shell=True, cwd=str(project_root), capture_output=True, text=True)
@@ -385,6 +393,7 @@ def profile(module, verbose=False):
 	profile_dir.mkdir(parents=True, exist_ok=True)
 	safe_module = module.replace("/", "-")
 	output_file = profile_dir / f"{safe_module}-{ts}.jfr"
+	# Overriding argLine deliberately drops the JaCoCo agent so instrumentation doesn't skew the profile.
 	argline = f"-XX:StartFlightRecording=filename={output_file},settings=profile,dumponexit=true"
 	cmd = f"mvn test -pl {module} -Drat.skip=true -DargLine='{argline}'"
 	code, out = run_command(cmd, verbose)

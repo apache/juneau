@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.bean;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.beans.*;
@@ -74,8 +73,8 @@ import org.apache.juneau.commons.reflect.Visibility;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S107",  // Builder.build() invokes a multi-arg constructor; high cardinality is inherent to a configuration POJO.
-	"java:S1192"  // Duplicate string literals are annotation attribute values and protocol-wire keys; intentional
+	"java:S107", // Builder.build() invokes a multi-arg constructor; high cardinality is inherent to a configuration POJO.
+	"java:S1192" // Duplicate string literals are annotation attribute values and protocol-wire keys; intentional
 })
 public final class BeanConfigContext {
 
@@ -410,7 +409,7 @@ public final class BeanConfigContext {
 		"java:S3776" // Cognitive complexity acceptable for bean-exclusion predicate dispatch
 	})
 	public boolean isNotABean(ClassInfo ci) {
-		assertArgNotNull("ci", ci);
+		reqnn("ci", ci);
 		if (notABeanPredicate != null)
 			return notABeanPredicate.test(ci);
 		if (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
@@ -519,7 +518,7 @@ public final class BeanConfigContext {
 		 * @param value The visibility threshold.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanClassVisibility(Visibility value) { beanClassVisibility = assertArgNotNull("value", value); return this; }
+		public Builder beanClassVisibility(Visibility value) { beanClassVisibility = reqnn("value", value); return this; }
 
 		/**
 		 * Sets the minimum bean constructor visibility.
@@ -527,7 +526,7 @@ public final class BeanConfigContext {
 		 * @param value The visibility threshold.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanConstructorVisibility(Visibility value) { beanConstructorVisibility = assertArgNotNull("value", value); return this; }
+		public Builder beanConstructorVisibility(Visibility value) { beanConstructorVisibility = reqnn("value", value); return this; }
 
 		/**
 		 * Sets the minimum bean field visibility.
@@ -535,7 +534,7 @@ public final class BeanConfigContext {
 		 * @param value The visibility threshold.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanFieldVisibility(Visibility value) { beanFieldVisibility = assertArgNotNull("value", value); return this; }
+		public Builder beanFieldVisibility(Visibility value) { beanFieldVisibility = reqnn("value", value); return this; }
 
 		/**
 		 * Sets the minimum bean method visibility.
@@ -543,7 +542,7 @@ public final class BeanConfigContext {
 		 * @param value The visibility threshold.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanMethodVisibility(Visibility value) { beanMethodVisibility = assertArgNotNull("value", value); return this; }
+		public Builder beanMethodVisibility(Visibility value) { beanMethodVisibility = reqnn("value", value); return this; }
 
 		/**
 		 * Toggles whether {@code BeanMap.put(String,Object)} returns the previous value rather than <jk>null</jk>.
@@ -671,7 +670,7 @@ public final class BeanConfigContext {
 		 * @param value The property namer.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder propertyNamer(PropertyNamer value) { propertyNamer = assertArgNotNull("value", value); return this; }
+		public Builder propertyNamer(PropertyNamer value) { propertyNamer = reqnn("value", value); return this; }
 
 		/**
 		 * Sets the property name used to embed the bean dictionary type (default: <js>"_type"</js>).
@@ -679,7 +678,7 @@ public final class BeanConfigContext {
 		 * @param value The property name.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanTypePropertyName(String value) { beanTypePropertyName = assertArgNotNull("value", value); return this; }
+		public Builder beanTypePropertyName(String value) { beanTypePropertyName = reqnn("value", value); return this; }
 
 		/**
 		 * Adds package names whose classes should be excluded from bean detection.
@@ -688,7 +687,7 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notBeanPackageNames(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			Collections.addAll(notBeanPackageNames, values);
 			return this;
 		}
@@ -700,7 +699,7 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notBeanPackagePrefixes(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			Collections.addAll(notBeanPackagePrefixes, values);
 			return this;
 		}
@@ -712,7 +711,7 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			Collections.addAll(notBeanClasses, values);
 			return this;
 		}
@@ -767,7 +766,7 @@ public final class BeanConfigContext {
 		 * @param value The annotation provider.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder annotationProvider(AnnotationProvider value) { annotationProvider = assertArgNotNull("value", value); return this; }
+		public Builder annotationProvider(AnnotationProvider value) { annotationProvider = reqnn("value", value); return this; }
 
 		/**
 		 * Installs a custom predicate that fully overrides {@link BeanConfigContext#isNotABean(ClassInfo)}.

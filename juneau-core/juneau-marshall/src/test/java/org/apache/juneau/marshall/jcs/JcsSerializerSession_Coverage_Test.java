@@ -149,6 +149,7 @@ class JcsSerializerSession_Coverage_Test extends TestBase {
 	}
 
 	@Test void g01_beanGetterExceptionDefaultThrows() {
-		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(new G01_ThrowBean()));
+		var bean = new G01_ThrowBean();
+		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(bean));
 	}
 }

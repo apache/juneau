@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.reactive;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -223,7 +224,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 		List<LogRecord> forLogger(String name) {
 			synchronized (records) {
-				return records.stream().filter(x -> name.equals(x.getLoggerName())).toList();
+				return records.stream().filter(x -> eq(name, x.getLoggerName())).toList();
 			}
 		}
 	}

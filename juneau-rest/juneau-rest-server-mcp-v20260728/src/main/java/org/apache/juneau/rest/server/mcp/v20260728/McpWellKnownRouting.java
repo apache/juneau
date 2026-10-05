@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -104,12 +103,12 @@ public final class McpWellKnownRouting {
 	 * @throws IllegalArgumentException If {@code resource} is <jk>null</jk>.
 	 */
 	public static String wellKnownRequestPath(URI resource) {
-		assertArgNotNull("resource", resource);
+		reqnn("resource", resource);
 		return WELL_KNOWN_PATH + normalizePath(resource.getRawPath());
 	}
 
 	private static String baseOf(URI resource) {
-		assertArgNotNull("resource", resource);
+		reqnn("resource", resource);
 		var scheme = resource.getScheme();
 		var authority = resource.getRawAuthority();
 		if (scheme == null || authority == null)

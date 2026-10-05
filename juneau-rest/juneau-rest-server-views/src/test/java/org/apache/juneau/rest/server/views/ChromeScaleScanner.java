@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -305,7 +307,7 @@ final class ChromeScaleScanner {
 				var families = CHECKED_PROPERTIES.get(d.property());
 				if (families == null)
 					continue;
-				if ("width".equals(d.property()) && !isSvgSelector(selector))
+				if (eq(d.property(), "width") && !isSvgSelector(selector))
 					continue;
 				checked.add(d);
 				var hit = findDuplicatedStep(d, families, scale);
@@ -337,12 +339,12 @@ final class ChromeScaleScanner {
 	private static Step findDuplicatedStep(Decl d, Set<Family> families, List<Step> scale) {
 		// line-height's step value is unitless, so it needs bare-number matching instead of the general
 		// px/rem literal matcher - scoped to this one property so no other property's matching widens (LD-2).
-		var lineHeight = "line-height".equals(d.property());
+		var lineHeight = eq(d.property(), "line-height");
 		// font-size's three steps are declared in rem, not px. The general ABSOLUTE matcher already admits
 		// rem (other properties, e.g. gap, rely on that too), but font-size gets its own named matcher here so
 		// its rem reachability is an explicit, font-size-scoped carve-out (the font-size rem-reachability carve-out) rather than an
 		// incidental side effect of the shared one - mirroring the line-height carve-out above in shape.
-		var fontSize = "font-size".equals(d.property());
+		var fontSize = eq(d.property(), "font-size");
 		var literals = lineHeight ? bareNumberValues(d.value())
 			: fontSize ? fontSizeAbsoluteValues(d.value())
 			: absoluteValues(d.value());
@@ -431,7 +433,7 @@ final class ChromeScaleScanner {
 
 	/** Normalises to px. {@code rem} resolves at the browser default because nothing here sets a root font-size. */
 	private static double px(double n, String unit) {
-		return "rem".equals(unit) ? n * 16.0 : n;
+		return eq(unit, "rem") ? n * 16.0 : n;
 	}
 
 	private static List<Decl> declarations(String selector, String body) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -66,7 +65,7 @@ public final class AuthResult {
 	 * @return A new {@link AuthResult}.
 	 */
 	public static AuthResult of(Principal principal, String... roles) {
-		assertArgNotNull("principal", principal);
+		reqnn("principal", principal);
 		return new AuthResult(principal, toSet(roles), MergeMode.ADD);
 	}
 
@@ -78,7 +77,7 @@ public final class AuthResult {
 	 * @return A new {@link AuthResult}.
 	 */
 	public static AuthResult of(Principal principal, Set<String> roles) {
-		assertArgNotNull("principal", principal);
+		reqnn("principal", principal);
 		return new AuthResult(principal, toSet(roles), MergeMode.ADD);
 	}
 
@@ -114,7 +113,7 @@ public final class AuthResult {
 	 * @return A new {@link AuthResult}.
 	 */
 	public static AuthResult replacing(Principal principal, String... roles) {
-		assertArgNotNull("principal", principal);
+		reqnn("principal", principal);
 		return new AuthResult(principal, toSet(roles), MergeMode.REPLACE);
 	}
 
@@ -126,7 +125,7 @@ public final class AuthResult {
 	 * @return A new {@link AuthResult}.
 	 */
 	public static AuthResult replacing(Principal principal, Set<String> roles) {
-		assertArgNotNull("principal", principal);
+		reqnn("principal", principal);
 		return new AuthResult(principal, toSet(roles), MergeMode.REPLACE);
 	}
 

@@ -16,8 +16,13 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.rest.server.widgets.*;
 
@@ -26,7 +31,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
  * {@code juneau-regions.js} region-populate runtime, the opt-in {@code juneau-config.js}/{@code juneau-config.css}
  * column-chooser runtime &mdash; each at its stable path (design doc §6.1), plus deprecated compatibility mounts
- * for the three assets that have since moved to the widget module.
+ * for the two assets that have since moved to the widget module.
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -43,23 +48,23 @@ import org.apache.juneau.rest.server.widgets.*;
  * {@code chrome.css} themes the same {@code .tag.<domain>.<value>} classes when present, but this module takes
  * <b>no</b> dependency on it.
  *
- * <h5 class='section'>Relocated: three assets now ship in the widget module</h5>
+ * <h5 class='section'>Relocated: two assets now ship in the widget module</h5>
  * <p>
- * {@code juneau-calendar.js}, {@code juneau-calendar.css} and {@code juneau-chrome.js} are widget runtimes, not
+ * {@code juneau-calendar.js} and {@code juneau-calendar.css} are widget runtimes, not
  * table runtimes, and their bytes now live in {@code juneau-rest-server-widgets} beside the bean contracts that
  * drive them.  {@link WidgetsMixin} is where a new application gets them.
  *
  * <p>
- * This mixin keeps a <b>deprecated</b> mount and path constant for each of the three so that an existing
+ * This mixin keeps a <b>deprecated</b> mount and path constant for each of the two so that an existing
  * {@code @Rest(mixins=ViewsMixin.class)} application keeps working with no change: the mount reads the widget
  * module's bytes off the classpath (that module is a compile-scope dependency of this one) rather than holding a
  * second copy, so the body and the cache-buster are identical to what {@link WidgetsMixin} serves.  Composing both
  * mixins is therefore harmless.
  *
  * <p>
- * The relocation does <b>not</b> make those scripts standalone: they still resolve glyphs through this module's
- * {@code juneau-icons.js} and push their popovers onto the ONE shared layer stack {@code juneau-views.js} publishes.
- * A page loading the widget calendar/chrome runtime must still load this module's {@code juneau-icons.js} and
+ * The relocation does <b>not</b> make that script standalone: it still resolves glyphs through this module's
+ * {@code juneau-icons.js} and pushes its popovers onto the ONE shared layer stack {@code juneau-views.js} publishes.
+ * A page loading the widget calendar runtime must still load this module's {@code juneau-icons.js} and
  * {@code juneau-views.js} first.
  *
  * <h5 class='section'>Cache-busting + versioned URLs:</h5>
@@ -97,10 +102,50 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 // @formatter:off
 @Rest
+@SuppressWarnings({
+	"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
+})
 public class ViewsMixin {
 
-	/** The URL path at which the client initializer is served (relative to the host mount). */
+	/**
+	 * The URL path at which the client initializer is served (relative to the host mount).  A page with any
+	 * server-mode card ({@code dataMode: "server"}) must load {@code juneau-datatables.js}
+	 * ({@link #DATATABLES_JS_PATH}) <b>before</b> this script, so {@code window.JuneauDataTables} is already present
+	 * when {@code buildOptions} wires up that card's ajax (design doc §3.1/D8).  This mixin does not serve
+	 * {@code juneau-datatables.js} itself &mdash; the resource
+	 * mixes in {@code DataTablesMixin} for that, the same way it already mixes in {@code ViewsMixin} for this
+	 * script; a duplicate {@code @RestGet} for the same path on two mixed-in classes would fail route
+	 * registration.  A missing {@code window.JuneauDataTables} at server-mode init fails loudly (console warning,
+	 * no silent GET fallback) rather than silently misbehaving.  A page with any ribbon options should likewise load
+	 * {@code juneau-ribbon.js} before this script, so {@code window.JuneauViews.ribbon} is present when
+	 * {@code buildOptions} merges that view's active ribbon state into the request; unlike the
+	 * {@code JuneauDataTables} case this one degrades rather than fails &mdash; a missing
+	 * {@code window.JuneauViews.ribbon} warns and simply contributes no ribbon filters, since a view with no ribbon
+	 * configured never needed {@code juneau-ribbon.js} loaded at all.
+	 */
 	public static final String VIEWS_JS_PATH = "/juneau-views.js";
+
+	/**
+	 * The URL path of the DataTables glue script, {@code juneau-datatables.js} (the same path as
+	 * {@link DataTablesMixin#GLUE_PATH}).
+	 *
+	 * <p>
+	 * Named here only so {@link #viewAssetUrl(RestRequest, String)} can build its cache-busted URL for an asset list
+	 * such as the console {@code "views"} toolkit pack.  This mixin does <b>not</b> serve it (see
+	 * {@link #VIEWS_JS_PATH} for why); a host that renders server-mode tables must also mix in {@link DataTablesMixin}.
+	 * The console {@code "views"} pack emits this script only on a page that has a server-mode table card, so a host
+	 * whose pages have no such card does not need {@link DataTablesMixin} (and never requests this path).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(mixins={ViewsMixin.<jk>class</jk>, DataTablesMixin.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 		<jc>// Load before juneau-views.js:</jc>
+	 * 		<jc>//   ViewsMixin.viewAssetUrl(req, ViewsMixin.DATATABLES_JS_PATH)</jc>
+	 * 	}
+	 * </p>
+	 */
+	public static final String DATATABLES_JS_PATH = DataTablesMixin.GLUE_PATH;
 
 	/** The URL path at which the ribbon runtime is served (relative to the host mount). */
 	public static final String RIBBON_JS_PATH = "/juneau-ribbon.js";
@@ -111,20 +156,77 @@ public class ViewsMixin {
 	/** The URL path at which the base view stylesheet is served (relative to the host mount). */
 	public static final String VIEWS_CSS_PATH = "/juneau-views.css";
 
-	/** The URL path at which the icon registry is served (relative to the host mount). */
+	/**
+	 * The URL path at which the icon registry is served (relative to the host mount).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Page-level sprite layers, read once before the chrome draws:</jc>
+	 * 	<jc>// &lt;script src="/views/juneau-icons.js"</jc>
+	 * 	<jc>//         data-juneau-icon-replacement="/my/set.svg"</jc>
+	 * 	<jc>//         data-juneau-icon-override="/my/overrides.svg"&gt;&lt;/script&gt;</jc>
+	 * </p>
+	 */
 	public static final String ICONS_JS_PATH = "/juneau-icons.js";
+
+	/**
+	 * The URL path at which the column-search engine is served (relative to the host mount).  This
+	 * dependency-free {@code <script>} loads before {@code juneau-views.js} (like the icon registry): it publishes
+	 * {@code JuneauViews.search} &mdash; the client mirror of the server-side {@link SearchExpressionParser}/
+	 * {@link SearchOperatorSet}/{@link InMemoryBeanQueryContext} context that the header search popup and a client-mode
+	 * grid use to parse and evaluate each column's raw search expression.
+	 */
+	public static final String SEARCH_JS_PATH = "/juneau-search.js";
+
+	/**
+	 * The URL path at which the general page-state store is served (relative to the host mount).  This
+	 * dependency-free {@code <script>} loads before {@code juneau-views.js} and {@code juneau-config.js} (like the
+	 * icon registry and column-search engine): it publishes {@code JuneauViews.pageState} &mdash; a per-table /
+	 * per-page key/value store, backed by {@code localStorage} by default and degrading to a silent no-op when
+	 * browser storage is blocked.  The datatable View Settings dialog and any other page preference share it.
+	 */
+	public static final String PAGESTATE_JS_PATH = "/juneau-pagestate.js";
+
+	/**
+	 * The URL path at which the shareable "Copy link" URL-state codec is served (relative to the host mount).  This
+	 * dependency-free {@code <script>} loads before {@code juneau-views.js} and {@code juneau-config.js} (like the
+	 * icon registry, column-search engine, and page-state store): it publishes {@code JuneauViews.urlState} &mdash;
+	 * the single codec for the one {@code ?state=} query parameter that carries a shareable link's live tab, primary-
+	 * table filters, and primary-table sort (never the browser-local View Settings, and never nested tables).
+	 */
+	public static final String URLSTATE_JS_PATH = "/juneau-urlstate.js";
 
 	/**
 	 * The URL path at which the shared SVG symbol sprite is served (relative to the host mount).
 	 * {@code juneau-icons.js} fetches this next to itself by default (pack {@code original}); the key/legend
-	 * file is not served to browsers.
+	 * file is not served to browsers.  An app replaces part or all of this shipped set per page with a replacement
+	 * and/or override sprite that uses the same {@code juneau-sym-{stem}} symbol ids.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Page-level sprite layers, read once before the chrome draws:</jc>
+	 * 	<jc>// &lt;script src="/views/juneau-icons.js"</jc>
+	 * 	<jc>//         data-juneau-icon-replacement="/my/set.svg"</jc>
+	 * 	<jc>//         data-juneau-icon-override="/my/overrides.svg"&gt;&lt;/script&gt;</jc>
+	 * </p>
 	 */
 	public static final String SYMBOLS_SVG_PATH = "/juneau-symbols.svg";
 
 	/**
 	 * The URL path at which the opt-in Material Symbols Outlined sprite is served (relative to the host mount).
-	 * Selected by {@code JuneauViews.icons.pack("material")} / {@code data-juneau-icon-pack="material"}.
-	 * Default remains {@link #SYMBOLS_SVG_PATH} (Juneau-original).
+	 * Selected as the legacy replacement layer by {@code JuneauViews.icons.pack("material")} /
+	 * {@code data-juneau-icon-pack="material"}; new apps point {@code data-juneau-icon-replacement} /
+	 * {@code JuneauViews.icons.sprites({replacementUrl})} at the set they want instead.
+	 * Default remains {@link #SYMBOLS_SVG_PATH} (Juneau's own shipped set).  The Material pack loads as the replacement
+	 * layer on top of that shipped sprite, so stems the Material file does not carry fall back to the shipped glyph.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Opt in to the Material Symbols sprite as the replacement layer over the shipped set, before the chrome draws:</jc>
+	 * 	<jc>// &lt;script src="/views/juneau-icons.js" data-juneau-icon-pack="material"&gt;&lt;/script&gt;</jc>
+	 * 	<jc>// or, from script before first paint:</jc>
+	 * 	<jc>// JuneauViews.icons.pack("material");</jc>
+	 * </p>
 	 */
 	public static final String SYMBOLS_MATERIAL_SVG_PATH = "/juneau-symbols-material.svg";
 
@@ -154,14 +256,6 @@ public class ViewsMixin {
 	public static final String HELPERS_JS_PATH = "/juneau-helpers.js";
 
 	/**
-	 * The URL path at which the page-cards runtime is served (relative to the host mount).  This
-	 * {@code <script>} is the last entry in the {@code "views"} toolkit pack (after
-	 * {@link #HELPERS_JS_PATH}): it scans {@code script.juneau-card-sidecar} envelopes emitted by the
-	 * {@code <@card>} FreeMarker directive and hands table/populate slots to {@code JuneauViews.regions.mount}.
-	 */
-	public static final String PAGE_CARDS_JS_PATH = "/juneau-page-cards.js";
-
-	/**
 	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
 	 * consumer adds this {@code <script>} after {@code juneau-views.js}; a non-configurable table never loads it.
 	 */
@@ -188,9 +282,6 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
 	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CALENDAR_JS_PATH = "/juneau-calendar.js";
 
@@ -201,55 +292,63 @@ public class ViewsMixin {
 	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
 	@Deprecated(since = "10.0.0", forRemoval = false)
 	public static final String CALENDAR_CSS_PATH = "/juneau-calendar.css";
 
 	/**
-	 * The URL path at which the opt-in page-chrome runtime is served (relative to the host mount).  A consumer adds
-	 * this {@code <script>} after {@code juneau-icons.js} (header action glyphs resolve from the icon registry); a
-	 * page with no {@code data-juneau-app-header}/{@code data-juneau-bar-slot} region never loads it.
+	 * The URL path at which the console shell runtime is served (relative to the host mount).
 	 *
-	 * @deprecated The chrome runtime now ships in the widget module; compose
-	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
-	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
+	 * <p>
+	 * {@code juneau-console.js} mounts the C1 page contract (header, nav, cards, footer) from a page's
+	 * {@code #juneau-page} script island. This module takes a compile-scope dependency on
+	 * {@code juneau-rest-server-console-ui} so that a {@code views}-only application can serve the console shell
+	 * from the same mixin it already composes, without separately adding {@link ConsoleChromeMixin}. The toolkit
+	 * pack ({@code juneau-views.js} and siblings) deliberately does <b>not</b> bundle this script: a console page's
+	 * shell loads it once via {@code PageCapture.writeBody}, and a second copy from the toolkit pack would
+	 * double-load the runtime.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A views-only application serves the console shell at the same stable path ConsoleChromeMixin uses.</jc>
+	 * 	<ja>&#64;Rest</ja>(mixins=ViewsMixin.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {}
+	 *
+	 * 	<jc>// GET /juneau-console.js now returns the shell runtime.</jc>
+	 * </p>
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
-	@Deprecated(since = "10.0.0", forRemoval = false)
-	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
+	public static final String CONSOLE_JS_PATH = "/juneau-console.js";
 
 	/**
 	 * The frozen {@code VIEW_META} contract-version handshake constant. FTL {@code <@card type="datatables">}
 	 * catalogs emit this on the lifted {@code view} object.
 	 */
-	public static final String CONTRACT_VERSION = "4";
+	public static final String CONTRACT_VERSION = "5";
 
 	/**
-	 * The app-header refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in.
+	 * The app-header refresh-envelope contract-version handshake constant that the console shell bakes in.
 	 * Deliberately distinct from {@link #CONTRACT_VERSION} and {@link #BAR_CONTRACT_VERSION}: a header-envelope
 	 * revision must never force a view-sidecar or bar-sidecar bump, or vice-versa.
 	 */
 	public static final String HEADER_CONTRACT_VERSION = "1";
 
 	/**
-	 * The bar-slot refresh-envelope contract-version handshake constant that {@code juneau-chrome.js} bakes in.
+	 * The bar-slot refresh-envelope contract-version handshake constant that the console shell bakes in.
 	 * Deliberately a distinct constant from {@link #HEADER_CONTRACT_VERSION} (see that constant).
 	 */
 	public static final String BAR_CONTRACT_VERSION = "1";
 
 	/**
-	 * The slot-envelope ({@code SLOT_META}) contract-version handshake constant that {@code juneau-page-cards.js}
-	 * and {@code juneau-views.js} bake in. Deliberately a distinct constant from {@link #CONTRACT_VERSION} (the
+	 * The slot-envelope ({@code SLOT_META}) contract-version handshake constant that {@code juneau-views.js}
+	 * bakes in. Deliberately a distinct constant from {@link #CONTRACT_VERSION} (the
 	 * inner {@code VIEW_META} object): a slot-envelope revision must never force a view-sidecar bump, or vice-versa.
 	 */
 	public static final String SLOT_CONTRACT_VERSION = "1";
 
 	/** Classpath location of the shipped initializer. */
 	static final String VIEWS_JS_RESOURCE = "/org/apache/juneau/views/juneau-views.js";
+
+	/** Classpath location of the DataTables glue script, shipped by {@code juneau-rest-server-datatables}. */
+	static final String DATATABLES_JS_RESOURCE = "/org/apache/juneau/rest/server/datatables/juneau-datatables.js";
 
 	/** Classpath location of the shipped ribbon runtime. */
 	static final String RIBBON_JS_RESOURCE = "/org/apache/juneau/views/juneau-ribbon.js";
@@ -263,7 +362,16 @@ public class ViewsMixin {
 	/** Classpath location of the shipped icon registry. */
 	static final String ICONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-icons.js";
 
-	/** Classpath location of the shipped SVG symbol sprite (Juneau-original, default pack). */
+	/** Classpath location of the shipped column-search engine (client mirror of the Java column-search engine). */
+	static final String SEARCH_JS_RESOURCE = "/org/apache/juneau/views/juneau-search.js";
+
+	/** Classpath location of the shipped general page-state store. */
+	static final String PAGESTATE_JS_RESOURCE = "/org/apache/juneau/views/juneau-pagestate.js";
+
+	/** Classpath location of the shipped shareable-link URL-state codec. */
+	static final String URLSTATE_JS_RESOURCE = "/org/apache/juneau/views/juneau-urlstate.js";
+
+	/** Classpath location of the shipped SVG symbol sprite (Juneau's own set, default pack). */
 	static final String SYMBOLS_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols.svg";
 
 	/** Classpath location of the opt-in Material Symbols Outlined sprite. */
@@ -275,9 +383,6 @@ public class ViewsMixin {
 	/** Classpath location of the shipped region-populate paint library. */
 	static final String HELPERS_JS_RESOURCE = "/org/apache/juneau/views/juneau-helpers.js";
 
-	/** Classpath location of the shipped page-cards runtime. */
-	static final String PAGE_CARDS_JS_RESOURCE = "/org/apache/juneau/views/juneau-page-cards.js";
-
 	/** Classpath location of the shipped column-chooser runtime. */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
 
@@ -288,7 +393,7 @@ public class ViewsMixin {
 	 * Classpath location of the reusable-calendar runtime, which the <b>widget</b> module now ships.
 	 *
 	 * <p>
-	 * The three widget-owned assets below are read out of the widget module's classpath (a compile-scope dependency of
+	 * The two widget-owned assets below are read out of the widget module's classpath (a compile-scope dependency of
 	 * this one), never copied into this module's resources.  Reading rather than copying is what makes this mixin's
 	 * deprecated accessor serve the same bytes the widget mixin serves, and it is why the absent-from-this-module
 	 * guard in the serving test can assert a move rather than a duplication.
@@ -297,9 +402,6 @@ public class ViewsMixin {
 
 	/** Classpath location of the reusable-calendar stylesheet, which the widget module now ships (see {@link #CALENDAR_JS_RESOURCE}). */
 	static final String CALENDAR_CSS_RESOURCE = "/org/apache/juneau/widgets/juneau-calendar.css";
-
-	/** Classpath location of the page-chrome runtime, which the widget module now ships (see {@link #CALENDAR_JS_RESOURCE}). */
-	static final String CHROME_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-chrome.js";
 
 	/** Content type emitted for the JavaScript assets. */
 	static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
@@ -321,18 +423,33 @@ public class ViewsMixin {
 	private static final ClasspathAssetCache ASSET_CACHE = new ClasspathAssetCache(ViewsMixin.class);
 
 	/**
-	 * The same helper, but anchored on the <b>widget</b> mixin, for the three assets that module now ships and this
+	 * The same helper, but anchored on the <b>widget</b> mixin, for the two assets that module now ships and this
 	 * one only keeps deprecated mounts for.
 	 *
 	 * <p>
 	 * The anchor governs two things: which classpath the bytes are read from (irrelevant here &mdash; the widget
 	 * module is a compile-scope dependency, so either anchor finds the same bytes) and which module's
 	 * implementation version the {@code ?v=<buildVersion>-<hash8>} cache-buster carries.  Anchoring the relocated
-	 * three on the widget mixin makes this mixin's deprecated URL for an asset <b>byte-identical</b> to the widget
+	 * two on the widget mixin makes this mixin's deprecated URL for an asset <b>byte-identical</b> to the widget
 	 * mixin's URL for it, buster included, rather than merely serving the same body behind two differently-versioned
 	 * URLs.  A page that mixes both mixins therefore cannot end up caching the same script twice.
 	 */
 	private static final ClasspathAssetCache WIDGET_ASSET_CACHE = new ClasspathAssetCache(WidgetsMixin.class);
+
+	/**
+	 * The same helper, but anchored on the <b>console-ui</b> mixin, for the console shell script that module ships
+	 * and this one serves at {@link #CONSOLE_JS_PATH}.  Anchoring on {@link ConsoleChromeMixin} (rather than this
+	 * class) makes this mount's {@code ?v=<buildVersion>-<hash8>} cache-buster identical to
+	 * {@code ConsoleChromeMixin}'s own mount of the same bytes, so a page that composes both mixins cannot end up
+	 * caching the same script twice under two different busters.
+	 */
+	private static final ClasspathAssetCache CONSOLE_ASSET_CACHE = new ClasspathAssetCache(ConsoleChromeMixin.class);
+
+	/**
+	 * The same helper, but anchored on {@link DataTablesMixin}, for {@link #DATATABLES_JS_PATH}: the cache-buster
+	 * carries the datatables module's implementation version, since that module ships (and serves) the bytes.
+	 */
+	private static final ClasspathAssetCache DATATABLES_ASSET_CACHE = new ClasspathAssetCache(DataTablesMixin.class);
 
 	/**
 	 * [GET /juneau-views.js] &mdash; serve the client initializer.
@@ -410,6 +527,51 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-search.js] &mdash; serve the column-search engine.
+	 *
+	 * @return The column-search engine as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=SEARCH_JS_PATH,
+		summary="Juneau rich-view column-search engine",
+		description="First-party, dependency-free JavaScript mirror of the server-side column-search engine (parser, operator metadata, and per-type leaf semantics) published as JuneauViews.search.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSearchScript() {
+		return serve(SEARCH_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-pagestate.js] &mdash; serve the general page-state store.
+	 *
+	 * @return The page-state store as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=PAGESTATE_JS_PATH,
+		summary="Juneau rich-view page-state store",
+		description="First-party, dependency-free JavaScript key/value store (per-table and per-page namespaces, localStorage-backed with a blocked-storage no-op fallback) published as JuneauViews.pageState.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getPageStateScript() {
+		return serve(PAGESTATE_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-urlstate.js] &mdash; serve the shareable-link URL-state codec.
+	 *
+	 * @return The URL-state codec as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=URLSTATE_JS_PATH,
+		summary="Juneau rich-view shareable-link URL-state codec",
+		description="First-party, dependency-free JavaScript codec for the one ?state= query parameter (tab/filter/sort of the primary table only, never View Settings or nested tables) published as JuneauViews.urlState.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getUrlStateScript() {
+		return serve(URLSTATE_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.
 	 *
 	 * @return The sprite as an SVG {@link HttpResource}.
@@ -432,7 +594,7 @@ public class ViewsMixin {
 	@RestGet(
 		path=SYMBOLS_MATERIAL_SVG_PATH,
 		summary="Juneau rich-view Material Symbols SVG sprite (opt-in)",
-		description="NOTICE-attributed Material Symbols Outlined sprite. Opt-in via JuneauViews.icons.pack(\"material\"). Default remains juneau-symbols.svg.",
+		description="NOTICE-attributed Material Symbols Outlined sprite. Apps normally supply their own set via the icon replacementUrl (data-juneau-icon-replacement); JuneauViews.icons.pack(\"material\") remains the legacy base selector. Default remains juneau-symbols.svg.",
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getSymbolsMaterialSvg() {
@@ -470,29 +632,14 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-page-cards.js] &mdash; serve the page-cards runtime.
-	 *
-	 * @return The page-cards runtime as a JavaScript {@link HttpResource}.
-	 */
-	@RestGet(
-		path=PAGE_CARDS_JS_PATH,
-		summary="Juneau page-cards runtime",
-		description="First-party, opt-in JavaScript that scans <@card> sidecar envelopes and hands table/populate slots to JuneauViews.regions.mount.",
-		swagger=@OpSwagger(ignore=true)
-	)
-	public HttpResource getPageCardsScript() {
-		return serve(PAGE_CARDS_JS_RESOURCE, JS_CONTENT_TYPE);
-	}
-
-	/**
-	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser / saved-views runtime.
+	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser runtime (column configuration is localStorage-persisted).
 	 *
 	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
 	 */
 	@RestGet(
 		path=CONFIG_JS_PATH,
 		summary="Juneau rich-view column-chooser runtime",
-		description="First-party, opt-in JavaScript that renders the View-tab column chooser and saved-views persistence for a columnConfig view.",
+		description="First-party, opt-in JavaScript that renders the View-tab column chooser and column configuration (localStorage-persisted) for a columnConfig view.",
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getConfigScript() {
@@ -522,7 +669,7 @@ public class ViewsMixin {
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
 	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -546,7 +693,7 @@ public class ViewsMixin {
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
 	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -560,9 +707,6 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
 	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CALENDAR_JS_PATH,
@@ -581,9 +725,6 @@ public class ViewsMixin {
 	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
 	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
 	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
 		path=CALENDAR_CSS_PATH,
@@ -596,24 +737,18 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-chrome.js] &mdash; serve the opt-in page-chrome runtime from the widget module's classpath.
+	 * [GET /juneau-console.js] &mdash; serve the console shell runtime from the console-ui module's classpath.
 	 *
-	 * @return The page-chrome runtime as a JavaScript {@link HttpResource}.
-	 * @deprecated Compose {@link WidgetsMixin} instead, which ships these bytes.  This mount stays so that an
-	 * 	application composing only this mixin keeps serving the asset at the same URL with the same body.
+	 * @return The console shell runtime as a JavaScript {@link HttpResource}.
 	 */
-	@SuppressWarnings({
-		"java:S1133" // Still referenced externally (compatibility mount, forRemoval=false); removal is a separate deprecation-cycle decision.
-	})
-	@Deprecated(since = "10.0.0", forRemoval = false)
 	@RestGet(
-		path=CHROME_JS_PATH,
-		summary="Juneau page-chrome runtime (relocated)",
-		description="Deprecated compatibility mount. The page-chrome runtime now ships in juneau-rest-server-widgets; these bytes are read from that module and are identical to the ones WidgetsMixin serves.",
+		path=CONSOLE_JS_PATH,
+		summary="Juneau console shell runtime",
+		description="Renders the #juneau-page contract into header, nav, cards and footer; served from the console-ui module's classpath.",
 		swagger=@OpSwagger(ignore=true)
 	)
-	public HttpResource getChromeScript() {
-		return WIDGET_ASSET_CACHE.serve(CHROME_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	public HttpResource getConsoleJs() {
+		return CONSOLE_ASSET_CACHE.serve(ConsoleChromeMixin.CONSOLE_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
 	}
 
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */
@@ -622,32 +757,40 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * Selects the cache that owns the given asset path: the three relocated widget assets hash and version through
-	 * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), everything else through this module's own.
+	 * Selects the cache that owns the given asset path: the two relocated widget assets hash and version through
+	 * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), the DataTables glue through the datatables
+	 * module's (see {@link #DATATABLES_ASSET_CACHE}), everything else through this module's own.
 	 */
 	private static ClasspathAssetCache cacheFor(String path) {
-		if (CALENDAR_JS_PATH.equals(path) || CALENDAR_CSS_PATH.equals(path) || CHROME_JS_PATH.equals(path))
+		if (eqa(path, CALENDAR_JS_PATH, CALENDAR_CSS_PATH))
 			return WIDGET_ASSET_CACHE;
+		if (eq(path, DATATABLES_JS_PATH))
+			return DATATABLES_ASSET_CACHE;
 		return ASSET_CACHE;
 	}
 
 	/** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */
+	@SuppressWarnings({
+		"java:S3776" // Flat path-to-resource lookup table; one branch per asset, no nesting.
+	})
 	private static String resourceFor(String path) {
-		if (VIEWS_JS_PATH.equals(path)) return VIEWS_JS_RESOURCE;
-		if (RIBBON_JS_PATH.equals(path)) return RIBBON_JS_RESOURCE;
-		if (RENDERS_JS_PATH.equals(path)) return RENDERS_JS_RESOURCE;
-		if (VIEWS_CSS_PATH.equals(path)) return VIEWS_CSS_RESOURCE;
-		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
-		if (SYMBOLS_SVG_PATH.equals(path)) return SYMBOLS_SVG_RESOURCE;
-		if (SYMBOLS_MATERIAL_SVG_PATH.equals(path)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
-		if (REGIONS_JS_PATH.equals(path)) return REGIONS_JS_RESOURCE;
-		if (HELPERS_JS_PATH.equals(path)) return HELPERS_JS_RESOURCE;
-		if (PAGE_CARDS_JS_PATH.equals(path)) return PAGE_CARDS_JS_RESOURCE;
-		if (CONFIG_JS_PATH.equals(path)) return CONFIG_JS_RESOURCE;
-		if (CONFIG_CSS_PATH.equals(path)) return CONFIG_CSS_RESOURCE;
-		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
-		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
-		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;
+		if (eq(path, VIEWS_JS_PATH)) return VIEWS_JS_RESOURCE;
+		if (eq(path, RIBBON_JS_PATH)) return RIBBON_JS_RESOURCE;
+		if (eq(path, RENDERS_JS_PATH)) return RENDERS_JS_RESOURCE;
+		if (eq(path, VIEWS_CSS_PATH)) return VIEWS_CSS_RESOURCE;
+		if (eq(path, ICONS_JS_PATH)) return ICONS_JS_RESOURCE;
+		if (eq(path, SEARCH_JS_PATH)) return SEARCH_JS_RESOURCE;
+		if (eq(path, PAGESTATE_JS_PATH)) return PAGESTATE_JS_RESOURCE;
+		if (eq(path, URLSTATE_JS_PATH)) return URLSTATE_JS_RESOURCE;
+		if (eq(path, SYMBOLS_SVG_PATH)) return SYMBOLS_SVG_RESOURCE;
+		if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
+		if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;
+		if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;
+		if (eq(path, CONFIG_JS_PATH)) return CONFIG_JS_RESOURCE;
+		if (eq(path, CONFIG_CSS_PATH)) return CONFIG_CSS_RESOURCE;
+		if (eq(path, CALENDAR_JS_PATH)) return CALENDAR_JS_RESOURCE;
+		if (eq(path, CALENDAR_CSS_PATH)) return CALENDAR_CSS_RESOURCE;
+		if (eq(path, DATATABLES_JS_PATH)) return DATATABLES_JS_RESOURCE;
 		throw new IllegalArgumentException("Unknown asset path: " + path);
 	}
 }

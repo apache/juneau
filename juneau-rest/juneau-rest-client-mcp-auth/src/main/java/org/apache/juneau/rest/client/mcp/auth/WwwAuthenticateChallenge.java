@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -52,8 +51,8 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 * @param parameters The auth-params (lower-cased keys).  Must not be <jk>null</jk>.
 	 */
 	protected WwwAuthenticateChallenge(String scheme, Map<String,String> parameters) {
-		this.scheme = assertArgNotNullOrBlank("scheme", scheme);
-		this.parameters = u(cp(assertArgNotNull("parameters", parameters)));
+		this.scheme = reqnb("scheme", scheme);
+		this.parameters = u(cp(reqnn("parameters", parameters)));
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 * @return <jk>true</jk> if this is a Bearer challenge.
 	 */
 	public boolean isBearer() {
-		return "bearer".equalsIgnoreCase(scheme);
+		return eqic("bearer", scheme);
 	}
 
 	/**
@@ -185,7 +184,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 * @return The value, or {@link Optional#empty()} if absent.
 	 */
 	public Optional<String> parameter(String name) {
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		return o(parameters.get(name.toLowerCase(Locale.ROOT)));
 	}
 

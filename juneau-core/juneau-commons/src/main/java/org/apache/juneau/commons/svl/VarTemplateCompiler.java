@@ -93,11 +93,11 @@ import org.apache.juneau.commons.lang.*;
  * segment is emitted unchanged.
  */
 @SuppressWarnings({
+	"java:S110", // Inheritance depth: the segment hierarchy is intentionally shallow
 	"java:S125", // State-machine narration in comments
 	"java:S2583", // Condition always true/false; state persists across iterations
-	"java:S6541", // Brain-method threshold; intentional state-machine consolidation
 	"java:S3776", // Cognitive complexity acceptable for this state-machine + parser
-	"java:S110", // Inheritance depth: the segment hierarchy is intentionally shallow
+	"java:S6541" // Brain-method threshold; intentional state-machine consolidation
 })
 final class VarTemplateCompiler {
 

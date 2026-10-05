@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.server.views;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal {@link ActionResult} when
@@ -50,7 +50,9 @@ import org.apache.juneau.marshall.*;
  * @since 10.0.0
  */
 @BeanType(properties="jobId,streamUrl,cancelUrl")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class AsyncJobRef {
 
 	/** The job's unguessable capability id. */
@@ -78,7 +80,7 @@ public class AsyncJobRef {
 	 * @return A new reference carrying the job's id and its {@code servlet:}-relative stream + cancel URLs.
 	 */
 	public static AsyncJobRef of(AsyncJob job) {
-		assertArgNotNull("job", job);
+		reqnn("job", job);
 		var r = new AsyncJobRef();
 		r.jobId = job.id();
 		r.streamUrl = "servlet:" + AsyncJobsMixin.streamPath(job.id());

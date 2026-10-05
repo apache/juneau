@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -125,20 +124,12 @@ import org.apache.juneau.commons.utils.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_lines = "lines";
-	private static final String ARG_pattern = "pattern";
-	private static final String ARG_regex = "regex";
-	private static final String ARG_replacement = "replacement";
-	private static final String ARG_searchPattern = "searchPattern";
 	private static final String LINE_SEPARATOR_REGEX = "[\\r\\n]+";
-	private static final String ARG_string = "string";
-	private static final String ARG_target = "target";
-	private static final String ARG_values = "values";
 
 	private static final Messages MESSAGES = Messages.of(FluentStringAssertion.class, "Messages");
 	private static final String MSG_stringDifferedAtPosition = MESSAGES.getString("stringDifferedAtPosition");
@@ -250,8 +241,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asReplace(String target, String replacement) {
-		assertArgNotNull(ARG_target, target);
-		assertArgNotNull(ARG_replacement, replacement);
+		reqnn("target", target);
+		reqnn("replacement", replacement);
 		return asTransformed(x -> x == null ? null : x.replace(target, replacement));
 	}
 
@@ -263,8 +254,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asReplaceAll(String regex, String replacement) {
-		assertArgNotNull(ARG_regex, regex);
-		assertArgNotNull(ARG_replacement, replacement);
+		reqnn("regex", regex);
+		reqnn("replacement", replacement);
 		return asTransformed(x -> x == null ? null : x.replaceAll(regex, replacement));
 	}
 
@@ -275,7 +266,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<String,R> asSplit(String regex) {
-		assertArgNotNull(ARG_regex, regex);
+		reqnn("regex", regex);
 		return new FluentListAssertion<>(this, valueIsNull() ? null : l(value().trim().split(regex)), returns());
 	}
 
@@ -348,7 +339,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isContains(String...values) throws AssertionError {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		var s = orElse(null);
 		for (var substring : values)
 			if (nn(substring) && ! contains(s, substring))
@@ -377,7 +368,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEndsWith(String string) {
-		assertArgNotNull(ARG_string, string);
+		reqnn("string", string);
 		var s = value();
 		if (! s.endsWith(string))
 			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
@@ -421,7 +412,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLines(String...lines) throws AssertionError {
-		assertArgNotNull(ARG_lines, lines);
+		reqnn("lines", lines);
 		var v = join(lines, '\n');
 		var s = value();
 		if (neq(v, s))
@@ -440,7 +431,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
-		assertArgNotNull(ARG_searchPattern, searchPattern);
+		reqnn("searchPattern", searchPattern);
 		return isPattern(getMatchPattern(searchPattern));
 	}
 
@@ -467,7 +458,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotContains(String...values) throws AssertionError {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		var s = orElse(null);
 		for (var substring : values)
 			if (nn(substring) && contains(s, substring))
@@ -512,7 +503,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isPattern(Pattern pattern) throws AssertionError {
-		assertArgNotNull(ARG_pattern, pattern);
+		reqnn("pattern", pattern);
 		var s = value();
 		if (! pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
@@ -539,7 +530,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isPattern(String regex, int flags) throws AssertionError {
-		assertArgNotNull(ARG_regex, regex);
+		reqnn("regex", regex);
 		var p = Pattern.compile(regex, flags);
 		var s = value();
 		if (! p.matcher(s).matches())
@@ -570,7 +561,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSortedLines(String...lines) {
-		assertArgNotNull(ARG_lines, lines);
+		reqnn("lines", lines);
 
 		// Must work for windows too.
 		var e = join(lines, '\n').trim().split(LINE_SEPARATOR_REGEX);
@@ -597,7 +588,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isStartsWith(String string) {
-		assertArgNotNull(ARG_string, string);
+		reqnn("string", string);
 		var s = value();
 		if (! s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));

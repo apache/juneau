@@ -59,14 +59,12 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S2160" // equals() / hashCode() inherited from MarshalledMap; map equality is element-based
+	"java:S110", // Inheritance depth comes from the inherited MarshalledMap/LinkedHashMap hierarchy, not from this class
+	"java:S2160", // equals() / hashCode() inherited from MarshalledMap; map equality is element-based
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class Json5Map extends MarshalledMap {
 
-	@SuppressWarnings({
-		"java:S2160", // equals() / hashCode() inherited from Json5Map; map equality is element-based
-		"java:S110"   // Inheritance depth inherited from MarshalledMap -> LinkedHashMap chain; intentional
-	})
 	private static class Unmodifiable extends Json5Map {
 		private static final long serialVersionUID = 1L;
 
@@ -170,8 +168,7 @@ public class Json5Map extends MarshalledMap {
 	 * @serial exclude
 	 */
 	@SuppressWarnings({
-		"java:S2386", // Public static final field accessed externally, cannot be protected
-		"java:S110"   // Anonymous subclass of Json5Map inherits the MarshalledMap -> LinkedHashMap chain; intentional
+		"java:S2386" // Public static final field accessed externally, cannot be protected
 	})
 	public static final Json5Map EMPTY_MAP = new Json5Map() {
 
@@ -407,7 +404,7 @@ public class Json5Map extends MarshalledMap {
 	@Override /* Overridden from MarshalledMap */
 	@SuppressWarnings({
 		"unchecked", // Generic varargs is safe here: values are only iterated, not stored into a typed array.
-		"varargs"
+		"varargs" // appendFirst()'s T... values is only forwarded to super.appendFirst(), never stored, so heap pollution cannot occur
 	})
 	public <T> Json5Map appendFirst(Predicate<T> test, String key, T...values) {
 		super.appendFirst(test, key, values);

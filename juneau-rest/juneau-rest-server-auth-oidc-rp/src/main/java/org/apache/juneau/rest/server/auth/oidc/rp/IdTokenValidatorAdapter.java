@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -96,7 +95,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder issuer(String value) {
-			issuer = assertArgNotNullOrBlank("value", value);
+			issuer = reqnb("value", value);
 			return this;
 		}
 
@@ -107,7 +106,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -124,7 +123,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder jwksUri(URI value) {
-			jwksUri = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
+			jwksUri = UriUtils.assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -136,7 +135,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder jwkSet(JWKSet value) {
-			jwkSet = assertArgNotNull("value", value);
+			jwkSet = reqnn("value", value);
 			return this;
 		}
 
@@ -148,7 +147,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder jwkSource(JWKSource<SecurityContext> value) {
-			jwkSource = assertArgNotNull("value", value);
+			jwkSource = reqnn("value", value);
 			return this;
 		}
 
@@ -160,12 +159,12 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder algorithms(JWSAlgorithm...values) {
-			assertArgNotNull("values", values);
-			assertArg(values.length > 0, "algorithms allowlist must be non-empty");
+			reqnn("values", values);
+			req(values.length > 0, "algorithms allowlist must be non-empty");
 			var next = new LinkedHashSet<JWSAlgorithm>();
 			for (var a : values) {
-				assertArgNotNull("algorithm", a);
-				assertArg(! Algorithm.NONE.equals(a), "\"none\" algorithm is permanently rejected");
+				reqnn("algorithm", a);
+				req(! Algorithm.NONE.equals(a), "\"none\" algorithm is permanently rejected");
 				next.add(a);
 			}
 			algorithms = next;
@@ -179,7 +178,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder maxClockSkewSeconds(int value) {
-			assertArg(value >= 0, "maxClockSkewSeconds must be non-negative (was %s)", value);
+			req(value >= 0, "maxClockSkewSeconds must be non-negative (was %s)", value);
 			maxClockSkewSeconds = value;
 			return this;
 		}
@@ -241,7 +240,7 @@ public class IdTokenValidatorAdapter {
 	 * @throws AuthenticationException If parsing, signature verification, or any claim check fails.
 	 */
 	public ClaimsPrincipal validate(String idToken, String expectedNonce) throws AuthenticationException {
-		assertArgNotNullOrBlank("idToken", idToken);
+		reqnb("idToken", idToken);
 		JWT jwt;
 		try {
 			jwt = JWTParser.parse(idToken);

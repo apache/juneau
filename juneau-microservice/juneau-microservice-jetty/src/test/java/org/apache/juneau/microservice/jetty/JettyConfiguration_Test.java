@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice.jetty;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -40,7 +41,9 @@ import jakarta.servlet.http.*;
  * mount paths fail fast.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
-@SuppressWarnings("resource")  // Microservice/Server instances are test fixtures managed by the test lifecycle; explicit close is not needed for these assertions.
+@SuppressWarnings({
+	"resource" // Microservice/Server instances are test fixtures managed by the test lifecycle; explicit close is not needed for these assertions.
+})
 class JettyConfiguration_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {
@@ -166,7 +169,7 @@ class JettyConfiguration_Test extends TestBase {
 			var mounted = false;
 			for (var h : ctx.getServletHandler().getServletMappings()) {
 				for (var p : h.getPathSpecs()) {
-					if ("/api/*".equals(p)) {
+					if (eq(p, "/api/*")) {
 						mounted = true;
 						break;
 					}

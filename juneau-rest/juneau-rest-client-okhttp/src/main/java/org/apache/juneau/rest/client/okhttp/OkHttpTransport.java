@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.okhttp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.rest.client.*;
@@ -179,7 +181,7 @@ public final class OkHttpTransport implements HttpTransport {
 	}
 
 	private static boolean requiresBody(String method) {
-		return "POST".equalsIgnoreCase(method) || "PUT".equalsIgnoreCase(method) || "PATCH".equalsIgnoreCase(method);
+		return eqic("POST", method) || eqic("PUT", method) || eqic("PATCH", method);
 	}
 
 	@SuppressWarnings({

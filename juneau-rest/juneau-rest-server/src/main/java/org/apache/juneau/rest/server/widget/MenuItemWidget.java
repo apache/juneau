@@ -63,7 +63,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
 	 * 		<jk>return</jk> <js>""</js>
 	 * 			+ <js>"\n	var xhr = new XMLHttpRequest();"</js>
-	 * 			+ <js>"\n	xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;v=id,name', true);"</js>
+	 * 			+ <js>"\n	xhr.open('GET', '/petstore/pet?search=status=AVAILABLE&amp;view=id,name', true);"</js>
 	 * 			+ <js>"\n	xhr.setRequestHeader('Accept', 'application/json');"</js>
 	 * 			+ <js>"\n	xhr.onload = function() {"</js>
 	 * 			+ <js>"\n       var pets = JSON.parse(xhr.responseText);"</js>

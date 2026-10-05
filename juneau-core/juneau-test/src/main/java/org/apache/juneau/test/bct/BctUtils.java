@@ -32,8 +32,7 @@ import org.opentest4j.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- *   <li class='jc'>{@link org.apache.juneau.commons.utils.Shorts} - Terse aliases for the domain utility methods
- *   <li class='jc'>{@link org.apache.juneau.commons.utils.AssertionUtils} - Argument validation methods
+ *   <li class='jc'>{@link org.apache.juneau.commons.utils.Shorts} - Terse aliases for the domain utility methods, including argument validation
  *   <li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils} - String manipulation methods
  * </ul>
  */

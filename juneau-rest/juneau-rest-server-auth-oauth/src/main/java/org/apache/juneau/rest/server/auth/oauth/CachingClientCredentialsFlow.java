@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -55,8 +54,6 @@ import com.nimbusds.oauth2.sdk.http.*;
  */
 public class CachingClientCredentialsFlow {
 
-	private static final String ARG_VALUE = "value";
-
 	/**
 	 * Static creator.
 	 *
@@ -88,7 +85,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull(ARG_VALUE, value);
+			tokenEndpoint = reqnn("value", value);
 			return this;
 		}
 
@@ -99,7 +96,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank(ARG_VALUE, value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -110,7 +107,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank(ARG_VALUE, value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -122,7 +119,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull(ARG_VALUE, value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -133,9 +130,9 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -148,7 +145,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenCache(TokenCache value) {
-			tokenCache = assertArgNotNull(ARG_VALUE, value);
+			tokenCache = reqnn("value", value);
 			return this;
 		}
 
@@ -159,7 +156,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder cacheSkew(Duration value) {
-			assertArgNotNull(ARG_VALUE, value);
+			reqnn("value", value);
 			if (value.isNegative())
 				throw new IllegalArgumentException("cacheSkew must be non-negative");
 			cacheSkew = value;
@@ -173,7 +170,7 @@ public class CachingClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull(ARG_VALUE, value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 

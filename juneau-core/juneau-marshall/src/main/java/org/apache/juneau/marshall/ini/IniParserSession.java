@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.ini;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -39,14 +38,14 @@ import org.apache.juneau.marshall.stream.*;
  * Session for parsing INI format into POJOs.
  */
 @SuppressWarnings({
-	"unchecked",
-	"java:S115", // ARG_ctx follows project assertion-param naming convention (ARG_<param>)
-	"java:S3776", "java:S6541", "java:S135",
-	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S135", // The INI line-reading, populateBean() and buildMapFromSections() loops use several 'continue's to skip blank lines, comments, nested sections and already-handled keys.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Branching is inherent to populateBean(), buildMapFromSections() and readValue(), which dispatch over section nesting and target value types.
+	"java:S6541", // populateBean() is a single dispatch over bean properties, sub-sections and value types; splitting it would scatter the INI section mapping.
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // The (T) cast of convertMapToTarget() in doRead() is safe because the target type is the Map type the result was built for.
 })
 public class IniParserSession extends ReaderParserSession implements RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/** Delimiter for nested section names (e.g. {@code address/street}). */
 	private static final String SECTION_PATH_DELIMITER = "/";
@@ -63,7 +62,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		private final IniParser ctx;
 
 		protected Builder(IniParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -81,7 +80,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * @return The builder.
 	 */
 	public static Builder create(IniParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final IniParser ctx;
@@ -288,11 +287,11 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		if (raw == null)
 			return null;
 		var trimmed = raw.trim();
-		if (trimmed.equals("null"))
+		if (eq(trimmed, "null"))
 			return null;
-		if (trimmed.equalsIgnoreCase("true"))
+		if (eqic(trimmed, "true"))
 			return true;
-		if (trimmed.equalsIgnoreCase("false"))
+		if (eqic(trimmed, "false"))
 			return false;
 		if (trimmed.startsWith("'") && trimmed.endsWith("'") && trimmed.length() >= 2) {
 			var inner = trimmed.substring(1, trimmed.length() - 1).replace("''", "'");

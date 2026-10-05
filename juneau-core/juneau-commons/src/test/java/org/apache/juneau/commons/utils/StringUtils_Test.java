@@ -37,10 +37,10 @@ import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"java:S125", // Commented code kept for test documentation
 	"java:S5961", // High assertion count acceptable in comprehensive test
-	"java:S125",  // Commented code kept for test documentation
-	"serial",     // Serialization not relevant in test code
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"serial", // Serialization not relevant in test code
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class StringUtils_Test extends TestBase {
 
@@ -760,7 +760,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("x", defaultIfBlank("x", null));
 		// Test non-breaking space
 		var result = defaultIfBlank("\u00A0", "default");
-		assertTrue(result.equals("default") || result.equals("\u00A0"));
+		assertTrue(eqa(result, "default", "\u00A0"));
 	}
 
 	//====================================================================================================
@@ -5005,12 +5005,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(readable(oe()));
 
 		// Test Iterable (not Collection) - triggers code path
-		var customIterable = new Iterable<String>() {
-			@Override
-			public Iterator<String> iterator() {
-				return Arrays.asList("x", "y", "z").iterator();
-			}
-		};
+		Iterable<String> customIterable = () -> Arrays.asList("x", "y", "z").iterator();
 		assertEquals("[x,y,z]", readable(customIterable));
 
 		// Test Iterator - triggers code path
@@ -6059,7 +6054,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", stripInvalidHttpHeaderChars(""));
 		// Test actual behavior - spaces appear to be removed
 		var result1 = stripInvalidHttpHeaderChars("Hello World");
-		assertTrue(result1.equals("HelloWorld") || result1.equals("Hello World")); // Accept either behavior
+		assertTrue(eqa(result1, "HelloWorld", "Hello World")); // Accept either behavior
 		// Control characters should be removed
 		var result2 = stripInvalidHttpHeaderChars("Hello\u0000World");
 		assertFalse(result2.contains("\u0000"));

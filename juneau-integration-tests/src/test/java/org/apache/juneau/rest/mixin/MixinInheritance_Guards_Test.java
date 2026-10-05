@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mixin;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -43,13 +45,13 @@ class MixinInheritance_Guards_Test extends TestBase {
 
 	public static class AllowOnlyHostHeader extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Host-Allowed").orElse(null));
+			return eq(req.getHeaderParam("X-Host-Allowed").orElse(null), "yes");
 		}
 	}
 
 	public static class AllowOnlyMixinHeader extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Mixin-Allowed").orElse(null));
+			return eq(req.getHeaderParam("X-Mixin-Allowed").orElse(null), "yes");
 		}
 	}
 

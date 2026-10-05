@@ -24,7 +24,7 @@
  *     { display(cellData, rowData, meta), sort(...), filter(...), type(...), class(cellData, rowData, meta) }
  *
  * In the MVP SERVER data mode only `display` + `class` are live - the server does sort/filter/type via
- * DataTablesQueryProtocol, so those facets are inert (they become live only in client-side mode).  The registry
+ * DataTablesQuery (BeanQuery adapter), so those facets are inert (they become live only in client-side mode).  The registry
  * contract still defines all four for forward-compatibility.
  *
  * Everything in the "PURE LOGIC LAYER" below is a pure (cellData, rowData, meta) -> string/class function with NO
@@ -339,11 +339,13 @@
 		return Number.isFinite(n) ? n : null;
 	}
 
+	// The bar state is painted with the status-tone names: below the warn threshold is "success", at or above it
+	// "warning", and at or above the exceeds threshold (or over max) "error".
 	function progressStateClass(actual, max, warn, exceeds) {
-		if (actual > max) return "is-exceeds";
-		if (exceeds != null && actual >= exceeds) return "is-exceeds";
-		if (warn != null && actual >= warn) return "is-warn";
-		return "is-ok";
+		if (actual > max) return "is-error";
+		if (exceeds != null && actual >= exceeds) return "is-error";
+		if (warn != null && actual >= warn) return "is-warning";
+		return "is-success";
 	}
 
 	function progressBarWidth(pct) {
@@ -421,7 +423,7 @@
 
 	// `neutral` is a legal tone that deliberately emits NO modifier: "no semantic colour" is the absence of a class,
 	// so it inherits the chip's themed currentColor exactly as an absent tone does.  An off-palette value also emits
-	// nothing (the server-side ViewDef check has already rejected it; this is the client's fail-safe half).
+	// nothing: the palette is closed and enforced here, on the client, with no server-side pre-check.
 	function pillToneClass(tone) {
 		return tone && tone !== "neutral" && Object.hasOwn(PILL_TONES, tone) ? " is-" + tone : "";
 	}

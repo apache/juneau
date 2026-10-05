@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
@@ -24,6 +23,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.processor.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A session for a single HTTP request.
@@ -37,18 +37,10 @@ import org.apache.juneau.rest.server.processor.*;
  *
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_ctx, ARG_ctx)
-	"resource"   // delegate access — RestSession owns the bean store and closes it; fluent add() calls return the same store.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // delegate access — RestSession owns the bean store and closes it; fluent add() calls return the same store.
 })
 public class RestOpSession extends ContextSession {
-
-	// Property name constants
-	private static final String PROP_ctx = "ctx";
-	private static final String PROP_session = "session";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_session = "session";
 
 	/**
 	 * Builder class.
@@ -70,9 +62,9 @@ public class RestOpSession extends ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RestOpContext ctx, RestSession session) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
-			this.session = assertArgNotNull(ARG_session, session);
+			this.session = reqnn("session", session);
 		}
 
 		@Override /* Overridden from Session.Builder */
@@ -91,7 +83,7 @@ public class RestOpSession extends ContextSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RestOpContext ctx, RestSession session) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
+		return new Builder(reqnn("ctx", ctx), reqnn("session", session));
 	}
 
 	private final RestOpContext ctx;
@@ -134,7 +126,8 @@ public class RestOpSession extends ContextSession {
 			res.flushBuffer();
 			req.close();
 		} catch (Exception e) {
-			session.exception(e);
+			if (! session.logClientAbort(e))
+				session.exception(e);
 		}
 		return this;
 	}
@@ -232,7 +225,7 @@ public class RestOpSession extends ContextSession {
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_ctx, ctx)
-			.a(PROP_session, session);
+			.a("ctx", ctx)
+			.a("session", session);
 	}
 }

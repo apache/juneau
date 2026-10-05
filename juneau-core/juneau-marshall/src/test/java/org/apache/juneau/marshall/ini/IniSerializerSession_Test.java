@@ -23,11 +23,14 @@ import java.io.*;
 import java.net.*;
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage-focused tests for {@link IniSerializerSession} targeting branches not already exercised by
@@ -276,48 +279,28 @@ class IniSerializerSession_Test extends TestBase {
 	// i0x - needsQuoting edge cases: leading/trailing-whitespace strings and structural characters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void i01_needsQuoting_leadingTrailingWhitespace() {
+	@ParameterizedTest
+	@MethodSource("i01_needsQuotingProvider")
+	void i01_needsQuoting(String value) {
 		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "  padded  ");
+		m.put("k", value);
 		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'  padded  '"), ini);
+		assertTrue(ini.contains("'" + value + "'"), ini);
 	}
 
-	@Test void i02_needsQuoting_structuralChars() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "a=b");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'a=b'"), ini);
-	}
-
-	@Test void i03_needsQuoting_bracketChars() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "a[b]");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'a[b]'"), ini);
-	}
-
-	@Test void i03b_needsQuoting_closeBracketOnly() {
-		// "]" without a preceding "[" -- the "[" check short-circuits false, so this is the only way to
-		// exercise the "]" contains() check's true branch on its own.
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "a]b");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'a]b'"), ini);
-	}
-
-	@Test void i04_needsQuoting_hashChar() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "a#b");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'a#b'"), ini);
-	}
-
-	@Test void i05_needsQuoting_emptyString() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("''"), ini);
+	static Stream<Arguments> i01_needsQuotingProvider() {
+		return Stream.of(
+			Arguments.of("  padded  "),    // i01: leading/trailing whitespace
+			Arguments.of("a=b"),           // i02: structural characters
+			Arguments.of("a[b]"),          // i03: bracket characters
+			// i03b: "]" without a preceding "[" -- the "[" check short-circuits false, so this is the only way to
+			// exercise the "]" contains() check's true branch on its own.
+			Arguments.of("a]b"),
+			Arguments.of("a#b"),           // i04: hash character
+			Arguments.of(""),              // i05: empty string
+			Arguments.of("line1\nline2"),  // i07: embedded newline
+			Arguments.of("12345")          // l11: purely numeric (hits the matchNumberPrefix branch directly)
+		);
 	}
 
 	@Test void i06_needsQuoting_literalNullTrueFalseStrings() {
@@ -329,13 +312,6 @@ class IniSerializerSession_Test extends TestBase {
 		assertTrue(ini.contains("'null'"), ini);
 		assertTrue(ini.contains("'true'"), ini);
 		assertTrue(ini.contains("'FALSE'"), ini);
-	}
-
-	@Test void i07_needsQuoting_embeddedNewline() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "line1\nline2");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'line1\nline2'"), ini);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -597,18 +573,6 @@ class IniSerializerSession_Test extends TestBase {
 		var s = IniSerializer.create().swaps(L10c_Swap.class).build();
 		var ini = s.write(m);
 		assertFalse(ini.contains("k"), ini);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// l7x - needsQuoting: a value that is purely numeric (hits the matchNumberPrefix branch directly, distinct from
-	// the structural-character and whitespace checks already covered).
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void l11_needsQuoting_numericLookingString() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("k", "12345");
-		var ini = IniSerializer.DEFAULT.write(m);
-		assertTrue(ini.contains("'12345'"), ini);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

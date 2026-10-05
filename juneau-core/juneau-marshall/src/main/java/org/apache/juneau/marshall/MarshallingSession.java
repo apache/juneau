@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -48,29 +47,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  *
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
 	"rawtypes", // Raw types necessary for generic type handling
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class MarshallingSession extends ContextSession implements ConverterSession, BeanSession {
-
-	// Property name constants
-	private static final String PROP_locale = "locale";
-	private static final String PROP_mediaType = "mediaType";
-	private static final String PROP_timeZone = "timeZone";
-	private static final String PROP_activeView = "activeView";
-	private static final String PROP_BeanSession_locale = "MarshallingSession.locale";
-	private static final String PROP_BeanSession_mediaType = "MarshallingSession.mediaType";
-	private static final String PROP_BeanSession_timeZone = "MarshallingSession.timeZone";
-	private static final String PROP_BeanSession_activeView = "MarshallingSession.activeView";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_o = "o";
-	private static final String ARG_c = "c";
-	private static final String ARG_classes = "classes";
-	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
@@ -93,7 +75,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarshallingContext ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			mediaType = ctx.getMediaType();
 			timeZone = ctx.getTimeZone();
@@ -205,13 +187,13 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 				return self();
 			}
 			switch (key) {
-				case PROP_locale, PROP_BeanSession_locale:
+				case "locale", "MarshallingSession.locale":
 					return locale(cvt(value, Locale.class));
-				case PROP_mediaType, PROP_BeanSession_mediaType:
+				case "mediaType", "MarshallingSession.mediaType":
 					return mediaType(cvt(value, MediaType.class));
-				case PROP_timeZone, PROP_BeanSession_timeZone:
+				case "timeZone", "MarshallingSession.timeZone":
 					return timeZone(cvt(value, TimeZone.class));
-				case PROP_activeView, PROP_BeanSession_activeView:
+				case "activeView", "MarshallingSession.activeView":
 					return activeView(cvt(value, String.class));
 				default:
 					super.property(key, value);
@@ -279,7 +261,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return A new builder.
 	 */
 	public static Builder<?> create(MarshallingContext ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -1095,8 +1077,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return A new instance of the class, or <jk>null</jk> if the class is not a bean.
 	 */
 	@SuppressWarnings({
-		"java:S1168",   // null when BeanMeta not found. Consider empty BeanMap.
-		"java:S1135"    // Deferred design consideration.
+		"java:S1135", // Deferred design consideration.
+		"java:S1168" // null when BeanMeta not found. Consider empty BeanMap.
 	})
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
 		var m = getBeanMeta(c);
@@ -1164,7 +1146,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override
 	public final <T> BeanMap<T> toBeanMap(T o) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 		if (o instanceof BeanMap o2)
 			return o2;
 		// Unwrap recognized proxies (e.g. Hibernate $HibernateProxy$) so we enumerate the entity's properties, not the proxy's.
@@ -1199,9 +1181,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * class.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
-		assertArgNotNull(ARG_o, o);
-		assertArgNotNull(ARG_c, c);
-		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class='%s', objectClass='%s', object='%s'", cn(c), cn(o), 0);
+		reqnn("o", o);
+		reqnn("c", c);
+		req(c.isInstance(o), "The specified object is not an instance of the specified class.  class='%s', objectClass='%s', object='%s'", cn(c), cn(o), 0);
 
 		var cm = getClassMeta(c);
 
@@ -1242,7 +1224,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return The wrapped object.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 		if (o instanceof BeanMap o2)
 			return o2;
 
@@ -1304,7 +1286,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
-		assertArgNotNull(ARG_classes, classes);
+		reqnn("classes", classes);
 		return new ClassMeta(Arrays.stream(classes).map(this::getClassMeta).toList());
 	}
 
@@ -1383,10 +1365,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_locale, locale)
-			.a(PROP_mediaType, mediaType)
-			.a(PROP_timeZone, timeZone)
-			.a(PROP_activeView, activeView);
+			.a("locale", locale)
+			.a("mediaType", mediaType)
+			.a("timeZone", timeZone)
+			.a("activeView", activeView);
 	}
 
 	/**
@@ -1516,7 +1498,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override /* BeanSession */
 	public final Collection<?> parseToList(CharSequence value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return new Json5List(value).setBeanSession(this);
 	}
 

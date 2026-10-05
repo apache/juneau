@@ -309,7 +309,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// E: Null-argument guards on RestResponse helpers (cover the assertArgNotNull branches).
+	// E: Null-argument guards on RestResponse helpers (cover the reqnn branches).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -335,7 +335,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void e01_nullEtagStringYields500() throws Exception {
-		// EntityTag.of(null) returns null, then assertArgNotNull triggers IllegalArgumentException → 500.
+		// EntityTag.of(null) returns null, then reqnn triggers IllegalArgumentException → 500.
 		var a = MockRestClient.buildLax(E.class);
 		a.get("/etagNullString").run().assertStatus(500);
 	}

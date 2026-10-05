@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -49,7 +50,8 @@ import org.junit.jupiter.api.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S125" // Comments are explanatory; they are not commented-out code.
+	"java:S125", // Comments are explanatory; they are not commented-out code.
+	"unused" // Fixture lambdas and methods (SwaggerProvider/OpenApiProvider lambdas, setContext, init(AtomicInteger)) ignore their parameters; the signatures are the contract under test.
 })
 class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
@@ -183,7 +185,9 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	//-----------------------------------------------------------------------------------------------------------
 
 	@Rest
-	@SuppressWarnings("resource") // Each factory method's BasicBeanStore is a short-lived in-memory test fixture backed by a Map, consumed synchronously by .build(); nothing external to leak.
+	@SuppressWarnings({
+		"resource" // Each factory method's BasicBeanStore is a short-lived in-memory test fixture backed by a Map, consumed synchronously by .build(); nothing external to leak.
+	})
 	static class Fix_ManyBeanOverrides {
 		@Bean public EncoderSet myEncoders() { return EncoderSet.create(new BasicBeanStore()).build(); }
 		@Bean public JsonSchemaGenerator myJsonSchemaGenerator() { return JsonSchemaGenerator.create().build(); }
@@ -231,7 +235,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	@Test void d01_defaultRequestHeaders_defaultContentTypeAnnotation_setsDefault() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_DefaultContentType.class, Fix_DefaultContentType::new));
-		assertTrue(ctx.getDefaultRequestHeaders().stream().anyMatch(h -> "Content-Type".equalsIgnoreCase(h.getName())));
+		assertTrue(ctx.getDefaultRequestHeaders().stream().anyMatch(h -> eqic("Content-Type", h.getName())));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -341,7 +345,6 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	//-----------------------------------------------------------------------------------------------------------
 
 	public static class Fix_SetContextThrows {
-		@SuppressWarnings("unused") // ctx required by convention: RestContext's initializeResourceContext() reflectively invokes setContext(RestContext) by exact signature.
 		public void setContext(RestContext ctx) { throw new IllegalStateException("boom"); }
 	}
 
@@ -514,9 +517,6 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	public static class Fix_RestInitMissingPrereq {
 		@RestInit
-		@SuppressWarnings({
-			"unused" // notAResolvableBean's type is the point of the test: an unresolvable @RestInit parameter must throw at construction before the method body would ever run.
-		})
 		public void init(java.util.concurrent.atomic.AtomicInteger notAResolvableBean) { /* never reached */ }
 	}
 

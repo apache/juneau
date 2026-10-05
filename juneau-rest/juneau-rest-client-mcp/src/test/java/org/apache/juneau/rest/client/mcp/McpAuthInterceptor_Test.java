@@ -30,7 +30,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Unit tests for {@link McpAuthInterceptor}.
  */
-@SuppressWarnings("resource") // mock transports are in-memory no-op closeables; test bodies close the RestClient/RestResponse that matters via try-with-resources.
+@SuppressWarnings({
+	"resource" // mock transports are in-memory no-op closeables; test bodies close the RestClient/RestResponse that matters via try-with-resources.
+})
 class McpAuthInterceptor_Test extends TestBase {
 
 	@Test

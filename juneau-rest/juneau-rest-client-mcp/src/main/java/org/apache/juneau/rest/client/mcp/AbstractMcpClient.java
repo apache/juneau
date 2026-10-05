@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -56,13 +55,10 @@ import org.apache.juneau.rest.client.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // The RestClient is built once and held in a field that close() closes.
+})
 public abstract class AbstractMcpClient implements Closeable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_BUILDER = "builder";
-	private static final String ARG_ENDPOINT = "endpoint";
-	private static final String ARG_INTERCEPTOR = "interceptor";
-	private static final String ARG_REQUEST = "request";
 
 	// JSON-RPC methods that are side-effect-free (pure queries), so a pre-response stale-connection failure can be
 	// safely replayed once.  Kept as revision-neutral protocol literals rather than a dependency on any dated
@@ -80,7 +76,6 @@ public abstract class AbstractMcpClient implements Closeable {
 		"resources/templates/list",
 		"completion/complete");
 
-	@SuppressWarnings("resource") // closed by this.close() (Closeable); Eclipse can't trace field-scoped ownership across construction and close().
 	private final RestClient restClient;
 	private final String endpoint;
 
@@ -92,9 +87,8 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * 	or is not a syntactically valid absolute {@code http}/{@code https} URL (see
 	 * 	{@link #validateEndpoint(String)}).
 	 */
-	@SuppressWarnings("resource") // the built RestClient is stored in the final restClient field and closed by close(); not leaked.
 	protected AbstractMcpClient(Builder<?> builder) {
-		assertArgNotNull(ARG_BUILDER, builder);
+		reqnn("builder", builder);
 		this.endpoint = validateEndpoint(builder.endpoint);
 		this.restClient = builder.restClientBuilder
 			.defaultSerializer(JsonSerializer.DEFAULT)
@@ -116,7 +110,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * 	has no scheme, or has a scheme other than {@code http}/{@code https} (case-insensitive).
 	 */
 	private static String validateEndpoint(String value) {
-		var endpointValue = assertArgNotNullOrBlank(ARG_ENDPOINT, value);
+		var endpointValue = reqnb("endpoint", value);
 		URI uri;
 		try {
 			uri = new URI(endpointValue);
@@ -124,7 +118,7 @@ public abstract class AbstractMcpClient implements Closeable {
 			throw new IllegalArgumentException("Invalid MCP endpoint URL '" + endpointValue + "': " + e.getMessage(), e);
 		}
 		var scheme = uri.getScheme();
-		if (scheme == null || ! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
+		if (scheme == null || ! (eqic(scheme, "http") || eqic(scheme, "https")))
 			throw new IllegalArgumentException(
 				"Invalid MCP endpoint URL '" + endpointValue + "': must be an absolute http or https URL, but scheme was '" + scheme + "'.");
 		return endpointValue;
@@ -167,7 +161,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @throws IOException If a transport-level or (de)serialization error occurs.
 	 */
 	public JsonRpcResponse send(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
-		assertArgNotNull(ARG_REQUEST, request);
+		reqnn("request", request);
 		try (var res = run(request, httpHeaders)) {
 			if (JsonRpcResponse.notification(request.getId()))
 				return null;
@@ -199,7 +193,6 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * {@code resources/read}) without risking a duplicate side effect.  Mutating methods (e.g. {@code tools/call}) and
 	 * any method not in {@link #RETRYABLE_METHODS} are never replayed.
 	 */
-	@SuppressWarnings("resource") // the returned RestResponse is closed by the caller's try-with-resources.
 	private RestResponse run(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
 		try {
 			return runOnce(request, httpHeaders);
@@ -211,7 +204,6 @@ public abstract class AbstractMcpClient implements Closeable {
 		}
 	}
 
-	@SuppressWarnings("resource") // the returned RestResponse is closed by the caller's try-with-resources.
 	private RestResponse runOnce(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
 		var req = restClient.post(endpoint).body(request);
 		if (httpHeaders != null) {
@@ -232,7 +224,6 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
 	 * @throws IOException If a transport-level error occurs opening the stream.
 	 */
-	@SuppressWarnings("resource") // returned SseEventReader wraps the opened stream; ownership transfers to the caller, who must close it (see javadoc).
 	protected SseEventReader openEventStream() throws IOException {
 		return restClient.post(endpoint).openEventStream();
 	}
@@ -247,7 +238,6 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the stream.
 	 */
-	@SuppressWarnings("resource") // delegates to the 3-arg overload, which transfers stream ownership to the caller.
 	protected SseEventReader openEventStream(JsonRpcRequest request) throws IOException {
 		return openEventStream(request, Map.of());
 	}
@@ -280,9 +270,8 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @throws McpException If the server rejected {@code request} with a JSON-RPC error instead of opening the
 	 * 	stream.
 	 */
-	@SuppressWarnings("resource") // 'res' is closed in the finally block via quiet(res::close) on every non-return path (Eclipse doesn't trace closes made through a method reference); the returned SseEventReader wraps 'res' and transfers ownership to the caller when opened.
 	protected SseEventReader openEventStream(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
-		assertArgNotNull(ARG_REQUEST, request);
+		reqnn("request", request);
 		var req = restClient.post(endpoint).body(request);
 		if (httpHeaders != null) {
 			for (var e : httpHeaders.entrySet())
@@ -352,7 +341,7 @@ public abstract class AbstractMcpClient implements Closeable {
 		 * @return This object.
 		 */
 		public SELF endpoint(String value) {
-			endpoint = assertArgNotNullOrBlank(ARG_ENDPOINT, value);
+			endpoint = reqnb("endpoint", value);
 			return self();
 		}
 
@@ -374,7 +363,7 @@ public abstract class AbstractMcpClient implements Closeable {
 		 * @return This object.
 		 */
 		public SELF interceptor(RestCallInterceptor value) {
-			restClientBuilder.interceptors(assertArgNotNull(ARG_INTERCEPTOR, value));
+			restClientBuilder.interceptors(reqnn("interceptor", value));
 			return self();
 		}
 

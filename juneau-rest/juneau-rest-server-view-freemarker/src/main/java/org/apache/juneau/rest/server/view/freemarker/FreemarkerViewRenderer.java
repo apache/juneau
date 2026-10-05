@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.view.freemarker;
 
 import java.io.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
@@ -28,7 +29,7 @@ import freemarker.template.*;
 
 /**
  * {@link ResponseProcessor} that detects {@link FreemarkerView}-typed return values and asks the
- * configured {@link Configuration} to render them directly onto the response writer.
+ * configured {@link freemarker.template.Configuration} to render them directly onto the response writer.
  *
  * <p>
  * Auto-registered by {@link FreemarkerMixin} via
@@ -44,7 +45,7 @@ import freemarker.template.*;
  * 	<li>Inspect the response content. If the value is not a {@link FreemarkerView}, return
  * 		{@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.
  * 	<li>Read the active {@link FreemarkerMixin} from the {@code RestContext} bean store
- * 		to discover the {@link Configuration} (lazy default if no configuration bean is
+ * 		to discover the {@link freemarker.template.Configuration} (lazy default if no configuration bean is
  * 		registered) and the optional template-suffix knob.
  * 	<li>Apply every entry from {@link FreemarkerView#getResponseHeaders()} via
  * 		{@link jakarta.servlet.http.HttpServletResponse#setHeader(String, String)
@@ -54,7 +55,7 @@ import freemarker.template.*;
  * 		{@code HTMLOutputFormat} so HTML is the natural target; an explicit caller header wins.
  * 	<li>Call {@code configuration.getTemplate(templateName).process(view.getAttributes(),
  * 		res.getWriter())} to stream the rendered output.
- * 	<li>When no FreeMarker engine is on the classpath, the {@link Configuration}-typed import
+ * 	<li>When no FreeMarker engine is on the classpath, the {@link freemarker.template.Configuration}-typed import
  * 		here fails to load at first use and surfaces {@link #NO_ENGINE_DIAGNOSTIC} naming the
  * 		missing dependency.
  * </ol>
@@ -115,9 +116,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		// Resolve the bridge resource (carries Configuration + cached default + templateSuffix).
 		// Fall back to a cached FreemarkerMixin when the renderer is used standalone
 		// without the mixin.
-		var bridge = req.getContext().getBeanStore()
-			.getBean(FreemarkerMixin.class)
-			.orElseGet(this::fallbackMixin);
+		var bridge = findMixin(req.getContext().getBeanStore());
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.
@@ -180,6 +179,22 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 	static String gateTemplateName(String basePath, String templateName) {
 		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
 		return FreemarkerDispatcher.stripBasePath(basePath, resolved);
+	}
+
+	// P8: the exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.
+	private FreemarkerMixin findMixin(WritableBeanStore store) {
+		FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);
+		for (var t : FreemarkerMixin.registeredSubtypes()) {
+			var b = store.getBean(t).orElse(null);
+			if (b == null || b == found)
+				continue;
+			if (found != null)
+				throw new IllegalStateException(String.format(
+					"Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",
+					found.getClass().getSimpleName(), b.getClass().getSimpleName()));
+			found = b;
+		}
+		return found != null ? found : fallbackMixin();
 	}
 
 	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.

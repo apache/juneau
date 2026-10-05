@@ -51,18 +51,10 @@ import org.apache.juneau.commons.io.*;
  *
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_cachingLimit)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class BasicFileFinder implements FileFinder {
-
-	// Property name constants
-	private static final String PROP_cachingLimit = "cachingLimit";
-	private static final String PROP_class = "class";
-	private static final String PROP_exclude = "exclude";
-	private static final String PROP_hashCode = "hashCode";
-	private static final String PROP_include = "include";
-	private static final String PROP_roots = "roots";
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 
@@ -132,12 +124,12 @@ public class BasicFileFinder implements FileFinder {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_cachingLimit, cachingLimit)
-			.a(PROP_class, cns(getClass()))
-			.a(PROP_exclude, excludePatterns)
-			.a(PROP_include, includePatterns)
-			.a(PROP_roots, roots)
-			.a(PROP_hashCode, hashCode);
+			.a("cachingLimit", cachingLimit)
+			.a("class", cns(getClass()))
+			.a("exclude", excludePatterns)
+			.a("include", includePatterns)
+			.a("roots", roots)
+			.a("hashCode", hashCode);
 		// @formatter:on
 	}
 
@@ -161,8 +153,8 @@ public class BasicFileFinder implements FileFinder {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"null" // Null handling verified by context or framework
 	})
 	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
 		name = trimSlashesAndSpaces(name);

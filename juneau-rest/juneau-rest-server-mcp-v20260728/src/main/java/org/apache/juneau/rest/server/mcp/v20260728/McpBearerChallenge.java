@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.net.*;
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fluent, insertion-ordered builder for a {@code WWW-Authenticate: Bearer ...} challenge value (RFC 6750 &sect;3, RFC
@@ -117,7 +117,7 @@ public final class McpBearerChallenge {
 	 * @return This object (for method chaining).
 	 */
 	public McpBearerChallenge param(String name, String value) {
-		assertArgNotNullOrBlank("name", name);
+		reqnb("name", name);
 		if (value != null)
 			params.put(name, sanitize(value));
 		return this;

@@ -107,8 +107,8 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"unchecked" // Type erasure requires unchecked casts
 	})
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
 		if (isNull())
@@ -139,7 +139,7 @@ public class Entry {
 				var s1 = firstNonWhitespaceChar(v);
 				if (isArray(type) && s1 != '[')
 					v = '[' + v + ']';
-				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
+				else if (s1 != '[' && s1 != '{' && neq(v, "null"))
 					v = '\'' + v + '\'';
 			}
 			return o(parser.read(v, type, args));
@@ -349,7 +349,7 @@ public class Entry {
 		var s = toString();
 		if (parser instanceof JsonParser) {
 			var s1 = firstNonWhitespaceChar(s);
-			if (s1 != '[' && ! "null".equals(s))
+			if (s1 != '[' && neq(s, "null"))
 				s = '[' + s + ']';
 		}
 		return o(JsonList.ofString(s, parser));
@@ -425,7 +425,7 @@ public class Entry {
 		var s = toString();
 		if (parser instanceof JsonParser) {
 			var s1 = firstNonWhitespaceChar(s);
-			if (s1 != '{' && ! "null".equals(s))
+			if (s1 != '{' && neq(s, "null"))
 				s = '{' + s + '}';
 		}
 		return o(JsonMap.ofString(s, parser));

@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.collections.CacheMode.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.*;
@@ -76,12 +76,9 @@ import org.apache.juneau.commons.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Cache5<K1,K2,K3,K4,K5,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_supplier = "supplier";
 
 	/**
 	 * Builder for creating configured {@link Cache5} instances.
@@ -407,7 +404,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 *
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, java.util.function.Supplier<V> supplier) {
-		assertArgNotNull(ARG_supplier, supplier);
+		reqnn("supplier", supplier);
 		if (cacheMode == NONE)
 			return supplier.get();
 		var m = getMap();

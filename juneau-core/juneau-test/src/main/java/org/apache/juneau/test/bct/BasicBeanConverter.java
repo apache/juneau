@@ -19,7 +19,6 @@ package org.apache.juneau.test.bct;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -219,15 +218,13 @@ import java.util.stream.*;
  * @see BeanConverter
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic type handling
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"javabugs:S2259", // False positive - null checks are properly handled via framework patterns
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Entries registered per Class<T> are cast back to Listifier/Stringifier/Swapper/Sizer<T> when applied
 })
 public class BasicBeanConverter implements BeanConverter {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_o = "o";
-	private static final String ARG_token = "token";
 
 	/**
 	 * Builder for creating customized BasicBeanConverter instances.
@@ -528,9 +525,6 @@ public class BasicBeanConverter implements BeanConverter {
 		private Class<T> forClass;
 		private Stringifier<T> function;
 
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast for stringifier entry
-		})
 		private StringifierEntry(Class<T> forClass, Stringifier function) {
 			this.forClass = forClass;
 			this.function = function;
@@ -769,7 +763,7 @@ public class BasicBeanConverter implements BeanConverter {
 
 	@Override
 	public String getNested(Object o, NestedTokenizer.Token token) {
-		assertArgNotNull(ARG_token, token);
+		reqnn("token", token);
 
 		if (o == null)
 			return getSetting(SETTING_nullValue, null);
@@ -808,19 +802,13 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for settings retrieval
-	})
 	public <T> T getSetting(String key, T def) {
 		return (T)settings.getOrDefault(key, def);
 	}
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for list conversion
-	})
 	public List<Object> listify(Object o) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 
 		o = swap(o);
 
@@ -841,11 +829,8 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for size calculation
-	})
 	public int size(Object o) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 
 		// Checks for Optional before unpacking.
 		if (o instanceof Optional o2)
@@ -905,9 +890,6 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for stringification
-	})
 	public String stringify(Object o) {
 
 		o = swap(o);
@@ -979,9 +961,6 @@ public class BasicBeanConverter implements BeanConverter {
 	 */
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for object swapping
-	})
 	public Object swap(Object o) {
 		if (o == null)
 			return null;

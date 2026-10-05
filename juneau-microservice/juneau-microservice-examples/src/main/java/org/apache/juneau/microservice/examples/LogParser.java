@@ -34,8 +34,8 @@ import org.apache.juneau.microservice.logging.*;
  * names.
  */
 @SuppressWarnings({
-	"resource",  // br is closed via this class's close() method
-	"java:S3776" // Cognitive complexity acceptable for log line parsing state machine
+	"java:S3776", // Cognitive complexity acceptable for log line parsing state machine
+	"resource" // br is closed via this class's close() method
 })
 public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
@@ -143,7 +143,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 			return isRecord
 				&& !(nn(start) && nn(date) && date.before(start))
 				&& !(nn(end) && nn(date) && date.after(end))
-				&& !(nn(threadFilter) && ! threadFilter.equals(thread))
+				&& !(nn(threadFilter) && neq(threadFilter, thread))
 				&& !(nn(loggerFilter) && ! loggerFilter.contains(logger))
 				&& !(nn(severityFilter) && ! severityFilter.contains(severity));
 		}

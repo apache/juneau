@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.health;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -90,7 +89,7 @@ public final class Health {
 		private Throwable error;
 
 		private Builder(String name, HealthStatus status, Throwable error) {
-			assertArgNotNull("name", name);
+			reqnn("name", name);
 			if (name.isEmpty())
 				throw new IllegalArgumentException("Argument 'name' cannot be empty.");
 			this.name = name;
@@ -106,7 +105,7 @@ public final class Health {
 		 * @return This builder.
 		 */
 		public Builder detail(String key, Object value) {
-			assertArgNotNull("key", key);
+			reqnn("key", key);
 			if (key.isEmpty())
 				throw new IllegalArgumentException("Argument 'key' cannot be empty.");
 			details.put(key, value);

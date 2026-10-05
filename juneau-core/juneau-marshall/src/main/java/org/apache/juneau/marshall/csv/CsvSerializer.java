@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.csv;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -78,13 +77,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, RecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -113,7 +110,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
 			nullValue = copyFrom.nullValue;
@@ -126,7 +123,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
 			nullValue = copyFrom.nullValue;

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.http;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Shared, dependency-free predicates for validating <b>same-origin</b> request paths declared by higher layers, plus
  * the single {@link #MIN_POLL_INTERVAL_MS polling floor} those layers clamp declared poll intervals to.
@@ -74,7 +76,7 @@ public final class SafePathTemplate {
 		if (colon >= 0 && (slash < 0 || colon < slash))
 			return false;
 		for (var seg : path.split("/", -1)) {
-			if ("..".equals(seg))
+			if (eq(seg, ".."))
 				return false;
 		}
 		return true;

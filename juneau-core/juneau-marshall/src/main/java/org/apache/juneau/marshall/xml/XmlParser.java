@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -82,20 +81,11 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordReadable, ArrayRecordReadable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_eventAllocator = "eventAllocator";
-	private static final String PROP_preserveRootElement = "preserveRootElement";
-	private static final String PROP_reporter = "reporter";
-	private static final String PROP_resolver = "resolver";
-	private static final String PROP_validating = "validating";
 
 	/**
 	 * Builder class.
@@ -132,7 +122,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;
@@ -147,7 +137,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;
@@ -510,10 +500,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_eventAllocator, eventAllocator)
-			.a(PROP_preserveRootElement, preserveRootElement)
-			.a(PROP_reporter, reporter)
-			.a(PROP_resolver, resolver)
-			.a(PROP_validating, validating);
+			.a("eventAllocator", eventAllocator)
+			.a("preserveRootElement", preserveRootElement)
+			.a("reporter", reporter)
+			.a("resolver", resolver)
+			.a("validating", validating);
 	}
 }

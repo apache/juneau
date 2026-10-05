@@ -20,7 +20,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -57,10 +56,13 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 @SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_getterOrFieldNotDefined)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Wildcard required - BeanMap<?>, ClassMeta<?> for property metadata
+	"java:S3776", // setPropertyValue(), add() and set() branch over every property kind (array, collection, map, bean, swap) and are kept as single flows
+	"java:S6541", // setPropertyValue() (about 150 lines) is the single dispatch point for assigning a value of any property kind
 	"rawtypes", // Raw types necessary for generic type handling
-	"unchecked", // Type erasure requires unchecked casts
-	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., PROP_field, ARG_value)
-	"java:S1452"  // Wildcard required - BeanMap<?>, ClassMeta<?> for property metadata
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
@@ -77,17 +79,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @since 10.0.0
 	 */
 	public static final Object SKIP_VALUE = new Object();
-
-	// Property name constants
-	private static final String PROP_field = "field";
-	private static final String PROP_getter = "getter";
-	private static final String PROP_name = "name";
-	private static final String PROP_setter = "setter";
-	private static final String PROP_type = "type";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_innerField = "innerField";
 
 	// Error message constants
 	private static final String MSG_getterOrFieldNotDefined = "Getter or public field not defined on property '%s'";
@@ -147,7 +138,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
-			delegateFor = assertArgNotNull(ARG_value, value);
+			delegateFor = reqnn("value", value);
 			return this;
 		}
 
@@ -167,7 +158,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder readTransform(BiFunction<BeanSession,Object,Object> value) {
-			readTransform = assertArgNotNull(ARG_value, value);
+			readTransform = reqnn("value", value);
 			return this;
 		}
 
@@ -187,7 +178,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder writeTransform(BiFunction<BeanSession,Object,Object> value) {
-			writeTransform = assertArgNotNull(ARG_value, value);
+			writeTransform = reqnn("value", value);
 			return this;
 		}
 
@@ -209,7 +200,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder rawMetaType(BeanInfo<?> value) {
-			rawTypeMeta = assertArgNotNull(ARG_value, value);
+			rawTypeMeta = reqnn("value", value);
 			typeMeta = rawTypeMeta;
 			return this;
 		}
@@ -231,7 +222,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder rawMetaType(Class<?> value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			if (bc == null)
 				return this;
 			rawTypeMeta = bc.resolveType(null, info(value), null);
@@ -276,7 +267,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setExtraKeys(MethodInfo value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			extraKeys = value.accessible();
 			return this;
 		}
@@ -288,7 +279,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setField(FieldInfo value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			field = value.accessible();
 			innerField = field;
 			return this;
@@ -301,7 +292,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setGetter(MethodInfo value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			getter = value.accessible();
 			return this;
 		}
@@ -313,7 +304,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setInnerField(FieldInfo value) {
-			innerField = assertArgNotNull(ARG_innerField, value);
+			innerField = reqnn("innerField", value);
 			return this;
 		}
 
@@ -324,7 +315,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setSetter(MethodInfo value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			setter = value.accessible();
 			return this;
 		}
@@ -353,9 +344,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @throws Exception If validation fails.
 		 */
 		@SuppressWarnings({
-			"java:S3776", // throws Exception intentional - callback/lifecycle method
-			"java:S112",  // Generic exception thrown; acceptable for framework/lifecycle methods
-			"java:S6541"  // Brain Method: validate() intentionally consolidates property metadata resolution
+			"java:S112" // Generic exception thrown; acceptable for framework/lifecycle methods
 		})
 		public boolean validate(BeanTypeResolver bc, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
@@ -433,7 +422,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(bc) && rawTypeMeta == null)
 				return false;
 
-			isDyna = "*".equals(name);
+			isDyna = eq(name, "*");
 
 			// Do some annotation validation.  Type-aware validation requires rawTypeMeta — on the commons-side
 			// path we skip it entirely.
@@ -601,9 +590,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
 	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for property add operation with various collection types
-	})
 	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 
 		if (rawTypeMeta == null)
@@ -704,9 +690,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
 	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for property add operation with map key handling
-	})
 	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
 
 		if (rawTypeMeta == null)
@@ -1095,10 +1078,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Session objects are single-threaded by design
-	})
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		Object value1 = m.meta.onWriteProperty(m.bean, pName, value);
 		try {
@@ -1157,10 +1136,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for complex property setter
-		"java:S6541" // Brain method acceptable - complex property value setting logic requires high LOC/complexity
-	})
 	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) {
 		try {
 			var r = (config.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
@@ -1321,11 +1296,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_field, field)
-			.a(PROP_getter, getter)
-			.a(PROP_name, name)
-			.a(PROP_setter, setter)
-			.a(PROP_type, cn(rawTypeMeta));
+			.a("field", field)
+			.a("getter", getter)
+			.a("name", name)
+			.a("setter", setter)
+			.a("type", cn(rawTypeMeta));
 		// @formatter:on
 	}
 
@@ -1466,7 +1441,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * @return <jk>true</jk> if this property is write-only.
 	 */
-	protected boolean isWriteOnly() { return writeOnly; }
+	public boolean isWriteOnly() { return writeOnly; }
 
 	/**
 	 * Sets an array field on this bean.

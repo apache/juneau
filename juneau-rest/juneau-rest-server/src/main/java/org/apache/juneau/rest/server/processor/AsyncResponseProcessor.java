@@ -94,12 +94,16 @@ import jakarta.servlet.http.*;
  * and {@link java.util.Locale} are request-scoped and survive correctly.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsync">Async Response Handling</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch">Async Response Handling</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1141", // finalizeAsync() nests try/finally blocks so each completion step (debug emit, request close, async-context complete) runs even if an earlier one fails
+	"java:S3776" // finalizeAsync() combines timeout, error and success handling with layered fallback and cleanup in one method
+})
 public class AsyncResponseProcessor implements ResponseProcessor {
 
 	private static final Logger LOG = Logger.getLogger(AsyncResponseProcessor.class.getName());
@@ -119,10 +123,6 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	public static final long DEFAULT_ASYNC_TIMEOUT_MILLIS = 30_000L;
 
 	@Override /* Overridden from ResponseProcessor */
-	@SuppressWarnings({
-		"java:S3776", // Async dispatch logic is inherently branchy — splitting further hurts readability.
-		"java:S1141"  // Nested try/catch cleanly separates startAsync IllegalStateException recovery from cancellation.
-	})
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
 		var res = opSession.getResponse();
 		var content = res.getContent().orElse(null);
@@ -168,9 +168,9 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	}
 
 	@SuppressWarnings({
-		"java:S2142", // We re-set the interrupt flag immediately and surface as a 500.
 		"java:S1166", // CancellationException is intentionally swallowed; we surface it as a 500 via convertThrowable.
-		"java:S3516"  // Always returns RESTART by design: every outcome (success or error) re-runs the chain on the now-synchronous content.
+		"java:S2142", // We re-set the interrupt flag immediately and surface as a 500.
+		"java:S3516" // Always returns RESTART by design: every outcome (success or error) re-runs the chain on the now-synchronous content.
 	})
 	private int processSyncFallback(RestOpSession opSession, CompletableFuture<?> cf, long timeoutMs) {
 		var res = opSession.getResponse();
@@ -251,9 +251,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Async finalization is inherently branchy.
-		"java:S1141", // Nested try/catch separates response-processing from container cleanup.
-		"java:S107"   // The 8 parameters are the internal async-finalization context (session, future, async ctx, error, done-latch, timeout flag, timeout ms, resolved value); a holder object would obscure this hot-path call and its sibling overload.
+		"java:S107" // The 8 parameters are the internal async-finalization context (session, future, async ctx, error, done-latch, timeout flag, timeout ms, resolved value); a holder object would obscure this hot-path call and its sibling overload.
 	})
 	private void finalizeAsync(RestOpSession opSession, CompletableFuture<?> cf, AsyncContext asyncCtx,
 			Throwable error, AtomicBoolean done, boolean timeout, long timeoutMs, Object value) {

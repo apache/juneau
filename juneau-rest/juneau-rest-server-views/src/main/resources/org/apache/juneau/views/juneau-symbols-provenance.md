@@ -1,13 +1,10 @@
 # `juneau-symbols.svg` — provenance manifest
 
-This file pins the **approved artwork** of every glyph in `juneau-symbols.svg` (the default, Juneau-original pack).
+This file pins the **approved artwork** of every glyph in `juneau-symbols.svg` (the shipped console icon pack).
 
-Its job is not attribution. All twenty-six glyphs are Juneau-original, so no third-party attribution is incurred on
-**this** sprite. The opt-in Material Symbols sprite is a sibling file (`juneau-symbols-material.svg`); `NOTICE`
-names that pack, not this one. Do not paste Material (or any other) path data into this file — swap packs instead.
-This file is a **guard**: a future paste of foreign path data over one of these glyphs fails the build until someone
-deliberately edits this file. `SymbolSprite_Provenance_Test` reads it and asserts it against the sprite on every
-default-profile run.
+Its job is not only attribution: it is a **guard**. A future silent paste over one of these glyphs fails the build
+until someone deliberately edits this file. `SymbolSprite_Provenance_Test` reads it and asserts it against the
+sprite on every default-profile run.
 
 > **If a fingerprint check has failed and you are here to make it pass:** do not update the row until you can say,
 > for the glyph in question, what this file's *Authoring rules* say you must be able to say. A fingerprint edit is
@@ -24,142 +21,118 @@ covers.
 
 ## Authoring rules
 
-Every glyph in this sprite is authored from scratch, in this repository, against these rules:
-
-1. **No external artwork is opened.** Not an icon set, not a design-system sheet, not another product's sprite.
-   Looking at the *rendered* image of the glyph being replaced is a permitted look-and-behaviour reference;
-   reading its coordinate list is not, with or without arithmetic applied. The test to apply: *could you draw this
-   from a PNG of it alone?*
-2. **`viewBox="0 0 24 24"`, always.** The host `<svg>` is `0 0 24 24` at every call site, so any other modulus
-   interposes a scale factor between the author's coordinates and the pixel grid.
-3. **Paint is `none` or `currentColor` — never a literal colour.** Hover and disabled tinting is a CSS `color`
-   change, and a hard-coded fill silently opts a glyph out of it.
-4. **Every stroked path declares `stroke-width` explicitly.** Inheriting it makes the rendered weight depend on
+1. **IRS console counterparts replace Juneau pixels when they exist** (operator ruling 2026-09-24 / design §3.4).
+   Where IRS ships a glyph for the same console role, that artwork is copied into this sprite under the existing
+   Juneau stem id (`juneau-sym-{stem}`). Origin for those rows is `irs-artwork`. Artwork clearance only — do
+   **not** copy SLDS / `slds-*` class names, Salesforce trademarks as branding, Salesforce Sans, lightning branding,
+   internal Salesforce URLs, IRS copyright headers, or verbatim proprietary IRS code.
+2. **Where IRS has no glyph for that role, keep the Juneau glyph** (`origin` stays `juneau-original`). Those
+   glyphs remain authored in this repository against the lattice rules below.
+3. **`viewBox="0 0 24 24"`, always.** The host `<svg>` is `0 0 24 24` at every call site.
+4. **Paint is `none`, `currentColor`, or a themable `var(--name, currentColor)` — never a literal colour.** Hover
+   and disabled tinting is a CSS `color` change, and a hard-coded fill silently opts a glyph out of it. The `var()`
+   form (used by `sort` for its two direction triangles) exists because custom properties inherit into a `<use>`
+   shadow tree where document selectors cannot reach; its fallback must be `currentColor`, so the glyph defaults to
+   the host `color`. The provenance test enforces exactly this rule.
+5. **Every stroked path declares `stroke-width` explicitly.** Inheriting it makes the rendered weight depend on
    where the glyph is used.
-5. **Draw on the lattice.** Chrome renders these at 16px (`--jc-chrome-glyph-size`) and 12px
-   (`--jc-chrome-glyph-size-small`). At 16px one pixel is 1.5 units, so:
-   - a **1px stroke** has its centreline on `0.75 + 1.5k` — its edges then land on `1.5k`, the pixel boundaries;
-   - a **2px stroke**, and every **filled** edge, lands on `1.5k` directly;
-   - **butt caps**, so a stroke's end lands on a boundary rather than half a stroke past it.
-   Purely diagonal geometry is exempt and is centred on 12 instead: a 45° edge is anti-aliased at any offset, so
-   there is nothing to snap and centring is the better use of the freedom. `chevrondown`, `chevronright` and
-   `close` are the three glyphs this applies to.
-   Curves — circles, arcs, the gear outline — are snapped where they have axis-aligned tangents (a circle's four
-   extremes) and are soft elsewhere by construction. This is stated rather than hidden: it is why `cancel`,
-   `new`, `search` and `refresh` measure lower on the crispness metric than the rectilinear glyphs.
+6. **Juneau-original lattice** (still required for rows that stay `juneau-original`): draw on the 16px/12px chrome
+   lattice documented historically for this sprite — 1px strokes on `0.75 + 1.5k`, 2px/filled edges on `1.5k`,
+   butt caps. Purely diagonal geometry is exempt and centred on 12. IRS-sourced rows are not re-latticed; they keep
+   the IRS path data as cleared.
 
 ## Document family
 
-`csv`, `pdf`, `spreadsheet` and `copy` are **one deliverable drawn from this spec**, not four glyphs each drawn
-against its own predecessor. The spec is declared here *before* the drawing, and the four are drawn from it.
-
-| Constant | Value |
-|---|---|
-| Page frame | axis-aligned rectangle, **12 × 15 units** |
-| Corner radius | **0** — square corners |
-| Fold treatment | **present**, top-right only: the corner is removed by a 45° chamfer of chord **4.5 units**. **No fold flap** — the two lines that would draw the turned-back corner are omitted; see the note below. |
-| Stroke | `stroke="currentColor"`, `stroke-width="1.5"` (1px at 16px), `fill="none"`, `stroke-linecap="butt"`, `stroke-linejoin="miter"` |
-| Frame position | top-left at **(5.25, 3.75)** for `csv`, `pdf`, `spreadsheet` |
-| Frame `d` | `M5.25 3.75H12.75L17.25 8.25V18.75H5.25Z` — **byte-identical** in those three, asserted |
-| Mark cell | the interior region **x ∈ [7.5, 15], y ∈ [9, 16.5]** — below the chamfer, inside the frame, on `1.5k` |
-| Mark rhythm | **three rows** at y = 9, 12, 15, each **1.5 units** tall; where a row is subdivided, **three columns** at x = 7.5, 10.5, 13.5, each **1.5 units** wide. The rhythm is a statement about **ink extent**, not about path coordinates, so a filled mark states it directly while a stroked one states it through its centrelines: `spreadsheet`'s grid runs its outer rule down the mark cell's own boundary and its two inner rules down the middle column and middle row. |
-| Wordmark | **none.** See below. |
-| `copy` | the same frame — same 12 × 15, same radius 0, same 4.5 chamfer, same stroke — drawn **twice**: front page top-left at **(3.75, 5.25)**, back page offset **(+3, −3)** from it and drawn as its visible edges only. Only the position differs from the constants above; the frame shape does not. |
-
-**The wordmark is deliberately absent, and this is a visual change from the artwork being replaced.** The incumbent
-`csv`, `pdf` and `spreadsheet` each carried a three-letter wordmark inside the frame. At the size these are
-actually rendered the frame's interior is 6 × 8 px, so three letters get ~2px of width each and resolve to a grey
-smear rather than letterforms — measured, not asserted: on the render harness's *mush* metric (share of the box in
-the ambiguous 60..215 luminance band) the incumbent set was the three worst glyphs in the sprite at 12px, at
-54.86% (`csv`), 54.17% (`pdf`) and 62.50% (`spreadsheet`). A single large capital was drawn and measured first and
-was rejected too: at 4 × 4 px against a 1px frame 3 units away, a `C` and a `P` read as brackets, not letters.
-
-So the members are distinguished **structurally** instead, on the declared mark rhythm, which resolves to whole
-crisp pixels at 16px:
-
-| Member | Interior mark | What it says |
-|---|---|---|
-| `csv` | a **3 × 3 grid of filled 1px cells** on the declared rhythm | discrete delimited values |
-| `pdf` | **three filled rules**, full width except the last | running text |
-| `spreadsheet` | a **stroked 2 × 2 grid** | ruled cells |
-| `copy` | none — the second page is the distinction | — |
+`csv`, `pdf`, `spreadsheet`, and `copy` previously shared a Juneau-original page-frame contract. Those four stems
+now ship **IRS artwork** (`origin` `irs-artwork`), so the old byte-identical frame path is **not** asserted across
+them. Distinguishing marks come from the IRS drawings themselves. Do not reintroduce a Juneau-only frame-identity
+assert without also reverting those stems to Juneau-original artwork.
 
 ## Glyphs
 
-`origin` is `juneau-original` for all twenty-six: eighteen redrawn from scratch under `READY-J0451`, one
-(`print`) drawn from scratch under `WORK-J0507` (Foundry `WORK-P0063` toolbar print/collapse-all follow-up), five
-(`pause`, `stop`, `forceStop`, `push`, `openPr`) drawn from scratch under `WORK-J0511` (Foundry
-`WORK-P0072`/`WORK-P0070` row-action icon follow-up), and `check` and `collapse_all`, which were already
-Juneau-original and are **byte-unchanged** by that work.
+`origin` is either:
+
+- `juneau-original` — authored in this repository (no IRS counterpart for that role, or the IRS counterpart was
+  already byte-identical so pixels did not change), or
+- `irs-artwork` — path data copied from the IRS console symbol sprite for the matching role (operator clearance
+  2026-09-24). Stem names stay Juneau (`search` stays `search`).
+
+Roles the shipped sprite keeps as **Juneau artwork** because IRS draws nothing this sprite can copy — grouped by
+*why* (see the trace in *Composition notes*, so a later pass does not re-skip a role that in fact has a live IRS
+`<use>` composition):
+
+- **No live IRS composition draws the role.** `chevronup` — IRS row-expand swaps `chevronright`↔`chevrondown`
+  (never an up chevron), so there is no `<use>` of up to copy; rotating `chevrondown` 180° would be *inventing*
+  artwork IRS never draws. `sort` — IRS leaves DataTables' own CSS `▲`/`▼` marks and only retints the active
+  direction; there is no sort sprite. Per spec U1 `sort` is still a real Juneau `<symbol>` (two triangles, each
+  painted `var(--jc-sort-asc-fill|--jc-sort-desc-fill, currentColor)` so header CSS can tint the active direction), kept.
+- **No IRS glyph draws the role.** `more` (row-action overflow, author alias `more_vert`) — IRS `action` is a
+  lightning-bolt, a different role. Three filled circles on the `1.5k` lattice, `currentColor`.
+- **Truly absent Foundry stems** (IRS chrome has no such control): `forceStop`, `openPr`.
+- **Dormant ids from an unrelated sheet** — present in a stock icon sheet the IRS console never loads (the IRS
+  console symbol sprite is its live one), so they are *not* the live IRS set and must not be copied: `print`, `push`, `stop`. Live
+  cancel/close use `close`/`cancel`; `stop` ≠ the copied `pause`.
 
 | Stem | Origin | Fingerprint (SHA-256 of the `<symbol>` element) |
 |---|---|---|
-| `cancel` | `juneau-original` | `a9290f19a96fb76f21ee0e7c18e8a4a86a47789cb313bfebfba5ad23f81968a8` |
+| `cancel` | `irs-artwork` | `1142648c3307e16e9b3e6abe9833511bae24d0e1e60b001bea801114cdaa0178` |
 | `check` | `juneau-original` | `eb29de8eb151d13bac83a41a67d5e98e6c932cf8476b5e24168e2fc1b94da6e8` |
-| `chevrondown` | `juneau-original` | `e228bfba6879899fa859283b147a1c57eb95591f2fc1d6a4f5f285c30f0ceaca` |
-| `chevronright` | `juneau-original` | `8b0a88ba65dc460e283ad875e0eeccd1e384f5be98147c964cef2c7fe8074b7a` |
-| `close` | `juneau-original` | `fdf4be3a7918635703619708ad86d163f824f21ff4f664defd721750c7aa3fee` |
+| `chevrondown` | `irs-artwork` | `4c70570f3e42a789bdf3ef5d3b19ffecc20896a8bcace9d0d6d13f27dd687cf1` |
+| `chevronleft` | `irs-artwork` | `371534cfd3a920b1a71515e7dfe8e93d1786d873b23c845ee4dc5221c8d8d1bc` |
+| `chevronright` | `irs-artwork` | `d6b741f21c485a16fba7057324d1c284f7fb53008071e4dace18f43e1829fa62` |
+| `chevronup` | `juneau-original` | `8bf893c85004a053572ffcf2b7a90550c861d88003ced74e59742ed881bc2ece` |
+| `close` | `irs-artwork` | `2e796f9ad254be5490a9b0ffe209c92f6b9012c113d22a08ad66a43b2622af7d` |
 | `collapse_all` | `juneau-original` | `3567662a623db15fcb907156f14713566f0652f7a8649815c5e137cbffe391de` |
-| `columns` | `juneau-original` | `0300d7ab7052f9079fea4eb2faa7e11663db7bbbf27a16d257f5d4edf46818f1` |
-| `copy` | `juneau-original` | `746c5e8bc1ee9f7ba2e64baf09054f10e39b1be1efc0c2a9a16642942e537ace` |
-| `csv` | `juneau-original` | `6abb9ea47097741d48a56e194aa5d068ba296daa3a8950b541ee2658a98e2246` |
-| `download` | `juneau-original` | `cc9b5776f4ad7f1302c7af2e1ab71b34f994073ca615be3b19726ae10b4e3bf9` |
-| `edit` | `juneau-original` | `4d89fef533d8930afaa124dbd73ed34f3dc8fcf542e624d3e589bdda4b91fc3d` |
-| `filter` | `juneau-original` | `498dd4f95d4a0d1c3208098bac405b6ff5e6b46ce132a418afc0c3f813ff3847` |
+| `columns` | `irs-artwork` | `63ce28c108c82ab89697705ebe62c11011e238a8c8b6e52c14b1df52dfdd6621` |
+| `copy` | `irs-artwork` | `d9ad73e6572d0d041c631d26ac771df2c8e317eb86c9992d4335daf77cba9eea` |
+| `csv` | `irs-artwork` | `1d8eb08aaabb0b8eaf5cefb70b80d7087dae2783a046f7ab9bf6a83e9eb845bf` |
+| `download` | `irs-artwork` | `42ae2720c4d85efea0034637b2e0aadfe6ab4bb4d21bd859949e9c94af5ac239` |
+| `edit` | `irs-artwork` | `f1385ef077958b6888186280de8fe61698c07a70d6ec97d1681b46656216e585` |
+| `filter` | `irs-artwork` | `8fbe460c68daf05bcfe9afc205666d8191e0577ca23b8c3c74b94c0d77dfadd0` |
+| `first_page` | `irs-artwork` | `14bd5ebadf8d3bcfd0b44f19d9c897d04a8850c5d1c1c5d7169e55b86ccac408` |
 | `forceStop` | `juneau-original` | `3732dbae1b32bc6b53144ee03469e87893b6d1d9686c3c7a53720040703458d3` |
-| `new` | `juneau-original` | `703a4403c820d2d6b6a21e578eaeb410c262572ea0d0f60aef9ffef7bb726754` |
+| `last_page` | `irs-artwork` | `947f6cc47850b1464d85465e214d58cd3a5d4ced84c90028c1780b389534909c` |
+| `link` | `juneau-original` | `5117de4b0677d59a14d241db8039890f57fe43dccd0fd82033a2dd9dc5ba2103` |
+| `more` | `juneau-original` | `88f14da9fd54c0a9ce3c55e04a63f282f329647e791166f38e89719730ad0182` |
+| `new` | `irs-artwork` | `5f1bd81e5d644a292343fb94c39260f818e587e124f15dc0117f48cd23101fda` |
 | `openPr` | `juneau-original` | `2ab421c35b2e22ce4e50100ead41f183f310fd129b021928b230fa4257683470` |
-| `pause` | `juneau-original` | `c4abca2faff8f1b59cc48550e5c7e66dfac9303e05914388eb99f627bb99d212` |
-| `pdf` | `juneau-original` | `a1cdef16b4c57ff0d9da9af5d3fd93416bc8752fdd5388345d601986d4c7667a` |
+| `pause` | `irs-artwork` | `3d7a1bac4ecf957e146d0e5993aec052413fbf20f27e1ff53a719f1981215552` |
+| `pdf` | `irs-artwork` | `63a334fc35f36a1a0b0077f308981a2bdca8f675bd33f2ee46a241d85437cb1f` |
 | `print` | `juneau-original` | `236eb8a210324db18c969faaf9623765586b84464850f026d2e5918d3650dc9e` |
 | `push` | `juneau-original` | `11500ea634ea1ad14cca0b1d0a08973c5d2f0973b7245bea3872114767be0d59` |
-| `refresh` | `juneau-original` | `33073e39fa8e58ab295b13dc18a8b7c28cbc7bf3c91ddb6ccc8290cb45d720cc` |
-| `search` | `juneau-original` | `03f04247d886a8f95fbf48e21968957c7115b002d770f6d67b39b2ea0296ab7f` |
-| `settings` | `juneau-original` | `d1fa0d3ebe2c1638425c35593379320634d11ae83a58c5b415d9e4d4fc12bc2a` |
-| `spreadsheet` | `juneau-original` | `3da479a6614c03da0adf222bb9f52f63ce423fe5f191a5922284c6305beec7b8` |
+| `refresh` | `irs-artwork` | `626b5da36e11e99dbb55b62624542d2b874b838a8790aa902b8e693d3c81a81e` |
+| `search` | `irs-artwork` | `3d095317f5d549458dfe434dfaf7cee17b45712de16ae55048ad57eebe7361e1` |
+| `settings` | `irs-artwork` | `8a5c58d5e4427c10f45aaedb20898c5e48a3d0b8344e31f1964a3d02b2a23340` |
+| `sort` | `juneau-original` | `a64e04a902869a580141b4ed76a3b5360b672bd6645c7bd43004bb2f4d85ac00` |
+| `spreadsheet` | `irs-artwork` | `e34e54acbddde596256a9b3e7ef38cf22195eb8231482f8475f2f5401db09283` |
 | `stop` | `juneau-original` | `dea9a934b0ff9bf814d422fa6288d82486b1fbb6d2c5959585388975067a2605` |
-| `toggle-deleted` | `juneau-original` | `2c12c07f4f1208ff61abb62a198f73d32315a168007c01bf6dd7224a6ca2f349` |
-| `toggle_column_search` | `juneau-original` | `c1a6ef076a8d226f544402edd862e868ea51909fed52f58dea345e56e2eba3b5` |
-
+| `toggle-deleted` | `irs-artwork` | `1ccd56b9117c71b67e950eafcd42f34c56fe167c63b51b420ea020fcbea8dc0c` |
+| `toggle_column_search` | `irs-artwork` | `875b83672d60c7cdae200f197850bfbd05e1ded31f0968ed21a918b861fdbbd8` |
 ## Composition notes
 
-What each glyph is, as a construction. These are the design briefs the artwork was drawn from, and they are
-recorded because the useful question about any of these glyphs later is "what was it meant to be", not "what are
-its coordinates".
+**A `<use>` of an IRS symbol — including one reused with rotate / flip / scale, and multi-`<use>` compositions —
+*is* the IRS artwork.** IRS often draws a chrome role by reusing one on-disk glyph transformed, rather than by
+shipping a same-named symbol. The absence of a same-named symbol in the IRS console sprite is therefore **not** evidence that IRS has no
+artwork for the role; the composition is. The rows below bake such compositions into self-contained Juneau
+`<symbol>`s (real overridable sprite stems per spec U1 — no runtime CSS transform stand-in), reusing the IRS
+chevron path already cleared into this sprite as `chevronright` (origin `irs-artwork`).
 
-| Stem | Construction |
-|---|---|
-| `cancel` | circle r=7.5 about (11.25, 11.25), plus a diagonal cross inscribed in it. |
-| `check` | unchanged. |
-| `chevrondown` | one 90° polyline, 15 units wide by 7.5 tall, apex down, centred on 12. |
-| `chevronright` | the same polyline turned a quarter turn, apex right. |
-| `close` | two full-width diagonals crossing at the centre. |
-| `collapse_all` | unchanged. |
-| `columns` | three filled bars, 3 units wide on a 4.5-unit pitch, 15 tall. **Drawn to its name — see the note below.** |
-| `copy` | two pages per the family spec, the back one offset (+3, −3) and clipped to its visible edges. |
-| `csv` | family frame, plus a 3 × 3 grid of filled 1px cells on the declared mark rhythm. |
-| `download` | a vertical shaft, a 90° arrowhead at its foot, and a detached tray below. |
-| `edit` | a 45° pencil: a parallelogram body, a symmetric point at the lower left, and a ferrule line across the body 3 units back from the cap. |
-| `filter` | a funnel: a full-width mouth, two symmetric slopes to a 3-unit throat, and an offset spout. |
-| `forceStop` | a filled regular octagon inscribed between (4.5, 4.5) and (19.5, 19.5), drawn as one closed H/L/V path — a stop-sign silhouette, used where `stop`'s plain square reads as insufficiently forceful. |
-| `new` | the `cancel` circle with an inscribed plus instead of a cross. |
-| `openPr` | a page frame open at the top-right corner, plus a diagonal shaft from its interior to a right-angle bracket beyond the gap — the standard "external link" construction, generic for "open elsewhere". |
-| `pause` | two filled vertical bars, 3 units wide, on either side of a 3-unit gap, both 4.5 to 19.5 tall — the `columns` bar rhythm reduced to two members. |
-| `pdf` | family frame, plus three filled rules on the declared mark rhythm, the last one short. |
-| `print` | a printer: an open-bottomed paper flap peeking above the body, a stroked body box, and an open-topped output-tray flap below it — three axis-aligned rectilinear shapes, all edges on the 24×24 lattice, symmetric about both the horizontal and vertical centreline. |
-| `push` | the `download` construction (shaft, arrowhead, tray), with the shaft-and-arrowhead group mirrored within its own band to point up instead of down; the tray is held fixed at the foot, unflipped, as the base being pushed from, with the same 3-unit gap separating it from the arrow. |
-| `refresh` | two 150° arcs of r=7.5 in 180° rotational symmetry, with a 30° gap at each end, each terminating in a filled triangular arrowhead whose base is radial and whose apex points along the direction of travel. |
-| `search` | circle r=6 about (9.75, 9.75) with a 45° handle from its lower-right quadrant. |
-| `settings` | a filled 6-tooth gear about (11.25, 11.25): outer radius 7.5, root radius 5.25, tooth half-angles 13°/22°, with an `evenodd` hole of r=2.25 knocked out of the centre. |
-| `spreadsheet` | family frame, plus a stroked 2 × 2 grid on the declared mark rhythm. |
-| `stop` | a filled 12 × 12 square, axis-aligned, centred on (12, 12). |
-| `toggle-deleted` | the `cancel` construction at r=9. |
-| `toggle_column_search` | the `search` construction at r=4.5 — deliberately the same idiom at a smaller weight, which is the relationship the two glyphs had before. |
+- **`chevronleft`** (`irs-artwork`). IRS has no `chevronleft` on disk: prev/next paging and the release-calendar
+  nav both draw the left chevron as the one `chevronright` asset **rotated 180°** (`transform="rotate(180 12 12)"`).
+  Baked here as that single rotated chevron path — so Juneau's prev/next pair is one mirrored glyph, as IRS intends.
+- **`first_page`** (`irs-artwork`). IRS's "skip to first" is the doubled paging chevron: **two** left chevrons
+  (each the `chevronright` asset rotated 180°) overlapped into one glyph. Baked as two copies of the rotated chevron
+  path offset `translate(∓3.5 0)` so they overlap ~40%, matching the IRS console's doubled-paging-arrow
+  negative-margin overlap (its 12px glyphs overlap 5px ≈ 42%). The overlap offset is a Juneau composition choice;
+  the path data is the cleared IRS chevron.
+- **`last_page`** (`irs-artwork`). Same doubled-chevron composition as `first_page` but **not** rotated — two
+  right-pointing `chevronright` chevrons offset `translate(∓3.5 0)`.
 
-### `columns` is drawn to its name
+These three replaced the previous Juneau-original single/doubled triangle glyphs (operator ruling 2026-09-24 /
+design §3.4: where IRS draws the role, its artwork replaces the Juneau glyph). The earlier pass skipped them only
+because it searched for a same-named `first_page` / `chevronleft` symbol in the IRS console sprite and ignored the
+live `<use>` compositions of its `chevronright` symbol.
 
-The artwork this replaced was a **cog** — the same composition as `settings`, so the two toolbar buttons were
-visually identical and neither told the user which one it was. `columns` is now three vertical bars. This is a
-deliberate behaviour change, not a side effect of the redraw, and it is the one glyph in this sprite whose meaning
-moved. It is required to be distinguishable at 16px from both `settings` and `spreadsheet`; the render harness
-renders both pairs side by side under that name for exactly this check.
+Roles kept as Juneau artwork, and why, are listed above under *Glyphs*. `chevronup` and `sort` were checked for a
+live IRS `<use>` composition (not just a same-named symbol) and have none; the rest are Foundry-absent or
+dormant-unrelated-sheet-only.

@@ -46,6 +46,9 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpSchemaSafety}: no-fetch handling of external {@code $ref}s and bounded
  * (depth / node / CPU-time) schema validation (Resolution B2).
  */
+@SuppressWarnings({
+	"java:S2925" // Sleeps simulate scheduling delay and non-CPU wall-clock time, or set a fixed measurement/backtracking window; none wait for a condition
+})
 class McpSchemaSafety_Test {
 
 	private final BeanStore ctx = new BasicBeanStore();
@@ -182,9 +185,6 @@ class McpSchemaSafety_Test {
 		assertTrue(elapsedMs < McpSchemaSafety.MAX_VALIDATION_MILLIS + 5000, () -> "validation did not terminate promptly: elapsed=" + elapsedMs + "ms");
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep here simulates the deterministic scheduling latency under test, not a wait-and-hope synchronization delay.
-	})
 	@Test
 	void d02_schedulingLatency_notCountedAgainstComputeBudget() {
 		// Exercises McpSchemaSafety.awaitBounded() directly (rather than saturating the shared
@@ -215,9 +215,6 @@ class McpSchemaSafety_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep here deterministically models a validation that elapses wall-clock without consuming CPU, not a wait-and-hope delay.
-	})
 	@Test
 	void d03_sleepingValidation_doesNotTripCpuBudget() {
 		// The core of the wall-clock->CPU-time fix: a "validation" that lets a lot of wall-clock elapse but
@@ -298,9 +295,6 @@ class McpSchemaSafety_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep here lets the match descend into backtracking before the interrupt, not a wait-and-hope synchronization delay.
-	})
 	@Test
 	void d06_interruptAbortsCatastrophicMatch() throws Exception {
 		// Root-cause proof for the DoS-residual fix. A catastrophically-backtracking pattern applied to a
@@ -328,9 +322,6 @@ class McpSchemaSafety_Test {
 		assertFalse(worker.isAlive(), "interrupt did not abort the catastrophically-backtracking match");
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep here samples the pool threads' CPU over a fixed window; it is the measurement window, not a wait-and-hope delay.
-	})
 	@Test
 	void d07_poolWorkerStopsBurningAfterBudgetTrip() throws Exception {
 		// End-to-end proof through the real DoS guard: after validateInput trips the compute budget and cancels
@@ -358,9 +349,6 @@ class McpSchemaSafety_Test {
 		assertTrue(burnedMs < 200, () -> "validation-pool worker kept burning CPU after budget trip: " + burnedMs + "ms");
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep deterministically exhausts the simulated pre-check deadline; burnCpuFor's timer-bounded loop models a bounded compute cost. Neither is a wait-and-hope delay.
-	})
 	@Test
 	void d08_staleSharedDeadlineBudget_falselyTripsTrivialValidation_freshBudgetDoesNot() {
 		// Regression test for the flaky Characterization_Test false-positive (McpSchemaSafety.validateInput ->

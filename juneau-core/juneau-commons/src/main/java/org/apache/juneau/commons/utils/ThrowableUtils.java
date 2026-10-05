@@ -56,6 +56,9 @@ import org.apache.juneau.commons.settings.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">juneau-commons - Utils Package</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1181" // Need to catch Throwable to handle all exception types including Error
+})
 public class ThrowableUtils {
 
 	private static final RichLogger LOG = RichLogger.getLogger(ThrowableUtils.class);
@@ -293,9 +296,6 @@ public class ThrowableUtils {
 	}
 
 	/** Runs a snippet; wraps any checked throwable in {@link RuntimeException}. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static void safe(Snippet snippet) {
 		try {
 			snippet.run();
@@ -307,9 +307,6 @@ public class ThrowableUtils {
 	}
 
 	/** Runs a snippet; maps any checked throwable via the provided function. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static void safe(Snippet snippet, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			snippet.run();
@@ -321,9 +318,6 @@ public class ThrowableUtils {
 	}
 
 	/** Executes a supplier; wraps any checked exception in {@link RuntimeException}. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static <T> T safe(ThrowingSupplier<T> s) {
 		try {
 			return s.get();
@@ -335,9 +329,6 @@ public class ThrowableUtils {
 	}
 
 	/** Executes a supplier; maps any checked exception via the provided function. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			return s.get();
@@ -349,9 +340,6 @@ public class ThrowableUtils {
 	}
 
 	/** Runs a snippet, silently ignoring any exception. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static void runQuietly(Snippet snippet) {
 		try {
 			snippet.run();
@@ -391,9 +379,6 @@ public class ThrowableUtils {
 	}
 
 	/** Executes a {@link SupplierWithThrowable}; wraps any checked throwable in {@link RuntimeException}. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
 		try {
 			return supplier.get();
@@ -405,9 +390,6 @@ public class ThrowableUtils {
 	}
 
 	/** Executes a {@link SupplierWithThrowable}; maps any checked throwable via the provided function. */
-	@SuppressWarnings({
-		"java:S1181" // Need to catch Throwable to handle all exception types including Error
-	})
 	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			return supplier.get();

@@ -40,13 +40,9 @@ import org.apache.juneau.marshall.serializer.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
-
-	// Property name constants
-	private static final String PROP_ctx = "ctx";
-	private static final String PROP_varResolver = "varResolver";
 
 	/**
 	 * Builder class.
@@ -366,7 +362,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	@Override /* Overridden from HtmlStrippedDocSerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_ctx, ctx)
-			.a(PROP_varResolver, getVarResolver());
+			.a("ctx", ctx)
+			.a("varResolver", getVarResolver());
 	}
 }

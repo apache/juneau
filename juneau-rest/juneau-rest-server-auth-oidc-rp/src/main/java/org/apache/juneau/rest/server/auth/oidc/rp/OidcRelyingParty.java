@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -115,6 +114,7 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are OIDC protocol parameter names and claim names; intentional
+	"java:S3077", // The lazily built metadata/code-flow/validator/JWK/logout-processor caches are volatile references to effectively immutable objects, published once without compound updates
 	"java:S9358" // Ternary chooses a different constructor/null vs value; moving it inside one call is not equivalent.
 })
 public class OidcRelyingParty {
@@ -179,7 +179,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
+			issuer = UriUtils.assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -191,7 +191,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder metadata(OidcMetadata value) {
-			metadata = assertArgNotNull("value", value);
+			metadata = reqnn("value", value);
 			return this;
 		}
 
@@ -202,7 +202,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -213,7 +213,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -225,7 +225,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -236,7 +236,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder redirectUri(URI value) {
-			redirectUri = assertArgNotNull("value", value);
+			redirectUri = reqnn("value", value);
 			return this;
 		}
 
@@ -247,7 +247,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder postLogoutRedirectUri(URI value) {
-			postLogoutRedirectUri = assertArgNotNull("value", value);
+			postLogoutRedirectUri = reqnn("value", value);
 			return this;
 		}
 
@@ -259,7 +259,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder postLoginRedirect(String value) {
-			postLoginRedirect = assertArgNotNullOrBlank("value", value);
+			postLoginRedirect = reqnb("value", value);
 			return this;
 		}
 
@@ -270,9 +270,9 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder scope(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -285,7 +285,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder sessionStore(SessionStore value) {
-			sessionStore = assertArgNotNull("value", value);
+			sessionStore = reqnn("value", value);
 			return this;
 		}
 
@@ -297,7 +297,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder rolesClaim(String value) {
-			rolesClaim = assertArgNotNullOrBlank("value", value);
+			rolesClaim = reqnb("value", value);
 			return this;
 		}
 
@@ -317,9 +317,9 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder stateNonceTtl(Duration value) {
-			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "stateNonceTtl must be positive");
-			assertArg(value.compareTo(LoginStateStore.MAX_TTL) <= 0, "stateNonceTtl must not exceed 30 minutes (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "stateNonceTtl must be positive");
+			req(value.compareTo(LoginStateStore.MAX_TTL) <= 0, "stateNonceTtl must not exceed 30 minutes (was %s)", value);
 			stateNonceTtl = value;
 			return this;
 		}
@@ -349,7 +349,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder loginStateStore(LoginStateStore value) {
-			loginStateStore = assertArgNotNull("value", value);
+			loginStateStore = reqnn("value", value);
 			return this;
 		}
 
@@ -360,8 +360,8 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder sessionTtl(Duration value) {
-			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "sessionTtl must be positive"); // HTT: JaCoCo bytecode artifact; zero and negative are tested by m01/m02 but one short-circuit branch edge remains instrumented
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "sessionTtl must be positive"); // HTT: JaCoCo bytecode artifact; zero and negative are tested by m01/m02 but one short-circuit branch edge remains instrumented
 			sessionTtl = value;
 			return this;
 		}
@@ -373,7 +373,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder cookieName(String value) {
-			cookieName = assertArgNotNullOrBlank("value", value);
+			cookieName = reqnb("value", value);
 			return this;
 		}
 
@@ -407,7 +407,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder cookieSameSite(String value) {
-			cookieSameSite = assertArgNotNullOrBlank("value", value);
+			cookieSameSite = reqnb("value", value);
 			return this;
 		}
 
@@ -419,7 +419,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -431,7 +431,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder authenticationRequestCustomizer(Consumer<AuthenticationRequest.Builder> value) {
-			authenticationRequestCustomizer = assertArgNotNull("value", value);
+			authenticationRequestCustomizer = reqnn("value", value);
 			return this;
 		}
 
@@ -442,7 +442,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder idTokenAlgorithms(JWSAlgorithm...values) {
-			idTokenAlgorithms = assertArgNotNull("values", values);
+			idTokenAlgorithms = reqnn("values", values);
 			return this;
 		}
 
@@ -453,7 +453,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clockSkewSeconds(int value) {
-			assertArg(value >= 0, "clockSkewSeconds must be non-negative (was %s)", value);
+			req(value >= 0, "clockSkewSeconds must be non-negative (was %s)", value);
 			clockSkewSeconds = value;
 			return this;
 		}
@@ -466,7 +466,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder jwkSet(JWKSet value) {
-			jwkSet = assertArgNotNull("value", value);
+			jwkSet = reqnn("value", value);
 			return this;
 		}
 
@@ -477,7 +477,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder jwkSource(JWKSource<SecurityContext> value) {
-			jwkSource = assertArgNotNull("value", value);
+			jwkSource = reqnn("value", value);
 			return this;
 		}
 
@@ -492,9 +492,9 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder userInfoClaims(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("claim", v);
+				reqnb("claim", v);
 				userInfoClaims.add(v);
 			}
 			return this;
@@ -514,7 +514,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -561,26 +561,11 @@ public class OidcRelyingParty {
 	private final Duration stateNonceTtl;
 	private final LoginStateStore loginStateStore;
 
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in metadata(); the OidcMetadata payload is fully built before assignment, so volatile safe-publication is sufficient.
-	})
 	private volatile OidcMetadata metadataCache;
 	private final OidcMetadata explicitMetadata;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in codeFlow(); the flow is fully built before assignment, so volatile safe-publication is sufficient.
-	})
 	private volatile OAuthAuthorizationCodeFlow codeFlowCache;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in idTokenValidator(); the adapter is fully built before assignment, so volatile safe-publication is sufficient.
-	})
 	private volatile IdTokenValidatorAdapter idTokenValidatorCache;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in jwkSource(); the source is fully built before assignment, so volatile safe-publication is sufficient.
-	})
 	private volatile JWKSource<SecurityContext> jwkSourceCache;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in logoutTokenProcessor(); the processor is fully built before assignment, so volatile safe-publication is sufficient.
-	})
 	private volatile ConfigurableJWTProcessor<SecurityContext> logoutTokenProcessorCache;
 
 	/**
@@ -635,8 +620,8 @@ public class OidcRelyingParty {
 	 * @throws IOException If the redirect cannot be written.
 	 */
 	public void startLogin(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		assertArgNotNull("req", req);
-		assertArgNotNull("res", res);
+		reqnn("req", req);
+		reqnn("res", res);
 		var state = new State().getValue();
 		var nonce = new Nonce().getValue();
 		var verifier = new CodeVerifier();
@@ -669,8 +654,8 @@ public class OidcRelyingParty {
 	 * 	ID-token validation fails.
 	 */
 	public void completeLogin(HttpServletRequest req, HttpServletResponse res) throws IOException, AuthenticationException {
-		assertArgNotNull("req", req);
-		assertArgNotNull("res", res);
+		reqnn("req", req);
+		reqnn("res", res);
 
 		var callbackUri = fullRequestUri(req);
 		AuthenticationResponse parsed;
@@ -750,8 +735,8 @@ public class OidcRelyingParty {
 	 * @throws IOException If the redirect cannot be written.
 	 */
 	public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		assertArgNotNull("req", req);
-		assertArgNotNull("res", res);
+		reqnn("req", req);
+		reqnn("res", res);
 		var cookieValue = readCookie(req);
 		JWT idTokenHint = null;
 		if (cookieValue != null) {
@@ -784,8 +769,8 @@ public class OidcRelyingParty {
 	 * @return The refreshed session, or {@link Optional#empty()} if there was nothing to refresh.
 	 */
 	public Optional<OidcSession> refresh(HttpServletRequest req, HttpServletResponse res) {
-		assertArgNotNull("req", req);
-		assertArgNotNull("res", res);
+		reqnn("req", req);
+		reqnn("res", res);
 		var cookieValue = readCookie(req);
 		if (cookieValue == null)
 			return oe();
@@ -859,7 +844,7 @@ public class OidcRelyingParty {
 	 * 	revocation.
 	 */
 	public int backChannelLogout(String logoutToken) throws AuthenticationException {
-		assertArgNotNullOrBlank("logoutToken", logoutToken);
+		reqnb("logoutToken", logoutToken);
 		if (! sessionStore.supportsServerSideRevocation())
 			throw new IllegalStateException("Back-channel logout requires a server-side-revocable SessionStore (InMemorySessionStore or a distributed store); the configured store is stateless.");
 		JWT jwt;
@@ -1045,7 +1030,9 @@ public class OidcRelyingParty {
 			var processor = new DefaultJWTProcessor<SecurityContext>();
 			processor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(LogoutTokenValidator.TYPE, JOSEObjectType.JWT, null));
 			processor.setJWSKeySelector(keySelector);
-			@SuppressWarnings("unchecked") // ClockAwareLogoutTokenClaimsVerifier conforms to JWTClaimsSetVerifier<SecurityContext>; Nimbus's raw type forces an unchecked conversion here.
+			@SuppressWarnings({
+				"unchecked" // ClockAwareLogoutTokenClaimsVerifier conforms to JWTClaimsSetVerifier<SecurityContext>; Nimbus's raw type forces an unchecked conversion here.
+			})
 			JWTClaimsSetVerifier<SecurityContext> claimsVerifier = new ClockAwareLogoutTokenClaimsVerifier(expectedIssuer, new ClientID(clientId), clock);
 			processor.setJWTClaimsSetVerifier(claimsVerifier);
 			logoutTokenProcessorCache = processor;
@@ -1106,7 +1093,7 @@ public class OidcRelyingParty {
 			sb.append("; HttpOnly");
 		if (cookieSecure)
 			sb.append("; Secure");
-		if (cookieSameSite != null) // HTT: false branch requires null cookieSameSite, which the builder's assertArgNotNullOrBlank guard prevents
+		if (cookieSameSite != null) // HTT: false branch requires null cookieSameSite, which the builder's reqnb guard prevents
 			sb.append("; SameSite=").append(cookieSameSite);
 		return sb.toString();
 	}
@@ -1138,7 +1125,7 @@ public class OidcRelyingParty {
 		if (cookies == null)
 			return null;
 		for (var c : cookies)
-			if (cookieName.equals(c.getName()) && c.getValue() != null && ! c.getValue().isBlank())
+			if (eq(cookieName, c.getName()) && c.getValue() != null && ! c.getValue().isBlank())
 				return c.getValue();
 		return null;
 	}

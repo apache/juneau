@@ -34,11 +34,12 @@ import org.junit.jupiter.api.*;
  * covered by the existing {@code Hocon*_Test} suite.
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns Object; cast to Map/List in tests
-	"unused",    // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S2699", // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
 	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
-	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unchecked", // Parser returns Object; cast to Map/List in tests
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 })
 class HoconParserSession_Test extends TestBase {
 
@@ -503,9 +504,6 @@ class HoconParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
-	})
 	void l04_unterminatedObject() {
 		// EOF inside `{ ... ` — readObject EOF branch (line 317).
 		var hocon = "a { x = 1";
@@ -519,9 +517,6 @@ class HoconParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
-	})
 	void l05_emptyreadValue() throws Exception {
 		// readValue EOF — value of `a =` followed by EOF.
 		// (Hits the "EOF -> null" arm at line 307.)
@@ -613,7 +608,7 @@ class HoconParserSession_Test extends TestBase {
 
 	@Test
 	void k02_builderRequiresContext() {
-		// assertArgNotNull check on null context.
+		// reqnn check on null context.
 		assertThrows(Exception.class, () -> HoconParserSession.create((HoconParser) null));
 	}
 
@@ -653,7 +648,5 @@ class HoconParserSession_Test extends TestBase {
 		public byte[] data;
 	}
 
-	@SuppressWarnings({
-	})
 	private static ParserPipe unused() { return null; } // keep import happy without ?-suppression
 }

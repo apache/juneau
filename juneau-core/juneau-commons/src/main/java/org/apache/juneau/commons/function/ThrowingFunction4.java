@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
@@ -93,12 +93,9 @@ import java.util.function.*;
 @FunctionalInterface
 @SuppressWarnings({
 	"java:S112", // throws Exception intentional - function may throw any checked exception
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface ThrowingFunction4<A,B,C,D,R> extends Function4<A,B,C,D,R> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Applies this function to the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.
@@ -139,7 +136,7 @@ public interface ThrowingFunction4<A,B,C,D,R> extends Function4<A,B,C,D,R> {
 	 */
 	@Override
 	default <V> ThrowingFunction4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b, C c, D d) -> after.apply(applyThrows(a, b, c, d));
 	}
 

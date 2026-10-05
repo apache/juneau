@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -43,16 +42,13 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // Output streams managed by calling code
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"rawtypes",  // Raw types necessary for generic Map/Collection handling
-	"unchecked", // Raw Map passed to forEachEntry requires an unchecked conversion to Map<K,V>
-	"java:S115"  // Constants use UPPER_camelCase convention (e.g., ARG_ctx)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes", // Raw types necessary for generic Map/Collection handling
+	"resource", // Output streams managed by calling code
+	"unchecked" // Raw Map passed to forEachEntry requires an unchecked conversion to Map<K,V>
 })
 public class ProtobufSerializerSession extends OutputStreamSerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -68,7 +64,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -86,7 +82,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(ProtobufSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final ProtobufSerializer ctx;

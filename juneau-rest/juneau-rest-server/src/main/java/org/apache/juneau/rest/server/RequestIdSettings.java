@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.commons.utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Configuration for the always-on request-id correlation resolver run at {@link RestSession} build time.
@@ -57,8 +57,6 @@ import org.apache.juneau.commons.utils.*;
  */
 public class RequestIdSettings {
 
-	private static final String ARG_VALUE = "value";
-
 	private final Predicate<String> validator;
 	private final String attributeKey;
 	private final Supplier<String> idSupplier;
@@ -69,7 +67,7 @@ public class RequestIdSettings {
 	 * @param b The builder configuring these settings.  Must not be <jk>null</jk>.
 	 */
 	protected RequestIdSettings(Builder b) {
-		assertArgNotNull("builder", b);
+		reqnn("builder", b);
 		this.validator = b.validator;
 		this.attributeKey = b.attributeKey;
 		this.idSupplier = b.idSupplier;
@@ -111,7 +109,7 @@ public class RequestIdSettings {
 	public static class Builder {
 
 		Predicate<String> validator = s -> true;
-		String attributeKey = RestServerConstants.REQUEST_ID;
+		String attributeKey = "requestId";
 		Supplier<String> idSupplier = Uuid7::createString;
 
 		/**
@@ -131,7 +129,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder validator(Predicate<String> value) {
-			assertArgNotNull(ARG_VALUE, value);
+			reqnn("value", value);
 			validator = value;
 			return this;
 		}
@@ -147,7 +145,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder attributeKey(String value) {
-			assertArgNotNull(ARG_VALUE, value);
+			reqnn("value", value);
 			if (value.isBlank())
 				throw new IllegalArgumentException("Argument 'value' must not be blank.");
 			attributeKey = value;
@@ -165,7 +163,7 @@ public class RequestIdSettings {
 		 * @return This object.
 		 */
 		public Builder idSupplier(Supplier<String> value) {
-			assertArgNotNull(ARG_VALUE, value);
+			reqnn("value", value);
 			idSupplier = value;
 			return this;
 		}

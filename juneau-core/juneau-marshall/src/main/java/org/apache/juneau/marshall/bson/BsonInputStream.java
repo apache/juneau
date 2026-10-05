@@ -209,7 +209,7 @@ public class BsonInputStream extends ParserInputStream {
 		var baos = new ByteArrayOutputStream();
 		int b;
 		while ((b = read()) >= 0 && b != 0) {
-			checkLength(baos.size() + 1, "cstring");
+			checkLength(baos.size() + 1L, "cstring");
 			baos.write(b);
 		}
 		if (b < 0)

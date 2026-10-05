@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  *    concrete {@link Map} subtype (e.g. {@link TreeMap}).
  *  - {@code readTypedValue}'s ObjectId (0x07) and unknown-type/skip (default) arms, via hand-built documents.
  */
+@SuppressWarnings({
+	"unchecked" // Tests cast the Object returned by parser.read(bytes, Map.class, ...) to the parameterized Map/List they requested
+})
 class BsonParserSession_Test extends TestBase {
 
 	// ================================================================
@@ -81,7 +84,6 @@ class BsonParserSession_Test extends TestBase {
 		var m = new LinkedHashMap<String,Object>();
 		m.put(" padded ", 1);
 		var bytes = s.write(m);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) p.read(bytes, Map.class, String.class, Object.class);
 		assertTrue(result.containsKey("padded"), result.toString());
 	}
@@ -92,7 +94,6 @@ class BsonParserSession_Test extends TestBase {
 		var m = new LinkedHashMap<String,Object>();
 		m.put(" padded ", 1);
 		var bytes = s.write(m);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) p.read(bytes, Map.class, String.class, Object.class);
 		assertTrue(result.containsKey(" padded "), result.toString());
 	}
@@ -186,7 +187,6 @@ class BsonParserSession_Test extends TestBase {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("x", 1);
 		var bytes = s.write(m);
-		@SuppressWarnings("unchecked")
 		Object result = BsonParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)org.apache.juneau.commons.bean.BeanMap.class);
 		assertInstanceOf(Map.class, result);
 		assertEquals(1, ((Map<?,?>)result).get("x"));
@@ -287,7 +287,6 @@ class BsonParserSession_Test extends TestBase {
 		var oid = new byte[]{0x50, 0x7F, 0x1F, 0x77, (byte) 0xBC, (byte) 0xF8, 0x6C, (byte) 0xD7,
 			(byte) 0x99, 0x43, (byte) 0x90, 0x11};
 		var bytes = doc(0x07, "id", oid);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) BsonParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("507f1f77bcf86cd799439011", result.get("id"));
 	}
@@ -296,7 +295,6 @@ class BsonParserSession_Test extends TestBase {
 		// Type 0x06 (Undefined, deprecated) has zero-length payload; readTypedValue's default arm must skip it
 		// (via skipValue) rather than fail, yielding a null value for that key.
 		var bytes = doc(0x06, "u", new byte[0]);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) BsonParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertTrue(result.containsKey("u"), result.toString());
 		assertNull(result.get("u"));
@@ -310,7 +308,6 @@ class BsonParserSession_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var bytes = s.write(Optional.of(List.of(1, 2, 3)));
-		@SuppressWarnings("unchecked")
 		var result = (Optional<List<Integer>>)(Optional<?>) p.read(bytes, Optional.class, List.class);
 		assertNotNull(result);
 		assertTrue(result.isPresent());
@@ -328,7 +325,6 @@ class BsonParserSession_Test extends TestBase {
 		m.put("a", "hi");
 		m.put("b", "bye");
 		var bytes = s.write(Optional.of(m));
-		@SuppressWarnings("unchecked")
 		var result = (Optional<Map<String,Object>>)(Optional<?>) p.read(bytes, Optional.class, Map.class);
 		assertNotNull(result);
 		assertTrue(result.isPresent());
@@ -375,7 +371,6 @@ class BsonParserSession_Test extends TestBase {
 		// "wrapped==null but sType is NOT object-shaped" combination that f03's Object.class case can't reach
 		// (there, sType.isObject() is always true whenever wrapped==null is even checked).
 		var bytes = doc(0x0A, "value", new byte[0]);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) BsonParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertNull(result.get("value"));
 		assertTrue(result.containsKey("value"));
@@ -403,7 +398,6 @@ class BsonParserSession_Test extends TestBase {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("value", "x");
 		var bytes = s.write(m);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) BsonParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("x", result.get("value"));
 	}
@@ -432,7 +426,6 @@ class BsonParserSession_Test extends TestBase {
 		m.put("a", 1);
 		m.put("b", 2);
 		var bytes = s.write(m);
-		@SuppressWarnings("unchecked")
 		var result = (Map<String,Object>) BsonParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
@@ -528,10 +521,10 @@ class BsonParserSession_Test extends TestBase {
 		// eType (Dd2_MapType) isMap()==true, and its @Swap resolves sType to plain Object (isObject()==true,
 		// not map/bean/creatable-bean) -> BOTH the line 162 "sType.isMap()" check AND the line 184
 		// "sType.canCreateNewBean()" check are false, so readDocument genuinely reaches the 217+ fallback
-		// path despite eType being a Map. The swapped scalar value round-trips through BSON's {"value":x}
-		// root-wrap convention, producing the single-key {"value":x} shape that reaches the 231-else (236)
+		// path despite eType being a Map. The swapped scalar value round-trips through BSON's single-key
+		// "value" root-wrap convention, producing the single-key document shape that reaches the 231-else (236)
 		// cast arm; castResult (a plain parsed map, not yet Dd2_MapType) is then converted to the declared
-		// Dd2_MapType via the "eType.isMap() && ... && !isInstance()" ternary's true arm (238/239), and
+		// Dd2_MapType via the "eType is a Map and not already an instance" ternary's true arm (238/239), and
 		// finally unswapped back (line 257, since the loose Object-typed swap always reports "swapped").
 		var src = new Dd2_MapType();
 		src.put("k", "hi");
@@ -541,28 +534,28 @@ class BsonParserSession_Test extends TestBase {
 		assertEquals("hi", result.get("k"));
 	}
 
-	public interface Dd3_View {
+	public interface Dd3View {
 		String getA();
 		String getB();
 	}
 
-	public static class Dd3_ViewImpl implements Dd3_View {
+	public static class Dd3ViewImpl implements Dd3View {
 		private String a, b;
-		public Dd3_ViewImpl() {}
-		public Dd3_ViewImpl(String a, String b) { this.a = a; this.b = b; }
+		public Dd3ViewImpl() {}
+		public Dd3ViewImpl(String a, String b) { this.a = a; this.b = b; }
 		@Override public String getA() { return a; }
 		@Override public String getB() { return b; }
 		public void setA(String a) { this.a = a; }
 		public void setB(String b) { this.b = b; }
 	}
 
-	public static class Dd3_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<Dd3_MapType,Dd3_View> {
+	public static class Dd3_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<Dd3_MapType,Dd3View> {
 		@Override
-		public Dd3_View swap(MarshallingSession session, Dd3_MapType o) {
-			return new Dd3_ViewImpl(String.valueOf(o.get("a")), String.valueOf(o.get("b")));
+		public Dd3View swap(MarshallingSession session, Dd3_MapType o) {
+			return new Dd3ViewImpl(String.valueOf(o.get("a")), String.valueOf(o.get("b")));
 		}
 		@Override
-		public Dd3_MapType unswap(MarshallingSession session, Dd3_View f, ClassMeta<?> hint) {
+		public Dd3_MapType unswap(MarshallingSession session, Dd3View f, ClassMeta<?> hint) {
 			var m = new Dd3_MapType();
 			m.put("a", f.getA());
 			m.put("b", f.getB());
@@ -578,13 +571,13 @@ class BsonParserSession_Test extends TestBase {
 	@Test void dd4_mapTypeWithNonCreatableInterfaceSwap_singleValueKeyDocumentHitsDisjunct2IsBeanSubcheck() throws Exception {
 		// Hand-crafted (not round-tripped through BsonSerializer, since the writer's own sType.isBean() check
 		// would never actually produce a single-"value"-key document for a bean-shaped sType -- see dd3's
-		// comment) single-key {"value":"hi"} document read as Dd3_MapType. sType (post-swap) is the Dd3_View
+		// comment) single-key {"value":"hi"} document read as Dd3_MapType. sType (post-swap) is the Dd3View
 		// interface: isMap()==false (disjunct-2's "!sType.isMap()" sub-check is true) but isBean()==true
 		// (disjunct-2's "!sType.isBean()" sub-check is false), so disjunct 2 evaluates to false via its SECOND
 		// sub-condition rather than its first (as in dd2) or third (never reached elsewhere) -- the one
 		// sub-condition-false combination the rest of the suite doesn't exercise. wrapped ("hi") is non-null,
 		// so disjunct 3 is also false, landing in the same else (236-239) / castResult-conversion path as dd3.
-		// Dd3_View is neither Map- nor Number-shaped, so findConversion's ObjectSwap fallback (MarshallingContext's
+		// Dd3View is neither Map- nor Number-shaped, so findConversion's ObjectSwap fallback (MarshallingContext's
 		// copyMapEntries) applies here too: the swap doesn't bridge, but castResult is already Map-shaped, so its
 		// entries (just the raw "value" wrapper key, since this document was never a genuine multi-key shape) are
 		// copied verbatim into a new Dd3_MapType instead of being lost.
@@ -597,13 +590,13 @@ class BsonParserSession_Test extends TestBase {
 	}
 
 	@Test void dd3_mapTypeWithNonCreatableInterfaceSwap_fallbackPathMultiKeyDocumentHitsMapConversionBranch() throws Exception {
-		// eType (Dd3_MapType) isMap()==true, and its @Swap resolves sType to the Dd3_View interface --
+		// eType (Dd3_MapType) isMap()==true, and its @Swap resolves sType to the Dd3View interface --
 		// interfaces are beans (readable getters) but never canCreateNewBean(), so on WRITE the serializer's
 		// own sType.isBean() check takes the direct writeBeanMap path (multi-key document, no "value" wrap),
 		// while on READ neither the isMap() (162) nor the canCreateNewBean() (184) guard is satisfied, so
 		// readDocument reaches the 217+ fallback with a genuinely multi-key document -- landing in line 241's
 		// "else" arm (not the single-"value"-key arm at 229-240) and exercising the 243/244
-		// "eType.isMap() && castResult instanceof Map && !isInstance()" true arm.
+		// the true arm of the "eType is a Map, castResult is a Map, not already an instance" condition.
 		//
 		// FIXED (previously flagged as a bug in MarshallingContext.findConversion): convertToMemberType(null,
 		// castResult, eType) at line 244 used to silently return null here instead of copying the parsed map's

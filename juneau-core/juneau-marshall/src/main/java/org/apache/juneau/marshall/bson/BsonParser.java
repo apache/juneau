@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -81,13 +81,12 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class BsonParser extends InputStreamParser implements BsonMetaProvider, RecordReadable, ArrayRecordReadable {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 	private static final String DEFAULT_NULL_KEY = "<NULL>";
 	private static final int DEFAULT_MAX_LENGTH = BsonInputStream.DEFAULT_MAX_LENGTH;
 
@@ -130,7 +129,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
 			maxLength = copyFrom.maxLength;
 		}
@@ -142,7 +141,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
 			maxLength = copyFrom.maxLength;
 		}

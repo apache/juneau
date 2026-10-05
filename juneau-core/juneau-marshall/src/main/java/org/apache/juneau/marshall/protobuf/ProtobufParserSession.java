@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -41,16 +40,13 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",  // Raw types necessary for generic type handling
-	"unchecked", // Type erasure requires unchecked casts
 	"java:S110", // Inheritance depth acceptable for parser session hierarchy
-	"resource",  // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
-	"java:S115"  // Constants use UPPER_camelCase convention (e.g., ARG_ctx)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class ProtobufParserSession extends InputStreamParserSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -66,7 +62,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -84,7 +80,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(ProtobufParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final ProtobufParser ctx;
@@ -124,7 +120,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for the tag-loop dispatch
-		"java:S6541"  // Brain method acceptable for the parse workhorse
+		"java:S6541" // Brain method acceptable for the parse workhorse
 	})
 	private Object readMessage0(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
 		if (type.isMap())

@@ -18,7 +18,6 @@ package org.apache.juneau.rest.server.httppart;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -105,15 +104,9 @@ import org.apache.juneau.rest.server.util.*;
  * </ul>
 */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RequestPathParamList extends ArrayList<RequestPathParam> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_parameters = "parameters";
-	private static final String ARG_name = "name";
-	private static final String ARG_names = "names";
-	private static final String ARG_headers = "headers";
 
 	private static final long serialVersionUID = 1L;
 
@@ -188,7 +181,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList add(HttpPart...parameters) {
-		assertArgNotNull(ARG_parameters, parameters);
+		reqnn("parameters", parameters);
 		for (var p : parameters)
 			if (nn(p))
 				add(p.getName(), p.getValue());
@@ -207,7 +200,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList add(String name, Object value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		add(new RequestPathParam(req, name, s(value)).parser(parser));
 		return this;
 	}
@@ -282,7 +275,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return <jk>true</jk> if the parameters with the specified name is present.
 	 */
 	public boolean contains(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return stream(name).findAny().isPresent();
 	}
 
@@ -293,7 +286,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull(ARG_names, names);
+		reqnn("names", names);
 		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
@@ -358,7 +351,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<RequestPathParam> getAll(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return stream(name).toList();
 	}
 
@@ -373,7 +366,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestPathParam getFirst(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return stream(name).findFirst().orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
 	}
 
@@ -388,7 +381,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestPathParam getLast(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		var v = Holder.<RequestPathParam>empty();
 		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
@@ -503,7 +496,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList remove(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
@@ -519,7 +512,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList set(HttpPart...parameters) {
-		assertArgNotNull(ARG_headers, parameters);
+		reqnn("headers", parameters);
 		for (var p : parameters)
 			remove(p.getName());
 		for (var p : parameters)
@@ -542,7 +535,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList set(String name, Object value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		set(new RequestPathParam(req, name, s(value)).parser(parser));
 		return this;
 	}

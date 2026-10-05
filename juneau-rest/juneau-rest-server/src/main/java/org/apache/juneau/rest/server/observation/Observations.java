@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.observation;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.concurrent.atomic.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Static facade over an explicitly-installed default {@link Observer} for ergonomic custom
@@ -64,13 +64,10 @@ import java.util.concurrent.atomic.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"resource" // observe(...) returns the Observation handle for the caller's try-with-resources; closing it here is wrong.
 })
 public class Observations {
-
-	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
-	@SuppressWarnings("java:S115")
-	private static final String ARG_observer = "observer";
 
 	private static final AtomicReference<Observer> defaultObserver = new AtomicReference<>(Observer.NOOP);
 
@@ -86,7 +83,7 @@ public class Observations {
 	 * @param observer The observer to install. Must not be <jk>null</jk>.
 	 */
 	public static void install(Observer observer) {
-		defaultObserver.set(assertArgNotNull(ARG_observer, observer));
+		defaultObserver.set(reqnn("observer", observer));
 	}
 
 	/**

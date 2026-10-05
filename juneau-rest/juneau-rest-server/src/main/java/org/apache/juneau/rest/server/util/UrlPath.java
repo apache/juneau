@@ -30,13 +30,9 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_parts)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class UrlPath {
-
-	// Property name constants
-	private static final String PROP_parts = "parts";
-	private static final String PROP_raw = "raw";
 
 	/**
 	 * Creates a new parsed {@link UrlPath} object from the specified string.
@@ -107,8 +103,8 @@ public class UrlPath {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_parts, parts)
-			.a(PROP_raw, path);
+			.a("parts", parts)
+			.a("raw", path);
 		// @formatter:on
 	}
 

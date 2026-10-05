@@ -219,8 +219,7 @@ final class BeanTestFakes {
 
 		FakeBeanStore(Object bean) { this.bean = bean; }
 
-		@SuppressWarnings("unchecked")
-		@Override public <T> Optional<T> getBean(Class<T> beanType) { return beanType.isInstance(bean) ? Optional.of((T) bean) : Optional.empty(); }
+		@Override public <T> Optional<T> getBean(Class<T> beanType) { return beanType.isInstance(bean) ? Optional.of(beanType.cast(bean)) : Optional.empty(); }
 		@Override public <T> Optional<T> getBean(Class<T> beanType, String name) { return getBean(beanType); }
 		@Override public <T> Map<String,T> getBeansOfType(Class<T> beanType) { return Map.of(); }
 		@Override public boolean hasBean(Class<?> beanType) { return beanType.isInstance(bean); }

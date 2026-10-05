@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console.datatables;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -170,7 +171,7 @@ class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 			var cfg2 = mixin.resolveConfiguration(req);
 			var sameInstance = cfg1 == USER_CFG && cfg2 == USER_CFG;
 			var settingsUnchanged = cfg1.getObjectWrapper() == ORIGINAL_WRAPPER
-				&& Objects.equals(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
+				&& eq(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
 				&& cfg1.getOutputFormat() == ORIGINAL_OUTPUT_FORMAT
 				&& cfg1.getTemplateUpdateDelayMilliseconds() == ORIGINAL_UPDATE_DELAY;
 			var varsFilled = cfg1.getSharedVariable(PageDirectiveModel.NAME) != null

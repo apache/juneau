@@ -29,8 +29,8 @@ import org.junit.jupiter.api.*;
 
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
+	"java:S5961" // High assertion count acceptable in comprehensive tests
 })
 class RestOp_Throws_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------

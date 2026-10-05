@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -37,15 +36,14 @@ import org.apache.juneau.marshall.swap.spi.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw ClassMeta locals in doWrite() and writeBeanWithHeadings() mirror MarkdownSerializerSession, where the swap API is used with raw ClassMeta
 	"java:S3776", // Cognitive complexity acceptable for doWrite / writeBeanWithHeadings
 	"java:S6541", // Brain method acceptable for doWrite
-	"resource", // MarkdownWriter/Writer lifecycle managed by SerializerPipe
-	"rawtypes",
+	"rawtypes", // Raw ClassMeta locals (cm, swappedCm) in doWrite() and writeBeanWithHeadings() are passed to the ObjectSwap API, which is typed on the raw class
+	"resource" // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 })
 public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
-
-	private static final String ARG_ctx = "ctx";
 
 	private final String title;
 	private final int headingLevel;
@@ -56,9 +54,6 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth acceptable for doc serializer session builder hierarchy
-	})
 	public static class Builder extends MarkdownSerializerSession.Builder<Builder> {
 
 		String title;
@@ -74,7 +69,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarkdownDocSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			title = ctx.title;
 			headingLevel = ctx.headingLevel;
 			addHorizontalRules = ctx.addHorizontalRules;
@@ -97,7 +92,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(MarkdownDocSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -130,13 +125,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 			if (o == null) {
 				w.text(nullValue);
 		} else {
-			@SuppressWarnings({
-				"java:S3740" // Raw ClassMeta from getClassMetaForObject
-			})
 			ClassMeta cm = getClassMetaForObject(o);
-			@SuppressWarnings({
-				"java:S3740" // Raw ObjectSwap from ClassMeta.getSwap
-			})
 			ObjectSwap swap = cm.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -38,16 +40,13 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // CONST_ prefix follows framework convention
-	"java:S135",  // Multiple break/continue necessary for tokenizer state machine loops
+	"java:S115", // CONST_ prefix follows framework convention
+	"java:S135", // Multiple break/continue necessary for tokenizer state machine loops
 	"java:S3776", // Cognitive complexity acceptable for protobuf grammar
 	"java:S6541", // Brain method acceptable for tokenizer
 	"resource" // Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.
 })
 class PrototextTokenizer {
-
-	private static final String CONST_integerOverflow = "Integer overflow: ";
-	private static final String CONST_invalidFloat = "Invalid float: ";
 
 	private final Reader reader;
 	private final Deque<Integer> pushback = new ArrayDeque<>();
@@ -198,7 +197,7 @@ class PrototextTokenizer {
 			|| term == ' ' || term == '\t' || term == '\n' || term == '\r' || term == 0x0B || term == 0x0C
 			|| term == ',' || term == ';' || term == ']' || term == '}';
 		var tok = buf.toString().toLowerCase(Locale.ROOT);
-		var isSpecial = isTerminator && (tok.equals("nan") || tok.equals("inf") || tok.equals("infinity"));
+		var isSpecial = isTerminator && (eqa(tok, "nan", "inf", "infinity"));
 		// Restore consumed chars in reverse order (pushback is a LIFO stack — to make the next read
 		// return buf[0], buf[0] must be on top, so we push buf[N-1] ... buf[0]).
 		for (var i = buf.length() - 1; i >= 0; i--)
@@ -261,7 +260,7 @@ class PrototextTokenizer {
 		try {
 			return Long.parseLong(sb.toString(), 16);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + sb);
+			throw parseException("Integer overflow: " + sb);
 		}
 	}
 
@@ -272,7 +271,7 @@ class PrototextTokenizer {
 		try {
 			return Long.parseLong(sb.toString(), 8);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + sb);
+			throw parseException("Integer overflow: " + sb);
 		}
 	}
 
@@ -310,7 +309,7 @@ class PrototextTokenizer {
 				double val = Double.parseDouble(s);
 				return neg ? -val : val;
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
-				throw parseException(CONST_invalidFloat + s);
+				throw parseException("Invalid float: " + s);
 			}
 		}
 		if (peekChar() == 'f' || peekChar() == 'F') {
@@ -320,7 +319,7 @@ class PrototextTokenizer {
 				double val = Double.parseDouble(s);
 				return neg ? -val : val;
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
-				throw parseException(CONST_invalidFloat + s);
+				throw parseException("Invalid float: " + s);
 			}
 		}
 		if (sb.isEmpty())
@@ -329,7 +328,7 @@ class PrototextTokenizer {
 		try {
 			return neg ? -Long.parseLong(s) : Long.parseLong(s);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + s);
+			throw parseException("Integer overflow: " + s);
 		}
 	}
 
@@ -344,9 +343,9 @@ class PrototextTokenizer {
 			sb.append((char) readChar());
 		var s = sb.toString();
 		var lower = s.toLowerCase(Locale.ROOT);
-		if (lower.equals("inf") || lower.equals("infinity"))
+		if (eqa(lower, "inf", "infinity"))
 			return new PrototextToken(PrototextToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
-		if (lower.equals("nan"))
+		if (eq(lower, "nan"))
 			return new PrototextToken(PrototextToken.TokenType.FLOAT, Double.NaN);
 		if (neg)
 			throw parseException("Invalid float literal: -" + s);
@@ -393,7 +392,7 @@ class PrototextTokenizer {
 		try {
 			return Double.parseDouble(s);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_invalidFloat + s);
+			throw parseException("Invalid float: " + s);
 		}
 	}
 
@@ -523,9 +522,9 @@ class PrototextTokenizer {
 		var t = read();
 		if (t.type() == PrototextToken.TokenType.IDENT) {
 			var s = t.stringValue().toLowerCase(Locale.ROOT);
-			if (s.equals("true") || s.equals("t") || s.equals("1"))
+			if (eqa(s, "true", "t", "1"))
 				return true;
-			if (s.equals("false") || s.equals("f") || s.equals("0"))
+			if (eqa(s, "false", "f", "0"))
 				return false;
 		}
 		if (t.type() == PrototextToken.TokenType.DEC_INT) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -119,14 +118,10 @@ import org.apache.juneau.commons.utils.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
-	"java:S3740"  // Raw Map/Iterator types used in simple map structural operations where key/value types are erased
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740" // Raw Map/Iterator types used in simple map structural operations where key/value types are erased
 })
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
-
-	// Argument name constants for assertArgsNotNull
-	private static final String ARG_keys = "keys";
-	private static final String ARG_values = "values";
 
 	/**
 	 * Inner class representing a single key-value entry in this map.
@@ -217,8 +212,8 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		"unchecked" // Type erasure requires cast for array-based map construction
 	})
 	public SimpleMap(K[] keys, V[] values) {
-		assertArgsNotNull(ARG_keys, keys, ARG_values, values);
-		assertArg(keys.length == values.length, "keys '%s' and values '%s' array lengths differ", keys.length, values.length);
+		reqnn("keys", keys, "values", values);
+		req(keys.length == values.length, "keys '%s' and values '%s' array lengths differ", keys.length, values.length);
 
 		// Check for duplicate keys
 		for (var i = 0; i < keys.length; i++) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -55,9 +54,9 @@ import org.apache.juneau.rest.server.swagger.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"unchecked", // CRTP self-type cast in self() is safe by construction.
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	"java:S1452", // Wildcard return on getResourceType() is intentional.
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"unchecked" // CRTP self-type cast in self() is safe by construction.
 })
 public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,SELF>> implements RestBuilder<SELF> {
 
@@ -72,7 +71,7 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	 * @param resourceType The resource type produced by {@link #build()}.  Must not be <jk>null</jk>.
 	 */
 	protected AbstractRestBuilder(Class<R> resourceType) {
-		this.resourceType = assertArgNotNull("resourceType", resourceType);
+		this.resourceType = reqnn("resourceType", resourceType);
 	}
 
 	/**
@@ -349,5 +348,5 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	public SELF mdcAsyncPropagation(boolean value) { mdcAsyncPropagation = value; return self(); }
 
 	@Override /* RestBuilder<?> */
-	public SELF set(String key, Object value) { extras.put(assertArgNotNull("key", key), value); return self(); }
+	public SELF set(String key, Object value) { extras.put(reqnn("key", key), value); return self(); }
 }

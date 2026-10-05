@@ -44,6 +44,10 @@ import org.apache.juneau.marshall.swaps.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1172", // The ClassMeta sourceType/type parameters of the public formatDate/formatCalendar/formatTemporal/formatAsDate/formatAsDateTime are unused by the current logic but kept for API stability
+	"unchecked" // Casts of parsed Duration/Period/Calendar/Date/Temporal values to T are guaranteed by the requested target ClassMeta<T>
+})
 public final class Iso8601Utils {
 
 	private Iso8601Utils() {}
@@ -92,9 +96,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used when the value lacks zone info).
 	 * @return The ISO 8601 string representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // type kept for API compatibility; future callers may use it for per-type dispatch hints
-	})
 	public static String format(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -150,9 +151,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used as the default zone).
 	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // sourceType kept for API symmetry with parseDate; callers pass ClassMeta context for potential future use
-	})
 	public static String formatDate(Date value, ClassMeta<?> sourceType, DateFormat format, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -176,9 +174,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used as the default zone when the value lacks zone info).
 	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // sourceType kept for API symmetry with parseCalendar; callers pass ClassMeta context for potential future use
-	})
 	public static String formatCalendar(Object value, ClassMeta<?> sourceType, CalendarFormat format, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -197,9 +192,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used as the default zone when the value lacks zone info).
 	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // sourceType kept for API symmetry with parseTemporal; callers pass ClassMeta context for potential future use
-	})
 	public static String formatTemporal(TemporalAccessor value, ClassMeta<?> sourceType, TemporalFormat format, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -215,9 +207,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The ISO date string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
-	})
 	public static String formatAsDate(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -241,9 +230,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The ISO date-time string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
-	})
 	public static String formatAsDateTime(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value == null)
 			return null;
@@ -281,9 +267,6 @@ public final class Iso8601Utils {
 	 * @return The parsed object, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target type is
 	 * 	not a recognized date/time/duration/period type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for date/time type dispatch
-	})
 	public static <T> T parse(String iso8601, ClassMeta<T> targetType, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
@@ -387,9 +370,6 @@ public final class Iso8601Utils {
 	 * @return The parsed value, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is not a
 	 * 	recognized calendar type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for Calendar/XMLGregorianCalendar dispatch
-	})
 	public static <T> T parseCalendar(String iso8601, ClassMeta<T> targetType, CalendarFormat formatHint, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
@@ -423,9 +403,6 @@ public final class Iso8601Utils {
 	 * @return The parsed {@link Date}, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is
 	 * 	not exactly {@code Date}.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for Date dispatch
-	})
 	public static <T> T parseDate(String iso8601, ClassMeta<T> targetType, DateFormat formatHint, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
@@ -454,9 +431,6 @@ public final class Iso8601Utils {
 	 * @return The parsed value, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is not a
 	 * 	{@link Temporal} subtype.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for per-subtype Temporal.from() dispatch
-	})
 	public static <T> T parseTemporal(String iso8601, ClassMeta<T> targetType, TemporalFormat formatHint, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
@@ -536,6 +510,7 @@ public final class Iso8601Utils {
 				case 'H': totalNanos += nanos * 3600; break;
 				case 'M': totalNanos += nanos * 60; break;
 				case 'S': totalNanos += nanos; break;
+				default: break; // Unreachable; isDurationUnit(char) already restricted the unit to H, M or S.
 			}
 			i++;  // Consume the unit.
 		}
@@ -631,8 +606,7 @@ public final class Iso8601Utils {
 				i++;
 		}
 		String unit = s.substring(i);
-		return unit.equals("ns") || unit.equals("us") || unit.equals("ms")
-			|| unit.equals("s") || unit.equals("m") || unit.equals("h") || unit.equals("d");
+		return eqa(unit, "ns", "us", "ms", "s", "m", "h", "d");
 	}
 
 	private static Calendar parseCalendarDefault(String iso8601, ZoneId zoneId) {
@@ -647,9 +621,6 @@ public final class Iso8601Utils {
 		return Date.from(ZonedDateTime.from(ta).toInstant());
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for Temporal.from() reflection
-	})
 	private static <T extends Temporal> T parseTemporalDefault(String iso8601, Class<T> tc, ZoneId zoneId) {
 		ZoneId offset = (tc == Instant.class) ? Z : zoneId;
 		var formatter = getFormatterForType(tc);
@@ -703,9 +674,6 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The converted date/time object, or <jk>null</jk> if the target type is not a recognized date/time type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for date/time type conversion
-	})
 	public static <T> T fromEpochMillis(long epochMillis, ClassMeta<T> targetType, TimeZone timeZone) {
 		Class<T> tc = targetType.inner();
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();

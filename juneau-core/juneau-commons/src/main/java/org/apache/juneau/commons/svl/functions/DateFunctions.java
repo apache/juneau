@@ -38,8 +38,8 @@ public final class DateFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked", // Cast is safe: type verified by caller context.
-		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"unchecked" // Cast is safe: type verified by caller context.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Now.class, ParseDate.class, FormatDate.class
@@ -81,8 +81,8 @@ public final class DateFunctions {
 		}
 
 		@SuppressWarnings({
-			"java:S3776", // Cognitive complexity: small ISO-format dispatch.
 			"java:S1166", // Exceptions swallowed intentionally — this is a try-each-format chain.
+			"java:S3776" // Cognitive complexity: small ISO-format dispatch.
 		})
 		private static long parseIso(String s) {
 			try { return Instant.parse(s).toEpochMilli(); } catch (@SuppressWarnings("unused") DateTimeParseException e) { /* fall through */ }

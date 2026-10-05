@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class XmlConfigAnnotation {
 
 	/**
@@ -38,8 +41,7 @@ public class XmlConfigAnnotation {
 	 * Applies {@link XmlConfig} annotations to a {@link XmlParser.Builder}.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Raw types required for reflective annotation application.
-		"rawtypes"   // Raw types required for reflective annotation application.
+		"unchecked" // Raw types required for reflective annotation application.
 	})
 	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {
 
@@ -68,9 +70,6 @@ public class XmlConfigAnnotation {
 	/**
 	 * Applies {@link XmlConfig} annotations to a {@link XmlSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<XmlConfig,XmlSerializer.Builder> {
 
 		/**

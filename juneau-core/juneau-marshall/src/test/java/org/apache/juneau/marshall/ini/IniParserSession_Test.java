@@ -53,7 +53,7 @@ class IniParserSession_Test extends TestBase {
 	@Test void a01_nullInputReturnsNull() throws Exception {
 		// ParserPipe.getParserReader() returns null when the raw input object itself is null, which is the
 		// actual (only) way doRead's "r == null" arm is reachable -- not empty-string input (readIniContent
-		// always pre-seeds a "" default section, so a `sections.isEmpty()` check would never be true;
+		// always pre-seeds a "" default section, so an empty-sections check would never be true;
 		// this was confirmed, along with the now-deleted dead guard that followed it in doRead).
 		var result = IniParser.DEFAULT.read((Object) null, Map.class);
 		assertNull(result);
@@ -94,7 +94,7 @@ class IniParserSession_Test extends TestBase {
 		public Map<String,Object> extra;
 	}
 
-	@Test void c01_grandchildSectionRoundTrip() throws Exception {
+	@Test void c01_grandchildSectionRoundTrip() {
 		var e = new C_Employee();
 		e.name = "John";
 		e.employment = new C_Employment();
@@ -110,7 +110,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("ACME", result.employment.company.ticker);
 	}
 
-	@Test void c02_nestedMapBeanPropertyRoundTrip() throws Exception {
+	@Test void c02_nestedMapBeanPropertyRoundTrip() {
 		var e = new C_Employee();
 		e.name = "Jane";
 		var extra = new LinkedHashMap<String,Object>();
@@ -146,7 +146,7 @@ class IniParserSession_Test extends TestBase {
 		public C_G_B b;
 	}
 
-	@Test void c02b_intermediateSectionHeaderMissing_defaultSectionNull() throws Exception {
+	@Test void c02b_intermediateSectionHeaderMissing_defaultSectionNull() {
 		// "[b]" exists as its own (empty) header, but "[b/c]" is skipped entirely -- only "[b/c/d]" is
 		// present. When populateBean recurses into sectionPath "b/c" (derived by splitting "b/c/d"),
 		// sections.get("b/c") is null (no such literal header), hitting defaultSection's null arm.
@@ -158,7 +158,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("hi", result.b.c.d.e);
 	}
 
-	@Test void c03_unmatchedNestedSectionSilentlyIgnored() throws Exception {
+	@Test void c03_unmatchedNestedSectionSilentlyIgnored() {
 		// Unlike the root-property loop (which throws ParseException for an unknown key -- see
 		// IniParser_Test.b04_unknownBeanPropertyThrows), populateBean's nested-SECTION loop silently
 		// continues past any section name that doesn't match a bean property, regardless of
@@ -168,7 +168,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("John", result.name);
 	}
 
-	@Test void c04_unmatchedNestedSection_ignoreUnknownBeanPropertiesTrue_alsoSilentlyIgnored() throws Exception {
+	@Test void c04_unmatchedNestedSection_ignoreUnknownBeanPropertiesTrue_alsoSilentlyIgnored() {
 		// Same unmatched-section scenario as c03, but with ignoreUnknownBeanProperties(true) explicitly
 		// set -- hits the `pMeta == null && isIgnoreUnknownBeanProperties()` true/true combo directly
 		// (c03 only exercises pMeta == null with the flag false).
@@ -182,7 +182,7 @@ class IniParserSession_Test extends TestBase {
 		public String employment;
 	}
 
-	@Test void c05_sectionHeaderOnScalarProperty_cMetaIsMapFalse_throwsParseException() throws Exception {
+	@Test void c05_sectionHeaderOnScalarProperty_cMetaIsMapFalse_throwsParseException() {
 		// FIXED: "employment" resolves to a real (non-null) pMeta, but its type is a plain String -- neither
 		// isBean() nor isMap() -- so the isBean()/isMap() if/else-if chain used to fall through with no
 		// assignment, silently dropping the section's data rather than erroring. Unlike an unmatched section
@@ -198,7 +198,7 @@ class IniParserSession_Test extends TestBase {
 	// key/values of its own).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_hasNestedRecursionIntoMapTarget() throws Exception {
+	@Test void d01_hasNestedRecursionIntoMapTarget() {
 		var ini = "name = John\n\n[employment]\ntitle = Engineer\n\n[employment/company]\nname = Acme\nticker = ACME";
 		var result = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertEquals("John", result.get("name"));
@@ -209,7 +209,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("ACME", company.get("ticker"));
 	}
 
-	@Test void d02_grandchildOnlySectionWithNoOwnHeaderIsRecovered() throws Exception {
+	@Test void d02_grandchildOnlySectionWithNoOwnHeaderIsRecovered() {
 		// FIXED: buildMapFromSections's isChild check used to only ever recognize a section as a "direct
 		// child" of sectionPath by matching literal keys already present in the sections map. A grandchild
 		// section like "employment/company" was never itself a direct child of "" (it contains
@@ -228,7 +228,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("Acme", company.get("name"));
 	}
 
-	@Test void d04_grandchildSectionHeaderMissing_defaultSectionNullAndDedup() throws Exception {
+	@Test void d04_grandchildSectionHeaderMissing_defaultSectionNullAndDedup() {
 		// Three-level structure with the *middle* level's own header ("[a/b]") never literally present --
 		// only "[a]" and two great-grandchild-ish entries "[a/b/x]" / "[a/b/y]" exist. When
 		// buildMapFromSections recurses into the synthesized "a/b" path (derived from splitting
@@ -245,7 +245,7 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("2", y.get("val"));
 	}
 
-	@Test void d03_duplicateChildNameDeduped() throws Exception {
+	@Test void d03_duplicateChildNameDeduped() {
 		// Two section headers that both resolve to the same immediate childName ("a") under the root --
 		// e.g. "[a]" (processed first from its own key/values) and "[a/b]" (a grandchild under it). The
 		// second time "a" is encountered as a candidate childName, result.containsKey("a") is already true,
@@ -281,7 +281,7 @@ class IniParserSession_Test extends TestBase {
 		public Date date;
 	}
 
-	@Test void e01_dateRoundTrip() throws Exception {
+	@Test void e01_dateRoundTrip() {
 		var b = new E01_DateBean();
 		b.date = new Date(0);
 		var ini = IniSerializer.DEFAULT.write(b);
@@ -293,7 +293,7 @@ class IniParserSession_Test extends TestBase {
 		public Calendar cal;
 	}
 
-	@Test void e02_calendarRoundTrip() throws Exception {
+	@Test void e02_calendarRoundTrip() {
 		var b = new E02_CalendarBean();
 		b.cal = new GregorianCalendar(2024, Calendar.MARCH, 15);
 		var ini = IniSerializer.DEFAULT.write(b);
@@ -308,7 +308,7 @@ class IniParserSession_Test extends TestBase {
 		public LocalDate localDate;
 	}
 
-	@Test void e03_temporalRoundTrip() throws Exception {
+	@Test void e03_temporalRoundTrip() {
 		var b = new E03_TemporalBean();
 		b.localDate = LocalDate.of(2024, 3, 15);
 		var ini = IniSerializer.DEFAULT.write(b);
@@ -320,7 +320,7 @@ class IniParserSession_Test extends TestBase {
 		public Duration dur;
 	}
 
-	@Test void e04_durationRoundTrip() throws Exception {
+	@Test void e04_durationRoundTrip() {
 		var b = new E04_DurationBean();
 		b.dur = Duration.ofMinutes(90);
 		var ini = IniSerializer.DEFAULT.write(b);
@@ -332,7 +332,7 @@ class IniParserSession_Test extends TestBase {
 		public Period per;
 	}
 
-	@Test void e05_periodRoundTrip() throws Exception {
+	@Test void e05_periodRoundTrip() {
 		var b = new E05_PeriodBean();
 		b.per = Period.of(1, 2, 3);
 		var ini = IniSerializer.DEFAULT.write(b);
@@ -344,7 +344,7 @@ class IniParserSession_Test extends TestBase {
 		public int count;
 	}
 
-	@Test void e06_numberFormatExceptionFallsBackToConvertToMemberType() throws Exception {
+	@Test void e06_numberFormatExceptionFallsBackToConvertToMemberType() {
 		// "0x10" fails both Long.parseLong and Double.parseDouble (NumberFormatException), so readValue
 		// falls back to convertToMemberType, which DOES understand the hex-literal convention.
 		var result = IniParser.DEFAULT.read("count = 0x10", E06_NumBean.class);
@@ -355,24 +355,24 @@ class IniParserSession_Test extends TestBase {
 		public double val;
 	}
 
-	@Test void e07_decimalPointTriggersDoubleParseDouble() throws Exception {
+	@Test void e07_decimalPointTriggersDoubleParseDouble() {
 		// trimmed.contains(".") is true -> Double.parseDouble path (rather than Long.parseLong).
 		var result = IniParser.DEFAULT.read("val = 3.5", E07_DoubleBean.class);
 		assertEquals(3.5, result.val);
 	}
 
-	@Test void e08_scientificNotationTriggersDoubleParseDouble() throws Exception {
+	@Test void e08_scientificNotationTriggersDoubleParseDouble() {
 		// No "." present, but contains("e") (case-insensitive) is true -> Double.parseDouble path.
 		var result = IniParser.DEFAULT.read("val = 1E3", E07_DoubleBean.class);
 		assertEquals(1000.0, result.val);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f0x - readValue: '-quoted-string edge cases that fall through the "startsWith('\'') && endsWith('\'') &&
-	// length >= 2" guard rather than satisfying it.
+	// f0x - readValue: single-quoted-string edge cases that fall through the quote-wrapped,
+	// minimum-length-of-two guard rather than satisfying it.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_bareApostropheNotTreatedAsQuoted() throws Exception {
+	@Test void f01_bareApostropheNotTreatedAsQuoted() {
 		// startsWith("'") and endsWith("'") are both true (same single character satisfies both ends), but
 		// length is 1, so the "length >= 2" conjunct is false and the quoted-string branch is skipped.
 		var ini = "a = '";
@@ -380,14 +380,14 @@ class IniParserSession_Test extends TestBase {
 		assertEquals("'", m.get("a"));
 	}
 
-	@Test void f02_unterminatedQuoteNotTreatedAsQuoted() throws Exception {
+	@Test void f02_unterminatedQuoteNotTreatedAsQuoted() {
 		// startsWith("'") is true but endsWith("'") is false -- falls through to plain-string handling.
 		var ini = "a = 'unterminated";
 		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertEquals("'unterminated", m.get("a"));
 	}
 
-	@Test void f03a_leadingSeparatorNotTreatedAsKeyValue() throws Exception {
+	@Test void f03a_leadingSeparatorNotTreatedAsKeyValue() {
 		// first == '=' -> splitKeyValue short-circuits to null regardless of the configured kvSeparator
 		// (the leading-char guard is hardcoded to '=', not `ctx.kvSeparator`) -- the line is dropped.
 		var ini = "=noKeyHere";
@@ -395,7 +395,7 @@ class IniParserSession_Test extends TestBase {
 		assertTrue(m.isEmpty(), m.toString());
 	}
 
-	@Test void f03_customKvSeparator_missingSeparatorNotTreatedAsKeyValue() throws Exception {
+	@Test void f03_customKvSeparator_missingSeparatorNotTreatedAsKeyValue() {
 		// idx < 0 (separator char not found) && sep != '=' -> the `':'`-fallback (lastIndexOf(':')) is
 		// skipped entirely, idx stays -1, and idx < 1 returns null -- the line is dropped, not an error.
 		var p = IniParser.create().kvSeparator('|').build();

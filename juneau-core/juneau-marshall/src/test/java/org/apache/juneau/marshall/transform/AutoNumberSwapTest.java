@@ -31,11 +31,11 @@ import org.apache.juneau.marshall.swap.spi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes",   // Raw types necessary for test bean handling
-	"unchecked",  // ObjectSwap.swap/unswap raw type invocations in tests
 	"java:S1172", // Unused parameters (o, foo) kept for API compatibility with ObjectSwap.swap/unswap signatures
 	"java:S1186", // Empty method body intentional for callback testing
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"rawtypes", // Raw types necessary for test bean handling
+	"unchecked", // ObjectSwap.swap/unswap raw type invocations in tests
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AutoNumberSwapTest extends TestBase {
 

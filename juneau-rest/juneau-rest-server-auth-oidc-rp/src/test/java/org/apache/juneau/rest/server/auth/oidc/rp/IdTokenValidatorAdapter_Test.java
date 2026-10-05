@@ -120,19 +120,19 @@ class IdTokenValidatorAdapter_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_algorithms_emptyArray_rejected() {
-		// values.length == 0 → assertArg false branch (line 157).
+		// values.length == 0 → req false branch (line 157).
 		assertThrows(IllegalArgumentException.class,
 			() -> IdTokenValidatorAdapter.create().algorithms());
 	}
 
 	@Test void d02_algorithms_nullElement_rejected() {
-		// null element → assertArgNotNull false branch (line 159).
+		// null element → reqnn false branch (line 159).
 		assertThrows(IllegalArgumentException.class,
 			() -> IdTokenValidatorAdapter.create().algorithms((JWSAlgorithm) null));
 	}
 
 	@Test void d03_algorithms_validAlgorithm_accepted() {
-		// RS256 is not NONE → assertArg true branch (line 161 TRUE branch). Build also uses jwkSet.
+		// RS256 is not NONE → req true branch (line 161 TRUE branch). Build also uses jwkSet.
 		assertDoesNotThrow(() -> IdTokenValidatorAdapter.create()
 			.issuer(ISS).clientId(CID).jwkSet(publicJwks(key))
 			.algorithms(JWSAlgorithm.RS256)

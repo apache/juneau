@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
@@ -84,26 +83,13 @@ import org.apache.juneau.marshall.yaml.*;
  *
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Builder types in reflection-based context creation; parameterization is not possible at call sites
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Builder<?> is returned by copyOrNull() because callers only need the base builder and the concrete SELF type is unknown.
+	"java:S3740", // Raw Builder types in reflection-based context creation; parameterization is not possible at call sites
+	"rawtypes", // Raw Builder is used by createBuilder(), the Context(Builder) constructor, copy() and the constructor cache because the builder subtype is only known reflectively.
+	"unchecked" // Casts of the reflectively-resolved Class to Class<? extends Context> and of innerBuild() to T are guaranteed by the builder/context type pairing.
 })
 public abstract class Context {
-
-	// Property name constants
-	private static final String PROP_annotations = "annotations";
-	private static final String PROP_debug = "debug";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_type = "type";
-	private static final String ARG_builder = "builder";
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String ARG_work = "work";
-	private static final String ARG_subtype = "subtype";
-	private static final String ARG_c = "c";
-	private static final String ARG_values = "values";
-	private static final String ARG_from = "from";
 
 	/**
 	 * Builder class.
@@ -153,10 +139,13 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			assertArgNotNull(ARG_copyFrom, copyFrom);
+			reqnn("copyFrom", copyFrom);
 			annotations = cp(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.type;
+			// Intentionally not copied: a prebuilt impl would bypass changes made to the copy, and the cache is per-builder.
+			cache = null;
+			impl = null;
 			registerBuilders(this);
 		}
 
@@ -167,10 +156,13 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context copyFrom) {
-			assertArgNotNull(ARG_copyFrom, copyFrom);
+			reqnn("copyFrom", copyFrom);
 			annotations = cp(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
+			// Intentionally not copied: a prebuilt impl would bypass changes made to the copy, and the cache is per-builder.
+			cache = null;
+			impl = null;
 			registerBuilders(this);
 		}
 
@@ -349,7 +341,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public SELF annotations(Annotation...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			annotations(l(values));
 			return self();
 		}
@@ -363,7 +355,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public SELF annotations(List<Annotation> values) {
-			annotations.addAll(assertArgNoNulls(ARG_values, values));
+			annotations.addAll(reqnns("values", values));
 			return self();
 		}
 
@@ -397,7 +389,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public SELF apply(AnnotationWorkList work) {
-			assertArgNotNull(ARG_work, work);
+			reqnn("work", work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
 			return self();
@@ -411,7 +403,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public SELF applyAnnotations(Class<?>...from) {
-			assertArgNoNulls(ARG_from, from);
+			reqnns("from", from);
 			return applyAnnotations((Object[])from);
 		}
 
@@ -511,7 +503,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public SELF applyAnnotations(Object...from) {
-			assertArgNoNulls(ARG_from, from);
+			reqnns("from", from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
@@ -565,7 +557,7 @@ public abstract class Context {
 		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
 		public <T extends Builder<?>> Optional<T> asSubtype(Class<T> subtype) {
-			return o(assertArgNotNull(ARG_subtype, subtype).isInstance(this) ? subtype.cast(this) : null);
+			return o(reqnn("subtype", subtype).isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -586,7 +578,7 @@ public abstract class Context {
 		 * @return The built context bean.
 		 */
 		public final <T extends Context> T build(Class<T> c) {
-			if (type == null || ! assertArgNotNull(ARG_c, c).isAssignableFrom(type))
+			if (type == null || ! reqnn("c", c).isAssignableFrom(type))
 				type = c;
 			return (T)innerBuild();
 		}
@@ -620,7 +612,7 @@ public abstract class Context {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			return assertArgNotNull(ARG_work, work).stream().anyMatch(x -> builders.stream().anyMatch(x::canApply));
+			return reqnn("work", work).stream().anyMatch(x -> builders.stream().anyMatch(x::canApply));
 		}
 
 		/**
@@ -636,9 +628,6 @@ public abstract class Context {
 		 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 		 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 		 */
-		@SuppressWarnings({
-			"java:S1452" // Public API: the copied builder's concrete subtype is intentionally unknown to callers.
-		})
 		public static Builder<?> copyOrNull(Builder<?> value) {
 			return value == null ? null : value.copy();
 		}
@@ -717,9 +706,6 @@ public abstract class Context {
 		 *
 		 * @return The context class if it was specified.
 		 */
-		@SuppressWarnings({
-			"java:S1452" // Public API: the context class is intentionally exposed as an open type.
-		})
 		public Optional<Class<?>> getType() { return o(type); }
 
 		/**
@@ -791,7 +777,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
 		protected void registerBuilders(Object...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			for (var b : values) {
 				if (b == this)
 					builders.add(b);
@@ -817,7 +803,7 @@ public abstract class Context {
 		}
 	}
 
-	/*
+	/**
 	 * Cache of static <c>create</c> methods that return builder instances for context classes.
 	 *
 	 * <p>
@@ -854,7 +840,7 @@ public abstract class Context {
 		.build();
 
 
-	/*
+	/**
 	 * Cache of public constructors on context classes that accept builder instances.
 	 *
 	 * <p>
@@ -883,7 +869,7 @@ public abstract class Context {
 		})
 		.build();
 
-	/*
+	/**
 	 * Default annotation provider instance for finding annotations on classes, methods, fields, and constructors.
 	 *
 	 * <p>
@@ -927,7 +913,7 @@ public abstract class Context {
 	 * @return A new builder.
 	 */
 	public static Builder createBuilder(Class<? extends Context> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		try {
 			return ((Builder)BUILDER_CREATE_METHODS.get(type).invoke(null)).type(type);
 		} catch (ExecutableException e) {
@@ -947,7 +933,7 @@ public abstract class Context {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Context(Builder builder) {
-		assertArgNotNull(ARG_builder, builder);
+		reqnn("builder", builder);
 		init(builder);
 		annotations = cp(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
@@ -961,6 +947,7 @@ public abstract class Context {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Context(Context copyFrom) {
+		reqnn("copyFrom", copyFrom);
 		annotationProvider = copyFrom.annotationProvider;
 		annotations = cp(copyFrom.annotations);
 		debug = copyFrom.debug;
@@ -1039,7 +1026,7 @@ public abstract class Context {
 	 */
 	protected FluentMap<String,Object> properties() {
 		return filteredBeanPropertyMap()
-			.a(PROP_annotations, annotations)
-			.a(PROP_debug, debug);
+			.a("annotations", annotations)
+			.a("debug", debug);
 	}
 }

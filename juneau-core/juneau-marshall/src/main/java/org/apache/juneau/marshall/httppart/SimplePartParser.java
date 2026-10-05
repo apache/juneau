@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.marshall.httppart;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
@@ -54,13 +54,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class SimplePartParser extends BaseHttpPartParser {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -81,7 +77,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override
@@ -117,7 +113,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public SimplePartParser(Builder builder) {
-		super(assertArgNotNull(ARG_builder, builder));
+		super(reqnn("builder", builder));
 	}
 
 	@Override

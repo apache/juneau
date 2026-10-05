@@ -21,7 +21,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.converter.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -212,17 +211,6 @@ class RequestQueryParamList_Test extends TestBase {
 			return "k1=" + q.get("k1").asString().orElse("?")
 				+ ",k2=" + q.get("k2").asString().orElse("?");
 		}
-
-		// Exercises native s/v/o/p/l parsing, which moved behind NativeQueryProtocol in 10.0 (was
-		// RequestQueryParamList.getPageArgs/getSearchArgs/getSortArgs/getViewArgs).
-		@RestGet(path="/searchArgs")
-		public String searchArgs(RestRequest req) {
-			var a = NativeQueryProtocol.INSTANCE.parse(req);
-			return "page=" + a.getPage().isPresent()
-				+ ",search=" + a.getSearch().isPresent()
-				+ ",sort=" + a.getSort().isPresent()
-				+ ",view=" + a.getView().isPresent();
-		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -360,20 +348,6 @@ class RequestQueryParamList_Test extends TestBase {
 		var c = MockRestClient.build(A.class);
 		c.get("/addWithNullEntry").run()
 			.assertContent("k1=v1,k2=v2");
-	}
-
-	@Test
-	void a20_searchArgs_present() throws Exception {
-		var c = MockRestClient.build(A.class);
-		c.get("/searchArgs?p=0&l=10&s=name=foo&o=name&v=name").run()
-			.assertContent("page=true,search=true,sort=true,view=true");
-	}
-
-	@Test
-	void a21_searchArgs_empty() throws Exception {
-		var c = MockRestClient.build(A.class);
-		c.get("/searchArgs").run()
-			.assertContent("page=false,search=false,sort=false,view=false");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

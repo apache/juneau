@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * A functional interface representing an operation that accepts two arguments and returns no result.
@@ -72,12 +73,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface Consumer2<A,B> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer2} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -102,7 +100,7 @@ public interface Consumer2<A,B> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b) -> {
 			apply(a, b);
 			after.apply(a, b);

@@ -48,10 +48,10 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S115", // Message-key constant uses UPPER_camelCase convention.
 	"java:S3776", // Cognitive complexity acceptable for JSON tokenizer state machine
 	"java:S6541", // Brain method acceptable for tokenizer dispatch
-	"java:S115",  // Message-key constant uses UPPER_camelCase convention.
-	"resource"    // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.
+	"resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.
 })
 public class JsonTokenReader implements TokenReader {
 
@@ -88,18 +88,6 @@ public class JsonTokenReader implements TokenReader {
 	// indirection without improving safety.  In return, subclasses MUST treat them as
 	// implementation-coupled: Juneau reserves the right to evolve them across major versions.
 	// ==============================================================================================
-
-	/**
-	 * Error-message format string for invalid JSON numbers.  Used with
-	 * {@link #parseException(String, Object...)}.
-	 */
-	protected static final String MSG_invalidNumber = "Invalid JSON number: '%s'";
-
-	/**
-	 * Error-message format string for unexpected characters at the cursor's current position.
-	 * Used with {@link #parseException(String, Object...)}.
-	 */
-	protected static final String MSG_unexpectedChar = "Unexpected character: '%s'";
 
 	/**
 	 * State-machine state: at root, after <c>[</c>, after <c>:</c>, or after <c>,</c> inside an
@@ -549,7 +537,7 @@ public class JsonTokenReader implements TokenReader {
 					afterValue();
 					return;
 				}
-				throw parseException(MSG_unexpectedChar, (char) c);
+				throw parseException("Unexpected character: '%s'", (char) c);
 			default:
 				if (isNumberStart(c)) {
 					r.unread();
@@ -557,7 +545,7 @@ public class JsonTokenReader implements TokenReader {
 					afterValue();
 					return;
 				}
-				throw parseException(MSG_unexpectedChar, (char) c);
+				throw parseException("Unexpected character: '%s'", (char) c);
 		}
 	}
 
@@ -766,7 +754,7 @@ public class JsonTokenReader implements TokenReader {
 				currentToken = TokenType.VALUE_NULL;
 				return;
 			default:
-				throw parseException(MSG_unexpectedChar, (char) c);
+				throw parseException("Unexpected character: '%s'", (char) c);
 		}
 	}
 
@@ -797,7 +785,7 @@ public class JsonTokenReader implements TokenReader {
 
 	private void validateNumberLexeme(String s) throws ParseException {
 		if (s.isEmpty())
-			throw parseException(MSG_invalidNumber, s);
+			throw parseException("Invalid JSON number: '%s'", s);
 		var isNegative = false;
 		var c = s.charAt(0);
 		if (c == '-') {
@@ -805,15 +793,15 @@ public class JsonTokenReader implements TokenReader {
 			c = (s.length() == 1 ? 'x' : s.charAt(1));
 		}
 		if (c == '.')
-			throw parseException(MSG_invalidNumber, s);
+			throw parseException("Invalid JSON number: '%s'", s);
 		if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
 			var c2 = s.charAt(isNegative ? 2 : 1);
 			if (c2 != '.' && c2 != 'e' && c2 != 'E')
-				throw parseException(MSG_invalidNumber, s);
+				throw parseException("Invalid JSON number: '%s'", s);
 		}
 		var i = s.indexOf('.');
 		if (i != -1 && (s.length() == (i + 1) || !isDigit(s.charAt(i + 1))))
-			throw parseException(MSG_invalidNumber, s);
+			throw parseException("Invalid JSON number: '%s'", s);
 	}
 
 	// Reader helpers

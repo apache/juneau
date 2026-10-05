@@ -173,7 +173,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void c03_exceptionHandling() {
 			Listifier<String> throwing = (converter, str) -> {
-				if ("ERROR".equals(str)) {
+				if (eq(str, "ERROR")) {
 					throw new RuntimeException("Intentional test exception");
 				}
 				return l(str);
@@ -324,8 +324,9 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	static class ListifierMethods {
-		// 'converter' is required by the Listifier functional-interface signature (used as a method reference).
-		@SuppressWarnings("unused")
+		@SuppressWarnings({
+			"unused" // 'converter' is required by the Listifier functional-interface signature (used as a method reference).
+		})
 		static List<Object> splitToChars(BeanConverter converter, String str) {
 			return l((Object[])str.split(""));
 		}

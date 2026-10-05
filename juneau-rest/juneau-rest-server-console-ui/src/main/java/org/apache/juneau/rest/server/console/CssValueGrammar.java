@@ -50,6 +50,11 @@ import java.util.regex.*;
  * REJECTs at the grammar layer itself (a distinct, independent check from the normalization-stage {@code url(}
  * reject above), not merely because the top-level belt happened to catch it first.
  */
+@SuppressWarnings({
+	"java:S5843", // Pattern is one allowlist grammar production; splitting it would scatter the validated set.
+	"java:S5998", // Patterns are matched against short, author-set theme-token values, so backtracking depth is bounded.
+	"java:S8786" // Input is a short, author-set theme-token value, not attacker-controlled request data; rewriting this allowlist regex risks altering the validated set.
+})
 final class CssValueGrammar {
 
 	private CssValueGrammar() {}
@@ -132,17 +137,11 @@ final class CssValueGrammar {
 
 	// <number> + allowlisted unit, one or more space-separated (unit optional, e.g. bare "0").
 	private static final String UNIT = "px|em|rem|%|vh|vw|vmin|vmax|pt|ch|fr|deg|turn|rad|s|ms";
-	@SuppressWarnings({
-		"java:S5998" // Length-list input is a short, author-set theme-token config value (never attacker-controlled request data), so the group-repetition backtracking cannot be driven to a stack overflow; rewriting this security allowlist regex risks altering the set of validated inputs.
-	})
 	private static final Pattern LENGTH_LIST = Pattern.compile(
 		"^-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?(?:\\s+-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?)*$");
 
 	// Optional inset, 2-4 lengths, then a color.  Color is checked against hex / functional / named-color
 	// productions (not CSS-wide keywords), so this cannot smuggle url() or an arbitrary ident(.
-	@SuppressWarnings({
-		"java:S5998" // Box-shadow input is a short, author-set theme-token config value (never attacker-controlled request data), so the group-repetition backtracking cannot be driven to a stack overflow; rewriting this security allowlist regex risks altering the set of validated inputs.
-	})
 	private static final Pattern BOX_SHADOW = Pattern.compile(
 		"^(?:inset\\s+)?-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?(?:\\s+-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?){1,3}\\s+(.+)$");
 

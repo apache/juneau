@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.math.*;
@@ -68,15 +68,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_camelCase convention (e.g., ARG_copyFrom, PROP_nativeTypes)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class ProtobufParser extends InputStreamParser implements ProtobufMetaProvider {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_nativeTypes = "nativeTypes";
 
 	private static final int DEFAULT_MAX_LENGTH = ProtobufReader.DEFAULT_MAX_LENGTH;
 
@@ -106,7 +101,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nativeTypes = copyFrom.nativeTypes;
 			maxLength = copyFrom.maxLength;
 		}
@@ -118,7 +113,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nativeTypes = copyFrom.nativeTypes;
 			maxLength = copyFrom.maxLength;
 		}
@@ -247,6 +242,6 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 	@Override /* Overridden from InputStreamParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_nativeTypes, nativeTypes);
+			.a("nativeTypes", nativeTypes);
 	}
 }

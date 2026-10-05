@@ -58,6 +58,10 @@ import org.apache.juneau.marshall.swaps.*;
  * Format/parse methods accept any {@link TemporalAccessor} so that {@link MonthDay} round-trips through the
  * same dispatch path as the {@link Temporal} subtypes.
  */
+@SuppressWarnings({
+	"java:S3776", // formatter(), parse() and convertForFormatter() dispatch over the many java.time subtypes and format modes; splitting them would obscure the mapping
+	"unchecked" // parse() casts MonthDay.parse()/invokeFrom() results to T; they are only produced when targetType matches that subtype
+})
 public enum TemporalFormat {
 
 	/** Sentinel meaning "no value configured" — falls through to the next-higher precedence level. */
@@ -203,9 +207,6 @@ public enum TemporalFormat {
 	 *         {@link OffsetTime}, and {@link MonthDay} (which fall back to their {@link #DEFAULT} ISO
 	 *         string form).
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Per-subtype MILLIS coercion logic is intentionally explicit; flattening hurts readability
-	})
 	public String format(TemporalAccessor value, ZoneId zoneId) {
 		if (value == null)
 			return null;
@@ -255,10 +256,6 @@ public enum TemporalFormat {
 	 * @param zoneId The default zone id used for time-only / unzoned values.
 	 * @return The parsed value, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked cast on reflective from() result
-		"java:S3776" // Per-subtype MILLIS dispatch is intentionally explicit; flattening hurts readability
-	})
 	public <T extends TemporalAccessor> T parse(String value, Class<T> targetType, ZoneId zoneId) {
 		if (value == null)
 			return null;
@@ -374,9 +371,6 @@ public enum TemporalFormat {
 		};
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Per-subtype coercion table mirrors the legacy TemporalSwap.convertToSerializable path
-	})
 	private Temporal convertForFormatter(TemporalAccessor value, ZoneId zoneId) {
 		if (value instanceof Temporal value2 && (this == DEFAULT || this == NOT_SET))
 			return value2;
@@ -397,9 +391,6 @@ public enum TemporalFormat {
 		return ZonedDateTime.from(new DefaultingTemporalAccessor(value, zoneId));
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Per-subtype epoch-millis coercion is intentionally explicit
-	})
 	private static Long toEpochMillis(TemporalAccessor value) {
 		if (value instanceof Instant value2)
 			return value2.toEpochMilli();
@@ -418,9 +409,6 @@ public enum TemporalFormat {
 		return null;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts for per-subtype factory dispatch
-	})
 	private static <T extends TemporalAccessor> T fromEpochMillis(long millis, Class<T> targetType, ZoneId zoneId) {
 		var instant = Instant.ofEpochMilli(millis);
 		if (targetType == Instant.class) return (T) instant;

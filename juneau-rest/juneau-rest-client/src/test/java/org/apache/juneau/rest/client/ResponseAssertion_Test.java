@@ -34,8 +34,8 @@ import org.junit.jupiter.api.*;
  * so this test lives in the {@code org.apache.juneau.rest.client} package.
  */
 @SuppressWarnings({
-	"resource",   // RestResponse is created for assertion testing; closed inline or not needed.
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
+	"resource" // RestResponse is created for assertion testing; closed inline or not needed.
 })
 class ResponseAssertion_Test extends TestBase {
 

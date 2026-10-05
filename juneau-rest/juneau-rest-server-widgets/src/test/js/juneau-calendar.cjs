@@ -94,10 +94,9 @@ function el(tag) {
 		removeAttribute: function (k) { delete this.attrs[k]; },
 		hasAttribute: function (k) { return Object.hasOwn(this.attrs, k); },
 		get dataset() {
-			const node = this;
 			return new Proxy({}, {
-				get: function (_t, prop) { return node.getAttribute(toDataAttr(String(prop))); },
-				set: function (_t, prop, v) { node.setAttribute(toDataAttr(String(prop)), v); return true; }
+				get: (_t, prop) => this.getAttribute(toDataAttr(String(prop))),
+				set: (_t, prop, v) => { this.setAttribute(toDataAttr(String(prop)), v); return true; }
 			});
 		},
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
@@ -112,7 +111,7 @@ function el(tag) {
 			if (i >= 0) this.childNodes.splice(i, 1);
 			return c;
 		},
-		remove: function () { if (this.parentNode) this.parentNode.removeChild(this); },
+		remove: function () { if (this.parentNode) this.parentNode.removeChild(this); }, // NOSONAR javascript:S7762 - this IS the shim's remove(); it delegates to removeChild, so calling remove() here would recurse forever
 		// `deep` is unused: this shim always deep-clones (its only caller always passes true); the parameter
 		// exists to match the real DOM cloneNode(deep) signature the caller invokes against.
 		cloneNode: function (deep) {
@@ -180,13 +179,15 @@ function parseAttrs(raw, node) {
 function parseTestHtml(html) {
 	const root = el('div');
 	const stack = [root];
-	const re = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*?)(\/?)>|([^<]+)/g;
+	const re = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*?)(\/?)>|([^<]+)/g; // NOSONAR javascript:S5843 - single-pass tag/text tokenizer for hand-written fixtures; see note above
 	let m;
 	while ((m = re.exec(html))) {
 		if (m[4] != null) {
 			const t = m[4];
-			if (t.trim().length) stack.at(-1).appendChild(textNode(t));
-			continue;
+			if (t.trim().length) {
+				stack.at(-1).appendChild(textNode(t));
+			}
+			continue;   // unconditional on purpose: whitespace-only runs are skipped too (there is no tag name to build)
 		}
 		const name = m[1];
 		const closing = html.charAt(m.index + 1) === '/';
@@ -318,7 +319,7 @@ const sandbox = {
 // NOSONAR javascript:S1523 -- this harness's entire purpose is loading the real juneau-calendar.js (a fixed local
 // file path given on the CLI, never attacker-controlled input) into a sandboxed VM context so its runtime can be
 // exercised without a browser; there is no alternative to dynamic evaluation here.
-vm.runInNewContext(fs.readFileSync(path.resolve(calendarJsPath), 'utf8'), sandbox, { filename: 'juneau-calendar.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(calendarJsPath), 'utf8'), sandbox, { filename: 'juneau-calendar.js' }); // NOSONAR javascript:S1523 - loading the production script under test into a VM sandbox is this harness's purpose
 
 const NS = window.JuneauCalendar;
 const out = { hasNs: !!NS, hasPure: !!NS?.pure };
@@ -518,6 +519,25 @@ out.seg_budget_seated = P.segmentsForWeek(overBudget, 1).length;
 out.seg_budget_laneCount = P.laneCount(overBudget, 1);
 out.seg_budget_overflowAtMon = P.overflowBarsAt(overBudget, 1, 1).map(function (e) { return e.id; }).join(',');
 
+// Bars never consume the chip budget (ported from the deleted CalendarLayout_Test#e01): a day crossed by TWO
+// spanning bars plus FOUR single-day events, with maxPerDay = 3 - both bars seat, three chips draw, "+1 more".
+const splitEvents = [
+	{ id: 'bar1', title: 'Bar 1', start: '2026-08-03', end: '2026-08-06' },
+	{ id: 'bar2', title: 'Bar 2', start: '2026-08-02', end: '2026-08-05' },
+	{ id: 'c1', title: 'C1', start: '2026-08-04' },
+	{ id: 'c2', title: 'C2', start: '2026-08-04' },
+	{ id: 'c3', title: 'C3', start: '2026-08-04' },
+	{ id: 'c4', title: 'C4', start: '2026-08-04' }
+];
+const splitSegs = P.buildSegments(splitEvents, 2026, 8, 'sunday', P.laneBudgetFor(3));
+out.split_seated = P.segmentsForWeek(splitSegs, 1).length;
+out.split_laneCount = P.laneCount(splitSegs, 1);
+const splitDay = P.eventsForDay(splitEvents, '2026-08-04');
+const splitCap = P.applyCap(splitDay, 3);
+out.split_shown = splitCap.shown.map(function (e) { return e.id; }).join(',');
+out.split_overflow = splitCap.overflow;
+out.split_hidden = splitDay.slice(splitCap.shown.length).map(function (e) { return e.id; }).join(',');
+
 out.coalesce = P.coalesceKey('cal1', 2026, 8, 4);
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -634,11 +654,11 @@ out.map_noHeader = !Object.hasOwn(fixMap, 'hdr');
 	out.timed_barTitles = paintedBarTitles(root).join(',');
 	out.timed_chipTitles = paintedTitles(root).join(',');
 	const timedChip = root.querySelectorAll('.jc-cal-event')[0];
-	out.timed_chipClass = timedChip ? timedChip.getAttribute('class') : null;
+	out.timed_chipClass = timedChip?.getAttribute('class') ?? null;
 	const timeLabel = root.querySelector('.jc-cal-event-time');
-	out.timed_label = timeLabel ? timeLabel.textContent : null;
+	out.timed_label = timeLabel?.textContent ?? null;
 	const bar = root.querySelector('.jc-cal-bar');
-	out.timed_barEventId = bar ? bar.dataset.juneauCalendarEventId : null;
+	out.timed_barEventId = bar?.dataset.juneauCalendarEventId ?? null;
 	out.timed_barSpan = bar?.style ? bar.style.getPropertyValue('--jc-cal-span') : null;
 }
 
@@ -845,7 +865,7 @@ function checkPopoverWithoutSharedStack(busySeed) {
 	const bare = buildFixture({ seed: busySeed });
 	NS.initInstance(bare);
 	const bareMore = bare.querySelector('.jc-cal-more');
-	out.pop_moreLabel = bareMore ? bareMore.textContent : null;      // "+1 more" - only what it hides
+	out.pop_moreLabel = bareMore?.textContent ?? null;      // "+1 more" - only what it hides
 	if (bareMore) {
 		bareMore._fire('click');
 	}

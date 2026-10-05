@@ -39,9 +39,9 @@ import org.junit.jupiter.api.*;
  *    getReporter, getResolver, getXmlBeanMeta, getXmlBeanPropertyMeta, getXmlClassMeta
  */
 @SuppressWarnings({
-	"rawtypes",
-	"unchecked",
-	"java:S5961"
+	"java:S5961", // Comprehensive XML parser-session coverage test that asserts many parsed results per scenario.
+	"rawtypes", // Tests cast parsed results to raw Map/List and inspect them without element typing.
+	"unchecked" // Tests cast P.read(...) results to raw Map/List and call methods on them.
 })
 class XmlParserSession_Test extends TestBase {
 

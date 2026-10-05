@@ -38,13 +38,14 @@ import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes",
+	"java:S1186", // Fixture no-ops (@BeanIgnore setD(String) and L2's empty constructor) exist only to give the test beans the shape under test
+	"java:S5961", // Each comprehensive BeanMap test method asserts many properties of one map/bean
+	"java:S9149", // Test fixture's static factories intentionally shadow the parent's.
+	"rawtypes", // Fixture beans deliberately declare raw List/ArrayList/LinkedList properties to exercise raw collection handling
+	"serial", // Serializable test fixtures (e.g. L1 extends LinkedList) intentionally omit serialVersionUID
 	"unchecked", // Integer to T cast in generic test helpers
-	"serial",
-	"java:S5961",
-	"java:S1186",
-	"unused", // Parameters retained for method-signature/functional-interface consistency in test fixtures.
-	"unlikely-arg-type" // Intentionally tests containsKey() returns false for a wrong-typed key.
+	"unlikely-arg-type", // Intentionally tests containsKey() returns false for a wrong-typed key.
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
 })
 class BeanMap_Test extends TestBase {
 

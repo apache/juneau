@@ -133,7 +133,7 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 	@Test void a05_dtIndex_isIndexIntoActualOptsColumns_notVisibleOffset() throws Exception {
 		var body = configJs();
 		var fn = functionBody(body, "function dtIndex(");
-		assertTrue(fn.contains("col.data === dataKey"), fn);
+		assertTrue(fn.contains("col?.data === dataKey"), fn);
 		assertTrue(body.contains("function buildOptsColumnSpace("), body);
 		assertTrue(body.contains("hasSelection"), body);
 		assertTrue(body.contains("hasActions"), body);
@@ -312,7 +312,7 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 		var r = report();
 		assertEquals(true, r.get("k_blankLabelOmitted"));
 		var ser = (Map<?,?>)r.get("k_serialized");
-		assertEquals(1, ((Number)ser.get("schemaVersion")).intValue());
+		assertEquals(2, ((Number)ser.get("schemaVersion")).intValue());
 		assertEquals(List.of("C", "A", "B"), ser.get("order"));
 		assertEquals(Map.of("C", "See"), ser.get("labels"));
 		assertEquals(Map.of("C", "ts-zulu"), ser.get("formats"));

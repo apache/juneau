@@ -47,8 +47,9 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1192",      // String literals repeated for clarity in UI generation
-	"javabugs:S2259"   // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"java:S1192", // String literals repeated for clarity in UI generation
+	"javabugs:S2259", // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"null" // Null analysis not applicable for optional values
 })
 public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
@@ -77,7 +78,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static Div examples(Session s, ParameterInfo pi) {
 		// @formatter:off
-		var isBody = "body".equals(pi.getIn());
+		var isBody = eq(pi.getIn(), "body");
 
 		var m = new JsonMap();
 
@@ -129,9 +130,6 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return examplesDiv(m);
 	}
 
-	@SuppressWarnings({
-		"null" // Null analysis not applicable for optional values
-	})
 	private static Div examplesDiv(JsonMap m) {
 		if (m.isEmpty()) // HTT - callers always check !m.isEmpty() before calling examplesDiv
 			return null;
@@ -305,7 +303,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			var parameters = table(tr(th("Name").class_("parameter-key"), th("Description").class_("parameter-key"))).class_("parameters");
 
 			op.getParameters().forEach(x -> {
-				var piName = "body".equals(x.getIn()) ? "body" : x.getName();
+				var piName = eq(x.getIn(), "body") ? "body" : x.getName();
 				var required = nn(x.getRequired()) && x.getRequired();
 
 				var parameterKey = td(
@@ -350,9 +348,6 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	@SuppressWarnings({
-		"null" // Null analysis not applicable for optional values
-	})
 	private static Div tagBlockContents(Session s, Tag t) {
 		// @formatter:off
 		var tagBlockContents = div().class_("tag-block-contents");

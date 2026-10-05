@@ -1,0 +1,2487 @@
+[
+  {
+    "id": "a01",
+    "group": "A_text",
+    "search": "v=good",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "a02",
+    "group": "A_text",
+    "search": "v=$eq(hello world)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": []
+  },
+  {
+    "id": "a03",
+    "group": "A_text",
+    "search": "v=$contains(WOR)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "a04",
+    "group": "A_text",
+    "search": "v=$prefix(GOOD)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "a05",
+    "group": "A_text",
+    "search": "v=$regex(hello.*)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "a06",
+    "group": "A_text",
+    "search": "v=$regex(hello.*, flags=m)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": []
+  },
+  {
+    "id": "a07",
+    "group": "A_text",
+    "search": "v=$regex([)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": []
+  },
+  {
+    "id": "a08",
+    "group": "A_text",
+    "search": "v=$blank()",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "a09",
+    "group": "A_text",
+    "search": "v=$ne(goodbye)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      0,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "id": "a10",
+    "group": "A_text",
+    "search": "v=$in(hello world,goodbye)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World",
+      "goodbye",
+      "GOOD grief",
+      "",
+      null
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "a11a",
+    "group": "A_text",
+    "search": "v=$eq(key-1)",
+    "types": {
+      "v": "ID"
+    },
+    "operators": "standard",
+    "rows": [
+      "KEY-1",
+      "KEY-2"
+    ],
+    "matches": []
+  },
+  {
+    "id": "a11b",
+    "group": "A_text",
+    "search": "v=key",
+    "types": {
+      "v": "ID"
+    },
+    "operators": "standard",
+    "rows": [
+      "KEY-1",
+      "KEY-2"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "b01",
+    "group": "B_numeric",
+    "search": "v=10",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "b02",
+    "group": "B_numeric",
+    "search": "v=$eq(5.0)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "b03",
+    "group": "B_numeric",
+    "search": "v=$gt(5)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "b04",
+    "group": "B_numeric",
+    "search": "v=$gte(5)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "b05",
+    "group": "B_numeric",
+    "search": "v=$lt(10)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "b06",
+    "group": "B_numeric",
+    "search": "v=$lte(10)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "b07",
+    "group": "B_numeric",
+    "search": "v=$between(5, 10)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15,
+      null
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "b08",
+    "group": "B_numeric",
+    "search": "v=$gt(abc)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "c01a",
+    "group": "C_version",
+    "search": "v=$eq(10.0.0)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0",
+      "9.5",
+      "bad"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "c01b",
+    "group": "C_version",
+    "search": "v=$eq(10.0)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0",
+      "9.5",
+      "bad"
+    ],
+    "matches": []
+  },
+  {
+    "id": "c02",
+    "group": "C_version",
+    "search": "v=$prefix(10)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0",
+      "9.5",
+      "bad"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "c03",
+    "group": "C_version",
+    "search": "v=10.0",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0",
+      "9.5",
+      "bad"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "c04",
+    "group": "C_version",
+    "search": "v=$gt(10.0.0)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0",
+      "9.5",
+      "bad"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "c06",
+    "group": "C_version",
+    "search": "v=250",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "250.1",
+      "250.2.3",
+      "25",
+      "2500",
+      "25.0"
+    ],
+    "matches": [
+      0,
+      1
+    ],
+    "comment": "IRS parity gap 4's exact example: a bare VERSION value defaults to $prefix (dotted-tuple prefix), not typed-equals, so 250 matches 250.1 and 250.2.3 but not 25, 2500 or 25.0."
+  },
+  {
+    "id": "c07",
+    "group": "C_version",
+    "search": "v=99",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0.0",
+      "10.1.0"
+    ],
+    "matches": [],
+    "comment": "IRS parity gap 4: the non-matching side of the same dotted-tuple-prefix rule as c06."
+  },
+  {
+    "id": "d01a",
+    "group": "D_timestamp",
+    "search": "v=$eq(2000)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      1000,
+      2000,
+      3000
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "d01b",
+    "group": "D_timestamp",
+    "search": "v=$gt(1500)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      1000,
+      2000,
+      3000
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "d01c",
+    "group": "D_timestamp",
+    "search": "v=$between(1000, 2000)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      1000,
+      2000,
+      3000
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "d02a",
+    "group": "D_timestamp",
+    "search": "v=$eq(2020-01-01T00:00:00Z)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "2020-01-01T00:00:00Z",
+      "2021-01-01T00:00:00Z"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "d02b",
+    "group": "D_timestamp",
+    "search": "v=$gt(2020-06-01T00:00:00Z)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "2020-01-01T00:00:00Z",
+      "2021-01-01T00:00:00Z"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "d03a",
+    "group": "D_timestamp",
+    "search": "v=$lt(2000)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "1970-01-01T00:00:01.000Z",
+      "1970-01-01T00:00:05.000Z"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "d03b",
+    "group": "D_timestamp",
+    "search": "v=$gt(2000)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "1970-01-01T00:00:01.000Z",
+      "1970-01-01T00:00:05.000Z"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "d04",
+    "group": "D_timestamp",
+    "search": "v=$gt(1000)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "not-a-date"
+    ],
+    "matches": []
+  },
+  {
+    "id": "d05",
+    "group": "D_timestamp",
+    "search": "v=2024-01-01",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "2024-01-01T00:00:00Z",
+      "2024-01-01T08:00:00Z",
+      "2024-01-02T00:00:00Z"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "d06",
+    "group": "D_timestamp",
+    "search": "v=$between(2024-01-01, 2024-01-02)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "2024-01-01T00:00:00Z",
+      "2024-01-01T08:00:00Z",
+      "2024-01-02T00:00:00Z",
+      "2024-01-02T08:00:00Z"
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "d07",
+    "group": "D_timestamp",
+    "search": "v=2024-13-40",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "d08",
+    "group": "D_timestamp",
+    "search": "v=2024-02-30",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "d09",
+    "group": "D_timestamp",
+    "search": "v=0099-01-01",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "0099-01-01T00:00:00Z",
+      "0099-01-01T08:00:00Z",
+      "0099-01-02T00:00:00Z"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "e01",
+    "group": "E_enum",
+    "search": "v=open",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "rows": [
+      "OPEN",
+      "CLOSED",
+      "OPEN"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "e02",
+    "group": "E_enum",
+    "search": "v=$eq(CLOSED)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "rows": [
+      "OPEN",
+      "CLOSED",
+      "OPEN"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "e03",
+    "group": "E_enum",
+    "search": "v=$in(OPEN,CLOSED)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "rows": [
+      "OPEN",
+      "CLOSED",
+      "OPEN"
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "e04",
+    "group": "E_enum",
+    "search": "v=$ne(OPEN)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "rows": [
+      "OPEN",
+      "CLOSED",
+      "OPEN"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "f01",
+    "group": "F_boolean",
+    "search": "v=true",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "rows": [
+      true,
+      false,
+      "true",
+      "nonsense"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "f02",
+    "group": "F_boolean",
+    "search": "v=$eq(false)",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "rows": [
+      true,
+      false,
+      "true",
+      "nonsense"
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "f03",
+    "group": "F_boolean",
+    "search": "v=$eq(maybe)",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "g01",
+    "group": "G_combinators",
+    "search": "v=$and($gt(1),$lt(12))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      1,
+      5,
+      9,
+      12
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "g02",
+    "group": "G_combinators",
+    "search": "v=$or($eq(1),$eq(12))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      1,
+      5,
+      9,
+      12
+    ],
+    "matches": [
+      0,
+      3
+    ]
+  },
+  {
+    "id": "g03",
+    "group": "G_combinators",
+    "search": "v=$not($eq(5))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      1,
+      5,
+      9,
+      12
+    ],
+    "matches": [
+      0,
+      2,
+      3
+    ]
+  },
+  {
+    "id": "g04",
+    "group": "G_combinators",
+    "search": "v=$or($eq(5),$gt(9))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      1,
+      5,
+      9,
+      12
+    ],
+    "matches": [
+      1,
+      3
+    ]
+  },
+  {
+    "id": "h01",
+    "group": "H_custom",
+    "search": "v=$startsCI(HE)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": {
+      "custom": [
+        "$startsCI"
+      ]
+    },
+    "rows": [
+      "Hello",
+      "help",
+      "world"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "i01",
+    "group": "I_multiColumn",
+    "search": "status=$eq(OPEN),name=$contains(alph)",
+    "types": {
+      "status": "ENUM",
+      "name": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      {
+        "id": "r1",
+        "status": "OPEN",
+        "name": "alpha"
+      },
+      {
+        "id": "r2",
+        "status": "OPEN",
+        "name": "beta"
+      },
+      {
+        "id": "r3",
+        "status": "CLOSED",
+        "name": "alpha"
+      }
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "i02",
+    "group": "I_multiColumn",
+    "search": "",
+    "types": {
+      "status": "ENUM",
+      "name": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      {
+        "id": "r1",
+        "status": "OPEN",
+        "name": "alpha"
+      },
+      {
+        "id": "r2",
+        "status": "OPEN",
+        "name": "beta"
+      },
+      {
+        "id": "r3",
+        "status": "CLOSED",
+        "name": "alpha"
+      }
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "l01",
+    "group": "L_corners",
+    "search": "v=$gte(10)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "l02",
+    "group": "L_corners",
+    "search": "v=$regex(Hello.*, zzz)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "l03",
+    "group": "L_corners",
+    "search": "v=$regex(HELLO.*, flags=i)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "l04",
+    "group": "L_corners",
+    "search": "v=$regex(a.b, flags=s)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "a\nb"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "l05",
+    "group": "L_corners",
+    "search": "v=$regex(hello.*, flags=x)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "rows": [
+      "Hello World"
+    ],
+    "matches": []
+  },
+  {
+    "id": "l06",
+    "group": "L_corners",
+    "search": "v=$between(10, 20)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      5,
+      10,
+      15
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "l07",
+    "group": "L_corners",
+    "search": "v=$between(5, abc)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "l08",
+    "group": "L_corners",
+    "search": "v=$gt(m)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "l09",
+    "group": "L_corners",
+    "search": "v=$gt(not-a-date)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "l10",
+    "group": "L_corners",
+    "search": "v=$eq(true)",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "rows": [
+      null,
+      true
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "l11",
+    "group": "L_corners",
+    "search": "v=$eq(5)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      "",
+      5
+    ],
+    "matches": [
+      1
+    ]
+  },
+  {
+    "id": "l12",
+    "group": "L_corners",
+    "search": "v=$gt(500)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      null,
+      "  ",
+      1000
+    ],
+    "matches": [
+      2
+    ]
+  },
+  {
+    "id": "l13",
+    "group": "L_corners",
+    "search": "v=$prefix(10)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      null,
+      "  ",
+      "10.0"
+    ],
+    "matches": [
+      2
+    ]
+  },
+  {
+    "id": "l14",
+    "group": "L_corners",
+    "search": "v=$gt(bad)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0"
+    ],
+    "matches": []
+  },
+  {
+    "id": "l15",
+    "group": "L_corners",
+    "search": "v=$prefix(bad)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0"
+    ],
+    "matches": []
+  },
+  {
+    "id": "l16",
+    "group": "L_corners",
+    "search": "v=$prefix(10.0.0.0)",
+    "types": {
+      "v": "VERSION"
+    },
+    "operators": "standard",
+    "rows": [
+      "10.0"
+    ],
+    "matches": []
+  },
+  {
+    "id": "o01",
+    "group": "O_dollar",
+    "search": "v=$-x",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "$-x"
+      }
+    },
+    "rows": [
+      "$-x",
+      "-x",
+      "$x"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "o02",
+    "group": "O_dollar",
+    "search": "v=$$",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "$"
+      }
+    },
+    "rows": [
+      "$",
+      "x",
+      "$$"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "o03",
+    "group": "O_dollar",
+    "search": "v=$100",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "$100"
+      }
+    },
+    "rows": [
+      "$100",
+      "100",
+      "x$100y"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "o04",
+    "group": "O_dollar",
+    "search": "v=$$eq(1)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "$eq(1)"
+      }
+    },
+    "rows": [
+      "$eq(1)",
+      "eq(1)",
+      "x$eq(1)y"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "o05",
+    "group": "O_dollar",
+    "search": "v=$foo",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "MALFORMED_OPERATOR"
+    }
+  },
+  {
+    "id": "o06",
+    "group": "O_dollar",
+    "search": "v=$",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "$"
+      }
+    },
+    "rows": [
+      "$",
+      "x"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "o07",
+    "group": "O_dollar",
+    "search": "v=$eq(\"a$$$$b\")",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "quoted literal containing a doubled $$ escape -- decode-side parity for BeanQuery.quote()'s fixed $-escaping (quote-strip, then $$ -> $, in that order)",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eq",
+        "args": [
+          {
+            "lit": "a$$b"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "a$$b",
+      "a$b"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "p01",
+    "group": "P_wildcards",
+    "search": "v=a*c",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "a*c"
+      }
+    },
+    "rows": [
+      "abc",
+      "axc",
+      "ac",
+      "xbc"
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "p02",
+    "group": "P_wildcards",
+    "search": "v=a?c",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "a?c"
+      }
+    },
+    "rows": [
+      "abc",
+      "axc",
+      "ac"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "p03",
+    "group": "P_wildcards",
+    "search": "v=a*b?d",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "a*b?d"
+      }
+    },
+    "rows": [
+      "aXbYd",
+      "abZd",
+      "xyz"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "p04",
+    "group": "P_wildcards",
+    "search": "v=*end",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "*end"
+      }
+    },
+    "rows": [
+      "theend",
+      "endish",
+      "xend"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "p05",
+    "group": "P_wildcards",
+    "search": "v=start*",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "start*"
+      }
+    },
+    "rows": [
+      "startline",
+      "mystart",
+      "start"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "p06",
+    "group": "P_wildcards",
+    "search": "v=a?",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "a?"
+      }
+    },
+    "rows": [
+      "ab",
+      "a",
+      "abc"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "p07",
+    "group": "P_wildcards",
+    "search": "v=\"a*\"",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "a*"
+      }
+    },
+    "rows": [
+      "a*c",
+      "abc",
+      "A*C"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "p08",
+    "group": "P_wildcards",
+    "search": "v=$contains(*)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$contains",
+        "args": [
+          {
+            "lit": "*"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "a*b",
+      "abc"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "p09",
+    "group": "P_wildcards",
+    "search": "v=$prefix(a?)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$prefix",
+        "args": [
+          {
+            "lit": "a?"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "a?bc",
+      "abc"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "p10",
+    "group": "P_wildcards",
+    "search": "v=$eq(a*b)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eq",
+        "args": [
+          {
+            "lit": "a*b"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "a*b",
+      "aXb"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "q01",
+    "group": "Q_case",
+    "search": "v=$eq(open)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eq",
+        "args": [
+          {
+            "lit": "open"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "open",
+      "OPEN",
+      "Open"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "q02",
+    "group": "Q_case",
+    "search": "v=$eqic(open)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eqic",
+        "args": [
+          {
+            "lit": "open"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "open",
+      "OPEN",
+      "Open"
+    ],
+    "matches": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "q03",
+    "group": "Q_case",
+    "search": "v=$in(OPEN,CLOSED)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$in",
+        "args": [
+          {
+            "lit": "OPEN"
+          },
+          {
+            "lit": "CLOSED"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "OPEN",
+      "open",
+      "CLOSED"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "q04",
+    "group": "Q_case",
+    "search": "v=$ne(OPEN)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$ne",
+        "args": [
+          {
+            "lit": "OPEN"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "OPEN",
+      "open",
+      ""
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "q05",
+    "group": "Q_case",
+    "search": "v=$or($eqic(open),$eqic(closed))",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$or",
+        "args": [
+          {
+            "op": "$eqic",
+            "args": [
+              {
+                "lit": "open"
+              }
+            ]
+          },
+          {
+            "op": "$eqic",
+            "args": [
+              {
+                "lit": "closed"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "rows": [
+      "OPEN",
+      "CLOSED",
+      "PENDING"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "q06",
+    "group": "Q_case",
+    "search": "v=$eqic(open)",
+    "types": {
+      "v": "ENUM"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eqic",
+        "args": [
+          {
+            "lit": "open"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "OPEN",
+      "CLOSED"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "q07",
+    "group": "Q_case",
+    "search": "v=$EQ(5)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$eq",
+        "args": [
+          {
+            "lit": "5"
+          }
+        ]
+      }
+    },
+    "rows": [
+      5,
+      10
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "q08",
+    "group": "Q_case",
+    "search": "v=$Between(1,5)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$between",
+        "args": [
+          {
+            "lit": "1"
+          },
+          {
+            "lit": "5"
+          }
+        ]
+      }
+    },
+    "rows": [
+      3,
+      10
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "r01",
+    "group": "R_regex",
+    "search": "v=$regex(\"a{1,3}\")",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$regex",
+        "args": [
+          {
+            "lit": "a{1,3}"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "aaa",
+      "a",
+      "b"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "r02",
+    "group": "R_regex",
+    "search": "v=$regex(\"(abc)+\")",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$regex",
+        "args": [
+          {
+            "lit": "(abc)+"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "abc",
+      "abcabc",
+      "xyz"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "r03",
+    "group": "R_regex",
+    "search": "v=$regex(a,b,c)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_ARG_COUNT"
+    }
+  },
+  {
+    "id": "r04",
+    "group": "R_regex",
+    "search": "v=$regex(a\\()",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "UNBALANCED"
+    }
+  },
+  {
+    "id": "r05",
+    "group": "R_regex",
+    "search": "v=$regex(a.b, flags=s)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$regex",
+        "args": [
+          {
+            "lit": "a.b"
+          },
+          {
+            "lit": "flags=s"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "a\nb",
+      "axb"
+    ],
+    "matches": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "r06",
+    "group": "R_regex",
+    "search": "v=$regex([)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$regex",
+        "args": [
+          {
+            "lit": "["
+          }
+        ]
+      }
+    },
+    "rows": [
+      "abc"
+    ],
+    "matches": []
+  },
+  {
+    "id": "s01",
+    "group": "S_errors",
+    "search": "v=",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "a blank expression on a known column is dropped by the resolver (not a syntax error) -- the empty Filter.And this produces matches every row, per Filter's own javadoc design intent",
+    "rows": [
+      "a",
+      "",
+      null,
+      "b"
+    ],
+    "matches": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "id": "s02",
+    "group": "S_errors",
+    "search": "v=$eq!(x)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "INVALID_OPERATOR_NAME"
+    }
+  },
+  {
+    "id": "s03",
+    "group": "S_errors",
+    "search": "v=$eq",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "MALFORMED_OPERATOR"
+    }
+  },
+  {
+    "id": "s04",
+    "group": "S_errors",
+    "search": "v=$nope(1)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "UNKNOWN_OPERATOR"
+    }
+  },
+  {
+    "id": "s05",
+    "group": "S_errors",
+    "search": "v=$eq(1,2)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_ARG_COUNT"
+    }
+  },
+  {
+    "id": "s06",
+    "group": "S_errors",
+    "search": "v=$in(a,,b)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "EMPTY_ARGUMENT"
+    }
+  },
+  {
+    "id": "s07",
+    "group": "S_errors",
+    "search": "v=$eq(1",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "UNBALANCED"
+    }
+  },
+  {
+    "id": "s08",
+    "group": "S_errors",
+    "search": "v=$eq(1)x",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "TRAILING_TEXT"
+    }
+  },
+  {
+    "id": "s09",
+    "group": "S_errors",
+    "search": "v=$eq(\"a",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "UNTERMINATED_QUOTE"
+    }
+  },
+  {
+    "id": "s10",
+    "group": "S_errors",
+    "search": "v=$and($gt(1))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_ARG_COUNT"
+    }
+  },
+  {
+    "id": "s11",
+    "group": "S_errors",
+    "search": "v=\"a",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "bare-literal (non-function-call) unterminated quote -- parity gap case, distinct from s09's function-argument-level unterminated quote",
+    "error": {
+      "code": "UNTERMINATED_QUOTE"
+    }
+  },
+  {
+    "id": "t01",
+    "group": "T_relativeDuration",
+    "search": "v=-24h",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "-24h"
+      }
+    },
+    "rows": [
+      "-24h",
+      "24h",
+      "x-24h-y"
+    ],
+    "matches": [
+      0,
+      2
+    ],
+    "comment": "IRS parity gap 2: the [+-]<n>(ms|s|m|h|d) relative-duration token round-trips as a plain literal — no special grammar — which is all sub-project #3 owns. Deliberately typed TEXT here rather than TIMESTAMP/duration: SearchExpressionParser never sees a column type (parseExpr takes no type argument), so the grammar/tree-shape point this case makes is identical regardless of the eventual column's type, and TEXT keeps this case clear of #4's (not-yet-landed) typed-value validation. Interpreting the digits+unit as an offset from request time, on an actual TIMESTAMP/duration column, is #1's and #4's job, not this parser's."
+  },
+  {
+    "id": "t02",
+    "group": "T_relativeDuration",
+    "search": "v=+7d",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "lit": "+7d"
+      }
+    },
+    "rows": [
+      "+7d",
+      "7d",
+      "x+7dy"
+    ],
+    "matches": [
+      0,
+      2
+    ],
+    "comment": "same point as t01 with the other sign and a different unit letter."
+  },
+  {
+    "id": "t03",
+    "group": "T_relativeDuration",
+    "search": "v=$contains(+500ms)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "tree": {
+      "leaf": "v",
+      "expr": {
+        "op": "$contains",
+        "args": [
+          {
+            "lit": "+500ms"
+          }
+        ]
+      }
+    },
+    "rows": [
+      "t=+500ms",
+      "nope"
+    ],
+    "matches": [
+      0
+    ],
+    "comment": "same literal shape as t01/t02, but as an operator argument rather than a bare pattern, to prove the parser treats it as an ordinary argument token too."
+  },
+  {
+    "id": "t04",
+    "group": "T_relativeDuration",
+    "search": "v=$gte(+1h)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      3599999,
+      3600000,
+      3600001
+    ],
+    "matches": [
+      1,
+      2
+    ],
+    "comment": "relative-duration literal on a NUMERIC column is plain signed milliseconds (+1h = 3600000); request time is never involved."
+  },
+  {
+    "id": "t05",
+    "group": "T_relativeDuration",
+    "search": "v=$lt(-90s)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "rows": [
+      -90001,
+      -90000,
+      0
+    ],
+    "matches": [
+      0
+    ],
+    "comment": "negative seconds on a NUMERIC column: -90s = -90000."
+  },
+  {
+    "id": "t06",
+    "group": "T_relativeDuration",
+    "search": "v=-5",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      -5,
+      0
+    ],
+    "matches": [
+      0
+    ],
+    "comment": "a bare signed number with no unit suffix is never a relative duration: on a TIMESTAMP column it is epoch milliseconds."
+  },
+  {
+    "id": "t07",
+    "group": "T_relativeDuration",
+    "search": "v=$gte(-100000d)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      -30610224000000,
+      4102444800000
+    ],
+    "matches": [
+      1
+    ],
+    "comment": "TIMESTAMP relative duration resolves against request time (-100000d is about 274 years back). The cases use margins of centuries so the result does not depend on the request-time instant; the exact arithmetic is tested with a fixed instant on both sides (ValueParse_Test / QueryResolver_Test, column-search.cjs requestTime)."
+  },
+  {
+    "id": "t08",
+    "group": "T_relativeDuration",
+    "search": "v=$lte(+100000d)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      4102444800000,
+      221845392000000
+    ],
+    "matches": [
+      0
+    ],
+    "comment": "same as t07 for a future offset (+100000d is about 274 years ahead)."
+  },
+  {
+    "id": "t09",
+    "group": "T_relativeDuration",
+    "search": "v=-24h",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "a relative-duration literal on a type other than NUMERIC/TIMESTAMP that types its literals is BAD_VALUE."
+  },
+  {
+    "id": "t10",
+    "group": "T_relativeDuration",
+    "search": "v=$gt(-24x)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "an unknown unit letter is not a relative duration and not any other timestamp shape."
+  },
+  {
+    "id": "t11",
+    "group": "T_relativeDuration",
+    "search": "v=+9999999999999999d",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "a duration whose millisecond total overflows a long is BAD_VALUE."
+  },
+  {
+    "id": "t12",
+    "group": "T_relativeDuration",
+    "search": "v=+106751991167d",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "a TIMESTAMP duration whose total fits a long but whose sum with request time overflows epoch milliseconds is BAD_VALUE."
+  },
+  {
+    "id": "t13",
+    "group": "T_relativeDuration",
+    "search": "v=-1M",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "duration units are lowercase only: -1M is neither a duration nor a number."
+  },
+  {
+    "id": "t14",
+    "group": "T_relativeDuration",
+    "search": "v=-1M",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    },
+    "comment": "duration units are lowercase only: -1M is neither a duration nor any timestamp shape."
+  },
+  {
+    "id": "t15",
+    "group": "T_relativeDuration",
+    "search": "v=$lte(+100000d)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "rows": [
+      "-24h",
+      4102444800000
+    ],
+    "matches": [
+      1
+    ],
+    "comment": "a String cell such as -24h is never a duration: it is an unparseable cell (no match), only literals are durations."
+  },
+  {
+    "id": "u01",
+    "group": "U_combinatorLiterals",
+    "search": "v=$or(1,$gt(5))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "comment": "bare literal directly under a combinator is typed as the column type (numeric equality), not text.",
+    "rows": [
+      1,
+      3,
+      6,
+      10
+    ],
+    "matches": [
+      0,
+      2,
+      3
+    ]
+  },
+  {
+    "id": "u02",
+    "group": "U_combinatorLiterals",
+    "search": "v=$or(abc,$gt(5))",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "comment": "bare literal directly under a combinator is validated as the column type.",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "u03",
+    "group": "U_combinatorLiterals",
+    "search": "v=$not(abc)",
+    "types": {
+      "v": "NUMERIC"
+    },
+    "operators": "standard",
+    "error": {
+      "code": "BAD_VALUE"
+    }
+  },
+  {
+    "id": "u04",
+    "group": "U_combinatorLiterals",
+    "search": "v=$not(2026-06-01T05:00)",
+    "types": {
+      "v": "TIMESTAMP"
+    },
+    "operators": "standard",
+    "comment": "local date-time under $not is UTC.",
+    "rows": [
+      "2026-06-01T04:00:00Z",
+      "2026-06-01T05:00:00Z",
+      "2026-06-01T06:00:00Z"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "u05",
+    "group": "U_combinatorLiterals",
+    "search": "v=$and(true,$ne(false))",
+    "types": {
+      "v": "BOOLEAN"
+    },
+    "operators": "standard",
+    "rows": [
+      true,
+      false
+    ],
+    "matches": [
+      0
+    ]
+  }
+]

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -71,18 +70,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class Example extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_description = "description";
-	private static final String PROP_externalValue = "externalValue";
-	private static final String PROP_summary = "summary";
-	private static final String PROP_value = "value";
 
 	private String summary;
 	private String description;
@@ -119,12 +109,12 @@ public class Example extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_externalValue -> toType(getExternalValue(), type);
-			case PROP_summary -> toType(getSummary(), type);
-			case PROP_value -> toType(getValue(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalValue" -> toType(getExternalValue(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "value" -> toType(getValue(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -173,10 +163,10 @@ public class Example extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(externalValue), PROP_externalValue)
-			.addIf(nn(summary), PROP_summary)
-			.addIf(nn(value), PROP_value)
+			.addIf(nn(description), "description")
+			.addIf(nn(externalValue), "externalValue")
+			.addIf(nn(summary), "summary")
+			.addIf(nn(value), "value")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -184,12 +174,12 @@ public class Example extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Example set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> setDescription(s(value));
-			case PROP_externalValue -> setExternalValue(s(value));
-			case PROP_summary -> setSummary(s(value));
-			case PROP_value -> setValue(value);
+			case "description" -> setDescription(s(value));
+			case "externalValue" -> setExternalValue(s(value));
+			case "summary" -> setSummary(s(value));
+			case "value" -> setValue(value);
 			default -> {
 				super.set(property, value);
 				yield this;

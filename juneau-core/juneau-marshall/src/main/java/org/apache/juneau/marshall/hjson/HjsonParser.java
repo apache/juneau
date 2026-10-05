@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.hjson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -119,12 +119,12 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // Extends ReaderParser, which sits in the shared Context > Parser > ReaderParser hierarchy used by every character-based parser
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class HjsonParser extends ReaderParser implements HjsonMetaProvider, RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -139,11 +139,11 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider, Reco
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_ctx, copyFrom));
+			super(reqnn("ctx", copyFrom));
 		}
 
 		protected Builder(HjsonParser copyFrom) {
-			super(assertArgNotNull(ARG_ctx, copyFrom));
+			super(reqnn("ctx", copyFrom));
 		}
 
 		@Override

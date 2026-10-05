@@ -29,7 +29,9 @@ import org.junit.jupiter.api.*;
  */
 class MsgPackOutputStream_Test extends TestBase {
 
-	@SuppressWarnings("resource") // writeExt returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.
+	@SuppressWarnings({
+		"resource" // writeExt returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.
+	})
 	private static String enc(int type, byte[] payload) throws IOException {
 		var bos = new ByteArrayOutputStream();
 		try (var os = new MsgPackOutputStream(bos)) {

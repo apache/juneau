@@ -33,7 +33,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link McpClient}.
  */
-@SuppressWarnings("resource") // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
+@SuppressWarnings({
+	"resource" // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
+})
 class McpClient_Test extends TestBase {
 
 	private static String bodyOf(TransportRequest req) {

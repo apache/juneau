@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.*;
  * method directly — and each such alias documents its target via an {@code @see} tag. Canonical
  * implementations live in {@link ObjectUtils}, {@link StringUtils}, {@link CollectionUtils},
  * {@link ClassUtils}, {@link ThrowableUtils}, {@link IoUtils}, {@link FileUtils},
- * {@link AssertionUtils}, {@link PredicateUtils}, {@link SystemUtils}, {@link DateUtils}, and
+ * {@link PredicateUtils}, {@link SystemUtils}, {@link DateUtils}, and
  * {@link ReflectionUtils}.
  *
  * <p><b>Documented exception:</b> the terse exception factories ({@code rex}/{@code brex}/
@@ -43,7 +43,30 @@ import org.apache.juneau.commons.reflect.*;
  * self-contained — they construct the exception directly rather than delegating to a domain
  * class — so that the domain {@code *Utils} classes can stay {@code Shorts}-free (they use the
  * package-private {@code Exceptions} helper instead). These are the only methods in this class
- * with no {@code @see} tag.
+ * with no {@code @see} tag, apart from the argument/state checks described next.
+ *
+ * <p><b>Argument and state checks:</b> the {@code req*} family ({@code req}, {@code reqnn},
+ * {@code reqnb}, {@code reqnns}, {@code reqt}, {@code reqcat}; throwing
+ * {@link IllegalArgumentException}) and the {@code chk*} family ({@code chk}, {@code chknn};
+ * throwing {@link IllegalStateException}) are also self-contained: {@code Shorts} holds their
+ * canonical implementations. Because of that, the domain
+ * {@code *Utils} classes may import {@code Shorts} for {@code req*}/{@code chk*} calls. That is the
+ * only relaxation: a domain class may use the self-contained members of {@code Shorts} (exception
+ * factories, {@code req*}, {@code chk*}) but never a delegating alias, because that alias would
+ * call back into a domain class.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+ *
+ * 	<jk>public</jk> Builder timeout(String <jv>name</jv>, Duration <jv>value</jv>) {
+ * 		<jf>name</jf> = <jsm>reqnb</jsm>(<js>"name"</js>, <jv>name</jv>);
+ * 		<jf>timeout</jf> = <jsm>reqnn</jsm>(<js>"value"</js>, <jv>value</jv>);
+ * 		<jsm>req</jsm>(! <jv>value</jv>.isNegative(), <js>"Argument 'value' cannot be negative: %s"</js>, <jv>value</jv>);
+ * 		<jsm>chk</jsm>(! <jf>built</jf>, <js>"Builder already used."</js>);
+ * 		<jk>return this</jk>;
+ * 	}
+ * </p>
  *
  * <p><b>Disjointness invariant:</b> no {@code Shorts} alias name is identical to the canonical
  * (full) method name of any method in any domain class. This lets a developer wildcard-import
@@ -54,8 +77,10 @@ import org.apache.juneau.commons.reflect.*;
  * replace {@code import static ...utils.Utils.*} with {@code import static ...utils.Shorts.*}.
  */
 @SuppressWarnings({
+	"java:S107", // The reqnn() and m() overloads take name/value and key/value pairs as positional arguments by design.
 	"java:S1118", // Utility facade with static methods only.
-	"java:S6539" // Monster class; Shorts is intentionally a single terse-alias factory facade, each method tiny and independent
+	"java:S6539", // Monster class; Shorts is intentionally a single terse-alias factory facade, each method tiny and independent
+	"unchecked" // reqt() and reqcat() cast only after the isInstance/isAssignableFrom checks confirm the element type.
 })
 public class Shorts {
 
@@ -401,6 +426,396 @@ public class Shorts {
 	 * @see ObjectUtils#size(Object)
 	 */
 	public static int sz(Object o) { return ObjectUtils.size(o); }
+
+	// ---- Argument checks (req*) and state checks (chk*) — canonical ----
+
+	// Self-contained, like the exception factories: these are the canonical implementations,
+	// so they carry no @see.
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder timeout(Duration <jv>value</jv>) {
+	 * 		<jsm>req</jsm>(! <jv>value</jv>.isNegative(), <js>"Argument 'value' cannot be negative: %s"</js>, <jv>value</jv>);
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * @param expression The boolean expression to check.
+	 * @param msg The exception message format string (see {@link StringUtils#format(String, Object...)}).
+	 * @param args The exception message args.
+	 * @throws IllegalArgumentException If the expression is <jk>false</jk>.
+	 */
+	public static void req(boolean expression, String msg, Object...args) throws IllegalArgumentException {
+		if (! expression)
+			throw iaex(msg, args);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder timeout(Duration <jv>value</jv>) {
+	 * 		<jf>timeout</jf> = <jsm>reqnn</jsm>(<js>"value"</js>, <jv>value</jv>);
+	 * 		<jk>return this</jk>;
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The argument data type.
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same argument.
+	 * @throws IllegalArgumentException If the argument is <jk>null</jk>.
+	 */
+	public static <T> T reqnn(String name, T o) throws IllegalArgumentException {
+		if (o == null)
+			throw iaex("Argument '%s' cannot be null.", name);
+		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if either of the specified arguments is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Foo(String <jv>name</jv>, Object <jv>value</jv>) {
+	 * 		<jsm>reqnn</jsm>(<js>"name"</js>, <jv>name</jv>, <js>"value"</js>, <jv>value</jv>);
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * @param name1 The first argument name.
+	 * @param o1 The first object to check.
+	 * @param name2 The second argument name.
+	 * @param o2 The second object to check.
+	 * @throws IllegalArgumentException If any argument is <jk>null</jk>.
+	 */
+	public static void reqnn(String name1, Object o1, String name2, Object o2) throws IllegalArgumentException {
+		reqnn(name1, o1);
+		reqnn(name2, o2);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if any of the three specified arguments is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jsm>reqnn</jsm>(<js>"a"</js>, <jv>a</jv>, <js>"b"</js>, <jv>b</jv>, <js>"c"</js>, <jv>c</jv>);
+	 * </p>
+	 *
+	 * @param name1 The first argument name.
+	 * @param o1 The first object to check.
+	 * @param name2 The second argument name.
+	 * @param o2 The second object to check.
+	 * @param name3 The third argument name.
+	 * @param o3 The third object to check.
+	 * @throws IllegalArgumentException If any argument is <jk>null</jk>.
+	 */
+	public static void reqnn(String name1, Object o1, String name2, Object o2, String name3, Object o3) throws IllegalArgumentException {
+		reqnn(name1, o1);
+		reqnn(name2, o2);
+		reqnn(name3, o3);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if any of the four specified arguments is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jsm>reqnn</jsm>(<js>"a"</js>, <jv>a</jv>, <js>"b"</js>, <jv>b</jv>, <js>"c"</js>, <jv>c</jv>, <js>"d"</js>, <jv>d</jv>);
+	 * </p>
+	 *
+	 * @param name1 The first argument name.
+	 * @param o1 The first object to check.
+	 * @param name2 The second argument name.
+	 * @param o2 The second object to check.
+	 * @param name3 The third argument name.
+	 * @param o3 The third object to check.
+	 * @param name4 The fourth argument name.
+	 * @param o4 The fourth object to check.
+	 * @throws IllegalArgumentException If any argument is <jk>null</jk>.
+	 */
+	public static void reqnn(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4) throws IllegalArgumentException {
+		reqnn(name1, o1);
+		reqnn(name2, o2);
+		reqnn(name3, o3);
+		reqnn(name4, o4);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if any of the five specified arguments is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jsm>reqnn</jsm>(<js>"a"</js>, <jv>a</jv>, <js>"b"</js>, <jv>b</jv>, <js>"c"</js>, <jv>c</jv>, <js>"d"</js>, <jv>d</jv>, <js>"e"</js>, <jv>e</jv>);
+	 * </p>
+	 *
+	 * @param name1 The first argument name.
+	 * @param o1 The first object to check.
+	 * @param name2 The second argument name.
+	 * @param o2 The second object to check.
+	 * @param name3 The third argument name.
+	 * @param o3 The third object to check.
+	 * @param name4 The fourth argument name.
+	 * @param o4 The fourth object to check.
+	 * @param name5 The fifth argument name.
+	 * @param o5 The fifth object to check.
+	 * @throws IllegalArgumentException If any argument is <jk>null</jk>.
+	 */
+	public static void reqnn(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
+		throws IllegalArgumentException {
+		reqnn(name1, o1);
+		reqnn(name2, o2);
+		reqnn(name3, o3);
+		reqnn(name4, o4);
+		reqnn(name5, o5);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified string argument is <jk>null</jk> or blank.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder name(String <jv>value</jv>) {
+	 * 		<jf>name</jf> = <jsm>reqnb</jsm>(<js>"value"</js>, <jv>value</jv>);
+	 * 		<jk>return this</jk>;
+	 * 	}
+	 * </p>
+	 *
+	 * @param name The argument name.
+	 * @param o The string to check.
+	 * @return The same string.
+	 * @throws IllegalArgumentException If the string is <jk>null</jk> or blank.
+	 */
+	public static String reqnb(String name, String o) throws IllegalArgumentException {
+		reqnn(name, o);
+		req(! o.isBlank(), "Argument '%s' cannot be blank.", name);
+		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified array argument or any of its elements is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder tags(String...<jv>values</jv>) {
+	 * 		<jf>tags</jf> = <jsm>l</jsm>(<jsm>reqnns</jsm>(<js>"values"</js>, <jv>values</jv>));
+	 * 		<jk>return this</jk>;
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param name The argument name.
+	 * @param o The array to check.
+	 * @return The same array.
+	 * @throws IllegalArgumentException If the array or any of its elements is <jk>null</jk>.
+	 */
+	public static <T> T[] reqnns(String name, T[] o) throws IllegalArgumentException {
+		reqnn(name, o);
+		for (var i = 0; i < o.length; i++)
+			req(o[i] != null, "Argument '%s' parameter %s cannot be null.", name, i);
+		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified collection argument or any of its elements is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder tags(List&lt;String&gt; <jv>values</jv>) {
+	 * 		<jf>tags</jf> = <jsm>tl</jsm>(<jsm>reqnns</jsm>(<js>"values"</js>, <jv>values</jv>));
+	 * 		<jk>return this</jk>;
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param <C> The collection type.
+	 * @param name The argument name.
+	 * @param collection The collection to check.
+	 * @return The same collection.
+	 * @throws IllegalArgumentException If the collection or any of its elements is <jk>null</jk>.
+	 */
+	public static <T,C extends Collection<T>> C reqnns(String name, C collection) throws IllegalArgumentException {
+		reqnn(name, collection);
+		var i = 0;
+		for (var element : collection)
+			req(element != null, "Argument '%s' element at index %s cannot be null.", name, i++);
+		return collection;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified object is not an instance of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public void</jk> setValue(Object <jv>value</jv>) {
+	 * 		String <jv>s</jv> = <jsm>reqt</jsm>(String.<jk>class</jk>, <jv>value</jv>);
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The expected type.
+	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
+	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
+	 * @return The object cast to the specified type.
+	 * @throws IllegalArgumentException If the object is not an instance of the specified type, or if either argument is <jk>null</jk>.
+	 */
+	public static <T> T reqt(Class<T> type, Object o) throws IllegalArgumentException {
+		reqnn("type", type);
+		reqnn("o", o);
+		if (! type.isInstance(o))
+			throw iaex("Object is not an instance of %s: %s", ClassUtils.className(type), ClassUtils.className(o));
+		return (T)o;
+	}
+
+	/**
+	 * Throws the exception provided by the supplier if the specified object is not an instance of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public void</jk> setValue(Object <jv>value</jv>) {
+	 * 		String <jv>s</jv> = <jsm>reqt</jsm>(String.<jk>class</jk>, <jv>value</jv>, () -&gt; <jsm>isex</jsm>(<js>"Invalid value type"</js>));
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The expected type.
+	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
+	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
+	 * @param exceptionSupplier The supplier that provides the exception to throw if validation fails.  Must not be <jk>null</jk>.
+	 * @return The object cast to the specified type.
+	 * @throws RuntimeException If the object is not an instance of the specified type (the exception is provided by the supplier).
+	 */
+	@SuppressWarnings({
+		"java:S112" // Exception type comes from caller's supplier
+	})
+	public static <T> T reqt(Class<T> type, Object o, Supplier<? extends RuntimeException> exceptionSupplier) {
+		reqnn("type", type);
+		reqnn("o", o);
+		if (! type.isInstance(o))
+			throw exceptionSupplier.get();
+		return (T)o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if any element of the specified class array is not a subtype of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Builder serializers(Class&lt;?&gt;...<jv>values</jv>) {
+	 * 		<jf>serializers</jf> = <jsm>reqcat</jsm>(<js>"values"</js>, Serializer.<jk>class</jk>, <jv>values</jv>);
+	 * 		<jk>return this</jk>;
+	 * 	}
+	 * </p>
+	 *
+	 * @param <E> The element type.
+	 * @param name The argument name.
+	 * @param type The expected parent class.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> type throws {@link NullPointerException}).
+	 * @param value The array value being checked.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws {@link NullPointerException}).
+	 * @return The value cast to the specified array type.
+	 * @throws IllegalArgumentException If any element is not a subtype of the specified type.
+	 */
+	public static <E> Class<E>[] reqcat(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
+		for (var i = 0; i < value.length; i++)
+			if (! type.isAssignableFrom(value[i]))
+				throw iaex("Arg %s did not have arg of type %s at index %s: %s", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));
+		return (Class<E>[])value;
+	}
+
+	/**
+	 * Throws an {@link IllegalStateException} if the specified expression is <jk>false</jk>.
+	 *
+	 * <p>
+	 * The state-check counterpart of {@link #req(boolean, String, Object...)}: use it for object or
+	 * lifecycle state rather than method arguments.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public void</jk> start() {
+	 * 		<jsm>chk</jsm>(! <jf>started</jf>, <js>"Already started: %s"</js>, <jf>name</jf>);
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * @param expression The boolean expression to check.
+	 * @param msg The exception message format string (see {@link StringUtils#format(String, Object...)}).
+	 * @param args The exception message args.
+	 * @throws IllegalStateException If the expression is <jk>false</jk>.
+	 */
+	public static void chk(boolean expression, String msg, Object...args) throws IllegalStateException {
+		if (! expression)
+			throw isex(msg, args);
+	}
+
+	/**
+	 * Throws an {@link IllegalStateException} if the specified object is <jk>null</jk>.
+	 *
+	 * <p>
+	 * The state-check counterpart of {@link #reqnn(String, Object)}: use it for object or
+	 * lifecycle state rather than method arguments.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
+	 *
+	 * 	<jk>public</jk> Connection connection() {
+	 * 		<jk>return</jk> <jsm>chknn</jsm>(<jf>connection</jf>, <js>"Not connected: %s"</js>, <jf>name</jf>);
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The object type.
+	 * @param o The object to check.  Can be <jk>null</jk>.
+	 * @param msg The exception message format string (see {@link StringUtils#format(String, Object...)}).
+	 * @param args The exception message args.
+	 * @return The same object.
+	 * @throws IllegalStateException If the object is <jk>null</jk>.
+	 */
+	public static <T> T chknn(T o, String msg, Object...args) throws IllegalStateException {
+		if (o == null)
+			throw isex(msg, args);
+		return o;
+	}
 
 	// ---- StringUtils ----
 
@@ -796,9 +1211,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4); }
 
 	/**
@@ -811,9 +1223,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5); }
 
 	/**
@@ -826,9 +1235,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6); }
 
 	/**
@@ -841,9 +1247,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7); }
 
 	/**
@@ -856,9 +1259,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8); }
 
 	/**
@@ -871,9 +1271,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9); }
 
 	/**
@@ -886,9 +1283,6 @@ public class Shorts {
 	 * @return A modifiable map.
 	 * @see CollectionUtils#map(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) { return CollectionUtils.map(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9, k10, v10); }
 
 	/**
@@ -1161,9 +1555,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4); }
 
 	/**
@@ -1180,9 +1571,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5); }
 
 	/**
@@ -1199,9 +1587,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6); }
 
 	/**
@@ -1218,9 +1603,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7); }
 
 	/**
@@ -1237,9 +1619,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8); }
 
 	/**
@@ -1256,9 +1635,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9); }
 
 	/**
@@ -1275,9 +1651,6 @@ public class Shorts {
 	 * @throws IllegalArgumentException if any of the keys are duplicated.
 	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
 	 */
-	@SuppressWarnings({
-		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
-	})
 	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9, k10, v10); }
 
 	/**

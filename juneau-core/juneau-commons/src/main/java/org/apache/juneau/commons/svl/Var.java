@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -52,13 +51,11 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard may appear in subclass method signatures
+	"java:S112", // throws Exception intentional - callback/lifecycle method
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452" // Wildcard may appear in subclass method signatures
 })
 public abstract class Var {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_name = "name";
 
 	private final String name;
 	final boolean streamed;
@@ -73,7 +70,7 @@ public abstract class Var {
 	 * 	If <jk>false</jk>, then the {@link #resolve(VarResolverSession, String)} method is implemented.
 	 */
 	protected Var(String name, boolean streamed) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		this.name = name;
 		this.streamed = streamed;
 
@@ -93,9 +90,6 @@ public abstract class Var {
 	 * @return The resolved value.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
 
 	/**
@@ -106,9 +100,6 @@ public abstract class Var {
 	 * @param arg The inside argument of the variable.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
 
 	/**

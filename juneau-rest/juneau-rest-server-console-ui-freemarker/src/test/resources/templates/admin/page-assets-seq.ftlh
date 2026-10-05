@@ -13,6 +13,6 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="releases" css=["a.css", "b.css"] init=["one.js", "two.js"]>
+--><@page tab="home" css=["a.css", "b.css"] init=["one.js", "two.js"]>
 <p>assets</p>
 </@page>

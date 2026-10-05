@@ -20,6 +20,7 @@ import java.awt.image.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.dto.*;
@@ -73,8 +74,24 @@ public class PetStoreResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	/** Backing store.  Singleton servlet → singleton store, shared across requests. */
-	private final transient PetStore store = new PetStore();
+	/**
+	 * The shared store, injected from the parent's bean store (the runner registers one seeded {@code PetStore}).
+	 * When this resource is mounted standalone (unit tests), {@link #store()} falls back to a classic-rows store.
+	 */
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient PetStore store;
+
+	@SuppressWarnings({
+		"java:S2654" // synchronized guards the lazy standalone fallback, racing against the injected value.
+	})
+	private synchronized PetStore store() {
+		if (store == null)
+			store = new PetStore();
+		return store;
+	}
 
 	/** In-memory photo bytes, keyed by pet ID.  Not seeded from JSON — populated only via {@link #putPetPhoto}. */
 	private final transient Map<Long,BufferedImage> photos = new ConcurrentHashMap<>();
@@ -90,7 +107,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/pets")
 	public Collection<Pet> getPets() {
-		return store.getPets();
+		return store().getPets();
 	}
 
 	/**
@@ -102,7 +119,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/pets/{id}")
 	public Pet getPet(@Path("id") long id) {
-		var pet = store.getPet(id);
+		var pet = store().getPet(id);
 		if (pet == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		return pet;
@@ -116,7 +133,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestPost("/pets")
 	public Pet createPet(@Content Pet pet) {
-		return store.createPet(pet);
+		return store().createPet(pet);
 	}
 
 	/**
@@ -131,7 +148,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public Pet updatePet(@Path("id") long id, @Content Pet pet) {
 		pet.setId(id);
 		try {
-			return store.updatePet(pet);
+			return store().updatePet(pet);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
@@ -146,7 +163,7 @@ public class PetStoreResource extends BasicRestServlet {
 	@RestDelete("/pets/{id}")
 	public void deletePet(@Path("id") long id) {
 		try {
-			store.deletePet(id);
+			store().deletePet(id);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
@@ -161,7 +178,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet(path="/pets/{id}/photo", serializers=PetPhotoSerializer.class)
 	public BufferedImage getPetPhoto(@Path("id") long id) {
-		if (store.getPet(id) == null)
+		if (store().getPet(id) == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		var image = photos.get(id);
 		if (image == null)
@@ -182,7 +199,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestPut(path="/pets/{id}/photo", parsers=PetPhotoParser.class)
 	public Ok putPetPhoto(@Path("id") long id, @Content BufferedImage image) {
-		var pet = store.getPet(id);
+		var pet = store().getPet(id);
 		if (pet == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		photos.put(id, image);
@@ -201,7 +218,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/orders")
 	public Collection<Order> getOrders() {
-		return store.getOrders();
+		return store().getOrders();
 	}
 
 	/**
@@ -213,7 +230,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/orders/{id}")
 	public Order getOrder(@Path("id") long id) {
-		var order = store.getOrder(id);
+		var order = store().getOrder(id);
 		if (order == null)
 			throw new NotFound("Order not found: id=%s", id);
 		return order;
@@ -227,7 +244,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestPost("/orders")
 	public Order createOrder(@Content Order order) {
-		return store.createOrder(order);
+		return store().createOrder(order);
 	}
 
 	/**
@@ -242,7 +259,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public Order updateOrder(@Path("id") long id, @Content Order order) {
 		order.setId(id);
 		try {
-			return store.updateOrder(order);
+			return store().updateOrder(order);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
@@ -257,7 +274,7 @@ public class PetStoreResource extends BasicRestServlet {
 	@RestDelete("/orders/{id}")
 	public void deleteOrder(@Path("id") long id) {
 		try {
-			store.deleteOrder(id);
+			store().deleteOrder(id);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
@@ -274,7 +291,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/users")
 	public Collection<User> getUsers() {
-		return store.getUsers();
+		return store().getUsers();
 	}
 
 	/**
@@ -286,7 +303,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestGet("/users/{username}")
 	public User getUser(@Path("username") String username) {
-		var user = store.getUser(username);
+		var user = store().getUser(username);
 		if (user == null)
 			throw new NotFound("User not found: username=%s", username);
 		return user;
@@ -300,7 +317,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 */
 	@RestPost("/users")
 	public User createUser(@Content User user) {
-		return store.createUser(user);
+		return store().createUser(user);
 	}
 
 	/**
@@ -315,7 +332,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public User updateUser(@Path("username") String username, @Content User user) {
 		user.setUsername(username);
 		try {
-			return store.updateUser(user);
+			return store().updateUser(user);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
@@ -330,7 +347,7 @@ public class PetStoreResource extends BasicRestServlet {
 	@RestDelete("/users/{username}")
 	public void deleteUser(@Path("username") String username) {
 		try {
-			store.deleteUser(username);
+			store().deleteUser(username);
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S3577", // Test method naming intentionally descriptive
-	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S5961" // High assertion count acceptable in comprehensive tests
 })
 class Swagger_RestOp_Parameters extends TestBase {
 

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -72,7 +71,7 @@ public class ProfileConfigStore extends ConfigStore {
 		 * @param copyFrom The builder to copy from.  Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			this.delegate = copyFrom.delegate;
 			this.baseName = copyFrom.baseName;
 			this.profiles = new ArrayList<>(copyFrom.profiles);
@@ -85,7 +84,7 @@ public class ProfileConfigStore extends ConfigStore {
 		 * @param copyFrom The bean to copy from.  Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProfileConfigStore copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			type(copyFrom.getClass());
 			this.delegate = copyFrom.delegate;
 			this.baseName = copyFrom.baseName;
@@ -163,8 +162,8 @@ public class ProfileConfigStore extends ConfigStore {
 	 */
 	public ProfileConfigStore(Builder builder) {
 		super(builder);
-		this.delegate = assertArgNotNull("delegate", builder.delegate);
-		this.baseName = assertArgNotNull("baseName", builder.baseName);
+		this.delegate = reqnn("delegate", builder.delegate);
+		this.baseName = reqnn("baseName", builder.baseName);
 		this.profiles = List.copyOf(builder.profiles);
 		this.format = builder.format;
 
@@ -214,6 +213,9 @@ public class ProfileConfigStore extends ConfigStore {
 	/**
 	 * Reads the base + each active profile from the delegate and merges them (profile-wins, last-active-wins).
 	 */
+	@SuppressWarnings({
+		"java:S9391" // Loop body throws checked IOException, which a stream lambda cannot propagate.
+	})
 	private String mergedContents() throws IOException {
 		var base = delegate.read(baseName);
 		if (profiles.isEmpty())

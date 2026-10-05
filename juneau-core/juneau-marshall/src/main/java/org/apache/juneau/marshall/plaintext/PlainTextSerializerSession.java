@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.marshall.plaintext;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link PlainTextSerializer}.
@@ -32,14 +32,11 @@ import org.apache.juneau.marshall.stream.*;
  *
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class PlainTextSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -53,7 +50,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession implemen
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(PlainTextSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -71,7 +68,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession implemen
 	 * @return A new builder.
 	 */
 	public static Builder create(PlainTextSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

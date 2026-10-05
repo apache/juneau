@@ -211,6 +211,9 @@ class PagingPill_Wiring_Test extends TestBase {
 	 * {@code div.dt-container .juneau-view-pagingpill} plus {@code svg} so they beat DataTables
 	 * {@code .dt-paging-button} and so fill/border cannot stick on the wrong node.
 	 */
+	@SuppressWarnings({
+		"java:S5961" // One CSS rule shape is asserted property-by-property; splitting would duplicate the fetch.
+	})
 	@Test void c02_viewsCss_hasPagingPillShapeAndDisabledGrey() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		var start = body.indexOf(".juneau-view-pagingpill {");
@@ -401,25 +404,15 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Control-row layout item 4 - the per-column search row buildColumnSearchRow(...) inserts/wires
+	// Control-row layout item 4 - the legacy hidden per-column search row is gone (WORK-J0547 icon popover replaced it)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void e05_buildColumnSearchRow_insertsHiddenPerColumnInputsWiredToColumnSearch() throws Exception {
+	@Test void e05_legacyColumnSearchRow_isNoLongerBuiltOrWired() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
-		var fnBody = functionBody(body, "function buildColumnSearchRow(");
-		assertTrue(fnBody.contains("juneau-view-columnsearch-row"), fnBody);
-		assertTrue(fnBody.contains("row.dataset.testid = \"col-search-row\""), fnBody);
-		assertTrue(fnBody.contains("juneau-view-columnsearch-input"), fnBody);
-		assertTrue(fnBody.contains("row.style.display = \"none\""), fnBody);
-		assertTrue(fnBody.contains("dt.column(idx).search(input.value).draw()"), fnBody);
-		assertTrue(fnBody.contains("col.searchable !== false"), fnBody);
-		assertTrue(fnBody.contains("col?.visible === false"), fnBody);
-		assertTrue(fnBody.contains("th.style.display = \"none\""), fnBody);
-
+		assertFalse(body.contains("buildColumnSearchRow"), body);
+		assertFalse(body.contains("buildColumnSearchToggleHandler"), body);
+		assertFalse(body.contains("juneau-view-columnsearch"), body);
 		var initBody = functionBody(body, "function constructTable(");
-		assertTrue(initBody.contains("buildColumnSearchRow("), initBody);
-		assertTrue(initBody.contains("ctx.onColumnSearchToggle = buildColumnSearchToggleHandler"), initBody);
-		var toggle = functionBody(body, "function buildColumnSearchToggleHandler(");
-		assertTrue(toggle.contains("ctx.dataTable.columns().search(\"\").draw()"), toggle);
+		assertFalse(initBody.contains("onColumnSearchToggle"), initBody);
 	}
 }

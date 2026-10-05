@@ -117,6 +117,6 @@ public class LogbackLogBackend implements LogBackend {
 	}
 
 	private static String resolveName(String name) {
-		return (name == null || name.equals("ROOT")) ? Logger.ROOT_LOGGER_NAME : name;
+		return (name == null || eq(name, "ROOT")) ? Logger.ROOT_LOGGER_NAME : name;
 	}
 }

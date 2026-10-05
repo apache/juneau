@@ -18,7 +18,6 @@ package org.apache.juneau.commons.reflect;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -86,14 +85,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // The (T) cast of Method.invoke() in invoke() and the (AnnotationInfo<A>) cast in getAnnotations(type) are safe because the caller chooses T and the stream is filtered by isType(type).
 })
 public final class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_declaringClass = "declaringClass";
-	private static final String ARG_inner = "inner";
-	private static final String ARG_type = "type";
 
 	/**
 	 * Creates a MethodInfo wrapper for the specified method.
@@ -127,7 +122,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(ClassInfo declaringClass, Method inner) {
-		assertArgNotNull(ARG_declaringClass, declaringClass);
+		reqnn("declaringClass", declaringClass);
 		return declaringClass.getMethod(inner);
 	}
 
@@ -147,7 +142,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(Method inner) {
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		return ClassInfo.of(inner.getDeclaringClass()).getMethod(inner);
 	}
 
@@ -289,11 +284,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	A stream of matching annotation infos in child-to-parent order.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for annotation stream
-	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 	}
 
@@ -668,9 +660,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return The object returned from the method.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for method invocation result
-	})
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
 		return safe(() -> {
 			try {

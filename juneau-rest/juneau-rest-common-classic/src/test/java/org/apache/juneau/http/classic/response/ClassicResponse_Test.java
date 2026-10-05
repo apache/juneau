@@ -25,6 +25,9 @@ import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
+@SuppressWarnings({
+	"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
+})
 class ClassicResponse_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -69,9 +72,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a01_responseClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a02_responseSetContent(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setContent("test-body");
@@ -80,9 +80,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a01_responseClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a03_responseSetHeader(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setHeader2("X-Test", "value1");
@@ -103,9 +100,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a01_responseClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a05_responseUnmodifiable(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		assertFalse(instance.isUnmodifiable());
@@ -167,9 +161,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a07_exceptionSetContent(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setContent("test-body");
@@ -178,9 +169,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a08_exceptionWithMessage(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor(String.class, Object[].class).newInstance("test %s", new Object[]{"msg"});
 		assertEquals("test msg", instance.getMessage());
@@ -190,9 +178,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a09_exceptionWithCause(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var cause = new RuntimeException("root cause");
 		var instance = type.getDeclaredConstructor(Throwable.class).newInstance(cause);
@@ -213,9 +198,6 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	@SuppressWarnings({
-		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
-	})
 	void a11_exceptionSetHeader(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setHeader2("X-Test", "value1");

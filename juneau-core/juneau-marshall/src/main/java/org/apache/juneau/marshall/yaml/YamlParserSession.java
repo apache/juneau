@@ -42,14 +42,21 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S125",  // State-machine and parse-path comments are documentation, not commented-out code
-	"java:S135",  // Multiple break/continue acceptable for YAML parsing state machines
+	"java:S107", // 8 parameters required for YAML scalar handling dispatch
+	"java:S125", // State-machine and parse-path comments are documentation, not commented-out code
+	"java:S135", // Multiple break/continue acceptable for YAML parsing state machines
+	"java:S1168", // handlePlainScalar(), readFlowMapping(), readFlowSequence() and readBlockMappingKey() return null for an empty scalar, null key or the unreachable fall-through, which callers treat as "no value"
+	"java:S1172", // eType, pMeta kept for API consistency with callers
+	"java:S2583", // Conditions look constant to static analysis but depend on parser state mutated by called helpers.
 	"java:S2589", // State checks in error path - analyzer FP on state machine flow
 	"java:S2677", // r.read() return value intentionally ignored when consuming/skipping chars
 	"java:S3626", // Redundant jump acceptable for state machine clarity
-	"unchecked",
-	"rawtypes",
-	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S3776", // readAnything(), readBlockScalar(), readFlowMapping() and readIntoBeanMapFlow() are branch-heavy dispatches over YAML syntax forms; splitting them would obscure the grammar
+	"java:S6541", // readAnything() and readBlockScalar() are long single-pass dispatches over the YAML scalar/flow/block forms
+	"rawtypes", // Raw Map/Collection/ArrayList are used in readAnything(), handleQuotedScalar() and handlePlainScalar() when instantiating the reflectively resolved target type
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked", // Casts to T/E and Class<? extends Number> in readAnything(), readFlowSequence(), readBlockSequence() and convertToType() are guarded by the ClassMeta checks on the requested type
+	"unused" // eType/pMeta/keyIndent on the private handleQuotedScalar(), handlePlainScalar() and convertToType() helpers are kept so they share readAnything()'s dispatch signature
 })
 public class YamlParserSession extends ReaderParserSession implements RecordReadable, ArrayRecordReadable {
 
@@ -88,9 +95,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return new Builder(ctx);
 	}
 
-	@SuppressWarnings({
-		"unused" // Stored for API consistency with Builder.create(YamlParser)
-	})
 	private final YamlParser ctx;
 
 	/**
@@ -197,10 +201,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for parser dispatch
-		"java:S6541" // Brain method acceptable for parser dispatch
-	})
 	private <T> T readAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -321,11 +321,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return (T)o;
 	}
 
-	@SuppressWarnings({
-		"java:S107", // 8 parameters required for YAML scalar handling dispatch
-		"java:S3776", // Cognitive complexity acceptable for scalar type dispatch
-		"java:S6541" // Brain method acceptable for scalar handling
-	})
 	private <T> Object handleQuotedScalar(String s, ParserReader r, ClassMeta<?> sType, ClassMeta<?> eType, BuilderSwap<T,Object> builder, Object outer, BeanPropertyMeta pMeta, int keyIndent) throws IOException, ParseException, ExecutableException {
 		if (looksLikeMappingKey(r)) {
 			r.read(); // consume ':'
@@ -376,11 +371,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return convertToType(s, sType, eType, outer, pMeta);
 	}
 
-	@SuppressWarnings({
-		"java:S107", // 8 parameters required for YAML scalar handling dispatch
-		"java:S3776", // Cognitive complexity acceptable for scalar type dispatch
-		"java:S6541" // Brain method acceptable for scalar handling
-	})
 	private <T> Object handlePlainScalar(String s, ParserReader r, ClassMeta<?> sType, ClassMeta<?> eType, BuilderSwap<T,Object> builder, Object outer, BeanPropertyMeta pMeta, int keyIndent) throws IOException, ParseException, ExecutableException {
 		if (s.isEmpty())
 			return null;
@@ -442,10 +432,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return convertToType(s, sType, eType, outer, pMeta);
 	}
 
-	@SuppressWarnings({
-		"unused",    // eType, pMeta kept for API consistency with callers
-		"java:S1172" // Same as above
-	})
 	private Object convertToType(String s, ClassMeta<?> sType, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		if (sType.isObject()) {
 			return resolveScalarType(trim(s));
@@ -546,13 +532,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Flow mapping: { key: value, ... }
 	// ==========================================
-	@SuppressWarnings({
-		"java:S1168",
-		"java:S135",
-		"java:S2583",
-		"java:S3776",
-		"java:S6541" // Brain method acceptable for flow mapping state machine
-	})
 	private <K,V> Map<K,V> readFlowMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -667,12 +646,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Flow sequence: [ value, ... ]
 	// ==========================================
-	@SuppressWarnings({
-		"java:S1168",
-		"java:S135",
-		"java:S2583",
-		"java:S3776"
-	})
 	private <E> Collection<E> readFlowSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
@@ -740,9 +713,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Block mapping
 	// ==========================================
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for block mapping parsing
-	})
 	private <K,V> Map<K,V> readBlockMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -848,9 +818,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Block mapping for beans
 	// ==========================================
-	@SuppressWarnings({
-		"java:S3776"
-	})
 	private <T> BeanMap<T> readIntoBeanMap(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 		int c = r.peek();
 		if (c == '{') {
@@ -859,12 +826,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return readIntoBeanMapBlock(r, m, 0);
 	}
 
-	@SuppressWarnings({
-		"java:S1168",
-		"java:S2583",
-		"java:S3776",
-		"java:S6541" // Brain method acceptable for bean map flow state machine
-	})
 	private <T> BeanMap<T> readIntoBeanMapFlow(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
@@ -956,9 +917,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings({
-		"java:S3776"
-	})
 	private <T> BeanMap<T> readIntoBeanMapBlock(ParserReader r, BeanMap<T> m, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		int blockIndent = -1;
@@ -1038,9 +996,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Block sequence: - value\n- value\n...
 	// ==========================================
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for block sequence parsing
-	})
 	private <E> Collection<E> readBlockSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		int blockIndent = -1;
@@ -1119,9 +1074,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Double-quoted string: "hello \"world\"\n"
 	// ==========================================
-	@SuppressWarnings({
-		"java:S3776"
-	})
 	private String readDoubleQuotedString(ParserReader r) throws IOException, ParseException {
 		int c = r.read(); // consume opening "
 		if (c != '"')
@@ -1178,11 +1130,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Plain scalar (unquoted)
 	// ==========================================
-	@SuppressWarnings({
-		"unused",    // indent accepted for context but not currently used in parsing logic
-		"java:S1172", // Same as above
-		"java:S3776"  // Cognitive complexity acceptable for plain scalar parsing
-	})
 	private static String readPlainScalar(ParserReader r, int indent) throws IOException {
 		var sb = new StringBuilder();
 		int c;
@@ -1224,10 +1171,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Block scalar: | or >
 	// ==========================================
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for block scalar parsing
-		"java:S6541" // Brain method acceptable for block scalar state machine
-	})
 	private String readBlockScalar(ParserReader r, char indicator) throws IOException, ParseException {
 		r.read(); // consume '|' or '>'
 
@@ -1431,9 +1374,6 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for scalar type resolution
-	})
 	private static Object resolveScalarType(String s) {
 		if (s == null || "null".equals(s) || "~".equals(s) || s.isEmpty())
 			return null;

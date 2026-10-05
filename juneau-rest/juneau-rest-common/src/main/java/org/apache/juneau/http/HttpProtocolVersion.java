@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -64,7 +63,7 @@ public record HttpProtocolVersion(String protocol, int major, int minor) {
 	 * @param minor The minor version (must be {@code >= 0}).
 	 */
 	public HttpProtocolVersion {
-		assertArgNotNull("protocol", protocol);
+		reqnn("protocol", protocol);
 		if (major < 0)
 			throw iaex("Major version must be >= 0, got %s", major);
 		if (minor < 0)
@@ -95,7 +94,7 @@ public record HttpProtocolVersion(String protocol, int major, int minor) {
 	 * @throws IllegalArgumentException If the string cannot be parsed.
 	 */
 	public static HttpProtocolVersion parse(String s) {
-		assertArgNotNull("s", s);
+		reqnn("s", s);
 		var slash = s.indexOf('/');
 		if (slash < 0)
 			throw iaex("Invalid protocol version: %s", s);

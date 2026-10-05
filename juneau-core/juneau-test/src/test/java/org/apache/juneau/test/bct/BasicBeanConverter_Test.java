@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  */
 @DisplayName("BasicBeanConverter")
 @SuppressWarnings({
-	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class BasicBeanConverter_Test extends TestBase {
@@ -114,7 +114,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var extractor = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String name) {
-					return o instanceof TestBean && "custom".equals(name);
+					return o instanceof TestBean && eq(name, "custom");
 				}
 
 				@Override

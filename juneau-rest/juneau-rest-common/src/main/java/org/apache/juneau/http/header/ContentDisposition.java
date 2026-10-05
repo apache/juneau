@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -153,7 +152,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder type(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("disposition-type must not be blank");
@@ -277,19 +276,19 @@ public class ContentDisposition extends HttpStringRangesHeader {
 		}
 
 		private Builder quotedParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			params.put(cleanName(name), q(value));
 			return this;
 		}
 
 		private Builder tokenParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			params.put(cleanName(name), value);
 			return this;
 		}
 
 		private static String cleanName(String name) {
-			assertArgNotNull("name", name);
+			reqnn("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("parameter name must not be blank");

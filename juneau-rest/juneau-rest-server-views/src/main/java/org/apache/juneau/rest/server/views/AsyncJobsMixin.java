@@ -72,6 +72,9 @@ import org.apache.juneau.rest.server.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // asyncJobRegistry() returns an AutoCloseable registry owned and closed by the implementing resource, not by these endpoints
+})
 public interface AsyncJobsMixin {
 
 	/** The URL path prefix for the async-job endpoints (relative to the host mount). */
@@ -106,9 +109,6 @@ public interface AsyncJobsMixin {
 	 * @param res The REST response.
 	 * @throws IOException If the stream could not be written.
 	 */
-	@SuppressWarnings({
-		"resource" // False positive: asyncJobRegistry() returns the shared AutoCloseable registry (not owned here) and the fluent sse.sendEvent/flush calls return the same 'sse' already managed by the try-with-resources.
-	})
 	@RestGet(path=STREAM_PATH, summary="Async job SSE progress stream", swagger=@OpSwagger(ignore=true))
 	default void streamJob(@Path("jobId") String jobId, RestResponse res) throws IOException {
 		var job = asyncJobRegistry().get(jobId).orElse(null);
@@ -152,9 +152,6 @@ public interface AsyncJobsMixin {
 	 * @param res The REST response.
 	 * @return The job's terminal {@link ActionResult}.
 	 */
-	@SuppressWarnings({
-		"resource" // False positive: asyncJobRegistry() returns the shared AutoCloseable registry, which this method borrows but does not own.
-	})
 	@RestPost(path=CANCEL_PATH, summary="Cancel an async job", swagger=@OpSwagger(ignore=true))
 	default ActionResult cancelJob(@Path("jobId") String jobId, RestResponse res) {
 		var job = asyncJobRegistry().get(jobId).orElse(null);

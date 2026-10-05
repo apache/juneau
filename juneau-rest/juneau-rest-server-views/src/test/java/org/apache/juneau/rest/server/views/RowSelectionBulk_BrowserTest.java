@@ -71,6 +71,9 @@ import org.junit.jupiter.api.condition.*;
  */
 @EnabledIfSystemProperty(named=RowSelectionBulk_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"unchecked" // Report sections are parsed JSON Maps cast to Map<String,Object>.
+})
 class RowSelectionBulk_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */
@@ -130,7 +133,6 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Map<String,Object> sub(String key) {
 		return (Map<String,Object>) report.get(key);
 	}
@@ -203,7 +205,6 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 
 	@Test void e02_eachTargetWasMarkedInFlightBeforeItsOwnRequest() {
 		var bulk = sub("bulk");
-		@SuppressWarnings("unchecked")
 		var atFetch = (Map<String,Object>) bulk.get("inflightAtFetchTime");
 		assertEquals(Boolean.TRUE, atFetch.get("1"), () -> report.toString());
 		assertEquals(Boolean.TRUE, atFetch.get("2"), () -> report.toString());
@@ -213,7 +214,6 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 	@Test void e03_everyTargetsInFlightMarkerClearedOnItsOwnTerminalOutcome() {
 		// MED-4: per-target marker clearing on every terminal outcome - success, failure, AND refusal.
 		var bulk = sub("bulk");
-		@SuppressWarnings("unchecked")
 		var after = (Map<String,Object>) bulk.get("inflightAfter");
 		assertEquals(Boolean.FALSE, after.get("1"), () -> report.toString());
 		assertEquals(Boolean.FALSE, after.get("2"), () -> report.toString());
@@ -224,11 +224,8 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 		// The load-bearing HIGH-5/MED-4 case: target '1' succeeds, '2' fails, '3' is refused - all three render
 		// their OWN outcome; none is hidden behind (or overwritten by) another target's result.
 		var bulk = sub("bulk");
-		@SuppressWarnings("unchecked")
 		var o1 = (Map<String,Object>) bulk.get("outcome1");
-		@SuppressWarnings("unchecked")
 		var o2 = (Map<String,Object>) bulk.get("outcome2");
-		@SuppressWarnings("unchecked")
 		var o3 = (Map<String,Object>) bulk.get("outcome3");
 		assertEquals("success", o1.get("state"), () -> report.toString());
 		assertTrue(String.valueOf(o1.get("text")).contains("Done"), () -> report.toString());

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.json5l;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
@@ -24,6 +23,7 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Json5lSerializer}.
@@ -44,13 +44,11 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class Json5lSerializerSession extends JsonlSerializerSession {
-
-	private static final String ARG_ctx = "ctx";
 
 	private static final char SUGAR_QUOTE = '\'';
 
@@ -68,7 +66,7 @@ public class Json5lSerializerSession extends JsonlSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Json5lSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -86,7 +84,7 @@ public class Json5lSerializerSession extends JsonlSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(Json5lSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final boolean json5Sugar;

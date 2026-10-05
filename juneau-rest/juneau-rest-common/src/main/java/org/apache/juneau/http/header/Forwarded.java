@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -192,8 +191,8 @@ public class Forwarded extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 		 */
 		public Builder param(String name, String value) {
-			assertArgNotNull("name", name);
-			assertArgNotNull("value", value);
+			reqnn("name", name);
+			reqnn("value", value);
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("forwarded parameter name must not be blank");

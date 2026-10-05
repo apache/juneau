@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oauth.flow;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -49,10 +48,11 @@ import com.nimbusds.oauth2.sdk.id.*;
  */
 @Deprecated(since = "10.0.0", forRemoval = false)
 @SuppressWarnings({
-	"java:S1192", // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "username"); intentional
-	"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	"java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "username"); intentional
 })
 public class OAuthResourceOwnerFlow {
+	// Q:  Can we just remove these deprecated APIs entirely?
 
 	/**
 	 * Static creator.
@@ -89,7 +89,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull("value", value);
+			tokenEndpoint = reqnn("value", value);
 			return this;
 		}
 
@@ -101,7 +101,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -113,7 +113,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -126,7 +126,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -138,7 +138,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder username(String value) {
-			username = assertArgNotNullOrBlank("value", value);
+			username = reqnb("value", value);
 			return this;
 		}
 
@@ -150,7 +150,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder password(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			passwordSupplier = () -> value;
 			return this;
 		}
@@ -163,7 +163,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder passwordSupplier(Supplier<String> value) {
-			passwordSupplier = assertArgNotNull("value", value);
+			passwordSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -175,9 +175,9 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -191,7 +191,7 @@ public class OAuthResourceOwnerFlow {
 		 */
 		@Deprecated(since = "10.0.0", forRemoval = false)
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 

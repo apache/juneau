@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.remote;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 
@@ -26,6 +25,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.bean.*;
 import org.apache.juneau.bean.html5.*;
@@ -56,8 +56,8 @@ import org.apache.juneau.rest.server.servlet.*;
  * </ul>
  */
 @SuppressWarnings({
-	"serial",  // SerialVersionUID not used for servlet
-	"javadoc"  // Javadoc inherited from BasicRestServlet
+	"javadoc", // Javadoc inherited from BasicRestServlet
+	"serial" // SerialVersionUID not used for servlet
 })
 public abstract class RrpcServlet extends BasicRestServlet {
 
@@ -71,10 +71,9 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	)
 	// @formatter:on
 	public List<LinkString> getInterfaces() throws Exception {
-		var l = new LinkedList<LinkString>();
-		for (var c : getServiceMap().keySet())
-			l.add(new LinkString(c.getName(), "servlet:/%s", urlEncode(c.getName())));
-		return l;
+		return getServiceMap().keySet().stream()
+			.map(c -> new LinkString(c.getName(), "servlet:/%s", urlEncode(c.getName())))
+			.collect(Collectors.toCollection(LinkedList::new));
 	}
 
 	// @formatter:off
@@ -148,10 +147,9 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	// @formatter:on
 	public Collection<LinkString> listMethods(@Path("javaInterface") @Schema(description = "Java interface name") String javaInterface) throws Exception {
 
-		List<LinkString> l = list();
-		for (var s : getMethods(javaInterface).keySet())
-			l.add(new LinkString(s, "servlet:/%s/%s", urlEncode(javaInterface), urlEncode(s)));
-		return l;
+		return getMethods(javaInterface).keySet().stream()
+			.map(s -> new LinkString(s, "servlet:/%s/%s", urlEncode(javaInterface), urlEncode(s)))
+			.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	// @formatter:off

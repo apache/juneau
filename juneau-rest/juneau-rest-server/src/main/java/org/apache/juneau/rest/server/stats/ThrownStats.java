@@ -33,20 +33,9 @@ import org.apache.juneau.commons.inject.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_causedBy)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ThrownStats {
-
-	// Property name constants
-	private static final String PROP_causedBy = "causedBy";
-	private static final String PROP_count = "count";
-	private static final String PROP_firstMessage = "firstMessage";
-	private static final String PROP_firstOccurrence = "firstOccurrence";
-	private static final String PROP_guid = "guid";
-	private static final String PROP_hash = "hash";
-	private static final String PROP_lastOccurrence = "lastOccurrence";
-	private static final String PROP_stackTrace = "stackTrace";
-	private static final String PROP_thrownClass = "thrownClass";
 
 	/**
 	 * Builder class.
@@ -288,15 +277,15 @@ public class ThrownStats {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_causedBy, causedBy.orElse(null))
-			.a(PROP_count, getCount())
-			.a(PROP_firstMessage, firstMessage)
-			.a(PROP_firstOccurrence, getFirstOccurrence())
-			.a(PROP_guid, guid)
-			.a(PROP_hash, hash)
-			.a(PROP_lastOccurrence, getLastOccurrence())
-			.a(PROP_stackTrace, stackTrace)
-			.a(PROP_thrownClass, thrownClass);
+			.a("causedBy", causedBy.orElse(null))
+			.a("count", getCount())
+			.a("firstMessage", firstMessage)
+			.a("firstOccurrence", getFirstOccurrence())
+			.a("guid", guid)
+			.a("hash", hash)
+			.a("lastOccurrence", getLastOccurrence())
+			.a("stackTrace", stackTrace)
+			.a("thrownClass", thrownClass);
 		// @formatter:on
 	}
 

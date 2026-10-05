@@ -166,10 +166,10 @@ public final class RestResponse implements Closeable {
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
 	public String getBodyAsString() throws IOException {
-		var body = this.body;
-		if (body == null)
+		var stream = this.body;
+		if (stream == null)
 			return null;
-		return new String(body.readAllBytes(), StandardCharsets.UTF_8);
+		return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
 	}
 
 	/**

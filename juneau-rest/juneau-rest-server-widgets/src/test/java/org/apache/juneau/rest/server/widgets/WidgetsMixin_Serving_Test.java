@@ -31,8 +31,8 @@ import org.junit.jupiter.api.*;
  * {@code ViewsMixin_Serving_Test}.
  *
  * <p>
- * This mixin now ships the three widget runtime assets ({@code juneau-calendar.js},
- * {@code juneau-calendar.css}, {@code juneau-chrome.js}), relocated here from the views module beside the bean
+ * This mixin now ships the two widget runtime assets ({@code juneau-calendar.js},
+ * {@code juneau-calendar.css}), relocated here from the views module beside the bean
  * contracts that drive them.  Serving tests follow the file owner, so the 200 matrix and the "these bytes are on this
  * module's classpath" assertions live here now, alongside what this mixin already owned: clean composition into a
  * host, contract-version re-exports that track the bean constants they mirror, and an asset-URL composition
@@ -76,13 +76,11 @@ class WidgetsMixin_Serving_Test extends TestBase {
 	/** Every asset path this mixin declares, paired with the classpath resource it must serve. */
 	private static final java.util.Map<String,String> DECLARED_ASSETS = java.util.Map.of(
 		WidgetsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/widgets/juneau-calendar.js",
-		WidgetsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css",
-		WidgetsMixin.CHROME_JS_PATH, "/org/apache/juneau/widgets/juneau-chrome.js");
+		WidgetsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css");
 
 	/** Every asset path this mixin declares. */
 	private static final String[] DECLARED_PATHS = {
-		WidgetsMixin.CALENDAR_JS_PATH, WidgetsMixin.CALENDAR_CSS_PATH,
-		WidgetsMixin.CHROME_JS_PATH};
+		WidgetsMixin.CALENDAR_JS_PATH, WidgetsMixin.CALENDAR_CSS_PATH};
 
 	private static final MockRestClient cNoMixin = MockRestClient.buildLax(NoMixin.class);
 	private static final MockRestClient cWithMixin = MockRestClient.buildLax(WithMixin.class);
@@ -115,6 +113,11 @@ class WidgetsMixin_Serving_Test extends TestBase {
 	@Test void a03_hostWithoutTheMixin_answers404OnThoseSamePaths() throws Exception {
 		for (var path : DECLARED_PATHS)
 			cNoMixin.get(path).run().assertStatus(404);
+	}
+
+	/** The standalone chrome script was deleted in C1; even with this mixin composed, its old URL is 404. */
+	@Test void a03b_retiredChromeScript_is404() throws Exception {
+		cWithMixin.get("/juneau-chrome.js").run().assertStatus(404);
 	}
 
 	private static byte[] classpathBytes(String resource) throws Exception {

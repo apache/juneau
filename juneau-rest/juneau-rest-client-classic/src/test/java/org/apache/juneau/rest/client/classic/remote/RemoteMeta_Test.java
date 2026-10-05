@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic.remote;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.http.classic.header.*;
@@ -37,7 +38,7 @@ class RemoteMeta_Test {
 
 	@Test void a01_pathFromValue_and_customVersionHeader_and_headerListClass() {
 		var meta = new RemoteMeta(RemoteWithValueAndCustomVersionHeader.class);
-		var versionHeader = meta.getHeaders().stream().filter(h -> h.getName().equals("X-Client-Version")).findFirst().orElse(null);
+		var versionHeader = meta.getHeaders().stream().filter(h -> eq(h.getName(), "X-Client-Version")).findFirst().orElse(null);
 		assertNotNull(versionHeader, "Custom version header not found");
 		assertEquals("1.0", versionHeader.getValue());
 	}

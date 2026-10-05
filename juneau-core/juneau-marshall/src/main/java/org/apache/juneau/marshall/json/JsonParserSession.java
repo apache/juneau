@@ -48,19 +48,20 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",  // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
-	"java:S125",  // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
+	"java:S115", // Constants use camelCase intentionally (e.g., decChars)
+	"java:S125", // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
+	"java:S135", // readIntoBeanMap2(), readIntoCollection2() and readIntoMap2() use several break/continue guards for invalid characters and separators; restructuring would reduce clarity
+	"java:S1168", // readFieldName() returns null for a missing name and doRead() for empty input; the unreachable fall-through returns in readIntoBeanMap2()/readIntoCollection2()/readIntoMap2() also return null
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2583", // State variables persist across loop iterations
+	"java:S3776", // readAnything(), readIntoMap2(), readIntoCollection2() and readIntoBeanMap2() are branch-heavy JSON token state machines; splitting them would obscure the grammar
 	"java:S6541", // Brain method acceptable for JSON parser dispatch and state machines
-	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
-	"resource" // ParserReader is managed by caller
+	"resource", // ParserReader is managed by caller
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class JsonParserSession extends ReaderParserSession implements TokenReadable, ArrayRecordReadable {
-
-	// Property name constants
-	private static final String PROP_validateEnd = "validateEnd";
-	private static final String PROP_JsonParserSession_validateEnd = "JsonParserSession.validateEnd";
 
 	/**
 	 * Builder class.
@@ -104,7 +105,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_validateEnd, PROP_JsonParserSession_validateEnd:
+				case "validateEnd", "JsonParserSession.validateEnd":
 					return validateEnd(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -153,9 +154,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		validateEnd = builder.validateEnd;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
-	})
 	<T> T readAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -312,11 +310,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		throw new ParseException(this, "Unquoted attribute detected.");
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
-	})
 	private <T> BeanMap<T> readIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
@@ -405,12 +398,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Compiler-satisfying return: all paths return l or throw. S1168 flags null returns; here null is unreachable.
-		"java:S135",     // Multiple break statements necessary for state machine error machine
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
-	})
 	private <E> Collection<E> readIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
@@ -475,12 +462,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		return null;  // Unreachable.
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
-		"java:S135",     // Multiple break statements necessary for state machine error handling
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
-	})
 	private <K,V> Map<K,V> readIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -580,9 +561,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	}
 
 	@SuppressWarnings({
-		"unused",    // r accepted for API consistency; subclasses may use it for position tracking
-		"java:S1172", // Same as above
-		"java:S3776"  // Cognitive complexity acceptable for number parsing logic
+		"java:S1172", // r accepted for API consistency; subclasses may use it for position tracking
+		"unused" // r accepted for API consistency; subclasses may use it for position tracking
 	})
 	protected Number readNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
@@ -618,10 +598,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * If the string consists of a concatenation of strings (e.g. 'AAA' + "BBB"), this method
 	 * will automatically concatenate the strings and return the result.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for parser state machine
-		"java:S135" // Multiple break statements necessary for state machine error handling
-	})
 	protected String readString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();
@@ -682,9 +658,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * Doesn't actually parse anything, but when positioned at the beginning of comment,
 	 * it will move the pointer to the last character in the comment.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for comment parsing logic
-	})
 	protected void skipComments(ParserReader r) throws ParseException, IOException {
 		int c = r.read();
 		if (c == '*') {
@@ -736,10 +709,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * Doesn't actually parse anything, but moves the position beyond the construct "{wrapperAttr:" when
 	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
-	@SuppressWarnings({
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S3776"     // Cognitive complexity acceptable for wrapper attribute parsing
-	})
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
 		// S1: Looking for outer '{'

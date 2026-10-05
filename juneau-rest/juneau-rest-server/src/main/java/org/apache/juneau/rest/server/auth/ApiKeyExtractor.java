@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import jakarta.servlet.http.*;
@@ -47,7 +48,7 @@ class ApiKeyExtractor {
 		var cookies = req.getCookies();
 		if (cookies != null) {
 			for (var c : cookies)
-				if (cookieName.equals(c.getName()))
+				if (eq(cookieName, c.getName()))
 					return c.getValue();
 		}
 		var raw = req.getHeader("Cookie");
@@ -58,7 +59,7 @@ class ApiKeyExtractor {
 			if (eq < 0)
 				continue;
 			var k = pair.substring(0, eq).trim();
-			if (cookieName.equals(k))
+			if (eq(cookieName, k))
 				return pair.substring(eq + 1).trim();
 		}
 		return null;

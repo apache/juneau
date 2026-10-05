@@ -71,6 +71,6 @@ public class EphemeralKeyProvider implements KeyProvider {
 
 	@Override /* KeyProvider */
 	public Optional<SecretKey> resolveKey(String keyId) {
-		return keyId.equals(current.keyId()) ? Optional.of(current.key()) : Optional.empty();
+		return eq(keyId, current.keyId()) ? Optional.of(current.key()) : Optional.empty();
 	}
 }

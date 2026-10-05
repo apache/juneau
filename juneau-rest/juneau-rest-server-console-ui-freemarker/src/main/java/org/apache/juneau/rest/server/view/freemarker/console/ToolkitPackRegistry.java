@@ -31,6 +31,15 @@ import org.apache.juneau.rest.server.widgets.*;
  * extra packs via {@code ConsoleFreemarkerMixin.Builder.registerToolkitPack(...)}.
  *
  * <p>
+ * The {@code "views"} pack includes the first-party DataTables glue ({@link ViewsMixin#DATATABLES_JS_PATH}) just
+ * before {@code juneau-views.js} <b>only when the page has a server-mode table card</b> (see
+ * {@link #resolve(List, RestRequest, boolean)}), so a server-mode {@code <@card type="datatables">} finds
+ * {@code window.JuneauDataTables} at init while a page with no such card never requests an asset the host may not
+ * serve.  {@code ViewsMixin} only names that path; a host that renders server-mode tables must also mix in
+ * {@code DataTablesMixin}, which serves it.  The pack never includes jQuery or the DataTables library itself (those
+ * stay caller-provided).
+ *
+ * <p>
  * Each pack carries its own asset-URL resolver so a pack whose assets live in a different mixin (e.g.
  * the {@code "calendar"} pack served by {@code WidgetsMixin}) resolves through that mixin's own
  * cache-busting helper rather than {@link ViewsMixin#viewAssetUrl(RestRequest, String)}.
@@ -39,7 +48,7 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 public final class ToolkitPackRegistry {
 
-	/** The built-in first-party pack: the page-cards / views runtime. */
+	/** The built-in first-party pack: the views runtime. */
 	public static final String PACK_VIEWS = "views";
 
 	/**
@@ -73,17 +82,19 @@ public final class ToolkitPackRegistry {
 
 	/** Constructs the registry with the built-in {@code "views"} pack installed. */
 	public ToolkitPackRegistry() {
-		register(PACK_VIEWS,
+		registerPack(PACK_VIEWS, Set.of(ViewsMixin.DATATABLES_JS_PATH), VIEWS_RESOLVER,
 			List.of(ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.CONFIG_CSS_PATH),
 			List.of(
 				ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.ICONS_JS_PATH,
+				ViewsMixin.SEARCH_JS_PATH,
+				ViewsMixin.PAGESTATE_JS_PATH,
 				ViewsMixin.RIBBON_JS_PATH,
+				ViewsMixin.DATATABLES_JS_PATH,
 				ViewsMixin.VIEWS_JS_PATH,
 				ViewsMixin.CONFIG_JS_PATH,
 				ViewsMixin.REGIONS_JS_PATH,
-				ViewsMixin.HELPERS_JS_PATH,
-				ViewsMixin.PAGE_CARDS_JS_PATH
+				ViewsMixin.HELPERS_JS_PATH
 			));
 		// The "calendar" pack ships from juneau-rest-server-widgets and resolves through that mixin's own
 		// cache-busting helper, not VIEWS_RESOLVER.  A page that wants it lists toolkit="views,calendar" so
@@ -114,17 +125,40 @@ public final class ToolkitPackRegistry {
 	 * @param resolver The per-pack asset-URL resolver.
 	 */
 	public synchronized void register(String name, List<String> cssPaths, List<String> jsPaths, AssetUrlResolver resolver) {
-		packs.put(name, new Pack(List.copyOf(cssPaths), List.copyOf(jsPaths), resolver));
+		registerPack(name, Set.of(), resolver, cssPaths, jsPaths);
+	}
+
+	private synchronized void registerPack(String name, Set<String> serverTableJs, AssetUrlResolver resolver,
+			List<String> cssPaths, List<String> jsPaths) {
+		packs.put(name, new Pack(List.copyOf(cssPaths), List.copyOf(jsPaths), Set.copyOf(serverTableJs), resolver));
+	}
+
+	/**
+	 * Resolves the given ordered pack names to absolute, cache-busted CSS + JS URLs, for a page with no server-mode
+	 * table card (so the DataTables glue is omitted).
+	 *
+	 * @param names The requested pack names (as authored). Empty = no pack.
+	 * @param req The in-flight request.
+	 * @return The resolved URLs.
+	 * @see #resolve(List, RestRequest, boolean)
+	 */
+	public Resolved resolve(List<String> names, RestRequest req) {
+		return resolve(names, req, false);
 	}
 
 	/**
 	 * Resolves the given ordered pack names to absolute, cache-busted CSS + JS URLs.
 	 *
+	 * <p>
+	 * Assets a pack marks as server-table-only (the {@code "views"} pack's DataTables glue,
+	 * {@link ViewsMixin#DATATABLES_JS_PATH}) are included only when <c>serverModeTable</c> is <jk>true</jk>.
+	 *
 	 * @param names The requested pack names (as authored). Empty = no pack.
 	 * @param req The in-flight request.
+	 * @param serverModeTable Whether the page has a server-mode table card (see {@link PageCapture#hasServerModeTable()}).
 	 * @return The resolved URLs.
 	 */
-	public Resolved resolve(List<String> names, RestRequest req) {
+	public Resolved resolve(List<String> names, RestRequest req, boolean serverModeTable) {
 		if (names == null || names.isEmpty())
 			return new Resolved(List.of(), List.of());
 		if (req == null)
@@ -138,10 +172,11 @@ public final class ToolkitPackRegistry {
 			for (var path : pack.cssPaths)
 				css.add(pack.resolver.resolve(req, path));
 			for (var path : pack.jsPaths)
-				js.add(pack.resolver.resolve(req, path));
+				if (serverModeTable || ! pack.serverTableJs.contains(path))
+					js.add(pack.resolver.resolve(req, path));
 		}
 		return new Resolved(List.copyOf(css), List.copyOf(js));
 	}
 
-	private record Pack(List<String> cssPaths, List<String> jsPaths, AssetUrlResolver resolver) {}
+	private record Pack(List<String> cssPaths, List<String> jsPaths, Set<String> serverTableJs, AssetUrlResolver resolver) {}
 }

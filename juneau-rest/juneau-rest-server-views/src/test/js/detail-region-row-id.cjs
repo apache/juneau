@@ -56,22 +56,12 @@ if (!rendersJsPath || !viewsJsPath || !regionsJsPath) {
 const out = {};
 
 /**
- * Adds the `classList` surface the shared shim does not model, to the two nodes `expandDetailRow` decorates on its
- * way past: the row `<tr>` (`juneau-view-detail-open`) and the host `<td>` (the cell-wrap opt-out).  Kept local to
- * this harness rather than pushed into views-dom-shim.cjs so no other harness's behavior can shift underneath it.
+ * Passthrough for the two nodes `expandDetailRow` decorates on its way past: the row `<tr>`
+ * (`juneau-view-detail-open`) and the host `<td>` (the cell-wrap opt-out).  The shared shim (views-dom-shim.cjs) now
+ * models a full `classList` surface (add/remove/toggle/contains backed by `className`), so this no longer installs a
+ * local one — assigning over the shim's getter-only `classList` would throw under modern Node.
  */
 function withClassList(node) {
-	node.classList = {
-		add: function (c) {
-			if ((' ' + (node.className || '') + ' ').indexOf(' ' + c + ' ') < 0)
-				node.className = ((node.className || '') + ' ' + c).trim();
-		},
-		remove: function (c) {
-			node.className = String(node.className || '').split(/\s+/)
-				.filter(function (x) { return x && x !== c; }).join(' ');
-		},
-		contains: function (c) { return (' ' + (node.className || '') + ' ').indexOf(' ' + c + ' ') >= 0; }
-	};
 	return node;
 }
 
@@ -155,11 +145,11 @@ function buildAndExpand(env, NS, I, opts) {
 	I.initDetailsExpander(table, ctx, { id: 'v1' });
 
 	// Click the chevron cell — the production expand gesture after chevron-only expand.
-	table.dispatch('click', { target: td, preventDefault: function () {}, stopPropagation: function () {} });
+	table.dispatch('click', { target: td, preventDefault: function () { /* no-op */ }, stopPropagation: function () { /* no-op */ } });
 
 	const panel = state.panel;
 	if (panel && opts.stripStamp) {
-		panel.removeAttribute('data-juneau-row-id');
+		delete panel.dataset.juneauRowId;
 		// Re-enrol a SECOND, freshly-added region so enrolIn's per-node idempotence mark does not make this a no-op.
 		const region2 = env.el('div');
 		region2.dataset.juneauRegion = 'source2';

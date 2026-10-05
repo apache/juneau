@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Serializes POJOs to HTTP responses as XML.
@@ -42,12 +42,10 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115"  // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class XmlDocSerializer extends XmlSerializer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_builder = "builder";
 
 	/** Default serializer without namespaces. */
 	public static class Ns extends XmlDocSerializer {
@@ -59,7 +57,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(XmlSerializer.Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).enableNamespaces());
+			super(reqnn("builder", builder).enableNamespaces());
 		}
 	}
 
@@ -82,7 +80,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public XmlDocSerializer(XmlSerializer.Builder<?> builder) {
-		super(assertArgNotNull(ARG_builder, builder));
+		super(reqnn("builder", builder));
 	}
 
 	@Override /* Overridden from Context */

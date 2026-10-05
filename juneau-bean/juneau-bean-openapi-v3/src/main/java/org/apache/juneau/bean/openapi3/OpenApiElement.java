@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -33,12 +32,9 @@ import org.apache.juneau.marshall.marshaller.*;
  */
 @Marshalled
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
 
 	private boolean strict;
 	private Map<String,Object> extra;
@@ -88,7 +84,7 @@ public abstract class OpenApiElement {
 	 */
 	@BeanProp("*")
 	public Object get(String property) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return o(extra).map(x -> x.get(property)).orElse(null);
 	}
 
@@ -104,7 +100,7 @@ public abstract class OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return toType(get(property), type);
 	}
 
@@ -132,7 +128,7 @@ public abstract class OpenApiElement {
 	 */
 	@BeanProp("*")
 	public OpenApiElement set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		if (strict)
 			throw rex("Cannot set property '%s' in strict mode.", property);
 		if (extra == null)

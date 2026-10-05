@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -342,10 +343,10 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 
 		assertTrue(swagger.getConsumes().stream().anyMatch(x -> x.toString().contains("text/plain")));
 		assertTrue(swagger.getProduces().stream().anyMatch(x -> x.toString().contains("text/plain")));
-		assertTrue(swagger.getTags().stream().anyMatch(t -> "pet".equals(t.getName())));
+		assertTrue(swagger.getTags().stream().anyMatch(t -> eq(t.getName(), "pet")));
 		// "widget" is only referenced at the op level (@OpSwagger(tags="widget")) and isn't in the
 		// class-level tag list -- this exercises the tagMap-backfill branch for op-only tags.
-		assertTrue(swagger.getTags().stream().anyMatch(t -> "widget".equals(t.getName())));
+		assertTrue(swagger.getTags().stream().anyMatch(t -> eq(t.getName(), "widget")));
 	}
 
 	@Test void a02_richFixture_bodySchemaMergesAllAnnotationAttributes() throws Exception {
@@ -359,7 +360,7 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 		assertNotNull(postOp);
 		assertEquals(Boolean.TRUE, postOp.getDeprecated());
 
-		var bodyParam = postOp.getParameters().stream().filter(p -> "body".equals(p.getIn())).findFirst().orElse(null);
+		var bodyParam = postOp.getParameters().stream().filter(p -> eq(p.getIn(), "body")).findFirst().orElse(null);
 		assertNotNull(bodyParam);
 		var schema = bodyParam.getSchema();
 		assertNotNull(schema);
@@ -409,15 +410,15 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 		var getOpWithPathParam = swagger.getPaths().values().stream()
 			.map(m -> m.get("get"))
 			.filter(Objects::nonNull)
-			.filter(o -> o.getParameters() != null && o.getParameters().stream().anyMatch(p -> "id".equals(p.getName())))
+			.filter(o -> o.getParameters() != null && o.getParameters().stream().anyMatch(p -> eq(p.getName(), "id")))
 			.findFirst().orElse(null);
 		assertNotNull(getOpWithPathParam);
 
-		var idParam = getOpWithPathParam.getParameters().stream().filter(p -> "id".equals(p.getName())).findFirst().orElse(null);
+		var idParam = getOpWithPathParam.getParameters().stream().filter(p -> eq(p.getName(), "id")).findFirst().orElse(null);
 		assertNotNull(idParam);
 		assertEquals(Boolean.TRUE, idParam.getRequired());
 
-		var fooParam = getOpWithPathParam.getParameters().stream().filter(p -> "X-Foo".equals(p.getName())).findFirst().orElse(null);
+		var fooParam = getOpWithPathParam.getParameters().stream().filter(p -> eq(p.getName(), "X-Foo")).findFirst().orElse(null);
 		assertNotNull(fooParam);
 		assertNotNull(fooParam.getExamples());
 	}
@@ -438,7 +439,7 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 		// Query (non-body) parameters carry these fields directly on the Parameter object rather than in a
 		// nested "schema" sub-object (that nested form is body/response-only) -- see BasicSwaggerProviderSession
 		// lines 491-497 vs. 481-489.
-		var qParam = shorthandOp.getParameters().stream().filter(p -> "q".equals(p.getName())).findFirst().orElse(null);
+		var qParam = shorthandOp.getParameters().stream().filter(p -> eq(p.getName(), "q")).findFirst().orElse(null);
 		assertNotNull(qParam);
 		assertEquals(Boolean.TRUE, qParam.getRequired());
 		assertEquals(Boolean.TRUE, qParam.getUniqueItems());
@@ -568,12 +569,12 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 
 		// "msgtag" exists both as a class-level @Tag and as a resource-bundle tags entry -- the bundle entry's
 		// description should have been merged (putAll) into the already-registered tagMap entry.
-		var msgtag = swagger.getTags().stream().filter(t -> "msgtag".equals(t.getName())).findFirst().orElse(null);
+		var msgtag = swagger.getTags().stream().filter(t -> eq(t.getName(), "msgtag")).findFirst().orElse(null);
 		assertNotNull(msgtag);
 		assertEquals("From bundle override", msgtag.getDescription());
 
 		// "msgtag2" only exists in the resource bundle -- a brand-new tagMap entry.
-		assertTrue(swagger.getTags().stream().anyMatch(t -> "msgtag2".equals(t.getName())));
+		assertTrue(swagger.getTags().stream().anyMatch(t -> eq(t.getName(), "msgtag2")));
 	}
 
 	@Test void a14_msgTagsBadName_throwsSwaggerException() throws Exception {
@@ -592,7 +593,7 @@ class BasicSwaggerProviderSession_CoverageSweep_Test extends org.apache.juneau.T
 		var op = swagger.getPaths().values().stream()
 			.map(m -> m.get("get")).filter(Objects::nonNull).findFirst().orElse(null);
 		assertNotNull(op);
-		var qParam = op.getParameters().stream().filter(p -> "q".equals(p.getName())).findFirst().orElse(null);
+		var qParam = op.getParameters().stream().filter(p -> eq(p.getName(), "q")).findFirst().orElse(null);
 		assertNotNull(qParam);
 		assertEquals("object", qParam.getType());
 		// customX isn't a standard swagger parameter attribute pushupSchemaFields() hoists directly onto the

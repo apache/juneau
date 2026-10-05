@@ -21,32 +21,94 @@
  * Maps icon names to inline-SVG markup that references one in-document sprite
  * (<symbol id="juneau-sym-{stem}"> from juneau-symbols.svg).  Mirrors juneau-renders.js's
  * registerRenderer/resolveRenderer pattern (registerIcon/resolveIcon).  Apps can register
- * additional or overriding icons at runtime via window.JuneauViews.icons.registerIcon(name, svgMarkup).
+ * additional or overriding icons the APP DRAWS ITSELF at runtime via
+ * window.JuneauViews.icons.registerIcon(name, svgMarkup) - that does not change a chrome stem.
  *
- * The sprite is fetched once at boot from the same directory as this script and injected
- * into the document so every <use href="#juneau-sym-{stem}"/> resolves with no per-icon
- * network request.  Default pack is Juneau-original (`juneau-symbols.svg`).  Material
- * Symbols Outlined is opt-in via `JuneauViews.icons.pack("material")` or
- * `data-juneau-icon-pack="material"` on this script tag — it fetches `juneau-symbols-material.svg`
- * (NOTICE-attributed, recovered from this repo's git history).  Not IRS / SLDS art.
- * Bundled names cover the ViewTable ribbon, paging pill, column chooser,
- * and search-clear glyphs this runtime actually paints.
+ * PAGE-LEVEL SPRITE CONFIGURATION
+ * ------------------------------
+ * Every chrome glyph the framework paints resolves through up to three sprite layers, in order:
+ *
+ *     per-icon override  ->  replacement  ->  shipped        (first hit wins)
+ *
+ * The SHIPPED layer is Juneau's own set (`juneau-symbols.svg`, injected once so hosts can
+ * <use href="#juneau-sym-{stem}"/>).  An app may, ONCE per page BEFORE the chrome draws, point at a
+ * REPLACEMENT sprite (its own set - may be partial) and/or an OVERRIDE sprite (a few names on top).
+ * All three use the SAME `juneau-sym-{stem}` symbol ids.
+ *
+ * Documented registration is attributes on this script tag, read before first paint:
+ *     <script src=".../juneau-icons.js"
+ *             data-juneau-icon-replacement="/my-set.svg"
+ *             data-juneau-icon-override="/my-overrides.svg">
+ * (An inline copy of this file must never contain a literal closing script tag, even in a comment: the HTML
+ * parser would end the inline script there.)
+ * A JavaScript call before first paint is equivalent:
+ *     JuneauViews.icons.sprites({ replacementUrl: "...", overrideUrl: "..." })
+ *
+ * `sprites(...)` returns a Promise that reports, per layer, whether it loaded / failed / was absent,
+ * and, per stem, which layer won.  The page still paints if the app does not await it.  A layer whose
+ * URL fails to fetch or parse (including a blocked cross-origin fetch) is skipped - the remaining layers
+ * and the shipped set fill any name it would have carried; a layer that DID load still wins.  A call that
+ * arrives after first paint is ignored (dev warns).  A name in none of the three layers draws nothing.
+ *
+ * Dev-mode warnings (failed load, unknown id, late registration) are emitted only when dev mode is on -
+ * set `JuneauViews.dev = true` or add `data-juneau-dev` to this script tag.  Production is silent and
+ * falls back to the shipped glyph with no user-facing error.
+ *
+ * The legacy `JuneauViews.icons.pack("material")` / `data-juneau-icon-pack="material"` selector loads the
+ * Material Symbols Outlined sprite as the REPLACEMENT layer on top of the real shipped sprite (as if the app had
+ * passed `replacementUrl` pointing at it).  Stems the Material pack lacks fall back to the shipped glyph.  An
+ * explicit `replacementUrl` wins over the pack.  New apps point `replacementUrl` at the set they want instead.
+ * `pack` / `registerIcon` do not rewrite chrome stems - chrome overrides go on the override sprite.
  */
 (function () {
 	"use strict";
 
-	var NS = window.JuneauViews = window.JuneauViews || {};
+	const NS = window.JuneauViews = window.JuneauViews || {};
 
-	var registry = NS._icons = NS._icons || {};
+	const registry = NS._icons = NS._icons || {};
 
-	var SPRITE_ID = "juneau-symbol-sprite";
-	var PACK_ORIGINAL = "original";
-	var PACK_MATERIAL = "material";
-	var PACK_FILES = {};
+	// Author-facing icon name -> sprite stem id (the map U2 publishes; wrong ids fall through to shipped).
+	const NAME_TO_STEM = {};
+
+	const SPRITE_ID = "juneau-symbol-sprite";
+	const SVG_NS = "http://www.w3.org/2000/svg";
+	const STEM_PREFIX = "juneau-sym-";
+	const PACK_ORIGINAL = "original";
+	const PACK_MATERIAL = "material";
+	const PACK_FILES = {};
 	PACK_FILES[PACK_ORIGINAL] = "juneau-symbols.svg";
 	PACK_FILES[PACK_MATERIAL] = "juneau-symbols-material.svg";
-	var _pack = PACK_ORIGINAL;
-	var _spritePromise = null;
+	let _pack = PACK_ORIGINAL;
+
+	// Page-level layer configuration.  Recorded from the script tag at eval time and/or a sprites(...) call
+	// before first paint; frozen once loadSymbolSprite() begins (that is "first paint" for this runtime).
+	let _replacementUrl = null;
+	let _overrideUrl = null;
+	let _loadStarted = false;
+	let _gen = 0;   // bumped by pack(); a load from an older generation is dropped when it settles
+	let _spritePromise = null;
+	let _report = null;
+	let _shippedStems = null;
+	let _mergedStems = null;
+
+	/** True only when dev mode is explicitly on - NS.dev===true or a data-juneau-dev attr on the icons script. */
+	function isDevMode() {
+		if (NS.dev === true) return true;
+		if (NS.dev === false) return false;
+		if (typeof document === "undefined") return false;
+		const scripts = document.getElementsByTagName("script");
+		for (const script of scripts) {
+			if (script.dataset.juneauDev != null && (script.src || "").includes("juneau-icons.js"))
+				return true;
+		}
+		return false;
+	}
+
+	/** Dev-only console warning; a no-op in production so a failed layer never surfaces a user-facing error. */
+	function warn(msg, err) {
+		if (isDevMode() && window.console?.warn)
+			console.warn(err != null ? msg + " " + err : msg);
+	}
 
 	function normalizePack(name) {
 		if (name == null || name === "")
@@ -56,179 +118,366 @@
 		throw new TypeError("JuneauViews.icons.pack: unknown pack '" + name + "' (original|material)");
 	}
 
-	function detectPackFromScript() {
+	function iconScriptAttr(attr) {
 		if (typeof document === "undefined")
-			return PACK_ORIGINAL;
-		var scripts = document.getElementsByTagName("script");
-		var i, src, attr;
-		for (i = 0; i < scripts.length; i++) {
-			src = scripts[i].src || "";
-			attr = scripts[i].getAttribute("data-juneau-icon-pack");
-			if (attr && src.indexOf("juneau-icons.js") !== -1)
-				return normalizePack(attr);
+			return null;
+		const scripts = document.getElementsByTagName("script");
+		for (const script of scripts) {
+			const v = script.getAttribute(attr);
+			if (v != null && (script.src || "").includes("juneau-icons.js"))
+				return v;
 		}
-		for (i = 0; i < scripts.length; i++) {
-			attr = scripts[i].getAttribute("data-juneau-icon-pack");
-			if (attr)
-				return normalizePack(attr);
+		for (const script of scripts) {
+			const v = script.getAttribute(attr);
+			if (v != null)
+				return v;
 		}
-		return PACK_ORIGINAL;
+		return null;
+	}
+
+	function detectPackFromScript() {
+		const attr = iconScriptAttr("data-juneau-icon-pack");
+		return attr != null ? normalizePack(attr) : PACK_ORIGINAL;
 	}
 
 	_pack = detectPackFromScript();
+	_replacementUrl = iconScriptAttr("data-juneau-icon-replacement") || null;
+	_overrideUrl = iconScriptAttr("data-juneau-icon-override") || null;
 
 	/**
-	 * Selects the symbol sprite pack, or returns the current pack when called with no args.
-	 * Default is `"original"` (Juneau-original art). `"material"` is the NOTICE-attributed
-	 * Material Symbols Outlined set. Changing pack after boot reloads the sprite.
+	 * Selects the legacy symbol pack, or returns the current pack when called with no args.  Default is
+	 * `"original"` (Juneau's own shipped set only).  `"material"` layers the Material Symbols Outlined set as the
+	 * REPLACEMENT layer over the real shipped sprite, so stems Material lacks still draw the shipped glyph; an
+	 * explicit `replacementUrl` wins over it.  Changing pack after boot reloads the sprite.  New apps should instead
+	 * point `sprites({replacementUrl})` at the set they want; this selector does not rewrite chrome stems.
+	 *
+	 * @example
+	 * // Legacy selector: layer the Material Symbols Outlined sprite over the shipped sprite.
+	 * JuneauViews.icons.pack("material");
+	 * JuneauViews.icons.pack();   // "material"
 	 */
 	function pack(name) {
 		if (arguments.length === 0)
 			return _pack;
-		var next = normalizePack(name);
+		const next = normalizePack(name);
 		if (next === _pack)
-			return _spritePromise || Promise.resolve();
+			return _spritePromise || Promise.resolve(_report || emptyReport());
 		_pack = next;
+		_gen++;   // any load still in flight belongs to the old pack and is dropped when it settles
 		_spritePromise = null;
+		// _loadStarted stays true: this is a reload, not a reopening of the pre-paint registration window.
 		if (typeof document !== "undefined") {
-			var existing = document.getElementById(SPRITE_ID);
-			if (existing && existing.parentNode)
-				existing.parentNode.removeChild(existing);
+			document.getElementById(SPRITE_ID)?.remove();
 			return loadSymbolSprite();
 		}
-		return Promise.resolve();
+		return Promise.resolve(emptyReport());
 	}
 
-	/** Registers (or overrides) an icon's inline-SVG markup under `name`. */
+	/**
+	 * Configures the page's optional replacement and/or override sprite URLs and (re)loads the sprite.  Must be
+	 * called before first paint; a call after the sprite has begun loading is ignored and warns in dev.  Returns
+	 * a Promise reporting, per layer, whether it loaded/failed/was absent, and per stem which layer won.
+	 *
+	 * @example
+	 * // Before the chrome draws (or as data-juneau-icon-* attributes on the script tag):
+	 * JuneauViews.icons.sprites({ replacementUrl: "/my/set.svg", overrideUrl: "/my/overrides.svg" })
+	 *   .then(function (report) { console.log(report.layers, report.stems.search); });
+	 */
+	function sprites(opts) {
+		opts = opts || {};
+		if (_loadStarted) {
+			warn("JuneauViews.icons.sprites(...) called after the sprite load began (first sprites() call or page boot); ignored.");
+			return _spritePromise || Promise.resolve(_report || emptyReport());
+		}
+		if (Object.hasOwn(opts, "replacementUrl"))
+			_replacementUrl = opts.replacementUrl || null;
+		if (Object.hasOwn(opts, "overrideUrl"))
+			_overrideUrl = opts.overrideUrl || null;
+		return loadSymbolSprite();
+	}
+
+	/**
+	 * Registers (or overrides) an icon the APP DRAWS ITSELF under `name`; does not change a chrome stem (chrome
+	 * overrides go on the override sprite).
+	 *
+	 * @example
+	 * JuneauViews.icons.registerIcon("myApp.logo", "<svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='9'/></svg>");
+	 * JuneauViews.icons.resolveIcon("myApp.logo");   // the markup above
+	 */
 	function registerIcon(name, svgMarkup) {
 		registry[name] = svgMarkup;
 		return registry[name];
 	}
 
-	/** Looks up an icon's markup by name; returns null when unknown (callers fall back to rendering raw text). */
-	function resolveIcon(name) {
-		return Object.prototype.hasOwnProperty.call(registry, name) ? registry[name] : null;
+	/** Registers a chrome icon `name` as a <use> host of sprite stem `stem`, and records the name->stem map. */
+	function reg(name, stem, extraClass) {
+		registry[name] = host(stem, extraClass);
+		NAME_TO_STEM[name] = stem;
+		return registry[name];
 	}
 
-	/** Resolves the active pack's sprite next to this script (same cache-buster query is ignored by the serving mixin). */
-	function spriteUrl() {
-		var file = PACK_FILES[_pack] || PACK_FILES[PACK_ORIGINAL];
-		var scripts = document.getElementsByTagName("script");
-		for (var i = 0; i < scripts.length; i++) {
-			var src = scripts[i].src || "";
-			var m = src.match(/^(.*)juneau-icons\.js(\?.*)?$/);
+	/**
+	 * Looks up an icon's markup by name.  `search` and the prefixed sprite id `juneau-sym-search` resolve to the
+	 * same glyph (U3).  A stem present in a loaded layer but not explicitly registered still resolves to a host.
+	 * Returns null for an unknown name (dev warns); callers then draw nothing rather than the raw name.
+	 *
+	 * @example
+	 * JuneauViews.icons.resolveIcon("search");            // "<svg ...><use href=\"#juneau-sym-search\"/></svg>"
+	 * JuneauViews.icons.resolveIcon("juneau-sym-search"); // the same markup (prefixed id equivalence)
+	 * JuneauViews.icons.resolveIcon("no-such-icon");      // null: the caller draws nothing
+	 */
+	function resolveIcon(name) {
+		if (name == null)
+			return null;
+		const stem = name.startsWith(STEM_PREFIX) ? name.slice(STEM_PREFIX.length) : name;
+		// Every stem, sort included, is a <use> host: it resolves against whatever sprite is in the document when it
+		// paints, so an override/replacement sprite wins even for a glyph drawn before the sprite loaded.
+		if (Object.hasOwn(registry, name))
+			return registry[name];
+		if (stem !== name && Object.hasOwn(registry, stem))
+			return registry[stem];
+		if (_mergedStems?.includes(stem))
+			return host(stem);
+		warn("JuneauViews.icons.resolveIcon: unknown icon '" + name + "'.");
+		return null;
+	}
+
+	/**
+	 * The author-name -> sprite-stem map (U2).  Wrong ids fall through the layers to the shipped glyph.
+	 *
+	 * @example
+	 * JuneauViews.icons.nameToStem().content_copy === "copy";   // true: the author name maps to the `copy` stem
+	 */
+	function nameToStem() {
+		const out = {};
+		for (const k in NAME_TO_STEM)
+			if (Object.hasOwn(NAME_TO_STEM, k))
+				out[k] = NAME_TO_STEM[k];
+		return out;
+	}
+
+	/**
+	 * The shipped stem names (U9).  After load this is the shipped catalog (a replacement that adds a stem does
+	 * not grow it); before load, the registered stems.
+	 *
+	 * @example
+	 * JuneauViews.icons.stems();   // ["cancel", "check", "chevrondown", ... "more", ... "search", ...]
+	 */
+	function stems() {
+		if (_shippedStems)
+			return _shippedStems.slice();
+		const seen = {}, out = [];
+		for (const k in NAME_TO_STEM) {
+			if (Object.hasOwn(NAME_TO_STEM, k) && !seen[NAME_TO_STEM[k]]) {
+				seen[NAME_TO_STEM[k]] = true;
+				out.push(NAME_TO_STEM[k]);
+			}
+		}
+		return out;
+	}
+
+	function emptyReport() {
+		return { layers: { shipped: "absent", replacement: "absent", override: "absent" }, stems: {}, names: [] };
+	}
+
+	/** Resolves a sprite file next to this script (the cache-buster query is preserved). */
+	function siblingUrl(file) {
+		const scripts = document.getElementsByTagName("script");
+		for (const script of scripts) {
+			const src = script.src || "";
+			const m = /^(.*)juneau-icons\.js(\?.*)?$/.exec(src);
 			if (m) return m[1] + file + (m[2] || "");
 		}
 		return file;
 	}
 
-	/** Fetches the sprite once and injects it so <use href="#juneau-sym-{stem}"/> resolves. Always resolves. */
-	function loadSymbolSprite() {
-		if (_spritePromise) return _spritePromise;
-		if (typeof document === "undefined" || typeof fetch !== "function") {
-			_spritePromise = Promise.resolve();
-			return _spritePromise;
+	/** Parses sprite SVG text; returns the root <svg> element, or null when the text is not parseable SVG. */
+	function parseSvg(xml) {
+		const doc = new DOMParser().parseFromString(xml, "image/svg+xml");
+		const root = doc.documentElement;
+		if (!root || root.nodeName.toLowerCase() !== "svg" || root.querySelector("parsererror"))
+			return null;
+		return root;
+	}
+
+	/** Extracts a { stem: <symbol> } map from a parsed sprite root, keyed by the `juneau-sym-` id suffix. */
+	function symbolsOf(root) {
+		const out = {};
+		const syms = root.getElementsByTagName("symbol");
+		for (const sym of syms) {
+			const id = sym.getAttribute("id") || "";
+			if (id.startsWith(STEM_PREFIX))
+				out[id.slice(STEM_PREFIX.length)] = sym;
 		}
-		_spritePromise = fetch(spriteUrl(), { credentials: "same-origin" })
+		return out;
+	}
+
+	/** Fetches one layer's sprite; always resolves to { name, status, symbols } - a failed fetch is `failed`/{}. */
+	function fetchLayer(url, layerName) {
+		if (!url)
+			return Promise.resolve({ name: layerName, status: "absent", symbols: {} });
+		return fetch(url, { credentials: "same-origin" })
 			.then(function (r) {
-				if (!r.ok) throw new Error("sprite HTTP " + r.status);
+				if (!r.ok) throw new Error("HTTP " + r.status);
 				return r.text();
 			})
 			.then(function (xml) {
-				var doc = new DOMParser().parseFromString(xml, "image/svg+xml");
-				var root = doc.documentElement;
-				if (!root || root.nodeName.toLowerCase() !== "svg" || root.querySelector("parsererror"))
-					throw new Error("sprite parse failed");
-				if (!document.getElementById(SPRITE_ID)) {
-					root.setAttribute("id", SPRITE_ID);
-					root.setAttribute("display", "none");
-					root.setAttribute("aria-hidden", "true");
-					document.documentElement.appendChild(document.importNode(root, true));
-				}
+				const root = parseSvg(xml);
+				if (!root) throw new Error("parse failed");
+				return { name: layerName, status: "loaded", symbols: symbolsOf(root) };
 			})
 			.catch(function (e) {
-				if (window.console && console.error) console.error("JuneauViews.icons: sprite load failed", e);
+				warn("JuneauViews.icons: " + layerName + " sprite failed (" + url + ")", e);
+				return { name: layerName, status: "failed", symbols: {} };
 			});
+	}
+
+	/** Rebuilds and injects the single in-document sprite from the merged { stem: <symbol> } winners. */
+	function injectMerged(merged) {
+		document.getElementById(SPRITE_ID)?.remove();
+		const svg = document.createElementNS ? document.createElementNS(SVG_NS, "svg") : document.createElement("svg");
+		svg.setAttribute("id", SPRITE_ID);
+		svg.setAttribute("display", "none");
+		svg.setAttribute("aria-hidden", "true");
+		for (const stem in merged)
+			if (Object.hasOwn(merged, stem))
+				svg.appendChild(document.importNode(merged[stem], true));
+		document.documentElement.appendChild(svg);
+	}
+
+	/**
+	 * Fetches the shipped sprite (plus the configured replacement / override layers) once, merges them per stem
+	 * (override -> replacement -> shipped, first hit wins), injects the merged sprite, and resolves to the load
+	 * report.  Always resolves - a failed layer is skipped, never a rejection.  Called automatically at boot;
+	 * calling it again returns the same Promise.
+	 *
+	 * @example
+	 * JuneauViews.icons.loadSymbolSprite().then(function (report) {
+	 *   console.log(report.layers.shipped);   // "loaded"
+	 * });
+	 */
+	function loadSymbolSprite() {
+		if (_spritePromise) return _spritePromise;
+		_loadStarted = true;
+		if (typeof document === "undefined" || typeof fetch !== "function") {
+			_report = emptyReport();
+			_spritePromise = Promise.resolve(_report);
+			return _spritePromise;
+		}
+		const gen = _gen;
+		_spritePromise = Promise.all([
+			fetchLayer(siblingUrl(PACK_FILES[PACK_ORIGINAL]), "shipped"),
+			// pack("material") supplies the replacement layer unless the app named its own replacement URL.
+			fetchLayer(_replacementUrl || (_pack === PACK_MATERIAL ? siblingUrl(PACK_FILES[PACK_MATERIAL]) : null), "replacement"),
+			fetchLayer(_overrideUrl, "override")
+		]).then(function (layers) {
+			// A pack() switch while this load was in flight makes it stale: drop it without touching any state.
+			if (gen !== _gen)
+				return _spritePromise || emptyReport();
+			const winner = {}, merged = {};
+			// Applied shipped-first: a later layer overwrites, so override beats replacement beats shipped.
+			layers.forEach(function (layer) {
+				for (const stem in layer.symbols) {
+					if (Object.hasOwn(layer.symbols, stem)) {
+						merged[stem] = layer.symbols[stem];
+						winner[stem] = layer.name;
+					}
+				}
+			});
+			injectMerged(merged);
+			_shippedStems = Object.keys(layers[0].symbols);
+			_mergedStems = Object.keys(merged);
+			_report = {
+				layers: { shipped: layers[0].status, replacement: layers[1].status, override: layers[2].status },
+				stems: winner,
+				names: _mergedStems.slice()
+			};
+			return _report;
+		});
 		return _spritePromise;
 	}
 
 	/**
-	 * Host SVG referencing a sprite symbol.  `extraClass` is optional (used to CSS-rotate chevronright for
-	 * left/first paging without shipping a second path).
+	 * Host SVG referencing a sprite symbol.  `extraClass` is optional (the sort glyph's class, which the header
+	 * order-state CSS uses to set the custom properties the sprite's two triangles paint with).
 	 */
 	function host(stem, extraClass) {
-		var cls = extraClass ? " class=\"" + extraClass + "\"" : "";
+		const cls = extraClass ? " class=\"" + extraClass + "\"" : "";
 		return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"" + cls
 			+ " aria-hidden=\"true\"><use href=\"#juneau-sym-" + stem + "\"/></svg>";
-	}
-
-	/** Two overlapped chevronright hosts (first/last paging), matching the doubled-chevron ribbon treatment. */
-	function doubled(flip) {
-		var cls = flip ? "juneau-sym-flip-x" : "";
-		return "<span class=\"juneau-view-paging-double\">" + host("chevronright", cls) + host("chevronright", cls) + "</span>";
 	}
 
 	NS.icons = {
 		registerIcon: registerIcon,
 		resolveIcon: resolveIcon,
 		loadSymbolSprite: loadSymbolSprite,
-		pack: pack
+		pack: pack,
+		sprites: sprites,
+		stems: stems,
+		nameToStem: nameToStem
 	};
 
 	// Bundled names (ViewTable ribbon + paging pill + column chooser).  Each host is a <use> of
-	// juneau-symbols.svg; first/last paging compose two chevronright uses (no extra paths).
-	registerIcon("content_copy", host("copy"));
-	registerIcon("copy", host("copy"));
-	registerIcon("csv", host("csv"));
-	registerIcon("table", host("spreadsheet"));
-	registerIcon("spreadsheet", host("spreadsheet"));
-	registerIcon("picture_as_pdf", host("pdf"));
-	registerIcon("pdf", host("pdf"));
-	registerIcon("print", host("print"));
-	registerIcon("refresh", host("refresh"));
-	registerIcon("manage_search", host("toggle_column_search"));
-	registerIcon("toggle_column_search", host("toggle_column_search"));
-	registerIcon("unfold_less", host("collapse_all"));
-	registerIcon("collapse_all", host("collapse_all"));
-	registerIcon("tune", host("settings"));
-	registerIcon("settings", host("settings"));
-	registerIcon("columns", host("columns"));
-	registerIcon("first_page", doubled(true));
-	registerIcon("chevron_left", host("chevronright", "juneau-sym-flip-x"));
-	registerIcon("chevron_right", host("chevronright"));
-	registerIcon("chevronright", host("chevronright"));
-	registerIcon("last_page", doubled(false));
-	registerIcon("filter_alt", host("filter"));
-	registerIcon("filter", host("filter"));
-	registerIcon("expand_more", host("chevrondown"));
-	registerIcon("chevrondown", host("chevrondown"));
-	// Original Juneau stacked-triangle sort glyph (12×24). Not a DataTables unicode ▲/▼ pair and
-	// not an IRS/SLDS SVG — two small filled triangles matching that treatment's size.
-	registerIcon("sort", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 12 24\" class=\"juneau-view-col-sort-glyph\" aria-hidden=\"true\">"
-		+ "<path class=\"juneau-sort-asc\" fill=\"currentColor\" d=\"M6 5 L10.5 11 H1.5 Z\"/>"
-		+ "<path class=\"juneau-sort-desc\" fill=\"currentColor\" d=\"M6 19 L1.5 13 H10.5 Z\"/>"
-		+ "</svg>");
-	registerIcon("search", host("search"));
-	registerIcon("close", host("close"));
-	registerIcon("download", host("download"));
-	registerIcon("edit", host("edit"));
-	registerIcon("cancel", host("cancel"));
-	registerIcon("check", host("check"));
-	registerIcon("new", host("new"));
-	registerIcon("toggle-deleted", host("toggle-deleted"));
-
-	// Row-action icons (WORK-J0511): referenced by row-action buttons (e.g. Foundry) but not previously
-	// registered, so those actions rendered a blank glyph before these five were added to the sprite.
-	registerIcon("pause", host("pause"));
-	registerIcon("stop", host("stop"));
-	registerIcon("forceStop", host("forceStop"));
-	registerIcon("push", host("push"));
-	registerIcon("openPr", host("openPr"));
+	// juneau-symbols.svg; reg() records the author-name -> stem map that resolveIcon/nameToStem publish.
+	reg("content_copy", "copy");
+	reg("copy", "copy");
+	reg("csv", "csv");
+	reg("table", "spreadsheet");
+	reg("spreadsheet", "spreadsheet");
+	reg("picture_as_pdf", "pdf");
+	reg("pdf", "pdf");
+	reg("print", "print");
+	reg("refresh", "refresh");
+	reg("manage_search", "toggle_column_search");
+	reg("toggle_column_search", "toggle_column_search");
+	reg("unfold_less", "collapse_all");
+	reg("collapse_all", "collapse_all");
+	reg("tune", "settings");
+	reg("settings", "settings");
+	reg("columns", "columns");
+	reg("chevron_right", "chevronright");
+	reg("chevronright", "chevronright");
+	reg("chevron_left", "chevronleft");
+	reg("chevronleft", "chevronleft");
+	reg("chevron_up", "chevronup");
+	reg("chevronup", "chevronup");
+	reg("filter_alt", "filter");
+	reg("filter", "filter");
+	reg("expand_more", "chevrondown");
+	reg("chevrondown", "chevrondown");
+	reg("search", "search");
+	reg("close", "close");
+	reg("download", "download");
+	reg("link", "link");
+	reg("edit", "edit");
+	reg("cancel", "cancel");
+	reg("check", "check");
+	reg("new", "new");
+	reg("toggle-deleted", "toggle-deleted");
+	reg("pause", "pause");
+	reg("stop", "stop");
+	reg("forceStop", "forceStop");
+	reg("push", "push");
+	reg("openPr", "openPr");
+	// WORK-J0557 U1 — real sprite stems (no CSS-composed / flipped stand-ins).  sort is an ordinary <use> host;
+	// the header asc/desc tint is driven by CSS custom properties on the host (they inherit into the <use> shadow tree).
+	reg("first_page", "first_page");
+	reg("last_page", "last_page");
+	reg("more_vert", "more");
+	reg("more", "more");
+	reg("sort", "sort", "juneau-view-col-sort-glyph");
 
 	if (typeof document !== "undefined") {
-		if (document.readyState === "loading")
+		// Defer the boot load past the point where an app's own sprites(...) call can still land: deferred and module
+		// scripts run while readyState is "interactive", i.e. after this script but before DOMContentLoaded.
+		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", loadSymbolSprite);
-		else
-			loadSymbolSprite();
+		} else if (document.readyState === "interactive") {
+			// DOMContentLoaded may already have fired (script injected late), so a 0ms timer is the backstop.
+			document.addEventListener("DOMContentLoaded", loadSymbolSprite);
+			setTimeout(loadSymbolSprite, 0);
+		} else {
+			Promise.resolve().then(loadSymbolSprite);
+		}
 	}
 })();

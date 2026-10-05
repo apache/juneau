@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"unused" // Fixture methods and classes are reached only reflectively or through annotations, so they appear unused
+})
 class MethodSafety_Test extends org.apache.juneau.TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -40,7 +43,6 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	//-----------------------------------------------------------------------------------------------------------
 
 	/** Carries one method per shape the rule cares about; group b reflects over these rather than dispatching. */
-	@SuppressWarnings("unused")
 	static class Fix_Methods {
 		@Mutating public void declared() { /* fixture body; only the @Mutating declaration matters to the check */ }
 		@Mutating("the stored credential") public void declaredWithNote() { /* fixture body; only the annotation/note matter */ }
@@ -48,12 +50,10 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	}
 
 	/** A superclass declaration must still be seen when the subclass overrides the method. */
-	@SuppressWarnings("unused")
 	static class Fix_Parent {
 		@Mutating public void inherited() { /* fixture body; only the @Mutating declaration matters to the check */ }
 	}
 
-	@SuppressWarnings("unused")
 	static class Fix_Child extends Fix_Parent {
 		@Override public void inherited() { /* fixture override; deliberately re-declares without @Mutating */ }
 	}

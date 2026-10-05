@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Dispatches server-initiated JSON-RPC requests delivered over an MCP client's duplex event-stream channel to a
@@ -36,9 +36,6 @@ import org.apache.juneau.commons.inject.*;
  * @since 10.0.0
  */
 public class McpDuplexDispatcher {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_REQUEST = "request";
 
 	private final AtomicReference<McpServerRequestHandler> handler = new AtomicReference<>();
 
@@ -72,7 +69,7 @@ public class McpDuplexDispatcher {
 	 * 	exception preserved as its cause).
 	 */
 	public Object dispatch(JsonRpcRequest request, BeanStore ctx) {
-		assertArgNotNull(ARG_REQUEST, request);
+		reqnn("request", request);
 		var h = handler.get();
 		if (h == null) {
 			if (JsonRpcResponse.notification(request.getId()))

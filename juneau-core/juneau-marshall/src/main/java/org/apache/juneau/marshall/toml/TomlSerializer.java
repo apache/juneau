@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.marshall.toml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
@@ -108,16 +109,15 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // Depth comes from the Serializer -> WriterSerializer base chain shared by all text-format serializers
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class TomlSerializer extends WriterSerializer implements RecordWritable {
+public class TomlSerializer extends WriterSerializer implements TomlMetaProvider, RecordWritable {
 
-	private static final String PROP_inlineTableThreshold = "inlineTableThreshold";
-	private static final String PROP_useInlineTables = "useInlineTables";
-	private static final String PROP_sortKeys = "sortKeys";
-	private static final String PROP_nullValue = "nullValue";
-	private static final String ARG_copyFrom = "copyFrom";
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,TomlClassMeta> tomlClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,TomlBeanPropertyMeta> tomlBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder class.
@@ -137,7 +137,7 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			inlineTableThreshold = copyFrom.inlineTableThreshold;
 			useInlineTables = copyFrom.useInlineTables;
 			sortKeys = copyFrom.sortKeys;
@@ -145,7 +145,7 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 		}
 
 		protected Builder(TomlSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			inlineTableThreshold = copyFrom.inlineTableThreshold;
 			useInlineTables = copyFrom.useInlineTables;
 			sortKeys = copyFrom.sortKeys;
@@ -275,6 +275,18 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 		return TomlSerializerSession.create(this);
 	}
 
+	@Override /* Overridden from TomlMetaProvider */
+	public TomlBeanPropertyMeta getTomlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return TomlBeanPropertyMeta.DEFAULT;
+		return tomlBeanPropertyMetas.computeIfAbsent(bpm, k -> new TomlBeanPropertyMeta(k, this));
+	}
+
+	@Override /* Overridden from TomlMetaProvider */
+	public TomlClassMeta getTomlClassMeta(ClassMeta<?> cm) {
+		return tomlClassMetas.computeIfAbsent(cm, k -> new TomlClassMeta(k, this));
+	}
+
 	@Override
 	public Builder copy() {
 		return new Builder(this);
@@ -283,10 +295,10 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 	@Override
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_inlineTableThreshold, inlineTableThreshold)
-			.a(PROP_useInlineTables, useInlineTables)
-			.a(PROP_sortKeys, sortKeys)
-			.a(PROP_nullValue, nullValue);
+			.a("inlineTableThreshold", inlineTableThreshold)
+			.a("useInlineTables", useInlineTables)
+			.a("sortKeys", sortKeys)
+			.a("nullValue", nullValue);
 	}
 
 	/**

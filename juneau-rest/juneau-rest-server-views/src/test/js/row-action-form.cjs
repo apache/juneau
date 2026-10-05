@@ -48,9 +48,9 @@ function loadViewsOnly(env) {
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
 		setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
-		clearTimeout: function () {},
+		clearTimeout: function () { /* no-op */ },
 		setInterval: function () { return 0; },
-		clearInterval: function () {},
+		clearInterval: function () { /* no-op */ },
 		Promise: Promise,
 		fetch: function (...args) { return env.callFetch(...args); }
 	};
@@ -228,7 +228,7 @@ async function openForm(opts) {
 	out.b15_refusalReason = b15.refusalReason;
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (err) {
-	console.error(err?.stack ? err.stack : err);
+})().catch(function (error) {
+	console.error(error?.stack ? error.stack : error);
 	process.exit(1);
 });

@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -177,7 +178,7 @@ class BeanStreaming_Test extends TestBase {
 			var lifecycleLog = new ArrayList<String>();
 			BeanConsumer<String> a = new BeanConsumer<>() {
 				@Override public void acceptThrows(String item) throws Exception {
-					if ("bad".equals(item)) throw new Exception("bad item");
+					if (eq(item, "bad")) throw new Exception("bad item");
 					lifecycleLog.add("accept:" + item);
 				}
 				@Override public void onError(Exception e) throws Exception {
@@ -200,7 +201,7 @@ class BeanStreaming_Test extends TestBase {
 			var skipped = new ArrayList<String>();
 			BeanConsumer<String> a = new BeanConsumer<>() {
 				@Override public void acceptThrows(String item) throws Exception {
-					if ("bad".equals(item)) throw new Exception("bad item");
+					if (eq(item, "bad")) throw new Exception("bad item");
 					received.add(item);
 				}
 				@Override public void onError(Exception e) {

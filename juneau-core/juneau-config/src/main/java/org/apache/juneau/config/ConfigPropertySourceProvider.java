@@ -17,6 +17,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.settings.*;
 
@@ -188,7 +189,7 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 		private static boolean isInClinit() {
 			var trace = Thread.currentThread().getStackTrace();
 			for (var frame : trace) {
-				if ("<clinit>".equals(frame.getMethodName()))
+				if (eq(frame.getMethodName(), "<clinit>"))
 					return true;
 			}
 			return false;

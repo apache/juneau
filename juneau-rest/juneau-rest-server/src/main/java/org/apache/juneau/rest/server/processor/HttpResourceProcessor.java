@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.http.*;
@@ -55,7 +57,7 @@ public class HttpResourceProcessor implements ResponseProcessor {
 		r.getHeaders().forEach(res::addHeader);
 
 		// RFC 7231 §4.3.2: HEAD must mirror GET headers but omit the body.
-		if ("HEAD".equalsIgnoreCase(opSession.getRequest().getMethod()))
+		if (eqic("HEAD", opSession.getRequest().getMethod()))
 			return FINISHED;
 
 		try (var os = res.getNegotiatedOutputStream()) {

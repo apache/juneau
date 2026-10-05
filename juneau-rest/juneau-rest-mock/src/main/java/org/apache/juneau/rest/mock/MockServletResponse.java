@@ -37,8 +37,8 @@ import jakarta.servlet.http.*;
  * </ul>
 */
 @SuppressWarnings({
-	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"java:S4144", // Identical methods intentional for different test scenarios
 	"resource" // Streams returned to servlet container; lifecycle managed by the container
 })
 public class MockServletResponse implements HttpServletResponse {
@@ -263,7 +263,7 @@ public class MockServletResponse implements HttpServletResponse {
 		if (nn(contentType) && nn(charset)) {
 			if (contentType.indexOf("charset=") != -1)
 				contentType = contentType.replaceAll("\\;\\s*charset=.*", "");
-			if (! "UTF-8".equalsIgnoreCase(charset))
+			if (neqic("UTF-8", charset))
 				contentType = contentType + ";charset=" + charset;
 			header(HEADER_ContentType, contentType);
 		}

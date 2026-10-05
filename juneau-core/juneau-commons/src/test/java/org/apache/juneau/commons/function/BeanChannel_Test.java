@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -79,7 +80,7 @@ class BeanChannel_Test extends TestBase {
 		var skipped = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String item) throws Exception {
-				if ("bad".equals(item)) throw new Exception("bad item");
+				if (eq(item, "bad")) throw new Exception("bad item");
 			}
 			@Override public void onError(Exception e) {
 				skipped.add(e.getMessage());

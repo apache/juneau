@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
@@ -43,12 +42,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class ParquetSerializer extends OutputStreamSerializer implements ParquetMetaProvider, RecordWritable, ArrayRecordWritable {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/** Default serializer. */
 	public static final ParquetSerializer DEFAULT = new ParquetSerializer(create());
@@ -89,7 +87,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			compressionCodec = copyFrom.compressionCodec;
 			rowGroupSize = copyFrom.rowGroupSize;
 			pageSize = copyFrom.pageSize;
@@ -109,7 +107,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ParquetSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			compressionCodec = copyFrom.compressionCodec;
 			rowGroupSize = copyFrom.rowGroupSize;
 			pageSize = copyFrom.pageSize;

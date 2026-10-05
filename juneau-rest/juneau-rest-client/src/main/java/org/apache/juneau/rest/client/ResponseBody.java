@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -178,8 +177,8 @@ public final class ResponseBody {
 	 * @throws IOException If an I/O error occurs reading the body or the body could not be parsed.
 	 */
 	public <T> T as(Parser parser, Class<T> type) throws IOException {
-		assertArgNotNull("parser", parser);
-		assertArgNotNull("type", type);
+		reqnn("parser", parser);
+		reqnn("type", type);
 		var body = response.getBodyAsString();
 		if (body == null)
 			return null;
@@ -223,8 +222,8 @@ public final class ResponseBody {
 		"unchecked" // The produced cursor is verified assignable to 'type' before the cast.
 	})
 	public <T> T asCursor(Parser parser, Class<T> type) throws IOException {
-		assertArgNotNull("parser", parser);
-		assertArgNotNull("type", type);
+		reqnn("parser", parser);
+		reqnn("type", type);
 
 		var isToken = TokenReader.class.isAssignableFrom(type);
 		var supported = isToken ? parser instanceof TokenReadable : parser instanceof RecordReadable;

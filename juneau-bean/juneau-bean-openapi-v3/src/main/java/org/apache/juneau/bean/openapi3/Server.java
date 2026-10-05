@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -72,19 +71,9 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Server extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_key = "key";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_description = "description";
-	private static final String PROP_url = "url";
-	private static final String PROP_variables = "variables";
 
 	private URI url;
 	private String description;
@@ -119,8 +108,8 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server addVariable(String key, ServerVariable value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		variables.put(key, value);
 		return this;
 	}
@@ -136,11 +125,11 @@ public class Server extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_url -> toType(getUrl(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_variables -> toType(getVariables(), type);
+			case "url" -> toType(getUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "variables" -> toType(getVariables(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -173,9 +162,9 @@ public class Server extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(url), PROP_url)
-			.addIf(ine(variables), PROP_variables)
+			.addIf(nn(description), "description")
+			.addIf(nn(url), "url")
+			.addIf(ine(variables), "variables")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -183,11 +172,11 @@ public class Server extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Server set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> setDescription(s(value));
-			case PROP_url -> setUrl(toUri(value));
-			case PROP_variables -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
+			case "description" -> setDescription(s(value));
+			case "url" -> setUrl(toUri(value));
+			case "variables" -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

@@ -17,15 +17,15 @@
 
 /*
  * detail-bar-slot.cjs - always-on Node harness for the SECOND named bar-slot host: a BarSlot riding the row-detail
- * ribbon.  Loads juneau-views.js AND juneau-chrome.js into ONE sandbox sharing one fake document, because the whole
+ * ribbon.  Loads juneau-views.js AND juneau-console.js into ONE sandbox sharing one fake document, because the whole
  * point of this slice is the seam between them: views clones + relocates + mints, chrome enhances.
  *
- *   Usage:  node detail-bar-slot.cjs <juneau-views.js> <juneau-chrome.js> [juneau-renders.js]
+ *   Usage:  node detail-bar-slot.cjs <juneau-views.js> <juneau-console.js> [juneau-renders.js]
  *
  * Covers: the relocate step in the detail caller (2-section) and its absence (1-section); clone-time id minting for
- * two simultaneously-expanded rows; enhance-on-insert via JuneauChrome.init.initAll() including its idempotence and
- * the shared wired marker that stops wireSafeActions double-binding; demand refresh fetching exactly once; collapse
- * teardown; and that NO interval timer is ever created.
+ * two simultaneously-expanded rows; enhance-on-insert via JuneauConsole.chrome.initAll() including its idempotence
+ * and the shared wired marker that stops wireSafeActions double-binding; demand refresh fetching exactly once;
+ * collapse teardown; and that NO interval timer is ever created.
  *
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
@@ -37,10 +37,10 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const viewsJsPath = process.argv[2];
-const chromeJsPath = process.argv[3];
+const consoleJsPath = process.argv[3];
 const rendersJsPath = process.argv[4];
-if (!viewsJsPath || !chromeJsPath) {
-	console.error('usage: node detail-bar-slot.cjs <juneau-views.js> <juneau-chrome.js> [juneau-renders.js]');
+if (!viewsJsPath || !consoleJsPath) {
+	console.error('usage: node detail-bar-slot.cjs <juneau-views.js> <juneau-console.js> [juneau-renders.js]');
 	process.exit(2);
 }
 
@@ -125,11 +125,11 @@ function dispatchFrom(node, ev) {
 }
 
 function datasetKeyToAttr(key) {
-	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+	return 'data-' + key.replaceAll(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
 }
 
 function attrToDatasetKey(attr) {
-	return attr.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+	return attr.slice(5).replaceAll(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
 }
 
 /** A minimal live `dataset` facade over `node`'s existing attrs store, so `.dataset.x` reads/writes stay in sync
@@ -154,7 +154,7 @@ function makeDataset(node) {
 		},
 		ownKeys() {
 			return Object.keys(node.attrs)
-				.filter(function (k) { return k.indexOf('data-') === 0; })
+				.filter(function (k) { return k.startsWith('data-'); })
 				.map(attrToDatasetKey);
 		},
 		getOwnPropertyDescriptor(_, key) {
@@ -266,7 +266,7 @@ const document = {
 	readyState: 'loading',
 	activeElement: null,
 	body: body,
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	createElement: function (tag) { return el(tag); },
 	getElementById: function (id) { return Object.hasOwn(byId, id) ? byId[id] : null; },
 	querySelectorAll: function (sel) { return body.querySelectorAll(sel); },
@@ -292,8 +292,8 @@ const window = {
 	innerWidth: 1024,
 	innerHeight: 768,
 	CustomEvent: CustomEvent,
-	addEventListener: function () {},
-	matchMedia: function () { return { matches: false, addEventListener: function () {} }; },
+	addEventListener: function () { /* no-op */ },
+	matchMedia: function () { return { matches: false, addEventListener: function () { /* no-op */ } }; },
 	getComputedStyle: function () { return { getPropertyValue: function () { return ''; } }; },
 	fetch: function (url, opts) {
 		fetchCalls++;
@@ -308,9 +308,9 @@ const sandbox = {
 	console: console,
 	CustomEvent: CustomEvent,
 	setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
-	clearTimeout: function () {},
+	clearTimeout: function () { /* no-op */ },
 	setInterval: function () { intervalCalls++; return 0; },
-	clearInterval: function () {},
+	clearInterval: function () { /* no-op */ },
 	Promise: Promise,
 	fetch: function (...args) { return window.fetch(...args); }
 };
@@ -321,13 +321,13 @@ if (rendersJsPath)
 	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
 // NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
-// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-chrome.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
+// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-console.js under test into the sandbox.
+vm.runInNewContext(fs.readFileSync(path.resolve(consoleJsPath), 'utf8'), sandbox, { filename: 'juneau-console.js' });
 
 const VNS = window.JuneauViews;
 const V = VNS?.init;
-const CNS = window.JuneauChrome;
-const C = CNS?.init;
+const CNS = window.JuneauConsole;
+const C = CNS?.chrome;
 
 const out = {
 	hasViews: !!(typeof V?.buildRibbonStrip === 'function' && typeof V?.relocateDetailBarSlot === 'function'),
@@ -574,7 +574,7 @@ let stripB = null;
 
 	// The marker is SUFFIX-ONLY (so readSidecar's own prefix is not doubled); the sidecar id carries the prefix.
 	out.mint_markerHasNoPrefix = out.mint_markerA.indexOf(SIDECAR_PREFIX) < 0;
-	out.mint_sidecarIdHasPrefix = out.mint_sidecarIdA.indexOf(SIDECAR_PREFIX) === 0;
+	out.mint_sidecarIdHasPrefix = out.mint_sidecarIdA.startsWith(SIDECAR_PREFIX);
 	out.mint_sidecarIdIsPrefixPlusMarker = out.mint_sidecarIdA === SIDECAR_PREFIX + out.mint_markerA;
 	out.mint_markerUsesMintedParentId = out.mint_markerA === PARENT_ID + ':a1';
 	out.mint_distinct = out.mint_markerA !== out.mint_markerB;
@@ -680,7 +680,7 @@ let safeFires = 0;
 	out.handshakeRejectsOther = V.detailContractOk({ contractVersion: '2' }, '1');
 
 	process.stdout.write(JSON.stringify(out, null, 2) + '\n');
-})().catch(function (e) {
-	process.stderr.write(String((e?.stack) || e) + '\n');
+})().catch(function (error) {
+	process.stderr.write(String((error?.stack) || error) + '\n');
 	process.exit(1);
 });

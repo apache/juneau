@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
@@ -57,22 +56,10 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"java:S100", // RDF method names (getRdfXml, isXmlLang, etc.) use domain-specific casing
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S110"  // Deep inheritance inherent to the RDF parser hierarchy.
+	"java:S110", // Deep inheritance inherent to the RDF parser hierarchy.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
-
-	// Property name constants
-	private static final String PROP_collectionFormat = "collectionFormat";
-	private static final String PROP_juneauBpNs = "juneauBpNs";
-	private static final String PROP_juneauNs = "juneauNs";
-	private static final String PROP_language = "language";
-	private static final String PROP_looseCollections = "looseCollections";
-	private static final String PROP_trimWhitespace = "trimWhitespace";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -116,7 +103,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -133,7 +120,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -169,7 +156,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = assertArgNotNull(ARG_value, value);
+			collectionFormat = reqnn("value", value);
 			return self();
 		}
 
@@ -202,7 +189,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF juneauBpNs(Namespace value) {
-			juneauBpNs = assertArgNotNull(ARG_value, value);
+			juneauBpNs = reqnn("value", value);
 			return self();
 		}
 
@@ -216,7 +203,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF juneauNs(Namespace value) {
-			juneauNs = assertArgNotNull(ARG_value, value);
+			juneauNs = reqnn("value", value);
 			return self();
 		}
 
@@ -265,7 +252,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public SELF language(String value) {
-			language = assertArgNotNull(ARG_value, value);
+			language = reqnn("value", value);
 			return self();
 		}
 
@@ -999,7 +986,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
@@ -1169,11 +1157,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_collectionFormat, collectionFormat)
-			.a(PROP_juneauBpNs, juneauBpNs)
-			.a(PROP_juneauNs, juneauNs)
-			.a(PROP_language, language)
-			.a(PROP_looseCollections, looseCollections)
-			.a(PROP_trimWhitespace, trimWhitespace);
+			.a("collectionFormat", collectionFormat)
+			.a("juneauBpNs", juneauBpNs)
+			.a("juneauNs", juneauNs)
+			.a("language", language)
+			.a("looseCollections", looseCollections)
+			.a("trimWhitespace", trimWhitespace);
 	}
 }

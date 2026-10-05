@@ -65,7 +65,7 @@ import org.apache.juneau.marshall.*;
  * page) to produce the JSON DataTables' {@code columns} option expects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link DataTablesQueryProtocol}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery}
  * 	<li class='jc'>{@link DataTablesTable}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/reference/option/columns">DataTables columns option</a>
  * </ul>
@@ -97,8 +97,7 @@ public class DataTablesColumns {
 	 */
 	public static List<Map<String,Object>> of(MarshallingContext ctx, Class<?> beanClass) {
 		var bm = ctx.getBeanMeta(beanClass);
-		if (bm == null)
-			throw iaex("Class '%s' is not a bean.", beanClass.getName());
+		req(bm != null, "Class '%s' is not a bean.", beanClass.getName());
 
 		var out = new ArrayList<Map<String,Object>>();
 		for (var pm : bm.getProperties().values()) {

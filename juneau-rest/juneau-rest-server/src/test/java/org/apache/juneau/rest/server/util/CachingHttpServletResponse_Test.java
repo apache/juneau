@@ -33,7 +33,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // Mockito mocks / in-memory streams; nothing to close.
+@SuppressWarnings({
+	"resource" // Mockito mocks / in-memory streams; nothing to close.
+})
 class CachingHttpServletResponse_Test {
 
 	/** Minimal in-memory ServletOutputStream backed by a ByteArrayOutputStream for testing the tee path. */

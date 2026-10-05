@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -53,15 +52,12 @@ import java.util.*;
  * {@code Marshalled*} collections and may change incompatibly in a future release.
  */
 @SuppressWarnings({
-	"java:S115" // ARG_-prefixed arg-key constants use the project's UPPER_camelCase convention.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class JsonPointer {
 
 	/** Sentinel distinguishing an absent value from a present <jk>null</jk> value during traversal. */
 	private static final Object MISSING = new Object();
-
-	private static final String ARG_rawMemberName = "rawMemberName";
-	private static final String ARG_token = "token";
 
 	/**
 	 * Parses and validates the specified RFC 6901 JSON Pointer string.
@@ -81,7 +77,7 @@ public class JsonPointer {
 	 * @return The encoded reference token.
 	 */
 	public static String encodeToken(String rawMemberName) {
-		assertArgNotNull(ARG_rawMemberName, rawMemberName);
+		reqnn("rawMemberName", rawMemberName);
 		return rawMemberName.replace("~", "~0").replace("/", "~1");
 	}
 
@@ -92,7 +88,7 @@ public class JsonPointer {
 	 * @return The decoded member name.
 	 */
 	public static String decodeToken(String token) {
-		assertArgNotNull(ARG_token, token);
+		reqnn("token", token);
 		return token.replace("~1", "/").replace("~0", "~");
 	}
 
@@ -239,7 +235,7 @@ public class JsonPointer {
 		}
 		if (container instanceof List) {
 			var list = (List<Object>)container;
-			if ("-".equals(token)) {
+			if (eq(token, "-")) {
 				list.add(value);
 				return;
 			}
@@ -266,7 +262,7 @@ public class JsonPointer {
 	}
 
 	private static boolean isIndexToken(String token) {
-		return "-".equals(token) || toArrayIndex(token) >= 0;
+		return eq(token, "-") || toArrayIndex(token) >= 0;
 	}
 
 	/*

@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.marshall.marshaller.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Bean stashed into the {@link org.apache.juneau.commons.inject.BeanStore} passed to a handler on a RESUME call,
@@ -85,7 +85,7 @@ public record McpMrtrResumeContext(Object continuation, Map<String,Object> input
 	 * @throws RuntimeException If the continuation's decoded shape cannot be converted to {@code type}.
 	 */
 	public <T> T continuationAs(Class<T> type) {
-		assertArgNotNull("type", type);
+		reqnn("type", type);
 		if (continuation == null)
 			return null;
 		return Json.to(Json.of(continuation), type);

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -66,11 +65,10 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * constructing a new one per call costs nothing.
  */
 @SuppressWarnings({
-	// Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
-	// (evaluated and rejected renaming this to e.g. AbstractMcpRevision): every dated adapter binding
-	// class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
-	// package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
-	"java:S2176"
+	"java:S2176" // Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
+	             // (evaluated and rejected renaming this to e.g. AbstractMcpRevision): every dated adapter binding
+	             // class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
+	             // package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
 })
 public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpRevision {
 
@@ -158,7 +156,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			return;
 		var raw = schema.toJsonMap();
 		JsonValueSafety.check(raw, "Tool '" + toolName + "' " + role + " for MCP revision 2025-06-18");
-		if (! "object".equals(raw.get("type")))
+		if (neq(raw.get("type"), "object"))
 			throw iaex("Tool ''%s'' %s root type ''%s'' is not object; MCP revision 2025-06-18 requires object schemas.",
 				toolName, role, raw.get("type"));
 		checkKeywords(toolName, role, raw);
@@ -184,7 +182,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 						throw iaex("Tool ''%s'' %s declares JSON Schema keyword ''%s'', which MCP revision 2025-06-18 cannot represent.",
 							toolName, role, keyword);
 					var child = entry.getValue();
-					if (("properties".equals(keyword) || "$defs".equals(keyword)) && child instanceof Map<?,?> child2) {
+					if ((eqa(keyword, "properties", "$defs")) && child instanceof Map<?,?> child2) {
 						for (var schema : child2.values())
 							stack.push(new SchemaValue(schema));
 					} else {
@@ -229,9 +227,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * single {@link JsonRpcResponse}; {@link #dispatch} wraps it in a {@link McpResponseResult}.
 	 */
 	private JsonRpcResponse dispatchResponse(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
-		assertArgNotNull("exchange", exchange);
-		assertArgNotNull("config", config);
-		assertArgNotNull("ctx", ctx);
+		reqnn("exchange", exchange);
+		reqnn("config", config);
+		reqnn("ctx", ctx);
 
 		if (VALIDATED.add(config))
 			validateSchemas(config);
@@ -429,13 +427,13 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 	private McpCompletionRef completionRef(Map<String,Object> refMap) {
 		var type = McpParamUtils.strParam(refMap, "type");
-		if ("ref/prompt".equals(type)) {
+		if (eq(type, "ref/prompt")) {
 			var name = McpParamUtils.strParam(refMap, "name");
 			if (isEmpty(name))
 				throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing ref.name for ref/prompt");
 			return McpCompletionRef.prompt(name);
 		}
-		if ("ref/resource".equals(type)) {
+		if (eq(type, "ref/resource")) {
 			var uri = McpParamUtils.strParam(refMap, "uri");
 			if (isEmpty(uri))
 				throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing ref.uri for ref/resource");

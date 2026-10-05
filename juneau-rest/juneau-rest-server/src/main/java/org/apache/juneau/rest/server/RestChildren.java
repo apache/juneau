@@ -52,6 +52,9 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3077" // The volatile Map snapshot and volatile RestContext are published immutable/fully built (copy-on-write).
+})
 public class RestChildren {
 
 	private static final Logger LOGGER = Logger.getLogger(RestChildren.class.getName());
@@ -80,9 +83,6 @@ public class RestChildren {
 		final ServletConfig servletConfig;
 
 		/** Written once under {@link #lock}; volatile for lock-free reads. */
-		@SuppressWarnings({
-			"java:S3077" // Publish-once reference: assigned once under double-checked locking in materialize(); the RestContext is fully built before assignment, so volatile safe-publication is sufficient.
-		})
 		volatile RestContext materialized;
 
 		private final Object lock = new Object();
@@ -284,9 +284,6 @@ public class RestChildren {
 	private final Object writeLock = new Object();
 
 	/** Eager-init children keyed by composed path. Copy-on-write; volatile for lock-free reads. */
-	@SuppressWarnings({
-		"java:S3077" // Copy-on-write snapshot: the map reference is replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.
-	})
 	private volatile Map<String,RestContext> children;
 
 	/**
@@ -363,7 +360,7 @@ public class RestChildren {
 	 */
 	public Optional<RestChildMatch> findMatch(RestSession.Builder builder) throws ServletException {
 		var pi = builder.getPathInfoUndecoded();
-		if (nn(pi) && ! pi.equals("/")) {
+		if (nn(pi) && neq(pi, "/")) {
 			// Check eager children first.
 			var snapshot = children;  // single volatile read
 			for (var rc : snapshot.values()) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.metrics.micrometer;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -99,7 +98,8 @@ import io.micrometer.core.instrument.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // TAG_xxx and ARG_xxx constants use camelCase after prefix intentionally (metric/arg key names, not enum-style constants)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S6213" // Method name 'record' is part of the established MetricsRecorder SPI; renaming this overriding method would be a breaking API change.
 })
 public class MicrometerMetricsRecorder implements MetricsRecorder {
 
@@ -108,14 +108,6 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 
 	/** Tag value used for the {@code exception} tag when the call completed normally. */
 	public static final String NO_EXCEPTION_TAG = "None";
-
-	private static final String TAG_METHOD = "method";
-	private static final String TAG_URI = "uri";
-	private static final String TAG_STATUS = "status";
-	private static final String TAG_EXCEPTION = "exception";
-
-	private static final String ARG_registry = "registry";
-	private static final String ARG_timerName = "timerName";
 
 	private final MeterRegistry registry;
 	private final String timerName;
@@ -136,8 +128,8 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	 * @param timerName The timer name. Must not be <jk>null</jk> or blank.
 	 */
 	public MicrometerMetricsRecorder(MeterRegistry registry, String timerName) {
-		this.registry = assertArgNotNull(ARG_registry, registry);
-		this.timerName = assertArgNotNullOrBlank(ARG_timerName, timerName);
+		this.registry = reqnn("registry", registry);
+		this.timerName = reqnb("timerName", timerName);
 	}
 
 	/**
@@ -154,30 +146,24 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	 */
 	public String getTimerName() { return timerName; }
 
-	@SuppressWarnings({
-		"java:S6213" // Method name 'record' is part of the established MetricsRecorder SPI; renaming this overriding method would be a breaking API change.
-	})
 	@Override /* MetricsRecorder */
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 		var effectiveName = ine(metricName) ? metricName : timerName;
 		var builder = Timer.builder(effectiveName)
-			.tag(TAG_METHOD, defaultIfBlank(httpMethod, ""))
-			.tag(TAG_URI, defaultIfBlank(uriTemplate, ""))
-			.tag(TAG_STATUS, Integer.toString(statusCode))
-			.tag(TAG_EXCEPTION, exceptionTag(error));
+			.tag("method", defaultIfBlank(httpMethod, ""))
+			.tag("uri", defaultIfBlank(uriTemplate, ""))
+			.tag("status", Integer.toString(statusCode))
+			.tag("exception", exceptionTag(error));
 		builder = applyMetricTags(builder, metricTags);
 		builder.register(registry).record(elapsed);
 	}
 
-	@SuppressWarnings({
-		"java:S6213" // Method name 'record' is part of the established MetricsRecorder SPI; renaming this overriding method would be a breaking API change.
-	})
 	@Override /* MetricsRecorder */
 	public void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
 		// Custom (non-request) observation: a timer named metricName carrying only the exception tag
 		// plus any caller-supplied metricTags - no HTTP method/uri/status tags (there is no request).
 		var builder = Timer.builder(metricName)
-			.tag(TAG_EXCEPTION, exceptionTag(error));
+			.tag("exception", exceptionTag(error));
 		builder = applyMetricTags(builder, metricTags);
 		builder.register(registry).record(elapsed);
 	}

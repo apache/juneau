@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
@@ -84,6 +86,9 @@ public class ExampleMcpServer extends McpRestServlet {
 
 	// The entire domain state. Handlers below close over this instance, so there is no DI ceremony to
 	// follow: the server object owns its notes, and every MCP surface is a thin view over them.
+	@SuppressWarnings({
+		"java:S2065" // Servlets are Serializable; transient keeps this non-serializable state out of servlet serialization (java:S1948).
+	})
 	private final transient NoteStore notes = new NoteStore();
 
 	/**
@@ -289,7 +294,7 @@ public class ExampleMcpServer extends McpRestServlet {
 				return new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, TEXT_PLAIN, text)));
 			}
 			@Override public McpCompleter completer(String variableName) {
-				return TITLE_ARG.equals(variableName) ? completer : null;
+				return eq(variableName, TITLE_ARG) ? completer : null;
 			}
 		};
 	}

@@ -39,7 +39,7 @@ import org.junit.jupiter.api.extension.*;
  */
 @ExtendWith(JuneauBeanStoreExtension.class)
 @SuppressWarnings({
-	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"resource" // Bean stores/overlays are Closeables whose lifecycle is owned by the extension/test; Eclipse JDT @Owning warning is by design.
 })
 class JuneauBeanStoreExtension_Test extends TestBase {

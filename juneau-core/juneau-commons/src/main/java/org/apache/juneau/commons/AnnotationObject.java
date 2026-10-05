@@ -17,7 +17,6 @@
 package org.apache.juneau.commons;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -135,13 +134,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class AnnotationObject implements Annotation {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_annotationType = "annotationType";
-	private static final String ARG_b = "b";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -160,7 +155,7 @@ public class AnnotationObject implements Annotation {
 		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
-			this.annotationType = assertArgNotNull(ARG_annotationType, annotationType);
+			this.annotationType = reqnn("annotationType", annotationType);
 		}
 
 		/**
@@ -184,7 +179,7 @@ public class AnnotationObject implements Annotation {
 	 * @param b The builder used to instantiate the fields of this class.  Must not be <jk>null</jk>.
 	 */
 	public AnnotationObject(Builder b) {
-		assertArgNotNull(ARG_b, b);
+		reqnn("b", b);
 		annotationType = b.getAnnotationType();
 	}
 

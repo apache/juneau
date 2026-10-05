@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -122,10 +124,14 @@ final class RawContentSinkScanner {
 	/** This module's shipped-JS resource directory, relative to the module root. */
 	private static final String VIEWS_JS_DIR = "src/main/resources/org/apache/juneau/views";
 
+	/** The console-ui module's shipped-JS resource directory (the console shell), relative to THIS module's root. */
+	private static final String CONSOLE_JS_DIR =
+		"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console";
+
 	/**
 	 * The WIDGET module's shipped-JS resource directory, relative to THIS module's root.
 	 *
-	 * <p>The card / calendar / chrome assets ship there now.  A guardrail follows the file it guards rather than the
+	 * <p>The card / calendar assets ship there now.  A guardrail follows the file it guards rather than the
 	 * module the test happens to live in - scanning a views path for a relocated asset would silently scan nothing.
 	 */
 	private static final String WIDGETS_JS_DIR =
@@ -146,7 +152,7 @@ final class RawContentSinkScanner {
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "slot.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-ribbon.js", "b.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-helpers.js", "span.innerHTML = markup;"),
-		new AllowedJsSink(WIDGETS_JS_DIR + "/juneau-chrome.js", "iconSpan.innerHTML = glyph;")
+		new AllowedJsSink(CONSOLE_JS_DIR + "/juneau-console.js", "iconSpan.innerHTML = glyph;")
 	);
 
 	/** Shipped JS assets scanned by {@link #scanShippedJs(Path)}, each as a reactor-root-relative path. */
@@ -164,7 +170,7 @@ final class RawContentSinkScanner {
 		// it here is what keeps that true rather than merely currently-so.
 		VIEWS_JS_DIR + "/juneau-regions.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
-		WIDGETS_JS_DIR + "/juneau-chrome.js"
+		CONSOLE_JS_DIR + "/juneau-console.js"
 	);
 
 	record AllowedJsSink(String relativePath, String snippet) {}
@@ -385,7 +391,7 @@ final class RawContentSinkScanner {
 
 		/** True if the argument is the empty string literal &mdash; a structural placeholder carrying nothing. */
 		boolean isEmptyLiteral() {
-			return "\"\"".equals(arg);
+			return eq(arg, "\"\"");
 		}
 
 		/** True if this site writes something that is neither a sidecar payload nor provably empty. */

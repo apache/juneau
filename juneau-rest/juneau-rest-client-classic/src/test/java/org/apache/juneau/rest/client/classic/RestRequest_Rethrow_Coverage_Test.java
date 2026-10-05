@@ -214,7 +214,7 @@ class RestRequest_Rethrow_Coverage_Test {
 	@Test void b07_noUsableConstructor_thrownInstanceStaysNull_noRethrowOccurs() throws Exception {
 		try (var c = client()) {
 			// None of the four constructor resolution attempts match -- thrownInstance stays null, the
-			// "if (nn(thrownInstance))" branch is skipped, and run() completes normally without rethrowing.
+			// non-null thrownInstance branch is skipped, and run() completes normally without rethrowing.
 			try (var req = c.get(url("/thrown?" + enc(ExcWithNoUsableCtor.class.getName())))
 					.rethrow(ExcWithNoUsableCtor.class)) {
 				try (var res = req.run()) {
@@ -250,7 +250,7 @@ class RestRequest_Rethrow_Coverage_Test {
 	@Test void c02_emptyThrownHeader_partsAbsentOrEmpty_returnsResponseDirectly() throws Exception {
 		try (var c = client()) {
 			// Thrown header present but with an empty value -- asParts() is present but its list is empty, so
-			// "!partsOpt.isPresent() || partsOpt.get().isEmpty()" short-circuits to returning the response as-is.
+			// the absent-or-empty check short-circuits to returning the response as-is.
 			try (var req = c.get(url("/emptyThrown")).rethrow(ExcWithNoArgCtor.class)) {
 				try (var res = req.run()) {
 					assertEquals(200, res.getStatusCode());
@@ -272,7 +272,7 @@ class RestRequest_Rethrow_Coverage_Test {
 
 	@Test void d02_errorStatus_noThrownHeader_noDetailSuffix() throws Exception {
 		try (var c = client()) {
-			// getThrownDetailSuffix()'s "!thrown.isPresent()" branch -- no Thrown header at all.
+			// getThrownDetailSuffix()'s absent-Thrown-header branch -- no Thrown header at all.
 			try (var req = c.get(url("/noBody")).errorCodes(sc -> true)) {
 				var e = assertThrows(RestCallException.class, req::run);
 				assertFalse(e.getMessage().contains("Thrown:"), "Unexpected message: " + e.getMessage());
@@ -282,7 +282,7 @@ class RestRequest_Rethrow_Coverage_Test {
 
 	@Test void d03_errorStatus_emptyThrownHeader_partsEmpty_noDetailSuffix() throws Exception {
 		try (var c = client()) {
-			// getThrownDetailSuffix()'s "partsOpt.isPresent() && !isEmpty()" -- present but empty list.
+			// getThrownDetailSuffix()'s parts-present-and-non-empty check -- present but empty list.
 			try (var req = c.get(url("/emptyThrown")).errorCodes(sc -> true)) {
 				var e = assertThrows(RestCallException.class, req::run);
 				assertFalse(e.getMessage().contains("Thrown:"), "Unexpected message: " + e.getMessage());
@@ -292,7 +292,7 @@ class RestRequest_Rethrow_Coverage_Test {
 
 	@Test void d04_errorStatus_thrownHeaderNoMessage_noDetailSuffix() throws Exception {
 		try (var c = client()) {
-			// className present but message blank -- "inb(className) && inb(message)" short-circuits false.
+			// className present but message blank -- the class-name-and-message-both-non-blank check short-circuits false.
 			try (var req = c.get(url("/thrown?" + enc("some.pkg.Boom"))).errorCodes(sc -> true)) {
 				var e = assertThrows(RestCallException.class, req::run);
 				assertFalse(e.getMessage().contains("Thrown:"), "Unexpected message: " + e.getMessage());

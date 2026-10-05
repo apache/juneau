@@ -135,8 +135,7 @@ public class Json5TokenReader extends JsonTokenReader {
 				case "true":  currentBoolean = true;  currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;
 				case "false": currentBoolean = false; currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;
 				case "null":  currentToken = TokenType.VALUE_NULL; afterValue(); return;
-				case "Infinity":
-				case "NaN":
+				case "Infinity", "NaN":
 					currentNumberLexeme = word;
 					currentToken = TokenType.VALUE_NUMBER;
 					afterValue();
@@ -228,6 +227,7 @@ public class Json5TokenReader extends JsonTokenReader {
 
 	@Override /* JsonTokenReader */
 	@SuppressWarnings({
+		"java:S2677", // r.read() consumes the already-peeked '\n' of a CRLF line continuation; cannot hit EOF.
 		"java:S3776" // Cognitive complexity acceptable for JSON5 quoted-string escape-handling state machine.
 	})
 	protected String readString() throws IOException, ParseException {

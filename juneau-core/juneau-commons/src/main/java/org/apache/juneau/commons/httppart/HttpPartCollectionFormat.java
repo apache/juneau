@@ -71,7 +71,7 @@ public enum HttpPartCollectionFormat {
 	public static HttpPartCollectionFormat fromString(String value) {
 		if (value == null)
 			return null;
-		if (value.equalsIgnoreCase("UON"))
+		if (eqic(value, "UON"))
 			return UONC;
 		return valueOf(ucr(value));
 	}

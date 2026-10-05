@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.rest.client.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A builder-configurable auth-token seam implemented as a {@link RestCallInterceptor}.
@@ -47,10 +47,6 @@ import org.apache.juneau.rest.client.*;
  */
 public class McpAuthInterceptor implements RestCallInterceptor {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_TOKEN_SUPPLIER = "tokenSupplier";
-	private static final String ARG_TOKEN = "token";
-
 	private final Supplier<String> tokenSupplier;
 
 	/**
@@ -59,7 +55,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	 * @param tokenSupplier Supplies the bearer token for each request. Must not be <jk>null</jk>.
 	 */
 	public McpAuthInterceptor(Supplier<String> tokenSupplier) {
-		this.tokenSupplier = assertArgNotNull(ARG_TOKEN_SUPPLIER, tokenSupplier);
+		this.tokenSupplier = reqnn("tokenSupplier", tokenSupplier);
 	}
 
 	/**
@@ -69,7 +65,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	 * @return A new interceptor. Never <jk>null</jk>.
 	 */
 	public static McpAuthInterceptor ofStaticBearer(String token) {
-		assertArgNotNull(ARG_TOKEN, token);
+		reqnn("token", token);
 		return new McpAuthInterceptor(() -> token);
 	}
 

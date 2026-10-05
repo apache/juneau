@@ -68,14 +68,14 @@ const PROBE = async function () {
 	const tableA = makeTable('reportsA', 'orders');
 
 	out.a_listEmpty = await NS.persistence.list(tableA);
-	await NS.persistence.save(tableA, 'My View', { schemaVersion: 1, columns: ['x'] });
+	await NS.persistence.save(tableA, 'My View', { schemaVersion: 2, columns: ['x'] });
 	out.a_listAfterSave = await NS.persistence.list(tableA);
 	out.a_loaded = await NS.persistence.load(tableA, 'My View');
 	await NS.persistence.setActive(tableA, 'My View');
 	out.a_activeAfterSetActive = await NS.persistence.getActive(tableA);
 	await NS.persistence.delete(tableA, 'My View');
 	out.a_activeAfterDelete = await NS.persistence.getActive(tableA);   // dangling -> Default
-	await NS.persistence.saveAndActivate(tableA, 'Second View', { schemaVersion: 1, columns: ['y'] });
+	await NS.persistence.saveAndActivate(tableA, 'Second View', { schemaVersion: 2, columns: ['y'] });
 	out.a_activeAfterSaveAndActivate = await NS.persistence.getActive(tableA);
 
 	// Two tables sharing a view id under different pages must not collide.
@@ -84,21 +84,21 @@ const PROBE = async function () {
 
 	// A reserved/blank name rejects with a typed 'malformed' error (never a thrown raw Error, never a silent no-op).
 	try {
-		await NS.persistence.save(tableA, 'Default', { schemaVersion: 1 });
+		await NS.persistence.save(tableA, 'Default', { schemaVersion: 2 });
 		out.a_reservedNameRejection = { threw: false };
-	} catch (e) {
-		out.a_reservedNameRejection = { threw: true, code: e.code };
+	} catch (error) {
+		out.a_reservedNameRejection = { threw: true, code: error.code };
 	}
 
 	// ---- b) localStorage per-scope quota (MAX_VIEWS_PER_SCOPE = 50) ----
 	const tableC = makeTable('quotaPage', 'quotaView');
 	for (let i = 0; i < NS.config.LOCALSTORAGE_MAX_VIEWS_PER_SCOPE; i++)
-		await NS.persistence.save(tableC, 'v' + i, { schemaVersion: 1 });
+		await NS.persistence.save(tableC, 'v' + i, { schemaVersion: 2 });
 	try {
-		await NS.persistence.save(tableC, 'oneTooMany', { schemaVersion: 1 });
+		await NS.persistence.save(tableC, 'oneTooMany', { schemaVersion: 2 });
 		out.b_overQuota = { threw: false };
-	} catch (e) {
-		out.b_overQuota = { threw: true, code: e.code };
+	} catch (error) {
+		out.b_overQuota = { threw: true, code: error.code };
 	}
 
 	// ---- c) cross-tab storage-event reconcile (localStorage provider only) ----
@@ -135,11 +135,11 @@ const PROBE = async function () {
 	out.d_listCall = calls[0];
 
 	calls.length = 0;
-	await NS.persistence.save(tableE, 'My View', { schemaVersion: 1 });
+	await NS.persistence.save(tableE, 'My View', { schemaVersion: 2 });
 	out.d_saveCall = calls[0];
 
 	calls.length = 0;
-	await NS.persistence.saveAndActivate(tableE, 'My View', { schemaVersion: 1 });
+	await NS.persistence.saveAndActivate(tableE, 'My View', { schemaVersion: 2 });
 	out.d_saveAndActivateCall = calls[0];
 
 	calls.length = 0;
@@ -156,8 +156,8 @@ const PROBE = async function () {
 	try {
 		await NS.persistence.list(tableF);
 		out.d_noShell = { threw: false, calls: calls.length };
-	} catch (e) {
-		out.d_noShell = { threw: true, code: e.code, calls: calls.length };
+	} catch (error) {
+		out.d_noShell = { threw: true, code: error.code, calls: calls.length };
 	}
 
 	window.fetch = realFetch;
@@ -183,12 +183,40 @@ const PROBE = async function () {
 		await page.goto(url);
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		const report = await page.evaluate(PROBE);
+
+		// ---- f) page-state View Settings survive a REAL page reload (design §6.1 last-applied restore) ----
+		// The localStorage-backed page-state store is the ONLY facet that can be proven to outlive a reload, and a
+		// reload is the ONLY way to prove it (a same-page re-read cannot distinguish persistence from an in-memory
+		// cache).  Write two view ids' committed blobs, reload, then prove a fresh read restores exactly the first
+		// and leaves the second independent; a table with no view id has no scope and reads back null.
+		await page.evaluate(() => {
+			const NS = window.JuneauViews;
+			const tbl = (viewId) => { const t = document.createElement('table'); t.dataset.juneauView = viewId; document.body.appendChild(t); return t; };
+			NS.config.writeViewSettings(tbl('reloadView'), { schemaVersion: 2, visible: ['a', 'b'], order: ['a', 'b'], labels: {}, formats: {}, search: ['a'], sort: [{ column: 'b', dir: 'asc' }], options: { pageSize: 50, wrap: true, density: 'compact' } });
+			NS.config.writeViewSettings(tbl('otherView'), { schemaVersion: 2, visible: ['z'], order: ['z'], labels: {}, formats: {}, search: [], sort: [], options: { pageSize: 10, wrap: false, density: 'comfortable' } });
+		});
+		await page.reload();
+		await page.evaluate(() => new Promise(requestAnimationFrame));
+		report.f_reload = await page.evaluate(() => {
+			const NS = window.JuneauViews;
+			const tbl = (viewId) => { const t = document.createElement('table'); t.dataset.juneauView = viewId; document.body.appendChild(t); return t; };
+			const noId = document.createElement('table');
+			document.body.appendChild(noId);
+			return {
+				hasPageState: !!(NS.pageState && typeof NS.pageState.table === 'function'),
+				restored: NS.config.readViewSettings(tbl('reloadView')).settings,
+				other: NS.config.readViewSettings(tbl('otherView')).settings,
+				absent: NS.config.readViewSettings(tbl('neverWritten')).settings,
+				noId: NS.config.readViewSettings(noId).settings
+			};
+		});
+
 		report.jsFailures = failures.slice();
 		process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

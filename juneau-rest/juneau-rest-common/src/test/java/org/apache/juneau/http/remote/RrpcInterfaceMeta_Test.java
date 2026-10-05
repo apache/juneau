@@ -142,7 +142,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
 			@Override public void flush() { /* Test-harness no-op. */ }
-			@Override public void close() {}
+			@Override public void close() { /* Test-harness no-op. */ }
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
 		log.addHandler(handler);
@@ -165,7 +165,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
 			@Override public void flush() { /* Test-harness no-op. */ }
-			@Override public void close() {}
+			@Override public void close() { /* Test-harness no-op. */ }
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
 		log.addHandler(handler);

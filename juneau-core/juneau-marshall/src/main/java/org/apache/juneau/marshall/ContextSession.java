@@ -18,7 +18,6 @@ package org.apache.juneau.marshall;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -40,23 +39,9 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class ContextSession {
-
-	// Property name constants
-	private static final String PROP_debug = "debug";
-	private static final String PROP_ContextSession_debug = "ContextSession.debug";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_value = "value";
-	private static final String ARG_msg = "msg";
-	private static final String ARG_args = "args";
-	private static final String ARG_type = "type";
-	private static final String ARG_apply = "apply";
-	private static final String ARG_key = "key";
-	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -103,7 +88,7 @@ public abstract class ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context ctx) {
-			this.ctx = assertArgNotNull(ARG_ctx, ctx);
+			this.ctx = reqnn("ctx", ctx);
 			this.properties = memoizer(LinkedHashMap::new);
 		}
 
@@ -118,8 +103,8 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public <T> SELF apply(Class<T> type, Consumer<T> apply) {
-			if (assertArgNotNull(ARG_type, type).isInstance(this))
-				assertArgNotNull(ARG_apply, apply).accept(type.cast(this));
+			if (reqnn("type", type).isInstance(this))
+				reqnn("apply", apply).accept(type.cast(this));
 			return self();
 		}
 
@@ -169,7 +154,7 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public SELF properties(Map<String,Object> value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			properties.reset();
 			value.forEach(this::property);
 			return self();
@@ -190,9 +175,9 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public SELF property(String key, Object value) {
-			assertArgNotNull(ARG_key, key);
+			reqnn("key", key);
 			switch (key) {
-				case PROP_debug, PROP_ContextSession_debug:
+				case "debug", "ContextSession.debug":
 					return debug(cvt(value, Boolean.class));
 				default:
 					var map = properties.get();
@@ -232,7 +217,7 @@ public abstract class ContextSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ContextSession(Builder<?> builder) {
-		assertArgNotNull(ARG_builder, builder);
+		reqnn("builder", builder);
 		ctx = builder.ctx;
 		debug = o(builder.debug).orElse(ctx.isDebug());
 		unmodifiable = builder.unmodifiable;
@@ -253,7 +238,7 @@ public abstract class ContextSession {
 	 * 	<br>Cannot be <jk>null</jk> (individual values may be <jk>null</jk>).
 	 */
 	public void addWarning(String msg, Object...args) {
-		assertArgsNotNull(ARG_msg, msg, ARG_args, args);
+		reqnn("msg", msg, "args", args);
 		if (unmodifiable)
 			return;
 		if (warnings == null)
@@ -311,6 +296,6 @@ public abstract class ContextSession {
 	 */
 	protected FluentMap<String,Object> properties() {
 		return filteredBeanPropertyMap()
-			.a(PROP_debug, debug);
+			.a("debug", debug);
 	}
 }

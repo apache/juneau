@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A wrapper around an {@link OutputStream} that prevents the underlying stream from being closed.
@@ -71,17 +71,11 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying stream
 })
 public class NoCloseOutputStream extends OutputStream {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_b = "b";
-	private static final String ARG_os = "os";
-
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying stream
-	})
 	private final OutputStream os;
 
 	/**
@@ -99,11 +93,8 @@ public class NoCloseOutputStream extends OutputStream {
 	 *
 	 * @param os The OutputStream to wrap. Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying stream
-	})
 	public NoCloseOutputStream(OutputStream os) {
-		this.os = assertArgNotNull(ARG_os, os);
+		this.os = reqnn("os", os);
 	}
 
 	/**
@@ -135,13 +126,13 @@ public class NoCloseOutputStream extends OutputStream {
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b) throws IOException {
-		assertArgNotNull(ARG_b, b);
+		reqnn("b", b);
 		os.write(b);
 	}
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b, int off, int len) throws IOException {
-		assertArgNotNull(ARG_b, b);
+		reqnn("b", b);
 		os.write(b, off, len);
 	}
 

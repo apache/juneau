@@ -44,8 +44,8 @@ public class YamlConfigFormat implements ConfigFormat {
 
 	@Override /* ConfigFormat */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for YAML-to-INI format conversion logic
-		"java:S135" // Multiple continue statements are intentional in this line-by-line YAML parsing state machine.
+		"java:S135", // Multiple continue statements are intentional in this line-by-line YAML parsing state machine.
+		"java:S3776" // Cognitive complexity acceptable for YAML-to-INI format conversion logic
 	})
 	public String toInternal(String contents) throws IOException {
 		if (contents == null)
@@ -60,7 +60,7 @@ public class YamlConfigFormat implements ConfigFormat {
 		for (var i = 0; i < lines.size(); i++) {
 			var line = lines.get(i);
 			var trim = line.trim();
-			if (trim.isEmpty() || trim.startsWith("#") || trim.equals("---")) {
+			if (trim.isEmpty() || trim.startsWith("#") || eq(trim, "---")) {
 				preLines.add(line);
 				continue;
 			}
@@ -75,7 +75,7 @@ public class YamlConfigFormat implements ConfigFormat {
 
 			var key = trim.substring(0, colonIndex).trim();
 			var rest = trim.substring(colonIndex + 1).trim();
-			if ("_imports".equals(key))
+			if (eq(key, "_imports"))
 				continue;
 
 			if (rest.isEmpty()) {

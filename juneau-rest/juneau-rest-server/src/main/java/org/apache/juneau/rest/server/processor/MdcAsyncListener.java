@@ -70,6 +70,9 @@ import java.util.logging.*;
  * @see org.apache.juneau.rest.server.RestContext#isMdcAsyncPropagation()
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1168" // snapshot() returns null when SLF4J is absent or the MDC is empty; wrap() relies on null to skip MDC work on the completion thread
+})
 public final class MdcAsyncListener {
 
 	private static final Logger LOG = Logger.getLogger(MdcAsyncListener.class.getName());
@@ -171,8 +174,7 @@ public final class MdcAsyncListener {
 	 * @return A copy of the current MDC map, or {@code null}.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure on reflective/generic cast; element type is verified at call site
-		"java:S1168" // null is a meaningful lazy-skip sentinel: wrap() treats null as "no MDC to propagate"; an empty map would force unnecessary MDC installation.
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
 	})
 	public static Map<String,String> snapshot() {
 		if (!AVAILABLE)
@@ -190,10 +192,6 @@ public final class MdcAsyncListener {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3011", // Reflective access to the OTel trace API — intentional; OpenTelemetry is not a compile dep.
-		"java:S1168"  // null preserves the lazy-skip contract: a null map with no active trace must stay null (no MDC to propagate).
-	})
 	private static Map<String,String> enrichWithTraceContext(Map<String,String> map) {
 		if (!OTEL_AVAILABLE)
 			return map;
@@ -256,9 +254,6 @@ public final class MdcAsyncListener {
 		};
 	}
 
-	@SuppressWarnings({
-		"java:S3011" // Reflective access to MDC methods — intentional; SLF4J is not a compile dep.
-	})
 	static void setContextMap(Map<String,String> map) {
 		try {
 			SET_CONTEXT_MAP.invoke(null, map);
@@ -267,9 +262,6 @@ public final class MdcAsyncListener {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3011" // Reflective access to MDC methods — intentional.
-	})
 	static void mdcClear() {
 		try {
 			CLEAR.invoke(null);

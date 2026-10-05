@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -91,32 +90,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Operation extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_callback = "callback";
-	private static final String ARG_in = "in";
-	private static final String ARG_name = "name";
-	private static final String ARG_property = "property";
-	private static final String ARG_response = "response";
-	private static final String ARG_status = "status";
-	private static final String ARG_statusCode = "statusCode";
-
-	// Property name constants
-	private static final String PROP_callbacks = "callbacks";
-	private static final String PROP_deprecated = "deprecated";
-	private static final String PROP_description = "description";
-	private static final String PROP_externalDocs = "externalDocs";
-	private static final String PROP_operationId = "operationId";
-	private static final String PROP_parameters = "parameters";
-	private static final String PROP_requestBody = "requestBody";
-	private static final String PROP_responses = "responses";
-	private static final String PROP_security = "security";
-	private static final String PROP_servers = "servers";
-	private static final String PROP_summary = "summary";
-	private static final String PROP_tags = "tags";
 
 	private List<String> tags = list();
 	private String summary;
@@ -172,8 +148,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addCallback(String name, Callback callback) {
-		assertArgNotNull(ARG_name, name);
-		assertArgNotNull(ARG_callback, callback);
+		reqnn("name", name);
+		reqnn("callback", callback);
 		callbacks.put(name, callback);
 		return this;
 	}
@@ -207,10 +183,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Parameter...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					parameters.add(v);
+		addAllNn(parameters, values);
 		return this;
 	}
 
@@ -229,8 +202,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, Response response) {
-		assertArgNotNull(ARG_statusCode, statusCode);
-		assertArgNotNull(ARG_response, response);
+		reqnn("statusCode", statusCode);
+		reqnn("response", response);
 		responses.put(statusCode, response);
 		return this;
 	}
@@ -264,10 +237,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(SecurityRequirement...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					security.add(v);
+		addAllNn(security, values);
 		return this;
 	}
 
@@ -300,10 +270,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addServers(Server...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					servers.add(v);
+		addAllNn(servers, values);
 		return this;
 	}
 
@@ -336,10 +303,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					tags.add(v);
+		addAllNn(tags, values);
 		return this;
 	}
 
@@ -354,20 +318,20 @@ public class Operation extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_tags -> toType(getTags(), type);
-			case PROP_summary -> toType(getSummary(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_operationId -> toType(getOperationId(), type);
-			case PROP_externalDocs -> toType(getExternalDocs(), type);
-			case PROP_parameters -> toType(getParameters(), type);
-			case PROP_requestBody -> toType(getRequestBody(), type);
-			case PROP_responses -> toType(getResponses(), type);
-			case PROP_callbacks -> toType(getCallbacks(), type);
-			case PROP_deprecated -> toType(getDeprecated(), type);
-			case PROP_security -> toType(getSecurity(), type);
-			case PROP_servers -> toType(getServers(), type);
+			case "tags" -> toType(getTags(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "description" -> toType(getDescription(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "requestBody" -> toType(getRequestBody(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "callbacks" -> toType(getCallbacks(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "servers" -> toType(getServers(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -415,8 +379,8 @@ public class Operation extends OpenApiElement {
 	 * @return The matching parameter, or <jk>null</jk> if not found.
 	 */
 	public Parameter getParameter(String in, String name) {
-		assertArgNotNull(ARG_in, in);
-		assertArgNotNull(ARG_name, name);
+		reqnn("in", in);
+		reqnn("name", name);
 		for (var p : parameters)
 			if (eq(p.getIn(), in) && eq(p.getName(), name))
 				return p;
@@ -454,7 +418,7 @@ public class Operation extends OpenApiElement {
 	 * @return The response, or <jk>null</jk> if not found.
 	 */
 	public Response getResponse(String status) {
-		assertArgNotNull(ARG_status, status);
+		reqnn("status", status);
 		return responses.get(status);
 	}
 
@@ -497,18 +461,18 @@ public class Operation extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(callbacks), PROP_callbacks)
-			.addIf(nn(deprecated), PROP_deprecated)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(externalDocs), PROP_externalDocs)
-			.addIf(nn(operationId), PROP_operationId)
-			.addIf(ine(parameters), PROP_parameters)
-			.addIf(nn(requestBody), PROP_requestBody)
-			.addIf(ine(responses), PROP_responses)
-			.addIf(ine(security), PROP_security)
-			.addIf(ine(servers), PROP_servers)
-			.addIf(nn(summary), PROP_summary)
-			.addIf(ine(tags), PROP_tags)
+			.addIf(ine(callbacks), "callbacks")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(operationId), "operationId")
+			.addIf(ine(parameters), "parameters")
+			.addIf(nn(requestBody), "requestBody")
+			.addIf(ine(responses), "responses")
+			.addIf(ine(security), "security")
+			.addIf(ine(servers), "servers")
+			.addIf(nn(summary), "summary")
+			.addIf(ine(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -516,20 +480,20 @@ public class Operation extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Operation set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
-			case PROP_deprecated -> setDeprecated(toType(value, Boolean.class));
-			case PROP_description -> setDescription(s(value));
-			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_operationId -> setOperationId(s(value));
-			case PROP_parameters -> setParameters(toListBuilder(value, Parameter.class).sparse().build());
-			case PROP_requestBody -> setRequestBody(toType(value, RequestBodyInfo.class));
-			case PROP_responses -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
-			case PROP_security -> setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
-			case PROP_servers -> setServers(toListBuilder(value, Server.class).sparse().build());
-			case PROP_summary -> setSummary(s(value));
-			case PROP_tags -> setTags(toListBuilder(value, String.class).sparse().build());
+			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
+			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
+			case "description" -> setDescription(s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId" -> setOperationId(s(value));
+			case "parameters" -> setParameters(toListBuilder(value, Parameter.class).sparse().build());
+			case "requestBody" -> setRequestBody(toType(value, RequestBodyInfo.class));
+			case "responses" -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
+			case "security" -> setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
+			case "servers" -> setServers(toListBuilder(value, Server.class).sparse().build());
+			case "summary" -> setSummary(s(value));
+			case "tags" -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

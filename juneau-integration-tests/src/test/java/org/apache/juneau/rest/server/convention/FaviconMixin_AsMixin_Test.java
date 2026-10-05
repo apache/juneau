@@ -135,4 +135,25 @@ class FaviconMixin_AsMixin_Test extends TestBase {
 		// Even with a missing classpath override, the default favicon resource provides bytes.
 		Assertions.assertNotNull(fav, "Builder must always produce an instance");
 	}
+
+	/** Docs pattern: a package-private {@code @Bean FaviconMixin} factory is honored. */
+	@Rest(mixins=FaviconMixin.class)
+	public static class D extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean FaviconMixin favicon() {
+			return FaviconMixin.create()
+				.bytes(new byte[]{(byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF})
+				.build();
+		}
+	}
+
+	private static final MockRestClient cd = MockRestClient.buildLax(D.class);
+
+	@Test void d01_packagePrivateFactoryServesCustomBytes() throws Exception {
+		var body = cd.get("/favicon.ico")
+			.run()
+			.assertStatus(200)
+			.getContent().asBytes();
+		Assertions.assertArrayEquals(new byte[]{(byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF}, body);
+	}
 }

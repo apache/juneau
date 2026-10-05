@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -46,7 +45,7 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 			throw iaex("id cannot be null or empty.");
 		this.id = id;
 		this.queue = new LinkedBlockingDeque<>(queueSize);
-		this.closeCallback = assertArgNotNull("closeCallback", closeCallback);
+		this.closeCallback = reqnn("closeCallback", closeCallback);
 		closed = new AtomicBoolean(false);
 	}
 

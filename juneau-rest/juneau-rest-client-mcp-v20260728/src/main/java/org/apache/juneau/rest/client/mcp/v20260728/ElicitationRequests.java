@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.marshaller.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Static helper for reading server&rarr;client MCP {@code 2026-07-28} SEP-2322 elicitation requests out of
@@ -57,8 +57,8 @@ public final class ElicitationRequests {
 	 * @throws IllegalArgumentException If {@code raw} is <jk>null</jk>.
 	 */
 	public static boolean isInputRequired(Map<String,Object> raw) {
-		assertArgNotNull("raw", raw);
-		return "input_required".equals(raw.get("resultType"));
+		reqnn("raw", raw);
+		return eq(raw.get("resultType"), "input_required");
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class ElicitationRequests {
 		"unchecked" // raw.get("inputRequests") deserializes to a Map<String,Object> from JSON for any well-formed remote response; a malformed one surfaces as ClassCastException here (see @throws), not a silently-wrong cast.
 	})
 	public static Map<String,ElicitRequest> requests(Map<String,Object> raw) {
-		assertArgNotNull("raw", raw);
+		reqnn("raw", raw);
 		var rawRequests = (Map<String,Object>) raw.get("inputRequests");
 		Map<String,ElicitRequest> out = new LinkedHashMap<>();
 		if (rawRequests != null)
@@ -110,7 +110,7 @@ public final class ElicitationRequests {
 	 * 	{@code String} &mdash; only possible against a malformed/non-conforming remote response.
 	 */
 	public static String requestState(Map<String,Object> raw) {
-		assertArgNotNull("raw", raw);
+		reqnn("raw", raw);
 		return (String) raw.get("requestState");
 	}
 }

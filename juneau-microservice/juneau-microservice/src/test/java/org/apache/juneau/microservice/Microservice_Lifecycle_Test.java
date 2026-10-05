@@ -68,7 +68,8 @@ import org.junit.jupiter.api.io.*;
 @org.apache.juneau.testing.JettyMicroserviceTest
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 @SuppressWarnings({
-	"resource" // Test-only Microservice/store instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
+	"resource", // Test-only Microservice/store instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
+	"unchecked" // Calls to the generic-varargs Builder.consoleCommands(Class<? extends ConsoleCommand>...) and vars(Class<? extends Var>...) create generic arrays
 })
 class Microservice_Lifecycle_Test extends TestBase {
 
@@ -91,9 +92,6 @@ class Microservice_Lifecycle_Test extends TestBase {
 		@Override public String getName() { return "no-noarg"; }
 		@Override public boolean execute(Scanner in, PrintWriter out, Args a) { return false; }
 	}
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	@Test void a02_builder_consoleCommands_classes_throwsForNoNoargCtor() {
 		var b = Microservice.create();
 		assertThrows(ExecutableException.class, () -> b.consoleCommands(NoNoargConsoleCommand.class));
@@ -128,9 +126,6 @@ class Microservice_Lifecycle_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends Var>[] varargs; generic array creation is safe here.
-	})
 	void a06_builder_vars_varargs() {
 		// vars(Class...) merely chains into the underlying VarResolver builder.  We just need to call it without
 		// throwing - subsequent build() should succeed.

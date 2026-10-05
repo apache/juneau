@@ -50,6 +50,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Cursor shortcut methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
 })
 public class CborSpacedHex extends Cbor {

@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
@@ -179,19 +178,13 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Wildcard required - List<AnnotationInfo<? extends Annotation>> for heterogeneous annotations
+	"java:S3776", // load() and the find()/has() lookups combine traversal order, type filtering and caching in a single pass
 	"rawtypes", // Raw types necessary for generic type handling
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>> for heterogeneous annotations
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class AnnotationProvider {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_c = "c";
-	private static final String ARG_f = "f";
-	private static final String ARG_m = "m";
-	private static final String ARG_p = "p";
-	private static final String ARG_type = "type";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// System properties
@@ -335,9 +328,6 @@ public class AnnotationProvider {
 		 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
 		 * 	or if the methods return incorrect types).
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for runtime annotation processing
-		})
 		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
 			if (runtimeAnnotations == null)
 				runtimeAnnotations = ReflectionMap.create(Annotation.class);
@@ -546,8 +536,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_c, c);
+		reqnn("type", type);
+		reqnn("c", c);
 		return cache.get(type, c, traversals);
 	}
 
@@ -571,8 +561,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_c, c);
+		reqnn("type", type);
+		reqnn("c", c);
 		return cache.get(type, c, traversals);
 	}
 
@@ -596,8 +586,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_f, f);
+		reqnn("type", type);
+		reqnn("f", f);
 		return cache.get(type, f, traversals);
 	}
 
@@ -625,8 +615,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_m, m);
+		reqnn("type", type);
+		reqnn("m", m);
 		return cache.get(type, m, traversals);
 	}
 
@@ -670,8 +660,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_p, p);
+		reqnn("type", type);
+		reqnn("p", p);
 		return cache.get(type, p, traversals);
 	}
 
@@ -698,7 +688,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		return cache.get(null, c, traversals);
 	}
 
@@ -721,7 +711,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		return cache.get(null, c, traversals);
 	}
 
@@ -744,7 +734,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_f, f);
+		reqnn("f", f);
 		return cache.get(null, f, traversals);
 	}
 
@@ -771,7 +761,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_m, m);
+		reqnn("m", m);
 		return cache.get(null, m, traversals);
 	}
 
@@ -810,7 +800,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal...traversals) {
-		assertArgNotNull(ARG_p, p);
+		reqnn("p", p);
 		return cache.get(null, p, traversals);
 	}
 
@@ -1011,8 +1001,7 @@ public class AnnotationProvider {
 	 * This is the supplier function for the findCache.
 	 */
 	@SuppressWarnings({
-		"java:S6541", // Synchronization not needed for cache access pattern
-		"java:S3776"  // Cognitive complexity acceptable for annotation traversal logic
+		"java:S6541" // Synchronization not needed for cache access pattern
 	})
 	private List load(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
 
@@ -1032,7 +1021,7 @@ public class AnnotationProvider {
 		else if (element instanceof FieldInfo || element instanceof ConstructorInfo)
 			t = l(a(SELF));
 		else {
-			assertType(ParameterInfo.class, element, Shorts::uoex);
+			reqt(ParameterInfo.class, element, Shorts::uoex);
 			t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));
 		}
 

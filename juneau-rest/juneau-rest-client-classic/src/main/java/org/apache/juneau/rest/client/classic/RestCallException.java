@@ -37,7 +37,7 @@ public class RestCallException extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	// HttpException has a bug involving ASCII control characters so just replace them with spaces.
-	private static String clean(String message) {
+	private static String replaceControlChars(String message) {
 		message = emptyIfNull(message);
 
 		boolean needsCleaning = false;
@@ -59,8 +59,8 @@ public class RestCallException extends HttpException {
 
 	private static String format(String msg, Object...args) {
 		if (args.length == 0)
-			return clean(msg);
-		return clean(f(msg, args));
+			return replaceControlChars(msg);
+		return replaceControlChars(f(msg, args));
 	}
 
 	private final int statusCode;

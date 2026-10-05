@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -85,14 +84,9 @@ import org.apache.juneau.commons.utils.*;
  * @param <B> The builder class to apply the annotation to.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class AnnotationApplier<A extends Annotation,B> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_annotationClass = "annotationClass";
-	private static final String ARG_builderClass = "builderClass";
-	private static final String ARG_vr = "vr";
 
 	private final VarResolverSession vr;
 	private final Class<A> ca;
@@ -106,9 +100,9 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @param varResolverSession The string resolver to use for resolving strings. Must not be <jk>null</jk>.
 	 */
 	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession varResolverSession) {
-		ca = assertArgNotNull(ARG_annotationClass, annotationClass);
-		cb = assertArgNotNull(ARG_builderClass, builderClass);
-		vr = assertArgNotNull(ARG_vr, varResolverSession);
+		ca = reqnn("annotationClass", annotationClass);
+		cb = reqnn("builderClass", builderClass);
+		vr = reqnn("vr", varResolverSession);
 	}
 
 	/**
@@ -173,7 +167,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return The resolved Charset.
 	 */
 	protected Optional<Charset> charset(String in) {
-		return string(in).map(x -> "default".equalsIgnoreCase(x) ? Charset.defaultCharset() : Charset.forName(x));
+		return string(in).map(x -> eqic("default", x) ? Charset.defaultCharset() : Charset.forName(x));
 	}
 
 	/**

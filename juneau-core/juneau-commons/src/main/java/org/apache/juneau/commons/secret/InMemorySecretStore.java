@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.secret;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -52,27 +51,27 @@ public class InMemorySecretStore implements SecretStore {
 
 	@Override /* SecretStore */
 	public void store(String key, char[] secret) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("secret", secret);
+		reqnn("key", key);
+		reqnn("secret", secret);
 		secrets.put(key, secret.clone());
 	}
 
 	@Override /* SecretStore */
 	public Optional<char[]> find(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		var v = secrets.get(key);
 		return v == null ? oe() : o(v.clone());
 	}
 
 	@Override /* SecretStore */
 	public boolean exists(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		return secrets.containsKey(key);
 	}
 
 	@Override /* SecretStore */
 	public boolean delete(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		var v = secrets.remove(key);
 		if (v == null)
 			return false;

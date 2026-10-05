@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -49,16 +48,13 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",   // Type erasure requires unchecked casts
-	"rawtypes",    // Raw types necessary for generic type handling
-	"java:S115",   // Constants use naming conventions that embed type info or config keys (e.g. PROP_collectionFormat)
-	"java:S3776",  // Cognitive complexity acceptable for RDF stream parser state machine methods
-	"java:S6541"   // Brain Method complexity acceptable for core RDF stream parser dispatch logic
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for RDF stream parser state machine methods
+	"java:S6541", // Brain Method complexity acceptable for core RDF stream parser dispatch logic
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class RdfStreamParserSession extends InputStreamParserSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -74,7 +70,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfStreamParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -93,7 +89,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfStreamParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final Model model;
@@ -118,9 +114,9 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
 		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
-		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), "root");
+		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), "_type");
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), "value");
 
 		// Map legacy language names to RIOT Lang
 		var langName = ctx.getLanguage();
@@ -142,7 +138,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+		if (eq(langName, "RDF/PROTO")) // HTT - not registered in Jena's RDFLanguages
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -178,7 +174,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		var l = new LinkedList<Resource>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
-		var root = m.createProperty(getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		var root = m.createProperty(getJuneauNs().getUri(), "root");
 		for (ResIterator i = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());
 
@@ -481,7 +477,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			var st = i.next();
 			var p = st.getPredicate();
 			var key = p.getLocalName();
-			if (! (key.equals("root") && p.equals(pRoot))) {
+			if (! (eq(key, "root") && p.equals(pRoot))) {
 				key = decodeString(key);
 				var o = st.getObject();
 				var key2 = convertAttrToType(m, key, keyType);

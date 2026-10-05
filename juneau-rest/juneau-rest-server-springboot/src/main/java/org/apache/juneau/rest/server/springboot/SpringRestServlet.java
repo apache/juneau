@@ -52,6 +52,12 @@ public abstract class SpringRestServlet extends RestServlet {
 	/**
 	 * Hook into Spring bean injection framework.
 	 *
+	 *
+	 * <p>
+	 * If no {@link ApplicationContext} was injected (e.g. the servlet was created with <c>new</c> outside of Spring,
+	 * or the injected {@link Optional} is empty), the returned store degrades gracefully to one with no Spring context
+	 * that only resolves beans from the parent chain.
+	 *
 	 * @param parent Optional parent resource bean store, used as a fallback after Spring's context.
 	 * @return A {@link WritableBeanStore} backed by Spring's {@link ApplicationContext}.
 	 */
@@ -60,6 +66,6 @@ public abstract class SpringRestServlet extends RestServlet {
 		"resource" // Spring takes ownership of the returned bean and manages its lifecycle
 	})
 	public WritableBeanStore createBeanStore(Optional<BeanStore> parent) {
-		return new SpringBeanStore(appContext.orElse(null), parent.orElse(null));
+		return new SpringBeanStore(Objects.requireNonNullElse(appContext, Optional.<ApplicationContext>empty()).orElse(null), parent.orElse(null));
 	}
 }

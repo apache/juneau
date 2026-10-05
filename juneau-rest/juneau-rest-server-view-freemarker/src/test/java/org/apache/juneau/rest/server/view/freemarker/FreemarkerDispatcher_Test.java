@@ -44,8 +44,8 @@ import freemarker.template.DefaultObjectWrapperBuilder;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"resource", // BasicBeanStore instances are short-lived in-memory test fixtures backed by a Map, consumed synchronously by the mocked request; nothing external to leak.
-	"java:S125" // Comments are explanatory; they are not commented-out code.
+	"java:S125", // Comments are explanatory; they are not commented-out code.
+	"resource" // BasicBeanStore instances are short-lived in-memory test fixtures backed by a Map, consumed synchronously by the mocked request; nothing external to leak.
 })
 class FreemarkerDispatcher_Test extends TestBase {
 

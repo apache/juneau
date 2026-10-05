@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -84,7 +85,7 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 
 	@Test void a06_noRequireSecureEscapeHatch() {
 		var hasRequireSecure = Arrays.stream(McpDynamicClientRegistrar.Builder.class.getMethods())
-			.anyMatch(m -> m.getName().equals("requireSecure"));
+			.anyMatch(m -> eq(m.getName(), "requireSecure"));
 		assertFalse(hasRequireSecure, "Builder must not expose a public requireSecure(...) escape hatch");
 	}
 

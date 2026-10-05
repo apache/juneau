@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.util.*;
 
 /**
  * The widget toolkit's serving-path mixin: the mount, asset-URL API and serving endpoints for the widget-owned
- * browser runtime ({@code juneau-calendar.js}, {@code juneau-calendar.css}, {@code juneau-chrome.js}), plus the
+ * browser runtime ({@code juneau-calendar.js}, {@code juneau-calendar.css}), plus the
  * contract-version handshake constants those runtimes bake in.
  *
  * <p>
@@ -35,10 +35,10 @@ import org.apache.juneau.rest.server.util.*;
  *
  * <h5 class='section'>These assets still need the view runtime beside them</h5>
  * <p>
- * The bytes live here, but they are <b>not</b> a standalone widget runtime: the calendar and chrome scripts
- * resolve their glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and push their
- * popovers onto the ONE shared layer stack that {@code juneau-views.js} publishes.  A page that loads either of
- * these scripts must therefore <b>also</b> load the view module's {@code juneau-icons.js} and
+ * The bytes live here, but they are <b>not</b> a standalone widget runtime: the calendar script
+ * resolves its glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and pushes its
+ * popovers onto the ONE shared layer stack that {@code juneau-views.js} publishes.  A page that loads
+ * this script must therefore <b>also</b> load the view module's {@code juneau-icons.js} and
  * {@code juneau-views.js}.  "Widgets without views" is deliberately not a goal here; what this module owns is the
  * bean contracts and the bytes, not independence from views.
  *
@@ -113,24 +113,18 @@ public class WidgetsMixin {
 	public static final String CALENDAR_CSS_PATH = "/juneau-calendar.css";
 
 	/**
-	 * The URL path at which the page-chrome runtime is served (relative to the host mount).  Load it after the view
-	 * module's icon registry &mdash; header action glyphs resolve from there.
-	 */
-	public static final String CHROME_JS_PATH = "/juneau-chrome.js";
-
-	/**
 	 * The per-month calendar-event envelope contract-version handshake constant that the calendar runtime bakes in,
 	 * aliased from the value the calendar model emits ({@link CalendarDef#CONTRACT_VERSION}).
 	 */
 	public static final String CALENDAR_CONTRACT_VERSION = CalendarDef.CONTRACT_VERSION;
 
 	/**
-	 * The app-header refresh-envelope contract-version handshake constant that the chrome runtime bakes in.
+	 * The app-header refresh-envelope contract-version handshake constant that the console shell bakes in.
 	 */
 	public static final String HEADER_CONTRACT_VERSION = "1";
 
 	/**
-	 * The bar-slot refresh-envelope contract-version handshake constant that the chrome runtime bakes in, aliased
+	 * The bar-slot refresh-envelope contract-version handshake constant that the console shell bakes in, aliased
 	 * from the value the bar model emits ({@link BarSlot#CONTRACT_VERSION}).
 	 */
 	public static final String BAR_CONTRACT_VERSION = BarSlot.CONTRACT_VERSION;
@@ -140,9 +134,6 @@ public class WidgetsMixin {
 
 	/** Classpath location of the shipped reusable-calendar stylesheet. */
 	static final String CALENDAR_CSS_RESOURCE = "/org/apache/juneau/widgets/juneau-calendar.css";
-
-	/** Classpath location of the shipped page-chrome runtime. */
-	static final String CHROME_JS_RESOURCE = "/org/apache/juneau/widgets/juneau-chrome.js";
 
 	/** Content type emitted for the JavaScript assets. */
 	static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
@@ -191,26 +182,11 @@ public class WidgetsMixin {
 	}
 
 	/**
-	 * [GET /juneau-chrome.js] &mdash; serve the page-chrome runtime.
-	 *
-	 * @return The page-chrome runtime as a JavaScript {@link HttpResource}.
-	 */
-	@RestGet(
-		path=CHROME_JS_PATH,
-		summary="Juneau page-chrome runtime",
-		description="First-party, opt-in JavaScript that enhances a page's app-header / avatar / bar-slot chrome: contract handshake, icon hydration, avatar fallback, SAFE host-events, and demand-only same-origin count refresh.",
-		swagger=@OpSwagger(ignore=true)
-	)
-	public HttpResource getChromeScript() {
-		return serve(CHROME_JS_RESOURCE, JS_CONTENT_TYPE);
-	}
-
-	/**
 	 * Returns the servlet-relative URL for a widget asset served by this mixin, carrying a
 	 * {@code ?v=<buildVersion>-<hash8>} content-sensitive cache-buster suitable for a page's {@code head=} block.
 	 *
 	 * @param path One of the asset path constants ({@link #CALENDAR_JS_PATH},
-	 * 	{@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
+	 * 	{@link #CALENDAR_CSS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 * @throws IllegalArgumentException If this mixin does not ship the bytes for the given path.
 	 */
@@ -234,7 +210,7 @@ public class WidgetsMixin {
 	 *
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #CALENDAR_JS_PATH},
-	 * 	{@link #CALENDAR_CSS_PATH}, {@link #CHROME_JS_PATH}).
+	 * 	{@link #CALENDAR_CSS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 * @throws IllegalArgumentException If this mixin does not ship the bytes for the given path.
 	 */
@@ -265,9 +241,8 @@ public class WidgetsMixin {
 	 * bytes always arrive together and no declared path can resolve to an empty response.
 	 */
 	private static String resourceFor(String path) {
-		if (CALENDAR_JS_PATH.equals(path)) return CALENDAR_JS_RESOURCE;
-		if (CALENDAR_CSS_PATH.equals(path)) return CALENDAR_CSS_RESOURCE;
-		if (CHROME_JS_PATH.equals(path)) return CHROME_JS_RESOURCE;
+		if (eq(path, CALENDAR_JS_PATH)) return CALENDAR_JS_RESOURCE;
+		if (eq(path, CALENDAR_CSS_PATH)) return CALENDAR_CSS_RESOURCE;
 		throw iaex("Widget asset ''%s'' is not served by this mixin.", path);
 	}
 

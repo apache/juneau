@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.resource;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -70,7 +70,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpResourceBean of(HttpBody body) {
-		assertArgNotNull("body", body);
+		reqnn("body", body);
 		return new HttpResourceBean(body, List.of());
 	}
 
@@ -82,8 +82,8 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpResourceBean of(HttpBody body, List<HttpHeader> headers) {
-		assertArgNotNull("body", body);
-		assertArgNotNull("headers", headers);
+		reqnn("body", body);
+		reqnn("headers", headers);
 		return new HttpResourceBean(body, headers);
 	}
 
@@ -94,7 +94,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public HttpResourceBean withHeader(HttpHeader header) {
-		assertArgNotNull("header", header);
+		reqnn("header", header);
 		var newHeaders = new ArrayList<>(headers);
 		newHeaders.add(header);
 		return new HttpResourceBean(body, newHeaders);
@@ -121,9 +121,7 @@ public final class HttpResourceBean implements HttpResource {
 		if (toAdd == null || toAdd.length == 0)
 			return this;
 		var newHeaders = new ArrayList<>(headers);
-		for (var h : toAdd)
-			if (h != null)
-				newHeaders.add(h);
+		addAllNn(newHeaders, toAdd);
 		return new HttpResourceBean(body, newHeaders);
 	}
 
@@ -137,9 +135,7 @@ public final class HttpResourceBean implements HttpResource {
 		if (ie(toAdd))
 			return this;
 		var newHeaders = new ArrayList<>(headers);
-		for (var h : toAdd)
-			if (h != null)
-				newHeaders.add(h);
+		addAllNn(newHeaders, toAdd);
 		return new HttpResourceBean(body, newHeaders);
 	}
 
@@ -164,7 +160,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return The first matching header, or <jk>null</jk> if absent.
 	 */
 	public HttpHeader getFirstHeader(String name) {
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		return headers.stream().filter(h -> eqic(h.getName(), name)).findFirst().orElse(null);
 	}
 

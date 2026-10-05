@@ -27,7 +27,8 @@ import org.junit.jupiter.api.*;
  * null/checked-exception invoke results, and the "no invoke method" construction failure).
  */
 @SuppressWarnings({
-	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"unused" // Parameter required to match the 1-arg invoke() signature dispatched to via reflection.
 })
 class TypedFunction_Coverage_Test extends TestBase {
 
@@ -48,27 +49,18 @@ class TypedFunction_Coverage_Test extends TestBase {
 	/** Returns null to exercise the null-result-becomes-empty-string branch. */
 	public static class NullReturning extends TypedFunction {
 		@Override public String name() { return "nullfn"; }
-		@SuppressWarnings({
-			"unused" // Parameter required to match the 1-arg invoke() signature dispatched to via reflection.
-		})
 		public String invoke(String s) { return null; }
 	}
 
 	/** Throws a checked (non-RuntimeException) exception from invoke. */
 	public static class CheckedThrower extends TypedFunction {
 		@Override public String name() { return "checkedthrow"; }
-		@SuppressWarnings({
-			"unused" // Parameter required to match the 1-arg invoke() signature dispatched to via reflection.
-		})
 		public String invoke(String s) throws java.io.IOException { throw new java.io.IOException("boom"); }
 	}
 
 	/** Throws an unchecked exception from invoke - should propagate as-is, not get wrapped. */
 	public static class RuntimeThrower extends TypedFunction {
 		@Override public String name() { return "runtimethrow"; }
-		@SuppressWarnings({
-			"unused" // Parameter required to match the 1-arg invoke() signature dispatched to via reflection.
-		})
 		public String invoke(String s) { throw new IllegalStateException("kaboom"); }
 	}
 

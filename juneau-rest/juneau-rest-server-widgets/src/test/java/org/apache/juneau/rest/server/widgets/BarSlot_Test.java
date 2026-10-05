@@ -37,7 +37,7 @@ class BarSlot_Test extends TestBase {
 		var b = BarSlot.create("bar-main")
 			.widgets(
 				BarText.of("ctx", "Editing"),
-				BarBadge.of("changePending").label("change pending").badge(Badge.count(7).tone(Tone.WARN)))
+				BarBadge.of("changePending").label("change pending").badge(Badge.count(7).tone(StatusTone.WARNING)))
 			.refreshUrl("/bar/counts");
 		assertEquals("bar-main", b.id);
 		assertEquals(2, b.widgets.size());

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -31,7 +32,9 @@ import org.junit.jupiter.api.*;
  * {@link RestRequest#isBodyRepeatable()}, the {@code Accept}/{@code Content-Type} negotiation performed by the
  * private {@code buildTransportRequest()}, path-remainder substitution, and query-string assembly.
  */
-@SuppressWarnings("resource") // 'captured[0]' is inspected synchronously by the fake HttpTransport lambda; the response itself is closed via try-with-resources at each call site.
+@SuppressWarnings({
+	"resource" // 'captured[0]' is inspected synchronously by the fake HttpTransport lambda; the response itself is closed via try-with-resources at each call site.
+})
 class RestRequest_Test extends TestBase {
 
 	private static TransportRequest[] capture() {
@@ -94,7 +97,7 @@ class RestRequest_Test extends TestBase {
 			}
 		}
 		assertEquals("text/existing", captured[0].getFirstHeader("Content-Type").value());
-		assertEquals(1, captured[0].getHeaders().stream().filter(h -> "Content-Type".equalsIgnoreCase(h.name())).count());
+		assertEquals(1, captured[0].getHeaders().stream().filter(h -> eqic("Content-Type", h.name())).count());
 	}
 
 	@Test
@@ -162,14 +165,15 @@ class RestRequest_Test extends TestBase {
 		}
 		assertEquals("text/existing", captured[0].getFirstHeader("Content-Type").value());
 		// The converted body's own "application/octet-stream" must not be duplicated alongside the caller's header.
-		assertEquals(1, captured[0].getHeaders().stream().filter(h -> "Content-Type".equalsIgnoreCase(h.name())).count());
+		assertEquals(1, captured[0].getHeaders().stream().filter(h -> eqic("Content-Type", h.name())).count());
 	}
 
 	@Test
 	void b04_body_noConverterMatch_noDefaultSerializer_throwsIllegalState() throws Exception {
 		try (var client = RestClient.create()) {
 			var req = client.post("http://x/");
-			var ex = assertThrows(IllegalStateException.class, () -> req.body(new Object()));
+			var value = new Object();
+			var ex = assertThrows(IllegalStateException.class, () -> req.body(value));
 			assertTrue(ex.getMessage().contains("No default serializer"), "Unexpected message: " + ex.getMessage());
 		}
 	}

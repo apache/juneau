@@ -68,8 +68,9 @@ import org.apache.juneau.commons.svl.vars.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // VarResolver manages Closeable resources
-	"java:S3740" // Raw Var/Class types used intentionally for dynamic variable resolver registration where type parameters are not available
+	"java:S3740", // Raw Var/Class types used intentionally for dynamic variable resolver registration where type parameters are not available
+	"resource", // VarResolver manages Closeable resources
+	"unchecked" // Var class/instance registration casts (Class<? extends Var>) and the raw Class passed to addBean come from Builder-validated entries
 })
 public class VarResolver {
 
@@ -294,9 +295,6 @@ public class VarResolver {
 	);
 
 	@SafeVarargs
-	@SuppressWarnings({
-		"unchecked" // Array allocation with generic component type; safe since the concat result is immediately typed by the return.
-	})
 	private static <T> Class<? extends T>[] concat(Class<? extends T>[]... arrays) {
 		var total = 0;
 		for (var a : arrays) total += a.length;
@@ -350,9 +348,6 @@ public class VarResolver {
 
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class<?> o2) {
-			@SuppressWarnings({
-				"unchecked" // Cast is safe: parameterized by caller.
-			})
 			var subType = (Class<? extends Var>) o2;
 			return BeanInstantiator.of(Var.class, bs).type(subType).run();
 		}
@@ -373,8 +368,7 @@ public class VarResolver {
 	 * @param builder The builder for this object.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure on userBeans map: the runtime types match by construction
-		"rawtypes"   // Same reason — Builder.bean(Class<T>, T) ensures Class/value pairing
+		"rawtypes" // Same reason — Builder.bean(Class<T>, T) ensures Class/value pairing
 	})
 	protected VarResolver(Builder builder) {
 		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);

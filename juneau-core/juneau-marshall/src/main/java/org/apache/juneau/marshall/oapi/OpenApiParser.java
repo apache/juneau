@@ -39,7 +39,8 @@ import org.apache.juneau.marshall.uon.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for OpenApiParser hierarchy
+	"java:S110", // Inheritance depth acceptable for OpenApiParser hierarchy
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 

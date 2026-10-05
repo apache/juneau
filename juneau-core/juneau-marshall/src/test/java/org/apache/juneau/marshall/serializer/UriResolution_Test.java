@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.*;
  */
 @SuppressWarnings({
 	"java:S1172", // Unused parameters in tests are intentional
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class UriResolution_Test extends TestBase {
 
@@ -58,7 +58,7 @@ class UriResolution_Test extends TestBase {
 				var r = s.writeToString(testBean);
 
 				// Specifying "xxx" in the expected results will spit out what we should populate the field with.
-				if (expected.equals("xxx")) {
+				if (eq(expected, "xxx")) {
 					System.out.println(label + "/" + cns(s) + "=\n" + r.replaceAll("\t", "\\\\t").replaceAll("\\\\", "\\\\\\\\").replaceAll("\\\"", "\\\\\\\"").replaceAll("\n", "\\\\n")); // NOT DEBUG
 					System.out.println(r);
 				}

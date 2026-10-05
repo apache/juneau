@@ -36,8 +36,8 @@ import org.junit.jupiter.api.*;
  * shapes through {@link ParquetSerializer} + {@link ParquetParser} to drive the serialize-side branches.
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns raw types; explicit casts required for typed assertions
-	"resource"   // RecordWriter.write(...) returns the same writer (fluent 'this'); already closed via try-with-resources.
+	"resource", // RecordWriter.write(...) returns the same writer (fluent 'this'); already closed via try-with-resources.
+	"unchecked" // Parser returns raw types; explicit casts required for typed assertions
 })
 class ParquetSerializerSessionFull_Test extends TestBase {
 

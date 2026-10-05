@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.mcp;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -322,7 +323,7 @@ class McpCompletionRegistry_Test {
 			McpResourceTemplateHandler faulty = new McpResourceTemplateHandler() {
 				@Override public McpResourceTemplateSpec descriptor() { return new McpResourceTemplateSpec().setUriTemplate("file:///{name}"); }
 				@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
-				@Override public McpCompleter completer(String variableName) { return "bogus".equals(variableName) ? STUB : null; }
+				@Override public McpCompleter completer(String variableName) { return eq(variableName, "bogus") ? STUB : null; }
 			};
 			var config = new McpServerConfig().addResourceTemplate(faulty);
 			assertFalse(config.hasAnyCompleter());

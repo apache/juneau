@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -111,28 +110,17 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"resource",   // Resource management handled externally
-	"java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
 	"java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
-	"java:S6539"  // Monster class; RestRequest is intentionally a single per-request fluent builder aggregating headers/query/form/body/serialization config
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
+	"java:S6539", // Monster class; RestRequest is intentionally a single per-request fluent builder aggregating headers/query/form/body/serialization config
+	"resource", // Resource management handled externally
+	"unchecked" // toMap() casts a value already verified to be a Map to Map<Object,Object>.
 })
 public class RestRequest extends MarshallingSession implements HttpUriRequest, Configurable, AutoCloseable {
 
-	// Property name constants
-	private static final String PROP_ignoreErrors = "ignoreErrors";
-	private static final String PROP_interceptors = "interceptors";
-	private static final String PROP_requestBodySchema = "requestBodySchema";
-	private static final String PROP_response = "response";
-	private static final String PROP_serializer = "serializer";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_client = "client";
-	private static final String ARG_method = "method";
-	private static final String ARG_parser = "parser";
-	private static final String ARG_uri = "uri";
-	private static final String ARG_value = "value";
-	private static final String ARG_interceptors = "interceptors";
+	private static final String HEADER_ACCEPT = org.apache.juneau.http.header.Accept.NAME;
+	private static final String HEADER_CONTENT_TYPE = org.apache.juneau.http.header.ContentType.NAME;
 
 	// URI path separator (always "/" per RFC 3986)
 	private static final String URI_PATH_SEPARATOR = "/";
@@ -206,9 +194,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		return NameValuePair.class.isAssignableFrom(o.getClass().getComponentType());
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	private static Map<Object,Object> toMap(Object o) {
 		return (Map<Object,Object>)o;
 	}
@@ -249,9 +234,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(assertArgNotNull(ARG_client, client).getMarshallingContext().createSession());
+		super(reqnn("client", client).getMarshallingContext().createSession());
 		this.client = client;
-		this.request = createInnerRequest(assertArgNotNull(ARG_method, method), assertArgNotNull(ARG_uri, uri), hasBody);
+		this.request = createInnerRequest(reqnn("method", method), reqnn("uri", uri), hasBody);
 		this.errorCodes = client.errorCodes;
 		this.formData = client.createFormData();
 		this.headerData = client.createHeaderData();
@@ -623,7 +608,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest errorCodes(Predicate<Integer> value) {
-		errorCodes = assertArgNotNull(ARG_value, value);
+		errorCodes = reqnn("value", value);
 		return this;
 	}
 
@@ -700,7 +685,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest formDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into formDataBean(Object) is not a bean.");
+		req(isBean(reqnn("value", value)), "Object passed into formDataBean(Object) is not a bean.");
 		var b = formData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
@@ -783,7 +768,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into formDataPairs(String...)");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into formDataPairs(String...)");
 		var b = formData;
 		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
@@ -1075,7 +1060,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest headerPairs(String...pairs) {
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into headerPairs(String...)");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into headerPairs(String...)");
 		var b = headerData;
 		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
@@ -1133,7 +1118,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest headersBean(Object value) {
-		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into headersBean(Object) is not a bean.");
+		req(isBean(reqnn("value", value)), "Object passed into headersBean(Object) is not a bean.");
 		var b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k, v) -> b.append(createHeader(k, v)));
 		return this;
@@ -1260,7 +1245,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @throws RestCallException If init method on interceptor threw an exception.
 	 */
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
-		assertArgNoNulls(ARG_interceptors, interceptors);
+		reqnns("interceptors", interceptors);
 		try {
 			for (var i : interceptors) {
 				this.interceptors.add(i);
@@ -1531,7 +1516,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest parser(Class<? extends Parser> parser) {
-		this.parser = client.getInstance(assertArgNotNull(ARG_parser, parser));
+		this.parser = client.getInstance(reqnn("parser", parser));
 		return this;
 	}
 
@@ -1553,7 +1538,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest parser(Parser parser) {
-		this.parser = assertArgNotNull(ARG_parser, parser);
+		this.parser = reqnn("parser", parser);
 		return this;
 	}
 
@@ -1630,7 +1615,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest pathDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into pathDataBean(Object) is not a bean.");
+		req(isBean(reqnn("value", value)), "Object passed into pathDataBean(Object) is not a bean.");
 		var b = pathData;
 		toBeanMap(value).forEach((k, v) -> b.set(createPart(PATH, k, v)));
 		return this;
@@ -1663,7 +1648,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest pathDataPairs(String...pairs) {
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into pathDataPairs(String...)");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into pathDataPairs(String...)");
 		var b = pathData;
 		for (var i = 0; i < pairs.length; i += 2)
 			b.set(pairs[i], pairs[i + 1]);
@@ -1942,7 +1927,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest queryDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into queryDataBean(Object) is not a bean.");
+		req(isBean(reqnn("value", value)), "Object passed into queryDataBean(Object) is not a bean.");
 		var b = queryData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(QUERY, k, v)));
 		return this;
@@ -1973,7 +1958,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into queryDataPairs(String...)");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into queryDataPairs(String...)");
 		var b = queryData;
 		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
@@ -2017,9 +2002,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Null elements are ignored (only non-null classes that extend {@link Throwable} are added).
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
 			rethrow = list();
@@ -2055,9 +2037,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"null" // Null handling verified by context or framework
 	})
 	public RestResponse run() throws RestCallException {
 		if (nn(response))
@@ -2072,9 +2054,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				var name = x.name;
 				var value = x.value;
 				var pathVar = "{" + name + "}";
-				if (path.indexOf(pathVar) == -1 && ! name.equals("/*"))
+				if (path.indexOf(pathVar) == -1 && neq(name, "/*"))
 					throw isex("Path variable {%s} was not found in path.", name);
-				if (name.equals("/*"))
+				if (eq(name, "/*"))
 					path = path.replaceAll("\\/\\*$", URI_PATH_SEPARATOR + value);
 				else
 					path = path.replace(pathVar, String.valueOf(value));
@@ -2086,7 +2068,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 			// Pick the serializer if it hasn't been overridden.
 			var hl = headerData;
-			var h = hl.getLast("Content-Type");
+			var h = hl.getLast(HEADER_CONTENT_TYPE);
 			var contentType = h.isPresent() ? h.get().getValue() : null;
 			var serializer2 = this.serializer;
 			if (serializer2 == null)
@@ -2095,7 +2077,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				contentType = serializer2.getPrimaryMediaType().toString();
 
 			// Pick the parser if it hasn't been overridden.
-			h = hl.getLast("Accept");
+			h = hl.getLast(HEADER_ACCEPT);
 			var accept = h.isPresent() ? h.get().getValue() : null;
 			var parser2 = this.parser;
 			if (parser2 == null)
@@ -2289,7 +2271,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 */
 	private HttpRequestBase buildRedirectRequest(HttpRequestBase current, URI target2, int statusCode) throws ClientProtocolException {
 		var method = current.getMethod();
-		var preserveMethod = method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("HEAD");
+		var preserveMethod = eqic(method, "GET") || eqic(method, "HEAD");
 		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);
 		var entity = (! rewriteToGet && current instanceof HttpEntityEnclosingRequestBase e) ? e.getEntity() : null;
 
@@ -2307,7 +2289,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 		next.setURI(target2);
 		for (var h : current.getAllHeaders())
-			if (! (rewriteToGet && (h.getName().equalsIgnoreCase("Content-Length") || h.getName().equalsIgnoreCase("Content-Type"))))
+			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))))
 				next.addHeader(h);
 		return next;
 	}
@@ -2715,7 +2697,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	private ContentType getRequestContentType(ContentType def) {
-		var h = request.getFirstHeader("Content-Type");
+		var h = request.getFirstHeader(HEADER_CONTENT_TYPE);
 		if (nn(h)) {
 			var s = h.getValue();
 			if (ine(s))
@@ -2791,16 +2773,16 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(ARG_client, client.properties())
-			.a(PROP_ignoreErrors, ignoreErrors)
-			.a(PROP_interceptors, interceptors)
-			.a(PROP_requestBodySchema, contentSchema)
-			.a(PROP_response, response)
-			.a(PROP_serializer, serializer);
+			.a("client", client.properties())
+			.a("ignoreErrors", ignoreErrors)
+			.a("interceptors", interceptors)
+			.a("requestBodySchema", contentSchema)
+			.a("response", response)
+			.a("serializer", serializer);
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || eq(name, "*") || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && ie(s(value))))
@@ -2843,7 +2825,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = ie(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
+		var isMulti = ie(name) || eq(name, "*") || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && ie(s(value))))
@@ -2902,7 +2884,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || eq(name, "*") || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
@@ -2968,7 +2950,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			}
 		}
 
-		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || eq(name, "*") || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && ie(s(value))))
@@ -3009,7 +2991,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * cursor opened over a temporary buffer, then sending the buffered bytes as the request
 	 * body.
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({
+		"rawtypes" // The body consumer's element type depends on the writer kind, so it is invoked through a raw Consumer.
+	})
 	private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {
 		if (serializer == null)
 			throw iaex("No serializer registered for cursor-streamed request body.");

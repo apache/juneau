@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.marshall.parser;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.commons.collections.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Subclass of parser session objects for character-based parsers.
@@ -35,16 +35,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ReaderParserSession extends ParserSession {
-
-	// Property name constants
-	private static final String PROP_streamCharset = "streamCharset";
-	private static final String PROP_ReaderParserSession_streamCharset = "ReaderParserSession.streamCharset";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -64,7 +57,7 @@ public class ReaderParserSession extends ParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ReaderParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			streamCharset = ctx.getStreamCharset();
 		}
@@ -81,7 +74,7 @@ public class ReaderParserSession extends ParserSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_streamCharset, PROP_ReaderParserSession_streamCharset:
+				case "streamCharset", "ReaderParserSession.streamCharset":
 					return streamCharset(cvt(value, Charset.class));
 				default:
 					super.property(key, value);
@@ -134,7 +127,7 @@ public class ReaderParserSession extends ParserSession {
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(ReaderParser ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final ReaderParser ctx;
@@ -192,6 +185,6 @@ public class ReaderParserSession extends ParserSession {
 	@Override /* Overridden from ParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_streamCharset, streamCharset);
+			.a("streamCharset", streamCharset);
 	}
 }

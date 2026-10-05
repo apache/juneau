@@ -124,9 +124,9 @@ public class ResponseAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 		"ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Response (AnnotationObject runtime proxy pattern)
-		"all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
+		"all", // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Instance extends AnnotationObject implements Response {
 

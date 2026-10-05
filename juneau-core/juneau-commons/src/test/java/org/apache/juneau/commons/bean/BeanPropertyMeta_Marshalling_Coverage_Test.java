@@ -220,7 +220,9 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 		return BeanPropertyMeta.builder(beanMeta, fieldName).setField(f).canRead().canWrite();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // bean.getClass() yields Class<? extends Object>, cast to Class<T> for the test helper.
+	})
 	private static <T> BeanMap<T> mapOf(T bean) {
 		var bm = BeanMap.of(bean, BeanMeta.of((Class<T>) bean.getClass()));
 		bm.setBeanSession(new FakeBeanSession());

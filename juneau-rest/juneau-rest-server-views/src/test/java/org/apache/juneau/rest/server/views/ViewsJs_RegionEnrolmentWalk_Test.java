@@ -198,7 +198,7 @@ class ViewsJs_RegionEnrolmentWalk_Test extends TestBase {
 	@Test void h01_missingRuntimeReportsLoudNotBlank() throws Exception {
 		var fn = functionBody(viewsJs(), "function reportRegionsWithoutRuntime(");
 		assertTrue(fn.contains("juneau-regions.js is not loaded"), fn);
-		assertTrue(fn.contains("data-juneau-region-state"), fn);
+		assertTrue(fn.contains("dataset.juneauRegionState"), fn);
 		assertTrue(fn.contains("renderAsyncStatus(el, \"error\""), fn);
 	}
 

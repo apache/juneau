@@ -35,8 +35,8 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"serial",  // Serialization not relevant for test beans
-	"unused"   // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"serial", // Serialization not relevant for test beans
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class JsonSchemaGenerator_Test extends TestBase {
 

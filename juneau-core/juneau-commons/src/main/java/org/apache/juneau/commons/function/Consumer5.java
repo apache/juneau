@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * A functional interface representing an operation that accepts five arguments and returns no result.
@@ -72,12 +73,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface Consumer5<A,B,C,D,E> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer5} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -100,7 +98,7 @@ public interface Consumer5<A,B,C,D,E> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer5<A,B,C,D,E> andThen(Consumer5<? super A,? super B,? super C,? super D,? super E> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b, C c, D d, E e) -> {
 			apply(a, b, c, d, e);
 			after.apply(a, b, c, d, e);

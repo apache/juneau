@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -98,8 +97,8 @@ public final class RecordStreamBody implements HttpBody {
 	 * @throws IllegalArgumentException If the serializer does not support the record-writer surface.
 	 */
 	public static RecordStreamBody records(Serializer serializer, Consumer<RecordWriter> consumer) {
-		assertArgNotNull("serializer", serializer);
-		assertArgNotNull("consumer", consumer);
+		reqnn("serializer", serializer);
+		reqnn("consumer", consumer);
 		if (! (serializer instanceof RecordWritable))
 			throw iaex("Serializer '%s' does not support the record-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, RecordWriter.class, false);
@@ -125,8 +124,8 @@ public final class RecordStreamBody implements HttpBody {
 	 * @throws IllegalArgumentException If the serializer does not support the token-writer surface.
 	 */
 	public static RecordStreamBody token(Serializer serializer, Consumer<TokenWriter> consumer) {
-		assertArgNotNull("serializer", serializer);
-		assertArgNotNull("consumer", consumer);
+		reqnn("serializer", serializer);
+		reqnn("consumer", consumer);
 		if (! (serializer instanceof TokenWritable))
 			throw iaex("Serializer '%s' does not support the token-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, TokenWriter.class, false);
@@ -175,11 +174,11 @@ public final class RecordStreamBody implements HttpBody {
 
 	@Override /* HttpBody */
 	@SuppressWarnings({
-		"unchecked", // Consumer is paired with writerKind at construction; the cast matches the opened cursor type.
-		"resource"   // The cursor wraps the caller-owned 'out'; its close() flushes but does not close 'out'.
+		"resource", // The cursor wraps the caller-owned 'out'; its close() flushes but does not close 'out'.
+		"unchecked" // Consumer is paired with writerKind at construction; the cast matches the opened cursor type.
 	})
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		reqnn("out", out);
 		if (written && ! repeatable)
 			throw new IOException("Non-repeatable streaming body cannot be resent.  Mark the body repeatable() if its producer can be replayed.");
 		written = true;

@@ -156,12 +156,12 @@ public class EncoderSet {
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
 			for (var v : values)
-				if (cns(v).equals("NoInherit"))
+				if (eq(cns(v), "NoInherit"))
 					clear();
 			for (var v : values) {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
-				} else if (! cns(v).equals("NoInherit")) {
+				} else if (neq(cns(v), "NoInherit")) {
 					throw iaex("Invalid type passed to EncoderSet.Builder.add(): %s", cn(v));
 				}
 			}
@@ -253,7 +253,7 @@ public class EncoderSet {
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
 			for (var v : values) {
-				if (cns(v).equals("Inherit")) {
+				if (eq(cns(v), "Inherit")) {
 					l.addAll(entries);
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);

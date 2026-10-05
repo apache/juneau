@@ -306,19 +306,19 @@ class StringListAssertion_Test extends TestBase {
 	@Test void cb05_any() {
 		var x1 = l("1");
 		var nil = nullList(String.class);
-		test(x1).isAny(x->x.equals("1"));
-		assertThrown(()->test(x1).isAny(x->x.equals("2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
+		test(x1).isAny(x->eq(x, "1"));
+		assertThrown(()->test(x1).isAny(x->eq(x, "2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
 		var assertion12 = test(nil);
-		assertThrows(BasicAssertionError.class, ()->assertion12.isAny(x->x.equals("2")), "Value was null.");
+		assertThrows(BasicAssertionError.class, ()->assertion12.isAny(x->eq(x, "2")), "Value was null.");
 	}
 
 	@Test void cb06_all() {
 		var x1 = l("1");
 		var nil = nullList(String.class);
 		test(x1).isAll(x->x!=null);
-		assertThrown(()->test(x1).isAll(x->x.equals("2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
+		assertThrown(()->test(x1).isAll(x->eq(x, "2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
 		var assertion13 = test(nil);
-		assertThrows(BasicAssertionError.class, ()->assertion13.isAll(x->x.equals("2")), "Value was null.");
+		assertThrows(BasicAssertionError.class, ()->assertion13.isAll(x->eq(x, "2")), "Value was null.");
 	}
 
 	@Test void cb07_isSize() {

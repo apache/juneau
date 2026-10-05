@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.config;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.beans.*;
@@ -31,13 +30,9 @@ import org.apache.juneau.marshall.parser.*;
  * A single section in a config file.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Section {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_c = "c";
-	private static final String ARG_bean = "bean";
 
 	final Config config;
 	private final ConfigMap configMap;
@@ -112,7 +107,7 @@ public class Section {
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 
 		if (! isPresent())
 			return oe();
@@ -200,7 +195,7 @@ public class Section {
 		"unchecked" // Type erasure requires cast to T for interface proxy
 	})
 	public <T> Optional<T> asInterface(Class<T> c) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 
 		if (! c.isInterface())
 			throw iaex("Class '%s' passed to toInterface() is not an interface.", cn(c));
@@ -256,7 +251,7 @@ public class Section {
 	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull(ARG_bean, bean);
+		reqnn("bean", bean);
 		if (! isPresent())
 			throw iaex("Section '%s' not found in configuration.", name);
 

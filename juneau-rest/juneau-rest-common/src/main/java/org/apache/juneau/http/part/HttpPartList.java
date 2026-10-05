@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -102,7 +101,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 		var x = new HttpPartList();
 		if (pairs == null)
 			pairs = new String[0];
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into HttpPartList.ofPairs()");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into HttpPartList.ofPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
 			x.add(HttpPartBean.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -265,7 +264,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * @return This object.
 	 */
 	public HttpPartList removeAll(String name) {
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		removeIf(p -> nameMatches(p, name));
 		return this;
 	}
@@ -391,9 +390,6 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read operations and
 	 * non-mutating iteration continue to work.
 	 */
-	@SuppressWarnings({
-		"java:S2160" // equals() inherited from ArrayList; list equality is element-based which is correct
-	})
 	public static class Unmodifiable extends HttpPartList implements UnmodifiableBean {
 
 		private static final long serialVersionUID = 1L;

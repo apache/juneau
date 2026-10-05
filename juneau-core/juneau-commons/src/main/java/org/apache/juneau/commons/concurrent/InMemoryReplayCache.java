@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.commons.concurrent;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Built-in default {@link ReplayCache}: a per-process, {@link ConcurrentHashMap}-backed seen-identifier set with
@@ -85,7 +85,7 @@ public class InMemoryReplayCache implements ReplayCache {
 
 	@Override /* ReplayCache */
 	public boolean checkAndRecord(String id, long expiresAtMs) {
-		assertArgNotNull("id", id);
+		reqnn("id", id);
 		maybeEvictExpired();
 		return seen.putIfAbsent(id, expiresAtMs) == null;
 	}

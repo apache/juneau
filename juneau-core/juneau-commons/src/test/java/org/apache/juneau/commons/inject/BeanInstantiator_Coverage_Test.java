@@ -47,7 +47,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S2094", // Intentionally empty helper beans.
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused" // Fixture builder methods take parameters (e.g. A05_Builder.build(unresolvable)) they never read; they exist only for injection coverage
 })
 class BeanInstantiator_Coverage_Test extends TestBase {
 
@@ -176,9 +177,6 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 
 	public static class A05_Bean {
 		public static class Builder {
-			@SuppressWarnings({
-				"unused" // Parameter required so the build() method is unresolvable, per the scenario under test.
-			})
 			public A05_Bean build(A05_Unresolvable unresolvable) { return new A05_Bean(); }
 			public static Builder create() { return new Builder(); }
 		}
@@ -328,7 +326,6 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 	// so a weak builder wins even though the subtype is concrete (not abstract).
 	public static class C06_Base { /* empty */ }
 	public static class C06_Sub extends C06_Base {
-		@SuppressWarnings("unused")
 		private C06_Sub() { /* private-only: no accessible direct constructor */ }
 		public static class Builder {
 			public C06_Base build() { return new C06_Base(); }
@@ -471,9 +468,6 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 		E03_Bean(Builder b) { this.value = b.value; }
 		public static class Builder {
 			String value = "unchanged";
-			@SuppressWarnings({
-				"unused" // Parameter required to match the setter signature invoked via reflection during auto-wire.
-			})
 			public void setValue(String v) { throw rex("boom - setter intentionally fails to exercise autoWireBuilder()'s best-effort exception swallow"); }
 			public E03_Bean build() { return new E03_Bean(this); }
 		}

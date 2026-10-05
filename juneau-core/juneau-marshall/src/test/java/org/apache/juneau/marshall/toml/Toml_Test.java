@@ -23,10 +23,13 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.marshaller.Toml; // Explicit: the same-package @Toml annotation would otherwise shadow the marshaller.
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unchecked" // Unchecked cast required for generic test utility.
+})
 class Toml_Test {
 
 	@Test
@@ -168,16 +171,10 @@ class Toml_Test {
 		var config = parsed.get("config");
 		assertNotNull(config);
 		assertTrue(config instanceof Map, "Expected Map for config");
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var configMap = (Map<String,Object>) config;
 		var db = configMap.get("db");
 		assertNotNull(db);
 		assertTrue(db instanceof Map, "Expected Map for db");
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var dbMap = (Map<String,Object>) db;
 		assertEquals("localhost", dbMap.get("host"));
 		assertEquals(5432L, dbMap.get("port"));

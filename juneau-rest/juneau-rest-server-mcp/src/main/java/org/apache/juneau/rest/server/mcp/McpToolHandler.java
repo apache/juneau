@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Handler for a single MCP tool.
@@ -62,9 +62,9 @@ public interface McpToolHandler {
 	 * @return A new handler wiring both. Never <jk>null</jk>.
 	 */
 	static McpToolHandler of(McpToolSpec descriptor, BiFunction<Map<String,Object>,BeanStore,McpToolOutcome> call) {
-		assertArgNotNull("descriptor", descriptor);
-		assertArgNotNullOrBlank("descriptor.getName()", descriptor.getName());
-		assertArgNotNull("call", call);
+		reqnn("descriptor", descriptor);
+		reqnb("descriptor.getName()", descriptor.getName());
+		reqnn("call", call);
 		return new McpToolHandler() {
 			@Override public McpToolSpec descriptor() {
 				return descriptor;

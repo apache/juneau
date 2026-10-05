@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.msgpack.DataType.*;
 
@@ -44,15 +43,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"rawtypes", // Raw types necessary for generic type handling
-	"unchecked", // Type erasure requires unchecked casts
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"  // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class MsgPackParserSession extends InputStreamParserSession implements TokenReadable, ArrayRecordReadable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -69,7 +65,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.nativeMode = ctx.isNativeMode();
 			this.maxLength = ctx.getMaxLength();
 		}
@@ -89,7 +85,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final boolean nativeMode;
@@ -168,7 +164,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541"  // Single-threaded session contexts do not require synchronization
+		"java:S6541" // Single-threaded session contexts do not require synchronization
 	})
 	private <T> T readAnything0(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
@@ -294,8 +290,8 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				// Merged scalar tier: one wire-type (BOOLEAN/INT/LONG/FLOAT/DOUBLE/STRING/BIN) covers
 				// many scalar Java types — the read already happened above and convertToType narrows.
-				// A byte[]-targeted string element is a BinaryFormat-encoded payload (TODO-353 write-side
-				// fix counterpart) rather than a literal string - decode it back to bytes directly, since
+				// A byte[]-targeted string element is a BinaryFormat-encoded payload (mirroring the
+				// serializer) rather than a literal string - decode it back to bytes directly, since
 				// the generic String-to-byte[] conversion doesn't know about BinaryFormat.
 				var binaryFormat = getBinaryFormat();
 				if (dt == STRING && sType.isByteArray() && binaryFormat != BinaryFormat.NOT_SET)

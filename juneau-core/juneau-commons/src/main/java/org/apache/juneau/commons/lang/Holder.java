@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -110,14 +109,10 @@ import org.apache.juneau.commons.utils.*;
  * @param <T> The value type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Consumer/Supplier types used in value holder utility where callback type parameter cannot be further bounded
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740" // Raw Consumer/Supplier types used in value holder utility where callback type parameter cannot be further bounded
 })
 public class Holder<T> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_mapper = "mapper";
-	private static final String ARG_predicate = "predicate";
 
 	/**
 	 * Creates a new empty value (with <c>null</c> as the initial value).
@@ -237,7 +232,7 @@ public class Holder<T> {
 	 * @return A {@link Holder} describing the value if it is present and matches the predicate, otherwise an empty {@link Holder}.
 	 */
 	public Holder<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull(ARG_predicate, predicate);
+		reqnn("predicate", predicate);
 		if (t == null)
 			return Holder.empty();
 		return predicate.test(t) ? this : Holder.empty();
@@ -271,7 +266,7 @@ public class Holder<T> {
 		"unchecked" // Type erasure requires cast to Holder<T2>
 	})
 	public <T2> Holder<T2> flatMap(Function<? super T,? extends Holder<? extends T2>> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		if (t == null)
 			return Holder.empty();
 		var result = mapper.apply(t);
@@ -443,7 +438,7 @@ public class Holder<T> {
 	 * @return A new {@link Holder} containing the mapped result, or an empty value if this value is empty.
 	 */
 	public <T2> Holder<T2> map(Function<? super T,T2> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		if (nn(t))
 			return of(mapper.apply(t));
 		return empty();

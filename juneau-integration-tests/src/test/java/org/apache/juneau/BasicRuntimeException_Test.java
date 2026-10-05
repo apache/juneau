@@ -116,18 +116,6 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("Message arg1", x.getMessage());
 	}
 
-	@Test void a10_PatternException_fluentSetters() {
-		var x = new PatternException("Original message");
-
-		// Test setMessage returns same instance for fluent chaining
-		assertSame(x, x.setMessage("New message"));
-		assertEquals("New message", x.getMessage());
-
-		// Test setMessage with args
-		assertSame(x, x.setMessage("Message %s", "arg1"));
-		assertEquals("Message arg1", x.getMessage());
-	}
-
 	@Test void a11_RemoteMetadataException_fluentSetters() {
 		var x = new RemoteMetadataException((Throwable)null, "Original message");
 

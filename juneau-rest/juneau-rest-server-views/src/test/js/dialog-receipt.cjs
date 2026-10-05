@@ -152,7 +152,7 @@ async function openAndConfirm(opts) {
 		const method = (init?.method) || 'GET';
 		if (method === 'GET' && url === FORM_URL)
 			return Promise.resolve(jsonResponse(modalPayload(o)));
-		if (method === 'GET' && String(url).indexOf(RECEIPT_URL) === 0)
+		if (method === 'GET' && String(url).startsWith(RECEIPT_URL))
 			return o.receipt();
 		return o.submit();
 	});
@@ -167,7 +167,7 @@ async function openAndConfirm(opts) {
 	return { env: env, I: I, fx: fx, opened: opened, confirm: btn };
 }
 
-const success = (extra) => () => Promise.resolve(jsonResponse(Object.assign({ outcome: 'success' }, extra || {})));
+const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'success', ...extra }));
 
 (async function main() {
 

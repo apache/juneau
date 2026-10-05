@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 @SuppressWarnings({
-	"java:S4144",
+	"java:S4144", // Tests such as a01/a03/a04 differ only in which source (system property, global or local override) supplies the value, so their bodies look identical
 	"unused" // Test beans with intentionally unused fields (e.g. UnsupportedType)
 })
 @ResourceLock(Resources.SYSTEM_PROPERTIES)

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -48,14 +47,12 @@ import org.apache.juneau.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",  // Inheritance depth acceptable for this class hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for part lists
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S127", // the set(...) replace loops shrink the cached loop bound (j--) when a same-named part is removed during iteration
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2160" // equals() inherited from ArrayList; list equality is element-based, which is correct for part lists
 })
 public class PartList extends ArrayList<NameValuePair> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_type = "type";
 
 	/** Represents no part list in annotations. */
 	public static final class Void extends PartList {
@@ -116,7 +113,7 @@ public class PartList extends ArrayList<NameValuePair> {
 		var x = new PartList();
 		if (pairs == null)
 			pairs = new String[0];
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into PartList.ofPairs()");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into PartList.ofPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
 			x.add(BasicPart.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -315,10 +312,10 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @return A part with a condensed value, or an empty {@link Optional} if no parts by the given name are present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 
 		var name = PartBeanMeta.of(type).getSchema().getName();
-		assertArg(nn(name), "Part name could not be found on bean type '%s'", cn(type));
+		req(nn(name), "Part name could not be found on bean type '%s'", cn(type));
 
 		return get(name, type);
 	}
@@ -707,8 +704,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	@SuppressWarnings({
-		"java:S127", // S127: loop counter j2 decrements when removing
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	public PartList set(List<NameValuePair> values) {
 
@@ -744,9 +740,6 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @param value The part to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S127" // Loop counter j decrements when removing elements
-	})
 	public PartList set(NameValuePair value) {
 		if (nn(value)) {
 			var replaced = false;
@@ -946,10 +939,6 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * {@code iterator()} / {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read
 	 * operations and non-mutating iteration continue to work.
 	 */
-	@SuppressWarnings({
-		"java:S110",  // Inheritance depth acceptable for this class hierarchy
-		"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for part lists
-	})
 	public static class Unmodifiable extends PartList implements UnmodifiableBean {
 
 		private static final long serialVersionUID = 1L;

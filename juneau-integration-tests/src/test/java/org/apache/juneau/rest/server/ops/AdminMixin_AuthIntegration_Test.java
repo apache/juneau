@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.security.*;
 
 import org.apache.juneau.*;
@@ -48,7 +50,7 @@ class AdminMixin_AuthIntegration_Test extends TestBase {
 
 	/** Accepts only "secret-token"; throws for anything else. */
 	private static final TokenValidator FIXED_TOKEN = token -> {
-		if ("secret-token".equals(token))
+		if (eq(token, "secret-token"))
 			return ADMIN;
 		throw new AuthenticationException("Invalid token");
 	};

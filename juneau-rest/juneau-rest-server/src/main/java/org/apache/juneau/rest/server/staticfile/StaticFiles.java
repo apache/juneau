@@ -186,6 +186,9 @@ public interface StaticFiles extends FileFinder {
 	}
 
 	/** Represents no static files */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public abstract class Void implements StaticFiles {}
 
 	/**

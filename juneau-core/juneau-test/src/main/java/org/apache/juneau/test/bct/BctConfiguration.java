@@ -17,7 +17,6 @@
 package org.apache.juneau.test.bct;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.function.*;
@@ -81,12 +80,9 @@ import org.apache.juneau.commons.settings.*;
  * @see BctAssertions
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BctConfiguration {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_converter = "converter";
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -328,7 +324,7 @@ public class BctConfiguration {
 	 * @see BasicBeanConverter
 	 */
 	public static void set(BeanConverter converter) {
-		assertArgNotNull(ARG_converter, converter);
+		reqnn("converter", converter);
 		CONVERTER_OVERRIDE.set(converter);
 	}
 

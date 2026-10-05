@@ -55,10 +55,10 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({
-	"rawtypes",   // Raw types necessary for test bean handling
-	"serial",     // Serialization not relevant
+	"java:S1612", // Lambdas preferred over method references in test predicates for clarity
 	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"java:S1612"  // Lambdas preferred over method references in test predicates for clarity
+	"rawtypes", // Raw types necessary for test bean handling
+	"serial" // Serialization not relevant
 })
 class RoundTripTransformBeans_Test extends TestBase {
 

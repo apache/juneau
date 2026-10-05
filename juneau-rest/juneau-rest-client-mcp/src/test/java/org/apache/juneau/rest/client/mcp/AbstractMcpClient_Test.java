@@ -34,7 +34,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link AbstractMcpClient#send(JsonRpcRequest)}.
  */
-@SuppressWarnings("resource") // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
+@SuppressWarnings({
+	"resource" // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
+})
 class AbstractMcpClient_Test extends TestBase {
 
 	/** Minimal concrete subclass so the abstract neutral core can be instantiated for testing. */

@@ -39,6 +39,9 @@ import org.apache.juneau.rest.server.tracing.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3776" // invoke() resolves arguments, sets up metrics/tracing scope, invokes the method and handles errors in a single flow
+})
 public class RestOpInvoker extends MethodInvoker {
 
 	private final RestOpArg[] opArgs;
@@ -109,8 +112,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @throws Exception If an error occurred during either parameter resolution or method invocation.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for REST operation invocation dispatch (virtual-thread + observability paths)
-		"java:S1181"  // Throwable (incl. Error) is intentionally captured to propagate it across the virtual-thread boundary; the caller rethrows Errors as-is.
+		"java:S1181" // Throwable (incl. Error) is intentionally captured to propagate it across the virtual-thread boundary; the caller rethrows Errors as-is.
 	})
 	public void invokeOp(RestOpSession opSession) throws Exception {
 		var vtExec = opSession.getContext().isVirtualThreadsEnabled()
@@ -148,8 +150,7 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for the dispatch hot path.
-		"resource"    // BeanStore is not owned here; its lifecycle is managed by RestContext.
+		"resource" // BeanStore is not owned here; its lifecycle is managed by RestContext.
 	})
 	private void invoke(RestOpSession opSession, boolean observable) throws Exception {
 		var args = new Object[opArgs.length];
@@ -259,7 +260,9 @@ public class RestOpInvoker extends MethodInvoker {
 		}
 	}
 
-	@SuppressWarnings("java:S107") // Parameter list is fixed by the framework invocation contract; grouping into a holder would not improve clarity.
+	@SuppressWarnings({
+		"java:S107" // Parameter list is fixed by the framework invocation contract; grouping into a holder would not improve clarity.
+	})
 	private void deferObservability(CompletionStage<?> stage, MetricsRecorder recorder, Scope tracerScope,
 			long startNanos, RestOpSession opSession, String metricName, String metricTags, boolean scopeStashed) {
 		var fullName = getFullName();

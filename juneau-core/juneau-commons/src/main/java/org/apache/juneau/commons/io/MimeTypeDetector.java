@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.collections.CacheMode.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -63,14 +62,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class MimeTypeDetector {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ext = "ext";
-	private static final String ARG_type = "type";
-	private static final String ARG_name = "name";
 
 	/**
 	 * Builder class for creating MimeTypeDetector instances.
@@ -111,8 +105,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If ext or type is null or blank.
 		 */
 		public Builder addExtensionType(String ext, String type) {
-			assertArgNotNullOrBlank(ARG_ext, ext);
-			assertArgNotNullOrBlank(ARG_type, type);
+			reqnb("ext", ext);
+			reqnb("type", type);
 			extMap.put(lcr(ext), type);
 			return this;
 		}
@@ -126,8 +120,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
 		public Builder addFileType(String name, String type) {
-			assertArgNotNullOrBlank(ARG_name, name);
-			assertArgNotNullOrBlank(ARG_type, type);
+			reqnb("name", name);
+			reqnb("type", type);
 			fileMap.put(name, type);
 			return this;
 		}

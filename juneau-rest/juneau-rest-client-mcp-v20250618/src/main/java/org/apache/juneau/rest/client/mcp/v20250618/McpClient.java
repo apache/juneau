@@ -256,7 +256,9 @@ public class McpClient extends AbstractMcpClient {
 		 *
 		 * @return A new {@link McpClient}. Never <jk>null</jk>.
 		 */
-		@SuppressWarnings("resource") // factory hands the built client to the caller, who must close it (McpClient implements Closeable).
+		@SuppressWarnings({
+			"resource" // factory hands the built client to the caller, who must close it (McpClient implements Closeable).
+		})
 		public McpClient build() {
 			return new McpClient(this);
 		}

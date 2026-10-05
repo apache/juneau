@@ -55,9 +55,9 @@ import org.junit.jupiter.api.*;
  * Cross-walk: each synthetic method's comment names the feature id (F-row) it exercises.
  */
 @SuppressWarnings({
-	"java:S5961",  // High assertion/case count is expected in a comprehensive parity matrix.
-	"java:S114",   // Snake_case fixture interface names (A_ParityClient, A_OpClient) are intentional test-local naming.
-	"resource"     // try-with-resources closes clients; RestResponse closed where applicable.
+	"java:S114", // Snake_case fixture interface names (A_ParityClient, A_OpClient) are intentional test-local naming.
+	"java:S5961", // High assertion/case count is expected in a comprehensive parity matrix.
+	"resource" // try-with-resources closes clients; RestResponse closed where applicable.
 })
 class RemoteProxy_FeatureParity_Test {
 
@@ -326,9 +326,6 @@ class RemoteProxy_FeatureParity_Test {
 			return mrc.getClient().remote(A_ParityClient.class);
 		}
 
-		@SuppressWarnings({
-			"resource" // The negotiating client shares the MockRestClient's (root-mounted) transport, closed by mrc; not closed separately.
-		})
 		private A_ParityClient parsingProxy(MockRestClient mrc) {
 			// Response-body deserialization needs a resolvable parser; the next-gen client has no implicit JSON default,
 			// so configure JSON serializer + default parser explicitly over the mock's (A_ParityJsonResource) transport.
@@ -869,9 +866,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@SuppressWarnings({
-			"resource" // The negotiating client shares the MockRestClient's (root-mounted) transport, closed by mrc.
-		})
 		@Test void c43_jsonRoundTrip_F23() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityJsonResource.class);
 					var c = RestClient.builder().transport(mrc.getClient().getTransport()).defaultSerializer(JsonSerializer.DEFAULT).defaultParser(JsonParser.DEFAULT).build()) {

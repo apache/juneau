@@ -35,7 +35,8 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"deprecation", // Deprecated API used intentionally for backward compatibility testing.
+	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class OAuthFlowBuilder_Test extends TestBase {
 
@@ -81,9 +82,6 @@ class OAuthFlowBuilder_Test extends TestBase {
 		assertTrue(q.contains("code_challenge="));
 	}
 
-	@SuppressWarnings({
-		"deprecation"  // Deprecated API used intentionally for backward compatibility testing.
-	})
 	@Test void c01_resourceOwner_requiredFields() {
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create().build());
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
@@ -91,9 +89,6 @@ class OAuthFlowBuilder_Test extends TestBase {
 			.clientId("id").clientSecret("secret").username("alice").build());
 	}
 
-	@SuppressWarnings({
-		"deprecation"  // Deprecated API used intentionally for backward compatibility testing.
-	})
 	@Test void c02_resourceOwner_buildsWithMinimum() {
 		var f = OAuthResourceOwnerFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))

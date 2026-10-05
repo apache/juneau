@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.auth.oauth.flow;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.UriUtils.*;
 
@@ -80,7 +79,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull("value", value));
+			tokenEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -91,7 +90,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -102,7 +101,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -114,7 +113,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -125,7 +124,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder refreshToken(String value) {
-			refreshToken = assertArgNotNullOrBlank("value", value);
+			refreshToken = reqnb("value", value);
 			return this;
 		}
 
@@ -136,9 +135,9 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -151,7 +150,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+			resource = reqnn("value", value);
 			return this;
 		}
 
@@ -162,8 +161,8 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -175,7 +174,7 @@ public class OAuthRefreshTokenFlow {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 

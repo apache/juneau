@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -40,12 +39,10 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for session hierarchy
-	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
-	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class SseSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -58,7 +55,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 		 * @param ctx The context creating this session. Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SseSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -74,7 +71,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 	 * @return A new builder.
 	 */
 	public static Builder create(SseSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

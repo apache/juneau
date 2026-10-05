@@ -29,9 +29,9 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({
+	"java:S114", // Snake_case fixture interface names (X_Iface, X_BasicIface) are intentional test-local naming.
 	"java:S4144", // Identical test methods intentional for testing different scenarios
-	"java:S114",  // Snake_case fixture interface names (X_Iface, X_BasicIface) are intentional test-local naming.
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BasicBeanStore_Test extends TestBase {
 
@@ -1180,7 +1180,7 @@ class BasicBeanStore_Test extends TestBase {
 	void u02_createBeanFromMethod_throwingFactory_wrapsBeanCreationException() {
 		var store = new BasicBeanStore(null);
 		assertThrows(BeanCreationException.class,
-			() -> store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> m.getNameSimple().equals("throwingFactory")));
+			() -> store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> eq(m.getNameSimple(), "throwingFactory")));
 	}
 
 	static class U_InstanceResource {
@@ -1212,7 +1212,7 @@ class BasicBeanStore_Test extends TestBase {
 	void u05_createBeanFromMethod_methodHasUnresolvableParams_returnsEmpty() {
 		// makeBean needs a String but none is in store → canResolveAllParameters false branch
 		var store = new BasicBeanStore(null);
-		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> m.getNameSimple().equals("makeBean"));
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> eq(m.getNameSimple(), "makeBean"));
 		assertTrue(result.isEmpty());
 	}
 
@@ -1309,9 +1309,6 @@ class BasicBeanStore_Test extends TestBase {
 	// X - BeanStore default methods: outer-instance, Optional, named-qualifier
 	// =========================================================================
 
-	@SuppressWarnings({
-		"java:S114" // Test-fixture interface; snake_case name groups it with its test section (X_*).
-	})
 	interface X_Iface {
 		TestBean create(Object outer, String msg);
 		TestBean createNamed(@Named("msg") String msg);
@@ -1459,9 +1456,6 @@ class BasicBeanStore_Test extends TestBase {
 		assertTrue(store.getBeanType(TestBean.class).isEmpty());
 	}
 
-	@SuppressWarnings({
-		"java:S114" // Test-fixture interface; snake_case name groups it with its test section (X_*).
-	})
 	interface X_BasicIface {
 		TestBean create(String msg);
 		TestBean createMissingUnnamed(Integer missingInt);

@@ -56,7 +56,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-widgets</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

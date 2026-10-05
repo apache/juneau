@@ -16,37 +16,28 @@
  */
 
 /**
- * A {@link org.apache.juneau.rest.server.converter.QueryProtocol} adapter implementing the
+ * The DataTables server-side-processing JSON beans implementing the
  * <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
- * contract on top of Juneau's shared query engine.
+ * contract.
  *
  * <p>
- * This is the optional companion to {@link org.apache.juneau.rest.server.converter.ProtocolQueryable} in
- * {@code juneau-rest-server}.  Adding this module to a service's classpath lets a resource speak the DataTables
- * server-side protocol instead of the Juneau-native {@code s/v/o/p/l} protocol, by registering a
- * {@link org.apache.juneau.rest.server.converter.QueryableSettings} bean selecting
- * {@link org.apache.juneau.rest.server.datatables.DataTablesQueryProtocol}.
+ * This package holds <b>only</b> the DataTables JSON <b>input</b> ({@link org.apache.juneau.rest.server.datatables.DataTablesRequest})
+ * and <b>output</b> ({@link org.apache.juneau.rest.server.datatables.DataTablesResults}) beans, plus the
+ * client-helper mixin.  It carries <b>no</b> query-engine types (design §5.3): the beans know nothing about
+ * {@link org.apache.juneau.commons.beanquery.BeanQuery}.
  *
  * <p>
- * The SPI ({@code QueryProtocol}), the normalized types ({@code QueryArgs}/{@code QueryResult}), and the
- * {@code NativeQueryProtocol} all stay in {@code juneau-rest-server} core; only the DataTables-specific protocol and
- * its {@link org.apache.juneau.rest.server.datatables.DataTablesResults} response envelope live here.
- *
- * <h5 class='topic'>Protocol versioning</h5>
- *
- * <p>
- * The DataTables server-side wire contract is small and has stayed backward-compatible across DataTables 1.10 → 2.x,
- * so this module versions the protocol at the <b>class level</b> rather than shipping per-version Maven artifacts.
- * {@link org.apache.juneau.rest.server.datatables.DataTablesQueryProtocol} is the current protocol; a future breaking
- * DataTables wire change would be added as a sibling class (e.g. {@code DataTables2QueryProtocol}) in this same module.
+ * The bridge between the two worlds lives in the sibling package
+ * {@link org.apache.juneau.rest.server.datatables.adapter}: {@code DataTablesQuery} maps a {@code DataTablesRequest}
+ * onto a {@code BeanQuery}, runs it against a {@link org.apache.juneau.commons.beanquery.BeanQuerySession}, and
+ * populates a {@code DataTablesResults} envelope (mapping {@code total}&rarr;{@code recordsTotal} and
+ * {@code matched}&rarr;{@code recordsFiltered}).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.converter.QueryProtocol}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.converter.ProtocolQueryable}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.converter.QueryableSettings}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.beanquery.BeanQuerySession}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/manual/server-side">DataTables Server-Side Processing</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  *
  * @since 10.0.0

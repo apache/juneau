@@ -76,13 +76,12 @@ public final class JettyHttpTransport implements HttpTransport {
 		this.httpClient = builder.httpClient != null ? builder.httpClient : new CredentialGuardingHttpClient();
 		this.responseTimeoutMs = builder.responseTimeoutMs;
 		if (this.policySupported && !this.httpClient.isStarted())
-			// A SocketAddressResolver that pin-on-connects SSRF-guard-active @Remote connections (see
-			// PolicyPinningSocketAddressResolver); leaves ordinary (non-@Remote) connections on this same client
-			// completely unaffected. Must be installed before start() -- HttpClient.setSocketAddressResolver()
-			// throws IllegalStateException once started, and HttpClient's own default resolver is an Async built
-			// from its executor/scheduler, which (unlike the resolver field itself) are not safely readable until
-			// after start() -- so the non-policy-active fallback here is Jetty's synchronous SocketAddressResolver.Sync
-			// (a supported, dependency-free implementation) rather than a hand-built copy of the async default.
+			// Installs a SocketAddressResolver that pin-on-connects SSRF-guard-active @Remote connections (see
+			// PolicyPinningSocketAddressResolver); ordinary (non-@Remote) connections on this same client are
+			// completely unaffected. It must be installed before the client starts, because Jetty rejects a resolver
+			// change once started. The default async resolver is built from the client's executor and scheduler, which
+			// are not safely readable until after start, so the fallback here is Jetty's synchronous
+			// SocketAddressResolver.Sync, a supported, dependency-free implementation, rather than a hand-built copy.
 			this.httpClient.setSocketAddressResolver(new PolicyPinningSocketAddressResolver(new SocketAddressResolver.Sync()));
 		if (!this.httpClient.isStarted())
 			this.httpClient.start();
@@ -168,9 +167,7 @@ public final class JettyHttpTransport implements HttpTransport {
 		jettyRequest.send(listener);
 		Response jettyResponse;
 		try {
-			jettyResponse = responseTimeoutMs > 0
-				? listener.get(responseTimeoutMs, TimeUnit.MILLISECONDS)
-				: listener.get(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+			jettyResponse = listener.get(responseTimeoutMs > 0 ? responseTimeoutMs : Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			abortQuietly(listener);

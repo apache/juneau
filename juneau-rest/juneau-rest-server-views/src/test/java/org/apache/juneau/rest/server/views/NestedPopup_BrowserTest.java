@@ -112,7 +112,9 @@ class NestedPopup_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Browser report values are cast to Map<String,Object>
+	})
 	private static Map<String,Object> sub(String key) {
 		return (Map<String,Object>) report.get(key);
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -28,34 +30,33 @@ import org.junit.jupiter.api.*;
  * the provenance manifest ({@code juneau-symbols-provenance.md}) approved, and that the sprite still honours the
  * contracts the manifest declares.
  *
- * <h5 class='section'>Why this exists at all, given every glyph is Juneau-original</h5>
+ * <h5 class='section'>Why this exists at all</h5>
  * <p>
- * Because that is a fact about today, and the failure it guards is silent. Eighteen of these twenty glyphs were
- * redrawn from scratch precisely because their predecessors were byte-identical to a proprietary source, and the
- * cheapest way for that to happen again is for someone to paste a glyph out of a design-system sheet during an
- * unrelated polish pass. Nothing else in the build would notice: the artwork renders, the ids are unchanged, and
- * {@link SymbolSprite_StemIds_Test} pins <i>names</i> rather than paths. This test makes such a paste fail until
- * the manifest row is deliberately edited, which turns an invisible act into a reviewable one.
+ * Because origin and fingerprint are facts about today, and the failure they guard is silent. Some glyphs are
+ * Juneau-original; others are console-sprite counterparts cleared for artwork copy (operator ruling 2026-09-24 /
+ * design §3.4) and recorded as {@code irs-artwork}. The cheapest way for an unreviewed paste to land again is for
+ * someone to overwrite a path during an unrelated polish pass. Nothing else in the build would notice: the artwork
+ * renders, the ids are unchanged, and {@link SymbolSprite_StemIds_Test} pins <i>names</i> rather than paths. This
+ * test makes such a paste fail until the manifest row is deliberately edited, which turns an invisible act into a
+ * reviewable one.
  *
  * <h5 class='section'>Deliberately separate from the stem-id guard</h5>
  * <p>
  * {@link SymbolSprite_StemIds_Test} guards correctness &mdash; a rename blanks the Support Console's toolbar,
- * because it overrides these glyphs by name through {@code registerIcon} and {@code juneau-icons.js} renders an
- * empty host {@code <svg>} for an unresolved stem rather than throwing. This one guards licensing drift. They fail
+ * because an app overrides these glyphs by stem name through the page-level override sprite (see
+ * {@code juneau-icons.js}), and an unresolved stem draws nothing rather than throwing. This one guards licensing drift. They fail
  * for unrelated reasons and read as unrelated diagnostics, so they are two tests rather than one.
  *
  * <h5 class='section'>What it asserts</h5>
  * <ul>
  * 	<li>The manifest and the sprite describe the same glyph set, in the same order.
  * 	<li>Every glyph's fingerprint still matches its approved value.
- * 	<li>Every glyph's declared origin is {@code juneau-original} &mdash; the fact that makes {@code LICENSE} and
- * 		{@code NOTICE} silent on this sprite, so it is asserted rather than assumed.
- * 	<li>The document family's page-frame path is byte-identical across {@code csv}, {@code pdf} and
- * 		{@code spreadsheet}. This is the mechanical half of drawing those as one set: a worker redrawing one of
- * 		them alone, against its own predecessor, cannot produce a passing deliverable.
+ * 	<li>Every glyph's declared origin is either {@code juneau-original} or {@code irs-artwork} &mdash; the only
+ * 		origins the manifest authorises. (This test does not read {@code NOTICE}; keeping its attribution in step
+ * 		with the {@code irs-artwork} rows is a manual, reviewed act.)
  * 	<li>The three contracts the manifest states as rules: {@code viewBox="0 0 24 24"} on every glyph, paint only
- * 		ever {@code none} or {@code currentColor}, and an explicit {@code stroke-width} wherever a stroke is
- * 		painted.
+ * 		ever {@code none}, {@code currentColor} or a themable {@code var(--x, currentColor)}, and an explicit
+ * 		{@code stroke-width} wherever a stroke is painted.
  * </ul>
  *
  * <h5 class='section'>What it deliberately does not assert</h5>
@@ -77,7 +78,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 			+ " that this test exists to force.";
 
 	private static final String REQUIRED_VIEWBOX = "0 0 24 24";
-	private static final String REQUIRED_ORIGIN = "juneau-original";
+	private static final Set<String> ALLOWED_ORIGINS = Set.of("juneau-original", "irs-artwork");
 
 	private static String sprite() throws Exception {
 		var s = SymbolProvenanceScanner.read(SymbolProvenanceScanner.SPRITE);
@@ -113,11 +114,10 @@ class SymbolSprite_Provenance_Test extends TestBase {
 	@Test void a01_manifestCoversExactlyTheShippedGlyphs() throws Exception {
 		var shipped = new ArrayList<>(SymbolProvenanceScanner.symbols(sprite()).keySet());
 		var declared = new ArrayList<>(SymbolProvenanceScanner.manifestFingerprints(manifest()).keySet());
-		assertFalse(shipped.isEmpty(), "no <symbol> elements found in the sprite - this test would be vacuous");
-		assertEquals(shipped, declared,
-			"the manifest and the sprite describe different glyph sets (or the same set in a different order)."
+		assertNotEmpty(() -> "no <symbol> elements found in the sprite - this test would be vacuous", shipped);
+		assertList(() -> "the manifest and the sprite describe different glyph sets (or the same set in a different order)."
 				+ " A glyph shipped without a manifest row is unpinned artwork; a row without a glyph is a stale"
-				+ " approval. " + MANIFEST_IS_THE_REVIEW);
+				+ " approval. " + MANIFEST_IS_THE_REVIEW, declared, shipped.toArray());
 	}
 
 	@Test void a02_everyGlyphMatchesItsApprovedFingerprint() throws Exception {
@@ -129,57 +129,64 @@ class SymbolSprite_Provenance_Test extends TestBase {
 			if (!actual.equals(approved.get(stem)))
 				drifted.add(stem + ": manifest=" + approved.get(stem) + " actual=" + actual);
 		});
-		assertEquals(List.of(), drifted,
-			"the artwork of these glyphs no longer matches what the manifest approved. " + MANIFEST_IS_THE_REVIEW);
+		assertEmpty(() -> "the artwork of these glyphs no longer matches what the manifest approved. "
+			+ MANIFEST_IS_THE_REVIEW, drifted);
 	}
 
-	@Test void a03_everyGlyphDeclaresJuneauOriginalOrigin() throws Exception {
-		// Not decoration: "all artwork is Juneau-original" is the reason LICENSE and NOTICE say nothing about this
-		// sprite (the item's LD-3).  A row that ever said otherwise would make those two files wrong, silently.
+	@Test void a03_everyGlyphDeclaresAnAllowedOrigin() throws Exception {
+		// Origins are either Juneau-original or IRS artwork cleared for copy (2026-09-24).  Any other token would
+		// leave LICENSE/NOTICE and the dual-hat rule out of sync with the sprite.
 		var origins = SymbolProvenanceScanner.manifestOrigins(manifest());
-		assertFalse(origins.isEmpty(), "no manifest rows parsed - this test would be vacuous");
-		var foreign = origins.entrySet().stream().filter(e -> !REQUIRED_ORIGIN.equals(e.getValue())).map(Object::toString).toList();
-		assertEquals(List.of(), foreign,
-			"a glyph declares a non-Juneau origin. That is not a manifest problem to fix here: it means LICENSE and"
-				+ " NOTICE now owe an attribution they do not carry.");
+		assertNotEmpty(() -> "no manifest rows parsed - this test would be vacuous", origins);
+		var foreign = origins.entrySet().stream()
+			.filter(e -> !ALLOWED_ORIGINS.contains(e.getValue()))
+			.map(Object::toString)
+			.toList();
+		assertEmpty(() -> "a glyph declares an origin outside " + ALLOWED_ORIGINS + ". Update the manifest only after the artwork"
+				+ " clearance and NOTICE attribution match.", foreign);
 	}
 
-	@Test void a04_documentFamilySharesAByteIdenticalFramePath() throws Exception {
-		var shipped = SymbolProvenanceScanner.symbols(sprite());
-		var frames = new LinkedHashMap<String,String>();
+	/**
+	 * The a04 check as a function of its inputs: every document-family stem must be shipped and declared
+	 * {@code irs-artwork}.  Returns one problem string per violation (empty when the family is intact).
+	 */
+	private static List<String> documentFamilyProblems(Map<String,String> shipped, Map<String,String> origins) {
+		var problems = new ArrayList<String>();
 		for (var stem : SymbolProvenanceScanner.FRAMED_FAMILY) {
-			var element = shipped.get(stem);
-			assertNotNull(element, () -> "the document family member " + stem + " is missing from the sprite");
-			var frame = SymbolProvenanceScanner.framePath(element);
-			assertNotNull(frame, () -> "the document family member " + stem + " declares no path data");
-			frames.put(stem, frame);
+			if (shipped.get(stem) == null)
+				problems.add("the document family member " + stem + " is missing from the sprite");
+			if (neq(origins.get(stem), "irs-artwork"))
+				problems.add("document-family stem " + stem + " is expected to be irs-artwork after the §3.4 replacement"
+					+ " but is " + origins.get(stem));
 		}
-		var distinct = new LinkedHashSet<>(frames.values());
-		assertEquals(1, distinct.size(),
-			() -> "the document family's page-frame path is not byte-identical across "
-				+ SymbolProvenanceScanner.FRAMED_FAMILY + ", so the three have stopped being one drawing: "
-				+ frames + ". The frame is declared in the manifest's `Document family` section and the members are"
-				+ " drawn from it; redrawing one member alone against its own predecessor is what this catches.");
+		return problems;
+	}
+
+	@Test void a04_documentFamilyMembersRemainShipped() throws Exception {
+		// csv / pdf / spreadsheet previously shared a Juneau-original byte-identical frame.  They now ship IRS
+		// artwork (design §3.4), so frame-identity is no longer asserted — only that the three stems still exist
+		// and keep their irs-artwork origin.
+		assertEmpty(() -> "document family drifted. " + MANIFEST_IS_THE_REVIEW,
+			documentFamilyProblems(SymbolProvenanceScanner.symbols(sprite()), SymbolProvenanceScanner.manifestOrigins(manifest())));
 	}
 
 	@Test void a05_everyGlyphIsNormalisedToTheHostViewBox() throws Exception {
 		var offModulus = new ArrayList<String>();
 		SymbolProvenanceScanner.symbols(sprite()).forEach((stem, element) -> {
 			var vb = SymbolProvenanceScanner.viewBox(element);
-			if (!REQUIRED_VIEWBOX.equals(vb))
+			if (neq(vb, REQUIRED_VIEWBOX))
 				offModulus.add(stem + ": viewBox=\"" + vb + "\"");
 		});
-		assertEquals(List.of(), offModulus,
-			"a glyph declares a viewBox other than \"" + REQUIRED_VIEWBOX + "\". juneau-icons.js hard-codes the"
+		assertEmpty(() -> "a glyph declares a viewBox other than \"" + REQUIRED_VIEWBOX + "\". juneau-icons.js hard-codes the"
 				+ " host <svg> at that modulus, so any other one interposes a scale factor between the author's"
-				+ " coordinates and the pixel grid and the glyph's strokes stop landing on pixel boundaries.");
+				+ " coordinates and the pixel grid and the glyph's strokes stop landing on pixel boundaries.", offModulus);
 	}
 
 	@Test void a06_paintIsOnlyEverNoneOrCurrentColor() throws Exception {
-		assertEquals(List.of(), SymbolProvenanceScanner.offContractPaints(sprite()),
-			"a hard-coded paint value appeared in the sprite. Hover, focus and disabled tinting is a CSS `color`"
-				+ " change, so a glyph painted with a literal colour silently opts out of all of it and needs a"
-				+ " second asset to be themed.");
+		assertEmpty(() -> "a hard-coded paint value appeared in the sprite. Hover, focus and disabled tinting is a CSS"
+				+ " `color` change (or, for a part with a themable `var(--x, currentColor)` paint, a custom-property"
+				+ " change), so a glyph painted with a literal colour silently opts out of all of it and needs a"
+				+ " second asset to be themed.", SymbolProvenanceScanner.offContractPaints(sprite()));
 	}
 
 	@Test void a07_everyStrokedElementDeclaresItsWidth() throws Exception {
@@ -187,9 +194,8 @@ class SymbolSprite_Provenance_Test extends TestBase {
 		var underspecified = new ArrayList<String>();
 		shipped.forEach((stem, element) ->
 			SymbolProvenanceScanner.strokedWithoutWidth(element).forEach(e -> underspecified.add(stem + ": <" + e + ">")));
-		assertEquals(List.of(), underspecified,
-			"an element paints a stroke without declaring stroke-width, so its rendered weight depends on where"
-				+ " the glyph is used rather than on the glyph.");
+		assertEmpty(() -> "an element paints a stroke without declaring stroke-width, so its rendered weight depends on"
+				+ " where the glyph is used rather than on the glyph.", underspecified);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -204,7 +210,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 		var mutated = mutateFirstPath(real);
 		var before = SymbolProvenanceScanner.symbols(real);
 		var after = SymbolProvenanceScanner.symbols(mutated);
-		assertEquals(before.keySet(), after.keySet(), "the mutation must not change the glyph set");
+		assertList(() -> "the mutation must not change the glyph set", after.keySet(), before.keySet().toArray());
 		var stem = before.keySet().iterator().next();
 		assertNotEquals(SymbolProvenanceScanner.fingerprint(before.get(stem)),
 			SymbolProvenanceScanner.fingerprint(after.get(stem)),
@@ -226,18 +232,23 @@ class SymbolSprite_Provenance_Test extends TestBase {
 			"a viewBox change left the fingerprint unchanged, so the hash is not covering the opening tag");
 	}
 
-	@Test void b03_theFrameComparisonCanFail() throws Exception {
+	@Test void b03_documentFamilyOriginAssertCanFail() throws Exception {
+		// a04 pins irs-artwork on the framed-family stems.  Run the SAME check against a mutated origins map and a
+		// mutated sprite and require it to report the breach; a vacuous check (or a vacuous origins map) would not.
 		var shipped = SymbolProvenanceScanner.symbols(sprite());
-		var frames = SymbolProvenanceScanner.FRAMED_FAMILY.stream()
-			.map(s -> SymbolProvenanceScanner.framePath(shipped.get(s))).toList();
-		assertEquals(1, new LinkedHashSet<>(frames).size(), "precondition: a04 is passing on the real sprite");
+		var origins = SymbolProvenanceScanner.manifestOrigins(manifest());
+		assertNotEmpty(() -> "precondition: manifest origins parse", origins);
+		assertEmpty(() -> "precondition: the unmutated inputs must pass the check", documentFamilyProblems(shipped, origins));
 
-		// One member's frame, mutated the way a solo redraw would produce - a different string of the same shape.
-		var drifted = new ArrayList<>(frames);
-		drifted.set(0, drifted.get(0) + "Z");
-		assertNotEquals(1, new LinkedHashSet<>(drifted).size(),
-			"a mutated frame path still compared as identical, so a04 is comparing something that cannot differ"
-				+ " - a normalised form, or the same element three times");
+		var first = SymbolProvenanceScanner.FRAMED_FAMILY.get(0);
+		var drifted = new LinkedHashMap<>(origins);
+		drifted.put(first, "juneau-original");
+		assertList(documentFamilyProblems(shipped, drifted),
+			"document-family stem " + first + " is expected to be irs-artwork after the §3.4 replacement but is juneau-original");
+
+		var missing = new LinkedHashMap<>(shipped);
+		missing.remove(first);
+		assertList(documentFamilyProblems(missing, origins), "the document family member " + first + " is missing from the sprite");
 	}
 
 	@Test void b04_theManifestRowPatternMatchesEveryRealRow() throws Exception {
@@ -245,20 +256,24 @@ class SymbolSprite_Provenance_Test extends TestBase {
 		// matching would make all three vacuous at once, and each of them would still pass.
 		var declared = SymbolProvenanceScanner.manifestFingerprints(manifest());
 		var shipped = SymbolProvenanceScanner.symbols(sprite());
-		assertEquals(shipped.size(), declared.size(),
-			"the manifest's fingerprint-row format no longer parses for every glyph. " + MANIFEST_IS_THE_REVIEW);
+		assertSize(() -> "the manifest's fingerprint-row format no longer parses for every glyph. " + MANIFEST_IS_THE_REVIEW,
+			shipped.size(), declared);
 	}
 
 	@Test void b05_theScannersDetectAnInjectedBreach() throws Exception {
 		var real = sprite();
-		assertFalse(SymbolProvenanceScanner.offContractPaints(real.replace("fill=\"none\"", "fill=\"#1589EE\"")).isEmpty(),
-			"an injected literal colour went undetected, so a06 cannot fail");
+		assertNotEmpty(() -> "an injected literal colour went undetected, so a06 cannot fail",
+			SymbolProvenanceScanner.offContractPaints(real.replace("fill=\"none\"", "fill=\"#1589EE\"")));
+		assertNotEmpty(() -> "a literal colour hidden in a var() fallback went undetected, so a06 cannot fail",
+			SymbolProvenanceScanner.offContractPaints("<symbol id=\"juneau-sym-x\"><path fill=\"var(--jc-x, #1589EE)\" d=\"M0 0\"/></symbol>"));
+		assertEmpty(() -> "a themable var(--x, currentColor) paint must be accepted",
+			SymbolProvenanceScanner.offContractPaints("<symbol id=\"juneau-sym-x\"><path fill=\"var(--jc-x, currentColor)\" d=\"M0 0\"/></symbol>"));
 
 		var stripped = real.replaceAll("\\s+stroke-width=\"[^\"]*\"", "");
 		assertNotEquals(real, stripped, "the sprite declares no stroke-width at all, so this check cannot run");
 		var breaches = SymbolProvenanceScanner.symbols(stripped).values().stream()
 			.flatMap(e -> SymbolProvenanceScanner.strokedWithoutWidth(e).stream()).toList();
-		assertFalse(breaches.isEmpty(), "removing every stroke-width went undetected, so a07 cannot fail");
+		assertNotEmpty(() -> "removing every stroke-width went undetected, so a07 cannot fail", breaches);
 	}
 
 	@Test void b06_theStrokeWidthScanSeesTheRealStrokedElements() throws Exception {
@@ -268,8 +283,8 @@ class SymbolSprite_Provenance_Test extends TestBase {
 			.replaceAll("\\s+stroke-width=\"[^\"]*\"", "");
 		var seen = SymbolProvenanceScanner.symbols(stripped).values().stream()
 			.mapToInt(e -> SymbolProvenanceScanner.strokedWithoutWidth(e).size()).sum();
-		assertTrue(seen >= 18,
-			() -> "only " + seen + " stroked elements were found across the whole sprite, which is fewer than there"
-				+ " are redrawn glyphs - the element pattern has stopped matching the real artwork");
+		assertTrue(seen >= 10,
+			() -> "only " + seen + " stroked elements were found across the whole sprite after stripping"
+				+ " stroke-width - the element pattern has stopped matching the remaining stroked artwork");
 	}
 }

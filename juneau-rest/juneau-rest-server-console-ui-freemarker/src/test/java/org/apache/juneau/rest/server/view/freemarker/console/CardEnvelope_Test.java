@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -44,8 +45,7 @@ class CardEnvelope_Test extends TestBase {
 				content: '<h1>Title</h1>'
 			}
 			""");
-		assertEquals("html", m.getString("type"));
-		assertEquals("<h1>Title</h1>", m.getString("content"));
+		assertBean(m, "type,content", "html,<h1>Title</h1>");
 	}
 
 	@Test void strictJson_stillWorks() {
@@ -75,14 +75,12 @@ class CardEnvelope_Test extends TestBase {
 	}
 
 	@Test void dualHat_newMainSources_haveNoSalesforceMarkers() throws Exception {
-		// Grep over the new v1 main sources (page/card/toolkit) and the page-cards runtime JS: no SLDS,
+		// Grep over the new v1 main sources (page/card/toolkit): no SLDS,
 		// no lightning, no Salesforce Sans, no IRS Json5l anywhere in the Apache trees.
 		var files = new ArrayList<Path>();
 		for (var f : List.of("PageDirectiveModel.java", "CardDirectiveModel.java", "CardEnvelope.java",
 				"ToolkitPackRegistry.java", "FtlAttrLists.java"))
 			files.add(MAIN.resolve(f));
-		files.add(Path.of("..", "juneau-rest-server-views", "src", "main", "resources", "org", "apache",
-			"juneau", "views", "juneau-page-cards.js"));
 		for (var p : files) {
 			assertTrue(Files.exists(p), () -> "missing source: " + p);
 			var src = Files.readString(p);

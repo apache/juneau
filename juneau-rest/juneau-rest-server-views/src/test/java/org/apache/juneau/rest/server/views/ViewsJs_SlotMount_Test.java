@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -62,8 +63,8 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		assertTrue(body.contains("return Promise.resolve(initTableFromDef(table, viewDef, extras))"), body);
 		assertTrue(body.contains("slot.closest(\"[data-juneau-csrf]\")"), body);
 		assertFalse(body.contains("data-ssc-csrf"), "slot CSRF copy must not read data-ssc-csrf-*");
-		assertTrue(body.contains("data-juneau-region-declared"), body);
-		assertTrue(body.contains("data-juneau-region-type"), body);
+		assertTrue(body.contains("dataset.juneauRegionDeclared"), body);
+		assertTrue(body.contains("dataset.juneauRegionType"), body);
 		var paintStart = body.indexOf("function paintSlotTable(");
 		assertTrue(paintStart >= 0, body);
 		var paintEnd = body.indexOf("function copyCsrfOntoTable(", paintStart);
@@ -147,5 +148,7 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		var r = report();
 		assertAllTrue(r, "t15_tile", "t15_bar", "t15_segments", "t15_contract",
 			"t16_unknownBanner", "t16_unknownLogged", "t16_noTable");
+		// status-tone token paints is-<tone>; an off-palette tone paints no modifier
+		assertBean(r, "t15_toneWarningClass,t15_toneAccentClass", "jc-stat-value is-warning,jc-stat-value");
 	}
 }

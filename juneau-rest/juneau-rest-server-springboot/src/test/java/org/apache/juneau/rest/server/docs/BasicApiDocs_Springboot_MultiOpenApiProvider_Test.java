@@ -69,8 +69,8 @@ import org.springframework.context.annotation.*;
  */
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
-	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BasicApiDocs_Springboot_MultiOpenApiProvider_Test {
 

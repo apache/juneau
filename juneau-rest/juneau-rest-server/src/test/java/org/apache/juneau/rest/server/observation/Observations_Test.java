@@ -32,6 +32,7 @@ import org.junit.jupiter.api.*;
  * {@link Observation}) using in-memory fakes of the {@link MetricsRecorder} / {@link TracerHook} SPIs.
  */
 @SuppressWarnings({
+	"java:S6213", // 'record' is the established SPI method name; renaming would break the MetricsRecorder interface contract.
 	"resource" // FakeTracer.startSpan(...) returns a FakeScope by SPI contract; the observation handle owns and closes it.
 })
 class Observations_Test {
@@ -44,13 +45,11 @@ class Observations_Test {
 		final List<String> events = new ArrayList<>();
 
 		@Override /* MetricsRecorder */
-		@SuppressWarnings("java:S6213") // 'record' is the established SPI method name; renaming would break the MetricsRecorder interface contract.
 		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			// Request-path method unused by these tests.
 		}
 
 		@Override /* MetricsRecorder */
-		@SuppressWarnings("java:S6213") // 'record' is the established SPI method name; renaming would break the MetricsRecorder interface contract.
 		public void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
 			assertNotNull(elapsed);
 			assertFalse(elapsed.isNegative());

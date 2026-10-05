@@ -73,7 +73,8 @@ import org.apache.juneau.commons.reflect.*;
  * @param <T> Specifies the type of object that this map encapsulates.
  */
 @SuppressWarnings({
-	"java:S3776" // Cognitive complexity acceptable for bean property iteration and filtering
+	"java:S3776", // Cognitive complexity acceptable for bean property iteration and filtering
+	"unchecked" // of() casts bean.getClass() to Class<T>, setBean() casts to T, and getProperty() casts the value to T2; all are tied to the wrapped bean type
 })
 public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T> {
 
@@ -84,9 +85,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param bean The bean being wrapped.  Must not be <jk>null</jk> (its runtime class is used to build the metadata).
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: map parameterization is verified at construction.
-	})
 	public static <T> BeanMap<T> of(T bean) {
 		return new BeanMap<>(bean, BeanMeta.of((Class<T>) bean.getClass()));
 	}
@@ -181,7 +179,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public boolean containsKey(Object property) {
 		// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties
 		var key = emptyIfNull(property);
-		if (meta.getProperties().containsKey(key) && ! "*".equals(key))
+		if (meta.getProperties().containsKey(key) && neq(key, "*"))
 			return true;
 		if (nn(meta.getDynaProperty())) {
 			try {
@@ -298,9 +296,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean property filtering with predicate
-	})
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.
@@ -416,9 +411,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	</ol>
 	 * @throws ClassCastException if property is not the specified type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T2 for property retrieval
-	})
 	public <T2> T2 get(String property, Class<T2> c) {
 		var pName = s(property);
 		var p = getPropertyMeta(pName);
@@ -570,6 +562,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	A new map with fields as key-value pairs.
 	 * 	<br>Note that modifying the values in this map will also modify the underlying bean.
 	 */
+	@SuppressWarnings({
+		"java:S9391" // Hot path; avoids stream allocation.
+	})
 	public Map<String,Object> getProperties(String...fields) {
 		Map<String,Object> thisMap = this;
 		var entries = new ArrayList<Map.Entry<String,Object>>(fields.length);
@@ -658,7 +653,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			return meta.getProperties().keySet();
 		Set<String> l = set();
 		meta.getProperties().forEach((k, v) -> {
-			if (! "*".equals(k))
+			if (neq(k, "*"))
 				l.add(k);
 		});
 		try {
@@ -679,8 +674,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return This object.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts for dynamic bean property access
-		"rawtypes", // Raw types necessary for generic type handling
+		"rawtypes" // Raw types necessary for generic type handling
 	})
 	public BeanMap<T> load(Map entries) {
 		putAll(entries);
@@ -758,9 +752,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	protected Collection<BeanPropertyMeta> getProperties() { return meta.getProperties().values(); }
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for bean assignment
-	})
 	void setBean(Object bean) { this.bean = (T)bean; }
 
 	/**

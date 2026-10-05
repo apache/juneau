@@ -32,6 +32,9 @@ public class FakeStreamSerializer extends OutputStreamSerializer {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jsonschema;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;
@@ -48,27 +47,11 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // The (Class<Enum<?>>) cast in getEnums() is safe because it is only reached for enum types.
 })
 public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_id = "id";
-	private static final String ARG_def = "def";
-
-	// JSON Schema property name constants
-	private static final String PROP_additionalProperties = "additionalProperties";
-	private static final String PROP_enum = "enum";
-	private static final String PROP_format = "format";
-	private static final String PROP_items = "items";
-	private static final String PROP_properties = "properties";
-	private static final String PROP_type = "type";
-	private static final String PROP_uniqueItems = "uniqueItems";
-
-	// JSON Schema type and format constants
-	private static final String TYPE_string = "string";
-	private static final String FORMAT_uri = "uri";
 
 	/**
 	 * Builder class.
@@ -84,7 +67,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -103,7 +86,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonSchemaGenerator ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final JsonSchemaGenerator ctx;
@@ -133,7 +116,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 */
 	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
 		if (nn(defs))
-			defs.put(assertArgNotNull(ARG_id, id), assertArgNotNull(ARG_def, def));
+			defs.put(reqnn("id", id), reqnn("def", def));
 		return this;
 	}
 
@@ -243,9 +226,6 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		return null;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to List<String> for enum extraction
-	})
 	private static List<String> getEnums(ClassMeta<?> cm) {
 		List<String> l = list();
 		for (var e : ((Class<Enum<?>>)cm.inner()).getEnumConstants())
@@ -269,11 +249,10 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1168",  // Intentional null when type is ignored — signals "no schema" to callers; null is filtered by JsonMap serialization
-		"java:S3776",  // Cognitive complexity acceptable for schema generation over type categories
-		"java:S6541",  // Brain Method — unified getSchema branching over serializers/types is intentional
-		"rawtypes",    // Raw types necessary for generic type handling
-		"unchecked"    // Type erasure requires unchecked casts
+		"java:S1168", // Intentional null when type is ignored — signals "no schema" to callers; null is filtered by JsonMap serialization
+		"java:S3776", // Cognitive complexity acceptable for schema generation over type categories
+		"java:S6541", // Brain Method — unified getSchema branching over serializers/types is intentional
+		"rawtypes" // Raw types necessary for generic type handling
 	})
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws MarshallingRecursionException, SerializeException {
@@ -356,14 +335,14 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 			type = "array";
 		} else if (sType.isEnum()) {
 			tc = ENUM;
-			type = TYPE_string;
+			type = "string";
 		} else {
 			tc = STRING;
-			type = TYPE_string;
+			type = "string";
 			// Check both the declared and serialized types so that JDK URI value types keep their "uri" format
 			// even when a default string swap (e.g. UrlSwap for java.net.URL) has rewritten the serialized type to String.
 			if (sType.isUri() || eType.isUri())
-				format = FORMAT_uri;
+				format = "uri";
 		}
 
 		// Add info from @Schema on bean property.
@@ -374,8 +353,8 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		out.append(jscm.getSchema());
 
 		Predicate<String> ne = Shorts::ine;
-		out.appendIfAbsentIf(ne, PROP_type, type);
-		out.appendIfAbsentIf(ne, PROP_format, format);
+		out.appendIfAbsentIf(ne, "type", type);
+		out.appendIfAbsentIf(ne, "format", format);
 
 		if (nn(aType)) {
 
@@ -392,27 +371,27 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 					if (p.canRead())
 						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getBeanInfo(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 				}
-				out.put(PROP_properties, properties);
+				out.put("properties", properties);
 
 			} else if (tc == COLLECTION) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
-					out.put(PROP_uniqueItems, true);
-				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
+					out.put("uniqueItems", true);
+				out.put("items", getSchema(et, "items", exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ARRAY) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
-					out.put(PROP_uniqueItems, true);
-				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
+					out.put("uniqueItems", true);
+				out.put("items", getSchema(et, "items", exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ENUM) {
-				out.put(PROP_enum, getEnums(sType));
+				out.put("enum", getEnums(sType));
 
 			} else if (tc == MAP) {
-				var om = getSchema(sType.getValueType(), PROP_additionalProperties, exampleAdded, descriptionAdded, null);
+				var om = getSchema(sType.getValueType(), "additionalProperties", exampleAdded, descriptionAdded, null);
 				if (om != null && ! om.isEmpty())
-					out.put(PROP_additionalProperties, om);
+					out.put("additionalProperties", om);
 
 			}
 		}

@@ -318,103 +318,103 @@ class HttpPartSchema_Coverage_Test extends TestBase {
 	// E: Numeric exclusiveMaximumValue/exclusiveMinimumValue type dispatch (Draft 2020-12)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_exclusiveMaximumValue_short() throws Exception {
+	@Test void e01_exclusiveMaximumValue_short() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMaximumValue(100).build();
 		s.validateOutput((short)99);
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput((short)100));
 	}
 
-	@Test void e02_exclusiveMaximumValue_byte() throws Exception {
+	@Test void e02_exclusiveMaximumValue_byte() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMaximumValue(100).build();
 		s.validateOutput((byte)50);
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput((byte)100));
 	}
 
-	@Test void e03_exclusiveMaximumValue_long() throws Exception {
+	@Test void e03_exclusiveMaximumValue_long() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMaximumValue(100).build();
 		s.validateOutput(99L);
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(100L));
 	}
 
-	@Test void e04_exclusiveMaximumValue_atomicLong() throws Exception {
+	@Test void e04_exclusiveMaximumValue_atomicLong() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMaximumValue(100).build();
 		s.validateOutput(new AtomicLong(99));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(new AtomicLong(100)));
 	}
 
-	@Test void e05_exclusiveMaximumValue_bigInteger() throws Exception {
+	@Test void e05_exclusiveMaximumValue_bigInteger() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMaximumValue(100).build();
 		s.validateOutput(BigInteger.valueOf(99));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(BigInteger.valueOf(100)));
 	}
 
-	@Test void e06_exclusiveMaximumValue_float() throws Exception {
+	@Test void e06_exclusiveMaximumValue_float() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMaximumValue(100).build();
 		s.validateOutput(99.0f);
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(100.0f));
 	}
 
-	@Test void e07_exclusiveMaximumValue_double() throws Exception {
+	@Test void e07_exclusiveMaximumValue_double() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMaximumValue(100).build();
 		s.validateOutput(99.0);
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(100.0));
 	}
 
-	@Test void e08_exclusiveMaximumValue_bigDecimal() throws Exception {
+	@Test void e08_exclusiveMaximumValue_bigDecimal() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMaximumValue(100).build();
 		s.validateOutput(BigDecimal.valueOf(99.0));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded", ()->s.validateOutput(BigDecimal.valueOf(100.0)));
 	}
 
-	@Test void e09_exclusiveMinimumValue_short() throws Exception {
+	@Test void e09_exclusiveMinimumValue_short() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMinimumValue(0).build();
 		s.validateOutput((short)1);
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput((short)0));
 	}
 
-	@Test void e10_exclusiveMinimumValue_byte() throws Exception {
+	@Test void e10_exclusiveMinimumValue_byte() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMinimumValue(0).build();
 		s.validateOutput((byte)1);
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput((byte)0));
 	}
 
-	@Test void e11_exclusiveMinimumValue_long() throws Exception {
+	@Test void e11_exclusiveMinimumValue_long() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMinimumValue(0).build();
 		s.validateOutput(1L);
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(0L));
 	}
 
-	@Test void e12_exclusiveMinimumValue_atomicLong() throws Exception {
+	@Test void e12_exclusiveMinimumValue_atomicLong() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMinimumValue(0).build();
 		s.validateOutput(new AtomicLong(1));
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(new AtomicLong(0)));
 	}
 
-	@Test void e13_exclusiveMinimumValue_bigInteger() throws Exception {
+	@Test void e13_exclusiveMinimumValue_bigInteger() {
 		var s = HttpPartSchema.create().tInteger().exclusiveMinimumValue(0).build();
 		s.validateOutput(BigInteger.valueOf(1));
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(BigInteger.valueOf(0)));
 	}
 
-	@Test void e14_exclusiveMinimumValue_float() throws Exception {
+	@Test void e14_exclusiveMinimumValue_float() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMinimumValue(0).build();
 		s.validateOutput(1.0f);
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(0.0f));
 	}
 
-	@Test void e15_exclusiveMinimumValue_double() throws Exception {
+	@Test void e15_exclusiveMinimumValue_double() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMinimumValue(0).build();
 		s.validateOutput(1.0);
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(0.0));
 	}
 
-	@Test void e16_exclusiveMinimumValue_bigDecimal() throws Exception {
+	@Test void e16_exclusiveMinimumValue_bigDecimal() {
 		var s = HttpPartSchema.create().tNumber().exclusiveMinimumValue(0).build();
 		s.validateOutput(BigDecimal.valueOf(1.0));
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met", ()->s.validateOutput(BigDecimal.valueOf(0.0)));
 	}
 
-	@Test void e17_multipleOf_atomicInteger_and_atomicLong() throws Exception {
+	@Test void e17_multipleOf_atomicInteger_and_atomicLong() {
 		var s = HttpPartSchema.create().tInteger().multipleOf(2).build();
 		s.validateOutput(new AtomicInteger(4));
 		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met", ()->s.validateOutput(new AtomicInteger(3)));
@@ -496,7 +496,7 @@ class HttpPartSchema_Coverage_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("X"));
 	}
 
-	@Test void f14_duration_fractionalSeconds() throws Exception {
+	@Test void f14_duration_fractionalSeconds() {
 		var s = HttpPartSchema.create().tString().noValidate().format("duration").build();
 		s.validateInput("PT1.5S");
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("PT1.S"));
@@ -507,7 +507,7 @@ class HttpPartSchema_Coverage_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("P1YTX"));
 	}
 
-	@Test void f16_email_localPartAllSpecialChars() throws Exception {
+	@Test void f16_email_localPartAllSpecialChars() {
 		var s = HttpPartSchema.create().tString().noValidate().format("email").build();
 		s.validateInput("a.b_c%d+e-f@example.com");
 		s.validateInput("user@my-domain.com");
@@ -530,33 +530,33 @@ class HttpPartSchema_Coverage_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("user@example.c1"));
 	}
 
-	@Test void f20_idnEmail_interiorDotEdgeCases() throws Exception {
+	@Test void f20_idnEmail_interiorDotEdgeCases() {
 		var s = HttpPartSchema.create().tString().noValidate().format("idn-email").build();
 		// Dot immediately after '@' or at the very end doesn't count as an interior dot -- no valid TLD separator.
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("user@.com"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("user@example."));
 	}
 
-	@Test void f21_hostname_labelBoundaryChars() throws Exception {
+	@Test void f21_hostname_labelBoundaryChars() {
 		var s = HttpPartSchema.create().tString().noValidate().format("hostname").build();
 		s.validateInput("a-b.com");
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("a_b.com"));
 	}
 
-	@Test void f22_ipv6_full() throws Exception {
+	@Test void f22_ipv6_full() {
 		var s = HttpPartSchema.create().tString().noValidate().format("ipv6").build();
 		s.validateInput("2001:0db8:0000:0000:0000:0000:0000:0001");
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("2001:0db8:0000:0000:0000:0000:0000"));
 	}
 
-	@Test void f23_ipv6_trailingColon() throws Exception {
+	@Test void f23_ipv6_trailingColon() {
 		var s = HttpPartSchema.create().tString().noValidate().format("ipv6").build();
 		s.validateInput("2001:0db8:0000:0000:0000:0000:0000:");
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput(":"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("2001:0db8:zzzz:0000:0000:0000:0000:0000:"));
 	}
 
-	@Test void f24_ipv6_leadingDoubleColon_tooManyGroups() throws Exception {
+	@Test void f24_ipv6_leadingDoubleColon_tooManyGroups() {
 		var s = HttpPartSchema.create().tString().noValidate().format("ipv6").build();
 		s.validateInput("::1");
 		s.validateInput("::1:2:3:4:5:6");
@@ -573,7 +573,7 @@ class HttpPartSchema_Coverage_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("foo/bar"));
 	}
 
-	@Test void f27_relativeJsonPointer_variants() throws Exception {
+	@Test void f27_relativeJsonPointer_variants() {
 		var s = HttpPartSchema.create().tString().noValidate().format("relative-json-pointer").build();
 		s.validateInput("0");
 		s.validateInput("12/foo");

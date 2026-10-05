@@ -60,7 +60,9 @@ class RdfApplyAnnotation_Test extends TestBase {
 
 	public static class A06_Target {
 		public String field1;
-		public void method1() {}
+		public void method1() {
+			// Intentionally empty; only used as a reflection target.
+		}
 	}
 
 	@Test void a06_builder_on_method_setsTargets() throws Exception {

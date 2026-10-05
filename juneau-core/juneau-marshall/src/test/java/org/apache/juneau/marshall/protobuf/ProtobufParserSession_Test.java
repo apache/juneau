@@ -137,7 +137,7 @@ class ProtobufParserSession_Test extends TestBase {
 
 	public static class StrMap {
 		public Map<String,Integer> m;
-		public StrMap() {}
+		public StrMap() { /* Public no-arg constructor required for bean instantiation. */ }
 	}
 
 	@Test
@@ -154,13 +154,13 @@ class ProtobufParserSession_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// decodeEnumOrdinal's "constants != null && ordinal >= 0 && ordinal < constants.length" (L272/274).
+	// decodeEnumOrdinal's in-range ordinal check against the enum constants array (L272/274).
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class NonEnumOrdinal {
 		@Protobuf(type=ProtobufScalarType.ENUM_INT)
 		public int val;
-		public NonEnumOrdinal() {}
+		public NonEnumOrdinal() { /* Public no-arg constructor required for bean instantiation. */ }
 	}
 
 	@Test
@@ -175,11 +175,11 @@ class ProtobufParserSession_Test extends TestBase {
 
 	public static class EnumBean {
 		public E e;
-		public EnumBean() {}
+		public EnumBean() { /* Public no-arg constructor required for bean instantiation. */ }
 	}
 
 	@Test
-	void a06_enumOrdinalNegative_fallsBackToRawOrdinal() throws Exception {
+	void a06_enumOrdinalNegative_fallsBackToRawOrdinal() {
 		// A varint whose low 32 bits are all set decodes to ordinal -1 after the (int) narrowing cast in
 		// decodeScalar's ENUM_INT arm, hitting the "ordinal >= 0" false branch (L272) -- falls back to the raw
 		// ordinal (L274) rather than indexing into the enum's constants array. The raw Integer -1 is then
@@ -191,7 +191,7 @@ class ProtobufParserSession_Test extends TestBase {
 	}
 
 	@Test
-	void a07_enumOrdinalOutOfRange_fallsBackToRawOrdinal() throws Exception {
+	void a07_enumOrdinalOutOfRange_fallsBackToRawOrdinal() {
 		// Ordinal 99 exceeds E's 3 constants, hitting the "ordinal < constants.length" false branch (L272) --
 		// falls back to the raw ordinal (L274) rather than indexing out of bounds. As in a06, the raw Integer is
 		// then rejected by the setter's int-to-enum conversion, which is expected and outside this branch's scope.
@@ -213,7 +213,7 @@ class ProtobufParserSession_Test extends TestBase {
 	}
 
 	@Test
-	void a08_beanRuntimeExceptionFromSetterPropagates() throws Exception {
+	void a08_beanRuntimeExceptionFromSetterPropagates() {
 		// Missing setters are silently ignored by default (MarshallingContext.Builder#disableIgnoreMissingSetters()
 		// defaults to false), so disableIgnoreMissingSetters() is needed to force BeanPropertyMeta.set() to actually
 		// throw for the getter-only "name" property, exercising setProperty's catch/rethrow (L233-237).

@@ -36,8 +36,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S135",  // Multiple break/continue necessary for isNumber char validation loop
-	"resource"    // Writer resource managed by calling code
+	"java:S135", // Multiple break/continue necessary for isNumber char validation loop
+	"resource" // Writer resource managed by calling code
 })
 public class HoconWriter extends SerializerWriter<HoconWriter> {
 

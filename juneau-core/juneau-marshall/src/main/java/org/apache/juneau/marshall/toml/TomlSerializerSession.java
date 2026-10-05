@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.toml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -35,16 +34,16 @@ import org.apache.juneau.marshall.stream.*;
  * Session for serializing objects to TOML format.
  */
 @SuppressWarnings({
-	"resource",   // TomlWriter lifecycle managed by SerializerPipe
-	"rawtypes",   // Raw types necessary for generic type handling
-	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115",  // Constants use naming conventions that embed type info or config keys (e.g. PROP_trimWhitespace)
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S1172", // pMeta accepted for API consistency with callers that track property context
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for serialization logic
-	"java:S6541"  // Acceptable for session implementation
+	"java:S6541", // Acceptable for session implementation
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // TomlWriter lifecycle managed by SerializerPipe
+	"unused" // pMeta parameters of writeValue and isSimpleOrInlineTable are unused but kept so callers pass property context uniformly
 })
 public class TomlSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for TOML serializer session.
@@ -54,7 +53,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		private TomlSerializer ctx;
 
 		protected Builder(TomlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -72,7 +71,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 	 * @return The builder.
 	 */
 	public static Builder create(TomlSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final TomlSerializer ctx;
@@ -270,10 +269,6 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			w.quotedKey(key);
 	}
 
-	@SuppressWarnings({
-		"unused",       // pMeta accepted for API consistency; may be used by future format-specific logic
-		"java:S1172"    // Same as above
-	})
 	private void writeValue(TomlWriter w, Object value, ClassMeta<?> aType, BeanPropertyMeta pMeta) throws SerializeException {
 		if (value == null) {
 			w.stringValue(ctx.getNullValue());
@@ -455,10 +450,6 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		w.arrayEnd();
 	}
 
-	@SuppressWarnings({
-		"unused",       // pMeta accepted for API consistency with callers that track property context
-		"java:S1172"    // Same as above
-	})
 	private boolean isSimpleOrInlineTable(ClassMeta<?> aType, Object value, BeanPropertyMeta pMeta) throws SerializeException {
 		if (aType.isBean()) {
 			BeanMap<?> bm = toBeanMap(value);

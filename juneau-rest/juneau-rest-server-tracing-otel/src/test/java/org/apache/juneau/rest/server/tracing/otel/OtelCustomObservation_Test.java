@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -106,8 +107,8 @@ class OtelCustomObservation_Test extends TestBase {
 		var spans = EXPORTER.getFinishedSpanItems();
 		assertEquals(2, spans.size());
 		// Inner finishes first; both share one trace id (inner is parented to outer).
-		var inner = spans.stream().filter(x -> x.getName().equals("inner")).findFirst().orElseThrow();
-		var outer = spans.stream().filter(x -> x.getName().equals("outer")).findFirst().orElseThrow();
+		var inner = spans.stream().filter(x -> eq(x.getName(), "inner")).findFirst().orElseThrow();
+		var outer = spans.stream().filter(x -> eq(x.getName(), "outer")).findFirst().orElseThrow();
 		assertEquals(outer.getTraceId(), inner.getTraceId());
 		assertEquals(outer.getSpanId(), inner.getParentSpanId());
 	}

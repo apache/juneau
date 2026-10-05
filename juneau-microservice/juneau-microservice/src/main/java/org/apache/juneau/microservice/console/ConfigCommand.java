@@ -37,15 +37,6 @@ import org.apache.juneau.microservice.*;
 })
 public class ConfigCommand extends ConsoleCommand {
 
-	// Message bundle key constants
-	private static final String MKEY_invalidArguments = "InvalidArguments";
-	private static final String MKEY_tooManyArguments = "TooManyArguments";
-	private static final String MKEY_keyNotFound = "KeyNotFound";
-	private static final String MKEY_configSet = "ConfigSet";
-	private static final String MKEY_configRemove = "ConfigRemove";
-	private static final String MKEY_description = "description";
-	private static final String MKEY_info = "info";
-
 	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
@@ -58,53 +49,53 @@ public class ConfigCommand extends ConsoleCommand {
 		if (size > 2) {
 			var option = args.get(1).orElse("");
 			var key = args.get(2).orElse("");
-			if (option.equals("get")) {
+			if (eq(option, "get")) {
 				// config get <key>
 				if (size == 3) {
 					var val = conf.get(key).orElse(null);
 					if (nn(val))
 						out.println(val);
 					else
-						out.println(mb.getString(MKEY_keyNotFound, key));
+						out.println(mb.getString("KeyNotFound", key));
 				} else {
-					out.println(mb.getString(MKEY_tooManyArguments));
+					out.println(mb.getString("TooManyArguments"));
 				}
-			} else if (option.equals("set")) {
+			} else if (eq(option, "set")) {
 				// config set <key> <value>
 				if (size == 4) {
 					conf.set(key, args.get(3).orElse(null));
-					out.println(mb.getString(MKEY_configSet));
+					out.println(mb.getString("ConfigSet"));
 				} else if (size < 4) {
-					out.println(mb.getString(MKEY_invalidArguments));
+					out.println(mb.getString("InvalidArguments"));
 				} else {
-					out.println(mb.getString(MKEY_tooManyArguments));
+					out.println(mb.getString("TooManyArguments"));
 				}
-			} else if (option.equals("remove")) {
+			} else if (eq(option, "remove")) {
 				// config remove <key>
 				if (size == 3) {
 					if (conf.get(key).isPresent()) {
 						conf.remove(key);
-						out.println(mb.getString(MKEY_configRemove, key));
+						out.println(mb.getString("ConfigRemove", key));
 					} else {
-						out.println(mb.getString(MKEY_keyNotFound, key));
+						out.println(mb.getString("KeyNotFound", key));
 					}
 				} else {
-					out.println(mb.getString(MKEY_tooManyArguments));
+					out.println(mb.getString("TooManyArguments"));
 				}
 			} else {
-				out.println(mb.getString(MKEY_invalidArguments));
+				out.println(mb.getString("InvalidArguments"));
 			}
 		} else {
-			out.println(mb.getString(MKEY_invalidArguments));
+			out.println(mb.getString("InvalidArguments"));
 		}
 		return false;
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() { return mb.getString(MKEY_description); }
+	public String getDescription() { return mb.getString("description"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() { return mb.getString(MKEY_info); }
+	public String getInfo() { return mb.getString("info"); }
 
 	@Override /* Overridden from ConsoleCommand */
 	public String getName() { return "config"; }

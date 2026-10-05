@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.json5;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -55,11 +55,10 @@ import org.apache.juneau.marshall.json.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for Json5Parser hierarchy
-	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_escapeSolidus)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class Json5Parser extends JsonParser {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -82,7 +81,7 @@ public class Json5Parser extends JsonParser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -92,7 +91,7 @@ public class Json5Parser extends JsonParser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Json5Parser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */

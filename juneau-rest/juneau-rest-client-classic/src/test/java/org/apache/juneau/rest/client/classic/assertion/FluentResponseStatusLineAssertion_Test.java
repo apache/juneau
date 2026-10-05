@@ -33,19 +33,19 @@ class FluentResponseStatusLineAssertion_Test {
 	private final StatusLine statusLine = new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK");
 
 	@Test void a01_asMajor() {
-		new FluentResponseStatusLineAssertion<>(statusLine, null).asMajor().is(1);
+		assertDoesNotThrow(() -> new FluentResponseStatusLineAssertion<>(statusLine, null).asMajor().is(1));
 	}
 
 	@Test void a02_asMinor() {
-		new FluentResponseStatusLineAssertion<>(statusLine, null).asMinor().is(1);
+		assertDoesNotThrow(() -> new FluentResponseStatusLineAssertion<>(statusLine, null).asMinor().is(1));
 	}
 
 	@Test void a03_asProtocol() {
-		new FluentResponseStatusLineAssertion<>(statusLine, null).asProtocol().is("HTTP");
+		assertDoesNotThrow(() -> new FluentResponseStatusLineAssertion<>(statusLine, null).asProtocol().is("HTTP"));
 	}
 
 	@Test void a04_asReason() {
-		new FluentResponseStatusLineAssertion<>(statusLine, null).asReason().is("OK");
+		assertDoesNotThrow(() -> new FluentResponseStatusLineAssertion<>(statusLine, null).asReason().is("OK"));
 	}
 
 	@Test void a05_configMethods_returnThis() {

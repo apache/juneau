@@ -37,8 +37,10 @@ import java.util.*;
 @SuppressWarnings({
 	"java:S3776", // Cognitive complexity: small recursive-descent parser.
 	"java:S6541", // Brain method: state machine for JSON tokenization.
+	"unchecked" // Cast is safe: type verified by caller context.
 })
 final class MiniJson {
+	// Q:  Anything here good candidates for state machines?
 
 	private final String src;
 	private int pos;
@@ -206,9 +208,6 @@ final class MiniJson {
 	 * Strings are rendered without surrounding quotes (so {@code get(...)} on an object property
 	 * returns the bare string value); container types (Map / List) are re-encoded.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
-	})
 	static String render(Object value) {
 		if (value == null) return "";
 		if (value instanceof String value2) return value2;
@@ -243,9 +242,6 @@ final class MiniJson {
 		return sb.toString();
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
-	})
 	private static void renderInto(StringBuilder sb, Object v) {
 		if (v == null) { sb.append("null"); return; }
 		if (v instanceof String v2) { appendString(sb, v2); return; }

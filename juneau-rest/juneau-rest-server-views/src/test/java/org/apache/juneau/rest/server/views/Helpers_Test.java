@@ -155,7 +155,7 @@ class Helpers_Test extends TestBase {
 	@Test void d04_pill_labelAndToneClass() {
 		var r = report();
 		assertEquals("Open", r.get("pill_label"));
-		assertAllTrue(r, "pill_toneClassApplied");
+		assertAllTrue(r, "pill_toneClassApplied", "pill_warningToneApplied", "pill_retiredToneNoClass");
 	}
 
 	@Test void d05_icon_unknownNameIsHidden() {

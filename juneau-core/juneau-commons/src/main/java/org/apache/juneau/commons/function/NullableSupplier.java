@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -64,24 +63,9 @@ import java.util.function.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface NullableSupplier<T> extends Supplier<T> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_action = "action";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_emptyAction = "emptyAction";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_exceptionSupplier = "exceptionSupplier";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_mapper = "mapper";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_other = "other";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_predicate = "predicate";
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_supplier = "supplier";
 
 	/**
 	 * Creates a NullableSupplier from a Supplier.
@@ -91,7 +75,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @return A new NullableSupplier instance.
 	 */
 	public static <T> NullableSupplier<T> of(Supplier<T> supplier) {
-		assertArgNotNull(ARG_supplier, supplier);
+		reqnn("supplier", supplier);
 		return supplier::get;
 	}
 
@@ -142,7 +126,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @return A NullableSupplier describing the result of applying a mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
 	default <U> NullableSupplier<U> map(Function<? super T,? extends U> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		return () -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -157,7 +141,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @return The result of applying a NullableSupplier-bearing mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
 	default <U> NullableSupplier<U> flatMap(Function<? super T,? extends NullableSupplier<? extends U>> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		return () -> {
 			T value = get();
 			if (nn(value)) {
@@ -175,7 +159,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @return A NullableSupplier describing the value of this NullableSupplier if a value is present and the value matches the given predicate, otherwise an empty NullableSupplier.
 	 */
 	default NullableSupplier<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull(ARG_predicate, predicate);
+		reqnn("predicate", predicate);
 		return () -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;
@@ -200,7 +184,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @return The value, if present, otherwise the result of <jk>other.get()</jk>.
 	 */
 	default T orElseGet(Supplier<? extends T> other) {
-		assertArgNotNull(ARG_other, other);
+		reqnn("other", other);
 		T value = get();
 		return nn(value) ? value : other.get();
 	}
@@ -214,7 +198,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @throws X If no value is present.
 	 */
 	default <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		assertArgNotNull(ARG_exceptionSupplier, exceptionSupplier);
+		reqnn("exceptionSupplier", exceptionSupplier);
 		T value = get();
 		if (nn(value))
 			return value;
@@ -227,7 +211,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @param action The action to be performed, if a value is present. Must not be <jk>null</jk>.
 	 */
 	default void ifPresent(Consumer<? super T> action) {
-		assertArgNotNull(ARG_action, action);
+		reqnn("action", action);
 		T value = get();
 		if (nn(value))
 			action.accept(value);
@@ -240,8 +224,8 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @param emptyAction The empty-based action to be performed, if no value is present. Must not be <jk>null</jk>.
 	 */
 	default void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction) {
-		assertArgNotNull(ARG_action, action);
-		assertArgNotNull(ARG_emptyAction, emptyAction);
+		reqnn("action", action);
+		reqnn("emptyAction", emptyAction);
 		T value = get();
 		if (nn(value))
 			action.accept(value);

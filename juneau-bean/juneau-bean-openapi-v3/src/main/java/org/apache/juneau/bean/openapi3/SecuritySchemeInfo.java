@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.contains;
@@ -87,25 +86,12 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class SecuritySchemeInfo extends OpenApiElement {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
 	private static final String[] VALID_IN = { "query", "header", "cookie" };
 	private static final String[] VALID_TYPES = { "apiKey", "http", "oauth2", "openIdConnect" };
-
-	// Property name constants
-	private static final String PROP_bearerFormat = "bearerFormat";
-	private static final String PROP_description = "description";
-	private static final String PROP_flows = "flows";
-	private static final String PROP_in = "in";
-	private static final String PROP_name = "name";
-	private static final String PROP_openIdConnectUrl = "openIdConnectUrl";
-	private static final String PROP_scheme = "scheme";
-	private static final String PROP_type = "type";
 
 	private String type;
 	private String description;
@@ -151,16 +137,16 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_name -> toType(getName(), type);
-			case PROP_in -> toType(getIn(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_scheme -> toType(getScheme(), type);
-			case PROP_flows -> toType(getFlows(), type);
-			case PROP_bearerFormat -> toType(getBearerFormat(), type);
-			case PROP_openIdConnectUrl -> toType(getOpenIdConnectUrl(), type);
-			case PROP_type -> toType(getType(), type);
+			case "name" -> toType(getName(), type);
+			case "in" -> toType(getIn(), type);
+			case "description" -> toType(getDescription(), type);
+			case "scheme" -> toType(getScheme(), type);
+			case "flows" -> toType(getFlows(), type);
+			case "bearerFormat" -> toType(getBearerFormat(), type);
+			case "openIdConnectUrl" -> toType(getOpenIdConnectUrl(), type);
+			case "type" -> toType(getType(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -249,14 +235,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(bearerFormat), PROP_bearerFormat)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(flows), PROP_flows)
-			.addIf(nn(in), PROP_in)
-			.addIf(nn(name), PROP_name)
-			.addIf(nn(openIdConnectUrl), PROP_openIdConnectUrl)
-			.addIf(nn(scheme), PROP_scheme)
-			.addIf(nn(type), PROP_type)
+			.addIf(nn(bearerFormat), "bearerFormat")
+			.addIf(nn(description), "description")
+			.addIf(nn(flows), "flows")
+			.addIf(nn(in), "in")
+			.addIf(nn(name), "name")
+			.addIf(nn(openIdConnectUrl), "openIdConnectUrl")
+			.addIf(nn(scheme), "scheme")
+			.addIf(nn(type), "type")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -264,16 +250,16 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public SecuritySchemeInfo set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_bearerFormat -> setBearerFormat(s(value));
-			case PROP_description -> setDescription(s(value));
-			case PROP_flows -> setFlows(toType(value, OAuthFlow.class));
-			case PROP_in -> setIn(s(value));
-			case PROP_name -> setName(s(value));
-			case PROP_openIdConnectUrl -> setOpenIdConnectUrl(s(value));
-			case PROP_scheme -> setScheme(s(value));
-			case PROP_type -> setType(s(value));
+			case "bearerFormat" -> setBearerFormat(s(value));
+			case "description" -> setDescription(s(value));
+			case "flows" -> setFlows(toType(value, OAuthFlow.class));
+			case "in" -> setIn(s(value));
+			case "name" -> setName(s(value));
+			case "openIdConnectUrl" -> setOpenIdConnectUrl(s(value));
+			case "scheme" -> setScheme(s(value));
+			case "type" -> setType(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

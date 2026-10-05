@@ -17,16 +17,20 @@
 package org.apache.juneau.marshall.yaml;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.Builder;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage-focused tests for {@link YamlParserSession} targeting low-coverage paths not already exercised by
@@ -53,25 +57,20 @@ class YamlParserSession_Test extends TestBase {
 		public A_Bean build() { return new A_Bean(this); }
 	}
 
-	@Test void a01_builderSwap_flowMapping() throws Exception {
-		// readAnything: c == '{' -> nn(builder) branch.
-		var b = YamlParser.DEFAULT.read("{x: 42}", A_Bean.class);
+	@ParameterizedTest
+	@MethodSource("a01_builderSwapProvider")
+	void a01_builderSwap(String input) {
+		var b = YamlParser.DEFAULT.read(input, A_Bean.class);
 		assertNotNull(b);
-		assertEquals(42, b.x);
+		assertBean(b, "x", "42");
 	}
 
-	@Test void a02_builderSwap_blockMapping_plainKey() throws Exception {
-		// handlePlainScalar -> nn(builder) branch.
-		var b = YamlParser.DEFAULT.read("x: 42", A_Bean.class);
-		assertNotNull(b);
-		assertEquals(42, b.x);
-	}
-
-	@Test void a03_builderSwap_blockMapping_quotedKey() throws Exception {
-		// handleQuotedScalar -> nn(builder) branch.
-		var b = YamlParser.DEFAULT.read("'x': 42", A_Bean.class);
-		assertNotNull(b);
-		assertEquals(42, b.x);
+	static Stream<Arguments> a01_builderSwapProvider() {
+		return Stream.of(
+			Arguments.of("{x: 42}"),   // a01: readAnything, c == '{' -> nn(builder) branch
+			Arguments.of("x: 42"),     // a02: handlePlainScalar -> nn(builder) branch
+			Arguments.of("'x': 42")    // a03: handleQuotedScalar -> nn(builder) branch
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -80,30 +79,26 @@ class YamlParserSession_Test extends TestBase {
 	// canCreateNewBean() is false but a JDK dynamic proxy can still back the interface).
 	//------------------------------------------------------------------------------------------------------------------
 
-	public interface B_IBean {
+	public interface BIBean {
 		String getName();
 		void setName(String name);
 	}
 
-	@Test void b01_proxyBean_flowMapping() throws Exception {
-		// readAnything: c == '{', canCreateNewBean() false, isMap/isCollection/isArray false -> proxy else-arm.
-		var b = YamlParser.DEFAULT.read("{name: Bob}", B_IBean.class);
+	@ParameterizedTest
+	@MethodSource("b01_proxyBeanProvider")
+	void b01_proxyBean(String input) {
+		var b = YamlParser.DEFAULT.read(input, BIBean.class);
 		assertNotNull(b);
-		assertEquals("Bob", b.getName());
+		assertBean(b, "name", "Bob");
 	}
 
-	@Test void b02_proxyBean_blockMapping_plainKey() throws Exception {
-		// handlePlainScalar's equivalent else-arm.
-		var b = YamlParser.DEFAULT.read("name: Bob", B_IBean.class);
-		assertNotNull(b);
-		assertEquals("Bob", b.getName());
-	}
-
-	@Test void b03_proxyBean_blockMapping_quotedKey() throws Exception {
-		// handleQuotedScalar's equivalent else-arm.
-		var b = YamlParser.DEFAULT.read("'name': Bob", B_IBean.class);
-		assertNotNull(b);
-		assertEquals("Bob", b.getName());
+	static Stream<Arguments> b01_proxyBeanProvider() {
+		return Stream.of(
+			// b01: readAnything, c == '{', canCreateNewBean() false, isMap/isCollection/isArray false -> proxy else-arm.
+			Arguments.of("{name: Bob}"),
+			Arguments.of("name: Bob"),     // b02: handlePlainScalar's equivalent else-arm
+			Arguments.of("'name': Bob")    // b03: handleQuotedScalar's equivalent else-arm
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -111,7 +106,7 @@ class YamlParserSession_Test extends TestBase {
 	// map is read generically then cast() converts it to the requested collection/array shape.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_flowMappingIntoTypedCollection() throws Exception {
+	@Test void c01_flowMappingIntoTypedCollection() {
 		// sType.isCollection() arm: target is a List, input is a flow MAPPING (not sequence).
 		assertDoesNotThrow(() -> {
 			try {
@@ -120,7 +115,7 @@ class YamlParserSession_Test extends TestBase {
 		});
 	}
 
-	@Test void c02_flowMappingIntoTypedArray() throws Exception {
+	@Test void c02_flowMappingIntoTypedArray() {
 		// FIXED: sType.isArray() arm: target is String[], input is a flow MAPPING. cast(MarshalledMap, ...) has
 		// no "_type" discriminator key to key off of, so it can never turn the map into an array -- it used to
 		// just hand back the map unchanged, silently returning the wrong runtime type for the requested array
@@ -130,7 +125,7 @@ class YamlParserSession_Test extends TestBase {
 			() -> YamlParser.DEFAULT.read("{0: a, 1: b}", String[].class));
 	}
 
-	@Test void c03_flowMappingIntoRawMap() throws Exception {
+	@Test void c03_flowMappingIntoRawMap() {
 		// readFlowMapping: keyType == null -> defaults to string() (raw, ungenerified Map target).
 		JsonMap m = YamlParser.DEFAULT.read("{a: 1, b: 2}", JsonMap.class);
 		assertEquals(2, m.size());
@@ -145,14 +140,14 @@ class YamlParserSession_Test extends TestBase {
 		public int age;
 	}
 
-	@Test void d01_beanBlockValue_eofImmediatelyAfterColon() throws Exception {
+	@Test void d01_beanBlockValue_eofImmediatelyAfterColon() {
 		// isNullBlockValue: r.peek() == -1 right after ':' -> true immediately.
 		var b = YamlParser.DEFAULT.read("name:", D_Bean.class);
 		assertNotNull(b);
 		assertNull(b.name);
 	}
 
-	@Test void d02_beanBlockValue_eofAfterTrailingNewline() throws Exception {
+	@Test void d02_beanBlockValue_eofAfterTrailingNewline() {
 		// isNullBlockValue: newline consumed, then EOF inside the while loop -> unread + true.
 		var b = YamlParser.DEFAULT.read("name:\n", D_Bean.class);
 		assertNotNull(b);
@@ -164,7 +159,7 @@ class YamlParserSession_Test extends TestBase {
 		public int age;
 	}
 
-	@Test void d03_beanBlockValue_nestedIndentedSibling() throws Exception {
+	@Test void d03_beanBlockValue_nestedIndentedSibling() {
 		// isNullBlockValue: newline then a non-blank char whose column is compared against blockIndent (the
 		// "false"/non-null outcome of that comparison, exercised via readAnything() recursing into a nested
 		// bean map rather than the value being treated as null).
@@ -202,7 +197,7 @@ class YamlParserSession_Test extends TestBase {
 		assertThrowsWithMessage(ParseException.class, "Unexpected '}' found", () -> YamlParser.DEFAULT.read("{a: 1,}", JsonMap.class));
 	}
 
-	@Test void e05_flowMapping_typedMapTarget_notMap() throws Exception {
+	@Test void e05_flowMapping_typedMapTarget_notMap() {
 		// sType.isMap() arm of readAnything's '{' dispatch, target is a concrete (non-generic-JsonMap) Map subtype.
 		Map<String,Integer> m = YamlParser.DEFAULT.read("{a: 1, b: 2}", TreeMap.class, String.class, Integer.class);
 		assertEquals(2, m.size());
@@ -226,7 +221,7 @@ class YamlParserSession_Test extends TestBase {
 		assertThrowsWithMessage(ParseException.class, "Could not find '}'", () -> YamlParser.DEFAULT.read("{name: Bob", D_Bean.class));
 	}
 
-	@Test void f04_beanFlow_unknownProperty() throws Exception {
+	@Test void f04_beanFlow_unknownProperty() {
 		// pm == null arm: onUnknownProperty() dispatch inside the flow-mapping bean state machine. Default
 		// config rejects unknown properties, so ignoreUnknownBeanProperties() is needed to reach the
 		// "read-and-discard" success path rather than onUnknownProperty's own throw.
@@ -261,7 +256,7 @@ class YamlParserSession_Test extends TestBase {
 	// h0x - readBlockMappingKey: colon embedded in a key that isn't followed by a terminator (space/newline/EOF).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void h01_blockMappingKey_embeddedColonNotTerminator() throws Exception {
+	@Test void h01_blockMappingKey_embeddedColonNotTerminator() {
 		// key "a:b" -- the first ':' is followed by 'b' (not a terminator) so it's appended rather than ending the key.
 		JsonMap m = YamlParser.DEFAULT.read("a:b: 1", JsonMap.class);
 		assertEquals("1", m.getString("a:b"));
@@ -271,7 +266,7 @@ class YamlParserSession_Test extends TestBase {
 	// i0x - readBlockSequence: sequence terminated by a non-'-' sibling line at the same indent.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void i01_blockSequence_terminatedByNonDashSibling() throws Exception {
+	@Test void i01_blockSequence_terminatedByNonDashSibling() {
 		List<String> l = new ArrayList<>();
 		YamlParser.DEFAULT.readIntoCollection("- a\nb: 1", l, String.class);
 		assertEquals(List.of("a"), l);
@@ -282,28 +277,28 @@ class YamlParserSession_Test extends TestBase {
 	// invalid indicator characters, and dedent-terminated blocks.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void j01_blockScalar_literalStripChomping() throws Exception {
+	@Test void j01_blockScalar_literalStripChomping() {
 		var s = YamlParser.DEFAULT.read("|-\n  hello\n", String.class);
 		assertEquals("hello", s);
 	}
 
-	@Test void j02_blockScalar_literalKeepChomping() throws Exception {
+	@Test void j02_blockScalar_literalKeepChomping() {
 		var s = YamlParser.DEFAULT.read("|+\n  hello\n\n\n", String.class);
 		assertTrue(s.startsWith("hello"), () -> "Expected to start with 'hello' but was: " + escapeForDisplay(s));
 		assertTrue(s.endsWith("\n\n\n"), () -> "Expected trailing blank lines preserved but was: " + escapeForDisplay(s));
 	}
 
-	@Test void j03_blockScalar_literalClipChompingDefault() throws Exception {
+	@Test void j03_blockScalar_literalClipChompingDefault() {
 		var s = YamlParser.DEFAULT.read("|\n  hello\n", String.class);
 		assertEquals("hello\n", s);
 	}
 
-	@Test void j04_blockScalar_foldedSingleNewlineBecomesSpace() throws Exception {
+	@Test void j04_blockScalar_foldedSingleNewlineBecomesSpace() {
 		var s = YamlParser.DEFAULT.read(">-\n  hello\n  world\n", String.class);
 		assertEquals("hello world", s);
 	}
 
-	@Test void j05_blockScalar_foldedBlankLinePreserved() throws Exception {
+	@Test void j05_blockScalar_foldedBlankLinePreserved() {
 		// FIXED: readBlockScalar's "Empty line" branch used to both (a) immediately append "" to `lines` AND
 		// (b) increment `trailingNewlines`, which was then replayed as a *second* set of "" entries once the
 		// next content line was reached -- double-counting every interior blank line. The blank-line branch
@@ -315,7 +310,7 @@ class YamlParserSession_Test extends TestBase {
 		assertEquals("hello\nworld", s);
 	}
 
-	@Test void j06_blockScalar_explicitIndentDigitIgnored() throws Exception {
+	@Test void j06_blockScalar_explicitIndentDigitIgnored() {
 		// The explicit indent-indicator digit is parsed (branch coverage) but not applied -- auto-detected
 		// indent from the content lines is used instead, per the class-level comment in readBlockScalar.
 		var s = YamlParser.DEFAULT.read("|2-\n  hello\n", String.class);
@@ -326,15 +321,27 @@ class YamlParserSession_Test extends TestBase {
 		assertThrowsWithMessage(ParseException.class, "Unexpected character", () -> YamlParser.DEFAULT.read("|x\n  hello\n", String.class));
 	}
 
-	@Test void j08_blockScalar_dedentEndsBlock() throws Exception {
-		// A subsequent line at a lower indent than the block's own content ends the block scalar and is
-		// treated as the next sibling key in the enclosing block mapping.
-		JsonMap m = YamlParser.DEFAULT.read("a: |\n  x\nb: 2", JsonMap.class);
-		assertEquals("x\n", m.getString("a"));
-		assertEquals("2", m.getString("b"));
+	@ParameterizedTest
+	@MethodSource("j08_twoKeyMappingProvider")
+	void j08_twoKeyMapping(String input, String a, String b) {
+		JsonMap m = YamlParser.DEFAULT.read(input, JsonMap.class);
+		assertBean(m, "a,b", a + "," + b);
 	}
 
-	@Test void j09_blockScalar_crlfIndicatorLine() throws Exception {
+	static Stream<Arguments> j08_twoKeyMappingProvider() {
+		return Stream.of(
+			// j08: a subsequent line at a lower indent than the block's own content ends the block scalar and is
+			// treated as the next sibling key in the enclosing block mapping.
+			Arguments.of("a: |\n  x\nb: 2", "x\n", "2"),
+			// r01: readBlockMapping's own space-skip check (distinct from the equivalent check in handlePlainScalar,
+			// which only covers the *first* key of a root-level mapping) needs a second-or-later key whose ':' is
+			// followed directly by a newline rather than a space.
+			Arguments.of("a: 1\nb:\n  2", "1", "2"),
+			Arguments.of("# comment\na: 1\n# another comment\nb: 2", "1", "2")  // r04: comment lines
+		);
+	}
+
+	@Test void j09_blockScalar_crlfIndicatorLine() {
 		var s = YamlParser.DEFAULT.read("|-\r\n  hello\r\n", String.class);
 		assertEquals("hello", s);
 	}
@@ -347,7 +354,7 @@ class YamlParserSession_Test extends TestBase {
 	// handled elsewhere -- these specifically target block-scalar content routed through convertToType directly).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void k01_resolveScalarType_blockScalarNullLiteral() throws Exception {
+	@Test void k01_resolveScalarType_blockScalarNullLiteral() {
 		// convertToType()'s isObject() arm calls the *session's* trim() (conditional on trimStrings(), default
 		// false) rather than an unconditional String#trim(), so the block scalar's own trailing '\n' (added by
 		// clip chomping) survives unless trimStrings() is enabled -- do so here to reach the "null".equals(s)
@@ -356,44 +363,44 @@ class YamlParserSession_Test extends TestBase {
 		assertNull(p.read("|\n  null\n", Object.class));
 	}
 
-	@Test void k02_resolveScalarType_blockScalarEmptyContent() throws Exception {
+	@Test void k02_resolveScalarType_blockScalarEmptyContent() {
 		var p = YamlParser.create().trimStrings().build();
 		assertNull(p.read("|\n\n", Object.class));
 	}
 
-	@Test void k03_resolveScalarType_titleCaseTrue() throws Exception {
+	@Test void k03_resolveScalarType_titleCaseTrue() {
 		assertEquals(Boolean.TRUE, YamlParser.DEFAULT.read("True", Object.class));
 	}
 
-	@Test void k04_resolveScalarType_upperCaseTrue() throws Exception {
+	@Test void k04_resolveScalarType_upperCaseTrue() {
 		assertEquals(Boolean.TRUE, YamlParser.DEFAULT.read("TRUE", Object.class));
 	}
 
-	@Test void k05_resolveScalarType_titleCaseFalse() throws Exception {
+	@Test void k05_resolveScalarType_titleCaseFalse() {
 		assertEquals(Boolean.FALSE, YamlParser.DEFAULT.read("False", Object.class));
 	}
 
-	@Test void k06_resolveScalarType_upperCaseFalse() throws Exception {
+	@Test void k06_resolveScalarType_upperCaseFalse() {
 		assertEquals(Boolean.FALSE, YamlParser.DEFAULT.read("FALSE", Object.class));
 	}
 
-	@Test void k07_tryParseNumber_integerOverflowFallsBackToLong() throws Exception {
+	@Test void k07_tryParseNumber_integerOverflowFallsBackToLong() {
 		assertEquals(99999999999L, YamlParser.DEFAULT.read("99999999999", Object.class));
 	}
 
-	@Test void k08_tryParseNumber_longOverflowFallsBackToRawString() throws Exception {
+	@Test void k08_tryParseNumber_longOverflowFallsBackToRawString() {
 		assertEquals("999999999999999999999999999999", YamlParser.DEFAULT.read("999999999999999999999999999999", Object.class));
 	}
 
-	@Test void k09_tryParseNumber_leadingPlusSign() throws Exception {
+	@Test void k09_tryParseNumber_leadingPlusSign() {
 		assertEquals(5, YamlParser.DEFAULT.read("+5", Object.class));
 	}
 
-	@Test void k10_tryParseNumber_leadingDot() throws Exception {
+	@Test void k10_tryParseNumber_leadingDot() {
 		assertEquals(0.5, YamlParser.DEFAULT.read(".5", Object.class));
 	}
 
-	@Test void k11_tryParseNumber_infiniteDoubleFallsBackToRawString() throws Exception {
+	@Test void k11_tryParseNumber_infiniteDoubleFallsBackToRawString() {
 		assertEquals("1e400", YamlParser.DEFAULT.read("1e400", Object.class));
 	}
 
@@ -401,32 +408,32 @@ class YamlParserSession_Test extends TestBase {
 	// l0x - skipDocumentMarker: partial (non-triple) dash/dot sequences must be pushed back and reparsed as scalars.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void l01_documentMarker_doubleDashNotTriple() throws Exception {
+	@Test void l01_documentMarker_doubleDashNotTriple() {
 		// Two dashes followed by a non-dash: not a "---" document-start marker, so both dashes are unread and the
 		// whole thing is re-parsed as a plain scalar (which fails numeric parsing and falls back to the raw string).
 		assertEquals("--5", YamlParser.DEFAULT.read("--5", Object.class));
 	}
 
-	@Test void l02_documentMarker_singleDashOnlyOneUnread() throws Exception {
+	@Test void l02_documentMarker_singleDashOnlyOneUnread() {
 		// A single dash immediately followed by a digit (not a document marker, and peekSecondChar() rules out
 		// a block-sequence "- " marker too) is just a negative number.
 		assertEquals(-5, YamlParser.DEFAULT.read("-5", Object.class));
 	}
 
-	@Test void l03_documentMarker_doubleDotNotTriple() throws Exception {
+	@Test void l03_documentMarker_doubleDotNotTriple() {
 		assertEquals("..5", YamlParser.DEFAULT.read("..5", Object.class));
 	}
 
-	@Test void l04_documentMarker_singleDotOnlyOneUnread() throws Exception {
+	@Test void l04_documentMarker_singleDotOnlyOneUnread() {
 		assertEquals(0.5, YamlParser.DEFAULT.read(".5", Object.class));
 	}
 
-	@Test void l05_documentMarker_tripleDashSkipped() throws Exception {
+	@Test void l05_documentMarker_tripleDashSkipped() {
 		JsonMap m = YamlParser.DEFAULT.read("---\na: 1", JsonMap.class);
 		assertEquals("1", m.getString("a"));
 	}
 
-	@Test void l06_documentMarker_tripleDotSkipped() throws Exception {
+	@Test void l06_documentMarker_tripleDotSkipped() {
 		// A "..." document-end marker preceding content on the same read is skipped just like "---".
 		JsonMap m = YamlParser.DEFAULT.read("...\na: 1", JsonMap.class);
 		assertEquals("1", m.getString("a"));
@@ -436,7 +443,7 @@ class YamlParserSession_Test extends TestBase {
 	// m0x - readSingleQuotedString / readDoubleQuotedString escape and error paths.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void m01_singleQuoted_escapedQuote() throws Exception {
+	@Test void m01_singleQuoted_escapedQuote() {
 		assertEquals("it's", YamlParser.DEFAULT.read("'it''s'", String.class));
 	}
 
@@ -444,15 +451,15 @@ class YamlParserSession_Test extends TestBase {
 		assertThrowsWithMessage(ParseException.class, "Could not find end of single-quoted", () -> YamlParser.DEFAULT.read("'abc", String.class));
 	}
 
-	@Test void m03_doubleQuoted_standardEscapes() throws Exception {
+	@Test void m03_doubleQuoted_standardEscapes() {
 		assertEquals("\\\"\n\t\r\0\u0007\b\f\u001b/", YamlParser.DEFAULT.read("\"\\\\\\\"\\n\\t\\r\\0\\a\\b\\f\\e\\/\"", String.class));
 	}
 
-	@Test void m04_doubleQuoted_hexEscape() throws Exception {
+	@Test void m04_doubleQuoted_hexEscape() {
 		assertEquals("A", YamlParser.DEFAULT.read("\"\\x41\"", String.class));
 	}
 
-	@Test void m05_doubleQuoted_unicodeEscape() throws Exception {
+	@Test void m05_doubleQuoted_unicodeEscape() {
 		assertEquals("A", YamlParser.DEFAULT.read("\"\\u0041\"", String.class));
 	}
 
@@ -484,12 +491,12 @@ class YamlParserSession_Test extends TestBase {
 		public java.net.URI uri;
 	}
 
-	@Test void n01_convertToType_char() throws Exception {
+	@Test void n01_convertToType_char() {
 		var b = YamlParser.DEFAULT.read("c: X", N_Bean.class);
 		assertEquals('X', b.c);
 	}
 
-	@Test void n02_convertToType_calendar() throws Exception {
+	@Test void n02_convertToType_calendar() {
 		var s = YamlSerializer.create().keepNullProperties().build();
 		var cal = Calendar.getInstance();
 		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
@@ -501,17 +508,17 @@ class YamlParserSession_Test extends TestBase {
 		assertNotNull(b.cal);
 	}
 
-	@Test void n03_convertToType_temporal() throws Exception {
+	@Test void n03_convertToType_temporal() {
 		var b = YamlParser.DEFAULT.read("ld: 2024-01-15", N_Bean.class);
 		assertEquals(LocalDate.of(2024, 1, 15), b.ld);
 	}
 
-	@Test void n04_convertToType_period() throws Exception {
+	@Test void n04_convertToType_period() {
 		var b = YamlParser.DEFAULT.read("per: P1Y2M3D", N_Bean.class);
 		assertEquals(Period.of(1, 2, 3), b.per);
 	}
 
-	@Test void n05_convertToType_newInstanceFromString() throws Exception {
+	@Test void n05_convertToType_newInstanceFromString() {
 		var b = YamlParser.DEFAULT.read("uri: 'http://example.com'", N_Bean.class);
 		assertEquals(java.net.URI.create("http://example.com"), b.uri);
 	}
@@ -562,86 +569,67 @@ class YamlParserSession_Test extends TestBase {
 		public void setFoo(@SuppressWarnings("unused") String v) { throw new IllegalStateException("boom"); }
 	}
 
-	@Test void p01_readBeanProperty_setterExceptionWrapped() {
-		// First property of a root-level block mapping is set via readBeanProperty() directly. The
-		// BeanRuntimeException thrown there propagates up through readInner()'s generic catch, which re-wraps
-		// it as a ParseException (its own message/cause chain still identifies the original BeanRuntimeException).
-		var ex = assertThrows(ParseException.class, () -> YamlParser.DEFAULT.read("foo: bar", P_Bean.class));
+	@ParameterizedTest
+	@MethodSource("p01_setterExceptionWrappedProvider")
+	void p01_setterExceptionWrapped(String input) {
+		var ex = assertThrows(ParseException.class, () -> YamlParser.DEFAULT.read(input, P_Bean.class));
 		assertInstanceOf(org.apache.juneau.commons.reflect.BeanRuntimeException.class, ex.getCause());
 	}
 
-	@Test void p02_readIntoBeanMapBlock_setterExceptionWrapped() {
-		// Second-and-later properties of a root-level block mapping are set inline within readIntoBeanMapBlock().
-		var ex = assertThrows(ParseException.class, () -> YamlParser.DEFAULT.read("ok: 1\nfoo: bar", P_Bean.class));
-		assertInstanceOf(org.apache.juneau.commons.reflect.BeanRuntimeException.class, ex.getCause());
-	}
-
-	@Test void p03_readIntoBeanMapFlow_setterExceptionWrapped() {
-		var ex = assertThrows(ParseException.class, () -> YamlParser.DEFAULT.read("{foo: bar}", P_Bean.class));
-		assertInstanceOf(org.apache.juneau.commons.reflect.BeanRuntimeException.class, ex.getCause());
+	static Stream<Arguments> p01_setterExceptionWrappedProvider() {
+		return Stream.of(
+			// p01: First property of a root-level block mapping is set via readBeanProperty() directly. The
+			// BeanRuntimeException thrown there propagates up through readInner()'s generic catch, which re-wraps
+			// it as a ParseException (its own message/cause chain still identifies the original BeanRuntimeException).
+			Arguments.of("foo: bar"),
+			// p02: Second-and-later properties of a root-level block mapping are set inline within readIntoBeanMapBlock().
+			Arguments.of("ok: 1\nfoo: bar"),
+			Arguments.of("{foo: bar}")  // p03: readIntoBeanMapFlow
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// q0x - readFlowMapping/readFlowSequence whitespace-continue arms not yet exercised (space before ':'/','/etc).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void q01_flowMapping_spaceBeforeColon() throws Exception {
-		JsonMap m = YamlParser.DEFAULT.read("{a : 1}", JsonMap.class);
-		assertEquals("1", m.getString("a"));
+	@ParameterizedTest
+	@MethodSource("q01_singleKeyMappingProvider")
+	void q01_singleKeyMapping(String input) {
+		JsonMap m = YamlParser.DEFAULT.read(input, JsonMap.class);
+		assertBean(m, "a", "1");
 	}
 
-	@Test void q02_flowMapping_spaceBeforeCloseBrace() throws Exception {
-		JsonMap m = YamlParser.DEFAULT.read("{a: 1 }", JsonMap.class);
-		assertEquals("1", m.getString("a"));
+	static Stream<Arguments> q01_singleKeyMappingProvider() {
+		return Stream.of(
+			Arguments.of("{a : 1}"),    // q01: flow mapping, space before ':'
+			Arguments.of("{a: 1 }"),    // q02: flow mapping, space before '}'
+			Arguments.of("'a': 1"),     // r02: block mapping, single-quoted key
+			Arguments.of("\"a\": 1")    // r03: block mapping, double-quoted key
+		);
 	}
 
-	@Test void q03_flowSequence_spaceBeforeCloseBracket() throws Exception {
-		JsonList l = YamlParser.DEFAULT.read("[1, 2 ]", JsonList.class);
-		assertEquals(2, l.size());
+	@ParameterizedTest
+	@MethodSource("q03_twoElementSequenceProvider")
+	void q03_twoElementSequence(String input) {
+		JsonList l = YamlParser.DEFAULT.read(input, JsonList.class);
+		assertBean(l, "size", "2");
 	}
 
-	@Test void q04_flowSequence_spaceBeforeComma() throws Exception {
-		JsonList l = YamlParser.DEFAULT.read("[1 , 2]", JsonList.class);
-		assertEquals(2, l.size());
-	}
-
-	@Test void q05_readPlainFlowKey_bracketTerminators() throws Exception {
-		// readPlainFlowKey's terminator set includes '[' and ']' (keys inside a flow mapping nested in a
-		// sequence context) in addition to ':' ',' '}' '{'.
-		JsonList l = YamlParser.DEFAULT.read("[{a: 1}, {b: 2}]", JsonList.class);
-		assertEquals(2, l.size());
+	static Stream<Arguments> q03_twoElementSequenceProvider() {
+		return Stream.of(
+			Arguments.of("[1, 2 ]"),           // q03: flow sequence, space before ']'
+			Arguments.of("[1 , 2]"),           // q04: flow sequence, space before ','
+			// q05: readPlainFlowKey's terminator set includes '[' and ']' (keys inside a flow mapping nested in a
+			// sequence context) in addition to ':' ',' '}' '{'.
+			Arguments.of("[{a: 1}, {b: 2}]")
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// r0x - readBlockMapping: no-space-after-colon, tab-based indent, quoted block-mapping keys.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void r01_blockMapping_secondKeyColonImmediatelyFollowedByNewline() throws Exception {
-		// readBlockMapping's own "if (c == ' ') r.read();" (distinct from the equivalent check in
-		// handlePlainScalar, which only covers the *first* key of a root-level mapping) needs a second-or-later
-		// key whose ':' is followed directly by a newline rather than a space.
-		JsonMap m = YamlParser.DEFAULT.read("a: 1\nb:\n  2", JsonMap.class);
-		assertEquals("1", m.getString("a"));
-		assertEquals("2", m.getString("b"));
-	}
-
-	@Test void r02_blockMapping_singleQuotedKey() throws Exception {
-		JsonMap m = YamlParser.DEFAULT.read("'a': 1", JsonMap.class);
-		assertEquals("1", m.getString("a"));
-	}
-
-	@Test void r03_blockMapping_doubleQuotedKey() throws Exception {
-		JsonMap m = YamlParser.DEFAULT.read("\"a\": 1", JsonMap.class);
-		assertEquals("1", m.getString("a"));
-	}
-
-	@Test void r04_blockMapping_commentLine() throws Exception {
-		JsonMap m = YamlParser.DEFAULT.read("# comment\na: 1\n# another comment\nb: 2", JsonMap.class);
-		assertEquals("1", m.getString("a"));
-		assertEquals("2", m.getString("b"));
-	}
-
-	@Test void r05_blockMapping_tabIndent() throws Exception {
+	@Test void r05_blockMapping_tabIndent() {
 		JsonMap m = YamlParser.DEFAULT.read("a:\n\tb: 1", JsonMap.class);
 		assertNotNull(m.get("a"));
 	}
@@ -655,17 +643,17 @@ class YamlParserSession_Test extends TestBase {
 		public List<String> items;
 	}
 
-	@Test void s01_blockSequence_nestedUnderBeanProperty() throws Exception {
+	@Test void s01_blockSequence_nestedUnderBeanProperty() {
 		var b = YamlParser.DEFAULT.read("items:\n  - a\n  - b", S_Bean.class);
 		assertEquals(List.of("a", "b"), b.items);
 	}
 
-	@Test void s02_blockSequence_commentLineBetweenItems() throws Exception {
+	@Test void s02_blockSequence_commentLineBetweenItems() {
 		JsonList l = YamlParser.DEFAULT.read("- a\n# comment\n- b", JsonList.class);
 		assertEquals(List.of("a", "b"), l);
 	}
 
-	@Test void s03_blockSequence_malformedDashRejected() throws Exception {
+	@Test void s03_blockSequence_malformedDashRejected() {
 		// FIXED: when a subsequent sequence line's leading '-' isn't followed by a space/newline/CR/EOF, the
 		// dash is not a valid block-sequence indicator (per YAML, '-' must be followed by whitespace or a line
 		// terminator) -- readBlockSequence now throws a ParseException instead of silently bailing out via
@@ -681,7 +669,7 @@ class YamlParserSession_Test extends TestBase {
 	// entry point (both are only ever invoked immediately after peek() has confirmed the opening quote char).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void t01_lowercaseTrueFalse_viaTrimmedBlockScalar() throws Exception {
+	@Test void t01_lowercaseTrueFalse_viaTrimmedBlockScalar() {
 		// resolveScalarType's exact-lowercase "true"/"false" arms, reached via a block scalar (which bypasses
 		// handlePlainScalar's own separate true/false fast-path) with trimStrings() enabled.
 		var p = YamlParser.create().trimStrings().build();
@@ -689,7 +677,7 @@ class YamlParserSession_Test extends TestBase {
 		assertEquals(Boolean.FALSE, p.read("|\n  false\n", Object.class));
 	}
 
-	@Test void t02_isYamlNull_allVariants() throws Exception {
+	@Test void t02_isYamlNull_allVariants() {
 		assertNull(YamlParser.DEFAULT.read("null", Object.class));
 		assertNull(YamlParser.DEFAULT.read("Null", Object.class));
 		assertNull(YamlParser.DEFAULT.read("NULL", Object.class));

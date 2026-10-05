@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.marshaller.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Static helper that parses typed {@link ElicitResult}s out of an {@link McpMrtrResumeContext} (MCP
@@ -49,8 +49,8 @@ public final class ElicitationResponses {
 	 * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.
 	 */
 	public static ElicitResult get(McpMrtrResumeContext ctx, String id) {
-		assertArgNotNull("ctx", ctx);
-		assertArgNotNull("id", id);
+		reqnn("ctx", ctx);
+		reqnn("id", id);
 		var value = ctx.inputResponses().get(id);
 		if (value == null)
 			return null;
@@ -67,7 +67,7 @@ public final class ElicitationResponses {
 	 * @throws RuntimeException If any answer's decoded shape cannot be converted to {@link ElicitResult}.
 	 */
 	public static Map<String,ElicitResult> all(McpMrtrResumeContext ctx) {
-		assertArgNotNull("ctx", ctx);
+		reqnn("ctx", ctx);
 		Map<String,ElicitResult> out = new LinkedHashMap<>();
 		ctx.inputResponses().keySet().forEach(id -> out.put(id, get(ctx, id)));
 		return out;
@@ -91,9 +91,9 @@ public final class ElicitationResponses {
 	 * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.
 	 */
 	public static boolean getBoolean(McpMrtrResumeContext ctx, String id, String field) {
-		assertArgNotNull("ctx", ctx);
-		assertArgNotNull("id", id);
-		assertArgNotNull("field", field);
+		reqnn("ctx", ctx);
+		reqnn("id", id);
+		reqnn("field", field);
 		var answer = get(ctx, id);
 		if (answer == null || answer.getAction() != ElicitAction.ACCEPT)
 			return false;
@@ -117,9 +117,9 @@ public final class ElicitationResponses {
 	 * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.
 	 */
 	public static String getString(McpMrtrResumeContext ctx, String id, String field) {
-		assertArgNotNull("ctx", ctx);
-		assertArgNotNull("id", id);
-		assertArgNotNull("field", field);
+		reqnn("ctx", ctx);
+		reqnn("id", id);
+		reqnn("field", field);
 		var answer = get(ctx, id);
 		if (answer == null || answer.getAction() != ElicitAction.ACCEPT)
 			return null;

@@ -26,7 +26,26 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * A badge is exactly one of a <b>count</b> badge ({@link #count}) or a <b>dot</b> badge ({@link #dot}); it never
  * carries both.  The optional {@link #max} clamps a large count to <js>"&lt;max&gt;+"</js> and {@link #tone} selects
- * an existing {@code --jc-*} palette token.  A count is painted with {@code textContent} &mdash; never {@code innerHTML}.
+ * the badge colour from the shared {@link StatusTone} palette.  A count is painted with {@code textContent}
+ * &mdash; never {@code innerHTML}.
+ *
+ * <p>
+ * The tone is serialized as its enum name (e.g. <js>"WARNING"</js>); the client lowercases it into the
+ * {@code data-juneau-badge-tone} attribute.  Colours map as:
+ * <ul>
+ * 	<li>{@link StatusTone#INFO} &mdash; blue
+ * 	<li>{@link StatusTone#SUCCESS} &mdash; green
+ * 	<li>{@link StatusTone#WARNING} &mdash; amber
+ * 	<li>{@link StatusTone#ERROR} &mdash; red
+ * 	<li>{@link StatusTone#NEUTRAL} &mdash; neutral
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// A red unread-count badge that caps at "99+".</jc>
+ * 	Badge <jv>badge</jv> = Badge.<jsm>count</jsm>(120).tone(StatusTone.<jsf>ERROR</jsf>).max(99).label(<js>"unread notifications"</js>);
+ * 	<jv>badge</jv>.validate();
+ * </p>
  *
  * @since 10.0.0
  */
@@ -45,8 +64,8 @@ public class Badge {
 	/** Optional display clamp; a count above this renders as <js>"&lt;max&gt;+"</js>.  When set must be {@code >= 1}. */
 	public Integer max;
 
-	/** Optional color tone; maps to a {@code --jc-*} palette token. */
-	public Tone tone;
+	/** Optional colour tone; <jk>null</jk> leaves the badge in its default colour. */
+	public StatusTone tone;
 
 	/** Optional visually-hidden context for screen readers, e.g. <js>"unread notifications"</js>. */
 	public String label;
@@ -77,10 +96,10 @@ public class Badge {
 	/**
 	 * Sets the color tone.
 	 *
-	 * @param value The tone.
+	 * @param value The tone.  Can be <jk>null</jk> to use the default colour.
 	 * @return This object.
 	 */
-	public Badge tone(Tone value) {
+	public Badge tone(StatusTone value) {
 		tone = value;
 		return this;
 	}

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -81,26 +80,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class PathItem extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_delete = "delete";
-	private static final String PROP_description = "description";
-	private static final String PROP_get = "get";
-	private static final String PROP_head = "head";
-	private static final String PROP_options = "options";
-	private static final String PROP_parameters = "parameters";
-	private static final String PROP_patch = "patch";
-	private static final String PROP_post = "post";
-	private static final String PROP_put = "put";
-	private static final String PROP_servers = "servers";
-	private static final String PROP_summary = "summary";
-	private static final String PROP_trace = "trace";
 
 	private String summary;
 	private String description;
@@ -152,20 +134,20 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_summary -> toType(getSummary(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_get -> toType(getGet(), type);
-			case PROP_put -> toType(getPut(), type);
-			case PROP_post -> toType(getPost(), type);
-			case PROP_delete -> toType(getDelete(), type);
-			case PROP_options -> toType(getOptions(), type);
-			case PROP_head -> toType(getHead(), type);
-			case PROP_patch -> toType(getPatch(), type);
-			case PROP_trace -> toType(getTrace(), type);
-			case PROP_servers -> toType(getServers(), type);
-			case PROP_parameters -> toType(getParameters(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "description" -> toType(getDescription(), type);
+			case "get" -> toType(getGet(), type);
+			case "put" -> toType(getPut(), type);
+			case "post" -> toType(getPost(), type);
+			case "delete" -> toType(getDelete(), type);
+			case "options" -> toType(getOptions(), type);
+			case "head" -> toType(getHead(), type);
+			case "patch" -> toType(getPatch(), type);
+			case "trace" -> toType(getTrace(), type);
+			case "servers" -> toType(getServers(), type);
+			case "parameters" -> toType(getParameters(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -258,18 +240,18 @@ public class PathItem extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(delete), PROP_delete)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(get), PROP_get)
-			.addIf(nn(head), PROP_head)
-			.addIf(nn(options), PROP_options)
-			.addIf(nn(parameters), PROP_parameters)
-			.addIf(nn(patch), PROP_patch)
-			.addIf(nn(post), PROP_post)
-			.addIf(nn(put), PROP_put)
-			.addIf(nn(servers), PROP_servers)
-			.addIf(nn(summary), PROP_summary)
-			.addIf(nn(trace), PROP_trace)
+			.addIf(nn(delete), "delete")
+			.addIf(nn(description), "description")
+			.addIf(nn(get), "get")
+			.addIf(nn(head), "head")
+			.addIf(nn(options), "options")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(patch), "patch")
+			.addIf(nn(post), "post")
+			.addIf(nn(put), "put")
+			.addIf(nn(servers), "servers")
+			.addIf(nn(summary), "summary")
+			.addIf(nn(trace), "trace")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -277,20 +259,20 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public PathItem set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_delete -> setDelete(toType(value, Operation.class));
-			case PROP_description -> setDescription(s(value));
-			case PROP_get -> setGet(toType(value, Operation.class));
-			case PROP_head -> setHead(toType(value, Operation.class));
-			case PROP_options -> setOptions(toType(value, Operation.class));
-			case PROP_patch -> setPatch(toType(value, Operation.class));
-			case PROP_parameters -> setParameters(lb(Parameter.class).addAny(value).sparse().build());
-			case PROP_post -> setPost(toType(value, Operation.class));
-			case PROP_put -> setPut(toType(value, Operation.class));
-			case PROP_servers -> setServers(lb(Server.class).addAny(value).sparse().build());
-			case PROP_summary -> setSummary(s(value));
-			case PROP_trace -> setTrace(toType(value, Operation.class));
+			case "delete" -> setDelete(toType(value, Operation.class));
+			case "description" -> setDescription(s(value));
+			case "get" -> setGet(toType(value, Operation.class));
+			case "head" -> setHead(toType(value, Operation.class));
+			case "options" -> setOptions(toType(value, Operation.class));
+			case "patch" -> setPatch(toType(value, Operation.class));
+			case "parameters" -> setParameters(lb(Parameter.class).addAny(value).sparse().build());
+			case "post" -> setPost(toType(value, Operation.class));
+			case "put" -> setPut(toType(value, Operation.class));
+			case "servers" -> setServers(lb(Server.class).addAny(value).sparse().build());
+			case "summary" -> setSummary(s(value));
+			case "trace" -> setTrace(toType(value, Operation.class));
 			default -> {
 				super.set(property, value);
 				yield this;

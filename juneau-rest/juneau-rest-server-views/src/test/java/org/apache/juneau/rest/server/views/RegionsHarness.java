@@ -66,15 +66,6 @@ final class RegionsHarness {
 		return reportImpl(harnessName, ViewsMixin.HELPERS_JS_RESOURCE);
 	}
 
-	/**
-	 * Runs the named harness with {@code juneau-page-cards.js} ALSO loaded (a fourth argv path, loaded last - the
-	 * same order the "views" toolkit pack emits it), for the page-cards harness whose F10 cases must actually BOOT
-	 * the sidecar scanner (name-only template lookup, populate hookup) rather than pin Java strings alone.
-	 */
-	static Map<?,?> reportWithPageCards(String harnessName) {
-		return reportImpl(harnessName, ViewsMixin.PAGE_CARDS_JS_RESOURCE);
-	}
-
 	private static Map<?,?> reportImpl(String harnessName, String extraResource) {
 		var cacheKey = (extraResource == null ? "" : extraResource + ":") + harnessName;
 		if (FAILED.contains(cacheKey))

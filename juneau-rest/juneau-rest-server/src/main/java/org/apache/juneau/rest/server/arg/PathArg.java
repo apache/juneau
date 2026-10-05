@@ -101,7 +101,7 @@ public class PathArg implements RestOpArg {
 			return null;
 		for (var p : restAnnotation.pathParams()) {
 			var pName = firstNonEmpty(p.name(), p.value());
-			if (paramName.equals(pName))
+			if (eq(paramName, pName))
 				return p;
 		}
 		return null;
@@ -143,7 +143,7 @@ public class PathArg implements RestOpArg {
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		var req = opSession.getRequest();
-		if (name.equals("*")) {
+		if (eq(name, "*")) {
 			var m = new JsonMap();
 			req.getPathParams().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getMarshallingSession().convertToType(m, type);

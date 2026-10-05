@@ -22,37 +22,123 @@ import java.util.*;
 import java.util.regex.*;
 
 /**
- * An immutable, named set of CSS custom-property ("theme token") overrides for the admin-console chrome.
+ * The validated token model behind the console's FTL {@code <@theme>}/{@code <@token>} directives: an immutable theme
+ * name, an ordered map of leaf tokens (literals) and an ordered map of alias tokens (live {@code var()} references).
  *
  * <p>
- * A {@link Theme} is pure data &mdash; it carries no classpath assets (fonts/logos/background images; that is a
- * fast-follow, see the design's P3) &mdash; just a name and a map of {@code --jc-*} token names to CSS values.
- * {@code ConsoleChromeMixin} appends the active theme's tokens to the served {@code chrome.css} response as an
- * {@code html:root{}} block, on top of {@link #OPEN}'s own block.
+ * Applications don't build themes in Java. They author them in their FreeMarker chrome, and the directives build
+ * this object:
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bftl'>
+ * 	&lt;@console&gt;
+ * 		&lt;@theme name="light-red"&gt;
+ * 			&lt;#-- A leaf: a literal (or a var() resolved to one at build time). --&gt;
+ * 			&lt;@token name="--jc-pill-red-bg" value="#fdeceb"/&gt;
+ * 			&lt;#-- An alias: a reference that stays live in the browser's cascade. --&gt;
+ * 			&lt;@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/&gt;
+ * 		&lt;/@theme&gt;
+ * 		&lt;@main/&gt;
+ * 	&lt;/@console&gt;
+ * </p>
+ *
+ * <p>
+ * That is equivalent to the following, which is what {@code <@theme>} does internally after seeding the builder
+ * from the stock palette:
+ *
+ * <p class='bjava'>
+ * 	Theme <jv>theme</jv> = Theme.<jsm>create</jsm>(<js>"light-red"</js>)
+ * 		.token(<js>"--jc-pill-red-bg"</js>, <js>"#fdeceb"</js>)
+ * 		.alias(<js>"--jc-tab-bar-bg"</js>, <js>"var(--jc-card-bg)"</js>)
+ * 		.build();
+ * 	String <jv>css</jv> = ConsoleChromeMixin.<jsm>overrideBlock</jsm>(<jv>theme</jv>);
+ * 	<jc>// html:root{--jc-pill-red-bg:#fdeceb;--jc-tab-bar-bg:var(--jc-card-bg);}</jc>
+ * </p>
+ *
+ * <p>
+ * The five stock palettes ({@link #OPEN}, {@link #LIGHT_RED}, {@link #LIGHT_BROWN}, {@link #RED}, {@link #GRAY})
+ * are selected by name: {@code <@theme name="gray">} in FTL, or {@code ConsoleChromeMixin.create().theme("gray")}
+ * for the served {@code chrome.css}.
+ *
+ * <h5 class='section'>The two channels:</h5>
+ * <p>
+ * The contract in one sentence: <b>a leaf is always a literal; an alias is always a reference; and no token name
+ * is declared by both.</b> The two channels are disjoint by <i>value shape</i> rather than by convention, and each
+ * carries its own validation:
+ *
+ * <table class='styled'>
+ * 	<tr><th>&nbsp;</th><th>leaf ({@link #getTokens()})</th><th>alias ({@link #getAliases()})</th></tr>
+ * 	<tr><td>example</td><td><c>--jc-accent: #b45309</c></td><td><c>--jc-tab-bar-bg: var(--jc-card-bg)</c></td></tr>
+ * 	<tr><td>value shape</td><td>literal</td><td>reference</td></tr>
+ * 	<tr><td>validated by</td><td>{@code CssValueGrammar}'s accept-known-safe allowlist</td><td>the anchored
+ * 		{@code var(--jc-name)} recognizer ({@link Builder#alias(String, String)})</td></tr>
+ * 	<tr><td>emitted</td><td>escaped, via {@code CssValueEscaper}</td><td>verbatim &mdash; see
+ * 		<i>Injection safety</i> below</td></tr>
+ * </table>
+ *
+ * <p>
+ * The rule a theme author needs to remember: <b>a literal belongs in {@link Builder#token(String, String)}; a
+ * reference belongs in {@link Builder#alias(String, String)}.</b> To make {@code --jc-tab-bar-bg} be {@code #fff},
+ * declare it with {@code token()}. To make it <i>follow</i> {@code --jc-card-bg} through the live cascade,
+ * {@link Builder#alias(String, String) alias} it.
+ *
+ * <h5 class='section'>Why the alias channel exists at all:</h5>
+ * <p>
+ * A leaf cannot carry a derived token. {@link Builder#build()} recognizes a {@code var(--jc-name)} value as a
+ * reference and <b>resolves it to a frozen literal</b>, which snapshots the live CSS cascade at composition time
+ * &mdash; so a token that must <i>keep following</i> its target can never be a leaf. {@code
+ * ConsoleChromeMixin.OPEN_ROLE_ALIASES} is the framework's own answer to the same problem, but those are
+ * unconditional framework defaults rather than per-theme derivations. The alias map is the third channel:
+ * <b>consumer-authored derivations that survive to the wire as references.</b>
+ *
+ * <h5 class='section'>The var() asymmetry &mdash; read this before "unifying" the two paths:</h5>
+ * <p>
+ * These two adjacent channels have <b>opposite</b> {@code var()} semantics, deliberately:
+ * <ul class='spaced-list'>
+ * 	<li>A {@code var()} in a <b>leaf</b> is <b>resolved away</b> before the wire ({@link Builder#build()}), so the
+ * 		served declaration carries the literal. That is asserted by {@code
+ * 		ConsoleChromeMixin_OverrideBlock_Test.a05}, which pins that {@code --jc-tag-red-text:var(} never appears in
+ * 		the body.
+ * 	<li>A {@code var()} in an <b>alias</b> must <b>survive as a reference</b> in the served declaration. Freezing
+ * 		it to a literal would defeat the entire purpose of the channel.
+ * </ul>
+ * <p>
+ * So a change that "unifies the two {@code var()} paths" silently destroys this type's reason to exist. The same
+ * warning is repeated at the emission site ({@code ConsoleChromeMixin.overrideBlock}), because that is the other
+ * place the mistake is reachable from.
  *
  * <h5 class='section'>Security:</h5>
  * <p>
- * Identifiers (theme name, token name) are REJECTed fail-closed by anchored {@code String.matches(...)} guards.
- * Token values are validated by {@code CssValueGrammar}'s accept-known-safe allowlist grammar (not a
- * {@code url(}-blocklist) and are escaped at emission time by {@code CssValueEscaper} (see
- * {@code ConsoleChromeMixin}). {@link #OPEN} is a placeholder empty theme in this revision; its real token set
- * lands together with {@code chrome.css}.
+ * Identifiers (theme name, token name, alias name) are rejected fail-closed by anchored {@code String.matches(...)}
+ * guards. Leaf values are validated by {@code CssValueGrammar}'s accept-known-safe allowlist grammar (not a
+ * {@code url(}-blocklist) and are escaped at emission time by {@code CssValueEscaper}. A leaf may also be a
+ * {@code var(--jc-name)} reference to another known token; {@link Builder#build() build()} resolves it to a
+ * concrete literal (own tokens shadowing {@link #OPEN}'s), so {@code var(} never appears in a {@link #getTokens()}
+ * value. An unknown reference, a cycle, or a chain longer than the resolution depth cap is a loud {@code build()}
+ * failure, never a silent fallback. Declared names in the reserved {@code --jc-chrome-*} namespace are rejected
+ * (see {@code rejectReservedChromeDeclaration}).
+ *
+ * <h5 class='section'>Injection safety of the alias channel:</h5>
+ * <p>
+ * Every alias value must match the fully-anchored {@code var(--jc-name)} shape ({@code VAR_REFERENCE}), which
+ * admits <b>exactly</b> this alphabet and nothing else: the three letters of {@code var} in either case, an opening
+ * paren, optional ASCII spaces, the literal {@code --jc-}, one or more of {@code [a-z0-9-]}, optional ASCII spaces,
+ * and a closing paren. (The recognizer's whitespace class can only ever match a plain space here, because every
+ * other character it would accept &mdash; tab, newline, carriage return, form feed, vertical tab &mdash; is a C0
+ * control character that {@code CssValueGrammar}'s belt has already rejected on the raw value, before this
+ * recognizer runs.)
  *
  * <p>
- * A token value may also be a {@code var(--jc-name)} <b>reference</b> to another known token. References are
- * <i>not</i> a {@code CssValueGrammar} value shape: {@code Theme.Builder} recognizes them one layer above the
- * grammar and resolves each to a concrete literal at {@link Builder#build() build()} time (own tokens shadowing
- * {@link #OPEN}'s), so the substring {@code var(} never appears in any {@link #getTokens()} value &mdash; only the
- * resolved literal, which is itself re-validated by the grammar, is ever emitted. An unknown reference, a cycle,
- * or a chain longer than the resolution depth cap is a loud {@code build()} failure, never a silent fallback.
+ * So not one of {@code ;}, <code>}</code>, {@code "}, {@code '}, {@code \}, <code>/&#42;</code>, {@code url(} or a
+ * control character is <i>representable</i> in an accepted value &mdash; the emitted text is provably safe with
+ * <b>no escaper at all</b>. That is a strictly stronger claim than the leaf channel's "safe because we escape it",
+ * and it is the reason the channel is restricted to references rather than given an escaper of its own (escaping a
+ * {@code var()} reference would corrupt its parens).
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bjava'>
- * 	Theme <jv>corporate</jv> = Theme.<jsm>create</jsm>(<js>"corporate"</js>)
- * 		.token(<js>"--jc-font"</js>, <js>"'Source Sans 3', Inter, sans-serif"</js>)
- * 		.token(<js>"--jc-accent"</js>, <js>"#1589EE"</js>)
- * 		.build();
- * </p>
+ * <p>
+ * A corollary worth stating: because an alias cannot carry a literal, the alias channel is <b>structurally</b>
+ * incapable of smuggling in a colour value, a font stack, or any other palette content. It can only ever point one
+ * name at another.
  *
  * @since 10.0.0
  */
@@ -78,6 +164,9 @@ public final class Theme {
 	 * (comma inside the parens) and falls through to grammar rejection.
 	 */
 	static final Pattern VAR_REFERENCE = Pattern.compile("^[Vv][Aa][Rr]\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
+
+	/** The reserved token-name prefix guarded by {@link #rejectReservedChromeDeclaration(String, String)}. */
+	static final String CHROME_TOKEN_PREFIX = "--jc-chrome-";
 
 	/**
 	 * The maximum number of reference hops resolved before {@code build()} fails, enforced independently of cycle
@@ -154,19 +243,19 @@ public final class Theme {
 		.token("--jc-tag-red-text", "var(--jc-pill-red-text)")
 		.token("--jc-tag-red-border", "var(--jc-pill-red-border)")
 		// Probe palette (client-side status probes).  A separate family from the pill/tag triads: probes SHOW a status
-		// dot and carry their own light status wash + ink, keyed to the four probe statuses ok/fail/warn/neutral.  Each
+		// dot and carry their own light status wash + ink, keyed to the four probe statuses success/error/warning/neutral.  Each
 		// status sets a background wash, a text (ink) colour, and the dot fill.  The selected-state ring reuses the
 		// existing --jc-accent-selected token (no new ring token).  Values are the measured status palette, independent
 		// of both the pill palette and the theme accent (neutral is a neutral grey, not the accent).
-		.token("--jc-probe-ok-bg", "#d1fae5")
-		.token("--jc-probe-ok-text", "#065f46")
-		.token("--jc-probe-ok-dot", "#10b981")
-		.token("--jc-probe-fail-bg", "#fee2e2")
-		.token("--jc-probe-fail-text", "#991b1b")
-		.token("--jc-probe-fail-dot", "#dc2626")
-		.token("--jc-probe-warn-bg", "#fef3c7")
-		.token("--jc-probe-warn-text", "#92400e")
-		.token("--jc-probe-warn-dot", "#f59e0b")
+		.token("--jc-probe-success-bg", "#d1fae5")
+		.token("--jc-probe-success-text", "#065f46")
+		.token("--jc-probe-success-dot", "#10b981")
+		.token("--jc-probe-error-bg", "#fee2e2")
+		.token("--jc-probe-error-text", "#991b1b")
+		.token("--jc-probe-error-dot", "#dc2626")
+		.token("--jc-probe-warning-bg", "#fef3c7")
+		.token("--jc-probe-warning-text", "#92400e")
+		.token("--jc-probe-warning-dot", "#f59e0b")
 		.token("--jc-probe-neutral-bg", "#e5e7eb")
 		.token("--jc-probe-neutral-text", "#374151")
 		.token("--jc-probe-neutral-dot", "#6b7280")
@@ -209,8 +298,8 @@ public final class Theme {
 	 *
 	 * <p>
 	 * Recolors the chrome, accent, links, text, borders, and primary button to a warm brown palette, while keeping
-	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
-	 * neutral gray) verbatim &mdash; a brown "danger" pill would stop reading as danger, so the status palette is
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, error red, warning amber,
+	 * neutral gray) verbatim &mdash; a brown "error" pill would stop reading as an error, so the status palette is
 	 * deliberately untouched. Authored as seeded from {@link #OPEN}, overriding
 	 * only the 15 browned tokens below; the other 40 &mdash; including all five tag triads and every structural
 	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
@@ -245,8 +334,8 @@ public final class Theme {
 	 *
 	 * <p>
 	 * Recolors the chrome, accent, links, text, borders, and primary button to a wine/rose palette, while keeping
-	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning amber,
-	 * neutral gray) verbatim &mdash; a red "danger" pill that matched the brand would stop reading as danger, so
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, error red, warning amber,
+	 * neutral gray) verbatim &mdash; a red "error" pill that matched the brand would stop reading as an error, so
 	 * the status palette is deliberately untouched. Seeded from {@link #OPEN}, overriding only the 15 recolored
 	 * tokens below; the other 40 &mdash; including all five tag triads and every structural token &mdash; are
 	 * inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
@@ -291,7 +380,7 @@ public final class Theme {
 	 * color (Jira's own brand is blue); no
 	 * Atlassian trademark appears in this theme's name or token values. Recolors the chrome, accent, links, brand,
 	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
-	 * green, danger red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
+	 * green, error red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
 	 * seeded from {@link #OPEN}, overriding only the 16 recolored tokens below;
 	 * the other 35 &mdash; including all five tag triads and every structural token &mdash; are inherited from
 	 * {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably identical to {@link #OPEN}'s.
@@ -356,14 +445,16 @@ public final class Theme {
 
 	private final String name;
 	private final Map<String,String> tokens;
+	private final Map<String,String> aliases;
 
-	private Theme(String name, Map<String,String> tokens) {
+	private Theme(String name, Map<String,String> tokens, Map<String,String> aliases) {
 		this.name = name;
 		// Insertion-ordered rather than Map.copyOf: ConsoleChromeMixin emits this map's iteration order directly as
 		// the served stylesheet's :root{} declarations, and Map.copyOf's order is perturbed by a per-JVM salt - which
 		// would make the response body differ between two processes serving an identical token set.  cp(Map) is
 		// contractually a LinkedHashMap copy, so it preserves that order; do not swap it for an unordered copy.
 		this.tokens = u(cp(tokens));
+		this.aliases = u(cp(aliases));
 	}
 
 	/**
@@ -413,11 +504,93 @@ public final class Theme {
 	public Map<String,String> getTokens() { return tokens; }
 
 	/**
+	 * Returns this theme's alias tokens: name to a live {@code var(--jc-*)} reference.
+	 *
+	 * <p>
+	 * Unlike a {@link #getTokens() leaf}, an alias is never resolved at build time. It reaches the browser verbatim,
+	 * so it follows its target through the cascade, including any later override of the target. The map is
+	 * insertion-ordered (the order {@link Builder#alias(String, String)} was called in), which keeps the emitted
+	 * block byte-stable, and it is unmodifiable. It is empty for every stock theme.
+	 *
+	 * <p>
+	 * This is a {@code Map}, not a rendered {@code String}, on purpose: the leaf half and the alias half of an
+	 * override block are escaped differently (see {@link ConsoleChromeMixin#overrideBlock(Theme)}), so the
+	 * emitter needs the two halves apart. Do not simplify this into a rendered string.
+	 *
+	 * @return The alias tokens.  Never <jk>null</jk>.
+	 */
+	public Map<String,String> getAliases() {
+		return aliases;
+	}
+
+	/**
+	 * The single shared, fail-closed guard rejecting a declaration of a reserved chrome-scale token name, invoked on
+	 * <b>every</b> path by which a token declaration can reach the served stylesheet.
+	 *
+	 * <p>
+	 * <b>What it protects.</b> {@code juneau-views.css} declares one shared control-scale ladder
+	 * ({@code --jc-chrome-control-height}, {@code --jc-chrome-font-size-1}, {@code --jc-chrome-glyph-size}, ...) at
+	 * {@code :root}, and a contract test in that module pins it as declared exactly once so that every surface
+	 * shares one ladder. A token block emitted here sits at {@code html:root}, which out-specifies that
+	 * {@code :root} &mdash; so a consumer redeclaring a ladder step would win, render perfectly, and turn that
+	 * contract into decoration with no test failing anywhere. Documentation is not a mitigation for that, so the
+	 * rejection lives here.
+	 *
+	 * <p>
+	 * <b>Where it fires.</b>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Builder#token(String, String)} and {@link Builder#alias(String, String)}, at declaration &mdash;
+	 * 		the only way a name enters a theme.
+	 * 	<li>{@code ConsoleChromeMixin.overrideBlock(Theme)}, at emission &mdash; defense in depth; unreachable for a
+	 * 		theme built by this class.
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>It fires on the declared name only, never on a target.</b> Aliasing a pack token <i>to</i> a ladder step
+	 * is legal and useful; <i>declaring</i> a ladder step is not.
+	 *
+	 * <p>
+	 * <b>The {@link Theme#OPEN} exemption.</b> The reserved namespace is {@code --jc-chrome-*} <i>except</i> the
+	 * names {@link Theme#OPEN} itself already declares. Two names are exempt today:
+	 * {@code --jc-chrome-bg} (page-chrome grey that predates the ladder) and {@code --jc-chrome-icon} (idle
+	 * ribbon / paging glyph ink). Both are consumed by {@code chrome.css} and are legitimately overridable.
+	 * Without the exemption this guard would reject {@link Theme#OPEN}'s own token
+	 * set &mdash; and therefore every stock palette seeded from {@link Theme#OPEN}, which is the normal way
+	 * to author a palette. The exemption is expressed against
+	 * {@link Theme#OPEN} rather than as a hardcoded name list so it cannot drift: it needs no copy of the ladder's
+	 * names (which live in a module this one deliberately cannot see), it stays correct if a chrome-named leaf is
+	 * ever added to or removed from {@link Theme#OPEN}, and it fails <i>closed</i> for every new name &mdash; no
+	 * ladder step is a {@link Theme#OPEN} token, and adding one could only ever happen through a reviewed edit to
+	 * {@link Theme#OPEN} that its own pinned token count would surface.
+	 *
+	 * <p>
+	 * A prefix test rather than an anchored {@code matches(...)}: by the time a name reaches here it has already
+	 * passed a full-string {@code ^--jc-[a-z0-9-]+$} shape guard, so its alphabet is closed and
+	 * {@link String#startsWith(String)} is total &mdash; there is no string that passes the shape guard, begins with
+	 * the reserved prefix, and escapes this check.
+	 *
+	 * <p>While {@link #OPEN} itself is being built, {@code OPEN} is still {@code null} and the guard is skipped: the
+	 * stock palette is the source of the exemption list, not subject to it.
+	 *
+	 * @param name The declared token name. Already shape-validated by the caller.
+	 * @param source A short description of the channel the declaration arrived through, for the failure message.
+	 * @throws IllegalArgumentException If {@code name} is a reserved chrome-scale token name.
+	 */
+	static void rejectReservedChromeDeclaration(String name, String source) {
+		if (OPEN == null)
+			return;
+		if (name.startsWith(CHROME_TOKEN_PREFIX) && ! OPEN.getTokens().containsKey(name))
+			throw iaex("Cannot declare reserved token '%s' (%s).  The '%s' namespace is the shared control-scale ladder declared by juneau-views.css; a token block served here out-specifies it.  Referencing one of these tokens is legal - declaring one is not.",
+				name, source, CHROME_TOKEN_PREFIX);
+	}
+
+	/**
 	 * Builder for {@link Theme}.
 	 */
 	public static final class Builder {
 		private final String name;
 		private final Map<String,String> tokens = new LinkedHashMap<>();
+		private final Map<String,String> aliases = new LinkedHashMap<>();
 
 		private Builder(String name) { this.name = name; }
 
@@ -438,6 +611,9 @@ public final class Theme {
 		 * </ul>
 		 * Escaping happens later, at emission time, via {@code CssValueEscaper} (see {@code ConsoleChromeMixin}).
 		 *
+		 * <p>A declared name in the reserved {@code --jc-chrome-*} namespace that {@link Theme#OPEN} does not already
+		 * declare is rejected.
+		 *
 		 * @param name The token name. Must not be <jk>null</jk> and must match {@code ^--jc-[a-z0-9-]+$}.
 		 * @param value
 		 * 	The CSS value &mdash; a literal, or a {@code var(--jc-name)} reference.
@@ -452,6 +628,7 @@ public final class Theme {
 		public Builder token(String name, String value) {
 			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
 				throw iaex("Invalid theme token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' leaf token");
 			// Recognition runs on the SAME post-belt string the grammar would see (one shared belt, no second
 			// comment-stripping pass).  A reference is stored unresolved; a literal is validated eagerly, exactly
 			// as before this feature existed.
@@ -464,6 +641,50 @@ public final class Theme {
 		}
 
 		/**
+		 * Declares an alias token: a name whose value is a live reference to another {@code --jc-*} token.
+		 *
+		 * <p>
+		 * The target must be exactly one {@code var(--jc-name)} reference, with no fallback, no surrounding value
+		 * and no second reference. It is stored after the shared normalization belt (trim and comment strip, with
+		 * control characters rejected on the raw value) and emitted verbatim. Nothing dangerous is representable in
+		 * that shape, so an alias needs no escaper. A literal belongs in {@link #token(String, String)}. A
+		 * {@code var()} given to {@code token()} is resolved to its literal at build time; one given here is not.
+		 *
+		 * <p>
+		 * A name may be declared by only one channel: {@link #build()} rejects a name given to both
+		 * {@code token()} and {@code alias()}, in either order.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Follows --jc-card-bg live, including any later override of it.</jc>
+		 * 	<jv>builder</jv>.alias(<js>"--jc-tab-bar-bg"</js>, <js>"var(--jc-card-bg)"</js>);
+		 *
+		 * 	<jc>// Rejected: a literal belongs in token(), not alias().</jc>
+		 * 	<jv>builder</jv>.alias(<js>"--jc-tab-bar-bg"</js>, <js>"#fff"</js>);
+		 * </p>
+		 *
+		 * <p>A declared name in the reserved {@code --jc-chrome-*} namespace that {@link Theme#OPEN} does not already
+		 * declare is rejected.
+		 *
+		 * @param name The alias name.  Must match {@code ^--jc-[a-z0-9-]+$}.
+		 * @param target The reference.  Must be a single {@code var(--jc-name)}.
+		 * @return This object.
+		 * @throws IllegalArgumentException If the name or the target is malformed.
+		 */
+		public Builder alias(String name, String target) {
+			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
+				throw iaex("Invalid theme alias name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' alias");
+			if (target == null)
+				throw iaex("Invalid theme alias target for '%s': null.", name);
+			var normalized = CssValueGrammar.normalize(target);
+			if (! VAR_REFERENCE.matcher(normalized).matches())
+				throw iaex("Invalid theme alias target for '%s': '%s'.  Must be a var(--jc-name) reference.", name, target);
+			aliases.put(name, normalized);
+			return this;
+		}
+
+		/**
 		 * Builds the immutable {@link Theme}, resolving every {@code var(--jc-name)} reference to a concrete literal.
 		 *
 		 * <p>
@@ -472,6 +693,8 @@ public final class Theme {
 		 * silent fall-through to {@code Theme.OPEN}'s value for a shadowed name). Resolution runs on a copy of the
 		 * token map, so a failed {@code build()} leaves this builder unchanged and retryable.
 		 *
+		 * <p>Rejects a name declared by both {@link #token(String, String)} and {@link #alias(String, String)}.
+		 *
 		 * @return A new {@link Theme} whose every token value is a resolved six-shape literal (the substring
 		 * 	{@code var(} appears in none of them).
 		 * @throws IllegalArgumentException
@@ -479,7 +702,11 @@ public final class Theme {
 		 * 	resolution depth cap.
 		 */
 		public Theme build() {
-			return new Theme(name, resolveReferences());
+			var resolved = resolveReferences();
+			for (var n : aliases.keySet())
+				if (tokens.containsKey(n))
+					throw iaex("Theme '%s' declares '%s' as both a leaf token and an alias.  A name may be declared by only one channel.", name, n);
+			return new Theme(name, resolved, aliases);
 		}
 
 		/** Resolves every reference in a copy of the token map, preserving declaration order; never mutates {@link #tokens}. */

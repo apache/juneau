@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S117", // Local variable names use underscores for test data clarity
-	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S4144" // Identical methods intentional for different test scenarios
 })
 class AnnotationObject_Test extends TestBase {
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -51,7 +52,9 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unused"  // Test POJO fields/methods are read reflectively through BeanMeta, not directly.
+	"java:S2133", // An actual anonymous class (not Runnable.class) is required so cm.isAnonymousClass() is exercised.
+	"java:S9357", // Must stay an anonymous class, not a lambda: the test exercises anonymous-class discovery.
+	"unused" // Test POJO fields/methods are read reflectively through BeanMeta, not directly.
 })
 class BeanMeta_Discovery_Coverage_Test extends TestBase {
 
@@ -164,9 +167,6 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2133" // An actual anonymous class (not Runnable.class) is required so cm.isAnonymousClass() is exercised.
-	})
 	void a08_create_anonymousClass_returnsReason() {
 		var anon = new Runnable() { @Override public void run() { /* Never invoked; only the anonymous class identity is under test. */ } };
 		var r = BeanMeta.create(new FakeBeanInfo<>(anon.getClass()), null);
@@ -180,9 +180,6 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	// PUBLIC visibility already makes "! isVisible" true for the anonymous class, so isAnonymousClass() is
 	// never reached at all) - this is the only way to exercise that disjunct's "true" outcome.
 	@Test
-	@SuppressWarnings({
-		"java:S2133" // An actual anonymous class (not Runnable.class) is required so cm.isAnonymousClass() is exercised.
-	})
 	void a08b_create_anonymousClass_permissiveVisibility_stillReturnsReason() {
 		var cfg = BeanConfigContext.create().beanClassVisibility(org.apache.juneau.commons.reflect.Visibility.PRIVATE).build();
 		var anon = new Runnable() { @Override public void run() { /* Never invoked; only the anonymous class identity is under test. */ } };
@@ -225,20 +222,16 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 		assertNull(r.notABeanReason());
 	}
 
-	// A package-private record has no *public* canonical constructor (findBeanConstructor's record branch only
-	// matches public ones - see e04 below), so beanConstructor.constructor() is empty here.  Combined with
-	// beansRequireDefaultConstructor(true), this drives the "! ci.isRecord()" guard to its false outcome (as
-	// opposed to a11, where isRecord() is also false, and a12, where the constructor IS present so the whole
-	// condition short-circuits before isRecord() is even evaluated) - proving records are exempt even when no
-	// constructor could be found at all.  Uses the package-private constructor directly (bypassing
-	// BeanMeta.create()'s own "class is not public" guard, which would otherwise reject this class before
-	// ever reaching the constructor-required check) - see BeanMeta.notABeanReason's package-private relaxation.
+	// A package-private record's canonical constructor is package-private (JLS 8.10.4), and findBeanConstructor's
+	// record branch looks it up among the declared constructors, so a constructor is always found for a record.
+	// Uses the package-private constructor directly (bypassing BeanMeta.create()'s own "class is not public" guard)
+	// - see BeanMeta.notABeanReason's package-private relaxation.
 	@Test
-	void a13_create_noArgConstructorRequired_recordWithNoPublicCtor_stillExempt() {
+	void a13_create_noArgConstructorRequired_packagePrivateRecord_hasConstructor() {
 		var cfg = BeanConfigContext.create().beansRequireDefaultConstructor(true).build();
 		var bm = new BeanMeta<>(new FakeBeanInfo<>(PackagePrivateRecord.class, cfg), null, null, null);
 		assertNull(bm.notABeanReason);
-		assertFalse(bm.hasConstructor());
+		assertTrue(bm.hasConstructor());
 	}
 
 	//====================================================================================================
@@ -314,9 +307,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 
 	@Test
 	void c07_beanFilter_propertyNamerOverride_isUsed() {
-		var namer = new PropertyNamer() {
-			@Override public String getPropertyName(String name) { return name.toUpperCase(); }
-		};
+		PropertyNamer namer = String::toUpperCase;
 		var filter = new FakeBeanFilter().propertyNamer(namer);
 		var cfg = BeanConfigContext.create().beanMetaInitializer(BeanTestFakes.initializerWithFilter(filter)).build();
 		var bm = BeanMeta.create(new FakeBeanInfo<>(FilterableBean.class, cfg), null).beanMeta();
@@ -380,7 +371,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 		// && nn(v.dictionaryClasses)" branch that builds the per-property BeanRegistry side-map entry - never
 		// exercised by d02 below, whose dictionaryClasses stays at validate()'s default emptyList().
 		var postProcessor = (BeanPropertyPostProcessor) (mc, builder) -> {
-			if ("x".equals(builder.name))
+			if (eq(builder.name, "x"))
 				builder.dictionaryClasses = List.of(info(String.class));
 		};
 		var cfg = BeanConfigContext.create().beanPropertyPostProcessor(postProcessor).build();
@@ -465,16 +456,16 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 		assertNotNull(inner);
 	}
 
-	// A record's canonical constructor can never be more restrictive than the record class itself (JLS
-	// 8.10.4.2), so the only way to get a non-public canonical constructor is a non-public record: its
-	// (package-private) canonical constructor is legal, but findBeanConstructor's record branch specifically
-	// searches for a *public* constructor match, so it finds nothing here and falls through to "no constructor".
+	// A record's canonical constructor has the same access as the record class (JLS 8.10.4), so a non-public record
+	// has a non-public canonical constructor; findBeanConstructor's record branch looks it up among the declared
+	// constructors and finds it.
 	record PackagePrivateRecord(String a) {}
 
 	@Test
-	void e04_record_nonPublicCanonicalConstructor_noPublicMatch_hasNoConstructor() {
+	void e04_record_nonPublicCanonicalConstructor_isFound() {
 		var bm = BeanMeta.of(PackagePrivateRecord.class);
-		assertFalse(bm.hasConstructor());
+		assertTrue(bm.hasConstructor());
+		TestAssertions.assertList(bm.getConstructorArgs(), "a");
 	}
 
 	//====================================================================================================
@@ -873,7 +864,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	//====================================================================================================
 
 	public static class NullNamingPropertyNamer implements PropertyNamer {
-		@Override public String getPropertyName(String name) { return "skipMe".equals(name) ? null : name; }
+		@Override public String getPropertyName(String name) { return eq(name, "skipMe") ? null : name; }
 	}
 
 	public static class SelectivelyDroppedFieldBean {

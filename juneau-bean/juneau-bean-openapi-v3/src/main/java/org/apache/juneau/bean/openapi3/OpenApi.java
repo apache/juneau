@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -76,31 +75,14 @@ import org.apache.juneau.marshall.objecttools.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class OpenApi extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_c = "c";
-	private static final String ARG_path = "path";
-	private static final String ARG_pathItem = "pathItem";
-	private static final String ARG_property = "property";
-	private static final String ARG_ref = "ref";
 
 	/** Represents a null OpenAPI document */
 	public static final OpenApi NULL = new OpenApi();
 
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
-
-	// Property name constants
-	private static final String PROP_components = "components";
-	private static final String PROP_externalDocs = "externalDocs";
-	private static final String PROP_info = "info";
-	private static final String PROP_openapi = "openapi";
-	private static final String PROP_paths = "paths";
-	private static final String PROP_security = "security";
-	private static final String PROP_servers = "servers";
-	private static final String PROP_tags = "tags";
 
 	@SuppressWarnings({
 		"java:S1700"  // Field duplicates class name per OpenAPI spec
@@ -144,8 +126,8 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addPath(String path, PathItem pathItem) {
-		assertArgNotNull(ARG_path, path);
-		assertArgNotNull(ARG_pathItem, pathItem);
+		reqnn("path", path);
+		reqnn("pathItem", pathItem);
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
 		paths.put(path, pathItem);
@@ -213,10 +195,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Server...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					servers.add(v);
+		addAllNn(servers, values);
 		return this;
 	}
 
@@ -249,10 +228,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Tag...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					tags.add(v);
+		addAllNn(tags, values);
 		return this;
 	}
 
@@ -273,8 +249,8 @@ public class OpenApi extends OpenApiElement {
 	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		assertArgNotNullOrBlank(ARG_ref, ref);
-		assertArgNotNull(ARG_c, c);
+		reqnb("ref", ref);
+		reqnn("c", c);
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  '%s'", ref);
 		try {
@@ -286,16 +262,16 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_openapi -> toType(getOpenapi(), type);
-			case PROP_info -> toType(getInfo(), type);
-			case PROP_servers -> toType(getServers(), type);
-			case PROP_paths -> toType(getPaths(), type);
-			case PROP_components -> toType(getComponents(), type);
-			case PROP_security -> toType(getSecurity(), type);
-			case PROP_tags -> toType(getTags(), type);
-			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case "openapi" -> toType(getOpenapi(), type);
+			case "info" -> toType(getInfo(), type);
+			case "servers" -> toType(getServers(), type);
+			case "paths" -> toType(getPaths(), type);
+			case "components" -> toType(getComponents(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "tags" -> toType(getTags(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -360,14 +336,14 @@ public class OpenApi extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(components), PROP_components)
-			.addIf(nn(externalDocs), PROP_externalDocs)
-			.addIf(nn(info), PROP_info)
-			.addIf(nn(openapi), PROP_openapi)
-			.addIf(nn(paths), PROP_paths)
-			.addIf(ine(security), PROP_security)
-			.addIf(ine(servers), PROP_servers)
-			.addIf(ine(tags), PROP_tags)
+			.addIf(nn(components), "components")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(info), "info")
+			.addIf(nn(openapi), "openapi")
+			.addIf(nn(paths), "paths")
+			.addIf(ine(security), "security")
+			.addIf(ine(servers), "servers")
+			.addIf(ine(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -375,16 +351,16 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public OpenApi set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_components -> setComponents(toType(value, Components.class));
-			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_info -> setInfo(toType(value, Info.class));
-			case PROP_openapi -> setOpenapi(s(value));
-			case PROP_paths -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
-			case PROP_security -> setSecurity(lb(SecurityRequirement.class).addAny(value).sparse().build());
-			case PROP_servers -> setServers(lb(Server.class).addAny(value).sparse().build());
-			case PROP_tags -> setTags(lb(Tag.class).addAny(value).sparse().build());
+			case "components" -> setComponents(toType(value, Components.class));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "info" -> setInfo(toType(value, Info.class));
+			case "openapi" -> setOpenapi(s(value));
+			case "paths" -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
+			case "security" -> setSecurity(lb(SecurityRequirement.class).addAny(value).sparse().build());
+			case "servers" -> setServers(lb(Server.class).addAny(value).sparse().build());
+			case "tags" -> setTags(lb(Tag.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

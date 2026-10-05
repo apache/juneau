@@ -83,6 +83,6 @@ class ArgException_Test extends TestBase {
 			.setHeaders(l(HttpStringHeader.of("X-Chain", "chained")))
 			.setContent("Chained content");
 
-		assertEquals("chained", x.getHeaders().stream().filter(h -> "X-Chain".equalsIgnoreCase(h.getName())).findFirst().orElseThrow().getValue());
+		assertEquals("chained", x.getHeaders().stream().filter(h -> eqic("X-Chain", h.getName())).findFirst().orElseThrow().getValue());
 	}
 }

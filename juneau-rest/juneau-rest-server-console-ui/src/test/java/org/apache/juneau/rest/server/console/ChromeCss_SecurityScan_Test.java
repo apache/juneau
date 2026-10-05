@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -52,9 +53,7 @@ class ChromeCss_SecurityScan_Test extends TestBase {
 			}
 			""";
 		var violations = ChromeCssScanner.scan(naive);
-		assertTrue(violations.stream().anyMatch(v -> v.contains("--jc-logo")), () -> "violations: " + violations);
-		assertTrue(violations.stream().anyMatch(v -> v.contains("nested")), () -> "violations: " + violations);
-		assertTrue(violations.stream().anyMatch(v -> v.contains("url-capable")), () -> "violations: " + violations);
+		assertContainsAll(violations, "--jc-logo", "nested", "url-capable");
 		assertTrue(violations.size() >= 3, () -> "expected at least 3 distinct violations, got: " + violations);
 	}
 
@@ -74,8 +73,7 @@ class ChromeCss_SecurityScan_Test extends TestBase {
 	/** Sanity: the gradient tokens ARE present on background-image (proves the allowlist path is actually exercised, not vacuously green because chrome.css has no gradient tokens at all). */
 	@Test void a04_realChromeCss_gradientTokensPresentOnBackgroundImage() throws IOException {
 		var css = readChromeCss();
-		assertTrue(css.contains("background-image: var(--jc-page-bg)"));
-		assertTrue(css.contains("background-image: var(--jc-avatar-bg)"));
+		assertContainsAll(css, "background-image: var(--jc-page-bg)", "background-image: var(--jc-avatar-bg)");
 	}
 
 	/** Sanity: no --jc-logo custom property DECLARATION or USAGE (the scanner's own denylist check, re-asserted directly here), and the static logo literal is present. */

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
@@ -74,18 +73,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class OAuthFlows extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_authorizationCode = "authorizationCode";
-	private static final String PROP_clientCredentials = "clientCredentials";
-	private static final String PROP_implicit = "implicit";
-	private static final String PROP_password = "password";
 
 	private OAuthFlow implicit;
 	private OAuthFlow password;
@@ -122,12 +112,12 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_implicit -> toType(getImplicit(), type);
-			case PROP_password -> toType(getPassword(), type);
-			case PROP_clientCredentials -> toType(getClientCredentials(), type);
-			case PROP_authorizationCode -> toType(getAuthorizationCode(), type);
+			case "implicit" -> toType(getImplicit(), type);
+			case "password" -> toType(getPassword(), type);
+			case "clientCredentials" -> toType(getClientCredentials(), type);
+			case "authorizationCode" -> toType(getAuthorizationCode(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -176,10 +166,10 @@ public class OAuthFlows extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(authorizationCode), PROP_authorizationCode)
-			.addIf(nn(clientCredentials), PROP_clientCredentials)
-			.addIf(nn(implicit), PROP_implicit)
-			.addIf(nn(password), PROP_password)
+			.addIf(nn(authorizationCode), "authorizationCode")
+			.addIf(nn(clientCredentials), "clientCredentials")
+			.addIf(nn(implicit), "implicit")
+			.addIf(nn(password), "password")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -187,12 +177,12 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public OAuthFlows set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_authorizationCode -> setAuthorizationCode(toType(value, OAuthFlow.class));
-			case PROP_clientCredentials -> setClientCredentials(toType(value, OAuthFlow.class));
-			case PROP_implicit -> setImplicit(toType(value, OAuthFlow.class));
-			case PROP_password -> setPassword(toType(value, OAuthFlow.class));
+			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
+			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
+			case "implicit" -> setImplicit(toType(value, OAuthFlow.class));
+			case "password" -> setPassword(toType(value, OAuthFlow.class));
 			default -> {
 				super.set(property, value);
 				yield this;

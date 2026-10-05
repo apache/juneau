@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for the next-generation {@link RecordStreamBody} streaming request body.
  */
+@SuppressWarnings({
+	"resource" // Fluent writer is caller-owned; nothing new to close.
+})
 class RecordStreamBody_Test extends TestBase {
 
 	public static class Bean {
@@ -49,9 +52,6 @@ class RecordStreamBody_Test extends TestBase {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer is caller-owned; nothing new to close.
-	})
 	void a01_record_defaultJson() throws Exception {
 		var body = RecordStreamBody.records(w -> {
 			try {
@@ -73,9 +73,6 @@ class RecordStreamBody_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer is caller-owned; nothing new to close.
-	})
 	void a03_record_explicitSerializer() throws Exception {
 		var body = RecordStreamBody.records(JsonSerializer.DEFAULT, w -> {
 			try {
@@ -92,9 +89,6 @@ class RecordStreamBody_Test extends TestBase {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer is caller-owned; nothing new to close.
-	})
 	void b01_token_defaultJson() throws Exception {
 		var body = RecordStreamBody.token(w -> {
 			try {
@@ -122,9 +116,6 @@ class RecordStreamBody_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer is caller-owned; nothing new to close.
-	})
 	void c02_repeatable_isReusable() throws Exception {
 		var body = RecordStreamBody.records(w -> {
 			try {
@@ -138,9 +129,6 @@ class RecordStreamBody_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer is caller-owned; nothing new to close.
-	})
 	void c03_nonRepeatable_failsFastOnResend() throws Exception {
 		var body = RecordStreamBody.records(w -> {
 			try {

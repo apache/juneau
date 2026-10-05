@@ -30,8 +30,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1172", // Unused parameters in tests are intentional
-	"unused", // Constructor parameters retained for bean-instantiation signature consistency in test fixtures.
-	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused" // Constructor parameters retained for bean-instantiation signature consistency in test fixtures.
 })
 class ThrownStore_Test extends TestBase {
 

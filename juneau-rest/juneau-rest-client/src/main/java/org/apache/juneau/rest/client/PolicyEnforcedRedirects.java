@@ -16,9 +16,12 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.net.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 
 /**
@@ -39,6 +42,12 @@ import org.apache.juneau.http.remote.*;
  * original method and body. A non-{@linkplain TransportBody#isRepeatable() repeatable} body cannot be safely
  * re-sent, so such a redirect is refused (fail closed) rather than risking a corrupt or partial replay.  The
  * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.
+ *
+ * <p>
+ * Caller-set credential headers ({@link RedirectSecurity#stripOnCrossOrigin()}, matched case-insensitively) are
+ * carried to the next hop only when it is the same origin as the current hop and not an {@code https} &rarr;
+ * {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are dropped
+ * and stay dropped for the rest of the chain.
  *
  * @since 10.0.0
  */
@@ -129,7 +138,7 @@ public final class PolicyEnforcedRedirects {
 	}
 
 	private static TransportRequest forRedirect(TransportRequest current, URI target, int statusCode) throws TransportException {
-		var preserveMethod = current.getMethod().equalsIgnoreCase("GET") || current.getMethod().equalsIgnoreCase("HEAD");
+		var preserveMethod = eqic(current.getMethod(), "GET") || eqic(current.getMethod(), "HEAD");
 		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);
 
 		try {
@@ -139,8 +148,11 @@ public final class PolicyEnforcedRedirects {
 				.uri(target2)
 				.remoteUrlPolicy(true, false)
 				.timeout(current.getTimeout());
+			// Credential headers are forwarded only to the same origin (and never across an https -> http downgrade).
+			var stripCredentials = RedirectSecurity.shouldStripCredentials(current.getUri(), target);
 			for (var h : current.getHeaders())
-				builder.header(h.name(), h.value());
+				if (! (stripCredentials && RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())))
+					builder.header(h.name(), h.value());
 			if (! rewriteToGet) {
 				var body = current.getBody();
 				if (body != null) {

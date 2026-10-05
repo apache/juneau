@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -46,7 +47,7 @@ class McpSpi_Test {
 	@Test
 	void b01_exchange_exposesRequestAndHeaders() {
 		var a = new JsonRpcRequest().setMethod("ping");
-		var b = new McpExchange(a, n -> "Mcp-Method".equals(n) ? "tools/call" : null);
+		var b = new McpExchange(a, n -> eq(n, "Mcp-Method") ? "tools/call" : null);
 		assertSame(a, b.request());
 		assertEquals("tools/call", b.header("Mcp-Method"));
 		assertNull(b.header("Missing"));

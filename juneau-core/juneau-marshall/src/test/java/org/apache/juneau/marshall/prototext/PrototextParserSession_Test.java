@@ -177,7 +177,9 @@ class PrototextParserSession_Test extends TestBase {
 
 	@Test void d03_readToMap_stringKey() throws Exception {
 		// convertMapToType → isMap() → default string key path → return map
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // PrototextParser.read(..., Map.class, String.class, String.class) returns Object; cast to Map<String,String> to assert on the result
+		})
 		var r = (Map<String,String>) PrototextParser.DEFAULT.read("a: \"1\" b: \"2\"", Map.class, String.class, String.class);
 		assertNotNull(r);
 	}

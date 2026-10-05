@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.ini;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -37,15 +36,14 @@ import org.apache.juneau.marshall.stream.*;
  * Session for serializing objects to INI format.
  */
 @SuppressWarnings({
-	"resource", // IniWriter lifecycle managed by SerializerPipe
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115", // Constants use naming conventions that embed type info or config keys (e.g. PROP_trimWhitespace)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for serialization logic
-	"java:S6541"  // Acceptable for session implementation
+	"java:S6541", // Acceptable for session implementation
+	"resource" // IniWriter lifecycle managed by SerializerPipe
 })
 public class IniSerializerSession extends WriterSerializerSession implements RecordWritable {
 
-	private static final String ARG_ctx = "ctx";
 	private static final String SECTION_PATH_DELIMITER = "/";
 
 	/**
@@ -56,7 +54,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		private IniSerializer ctx;
 
 		protected Builder(IniSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -74,7 +72,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	 * @return The builder.
 	 */
 	public static Builder create(IniSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final IniSerializer ctx;
@@ -141,7 +139,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
 			// Collections/arrays are written as inline key-value (not sections), so they must appear in
 			// the default section before any [section] headers for correct parsing
-			if (iniMeta.isJson5Encoding() || isSimpleOrJson5Inline(aType, value)
+			if (iniMeta.isJson5Encoding() || isSimpleOrJson5Inline(aType)
 				|| aType.isCollectionOrArrayOrOptional()) {
 				simple.add(new AbstractMap.SimpleEntry<>(pMeta, value));
 			} else {
@@ -180,22 +178,17 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 					var map = (Map<?,?>)value;
 					if (isSimpleMap(map, aType)) {
 						w.section(newPath);
-						writeMapSection(w, map, aType);
+						writeMapSection(w, map);
 					} else {
 						if (ctx.useComments && ine(iniMeta.getComment()))
 							w.comment(iniMeta.getComment());
 						writeKeyValue(w, pMeta.getName(), value, pMeta);
 					}
-				} else if (aType.isCollection() || aType.isArray()) {
-					if (ctx.useComments && ine(iniMeta.getComment()))
-						w.comment(iniMeta.getComment());
-					writeKeyValue(w, pMeta.getName(), value, pMeta);
 				} else {
-					// Neither bean, map, collection, nor array: e.g. a streamable-but-not-collection value
-					// (a Stream). isCollectionOrArrayOrOptional() only classifies actual
-					// collections/arrays/Optionals as "simple" at classification time, so this falls through
-					// to the "sections" pass here -- write it as an inline key-value rather than silently
-					// dropping it.
+					// Collections and arrays, plus anything that is neither bean, map, collection, nor array
+					// (e.g. a streamable-but-not-collection value such as a Stream). The latter isn't classified
+					// as "simple" at classification time, so it falls through to the "sections" pass here --
+					// write it as an inline key-value rather than silently dropping it.
 					if (ctx.useComments && ine(iniMeta.getComment()))
 						w.comment(iniMeta.getComment());
 					writeKeyValue(w, pMeta.getName(), value, pMeta);
@@ -228,7 +221,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 						if (isUseWhitespace())
 							w.blankLine();
 						w.section(k);
-						writeMapSection(w, nested, aType);
+						writeMapSection(w, nested);
 					} else {
 						writeKeyValue(w, k, v, null);
 					}
@@ -241,11 +234,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		});
 	}
 
-	@SuppressWarnings({
-		"unused",    // type reserved for future type-aware section serialization
-		"java:S1172" // Same as above
-	})
-	private void writeMapSection(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMapSection(IniWriter w, Map<?,?> map) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
@@ -280,7 +269,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		String valueStr;
 		if (value == null)
 			valueStr = "null";
-		else if (isSimpleOrJson5Inline(aType, value))
+		else if (isSimpleOrJson5Inline(aType))
 			valueStr = formatSimpleValue(value, aType);
 		else
 			valueStr = encodeComplexValue(value);
@@ -314,7 +303,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	private static boolean needsQuoting(String s) {
 		if (ie(s))
 			return true;
-		if (s.equals("null") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))
+		if (eq(s, "null") || eqic(s, "true") || eqic(s, "false"))
 			return true;
 		// Whole-string numeric check; mirrors -?\d+(\.\d+)?([eE][+-]?\d+)? (integer part allows leading zeros).
 		if (StringUtils.matchNumberPrefix(s, true) == s.length())
@@ -338,11 +327,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		return b.build();
 	}
 
-	@SuppressWarnings({
-		"unused",    // value accepted for future value-aware inline detection
-		"java:S1172" // Same as above
-	})
-	private static boolean isSimpleOrJson5Inline(ClassMeta<?> aType, Object value) {
+	private static boolean isSimpleOrJson5Inline(ClassMeta<?> aType) {
 		if (aType.isBean() || aType.isMap())
 			return false;
 		if (aType.isCollection() || aType.isArray())

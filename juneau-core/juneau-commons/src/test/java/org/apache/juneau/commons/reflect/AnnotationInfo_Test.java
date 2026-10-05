@@ -18,6 +18,7 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -26,11 +27,11 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unchecked",  // Cast from Object to Map<String,Object> in annotation tests
-	"java:S5961", // S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
 	"java:S1186", // Empty method body intentional for REST/proxy interface testing
 	"java:S1874", // Intentional use of deprecated API to verify functionality
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"java:S5961", // S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+	"unchecked", // Cast from Object to Map<String,Object> in annotation tests
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AnnotationInfo_Test extends TestBase {
 
@@ -707,19 +708,19 @@ class AnnotationInfo_Test extends TestBase {
 		var handler = new java.lang.reflect.InvocationHandler() {
 			@Override
 			public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
-				if (method.getName().equals("value")) {
+				if (eq(method.getName(), "value")) {
 					throw new RuntimeException("Test exception");
 				}
-				if (method.getName().equals("annotationType")) {
+				if (eq(method.getName(), "annotationType")) {
 					return annotationType;
 				}
-				if (method.getName().equals("toString")) {
+				if (eq(method.getName(), "toString")) {
 					return "@ToMapTestAnnotation";
 				}
-				if (method.getName().equals("hashCode")) {
+				if (eq(method.getName(), "hashCode")) {
 					return 0;
 				}
-				if (method.getName().equals("equals")) {
+				if (eq(method.getName(), "equals")) {
 					return false;
 				}
 				return method.getDefaultValue();

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.objecttools;
 
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -91,7 +92,7 @@ class ObjectIntrospector_Test extends TestBase {
 	}
 
 	@Test void a07_allow_predicateForm() throws Exception {
-		var oi = new ObjectIntrospector("foobar").allow(m -> m.getName().equals("toString"));
+		var oi = new ObjectIntrospector("foobar").allow(m -> eq(m.getName(), "toString"));
 		assertEquals("foobar", oi.invokeMethod("toString", null));
 		assertThrows(MethodNotAllowlistedException.class, ()->oi.invokeMethod("substring(int,int)", "[3,6]"));
 	}

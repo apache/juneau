@@ -30,6 +30,9 @@ import org.apache.juneau.marshall.parser.*;
 /**
  * Utility class for creating mocked reader parsers.
  */
+@SuppressWarnings({
+	"java:S9149" // Test fixture's static factories intentionally shadow the parent's.
+})
 public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------

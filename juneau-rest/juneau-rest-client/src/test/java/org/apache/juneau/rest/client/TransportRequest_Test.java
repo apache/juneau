@@ -68,7 +68,8 @@ class TransportRequest_Test extends TestBase {
 	}
 
 	@Test void a03_builder_uriFromString_invalidThrows() {
-		assertThrows(IllegalArgumentException.class, () -> TransportRequest.builder().method("GET").uri("http://[bad"));
+		var builder = TransportRequest.builder().method("GET");
+		assertThrows(IllegalArgumentException.class, () -> builder.uri("http://[bad"));
 	}
 
 	@Test void a04_builder_headersCollection() {
@@ -90,11 +91,13 @@ class TransportRequest_Test extends TestBase {
 	}
 
 	@Test void a07_builder_requiresMethod() {
-		assertThrows(IllegalArgumentException.class, () -> TransportRequest.builder().uri("https://example.com").build());
+		var builder = TransportRequest.builder().uri("https://example.com");
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	@Test void a08_builder_requiresUri() {
-		assertThrows(IllegalArgumentException.class, () -> TransportRequest.builder().method("GET").build());
+		var builder = TransportRequest.builder().method("GET");
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	// ==========================================================================

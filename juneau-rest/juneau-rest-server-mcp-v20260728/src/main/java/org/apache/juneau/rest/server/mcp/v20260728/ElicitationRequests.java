@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -53,8 +52,8 @@ public final class ElicitationRequests {
 	 * @throws IllegalArgumentException If {@code id} or {@code request} is <jk>null</jk>.
 	 */
 	public static McpInputRequiredSignal of(String id, ElicitRequest request, Object continuation) {
-		assertArgNotNull("id", id);
-		assertArgNotNull("request", request);
+		reqnn("id", id);
+		reqnn("request", request);
 		return of(Map.of(id, request), continuation);
 	}
 
@@ -77,12 +76,12 @@ public final class ElicitationRequests {
 	 * 	<jk>null</jk>.
 	 */
 	public static McpInputRequiredSignal of(Map<String,ElicitRequest> requests, Object continuation) {
-		assertArgNotNull("requests", requests);
+		reqnn("requests", requests);
 		if (requests.isEmpty())
 			throw iaex("requests must not be empty");
 		Map<String,Object> raw = new LinkedHashMap<>();
 		requests.forEach((id, request) -> {
-			assertArgNotNull("requests[" + id + "]", request);
+			reqnn("requests[" + id + "]", request);
 			raw.put(id, Json.to(Json.of(request), JsonMap.class));
 		});
 		return new McpInputRequiredSignal(raw, continuation);

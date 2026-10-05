@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -210,10 +211,10 @@ class Characterization_Test {
 					}
 					@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
 					@Override public McpCompleter completer(String variableName) {
-						if (! "name".equals(variableName))
+						if (neq(variableName, "name"))
 							return null;
 						return (request, ctx) -> {
-							if ("cap".equals(request.getValue())) {
+							if (eq(request.getValue(), "cap")) {
 								var values = new ArrayList<String>();
 								for (var i = 0; i < 101; i++)
 									values.add("item" + i);

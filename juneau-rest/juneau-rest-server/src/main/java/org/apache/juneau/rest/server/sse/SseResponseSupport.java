@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.time.*;
@@ -26,21 +25,19 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fluent SSE response helper.
  */
+@SuppressWarnings({
+	"resource" // The heartbeat and negotiated writer are owned by this object/response and are closed in close().
+})
 public class SseResponseSupport implements AutoCloseable {
 
 	private final RestResponse response;
-	@SuppressWarnings({
-		"resource" // Writer is response-owned and intentionally not closed by this wrapper.
-	})
 	private final FinishablePrintWriter writer;
 	private final ScheduledExecutorService scheduler;
-	@SuppressWarnings({
-		"resource" // Heartbeat lifecycle is controlled by this wrapper and closed in close()/heartbeat().
-	})
 	private SseHeartbeat heartbeat;
 
 	/**
@@ -49,11 +46,8 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @param response The REST response. Must not be <jk>null</jk>.
 	 * @throws IOException If the writer could not be created.
 	 */
-	@SuppressWarnings({
-		"resource" // BeanStore returns container-managed scheduler reference; this wrapper borrows it.
-	})
 	public SseResponseSupport(RestResponse response) throws IOException {
-		this.response = assertArgNotNull("response", response);
+		this.response = reqnn("response", response);
 		this.scheduler = response.getContext().getBeanStore().getBean(ScheduledExecutorService.class).orElse(null);
 		response.setContentType("text/event-stream");
 		response.setHeader("Cache-Control", "no-cache");
@@ -68,9 +62,6 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @param interval The heartbeat interval.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"resource" // The new heartbeat is stored in the 'heartbeat' field (owned by this wrapper, closed in close()/heartbeat()); any prior heartbeat is closed just above before being replaced.
-	})
 	public SseResponseSupport heartbeat(Duration interval) {
 		if (scheduler != null) {
 			if (heartbeat != null)
@@ -100,9 +91,6 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */
-	@SuppressWarnings({
-		"resource" // SSE stream resource lifecycle is managed by the servlet container.
-	})
 	public SseResponseSupport sendEvent(String name, Object data) throws IOException {
 		return sendEvent(new SseEvent(name, data == null ? null : data.toString()));
 	}
@@ -138,11 +126,8 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */
-	@SuppressWarnings({
-		"resource" // Subscription lifecycle is handled in finally and by caller contract.
-	})
 	public SseResponseSupport sendFrom(SseSubscription subscription) throws IOException {
-		assertArgNotNull("subscription", subscription);
+		reqnn("subscription", subscription);
 		try {
 			while (! subscription.isClosed()) {
 				sendEvent(subscription.take());

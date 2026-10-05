@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.time;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -93,12 +93,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class GranularZonedDateTime {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 
 	/**
 	 * Creates a GranularZonedDateTime from a Date with the specified precision.
@@ -268,11 +265,11 @@ public class GranularZonedDateTime {
 	 */
 	
 	@SuppressWarnings({
-		"java:S6541", // Single-threaded context; synchronization unnecessary
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541" // Single-threaded context; synchronization unnecessary
 	})
 	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, Clock clock) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		var digit = StringUtils.DIGIT;
 		clock = clock == null ? Clock.systemDefaultZone() : clock;
 
@@ -887,7 +884,7 @@ public class GranularZonedDateTime {
 	 */
 	public GranularZonedDateTime roll(ChronoField field, int amount) {
 		var unit = toChronoUnit(field);
-		assertArg(unit != null, "Unsupported roll field: %s", field);
+		req(unit != null, "Unsupported roll field: %s", field);
 		var newZdt = zdt.plus(amount, unit);
 		return new GranularZonedDateTime(newZdt, precision);
 	}

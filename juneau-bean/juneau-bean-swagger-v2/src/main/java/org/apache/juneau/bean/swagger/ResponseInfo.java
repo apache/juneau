@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -82,22 +81,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ResponseInfo extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_example = "example";
-	private static final String ARG_header = "header";
-	private static final String ARG_mimeType = "mimeType";
-	private static final String ARG_name = "name";
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_description = "description";
-	private static final String PROP_examples = "examples";
-	private static final String PROP_headers = "headers";
-	private static final String PROP_schema = "schema";
 
 	private String description;
 	private SchemaInfo schema;
@@ -134,8 +120,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo addExample(String mimeType, Object example) {
-		assertArgNotNull(ARG_mimeType, mimeType);
-		assertArgNotNull(ARG_example, example);
+		reqnn("mimeType", mimeType);
+		reqnn("example", example);
 		examples.put(mimeType, example);
 		return this;
 	}
@@ -148,8 +134,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
-		assertArgNotNull(ARG_name, name);
-		assertArgNotNull(ARG_header, header);
+		reqnn("name", name);
+		reqnn("header", header);
 		headers.put(name, header);
 		return this;
 	}
@@ -185,12 +171,12 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_examples -> toType(getExamples(), type);
-			case PROP_headers -> toType(getHeaders(), type);
-			case PROP_schema -> toType(getSchema(), type);
+			case "description" -> toType(getDescription(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "schema" -> toType(getSchema(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -222,7 +208,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return headers.get(name);
 	}
 
@@ -250,10 +236,10 @@ public class ResponseInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(description), PROP_description)
-			.addIf(ine(examples), PROP_examples)
-			.addIf(ine(headers), PROP_headers)
-			.addIf(nn(schema), PROP_schema)
+			.addIf(nn(description), "description")
+			.addIf(ine(examples), "examples")
+			.addIf(ine(headers), "headers")
+			.addIf(nn(schema), "schema")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -284,12 +270,12 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public ResponseInfo set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> setDescription(s(value));
-			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
-			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
+			case "description" -> setDescription(s(value));
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			default -> {
 				super.set(property, value);
 				yield this;

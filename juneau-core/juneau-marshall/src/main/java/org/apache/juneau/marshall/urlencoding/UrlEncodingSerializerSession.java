@@ -42,17 +42,15 @@ import org.apache.juneau.marshall.uon.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
-	"rawtypes",   // Raw types necessary for generic type handling
-	"unchecked",  // Type erasure requires unchecked casts
-	"resource",   // Resource management handled externally
-	"java:S110"   // Inheritance depth acceptable for this class hierarchy
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2177", // Private writeAnything()/writeBeanMap()/writeMap() intentionally share names (with different signatures) with the inherited UON writers but emit URL-encoding-specific output
+	"java:S3776", // writeAnything() and writeBeanMap() branch over every value kind and expanded-param mode in one pass
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // Resource management handled externally
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class UrlEncodingSerializerSession extends UonSerializerSession {
-
-	// Property name constants
-	private static final String PROP_expandedParams = "expandedParams";
-	private static final String PROP_UrlEncodingSerializerSession_expandedParams = "UrlEncodingSerializerSession.expandedParams";
 
 	/**
 	 * Builder class.
@@ -94,7 +92,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		public Builder property(String key, Object value) {
 			if (key == null) { super.property(key, value); return this; }
 			switch (key) {
-				case PROP_expandedParams, PROP_UrlEncodingSerializerSession_expandedParams:
+				case "expandedParams", "UrlEncodingSerializerSession.expandedParams":
 					return expandedParams(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -152,9 +150,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/*
 	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for URL encoding serialization routing
-	})
 	private SerializerWriter<?> writeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
 		ClassMeta<?> aType = null;			// The actual type
@@ -211,10 +206,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	}
 
 	
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for expanded-params bean map serialization
-		"java:S2177", // Intentional: UrlEncodingSerializerSession provides its own private writeBeanMap() with expanded-params logic
-	})
 	private SerializerWriter<?> writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
 
@@ -305,9 +296,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({
-		"java:S2177" // Intentional: UrlEncodingSerializerSession provides its own private writeMap() with expanded-params logic
-	})
 	private SerializerWriter<?> writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

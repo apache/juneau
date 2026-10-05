@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -24,6 +23,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
@@ -143,7 +143,7 @@ public class SamlAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder validator(SamlAssertionValidator value) {
-			validator = assertArgNotNull("value", value);
+			validator = reqnn("value", value);
 			return this;
 		}
 
@@ -154,7 +154,7 @@ public class SamlAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder binding(SamlBinding value) {
-			binding = assertArgNotNull("value", value);
+			binding = reqnn("value", value);
 			return this;
 		}
 
@@ -165,7 +165,7 @@ public class SamlAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder consumerPath(String value) {
-			consumerPath = assertArgNotNullOrBlank("value", value);
+			consumerPath = reqnb("value", value);
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class SamlAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder rolesClaim(String value) {
-			rolesClaim = assertArgNotNullOrBlank("value", value);
+			rolesClaim = reqnb("value", value);
 			return this;
 		}
 
@@ -187,7 +187,7 @@ public class SamlAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder realm(String value) {
-			realm = assertArgNotNullOrBlank("value", value);
+			realm = reqnb("value", value);
 			return this;
 		}
 
@@ -320,8 +320,8 @@ public class SamlAuthFilter extends AuthFilter {
 			throw new AuthenticationException("Unable to derive SAML ACS recipient from request").wwwAuthenticate(challenge);
 		var port = req.getServerPort();
 		var isDefaultPort = port <= 0
-			|| (port == 80 && "http".equalsIgnoreCase(scheme))
-			|| (port == 443 && "https".equalsIgnoreCase(scheme));
+			|| (port == 80 && eqic("http", scheme))
+			|| (port == 443 && eqic("https", scheme));
 		var sb = new StringBuilder(scheme).append("://").append(host);
 		if (!isDefaultPort)
 			sb.append(':').append(port);
@@ -355,7 +355,7 @@ public class SamlAuthFilter extends AuthFilter {
 			return p;
 		} catch (AuthenticationException e) {
 			var hasChallenge = e.getHeaders().stream()
-				.anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()));
+				.anyMatch(h -> eqic("WWW-Authenticate", h.getName()));
 			if (!hasChallenge)
 				e.wwwAuthenticate(challenge);
 			throw e;
@@ -371,11 +371,10 @@ public class SamlAuthFilter extends AuthFilter {
 		if (principal instanceof ClaimsPrincipal principal2) {
 			var v = principal2.getClaims().get(rolesClaim);
 			if (v instanceof List<?> v2) {
-				var roles = new HashSet<String>();
-				for (var item : (List<Object>) v2)
-					if (item instanceof String item2)
-						roles.add(item2);
-				return roles;
+				return ((List<Object>) v2).stream()
+					.filter(String.class::isInstance)
+					.map(String.class::cast)
+					.collect(Collectors.toCollection(HashSet::new));
 			}
 		}
 		return Collections.emptySet();

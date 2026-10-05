@@ -59,7 +59,7 @@ const READ = function () {
 		return document.querySelector('[data-juneau-field="' + data + '"]').closest('.juneau-view-detail-field');
 	};
 	const panel = document.getElementById('panel');
-	const tracks = window.getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).map(parseFloat);
+	const tracks = window.getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).map(Number.parseFloat);
 	const cols = tracks.length;
 	const gridBox = grid.getBoundingClientRect();
 	const span = fieldOf('summary').getBoundingClientRect();
@@ -72,7 +72,7 @@ const READ = function () {
 		// A span must never CREATE a track.  The auto-fit candidate this design rejected failed exactly here:
 		// it raised the repetition count to satisfy the span and left a ~25px orphan track with a field clipped
 		// inside it, so counting tracks alone would have passed it.  The narrowest track is the discriminator.
-		narrowestTrackPx: Math.min.apply(null, tracks),
+		narrowestTrackPx: Math.min(...tracks),
 		// A FULL span occupies the grid's whole content width at every step, including the one-column step,
 		// where it must be indistinguishable from an unspanned field.
 		spanIsFullWidth: Math.abs(span.width - gridBox.width) <= 1,
@@ -90,8 +90,8 @@ const READ = function () {
 		emptyValueHeight: missing.getBoundingClientRect().height,
 		filledValueHeight: document.querySelector('[data-juneau-field="state"]').getBoundingClientRect().height,
 		// The label is the smaller of the pair, inverting what the panel used to do.
-		labelPx: parseFloat(window.getComputedStyle(nameField.querySelector('.juneau-view-detail-field-title')).fontSize),
-		valuePx: parseFloat(window.getComputedStyle(document.querySelector('[data-juneau-field="name"]')).fontSize),
+		labelPx: Number.parseFloat(window.getComputedStyle(nameField.querySelector('.juneau-view-detail-field-title')).fontSize),
+		valuePx: Number.parseFloat(window.getComputedStyle(document.querySelector('[data-juneau-field="name"]')).fontSize),
 		// INLINE puts the label beside the value, not above it.
 		labelBesideValue: (function () {
 			const t = nameField.querySelector('.juneau-view-detail-field-title').getBoundingClientRect();
@@ -166,7 +166,7 @@ async function settle(page) {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

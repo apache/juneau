@@ -26,7 +26,7 @@ class BeanDictionaryMap_Test {
 
 	@SuppressWarnings({
 		"rawtypes", // mirrors raw-type signatures in BeanDictionaryMap.append()
-		"serial"    // test-only subclass; serialVersionUID not needed
+		"serial" // test-only subclass; serialVersionUID not needed
 	})
 	private static class TestMap extends BeanDictionaryMap {
 		TestMap appendClass(String name, Class<?> c) { return (TestMap)append(name, c); }

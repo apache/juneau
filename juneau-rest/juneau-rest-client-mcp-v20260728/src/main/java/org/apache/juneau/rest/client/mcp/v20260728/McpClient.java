@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -32,6 +31,7 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.mcp.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Typed <c>2026-07-28</c> Model Context Protocol (MCP) client facade.
@@ -61,7 +61,9 @@ import org.apache.juneau.rest.client.mcp.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // WRAP_KEY_value mirrors the JsonMap key literal it wraps; a conventional UPPER_SNAKE_CASE name would obscure that.
+	"java:S115", // WRAP_KEY_value mirrors the JsonMap key literal it wraps; a conventional UPPER_SNAKE_CASE name would obscure that.
+	"java:S1181", // connect() and closeQuietly() catch Throwable so the transport is closed and any close failure is recorded as suppressed on the original handshake failure, which is then rethrown
+	"resource" // connect() returns the built McpClient to the caller, who owns closing it (it is closed here only on handshake failure); the SSE reader is closed by SubscriptionPump.close()
 })
 public final class McpClient extends AbstractMcpClient {
 
@@ -78,9 +80,6 @@ public final class McpClient extends AbstractMcpClient {
 
 	/** SEP-2243 request-routing header carrying the tool/prompt/resource routing name for the call. */
 	private static final String HEADER_MCP_NAME = "Mcp-Name";
-
-	/** JsonMap wrapper key used to route a single value through {@link JsonMap}'s typed bean-dictionary decode. */
-	private static final String WRAP_KEY_value = "value";
 
 	private final ClientCapabilities clientCapabilities;
 	private final Implementation clientInfo;
@@ -124,9 +123,6 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
 	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
 	 */
-	@SuppressWarnings({
-		"resource" // @Owning: returns the newly-built, already-handshaked client to the caller, which owns and must close it.
-	})
 	public static McpClient connect(String endpoint) throws IOException {
 		return connect(builder().endpoint(endpoint));
 	}
@@ -145,12 +141,8 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
 	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
 	 */
-	@SuppressWarnings({
-		"java:S1181", // Must run the close-and-rethrow cleanup below even on Error, not just checked/runtime exceptions.
-		"resource" // client is already closed via closeQuietly(client, e) before the rethrow on the failure path below; the success-path return is @Owning - the caller owns and must close the returned client.
-	})
 	public static McpClient connect(Builder builder) throws IOException {
-		assertArgNotNull("builder", builder);
+		reqnn("builder", builder);
 		var client = builder.build();
 		try {
 			client.serverDiscover();
@@ -172,9 +164,6 @@ public final class McpClient extends AbstractMcpClient {
 	 * Closes {@code client}, adding any close failure as a suppressed exception on {@code primary} rather than
 	 * letting it mask the handshake failure that is the actual reason {@link #connect(Builder)} is failing.
 	 */
-	@SuppressWarnings({
-		"java:S1181" // Must record even an Error from close() as suppressed rather than let it replace the handshake failure.
-	})
 	private static void closeQuietly(McpClient client, Throwable primary) {
 		try {
 			client.close();
@@ -540,8 +529,8 @@ public final class McpClient extends AbstractMcpClient {
 	 * as a typed {@link McpElicitationLimitException} rather than hanging.
 	 */
 	private Map<String,Object> driveElicitation(String method, RequestParams<?> params, ResumeApplier applyResume, McpElicitationHandler handler, int maxRounds) throws IOException {
-		assertArgNotNull("handler", handler);
-		assertArg(maxRounds >= 1, "maxRounds must be >= 1 (was %s).", maxRounds);
+		reqnn("handler", handler);
+		req(maxRounds >= 1, "maxRounds must be >= 1 (was %s).", maxRounds);
 		var raw = callRaw(method, params);
 		var rounds = 0;
 		while (ElicitationRequests.isInputRequired(raw)) {
@@ -549,7 +538,7 @@ public final class McpClient extends AbstractMcpClient {
 				throw new McpElicitationLimitException(maxRounds);
 			var requests = ElicitationRequests.requests(raw);
 			var requestState = ElicitationRequests.requestState(raw);
-			var answers = assertArgNotNull("handler result", handler.elicit(requests));
+			var answers = reqnn("handler result", handler.elicit(requests));
 			applyResume.apply(ElicitationResponses.toInputResponses(answers), requestState);
 			raw = callRaw(method, params);
 		}
@@ -562,7 +551,7 @@ public final class McpClient extends AbstractMcpClient {
 	 * the {@code type} discriminator it already carries in the raw tree.
 	 */
 	private static <T> T decodeResult(Map<String,Object> raw, Class<T> resultType) {
-		return JsonMap.of(WRAP_KEY_value, raw).get(WRAP_KEY_value, resultType);
+		return JsonMap.of("value", raw).get("value", resultType);
 	}
 
 	/**
@@ -598,12 +587,9 @@ public final class McpClient extends AbstractMcpClient {
 	 * @return A handle to cancel/close the subscription. Never <jk>null</jk>.
 	 * @throws IOException If the initial listen request/stream-open fails.
 	 */
-	@SuppressWarnings({
-		"resource" // reader/pump are @Owning: reader's ownership passes to pump immediately; on pump.start() failure the reader is closed via pump.closeReaderQuietly() before the rethrow; on success pump is returned to the caller as the McpSubscriptionHandle (which owns close()/cancel()), and the pump thread's run() finally closes the reader unconditionally. Warnings surface at the throw/return exit points, so suppress at method scope.
-	})
 	public McpSubscriptionHandle listen(SubscriptionFilter filter, McpSubscriptionListener listener) throws IOException {
-		assertArgNotNull("filter", filter);
-		assertArgNotNull("listener", listener);
+		reqnn("filter", filter);
+		reqnn("listener", listener);
 		var params = new SubscriptionsListenRequest().setNotifications(filter);
 		stampMeta(params.getMeta() == null ? params.setMeta(new RequestMeta()).getMeta() : params.getMeta());
 		var wireParams = toWireParams(params);
@@ -655,9 +641,6 @@ public final class McpClient extends AbstractMcpClient {
 		private static final AtomicLong THREAD_SEQ = new AtomicLong();
 
 		private final String id;
-		@SuppressWarnings({
-			"resource" // Owned by this pump's lifecycle: closed via closeReaderQuietly() from cancel()/close(), and unconditionally in run()'s finally block once the decode loop ends.
-		})
 		private final SseEventReader reader;
 		private final McpSubscriptionListener listener;
 		final Thread pumpThread;
@@ -690,7 +673,7 @@ public final class McpClient extends AbstractMcpClient {
 			try {
 				while (open && reader.hasNext()) {
 					var event = reader.next();
-					if (EVENT_PING.equals(event.getEvent()))
+					if (eq(event.getEvent(), EVENT_PING))
 						continue;
 					if (event.getData() == null || event.getData().isEmpty())
 						continue;
@@ -926,7 +909,7 @@ public final class McpClient extends AbstractMcpClient {
 		var res = send(req, headers);
 		if (res.getError() != null)
 			throw McpException.fromJsonRpcError(res.getError());
-		var result = JsonMap.of(WRAP_KEY_value, res.getResult()).get(WRAP_KEY_value, resultType);
+		var result = JsonMap.of("value", res.getResult()).get("value", resultType);
 		writeCache(cacheKey, result);
 		return result;
 	}
@@ -1031,7 +1014,7 @@ public final class McpClient extends AbstractMcpClient {
 		 * @return This object.
 		 */
 		public Builder clientCapabilities(ClientCapabilities value) {
-			this.clientCapabilities = assertArgNotNull("clientCapabilities", value);
+			this.clientCapabilities = reqnn("clientCapabilities", value);
 			return this;
 		}
 
@@ -1081,9 +1064,6 @@ public final class McpClient extends AbstractMcpClient {
 		 *
 		 * @return A new {@link McpClient}. Never <jk>null</jk>.
 		 */
-		@SuppressWarnings({
-			"resource" // @Owning: returns a newly-constructed client to the caller, which owns and must close it.
-		})
 		public McpClient build() {
 			return new McpClient(this);
 		}

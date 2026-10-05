@@ -51,13 +51,14 @@ import org.eclipse.jgit.transport.*;
  * 	<li class='jc'>{@link SecretStores}
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // The JGit Repository and Git handles are opened in the constructors and released by close(); callers use GitControl via try-with-resources
+})
 public class GitControl implements AutoCloseable {
 
 	private final String localPath;
 	private final String remotePath;
-	@SuppressWarnings("resource") // Owned by this AutoCloseable; released in close().
 	private final Repository localRepo;
-	@SuppressWarnings("resource") // Owned by this AutoCloseable; released in close().
 	private final Git git;
 	private final CredentialsProvider cp;
 	private final boolean forcePush;
@@ -92,9 +93,6 @@ public class GitControl implements AutoCloseable {
 	 * 	<br>Force-push is opt-in; defaults to <jk>false</jk> in the other constructors.
 	 * @throws IOException If the repository cannot be opened.
 	 */
-	@SuppressWarnings({
-		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there.
-	})
 	public GitControl(String localPath, String remotePath, String username, String password, boolean forcePush) throws IOException {
 		this.localPath = localPath;
 		this.remotePath = remotePath;
@@ -125,9 +123,6 @@ public class GitControl implements AutoCloseable {
 	 * 	<br>Force-push is opt-in; defaults to <jk>false</jk> in the other constructors.
 	 * @throws IOException If the repository cannot be opened.
 	 */
-	@SuppressWarnings({
-		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there.
-	})
 	public GitControl(String localPath, String remotePath, String username, String secretKey, BeanStore beanStore, boolean forcePush) throws IOException {
 		this.localPath = localPath;
 		this.remotePath = remotePath;

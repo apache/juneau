@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
+import static org.apache.juneau.commons.utils.Shorts.reqnn;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -33,7 +34,8 @@ import java.util.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FileUtils {
 
@@ -41,12 +43,6 @@ public class FileUtils {
 	 * Prevents instantiation.
 	 */
 	private FileUtils() {}
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_basePath = "basePath";
-	private static final String ARG_f = "f";
-	private static final String ARG_path = "path";
-	private static final String ARG_rootDir = "rootDir";
 
 	// Shared message text — kept identical across the two boundary-check sites so attackers
 	// cannot distinguish "rejected by pre-existence check" from "rejected by symlink check".
@@ -210,7 +206,7 @@ public class FileUtils {
 	public static boolean hasExtension(String name, String ext) {
 		if (name == null || ext == null)
 			return false;
-		return ext.equals(getFileExtension(name));
+		return eq(ext, getFileExtension(name));
 	}
 
 	/**
@@ -222,7 +218,7 @@ public class FileUtils {
 	 * @throws RuntimeException if directory could not be created.
 	 */
 	public static File mkdirs(File f, boolean clean) {
-		assertArgNotNull(ARG_f, f);
+		reqnn("f", f);
 		if (f.exists()) {
 			if (clean) {
 				optional(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory '%s'", f.getAbsolutePath()));
@@ -242,7 +238,7 @@ public class FileUtils {
 	 * @return The directory.
 	 */
 	public static File mkdirs(String path, boolean clean) {
-		assertArgNotNull(ARG_path, path);
+		reqnn("path", path);
 		return mkdirs(new File(path), clean);
 	}
 
@@ -284,7 +280,7 @@ public class FileUtils {
 	 * 	{@code 403 Forbidden}.
 	 */
 	public static Optional<File> resolveSafely(File rootDir, String userPath) {
-		assertArgNotNull(ARG_rootDir, rootDir);
+		reqnn("rootDir", rootDir);
 		var root = canonicalizeRoot(rootDir.toPath());
 		if (userPath == null || userPath.isEmpty())
 			return optional(root.toFile());
@@ -343,7 +339,7 @@ public class FileUtils {
 	 * 	{@code 403 Forbidden}.
 	 */
 	public static String resolveVirtualPathSafely(String basePath, String userPath) {
-		assertArgNotNull(ARG_basePath, basePath);
+		reqnn("basePath", basePath);
 		if (basePath.isBlank())
 			throw iaex("basePath must not be blank.");
 		var bp = normalizeVirtualPath(basePath);
@@ -379,8 +375,8 @@ public class FileUtils {
 	 * Returns {@code null} if a {@code ..} segment would pop above the root.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
-		"java:S135" // Multiple continue statements are intrinsic to this path-segment scan/normalization loop.
+		"java:S135", // Multiple continue statements are intrinsic to this path-segment scan/normalization loop.
+		"java:S3776" // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
 	})
 	private static String normalizeVirtualPath(String path) {
 		if (path == null)
@@ -389,9 +385,9 @@ public class FileUtils {
 		var endsWithSlash = path.length() > 1 && path.endsWith("/");
 		var segments = new ArrayList<String>();
 		for (var s : path.split("/")) {
-			if (s.isEmpty() || ".".equals(s))
+			if (s.isEmpty() || eq(s, "."))
 				continue;
-			if ("..".equals(s)) {
+			if (eq(s, "..")) {
 				if (segments.isEmpty())
 					return null;
 				segments.remove(segments.size() - 1);

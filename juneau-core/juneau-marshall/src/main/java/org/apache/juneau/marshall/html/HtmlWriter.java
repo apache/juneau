@@ -32,8 +32,8 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Writer resource managed by calling code
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"resource" // Writer resource managed by calling code
 })
 public abstract class HtmlWriter<SELF extends HtmlWriter<SELF>> extends XmlWriter<SELF> {
 

@@ -43,18 +43,15 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure: elementType is ClassMeta<?>; toArray/convertToType return Object
 	"java:S110", // Inheritance depth acceptable
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure: elementType is ClassMeta<?>; toArray/convertToType return Object
 })
 public class Json5lParserSession extends Json5ParserSession {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth is intentional across parser session builders
-	})
 	public static class Builder extends Json5ParserSession.Builder {
 
 		/**

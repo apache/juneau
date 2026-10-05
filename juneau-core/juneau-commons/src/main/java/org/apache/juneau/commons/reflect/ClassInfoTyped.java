@@ -23,6 +23,9 @@ import java.lang.reflect.*;
  *
  * @param <T> The raw class type this instance represents.
  */
+@SuppressWarnings({
+	"unchecked" // Type erasure requires cast for ClassInfo typed operations
+})
 public class ClassInfoTyped<T> extends ClassInfo {
 
 	/**
@@ -44,17 +47,11 @@ public class ClassInfoTyped<T> extends ClassInfo {
 		super(inner, innerType);
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for ClassInfo typed operations
-	})
 	@Override
 	public Class<T> inner() {
 		return (Class<T>)super.inner();
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for ClassInfo typed operations
-	})
 	@Override
 	public T getPrimitiveDefault() { return (T)super.getPrimitiveDefault(); }
 }

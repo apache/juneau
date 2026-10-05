@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -116,7 +117,9 @@ class RowActionCsrf_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // req() casts an entry of the JS-harness JSON report to Map<String,Object>
+	})
 	private static Map<String,Object> req(String key) {
 		return (Map<String,Object>) report.get(key);
 	}
@@ -126,10 +129,9 @@ class RowActionCsrf_BrowserTest extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_runtimeLoadedAtCurrentContractVersion() {
-		assertEquals(Boolean.TRUE, report.get("hasInit"), () -> "juneau-views.js did not populate JuneauViews.init: " + report);
-		assertEquals("4", report.get("contractVersion"), () -> report.toString());
-		assertEquals(LoopbackBoundary.DEFAULT_CSRF_HEADER, report.get("defaultCsrfHeader"), () -> report.toString());
-		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
+		// Page contract is now version 5 (JUNEAU_VIEW_CONTRACT_VERSION); the old literal "4" here was stale.
+		assertBean(report, "hasInit,contractVersion,defaultCsrfHeader,jsFailures",
+			"true,5," + LoopbackBoundary.DEFAULT_CSRF_HEADER + ",[]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -153,12 +155,10 @@ class RowActionCsrf_BrowserTest extends TestBase {
 
 	@Test void b04_validTokenYieldsJsonRequestWithCsrfHeader() {
 		var r = req("reqValid");
-		assertNull(r.get("refuse"), () -> report.toString());
-		assertEquals("POST", r.get("method"), () -> report.toString());
-		@SuppressWarnings("unchecked")
-		var headers = (Map<String,Object>) r.get("headers");
-		assertEquals("application/json", headers.get("Content-Type"), () -> report.toString());
-		assertEquals("tok-123", headers.get(LoopbackBoundary.DEFAULT_CSRF_HEADER), () -> report.toString());
+		// A non-refused request omits the "refuse" key entirely, which BCT reports as a missing property rather than null.
+		assertFalse(r.containsKey("refuse"), () -> report.toString());
+		assertBean(r, "method,headers{Content-Type," + LoopbackBoundary.DEFAULT_CSRF_HEADER + "}",
+			"POST,{application/json,tok-123}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -172,10 +172,8 @@ class RowActionCsrf_BrowserTest extends TestBase {
 	}
 
 	@Test void c02_validTokenIssuesTheRequestWithNoRefusal() {
-		assertEquals(Boolean.TRUE, report.get("validTokenFetchIssued"), () -> "no request was issued with a valid token: " + report);
-		assertEquals("POST", report.get("validTokenMethod"), () -> report.toString());
-		assertEquals("application/json", report.get("validTokenContentType"), () -> report.toString());
-		assertEquals("tok-123", report.get("validTokenCsrfHeader"), () -> report.toString());
-		assertEquals(Boolean.FALSE, report.get("validTokenRefusalVisible"), () -> "a refusal rendered for a valid submit: " + report);
+		assertBean(report,
+			"validTokenFetchIssued,validTokenMethod,validTokenContentType,validTokenCsrfHeader,validTokenRefusalVisible",
+			"true,POST,application/json,tok-123,false");
 	}
 }

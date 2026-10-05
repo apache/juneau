@@ -56,7 +56,7 @@
 	 * Blob schema version every saved-view blob carries (§3.2) - lets both backends refuse an unknown/newer shape
 	 * deterministically rather than guess at it.
 	 */
-	const CURRENT_SCHEMA_VERSION = 1;
+	const CURRENT_SCHEMA_VERSION = 2;
 
 	/** Decoded-name cap (§3.1) - named so JS and the slice-3 Java mixin reject at the exact same boundary. */
 	const MAX_NAME_LEN = 128;
@@ -705,7 +705,7 @@
 	 */
 	function dtIndex(dataKey, optsColumns) {
 		if (!optsColumns) return -1;
-		return optsColumns.findIndex(function (col) { return col && col.data === dataKey; });
+		return optsColumns.findIndex(function (col) { return col?.data === dataKey; });
 	}
 
 	// ==================================================================================================================
@@ -1236,9 +1236,13 @@
 
 	/**
 	 * Programmatic Apply entry point (no chooser UI).  Computes effective columns from {@code savedView} and
-	 * runs the destroy/reinit transaction via {@code NS.init.buildTable}.
+	 * runs the destroy/reinit transaction via {@code NS.init.buildTable}.  {@code overrides.defaultOrder}, when
+	 * present, replaces {@code viewDef.defaultOrder} for this one rebuild (Gap 1 Sort restore - a default ORDER,
+	 * not a sortability toggle, so this never touches any column's own {@code orderable} flag).
+	 * {@code overrides.searchMembership}, when present, downgrades {@code searchable} on every effective column
+	 * absent from it (Gap 1 Search restore), via {@link #applySearchMembershipToColumns}.
 	 */
-	function applyView(table, savedView) {
+	function applyView(table, savedView, overrides) {
 		const ctx = table?.__juneauCtx;
 		if (!ctx || !ctx.viewDef) return { ok: false, reason: "not-initialized" };
 		if (!NS.init || typeof NS.init.buildTable !== "function") return { ok: false, reason: "no-buildTable" };
@@ -1248,14 +1252,19 @@
 		} catch (e) {
 			return { ok: false, reason: "malformed", message: e?.message };
 		}
-		return NS.init.buildTable(table, ctx.viewDef, effective, ctx);
+		if (overrides?.searchMembership != null)
+			effective = applySearchMembershipToColumns(effective, overrides.searchMembership);
+		const viewDef = overrides?.defaultOrder
+			? Object.assign({}, ctx.viewDef, { defaultOrder: overrides.defaultOrder })
+			: ctx.viewDef;
+		return NS.init.buildTable(table, viewDef, effective, ctx);
 	}
 
 	NS.config.resolveActiveView = resolveActiveView;
 	NS.config.applyView = applyView;
 
 	// ==================================================================================================================
-	// CHOOSER UI  (View tab only — Search/Sort/Options tabs are out of scope)
+	// VIEW SETTINGS DIALOG  (four tabs — View / Search / Sort / Options, spec §3)
 	// ==================================================================================================================
 	//
 	// XSS HARD RULE: saved-view names and per-column label overrides are user-controlled and are painted into
@@ -1304,11 +1313,16 @@
 				&& (headRow.querySelector(".juneau-view-detail-th") || headRow.querySelector(".juneau-view-detail-control")))
 			offset++;
 		if (ctx?.selectionState) offset++;
-		(effectiveColumns || []).forEach(function (col, i) {
+		// DataTables removes a hidden column's header cell, so only the visible columns have a cell to paint.
+		const shown = (effectiveColumns || []).filter(function (col) { return col?.visible !== false; });
+		shown.forEach(function (col, i) {
 			const th = ths[offset + i];
 			if (!th) return;
 			const label = (col.title != null && String(col.title).trim() !== "") ? String(col.title) : (col.data || "");
-			paintUserText(th, label);
+			// Paint into DataTables' own title element so its sort control (and the search icon) survive; a
+			// header without one (a plain th) is painted whole.
+			const titleEl = typeof th.querySelector === "function" ? th.querySelector(".dt-column-title") : null;
+			paintUserText(titleEl || th, label);
 		});
 	}
 
@@ -1318,7 +1332,137 @@
 		return m;
 	}
 
-	function defaultDraftFromCatalog(catalog) {
+	// The Options controls (spec §3.4 + Gap 7): page size / text wrap / row density / auto-refresh interval.
+	const DEFAULT_PAGE_SIZE = 25;
+	const DEFAULT_DENSITY = "comfortable";
+	const ALLOWED_DENSITIES = ["compact", "comfortable"];
+	const ALLOWED_PAGE_SIZES = [10, 25, 50, 100];
+	// 0 means "Off" (falsy, same convention viewDef.pollIntervalMs already uses in wireTablePolling).
+	// IRS's exact interval set (decision, 2026-10-01): Off/30s/1m/5m/15m.
+	const ALLOWED_AUTO_REFRESH_MS = [0, 30000, 60000, 300000, 900000];
+
+	/** Human label for an {@code ALLOWED_AUTO_REFRESH_MS} value, for the Options tab's <select> (Gap 7). */
+	function autoRefreshLabel(ms) {
+		switch (ms) {
+			case 30000: return "30s";
+			case 60000: return "1m";
+			case 300000: return "5m";
+			case 900000: return "15m";
+			default: return "Off";
+		}
+	}
+
+	/** The Search tab's universe (spec §3.2): columns that CAN be searched — they carry T6 search metadata. */
+	function searchCapableColumns(catalog) {
+		return (catalog || []).filter(function (c) { return c?.data != null && c.search != null; });
+	}
+
+	/** The Sort tab's universe (spec §3.3): columns that CAN be sorted — {@code orderable !== false}. */
+	function sortCapableColumns(catalog) {
+		return (catalog || []).filter(function (c) { return c?.data != null && c.orderable !== false; });
+	}
+
+	/** Default search MEMBERSHIP (spec §3.2) — every search-capable column starts with its header popup on. */
+	function defaultSearchMembership(catalog) {
+		return searchCapableColumns(catalog).map(function (c) { return c.data; });
+	}
+
+	/**
+	 * Downgrades an effective column's {@code searchable} flag to {@code false} when it is absent from
+	 * {@code searchMembership} (Gap 1 restore / spec §3.2) - never UPGRADES a column the catalog itself marked
+	 * {@code searchable: false}, so this can only turn a capable column's header search icon off, never turn an
+	 * intrinsically incapable one on.  {@code searchMembership} is {@code null}/{@code undefined}-safe: a missing
+	 * list leaves every column's {@code searchable} flag exactly as the catalog declared it (today's unrestricted
+	 * behavior), so a caller with no persisted Search facet to restore can pass it through unchanged.
+	 */
+	function applySearchMembershipToColumns(effectiveColumns, searchMembership) {
+		if (searchMembership == null) return effectiveColumns;
+		const member = new Set(searchMembership);
+		return (effectiveColumns || []).map(function (c) {
+			if (!c || c.data == null || c.searchable === false || member.has(c.data)) return c;
+			const copy = {};
+			for (const k in c) if (Object.hasOwn(c, k)) copy[k] = c[k];
+			copy.searchable = false;
+			return copy;
+		});
+	}
+
+	/**
+	 * Intersects a persisted sort list with the given sort-capable key universe, preserving ORDER and each entry's
+	 * `dir` (Gap 6 — IRS parity: the Sort tab is an ordered priority list, not an unordered membership set).
+	 * Unknown columns and duplicate entries are dropped; a malformed `dir` (anything but `"desc"`) coerces to
+	 * `"asc"`. A non-array `sortList` returns every capable key in catalog order, ascending — the same "absent
+	 * means everything, in catalog order" default {@link #intersectMembership} uses for search.
+	 */
+	function intersectSortOrder(sortList, capableKeys) {
+		if (!Array.isArray(sortList))
+			return capableKeys.map(function (k) { return { column: k, dir: "asc" }; });
+		const allowed = Object.create(null);
+		capableKeys.forEach(function (k) { allowed[k] = true; });
+		const out = [];
+		const seen = Object.create(null);
+		sortList.forEach(function (e) {
+			if (!e || e.column == null) return;
+			const key = String(e.column);
+			if (!allowed[key] || seen[key]) return;
+			seen[key] = true;
+			out.push({ column: key, dir: e.dir === "desc" ? "desc" : "asc" });
+		});
+		return out;
+	}
+
+	/** Default sort ORDER (spec §3.3, Gap 6): every sort-capable column starts in catalog order, ascending. */
+	function defaultSortOrder(catalog, defaultOrder) {
+		const capable = sortCapableColumns(catalog).map(function (c) { return c.data; });
+		// When the caller supplies the view's declared {@code defaultOrder} ([{data,dir}]), seed from exactly that
+		// (intersected with the sort-capable columns) so an untouched Apply never replaces it with "every column".
+		if (Array.isArray(defaultOrder)) {
+			return intersectSortOrder(defaultOrder.map(function (e) {
+				return { column: e && e.data, dir: e && e.dir };
+			}), capable);
+		}
+		return intersectSortOrder(null, capable);
+	}
+
+	/** The view's declared {@code defaultOrder} for draft seeding: always an array (empty when the view declares none). */
+	function ctxDefaultOrder(ctx) {
+		const d = ctx?.viewDef?.defaultOrder;
+		return Array.isArray(d) ? d : [];
+	}
+
+	/** Catalog-default draft for {@code ctx}, with the Sort facet seeded from {@code viewDef.defaultOrder}. */
+	function defaultDraftForCtx(ctx) {
+		return defaultDraftFromCatalog(currentCatalog(ctx), ctxDefaultOrder(ctx));
+	}
+
+	/** Framework default Options (spec §3.4 + Gap 7) — page size / wrap / density / auto-refresh, nothing else. */
+	function defaultOptions() {
+		return { pageSize: DEFAULT_PAGE_SIZE, wrap: false, density: DEFAULT_DENSITY, autoRefreshMs: 0 };
+	}
+
+	/** Coerces a persisted/edited Options blob to the exactly-four-field, in-range shape (unknown fields dropped). */
+	function normalizeOptions(raw) {
+		const out = defaultOptions();
+		if (raw && typeof raw === "object") {
+			if (ALLOWED_PAGE_SIZES.indexOf(raw.pageSize) >= 0) out.pageSize = raw.pageSize;
+			if (typeof raw.wrap === "boolean") out.wrap = raw.wrap;
+			if (ALLOWED_DENSITIES.indexOf(raw.density) >= 0) out.density = raw.density;
+			if (ALLOWED_AUTO_REFRESH_MS.indexOf(raw.autoRefreshMs) >= 0) out.autoRefreshMs = raw.autoRefreshMs;
+		}
+		return out;
+	}
+
+	/** Intersects a persisted membership array with the given capable-column universe (unknown ids dropped). */
+	function intersectMembership(membership, capableKeys) {
+		if (!Array.isArray(membership)) return capableKeys.slice();
+		const allowed = Object.create(null);
+		capableKeys.forEach(function (k) { allowed[k] = true; });
+		const out = [];
+		membership.forEach(function (k) { if (allowed[k] && out.indexOf(k) < 0) out.push(k); });
+		return out;
+	}
+
+	function defaultDraftFromCatalog(catalog, defaultOrder) {
 		const cols = catalog || [];
 		const order = [];
 		const visible = [];
@@ -1328,19 +1472,75 @@
 			if (c.pinned || c.defaultVisible !== false) visible.push(c.data);
 		});
 		if (visible.length === 0 && order.length > 0) visible.push(order[0]);
-		return { visible: visible, order: order, labels: {}, formats: {} };
+		return {
+			visible: visible,
+			order: order,
+			labels: {},
+			formats: {},
+			search: defaultSearchMembership(cols),
+			sort: defaultSortOrder(cols, defaultOrder),
+			options: defaultOptions()
+		};
 	}
 
-	function draftFromSavedView(catalog, savedView) {
-		if (savedView == null) return defaultDraftFromCatalog(catalog);
+	function draftFromSavedView(catalog, savedView, defaultOrder) {
+		if (savedView == null) return defaultDraftFromCatalog(catalog, defaultOrder);
 		const validated = validateView(savedView, catalog);
-		if (!validated.ok || !validated.view) return defaultDraftFromCatalog(catalog);
+		if (!validated.ok || !validated.view) return defaultDraftFromCatalog(catalog, defaultOrder);
+		// Saved-view blobs carry only the View facet; search/sort/options come from the page-state store, so a
+		// draft built from a saved view starts those three at their catalog defaults.
 		return {
 			visible: validated.view.visible.slice(),
 			order: validated.view.order.slice(),
 			labels: { ...(validated.view.labels || {}) },
-			formats: { ...(validated.view.formats || {}) }
+			formats: { ...(validated.view.formats || {}) },
+			search: defaultSearchMembership(catalog),
+			sort: defaultSortOrder(catalog, defaultOrder),
+			options: defaultOptions()
 		};
+	}
+
+	/**
+	 * Overlays a persisted View Settings blob (§6.1, page-state store) onto a fresh catalog-default draft: the View
+	 * facet is validated through {@link #validateView}, and search/sort membership + Options are intersected /
+	 * normalized against the current catalog so a stale blob referencing dropped columns degrades gracefully.
+	 */
+	function draftFromViewSettings(catalog, settings, defaultOrder) {
+		const base = defaultDraftFromCatalog(catalog, defaultOrder);
+		if (!settings || typeof settings !== "object" || settings.schemaVersion !== CURRENT_SCHEMA_VERSION) return base;
+		const validated = validateView(settings, catalog);
+		if (validated.ok && validated.view) {
+			base.visible = validated.view.visible.slice();
+			base.order = validated.view.order.slice();
+			base.labels = { ...(validated.view.labels || {}) };
+			base.formats = { ...(validated.view.formats || {}) };
+		}
+		base.search = intersectMembership(settings.search, defaultSearchMembership(catalog));
+		base.sort = Array.isArray(settings.sort)
+			? intersectSortOrder(settings.sort, sortCapableColumns(catalog).map(function (c) { return c.data; }))
+			: base.sort;
+		base.options = normalizeOptions(settings.options);
+		return base;
+	}
+
+	/**
+	 * Reads and validates this table's persisted View Settings exactly once per table lifetime (Gap 1 / §6.1),
+	 * memoizing the result on {@code ctx._lastAppliedViewSettings} so neither the dialog's seed block nor the
+	 * construction-time restore path (`juneau-views.js` `go()`) re-reads storage, and so the Q1 one-time reset
+	 * notice (readViewSettings deletes a version-mismatched blob the first time it is seen) cannot fire twice or
+	 * get silently skipped by a second, independent read finding nothing left.  Returns {@code {draft, reset}};
+	 * {@code draft} is {@code null} when no View Settings blob exists for this table, so the caller can fall back
+	 * to its own named-saved-view handling in that case.
+	 */
+	function resolveLastAppliedViewSettings(table, ctx) {
+		if (ctx._lastAppliedViewSettings !== undefined) return ctx._lastAppliedViewSettings;
+		const read = readViewSettings(table);
+		const result = {
+			draft: read.settings != null ? draftFromViewSettings(currentCatalog(ctx), read.settings, ctxDefaultOrder(ctx)) : null,
+			reset: read.reset
+		};
+		ctx._lastAppliedViewSettings = result;
+		return result;
 	}
 
 	function snapshotDraft(draft) {
@@ -1348,8 +1548,97 @@
 			visible: draft.visible,
 			order: draft.order,
 			labels: draft.labels,
-			formats: draft.formats
+			formats: draft.formats,
+			search: draft.search,
+			sort: draft.sort,
+			options: draft.options
 		});
+	}
+
+	/** The View Settings blob persisted on Apply (§6.1) — all seven page-state facets, none of the URL facets. */
+	function viewSettingsFromDraft(draft) {
+		return {
+			schemaVersion: CURRENT_SCHEMA_VERSION,
+			visible: Array.isArray(draft?.visible) ? draft.visible.slice() : [],
+			order: Array.isArray(draft?.order) ? draft.order.slice() : [],
+			labels: { ...(draft?.labels || {}) },
+			formats: { ...(draft?.formats || {}) },
+			search: Array.isArray(draft?.search) ? draft.search.slice() : [],
+			sort: Array.isArray(draft?.sort) ? draft.sort.map(function (e) { return { column: e.column, dir: e.dir === "desc" ? "desc" : "asc" }; }) : [],
+			options: normalizeOptions(draft?.options)
+		};
+	}
+
+	// ==================================================================================================================
+	// PAGE-STATE STORE BRIDGE  (§6.1/§6.2 — View Settings persist per-table through juneau-pagestate.js, NOT the URL)
+	// ==================================================================================================================
+
+	/** The per-table page-state key View Settings live under (distinct from any page-level namespace). */
+	const VIEW_SETTINGS_STATE_KEY = "viewSettings";
+
+	/**
+	 * The per-table page-state scope for this table, or {@code null} when the page-state store is absent or the
+	 * table has no stable view id.  Keyed on the SAME {@code data-juneau-view} id the saved-view scope uses, so two
+	 * tables on one page never clobber each other's View Settings (§6.2 per-table keying).
+	 */
+	function pageStateScopeForTable(table) {
+		if (!NS.pageState || typeof NS.pageState.table !== "function") return null;
+		const viewId = resolveViewId(table);
+		if (viewId == null) return null;
+		return NS.pageState.table(viewId);
+	}
+
+	/**
+	 * Reads this table's last-applied View Settings blob (§6.1). A missing blob reads as {@code {settings:null,
+	 * reset:false}}. A present blob whose {@code schemaVersion} does not match {@link #CURRENT_SCHEMA_VERSION} (or
+	 * that is not itself a plain object) is discarded outright - deleted from the store, not merely ignored - and
+	 * reads as {@code {settings:null, reset:true}}, so the caller can show a one-time reset notice (design §5 / Q1)
+	 * instead of silently reverting to catalog defaults.
+	 */
+	function readViewSettings(table) {
+		const scope = pageStateScopeForTable(table);
+		if (!scope) return { settings: null, reset: false };
+		const blob = scope.get(VIEW_SETTINGS_STATE_KEY);
+		if (blob == null) return { settings: null, reset: false };
+		if (typeof blob !== "object" || blob.schemaVersion !== CURRENT_SCHEMA_VERSION) {
+			scope.remove(VIEW_SETTINGS_STATE_KEY);
+			return { settings: null, reset: true };
+		}
+		return { settings: blob, reset: false };
+	}
+
+	/** Persists this table's committed View Settings blob on Apply (§6.1); a no-op when the store is unavailable. */
+	function writeViewSettings(table, settings) {
+		const scope = pageStateScopeForTable(table);
+		if (scope) scope.set(VIEW_SETTINGS_STATE_KEY, settings);
+	}
+
+	/**
+	 * Open precedence for the shareable URL facet (design §6.3 / T19): {@code ?state=} wins for tab / filters /
+	 * sort over any store-held live snapshot.  View Settings never go through this path — they stay in the
+	 * page-state store ({@link readViewSettings}/{@link writeViewSettings}) and are never encoded in the URL.
+	 * Thin wrapper over {@code JuneauViews.urlState.resolveOpenState} so the views runtime and this config
+	 * layer share one call site.
+	 */
+	function resolveShareableOpenState(urlState, storeLiveState) {
+		if (NS.urlState && typeof NS.urlState.resolveOpenState === "function")
+			return NS.urlState.resolveOpenState(urlState, storeLiveState);
+		return (!urlState || NS.urlState?.isEmptyState?.(urlState))
+			? (storeLiveState || null) : urlState;
+	}
+
+	/**
+	 * Copy-link helper for a host (T17): builds the current shareable URL (always with {@code ?state=}, even under
+	 * clean-address) and writes it to the clipboard.  The Copy link toolbar button itself is T20 / JRM — not this
+	 * pass — but the live URL this would copy is the same one the address bar sync maintains.
+	 */
+	function copyShareLink(table) {
+		if (typeof NS.init?.copyShareableUrl === "function")
+			return NS.init.copyShareableUrl(table, table && table.__juneauCtx);
+		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function")
+			return Promise.resolve({ ok: false, url: "" });
+		const url = NS.urlState.buildShareUrl(window.location, { tab: null, filters: [], sort: null });
+		return NS.urlState.copy(window.navigator, url).then(function (ok) { return { ok: !!ok, url: url }; });
 	}
 
 	function visibleCount(draft) {
@@ -1377,6 +1666,19 @@
 		const tmp = draft.order[i];
 		draft.order[i] = draft.order[j];
 		draft.order[j] = tmp;
+		return true;
+	}
+
+	/** Moves a sort-list entry (keyed by column) by `delta` positions in `draft.sort`; mirrors {@link #moveColumn}. */
+	function moveSortEntry(draft, dataKey, delta) {
+		if (!draft || !Array.isArray(draft.sort)) return false;
+		const i = draft.sort.findIndex(function (e) { return e?.column === dataKey; });
+		if (i < 0) return false;
+		const j = i + delta;
+		if (j < 0 || j >= draft.sort.length) return false;
+		const tmp = draft.sort[i];
+		draft.sort[i] = draft.sort[j];
+		draft.sort[j] = tmp;
 		return true;
 	}
 
@@ -1409,6 +1711,12 @@
 			ctx._configStatusEl = null;
 			ctx._configListEl = null;
 			ctx._configSelectEl = null;
+			ctx._configSearchListEl = null;
+			ctx._configSortListEl = null;
+			ctx._configTabButtons = null;
+			ctx._configTabBodies = null;
+			ctx._configVisibleTabs = null;
+			ctx._configResetBtn = null;
 		}
 	}
 
@@ -1440,7 +1748,7 @@
 		vis.className = "juneau-config-col-vis";
 		vis.checked = draft.visible.indexOf(col.data) >= 0;
 		vis.disabled = !!col.pinned || (!canHideColumn(draft, currentCatalog(ctx), col.data) && vis.checked);
-		vis.setAttribute("aria-label", "Show column");
+		vis.setAttribute("aria-label", "Show column " + (col.title || col.data));
 		vis.addEventListener("change", function () {
 			if (vis.checked) {
 				if (draft.visible.indexOf(col.data) < 0) draft.visible.push(col.data);
@@ -1471,7 +1779,7 @@
 		up.type = "button";
 		up.className = "juneau-config-col-move";
 		paintUserText(up, "Up");
-		up.setAttribute("aria-label", "Move column up");
+		up.setAttribute("aria-label", "Move column up " + (col.title || col.data));
 		up.disabled = draft.order.indexOf(col.data) === 0;
 		up.addEventListener("click", function () {
 			if (moveColumn(draft, col.data, -1)) {
@@ -1485,7 +1793,7 @@
 		down.type = "button";
 		down.className = "juneau-config-col-move";
 		paintUserText(down, "Down");
-		down.setAttribute("aria-label", "Move column down");
+		down.setAttribute("aria-label", "Move column down " + (col.title || col.data));
 		down.disabled = draft.order.indexOf(col.data) === draft.order.length - 1;
 		down.addEventListener("click", function () {
 			if (moveColumn(draft, col.data, 1)) {
@@ -1498,7 +1806,7 @@
 		const label = document.createElement("input");
 		label.type = "text";
 		label.className = "juneau-config-col-label";
-		label.setAttribute("aria-label", "Column label");
+		label.setAttribute("aria-label", "Column label for " + (col.title || col.data));
 		paintUserInput(label, draft.labels[col.data] || "");
 		label.placeholder = col.title || col.data;
 		label.addEventListener("input", function () {
@@ -1512,7 +1820,7 @@
 		if (Array.isArray(col.formats) && col.formats.length) {
 			const sel = document.createElement("select");
 			sel.className = "juneau-config-col-format";
-			sel.setAttribute("aria-label", "Column format");
+			sel.setAttribute("aria-label", "Column format for " + (col.title || col.data));
 			const empty = document.createElement("option");
 			empty.value = "";
 			paintUserText(empty, "(default)");
@@ -1580,8 +1888,22 @@
 			labels: { ...ctx._configDraft.labels },
 			formats: { ...ctx._configDraft.formats }
 		};
-		const result = applyView(table, saved);
+		const draft = ctx._configDraft;
+		const visible = visibleConfigTabs(ctx.viewDef);
+		const tabOn = function (tab) { return visible.indexOf(tab) >= 0; };
+		const result = applyView(table, saved, {
+			defaultOrder: (tabOn("sort") && draft.sort?.length)
+				? draft.sort.map(function (e) { return { data: e.column, dir: e.dir }; })
+				: undefined,
+			searchMembership: tabOn("search") ? draft.search : undefined
+		});
 		if (result?.ok) {
+			// Apply COMMITS the View Settings to the page-state store (§6.1) so a reload restores them per-table,
+			// AND (Gap 1) applies search/sort/options to the live grid itself, the same way construction-time
+			// restore does - no more "nothing visibly changes until the next reload."
+			if (tabOn("options") && typeof NS.init?.applyRestoredOptionsToLiveGrid === "function")
+				NS.init.applyRestoredOptionsToLiveGrid(table, ctx, draft.options);
+			writeViewSettings(table, viewSettingsFromDraft(ctx._configDraft));
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 			ctx._configDirty = false;
 			refreshChooserDirty(ctx);
@@ -1616,7 +1938,7 @@
 
 	function loadNamedView(table, ctx, name) {
 		if (name == null || name === "") {
-			ctx._configDraft = defaultDraftFromCatalog(currentCatalog(ctx));
+			ctx._configDraft = defaultDraftForCtx(ctx);
 			ctx._configActiveName = null;
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 			ctx._configDirty = false;
@@ -1625,7 +1947,7 @@
 			return Promise.resolve();
 		}
 		return NS.persistence.load(table, name).then(function (blob) {
-			ctx._configDraft = draftFromSavedView(currentCatalog(ctx), blob);
+			ctx._configDraft = draftFromSavedView(currentCatalog(ctx), blob, ctxDefaultOrder(ctx));
 			ctx._configActiveName = name;
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 			ctx._configDirty = false;
@@ -1636,15 +1958,358 @@
 		});
 	}
 
+	/** The four View Settings tabs (spec §3), in header order. */
+	const CONFIG_TABS = ["view", "search", "sort", "options"];
+	const CONFIG_TAB_LABELS = { view: "View", search: "Search", sort: "Sort", options: "Options" };
+
+	/** Bumped once per {@code openChooser} call so each dialog's tab/panel ids are unique on the page (F3). */
+	let configDialogSeq = 0;
+
+	/** Public JSON key per internal tab id (Gap-g, WORK-J0559 Q7/R7): `columnConfig.tabs` lists these public names. */
+	const CONFIG_TAB_PUBLIC_KEYS = { view: "columns", search: "search", sort: "sort", options: "options" };
+
+	/**
+	 * Resolves which of the four tabs {@code viewDef.columnConfig} allows (Gap-g, IRS parity / WORK-J0559 Q7/R7).
+	 * {@code columnConfig: true} (or any other non-object truthy value - the pre-existing default) means "all four
+	 * tabs", in {@link #CONFIG_TABS}'s fixed order regardless of the order names are given in. {@code columnConfig:
+	 * {tabs: [...]}} restricts to the named public keys; unknown names are dropped, and an empty or all-unknown
+	 * {@code tabs} array falls back to "all four tabs" rather than "no tabs" (an accidental {@code {tabs: []}} must
+	 * not silently produce a chooser with nothing in it).
+	 */
+	function visibleConfigTabs(viewDef) {
+		const cc = viewDef?.columnConfig;
+		if (!cc || typeof cc !== "object" || !Array.isArray(cc.tabs)) return CONFIG_TABS.slice();
+		const wanted = Object.create(null);
+		cc.tabs.forEach(function (name) { wanted[name] = true; });
+		const out = CONFIG_TABS.filter(function (t) { return wanted[CONFIG_TAB_PUBLIC_KEYS[t]]; });
+		return out.length ? out : CONFIG_TABS.slice();
+	}
+
+	/**
+	 * Shows one tab body and hides the rest, moves the active class onto its button, updates each tab button's
+	 * {@code aria-selected} and roving {@code tabindex} (F3 - only the active tab is {@code tabindex="0"}; the
+	 * rest are {@code tabindex="-1"}, per the WAI-ARIA APG tabs pattern), and reveals the View-tab-only Reset
+	 * control (spec §3 footer: Apply / Cancel always; Reset to defaults on the View tab).
+	 */
+	function selectConfigTab(ctx, name) {
+		ctx._configActiveTab = name;
+		const buttons = ctx._configTabButtons || {};
+		const bodies = ctx._configTabBodies || {};
+		(ctx._configVisibleTabs || CONFIG_TABS).forEach(function (t) {
+			const btn = buttons[t];
+			if (btn?.classList) btn.classList.toggle("juneau-config-tab-active", t === name);
+			if (btn) {
+				btn.setAttribute("aria-selected", t === name ? "true" : "false");
+				btn.tabIndex = t === name ? 0 : -1;
+			}
+			const body = bodies[t];
+			if (body) body.hidden = t !== name;
+		});
+		if (ctx._configResetBtn) ctx._configResetBtn.hidden = name !== "view";
+	}
+
+	/**
+	 * One membership checkbox row (spec §3.2/§3.3): a checkbox toggling {@code dataKey}'s presence in the draft's
+	 * {@code facetKey} array, plus the (user-controlled) column label painted with {@code textContent} only.
+	 */
+	function buildMembershipRow(ctx, col, facetKey) {
+		const row = document.createElement("div");
+		row.className = "juneau-config-member-row";
+		row.dataset.col = col.data;
+
+		const cb = document.createElement("input");
+		cb.type = "checkbox";
+		cb.className = "juneau-config-member-toggle";
+		const draftList = ctx._configDraft[facetKey] || (ctx._configDraft[facetKey] = []);
+		cb.checked = draftList.indexOf(col.data) >= 0;
+		cb.setAttribute("aria-label", (facetKey === "search" ? "Searchable " : "Sortable ") + (col.title || col.data));
+		cb.addEventListener("change", function () {
+			const list = ctx._configDraft[facetKey] || (ctx._configDraft[facetKey] = []);
+			if (cb.checked) {
+				if (list.indexOf(col.data) < 0) list.push(col.data);
+			} else {
+				ctx._configDraft[facetKey] = list.filter(function (id) { return id !== col.data; });
+			}
+			markDirty(ctx);
+		});
+		row.appendChild(cb);
+
+		const name = document.createElement("span");
+		name.className = "juneau-config-member-name";
+		paintUserText(name, col.title || col.data);
+		row.appendChild(name);
+		return row;
+	}
+
+	/** Fills {@code listEl} with a membership row per capable column; a facet with no capable columns shows a note. */
+	function renderMembershipList(ctx, listEl, capableColumns, facetKey) {
+		if (!listEl) return;
+		while (listEl.firstChild) listEl.firstChild.remove();
+		if (!capableColumns.length) {
+			const note = document.createElement("div");
+			note.className = "juneau-config-empty-note";
+			paintUserText(note, facetKey === "search" ? "No searchable columns." : "No sortable columns.");
+			listEl.appendChild(note);
+			return;
+		}
+		capableColumns.forEach(function (col) {
+			listEl.appendChild(buildMembershipRow(ctx, col, facetKey));
+		});
+	}
+
+	/**
+	 * One ordered Sort-tab row (Gap 6): a checkbox toggling membership (unchecking removes it from `draft.sort`
+	 * entirely - {@link #buildUnsortedRow} re-adds it at the tail when re-checked), an Up/Down reorder pair, and
+	 * an Asc/Desc select - all draft-mutating, mirroring {@link #buildChooserRow}'s reorder convention.
+	 */
+	function buildSortRow(ctx, col, draft, index, count) {
+		const row = document.createElement("div");
+		row.className = "juneau-config-sort-row";
+		row.dataset.col = col.data;
+
+		const cb = document.createElement("input");
+		cb.type = "checkbox";
+		cb.className = "juneau-config-sort-toggle";
+		cb.checked = true;
+		cb.setAttribute("aria-label", "Sortable " + (col.title || col.data));
+		cb.addEventListener("change", function () {
+			if (!cb.checked) draft.sort = draft.sort.filter(function (e) { return e.column !== col.data; });
+			markDirty(ctx);
+			renderSortList(ctx);
+		});
+		row.appendChild(cb);
+
+		const name = document.createElement("span");
+		name.className = "juneau-config-sort-name";
+		paintUserText(name, col.title || col.data);
+		row.appendChild(name);
+
+		const dirSel = document.createElement("select");
+		dirSel.className = "juneau-config-sort-dir";
+		dirSel.setAttribute("aria-label", "Sort direction for " + (col.title || col.data));
+		["asc", "desc"].forEach(function (d) {
+			const opt = document.createElement("option");
+			opt.value = d;
+			paintUserText(opt, d === "asc" ? "Ascending" : "Descending");
+			dirSel.appendChild(opt);
+		});
+		const entry = draft.sort.find(function (e) { return e.column === col.data; });
+		dirSel.value = entry ? entry.dir : "asc";
+		dirSel.addEventListener("change", function () {
+			const e = draft.sort.find(function (e2) { return e2.column === col.data; });
+			if (e) { e.dir = dirSel.value === "desc" ? "desc" : "asc"; markDirty(ctx); }
+		});
+		row.appendChild(dirSel);
+
+		const up = document.createElement("button");
+		up.type = "button";
+		up.className = "juneau-config-sort-move";
+		paintUserText(up, "Up");
+		up.setAttribute("aria-label", "Move sort priority up " + (col.title || col.data));
+		up.disabled = index === 0;
+		up.addEventListener("click", function () {
+			if (moveSortEntry(draft, col.data, -1)) { markDirty(ctx); renderSortList(ctx); }
+		});
+		row.appendChild(up);
+
+		const down = document.createElement("button");
+		down.type = "button";
+		down.className = "juneau-config-sort-move";
+		paintUserText(down, "Down");
+		down.setAttribute("aria-label", "Move sort priority down " + (col.title || col.data));
+		down.disabled = index === count - 1;
+		down.addEventListener("click", function () {
+			if (moveSortEntry(draft, col.data, 1)) { markDirty(ctx); renderSortList(ctx); }
+		});
+		row.appendChild(down);
+
+		return row;
+	}
+
+	/** A sort-capable column NOT currently in `draft.sort`: an unchecked row with no reorder/dir controls. */
+	function buildUnsortedRow(ctx, col, draft) {
+		const row = document.createElement("div");
+		row.className = "juneau-config-sort-row juneau-config-sort-row-unsorted";
+		row.dataset.col = col.data;
+
+		const cb = document.createElement("input");
+		cb.type = "checkbox";
+		cb.className = "juneau-config-sort-toggle";
+		cb.checked = false;
+		cb.setAttribute("aria-label", "Sortable " + (col.title || col.data));
+		cb.addEventListener("change", function () {
+			if (cb.checked) draft.sort.push({ column: col.data, dir: "asc" });
+			markDirty(ctx);
+			renderSortList(ctx);
+		});
+		row.appendChild(cb);
+
+		const name = document.createElement("span");
+		name.className = "juneau-config-sort-name";
+		paintUserText(name, col.title || col.data);
+		row.appendChild(name);
+
+		return row;
+	}
+
+	/**
+	 * Fills the Sort tab (Gap 6 - IRS parity: an ORDERED priority list, not an unordered membership set) from the
+	 * current draft: `draft.sort` entries first, in their current order, each with reorder + Asc/Desc controls;
+	 * then any remaining sort-capable column not yet in the list, unchecked, appended to the tail of `draft.sort`
+	 * the moment its checkbox is ticked.
+	 */
+	function renderSortList(ctx) {
+		const list = ctx._configSortListEl;
+		if (!list) return;
+		while (list.firstChild) list.firstChild.remove();
+		const draft = ctx._configDraft;
+		const capable = sortCapableColumns(currentCatalog(ctx));
+		if (!capable.length) {
+			const note = document.createElement("div");
+			note.className = "juneau-config-empty-note";
+			paintUserText(note, "No sortable columns.");
+			list.appendChild(note);
+			return;
+		}
+		const byData = catalogByDataLocal(capable);
+		const inList = draft.sort.filter(function (e) { return byData[e.column]; });
+		const remaining = capable.filter(function (c) {
+			return inList.every(function (e) { return e.column !== c.data; });
+		});
+		inList.forEach(function (e, i) {
+			list.appendChild(buildSortRow(ctx, byData[e.column], draft, i, inList.length));
+		});
+		remaining.forEach(function (c) {
+			list.appendChild(buildUnsortedRow(ctx, c, draft));
+		});
+	}
+
+	/** The Options tab body (spec §3.4): EXACTLY four controls — page size, text wrap, row density, auto-refresh. */
+	function buildOptionsTabBody(ctx) {
+		const body = document.createElement("div");
+		body.className = "juneau-config-options";
+		const opts = ctx._configDraft.options || (ctx._configDraft.options = defaultOptions());
+
+		const pageRow = document.createElement("label");
+		pageRow.className = "juneau-config-opt juneau-config-opt-pagesize";
+		const pageLbl = document.createElement("span");
+		paintUserText(pageLbl, "Page size");
+		pageRow.appendChild(pageLbl);
+		const pageSel = document.createElement("select");
+		pageSel.setAttribute("aria-label", "Page size");
+		ALLOWED_PAGE_SIZES.forEach(function (n) {
+			const opt = document.createElement("option");
+			opt.value = String(n);
+			paintUserText(opt, String(n));
+			pageSel.appendChild(opt);
+		});
+		pageSel.value = String(opts.pageSize);
+		pageSel.addEventListener("change", function () {
+			const n = Number.parseInt(pageSel.value, 10);
+			if (ALLOWED_PAGE_SIZES.indexOf(n) >= 0) { ctx._configDraft.options.pageSize = n; markDirty(ctx); }
+		});
+		pageRow.appendChild(pageSel);
+		body.appendChild(pageRow);
+
+		const wrapRow = document.createElement("label");
+		wrapRow.className = "juneau-config-opt juneau-config-opt-wrap";
+		const wrapCb = document.createElement("input");
+		wrapCb.type = "checkbox";
+		wrapCb.setAttribute("aria-label", "Text wrap");
+		wrapCb.checked = !!opts.wrap;
+		wrapCb.addEventListener("change", function () { ctx._configDraft.options.wrap = !!wrapCb.checked; markDirty(ctx); });
+		wrapRow.appendChild(wrapCb);
+		const wrapLbl = document.createElement("span");
+		paintUserText(wrapLbl, "Text wrap");
+		wrapRow.appendChild(wrapLbl);
+		body.appendChild(wrapRow);
+
+		const densRow = document.createElement("label");
+		densRow.className = "juneau-config-opt juneau-config-opt-density";
+		const densLbl = document.createElement("span");
+		paintUserText(densLbl, "Row density");
+		densRow.appendChild(densLbl);
+		const densSel = document.createElement("select");
+		densSel.setAttribute("aria-label", "Row density");
+		ALLOWED_DENSITIES.forEach(function (d) {
+			const opt = document.createElement("option");
+			opt.value = d;
+			paintUserText(opt, d.charAt(0).toUpperCase() + d.slice(1));
+			densSel.appendChild(opt);
+		});
+		densSel.value = opts.density;
+		densSel.addEventListener("change", function () {
+			if (ALLOWED_DENSITIES.indexOf(densSel.value) >= 0) { ctx._configDraft.options.density = densSel.value; markDirty(ctx); }
+		});
+		densRow.appendChild(densSel);
+		body.appendChild(densRow);
+
+		const refreshRow = document.createElement("label");
+		refreshRow.className = "juneau-config-opt juneau-config-opt-autorefresh";
+		const refreshLbl = document.createElement("span");
+		paintUserText(refreshLbl, "Auto-refresh");
+		refreshRow.appendChild(refreshLbl);
+		const refreshSel = document.createElement("select");
+		refreshSel.setAttribute("aria-label", "Auto-refresh");
+		ALLOWED_AUTO_REFRESH_MS.forEach(function (ms) {
+			const opt = document.createElement("option");
+			opt.value = String(ms);
+			paintUserText(opt, autoRefreshLabel(ms));
+			refreshSel.appendChild(opt);
+		});
+		refreshSel.value = String(opts.autoRefreshMs);
+		refreshSel.addEventListener("change", function () {
+			const ms = Number.parseInt(refreshSel.value, 10);
+			if (ALLOWED_AUTO_REFRESH_MS.indexOf(ms) >= 0) { ctx._configDraft.options.autoRefreshMs = ms; markDirty(ctx); }
+		});
+		refreshRow.appendChild(refreshSel);
+		body.appendChild(refreshRow);
+
+		return body;
+	}
+
+	/** Rebuilds all three new tab bodies' contents from the current draft (called on open AND on Reset). */
+	function renderConfigTabBodies(ctx) {
+		renderChooserColumnList(ctx);
+		const bodies = ctx._configTabBodies || {};
+		renderMembershipList(ctx, ctx._configSearchListEl, searchCapableColumns(currentCatalog(ctx)), "search");
+		renderSortList(ctx);
+		// Options is a fresh control set each render so it reflects the current draft.options.
+		const optHost = bodies.options;
+		if (optHost) {
+			while (optHost.firstChild) optHost.firstChild.remove();
+			optHost.appendChild(buildOptionsTabBody(ctx));
+		}
+	}
+
+	/** Reset to defaults (spec §3.1) — drafts the catalog defaults; Apply still commits, Cancel abandons. */
+	function resetDraftToDefaults(ctx) {
+		ctx._configDraft = defaultDraftForCtx(ctx);
+		renderConfigTabBodies(ctx);
+		markDirty(ctx);
+	}
+
 	function openChooser(table, ctx) {
 		if (ctx._configBackdrop) {
 			closeChooserDialog(ctx);
 			return;
 		}
-		if (!ctx._configDraft)
-			ctx._configDraft = draftFromSavedView(currentCatalog(ctx), null);
+		if (!ctx._configDraft) {
+			// Seed the dialog from the last-applied View Settings (§6.1) when present, else catalog defaults.  A
+			// schemaVersion mismatch (or missing/non-object blob) discards the whole blob and shows a one-time
+			// notice (design §5 / Q1) rather than silently reverting; readViewSettings deleting the blob on
+			// detection is what makes the notice "once" - a later re-open finds nothing stored, not a mismatch.
+			// Routed through the shared helper (Gap 1) so this is the SAME read `go()`'s construction-time restore
+			// already consumed - never a second independent read of the same blob.
+			const resolved = resolveLastAppliedViewSettings(table, ctx);
+			ctx._configDraft = resolved.draft != null
+				? resolved.draft
+				: draftFromSavedView(currentCatalog(ctx), null, ctxDefaultOrder(ctx));
+			ctx._configResetNotice = resolved.reset;
+		}
 		if (ctx._configCleanSnapshot == null)
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+		ctx._configVisibleTabs = visibleConfigTabs(ctx.viewDef);
 
 		const backdrop = document.createElement("div");
 		backdrop.className = CHOOSER_BACKDROP_CLASS;
@@ -1661,108 +2326,202 @@
 		paintUserText(title, "View Settings");
 		dialog.appendChild(title);
 
+		const dialogIdPrefix = "juneau-config-" + (++configDialogSeq) + "-";
+		const tabIds = {};
+		ctx._configVisibleTabs.forEach(function (t) {
+			tabIds[t] = { tab: dialogIdPrefix + "tab-" + t, panel: dialogIdPrefix + "panel-" + t };
+		});
+
 		const tabs = document.createElement("div");
 		tabs.className = "juneau-config-tabs";
-		const viewTab = document.createElement("button");
-		viewTab.type = "button";
-		viewTab.className = "juneau-config-tab juneau-config-tab-active";
-		paintUserText(viewTab, "View");
-		tabs.appendChild(viewTab);
+		tabs.setAttribute("role", "tablist");
+		ctx._configTabButtons = {};
+		ctx._configTabBodies = {};
+		ctx._configVisibleTabs.forEach(function (t) {
+			const btn = document.createElement("button");
+			btn.type = "button";
+			btn.id = tabIds[t].tab;
+			btn.className = "juneau-config-tab";
+			btn.setAttribute("role", "tab");
+			btn.setAttribute("aria-controls", tabIds[t].panel);
+			btn.setAttribute("aria-selected", "false");
+			btn.tabIndex = -1;
+			btn.dataset.tab = t;
+			paintUserText(btn, CONFIG_TAB_LABELS[t]);
+			btn.addEventListener("click", function () { selectConfigTab(ctx, t); btn.focus(); });
+			ctx._configTabButtons[t] = btn;
+			tabs.appendChild(btn);
+		});
+		// F3 - Left/Right/Home/End roving-tabindex keyboard nav (WAI-ARIA APG tabs pattern), reusing the same
+		// pure target-index function the detail-view ribbon strip's own tab keydown handler uses.  Gap-g - the
+		// wraparound/indexing math runs over the VISIBLE tabs only, so a restricted dialog never lands on, or
+		// wraps through, a tab it never built.
+		tabs.addEventListener("keydown", function (e) {
+			if (!NS.init || typeof NS.init.detailTabTargetIndex !== "function") return;
+			const current = ctx._configVisibleTabs.indexOf(ctx._configActiveTab);
+			const target = NS.init.detailTabTargetIndex(e.key, current, ctx._configVisibleTabs.length);
+			if (target < 0) return;
+			e.preventDefault?.();
+			const name = ctx._configVisibleTabs[target];
+			selectConfigTab(ctx, name);
+			ctx._configTabButtons[name]?.focus();
+		});
 		dialog.appendChild(tabs);
 
-		const toolbar = document.createElement("div");
-		toolbar.className = "juneau-config-saved-bar";
+		const bodies = document.createElement("div");
+		bodies.className = "juneau-config-bodies";
+		dialog.appendChild(bodies);
 
-		const sel = document.createElement("select");
-		sel.className = "juneau-config-view-select";
-		sel.setAttribute("aria-label", "Saved view");
-		ctx._configSelectEl = sel;
-		sel.addEventListener("change", function () {
-			if (!confirmDiscard(ctx)) {
-				sel.value = ctx._configActiveName == null ? "" : ctx._configActiveName;
-				return;
-			}
-			const name = sel.value === "" ? null : sel.value;
-			loadNamedView(table, ctx, name).then(function () {
-				NS.persistence.setActive(table, name).catch(function () { /* quota / private mode — the
-					chooser selection itself already applied; persisting it across reloads is best-effort */ });
+		const visibleTabs = ctx._configVisibleTabs;
+		if (visibleTabs.indexOf("view") >= 0) {
+			const viewBody = document.createElement("div");
+			viewBody.className = "juneau-config-body juneau-config-body-view";
+			viewBody.id = tabIds.view.panel;
+			viewBody.setAttribute("role", "tabpanel");
+			viewBody.setAttribute("aria-labelledby", tabIds.view.tab);
+			ctx._configTabBodies.view = viewBody;
+			bodies.appendChild(viewBody);
+
+			const toolbar = document.createElement("div");
+			toolbar.className = "juneau-config-saved-bar";
+
+			const sel = document.createElement("select");
+			sel.className = "juneau-config-view-select";
+			sel.setAttribute("aria-label", "Saved view");
+			ctx._configSelectEl = sel;
+			sel.addEventListener("change", function () {
+				if (!confirmDiscard(ctx)) {
+					sel.value = ctx._configActiveName == null ? "" : ctx._configActiveName;
+					return;
+				}
+				const name = sel.value === "" ? null : sel.value;
+				loadNamedView(table, ctx, name).then(function () {
+					NS.persistence.setActive(table, name).catch(function () { /* quota / private mode — the
+						chooser selection itself already applied; persisting it across reloads is best-effort */ });
+				});
 			});
-		});
-		toolbar.appendChild(sel);
+			toolbar.appendChild(sel);
 
-		const saveBtn = document.createElement("button");
-		saveBtn.type = "button";
-		paintUserText(saveBtn, "Save");
-		saveBtn.addEventListener("click", function () {
-			if (ctx._configActiveName == null) {
-				showChooserStatus(ctx, "Use Save as… to name a new view.", true);
-				return;
-			}
-			persistDraft(table, ctx, ctx._configActiveName, true);
-		});
-		toolbar.appendChild(saveBtn);
-
-		const saveAsBtn = document.createElement("button");
-		saveAsBtn.type = "button";
-		paintUserText(saveAsBtn, "Save as…");
-		saveAsBtn.addEventListener("click", function () {
-			const name = askSaveAsName();
-			if (name == null || String(name).trim() === "") return;
-			const basic = validateNameBasic(name);
-			if (!basic.ok) {
-				showChooserStatus(ctx, basic.message, true);
-				return;
-			}
-			persistDraft(table, ctx, String(name).trim(), true);
-		});
-		toolbar.appendChild(saveAsBtn);
-
-		const delBtn = document.createElement("button");
-		delBtn.type = "button";
-		paintUserText(delBtn, "Delete");
-		delBtn.addEventListener("click", function () {
-			if (ctx._configActiveName == null) {
-				showChooserStatus(ctx, "The Default view cannot be deleted.", true);
-				return;
-			}
-			const name = ctx._configActiveName;
-			NS.persistence["delete"](table, name).then(function () {
-				return NS.persistence.setActive(table, null);
-			}).then(function () {
-				ctx._configActiveName = null;
-				ctx._configDraft = defaultDraftFromCatalog(currentCatalog(ctx));
-				ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
-				ctx._configDirty = false;
-				renderChooserColumnList(ctx);
-				refreshChooserDirty(ctx);
-				return NS.persistence.list(table);
-			}).then(function (listing) {
-				fillViewSelect(ctx, listing);
-				showChooserStatus(ctx, "Deleted.", false);
-			}, function (e) {
-				showChooserStatus(ctx, (toTypedError(e).message) || "Delete failed.", true);
+			const saveBtn = document.createElement("button");
+			saveBtn.type = "button";
+			paintUserText(saveBtn, "Save");
+			saveBtn.addEventListener("click", function () {
+				if (ctx._configActiveName == null) {
+					showChooserStatus(ctx, "Use Save as… to name a new view.", true);
+					return;
+				}
+				persistDraft(table, ctx, ctx._configActiveName, true);
 			});
-		});
-		toolbar.appendChild(delBtn);
+			toolbar.appendChild(saveBtn);
 
-		const dirty = document.createElement("span");
-		dirty.className = "juneau-config-dirty";
-		dirty.hidden = true;
-		ctx._configDirtyEl = dirty;
-		toolbar.appendChild(dirty);
+			const saveAsBtn = document.createElement("button");
+			saveAsBtn.type = "button";
+			paintUserText(saveAsBtn, "Save as…");
+			saveAsBtn.addEventListener("click", function () {
+				const name = askSaveAsName();
+				if (name == null || String(name).trim() === "") return;
+				const basic = validateNameBasic(name);
+				if (!basic.ok) {
+					showChooserStatus(ctx, basic.message, true);
+					return;
+				}
+				persistDraft(table, ctx, String(name).trim(), true);
+			});
+			toolbar.appendChild(saveAsBtn);
 
-		dialog.appendChild(toolbar);
+			const delBtn = document.createElement("button");
+			delBtn.type = "button";
+			paintUserText(delBtn, "Delete");
+			delBtn.addEventListener("click", function () {
+				if (ctx._configActiveName == null) {
+					showChooserStatus(ctx, "The Default view cannot be deleted.", true);
+					return;
+				}
+				const name = ctx._configActiveName;
+				NS.persistence["delete"](table, name).then(function () {
+					return NS.persistence.setActive(table, null);
+				}).then(function () {
+					ctx._configActiveName = null;
+					ctx._configDraft = defaultDraftForCtx(ctx);
+					ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+					ctx._configDirty = false;
+					renderChooserColumnList(ctx);
+					refreshChooserDirty(ctx);
+					return NS.persistence.list(table);
+				}).then(function (listing) {
+					fillViewSelect(ctx, listing);
+					showChooserStatus(ctx, "Deleted.", false);
+				}, function (e) {
+					showChooserStatus(ctx, (toTypedError(e).message) || "Delete failed.", true);
+				});
+			});
+			toolbar.appendChild(delBtn);
+
+			const dirty = document.createElement("span");
+			dirty.className = "juneau-config-dirty";
+			dirty.hidden = true;
+			ctx._configDirtyEl = dirty;
+			toolbar.appendChild(dirty);
+
+			viewBody.appendChild(toolbar);
+
+			const list = document.createElement("div");
+			list.className = "juneau-config-col-list";
+			ctx._configListEl = list;
+			viewBody.appendChild(list);
+		}
+
+		if (visibleTabs.indexOf("search") >= 0) {
+			// Search tab (spec §3.2) — membership only; operator editing lives in the header popup (§4).
+			const searchBody = document.createElement("div");
+			searchBody.className = "juneau-config-body juneau-config-body-search";
+			searchBody.id = tabIds.search.panel;
+			searchBody.setAttribute("role", "tabpanel");
+			searchBody.setAttribute("aria-labelledby", tabIds.search.tab);
+			searchBody.hidden = true;
+			const searchList = document.createElement("div");
+			searchList.className = "juneau-config-member-list juneau-config-search-list";
+			ctx._configSearchListEl = searchList;
+			searchBody.appendChild(searchList);
+			ctx._configTabBodies.search = searchBody;
+			bodies.appendChild(searchBody);
+		}
+
+		if (visibleTabs.indexOf("sort") >= 0) {
+			// Sort tab (spec §3.3) — an ordered, directional priority list (Gap 6).
+			const sortBody = document.createElement("div");
+			sortBody.className = "juneau-config-body juneau-config-body-sort";
+			sortBody.id = tabIds.sort.panel;
+			sortBody.setAttribute("role", "tabpanel");
+			sortBody.setAttribute("aria-labelledby", tabIds.sort.tab);
+			sortBody.hidden = true;
+			const sortList = document.createElement("div");
+			sortList.className = "juneau-config-member-list juneau-config-sort-list";
+			ctx._configSortListEl = sortList;
+			sortBody.appendChild(sortList);
+			ctx._configTabBodies.sort = sortBody;
+			bodies.appendChild(sortBody);
+		}
+
+		if (visibleTabs.indexOf("options") >= 0) {
+			// Options tab (spec §3.4) — page size / wrap / density only.
+			const optionsBody = document.createElement("div");
+			optionsBody.className = "juneau-config-body juneau-config-body-options";
+			optionsBody.id = tabIds.options.panel;
+			optionsBody.setAttribute("role", "tabpanel");
+			optionsBody.setAttribute("aria-labelledby", tabIds.options.tab);
+			optionsBody.hidden = true;
+			ctx._configTabBodies.options = optionsBody;
+			bodies.appendChild(optionsBody);
+		}
 
 		const status = document.createElement("div");
 		status.className = "juneau-config-status";
+		status.setAttribute("role", "status");
+		status.setAttribute("aria-live", "polite");
 		status.hidden = true;
 		ctx._configStatusEl = status;
 		dialog.appendChild(status);
-
-		const list = document.createElement("div");
-		list.className = "juneau-config-col-list";
-		ctx._configListEl = list;
-		dialog.appendChild(list);
 
 		const actions = document.createElement("div");
 		actions.className = "juneau-config-actions";
@@ -1774,9 +2533,17 @@
 		applyBtn.addEventListener("click", function () { applyDraft(table, ctx); });
 		actions.appendChild(applyBtn);
 
+		const resetBtn = document.createElement("button");
+		resetBtn.type = "button";
+		resetBtn.className = "juneau-config-reset";
+		paintUserText(resetBtn, "Reset to defaults");
+		resetBtn.addEventListener("click", function () { resetDraftToDefaults(ctx); });
+		ctx._configResetBtn = resetBtn;
+		actions.appendChild(resetBtn);
+
 		const closeBtn = document.createElement("button");
 		closeBtn.type = "button";
-		paintUserText(closeBtn, "Close");
+		paintUserText(closeBtn, "Cancel");
 		closeBtn.addEventListener("click", function () {
 			if (!confirmDiscard(ctx)) return;
 			closeChooserDialog(ctx);
@@ -1794,8 +2561,13 @@
 		document.body.appendChild(backdrop);
 		ctx._configBackdrop = backdrop;
 
-		renderChooserColumnList(ctx);
+		renderConfigTabBodies(ctx);
+		selectConfigTab(ctx, ctx._configVisibleTabs[0]);
 		refreshChooserDirty(ctx);
+		if (ctx._configResetNotice) {
+			showChooserStatus(ctx, "Saved view settings were reset because the table changed.", false);
+			ctx._configResetNotice = false;
+		}
 		NS.persistence.list(table).then(function (listing) {
 			if (ctx._configActiveName === undefined)
 				ctx._configActiveName = listing.active;
@@ -1827,7 +2599,7 @@
 				btn.textContent = "";
 				btn.appendChild(document.importNode ? document.importNode(svg, true) : svg);
 			}
-		} catch (e) { /* text fallback already applied */ }
+		} catch (e) { /* text fallback already applied */ } // NOSONAR javascript:S2486 -- best-effort; text label already painted
 	}
 
 	function stampChromeTip(el, text) {
@@ -1863,7 +2635,11 @@
 		host.appendChild(btn);
 
 		if (ctx._configDraft == null) {
-			ctx._configDraft = defaultDraftFromCatalog(currentCatalog(ctx));
+			// Single seeding point: the last-applied View Settings (memoized read shared with go()'s restore), else
+			// catalog defaults.  The one-time schemaVersion-reset notice is armed here and shown by openChooser.
+			const resolved = resolveLastAppliedViewSettings(table, ctx);
+			ctx._configDraft = resolved.draft != null ? resolved.draft : defaultDraftForCtx(ctx);
+			ctx._configResetNotice = !!resolved.reset;
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 			ctx._configDirty = false;
 		}
@@ -1882,4 +2658,27 @@
 	NS.config.closeChooserDialog = closeChooserDialog;
 	NS.config.applyDraft = applyDraft;
 	NS.config.CHOOSER_BACKDROP_CLASS = CHOOSER_BACKDROP_CLASS;
+	// T12 — four-tab View Settings pure layer + page-state bridge (§3/§6.1).
+	NS.config.CONFIG_TABS = CONFIG_TABS;
+	NS.config.searchCapableColumns = searchCapableColumns;
+	NS.config.sortCapableColumns = sortCapableColumns;
+	NS.config.defaultSearchMembership = defaultSearchMembership;
+	NS.config.applySearchMembershipToColumns = applySearchMembershipToColumns;
+	NS.config.resolveLastAppliedViewSettings = resolveLastAppliedViewSettings;
+	NS.config.defaultSortOrder = defaultSortOrder;
+	NS.config.intersectSortOrder = intersectSortOrder;
+	NS.config.moveSortEntry = moveSortEntry;
+	NS.config.visibleConfigTabs = visibleConfigTabs;
+	NS.config.CONFIG_TAB_PUBLIC_KEYS = CONFIG_TAB_PUBLIC_KEYS;
+	NS.config.defaultOptions = defaultOptions;
+	NS.config.normalizeOptions = normalizeOptions;
+	NS.config.intersectMembership = intersectMembership;
+	NS.config.draftFromViewSettings = draftFromViewSettings;
+	NS.config.viewSettingsFromDraft = viewSettingsFromDraft;
+	NS.config.readViewSettings = readViewSettings;
+	NS.config.writeViewSettings = writeViewSettings;
+	NS.config.resolveShareableOpenState = resolveShareableOpenState;
+	NS.config.copyShareLink = copyShareLink;
+	NS.config.selectConfigTab = selectConfigTab;
+	NS.config.resetDraftToDefaults = resetDraftToDefaults;
 })();

@@ -103,6 +103,7 @@
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 		<logback.version>1.5.18</logback.version>
 		<log4j.version>2.26.1</log4j.version>
+		<h2.version>2.3.232</h2.version>
 	</properties>
 
 	<modules>
@@ -228,6 +229,9 @@
 						<exclude>**/app.json</exclude>
 						<exclude>**/Procfile</exclude>
 
+						<!-- JSON Schema has no comment syntax for ASF license headers -->
+						<exclude>**/juneau-page.schema.json</exclude>
+
 						<exclude>**/.asf.yaml</exclude>
 
 						<!-- ServiceLoader provider files - plain text, no comment syntax for license headers -->
@@ -244,6 +248,7 @@
 
 						<!-- JMH micro-benchmark output directory - generated result data + .gitkeep placeholder, no license header syntax -->
 					<exclude>**/jmh-results/**</exclude>
+					<exclude>**/src/test/resources/golden/**</exclude>
 				</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->

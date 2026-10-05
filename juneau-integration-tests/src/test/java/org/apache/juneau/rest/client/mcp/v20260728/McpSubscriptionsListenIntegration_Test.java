@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -135,14 +136,16 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 	 * is no push notification to await deterministically - only the real {@code activeCount} condition, polled on
 	 * a bounded schedule. Returns the last observed count once it reads {@code "0"} or the deadline elapses.
 	 */
-	@SuppressWarnings("java:S2925") // pacing delay between condition polls; no push notification exists for this rollup
+	@SuppressWarnings({
+		"java:S2925" // pacing delay between condition polls; no push notification exists for this rollup
+	})
 	private static String awaitActiveCountZero(McpClient client, long timeoutMs, long pollMs) throws Exception {
 		var deadline = System.currentTimeMillis() + timeoutMs;
 		String count;
 		do {
 			Thread.sleep(pollMs);
 			count = ((TextContent) client.callTool("activeCount", Map.of()).getContent().get(0)).getText();
-		} while (! "0".equals(count) && System.currentTimeMillis() < deadline);
+		} while (neq(count, "0") && System.currentTimeMillis() < deadline);
 		return count;
 	}
 
@@ -287,7 +290,7 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 				assertTrue(first.getData() != null && first.getData().contains("notifications/subscriptions/acknowledged"), first.getData());
 				while (reader.hasNext() && pingsSeen.getCount() > 0) {
 					var event = reader.next();
-					if ("ping".equals(event.getEvent())) {
+					if (eq(event.getEvent(), "ping")) {
 						assertNull(event.getData(), "a heartbeat frame must carry no data: payload");
 						pingsSeen.countDown();
 					}

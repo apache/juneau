@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1186", // Empty test method intentional for framework testing
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ReflectionUtils_Test extends TestBase {
 

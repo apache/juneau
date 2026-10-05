@@ -180,9 +180,9 @@ final class LegacyHttpResponseAdapter {
 
 		private static boolean isUriHeader(String name) {
 			return name != null && (
-				name.equalsIgnoreCase("Location")
-				|| name.equalsIgnoreCase("Content-Location")
-				|| name.equalsIgnoreCase("Referer"));
+				eqic(name, "Location")
+				|| eqic(name, "Content-Location")
+				|| eqic(name, "Referer"));
 		}
 
 		@Override

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -56,7 +58,7 @@ class AuthenticationException_Test extends TestBase {
 		var ex = new AuthenticationException("denied")
 			.wwwAuthenticate("Bearer realm=\"api\"");
 		var header = ex.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst()
 			.orElseThrow();
 		Assertions.assertEquals("Bearer realm=\"api\"", header.getValue());
@@ -67,7 +69,7 @@ class AuthenticationException_Test extends TestBase {
 			.wwwAuthenticate("Bearer realm=\"one\"")
 			.wwwAuthenticate("Bearer realm=\"two\"");
 		var matches = ex.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.toList();
 		Assertions.assertEquals(1, matches.size(), "expected one WWW-Authenticate header");
 		Assertions.assertEquals("Bearer realm=\"two\"", matches.get(0).getValue());

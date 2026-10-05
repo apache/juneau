@@ -53,6 +53,9 @@ import org.apache.juneau.rest.server.servlet.*;
 	},
 	resolveBodyVars="true"
 )
+@SuppressWarnings({
+	"java:S112" // throws Exception intentional - callback/lifecycle method
+})
 public class ConfigResource extends BasicRestServlet {
 	@Response
 	@Schema(description = "Section not found.")
@@ -181,9 +184,6 @@ public class ConfigResource extends BasicRestServlet {
 	 * @return The config as a map.
 	 * @throws Exception If parsing or loading fails.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public JsonMap setConfigContents(
 			@Content @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
@@ -208,9 +208,6 @@ public class ConfigResource extends BasicRestServlet {
 	 * @return The config as a map.
 	 * @throws Exception If parsing or loading fails.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public JsonMap setConfigContentsFormPost(
 			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
 		) throws Exception {
@@ -236,9 +233,6 @@ public class ConfigResource extends BasicRestServlet {
 	 * @return The updated section as a map.
 	 * @throws Exception If the update fails.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public JsonMap setConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Content @Schema(d="New contents of config section as a simple map of key/value pairs.")

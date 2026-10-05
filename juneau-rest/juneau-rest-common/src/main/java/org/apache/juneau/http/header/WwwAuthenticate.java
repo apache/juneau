@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -169,7 +168,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder scheme(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("scheme must not be blank");
@@ -232,7 +231,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 		 * @return This object.
 		 */
 		public Builder qop(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			return quotedParam("qop", String.join(",", values));
 		}
 
@@ -273,7 +272,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 		 * @return This object.
 		 */
 		public Builder domain(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			return quotedParam("domain", String.join(" ", values));
 		}
 
@@ -323,19 +322,19 @@ public class WwwAuthenticate extends HttpStringHeader {
 		}
 
 		private Builder quotedParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			params.put(cleanName(name), q(value));
 			return this;
 		}
 
 		private Builder tokenParam(String name, String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			params.put(cleanName(name), value);
 			return this;
 		}
 
 		private static String cleanName(String name) {
-			assertArgNotNull("name", name);
+			reqnn("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("auth-param name must not be blank");

@@ -37,12 +37,11 @@ import org.apache.juneau.commons.lang.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_x0000)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., CONST_x0000)
+	"java:S3776", // encodeElementNameInner(), encodeAttrName(), encodeText() and findNamespace() apply XML name/text escaping and namespace rules char-by-char in one pass
+	"resource" // Resource management handled externally
 })
 public class XmlUtils {
-
-	private static final String CONST_x0000 = "_x0000_";
 
 	/**
 	 * Prevents instantiation.
@@ -149,12 +148,9 @@ public class XmlUtils {
 	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML attribute name encoding
-	})
 	public static Writer encodeAttrName(Writer w, Object value) throws IOException {
 		if (value == null)
-			return w.append(CONST_x0000);
+			return w.append("_x0000_");
 		var s = value.toString();
 
 		if (needsAttrNameEncoding(s)) {
@@ -201,13 +197,10 @@ public class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML attribute value encoding
-	})
 	public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {
 		try {
 			if (value == null)
-				return w.append(CONST_x0000);
+				return w.append("_x0000_");
 			var s = value.toString();
 			if (s.isEmpty())
 				return w;
@@ -248,7 +241,7 @@ public class XmlUtils {
 	 */
 	public static String encodeElementName(Object value) {
 		if (value == null)
-			return CONST_x0000;
+			return "_x0000_";
 		var s = value.toString();
 		if (s.isEmpty())
 			return "_xE000_";
@@ -277,7 +270,7 @@ public class XmlUtils {
 	public static Writer encodeElementName(Writer w, Object value) {
 		try {
 			if (value == null)
-				return w.append(CONST_x0000);
+				return w.append("_x0000_");
 			var s = value.toString();
 			if (needsElementNameEncoding(s))
 				return encodeElementNameInner(w, s);
@@ -308,14 +301,11 @@ public class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML text encoding
-	})
 	public static Writer encodeText(Writer w, Object value, boolean trim, boolean preserveWhitespace) {
 
 		try {
 			if (value == null)
-				return w.append(CONST_x0000);
+				return w.append("_x0000_");
 			var s = value.toString();
 			if (s.isEmpty())
 				return w.append("_xE000_");
@@ -356,7 +346,7 @@ public class XmlUtils {
 	 */
 	public static String escapeText(Object value) {
 		if (value == null)
-			return CONST_x0000;
+			return "_x0000_";
 		var s = value.toString();
 
 		try {
@@ -455,9 +445,6 @@ public class XmlUtils {
 	}
 
 	// Converts an integer to a hexadecimal string padded to 4 places.
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for hex character padding
-	})
 	private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
 		for (var c : toHex4(num))
@@ -465,9 +452,6 @@ public class XmlUtils {
 		return out.append('_');
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML element name encoding
-	})
 	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
@@ -503,9 +487,6 @@ public class XmlUtils {
 		return w;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML namespace resolution
-	})
 	private static Namespace findNamespace(String prefix, String ns, List<Xml> xmls, List<XmlSchema> schemas) {
 
 		// If both prefix and namespace specified, use that Namespace mapping.

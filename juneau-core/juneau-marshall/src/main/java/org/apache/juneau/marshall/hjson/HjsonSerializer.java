@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.hjson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -114,12 +114,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // Depth comes from the Serializer -> WriterSerializer base chain shared by all text-format serializers
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvider, RecordWritable {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -158,7 +158,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useMultilineStrings = copyFrom.useMultilineStrings;
 			useQuotelessStrings = copyFrom.useQuotelessStrings;
 			useQuotelessKeys = copyFrom.useQuotelessKeys;
@@ -167,7 +167,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 		}
 
 		protected Builder(HjsonSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useMultilineStrings = copyFrom.useMultilineStrings;
 			useQuotelessStrings = copyFrom.useQuotelessStrings;
 			useQuotelessKeys = copyFrom.useQuotelessKeys;

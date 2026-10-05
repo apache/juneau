@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.rrpc;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -41,14 +40,10 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class RrpcRestOpSession extends RestOpSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_session = "session";
 
 	/**
 	 * Builder class.
@@ -66,7 +61,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RrpcRestOpContext ctx, RestSession session) {
-			super(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
+			super(reqnn("ctx", ctx), reqnn("session", session));
 			this.ctx2 = ctx;
 		}
 
@@ -87,7 +82,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RrpcRestOpContext ctx, RestSession session) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
+		return new Builder(reqnn("ctx", ctx), reqnn("session", session));
 
 	}
 
@@ -124,11 +119,11 @@ public class RrpcRestOpSession extends RestOpSession {
 
 		final Object o = res.hasContent() ? res.getContent(Object.class) : null;
 
-		if ("GET".equals(session.getMethod())) {
+		if (eq(session.getMethod(), "GET")) {
 			res.setContent(ctx.getMeta().getMethodsByPath().keySet());
 			return;
 
-		} else if ("POST".equals(session.getMethod())) {
+		} else if (eq(session.getMethod(), "POST")) {
 			// The method-signature path is whatever remains of the URL below this operation's matched path
 			// pattern (e.g. pattern "/calc/*" matched against "/calc/add/(int,int)" leaves "add/(int,int)"),
 			// NOT merely the last '/'-delimited segment of the full request path. A method-signature path

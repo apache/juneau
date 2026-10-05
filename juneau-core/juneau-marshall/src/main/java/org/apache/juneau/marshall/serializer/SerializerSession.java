@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -75,42 +74,15 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"rawtypes",   // Raw types necessary for generic type handling throughout serializer session
-	"unchecked", // Type erasure requires unchecked casts throughout serializer session
-	"resource",  // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
-	"java:S6539" // Monster class; SerializerSession is intentionally the core per-run serialization session base, aggregating traversal/formatting state
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // create() returning Builder<?> and getExpectedRootType()/push2() returning ClassMeta<?> intentionally expose wildcard types.
+	"java:S3776", // Branching is inherent to canIgnoreValue() and getBeanTypeName(), which check many null/empty/default combinations.
+	"java:S6539", // Monster class; SerializerSession is intentionally the core per-run serialization session base, aggregating traversal/formatting state
+	"rawtypes", // Raw types necessary for generic type handling throughout serializer session
+	"resource", // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts throughout serializer session
 })
 public class SerializerSession extends MarshallingTraverseSession {
-
-	// Property name constants
-	private static final String PROP_javaMethod = "javaMethod";
-	private static final String PROP_resolver = "resolver";
-	private static final String PROP_schema = "schema";
-	private static final String PROP_uriContext = "uriContext";
-	private static final String PROP_uriResolver = "uriResolver";
-	private static final String PROP_keepNullProperties = "keepNullProperties";
-	private static final String PROP_nonDefault = "nonDefault";
-	private static final String PROP_trimStrings = "trimStrings";
-	private static final String PROP_addBeanTypes = "addBeanTypes";
-	private static final String PROP_addRootType = "addRootType";
-	private static final String PROP_sortCollections = "sortCollections";
-	private static final String PROP_sortMaps = "sortMaps";
-	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
-	private static final String PROP_trimEmptyMaps = "trimEmptyMaps";
-	private static final String PROP_SerializerSession_javaMethod = "SerializerSession.javaMethod";
-	private static final String PROP_SerializerSession_resolver = "SerializerSession.resolver";
-	private static final String PROP_SerializerSession_schema = "SerializerSession.schema";
-	private static final String PROP_SerializerSession_uriContext = "SerializerSession.uriContext";
-	private static final String PROP_SerializerSession_keepNullProperties = "SerializerSession.keepNullProperties";
-	private static final String PROP_SerializerSession_nonDefault = "SerializerSession.nonDefault";
-	private static final String PROP_SerializerSession_trimStrings = "SerializerSession.trimStrings";
-	private static final String PROP_SerializerSession_addBeanTypes = "SerializerSession.addBeanTypes";
-	private static final String PROP_SerializerSession_addRootType = "SerializerSession.addRootType";
-	private static final String PROP_SerializerSession_sortCollections = "SerializerSession.sortCollections";
-	private static final String PROP_SerializerSession_sortMaps = "SerializerSession.sortMaps";
-	private static final String PROP_SerializerSession_trimEmptyCollections = "SerializerSession.trimEmptyCollections";
-	private static final String PROP_SerializerSession_trimEmptyMaps = "SerializerSession.trimEmptyMaps";
 
 	/**
 	 * Builder class.
@@ -119,8 +91,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingTraverseSession.Builder<SELF> {
-
-		private static final String ARG_ctx = "ctx";
 
 		private HttpPartSchema schema;
 		private Method javaMethod;
@@ -144,7 +114,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getResponseContentType());
 			uriContext = ctx.getUriContext();
@@ -185,31 +155,31 @@ public class SerializerSession extends MarshallingTraverseSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_javaMethod, PROP_SerializerSession_javaMethod:
+				case "javaMethod", "SerializerSession.javaMethod":
 					return javaMethod(cvt(value, Method.class));
-				case PROP_resolver, PROP_SerializerSession_resolver:
+				case "resolver", "SerializerSession.resolver":
 					return resolver(cvt(value, VarResolverSession.class));
-				case PROP_schema, PROP_SerializerSession_schema:
+				case "schema", "SerializerSession.schema":
 					return schema(cvt(value, HttpPartSchema.class));
-				case PROP_uriContext, PROP_SerializerSession_uriContext:
+				case "uriContext", "SerializerSession.uriContext":
 					return uriContext(cvt(value, UriContext.class));
-				case PROP_keepNullProperties, PROP_SerializerSession_keepNullProperties:
+				case "keepNullProperties", "SerializerSession.keepNullProperties":
 					return keepNullProperties(cvt(value, Boolean.class));
-				case PROP_nonDefault, PROP_SerializerSession_nonDefault:
+				case "nonDefault", "SerializerSession.nonDefault":
 					return nonDefault(cvt(value, Boolean.class));
-				case PROP_trimStrings, PROP_SerializerSession_trimStrings:
+				case "trimStrings", "SerializerSession.trimStrings":
 					return trimStrings(cvt(value, Boolean.class));
-				case PROP_addBeanTypes, PROP_SerializerSession_addBeanTypes:
+				case "addBeanTypes", "SerializerSession.addBeanTypes":
 					return addBeanTypes(cvt(value, Boolean.class));
-				case PROP_addRootType, PROP_SerializerSession_addRootType:
+				case "addRootType", "SerializerSession.addRootType":
 					return addRootType(cvt(value, Boolean.class));
-				case PROP_sortCollections, PROP_SerializerSession_sortCollections:
+				case "sortCollections", "SerializerSession.sortCollections":
 					return sortCollections(cvt(value, Boolean.class));
-				case PROP_sortMaps, PROP_SerializerSession_sortMaps:
+				case "sortMaps", "SerializerSession.sortMaps":
 					return sortMaps(cvt(value, Boolean.class));
-				case PROP_trimEmptyCollections, PROP_SerializerSession_trimEmptyCollections:
+				case "trimEmptyCollections", "SerializerSession.trimEmptyCollections":
 					return trimEmptyCollections(cvt(value, Boolean.class));
-				case PROP_trimEmptyMaps, PROP_SerializerSession_trimEmptyMaps:
+				case "trimEmptyMaps", "SerializerSession.trimEmptyMaps":
 					return trimEmptyMaps(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -403,11 +373,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
-	})
 	public static Builder<?> create(Serializer ctx) {
-		return new DefaultBuilder(assertArgNotNull("ctx", ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -546,9 +513,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for value ignore logic with multiple conditions
-	})
 	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
 		if (value == null && ! isKeepNullProperties())
@@ -695,8 +659,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return <jk>true</jk> if the values are equal under the {@code nonDefault} contract.
 	 */
 	@SuppressWarnings({
-		"java:S1244", // Float equality is intentional: caller has already narrowed to numeric short-circuit; BigDecimal compareTo handles the value-equality semantics.
-		"java:S3776"  // Cognitive complexity acceptable for the numeric/NaN value-equality logic.
+		"java:S1244" // Float equality is intentional: caller has already narrowed to numeric short-circuit; BigDecimal compareTo handles the value-equality semantics.
 	})
 	private static boolean defaultEquals(Object a, Object b) {
 		if (a == b)
@@ -781,9 +744,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param consumer The entry consumer.
 	 * @since 9.2.1
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for streamable-entry dispatch logic
-	})
 	public final void forEachStreamableEntry(Object o, ClassMeta<?> type, Consumer consumer) {
 		if (o == null)
 			return;
@@ -1282,8 +1242,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
 	@SuppressWarnings({
-		"null",       // Null analysis handled by runtime checks
-		"java:S3776"  // Cognitive complexity acceptable for type name resolution logic
+		"null" // Null analysis handled by runtime checks
 	})
 	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
@@ -1337,9 +1296,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk> unless root typing is enabled, in which case the generic {@link Object} type is returned).
 	 * @return The expected type, or <jk>null</jk> if the object was <jk>null</jk> and root typing is disabled.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - ClassMeta<?> for root type metadata
-	})
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
 		if (isAddRootType())
 			return object();
@@ -1566,7 +1522,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	@Override /* Overridden from MarshallingTraverseSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_uriResolver, uriResolver);
+			.a("uriResolver", uriResolver);
 	}
 
 	/**
@@ -1583,9 +1539,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	once (since they can be expensive).
 	 * @throws SerializeException If recursion occurred.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - ClassMeta<?> for push stack metadata
-	})
 	protected final ClassMeta<?> push2(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
 		try {
 			return super.push(attrName, o, eType);

@@ -33,8 +33,9 @@ import jakarta.servlet.*;
  * the existing {@code MockServletRequest_Coverage_Test} (which focuses on
  * {@code applyOverrides}).
  */
-// MockRestClient instances are short-lived test fixtures; the mock framework manages lifecycle.
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // MockRestClient instances are short-lived test fixtures; the mock framework manages lifecycle.
+})
 class MockServletRequest_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

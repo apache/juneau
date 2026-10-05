@@ -45,12 +45,16 @@ import org.apache.juneau.marshall.xml.*;
  * @param <SELF> The self type for fluent setters.
  */
 @org.apache.juneau.marshall.html.Html(format = XML)
-@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+@SuppressWarnings({
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+})
 public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 
 	private java.util.Map<String,Object> attrs;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // (SELF) this is the CRTP self-cast; SELF is bounded by HtmlElement<SELF>
+	})
 	protected final SELF self() {
 		return (SELF) this;
 	}
@@ -103,7 +107,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 		if (val == null)
 			attrs.remove(key);
 		else {
-			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+			if (eqa(key, "url", "href") || key.endsWith("action"))
 				val = toUri(val);
 			attrs.put(key, val);
 		}
@@ -1061,7 +1065,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 		if (nn(value)) {
 			value.entrySet().forEach(x -> {
 				var key = x.getKey();
-				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+				if (eqa(key, "url", "href") || key.endsWith("action"))
 					x.setValue(toUri(x.getValue()));
 			});
 		}

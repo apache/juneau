@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.math.*;
@@ -48,7 +48,9 @@ public class MsgPackTokenWriter implements TokenWriter {
 	 *
 	 * @param walk The {@link PojoWalker.Options walk options} used by {@link #object(Object)}.
 	 */
-	@SuppressWarnings("javadoc")
+	@SuppressWarnings({
+		"javadoc" // Record components are documented in the enclosing Javadoc; per-component tags are omitted.
+	})
 	public record Settings(PojoWalker.Options walk) {
 
 		/** Default canonical setting: default walk options. */
@@ -93,8 +95,8 @@ public class MsgPackTokenWriter implements TokenWriter {
 	}
 
 	private MsgPackTokenWriter(OutputStream out, Closeable owned, Settings settings) {
-		assertArgNotNull("out", out);
-		assertArgNotNull("settings", settings);
+		reqnn("out", out);
+		reqnn("settings", settings);
 		this.finalOut = out;
 		this.owned = owned;
 		this.settings = settings;
@@ -162,7 +164,7 @@ public class MsgPackTokenWriter implements TokenWriter {
 	@Override /* TokenWriter */
 	public TokenWriter fieldName(String name) throws IOException {
 		assertOpen();
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		if (isMapStack.isEmpty() || !isTrue(isMapStack.peek()))
 			throw new IllegalStateException("field called outside an object");
 		if (!isTrue(awaitingKey.peek()))

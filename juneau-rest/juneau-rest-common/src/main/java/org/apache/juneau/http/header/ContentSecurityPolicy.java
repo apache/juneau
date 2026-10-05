@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -210,9 +209,6 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 	 *
 	 * @since 10.0.0
 	 */
-	@SuppressWarnings({
-		"java:S115" // Source-keyword constants mirror external CSP literals exactly (e.g. 'self', 'none').
-	})
 	public static class Builder {
 
 		//--------------------------------------------------------------------------------------------------------------
@@ -251,7 +247,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code token} is <jk>null</jk> or blank.
 		 */
 		public static String nonce(String token) {
-			assertArgNotNull("token", token);
+			reqnn("token", token);
 			if (token.trim().isEmpty())
 				throw iaex("nonce token must not be blank");
 			return "'nonce-" + token + "'";
@@ -265,7 +261,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code scheme} is <jk>null</jk> or blank.
 		 */
 		public static String scheme(String scheme) {
-			assertArgNotNull("scheme", scheme);
+			reqnn("scheme", scheme);
 			var s = scheme.trim();
 			if (s.isEmpty())
 				throw iaex("scheme must not be blank");
@@ -281,8 +277,8 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * @throws IllegalArgumentException If either argument is <jk>null</jk> or blank.
 		 */
 		public static String hash(String algorithm, String base64Hash) {
-			assertArgNotNull("algorithm", algorithm);
-			assertArgNotNull("base64Hash", base64Hash);
+			reqnn("algorithm", algorithm);
+			reqnn("base64Hash", base64Hash);
 			if (algorithm.trim().isEmpty())
 				throw iaex("hash algorithm must not be blank");
 			if (base64Hash.trim().isEmpty())
@@ -316,7 +312,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code nonce} is <jk>null</jk>.
 		 */
 		public static String resolveNonce(String policyValue, String nonce) {
-			assertArgNotNull("nonce", nonce);
+			reqnn("nonce", nonce);
 			if (policyValue == null)
 				return null;
 			return policyValue.replace(NONCE_PLACEHOLDER, nonce);
@@ -495,7 +491,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 		 */
 		public Builder directive(String name, String...sources) {
-			assertArgNotNull("name", name);
+			reqnn("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("directive name must not be blank");

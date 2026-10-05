@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.vars;
 
 import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.http.response.*;
@@ -88,9 +89,9 @@ public class FileVar extends DefaultingVar {
 		if (s == null)
 			return null;
 		String subType = getFileExtension(key);
-		if ("html".equals(subType) || "xhtml".equals(subType) || "xml".equals(subType))
+		if (eqa(subType, "html", "xhtml", "xml"))
 			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-		else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
+		else if (eqa(subType, "json", "javascript", "css"))
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
 	}

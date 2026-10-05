@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -67,8 +68,8 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void a01_contractVersionPinnedToCurrent() throws Exception {
 		var body = viewsJs();
-		assertTrue(body.contains("JUNEAU_VIEW_CONTRACT_VERSION = \"4\""), body);
-		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
+		assertTrue(body.contains("JUNEAU_VIEW_CONTRACT_VERSION = \"5\""), body);
+		assertEquals("5", ViewsMixin.CONTRACT_VERSION);
 	}
 
 	@Test void a02_defaultCsrfHeaderMatchesTheServerBoundary() throws Exception {
@@ -393,9 +394,8 @@ class ViewsJs_RowActions_Test extends TestBase {
 	@Test void b02_literalEndpointWithNoTokenIsPreservedByteIdentical_backwardCompat() {
 		var r = report();
 		// With rowData, without rowData, and via the pre-J0509 4-argument call signature - all three unaffected.
-		assertEquals("servlet:/incidents/ack", r.get("literal_withRowData"));
-		assertEquals("servlet:/incidents/ack", r.get("literal_noRowData"));
-		assertEquals("servlet:/incidents/ack", r.get("literal_preFeatureCallSignature"));
+		assertBean(r, "literal_withRowData,literal_noRowData,literal_preFeatureCallSignature",
+			"servlet:/incidents/ack,servlet:/incidents/ack,servlet:/incidents/ack");
 	}
 
 	@Test void b03_noIdOrNullIdRowRefusesTheSubmission_WORK_J0521_B1b() {
@@ -413,8 +413,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	/** Common assertion shape for a buildActionRequest refusal marker: refuse===true, the named reason, no `url`. */
 	private static void assertRefusal(Map<?,?> marker, String reason) {
-		assertEquals(true, marker.get("refuse"), marker::toString);
-		assertEquals(reason, marker.get("reason"), marker::toString);
+		assertBean(marker, "refuse,reason", "true," + reason);
 		assertFalse(marker.containsKey("url"), marker::toString);
 	}
 
@@ -430,24 +429,19 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void b06_nullOrUndefinedEndpointIsReturnedAsIs_neverStringified() {
 		var r = report();
-		assertNull(r.get("nullEndpoint_helper"));
-		assertEquals(true, r.get("undefinedEndpointIsUndefined_helper"));
+		assertBean(r, "nullEndpoint_helper,undefinedEndpointIsUndefined_helper", "<null>,true");
 	}
 
 	@Test void b07_refusalNeverReachesSubstitution() {
 		var r = report();
-		assertEquals(true, ((Map<?,?>) r.get("refusal_safeMethod")).get("refuse"));
-		assertEquals("safe-method", ((Map<?,?>) r.get("refusal_safeMethod")).get("reason"));
-		assertEquals(true, ((Map<?,?>) r.get("refusal_blankToken")).get("refuse"));
-		assertEquals("missing-token", ((Map<?,?>) r.get("refusal_blankToken")).get("reason"));
-		assertFalse(((Map<?,?>) r.get("refusal_safeMethod")).containsKey("url"));
-		assertFalse(((Map<?,?>) r.get("refusal_blankToken")).containsKey("url"));
+		// Same refuse/reason/no-url shape assertRefusal checks, applied to two distinct markers.
+		assertRefusal((Map<?,?>) r.get("refusal_safeMethod"), "safe-method");
+		assertRefusal((Map<?,?>) r.get("refusal_blankToken"), "missing-token");
 	}
 
 	@Test void b08_substituteRowActionEndpointHelperDirect() {
 		var r = report();
-		assertEquals("/x/a1", r.get("helper_direct"));
-		assertEquals("/x/ack", r.get("helper_noToken"));
+		assertBean(r, "helper_direct,helper_noToken", "/x/a1,/x/ack");
 	}
 
 	@Test void b09_gracefullyDegradesButRefusesATemplatedEndpoint_whenRendersJsIsNotLoaded_WORK_J0521_S5() {
@@ -459,9 +453,8 @@ class ViewsJs_RowActions_Test extends TestBase {
 		// non-templated (literal) endpoint still fires byte-identical - shipping juneau-views.js alone remains
 		// fully backward compatible for every endpoint that has no `{property}` token at all.
 		var r = reportNoRendersJs();
-		assertEquals(false, r.get("hasInterpolateHref"));
+		assertBean(r, "hasInterpolateHref,literal_withRowData", "false,servlet:/incidents/ack");
 		assertRefusal((Map<?,?>) r.get("idTemplate_resolved"), "unresolved-endpoint");
-		assertEquals("servlet:/incidents/ack", r.get("literal_withRowData"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

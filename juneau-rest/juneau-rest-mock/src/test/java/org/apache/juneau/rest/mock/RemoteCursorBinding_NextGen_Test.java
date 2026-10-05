@@ -38,6 +38,9 @@ import org.junit.jupiter.api.*;
  * directly-set request body.  Each test builds a next-generation client configured with a JSON parser so the
  * inbound cursor parser is negotiated from the response {@code Content-Type}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources are owned by the caller or the surrounding framework/lifecycle; closing is handled elsewhere.
+})
 class RemoteCursorBinding_NextGen_Test {
 
 	public static class Bean {
@@ -80,9 +83,6 @@ class RemoteCursorBinding_NextGen_Test {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
-	})
 	void a01_recordReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
 				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
@@ -96,9 +96,6 @@ class RemoteCursorBinding_NextGen_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
-	})
 	void a02_tokenReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
 				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
@@ -112,9 +109,6 @@ class RemoteCursorBinding_NextGen_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
-	})
 	void a03_concreteCursorReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
 				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
@@ -131,9 +125,6 @@ class RemoteCursorBinding_NextGen_Test {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close.
-	})
 	void b01_recordStreamBody_record() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
 				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
@@ -151,9 +142,6 @@ class RemoteCursorBinding_NextGen_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close.
-	})
 	void b02_recordStreamBody_token() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
 				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
@@ -180,9 +168,6 @@ class RemoteCursorBinding_NextGen_Test {
 	// ==========================================================================
 
 	@Test
-	@SuppressWarnings({
-		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close.
-	})
 	void c01_streamBodyEntity_direct() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
 			try (var resp = client.post("/echo").streamBodyEntity(RecordStreamBody.records(w -> {

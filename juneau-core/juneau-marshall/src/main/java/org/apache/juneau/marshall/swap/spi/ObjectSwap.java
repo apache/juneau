@@ -103,9 +103,10 @@ import org.apache.juneau.marshall.serializer.*;
  * @param <S> The swapped form of the class.
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
+	"java:S112", // throws Exception intentional - callback/lifecycle method for user implementations
+	"java:S1452", // Wildcard required - ObjectSwap<T,?>, ClassMeta<?> for fluent API and swap metadata
 	"rawtypes", // Raw types necessary for generic type handling
-	"java:S1452"  // Wildcard required - ObjectSwap<T,?>, ClassMeta<?> for fluent API and swap metadata
+	"unchecked" // Type erasure requires unchecked casts
 })
 public abstract class ObjectSwap<T,S> {
 
@@ -333,9 +334,6 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The transformed object.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
-	})
 	public S swap(MarshallingSession session, T o, String template) throws Exception {
 		throw new SerializeException("Swap method not implemented on ObjectSwap '%s'", cn(this));
 	}
@@ -360,9 +358,6 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The narrowed object.
 	 * @throws Exception If this method is not implemented.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
-	})
 	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint) throws Exception {
 		return unswap(session, f, hint, template);
 	}
@@ -384,9 +379,6 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The transformed object.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
-	})
 	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint, String template) throws Exception {
 		throw new ParseException("Unswap method not implemented on ObjectSwap '%s'", cn(this));
 	}

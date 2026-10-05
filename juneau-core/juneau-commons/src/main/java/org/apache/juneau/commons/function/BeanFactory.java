@@ -80,6 +80,7 @@ public interface BeanFactory<T> {
 	 * {@code @BeanProp(factory=...)} when no factory is specified.
 	 */
 	@SuppressWarnings({
+		"java:S9398", // Public API annotation-default sentinel; moving it breaks adopters.
 		"rawtypes" // Raw type required for use as annotation sentinel
 	})
 	final class Void implements BeanFactory {

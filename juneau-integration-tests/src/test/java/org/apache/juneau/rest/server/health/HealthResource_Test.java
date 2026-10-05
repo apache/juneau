@@ -17,11 +17,13 @@
 package org.apache.juneau.rest.server.health;
 
 import static java.util.EnumSet.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -82,9 +84,12 @@ class HealthResource_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_healthzReturns503WhenAnyComponentDown() throws Exception {
-		c.get("/health/healthz").accept("application/json").run()
-			.assertStatus(503)
+		var r = c.get("/health/healthz").accept("application/json").run().cacheContent();
+		r.assertStatus(503)
 			.assertContent().asString().isContains("\"status\":\"DOWN\"");
+		// Each named indicator is its own bean: db is UP, cache is DOWN.
+		var components = JsonMap.ofString(r.getContent().asString()).getMap("components");
+		assertBean(components, "db{status},cache{status}", "{UP},{DOWN}");
 	}
 
 	@Test void a02_livezAndReadyzFilterByProbeType() throws Exception {

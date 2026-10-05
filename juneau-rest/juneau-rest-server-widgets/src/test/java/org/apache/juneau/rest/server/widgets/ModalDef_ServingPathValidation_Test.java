@@ -273,7 +273,7 @@ class ModalDef_ServingPathValidation_Test extends TestBase {
 		assertEquals(checked, unchecked);
 	}
 
-	@Test void h2_jsonOf_malformedModal_stillSucceeds_notTheSerializerLevelGate() throws Exception {
+	@Test void h2_jsonOf_malformedModal_stillSucceeds_notTheSerializerLevelGate() {
 		// A ResponseProcessor never runs for Json.of(...): this is the pin that this item did not accidentally
 		// become the serializer-level gate the design rejected (design doc fork F12(f), section 4.3(d)).  It is
 		// deliberately uncomfortable to read, exactly like WORK-J0520's own (f1).

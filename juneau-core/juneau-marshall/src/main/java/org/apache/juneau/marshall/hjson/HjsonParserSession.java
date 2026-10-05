@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.hjson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -34,16 +33,14 @@ import org.apache.juneau.marshall.stream.*;
  * Session for parsing Hjson format into POJOs.
  */
 @SuppressWarnings({
-	"java:S110",  // Inheritance depth acceptable for parser session hierarchy
-	"java:S115",  // ARG_ctx follows project assertion-param naming convention
+	"java:S110", // Inheritance depth acceptable for parser session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for Hjson parse logic
 	"java:S6541", // Acceptable for session implementation
-	"unchecked",  // (T) casts in doRead for generic return type
-	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // (T) casts in doRead for generic return type
 })
 public class HjsonParserSession extends ReaderParserSession implements RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for Hjson parser session.
@@ -51,7 +48,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		protected Builder(HjsonParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -68,7 +65,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * @return The builder.
 	 */
 	public static Builder create(HjsonParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	protected HjsonParserSession(Builder builder) {

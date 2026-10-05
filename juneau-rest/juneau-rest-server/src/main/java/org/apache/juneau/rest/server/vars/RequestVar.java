@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.vars;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import org.apache.juneau.commons.svl.*;
@@ -87,32 +88,32 @@ public class RequestVar extends MultipartResolvingVar {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		char c = charAt(key, 0);
 		if (c == 'a') {
-			if ("authorityPath".equals(key))
+			if (eq(key, "authorityPath"))
 				return req.getAuthorityPath();
 		} else if (c == 'c') {
-			if ("contextPath".equals(key))
+			if (eq(key, "contextPath"))
 				return req.getContextPath();
 		} else if (c == 'm') {
-			if ("method".equals(key))
+			if (eq(key, "method"))
 				return req.getMethod();
 		} else if (c == 'p') {
-			if ("pathInfo".equals(key))
+			if (eq(key, "pathInfo"))
 				return req.getPathInfo();
 		} else if (c == 'r') {
-			if ("requestParentURI".equals(key))
+			if (eq(key, "requestParentURI"))
 				return req.getUriContext().getRootRelativePathInfoParent();
-			if ("requestURI".equals(key))
+			if (eq(key, "requestURI"))
 				return req.getRequestURI();
 		} else if (c == 's') {
-			if ("servletClass".equals(key))
+			if (eq(key, "servletClass"))
 				return req.getContext().getResourceClass().getName();
-			if ("servletClassSimple".equals(key))
+			if (eq(key, "servletClassSimple"))
 				return req.getContext().getResourceClass().getSimpleName();
-			if ("servletParentURI".equals(key))
+			if (eq(key, "servletParentURI"))
 				return req.getUriContext().getRootRelativeServletPathParent();
-			if ("servletPath".equals(key))
+			if (eq(key, "servletPath"))
 				return req.getServletPath();
-			if ("servletURI".equals(key))
+			if (eq(key, "servletURI"))
 				return req.getUriContext().getRootRelativeServletPath();
 		}
 		return req.getAttributes().get(key).asString().orElse(null);

@@ -31,7 +31,8 @@ import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class HttpPartSchema_Path_Test extends TestBase {
 
@@ -82,9 +83,6 @@ class HttpPartSchema_Path_Test extends TestBase {
 	}
 
 	public static class A03 {
-		@SuppressWarnings({
-			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
-		})
 		public void a(
 				@Path("x")
 				@Schema(
@@ -119,9 +117,6 @@ class HttpPartSchema_Path_Test extends TestBase {
 	}
 
 	public static class A04 {
-		@SuppressWarnings({
-			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
-		})
 		public void a(
 				@Path("y")
 				@Schema(
@@ -679,9 +674,6 @@ class HttpPartSchema_Path_Test extends TestBase {
 	}
 
 	public static class E04 {
-		@SuppressWarnings({
-			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
-		})
 		public void a(
 				@Path(name = "logger", def = "") String loggerName,
 				@Path(name = "level", def = "INFO") String levelName

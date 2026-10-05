@@ -37,21 +37,13 @@ import org.apache.juneau.rest.server.util.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_contextPath)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class MockPathResolver {
 
-	// Property name constants
-	private static final String PROP_contextPath = "contextPath";
-	private static final String PROP_error = "error";
-	private static final String PROP_remainder = "remainder";
-	private static final String PROP_servletPath = "servletPath";
-	private static final String PROP_target = "target";
-	private static final String PROP_uri = "uri";
-
 	private static String fixSegment(String s, Map<String,Object> pathVars) {
 		s = formatNamed(emptyIfNull(s), pathVars);
-		if (s.isEmpty() || s.equals("/"))
+		if (s.isEmpty() || eq(s, "/"))
 			return "";
 		s = trimTrailingSlashes(s);
 		if (s.charAt(0) != '/')
@@ -137,12 +129,12 @@ public class MockPathResolver {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_contextPath, contextPath)
-			.a(PROP_error, error)
-			.a(PROP_remainder, remainder)
-			.a(PROP_servletPath, servletPath)
-			.a(PROP_target, target)
-			.a(PROP_uri, uri);
+			.a("contextPath", contextPath)
+			.a("error", error)
+			.a("remainder", remainder)
+			.a("servletPath", servletPath)
+			.a("target", target)
+			.a("uri", uri);
 		// @formatter:on
 	}
 
@@ -153,7 +145,7 @@ public class MockPathResolver {
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S6541" // Single-threaded context; synchronization unnecessary
 	})
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 

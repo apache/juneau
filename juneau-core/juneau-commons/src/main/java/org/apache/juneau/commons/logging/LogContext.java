@@ -68,6 +68,9 @@ import java.util.*;
  * 	<li class='jc'>{@link LogRecordContext}
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Returns a Scope the caller must close via try-with-resources; Eclipse JDT @Owning warning is by design.
+})
 public final class LogContext {
 
 	/** The single shared instance.  There is exactly one thread-local map; sharing the instance is harmless. */
@@ -87,9 +90,6 @@ public final class LogContext {
 	 * @param value The entry value.  A <jk>null</jk> value removes the key for the scope's duration.
 	 * @return A scope that restores the prior state of this key on {@link Scope#close()}.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Returns a Scope the caller must close via try-with-resources; Eclipse JDT @Owning warning is by design.
-	})
 	public Scope with(String key, Object value) {
 		if (key == null)
 			throw iaex("Argument 'key' cannot be null.");
@@ -111,9 +111,6 @@ public final class LogContext {
 	 * 	<jk>null</jk> value removes that key for the scope's duration.
 	 * @return A scope that restores the prior state of all supplied keys on {@link Scope#close()}.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Returns a Scope the caller must close via try-with-resources; Eclipse JDT @Owning warning is by design.
-	})
 	public Scope with(Map<String,Object> entries) {
 		if (entries == null)
 			throw iaex("Argument 'entries' cannot be null.");

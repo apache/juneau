@@ -29,8 +29,8 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unchecked", // Cast from Object to List<String> in Csv.from tests
-	"resource"   // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+	"resource", // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+	"unchecked" // Cast from Object to List<String> in Csv.from tests
 })
 class Csv_Test extends TestBase{
 

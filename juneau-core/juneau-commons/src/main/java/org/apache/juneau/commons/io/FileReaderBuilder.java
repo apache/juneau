@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent builder for creating {@link Reader} instances from files with configurable character encoding.
@@ -80,13 +80,9 @@ import java.nio.file.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FileReaderBuilder {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_cs = "cs";
-	private static final String ARG_file = "file";
 
 	/**
 	 * Creates a new builder.
@@ -205,7 +201,7 @@ public class FileReaderBuilder {
 	public Reader build() throws FileNotFoundException {
 		if (allowNoFile && (file == null || ! file.exists()))
 			return new StringReader("");
-		assertArgNotNull(ARG_file, file);
+		reqnn("file", file);
 		return new InputStreamReader(new FileInputStream(file), cs != null ? cs : Charset.defaultCharset());
 	}
 
@@ -254,7 +250,7 @@ public class FileReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder charset(String cs) {
-		this.cs = Charset.forName(assertArgNotNull(ARG_cs, cs));
+		this.cs = Charset.forName(reqnn("cs", cs));
 		return this;
 	}
 

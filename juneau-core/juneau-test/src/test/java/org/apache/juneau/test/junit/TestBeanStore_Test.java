@@ -33,7 +33,9 @@ import org.junit.jupiter.api.*;
  * mechanism.  The framework wiring (Args.overridingParent, MockRestClient.overridingBeanStore)
  * is exercised by sibling tests; this test concentrates on the {@link TestBeanStore} surface.
  */
-@SuppressWarnings("resource")  // TestBeanStore instances are short-lived in-memory test fixtures; closing is irrelevant to these assertions.
+@SuppressWarnings({
+	"resource" // TestBeanStore instances are short-lived in-memory test fixtures; closing is irrelevant to these assertions.
+})
 class TestBeanStore_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

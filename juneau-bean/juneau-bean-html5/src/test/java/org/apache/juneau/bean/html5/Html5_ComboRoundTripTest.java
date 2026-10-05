@@ -30,7 +30,6 @@ import org.apache.juneau.*;
 /**
  * Exhaustive serialization tests for all the HTML5 DTOs.
  */
-@SuppressWarnings({})
 class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static final B btag = HtmlBuilder.b("bbb");

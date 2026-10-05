@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The body of a transport-layer request — a thin wrapper around {@link HttpBody} that gives transports a
@@ -50,7 +50,7 @@ public final class TransportBody {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static TransportBody of(HttpBody body) {
-		return new TransportBody(assertArgNotNull("body", body));
+		return new TransportBody(reqnn("body", body));
 	}
 
 	/**

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -111,7 +112,7 @@ class SamlAuthFilter_Test extends TestBase {
 		var f = SamlAuthFilter.create().validator(v).build();
 		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", b64)));
-		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void c02_validatorReturnsNull_throws() throws Exception {

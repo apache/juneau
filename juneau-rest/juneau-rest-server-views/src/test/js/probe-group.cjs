@@ -53,13 +53,13 @@ const out = {
 };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
-function idOf(el) { return el ? el.getAttribute('data-juneau-probe') : null; }
+function idOf(el) { return el ? (el.dataset.juneauProbe ?? null) : null; }
 
 function probe(id, status, opts) {
 	opts = opts || {};
 	const el = env.el('button');
 	el.className = 'jc-probe jc-probe-' + status + (opts.disabled ? ' is-disabled' : '');
-	el.setAttribute('data-juneau-probe', id);
+	el.dataset.juneauProbe = id;
 	if (opts.checked) el.setAttribute('aria-checked', 'true');
 	if (opts.disabled) el.setAttribute('aria-disabled', 'true');
 	el.textContent = opts.label || id;
@@ -69,7 +69,7 @@ function probe(id, status, opts) {
 function group(probes) {
 	const g = env.el('div');
 	g.className = 'jc-probe-group';
-	g.setAttribute('data-juneau-probe-group', '');
+	g.dataset.juneauProbeGroup = '';
 	probes.forEach(function (p) { g.appendChild(p); });
 	env.body.appendChild(g);
 	return g;
@@ -79,9 +79,9 @@ function group(probes) {
 // 1) Initial paint: role wiring, markup-declared selection, roving tabindex, no event on init.
 // ------------------------------------------------------------------------------------------------------------------
 
-const p1 = probe('ok', 'ok');
-const p2 = probe('warn', 'warn', { checked: true });
-const p3 = probe('fail', 'fail');
+const p1 = probe('ok', 'success');
+const p2 = probe('warn', 'warning', { checked: true });
+const p3 = probe('fail', 'error');
 const g1 = group([p1, p2, p3]);
 let events1 = [];
 const ctl1 = I.enhanceProbeGroup(g1, { onSelect: function (id) { events1.push(id); } });
@@ -116,8 +116,8 @@ out.reclick_stillSelected = idOf(ctl1.getSelected());
 // ------------------------------------------------------------------------------------------------------------------
 
 events1 = [];
-p3.className = 'jc-probe jc-probe-ok';   // app re-ran the probe: fail -> ok
-p1.className = 'jc-probe jc-probe-fail';
+p3.className = 'jc-probe jc-probe-success';   // app re-ran the probe: error -> success
+p1.className = 'jc-probe jc-probe-error';
 ctl1.repaint();
 out.repaint_selectedId = idOf(ctl1.getSelected());
 out.repaint_ariaChecked = [p1, p2, p3].map(function (p) { return p.getAttribute('aria-checked'); }).join(',');
@@ -127,9 +127,9 @@ out.repaint_eventCount = events1.length;
 // 4) Keyboard: Right/Down forward, Left/Up back (both wrap + skip disabled), Home/End to first/last enabled.
 // ------------------------------------------------------------------------------------------------------------------
 
-const q1 = probe('a', 'ok');
-const q2 = probe('b', 'warn', { disabled: true });
-const q3 = probe('c', 'fail');
+const q1 = probe('a', 'success');
+const q2 = probe('b', 'warning', { disabled: true });
+const q3 = probe('c', 'error');
 const g2 = group([q1, q2, q3]);
 let ev2 = [];
 const ctl2 = I.enhanceProbeGroup(g2, { onSelect: function (id) { ev2.push(id); } });
@@ -137,38 +137,38 @@ const ctl2 = I.enhanceProbeGroup(g2, { onSelect: function (id) { ev2.push(id); }
 out.kbd_initSelected = idOf(ctl2.getSelected());   // first enabled = 'a'
 
 env.setActive(q1); ev2 = [];
-g2.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });
 out.kbd_rightSkipsDisabled = idOf(ctl2.getSelected());   // 'c' (skips disabled 'b')
 out.kbd_rightEventId = ev2.length ? ev2[0] : null;
 out.kbd_rightFocus = env.getActive() === q3;
 
 env.setActive(q3);
-g2.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });
 out.kbd_rightWrap = idOf(ctl2.getSelected());   // wraps to 'a'
 
 env.setActive(q1);
-g2.dispatch('keydown', { key: 'ArrowLeft', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'ArrowLeft', preventDefault: function () { /* no-op */ } });
 out.kbd_leftWrap = idOf(ctl2.getSelected());   // wraps to 'c'
 
 env.setActive(q1);
-g2.dispatch('keydown', { key: 'ArrowDown', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'ArrowDown', preventDefault: function () { /* no-op */ } });
 out.kbd_downSameAsRight = idOf(ctl2.getSelected());   // 'c'
 
 env.setActive(q3);
-g2.dispatch('keydown', { key: 'ArrowUp', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'ArrowUp', preventDefault: function () { /* no-op */ } });
 out.kbd_upSameAsLeft = idOf(ctl2.getSelected());   // 'a'
 
 env.setActive(q3);
-g2.dispatch('keydown', { key: 'Home', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'Home', preventDefault: function () { /* no-op */ } });
 out.kbd_home = idOf(ctl2.getSelected());   // 'a'
 
 env.setActive(q1);
-g2.dispatch('keydown', { key: 'End', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'End', preventDefault: function () { /* no-op */ } });
 out.kbd_end = idOf(ctl2.getSelected());   // 'c'
 
 ev2 = [];
 const beforeUnhandled = idOf(ctl2.getSelected());
-g2.dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+g2.dispatch('keydown', { key: 'Enter', preventDefault: function () { /* no-op */ } });
 out.kbd_unhandledEventCount = ev2.length;
 out.kbd_unhandledUnchanged = idOf(ctl2.getSelected()) === beforeUnhandled;
 
@@ -199,9 +199,9 @@ out.imperative_unknownRejected = ctl2.select('nope') === false;
 // 7) Two groups are independent: selecting in one does not clear the other.
 // ------------------------------------------------------------------------------------------------------------------
 
-const r1 = probe('x', 'ok'); const r2 = probe('y', 'warn');
+const r1 = probe('x', 'success'); const r2 = probe('y', 'warning');
 const gA = group([r1, r2]);
-const s1 = probe('m', 'ok'); const s2 = probe('n', 'warn');
+const s1 = probe('m', 'success'); const s2 = probe('n', 'warning');
 const gB = group([s1, s2]);
 I.enhanceProbeGroup(gA);
 I.enhanceProbeGroup(gB);
@@ -218,12 +218,12 @@ const gE = group([]);
 const ctlE = I.enhanceProbeGroup(gE);
 out.empty_noSelected = ctlE.getSelected() === null;
 let emptyThrew = false;
-try { gE.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () {} }); }
-catch (e) { emptyThrew = true; }
+try { gE.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } }); }
+catch (error) { emptyThrew = true; }
 out.empty_keydownNoThrow = !emptyThrew;
 
-const t1 = probe('d1', 'ok', { disabled: true });
-const t2 = probe('d2', 'warn', { disabled: true });
+const t1 = probe('d1', 'success', { disabled: true });
+const t2 = probe('d2', 'warning', { disabled: true });
 const gD = group([t1, t2]);
 const ctlD = I.enhanceProbeGroup(gD);
 out.allDisabled_noSelected = ctlD.getSelected() === null;
@@ -236,7 +236,7 @@ out.allDisabled_ariaChecked = [t1, t2].map(function (p) { return p.getAttribute(
 
 out.idempotent_sameCtl = I.enhanceProbeGroup(g1) === ctl1;
 
-const w1 = probe('w1', 'ok', { checked: true }); const w2 = probe('w2', 'warn');
+const w1 = probe('w1', 'success', { checked: true }); const w2 = probe('w2', 'warning');
 const gW = group([w1, w2]);
 I.initProbeGroups(env.document);
 out.initAll_enhanced = !!gW._juneauProbeCtl;

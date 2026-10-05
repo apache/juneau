@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -43,17 +42,16 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"unchecked",
-	"java:S115",
-	"java:S125",  // Explanatory comments contain BSON/JSON syntax (e.g. {"value":x}) that Sonar misreads as commented-out code
-	"java:S3776",
-	"java:S6541",
-	"resource"    // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"java:S125", // Explanatory comments contain BSON/JSON syntax (e.g. {"value":x}) that Sonar misreads as commented-out code
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // readDocument() branches on map/bean/Optional/swap targets and element types in one pass
+	"java:S6541", // readDocument() is the single BSON document-to-object dispatch and is long by design
+	"rawtypes", // readDocument()/readArray() build raw Map and Collection instances whose element types are only known at runtime from ClassMeta
+	"resource", // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"unchecked" // (T) results of readDocument()/doRead() are built from the ClassMeta eType, so the cast matches the requested type
 })
 public class BsonParserSession extends InputStreamParserSession implements RecordReadable, ArrayRecordReadable {
 
-	private static final String ARG_ctx = "ctx";
 	private static final String BSON_VALUE_KEY = "value";
 
 	/**
@@ -71,7 +69,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			nullKeyString = ctx.getNullKeyString();
 			maxLength = ctx.getMaxLength();
 		}
@@ -90,7 +88,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	 * @return A new builder.
 	 */
 	public static Builder create(BsonParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final String nullKeyString;
@@ -125,8 +123,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				yield null;
 			}
 		};
-		// A byte[]-targeted string element is a BinaryFormat-encoded payload (TODO-353 write-side fix
-		// counterpart) rather than a literal string value - decode it back to bytes.
+		// A byte[]-targeted string element is a BinaryFormat-encoded payload (mirroring the serializer)
+		// rather than a literal string value - decode it back to bytes.
 		if (elementType == 0x02 && nn(targetType) && targetType.isByteArray()) {
 			var binaryFormat = getBinaryFormat();
 			if (binaryFormat != BinaryFormat.NOT_SET)
@@ -270,8 +268,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	}
 
 	@SuppressWarnings({
-		"unused",    // pMeta kept for API consistency with other readXxx methods
-		"java:S1172" // Same as above
+		"java:S1172", // pMeta kept for API consistency with other readXxx methods
+		"unused" // pMeta kept for API consistency with other readXxx methods
 	})
 	private Object readArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();

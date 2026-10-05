@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
@@ -70,17 +69,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Tag extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_description = "description";
-	private static final String PROP_externalDocs = "externalDocs";
-	private static final String PROP_name = "name";
 
 	private String name;
 	private String description;
@@ -115,11 +106,11 @@ public class Tag extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_name -> toType(getName(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case "name" -> toType(getName(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -158,9 +149,9 @@ public class Tag extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(externalDocs), PROP_externalDocs)
-			.addIf(nn(name), PROP_name)
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(name), "name")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -168,11 +159,11 @@ public class Tag extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Tag set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> setDescription(s(value));
-			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_name -> setName(s(value));
+			case "description" -> setDescription(s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "name" -> setName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

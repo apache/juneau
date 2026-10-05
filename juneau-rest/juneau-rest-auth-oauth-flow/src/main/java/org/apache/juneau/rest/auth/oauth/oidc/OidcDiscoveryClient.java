@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.auth.oauth.oidc;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -31,6 +30,7 @@ import com.nimbusds.oauth2.sdk.as.*;
 import com.nimbusds.oauth2.sdk.http.*;
 import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.openid.connect.sdk.op.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fetches a Juneau-native {@link OidcMetadata} record describing an authorization server, supporting both the RFC 8414
@@ -55,12 +55,9 @@ import com.nimbusds.openid.connect.sdk.op.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class OidcDiscoveryClient {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -89,7 +86,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull(ARG_value, value);
+			issuer = reqnn("value", value);
 			return this;
 		}
 
@@ -100,8 +97,8 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull(ARG_value, value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -113,7 +110,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -218,10 +215,7 @@ public class OidcDiscoveryClient {
 		var s = md.getScopes();
 		if (s == null)
 			return Collections.emptySet();
-		var out = new LinkedHashSet<String>();
-		for (var v : s.toStringList())
-			out.add(v);
-		return out;
+		return new LinkedHashSet<>(s.toStringList());
 	}
 
 	private static final Set<String> STANDARD_FIELDS = Set.of(

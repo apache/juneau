@@ -35,7 +35,9 @@ import org.junit.jupiter.api.*;
  * options, scalar value type dispatch (Date/Calendar/Temporal/Duration/Period/byte[]), and
  * bean property comments.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked" // Tests cast generic parsed values to typed Map/List for assertions
+})
 class PrototextSerializerSession_Test extends TestBase {
 
 	// Debug trace
@@ -480,8 +482,6 @@ class PrototextSerializerSession_Test extends TestBase {
 		c1.put("k", "alpha");
 		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
-		@SuppressWarnings({
-		})
 		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
 		var proto = PrototextSerializer.DEFAULT.write(bean);
@@ -497,8 +497,6 @@ class PrototextSerializerSession_Test extends TestBase {
 		c1.put("k", "alpha");
 		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
-		@SuppressWarnings({
-		})
 		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
 		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();

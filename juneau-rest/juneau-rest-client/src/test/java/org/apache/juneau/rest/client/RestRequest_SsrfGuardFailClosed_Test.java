@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Red-on-broken verification-gate test for the design's "unknown/caller-supplied {@link HttpTransport} fails
- * closed" requirement (see {@code TODO-392-remote-url-ssrf-resolved-address.md} "Test notes" and
+ * closed" requirement (see the "Test notes" of work item 392, remote URL SSRF resolved-address, and
  * {@link HttpTransport#supportsUrlPolicy()}).
  *
  * <p>
@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  * behavior (which had no such check and would have connected regardless) and pass now that
  * {@code RestRequest#run()} rejects policy-covered requests against it.
  */
+@SuppressWarnings({
+	"resource" // StubTransport (a Closeable HttpTransport) is passed to the try-with-resources RestClient that owns it
+})
 class RestRequest_SsrfGuardFailClosed_Test extends TestBase {
 
 	@Remote(path = "/api")
@@ -50,9 +53,6 @@ class RestRequest_SsrfGuardFailClosed_Test extends TestBase {
 		boolean executed;
 
 		@Override
-		@SuppressWarnings({
-			"resource" // Hands the built TransportResponse to the caller, mirroring the real HttpTransport.execute() contract; Eclipse JDT @Owning warning is by design.
-		})
 		public TransportResponse execute(TransportRequest request) {
 			executed = true;
 			return TransportResponse.builder().statusCode(200).body(new ByteArrayInputStream(new byte[0])).build();
@@ -60,9 +60,6 @@ class RestRequest_SsrfGuardFailClosed_Test extends TestBase {
 	}
 
 	@Test void a01_policyCoveredRequest_unknownTransport_failsClosed_beforeAnyExecute() throws Exception {
-		@SuppressWarnings({
-			"resource" // stub is closed transitively -- RestClient.close() (invoked by the try-with-resources below) delegates to transport.close().
-		})
 		var stub = new StubTransport();
 		try (var client = RestClient.builder().transport(stub).rootUrl("http://example.com").build()) {
 			var proxy = client.remote(TestApi.class);
@@ -78,9 +75,6 @@ class RestRequest_SsrfGuardFailClosed_Test extends TestBase {
 	}
 
 	@Test void a02_policyCoveredRequest_unknownTransport_allowPrivateUrls_bypassesFailClosed_andExecutes() throws Exception {
-		@SuppressWarnings({
-			"resource" // stub is closed transitively -- RestClient.close() (invoked by the try-with-resources below) delegates to transport.close().
-		})
 		var stub = new StubTransport();
 		try (var client = RestClient.builder().transport(stub).rootUrl("http://example.com").allowPrivateUrls(true).build()) {
 			// allowPrivateUrls(true) deactivates the guard entirely (isSsrfGuardActive() == false), so the

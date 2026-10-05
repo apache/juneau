@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "title": "Support Enablement Console",
+  "theme": { "name": "open" },
+  "header": {
+    "title": "Support Enablement Console",
+    "logo": { "src": "/img/sandbox-console-logo.svg", "href": "/", "alt": "Support Enablement Console" },
+    "chrome": true,
+    "slots": { "banner": "header.banner" }
+  },
+  "footer": { "text": "Sandbox Support Console" },
+  "nav": [
+    { "id": "home", "label": "Home", "href": "/home", "children": [
+      { "id": "about", "label": "About", "href": "/home/about" },
+      { "id": "setup", "label": "Setup", "href": "/home/setup" } ] },
+    { "id": "slo", "label": "SLO", "href": "/slo" }
+  ],
+  "activeNav": ["home", "setup"],
+  "cards": [
+    { "id": "jc-seg-1", "type": "html", "template": "jc-seg-1", "bare": true }
+  ]
+}

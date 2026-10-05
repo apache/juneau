@@ -220,7 +220,7 @@ class MaxIndent_Test extends TestBase {
 			var r = s.writeToString(input.in);
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
-			if (expected.equals("xxx")) {
+			if (eq(expected, "xxx")) {
 				System.out.println(input.label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 				return;

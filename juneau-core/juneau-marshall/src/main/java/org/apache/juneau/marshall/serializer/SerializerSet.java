@@ -85,6 +85,10 @@ import org.apache.juneau.marshall.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes", // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+	"unchecked" // Builder forEach casts raw (Consumer)/(Class) actions to the builder type selected by the class argument
+})
 public class SerializerSet {
 
 	/**
@@ -310,10 +314,6 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<Serializer.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEach(Consumer<Serializer.Builder<?>> action) {
 			builders(Serializer.Builder.class).forEach((Consumer)action);
 			return this;
@@ -325,10 +325,6 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<OutputStreamSerializer.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder<?>> action) {
 			return forEach((Class)OutputStreamSerializer.Builder.class, (Consumer)action);
 		}
@@ -339,10 +335,6 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<WriterSerializer.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEachWS(Consumer<WriterSerializer.Builder<?>> action) {
 			return forEach((Class)WriterSerializer.Builder.class, (Consumer)action);
 		}
@@ -446,9 +438,6 @@ public class SerializerSet {
 					return ci.newInstance();
 
 				// Check for builder create method.
-				@SuppressWarnings({
-					"unchecked" // Type erasure requires unchecked casts
-				})
 				Serializer.Builder<?> b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (nn(bcBuilder))
 					b.marshallingContext(bcBuilder);

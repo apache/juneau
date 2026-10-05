@@ -64,7 +64,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S6539" // Monster class; MarshallUtils is intentionally a single cohesive terse-marshalling-facade hub, one method family per format
+	"java:S6539", // Monster class; MarshallUtils is intentionally a single cohesive terse-marshalling-facade hub, one method family per format
+	"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
 })
 public final class MarshallUtils {
 
@@ -1927,9 +1928,6 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
-	})
 	public static <T> List<T> parquet(Object input, Class<T> type) throws ParseException, IOException {
 		return (List<T>) Parquet.DEFAULT.read(input, List.class, type);
 	}
@@ -1946,9 +1944,6 @@ public final class MarshallUtils {
 	 * @param c The bean class (parser returns {@code List<T>}).
 	 * @return The parsed list of beans.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
-	})
 	public static <T> List<T> parquet(byte[] o, Class<T> c) {
 		return (List<T>) safe(() -> Parquet.to(o, List.class, c));
 	}
@@ -1962,9 +1957,6 @@ public final class MarshallUtils {
 	 * @return The parsed list.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
-	})
 	public static <T> List<T> parquet(byte[] input, Type type) throws ParseException {
 		return (List<T>) Parquet.to(input, List.class, type);
 	}

@@ -28,6 +28,9 @@ import org.apache.juneau.marshall.xml.*;
  *
  * <p>Contains the marshall-bound helpers layered on top of the shared {@link BasicTestUtils} base.</p>
  */
+@SuppressWarnings({
+	"java:S112" // Generic exception throw required; checked exception wrapping would obscure test intent.
+})
 public class TestUtils extends BasicTestUtils {
 
 	public static String assertJson(String expected, Object value) {
@@ -54,9 +57,6 @@ public class TestUtils extends BasicTestUtils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings({
-		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
-	})
 	public static final void validateXml(Object o) throws Exception {
 		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
@@ -64,9 +64,6 @@ public class TestUtils extends BasicTestUtils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings({
-		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
-	})
 	public static final void validateXml(Object o, XmlSerializer s) throws Exception {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.write(o);

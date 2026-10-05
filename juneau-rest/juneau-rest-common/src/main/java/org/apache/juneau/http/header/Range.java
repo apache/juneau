@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -134,7 +133,7 @@ public class Range extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder unit(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("range unit must not be blank");
@@ -192,7 +191,7 @@ public class Range extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder spec(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("range spec must not be blank");

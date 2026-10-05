@@ -135,8 +135,10 @@ import org.apache.juneau.marshall.parser.*;
  * </p>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked operations for generic collections
-	"rawtypes"   // Raw types necessary for generic type handling
+	"java:S1452", // getList and getMap return List<?>/Map<?,?> because the element types are unknown until the caller converts them
+	"java:S3776", // service() walks the URL path across maps, lists and arrays for every GET/PUT/POST/DELETE case
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked operations for generic collections
 })
 public class PathTraversal {
 	// Internal traversal node — never serialized; 'parent' is an upward tree pointer used only to walk back up the model during PUT/POST/DELETE rewrites.
@@ -510,9 +512,6 @@ public class PathTraversal {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - List<?> for heterogeneous list elements
-	})
 	public List<?> getList(String url) {
 		return get(url, List.class);
 	}
@@ -528,9 +527,6 @@ public class PathTraversal {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - List<?> for heterogeneous list elements
-	})
 	public List<?> getList(String url, List<?> defVal) {
 		return getWithDefault(url, defVal, List.class);
 	}
@@ -574,9 +570,6 @@ public class PathTraversal {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - Map<?,?> for heterogeneous map entries
-	})
 	public Map<?,?> getMap(String url) {
 		return get(url, Map.class);
 	}
@@ -592,9 +585,6 @@ public class PathTraversal {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - Map<?,?> for heterogeneous map entries
-	})
 	public Map<?,?> getMap(String url, Map<?,?> defVal) {
 		return getWithDefault(url, defVal, Map.class);
 	}
@@ -770,7 +760,6 @@ public class PathTraversal {
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for REST operation routing logic
 		"java:S6541" // Cognitive complexity acceptable for REST operation routing logic
 	})
 	private Object service(int method, String url, Object val) throws PathTraversalException {
@@ -921,9 +910,6 @@ public class PathTraversal {
 		return null;	// Never gets here.
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for array element setting with expansion logic
-	})
 	private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {
 		var a = (Object[])o;
 		if (a.length <= index) {
@@ -936,9 +922,6 @@ public class PathTraversal {
 		return a;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for recursive node navigation
-	})
 	JsonNode getNode(String url, JsonNode n) {
 		if (isEmpty(url))
 			return n;

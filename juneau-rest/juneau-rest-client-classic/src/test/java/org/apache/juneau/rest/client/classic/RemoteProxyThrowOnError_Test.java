@@ -31,7 +31,7 @@ import com.sun.net.httpserver.*;
 
 /**
  * Focused test suite for the classic REST-proxy engine's {@link Remote#throwOnError()}/{@link RemoteOp#throwOnError()}
- * behavior (TODO-351 item B-client-1, Tier 2).
+ * behavior (work item 351, B-client-1, Tier 2).
  *
  * <p>
  * This member changes the classic engine's default per-call error handling to match the next-generation engine's

@@ -27,8 +27,8 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unused",    // Test helper classes have fields read only via assertions
-	"java:S5778" // assertThrows lambdas intentionally contain multiple statements to fully exercise the conversion path
+	"java:S5778", // assertThrows lambdas intentionally contain multiple statements to fully exercise the conversion path
+	"unused" // Test helper classes have fields read only via assertions
 })
 
 class BasicConverter_Test extends TestBase {

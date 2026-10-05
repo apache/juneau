@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.msgpack.DataType.*;
 
 import java.io.*;
@@ -40,17 +40,16 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // OutputStream resource managed by calling code
+	"java:S127", // The UTF-8 length/write loops advance i again to consume the low surrogate of a surrogate pair.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S4349", // write(byte[],int,int) is intentionally omitted; MsgPack writes single structured bytes via write(int); bulk array writes are not part of this protocol API
-	"java:S115" // ARG_-prefixed arg-key constant uses the project's UPPER_camelCase convention.
+	"resource" // OutputStream resource managed by calling code
 })
 public class MsgPackOutputStream extends OutputStream {
 
 	private final OutputStream os;
 
 	private static final long L2X31 = ((long)(1 << 30)) * 2;
-
-	private static final String ARG_value = "value";
 
 	/**
 	 * Constructor.
@@ -70,9 +69,6 @@ public class MsgPackOutputStream extends OutputStream {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S127" // Loop counter advances for surrogate pairs
-	})
 	private static int getUtf8ByteLength(CharSequence cs) {
 		var count = 0;
 		for (int i = 0, len = cs.length(); i < len; i++) {
@@ -93,9 +89,6 @@ public class MsgPackOutputStream extends OutputStream {
 	}
 
 	
-	@SuppressWarnings({
-		"java:S127" // For-loop counter modification acceptable in this algorithm
-	})
 	private int writeUtf8To(CharSequence in) {
 		var count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {
@@ -398,7 +391,7 @@ public class MsgPackOutputStream extends OutputStream {
 	 * @return This stream.
 	 */
 	MsgPackOutputStream appendBigInteger(BigInteger value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		if (value.bitLength() < 64)
 			return appendLong(value.longValue());
 		if (value.signum() > 0 && value.bitLength() == 64)

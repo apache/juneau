@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 
 import org.apache.juneau.marshall.*;
@@ -32,7 +33,7 @@ public class ImplicitSwappedObject {
 	public ImplicitSwappedObject() {}
 
 	public ImplicitSwappedObject(String fromString) {
-		if (fromString.equals(SWAP))
+		if (eq(fromString, SWAP))
 			wasUnswapped = true;
 	}
 }

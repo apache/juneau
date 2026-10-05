@@ -37,15 +37,15 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
+	"java:S110", // Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer->SerializerWriter->XmlWriter->HtmlWriter->BasicHtmlWriter); depth is not reducible without unwinding CRTP.
 	"java:S112", // Generic exception thrown; template methods throw Exception for subclass flexibility
 	"java:S1192", // HTML tag names (e.g. aside, section) repeated in template; constants would obscure markup
-	"java:S110" // Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer->SerializerWriter->XmlWriter->HtmlWriter->BasicHtmlWriter); depth is not reducible without unwinding CRTP.
+	"resource" // Resource management handled externally
 })
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 	private static boolean exists(String s) {
-		return nn(s) && ! "NONE".equals(s);
+		return nn(s) && neq(s, "NONE");
 	}
 
 	private static boolean isEmptyObject(Object o) {
@@ -348,7 +348,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 					// and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a
 					// bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.
 					var scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()
-						.filter(sch -> sch.equalsIgnoreCase(key))
+						.filter(sch -> eqic(sch, key))
 						.findFirst()
 						.orElse(null);
 					if (scheme != null && ! val.isEmpty()) {

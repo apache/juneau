@@ -47,8 +47,8 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // BsonInputStream instances in tests are closed by the test infrastructure / GC; not leak-relevant.
-	"unchecked"  // Parser returns Object; cast to Map in tests.
+	"resource", // BsonInputStream instances in tests are closed by the test infrastructure / GC; not leak-relevant.
+	"unchecked" // Parser returns Object; cast to Map in tests.
 })
 class BsonConformanceFixes_Test extends TestBase {
 

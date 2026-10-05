@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -45,14 +46,14 @@ class PredicateUtils_Test {
 
 		// When predicate matches, should consume
 		consumed.clear();
-		Predicate<String> matches = s -> s.equals("match");
+		Predicate<String> matches = s -> eq(s, "match");
 		consumeIf(matches, consumer, "match");
 		assertEquals(1, consumed.size());
 		assertEquals("match", consumed.get(0));
 
 		// When predicate doesn't match, should not consume
 		consumed.clear();
-		Predicate<String> noMatch = s -> s.equals("match");
+		Predicate<String> noMatch = s -> eq(s, "match");
 		consumeIf(noMatch, consumer, "nomatch");
 		assertTrue(consumed.isEmpty());
 
@@ -176,7 +177,7 @@ class PredicateUtils_Test {
 		assertTrue(test(null, 123));
 
 		// When predicate matches, should return true
-		Predicate<String> matches = s -> s.equals("match");
+		Predicate<String> matches = s -> eq(s, "match");
 		assertTrue(test(matches, "match"));
 
 		// When predicate doesn't match, should return false

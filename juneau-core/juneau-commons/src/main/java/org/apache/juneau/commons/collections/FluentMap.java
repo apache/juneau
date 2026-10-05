@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent wrapper around an arbitrary map that provides convenient methods for adding entries.
@@ -86,12 +86,9 @@ import java.util.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentMap<K,V> extends AbstractMap<K,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	private final Map<K,V> map;
 
@@ -101,7 +98,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * @param inner The underlying map to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentMap(Map<K,V> inner) {
-		this.map = assertArgNotNull(ARG_inner, inner);
+		this.map = reqnn("inner", inner);
 	}
 
 	/**

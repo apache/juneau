@@ -38,7 +38,8 @@ import org.junit.jupiter.api.*;
  * that need a resolver returning a type unrelated to the field/getter/setter it was asked to resolve).
  */
 @SuppressWarnings({
-	"unused"  // Test POJO members are read reflectively, not directly.
+	"java:S1172", // The anonymous BeanTypeResolver's resolveType() override must accept but deliberately ignores its arguments and returns a fixed type
+	"unused" // Test POJO members are read reflectively, not directly.
 })
 class BeanPropertyMeta_Validate_Coverage_Test extends TestBase {
 
@@ -55,13 +56,7 @@ class BeanPropertyMeta_Validate_Coverage_Test extends TestBase {
 		public String getStr() { return null; }
 		public Integer getInt() { return null; }
 		public Map<String,Object> getMap() { return null; }
-		@SuppressWarnings({
-			"java:S1172" // Reflection target only: the "key" param's presence/type is what's under test, not its usage.
-		})
 		public Map<String,Object> getMapByKey(String key) { return null; }
-		@SuppressWarnings({
-			"java:S1172" // Reflection target only: the "x" param's presence/type is what's under test, not its usage.
-		})
 		public String getBadDynaGetter(int x) { return null; }
 		public String getBadDynaGetterNoArgs() { return null; }
 	}

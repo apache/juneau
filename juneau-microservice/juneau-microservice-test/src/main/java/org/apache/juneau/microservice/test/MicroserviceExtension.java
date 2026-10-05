@@ -59,7 +59,8 @@ import org.junit.jupiter.api.extension.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"resource"
+	"java:S3011", // setAccessible(true) is needed to call the test class's (possibly private) builder method and no-arg constructor.
+	"resource" // The RestClient and Microservice are created in beforeAll(), kept in the per-class State, and closed/stopped in afterAll().
 })
 public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallback, ParameterResolver {
 
@@ -175,7 +176,6 @@ public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallbac
 		throw new ExtensionContextException("@MicroserviceTest annotation not found on " + testClass.getName());
 	}
 
-	@SuppressWarnings("java:S3011") // setAccessible required: builder supplier method may be package-private or private by test-class convention.
 	private static Microservice.Builder resolveBuilder(Class<?> testClass, MicroserviceTest ann) {
 		var m = findBuilderSupplier(testClass, ann.builderMethod());
 		if (m == null)
@@ -213,7 +213,6 @@ public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallbac
 	 * Instantiates the test class via its no-arg constructor purely to drive {@code @TestBean} discovery (which
 	 * reads instance + static members). Falls back to a hierarchy-static-only scan if no usable no-arg ctor exists.
 	 */
-	@SuppressWarnings("java:S3011") // setAccessible required: test class no-arg constructor may be package-private for JUnit lifecycle reasons.
 	private static Object instantiateForDiscovery(Class<?> testClass) {
 		try {
 			var ctor = testClass.getDeclaredConstructor();

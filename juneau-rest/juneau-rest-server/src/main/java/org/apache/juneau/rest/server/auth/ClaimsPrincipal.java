@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -79,7 +78,7 @@ public class ClaimsPrincipal implements Principal {
 	 * @param claims The claim map. May be <jk>null</jk> (treated as an empty map). Defensively copied.
 	 */
 	public ClaimsPrincipal(String name, Map<String,Object> claims) {
-		assertArgNotNullOrBlank("name", name);
+		reqnb("name", name);
 		this.name = name;
 		this.claims = claims == null
 			? Collections.emptyMap()
@@ -112,8 +111,8 @@ public class ClaimsPrincipal implements Principal {
 	 * @return The coerced value, or {@link Optional#empty()} if the claim is absent or cannot be coerced.
 	 */
 	public <T> Optional<T> getClaim(String claimName, Class<T> type) {
-		assertArgNotNull("claimName", claimName);
-		assertArgNotNull("type", type);
+		reqnn("claimName", claimName);
+		reqnn("type", type);
 		var v = claims.get(claimName);
 		if (v == null)
 			return oe();
@@ -127,7 +126,7 @@ public class ClaimsPrincipal implements Principal {
 	 * @return <jk>true</jk> if the claim is present, even if its value is the JSON {@code null} literal.
 	 */
 	public boolean hasClaim(String claimName) {
-		assertArgNotNull("claimName", claimName);
+		reqnn("claimName", claimName);
 		return claims.containsKey(claimName);
 	}
 

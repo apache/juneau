@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.cp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -89,14 +88,9 @@ import org.apache.juneau.commons.io.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface FileFinder {
-
-	/** Argument name constant for assertArgNotNull. */
-	String ARG_value = "value";
-	/** Argument name constant for assertArgNotNull. */
-	String ARG_c = "c";
 
 	/**
 	 * Builder class.
@@ -151,10 +145,10 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		@SuppressWarnings({
-			"null" // Null check handled by assertArgNotNull
+			"null" // Null check handled by reqnn
 		})
 		public Builder cp(Class<?> c, String path, boolean recursive) {
-			assertArgNotNull(ARG_c, c);
+			reqnn("c", c);
 			while (nn(c)) {
 				roots.add(new LocalDir(c, path));
 				c = recursive ? c.getSuperclass() : null;
@@ -169,7 +163,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder dir(String value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			return path(Paths.get(".").resolve(value));
 		}
 
@@ -222,6 +216,9 @@ public interface FileFinder {
 	}
 
 	/** Represents no file finder */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public abstract class Void implements FileFinder {}
 
 	/**

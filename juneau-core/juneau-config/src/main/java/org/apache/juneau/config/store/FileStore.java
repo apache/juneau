@@ -18,7 +18,6 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardOpenOption.*;
 import static java.nio.file.StandardWatchEventKinds.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -45,19 +44,12 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resources are managed by caller
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // read() and write() combine cache lookup, file locking and compare-and-swap of contents in one flow
+	"javabugs:S2259", // The nullable watcher and the conditional FileChannel lock resource in read() are guarded by nn()/ternary checks that flow analysis does not track
+	"resource" // Resources are managed by caller
 })
 public class FileStore extends ConfigStore {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_charset = "charset";
-	private static final String PROP_extensions = "extensions";
-	private static final String PROP_updateOnWrite = "updateOnWrite";
 
 	/**
 	 * Builder class.
@@ -90,7 +82,7 @@ public class FileStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
 			enableWatcher = copyFrom.enableWatcher;
@@ -106,7 +98,7 @@ public class FileStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(FileStore copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			type(copyFrom.getClass());
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
@@ -139,7 +131,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder charset(Charset value) {
-			charset = assertArgNotNull(ARG_value, value);
+			charset = reqnn("value", value);
 			return this;
 		}
 
@@ -166,7 +158,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder directory(File value) {
-			directory = assertArgNotNull(ARG_value, value).getAbsolutePath();
+			directory = reqnn("value", value).getAbsolutePath();
 			return this;
 		}
 
@@ -188,7 +180,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder directory(String value) {
-			directory = assertArgNotNull(ARG_value, value);
+			directory = reqnn("value", value);
 			return this;
 		}
 
@@ -235,7 +227,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder extensions(String value) {
-			extensions = assertArgNotNull(ARG_value, value);
+			extensions = reqnn("value", value);
 			return this;
 		}
 
@@ -286,7 +278,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder watcherSensitivity(WatcherSensitivity value) {
-			watcherSensitivity = assertArgNotNull(ARG_value, value);
+			watcherSensitivity = reqnn("value", value);
 			return this;
 		}
 	}
@@ -470,9 +462,6 @@ public class FileStore extends ConfigStore {
 	}
 
 	@Override /* Overridden from ConfigStore */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for file writing logic
-	})
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 		name = resolveName(name);
 
@@ -532,9 +521,6 @@ public class FileStore extends ConfigStore {
 		return null;
 	}
 
-	@SuppressWarnings({
-		"javabugs:S2259" // p.getParent() is only reached when p does not exist; p is always dir.resolve(nonEmptySegment), so the only way p could be a rootless path with a null parent is if p itself were the filesystem root, which always exists and would skip this branch.
-	})
 	private synchronized boolean isWritable(Path p) {
 		try {
 			if (! Files.exists(p)) {
@@ -559,9 +545,6 @@ public class FileStore extends ConfigStore {
 	 * @param e The file system event.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"javabugs:S2259" // e.context() for ENTRY_CREATE/DELETE/MODIFY events (OVERFLOW is filtered out before this is called) is documented to return the single relative path segment of the changed entry, which always has a non-null file name.
-	})
 	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
 		var fn = e.context().getFileName().toString();
 
@@ -577,16 +560,12 @@ public class FileStore extends ConfigStore {
 	@Override /* Overridden from ConfigStore */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_charset, charset)
-			.a(PROP_extensions, extensions)
-			.a(PROP_updateOnWrite, updateOnWrite);
+			.a("charset", charset)
+			.a("extensions", extensions)
+			.a("updateOnWrite", updateOnWrite);
 	}
 
 	@Override
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for name resolution logic
-		"javabugs:S2259" // nameCache.get(name) at the end is always preceded by a put for this key in this call (or the key already existed), and no code ever removes entries, so the map is guaranteed to contain it.
-	})
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {
 			String n = null;

@@ -165,4 +165,4 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });
+})().catch(error => { process.stderr.write(String(error?.stack || error) + '\n'); process.exit(1); });

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -25,6 +24,7 @@ import java.time.*;
 import java.util.concurrent.*;
 
 import com.sun.net.httpserver.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A minimal loopback ({@code http://127.0.0.1}) HTTP listener that captures the single authorization-code redirect an
@@ -61,7 +61,9 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	 * @return A started receiver.
 	 * @throws IOException If the loopback server could not be started.
 	 */
-	@SuppressWarnings("resource") // factory hands the started receiver (and its bound socket) to the caller, who must close it (see class javadoc).
+	@SuppressWarnings({
+		"resource" // factory hands the started receiver (and its bound socket) to the caller, who must close it (see class javadoc).
+	})
 	public static LoopbackRedirectReceiver open() throws IOException {
 		return new LoopbackRedirectReceiver(DEFAULT_PATH, DEFAULT_HTML);
 	}
@@ -93,10 +95,10 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	 * @throws IOException If the loopback server could not be started (e.g. the fixed port is already in use).
 	 */
 	public LoopbackRedirectReceiver(String path, int bindPort, String successHtml) throws IOException {
-		this.path = assertArgNotNullOrBlank("path", path);
-		assertArg(path.startsWith("/"), "path must start with '/' (was '%s')", path);
-		assertArg(bindPort >= 0, "port must not be negative (was %s)", bindPort);
-		assertArgNotNull("successHtml", successHtml);
+		this.path = reqnb("path", path);
+		req(path.startsWith("/"), "path must start with '/' (was '%s')", path);
+		req(bindPort >= 0, "port must not be negative (was %s)", bindPort);
+		reqnn("successHtml", successHtml);
 		var html = successHtml.getBytes(StandardCharsets.UTF_8);
 		var svr = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), bindPort), 0);
 		try {
@@ -154,7 +156,7 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	 * @throws McpAuthException If the wait times out or is interrupted.
 	 */
 	public URI awaitCallback(Duration timeout) {
-		assertArgNotNull("timeout", timeout);
+		reqnn("timeout", timeout);
 		try {
 			return callback.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
 		} catch (TimeoutException e) {

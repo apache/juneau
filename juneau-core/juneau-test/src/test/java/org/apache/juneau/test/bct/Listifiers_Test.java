@@ -375,10 +375,10 @@ class Listifiers_Test extends TestBase {
 			assertSize(2, result);
 			// Check that we have the expected entries
 			var hasKey1Entry = result.stream().filter(obj -> obj instanceof Map.Entry).map(obj -> (Map.Entry<?,?>)obj)
-				.anyMatch(entry -> "key1".equals(entry.getKey()) && "value1".equals(entry.getValue()));
+				.anyMatch(entry -> eq(entry.getKey(), "key1") && eq(entry.getValue(), "value1"));
 			assertTrue(hasKey1Entry);
 
-			var hasKey2Entry = result.stream().filter(obj -> obj instanceof Map.Entry).map(obj -> (Map.Entry<?,?>)obj).anyMatch(entry -> "key2".equals(entry.getKey()) && entry.getValue() == null);
+			var hasKey2Entry = result.stream().filter(obj -> obj instanceof Map.Entry).map(obj -> (Map.Entry<?,?>)obj).anyMatch(entry -> eq(entry.getKey(), "key2") && entry.getValue() == null);
 			assertTrue(hasKey2Entry);
 		}
 

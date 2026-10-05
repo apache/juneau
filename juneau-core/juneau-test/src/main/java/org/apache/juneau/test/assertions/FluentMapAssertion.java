@@ -99,7 +99,8 @@ import org.apache.juneau.commons.utils.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_mapWasNotEmpty)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_mapWasNotEmpty)
+	"unchecked" // Generic varargs parameters (K...keys) in the key-based assertion methods create generic arrays at call sites
 })
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R> {
 
@@ -184,9 +185,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The entries to extract.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for map value filtering
-	})
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
@@ -206,9 +204,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for values list extraction
-	})
 	public FluentListAssertion<Object,R> asValues(K...keys) {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
 	}

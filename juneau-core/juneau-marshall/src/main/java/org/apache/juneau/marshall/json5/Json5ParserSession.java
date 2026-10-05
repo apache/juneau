@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.json5;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.commons.lang.*;
@@ -41,10 +43,11 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S125",  // State-machine comments are documentation, not commented-out code
+	"java:S110", // Inheritance depth is intentional to reuse parser-session behavior layers
+	"java:S125", // State-machine comments are documentation, not commented-out code
+	"java:S135", // Multiple break statements necessary for state machine error handling
+	"java:S2677", // r.read() calls that consume an already-peeked character ignore the result
 	"java:S3776", // Cognitive complexity acceptable for parser state machine
-	"java:S135",  // Multiple break statements necessary for state machine error handling
-	"java:S110",  // Inheritance depth is intentional to reuse parser-session behavior layers
 	"resource" // ParserReader is managed by caller
 })
 public class Json5ParserSession extends JsonParserSession {
@@ -54,9 +57,6 @@ public class Json5ParserSession extends JsonParserSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth is intentional across parser session builders
-	})
 	public static class Builder extends JsonParserSession.Builder<Builder> {
 
 		/**
@@ -134,7 +134,7 @@ public class Json5ParserSession extends JsonParserSession {
 			if (! VALID_BARE_CHARS.contains(c)) {
 				r.unread();
 				var s = r.getMarked().intern();
-				return s.equals("null") ? null : s;
+				return eq(s, "null") ? null : s;
 			}
 		}
 		throw new ParseException(this, "Could not find the end of the field name.");
@@ -290,11 +290,11 @@ public class Json5ParserSession extends JsonParserSession {
 		// Empty quoted strings coerce to 0 via StringUtils.parseNumber (existing Json5 bean databind).
 		if (! s.isEmpty()) {
 			var signed = s.charAt(0) == '+' ? s.substring(1) : s;
-			if (signed.equals("Infinity"))
+			if (eq(signed, "Infinity"))
 				return Double.POSITIVE_INFINITY;
-			if (signed.equals("-Infinity"))
+			if (eq(signed, "-Infinity"))
 				return Double.NEGATIVE_INFINITY;
-			if (signed.equals("NaN") || signed.equals("-NaN"))
+			if (eqa(signed, "NaN", "-NaN"))
 				return Double.NaN;
 		}
 		try {

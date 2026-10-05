@@ -72,7 +72,7 @@ out.a_defaultTitles = defaults.map(function (c) { return c.title; });
 
 // ---- b) Pinned always visible even when omitted from visible[] ----
 const pinnedResult = C.validateView(
-	{ schemaVersion: 1, visible: ['B', 'C'], order: ['B', 'A', 'C'], labels: {}, formats: {} },
+	{ schemaVersion: 2, visible: ['B', 'C'], order: ['B', 'A', 'C'], labels: {}, formats: {} },
 	catalog
 );
 out.b_pinnedForcedVisible = pinnedResult.ok && pinnedResult.view.visible.indexOf('A') >= 0;
@@ -80,7 +80,7 @@ out.b_pinnedOk = pinnedResult.ok;
 
 // ---- c) ≥1 visible — all-hidden blob is repaired (first catalog column forced visible) ----
 const allHidden = C.validateView(
-	{ schemaVersion: 1, visible: [], order: ['A', 'B', 'C'], labels: {}, formats: {} },
+	{ schemaVersion: 2, visible: [], order: ['A', 'B', 'C'], labels: {}, formats: {} },
 	catalog
 );
 out.c_atLeastOneVisible = allHidden.ok && allHidden.view.visible.length >= 1;
@@ -88,7 +88,7 @@ out.c_repairedVisible = allHidden.ok ? allHidden.view.visible.slice() : null;
 
 // ---- d) Unknown column ids dropped ----
 const unknownDropped = C.validateView(
-	{ schemaVersion: 1, visible: ['A', 'GONE', 'C'], order: ['GONE', 'C', 'A', 'B'],
+	{ schemaVersion: 2, visible: ['A', 'GONE', 'C'], order: ['GONE', 'C', 'A', 'B'],
 		labels: { GONE: 'x', C: 'See' }, formats: { GONE: 'date', C: 'ts-zulu' } },
 	catalog
 );
@@ -100,15 +100,15 @@ out.d_formats = unknownDropped.ok ? unknownDropped.view.formats : null;
 
 // ---- e) Duplicate order / visible rejected ----
 out.e_dupOrder = C.validateView(
-	{ schemaVersion: 1, visible: ['A'], order: ['A', 'B', 'A'], labels: {}, formats: {} }, catalog
+	{ schemaVersion: 2, visible: ['A'], order: ['A', 'B', 'A'], labels: {}, formats: {} }, catalog
 );
 out.e_dupVisible = C.validateView(
-	{ schemaVersion: 1, visible: ['A', 'A'], order: ['A', 'B', 'C'], labels: {}, formats: {} }, catalog
+	{ schemaVersion: 2, visible: ['A', 'A'], order: ['A', 'B', 'C'], labels: {}, formats: {} }, catalog
 );
 
 // ---- f) Format constrained to declared list (undeclared override dropped) ----
 const badFmt = C.validateView(
-	{ schemaVersion: 1, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
+	{ schemaVersion: 2, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
 		labels: {}, formats: { C: 'not-a-real-format', B: 'date' } },
 	catalog
 );
@@ -116,7 +116,7 @@ out.f_formatsAfterConstraint = badFmt.ok ? badFmt.view.formats : null;
 
 // ---- g) Renderer meta/href preserved across format swap ----
 const reformatted = C.computeEffectiveColumns(catalog, {
-	schemaVersion: 1, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
+	schemaVersion: 2, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
 	labels: {}, formats: { C: 'ts-zulu' }
 });
 const colC = reformatted.find(function (c) { return c.data === 'C'; });
@@ -126,7 +126,7 @@ out.g_href = colC?.href;
 
 // ---- h) Blank label reverts to catalog title ----
 const relabeled = C.computeEffectiveColumns(catalog, {
-	schemaVersion: 1, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
+	schemaVersion: 2, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'],
 	labels: { B: '  ', C: 'Custom C' }, formats: {}
 });
 out.h_blankReverts = relabeled.find(function (c) { return c.data === 'B'; }).title;
@@ -134,7 +134,7 @@ out.h_customKept = relabeled.find(function (c) { return c.data === 'C'; }).title
 
 // ---- i) Reorder + hide via saved view ----
 const reordered = C.computeEffectiveColumns(catalog, {
-	schemaVersion: 1, visible: ['A', 'C'], order: ['C', 'A', 'B'], labels: {}, formats: {}
+	schemaVersion: 2, visible: ['A', 'C'], order: ['C', 'A', 'B'], labels: {}, formats: {}
 });
 out.i_order = reordered.map(function (c) { return c.data; });
 out.i_visibility = reordered.map(function (c) { return !!c.visible; });
@@ -144,7 +144,7 @@ const catalogWithD = catalog.concat([
 	{ data: 'D', title: 'Col D', defaultVisible: false, render: { id: 'text' } }
 ]);
 const oldBlob = C.computeEffectiveColumns(catalogWithD, {
-	schemaVersion: 1, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
+	schemaVersion: 2, visible: ['A', 'B', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
 });
 out.j_orderIncludesD = oldBlob.map(function (c) { return c.data; });
 out.j_D_visible = oldBlob.find(function (c) { return c.data === 'D'; }).visible;
@@ -162,7 +162,7 @@ out.k_blankLabelOmitted = !Object.hasOwn(serialized.labels, 'B');
 
 // ---- l) LOAD-BEARING dtIndex fixture: [sel, A, B(hidden), C, actions] → C is 3, NOT 2 ----
 const effForIndex = C.computeEffectiveColumns(catalog, {
-	schemaVersion: 1, visible: ['A', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
+	schemaVersion: 2, visible: ['A', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
 });
 const optsColumns = C.buildOptsColumnSpace(effForIndex, { hasSelection: true, hasActions: true });
 out.l_optsDataKeys = optsColumns.map(function (c) { return c.data; });

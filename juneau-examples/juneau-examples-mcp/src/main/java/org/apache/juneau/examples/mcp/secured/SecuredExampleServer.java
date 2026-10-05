@@ -48,7 +48,8 @@ import jakarta.servlet.*;
  * all. Jetty's own {@code Server.start()} then finds the connector already open and skips rebinding it.
  */
 @SuppressWarnings({
-	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S106", // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"resource" // The auth server, Jetty connector and Microservice opened in start() are handed to the returned handle, whose close() stops them.
 })
 public final class SecuredExampleServer implements AutoCloseable {
 
@@ -56,7 +57,6 @@ public final class SecuredExampleServer implements AutoCloseable {
 	public static final int DEFAULT_PORT = 5001;
 
 	private final Microservice microservice;
-	@SuppressWarnings("resource") // closed in close(); this field's lifecycle is fully managed by this class.
 	private final OfflineAuthorizationServer authServer;
 	private final URI rootUrl;
 
@@ -74,7 +74,6 @@ public final class SecuredExampleServer implements AutoCloseable {
 	 * @return A running server handle. Close it (or call {@link #close()}) to stop both servers.
 	 * @throws Exception If either server fails to start.
 	 */
-	@SuppressWarnings("resource") // The bean store is handed to (and closed by) the Microservice lifecycle.
 	public static SecuredExampleServer start(int port) throws Exception {
 		var authServer = OfflineAuthorizationServer.start();
 		// M9: hoisted above the try so a failure AFTER connector.open() (which has already bound a real OS
@@ -159,7 +158,6 @@ public final class SecuredExampleServer implements AutoCloseable {
 	 * @param args Optional single argument: the port the MCP server listens on (defaults to {@link #DEFAULT_PORT}).
 	 * @throws Exception If either server fails to start.
 	 */
-	@SuppressWarnings("resource") // example server (and its auth server) run for the JVM lifetime; closed on process exit.
 	public static void main(String[] args) throws Exception {
 		var port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
 		var server = start(port);

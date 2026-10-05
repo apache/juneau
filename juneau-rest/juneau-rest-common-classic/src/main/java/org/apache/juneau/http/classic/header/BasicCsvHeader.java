@@ -41,7 +41,8 @@ import org.apache.juneau.test.assertions.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+	"java:S2160", // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+	"java:S3776" // contains()/containsIgnoreCase() check both the fixed value array and the supplier with nested null-guarded loops
 })
 public class BasicCsvHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
@@ -184,9 +185,6 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for CSV contains check
-	})
 	public boolean contains(String val) {
 		if (nn(value))
 			for (var v : value)
@@ -209,9 +207,6 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for case-insensitive CSV contains check
-	})
 	public boolean containsIgnoreCase(String val) {
 		if (nn(value))
 			for (var v : value)

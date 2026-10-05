@@ -23,6 +23,9 @@ import java.util.regex.*;
 /**
  * Shared test-support utilities for validating XML output.
  */
+@SuppressWarnings({
+	"java:S112" // checkXmlWhitespace() and its helper deliberately throw plain Exception to report whitespace errors.
+})
 public final class XmlTestUtils {
 
 	// Whitespace-validation patterns.  The lookbehind on the trailing '>' distinguishes start tags ('(?<!/)')
@@ -42,9 +45,6 @@ public final class XmlTestUtils {
 	 * @param out The XML to validate.
 	 * @throws Exception If the whitespace/indentation in the XML is incorrect.
 	 */
-	@SuppressWarnings({
-		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
-	})
 	public static void checkXmlWhitespace(String out) throws Exception {
 		if (out.indexOf('\u0000') != -1) {
 			for (var s : out.split("\u0000"))
@@ -74,9 +74,6 @@ public final class XmlTestUtils {
 	 * @return The indent depth after processing this line.
 	 * @throws Exception If the line's indentation is wrong, or the line doesn't match any recognized form.
 	 */
-	@SuppressWarnings({
-		"java:S112" // Test utility; generic exception mirrors checkXmlWhitespace's diagnostic contract, not swallowed by callers.
-	})
 	private static int checkLineIndent(String line, int lineNum, int indent) throws Exception {
 		var m = START_TAG.matcher(line);
 		if (m.matches()) {
@@ -120,9 +117,6 @@ public final class XmlTestUtils {
 	 * @param lineType A human-readable description of the line kind being checked (for error messages).
 	 * @throws Exception If <c>actual != expected</c>.
 	 */
-	@SuppressWarnings({
-		"java:S112" // Test utility; generic exception mirrors checkXmlWhitespace's diagnostic contract, not swallowed by callers.
-	})
 	private static void checkIndent(int expected, int actual, int lineNum, String lineType) throws Exception {
 		if (actual != expected)
 			throw new Exception("Wrong indentation detected on " + lineType + " line ''" + lineNum + "''");

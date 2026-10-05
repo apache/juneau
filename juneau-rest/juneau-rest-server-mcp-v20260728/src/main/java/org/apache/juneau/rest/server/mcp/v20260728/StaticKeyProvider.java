@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.Base64;
 import java.util.Collections;
@@ -26,6 +25,7 @@ import java.util.Optional;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Built-in, immutable, static-at-startup {@link KeyProvider}: an operator-supplied keyring of one or more AES
@@ -89,7 +89,7 @@ public final class StaticKeyProvider implements KeyProvider {
 	 * @return A new AES {@link SecretKey} wrapping {@code value}. Never <jk>null</jk>.
 	 */
 	public static SecretKey aesKey(byte[] value) {
-		assertArgNotNull("value", value);
+		reqnn("value", value);
 		return new SecretKeySpec(value, "AES");
 	}
 
@@ -100,7 +100,7 @@ public final class StaticKeyProvider implements KeyProvider {
 	 * @return A new AES {@link SecretKey} wrapping the decoded bytes. Never <jk>null</jk>.
 	 */
 	public static SecretKey aesKey(String base64) {
-		assertArgNotNullOrBlank("base64", base64);
+		reqnb("base64", base64);
 		return aesKey(Base64.getDecoder().decode(base64));
 	}
 
@@ -134,8 +134,8 @@ public final class StaticKeyProvider implements KeyProvider {
 		 * 	<jk>null</jk>.
 		 */
 		public Builder addKey(String keyId, SecretKey key) {
-			assertArgNotNullOrBlank("keyId", keyId);
-			assertArgNotNull("key", key);
+			reqnb("keyId", keyId);
+			reqnn("key", key);
 			keys.put(keyId, key);
 			return this;
 		}
@@ -149,7 +149,7 @@ public final class StaticKeyProvider implements KeyProvider {
 		 * @throws IllegalArgumentException If {@code keyId} is <jk>null</jk> or blank.
 		 */
 		public Builder current(String keyId) {
-			assertArgNotNullOrBlank("keyId", keyId);
+			reqnb("keyId", keyId);
 			currentKeyId = keyId;
 			return this;
 		}
@@ -162,9 +162,9 @@ public final class StaticKeyProvider implements KeyProvider {
 		 * 	the designated current key was never added via {@link #addKey(String, SecretKey)}.
 		 */
 		public StaticKeyProvider build() {
-			assertArg(currentKeyId != null, "No current key designated; call current(keyId) before build().");
+			req(currentKeyId != null, "No current key designated; call current(keyId) before build().");
 			var key = keys.get(currentKeyId);
-			assertArg(key != null, "current(''%s'') does not name a key added via addKey(...).", currentKeyId);
+			req(key != null, "current(''%s'') does not name a key added via addKey(...).", currentKeyId);
 			return new StaticKeyProvider(new KeyedSecret(currentKeyId, key), keys);
 		}
 	}

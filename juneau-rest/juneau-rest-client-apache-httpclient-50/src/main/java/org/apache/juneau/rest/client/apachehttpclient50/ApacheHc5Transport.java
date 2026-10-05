@@ -23,6 +23,8 @@ import org.apache.hc.client5.http.impl.io.*;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.*;
 import org.apache.hc.core5.http.io.support.*;
+import org.apache.hc.core5.http.message.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -163,7 +165,7 @@ public final class ApacheHc5Transport implements HttpTransport {
 	private static ClassicHttpRequest buildHcRequest(TransportRequest request) throws TransportException {
 		var builder = ClassicRequestBuilder.create(request.getMethod()).setUri(request.getUri());
 		for (var h : request.getHeaders())
-			builder.addHeader(h.name(), h.value());
+			builder.addHeader(new BasicHeader(h.name(), h.value(), RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())));
 		var body = request.getBody();
 		if (body != null)
 			builder.setEntity(buildEntity(body));

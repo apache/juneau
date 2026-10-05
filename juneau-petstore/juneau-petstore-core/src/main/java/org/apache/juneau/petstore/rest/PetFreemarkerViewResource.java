@@ -51,7 +51,24 @@ public class PetFreemarkerViewResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient PetStore store = new PetStore();
+	/**
+	 * The shared store, injected from the parent's bean store (the runner registers one seeded {@code PetStore}).
+	 * When this resource is mounted standalone (unit tests), {@link #store()} falls back to a classic-rows store.
+	 */
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient PetStore store;
+
+	@SuppressWarnings({
+		"java:S2654" // synchronized guards the lazy standalone fallback, racing against the injected value.
+	})
+	private synchronized PetStore store() {
+		if (store == null)
+			store = new PetStore();
+		return store;
+	}
 
 	/**
 	 * Provides a {@link FreemarkerMixin} configured to resolve templates under {@code petstore-templates/}.
@@ -74,7 +91,7 @@ public class PetFreemarkerViewResource extends BasicRestServlet {
 	 */
 	@RestGet("/pets/{id}/view")
 	public View viewPet(@Path("id") long id) {
-		var pet = store.getPet(id);
+		var pet = store().getPet(id);
 		if (pet == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		return FreemarkerView.of("pet.ftlh").attr("pet", pet);

@@ -39,15 +39,20 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Writer resource managed by calling code
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S107", // The constructor and create() take the writer plus all formatting flags, mirroring the serializer settings.
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S3776", // attr() and stringValue() need nested character-class and escape branching to decide quoting in one pass.
+	"resource" // Writer resource managed by calling code
 })
 public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends SerializerWriter<SELF> {
 
 	// Characters that trigger special handling of serializing attribute values.
 	// @formatter:off
-	private static final AsciiSet encodedChars = AsciiSet.of("\n\t\b\f\r'\"\\");
-	private static final AsciiSet encodedChars2 = AsciiSet.of("\n\t\b\f\r'\"\\/");
+	// Includes all C0 control characters (U+0000-U+001F) and DEL (U+007F), which must be escaped per RFC 8259.
+	private static final AsciiSet encodedChars = AsciiSet.create().range('\u0000', '\u001f').chars("\u007f'\"\\").build();
+	private static final AsciiSet encodedChars2 = AsciiSet.create().range('\u0000', '\u001f').chars("\u007f'\"\\/").build();
+
+	private static final char[] HEX = "0123456789abcdef".toCharArray();
 
 	private static final KeywordSet reservedWords = new KeywordSet(
 		"arguments","break","case","catch","class","const","continue","debugger","default","delete",
@@ -82,9 +87,6 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Constructor requires 8 parameters for JSON writer configuration
-	})
 	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.simpleAttrs = simpleAttrs;
@@ -107,9 +109,6 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 * @return A new JsonWriter instance.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Factory method mirrors the constructor; all 8 parameters are distinct JSON writer configuration settings
-	})
 	public static BasicJsonWriter create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		return new BasicJsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
 	}
@@ -121,9 +120,6 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for JSON attribute writing with encoding
-	})
 	public SELF attr(String s) {
 
 		if (trimStrings)
@@ -196,9 +192,6 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 	 * 	<br>Can be <jk>null</jk> (nothing is written).
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for JSON string value writing with escaping
-	})
 	public SELF stringValue(String s) {
 		if (s == null)
 			return self();
@@ -228,7 +221,11 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 						w('\\').w('\\');
 					else if (c == '/' && escapeSolidus)
 						w('\\').w('/');
-					else if (c != '\r')
+					else if (c == '\r')
+						w('\\').w('r');
+					else if (c < 0x20 || c == 0x7f)
+						w('\\').w('u').w('0').w('0').w(HEX[c >> 4]).w(HEX[c & 0xf]);
+					else
 						w(c);
 				} else {
 					w(c);

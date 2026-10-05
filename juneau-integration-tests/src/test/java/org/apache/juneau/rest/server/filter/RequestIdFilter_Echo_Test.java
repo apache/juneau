@@ -38,7 +38,7 @@ class RequestIdFilter_Echo_Test extends TestBase {
 		}
 		@RestGet(path="/a")
 		public String a(RestRequest req) {
-			return req.getAttribute(RestServerConstants.REQUEST_ID).asString().orElse("");
+			return req.getAttribute("requestId").asString().orElse("");
 		}
 	}
 

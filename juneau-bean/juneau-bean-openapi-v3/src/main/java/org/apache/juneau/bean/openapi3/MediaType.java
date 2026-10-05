@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -70,22 +69,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class MediaType extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_example = "example";
-	private static final String ARG_key = "key";
-	private static final String ARG_name = "name";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_encoding = "encoding";
-	private static final String PROP_examples = "examples";
-	private static final String PROP_schema = "schema";
-	private static final String PROP_xExample = "x-example";
 
 	private SchemaInfo schema;
 	private Object example;
@@ -121,8 +107,8 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		encoding.put(key, value);
 		return this;
 	}
@@ -135,8 +121,8 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType addExample(String name, Example example) {
-		assertArgNotNull(ARG_name, name);
-		assertArgNotNull(ARG_example, example);
+		reqnn("name", name);
+		reqnn("example", example);
 		examples.put(name, example);
 		return this;
 	}
@@ -152,12 +138,12 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_encoding -> toType(getEncoding(), type);
-			case PROP_examples -> toType(getExamples(), type);
-			case PROP_schema -> toType(getSchema(), type);
-			case PROP_xExample -> toType(getExample(), type);
+			case "encoding" -> toType(getEncoding(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "x-example" -> toType(getExample(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -198,10 +184,10 @@ public class MediaType extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(encoding), PROP_encoding)
-			.addIf(ine(examples), PROP_examples)
-			.addIf(nn(schema), PROP_schema)
-			.addIf(nn(example), PROP_xExample)
+			.addIf(ine(encoding), "encoding")
+			.addIf(ine(examples), "examples")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(example), "x-example")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -209,12 +195,12 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public MediaType set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_encoding -> setEncoding(toMapBuilder(value, String.class, Encoding.class).sparse().build());
-			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
-			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
-			case PROP_xExample -> setExample(value);
+			case "encoding" -> setEncoding(toMapBuilder(value, String.class, Encoding.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(value);
 			default -> {
 				super.set(property, value);
 				yield this;

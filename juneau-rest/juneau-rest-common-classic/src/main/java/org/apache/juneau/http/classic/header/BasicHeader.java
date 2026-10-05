@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -107,7 +106,7 @@ public class BasicHeader implements Header, Serializable {
 		"unchecked" // Type erasure requires cast for supplier
 	})
 	public BasicHeader(String name, Object value) {
-		assertArg(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
+		req(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = s(value);
@@ -127,7 +126,7 @@ public class BasicHeader implements Header, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
-		assertArg(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
+		req(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;

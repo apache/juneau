@@ -29,6 +29,7 @@ import java.util.function.*;
  */
 @SuppressWarnings({
 	"java:S2160", // equals() on HttpHeaderBean uses name + getValue(); typed state is reflected in getValue()
+	"java:S9149", // Public Juneau DSL factory; hiding parent of()/create() is intentional.
 	"unchecked" // Supplier<?> branches cast to typed suppliers after lazy-mode check
 })
 public class HttpLongHeader extends HttpHeaderBean {
@@ -47,9 +48,6 @@ public class HttpLongHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value. May be {@code null} or empty.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpLongHeader of(String name, String wireValue) {
 		return new HttpLongHeader(name, wireValue);
 	}
@@ -61,9 +59,6 @@ public class HttpLongHeader extends HttpHeaderBean {
 	 * @param typedValue The long value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpLongHeader of(String name, Long typedValue) {
 		return new HttpLongHeader(name, typedValue);
 	}

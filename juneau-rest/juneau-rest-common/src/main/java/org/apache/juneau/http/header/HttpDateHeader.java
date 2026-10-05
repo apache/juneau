@@ -32,6 +32,7 @@ import java.util.function.*;
  */
 @SuppressWarnings({
 	"java:S2160", // equals() on HttpHeaderBean uses name + getValue(); typed state is reflected in getValue()
+	"java:S9149", // Public Juneau DSL factory; hiding parent of()/create() is intentional.
 	"unchecked" // Supplier<?> branches cast to typed suppliers after lazy-mode check
 })
 public class HttpDateHeader extends HttpHeaderBean {
@@ -50,9 +51,6 @@ public class HttpDateHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value (e.g. {@code "Sun, 06 Nov 1994 08:49:37 GMT"}). May be {@code null} or empty.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpDateHeader of(String name, String wireValue) {
 		return new HttpDateHeader(name, wireValue);
 	}
@@ -64,9 +62,6 @@ public class HttpDateHeader extends HttpHeaderBean {
 	 * @param typedValue The date value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpDateHeader of(String name, ZonedDateTime typedValue) {
 		return new HttpDateHeader(name, typedValue);
 	}

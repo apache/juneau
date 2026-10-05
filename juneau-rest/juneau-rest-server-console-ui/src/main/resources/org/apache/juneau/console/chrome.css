@@ -204,9 +204,10 @@ a:hover { text-decoration: underline; }
 /* ==========================================================================
    App-header extras (TODO-445m): action/avatar count-dot badges, avatar
    presence status + image fallback, and the 445h-pending menu surface.
-   Tones and presence states reuse the shared .tag palette tokens - WARN tone
-   and AWAY status BOTH map to amber (locked mapping L10; no dedicated
-   --jc-warn* token is introduced).  Every var(--jc-*) here sinks only into
+   Badge tones use the StatusTone wire tokens (info, success, warning, error,
+   neutral) and presence states reuse the shared .tag palette tokens - the
+   warning tone and AWAY status BOTH map to amber (no dedicated --jc-warn*
+   token is introduced).  Every var(--jc-*) here sinks only into
    color / background-color / border-color / border-radius (or a "Npx solid
    var()" border shorthand as elsewhere in this file) - never a url-capable
    whole value.
@@ -248,13 +249,13 @@ a:hover { text-decoration: underline; }
   border-radius: 50%;
 }
 
-.jc-badge[data-juneau-badge-tone="accent"]  { background-color: var(--jc-tag-blue-bg);    color: var(--jc-tag-blue-text);    border-color: var(--jc-tag-blue-border); }
+.jc-badge[data-juneau-badge-tone="info"]    { background-color: var(--jc-tag-blue-bg);    color: var(--jc-tag-blue-text);    border-color: var(--jc-tag-blue-border); }
 .jc-badge[data-juneau-badge-tone="success"] { background-color: var(--jc-tag-green-bg);   color: var(--jc-tag-green-text);   border-color: var(--jc-tag-green-border); }
-.jc-badge[data-juneau-badge-tone="warn"]    { background-color: var(--jc-tag-amber-bg);   color: var(--jc-tag-amber-text);   border-color: var(--jc-tag-amber-border); }
-.jc-badge[data-juneau-badge-tone="danger"]  { background-color: var(--jc-tag-red-bg);     color: var(--jc-tag-red-text);     border-color: var(--jc-tag-red-border); }
+.jc-badge[data-juneau-badge-tone="warning"] { background-color: var(--jc-tag-amber-bg);   color: var(--jc-tag-amber-text);   border-color: var(--jc-tag-amber-border); }
+.jc-badge[data-juneau-badge-tone="error"]   { background-color: var(--jc-tag-red-bg);     color: var(--jc-tag-red-text);     border-color: var(--jc-tag-red-border); }
 .jc-badge[data-juneau-badge-tone="neutral"] { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
 
-/* Avatar image + hidden-initials fallback (juneau-chrome.js hides the img on error and unhides the initials). */
+/* Avatar image + hidden-initials fallback (juneau-console.js hides the img on error and unhides the initials). */
 .jc-avatar-img {
   width: 100%;
   height: 100%;
@@ -280,7 +281,7 @@ a:hover { text-decoration: underline; }
 .jc-avatar-status-busy::after    { background-color: var(--jc-tag-red-text); }
 .jc-avatar-status-offline::after { background-color: var(--jc-tag-neutral-text); }
 
-/* Menu surface - display:none until juneau-chrome.js portals it onto the shared views layer stack (445h), which
+/* Menu surface - display:none until juneau-console.js portals it onto the shared views layer stack (445h), which
    sets position:fixed + the cell-anchored top/left and toggles display back on.  Inert with JS off. */
 .jc-menu {
   display: none;
@@ -577,6 +578,60 @@ a:hover { text-decoration: underline; }
 .jc-breadcrumb a { color: var(--jc-text-muted); }
 .jc-breadcrumb .sep { margin: 0 6px; }
 
+/* --------------------------------------------------------------------------
+   Shell-rendered chrome (juneau-console.js, 10.0.0)
+   -------------------------------------------------------------------------- */
+
+.jc-brand-subtitle {
+  margin-left: var(--jc-space-2);
+  color: var(--jc-text-soft);
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.jc-card-title {
+  margin: 0 0 var(--jc-space-3) 0;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--jc-text);
+}
+
+/* Local fallback when the JuneauViews layer stack is absent (C1 P15): the shell toggles the list's
+   display; with views loaded the list is portalled as a layer and these rules do not apply. */
+.jc-user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.jc-user-menu > .jc-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 30;
+}
+
+/* Loud-failure banner (spec §5.4). One banner per page, one item per failure. */
+.jc-console-error {
+  position: relative;
+  z-index: 40;
+  margin: 0;
+  padding: var(--jc-space-2) var(--jc-space-3);
+  background-color: var(--jc-tag-red-bg);
+  color: var(--jc-tag-red-text);
+  border-bottom: 2px solid var(--jc-tag-red-text);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.jc-console-error-item {
+  overflow-wrap: anywhere;
+}
+
+.jc-console-error-item + .jc-console-error-item {
+  margin-top: 4px;
+}
+
 /* ==========================================================================
    Card
    ========================================================================== */
@@ -738,12 +793,12 @@ a:hover { text-decoration: underline; }
    visible dot, sized a touch larger than a pill.  Exactly four statuses paint from the dedicated --jc-probe-* palette
    (light wash + ink + dot fill); the selected probe in a group draws a themed accent ring from --jc-accent-selected.
    Selecting a probe never repaints its status colours. */
-.jc-probe-ok      { background-color: var(--jc-probe-ok-bg);      color: var(--jc-probe-ok-text); }
-.jc-probe-ok      .jc-probe-dot { background-color: var(--jc-probe-ok-dot); }
-.jc-probe-fail    { background-color: var(--jc-probe-fail-bg);    color: var(--jc-probe-fail-text); }
-.jc-probe-fail    .jc-probe-dot { background-color: var(--jc-probe-fail-dot); }
-.jc-probe-warn    { background-color: var(--jc-probe-warn-bg);    color: var(--jc-probe-warn-text); }
-.jc-probe-warn    .jc-probe-dot { background-color: var(--jc-probe-warn-dot); }
+.jc-probe-success { background-color: var(--jc-probe-success-bg); color: var(--jc-probe-success-text); }
+.jc-probe-success .jc-probe-dot { background-color: var(--jc-probe-success-dot); }
+.jc-probe-error   { background-color: var(--jc-probe-error-bg);   color: var(--jc-probe-error-text); }
+.jc-probe-error   .jc-probe-dot { background-color: var(--jc-probe-error-dot); }
+.jc-probe-warning { background-color: var(--jc-probe-warning-bg); color: var(--jc-probe-warning-text); }
+.jc-probe-warning .jc-probe-dot { background-color: var(--jc-probe-warning-dot); }
 .jc-probe-neutral { background-color: var(--jc-probe-neutral-bg); color: var(--jc-probe-neutral-text); }
 .jc-probe-neutral .jc-probe-dot { background-color: var(--jc-probe-neutral-dot); }
 .jc-probe[aria-checked="true"] { box-shadow: 0 0 0 2px var(--jc-accent-selected); }
@@ -1042,10 +1097,6 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-pagingpill-menu-option:hover,
 .juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
-
-/* Per-column search row inputs - same control-border treatment, themed accent on focus. */
-.juneau-view-columnsearch-input { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-text); }
-.juneau-view-columnsearch-input:focus { border-color: var(--jc-accent); }
 
 /* Toolbar Search - same --jc-control-border as ribbon/paging so a theme that splits --jc-border from
    --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.

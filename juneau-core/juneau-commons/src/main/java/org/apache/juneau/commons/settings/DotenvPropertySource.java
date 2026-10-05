@@ -27,6 +27,9 @@ import java.util.concurrent.atomic.*;
 /**
  * Property source backed by a dotenv file.
  */
+@SuppressWarnings({
+	"java:S3776" // load() reads the file line by line with nested blank/comment, key=value and quote-stripping checks
+})
 public class DotenvPropertySource implements PropertySource {
 
 	private static final String DEFAULT_PATH = ".env";
@@ -62,18 +65,12 @@ public class DotenvPropertySource implements PropertySource {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for dotenv property lookup and parsing logic
-	})
 	public PropertyLookupResult get(String name) {
 		var values = map.updateAndGet(existing -> existing != null ? existing : load(path));
 		var value = values.get(name);
 		return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // line-oriented dotenv parsing intentionally keeps all validation branches in one place.
-	})
 	private static Map<String,String> load(Path path) {
 		if (path == null || ! Files.exists(path))
 			return Collections.emptyMap();

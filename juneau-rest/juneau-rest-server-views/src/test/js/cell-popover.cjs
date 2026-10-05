@@ -35,7 +35,7 @@ if (!rendersJsPath || !viewsJsPath) {
 
 /** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
 function toDataAttr(prop) {
-	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
+	return 'data-' + prop.replaceAll(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
 }
 
 function el(tag) {
@@ -58,14 +58,13 @@ function el(tag) {
 		removeAttribute: function (k) { delete this.attrs[k]; },
 		/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
 		get dataset() {
-			const self = this;
 			return new Proxy({}, {
-				get: function (t, prop) {
+				get: (t, prop) => {
 					if (typeof prop !== 'string') return undefined;
 					const k = toDataAttr(prop);
-					return Object.hasOwn(self.attrs, k) ? self.attrs[k] : undefined;
+					return Object.hasOwn(this.attrs, k) ? this.attrs[k] : undefined;
 				},
-				set: function (t, prop, value) { self.setAttribute(toDataAttr(prop), value); return true; }
+				set: (t, prop, value) => { this.setAttribute(toDataAttr(prop), value); return true; }
 			});
 		},
 		appendChild: function (c) { this.childNodes.push(c); c.parentNode = this; return c; },
@@ -108,7 +107,7 @@ function parseAttrs(raw, node) {
 	if (!raw) return;
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
-	while ((m = re.exec(raw)))
+	for (m = re.exec(raw); m; m = re.exec(raw))
 		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
 }
 
@@ -121,7 +120,7 @@ function parseTestHtml(html) {
 	const stack = [root];
 	const re = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)\/?>|([^<]+)/g;
 	let m;
-	while ((m = re.exec(html))) {
+	for (m = re.exec(html); m; m = re.exec(html)) {
 		if (m[3] != null) {
 			stack.at(-1).appendChild(textNode(m[3]));
 			continue;
@@ -149,7 +148,7 @@ DOMParser.prototype.parseFromString = function (str) {
 const byId = {};
 const document = {
 	readyState: 'loading',
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
 	getElementById: function (id) { return byId[id] || null; },
@@ -181,6 +180,26 @@ vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, 
 
 const NS = window.JuneauViews;
 const I = NS?.init;
+/** True when {@code n} or any descendant element carries a {@code data-juneau-ts} host stamp. */
+function hasTsHost(n) {
+	if (!n || n.nodeType !== 1) return false;
+	if (n.dataset.juneauTs) return true;
+	for (const c of n.childNodes) {
+		if (hasTsHost(c)) return true;
+	}
+	return false;
+}
+
+/** True when {@code n} or a descendant, other than {@code root} itself, is a SPAN element. */
+function hasSpanBelow(n, root) {
+	if (!n || n.nodeType !== 1) return false;
+	if (n !== root && n.tagName === 'SPAN') return true;
+	for (const c of n.childNodes) {
+		if (hasSpanBelow(c, root)) return true;
+	}
+	return false;
+}
+
 const out = { hasInit: typeof I?.appendPopoverTrigger === 'function' && typeof I?.fillCellPopover === 'function' };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
@@ -229,15 +248,7 @@ I.fillCellPopover(pop, {
 out.fill_title = pop.textContent.indexOf('CPU') >= 0;
 out.fill_actual = pop.textContent.indexOf('12') >= 0;
 out.fill_missingBlank = pop.textContent.indexOf('undefined') < 0 && pop.textContent.indexOf('null') < 0;
-out.fill_noTsHost = (function () {
-	function walk(n) {
-		if (!n || n.nodeType !== 1) return false;
-		if (n.dataset.juneauTs) return true;
-		for (const c of n.childNodes) if (walk(c)) return true;
-		return false;
-	}
-	return !walk(pop);
-})();
+out.fill_noTsHost = !hasTsHost(pop);
 
 window.JuneauViews.registerRenderer('date', { display: function () { return '<img src=x onerror=alert(1)>'; } });
 out.freeze_dateStillText = String(NS.resolveSinkRenderer('date').display('2026-08-20T20:11:00Z', {}, {})).indexOf('<img') < 0;
@@ -247,14 +258,6 @@ I.fillCellPopover(hostile, {
 	fields: [{ data: 'v', render: { id: 'tag' } }]
 }, { v: 'x' });
 out.fill_htmlShapedFallsBack = hostile.textContent.indexOf('x') >= 0;
-out.fill_noElementCopy = (function () {
-	function walk(n) {
-		if (!n || n.nodeType !== 1) return false;
-		if (n !== hostile && n.tagName === 'SPAN') return true;
-		for (const c of n.childNodes) if (walk(c)) return true;
-		return false;
-	}
-	return !walk(hostile);
-})();
+out.fill_noElementCopy = !hasSpanBelow(hostile, hostile);
 
 process.stdout.write(JSON.stringify(out));

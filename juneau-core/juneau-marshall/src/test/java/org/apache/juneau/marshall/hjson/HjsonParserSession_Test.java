@@ -35,8 +35,8 @@ import org.junit.jupiter.api.*;
  * existing {@code Hjson*_Test} suite ({@link HjsonParser_Test}, {@link HjsonEdgeCases_Test}, etc.).
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns Object; cast to Map/List in tests
-	"resource"   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unchecked" // Parser returns Object; cast to Map/List in tests
 })
 class HjsonParserSession_Test extends TestBase {
 
@@ -285,7 +285,7 @@ class HjsonParserSession_Test extends TestBase {
 
 	@Test
 	void e04_swapPathOnBeanBytesProperty() throws Exception {
-		// convertToBean's "if (nn(swap))" branch via a scalar byte[] bean property (not inside a List).
+		// convertToBean's swap-is-not-null branch via a scalar byte[] bean property (not inside a List).
 		var p = HjsonParser.create().binaryFormat(BinaryFormat.HEX).build();
 		var bean = p.read("{data: \"010203\"}", BeanWithBytes.class);
 		assertNotNull(bean);

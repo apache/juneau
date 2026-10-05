@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -101,7 +103,7 @@ final class ChromeCssScanner {
 			}
 			var inner = css.substring(idx + 1, Math.max(idx + 1, k - 1));
 
-			if (! name.equals("var") && inner.contains("var(--jc-"))
+			if (neq(name, "var") && inner.contains("var(--jc-"))
 				violations.add("'var(--jc-' nested inside '" + name + "(...)': " + name + "(" + inner + ")");
 
 			i = idx + 1;
@@ -116,7 +118,7 @@ final class ChromeCssScanner {
 			var token = m.group(2);
 			if (! URL_CAPABLE_PROPERTIES.contains(property))
 				continue;
-			var allowed = property.equals("background-image") && GRADIENT_TOKEN_ALLOWLIST.contains(token);
+			var allowed = eq(property, "background-image") && GRADIENT_TOKEN_ALLOWLIST.contains(token);
 			if (! allowed)
 				violations.add("'" + token + "' sinks into url-capable property '" + property + "'.");
 		}

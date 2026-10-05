@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jcs;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -39,15 +38,13 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S3776" // Cognitive complexity acceptable for ECMAScript number formatting and map serialization
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for ECMAScript number formatting and map serialization
+	"resource" // Resource management handled externally
 })
 public class JcsSerializerSession extends JsonSerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
+	// Q:  Any good candidates for state machines in here?
 
 	/**
 	 * Builder class.
@@ -61,7 +58,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JcsSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -78,7 +75,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JcsSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -169,7 +166,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 			var expNum = Integer.parseInt(exp);
 			// ECMAScript: shorten mantissa (1.0 -> 1, 2.5 -> 2.5)
 			mantissa = stripTrailingZeros(mantissa);
-			if (mantissa.equals("1.0") || mantissa.equals("1"))
+			if (eqa(mantissa, "1.0", "1"))
 				mantissa = "1";
 			else if (mantissa.endsWith(".0"))
 				mantissa = mantissa.substring(0, mantissa.length() - 2);
@@ -283,7 +280,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+		"unchecked" // Type erasure requires unchecked casts in collection/map serialization
 	})
 	@Override /* Overridden from JsonSerializerSession - package visibility, override by making accessible */
 	protected SerializerWriter<?> writeMap(JsonWriter<?> out, Map m, ClassMeta<?> type) throws SerializeException {

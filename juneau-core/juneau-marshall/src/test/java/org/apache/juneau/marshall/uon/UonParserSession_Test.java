@@ -44,11 +44,12 @@ import org.junit.jupiter.api.*;
  *  - readAttrName encoded mode
  */
 @SuppressWarnings({
-	"rawtypes",
-	"unchecked",
-	"java:S5961",
+	"java:S5778", // assertThrows lambdas contain multiple calls; only the primary call throws.
+	"java:S5961", // Tests exercise many parser branches and each needs its own assertions
 	"java:S5976", // SSLLC test naming convention requires individual methods, not parameterized tests
-	"resource" // Pipe/UonReader fixtures wrap in-memory Strings; closure is exercised elsewhere and irrelevant to these assertions
+	"rawtypes", // Tests parse into raw Map/Collection targets (e.g. LinkedList<Map>, Map[]) to hit the untyped parser branches
+	"resource", // Pipe/UonReader fixtures wrap in-memory Strings; closure is exercised elsewhere and irrelevant to these assertions
+	"unchecked" // Casts of raw parse results to LinkedList<Map> and similar typed collections
 })
 class UonParserSession_Test extends TestBase {
 
@@ -80,9 +81,6 @@ class UonParserSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void a03_builderProperty_nullKeyDelegates() {
 		// A null key takes the early-return branch and delegates to super, which throws.
 		var p = UonParser.create().build();
@@ -449,9 +447,6 @@ class UonParserSession_Test extends TestBase {
 		assertEquals(3, dest.get(2));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void i03_doParseIntoMap_validateEnd() {
 		// validateEnd with extra junk after map.
 		assertThrows(ParseException.class, () -> {
@@ -460,9 +455,6 @@ class UonParserSession_Test extends TestBase {
 		});
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test void i04_doParseIntoCollection_validateEnd() {
 		assertThrows(ParseException.class, () -> {
 			var dest = new ArrayList<>();

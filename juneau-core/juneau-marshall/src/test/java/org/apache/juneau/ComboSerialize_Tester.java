@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.yaml.*;
  * @param <T>
  */
 @SuppressWarnings({
-	"rawtypes",
+	"rawtypes", // Raw Serializer.Builder is used as a Consumer type argument when applying registered builder customizers in create().
 	"unchecked" // Consumer/Builder casts in test infra
 })
 public class ComboSerialize_Tester<T> {
@@ -184,7 +184,7 @@ public class ComboSerialize_Tester<T> {
 	}
 
 	private boolean isSkipped(String testName, String expected) {
-		return expected == null || "SKIP".equals(expected) || skipTest.test(testName);
+		return expected == null || eq(expected, "SKIP") || skipTest.test(testName);
 	}
 
 	public void testSerialize(String testName) throws Exception {

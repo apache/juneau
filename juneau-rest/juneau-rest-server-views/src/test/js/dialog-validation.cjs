@@ -48,7 +48,7 @@ const dialog = env.el('div');
 I.appendDialogForm(dialog, {
 	fields: [
 		{ name: 'req', type: 'text', label: 'Req', required: true, help: 'need it' },
-		{ name: 'pat', type: 'text', label: 'Pat', pattern: '^[0-9]+$' },
+		{ name: 'pat', type: 'text', label: 'Pat', pattern: String.raw`^\d+$` },
 		{ name: 'lim', type: 'text', label: 'Lim', maxLength: 3 },
 		{ name: 'chk', type: 'checkbox', label: 'Chk', required: true }
 	]
@@ -71,7 +71,7 @@ out.lim_ariaInvalid = lim.getAttribute('aria-invalid') === 'true';
 out.chk_ariaInvalid = chk.getAttribute('aria-invalid') === 'true';
 const reqErr = dialog.querySelector('[data-juneau-error-for="req"]');
 out.confirm_roleAlert = reqErr.getAttribute('role') === 'alert';
-out.confirm_errorTextSet = !!reqErr.textContent && reqErr.textContent.length > 0;
+out.confirm_errorTextSet = reqErr.textContent?.length > 0;
 out.describedby_concatHelpAndError = (function () {
 	const d = req.getAttribute('aria-describedby') || '';
 	return d.indexOf('-help') >= 0 && d.indexOf('-error') >= 0;

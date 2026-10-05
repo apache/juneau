@@ -66,7 +66,7 @@ class AuthenticatedRequestWrapper_Test extends TestBase {
 
 	@Test void a05_getAttribute_principalAttr() {
 		var a = new AuthenticatedRequestWrapper(mockReq(), AuthResult.of(ALICE));
-		assertSame(ALICE, a.getAttribute(RestServerConstants.PRINCIPAL_ATTR));
+		assertSame(ALICE, a.getAttribute("juneau.principal"));
 	}
 
 	@Test void a06_getAttribute_otherKey_delegatesToWrapped() {

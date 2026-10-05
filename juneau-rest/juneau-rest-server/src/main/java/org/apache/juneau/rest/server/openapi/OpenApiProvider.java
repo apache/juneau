@@ -208,6 +208,9 @@ public interface OpenApiProvider {
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
 	 * ultimately {@link BasicOpenApiProvider} if not specified at any level.
 	 */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public abstract class Void implements OpenApiProvider {}
 
 	/**

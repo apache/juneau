@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.secret;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -49,14 +48,14 @@ public class EnvVarSecretStore implements SecretStore {
 
 	@Override /* SecretStore */
 	public Optional<char[]> find(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		var v = System.getenv(key);
 		return v == null ? oe() : o(v.toCharArray());
 	}
 
 	@Override /* SecretStore */
 	public boolean exists(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		return System.getenv(key) != null;
 	}
 

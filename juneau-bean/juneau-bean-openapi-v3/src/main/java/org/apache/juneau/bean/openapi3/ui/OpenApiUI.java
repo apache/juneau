@@ -49,8 +49,10 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1192",      // String literals repeated for clarity in UI generation
-	"javabugs:S2259"   // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"java:S1192", // String literals repeated for clarity in UI generation
+	"java:S3776", // Cognitive complexity acceptable for this logic
+	"javabugs:S2259", // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"null" // Null analysis not applicable for optional values
 })
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
@@ -77,9 +79,6 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static final RichLogger LOG = RichLogger.getLogger(OpenApiUI.class);
 
-	@SuppressWarnings({
-		"null" // Null analysis not applicable for optional values
-	})
 	private static void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
 		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || (nn(t) && nn(op.getTags()) && op.getTags().contains(t.getName()))) { // HTT - op.getTags() is always non-null (initialized to list()); the null branch is unreachable
 			tagBlockContents.child(opBlock(s, path, method, op));
@@ -130,9 +129,6 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return examplesDiv(m);
 	}
 
-	@SuppressWarnings({
-		"null" // Null analysis not applicable for optional values
-	})
 	private static Div examplesDiv(JsonMap m) {
 		if (m.isEmpty()) // HTT - callers always check !m.isEmpty() before calling examplesDiv
 			return null;
@@ -160,9 +156,6 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the informational summary before the ops.
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for this logic
-	})
 	private static Table header(Session s) {
 		var table = table().class_("header");
 
@@ -311,9 +304,6 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for this logic
-	})
 	private static Div tagBlockContents(Session s, Tag t) {
 		var tagBlockContents = div().class_("tag-block-contents");
 

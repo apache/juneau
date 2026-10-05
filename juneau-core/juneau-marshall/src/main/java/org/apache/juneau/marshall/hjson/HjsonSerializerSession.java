@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.hjson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -36,12 +35,15 @@ import org.apache.juneau.marshall.stream.*;
  * Session for serializing objects to Hjson format.
  */
 @SuppressWarnings({
-	"resource", "java:S110", "java:S115", "java:S3776", "java:S6541",
-	"rawtypes", "unchecked"
+	"java:S110", // Session hierarchy (HjsonSerializerSession -> WriterSerializerSession -> SerializerSession -> MarshallingSession ...) is inherently deep.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // writeAnything() dispatches on every supported value type (bean, map, collection, array, date, etc.) in one if/else chain.
+	"java:S6541", // writeAnything() is the single type-dispatch point of the serializer and is long by design.
+	"rawtypes", // Raw Map, Collection and BeanMap are used in writeMap()/writeCollection() and the casts in doWrite()/writeAnything() because the runtime value type is not known.
+	"resource", // The HjsonWriter wraps the pipe's writer and is closed with the SerializerPipe, not in getHjsonWriter().
+	"unchecked" // Calls to forEachEntry() with the raw Map/Collection arguments in writeMap()/writeCollection() are unchecked.
 })
 public class HjsonSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for Hjson serializer session.
@@ -51,7 +53,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		private HjsonSerializer ctx;
 
 		protected Builder(HjsonSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -69,7 +71,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 	 * @return The builder.
 	 */
 	public static Builder create(HjsonSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final HjsonSerializer ctx;

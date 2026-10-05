@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.concurrent;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
@@ -568,7 +569,7 @@ class NullableReference_Test extends TestBase {
 		assertTrue(successCount.get() > 0, "compareAndSet should have succeeded at least once");
 		// Final value should be either "initial" or "target"
 		var finalValue = ref.get();
-		assertTrue("initial".equals(finalValue) || targetValue.equals(finalValue),
+		assertTrue(eq(finalValue, "initial") || targetValue.equals(finalValue),
 			"Final value should be 'initial' or 'target', but was: " + finalValue);
 	}
 

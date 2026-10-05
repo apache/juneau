@@ -16,338 +16,36 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 
-import java.util.*;
-
 /**
- * Utility methods for argument validation and assertion.
+ * Membership assertion ({@link #assertOneOf(Object, Object...) assertOneOf}).
  *
  * <p>
- * This class provides static utility methods for validating method arguments and throwing
- * {@link IllegalArgumentException} when validation fails. These methods are designed to
- * simplify common parameter validation patterns and provide consistent error messages.
- *
- * <h5 class='section'>Features:</h5>
- * <ul>
- *   <li><b>Null checking:</b> Validate single or multiple arguments are not null
- *   <li><b>Boolean expressions:</b> Assert arbitrary boolean conditions with custom messages
- *   <li><b>String validation:</b> Check for null or blank strings
- *   <li><b>Type checking:</b> Validate class array types
- * </ul>
+ * The argument and state checks that used to live here moved to {@link Shorts} in 10.0:
+ * <c>req*</c> (throwing {@link IllegalArgumentException}) and <c>chk*</c> (throwing {@link IllegalStateException}).
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- *   <jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
+ * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
  *
- *   <jk>public</jk> <jk>void</jk> setFooBar(String <jv>foo</jv>, String <jv>bar</jv>) {
- *       <jc>// Validate multiple arguments at once</jc>
- *       <jsm>assertArgsNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>, <js>"bar"</js>, <jv>bar</jv>);
- *
- *       <jc>// Validate custom condition</jc>
- *       <jsm>assertArg</jsm>(<jv>foo</jv>.length() &gt; 0, <js>"Foo cannot be empty"</js>);
- *   }
+ * 	<jc>// Returns the value if it matches one of the expected values; otherwise throws an AssertionError</jc>
+ * 	String <jv>mode</jv> = <jsm>assertOneOf</jsm>(<jv>input</jv>, <js>"fast"</js>, <js>"safe"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
+ *
+ * @see Shorts
  */
-@SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
-})
 public class AssertionUtils {
 
 	/**
 	 * Prevents instantiation.
 	 */
 	private AssertionUtils() {}
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_type = "type";
-	private static final String ARG_o = "o";
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
-	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param expression The boolean expression to check.
-	 * @param msg The exception message.
-	 * @param args The exception message args.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
-		if (! expression)
-			throw iaex(msg, args);
-	}
-
-	/**
-	 * Asserts that the given expression is <c>true</c>, throwing an {@link IllegalStateException} if it's not.
-	 *
-	 * <p>
-	 * This method is similar to {@link #assertArg(boolean, String, Object...)} but throws an
-	 * {@link IllegalStateException} instead of an {@link IllegalArgumentException}, making it suitable
-	 * for state validation rather than argument validation.
-	 *
-	 * @param expression The expression to test.
-	 * @param msg The error message format string.
-	 * @param args The arguments for the error message format string.
-	 * @throws IllegalStateException if the expression is <c>false</c>.
-	 */
-	public static final void assertState(boolean expression, String msg, Object...args) throws IllegalStateException {
-		if (! expression)
-			throw isex(msg, args);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> String setFoo(String <jv>foo</jv>) {
-	 *		<jsm>assertArgNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The argument data type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same argument.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument '%s' cannot be null.", name);
-		return o;
-	}
-
-	/**
-	 * Asserts that the specified object is not <jk>null</jk>, throwing an {@link IllegalStateException} if it is.
-	 *
-	 * @param <T> The type of the object.
-	 * @param o The object to check. Can be <jk>null</jk>.
-	 * @param msg The error message format string. Must not be <jk>null</jk>.
-	 * @param args The arguments for the message format string.
-	 * @return The non-null object.
-	 * @throws IllegalStateException If the object is <jk>null</jk>.
-	 */
-	public static final <T> T assertNotNull(T o, String msg, Object...args) throws IllegalStateException {
-		if (o == null)
-			throw isex(msg, args);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified string is <jk>null</jk> or blank.
-	 *
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
-	 */
-	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
-		assertArgNotNull(name, o);
-		assertArg(! o.isBlank(), "Argument '%s' cannot be blank.", name);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if any of the specified arguments are <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> String setFooBar(String <jv>foo</jv>, String <jv>bar</jv>) {
-	 *		<jsm>assertArgsNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>, <js>"bar"</js>, <jv>bar</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param name1 The first argument name.
-	 * @param o1 The first object to check.
-	 * @param name2 The second argument name.
-	 * @param o2 The second object to check.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2) throws IllegalArgumentException {
-		assertArgNotNull(name1, o1);
-		assertArgNotNull(name2, o2);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if any of the specified arguments are <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> String setFooBarBaz(String <jv>foo</jv>, String <jv>bar</jv>, String <jv>baz</jv>) {
-	 *		<jsm>assertArgsNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>, <js>"bar"</js>, <jv>bar</jv>, <js>"baz"</js>, <jv>baz</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param name1 The first argument name.
-	 * @param o1 The first object to check.
-	 * @param name2 The second argument name.
-	 * @param o2 The second object to check.
-	 * @param name3 The third argument name.
-	 * @param o3 The third object to check.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3) throws IllegalArgumentException {
-		assertArgNotNull(name1, o1);
-		assertArgNotNull(name2, o2);
-		assertArgNotNull(name3, o3);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if any of the specified arguments are <jk>null</jk>.
-	 *
-	 * @param name1 The first argument name.
-	 * @param o1 The first object to check.
-	 * @param name2 The second argument name.
-	 * @param o2 The second object to check.
-	 * @param name3 The third argument name.
-	 * @param o3 The third object to check.
-	 * @param name4 The fourth argument name.
-	 * @param o4 The fourth object to check.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	@SuppressWarnings({
-		"java:S107" // 8 parameters needed for argument validation
-	})
-	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4) throws IllegalArgumentException {
-		assertArgNotNull(name1, o1);
-		assertArgNotNull(name2, o2);
-		assertArgNotNull(name3, o3);
-		assertArgNotNull(name4, o4);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if any of the specified arguments are <jk>null</jk>.
-	 *
-	 * @param name1 The first argument name.
-	 * @param o1 The first object to check.
-	 * @param name2 The second argument name.
-	 * @param o2 The second object to check.
-	 * @param name3 The third argument name.
-	 * @param o3 The third object to check.
-	 * @param name4 The fourth argument name.
-	 * @param o4 The fourth object to check.
-	 * @param name5 The fifth argument name.
-	 * @param o5 The fifth object to check.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	@SuppressWarnings({
-		"java:S107" // 10 parameters needed for argument validation
-	})
-	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
-		throws IllegalArgumentException {
-		assertArgNotNull(name1, o1);
-		assertArgNotNull(name2, o2);
-		assertArgNotNull(name3, o3);
-		assertArgNotNull(name4, o4);
-		assertArgNotNull(name5, o5);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified object is not an instance of the specified type.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> <jk>void</jk> setValue(Object <jv>value</jv>) {
-	 *		<jc>// Validate that value is a String</jc>
-	 *		<jsm>assertType</jsm>(String.<jk>class</jk>, <jv>value</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The expected type.
-	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
-	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
-	 * @return The object cast to the specified type.
-	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type, or if either argument is <jk>null</jk>.
-	 */
-	@SuppressWarnings({
-		"unchecked" // Type safety ensured by instanceof check
-	})
-	public static final <T> T assertType(Class<T> type, Object o) throws IllegalArgumentException {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_o, o);
-		if (! type.isInstance(o))
-			throw iaex("Object is not an instance of %s: %s", ClassUtils.className(type), ClassUtils.className(o));
-		return (T)o;
-	}
-
-	/**
-	 * Throws the exception provided by the supplier if the specified object is not an instance of the specified type.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> <jk>void</jk> setValue(Object <jv>value</jv>) {
-	 *		<jc>// Validate that value is a String, throw custom exception</jc>
-	 *		<jsm>assertType</jsm>(String.<jk>class</jk>, <jv>value</jv>, () -&gt; <jk>new</jk> IllegalStateException(<js>"Invalid value type"</js>));
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The expected type.
-	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
-	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
-	 * @param exceptionSupplier The supplier that provides the exception to throw if validation fails.  Must not be <jk>null</jk>.
-	 * @return The object cast to the specified type.
-	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
-	 */
-	@SuppressWarnings({
-		"unchecked", // Type safety ensured by instanceof check
-		"java:S112"  // Exception type comes from caller's supplier
-	})
-	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) {
-		assertArgNotNull(ARG_type, type);
-		assertArgNotNull(ARG_o, o);
-		if (! type.isInstance(o))
-			throw exceptionSupplier.get();
-		return (T)o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
-	 *
-	 * @param <E> The element type.
-	 * @param name The argument name.
-	 * @param type The expected parent class.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> type throws {@link NullPointerException}).
-	 * @param value The array value being checked.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws {@link NullPointerException}).
-	 * @return The value cast to the specified array type.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Class<E>[] for array validation
-	})
-	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
-		for (var i = 0; i < value.length; i++)
-			if (! type.isAssignableFrom(value[i]))
-				throw iaex("Arg %s did not have arg of type %s at index %s: %s", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));
-		return (Class<E>[])value;
-	}
 
 	/**
 	 * Throws an {@link AssertionError} if the specified actual value is not one of the expected values.
@@ -360,55 +58,11 @@ public class AssertionUtils {
 	 */
 	@SafeVarargs
 	public static final <T> T assertOneOf(T actual, T...expected) {
+		// Q:  Is this dead code?  Can this method and class be removed entirely?
 		for (var e : expected) {
 			if (equal(actual, e))
 				return actual;
 		}
 		throw new AssertionError("Invalid value specified: " + actual);
 	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
-	 *
-	 * @param <T> The element type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
-	 */
-	public static final <T> T[] assertArgNoNulls(String name, T[] o) throws IllegalArgumentException {
-		assertArgNotNull(name, o);
-		for (var i = 0; i < o.length; i++)
-			assertArg(isNotNull(o[i]), "Argument '%s' parameter %s cannot be null.", name, i);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified collection or any of its elements are <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
-	 *
-	 *	<jk>public</jk> <jk>void</jk> setValues(List&lt;String&gt; <jv>values</jv>) {
-	 *		<jsm>assertCollectionArgNotNull</jsm>(<js>"values"</js>, <jv>values</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @param <C> The collection type.
-	 * @param name The argument name.
-	 * @param collection The collection to check.
-	 * @return The same collection.
-	 * @throws IllegalArgumentException Thrown if the specified collection or any of its elements are <jk>null</jk>.
-	 */
-	public static final <T,C extends Collection<T>> C assertArgNoNulls(String name, C collection) throws IllegalArgumentException {
-		assertArgNotNull(name, collection);
-		var i = 0;
-		for (var element : collection)
-			assertArg(isNotNull(element), "Argument '%s' element at index %s cannot be null.", name, i++);
-		return collection;
-	}
-
 }

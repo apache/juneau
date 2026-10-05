@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -35,12 +34,10 @@ import org.apache.juneau.commons.svl.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_vrs = "vrs";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -86,7 +83,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private final transient VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
-		this.vrs = assertArgNotNull(ARG_vrs, vrs);
+		this.vrs = reqnn("vrs", vrs);
 	}
 
 	@Override /* Overridden from Object */
@@ -138,7 +135,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 			add(ai, (AnnotationApplier<Annotation,Object>)(AnnotationApplier<?,?>) new BeanConfigAnnotation.Applier(vrs));
 			return;
 		}
-		var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
+		var cpa = chknn(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
 		Arrays.stream(cpa.value())
 			.map(x -> safe(() -> (Constructor<? extends AnnotationApplier<?,?>>)x.getConstructor(VarResolverSession.class)))
 			.forEach(applyConstructor -> {

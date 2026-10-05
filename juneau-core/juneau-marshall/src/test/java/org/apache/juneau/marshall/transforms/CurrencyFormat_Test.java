@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -75,7 +76,7 @@ class CurrencyFormat_Test {
 		assertNotNull(disp);
 		// If both equal the ISO code, the surefire JVM lacks locale data for en_US/USD — accept that.
 		// Otherwise, at least the DISPLAY_NAME must be longer than the ISO code.
-		if (!"USD".equals(disp))
+		if (neq(disp, "USD"))
 			assertTrue(disp.length() > 3, "display name: " + disp);
 	}
 
@@ -115,13 +116,13 @@ class CurrencyFormat_Test {
 		// Whatever the JDK calls the USD symbol in en_US, that symbol must parse back to USD.
 		var sym = USD.getSymbol(Locale.US);
 		// Only meaningful if the locale provider actually localized the symbol (not just returned "USD").
-		if (!"USD".equals(sym))
+		if (neq(sym, "USD"))
 			assertEquals(USD, CurrencyFormat.parse(sym, CurrencyFormat.SYMBOL, Locale.US));
 	}
 
 	@Test void b04_parse_symbol_canada_roundTrips() {
 		var sym = CAD.getSymbol(Locale.CANADA);
-		if (!"CAD".equals(sym))
+		if (neq(sym, "CAD"))
 			assertEquals(CAD, CurrencyFormat.parse(sym, CurrencyFormat.SYMBOL, Locale.CANADA));
 	}
 
@@ -132,7 +133,7 @@ class CurrencyFormat_Test {
 
 	@Test void b06_parse_displayName_us_roundTrips() {
 		var name = USD.getDisplayName(Locale.US);
-		if (!"USD".equals(name))
+		if (neq(name, "USD"))
 			assertEquals(USD, CurrencyFormat.parse(name, CurrencyFormat.DISPLAY_NAME, Locale.US));
 	}
 
@@ -185,7 +186,7 @@ class CurrencyFormat_Test {
 		// Euro is unambiguous in en_US locale data — exactly one currency uses "€".
 		// Locale-data dependent: skip if the test JVM doesn't have CLDR/JRE data.
 		var eurSym = EUR.getSymbol(Locale.US);
-		if (!"EUR".equals(eurSym)) {
+		if (neq(eurSym, "EUR")) {
 			var parsed = CurrencyFormat.parse(eurSym, CurrencyFormat.SYMBOL, Locale.US);
 			assertEquals(EUR, parsed);
 		}
@@ -198,7 +199,7 @@ class CurrencyFormat_Test {
 		var usdSym = USD.getSymbol(Locale.US);
 		var cadSym = CAD.getSymbol(Locale.US);
 		// Both symbols equal -> ambiguous path was exercised.
-		if ("$".equals(usdSym) && "$".equals(cadSym)) {
+		if (eq(usdSym, "$") && eq(cadSym, "$")) {
 			assertEquals(USD, CurrencyFormat.parse("$", CurrencyFormat.SYMBOL, Locale.US));
 		}
 	}

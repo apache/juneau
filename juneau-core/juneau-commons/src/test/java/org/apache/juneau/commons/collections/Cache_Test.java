@@ -1307,6 +1307,9 @@ class Cache_Test extends TestBase {
 	 * pinned by the JVM string pool and never reclaim, spinning this loop until its bound. Calling this on the
 	 * current thread also covers the thread-local WEAK caches.
 	 */
+	@SuppressWarnings({
+		"java:S2925" // Polling for garbage collection of weak references has no deterministic alternative.
+	})
 	private static void gcUntilEmpty(Cache<?,?> cache) {
 		for (var i = 0; i < 100 && ! cache.isEmpty(); i++) {
 			System.gc();

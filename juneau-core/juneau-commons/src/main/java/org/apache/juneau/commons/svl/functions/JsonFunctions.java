@@ -32,13 +32,15 @@ import org.apache.juneau.commons.svl.*;
  * tokenization is amortized; the JSON parse itself is not yet cached and is a known follow-on
  * optimization opportunity.
  */
+@SuppressWarnings({
+	"unchecked" // Cast is safe: type verified by caller context.
+})
 public final class JsonFunctions {
 
 	private JsonFunctions() {}
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked", // Cast is safe: type verified by caller context.
 		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
@@ -64,8 +66,7 @@ public final class JsonFunctions {
 		}
 
 		@SuppressWarnings({
-			"unchecked",  // Cast is safe: type verified by caller context.
-			"java:S3776"  // Cognitive complexity acceptable for JSON path navigation dispatch
+			"java:S3776" // Cognitive complexity acceptable for JSON path navigation dispatch
 		})
 		private static Object navigate(Object root, String path) {
 			if (root == null || path == null) return null;
@@ -93,9 +94,6 @@ public final class JsonFunctions {
 	 * {@code #{get(json, key)}} — extracts {@code json[key]} (object) or {@code json[index]}
 	 * (array, when {@code key} parses as int).
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
-	})
 	public static class Get extends TypedFunction {
 		@Override public String name() { return "get"; }
 		public String invoke(String json, String key) {
@@ -117,9 +115,6 @@ public final class JsonFunctions {
 	}
 
 	/** {@code #{keys(json)}} — returns a JSON-array-shortcut string of an object's keys. */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
-	})
 	public static class Keys extends TypedFunction {
 		@Override public String name() { return "keys"; }
 		public String invoke(String json) {
@@ -130,22 +125,15 @@ public final class JsonFunctions {
 	}
 
 	/** {@code #{values(json)}} — returns a JSON-array-shortcut string of an object's values (or array elements). */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
-	})
 	public static class Values extends TypedFunction {
 		@Override public String name() { return "values"; }
 		public String invoke(String json) {
 			var v = MiniJson.parse(json);
 			if (v instanceof Map<?,?> v2) {
-				var out = new ArrayList<String>();
-				for (var x : ((Map<String,Object>) v2).values()) out.add(MiniJson.render(x));
-				return JsonShortcut.encodeArray(out);
+				return JsonShortcut.encodeArray(((Map<String,Object>) v2).values().stream().map(MiniJson::render).toList());
 			}
 			if (v instanceof List<?> v3) {
-				var out = new ArrayList<String>();
-				for (var x : v3) out.add(MiniJson.render(x));
-				return JsonShortcut.encodeArray(out);
+				return JsonShortcut.encodeArray(v3.stream().map(MiniJson::render).toList());
 			}
 			return "[]";
 		}

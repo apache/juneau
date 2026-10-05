@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.*;
  * Golden-HTML tests for the {@code <@console>} document-shell directive and its capture slots
  * ({@code <@head>}/{@code <@scripts>}/{@code <@brand>}/{@code <@actions>}/{@code <@title>}/{@code <@footer>}/
  * {@code <@body>}), the positional {@code <@main/>}, the in-{@code <@console>} {@code <@theme>}/{@code <@token>}
- * ThemePack path, and the CSRF document-shell channel. An app chrome authors only the thin
+ * theme override path, and the CSRF document-shell channel. An app chrome authors only the thin
  * {@code <@console>…</@console>}; Juneau emits the whole {@code <!DOCTYPE html>} document, its head cascade, and its
  * body scaffold.
  *
@@ -130,12 +131,12 @@ class ConsoleDirective_Test extends TestBase {
 	}
 
 	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
-	public static class ThemePackHost extends BasicRestServlet {
+	public static class ThemeOverrideHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/console-chrome-themepack.ftlh")
+				.chromeTemplate("admin/console-chrome-theme-override.ftlh")
 				.build();
 		}
 		@RestGet(path="/naked")
@@ -204,6 +205,19 @@ class ConsoleDirective_Test extends TestBase {
 		}
 	}
 
+	// A chrome that renders no <@console>.
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class NoConsoleHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() {
+			return ConsoleFreemarkerMixin.create().basePath("/templates/").chromeTemplate("admin/no-console-chrome.ftlh").build();
+		}
+		@RestGet(path="/naked")
+		public View naked() {
+			return FreemarkerView.of("admin/page-naked.ftlh");
+		}
+	}
+
 	// A live RestRequest so resolveConfiguration(...) has a request to hand the fill-missing walk.
 	private static RestRequest dummyRequest() throws Exception {
 		try (var c = MockRestClient.buildLax(DummyHost.class);
@@ -261,51 +275,35 @@ class ConsoleDirective_Test extends TestBase {
 			body = rsp.getContent().asString();
 		}
 
-		// Document skeleton Juneau owns (the app never wrote any of this).
+		// Document skeleton and head cascade (server-rendered, D3).
 		assertTrue(body.contains("<!DOCTYPE html>"), () -> body);
 		assertTrue(body.contains("<meta charset=\"utf-8\">"), () -> body);
 		assertTrue(body.contains("name=\"viewport\""), () -> body);
-
-		// Document <title> falls back to brand= when title= is absent.
 		assertTrue(body.contains("<title>My App</title>"), () -> body);
-
-		// Head cascade. Chrome/theme hrefs are context-root-absolute against the standalone
-		// /juneau-console/* mount (leading slash), not servlet-relative under the page resource.
-		assertTrue(body.contains("name=\"page-tab\"") && body.contains("releases"), () -> body);
+		assertTrue(body.contains("<meta name=\"page-tab\" content=\"home\">"), () -> body);
 		assertTrue(body.contains("href=\"/juneau-console/chrome.css"), () -> body);
 		assertTrue(body.contains("href=\"/juneau-console/themes/juneau-theme-light-red.css"), () -> body);
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
-		assertFalse(body.contains("juneau-theme-open.css"), () -> body);  // theme= wins; no default block
+		assertFalse(body.contains("juneau-theme-open.css"), () -> body);
 		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
-		assertTrue(body.contains("extra-head.css"), () -> body);  // <@head> pass-through
-
-		// Header composed from icon= + brand=.
-		assertTrue(body.contains("<header class=\"jc-header\">"), () -> body);
-		// icon= paints .jc-logo as a background <div> (matches chrome.css), NOT an <img>.
-		assertTrue(body.contains("class=\"jc-logo\""), () -> body);
-		assertTrue(body.contains("background-image:url('/app/logo.svg')"), () -> body);
-		assertFalse(body.contains("<img class=\"jc-logo\""), () -> body);
-		assertTrue(body.contains("jc-brand-title") && body.contains("My App"), () -> body);
-
-		// Body: exactly one <main>, the page body inside it, the nav landmark before it.
-		assertEquals(1, count(body, "<main class=\"jc-main\">"), () -> body);
-		assertTrue(body.contains("<p>assets</p>"), () -> body);
-		assertTrue(body.contains("class=\"juneau-page-nav\""), () -> body);
-		assertTrue(body.indexOf("juneau-page-nav") < body.indexOf("<main"), () -> body);
-
-		// No .jc-chrome wrapper unless the app opts in.
-		assertFalse(body.contains("jc-chrome"), () -> body);
-
-		// Footer + end-of-body scripts.
-		assertTrue(body.contains("jc-page-footer") && body.contains("ACME"), () -> body);
-		assertTrue(body.contains("src=\"one.js\"") && body.contains("src=\"two.js\""), () -> body);
-		assertTrue(body.contains("extra-tail.js"), () -> body);  // <@scripts> pass-through
-
-		// Head closes before the body opens; main precedes footer.
+		assertTrue(body.contains("extra-head.css"), () -> body);
 		assertTrue(body.indexOf("</head>") < body.indexOf("<body"), () -> body);
-		assertTrue(body.indexOf("<main") < body.indexOf("jc-page-footer"), () -> body);
 
-		// Dual-hat: no Salesforce/SLDS leakage in the emitted shell.
+		// Header, nav, page body and footer are contract data now (D3), not server HTML.
+		assertPage(body).isValid()
+			.hasTitle("My App").hasHeaderTitle("My App").hasTheme("light-red")
+			.hasNavHref("home", "/home").hasActiveNav("home")
+			.hasCard("jc-seg-1", "html").templateContains("jc-seg-1", "<p>assets</p>")
+			.hasFooterSlot("content").templateContains("footer.content", "&copy; ACME");
+		assertEquals("/app/logo.svg", assertPage(body).contract().getMap("header").getMap("logo").getString("src"));
+		assertFalse(body.contains("<header class=\"jc-header\""), () -> body);
+		assertFalse(body.contains("<main class=\"jc-main\""), () -> body);
+
+		// Shell, then the end-of-body scripts in order.
+		assertTrue(body.contains("/juneau-console/juneau-console.js"), () -> body);
+		assertTrue(body.indexOf("juneau-console.js") < body.indexOf("src=\"one.js\""), () -> body);
+		assertTrue(body.indexOf("src=\"one.js\"") < body.indexOf("src=\"two.js\""), () -> body);
+		assertTrue(body.indexOf("src=\"two.js\"") < body.indexOf("extra-tail.js"), () -> body);
 		assertFalse(body.contains("slds-"), () -> body);
 	}
 
@@ -347,10 +345,11 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("<header class=\"my-custom-header\">WHOLE HEADER</header>"), () -> body);
-		assertFalse(body.contains("jc-header"), () -> body);          // default header suppressed
-		assertFalse(body.contains("Ignored When Title Set"), () -> body);  // brand= ignored (title= wins the doc title, <@title> the header)
-		assertTrue(body.contains("<title>Doc Title Here</title>"), () -> body);  // title= drives the document <title>
+		assertPage(body).isValid().hasHeaderSlot("replace")
+			.templateContains("header.replace", "<header class=\"my-custom-header\">WHOLE HEADER</header>");
+		assertTrue(body.contains("<title>Doc Title Here</title>"), () -> body);
+		assertPage(body).hasTitle("Doc Title Here").hasHeaderTitle("Ignored When Title Set");
+		// The shell ignores header.title when slots.replace is present; spec §5.2.
 	}
 
 	@Test void c05_brandAndActions_subSlots() throws Exception {
@@ -360,18 +359,16 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("<header class=\"jc-header\">"), () -> body);
-		assertTrue(body.contains("<div class=\"jc-brand\">"), () -> body);
-		assertTrue(body.contains("CUSTOM BRAND REGION"), () -> body);
-		assertFalse(body.contains("jc-brand-title"), () -> body);  // <@brand> replaces the default brand region markup
-		assertTrue(body.contains("jc-header-actions") && body.contains("Sign out"), () -> body);
+		assertPage(body).isValid().hasHeaderTitle("Default Brand")
+			.hasHeaderSlot("brand").templateContains("header.brand", "CUSTOM BRAND REGION")
+			.hasHeaderSlot("actions").templateContains("header.actions", "Sign out");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Optional .jc-chrome sticky wrapper + body attrs + phased head/scripts + title=
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void c11_stickyChrome_wrapsHeaderAndNav_phasesAndBodyAttrs() throws Exception {
+	@Test void c11_stickyChrome_phasesAndBodyAttrs() throws Exception {
 		String body;
 		try (var c = MockRestClient.buildLax(StickyHost.class);
 			var rsp = c.get("/assets").run()) {
@@ -379,29 +376,12 @@ class ConsoleDirective_Test extends TestBase {
 			body = rsp.getContent().asString();
 		}
 
-		// title= wins the document <title> over brand=.
 		assertTrue(body.contains("<title>Doc Title</title>"), () -> body);
-
-		// <@body> attributes land on the emitted <body> tag.
-		assertTrue(body.contains("data-runtime-tab=\"open\""), () -> body);
-
-		// .jc-chrome wraps the header + pre-main nav region; the <main> lands after the wrapper closes.
-		assertTrue(body.contains("<div class=\"jc-chrome\">"), () -> body);
-		assertTrue(body.indexOf("<div class=\"jc-chrome\">") < body.indexOf("jc-header"), () -> body);
-		assertTrue(body.indexOf("jc-header") < body.indexOf("juneau-page-nav"), () -> body);  // header, then nav, inside the wrapper
-		assertTrue(body.indexOf("juneau-page-nav") < body.indexOf("<main"), () -> body);
-		assertTrue(body.contains("</div>\n<main class=\"jc-main\">"), () -> body);  // wrapper closes immediately before <main>
-
-		// <@head phase="before-page-css"> lands app CSS BEFORE the page-local pageCss (a.css).
-		assertTrue(body.contains("app-early.css"), () -> body);
-		assertTrue(body.indexOf("app-early.css") < body.indexOf("a.css"), () -> body);
-
-		// <@scripts phase="after-toolkit"> lands BEFORE pageInit (one.js).
-		assertTrue(body.contains("mid-toolkit.js"), () -> body);
-		assertTrue(body.indexOf("mid-toolkit.js") < body.indexOf("one.js"), () -> body);
-
-		// Footer is a body-level child after <main>, outside the .jc-chrome wrapper.
-		assertTrue(body.indexOf("<main") < body.indexOf("jc-page-footer"), () -> body);
+		assertTrue(body.contains("<body data-runtime-tab=\"open\">"), () -> body);
+		assertEquals(Boolean.TRUE, assertPage(body).contract().getMap("header").get("chrome"));
+		assertTrue(body.indexOf("app-early.css") < body.indexOf("href=\"a.css\""), () -> body);
+		assertTrue(body.indexOf("mid-toolkit.js") < body.indexOf("src=\"one.js\""), () -> body);
+		assertPage(body).isValid().hasFooterSlot("content");
 	}
 
 	@Test void c13_consoleAssetHrefs_areContextRootAbsoluteUnderANestedPagePath() throws Exception {
@@ -427,21 +407,20 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		// No icon=/brand=/<@title>/<@brand>/<@actions> authored: emit no <header> at all (no empty sticky bar).
+		// No icon=/brand=/<@title>/<@brand>/<@actions> authored: no header in the contract at all.
+		var a = assertPage(body).isValid();
+		assertNull(a.contract().get("header"), () -> body);
 		assertFalse(body.contains("<header"), () -> body);
-		assertFalse(body.contains("jc-header"), () -> body);
-		// The rest of the document still renders.
-		assertEquals(1, count(body, "<main class=\"jc-main\">"), () -> body);
-		assertTrue(body.contains("class=\"juneau-page-nav\""), () -> body);
+		a.hasNavHref("home", "/home").hasCard("jc-seg-1", "html");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// In-<@console> <@theme>/<@token> ThemePack path
+	// In-<@console> <@theme>/<@token> override path
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void c06_themePack_emitsPackLinkThenOverrideStyle() throws Exception {
+	@Test void c06_themeOverride_emitsStockLinkThenOverrideStyle() throws Exception {
 		String body;
-		try (var c = MockRestClient.buildLax(ThemePackHost.class);
+		try (var c = MockRestClient.buildLax(ThemeOverrideHost.class);
 			var rsp = c.get("/naked").run()) {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
@@ -451,8 +430,9 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.contains("html:root{"), () -> body);
 		assertTrue(body.contains("--jc-surface"), () -> body);           // leaf token
 		assertTrue(body.contains("--jc-brand-accent:var(--jc-surface)"), () -> body);  // alias survives to the wire verbatim
-		// The FTL-constructed override block lands AFTER the stock pack link (head cascade order).
+		// The FTL-constructed override block lands AFTER the stock theme link (head cascade order).
 		assertTrue(body.indexOf("juneau-theme-open.css") < body.indexOf("<style>"), () -> body);
+		assertPage(body).isValid().hasTheme("open");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -466,7 +446,7 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(500);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("must be nested inside <@console>"), () -> body);
+		assertTrue(body.contains("<@head> must be nested inside <@console>."), () -> body);
 	}
 
 	@Test void c08_formatAttr_isRejected() throws Exception {
@@ -476,7 +456,7 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(500);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("no format=") && body.contains("<@console>"), () -> body);
+		assertTrue(body.contains("<@console> has no format= attribute."), () -> body);
 	}
 
 	@Test void c09_mainWithBody_isRejected() throws Exception {
@@ -486,7 +466,7 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(500);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("self-closing"), () -> body);
+		assertTrue(body.contains("<@main/> is self-closing; the page body is the main content and takes no nested body."), () -> body);
 	}
 
 	@Test void c10_unknownThemeName_isRejected() throws Exception {
@@ -496,6 +476,17 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(500);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("unknown theme name") && body.contains("chartreuse"), () -> body);
+		assertTrue(body.contains("<@console> unknown theme name 'chartreuse'.  Built-in themes: "), () -> body);
+	}
+
+	@Test void c14_pageWithoutConsoleChrome_isRejected() throws Exception {
+		// P16: a chrome template that never renders <@console> is the removed legacy path.
+		try (var c = MockRestClient.buildLax(NoConsoleHost.class);
+			var rsp = c.get("/naked").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("<@page> chrome template 'admin/no-console-chrome.ftlh' rendered no <@console>; "
+				+ "the legacy chrome was removed in 10.0.0."), () -> body);
+		}
 	}
 }

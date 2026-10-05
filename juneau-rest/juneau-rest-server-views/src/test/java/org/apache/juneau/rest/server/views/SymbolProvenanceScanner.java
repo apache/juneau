@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -31,8 +32,8 @@ import java.util.regex.*;
  *
  * <h5 class='section'>What it is for</h5>
  * <p>
- * Every glyph in this sprite is Juneau-original, so the manifest incurs no attribution and exists only as a guard:
- * it pins the <i>approved</i> artwork so that a future paste of foreign path data over a glyph fails the build
+ * Each glyph in this sprite is either Juneau-original or artwork cleared for copy from the IRS console sprite (see
+ * the manifest's {@code origin} column); the manifest exists as a guard: it pins the <i>approved</i> artwork so that a future paste of foreign path data over a glyph fails the build
  * until someone deliberately edits the manifest row. This class does the reading and the hashing;
  * {@link SymbolSprite_Provenance_Test} does the asserting.
  *
@@ -81,7 +82,7 @@ final class SymbolProvenanceScanner {
 		Pattern.compile("^\\|\\s*`([A-Za-z0-9_-]+)`\\s*\\|\\s*`([a-z-]+)`\\s*\\|\\s*`([0-9a-f]{64})`\\s*\\|\\s*$",
 			Pattern.MULTILINE);
 
-	/** The three document-family members whose frame path is required to be byte-identical. */
+	/** The three document-family members (csv / pdf / spreadsheet); the manifest pins their origin, not a shared frame path. */
 	static final List<String> FRAMED_FAMILY = List.of("csv", "pdf", "spreadsheet");
 
 	/** A {@code d} attribute value. */
@@ -89,6 +90,14 @@ final class SymbolProvenanceScanner {
 
 	/** A {@code fill} or {@code stroke} paint value. */
 	private static final Pattern PAINT = Pattern.compile("\\b(fill|stroke)=\"([^\"]*)\"");
+
+	/**
+	 * A themable paint: a custom property whose fallback is {@code currentColor}, e.g.
+	 * {@code var(--jc-sort-asc-fill, currentColor)}.  Allowed deliberately so a glyph can expose a per-part tint
+	 * hook (custom properties inherit into a {@code <use>} shadow tree, where document selectors cannot reach)
+	 * while still defaulting to the host's {@code color}; a literal colour in the fallback is still a breach.
+	 */
+	private static final Pattern THEMABLE_PAINT = Pattern.compile("var\\(--[A-Za-z0-9_-]+,\\s*currentColor\\)");
 
 	/** One element of a symbol body, with its attributes. */
 	private static final Pattern ELEMENT = Pattern.compile("<(\\w+)([^>]*?)/?>");
@@ -175,13 +184,13 @@ final class SymbolProvenanceScanner {
 		return d.isEmpty() ? null : d.get(0);
 	}
 
-	/** Every {@code fill}/{@code stroke} value in the sprite that is neither {@code none} nor {@code currentColor}. */
+	/** Every {@code fill}/{@code stroke} value in the sprite that is not {@code none}, {@code currentColor} or {@code var(--x, currentColor)}. */
 	static List<String> offContractPaints(String svg) {
 		var out = new ArrayList<String>();
 		var m = PAINT.matcher(svg);
 		while (m.find()) {
 			var v = m.group(2);
-			if (!"none".equals(v) && !"currentColor".equals(v))
+			if (!eqa(v, "none", "currentColor") && !THEMABLE_PAINT.matcher(v).matches())
 				out.add(m.group(1) + "=\"" + v + "\"");
 		}
 		return out;
@@ -200,7 +209,7 @@ final class SymbolProvenanceScanner {
 		while (m.find()) {
 			var tag = m.group(1);
 			var attrs = m.group(2);
-			if ("symbol".equals(tag))
+			if (eq(tag, "symbol"))
 				continue;
 			if (attrs.contains("stroke=\"currentColor\"") && !attrs.contains("stroke-width=\""))
 				out.add(tag + attrs.stripTrailing());

@@ -42,13 +42,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 @SuppressWarnings({
-	"rawtypes",   // Raw types used for generic testing scenarios
-	"unchecked",  // Cast from Object to List/Map in config tests
-	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"java:S114",  // Test-local helper interfaces use the documented LNN_ClassName convention (underscore separates the test-method prefix from the descriptive name).
+	"java:S114", // Test-local helper interfaces use the documented LNN_ClassName convention (underscore separates the test-method prefix from the descriptive name).
 	"java:S1130", // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to specific checked types is high-churn/low-value.
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"java:S5976", // Explicit per-case tests are clearer and self-documenting than a parameterized table; intentional.
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"rawtypes", // Raw types used for generic testing scenarios
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unchecked" // Cast from Object to List/Map in config tests
 })
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Config_Test extends TestBase {

@@ -81,9 +81,10 @@ import java.util.logging.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S100",  // Method names match java.util.logging.Logger for API compatibility
+	"java:S100", // Method names match java.util.logging.Logger for API compatibility
 	"java:S1192", // String literals intentionally duplicated for clarity
-	"java:S2176"  // Class name intentionally matches java.util.logging.Logger; extends it to provide Juneau-specific logging enhancements
+	"java:S2176", // Class name intentionally matches java.util.logging.Logger; extends it to provide Juneau-specific logging enhancements
+	"resource" // Caller takes ownership of the returned LogRecordCapture
 })
 public class RichLogger extends java.util.logging.Logger {
 
@@ -293,23 +294,14 @@ public class RichLogger extends java.util.logging.Logger {
 	 *
 	 * @return A LogRecordCapture instance.
 	 */
-	@SuppressWarnings({
-		"resource" // Caller takes ownership of the returned LogRecordCapture
-	})
 	public LogRecordCapture captureEvents() {
 		return new LogRecordCapture(canonical);
 	}
 
-	@SuppressWarnings({
-		"resource" // Caller takes ownership of the returned LogRecordCapture
-	})
 	public LogRecordCapture captureEvents(Level min) {
 		return new LogRecordCapture(canonical, x -> x.getLevel().intValue() >= min.intValue());
 	}
 
-	@SuppressWarnings({
-		"resource" // Caller takes ownership of the returned LogRecordCapture
-	})
 	public LogRecordCapture captureEvents(Predicate<java.util.logging.LogRecord> filter) {
 		return new LogRecordCapture(canonical, filter);
 	}

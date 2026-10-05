@@ -18,7 +18,6 @@ package org.apache.juneau.secret.macos.keychain;
 
 import static java.nio.charset.StandardCharsets.*;
 import static java.util.concurrent.TimeUnit.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -127,21 +126,21 @@ public class KeychainSecretStore implements SecretStore {
 	 * @param commandRunner The command invocation seam.  Must not be <jk>null</jk>.
 	 */
 	KeychainSecretStore(String service, FailMode failMode, CommandRunner commandRunner) {
-		this.service = assertArgNotNullOrBlank("service", service);
-		this.failMode = assertArgNotNull("failMode", failMode);
-		this.commandRunner = assertArgNotNull("commandRunner", commandRunner);
+		this.service = reqnb("service", service);
+		this.failMode = reqnn("failMode", failMode);
+		this.commandRunner = reqnn("commandRunner", commandRunner);
 	}
 
 	private static long validateTimeout(long timeoutSeconds) {
-		assertArg(timeoutSeconds > 0, "Argument 'timeoutSeconds' must be > 0.");
+		req(timeoutSeconds > 0, "Argument 'timeoutSeconds' must be > 0.");
 		return timeoutSeconds;
 	}
 
 	@Override /* SecretStore */
 	public void store(String key, char[] secret) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("secret", secret);
-		assertArg(! containsNewline(secret), "Argument 'secret' must not contain a newline or carriage return character.");
+		reqnn("key", key);
+		reqnn("secret", secret);
+		req(! containsNewline(secret), "Argument 'secret' must not contain a newline or carriage return character.");
 		var payload = stdinConfirmationPayload(secret);
 		try {
 			// A bare, valueless "-w" makes the CLI prompt (twice, for confirmation) on stdin/stderr instead
@@ -160,7 +159,7 @@ public class KeychainSecretStore implements SecretStore {
 
 	@Override /* SecretStore */
 	public Optional<char[]> find(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		try {
 			var r = run(FIND_GENERIC_PASSWORD, "-a", key, "-s", service, "-w");
 			if (r.exit() == 0)
@@ -177,7 +176,7 @@ public class KeychainSecretStore implements SecretStore {
 
 	@Override /* SecretStore */
 	public boolean exists(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		try {
 			var r = run(FIND_GENERIC_PASSWORD, "-a", key, "-s", service);
 			if (r.exit() == 0)
@@ -194,7 +193,7 @@ public class KeychainSecretStore implements SecretStore {
 
 	@Override /* SecretStore */
 	public boolean delete(String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		try {
 			var r = run("delete-generic-password", "-a", key, "-s", service);
 			if (r.exit() == 0)

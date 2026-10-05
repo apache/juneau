@@ -79,6 +79,9 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
+@SuppressWarnings({
+	"unchecked" // Type erasure requires cast to T for proxy creation
+})
 public class ObjectMerger {
 
 	/**
@@ -146,9 +149,6 @@ public class ObjectMerger {
 	 * 	<br>Can contain nulls.
 	 * @return A proxy interface over the merged POJOs.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for proxy creation
-	})
 	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
 		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new MergeInvocationHandler(callAllNonGetters, pojos));
 	}
@@ -166,9 +166,6 @@ public class ObjectMerger {
 	 * 	<br>Can contain nulls.
 	 * @return A proxy interface over the merged POJOs.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for proxy creation
-	})
 	public static <T> T merge(Class<T> interfaceClass, T...pojos) {
 		return merge(interfaceClass, false, pojos);
 	}

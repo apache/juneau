@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -103,7 +102,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 		var x = new HttpHeaderList();
 		if (pairs == null)
 			pairs = new String[0];
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into HttpHeaderList.ofPairs()");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into HttpHeaderList.ofPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
 			x.add(HttpHeaderBean.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -277,7 +276,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * @return This object.
 	 */
 	public HttpHeaderList removeAll(String name) {
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		removeIf(h -> nameMatches(h, name));
 		return this;
 	}
@@ -406,9 +405,6 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read operations and
 	 * non-mutating iteration continue to work.
 	 */
-	@SuppressWarnings({
-		"java:S2160" // equals() inherited from ArrayList; list equality is element-based which is correct
-	})
 	public static class Unmodifiable extends HttpHeaderList implements UnmodifiableBean {
 
 		private static final long serialVersionUID = 1L;

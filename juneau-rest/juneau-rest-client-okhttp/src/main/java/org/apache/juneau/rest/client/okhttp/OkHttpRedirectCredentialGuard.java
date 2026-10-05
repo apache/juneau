@@ -41,7 +41,9 @@ import okhttp3.*;
 final class OkHttpRedirectCredentialGuard implements Interceptor {
 
 	@Override /* Interceptor */
-	@SuppressWarnings("resource") // returned Response is owned and closed by OkHttp's call chain, not by this interceptor.
+	@SuppressWarnings({
+		"resource" // returned Response is owned and closed by OkHttp's call chain, not by this interceptor.
+	})
 	public Response intercept(Chain chain) throws IOException {
 		var request = chain.request();
 		var from = chain.call().request().url().uri();

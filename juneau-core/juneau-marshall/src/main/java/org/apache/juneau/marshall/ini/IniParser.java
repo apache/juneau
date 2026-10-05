@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.time.*;
@@ -89,16 +89,15 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // IniParser sits below Parser and ReaderParser in the parser hierarchy, which is structural
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class IniParser extends ReaderParser implements IniMetaProvider, RecordReadable {
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
-
-	private static final String PROP_kvSeparator = "kvSeparator";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder for {@link IniParser}.
@@ -114,12 +113,12 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			kvSeparator = copyFrom.kvSeparator;
 		}
 
 		protected Builder(IniParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			kvSeparator = copyFrom.kvSeparator;
 		}
 
@@ -206,7 +205,7 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 	@Override
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_kvSeparator, String.valueOf(kvSeparator));
+			.a("kvSeparator", String.valueOf(kvSeparator));
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -45,14 +44,13 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // Output streams managed by calling code
-	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes", // writeMap()/writeCollection() take raw Map/Collection because values arrive as Object and are cast after ClassMeta type checks
+	"resource", // Output streams managed by calling code
+	"unchecked" // Type erasure requires unchecked operations
 })
 public class MsgPackSerializerSession extends OutputStreamSerializerSession implements TokenWritable, ArrayRecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -66,7 +64,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -86,10 +84,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
-	/*
+	/**
 	 * Converts the specified output target object to an {@link MsgPackOutputStream}.
 	 */
 	private static MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws IOException {
@@ -225,8 +223,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({
-		"rawtypes",   // Raw types necessary for generic type handling
-		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
+		"java:S3776" // Cognitive complexity acceptable for serialization dispatch logic
 	})
 	private MsgPackOutputStream writeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
@@ -356,10 +353,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		});
 	}
 
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic collection handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	private void writeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
@@ -369,10 +362,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		l.forEach(x -> writeAnything(out, x, elementType, "<iterator>", null));
 	}
 
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic map handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	private void writeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -74,13 +74,10 @@ import java.lang.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	"java:S3011"  // Reflection access needed for accessibility introspection
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3011" // Reflection access needed for accessibility introspection
 })
 public abstract sealed class AccessibleInfo extends ElementInfo permits FieldInfo, ExecutableInfo {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	private final AccessibleObject inner;
 
@@ -91,7 +88,7 @@ public abstract sealed class AccessibleInfo extends ElementInfo permits FieldInf
 	 */
 	protected AccessibleInfo(AccessibleObject inner, int modifiers) {
 		super(modifiers);
-		this.inner = assertArgNotNull(ARG_inner, inner);
+		this.inner = reqnn("inner", inner);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

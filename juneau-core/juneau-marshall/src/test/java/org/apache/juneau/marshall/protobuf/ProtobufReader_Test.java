@@ -116,7 +116,7 @@ class ProtobufReader_Test extends TestBase {
 	}
 
 	@Test
-	void a09_varintRejectsOverlongContinuation() throws Exception {
+	void a09_varintRejectsOverlongContinuation() {
 		// 10 continuation bytes (0x80) with no terminating byte: the 10th byte still has the continuation
 		// bit set, so the varint never terminates within the 10-byte cap.
 		var r = reader(0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80);
@@ -134,13 +134,13 @@ class ProtobufReader_Test extends TestBase {
 	}
 
 	@Test
-	void a11_tagRejectsOverlongContinuation() throws Exception {
+	void a11_tagRejectsOverlongContinuation() {
 		var r = reader(0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80);
 		assertThrowsWithMessage(IOException.class, "exceeds maximum length of 10 bytes", r::readTag);
 	}
 
 	@Test
-	void b01_skipFieldLenRejectsLengthAboveMaxLength() throws Exception {
+	void b01_skipFieldLenRejectsLengthAboveMaxLength() {
 		// Declared length (10) exceeds the configured maximum (5); must reject before skipping any data.
 		var r = reader(0x0A, 1,2,3,4,5,6,7,8,9,10, 0x10);
 		r.setMaxLength(5);
@@ -148,7 +148,7 @@ class ProtobufReader_Test extends TestBase {
 	}
 
 	@Test
-	void b02_skipFieldLenRejectsWrappedNegativeVarint() throws Exception {
+	void b02_skipFieldLenRejectsWrappedNegativeVarint() {
 		// Varint decodes to -1L (wrapped-negative as an int cast); must reject rather than skip a negative count.
 		var r = reader(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x01);
 		assertThrowsWithMessage(IOException.class, "negative", () -> r.skipField(WireType.LEN));

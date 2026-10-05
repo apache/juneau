@@ -122,8 +122,9 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 	@Test void b06_nonBearerMethodOnly_rejected() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var bf = SamlTestSupport.bf();
-		// OpenSAML builder factory returns a wildcard-typed builder; cast is safe for the requested element QName.
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // OpenSAML builder factory returns a wildcard-typed builder; cast is safe for the requested element QName.
+		})
 		var scb = (org.opensaml.saml.common.SAMLObjectBuilder<SubjectConfirmation>)
 			bf.getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		var sc = scb.buildObject();

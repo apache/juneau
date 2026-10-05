@@ -1,8 +1,10 @@
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.nn;
+import static org.apache.juneau.commons.utils.Shorts.req;
+import static org.apache.juneau.commons.utils.Shorts.reqnn;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -123,19 +125,15 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S6539" // Monster class; CollectionUtils is intentionally a single cohesive collection-utility hub, not a set of unrelated responsibilities
+	"java:S107", // Many parameters acceptable for convenience method
+	"java:S1168", // nullList/nullMap/toList(nullIfEmpty) deliberately return null as the documented "absent" value
+	"java:S1172", // nullList/nullMap take Class parameters solely to drive generic type inference at call sites
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S6539", // Monster class; CollectionUtils is intentionally a single cohesive collection-utility hub, not a set of unrelated responsibilities
+	"rawtypes", // copyArrayToList() exposes a raw List (public API) and sortedList() sorts via raw Comparable
+	"unchecked" // Generic-array cast in combine() and raw Comparable sort in sortedList() are safe: elements are only read/compared as Object/Comparable
 })
 public class CollectionUtils {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
-	private static final String ARG_input = "input";
-	private static final String ARG_value = "value";
-	private static final String ARG_array = "array";
-	private static final String ARG_arrays = "arrays";
-	private static final String ARG_values = "values";
-	private static final String ARG_o = "o";
 
 	/**
 	 * Traverses all elements in the specified objects and accumulates them into a list.
@@ -166,9 +164,6 @@ public class CollectionUtils {
 	 * @param o The objects to traverse. Can be <jk>null</jk> or empty, in which case an empty list is returned.
 	 * @return A new modifiable list containing all accumulated leaf elements.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <T> List<T> accumulate(Object... o) {
 		var l = list();
 		if (o != null)
@@ -287,6 +282,61 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Adds all non-<jk>null</jk> entries to the specified collection.
+	 *
+	 * <p>
+	 * <jk>null</jk> elements are skipped.
+	 * A <jk>null</jk> entries array is a no-op.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = <jk>new</jk> ArrayList&lt;&gt;();
+	 * 	addAllNn(<jv>list</jv>, <js>"a"</js>, <jk>null</jk>, <js>"b"</js>);  <jc>// list is [a, b]</jc>
+	 * </p>
+	 *
+	 * @param <E> The element type.
+	 * @param <C> The collection type.
+	 * @param value The collection to add to.  Must not be <jk>null</jk>.
+	 * @param entries The entries to add.  Can be <jk>null</jk> (no-op); <jk>null</jk> elements are skipped.
+	 * @return The same collection instance that was passed in.
+	 */
+	@SafeVarargs
+	public static <E, C extends Collection<? super E>> C addAllNn(C value, E...entries) {
+		if (nn(entries))
+			for (var e : entries)
+				if (nn(e))
+					value.add(e);
+		return value;
+	}
+
+	/**
+	 * Adds all non-<jk>null</jk> elements of the specified collection to the specified target collection.
+	 *
+	 * <p>
+	 * <jk>null</jk> elements are skipped.
+	 * A <jk>null</jk> entries collection is a no-op.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Set&lt;String&gt; <jv>set</jv> = <jk>new</jk> LinkedHashSet&lt;&gt;();
+	 * 	addAllNn(<jv>set</jv>, Arrays.<jsm>asList</jsm>(<js>"a"</js>, <jk>null</jk>, <js>"b"</js>));  <jc>// set is [a, b]</jc>
+	 * </p>
+	 *
+	 * @param <E> The element type.
+	 * @param <C> The collection type.
+	 * @param value The collection to add to.  Must not be <jk>null</jk>.
+	 * @param entries The entries to add.  Can be <jk>null</jk> (no-op); <jk>null</jk> elements are skipped.
+	 * @return The same collection instance that was passed in.
+	 */
+	public static <E, C extends Collection<? super E>> C addAllNn(C value, Collection<? extends E> entries) {
+		if (nn(entries))
+			for (var e : entries)
+				if (nn(e))
+					value.add(e);
+		return value;
+	}
+
+	/**
 	 * Appends one or more elements to an array.
 	 *
 	 * @param <T> The element type.
@@ -294,9 +344,6 @@ public class CollectionUtils {
 	 * @param newElements The new elements to append to the array.  Must not be <jk>null</jk>; if empty, the original array is returned.
 	 * @return A new array with the specified elements appended.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <T> T[] addAll(T[] array, T...newElements) {
 		if (array == null)
 			return newElements;
@@ -316,9 +363,6 @@ public class CollectionUtils {
 	 * @param length The length of the array.
 	 * @return A new array of the specified type and length. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <E> E[] array(Class<E> componentType, int length) {
 		return (E[])Array.newInstance(componentType, length);
 	}
@@ -331,11 +375,8 @@ public class CollectionUtils {
 	 * @param componentType The component type of the array.  Must not be <jk>null</jk>.
 	 * @return A new array.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		var array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
@@ -351,8 +392,8 @@ public class CollectionUtils {
 		"java:S3776" // Cognitive complexity acceptable for array conversion
 	})
 	public static List<Object> arrayToList(Object array) {
-		assertArgNotNull(ARG_array, array);
-		assertArg(ClassUtils.isArray(array), "Input must be an array but was %s", ClassUtils.className(array));
+		reqnn("array", array);
+		req(ClassUtils.isArray(array), "Input must be an array but was %s", ClassUtils.className(array));
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -418,11 +459,8 @@ public class CollectionUtils {
 	 * @param arrays Collection of arrays to combine.  Must not be <jk>null</jk> (a <jk>null</jk> array argument throws {@link IllegalArgumentException}); individual <jk>null</jk> array entries are skipped.
 	 * @return A new combined array, or an empty array if all arrays are <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <E> E[] combine(E[]...arrays) {
-		assertArgNotNull(ARG_arrays, arrays);
+		reqnn("arrays", arrays);
 		int l = 0;
 		E[] a1 = null;
 		for (var a : arrays) {
@@ -465,10 +503,6 @@ public class CollectionUtils {
 	 * @param list The list to copy the values into.  Must not be <jk>null</jk> when the array is non-<jk>null</jk>.
 	 * @return The same list passed in.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked cast from array
-		"rawtypes"   // Raw types necessary for generic array handling
-	})
 	public static List copyArrayToList(Object array, List list) {
 		if (isNotNull(array)) {
 			var length = Array.getLength(array);
@@ -686,7 +720,7 @@ public class CollectionUtils {
 	public static int length(Object array) {
 		if (array == null)
 			return 0;
-		assertArg(array.getClass().isArray(), "Object is not an array");
+		req(array.getClass().isArray(), "Object is not an array");
 		return Array.getLength(array);
 	}
 
@@ -722,10 +756,6 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168",    // Intentional null return for assertion testing.
-		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
-	})
 	public static <T> List<T> nullList(Class<T> type) {
 		return null;
 	}
@@ -829,9 +859,6 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		return new SimpleMap<>(array(k1, k2, k3, k4), array(v1, v2, v3, v4));
 	}
@@ -854,9 +881,6 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5), array(v1, v2, v3, v4, v5));
 	}
@@ -881,9 +905,6 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6), array(v1, v2, v3, v4, v5, v6));
 	}
@@ -910,9 +931,6 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7), array(v1, v2, v3, v4, v5, v6, v7));
 	}
@@ -941,9 +959,6 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8), array(v1, v2, v3, v4, v5, v6, v7, v8));
 	}
@@ -974,9 +989,6 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8, k9), array(v1, v2, v3, v4, v5, v6, v7, v8, v9));
 	}
@@ -1009,9 +1021,6 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), array(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
 	}
@@ -1026,7 +1035,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> Set<E> immutableSet(E...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(values)));
 	}
 
@@ -1114,9 +1123,6 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1143,9 +1149,6 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1175,9 +1178,6 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1210,9 +1210,6 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1248,9 +1245,6 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1289,9 +1283,6 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1333,9 +1324,6 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S107" // Many parameters acceptable for convenience method
-	})
 	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1370,9 +1358,6 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 * @see Maps
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public static <K,V> Maps<K,V> mapBuilder() {
 		return (Maps<K,V>)Maps.create().ordered();
 	}
@@ -1461,10 +1446,6 @@ public class CollectionUtils {
 	 * @param valueType The value type class.
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168",    // Intentional null return for assertion testing. Consider Optional.
-		"java:S1172"    // Parameters required for type inference in public API
-	})
 	public static <K,V> Map<K,V> nullMap(Class<K> keyType, Class<V> valueType) {
 		return null;
 	}
@@ -1478,9 +1459,6 @@ public class CollectionUtils {
 	 * @param valueType The value type.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameters required for type inference in public API
-	})
 	public static <K,V> Map<K,V> mapOfType(Class<K> keyType, Class<V> valueType) {
 		return map();
 	}
@@ -1572,7 +1550,7 @@ public class CollectionUtils {
 	 * @return The list with negation tokens applied, or the original list if no negation tokens were present.
 	 */
 	public static List<String> removeNegations(List<String> input) {
-		assertArgNotNull(ARG_input, input);
+		reqnn("input", input);
 		var hasNegation = false;
 		for (var token : input) {
 			if (token != null && token.length() > 1 && token.charAt(0) == '-') {
@@ -1604,13 +1582,10 @@ public class CollectionUtils {
 	 * @return A new {@link TreeSet} containing all non-null elements from the collection.
 	 */
 	public static <E> SortedSet<E> treeSet(Comparator<? super E> comparator, Collection<? extends E> elements) {
-		assertArgNotNull(ARG_comparator, comparator);
-		var s = new TreeSet<E>(comparator);
-		if (elements != null)
-			for (var e : elements)
-				if (e != null)
-					s.add(e);
-		return s;
+		reqnn("comparator", comparator);
+		if (elements == null)
+			return new TreeSet<E>(comparator);
+		return elements.stream().filter(Objects::nonNull).collect(Collectors.toCollection(() -> new TreeSet<E>(comparator)));
 	}
 
 	/**
@@ -1686,10 +1661,6 @@ public class CollectionUtils {
 	 * @param values The values to initialize the list with.  Must not be <jk>null</jk>.
 	 * @return A new modifiable list.
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for varargs handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
 		List<E> l = list(values);
@@ -1723,12 +1694,8 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> SortedSet<E> sortedSet(E...values) {
-		assertArgNotNull(ARG_values, values);
-		var l = new TreeSet<E>();
-		for (var v : values)
-			if (v != null)
-				l.add(v);
-		return l;
+		reqnn("values", values);
+		return Arrays.stream(values).filter(Objects::nonNull).collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	/**
@@ -1763,9 +1730,6 @@ public class CollectionUtils {
 	 * @param value The list to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A synchronized view of the list, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // Pass-through null by design. Consider empty list.
-	})
 	public static <E> List<E> synced(List<E> value) {
 		return value == null ? null : Collections.synchronizedList(value);
 	}
@@ -1778,9 +1742,6 @@ public class CollectionUtils {
 	 * @param value The map to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A synchronized view of the map, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // Pass-through null by design. Consider empty map.
-	})
 	public static <K,V> Map<K,V> synced(Map<K,V> value) {
 		return value == null ? null : Collections.synchronizedMap(value);
 	}
@@ -1792,9 +1753,6 @@ public class CollectionUtils {
 	 * @param value The set to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A synchronized view of the set, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // Pass-through null by design. Consider empty set.
-	})
 	public static <E> Set<E> synced(Set<E> value) {
 		return value == null ? null : Collections.synchronizedSet(value);
 	}
@@ -1838,9 +1796,6 @@ public class CollectionUtils {
 	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty or null.
 	 * @return A new modifiable list, or an empty list if the input was <jk>null</jk> (when nullIfEmpty is false), or <jk>null</jk> if nullIfEmpty and the input was null or empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // Intentional null when nullIfEmpty and (null or empty).
-	})
 	public static <E> List<E> toList(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null)
 			return nullIfEmpty ? null : new ArrayList<>();
@@ -1910,7 +1865,7 @@ public class CollectionUtils {
 		"java:S1452"  // Wildcard required - List<?> for heterogeneous collections from various sources
 	})
 	public static final List<?> toList(Object o) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 		if (o instanceof List<?> o2)
 			return o2;
 		if (o instanceof Iterable<?> o2)
@@ -1940,10 +1895,6 @@ public class CollectionUtils {
 	 * 	It must match the actual component type in the array.
 	 * @return A new {@link ArrayList}
 	 */
-	@SuppressWarnings({
-		"unchecked", // Parameter elementType is used for type inference, not runtime behavior
-		"java:S1172", // Unused parameters kept for API consistency or framework requirements
-	})
 	public static <E> List<E> toList(Object array, Class<E> elementType) {
 		var l = new ArrayList<E>(Array.getLength(array));
 		for (var i = 0; i < Array.getLength(array); i++)
@@ -1990,7 +1941,7 @@ public class CollectionUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> toSet(T[] array) {
-		assertArgNotNull(ARG_array, array);
+		reqnn("array", array);
 		return new AbstractSet<>() {
 
 			@Override /* Overridden from Set */
@@ -2053,9 +2004,6 @@ public class CollectionUtils {
 	 * @param nullIfEmpty If <jk>true</jk> returns <jk>null</jk> if the collection is empty.
 	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>, or <jk>null</jk> if nullIfEmpty and the collection is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // Intentional null when nullIfEmpty and empty.
-	})
 	public static <E> SortedSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null)
 			return new TreeSet<>();
@@ -2083,7 +2031,7 @@ public class CollectionUtils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(ClassUtils.isArray(array), "Arg was not an array.  Type: %s", ClassUtils.className(array));
+		req(ClassUtils.isArray(array), "Arg was not an array.  Type: %s", ClassUtils.className(array));
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
@@ -2136,9 +2084,6 @@ public class CollectionUtils {
 	 * array inputs (including all primitive array types), treating everything else as a single leaf element.
 	 * {@code null} inputs return an empty stream.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	private static <T> Stream<T> traverseToStream(Object o) {
 		if (o == null)
 			return Stream.empty();
@@ -2202,10 +2147,6 @@ public class CollectionUtils {
 	 * @param type The component type class.
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S1168",  // Intentional null return for assertion testing.
-		"java:S1172"   // Parameter type is used for type inference, not runtime behavior
-	})
 	public static <T> T[] nullArray(Class<T> type) {
 		return null;
 	}
@@ -2299,8 +2240,6 @@ public class CollectionUtils {
 	 * @param val The map to check.
 	 * @return <jk>null</jk> if the map is <jk>null</jk> or empty, otherwise the map itself.
 	 */
-	@SuppressWarnings({ "java:S1168" // Intentional null return.
-	})
 	public static <K,V> Map<K,V> nullIfEmpty(Map<K,V> val) {
 		return isEmpty(val) ? null : val;
 	}
@@ -2312,8 +2251,6 @@ public class CollectionUtils {
 	 * @param val The list to check.
 	 * @return <jk>null</jk> if the list is <jk>null</jk> or empty, otherwise the list itself.
 	 */
-	@SuppressWarnings({ "java:S1168" // Intentional null return.
-	})
 	public static <E> List<E> nullIfEmpty(List<E> val) {
 		return isEmpty(val) ? null : val;
 	}
@@ -2325,8 +2262,6 @@ public class CollectionUtils {
 	 * @param val The set to check.
 	 * @return <jk>null</jk> if the set is <jk>null</jk> or empty, otherwise the set itself.
 	 */
-	@SuppressWarnings({ "java:S1168" // Intentional null return.
-	})
 	public static <E> Set<E> nullIfEmpty(Set<E> val) {
 		return isEmpty(val) ? null : val;
 	}
@@ -2359,8 +2294,6 @@ public class CollectionUtils {
 	 * @param index The index to access.
 	 * @return The element, or null if out-of-bounds/null list.
 	 */
-	@SuppressWarnings({ "java:S1168" // Intentional null return.
-	})
 	public static <E> E elementAt(List<E> l, int index) {
 		if (l == null || index < 0 || index >= l.size())
 			return null;
@@ -2376,7 +2309,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <T> Set<T> set(T...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 

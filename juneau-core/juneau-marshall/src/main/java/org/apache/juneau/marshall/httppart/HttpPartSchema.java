@@ -25,6 +25,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.neq;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -89,73 +90,25 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S100", // Builder methods const_, default_ and enum_ use a trailing underscore to avoid Java keyword clashes with the OpenAPI keywords
+	"java:S115", // Constants use UPPER_camelCase convention (e.g., ANN_inclusive)
 	"java:S116", // Field names use trailing underscores (default_, enum_, const_) to avoid Java keyword conflicts
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
-	"java:S5843", // Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
+	"java:S1168", // Builder helpers (toNumber, toSet, joinnlOrNull, getAnnotationString) return null as the absent-value sentinel that callers test for
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S1452", // Wildcard required for parsed type metadata
-	"java:S6539"  // Monster class; HttpPartSchema is intentionally a single cohesive OpenAPI/HTTP-part schema model+validator
+	"java:S3776", // The HttpPartSchema(Builder) constructor and annotation-applying code branch over every OpenAPI type/format/constraint combination
+	"java:S5843", // Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
+	"java:S6539", // Monster class; HttpPartSchema is intentionally a single cohesive OpenAPI/HTTP-part schema model+validator
+	"java:S6541", // The HttpPartSchema(Builder) constructor runs the full per-type validation switch in one place
+	"unused" // Method kept for future use or API completeness
 })
 public class HttpPartSchema {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
-	// Property name constants
-	private static final String PROP_additionalProperties = "additionalProperties";
-	private static final String PROP_allowEmptyValue = "allowEmptyValue";
-	private static final String PROP_collectionFormat = "collectionFormat";
-	private static final String PROP_default = "default";
-	private static final String PROP_enum = "enum";
-	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
-	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
-	private static final String PROP_format = "format";
-	private static final String PROP_items = "items";
-	private static final String PROP_maximum = "maximum";
-	private static final String PROP_maxItems = "maxItems";
-	private static final String PROP_maxLength = "maxLength";
-	private static final String PROP_maxProperties = "maxProperties";
-	private static final String PROP_minimum = "minimum";
-	private static final String PROP_minItems = "minItems";
-	private static final String PROP_minLength = "minLength";
-	private static final String PROP_minProperties = "minProperties";
-	private static final String PROP_multipleOf = "multipleOf";
-	private static final String PROP_name = "name";
-	private static final String PROP_parsedType = "parsedType";
-	private static final String PROP_pattern = "pattern";
-	private static final String PROP_properties = "properties";
-	private static final String PROP_required = "required";
-	private static final String PROP_skipIfEmpty = "skipIfEmpty";
-	private static final String PROP_type = "type";
-	private static final String PROP_uniqueItems = "uniqueItems";
-
-	// Jakarta validation annotation class name constants
-	private static final String CLASSNAME_NotNull = "NotNull";
-	private static final String CLASSNAME_Size = "Size";
-	private static final String CLASSNAME_Min = "Min";
-	private static final String CLASSNAME_Max = "Max";
-	private static final String CLASSNAME_Pattern = "Pattern";
-	private static final String CLASSNAME_Email = "Email";
-	private static final String CLASSNAME_Positive = "Positive";
-	private static final String CLASSNAME_PositiveOrZero = "PositiveOrZero";
-	private static final String CLASSNAME_Negative = "Negative";
-	private static final String CLASSNAME_NegativeOrZero = "NegativeOrZero";
-	private static final String CLASSNAME_NotEmpty = "NotEmpty";
-	private static final String CLASSNAME_NotBlank = "NotBlank";
-	private static final String CLASSNAME_DecimalMin = "DecimalMin";
-	private static final String CLASSNAME_DecimalMax = "DecimalMax";
-
-	// Annotation attribute name constants
-	private static final String ANN_value = "value";
-	private static final String ANN_min = "min";
-	private static final String ANN_max = "max";
-	private static final String ANN_regexp = "regexp";
-	private static final String ANN_inclusive = "inclusive";
-
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S116" // Field names intentionally match JSON property names
-	})
 	public static class Builder {
 		String name;
 		String default_;
@@ -204,9 +157,6 @@ public class HttpPartSchema {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to match JSON Schema keyword
-		})
 		public Builder const_(String value) {
 			const_ = value;
 			return this;
@@ -233,9 +183,6 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-		})
 		public Builder default_(String value) {
 			if (ine(value))
 				default_ = value;
@@ -262,9 +209,6 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-		})
 		public Builder enum_(Set<String> value) {
 			if (nn(value) && ! value.isEmpty())
 				enum_ = value;
@@ -282,9 +226,6 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is empty.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-		})
 		public Builder enum_(String...values) {
 			return enum_(set(values));
 		}
@@ -2651,18 +2592,15 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		@SuppressWarnings({
-			"java:S3776" // Annotation-name dispatch over HTTP-part annotations (Path/Response/StatusCode/...); the switch encodes per-annotation schema-mapping rules that are clearer inline than fragmented across helpers.
-		})
 		private Builder applyHttpAnnotation(Annotation a) {
 			var annotationName = a.annotationType().getSimpleName();
 
 			var schema = getAnnotationValue(a, "schema", Schema.class);
-			if (schema != null && ("Response".equals(annotationName) || !SchemaAnnotation.empty(schema)))
+			if (schema != null && (eq(annotationName, "Response") || !SchemaAnnotation.empty(schema)))
 				apply(schema);
 
 			var aName = getAnnotationString(a, "name");
-			var aValue = getAnnotationString(a, ANN_value);
+			var aValue = getAnnotationString(a, "value");
 
 			switch (annotationName) {
 				case "PathRemainder" -> {
@@ -2687,7 +2625,7 @@ public class HttpPartSchema {
 					allowEmptyValue(true);
 					required(false);
 				}
-				case "StatusCode" -> codes(getAnnotationIntArray(a, ANN_value));
+				case "StatusCode" -> codes(getAnnotationIntArray(a, "value"));
 				default -> {
 					name(firstNonEmpty(aName, aValue));
 					default_(getAnnotationString(a, "def"));
@@ -2753,9 +2691,6 @@ public class HttpPartSchema {
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
 
-		@SuppressWarnings({
-			"java:S3776" // Maps every @Schema attribute (plus its short-form alias) onto the builder; the flat attribute-by-attribute copy is behavior-preserving and clearer as one method than split across helpers.
-		})
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));
@@ -2865,21 +2800,17 @@ public class HttpPartSchema {
 		 * @return This object.
 		 * @since 9.2.0
 		 */
-		@SuppressWarnings({
-			"java:S3776", // Cognitive complexity acceptable for Jakarta validation application
-			"java:S6541" // Brain method: consolidated Jakarta validation constraint dispatch
-		})
 		Builder applyJakartaValidation(Annotation a) {
 			String simpleName = cns(a.annotationType());
 
 			try {
 				switch (simpleName) {
-					case CLASSNAME_NotNull:
+					case "NotNull":
 						required(true);
 						break;
-				case CLASSNAME_Size:
-					Integer min = getAnnotationValue(a, ANN_min, Integer.class);
-					Integer max = getAnnotationValue(a, ANN_max, Integer.class);
+					case "Size":
+						Integer min = getAnnotationValue(a, "min", Integer.class);
+						Integer max = getAnnotationValue(a, "max", Integer.class);
 						if (nn(min) && min > 0) {
 							minLength(min.longValue());
 							minItems(min.longValue());
@@ -2889,60 +2820,60 @@ public class HttpPartSchema {
 							maxItems(max.longValue());
 						}
 						break;
-				case CLASSNAME_Min:
-					Long minValue = getAnnotationValue(a, ANN_value, Long.class);
+					case "Min":
+						Long minValue = getAnnotationValue(a, "value", Long.class);
 						if (nn(minValue))
 							minimum(minValue);
 						break;
-				case CLASSNAME_Max:
-					Long maxValue = getAnnotationValue(a, ANN_value, Long.class);
+					case "Max":
+						Long maxValue = getAnnotationValue(a, "value", Long.class);
 						if (nn(maxValue))
 							maximum(maxValue);
 						break;
-				case CLASSNAME_Pattern:
-					String regexp = getAnnotationValue(a, ANN_regexp, String.class);
+					case "Pattern":
+						String regexp = getAnnotationValue(a, "regexp", String.class);
 						if (nn(regexp))
 							pattern(regexp);
 						break;
-					case CLASSNAME_Email:
+					case "Email":
 						format("email");
 						break;
-					case CLASSNAME_Positive:
+					case "Positive":
 						minimum(0);
 						exclusiveMinimum(true);
 						break;
-					case CLASSNAME_PositiveOrZero:
+					case "PositiveOrZero":
 						minimum(0);
 						break;
-					case CLASSNAME_Negative:
+					case "Negative":
 						maximum(0);
 						exclusiveMaximum(true);
 						break;
-					case CLASSNAME_NegativeOrZero:
+					case "NegativeOrZero":
 						maximum(0);
 						break;
-					case CLASSNAME_NotEmpty:
+					case "NotEmpty":
 						required(true);
 						minLength(1L);
 						minItems(1L);
 						break;
-					case CLASSNAME_NotBlank:
+					case "NotBlank":
 						required(true);
 						minLength(1L);
 						pattern(".*\\S.*"); // Contains at least one non-whitespace character
 						break;
-				case CLASSNAME_DecimalMin:
-					String minVal = getAnnotationValue(a, ANN_value, String.class);
-					Boolean minInclusive = getAnnotationValue(a, ANN_inclusive, Boolean.class);
+					case "DecimalMin":
+						String minVal = getAnnotationValue(a, "value", String.class);
+						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(minVal)) {
 							minimum(toNumber(minVal));
 							if (isFalse(minInclusive))
 								exclusiveMinimum(true);
 						}
 						break;
-				case CLASSNAME_DecimalMax:
-					String maxVal = getAnnotationValue(a, ANN_value, String.class);
-					Boolean maxInclusive = getAnnotationValue(a, ANN_inclusive, Boolean.class);
+					case "DecimalMax":
+						String maxVal = getAnnotationValue(a, "value", String.class);
+						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(maxVal)) {
 							maximum(toNumber(maxVal));
 							if (isFalse(maxInclusive))
@@ -3491,9 +3422,6 @@ public class HttpPartSchema {
 		return create().tString().fUon();
 	}
 
-	@SuppressWarnings({
-		"java:S1168"     // Null when input null. Consider empty map.
-	})
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
@@ -3502,9 +3430,6 @@ public class HttpPartSchema {
 		return u(m);
 	}
 
-	@SuppressWarnings({
-		"java:S1168"     // Null for null input. Consider default schema.
-	})
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
 			return null;
@@ -3528,9 +3453,6 @@ public class HttpPartSchema {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S1168"     // Null for empty input. Consider empty set.
-	})
 	static final Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
@@ -3539,9 +3461,6 @@ public class HttpPartSchema {
 		return set;
 	}
 
-	@SuppressWarnings({
-		"java:S1168"     // Null when all arrays empty. Consider empty set.
-	})
 	static final Set<String> toSet(String[]...s) {
 		var isNotEmpty = false;
 		for (var ss : s)
@@ -3598,9 +3517,6 @@ public class HttpPartSchema {
 	final Number exclusiveMaximumValue;
 	final Number exclusiveMinimumValue;
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for schema construction
-	})
 	HttpPartSchema(Builder b) {
 		name = b.name;
 		default_ = b.default_;
@@ -3675,57 +3591,57 @@ public class HttpPartSchema {
 		switch (type) {
 			case STRING: {
 				notAllowed
-					.addIf(nn(properties), PROP_properties)
-					.addIf(nn(additionalProperties), PROP_additionalProperties)
-					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
-					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
-					.addIf(uniqueItems, PROP_uniqueItems)
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
-					.addIf(nn(items), PROP_items)
-					.addIf(nn(maximum), PROP_maximum)
-					.addIf(nn(minimum), PROP_minimum)
-					.addIf(nn(multipleOf), PROP_multipleOf)
-					.addIf(nn(maxItems), PROP_maxItems)
-					.addIf(nn(minItems), PROP_minItems)
-					.addIf(nn(minProperties), PROP_minProperties);
+					.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.addIf(nn(properties), PROP_properties)
-					.addIf(nn(additionalProperties), PROP_additionalProperties)
-					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
-					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
-					.addIf(nn(pattern), PROP_pattern)
-					.addIf(nn(maximum), PROP_maximum)
-					.addIf(nn(minimum), PROP_minimum)
-					.addIf(nn(multipleOf), PROP_multipleOf)
-					.addIf(nn(maxLength), PROP_maxLength)
-					.addIf(nn(minLength), PROP_minLength)
-					.addIf(nn(maxProperties), PROP_maxProperties)
-					.addIf(nn(minProperties), PROP_minProperties);
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.addIf(! enum_.isEmpty(), PROP_enum)
-					.addIf(nn(properties), PROP_properties)
-					.addIf(nn(additionalProperties), PROP_additionalProperties)
-					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
-					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
-					.addIf(uniqueItems, PROP_uniqueItems)
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
-					.addIf(nn(pattern), PROP_pattern)
-					.addIf(nn(items), PROP_items)
-					.addIf(nn(maximum), PROP_maximum)
-					.addIf(nn(minimum), PROP_minimum)
-					.addIf(nn(multipleOf), PROP_multipleOf)
-					.addIf(nn(maxItems), PROP_maxItems)
-					.addIf(nn(maxLength), PROP_maxLength)
-					.addIf(nn(maxProperties), PROP_maxProperties)
-					.addIf(nn(minItems), PROP_minItems)
-					.addIf(nn(minLength), PROP_minLength)
-					.addIf(nn(minProperties), PROP_minProperties);
+				notAllowed.addIf(! enum_.isEmpty(), "enum")
+					.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
@@ -3733,50 +3649,50 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.addIf(nn(properties), PROP_properties)
-					.addIf(nn(additionalProperties), PROP_additionalProperties)
-					.addIf(uniqueItems, PROP_uniqueItems)
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
-					.addIf(nn(pattern), PROP_pattern)
-					.addIf(nn(items), PROP_items)
-					.addIf(nn(maxItems), PROP_maxItems)
-					.addIf(nn(maxLength), PROP_maxLength)
-					.addIf(nn(maxProperties), PROP_maxProperties)
-					.addIf(nn(minItems), PROP_minItems)
-					.addIf(nn(minLength), PROP_minLength)
-					.addIf(nn(minProperties), PROP_minProperties);
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.addIf(nn(properties), PROP_properties)
-					.addIf(nn(additionalProperties), PROP_additionalProperties)
-					.addIf(uniqueItems, PROP_uniqueItems)
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
-					.addIf(nn(pattern), PROP_pattern)
-					.addIf(nn(items), PROP_items)
-					.addIf(nn(maxItems), PROP_maxItems)
-					.addIf(nn(maxLength), PROP_maxLength)
-					.addIf(nn(maxProperties), PROP_maxProperties)
-					.addIf(nn(minItems), PROP_minItems)
-					.addIf(nn(minLength), PROP_minLength)
-					.addIf(nn(minProperties), PROP_minProperties);
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
 			case OBJECT: {
-				notAllowed.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
-					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
-					.addIf(uniqueItems, PROP_uniqueItems)
-					.addIf(nn(pattern), PROP_pattern)
-					.addIf(nn(items), PROP_items)
-					.addIf(nn(maximum), PROP_maximum)
-					.addIf(nn(minimum), PROP_minimum)
-					.addIf(nn(multipleOf), PROP_multipleOf)
-					.addIf(nn(maxItems), PROP_maxItems)
-					.addIf(nn(maxLength), PROP_maxLength)
-					.addIf(nn(minItems), PROP_minItems)
-					.addIf(nn(minLength), PROP_minLength);
+				notAllowed.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
@@ -4122,32 +4038,32 @@ public class HttpPartSchema {
 		Predicate<Object> nm1 = x -> x instanceof Number x2 && x2.intValue() != -1;
 		Predicate<Object> nn = Shorts::nn;
 		return mapb_so().sorted().buildFluent()
-			.ai(ne, PROP_name, name)
-			.ai(ne, PROP_type, type)
-			.ai(ne, PROP_format, format)
-			.ai(ne, PROP_default, default_)
-			.ai(ne, PROP_enum, enum_)
-			.ai(ne, PROP_properties, properties)
-			.ai(nf, PROP_allowEmptyValue, allowEmptyValue)
-			.ai(nf, PROP_exclusiveMaximum, exclusiveMaximum)
-			.ai(nf, PROP_exclusiveMinimum, exclusiveMinimum)
-			.ai(nf, PROP_required, required)
-			.ai(nf, PROP_uniqueItems, uniqueItems)
-			.ai(nf, PROP_skipIfEmpty, skipIfEmpty)
-			.ai(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat, collectionFormat)
-			.ai(ne, PROP_pattern, pattern)
-			.ai(nn, PROP_items, items)
-			.ai(nn, PROP_additionalProperties, additionalProperties)
-			.ai(nm1, PROP_maximum, maximum)
-			.ai(nm1, PROP_minimum, minimum)
-			.ai(nm1, PROP_multipleOf, multipleOf)
-			.ai(nm1, PROP_maxLength, maxLength)
-			.ai(nm1, PROP_minLength, minLength)
-			.ai(nm1, PROP_maxItems, maxItems)
-			.ai(nm1, PROP_minItems, minItems)
-			.ai(nm1, PROP_maxProperties, maxProperties)
-			.ai(nm1, PROP_minProperties, minProperties)
-			.a(PROP_parsedType, parsedType);
+			.ai(ne, "name", name)
+			.ai(ne, "type", type)
+			.ai(ne, "format", format)
+			.ai(ne, "default", default_)
+			.ai(ne, "enum", enum_)
+			.ai(ne, "properties", properties)
+			.ai(nf, "allowEmptyValue", allowEmptyValue)
+			.ai(nf, "exclusiveMaximum", exclusiveMaximum)
+			.ai(nf, "exclusiveMinimum", exclusiveMinimum)
+			.ai(nf, "required", required)
+			.ai(nf, "uniqueItems", uniqueItems)
+			.ai(nf, "skipIfEmpty", skipIfEmpty)
+			.ai(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+			.ai(ne, "pattern", pattern)
+			.ai(nn, "items", items)
+			.ai(nn, "additionalProperties", additionalProperties)
+			.ai(nm1, "maximum", maximum)
+			.ai(nm1, "minimum", minimum)
+			.ai(nm1, "multipleOf", multipleOf)
+			.ai(nm1, "maxLength", maxLength)
+			.ai(nm1, "minLength", minLength)
+			.ai(nm1, "maxItems", maxItems)
+			.ai(nm1, "minItems", minItems)
+			.ai(nm1, "maxProperties", maxProperties)
+			.ai(nm1, "minProperties", minProperties)
+			.a("parsedType", parsedType);
 		// @formatter:on
 	}
 
@@ -4163,9 +4079,6 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for input validation
-	})
 	public String validateInput(String in) throws SchemaValidationException {
 		if (! isValidRequired(in))
 			throw new SchemaValidationException("No value specified.");
@@ -4196,10 +4109,6 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for output validation
-		"java:S6541" // Brain method: schema output validation branches by OpenAPI part type
-	})
 	public <T> T validateOutput(T o) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
@@ -4471,7 +4380,7 @@ public class HttpPartSchema {
 			return true;
 
 		// Skip validation for literal "null" string
-		if ("null".equals(x))
+		if (eq(x, "null"))
 			return true;
 
 		try {
@@ -4788,9 +4697,6 @@ public class HttpPartSchema {
 		return x.isEmpty() || x.charAt(0) == '/';
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for maximum validation
-	})
 	private boolean isValidMaximum(Number x) {
 		// Check Draft 2020-12 exclusiveMaximumValue first (takes precedence)
 		if (nn(exclusiveMaximumValue)) {
@@ -4835,9 +4741,6 @@ public class HttpPartSchema {
 		return maxProperties == null || x.size() <= maxProperties;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for minimum validation
-	})
 	private boolean isValidMinimum(Number x) {
 		// Check Draft 2020-12 exclusiveMinimumValue first (takes precedence)
 		if (nn(exclusiveMinimumValue)) {
@@ -4996,9 +4899,6 @@ public class HttpPartSchema {
 		return true;
 	}
 
-	@SuppressWarnings({
-		"unused" // Method kept for future use or API completeness
-	})
 	private static boolean isValidUri(String x) {
 		// RFC 3986 URI validation
 		try {
@@ -5010,9 +4910,6 @@ public class HttpPartSchema {
 		}
 	}
 
-	@SuppressWarnings({
-		"unused" // Method kept for future use or API completeness
-	})
 	private static boolean isValidUriReference(String x) {
 		// RFC 3986 URI reference (can be relative)
 		try {

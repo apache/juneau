@@ -111,7 +111,9 @@ class DialogForm_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The browser report entry is a JSON object parsed to Object and cast to Map<String,Object>
+	})
 	private static Map<String,Object> sub(String key) {
 		return (Map<String,Object>) report.get(key);
 	}

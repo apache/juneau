@@ -19,6 +19,7 @@ package org.apache.juneau.marshall;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Supported wire formats for {@link Currency} values.
@@ -192,18 +193,12 @@ public enum CurrencyFormat {
 	}
 
 	private static Currency findBySymbol(String token, Locale loc, String original) {
-		var matches = new ArrayList<Currency>();
-		for (var c : Currency.getAvailableCurrencies())
-			if (token.equals(c.getSymbol(loc)))
-				matches.add(c);
+		var matches = Currency.getAvailableCurrencies().stream().filter(c -> eq(token, c.getSymbol(loc))).collect(Collectors.toCollection(ArrayList::new));
 		return resolveAmbiguousMatches(matches, loc, original, "symbol");
 	}
 
 	private static Currency findByDisplayName(String token, Locale loc, String original) {
-		var matches = new ArrayList<Currency>();
-		for (var c : Currency.getAvailableCurrencies())
-			if (token.equals(c.getDisplayName(loc)))
-				matches.add(c);
+		var matches = Currency.getAvailableCurrencies().stream().filter(c -> eq(token, c.getDisplayName(loc))).collect(Collectors.toCollection(ArrayList::new));
 		return resolveAmbiguousMatches(matches, loc, original, "display name");
 	}
 
@@ -232,8 +227,8 @@ public enum CurrencyFormat {
 	 * @return <jk>false</jk>.
 	 */
 	@SuppressWarnings({
-		"static-method", // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
-		"java:S3400"     // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"java:S3400", // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"static-method" // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
 	})
 	public boolean isNumeric() {
 		return false;

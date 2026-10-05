@@ -38,8 +38,8 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778",   // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"deprecation"   // OAuthResourceOwnerFlow is deprecated API; tested intentionally for coverage
+	"deprecation", // OAuthResourceOwnerFlow is deprecated API; tested intentionally for coverage
+	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class OAuthFlowBranch_Test extends TestBase {
 

@@ -112,15 +112,14 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S2095", // Writer is response-owned; we never close it.
+	"java:S3077", // The lazily loaded static adapters list and the stream's Flow.Subscription are volatile references set once and read across threads, with no compound updates
 	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
 })
 public class ReactiveResponseProcessor implements ResponseProcessor {
 
 	private static final Logger LOG = Logger.getLogger(ReactiveResponseProcessor.class.getName());
 
-	@SuppressWarnings({
-		"java:S3077" // Write-once double-checked-locking cache holding an immutable List.copyOf(...); volatile gives correct safe publication of the one-time assignment and the reference is never mutated afterward.
-	})
 	private static volatile List<ReactiveStreamsAdapter> adapters;
 
 	private enum Shape { BUFFER, SSE, NDJSON }
@@ -178,8 +177,8 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings({
-		"java:S3776", // Streaming setup is branchy by nature (content-type prep + async-vs-sync fallback).
-		"java:S1141"  // Nested try/catch cleanly separates startAsync recovery from the sync fallback.
+		"java:S1141", // Nested try/catch cleanly separates startAsync recovery from the sync fallback.
+		"java:S3776" // Streaming setup is branchy by nature (content-type prep + async-vs-sync fallback).
 	})
 	private int handleStream(RestOpSession opSession, Flow.Publisher<?> pub, Shape shape) throws IOException {
 		var res = opSession.getResponse();
@@ -351,9 +350,6 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	// Frame encoders.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"java:S2095" // Writer is response-owned; we never close it.
-	})
 	private static void writeSseFrame(FinishablePrintWriter w, Object element) throws IOException, SerializeException {
 		if (element == null)
 			return;
@@ -365,9 +361,6 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		Sse.DEFAULT.write(new SseEvent(null, data), w);
 	}
 
-	@SuppressWarnings({
-		"java:S2095" // Writer is response-owned; we never close it.
-	})
 	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {
 		if (element == null)
 			return;
@@ -468,9 +461,6 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		private volatile boolean wrote;
 
 		/** Published once by {@code onSubscribe} (Reactive Streams: at most one call); read by {@code onNext}/{@code cancel}. */
-		@SuppressWarnings({
-			"java:S3077" // Publish-once reference: assigned exactly once in onSubscribe; request()/cancel() are required by the Reactive Streams spec to support concurrent invocation, so volatile safe-publication of the reference alone is sufficient.
-		})
 		private volatile Flow.Subscription subscription;
 
 		StreamingSubscriber(RestResponse res, FinishablePrintWriter writer, FrameEncoder encoder,

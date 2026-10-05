@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -311,7 +312,7 @@ class BeanMap_Coverage_Test extends TestBase {
 	void f02_forEachProperty_filtersAndApplies() {
 		var bm = BeanMap.of(new A_Pojo());
 		var names = new ArrayList<String>();
-		bm.forEachProperty(p -> p.getName().equals("x"), p -> names.add(p.getName()));
+		bm.forEachProperty(p -> eq(p.getName(), "x"), p -> names.add(p.getName()));
 		assertEquals(List.of("x"), names);
 	}
 

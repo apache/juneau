@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S4144", // Identical test methods intentional for testing different scenarios
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class ConfigMap_Test extends TestBase {
 

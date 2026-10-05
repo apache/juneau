@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent wrapper around an arbitrary set that provides convenient methods for adding elements.
@@ -86,12 +86,9 @@ import java.util.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentSet<E> extends AbstractSet<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	private final Set<E> set;
 
@@ -101,7 +98,7 @@ public class FluentSet<E> extends AbstractSet<E> {
 	 * @param inner The underlying set to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentSet(Set<E> inner) {
-		this.set = assertArgNotNull(ARG_inner, inner);
+		this.set = reqnn("inner", inner);
 	}
 
 	/**

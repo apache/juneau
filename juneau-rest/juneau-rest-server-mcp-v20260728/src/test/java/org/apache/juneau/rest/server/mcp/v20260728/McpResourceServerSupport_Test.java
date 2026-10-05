@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.http.response.Forbidden;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.MockServletRequest;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.rest.server.RestServerConstants;
 import org.apache.juneau.rest.server.auth.TokenValidator;
 import org.apache.juneau.rest.server.mcp.McpEndpointMixin;
 import org.apache.juneau.rest.server.util.UrlPath;
@@ -271,7 +271,7 @@ class McpResourceServerSupport_Test {
 			() -> McpResourceServerSupport.enforceOperationScopes(c, grantedScopes, ctx));
 		assertEquals(403, e.getStatusCode());
 		var challenge = e.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.map(HttpHeader::getValue)
 			.findFirst().orElseThrow();
 		assertTrue(challenge.contains("error=\"insufficient_scope\""), challenge);
@@ -292,7 +292,7 @@ class McpResourceServerSupport_Test {
 
 	@Test void g01_principal_presentReturnsStashedPrincipal() {
 		Principal p = () -> "bob";
-		var req = MockServletRequest.create().attribute(RestServerConstants.PRINCIPAL_ATTR, p);
+		var req = MockServletRequest.create().attribute("juneau.principal", p);
 		assertSame(p, McpResourceServerSupport.principal(req));
 	}
 
@@ -306,7 +306,7 @@ class McpResourceServerSupport_Test {
 
 	@Test void g04_principal_nonPrincipalAttributeIsNull() {
 		// Defensive: a stashed value that is not a Principal must not be cast/returned.
-		var req = MockServletRequest.create().attribute(RestServerConstants.PRINCIPAL_ATTR, "not-a-principal");
+		var req = MockServletRequest.create().attribute("juneau.principal", "not-a-principal");
 		assertNull(McpResourceServerSupport.principal(req));
 	}
 }

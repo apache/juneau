@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.jena;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -34,8 +35,10 @@ import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"java:S114", // test fixture naming convention (section_prefix)
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
-	"java:S5976" // Explicit per-case parser tests are clearer for diagnostics than a single parameterized rewrite.
+	"java:S5976", // Explicit per-case parser tests are clearer for diagnostics than a single parameterized rewrite.
+	"rawtypes" // Tests read into raw Map/List results and pass a raw (Class)BeanInterceptor.class to exercise untyped parser paths
 })
 class RdfParser_Test extends TestBase {
 
@@ -277,8 +280,7 @@ class RdfParser_Test extends TestBase {
 		static class D10_TestParserListener extends ParserListener {}
 
 		@SuppressWarnings({
-			"unchecked", // Raw type needed for beanInterceptor test
-			"rawtypes" // (Class) cast required by beanInterceptor API
+			"unchecked" // Raw type needed for beanInterceptor test
 		})
 		@Test void d01_beanVisibilityAndContext() {
 			assertNotNull(RdfParser.create().beanClassVisibility(Visibility.PUBLIC).build());
@@ -832,7 +834,6 @@ class RdfParser_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("java:S5778")
 	@Nested class I_readrBranchCovers extends TestBase {
 
 		@Test void i01_read_self_referential() throws Exception {
@@ -849,7 +850,6 @@ class RdfParser_Test extends TestBase {
 
 		public interface I02TypedInterface {}
 
-		@SuppressWarnings("rawtypes")
 		@Test void i02_read_unknown_type_name() throws Exception {
 			// _type property with unresolvable class name — line 258 FALSE: nn(tcm) is false → type unchanged.
 			// Map (interface) can't be instantiated → type lookup runs; unknown type → nn(tcm)=false → sType stays Map.
@@ -880,7 +880,7 @@ class RdfParser_Test extends TestBase {
 
 		@Test void i05_read_named_uri_resource_with_no_children_as_object() throws Exception {
 			// Named URI resource with no child properties — covers line 291 TRUE:
-			// nn(uri) && !r.listProperties().hasNext() → o = r.getURI()
+			// Resource with a URI and no child properties is converted to just its URI string
 			var p = RdfParser.create().ntriple().build();
 			var rdf = "<http://ex.org/main> <http://ex.org/ref> <http://ex.org/orphan> .\n"
 				+ "<http://ex.org/main> <" + p.getJuneauBpNs().getUri() + "name> \"main\" .\n";
@@ -989,10 +989,9 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(result);
 		}
 
-		@SuppressWarnings("rawtypes")
 		@Test void i17_read_map_with_root_property() throws Exception {
 			// Map serialized with addRootProperty() — readIntoMap skips the root triple (line 459 FALSE:
-			// key.equals("root") && p.getURI().equals(juneauNs) → condition TRUE → skip via !(...) = FALSE)
+			// Root key with the Juneau namespace URI: condition is true, so the guard skips the property
 			var serialized = RdfSerializer.create().ntriple().addRootProperty().build()
 				.write(Map.of("name", "test"));
 			Map result = RdfParser.create().ntriple().build().read(serialized, Map.class);
@@ -1149,7 +1148,7 @@ class RdfParser_Test extends TestBase {
 			// via direct Model construction against the shared getRoots() algorithm.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var rootProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_ROOT);
+			var rootProp = m.createProperty(session.getJuneauNs().getUri(), "root");
 			var marked = m.createResource("http://ex.org/marked");
 			marked.addProperty(rootProp, "true");
 			// An unrelated, unmarked resource must NOT be picked up once a marker match exists.
@@ -1169,7 +1168,7 @@ class RdfParser_Test extends TestBase {
 			self.addProperty(m.createProperty("http://ex.org/loop"), self);
 			var roots = session.getRoots(m);
 			// The self-referential resource is still a root: it's never recorded as someone else's object.
-			assertTrue(roots.stream().anyMatch(r -> "http://ex.org/self".equals(r.getURI())));
+			assertTrue(roots.stream().anyMatch(r -> eq(r.getURI(), "http://ex.org/self")));
 		}
 
 		@Test void j05_getValue_resourceWithoutPValue_throws() {
@@ -1188,7 +1187,7 @@ class RdfParser_Test extends TestBase {
 			// wrapped-literal round-trip tests (pValue → literal) never trigger.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var valueProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_VALUE);
+			var valueProp = m.createProperty(session.getJuneauNs().getUri(), "value");
 			var r = m.createResource("http://ex.org/wrapper");
 			var nested = m.createResource("http://ex.org/nested");
 			r.addProperty(valueProp, nested);
@@ -1661,7 +1660,7 @@ class RdfParser_Test extends TestBase {
 			// the "v != null" FALSE branch (line 342), distinct from the direct-byte[]/base64-string cases.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var valueProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_VALUE);
+			var valueProp = m.createProperty(session.getJuneauNs().getUri(), "value");
 			var r = m.createResource("http://ex.org/l19b");
 			var nil = m.createResource(Constants.RDF_NIL);
 			r.addProperty(valueProp, nil);
@@ -1810,7 +1809,7 @@ class RdfParser_Test extends TestBase {
 			// addRootProperty().
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var rootProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_ROOT);
+			var rootProp = m.createProperty(session.getJuneauNs().getUri(), "root");
 			var r = m.createResource("http://ex.org/l26");
 			r.addProperty(rootProp, "true");
 			r.addProperty(m.createProperty(session.getJuneauBpNs().getUri(), "name"), "hi");
@@ -1826,7 +1825,7 @@ class RdfParser_Test extends TestBase {
 			// readIntoBeanMap's equivalent check.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var rootProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_ROOT);
+			var rootProp = m.createProperty(session.getJuneauNs().getUri(), "root");
 			var r = m.createResource("http://ex.org/l27");
 			r.addProperty(rootProp, "true");
 			r.addProperty(m.createProperty("http://ex.org/k"), "v");
@@ -1893,7 +1892,7 @@ class RdfParser_Test extends TestBase {
 			// the n.isLiteral() TRUE branch (line 206) after reassigning n = st.getObject().
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var valueProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_VALUE);
+			var valueProp = m.createProperty(session.getJuneauNs().getUri(), "value");
 			var r = m.createResource("http://ex.org/m04");
 			r.addProperty(valueProp, "wrapped-literal");
 			var result = session.getValue(r, null);
@@ -1905,7 +1904,7 @@ class RdfParser_Test extends TestBase {
 			// literal) -- covers the recursive readAnything() call, distinct from m04's direct-literal case.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var valueProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_VALUE);
+			var valueProp = m.createProperty(session.getJuneauNs().getUri(), "value");
 			var r = m.createResource("http://ex.org/m05-wrapper");
 			var nested = m.createResource("http://ex.org/m05-nested");
 			r.addProperty(valueProp, nested);
@@ -2214,7 +2213,7 @@ class RdfParser_Test extends TestBase {
 			// addBeanTypes() together with a plain bean target in a way that leaves the marker unconsumed.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var rootProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_ROOT);
+			var rootProp = m.createProperty(session.getJuneauNs().getUri(), "root");
 			var r = m.createResource("http://ex.org/m28");
 			r.addProperty(rootProp, "true");
 			r.addProperty(m.createProperty(session.getJuneauBpNs().getUri(), "name"), "hi");
@@ -2234,7 +2233,7 @@ class RdfParser_Test extends TestBase {
 			// pins the ACTUAL (buggy) behavior rather than the evidently-intended one.
 			var session = newSession();
 			var m = ModelFactory.createDefaultModel();
-			var rootProp = m.createProperty(session.getJuneauNs().getUri(), Constants.RDF_juneauNs_ROOT);
+			var rootProp = m.createProperty(session.getJuneauNs().getUri(), "root");
 			var r = m.createResource("http://ex.org/m29");
 			r.addProperty(rootProp, "true");
 			r.addProperty(m.createProperty("http://ex.org/k"), "v");

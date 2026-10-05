@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -68,16 +67,9 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class License extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_name = "name";
-	private static final String PROP_url = "url";
 
 	private String name;
 	private URI url;
@@ -110,10 +102,10 @@ public class License extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_name -> toType(getName(), type);
-			case PROP_url -> toType(getUrl(), type);
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -142,8 +134,8 @@ public class License extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(name), PROP_name)
-			.addIf(nn(url), PROP_url)
+			.addIf(nn(name), "name")
+			.addIf(nn(url), "url")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -151,10 +143,10 @@ public class License extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public License set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_name -> setName(s(value));
-			case PROP_url -> setUrl(toUri(value));
+			case "name" -> setName(s(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

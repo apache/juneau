@@ -30,6 +30,9 @@ import java.util.function.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+})
 public class HttpStringPart extends HttpPartBean {
 
 	/**
@@ -39,9 +42,6 @@ public class HttpStringPart extends HttpPartBean {
 	 * @param value The part value. May be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringPart of(String name, String value) {
 		return new HttpStringPart(name, value);
 	}
@@ -53,9 +53,6 @@ public class HttpStringPart extends HttpPartBean {
 	 * @param valueSupplier Supplier for the value. Must not be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringPart of(String name, Supplier<String> valueSupplier) {
 		return new HttpStringPart(name, valueSupplier);
 	}

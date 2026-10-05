@@ -138,18 +138,10 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes" // createParserBuilder() returns the raw Builder because the builder subtype is only known reflectively.
 })
 public class Parser extends MarshallingContextable {
-
-	// Property name constants
-	private static final String PROP_autoCloseStreams = "autoCloseStreams";
-	private static final String PROP_debugOutputLines = "debugOutputLines";
-	private static final String PROP_listener = "listener";
-	private static final String PROP_nulls = "nulls";
-	private static final String PROP_trimStrings = "trimStrings";
-	private static final String PROP_unbuffered = "unbuffered";
 
 	/**
 	 * Builder class.
@@ -639,7 +631,7 @@ public class Parser extends MarshallingContextable {
 	public boolean canHandle(String contentType) {
 		if (nn(contentType))
 			for (var mt : getMediaTypes())
-				if (contentType.equals(mt.toString()))
+				if (eq(contentType, mt.toString()))
 					return true;
 		return false;
 	}
@@ -1048,11 +1040,11 @@ public class Parser extends MarshallingContextable {
 	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_autoCloseStreams, autoCloseStreams)
-			.a(PROP_debugOutputLines, debugOutputLines)
-			.a(PROP_listener, listener)
-			.a(PROP_nulls, nulls)
-			.a(PROP_trimStrings, trimStrings)
-			.a(PROP_unbuffered, unbuffered);
+			.a("autoCloseStreams", autoCloseStreams)
+			.a("debugOutputLines", debugOutputLines)
+			.a("listener", listener)
+			.a("nulls", nulls)
+			.a("trimStrings", trimStrings)
+			.a("unbuffered", unbuffered);
 	}
 }

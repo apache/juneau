@@ -34,6 +34,9 @@ import org.junit.jupiter.api.io.*;
  * construction test confirms the {@link SecretStore} constructor wires the resolved credentials through without
  * regressing the anonymous default.
  */
+@SuppressWarnings({
+	"resource" // new BasicBeanStore().addBean(...) is a fluent self-return; the try-with-resources on 'beanStore' already closes the same instance the constructor produced.
+})
 class GitControl_Test {
 
 	private static char[] passwordOf(CredentialsProvider cp) throws Exception {
@@ -52,9 +55,6 @@ class GitControl_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"resource" // new BasicBeanStore().addBean(...) is a fluent self-return; the try-with-resources on 'beanStore' already closes the same instance the constructor produced.
-	})
 	@Test void a02_contributedStoreResolvesSecret() throws Exception {
 		var store = new InMemorySecretStore();
 		store.store("GIT_TOKEN", "hunter2".toCharArray());
@@ -84,9 +84,6 @@ class GitControl_Test {
 	// Constructor integration.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource" // new BasicBeanStore().addBean(...) is a fluent self-return; the try-with-resources on 'beanStore' already closes the same instance the constructor produced.
-	})
 	@Test void b01_secretStoreConstructorWiresCredentialsAndClosesCleanly(@TempDir File dir) throws IOException {
 		var store = new InMemorySecretStore();
 		store.store("GIT_TOKEN", "hunter2".toCharArray());

@@ -17,7 +17,6 @@
 package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -130,15 +129,11 @@ import org.apache.juneau.commons.function.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // The as*() narrowing methods re-type this assertion's value via cast(), which cannot be verified at compile time
 })
 public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_beanType = "beanType";
-	private static final String ARG_elementType = "elementType";
-	private static final String ARG_keyType = "keyType";
-	private static final String ARG_valueType = "valueType";
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");
@@ -191,7 +186,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @throws AssertionError If object is not an array.
 	 */
 	public <E> FluentArrayAssertion<E,R> asArray(Class<E> elementType) throws AssertionError {
-		assertArgNotNull(ARG_elementType, elementType);
+		reqnn("elementType", elementType);
 		return new FluentArrayAssertion<>(this, cast(arrayClass(elementType)), returns());
 	}
 
@@ -214,7 +209,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @throws AssertionError If object is not a bean.
 	 */
 	public <T2> FluentBeanAssertion<T2,R> asBean(Class<T2> beanType) {
-		assertArgNotNull(ARG_beanType, beanType);
+		reqnn("beanType", beanType);
 		return new FluentBeanAssertion<>(this, cast(beanType), returns());
 	}
 
@@ -226,11 +221,8 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a bean.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentBeanListAssertion<T2,R>
-	})
 	public <T2> FluentBeanListAssertion<T2,R> asBeanList(Class<T2> beanType) {
-		assertArgNotNull(ARG_beanType, beanType);
+		reqnn("beanType", beanType);
 		return new FluentBeanListAssertion<>(this, cast(List.class), returns());
 	}
 
@@ -302,11 +294,8 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentCollectionAssertion<E,R>
-	})
 	public <E> FluentCollectionAssertion<E,R> asCollection(Class<E> elementType) {
-		assertArgNotNull(ARG_elementType, elementType);
+		reqnn("elementType", elementType);
 		return new FluentCollectionAssertion<>(this, cast(Collection.class), returns());
 	}
 
@@ -317,9 +306,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an instance of {@link Comparable}.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentComparableAssertion<T2,R>
-	})
 	public <T2 extends Comparable<T2>> FluentComparableAssertion<T2,R> asComparable() {
 		return new FluentComparableAssertion<>(this, (T2)cast(Comparable.class), returns());
 	}
@@ -392,11 +378,8 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a list.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentListAssertion<E,R>
-	})
 	public <E> FluentListAssertion<E,R> asList(Class<E> elementType) {
-		assertArgNotNull(ARG_elementType, elementType);
+		reqnn("elementType", elementType);
 		return new FluentListAssertion<>(this, cast(List.class), returns());
 	}
 
@@ -440,12 +423,9 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a map.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentMapAssertion<K,V,R>
-	})
 	public <K,V> FluentMapAssertion<K,V,R> asMap(Class<K> keyType, Class<V> valueType) {
-		assertArgNotNull(ARG_keyType, keyType);
-		assertArgNotNull(ARG_valueType, valueType);
+		reqnn("keyType", keyType);
+		reqnn("valueType", valueType);
 		return new FluentMapAssertion<>(this, cast(Map.class), returns());
 	}
 
@@ -465,9 +445,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to FluentStringListAssertion<R>
-	})
 	public FluentStringListAssertion<R> asStringList() {
 		return new FluentStringListAssertion<>(this, cast(List.class), returns());
 	}

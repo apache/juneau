@@ -20,10 +20,14 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for the {@link XmlFormat#RAWTEXT} content format.
@@ -39,31 +43,25 @@ class Xml_RawText_Test extends TestBase {
 	// Serialize
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// A body containing raw '<', '>' and '&' must be emitted VERBATIM (no entity escaping).
-	@Test void a01_serializeVerbatim() throws Exception {
+	@ParameterizedTest
+	@MethodSource("a01_serializeVerbatimProvider")
+	void a01_serializeVerbatim(String content, String expected) throws Exception {
 		var s = XmlSerializer.DEFAULT_SQ;
 		var t = new A();
 		t.f1 = "f1";
-		t.f2 = "if (a < b) { return a & b > c; }";
-		assertEquals("<A f1='f1'>if (a < b) { return a & b > c; }</A>", s.write(t));
+		t.f2 = content;
+		assertEquals(expected, s.write(t));
 	}
 
-	// Whitespace (newlines/tabs) must be emitted literally (contrast with TEXT_PWS's &#x000a;/&#x0009;/_x0020_).
-	@Test void a02_serializeWhitespaceVerbatim() throws Exception {
-		var s = XmlSerializer.DEFAULT_SQ;
-		var t = new A();
-		t.f1 = "f1";
-		t.f2 = "\n\tx();\n";
-		assertEquals("<A f1='f1'>\n\tx();\n</A>", s.write(t));
-	}
-
-	// A literal _x####_ sequence must NOT be encoded on serialize (verbatim).
-	@Test void a03_serializeNoUnderscoreEncoding() throws Exception {
-		var s = XmlSerializer.DEFAULT_SQ;
-		var t = new A();
-		t.f1 = "f1";
-		t.f2 = "  _x0041_ leading";
-		assertEquals("<A f1='f1'>  _x0041_ leading</A>", s.write(t));
+	static Stream<Arguments> a01_serializeVerbatimProvider() {
+		return Stream.of(
+			// a01: a body containing raw '<', '>' and '&' must be emitted VERBATIM (no entity escaping).
+			Arguments.of("if (a < b) { return a & b > c; }", "<A f1='f1'>if (a < b) { return a & b > c; }</A>"),
+			// a02: whitespace (newlines/tabs) must be emitted literally (contrast with TEXT_PWS's &#x000a;/&#x0009;/_x0020_).
+			Arguments.of("\n\tx();\n", "<A f1='f1'>\n\tx();\n</A>"),
+			// a03: a literal _x####_ sequence must NOT be encoded on serialize (verbatim).
+			Arguments.of("  _x0041_ leading", "<A f1='f1'>  _x0041_ leading</A>")
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

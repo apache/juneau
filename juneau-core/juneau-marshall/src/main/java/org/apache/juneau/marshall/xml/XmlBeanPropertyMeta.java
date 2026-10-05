@@ -103,9 +103,9 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public XmlFormat getXmlFormat() { return xmlFormat; }
 
 	@SuppressWarnings({
-		"unused",       // mp unused here; accepted to match AnnotationProvider-based caller pattern
-		"java:S1172",   // Same as above
-		"java:S3776"    // Cognitive complexity acceptable for XML format detection from annotations
+		"java:S1172", // mp unused here; accepted to match AnnotationProvider-based caller pattern
+		"java:S3776", // Cognitive complexity acceptable for XML format detection from annotations
+		"unused" // mp unused here; accepted to match AnnotationProvider-based caller pattern
 	})
 	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
 		if (xml == null)

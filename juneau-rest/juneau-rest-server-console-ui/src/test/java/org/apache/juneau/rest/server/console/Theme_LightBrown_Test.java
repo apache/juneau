@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -46,10 +47,8 @@ class Theme_LightBrown_Test extends TestBase {
 
 	@Test void b01_brownedSignatureValues() {
 		var tokens = Theme.LIGHT_BROWN.getTokens();
-		assertEquals("#a9772f", tokens.get("--jc-accent"));
-		assertEquals("#8a5a1a", tokens.get("--jc-link"));
-		assertEquals("#8a6d3b", tokens.get("--jc-btn-primary"));
-		assertTrue(tokens.get("--jc-page-bg").contains("#dccaa6"), () -> "expected the brown gradient, got: " + tokens.get("--jc-page-bg"));
+		assertBean(tokens, "--jc-accent,--jc-link,--jc-btn-primary", "#a9772f,#8a5a1a,#8a6d3b");
+		assertContains("#dccaa6", tokens.get("--jc-page-bg"));
 	}
 
 	@Test void b02_keptFromOpen_statusAndTagValues_areUnchanged() {
@@ -60,12 +59,10 @@ class Theme_LightBrown_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-green-bg"), tokens.get("--jc-tag-green-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
-		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
-		assertEquals("16px 16px 8px", tokens.get("--jc-card-padding"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
-		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", tokens.get("--jc-card-shadow"));
+		assertBean(tokens, "--jc-card-bg,--jc-card-padding,--jc-card-shadow", "#ffffff,16px 16px 8px,0 2px 2px rgba(0, 0, 0, 0.05)");
 	}
 
 	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {

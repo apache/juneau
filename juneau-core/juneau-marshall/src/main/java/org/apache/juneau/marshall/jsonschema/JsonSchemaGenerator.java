@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jsonschema;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -47,23 +46,10 @@ import org.apache.juneau.marshall.json5.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
 })
 public class JsonSchemaGenerator extends MarshallingTraverseContext implements JsonSchemaMetaProvider {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_values = "values";
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_addDescriptionsTo = "addDescriptionsTo";
-	private static final String PROP_addExamplesTo = "addExamplesTo";
-	private static final String PROP_allowNestedDescriptions = "allowNestedDescriptions";
-	private static final String PROP_allowNestedExamples = "allowNestedExamples";
-	private static final String PROP_beanDefMapper = "beanDefMapper";
-	private static final String PROP_ignoreTypes = "ignoreTypes";
-	private static final String PROP_useBeanDefs = "useBeanDefs";
 
 	/**
 	 * Builder class.
@@ -107,7 +93,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			MarshallingContext.Builder bc = marshallingContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().marshallingContext(bc);
 			jsonParserBuilder = copyFrom.jsonParserBuilder.copy().marshallingContext(bc);
@@ -128,7 +114,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			MarshallingContext.Builder bc = marshallingContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().marshallingContext(bc);
 			jsonParserBuilder = copyFrom.jsonParser.copy().marshallingContext(bc);
@@ -169,7 +155,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			addDescriptionsTo = addAll(addDescriptionsTo, values);
 			return this;
 		}
@@ -209,7 +195,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			addExamplesTo = addAll(addExamplesTo, values);
 			return this;
 		}
@@ -277,7 +263,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {
-			beanDefMapper = assertArgNotNull(ARG_value, value);
+			beanDefMapper = reqnn("value", value);
 			return this;
 		}
 
@@ -296,9 +282,6 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 *
 		 * @return The JSON serializer builder.
 		 */
-		@SuppressWarnings({
-			"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
-		})
 		public JsonParser.Builder<?> getJsonParserBuilder() { return jsonParserBuilder; }
 
 		/**
@@ -306,9 +289,6 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 *
 		 * @return The JSON serializer builder.
 		 */
-		@SuppressWarnings({
-			"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
-		})
 		public JsonSerializer.Builder<?> getJsonSerializerBuilder() { return jsonSerializerBuilder; }
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -352,7 +332,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}
@@ -558,13 +538,13 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 	@Override /* Overridden from MarshallingTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addDescriptionsTo, addDescriptionsTo)
-			.a(PROP_addExamplesTo, addExamplesTo)
-			.a(PROP_allowNestedDescriptions, allowNestedDescriptions)
-			.a(PROP_allowNestedExamples, allowNestedExamples)
-			.a(PROP_beanDefMapper, beanDefMapper)
-			.a(PROP_ignoreTypes, ignoreTypes)
-			.a(PROP_useBeanDefs, useBeanDefs);
+			.a("addDescriptionsTo", addDescriptionsTo)
+			.a("addExamplesTo", addExamplesTo)
+			.a("allowNestedDescriptions", allowNestedDescriptions)
+			.a("allowNestedExamples", allowNestedExamples)
+			.a("beanDefMapper", beanDefMapper)
+			.a("ignoreTypes", ignoreTypes)
+			.a("useBeanDefs", useBeanDefs);
 	}
 
 	JsonParser getJsonParser() { return jsonParser; }

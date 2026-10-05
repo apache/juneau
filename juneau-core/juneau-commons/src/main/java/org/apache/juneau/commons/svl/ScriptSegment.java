@@ -73,9 +73,7 @@ final class ScriptSegment extends TemplateSegment {
 		// Resolve each arg template to a String, then dispatch to the function. TypedFunction
 		// handles ArgCoercer.coerce(...) internally; direct VarFunction implementations get the
 		// raw String args via the args list.
-		var args = new ArrayList<Object>(argTemplates.length);
-		for (var t : argTemplates)
-			args.add(t.resolve(session));
+		List<Object> args = Arrays.stream(argTemplates).<Object>map(t -> t.resolve(session)).toList();
 
 		var n = args.size();
 		if (n < cachedFn.minArity() || n > cachedFn.maxArity()) {

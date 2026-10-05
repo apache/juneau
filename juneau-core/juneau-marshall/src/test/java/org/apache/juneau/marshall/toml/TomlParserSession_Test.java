@@ -47,24 +47,24 @@ class TomlParserSession_Test extends TestBase {
 		assertNull(r);
 	}
 
-	@Test void a02_emptyDocumentReturnsNewInstanceWhenInstantiable() throws Exception {
+	@Test void a02_emptyDocumentReturnsNewInstanceWhenInstantiable() {
 		var r = TomlParser.DEFAULT.read("", A02_Bean.class);
 		assertNotNull(r);
 	}
 
-	@Test void a03_emptyDocumentReturnsNullWhenNotInstantiable() throws Exception {
+	@Test void a03_emptyDocumentReturnsNullWhenNotInstantiable() {
 		// Map targets can't be "newInstance()"d via canCreateNewBean, so an empty document
 		// parsed to a non-bean, non-instantiable target returns null.
-		var r = TomlParser.DEFAULT.read("   \n  ", A03_Iface.class);
+		var r = TomlParser.DEFAULT.read("   \n  ", A03Iface.class);
 		assertNull(r);
 	}
 
-	@Test void a04_valueWrapperUnwrapsToScalar() throws Exception {
+	@Test void a04_valueWrapperUnwrapsToScalar() {
 		var r = TomlParser.DEFAULT.read("_value = 42", Integer.class);
 		assertEquals(42, r);
 	}
 
-	@Test void a05_directMapToType() throws Exception {
+	@Test void a05_directMapToType() {
 		var r = TomlParser.DEFAULT.read("name = \"Alice\"\nage = 30", JsonMap.class);
 		assertEquals("Alice", r.getString("name"));
 		assertEquals(30, r.getInt("age"));
@@ -74,65 +74,65 @@ class TomlParserSession_Test extends TestBase {
 	// b. readTomlDocument main loop
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_simpleTableHeader() throws Exception {
+	@Test void b01_simpleTableHeader() {
 		var r = TomlParser.DEFAULT.read("[server]\nhost = \"localhost\"", JsonMap.class);
 		var server = r.getMap("server");
 		assertEquals("localhost", server.get("host"));
 	}
 
-	@Test void b02_arrayOfTablesFirstOccurrence() throws Exception {
+	@Test void b02_arrayOfTablesFirstOccurrence() {
 		var r = TomlParser.DEFAULT.read("[[fruits]]\nname = \"apple\"", JsonMap.class);
 		var list = r.getList("fruits");
 		assertEquals(1, list.size());
 	}
 
-	@Test void b02b_arrayOfTablesSecondOccurrenceAppends() throws Exception {
+	@Test void b02b_arrayOfTablesSecondOccurrenceAppends() {
 		var r = TomlParser.DEFAULT.read("[[fruits]]\nname = \"apple\"\n[[fruits]]\nname = \"pear\"", JsonMap.class);
 		var list = r.getList("fruits");
 		assertEquals(2, list.size());
 	}
 
-	@Test void b03_arrayOfTablesRedefinedAsScalarThrows() throws Exception {
+	@Test void b03_arrayOfTablesRedefinedAsScalarThrows() {
 		assertThrows(ParseException.class,
 			() -> TomlParser.DEFAULT.read("fruits = 1\n[[fruits]]\nname = \"apple\"", JsonMap.class));
 	}
 
-	@Test void b04_dottedKeyPath() throws Exception {
+	@Test void b04_dottedKeyPath() {
 		var r = TomlParser.DEFAULT.read("a.b.c = 1", JsonMap.class);
 		var a = r.getMap("a");
 		var b = (Map<?,?>) a.get("b");
 		assertEquals(1L, b.get("c"));
 	}
 
-	@Test void b05_emptyKeyThrows() throws Exception {
+	@Test void b05_emptyKeyThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("= 1", JsonMap.class));
 	}
 
-	@Test void b06_missingEqualsThrows() throws Exception {
+	@Test void b06_missingEqualsThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("foo 1", JsonMap.class));
 	}
 
-	@Test void b07_unrecognizedLeadingCharacterBreaksLoop() throws Exception {
+	@Test void b07_unrecognizedLeadingCharacterBreaksLoop() {
 		// '}' at document top level matches none of the dispatch conditions ('[', key-start chars),
 		// so the main loop's else-branch breaks immediately, yielding an empty document.
 		var r = TomlParser.DEFAULT.read("}", JsonMap.class);
 		assertTrue(r == null || r.isEmpty());
 	}
 
-	@Test void b08_keyStartingWithUnderscoreOrDash() throws Exception {
+	@Test void b08_keyStartingWithUnderscoreOrDash() {
 		var r = TomlParser.DEFAULT.read("_a = 1\n-b = 2", JsonMap.class);
 		assertEquals(1L, r.get("_a"));
 		assertEquals(2L, r.get("-b"));
 	}
 
-	@Test void b09_quotedKeyAtTopLevel() throws Exception {
+	@Test void b09_quotedKeyAtTopLevel() {
 		// A leading '"' or '\'' also satisfies the main loop's key-start dispatch condition.
 		var r = TomlParser.DEFAULT.read("'a.b' = 1\n\"c d\" = 2", JsonMap.class);
 		assertEquals(1L, r.get("a.b"));
 		assertEquals(2L, r.get("c d"));
 	}
 
-	@Test void b10_dottedArrayOfTablesHeader() throws Exception {
+	@Test void b10_dottedArrayOfTablesHeader() {
 		// A multi-segment array-of-tables path exercises getOrCreateAt()/setAt()'s intermediate-segment
 		// loop (parts.length > 1), unlike the single-segment "[[fruits]]" header in b02.
 		var r = TomlParser.DEFAULT.read("[[fruits.varieties]]\nname = \"red\"", JsonMap.class);
@@ -141,7 +141,7 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(1, varieties.size());
 	}
 
-	@Test void b11_valueTerminatedByTabOrHash() throws Exception {
+	@Test void b11_valueTerminatedByTabOrHash() {
 		// readUntilValueEnd()'s terminator scan must recognize '\t' and an immediately-adjacent '#'
 		// (no space) as stop characters, not just ' '/','/']'/'}'.
 		var r = TomlParser.DEFAULT.read("a = 1\tb = 2#c\n", JsonMap.class);
@@ -149,7 +149,7 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(2L, r.get("b"));
 	}
 
-	@Test void b11b_valueTerminatedByBareCarriageReturn() throws Exception {
+	@Test void b11b_valueTerminatedByBareCarriageReturn() {
 		// readUntilValueEnd()'s terminator scan must also recognize a bare '\r' (CRLF line ending)
 		// as a stop character, distinct from the '\n' case exercised implicitly by every other test.
 		var r = TomlParser.DEFAULT.read("a = 1\r\nb = 2\r\n", JsonMap.class);
@@ -157,7 +157,7 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(2L, r.get("b"));
 	}
 
-	@Test void b12_emptyTableHeader() throws Exception {
+	@Test void b12_emptyTableHeader() {
 		// readTablePath's "key == null" break fires immediately when the path is empty (no bare-key
 		// or quoted-key characters before the closing ']'), unlike every other table-header test
 		// where the loop always finds at least one path segment before breaking on '.'/']'.
@@ -166,8 +166,8 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(1L, empty.get("a"));
 	}
 
-	@Test void b13_missingClosingBracketOnTableHeaderAtEof() throws Exception {
-		// readTablePath's "if (t.peek() == ']') t.read();" checks normally find ']' to consume for a
+	@Test void b13_missingClosingBracketOnTableHeaderAtEof() {
+		// readTablePath's closing-bracket consume checks normally find ']' to consume for a
 		// well-formed "[table]" header; this covers their false arm instead -- input reaches EOF
 		// before any ']' appears, but the table path itself ("table") was still read successfully,
 		// so parsing tolerantly proceeds and registers an empty table under that (unterminated) name.
@@ -180,124 +180,124 @@ class TomlParserSession_Test extends TestBase {
 	// c. readValue type dispatch
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_tripleQuoteBasicString() throws Exception {
+	@Test void c01_tripleQuoteBasicString() {
 		var r = TomlParser.DEFAULT.read("s = \"\"\"hello\"\"\"", JsonMap.class);
 		assertEquals("hello", r.getString("s"));
 	}
 
-	@Test void c02_literalString() throws Exception {
+	@Test void c02_literalString() {
 		var r = TomlParser.DEFAULT.read("s = 'raw\\path'", JsonMap.class);
 		assertEquals("raw\\path", r.getString("s"));
 	}
 
-	@Test void c03_tripleQuoteLiteralString() throws Exception {
+	@Test void c03_tripleQuoteLiteralString() {
 		var r = TomlParser.DEFAULT.read("s = '''raw\\path'''", JsonMap.class);
 		assertEquals("raw\\path", r.getString("s"));
 	}
 
-	@Test void c04_booleanTrueAndFalse() throws Exception {
+	@Test void c04_booleanTrueAndFalse() {
 		var r = TomlParser.DEFAULT.read("a = true\nb = false", JsonMap.class);
 		assertEquals(true, r.get("a"));
 		assertEquals(false, r.get("b"));
 	}
 
-	@Test void c05_inlineArrayWithTrailingComma() throws Exception {
+	@Test void c05_inlineArrayWithTrailingComma() {
 		var r = TomlParser.DEFAULT.read("a = [1, 2, 3,]", JsonMap.class);
 		var list = r.getList("a");
 		assertEquals(3, list.size());
 	}
 
-	@Test void c06_inlineTable() throws Exception {
+	@Test void c06_inlineTable() {
 		var r = TomlParser.DEFAULT.read("point = { x = 1, y = 2 }", JsonMap.class);
 		var point = r.getMap("point");
 		assertEquals(1L, point.get("x"));
 		assertEquals(2L, point.get("y"));
 	}
 
-	@Test void c06b_inlineTableMissingEqualsThrows() throws Exception {
+	@Test void c06b_inlineTableMissingEqualsThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("point = { x 1 }", JsonMap.class));
 	}
 
-	@Test void c06c_inlineTableEmptyKeyThrows() throws Exception {
+	@Test void c06c_inlineTableEmptyKeyThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("point = { = 1 }", JsonMap.class));
 	}
 
-	@Test void c07_hexIntegerLiteral() throws Exception {
+	@Test void c07_hexIntegerLiteral() {
 		var r = TomlParser.DEFAULT.read("a = 0xFF", JsonMap.class);
 		assertEquals(255L, r.get("a"));
 	}
 
-	@Test void c07b_octalIntegerLiteral() throws Exception {
+	@Test void c07b_octalIntegerLiteral() {
 		var r = TomlParser.DEFAULT.read("a = 0o17", JsonMap.class);
 		assertEquals(15L, r.get("a"));
 	}
 
-	@Test void c07c_binaryIntegerLiteral() throws Exception {
+	@Test void c07c_binaryIntegerLiteral() {
 		var r = TomlParser.DEFAULT.read("a = 0b101", JsonMap.class);
 		assertEquals(5L, r.get("a"));
 	}
 
-	@Test void c08_signedSpecialFloats() throws Exception {
+	@Test void c08_signedSpecialFloats() {
 		var r = TomlParser.DEFAULT.read("a = +inf\nb = -inf\nc = +nan", JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, r.get("a"));
 		assertEquals(Double.NEGATIVE_INFINITY, r.get("b"));
 		assertTrue(Double.isNaN((Double) r.get("c")));
 	}
 
-	@Test void c08b_bareSpecialFloats() throws Exception {
+	@Test void c08b_bareSpecialFloats() {
 		// Leading char 'i'/'n' (no sign) dispatches through the separate inf/nan-only branch.
 		var r = TomlParser.DEFAULT.read("a = inf\nb = nan", JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, r.get("a"));
 		assertTrue(Double.isNaN((Double) r.get("b")));
 	}
 
-	@Test void c08c_bareSpecialFloatInvalidThrows() throws Exception {
+	@Test void c08c_bareSpecialFloatInvalidThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = ignored", JsonMap.class));
 	}
 
-	@Test void c09_yearMonthLikeStringKeptAsString() throws Exception {
+	@Test void c09_yearMonthLikeStringKeptAsString() {
 		// "2024-06" matches isDateLikeString (length 7, dash at index 4) and is kept as a raw
 		// String for convertValue to later coerce into YearMonth/Year on the bean-property path.
 		var r = TomlParser.DEFAULT.read("ym = 2024-06", JsonMap.class);
 		assertEquals("2024-06", r.get("ym"));
 	}
 
-	@Test void c10_localDateTimeLiteral() throws Exception {
+	@Test void c10_localDateTimeLiteral() {
 		var r = TomlParser.DEFAULT.read("ts = 2024-01-15T10:30:00", JsonMap.class);
 		assertEquals(LocalDateTime.of(2024, 1, 15, 10, 30, 0), r.get("ts"));
 	}
 
-	@Test void c11_floatWithDecimalPoint() throws Exception {
+	@Test void c11_floatWithDecimalPoint() {
 		var r = TomlParser.DEFAULT.read("pi = 3.14", JsonMap.class);
 		assertEquals(3.14, r.get("pi"));
 	}
 
-	@Test void c12_invalidNumberThrows() throws Exception {
+	@Test void c12_invalidNumberThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = 123x", JsonMap.class));
 	}
 
-	@Test void c13_numberLikeTimeStringFallsBackToString() throws Exception {
+	@Test void c13_numberLikeTimeStringFallsBackToString() {
 		// "12:30" fails Long.parseLong but contains ':', so it falls through as a raw String
-		// (line: "if (s.contains(\"-\") || s.contains(\":\")) return s;").
+		// (the date-time-looking string fallback).
 		var r = TomlParser.DEFAULT.read("t = 12:30", JsonMap.class);
 		assertEquals("12:30", r.get("t"));
 	}
 
-	@Test void c15_unexpectedCharacterInValueThrows() throws Exception {
+	@Test void c15_unexpectedCharacterInValueThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = @", JsonMap.class));
 	}
 
-	@Test void c16_negativeNanLiteral() throws Exception {
+	@Test void c16_negativeNanLiteral() {
 		var r = TomlParser.DEFAULT.read("a = -nan", JsonMap.class);
 		assertTrue(Double.isNaN((Double) r.get("a")));
 	}
 
-	@Test void c17_exponentWithoutDecimalPoint() throws Exception {
+	@Test void c17_exponentWithoutDecimalPoint() {
 		var r = TomlParser.DEFAULT.read("a = 1e10", JsonMap.class);
 		assertEquals(1e10, r.get("a"));
 	}
 
-	@Test void c18_dateTimeWithColonButNoTOrSpaceSeparator() throws Exception {
+	@Test void c18_dateTimeWithColonButNoTOrSpaceSeparator() {
 		// readValue's date-time dispatch OR-condition also accepts a bare ":" (without "T") as long
 		// as there's no separator between the date and time parts -- an unusual but syntactically
 		// reachable shape that routes into TomlTokenizer.parseDateTimeString(), which in turn can't
@@ -305,7 +305,7 @@ class TomlParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("ts = 2024-01-1510:30:00", JsonMap.class));
 	}
 
-	@Test void c18b_spaceSeparatedDateTimeLiteralNowRecognized() throws Exception {
+	@Test void c18b_spaceSeparatedDateTimeLiteralNowRecognized() {
 		// FIXED: the standard TOML space-separated datetime variant, e.g. "2024-01-15 10:30:00", used to
 		// never be recognized by readValue's date-time dispatch at all -- readUntilValueEnd() treats ' '
 		// as a hard value terminator, so the scan was truncated to just the bare date "2024-01-15" before
@@ -316,22 +316,22 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(LocalDateTime.of(2024, 1, 15, 10, 30, 0), r.get("ts"));
 	}
 
-	@Test void c19_uppercaseRadixPrefixes() throws Exception {
+	@Test void c19_uppercaseRadixPrefixes() {
 		var r = TomlParser.DEFAULT.read("a = 0XFF\nb = 0O17\nc = 0B101", JsonMap.class);
 		assertEquals(255L, r.get("a"));
 		assertEquals(15L, r.get("b"));
 		assertEquals(5L, r.get("c"));
 	}
 
-	@Test void c20_hexPrefixWithNoDigitsThrows() throws Exception {
+	@Test void c20_hexPrefixWithNoDigitsThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = 0x", JsonMap.class));
 	}
 
-	@Test void c21_radixIntegerOverflowThrows() throws Exception {
+	@Test void c21_radixIntegerOverflowThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = 0xFFFFFFFFFFFFFFFFF", JsonMap.class));
 	}
 
-	@Test void c22_unterminatedLiteralStringAtEofThrows() throws Exception {
+	@Test void c22_unterminatedLiteralStringAtEofThrows() {
 		// isTripleQuote()'s c2 < 0 arm: a single opening quote immediately followed by EOF.
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("a = '", JsonMap.class));
 	}
@@ -340,27 +340,27 @@ class TomlParserSession_Test extends TestBase {
 	// d. convertValue dispatch
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_mapToJsonMapTarget() throws Exception {
+	@Test void d01_mapToJsonMapTarget() {
 		var r = TomlParser.DEFAULT.read("inner = { a = 1 }", D01_JsonMapBean.class);
 		assertEquals(1, r.inner.getInt("a"));
 	}
 
-	@Test void d02_mapToBeanTarget() throws Exception {
+	@Test void d02_mapToBeanTarget() {
 		var r = TomlParser.DEFAULT.read("[inner]\na = \"x\"", D02_OuterBean.class);
 		assertEquals("x", r.inner.a);
 	}
 
-	@Test void d03_listToCollectionTarget() throws Exception {
+	@Test void d03_listToCollectionTarget() {
 		var r = TomlParser.DEFAULT.read("items = [1, 2, 3]", D03_ListBean.class);
 		assertEquals(List.of(1, 2, 3), r.items);
 	}
 
-	@Test void d04_listToArrayTarget() throws Exception {
+	@Test void d04_listToArrayTarget() {
 		var r = TomlParser.DEFAULT.read("items = [1, 2, 3]", D04_ArrayBean.class);
 		assertArrayEquals(new int[]{1, 2, 3}, r.items);
 	}
 
-	@Test void d05_topLevelNumberIntoDuration() throws Exception {
+	@Test void d05_topLevelNumberIntoDuration() {
 		// Bare integer literal is sniffed by Iso8601Utils.parseDuration and interpreted per the
 		// configured DurationFormat hint (MILLIS here) rather than as strict ISO-8601 text.
 		var p = TomlParser.create().durationFormat(DurationFormat.MILLIS).build();
@@ -368,63 +368,63 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(Duration.ofMillis(30000), r);
 	}
 
-	@Test void d06_topLevelNumberIntoPeriod() throws Exception {
+	@Test void d06_topLevelNumberIntoPeriod() {
 		var p = TomlParser.create().periodFormat(PeriodFormat.DAYS).build();
 		var r = p.read("_value = 5", Period.class);
 		assertEquals(Period.ofDays(5), r);
 	}
 
-	@Test void d07_topLevelNumberIntoDate() throws Exception {
+	@Test void d07_topLevelNumberIntoDate() {
 		var p = TomlParser.create().dateFormat(DateFormat.MILLIS).build();
 		var r = p.read("_value = 1699999999000", java.util.Date.class);
 		assertEquals(1699999999000L, r.getTime());
 	}
 
-	@Test void d08_topLevelNumberIntoCalendar() throws Exception {
+	@Test void d08_topLevelNumberIntoCalendar() {
 		var p = TomlParser.create().calendarFormat(CalendarFormat.MILLIS).build();
 		var r = p.read("_value = 1699999999000", java.util.Calendar.class);
 		assertEquals(1699999999000L, r.getTimeInMillis());
 	}
 
-	@Test void d09_topLevelNumberIntoTemporal() throws Exception {
+	@Test void d09_topLevelNumberIntoTemporal() {
 		var p = TomlParser.create().temporalFormat(TemporalFormat.MILLIS).build();
 		var r = p.read("_value = 1699999999000", Instant.class);
 		assertEquals(1699999999000L, r.toEpochMilli());
 	}
 
-	@Test void d10_topLevelStringIntoDate() throws Exception {
+	@Test void d10_topLevelStringIntoDate() {
 		var r = TomlParser.DEFAULT.read("_value = \"2023-01-01T00:00:00Z\"", java.util.Date.class);
 		assertNotNull(r);
 	}
 
-	@Test void d10b_topLevelStringIntoCalendar() throws Exception {
+	@Test void d10b_topLevelStringIntoCalendar() {
 		var r = TomlParser.DEFAULT.read("_value = \"2023-01-01T00:00:00Z\"", java.util.Calendar.class);
 		assertNotNull(r);
 	}
 
-	@Test void d10c_topLevelStringIntoTemporal() throws Exception {
+	@Test void d10c_topLevelStringIntoTemporal() {
 		var r = TomlParser.DEFAULT.read("_value = \"2023-01-01T00:00:00Z\"", Instant.class);
 		assertNotNull(r);
 	}
 
-	@Test void d10d_topLevelStringIntoDuration() throws Exception {
+	@Test void d10d_topLevelStringIntoDuration() {
 		var r = TomlParser.DEFAULT.read("_value = \"PT30S\"", Duration.class);
 		assertEquals(Duration.ofSeconds(30), r);
 	}
 
-	@Test void d10e_topLevelStringIntoPeriod() throws Exception {
+	@Test void d10e_topLevelStringIntoPeriod() {
 		var r = TomlParser.DEFAULT.read("_value = \"P1Y2M3D\"", Period.class);
 		assertEquals(Period.of(1, 2, 3), r);
 	}
 
-	@Test void d11_nativeTemporalLiteralIntoTemporalTarget() throws Exception {
+	@Test void d11_nativeTemporalLiteralIntoTemporalTarget() {
 		// Native TOML datetime literal (unquoted) is tokenized as a java.time.* TemporalAccessor
 		// by readValue's date-time branch, then re-routed through readTemporal by convertValue.
 		var r = TomlParser.DEFAULT.read("_value = 2024-01-15T10:30:00Z", OffsetDateTime.class);
 		assertNotNull(r);
 	}
 
-	@Test void d12_topLevelByteArrayWithRealBinarySwap() throws Exception {
+	@Test void d12_topLevelByteArrayWithRealBinarySwap() {
 		var s = TomlSerializer.create().binaryFormat(BinaryFormat.HEX).build();
 		var p = TomlParser.create().binaryFormat(BinaryFormat.HEX).build();
 		var toml = s.write(new byte[]{9, 8, 7});
@@ -432,19 +432,19 @@ class TomlParserSession_Test extends TestBase {
 		assertArrayEquals(new byte[]{9, 8, 7}, result);
 	}
 
-	@Test void d13_nullValueSentinelConfigured() throws Exception {
+	@Test void d13_nullValueSentinelConfigured() {
 		var r = TomlParser.DEFAULT.read("name = \"<NULL>\"", D13_Bean.class);
 		assertNull(r.name);
 	}
 
-	@Test void d14_mapPropertyRawMapNotJsonMapNotBean() throws Exception {
+	@Test void d14_mapPropertyRawMapNotJsonMapNotBean() {
 		// convertValue's Map branch: not JsonMap.class-assignable and not isBean() -- falls through
 		// past both guards to the generic Map-target handling below (targetType.isMap()).
 		var r = TomlParser.DEFAULT.read("[props]\na = 1", D14_RawMapBean.class);
 		assertEquals(1L, r.props.get("a"));
 	}
 
-	@Test void d15_nestedMapWithinJsonMapTarget() throws Exception {
+	@Test void d15_nestedMapWithinJsonMapTarget() {
 		// toJsonMap's recursive "v instanceof Map" arm for a nested table inside a JsonMap-typed
 		// bean property (as opposed to d01's single-level table).
 		var r = TomlParser.DEFAULT.read("inner = { a = { b = 1 } }", D01_JsonMapBean.class);
@@ -452,7 +452,7 @@ class TomlParserSession_Test extends TestBase {
 		assertEquals(1L, nested.get("b"));
 	}
 
-	@Test void d16_mapTargetInterfaceUsesGenericMap() throws Exception {
+	@Test void d16_mapTargetInterfaceUsesGenericMap() {
 		// convertMapToType's Map branch: Map.class (an interface) isn't directly instantiable via
 		// canCreateNewInstance(), so it falls back to newGenericMap() instead of newInstance().
 		var r = TomlParser.DEFAULT.read("a = 1", Map.class);
@@ -463,13 +463,13 @@ class TomlParserSession_Test extends TestBase {
 	// e. populateBeanMap unknown-property handling
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_unknownPropertyIgnoredWhenConfigured() throws Exception {
+	@Test void e01_unknownPropertyIgnoredWhenConfigured() {
 		var p = TomlParser.create().ignoreUnknownBeanProperties().build();
 		var r = p.read("name = \"Alice\"\nunknown = \"x\"", D13_Bean.class);
 		assertEquals("Alice", r.name);
 	}
 
-	@Test void e02_unknownPropertyThrows() throws Exception {
+	@Test void e02_unknownPropertyThrows() {
 		assertThrows(ParseException.class, () -> TomlParser.DEFAULT.read("unknown = \"x\"", D13_Bean.class));
 	}
 
@@ -493,7 +493,7 @@ class TomlParserSession_Test extends TestBase {
 		public String name;
 	}
 
-	public interface A03_Iface {
+	public interface A03Iface {
 		// Not instantiable; used only to force canCreateNewBean(...) == false.
 	}
 

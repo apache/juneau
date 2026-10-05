@@ -44,10 +44,10 @@ public class UriUtils {
 	public static boolean isSecureOrLoopback(URI uri) {
 		if (uri == null)
 			return false;
-		if ("https".equalsIgnoreCase(uri.getScheme()))
+		if (eqic("https", uri.getScheme()))
 			return true;
 		var host = uri.getHost();
-		return host != null && (host.equals("127.0.0.1") || host.equalsIgnoreCase("localhost") || host.equals("[::1]") || host.equals("::1"));
+		return host != null && (eq(host, "127.0.0.1") || eqic(host, "localhost") || eqa(host, "[::1]", "::1"));
 	}
 
 	/**

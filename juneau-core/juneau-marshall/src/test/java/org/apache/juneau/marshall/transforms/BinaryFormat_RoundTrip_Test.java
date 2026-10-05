@@ -69,7 +69,7 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * {@link BinaryFormat} affects every text-based serializer, plus BSON / CBOR / MsgPack (binary serializers
- * with a native byte-array wire type, fixed under TODO-353): {@link BinaryFormat#NOT_SET} emits their
+ * with a native byte-array wire type): {@link BinaryFormat#NOT_SET} emits their
  * native binary opcode as before, while every other constant switches the {@code byte[]} wire
  * representation to that format's native string type carrying the spaced-hex/base64/etc. text — the
  * variant {@code binarySwap} installed by {@code MarshalledPropertyPostProcessor} hands the raw
@@ -80,7 +80,7 @@ import org.junit.jupiter.params.provider.*;
  * ({@link org.apache.juneau.marshall.swaps.BinarySwap}), which likewise short-circuits to raw bytes for
  * binary sessions and lets the same per-format dispatch site apply the configured format.  Serializers
  * without a native byte-array wire type (Parquet, binary RDF) always run through the swap-formatted text
- * string.  Prototext still has the pre-TODO-353 native-bytes-always bug (out of scope here — it emits its
+ * string.  Prototext still has the native-bytes-always bug (out of scope here — it emits its
  * native bytes opcode unconditionally); its round-trip below still passes because it's lossless either way,
  * not because it honors the configured format.  All combos round-trip to the original bytes regardless.
  */

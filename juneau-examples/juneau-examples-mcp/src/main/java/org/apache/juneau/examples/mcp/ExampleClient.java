@@ -44,7 +44,8 @@ import org.apache.juneau.rest.client.mcp.v20260728.*;
  * wire format carries, so what you see here is not byte-for-byte what came off the wire.
  */
 @SuppressWarnings({
-	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S106", // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S112" // main(), run() and the demo helpers declare throws Exception so the walkthrough can propagate any client failure without boilerplate
 })
 public final class ExampleClient {
 
@@ -62,9 +63,6 @@ public final class ExampleClient {
 	 * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:5000/}).
 	 * @throws Exception If any step fails.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - example main() kept simple for demo readability
-	})
 	public static void main(String[] args) throws Exception {
 		var endpoint = args.length > 0 ? args[0] : "http://localhost:" + ExampleServer.DEFAULT_PORT + "/";
 		try (var client = connect(endpoint)) {
@@ -79,7 +77,9 @@ public final class ExampleClient {
 	 * @return A connected client (its mandatory {@code server/discover} handshake already done).
 	 * @throws IOException If the connection or handshake fails.
 	 */
-	@SuppressWarnings("resource") // returned client is owned and closed by the caller (see main() above).
+	@SuppressWarnings({
+		"resource" // returned client is owned and closed by the caller (see main() above).
+	})
 	public static McpClient connect(String endpoint) throws IOException {
 		return McpClient.connect(McpClient.builder()
 			.endpoint(endpoint)
@@ -95,9 +95,6 @@ public final class ExampleClient {
 	 * @param client The connected MCP client.
 	 * @throws Exception If any step fails.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
-	})
 	public static void run(McpClient client) throws Exception {
 
 		section("1. server/discover — who are we talking to?");
@@ -157,9 +154,6 @@ public final class ExampleClient {
 	 * Subscribes for changes to a note URI, publishes that note, and prints the change frame that arrives
 	 * over the held-open SSE stream.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
-	})
 	private static void runSubscriptionDemo(McpClient client) throws Exception {
 		var noteUri = NoteStore.uriFor("todo");
 		var updates = new LinkedBlockingQueue<String>();

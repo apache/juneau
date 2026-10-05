@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.tracing;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.http.tracing.TraceContextCarrier;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Neutral, dependency-free helper for stamping a caller's current trace context into an arbitrary
@@ -62,8 +62,8 @@ public final class TraceContexts {
 	 * @param carrier The {@link TraceContextCarrier} to write into. Must not be <jk>null</jk>.
 	 */
 	public static void inject(TracerHook tracer, TraceContextCarrier carrier) {
-		assertArgNotNull("tracer", tracer);
-		assertArgNotNull("carrier", carrier);
+		reqnn("tracer", tracer);
+		reqnn("carrier", carrier);
 		tracer.inject(carrier);
 	}
 }

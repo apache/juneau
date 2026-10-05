@@ -33,8 +33,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1186", // Empty test method intentional for framework testing
-	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ConfigMapListener_Test extends TestBase {
 

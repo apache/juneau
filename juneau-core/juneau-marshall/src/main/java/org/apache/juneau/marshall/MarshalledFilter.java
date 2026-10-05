@@ -77,8 +77,9 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",   // Raw types necessary for generic type handling
-	"java:S1452" // Wildcard required - ClassInfoTyped<?>, ClassMeta<?> for filter metadata
+	"java:S1452", // Wildcard required - ClassInfoTyped<?>, ClassMeta<?> for filter metadata
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // interceptor(Class<?>) narrows the supplied class to Class<? extends BeanInterceptor>; the builder's type() validates it.
 })
 public class MarshalledFilter implements BeanFilter {
 
@@ -315,9 +316,6 @@ public class MarshalledFilter implements BeanFilter {
 		 * 	<br>The default value is {@link BeanInterceptor}.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Cast is safe: type parameter verified by caller.
-		})
 		public Builder interceptor(Class<?> value) {
 			interceptor.type((Class<? extends BeanInterceptor>) value);
 			return this;
@@ -614,7 +612,7 @@ public class MarshalledFilter implements BeanFilter {
 		this.unsortedProperties = builder.unsortedProperties;
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);
-		this.beanDictionary = builder.dictionary == null ? u(list()) : u(cp(builder.dictionary));
+		this.beanDictionary = u(builder.dictionary == null ? list() : cp(builder.dictionary));
 		this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);
 	}
 
@@ -744,9 +742,6 @@ public class MarshalledFilter implements BeanFilter {
 	 * @param value The value just extracted from calling the bean getter.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	@Override
 	public Object readProperty(Object bean, String name, Object value) {
 		return interceptor.readProperty(bean, name, value);
@@ -760,9 +755,6 @@ public class MarshalledFilter implements BeanFilter {
 	 * @param value The value just parsed.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	@Override
 	public Object writeProperty(Object bean, String name, Object value) {
 		return interceptor.writeProperty(bean, name, value);

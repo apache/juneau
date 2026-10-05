@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
@@ -221,9 +222,7 @@ public class EchoMixin {
 	protected EchoMixin(Builder builder) {
 		bodyLimit = builder.bodyLimit;
 		redactedHeaders = u(new LinkedHashSet<>(builder.redactedHeaders));
-		var s = new LinkedHashSet<String>();
-		for (var h : builder.redactedHeaders)
-			s.add(h.toLowerCase(Locale.ROOT));
+		var s = builder.redactedHeaders.stream().map(h -> h.toLowerCase(Locale.ROOT)).collect(Collectors.toCollection(LinkedHashSet::new));
 		redactedHeadersLower = u(s);
 		enabled = builder.enabled;
 	}

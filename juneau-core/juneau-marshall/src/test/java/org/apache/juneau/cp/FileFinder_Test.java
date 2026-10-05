@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
 	"java:S5786", // Must be public for cross-package subclass FileFinder_Test2
 	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S5976", // JUnit assertions preferred but not required in all test scenarios
-	"resource"    // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+	"resource" // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
 })
 public class FileFinder_Test extends TestBase {
 

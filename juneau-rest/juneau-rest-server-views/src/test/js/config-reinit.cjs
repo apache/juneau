@@ -42,19 +42,19 @@ if (!configJsPath || !viewsJsPath) {
 
 const document = {
 	readyState: 'loading',
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
 	getElementById: function () { return null; },
 	createElement: function () {
 		return {
-			setAttribute: function () {},
-			appendChild: function () {},
+			setAttribute: function () { /* no-op */ },
+			appendChild: function () { /* no-op */ },
 			querySelector: function () { return null; },
 			querySelectorAll: function () { return []; }
 		};
 	},
-	body: { appendChild: function () {}, querySelectorAll: function () { return []; } }
+	body: { appendChild: function () { /* no-op */ }, querySelectorAll: function () { return []; } }
 };
 
 const window = { document: document, console: console, jQuery: undefined };
@@ -91,7 +91,7 @@ const catalog = [
 	{ data: 'C', title: 'Col C', orderable: true }
 ];
 const effective = C.computeEffectiveColumns(catalog, {
-	schemaVersion: 1, visible: ['A', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
+	schemaVersion: 2, visible: ['A', 'C'], order: ['A', 'B', 'C'], labels: {}, formats: {}
 });
 const optsColumns = C.buildOptsColumnSpace(effective, { hasSelection: true, hasActions: true });
 optsColumns.forEach(function (c) {
@@ -116,5 +116,52 @@ out.hiddenFallbackData = hiddenOrder?.[0]
 	: null;
 
 out.applyViewNotInit = C.applyView({}, null);
+
+// Gap 1: applySearchMembershipToColumns never upgrades an intrinsically incapable column, downgrades an
+// absent-from-membership capable one, and passes everything through unchanged when membership is null.
+const searchCatalogEffective = C.computeEffectiveColumns(
+	[
+		{ data: 'A', searchable: true },
+		{ data: 'B', searchable: true },
+		{ data: 'C', searchable: false }
+	],
+	null
+);
+const downgraded = C.applySearchMembershipToColumns(searchCatalogEffective, ['A']);
+out.searchMembershipDowngradesB = downgraded.find(function (c) { return c.data === 'B'; }).searchable;
+out.searchMembershipKeepsA = downgraded.find(function (c) { return c.data === 'A'; }).searchable;
+out.searchMembershipNeverUpgradesC = downgraded.find(function (c) { return c.data === 'C'; }).searchable;
+out.searchMembershipNullIsNoop = C.applySearchMembershipToColumns(searchCatalogEffective, null) === searchCatalogEffective;
+
+// Gap 1: defaultOrderFromSort is a pure {column,dir}[] -> {data,dir}[] mapping, empty/absent-safe.
+out.defaultOrderFromSort = I.defaultOrderFromSort([{ column: 'C', dir: 'desc' }, { column: 'A', dir: 'asc' }]);
+out.defaultOrderFromSortEmpty = I.defaultOrderFromSort(null);
+
+// Gap 1: resolveLastAppliedViewSettings memoizes - the second call on the same ctx returns the SAME cached result
+// object (so storage is never read twice and the Q1 reset notice cannot be lost to a second read).
+const memoCtx = { table: {}, viewDef: { columns: [{ data: 'A' }] } };
+const firstResolve = C.resolveLastAppliedViewSettings(memoCtx.table, memoCtx);
+const secondResolve = C.resolveLastAppliedViewSettings(memoCtx.table, memoCtx);
+out.resolveLastAppliedIsMemoized = firstResolve === secondResolve && memoCtx._lastAppliedViewSettings === firstResolve;
+out.resolveLastAppliedNoBlobIsNull = memoCtx._lastAppliedViewSettings.draft;
+
+// Gap 1: applyView's new overrides param reaches NS.init.buildTable - spy it (applyView calls it via NS.init).
+let captured = null;
+const realBuildTable = I.buildTable;
+I.buildTable = function (table, viewDef, effective, ctx) { captured = { viewDef: viewDef, effective: effective }; return { ok: true }; };
+const overrideTable = {};
+overrideTable.__juneauCtx = { viewDef: { columns: [{ data: 'A', searchable: true }, { data: 'B', searchable: true }] } };
+C.applyView(overrideTable, { schemaVersion: 2, visible: ['A', 'B'], order: ['A', 'B'], labels: {}, formats: {} }, {
+	defaultOrder: [{ data: 'B', dir: 'desc' }],
+	searchMembership: ['A']
+});
+I.buildTable = realBuildTable;
+out.applyViewOverridesDefaultOrder = captured?.viewDef?.defaultOrder;
+out.applyViewOverridesSearchableB = captured?.effective?.find(function (c) { return c.data === 'B'; })?.searchable;
+
+// Gap 7: defaultOptions/normalizeOptions carry autoRefreshMs, defaulting Off and dropping an out-of-range value.
+out.defaultOptionsAutoRefreshOff = C.defaultOptions().autoRefreshMs;
+out.normalizeOptionsDropsBadAutoRefresh = C.normalizeOptions({ autoRefreshMs: 12345 }).autoRefreshMs;
+out.normalizeOptionsKeepsGoodAutoRefresh = C.normalizeOptions({ autoRefreshMs: 60000 }).autoRefreshMs;
 
 process.stdout.write(JSON.stringify(out));

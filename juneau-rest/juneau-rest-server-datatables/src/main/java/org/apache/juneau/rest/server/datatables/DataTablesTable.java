@@ -64,6 +64,13 @@ public class DataTablesTable {
 	/** Marker attribute the shipped {@code juneau-datatables.js} glue looks for to auto-initialize a table. */
 	public static final String MARKER_ATTR = "data-juneau-datatable";
 
+	/**
+	 * Marker attribute carrying a server endpoint URL that the shipped {@code juneau-datatables.js} glue auto-wires
+	 * into {@code opts.ajax} via {@code JuneauDataTables.ajax(url)} (with {@code opts.serverSide} defaulted to
+	 * <jk>true</jk>) when the parsed {@link #MARKER_ATTR} options have no {@code ajax} key.
+	 */
+	public static final String AJAX_ATTR = "data-juneau-datatable-ajax";
+
 	private DataTablesTable() {}
 
 	/**
@@ -114,9 +121,7 @@ public class DataTablesTable {
 		var bm = ctx.getBeanMeta(rowType);
 		var columns = DataTablesColumns.of(ctx, rowType);
 
-		var headerCells = new ArrayList<>(columns.size());
-		for (var col : columns)
-			headerCells.add(th(String.valueOf(col.get("title"))));
+		var headerCells = columns.stream().map(col -> th(String.valueOf(col.get("title")))).toArray();
 
 		var htmlSerializer = HtmlSerializer.create().marshallingContext(ctx).build();
 		var session = htmlSerializer.getSession();
@@ -140,7 +145,7 @@ public class DataTablesTable {
 			bodyRows.add(tr(cells.toArray()));
 		}
 
-		return table(thead(tr(headerCells.toArray())), tbody(bodyRows.toArray()))
+		return table(thead(tr(headerCells)), tbody(bodyRows.toArray()))
 			.id(id)
 			.attr(MARKER_ATTR, "");
 	}
@@ -191,21 +196,18 @@ public class DataTablesTable {
 	 * @return A new {@link Table} DOM bean.
 	 */
 	public static Table of(MarshallingContext ctx, String id, Collection<?> rows, List<Map<String,Object>> columns) {
-		var headerCells = new ArrayList<>(columns.size());
-		for (var col : columns)
-			headerCells.add(th(String.valueOf(col.get("title"))));
+		var headerCells = columns.stream().map(col -> th(String.valueOf(col.get("title")))).toArray();
 
 		var bodyRows = new ArrayList<>(rows.size());
 		for (var row : rows) {
-			var cells = new ArrayList<>(columns.size());
-			for (var col : columns) {
+			var cells = columns.stream().map(col -> {
 				var v = value(ctx, row, String.valueOf(col.get("data")));
-				cells.add(td(v == null ? "" : v));
-			}
-			bodyRows.add(tr(cells.toArray()));
+				return td(v == null ? "" : v);
+			}).toArray();
+			bodyRows.add(tr(cells));
 		}
 
-		return table(thead(tr(headerCells.toArray())), tbody(bodyRows.toArray()))
+		return table(thead(tr(headerCells)), tbody(bodyRows.toArray()))
 			.id(id)
 			.attr(MARKER_ATTR, "");
 	}

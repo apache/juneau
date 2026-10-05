@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -46,6 +46,7 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for parser hierarchy
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class SseParser extends ReaderParser implements RecordReadable {
@@ -83,7 +84,7 @@ public class SseParser extends ReaderParser implements RecordReadable {
 		 * @param copyFrom The builder to copy from. Must not be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -92,7 +93,7 @@ public class SseParser extends ReaderParser implements RecordReadable {
 		 * @param copyFrom The parser to copy from. Must not be <jk>null</jk>.
 		 */
 		protected Builder(SseParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */

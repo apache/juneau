@@ -21,7 +21,6 @@ import static java.util.Comparator.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -188,17 +187,14 @@ import org.apache.juneau.commons.reflect.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // findBeanImpl() nests fallbacks across instantiation strategies; splitting it would obscure the ordering
+	"java:S6539", // Monster class; BeanInstantiator intentionally centralizes multi-strategy bean-instantiation auto-wiring
+	"java:S6541", // findBeanImpl() tries subtype, builder, factory-method and constructor strategies in sequence, so it is one long method by design
 	"resource", // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
-	"java:S6539" // Monster class; BeanInstantiator intentionally centralizes multi-strategy bean-instantiation auto-wiring
+	"unchecked" // (T) beanType.cast(...) results and the (Class<? extends T>) narrowing in type() are guarded by the runtime beanType check
 })
 public class BeanInstantiator<T> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_beanType = "beanType";
-	private static final String ARG_fallback = "fallback";
-	private static final String ARG_hook = "hook";
-	private static final String ARG_names = "names";
-	private static final String ARG_value = "value";
 
 	private static final String CONST_usingFallbackSupplier = "Using fallback supplier";
 
@@ -518,7 +514,7 @@ public class BeanInstantiator<T> {
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 */
 	protected Builder(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
-		this.beanType = info(assertArgNotNull(ARG_beanType, beanType));
+		this.beanType = info(reqnn("beanType", beanType));
 		this.beanSubType = this.beanType;
 		this.parentStore = parentStore;
 		this.store = new BasicBeanStore(this.parentStore);
@@ -695,9 +691,9 @@ public class BeanInstantiator<T> {
 	 * @throws IllegalArgumentException If value is not a subclass of {@code beanType}.
 	 */
 	public Builder<T> type(Class<? extends T> value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		beanSubType = info(value);
-		assertArg(beanType.isAssignableFrom(beanSubType), "type must be a subclass of beanType. beanType=%s, type=%s", cn(beanType), cn(beanSubType));
+		req(beanType.isAssignableFrom(beanSubType), "type must be a subclass of beanType. beanType=%s, type=%s", cn(beanType), cn(beanSubType));
 		reset();
 		return this;
 	}
@@ -714,11 +710,8 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or its underlying class is not a subclass of {@code beanType}.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Reflective builder lookup returns Object; cast is safe by construction.
-	})
 	public Builder<T> type(ClassInfo value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return type((Class<? extends T>) value.inner());
 	}
 
@@ -752,9 +745,9 @@ public class BeanInstantiator<T> {
 	 * @throws IllegalArgumentException If the builder type is invalid (does not have a valid build/create/get method).
 	 */
 	public Builder<T> builder(Class<?> value) {
-		explicitBuilderType = info(assertArgNotNull(ARG_value, value));
+		explicitBuilderType = info(reqnn("value", value));
 		builderType.set(explicitBuilderType);
-		assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type %1$s for bean type %2$s. Builder must have a build(), create(), or get() method that returns %2$s (or a parent of %2$s). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
+		req(isValidBuilderType(explicitBuilderType), "Invalid builder type %1$s for bean type %2$s. Builder must have a build(), create(), or get() method that returns %2$s (or a parent of %2$s). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
 		builderTypes.get();  // Triggers validation on type hierarchy.
 		reset();
 		return this;
@@ -789,7 +782,7 @@ public class BeanInstantiator<T> {
 	 */
 	public Builder<T> builder(Object value) {
 		builder(value.getClass());
-		explicitBuilder = assertArgNotNull(ARG_value, value);
+		explicitBuilder = reqnn("value", value);
 		reset();
 		return this;
 	}
@@ -823,7 +816,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> builderClassNames(String... names) {
-		builderClassNames = set(assertArgNoNulls(ARG_names, names));
+		builderClassNames = set(reqnns("names", names));
 		reset();
 		return this;
 	}
@@ -857,7 +850,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> builderMethodNames(String... names) {
-		builderMethodNames = set(assertArgNoNulls(ARG_names, names));
+		builderMethodNames = set(reqnns("names", names));
 		reset();
 		return this;
 	}
@@ -890,7 +883,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> buildMethodNames(String... names) {
-		buildMethodNames = set(assertArgNoNulls(ARG_names, names));
+		buildMethodNames = set(reqnns("names", names));
 		reset();
 		return this;
 	}
@@ -1155,7 +1148,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> factoryMethodNames(String... names) {
-		factoryMethodNames = set(assertArgNoNulls(ARG_names, names));
+		factoryMethodNames = set(reqnns("names", names));
 		reset();
 		return this;
 	}
@@ -1204,7 +1197,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> fallback(Supplier<? extends T> fallback) {
-		assertArgNotNull(ARG_fallback, fallback);
+		reqnn("fallback", fallback);
 		this.fallbackSupplier = fallback;
 		return this;
 	}
@@ -1260,9 +1253,6 @@ public class BeanInstantiator<T> {
 	 * @param <B> The builder type.
 	 * @return The builder instance wrapped in an {@link Optional}, or an empty optional if no builder exists.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to B for builder retrieval
-	})
 	public <B> Optional<B> getBuilder() {
 		beanImpl.reset();
 		return (Optional<B>)builderMemoizer.toOptional();
@@ -1401,7 +1391,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> postCreateHook(Consumer<T> hook) {
-		assertArgNotNull(ARG_hook, hook);
+		reqnn("hook", hook);
 		postCreateHooks.add(hook);
 		return this;
 	}
@@ -1433,7 +1423,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> description(String value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		description = value;
 		return this;
 	}
@@ -1457,7 +1447,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> wrap(UnaryOperator<T> wrapper) {
-		assertArgNotNull(ARG_value, wrapper);
+		reqnn("value", wrapper);
 		wrappers.add(wrapper);
 		return this;
 	}
@@ -1474,8 +1464,8 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> validate(Predicate<T> predicate, String message) {
-		assertArgNotNull(ARG_value, predicate);
-		assertArgNotNull(ARG_value, message);
+		reqnn("value", predicate);
+		reqnn("value", message);
 		validators.add(new Validation<>(predicate, message));
 		return this;
 	}
@@ -1491,7 +1481,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> or(Builder<? extends T> alternative) {
-		assertArgNotNull(ARG_value, alternative);
+		reqnn("value", alternative);
 		alternatives.add(alternative);
 		return this;
 	}
@@ -1513,7 +1503,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> builderInitializer(Consumer<Object> initializer) {
-		assertArgNotNull(ARG_value, initializer);
+		reqnn("value", initializer);
 		builderInitializers.add(initializer);
 		return this;
 	}
@@ -1594,7 +1584,7 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 */
 	public Builder<T> scope(Scope value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		cached = (value == Scope.SINGLETON);
 		return this;
 	}
@@ -1677,11 +1667,6 @@ public class BeanInstantiator<T> {
 	 * @return The created bean.
 	 * @throws ExecutableException if bean could not be created.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
-	})
 	private T findBeanImpl() {
 		var store2 = this.store;
 		var builder2 = explicitBuilder != null ? explicitBuilder : this.builderMemoizer.get();  // Use explicit builder if set, otherwise get from supplier
@@ -2093,11 +2078,6 @@ public class BeanInstantiator<T> {
 	 * 2. @Builder annotation on beanSubType (includes inherited annotations)
 	 * 3. Autodetect from static methods or inner classes
 	 */
-	@SuppressWarnings({
-		"unchecked",  // Type erasure requires cast to ClassInfo for builder type
-		"java:S3776",  // Cognitive complexity acceptable for multi-strategy builder-type resolution
-		"java:S6541"  // Brain-method metrics acceptable: linear, well-commented priority chain of builder-type resolution strategies
-	})
 	private ClassInfo findBuilderType() {
 		log("Finding builder type...");
 
@@ -2400,7 +2380,6 @@ public class BeanInstantiator<T> {
 	 * Setters whose argument cannot be resolved are silently skipped.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Best-effort auto-wiring branches on reflection and type-shape checks.
 		"java:S3011" // Reflection access override is required for invoking discovered setters uniformly.
 	})
 	private void autoWireBuilder(Object builder2, BeanStore bs) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -39,13 +38,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class ClasspathStore extends ConfigStore {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -64,7 +60,7 @@ public class ClasspathStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -74,7 +70,7 @@ public class ClasspathStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ClasspathStore copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			type(copyFrom.getClass());
 		}
 

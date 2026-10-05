@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.logging;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -162,9 +164,9 @@ public interface RestDebugFormatter {
 			return false;
 		if (ct.startsWith("text/"))
 			return true;
-		if (ct.equals("multipart/form-data"))
+		if (eq(ct, "multipart/form-data"))
 			return false;
-		if (ct.equals("application/json") || ct.equals("application/xml") || ct.equals("application/x-www-form-urlencoded"))
+		if (eqa(ct, "application/json", "application/xml", "application/x-www-form-urlencoded"))
 			return true;
 		return ct.endsWith("+json") || ct.endsWith("+xml");
 	}

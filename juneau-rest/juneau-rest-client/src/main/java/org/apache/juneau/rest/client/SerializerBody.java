@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -56,7 +55,7 @@ public final class SerializerBody implements HttpBody {
 	private final String contentType;
 
 	private SerializerBody(Serializer serializer, Object value, String contentType) {
-		this.serializer = assertArgNotNull("serializer", serializer);
+		this.serializer = reqnn("serializer", serializer);
 		this.value = value;
 		this.contentType = contentType;
 	}
@@ -69,7 +68,7 @@ public final class SerializerBody implements HttpBody {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static SerializerBody of(Serializer serializer, Object value) {
-		assertArgNotNull("serializer", serializer);
+		reqnn("serializer", serializer);
 		var mt = serializer.getResponseContentType();
 		return new SerializerBody(serializer, value, mt == null ? null : mt.toString());
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
@@ -56,11 +57,11 @@ class ConfigMemoryStore_Test extends TestBase {
 
 		final var latch = new CountDownLatch(2);
 		fs.register("X", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("Y", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 

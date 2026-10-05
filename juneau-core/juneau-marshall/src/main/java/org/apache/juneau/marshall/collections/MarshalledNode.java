@@ -64,6 +64,9 @@ import org.apache.juneau.marshall.*;
  * <b>Beta — API subject to change:</b> This type is part of the next-generation typed tree model layered over the
  * {@code Marshalled*} collections and may change incompatibly in a future release.
  */
+@SuppressWarnings({
+	"unchecked" // put()/add() cast the node value to Map<String,Object>/List<Object> only after checking the node is an object/array node
+})
 public class MarshalledNode {
 
 	/**
@@ -262,9 +265,6 @@ public class MarshalledNode {
 	 * @return This object.
 	 * @throws IllegalStateException If this is not an object node.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Backing map of an object node always accepts String keys / Object values.
-	})
 	public MarshalledNode put(String name, Object value) {
 		if (! isObject())
 			throw isex("put(String,Object) is only valid on an object node.");
@@ -279,9 +279,6 @@ public class MarshalledNode {
 	 * @return This object.
 	 * @throws IllegalStateException If this is not an array node.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Backing list of an array node always accepts Object elements.
-	})
 	public MarshalledNode add(Object value) {
 		if (! isArray())
 			throw isex("add(Object) is only valid on an array node.");

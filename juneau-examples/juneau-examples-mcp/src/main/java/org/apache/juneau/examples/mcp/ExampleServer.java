@@ -43,7 +43,8 @@ import jakarta.servlet.*;
  * we control the listen port directly &mdash; no {@code jetty.xml} required.
  */
 @SuppressWarnings({
-	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"java:S106", // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+	"resource" // start() returns the running ExampleServer to the caller, who closes it; main() intentionally runs until the process is killed
 })
 public final class ExampleServer implements AutoCloseable {
 
@@ -65,7 +66,6 @@ public final class ExampleServer implements AutoCloseable {
 	 * @return A running server handle. Close it (or call {@link #close()}) to stop.
 	 * @throws Exception If the server fails to start.
 	 */
-	@SuppressWarnings("resource") // The bean store is handed to (and closed by) the Microservice lifecycle.
 	public static ExampleServer start(int port) throws Exception {
 		var jetty = buildServer(port);
 
@@ -106,7 +106,6 @@ public final class ExampleServer implements AutoCloseable {
 	 * @param args Optional single argument: the port to listen on (defaults to {@link #DEFAULT_PORT}).
 	 * @throws Exception If the server fails to start.
 	 */
-	@SuppressWarnings("resource") // example server runs for the JVM lifetime; closed on process exit.
 	public static void main(String[] args) throws Exception {
 		var port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
 		var server = start(port);
@@ -119,7 +118,6 @@ public final class ExampleServer implements AutoCloseable {
 	}
 
 	/** Builds a Jetty server with a single connector on {@code port} and a root servlet context. */
-	@SuppressWarnings("resource") // connector is added to and owned by the server; closed when the server stops.
 	private static Server buildServer(int port) {
 		var server = new Server();
 		var connector = new ServerConnector(server);

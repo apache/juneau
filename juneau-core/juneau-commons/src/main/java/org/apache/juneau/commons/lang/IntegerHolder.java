@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -53,12 +52,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class IntegerHolder extends Holder<Integer> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new integer value initialized to <c>0</c>.
@@ -280,7 +276,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Integer...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

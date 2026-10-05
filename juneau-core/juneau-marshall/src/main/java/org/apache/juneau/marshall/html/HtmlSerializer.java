@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.html;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.*;
@@ -144,21 +144,10 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
-
-	// Property name constants
-	private static final String PROP_addBeanTypesHtml = "addBeanTypesHtml";
-	private static final String PROP_addKeyValueTableHeaders = "addKeyValueTableHeaders";
-	private static final String PROP_detectLabelParameters = "detectLabelParameters";
-	private static final String PROP_detectLinksInStrings = "detectLinksInStrings";
-	private static final String PROP_labelParameter = "labelParameter";
-	private static final String PROP_uriAnchorText = "uriAnchorText";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -197,7 +186,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = copyFrom.disableDetectLabelParameters;
@@ -213,7 +202,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = ! copyFrom.detectLabelParameters;
@@ -502,7 +491,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @return This object.
 		 */
 		public SELF labelParameter(String value) {
-			labelParameter = assertArgNotNull(ARG_value, value);
+			labelParameter = reqnn("value", value);
 			return self();
 		}
 
@@ -666,7 +655,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @return This object.
 		 */
 		public SELF uriAnchorText(AnchorText value) {
-			uriAnchorText = assertArgNotNull(ARG_value, value);
+			uriAnchorText = reqnn("value", value);
 			return self();
 		}
 
@@ -871,11 +860,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	@Override /* Overridden from XmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesHtml, addBeanTypesHtml)
-			.a(PROP_addKeyValueTableHeaders, addKeyValueTableHeaders)
-			.a(PROP_detectLabelParameters, detectLabelParameters)
-			.a(PROP_detectLinksInStrings, detectLinksInStrings)
-			.a(PROP_labelParameter, labelParameter)
-			.a(PROP_uriAnchorText, uriAnchorText);
+			.a("addBeanTypesHtml", addBeanTypesHtml)
+			.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
+			.a("detectLabelParameters", detectLabelParameters)
+			.a("detectLinksInStrings", detectLinksInStrings)
+			.a("labelParameter", labelParameter)
+			.a("uriAnchorText", uriAnchorText);
 	}
 }

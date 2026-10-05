@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.csv;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -77,13 +76,11 @@ import org.apache.juneau.marshall.stream.*;
  *
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordReadable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -112,7 +109,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordRe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
 			nullValue = copyFrom.nullValue;
@@ -125,7 +122,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordRe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
 			nullValue = copyFrom.nullValue;

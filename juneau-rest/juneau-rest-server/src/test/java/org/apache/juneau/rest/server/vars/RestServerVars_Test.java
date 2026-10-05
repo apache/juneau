@@ -46,7 +46,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // 'store' (BasicBeanStore/WritableBeanStore) instances are short-lived in-memory test fixtures backed by a Map; nothing external to leak.
+@SuppressWarnings({
+	"resource" // 'store' (BasicBeanStore/WritableBeanStore) instances are short-lived in-memory test fixtures backed by a Map; nothing external to leak.
+})
 class RestServerVars_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------

@@ -21,7 +21,9 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("resource")  // MockRestClient instances are short-lived test fixtures; the mock framework manages lifecycle.
+@SuppressWarnings({
+	"resource" // MockRestClient instances are short-lived test fixtures; the mock framework manages lifecycle.
+})
 class MockRestClient_PathVars_Test extends TestBase {
 
 	@Rest

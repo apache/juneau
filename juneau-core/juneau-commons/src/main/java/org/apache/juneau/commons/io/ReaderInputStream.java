@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.*;
 import java.nio.charset.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -71,22 +71,12 @@ import java.nio.charset.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
 })
 public class ReaderInputStream extends InputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_array = "array";
-	private static final String ARG_b = "b";
-	private static final String ARG_charset = "charset";
-	private static final String ARG_charsetName = "charsetName";
-	private static final String ARG_encoder = "encoder";
-	private static final String ARG_reader = "reader";
-
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
-	})
 	private final Reader reader;
 	private final CharsetEncoder encoder;
 
@@ -124,13 +114,10 @@ public class ReaderInputStream extends InputStream {
 	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
-	})
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
-		this(assertArgNotNull(ARG_reader, reader),
-			 assertArgNotNull(ARG_charset, charset).newEncoder()
+		this(reqnn("reader", reader),
+			 reqnn("charset", charset).newEncoder()
 					.onMalformedInput(CodingErrorAction.REPLACE)
 					.onUnmappableCharacter(CodingErrorAction.REPLACE),
 			 bufferSize
@@ -156,13 +143,10 @@ public class ReaderInputStream extends InputStream {
 	 * @param encoder the charset encoder.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
-	})
 	public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
-		this.reader = assertArgNotNull(ARG_reader, reader);
-		this.encoder = assertArgNotNull(ARG_encoder, encoder);
-		assertArg(bufferSize > 0, "Argument 'bufferSize' must be positive.");
+		this.reader = reqnn("reader", reader);
+		this.encoder = reqnn("encoder", encoder);
+		req(bufferSize > 0, "Argument 'bufferSize' must be positive.");
 		this.encoderIn = CharBuffer.allocate(bufferSize);
 		this.encoderIn.flip(); // Fixes Java 11 issue.
 		this.encoderOut = ByteBuffer.allocate(128);
@@ -188,7 +172,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
 	public ReaderInputStream(Reader reader, String charsetName, int bufferSize) {
-		this(reader, Charset.forName(assertArgNotNull(ARG_charsetName, charsetName)), bufferSize);
+		this(reader, Charset.forName(reqnn("charsetName", charsetName)), bufferSize);
 	}
 
 	/**
@@ -231,7 +215,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] b) throws IOException {
-		assertArgNotNull(ARG_b, b);
+		reqnn("b", b);
 		return read(b, 0, b.length);
 	}
 
@@ -247,7 +231,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] array, int off, int len) throws IOException {
-		assertArgNotNull(ARG_array, array);
+		reqnn("array", array);
 		if (len < 0 || off < 0 || (off + len) > array.length) {
 			throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
 		}

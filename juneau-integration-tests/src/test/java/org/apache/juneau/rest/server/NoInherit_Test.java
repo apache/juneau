@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,7 +96,7 @@ class NoInherit_Test extends TestBase {
 	void a03_methodNoInherit_stillInheritsParentMethodSerializerAllowlist() throws Exception {
 		var ctx = restContext(ChildM.class);
 		var op = ctx.getRestOperations().getOpContexts().stream()
-			.filter(o -> ChildM.class.equals(o.getJavaMethod().getDeclaringClass()) && "get".equals(o.getJavaMethod().getName()))
+			.filter(o -> ChildM.class.equals(o.getJavaMethod().getDeclaringClass()) && eq(o.getJavaMethod().getName(), "get"))
 			.findFirst()
 			.orElseThrow();
 		var keys = op.getAllowedSerializerOptions();
@@ -128,7 +129,7 @@ class NoInherit_Test extends TestBase {
 	void a04_aggregatedNoInherit_includesBothParentAndChild() throws Exception {
 		var ctx = restContext(ChildAggregated.class);
 		var op = ctx.getRestOperations().getOpContexts().stream()
-			.filter(o -> ChildAggregated.class.equals(o.getJavaMethod().getDeclaringClass()) && "get".equals(o.getJavaMethod().getName()))
+			.filter(o -> ChildAggregated.class.equals(o.getJavaMethod().getDeclaringClass()) && eq(o.getJavaMethod().getName(), "get"))
 			.findFirst()
 			.orElseThrow();
 		var keys = op.getAllowedSerializerOptions();
@@ -159,7 +160,7 @@ class NoInherit_Test extends TestBase {
 	void a05_methodNoInherit_blocksClassLevelButNotParentMethod() throws Exception {
 		var ctx = restContext(ChildBlocksClassInheritance.class);
 		var op = ctx.getRestOperations().getOpContexts().stream()
-			.filter(o -> ChildBlocksClassInheritance.class.equals(o.getJavaMethod().getDeclaringClass()) && "get".equals(o.getJavaMethod().getName()))
+			.filter(o -> ChildBlocksClassInheritance.class.equals(o.getJavaMethod().getDeclaringClass()) && eq(o.getJavaMethod().getName(), "get"))
 			.findFirst()
 			.orElseThrow();
 		var keys = op.getAllowedSerializerOptions();

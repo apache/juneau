@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -29,7 +30,9 @@ import org.junit.jupiter.api.*;
  * {@link RestClient.Builder#queryData(String, String)}), which are applied to every {@link RestRequest} built
  * from the client.
  */
-@SuppressWarnings("resource") // 'tReq' is inspected synchronously by the fake HttpTransport lambda; not owned by the test.
+@SuppressWarnings({
+	"resource" // 'tReq' is inspected synchronously by the fake HttpTransport lambda; not owned by the test.
+})
 class RestClient_Builder_Test extends TestBase {
 
 	@Test
@@ -63,7 +66,7 @@ class RestClient_Builder_Test extends TestBase {
 				assertEquals(200, res.getStatusCode());
 			}
 		}
-		var h = captured[0].getHeaders().stream().filter(x -> "X-Eager".equals(x.name())).findFirst().orElseThrow();
+		var h = captured[0].getHeaders().stream().filter(x -> eq(x.name(), "X-Eager")).findFirst().orElseThrow();
 		assertEquals("v1", h.value());
 	}
 
@@ -79,13 +82,13 @@ class RestClient_Builder_Test extends TestBase {
 			try (var res1 = client.get("http://x/").run()) {
 				assertEquals(200, res1.getStatusCode());
 			}
-			var h1 = captured[0].getHeaders().stream().filter(x -> "X-Dyn".equals(x.name())).findFirst().orElseThrow();
+			var h1 = captured[0].getHeaders().stream().filter(x -> eq(x.name(), "X-Dyn")).findFirst().orElseThrow();
 			assertEquals("call-1", h1.value());
 
 			try (var res2 = client.get("http://x/").run()) {
 				assertEquals(200, res2.getStatusCode());
 			}
-			var h2 = captured[0].getHeaders().stream().filter(x -> "X-Dyn".equals(x.name())).findFirst().orElseThrow();
+			var h2 = captured[0].getHeaders().stream().filter(x -> eq(x.name(), "X-Dyn")).findFirst().orElseThrow();
 			assertEquals("call-2", h2.value());
 		}
 	}

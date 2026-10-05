@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -26,13 +27,13 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
  * {@link Render#pill()} / {@link Render#pill(String)} factory sugar: canonical {@code {id:"pill",meta:…}} wire form
  * and boxed-omission rules (dot default on, absent/blank tone omitted).  These factories are pure sugar over
- * {@link Render#of(String)} &mdash; they carry no host-specific behavior of their own; the cell/fill-sink split lives
- * entirely in {@link ViewDef}'s serving-path validation.
+ * {@link Render#of(String)} &mdash; they carry no host-specific behavior of their own; they are not tied to any host or sink.
  */
 class Render_Pill_Test extends TestBase {
 
@@ -65,6 +66,17 @@ class Render_Pill_Test extends TestBase {
 		}
 	}
 
+	@Test void a03b_pill_typedTone_matchesWireToken() {
+		for (var tone : StatusTone.values()) {
+			var r = Render.pill(tone);
+			assertBean(r, "id,meta", "pill,{tone=" + tone.wire() + "}");
+			assertBean(wire(r), "id,meta", "pill,{tone=" + tone.wire() + "}");
+		}
+		var n = Render.pill((StatusTone)null);
+		assertNull(n.meta);
+		assertEquals(Map.of("id", "pill"), wire(n));
+	}
+
 	@Test void a04_chainedMeta_carriesFieldDotAction() {
 		var r = Render.pill("success").meta("field", "state").meta("dot", "off").meta("action", "ack");
 		assertEquals(Map.of("tone", "success", "field", "state", "dot", "off", "action", "ack"), r.meta);
@@ -86,7 +98,7 @@ class Render_Pill_Test extends TestBase {
 	 * Task 15 companion pin: the {@code pill} block of the shipped {@code juneau-renders.js} must carry NO hardcoded
 	 * hex colour.  A pill chip's colour comes exclusively from the console-ui {@code --jc-pill-*} palette classes
 	 * (via {@code chrome.css}); the renderer only stamps the palette classes, never a literal colour.  This is the
-	 * source-scan half of the runtime check in {@code page-cards-mount.cjs} (its display facet emits no {@code #}).
+	 * source-scan pin; the shipped renderer must never stamp a literal colour.
 	 */
 	@Test void a06_pillBlockOfRendersJs_carriesNoHardcodedHex() throws IOException {
 		// The test CWD is the module root; the shipped renderer lives under src/main/resources.

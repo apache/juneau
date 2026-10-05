@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.parser;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -57,35 +56,19 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"rawtypes",   // Raw types necessary for generic type handling throughout parser session
-	"unchecked",  // Type erasure requires unchecked casts throughout parser session
-	"resource" // pipe field holds the per-parse ParserPipe whose lifecycle is managed by the session, not owned as a standalone field.
+	"java:S112", // throws Exception intentional - callback/lifecycle method
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // create(), getClassMeta() and getListenerClass() expose wildcard Builder<?>/ClassMeta<?>/Class<? extends ParserListener> because the concrete type is not known statically
+	"rawtypes", // Raw types necessary for generic type handling throughout parser session
+	"resource", // pipe field holds the per-parse ParserPipe whose lifecycle is managed by the session, not owned as a standalone field.
+	"unchecked" // Type erasure requires unchecked casts throughout parser session
 })
 public class ParserSession extends MarshallingSession {
-
-	// Property name constants
-	private static final String PROP_javaMethod = "javaMethod";
-	private static final String PROP_listener = "listener";
-	private static final String PROP_outer = "outer";
-	private static final String PROP_schema = "schema";
-	private static final String PROP_trimStrings = "trimStrings";
-	private static final String PROP_nulls = "nulls";
-	private static final String PROP_maxParseDepth = "maxParseDepth";
-	private static final String PROP_ParserSession_javaMethod = "ParserSession.javaMethod";
-	private static final String PROP_ParserSession_outer = "ParserSession.outer";
-	private static final String PROP_ParserSession_schema = "ParserSession.schema";
-	private static final String PROP_ParserSession_trimStrings = "ParserSession.trimStrings";
-	private static final String PROP_ParserSession_nulls = "ParserSession.nulls";
-	private static final String PROP_ParserSession_maxParseDepth = "ParserSession.maxParseDepth";
 
 	/**
 	 * Default value for {@link Builder#maxParseDepth(int)}.
 	 */
 	protected static final int DEFAULT_MAX_PARSE_DEPTH = 1000;
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -110,7 +93,7 @@ public class ParserSession extends MarshallingSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Parser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx).getMarshallingContext());
+			super(reqnn("ctx", ctx).getMarshallingContext());
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
 			trimStrings = ctx.isTrimStrings();
@@ -171,17 +154,17 @@ public class ParserSession extends MarshallingSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_javaMethod, PROP_ParserSession_javaMethod:
+				case "javaMethod", "ParserSession.javaMethod":
 					return javaMethod(cvt(value, Method.class));
-				case PROP_outer, PROP_ParserSession_outer:
+				case "outer", "ParserSession.outer":
 					return outer(value);
-				case PROP_schema, PROP_ParserSession_schema:
+				case "schema", "ParserSession.schema":
 					return schema(cvt(value, HttpPartSchema.class));
-				case PROP_trimStrings, PROP_ParserSession_trimStrings:
+				case "trimStrings", "ParserSession.trimStrings":
 					return trimStrings(cvt(value, Boolean.class));
-				case PROP_nulls, PROP_ParserSession_nulls:
+				case "nulls", "ParserSession.nulls":
 					return nulls(cvt(value, Nulls.class));
-				case PROP_maxParseDepth, PROP_ParserSession_maxParseDepth:
+				case "maxParseDepth", "ParserSession.maxParseDepth":
 					return maxParseDepth(cvt(value, Integer.class));
 				default:
 					super.property(key, value);
@@ -263,11 +246,8 @@ public class ParserSession extends MarshallingSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
-	})
 	public static Builder<?> create(Parser ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -1099,9 +1079,6 @@ public class ParserSession extends MarshallingSession {
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		throw uoex("Parser '%s' does not support this method.", cn(getClass()));
 	}
@@ -1121,9 +1098,6 @@ public class ParserSession extends MarshallingSession {
 	 * @return The same map that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		throw uoex("Parser '%s' does not support this method.", cn(getClass()));
 	}
@@ -1138,9 +1112,6 @@ public class ParserSession extends MarshallingSession {
 	 * 	<br>Can be <jk>null</jk> (the <c>@Marshalled(dictionary={})</c> registry lookup on the expected type is skipped).
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - ClassMeta<?> for type resolution
-	})
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 		BeanRegistry br = null;
 
@@ -1491,12 +1462,12 @@ public class ParserSession extends MarshallingSession {
 	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_javaMethod, javaMethod)
-			.a(PROP_listener, listener)
-			.a(PROP_outer, outer)
-			.a(PROP_trimStrings, trimStrings)
-			.a(PROP_nulls, nulls)
-			.a(PROP_maxParseDepth, maxParseDepth);
+			.a("javaMethod", javaMethod)
+			.a("listener", listener)
+			.a("outer", outer)
+			.a("trimStrings", trimStrings)
+			.a("nulls", nulls)
+			.a("maxParseDepth", maxParseDepth);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -115,14 +114,10 @@ import org.apache.juneau.commons.function.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S2143" // Public assertion API is built on Date by design (signatures take/return Date, extends FluentComparableAssertion<Date,R>); cannot swap to java.time without breaking the assertion API.
 })
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_lower = "lower";
-	private static final String ARG_upper = "upper";
-	private static final String ARG_value = "value";
 
 	private static final Messages MESSAGES = Messages.of(FluentDateAssertion.class, "Messages");
 	private static final String MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
@@ -213,7 +208,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		if (! (value().after(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -235,7 +230,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		if (! (value().before(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -259,8 +254,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		isExists();
-		assertArgNotNull(ARG_lower, lower);
-		assertArgNotNull(ARG_upper, upper);
+		reqnn("lower", lower);
+		reqnn("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

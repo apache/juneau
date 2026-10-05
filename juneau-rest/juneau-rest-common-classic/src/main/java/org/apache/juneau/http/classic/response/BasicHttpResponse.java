@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
@@ -63,13 +62,11 @@ import org.apache.juneau.marshall.*;
  */
 @Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_status)
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"deprecation", // Uses deprecated HttpMessage API
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> implements HttpResponse {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_response = "response";
 
 	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
@@ -104,7 +101,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpResponse(HttpResponse response) {
-		assertArgNotNull(ARG_response, response);
+		reqnn("response", response);
 		setHeaders(response.getAllHeaders());
 		setContent(response.getEntity());
 		setStatusLine(response.getStatusLine());
@@ -161,9 +158,6 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	@Override /* Overridden from HttpMessage */
 	public Locale getLocale() { return statusLine.getLocale(); }
 
-	@SuppressWarnings({
-		"deprecation" // Uses deprecated HttpMessage API
-	})
 	@Override /* Overridden from HttpMessage */
 	public HttpParams getParams() { return null; }
 
@@ -329,9 +323,6 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 		return modify(() -> headers.set(Location.of(value)));
 	}
 
-	@SuppressWarnings({
-		"deprecation" // Uses deprecated HttpMessage API
-	})
 	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
 		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
@@ -507,7 +498,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @throws AssertionError If status code is not what was expected.
 	 */
 	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		assertArgNotNull(ARG_response, response);
+		reqnn("response", response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);

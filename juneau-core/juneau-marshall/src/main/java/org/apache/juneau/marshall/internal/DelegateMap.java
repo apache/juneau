@@ -32,8 +32,8 @@ import org.apache.juneau.marshall.collections.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"rawtypes",  // Raw types necessary for generic Map delegation
-	"java:S110"  // Inheritance depth inherited from JsonMap -> MarshalledMap -> LinkedHashMap chain; intentional
+	"java:S110", // Inheritance depth inherited from JsonMap -> MarshalledMap -> LinkedHashMap chain; intentional
+	"rawtypes" // Raw types necessary for generic Map delegation
 })
 public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;

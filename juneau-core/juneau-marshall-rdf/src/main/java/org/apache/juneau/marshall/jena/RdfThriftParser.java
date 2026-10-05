@@ -73,7 +73,8 @@ public class RdfThriftParser extends RdfStreamParser {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static RdfStreamParser.Builder<?> create() {
 		return RdfStreamParser.create()

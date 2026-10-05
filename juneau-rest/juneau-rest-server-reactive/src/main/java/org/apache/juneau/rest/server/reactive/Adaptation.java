@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.reactive;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.concurrent.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The result of a {@link ReactiveStreamsAdapter#adapt(Object) ReactiveStreamsAdapter.adapt(...)} call:
@@ -36,6 +36,9 @@ import java.util.concurrent.*;
  * @see ReactiveResponseProcessor
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1452" // single() and stream() return CompletionStage<?>/Flow.Publisher<?> because the element type is erased at adaptation time.
+})
 public final class Adaptation {
 
 	private final CompletionStage<?> single;
@@ -53,7 +56,7 @@ public final class Adaptation {
 	 * @return A new adaptation.
 	 */
 	public static Adaptation single(CompletionStage<?> value) {
-		return new Adaptation(assertArgNotNull("value", value), null);
+		return new Adaptation(reqnn("value", value), null);
 	}
 
 	/**
@@ -63,7 +66,7 @@ public final class Adaptation {
 	 * @return A new adaptation.
 	 */
 	public static Adaptation stream(Flow.Publisher<?> value) {
-		return new Adaptation(null, assertArgNotNull("value", value));
+		return new Adaptation(null, reqnn("value", value));
 	}
 
 	/**
@@ -80,9 +83,6 @@ public final class Adaptation {
 	 *
 	 * @return The completion stage, or {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // CompletionStage<?> wildcard return intentional; callers only need the base stage type for chaining
-	})
 	public CompletionStage<?> single() {
 		return single;
 	}
@@ -92,9 +92,6 @@ public final class Adaptation {
 	 *
 	 * @return The publisher, or {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Publisher<?> wildcard return intentional; callers only need the base publisher type for consumption
-	})
 	public Flow.Publisher<?> stream() {
 		return stream;
 	}

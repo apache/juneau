@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jsonl;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
@@ -25,6 +24,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonlParser}.
@@ -38,14 +38,12 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure: elementType is ClassMeta<?>; toArray/convertToType return Object
 	"java:S110", // Inheritance depth acceptable
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure: elementType is ClassMeta<?>; toArray/convertToType return Object
 })
 public class JsonlParserSession extends JsonParserSession {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -64,7 +62,7 @@ public class JsonlParserSession extends JsonParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonlParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -82,7 +80,7 @@ public class JsonlParserSession extends JsonParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonlParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

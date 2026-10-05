@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -101,7 +100,7 @@ public class OAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder validator(TokenValidator value) {
-			validator = assertArgNotNull("value", value);
+			validator = reqnn("value", value);
 			return this;
 		}
 
@@ -112,7 +111,7 @@ public class OAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder realm(String value) {
-			realm = assertArgNotNullOrBlank("value", value);
+			realm = reqnb("value", value);
 			return this;
 		}
 
@@ -124,7 +123,7 @@ public class OAuthFilter extends AuthFilter {
 		 * @return This object.
 		 */
 		public Builder rolesClaim(String value) {
-			rolesClaim = assertArgNotNullOrBlank("value", value);
+			rolesClaim = reqnb("value", value);
 			return this;
 		}
 
@@ -175,7 +174,7 @@ public class OAuthFilter extends AuthFilter {
 			return p;
 		} catch (AuthenticationException e) {
 			var hasChallenge = e.getHeaders().stream()
-				.anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()));
+				.anyMatch(h -> eqic("WWW-Authenticate", h.getName()));
 			if (!hasChallenge)
 				e.wwwAuthenticate(challenge);
 			throw e;

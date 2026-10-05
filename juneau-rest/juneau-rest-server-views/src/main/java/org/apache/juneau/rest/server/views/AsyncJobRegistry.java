@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.views;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
@@ -45,7 +44,8 @@ import java.util.concurrent.*;
  * Because jobs keep running after the page navigates away (Q3) and stream customer-adjacent content, the following
  * caps are enforced server-side and are security controls, not tuning knobs (MED-6, a Task-11 disclosure bound):
  * <ul class='spaced-list'>
- * 	<li>{@link #MAX_CONCURRENT_JOBS} concurrent (non-terminal) jobs &mdash; {@link #tryCreate()} refuses beyond it;
+ * 	<li>{@link #MAX_CONCURRENT_JOBS} concurrent (non-terminal) jobs &mdash; {@link #tryCreate()} refuses beyond it, and the
+ * 		check-and-insert is atomic, so concurrent callers cannot overshoot it;
  * 	<li>{@link AsyncJobRegistry#HARD_TIMEOUT} hard per-job timeout &mdash; scheduled here and also swept by
  * 		{@link #sweepTimeouts()};
  * 	<li>{@link AsyncJob#maxOutputBytes()} of streamed output per job &mdash; enforced in {@link AsyncJob#progress};
@@ -53,10 +53,35 @@ import java.util.concurrent.*;
  * 		{@link AsyncJob#acquireSubscriber()}.
  * </ul>
  *
+ * <h5 class='section'>De-duplication by {@link IdempotencyKey}</h5>
+ * <p>
+ * {@link #tryCreate(IdempotencyKey)} / {@link #create(IdempotencyKey)} register a job under an idempotency key's
+ * {@link IdempotencyKey#value() value}; submitting again with a key that is already registered returns the
+ * <b>existing</b> job instead of creating a second one, so a double-click, an impatient re-submit or a browser retry
+ * collapses to one job.  The lookup-or-create is atomic: concurrent submits with one key yield exactly one job.
+ *
+ * <p>
+ * <b>A key whose job has finished replays that finished job</b> (the same replay-on-duplicate contract as
+ * {@link IdempotencyKey}): the duplicate gets the terminal job and its {@link AsyncJob#result() result} back rather
+ * than triggering a second run.  This holds for the job's retention window; once the terminal job is reaped from the
+ * heap (see {@link #sweepTimeouts()}), its key is forgotten too, and the same key starts a fresh job.  A duplicate
+ * never counts against {@link #MAX_CONCURRENT_JOBS}, since it creates nothing.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	AsyncJobRegistry <jv>registry</jv> = <jk>new</jk> AsyncJobRegistry();
+ * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
+ *
+ * 	AsyncJob <jv>first</jv> = <jv>registry</jv>.create(<jv>key</jv>);
+ * 	AsyncJob <jv>again</jv> = <jv>registry</jv>.create(<jv>key</jv>);  <jc>// Double-click: same job, nothing new started.</jc>
+ * 	<jsm>assert</jsm> <jv>first</jv> == <jv>again</jv>;
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link AsyncJob}
  * 	<li class='jc'>{@link AsyncJobsMixin}
+ * 	<li class='jc'>{@link IdempotencyKey}
  * </ul>
  *
  * @since 10.0.0
@@ -85,6 +110,8 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	static final Duration RETENTION = Duration.ofSeconds(60);
 
 	private final Map<String,AsyncJob> jobs = new ConcurrentHashMap<>();
+	private final Map<String,AsyncJob> byKey = new ConcurrentHashMap<>();
+	private final Object admission = new Object();
 	private final SecureRandom random = new SecureRandom();
 	private final Clock clock;
 	private final Duration timeout;
@@ -138,7 +165,7 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	}
 
 	private AsyncJobRegistry(Clock clock, Duration timeout, long maxOutputBytes, int maxSubscribers, ScheduledExecutorService scheduler, boolean ownsScheduler) {
-		this.clock = assertArgNotNull("clock", clock);
+		this.clock = reqnn("clock", clock);
 		this.timeout = requirePositiveTimeout(timeout);
 		this.maxOutputBytes = maxOutputBytes;
 		this.maxSubscribers = maxSubscribers;
@@ -147,7 +174,7 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	}
 
 	private static Duration requirePositiveTimeout(Duration timeout) {
-		assertArgNotNull("timeout", timeout);
+		reqnn("timeout", timeout);
 		if (timeout.isZero() || timeout.isNegative())
 			throw iaex("AsyncJobRegistry timeout must be a positive duration, not %s.", timeout);
 		return timeout;
@@ -173,12 +200,28 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	 */
 	public Optional<AsyncJob> tryCreate() {
 		sweepTimeouts();
-		if (runningCount() >= MAX_CONCURRENT_JOBS)
-			return Optional.empty();
-		var job = new AsyncJob(mintId(), clock.instant(), timeout, maxOutputBytes, maxSubscribers);
-		jobs.put(job.id(), job);
+		return Optional.ofNullable(newJobIfRoom());
+	}
+
+	/**
+	 * Atomically checks the running-job cap and registers a new job, or returns <jk>null</jk> when the cap is reached.
+	 *
+	 * <p>
+	 * The check and the insert share {@link #admission}, so concurrent callers (unkeyed, or keyed with different keys)
+	 * cannot all observe a free slot and overshoot {@link #MAX_CONCURRENT_JOBS}.  A slot is simply a non-terminal
+	 * entry in {@link #jobs}, so there is no separate counter to release when a job settles, times out or is reaped.
+	 * Lock order is key bucket ({@code byKey.compute}) then {@code admission}, never the reverse.
+	 */
+	private AsyncJob newJobIfRoom() {
+		AsyncJob job;
+		synchronized (admission) {
+			if (runningCount() >= MAX_CONCURRENT_JOBS)
+				return null;
+			job = new AsyncJob(mintId(), clock.instant(), timeout, maxOutputBytes, maxSubscribers);
+			jobs.put(job.id(), job);
+		}
 		scheduleTimeout(job);
-		return Optional.of(job);
+		return job;
 	}
 
 	/**
@@ -189,6 +232,43 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	 */
 	public AsyncJob create() {
 		return tryCreate().orElseThrow(() -> new IllegalStateException(
+			"Refusing to create an async job: the " + MAX_CONCURRENT_JOBS + "-concurrent-job cap is reached."));
+	}
+
+	/**
+	 * Returns the job registered under the specified idempotency key, or atomically creates and registers one.
+	 *
+	 * <p>
+	 * If the key's {@link IdempotencyKey#value() value} is already registered, the existing job is returned &mdash;
+	 * running or finished (see the class Javadoc for the finished-key behavior) &mdash; and nothing new is created, so
+	 * a duplicate is never refused by the concurrency cap.  Otherwise behaves like {@link #tryCreate()}.  Concurrent
+	 * callers with one key observe exactly one job.
+	 *
+	 * @param key The idempotency key.  Must not be <jk>null</jk>.
+	 * @return The existing or new job, or empty if the key is unregistered and {@link #MAX_CONCURRENT_JOBS} concurrent
+	 * 	jobs are already running.
+	 */
+	public Optional<AsyncJob> tryCreate(IdempotencyKey key) {
+		reqnn("key", key);
+		sweepTimeouts();
+		return Optional.ofNullable(byKey.compute(key.value(), (k, existing) -> {
+			if (existing != null)
+				return existing;
+			return newJobIfRoom();
+		}));
+	}
+
+	/**
+	 * Returns the job registered under the specified idempotency key, or creates and registers one, throwing when the
+	 * concurrency cap is reached.
+	 *
+	 * @param key The idempotency key.  Must not be <jk>null</jk>.
+	 * @return The existing or new job.
+	 * @throws IllegalStateException If the key is unregistered and {@link #MAX_CONCURRENT_JOBS} concurrent jobs are already running.
+	 * @see #tryCreate(IdempotencyKey)
+	 */
+	public AsyncJob create(IdempotencyKey key) {
+		return tryCreate(key).orElseThrow(() -> new IllegalStateException(
 			"Refusing to create an async job: the " + MAX_CONCURRENT_JOBS + "-concurrent-job cap is reached."));
 	}
 
@@ -244,8 +324,10 @@ public final class AsyncJobRegistry implements AutoCloseable {
 		while (it.hasNext()) {
 			var job = it.next();
 			job.enforceTimeout(now);
-			if (job.isTerminal() && job.createdAt().isBefore(reapBefore))
+			if (job.isTerminal() && job.createdAt().isBefore(reapBefore)) {
 				it.remove();
+				byKey.values().remove(job);
+			}
 		}
 	}
 

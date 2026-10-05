@@ -51,8 +51,8 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
+	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"removal" // Tests deprecated finalize() method for leak detection
 })
 class RestClient_Config_RestClient_Test extends TestBase {

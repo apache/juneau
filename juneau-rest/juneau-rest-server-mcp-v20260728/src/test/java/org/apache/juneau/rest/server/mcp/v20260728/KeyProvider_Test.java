@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -52,7 +53,7 @@ class KeyProvider_Test {
 
 		@Override /* KeyProvider */
 		public Optional<SecretKey> resolveKey(String keyId) {
-			return keyId.equals(current.keyId()) ? Optional.of(current.key()) : Optional.empty();
+			return eq(keyId, current.keyId()) ? Optional.of(current.key()) : Optional.empty();
 		}
 	}
 

@@ -29,8 +29,8 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"serial", // Serialization not relevant
 	"java:S4144", // Identical methods intentional for different test scenarios
+	"serial" // Serialization not relevant
 })
 class XmlCollapsed_Test extends TestBase {
 

@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A wrapper around a {@link Writer} that prevents the underlying writer from being closed.
@@ -71,18 +71,11 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying writer
 })
 public class NoCloseWriter extends Writer {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_cbuf = "cbuf";
-	private static final String ARG_str = "str";
-	private static final String ARG_w = "w";
-
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying writer
-	})
 	private final Writer w;
 
 	/**
@@ -100,11 +93,8 @@ public class NoCloseWriter extends Writer {
 	 *
 	 * @param w The Writer to wrap. Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying writer
-	})
 	public NoCloseWriter(Writer w) {
-		this.w = assertArgNotNull(ARG_w, w);
+		this.w = reqnn("w", w);
 	}
 
 	@Override /* Overridden from Writer */
@@ -156,13 +146,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf) throws IOException {
-		assertArgNotNull(ARG_cbuf, cbuf);
+		reqnn("cbuf", cbuf);
 		w.write(cbuf);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) throws IOException {
-		assertArgNotNull(ARG_cbuf, cbuf);
+		reqnn("cbuf", cbuf);
 		w.write(cbuf, off, len);
 	}
 
@@ -173,13 +163,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(String str) throws IOException {
-		assertArgNotNull(ARG_str, str);
+		reqnn("str", str);
 		w.write(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) throws IOException {
-		assertArgNotNull(ARG_str, str);
+		reqnn("str", str);
 		w.write(str, off, len);
 	}
 }

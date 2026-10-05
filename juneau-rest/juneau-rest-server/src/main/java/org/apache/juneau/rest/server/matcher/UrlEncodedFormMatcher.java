@@ -32,6 +32,6 @@ public class UrlEncodedFormMatcher extends RestMatcher {
 	@Override /* Overridden from RestMatcher */
 	public boolean matches(HttpServletRequest req) {
 		String contentType = req.getContentType();
-		return nn(contentType) && contentType.equals("application/x-www-form-urlencoded");
+		return nn(contentType) && eq(contentType, "application/x-www-form-urlencoded");
 	}
 }

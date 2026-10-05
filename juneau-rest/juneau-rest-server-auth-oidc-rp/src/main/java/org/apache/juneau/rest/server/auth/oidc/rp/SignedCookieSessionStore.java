@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
@@ -94,7 +93,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		 * @return This object.
 		 */
 		public Builder signingKey(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			return signingKey(value.getBytes(StandardCharsets.UTF_8));
 		}
 
@@ -105,8 +104,8 @@ public class SignedCookieSessionStore implements SessionStore {
 		 * @return This object.
 		 */
 		public Builder signingKey(byte[] value) {
-			assertArgNotNull("value", value);
-			assertArg(value.length >= 32, "signingKey must be at least 32 bytes (256 bits) for HS256; was %s", value.length);
+			reqnn("value", value);
+			req(value.length >= 32, "signingKey must be at least 32 bytes (256 bits) for HS256; was %s", value.length);
 			signingKey = cp(value);
 			return this;
 		}
@@ -118,7 +117,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		 * @return This object.
 		 */
 		public Builder maxCookieBytes(int value) {
-			assertArg(value > 0, "maxCookieBytes must be positive (was %s)", value);
+			req(value > 0, "maxCookieBytes must be positive (was %s)", value);
 			maxCookieBytes = value;
 			return this;
 		}
@@ -130,7 +129,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -163,7 +162,7 @@ public class SignedCookieSessionStore implements SessionStore {
 
 	@Override /* Overridden from SessionStore */
 	public String createSessionCookieValue(OidcSession session) {
-		assertArgNotNull("session", session);
+		reqnn("session", session);
 		try {
 			var cb = new JWTClaimsSet.Builder()
 				.subject(session.subject())
@@ -190,7 +189,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
 	})
 	public Optional<OidcSession> lookup(String cookieValue) {
-		assertArgNotNull("cookieValue", cookieValue);
+		reqnn("cookieValue", cookieValue);
 		try {
 			var jwt = SignedJWT.parse(cookieValue);
 			if (! jwt.verify(new MACVerifier(signingKey)))

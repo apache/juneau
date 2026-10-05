@@ -36,8 +36,8 @@ import org.junit.jupiter.api.*;
  * malformed-input error paths, and toType()'s conversion-failure wrapping.
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns Object by default for raw target types in these tests
 	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"unchecked" // Parser returns Object by default for raw target types in these tests
 })
 class OpenApiParserSession_Test extends TestBase {
 
@@ -236,7 +236,7 @@ class OpenApiParserSession_Test extends TestBase {
 
 	@Test
 	void f01_decodedBytesIncompatibleWithTargetTypeWrapsAsParseException() {
-		// toType()'s catch (InvalidDataConversionException e) -> throw new ParseException(e.getMessage()):
+		// toType()'s InvalidDataConversionException catch arm, which rethrows as a ParseException:
 		// the base64 decode itself succeeds, but converting the resulting byte[] into a bean with no
 		// byte[] mutator fails at the convertToType() call.
 		assertThrowsWithMessage(ParseException.class, "Invalid data conversion", () -> p(T_BYTE, "YWJj", F01_Bean.class));
@@ -335,7 +335,7 @@ class OpenApiParserSession_Test extends TestBase {
 
 	@Test
 	void k03_mapNewInstanceThrowingWrapsAsParseException() {
-		// The "catch (ExecutableException e) -> throw new ParseException(e)" arm: type.newInstance()
+		// The ExecutableException catch arm (rethrown as a ParseException): type.newInstance()
 		// propagates the no-arg constructor's own RuntimeException wrapped as an ExecutableException.
 		assertThrowsWithMessage(ParseException.class, "boom", () -> p(T_OBJECT, "a=1", K03_Map.class));
 	}

@@ -47,6 +47,9 @@ import org.junit.jupiter.api.io.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@TempDir
@@ -108,18 +111,15 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 		private static Config buildConfig() {
 			var cfg = Config.create().memStore().build();
-			cfg.set(DIRECTORY_RESOURCE_rootDir, rootDir.toString());
-			cfg.set(DIRECTORY_RESOURCE_allowViews, "true");
-			cfg.set(DIRECTORY_RESOURCE_allowUploads, "true");
-			cfg.set(DIRECTORY_RESOURCE_allowDeletes, "true");
+			cfg.set("DirectoryResource." + "rootDir.s", rootDir.toString());
+			cfg.set("DirectoryResource." + "allowViews.b", "true");
+			cfg.set("DirectoryResource." + "allowUploads.b", "true");
+			cfg.set("DirectoryResource." + "allowDeletes.b", "true");
 			return cfg;
 		}
 	}
 
 	// Tests intentionally leave resources open; try-with-resources would obscure the test intent.
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	private static MockRestClient buildClient() {
 		return MockRestClient.buildLax(TestDirResource.class);
 	}
@@ -128,9 +128,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 	// Baseline — non-traversing requests still work
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void t01_normalAccess_view() throws Exception {
 		try (var c = buildClient()) {
 			c.request("VIEW", "/inside.txt").run()
@@ -145,9 +142,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t02_directTraversal_GET_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.get("/../outside-secret.txt").run().getStatusCode();
 			assertEquals(403, status, "GET /../outside-secret.txt must be rejected (path escapes root)");
 		}
@@ -155,9 +149,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t03_methodVIEW_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/../outside-secret.txt?method=VIEW").run();
 			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.txt?method=VIEW must be rejected");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_SECRET"),
@@ -167,9 +158,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t04_methodDOWNLOAD_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/../outside-secret.txt?method=DOWNLOAD").run();
 			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.txt?method=DOWNLOAD must be rejected");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_SECRET"),
@@ -179,9 +167,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t05_verbVIEW_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.request("VIEW", "/../outside-secret.txt").run().getStatusCode();
 			assertEquals(403, status, "VIEW /../outside-secret.txt must be rejected");
 		}
@@ -189,9 +174,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t06_verbDOWNLOAD_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.request("DOWNLOAD", "/../outside-secret.txt").run().getStatusCode();
 			assertEquals(403, status, "DOWNLOAD /../outside-secret.txt must be rejected");
 		}
@@ -199,9 +181,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 
 	@Test void t07_nestedTraversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.get("/a/b/../../../outside-secret.txt").run().getStatusCode();
 			assertEquals(403, status, "GET /a/b/../../../outside-secret.txt must be rejected");
 		}
@@ -217,9 +196,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		// path is interpreted as relative to root → 404 (no such file under root). Either is a
 		// non-leak outcome.
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.get("/etc/passwd").run().getStatusCode();
 			assertTrue(status == 403 || status == 404, "Status must be 403 or 404, was: " + status);
 		}
@@ -230,9 +206,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		// it; some containers reject "%2e%2e" outright. Either outcome is acceptable as long as
 		// the outside-root secret is NOT returned.
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/%2e%2e/outside-secret.txt").run();
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_SECRET"),
 				"URL-encoded traversal must not leak the outside-root secret. Status was: " + resp.getStatusCode());
@@ -255,9 +228,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		assertFalse(Files.exists(outsideUpload), "Pre-condition: upload target must not exist");
 
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.put("/../outside-uploaded-by-test.txt", "ATTACK_PAYLOAD").run().getStatusCode();
 			// Pre-fix: would have been 404 (legacy "file must exist before PUT" behavior). Post-fix:
 			// the boundary check fires first and returns 403. Either way, the outside file must NOT
@@ -274,9 +244,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		assertTrue(Files.exists(outsideSecret), "Pre-condition: outside secret must exist");
 
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var status = c.delete("/../outside-secret.txt").run().getStatusCode();
 			assertEquals(403, status, "DELETE /../outside-secret.txt must be rejected with 403");
 			assertTrue(Files.exists(outsideSecret),
@@ -290,9 +257,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 	// Symlink handling
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void t12_symlinkInsideRoot_is_followed() throws Exception {
 		assumeTrue(symlinkInside != null, "Filesystem does not support symbolic links");
 
@@ -307,9 +271,6 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		assumeTrue(symlinkEscape != null, "Filesystem does not support symbolic links");
 
 		try (var c = buildClient()) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("VIEW", "/link-to-outside").run();
 			assertEquals(403, resp.getStatusCode(),
 				"Symlink to outside-root must be rejected with 403 (post-existence boundary check)");

@@ -59,6 +59,9 @@ import java.util.*;
  * implementations of {@link VarFunction} bypass the typed table; their {@code invoke(...)}
  * receives raw {@link String} args via {@link #passthrough(List)}.
  */
+@SuppressWarnings({
+	"java:S3776" // parseStringArray() and coerceOne() dispatch over the full target-type coercion table and array-literal syntax in one place
+})
 final class ArgCoercer {
 
 	private ArgCoercer() {}
@@ -125,9 +128,6 @@ final class ArgCoercer {
 	 * @param raw The raw value (typically a {@link String} produced by template resolution).
 	 * @return The coerced value.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity: the type-dispatch chain is intentional.
-	})
 	static Object coerceOne(String fnName, int argIndex, Class<?> target, Object raw) {
 		if (target == String.class)
 			return raw == null ? "" : raw.toString();
@@ -159,9 +159,9 @@ final class ArgCoercer {
 	 */
 	private static boolean parseBoolean(String fnName, int argIndex, String s) {
 		var t = s.trim();
-		if (t.equalsIgnoreCase("true") || t.equals("1") || t.equalsIgnoreCase("yes") || t.equalsIgnoreCase("on"))
+		if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))
 			return true;
-		if (t.isEmpty() || t.equalsIgnoreCase("false") || t.equals("0") || t.equalsIgnoreCase("no") || t.equalsIgnoreCase("off"))
+		if (t.isEmpty() || eqic(t, "false") || eq(t, "0") || eqic(t, "no") || eqic(t, "off"))
 			return false;
 		throw iaex("Function '%s' arg %s: cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)",
 			fnName, argIndex, s);
@@ -181,9 +181,6 @@ final class ArgCoercer {
 	 * This is intentionally a small inline parser — depending on the full Juneau JSON parser
 	 * here would create a circular module dependency (juneau-commons → juneau-marshall).
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity: simple inline JSON array parser.
-	})
 	private static String[] parseStringArray(String fnName, int argIndex, String s) {
 		var t = s.trim();
 		if (t.isEmpty())

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -174,7 +173,7 @@ public final class MockHttpTransport implements HttpTransport {
 
 	private record Route(String method, String path, RequestHandler handler) {
 		boolean matches(String m, String p) {
-			return (method == null || method.equalsIgnoreCase(m)) && (path == null || path.equals(p));
+			return (method == null || eqic(method, m)) && (path == null || path.equals(p));
 		}
 	}
 
@@ -200,7 +199,7 @@ public final class MockHttpTransport implements HttpTransport {
 		 * @return This object.
 		 */
 		public Builder on(String method, String path, RequestHandler handler) {
-			assertArgNotNull("handler", handler);
+			reqnn("handler", handler);
 			routes.add(new Route(method, path, handler));
 			return this;
 		}

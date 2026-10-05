@@ -62,9 +62,9 @@ import org.apache.juneau.test.assertions.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
 	"java:S4144", // Identical methods intentional for different test scenarios
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"resource" // Resource management handled externally
 })
 public class ResponseContent implements HttpEntity {
 
@@ -237,8 +237,8 @@ public class ResponseContent implements HttpEntity {
 	 * @see MarshallingSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts in content parsing
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"unchecked" // Type erasure requires unchecked casts in content parsing
 	})
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {

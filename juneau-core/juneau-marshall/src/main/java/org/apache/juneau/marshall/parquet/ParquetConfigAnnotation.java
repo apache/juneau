@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -51,7 +52,7 @@ public class ParquetConfigAnnotation {
 		public void apply(AnnotationInfo<ParquetConfig> ai, ParquetSerializer.Builder b) {
 			var a = ai.inner();
 			if (!a.compressionCodec().isEmpty()) {
-				var cc = "GZIP".equalsIgnoreCase(a.compressionCodec())
+				var cc = eqic("GZIP", a.compressionCodec())
 					? CompressionCodec.GZIP : CompressionCodec.UNCOMPRESSED;
 				b.compressionCodec(cc);
 			}
@@ -59,7 +60,7 @@ public class ParquetConfigAnnotation {
 				b.rowGroupSize(Integer.parseInt(a.rowGroupSize()));
 			if (!a.pageSize().isEmpty())
 				b.pageSize(Integer.parseInt(a.pageSize()));
-			if ("true".equalsIgnoreCase(a.addBeanTypes()))
+			if (eqic("true", a.addBeanTypes()))
 				b.addBeanTypesParquet(true);
 		}
 	}

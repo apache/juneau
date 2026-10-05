@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.collections;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.toStringArray;
@@ -56,13 +55,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  */
 @SuppressWarnings({
 	"java:S2160", // equals() / hashCode() inherited from LinkedHashMap; map equality is element-based
-	"java:S6539"  // Monster class; MarshalledMap's large method surface follows directly from implementing the Map contract plus path-navigation helpers
+	"java:S6539", // Monster class; MarshalledMap's large method surface follows directly from implementing the Map contract plus path-navigation helpers
+	"rawtypes", // cast2() builds the target map as a raw Map and getSwapped() bridges through a raw ObjectSwap
+	"unchecked" // Casts to T in cast()/cast2()/getSwapped() are driven by the requested Class/ClassMeta/ObjectSwap, which determines T at runtime
 })
 public class MarshalledMap extends LinkedHashMap<String,Object> {
 
-	@SuppressWarnings({
-		"java:S2160" // equals() / hashCode() inherited from MarshalledMap; map equality is element-based
-	})
 	private static class Unmodifiable extends MarshalledMap {
 		private static final long serialVersionUID = 1L;
 
@@ -321,7 +319,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledMap(CharSequence in, Parser p) throws ParseException {
-		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
+		this(reqnn("p", p).getMarshallingContext().getSession());
 		if (ine(in))
 			p.readIntoMap(in, this, bs().string(), bs().object());
 	}
@@ -346,7 +344,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @param keyValuePairs A list of key/value pairs to add to this map.
 	 */
 	public MarshalledMap(Object...keyValuePairs) {
-		assertArg(keyValuePairs.length % 2 == 0, "Odd number of parameters passed into MarshalledMap(Object...)");
+		req(keyValuePairs.length % 2 == 0, "Odd number of parameters passed into MarshalledMap(Object...)");
 		for (var i = 0; i + 1 < keyValuePairs.length; i += 2)
 			put(s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
@@ -362,7 +360,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledMap(java.io.Reader in, Parser p) throws ParseException {
-		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
+		this(reqnn("p", p).getMarshallingContext().getSession());
 		p.readIntoMap(in, this, bs().string(), bs().object());
 	}
 
@@ -400,8 +398,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Generic varargs is safe here: values are only iterated, not stored into a typed array.
-		"varargs"
+		"varargs" // appendFirst()'s T... values is only iterated, never stored or exposed, so heap pollution cannot occur
 	})
 	public <T> MarshalledMap appendFirst(Predicate<T> test, String key, T...values) {
 		for (var v : values)
@@ -505,9 +502,6 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	public <T> T cast(Class<T> type) {
 		MarshallingSession bs = bs();
 		ClassMeta<?> c2 = bs.getClassMeta(type);
@@ -528,9 +522,6 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for ClassMeta<T>
-	})
 	public <T> T cast(ClassMeta<T> cm) {
 		MarshallingSession bs = bs();
 		var c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
@@ -1174,10 +1165,6 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling for generic type handling
-		"unchecked", // Type erasure requires unchecked casts in ObjectSwap operations
-	})
 	public <T> T getSwapped(String key, ObjectSwap<T,?> objectSwap) throws ParseException {
 		try {
 			Object o = super.get(key);
@@ -1554,9 +1541,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * Converts this map to the specified class type.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts in dynamic map operations
-		"rawtypes", // Raw types necessary for generic type handling
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	private <T> T cast2(ClassMeta<T> cm) {
 

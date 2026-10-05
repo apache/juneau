@@ -44,6 +44,9 @@ import org.apache.juneau.rest.server.servlet.*;
  * @since 10.0.0
  */
 @Rest(path="/dumps")
+@SuppressWarnings({
+	"resource" // getHeapDump() returns a self-deleting InputStream that the REST framework streams to the response and closes.
+})
 public class DumpsResource extends BasicRestResource {
 
 	private final DumpsManager defaultManager = new DumpsManager();
@@ -56,9 +59,6 @@ public class DumpsResource extends BasicRestResource {
 	 * @param req The HTTP request (its context's bean store is searched).
 	 * @return The resolved manager; never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // The bean store is owned by the RestContext; this only borrows a bean and must not close it.
-	})
 	protected DumpsManager manager(RestRequest req) {
 		return req.getContext().getBeanStore().getBean(DumpsManager.class).orElse(defaultManager);
 	}
@@ -97,9 +97,6 @@ public class DumpsResource extends BasicRestResource {
 		summary="Heap dump",
 		description="Produces a HotSpot heap dump (hprof).  Disabled by default; opt in via DumpsSettings."
 	)
-	@SuppressWarnings({
-		"resource" // The returned stream is handed off to the framework's InputStreamProcessor, which pipes then closes it (and the backing temp file self-deletes on close).
-	})
 	public InputStream getHeapDump(RestRequest req, RestResponse res) throws IOException {
 		var manager = manager(req);
 		if (! manager.resolveSettings(req.getContext()).isHeapDumpEnabled())

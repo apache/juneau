@@ -189,7 +189,7 @@ const RESOLVE = function (names) {
 /** True once the sprite has been parsed and injected by the registry's own loader. */
 const SPRITE_READY = function () {
 	const sprite = document.getElementById('juneau-symbol-sprite');
-	return !!sprite && sprite.querySelectorAll('symbol').length > 0;
+	return sprite?.querySelectorAll('symbol').length > 0;
 };
 
 /**
@@ -568,8 +568,8 @@ async function shoot(page) {
 		for (const size of sizes) {
 			for (const key of ['ink', 'solid', 'gradient', 'mush']) {
 				const vals = req.family.map(function (s) { return tiles[s][size][key]; });
-				const lo = Math.min.apply(null, vals);
-				const hi = Math.max.apply(null, vals);
+				const lo = Math.min(...vals);
+				const hi = Math.max(...vals);
 				spreads[key + size] = Math.round((hi - lo) * 1000) / 1000;
 				lines.push(pad(key, 12) + pad(size + 'px', 6) + num(lo.toFixed(3), 10) + num(hi.toFixed(3), 10)
 					+ num((hi - lo).toFixed(3), 10));
@@ -619,7 +619,7 @@ async function shoot(page) {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

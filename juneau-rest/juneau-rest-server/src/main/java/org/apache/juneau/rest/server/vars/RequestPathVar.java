@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.vars;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
@@ -68,7 +70,7 @@ public class RequestPathVar extends MultipartResolvingVar {
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		if ("REMAINDER".equals(key))
+		if (eq(key, "REMAINDER"))
 			return req.getPathParams().getRemainder().orElse(null);
 		return req.getPathParam(key).orElse(null);
 	}

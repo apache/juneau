@@ -1,0 +1,32 @@
+{
+  "version": "1",
+  "title": "Deep",
+  "header": {
+    "userMenu": {
+      "label": "Jane Doe",
+      "initials": "JB",
+      "items": [
+        { "label": "Profile", "href": "/profile" },
+        { "label": "Logout", "href": "/logout" }
+      ]
+    }
+  },
+  "footer": {
+    "links": [ { "label": "Help", "href": "/help" } ]
+  },
+  "nav": [
+    { "id": "a", "label": "A", "href": "/a", "children": [
+      { "id": "b", "label": "B", "href": "/a/b", "children": [
+        { "id": "c", "label": "C", "href": "/a/b/c", "children": [
+          { "id": "d", "label": "D", "href": "/a/b/c/d" }
+        ] }
+      ] }
+    ] }
+  ],
+  "activeNav": ["a", "b", "c", "d"],
+  "cards": [
+    { "id": "h1", "type": "html", "template": "tmpl-h1" },
+    { "id": "d1", "type": "datatables", "table": "/rest/x/data" },
+    { "id": "k", "type": "kpi", "value": 3 }
+  ]
+}

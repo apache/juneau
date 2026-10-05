@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.html;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -52,35 +51,17 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // Resource management handled externally
-	"rawtypes",   // Raw types necessary for generic type handling throughout HTML serializer session
-	"unchecked",  // Type erasure requires unchecked casts throughout HTML serializer session
-	"java:S110",  // Inheritance depth acceptable for this class hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S6541"  // Brain method acceptable for writeAnything; refactoring would reduce clarity
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // Builder<?> create(), doSerialize()/getHtmlWriter() returning XmlWriter<?>/HtmlWriter<?>, and getRender() returning HtmlRender<?> intentionally expose wildcard types.
+	"java:S3776", // Branching is inherent to writeAnything(), writeCollection() and getTableHeaders(), which decide table/list/bean/map layout per type.
+	"java:S6541", // Brain method acceptable for writeAnything; refactoring would reduce clarity
+	"rawtypes", // Raw types necessary for generic type handling throughout HTML serializer session
+	"resource", // Resource management handled externally
+	"unchecked" // Type erasure requires unchecked casts throughout HTML serializer session
 })
 public class HtmlSerializerSession extends XmlSerializerSession {
-
-	// Property name constants
-	private static final String PROP_addKeyValueTableHeaders = "addKeyValueTableHeaders";
-	private static final String PROP_detectLabelParameters = "detectLabelParameters";
-	private static final String PROP_detectLinksInStrings = "detectLinksInStrings";
-	private static final String PROP_labelParameter = "labelParameter";
-	private static final String PROP_uriAnchorText = "uriAnchorText";
-	private static final String PROP_HtmlSerializerSession_addKeyValueTableHeaders = "HtmlSerializerSession.addKeyValueTableHeaders";
-	private static final String PROP_HtmlSerializerSession_detectLabelParameters = "HtmlSerializerSession.detectLabelParameters";
-	private static final String PROP_HtmlSerializerSession_detectLinksInStrings = "HtmlSerializerSession.detectLinksInStrings";
-	private static final String PROP_HtmlSerializerSession_labelParameter = "HtmlSerializerSession.labelParameter";
-	private static final String PROP_HtmlSerializerSession_uriAnchorText = "HtmlSerializerSession.uriAnchorText";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-
-	// HTML tag name constants
-	private static final String TAG_style = "style";
-	private static final String TAG_table = "table";
-	private static final String TAG_array = "array";
-	private static final String CONST_string = "string";
 
 	/**
 	 * Builder class.
@@ -104,7 +85,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			addKeyValueTableHeaders = ctx.isAddKeyValueTableHeaders();
 			detectLabelParameters = ctx.isDetectLabelParameters();
@@ -177,15 +158,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_addKeyValueTableHeaders, PROP_HtmlSerializerSession_addKeyValueTableHeaders:
+				case "addKeyValueTableHeaders", "HtmlSerializerSession.addKeyValueTableHeaders":
 					return addKeyValueTableHeaders(cvt(value, Boolean.class));
-				case PROP_detectLabelParameters, PROP_HtmlSerializerSession_detectLabelParameters:
+				case "detectLabelParameters", "HtmlSerializerSession.detectLabelParameters":
 					return detectLabelParameters(cvt(value, Boolean.class));
-				case PROP_detectLinksInStrings, PROP_HtmlSerializerSession_detectLinksInStrings:
+				case "detectLinksInStrings", "HtmlSerializerSession.detectLinksInStrings":
 					return detectLinksInStrings(cvt(value, Boolean.class));
-				case PROP_labelParameter, PROP_HtmlSerializerSession_labelParameter:
+				case "labelParameter", "HtmlSerializerSession.labelParameter":
 					return labelParameter(cvt(value, String.class));
-				case PROP_uriAnchorText, PROP_HtmlSerializerSession_uriAnchorText:
+				case "uriAnchorText", "HtmlSerializerSession.uriAnchorText":
 					return uriAnchorText(cvt(value, AnchorText.class));
 				default:
 					super.property(key, value);
@@ -212,11 +193,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
-	})
 	public static Builder<?> create(HtmlSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final HtmlSerializer ctx;
@@ -379,8 +357,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Consider Optional or separate method to avoid null return.
 	 */
 	@SuppressWarnings({
-		"java:S1168",     // Null vs empty array have distinct semantics (don't use table vs table with no headers)
-		"java:S3776"      // Cognitive complexity acceptable for table header resolution
+		"java:S1168" // Null vs empty array have distinct semantics (don't use table vs table with no headers)
 	})
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException {
 
@@ -442,9 +419,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return bm.keySet().toArray(new String[bm.size()]);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean map serialization
-	})
 	private void writeBeanMap(XmlWriter<?> out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var mcm = (ClassMeta<?>) m.getBeanInfo();
@@ -453,7 +427,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		int i = indent;
 
-		out.oTag(i, TAG_table);
+		out.oTag(i, "table");
 
 		String typeName = m.getMeta().getDictionaryName();
 		if (nn(typeName) && eType != mcm)
@@ -493,7 +467,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.oTag(i + 2, "td");
 			String style = getStyle(this, pMeta, value);
 			if (nn(style))
-				out.attr(TAG_style, style);
+				out.attr("style", style);
 			out.cTag();
 
 			try {
@@ -513,14 +487,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i + 1).eTag("tr").nl(i + 1);
 		});
 
-		out.ie(i).eTag(TAG_table).nl(i);
+		out.ie(i).eTag("table").nl(i);
 	}
 
 	
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
-	})
 	private void writeCollection(XmlWriter<?> out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
@@ -542,7 +512,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (sType != eType)
 			type2 = sType.getBeanDictionaryName();
 		if (type2 == null)
-			type2 = TAG_array;
+			type2 = "array";
 
 		c = sort(c);
 
@@ -556,7 +526,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		if (nn(th)) {
 
-			out.oTag(i, TAG_table).attr(btpn, type2).w('>').nl(i + 1);
+			out.oTag(i, "table").attr(btpn, type2).w('>').nl(i + 1);
 			if (th.length > 0) {
 				out.sTag(i + 1, "tr").nl(i + 2);
 				for (var key : th) {
@@ -629,7 +599,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							String style = getStyle(this, pMeta, value);
 							out.oTag(i + 2, "td");
 							if (nn(style))
-								out.attr(TAG_style, style);
+								out.attr("style", style);
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
@@ -644,11 +614,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				}
 				out.ie(i + 1).eTag("tr").nl(i + 1);
 			}
-			out.ie(i).eTag(TAG_table).nl(i);
+			out.ie(i).eTag("table").nl(i);
 
 		} else {
 			out.oTag(i, isDc ? "p" : "ul");
-			if (! type2.equals(TAG_array))
+			if (! type2.equals("array"))
 				out.attr(btpn, type2);
 			out.w('>').nl(i + 1);
 			var isFirst = true;
@@ -660,7 +630,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				String style = getStyle(this, ppMeta, o);
 				String link = getLink(ppMeta);
 				if (nn(style) && ! isDc)
-					out.attr(TAG_style, style);
+					out.attr("style", style);
 				if (! isDc)
 					out.cTag();
 				if (nn(link))
@@ -689,7 +659,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		int i = indent;
 
-		out.oTag(i, TAG_table);
+		out.oTag(i, "table");
 
 		if (nn(typeName) && nn(ppMeta) && ppMeta.getBeanInfo() != aType)
 			out.attr(getBeanTypePropertyName(sType), typeName);
@@ -704,7 +674,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		forEachEntry(m, x -> writeMapEntry(out, x, keyType, valueType, i, ppMeta));
 
-		out.ie(i).eTag(TAG_table).nl(i);
+		out.ie(i).eTag("table").nl(i);
 	}
 
 	private void writeMapEntry(XmlWriter<?> out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
@@ -724,7 +694,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.sTag(i + 1, "tr").nl(i + 2);
 		out.oTag(i + 2, "td");
 		if (nn(style))
-			out.attr(TAG_style, style);
+			out.attr("style", style);
 		out.cTag();
 		if (nn(link))
 			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", s(value))).cTag();
@@ -775,9 +745,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Raw output may be any HtmlWriter CRTP leaf; the concrete self-type is not nameable here.
-	})
 	protected final HtmlWriter<?> getHtmlWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter<?> output2)
@@ -854,9 +821,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+		"null" // Null handling verified by context or framework
 	})
 	protected ContentResult writeAnything(XmlWriter<?> out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
@@ -1024,7 +990,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isDate()) {
 				String s = writeDate((Date)o, sType);
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(s).eTag(CONST_string);
+					out.sTag("string").text(s).eTag("string");
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -1032,7 +998,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isCalendar()) {
 				String s = writeCalendar(o, sType);
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(s).eTag(CONST_string);
+					out.sTag("string").text(s).eTag("string");
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -1040,7 +1006,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isTemporal()) {
 				String s = writeTemporal((TemporalAccessor)o, sType);
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(s).eTag(CONST_string);
+					out.sTag("string").text(s).eTag("string");
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -1048,7 +1014,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isDuration()) {
 				String s = writeDuration((Duration)o);
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(s).eTag(CONST_string);
+					out.sTag("string").text(s).eTag("string");
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -1056,14 +1022,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isPeriod()) {
 				String s = writePeriod((Period)o);
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(s).eTag(CONST_string);
+					out.sTag("string").text(s).eTag("string");
 				else
 					out.text(s);
 				cr = CR_MIXED;
 
 			} else {
 				if (isRoot && addJsonTags)
-					out.sTag(CONST_string).text(toString(o)).eTag(CONST_string);
+					out.sTag("string").text(toString(o)).eTag("string");
 				else
 					out.text(toString(o));
 				cr = CR_MIXED;

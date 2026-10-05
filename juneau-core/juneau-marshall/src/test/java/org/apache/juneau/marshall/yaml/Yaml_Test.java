@@ -27,9 +27,9 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unused",    // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 	"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
-	"java:S5976" // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 })
 class Yaml_Test extends TestBase {
 

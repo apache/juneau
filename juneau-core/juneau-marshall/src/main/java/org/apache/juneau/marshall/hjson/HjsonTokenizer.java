@@ -34,7 +34,7 @@ import java.util.Locale;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S135",  // Multiple break/continue necessary for tokenizer state machine loops
+	"java:S135", // Multiple break/continue necessary for tokenizer state machine loops
 	"java:S3776", // Cognitive complexity acceptable for Hjson grammar
 	"resource" // Reader field wraps the caller's reader (BufferedReader/PushbackReader hold only in-memory buffers); the underlying reader is caller-owned.
 })
@@ -312,9 +312,9 @@ public class HjsonTokenizer {
 		if (raw.isEmpty())
 			return readToken();
 
-		if (raw.equals("true")) return Token.of(TokenType.TRUE);
-		if (raw.equals("false")) return Token.of(TokenType.FALSE);
-		if (raw.equals("null")) return Token.of(TokenType.NULL);
+		if (eq(raw, "true")) return Token.of(TokenType.TRUE);
+		if (eq(raw, "false")) return Token.of(TokenType.FALSE);
+		if (eq(raw, "null")) return Token.of(TokenType.NULL);
 
 		// Whole-string JSON-number match (leading-zero-restricted grammar); span equals the full token on a match.
 		if (matchNumberPrefix(raw, false) == raw.length()) {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -70,22 +71,14 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 
 	@Test void t02_declared_membersMatchTheAttachedDescriptor() {
 		var r = report();
-		assertEquals("/api/widgets/42/status", r.get("t2_dataUrl"));
-		assertEquals("fieldGrid", r.get("t2_renderer"));
-		assertEquals(false, r.get("t2_lazy"));
-		assertEquals(30000, intOf(r, "t2_refreshMs"));
-		assertEquals(List.of(Map.of("data", "status", "label", "Status")), r.get("t2_fields"), r::toString);
-		assertEquals(List.of("status"), r.get("t2_titleFields"));
-		assertEquals(Map.of("verbose", true), r.get("t2_params"), r::toString);
+		assertBean(r, "t2_dataUrl,t2_renderer,t2_lazy,t2_refreshMs,t2_fields,t2_titleFields,t2_params",
+			"/api/widgets/42/status,fieldGrid,false,30000,[{data=status,label=Status}],[status],{verbose=true}");
 	}
 
 	/** F9: the per-type {@code lazy} default - row-detail/card-body false, tab-body true - for an identity-only region. */
 	@Test void t02b_declared_perTypeLazyDefaultsForAnIdentityOnlyRegion() {
 		var r = report();
-		var lazy = (Map<?,?>)r.get("t2b_lazyDefaults");
-		assertEquals(false, lazy.get("row-detail"));
-		assertEquals(false, lazy.get("card-body"));
-		assertEquals(true, lazy.get("tab-body"));
+		assertBean(r, "t2b_lazyDefaults{row-detail,card-body,tab-body}", "{false,false,true}");
 		assertAllTrue(r, "t2b_dataUrlNull");
 	}
 
@@ -101,10 +94,9 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 
 	@Test void t13_fetchDeclared_resolvesTheUnwrappedValuesMapOnSuccess() {
 		var r = report();
-		assertEquals("/api/widgets/1", r.get("t13_fetchUrl"));
-		assertEquals(Map.of("status", "ok", "count", 3), r.get("t13_valuesMap"), r::toString);
-		// No caching: a second call fetches again and resolves the same shape.
-		assertEquals(Map.of("status", "ok", "count", 3), r.get("t13_secondCallValuesMap"), r::toString);
+		// t13_secondCallValuesMap: no caching - a second call fetches again and resolves the same shape.
+		assertBean(r, "t13_fetchUrl,t13_valuesMap,t13_secondCallValuesMap",
+			"/api/widgets/1,{status=ok,count=3},{status=ok,count=3}");
 	}
 
 	@Test void t13_fetchDeclared_404IsKindEmpty() {
@@ -172,10 +164,9 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 
 	@Test void t14a_poll_oneTimerEverAcrossTenRepopulatesAndATick() {
 		var r = report();
-		assertEquals(1, intOf(r, "t14a_oneTimerAfterInitial"));
-		assertEquals(1, intOf(r, "t14a_oneTimerAfterTenRepopulates"),
-			"ten re-populates must end with exactly one live timer, not ten (clear-then-set)");
-		assertEquals(1, intOf(r, "t14a_oneTimerAfterTick"));
+		// Collapsed via BCT: all three are simple int-equality checks on the same map, and the generic BCT
+		// failure message (which names the failing property) is diagnostic enough on its own.
+		assertBean(r, "t14a_oneTimerAfterInitial,t14a_oneTimerAfterTenRepopulates,t14a_oneTimerAfterTick", "1,1,1");
 	}
 
 	/**
@@ -242,35 +233,24 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// Test 16a (parity): serializeParams matches RegionDef.serializeParams's golden cases (RegionDef_Test g10-g16).
-	// g17 (nested map) is deliberately excluded - see RegionDef_Test#g17 and this harness's own comment.
+	// Test 16a: serializeParams golden cases.  juneau-regions.js is the only implementation; these literals were
+	// captured from the deleted Java RegionDef.serializeParams on 2026-09-30 so the wire encoding did not change.
 	// =================================================================================================================
 
-	@Test void t16a_serializeParams_matchesTheJavaGoldenCases() {
+	@Test void t16a_serializeParams_goldenCases() {
 		var r = report();
-		assertEquals(RegionDef.serializeParams(null), r.get("t16a_null"));
-
-		var m1 = new LinkedHashMap<String,Object>(); m1.put("a", "1"); m1.put("b", null);
-		assertEquals(RegionDef.serializeParams(m1), r.get("t16a_nullValueOmitsKey"));
-
-		assertEquals(RegionDef.serializeParams(Map.of("a", "")), r.get("t16a_emptyStringIsKeyEquals"));
-
-		var m2 = new LinkedHashMap<String,Object>(); m2.put("on", true); m2.put("n", 42);
-		assertEquals(RegionDef.serializeParams(m2), r.get("t16a_booleanAndNumber"));
-
-		assertEquals(RegionDef.serializeParams(Map.of("tag", List.of("a", "b"))), r.get("t16a_collectionRepeatsKey"));
-
-		var m3 = new LinkedHashMap<String,Object>(); m3.put("z", "1"); m3.put("a", "2");
-		assertEquals(RegionDef.serializeParams(m3), r.get("t16a_keyOrderIsIterationOrder"));
-
-		assertEquals(RegionDef.serializeParams(Map.of("q", "a b")), r.get("t16a_spaceIsPercent20"));
+		assertEquals("", r.get("t16a_null"));
+		assertEquals("a=1", r.get("t16a_nullValueOmitsKey"));          // input: a is "1", b is null
+		assertEquals("a=", r.get("t16a_emptyStringIsKeyEquals"));      // input: a is the empty string
+		assertEquals("on=true&n=42", r.get("t16a_booleanAndNumber"));  // input: on is true, n is 42
+		assertEquals("tag=a&tag=b", r.get("t16a_collectionRepeatsKey")); // input: tag is the collection a, b
+		assertEquals("z=1&a=2", r.get("t16a_keyOrderIsIterationOrder")); // input: z is "1", then a is "2"
+		assertEquals("q=a%20b", r.get("t16a_spaceIsPercent20"));       // input: q is "a b"
 	}
 
 	/**
-	 * The documented, intentional divergence: a nested map is not a valid wire input (the server rejects it at
-	 * {@code RegionDef.validate()}/{@code serializeParams} - see {@code RegionDef_Test#g17}), so the client's own
-	 * defensive-depth handling of one is untested-by-parity on the Java side and is asserted only for its own,
-	 * documented shape: dropped silently, never thrown.
+	 * A nested map is not a valid wire input (RegionDef.validate() rejects it server-side), so the client drops it
+	 * silently rather than throwing.
 	 */
 	@Test void t16a_serializeParams_nestedMapIsDroppedClientSideNotThrown() {
 		assertEquals("", report().get("t16a_nestedMapDroppedNotThrown"));

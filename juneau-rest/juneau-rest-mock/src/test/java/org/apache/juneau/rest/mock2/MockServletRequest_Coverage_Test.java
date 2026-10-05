@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"resource", // MockRestClient instances are short-lived test fixtures; the mock framework manages lifecycle.
-	"unused"   // REST op method parameters are required by the framework dispatch signature even when not referenced in the body.
+	"unused" // REST op method parameters are required by the framework dispatch signature even when not referenced in the body.
 })
 class MockServletRequest_Coverage_Test extends TestBase {
 

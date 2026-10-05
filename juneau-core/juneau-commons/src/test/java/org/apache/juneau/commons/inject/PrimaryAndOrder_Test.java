@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S2094", // Intentionally empty bean class used as test fixture.
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class PrimaryAndOrder_Test extends TestBase {
 

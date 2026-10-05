@@ -20,7 +20,6 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -83,14 +82,11 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	"java:S3011"  // Reflection access needed for executable introspection
+	"java:S1119", // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3011" // Reflection access needed for executable introspection
 })
 public abstract sealed class ExecutableInfo extends AccessibleInfo permits ConstructorInfo, MethodInfo {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
-	private static final String ARG_type = "type";
 
 	protected final ClassInfo declaringClass;
 	private final Executable inner;
@@ -116,7 +112,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * @param inner The constructor or method that this info represents. Must not be <jk>null</jk>.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
-		super(inner, assertArgNotNull(ARG_inner, inner).getModifiers());
+		super(inner, reqnn("inner", inner).getModifiers());
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;
@@ -271,7 +267,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 		"unchecked" // Type erasure requires cast for annotation stream
 	})
 	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		// @formatter:off
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
@@ -694,9 +690,6 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	@SuppressWarnings({
-		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
-	})
 	public final int parameterMatchesLenientCount(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
@@ -725,9 +718,6 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	@SuppressWarnings({
-		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
-	})
 	public final int parameterMatchesLenientCount(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
@@ -756,9 +746,6 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	@SuppressWarnings({
-		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
-	})
 	public final int parameterMatchesLenientCount(Object...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
@@ -780,7 +767,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 */
 	@Override
 	public final boolean setAccessible() {
-		// inner can never be null - constructor asserts non-null via assertArgNotNull
+		// inner can never be null - constructor asserts non-null via reqnn
 		return safeOpt(() -> {
 			inner.setAccessible(true);
 			return true;
@@ -869,7 +856,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for toString formatting logic
-		"java:S6541"  // Synchronization not needed for local string building
+		"java:S6541" // Synchronization not needed for local string building
 	})
 	private String findToString() {
 		var sb = new StringBuilder(256);

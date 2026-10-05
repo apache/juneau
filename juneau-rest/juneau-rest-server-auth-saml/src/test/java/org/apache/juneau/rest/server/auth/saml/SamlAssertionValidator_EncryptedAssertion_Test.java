@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -74,7 +75,7 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 			.build();
 		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(ENCRYPTED_ENVELOPE_TEMPLATE));
 		var hdr = ex.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst().orElseThrow();
 		assertTrue(hdr.getValue().contains("decryption_required"),
 			"Expected WWW-Authenticate to contain 'decryption_required', got: " + hdr.getValue());
@@ -91,7 +92,7 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 			.build();
 		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(ENCRYPTED_ENVELOPE_TEMPLATE));
 		var hdr = ex.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst().orElseThrow();
 		assertTrue(hdr.getValue().contains("decryption_failed"),
 			"Expected WWW-Authenticate to contain 'decryption_failed', got: " + hdr.getValue());

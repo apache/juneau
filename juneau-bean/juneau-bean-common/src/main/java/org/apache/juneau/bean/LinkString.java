@@ -22,7 +22,6 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.oapi.*;
-import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.serializer.*;
 
 /**
@@ -170,7 +169,7 @@ public class LinkString implements Comparable<LinkString> {
 	}
 
 	/**
-	 * Returns the name so that the {@link ObjectSearcher} class can search against it.
+	 * Returns the name so that the object-search engine can search against it.
 	 */
 	@Override /* Overridden from Object */
 	public String toString() {

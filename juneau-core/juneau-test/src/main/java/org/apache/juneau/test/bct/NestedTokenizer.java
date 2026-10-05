@@ -163,7 +163,7 @@ class NestedTokenizer {
 
 	@SuppressWarnings({
 		"java:S3776", // Intentional Brain Method.
-		"java:S6541", // StringBuilder used in local scope; no synchronization needed
+		"java:S6541" // StringBuilder used in local scope; no synchronization needed
 	})
 	public static List<Token> tokenize(String in) {
 		if (in == null)

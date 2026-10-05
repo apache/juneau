@@ -19,6 +19,9 @@ package org.apache.juneau.petstore.service;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.dto.Order;
@@ -146,5 +149,94 @@ class PetStore_Test extends TestBase {
 		var s = new PetStore();
 		s.deleteUser("mwatson");
 		assertNull(s.getUser("mwatson"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e — audit trail
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final Instant T0 = Instant.parse("2026-10-01T12:00:00Z");
+
+	private static PetStore fixedStore() {
+		return new PetStore(Clock.fixed(T0, ZoneOffset.UTC));
+	}
+
+	private static Pet newPet(String name) {
+		return new Pet().setName(name).setSpecies(Species.DOG).setPrice(10f).setStatus(PetStatus.AVAILABLE);
+	}
+
+	@Test void e01_classicSeedWritesNoAudit() {
+		assertEmpty(fixedStore().getAudit());
+	}
+
+	@Test void e02_createPet_apiActorByDefault() {
+		var s = fixedStore();
+		var p = s.createPet(newPet("Newpet"));
+		assertBeans(s.getAudit(), "id,at,actor,entity,entityId,action,detail",
+			"1,2026-10-01T12:00:00Z,api,Pet," + p.getId() + ",CREATE,Newpet");
+	}
+
+	@Test void e03_updatePet_consoleActor() {
+		var s = fixedStore();
+		var p = s.getPet(1).setName("Renamed");
+		s.updatePet(p, "console:alice");
+		assertBeans(s.getAudit(), "actor,entity,entityId,action,detail", "console:alice,Pet,1,UPDATE,Renamed");
+	}
+
+	@Test void e04_deleteOrder_audited() {
+		var s = fixedStore();
+		s.deleteOrder(101, "api");
+		assertBeans(s.getAudit(), "entity,entityId,action", "Order,101,DELETE");
+	}
+
+	@Test void e05_createUser_keyedByUsername() {
+		var s = fixedStore();
+		s.createUser(new User().setUsername("zed").setFirstName("Zed"), "console:admin");
+		assertBeans(s.getAudit(), "actor,entity,entityId,action,detail", "console:admin,User,zed,CREATE,zed");
+	}
+
+	@Test void e06_failedMutationAppendsNothing() {
+		var s = fixedStore();
+		assertThrows(PetstoreNotFoundException.class, () -> s.deletePet(99_999));
+		var existing = s.getUser("mwatson");
+		assertThrows(IllegalArgumentException.class, () -> s.createUser(existing));
+		assertEmpty(s.getAudit());
+	}
+
+	@Test void e07_auditIdsIncrease() {
+		var s = fixedStore();
+		s.createPet(newPet("A"));
+		s.createPet(newPet("B"));
+		assertBeans(s.getAudit(), "id,detail", "1,A", "2,B");
+	}
+
+	@Test void e08_getAuditIsImmutableSnapshot() {
+		var s = fixedStore();
+		s.createPet(newPet("A"));
+		var snap = s.getAudit();
+		s.createPet(newPet("B"));
+		assertSize(1, snap);
+		assertThrows(UnsupportedOperationException.class, () -> snap.add(new AuditEntry()));
+	}
+
+	@Test void e09_load_preservesIdsAndBumpsCounters() {
+		var s = fixedStore();
+		s.load(
+			List.of(new Pet().setId(700).setName("Loaded").setSpecies(Species.CAT).setStatus(PetStatus.SOLD)),
+			List.of(new Order().setId(900).setPetId(700).setStatus(OrderStatus.PLACED)),
+			List.of(new User().setUsername("loaded")),
+			List.of(new AuditEntry().setId(40).setAt(T0).setActor("api").setEntity("Pet").setEntityId("700").setAction("CREATE")));
+		assertBean(s.getPet(700), "id,name", "700,Loaded");
+		assertBean(s.getOrder(900), "id,petId", "900,700");
+		assertBean(s.getUser("loaded"), "username", "loaded");
+		assertEquals(701L, s.createPet(newPet("Next")).getId());
+		assertEquals(901L, s.createOrder(new Order().setPetId(1).setStatus(OrderStatus.PLACED)).getId());
+		assertBeans(s.getAudit(), "id", "40", "41", "42");
+	}
+
+	@Test void e10_recordAudit_public() {
+		var s = fixedStore();
+		var e = s.recordAudit("job:restock", "Pet", "*", "RESTOCK", "3 per species");
+		assertBean(e, "id,actor,action,detail", "1,job:restock,RESTOCK,3 per species");
 	}
 }

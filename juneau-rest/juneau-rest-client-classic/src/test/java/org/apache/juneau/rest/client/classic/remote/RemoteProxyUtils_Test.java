@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * directly rather than through reflection.
  *
  * <p>
- * <b>[TODO-396]/[TODO-392]:</b> `b01`-`b05` originated as 396's scheme-only parity tests; `c01`-`c04` were added by
+ * <b>[Work items 396 and 392]:</b> `b01`-`b05` originated as 396's scheme-only parity tests; `c01`-`c04` were added by
  * 392 to extend that parity coverage to the deny-private + {@code allowPrivateUrls} opt-in policy. See
  * {@code RemoteUrlPolicy_Test} (juneau-rest-common) for the full deny-list/pin-on-connect/redirect unit coverage.
  */
@@ -65,7 +65,7 @@ class RemoteProxyUtils_Test {
 	}
 
 	// ==========================================================================
-	// c - requireHttpScheme(String, boolean) -- [TODO-392] deny-private + allowPrivateUrls parity
+	// c - requireHttpScheme(String, boolean) -- [work item 392] deny-private + allowPrivateUrls parity
 	// ==========================================================================
 
 	@Test void c01_requireHttpScheme_loopback_rejectedByDefault() {

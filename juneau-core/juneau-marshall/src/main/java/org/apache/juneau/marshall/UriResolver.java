@@ -135,7 +135,7 @@ public class UriResolver {
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for URI resolution logic
-		"java:S6541"  // Brain Method acceptable for URI resolution state machine
+		"java:S6541" // Brain Method acceptable for URI resolution state machine
 	})
 	public Appendable append(Appendable a, Object o) {
 
@@ -174,7 +174,7 @@ public class UriResolver {
 				if (uri.length() > 8) {
 					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-					if (remainder.equals("/") && (hasContext || (resolution == ABSOLUTE && nn(authority)))) {
+					if (eq(remainder, "/") && (hasContext || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
 					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
 						a2.append('/').append(remainder);
@@ -198,7 +198,7 @@ public class UriResolver {
 				if (uri.length() > 8) {
 					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-					if (remainder.equals("/") && (hasContext || hasServlet || (resolution == ABSOLUTE && nn(authority)))) {
+					if (eq(remainder, "/") && (hasContext || hasServlet || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
 					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
 						a2.append('/').append(remainder);
@@ -225,7 +225,7 @@ public class UriResolver {
 				if (uri.length() > 8) {
 					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-					if (remainder.equals("/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && nn(authority)))) {
+					if (eq(remainder, "/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
 					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
 						a2.append('/').append(remainder);

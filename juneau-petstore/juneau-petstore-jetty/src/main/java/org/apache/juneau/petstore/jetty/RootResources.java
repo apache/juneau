@@ -16,10 +16,13 @@
  */
 package org.apache.juneau.petstore.jetty;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.microservice.examples.*;
+import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.rest.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widget.*;
@@ -39,6 +42,16 @@ import org.apache.juneau.rest.server.widget.*;
  * {@code juneau-petstore-jetty.cfg} (the same {@code $C{...}} pattern already used by the {@code source} navlink
  * below, which resolves {@code $C{Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no
  * {@code .cfg}/{@code Config} equivalent.
+ *
+ * <p>
+ * Registers the one seeded {@link PetStore} shared by every child resource (D-P6/D-P10).
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Children declare a field and the group's bean back-fills it.</jc>
+ * 	<ja>@Bean</ja>
+ * 	<jk>private transient</jk> PetStore <jf>store</jf>;
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
@@ -96,4 +109,18 @@ import org.apache.juneau.rest.server.widget.*;
 public class RootResources extends BasicRestServletGroup {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Registers the one {@link PetStore} shared by the {@code /petstore} API and the console tree, seeded with the
+	 * deterministic demo data set.
+	 *
+	 * <p>
+	 * Child resources inherit the group's beans, so a plain {@code @Bean} method is all that is needed.
+	 *
+	 * @return The seeded {@link PetStore}.
+	 */
+	@Bean
+	public PetStore petStore() {
+		return PetstoreSeed.create().populate(new PetStore());
+	}
 }

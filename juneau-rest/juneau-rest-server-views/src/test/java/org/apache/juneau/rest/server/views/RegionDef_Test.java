@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -35,9 +36,7 @@ class RegionDef_Test extends TestBase {
 
 	@Test void a01_create_andFluentChain() {
 		var r = RegionDef.create("sidebar").populate("myWidget").allowPopulators("myWidget");
-		assertEquals("sidebar", r.id);
-		assertEquals("myWidget", r.populate);
-		assertEquals(java.util.Set.of("myWidget"), r.allowedPopulators);
+		assertBean(r, "id,populate,allowedPopulators", "sidebar,myWidget,[myWidget]");
 	}
 
 	@Test void a02_contractVersion_isOne() {
@@ -126,7 +125,7 @@ class RegionDef_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// params: nested-map rejection, dataUrl-collision rejection, and §8.2.1's serialization golden.
+	// params: nested-map rejection and dataUrl-collision rejection.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void g01_params_nestedMap_rejected() {
@@ -143,74 +142,6 @@ class RegionDef_Test extends TestBase {
 
 	@Test void g03_params_noCollision_accepted() {
 		RegionDef.create("r").dataUrl("/rest/x?scope=all").params(Map.of("tag", "a")).validate();
-	}
-
-	@Test void g10_serializeParams_null_isEmpty() {
-		assertEquals("", RegionDef.serializeParams(null));
-	}
-
-	@Test void g11_serializeParams_nullValue_omitsKeyEntirely() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("a", "1");
-		m.put("b", null);
-		assertEquals("a=1", RegionDef.serializeParams(m));
-	}
-
-	@Test void g12_serializeParams_emptyString_isKeyEquals() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("a", "");
-		assertEquals("a=", RegionDef.serializeParams(m));
-	}
-
-	@Test void g13_serializeParams_booleanAndNumber_scalarTokens() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("on", true);
-		m.put("n", 42);
-		assertEquals("on=true&n=42", RegionDef.serializeParams(m));
-	}
-
-	@Test void g14_serializeParams_collection_repeatsKeyInOrder() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("tag", List.of("a", "b"));
-		assertEquals("tag=a&tag=b", RegionDef.serializeParams(m));
-	}
-
-	@Test void g15_serializeParams_keyOrder_isMapIterationOrder() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("z", "1");
-		m.put("a", "2");
-		assertEquals("z=1&a=2", RegionDef.serializeParams(m));
-	}
-
-	@Test void g16_serializeParams_space_isPercent20NotPlus() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("q", "a b");
-		assertEquals("q=a%20b", RegionDef.serializeParams(m));
-	}
-
-	@Test void g17_serializeParams_nestedMap_rejectedDirectly() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("scope", Map.of("x", 1));
-		assertThrows(IllegalArgumentException.class, () -> RegionDef.serializeParams(m));
-	}
-
-	@Test void g20_resolvedDataUrl_appendsWithQuestionMark() {
-		var r = RegionDef.create("r").dataUrl("/rest/x").params(Map.of("scope", "recent"));
-		assertEquals("/rest/x?scope=recent", r.resolvedDataUrl());
-	}
-
-	@Test void g21_resolvedDataUrl_appendsWithAmpersandWhenDataUrlHasQuery() {
-		var r = RegionDef.create("r").dataUrl("/rest/x?a=1").params(Map.of("b", "2"));
-		assertEquals("/rest/x?a=1&b=2", r.resolvedDataUrl());
-	}
-
-	@Test void g22_resolvedDataUrl_noParams_returnsDataUrlVerbatim() {
-		var r = RegionDef.create("r").dataUrl("/rest/x");
-		assertEquals("/rest/x", r.resolvedDataUrl());
-	}
-
-	@Test void g23_resolvedDataUrl_nullDataUrl_isNull() {
-		assertNull(RegionDef.create("r").resolvedDataUrl());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
@@ -303,13 +234,9 @@ class RegionDef_Test extends TestBase {
 
 	@Test void j01_toContractMap_minimal_shape() {
 		var m = RegionDef.create("sidebar").toContractMap();
-		assertEquals("1", m.get("contractVersion"));
-		assertEquals("sidebar", m.get("id"));
-		assertEquals(false, m.get("lazy"));
-		assertFalse(m.containsKey("type"));
-		assertFalse(m.containsKey("populate"));
-		assertFalse(m.containsKey("dataUrl"));
-		assertFalse(m.containsKey("fields"));
+		// Minimal descriptor: toContractMap() only ever adds contractVersion/id/lazy unconditionally, so this
+		// exact-contents assertMap also subsumes the four containsKey absence checks it replaces.
+		assertMap(m, "contractVersion=1", "id=sidebar", "lazy=false");
 	}
 
 	@Test void j02_toContractMap_fullDescriptor_roundTripsThroughJson() throws Exception {
@@ -318,36 +245,24 @@ class RegionDef_Test extends TestBase {
 			.titleFields("severity").refreshMs(15_000)
 			.fields(
 				RegionDef.Field.of("severity").label("Severity").render("pill")
-					.renderMeta(Map.of("tone", "warn")),
+					.renderMeta(Map.of("tone", "warning")),
 				RegionDef.Field.of("host").label("Host").href("servlet:/hosts/{host}"),
 				RegionDef.Field.of("summary").label("Summary").format(FieldFormat.MARKDOWN)
 					.span(FieldSpan.FULL),
 				RegionDef.Field.of("actions").label("").actions("ack", "resolve"));
 		r.validate();
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The (Map<String,Object>) cast of the JSON round-trip of the contract map is safe because toContractMap() is a string-keyed map.
+		})
 		var parsed = (Map<String,Object>) Json.to(Json.of(r.toContractMap()), Map.class);
-		assertEquals("1", parsed.get("contractVersion"));
-		assertEquals("posture", parsed.get("id"));
-		assertEquals("card-body", parsed.get("type"));
-		assertEquals("default", parsed.get("populate"));
-		assertEquals("/rest/gacks/42/diagnose", parsed.get("dataUrl"));
-		assertEquals(Map.of("scope", "recent"), parsed.get("params"));
-		assertEquals("field-grid", parsed.get("renderer"));
-		assertEquals(false, parsed.get("lazy"));
-		assertEquals(15000, ((Number) parsed.get("refreshMs")).intValue());
-		assertEquals(List.of("severity"), parsed.get("titleFields"));
-
-		@SuppressWarnings("unchecked")
-		var fields = (List<Map<String,Object>>) parsed.get("fields");
-		assertEquals(4, fields.size());
-		assertEquals("severity", fields.get(0).get("data"));
-		assertEquals("pill", fields.get(0).get("render"));
-		assertEquals(Map.of("tone", "warn"), fields.get(0).get("renderMeta"));
-		assertEquals("servlet:/hosts/{host}", fields.get(1).get("href"));
-		assertEquals("markdown", fields.get(2).get("format"));
-		assertEquals("full", fields.get(2).get("span"));
-		assertEquals(List.of("ack", "resolve"), fields.get(3).get("actions"));
+		// fields[]: 0=severity (pill render + renderMeta), 1=host (href), 2=summary (markdown format, full span),
+		// 3=actions (ack/resolve).
+		assertBean(parsed,
+			"contractVersion,id,type,populate,dataUrl,params,renderer,lazy,refreshMs,titleFields,"
+				+ "fields{length,0{data,render,renderMeta},1{href},2{format,span},3{actions}}",
+			"1,posture,card-body,default,/rest/gacks/42/diagnose,{scope=recent},field-grid,false,15000,[severity],"
+				+ "{4,{severity,pill,{tone=warning}},{servlet:/hosts/{host}},{markdown,full},{[ack,resolve]}}");
 	}
 
 	@Test void j03_toContractMap_rowDetail_noFieldsMember() {

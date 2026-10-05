@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 
@@ -38,7 +38,7 @@ import java.lang.reflect.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public enum Visibility {
 
@@ -56,9 +56,6 @@ public enum Visibility {
 
 	/** Include all classes/fields/methods. */
 	PRIVATE;
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_x = "x";
 
 	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
@@ -128,7 +125,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public <T> Constructor<T> transform(Constructor<T> x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		if (isVisible(x) && ! setAccessible(x))
 			return null;  // HTT
 		return x;
@@ -147,7 +144,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Field transform(Field x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		if (isVisible(x) && ! setAccessible(x))
 			return null;  // HTT
 		return x;
@@ -166,7 +163,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Method transform(Method x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		if (isVisible(x) && ! setAccessible(x))
 			return null;  // HTT
 		return x;

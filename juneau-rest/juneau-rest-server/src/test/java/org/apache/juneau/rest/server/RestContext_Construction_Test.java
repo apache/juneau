@@ -42,6 +42,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
+})
 class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -63,7 +66,6 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 	// a - basic construction and core getters
 	//-----------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("resource") // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
 	@Test void a01_bareResource_constructsAndExposesCoreGetters() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		assertNotNull(ctx.getBeanStore());
@@ -83,7 +85,6 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 		ctx.destroy();
 	}
 
-	@SuppressWarnings("resource") // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
 	@Test void a02_bareResource_namedFrameworkDefaultSuppliers_resolveMethodLists() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		// The named MethodList default suppliers registered by registerFrameworkDefaults() are only ever

@@ -50,7 +50,7 @@
 <symbol id="juneau-sym-first_page" viewBox="0 -960 960 960" fill="currentColor">
 <path d="M240-240v-480h80v480h-80Zm440 0L440-480l240-240 56 56-184 184 184 184-56 56Z"/>
 </symbol>
-<symbol id="juneau-sym-chevron_left" viewBox="0 -960 960 960" fill="currentColor">
+<symbol id="juneau-sym-chevronleft" viewBox="0 -960 960 960" fill="currentColor">
 <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/>
 </symbol>
 <symbol id="juneau-sym-chevronright" viewBox="0 -960 960 960" fill="currentColor">

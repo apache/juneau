@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -94,18 +94,15 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // Serializer hierarchy (IniSerializer -> WriterSerializer -> Serializer -> MarshallingContextable -> Context) is inherently deep.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class IniSerializer extends WriterSerializer implements IniMetaProvider, RecordWritable {
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
-
-	private static final String PROP_kvSeparator = "kvSeparator";
-	private static final String PROP_spacedSeparator = "spacedSeparator";
-	private static final String PROP_useComments = "useComments";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -124,14 +121,14 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider, 
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			kvSeparator = copyFrom.kvSeparator;
 			spacedSeparator = copyFrom.spacedSeparator;
 			useComments = copyFrom.useComments;
 		}
 
 		protected Builder(IniSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			kvSeparator = copyFrom.kvSeparator;
 			spacedSeparator = copyFrom.spacedSeparator;
 			useComments = copyFrom.useComments;
@@ -274,9 +271,9 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider, 
 	@Override
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_kvSeparator, String.valueOf(kvSeparator))
-			.a(PROP_spacedSeparator, spacedSeparator)
-			.a(PROP_useComments, useComments);
+			.a("kvSeparator", String.valueOf(kvSeparator))
+			.a("spacedSeparator", spacedSeparator)
+			.a("useComments", useComments);
 	}
 
 	/**

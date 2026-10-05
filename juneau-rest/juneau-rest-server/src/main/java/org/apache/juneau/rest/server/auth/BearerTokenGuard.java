@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.security.*;
@@ -117,7 +117,7 @@ public class BearerTokenGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder validator(TokenValidator value) {
-			validator = assertArgNotNull("value", value);
+			validator = reqnn("value", value);
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class BearerTokenGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder realm(String value) {
-			realm = assertArgNotNullOrBlank("value", value);
+			realm = reqnb("value", value);
 			return this;
 		}
 
@@ -191,7 +191,7 @@ public class BearerTokenGuard extends RestGuard {
 		} catch (AuthenticationException e) {
 			// Preserve any richer challenge the validator already set on the exception; otherwise stamp our basic one.
 			var override = e.getHeaders().stream()
-				.filter(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))
+				.filter(h -> eqic(WWW_AUTHENTICATE, h.getName()))
 				.map(h -> h.getValue())
 				.findFirst()
 				.orElse(challenge);
@@ -205,7 +205,7 @@ public class BearerTokenGuard extends RestGuard {
 			res.setHeader(WWW_AUTHENTICATE, challenge);
 			throw new AuthenticationException("Token validation returned no principal").wwwAuthenticate(challenge);
 		}
-		req.getAttributes().set(RestServerConstants.PRINCIPAL_ATTR, p);
+		req.getAttributes().set("juneau.principal", p);
 		return true;
 	}
 

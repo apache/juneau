@@ -93,8 +93,8 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 
 	@Override /* Overridden from TemporalAccessor */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"unchecked" // Type erasure requires unchecked casts
 	})
 	public <R> R query(TemporalQuery<R> query) {
 		var r = inner.query(query);

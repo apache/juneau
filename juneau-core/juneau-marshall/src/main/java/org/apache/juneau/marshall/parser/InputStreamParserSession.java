@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.marshall.parser;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.marshall.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Subclass of parser session objects for byte-based parsers.
@@ -34,13 +34,10 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"resource" // Resource management handled by ParserPipe
 })
 public class InputStreamParserSession extends ParserSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -59,7 +56,7 @@ public class InputStreamParserSession extends ParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(InputStreamParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -91,7 +88,7 @@ public class InputStreamParserSession extends ParserSession {
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(InputStreamParser ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final InputStreamParser ctx;

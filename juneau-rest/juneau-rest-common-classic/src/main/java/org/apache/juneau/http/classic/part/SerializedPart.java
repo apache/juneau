@@ -45,8 +45,9 @@ import org.apache.juneau.marshall.urlencoding.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S2160", // equals() inherited from BasicPart compares name+value; serializer field affects rendering not identity
 	"java:S3740", // Raw HttpPartSerializer/Supplier types used where serialized HTTP part value type cannot be statically parameterized
-	"java:S2160"  // equals() inherited from BasicPart compares name+value; serializer field affects rendering not identity
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
 })
 public class SerializedPart extends BasicPart {
 
@@ -59,9 +60,6 @@ public class SerializedPart extends BasicPart {
 	 * 	<br>Can be any POJO.
 	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static SerializedPart of(String name, Object value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}
@@ -75,9 +73,6 @@ public class SerializedPart extends BasicPart {
 	 * 	<br>Can be a supplier of any POJO.
 	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static SerializedPart of(String name, Supplier<?> value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}

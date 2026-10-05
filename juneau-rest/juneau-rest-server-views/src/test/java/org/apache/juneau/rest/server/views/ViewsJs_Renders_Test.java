@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -330,31 +331,25 @@ class ViewsJs_Renders_Test extends TestBase {
 	@Test void d03_pill_toneClassIsTheFiveValuePalette() {
 		var r = report();
 		assertEquals("error,info,neutral,success,warning", r.get("pill_tones"));
-		assertEquals(true, r.get("pill_toneInfo"));
-		assertEquals(true, r.get("pill_toneSuccess"));
-		assertEquals(true, r.get("pill_toneWarning"));
-		assertEquals(true, r.get("pill_toneError"));
+		assertBean(r, "pill_toneInfo,pill_toneSuccess,pill_toneWarning,pill_toneError", "true,true,true,true");
 		// `neutral` is in-palette but deliberately classless: no semantic colour is the absence of a modifier.
-		assertEquals(true, r.get("pill_toneNeutralNoClass"));
-		assertEquals(true, r.get("pill_toneAbsentNoClass"));
+		assertBean(r, "pill_toneNeutralNoClass,pill_toneAbsentNoClass", "true,true");
 		// ok/warn/exceeds/accent were the v1 palette; they are off-palette now and must not paint anything.
-		assertEquals(true, r.get("pill_toneV1NoClass"));
+		assertBean(r, "pill_toneV1NoClass", "true");
 	}
 
 	/**
-	 * The palette rename must not have swept the {@code progress} renderer, whose {@code warn}/{@code exceeds} meta
-	 * are numeric THRESHOLDS that happen to share two spellings with the retired tone names.  {@code is-warn} and
-	 * {@code is-exceeds} are progress state classes and stay exactly as they were.
+	 * The {@code progress} renderer's {@code warn}/{@code exceeds} meta are numeric THRESHOLDS that happen to share two
+	 * spellings with the retired tone names; they stay thresholds.  The bar STATE they drive is painted with the
+	 * status-tone names: {@code is-success} (below warn), {@code is-warning} (at/above warn) and {@code is-error}
+	 * (at/above exceeds, or over max).
 	 */
-	@Test void d03b_progressThresholdsAreUnaffectedByTheToneRename() {
+	@Test void d03b_progressThresholdsDriveStatusToneStates() {
 		var r = report();
-		assertEquals(true, r.get("progress_warnEq"));            // meta.warn still drives is-warn
-		assertEquals(true, r.get("progress_exceedsEq"));         // meta.exceeds still drives is-exceeds
-		assertEquals(true, r.get("progress_warnEqExceeds"));     // exceeds still wins a tie
-		assertEquals(true, r.get("progress_exceedsBelowWarn"));
-		assertEquals(true, r.get("progress_units"));
-		assertEquals(true, r.get("progress_eqMaxOk"));           // and `is-ok` survives as a progress state class
-		assertEquals(true, r.get("progress_overExceeds"));
+		// The warn meta value drives the is-warning class and the exceeds meta value drives is-error; when both are equal, exceeds wins the tie.
+		// The in-range progress state class is `is-success`.
+		assertBean(r, "progress_warnEq,progress_exceedsEq,progress_warnEqExceeds,progress_exceedsBelowWarn,progress_units,progress_eqMaxOk,progress_overExceeds",
+			"true,true,true,true,true,true,true");
 	}
 
 	@Test void d04_pill_actionAddsRoleTabindexAndId_onlyWhenSet() {

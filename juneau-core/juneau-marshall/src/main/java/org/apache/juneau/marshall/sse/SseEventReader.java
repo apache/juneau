@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.marshall.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Line-driven {@link Iterator} over the events in a <c>text/event-stream</c>.
@@ -55,13 +55,11 @@ import java.util.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S6541", // Brain method acceptable for readLine / nextEvent — they encode the SSE lexical state machine
-	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
 	"resource" // in is the caller-owned Reader (see class Javadoc); this iterator reads from it but does not own its lifecycle.
 })
 public class SseEventReader implements Iterator<SseEvent>, Closeable {
-
-	private static final String ARG_in = "in";
 
 	/** UTF-8 BOM character that must be stripped exactly once from the start of an SSE stream. */
 	private static final int BOM = 0xFEFF;
@@ -90,7 +88,7 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 		"java:S2095" // Reader ownership is transferred to this Closeable and released by close().
 	})
 	public SseEventReader(Reader in) {
-		this.in = assertArgNotNull(ARG_in, in);
+		this.in = reqnn("in", in);
 	}
 
 	@Override /* Overridden from Iterator */

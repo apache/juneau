@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.views;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
@@ -249,7 +248,7 @@ public final class IdempotencyKey {
 	}
 
 	private static void requireNonBlank(String name, String value) {
-		assertArgNotNull(name, value);
+		reqnn(name, value);
 		if (value.isBlank())
 			throw iaex("Argument ''%s'' must not be blank.", name);
 	}

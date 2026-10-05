@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
@@ -87,7 +88,7 @@ class RestRequestTextMapGetter_Test extends TestBase {
 		assertNotNull(keys);
 		boolean found = false;
 		for (var k : keys) {
-			if ("X-Trace-Id".equalsIgnoreCase(k)) { found = true; break; }
+			if (eqic("X-Trace-Id", k)) { found = true; break; }
 		}
 		assertTrue(found, "keys() should include sent header name (any case)");
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -115,7 +116,7 @@ class SamlXmlSecurity_Test extends TestBase {
 			case "publicDtd" -> "<!DOCTYPE " + root + " PUBLIC '-//Juneau//DTD XXE Test//EN' '" + uri + "'>" + xml;
 			case "xincludeXml", "xincludeText" -> xml.replace(marker,
 				"<xi:include xmlns:xi='http://www.w3.org/2001/XInclude' href='" + uri + "' parse='"
-				+ (vector.equals("xincludeXml") ? "xml" : "text") + "'/>");
+				+ (eq(vector, "xincludeXml") ? "xml" : "text") + "'/>");
 			case "schemaLocation" -> xml.replaceFirst(" ", " xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='"
 				+ "urn:oasis:names:tc:SAML:2.0:metadata " + uri + " urn:oasis:names:tc:SAML:2.0:protocol " + uri + "' ");
 			case "noNamespaceSchemaLocation" -> xml.replaceFirst(" ",
@@ -172,9 +173,9 @@ class SamlXmlSecurity_Test extends TestBase {
 	@ValueSource(strings = {"general", "parameter", "systemDtd", "publicDtd", "xincludeText"})
 	void responseFileReferencesCannotSupplySignedSubject(String vector, @TempDir Path directory) throws Exception {
 		var file = directory.resolve("external.txt");
-		Files.writeString(file, vector.equals("general") || vector.equals("xincludeText") ? "alice" : "<!ENTITY subject 'alice'>");
+		Files.writeString(file, eqa(vector, "general", "xincludeText") ? "alice" : "<!ENTITY subject 'alice'>");
 		var xml = attack(signedResponse, vector, file.toUri().toString(), "alice");
-		if (!vector.equals("general") && !vector.equals("xincludeText"))
+		if (!eqa(vector, "general", "xincludeText"))
 			xml = xml.replace("alice", "&subject;");
 		var input = xml;
 		var v = validator();
@@ -186,10 +187,10 @@ class SamlXmlSecurity_Test extends TestBase {
 	@ValueSource(strings = {"general", "parameter", "systemDtd", "publicDtd", "xincludeText"})
 	void metadataFileReferencesCannotSupplyContent(String vector, @TempDir Path directory) throws Exception {
 		var file = directory.resolve("external.txt");
-		Files.writeString(file, vector.equals("general") || vector.equals("xincludeText")
+		Files.writeString(file, eqa(vector, "general", "xincludeText")
 			? "PRIVATE_FILE_MARKER" : "<!ENTITY secret 'PRIVATE_FILE_MARKER'>");
 		metadataBody = attack(METADATA, vector, file.toUri().toString(), "safe");
-		if (!vector.equals("general") && !vector.equals("xincludeText"))
+		if (!eqa(vector, "general", "xincludeText"))
 			metadataBody = metadataBody.replace("safe", "&secret;");
 		try {
 			assertNotEquals("PRIVATE_FILE_MARKER", readMetadata());

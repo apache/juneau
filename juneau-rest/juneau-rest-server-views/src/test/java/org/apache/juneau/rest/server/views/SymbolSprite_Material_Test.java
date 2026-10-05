@@ -28,14 +28,14 @@ import org.junit.jupiter.api.*;
 
 /**
  * Pins the opt-in Material Symbols Outlined sprite: stem ids, Material viewBox, and the recovered
- * git-history path data. Default pack remains {@code juneau-symbols.svg} (Juneau-original).
+ * git-history path data. Default remains {@code juneau-symbols.svg} (Juneau-original); {@code pack("material")} layers this file as the replacement over it.
  */
 class SymbolSprite_Material_Test extends TestBase {
 
 	private static final Set<String> EXPECTED_IDS = Set.of(
 		"juneau-sym-copy", "juneau-sym-csv", "juneau-sym-spreadsheet", "juneau-sym-pdf",
 		"juneau-sym-refresh", "juneau-sym-toggle_column_search", "juneau-sym-collapse_all",
-		"juneau-sym-settings", "juneau-sym-first_page", "juneau-sym-chevron_left",
+		"juneau-sym-settings", "juneau-sym-first_page", "juneau-sym-chevronleft",
 		"juneau-sym-chevronright", "juneau-sym-last_page", "juneau-sym-filter",
 		"juneau-sym-chevrondown"
 	);

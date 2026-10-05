@@ -71,8 +71,8 @@ class PetStoreClient_Test {
 		try (var client = newClient()) {
 			var svc = client.remote(PetStoreClient.class);
 			var pets = svc.getPets();
-			assertEquals(9, pets.size());
-			assertBean(pets.get(0), "name,species", "Mr. Frisky,CAT");
+			assertSize(500, pets);
+			assertBean(pets.stream().filter(p -> p.getId() == 1).findFirst().orElseThrow(), "name,species", "Mr. Frisky,CAT");
 		}
 	}
 

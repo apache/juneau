@@ -105,6 +105,9 @@ import org.apache.juneau.marshall.serializer.*;
  *
  * @param <T> The normal class type.
  */
+@SuppressWarnings({
+	"java:S3776" // The long &&/|| condition chains in isSwapMethod()/isUnswapMethod() and the nested loops in the constructor.
+})
 public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 	private static final Set<String> SWAP_METHOD_NAMES = u(set("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"));
@@ -118,9 +121,8 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic type handling
 		"java:S1452", // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
-		"java:S3776"  // Cognitive complexity acceptable for exhaustive number type detection heuristic
+		"rawtypes" // Raw types necessary for generic type handling
 	})
 	public static ObjectSwap<?,?> find(MarshallingContext bc, ClassInfo ci) {
 
@@ -204,8 +206,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	private final Class<?> unswapType;
 
 	@SuppressWarnings({
-		"null",      // Method info variables are checked for null before use in method body
-		"java:S3776" // Cognitive complexity acceptable for auto-number swap constructor dispatch
+		"null" // Method info variables are checked for null before use in method body
 	})
 	private AutoNumberSwap(MarshallingContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());

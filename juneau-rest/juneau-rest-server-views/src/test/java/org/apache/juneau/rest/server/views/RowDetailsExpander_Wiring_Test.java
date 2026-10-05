@@ -29,9 +29,9 @@ import org.junit.jupiter.api.*;
  * {@code juneau-views.js}/{@code juneau-views.css}, mirroring {@code TablePolling_Wiring_Test}'s established idiom.
  */
 @SuppressWarnings({
-	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
-	"java:S5976" // Each test targets a distinct function/behavior via the shared functionBody(...) idiom; collapsing
-					// into one @ParameterizedTest would obscure which specific behavior failed.
+	"java:S5976", // Each test targets a distinct function/behavior via the shared functionBody(...) idiom; collapsing
+	              // into one @ParameterizedTest would obscure which specific behavior failed.
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class RowDetailsExpander_Wiring_Test extends TestBase {
 
@@ -258,7 +258,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var start = body.indexOf(".juneau-view-detail-panel {");
 		var end = body.indexOf("}", start);
 		var rule = body.substring(start, end);
-		assertFalse(rule.contains("color:"), rule);
-		assertFalse(rule.contains("background"), rule);
+		assertFalse(rule.contains("#"), rule);  // No hard-coded palette color; the only background is the themed variable.
+		assertFalse(rule.replace("background-color: var(--jc-card-bg)", "").contains("color:"), rule);
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.uon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
@@ -150,19 +149,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider, RecordWritable {
-
-	// Property name constants
-	private static final String PROP_addBeanTypes = "addBeanTypes";
-	private static final String PROP_encoding = "encoding";
-	private static final String PROP_paramFormat = "paramFormat";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -197,7 +188,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -211,7 +202,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -361,7 +352,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @return This object.
 		 */
 		public SELF paramFormat(ParamFormat value) {
-			paramFormat = assertArgNotNull(ARG_value, value);
+			paramFormat = reqnn("value", value);
 			return self();
 		}
 
@@ -627,8 +618,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypes, addBeanTypes2)
-			.a(PROP_encoding, encoding)
-			.a(PROP_paramFormat, paramFormat);
+			.a("addBeanTypes", addBeanTypes2)
+			.a("encoding", encoding)
+			.a("paramFormat", paramFormat);
 	}
 }

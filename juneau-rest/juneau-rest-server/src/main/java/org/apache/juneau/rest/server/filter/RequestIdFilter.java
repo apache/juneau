@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.filter;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
@@ -24,6 +23,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Thin configuration façade over the always-on request-id correlation resolver.
@@ -75,7 +75,7 @@ public class RequestIdFilter {
 	 * @param b The builder configuring this filter.  Must not be <jk>null</jk>.
 	 */
 	protected RequestIdFilter(Builder b) {
-		assertArgNotNull("builder", b);
+		reqnn("builder", b);
 	}
 
 	/**
@@ -100,11 +100,11 @@ public class RequestIdFilter {
 	 * @return The resolved request id, or <jk>null</jk> if none has been resolved (e.g. invoked outside a Juneau call).
 	 */
 	public String apply(HttpServletRequest req, HttpServletResponse res) {
-		assertArgNotNull("req", req);
-		assertArgNotNull("res", res);
+		reqnn("req", req);
+		reqnn("res", res);
 		var session = RestSession.fromRequest(req);
 		String id = session != null ? session.getRequestId() : null;
-		if (id == null && req.getAttribute(RestServerConstants.REQUEST_ID) instanceof String s && ! s.isEmpty())
+		if (id == null && req.getAttribute("requestId") instanceof String s && ! s.isEmpty())
 			id = s;
 		if (id != null)
 			res.setHeader(HEADER_REQUEST_ID, id);
@@ -133,7 +133,7 @@ public class RequestIdFilter {
 		 * @return This object.
 		 */
 		public Builder idSupplier(Supplier<String> value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			return this;
 		}
 
@@ -144,7 +144,7 @@ public class RequestIdFilter {
 		 * @return This object.
 		 */
 		public Builder validator(Predicate<String> value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			return this;
 		}
 
@@ -155,7 +155,7 @@ public class RequestIdFilter {
 		 * @return This object.
 		 */
 		public Builder attributeKey(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isBlank())
 				throw new IllegalArgumentException("Argument 'value' must not be blank.");
 			return this;

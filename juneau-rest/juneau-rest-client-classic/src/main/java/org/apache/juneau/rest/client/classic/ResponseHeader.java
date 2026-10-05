@@ -48,8 +48,8 @@ import org.apache.juneau.test.assertions.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // request and response are owned by the RestCall that created this header; lifecycle managed externally
-	"java:S2160" // equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining
+	"java:S2160", // equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining
+	"resource" // request and response are owned by the RestCall that created this header; lifecycle managed externally
 })
 public class ResponseHeader extends BasicHeader {
 

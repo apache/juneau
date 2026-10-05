@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -24,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link SseParser}.
@@ -37,14 +37,12 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",   // Inheritance depth acceptable for session hierarchy
-	"java:S115",   // Match AssertionUtils arg-name style used throughout Juneau.
-	"unchecked",   // Type erasure: SseEvent/List<SseEvent> returned via Object cast
-	"resource"     // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S110", // Inheritance depth acceptable for session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure: SseEvent/List<SseEvent> returned via Object cast
 })
 public class SseParserSession extends ReaderParserSession implements RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -57,7 +55,7 @@ public class SseParserSession extends ReaderParserSession implements RecordReada
 		 * @param ctx The context creating this session. Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SseParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -73,7 +71,7 @@ public class SseParserSession extends ReaderParserSession implements RecordReada
 	 * @return A new builder.
 	 */
 	public static Builder create(SseParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

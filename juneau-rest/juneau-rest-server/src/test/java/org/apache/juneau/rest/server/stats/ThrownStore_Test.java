@@ -27,9 +27,9 @@ import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unused",     // Unused parameters/variables kept for consistent method signatures across test utilities.
-	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"java:S1172"  // Unused parameters in tests are intentional
+	"java:S1172", // Unused parameters in tests are intentional
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ThrownStore_Test extends TestBase {
 

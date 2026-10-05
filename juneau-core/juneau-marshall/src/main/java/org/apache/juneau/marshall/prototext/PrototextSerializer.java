@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -124,14 +124,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Builder pattern requires many parameters
-	"java:S115",  // PROP_/ARG_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class PrototextSerializer extends WriterSerializer implements PrototextMetaProvider, RecordWritable {
-
-	private static final String PROP_useListSyntaxForBeans = "useListSyntaxForBeans";
-	private static final String PROP_useColonForMessages = "useColonForMessages";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -150,13 +147,13 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useListSyntaxForBeans = copyFrom.useListSyntaxForBeans;
 			useColonForMessages = copyFrom.useColonForMessages;
 		}
 
 		protected Builder(PrototextSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useListSyntaxForBeans = copyFrom.useListSyntaxForBeans;
 			useColonForMessages = copyFrom.useColonForMessages;
 		}
@@ -271,8 +268,8 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 	@Override
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_useListSyntaxForBeans, useListSyntaxForBeans)
-			.a(PROP_useColonForMessages, useColonForMessages);
+			.a("useListSyntaxForBeans", useListSyntaxForBeans)
+			.a("useColonForMessages", useColonForMessages);
 	}
 
 	@Override /* PrototextMetaProvider */

@@ -21,13 +21,14 @@ import static java.nio.charset.StandardCharsets.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.CollectionUtils.toList;
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.req;
+import static org.apache.juneau.commons.utils.Shorts.reqnn;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -54,19 +55,18 @@ import org.apache.juneau.commons.reflect.*;
  * Reusable string utility methods.
  */
 @SuppressWarnings({
-	"java:S115",  // Constant names use UPPER_snakeCase convention
+	"java:S127", // Scanning loops (e.g. the whitespace/token skipping parsers) advance the index inside the loop body
+	"java:S135", // Multiple break statements in mutually exclusive branches - necessary for early termination
+	"java:S1168", // Null-in/null-out string utilities (base64Encode, decodeHex, clean, escapeForJava, ...) return null for null input
 	"java:S1192", // Duplicated string literals (HTML entities) are intentional
-	"java:S5843", // FP_REGEX copied from JDK source for parsing consistency
 	"java:S3516", // Methods flagged as always returning the same value are valid utility implementations (e.g. null-safe wrappers)
-	"java:S6539"  // Monster class; StringUtils is intentionally a single cohesive string-utility hub, not a set of unrelated responsibilities
+	"java:S3776", // Multi-branch scanners and parsers (tokenizers, escape handling, validators) are kept as single methods
+	"java:S5843", // FP_REGEX copied from JDK source for parsing consistency
+	"java:S6539", // Monster class; StringUtils is intentionally a single cohesive string-utility hub, not a set of unrelated responsibilities
+	"java:S6541", // Thread-safe singleton pattern acceptable
+	"java:S8786" // Possessive, overlap-free regex ((?:label\.)++TLD with a dot-less label class) does not backtrack; matching is linear. S8786 is a false positive here.
 })
 public class StringUtils {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_builder = "builder";
-	private static final String ARG_values = "values";
-	private static final String ARG_s = "s";
 
 	/** Characters considered common separators (comma/semicolon/colon/pipe/tab). */
 	public static final AsciiSet COMMON_SEPARATORS = AsciiSet.of(",;:|\t");
@@ -354,7 +354,7 @@ public class StringUtils {
 
 		var bIn = in.getBytes(UTF8);
 
-		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
+		req(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
 		var inLength = bIn.length;
@@ -469,7 +469,7 @@ public class StringUtils {
 	 * @throws IllegalArgumentException If <c>builder</c> is <jk>null</jk>.
 	 */
 	public static String buildString(Consumer<StringBuilder> builder) {
-		assertArgNotNull(ARG_builder, builder);
+		reqnn("builder", builder);
 		var sb = new StringBuilder();
 		builder.accept(sb);
 		return sb.toString();
@@ -1839,9 +1839,6 @@ public class StringUtils {
 	 * @param end The end marker. Can be <jk>null</jk>.
 	 * @return A list of text segments found between the markers, or an empty list if any parameter is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S135" // Multiple break statements in mutually exclusive branches - necessary for early termination
-	})
 	public static List<String> extractBetween(String str, String start, String end) {
 		if (isEmpty(str) || isEmpty(start) || isEmpty(end))
 			return Collections.emptyList();
@@ -1876,9 +1873,6 @@ public class StringUtils {
 	 * @param str The string to extract emails from. Can be <jk>null</jk>.
 	 * @return A list of email addresses found in the input, or an empty list if the string is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S8786" // Possessive, overlap-free regex ((?:label\.)++TLD with a dot-less label class) does not backtrack; matching is linear. S8786 is a false positive here.
-	})
 	public static List<String> extractEmails(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
@@ -2281,7 +2275,7 @@ public class StringUtils {
 	 * @see java.text.MessageFormat
 	 */
 	public static String mformat(String pattern, Object...args) {
-		assertArgNotNull("pattern", pattern);
+		reqnn("pattern", pattern);
 		if (args.length == 0)
 			return pattern;
 		return MessageFormat.format(pattern, args);
@@ -2311,9 +2305,6 @@ public class StringUtils {
 	 * @param resolver The function that resolves variable names to values.  Can be <jk>null</jk> (the string is returned unchanged).
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for string formatting logic
-	})
 	public static String formatNamed(String s, Function<String,Object> resolver) {
 
 		if (s == null)
@@ -2493,10 +2484,6 @@ public class StringUtils {
 	 * @param s The URI string.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return Just the authority portion of the URI.
 	 */
-	@SuppressWarnings({
-		"java:S3516", // Returns s or s.substring(0,i) - different values per parse path
-		"java:S3776"  // Cognitive complexity acceptable for state machine-based URI parser
-	})
 	public static String getAuthorityUri(String s) {
 
 		// Use a state machine for maximum performance.
@@ -2586,9 +2573,6 @@ public class StringUtils {
 	 * @return
 	 * 	The time in milliseconds, or <c>-1</c> if the string is empty or <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for duration parsing logic
-	})
 	public static long getDuration(String s) {
 		s = trim(s);
 		if (isEmpty(s))
@@ -2932,10 +2916,6 @@ public class StringUtils {
 	 * @param variables The map containing the variable values.  Can be <jk>null</jk> (the template is returned unchanged).
 	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
 	 */
-	@SuppressWarnings({
-		"java:S135",  // Multiple break statements in mutually exclusive branches - necessary for early termination
-		"java:S3516"  // Returns varying result based on template and variables
-	})
 	public static String interpolate(String template, Map<String,Object> variables) {
 		if (template == null)
 			return null;
@@ -2989,9 +2969,6 @@ public class StringUtils {
 	 * @param s The string to test.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for state machine-based URI validator
-	})
 	public static boolean isAbsoluteUri(String s) {
 
 		if (isEmpty(s))
@@ -3279,9 +3256,6 @@ public class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if the specified string is numeric.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for decimal validation logic
-	})
 	public static boolean isDecimal(String s) {
 		if (s == null || s.isEmpty() || ! FIRST_NUMBER_CHARS.contains(s.charAt(0)))
 			return false;
@@ -3345,11 +3319,8 @@ public class StringUtils {
 	 * @param allowLeadingZeros Whether the integer part may contain leading zeros.
 	 * @return The length of the matched prefix, or {@code -1} if the string does not start with a valid number.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Inherent branching in a hand-written JSON-number-grammar scanner (sign, integer part, optional fraction, optional exponent); splitting would harm readability.
-	})
 	public static int matchNumberPrefix(String s, boolean allowLeadingZeros) {
-		assertArgNotNull(ARG_s, s);
+		reqnn("s", s);
 		var len = s.length();
 		var i = 0;
 		if (i < len && s.charAt(i) == '-')
@@ -3437,9 +3408,6 @@ public class StringUtils {
 	 * @param str The string to check.
 	 * @return <jk>true</jk> if the string is a valid email address.
 	 */
-	@SuppressWarnings({
-		"java:S8786" // Possessive, overlap-free regex ((?:label\.)++TLD with a dot-less label class) does not backtrack; matching is linear. S8786 is a false positive here.
-	})
 	public static boolean isEmail(String str) {
 		if (isEmpty(str))
 			return false;
@@ -3692,7 +3660,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		for (var value : values)
 			if (equal(s, value))
 				return true;
@@ -3753,9 +3721,6 @@ public class StringUtils {
 	 * @param threshold The similarity threshold (0.0 to 1.0).
 	 * @return <jk>true</jk> if the similarity is greater than or equal to the threshold, <jk>false</jk> otherwise.
 	 */
-	@SuppressWarnings({
-		"java:S3516" // Result varies based on similarity(str1, str2) and threshold
-	})
 	public static boolean isSimilar(String str1, String str2, double threshold) {
 		return similarity(str1, str2) >= threshold;
 	}
@@ -3773,7 +3738,6 @@ public class StringUtils {
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for state machine-based URI validator
 		"java:S1126" // State machine requires if-then-else structure
 	})
 	public static boolean isUri(String s) {
@@ -4471,9 +4435,6 @@ public class StringUtils {
 	 * @param str The string to count lines in. Can be <jk>null</jk>.
 	 * @return The number of lines, or <c>0</c> if the string is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S127" // Loop counter advances to skip \r\n as single line break
-	})
 	public static int lineCount(String str) {
 		if (isEmpty(str))
 			return 0;
@@ -4593,8 +4554,6 @@ public class StringUtils {
 	 * @return The Metaphone code, or <jk>null</jk> if input is <jk>null</jk> or empty.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for metaphone algorithm
-		"java:S6541", // Thread-safe singleton pattern acceptable
 		"java:S1871" // Multiple cases in phonetic algorithm intentionally map to the same code (e.g. 'Q' -> 'K')
 	})
 	public static String metaphone(String str) {
@@ -4819,9 +4778,6 @@ public class StringUtils {
 	 * @param str2 The second string.  Can be <jk>null</jk> (a non-<jk>null</jk> str1 sorts after a <jk>null</jk> str2).
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for natural comparison algorithm
-	})
 	public static int naturalCompare(String str1, String str2) {
 		if (Objects.equals(str1, str2))
 			return 0;
@@ -5385,7 +5341,7 @@ public class StringUtils {
 	 * @throws IllegalArgumentException If the string is <jk>null</jk>.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		assertArgNotNull(ARG_s, s);
+		reqnn("s", s);
 		var m = multiplierInt(s);
 		if (m == 1)
 			return Integer.decode(s);
@@ -5479,7 +5435,7 @@ public class StringUtils {
 	 * @throws IllegalArgumentException If the string is <jk>null</jk>.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		assertArgNotNull(ARG_s, s);
+		reqnn("s", s);
 		var m = multiplierLong(s);
 		if (m == 1) {
 			// If multiplier is 1, try to decode the whole string
@@ -5568,9 +5524,6 @@ public class StringUtils {
 	 * 	If <jk>null</jk> or <c>Number</c>, uses the best guess.
 	 * @return The parsed number, or <jk>null</jk> if the string was null.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for number parsing logic
-	})
 	public static Number parseNumber(String s, Class<? extends Number> type) {
 		if (s == null)
 			return null;
@@ -6269,7 +6222,7 @@ public class StringUtils {
 	 * @see #parseNumber(String, Class)
 	 */
 	public static String removeUnderscores(String value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return notContains(value, '_') ? value : value.replace("_", "");
 	}
 
@@ -6732,9 +6685,6 @@ public class StringUtils {
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // splita used widely; null propagates from split(). Consider empty array. See BasicCsvHeader, etc.
-	})
 	public static String[] splita(String s, char c, int limit) {
 		if (s == null)
 			return null;
@@ -6749,9 +6699,6 @@ public class StringUtils {
 	 * @param c The character to split on.
 	 * @return The tokens, or null if the input array was null
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // splita used widely. Consider empty array. See BasicCsvHeader, etc.
-	})
 	public static String[] splita(String[] s, char c) {
 		if (s == null)
 			return null;
@@ -6779,9 +6726,6 @@ public class StringUtils {
 	 * @param trim Trim strings after parsing.
 	 * @return The parsed map, or an empty map if the string was null.
 	 */
-	@SuppressWarnings({
-		"java:S3776"     // Cognitive complexity acceptable for map splitting logic
-	})
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
@@ -6896,9 +6840,6 @@ public class StringUtils {
 	 * 	The results, or an empty list if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty list.
 	 */
-	@SuppressWarnings({
-		"java:S3776"     // Cognitive complexity acceptable for nested string splitting
-	})
 	public static List<String> splitNested(String s) {
 		var escapeChars = getEscapeSet(',');
 
@@ -6954,12 +6895,9 @@ public class StringUtils {
 	 * 	The results.
 	 * @throws IllegalArgumentException If the input was <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for nested inner string splitting
-	})
 	public static List<String> splitNestedInner(String s) {
-		assertArg(isNotNull(s), "String was null.");
-		assertArg(isNotEmpty(s), "String was empty.");
+		req(isNotNull(s), "String was null.");
+		req(isNotEmpty(s), "String was empty.");
 
 		// S1: Looking for '{'
 		// S2: Found '{', looking for '}'
@@ -7038,8 +6976,7 @@ public class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	@SuppressWarnings({
-		"java:S3776",    // Cognitive complexity acceptable for quoted string splitting
-		"java:S2583"     // State variables persist across loop iterations
+		"java:S2583" // State variables persist across loop iterations
 	})
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
@@ -7778,10 +7715,6 @@ public class StringUtils {
 	 * @param escaped The characters escaped.  Must not be <jk>null</jk> when the string is non-empty (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S127",  // Loop counter advances to skip escape sequences
-		"java:S3776"  // Cognitive complexity acceptable for character unescaping logic
-	})
 	public static String unescapeChars(String s, AsciiSet escaped) {
 		if (s == null || s.isEmpty())
 			return s;
@@ -7990,10 +7923,6 @@ public class StringUtils {
 	 * @param o The object to encode.
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
-	@SuppressWarnings({
-		"java:S127",  // Loop counter advances variably for surrogate pairs and multi-byte sequences
-		"java:S3776"  // Cognitive complexity acceptable for URL path encoding
-	})
 	public static String urlEncodePath(Object o) {
 
 		if (o == null)
@@ -8139,10 +8068,6 @@ public class StringUtils {
 	 * @return The wrapped string, or <jk>null</jk> if input is <jk>null</jk>.
 	 * @throws IllegalArgumentException if wrapLength is &lt;= 0 or newline is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for text wrapping algorithm
-		"java:S6541" // Thread-safe singleton pattern acceptable
-	})
 	public static String wrap(String str, int wrapLength, String newline) {
 		if (str == null)
 			return null;
@@ -8327,8 +8252,6 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for IPv6 validation
-		"java:S6541", // Thread-safe singleton pattern acceptable
 		"java:S1313" // IPv6 validation intentionally compares against canonical literals like :: and ::ffff
 	})
 	public static boolean isValidIPv6Address(String ip) {
@@ -8543,9 +8466,6 @@ public class StringUtils {
 	 * @param value The numeric value.
 	 * @return The value in milliseconds, or <c>-1</c> if the unit is invalid.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for unit parsing logic
-	})
 	private static long parseUnit(String unit, double value) {
 		if (isEmpty(unit)) {
 			// No unit means milliseconds
@@ -8609,9 +8529,6 @@ public class StringUtils {
 	 * @param r The StringReader positioned at the start of a comment (at the first <js>'/'</js>).  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @throws IOException If an I/O error occurs.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for comment skipping logic
-	})
 	public static void skipComments(StringReader r) throws IOException {
 		var c = r.read();
 		//  "/* */" style comments
@@ -8654,9 +8571,6 @@ public class StringUtils {
 	 * @param str The string to split.
 	 * @return A list of words, or empty list if input is null or empty.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for word splitting logic
-	})
 	private static List<String> splitWords(String str) {
 		if (str == null || isEmpty(str))
 			return Collections.emptyList();

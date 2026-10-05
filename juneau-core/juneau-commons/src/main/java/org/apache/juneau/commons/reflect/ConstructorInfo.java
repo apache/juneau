@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.reflect;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -77,13 +76,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // (T) cast of Constructor.newInstance() in the generic newInstance(): T is chosen by the caller to be the constructor's declaring type
 })
 public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_declaringClass = "declaringClass";
-	private static final String ARG_inner = "inner";
 
 	/**
 	 * Creates a ConstructorInfo wrapper for the specified constructor.
@@ -100,7 +96,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return A new ConstructorInfo object wrapping the constructor.
 	 */
 	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> inner) {
-		assertArgNotNull(ARG_declaringClass, declaringClass);
+		reqnn("declaringClass", declaringClass);
 		return declaringClass.getConstructor(inner);
 	}
 
@@ -120,7 +116,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return A new ConstructorInfo object wrapping the constructor.
 	 */
 	public static ConstructorInfo of(Constructor<?> inner) {
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		return ClassInfo.of(inner.getDeclaringClass()).getConstructor(inner);
 	}
 
@@ -182,9 +178,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @param <T> The class type of the constructor.
 	 * @return The wrapped constructor.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Constructor<T>
-	})
 	public <T> Constructor<T> inner() {
 		return (Constructor<T>)inner;
 	}
@@ -236,9 +229,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for instance creation
-	})
 	public <T> T newInstance(Object...args) throws ExecutableException {
 		return safe(() -> {
 			try {

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.collections.*;
 
@@ -75,11 +75,10 @@ import org.apache.juneau.commons.collections.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class MarkdownDocSerializer extends MarkdownSerializer {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -109,7 +108,7 @@ public class MarkdownDocSerializer extends MarkdownSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			title = copyFrom.title;
 			headingLevel = copyFrom.headingLevel;
 			addHorizontalRules = copyFrom.addHorizontalRules;
@@ -124,7 +123,7 @@ public class MarkdownDocSerializer extends MarkdownSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarkdownDocSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			title = copyFrom.title;
 			headingLevel = copyFrom.headingLevel;
 			addHorizontalRules = copyFrom.addHorizontalRules;

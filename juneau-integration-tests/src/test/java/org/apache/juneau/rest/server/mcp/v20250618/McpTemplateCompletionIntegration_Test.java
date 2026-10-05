@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -90,7 +91,7 @@ class McpTemplateCompletionIntegration_Test {
 		return new McpResourceTemplateHandler() {
 			@Override public McpResourceTemplateSpec descriptor() { return new McpResourceTemplateSpec().setUriTemplate("file:///{x}").setName("t"); }
 			@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
-			@Override public McpCompleter completer(String v) { return "x".equals(v) ? (request, ctx) -> McpCompletionResult.empty() : null; }
+			@Override public McpCompleter completer(String v) { return eq(v, "x") ? (request, ctx) -> McpCompletionResult.empty() : null; }
 		};
 	}
 

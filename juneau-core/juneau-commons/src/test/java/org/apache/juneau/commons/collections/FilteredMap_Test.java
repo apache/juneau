@@ -17,8 +17,8 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -808,7 +808,7 @@ class FilteredMap_Test extends TestBase {
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null)
 			.keyFunction(o -> {
-				assertArgNotNull("key", o);
+				reqnn("key", o);
 				return o.toString();
 			})
 			.build();
@@ -824,7 +824,7 @@ class FilteredMap_Test extends TestBase {
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null)
 			.valueFunction(o -> {
-				assertArgNotNull("value", o);
+				reqnn("value", o);
 				return Integer.parseInt(o.toString());
 			})
 			.build();

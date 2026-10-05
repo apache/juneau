@@ -15,13 +15,13 @@
  * limitations under the License. */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Stream-based RDF serializer for binary formats (RDF/THRIFT, RDF/PROTO).
@@ -38,14 +38,10 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S110" // Deep inheritance inherent to the RDF serializer hierarchy.
+	"java:S110", // Deep inheritance inherent to the RDF serializer hierarchy.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMetaProvider {
-
-	// Argument name constants
-	private static final String ARG_builder = "builder";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -75,7 +71,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			language = copyFrom.language;
 			addBeanTypes = copyFrom.addBeanTypes;
 			rdfSerializer = copyFrom.rdfSerializer;
@@ -88,7 +84,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfStreamSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			language = copyFrom.language;
 			addBeanTypes = copyFrom.isAddBeanTypes();
 			rdfSerializer = copyFrom.rdfSerializer;
@@ -173,7 +169,8 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
@@ -189,7 +186,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfStreamSerializer(Builder<?> builder) {
-		super(assertArgNotNull(ARG_builder, builder).produces(getProduces(builder)).accept(getAccept(builder)));
+		super(reqnn("builder", builder).produces(getProduces(builder)).accept(getAccept(builder)));
 		language = builder.language;
 		rdfSerializer = builder.getRdfSerializer();
 	}

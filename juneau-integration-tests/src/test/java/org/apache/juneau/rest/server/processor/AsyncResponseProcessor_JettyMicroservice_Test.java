@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -374,7 +375,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 		List<LogRecord> forLogger(String name) {
 			synchronized (records) {
-				return records.stream().filter(x -> name.equals(x.getLoggerName())).toList();
+				return records.stream().filter(x -> eq(name, x.getLoggerName())).toList();
 			}
 		}
 	}
@@ -665,7 +666,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			// request-thread scope is closed and nothing re-opens a general scope there). Update this test AND the docs
 			// scope line if general async LogContext propagation is ever added.
 			var adhocRec = handler.forLogger(opLogger.getName()).stream()
-				.filter(r -> "adhoc-completion-log".equals(r.getMessage()))
+				.filter(r -> eq(r.getMessage(), "adhoc-completion-log"))
 				.findFirst().orElse(null);
 			assertNotNull(adhocRec, "expected the ad-hoc FINE record emitted on the completion thread");
 			assertNull(LogRecordContext.of(adhocRec).get("corrId"),

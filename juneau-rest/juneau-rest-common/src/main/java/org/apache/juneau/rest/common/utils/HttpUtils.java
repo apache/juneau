@@ -24,6 +24,9 @@ import java.lang.reflect.*;
  * HTTP utilities.
  *
  */
+@SuppressWarnings({
+	"java:S3776" // detectHttpMethod and detectHttpPath branch over the do/get/put/... name-prefix conventions
+})
 public class HttpUtils {
 
 	/**
@@ -42,16 +45,13 @@ public class HttpUtils {
 	 * @param def The default HTTP method if not detected. Can be <jk>null</jk>.
 	 * @return The REST method name, or <c>def</c> (which can be <jk>null</jk>) if not detected.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTTP method detection
-	})
 	public static String detectHttpMethod(Method m, boolean detectMethod, String def) {
 		String n = m.getName();
 		if (detectMethod) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = ucr(n.substring(2));
 				for (var t : UC_METHODS)
-					if (n2.equals(t))
+					if (eq(n2, t))
 						return n2;
 			}
 			for (var t : LC_METHODS)
@@ -68,16 +68,13 @@ public class HttpUtils {
 	 * @param method The HTTP method name if it's known. Can be <jk>null</jk>, in which case the path is inferred from Java method naming conventions.
 	 * @return The REST path. Never <jk>null</jk> (falls back to <c>'/' + methodName</c> when no convention matches).
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTTP path detection
-	})
 	public static String detectHttpPath(Method m, String method) {
 		String n = m.getName();
 		if (method == null) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = ucr(n.substring(2));
 				for (var t : UC_METHODS)
-					if (n2.equals(t))
+					if (eq(n2, t))
 						return "/";
 			}
 			for (var t : LC_METHODS) {
@@ -86,7 +83,7 @@ public class HttpUtils {
 				}
 			}
 		} else {
-			if (n.equalsIgnoreCase(method) || n.equals("do") || n.equals("_"))
+			if (eqic(n, method) || eqa(n, "do", "_"))
 				return "/";
 			if (n.startsWith(method) && (n.length() == method.length() || Character.isUpperCase(n.charAt(method.length())))) {
 				return '/' + java.beans.Introspector.decapitalize(n.substring(method.length()));

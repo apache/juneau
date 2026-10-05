@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A non-repeatable {@link HttpBody} that streams character content from a {@link Reader}, encoded as UTF-8.
@@ -51,7 +51,7 @@ public final class ReaderBody implements HttpBody {
 	private final String contentType;
 
 	private ReaderBody(Reader reader, String contentType) {
-		this.reader = assertArgNotNull("reader", reader);
+		this.reader = reqnn("reader", reader);
 		this.contentType = contentType;
 	}
 

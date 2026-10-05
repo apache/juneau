@@ -99,13 +99,15 @@ class FluentResponseBodyAssertion_Test {
 
 	@Test void a01_as_typeVarargs() throws Exception {
 		try (var response = okResponse()) {
-			new FluentResponseBodyAssertion<>(response.getContent(), null).as((Type)String.class).is("hello");
+			var a = new FluentResponseBodyAssertion<>(response.getContent(), null);
+			assertDoesNotThrow(() -> a.as((Type)String.class).is("hello"));
 		}
 	}
 
 	@Test void a02_isNotEmpty() throws Exception {
 		try (var response = okResponse()) {
-			new FluentResponseBodyAssertion<>(response.getContent(), null).isNotEmpty();
+			var a = new FluentResponseBodyAssertion<>(response.getContent(), null);
+			assertDoesNotThrow(a::isNotEmpty);
 		}
 	}
 

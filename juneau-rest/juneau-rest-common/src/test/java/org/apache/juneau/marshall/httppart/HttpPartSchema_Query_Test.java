@@ -31,7 +31,8 @@ import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class HttpPartSchema_Query_Test extends TestBase {
 
@@ -88,9 +89,6 @@ class HttpPartSchema_Query_Test extends TestBase {
 	}
 
 	public static class A03 {
-		@SuppressWarnings({
-			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
-		})
 		public void a(
 				@Query("x")
 				@Schema(
@@ -131,9 +129,6 @@ class HttpPartSchema_Query_Test extends TestBase {
 	}
 
 	public static class A04 {
-		@SuppressWarnings({
-			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
-		})
 		public void a(
 				@Query("y")
 				@Schema(

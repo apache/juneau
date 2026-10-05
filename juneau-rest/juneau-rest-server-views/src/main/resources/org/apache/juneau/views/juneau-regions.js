@@ -281,7 +281,7 @@
 			if (n.hidden) return true;
 			if (n.style?.display === "none") return true;
 			const cls = " " + (n.className || "") + " ";
-			if ((cls.indexOf(" jc-panel ") >= 0 || cls.indexOf(" jc-subpanel ") >= 0) && cls.indexOf(" jc-active ") < 0)
+			if ((cls.includes(" jc-panel ") || cls.includes(" jc-subpanel ")) && ! cls.includes(" jc-active "))
 				return true;
 			const computed = window.getComputedStyle ? window.getComputedStyle(n) : null;
 			if (computed?.display === "none") return true;
@@ -911,15 +911,14 @@
 
 	/**
 	 * Serializes `params` to a query-string fragment (no leading `?`/`&`), under the closed rules of design
-	 * &sect;8.2.1 - identically to the Java server's twin (`RegionDef.serializeParams`, test 16a's golden).
+	 * &sect;8.2.1. This is the only implementation of the region-params wire encoding.
 	 * `null`/empty `params` serializes to an empty string.
 	 *
 	 * <p>Rules: a `null`/`undefined` value omits the key entirely; an empty string serializes as `k=`; a scalar
 	 * (string/number/boolean) serializes as `k=<percent-encoded value>`; an array repeats the key once per
 	 * element, in order (`k=a&k=b`); a plain object (a nested map) is dropped defensively - the server already
 	 * rejects it at {@code RegionDef.validate()}, so reaching this function is not the normal path. Encoding is
-	 * `encodeURIComponent`, which already encodes a space as `%20` rather than `+`, matching the server's
-	 * `URLEncoder`-minus-the-`+` twin.
+	 * `encodeURIComponent`, which encodes a space as `%20` rather than `+`.
 	 */
 	function serializeParams(params) {
 		if (!params) return "";
@@ -963,7 +962,7 @@
 		let dataUrl = region.declared.dataUrl;
 		if (blank(dataUrl)) return dataUrl;
 		const rowId = region.ids ? region.ids.rowId : null;
-		if (dataUrl.indexOf("{id}") >= 0) {
+		if (dataUrl.includes("{id}")) {
 			const init = NS.init;
 			if (rowId == null || typeof init?.substituteDetailUrl !== "function") return null;
 			dataUrl = init.substituteDetailUrl(dataUrl, rowId);
@@ -971,7 +970,7 @@
 		}
 		const q = serializeParams(region.params);
 		if (q === "") return dataUrl;
-		return dataUrl + (dataUrl.indexOf("?") >= 0 ? "&" : "?") + q;
+		return dataUrl + (dataUrl.includes("?") ? "&" : "?") + q;
 	}
 
 	/** A never-throwing JSON parse - a malformed body is a fail-closed rejection, not an uncaught exception. */
@@ -1730,8 +1729,8 @@
 		}
 		const ids = Object.keys(hookup);
 		const planned = [];
-		for (let i = 0; i < ids.length; i++) {
-			const id = ids[i];
+		for (const idsEntry of ids) {
+			const id = idsEntry;
 			const value = hookup[id];
 			const el = window.document.getElementById(id);
 			if (!el) {
@@ -1784,8 +1783,8 @@
 		}
 		const handles = [];
 		const tableJobs = [];
-		for (let i = 0; i < planned.length; i++) {
-			const item = planned[i];
+		for (const plannedItem of planned) {
+			const item = plannedItem;
 			if (item.kind === "region") {
 				item.el.setAttribute(REGION_ATTR, item.id);
 				item.el.setAttribute(REGION_POPULATE_ATTR, item.name);

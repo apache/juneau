@@ -31,8 +31,10 @@ import freemarker.template.*;
  *
  * <h5 class='section'>Used INSTEAD OF {@link FreemarkerMixin}, not beside it:</h5>
  * <p>
- * Register it typed as the parent so {@code FreemarkerViewRenderer}'s exact-type
- * {@code getBean(FreemarkerMixin.class)} lookup finds it &mdash; the return type below is load-bearing:
+ * Register it typed as either {@link FreemarkerMixin} or {@code ConsoleFreemarkerMixin} &mdash; both declared
+ * return types work. {@code FreemarkerViewRenderer} finds the exact-type {@code FreemarkerMixin} bean when one is
+ * registered, and otherwise also looks for a bean declared under any registered subtype (P8), which this class
+ * registers via a static initializer:
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
@@ -41,10 +43,13 @@ import freemarker.template.*;
  * </p>
  *
  * <p>
- * A {@code @Bean public ConsoleFreemarkerMixin freemarker() {...}} (the subtype as the declared return type) is
- * stored under {@code ConsoleFreemarkerMixin.class} and is <b>invisible</b> to the renderer's exact-type lookup,
- * which then falls back to a plain {@code new FreemarkerMixin()} (default {@code basePath="/"}) &mdash; composed
- * chrome silently does not render. See {@code ConsoleFreemarkerMixin_Test}'s anti-pattern gate.
+ * or equivalently:
+ *
+ * <p class='bjava'>
+ * 	<ja>@Bean</ja> <jk>public</jk> ConsoleFreemarkerMixin freemarker() {
+ * 		<jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>().basePath(<js>"/templates/"</js>).build();
+ * 	}
+ * </p>
  *
  * <h5 class='section'>Consumer {@code /templates} is never shadowed:</h5>
  * <p>
@@ -75,6 +80,10 @@ import freemarker.template.*;
  */
 public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 
+	static {
+		FreemarkerMixin.registerSubtype(ConsoleFreemarkerMixin.class);
+	}
+
 	/**
 	 * The reserved classpath-root-relative location of the shipped console chrome template
 	 * (defines the {@code <@tag>} macro). Load-bearing for the collision-free-namespacing argument in the class
@@ -87,6 +96,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 
 	private final String chromeTemplate;
 	private final List<ExtraPack> extraPacks;
+	private final boolean devMode;
 
 	/**
 	 * No-arg constructor &mdash; mirrors {@link FreemarkerMixin#FreemarkerMixin()} so the mixin walk's
@@ -105,6 +115,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		super(builder);
 		this.chromeTemplate = builder.chromeTemplate;
 		this.extraPacks = List.copyOf(builder.extraPacks);
+		this.devMode = builder.devMode;
 	}
 
 	/** Extra toolkit pack registered through the builder, applied when {@code resolveConfiguration} builds the registry. */
@@ -229,19 +240,16 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		if (cfg.getSharedVariable(TokenDirectiveModel.NAME) == null)
 			cfg.setSharedVariable(TokenDirectiveModel.NAME, new TokenDirectiveModel());
 		if (cfg.getSharedVariable(ConsoleDirectiveModel.NAME) == null)
-			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel());
+			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode));
 		if (cfg.getSharedVariable(MainDirectiveModel.NAME) == null)
 			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
-		// The six capture-only slot directives share one parameterized class, one instance registered per slot name.
-		for (var slot : CONSOLE_SLOT_NAMES)
+		if (cfg.getSharedVariable(HasToolkitMethodModel.NAME) == null)
+			cfg.setSharedVariable(HasToolkitMethodModel.NAME, new HasToolkitMethodModel());
+		// The seven capture-only slot directives share one parameterized class, one instance registered per slot name.
+		for (var slot : ConsoleSlotDirectiveModel.SLOT_NAMES)
 			if (cfg.getSharedVariable(slot) == null)
 				cfg.setSharedVariable(slot, new ConsoleSlotDirectiveModel(slot));
 	}
-
-	/** The {@code <@console>} capture-only slot names, each registered to a {@link ConsoleSlotDirectiveModel}. */
-	private static final List<String> CONSOLE_SLOT_NAMES =
-		List.of(ConsoleContext.HEAD, ConsoleContext.SCRIPTS, ConsoleContext.BRAND, ConsoleContext.ACTIONS,
-			ConsoleContext.TITLE, ConsoleContext.FOOTER, ConsoleContext.BODY);
 
 	/**
 	 * Builder for {@link ConsoleFreemarkerMixin}.
@@ -250,6 +258,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 
 		String chromeTemplate = DEFAULT_CHROME_TEMPLATE;
 		final List<ExtraPack> extraPacks = new ArrayList<>();
+		boolean devMode = Boolean.getBoolean("juneau.console.devMode");
 
 		/** Constructor &mdash; package access for {@link ConsoleFreemarkerMixin#create()}. */
 		protected Builder() {}
@@ -298,6 +307,29 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 */
 		public Builder registerToolkitPack(String name, List<String> cssPaths, List<String> jsPaths) {
 			extraPacks.add(new ExtraPack(name, List.copyOf(cssPaths), List.copyOf(jsPaths)));
+			return this;
+		}
+
+		/**
+		 * Validates every page contract against {@code juneau-page.schema.json} when {@code <@console>} closes, and
+		 * fails the render with E-14 on any finding.
+		 *
+		 * <p>
+		 * Defaults to the {@code juneau.console.devMode} system property. Intended for development and tests; it parses
+		 * and validates the contract on every render.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
+		 * 		<jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>().devMode(<jk>true</jk>).basePath(<js>"/templates/"</js>).build();
+		 * 	}
+		 * </p>
+		 *
+		 * @param value Whether to validate.
+		 * @return This object.
+		 */
+		public Builder devMode(boolean value) {
+			devMode = value;
 			return this;
 		}
 

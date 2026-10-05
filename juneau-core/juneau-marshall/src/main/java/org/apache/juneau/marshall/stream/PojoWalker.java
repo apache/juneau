@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.marshall.stream;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.*;
 
@@ -54,13 +54,10 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // TokenWriter is a fluent Closeable returning itself; discarding the chained return value is intentional, and the writer is the caller's to close.
-	"java:S115" // ARG_-prefixed arg-key constants use the project's UPPER_camelCase convention.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // TokenWriter is a fluent Closeable returning itself; discarding the chained return value is intentional, and the writer is the caller's to close.
 })
 public final class PojoWalker {
-
-	private static final String ARG_w = "w";
-	private static final String ARG_options = "options";
 
 	/**
 	 * Databind-level settings honored by {@link PojoWalker}.
@@ -135,8 +132,8 @@ public final class PojoWalker {
 	 * @throws IOException If the writer's underlying stream fails.
 	 */
 	public static void walk(TokenWriter w, Object value, Options options) throws IOException {
-		assertArgNotNull(ARG_w, w);
-		assertArgNotNull(ARG_options, options);
+		reqnn("w", w);
+		reqnn("options", options);
 		// Identity-based ancestor set: tracks the objects on the current walk path so a
 		// self-referencing graph throws instead of overflowing the stack.  Shared-but-acyclic
 		// references are fine because each node is removed from the set once its subtree completes.
@@ -268,9 +265,9 @@ public final class PojoWalker {
 	}
 
 	private static List<Map.Entry<Object,Object>> sortedEntries(Map<?,?> m) {
-		var list = new ArrayList<Map.Entry<Object,Object>>(m.size());
-		for (var entry : m.entrySet())
-			list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()));
+		List<Map.Entry<Object,Object>> list = m.entrySet().stream()
+			.<Map.Entry<Object,Object>>map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()))
+			.collect(Collectors.toCollection(ArrayList::new));
 		list.sort(Comparator.comparing(e -> {
 			var k = e.getKey();
 			return k == null ? "" : k.toString();

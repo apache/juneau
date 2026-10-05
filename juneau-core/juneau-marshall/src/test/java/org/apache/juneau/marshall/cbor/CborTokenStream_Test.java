@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -333,7 +334,7 @@ class CborTokenStream_Test extends TestBase {
 				while (r.next() != TokenType.END_OBJECT) {
 					var key = r.getFieldName();
 					var t = r.next();
-					if ("data".equals(key))
+					if (eq(key, "data"))
 						assertEquals(TokenType.VALUE_BINARY, t);
 				}
 			}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.util;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -177,7 +178,7 @@ class ClasspathAssetCache_Test {
 
 	private static String cacheControlOf(org.apache.juneau.http.HttpResource resource) {
 		return resource.getHeaders().stream()
-			.filter(h -> h.getName().equalsIgnoreCase("Cache-Control"))
+			.filter(h -> eqic(h.getName(), "Cache-Control"))
 			.findFirst()
 			.map(org.apache.juneau.http.HttpHeader::getValue)
 			.orElseThrow(() -> new AssertionError("no Cache-Control header found"));

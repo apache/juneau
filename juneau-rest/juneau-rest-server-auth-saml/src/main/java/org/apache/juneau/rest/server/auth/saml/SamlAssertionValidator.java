@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -132,7 +131,7 @@ import net.shibboleth.shared.resolver.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are SAML protocol claim names and JWT-style field keys; intentional
-	"java:S6539"  // Monolithic class: validator is a single end-to-end pipeline.
+	"java:S6539" // Monolithic class: validator is a single end-to-end pipeline.
 })
 public class SamlAssertionValidator {
 
@@ -203,7 +202,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder metadataResolver(MetadataResolver value) {
-			metadataResolver = assertArgNotNull("value", value);
+			metadataResolver = reqnn("value", value);
 			return this;
 		}
 
@@ -217,7 +216,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder signingCredential(Credential value) {
-			signingCredential = assertArgNotNull("value", value);
+			signingCredential = reqnn("value", value);
 			return this;
 		}
 
@@ -232,7 +231,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder decryptionCredential(Credential value) {
-			decryptionCredential = assertArgNotNull("value", value);
+			decryptionCredential = reqnn("value", value);
 			return this;
 		}
 
@@ -243,7 +242,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder spEntityId(String value) {
-			spEntityId = assertArgNotNullOrBlank("value", value);
+			spEntityId = reqnb("value", value);
 			return this;
 		}
 
@@ -254,7 +253,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder expectedIssuer(String value) {
-			expectedIssuer = assertArgNotNullOrBlank("value", value);
+			expectedIssuer = reqnb("value", value);
 			return this;
 		}
 
@@ -268,12 +267,12 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder algorithms(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			if (values.length == 0)
 				throw iaex("algorithms allowlist must be non-empty");
 			var next = new LinkedHashSet<String>();
 			for (var a : values) {
-				assertArgNotNull("algorithm", a);
+				reqnn("algorithm", a);
 				if (a.toLowerCase(Locale.ROOT).contains("sha1"))
 					throw iaex("SHA-1 algorithms are permanently rejected: %s", a);
 				next.add(a);
@@ -293,12 +292,12 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder digestAlgorithms(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			if (values.length == 0)
 				throw iaex("digest allowlist must be non-empty");
 			var next = new LinkedHashSet<String>();
 			for (var a : values) {
-				assertArgNotNull("digestAlgorithm", a);
+				reqnn("digestAlgorithm", a);
 				if (a.toLowerCase(Locale.ROOT).contains("sha1"))
 					throw iaex("SHA-1 digest algorithms are permanently rejected: %s", a);
 				next.add(a);
@@ -325,7 +324,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder recipient(String value) {
-			recipient = assertArgNotNullOrBlank("value", value);
+			recipient = reqnb("value", value);
 			return this;
 		}
 
@@ -344,7 +343,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder expectedInResponseTo(String value) {
-			expectedInResponseTo = assertArgNotNullOrBlank("value", value);
+			expectedInResponseTo = reqnb("value", value);
 			return this;
 		}
 
@@ -361,7 +360,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder subjectAddress(String value) {
-			expectedAddress = assertArgNotNullOrBlank("value", value);
+			expectedAddress = reqnb("value", value);
 			return this;
 		}
 
@@ -378,7 +377,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder replayCache(ReplayCache value) {
-			replayCache = assertArgNotNull("value", value);
+			replayCache = reqnn("value", value);
 			return this;
 		}
 
@@ -389,7 +388,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder clockSkew(Duration value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isNegative())
 				throw iaex("clockSkew must be non-negative");
 			if (value.compareTo(MAX_CLOCK_SKEW) > 0)
@@ -405,7 +404,7 @@ public class SamlAssertionValidator {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -509,7 +508,7 @@ public class SamlAssertionValidator {
 	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
 	 */
 	public Principal validate(String xml) throws AuthenticationException {
-		assertArgNotNullOrBlank("xml", xml);
+		reqnb("xml", xml);
 		return validateInternal(xml, recipient);
 	}
 
@@ -533,8 +532,8 @@ public class SamlAssertionValidator {
 	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
 	 */
 	public Principal validate(String xml, String recipient) throws AuthenticationException {
-		assertArgNotNullOrBlank("xml", xml);
-		assertArgNotNullOrBlank("recipient", recipient);
+		reqnb("xml", xml);
+		reqnb("recipient", recipient);
 		return validateInternal(xml, recipient);
 	}
 
@@ -764,7 +763,7 @@ public class SamlAssertionValidator {
 		boolean audienceOk = false;
 		for (var ar : conditions.getAudienceRestrictions()) {
 			for (var aud : ar.getAudiences()) {
-				if (spEntityId.equals(aud.getURI())) {
+				if (eq(spEntityId, aud.getURI())) {
 					audienceOk = true;
 					break;
 				}
@@ -776,10 +775,10 @@ public class SamlAssertionValidator {
 
 	private void validateIssuer(Response response, Assertion assertion) throws AuthenticationException {
 		var assertionIssuer = assertion.getIssuer();
-		if (assertionIssuer == null || !expectedIssuer.equals(assertionIssuer.getValue()))
+		if (assertionIssuer == null || neq(expectedIssuer, assertionIssuer.getValue()))
 			throw rejectAssertion("assertion <Issuer> does not match expected issuer");
 		var respIssuer = response.getIssuer();
-		if (respIssuer != null && !expectedIssuer.equals(respIssuer.getValue()))
+		if (respIssuer != null && neq(expectedIssuer, respIssuer.getValue()))
 			throw rejectAssertion("response <Issuer> does not match expected issuer");
 	}
 
@@ -822,7 +821,7 @@ public class SamlAssertionValidator {
 		var data = sc.getSubjectConfirmationData();
 		if (data == null)
 			return "bearer <SubjectConfirmationData> is missing";
-		if (! recipient.equals(data.getRecipient()))
+		if (neq(recipient, data.getRecipient()))
 			return "bearer confirmation <Recipient> does not match the expected ACS URL";
 		var now = clock.instant();
 		var noa = data.getNotOnOrAfter();
@@ -835,12 +834,12 @@ public class SamlAssertionValidator {
 			return "bearer confirmation is not yet valid";
 		var inResponseTo = data.getInResponseTo();
 		if (expectedInResponseTo != null) {
-			if (! expectedInResponseTo.equals(inResponseTo))
+			if (neq(expectedInResponseTo, inResponseTo))
 				return "bearer confirmation <InResponseTo> does not match the expected request ID";
 		} else if (inResponseTo != null && ! inResponseTo.isEmpty()) {
 			return "unsolicited bearer confirmation must not carry <InResponseTo>";
 		}
-		if (expectedAddress != null && ! expectedAddress.equals(data.getAddress()))
+		if (expectedAddress != null && neq(expectedAddress, data.getAddress()))
 			return "bearer confirmation <Address> does not match the expected client address";
 		return null;
 	}

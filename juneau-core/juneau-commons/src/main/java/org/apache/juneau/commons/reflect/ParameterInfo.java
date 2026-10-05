@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -67,40 +66,38 @@ import org.apache.juneau.commons.utils.*;
  * 	MethodInfo <jv>mi</jv> = ...;
  * 	ParameterInfo <jv>param</jv> = <jv>mi</jv>.getParameters().get(0);
  *
-	 * 	<jc>// Get parameter type</jc>
-	 * 	ClassInfo <jv>type</jv> = <jv>param</jv>.getParameterType();
-	 *
-	 * 	<jc>// Get resolved name (from bytecode or @Name annotation)</jc>
-	 * 	String <jv>name</jv> = <jv>param</jv>.getResolvedName();
-	 *
-	 * 	<jc>// Get annotations</jc>
-	 * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
-	 * 		<jv>param</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
-	 * </p>
-	 *
-	 * <h5 class='section'>Parameter Name Resolution:</h5>
-	 * <p>
-	 * Parameter names are resolved in the following order:
-	 * <ol class='spaced-list'>
-	 * 	<li><ja>@Name</ja> annotation value (if present)
-	 * 	<li>Bytecode parameter names (if compiled with <c>-parameters</c> flag)
-	 * 	<li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
-	 * </ol>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link MethodInfo} - Method introspection
-	 * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
-	 * 	<li class='jc'>{@link ExecutableInfo} - Common executable functionality
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
-	 * </ul>
-	 */
-	@SuppressWarnings({
-		"java:S115" // Constants use UPPER_snakeCase convention
-	})
+ * 	<jc>// Get parameter type</jc>
+ * 	ClassInfo <jv>type</jv> = <jv>param</jv>.getParameterType();
+ *
+ * 	<jc>// Get resolved name (from bytecode or @Name annotation)</jc>
+ * 	String <jv>name</jv> = <jv>param</jv>.getResolvedName();
+ *
+ * 	<jc>// Get annotations</jc>
+ * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+ * 		<jv>param</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+ * </p>
+ *
+ * <h5 class='section'>Parameter Name Resolution:</h5>
+ * <p>
+ * Parameter names are resolved in the following order:
+ * <ol class='spaced-list'>
+ * 	<li><ja>@Name</ja> annotation value (if present)
+ * 	<li>Bytecode parameter names (if compiled with <c>-parameters</c> flag)
+ * 	<li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
+ * </ol>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+ * 	<li class='jc'>{@link ExecutableInfo} - Common executable functionality
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // Casts to AnnotationInfo<A> in the annotation stream and to Supplier<Object>/Class<Object>/Provider<Object> in the JSR-330 Provider bean resolution are guarded by the requested type
+})
 public final class ParameterInfo extends ElementInfo implements Annotatable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	/**
 	 * Resettable supplier for the system property to disable bytecode parameter name detection.
@@ -135,7 +132,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @throws IllegalArgumentException If the parameter is <jk>null</jk> or cannot be found in its declaring executable.
 	 */
 	public static ParameterInfo of(Parameter inner) {
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		var exec = inner.getDeclaringExecutable();
 		ExecutableInfo execInfo;
 		if (exec instanceof Constructor<?> exec2)
@@ -247,9 +244,6 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type.
 	 * @return A stream of annotation infos, never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for annotation stream
-	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotations().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
 	}
@@ -886,8 +880,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
-		"unchecked"   // reflective Provider<T> resolution — valueType is Class<?> at runtime; cast narrows it to Class<Object> for the supplier signature
+		"java:S6541" // Single-threaded context; synchronization unnecessary
 	})
 	public Object resolveValue(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
@@ -973,7 +966,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 
 				// Handle List<T> or Set<T>
 				var inner2 = o(ptu.inner()).orElse(Object.class);
-				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
+				if (eqa(inner2, List.class, Set.class)) {
 					if (parameterizedType instanceof ParameterizedType parameterizedType2) {
 						var typeArgs = parameterizedType2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {

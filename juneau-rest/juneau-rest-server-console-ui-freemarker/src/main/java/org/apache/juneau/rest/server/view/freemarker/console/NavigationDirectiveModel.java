@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -23,16 +25,13 @@ import freemarker.core.*;
 import freemarker.template.*;
 
 /**
- * The {@code <@navigation>} shared FreeMarker directive: the wrapper for a recursive {@code <@node>}
- * tree authored <b>once in chrome</b>. Opens a per-render {@link NavContext} (fresh ancestor stack),
- * renders its body so nested {@code <@node>}s register on that context, and emits exactly one
- * {@code .juneau-page-nav} landmark: depth-0 nodes as a {@code .juneau-page-nav-sections} row, then one
- * {@code .juneau-page-nav-children} row per selected ancestor that has nested nodes (arbitrarily deep).
+ * The {@code <@navigation>} console FreeMarker directive: opens the nav tree on the {@link PageCapture}.
  *
  * <p>
- * The only attribute is {@code layout} ({@code horizontal} &mdash; the omit default &mdash; or
- * {@code vertical}); {@code format=} and any unknown attribute are rejected. The chrome places this
- * landmark <b>outside</b> {@code <main>} and never inside a {@code .jc-card}.
+ * Nested {@code <@node>}s add {@code nav[]} entries of any depth; the shell renders the nav and sets
+ * {@code aria-current}. An omitted {@code layout=} leaves {@code navLayout} out of the contract (the shell defaults
+ * to horizontal). {@code format=}, any unknown attribute, and nesting inside another {@code <@navigation>} or outside
+ * {@code <@console>} are all rejected (fail closed).
  *
  * @since 10.0.0
  */
@@ -41,32 +40,43 @@ public final class NavigationDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "navigation";
 
-	private static final Set<String> ATTRS = Set.of("layout");
+	static final Set<String> ATTRS = Set.of("layout");
 
 	NavigationDirectiveModel() {}
 
 	@Override
 	@SuppressWarnings({
-		"unchecked", // FreeMarker's raw params Map is String-keyed by contract.
-		"resource" // FreeMarker owns env.getOut(); closing it would close the HTTP response.
+		"unchecked" // FreeMarker's raw params Map is String-keyed by contract.
 	})
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
 			TemplateDirectiveBody body) throws TemplateException, IOException {
-		var p = (Map<String, TemplateModel>) params;
+		Map<String, TemplateModel> p = params;
 		if (p.containsKey("format"))
 			throw FtlAttrLists.reject("<@navigation> has no format= attribute.");
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
 
-		var layout = FtlAttrLists.scalar(p, "layout");
-		if (layout.isEmpty())
-			layout = "horizontal";
-		if (! ("horizontal".equals(layout) || "vertical".equals(layout)))
-			throw FtlAttrLists.reject("<@navigation> layout= must be horizontal|vertical; got '" + layout + "'.");
+		var cap = PageCapture.get(env);
+		if (cap == null || ! cap.consoleOpen)
+			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", NAME));
+		if (cap.navOpen)
+			throw FtlAttrLists.reject("<@navigation> cannot be nested inside another <@navigation>.");
 
-		var ctx = new NavContext();
-		env.setCustomState(NavContext.KEY, ctx);
-		if (body != null)
-			body.render(new StringWriter());
-		ctx.write(env.getOut(), layout);
+		var layout = FtlAttrLists.scalar(p, "layout");
+		if (! layout.isEmpty()) {
+			if (! (eqa(layout, "horizontal", "vertical")))
+				throw FtlAttrLists.reject(String.format(
+					"<@navigation> layout= must be horizontal or vertical; got '%s'.", layout));
+			cap.navLayout(layout);
+		}
+
+		cap.navOpen = true;
+		cap.navCursor.push(cap.navRoot());
+		try (var sink = new StringWriter()) {
+			if (body != null)
+				body.render(sink);
+		} finally {
+			cap.navCursor.pop();
+			cap.navOpen = false;
+		}
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -368,7 +369,7 @@ class Microservice_Runtime_Test extends TestBase {
 
 	/** Returns <jk>true</jk> if a live thread named "ConsoleThread" (the Microservice console thread) currently exists. */
 	private static boolean consoleThreadAlive() {
-		return Thread.getAllStackTraces().keySet().stream().anyMatch(t -> t.isAlive() && "ConsoleThread".equals(t.getName()));
+		return Thread.getAllStackTraces().keySet().stream().anyMatch(t -> t.isAlive() && eq(t.getName(), "ConsoleThread"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -240,13 +240,15 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 
 	@Test void b02_declaredExceptionType_matchingStatus_thrown() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
-			assertThrows(NotFound.class, () -> client.remote(StatusAndExceptionService.class).getMappedToDeclaredException());
+			var service = client.remote(StatusAndExceptionService.class);
+			assertThrows(NotFound.class, service::getMappedToDeclaredException);
 		}
 	}
 
 	@Test void b03_undeclaredError_throwOnError_throwsGenericBasicHttpException() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
-			var ex = assertThrows(BasicHttpException.class, () -> client.remote(StatusAndExceptionService.class).getUndeclaredErrorThrowsGeneric());
+			var service = client.remote(StatusAndExceptionService.class);
+			var ex = assertThrows(BasicHttpException.class, service::getUndeclaredErrorThrowsGeneric);
 			assertEquals(404, ex.getStatusCode());
 		}
 	}
@@ -407,14 +409,16 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// throwIfError(...) fires before the stream is ever handed back, exercising processStreamReturn's
 		// "!ok" finally-close branch rather than the normal success path.
 		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
-			assertThrows(BasicHttpException.class, () -> client.remote(StreamReturnService.class).getStreamThrowsBeforeHandingBackStream());
+			var service = client.remote(StreamReturnService.class);
+			assertThrows(BasicHttpException.class, service::getStreamThrowsBeforeHandingBackStream);
 		}
 	}
 
 	@Test void d06_readerReturn_throwOnErrorBeforeHandingBackReader_closesResponse() throws Exception {
 		// Same as d05 but for processReaderReturn's analogous "!ok" finally-close branch.
 		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
-			assertThrows(BasicHttpException.class, () -> client.remote(StreamReturnService.class).getReaderThrowsBeforeHandingBackReader());
+			var service = client.remote(StreamReturnService.class);
+			assertThrows(BasicHttpException.class, service::getReaderThrowsBeforeHandingBackReader);
 		}
 	}
 
@@ -518,7 +522,8 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// exercises both outcomes of the TransportException catch: backoff-and-retry while budget remains, then
 		// give up and rethrow once attempt exceeds the retry budget (lines 790-794).
 		try (var client = RestClient.builder().rootUrl("http://127.0.0.1:1").build()) {
-			assertThrows(TransportException.class, () -> client.remote(UnreachableHostRetryService.class).get());
+			var service = client.remote(UnreachableHostRetryService.class);
+			assertThrows(TransportException.class, service::get);
 		}
 	}
 

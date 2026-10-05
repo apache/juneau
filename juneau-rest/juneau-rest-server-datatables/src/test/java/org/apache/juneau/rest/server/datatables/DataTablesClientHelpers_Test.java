@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.datatables;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -82,7 +83,7 @@ class DataTablesClientHelpers_Test extends TestBase {
 
 	@Test void a02_columnFlagsDefaultTrue() {
 		var cols = DataTablesColumns.of(Row.class);
-		var name = cols.stream().filter(c -> "name".equals(c.get("data"))).findFirst().orElseThrow();
+		var name = cols.stream().filter(c -> eq(c.get("data"), "name")).findFirst().orElseThrow();
 		assertEquals(Boolean.TRUE, name.get("orderable"));
 		assertEquals(Boolean.TRUE, name.get("searchable"));
 	}
@@ -186,5 +187,15 @@ class DataTablesClientHelpers_Test extends TestBase {
 		// Second request exercises the memoized (already-cached) fast path of the double-checked-locking glue-script reader.
 		var body2 = c.get("/juneau-datatables.js").run().assertStatus(200).getContent().asString();
 		assertEquals(body, body2, body2);
+	}
+
+	@Test void c02_ajaxAttrConstant() {
+		assertEquals("data-juneau-datatable-ajax", DataTablesTable.AJAX_ATTR);
+	}
+
+	@Test void c03_glueScriptExposesAjaxHelper() throws Exception {
+		var body = MockRestClient.build(GlueHost.class).get("/juneau-datatables.js").run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("JuneauDataTables"), body);
+		assertTrue(body.contains(DataTablesTable.AJAX_ATTR), body);
 	}
 }

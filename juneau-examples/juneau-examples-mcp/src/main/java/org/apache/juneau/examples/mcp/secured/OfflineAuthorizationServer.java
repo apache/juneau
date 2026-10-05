@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.mcp.secured;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
@@ -248,7 +250,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 		// DEMO ONLY: see class javadoc - not a production AS.
 		tokenRequestCount.incrementAndGet();
 		try {
-			if (! "POST".equals(exchange.getRequestMethod())) {
+			if (neq(exchange.getRequestMethod(), "POST")) {
 				exchange.getResponseHeaders().add("Allow", "POST");
 				sendJson(exchange, 405, error("invalid_request", "must POST to /token"));
 				return;
@@ -262,7 +264,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 			try (var body = exchange.getRequestBody()) {
 				form = parseForm(body);
 			}
-			if (! "client_credentials".equals(form.get("grant_type"))) {
+			if (neq(form.get("grant_type"), "client_credentials")) {
 				sendJson(exchange, 400, error("unsupported_grant_type", "only client_credentials is supported"));
 				return;
 			}
@@ -291,7 +293,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 
 	/** Serves a minimal RFC 8414 Authorization Server Metadata document (M10): {@code issuer} + {@code token_endpoint} only. */
 	private void handleAuthorizationServerMetadata(HttpExchange exchange) throws IOException {
-		if (! "GET".equals(exchange.getRequestMethod())) {
+		if (neq(exchange.getRequestMethod(), "GET")) {
 			exchange.getResponseHeaders().add("Allow", "GET");
 			exchange.sendResponseHeaders(405, -1);
 			return;

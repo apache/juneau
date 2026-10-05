@@ -29,7 +29,9 @@ import org.junit.jupiter.api.*;
  * key/value-pair-format detection when the actual data is NOT in that shape, and the {@code valueType==null}
  * fallback to {@code Object} when reading a non-string-keyed map without an explicit value type.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked" // ParquetParser.read() returns a raw Map that the tests cast to the expected Map<K,V>.
+})
 class ParquetParserSessionMapTarget_Test extends TestBase {
 
 	@Test void a01_singleKeyLiterallyValue_unwrapsInnerMap() throws Exception {

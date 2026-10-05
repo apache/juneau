@@ -98,8 +98,10 @@ import org.apache.juneau.microservice.logging.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // consoleReader and consoleWriter are backed by system streams or caller-provided streams; lifecycle managed by stop()
-	"java:S3740" // Raw Class/Builder types used intentionally for reflective microservice wiring where type parameters are not available
+	"java:S112", // throws Exception intentional - callback/lifecycle method
+	"java:S3740", // Raw Class/Builder types used intentionally for reflective microservice wiring where type parameters are not available
+	"resource", // consoleReader and consoleWriter are backed by system streams or caller-provided streams; lifecycle managed by stop()
+	"unchecked" // Type erasure requires unchecked cast for varargs
 })
 public class Microservice implements ConfigEventListener {
 
@@ -206,9 +208,6 @@ public class Microservice implements ConfigEventListener {
 		 * @return A new microservice.
 		 * @throws Exception Error occurred.
 		 */
-		@SuppressWarnings({
-			"java:S112" // throws Exception intentional - callback/lifecycle method
-		})
 		public Microservice build() throws Exception {
 			return new Microservice(this);
 		}
@@ -311,9 +310,6 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked cast for varargs
-		})
 		public Builder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
 			try {
 				for (var cc : consoleCommands)
@@ -493,9 +489,6 @@ public class Microservice implements ConfigEventListener {
 		 * @param vars The set of variables to append to the var resolver builder.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked cast for varargs
-		})
 		public Builder vars(Class<? extends Var>...vars) {
 			varResolver.vars(vars);
 			return this;
@@ -542,10 +535,7 @@ public class Microservice implements ConfigEventListener {
 		 * @since 10.0.0
 		 */
 		public Builder configurations(Class<?>... configurations) {
-			if (nn(configurations))
-				for (var c : configurations)
-					if (nn(c))
-						this.configurations.add(c);
+			addAllNn(this.configurations, configurations);
 			return this;
 		}
 
@@ -558,10 +548,7 @@ public class Microservice implements ConfigEventListener {
 		 * @since 10.0.0
 		 */
 		public Builder configurations(List<Class<?>> configurations) {
-			if (nn(configurations))
-				for (var c : configurations)
-					if (nn(c))
-						this.configurations.add(c);
+			addAllNn(this.configurations, configurations);
 			return this;
 		}
 
@@ -1234,9 +1221,6 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public Microservice join() throws Exception {
 		return this;
 	}
@@ -1282,9 +1266,6 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public synchronized Microservice start() throws Exception {
 
 		if (config.getName() == null)
@@ -1316,9 +1297,6 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public synchronized Microservice startConsole() throws Exception {
 		if (nn(consoleThread) && ! consoleThread.isAlive())
 			consoleThread.start();
@@ -1336,9 +1314,6 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public synchronized Microservice stop() throws Exception {
 		if (stopped)
 			return this;
@@ -1375,9 +1350,6 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public synchronized Microservice stopConsole() throws Exception {
 		if (nn(consoleThread) && consoleThread.isAlive())
 			consoleThread.interrupt();

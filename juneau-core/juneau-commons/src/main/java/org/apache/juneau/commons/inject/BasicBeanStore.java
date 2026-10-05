@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -61,11 +60,12 @@ import org.apache.juneau.commons.settings.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
-	"java:S135",  // @PreDestroy/@Bean discovery loops use per-element continue guards for clarity; refactoring obscures the per-annotation filter chain
+	"java:S135", // @PreDestroy/@Bean discovery loops use per-element continue guards for clarity; refactoring obscures the per-annotation filter chain
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3011", // setAccessible(true) is required to invoke private/package-private @Bean members and @PreDestroy methods via reflection
 	"java:S3776", // matchesConditions and registerConfiguration intentionally centralize the @Conditional/@Bean discovery state machine; splitting hurts cohesion
-	"resource" // BeanStore is a fluent AutoCloseable; self-returns and owned/sentinel stores are not new resources to close.
+	"resource", // BeanStore is a fluent AutoCloseable; self-returns and owned/sentinel stores are not new resources to close.
+	"unchecked" // Bean maps are keyed by Class<T>, so (T)/(Supplier<T>)/(Class<? extends T>) casts on stored suppliers and bindings match the requested bean type
 })
 public class BasicBeanStore implements WritableBeanStore {
 	private static final RichLogger LOGGER = RichLogger.getLogger(BasicBeanStore.class.getName());
@@ -85,21 +85,6 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore()}.
 	 */
 	public static final BasicBeanStore INSTANCE = new BasicBeanStore();
-
-	// Property name constants
-	private static final String PROP_bean = "bean";
-	private static final String PROP_defaults = "defaults";
-	private static final String PROP_entries = "entries";
-	private static final String PROP_identity = "identity";
-	private static final String PROP_name = "name";
-	private static final String PROP_overlayStack = "overlayStack";
-	private static final String PROP_overridingParent = "overridingParent";
-	private static final String PROP_parent = "parent";
-	private static final String PROP_type = "type";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_beanType = "beanType";
-	private static final String ARG_onClassOrObject = "onClassOrObject";
 
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> entries;
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> defaults;
@@ -443,9 +428,6 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return A map of bean names to bean instances.  Never <jk>null</jk>.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Map<String,T>
-	})
 	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
 		checkOpen();
 		// Build the result respecting the priority order used by getBean / resolve:
@@ -533,9 +515,6 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: parameterization is verified at construction.
-	})
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType, String name) {
 		var typeMap = defaults.get(beanType);
 		if (typeMap == null)
@@ -581,9 +560,6 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: parameterization is verified at construction.
-	})
 	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
 		var v = (Class<? extends T>) typeBindings.get(beanType);
 		if (nn(v))
@@ -619,9 +595,6 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for supplier resolution
-	})
 	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
 		// (0) Push/pop overlay stack — wins over the construction-time overridingParent slot because pushed
 		// frames are "more recent".  Lazily initialized; null until the first pushOverlay() call.
@@ -696,9 +669,28 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Otherwise, both instance and static methods on the object's class are eligible.
 	 * A <jk>null</jk> <c>filter</c> accepts any qualifying method.
 	 *
+	 * <p>
+	 * The search has two passes.  The first pass considers public methods only (unchanged behavior).  If it finds
+	 * nothing, the second pass considers <em>non-public</em> methods across the class hierarchy, child class first,
+	 * but only those carrying {@link Bean @Bean} (declared directly or inherited from a method they override; see
+	 * {@link BeanAnnotation#find(MethodInfo)}).  Bridge/synthetic methods, interface static methods and deprecated
+	 * methods are skipped, as are parent methods overridden by an already-seen child method.  A non-public method
+	 * without {@link Bean @Bean} is never invoked, even when <c>filter</c> is <jk>null</jk>.
+	 * Non-public methods are made accessible before invocation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<ja>@Bean</ja>
+	 * 		RichLogger logger() { <jk>return new</jk> RichLogger(); }  <jc>// Package-private, found by the second pass.</jc>
+	 * 	}
+	 *
+	 * 	Optional&lt;RichLogger&gt; <jv>logger</jv> = <jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jk>new</jk> MyResource());
+	 * </p>
+	 *
 	 * @param <T> The bean type.
 	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
-	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * @param onClassOrObject The object instance or {@link Class} whose methods are searched.
 	 * 	Must not be <jk>null</jk>.
 	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).
 	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
@@ -708,11 +700,11 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
-		assertArgNotNull(ARG_beanType, beanType);
-		assertArgNotNull(ARG_onClassOrObject, onClassOrObject);
+		reqnn("beanType", beanType);
+		reqnn("onClassOrObject", onClassOrObject);
 		Object resource = onClassOrObject instanceof Class ? null : onClassOrObject;
 		Class<?> resourceClass = onClassOrObject instanceof Class<?> onClassOrObject2 ? onClassOrObject2 : onClassOrObject.getClass();
-		return info(resourceClass)
+		var first = info(resourceClass)
 			.getPublicMethod(m ->
 				m.isNotDeprecated()
 				&& m.hasReturnType(beanType)
@@ -726,6 +718,33 @@ public class BasicBeanStore implements WritableBeanStore {
 					throw new BeanCreationException("Failed to create bean of type [" + beanType.getSimpleName() + "] via method [" + m.getName() + "]", e);
 				}
 			});
+		if (first.isPresent())
+			return first;
+		return createBeanFromNonPublicMethod(beanType, resourceClass, resource, filter, extraBeans);
+	}
+
+	/**
+	 * Second pass of {@link #createBeanFromMethod}: non-public {@link Bean @Bean}-annotated methods, child class first.
+	 */
+	private <T> Optional<T> createBeanFromNonPublicMethod(Class<T> beanType, Class<?> resourceClass, Object resource, Predicate<MethodInfo> filter, Object[] extraBeans) {
+		var seen = new HashSet<String>();  // Signatures of non-private, non-static methods already visited (child-first).
+		for (var m : info(resourceClass).getAllMethods()) {
+			if (m.isBridge() || m.isSynthetic())
+				continue;
+			if (m.isNotPrivate() && m.isNotStatic() && ! seen.add(m.getSignature()))
+				continue;
+			if (m.isPublic() || (m.isStatic() && m.getDeclaringClass().isInterface()))
+				continue;
+			if (BeanAnnotation.find(m).isEmpty())
+				continue;
+			if (m.isNotDeprecated()
+				&& m.hasReturnType(beanType)
+				&& (filter == null || filter.test(m))
+				&& (m.isStatic() || nn(resource))
+				&& m.canResolveAllParameters(this, extraBeans))
+				return Optional.ofNullable(BeanMethodInvoker.invoke(this, beanType, m, m.isStatic() ? null : resource, extraBeans));
+		}
+		return Optional.empty();
 	}
 
 	@Override /* Overridden from Object */
@@ -737,14 +756,14 @@ public class BasicBeanStore implements WritableBeanStore {
 		// @formatter:off
 		var entryList = list();
 		entries.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> entryList.add(filteredBeanPropertyMap()
-			.a(PROP_type, cns(type))
-			.a(PROP_bean, id(supplier.get()))
-			.a(PROP_name, name))));
+			.a("type", cns(type))
+			.a("bean", id(supplier.get()))
+			.a("name", name))));
 		var defaultList = list();
 		defaults.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> defaultList.add(filteredBeanPropertyMap()
-			.a(PROP_type, cns(type))
-			.a(PROP_bean, id(supplier.get()))
-			.a(PROP_name, name))));
+			.a("type", cns(type))
+			.a("bean", id(supplier.get()))
+			.a("name", name))));
 		Object overridingParentValue = null;
 		if (nn(overridingParent)) {
 			if (overridingParent instanceof BasicBeanStore overridingParent2)
@@ -755,12 +774,12 @@ public class BasicBeanStore implements WritableBeanStore {
 		var stack = overlayStack;
 		Object overlayStackValue = (nn(stack) && stack.depth() > 0) ? s(stack) : null;
 		return filteredBeanPropertyMap()
-			.a(PROP_entries, entryList)
-			.a(PROP_defaults, defaultList.isEmpty() ? null : defaultList)
-			.a(PROP_overlayStack, overlayStackValue)
-			.a(PROP_overridingParent, overridingParentValue)
-			.a(PROP_identity, id(this))
-			.a(PROP_parent, parent instanceof BasicBeanStore parent2 ? parent2.properties() : s(parent));
+			.a("entries", entryList)
+			.a("defaults", defaultList.isEmpty() ? null : defaultList)
+			.a("overlayStack", overlayStackValue)
+			.a("overridingParent", overridingParentValue)
+			.a("identity", id(this))
+			.a("parent", parent instanceof BasicBeanStore parent2 ? parent2.properties() : s(parent));
 		// @formatter:on
 	}
 
@@ -791,9 +810,6 @@ public class BasicBeanStore implements WritableBeanStore {
 			throw errors;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // reflective @Bean discovery — element types resolve at runtime to the value's actual class
-	})
 	private void registerConfiguration(Class<?> configType, Set<Class<?>> visited) {
 		if (!visited.add(configType))
 			return;

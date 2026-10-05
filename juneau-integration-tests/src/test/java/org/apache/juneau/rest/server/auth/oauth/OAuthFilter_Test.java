@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -79,7 +80,7 @@ class OAuthFilter_Test extends TestBase {
 		var f = filter(v);
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));
 		assertTrue(ex.getHeaders().stream()
-			.anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+			.anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void b02_validatorReturnsNull_throws() {
@@ -119,7 +120,7 @@ class OAuthFilter_Test extends TestBase {
 		var f = OAuthFilter.create().validator(v).realm("api2").build();
 		var e = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));
 		var hdr = e.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst().orElseThrow();
 		assertTrue(hdr.getValue().contains("api2"));
 	}

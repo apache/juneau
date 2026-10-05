@@ -20,9 +20,9 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import java.net.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.bean.html5.*;
-import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.*;
 
@@ -63,9 +63,9 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 	@Override /* Overridden from MenuItemWidget */
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
-		var l = new TreeSet<MediaType>();
-		for (var s : req.getOpContext().getSerializers().getSerializers())
-			l.add(s.getPrimaryMediaType());
+		var l = req.getOpContext().getSerializers().getSerializers().stream()
+			.map(s -> s.getPrimaryMediaType())
+			.collect(Collectors.toCollection(TreeSet::new));
 		for (var mt : l) {
 			URI uri = req.getUri(true, CollectionUtils.map("plainText", "true", "Accept", mt.toString()));
 			div.children(a(uri, mt), br());

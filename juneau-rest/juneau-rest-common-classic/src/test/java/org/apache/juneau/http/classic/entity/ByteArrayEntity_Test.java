@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1130", // Test methods uniformly declare 'throws Exception'; per-method pruning is high-churn/low-value.
-	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class ByteArrayEntity_Test extends TestBase {
 

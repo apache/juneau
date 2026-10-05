@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -54,13 +53,9 @@ import java.util.concurrent.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class McpStepUpAuthorizer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_operation = "operation";
 
 	/** A caller-supplied MCP call that throws {@link McpInsufficientScopeException} on a step-up challenge. */
 	@FunctionalInterface
@@ -116,7 +111,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull(ARG_value, value);
+			resource = reqnn("value", value);
 			return this;
 		}
 
@@ -127,7 +122,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull(ARG_value, value);
+			issuer = reqnn("value", value);
 			return this;
 		}
 
@@ -138,7 +133,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder accumulator(McpScopeAccumulator value) {
-			accumulator = assertArgNotNull(ARG_value, value);
+			accumulator = reqnn("value", value);
 			return this;
 		}
 
@@ -149,7 +144,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder reauthorizer(Reauthorizer value) {
-			reauthorizer = assertArgNotNull(ARG_value, value);
+			reauthorizer = reqnn("value", value);
 			return this;
 		}
 
@@ -161,7 +156,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder maxAttempts(int value) {
-			assertArg(value >= 1, "maxAttempts must be >= 1 (was %s)", value);
+			req(value >= 1, "maxAttempts must be >= 1 (was %s)", value);
 			maxAttempts = value;
 			return this;
 		}
@@ -185,9 +180,9 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder previouslyRequestedScopes(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				previouslyRequestedScopes.add(v);
 			}
 			return this;
@@ -248,8 +243,8 @@ public class McpStepUpAuthorizer {
 	 * @throws McpAuthException If step-up is disabled, or the attempt cap is exceeded (permanent authorization failure).
 	 */
 	public <T> T execute(String operation, ScopedCall<T> call) {
-		assertArgNotNullOrBlank(ARG_operation, operation);
-		assertArgNotNull("call", call);
+		reqnb("operation", operation);
+		reqnn("call", call);
 		var opKey = opKey(operation);
 		while (true) {
 			try {
@@ -279,7 +274,7 @@ public class McpStepUpAuthorizer {
 	 * @return The recorded attempt count.
 	 */
 	public int attempts(String operation) {
-		assertArgNotNullOrBlank(ARG_operation, operation);
+		reqnb("operation", operation);
 		return attemptsByOperation.getOrDefault(opKey(operation), 0);
 	}
 
@@ -290,7 +285,7 @@ public class McpStepUpAuthorizer {
 	 * @param operation The operation identifier.  Must not be <jk>null</jk> or blank.
 	 */
 	public void reset(String operation) {
-		assertArgNotNullOrBlank(ARG_operation, operation);
+		reqnb("operation", operation);
 		attemptsByOperation.remove(opKey(operation));
 	}
 

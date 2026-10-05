@@ -28,8 +28,8 @@ import org.junit.jupiter.api.*;
  * Branch-coverage tests for {@link HtmlParserSession}.
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes"
+	"rawtypes", // Some tests read into a raw (List) result to check element handling without declaring an element type
+	"unchecked" // PAR.read(html, List.class, X.class) returns Object; tests cast it to List<X>/Map<String,String> to assert on parsed results
 })
 class HtmlParserSession_Test extends TestBase {
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.parser;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.marshall.*;
 
@@ -41,11 +41,10 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class InputStreamParser extends Parser {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -67,7 +66,7 @@ public class InputStreamParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -77,7 +76,7 @@ public class InputStreamParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(InputStreamParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */

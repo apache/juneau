@@ -33,14 +33,12 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use naming conventions that embed type info or config keys (e.g. PROP_strictMode)
+	"java:S115", // Constants use naming conventions that embed type info or config keys
 	"java:S3776", // Cognitive complexity acceptable for TOML grammar
 	"java:S6541", // Brain method acceptable for tokenizer
 	"resource" // Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.
 })
 class TomlTokenizer {
-
-	private static final String CONST_integerOverflow = "Integer overflow: ";
 
 	private final Reader reader;
 	private final Deque<Integer> pushback = new ArrayDeque<>();
@@ -402,7 +400,7 @@ class TomlTokenizer {
 		try {
 			return Long.parseLong(sb.toString(), 16);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + sb);
+			throw parseException("Integer overflow: " + sb);
 		}
 	}
 
@@ -418,7 +416,7 @@ class TomlTokenizer {
 		try {
 			return Long.parseLong(sb.toString(), 8);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + sb);
+			throw parseException("Integer overflow: " + sb);
 		}
 	}
 
@@ -434,7 +432,7 @@ class TomlTokenizer {
 		try {
 			return Long.parseLong(sb.toString(), 2);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + sb);
+			throw parseException("Integer overflow: " + sb);
 		}
 	}
 
@@ -454,7 +452,7 @@ class TomlTokenizer {
 			long val = Long.parseLong(s);
 			return neg ? -val : val;
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw parseException(CONST_integerOverflow + s);
+			throw parseException("Integer overflow: " + s);
 		}
 	}
 

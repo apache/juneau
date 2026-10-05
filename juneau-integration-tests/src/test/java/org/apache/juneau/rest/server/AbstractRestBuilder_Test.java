@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * every fluent setter (a) records the value on the synthetic annotation returned by {@link AbstractRestBuilder#toRestAnnotation()}
  * and (b) returns the builder for chaining.
  */
+@SuppressWarnings({
+	"unchecked" // Builder calls such as serializers()/parsers()/encoders() take Class<? extends X>... varargs, creating generic arrays at the call sites
+})
 class AbstractRestBuilder_Test extends TestBase {
 	public static class R extends RestResource {}
 
@@ -86,9 +89,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends Serializer>[] varargs; generic array creation is safe here.
-	})
 	void b01_serializers() {
 		var b = b().serializers(JsonSerializer.class);
 		assertArrayEquals(new Class<?>[]{JsonSerializer.class}, b.toRestAnnotation().serializers());
@@ -100,9 +100,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends Encoder>[] varargs; generic array creation is safe here.
-	})
 	void b03_encoders() {
 		var b = b().encoders(IdentityEncoder.class);
 		assertArrayEquals(new Class<?>[]{IdentityEncoder.class}, b.toRestAnnotation().encoders());
@@ -129,9 +126,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends ResponseProcessor>[] varargs; generic array creation is safe here.
-	})
 	void b08_responseProcessors() {
 		var b = b().responseProcessors();
 		assertEquals(0, b.toRestAnnotation().responseProcessors().length);
@@ -203,9 +197,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends RestOpArg>[] varargs; generic array creation is safe here.
-	})
 	void c13_restOpArgs() {
 		var b = b().restOpArgs();
 		assertEquals(0, b.toRestAnnotation().restOpArgs().length);
@@ -216,9 +207,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends Guard>[] varargs; generic array creation is safe here.
-	})
 	void d01_guards() {
 		var b = b().guards();
 		assertEquals(0, b.toRestAnnotation().guards().length);
@@ -233,9 +221,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked" // Class<? extends RestConverter>[] varargs; generic array creation is safe here.
-	})
 	void d04_converters() {
 		var b = b().converters();
 		assertEquals(0, b.toRestAnnotation().converters().length);

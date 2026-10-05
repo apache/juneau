@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.auth;
 
 import java.security.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Package-private utility for extracting role names from a {@link ClaimsPrincipal} claim.
@@ -46,11 +47,10 @@ class ClaimsRoleExtractor {
 		if (principal instanceof ClaimsPrincipal principal2) {
 			var v = principal2.getClaims().get(claimName);
 			if (v instanceof List<?> v2) {
-				var roles = new HashSet<String>();
-				for (var item : (List<Object>) v2)
-					if (item instanceof String item2)
-						roles.add(item2);
-				return roles;
+				return ((List<Object>) v2).stream()
+					.filter(String.class::isInstance)
+					.map(String.class::cast)
+					.collect(Collectors.toCollection(HashSet::new));
 			}
 		}
 		return Collections.emptySet();

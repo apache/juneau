@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -45,7 +46,7 @@ class PageDirective_Test extends TestBase {
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/test-chrome.ftlh")
+				.chromeTemplate("admin/console-chrome-bare.ftlh")
 				.build();
 		}
 		@RestGet(path="/naked")
@@ -74,12 +75,24 @@ class PageDirective_Test extends TestBase {
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/test-chrome.ftlh")
+				.chromeTemplate("admin/console-chrome-bare.ftlh")
 				.build();
 		}
 		@RestGet(path="/toolkit")
 		public View toolkit() {
 			return FreemarkerView.of("admin/page-toolkit.ftlh");
+		}
+		@RestGet(path="/toolkit-server")
+		public View toolkitServer() {
+			return FreemarkerView.of("admin/page-toolkit-server-table.ftlh");
+		}
+		@RestGet(path="/toolkit-client")
+		public View toolkitClient() {
+			return FreemarkerView.of("admin/page-toolkit-client-table.ftlh");
+		}
+		@RestGet(path="/toolkit-url")
+		public View toolkitUrl() {
+			return FreemarkerView.of("admin/page-toolkit-url-table.ftlh");
 		}
 	}
 
@@ -105,7 +118,7 @@ class PageDirective_Test extends TestBase {
 		// The v1 framework registers page/card (and the Tag* method model); it never registered a
 		// <@viewSlot> directive.  Freeze that: page and card are present, viewSlot never was.
 		var cfg = ConsoleFreemarkerMixin.create().basePath("/templates/")
-			.chromeTemplate("admin/test-chrome.ftlh").build()
+			.chromeTemplate("admin/console-chrome-bare.ftlh").build()
 			.resolveConfiguration(dummyRequest());
 		assertNull(cfg.getSharedVariable("viewSlot"));
 		assertNotNull(cfg.getSharedVariable("page"));
@@ -116,22 +129,21 @@ class PageDirective_Test extends TestBase {
 		// The demo <@datatable> macro lives in the datatables module; this module must NOT define a shared
 		// variable named "datatable".  type="datatables" on <@card> is the framework surface, not a directive.
 		var cfg = ConsoleFreemarkerMixin.create().basePath("/templates/")
-			.chromeTemplate("admin/test-chrome.ftlh").build()
+			.chromeTemplate("admin/console-chrome-bare.ftlh").build()
 			.resolveConfiguration(dummyRequest());
 		assertNull(cfg.getSharedVariable("datatable"));
 	}
 
-	@Test void a01_nakedHtml_isWrappedInSingleMain_noSecondMain() throws Exception {
+	@Test void a01_nakedHtml_isOneSegmentCard() throws Exception {
 		String body;
 		try (var c = MockRestClient.buildLax(Host.class);
 			var rsp = c.get("/naked").run()) {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("<p class=\"naked-html\">hello</p>")
-			|| body.contains("<p class='naked-html'>hello</p>"), () -> body);
-		assertEquals(1, count(body, "<main"), () -> body);
-		assertTrue(body.contains("class=\"jc-main\"") || body.contains("class='jc-main'"), () -> body);
+		assertPage(body).isValid().hasCardOrder("jc-seg-1")
+			.templateContains("jc-seg-1", "<p class=\"naked-html\">hello</p>");
+		assertFalse(body.contains("<main"), () -> body);
 		assertFalse(body.contains("slds-"), "dual-hat: no slds-* in page output");
 	}
 
@@ -142,7 +154,7 @@ class PageDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("name=\"page-tab\"") && body.contains("releases"), () -> body);
+		assertTrue(body.contains("name=\"page-tab\"") && body.contains("content=\"home\""), () -> body);
 		assertTrue(body.contains("href=\"a.css\""), () -> body);
 		assertTrue(body.contains("href=\"b.css\""), () -> body);
 		assertTrue(body.indexOf("a.css") < body.indexOf("b.css"), () -> body);
@@ -150,6 +162,7 @@ class PageDirective_Test extends TestBase {
 		assertTrue(body.contains("src=\"two.js\""), () -> body);
 		assertTrue(body.indexOf("one.js") < body.indexOf("two.js"), () -> body);
 		assertFalse(body.contains("data-toolkit-js"), "omit toolkit= means no pack");
+		assertPage(body).isValid().hasActiveNav("home");
 	}
 
 	@Test void a02b_sequenceLiterals_areFirstClass() throws Exception {
@@ -176,24 +189,41 @@ class PageDirective_Test extends TestBase {
 		assertFalse(body.contains("juneau-page-cards.js"), () -> body);
 	}
 
-	@Test void a05_toolkitViews_emitsViewsPack_pageCardsLast_noDatatables() throws Exception {
-		String body;
+	private static String toolkitBody(String path) throws Exception {
 		try (var c = MockRestClient.buildLax(ToolkitHost.class);
-			var rsp = c.get("/toolkit").run()) {
+			var rsp = c.get(path).run()) {
 			rsp.assertStatus(200);
-			body = rsp.getContent().asString();
+			return rsp.getContent().asString();
 		}
-		// The "views" pack is emitted (marked so a consumer chrome can find it), page-cards is present, and
-		// page-cards.js is the LAST toolkit JS entry.
+	}
+
+	@Test void a05_toolkitViews_emitsViewsPack_noPageCards_noGlueWithoutServerTable() throws Exception {
+		var body = toolkitBody("/toolkit");
+		// The "views" pack is emitted (marked so a consumer chrome can find it); page-cards is no longer part of it.
 		assertTrue(body.contains("data-toolkit-js"), () -> body);
 		assertTrue(body.contains("juneau-views.js"), () -> body);
-		assertTrue(body.contains("juneau-page-cards.js"), () -> body);
-		assertTrue(body.indexOf("juneau-views.js") < body.indexOf("juneau-page-cards.js"), () -> body);
-		assertTrue(body.indexOf("juneau-helpers.js") < body.indexOf("juneau-page-cards.js"), () -> body);
-		// Dual-hat / anti-pattern: the first-party pack pulls in neither DataTables nor jQuery.
-		assertFalse(body.contains("datatables"), () -> body);
+		assertFalse(body.contains("juneau-page-cards.js"), () -> body);
+		assertTrue(body.indexOf("juneau-views.js") < body.indexOf("juneau-helpers.js"), () -> body);
+		// No server-mode table card: the DataTables glue is NOT requested (a host without DataTablesMixin would 404),
+		// and the DataTables library and jQuery stay caller-provided.
+		assertFalse(body.toLowerCase().contains("datatables"), () -> body);
 		assertFalse(body.contains("jquery"), () -> body);
 		assertFalse(body.contains("slds-"), () -> body);
+	}
+
+	@Test void a05b_toolkitViews_serverModeCard_emitsGlueBeforeViewsJs() throws Exception {
+		for (var path : java.util.List.of("/toolkit-server", "/toolkit-url")) {
+			var body = toolkitBody(path);
+			assertTrue(body.contains("juneau-datatables.js"), () -> path + ": " + body);
+			assertTrue(body.indexOf("juneau-datatables.js") < body.indexOf("juneau-views.js"), () -> path + ": " + body);
+			assertEquals(body.indexOf("juneau-datatables.js"), body.lastIndexOf("juneau-datatables.js"), () -> path + ": emitted once: " + body);
+		}
+	}
+
+	@Test void a05c_toolkitViews_clientModeCard_noGlue() throws Exception {
+		var body = toolkitBody("/toolkit-client");
+		assertTrue(body.contains("juneau-views.js"), () -> body);
+		assertFalse(body.contains("juneau-datatables.js"), () -> body);
 	}
 
 	@Test void a04_unknownAttr_isRejected() throws Exception {
@@ -203,11 +233,5 @@ class PageDirective_Test extends TestBase {
 			var body = rsp.getContent().asString();
 			assertTrue(body.contains("unknown attribute") && body.contains("foo"), () -> body);
 		}
-	}
-
-	static int count(String body, String needle) {
-		int n = 0, i = 0;
-		while ((i = body.indexOf(needle, i)) >= 0) { n++; i += needle.length(); }
-		return n;
 	}
 }

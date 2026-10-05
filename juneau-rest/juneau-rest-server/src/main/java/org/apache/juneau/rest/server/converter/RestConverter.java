@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='topic'>Predefined converters</h5>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
- * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
+ * 	<li class='jc'>{@link Queryable} - Allows BeanQuery search/view/sort/paging functions to be performed on POJOs.
  * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  *

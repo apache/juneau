@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -71,17 +71,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider, TokenWritable, ArrayRecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_builder = "builder";
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_addBeanTypesMsgPack = "addBeanTypesMsgPack";
 
 	/** Default serializer, BASE64 string output. */
 	public static class Base64 extends MsgPackSerializer {
@@ -93,7 +87,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Base64(Builder builder) {
-			super(assertArgNotNull(ARG_builder, builder).binaryFormat(BinaryFormat.BASE64));
+			super(reqnn("builder", builder).binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -122,7 +116,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;
 		}
 
@@ -133,7 +127,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;
 		}
 
@@ -278,7 +272,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	@Override /* Overridden from OutputStreamSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesMsgPack, addBeanTypesMsgPack);
+			.a("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
 
 	/**

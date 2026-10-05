@@ -21,14 +21,13 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.validation.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.validation.constraints.*;
 
 /**
  * Tests the non-negotiable &quot;validation is opt-in and disabled by default&quot; contract for
- * {@link BeanValidator} integration with Juneau REST.
+ * {@link org.apache.juneau.rest.server.validation.BeanValidator} integration with Juneau REST.
  *
  * <p>
  * Every test here pairs a request bean carrying Jakarta constraint annotations with a {@code @RestOp} handler

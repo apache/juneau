@@ -46,13 +46,10 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_headers)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class BasicStaticFiles implements StaticFiles {
-
-	// Property name constants
-	private static final String PROP_headers = "headers";
 
 	/**
 	 * Creates a new builder for this object.
@@ -155,9 +152,7 @@ public class BasicStaticFiles implements StaticFiles {
 			var hdrs = new ArrayList<HttpHeader>();
 			if (ct != null)
 				hdrs.add(ContentType.of(ct));
-			for (var h : headers)
-				if (h != null)
-					hdrs.add(h);
+			Arrays.stream(headers).filter(Objects::nonNull).forEach(hdrs::add);
 			return o(HttpResourceBean.of(StreamBody.of(is.get()), hdrs));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
@@ -167,7 +162,7 @@ public class BasicStaticFiles implements StaticFiles {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_headers, headers);
+			.a("headers", headers);
 		// @formatter:on
 	}
 

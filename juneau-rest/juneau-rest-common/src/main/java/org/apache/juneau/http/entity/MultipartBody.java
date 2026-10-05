@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -215,8 +214,8 @@ public final class MultipartBody implements HttpBody {
 		 * that could otherwise inject an extra MIME header line into the multipart wire format.
 		 */
 		public MultipartPart {
-			assertArgNotNull("name", name);
-			assertArgNotNull("body", body);
+			reqnn("name", name);
+			reqnn("body", body);
 			assertNoInjectionChars("name", name);
 			assertNoInjectionChars("filename", filename);
 			assertNoInjectionChars("contentType", contentType);
@@ -243,7 +242,7 @@ public final class MultipartBody implements HttpBody {
 		 * @return A new instance. Never <jk>null</jk>.
 		 */
 		public static MultipartPart file(String name, File file, String contentType) {
-			assertArgNotNull("file", file);
+			reqnn("file", file);
 			return new MultipartPart(name, file.getName(), contentType, FileBody.of(file, contentType));
 		}
 
@@ -283,7 +282,7 @@ public final class MultipartBody implements HttpBody {
 		 * @return This object.
 		 */
 		public Builder boundary(String value) {
-			boundary = assertArgNotNullOrBlank("value", value);
+			boundary = reqnb("value", value);
 			return this;
 		}
 
@@ -319,7 +318,7 @@ public final class MultipartBody implements HttpBody {
 		 * @return This object.
 		 */
 		public Builder part(MultipartPart part) {
-			parts.add(assertArgNotNull("part", part));
+			parts.add(reqnn("part", part));
 			return this;
 		}
 

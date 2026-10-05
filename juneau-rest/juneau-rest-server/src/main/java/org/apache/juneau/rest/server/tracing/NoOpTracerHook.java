@@ -60,8 +60,7 @@ public final class NoOpTracerHook implements TracerHook {
 	 * private equivalent.
 	 */
 	@SuppressWarnings({
-		"resource", // Singleton; intentionally held for the process lifetime.
-		"java:S6548" // Intentional process-wide no-op singleton returned for every span; the Singleton pattern is required for the zero-allocation no-op scope.
+		"resource" // Singleton; intentionally held for the process lifetime.
 	})
 	public static final class NoOpScope implements Scope {
 

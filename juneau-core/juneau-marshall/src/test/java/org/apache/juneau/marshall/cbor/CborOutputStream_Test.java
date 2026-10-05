@@ -238,7 +238,9 @@ class CborOutputStream_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("resource") // writeSimple returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.
+	@SuppressWarnings({
+		"resource" // writeSimple returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.
+	})
 	void a32_writeSimple() throws Exception {
 		// Major type 7 with the additional info encoding the simple value.
 		// Inline (0..23): one byte, 0xE0 | value.

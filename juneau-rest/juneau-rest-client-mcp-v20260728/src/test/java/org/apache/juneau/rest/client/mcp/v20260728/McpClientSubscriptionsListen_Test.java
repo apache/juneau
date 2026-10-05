@@ -47,7 +47,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 
 		// A "ping" heartbeat (named event, no data:) is interleaved between real frames to pin that the
 		// client's decode loop must skip it rather than choking on a null/empty data payload (see CONTRACT.md /
-		// SubscriptionsListenPublisher's HEARTBEAT_EVENT_NAME="ping" real-transport shape).
+		// SubscriptionsListenPublisher's heartbeat event name of "ping", the real-transport shape).
 		var inbound =
 			"data: {\"jsonrpc\":\"2.0\",\"method\":\"" + McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED + "\",\"params\":" + JsonSerializer.DEFAULT.write(ack) + "}\n\n"
 			+ "event: ping\n\n"
@@ -118,7 +118,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			assertTrue(done.await(5, TimeUnit.SECONDS));
 			handle.close();
 		}
-		// This is precisely the header contract McpRevision.dispatch()'s validateHeaders(...) enforces
+		// This is precisely the header contract the header validation in McpRevision dispatch enforces
 		// unconditionally before branching on the method (server-side); a real v2 server would otherwise
 		// reject the opening subscriptions/listen POST with -32600 "Missing required header: Mcp-Method".
 		assertEquals(McpMethods.SUBSCRIPTIONS_LISTEN, seenMethod.get());
@@ -473,7 +473,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 
 	@Test
 	void b04_isOpenObservedFromWithinOnError_forMalformedFrameDecodeException_isFalse_notTrueEvenThoughFinallyHasNotRunYet() throws Exception {
-		// Same malformed payload as a03, but this exercises run()'s catch (Exception e) branch specifically
+		// Same malformed payload as a03, but this exercises the generic exception-handling branch of run() specifically
 		// (the decode failure is thrown out of dispatch(...) itself, not returned as a JSON-RPC error frame).
 		var inbound = "data: {not valid json\n\n";
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200)

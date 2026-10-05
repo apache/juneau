@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
@@ -65,30 +64,18 @@ import org.apache.juneau.marshall.*;
  */
 @Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_status)
-	"java:S110" // Deep exception-hierarchy inheritance is structural and intentional; flattening would break the HTTP-response exception model.
+	"deprecation", // Uses deprecated HttpMessage API
+	"java:S110", // Deep exception-hierarchy inheritance is structural and intentional; flattening would break the HTTP-response exception model.
+	"java:S1104", // Package-private headers/statusLine/content fields are reassigned by setters and subclass constructors, so they cannot be final or private
+	"java:S1165", // headers/statusLine/content are replaced after construction by setters, so the exception's fields cannot be final
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_response = "response";
-
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings({
-		"java:S1104", // Fields reassigned after construction, cannot be final
-		"java:S1165"  // Cannot be final; setHeaders() replaces the list entirely via headers = value.copy()
-	})
 	HeaderList headers = HeaderList.create();
-	@SuppressWarnings({
-		"java:S1104", // Field reassigned after construction, cannot be final
-		"java:S1165"  // Cannot be final; setStatusLine() replaces it entirely via statusLine = value.copy()
-	})
 	transient BasicStatusLine statusLine = new BasicStatusLine();
-	@SuppressWarnings({
-		"java:S1104", // Field reassigned after construction, cannot be final
-		"java:S1165"  // Cannot be final; setContent() replaces it via content = value
-	})
 	transient HttpEntity content;
 
 	/**
@@ -108,7 +95,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException(HttpResponse response) {
 		super((Throwable)null);
-		assertArgNotNull(ARG_response, response);
+		reqnn("response", response);
 		var h = response.getLastHeader("Thrown");
 		if (nn(h)) {
 			var partsOpt = thrown(h.getValue()).asParts();
@@ -281,9 +268,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return m;
 	}
 
-	@SuppressWarnings({
-		"deprecation" // Uses deprecated HttpMessage API
-	})
 	@Override /* Overridden from HttpMessage */
 	public HttpParams getParams() { return null; }
 
@@ -460,9 +444,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return modify(() -> super.setMessage(message, args));
 	}
 
-	@SuppressWarnings({
-		"deprecation" // Uses deprecated HttpMessage API
-	})
 	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
 		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
@@ -585,7 +566,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @throws AssertionError If status code is not what was expected.
 	 */
 	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		assertArgNotNull(ARG_response, response);
+		reqnn("response", response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);

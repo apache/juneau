@@ -110,6 +110,52 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// addAllNn
+	//====================================================================================================
+	@Test
+	void a004b_addAllNn_varargs() {
+		var list = list("x");
+		var r = addAllNn(list, "a", null, "b");
+		assertSame(list, r);
+		assertList(r, "x", "a", "b");
+	}
+
+	@Test
+	void a004c_addAllNn_nullEntriesArray() {
+		var list = list("x");
+		assertSame(list, addAllNn(list, (String[])null));
+		assertList(list, "x");
+	}
+
+	@Test
+	void a004d_addAllNn_empty() {
+		var list = list("x");
+		assertSame(list, addAllNn(list));
+		assertSame(list, addAllNn(list, new String[0]));
+		assertList(list, "x");
+	}
+
+	@Test
+	void a004e_addAllNn_set() {
+		var set = new LinkedHashSet<String>();
+		var r = addAllNn(set, "a", null, "b", "a");
+		assertSame(set, r);
+		assertList(r, "a", "b");
+	}
+
+	@Test
+	void a004f_addAllNn_collectionArg() {
+		var target = new ArrayList<String>();
+		var src = Arrays.asList("a", null, "b");
+		// Passing a List must resolve to the Collection overload (not varargs with E=List).
+		var r = addAllNn(target, src);
+		assertSame(target, r);
+		assertList(r, "a", "b");
+		assertSame(target, addAllNn(target, (Collection<String>)null));
+		assertSize(2, target);
+	}
+
+	//====================================================================================================
 	// addAll(List<E>, List<E>)
 	//====================================================================================================
 	@Test

@@ -97,8 +97,8 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // RequestFormParam manages Closeable resources
-	"java:S2160" // equals() inherited from parent context; form param identity based on name+value from parent
+	"java:S2160", // equals() inherited from parent context; form param identity based on name+value from parent
+	"resource" // RequestFormParam manages Closeable resources
 })
 public class RequestFormParam extends RequestHttpPart implements HttpPart {
 

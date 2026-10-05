@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -511,8 +512,8 @@ class OtelTracerHook_Test extends TestBase {
 
 		var spans = EXPORTER.getFinishedSpanItems();
 		assertEquals(2, spans.size(), "server span + downstream child span");
-		var server = spans.stream().filter(x -> ! "child".equals(x.getName())).findFirst().orElseThrow();
-		var child = spans.stream().filter(x -> "child".equals(x.getName())).findFirst().orElseThrow();
+		var server = spans.stream().filter(x -> neq(x.getName(), "child")).findFirst().orElseThrow();
+		var child = spans.stream().filter(x -> eq(x.getName(), "child")).findFirst().orElseThrow();
 		assertEquals(META_TRACE_ID, server.getTraceId(), "server span must be parented by the extracted carrier context");
 		assertEquals(META_SPAN_ID, server.getParentSpanId());
 		assertEquals(server.getTraceId(), child.getTraceId(), "downstream child must share the server span's trace id");

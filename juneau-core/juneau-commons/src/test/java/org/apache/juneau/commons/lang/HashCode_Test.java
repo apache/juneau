@@ -50,13 +50,13 @@ class HashCode_Test extends TestBase {
 	@MethodSource("initialHashCodeTestData")
 	void a02_create_initialHashCode(String testName) {
 		int expectedHashCode = 1;
-		if ("create".equals(testName)) {
+		if (eq(testName, "create")) {
 			var hc = HashCode.create();
 			assertEquals(expectedHashCode, hc.get());
-		} else if ("of_empty".equals(testName)) {
+		} else if (eq(testName, "of_empty")) {
 			var hashCode = HashCode.of();
 			assertEquals(expectedHashCode, hashCode);
-		} else if ("get_initialValue".equals(testName)) {
+		} else if (eq(testName, "get_initialValue")) {
 			var hc = HashCode.create();
 			assertEquals(expectedHashCode, hc.get());
 		}

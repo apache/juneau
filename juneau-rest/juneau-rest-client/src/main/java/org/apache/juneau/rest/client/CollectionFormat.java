@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * Specifies how collection-valued query/form parameters are serialized to a single string.
@@ -73,7 +74,7 @@ public enum CollectionFormat {
 	 * @throws IllegalArgumentException If called on {@link #REPEATED}.
 	 */
 	public String join(Iterable<?> values) {
-		assertArg(delimiter != null, "join() is not supported for CollectionFormat.REPEATED");
+		req(delimiter != null, "join() is not supported for CollectionFormat.REPEATED");
 		var sb = new StringBuilder();
 		var first = true;
 		for (var v : values) {

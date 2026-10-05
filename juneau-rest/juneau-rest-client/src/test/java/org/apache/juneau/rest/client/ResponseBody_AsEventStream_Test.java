@@ -32,7 +32,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ResponseBody#asEventStream()}.
  */
-@SuppressWarnings("resource") // 'tr'/TransportResponse values below are handed to (and closed by) the enclosing RestResponse; test helpers return a RestResponse the caller closes via try-with-resources.
+@SuppressWarnings({
+	"resource" // 'tr'/TransportResponse values below are handed to (and closed by) the enclosing RestResponse; test helpers return a RestResponse the caller closes via try-with-resources.
+})
 class ResponseBody_AsEventStream_Test extends TestBase {
 
 	private static RestResponse response(String sseText, Closeable closeCallback) {

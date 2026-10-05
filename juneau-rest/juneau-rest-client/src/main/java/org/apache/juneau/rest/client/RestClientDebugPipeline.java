@@ -49,19 +49,25 @@ final class RestClientDebugPipeline {
 		// Stable-INFO emission: the record is always stamped INFO so the basic access line survives under an
 		// INFO handler even when a logger is raised to FINE/FINEST for diagnostics. `level` (the resolved tier)
 		// continues to drive only the cumulative section-inclusion checks above.
-		var record = new LogRecord(Level.INFO, sb.toString());
-		record.setLoggerName(logger.getName());
+		var logRecord = new LogRecord(Level.INFO, sb.toString());
+		logRecord.setLoggerName(logger.getName());
 		if (thrown != null)
-			record.setThrown(thrown);
+			logRecord.setThrown(thrown);
 
 		// Stamp-from-field: attach the resolved correlation id as a structured field so it survives to emission
 		// regardless of any log-context scope's lifetime (the load-bearing client fix).  Prefer the server-confirmed
 		// echoed id, else the sent id.  Map.of rejects null, so skip the attach entirely when neither exists (e.g.
 		// sendRequestId(false)) — a null-valued map would throw.
-		var effectiveId = (res != null && res.getRequestId() != null) ? res.getRequestId() : (req != null ? req.getRequestId() : null);
+		var effectiveId = effectiveRequestId(req, res);
 		if (effectiveId != null)
-			LogRecordContext.attachIfAbsent(record, Map.of("requestId", effectiveId));
+			LogRecordContext.attachIfAbsent(logRecord, Map.of("requestId", effectiveId));
 
-		logger.log(record);
+		logger.log(logRecord);
+	}
+
+	private static String effectiveRequestId(RestRequest req, RestResponse res) {
+		if (res != null && res.getRequestId() != null)
+			return res.getRequestId();
+		return req != null ? req.getRequestId() : null;
 	}
 }

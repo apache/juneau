@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -69,16 +68,9 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ExternalDocumentation extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_description = "description";
-	private static final String PROP_url = "url";
 
 	private String description;
 	private URI url;
@@ -111,10 +103,10 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_url -> toType(getUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "url" -> toType(getUrl(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -143,8 +135,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(url), PROP_url)
+			.addIf(nn(description), "description")
+			.addIf(nn(url), "url")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -152,10 +144,10 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public ExternalDocumentation set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> setDescription(s(value));
-			case PROP_url -> setUrl(toUri(value));
+			case "description" -> setDescription(s(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

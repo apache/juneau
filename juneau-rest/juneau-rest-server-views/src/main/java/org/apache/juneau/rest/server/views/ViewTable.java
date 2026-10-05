@@ -22,7 +22,7 @@ import org.apache.juneau.rest.server.filter.*;
  * Public DOM/CSS contract for a {@code data-juneau-view} table.
  *
  * <p>
- * Table authoring is FTL {@code <@card type="datatables">} (JSON5 catalog + {@code juneau-page-cards.js}).
+ * Table authoring is FTL {@code <@card type="datatables">} (JSON5 catalog).
  * This type is the stable set of marker attributes and class names the runtime and consumer chrome still
  * stamp or select: CSRF on a shell ancestor, layout hint, selection/bulk markers, row-detail template
  * attributes, and the named overflow class. It is not a Java page-authoring factory.
@@ -98,16 +98,6 @@ public class ViewTable {
 
 	/** Prefix of the bulk-actions sidecar {@code <script>} element id: {@code juneau-view-bulk:<viewId>}. */
 	public static final String BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
-
-	/**
-	 * Attribute the resolved, context-path-aware saved-views REST base is stamped onto on a wrapper
-	 * so {@code juneau-config.js} can locate it via {@code table.closest('[data-juneau-saved-views]')}.
-	 *
-	 * <p>
-	 * The mount is fixed at {@link SavedViewsMixin#SAVED_VIEWS_PREFIX}; only the resolved URL varies with the
-	 * servlet context path. Absent/blank means the JS server-provider is unavailable for this table (fail closed).
-	 */
-	public static final String SAVED_VIEWS_ATTR = "data-juneau-saved-views";
 
 	/**
 	 * Full-real-estate layout hint. A first-class public {@code data-juneau-*} convention: consumer chrome

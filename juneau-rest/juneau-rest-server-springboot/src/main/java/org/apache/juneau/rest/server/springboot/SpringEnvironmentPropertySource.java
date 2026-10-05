@@ -124,7 +124,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		// Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a
 		// Spring-Boot deployment has a single source of truth for which profiles are active.  Only answered when the
 		// caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).
-		if (PROFILES_ACTIVE_KEY.equals(name) && ! e.containsProperty(name)) {
+		if (eq(name, PROFILES_ACTIVE_KEY) && ! e.containsProperty(name)) {
 			var active = e.getActiveProfiles();
 			if (active.length > 0)  // getActiveProfiles() never returns null per the Environment contract.
 				return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(",", active)));

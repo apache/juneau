@@ -66,7 +66,7 @@ class ResponseContent_Coverage_Test {
 			var body = "hi".getBytes(StandardCharsets.UTF_8);
 			exchange.getResponseHeaders().add("Content-Type", "text/plain");
 			// Declares a larger Content-Length than the bytes actually written, so reading the full declared length
-			// triggers an IOException partway through -- exercises asString()/toString()'s catch(IOException) branch.
+			// triggers an IOException partway through -- exercises the IOException-handling branch of asString and toString.
 			// The explicit flush() forces the partial body onto the wire before close() (which itself throws
 			// because the declared length wasn't fully written); without it, some JDKs (e.g. 25) tear the
 			// connection down before anything is sent, producing NoHttpResponseException instead.
@@ -210,8 +210,8 @@ class ResponseContent_Coverage_Test {
 		// has its own writeTo(OutputStream) simplified to fail fast (it's never legitimately invoked -- see the
 		// in-source comment). Forcing the sentinel into play via an HttpResponseInterceptor (which runs before
 		// ResponseContent captures `entity`, same as a01 above) and exercising both read paths confirms neither
-		// pipeTo(OutputStream) (-> ResponseContent#writeTo -> pipeTo -> asInputStream -> entity.getContent()) nor
-		// asBytes() ever reaches NULL_ENTITY.writeTo(...); if they did, this test would fail with an
+		// pipeTo (which goes through ResponseContent#writeTo, then pipeTo, asInputStream and entity.getContent) nor
+		// asBytes ever reaches the sentinel's writeTo; if they did, this test would fail with an
 		// UnsupportedOperationException instead of observing empty content.
 		HttpResponseInterceptor itcp = (response, context) -> response.setEntity(null);
 		try (var client = RestClient.create().interceptors(itcp).build();

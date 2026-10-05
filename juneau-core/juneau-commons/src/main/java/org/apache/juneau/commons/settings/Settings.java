@@ -18,7 +18,6 @@ package org.apache.juneau.commons.settings;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
@@ -130,22 +129,11 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_sources, MSG_globalDisabled)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_globalDisabled)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // Type erasure requires unchecked cast
 })
 public class Settings {
-
-	// Argument name constants for assertArgNoNulls
-	private static final String ARG_sources = "sources";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_name = "name";
-	private static final String ARG_def = "def";
-	private static final String ARG_s = "s";
-	private static final String ARG_c = "c";
-	private static final String ARG_supplier = "supplier";
-	private static final String ARG_source = "source";
-	private static final String ARG_type = "type";
-	private static final String ARG_function = "function";
 
 	/**
 	 * System property source that delegates to {@link System#getProperty(String)}.
@@ -230,7 +218,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder globalStore(NullableSupplier<PropertyStore> supplier) {
-			this.globalStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
+			this.globalStoreSupplier = reqnn("supplier", supplier);
 			return this;
 		}
 
@@ -241,7 +229,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder localStore(NullableSupplier<PropertyStore> supplier) {
-			this.localStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
+			this.localStoreSupplier = reqnn("supplier", supplier);
 			return this;
 		}
 
@@ -253,7 +241,7 @@ public class Settings {
 		 */
 		@SafeVarargs
 		public final Builder setSources(PropertySource...sources) {
-			assertArgNoNulls(ARG_sources, sources);
+			reqnns("sources", sources);
 			this.sources.clear();
 			for (var source : sources) {
 				this.sources.add(source);
@@ -268,7 +256,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder addSource(PropertySource source) {
-			assertArgNotNull(ARG_source, source);
+			reqnn("source", source);
 			this.sources.add(source);
 			return this;
 		}
@@ -329,8 +317,8 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public <T> Builder addTypeFunction(Class<T> type, Function<String,T> function) {
-			assertArgNotNull(ARG_type, type);
-			assertArgNotNull(ARG_function, function);
+			reqnn("type", type);
+			reqnn("function", function);
 			customTypeFunctions.put(type, function);
 			return this;
 		}
@@ -385,7 +373,7 @@ public class Settings {
 	 * @return This object for method chaining.
 	 */
 	public Settings addSource(PropertySource source) {
-		assertArgNotNull(ARG_source, source);
+		reqnn("source", source);
 		sources.add(source);
 		return this;
 	}
@@ -420,7 +408,7 @@ public class Settings {
 	 * @return <jk>true</jk> if the source was present and removed, <jk>false</jk> otherwise.
 	 */
 	public boolean removeSource(PropertySource source) {
-		assertArgNotNull(ARG_source, source);
+		reqnn("source", source);
 		// Identity-based removal so that PropertySource impls without a sensible equals() still
 		// round-trip cleanly through add/remove pairs.
 		for (var i = 0; i < sources.size(); i++) {
@@ -454,7 +442,7 @@ public class Settings {
 	 * @return A {@link StringSetting} that provides the resolved property value.
 	 */
 	public StringSetting get(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return new StringSetting(this, () -> {
 			// 1. Check thread-local override
 			var v = localStore.get().get(name);
@@ -509,7 +497,7 @@ public class Settings {
 	 * @see #get(String)
 	 */
 	public Optional<String> getOverride(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		var v = localStore.get().get(name);
 		if (v.isPresent())
 			return v.value();
@@ -532,7 +520,7 @@ public class Settings {
 	 * @return <jk>true</jk> if either store carries an override (even with a {@code null} value).
 	 */
 	public boolean isOverridden(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return localStore.get().get(name).isPresent() || globalStore.get().get(name).isPresent();
 	}
 
@@ -564,11 +552,8 @@ public class Settings {
 	 * @see #get(String)
 	 * @see #toType(String, Class)
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked cast
-	})
 	public <T> T get(String name, T def) {
-		assertArgNotNull(ARG_def, def);
+		reqnn("def", def);
 		return get(name).asType((Class<T>)def.getClass()).orElse(def);
 	}
 
@@ -596,7 +581,7 @@ public class Settings {
 	 * @see #clearGlobal()
 	 */
 	public Settings setGlobal(String name, String value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		globalStore.orElseThrow(()->isex(MSG_globalDisabled)).set(name, value);
 		return this;
 	}
@@ -613,7 +598,7 @@ public class Settings {
 	 * @see #clearGlobal()
 	 */
 	public void unsetGlobal(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		globalStore.orElseThrow(()->isex(MSG_globalDisabled)).unset(name);
 	}
 
@@ -636,8 +621,8 @@ public class Settings {
 	 * @see #clearLocal()
 	 */
 	public Settings setLocal(String name, String value) {
-		assertArgNotNull(ARG_name, name);
-		assertState(nn(localStore.get()), MSG_localDisabled);
+		reqnn("name", name);
+		chk(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().set(name, value);
 		return this;
 	}
@@ -654,8 +639,8 @@ public class Settings {
 	 * @see #clearLocal()
 	 */
 	public void unsetLocal(String name) {
-		assertArgNotNull(ARG_name, name);
-		assertState(nn(localStore.get()), MSG_localDisabled);
+		reqnn("name", name);
+		chk(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().unset(name);
 	}
 
@@ -675,7 +660,7 @@ public class Settings {
 	 * @see #unsetLocal(String)
 	 */
 	public Settings clearLocal() {
-		assertState(nn(localStore.get()), MSG_localDisabled);
+		chk(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().clear();
 		return this;
 	}
@@ -744,12 +729,11 @@ public class Settings {
 	 * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked cast
 		"rawtypes" // Raw types necessary for generic type handling
 	})
 	public <T> T toType(String s, Class<T> c) {
-		assertArgNotNull(ARG_s, s);
-		assertArgNotNull(ARG_c, c);
+		reqnn("s", s);
+		reqnn("c", c);
 		var f = (Function<String,T>)toTypeFunctions.get(c);
 		if (f == null) {
 			if (c == String.class)

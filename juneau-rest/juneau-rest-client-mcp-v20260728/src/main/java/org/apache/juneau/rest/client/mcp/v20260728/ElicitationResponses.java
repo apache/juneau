@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Static helper for encoding the client's answers to server&rarr;client MCP {@code 2026-07-28} SEP-2322
@@ -51,8 +51,8 @@ public final class ElicitationResponses {
 	 * @throws IllegalArgumentException If {@code id} or {@code result} is <jk>null</jk>.
 	 */
 	public static Map<String,Object> toInputResponse(String id, ElicitResult result) {
-		assertArgNotNull("id", id);
-		assertArgNotNull("result", result);
+		reqnn("id", id);
+		reqnn("result", result);
 		return toInputResponses(Map.of(id, result));
 	}
 
@@ -73,10 +73,10 @@ public final class ElicitationResponses {
 	 * @throws IllegalArgumentException If {@code results} is <jk>null</jk>, or any value in it is <jk>null</jk>.
 	 */
 	public static Map<String,Object> toInputResponses(Map<String,ElicitResult> results) {
-		assertArgNotNull("results", results);
+		reqnn("results", results);
 		Map<String,Object> out = new LinkedHashMap<>();
 		results.forEach((id, result) -> {
-			assertArgNotNull("results[" + id + "]", result);
+			reqnn("results[" + id + "]", result);
 			// Pre-marshalled to JsonMap here (rather than left as the typed ElicitResult for McpClient.call's
 			// own toWireParams flattening) so that (a) a null-check on the encoded shape is meaningful even
 			// when this helper is used standalone, outside McpClient.call's flow, and (b) the returned map is

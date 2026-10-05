@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -31,6 +30,7 @@ import com.nimbusds.oauth2.sdk.http.*;
 import com.nimbusds.oauth2.sdk.util.*;
 
 import net.minidev.json.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fetches and parses an RFC 9728 Protected Resource Metadata (PRM) document, and resolves the authorization server a
@@ -57,20 +57,12 @@ import net.minidev.json.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value, PROP_resource)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class McpProtectedResourceMetadataClient {
 
 	/** Default connect/read timeout applied to a PRM fetch / AS discovery when the caller sets none. */
 	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-
-	// PRM document property name constants (RFC 9728)
-	private static final String PROP_resource = "resource";
-	private static final String PROP_authorizationServers = "authorization_servers";
-	private static final String PROP_scopesSupported = "scopes_supported";
 
 	/**
 	 * Static creator.
@@ -105,7 +97,7 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder expectedResource(URI value) {
-			expectedResource = assertArgNotNull(ARG_value, value);
+			expectedResource = reqnn("value", value);
 			return this;
 		}
 
@@ -116,8 +108,8 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull(ARG_value, value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -140,7 +132,7 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -195,7 +187,7 @@ public class McpProtectedResourceMetadataClient {
 	 * @throws McpAuthException If the fetch fails, the document cannot be parsed, or the resource identity check fails.
 	 */
 	public McpProtectedResourceMetadata fetch(URI prmUrl, URI expectedResource) {
-		assertArgNotNull("prmUrl", prmUrl);
+		reqnn("prmUrl", prmUrl);
 		requireSecure(prmUrl, "Protected-resource-metadata URL");
 		HTTPResponse resp;
 		try {
@@ -241,7 +233,7 @@ public class McpProtectedResourceMetadataClient {
 	 * 	fails the resource identity check.
 	 */
 	public McpProtectedResourceMetadata parse(String json, URI source, URI expectedResource) {
-		assertArgNotNull("json", json);
+		reqnn("json", json);
 		JSONObject o;
 		try {
 			o = JSONObjectUtils.parse(json);
@@ -250,14 +242,14 @@ public class McpProtectedResourceMetadataClient {
 		}
 		McpProtectedResourceMetadata prm;
 		try {
-			var resource = JSONObjectUtils.getURI(o, PROP_resource);
+			var resource = JSONObjectUtils.getURI(o, "resource");
 			var authServers = new ArrayList<URI>();
-			if (o.containsKey(PROP_authorizationServers))
-				for (var v : JSONObjectUtils.getStringList(o, PROP_authorizationServers))
+			if (o.containsKey("authorization_servers"))
+				for (var v : JSONObjectUtils.getStringList(o, "authorization_servers"))
 					authServers.add(URI.create(v));
 			var scopes = new LinkedHashSet<String>();
-			if (o.containsKey(PROP_scopesSupported))
-				scopes.addAll(JSONObjectUtils.getStringList(o, PROP_scopesSupported));
+			if (o.containsKey("scopes_supported"))
+				scopes.addAll(JSONObjectUtils.getStringList(o, "scopes_supported"));
 			var extras = new LinkedHashMap<String,Object>();
 			for (var e : o.entrySet())
 				if (!STANDARD_FIELDS.contains(e.getKey()))
@@ -279,7 +271,7 @@ public class McpProtectedResourceMetadataClient {
 	 * @throws McpAuthException If no authorization server is advertised or discovery/issuer validation fails.
 	 */
 	public OidcMetadata discoverAuthorizationServer(McpProtectedResourceMetadata prm) {
-		assertArgNotNull("prm", prm);
+		reqnn("prm", prm);
 		var as = prm.firstAuthorizationServer()
 			.orElseThrow(() -> new McpAuthException("Protected-resource-metadata for " + prm.resource() + " advertised no authorization_servers"));
 		requireSecure(as, "Authorization-server URL");
@@ -308,7 +300,7 @@ public class McpProtectedResourceMetadataClient {
 	}
 
 	private void requireSecure(URI uri, String what) {
-		if (allowInsecureHttp || "https".equalsIgnoreCase(uri.getScheme()) || isLoopback(uri))
+		if (allowInsecureHttp || eqic("https", uri.getScheme()) || isLoopback(uri))
 			return;
 		throw new McpAuthException(what + " must use https (was '" + uri + "'); enable allowInsecureHttp for non-loopback http");
 	}
@@ -317,10 +309,10 @@ public class McpProtectedResourceMetadataClient {
 		var host = uri.getHost();
 		if (host == null)
 			return false;
-		return "localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host) || "[::1]".equals(host) || "::1".equals(host);
+		return eqic("localhost", host) || eqa(host, "127.0.0.1", "[::1]", "::1");
 	}
 
 	private static final Set<String> STANDARD_FIELDS = Set.of(
-		PROP_resource, PROP_authorizationServers, PROP_scopesSupported
+		"resource", "authorization_servers", "scopes_supported"
 	);
 }

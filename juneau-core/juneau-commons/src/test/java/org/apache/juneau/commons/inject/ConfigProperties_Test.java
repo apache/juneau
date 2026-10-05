@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -224,7 +225,7 @@ class ConfigProperties_Test extends TestBase {
 
 	@Test void h01_scopedPropertySourceInParentStoreParticipatesAheadOfGlobal() {
 		var store = new BasicBeanStore(null);
-		store.addBean(PropertySource.class, name -> "MyServiceH01.host".equals(name)
+		store.addBean(PropertySource.class, name -> eq(name, "MyServiceH01.host")
 			? PropertyLookupResult.present(Optional.of("scoped.example.com"))
 			: PropertyLookupResult.missing());
 		var bean = BeanInstantiator.of(H01_Bean.class, store).run();

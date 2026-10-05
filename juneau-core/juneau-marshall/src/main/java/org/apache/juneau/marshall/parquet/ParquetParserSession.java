@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
@@ -35,19 +34,19 @@ import org.apache.juneau.marshall.stream.*;
  * Session for {@link ParquetParser}.
  */
 @SuppressWarnings({
-	"java:S110",
-	"java:S115",
-	"java:S2583", // parquetDebug() is runtime-configurable via setDebugEnabled/-Djuneau.parquet.debug
-	"java:S3776",
-	"java:S6541", // Brain Method: Parquet parsing/serialization flows are inherently branchy
+	"java:S107", // readAllRows(), readRowGroupRows() and the FileMeta record carry the fixed per-file schema maps (repetition, raw-byte-array paths, UUID paths, logical types) through the column decode
+	"java:S110", // Extends the shared InputStreamParserSession > ParserSession hierarchy used by every binary format parser session
 	"java:S1192", // Duplicated literals (.list.element, root.list.element., value) are schema keys; constants would obscure
-	"resource",   // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
-	"java:S6539"  // Monster class; ParquetParserSession is intentionally a single cohesive Parquet codec session
+	"java:S2583", // parquetDebug() is runtime-configurable via setDebugEnabled/-Djuneau.parquet.debug
+	"java:S3776", // doRead(), readSchema() and reconstructNestedListColumn() each walk the Parquet structure (schema tree, scalar-vs-bean-vs-collection targets, repetition/definition levels) in one pass
+	"java:S6539", // Monster class; ParquetParserSession is intentionally a single cohesive Parquet codec session
+	"java:S6541", // Brain Method: Parquet parsing/serialization flows are inherently branchy
+	"resource", // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"unchecked" // doRead() casts the converted row/array/collection result to T, and Collection<Object> for the target collection type, both guaranteed by the requested ClassMeta
 })
 public class ParquetParserSession extends InputStreamParserSession implements RecordReadable, ArrayRecordReadable {
 
 	private static final byte[] MAGIC = "PAR1".getBytes(StandardCharsets.UTF_8);
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Explicit override set via {@link #setDebugEnabled}.  When {@code null}, the debug state is read
@@ -93,7 +92,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ParquetParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -111,7 +110,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * @return A new builder.
 	 */
 	public static Builder create(ParquetParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final ParquetParser ctx;
@@ -229,7 +228,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	@Override
 	@SuppressWarnings({
-		"unchecked" // Generic (T) casts required due to type erasure in doRead
+		"java:S9391" // Hot path; avoids stream allocation (and loop bodies throw checked ParseException).
 	})
 	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		var bytes = readAllBytes(pipe, effectiveMaxInputLength());
@@ -837,9 +836,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return allRows;
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
-	})
 	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, DecompressionBudget budget) throws ParseException {
 		var columnData = new LinkedHashMap<String,List<Object>>();
 		var maxLength = effectiveMaxLength();
@@ -983,9 +979,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * {@code stacks[0]} is the outermost list (what will be placed in the row),
 	 * {@code stacks[N-1]} is the innermost list being appended to.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Generic array creation for stacks.
-	})
 	private static List<Object> reconstructNestedListColumn(List<Object[]> flattened, int numRows, int depth, int maxDef, long maxCount) {
 		var result = new ArrayList<>(clampCapacity(numRows, maxCount));
 		var stacks = new ArrayList[depth];
@@ -1154,9 +1147,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return result;
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
-	})
 	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings, int maxLength, long maxCount, DecompressionBudget budget) throws ParseException {
 		try {
 			if (cc.numValues() < 0 || cc.numValues() > maxCount)
@@ -1221,9 +1211,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Decodes one PLAIN-or-dictionary-encoded data page into {@code values}, appending {@link GroupNull}
 	 * sentinels for null intermediate OPTIONAL groups (GAP-14).
 	 */
-	@SuppressWarnings({
-		"java:S107" // Parser-internal method threads decode state (page metrics, def levels, logical types, value sink); parameter count is intentional.
-	})
 	static void readDataPageValues(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
 			int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical,
 			boolean dictEncoded, List<Object> dictionary, List<Object> values) throws IOException, ParseException {
@@ -1583,9 +1570,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Replaces keys equal to {@link ParquetParser#nullKeyString} (default <js>"&lt;NULL&gt;"</js>)
 	 * with actual <jk>null</jk> in maps. Enables round-trip of maps with null keys in flat (column-per-key) format.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: Parquet schema type is verified at parse time.
-	})
 	private void replaceNullKeySentinel(Object obj) {
 		if (obj == null)
 			return;
@@ -1604,9 +1588,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	/** Collapses Parquet optional-group {value: X} wrappers so MarshallingSession receives unwrapped values for Optional properties. */
-	@SuppressWarnings({
-		"unchecked" // (Map<String,Object>) cast for mutating optional-group structure
-	})
 	private void collapseOptionalWrappers(Map<?,?> row, ClassMeta<?> elementType) {
 		var bm = elementType.getBeanMeta();
 		boolean hasOptional = bm.getProperties().values().stream().anyMatch(p -> p.getBeanInfo() != null && p.getBeanInfo().isOptional());
@@ -1683,9 +1664,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return val;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // (Map<String,Object>) cast when creating nested maps at path segments
-	})
 	private static void setByPath(Map<String,Object> target, String path, Object value) throws ParseException {
 		var parts = path.split("\\.");
 		if (parts.length == 1) {
@@ -1735,9 +1713,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return arr;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Collection.newInstance() returns raw type; cast to Collection<Object> for add
-	})
 	private Object toCollection(List<Object> values, ClassMeta<?> collectionType) throws ParseException {
 		var elemType = collectionType.getElementType();
 		Collection<Object> result;

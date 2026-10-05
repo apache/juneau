@@ -510,8 +510,7 @@ class Stringifiers_Test extends TestBase {
 			var result = stringifier.apply(converter, input);
 
 			// Order may vary, so check both possibilities
-			assertTrue(result.equals("{key1=value1,key2=value2}") ||
-				result.equals("{key2=value2,key1=value1}"));
+			assertTrue(eqa(result, "{key1=value1,key2=value2}", "{key2=value2,key1=value1}"));
 		}
 
 		@Test

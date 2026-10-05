@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -83,15 +82,10 @@ import java.nio.file.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // File resources managed by calling code
-	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // File resources managed by calling code
 })
 public class LocalFile {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_clazz = "clazz";
-	private static final String ARG_clazzPath = "clazzPath";
-	private static final String ARG_path = "path";
 
 	private final Class<?> clazz;
 	private final String clazzPath;
@@ -123,8 +117,8 @@ public class LocalFile {
 	 *                  Use absolute paths (starting with <js>'/'</js>) to reference from classpath root.
 	 */
 	public LocalFile(Class<?> clazz, String clazzPath) {
-		this.clazz = assertArgNotNull(ARG_clazz, clazz);
-		this.clazzPath = assertArgNotNull(ARG_clazzPath, clazzPath);
+		this.clazz = reqnn("clazz", clazz);
+		this.clazzPath = reqnn("clazzPath", clazzPath);
 		this.path = null;
 		var i = clazzPath.lastIndexOf('/');
 		this.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
@@ -157,9 +151,9 @@ public class LocalFile {
 	public LocalFile(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = assertArgNotNull(ARG_path, path);
+		this.path = reqnn("path", path);
 		var fileName = path.getFileName();
-		assertArg(fileName != null, "Argument 'path' must not be a root path (must have a filename).");
+		req(fileName != null, "Argument 'path' must not be a root path (must have a filename).");
 		this.name = o(fileName).map(Object::toString).orElse(null);
 	}
 

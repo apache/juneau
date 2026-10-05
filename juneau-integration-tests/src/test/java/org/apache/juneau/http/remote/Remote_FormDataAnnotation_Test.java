@@ -42,15 +42,13 @@ import org.apache.juneau.rest.server.RestRequest;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
 })
 class Remote_FormDataAnnotation_Test extends TestBase {
 
 	public static class Bean {
 		public int f;
-		@SuppressWarnings({
-			"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-		})
 		public static Bean of() {
 			var b = new Bean();
 			b.f = 1;

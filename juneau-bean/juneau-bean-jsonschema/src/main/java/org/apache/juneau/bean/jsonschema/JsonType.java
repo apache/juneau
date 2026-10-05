@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Represents possible JSON types in the JSON-Schema core specification.
  *
@@ -69,23 +71,23 @@ public enum JsonType {
 		if (value == null || value.length() < 4)
 			return null;
 		var c = value.charAt(0);
-		if (c == 'a' && value.equals("array"))
+		if (c == 'a' && eq(value, "array"))
 			return ARRAY;
-		if (c == 'b' && value.equals("boolean"))
+		if (c == 'b' && eq(value, "boolean"))
 			return BOOLEAN;
-		if (c == 'i' && value.equals("integer"))
+		if (c == 'i' && eq(value, "integer"))
 			return INTEGER;
 		if (c == 'n') {
 			c = value.charAt(2);
-			if (c == 'l' && value.equals("null"))
+			if (c == 'l' && eq(value, "null"))
 				return NULL;
-			if (c == 'm' && value.equals("number"))
+			if (c == 'm' && eq(value, "number"))
 				return NUMBER;
 			return null;
 		}
-		if (c == 'o' && value.equals("object"))
+		if (c == 'o' && eq(value, "object"))
 			return OBJECT;
-		if (c == 's' && value.equals("string"))
+		if (c == 's' && eq(value, "string"))
 			return STRING;
 		return null;
 	}

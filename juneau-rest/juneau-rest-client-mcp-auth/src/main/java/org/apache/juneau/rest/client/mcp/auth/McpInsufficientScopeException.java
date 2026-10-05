@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * Signals that an MCP call was rejected with a SEP-2350 {@code 401}/{@code 403 insufficient_scope} step-up challenge.
@@ -44,7 +45,7 @@ public class McpInsufficientScopeException extends RuntimeException {
 	 */
 	public McpInsufficientScopeException(WwwAuthenticateChallenge challenge) {
 		super("MCP call rejected with an insufficient_scope step-up challenge: "
-			+ assertArgNotNull("challenge", challenge).scopes());
+			+ reqnn("challenge", challenge).scopes());
 		this.challenge = challenge;
 	}
 

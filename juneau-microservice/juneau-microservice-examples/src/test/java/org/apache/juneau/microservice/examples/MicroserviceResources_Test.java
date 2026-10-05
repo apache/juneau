@@ -73,10 +73,10 @@ class MicroserviceResources_Test extends TestBase {
 
 		private static Config buildConfig() {
 			var cfg = Config.create().memStore().build();
-			cfg.set(DIRECTORY_RESOURCE_rootDir, dirRoot.toString());
-			cfg.set(DIRECTORY_RESOURCE_allowViews, "true");
-			cfg.set(DIRECTORY_RESOURCE_allowUploads, "true");
-			cfg.set(DIRECTORY_RESOURCE_allowDeletes, "false");
+			cfg.set("DirectoryResource." + "rootDir.s", dirRoot.toString());
+			cfg.set("DirectoryResource." + "allowViews.b", "true");
+			cfg.set("DirectoryResource." + "allowUploads.b", "true");
+			cfg.set("DirectoryResource." + "allowDeletes.b", "false");
 			return cfg;
 		}
 	}

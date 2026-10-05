@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
@@ -74,12 +73,12 @@ public class InMemoryLoginStateStore implements LoginStateStore {
 	 * @param clock The clock for TTL sweeping.  Must not be <jk>null</jk>.
 	 */
 	public InMemoryLoginStateStore(Duration ttl, int maxEntries, Clock clock) {
-		assertArgNotNull("ttl", ttl);
-		assertArg(!ttl.isZero() && !ttl.isNegative(), "ttl must be positive");
-		assertArg(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was %s)", ttl);
-		assertArg(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
+		reqnn("ttl", ttl);
+		req(!ttl.isZero() && !ttl.isNegative(), "ttl must be positive");
+		req(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was %s)", ttl);
+		req(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.maxEntries = maxEntries;
-		this.clock = assertArgNotNull("clock", clock);
+		this.clock = reqnn("clock", clock);
 		this.entries = new LinkedHashMap<>(16, 0.75f, true) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -91,8 +90,8 @@ public class InMemoryLoginStateStore implements LoginStateStore {
 
 	@Override /* LoginStateStore */
 	public void store(String state, PendingLogin pending) {
-		assertArgNotNullOrBlank("state", state);
-		assertArgNotNull("pending", pending);
+		reqnb("state", state);
+		reqnn("pending", pending);
 		var now = clock.instant();
 		synchronized (lock) {
 			sweepExpired(now);

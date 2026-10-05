@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -64,14 +63,12 @@ import org.apache.juneau.http.UnmodifiableBean;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",  // Inheritance depth acceptable for this class hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for header lists
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S127", // set(Header)/set(List) remove duplicate-named headers while iterating and decrement the cached size bound (j/j2) to match
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2160" // equals() inherited from ArrayList; list equality is element-based, which is correct for header lists
 })
 public class HeaderList extends ArrayList<Header> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_type = "type";
 
 	/** Represents no header list in annotations. */
 	public static final class Void extends HeaderList {
@@ -133,7 +130,7 @@ public class HeaderList extends ArrayList<Header> {
 		var x = new HeaderList();
 		if (pairs == null)
 			pairs = new String[0];
-		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into HeaderList.ofPairs()");
+		req(pairs.length % 2 == 0, "Odd number of parameters passed into HeaderList.ofPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
 			x.add(BasicHeader.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -334,10 +331,10 @@ public class HeaderList extends ArrayList<Header> {
 	 * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		assertArg(nn(name), "Header name could not be found on bean type '%s'", cn(type));
+		req(nn(name), "Header name could not be found on bean type '%s'", cn(type));
 
 		return get(name, type);
 	}
@@ -735,9 +732,6 @@ public class HeaderList extends ArrayList<Header> {
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S127" // Loop counter j decrements when removing elements
-	})
 	public HeaderList set(Header value) {
 		if (nn(value)) {
 			var replaced = false;
@@ -787,8 +781,7 @@ public class HeaderList extends ArrayList<Header> {
 	 */
 	
 	@SuppressWarnings({
-		"java:S127", // S127: loop counter j2 decrements when removing
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	public HeaderList set(List<Header> values) {
 
@@ -969,10 +962,6 @@ public class HeaderList extends ArrayList<Header> {
 	 * {@code iterator()} / {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read
 	 * operations and non-mutating iteration continue to work.
 	 */
-	@SuppressWarnings({
-		"java:S110",  // Inheritance depth acceptable for this class hierarchy
-		"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for header lists
-	})
 	public static class Unmodifiable extends HeaderList implements UnmodifiableBean {
 
 		private static final long serialVersionUID = 1L;

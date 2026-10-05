@@ -87,8 +87,8 @@ public final class RedirectSecurity {
 	public static boolean sameOrigin(URI from, URI to) {
 		requireAbsolute(from, "from");
 		requireAbsolute(to, "to");
-		return from.getScheme().equalsIgnoreCase(to.getScheme())
-			&& from.getHost().equalsIgnoreCase(to.getHost())
+		return eqic(from.getScheme(), to.getScheme())
+			&& eqic(from.getHost(), to.getHost())
 			&& normalizedPort(from) == normalizedPort(to);
 	}
 
@@ -104,7 +104,7 @@ public final class RedirectSecurity {
 	public static boolean isDowngrade(URI from, URI to) {
 		requireAbsolute(from, "from");
 		requireAbsolute(to, "to");
-		return "https".equalsIgnoreCase(from.getScheme()) && "http".equalsIgnoreCase(to.getScheme());
+		return eqic("https", from.getScheme()) && eqic("http", to.getScheme());
 	}
 
 	/**

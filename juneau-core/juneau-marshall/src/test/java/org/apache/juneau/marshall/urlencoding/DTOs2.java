@@ -22,6 +22,9 @@ import java.util.*;
 
 import org.apache.juneau.marshall.*;
 
+@SuppressWarnings({
+	"java:S9149" // Test fixture's static factories intentionally shadow the parent's.
+})
 public class DTOs2 {
 
 	@MarshalledApply(on="Dummy1",value=@Marshalled)

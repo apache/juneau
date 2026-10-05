@@ -38,7 +38,7 @@
 
 	// Contract-version handshake: MUST equal ViewDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION (single source
 	// of truth on the server).  The initializer fails loud when a sidecar's contractVersion differs.
-	const JUNEAU_VIEW_CONTRACT_VERSION = "4";
+	const JUNEAU_VIEW_CONTRACT_VERSION = "5";
 
 	// The typed action-result contract version (ActionResult.CONTRACT_VERSION on the server).  This is a SEPARATE,
 	// independently-versioned wire contract from VIEW_META - it is deliberately NOT aliased to
@@ -80,7 +80,7 @@
 
 	/**
 	 * The slot-envelope contract version ({@code ViewSlot.CONTRACT_VERSION} on the server).  Independently
-	 * versioned from VIEW_META {@code "4"} so a slot-delivery revision cannot force every sidecar page to
+	 * versioned from VIEW_META {@code "5"} so a slot-delivery revision cannot force every sidecar page to
 	 * handshake-fail.
 	 */
 	const JUNEAU_SLOT_CONTRACT_VERSION = "1";
@@ -430,7 +430,7 @@
 	// NOSONAR javascript:S8786 -- same rationale as juneau-renders.js's interpolateHref (see its own NOSONAR):
 	// `[^}]+` is fed developer-authored `endpoint` templates, never row data, and `[^}]` -> `[^{}]` would change
 	// the matched language and break grammar parity with interpolateHref.
-	const ROW_ACTION_TOKEN_RE = /\{([^}]+)\}/;
+	const ROW_ACTION_TOKEN_RE = /\{([^}]+)\}/; // NOSONAR javascript:S8786 -- see the rationale above; `[^}]` -> `[^{}]` would change the language
 
 	/**
 	 * True when `template` carries a `{property}` token whose row value is absent, `null`, or blank
@@ -647,7 +647,7 @@
 
 	/** Whether an action is presented as a modal dialog (`present=dialog`) - the declarative modal/form path. */
 	function isDialogAction(action) {
-		return !! (action?.present === "dialog");
+		return action?.present === "dialog";
 	}
 
 	/**
@@ -818,10 +818,45 @@
 	}
 
 	/**
+	 * Pure helper: appends `params`' own enumerable keys onto `url` as query-string entries (each key/value through
+	 * `encodeURIComponent`), preserving whatever query string `url` already carries.  A `params` with no own keys
+	 * returns `url` unchanged.  Used by the server-mode `beforeSend` re-derivation below - the POST/JSON wire (D1)
+	 * carries `param:`-scoped ribbon options and the nested-scope param as URL query parameters, not JSON-body
+	 * fields, so an `@Query`-bound server endpoint keeps working unchanged (BeanQuery datatables design doc §3.1).
+	 */
+	function appendQueryParams(url, params) {
+		const keys = params ? Object.keys(params) : [];
+		if (keys.length === 0) return url;
+		const sep = url.indexOf("?") >= 0 ? "&" : "?";
+		const qs = keys.map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&");
+		return url + sep + qs;
+	}
+
+	/**
 	 * Builds the DataTables options object from a VIEW_META view.  `deps` supplies the pure renderer-registry hooks
-	 * (parseRenderId/resolveRenderer/warn) and the ribbon param contributor (ribbonParams(activeState)).  The
-	 * serverSide fork (§6.7): server -> serverSide:true + ajax{dataSrc:"data"} (with ribbon active-toggle params
-	 * merged into the request); client -> serverSide:false + ajax{dataSrc:""}.
+	 * (parseRenderId/resolveRenderer/warn) and the ribbon's live active-toggle-state snapshot
+	 * (`ribbonActiveState()`) - the one ribbon input genuinely DOM/localStorage-derived and not computable from
+	 * `viewDef` alone.  Everything else about ribbon encoding goes through the shared, pure
+	 * `window.JuneauViews.ribbon` functions in `juneau-ribbon.js` that downstream ribbon parity corpora pin
+	 * directly (BeanQuery DataTables design §3.1), so this file and that corpus cannot drift:
+	 * `ribbon.ribbonColumnSearches(viewDef, activeState, optsColumns)` for column-scoped contributions,
+	 * `ribbon.ribbonQueryParams(viewDef, activeState)` for `param:`-scoped ones, and `ribbon.mergeColumnSearches` to
+	 * AND a column-scoped contribution onto the user's own typed search on that column.
+	 *
+	 * The serverSide fork (§6.7, amended by BeanQuery datatables design doc §3.1/D8 and by the column-scoped
+	 * ribbon fix): server -> serverSide:true + `window.JuneauDataTables.ajax(url, {...})` (the POST/JSON wire, D1), where
+	 * `ribbon.ribbonColumnSearches()`'s output is merged into the outgoing JSON body's `columns[i].search.value`
+	 * through `ribbon.mergeColumnSearches` (via the `extra.data` hook `JuneauDataTables.ajax` itself calls before
+	 * stringifying), while `ribbon.ribbonQueryParams()`'s output and the nested-scope param (if any) are re-derived
+	 * onto the request URL on every request through `beforeSend`.  Column-scoped ribbon state is JSON-body-only,
+	 * never a URL query parameter the POST-only endpoint cannot see (a column-scoped ribbon filter sent as a
+	 * URL param was silently dropped).  Client -> serverSide:false + ajax{dataSrc:""} (a plain GET of a JSON array,
+	 * unchanged by D8).
+	 *
+	 * A missing `window.JuneauDataTables` at server-mode init fails loudly through `deps.warn` - there is no silent
+	 * GET fallback to the wire format D1 removed.  A view with ribbon options but no `window.JuneauViews.ribbon`
+	 * loaded (`juneau-ribbon.js` missing) also warns through `deps.warn`, and simply contributes no ribbon filters at
+	 * all - it degrades, it does not throw.
 	 */
 	function buildOptions(viewDef, deps) {
 		const opts = {};
@@ -845,25 +880,18 @@
 
 		if (viewDef.dataMode === "server") {
 			opts.serverSide = true;
-			opts.ajax = {
-				url: viewDef.dataUrl,
-				dataSrc: "data",
-				data: function (d) {
-					const extra = deps.ribbonParams ? deps.ribbonParams() : {};
-					for (const k in extra) if (Object.hasOwn(extra, k)) d[k] = extra[k];
-					return d;
-				}
-			};
+			buildServerAjax(opts, viewDef, deps);
 		} else {
 			opts.serverSide = false;
 			opts.ajax = { url: viewDef.dataUrl, dataSrc: "" };
 		}
 
-		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a
-		// nested table, merges exactly ONE extra query parameter (its declared scope-param name -> the parent row id)
-		// into the GET in BOTH data modes.  The parent id is read through a getter at REQUEST time (off the live
-		// data-juneau-parent-id attribute) so the scope stays correct even if the nested table is re-init'd against a
-		// different parent row.  This is deliberately nested-only: a top-level view never carries deps.nestedScope.
+		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a nested table, merges exactly ONE extra
+		// query parameter (its declared scope-param name -> the parent row id) into the request in BOTH data modes -
+		// as a re-derived URL query parameter in server mode (design doc §3.1/D8), or into the GET's `data` object in
+		// client mode.  The parent id is read through a getter at REQUEST time (off the live data-juneau-parent-id
+		// attribute) so the scope stays correct even if the nested table is re-init'd against a different parent
+		// row.  This is deliberately nested-only: a top-level view never carries deps.nestedScope.
 		if (deps?.nestedScope)
 			applyNestedScope(opts, deps.nestedScope);
 
@@ -882,21 +910,131 @@
 	}
 
 	/**
-	 * Merges a nested table's parent-scope parameter into an already-built `opts.ajax`, wrapping any pre-existing
-	 * `data` contributor (the server-mode ribbon-param merger) rather than clobbering it.  `scope` is
-	 * `{param, parentId}` where `param` is the query-parameter name and `parentId` is a getter (or a plain value)
-	 * read at request time.  A null/blank parent id contributes nothing (the request goes out unscoped rather than
-	 * with an empty param) - a fail-closed caller withholds init entirely when the parent id is unknown, so this
-	 * only guards against a transient blank.  Pure: mutates the passed `opts` and touches no DOM/jQuery.
+	 * Server-mode half of `buildOptions` (design doc §3.1/D8): installs `opts.ajax` from
+	 * `window.JuneauDataTables.ajax`, with a `data` hook that merges column-scoped ribbon filters into the JSON body
+	 * and a `beforeSend` that re-derives the `param:`-scoped ribbon params onto the URL per request.  Leaves
+	 * `opts.ajax` unset (and warns) when `juneau-datatables.js` has not loaded.
+	 *
+	 * Review point: `beforeSend` must only ever read `ribbon.ribbonQueryParams` (plus the nested-scope
+	 * param `applyNestedScope` wraps on).  Wiring `ribbon.ribbonColumnSearches` (or any per-column value) into the URL
+	 * reintroduces the exact bug this split fixes - a column-scoped filter silently dropped by a body-only endpoint.
+	 */
+	function buildServerAjax(opts, viewDef, deps) {
+		const dt = window.JuneauDataTables;
+		const ribbon = NS.ribbon;
+		if ((viewDef.ribbon || []).length && !ribbon && deps?.warn) {
+			// Loud-but-non-fatal: this view declares ribbon options but juneau-ribbon.js (window.JuneauViews.ribbon)
+			// hasn't loaded, so NEITHER ribbon.ribbonColumnSearches NOR ribbon.ribbonQueryParams below can run - the
+			// table still works, it just never contributes any ribbon filter to the request.
+			deps.warn("Juneau view '" + viewDef.id + "': this view declares ribbon options but juneau-ribbon.js "
+				+ "(window.JuneauViews.ribbon) has not loaded - ribbon filters will not reach the server.");
+		}
+		if (!dt || typeof dt.ajax !== "function") {
+			// Loud failure (design doc §3.1/D8): juneau-datatables.js did not load before juneau-views.js on this
+			// page, so there is no POST/JSON wiring available.  opts.ajax is left unset deliberately - DataTables
+			// itself then fails loudly on this serverSide table instead of quietly falling back to a GET the
+			// POST-only endpoint would reject.
+			if (deps?.warn)
+				deps.warn("Juneau view '" + viewDef.id + "': server-mode table requires juneau-datatables.js "
+					+ "(window.JuneauDataTables) to load before juneau-views.js on this page.");
+			return;
+		}
+		const activeState = function () { return deps?.ribbonActiveState ? deps.ribbonActiveState() : {}; };
+		opts.ajax = dt.ajax(viewDef.dataUrl, {
+			dataSrc: "data",
+			// Column-scoped ribbon filters: ribbon.ribbonColumnSearches's output is merged into the
+			// JSON body, ANDed with any existing per-column user search via ribbon.mergeColumnSearches, BEFORE
+			// JuneauDataTables.ajax's own data() stringifies it.  `opts.columns` is read at request time, so it is
+			// the full post-assembleFullColumnArray array (live dtIndex), not the catalog-only one built above.
+			data: function (d) {
+				if (!ribbon) return d;
+				const columnSearches = ribbon.ribbonColumnSearches(viewDef, activeState(), opts.columns);
+				const userSearch = {};
+				(d.columns || []).forEach(function (c, i) {
+					if (c?.search?.value) userSearch[i] = c.search.value;
+				});
+				const merged = ribbon.mergeColumnSearches(userSearch, columnSearches);
+				Object.keys(merged).forEach(function (i) {
+					d.columns = d.columns || [];
+					d.columns[i] = d.columns[i] || {};
+					d.columns[i].search = d.columns[i].search || { value: "", regex: false };
+					d.columns[i].search.value = merged[i];
+				});
+				// A ribbon filter may target a column the author marked searchable:false (no search box); the
+				// server skips non-searchable columns, so without this the filter would be silently dropped.  The
+				// server's own column/operator checks still apply - this flag is not an authorization boundary.
+				Object.keys(columnSearches || {}).forEach(function (i) {
+					d.columns[i].searchable = true;
+				});
+				return d;
+			},
+			// URL-only params (any `param:`-scoped ribbon option; applyNestedScope wraps this to add the
+			// nested-table parent-scope param) - never a column-scoped one; those go through `data` above.
+			beforeSend: function (jqXHR, settings) {
+				const extra = ribbon ? ribbon.ribbonQueryParams(viewDef, activeState()) : {};
+				settings.url = appendQueryParams(viewDef.dataUrl, extra);
+				// Send the CSRF token with the server-mode data request, resolved per request exactly as the
+				// row-action path does (table attribute first, then the page meta tag); no token, no header.
+				const csrf = resolveServerCsrf(deps?.table);
+				if (csrf && jqXHR && typeof jqXHR.setRequestHeader === "function")
+					jqXHR.setRequestHeader(csrf.headerName, csrf.token);
+			}
+		});
+	}
+
+	/**
+	 * Resolves the CSRF token + header name for a server-mode data request: the view table's `data-juneau-csrf`
+	 * attribute (via resolveCsrfToken) first, else `meta[name="csrf-token"]`; the header name comes from
+	 * resolveCsrfHeaderName (per-table override, else DEFAULT_CSRF_HEADER).  Returns null when no non-blank token
+	 * is found, so the caller sends no header.
+	 */
+	function resolveServerCsrf(table) {
+		let token = table ? resolveCsrfToken(table) : null;
+		if (isBlankToken(token)) {
+			const meta = typeof document === "undefined" ? null : document.querySelector('meta[name="csrf-token"]');
+			token = meta ? meta.getAttribute("content") : null;
+		}
+		if (isBlankToken(token)) return null;
+		return { token: token, headerName: table ? resolveCsrfHeaderName(table) : DEFAULT_CSRF_HEADER };
+	}
+
+	/**
+	 * Merges a nested table's parent-scope parameter into an already-built `opts.ajax` (design doc §3.1/D8).
+	 * `scope` is `{param, parentId}` where `param` is the query-parameter name and `parentId` is a getter (or a
+	 * plain value) read at request time.  A null/blank parent id contributes nothing (the request goes out
+	 * unscoped rather than with an empty param) - a fail-closed caller withholds init entirely when the parent id
+	 * is unknown, so this only guards against a transient blank.  Branches on which ajax shape it was handed: a
+	 * server-mode `opts.ajax` (built by `window.JuneauDataTables.ajax`) carries a `beforeSend`, which this wraps to
+	 * append the scope param onto the re-derived URL after any ribbon params the prior `beforeSend` already
+	 * appended; a client-mode `opts.ajax` has no `beforeSend`, so this wraps (or installs) its `data` contributor
+	 * instead, exactly as before D8.  A missing `opts.ajax` (the server-mode "no JuneauDataTables" loud-failure
+	 * case) is a no-op.  Pure: mutates the passed `opts` and touches no DOM/jQuery.
 	 */
 	function applyNestedScope(opts, scope) {
 		if (!opts || !opts.ajax || !scope || !scope.param) return;
+		const parentId = function () {
+			const pid = typeof scope.parentId === "function" ? scope.parentId() : scope.parentId;
+			return pid != null && String(pid) !== "" ? pid : null;
+		};
+		if (typeof opts.ajax.beforeSend === "function") {
+			const prior = opts.ajax.beforeSend;
+			opts.ajax.beforeSend = function (jqXHR, settings) {
+				prior(jqXHR, settings);
+				const pid = parentId();
+				if (pid != null) {
+					const p = {};
+					p[scope.param] = pid;
+					settings.url = appendQueryParams(settings.url, p);
+				}
+			};
+			return;
+		}
 		const prior = opts.ajax.data;
 		opts.ajax.data = function (d) {
 			let out = d;
 			if (typeof prior === "function") { const r = prior(d); if (r !== undefined) out = r; }
-			const pid = typeof scope.parentId === "function" ? scope.parentId() : scope.parentId;
-			if (pid != null && String(pid) !== "") out[scope.param] = pid;
+			const pid = parentId();
+			if (pid != null) out[scope.param] = pid;
 			return out;
 		};
 	}
@@ -905,16 +1043,16 @@
 	// DOM / JQUERY BINDING LAYER  (thin shim)
 	// ==================================================================================================================
 
-	function warn(msg) { if (window.console && console.warn) console.warn(msg); }
-	function error(msg) { if (window.console && console.error) console.error(msg); }
+	function warn(msg) { if (window.console?.warn) console.warn(msg); }
+	function error(msg) { if (window.console?.error) console.error(msg); }
 
 	/**
 	 * Builds one icon-only 32px toolbar button under the given `className` (visual-parity design doc §4.A/§4.C).
 	 * Deliberately self-contained rather than reusing juneau-ribbon.js's button(...) helper (Design decision #3):
 	 * this module's buttons are not RibbonActions and have no built-in-id/symbol-override duality to resolve, so
 	 * they resolve their fixed glyph names directly via window.JuneauViews.icons.resolveIcon(...) - the two files
-	 * share the icon mechanism without either depending on the other's toolbar-construction logic.  Falls back to
-	 * rendering the label as text when the glyph isn't registered (same convention as juneau-ribbon.js's button()).
+	 * share the icon mechanism without either depending on the other's toolbar-construction logic.  An unknown glyph draws
+	 * nothing (spec U11); the button keeps its aria-label / tooltip, stamped from the label above.
 	 */
 	function toolbarButton(className, label, iconName, onClick) {
 		const b = document.createElement("button");
@@ -923,11 +1061,7 @@
 		stampChromeTip(b, label);
 		const icons = window.JuneauViews?.icons;
 		const markup = icons?.resolveIcon ? icons.resolveIcon(iconName) : null;
-		if (markup != null) {
-			b.innerHTML = markup;
-		} else {
-			b.textContent = label;
-		}
+		if (markup != null) b.innerHTML = markup;
 		b.addEventListener("click", onClick);
 		return b;
 	}
@@ -1093,6 +1227,11 @@
 		pill.appendChild(lastBtn);
 
 		function refreshPillState() {
+			// A table torn down by an Apply rebuild keeps this draw.dt handler bound to the (reused) <table> element,
+			// and the REBUILT DataTable's first synchronous draw fires it before ctx.dataTable is reassigned (client
+			// mode) - so the live reference can be transiently null.  Nothing to refresh then: the rebuilt table's
+			// own pill wires itself.
+			if (!ctx.dataTable) return;
 			const info = ctx.dataTable.page.info();
 			const st = pillState(info, ctx.dataTable.page.len());
 			firstBtn.disabled = st.firstDisabled;
@@ -1110,43 +1249,6 @@
 	}
 
 	/**
-	 * Builds and inserts the per-column search `<tr>` into `table`'s `<thead>` (visual-parity §4, item 4 - fixes
-	 * the columnSearchToggle button, which toggled `ctx.columnSearchOn` but had nothing wired to
-	 * `ctx.onColumnSearchToggle` to actually show/hide or filter anything).  One text input per SEARCHABLE column
-	 * (a non-searchable column gets an empty cell, keeping column count/alignment intact); each input's `input`
-	 * event applies a simple per-column text filter via `dt.column(idx).search(value).draw()`.  Starts hidden
-	 * (`ctx.onColumnSearchToggle`, wired by the caller, toggles visibility).  Returns null when the table has no
-	 * `<thead>` (defensive; every juneau view table has one).
-	 */
-	function buildColumnSearchRow(table, optsColumns, dt) {
-		const thead = table.querySelector("thead");
-		if (!thead) return null;
-		const row = document.createElement("tr");
-		row.className = "juneau-view-columnsearch-row";
-		row.dataset.testid = "col-search-row";
-		row.style.display = "none";
-		(optsColumns || []).forEach(function (col, idx) {
-			const th = document.createElement("th");
-			const isSynthetic = !col || col.data == null;
-			const isHidden = col?.visible === false;
-			if (isHidden) th.style.display = "none";
-			if (!isSynthetic && !isHidden && col.searchable !== false) {
-				const input = document.createElement("input");
-				input.type = "text";
-				input.className = "juneau-view-columnsearch-input";
-				const label = "Search " + (col.title || col.data || "column " + idx);
-				input.placeholder = label;
-				input.setAttribute("aria-label", label);
-				input.addEventListener("input", function () { dt.column(idx).search(input.value).draw(); });
-				th.appendChild(input);
-			}
-			row.appendChild(th);
-		});
-		thead.appendChild(row);
-		return row;
-	}
-
-	/**
 	 * Header sort + per-column search icons (WORK-J0547).  DataTables sorts on a click anywhere in the
 	 * {@code th}; we capture-stop that unless the click is on the sort control ({@code span.dt-column-order}
 	 * or a DT1 fallback {@code .juneau-view-col-sort-icon}).  Searchable columns get a Juneau {@code search}
@@ -1158,9 +1260,8 @@
 		table.dataset.juneauHeaderSortSearch = "1";
 		table.addEventListener("click", function (e) {
 			if (!isOwnTableEvent(table, e)) return;
-			const closest = e.target && e.target.closest;
+			const closest = e.target?.closest;
 			if (!closest) return;
-			if (closest.call(e.target, "thead tr.juneau-view-columnsearch-row")) return;
 			const th = closest.call(e.target, "thead tr:first-child th, thead tr:first-child td");
 			if (!th || !table.contains(th)) return;
 			if (th.classList.contains("juneau-view-select-th")
@@ -1174,7 +1275,7 @@
 		table.addEventListener("keydown", function (e) {
 			if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
 			if (!isOwnTableEvent(table, e)) return;
-			const th = e.target.closest && e.target.closest("thead tr:first-child th, thead tr:first-child td");
+			const th = e.target.closest?.("thead tr:first-child th, thead tr:first-child td");
 			if (!th || !table.contains(th)) return;
 			if (e.target.closest("input, button, a, .juneau-view-col-search-icon, .juneau-view-col-sort-icon, span.dt-column-order"))
 				return;
@@ -1182,12 +1283,12 @@
 			e.preventDefault();
 		}, true);
 		ctx.dataTable.columns().every(function () {
-			const col = this;
+			const col = this; // NOSONAR javascript:S7740 -- DataTables columns().every() binds `this` to the column API; an arrow function cannot receive it
 			const header = typeof col.header === "function" ? col.header() : null;
 			if (!header) return;
 			const def = (ctx.optsColumns || [])[col.index()];
 			const isSynthetic = !def || def.data == null;
-			const hidden = def && def.visible === false;
+			const hidden = def?.visible === false;
 			if (hidden) return;
 			if (!isSynthetic && def.orderable !== false)
 				ensureHeaderSortControl(header, col, ctx.dataTable);
@@ -1198,27 +1299,29 @@
 
 	/** DT2 already emits {@code span.dt-column-order}; DT1 does not, so inject a Juneau sort control. */
 	function ensureHeaderSortControl(header, col, dt) {
+		const flex = header.querySelector("div.dt-column-header") || header;
 		let orderSpan = header.querySelector("span.dt-column-order");
 		if (!orderSpan) {
 			orderSpan = document.createElement("span");
 			orderSpan.className = "dt-column-order juneau-view-col-sort-icon";
-			const flex = header.querySelector("div.dt-column-header") || header;
 			flex.appendChild(orderSpan);
 			orderSpan.addEventListener("click", function (e) {
 				e.stopPropagation();
 				cycleColumnOrder(dt, col.index());
 			});
 		}
+		// Design 7.1: the sort glyph is the leftmost header control, so pull DT2's order span (which it appends
+		// after the title) to the front of the flex row.
+		if (flex.firstChild !== orderSpan) flex.insertBefore(orderSpan, flex.firstChild);
 		orderSpan.classList.add("juneau-view-col-sort-icon");
 		if (!orderSpan.querySelector("svg")) {
-			const markup = window.JuneauViews?.icons?.resolveIcon?.("sort")
-				|| window.JuneauViews?.icons?.resolveIcon?.("expand_more");
+			const markup = window.JuneauViews?.icons?.resolveIcon?.("sort");
 			if (markup) orderSpan.insertAdjacentHTML("afterbegin", markup);
 		}
 		if (!orderSpan.getAttribute("role")) orderSpan.setAttribute("role", "button");
 		orderSpan.setAttribute("tabindex", "0");
 		const title = header.querySelector(".dt-column-title");
-		const name = (title && title.textContent.trim()) || "column";
+		const name = title?.textContent.trim() || "column";
 		orderSpan.setAttribute("aria-label", "Sort " + name);
 		if (!orderSpan.dataset.juneauSortKey) {
 			orderSpan.dataset.juneauSortKey = "1";
@@ -1235,8 +1338,8 @@
 		if (!dt || typeof dt.order !== "function") return;
 		const current = dt.order() || [];
 		let dir = null;
-		for (let i = 0; i < current.length; i++) {
-			if (current[i] && current[i][0] === idx) { dir = current[i][1]; break; }
+		for (const entry of current) {
+			if (entry?.[0] === idx) { dir = entry[1]; break; }
 		}
 		if (dir === "asc") dt.order([[idx, "desc"]]).draw();
 		else if (dir === "desc") dt.order([]).draw();
@@ -1254,8 +1357,13 @@
 		icon.dataset.testid = "col-search-icon";
 		const markup = window.JuneauViews?.icons?.resolveIcon?.("search");
 		if (markup) icon.innerHTML = markup;
+		// Design 7.1: the magnifying glass sits immediately beside (just right of) the sort glyph, ahead of the
+		// title.  With no sort control on the column it becomes the leftmost control instead.
 		const orderSpan = flex.querySelector("span.dt-column-order");
-		if (orderSpan) orderSpan.before(icon); else flex.appendChild(icon);
+		if (orderSpan) flex.insertBefore(icon, orderSpan.nextSibling); else flex.insertBefore(icon, flex.firstChild);
+		// Reflect an already-applied filter (e.g. one restored from saved state or the URL) with the active class.
+		const current = (typeof col.search === "function" ? col.search() : "") || "";
+		if (current) icon.classList.add("is-active");
 		const open = function (e) {
 			if (e) { e.preventDefault(); e.stopPropagation(); }
 			openColumnSearchPopover(icon, col, ctx, table);
@@ -1268,19 +1376,77 @@
 	}
 
 	function closeColumnSearchPopover(ctx) {
-		const el = ctx && ctx._colSearchPopover;
+		const el = ctx?._colSearchPopover;
 		if (!el) return;
 		if (ctx) ctx._colSearchPopover = null;
 		popLayer(el);
 	}
 
+	/**
+	 * The per-column {@code search} block ({@code {type, operators}}) the server emitted into VIEW_META for the
+	 * column {@code col} maps to, or {@code null} when the column shipped no search metadata.  Resolved by matching
+	 * the DataTables column's {@code data} name (from {@code ctx.optsColumns}) against the sidecar catalog
+	 * ({@code ctx.viewDef.columns}) - the catalog, not {@code optsColumns}, is where CardEnvelope writes the block.
+	 */
+	function columnSearchMeta(ctx, col) {
+		const def = (ctx?.optsColumns || [])[col.index()];
+		const dataName = def?.data != null ? String(def.data) : null;
+		if (dataName == null) return null;
+		const cols = (ctx?.viewDef && ctx.viewDef.columns) || [];
+		for (const c of cols) {
+			if (c?.data != null && String(c.data) === dataName) return c.search || null;
+		}
+		return null;
+	}
+
+	// A "$name" that is invoked as a function ("$name(...)").  Anchored on the following "(" so a literal "$5"
+	// inside an argument is not mistaken for an operator when checking membership in the column's effective set.
+	const COL_SEARCH_OP_RE = /\$[A-Za-z]\w*(?=\s*\()/g;
+
+	/** Every operator "$name" invoked in a raw expression (design §4.3 effective-set membership check). */
+	function usedOperatorNames(raw) {
+		const out = [];
+		let m;
+		COL_SEARCH_OP_RE.lastIndex = 0;
+		while ((m = COL_SEARCH_OP_RE.exec(raw)) !== null) out.push(m[0]);
+		return out;
+	}
+
+	/**
+	 * Classifies a draft column-search string against the column's metadata and the JuneauViews.search engine
+	 * (design §5).  Returns {@code {trimmed, dollar, empty, incomplete, rejected}}: {@code dollar} = a leading
+	 * {@code $} expression (commit deferred to Enter/Apply); {@code rejected} = an unparseable expression OR one
+	 * naming an operator not on the column's effective set (a reject, not a silent rewrite - §4.3); {@code
+	 * incomplete} = a still-being-typed {@code $} draft that must not touch the grid.
+	 */
+	function evaluateColumnSearchDraft(raw, meta, search) {
+		const trimmed = (raw || "").trim();
+		const dollar = trimmed.charAt(0) === "$";
+		const desc = search && typeof search.parse === "function" ? search.parse(trimmed) : null;
+		let rejected = !!desc?.invalid;
+		if (dollar && meta && Array.isArray(meta.operators)) {
+			const allowed = {};
+			meta.operators.forEach(function (o) { if (o?.name) allowed[o.name] = true; });
+			usedOperatorNames(trimmed).forEach(function (n) { if (!allowed[n]) rejected = true; });
+		}
+		return {
+			trimmed: trimmed,
+			dollar: dollar,
+			empty: trimmed === "",
+			incomplete: !!desc?.incomplete,
+			rejected: rejected
+		};
+	}
+
 	function openColumnSearchPopover(iconEl, col, ctx, table) {
 		closeColumnSearchPopover(ctx);
-		const idx = col.index();
 		const header = typeof col.header === "function" ? col.header() : iconEl.closest("th,td");
-		const titleEl = header && header.querySelector(".dt-column-title");
-		const title = (titleEl && titleEl.textContent.trim()) || "Column";
+		const titleEl = header?.querySelector(".dt-column-title");
+		const title = titleEl?.textContent.trim() || "Column";
 		const current = (typeof col.search === "function" ? col.search() : "") || "";
+		const meta = columnSearchMeta(ctx, col);
+		const search = window.JuneauViews?.search;
+		const serverSide = !!(ctx?.viewDef && ctx.viewDef.dataMode === "server");
 		const el = document.createElement("div");
 		el.className = "juneau-view-col-search-popover";
 		el.setAttribute("role", "dialog");
@@ -1293,32 +1459,143 @@
 		input.className = "juneau-view-col-search-popover-input";
 		input.setAttribute("aria-label", "Search " + title);
 		input.value = current;
+		const status = document.createElement("div");
+		status.className = "juneau-view-col-search-popover-status";
+		status.setAttribute("role", "status");
+		status.setAttribute("aria-live", "polite");
 		el.appendChild(heading);
+		// Per-type bare-value help (Gap 8 / spec 4a D9): what a plain, non-"$operator" value means for a column
+		// of this type - sourced straight from `col.search.bareHelp` (sub-project #3's SearchType.bareHelp(),
+		// serialized onto the catalog), so the wording stays in sync with that type automatically. Rendered BEFORE
+		// the per-operator help list below, since a bare value - no "$name(...)" - is the common case. Absent
+		// (older catalog, or no search metadata) is a silent no-op.
+		if (meta?.bareHelp != null && String(meta.bareHelp) !== "") {
+			const bareHelp = document.createElement("div");
+			bareHelp.className = "juneau-view-col-search-popover-barehelp";
+			bareHelp.textContent = String(meta.bareHelp);
+			el.appendChild(bareHelp);
+		}
 		el.appendChild(input);
-		const apply = function () {
-			const v = input.value || "";
-			col.search(v).draw();
-			iconEl.classList.toggle("is-active", !!v);
-			syncColumnSearchRowInput(table, idx, v);
+		el.appendChild(status);
+		// Operator help (design §4.5): rendered straight from the VIEW_META operator list so a developer's custom
+		// operator help shows exactly the way a built-in's does.  Absent when the column shipped no search metadata.
+		if (meta && Array.isArray(meta.operators) && meta.operators.length) {
+			const helpList = document.createElement("div");
+			helpList.className = "juneau-view-col-search-popover-help";
+			meta.operators.forEach(function (o) {
+				if (!o || !o.name) return;
+				const row = document.createElement("div");
+				row.className = "juneau-view-col-search-popover-help-op";
+				const code = document.createElement("code");
+				code.textContent = o.name;
+				row.appendChild(code);
+				if (o.help != null && String(o.help) !== "") {
+					const desc = document.createElement("span");
+					desc.textContent = String(o.help);
+					row.appendChild(desc);
+				}
+				helpList.appendChild(row);
+			});
+			el.appendChild(helpList);
+		}
+		let committed = false;
+		let dirtyApplied = false;   // whether a live preview has changed the APPLIED search away from `current`
+		const setStatus = function (kind, message) {
+			el.classList.toggle("is-invalid", kind === "invalid");
+			el.classList.toggle("is-incomplete", kind === "incomplete");
+			status.textContent = message || "";
 		};
-		input.addEventListener("input", apply);
+		const applyValue = function (value) {
+			col.search(value).draw();
+			iconEl.classList.toggle("is-active", !!value);
+			dirtyApplied = value !== current;
+		};
+		// Live preview per keystroke: an emptied box clears the filter; a bare quick-filter previews live on a client
+		// table but waits for Enter/Apply on a server table (no fetch-per-keystroke); a `$`-expression NEVER previews
+		// (design §5) - an incomplete draft must not blank the grid, and an out-of-set operator is a reject.
+		const onInput = function () {
+			const d = evaluateColumnSearchDraft(input.value, meta, search);
+			if (d.empty) { setStatus("", ""); applyValue(""); return; }
+			if (d.rejected) { setStatus("invalid", "Not a valid search for this column."); return; }
+			if (d.dollar) { setStatus(d.incomplete ? "incomplete" : "", ""); return; }
+			setStatus("", "");
+			if (!serverSide) applyValue(d.trimmed);
+		};
+		// Enter/Apply commit: empty clears; a `$`-expression must be complete, valid, and use only in-set operators;
+		// a bare quick-filter always commits.  A rejected or incomplete `$`-draft leaves the grid untouched.
+		const commit = function () {
+			const d = evaluateColumnSearchDraft(input.value, meta, search);
+			if (d.rejected) { setStatus("invalid", "Not a valid search for this column."); return; }
+			if (d.dollar && d.incomplete) { setStatus("incomplete", "Finish the expression to search."); return; }
+			applyValue(d.empty ? "" : d.trimmed);
+			committed = true;
+			closeColumnSearchPopover(ctx);
+		};
+		input.addEventListener("input", onInput);
+		input.addEventListener("keydown", function (e) {
+			if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); commit(); }
+		});
 		ctx._colSearchPopover = el;
 		pushLayer(el, {
 			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
 			returnFocusTo: iconEl,
-			onDismiss: function () { if (ctx._colSearchPopover === el) ctx._colSearchPopover = null; }
+			// Esc / click-away reverts (design §5): undo any live preview back to the value the popover opened with,
+			// unless Enter/Apply already committed.
+			onDismiss: function () {
+				if (ctx._colSearchPopover === el) ctx._colSearchPopover = null;
+				if (!committed && dirtyApplied) {
+					col.search(current).draw();
+					iconEl.classList.toggle("is-active", !!current);
+				}
+				// Announce a reverted or never-applied edit (design §4.2): covers both the live-preview revert above
+				// AND a `$`-draft/server-deferred value that never previewed at all, whenever the box no longer
+				// matches what actually reached the grid.
+				if (!committed && input.value.trim() !== String(current).trim())
+					announce(table, ANNOUNCE.searchNotApplied(title));
+			}
 		});
 		positionCellPopover(el, iconEl);
 		input.focus();
 		input.select();
 	}
 
-	function syncColumnSearchRowInput(table, idx, value) {
-		const row = table && table.querySelector && table.querySelector("thead tr.juneau-view-columnsearch-row");
-		if (!row) return;
-		const th = row.children[idx];
-		const inp = th && th.querySelector && th.querySelector("input.juneau-view-columnsearch-input");
-		if (inp && inp.value !== value) inp.value = value;
+	/**
+	 * The live-announcer's message catalog (design §4.1): one small constant map so every announced string is defined
+	 * in one place and tests can compare exact text.  A function entry builds a message from its argument.
+	 */
+	const ANNOUNCE = {
+		searchNotApplied: function (title) { return "Search for '" + title + "' not applied."; },
+		linkCopied: "Link copied.",
+		linkCopyFailed: "Could not copy link."
+	};
+
+	/** Locates (or lazily creates) `table`'s live-announcer element, as the DataTables wrapper's next sibling. */
+	function announcerElFor(table) {
+		if (!table) return null;
+		if (table.__juneauAnnouncerEl?.parentNode) return table.__juneauAnnouncerEl;
+		const host = table.closest?.(".dt-container, .dataTables_wrapper") || table;
+		if (!host.parentNode) return null;
+		const el = document.createElement("div");
+		el.className = "juneau-view-announcer";
+		el.setAttribute("role", "status");
+		el.setAttribute("aria-live", "polite");
+		el.setAttribute("aria-atomic", "true");
+		host.parentNode.insertBefore(el, host.nextSibling);
+		table.__juneauAnnouncerEl = el;
+		return el;
+	}
+
+	/**
+	 * Announces {@code message} politely for screen readers on a per-table live region that lives OUTSIDE the popover
+	 * (design §4), so a popover's own removal can never take the announcement down with it.  Clears the region first
+	 * and re-sets it on a fresh tick, so two consecutive identical messages both announce (a no-op `textContent`
+	 * write is not observed as a change by assistive tech).
+	 */
+	function announce(table, message) {
+		const el = announcerElFor(table);
+		if (!el) return;
+		el.textContent = "";
+		setTimeout(function () { el.textContent = message; }, 0);
 	}
 
 	/** Renders the fail-loud, visible in-table banner used on a contract-version mismatch (or a parse failure). */
@@ -1550,7 +1827,9 @@
 	function isPollSuspended(table, ctx, viewDef) {
 		if (ctx?._pollPaused) return true;
 		if (! viewDef?.pausePollingWhileEditing) return false;
-		return hasOpenDetailRow(table) || hasOpenActionDialog(ctx);
+		// ctx._configBackdrop is the View Settings dialog (Gap 7): neither the detail-row nor the action-dialog
+		// check covers it.
+		return hasOpenDetailRow(table) || hasOpenActionDialog(ctx) || !!ctx?._configBackdrop;
 	}
 
 	/**
@@ -1604,10 +1883,17 @@
 	 * belongs to a nested view whose shell was cloned into one of this table's expanded detail panels - it is skipped.
 	 * Without that skip a parent table with an open row would resolve its nested table's template as its own (the
 	 * cloned nested shell precedes the parent's sibling template in document order).
+	 *
+	 * <p>A nested table not yet wrapped by DataTables (its own {@code constructTable} runs before {@code new DataTable})
+	 * has no {@code .dt-container} of its own, so {@link #findViewWrapper} walks up to the ENCLOSING table's wrapper.
+	 * That wrapper is rejected (an outer {@code <table>} sits between it and {@code table}); otherwise the nested table
+	 * would resolve the parent's template and grow a bogus expander column.
 	 */
 	function findRowDetailTemplate(table) {
 		if (!table) return null;
-		const wrapper = findViewWrapper(table);
+		let wrapper = findViewWrapper(table);
+		for (let n = table.parentNode; wrapper && n && n !== wrapper; n = n.parentNode)
+			if (n.tagName === "TABLE") wrapper = null;
 		const host = wrapper?.parentNode && wrapper !== table.parentNode
 			? wrapper.parentNode
 			: table.parentNode;
@@ -1705,7 +1991,7 @@
 			}
 		}
 		if (state === "ok") {
-			if (status?.parentNode) status.parentNode.removeChild(status);
+			status?.remove();
 			return null;
 		}
 		if (!status) {
@@ -2134,7 +2420,7 @@
 	}
 
 	function titleFieldAllowlist(root) {
-		const raw = root && root.getAttribute ? root.getAttribute("data-juneau-title-fields") : null;
+		const raw = root?.getAttribute?.("data-juneau-title-fields") ?? null;
 		if (raw == null || raw === "") return new Set();
 		return new Set(String(raw).split(",").map(function (s) { return s.trim(); }).filter(Boolean));
 	}
@@ -2375,7 +2661,7 @@
 	// ==================================================================================================================
 	//
 	// A probe group is server-painted markup: a container carrying data-juneau-probe-group (and class .jc-probe-group)
-	// wrapping one or more .jc-probe chips, each carrying a status class (.jc-probe-ok / -fail / -warn / -neutral) and a
+	// wrapping one or more .jc-probe chips, each carrying a status class (.jc-probe-success / -error / -warning / -neutral) and a
 	// visible .jc-probe-dot.  Juneau owns SELECTION only: exactly one probe per group is selected (radiogroup/radio
 	// semantics with a roving tabindex), and selecting one clears the rest.  The app keeps the click ACTION (a probe
 	// click can re-run the underlying check); re-running only repaints a chip's status class, which must NOT disturb
@@ -2391,19 +2677,25 @@
 	const PROBE_GROUP_ATTR = "data-juneau-probe-group";
 	const PROBE_ID_ATTR = "data-juneau-probe";
 
+	/** The element's class string: the `class` attribute when non-empty, else `className` when it is a string, else "". */
+	function classStringOf(el) {
+		const attr = typeof el.getAttribute === "function" ? el.getAttribute("class") : null;
+		if (attr != null && attr !== "") return attr;
+		return typeof el.className === "string" ? el.className : "";
+	}
+
 	/** True if a probe is disabled: carries the shared `is-disabled` class or `aria-disabled="true"`. */
 	function probeIsDisabled(el) {
 		if (!el) return true;
-		const cls = typeof el.getAttribute === "function" ? el.getAttribute("class") : null;
-		const cn = cls != null && cls !== "" ? cls : (typeof el.className === "string" ? el.className : "");
-		if (cn && cn.split(/\s+/).indexOf("is-disabled") >= 0) return true;
+		const cn = classStringOf(el);
+		if (cn && cn.split(/\s+/).includes("is-disabled")) return true;
 		return el.getAttribute ? el.getAttribute("aria-disabled") === "true" : false;
 	}
 
 	/** The .jc-probe chips this group OWNS - one whose nearest enclosing group is exactly `group` (nested groups keep their own). */
 	function probesInGroup(group) {
 		const out = [];
-		const all = group && group.querySelectorAll ? group.querySelectorAll(".jc-probe") : [];
+		const all = group?.querySelectorAll?.(".jc-probe") ?? [];
 		for (const el of all) {
 			const owner = el.closest ? el.closest("[" + PROBE_GROUP_ATTR + "]") : group;
 			if (owner === group) out.push(el);
@@ -2468,7 +2760,7 @@
 		if (group.setAttribute) group.setAttribute("role", "radiogroup");
 
 		function probes() { return probesInGroup(group); }
-		function idOf(el) { return el && el.getAttribute ? el.getAttribute(PROBE_ID_ATTR) : null; }
+		function idOf(el) { return el?.getAttribute?.(PROBE_ID_ATTR) ?? null; }
 		function findById(id) {
 			if (id == null) return null;
 			for (const el of probes()) if (idOf(el) === id) return el;
@@ -2523,7 +2815,7 @@
 			if (!list.length) return;
 			let initial = null;
 			for (const el of list)
-				if (!probeIsDisabled(el) && el.getAttribute && el.getAttribute("aria-checked") === "true") { initial = idOf(el); break; }
+				if (!probeIsDisabled(el) && el.getAttribute?.("aria-checked") === "true") { initial = idOf(el); break; }
 			if (initial == null)
 				for (const el of list) if (!probeIsDisabled(el)) { initial = idOf(el); break; }
 			if (initial != null) selectId(initial, false);
@@ -2531,8 +2823,8 @@
 		})();
 
 		group.addEventListener("click", function (e) {
-			const t = e && e.target;
-			const el = t && t.closest ? t.closest(".jc-probe") : null;
+			const t = e?.target;
+			const el = t?.closest?.(".jc-probe") ?? null;
 			if (!el) return;
 			const owner = el.closest ? el.closest("[" + PROBE_GROUP_ATTR + "]") : group;
 			if (owner !== group) return;          // a click on a nested group's probe is not ours
@@ -2580,10 +2872,10 @@
 		for (const g of groups) enhanceProbeGroup(g);
 	}
 
-	// The detail-hosted bar slot (BarSlotTable constants of the same names on the server).  DETAIL_BAR_MARKER carries
+	// The detail-hosted bar slot (client-painted; attribute names are shared with the console shell).  DETAIL_BAR_MARKER carries
 	// the slot identity; DETAIL_BAR_META finds the id-less sidecar the <template> ships; DETAIL_BAR_SIDECAR_PREFIX is
-	// the prefix juneau-chrome.js's readSidecar() concatenates - which is exactly why the minted MARKER is
-	// suffix-only, so the prefix is never doubled.
+	// the prefix the console shell's chrome section's readSidecar() concatenates - which is exactly why the minted
+	// MARKER is suffix-only, so the prefix is never doubled.
 	const DETAIL_BAR_MARKER = "data-juneau-bar-slot";
 	const DETAIL_BAR_META = "data-juneau-bar-meta";
 	const DETAIL_BAR_SIDECAR_PREFIX = "juneau-bar:";
@@ -2632,8 +2924,9 @@
 	 * <p>Two rows can be expanded at once, so the author's {@code BarSlot.id} is not a usable DOM identity: both
 	 * clones would answer the same {@code getElementById("juneau-bar:" + authorId)}.  Identity is therefore per
 	 * expanded row INSTANCE: the marker becomes {@code "<parentId>:<rowId>"} and the sidecar id becomes
-	 * {@code "juneau-bar:<parentId>:<rowId>"}.  The marker is deliberately SUFFIX-ONLY - juneau-chrome.js reads a
-	 * sidecar as {@code readSidecar("juneau-bar:", marker)}, so a prefixed marker would double the prefix.
+	 * {@code "juneau-bar:<parentId>:<rowId>"}.  The marker is deliberately SUFFIX-ONLY - the console shell's chrome
+	 * section reads a sidecar as {@code readSidecar("juneau-bar:", marker)}, so a prefixed marker would double the
+	 * prefix.
 	 *
 	 * <p>{@code parentId} is the parent table's MINTED id (its DOM identity, from viewSidecarKey), not the author
 	 * {@code ViewDef.id}, so two cards hosting the same authored view never collide.  The author {@code BarSlot.id}
@@ -2669,7 +2962,8 @@
 	}
 
 	/**
-	 * Enhances a freshly-INSERTED detail panel's bar slot through juneau-chrome.js's exported entry.
+	 * Enhances a freshly-INSERTED detail panel's bar slot through the console shell's chrome section
+	 * ({@code window.JuneauConsole.chrome}, absorbed from the retired standalone chrome script).
 	 *
 	 * <p>Chrome scans for bar slots on DOMContentLoaded only, so a slot cloned from a {@code <template>} on
 	 * row-expand would never be enhanced.  initAll() is document-wide and idempotent (it shares a wired marker with
@@ -2677,16 +2971,20 @@
 	 * again the correct enhance-on-insert seam.  This is DEMAND work only - no timer is started here or there.
 	 *
 	 * <p>Must run AFTER the panel is in the document (initAll queries the document) and after the relocate step.
-	 * A no-op when the panel has no bar slot, or when the optional chrome bundle is not loaded at all.
+	 * A no-op when the panel has no bar slot.  When the panel has one but juneau-console.js is not loaded, the slot
+	 * stays un-hydrated and this logs a console.error, because every page that loads the views toolkit must also
+	 * load the shell (C1-D5).
 	 *
 	 * @return true when chrome was asked to re-scan.
 	 */
 	function enhanceChromeInPanel(panel) {
 		if (!detailBarSlotIn(panel)) return false;
-		const chrome = typeof window !== "undefined" ? window.JuneauChrome : null;
-		const init = chrome?.init;
-		if (!init || typeof init.initAll !== "function") return false;
-		init.initAll();
+		const chrome = typeof window !== "undefined" ? window.JuneauConsole?.chrome : null;
+		if (!chrome || typeof chrome.initAll !== "function") {
+			window.console?.error?.("[juneau-views] bar slot not hydrated: juneau-console.js is not loaded");
+			return false;
+		}
+		chrome.initAll();
 		return true;
 	}
 
@@ -2756,8 +3054,8 @@
 	/**
 	 * Reads one button's declared rules.  A malformed attribute warns and gates NOTHING rather than disabling the
 	 * button: the rule is presentation only (the server re-reads the row's state and refuses on its own authority),
-	 * so the safe direction here is the pre-rule behaviour, not a bar of dead buttons.  The server-side validation
-	 * makes a malformed attribute a toolkit bug in the first place.
+	 * so the safe direction here is the pre-rule behaviour, not a bar of dead buttons.  The server does not validate the attribute's JSON, so a
+	 * malformed value is a toolkit/authoring bug surfaced only by this warning.
 	 */
 	function parseActionRefRules(btn) {
 		const raw = btn.getAttribute(ACTION_RULES_ATTR);
@@ -3562,10 +3860,10 @@
 	 */
 	function reportRegionsWithoutRuntime(nodes) {
 		for (const el of nodes) {
-			if (window.console && console.error)
+			if (window.console?.error)
 				console.error("juneau-views.js: juneau-regions.js is not loaded; the region '"
 					+ (el.getAttribute(REGION_MARKER) || "") + "' cannot populate.");
-			el.setAttribute("data-juneau-region-state", "error");
+			el.dataset.juneauRegionState = "error";
 			renderAsyncStatus(el, "error", "This region could not be populated: juneau-regions.js is not loaded.");
 		}
 	}
@@ -3584,9 +3882,9 @@
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
-		const titleFields = tpl.getAttribute("data-juneau-title-fields");
+		const titleFields = tpl.dataset.juneauTitleFields;
 		if (titleFields != null && titleFields !== "")
-			panel.setAttribute("data-juneau-title-fields", titleFields);
+			panel.dataset.juneauTitleFields = titleFields;
 		// The panel's OWN row-id stamp, and the reason it cannot be inherited: DataTables inserts a child row as a
 		// SIBLING `<tr>` of `tr`, not as a descendant of it, so nothing inside this panel is beneath the row element
 		// that carries `ROW_ID_ATTR`.  Every consumer that resolves a row id by `closest("[data-juneau-row-id]")` -
@@ -3792,7 +4090,10 @@
 		function render() {
 			const age = formatStalenessAge(Date.now() - state.lastSuccessAt);
 			const paused = ! state.failed && isPollSuspended(table, ctx, viewDef);
-			indicator.dataset.state = state.failed ? "error" : (paused ? "paused" : "fresh");
+			let stateName = "fresh";
+			if (state.failed) stateName = "error";
+			else if (paused) stateName = "paused";
+			indicator.dataset.state = stateName;
 			if (state.failed) indicator.textContent = "Refresh failed - last updated " + age;
 			else indicator.textContent = (paused ? "Paused \u2014 updated " : "Updated ") + age;
 		}
@@ -3874,7 +4175,7 @@
 	function actionTriggerMarkup() {
 		const icons = window.JuneauViews?.icons;
 		const glyph = icons?.resolveIcon ? icons.resolveIcon("more_vert") : null;
-		const inner = glyph != null ? glyph : "\u22EF";   // horizontal ellipsis fallback when no glyph is registered
+		const inner = glyph != null ? glyph : "";   // unknown glyph draws nothing (spec U11); aria-label stays
 		return '<button type="button" class="juneau-view-action-trigger" aria-haspopup="menu" ' +
 			'aria-label="Row actions">' + inner + '</button>';
 	}
@@ -3956,8 +4257,8 @@
 
 	/**
 	 * Dual-chevron markup for the dedicated row-expand cell (the .juneau-view-detail-control column).  Collapsed (right)
-	 * and expanded (down) glyphs; CSS on {@code .juneau-view-detail-open} swaps which one shows.  Falls back to
-	 * unicode triangles when the icon registry has not loaded.  A real {@code <button>} so keyboard (Enter/Space)
+	 * and expanded (down) glyphs; CSS on {@code .juneau-view-detail-open} swaps which one shows.  An unknown
+	 * glyph draws nothing (spec U11).  A real {@code <button>} so keyboard (Enter/Space)
 	 * activates expand without making the rest of the row a click target.
 	 */
 	function detailsControlCellMarkup() {
@@ -3966,8 +4267,8 @@
 		const expanded = typeof icons?.resolveIcon === "function" ? icons.resolveIcon("expand_more") : "";
 		return '<button type="button" class="juneau-view-detail-toggle" aria-label="Expand or collapse row" aria-expanded="false">'
 			+ '<span class="juneau-view-detail-glyphs" aria-hidden="true">'
-			+ '<span class="juneau-view-detail-collapsed">' + (collapsed || "\u25B8") + '</span>'
-			+ '<span class="juneau-view-detail-expanded">' + (expanded || "\u25BE") + '</span>'
+			+ '<span class="juneau-view-detail-collapsed">' + (collapsed || "") + '</span>'
+			+ '<span class="juneau-view-detail-expanded">' + (expanded || "") + '</span>'
 			+ '</span></button>';
 	}
 
@@ -4306,8 +4607,9 @@
 				fetchResultForm(result.resultForm, action, table, tr, ctx);
 				return;
 			}
-			const disposition = (outcome === "success")
-				? "closeCommitted" : (outcome === "refusal" ? "retryable" : "terminal");
+			let disposition = "terminal";
+			if (outcome === "success") disposition = "closeCommitted";
+			else if (outcome === "refusal") disposition = "retryable";
 			if (settleDialogResultHold(ctx, disposition)) renderHeldResultNotice(actionOutcomeMessage(o));
 			else renderActionOutcomeFor(tr, o, ctx);
 			// F4: an UNHELD success carrying a resultForm keeps its success banner byte-identical and adds ONE
@@ -4746,11 +5048,10 @@
 			.catch(function () { renderActionRefusalFor(tr, action, "request-failed", ctx); });
 	}
 
-	// THIRD bar-slot host: a dialog's ModalDef.barSlot (BarSlotTable constants of the same names on the server).
+	// THIRD bar-slot host: a dialog's ModalDef.barSlot (client-painted; attribute names are shared with the console shell).
 	// Unlike the row-detail host, this one travels the wire as JSON - the modal itself IS the fetched payload, with
 	// no server-rendered pass to ride into - so the dialog caller paints the region + its id-less dynamic-count
-	// sidecar from that JSON, mirroring BarSlotTable.detailRegion(bar, ANCHOR_DIALOG_TITLE) +
-	// BarSlotTable.detailSidecar(bar)'s exact shape, rather than relocating server-painted markup.  Identity minting,
+	// sidecar from that JSON in the same shape the row-detail host uses, rather than relocating server-painted markup.  Identity minting,
 	// enhance-on-insert, and collapse teardown are NOT reimplemented here: this caller reuses
 	// mintDetailBarSlotIdentity / enhanceChromeInPanel / teardownDetailBarSlot verbatim (see showActionDialog below),
 	// exactly as spec'd - the shared strip builder never learns ANY bar-slot host exists (FINISHED-J0445u/J0445w).
@@ -4764,7 +5065,7 @@
 	const BAR_BADGE_TONE_ATTR = "data-juneau-badge-tone";
 	const BAR_BADGE_MAX_ATTR = "data-juneau-badge-max";
 
-	/** Clamps a fresh count above `max` to "<max>+", exactly as the server's AppHeaderTable.clampCount does.  Pure. */
+	/** Clamps a fresh count above `max` to "<max>+", as the console shell's count clamp does.  Pure. */
 	function clampDialogBarCount(count, max) {
 		if (typeof count !== "number") return "";
 		if (typeof max === "number" && count > max) return max + "+";
@@ -4776,12 +5077,15 @@
 		return !! w && typeof w.text === "string";
 	}
 
-	/** Paints one BarBadge's count/tone overlay from JSON, mirroring BarSlotTable's private emitBadge(). */
+	/** Paints one BarBadge's count/tone overlay from JSON, matching the row-detail host's badge markup. */
 	function buildDialogBarBadgeEl(id, badge) {
 		const span = document.createElement("span");
 		span.className = "jc-badge";
 		span.setAttribute(BAR_BADGE_ATTR, BAR_BADGE_NS + ":" + id);
-		if (badge.tone != null) span.setAttribute(BAR_BADGE_TONE_ATTR, String(badge.tone).toLowerCase());
+		// Badge.tone serializes as the enum name (e.g. "WARNING"), so lower-case it to the wire token before the palette check.
+		const tone = badge.tone == null ? "" : String(badge.tone).toLowerCase();
+		const tones = NS._render?.pillTones;
+		if (Array.isArray(tones) && tones.includes(tone)) span.setAttribute(BAR_BADGE_TONE_ATTR, tone);
 		if (badge.dot) {
 			span.className = "jc-badge jc-badge-dot";
 		} else if (typeof badge.count === "number") {
@@ -4793,7 +5097,7 @@
 		return span;
 	}
 
-	/** Paints one BarWidget (BarText or BarBadge) from JSON, mirroring BarSlotTable's private emitWidget(). */
+	/** Paints one BarWidget (BarText or BarBadge) from JSON, matching the row-detail host's widget markup. */
 	function buildDialogBarWidgetEl(w) {
 		if (! w || typeof w.id !== "string" || w.id === "") return null;
 		const span = document.createElement("span");
@@ -4815,9 +5119,8 @@
 	}
 
 	/**
-	 * Builds a dialog's bar-slot region + id-less sidecar from the JSON `bar` (a {@code ModalDef.barSlot}), mirroring
-	 * {@code BarSlotTable.detailRegion(bar, BarSlotTable.ANCHOR_DIALOG_TITLE)} +
-	 * {@code BarSlotTable.detailSidecar(bar)}'s exact shape - {@code createElement}/{@code textContent} only, NEVER
+	 * Builds a dialog's bar-slot region + id-less sidecar from the JSON `bar` (a {@code ModalDef.barSlot}), in
+	 * the same region + id-less dynamic-count sidecar shape as the row-detail host - {@code createElement}/{@code textContent} only, NEVER
 	 * {@code innerHTML} (BLK-1/MED-9: this is fetched, attacker-influenceable data, the same reasoning
 	 * {@code buildDialogOverlay} states for the confirmation fields below).  Returns <jk>null</jk> for a
 	 * missing/malformed/empty bar - a peripheral, additive feature failing closed must never block the confirm/cancel
@@ -5529,7 +5832,7 @@
 				if (ctx?._dialogStack) {
 					const i = ctx._dialogStack.indexOf(ui.backdrop);
 					if (i >= 0) ctx._dialogStack.splice(i, 1);
-					ctx._actionDialog = ctx._dialogStack.length ? ctx._dialogStack[ctx._dialogStack.length - 1] : null;
+					ctx._actionDialog = ctx._dialogStack.at(-1) ?? null;
 				}
 				notifyPollPausedChange(ctx);
 			}
@@ -5708,7 +6011,7 @@
 	/** Whether the held dialog's layer is still on this ctx's dialog stack (it is not, after Cancel or Escape). */
 	function heldLayerIsLive(ctx, hold) {
 		const stack = ctx?._dialogStack;
-		return !! (stack?.indexOf(hold.backdrop) >= 0);
+		return stack?.includes(hold.backdrop) === true;
 	}
 
 	/** Drops the busy marker a hold stamped on its dialog. */
@@ -5788,9 +6091,10 @@
 	 * consumer-authoring mistake).  One node, overwritten.
 	 */
 	function renderResultFormIgnored(tr, ctx) {
-		const host = tr
-			? (tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr)
-			: ribbonBannerHost(ctx);
+		let host;
+		if (! tr) host = ribbonBannerHost(ctx);
+		else if (tr.querySelector) host = tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr;
+		else host = tr;
 		if (! host?.appendChild) return;
 		let el = host.querySelector ? host.querySelector(".juneau-view-result-form-ignored") : null;
 		if (! el) {
@@ -6144,7 +6448,7 @@
 			if (!trigger) return;
 			const tr = trigger.closest("tr");
 			if (!tr) return;
-			const wasOpen = !! (ctx?._actionMenuTrigger === trigger);
+			const wasOpen = ctx?._actionMenuTrigger === trigger;
 			closeRowActionMenus(table);
 			if (wasOpen) return;   // second click on the open menu's trigger closes it (toggle)
 			const menu = buildRowActionMenu(viewDef, table, tr, ctx);
@@ -6208,7 +6512,6 @@
 			});
 		}
 		[
-			"thead tr.juneau-view-columnsearch-row",
 			"thead th.juneau-view-actions-th",
 			"thead th.juneau-view-select-th",
 			"thead th.juneau-view-detail-th"
@@ -6259,10 +6562,19 @@
 			});
 			ctx._jobSources.clear();
 		}
+		// Auto-refresh timer (Options tab): cleared here so a destroyed table never keeps reloading; Apply re-wires it
+		// from the committed draft (applyRestoredOptionsToLiveGrid) after the rebuild.
+		if (ctx._autoRefreshTimerId != null) {
+			clearInterval(ctx._autoRefreshTimerId);
+			ctx._autoRefreshTimerId = null;
+		}
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
 		closeColumnSearchPopover(ctx);
-		if (table && table.dataset) delete table.dataset.juneauHeaderSortSearch;
+		if (table?.dataset) {
+			delete table.dataset.juneauHeaderSortSearch;
+			delete table.dataset.juneauUrlStateWired;
+		}
 		// DT1 table-overflow-wrap discipline: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
 		if (ctx._scrollRegionObserver) {
 			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
@@ -6425,7 +6737,7 @@
 				const ro = new window.ResizeObserver(recheck);
 				ro.observe(region);
 				if (ctx) ctx._scrollRegionObserver = ro;
-			} catch (e) { /* observer unavailable — the one-shot recheck above still ran */ }
+			} catch (e) { /* observer unavailable — the one-shot recheck above still ran */ } // NOSONAR javascript:S2486 -- documented best-effort fallback; the one-shot recheck already ran
 		}
 	}
 
@@ -6461,17 +6773,6 @@
 		ctx.bulkToolbar = ctx._bulkDef ? buildBulkToolbar(ctx._bulkDef, table, ctx, ctx.selectionState) : null;
 	}
 
-	function buildColumnSearchToggleHandler(columnSearchRow, ctx) {
-		return function (on) {
-			if (!columnSearchRow) return;
-			columnSearchRow.style.display = on ? "" : "none";
-			if (!on) {
-				Array.prototype.forEach.call(columnSearchRow.querySelectorAll("input"), function (inp) { inp.value = ""; });
-				if (ctx.dataTable) ctx.dataTable.columns().search("").draw();
-			}
-		};
-	}
-
 	function wireToolbarLeftCluster(toolbarRow, ctx) {
 		if (!toolbarRow) return;
 		const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
@@ -6490,6 +6791,370 @@
 		initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
 	}
 
+	/** Converts a restored Sort facet's ordered {@code {column,dir}[]} into the `viewDef.defaultOrder` shape
+	 * {@link #resolveOrder} already understands (Gap 1 / Gap 6) - a pure mapping, no DataTables dependency. */
+	function defaultOrderFromSort(sortList) {
+		return (sortList || []).map(function (e) { return { data: e.column, dir: e.dir }; });
+	}
+
+	/**
+	 * Applies a restored Options facet (page size / text wrap / row density / auto-refresh - Gap 1, Gap 7 / spec
+	 * §3.4) to an already-constructed live grid.  Runs AFTER `buildTable` returns, from both `initTableFromDef`'s
+	 * construction-time restore and `applyDraft`'s Apply handler, so the two paths share one definition of what
+	 * "Options restore" means.  `options` absent, or `ctx.dataTable` not yet set, is a no-op.
+	 */
+	function applyRestoredOptionsToLiveGrid(table, ctx, options) {
+		if (!options || !ctx.dataTable) return;
+		const page = ctx.dataTable.page;
+		// Only nudge (and redraw) when the live page length actually differs, so a default-sized restore in
+		// server mode does not cost an extra data request.
+		if (options.pageSize != null && typeof page?.len === "function" && page.len() !== options.pageSize)
+			page.len(options.pageSize).draw(false);
+		if (table.classList) {
+			table.classList.toggle("juneau-view-wrap", !!options.wrap);
+			table.classList.toggle("juneau-view-density-comfortable", options.density === "comfortable");
+		}
+		wireAutoRefresh(table, ctx, options.autoRefreshMs);
+	}
+
+	/**
+	 * Wires the operator-chosen auto-refresh interval (Gap 7 / spec §3.4 Options tab) - independent of
+	 * {@code viewDef.pollIntervalMs}'s own {@link #initPolling} timer, so turning one on never disturbs the
+	 * other.  Reuses only the generic pieces of that timer: {@link #hasInFlightRow} (never paint over a draw
+	 * already in flight) and {@link #isPollSuspended} with a synthetic {@code {pausePollingWhileEditing: true}}
+	 * stand-in viewDef, so a dialog open / row expanded pauses this the same way it pauses a declared poll.
+	 * Tab-hidden is handled the same way {@code initPolling}'s own tick does - a plain {@code document.hidden}
+	 * check, no suspension predicate involved.  {@code autoRefreshMs} of {@code 0} (Off, the default) clears any
+	 * existing timer and wires nothing new - idempotent, so this is safe to call again on every Apply.
+	 */
+	function wireAutoRefresh(table, ctx, autoRefreshMs) {
+		if (ctx._autoRefreshTimerId != null) {
+			clearInterval(ctx._autoRefreshTimerId);
+			ctx._autoRefreshTimerId = null;
+		}
+		if (!autoRefreshMs) return;
+		const syntheticViewDef = { pausePollingWhileEditing: true };
+		ctx._autoRefreshTimerId = setInterval(function () {
+			if (document.hidden) return;
+			if (!ctx.dataTable) return;
+			if (hasInFlightRow(table)) return;
+			if (isPollSuspended(table, ctx, syntheticViewDef)) return;
+			ctx.dataTable.ajax.reload(null, false);
+		}, autoRefreshMs);
+	}
+
+	// ==================================================================================================================
+	// SHAREABLE URL STATE  (design §6.3 / T17–T19 — live ?state= sync + open restore; View Settings stay in the store)
+	// ==================================================================================================================
+
+	/**
+	 * Whether {@code table} is the page's shareable primary (design §6.3: primary table only). Nested tables never
+	 * qualify. An explicit {@code view.primary === true} / {@code data-juneau-primary} wins; {@code primary:false}
+	 * opts out; otherwise the first non-nested {@code table[data-juneau-view]} on the page is primary.
+	 */
+	function isShareablePrimaryTable(table, viewDef) {
+		if (!table) return false;
+		if (table.getAttribute?.(NESTED_INIT_ATTR) === "1") return false;
+		if (typeof table.closest === "function"
+			&& (table.closest("[" + NESTED_ATTR + "]") || table.closest(".juneau-view-detail-panel")))
+			return false;
+		if (viewDef?.primary === false) return false;
+		if (viewDef?.primary === true) return true;
+		const ds = table.dataset || {};
+		if (ds.juneauPrimary === "true" || ds.juneauPrimary === "1") return true;
+		if (ds.juneauPrimary === "false" || ds.juneauPrimary === "0") return false;
+		const tables = document.querySelectorAll("table[data-juneau-view]");
+		for (const t of tables) {
+			if (t.getAttribute?.(NESTED_INIT_ATTR) === "1") continue;
+			if (typeof t.closest === "function"
+				&& (t.closest("[" + NESTED_ATTR + "]") || t.closest(".juneau-view-detail-panel")))
+				continue;
+			return t === table;
+		}
+		return false;
+	}
+
+	/**
+	 * Whether {@code table} gets a Copy-link toolbar button (framework parity - {@code copyShareableUrl} existed
+	 * with no button to trigger it). Shown by default on the page's PRIMARY view: {@code viewDef.primary === true}
+	 * explicitly, or, when {@code primary} is unset, when this is the page's only non-nested view table. NOT
+	 * {@link #isShareablePrimaryTable}'s own "first wins" fallback for an unset primary with SEVERAL tables - that
+	 * tie-break is fine for picking which table silently drives the address bar, but wrong for a VISIBLE button:
+	 * several equally-ranked tables with none marked primary get NO button, not an arbitrary one. Two independent
+	 * opt-outs: {@code viewDef.primary === false}, and the Copy-link-specific {@code viewDef.copyLink === false}
+	 * (for a primary view that still wants no Copy-link button).
+	 */
+	function isCopyLinkVisible(table, viewDef) {
+		if (!table) return false;
+		if (viewDef?.copyLink === false) return false;
+		if (viewDef?.primary === false) return false;
+		if (table.getAttribute?.(NESTED_INIT_ATTR) === "1") return false;
+		if (typeof table.closest === "function"
+			&& (table.closest("[" + NESTED_ATTR + "]") || table.closest(".juneau-view-detail-panel")))
+			return false;
+		if (viewDef?.primary === true) return true;
+		let topLevelCount = 0;
+		const tables = document.querySelectorAll("table[data-juneau-view]");
+		for (const t of tables) {
+			if (t.getAttribute?.(NESTED_INIT_ATTR) === "1") continue;
+			if (typeof t.closest === "function"
+				&& (t.closest("[" + NESTED_ATTR + "]") || t.closest(".juneau-view-detail-panel")))
+				continue;
+			topLevelCount++;
+		}
+		return topLevelCount === 1;
+	}
+
+	/** Drops any `?query` / `#fragment` tail and trailing slashes from an href (linear scan - no backtracking regex). */
+	function stripQueryAndTrailingSlashes(href) {
+		const cut = href.search(/[?#]/);
+		let end = cut >= 0 ? cut : href.length;
+		while (end > 0 && href.charAt(end - 1) === "/") end--;
+		return href.slice(0, end);
+	}
+
+	/** Live Page Tab id for the shareable URL, or {@code null} when the page has no tab signal. */
+	function readLiveShareTab() {
+		const meta = typeof document.querySelector === "function"
+			? document.querySelector('meta[name="page-tab"]') : null;
+		if (meta?.getAttribute) {
+			const c = meta.getAttribute("content");
+			if (c != null && String(c) !== "") return String(c);
+		}
+		const cur = typeof document.querySelector === "function"
+			? document.querySelector('.juneau-page-nav [aria-current="page"]') : null;
+		if (cur) {
+			const named = cur.getAttribute?.("data-juneau-tab") || cur.getAttribute?.("data-tab");
+			if (named) return String(named);
+			const href = cur.getAttribute?.("href");
+			if (href) {
+				const parts = stripQueryAndTrailingSlashes(String(href)).split("/");
+				const last = parts.at(-1);
+				if (last) return last;
+			}
+		}
+		if (NS.pageState && typeof NS.pageState.page === "function") {
+			const t = NS.pageState.page("share").get("tab");
+			if (t != null && String(t) !== "") return String(t);
+		}
+		return null;
+	}
+
+	/** Collects the live shareable facets (tab / primary-table filters / primary-table sort) — never View Settings. */
+	function collectLiveUrlState(table, ctx) {
+		const filters = [];
+		const cols = ctx?.optsColumns || [];
+		const dt = ctx?.dataTable;
+		if (dt && typeof dt.columns === "function") {
+			dt.columns().every(function () {
+				const col = this; // NOSONAR javascript:S7740 -- DataTables columns().every() binds `this` to the column API; an arrow function cannot receive it
+				const def = cols[col.index()];
+				if (!def || def.data == null) return;
+				const expr = (typeof col.search === "function" ? col.search() : "") || "";
+				if (String(expr) !== "") filters.push({ column: String(def.data), expr: String(expr) });
+			});
+		}
+		let sort = null;
+		if (dt && typeof dt.order === "function") {
+			const order = dt.order() || [];
+			if (order.length && order[0]) {
+				const idx = order[0][0];
+				const dir = order[0][1];
+				const def = cols[idx];
+				if (def?.data != null && dir)
+					sort = { column: String(def.data), dir: String(dir) };
+			}
+		}
+		return { tab: readLiveShareTab(), filters: filters, sort: sort };
+	}
+
+	/**
+	 * Applies an open {@code ?state=} payload to the live grid (T19). Incomplete / rejected filter expressions are
+	 * skipped so a bad link cannot blank the grid. Does not touch View Settings (columns / membership / options).
+	 */
+	function applyShareableOpenState(table, ctx, state) {
+		if (!state || !ctx || !ctx.dataTable) return;
+		const U = NS.urlState;
+		if (U && typeof U.isEmptyState === "function" && U.isEmptyState(state)) return;
+
+		if (state.tab != null && String(state.tab) !== "") {
+			if (NS.pageState && typeof NS.pageState.page === "function")
+				NS.pageState.page("share").set("tab", String(state.tab));
+			const tabId = String(state.tab);
+			// Never build a selector from `?state=` input (F1): enumerate the constant-shaped selector and compare
+			// dataset.juneauStripTab by plain string equality instead of concatenating tabId into the selector text.
+			let btn = null;
+			if (typeof document.querySelectorAll === "function") {
+				const candidates = document.querySelectorAll('[role="tab"][data-juneau-strip-tab]');
+				for (const c of candidates) {
+					if (c?.dataset && c.dataset.juneauStripTab === tabId) { btn = c; break; }
+				}
+			}
+			if (btn && typeof btn.click === "function") {
+				try { btn.click(); } catch (e) { /* host tab strip unavailable */ }
+			}
+			try {
+				if (typeof CustomEvent === "function")
+					document.dispatchEvent(new CustomEvent("juneau:share-tab", { detail: { tab: tabId } }));
+			} catch (e2) { /* CustomEvent unavailable in the harness */ }
+		}
+
+		const cols = ctx.optsColumns || [];
+		const search = NS.search;
+		const filters = state.filters || [];
+		for (const f of filters) {
+			if (!f || f.column == null || f.expr == null || String(f.expr) === "") continue;
+			const expr = String(f.expr);
+			// Incomplete / invalid $-DSL must not blank the grid (design §6.3 / column-search commit rule).
+			const draft = evaluateColumnSearchDraft(expr, null, search);
+			if (draft.incomplete || draft.rejected) continue;
+			let colIdx = -1;
+			for (let c = 0; c < cols.length; c++) {
+				if (cols[c] && cols[c].data != null && String(cols[c].data) === String(f.column)) {
+					colIdx = c;
+					break;
+				}
+			}
+			if (colIdx < 0) continue;
+			const api = ctx.dataTable.column(colIdx);
+			if (api && typeof api.search === "function") {
+				api.search(expr);
+				const header = typeof api.header === "function" ? api.header() : null;
+				const icon = header?.querySelector?.(".juneau-view-col-search-icon");
+				icon?.classList?.add("is-active");
+			}
+		}
+
+		if (state.sort?.column != null && state.sort.dir != null) {
+			let sortIdx = -1;
+			for (let c = 0; c < cols.length; c++) {
+				if (cols[c] && cols[c].data != null && String(cols[c].data) === String(state.sort.column)) {
+					sortIdx = c;
+					break;
+				}
+			}
+			if (sortIdx >= 0 && typeof ctx.dataTable.order === "function") {
+				const dir = String(state.sort.dir) === "desc" ? "desc" : "asc";
+				ctx.dataTable.order([[sortIdx, dir]]);
+			}
+		}
+		if (typeof ctx.dataTable.draw === "function") ctx.dataTable.draw(false);
+	}
+
+	/** T17/T18: sync the address bar to the live shareable state (no-op under clean-address). */
+	function syncShareableUrlState(table, ctx) {
+		const U = NS.urlState;
+		if (!U || typeof U.writeToAddressBar !== "function") return false;
+		if (!isShareablePrimaryTable(table, ctx?.viewDef)) return false;
+		const clean = typeof U.cleanAddressEnabled === "function"
+			? U.cleanAddressEnabled(ctx.viewDef, table)
+			: false;
+		const state = collectLiveUrlState(table, ctx);
+		return U.writeToAddressBar(window.history, window.location, state, { clean: clean });
+	}
+
+	/**
+	 * Builds (and optionally copies) the shareable URL for the primary table — always carries {@code ?state=} even
+	 * under clean-address (T17/T18). Hosts call this for Copy link; T20's toolbar button is out of this pass.
+	 */
+	function buildShareableUrl(table, ctx) {
+		const U = NS.urlState;
+		if (!U || typeof U.buildShareUrl !== "function") return "";
+		const c = ctx || table.__juneauCtx;
+		return U.buildShareUrl(window.location, collectLiveUrlState(table, c));
+	}
+
+	function copyShareableUrl(table, ctx) {
+		const U = NS.urlState;
+		const url = buildShareableUrl(table, ctx);
+		if (!U || typeof U.copy !== "function") return Promise.resolve({ ok: false, url: url });
+		return U.copy(window.navigator, url).then(function (ok) { return { ok: !!ok, url: url }; });
+	}
+
+	/**
+	 * Wires the Copy-link toolbar affordance beside the Columns gear, mirroring {@code NS.config.mountChooser}'s
+	 * own DOM-construction pattern (same {@code .juneau-view-ribbon-btn} base class, same icon-then-text-fallback
+	 * painting, same tooltip stamping) so the two buttons look and behave alike. Duplicates that module's tiny
+	 * {@code paintChooserIcon} inline rather than importing it - this module and {@code juneau-config.js} are
+	 * independently loadable, and a page with no {@code columnConfig} never loads the latter at all. Routed through
+	 * {@code NS.init.copyShareableUrl} (the exported reference), so a test harness can spy this call. Idempotent:
+	 * called from {@code constructTable} on first init AND every Apply rebuild, and a second call never duplicates
+	 * the button.
+	 */
+	function mountCopyLinkButton(table, ctx, toolbarRow) {
+		if (!ctx || !ctx.viewDef) return;
+		if (!isCopyLinkVisible(table, ctx.viewDef)) return;
+		// No URL-state module -> nothing to copy; don't render a button that can only fail.
+		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function") return;
+		const host = toolbarRow
+			? (toolbarRow.querySelector(".juneau-view-toolbar-right") || toolbarRow)
+			: (table.parentNode && (table.parentNode.querySelector(".juneau-view-toolbar-right") || table.parentNode));
+		if (!host) return;
+		if (host.querySelector?.(".juneau-view-copylink-btn")) return;
+
+		const btn = document.createElement("button");
+		btn.type = "button";
+		btn.className = "juneau-view-ribbon-btn juneau-view-copylink-btn";
+		stampChromeTip(btn, "Copy link");
+		btn.textContent = "Copy link";
+		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon("link") : null;
+		if (markup != null && typeof DOMParser === "function") {
+			try {
+				const doc = new DOMParser().parseFromString(markup, "image/svg+xml");
+				const svg = doc.documentElement;
+				if (svg?.tagName?.toLowerCase() === "svg") {
+					btn.textContent = "";
+					btn.appendChild(document.importNode ? document.importNode(svg, true) : svg);
+				}
+			} catch (e) { /* text fallback already applied */ } // NOSONAR javascript:S2486 -- documented best-effort fallback; the text label is already painted
+		}
+		btn.addEventListener("click", function () {
+			NS.init.copyShareableUrl(table, ctx).then(function (result) {
+				announce(table, result.ok ? ANNOUNCE.linkCopied : ANNOUNCE.linkCopyFailed);
+			}).catch(function () {
+				announce(table, ANNOUNCE.linkCopyFailed);
+			});
+		});
+		host.appendChild(btn);
+	}
+
+	/**
+	 * Wires live address-bar sync (T17/T18) and open precedence (T19) for the primary table. Nested / non-primary
+	 * tables are a no-op. Idempotent per table.
+	 */
+	function wireShareableUrlState(table, ctx) {
+		if (!table || !ctx || !ctx.dataTable) return;
+		if (!isShareablePrimaryTable(table, ctx.viewDef)) return;
+		if (table.dataset?.juneauUrlStateWired === "1") return;
+		if (table.dataset) table.dataset.juneauUrlStateWired = "1";
+
+		const U = NS.urlState;
+		if (!U) return;
+
+		// T19: apply ?state= once per table lifetime (not again on every View-Settings Apply rebuild).
+		if (!ctx._urlStateOpenApplied) {
+			ctx._urlStateOpenApplied = true;
+			const fromUrl = typeof U.readFromSearch === "function" ? U.readFromSearch(window.location.search) : null;
+			const resolve = (typeof NS.config?.resolveShareableOpenState === "function")
+				? NS.config.resolveShareableOpenState
+				: U.resolveOpenState;
+			const openState = typeof resolve === "function" ? resolve(fromUrl, null) : fromUrl;
+			if (openState && !(typeof U.isEmptyState === "function" && U.isEmptyState(openState)))
+				applyShareableOpenState(table, ctx, openState);
+		}
+
+		const onLiveChange = function (e) {
+			if (e && e.target && e.target !== table) return;
+			syncShareableUrlState(table, ctx);
+		};
+		if (typeof ctx.dataTable.on === "function") {
+			ctx.dataTable.on("order.dt", onLiveChange);
+			ctx.dataTable.on("search.dt", onLiveChange);
+		}
+		// Reflect the post-open state once (skipped under clean-address).
+		syncShareableUrlState(table, ctx);
+	}
+
 	function constructTable(table, viewDef, effectiveColumns, ctx) {
 		const $ = window.jQuery;
 		restoreHeaderShell(table, ctx);
@@ -6501,14 +7166,14 @@
 			warn: warn,
 			effectiveColumns: effectiveColumns,
 			hasRowDetail: !!findRowDetailTemplate(table),
-			ribbonParams: function () {
-				return NS.ribbon?.ribbonToQueryParams
-					? NS.ribbon.ribbonToQueryParams(viewDef, ctx.activeState, ctx.optsColumns)
-					: {};
-			},
+			// The ribbon's live active-toggle state, read at REQUEST time; buildOptions turns it into body column
+			// searches / URL params through window.JuneauViews.ribbon (design doc §3.1/D8).
+			ribbonActiveState: function () { return ctx.activeState || {}; },
 			// Present ONLY for a nested table (set by prepareNestedTable); a top-level view leaves it undefined so
 			// buildOptions merges no parent-scope parameter.
-			nestedScope: ctx.nestedScope
+			nestedScope: ctx.nestedScope,
+			// The view table, so a server-mode data request can carry the CSRF token (read per request).
+			table: table
 		};
 
 		const opts = buildOptions(viewDef, deps);
@@ -6540,8 +7205,6 @@
 
 		const pill = buildPagingPill(viewDef, ctx);
 		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
-		const columnSearchRow = buildColumnSearchRow(table, ctx.optsColumns, ctx.dataTable);
-		ctx.onColumnSearchToggle = buildColumnSearchToggleHandler(columnSearchRow, ctx);
 
 		const wrapper = findViewWrapper(table);
 		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
@@ -6552,6 +7215,14 @@
 		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
 		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function")
 			NS.config.mountChooser(table, ctx, toolbarRow);
+
+		// Copy-link affordance (framework parity): independent of columnConfig - shown by default on the page's
+		// primary view (isCopyLinkVisible), with its own opt-outs (viewDef.primary === false / copyLink === false).
+		mountCopyLinkButton(table, ctx, toolbarRow);
+
+		// Shareable URL facet (design §6.3 / T17–T19): live address-bar sync + open restore for the primary table.
+		// View Settings stay in the page-state store; this never writes them into ?state=.
+		wireShareableUrlState(table, ctx);
 
 		// DT1 table-overflow-wrap discipline: DT1 gets its own JS-inserted scroll box (no-op on DT2 — the flex
 		// .dt-layout-cell already scrolls via CSS), then the scroll region gets an overflow-detected tabindex.
@@ -6641,7 +7312,8 @@
 	 * saved-views identity) and {@code pollIntervalMs} (a nested table refreshes with its parent, not on its own
 	 * timer).  A nested mutating action rides the token the server painted onto this table from the enclosing
 	 * response; a token-less nested table refuses visibly rather than submitting.  The parent-row scope is applied by
-	 * seeding {@code ctx.nestedScope}, which buildOptions merges into the ajax GET in both data modes.
+	 * seeding {@code ctx.nestedScope}, which buildOptions merges into the request in both data modes (a re-derived
+	 * URL query parameter in server mode, the GET's data object in client mode).
 	 */
 	function prepareNestedTable(wrap, parentId) {
 		if (!wrap || typeof wrap.querySelector !== "function") return;
@@ -6712,7 +7384,6 @@
 			dataTable: null,
 			activeState: {},
 			selectionState: selectionState,
-			columnSearchOn: false,
 			nested: true,
 			nestedDepth: depth,
 			nestedScope: {
@@ -6940,7 +7611,6 @@
 			dataTable: null,
 			activeState: activeState,
 			selectionState: selectionState,
-			columnSearchOn: false,
 			_jobSources: new Set(),
 			_pollTimers: [],
 			_reinitPending: null,
@@ -6973,8 +7643,33 @@
 		}
 
 		function go(saved) {
-			const effective = resolveEffectiveColumns(viewDef, saved);
-			buildTable(table, viewDef, effective, ctx);
+			// Gap 1: the per-table View Settings blob, not the named-saved-view blob, is the preferred restore
+			// source - it is the one `applyDraft` writes on EVERY Apply, named or not.  The named-saved-view
+			// path (`saved`, from `resolveActiveView`) is only a fallback for a table with no View Settings blob
+			// at all.  Gap-g: a facet whose tab is hidden by `columnConfig: {tabs:[...]}` is never restored from
+			// it, even if a (possibly stale) blob for it exists.
+			// Gated on columnConfig: a table without the chooser never applies (or deletes) a stored blob.  The
+			// `reset` flag rides on the memoized result and is surfaced by the chooser's single seed point
+			// (mountChooser -> ctx._configResetNotice), so go() need not consume it.
+			const resolved = (viewDef.columnConfig && typeof NS.config?.resolveLastAppliedViewSettings === "function")
+				? NS.config.resolveLastAppliedViewSettings(table, ctx)
+				: { draft: null, reset: false };
+			const visible = (typeof NS.config?.visibleConfigTabs === "function")
+				? NS.config.visibleConfigTabs(viewDef)
+				: ["view", "search", "sort", "options"];
+			const tabOn = function (tab) { return visible.indexOf(tab) >= 0; };
+			const draft = resolved.draft;
+			const viewSaved = (draft && tabOn("view")) ? draft : saved;
+			let effective = resolveEffectiveColumns(viewDef, viewSaved);
+			let effectiveViewDef = viewDef;
+			if (draft && tabOn("sort") && draft.sort?.length)
+				effectiveViewDef = Object.assign({}, viewDef, { defaultOrder: defaultOrderFromSort(draft.sort) });
+			if (draft && tabOn("search") && typeof NS.config?.applySearchMembershipToColumns === "function")
+				effective = NS.config.applySearchMembershipToColumns(effective, draft.search);
+			// Routed through the NS.init export (rather than the closed-over `buildTable` reference directly) so
+			// a test harness can observe this call the same way it already observes applyView's.
+			NS.init.buildTable(table, effectiveViewDef, effective, ctx);
+			if (draft && tabOn("options")) applyRestoredOptionsToLiveGrid(table, ctx, draft.options);
 		}
 
 		if (viewDef.columnConfig && typeof NS.config?.resolveActiveView === "function")
@@ -7079,10 +7774,10 @@
 		}
 
 		const wrapper = document.createElement("div");
-		wrapper.setAttribute("data-juneau-layout", envelope.layout || "wide");
-		wrapper.setAttribute("data-juneau-slot-table", "1");
+		wrapper.dataset.juneauLayout = envelope.layout || "wide";
+		wrapper.dataset.juneauSlotTable = "1";
 		if (envelope.savedViewsBase)
-			wrapper.setAttribute("data-juneau-saved-views", envelope.savedViewsBase);
+			wrapper.dataset.juneauSavedViews = envelope.savedViewsBase;
 
 		if (quickStats) wrapper.appendChild(paintQuickStats(quickStats));
 
@@ -7106,18 +7801,18 @@
 	function copyCsrfOntoTable(slot, table) {
 		const ancestor = typeof slot.closest === "function" ? slot.closest("[data-juneau-csrf]") : null;
 		if (!ancestor) return;
-		const token = ancestor.getAttribute("data-juneau-csrf");
+		const token = ancestor.dataset.juneauCsrf;
 		if (token == null || token === "") return;
-		table.setAttribute("data-juneau-csrf", token);
-		const header = ancestor.getAttribute("data-juneau-csrf-header");
+		table.dataset.juneauCsrf = token;
+		const header = ancestor.dataset.juneauCsrfHeader;
 		if (header != null && header !== "")
-			table.setAttribute("data-juneau-csrf-header", header);
+			table.dataset.juneauCsrfHeader = header;
 	}
 
 	function buildSlotTableEl(viewDef, selection, detail, rows) {
 		const table = document.createElement("table");
 		table.id = viewDef.id;
-		table.setAttribute("data-juneau-view", viewDef.id);
+		table.dataset.juneauView = viewDef.id;
 		table.className = "juneau-view-table";
 		const thead = document.createElement("thead");
 		const tr = document.createElement("tr");
@@ -7134,8 +7829,7 @@
 			tr.appendChild(th);
 		}
 		const cols = viewDef.columns || [];
-		for (let i = 0; i < cols.length; i++) {
-			const c = cols[i];
+		for (const c of cols) {
 			const th = document.createElement("th");
 			th.textContent = c.title == null || c.title === "" ? c.data : c.title;
 			tr.appendChild(th);
@@ -7144,8 +7838,7 @@
 		table.appendChild(thead);
 		if (rows?.length) {
 			const tbody = document.createElement("tbody");
-			for (let r = 0; r < rows.length; r++) {
-				const row = rows[r];
+			for (const row of rows) {
 				const bodyTr = document.createElement("tr");
 				if (detail) {
 					const td = document.createElement("td");
@@ -7157,9 +7850,9 @@
 					td.className = "juneau-view-select-cell";
 					bodyTr.appendChild(td);
 				}
-				for (let i = 0; i < cols.length; i++) {
+				for (const col of cols) {
 					const td = document.createElement("td");
-					const v = row ? row[cols[i].data] : null;
+					const v = row ? row[col.data] : null;
 					td.textContent = v == null ? "" : String(v);
 					bodyTr.appendChild(td);
 				}
@@ -7176,9 +7869,9 @@
 		const strip = document.createElement("div");
 		strip.className = "jc-quickstats";
 		strip.setAttribute("data-juneau-quickstats", stats.id); // NOSONAR javascript:S7761 -- querySelector pins literal data-juneau-quickstats
-		strip.setAttribute("data-juneau-quickstats-contract", JUNEAU_QUICKSTATS_CONTRACT_VERSION);
-		for (let i = 0; i < stats.items.length; i++)
-			strip.appendChild(paintQuickStatItem(stats.items[i]));
+		strip.dataset.juneauQuickstatsContract = JUNEAU_QUICKSTATS_CONTRACT_VERSION;
+		for (const item of stats.items)
+			strip.appendChild(paintQuickStatItem(item));
 		return strip;
 	}
 
@@ -7194,14 +7887,19 @@
 		return paintStatTile(item);
 	}
 
+	// Fail-closed, matching the pill renderer: a tone not in NS._render.pillTones (exported by juneau-renders.js) is
+	// dropped, i.e. no is-* class is emitted.  "neutral" is in the palette but is also emitted with no is-* class.
+	// Case-sensitive on purpose: QuickStats tones are wire tokens and must match the pill renderer exactly.
 	function toneClass(base, tone) {
-		return !tone || tone === "neutral" ? base : base + " is-" + tone;
+		const t = tone == null ? "" : String(tone);
+		const tones = NS._render?.pillTones;
+		return t === "neutral" || !Array.isArray(tones) || !tones.includes(t) ? base : base + " is-" + t;
 	}
 
 	function paintStatTile(item) {
 		const div = document.createElement("div");
 		div.className = "jc-stat jc-stat-tile";
-		div.setAttribute("data-juneau-stat", item.id);
+		div.dataset.juneauStat = item.id;
 		const label = document.createElement("span");
 		label.className = "jc-stat-label";
 		label.textContent = item.label == null ? "" : String(item.label);
@@ -7216,7 +7914,7 @@
 	function paintStatBar(item) {
 		const div = document.createElement("div");
 		div.className = "jc-stat jc-stat-bar";
-		div.setAttribute("data-juneau-stat", item.id);
+		div.dataset.juneauStat = item.id;
 		const label = document.createElement("span");
 		label.className = "jc-stat-label";
 		label.textContent = item.label == null ? "" : String(item.label);
@@ -7242,14 +7940,13 @@
 	function paintStatSegments(item) {
 		const div = document.createElement("div");
 		div.className = "jc-stat jc-stat-segments";
-		div.setAttribute("data-juneau-stat", item.id);
+		div.dataset.juneauStat = item.id;
 		const label = document.createElement("span");
 		label.className = "jc-stat-label";
 		label.textContent = item.label == null ? "" : String(item.label);
 		div.appendChild(label);
 		const segs = item.segments || [];
-		for (let i = 0; i < segs.length; i++) {
-			const s = segs[i];
+		for (const s of segs) {
 			const seg = document.createElement("span");
 			seg.className = toneClass("jc-stat-segment", s.tone);
 			const count = document.createElement("span");
@@ -7267,11 +7964,11 @@
 
 	function buildDetailTemplate(detail, parentTable) {
 		const tpl = document.createElement("template");
-		tpl.setAttribute("data-juneau-row-detail", "1");
-		tpl.setAttribute("data-juneau-detail-contract", detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION);
-		if (detail.endpoint) tpl.setAttribute("data-juneau-detail-url", detail.endpoint);
-		if (detail.region && detail.region.titleFields && detail.region.titleFields.length)
-			tpl.setAttribute("data-juneau-title-fields", detail.region.titleFields.join(","));
+		tpl.dataset.juneauRowDetail = "1";
+		tpl.dataset.juneauDetailContract = detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
+		if (detail.endpoint) tpl.dataset.juneauDetailUrl = detail.endpoint;
+		if (detail.region?.titleFields?.length)
+			tpl.dataset.juneauTitleFields = detail.region.titleFields.join(",");
 		// Expand clones tpl.content (expandDetailRow). Chromium's template.appendChild
 		// leaves that fragment empty - the HTML parser is what fills .content. Paint
 		// into the fragment the expander clones, never the template element's light DOM.
@@ -7293,18 +7990,18 @@
 	function buildDetailHeader(detail) {
 		const header = document.createElement("div");
 		header.className = "juneau-view-detail-header";
-		header.setAttribute("data-juneau-detail-header", "1");
+		header.dataset.juneauDetailHeader = "1";
 		if (detail.icon) {
 			const icon = document.createElement("span");
-			icon.setAttribute("data-juneau-detail-icon", detail.icon);
+			icon.dataset.juneauDetailIcon = detail.icon;
 			icon.className = "juneau-view-detail-icon";
 			header.appendChild(icon);
 		}
 		if (detail.title) {
 			const h2 = document.createElement("h2");
 			h2.textContent = detail.title;
-			h2.setAttribute("data-juneau-detail-title", "1");
-			h2.setAttribute("data-juneau-detail-title-template", detail.title);
+			h2.dataset.juneauDetailTitle = "1";
+			h2.dataset.juneauDetailTitleTemplate = detail.title;
 			h2.className = "juneau-view-detail-title";
 			header.appendChild(h2);
 		}
@@ -7315,13 +8012,13 @@
 		const d = document.createElement("div");
 		d.className = "juneau-region";
 		d.setAttribute("data-juneau-region", region.id); // NOSONAR javascript:S7761 -- test shims + source-scan pins literal data-juneau-region
-		d.setAttribute("data-juneau-region-contract", "1");
-		d.setAttribute("data-juneau-region-type", region.type || "row-detail");
+		d.dataset.juneauRegionContract = "1";
+		d.dataset.juneauRegionType = region.type || "row-detail";
 		if (region.populate)
-			d.setAttribute("data-juneau-region-populate", region.populate);
+			d.dataset.juneauRegionPopulate = region.populate;
 		const declared = {};
 		if (region.dataUrl) declared.dataUrl = region.dataUrl;
-		d.setAttribute("data-juneau-region-declared", JSON.stringify(declared));
+		d.dataset.juneauRegionDeclared = JSON.stringify(declared);
 		return d;
 	}
 
@@ -7331,28 +8028,28 @@
 		const built = buildDialogBarSlotRegion(bar);
 		if (!built) return null;
 		built.region.className = "jc-bar-slot juneau-view-detail-bar-slot";
-		built.region.setAttribute("data-juneau-bar-slot-anchor", anchor);
+		built.region.dataset.juneauBarSlotAnchor = anchor;
 		return built;
 	}
 
 	function buildNestedSlot(nested, parentTable) { // NOSONAR javascript:S1481 -- J0532 nested-slot seam; do not delete.
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-detail-nested";
-		wrap.setAttribute("data-juneau-nested", "1");
-		wrap.setAttribute("data-juneau-nested-contract", nested.contractVersion || JUNEAU_NESTED_CONTRACT_VERSION);
-		wrap.setAttribute("data-juneau-nested-scope-param", nested.parentScopeParam || "parentId");
+		wrap.dataset.juneauNested = "1";
+		wrap.dataset.juneauNestedContract = nested.contractVersion || JUNEAU_NESTED_CONTRACT_VERSION;
+		wrap.dataset.juneauNestedScopeParam = nested.parentScopeParam || "parentId";
 		const v = nested.view || {};
 		if (nested.contractVersion && nested.contractVersion !== JUNEAU_NESTED_CONTRACT_VERSION) {
 			error("Juneau nested table '" + v.id + "': contract version mismatch; nested table withheld.");
 			return wrap;
 		}
 		const table = document.createElement("table");
-		table.setAttribute("data-juneau-view", v.id);
+		table.dataset.juneauView = v.id;
 		table.className = "juneau-view-table";
-		const csrf = parentTable && parentTable.getAttribute("data-juneau-csrf");
-		if (csrf) table.setAttribute("data-juneau-csrf", csrf);
-		const csrfHeader = parentTable && parentTable.getAttribute("data-juneau-csrf-header");
-		if (csrfHeader) table.setAttribute("data-juneau-csrf-header", csrfHeader);
+		const csrf = parentTable?.dataset.juneauCsrf;
+		if (csrf) table.dataset.juneauCsrf = csrf;
+		const csrfHeader = parentTable?.dataset.juneauCsrfHeader;
+		if (csrfHeader) table.dataset.juneauCsrfHeader = csrfHeader;
 		if (nested.selection) {
 			table.setAttribute(SELECT_ATTR, "1");
 			table.setAttribute(ROW_ID_FIELD_ATTR, nested.selection.rowIdField);
@@ -7374,9 +8071,9 @@
 			tr.appendChild(th);
 		}
 		const cols = v.columns || [];
-		for (let i = 0; i < cols.length; i++) {
+		for (const col of cols) {
 			const th = document.createElement("th");
-			th.textContent = cols[i].title == null || cols[i].title === "" ? cols[i].data : cols[i].title;
+			th.textContent = col.title == null || col.title === "" ? col.data : col.title;
 			tr.appendChild(th);
 		}
 		thead.appendChild(tr);
@@ -7485,13 +8182,11 @@
 
 	function hasChromeTipClass(el) {
 		if (!el) return false;
-		const attr = typeof el.getAttribute === "function" ? el.getAttribute("class") : null;
-		const cn = attr != null && attr !== "" ? attr
-			: (typeof el.className === "string" ? el.className : "");
+		const cn = classStringOf(el);
 		if (!cn) return false;
 		const parts = cn.split(/\s+/);
-		for (let i = 0; i < parts.length; i++) {
-			if (JC_TIP_CHROME[parts[i]]) return true;
+		for (const part of parts) {
+			if (JC_TIP_CHROME[part]) return true;
 		}
 		return false;
 	}
@@ -7503,10 +8198,10 @@
 	function stampChromeTip(el, text) {
 		const t = text == null ? "" : String(text);
 		if (t !== "") {
-			el.setAttribute("data-jc-tip", t);
+			el.dataset.jcTip = t;
 			el.setAttribute("aria-label", t);
 		} else {
-			el.removeAttribute("data-jc-tip");
+			delete el.dataset.jcTip;
 		}
 		clearNativeTitle(el);
 	}
@@ -7534,7 +8229,7 @@
 	}
 
 	function promoteTitle(el, text) {
-		el.setAttribute("data-jc-tip", text);
+		el.dataset.jcTip = text;
 		clearNativeTitle(el);
 	}
 
@@ -7691,7 +8386,27 @@
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
 		initCursorTooltip: initCursorTooltip,
-		buildColumnSearchRow: buildColumnSearchRow,
+		// Header sort + per-column search glyphs (design §7.1) - exposed for the node harness + manual verification.
+		wireHeaderSortSearch: wireHeaderSortSearch,
+		ensureHeaderSortControl: ensureHeaderSortControl,
+		renderHeaderSearchIcon: renderHeaderSearchIcon,
+		openColumnSearchPopover: openColumnSearchPopover,
+		closeColumnSearchPopover: closeColumnSearchPopover,
+		cycleColumnOrder: cycleColumnOrder,
+		announce: announce,
+		columnSearchMeta: columnSearchMeta,
+		evaluateColumnSearchDraft: evaluateColumnSearchDraft,
+		// Shareable URL facet (design §6.3 / T17–T19) — exposed for the node harness + host Copy link.
+		isShareablePrimaryTable: isShareablePrimaryTable,
+		announceMessages: ANNOUNCE,
+		isCopyLinkVisible: isCopyLinkVisible,
+		mountCopyLinkButton: mountCopyLinkButton,
+		collectLiveUrlState: collectLiveUrlState,
+		applyShareableOpenState: applyShareableOpenState,
+		syncShareableUrlState: syncShareableUrlState,
+		wireShareableUrlState: wireShareableUrlState,
+		buildShareableUrl: buildShareableUrl,
+		copyShareableUrl: copyShareableUrl,
 		buildToolbarRow: buildToolbarRow,
 		// Table polling + visible staleness indicator - exposed for manual verification.
 		MIN_POLL_INTERVAL_MS: MIN_POLL_INTERVAL_MS,
@@ -7702,6 +8417,9 @@
 		hasOpenDetailRow: hasOpenDetailRow,
 		hasOpenActionDialog: hasOpenActionDialog,
 		isPollSuspended: isPollSuspended,
+		defaultOrderFromSort: defaultOrderFromSort,
+		applyRestoredOptionsToLiveGrid: applyRestoredOptionsToLiveGrid,
+		wireAutoRefresh: wireAutoRefresh,
 		buildStalenessIndicator: buildStalenessIndicator,
 		initPolling: initPolling,
 		// Row-details expander - exposed for manual verification.

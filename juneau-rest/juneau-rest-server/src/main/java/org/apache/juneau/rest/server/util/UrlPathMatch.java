@@ -34,13 +34,9 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_r)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class UrlPathMatch {
-
-	// Property name constants
-	private static final String PROP_r = "r";
-	private static final String PROP_v = "v";
 
 	private final int matchedParts;
 	private final String path;
@@ -145,8 +141,8 @@ public class UrlPathMatch {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_r, getRemainder())
-			.a(PROP_v, getVars());
+			.a("r", getRemainder())
+			.a("v", getVars());
 		// @formatter:on
 	}
 

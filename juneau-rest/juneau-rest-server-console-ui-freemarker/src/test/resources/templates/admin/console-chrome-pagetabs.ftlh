@@ -13,7 +13,8 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@console theme="light-red" icon="/app/logo.svg" brand="My App" chrome="true">
+--><@console icon="/app/logo.svg" brand="My App" chrome="true">
+<@theme name="light-red"/>
 <@navigation>
 <@node id="home" label="Home" href="/home"/>
 <@node id="items" label="Items" href="/items"/>

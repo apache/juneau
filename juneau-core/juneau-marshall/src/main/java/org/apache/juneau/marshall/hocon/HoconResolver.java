@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Resolves ${var} and ${?var} substitutions in the parsed HOCON tree.
@@ -82,12 +83,7 @@ public class HoconResolver {
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
-				var resolved = new ArrayList<HoconValue>();
-				for (var el : arr.getElements()) {
-					var r = resolveValue(el);
-					if (r != null)
-						resolved.add(r);
-				}
+				var resolved = arr.getElements().stream().map(this::resolveValue).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
 				arr.setElements(resolved);
 				yield val;
 			}
@@ -188,9 +184,7 @@ public class HoconResolver {
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
-				var resolved = new ArrayList<HoconValue>();
-				for (var el : arr.getElements())
-					resolved.add(resolveValueWithLookup(el, lookup));
+				var resolved = arr.getElements().stream().map(el -> resolveValueWithLookup(el, lookup)).collect(Collectors.toCollection(ArrayList::new));
 				arr.setElements(resolved);
 				yield val;
 			}

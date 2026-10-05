@@ -31,8 +31,8 @@ import org.junit.jupiter.api.*;
  * Covers paths not reached by {@link MarkdownDocParser_Test}.
  */
 @SuppressWarnings({
-	"unchecked",  // Unchecked cast required for generic test utility.
-	"java:S5976",  // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"unchecked" // Unchecked cast required for generic test utility.
 })
 class MarkdownDocParserSession_Test {
 

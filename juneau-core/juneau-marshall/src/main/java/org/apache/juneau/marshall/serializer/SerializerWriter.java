@@ -41,12 +41,14 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // SerializerWriter manages Closeable resources
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"resource" // SerializerWriter manages Closeable resources
 })
 public abstract class SerializerWriter<SELF extends SerializerWriter<SELF>> extends Writer {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The (SELF) this cast in self() is the standard CRTP self-type cast.
+	})
 	protected final SELF self() {
 		return (SELF) this;
 	}

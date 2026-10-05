@@ -84,7 +84,7 @@ public class AuthArg implements RestOpArg {
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) {
-		var v = opSession.getRequest().getAttribute(RestServerConstants.PRINCIPAL_ATTR).getValue();
+		var v = opSession.getRequest().getAttribute("juneau.principal").getValue();
 		if (v == null || ! type.isInstance(v))
 			return null;
 		return v;

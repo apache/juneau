@@ -82,14 +82,61 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertFalse(body.contains("slds-"), body);
 	}
 
+	// Design 7.1 order: the magnifying glass is inserted immediately after the sort glyph (its nextSibling slot),
+	// ahead of the title; on a non-sortable column it becomes the leftmost control instead.  The old
+	// "before the order span" placement (which put search left of sort) must be gone.
+	@Test void a04b_searchIcon_insertedAfterSortGlyphAheadOfTitle() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function renderHeaderSearchIcon(");
+		assertTrue(fn.contains("insertBefore(icon, orderSpan.nextSibling)"), fn);
+		assertTrue(fn.contains("insertBefore(icon, flex.firstChild)"), fn);
+		assertFalse(fn.contains("orderSpan.before(icon)"), fn);
+	}
+
+	// Design 7.1 active state: a column that already carries a search value (restored from saved state or the URL)
+	// paints the glyph active on first render, not only after a popover edit.
+	@Test void a04c_searchIcon_activeWhenColumnAlreadyFiltered() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function renderHeaderSearchIcon(");
+		assertTrue(fn.contains("col.search === \"function\""), fn);
+		assertTrue(fn.contains("classList.add(\"is-active\")"), fn);
+	}
+
 	@Test void a05_searchPopover_appliesColumnSearch() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function openColumnSearchPopover(");
-		assertTrue(fn.contains("col.search(v).draw()"), fn);
+		assertTrue(fn.contains("col.search(value).draw()"), fn);
 		assertTrue(fn.contains("juneau-view-col-search-popover"), fn);
 		assertTrue(fn.contains("is-active"), fn);
 		assertFalse(fn.contains("btn-primary"), fn);
 		assertFalse(fn.contains("btn-secondary"), fn);
+	}
+
+	// Design §4.5 / §5 commit semantics live in openColumnSearchPopover: help rendered from the VIEW_META operator
+	// list, a `$`-expression deferred to Enter/Apply (never previewed), a bare quick-filter previewed live only off
+	// the server dataMode branch, an out-of-set operator rejected, and Esc/click-away reverting the live preview.
+	@Test void a05b_searchPopover_helpDeferralRejectAndRevert() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function openColumnSearchPopover(");
+		assertTrue(fn.contains("juneau-view-col-search-popover-help"), fn);   // operator help list
+		assertTrue(fn.contains("meta.operators"), fn);                         // help sourced from VIEW_META
+		assertTrue(fn.contains("evaluateColumnSearchDraft"), fn);              // classify draft (dollar/reject/incomplete)
+		assertTrue(fn.contains("if (!serverSide) applyValue"), fn);            // bare preview only on client tables
+		assertTrue(fn.contains("if (d.dollar)"), fn);                          // $-expression is NOT previewed
+		assertTrue(fn.contains("Not a valid search for this column."), fn);    // reject message
+		assertTrue(fn.contains("col.search(current).draw()"), fn);             // revert to opened-with value on dismiss
+	}
+
+	// The draft classifier gates commit timing: leading "$" => deferred; an unparseable expression OR one naming an
+	// operator not on the column's effective set => rejected (design §4.3 - a reject, not a silent rewrite).
+	@Test void a05c_evaluateColumnSearchDraft_gatesDollarAndEffectiveSet() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function evaluateColumnSearchDraft(");
+		assertTrue(fn.contains("search.parse"), fn);
+		assertTrue(fn.contains("desc?.invalid"), fn);
+		assertTrue(fn.contains("desc?.incomplete"), fn);
+		assertTrue(fn.contains("usedOperatorNames"), fn);
+		assertTrue(fn.contains("if (!allowed[n]) rejected = true"), fn);
 	}
 
 	@Test void a06_teardown_closesPopoverAndClearsGuard() throws Exception {
@@ -107,12 +154,14 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("querySelector(\"svg\")"), fn);
 		assertTrue(fn.contains("resolveIcon?.(\"sort\")"), fn);
 		assertTrue(fn.indexOf("classList.add") > fn.indexOf("if (!orderSpan)"), fn);
+		// Design 7.1: the DT2 order span (appended after the title) is pulled to the front so the sort glyph leads.
+		assertTrue(fn.contains("insertBefore(orderSpan, flex.firstChild)"), fn);
 	}
 
 	@Test void b01_viewsCss_idleSortChevronsAreVisible() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("span.dt-column-order:before"), body);
-		assertTrue(body.contains(".juneau-sort-asc"), body);
+		assertTrue(body.contains("--jc-sort-asc-fill"), body);
 		assertTrue(body.contains("opacity: 0.45;"), body);
 		assertTrue(body.contains(".juneau-view-col-search-icon"), body);
 		assertTrue(body.contains("cursor: default;"), body);

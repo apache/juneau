@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -111,18 +110,12 @@ import java.util.function.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw List/Iterable types used in utility methods where element type is not statically known
+	"java:S1168", // build() and buildFiltered() return null when sparse() is set and the list is empty (documented contract), and convertElement() returns null when no element function is set
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw List/Iterable types used in utility methods where element type is not statically known
+	"unchecked" // add(E...) declares a generic varargs parameter (possible heap pollution); values is only iterated, never stored or exposed
 })
 public class Lists<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
-	private static final String ARG_elementFunction = "elementFunction";
-	private static final String ARG_elementType = "elementType";
-	private static final String ARG_filter = "filter";
-	private static final String ARG_value = "value";
-	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new list builder for the specified element type.
@@ -139,7 +132,7 @@ public class Lists<E> {
 	 * @return A new list builder instance.
 	 */
 	public static <E> Lists<E> create(Class<E> elementType) {
-		return new Lists<>(assertArgNotNull(ARG_elementType, elementType));
+		return new Lists<>(reqnn("elementType", elementType));
 	}
 
 	private List<E> list;
@@ -158,7 +151,7 @@ public class Lists<E> {
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
 	public Lists(Class<E> elementType) {
-		this.elementType = assertArgNotNull(ARG_elementType, elementType);
+		this.elementType = reqnn("elementType", elementType);
 	}
 
 	/**
@@ -183,11 +176,8 @@ public class Lists<E> {
 	 * @param values The values to add to this list.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for varargs addition
-	})
 	public Lists<E> add(E...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -291,9 +281,6 @@ public class Lists<E> {
 	 *
 	 * @return The built list, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168"  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)
-	})
 	public List<E> build() {
 		if (sparse && ie(list))
 			return null;
@@ -368,9 +355,6 @@ public class Lists<E> {
 	 *
 	 * @return The built list as a {@link FilteredList}, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
-	})
 	public FilteredList<E> buildFiltered() {
 		var l = build();
 		if (l == null)  // sparse mode and empty
@@ -392,7 +376,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> elementFunction(Function<Object,E> elementFunction) {
-		this.elementFunction = assertArgNotNull(ARG_elementFunction, elementFunction);
+		this.elementFunction = reqnn("elementFunction", elementFunction);
 		return this;
 	}
 
@@ -403,7 +387,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> elementType(Class<E> value) {
-		elementType = assertArgNotNull(ARG_value, value);
+		elementType = reqnn("value", value);
 		return this;
 	}
 
@@ -490,7 +474,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> filtered(Predicate<E> filter) {
-		Predicate<E> newFilter = assertArgNotNull(ARG_filter, filter);
+		Predicate<E> newFilter = reqnn("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -503,9 +487,6 @@ public class Lists<E> {
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for sorted list creation
-	})
 	public Lists<E> sorted() {
 		return sorted((Comparator<E>)Comparator.naturalOrder());
 	}
@@ -517,7 +498,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> sorted(Comparator<E> comparator) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		return this;
 	}
 

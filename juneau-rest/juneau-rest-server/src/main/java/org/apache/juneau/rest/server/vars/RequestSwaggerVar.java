@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.vars;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -99,33 +100,33 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			Optional<Operation> methodSwagger = req.getOperationSwagger();
 			char c = charAt(key, 0);
 			if (c == 'c') {
-				if ("contact".equals(key))
+				if (eq(key, "contact"))
 					return swagger.map(Swagger::getInfo).map(Info::getContact).map(Shorts::s).orElse(null);
 			} else if (c == 'd') {
-				if ("description".equals(key))
+				if (eq(key, "description"))
 					return swagger.map(Swagger::getInfo).map(Info::getDescription).orElse(null);
 			} else if (c == 'e') {
-				if ("externalDocs".equals(key))
+				if (eq(key, "externalDocs"))
 					return swagger.map(Swagger::getExternalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
-				if ("license".equals(key))
+				if (eq(key, "license"))
 					return swagger.map(Swagger::getInfo).map(Info::getLicense).map(Shorts::s).orElse(null);
 			} else if (c == 'o') {
-				if ("operationDescription".equals(key))
+				if (eq(key, "operationDescription"))
 					return methodSwagger.map(Operation::getDescription).orElse(null);
-				if ("operationSummary".equals(key))
+				if (eq(key, "operationSummary"))
 					return methodSwagger.map(Operation::getSummary).orElse(null);
 			} else if (c == 's') {
-				if ("siteName".equals(key))
+				if (eq(key, "siteName"))
 					return swagger.map(Swagger::getInfo).map(Info::getSiteName).orElse(null);
 			} else if (c == 't') {
-				if ("tags".equals(key))
+				if (eq(key, "tags"))
 					return swagger.map(Swagger::getTags).map(Json5::of).orElse(null);
-				if ("termsOfService".equals(key))
+				if (eq(key, "termsOfService"))
 					return swagger.map(Swagger::getInfo).map(Info::getTermsOfService).orElse(null);
-				if ("title".equals(key))
+				if (eq(key, "title"))
 					return swagger.map(Swagger::getInfo).map(Info::getTitle).orElse(null);
-			} else if (c == 'v' && "version".equals(key))
+			} else if (c == 'v' && eq(key, "version"))
 				return swagger.map(Swagger::getInfo).map(Info::getVersion).orElse(null);
 			return null;
 		} catch (Exception e) {

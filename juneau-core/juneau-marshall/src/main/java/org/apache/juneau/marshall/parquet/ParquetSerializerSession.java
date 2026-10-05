@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
@@ -36,17 +35,17 @@ import org.apache.juneau.marshall.stream.*;
  * Session for {@link ParquetSerializer}.
  */
 @SuppressWarnings({
-	"resource",   // Output streams managed by calling code
-	"java:S110",
-	"java:S115",
-	"java:S3776",
+	"java:S107", // Recursive list flattening requires path/index/def/rep context; refactor would obscure
+	"java:S110", // Deep chain comes from the Serializer/OutputStreamSerializerSession session base classes
+	"java:S1192", // Duplicated "value" is ValueHolder/Optional schema key; constant would obscure
+	"java:S3776", // collectBeans/flattenListValuesImpl/writeValue branch on many value shapes (Map, List, array, Optional, swaps, logical types)
 	"java:S6541", // Brain Method: Parquet bean collection and list flattening are inherently branchy
-	"java:S1192"  // Duplicated "value" is ValueHolder/Optional schema key; constant would obscure
+	"java:S9391", // Row/column loops stay imperative because their bodies call methods that throw checked SerializeException/IOException
+	"resource" // Output streams managed by calling code
 })
 public class ParquetSerializerSession extends OutputStreamSerializerSession implements RecordWritable, ArrayRecordWritable {
 
 	private static final byte[] MAGIC = "PAR1".getBytes(StandardCharsets.UTF_8);
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for serializer sessions.
@@ -56,7 +55,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		private ParquetSerializer ctx;
 
 		protected Builder(ParquetSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -74,7 +73,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 * @return A new builder.
 	 */
 	public static Builder create(ParquetSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final ParquetSerializer ctx;
@@ -645,9 +644,6 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		return (Map<?,?>) obj;
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Recursive list flattening requires path/index/def/rep context; refactor would obscure
-	})
 	private void flattenListValues(Object obj, String path, int partIndex, boolean firstInRow, int currentRep, int listDepth, int maxDef, List<FlattenedEntry> out, Set<Object> seen) throws SerializeException {
 		if (obj != null && seen.contains(obj)) {
 			if (ctx.cycleHandling == ParquetCycleHandling.THROW)
@@ -665,9 +661,6 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Recursive list flattening requires path/index/def/rep context; refactor would obscure
-	})
 	private void flattenListValuesImpl(Object obj, String path, int partIndex, boolean firstInRow, int currentRep, int listDepth, int maxDef, List<FlattenedEntry> out, Set<Object> seen) throws SerializeException {
 		var parts = path.split("\\.");
 		if (partIndex >= parts.length) {

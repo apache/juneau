@@ -37,7 +37,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // Mocked ServletOutputStream/HttpServletResponse are in-memory test doubles with no-op close(); the code under test owns wrapping/writing them, not this test.
+@SuppressWarnings({
+	"resource" // Mocked ServletOutputStream/HttpServletResponse are in-memory test doubles with no-op close(); the code under test owns wrapping/writing them, not this test.
+})
 class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 
 	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier) {

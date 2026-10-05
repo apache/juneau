@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -64,19 +63,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RequestBodyInfo extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_key = "key";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_content = "content";
-	private static final String PROP_description = "description";
-	private static final String PROP_required = "required";
 
 	private String description;
 	private Map<String,MediaType> content = map();
@@ -111,8 +100,8 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo addContent(String key, MediaType value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		content.put(key, value);
 		return this;
 	}
@@ -128,11 +117,11 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_content -> toType(getContent(), type);
-			case PROP_required -> toType(getRequired(), type);
+			case "description" -> toType(getDescription(), type);
+			case "content" -> toType(getContent(), type);
+			case "required" -> toType(getRequired(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -168,9 +157,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(content), PROP_content)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(required), PROP_required)
+			.addIf(ine(content), "content")
+			.addIf(nn(description), "description")
+			.addIf(nn(required), "required")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -178,11 +167,11 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public RequestBodyInfo set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_content -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
-			case PROP_description -> setDescription(s(value));
-			case PROP_required -> setRequired(toBoolean(value));
+			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
+			case "description" -> setDescription(s(value));
+			case "required" -> setRequired(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

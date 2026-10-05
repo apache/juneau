@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.marshall.toml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
@@ -95,14 +96,14 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Builder pattern requires many parameters
-	"java:S115",  // ARG_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class TomlParser extends ReaderParser implements RecordReadable {
+public class TomlParser extends ReaderParser implements TomlMetaProvider, RecordReadable {
 
-	private static final String ARG_copyFrom = "copyFrom";
-
-	private static final String PROP_nullValue = "nullValue";
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,TomlClassMeta> tomlClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,TomlBeanPropertyMeta> tomlBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder for {@link TomlParser}.
@@ -118,12 +119,12 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullValue = copyFrom.nullValue;
 		}
 
 		protected Builder(TomlParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullValue = copyFrom.nullValue;
 		}
 
@@ -192,6 +193,18 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 		return TomlParserSession.create(this);
 	}
 
+	@Override /* Overridden from TomlMetaProvider */
+	public TomlBeanPropertyMeta getTomlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return TomlBeanPropertyMeta.DEFAULT;
+		return tomlBeanPropertyMetas.computeIfAbsent(bpm, k -> new TomlBeanPropertyMeta(k, this));
+	}
+
+	@Override /* Overridden from TomlMetaProvider */
+	public TomlClassMeta getTomlClassMeta(ClassMeta<?> cm) {
+		return tomlClassMetas.computeIfAbsent(cm, k -> new TomlClassMeta(k, this));
+	}
+
 	@Override
 	public Builder copy() {
 		return new Builder(this);
@@ -199,7 +212,7 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 
 	@Override
 	protected FluentMap<String,Object> properties() {
-		return super.properties().a(PROP_nullValue, nullValue);
+		return super.properties().a("nullValue", nullValue);
 	}
 
 	/**

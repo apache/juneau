@@ -130,12 +130,10 @@ import org.apache.juneau.marshall.uon.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
-
-	// Property name constants
-	private static final String PROP_expandedParams = "expandedParams";
 
 	/**
 	 * Builder class.
@@ -372,6 +370,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	@Override /* Overridden from UonSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_expandedParams, expandedParams);
+			.a("expandedParams", expandedParams);
 	}
 }

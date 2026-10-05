@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -46,28 +47,17 @@ class ChromeCss_MainInner_Test extends TestBase {
 		var start = c.indexOf(".jc-main {");
 		var end = c.indexOf('}', start);
 		var body = c.substring(start, end);
-		assertTrue(body.contains("background-color: var(--jc-main-bg)"), body);
-		assertTrue(body.contains("margin: var(--jc-space-3) var(--jc-space-3) 0"),
-			"bottom gutter is body padding, not .jc-main margin-bottom: " + body);
+		assertContainsAll(body, "background-color: var(--jc-main-bg)", "margin: var(--jc-space-3) var(--jc-space-3) 0",
+			"border-radius: var(--jc-radius)", "padding: 20px 24px 40px", "overflow: auto", "min-height: 0");
 		assertFalse(body.contains("margin: var(--jc-space-3);"),
 			"four-sided margin on .jc-main clips at scroll end: " + body);
-		assertTrue(body.contains("border-radius: var(--jc-radius)"), body);
 		assertFalse(body.contains("max-width:"), "Q4: no max-width on .jc-main: " + body);
 		assertFalse(body.contains("border:"), "Q4: no extra border on .jc-main: " + body);
-		assertTrue(body.contains("padding: 20px 24px 40px"), "keep today's inner padding: " + body);
-		assertTrue(body.contains("overflow: auto"), "cards scroll inside .jc-main, not the document: " + body);
-		assertTrue(body.contains("min-height: 0"), "flex item must shrink so overflow:auto kicks in: " + body);
 	}
 
 	@Test void a01b_body_keepsBottomGutterAfterScroll() throws Exception {
 		var c = flat();
-		assertTrue(c.contains("padding-bottom: var(--jc-space-3)"),
-			"body must pad the bottom gutter so --jc-page-bg remains visible after scroll: " + c);
-		assertTrue(c.contains("min-height: 100vh"), c);
-		assertTrue(c.contains("overflow: hidden"),
-			"html/body must not scroll; the page-bg gradient stays put: " + c);
-		assertTrue(c.contains("display: flex"), c);
-		assertTrue(c.contains("flex-direction: column"), c);
+		assertContainsAll(c, "padding-bottom: var(--jc-space-3)", "min-height: 100vh", "overflow: hidden", "display: flex", "flex-direction: column");
 	}
 
 	@Test void a01c_jcFooter_modestMutedCentered() throws Exception {
@@ -135,9 +125,6 @@ class ChromeCss_MainInner_Test extends TestBase {
 		var brace = c.indexOf('{', start);
 		var end = c.indexOf('}', brace);
 		var body = c.substring(brace, end);
-		assertTrue(body.contains("background-color: transparent"), body);
-		assertTrue(body.contains("padding: 0"), body);
-		assertTrue(body.contains("box-shadow: none"),
-			"table-chrome must not lift as a white card: " + body);
+		assertContainsAll(body, "background-color: transparent", "padding: 0", "box-shadow: none");
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -88,14 +87,10 @@ import org.apache.juneau.commons.settings.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use ARG_lowerCamel convention to match the corresponding constructor parameter name (e.g., ARG_target → target).
+	"java:S107", // The private bind/bindField/bindNested/hasResolvableKey helpers thread the same binding context (target, prefix, settings, sources, flags, validator, path) through recursion
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public final class ConfigPropertiesBinder<T> {
-
-	private static final String ARG_target = "target";
-	private static final String ARG_prefix = "prefix";
-	private static final String ARG_settings = "settings";
-	private static final String ARG_validator = "validator";
 
 	/**
 	 * Creates a new binder for {@code target}'s fields under {@code prefix}.
@@ -122,8 +117,8 @@ public final class ConfigPropertiesBinder<T> {
 	private BeanStore beanStore;
 
 	private ConfigPropertiesBinder(T target, String prefix) {
-		this.target = assertArgNotNull(ARG_target, target);
-		this.prefix = assertArgNotNull(ARG_prefix, prefix);
+		this.target = reqnn("target", target);
+		this.prefix = reqnn("prefix", prefix);
 	}
 
 	/**
@@ -189,8 +184,8 @@ public final class ConfigPropertiesBinder<T> {
 	 * 	be converted to its field's type, or a nested {@code @ConfigProperties} type could not be instantiated.
 	 */
 	public T run() {
-		assertArgNotNull(ARG_settings, settings);
-		assertArgNotNull(ARG_validator, validator);
+		reqnn("settings", settings);
+		reqnn("validator", validator);
 		var scopedSources = scopedSources(beanStore);
 		var path = new HashSet<Class<?>>();
 		path.add(target.getClass());
@@ -207,9 +202,6 @@ public final class ConfigPropertiesBinder<T> {
 		validator.validate(target);
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Internal recursive-bind helper; the parameters are the fixed bind context (target/key/field/settings/sources/relaxed/validator/path) threaded unchanged through bind()/bindNested()/hasResolvableKey() - a parameter object would just wrap them without reducing coupling.
-	})
 	private static void bindField(Object target, String prefix, FieldInfo field, Settings settings, PropertySource[] scopedSources, boolean relaxed, ConfigPropertiesValidator validator, Set<Class<?>> path) {
 		var key = prefix + "." + field.getName();
 		var fieldType = field.getFieldType();
@@ -233,9 +225,6 @@ public final class ConfigPropertiesBinder<T> {
 		// Bind-only-present: no candidate resolved anywhere in the chain, field initializer default stands.
 	}
 
-	@SuppressWarnings({
-		"java:S107" // Internal recursive-bind helper; the parameters are the fixed bind context (target/key/field/fieldType/settings/sources/relaxed/validator/path) threaded unchanged through bind()/bindField()/hasResolvableKey() - a parameter object would just wrap them without reducing coupling.
-	})
 	private static void bindNested(Object target, String key, FieldInfo field, ClassInfo fieldType, Settings settings, PropertySource[] scopedSources, boolean relaxed, ConfigPropertiesValidator validator, Set<Class<?>> path) {
 		if (! path.add(fieldType.inner()))
 			throw rex("Circular @ConfigProperties nesting detected at %s", field.getLabel());

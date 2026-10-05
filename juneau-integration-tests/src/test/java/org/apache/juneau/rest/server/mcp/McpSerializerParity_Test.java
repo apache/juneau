@@ -80,23 +80,39 @@ class McpSerializerParity_Test extends TestBase {
 	}
 
 	/**
-	 * Deviation from the plan's literal {@code Args} fixture: an empty bean class (no properties) is classified
-	 * by {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator} as a plain string schema, and any
-	 * non-empty bean class is wrapped by that generator's bean-defs mode into a top-level {@code $ref} carrying
-	 * an actual {@link URI} instance (not a JSON string) inside the schema map that
-	 * {@code McpSchemaSafety.validateInput} walks with {@code JsonValueSafety.check} — a pre-existing,
-	 * out-of-scope defect (affects any typed tool with a bean-shaped argument) that rejects the schema as
-	 * containing a "non-JSON value type". Using {@code Map.class} as the argument type exercises a real typed
-	 * tool without an argument schema shape that trips this unrelated bug, while {@link Result} (the type this
-	 * test actually cares about) still drives the {@code outputSchema}'s {@code $defs}/{@code $ref} and the
-	 * structured-content URI/fragment fields under test.
+	 * Typed tool adapted then re-exposed <em>without</em> an input schema.
+	 *
+	 * <p>
+	 * {@link Result} still drives output-schema {@code $defs}/{@code $ref} and the structured-content
+	 * URI/fragment fields under test. Input schema is deliberately omitted: {@code tools/call} runs
+	 * {@code McpSchemaSafety.validateInput}, which shares a 100&nbsp;ms wall-clock
+	 * {@link org.apache.juneau.commons.utils.JsonValueSafety} deadline across the schema and argument walks.
+	 * Under CI load ({@code forkCount=8}) one of the two sequential servlet/mixin calls can trip
+	 * {@code Tool input schema traversal exceeded 100 ms} while the other succeeds, breaking byte-identity.
+	 * A null input schema makes {@code validateInput} a no-op so both sides stay on the success path;
+	 * serializer policy under test does not depend on input-schema validation.
+	 *
+	 * <p>
+	 * Argument type remains {@code Map.class} (not a bean {@code Args}) so the typed adapter's schema
+	 * derivation never materializes a {@link URI} leaf that {@code JsonValueSafety} would reject as a
+	 * non-JSON value — a pre-existing, out-of-scope defect for bean-shaped tool arguments.
 	 */
-	private static McpTypedToolHandler<Map<String,Object>,Result> xTool() {
-		return new McpTypedToolHandler<Map<String,Object>,Result>() {
+	private static McpToolHandler xTool() {
+		var adapted = McpTypedHandlers.adaptTool(new McpTypedToolHandler<Map<String,Object>,Result>() {
 			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("x"); }
 			@Override public Type argumentType() { return Map.class; }
 			@Override public Type resultType() { return Result.class; }
 			@Override public Result call(Map<String,Object> arguments, BeanStore ctx) { return new Result(); }
+		});
+		return new McpToolHandler() {
+			@Override public McpToolSpec descriptor() {
+				return new McpToolSpec()
+					.setName(adapted.descriptor().getName())
+					.setOutputSchema(adapted.descriptor().getOutputSchema());
+			}
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+				return adapted.call(arguments, ctx);
+			}
 		};
 	}
 

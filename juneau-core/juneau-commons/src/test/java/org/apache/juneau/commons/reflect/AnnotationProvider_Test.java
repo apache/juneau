@@ -19,6 +19,7 @@ package org.apache.juneau.commons.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -148,7 +149,7 @@ class AnnotationProvider_Test extends TestBase {
 		// Should find annotation on child class
 		assertTrue(annotations.size() >= 1);
 		var childAnnotation = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("child"))
+			.filter(a -> eq(a.getValue().orElse(""), "child"))
 			.findFirst();
 		assertTrue(childAnnotation.isPresent());
 	}
@@ -236,7 +237,7 @@ class AnnotationProvider_Test extends TestBase {
 
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("runtimeField"))
+			.filter(a -> eq(a.getValue().orElse(""), "runtimeField"))
 			.findFirst();
 		assertTrue(runtimeAnnotationFound.isPresent(), "Should find runtime annotation on field");
 	}
@@ -792,7 +793,7 @@ class AnnotationProvider_Test extends TestBase {
 
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("runtimeMethod"))
+			.filter(a -> eq(a.getValue().orElse(""), "runtimeMethod"))
 			.findFirst();
 		assertTrue(runtimeAnnotationFound.isPresent(), "Should find runtime annotation on method");
 	}
@@ -819,7 +820,7 @@ class AnnotationProvider_Test extends TestBase {
 
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("runtimeConstructor"))
+			.filter(a -> eq(a.getValue().orElse(""), "runtimeConstructor"))
 			.findFirst();
 		assertTrue(runtimeAnnotationFound.isPresent(), "Should find runtime annotation on constructor");
 	}
@@ -976,7 +977,7 @@ class AnnotationProvider_Test extends TestBase {
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1);
 		var runtimeAnnotation = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("runtime1"))
+			.filter(a -> eq(a.getValue().orElse(""), "runtime1"))
 			.findFirst();
 		assertTrue(runtimeAnnotation.isPresent());
 	}
@@ -1000,7 +1001,7 @@ class AnnotationProvider_Test extends TestBase {
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1);
 		var runtimeAnnotationFound = annotations.stream()
-			.filter(a -> a.getValue().orElse("").equals("runtimeOn"))
+			.filter(a -> eq(a.getValue().orElse(""), "runtimeOn"))
 			.findFirst();
 		assertTrue(runtimeAnnotationFound.isPresent());
 	}

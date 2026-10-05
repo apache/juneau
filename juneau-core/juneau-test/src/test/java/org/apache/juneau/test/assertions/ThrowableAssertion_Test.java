@@ -17,6 +17,7 @@
 package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -200,7 +201,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca04b_is_predicate() {
 		var x1 = throwable("1");
-		test(x1).is(x->x.getMessage().equals("1"));
+		test(x1).is(x->eq(x.getMessage(), "1"));
 		assertThrown(()->test(x1).is(x->x.getMessage().length()==4)).asMessage().asOneLine().is("Unexpected value: 'java.lang.RuntimeException: 1'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='java.lang.RuntimeException: 1'.");
 	}

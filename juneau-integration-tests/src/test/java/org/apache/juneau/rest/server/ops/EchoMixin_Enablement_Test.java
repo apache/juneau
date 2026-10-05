@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.*;
@@ -201,7 +202,7 @@ class EchoMixin_Enablement_Test extends TestBase {
 	/** Denies unless an {@code X-Admin: yes} header is present. */
 	public static class DenyUnlessAdmin extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Admin").orElse(null));
+			return eq(req.getHeaderParam("X-Admin").orElse(null), "yes");
 		}
 	}
 

@@ -39,7 +39,7 @@ class ProtobufParser_ParseDepth_Test extends TestBase {
 
 	public static class Nested {
 		public Nested child;
-		public Nested() {}
+		public Nested() { /* Public no-arg constructor required for bean instantiation. */ }
 	}
 
 	/**

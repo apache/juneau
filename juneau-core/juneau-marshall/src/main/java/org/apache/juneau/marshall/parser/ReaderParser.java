@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.parser;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.nio.charset.*;
@@ -45,15 +45,10 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class ReaderParser extends Parser {
-
-	// Property name constants
-	private static final String PROP_streamCharset = "streamCharset";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -79,7 +74,7 @@ public class ReaderParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			streamCharset = copyFrom.streamCharset;
 		}
 
@@ -90,7 +85,7 @@ public class ReaderParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ReaderParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			streamCharset = copyFrom.streamCharset;
 		}
 
@@ -216,6 +211,6 @@ public class ReaderParser extends Parser {
 	@Override /* Overridden from Parser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_streamCharset, streamCharset);
+			.a("streamCharset", streamCharset);
 	}
 }

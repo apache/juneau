@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.marshall.cbor;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.math.*;
 
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Reference implementation of the public {@link TokenWriter} surface for the CBOR format
@@ -93,8 +93,8 @@ public class CborTokenWriter implements TokenWriter {
 	}
 
 	private CborTokenWriter(OutputStream out, Closeable owned, Settings settings) {
-		assertArgNotNull("out", out);
-		assertArgNotNull("settings", settings);
+		reqnn("out", out);
+		reqnn("settings", settings);
 		this.raw = out;
 		this.out = new CborOutputStream(out);
 		this.owned = owned;
@@ -143,7 +143,7 @@ public class CborTokenWriter implements TokenWriter {
 	@Override /* TokenWriter */
 	public TokenWriter fieldName(String name) throws IOException {
 		assertOpen();
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		if (depth == 0 || !stackIsMap[depth - 1])
 			throw new IllegalStateException("field called outside an object");
 		if (!stackAwaitingKey[depth - 1])

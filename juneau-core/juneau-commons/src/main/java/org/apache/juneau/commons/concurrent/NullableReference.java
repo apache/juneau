@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.concurrent;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -75,17 +74,9 @@ import java.util.function.*;
  * @param <V> The type of value held by this reference.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class NullableReference<V> extends AtomicReference<V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_action = "action";
-	private static final String ARG_emptyAction = "emptyAction";
-	private static final String ARG_exceptionSupplier = "exceptionSupplier";
-	private static final String ARG_mapper = "mapper";
-	private static final String ARG_other = "other";
-	private static final String ARG_predicate = "predicate";
 
 	private static final long serialVersionUID = 1L;
 
@@ -163,7 +154,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @return An NullableReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
 	public <U> NullableReference<U> map(Function<? super V,? extends U> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		V value = get();
 		return nn(value) ? NullableReference.of(mapper.apply(value)) : NullableReference.empty();
 	}
@@ -176,7 +167,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @return The result of applying an NullableReference-bearing mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
 	public <U> NullableReference<U> flatMap(Function<? super V,? extends NullableReference<? extends U>> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		V value = get();
 		if (nn(value)) {
 			NullableReference<? extends U> result = mapper.apply(value);
@@ -192,7 +183,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @return An NullableReference describing the value if a value is present and the value matches the given predicate, otherwise an empty NullableReference.
 	 */
 	public NullableReference<V> filter(Predicate<? super V> predicate) {
-		assertArgNotNull(ARG_predicate, predicate);
+		reqnn("predicate", predicate);
 		V value = get();
 		return (nn(value) && predicate.test(value)) ? NullableReference.of(value) : NullableReference.empty();
 	}
@@ -215,7 +206,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @return The value, if present, otherwise the result of <jk>other.get()</jk>.
 	 */
 	public V orElseGet(Supplier<? extends V> other) {
-		assertArgNotNull(ARG_other, other);
+		reqnn("other", other);
 		V value = get();
 		return nn(value) ? value : other.get();
 	}
@@ -229,7 +220,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @throws X If no value is present.
 	 */
 	public <X extends Throwable> V orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		assertArgNotNull(ARG_exceptionSupplier, exceptionSupplier);
+		reqnn("exceptionSupplier", exceptionSupplier);
 		V value = get();
 		if (nn(value))
 			return value;
@@ -242,7 +233,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @param action The action to be performed, if a value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresent(Consumer<? super V> action) {
-		assertArgNotNull(ARG_action, action);
+		reqnn("action", action);
 		V value = get();
 		if (nn(value))
 			action.accept(value);
@@ -255,8 +246,8 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @param emptyAction The empty-based action to be performed, if no value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresentOrElse(Consumer<? super V> action, Runnable emptyAction) {
-		assertArgNotNull(ARG_action, action);
-		assertArgNotNull(ARG_emptyAction, emptyAction);
+		reqnn("action", action);
+		reqnn("emptyAction", emptyAction);
 		V value = get();
 		if (nn(value))
 			action.accept(value);

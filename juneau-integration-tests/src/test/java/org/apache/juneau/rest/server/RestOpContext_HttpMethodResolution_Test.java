@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -44,7 +45,7 @@ class RestOpContext_HttpMethodResolution_Test extends TestBase {
 
 	private static String verbOf(RestContext ctx, String javaMethodName) {
 		return ctx.getRestOperations().getOpContexts().stream()
-			.filter(op -> javaMethodName.equals(op.getJavaMethod().getName()))
+			.filter(op -> eq(javaMethodName, op.getJavaMethod().getName()))
 			.findFirst()
 			.orElseThrow()
 			.getHttpMethod();

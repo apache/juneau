@@ -82,7 +82,7 @@ function buildFixture(action) {
 }
 
 function clickAction(fx) {
-	fx.table.dispatch('click', { target: fx.actionBtn, preventDefault: function () {}, stopPropagation: function () {} });
+	fx.table.dispatch('click', { target: fx.actionBtn, preventDefault: function () { /* no-op */ }, stopPropagation: function () { /* no-op */ } });
 }
 
 (async function main() {

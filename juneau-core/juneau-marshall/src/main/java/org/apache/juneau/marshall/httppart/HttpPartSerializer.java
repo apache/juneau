@@ -95,6 +95,9 @@ public interface HttpPartSerializer {
 	 * <p>
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public interface Void extends HttpPartSerializer {}
 
 	/**

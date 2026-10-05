@@ -17,7 +17,6 @@
 package org.apache.juneau.test.assertions;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.Shorts.eq;
@@ -97,13 +96,10 @@ import org.apache.juneau.commons.function.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_parent = "parent";
-	private static final String ARG_type = "type";
 
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
 	private static final String MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType");
@@ -353,7 +349,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isExactType(Class<?> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		if (type != value().getClass())
 			throw error(MSG_exceptionWasNotExpectedType, cn(type), cn(value()));
 		return returns();
@@ -392,7 +388,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isType(Class<?> parent) {
-		assertArgNotNull(ARG_parent, parent);
+		reqnn("parent", parent);
 		if (! parent.isInstance(value()))
 			throw error(MSG_exceptionWasNotExpectedType, cn(parent), cn(value()));
 		return returns();

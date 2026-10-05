@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.validation.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
- * 		.{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>meta</jv>);
+ * 		.{@link RestRequest#getRequest(RequestBeanMeta,RequestBeanSetters) getRequest}(<jv>meta</jv>, <jv>setters</jv>);
  * </p>
  *
  * <p>
@@ -67,22 +67,33 @@ public class RequestBeanArg implements RestOpArg {
 	private final boolean validate;
 
 	/**
+	 * The resolved constructor and setters for a concrete {@link Request @Request} bean class, or {@code null} for
+	 * an interface bean (proxied; never needs a setter). Resolved eagerly here, not lazily on the first matching
+	 * request, so a bean with a missing setter or constructor fails {@code @RestOp} registration (servlet init).
+	 */
+	private final RequestBeanSetters setters;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
+	 * @throws IllegalArgumentException If the bean is a concrete class with no public no-arg constructor, or with an
+	 * 	annotated getter that has no matching setter (see {@link RequestBeanSetters#resolve}).
 	 */
 	protected RequestBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.meta = RequestBeanMeta.create(paramInfo, annotations);
 		this.validate = BeanValidator.isValidationRequested(paramInfo);
+		var beanClass = meta.getBeanInfo().inner();
+		this.setters = beanClass.isInterface() ? null : RequestBeanSetters.resolve(beanClass, meta);
 	}
 
 	@SuppressWarnings({
-		"resource" // getRequest(meta) may back a property with a request content stream; that stream is container-managed and handed to the invoked op method, not owned/closed here.
+		"resource" // getRequest(meta, setters) may back a property with a request content stream; that stream is container-managed and handed to the invoked op method, not owned/closed here.
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		var bean = opSession.getRequest().getRequest(meta);
+		var bean = opSession.getRequest().getRequest(meta, setters);
 		return validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
 	}
 }

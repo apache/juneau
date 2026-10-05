@@ -76,7 +76,7 @@
 
 	const GRID_WEEKS = 6;
 	const WEEK_DAYS = 7;
-	const LANE_OVERFLOW = -1;   // mirrors CalendarLayout.LANE_OVERFLOW.
+	const LANE_OVERFLOW = -1;   // lane id of a bar piece that did not fit the week's lane budget.
 	const MAX_LANES_PER_WEEK = 8;   // mirrors CalendarDef.MAX_LANES_PER_WEEK.
 
 	const NEUTRAL = "neutral";
@@ -291,7 +291,7 @@
 
 	/** The envelope's year/month must echo the requested (numeric) window, else the body is dropped. */
 	function echoOk(envelope, y, m) {
-		return !!envelope && envelope.year === y && envelope.month === m;
+		return envelope?.year === y && envelope?.month === m;
 	}
 
 	/**
@@ -355,7 +355,7 @@
 
 	/** Substitutes {year}/{month} (1-based, unpadded integers) into a same-origin path template. */
 	function substituteEndpoint(template, y, m) {
-		return template.replaceAll(/\{year\}/g, String(y)).replaceAll(/\{month\}/g, String(m));
+		return template.replaceAll('{year}', String(y)).replaceAll('{month}', String(m));
 	}
 
 	/** Compares two strings, null-safely, for a total sort order. */
@@ -371,7 +371,8 @@
 
 	/**
 	 * Chip order inside a day cell: ALL-DAY chips first, then TIMED chips ASCENDING, with the event id as the final
-	 * tie-break so the order is total and therefore identical across a re-render.  Mirrors CalendarLayout.CHIP_ORDER.
+	 * tie-break so the order is total and therefore identical across a re-render.  This file is the only
+	 * implementation of the order.
 	 */
 	function chipCompare(a, b) {
 		const aa = effectiveAllDay(a) ? 0 : 1;
@@ -404,7 +405,7 @@
 	 * month's visible IN-MONTH days (adjacent cells never carry events), so continuesLeft/continuesRight are raised
 	 * both by a week-boundary cut and by a month clip - a span longer than the month therefore clips with a flag on
 	 * both ends.  Every piece of one span carries the same event, so hover/focus/filter act on the whole event.
-	 * Mirrors CalendarLayout.segments()/seatLanes().
+	 * This file is the only implementation of segmentation and lane seating.
 	 */
 	function buildSegments(events, y, m, weekStart, laneBudget) {
 		const gridStart = toEpochDay(y, m, 1) - firstWeekdayOffset(y, m, weekStart);
@@ -777,7 +778,7 @@
 			method: "GET",
 			credentials: "same-origin",
 			headers: { Accept: "application/json" },
-			signal: controller ? controller.signal : undefined
+			signal: controller?.signal
 		}).then(function (resp) {
 			if (!resp.ok)
 				throw new Error("HTTP " + resp.status);

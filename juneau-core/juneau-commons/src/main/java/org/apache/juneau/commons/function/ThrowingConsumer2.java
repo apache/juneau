@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 /**
@@ -84,12 +84,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 @FunctionalInterface
 @SuppressWarnings({
 	"java:S112", // throws Exception intentional - consumer may throw any checked exception
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface ThrowingConsumer2<A,B> extends Consumer2<A,B> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Performs this operation on the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.
@@ -124,7 +121,7 @@ public interface ThrowingConsumer2<A,B> extends Consumer2<A,B> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default ThrowingConsumer2<A,B> andThen(ThrowingConsumer2<? super A,? super B> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b) -> {
 			acceptThrows(a, b);
 			after.acceptThrows(a, b);

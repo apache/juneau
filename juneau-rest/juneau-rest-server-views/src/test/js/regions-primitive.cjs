@@ -39,7 +39,7 @@ if (!rendersJsPath || !viewsJsPath || !regionsJsPath) {
 const out = {};
 
 function stateOf(el) {
-	return el.getAttribute('data-juneau-region-state');
+	return el.dataset.juneauRegionState ?? null;
 }
 
 (async function () {
@@ -65,7 +65,7 @@ function stateOf(el) {
 			ctx0[type] = el;
 			R.initRegion(el);
 		}
-		out.t1_types = Object.keys(seen).sort();
+		out.t1_types = Object.keys(seen).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t1_allEmpty = Object.values(seen).every(function (s) { return s.childCount === 0; });
 		out.t1_allConnected = Object.values(seen).every(function (s) { return s.connected === true; });
 		out.t1_allSameNode = Object.values(seen).every(function (s) { return s.sameNode === true; });
@@ -90,11 +90,11 @@ function stateOf(el) {
 		const el = H.mkRegion(env, { id: 'diagnose', type: 'row-detail', host: 'gacks/row-42', populate: 'capture', parent: card });
 		R.initRegion(el);
 
-		out.t2_keys = Object.keys(ctx).sort();
-		out.t2_declaredKeys = Object.keys(ctx.declared).sort();
-		out.t2_idsKeys = Object.keys(ctx.ids).sort();
+		out.t2_keys = Object.keys(ctx).sort((a, b) => Number(a > b) - Number(a < b));
+		out.t2_declaredKeys = Object.keys(ctx.declared).sort((a, b) => Number(a > b) - Number(a < b));
+		out.t2_idsKeys = Object.keys(ctx.ids).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t2_types = {};
-		for (const k of Object.keys(ctx).sort()) out.t2_types[k] = typeof ctx[k];
+		for (const k of Object.keys(ctx).sort((a, b) => Number(a > b) - Number(a < b))) out.t2_types[k] = typeof ctx[k];
 		out.t2_contractVersion = ctx.contractVersion;
 		out.t2_type = ctx.type;
 		out.t2_id = ctx.id;
@@ -142,8 +142,8 @@ function stateOf(el) {
 			const probe = ctx.signal.fork();
 			ctx.signal.fork();   // supersedes `probe`, so it is aborted without tearing the region down
 			// NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
-			try { await fetch('http://juneau.invalid/none', { signal: probe }); return 'RESOLVED'; }
-			catch (e) { return e.name === 'AbortError'; }
+			try { await fetch('https://juneau.invalid/none', { signal: probe }); return 'RESOLVED'; }
+			catch (error) { return error.name === 'AbortError'; }
 		})();
 		out['t8a_forkTypeof' + suffix] = typeof ctx.signal.fork;
 
@@ -228,7 +228,7 @@ function stateOf(el) {
 
 		// The reserved default cannot be overridden, and the refusal mutates nothing.
 		const before = R.resolve('default');
-		const refused = R.register('default', function () {});
+		const refused = R.register('default', function () { /* no-op */ });
 		out.t4_reservedRefused = refused === null && R.resolve('default') === before;
 		out.t4_reservedErrorLogged = rec.errorsMatching('reserved populator name').length === 1;
 	}
@@ -522,7 +522,7 @@ function stateOf(el) {
 		pending[1].resolve(H.jsonResponse({ ok: 1 }, { status: 500 }));
 		const r2 = await p2;
 		out.t50b_nonTwoHundredResolvesNotRejects = r2.ok === false && r2.status === 500;
-		await p1.catch(function () {});
+		await p1.catch(function () { /* no-op */ });
 
 		// Three refusals, each with a marker, a visible message and ZERO network traffic.
 		const callsBefore = calls.length;
@@ -533,7 +533,7 @@ function stateOf(el) {
 			dotDot: ['/rest/../etc', {}, {}]
 		})) {
 			try { await ctx.write(...args); refusals[name] = 'RESOLVED'; }
-			catch (e) { refusals[name] = e.reason; }
+			catch (error) { refusals[name] = error.reason; }
 		}
 		out.t50b_refusalReasons = refusals;
 		out.t50b_refusalsIssuedNoTraffic = calls.length === callsBefore;
@@ -545,7 +545,7 @@ function stateOf(el) {
 		R.initRegion(el2);
 		const ctx2 = ctx;
 		let missing = null;
-		try { await ctx2.write('/rest/x/act', {}); } catch (e) { missing = e.reason; }
+		try { await ctx2.write('/rest/x/act', {}); } catch (error) { missing = error.reason; }
 		out.t50b_missingTokenReason = missing;
 	}
 
@@ -592,7 +592,7 @@ function stateOf(el) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

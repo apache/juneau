@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -37,12 +36,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_iterator)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BasicHeaderIterator implements HeaderIterator {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_headers = "headers";
 
 	private final Header[] entries;
 	private final String name;
@@ -58,7 +54,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 * @param caseSensitive Use case-sensitive matching for part name.
 	 */
 	public BasicHeaderIterator(Header[] headers, String name, boolean caseSensitive) {
-		this.entries = assertArgNotNull(ARG_headers, headers);
+		this.entries = reqnn("headers", headers);
 		this.name = name;
 		this.caseSensitive = caseSensitive;
 		this.currentIndex = findNext(-1);

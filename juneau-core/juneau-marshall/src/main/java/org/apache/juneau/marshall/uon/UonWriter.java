@@ -38,8 +38,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S4144", // Identical methods intentional for different test scenarios
+	"resource" // Resource management handled externally
 })
 public class UonWriter extends SerializerWriter<UonWriter> {
 
@@ -97,7 +97,7 @@ public class UonWriter extends SerializerWriter<UonWriter> {
 	 */
 	@SuppressWarnings({
 		"java:S127", // Loop counter advances for surrogate pairs
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	public UonWriter appendObject(Object o, boolean isTopAttrName) {
 

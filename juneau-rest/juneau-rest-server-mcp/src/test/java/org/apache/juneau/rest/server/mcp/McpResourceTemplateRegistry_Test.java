@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.mcp;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -311,7 +312,7 @@ class McpResourceTemplateRegistry_Test {
 			McpResourceTemplateHandler h = new McpResourceTemplateHandler() {
 				@Override public McpResourceTemplateSpec descriptor() { return new McpResourceTemplateSpec().setUriTemplate("file:///{name}"); }
 				@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
-				@Override public McpCompleter completer(String variableName) { return "name".equals(variableName) ? STUB : null; }
+				@Override public McpCompleter completer(String variableName) { return eq(variableName, "name") ? STUB : null; }
 			};
 			assertSame(STUB, McpServerConfig.resourceTemplateCompleter(h, "name"));
 		}
@@ -340,7 +341,9 @@ class McpResourceTemplateRegistry_Test {
 
 	@Nested class G_compiledMatcherCache {
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The (Map<...>) cast of the reflectively-read compiledResourceTemplateMatchers field matches its declared type.
+		})
 		private Map<McpResourceTemplateHandler,McpUriTemplateMatcher> compiledMatchers(McpServerConfig config) {
 			try {
 				var f = McpServerConfig.class.getDeclaredField("compiledResourceTemplateMatchers");

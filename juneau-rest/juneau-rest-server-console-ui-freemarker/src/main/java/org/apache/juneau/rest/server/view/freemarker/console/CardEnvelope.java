@@ -24,18 +24,20 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.views.*;
 
 /**
- * Parser for the {@code <@card type="json">} envelope (and the {@code datatables} / {@code calendar}
- * sugars that desugar into it).
+ * Parser and lift for a {@code <@card type="datatables">} JSON5 catalog body.
  *
  * <p>
  * The card body is authored as <b>JSON5</b> &mdash; comments, unquoted keys, trailing commas, and
  * single quotes are all first-class &mdash; and parsed with the Juneau {@link Json5Parser#DEFAULT}
- * (<b>not</b> a line-delimited multi-record JSON5 stream reader; a card body is exactly one object). The
- * emitted client sidecar, by contrast, is strict RFC JSON written with
- * {@code org.apache.juneau.marshall.marshaller.Json.DEFAULT.write(...)}.
+ * (<b>not</b> a line-delimited multi-record JSON5 stream reader; a card body is exactly one object).
+ * {@link #liftTable} then lifts that catalog into the frozen SLOT_META envelope the views runtime
+ * handshakes.
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals read more clearly inline than as constants
+})
 final class CardEnvelope {
 
 	private CardEnvelope() {}
@@ -57,7 +59,10 @@ final class CardEnvelope {
 
 	/** Author-catalog VIEW_META fields copied verbatim onto the lifted {@code view} when present. */
 	private static final Set<String> VIEW_META_PASSTHROUGH =
-		Set.of("defaultOrder", "ribbon", "dataMode", "rowType", "pollIntervalMs");
+		Set.of(
+			"defaultOrder", "ribbon", "dataMode", "rowType", "pollIntervalMs", "columnConfig",
+			"cleanAddress", "primary"
+		);
 
 	/**
 	 * Lifts a {@code type="datatables"} author catalog into the frozen SLOT_META envelope that
@@ -95,8 +100,10 @@ final class CardEnvelope {
 			if (! (raw instanceof Map<?, ?> c))
 				throw new IllegalArgumentException("<@card type=\"datatables\"> each column must be an object.");
 			var col = new JsonMap();
-			col.put("data", firstNonNull(c.get("data"), c.get("key")));
+			var data = firstNonNull(c.get("data"), c.get("key"));
+			col.put("data", data);
 			col.put("title", firstNonNull(c.get("title"), c.get("label")));
+			addSearchMeta(col, str(data), c);
 			cols.add(col);
 		}
 		view.put("columns", cols);
@@ -111,7 +118,53 @@ final class CardEnvelope {
 		return slot;
 	}
 
+	/**
+	 * Emits the per-column {@code search} block (design §4.3&ndash;§4.5) when the author gave the column a
+	 * {@code searchType}: its wire search-type token plus the gated effective operators, each carrying the help
+	 * text the header popup renders. A column with no {@code searchType} is left non-searchable (no {@code search}
+	 * key).
+	 *
+	 * <p>
+	 * Author catalog input per column: a {@code searchType} wire token, an optional {@code searchOperators}
+	 * allow-list array (design §4.3), and optional {@code customOperators:[{name,help}]} (design §4.4).  The
+	 * operator-gating and the wire shape are owned by {@link Column#searchMeta(String, String, List, List)} in the
+	 * views layer; this chrome-only module never touches the search engine directly.
+	 *
+	 * @param col The lifted VIEW_META column to add the {@code search} block to.
+	 * @param columnName The row-data key this column reads (its {@link Column} name).
+	 * @param c The author catalog column.
+	 */
+	private static void addSearchMeta(JsonMap col, String columnName, Map<?, ?> c) {
+		var searchType = str(c.get("searchType"));
+		if (searchType == null || searchType.isBlank())
+			return;  // Non-searchable column: no search block (design §4.3).
+		List<String> allow = null;
+		if (c.get("searchOperators") instanceof List<?> a) {
+			allow = new ArrayList<>();
+			for (var n : a)
+				allow.add(str(n));
+		}
+		var customs = new ArrayList<Map<String,String>>();
+		if (c.get("customOperators") instanceof List<?> cs)
+			for (var raw : cs) {
+				if (! (raw instanceof Map<?, ?> cm))
+					throw new IllegalArgumentException(
+						"<@card type=\"datatables\"> each customOperator must be an object.");
+				var nameHelp = new LinkedHashMap<String,String>();
+				nameHelp.put("name", str(cm.get("name")));
+				nameHelp.put("help", str(cm.get("help")));
+				customs.add(nameHelp);
+			}
+		var search = Column.searchMeta(columnName, searchType, allow, customs);
+		if (search != null)
+			col.put("search", search);
+	}
+
 	private static Object firstNonNull(Object a, Object b) {
 		return a != null ? a : b;
+	}
+
+	private static String str(Object o) {
+		return o == null ? null : o.toString();
 	}
 }

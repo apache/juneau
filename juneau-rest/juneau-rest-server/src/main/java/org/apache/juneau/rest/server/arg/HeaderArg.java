@@ -96,6 +96,9 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */
+@SuppressWarnings({
+	"unchecked" // The (Class<? extends HttpPartParser>) cast of the schema parser class is safe because the schema only holds HttpPartParser subclasses.
+})
 public class HeaderArg implements RestOpArg {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
@@ -165,7 +168,7 @@ public class HeaderArg implements RestOpArg {
 			return null;
 		for (var h : restAnnotation.headerParams()) {
 			var hName = firstNonEmpty(h.name(), h.value());
-			if (paramName.equals(hName))
+			if (eq(paramName, hName))
 				return h;
 		}
 		return null;
@@ -197,9 +200,6 @@ public class HeaderArg implements RestOpArg {
 
 		this.def = findDef(pi).or(() -> o(classLevelHeader).filter(h -> ine(h.def())).map(Header::def)).orElse(null);
 		this.type = pi.getParameterType();
-		@SuppressWarnings({
-			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
-		})
 		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
@@ -209,8 +209,7 @@ public class HeaderArg implements RestOpArg {
 	}
 
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for REST argument resolution with generic types
-		"unchecked", // Type erasure requires unchecked casts in REST argument parsing
+		"rawtypes" // Raw types necessary for REST argument resolution with generic types
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {

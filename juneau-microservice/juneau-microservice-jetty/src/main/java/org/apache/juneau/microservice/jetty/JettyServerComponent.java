@@ -78,6 +78,7 @@ import jakarta.servlet.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
+	"java:S3878", // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
 })
 public class JettyServerComponent implements MicroserviceListener {
@@ -136,7 +137,7 @@ public class JettyServerComponent implements MicroserviceListener {
 
 	private static String normalizePathSpec(String rawPath) {
 		var p = rawPath == null ? "" : rawPath;
-		if (p.isEmpty() || "/".equals(p))
+		if (p.isEmpty() || eq(p, "/"))
 			return "/*";
 		if (! p.startsWith("/"))
 			p = "/" + p;
@@ -190,9 +191,9 @@ public class JettyServerComponent implements MicroserviceListener {
 
 	@Override /* Overridden from MicroserviceListener */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for server creation logic
 		"java:S1141", // Nested try blocks scope checked-exception translation tightly to single call sites
-		"java:S6541"  // Brain Method acceptable for server startup wiring logic
+		"java:S3776", // Cognitive complexity acceptable for server creation logic
+		"java:S6541" // Brain Method acceptable for server startup wiring logic
 	})
 	public void onStart(Microservice ms) {
 		try {
@@ -397,9 +398,6 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param pathSpec The context path of the servlet.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
-	})
 	public JettyServerComponent addServlet(Servlet servlet, String pathSpec) {
 		if (nn(pathSpec) && ! pathSpec.endsWith("/*"))
 			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
@@ -427,9 +425,6 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
-	})
 	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
 		return addFilter(filter, new String[]{urlPattern});
 	}
@@ -541,7 +536,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	public URI getURI() {
 		var cp = getContextPath();
 		try {
-			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
+			return new URI(getProtocol(), null, getHostName(), getPort(), eq(cp, "/") ? null : cp, null, null);
 		} catch (URISyntaxException e) {
 			throw toRex(e);
 		}

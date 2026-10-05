@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.hal;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -63,12 +62,9 @@ import org.apache.juneau.marshall.marshaller.*;
 @Marshalled
 @SuppressWarnings({
 	"java:S116", // Field names mirror HAL spec.
-	"java:S115" // Constant names intentionally mirror argument identifiers.
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class HalResource {
-
-	private static final String ARG_property = "property";
-	private static final String ARG_relation = "relation";
 
 	private Map<String,Object> _links;
 	private Map<String,Object> _embedded;
@@ -121,7 +117,7 @@ public class HalResource {
 	 * @return This object.
 	 */
 	public HalResource addLink(String relation, HalLink value) {
-		assertArgNotNull(ARG_relation, relation);
+		reqnn("relation", relation);
 		if (_links == null)
 			_links = map();
 		_links.put(relation, value);
@@ -140,7 +136,7 @@ public class HalResource {
 	 * @return This object.
 	 */
 	public HalResource addLinks(String relation, HalLink...values) {
-		assertArgNotNull(ARG_relation, relation);
+		reqnn("relation", relation);
 		if (_links == null)
 			_links = map();
 		var existing = _links.get(relation);
@@ -198,7 +194,7 @@ public class HalResource {
 	 * @return This object.
 	 */
 	public HalResource addEmbedded(String relation, HalResource value) {
-		assertArgNotNull(ARG_relation, relation);
+		reqnn("relation", relation);
 		if (_embedded == null)
 			_embedded = map();
 		_embedded.put(relation, value);
@@ -214,7 +210,7 @@ public class HalResource {
 	 * @return This object.
 	 */
 	public HalResource addEmbedded(String relation, HalResource...values) {
-		assertArgNotNull(ARG_relation, relation);
+		reqnn("relation", relation);
 		if (_embedded == null)
 			_embedded = map();
 		var existing = _embedded.get(relation);
@@ -250,7 +246,7 @@ public class HalResource {
 	 */
 	@BeanProp("*")
 	public Object get(String property) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return o(properties).map(x -> x.get(property)).orElse(null);
 	}
 
@@ -266,7 +262,7 @@ public class HalResource {
 	 */
 	@BeanProp("*")
 	public HalResource set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		if (properties == null)
 			properties = map();
 		properties.put(property, value);

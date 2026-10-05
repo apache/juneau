@@ -83,7 +83,9 @@ class McpClient_Elicitation_Test extends TestBase {
 	}
 
 	/** The wire params ({@code inputResponses}/{@code requestState}) the server saw on the Nth (0-based) request. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // getParams() is cast to Map<String,Object>; the recorded wire params are always a JSON object
+	})
 	private static Map<String,Object> paramsOf(Recorder r, int n) {
 		return (Map<String,Object>) r.requests.get(n).getParams();
 	}

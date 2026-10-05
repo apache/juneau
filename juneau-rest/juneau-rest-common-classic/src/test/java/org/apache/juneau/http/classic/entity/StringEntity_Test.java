@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Validates {@link StringEntity}.
  */
+@SuppressWarnings({
+	"resource" // getContent() returns a ByteArrayInputStream that requires no closing.
+})
 class StringEntity_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -73,17 +76,11 @@ class StringEntity_Test extends TestBase {
 		assertArrayEquals("foo".getBytes(StandardCharsets.UTF_8), x.asBytes());
 	}
 
-	@SuppressWarnings({
-		"resource" // getContent() returns a ByteArrayInputStream that requires no closing.
-	})
 	@Test void b03_getContent_cached() throws Exception {
 		var x = new StringEntity(null, "foo").setCached();
 		assertEquals("foo", new String(x.getContent().readAllBytes(), StandardCharsets.UTF_8));
 	}
 
-	@SuppressWarnings({
-		"resource" // getContent() returns a ByteArrayInputStream that requires no closing.
-	})
 	@Test void b04_getContent_notCached() throws Exception {
 		var x = new StringEntity(null, "foo");
 		assertEquals("foo", new String(x.getContent().readAllBytes(), StandardCharsets.UTF_8));

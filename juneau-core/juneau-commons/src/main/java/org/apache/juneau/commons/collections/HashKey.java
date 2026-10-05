@@ -91,13 +91,9 @@ import org.apache.juneau.commons.utils.*;
  * </p>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_array)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class HashKey {
-
-	// Property name constants
-	private static final String PROP_array = "array";
-	private static final String PROP_hashCode = "hashCode";
 
 	/**
 	 * Creates a new hash key from the specified values.
@@ -184,8 +180,8 @@ public class HashKey {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_hashCode, hashCode())
-			.a(PROP_array, array);
+			.a("hashCode", hashCode())
+			.a("array", array);
 		// @formatter:on
 	}
 

@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.marshall.serializer.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlDocSerializer}.
@@ -32,14 +32,11 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Writer managed by SerializerPipe; caller closes
 	"java:S110", // Session classes inherit many parameters from base
-	"java:S115"  // PROP_/ARG_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Writer managed by SerializerPipe; caller closes
 })
 public class XmlDocSerializerSession extends XmlSerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -53,7 +50,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlDocSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -71,7 +68,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(XmlDocSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

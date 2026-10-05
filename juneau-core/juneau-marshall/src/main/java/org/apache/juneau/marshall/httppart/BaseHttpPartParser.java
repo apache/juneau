@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.marshall.httppart;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Base class for implementations of {@link HttpPartParser}
@@ -36,14 +36,9 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public abstract class BaseHttpPartParser extends MarshallingContextable implements HttpPartParser {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_toType = "toType";
-	private static final String ARG_toTypeArgs = "toTypeArgs";
-	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -65,7 +60,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<SELF> builder) {
-			super(assertArgNotNull(ARG_builder, builder));
+			super(reqnn("builder", builder));
 		}
 	}
 
@@ -107,7 +102,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().read(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType)));
+		return getPartSession().read(partType, schema, in, getClassMeta(reqnn("toType", toType)));
 	}
 
 	/**
@@ -129,7 +124,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().read(partType, schema, in, assertArgNotNull(ARG_toType, toType));
+		return getPartSession().read(partType, schema, in, reqnn("toType", toType));
 	}
 
 	/**
@@ -153,7 +148,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		assertArgNoNulls(ARG_toTypeArgs, toTypeArgs);
-		return getPartSession().read(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType), toTypeArgs));
+		reqnns("toTypeArgs", toTypeArgs);
+		return getPartSession().read(partType, schema, in, getClassMeta(reqnn("toType", toType), toTypeArgs));
 	}
 }

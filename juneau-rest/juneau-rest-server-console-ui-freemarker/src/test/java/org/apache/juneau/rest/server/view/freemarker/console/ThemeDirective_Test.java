@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -29,8 +30,10 @@ import org.junit.jupiter.api.*;
 
 /**
  * Golden-HTML tests for the {@code <@theme name="…"/>} chrome directive: a named theme emits that
- * shipped pack's {@code <link rel="stylesheet">} and no other; omitting the directive defaults to the
- * {@code open} pack; an unknown attribute (and {@code theme=} on {@code <@page>}) are rejected.
+ * shipped pack's {@code <link rel="stylesheet">} and no other (and the contract's {@code theme.name});
+ * omitting the directive defaults to the {@code open} pack; an unknown attribute (and {@code theme=} on
+ * {@code <@page>}) are rejected. {@code <@theme>} is only valid inside {@code <@console>} (E-18 is covered
+ * in {@link ConsoleDirective_Errors_Test}).
  *
  * @since 10.0.0
  */
@@ -45,7 +48,7 @@ class ThemeDirective_Test extends TestBase {
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/theme-chrome.ftlh")
+				.chromeTemplate("admin/console-theme-named.ftlh")
 				.build();
 		}
 		@RestGet(path="/themed")
@@ -60,7 +63,7 @@ class ThemeDirective_Test extends TestBase {
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/theme-chrome-default.ftlh")
+				.chromeTemplate("admin/console-chrome-bare.ftlh")
 				.build();
 		}
 		@RestGet(path="/themed-default")
@@ -79,7 +82,7 @@ class ThemeDirective_Test extends TestBase {
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create()
 				.basePath("/templates/")
-				.chromeTemplate("admin/theme-bogus-chrome.ftlh")
+				.chromeTemplate("admin/console-theme-bogus.ftlh")
 				.build();
 		}
 		@RestGet(path="/themed-bogus")
@@ -105,6 +108,8 @@ class ThemeDirective_Test extends TestBase {
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
 		assertFalse(body.contains("juneau-theme-open.css"), () -> body);  // named pack wins; no second block
 		assertFalse(body.contains("slds-"), () -> body);
+		assertPage(body).isValid().hasTheme("light-red");
+		assertFalse(body.contains("<style>"), () -> body);  // no tokens means no override block
 	}
 
 	@Test void d02_omitTheme_defaultsToOpen() throws Exception {
@@ -115,6 +120,7 @@ class ThemeDirective_Test extends TestBase {
 			body = rsp.getContent().asString();
 		}
 		assertTrue(body.contains("juneau-theme-open.css"), () -> body);
+		assertPage(body).isValid().hasTheme("open");
 	}
 
 	@Test void d03_unknownThemeAttr_isRejected() throws Exception {
@@ -122,7 +128,7 @@ class ThemeDirective_Test extends TestBase {
 			var rsp = c.get("/themed-bogus").run()) {
 			rsp.assertStatus(500);
 			var body = rsp.getContent().asString();
-			assertTrue(body.contains("unknown attribute") && body.contains("bogus"), () -> body);
+			assertTrue(body.contains("<@theme> unknown attribute 'bogus'."), () -> body);
 		}
 	}
 
@@ -131,7 +137,101 @@ class ThemeDirective_Test extends TestBase {
 			var rsp = c.get("/page-theme-attr").run()) {
 			rsp.assertStatus(500);
 			var body = rsp.getContent().asString();
-			assertTrue(body.contains("unknown attribute") && body.contains("theme"), () -> body);
+			assertTrue(body.contains("<@page> unknown attribute 'theme'."), () -> body);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// e) <@theme>/<@token> inside <@console>: escaping and build-time diagnostics
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static FreemarkerMixin consoleMixin(String chrome) {
+		return ConsoleFreemarkerMixin.create().basePath("/templates/").chromeTemplate("admin/" + chrome).build();
+	}
+
+	private static String render(Class<?> host, int expectedStatus) throws Exception {
+		try (var c = MockRestClient.buildLax(host); var rsp = c.get("/naked").run()) {
+			rsp.assertStatus(expectedStatus);
+			return rsp.getContent().asString();
+		}
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E01_SemicolonHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-token-semicolon.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	/**
+	 * The FTL twin of the mixin's escaper-wiring gate: {@code 'My;Font'} is grammar-accepted, but a raw {@code ;}
+	 * would end the declaration early. Only a wired {@code CssValueEscaper} turns it into {@code \3B }.
+	 */
+	@Test void e01_leafValueWithSemicolon_isEscapedInTheOverrideBlock() throws Exception {
+		var body = render(E01_SemicolonHost.class, 200);
+		assertTrue(body.contains("\\3B "), () -> "expected the CSS-hex escape for ';', body:\n" + body);
+		assertFalse(body.contains("'My;Font'"), () -> "raw unescaped ';' leaked into the override block, body:\n" + body);
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E02_ReservedHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-token-reserved.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	@Test void e02_reservedChromeToken_isRejected() throws Exception {
+		var body = render(E02_ReservedHost.class, 500);
+		assertTrue(body.contains("Cannot declare reserved token '--jc-chrome-control-height'"), () -> body);
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E03_UnknownRefHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-alias-unknown.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E04_CycleHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-token-cycle.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E05_BothChannelsHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-both-channels.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class E06_BodylessHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return consoleMixin("theme-bodyless.ftlh"); }
+		@RestGet(path="/naked") public View naked() { return FreemarkerView.of("admin/page-naked.ftlh"); }
+	}
+
+	@Test void e03_leafReferencingAnUnknownToken_isRejectedWithTheBuildSentence() throws Exception {
+		var body = render(E03_UnknownRefHost.class, 500);
+		assertTrue(body.contains("references unknown token '--jc-nope'"), () -> body);
+	}
+
+	@Test void e04_cyclicLeafReferences_areRejectedWithTheBuildSentence() throws Exception {
+		var body = render(E04_CycleHost.class, 500);
+		assertTrue(body.contains("cyclic reference"), () -> body);
+	}
+
+	@Test void e05_nameDeclaredByBothChannels_isRejectedWithTheThemeSentence() throws Exception {
+		var body = render(E05_BothChannelsHost.class, 500);
+		assertTrue(body.contains("Theme 'open' declares '--jc-x' as both a leaf token and an alias"), () -> body);
+	}
+
+	/** A body-less <@theme> is just the stock stylesheet: one link, no inline block. */
+	@Test void e06_bodylessTheme_linksTheStockStylesheet_andEmitsNoOverrideBlock() throws Exception {
+		var body = render(E06_BodylessHost.class, 200);
+		assertEquals(1, count(body, "juneau-theme-gray.css"), () -> body);
+		assertFalse(body.contains("html:root{"), () -> body);
 	}
 }

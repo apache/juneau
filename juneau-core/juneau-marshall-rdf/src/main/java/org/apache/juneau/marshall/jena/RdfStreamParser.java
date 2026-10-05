@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.xml.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Stream-based RDF parser for binary formats (RDF/THRIFT, RDF/PROTO).
@@ -39,14 +39,10 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
+	"java:S110", // Deep inheritance inherent to the RDF parser hierarchy.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RdfStreamParser extends InputStreamParser implements RdfMetaProvider {
-
-	// Argument name constants
-	private static final String ARG_builder = "builder";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -75,7 +71,7 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			language = copyFrom.language;
 			rdfParser = copyFrom.rdfParser;
 		}
@@ -87,7 +83,7 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfStreamParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			language = copyFrom.language;
 			rdfParser = copyFrom.rdfParser;
 		}
@@ -157,7 +153,8 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
@@ -173,7 +170,7 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfStreamParser(Builder<?> builder) {
-		super(assertArgNotNull(ARG_builder, builder).consumes(getConsumes(builder)));
+		super(reqnn("builder", builder).consumes(getConsumes(builder)));
 		language = builder.language;
 		rdfParser = builder.getRdfParser();
 	}

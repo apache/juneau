@@ -17,6 +17,8 @@
 package org.apache.juneau.rest.server.view.freemarker;
 
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
@@ -222,6 +224,37 @@ public class FreemarkerMixin {
 
 	/** Default field-exposure flag &mdash; {@code true} (public-field DTOs render out of the box). */
 	public static final boolean DEFAULT_EXPOSE_FIELDS = FreemarkerDispatcher.DEFAULT_EXPOSE_FIELDS;
+
+	private static final Set<Class<? extends FreemarkerMixin>> SUBTYPES = new CopyOnWriteArraySet<>();
+
+	/**
+	 * Registers a subclass so {@link FreemarkerViewRenderer} also finds a bean declared with that subclass as its
+	 * {@code @Bean} return type.
+	 *
+	 * <p>
+	 * The bean store is keyed by declared type, so without this a {@code @Bean public ConsoleFreemarkerMixin
+	 * freemarker()} was not found and the renderer silently used a plain mixin. Subclasses call this from a static
+	 * initializer.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> MyMixin <jk>extends</jk> FreemarkerMixin {
+	 * 		<jk>static</jk> { FreemarkerMixin.<jsm>registerSubtype</jsm>(MyMixin.<jk>class</jk>); }
+	 * 	}
+	 * </p>
+	 *
+	 * @param type The subclass. Must not be {@code null}.
+	 */
+	public static void registerSubtype(Class<? extends FreemarkerMixin> type) {
+		if (type == null)
+			throw new IllegalArgumentException("registerSubtype(type): type must not be null.");
+		SUBTYPES.add(type);
+	}
+
+	/** @return The registered subclasses, in registration order. */
+	public static Set<Class<? extends FreemarkerMixin>> registeredSubtypes() {
+		return Collections.unmodifiableSet(SUBTYPES);
+	}
 
 	private final FreemarkerDispatcher worker;
 

@@ -36,8 +36,8 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S5778",        // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
-	"java:S5961"        // High assertion count is acceptable in comprehensive data-driven test methods.
+	"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+	"java:S5961" // High assertion count is acceptable in comprehensive data-driven test methods.
 })
 class MarshalledList_Test extends TestBase {
 

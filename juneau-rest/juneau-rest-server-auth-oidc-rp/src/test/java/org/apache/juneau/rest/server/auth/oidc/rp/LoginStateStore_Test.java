@@ -47,11 +47,11 @@ import com.nimbusds.jose.jwk.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S8692", // Nimbus oauth2-oidc-sdk exposes no clock hook on the ID-token path; the login-state expiry re-check IS clock-injectable and is tested deterministically.
 	"java:S1130", // Test methods declare throws Exception for checked exceptions MockServletResponse may propagate; declarations are intentionally broad.
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
 	"java:S5976", // Similar-shaped gates assert distinct security outcomes; parameterizing would obscure intent.
-	"resource"    // Closeable StubIdp fixture; lifecycle managed by @BeforeEach/@AfterEach, not a real leak.
+	"java:S8692", // Nimbus oauth2-oidc-sdk exposes no clock hook on the ID-token path; the login-state expiry re-check IS clock-injectable and is tested deterministically.
+	"resource" // Closeable StubIdp fixture; lifecycle managed by @BeforeEach/@AfterEach, not a real leak.
 })
 class LoginStateStore_Test extends TestBase {
 

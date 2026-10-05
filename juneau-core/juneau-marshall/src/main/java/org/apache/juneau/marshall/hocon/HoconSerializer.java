@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.hocon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.net.*;
@@ -124,12 +124,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115",
+	"java:S110", // HoconSerializer extends WriterSerializer, which sits on the shared Serializer base-class chain; the depth comes from that format-family design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class HoconSerializer extends WriterSerializer implements HoconMetaProvider, RecordWritable {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -172,7 +172,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useEqualsSign = copyFrom.useEqualsSign;
 			useUnquotedStrings = copyFrom.useUnquotedStrings;
 			useUnquotedKeys = copyFrom.useUnquotedKeys;
@@ -182,7 +182,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 		}
 
 		protected Builder(HoconSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			useEqualsSign = copyFrom.useEqualsSign;
 			useUnquotedStrings = copyFrom.useUnquotedStrings;
 			useUnquotedKeys = copyFrom.useUnquotedKeys;

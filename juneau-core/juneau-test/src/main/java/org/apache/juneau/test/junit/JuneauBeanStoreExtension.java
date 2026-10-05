@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.junit;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -125,7 +124,8 @@ import org.junit.jupiter.api.extension.*;
  */
 @SuppressWarnings({
 	"java:S3011", // setAccessible(true) is required to read package-private/private @TestBean members on user test classes
-	"resource"   // BeanStore lookups return Closeables owned by the JUnit lifecycle; Eclipse JDT @Owning warning is by design.
+	"java:S3776", // populateStaticOverrides() and populateInstanceOverrides() scan annotated fields/methods and modes in one pass; splitting them would obscure the override rules
+	"resource" // BeanStore lookups return Closeables owned by the JUnit lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback,
 		AfterEachCallback, ParameterResolver {
@@ -438,7 +438,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 10.0.0
 	 */
 	public static OverrideSet discoverOverrides(Object testInstance) {
-		assertArgNotNull("testInstance", testInstance);
+		reqnn("testInstance", testInstance);
 		var classScoped = buildClassScopeStoreWithMode(testInstance.getClass());
 		var methodScoped = buildMethodScopeStoreWithMode(testInstance, classScoped.store());
 		// Unify the two scopes' modes: an empty scope contributes no constraint; a populated one does.
@@ -483,9 +483,6 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * Non-static {@code scope = CLASS} declarations are rejected with an {@link ExtensionContextException} &mdash;
 	 * instance state isn't available at {@code beforeAll} time.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for hierarchical test bean override wiring
-	})
 	private static void populateStaticOverrides(TestBeanStore store, Class<?> testClass, ModeTracker modeTracker) {
 		for (var c : classHierarchy(testClass)) {
 			for (var f : c.getDeclaredFields()) {
@@ -519,9 +516,6 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * Honors both instance and static members ("behave consistently with
 	 * non-static" for {@code scope = METHOD} on static fields).
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for hierarchical test bean instance override wiring
-	})
 	private static void populateInstanceOverrides(TestBeanStore store, Object testInstance, ModeTracker modeTracker) {
 		var testClass = testInstance.getClass();
 		for (var c : classHierarchy(testClass)) {

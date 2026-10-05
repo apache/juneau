@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
-	"serial", // Serialization not relevant
+	"serial" // Serialization not relevant
 })
 class CommonParser_Test extends TestBase {
 

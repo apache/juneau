@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.health;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -127,12 +129,12 @@ public class HealthServlet extends BasicRestServlet {
 	 */
 	protected HealthProbe probeFor(RestRequest req) {
 		var hint = req.getPathInfo();
-		if (hint == null || hint.isEmpty() || "/".equals(hint))
+		if (hint == null || hint.isEmpty() || eq(hint, "/"))
 			hint = req.getServletPath();
 		var last = lastSegment(hint);
-		if ("readyz".equals(last) || "ready".equals(last))
+		if (eqa(last, "readyz", "ready"))
 			return HealthProbe.READY;
-		if ("livez".equals(last) || "live".equals(last))
+		if (eqa(last, "livez", "live"))
 			return HealthProbe.LIVE;
 		return null; // "/healthz" (or anything else this instance is mounted at) -- overall aggregate.
 	}

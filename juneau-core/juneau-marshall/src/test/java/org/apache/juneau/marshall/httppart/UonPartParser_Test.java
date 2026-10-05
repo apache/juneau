@@ -32,8 +32,8 @@ import org.junit.jupiter.api.*;
 
 
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for test bean handling
 	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"rawtypes" // Raw types necessary for test bean handling
 })
 class UonPartParser_Test extends TestBase {
 

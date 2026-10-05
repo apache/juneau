@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.bean.jsonrpc;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.marshall.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Runtime exception carrying JSON-RPC error fields for mapping to {@link JsonRpcError}.
@@ -26,7 +26,8 @@ import org.apache.juneau.marshall.*;
 @Marshalled
 @SuppressWarnings({
 	"java:S1165" // Fields have a public setter used by callers for chained mutation after construction.
-})public class McpException extends RuntimeException {
+})
+public class McpException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -116,7 +117,7 @@ import org.apache.juneau.marshall.*;
 	 * @return A new exception containing the same code, message, and data.
 	 */
 	public static McpException fromJsonRpcError(JsonRpcError e) {
-		var a = assertArgNotNull("error", e);
+		var a = reqnn("error", e);
 		return new McpException(a.getCode(), a.getMessage(), a.getData());
 	}
 }

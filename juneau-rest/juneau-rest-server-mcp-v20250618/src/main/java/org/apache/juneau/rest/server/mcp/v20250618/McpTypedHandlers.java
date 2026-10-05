@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
@@ -24,6 +23,7 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Adapter that converts a {@link McpTypedPromptHandler} into the raw {@link McpPromptHandler} interface
@@ -48,7 +48,7 @@ public final class McpTypedHandlers {
 	 * @return A raw handler delegating to {@code typed}.
 	 */
 	public static <A> McpPromptHandler adaptPrompt(McpTypedPromptHandler<A> typed) {
-		assertArgNotNull("typed", typed);
+		reqnn("typed", typed);
 		return new McpPromptHandler() {
 			@Override
 			public McpPromptSpec descriptor() {

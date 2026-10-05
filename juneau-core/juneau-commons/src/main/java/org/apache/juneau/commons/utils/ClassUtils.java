@@ -17,8 +17,8 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -34,9 +34,10 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3011", // Reflection access needed for class introspection utilities
-	"java:S3740"  // Raw Class/Constructor types used intentionally for generic class-loading and reflection utilities
+	"java:S3740", // Raw Class/Constructor types used intentionally for generic class-loading and reflection utilities
+	"rawtypes" // The modifiableCollectionTypes cache, public isVoid/isNotVoid(Class) and instanceof Class patterns use the raw Class type
 })
 public class ClassUtils {
 
@@ -45,20 +46,11 @@ public class ClassUtils {
 	 */
 	private ClassUtils() {}
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_args = "args";
-	private static final String ARG_paramTypes = "paramTypes";
-	private static final String ARG_x = "x";
-
 	/**
 	 * Predicate check to filter out void classes.
 	 */
 	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for generic class cache
-	})
 	private static Cache<Class,Boolean> modifiableCollectionTypes = Cache.of(Class.class, Boolean.class).build();
 
 	/**
@@ -96,7 +88,7 @@ public class ClassUtils {
 	 * @throws IllegalArgumentException If value is <jk>null</jk>.
 	 */
 	public static boolean canAddTo(Collection<?> value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return canAddTo(value.getClass());
 	}
 
@@ -133,7 +125,7 @@ public class ClassUtils {
 	 * @throws IllegalArgumentException If value is <jk>null</jk>.
 	 */
 	public static boolean canPutTo(Map<?,?> value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return canAddTo(value.getClass());
 	}
 
@@ -358,8 +350,8 @@ public class ClassUtils {
 	 * 	matches (fast path optimization).
 	 */
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
-		assertArgNotNull(ARG_paramTypes, paramTypes);
-		assertArgNotNull(ARG_args, args);
+		reqnn("paramTypes", paramTypes);
+		reqnn("args", args);
 		var needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {
 			for (var i = 0; i < paramTypes.length; i++) {
@@ -465,9 +457,6 @@ public class ClassUtils {
 	 * @param c The class to check.
 	 * @return <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for generic void check
-	})
 	public static boolean isNotVoid(Class c) {
 		return ! isVoid(c);
 	}
@@ -478,9 +467,6 @@ public class ClassUtils {
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for generic void check
-	})
 	public static boolean isVoid(Class c) {
 		return c == null || c == void.class || c == Void.class || classNameSimple(c).equalsIgnoreCase("void");
 	}
@@ -492,7 +478,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;
@@ -506,7 +492,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Field x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;
@@ -520,7 +506,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Method x) {
-		assertArgNotNull(ARG_x, x);
+		reqnn("x", x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;
@@ -565,7 +551,8 @@ public class ClassUtils {
 	 * @param o The object to cast.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The cast object, or null if the object was null or not an instance of c.
 	 */
-	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	@SuppressWarnings({
+		"java:S1168" // Intentional null return.
 	})
 	public static <T> T castTo(Class<T> c, Object o) {
 		return o != null && c.isInstance(o) ? c.cast(o) : null;

@@ -39,6 +39,9 @@ import org.apache.juneau.marshall.*;
  * @param <B> The builder class.
  */
 @SuppressWarnings({
+	"java:S1172", // Parameter kept to match ObjectSwap interface signature
+	"java:S1452", // findSwapFromBuilderClass()/findSwapFromObjectClass() return BuilderSwap<?,?> and getBuilderClassMeta() returns ClassMeta<?> because the object/builder types are discovered reflectively
+	"rawtypes", // Raw types necessary for ObjectSwap generic bridge methods
 	"unchecked" // Type erasure requires unchecked operations for builder pattern
 })
 public class BuilderSwap<T,B> {
@@ -51,11 +54,6 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
 	 */
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for ObjectSwap generic bridge methods
-		"java:S1172",   // Parameter kept to match ObjectSwap interface signature
-		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
-	})
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
 		var bci = info(builderClass);
 		if (bci.isNotPublic())
@@ -98,11 +96,6 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
 	 */
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for ObjectSwap generic bridge methods
-		"java:S1172",   // Parameter kept to match ObjectSwap interface signature
-		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
-	})
 	public static BuilderSwap<?,?> findSwapFromObjectClass(MarshallingContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Holder.<Class<?>>empty();
 		MethodInfo objectCreateMethod;
@@ -280,9 +273,6 @@ public class BuilderSwap<T,B> {
 	 * 	Must not be <jk>null</jk> on the first (uncached) call.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	@SuppressWarnings({
-		"java:S1452"  // Wildcard required - ClassMeta<?> for builder class type
-	})
 	public ClassMeta<?> getBuilderClassMeta(MarshallingSession session) {
 		if (builderClassMeta == null)
 			builderClassMeta = session.getClassMeta(getBuilderClass());

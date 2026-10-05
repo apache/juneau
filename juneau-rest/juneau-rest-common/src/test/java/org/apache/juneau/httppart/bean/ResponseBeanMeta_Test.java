@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  * (package-private: no public-API widening) of branches unreachable through the public
  * {@code create(...)} factories alone.
  */
+@SuppressWarnings({
+	"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
+})
 class ResponseBeanMeta_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -165,23 +168,14 @@ class ResponseBeanMeta_Test {
 	}
 
 	static class ParamFixtures {
-		@SuppressWarnings({
-			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
-		})
 		public void plain(String s) {
 			/* Test-harness no-op. */
 		}
 
-		@SuppressWarnings({
-			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
-		})
 		public void annotated(@Response ResponseBody b) {
 			/* Test-harness no-op. */
 		}
 
-		@SuppressWarnings({
-			"unused" // Parameter exists only to be inspected via reflection; the method itself is never invoked.
-		})
 		public void annotatedWithStatus(@Response @StatusCode(201) ResponseBody b) {
 			/* Test-harness no-op. */
 		}

@@ -17,7 +17,6 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -30,6 +29,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
@@ -59,29 +59,10 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"resource" // ConfigStore and other Closeable fields are owned by the caller; lifecycle managed externally
 })
 public class Config extends Context implements ConfigEventListener {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_section = "section";
-	private static final String ARG_key = "key";
-	private static final String ARG_values = "values";
-
-	// Property name constants
-	private static final String PROP_binaryFormat = "binaryFormat";
-	private static final String PROP_binaryLineLength = "binaryLineLength";
-	private static final String PROP_mods = "mods";
-	private static final String PROP_multiLineValuesOnSeparateLines = "multiLineValuesOnSeparateLines";
-	private static final String PROP_format = "format";
-	private static final String PROP_name = "name";
-	private static final String PROP_parser = "parser";
-	private static final String PROP_readOnly = "readOnly";
-	private static final String PROP_serializer = "serializer";
-	private static final String PROP_store = "store";
-	private static final String PROP_varResolver = "varResolver";
 
 	/**
 	 * Builder class.
@@ -128,11 +109,7 @@ public class Config extends Context implements ConfigEventListener {
 			var s = env("juneau.profiles.active", "");
 			if (s == null || s.isBlank())
 				return list();
-			var out = new ArrayList<String>();
-			for (var p : s.split(","))
-				if (! p.isBlank())
-					out.add(p.trim());
-			return out;
+			return Arrays.stream(s.split(",")).filter(p -> ! p.isBlank()).map(String::trim).collect(Collectors.toCollection(ArrayList::new));
 		}
 
 		/**
@@ -202,7 +179,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull(ARG_value, value);
+			binaryFormat = reqnn("value", value);
 			return this;
 		}
 
@@ -263,7 +240,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder mods(Mod...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			for (var value : values)
 				mods.put(value.getId(), value);
 			return this;
@@ -310,7 +287,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			name = assertArgNotNull(ARG_value, value);
+			name = reqnn("value", value);
 			return this;
 		}
 
@@ -384,7 +361,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder parser(ReaderParser value) {
-			parser = assertArgNotNull(ARG_value, value);
+			parser = reqnn("value", value);
 			return this;
 		}
 
@@ -422,7 +399,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder serializer(WriterSerializer value) {
-			serializer = assertArgNotNull(ARG_value, value);
+			serializer = reqnn("value", value);
 			return this;
 		}
 
@@ -439,7 +416,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder store(ConfigStore value) {
-			store = assertArgNotNull(ARG_value, value);
+			store = reqnn("value", value);
 			return this;
 		}
 
@@ -456,7 +433,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder varResolver(VarResolver value) {
-			varResolver = assertArgNotNull(ARG_value, value);
+			varResolver = reqnn("value", value);
 			return this;
 		}
 	}
@@ -522,17 +499,15 @@ public class Config extends Context implements ConfigEventListener {
 
 		var cmd = env("sun.java.command", "not_found").split("\\s+")[0];
 		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) { // HTT - not a .jar during tests
-			cmd = cmd.replaceAll("(?:[^\\\\\\/]*[\\\\\\/])*([^\\\\\\/]+)\\.jar$", "$1"); // Unrolled loop (no .* overlapping the separator class) avoids super-linear backtracking; same "strip path up to last separator" semantics.
+			cmd = jarBaseName(cmd);  // Strip path up to last separator and the ".jar" suffix.
 			l.add(cmd + ".cfg");
-			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
+			cmd = stripVersion(cmd);  // Try also without version in jar name.
 			l.add(cmd + ".cfg");
 		}
 
 		var fileArray = new File(".").listFiles();
 		if (fileArray != null) { // HTT - listFiles() always returns non-null in test environment
-			for (var f : fileArray)
-				if (f.getName().endsWith(".cfg"))
-					l.add(f.getName());
+			Arrays.stream(fileArray).map(File::getName).filter(n -> n.endsWith(".cfg")).forEach(l::add);
 		}
 
 		l.add("juneau.cfg");
@@ -595,8 +570,23 @@ public class Config extends Context implements ConfigEventListener {
 			return YamlConfigFormat.INSTANCE;
 		return IniConfigFormat.INSTANCE;
 	}
+	// Plain string ops instead of regex: avoids stack-overflow (S5998) and super-linear backtracking (S8786).
+	static String jarBaseName(String cmd) {
+		var base = cmd.substring(Math.max(cmd.lastIndexOf('/'), cmd.lastIndexOf('\\')) + 1);
+		return base.length() > 4 ? base.substring(0, base.length() - 4) : cmd;
+	}
+
+	static String stripVersion(String cmd) {
+		var i = Math.min(nonNeg(cmd.indexOf('.')), nonNeg(cmd.indexOf('_')));
+		return i == Integer.MAX_VALUE ? cmd : cmd.substring(0, i);
+	}
+
+	private static int nonNeg(int i) {
+		return i < 0 ? Integer.MAX_VALUE : i;
+	}
+
 	private static String section(String section) {
-		assertArgNotNull(ARG_section, section);
+		reqnn("section", section);
 		if (isEmpty(section))
 			return "";
 		return section;
@@ -608,7 +598,7 @@ public class Config extends Context implements ConfigEventListener {
 		return key.substring(i + 1);
 	}
 	private static String sname(String key) {
-		assertArgNotNull(ARG_key, key);
+		reqnn("key", key);
 		var i = key.lastIndexOf('/');
 		if (i == -1)
 			return "";
@@ -1094,7 +1084,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
-		assertArgNotNull(ARG_key, key);
+		reqnn("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
 		modifiers = nie(modifiers);
@@ -1119,7 +1109,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, String value) {
 		checkWrite();
-		assertArgNotNull(ARG_key, key);
+		reqnn("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
 
@@ -1239,17 +1229,17 @@ public class Config extends Context implements ConfigEventListener {
 	protected FluentMap<String,Object> properties() {
 		// HTT - Config.toString() is overridden to return configMap.toString(), so this method is never called in practice
 		return super.properties()
-			.a(PROP_binaryFormat, binaryFormat)
-			.a(PROP_binaryLineLength, binaryLineLength)
-			.a(PROP_mods, mods)
-			.a(PROP_multiLineValuesOnSeparateLines, multiLineValuesOnSeparateLines)
-			.a(PROP_format, format == null ? null : format.id())
-			.a(PROP_name, name)
-			.a(PROP_parser, parser)
-			.a(PROP_readOnly, readOnly)
-			.a(PROP_serializer, serializer)
-			.a(PROP_store, store)
-			.a(PROP_varResolver, varResolver);
+			.a("binaryFormat", binaryFormat)
+			.a("binaryLineLength", binaryLineLength)
+			.a("mods", mods)
+			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
+			.a("format", format == null ? null : format.id())
+			.a("name", name)
+			.a("parser", parser)
+			.a("readOnly", readOnly)
+			.a("serializer", serializer)
+			.a("store", store)
+			.a("varResolver", varResolver);
 	}
 
 	@Override /* Overridden from Object */

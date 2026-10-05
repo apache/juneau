@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.Shorts.ioex;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -36,15 +37,17 @@ import org.apache.juneau.commons.logging.*;
 /**
  * Various I/O related utility methods.
  */
+@SuppressWarnings({
+	"java:S5164", // Cleanup method provided: cleanupThreadLocals()
+	"null", // Eclipse null analysis does not recognise isNotNull()/isNotEmpty() guards on the optional buffer caches and the saved IOException.
+	"resource" // Wrapper readers/writers (InputStreamReader, OutputStreamWriter, BufferedReader) are built over caller-owned streams and must not close them.
+})
 public class IoUtils {
 
 	/** UTF-8 charset */
 	public static final Charset UTF8 = StandardCharsets.UTF_8;
 
 	/** Reusable empty input stream. */
-	@SuppressWarnings({
-		"resource" // Intentional singleton; read() always returns -1 and close() is a no-op
-	})
 	public static final InputStream EMPTY_INPUT_STREAM = new InputStream() {
 		@Override
 		public int read() {
@@ -54,13 +57,7 @@ public class IoUtils {
 
 	private static final int BUFF_SIZE = 1024;
 
-	@SuppressWarnings({
-		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
-	})
 	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (isTrue(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
-	@SuppressWarnings({
-		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
-	})
 	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (isTrue(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
@@ -89,9 +86,6 @@ public class IoUtils {
 	}
 
 	/** Reusable empty reader. */
-	@SuppressWarnings({
-		"resource" // Intentional singleton; read() always returns -1 and close() is a no-op
-	})
 	public static final Reader EMPTY_READER = new Reader() {
 		@Override
 		public void close() throws IOException { /* no-op */ }
@@ -115,9 +109,6 @@ public class IoUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"null" // Null analysis not applicable to variadic close operations
-	})
 	public static void close(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {
@@ -258,9 +249,6 @@ public class IoUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"null" // Null analysis not applicable to variadic flush operations
-	})
 	public static void flush(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {
@@ -298,7 +286,7 @@ public class IoUtils {
 		if (cl == null)
 			cl = ClassLoader.getSystemClassLoader();
 		for (var path : paths) {
-			var n = ".".equals(path) ? name : path + '/' + name;
+			var n = eq(path, ".") ? name : path + '/' + name;
 			try (var is = cl.getResourceAsStream(n)) {
 				if (isNotNull(is))
 					return read(is);
@@ -840,9 +828,6 @@ public class IoUtils {
 	 * 	The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already a buffered
 	 * 	reader, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Caller takes ownership of the returned Reader
-	})
 	public static Reader toBufferedReader(Reader r) {
 		if (r == null || r instanceof BufferedReader || r instanceof StringReader)
 			return r;

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock.classic;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -36,8 +37,8 @@ import jakarta.servlet.*;
  * doesn't blow up.
  */
 @SuppressWarnings({
-	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
-	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature.
+	"java:S1130", // Test methods use the project-standard broad 'throws Exception' signature.
+	"resource" // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 })
 class MockRestRequest_Test extends TestBase {
 
@@ -186,9 +187,9 @@ class MockRestRequest_Test extends TestBase {
 			Thread.currentThread().getContextClassLoader(),
 			new Class<?>[]{ServletContext.class},
 			(proxy, method, args) -> {
-				if ("toString".equals(method.getName())) return "stub-servlet-context";
-				if ("hashCode".equals(method.getName())) return 0;
-				if ("equals".equals(method.getName())) return proxy == args[0];
+				if (eq(method.getName(), "toString")) return "stub-servlet-context";
+				if (eq(method.getName(), "hashCode")) return 0;
+				if (eq(method.getName(), "equals")) return proxy == args[0];
 				return null;
 			});
 		client().get("/").servletContext(stub).run().assertStatus(200);

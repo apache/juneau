@@ -24,9 +24,9 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"cast",       // Explicit cast needed for type testing
+	"cast", // Explicit cast needed for type testing
 	"java:S2925", // Thread.sleep intentional for concurrency/race condition tests
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class Memoizer_Test extends TestBase {
 

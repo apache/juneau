@@ -58,7 +58,8 @@ class EnvVarSecretStore_Test extends TestBase {
 
 	@Test void a05_storeIsUnsupported() {
 		var store = new EnvVarSecretStore();
-		assertThrows(UnsupportedOperationException.class, () -> store.store("k", "v".toCharArray()));
+		var value = "v".toCharArray();
+		assertThrows(UnsupportedOperationException.class, () -> store.store("k", value));
 	}
 
 	@Test void a06_deleteIsUnsupported() {

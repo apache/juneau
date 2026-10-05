@@ -33,7 +33,7 @@ import com.sun.net.httpserver.*;
 /**
  * End-to-end tests validating that the <b>classic</b> REST-proxy engine now honors the
  * {@link Remote @Remote}/{@link RemoteOp @RemoteOp} members that were previously silent no-ops, at feature parity with
- * the next-generation engine (TODO-351 item B-client-1).
+ * the next-generation engine (work item 351, B-client-1).
  *
  * <p>
  * Each test drives a real proxy call against an in-process {@link HttpServer} and asserts on what the server received
@@ -65,6 +65,9 @@ class RemoteProxyParity_Test {
 	private static volatile String lastXFoo;
 	private static volatile String lastXBar;
 
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep deliberately simulates server latency in the stub handler to trigger client timeouts.
+	})
 	@BeforeAll
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);

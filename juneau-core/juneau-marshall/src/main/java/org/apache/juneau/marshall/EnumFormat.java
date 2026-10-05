@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -47,7 +46,7 @@ import java.util.*;
  * ambiguous input.
  */
 @SuppressWarnings({
-	"java:S115" // ARG_-prefixed arg-key constant uses the project's UPPER_camelCase convention.
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public enum EnumFormat {
 
@@ -77,8 +76,6 @@ public enum EnumFormat {
 
 	/** {@link Enum#ordinal()} as a numeric value. */
 	ORDINAL;
-
-	private static final String ARG_enumClass = "enumClass";
 
 	/**
 	 * Formats the specified enum value using this format.
@@ -123,7 +120,7 @@ public enum EnumFormat {
 		"java:S3776" // Cognitive complexity acceptable for enum format parsing dispatch
 	})
 	public static <E extends Enum<E>> E parse(String value, Class<E> enumClass) {
-		assertArgNotNull(ARG_enumClass, enumClass);
+		reqnn("enumClass", enumClass);
 		if (value == null)
 			return null;
 		var s = value.trim();
@@ -155,7 +152,7 @@ public enum EnumFormat {
 				return e;
 		// Case-insensitive fallback.
 		for (var e : enumClass.getEnumConstants())
-			if (e.name().equalsIgnoreCase(s) || s.equalsIgnoreCase(e.toString()))
+			if (eqic(e.name(), s) || eqic(s, e.toString()))
 				return e;
 		throw iaex("Could not resolve enum value '%s' on class '%s'", value, enumClass.getName());
 	}

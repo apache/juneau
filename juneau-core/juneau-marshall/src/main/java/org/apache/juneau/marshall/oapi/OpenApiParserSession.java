@@ -52,7 +52,8 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for OpenApiParserSession hierarchy
+	"java:S110", // Inheritance depth acceptable for OpenApiParserSession hierarchy
+	"unchecked" // (T) casts of parsed part values and (Map<String,Object>) cast of type.newInstance() in the OBJECT part path follow the requested ClassMeta
 })
 public class OpenApiParserSession extends UonParserSession {
 
@@ -115,9 +116,6 @@ public class OpenApiParserSession extends UonParserSession {
 		ctx = builder.ctx;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T
-	})
 	@Override /* Overridden from HttpPartParser */
 	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		if (partType == null)
@@ -145,13 +143,12 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S6541" // Single-threaded session contexts do not require synchronization
 	})
 	private <T> T readInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
-		if (in == null || "null".equals(in)) {
+		if (in == null || eq(in, "null")) {
 			if (schema.getDefault() == null)
 				return null;
 			in = schema.getDefault();

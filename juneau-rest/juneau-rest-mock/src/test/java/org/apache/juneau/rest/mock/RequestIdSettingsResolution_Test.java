@@ -78,7 +78,7 @@ class RequestIdSettingsResolution_Test {
 		@RestGet(path="/echo")
 		public String echo(RestRequest req) {
 			var underCustom = req.getAttribute("customReqId").asString().orElse("");
-			var underDefault = req.getAttribute(RestServerConstants.REQUEST_ID).asString().orElse("");
+			var underDefault = req.getAttribute("requestId").asString().orElse("");
 			return req.getRequestId() + "|" + underCustom + "|" + underDefault;
 		}
 	}

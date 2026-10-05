@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -94,12 +94,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Builder pattern requires many parameters
-	"java:S115",  // ARG_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class PrototextParser extends ReaderParser implements PrototextMetaProvider, RecordReadable {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder for {@link PrototextParser}.
@@ -114,11 +113,11 @@ public class PrototextParser extends ReaderParser implements PrototextMetaProvid
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		protected Builder(PrototextParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override

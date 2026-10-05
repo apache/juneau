@@ -20,6 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -35,13 +36,13 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S117",  // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
-	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"java:S1186", // Empty method body intentional for callback testing
-	"java:S116",  // Field names use underscores for test data clarity
+	"java:S116", // Field names use underscores for test data clarity
+	"java:S117", // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S1186", // Empty method body intentional for callback testing
 	"java:S3008", // Static field names use underscores for test data clarity
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParameterInfo_Test extends TestBase {
 
@@ -898,9 +899,9 @@ class ParameterInfo_Test extends TestBase {
 		// Basic parameters (names may or may not be available in bytecode)
 		var method1 = ci.getPublicMethod(x -> x.hasName("basicMethod")).get();
 		var param1_0 = method1.getParameter(0).toString();
-		assertTrue(param1_0.equals("int a") || param1_0.equals("int arg0"), "Expected 'int a' or 'int arg0', got: " + param1_0);
+		assertTrue(eqa(param1_0, "int a", "int arg0"), "Expected 'int a' or 'int arg0', got: " + param1_0);
 		var param1_1 = method1.getParameter(1).toString();
-		assertTrue(param1_1.equals("java.lang.String b") || param1_1.equals("java.lang.String arg1"), "Expected 'java.lang.String b' or 'java.lang.String arg1', got: " + param1_1);
+		assertTrue(eqa(param1_1, "java.lang.String b", "java.lang.String arg1"), "Expected 'java.lang.String b' or 'java.lang.String arg1', got: " + param1_1);
 
 		// Parameters with @Name annotation (always have names)
 		var method2 = ci.getPublicMethod(x -> x.hasName("namedMethod")).get();
@@ -912,8 +913,7 @@ class ParameterInfo_Test extends TestBase {
 		var method3 = ci.getPublicMethod(x -> x.hasName("finalMethod")).get();
 		var param3_0 = method3.getParameter(0).toString();
 		assertTrue(
-			param3_0.equals("int value") || param3_0.equals("int arg0") ||
-			param3_0.equals("final int value") || param3_0.equals("final int arg0"),
+			eqa(param3_0, "int value", "int arg0", "final int value", "final int arg0"),
 			"Expected 'int value', 'int arg0', 'final int value', or 'final int arg0', got: " + param3_0);
 
 		// Generic parameters
@@ -929,7 +929,7 @@ class ParameterInfo_Test extends TestBase {
 		var method6 = ci.getPublicMethod(x -> x.hasName("finalVarargsMethod")).get();
 		var param6_0 = method6.getParameter(0).toString();
 		assertTrue(
-			param6_0.equals("java.lang.String... args") || param6_0.equals("final java.lang.String... args"),
+			eqa(param6_0, "java.lang.String... args", "final java.lang.String... args"),
 			"Expected 'java.lang.String... args' or 'final java.lang.String... args', got: " + param6_0);
 
 		// Array parameters
@@ -955,9 +955,9 @@ class ParameterInfo_Test extends TestBase {
 		// Parameters without @Name annotations (names may or may not be available in bytecode)
 		var method10 = ci.getPublicMethod(x -> x.hasName("unnamedMethod")).get();
 		var param10_0 = method10.getParameter(0).toString();
-		assertTrue(param10_0.equals("int param1") || param10_0.equals("int arg0"), "Expected 'int param1' or 'int arg0', got: " + param10_0);
+		assertTrue(eqa(param10_0, "int param1", "int arg0"), "Expected 'int param1' or 'int arg0', got: " + param10_0);
 		var param10_1 = method10.getParameter(1).toString();
-		assertTrue(param10_1.equals("java.lang.String param2") || param10_1.equals("java.lang.String arg1"), "Expected 'java.lang.String param2' or 'java.lang.String arg1', got: " + param10_1);
+		assertTrue(eqa(param10_1, "java.lang.String param2", "java.lang.String arg1"), "Expected 'java.lang.String param2' or 'java.lang.String arg1', got: " + param10_1);
 	}
 
 	//====================================================================================================

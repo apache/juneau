@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.springboot.logging;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,7 +161,7 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertTrue(resp.body().contains("phase4-body"), resp.body());
 			}
 
-			var rec = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			var rec = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_ECHO)).reduce((a, b) -> b).orElse(null);
 			assertNotNull(rec, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
 			assertEquals(Level.INFO, rec.getLevel());
 			// Secure-by-default: FINEST no longer dumps bodies without the JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES
@@ -193,7 +194,7 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertEquals(200, resp.statusCode());
 				assertTrue(resp.body().contains("one"), resp.body());
 			}
-			var debugRecord = handler.records().stream().filter(x -> OP_ONE.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			var debugRecord = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_ONE)).reduce((a, b) -> b).orElse(null);
 			assertNotNull(debugRecord);
 			assertEquals(Level.INFO, debugRecord.getLevel());
 			assertTrue(debugRecord.getMessage().contains("---Request Headers---"), debugRecord.getMessage());
@@ -205,7 +206,7 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertEquals(200, resp.statusCode());
 				assertTrue(resp.body().contains("one"), resp.body());
 			}
-			var infoRecord = handler.records().stream().filter(x -> OP_ONE.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			var infoRecord = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_ONE)).reduce((a, b) -> b).orElse(null);
 			assertNotNull(infoRecord);
 			assertEquals(Level.INFO, infoRecord.getLevel());
 			assertTrue(infoRecord.getMessage().contains("[200] HTTP GET /api/one"), infoRecord.getMessage());
@@ -239,8 +240,8 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertEquals(200, get(port, "/api/two", "X-Scoped", "two").statusCode());
 			}
 
-			var oneRecord = handler.records().stream().filter(x -> OP_ONE.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
-			var twoRecord = handler.records().stream().filter(x -> OP_TWO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			var oneRecord = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_ONE)).reduce((a, b) -> b).orElse(null);
+			var twoRecord = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_TWO)).reduce((a, b) -> b).orElse(null);
 			assertNotNull(oneRecord, "operation-level TRACE should emit for .one");
 			assertNotNull(twoRecord, "sibling operation should still emit at INFO detail");
 			assertEquals(Level.INFO, oneRecord.getLevel());
@@ -280,7 +281,7 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 				assertTrue(resp.body().contains("phase4-body-visible"), resp.body());
 			}
 
-			var rec = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			var rec = handler.records().stream().filter(x -> eq(x.getLoggerName(), OP_ECHO)).reduce((a, b) -> b).orElse(null);
 			assertNotNull(rec, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
 			assertEquals(Level.INFO, rec.getLevel());
 			var msg = rec.getMessage();

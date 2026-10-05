@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -202,9 +203,9 @@ class MultiMap_Test extends TestBase {
 		multiMap.entrySet().forEach(entries::add);
 
 		assertEquals(3, entries.size());
-		assertTrue(entries.stream().anyMatch(e -> e.getKey().equals("key1") && e.getValue().equals("value1")));
-		assertTrue(entries.stream().anyMatch(e -> e.getKey().equals("key2") && e.getValue().equals("value2")));
-		assertTrue(entries.stream().anyMatch(e -> e.getKey().equals("key3") && e.getValue().equals("value3")));
+		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key1") && eq(e.getValue(), "value1")));
+		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key2") && eq(e.getValue(), "value2")));
+		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key3") && eq(e.getValue(), "value3")));
 	}
 
 	@Test
@@ -219,7 +220,7 @@ class MultiMap_Test extends TestBase {
 
 		assertEquals(2, entries.size());
 		// key1 should have value1 (from first map)
-		var key1Entry = entries.stream().filter(e -> e.getKey().equals("key1")).findFirst().orElse(null);
+		var key1Entry = entries.stream().filter(e -> eq(e.getKey(), "key1")).findFirst().orElse(null);
 		assertNotNull(key1Entry);
 		assertEquals("value1", key1Entry.getValue());
 	}
@@ -233,7 +234,7 @@ class MultiMap_Test extends TestBase {
 		var iterator = multiMap.entrySet().iterator();
 		while (iterator.hasNext()) {
 			var entry = iterator.next();
-			if (entry.getKey().equals("key2")) {
+			if (eq(entry.getKey(), "key2")) {
 				iterator.remove();
 			}
 		}

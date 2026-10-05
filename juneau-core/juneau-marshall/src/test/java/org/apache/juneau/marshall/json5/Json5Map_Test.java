@@ -39,8 +39,8 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1130", // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (ParseException/IOException/SerializeException) is high-churn/low-value.
-	"cast" // Tests intentionally exercise redundant casts on Json5Map/Json5List values; harmless "already an instance" warnings.
+	"cast", // Tests intentionally exercise redundant casts on Json5Map/Json5List values; harmless "already an instance" warnings.
+	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (ParseException/IOException/SerializeException) is high-churn/low-value.
 })
 class Json5Map_Test extends TestBase {
 

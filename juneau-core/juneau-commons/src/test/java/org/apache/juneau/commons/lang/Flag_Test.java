@@ -192,7 +192,7 @@ class Flag_Test extends TestBase {
 		// Simulate using flag in a lambda
 		var list = l("a", "b", "c");
 		list.forEach(x -> {
-			if ("b".equals(x)) {
+			if (eq(x, "b")) {
 				a.set();
 			}
 		});

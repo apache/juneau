@@ -45,6 +45,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S3776", // Branching is inherent to applyOverrides() and getQueryString(), which merge request parts and parameters from many sources.
 	"resource" // Streams returned to servlet container; lifecycle managed by the container
 })
 public class MockServletRequest implements HttpServletRequest {
@@ -131,9 +132,6 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param req The request to copy overrides from.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTTP request override application
-	})
 	public MockServletRequest applyOverrides(HttpRequest req) {
 
 		if (req instanceof org.apache.juneau.rest.mock.classic.MockRestRequest req2) {
@@ -406,7 +404,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
-		if ("POST".equalsIgnoreCase(method)) {
+		if (eqic("POST", method)) {
 			if (formDataMap == null) {
 				var listMap = RestUtils.parseQuery(read(content));
 				formDataMap = map();
@@ -464,9 +462,6 @@ public class MockServletRequest implements HttpServletRequest {
 	public String getProtocolRequestId() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for query string construction
-	})
 	public String getQueryString() {
 		if (queryString == null) {
 			if (queryDataMap.isEmpty())

@@ -59,7 +59,7 @@ function page(h, opts) {
 }
 
 function mk(p, id, opts) {
-	const el = H.mkRegion(p.env, Object.assign({ id: id, type: 'card-body', populate: 'sub' }, opts || {}));
+	const el = H.mkRegion(p.env, { id: id, type: 'card-body', populate: 'sub', ...opts });
 	p.R.initRegion(el);
 	return el;
 }
@@ -106,7 +106,7 @@ function kinds(list) {
 		out.t18_keys = [p.ctxs.a.key, p.ctxs.b.key, p.ctxs.c.key];
 
 		let threw = false;
-		try { p.ctxs.a.emit({ kind: 'nowhere' }, { to: 'does-not-exist' }); } catch (e) { threw = true; }
+		try { p.ctxs.a.emit({ kind: 'nowhere' }, { to: 'does-not-exist' }); } catch (error) { threw = true; }
 		out.t19_noThrow = threw === false;
 		out.t19_warned = p.rec.warnsMatching("no region matches emit target 'does-not-exist'").length === 1;
 		out.t19_nobodyGotIt = kinds(p.received.b).indexOf('nowhere') < 0 && kinds(p.received.c).indexOf('nowhere') < 0;
@@ -302,16 +302,16 @@ function kinds(list) {
 		R.emitFramework(R.tableRedrewMessage({ viewId: 'gacks', nested: false, rowCount: 25, page: 0 }));
 
 		out.t27_kinds = seen.map(function (m) { return m.kind; });
-		out.t27_allNamespaced = seen.every(function (m) { return m.kind.indexOf('juneau:') === 0; });
+		out.t27_allNamespaced = seen.every(function (m) { return m.kind.startsWith('juneau:'); });
 		out.t27_senderIsFramework = R.FRAMEWORK_SENDER_KEY;
 		out.t27a_drivenWithNoAuthorEmit = mine.slice();
 
 		// 51 - a golden per framework message: kind including the prefix, schemaVersion, and the full field set.
-		out.t51_selectionKeys = Object.keys(seen[0]).sort();
+		out.t51_selectionKeys = Object.keys(seen[0]).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t51_selection = seen[0];
-		out.t51_detailKeys = Object.keys(seen[1]).sort();
+		out.t51_detailKeys = Object.keys(seen[1]).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t51_detail = seen[1];
-		out.t51_redrewKeys = Object.keys(seen[2]).sort();
+		out.t51_redrewKeys = Object.keys(seen[2]).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t51_redrew = seen[2];
 		out.t51_schemaVersionsIndependentOfContract = seen.every(function (m) { return m.schemaVersion === 1; })
 			&& R.CONTRACT_VERSION === '1';
@@ -385,7 +385,7 @@ function kinds(list) {
 				pageFetch('/probe/' + msg.probe, { signal: sig })
 					.then(function (res) { return res.text(); })
 					.then(function (text) { el.textContent = text; })
-					.catch(function (e) { if (e.name !== 'AbortError') throw e; });
+					.catch(function (error) { if (error.name !== 'AbortError') throw error; });
 			});
 		});
 		let driver = null;
@@ -423,7 +423,7 @@ function kinds(list) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

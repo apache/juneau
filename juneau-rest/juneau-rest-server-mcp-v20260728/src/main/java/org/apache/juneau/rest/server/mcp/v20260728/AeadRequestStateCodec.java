@@ -179,7 +179,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 			// base64url(ciphertext+tag); reject any token with the wrong segment count, an unrecognized version,
 			// an empty/oversized keyId segment, or a nonce segment that isn't the expected length before any
 			// base64 decode.
-			if (parts.length != 4 || !VERSION.equals(parts[0]) || parts[1].isEmpty() || parts[1].length() > MAX_KEY_ID_B64_CHARS
+			if (parts.length != 4 || neq(VERSION, parts[0]) || parts[1].isEmpty() || parts[1].length() > MAX_KEY_ID_B64_CHARS
 					|| parts[2].length() != NONCE_B64_CHARS)
 				return Optional.empty();
 			var keyId = new String(Base64.getUrlDecoder().decode(parts[1]), StandardCharsets.UTF_8);

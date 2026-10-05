@@ -92,6 +92,10 @@ import java.util.regex.*;
  * URI-template parsing, that would justify extracting a shared helper into {@code juneau-commons} at that time,
  * not before.
  */
+@SuppressWarnings({
+	"java:S1168", // null means "template does not match"; an empty map would mean "matched with zero variables" - collapsing the two would turn non-matches into false matches.
+	"java:S3776" // Intentional: hand-rolled RFC 6570 reverse matcher; control-flow verified by McpUriTemplateMatcher_Test, refactor would risk matching correctness.
+})
 public final class McpUriTemplateMatcher {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -113,9 +117,6 @@ public final class McpUriTemplateMatcher {
 	 * 	malformed percent escape, has invalid operator/varspec grammar, has a literal segment containing an
 	 * 	invalid UTF-8 percent-escape sequence, or declares the same variable name more than once.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Intentional: hand-rolled RFC 6570 reverse matcher; control-flow verified by McpUriTemplateMatcher_Test, refactor would risk matching correctness.
-	})
 	public static McpUriTemplateMatcher compile(String uriTemplate) {
 		if (uriTemplate == null || uriTemplate.isBlank())
 			throw iaex("Malformed URI template ''%s'': template must not be null or blank", uriTemplate);
@@ -239,9 +240,6 @@ public final class McpUriTemplateMatcher {
 	 * 	the URI does not match, the URI contains a malformed percent escape, or a captured value's decoded bytes
 	 * 	are not valid UTF-8.
 	 */
-	@SuppressWarnings({
-		"java:S1168" // null means "template does not match"; an empty map would mean "matched with zero variables" - collapsing the two would turn non-matches into false matches.
-	})
 	public Map<String,String> match(String uri) {
 		if (! reverseMatchable || uri == null)
 			return null;
@@ -259,8 +257,6 @@ public final class McpUriTemplateMatcher {
 	 * complexity guarantee.
 	 */
 	@SuppressWarnings({
-		"java:S1168", // null means "template does not match"; an empty map would mean "matched with zero variables" - collapsing the two would turn non-matches into false matches.
-		"java:S3776", // Intentional: hand-rolled RFC 6570 reverse matcher; control-flow verified by McpUriTemplateMatcher_Test, refactor would risk matching correctness.
 		"java:S127", // The i++ skip of the paired literal piece after consuming a capture is intentional and documented by the class-level "Ambiguous-capture resolution" section.
 		"java:S135" // Single continue plus the loop-counter skip above are the simplest expression of this piece-by-piece scan; splitting it out would risk matching correctness.
 	})
@@ -334,9 +330,6 @@ public final class McpUriTemplateMatcher {
 
 	private record RawExpr(String body, int index) implements RawToken {}
 
-	@SuppressWarnings({
-		"java:S3776" // Intentional: hand-rolled RFC 6570 reverse matcher; control-flow verified by McpUriTemplateMatcher_Test, refactor would risk matching correctness.
-	})
 	private static List<RawToken> tokenize(String template) {
 		var out = new ArrayList<RawToken>();
 		var n = template.length();

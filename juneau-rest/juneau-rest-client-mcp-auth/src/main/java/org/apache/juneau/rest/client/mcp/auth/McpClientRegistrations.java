@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * Bridges a Dynamic-Client-Registration result ({@link McpClientRegistration}) into F1's existing token flows &mdash;
@@ -53,8 +54,8 @@ public final class McpClientRegistrations {
 	 * @return The same builder, for chaining.
 	 */
 	public static McpAuthorizationCodeAcquirer.Builder configure(McpAuthorizationCodeAcquirer.Builder builder, McpClientRegistration registration) {
-		assertArgNotNull("builder", builder);
-		assertArgNotNull("registration", registration);
+		reqnn("builder", builder);
+		reqnn("registration", registration);
 		builder.clientId(registration.clientId());
 		registration.clientSecret().ifPresent(builder::clientSecret);
 		// Keep the loopback receiver's callback path AND port consistent with the redirect URI that was actually
@@ -81,8 +82,8 @@ public final class McpClientRegistrations {
 	 * @return The same builder, for chaining.
 	 */
 	public static McpTokenProvider.Builder configure(McpTokenProvider.Builder builder, McpClientRegistration registration) {
-		assertArgNotNull("builder", builder);
-		assertArgNotNull("registration", registration);
+		reqnn("builder", builder);
+		reqnn("registration", registration);
 		builder.clientId(registration.clientId());
 		registration.clientSecret().ifPresent(builder::clientSecret);
 		return builder;

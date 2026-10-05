@@ -66,7 +66,8 @@ import org.junit.jupiter.params.provider.*;
  * record-stream entry points.
  */
 @SuppressWarnings({
-	"resource" // Test fixtures use in-memory streams/writers; closing is the record adapter's responsibility, not the test's.
+	"resource", // Test fixtures use in-memory streams/writers; closing is the record adapter's responsibility, not the test's.
+	"unchecked" // parseWithElement(...) results are cast to List<Flat>/Map<String,Flat> to match the element type passed in
 })
 class RecordStream_Test extends TestBase {
 
@@ -464,7 +465,6 @@ class RecordStream_Test extends TestBase {
 
 	@ParameterizedTest
 	@EnumSource(Format.class)
-	@SuppressWarnings("unchecked")
 	void h01_listOfBeans(Format fmt) throws Exception {
 		assumeWriteCapable(fmt);
 		assumeFalse(fmt.has(Skip.SSE_EVENT_ENVELOPE));
@@ -492,7 +492,6 @@ class RecordStream_Test extends TestBase {
 
 	@ParameterizedTest
 	@EnumSource(Format.class)
-	@SuppressWarnings("unchecked")
 	void i01_mapOfBeans(Format fmt) throws Exception {
 		assumeWriteCapable(fmt);
 		assumeFalse(fmt.has(Skip.SSE_EVENT_ENVELOPE));
@@ -520,7 +519,6 @@ class RecordStream_Test extends TestBase {
 
 	@ParameterizedTest
 	@EnumSource(Format.class)
-	@SuppressWarnings("unchecked")
 	void j01_emptyList(Format fmt) throws Exception {
 		assumeWriteCapable(fmt);
 		assumeFalse(fmt.has(Skip.SSE_EVENT_ENVELOPE));

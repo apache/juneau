@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.server.filter;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Applies a {@link LoopbackBoundary} to every request reaching the servlet container, rejecting those that did not
@@ -109,7 +109,7 @@ public class LoopbackBoundaryFilter implements Filter {
 	 * @param boundary The boundary to apply to every request.  Must not be <jk>null</jk>.
 	 */
 	public LoopbackBoundaryFilter(LoopbackBoundary boundary) {
-		this.boundary = assertArgNotNull("boundary", boundary);
+		this.boundary = reqnn("boundary", boundary);
 	}
 
 	/**

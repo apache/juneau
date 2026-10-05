@@ -47,22 +47,9 @@ import org.apache.juneau.marshall.parser.*;
  */
 @Marshalled
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_aContextRoot)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class UriContext {
-
-	// Property name constants
-	private static final String PROP_aContextRoot = "aContextRoot";
-	private static final String PROP_aPathInfo = "aPathInfo";
-	private static final String PROP_aServletPath = "aServletPath";
-	private static final String PROP_authority = "authority";
-	private static final String PROP_contextRoot = "contextRoot";
-	private static final String PROP_parentPath = "parentPath";
-	private static final String PROP_pathInfo = "pathInfo";
-	private static final String PROP_rContextRoot = "rContextRoot";
-	private static final String PROP_rResource = "rResource";
-	private static final String PROP_rPath = "rPath";
-	private static final String PROP_servletPath = "servletPath";
 
 	/**
 	 * Default URI context.
@@ -166,10 +153,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		var m = Json5Map.ofString(s);
-		this.authority = nie(trimSlashes(m.getString(PROP_authority)));
-		this.contextRoot = nie(trimSlashes(m.getString(PROP_contextRoot)));
-		this.servletPath = nie(trimSlashes(m.getString(PROP_servletPath)));
-		this.pathInfo = nie(trimSlashes(m.getString(PROP_pathInfo)));
+		this.authority = nie(trimSlashes(m.getString("authority")));
+		this.contextRoot = nie(trimSlashes(m.getString("contextRoot")));
+		this.servletPath = nie(trimSlashes(m.getString("servletPath")));
+		this.pathInfo = nie(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 		this.rContextRoot = memoize(this::findRContextRoot);
 		this.rResource = memoize(this::findRResource);
@@ -451,17 +438,17 @@ public class UriContext {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_aContextRoot, aContextRoot.get())
-			.a(PROP_aPathInfo, aPathInfo.get())
-			.a(PROP_aServletPath, aServletPath.get())
-			.a(PROP_authority, authority)
-			.a(PROP_contextRoot, contextRoot)
-			.a(PROP_parentPath, parentPath)
-			.a(PROP_pathInfo, pathInfo)
-			.a(PROP_rContextRoot, rContextRoot.get())
-			.a(PROP_rResource, rResource.get())
-			.a(PROP_servletPath, servletPath)
-			.a(PROP_rPath, rPath.get());
+			.a("aContextRoot", aContextRoot.get())
+			.a("aPathInfo", aPathInfo.get())
+			.a("aServletPath", aServletPath.get())
+			.a("authority", authority)
+			.a("contextRoot", contextRoot)
+			.a("parentPath", parentPath)
+			.a("pathInfo", pathInfo)
+			.a("rContextRoot", rContextRoot.get())
+			.a("rResource", rResource.get())
+			.a("servletPath", servletPath)
+			.a("rPath", rPath.get());
 		// @formatter:on
 	}
 

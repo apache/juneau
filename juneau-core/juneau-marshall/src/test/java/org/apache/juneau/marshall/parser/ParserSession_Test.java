@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.parser;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -56,11 +57,11 @@ import org.junit.jupiter.api.*;
  *    UON, or CSV parser sessions; all override and call their internal {@code readAnything}.
  */
 @SuppressWarnings({
-	"unchecked",
-	"java:S5778", /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */
-	"java:S5961", /* large coverage-driven test class is intentional */
-	"unused",     // Unused parameters/variables kept for consistent method signatures across test utilities.
-	"resource"   // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5961", // large coverage-driven test class is intentional
+	"resource", // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
+	"unchecked", // Results of read(..., List.class/Map.class, elementTypes...) are cast to parameterized List<X>/Map<K,V> matching the requested types
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParserSession_Test extends TestBase {
 
@@ -87,11 +88,11 @@ class ParserSession_Test extends TestBase {
 	// a - parse(...) type/class/classmeta paths
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_read_classFromString() throws Exception {
+	@Test void a01_read_classFromString() {
 		assertEquals(Integer.valueOf(123), P.read("123", Integer.class));
 	}
 
-	@Test void a02_read_classMetaFromString() throws Exception {
+	@Test void a02_read_classMetaFromString() {
 		var ses = P.getSession();
 		var cm = ses.getClassMeta(Integer.class);
 		assertEquals(Integer.valueOf(7), ses.read("7", cm));
@@ -119,12 +120,12 @@ class ParserSession_Test extends TestBase {
 		assertEquals(List.of(1, 2, 3), l);
 	}
 
-	@Test void a06_read_typeWithArgs_string() throws Exception {
+	@Test void a06_read_typeWithArgs_string() {
 		var l = (List<Integer>) P.read("[1,2,3]", List.class, Integer.class);
 		assertEquals(3, l.size());
 	}
 
-	@Test void a07_read_typeWithArgs_nestedMap() throws Exception {
+	@Test void a07_read_typeWithArgs_nestedMap() {
 		var m = (Map<String,List<Bean>>) P.read(
 			"{\"a\":[{\"f1\":\"x\",\"f2\":1}]}",
 			Map.class, String.class, List.class, Bean.class);
@@ -132,7 +133,7 @@ class ParserSession_Test extends TestBase {
 		assertEquals("x", m.get("a").get(0).f1);
 	}
 
-	@Test void a08_read_voidShortCircuit() throws Exception {
+	@Test void a08_read_voidShortCircuit() {
 		// readInner: type.isVoid() → returns null without invoking doRead.
 		assertNull(P.read("\"anything\"", Void.class));
 		assertNull(P.read("123", Void.class));
@@ -145,12 +146,12 @@ class ParserSession_Test extends TestBase {
 		assertNull(ses.read((Object) null, Bean.class));
 	}
 
-	@Test void a10_read_nullInputForString() throws Exception {
+	@Test void a10_read_nullInputForString() {
 		// String overload also accepts null.
 		assertNull(P.read((String) null, Bean.class));
 	}
 
-	@Test void a11_read_nullInputForType() throws Exception {
+	@Test void a11_read_nullInputForType() {
 		assertNull(P.read((String) null, List.class, Integer.class));
 	}
 
@@ -185,21 +186,21 @@ class ParserSession_Test extends TestBase {
 	// c - readIntoMap / readIntoCollection overloads
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_readIntoMap_basic() throws Exception {
+	@Test void c01_readIntoMap_basic() {
 		var dest = new HashMap<String,Integer>();
 		P.readIntoMap("{\"a\":1,\"b\":2}", dest, String.class, Integer.class);
 		assertEquals(1, dest.get("a"));
 		assertEquals(2, dest.get("b"));
 	}
 
-	@Test void c02_readIntoMap_intKeys() throws Exception {
+	@Test void c02_readIntoMap_intKeys() {
 		var dest = new HashMap<Integer,String>();
 		P.readIntoMap("{\"1\":\"a\",\"2\":\"b\"}", dest, Integer.class, String.class);
 		assertEquals("a", dest.get(1));
 		assertEquals("b", dest.get(2));
 	}
 
-	@Test void c03_readIntoMap_defaultElementTypes() throws Exception {
+	@Test void c03_readIntoMap_defaultElementTypes() {
 		// Passing null types defaults to String/Object.
 		var dest = new HashMap<String,Object>();
 		P.readIntoMap("{\"a\":1}", dest, null, null);
@@ -212,19 +213,19 @@ class ParserSession_Test extends TestBase {
 			() -> P.readIntoMap("{not-json", dest, String.class, Object.class));
 	}
 
-	@Test void c05_readIntoCollection_basic() throws Exception {
+	@Test void c05_readIntoCollection_basic() {
 		var dest = new ArrayList<Integer>();
 		P.readIntoCollection("[1,2,3]", dest, Integer.class);
 		assertEquals(List.of(1, 2, 3), dest);
 	}
 
-	@Test void c06_readIntoCollection_strings() throws Exception {
+	@Test void c06_readIntoCollection_strings() {
 		var dest = new ArrayList<String>();
 		P.readIntoCollection("[\"a\",\"b\"]", dest, String.class);
 		assertEquals(List.of("a", "b"), dest);
 	}
 
-	@Test void c07_readIntoCollection_nullElementType() throws Exception {
+	@Test void c07_readIntoCollection_nullElementType() {
 		// JsonParserSession.doReadIntoCollection now defaults a null elementType to Object.class,
 		// matching the doc claim that null defaults "to whatever is being parsed".
 		var dest = new ArrayList<>();
@@ -241,7 +242,7 @@ class ParserSession_Test extends TestBase {
 			() -> P.readIntoCollection("[1,2,", dest, Integer.class));
 	}
 
-	@Test void c09_readIntoCollection_emptyArrayInput() throws Exception {
+	@Test void c09_readIntoCollection_emptyArrayInput() {
 		var dest = new ArrayList<Integer>();
 		P.readIntoCollection("[]", dest, Integer.class);
 		assertTrue(dest.isEmpty());
@@ -251,7 +252,7 @@ class ParserSession_Test extends TestBase {
 	// d - readArgs
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_readArgs_basic() throws Exception {
+	@Test void d01_readArgs_basic() {
 		var args = P.getSession().readArgs("[\"hello\",42,true]",
 			new Type[] { String.class, Integer.class, Boolean.class });
 		assertEquals("hello", args[0]);
@@ -259,7 +260,7 @@ class ParserSession_Test extends TestBase {
 		assertEquals(true, args[2]);
 	}
 
-	@Test void d02_readArgs_emptyArray() throws Exception {
+	@Test void d02_readArgs_emptyArray() {
 		var args = P.getSession().readArgs("[]", new Type[0]);
 		assertEquals(0, args.length);
 	}
@@ -295,7 +296,7 @@ class ParserSession_Test extends TestBase {
 		var received = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) throws Exception {
-				if ("bad".equals(t)) throw new IOException("kaboom");
+				if (eq(t, "bad")) throw new IOException("kaboom");
 				received.add(t);
 			}
 			@Override public void onError(Exception e) throws Exception { throw e; }
@@ -310,7 +311,7 @@ class ParserSession_Test extends TestBase {
 		var received = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) {
-				if ("bad".equals(t)) throw new IllegalStateException("nope");
+				if (eq(t, "bad")) throw new IllegalStateException("nope");
 				received.add(t);
 			}
 			@Override public void onError(Exception e) {
@@ -405,7 +406,7 @@ class ParserSession_Test extends TestBase {
 		}
 	}
 
-	@Test void f01_listener_unknownProperty() throws Exception {
+	@Test void f01_listener_unknownProperty() {
 		CountingListener.events.clear();
 		var p = JsonParser.create()
 			.ignoreUnknownBeanProperties()
@@ -426,7 +427,7 @@ class ParserSession_Test extends TestBase {
 		assertTrue(CountingListener.events.stream().noneMatch(s -> s.startsWith("unknown:")));
 	}
 
-	@Test void f03_listener_beanSetterException() throws Exception {
+	@Test void f03_listener_beanSetterException() {
 		CountingListener.events.clear();
 		var p = JsonParser.create()
 			.listener(CountingListener.class)
@@ -632,12 +633,12 @@ class ParserSession_Test extends TestBase {
 		public String f1;
 	}
 
-	@Test void i01_trimStrings_disabledByDefault() throws Exception {
+	@Test void i01_trimStrings_disabledByDefault() {
 		var b = P.read("{\"f1\":\"  hello  \"}", TrimBean.class);
 		assertEquals("  hello  ", b.f1);
 	}
 
-	@Test void i02_trimStrings_enabledViaBuilder() throws Exception {
+	@Test void i02_trimStrings_enabledViaBuilder() {
 		var p = JsonParser.create().trimStrings().build();
 		var b = p.read("{\"f1\":\"  hello  \"}", TrimBean.class);
 		assertEquals("hello", b.f1);
@@ -670,7 +671,7 @@ class ParserSession_Test extends TestBase {
 		public int b;
 	}
 
-	@Test void k01_beanDictionary_resolvesType() throws Exception {
+	@Test void k01_beanDictionary_resolvesType() {
 		var p = JsonParser.create().beanDictionary(Alpha.class, Beta.class).build();
 		var o = p.read("{\"_type\":\"alpha\",\"a\":7}", Object.class);
 		assertInstanceOf(Alpha.class, o);
@@ -718,13 +719,13 @@ class ParserSession_Test extends TestBase {
 	// n - convertAttrToType dispatch (covered indirectly via Map<X,Y> parse)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void n01_convertAttr_charType() throws Exception {
+	@Test void n01_convertAttr_charType() {
 		var m = (Map<Character,String>) P.read(
 			"{\"x\":\"foo\"}", HashMap.class, Character.class, String.class);
 		assertTrue(m.containsKey('x'));
 	}
 
-	@Test void n02_convertAttr_booleanType() throws Exception {
+	@Test void n02_convertAttr_booleanType() {
 		var m = (Map<Boolean,String>) P.read(
 			"{\"true\":\"yes\",\"false\":\"no\"}", HashMap.class, Boolean.class, String.class);
 		assertEquals("yes", m.get(true));
@@ -766,7 +767,7 @@ class ParserSession_Test extends TestBase {
 	// p - convertAttrToType paths via Map keys for non-trivial types (Temporal/Duration/Period/Date/Calendar)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void p01_convertAttr_temporalKey() throws Exception {
+	@Test void p01_convertAttr_temporalKey() {
 		// Use java.time.LocalDate as a map key — exercises sType.isTemporal() branch.
 		var m = (Map<java.time.LocalDate,String>) P.read(
 			"{\"2020-01-02\":\"v\"}", HashMap.class, java.time.LocalDate.class, String.class);
@@ -774,35 +775,35 @@ class ParserSession_Test extends TestBase {
 		assertEquals("v", m.values().iterator().next());
 	}
 
-	@Test void p02_convertAttr_durationKey() throws Exception {
+	@Test void p02_convertAttr_durationKey() {
 		// Duration as a map key — exercises sType.isDuration() branch.
 		var m = (Map<java.time.Duration,String>) P.read(
 			"{\"PT1H\":\"v\"}", HashMap.class, java.time.Duration.class, String.class);
 		assertEquals(1, m.size());
 	}
 
-	@Test void p03_convertAttr_periodKey() throws Exception {
+	@Test void p03_convertAttr_periodKey() {
 		// Period as a map key — exercises sType.isPeriod() branch.
 		var m = (Map<java.time.Period,String>) P.read(
 			"{\"P1D\":\"v\"}", HashMap.class, java.time.Period.class, String.class);
 		assertEquals(1, m.size());
 	}
 
-	@Test void p04_convertAttr_dateKey() throws Exception {
+	@Test void p04_convertAttr_dateKey() {
 		// Date as a map key — exercises sType.isDate() branch.
 		var m = (Map<Date,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Date.class, String.class);
 		assertEquals(1, m.size());
 	}
 
-	@Test void p05_convertAttr_calendarKey() throws Exception {
+	@Test void p05_convertAttr_calendarKey() {
 		// Calendar as a map key — exercises sType.isCalendar() branch.
 		var m = (Map<Calendar,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Calendar.class, String.class);
 		assertEquals(1, m.size());
 	}
 
-	@Test void p06_convertAttr_numberKey() throws Exception {
+	@Test void p06_convertAttr_numberKey() {
 		// Number subtype (Long) as a map key.
 		var m = (Map<Long,String>) P.read(
 			"{\"100\":\"v\"}", HashMap.class, Long.class, String.class);
@@ -1031,19 +1032,21 @@ class ParserSession_Test extends TestBase {
 	// u - shared parse-depth budget (enterParseDepth/exitParseDepth + Builder#maxParseDepth)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void u01_enterExitParseDepth_roundTripsWithinBudget() throws Exception {
+	@Test void u01_enterExitParseDepth_roundTripsWithinBudget() {
 		var s = new ExposingSession(JsonParser.DEFAULT);
 		// Default budget (1000) comfortably allows a handful of nested enter/exit calls.
-		s.exposeEnterParseDepth();
-		s.exposeEnterParseDepth();
-		s.exposeExitParseDepth();
-		s.exposeExitParseDepth();
-		// Depth counter is back at 0; another full round-trip should still succeed.
-		s.exposeEnterParseDepth();
-		s.exposeExitParseDepth();
+		assertDoesNotThrow(() -> {
+			s.exposeEnterParseDepth();
+			s.exposeEnterParseDepth();
+			s.exposeExitParseDepth();
+			s.exposeExitParseDepth();
+			// Depth counter is back at 0; another full round-trip should still succeed.
+			s.exposeEnterParseDepth();
+			s.exposeExitParseDepth();
+		});
 	}
 
-	@Test void u02_enterParseDepth_exceedsConfiguredBudget_throwsParseException() throws Exception {
+	@Test void u02_enterParseDepth_exceedsConfiguredBudget_throwsParseException() {
 		// Build a session with maxParseDepth(2) via the builder, then drive it past the budget.
 		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
 		builder.maxParseDepth(2);
@@ -1054,7 +1057,7 @@ class ParserSession_Test extends TestBase {
 		assertTrue(e.getMessage().contains("Maximum parse depth exceeded (2)"), e.getMessage());
 	}
 
-	@Test void u03_builder_property_maxParseDepth_unqualified() throws Exception {
+	@Test void u03_builder_property_maxParseDepth_unqualified() {
 		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
 		builder.property("maxParseDepth", "2");
 		var s = new ExposingSession(builder);
@@ -1063,7 +1066,7 @@ class ParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, s::exposeEnterParseDepth);
 	}
 
-	@Test void u04_builder_property_maxParseDepth_qualified() throws Exception {
+	@Test void u04_builder_property_maxParseDepth_qualified() {
 		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
 		builder.property("ParserSession.maxParseDepth", "1");
 		var s = new ExposingSession(builder);
@@ -1071,7 +1074,7 @@ class ParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, s::exposeEnterParseDepth);
 	}
 
-	@Test void u05_builder_maxParseDepth_defaultIsAThousand() throws Exception {
+	@Test void u05_builder_maxParseDepth_defaultIsAThousand() {
 		var s = new ExposingSession(JsonParser.DEFAULT);
 		for (var i = 0; i < 1000; i++)
 			s.exposeEnterParseDepth();
@@ -1082,7 +1085,7 @@ class ParserSession_Test extends TestBase {
 	// v - allocateLocal: the ONLY remaining place where an OutOfMemoryError is converted to a bounded ParseException
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void v01_allocateLocal_success_returnsSupplierValue() throws Exception {
+	@Test void v01_allocateLocal_success_returnsSupplierValue() {
 		var s = new ExposingSession(JsonParser.DEFAULT);
 		var result = s.exposeAllocateLocal("test-array", () -> new int[10]);
 		assertEquals(10, result.length);

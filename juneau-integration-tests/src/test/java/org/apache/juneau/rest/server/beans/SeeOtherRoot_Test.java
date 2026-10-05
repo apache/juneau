@@ -73,7 +73,7 @@ class SeeOtherRoot_Test extends TestBase {
 			.setHeaders(l(HttpStringHeader.of("X-Chain", "chained")))
 			.setContent("Redirect content");
 
-		assertEquals("chained", x.getHeaders().stream().filter(h -> "X-Chain".equalsIgnoreCase(h.getName())).findFirst().orElseThrow().getValue());
+		assertEquals("chained", x.getHeaders().stream().filter(h -> eqic("X-Chain", h.getName())).findFirst().orElseThrow().getValue());
 	}
 
 	@Test void a05_reusableInstance() {

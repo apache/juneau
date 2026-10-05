@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S2094", // Intentionally empty helper bean.
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BeanInstantiator_OptionD_Test extends TestBase {
 

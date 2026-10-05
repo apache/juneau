@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -244,10 +245,10 @@ class BidiMap_Test extends TestBase {
 		boolean foundTwo = false;
 
 		for (var entry : entries) {
-			if ("one".equals(entry.getKey()) && Integer.valueOf(1).equals(entry.getValue())) {
+			if (eq(entry.getKey(), "one") && Integer.valueOf(1).equals(entry.getValue())) {
 				foundOne = true;
 			}
-			if ("two".equals(entry.getKey()) && Integer.valueOf(2).equals(entry.getValue())) {
+			if (eq(entry.getKey(), "two") && Integer.valueOf(2).equals(entry.getValue())) {
 				foundTwo = true;
 			}
 		}
@@ -383,7 +384,7 @@ class BidiMap_Test extends TestBase {
 	@Test void a23c_overwriteKeyWithSameValue() {
 		// Test line 127: overwriting a key with the same value should not throw
 		// The condition is: values.contains(value) && ! value.equals(existingValue)
-		// When value.equals(existingValue), the condition is false, so assertArg passes
+		// When value.equals(existingValue), the condition is false, so req passes
 		var map = BidiMap.<String,Integer>create()
 			.add("key1", 100)
 			.add("key2", 200)
@@ -398,7 +399,7 @@ class BidiMap_Test extends TestBase {
 	@Test void a23d_overwriteKeyWithNewValue_notInValues() {
 		// Test line 127: overwriting a key with a new value not in the values set
 		// The condition is: values.contains(value) && ! value.equals(existingValue)
-		// When !values.contains(value), the condition is false, so assertArg passes
+		// When !values.contains(value), the condition is false, so req passes
 		var map = BidiMap.<String,Integer>create()
 			.add("key1", 100)
 			.add("key2", 200)

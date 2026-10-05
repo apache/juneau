@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -89,7 +90,7 @@ class NamedHeaders_Test extends TestBase {
 				continue;
 			if (! Modifier.isStatic(m.getModifiers()))
 				continue;
-			if (! m.getName().equals("of") && ! m.getName().startsWith("ofLazy"))
+			if (neq(m.getName(), "of") && ! m.getName().startsWith("ofLazy"))
 				continue;
 			if (! HttpHeaderBean.class.isAssignableFrom(m.getReturnType()))
 				continue;
@@ -190,9 +191,9 @@ class NamedHeaders_Test extends TestBase {
 			// payload, so route those to the typed supplier.
 			if (p == Supplier.class) {
 				var mn = m.getName();
-				if (mn.equals("ofLazyParsed") || mn.equals("ofLazyTokens"))
+				if (eqa(mn, "ofLazyParsed", "ofLazyTokens"))
 					v = supplierOfTyped(headerCls);
-				else if (mn.equals("of") && isPolymorphic(headerCls))
+				else if (eq(mn, "of") && isPolymorphic(headerCls))
 					v = supplierOfTyped(headerCls);
 				else
 					v = supplierOfWireString(headerCls);
@@ -255,8 +256,8 @@ class NamedHeaders_Test extends TestBase {
 		if (HttpCsvHeader.class.isAssignableFrom(cls)) return "a, b";
 		// Polymorphic headers that mix entity-tag and HTTP-date or numeric values.
 		var n = cls.getSimpleName();
-		if ("IfRange".equals(n)) return "\"foo\"";
-		if ("RetryAfter".equals(n)) return "120";
+		if (eq(n, "IfRange")) return "\"foo\"";
+		if (eq(n, "RetryAfter")) return "120";
 		return "value";
 	}
 
@@ -280,15 +281,15 @@ class NamedHeaders_Test extends TestBase {
 		if (HttpUriHeader.class.isAssignableFrom(cls)) return () -> URI.create("http://example.com");
 		if (HttpCsvHeader.class.isAssignableFrom(cls)) return () -> new String[] { "a", "b" };
 		var n = cls.getSimpleName();
-		if ("IfRange".equals(n)) return () -> EntityTag.of("\"foo\"");
-		if ("RetryAfter".equals(n)) return () -> Integer.valueOf(120);
+		if (eq(n, "IfRange")) return () -> EntityTag.of("\"foo\"");
+		if (eq(n, "RetryAfter")) return () -> Integer.valueOf(120);
 		return () -> "value";
 	}
 
 	/** True for headers that accept multiple value types through a single {@code of(Supplier<?>)} factory. */
 	private static boolean isPolymorphic(Class<?> cls) {
 		var n = cls.getSimpleName();
-		return "IfRange".equals(n) || "RetryAfter".equals(n);
+		return eqa(n, "IfRange", "RetryAfter");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

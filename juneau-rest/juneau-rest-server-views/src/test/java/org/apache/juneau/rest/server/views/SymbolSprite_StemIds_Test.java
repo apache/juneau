@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -45,12 +46,14 @@ class SymbolSprite_StemIds_Test extends TestBase {
 	 * an artwork or naming change.
 	 */
 	private static final Set<String> EXPECTED_IDS = Set.of(
-		"juneau-sym-cancel", "juneau-sym-check", "juneau-sym-chevrondown", "juneau-sym-chevronright",
-		"juneau-sym-close", "juneau-sym-collapse_all", "juneau-sym-columns", "juneau-sym-copy", "juneau-sym-csv",
-		"juneau-sym-download", "juneau-sym-edit", "juneau-sym-filter", "juneau-sym-forceStop", "juneau-sym-new",
-		"juneau-sym-openPr", "juneau-sym-pause", "juneau-sym-pdf", "juneau-sym-print", "juneau-sym-push",
-		"juneau-sym-refresh", "juneau-sym-search", "juneau-sym-settings", "juneau-sym-spreadsheet",
-		"juneau-sym-stop", "juneau-sym-toggle-deleted", "juneau-sym-toggle_column_search"
+		"juneau-sym-cancel", "juneau-sym-check", "juneau-sym-chevrondown", "juneau-sym-chevronleft",
+		"juneau-sym-chevronright", "juneau-sym-chevronup", "juneau-sym-close", "juneau-sym-collapse_all",
+		"juneau-sym-columns", "juneau-sym-copy", "juneau-sym-csv", "juneau-sym-download", "juneau-sym-edit",
+		"juneau-sym-filter", "juneau-sym-first_page", "juneau-sym-forceStop", "juneau-sym-last_page",
+		"juneau-sym-link", "juneau-sym-more", "juneau-sym-new", "juneau-sym-openPr", "juneau-sym-pause", "juneau-sym-pdf", "juneau-sym-print",
+		"juneau-sym-push", "juneau-sym-refresh", "juneau-sym-search", "juneau-sym-settings", "juneau-sym-sort",
+		"juneau-sym-spreadsheet", "juneau-sym-stop", "juneau-sym-toggle-deleted",
+		"juneau-sym-toggle_column_search"
 	);
 
 	private static final Pattern SYMBOL_ID_PATTERN = Pattern.compile("<symbol\\s+id=\"([^\"]+)\"");
@@ -70,18 +73,15 @@ class SymbolSprite_StemIds_Test extends TestBase {
 
 	@Test void a01_stemIdSetIsPinned() throws Exception {
 		var actual = actualIds();
-		if (actual.equals(EXPECTED_IDS))
-			return;
-
 		var removed = new TreeSet<>(EXPECTED_IDS);
 		removed.removeAll(actual);
 		var added = new TreeSet<>(actual);
 		added.removeAll(EXPECTED_IDS);
 
-		fail("juneau-symbols.svg <symbol> stem ids no longer match the pinned set - removed: " + removed
+		assertList(() -> "juneau-symbols.svg <symbol> stem ids no longer match the pinned set - removed: " + removed
 			+ ", added: " + added + ". A stem id is a lookup key a host page can override a glyph by; changing,"
 			+ " adding, or removing one here (even one renamed to something equivalent-looking) breaks that"
 			+ " lookup silently, with no error on either side. If this change is intentional, update"
-			+ " EXPECTED_IDS to match.");
+			+ " EXPECTED_IDS to match.", new TreeSet<>(actual), new TreeSet<>(EXPECTED_IDS).toArray());
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -48,18 +47,15 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",  // Raw types necessary for generic type handling
-	"unchecked", // Type erasure requires unchecked casts
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S110", // Deep inheritance inherent to the RDF serializer session hierarchy.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S2176", // Inheritance depth exceeds 5; necessary to participate in the serializer session hierarchy
 	"java:S3776", // Cognitive complexity acceptable for RDF serializer session methods
 	"java:S6541", // Brain Method complexity acceptable for core RDF serializer dispatch logic
-	"java:S110" // Deep inheritance inherent to the RDF serializer session hierarchy.
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class RdfSerializerSession extends WriterSerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -75,7 +71,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -116,7 +112,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final Model model;
@@ -142,8 +138,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		addModelPrefix(ctx.getJuneauBpNs());
 		for (var ns : this.namespaces)
 			addModelPrefix(ns);
-		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), "root");
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), "value");
 
 		// Map legacy language names to RIOT Lang (e.g. "N-TRIPLE" -> NTRIPLES)
 		var langName = ctx.getLanguage();
@@ -157,7 +153,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		if ("RDF/PROTO".equals(langName))
+		if (eq(langName, "RDF/PROTO"))
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -213,7 +209,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			aType = object();
 		}
 
-		// Handle Optional<X>
+		// Handle Optional values
 		if (isOptional(aType)) {
 			o = getOptionalValue(o);
 			eType = getOptionalType(eType);
@@ -257,7 +253,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			}
 
 		} else if (sType.isUri() || isURI) {
-			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values (where sType could be String or a bean) need to route through the Resource emission path.  RDF URIs must be absolute to be valid.
+			// RDF URI gate must come before isBean/isMap/isCharSequence: values annotated with Uri (where sType could be String or a bean) need to route through the Resource emission path.  RDF URIs must be absolute to be valid.
 			var uri = getUri(o);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);

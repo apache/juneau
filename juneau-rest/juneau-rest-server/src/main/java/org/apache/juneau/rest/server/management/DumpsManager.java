@@ -95,7 +95,9 @@ public class DumpsManager {
 	public boolean heapDump(File target, boolean live) {
 		try {
 			var diagClass = Class.forName("com.sun.management.HotSpotDiagnosticMXBean");
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // diagClass is the reflectively loaded HotSpotDiagnosticMXBean, which is a PlatformManagedObject, so the Class<? extends PlatformManagedObject> narrowing is valid
+			})
 			var bean = ManagementFactory.getPlatformMXBean((Class<? extends PlatformManagedObject>) diagClass);
 			if (bean == null)
 				return false;  // HTT: only on a JVM exposing the class but no platform bean — not reproducible on HotSpot CI.

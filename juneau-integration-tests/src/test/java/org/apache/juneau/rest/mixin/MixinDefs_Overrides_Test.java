@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mixin;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -37,13 +39,13 @@ class MixinDefs_Overrides_Test extends TestBase {
 
 	public static class AllowOnlyAdmin extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Admin").orElse(null));
+			return eq(req.getHeaderParam("X-Admin").orElse(null), "yes");
 		}
 	}
 
 	public static class AllowOnlyHost extends RestGuard {
 		@Override public boolean isRequestAllowed(RestRequest req) {
-			return "yes".equals(req.getHeaderParam("X-Host").orElse(null));
+			return eq(req.getHeaderParam("X-Host").orElse(null), "yes");
 		}
 	}
 

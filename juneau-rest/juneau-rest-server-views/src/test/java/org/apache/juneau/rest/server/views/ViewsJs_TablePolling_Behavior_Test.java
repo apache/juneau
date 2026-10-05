@@ -320,4 +320,25 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 		assertEquals(true, r.get("default_inflightDrawStillPaints"));
 		assertEquals(true, r.get("manualPause_drawNotCancelledWithoutAnOpenPanel"));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Gap 7: auto-refresh is its own timer, paused by the same editing-surface rule, independent of initPolling.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_autoRefresh_pausesWhileTheViewSettingsDialogIsOpen_andResumesAfter() {
+		var r = report();
+		assertEquals(true, r.get("autoRefresh_ticksWhenIdle"));
+		assertEquals(true, r.get("autoRefresh_pausedByConfigBackdrop"));
+		assertEquals(true, r.get("autoRefresh_resumesAfterConfigBackdropCleared"));
+	}
+
+	@Test void g02_autoRefresh_coexistsWithAnUnrelatedDeclaredPollTimer() {
+		var r = report();
+		assertEquals(true, r.get("autoRefresh_coexistsWithDeclaredPoll"));
+	}
+
+	@Test void g03_autoRefresh_offTearsDownAnyPriorTimer() {
+		var r = report();
+		assertEquals(true, r.get("autoRefresh_offTearsDownPriorTimer"));
+	}
 }

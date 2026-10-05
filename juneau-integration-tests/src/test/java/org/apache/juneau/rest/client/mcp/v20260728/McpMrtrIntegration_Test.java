@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.SecureRandom;
@@ -105,7 +106,7 @@ class McpMrtrIntegration_Test extends TestBase {
 				var resume = ctx.getBean(McpMrtrResumeContext.class);
 				if (resume.isEmpty())
 					throw new McpInputRequiredSignal(Map.of("q1", Map.of("type", "elicitation")), "cont-1");
-				if ("cont-1".equals(resume.get().continuation()))
+				if (eq(resume.get().continuation(), "cont-1"))
 					throw new McpInputRequiredSignal(Map.of("q2", Map.of("type", "elicitation")), "cont-2");
 				return McpToolOutcome.text("resumed2:" + resume.get().inputResponses().get("q2"));
 			}

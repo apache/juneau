@@ -161,7 +161,9 @@ public enum ClassFormat {
 	 * @param value The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
 	 * 	allow all names (the default).
 	 */
-	@SuppressWarnings("java:S3066") // Public setter is the documented deployment-configuration entry point (see Javadoc above); it is also exercised directly from ClassFormat_Test in another package, so visibility cannot be narrowed without breaking that call site.
+	@SuppressWarnings({
+		"java:S3066" // Public setter is the documented deployment-configuration entry point (see Javadoc above); it is also exercised directly from ClassFormat_Test in another package, so visibility cannot be narrowed without breaking that call site.
+	})
 	public static void setClassNameGuard(Predicate<String> value) {
 		classNameGuard.set(value);
 	}
@@ -362,8 +364,8 @@ public enum ClassFormat {
 	 * @return <jk>false</jk>.
 	 */
 	@SuppressWarnings({
-		"static-method", // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
-		"java:S3400"     // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"java:S3400", // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"static-method" // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
 	})
 	public boolean isNumeric() {
 		return false;

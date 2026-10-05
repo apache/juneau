@@ -36,6 +36,11 @@ import org.apache.juneau.commons.inject.*;
  * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a
  * revision-specific hook on that revision's servlet or endpoint mixin.
  */
+@SuppressWarnings({
+	"java:S135", // Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses
+	"java:S3077", // The volatile fields hold immutable List/Map snapshots that are replaced wholesale when resource templates are published, so volatile only publishes a fully-built reference
+	"java:S3776" // validateResourceTemplates(), resolveResourceTemplate() and the completer lookups each match handlers against several URI/argument rules in one pass
+})
 public class McpServerConfig {
 
 	private String name;
@@ -46,13 +51,7 @@ public class McpServerConfig {
 	private List<McpResourceHandler> resources = l();
 	private List<McpResourceTemplateHandler> resourceTemplates = l();
 
-	@SuppressWarnings({
-		"java:S3077" // Safe-publication snapshot only: written solely via publishResourceTemplates()/ensureResourceTemplatesValid() after the resourceTemplates write it guards, so a racing re-validation is at worst redundant (idempotent), never corrupting.
-	})
 	private volatile List<McpResourceTemplateHandler> validatedResourceTemplatesSnapshot = List.of();
-	@SuppressWarnings({
-		"java:S3077" // Safe-publication snapshot only: written in lockstep with validatedResourceTemplatesSnapshot (same guard), so a racing re-validation is at worst a redundant recompile, never a corrupt/mismatched read.
-	})
 	private volatile Map<McpResourceTemplateHandler, McpUriTemplateMatcher> compiledResourceTemplateMatchers = Map.of();
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 
@@ -233,10 +232,6 @@ public class McpServerConfig {
 	 * descriptor with {@code null} {@link McpPromptSpec#getArguments() arguments} carries nothing to validate
 	 * here and is silently skipped; those are not this validation's concern.
 	 */
-	@SuppressWarnings({
-		"java:S135", // Three sequential null/absent-field skips are simple, independent guard clauses, not branching logic worth extracting.
-		"java:S3776" // Cognitive complexity from the guard-clause density is inherent to exhaustively validating a nested registry; standing project policy is to suppress rather than refactor for this metric alone.
-	})
 	private static void validatePrompts(List<McpPromptHandler> candidate) {
 		for (var i = 0; i < candidate.size(); i++) {
 			var handler = candidate.get(i);
@@ -529,10 +524,6 @@ public class McpServerConfig {
 	 * @return The winning match (handler plus its immutable, insertion-ordered decoded variable map), or
 	 * 	{@code null} if no registered reverse-matchable template matches {@code uri}.
 	 */
-	@SuppressWarnings({
-		"java:S135", // Three sequential null/non-matching skips are simple, independent guard clauses over one candidate loop, not branching logic worth extracting.
-		"java:S3776" // Cognitive complexity from the guard-clause density plus the ranking comparison is inherent to this method's documented deterministic tie-break contract; standing project policy is to suppress rather than refactor for this metric alone.
-	})
 	public ResourceTemplateMatch resolveResourceTemplate(String uri) {
 		if (uri == null)
 			return null;
@@ -593,9 +584,6 @@ public class McpServerConfig {
 	 * @return The argument's completer, or {@code null} if the prompt is unknown, the argument is undeclared,
 	 * 	or the argument declares no completer. Never invokes the completer.
 	 */
-	@SuppressWarnings({
-		"java:S135" // Two sequential null/name-mismatch skips are simple, independent guard clauses over one lookup loop, not branching logic worth extracting.
-	})
 	public McpCompleter promptCompleter(String promptName, String argumentName) {
 		if (promptName == null || argumentName == null)
 			return null;
@@ -603,7 +591,7 @@ public class McpServerConfig {
 			if (handler == null)
 				continue;
 			var descriptor = handler.descriptor();
-			if (descriptor == null || ! promptName.equals(descriptor.getName()))
+			if (descriptor == null || neq(promptName, descriptor.getName()))
 				continue;
 			var arguments = descriptor.getArguments();
 			return arguments == null ? null : completerForArgument(arguments, argumentName);
@@ -618,7 +606,7 @@ public class McpServerConfig {
 	 */
 	private static McpCompleter completerForArgument(List<McpPromptArgument> arguments, String argumentName) {
 		for (var argument : arguments)
-			if (argument != null && argumentName.equals(argument.getName()))
+			if (argument != null && eq(argumentName, argument.getName()))
 				return argument.getCompleter();
 		return null;
 	}
@@ -643,9 +631,6 @@ public class McpServerConfig {
 	 * @return The variable's completer, or {@code null} if the template is unregistered, the variable is
 	 * 	undeclared, or the handler declares no completer for it. Never invokes the completer.
 	 */
-	@SuppressWarnings({
-		"java:S135" // Two sequential null/template-mismatch skips are simple, independent guard clauses over one lookup loop, not branching logic worth extracting.
-	})
 	public McpCompleter templateCompleter(String uriTemplate, String variableName) {
 		if (uriTemplate == null || variableName == null)
 			return null;
@@ -699,10 +684,6 @@ public class McpServerConfig {
 	 * @return {@code true} if at least one prompt-argument completer or resource-template variable completer
 	 * 	is registered.
 	 */
-	@SuppressWarnings({
-		"java:S135", // Two sequential null-skips per loop, across two independent scans (prompts then templates), are simple guard clauses, not branching logic worth extracting.
-		"java:S3776" // Cognitive complexity from scanning two registries with guard clauses is inherent to this method's "any completer anywhere" contract; standing project policy is to suppress rather than refactor for this metric alone.
-	})
 	public boolean hasAnyCompleter() {
 		for (var handler : getPrompts()) {
 			if (handler == null)

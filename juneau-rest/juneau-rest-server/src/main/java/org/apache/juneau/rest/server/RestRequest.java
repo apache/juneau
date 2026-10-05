@@ -18,7 +18,6 @@ package org.apache.juneau.rest.server;
 
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -65,6 +64,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.marshaller.Uon;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.assertions.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.guard.*;
@@ -184,11 +184,13 @@ import jakarta.servlet.http.*;
  *
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts in REST client operations
-	"unused", // Unused parameters in HttpServletRequest overrides and helper methods
+	"java:S3776", // checkPreconditions() walks the chained RFC 7232 If-Match/If-Unmodified-Since/If-None-Match/If-Modified-Since steps in order; splitting would obscure the precedence rules
 	"java:S6539", // Collection.toArray() usage intentional
+	"javabugs:S2259", // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
 	"resource", // Streams returned to servlet container; lifecycle managed by the container
-	"javabugs:S2259" // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
+	"unchecked", // Type erasure requires unchecked casts in REST client operations
+	"unused" // Unused parameters in HttpServletRequest overrides and helper methods
 })
 public class RestRequest extends HttpServletRequestWrapper {
 
@@ -217,7 +219,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return {@code true} if {@code method} is {@code PUT} or {@code POST}, case-insensitively.
 	 */
 	static boolean isContentParamMethod(String method) {
-		return "PUT".equalsIgnoreCase(method) || "POST".equalsIgnoreCase(method);
+		return eqic("PUT", method) || eqic("POST", method);
 	}
 
 	/*
@@ -485,11 +487,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	guard failed).
 	 * @throws IllegalArgumentException If {@code response} is <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTTP precondition checks (If-Match, If-None-Match, If-Modified-Since, etc.)
-	})
 	public Optional<BasicHttpException> checkPreconditions(RestResponse response) {
-		assertArgNotNull("response", response);
+		reqnn("response", response);
 		var resTagStr = response.getHeader(ETag.NAME);
 		var resTag = nn(resTagStr) ? EntityTag.of(resTagStr) : null;
 		var resLastModStr = response.getHeader(LastModified.NAME);
@@ -532,7 +531,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	private boolean isSafeMethod() {
 		var m = getMethod();
-		return "GET".equalsIgnoreCase(m) || "HEAD".equalsIgnoreCase(m);
+		return eqic("GET", m) || eqic("HEAD", m);
 	}
 
 	private static ZonedDateTime parseHttpDate(String value) {
@@ -670,7 +669,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			var scheme = inner.getScheme();
 			var port = inner.getServerPort();
 			var sb = new StringBuilder(inner.getScheme()).append("://").append(inner.getServerName());
-			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
+			if (! (port == 80 && eq(scheme, "http") || port == 443 && eq(scheme, "https")))
 				sb.append(':').append(port);
 			authorityPath = sb.toString();
 		}
@@ -1378,23 +1377,57 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new request bean proxy for this REST request.
 	 */
 	public <T> T getRequest(RequestBeanMeta rbm) {
+		return getRequest(rbm, null);
+	}
+
+	/**
+	 * Same as {@link #getRequest(RequestBeanMeta)}, but reuses setters already resolved when the {@code @RestOp}'s
+	 * arguments were built instead of resolving them on this call.
+	 *
+	 * @param <T> The request bean interface to instantiate.
+	 * @param rbm The metadata about the request bean interface to create.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param setters
+	 * 	The pre-resolved constructor/setters for a concrete bean class, or <jk>null</jk> to resolve them on this call
+	 * 	(callers such as {@code Queryable} that only have a {@link Class}, not a registered {@link RequestBeanArg}).
+	 * 	Resolving here throws the same {@link IllegalArgumentException} message as {@link RequestBeanArg},
+	 * 	wrapped the same way as any other exception from this method.
+	 * @return A new request bean proxy or instance for this REST request.
+	 */
+	public <T> T getRequest(RequestBeanMeta rbm, RequestBeanSetters setters) {
 		try {
 			var c = (Class<T>)rbm.getBeanInfo().inner();
 			final MarshallingSession bs = getMarshallingSession();
-			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
-				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
-				if (nn(pm))
-					return resolveRequestBeanProperty(pm, method, bs);
-				return null;
-			});
+			if (c.isInterface())
+				return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
+					RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
+					if (nn(pm))
+						return resolveRequestBeanProperty(pm, method, bs);
+					return null;
+				});
+			return newRequestBean(rbm, bs, nn(setters) ? setters : RequestBeanSetters.resolve(c, rbm));
 		} catch (Exception e) {
 			throw toRex(e);
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Request-bean MULTI vs last-wins vs Optional/def branching is clearer in one method than split across accessors.
-	})
+	/**
+	 * Instantiates a concrete {@link Request @Request} bean class via the resolved {@link RequestBeanSetters} and
+	 * populates it by invoking the setter matching each annotated getter.  Absent parameters (a <jk>null</jk> resolved
+	 * value) are left at their default.
+	 */
+	private <T> T newRequestBean(RequestBeanMeta rbm, MarshallingSession bs, RequestBeanSetters setters) throws Exception {
+		T bean = setters.newInstance();
+		for (var pm : rbm.getProperties()) {
+			var getter = pm.getGetter();
+			var value = resolveRequestBeanProperty(pm, getter, bs);
+			if (value == null)
+				continue;
+			setters.set(bean, getter, value);
+		}
+		return bean;
+	}
+
 	private Object resolveRequestBeanProperty(RequestBeanPropertyMeta pm, java.lang.reflect.Method method, MarshallingSession bs) throws Exception {
 		HttpPartParserSession pp = pm.getParser(getPartParserSession());
 		HttpPartSchema schema = pm.getSchema();
@@ -1437,10 +1470,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Collection constructed from ClassMeta.newInstance() is untyped.
-		"java:S3776" // Request-bean MULTI collection Optional/default/array branching is clearer in one method than split helpers.
-	})
 	private Object resolveRequestBeanMultiCollection(HttpPartType pt, String name, HttpPartParserSession pp, HttpPartSchema schema, ClassMeta<?> type) throws Exception {
 		var optional = type.isOptional();
 		var raw = optional ? type.getElementType() : type;
@@ -1483,9 +1512,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
-	@SuppressWarnings({
-		"rawtypes" // Collection constructed from ClassMeta.newInstance() is untyped.
-	})
 	private static Collection newCollection(ClassMeta<?> raw) {
 		if (raw.isArray())
 			return CollectionUtils.list();
@@ -1530,6 +1556,20 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var j = x.indexOf('.', i);
 		var pv = HttpProtocolVersion.of(x.substring(0, i), StringUtils.parseInt(x.substring(i + 1, j)), StringUtils.parseInt(x.substring(j + 1)));
 		return HttpRequestLineBean.of(inner.getMethod(), inner.getRequestURI(), pv);
+	}
+
+	/**
+	 * Returns the HTTP response associated with this request.
+	 *
+	 * <p>
+	 * Only safe to call once the REST call has reached the point of invoking the matched Java method, e.g. from inside
+	 * a {@link org.apache.juneau.rest.server.converter.RestConverter}, which only ever runs after method invocation.
+	 * Calling it any earlier throws {@link org.apache.juneau.http.response.InternalServerError}.
+	 *
+	 * @return The response associated with this request.
+	 */
+	public RestResponse getResponse() {
+		return session.getOpSession().getResponse();
 	}
 
 	/**
@@ -1954,7 +1994,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
-	public boolean isPlainText() { return "true".equals(queryParams.get("plainText").asString().orElse("false")); }
+	public boolean isPlainText() { return eq(queryParams.get("plainText").asString().orElse("false"), "true"); }
 
 	/**
 	 * Sets a request attribute.
@@ -1983,7 +2023,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public RestRequest setAuthResult(AuthResult value) {
 		authResult = value;
 		if (value != null && value.getPrincipal() != null)
-			setAttribute(RestServerConstants.PRINCIPAL_ATTR, value.getPrincipal());
+			setAttribute("juneau.principal", value.getPrincipal());
 		return this;
 	}
 
@@ -2088,9 +2128,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return An unmodifiable map of session properties; may be empty but never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // cognitive complexity acceptable; sequential null-checks for 4 sources
-	})
 	public Map<String,Object> getSerializerSessionPropertyMap() {
 		var allowlist = opContext.getAllowedSerializerOptions();
 		Map<String,Object> m1 = null;
@@ -2133,9 +2170,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return An unmodifiable map of session properties; may be empty but never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // cognitive complexity acceptable; sequential null-checks for 4 sources
-	})
 	public Map<String,Object> getParserSessionPropertyMap() {
 		var allowlist = opContext.getAllowedParserOptions();
 		Map<String,Object> m1 = null;
@@ -2253,7 +2287,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		sb.append("---Headers---\n");
 		getHeaders().forEach(x -> sb.append("\t").append(x).append("\n"));
 		var m = getMethod();
-		if (m.equals("PUT") || m.equals("POST")) {
+		if (eqa(m, "PUT", "POST")) {
 			try {
 				sb.append("---Content UTF-8---\n");
 				sb.append(content.asString()).append("\n");

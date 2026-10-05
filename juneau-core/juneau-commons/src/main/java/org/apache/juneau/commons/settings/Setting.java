@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -45,15 +44,10 @@ import org.apache.juneau.commons.function.*;
  * @param <T> The type of value supplied.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Setting<T> extends Memoizer<T> {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_supplier = "supplier";
-	private static final String ARG_settings = "settings";
-	private static final String ARG_mapper = "mapper";
-	private static final String ARG_predicate = "predicate";
 	private final Settings settings;
 
 	/**
@@ -63,8 +57,8 @@ public class Setting<T> extends Memoizer<T> {
 	 * @param supplier The supplier that provides the value. Must not be <jk>null</jk>.
 	 */
 	public Setting(Settings settings, Supplier<T> supplier) {
-		super(assertArgNotNull(ARG_supplier, supplier));
-		this.settings = assertArgNotNull(ARG_settings, settings);
+		super(reqnn("supplier", supplier));
+		this.settings = reqnn("settings", settings);
 	}
 
 	/**
@@ -103,7 +97,7 @@ public class Setting<T> extends Memoizer<T> {
 	 */
 	@Override
 	public <U> Setting<U> map(Function<? super T,? extends U> mapper) {
-		assertArgNotNull(ARG_mapper, mapper);
+		reqnn("mapper", mapper);
 		return new Setting<>(settings, () -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -122,7 +116,7 @@ public class Setting<T> extends Memoizer<T> {
 	 */
 	@Override
 	public Setting<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull(ARG_predicate, predicate);
+		reqnn("predicate", predicate);
 		return new Setting<>(settings, () -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;

@@ -36,8 +36,8 @@ public final class BooleanFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked", // Cast is safe: type verified by caller context.
-		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"unchecked" // Cast is safe: type verified by caller context.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		And.class, Or.class, Not.class, Xor.class,
@@ -115,9 +115,9 @@ public final class BooleanFunctions {
 	/** Same truthiness table as {@link ArgCoercer}, exposed for variadic use in {@link And}/{@link Or}. */
 	private static boolean parseBool(String s) {
 		var t = s == null ? "" : s.trim();
-		if (t.equalsIgnoreCase("true") || t.equals("1") || t.equalsIgnoreCase("yes") || t.equalsIgnoreCase("on"))
+		if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))
 			return true;
-		if (t.isEmpty() || t.equalsIgnoreCase("false") || t.equals("0") || t.equalsIgnoreCase("no") || t.equalsIgnoreCase("off"))
+		if (t.isEmpty() || eqic(t, "false") || eq(t, "0") || eqic(t, "no") || eqic(t, "off"))
 			return false;
 		throw iaex("cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)", s);
 	}

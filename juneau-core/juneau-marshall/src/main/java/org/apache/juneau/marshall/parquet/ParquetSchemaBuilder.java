@@ -21,6 +21,7 @@ import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
@@ -35,7 +36,8 @@ import org.apache.juneau.marshall.serializer.*;
  * <a class="doclink" href="https://parquet.apache.org/docs/file-format/">Parquet specification</a>.
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated "value" is Parquet Optional key; constant would obscure schema mapping
+	"java:S1192", // Duplicated "value" is Parquet Optional key; constant would obscure schema mapping
+	"java:S3776" // addLeafSchema() and addBeanSchema() map every Java type to a Parquet physical/logical type in one pass; splitting them would obscure the mapping
 })
 public final class ParquetSchemaBuilder {
 
@@ -185,9 +187,6 @@ public final class ParquetSchemaBuilder {
 	}
 
 	/** Optional&lt;X&gt; → optional group with "value" child of type X (2.2). */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive Complexity: optional/value dispatch is inherently branchy
-	})
 	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var et = cm.getElementType();
 		Object innerSample = sampleBean instanceof Optional<?> sampleBean2 ? sampleBean2.orElse(null) : sampleBean;
@@ -196,9 +195,6 @@ public final class ParquetSchemaBuilder {
 		addSchemaElements(elements, et, "value", optPath, false, innerSample, typesInProgress);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive Complexity: bean/cycle/property dispatch is inherently branchy
-	})
 	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
 		var beanClass = cm.inner();
@@ -344,9 +340,6 @@ public final class ParquetSchemaBuilder {
 		addSchemaElements(elements, vt, "value", mapPath + ".key_value", false, null, typesInProgress);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive Complexity: type-to-Parquet mapping requires many branches
-	})
 	private void addLeafSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot) {
 		int repetition = isRoot ? REQUIRED : OPTIONAL;
 		String path = parentPath != null ? parentPath + "." + name : name;
@@ -418,10 +411,6 @@ public final class ParquetSchemaBuilder {
 	 * @return List of leaf elements with non-null paths.
 	 */
 	public static List<ParquetSchemaElement> getLeafColumns(List<ParquetSchemaElement> schema) {
-		var leaves = new ArrayList<ParquetSchemaElement>();
-		for (var e : schema)
-			if (e.isLeaf())
-				leaves.add(e);
-		return leaves;
+		return schema.stream().filter(ParquetSchemaElement::isLeaf).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

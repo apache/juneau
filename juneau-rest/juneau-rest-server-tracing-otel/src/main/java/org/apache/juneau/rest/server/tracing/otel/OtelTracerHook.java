@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -95,8 +94,8 @@ import io.opentelemetry.context.propagation.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115", // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
-	"resource"   // Span / Scope returned to caller for try-with-resources management; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Span / Scope returned to caller for try-with-resources management; Eclipse JDT @Owning warning is by design.
 })
 public class OtelTracerHook implements TracerHook {
 
@@ -114,10 +113,6 @@ public class OtelTracerHook implements TracerHook {
 
 	/** OTel attribute key {@code exception.type} used when recording a thrown exception. */
 	public static final AttributeKey<String> ATTR_EXCEPTION_TYPE = AttributeKey.stringKey("exception.type");
-
-	private static final String ARG_openTelemetry = "openTelemetry";
-	private static final String ARG_tracer = "tracer";
-	private static final String ARG_propagator = "propagator";
 
 	private final Tracer tracer;
 	private final TextMapPropagator propagator;
@@ -145,7 +140,7 @@ public class OtelTracerHook implements TracerHook {
 	 * @param openTelemetry The {@link OpenTelemetry} instance. Must not be <jk>null</jk>.
 	 */
 	public OtelTracerHook(OpenTelemetry openTelemetry) {
-		assertArgNotNull(ARG_openTelemetry, openTelemetry);
+		reqnn("openTelemetry", openTelemetry);
 		this.tracer = openTelemetry.getTracer(DEFAULT_INSTRUMENTATION_NAME);
 		this.propagator = openTelemetry.getPropagators().getTextMapPropagator();
 	}
@@ -162,8 +157,8 @@ public class OtelTracerHook implements TracerHook {
 	 * 	header transfer. Must not be <jk>null</jk>.
 	 */
 	public OtelTracerHook(Tracer tracer, TextMapPropagator propagator) {
-		this.tracer = assertArgNotNull(ARG_tracer, tracer);
-		this.propagator = assertArgNotNull(ARG_propagator, propagator);
+		this.tracer = reqnn("tracer", tracer);
+		this.propagator = reqnn("propagator", propagator);
 	}
 
 	@Override /* TracerHook */

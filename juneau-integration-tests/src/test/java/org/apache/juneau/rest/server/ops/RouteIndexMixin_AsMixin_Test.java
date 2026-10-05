@@ -51,6 +51,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"unchecked" // Unchecked cast required for generic test utility.
+})
 class RouteIndexMixin_AsMixin_Test extends TestBase {
 
 	@Rest(mixins=RouteIndexMixin.class)
@@ -207,9 +210,6 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	// Helpers.
 	// -----------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	private static List<Map<String,Object>> parseEntries(String body) throws Exception {
 		return (List<Map<String,Object>>) JsonParser.DEFAULT.read(body, List.class);
 	}
@@ -218,9 +218,6 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 		return entries.stream().map(e -> String.valueOf(e.get("path"))).toList();
 	}
 
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	private static Map<String,Map<String,Object>> byPath(List<Map<String,Object>> entries) {
 		var out = new LinkedHashMap<String,Map<String,Object>>();
 		for (var e : entries) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -58,9 +57,9 @@ import org.apache.juneau.http.header.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S3008", // Concrete subclasses use UPPER_CASE singleton instance constants (e.g., INSTANCE fields).
+	"java:S1165", // Mutable exception fields are intentional: HTTP exceptions support builder-style fluent setters.
 	"java:S1948", // HttpHeaderList is not Java-serializable; HTTP exceptions are not designed for Java serialization transport.
-	"java:S1165"  // Mutable exception fields are intentional: HTTP exceptions support builder-style fluent setters.
+	"java:S3008" // Concrete subclasses use UPPER_CASE singleton instance constants (e.g., INSTANCE fields).
 })
 public class BasicHttpException extends RuntimeException implements HttpResponseMessage {
 
@@ -142,7 +141,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpException(BasicHttpException copyFrom) {
-		super(assertArgNotNull("copyFrom", copyFrom).getMessage(), copyFrom.getCause());
+		super(reqnn("copyFrom", copyFrom).getMessage(), copyFrom.getCause());
 		this.statusLine = copyFrom.statusLine;
 		this.headers = copyFrom.headers.copy();
 		this.body = copyFrom.body;
@@ -207,7 +206,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusLine(HttpStatusLine value) {
-		return modify(() -> statusLine = assertArgNotNull("value", value));
+		return modify(() -> statusLine = reqnn("value", value));
 	}
 
 	/**
@@ -238,7 +237,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 */
 	public BasicHttpException setProtocolVersion(HttpProtocolVersion value) {
 		return modify(() -> {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
 		});
 	}

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -36,12 +35,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_iterator)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BasicPartIterator implements PartIterator {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_parts = "parts";
 
 	private final NameValuePair[] entries;
 	private final String name;
@@ -57,7 +53,7 @@ public class BasicPartIterator implements PartIterator {
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */
 	public BasicPartIterator(NameValuePair[] parts, String name, boolean caseInsensitive) {
-		this.entries = assertArgNotNull(ARG_parts, parts);
+		this.entries = reqnn("parts", parts);
 		this.name = name;
 		this.caseInsensitive = caseInsensitive;
 		this.currentIndex = findNext(-1);

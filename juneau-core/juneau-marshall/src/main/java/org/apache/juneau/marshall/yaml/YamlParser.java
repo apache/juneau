@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.marshall.yaml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
@@ -85,12 +87,14 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class YamlParser extends ReaderParser implements RecordReadable, ArrayRecordReadable {
+public class YamlParser extends ReaderParser implements YamlMetaProvider, RecordReadable, ArrayRecordReadable {
 
-	private static final String ARG_copyFrom = "copyFrom";
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,YamlClassMeta> yamlClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,YamlBeanPropertyMeta> yamlBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder class.
@@ -113,7 +117,7 @@ public class YamlParser extends ReaderParser implements RecordReadable, ArrayRec
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -123,7 +127,7 @@ public class YamlParser extends ReaderParser implements RecordReadable, ArrayRec
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(YamlParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -163,6 +167,18 @@ public class YamlParser extends ReaderParser implements RecordReadable, ArrayRec
 	 */
 	public YamlParser(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* Overridden from YamlMetaProvider */
+	public YamlBeanPropertyMeta getYamlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return YamlBeanPropertyMeta.DEFAULT;
+		return yamlBeanPropertyMetas.computeIfAbsent(bpm, k -> new YamlBeanPropertyMeta(k, this));
+	}
+
+	@Override /* Overridden from YamlMetaProvider */
+	public YamlClassMeta getYamlClassMeta(ClassMeta<?> cm) {
+		return yamlClassMetas.computeIfAbsent(cm, k -> new YamlClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

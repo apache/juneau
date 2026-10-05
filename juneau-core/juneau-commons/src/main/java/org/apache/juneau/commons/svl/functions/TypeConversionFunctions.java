@@ -32,8 +32,8 @@ public final class TypeConversionFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked", // Cast is safe: type verified by caller context.
-		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"unchecked" // Cast is safe: type verified by caller context.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		ToInt.class, ToLong.class, ToDouble.class, ToBool.class

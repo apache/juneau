@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
@@ -136,23 +135,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, RecordWritable {
-
-	// Property name constants
-	private static final String PROP_addBeanTypes = "addBeanTypes";
-	private static final String PROP_addNamespaceUrlsToRoot = "addNamespaceUrlsToRoot";
-	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
-	private static final String PROP_defaultNamespace = "defaultNamespace";
-	private static final String PROP_enableNamespaces = "enableNamespaces";
-	private static final String PROP_namespaces = "namespaces";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String ARG_builder = "builder";
-	private static final String ARG_values = "values";
 
 	/**
 	 * Builder class.
@@ -195,7 +182,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
 			defaultNamespace = copyFrom.defaultNamespace;
@@ -213,7 +200,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
 			defaultNamespace = copyFrom.getDefaultNamespace();
@@ -437,7 +424,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * @return This object.
 		 */
 		public SELF namespaces(Namespace...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			namespaces = addAll(namespaces, values);
 			return self();
 		}
@@ -525,7 +512,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).enableNamespaces());
+			super(reqnn("builder", builder).enableNamespaces());
 		}
 	}
 
@@ -539,7 +526,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSq(Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).enableNamespaces().quoteChar('\''));
+			super(reqnn("builder", builder).enableNamespaces().quoteChar('\''));
 		}
 	}
 
@@ -553,7 +540,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSqReadable(Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).enableNamespaces().quoteChar('\'').useWhitespace());
+			super(reqnn("builder", builder).enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -567,7 +554,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Sq(Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).quoteChar('\''));
+			super(reqnn("builder", builder).quoteChar('\''));
 		}
 	}
 
@@ -581,7 +568,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public SqReadable(Builder<?> builder) {
-			super(assertArgNotNull(ARG_builder, builder).quoteChar('\'').useWhitespace());
+			super(reqnn("builder", builder).quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -771,11 +758,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypes, addBeanTypes2)
-			.a(PROP_addNamespaceUrlsToRoot, addNamespaceUrlsToRoot)
-			.a(PROP_autoDetectNamespaces, autoDetectNamespaces)
-			.a(PROP_defaultNamespace, defaultNamespace)
-			.a(PROP_enableNamespaces, enableNamespaces)
-			.a(PROP_namespaces, namespaces);
+			.a("addBeanTypes", addBeanTypes2)
+			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("defaultNamespace", defaultNamespace)
+			.a("enableNamespaces", enableNamespaces)
+			.a("namespaces", namespaces);
 	}
 }

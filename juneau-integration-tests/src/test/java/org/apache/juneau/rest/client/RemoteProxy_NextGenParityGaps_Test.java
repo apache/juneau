@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -1390,7 +1391,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 	}
 
 	private static int countHeaders(TransportRequest req, String name) {
-		return (int) req.getHeaders().stream().filter(h -> h.name().equalsIgnoreCase(name)).count();
+		return (int) req.getHeaders().stream().filter(h -> eqic(h.name(), name)).count();
 	}
 
 	private static String headerValue(TransportRequest req, String name) {

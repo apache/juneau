@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -212,10 +213,10 @@ class Characterization_Test {
 					}
 					@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
 					@Override public McpCompleter completer(String variableName) {
-						if (! "name".equals(variableName))
+						if (neq(variableName, "name"))
 							return null;
 						return (request, ctx) -> {
-							if ("cap".equals(request.getValue())) {
+							if (eq(request.getValue(), "cap")) {
 								var values = new ArrayList<String>();
 								for (var i = 0; i < 101; i++)
 									values.add("item" + i);
@@ -306,7 +307,7 @@ class Characterization_Test {
 					var resume = ctx.getBean(McpMrtrResumeContext.class);
 					if (resume.isEmpty())
 						throw new McpInputRequiredSignal(Map.of("q1", Map.of("type", "elicitation")), "cont-1");
-					if ("pause-again".equals(resume.get().continuation()))
+					if (eq(resume.get().continuation(), "pause-again"))
 						throw new McpInputRequiredSignal(Map.of("q2", Map.of("type", "elicitation")), "cont-2");
 					return McpToolOutcome.text("resumed:" + resume.get().inputResponses().get("q1"));
 				}

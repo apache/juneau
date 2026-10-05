@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.*;
  */
 @SuppressWarnings({
 	"java:S1172", // Unused parameters in tests are intentional
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class InvalidXmlBeans_Test extends TestBase {
 

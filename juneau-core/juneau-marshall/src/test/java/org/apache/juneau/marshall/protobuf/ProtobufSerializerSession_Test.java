@@ -78,7 +78,7 @@ class ProtobufSerializerSession_Test extends TestBase {
 
 	@Test void b01_beanMapRootNotRejected() throws Exception {
 		// A BeanMap root satisfies cm.isMap(), but cm.isBeanMap() is also true, so the raw-Map rejection
-		// guard in doWrite (cm.isMap() && !cm.isBean() && !cm.isBeanMap()) does not fire for it -- unlike
+		// guard in doWrite (a raw Map that is neither a bean nor a BeanMap) does not fire for it -- unlike
 		// a raw Map root, this completes without throwing (the resulting bytes reflect the BeanMap's own
 		// class metadata, which carries no protobuf field table, hence the empty output).
 		var session = ProtobufSerializer.DEFAULT.createSession().build();
@@ -97,7 +97,8 @@ class ProtobufSerializerSession_Test extends TestBase {
 	}
 
 	@Test void c01_beanGetterExceptionDefaultThrows() {
-		assertThrows(SerializeException.class, () -> ProtobufSerializer.DEFAULT.write(new C01_ThrowBean()));
+		var bean = new C01_ThrowBean();
+		assertThrows(SerializeException.class, () -> ProtobufSerializer.DEFAULT.write(bean));
 	}
 
 	@Test void c02_beanGetterExceptionIgnored() throws Exception {

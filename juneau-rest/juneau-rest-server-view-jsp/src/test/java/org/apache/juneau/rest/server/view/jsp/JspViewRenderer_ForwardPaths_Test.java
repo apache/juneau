@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.jsp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -187,7 +189,7 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 		return (ServletContext) Proxy.newProxyInstance(
 			JspViewRenderer_ForwardPaths_Test.class.getClassLoader(),
 			new Class<?>[] { ServletContext.class },
-			(proxy, method, args) -> "getRequestDispatcher".equals(method.getName()) ? dispatcher : null);
+			(proxy, method, args) -> eq(method.getName(), "getRequestDispatcher") ? dispatcher : null);
 	}
 
 	@Test void a0_nonJspViewContent_returnsNextAndFallsThroughToPojoSerializer() throws Exception {

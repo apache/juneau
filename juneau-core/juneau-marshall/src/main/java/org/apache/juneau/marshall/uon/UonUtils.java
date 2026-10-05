@@ -169,6 +169,9 @@ public class UonUtils {
 		return out;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Single-pass number-literal scanner; splitting would obscure the grammar.
+	})
 	private static boolean isUonNumberLiteral(String s) {
 		if (isEmpty(s))
 			return false;

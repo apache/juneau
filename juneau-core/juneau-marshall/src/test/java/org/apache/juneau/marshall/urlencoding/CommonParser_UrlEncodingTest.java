@@ -29,8 +29,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
-	"unchecked", // Cast from Object to LinkedList in test
-	"serial" // Serialization not relevant
+	"serial", // Serialization not relevant
+	"unchecked" // Cast from Object to LinkedList in test
 })
 class CommonParser_UrlEncodingTest extends TestBase {
 

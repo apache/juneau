@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -51,19 +50,15 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
-	"rawtypes", // Raw types necessary for generic type handling
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2177", // Private readIntoBean/readIntoCollection/readIntoMap intentionally reuse the names of XmlParserSession methods with HTML-specific logic
+	"java:S3776", // readAnything, readTableIntoCollection and skipTag branch over HTML tag and element types
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class HtmlParserSession extends XmlParserSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-
-	// HTML tag name constants
-	private static final String TAG_array = "array";
-	private static final String TAG_object = "object";
 
 	/**
 	 * Builder class.
@@ -79,7 +74,7 @@ public class HtmlParserSession extends XmlParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -100,7 +95,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(HtmlParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private static String getAttribute(XmlReader r, String name, String def) {
@@ -186,9 +181,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at outer START_ELEMENT.
 	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTML parsing with type detection
-	})
 	private <T> T readAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
@@ -310,7 +302,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 		} else if (tag == P) {
 			String text = getElementText(r);
-			if (! "No Results".equals(text))
+			if (neq(text, "No Results"))
 				isValid = false;
 			skipTag(r, X_P);
 
@@ -324,18 +316,18 @@ public class HtmlParserSession extends XmlParserSession {
 
 		} else if (tag == TABLE) {
 
-			String typeName = getAttribute(r, getBeanTypePropertyName(eType), TAG_object);
+			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "object");
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
 
 			if (nn(cm)) {
 				sType = eType = cm;
-				typeName = sType.isCollectionOrArray() ? TAG_array : TAG_object;
-			} else if (! TAG_array.equals(typeName)) {
+				typeName = sType.isCollectionOrArray() ? "array" : "object";
+			} else if (neq(typeName, "array")) {  // Q:  Use Shorts?
 				// Type name could be a subtype name.
-				typeName = sType.isCollectionOrArray() ? TAG_array : TAG_object;
+				typeName = sType.isCollectionOrArray() ? "array" : "object";
 			}
 
-			if (typeName.equals(TAG_object)) {
+			if (typeName.equals("object")) {
 				if (sType.isObject()) {
 					o = readIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(builder)) {
@@ -354,7 +346,7 @@ public class HtmlParserSession extends XmlParserSession {
 				}
 				skipTag(r, X_TABLE);
 
-			} else if (typeName.equals(TAG_array)) {
+			} else if (typeName.equals("array")) {
 				if (sType.isObject())
 					o = readTableIntoCollection(r, (Collection)newGenericList(), sType, pMeta);
 				else if (sType.isCollection())
@@ -371,7 +363,7 @@ public class HtmlParserSession extends XmlParserSession {
 			}
 
 		} else if (tag == UL) {
-			String typeName = getAttribute(r, getBeanTypePropertyName(eType), TAG_array);
+			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "array");
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
 			if (nn(cm))
 				sType = eType = cm;
@@ -406,9 +398,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTML bean parsing
-	})
 	private <T> BeanMap<T> readIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		var pb = swapParentBean(m.getBean(false));
 		try {
@@ -455,9 +444,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings({
-		"java:S2177" // Intentional: HtmlParserSession provides its own private readIntoCollection() with HTML-specific logic
-	})
 	private <E> Collection<E> readIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
@@ -477,9 +463,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings({
-		"java:S2177" // Intentional: HtmlParserSession provides its own private readIntoMap() with HTML-specific logic
-	})
 	private <K,V> Map<K,V> readIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
@@ -512,9 +495,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTML table parsing into collection
-	})
 	private <E> Collection<E> readTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -625,7 +605,7 @@ public class HtmlParserSession extends XmlParserSession {
 		return l;
 	}
 
-	/*
+	/**
 	 * Skips over the current element and advances to the next element.
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
@@ -673,7 +653,7 @@ public class HtmlParserSession extends XmlParserSession {
 	private HtmlTag skipToData(XmlReader r) throws ParseException, XMLStreamException {
 		while (true) {
 			var event = r.next();
-			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
+			if (event == START_ELEMENT && eq(r.getLocalName(), "div") && eq(r.getAttributeValue(null, "id"), "data")) {
 				r.nextTag();
 				event = r.getEventType();
 				var isEmpty = (event == END_ELEMENT);
@@ -762,9 +742,6 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	@Override /* Overridden from XmlParserSession */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for HTML text parsing with whitespace handling
-	})
 	protected String readText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();

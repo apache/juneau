@@ -52,12 +52,10 @@ import org.apache.juneau.marshall.jsonschema.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for HtmlSchemaSerializer hierarchy
-	"java:S115"  // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlSchemaSerializer extends HtmlSerializer {
-
-	// Property name constants
-	private static final String PROP_generator = "generator";
 
 	/**
 	 * Builder class.
@@ -334,7 +332,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	@Override /* Overridden from HtmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_generator, generator);
+			.a("generator", generator);
 	}
 
 	JsonSchemaGenerator getGenerator() { return generator; }

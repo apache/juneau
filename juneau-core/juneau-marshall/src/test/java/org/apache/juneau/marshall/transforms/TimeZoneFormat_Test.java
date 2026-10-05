@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -38,7 +39,7 @@ class TimeZoneFormat_Test {
 	@Test void a02_offsetVariant() {
 		var off = TimeZoneFormat.OFFSET.format(PST);
 		assertNotNull(off);
-		assertTrue(off.startsWith("-") || off.equals("Z"), "Unexpected offset: " + off);
+		assertTrue(off.startsWith("-") || eq(off, "Z"), "Unexpected offset: " + off);
 	}
 
 	@Test void a03_nameVariants() {

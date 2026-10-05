@@ -480,8 +480,8 @@ class BctAssertions_Test extends TestBase {
 			var map = m("count", 42, "enabled", true);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertMap(() -> "Custom predicate message", map, (Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
-				(Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("enabled") && entry.getValue().equals(true)));
+			assertDoesNotThrow(() -> assertMap(() -> "Custom predicate message", map, (Predicate<Map.Entry<String,Object>>)entry -> eq(entry.getKey(), "count") && entry.getValue().equals(42),
+				(Predicate<Map.Entry<String,Object>>)entry -> eq(entry.getKey(), "enabled") && entry.getValue().equals(true)));
 
 			// Test failed predicate validation
 			var singleEntryMap = m("count", 1);

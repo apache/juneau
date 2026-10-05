@@ -115,9 +115,9 @@ public class PropertyExtractors {
 				}
 				return l.get(index);
 			}
-			if ("length".equals(name))
+			if (eq(name, "length"))
 				return l.size();
-			if ("size".equals(name))
+			if (eq(name, "size"))
 				return l.size();
 			return super.extract(converter, o, name);
 		}
@@ -177,7 +177,7 @@ public class PropertyExtractors {
 				name = null;
 			if (m.containsKey(name))
 				return m.get(name);
-			if ("size".equals(name))
+			if (eq(name, "size"))
 				return m.size();
 			return super.extract(converter, o, name);
 		}
@@ -224,9 +224,9 @@ public class PropertyExtractors {
 		}
 
 		@SuppressWarnings({
-			"null", // Intentional brain method.
 			"java:S3011", // Reflection access required for framework functionality
 			"java:S3776", // Cognitive complexity acceptable for this specific logic
+			"null" // Intentional brain method.
 		})
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
@@ -243,9 +243,9 @@ public class PropertyExtractors {
 				}
 				if (o instanceof Map.Entry<?,?> me) {
 					// Reflection to classes inside java.util are restricted in Java 9+.
-					if ("key".equals(name))
+					if (eq(name, "key"))
 						return me.getKey();
-					if ("value".equals(name))
+					if (eq(name, "value"))
 						return me.getValue();
 				}
 				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get" + n) && x.getParameterCount() == 0).findFirst().orElse(null);
@@ -253,7 +253,7 @@ public class PropertyExtractors {
 					m.setAccessible(true);
 					return m.invoke(o);
 				}
-				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
+				m = Arrays.stream(c.getMethods()).filter(x -> eq(x.getName(), "get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
 				if (nn(m)) {
 					m.setAccessible(true);
 					return m.invoke(o, name);

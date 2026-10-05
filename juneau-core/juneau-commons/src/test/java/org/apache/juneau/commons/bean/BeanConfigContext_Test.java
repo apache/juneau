@@ -251,9 +251,6 @@ class BeanConfigContext_Test extends TestBase {
 	// copy()
 	//====================================================================================================
 
-	@SuppressWarnings({
-		"java:S5961" // Comprehensive single-feature coverage: verifies copy() preserves every configuration field.
-	})
 	@Test
 	void d01_copy_preservesAllValues() {
 		var store = new BasicBeanStore(null);

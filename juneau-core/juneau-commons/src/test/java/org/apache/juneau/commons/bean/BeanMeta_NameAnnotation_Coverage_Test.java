@@ -39,11 +39,13 @@ import org.junit.jupiter.api.*;
  * javadoc on both methods explicitly describes {@code @Name} handling as part of their contract even though no
  * production caller can trigger it.
  */
+@SuppressWarnings({
+	"unused" // paramHolder()'s parameter exists only to carry a real @Name annotation, and the method is a reflection target that is never invoked
+})
 class BeanMeta_NameAnnotation_Coverage_Test extends TestBase {
 
 	// A dummy parameter-annotated holder - @Name can only ever be placed on a parameter, so this is the only
 	// way to obtain a real (non-mock) Name annotation instance to hand to bpName()/name() directly.
-	@SuppressWarnings("unused")
 	private static void paramHolder(@Name("theName") String p) { /* never invoked - reflection target only */ }
 
 	private static Name syntheticNameAnnotation() throws Exception {
@@ -85,7 +87,6 @@ class BeanMeta_NameAnnotation_Coverage_Test extends TestBase {
 
 	// A @Name whose value() is blank - name(AnnotationInfo)'s Name-branch guard is `ine(n.value())`
 	// (is-not-empty), so a blank value must return null rather than the empty string.
-	@SuppressWarnings("unused")
 	private static void blankParamHolder(@Name("") String p) { /* never invoked - reflection target only */ }
 
 	@Test

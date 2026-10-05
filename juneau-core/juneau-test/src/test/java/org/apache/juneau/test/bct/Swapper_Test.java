@@ -148,7 +148,7 @@ class Swapper_Test extends TestBase {
 		@Test
 		void c02_nullOutputHandling() {
 			Swapper<String> nullReturning = (converter, str) -> {
-				if ("return_null".equals(str)) return null;
+				if (eq(str, "return_null")) return null;
 				return str;
 			};
 
@@ -161,7 +161,7 @@ class Swapper_Test extends TestBase {
 		@Test
 		void c03_exceptionHandling() {
 			Swapper<String> throwing = (converter, str) -> {
-				if ("ERROR".equals(str)) {
+				if (eq(str, "ERROR")) {
 					throw new RuntimeException("Intentional test exception");
 				}
 				return str;
@@ -436,8 +436,9 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	static class SwapperMethods {
-		// 'converter' is required by the Swapper functional-interface signature (used as a method reference).
-		@SuppressWarnings("unused")
+		@SuppressWarnings({
+			"unused" // 'converter' is required by the Swapper functional-interface signature (used as a method reference).
+		})
 		static String addPrefix(BeanConverter converter, String str) {
 			return "PREFIX:" + str;
 		}

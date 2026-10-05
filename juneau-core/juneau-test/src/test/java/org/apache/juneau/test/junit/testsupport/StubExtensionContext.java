@@ -147,8 +147,7 @@ public final class StubExtensionContext {
 
 		@Override
 		@SuppressWarnings({
-			"unchecked", // proxy-level dispatch — types are validated by JUnit's interface contract
-			"rawtypes"
+			"unchecked" // The Function arguments arrive as Object through the proxy; they follow JUnit's Store.computeIfAbsent contract.
 		})
 		public Object invoke(Object proxy, Method method, Object[] args) {
 			var name = method.getName();
@@ -171,10 +170,10 @@ public final class StubExtensionContext {
 						return typeKey.cast(backing.computeIfAbsent(typeKey, k -> instantiate(typeKey)));
 					}
 					if (args.length == 2) {
-						var fn = (Function) args[1];
+						var fn = (Function<Object,Object>) args[1];
 						return backing.computeIfAbsent(args[0], fn::apply);
 					}
-					var fn2 = (Function) args[1];
+					var fn2 = (Function<Object,Object>) args[1];
 					var typed = backing.computeIfAbsent(args[0], fn2::apply);
 					return ((Class<?>) args[2]).cast(typed);
 				case "equals":

@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -117,18 +116,12 @@ import java.util.function.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Set/Iterable types used in utility methods where element type is not statically known
+	"java:S1168", // build() and buildFiltered() return null when sparse() is set and the set is empty
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw Set/Iterable types used in utility methods where element type is not statically known
+	"unchecked" // Element casts such as (E)o in the builder are guarded by the builder's element-type contract
 })
 public class Sets<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
-	private static final String ARG_elementFunction = "elementFunction";
-	private static final String ARG_elementType = "elementType";
-	private static final String ARG_filter = "filter";
-	private static final String ARG_value = "value";
-	private static final String ARG_values = "values";
 
 	/**
 	 * Static creator.
@@ -138,7 +131,7 @@ public class Sets<E> {
 	 * @return A new builder.
 	 */
 	public static <E> Sets<E> create(Class<E> elementType) {
-		return new Sets<>(assertArgNotNull(ARG_elementType, elementType));
+		return new Sets<>(reqnn("elementType", elementType));
 	}
 
 	private Set<E> set;
@@ -158,7 +151,7 @@ public class Sets<E> {
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
 	public Sets(Class<E> elementType) {
-		this.elementType = assertArgNotNull(ARG_elementType, elementType);
+		this.elementType = reqnn("elementType", elementType);
 	}
 
 	/**
@@ -189,11 +182,8 @@ public class Sets<E> {
 	 * @param values The values to add to this set.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for varargs addition
-	})
 	public Sets<E> add(E...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -308,9 +298,6 @@ public class Sets<E> {
 	 *
 	 * @return The built set, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168"  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)
-	})
 	public Set<E> build() {
 		if (sparse && ie(set))
 			return null;
@@ -397,9 +384,6 @@ public class Sets<E> {
 	 *
 	 * @return The built set as a {@link FilteredSet}, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
-	@SuppressWarnings({
-		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
-	})
 	public FilteredSet<E> buildFiltered() {
 		var s = build();
 		if (s == null)  // sparse mode and empty
@@ -421,7 +405,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> elementFunction(Function<Object,E> elementFunction) {
-		this.elementFunction = assertArgNotNull(ARG_elementFunction, elementFunction);
+		this.elementFunction = reqnn("elementFunction", elementFunction);
 		return this;
 	}
 
@@ -432,7 +416,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> elementType(Class<E> value) {
-		elementType = assertArgNotNull(ARG_value, value);
+		elementType = reqnn("value", value);
 		return this;
 	}
 
@@ -519,7 +503,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> filtered(Predicate<E> filter) {
-		Predicate<E> newFilter = assertArgNotNull(ARG_filter, filter);
+		Predicate<E> newFilter = reqnn("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -536,9 +520,6 @@ public class Sets<E> {
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for sorted set creation
-	})
 	public Sets<E> sorted() {
 		return sorted((Comparator<E>)Comparator.naturalOrder());
 	}
@@ -554,7 +535,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> sorted(Comparator<E> comparator) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		ordered = false;
 		return this;
 	}
@@ -713,9 +694,6 @@ public class Sets<E> {
 	 * @param o The object to convert.
 	 * @return The converted element, or <jk>null</jk> if conversion is not possible.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to E for element conversion
-	})
 	private E convertElement(Object o) {
 		if (elementType.isInstance(o))
 			return (E)o;

@@ -18,7 +18,7 @@ package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.collections.CacheMode.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.*;
@@ -150,12 +150,10 @@ import org.apache.juneau.commons.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S5164" // Cleanup method provided: cleanup()
 })
 public class Cache<K,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_supplier = "supplier";
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -468,9 +466,6 @@ public class Cache<K,V> {
 	// equality for array keys.  The static key type is therefore Object.
 	// If threadLocal is true, this is null and threadLocalMap is used instead.
 	private final Map<Object,V> map;
-	@SuppressWarnings({
-		"java:S5164" // Cleanup method provided: cleanup()
-	})
 	private final ThreadLocal<Map<Object,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
@@ -492,9 +487,6 @@ public class Cache<K,V> {
 	 */
 	private final Map<K,Tuple1<K>> wrapperCache;
 
-	@SuppressWarnings({
-		"java:S5164" // Cleanup method provided: cleanup()
-	})
 	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
 
 	private final int maxSize;
@@ -666,7 +658,7 @@ public class Cache<K,V> {
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
-		assertArgNotNull(ARG_supplier, supplier);
+		reqnn("supplier", supplier);
 		if (disableCaching)
 			return supplier.get();
 		var m = getMap();

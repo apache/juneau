@@ -204,6 +204,9 @@ public interface SwaggerProvider {
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
 	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
 	 */
+	@SuppressWarnings({
+		"java:S9398" // Public annotation-default marker; moving breaks API.
+	})
 	public abstract class Void implements SwaggerProvider {}
 
 	/**

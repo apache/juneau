@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -68,8 +67,8 @@ import org.apache.juneau.rest.client.remote.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"resource", // transport is closed in RestClient.close(); this class owns it
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // transport is closed in RestClient.close(); this class owns it
 })
 public final class RestClient implements Closeable {
 
@@ -87,10 +86,6 @@ public final class RestClient implements Closeable {
 		BodyConverter.of(File.class, file -> TransportBody.of(FileBody.of(file)))
 	);
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_method = "method";
-	private static final String ARG_url = "url";
-
 	final HttpTransport transport;
 	final List<HttpHeader> defaultHeaders;
 	final List<HttpPart> defaultQueryData;
@@ -106,7 +101,7 @@ public final class RestClient implements Closeable {
 	final boolean allowPrivateUrls;
 
 	private RestClient(Builder builder) {
-		this.transport = assertArgNotNull("transport",
+		this.transport = reqnn("transport",
 			builder.transport != null ? builder.transport : discoverTransport());
 		this.defaultHeaders = List.copyOf(builder.defaultHeaders);
 		this.defaultQueryData = List.copyOf(builder.defaultQueryData);
@@ -155,14 +150,13 @@ public final class RestClient implements Closeable {
 	}
 
 	private static HttpTransport discoverTransport() {
-		var providers = new ArrayList<HttpTransportProvider>();
-		for (var p : ServiceLoader.load(HttpTransportProvider.class))
-			if (p.isAvailable())
-				providers.add(p);
-		if (providers.isEmpty())
-			return JavaHttpTransport.create();  // defensive fallback if META-INF/services was stripped (e.g. uber-jar shading)
-		providers.sort(Comparator.comparingInt(HttpTransportProvider::getPriority));
-		return providers.get(0).create();
+		// Lowest priority value wins; ties resolve to the first discovered provider.
+		return ServiceLoader.load(HttpTransportProvider.class).stream()
+			.map(ServiceLoader.Provider::get)
+			.filter(HttpTransportProvider::isAvailable)
+			.min(Comparator.comparingInt(HttpTransportProvider::getPriority))
+			.map(HttpTransportProvider::create)
+			.orElseGet(JavaHttpTransport::create);  // defensive fallback if META-INF/services was stripped (e.g. uber-jar shading)
 	}
 
 	/**
@@ -247,8 +241,8 @@ public final class RestClient implements Closeable {
 	 * @return A new {@link RestRequest}. Never <jk>null</jk>.
 	 */
 	public RestRequest request(String method, String url) {
-		assertArgNotNull(ARG_method, method);
-		assertArgNotNull(ARG_url, url);
+		reqnn("method", method);
+		reqnn("url", url);
 		var resolvedUrl = rootUrl != null && !url.contains("://") ? rootUrl + url : url;
 		return new RestRequest(this, method, resolvedUrl);
 	}

@@ -32,7 +32,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // Mockito mocks / in-memory streams; nothing to close.
+@SuppressWarnings({
+	"resource" // Mockito mocks / in-memory streams; nothing to close.
+})
 class CachingHttpServletRequest_Test {
 
 	private static HttpServletRequest mockRequest(byte[] content) throws IOException {

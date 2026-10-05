@@ -49,6 +49,9 @@ import java.util.function.*;
  * 	<li class='jc'>{@link BeanStore} - Read-only bean lookup interface
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Fluent methods return the store itself (an AutoCloseable); callers chaining registrations must not be flagged for not closing each returned reference.
+})
 public interface WritableBeanStore extends BeanStore, AutoCloseable {
 
 	/**
@@ -59,9 +62,6 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return The bean.
 	 */
-	@SuppressWarnings({
-		"resource" // addBean returns this; the discarded return is the store the caller already holds
-	})
 	default <T> T add(Class<T> beanType, T bean) {
 		addBean(beanType, bean);
 		return bean;
@@ -76,9 +76,6 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean.
 	 */
-	@SuppressWarnings({
-		"resource" // addBean returns this; the discarded return is the store the caller already holds
-	})
 	default <T> T add(Class<T> beanType, T bean, String name) {
 		addBean(beanType, bean, name);
 		return bean;
@@ -233,9 +230,6 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param configTypes The configuration types.  Can be <jk>null</jk>, in which case no action is taken.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"resource" // registerConfiguration returns this; the discarded return is the store the caller already holds
-	})
 	default WritableBeanStore registerConfigurations(Class<?>... configTypes) {
 		if (configTypes != null)
 			for (var c : configTypes)

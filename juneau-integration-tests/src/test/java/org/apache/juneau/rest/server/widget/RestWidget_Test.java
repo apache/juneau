@@ -27,6 +27,9 @@ import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"serial" // Test-only servlet; no serialVersionUID needed.
+})
 class RestWidget_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -93,9 +96,6 @@ class RestWidget_Test extends TestBase {
 		widgets={PoweredByApache.class},
 		footer="$W{PoweredByApache}"
 	)
-	@SuppressWarnings({
-		"serial" // Test-only servlet; no serialVersionUID needed.
-	})
 	public static class C extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
 		public String get() { return "OK"; }
@@ -117,9 +117,6 @@ class RestWidget_Test extends TestBase {
 		widgets={PoweredByJuneau.class},
 		footer="$W{PoweredByJuneau}"
 	)
-	@SuppressWarnings({
-		"serial" // Test-only servlet; no serialVersionUID needed.
-	})
 	public static class D extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
 		public String get() { return "OK"; }
@@ -141,9 +138,6 @@ class RestWidget_Test extends TestBase {
 		widgets={ThemeMenuItem.class},
 		navlinks={"$W{ThemeMenuItem}"}
 	)
-	@SuppressWarnings({
-		"serial" // Test-only servlet; no serialVersionUID needed.
-	})
 	public static class E extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
 		public String get() { return "OK"; }
@@ -168,9 +162,6 @@ class RestWidget_Test extends TestBase {
 		widgets={ContentTypeMenuItem.class},
 		navlinks={"$W{ContentTypeMenuItem}"}
 	)
-	@SuppressWarnings({
-		"serial" // Test-only servlet; no serialVersionUID needed.
-	})
 	public static class F extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
 		public String get() { return "OK"; }
@@ -191,9 +182,6 @@ class RestWidget_Test extends TestBase {
 		widgets={QueryMenuItem.class},
 		navlinks={"$W{QueryMenuItem}"}
 	)
-	@SuppressWarnings({
-		"serial" // Test-only servlet; no serialVersionUID needed.
-	})
 	public static class G extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
 		public String get() { return "OK"; }
@@ -203,6 +191,17 @@ class RestWidget_Test extends TestBase {
 		var c = MockRestClient.build(G.class);
 		var html = c.get("/").accept("text/html").run().assertStatus(200).getContent().asString();
 		assertContains(html, "query");
+	}
+
+	@Test void g02_queryMenuItem_rendersBeanQueryFieldNames() throws Exception {
+		var c = MockRestClient.build(G.class);
+		var html = c.get("/").accept("text/html").run().assertStatus(200).getContent().asString();
+		assertContains(html, "name=\"search\"");
+		assertContains(html, "name=\"view\"");
+		assertContains(html, "name=\"sort\"");
+		assertContains(html, "name='position'");
+		assertContains(html, "name='limit'");
+		assertFalse(html.contains("field-ignore-case"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

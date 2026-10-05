@@ -23,7 +23,7 @@ import java.util.regex.*;
 
 /**
  * Test-only, <b>private</b> source scanner enforcing the {@code <script>}-JSON adoption of
- * {@link StringUtils#escapeForScript(String)} across the Juneau framework's own code (TODO-431 Phase 3).
+ * {@link StringUtils#escapeForScript(String)} across the Juneau framework's own code.
  *
  * <p>
  * Not shipped and deliberately not public API: it guards the framework's own raw-text {@code <script>} sinks and is

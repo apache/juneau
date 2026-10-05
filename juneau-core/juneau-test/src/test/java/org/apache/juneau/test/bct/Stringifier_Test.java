@@ -159,7 +159,7 @@ class Stringifier_Test extends TestBase {
 		@Test
 		void c03_exceptionHandling() {
 			Stringifier<String> throwing = (converter, str) -> {
-				if ("ERROR".equals(str)) {
+				if (eq(str, "ERROR")) {
 					throw new RuntimeException("Intentional test exception");
 				}
 				return str;
@@ -387,8 +387,9 @@ class Stringifier_Test extends TestBase {
 	// ====================================================================================================
 
 	static class StringifierMethods {
-		// 'converter' is required by the Stringifier functional-interface signature (used as a method reference).
-		@SuppressWarnings("unused")
+		@SuppressWarnings({
+			"unused" // 'converter' is required by the Stringifier functional-interface signature (used as a method reference).
+		})
 		static String addPrefix(BeanConverter converter, String str) {
 			return "PREFIX:" + str;
 		}

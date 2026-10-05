@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.prototext;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -37,17 +36,15 @@ import org.apache.juneau.marshall.utils.*;
  * Session for parsing Protobuf Text Format into POJOs.
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic Map/List handling
-	"unchecked", // Type erasure requires unchecked casts in convertValue
+	"java:S135", // Multiple breaks acceptable in parse loop
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for readMessage
 	"java:S6541", // Brain method acceptable for readMessage
-	"java:S135", // Multiple breaks acceptable in parse loop
-	"java:S115", // ARG_ prefix follows framework convention
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"rawtypes", // Raw types necessary for generic Map/List handling
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts in convertValue
 })
 public class PrototextParserSession extends ReaderParserSession implements RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for Prototext parser session.
@@ -55,7 +52,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		protected Builder(PrototextParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -72,7 +69,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	 * @return A new builder.
 	 */
 	public static Builder create(PrototextParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	protected PrototextParserSession(Builder builder) {
@@ -260,15 +257,15 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				var s = tok.stringValue();
 				if (s == null) yield null;
 				var lower = s.toLowerCase(Locale.ROOT);
-				if (lower.equals("true") || lower.equals("t") || lower.equals("1"))
+				if (eqa(lower, "true", "t", "1"))
 					yield Boolean.TRUE;
-				if (lower.equals("false") || lower.equals("f") || lower.equals("0"))
+				if (eqa(lower, "false", "f", "0"))
 					yield Boolean.FALSE;
-				if (lower.equals("inf") || lower.equals("infinity"))
+				if (eqa(lower, "inf", "infinity"))
 					yield Double.POSITIVE_INFINITY;
-				if (lower.equals("-inf"))
+				if (eq(lower, "-inf"))
 					yield Double.NEGATIVE_INFINITY;
-				if (lower.equals("nan"))
+				if (eq(lower, "nan"))
 					yield Double.NaN;
 				yield s;
 			}

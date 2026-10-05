@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.jsonl;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,8 +46,8 @@ class JsonlMediaType_Test {
 	void a02_acceptsAllMediaTypes() {
 		var types = new ArrayList<String>();
 		JsonlSerializer.DEFAULT.forEachAcceptMediaType(mt -> types.add(mt.getType() + "/" + mt.getSubType()));
-		assertTrue(types.stream().anyMatch(t -> "application/jsonl".equals(t) || t.contains("jsonl")), "Expected application/jsonl: " + types);
-		assertTrue(types.stream().anyMatch(t -> "application/x-ndjson".equals(t) || t.contains("ndjson")), "Expected application/x-ndjson: " + types);
+		assertTrue(types.stream().anyMatch(t -> eq(t, "application/jsonl") || t.contains("jsonl")), "Expected application/jsonl: " + types);
+		assertTrue(types.stream().anyMatch(t -> eq(t, "application/x-ndjson") || t.contains("ndjson")), "Expected application/x-ndjson: " + types);
 		assertTrue(types.stream().anyMatch("text/jsonl"::equals), "Expected text/jsonl: " + types);
 	}
 

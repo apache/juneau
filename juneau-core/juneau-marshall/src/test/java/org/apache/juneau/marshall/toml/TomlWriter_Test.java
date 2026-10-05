@@ -29,8 +29,8 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({
-	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+	"java:S8694", // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class TomlWriter_Test extends TestBase {
 

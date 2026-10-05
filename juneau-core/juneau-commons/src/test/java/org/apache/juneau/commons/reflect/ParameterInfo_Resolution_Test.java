@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"unused"    // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParameterInfo_Resolution_Test extends TestBase {
 

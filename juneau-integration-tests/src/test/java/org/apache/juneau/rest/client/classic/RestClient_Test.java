@@ -44,8 +44,8 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S1186", // Empty test method intentional for framework testing
 	"deprecation", // Uses deprecated API
+	"java:S1186", // Empty test method intentional for framework testing
 	"removal" // Tests deprecated API for backward compatibility
 })
 class RestClient_Test extends TestBase {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.net.*;
 import java.net.http.*;
@@ -81,6 +83,8 @@ import org.apache.juneau.http.remote.*;
 })
 public final class JavaHttpTransport implements HttpTransport {
 
+	private static final String RESTRICTED_HEADERS_PROPERTY = "jdk.httpclient.allowRestrictedHeaders";
+
 	static {
 		// Best-effort: the JDK HttpClient rejects a caller-set "Host" header by default -- a fixed, JVM-wide,
 		// first-touch-wins setting cached the first time any HttpRequest.Builder.header() call reaches the JDK's
@@ -89,11 +93,12 @@ public final class JavaHttpTransport implements HttpTransport {
 		// original Host header for virtual-hosted targets after the IP-literal rewrite. If some other code
 		// already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of
 		// silently sending the wrong Host.
-		var existing = System.getProperty("jdk.httpclient.allowRestrictedHeaders");
+		var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);
 		if (existing == null || existing.isBlank())
-			System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
+			System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");
 		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
-			System.setProperty("jdk.httpclient.allowRestrictedHeaders", existing + ",host");
+			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");
+		// Q: Can we use commons settings for accessing system properties?
 	}
 
 	private final HttpClient httpClient;
@@ -159,7 +164,7 @@ public final class JavaHttpTransport implements HttpTransport {
 	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
 		var uri = request.getUri();
 		var scheme = uri.getScheme();
-		if (! "http".equalsIgnoreCase(scheme))
+		if (neqic("http", scheme))
 			throw new TransportException("JavaHttpTransport cannot preserve TLS SNI/hostname verification while "
 				+ "pinning the resolved address (the JDK HttpClient has no connect-time/DNS SPI); refusing "
 				+ "(fail closed) a policy-covered HTTPS request: " + uri

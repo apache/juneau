@@ -22,7 +22,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * [TODO-401] Bug B: {@link RestSession#run()}'s NotFound status sentinel must not depend on the container's
+ * [legacy item 401] Bug B: {@link RestSession#run()}'s NotFound status sentinel must not depend on the container's
  * pre-dispatch default status code.
  *
  * <p>

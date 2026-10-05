@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.guard;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
@@ -99,7 +98,8 @@ import org.apache.juneau.rest.server.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are HTTP header names and rate-limit response field names; intentional
+	"java:S1192", // Duplicate string literals are HTTP header names and rate-limit response field names; intentional
+	"java:S3516" // guard() and isRequestAllowed() always return true by contract; denial is signalled by throwing tooManyRequests
 })
 public class RateLimitGuard extends RestGuard {
 
@@ -129,7 +129,7 @@ public class RateLimitGuard extends RestGuard {
 	 * @param b The builder configuring this guard.  Must not be <jk>null</jk>.
 	 */
 	protected RateLimitGuard(Builder b) {
-		assertArgNotNull("builder", b);
+		reqnn("builder", b);
 		if (b.permitsPerSecond <= 0.0)
 			throw new IllegalArgumentException("Argument 'permitsPerSecond' must be > 0.");
 		if (b.burst <= 0)
@@ -153,9 +153,6 @@ public class RateLimitGuard extends RestGuard {
 	}
 
 	@Override /* Overridden from RestGuard */
-	@SuppressWarnings({
-		"java:S3516" // Always returns true by design: a throttled request throws TooManyRequests (the guard's rejection signal per RestGuard's contract), so the normal-exit paths intentionally only ever return true.
-	})
 	public boolean guard(RestRequest req, RestResponse res) {
 		if (isExempt(req))
 			return true;
@@ -175,9 +172,6 @@ public class RateLimitGuard extends RestGuard {
 	}
 
 	@Override /* Overridden from RestGuard */
-	@SuppressWarnings({
-		"java:S3516" // Always returns true by design: throttling is enforced in the overridden guard() method, so this abstract-contract method intentionally never rejects on its own.
-	})
 	public boolean isRequestAllowed(RestRequest req) {
 		return true;
 	}
@@ -299,7 +293,7 @@ public class RateLimitGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder keyBy(Function<RestRequest,String> value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			keyResolver = value;
 			return this;
 		}
@@ -332,7 +326,7 @@ public class RateLimitGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder exemptPaths(String...values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			exemptPaths = new LinkedHashSet<>(Arrays.asList(values));
 			return this;
 		}
@@ -348,7 +342,7 @@ public class RateLimitGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder whenLimitExceeded(BiConsumer<RestRequest,RateLimitInfo> value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			onLimitExceeded = value;
 			return this;
 		}
@@ -364,7 +358,7 @@ public class RateLimitGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder storage(Storage value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			storage = value;
 			return this;
 		}
@@ -600,7 +594,7 @@ public class RateLimitGuard extends RestGuard {
 		 * @param nanoClock Supplies the current time in nanoseconds for refill math and idle-eviction bookkeeping.  Must not be <jk>null</jk>.
 		 */
 		InMemoryStorage(int maxKeys, LongSupplier nanoClock) {
-			assertArgNotNull("nanoClock", nanoClock);
+			reqnn("nanoClock", nanoClock);
 			if (maxKeys <= 0)
 				throw new IllegalArgumentException("Argument 'maxKeys' must be > 0.");
 			this.maxKeys = maxKeys;

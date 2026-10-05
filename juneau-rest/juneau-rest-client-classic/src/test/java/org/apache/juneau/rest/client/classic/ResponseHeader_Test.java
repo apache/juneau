@@ -65,7 +65,9 @@ class ResponseHeader_Test {
 			executor.shutdownNow();
 	}
 
-	@SuppressWarnings("resource") // Client/response instances are short-lived test fixtures.
+	@SuppressWarnings({
+		"resource" // Client/response instances are short-lived test fixtures.
+	})
 	private static RestResponse response() throws Exception {
 		var client = RestClient.create().rootUrl("http://localhost:" + port).build();
 		return client.get("/headers").run();

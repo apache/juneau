@@ -24,6 +24,9 @@ import org.apache.juneau.marshall.json.*;
 /**
  * Utility classes and methods for the {@link Json5lConfig @Json5lConfig} annotation.
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class Json5lConfigAnnotation {
 
 	private Json5lConfigAnnotation() {}
@@ -31,9 +34,6 @@ public class Json5lConfigAnnotation {
 	/**
 	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonParser.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class ParserApply extends AnnotationApplier<Json5lConfig,JsonParser.Builder> {
 
 		/**
@@ -55,9 +55,6 @@ public class Json5lConfigAnnotation {
 	/**
 	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<Json5lConfig,JsonSerializer.Builder> {
 
 		/**

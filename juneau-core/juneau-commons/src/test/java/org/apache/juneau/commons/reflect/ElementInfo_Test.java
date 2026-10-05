@@ -26,8 +26,8 @@ import org.junit.jupiter.api.*;
 
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
+	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"unused" // Private members and helper methods required for reflection testing
 })
 class ElementInfo_Test extends TestBase {

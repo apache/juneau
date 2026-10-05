@@ -25,7 +25,7 @@
  * {@code VIEW_META} JSON contract constants ({@link org.apache.juneau.rest.server.views.ViewsMixin},
  * {@link org.apache.juneau.rest.server.views.ViewTable}), region mounting
  * ({@link org.apache.juneau.rest.server.views.RegionDef}, {@link org.apache.juneau.rest.server.views.RegionTable}),
- * bulk-mutate / row-action / saved-view types, and the first-party
+ * bulk-mutate / row-action types, and the first-party
  * {@code juneau-views.js}/{@code juneau-ribbon.js}/{@code juneau-renders.js} runtime.
  *
  * <p>
@@ -34,10 +34,10 @@
  * console-ui's palette themes the shared {@code .tag.<domain>.<value>} class-name contract when present.
  *
  * <p>
- * Alongside the DataTables view it also hosts the DOM-free month-layout engine
- * ({@link org.apache.juneau.rest.server.views.CalendarLayout}) for the reusable calendar widget.
+ * Alongside the DataTables view it also hosts the reusable calendar widget.
  * A page mounts an empty {@code data-juneau-calendar} marker; the shipped
- * {@code juneau-calendar.js}/{@code juneau-calendar.css} runtime hydrates it.  The
+ * {@code juneau-calendar.js}/{@code juneau-calendar.css} runtime hydrates it, and the month layout (grid,
+ * spanning-bar lanes, chip order, "+N more") is computed client-side by <c>juneau-calendar.js</c>.  The
  * {@link org.apache.juneau.rest.server.widgets.CalendarDef} bean itself lives in {@code juneau-rest-server-widgets}
  * (bean-only, no dependency on views); views <b>composes</b> it here.
  *
@@ -93,8 +93,8 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.CalendarLayout}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.DataTablesQueryProtocol}
+ * 	<li class='jc'><c>juneau-calendar.js</c>
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.DataTablesColumns}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/manual/server-side">DataTables Server-Side Processing</a>
  * </ul>

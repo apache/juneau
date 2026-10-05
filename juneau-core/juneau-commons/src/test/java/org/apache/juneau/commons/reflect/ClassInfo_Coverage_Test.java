@@ -32,9 +32,10 @@ import org.junit.jupiter.api.*;
  * <c>ClassInfo_Test</c> - this file focuses on specific branch gaps identified via coverage.py).
  */
 @SuppressWarnings({
+	"java:S116", // Field names use underscores for test data clarity
 	"java:S1186", // Empty method bodies intentional for reflection test fixtures
-	"java:S116",  // Field names use underscores for test data clarity
-	"unused"      // Fields/methods referenced only via reflection
+	"java:S2133", // new ArrayList<String>() {}.getClass() deliberately creates an anonymous subclass only to capture its ParameterizedType generic superclass.
+	"unused" // Fields/methods referenced only via reflection
 })
 class ClassInfo_Coverage_Test extends TestBase {
 
@@ -142,7 +143,7 @@ class ClassInfo_Coverage_Test extends TestBase {
 		assertTrue(ClassInfo.of(String.class).is(NOT_ANONYMOUS));
 		// Lambdas aren't anonymous classes per Class.isAnonymousClass() - need a real anonymous class expression.
 		@SuppressWarnings({
-			"java:S2133" // An actual anonymous class (not Greeter.class) is required so isAnonymousClass() is exercised.
+			"java:S9357" // Must stay an anonymous class, not a lambda: the test exercises isAnonymousClass().
 		})
 		var anon = new Greeter() {
 			@Override
@@ -167,9 +168,6 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void f03_isChildOfType_nonClassType_false() {
-		@SuppressWarnings({
-			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
-		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(ArrayList.class).isChildOf(pt));
 	}
@@ -241,9 +239,6 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void i04_isParentOfType_nonClassType_false() {
-		@SuppressWarnings({
-			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
-		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(List.class).isParentOf(pt));
 	}
@@ -370,9 +365,6 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void l07_isAssignableFromType_nonClassType_false() {
-		@SuppressWarnings({
-			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
-		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(List.class).isAssignableFrom(pt));
 	}

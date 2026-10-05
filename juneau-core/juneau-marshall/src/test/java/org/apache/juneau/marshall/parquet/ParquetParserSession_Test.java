@@ -36,9 +36,9 @@ import org.junit.jupiter.api.*;
  *  - toArray / toCollection internal paths via different target types
  */
 @SuppressWarnings({
-	"unchecked",   // Parser returns raw types; explicit casts required for typed assertions
-	"java:S5961",  // High assertion count is acceptable in comprehensive data-driven test methods.
-	"java:S125"    // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S5961", // High assertion count is acceptable in comprehensive data-driven test methods.
+	"unchecked" // Parser returns raw types; explicit casts required for typed assertions
 })
 class ParquetParserSession_Test extends TestBase {
 

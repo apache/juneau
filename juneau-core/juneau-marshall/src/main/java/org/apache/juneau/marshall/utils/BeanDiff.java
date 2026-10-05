@@ -49,13 +49,9 @@ import org.apache.juneau.marshall.collections.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_v1)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BeanDiff {
-
-	// Property name constants
-	private static final String PROP_v1 = "v1";
-	private static final String PROP_v2 = "v2";
 
 	/**
 	 * Builder class.
@@ -195,8 +191,8 @@ public class BeanDiff {
 	 * 	<br>If <jk>null</jk>, no properties are excluded.
 	 */
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"null" // Null handling verified by context or framework
 	})
 	public <T> BeanDiff(MarshallingContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
@@ -244,8 +240,8 @@ public class BeanDiff {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return mapb_so().buildFluent()
-			.a(PROP_v1, v1)
-			.a(PROP_v2, v2);
+			.a("v1", v1)
+			.a("v2", v2);
 		// @formatter:on
 	}
 

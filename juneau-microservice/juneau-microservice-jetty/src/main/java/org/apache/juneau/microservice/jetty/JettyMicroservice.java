@@ -56,6 +56,7 @@ import jakarta.servlet.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S112", // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
 	"resource" // beanStore lifetime is managed by the returned Microservice; not an independent resource.
 })
 public final class JettyMicroservice {
@@ -75,9 +76,6 @@ public final class JettyMicroservice {
 	 * @return The started {@link Microservice} instance.  Callers typically chain {@link Microservice#join()}.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
-	})
 	public static Microservice run(String[] args, Servlet rootServlet) throws Exception {
 		return run(args, rootServlet, true);
 	}
@@ -100,9 +98,6 @@ public final class JettyMicroservice {
 	 * @return The started {@link Microservice} instance.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
-	})
 	public static Microservice run(String[] args, Servlet rootServlet, boolean startConsole) throws Exception {
 		var beanStore = new BasicBeanStore();
 		beanStore.addBean(Servlet.class, rootServlet);
@@ -129,9 +124,6 @@ public final class JettyMicroservice {
 	 * @return The started {@link Microservice} instance.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
-	})
 	public static Microservice run(String[] args, WritableBeanStore beanStore, boolean startConsole, Class<?>... configurations) throws Exception {
 		var ms = Microservice
 			.create()

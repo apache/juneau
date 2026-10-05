@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.io.*;
 import java.lang.management.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
@@ -113,9 +114,7 @@ public class AdminProvider {
 			entry.put("state", t.getState().toString());
 			entry.put("daemon", t.isDaemon());
 			entry.put("priority", t.getPriority());
-			var stack = new ArrayList<String>();
-			for (var f : e.getValue())
-				stack.add(f.toString());
+			var stack = Arrays.stream(e.getValue()).map(StackTraceElement::toString).collect(Collectors.toCollection(ArrayList::new));
 			entry.put("stack", stack);
 			out.add(entry);
 		}
@@ -238,10 +237,7 @@ public class AdminProvider {
 	}
 
 	private boolean isExcludedThread(String threadName) {
-		for (var prefix : threadNamePrefixExclude)
-			if (threadName != null && threadName.startsWith(prefix))
-				return true;
-		return false;
+		return threadName != null && threadNamePrefixExclude.stream().anyMatch(threadName::startsWith);
 	}
 
 	private static Map<String,RateLimitGuard> collectRateLimitGuards(BeanStore bs) {

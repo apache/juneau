@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link ToolkitPackRegistry}: the built-in {@code "views"} pack emits CSS before JS with
- * the page-cards runtime last, an empty name list resolves to nothing, an unknown name fails loud, and the
+ * the helpers runtime last, an empty name list resolves to nothing, an unknown name fails loud, and the
  * per-pack {@link ToolkitPackRegistry.AssetUrlResolver} seam (the same seam
  * {@code ConsoleFreemarkerMixin.Builder.registerToolkitPack} feeds) is honored.
  *
@@ -64,19 +65,20 @@ class ToolkitPackRegistry_Test extends TestBase {
 		return -1;
 	}
 
-	@Test void views_order_cssThenJs_pageCardsLast() throws Exception {
+	@Test void views_order_cssThenJs_helpersLast_noPageCards() throws Exception {
 		var reg = new ToolkitPackRegistry();
-		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest());
+		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest(), true);
 
 		// CSS: views.css then config.css.
 		assertTrue(indexOfContaining(r.cssUrls(), "juneau-views.css") >= 0, () -> r.cssUrls().toString());
 		assertTrue(indexOfContaining(r.cssUrls(), "juneau-config.css") >= 0, () -> r.cssUrls().toString());
 
-		// JS load order is a contract: renders, icons, ribbon, views, config, regions, helpers, page-cards LAST.
+		// JS load order is a contract: renders, icons, search, pagestate, ribbon, datatables glue, views, config,
+		// regions, helpers LAST.
 		var js = r.jsUrls();
 		var order = List.of(
-			"juneau-renders.js", "juneau-icons.js", "juneau-ribbon.js", "juneau-views.js",
-			"juneau-config.js", "juneau-regions.js", "juneau-helpers.js", "juneau-page-cards.js");
+			"juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-ribbon.js",
+			"juneau-datatables.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js", "juneau-helpers.js");
 		var prev = -1;
 		for (var name : order) {
 			var at = indexOfContaining(js, name);
@@ -85,11 +87,31 @@ class ToolkitPackRegistry_Test extends TestBase {
 			assertTrue(at > p, () -> name + " out of order in " + js);
 			prev = at;
 		}
-		// page-cards is the very last JS entry.
-		assertTrue(js.get(js.size() - 1).contains("juneau-page-cards.js"), () -> js.toString());
-		// No datatables / jQuery in the first-party pack.
-		assertEquals(-1, indexOfContaining(js, "datatables"), () -> js.toString());
-		assertEquals(-1, indexOfContaining(js, "jquery"), () -> js.toString());
+		assertTrue(js.get(js.size() - 1).contains("juneau-helpers.js"), js::toString);
+		assertEquals(-1, indexOfContaining(js, "juneau-page-cards.js"), js::toString);
+	}
+
+	@Test void views_withoutServerModeTable_omitsDataTablesGlue() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		var req = dummyRequest();
+		var views = List.of(ToolkitPackRegistry.PACK_VIEWS);
+		for (var r : List.of(reg.resolve(views, req), reg.resolve(views, req, false))) {
+			assertEquals(-1, indexOfContaining(r.jsUrls(), "datatables"), () -> r.jsUrls().toString());
+			assertTrue(indexOfContaining(r.jsUrls(), "juneau-views.js") >= 0, () -> r.jsUrls().toString());
+			assertTrue(r.jsUrls().get(r.jsUrls().size() - 1).contains("juneau-helpers.js"), () -> r.jsUrls().toString());
+		}
+	}
+
+	@Test void views_withServerModeTable_includesDataTablesGlue_neverTheDataTablesLibraryOrJquery() throws Exception {
+		// A server-mode datatables card needs window.JuneauDataTables before juneau-views.js inits it, so the views
+		// pack carries the first-party glue (cache-busted like every other asset) when the page has such a card.
+		// jQuery and the DataTables library itself stay caller-provided.
+		var js = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest(), true).jsUrls();
+		var glue = js.stream().filter(u -> u.toLowerCase().contains("datatables")).toList();
+		assertSize(1, glue);
+		assertContains("/juneau-datatables.js?v=", glue.get(0));
+		assertTrue(indexOfContaining(js, "juneau-datatables.js") < indexOfContaining(js, "juneau-views.js"), js::toString);
+		assertEquals(-1, indexOfContaining(js, "jquery"), js::toString);
 	}
 
 	@Test void calendar_isBuiltIn_resolvesThroughWidgetsMixin() throws Exception {
@@ -119,15 +141,16 @@ class ToolkitPackRegistry_Test extends TestBase {
 		// An empty (or null) name list resolves to nothing and does NOT require a request.
 		for (var names : Arrays.<List<String>>asList(List.of(), null)) {
 			var r = reg.resolve(names, null);
-			assertTrue(r.cssUrls().isEmpty(), () -> "" + r.cssUrls());
-			assertTrue(r.jsUrls().isEmpty(), () -> "" + r.jsUrls());
+			assertEmpty(r.cssUrls());
+			assertEmpty(r.jsUrls());
 		}
 	}
 
 	@Test void unknownPack_throws() throws Exception {
 		var reg = new ToolkitPackRegistry();
 		var req = dummyRequest();
-		var ex = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("nope"), req));
+		var nope = List.of("nope");
+		var ex = assertThrows(IllegalArgumentException.class, () -> reg.resolve(nope, req));
 		assertTrue(ex.getMessage().contains("Unknown toolkit pack"), ex::getMessage);
 	}
 
@@ -142,7 +165,6 @@ class ToolkitPackRegistry_Test extends TestBase {
 			List.of("/x.js", "/y.js"),
 			(req, path) -> "ECHO" + path);   // an AssetUrlResolver that never touches the request
 		var r = reg.resolve(List.of("probe"), dummyRequest());
-		assertEquals(List.of("ECHO/a.css"), r.cssUrls());
-		assertEquals(List.of("ECHO/x.js", "ECHO/y.js"), r.jsUrls());
+		assertBean(r, "cssUrls,jsUrls", "[ECHO/a.css],[ECHO/x.js,ECHO/y.js]");
 	}
 }

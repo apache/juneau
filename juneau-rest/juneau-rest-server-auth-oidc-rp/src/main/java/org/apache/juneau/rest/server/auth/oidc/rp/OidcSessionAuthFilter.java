@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -62,8 +61,8 @@ public class OidcSessionAuthFilter extends AuthFilter {
 	 * @param cookieName The session cookie name.  Must not be <jk>null</jk> or blank.
 	 */
 	public OidcSessionAuthFilter(SessionStore sessionStore, String cookieName) {
-		this.sessionStore = assertArgNotNull("sessionStore", sessionStore);
-		this.cookieName = assertArgNotNullOrBlank("cookieName", cookieName);
+		this.sessionStore = reqnn("sessionStore", sessionStore);
+		this.cookieName = reqnb("cookieName", cookieName);
 	}
 
 	@Override /* Overridden from AuthFilter */
@@ -73,7 +72,7 @@ public class OidcSessionAuthFilter extends AuthFilter {
 			return oe();
 		String value = null;
 		for (var c : cookies) {
-			if (cookieName.equals(c.getName())) {
+			if (eq(cookieName, c.getName())) {
 				value = c.getValue();
 				break;
 			}

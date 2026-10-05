@@ -86,7 +86,8 @@ public class TriXSerializer extends RdfSerializer {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S1452", // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		"java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.
 	})
 	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().triX();

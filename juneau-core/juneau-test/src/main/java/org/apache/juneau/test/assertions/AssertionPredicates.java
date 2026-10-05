@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.test.assertions.AssertionPredicate.*;
@@ -53,14 +52,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class AssertionPredicates {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_expression = "expression";
-	private static final String ARG_type = "type";
-	private static final String ARG_value = "value";
 
 	private static final Function<Object,String> TYPENAME = Shorts::cn;
 
@@ -130,7 +125,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eq(Object value) {
-		return test(x -> Objects.equals(x, value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> Shorts.eq(x, value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
@@ -172,7 +167,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> exactType(Class<?> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 
@@ -201,7 +196,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		var p = getMatchPattern(value);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
@@ -217,7 +212,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(Object value) {
-		return test(x -> ! Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> neq(x, value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
@@ -287,7 +282,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(Pattern value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		return test(x -> x != null && value.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
 	}
 
@@ -302,7 +297,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression) {
-		assertArgNotNull(ARG_expression, expression);
+		reqnn("expression", expression);
 		var p = Pattern.compile(expression);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -329,7 +324,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
-		assertArgNotNull(ARG_expression, expression);
+		reqnn("expression", expression);
 		var p = Pattern.compile(expression, flags);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -384,7 +379,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> type(Class<?> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 

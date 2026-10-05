@@ -83,11 +83,14 @@ import jakarta.servlet.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_SNAKE_CASE convention (e.g., ROOT_CONTEXT_PATH)
+	"java:S3878", // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	"resource" // The Tomcat server is held by this component and closed in onStop(); its lifecycle spans onStart/onStop, so it cannot be try-with-resources. Eclipse JDT @Owning warning is by design.
 })
 public class TomcatServerComponent implements MicroserviceListener {
 
-	@SuppressWarnings("java:S2245") // Non-security use: port-selection jitter only; not used for tokens, session IDs, or any security-sensitive purpose.
+	@SuppressWarnings({
+		"java:S2245" // Non-security use: port-selection jitter only; not used for tokens, session IDs, or any security-sensitive purpose.
+	})
 	private static final Random RANDOM = new Random();
 	private static final String ROOT_CONTEXT_PATH = "";
 	private static final String ROOT_DOC_BASE = ".";
@@ -142,7 +145,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 
 	private static String normalizePathSpec(String rawPath) {
 		var p = rawPath == null ? "" : rawPath;
-		if (p.isEmpty() || "/".equals(p))
+		if (p.isEmpty() || eq(p, "/"))
 			return "/*";
 		if (! p.startsWith("/"))
 			p = "/" + p;
@@ -391,7 +394,6 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * @param pathSpec The context path of the servlet.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	public TomcatServerComponent addServlet(Servlet servlet, String pathSpec) {
 		return addServlet(servlet, new String[]{normalizePathSpec(pathSpec)});
 	}
@@ -422,7 +424,6 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
 		return addFilter(filter, new String[]{urlPattern});
 	}

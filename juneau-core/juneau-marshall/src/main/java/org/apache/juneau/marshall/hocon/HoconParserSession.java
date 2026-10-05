@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.hocon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -34,13 +33,16 @@ import org.apache.juneau.marshall.stream.*;
  * Session for parsing HOCON format into POJOs.
  */
 @SuppressWarnings({
-	"java:S110", "java:S115", "java:S135", "java:S3776", "java:S6541", "unchecked",
-	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
-	// java:S135: readArrayOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
+	"java:S110", // Inheritance depth acceptable for this class hierarchy.
+	"java:S135", // readArrayOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for this specific logic.
+	"java:S6541", // Brain method acceptable for this parser state machine.
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site.
 })
 public class HoconParserSession extends ReaderParserSession implements RecordReadable {
 
-	private static final String ARG_ctx = "ctx";
 	private static final String[] EMPTY_PATH = new String[0];
 
 	/**
@@ -51,7 +53,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		private HoconParser hoconParser;
 
 		protected Builder(HoconParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.hoconParser = ctx;
 		}
 
@@ -69,7 +71,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	 * @return The builder.
 	 */
 	public static Builder create(HoconParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final HoconParser hoconParser;

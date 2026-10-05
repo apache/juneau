@@ -61,7 +61,7 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		assertTrue(body.contains("excel: \"table\""), body);
 		assertTrue(body.contains("pdf: \"picture_as_pdf\""), body);
 		assertTrue(body.contains("refresh: \"refresh\""), body);
-		assertTrue(body.contains("columnSearchToggle: \"manage_search\""), body);
+		assertFalse(body.contains("columnSearchToggle"), body);
 		assertTrue(body.contains("collapse: \"unfold_less\""), body);
 		assertTrue(body.contains("dialog: \"new\""), body);
 	}

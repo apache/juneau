@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.hocon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -36,12 +35,15 @@ import org.apache.juneau.marshall.stream.*;
  * Session for serializing objects to HOCON format.
  */
 @SuppressWarnings({
-	"resource", "java:S110", "java:S115", "java:S3776", "java:S6541",
-	"rawtypes", "unchecked"
+	"java:S110", // Inheritance depth comes from the inherited WriterSerializerSession session hierarchy, not from this class
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // writeBeanMap() and writeAnything() branch over every HOCON value kind (bean, map, collection, date, duration, stream) in one pass
+	"java:S6541", // writeAnything() is the single dispatch point over all serializable value kinds
+	"rawtypes", // writeMap()/writeCollection() take raw Map/Collection because values arrive as Object and are cast after ClassMeta type checks
+	"resource", // The HoconWriter created in getHoconWriter() wraps the pipe's writer and is closed by the SerializerPipe, not by this session
+	"unchecked" // Raw Map/Collection casts in doWrite()/writeAnything()/writeBeanMap() are guarded by the ClassMeta isMap()/isCollection() and instanceof checks
 })
 public class HoconSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder for HOCON serializer session.
@@ -51,7 +53,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		private HoconSerializer ctx;
 
 		protected Builder(HoconSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -69,7 +71,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 	 * @return The builder.
 	 */
 	public static Builder create(HoconSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final HoconSerializer ctx;

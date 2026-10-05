@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import javax.crypto.SecretKey;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A key paired with the identifier an operator chose for it, as returned by {@link KeyProvider#currentKey()}
@@ -47,9 +47,9 @@ public record KeyedSecret(String keyId, SecretKey key) {
 	 * is non-null.
 	 */
 	public KeyedSecret {
-		assertArgNotNullOrBlank("keyId", keyId);
-		assertArg(keyId.length() <= MAX_KEY_ID_CHARS, "Argument 'keyId' length (%s) exceeds max of %s chars.", keyId.length(), MAX_KEY_ID_CHARS);
-		assertArgNotNull("key", key);
+		reqnb("keyId", keyId);
+		req(keyId.length() <= MAX_KEY_ID_CHARS, "Argument 'keyId' length (%s) exceeds max of %s chars.", keyId.length(), MAX_KEY_ID_CHARS);
+		reqnn("key", key);
 	}
 
 	/**

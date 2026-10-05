@@ -173,13 +173,20 @@ public interface BeanStore {
 	 * Finds and invokes a factory method that produces a bean of type <c>beanType</c>.
 	 *
 	 * <p>
-	 * Scans all public methods of the resource class identified by <c>onClassOrObject</c>:
+	 * Scans the methods of the resource class identified by <c>onClassOrObject</c>:
 	 * <ul>
 	 * 	<li>If <c>onClassOrObject</c> is a {@link Class}, only <jk>static</jk> methods are eligible and
 	 * 		the instance parameter passed to the invoked method is <jk>null</jk>.
 	 * 	<li>If <c>onClassOrObject</c> is any other object, both instance and static methods on its class are
 	 * 		eligible, and the object itself is passed as the receiver.
 	 * </ul>
+	 *
+	 * <p>
+	 * The search has two passes.  The first pass considers public methods only.  If it finds nothing, a second pass
+	 * considers <em>non-public</em> methods (protected, package-private or private) across the class hierarchy,
+	 * child class first, but only those that carry {@link Bean @Bean} (declared directly or inherited from a method
+	 * they override; see {@link BeanAnnotation#find(MethodInfo)}).  A non-public method without {@link Bean @Bean} is
+	 * never invoked, even when <c>filter</c> is <jk>null</jk>.  Non-public methods are made accessible before invocation.
 	 *
 	 * <p>
 	 * The first method satisfying all of the following is invoked:
@@ -196,23 +203,23 @@ public interface BeanStore {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
- * 	<jc>// Filter only</jc>
- * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
- * 		RestContext::isBeanMethod)
- * 		.ifPresent(<jv>creator</jv>::impl);
- *
- * 	<jc>// Filter + extra bean not yet in the store</jc>
- * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
- * 		RestContext::isBeanMethod, <jv>builder</jv>)
- * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
- *
- * 	<jc>// No filter, no extra beans</jc>
- * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>);
+	 * 	<jc>// Filter only</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
+	 * 		<jv>m</jv> -&gt; <jv>m</jv>.hasAnnotation(Bean.<jk>class</jk>))
+	 * 		.ifPresent(<jv>creator</jv>::impl);
+	 *
+	 * 	<jc>// Filter + extra bean not yet in the store</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
+	 * 		<jv>m</jv> -&gt; <jv>m</jv>.hasAnnotation(Bean.<jk>class</jk>), <jv>builder</jv>)
+	 * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
+	 *
+	 * 	<jc>// No filter, no extra beans</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>);
 	 * </p>
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
-	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * @param onClassOrObject The object instance or {@link Class} whose methods are searched.
 	 * 	Must not be <jk>null</jk>.
 	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).
 	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
@@ -227,11 +234,67 @@ public interface BeanStore {
 	}
 
 	/**
+	 * Invokes one specific factory method to produce a bean of type <c>beanType</c>.
+	 *
+	 * <p>
+	 * Unlike {@link #createBeanFromMethod(Class, Object, Predicate, Object...)}, no search is performed:
+	 * the caller supplies the {@link MethodInfo} it has already chosen.  Visibility is not a gate:
+	 * public, protected, package-private and private methods are all invoked (non-public methods are made accessible first).
+	 * Deprecation is not checked.
+	 *
+	 * <p>
+	 * If <c>onClassOrObject</c> is a {@link Class}, only <jk>static</jk> methods can be invoked.  Otherwise the object
+	 * is used as the receiver for instance methods.
+	 *
+	 * <p>
+	 * Returns {@link Optional#empty()} when the method is not eligible: it returns <jk>void</jk>, it is a bridge or
+	 * synthetic method, it is an instance method and <c>onClassOrObject</c> is a {@link Class}, or one of its parameters
+	 * cannot be resolved from this store plus <c>extraBeans</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Invoke one specific @Bean factory method, instead of searching by return type.</jc>
+	 * 	MethodInfo <jv>m</jv> = ClassInfo.<jsm>of</jsm>(MyResource.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"cacheIndicator"</js>)).get();
+	 * 	Optional&lt;HealthIndicator&gt; <jv>cache</jv> = <jv>beanStore</jv>.invokeBeanMethod(HealthIndicator.<jk>class</jk>, <jv>m</jv>, <jv>resource</jv>);
+	 * </p>
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The expected bean type.  Must be assignable from the method's return type.  Must not be <jk>null</jk>.
+	 * @param method The factory method to invoke.  Must not be <jk>null</jk>.
+	 * @param onClassOrObject The receiver object, or the {@link Class} for static methods.  Must not be <jk>null</jk>.
+	 * 	The method's declaring class must be assignable from this object's class (or this class).
+	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
+	 * @return The created bean, or {@link Optional#empty()} if the method is not eligible.
+	 * @throws IllegalArgumentException If an argument is <jk>null</jk>, <c>beanType</c> is not assignable from the
+	 * 	method's return type, or the method does not belong to the target's class hierarchy.
+	 * @throws BeanCreationException If the method cannot be made accessible or threw an exception during invocation.
+	 */
+	default <T> Optional<T> invokeBeanMethod(Class<T> beanType, MethodInfo method, Object onClassOrObject, Object... extraBeans) {
+		reqnn("beanType", beanType);
+		reqnn("method", method);
+		reqnn("onClassOrObject", onClassOrObject);
+		var returnType = method.getReturnType();
+		if (returnType.is(void.class) || method.isBridge() || method.isSynthetic())
+			return Optional.empty();
+		req(ClassInfo.of(beanType).getWrapperIfPrimitive().inner().isAssignableFrom(returnType.getWrapperIfPrimitive().inner()),
+			"Bean type [%s] is not assignable from the return type [%s] of method [%s].", beanType.getSimpleName(), returnType.getNameSimple(), method.getLabel());
+		var isClass = onClassOrObject instanceof Class;
+		Class<?> target = isClass ? (Class<?>)onClassOrObject : onClassOrObject.getClass();
+		req(method.inner().getDeclaringClass().isAssignableFrom(target),
+			"Method [%s] is not declared on the hierarchy of [%s].", method.getLabel(), target.getSimpleName());
+		if (method.isNotStatic() && isClass)
+			return Optional.empty();
+		if (! method.canResolveAllParameters(this, extraBeans))
+			return Optional.empty();
+		return Optional.ofNullable(BeanMethodInvoker.invoke(this, beanType, method, method.isStatic() ? null : onClassOrObject, extraBeans));
+	}
+
+	/**
 	 * Convenience overload of {@link #createBeanFromMethod(Class, Object, Predicate, Object...)} with no filter and no extra beans.
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
-	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * @param onClassOrObject The object instance or {@link Class} whose methods are searched.
 	 * 	Must not be <jk>null</jk>.
 	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
 	 * 	factory method was found.

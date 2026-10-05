@@ -93,7 +93,7 @@ public class JcsWriter extends JsonWriter<JcsWriter> {
 				w('\\').w('f');
 			else if (c == '\r')
 				w('\\').w('r');
-			else if (c >= 0 && c <= 0x1F)
+			else if (c <= 0x1F)
 				w(String.format("\\u%04x", (int) c));
 			else
 				w(c);

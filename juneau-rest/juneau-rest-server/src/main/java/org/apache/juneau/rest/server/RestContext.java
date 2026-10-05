@@ -21,7 +21,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -52,6 +51,8 @@ import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.bean.rfc7807.adapter.*;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.commons.beanquery.BeanQueryExecutionException;
+import org.apache.juneau.commons.beanquery.BeanQuerySyntaxException;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.http.MediaType;
@@ -130,7 +131,7 @@ import jakarta.servlet.http.*;
  * The historical <c>public MyResource(RestContext.Builder builder)</c> constructor-injection pattern and the
  * <c>{@link RestInit @RestInit} public void init(RestContext.Builder builder)</c> method-injection pattern were both
  * removed in 10.0. {@code RestContext.Builder} itself is on the deletion path; new code should not depend on it.
- * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V10.0MigrationGuide">v10.0 Migration Guide</a>
+ * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V10MigrationGuide">v10.0 Migration Guide</a>
  * for replacement recipes.
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -142,35 +143,19 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S112",  // RuntimeException used in memoizer lambdas to re-wrap checked exceptions (ServletException/Exception) that Supplier<T> cannot declare
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam)
-	"java:S1200", // Class has many dependencies; acceptable for this core context class
+	"java:S112", // RuntimeException used in memoizer lambdas to re-wrap checked exceptions (ServletException/Exception) that Supplier<T> cannot declare
+	"java:S125", // Explanatory comments reference SVL ($C{...}/$E{...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code
+	"java:S1141", // Nested try/catch blocks required for granular error reporting during initialization.
 	"java:S1192", // Duplicate string literals are property key names and REST annotation attribute values; intentional
-	"java:S125",  // Explanatory comments reference SVL ($C{...}/$E{...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code
+	"java:S1200", // Class has many dependencies; acceptable for this core context class
+	"java:S2259", // Values are non-null by construction or guarded by earlier checks that static flow analysis does not track.
 	"java:S3776", // Cognitive complexity in field-initializer lambdas (memoizer wiring); cannot annotate at lambda scope
 	"java:S6539", // Monster class; RestContext is intentionally a central hub for REST framework configuration
-	"resource"    // Streams and session objects returned to callers; lifecycle managed by the servlet container or RestCall
+	"resource" // Streams and session objects returned to callers; lifecycle managed by the servlet container or RestCall
 })
 public class RestContext extends Context {
 
 	private static final RichLogger LOG = RichLogger.getLogger(RestContext.class);
-
-	// Property name constants
-	private static final String PROP_allowContentParam = "allowContentParam";
-	private static final String PROP_beanStore = "beanStore";
-	private static final String PROP_consumes = "consumes";
-	private static final String PROP_defaultRequestAttributes = "defaultRequestAttributes";
-	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
-	private static final String PROP_defaultResponseHeaders = "defaultResponseHeaders";
-	private static final String PROP_partParser = "partParser";
-	private static final String PROP_partSerializer = "partSerializer";
-	private static final String PROP_produces = "produces";
-	private static final String PROP_responseProcessors = "responseProcessors";
-	private static final String PROP_restOpArgs = "restOpArgs";
-	private static final String PROP_bootstrapVarResolver = "bootstrapVarResolver";
-	private static final String PROP_staticFiles = "staticFiles";
-	private static final String PROP_swaggerProvider = "swaggerProvider";
-	private static final String PROP_openApiProvider = "openApiProvider";
 
 	/**
 	 * Bootstrap arguments for {@link RestContext}.
@@ -249,8 +234,8 @@ public class RestContext extends Context {
 		 * Compact canonical constructor — null-coalesces optional fields and validates required ones.
 		 */
 		public Args {
-			assertArgNotNull("resourceClass", resourceClass);
-			assertArgNotNull("resource", resource);
+			reqnn("resourceClass", resourceClass);
+			reqnn("resource", resource);
 			if (path == null)
 				path = "";
 			if (beanStoreConfigurer == null)
@@ -318,7 +303,7 @@ public class RestContext extends Context {
 		 * Compact canonical constructor — validates required components and null-coalesces {@code overrides}.
 		 */
 		public ResolvedMixin {
-			assertArgNotNull("type", type);
+			reqnn("type", type);
 			if (overrides == null)
 				overrides = MixinAnnotation.DEFAULT;
 		}
@@ -374,7 +359,7 @@ public class RestContext extends Context {
 		 * Compact canonical constructor — validates required components and null-coalesces {@code seed}.
 		 */
 		public ResolvedChild {
-			assertArgNotNull("type", type);
+			reqnn("type", type);
 			if (seed == null)
 				seed = ChildAnnotation.DEFAULT;
 		}
@@ -876,16 +861,21 @@ public class RestContext extends Context {
 		return isBeanMethod(mi, null);
 	}
 
+	// Judges the effective (first) @Bean annotation, consistent with the registration walk; the name is
+	// compared through BeanAnnotation.name() so that the @Bean("x") value alias matches a named lookup.
 	private static boolean isBeanMethod(MethodInfo mi, String name) {
 		return mi.getAnnotations(Bean.class)
 			.map(AnnotationInfo::inner)
-			.anyMatch(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)));
+			.findFirst()
+			.filter(x -> x.methodScope().length == 0 && (n(name) || eq(BeanAnnotation.name(x), name)))
+			.isPresent();
 	}
 
 	protected final AtomicBoolean initialized = new AtomicBoolean(false);
 	protected final BasicHttpException initException;
 	protected final WritableBeanStore beanStore;
 	protected final WritableBeanStore bootstrapBeanStore;  // Writable during bootstrap; exposed for child-context composition.
+	protected final WritableBeanStore inheritableBeanStore;  // This resource's @Bean results, layered over bootstrapBeanStore; the parent of @Rest(children) stores.
 	protected final Builder builder;
 	protected final Class<?> resourceClass;
 	protected final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
@@ -983,6 +973,42 @@ public class RestContext extends Context {
 		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isBeanMethod)
 			.orElse(defaultBs);
 	}
+
+	/**
+	 * Returns {@code true} if a {@link Bean @Bean} field value of the specified type and name should be exported
+	 * to the {@link #getInheritableBeanStore() inheritable bean store}.
+	 *
+	 * <p>
+	 * Bean-store types and framework-managed types (see {@link #isFrameworkBeanType(Class, String)}, such as
+	 * {@link SerializerSet} or {@link MethodExecStore}) are excluded so that each child keeps its own instances.
+	 * This holds for named beans too: a {@code @Bean(name="encoders") EncoderSet} is not exported.
+	 *
+	 * @param type The bean type.
+	 * @param name The bean name, or {@code null} for an unnamed bean.
+	 * @return {@code true} if the value should be visible to {@code @Rest(children)} sub-resources.
+	 */
+	private boolean isInheritableBeanType(Class<?> type, String name) {
+		if (WritableBeanStore.class.equals(type) || BeanStore.class.equals(type))
+			return false;
+		return ! isFrameworkBeanType(type, name);
+	}
+
+	/**
+	 * Returns {@code true} if the specified type and name denote a framework-managed bean, i.e. one backed by a
+	 * per-context default supplier registered under either the exact name or the unnamed slot.
+	 *
+	 * <p>
+	 * A framework type has one per-context instance, so {@code @Bean} methods of such a type are never invoked by the
+	 * registration walk (the framework memoizer invokes them) and are never exported to children.
+	 *
+	 * @param type The bean type.
+	 * @param name The bean name, or {@code null} for an unnamed bean.
+	 * @return {@code true} if the type is framework-managed.
+	 */
+	private boolean isFrameworkBeanType(Class<?> type, String name) {
+		return beanStore.hasDefaultSupplier(type, name) || beanStore.hasDefaultSupplier(type, "");
+	}
+
 	private RestContext parentContext() { return parentContext; }
 	private RestOperations restOperations() { return restOperations.get(); }
 
@@ -1000,7 +1026,8 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * {@link Rest#children() @Rest(children)} sub-resources are <i>not</i> mixin contexts &mdash; they retain
-	 * pre-10.0.0 isolated resolution (no parent-context walk).  The mixin-vs-child divergence is intentional:
+	 * pre-10.0.0 isolated resolution (no parent-context walk), and inherit only the parent's
+	 * {@link #getInheritableBeanStore() non-framework beans}.  The mixin-vs-child divergence is intentional:
 	 * mixins are inline composers that share the host's URL namespace; children are heavyweight independent
 	 * resources mounted at their own URL prefix.
 	 *
@@ -1062,10 +1089,10 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(RestOperations.class, restOperations::get);
 		bs.addDefaultSupplier(RestChildren.class, restChildren::get);
 		// Named framework beans (replaces DELAYED_INJECTION_NAMES).
-		bs.addDefaultSupplier(VarResolver.class, this::getBootstrapVarResolver, PROP_bootstrapVarResolver);
-		bs.addDefaultSupplier(HttpHeaderList.class, defaultRequestHeaders::get, PROP_defaultRequestHeaders);
-		bs.addDefaultSupplier(HttpHeaderList.class, defaultResponseHeaders::get, PROP_defaultResponseHeaders);
-		bs.addDefaultSupplier(NamedAttributeMap.class, defaultRequestAttributes::get, PROP_defaultRequestAttributes);
+		bs.addDefaultSupplier(VarResolver.class, this::getBootstrapVarResolver, "bootstrapVarResolver");
+		bs.addDefaultSupplier(HttpHeaderList.class, defaultRequestHeaders::get, "defaultRequestHeaders");
+		bs.addDefaultSupplier(HttpHeaderList.class, defaultResponseHeaders::get, "defaultResponseHeaders");
+		bs.addDefaultSupplier(NamedAttributeMap.class, defaultRequestAttributes::get, "defaultRequestAttributes");
 		bs.addDefaultSupplier(MethodList.class, () -> destroyInvokerPair.get().methods, "destroyMethods");
 		bs.addDefaultSupplier(MethodList.class, () -> endCallInvokerPair.get().methods, "endCallMethods");
 		bs.addDefaultSupplier(MethodList.class, postCallMethods::get, "postCallMethods");
@@ -1139,12 +1166,11 @@ public class RestContext extends Context {
 	 * through to {@code @Value} resolution.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for multi-source REST config property collection
-		"java:S135"   // Per-annotation continue guards are clearer than restructuring the config-source filter chain.
+		"java:S135" // Per-annotation continue guards are clearer than restructuring the config-source filter chain.
 	})
 	private List<PropertySource> collectRestConfigPropertySources() {
 		var bs = beanStore();
-		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
+		var vr = bs.getBean(VarResolver.class, "bootstrapVarResolver").orElseGet(this::getBootstrapVarResolver);
 		var result = new ArrayList<PropertySource>();
 		var seen = new LinkedHashSet<String>();
 		// AnnotationProvider returns child-first; iterate in the same order so child wins on collision.
@@ -1162,7 +1188,7 @@ public class RestContext extends Context {
 			if (result.isEmpty()) {
 				// Most-derived child slot. rawConfig.get() captures @Bean Config override; reuse it.
 				cfg = rawConfig.get();
-			} else if ("SYSTEM_DEFAULT".equals(resolvedName)) {
+			} else if (eq(resolvedName, "SYSTEM_DEFAULT")) {
 				cfg = Config.getSystemDefault();
 			} else {
 				cfg = Config.create().varResolver(vr).name(resolvedName).build();
@@ -1220,13 +1246,13 @@ public class RestContext extends Context {
 	private final Memoizer<Config> rawConfig = memoizer(() -> {
 		var bs = beanStore();
 		var v = Holder.<Config>empty();
-		// Bootstrap VarResolver is registered under PROP_bootstrapVarResolver during construction; the
+		// Bootstrap VarResolver is registered under "bootstrapVarResolver" during construction; the
 		// unnamed VarResolver slot is reserved for the full runtime resolver default supplier.
-		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
+		var vr = bs.getBean(VarResolver.class, "bootstrapVarResolver").orElseGet(this::getBootstrapVarResolver);
 		var cfv = Holder.<String>empty();
 		rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass()))).map(x -> x.inner().config()).filter(Shorts::ine).forEach(x -> cfv.set(vr.resolve(x)));
 		var cf = cfv.orElse("");
-		if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
+		if (v.isEmpty() && eq(cf, "SYSTEM_DEFAULT"))
 			v.set(Config.getSystemDefault());
 		if (v.isEmpty() && cf.isEmpty() && isMixinContextField() && getParentContext() != null)
 			// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that $C{...}
@@ -1271,7 +1297,7 @@ public class RestContext extends Context {
 				.bean(FileFinder.class, FileFinder.create(bs).cp(resourceClass(), null, true).build())
 				.build()
 		);
-		bs.createBeanFromMethod(VarResolver.class, resource().get(), x -> isBeanMethod(x, PROP_bootstrapVarResolver)).ifPresent(v::set);
+		bs.createBeanFromMethod(VarResolver.class, resource().get(), x -> isBeanMethod(x, "bootstrapVarResolver")).ifPresent(v::set);
 		return v.get();
 	});
 	// @formatter:on
@@ -1333,7 +1359,7 @@ public class RestContext extends Context {
 		var bean = bs.getBean(RestAuthenticator.class).orElse(null);
 		if (bean != null)
 			return o(bean);
-		var annoClass = getRestAnnotationsForProperty(PROPERTY_authenticator)
+		var annoClass = getRestAnnotationsForProperty("authenticator")
 			.map(ai -> ai.inner().authenticator())
 			.filter(x -> x != RestAuthenticator.Null.class)
 			.reduce((first, second) -> second)
@@ -1362,7 +1388,7 @@ public class RestContext extends Context {
 	private final Memoizer<List<RestAuthenticator>> effectiveAuthenticators = memoizer(() -> {
 		var l = new ArrayList<RestAuthenticator>();
 		var pc = parentContext();
-		if (isInherited(PROPERTY_authenticator) && pc != null)
+		if (isInherited("authenticator") && pc != null)
 			l.addAll(pc.getEffectiveAuthenticators());
 		localAuthenticator.get().ifPresent(l::add);
 		return u(l);
@@ -1427,7 +1453,7 @@ public class RestContext extends Context {
 	private final Memoizer<List<MediaType>> consumes = memoizer(() -> {
 		// Walk @Rest(consumes=...) chain (parent-to-child); concat all entries in chain order.
 		var fromAnnotations = new ArrayList<MediaType>();
-		getRestAnnotationsForProperty(PROPERTY_consumes)
+		getRestAnnotationsForProperty("consumes")
 			.forEach(ai -> stream(ai.inner().consumes()).map(MediaType::of).forEach(fromAnnotations::add));
 		if (! fromAnnotations.isEmpty())
 			return u(fromAnnotations);
@@ -1484,13 +1510,13 @@ public class RestContext extends Context {
 		// Resolution goes through the unified noInherit-aware walk: getRestAnnotationsForProperty yields
 		// the same parent-to-child order getRestAnnotationsTopDown did for non-mixin contexts, plus host→mixin
 		// inheritance, noInherit cutoff, and @Mixin override injection for mixin sub-contexts.
-		getRestAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
+		getRestAnnotationsForProperty("defaultRequestAttributes").forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
 			.filter(StringUtils::isNotBlank)
 			.map(this::resolve)
 			.filter(StringUtils::isNotBlank)
 			.map(BasicNamedAttribute::ofPair)
 			.forEach(v.get()::add));
-		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestAttributes), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource().get(), x -> isBeanMethod(x, "defaultRequestAttributes"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -1507,7 +1533,7 @@ public class RestContext extends Context {
 		// Resolution goes through the unified noInherit-aware walk — see defaultRequestAttributes.
 		// defaultAccept/defaultContentType are folded into this same walk (as they always were); they key off
 		// the defaultRequestHeaders property for noInherit/override purposes.
-		getRestAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
+		getRestAnnotationsForProperty("defaultRequestHeaders").forEach(ai -> {
 			Rest a = ai.inner();
 			Arrays.stream(a.defaultRequestHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault);
 			var defaultAccept = resolve(a.defaultAccept());
@@ -1517,7 +1543,7 @@ public class RestContext extends Context {
 			if (isNotBlank(defaultContentType))
 				v.get().setDefault(ContentType.of(defaultContentType));
 		});
-		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestHeaders), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, "defaultRequestHeaders"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -1531,8 +1557,8 @@ public class RestContext extends Context {
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Holder.of(HttpHeaderList.create());
 		// Resolution goes through the unified noInherit-aware walk — see defaultRequestAttributes.
-		getRestAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
-		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
+		getRestAnnotationsForProperty("defaultResponseHeaders").forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, "defaultResponseHeaders"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -1559,7 +1585,7 @@ public class RestContext extends Context {
 	private final Memoizer<EncoderSet.Builder> encodersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Holder.of(EncoderSet.create(bs));
-		getRestAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> v.get().add(ai.inner().encoders()));
+		getRestAnnotationsForProperty("encoders").forEach(ai -> v.get().add(ai.inner().encoders()));
 		bs.createBeanFromMethod(EncoderSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
@@ -1628,7 +1654,7 @@ public class RestContext extends Context {
 		// (2) the host→mixin chain cutoff consults the unified noInherit set, so @Mixin(noInherit="messages")
 		// cuts the host bundle exactly like the mixin class's own @Rest(noInherit="messages").
 		var vrs = getBootstrapVarResolver().createSession();
-		getRestAnnotationsTopDown().forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
+		getRestAnnotationsTopDown().forEach(ai -> ai.getString("messages").filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
 		var rmMessages = resolvedMixinField();
 		if (rmMessages != null) {
 			var mm = rmMessages.overrides().messages();
@@ -1641,7 +1667,7 @@ public class RestContext extends Context {
 		// Use the SVL-free isNoInheritLiteral (NOT the noInherit memoizer) to avoid a resolver cycle:
 		// noInherit -> resolveCdl -> getVarResolver -> getMessages -> messages.  It now also consults the
 		// host @Mixin(noInherit=...) tokens so a @Mixin can cut the host bundle just like the mixin class's own.
-		if (isMixinContextField() && nn(parent) && !isNoInheritLiteral(PROPERTY_messages))
+		if (isMixinContextField() && nn(parent) && !isNoInheritLiteral("messages"))
 			return Messages.chain(local, parent.getMessages());
 		return local;
 	});
@@ -1670,7 +1696,7 @@ public class RestContext extends Context {
 	private final Memoizer<ParserSet.Builder> parsersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Holder.of(ParserSet.create(bs));
-		getRestAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> v.get().add(ai.inner().parsers()));
+		getRestAnnotationsForProperty("parsers").forEach(ai -> v.get().add(ai.inner().parsers()));
 		bs.createBeanFromMethod(ParserSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
@@ -1701,7 +1727,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpPartParser> partParser = memoizer(() -> {
 		var creator = partParserCreator.get();
-		getRestAnnotationsForProperty(PROPERTY_partParser)
+		getRestAnnotationsForProperty("partParser")
 			.map(ai -> ai.inner().partParser())
 			.filter(ClassUtils::isNotVoid)
 			.reduce((a, b) -> b)
@@ -1730,7 +1756,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() -> {
 		var creator = partSerializerCreator.get();
-		getRestAnnotationsForProperty(PROPERTY_partSerializer)
+		getRestAnnotationsForProperty("partSerializer")
 			.map(ai -> ai.inner().partSerializer())
 			.filter(ClassUtils::isNotVoid)
 			.reduce((a, b) -> b)
@@ -1836,7 +1862,7 @@ public class RestContext extends Context {
 	private final Memoizer<List<MediaType>> produces = memoizer(() -> {
 		// Walk @Rest(produces=...) chain (parent-to-child); concat all entries in chain order.
 		var fromAnnotations = new ArrayList<MediaType>();
-		getRestAnnotationsForProperty(PROPERTY_produces)
+		getRestAnnotationsForProperty("produces")
 			.forEach(ai -> stream(ai.inner().produces()).map(MediaType::of).forEach(fromAnnotations::add));
 		if (! fromAnnotations.isEmpty())
 			return u(fromAnnotations);
@@ -1930,7 +1956,7 @@ public class RestContext extends Context {
 		// when no module ships a META-INF/services/...ResponseProcessor provider file the list is empty and
 		// the chain is identical to the pre-feature default.
 		discoverServiceLoaderResponseProcessors().forEach(b::add);
-		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
+		getRestAnnotationsForProperty("responseProcessors")
 			.forEach(ai -> b.add(ai.inner().responseProcessors()));
 		// @Bean method override REPLACES the entire annotation-derived list.
 		var override = bs.createBeanFromMethod(ResponseProcessorList.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
@@ -1951,7 +1977,7 @@ public class RestContext extends Context {
 		// final order: [child, parent, DefaultConfig], matching the legacy apply-pass behavior.
 		var bs = beanStore();
 		var b = RestOpArgList.create(bs);
-		getRestAnnotationsForProperty(PROPERTY_restOpArgs)
+		getRestAnnotationsForProperty("restOpArgs")
 			.forEach(ai -> b.add(ai.inner().restOpArgs()));
 		// @Bean method override REPLACES the entire annotation-derived list.
 		var override = bs.createBeanFromMethod(RestOpArgList.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
@@ -1969,7 +1995,7 @@ public class RestContext extends Context {
 	private final Memoizer<SerializerSet.Builder> serializersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Holder.of(SerializerSet.create(bs));
-		getRestAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> v.get().add(ai.inner().serializers()));
+		getRestAnnotationsForProperty("serializers").forEach(ai -> v.get().add(ai.inner().serializers()));
 		bs.createBeanFromMethod(SerializerSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
@@ -2001,7 +2027,7 @@ public class RestContext extends Context {
 		var creator = BeanInstantiator.of(StaticFiles.class, bs).type(BasicStaticFiles.class).noBuilder();
 		bs.getBeanType(StaticFiles.class).ifPresent(creator::type);
 		// @Rest(staticFiles=X) — most-derived non-Void wins (parent-to-child chain; reduce-last keeps the closest-to-child override).
-		getRestAnnotationsForProperty(PROPERTY_staticFiles)
+		getRestAnnotationsForProperty("staticFiles")
 			.map(ai -> ai.inner().staticFiles())
 			.filter(c -> c != StaticFiles.Void.class)
 			.reduce((first, second) -> second)
@@ -2025,7 +2051,7 @@ public class RestContext extends Context {
 		var creator = BeanInstantiator.of(SwaggerProvider.class, bs).type(BasicSwaggerProvider.class).noBuilder();
 		bs.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
 		// @Rest(swaggerProvider=X) — most-derived non-Void wins (parent-to-child chain; reduce-last keeps the closest-to-child override).
-		getRestAnnotationsForProperty(PROPERTY_swaggerProvider)
+		getRestAnnotationsForProperty("swaggerProvider")
 			.map(ai -> ai.inner().swaggerProvider())
 			.filter(c -> c != SwaggerProvider.Void.class)
 			.reduce((first, second) -> second)
@@ -2047,7 +2073,7 @@ public class RestContext extends Context {
 		var creator = BeanInstantiator.of(OpenApiProvider.class, bs).type(BasicOpenApiProvider.class).noBuilder();
 		bs.getBeanType(OpenApiProvider.class).ifPresent(creator::type);
 		// @Rest(openApiProvider=X) — most-derived non-Void wins.
-		getRestAnnotationsForProperty(PROPERTY_openApiProvider)
+		getRestAnnotationsForProperty("openApiProvider")
 			.map(ai -> ai.inner().openApiProvider())
 			.filter(c -> c != OpenApiProvider.Void.class)
 			.reduce((first, second) -> second)
@@ -2229,10 +2255,6 @@ public class RestContext extends Context {
 	 * guard below short-circuits the flat-inheritance rule (a mixin's {@code @Rest(mixins=B)} is collected at
 	 * the host level, not nested under A).
 	 */
-	@SuppressWarnings({
-		"java:S3776", // High cognitive complexity is inherent in REST operation set initialization.
-		"java:S1141"  // Nested try/catch blocks required for granular error reporting during initialization.
-	})
 	private final Memoizer<RestOperations> restOperations = memoizer(() -> safe(() -> {
 		initializeFrameworkBeansForRestOps();
 		var bs = beanStore();
@@ -2265,7 +2287,7 @@ public class RestContext extends Context {
 					if (mi.isNotPublic())
 						throw servletException("@RestOp method %s.%s must be defined as public.", classInfo.inner().getName(), mi.getNameSimple());
 					var roc = new RestOpContext(mi.inner(), opContext, targetSupplier);
-					if ("RRPC".equals(roc.getHttpMethod())) {
+					if (eq(roc.getHttpMethod(), "RRPC")) {
 						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), opContext, targetSupplier);
 						b.add("GET", roc2).add("POST", roc2);
 					} else {
@@ -2292,7 +2314,7 @@ public class RestContext extends Context {
 	 */
 	private Collection<ResolvedMixin> getResolvedMixins() {
 		var out = new LinkedHashMap<Class<?>,ResolvedMixin>();
-		getRestAnnotationsForProperty(PROPERTY_mixins).forEach(ai -> {
+		getRestAnnotationsForProperty("mixins").forEach(ai -> {
 			for (var mixin : ai.inner().mixins())
 				collectResolvedMixin(ResolvedMixin.ofBare(mixin), out);
 			for (var def : ai.inner().mixinDefs())
@@ -2382,9 +2404,6 @@ public class RestContext extends Context {
 	 * (via an explicit {@code .get()} call inside the try-catch block) so that any construction failure surfaces
 	 * at initialization time rather than lazily.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // cognitive complexity acceptable for child-context construction
-	})
 	private final Memoizer<RestChildren> restChildren = memoizer(() -> safe(() -> {
 		var bs = beanStore();
 		var servletConfig = bs.getBean(ServletConfig.class).orElse(null);
@@ -2430,10 +2449,6 @@ public class RestContext extends Context {
 	 * @param builder The builder containing the settings for this bean.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // High cognitive complexity is inherent in REST context constructor initialization.
-		"java:S1141"  // Nested try/catch blocks required for granular error reporting during initialization.
-	})
 	private RestContext(Builder builder) throws Exception {
 		super(builder);
 
@@ -2452,7 +2467,7 @@ public class RestContext extends Context {
 			resolvedMixin = (contextKind instanceof ContextKind.Mixin contextKind2) ? contextKind2.def() : null;
 			resolvedChild = (contextKind instanceof ContextKind.Child contextKind3) ? contextKind3.def() : null;
 			resourceClass = builder.resourceClass;
-			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
+			var rs = new ResourceSupplier(resourceClass, reqnn("resource", builder.args.resource()));
 			resource = rs;
 
 			// Resolve the programmatic configuration builder.  Prefer the one carried on Args (set by
@@ -2483,13 +2498,16 @@ public class RestContext extends Context {
 			// with per-mixin sub-contexts, the same effect is
 			// achieved by parent-linking the mixin's beanStore to the host's full beanStore.
 			//
-			// For top-level resources and @Rest(children) sub-resources, the parent remains the bootstrap
-			// layer (children are intentionally independent of the host's resource-class beans).
+			// For @Rest(children) sub-resources, the parent is the host's inheritable layer: the host's bootstrap
+			// store plus the host's own non-framework @Bean method results and @Bean field values.  Children see
+			// the group's beans (transitively, since each child's inheritable layer sits on top of its parent's),
+			// but not the host's framework-managed beans (serializers, call logger, children, ...), which stay
+			// per-context.
 			WritableBeanStore parentBs;
 			if (parentContext != null && isMixinContext)
 				parentBs = parentContext.beanStore;
 			else if (parentContext != null)
-				parentBs = parentContext.bootstrapBeanStore;
+				parentBs = parentContext.inheritableBeanStore;
 			else
 				parentBs = null;
 
@@ -2518,13 +2536,14 @@ public class RestContext extends Context {
 				bootstrapBeanStore = parentBs;
 			}
 			beanStore = bs;
+			inheritableBeanStore = new BasicBeanStore(bootstrapBeanStore);
 
 			beanStore.addBean(WritableBeanStore.class, beanStore);
 			// Register the bootstrap VarResolver as a NAMED entry only.  The unnamed VarResolver
 			// slot is intentionally left to the registerFrameworkDefaults() default supplier (which
 			// resolves to the full runtime VarResolver) so that internal accessors such as
 			// getVarResolver() return the right thing when routed through beanStore.getBean(...).
-			beanStore.add(VarResolver.class, getBootstrapVarResolver(), PROP_bootstrapVarResolver);
+			beanStore.add(VarResolver.class, getBootstrapVarResolver(), "bootstrapVarResolver");
 			// Force-build raw Config now (fail fast if @Rest(config) is misconfigured).  The unnamed
 			// Config slot in the bean store is intentionally left to the default supplier (the full
 			// runtime Config) — @RestInit hooks that take Config as a parameter will see the fully
@@ -2597,47 +2616,105 @@ public class RestContext extends Context {
 				// tier-4 default / parent-wins semantics, so a Spring/parent-supplied bean still wins for them.
 				beanStore.addBean(RestContextProperties.class, getRestContextProperties());
 
-			// Register @Bean fields that already have a value.
+			// Register @Bean fields that already have a value.  Non-framework values are also exported to the
+			// inheritable layer so that @Rest(children) sub-resources see them.  Each registered (type, name) key is
+			// recorded so that a @Bean method with the same key does not overwrite the field (first wins).
+			// Framework-typed fields (including named ones such as @Bean(name="encoders") EncoderSet) keep their
+			// raw value locally and are not exported; unlike framework-typed methods they are not aliased.
+			var registeredKeys = new HashSet<List<Object>>();
 			// @formatter:off
 			rci2.getAllFields().stream()
 				.filter(x -> x.hasAnnotation(Bean.class))
-				.forEach(x -> o(x.get(resource.get())).ifPresent(
-					y -> beanStore.add(
-						x.getFieldType().inner(),
-						y,
-						BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null))
-					)
-				));
+				.forEach(x -> o(x.get(resource.get())).ifPresent(y -> {
+					var ft = x.getFieldType().<Object>inner();
+					var name = BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+					beanStore.add(ft, y, name);
+					registeredKeys.add(List.of(ft, name));
+					if (isInheritableBeanType(ft, name))
+						inheritableBeanStore.add(ft, y, name);
+				}));
 			// @formatter:on
 
 			// Run @Bean methods and register their results as LOCAL entries (level 2 of resolve()).
 			//
-			// For non-framework types: invoke the @Bean method directly via createBeanFromMethod
-			// and store the result via addBean.
+			// Each @Bean method is invoked directly (BeanStore.invokeBeanMethod) and its own result is registered under
+			// its own (return type, name) key, so several same-typed methods with different names yield distinct beans.
+			// Methods of any visibility (public, protected, package-private, private) and static methods are honored.
+			// NOTE: for a proxied (e.g. CGLIB) resource, non-public methods run against the resource object as-is.
 			//
-			// For framework types (those with a default supplier registered above): the @Bean
-			// scan already ran inside the corresponding memoizer body (see e.g. the `logger` memoizer above),
-			// so re-invoking createBeanFromMethod here would create a SECOND instance and produce
-			// inconsistent state between the framework's memoizer-backed bean and the bean store's
-			// local entry.  Instead, PROMOTE the existing default supplier (which is memoizer-backed
-			// and resolves to the @Bean value when one was supplied) into a local-entry supplier.
+			// Walk order is child class first, then superclasses, with interface default methods after all superclasses.
+			// The first method to claim a (type, name) key wins (D3); an unresolvable method (missing parameters)
+			// claims nothing, so a later candidate can still fill the key.  An overridden method runs once (the
+			// override); if the parent declares a covariant (wider) return type, the override's instance is also
+			// registered under the parent's type.  Methods with a non-empty methodScope() are op-scoped and skipped
+			// here (RestOpContext handles them); interface static methods are ignored.
+			//
+			// For framework types (those with a default supplier registered above, under the exact name or unnamed):
+			// the @Bean scan already ran inside the corresponding memoizer body (see e.g. the `logger` memoizer above),
+			// so invoking the method here would create a SECOND instance and produce inconsistent state between the
+			// framework's memoizer-backed bean and the bean store's local entry.  Instead, the existing default
+			// supplier (memoizer-backed, resolving to the @Bean value when one was supplied) is PROMOTED into a
+			// local-entry supplier.  A framework type has one per-context instance, so when the method is named but only
+			// an unnamed default exists (e.g. @Bean(name="encoders") EncoderSet), the name becomes an alias of that
+			// single instance.  Framework types are never exported to children (J0561 isolation).
 			// Promoting at level 2 means @Bean results win over a parent (Spring) at level 3.
 			//
 			// Net effect: @Bean method results uniformly take precedence over Spring/parent
 			// bindings for both framework and user-defined types.  This auto-derives the legacy
 			// DELAYED_INJECTION list from the default-supplier registrations.
-			rci2.getAllMethods().stream().filter(x -> x.hasAnnotation(Bean.class)).forEach(x -> {
-				var rt = x.getReturnType().<Object>inner();
-				var name = BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-				// Skip the WritableBeanStore factory (already consumed by createBeanStore()).
-				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt))
+			var walkedMethods = new HashMap<String,Object[]>();              // Signature -> {returnType, instance|null} for overridable methods.
+			var frameworkMethods = new LinkedHashMap<Class<?>,List<String>>();  // Framework type -> method names (for the duplicate warning).
+			rci2.getAllMethods().forEach(x -> {
+				if (x.isStatic() && x.inner().getDeclaringClass().isInterface())
 					return;
-				if (beanStore instanceof BasicBeanStore beanStore2 && beanStore2.hasDefaultSupplier(rt, name)) {
-					beanStore2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
+				var found = BeanAnnotation.find(x).orElse(null);
+				if (found == null || found.methodScope().length > 0)
+					return;
+				var rt = x.getReturnType().<Object>inner();
+				var name = BeanAnnotation.name(found);
+				// Skip the WritableBeanStore factory (already consumed by createBeanStore()) and void methods.
+				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt) || void.class.equals(rt))
+					return;
+				var overridable = ! x.isPrivate() && ! x.isStatic();
+				var sig = x.getSignature();
+				if (overridable) {
+					var previous = walkedMethods.get(sig);
+					if (previous != null || walkedMethods.containsKey(sig)) {
+						// Overridden parent copy: never invoked.  Covariant override: share the child's instance under the parent's type.
+						// The parent's (type, name) key obeys first-wins too, so an earlier @Bean field or method keeps it.
+						if (previous != null && previous[0] != rt && previous[1] != null && registeredKeys.add(List.of(rt, name))) {
+							beanStore.addBean(rt, previous[1], name);
+							if (isInheritableBeanType(rt, name))
+								inheritableBeanStore.addBean(rt, previous[1], name);
+						}
+						return;
+					}
+					walkedMethods.put(sig, null);
+				}
+				if (isFrameworkBeanType(rt, name)) {
+					frameworkMethods.computeIfAbsent(rt, k -> new ArrayList<>()).add(x.getName());
+					if (beanStore instanceof BasicBeanStore beanStore2) {
+						if (beanStore2.hasDefaultSupplier(rt, name))
+							beanStore2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
+						else
+							beanStore2.getDefaultSupplier(rt, "").ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
+					}
 					return;
 				}
-				beanStore.createBeanFromMethod(rt, resource.get(), RestContext::isBeanMethod)
-					.ifPresent(y -> beanStore.addBean(rt, y, name));
+				if (registeredKeys.contains(List.of(rt, name)))
+					return;
+				beanStore.invokeBeanMethod(rt, x, resource.get()).ifPresent(y -> {
+					registeredKeys.add(List.of(rt, name));
+					if (overridable)
+						walkedMethods.put(sig, new Object[]{rt, y});
+					beanStore.addBean(rt, y, name);
+					// Same instance, exported so @Rest(children) sub-resources see it.
+					inheritableBeanStore.addBean(rt, y, name);
+				});
+			});
+			frameworkMethods.forEach((type, methods) -> {
+				if (methods.size() > 1)
+					LOG.warning("Resource class {} declares multiple @Bean methods {} of framework type {}.  A framework type has one per-context instance, so all of these names alias it.", resourceClass().getName(), methods, type.getName());
 			});
 
 			// Run @RestInit-annotated methods on the resource object (deduplicated by signature, top-down order).
@@ -2792,7 +2869,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedParserOptions;
+		var p = "allowedParserOptions";
 		var pc = parentContext();
 		if (isInherited(p) && pc != null)
 			l.addAll(pc.getAllowedParserOptions());
@@ -2809,7 +2886,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedSerializerOptions;
+		var p = "allowedSerializerOptions";
 		var pc = parentContext();
 		if (isInherited(p) && pc != null)
 			l.addAll(pc.getAllowedSerializerOptions());
@@ -3130,49 +3207,49 @@ public class RestContext extends Context {
 	 * default {@code "Accept,Content-Type"}.
 	 */
 	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, getRestContextProperties().getAllowedHeaderParams()))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedHeaderParams", getRestContextProperties().getAllowedHeaderParams()))));
 
 	/**
 	 * HTTP method names that may be specified via a request header; resolved from {@code @Rest(allowedMethodHeaders)},
 	 * default empty.
 	 */
 	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, getRestContextProperties().getAllowedMethodHeaders()))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedMethodHeaders", getRestContextProperties().getAllowedMethodHeaders()))));
 
 	/**
 	 * HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)},
 	 * default {@code "HEAD,OPTIONS"}.
 	 */
 	private final Memoizer<Set<String>> allowedMethodParams = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, getRestContextProperties().getAllowedMethodParams()))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedMethodParams", getRestContextProperties().getAllowedMethodParams()))));
 
 	/**
 	 * Whether a {@code &content=} URL parameter may override the request body; inverse of
 	 * {@code @Rest(disableContentParam)}.
 	 */
 	private final Memoizer<Boolean> allowContentParam = memoizer(() ->
-		!mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, resolveBooleanDefault(getRestContextProperties().getDisableContentParamRaw())));
+		!mergeReplacedBooleanAttribute("disableContentParam", resolveBooleanDefault(getRestContextProperties().getDisableContentParamRaw())));
 
 	/**
 	 * Whether exception stack traces are rendered in error responses; resolved from
 	 * {@code @Rest(renderResponseStackTraces)}.
 	 */
 	private final Memoizer<Boolean> renderResponseStackTraces = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, resolveBooleanDefault(getRestContextProperties().getRenderResponseStackTracesRaw())));
+		mergeReplacedBooleanAttribute("renderResponseStackTraces", resolveBooleanDefault(getRestContextProperties().getRenderResponseStackTracesRaw())));
 
 	/**
 	 * Whether the resource emits RFC 7807 {@code application/problem+json} responses; resolved from
 	 * {@code @Rest(problemDetails)}.
 	 */
 	private final Memoizer<Boolean> problemDetails = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, resolveBooleanDefault(getRestContextProperties().getProblemDetailsRaw())));
+		mergeReplacedBooleanAttribute("problemDetails", resolveBooleanDefault(getRestContextProperties().getProblemDetailsRaw())));
 
 	/**
 	 * Whether REST-driven serializer/parser debug behavior is enabled for this resource; resolved from
 	 * {@code @Rest(debugMarshalling)}.
 	 */
 	private final Memoizer<Boolean> debugMarshalling = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_debugMarshalling, resolveBooleanDefault(getRestContextProperties().getDebugMarshallingRaw())));
+		mergeReplacedBooleanAttribute("debugMarshalling", resolveBooleanDefault(getRestContextProperties().getDebugMarshallingRaw())));
 
 	/**
 	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
@@ -3183,7 +3260,7 @@ public class RestContext extends Context {
 	 * than Java 21 the flag is logged once and ignored — see {@link #virtualThreadExecutor}.
 	 */
 	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, resolveBooleanDefault(getRestContextProperties().getVirtualThreadsRaw())));
+		mergeReplacedBooleanAttribute("virtualThreads", resolveBooleanDefault(getRestContextProperties().getVirtualThreadsRaw())));
 
 	/**
 	 * Env-driven component of {@link #isResponseTraceparent()}; resolved from the {@code RestContext.responseTraceparent}
@@ -3210,7 +3287,7 @@ public class RestContext extends Context {
 	 * {@link RestOpContext}.
 	 */
 	private final Memoizer<String> observabilityAttribute = memoizer(() ->
-		mergeReplacedStringAttribute(PROPERTY_observability, null));
+		mergeReplacedStringAttribute("observability", null));
 
 	/**
 	 * Configurable async-response timeout (milliseconds) applied by {@code AsyncResponseProcessor} to
@@ -3221,7 +3298,7 @@ public class RestContext extends Context {
 	 * itself when neither the resource nor the operation declares a value.
 	 */
 	private final Memoizer<Long> asyncTimeoutMillis = memoizer(() -> {
-		var s = mergeReplacedStringAttribute(PROPERTY_asyncTimeoutMillis, null);
+		var s = mergeReplacedStringAttribute("asyncTimeoutMillis", null);
 		if (isEmpty(s))
 			return -1L;
 		try {
@@ -3261,7 +3338,7 @@ public class RestContext extends Context {
 	private String resolveAsyncCompletionExecutorName() {
 		return builder.asyncCompletionExecutorName != null
 			? builder.asyncCompletionExecutorName
-			: mergeReplacedStringAttribute(PROPERTY_asyncCompletionExecutor, null);
+			: mergeReplacedStringAttribute("asyncCompletionExecutor", null);
 	}
 
 	/**
@@ -3301,7 +3378,7 @@ public class RestContext extends Context {
 	 * resolved from {@code @Rest(eagerInit)}.
 	 */
 	private final Memoizer<Boolean> eagerInit = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, resolveBooleanDefault(getRestContextProperties().getEagerInitRaw())));
+		mergeReplacedBooleanAttribute("eagerInit", resolveBooleanDefault(getRestContextProperties().getEagerInitRaw())));
 
 	/**
 	 * Annotation + env-driven component of the lazy-children flag.
@@ -3313,14 +3390,14 @@ public class RestContext extends Context {
 	 * because blank-final-field rules prevent the memoizer lambda from safely capturing {@link #builder}.
 	 */
 	private final Memoizer<Boolean> lazyChildrenAnnotation = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_lazyChildren, resolveBooleanDefault(getRestContextProperties().getLazyChildrenRaw())));
+		mergeReplacedBooleanAttribute("lazyChildren", resolveBooleanDefault(getRestContextProperties().getLazyChildrenRaw())));
 
 	/**
 	 * The request header used for client-version matching; resolved from {@code @Rest(clientVersionHeader)},
 	 * default {@code "Client-Version"}.
 	 */
 	private final Memoizer<String> clientVersionHeader = memoizer(() ->
-		mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, getRestContextProperties().getClientVersionHeader()));
+		mergeReplacedStringAttribute("clientVersionHeader", getRestContextProperties().getClientVersionHeader()));
 
 	/**
 	 * The {@link UriRelativity} strategy for URI resolution in this resource.
@@ -3334,7 +3411,7 @@ public class RestContext extends Context {
 			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(getRestContextProperties().getUriRelativityRaw())))
 				.orElse(UriRelativity.RESOURCE)
 		);
-		restAnnotationsForPropertySortedByRank(PROPERTY_uriRelativity).forEach(ai -> ai.getString(PROPERTY_uriRelativity).filter(StringUtils::isNotBlank).ifPresent(s ->
+		restAnnotationsForPropertySortedByRank("uriRelativity").forEach(ai -> ai.getString("uriRelativity").filter(StringUtils::isNotBlank).ifPresent(s ->
 			parseEnumConstant(UriRelativity.class, resolve(s)).ifPresent(v::set)
 		));
 		return v.get();
@@ -3348,11 +3425,11 @@ public class RestContext extends Context {
 	 * blocked by {@code noInherit}. {@code null} means no override.
 	 */
 	private final Memoizer<String> uriAuthority = memoizer(() -> {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, defaultUriAuthority.orElse(null));
+		String local = mergeReplacedStringAttribute("uriAuthority", defaultUriAuthority.orElse(null));
 		if (nn(local))
 			return local;
 		var pc = parentContext();
-		return isInherited(PROPERTY_uriAuthority) && pc != null ? pc.getUriAuthority() : null;
+		return isInherited("uriAuthority") && pc != null ? pc.getUriAuthority() : null;
 	});
 
 	/**
@@ -3363,11 +3440,11 @@ public class RestContext extends Context {
 	 * blocked by {@code noInherit}. {@code null} means no override.
 	 */
 	private final Memoizer<String> uriContext = memoizer(() -> {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, defaultUriContext.orElse(null));
+		String local = mergeReplacedStringAttribute("uriContext", defaultUriContext.orElse(null));
 		if (nn(local))
 			return local;
 		var pc = parentContext();
-		return isInherited(PROPERTY_uriContext) && pc != null ? pc.getUriContext() : null;
+		return isInherited("uriContext") && pc != null ? pc.getUriContext() : null;
 	});
 
 	/**
@@ -3382,7 +3459,7 @@ public class RestContext extends Context {
 			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(getRestContextProperties().getUriResolutionRaw())))
 				.orElse(UriResolution.ROOT_RELATIVE)
 		);
-		restAnnotationsForPropertySortedByRank(PROPERTY_uriResolution).forEach(ai -> ai.getString(PROPERTY_uriResolution).filter(StringUtils::isNotBlank).ifPresent(s ->
+		restAnnotationsForPropertySortedByRank("uriResolution").forEach(ai -> ai.getString("uriResolution").filter(StringUtils::isNotBlank).ifPresent(s ->
 			parseEnumConstant(UriResolution.class, resolve(s)).ifPresent(v::set)
 		));
 		return v.get();
@@ -3409,7 +3486,7 @@ public class RestContext extends Context {
 	 * preserves that invariant when a mixin sub-context walks annotations for these properties.
 	 */
 	private static final Set<String> HOST_ONLY_PROPERTIES = Set.of(
-		PROPERTY_path, PROPERTY_paths, PROPERTY_mixins, PROPERTY_children
+		"path", "paths", "mixins", "children"
 	);
 
 	/**
@@ -3424,9 +3501,9 @@ public class RestContext extends Context {
 	 * conflict-resolution / namespace concern, not an append, and is out of scope for this opt-in directive.
 	 */
 	private static final Set<String> MERGEABLE_LIST_PROPERTIES = Set.of(
-		PROPERTY_serializers, PROPERTY_parsers, PROPERTY_encoders, PROPERTY_converters, PROPERTY_guards,
-		PROPERTY_responseProcessors, PROPERTY_restOpArgs, PROPERTY_defaultRequestHeaders,
-		PROPERTY_defaultResponseHeaders, PROPERTY_defaultRequestAttributes, PROPERTY_produces, PROPERTY_consumes
+		"serializers", "parsers", "encoders", "converters", "guards",
+		"responseProcessors", "restOpArgs", "defaultRequestHeaders",
+		"defaultResponseHeaders", "defaultRequestAttributes", "produces", "consumes"
 	);
 
 	/**
@@ -3465,7 +3542,7 @@ public class RestContext extends Context {
 		}
 		var cutoff = annotations.size();
 		for (var i = 0; i < annotations.size(); i++) {
-			if (resolveCdl(annotations.get(i).getStringArray(PROPERTY_noInherit)).anyMatch(name::equalsIgnoreCase)) {
+			if (resolveCdl(annotations.get(i).getStringArray("noInherit")).anyMatch(name::equalsIgnoreCase)) {
 				cutoff = i + 1;
 				break;
 			}
@@ -3498,7 +3575,7 @@ public class RestContext extends Context {
 			}
 			// Mixin-declared @Rest(mergeResponseProcessorsIntoHost=true) opt-in: fold the opted-in mixin's OWN response
 			// processors into the host's chain — response-processor-scoped only (never other list-shaped attributes).
-			if (PROPERTY_responseProcessors.equals(name)) {
+			if (eq(name, "responseProcessors")) {
 				var mergedRp = mergeResponseProcessorsIntoHostMixinAnnotations.get();
 				if (! mergedRp.isEmpty())
 					hostStream = Stream.concat(hostStream, mergedRp.stream());
@@ -3676,7 +3753,7 @@ public class RestContext extends Context {
 		if (resolvedMixin != null) {
 			for (var s : resolvedMixin.overrides().noInherit())
 				for (var t : StringUtils.split(s, ','))
-					if (property.equalsIgnoreCase(t.trim()))
+					if (eqic(property, t.trim()))
 						return true;
 		}
 		return false;
@@ -3710,9 +3787,6 @@ public class RestContext extends Context {
 	 * @param s The raw string. Can be {@code null}.
 	 * @return The resolved string.
 	 */
-	@SuppressWarnings({
-		"java:S2259" // getVarResolver() is never null post-construction: registerFrameworkDefaults() always registers a VarResolver default supplier before the constructor returns.
-	})
 	protected String resolve(String s) {
 		return getVarResolver().resolve(s);
 	}
@@ -3785,9 +3859,6 @@ public class RestContext extends Context {
 	 * @throws ServletException General servlet exception.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for request execution logic
-	})
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		// Must be careful not to bleed thread-locals.
@@ -4065,7 +4136,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() { return beanStore.getBean(NamedAttributeMap.class, PROP_defaultRequestAttributes).orElse(null); }
+	public NamedAttributeMap getDefaultRequestAttributes() { return beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").orElse(null); }
 
 	/**
 	 * Returns the default request headers for this resource.
@@ -4078,7 +4149,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpHeaderList getDefaultRequestHeaders() { return beanStore.getBean(HttpHeaderList.class, PROP_defaultRequestHeaders).orElse(null); }
+	public HttpHeaderList getDefaultRequestHeaders() { return beanStore.getBean(HttpHeaderList.class, "defaultRequestHeaders").orElse(null); }
 
 	/**
 	 * Returns the default response headers for this resource.
@@ -4091,7 +4162,7 @@ public class RestContext extends Context {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpHeaderList getDefaultResponseHeaders() { return beanStore.getBean(HttpHeaderList.class, PROP_defaultResponseHeaders).orElse(null); }
+	public HttpHeaderList getDefaultResponseHeaders() { return beanStore.getBean(HttpHeaderList.class, "defaultResponseHeaders").orElse(null); }
 
 	/**
 	 * Returns the encoders associated with this context.
@@ -4347,11 +4418,60 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * This is the bean store inherited from the parent resource and does not include
-	 * any beans added by this class.
+	 * any beans added by this class.  For a {@link Rest#children() @Rest(children)} sub-resource, this is the
+	 * parent's {@link #getInheritableBeanStore() inheritable bean store}.
 	 *
 	 * @return The bootstrap bean store for this context.
 	 */
 	public WritableBeanStore getBootstrapBeanStore() { return bootstrapBeanStore; }
+
+	/**
+	 * Returns the bean store that this resource exposes to its {@link Rest#children() @Rest(children)} sub-resources.
+	 *
+	 * <p>
+	 * This store layers this resource's own {@link Bean @Bean} method results and non-<jk>null</jk>
+	 * {@link Bean @Bean} field values on top of the {@link #getBootstrapBeanStore() bootstrap bean store}, and is
+	 * used as the bootstrap bean store of every child.  Since each child's inheritable store sits on top of its
+	 * parent's, a grandchild sees the beans of its parent, its grandparent, and so on up to the root (including
+	 * any Spring context bridged in at the root by {@code SpringRestServlet}).
+	 *
+	 * <p>
+	 * Precedence and isolation:
+	 * <ul>
+	 * 	<li>A child's own {@code @Bean} of the same type and name wins over the inherited one.
+	 * 	<li>Framework-managed types (serializers, parsers, {@link MethodExecStore}, {@link RestChildren}, ...) are
+	 * 		<i>not</i> exported; each child builds its own from its own {@code @Rest} configuration.
+	 * 	<li>Beans flow down only: a child's beans are never visible to its parent or its siblings.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(children={PetResource.<jk>class</jk>, OrderResource.<jk>class</jk>})
+	 * 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+	 *
+	 * 		<jc>// One store shared by every child resource.</jc>
+	 * 		<ja>@Bean</ja>
+	 * 		<jk>public</jk> PetStore petStore() {
+	 * 			<jk>return new</jk> PetStore();
+	 * 		}
+	 * 	}
+	 *
+	 * 	<ja>@Rest</ja>(path=<js>"/pets"</js>)
+	 * 	<jk>public class</jk> PetResource <jk>extends</jk> BasicRestResource {
+	 *
+	 * 		<ja>@Inject</ja> PetStore <jf>store</jf>;  <jc>// Resolved from the group's @Bean method.</jc>
+	 *
+	 * 		<ja>@RestGet</ja>(<js>"/"</js>)
+	 * 		<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+	 * 			<jk>return</jk> <jf>store</jf>.getPets();
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * @return The bean store exposed to child resources.
+	 * @since 10.0.0
+	 */
+	public WritableBeanStore getInheritableBeanStore() { return inheritableBeanStore; }
 
 	/**
 	 * Returns the serializers associated with this context.
@@ -4384,9 +4504,6 @@ public class RestContext extends Context {
 	 *
 	 * @return The context statistics.
 	 */
-	@SuppressWarnings({
-		"java:S2259" // getMethodExecStore() is never null post-construction: registerFrameworkDefaults() always registers a MethodExecStore default supplier before the constructor returns.
-	})
 	public RestContextStats getStats() { return new RestContextStats(startTime, getMethodExecStore().getStatsByTotalTime()); }
 
 	/**
@@ -4700,7 +4817,7 @@ public class RestContext extends Context {
 	 */
 	public boolean isObservabilityDisabled() {
 		var v = observabilityAttribute.get();
-		return v != null && v.equalsIgnoreCase("false");
+		return v != null && eqic(v, "false");
 	}
 
 	/**
@@ -4840,9 +4957,6 @@ public class RestContext extends Context {
 		return this;
 	}
 
-	@SuppressWarnings({
-		"java:S2259" // mi is guarded by the nn(mi) check above; Sonar's flow analysis does not track nn() as a null guard.
-	})
 	private void initializeResourceContext(Object resource2) {
 		var mi = ClassInfo.of(resource2).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (nn(mi)) {
@@ -4860,9 +4974,6 @@ public class RestContext extends Context {
 	 * @return This object.
 	 * @throws ServletException Error occurred.
 	 */
-	@SuppressWarnings({
-		"java:S2259" // getRestChildren() is never null post-construction: registerFrameworkDefaults() always registers a RestChildren default supplier before the constructor returns.
-	})
 	public RestContext postInitChildFirst() throws ServletException {
 		if (initialized.get())
 			return this;
@@ -4910,7 +5021,7 @@ public class RestContext extends Context {
 	 */
 	private void checkObservabilityBackendPresent() {
 		var attr = observabilityAttribute.get();
-		if (!"true".equalsIgnoreCase(attr))
+		if (neqic("true", attr))
 			return;
 		var recorder = beanStore.getBean(MetricsRecorder.class).orElse(null);
 		var tracer = beanStore.getBean(TracerHook.class).orElse(null);
@@ -4932,7 +5043,7 @@ public class RestContext extends Context {
 	private void checkAsyncCompletionExecutorPresent() {
 		var name = builder.asyncCompletionExecutorName != null
 			? builder.asyncCompletionExecutorName
-			: mergeReplacedStringAttribute(PROPERTY_asyncCompletionExecutor, null);
+			: mergeReplacedStringAttribute("asyncCompletionExecutor", null);
 		if (name != null && !name.isBlank())
 			asyncCompletionExecutor.get(); // throws IllegalStateException if bean is missing
 	}
@@ -4997,6 +5108,10 @@ public class RestContext extends Context {
 	 * The default implementation looks at the throwable class name to determine whether it can be converted to another type:
 	 *
 	 * <ul>
+	 * 	<li>{@link BeanQuerySyntaxException} - Converted to {@link BadRequest} carrying the exception's message and an
+	 * 		{@value BeanQueryRequest#ERROR_HEADER} header set to its {@link BeanQuerySyntaxException#code() code()}.
+	 * 	<li>{@link BeanQueryExecutionException} - Converted to {@link InternalServerError} with the generic message
+	 * 		<js>"Query execution failed."</js>; the original exception (and its cause) stays attached for logging.
 	 * 	<li><js>"*AccessDenied*"</js> - Converted to {@link Unauthorized}.
 	 * 	<li><js>"*Empty*"</js>,<js>"*NotFound*"</js> - Converted to {@link NotFound}.
 	 * </ul>
@@ -5022,6 +5137,13 @@ public class RestContext extends Context {
 
 		if (ci.isAssignableTo(ParseException.class) || ci.is(InvalidDataConversionException.class))
 			return new BadRequest(t);
+
+		if (t instanceof BeanQuerySyntaxException e)
+			return new BadRequest(e).setHeader(BeanQueryRequest.ERROR_HEADER, e.code().name());
+
+		// The cause may carry SQL or table names: keep it attached for logging, but never in the client-facing message.
+		if (t instanceof BeanQueryExecutionException e)
+			return new InternalServerError(e, "Query execution failed.");
 
 		String n = cn(t);
 
@@ -5102,9 +5224,6 @@ public class RestContext extends Context {
 	 * @param m The method to get statistics for.
 	 * @return The cached time-stats object.
 	 */
-	@SuppressWarnings({
-		"java:S2259" // getMethodExecStore() is never null post-construction: registerFrameworkDefaults() always registers a MethodExecStore default supplier before the constructor returns.
-	})
 	protected MethodExecStats getMethodExecStats(Method m) {
 		return getMethodExecStore().getStats(m);
 	}
@@ -5188,6 +5307,10 @@ public class RestContext extends Context {
 	 */
 	protected synchronized void handleError(RestSession session, Throwable e) throws IOException {
 
+		// Client disconnected mid-response: routine.  Don't record it, log it, or try to write an error to a dead socket.
+		if (session.logContainerClientAbort(e))
+			return;
+
 		session.exception(e);
 
 		if (getLogger().isLoggable(Level.FINE))
@@ -5209,6 +5332,12 @@ public class RestContext extends Context {
 		var t2 = resolveThrownHeader(e2, isRenderResponseStackTraces(), isRpcDispatch(session));
 		if (nn(t2))
 			res.setHeader(t2.getName(), t2.getValue());
+
+		// Matches the op-method path (HttpResponseProcessor / ProblemDetailsProcessor), which sends this header too.
+		e2.getHeaders().stream()
+			.filter(h -> BeanQueryRequest.ERROR_HEADER.equals(h.getName()))
+			.findFirst()
+			.ifPresent(h -> res.setHeader(h.getName(), h.getValue()));
 
 		try {
 			var statusCode = e2.getStatusLine().getStatusCode();
@@ -5319,6 +5448,10 @@ public class RestContext extends Context {
 	private static boolean writeProblemDetailsBody(HttpServletResponse res, BasicHttpException e, int statusCode) {
 		try {
 			var problem = ProblemAdapters.fromException(e);
+			e.getHeaders().stream()
+				.filter(h -> BeanQueryRequest.ERROR_HEADER.equals(h.getName()))
+				.findFirst()
+				.ifPresent(h -> problem.set("code", h.getValue()));
 			res.setStatus(statusCode);
 			res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
 			res.setHeader("Content-Encoding", "identity");
@@ -5387,9 +5520,6 @@ public class RestContext extends Context {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	protected void handleNotFound(RestSession session) throws Exception {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();
@@ -5470,8 +5600,7 @@ public class RestContext extends Context {
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
 	@SuppressWarnings({
-		"java:S127", // Loop counter i resets to -1 on RESTART
-		"java:S2259" // getResponseProcessors() is never null post-construction: registerFrameworkDefaults() always registers a ResponseProcessor[] default supplier before the constructor returns.
+		"java:S127" // Loop counter i resets to -1 on RESTART
 	})
 	public void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 
@@ -5496,28 +5625,28 @@ public class RestContext extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_allowContentParam, isAllowContentParam())
-			.a(PROPERTY_allowedHeaderParams, getAllowedHeaderParams())
-			.a(PROPERTY_allowedMethodHeaders, getAllowedMethodHeaders())
-			.a(PROPERTY_allowedMethodParams, getAllowedMethodParams())
-			.a(PROP_beanStore, beanStore)
-			.a(PROPERTY_clientVersionHeader, getClientVersionHeader())
-			.a(PROP_consumes, getConsumes())
-			.a(PROP_defaultRequestHeaders, getDefaultRequestHeaders())
-			.a(PROP_defaultResponseHeaders, getDefaultResponseHeaders())
-			.a(PROP_partParser, getPartParser())
-			.a(PROP_partSerializer, getPartSerializer())
-			.a(PROP_produces, getProduces())
-			.a(PROPERTY_renderResponseStackTraces, isRenderResponseStackTraces())
-			.a(PROP_responseProcessors, getResponseProcessors())
-			.a(PROP_restOpArgs, getRestOpArgs())
-			.a(PROP_staticFiles, getStaticFiles())
-			.a(PROP_swaggerProvider, getSwaggerProvider())
-			.a(PROP_openApiProvider, getOpenApiProvider())
-			.a(PROPERTY_uriAuthority, getUriAuthority())
-			.a(PROPERTY_uriContext, getUriContext())
-			.a(PROPERTY_uriRelativity, getUriRelativity())
-			.a(PROPERTY_uriResolution, getUriResolution());
+			.a("allowContentParam", isAllowContentParam())
+			.a("allowedHeaderParams", getAllowedHeaderParams())
+			.a("allowedMethodHeaders", getAllowedMethodHeaders())
+			.a("allowedMethodParams", getAllowedMethodParams())
+			.a("beanStore", beanStore)
+			.a("clientVersionHeader", getClientVersionHeader())
+			.a("consumes", getConsumes())
+			.a("defaultRequestHeaders", getDefaultRequestHeaders())
+			.a("defaultResponseHeaders", getDefaultResponseHeaders())
+			.a("partParser", getPartParser())
+			.a("partSerializer", getPartSerializer())
+			.a("produces", getProduces())
+			.a("renderResponseStackTraces", isRenderResponseStackTraces())
+			.a("responseProcessors", getResponseProcessors())
+			.a("restOpArgs", getRestOpArgs())
+			.a("staticFiles", getStaticFiles())
+			.a("swaggerProvider", getSwaggerProvider())
+			.a("openApiProvider", getOpenApiProvider())
+			.a("uriAuthority", getUriAuthority())
+			.a("uriContext", getUriContext())
+			.a("uriRelativity", getUriRelativity())
+			.a("uriResolution", getUriResolution());
 	}
 
 	/**

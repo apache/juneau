@@ -20,7 +20,6 @@ import static java.lang.Character.isWhitespace;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -1067,30 +1066,22 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"resource",  // Resource management handled externally
-	"java:S106",  // System.err is the intentional default fallback for the configurable console PrintStream
+	"java:S106", // System.err is the intentional default fallback for the configurable console PrintStream
+	"java:S112", // Builder.interceptors(Class...), executeRemoteWithRetry(), materializeRemote() and throwRemoteError() declare throws Exception because remote-proxy calls surface arbitrary checked exceptions
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S6539" // Monster class; RestClient is intentionally a single fluent builder/client aggregating config, call orchestration, and remote-proxy wiring
+	"java:S1133", // Deprecated override required by HttpClient interface
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // buildRemoteRequest(), executeRemoteWithRetry(), callback() and getRrpcInterface() are branch-heavy remote-call orchestration; splitting them would obscure the flow
+	"java:S6539", // Monster class; RestClient is intentionally a single fluent builder/client aggregating config, call orchestration, and remote-proxy wiring
+	"rawtypes", // Raw types necessary for generic type handling.
+	"resource", // Resource management handled externally
+	"unchecked" // Casts in getInstance() (Class<? extends Serializer/Parser>) and in the getRemote()/getRrpcInterface() Proxy.newProxyInstance results are guarded by isAssignableFrom checks and the proxied interface type
 })
 public class RestClient extends MarshallingContextable implements HttpClient, Closeable {
 
-	// Property name constants
-	private static final String PROP_errorCodes = "errorCodes";
-	private static final String PROP_executorService = "executorService";
-	private static final String PROP_executorServiceShutdownOnClose = "executorServiceShutdownOnClose";
-	private static final String PROP_headerData = "headerData";
-	private static final String PROP_interceptors = "interceptors";
-	private static final String PROP_keepHttpClientOpen = "keepHttpClientOpen";
-	private static final String PROP_partParser = "partParser";
-	private static final String PROP_partSerializer = "partSerializer";
-	private static final String PROP_queryData = "queryData";
-	private static final String PROP_rootUrl = "rootUrl";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_itcp = "itcp";
-	private static final String ARG_value = "value";
-	private static final String ARG_interfaceClass = "interfaceClass";
+	// Argument name constants for reqnn
+	private static final String HEADER_ACCEPT = org.apache.juneau.http.header.Accept.NAME;
+	private static final String HEADER_CONTENT_TYPE = org.apache.juneau.http.header.ContentType.NAME;
 
 	/**
 	 * Builder class.
@@ -1236,7 +1227,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
 		public SELF addInterceptorFirst(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
+			httpClientBuilder().addInterceptorFirst(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1253,7 +1244,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
 		public SELF addInterceptorFirst(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
+			httpClientBuilder().addInterceptorFirst(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1270,7 +1261,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
 		public SELF addInterceptorLast(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
+			httpClientBuilder().addInterceptorLast(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1287,7 +1278,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
 		public SELF addInterceptorLast(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
+			httpClientBuilder().addInterceptorLast(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1454,7 +1445,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see #callHandler()
 		 */
 		public SELF callHandler(Class<? extends RestCallHandler> value) {
-			callHandler().type(assertArgNotNull(ARG_value, value));
+			callHandler().type(reqnn("value", value));
 			return self();
 		}
 
@@ -1960,7 +1951,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF errorCodes(Predicate<Integer> value) {
-			errorCodes = assertArgNotNull(ARG_value, value);
+			errorCodes = reqnn("value", value);
 			return self();
 		}
 
@@ -2814,9 +2805,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
-		@SuppressWarnings({
-			"java:S112" // throws Exception intentional - callback/lifecycle method
-		})
 		public SELF interceptors(Class<?>...values) throws Exception {
 			for (var c : values) {
 				if (c == null)
@@ -2882,9 +2870,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for interceptor configuration
-		})
 		public SELF interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (var o : value) {
@@ -3770,9 +3755,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked casts
-		})
 		public SELF parser(Class<? extends Parser> value) {
 			return parsers(value);
 		}
@@ -3854,11 +3836,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked casts
-		})
 		public SELF parsers(Class<? extends Parser>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			parsers().add(value);
 			return self();
 		}
@@ -3897,7 +3876,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF parsers(Parser...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			parsers().add(value);
 			return self();
 		}
@@ -3938,7 +3917,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(assertArgNotNull(ARG_value, value));
+			partParser().type(reqnn("value", value));
 			return self();
 		}
 
@@ -3967,7 +3946,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF partParser(HttpPartParser value) {
-			partParser().impl(assertArgNotNull(ARG_value, value));
+			partParser().impl(reqnn("value", value));
 			return self();
 		}
 
@@ -4007,7 +3986,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(assertArgNotNull(ARG_value, value));
+			partSerializer().type(reqnn("value", value));
 			return self();
 		}
 
@@ -4036,7 +4015,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(assertArgNotNull(ARG_value, value));
+			partSerializer().impl(reqnn("value", value));
 			return self();
 		}
 
@@ -4739,9 +4718,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked casts
-		})
 		public SELF serializer(Class<? extends Serializer> value) {
 			return serializers(value);
 		}
@@ -4824,11 +4800,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked casts
-		})
 		public SELF serializers(Class<? extends Serializer>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			serializers().add(value);
 			return self();
 		}
@@ -4867,7 +4840,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF serializers(Serializer...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			serializers().add(value);
 			return self();
 		}
@@ -5369,9 +5342,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked casts
-		})
 		public SELF universal() {
 			// @formatter:off
 			return
@@ -5514,7 +5484,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF uriContext(UriContext value) {
-			serializers().forEach(x -> x.uriContext(assertArgNotNull(ARG_value, value)));
+			serializers().forEach(x -> x.uriContext(reqnn("value", value)));
 			return self();
 		}
 
@@ -5551,7 +5521,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF uriRelativity(UriRelativity value) {
-			serializers().forEach(x -> x.uriRelativity(assertArgNotNull(ARG_value, value)));
+			serializers().forEach(x -> x.uriRelativity(reqnn("value", value)));
 			return self();
 		}
 
@@ -5590,7 +5560,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF uriResolution(UriResolution value) {
-			serializers().forEach(x -> x.uriResolution(assertArgNotNull(ARG_value, value)));
+			serializers().forEach(x -> x.uriResolution(reqnn("value", value)));
 			return self();
 		}
 
@@ -6044,9 +6014,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * @return A new {@link Builder} object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // DefaultBuilder is the concrete Builder subtype; CRTP type variable T cannot be recovered at the static call site
-	})
 	public static <T extends Builder<T>> Builder<T> create() {
 		return (Builder<T>) new DefaultBuilder();
 	}
@@ -6197,9 +6164,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws RestCallException REST call failed.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for callback parsing state machine
 		"java:S1854", // state = S5 is a necessary state machine transition; SonarLint false positive
-		"java:S4165"  // state already holds S5 in some paths, but the assignment is a deliberate state machine transition
+		"java:S4165" // state already holds S5 in some paths, but the assignment is a deliberate state machine transition
 	})
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);
@@ -6728,9 +6694,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @deprecated Use {@link HttpClientBuilder}.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
-	@SuppressWarnings({
-		"java:S1133" // Deprecated override required by HttpClient interface
-	})
 	@Override /* Overridden from HttpClient */
 	public ClientConnectionManager getConnectionManager() { return httpClient.getConnectionManager(); }
 
@@ -6750,9 +6713,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @deprecated Use {@link RequestConfig}.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
-	@SuppressWarnings({
-		"java:S1133" // Deprecated override required by HttpClient interface
-	})
 	@Override /* Overridden from HttpClient */
 	public HttpParams getParams() { return httpClient.getParams(); }
 
@@ -6868,13 +6828,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"java:S3776", // Cognitive complexity acceptable for remote proxy creation
 		"java:S6541" // Brain method acceptable - remote proxy creation requires complex initialization logic
 	})
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
-		assertArgNotNull(ARG_interfaceClass, interfaceClass);
+		reqnn("interfaceClass", interfaceClass);
 
 		if (rootUrl == null)
 			rootUrl = this.rootUrl != null ? this.rootUrl.get() : null;
@@ -6886,9 +6844,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
 			@Override /* Overridden from InvocationHandler */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for proxy invocation handler
-		})
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				var rom = rm.getOperationMeta(method);
 
@@ -7018,10 +6973,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts in REST client operations
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri, Serializer serializer, Parser parser) {
 
 		if (uri == null) {
@@ -7789,16 +7740,16 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_errorCodes, errorCodes)
-			.a(PROP_executorService, executorService.get())
-			.a(PROP_executorServiceShutdownOnClose, executorServiceShutdownOnClose)
-			.a(PROP_headerData, headerData)
-			.a(PROP_interceptors, interceptors)
-			.a(PROP_keepHttpClientOpen, keepHttpClientOpen)
-			.a(PROP_partParser, partParser)
-			.a(PROP_partSerializer, partSerializer)
-			.a(PROP_queryData, queryData)
-			.a(PROP_rootUrl, rootUrl != null ? rootUrl.get() : null);
+			.a("errorCodes", errorCodes)
+			.a("executorService", executorService.get())
+			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+			.a("headerData", headerData)
+			.a("interceptors", interceptors)
+			.a("keepHttpClientOpen", keepHttpClientOpen)
+			.a("partParser", partParser)
+			.a("partSerializer", partSerializer)
+			.a("queryData", queryData)
+			.a("rootUrl", rootUrl != null ? rootUrl.get() : null);
 	}
 
 	/**
@@ -7875,7 +7826,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	String resolveRemoteUri(Class<?> interfaceClass, String restUrl2, Method method, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) {
 		var fullPath = rom.getFullPath();
-		var allowPrivateUrls = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
+		var allowPrivate = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
 		String uri;
 
 		// Option A: a call-time @Url parameter wins over everything (endpoint replacement).
@@ -7885,7 +7836,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			var v = arg == null ? null : arg.toString();
 			if (v == null || v.trim().isEmpty())
 				throw new RemoteMetadataException(interfaceClass, "@Url parameter on " + method.getDeclaringClass().getName() + "." + method.getName() + " must not be null or blank.");
-			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivateUrls);
+			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivate);
 			// A scheme-less @Url value is relative and resolved against the client root URL only.
 			if (uri.indexOf("://") == -1)
 				uri = restUrl2 + '/' + trimSlashes(uri);
@@ -7893,7 +7844,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// Option B: a declarative base/host override (method-level wins over interface-level).
 			var baseUrl = firstNonEmpty(rom.getBaseUrl(), rm.getBaseUrl());
 			if (ine(baseUrl)) {
-				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath), allowPrivateUrls);
+				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath), allowPrivate);
 			} else {
 				uri = fullPath;
 				if (uri.indexOf("://") == -1)
@@ -7909,7 +7860,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		// the full deny-private policy, not just the http/https scheme check (Review R4: the default (no-override)
 		// path is policy-covered too once it is absolute).
 		try {
-			RemoteUrlPolicy.requireAllowedUrl(uri, allowPrivateUrls);
+			RemoteUrlPolicy.requireAllowedUrl(uri, allowPrivate);
 		} catch (IllegalArgumentException e) {
 			throw new RemoteMetadataException(interfaceClass, e.getMessage());
 		}
@@ -7929,9 +7880,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * the offending interface/method is already reported earlier by {@link #resolveRemoteUri}; neither the interface
 	 * class nor the {@link Method} is needed here.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for the remote-proxy request builder (constants + parts + content negotiation + policy)
-	})
 	RestRequest buildRemoteRequest(String uri, Serializer serializer, Parser parser, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) throws RestCallException {
 		var httpMethod = rom.getHttpMethod();
 		var rc = request(httpMethod, uri, hasContent(httpMethod));
@@ -7966,16 +7914,16 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			var n = h.getName();
 			if (methodHeaderNames.contains(n))
 				return;
-			if (skipContentType && "Content-Type".equalsIgnoreCase(n))
+			if (skipContentType && eqic(HEADER_CONTENT_TYPE, n))
 				return;
-			if (skipAccept && "Accept".equalsIgnoreCase(n))
+			if (skipAccept && eqic(HEADER_ACCEPT, n))
 				return;
 			rc.header(h);
 		});
 		rom.getConstantHeaders().forEach(e -> {
-			if (skipContentType && "Content-Type".equalsIgnoreCase(e.getKey()))
+			if (skipContentType && eqic(HEADER_CONTENT_TYPE, e.getKey()))
 				return;
-			if (skipAccept && "Accept".equalsIgnoreCase(e.getKey()))
+			if (skipAccept && eqic(HEADER_ACCEPT, e.getKey()))
 				return;
 			rc.header(e.getKey(), e.getValue());
 		});
@@ -8075,7 +8023,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		});
 
 		// Set the Accept header from the dedicated attribute unless a caller-supplied @Header param already provided one.
-		if (ine(effAccept) && ! rc.containsHeader("Accept"))
+		if (ine(effAccept) && ! rc.containsHeader(HEADER_ACCEPT))
 			rc.accept(effAccept);
 
 		// Per-call response/read timeout (method-level overrides interface-level) via a per-call RequestConfig.
@@ -8098,8 +8046,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * repeatable body).  Mirrors the next-generation engine's {@code RemoteInvocationHandler.processReturn(...)}.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for the gated retry loop (verb/body/status safety gates + backoff)
-		"java:S112"   // throws Exception intentional - reflective remote-proxy dispatch propagates arbitrary declared exceptions
+		"java:S135" // Two continue statements are the two retry triggers (transport failure, retryable status); merging them would obscure the loop
 	})
 	Object executeRemoteWithRetry(String uri, Serializer serializer, Parser parser, Method method, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) throws Exception {
 		var throwOnError = rm.isThrowOnError() || rom.isThrowOnError();
@@ -8107,8 +8054,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		var maxRetries = (isRetryableMode(ror, method.getReturnType()) && isRetryableVerb(rom, rm)) ? effectiveRetries(rom, rm) : 0;
 
 		// Every getRemote() call is policy-covered; the SSRF guard is active unless allowPrivateUrls opts out.
-		var allowPrivateUrls = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
-		var guardActive = ! allowPrivateUrls;
+		var allowPrivate = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
+		var guardActive = ! allowPrivate;
 		if (guardActive && ! ssrfPolicySupported)
 			throw new RestCallException(null, null, "Refusing to send a policy-covered @Remote request through a "
 				+ "caller-supplied HttpClient that cannot be guaranteed to honor the SSRF guardrail's connect-time "
@@ -8171,9 +8118,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * conditional-throw error mapping (mirrors the next-generation engine's {@code throwIfError} +
 	 * {@code materializeResponse}).
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - reflective remote-proxy dispatch propagates arbitrary declared exceptions
-	})
 	Object materializeRemote(RestResponse res, Method method, RemoteOperationMeta rom, boolean throwOnError) throws Exception {
 		var ror = rom.getReturns();
 		var rv = ror.getReturnValue();
@@ -8244,13 +8188,17 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/** Instantiates an HTTP response/exception bean, preferring a {@code (String body)} constructor. */
 	private static Object instantiateHttpType(Class<?> c, String body) {
 		try {
-			try {
-				return c.getConstructor(String.class).newInstance(body);
-			} catch (NoSuchMethodException e) {
-				return c.getConstructor().newInstance();
-			}
+			return newHttpTypeInstance(c, body);
 		} catch (ReflectiveOperationException e) {
 			throw rex(e, "Could not instantiate HTTP response/exception type %s", c.getName());
+		}
+	}
+
+	private static Object newHttpTypeInstance(Class<?> c, String body) throws ReflectiveOperationException {
+		try {
+			return c.getConstructor(String.class).newInstance(body);
+		} catch (NoSuchMethodException e) {
+			return c.getConstructor().newInstance();
 		}
 	}
 
@@ -8303,9 +8251,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
-	})
 	<T extends Context> T getInstance(Class<T> c) {
 		var o = requestContexts.computeIfAbsent(c, k -> {
 			if (Serializer.class.isAssignableFrom(k)) {

@@ -49,9 +49,7 @@ final class PolicyPinningSocketAddressResolver implements SocketAddressResolver 
 		try {
 			var pinned = RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT);
 			promise.succeeded(List.of(new InetSocketAddress(pinned, port)));
-		} catch (UnknownHostException e) {
-			promise.failed(e);
-		} catch (RuntimeException e) {
+		} catch (UnknownHostException | RuntimeException e) {
 			promise.failed(e);
 		}
 	}

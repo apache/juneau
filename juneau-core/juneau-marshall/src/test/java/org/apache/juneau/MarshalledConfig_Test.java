@@ -37,10 +37,10 @@ import org.apache.juneau.marshall.swap.spi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for test bean handling
-	"unchecked", // Iterator/Iterator<String> unchecked conversion in tests
+	"cast", // Explicit cast needed for type testing
 	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"cast" // Explicit cast needed for type testing
+	"rawtypes", // Raw types necessary for test bean handling
+	"unchecked" // Iterator/Iterator<String> unchecked conversion in tests
 })
 class MarshalledConfig_Test extends TestBase {
 
@@ -440,21 +440,21 @@ class MarshalledConfig_Test extends TestBase {
 		@Override /* InvocationHandler */
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			var methodName = method.getName();
-			if (methodName.equals("getA")) {
+			if (eq(methodName, "getA")) {
 				return map.get("a");
 			}
-			if (methodName.equals("setA")) {
+			if (eq(methodName, "setA")) {
 				map.put("a", args[0]);
 				return null;
 			}
-			if (methodName.equals("getB")) {
+			if (eq(methodName, "getB")) {
 				return map.get("b");
 			}
-			if (methodName.equals("setB")) {
+			if (eq(methodName, "setB")) {
 				map.put("b", args[0]);
 				return null;
 			}
-			if (methodName.equals("toString")) {
+			if (eq(methodName, "toString")) {
 				return map.toString();
 			}
 			return null;

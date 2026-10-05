@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.config;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.marshall.serializer.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent builder for adding or updating a single {@link Config} entry.
@@ -90,7 +90,7 @@ public class EntryBuilder {
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	protected EntryBuilder(Config config, String key) {
-		assertArgNotNull("key", key);
+		reqnn("key", key);
 		this.config = config;
 		this.key = key;
 	}
@@ -150,7 +150,7 @@ public class EntryBuilder {
 	 * @return This object.
 	 */
 	public EntryBuilder comment(String value) {
-		assertArgNotNull("value", value);
+		reqnn("value", value);
 		this.comment = value;
 		return this;
 	}
@@ -176,7 +176,7 @@ public class EntryBuilder {
 	 * @return This object.
 	 */
 	public EntryBuilder preLines(List<String> value) {
-		assertArgNotNull("value", value);
+		reqnn("value", value);
 		this.preLines = value;
 		return this;
 	}

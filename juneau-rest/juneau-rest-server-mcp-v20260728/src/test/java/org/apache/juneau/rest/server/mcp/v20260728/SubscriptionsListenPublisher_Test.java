@@ -30,7 +30,8 @@ import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({
-	"resource" // Fake/real subscriptions and broker registrations in tests are intentionally unassigned/unclosed; closing is handled by test infrastructure.
+	"java:S2925", // Thread.sleep(10) only paces the awaitTrue() poll loop, which re-checks a condition until a deadline; it is not a fixed wait
+	"resource" // FakeSubscription/subscriber and broker registrations are in-memory test doubles that the tests do not need to close
 })
 class SubscriptionsListenPublisher_Test {
 
@@ -44,9 +45,6 @@ class SubscriptionsListenPublisher_Test {
 	}
 
 	/** Polls {@code condition} until it is {@code true} (or the timeout elapses), for state with no completion signal. */
-	@SuppressWarnings({
-		"java:S2925" // The sleep is the poll interval of this bounded-deadline poll loop, not a fixed wait-and-hope delay.
-	})
 	private static boolean awaitTrue(java.util.function.BooleanSupplier condition, Duration timeout) throws InterruptedException {
 		var deadline = System.nanoTime() + timeout.toNanos();
 		do {
@@ -329,9 +327,6 @@ class SubscriptionsListenPublisher_Test {
 	}
 
 	// I4: request(n) with a non-positive n must deliver onError(IllegalArgumentException), not silently no-op.
-	@SuppressWarnings({
-		"java:S2925" // Thread.sleep bounds a window to confirm no delayed second signal arrives; there is no state to poll for since the assertion is on absence.
-	})
 	@Test
 	void requestWithNonPositiveNDeliversIllegalArgumentExceptionOnce() throws Exception {
 		var subscription = new FakeSubscription();

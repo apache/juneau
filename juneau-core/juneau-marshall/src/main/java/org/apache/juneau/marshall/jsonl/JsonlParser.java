@@ -84,7 +84,8 @@ import org.apache.juneau.marshall.json.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable
+	"java:S110", // Inheritance depth acceptable
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class JsonlParser extends JsonParser {
 

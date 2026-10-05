@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Handler for a single MCP resource.
@@ -57,9 +57,9 @@ public interface McpResourceHandler {
 	 * @return A new handler wiring both. Never <jk>null</jk>.
 	 */
 	static McpResourceHandler of(McpResourceSpec descriptor, BiFunction<String,BeanStore,McpResourceOutcome> read) {
-		assertArgNotNull("descriptor", descriptor);
-		assertArgNotNullOrBlank("descriptor.getUri()", descriptor.getUri());
-		assertArgNotNull("read", read);
+		reqnn("descriptor", descriptor);
+		reqnb("descriptor.getUri()", descriptor.getUri());
+		reqnn("read", read);
 		return new McpResourceHandler() {
 			@Override public McpResourceSpec descriptor() {
 				return descriptor;

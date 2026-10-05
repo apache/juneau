@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -41,7 +42,6 @@ import org.junit.jupiter.params.provider.*;
  * console-ui-freemarker-datatables → console-ui-freemarker + datatables (the ONLY module allowed to touch both)
  * datatables                       → rest-server + bean-html5          (NOT console-ui — stays generic)
  * view-freemarker                  → rest-server + freemarker          (NOT -datatables — untouched)
- * theme-packs                      → console-ui + views                (the ONLY module allowed to touch both)
  * </pre>
  *
  * <p>
@@ -82,8 +82,7 @@ class ModuleGraph_Test extends TestBase {
 
 	@Test void a05_consoleUiFreemarkerDatatables_dependsOnBothHalves() throws IOException {
 		var pom = pomOf("juneau-rest-server-console-ui-freemarker-datatables");
-		assertTrue(hasDependency(pom, "juneau-rest-server-console-ui-freemarker"));
-		assertTrue(hasDependency(pom, "juneau-rest-server-datatables"));
+		assertContainsAll(pom, "<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>", "<artifactId>juneau-rest-server-datatables</artifactId>");
 	}
 
 	@Test void a06_consoleUi_dependsOnlyOnRestServer() throws IOException {
@@ -93,38 +92,43 @@ class ModuleGraph_Test extends TestBase {
 
 	@Test void a07_consoleUiFreemarker_dependsOnConsoleUiAndViewFreemarker() throws IOException {
 		var pom = pomOf("juneau-rest-server-console-ui-freemarker");
-		assertTrue(hasDependency(pom, "juneau-rest-server-console-ui"));
-		assertTrue(hasDependency(pom, "juneau-rest-server-view-freemarker"));
-	}
-
-	@Test void a08_themePacks_dependsOnConsoleUi() throws IOException {
-		var pom = pomOf("juneau-rest-server-theme-packs");
-		assertTrue(hasDependency(pom, "juneau-rest-server-console-ui"));
-	}
-
-	@Test void a09_themePacks_dependsOnViews() throws IOException {
-		var pom = pomOf("juneau-rest-server-theme-packs");
-		assertTrue(hasDependency(pom, "juneau-rest-server-views"));
-	}
-
-	@Test void a10_consoleUi_doesNotDependOnThemePacks() throws IOException {
-		var pom = pomOf("juneau-rest-server-console-ui");
-		assertFalse(hasDependency(pom, "juneau-rest-server-theme-packs"));
-	}
-
-	@Test void a11_views_doesNotDependOnThemePacks() throws IOException {
-		var pom = pomOf("juneau-rest-server-views");
-		assertFalse(hasDependency(pom, "juneau-rest-server-theme-packs"));
+		assertContainsAll(pom, "<artifactId>juneau-rest-server-console-ui</artifactId>", "<artifactId>juneau-rest-server-view-freemarker</artifactId>");
 	}
 
 	/**
-	 * {@code ThemePack} lives in {@code console-ui}, and the tempting shortcut - having it reach into {@code views}
-	 * for the widget token names it aliases - would collapse the {@code theme-packs} module's whole reason for
-	 * existing: it is the only module allowed to touch both sides. The alias channel keeps those names as opaque
-	 * strings precisely so this edge stays absent.
+	 * {@code console-ui} stays engine- and toolkit-agnostic: it must not depend on the {@code views} toolkit.
 	 */
 	@Test void a12_consoleUi_doesNotDependOnViews() throws IOException {
 		var pom = pomOf("juneau-rest-server-console-ui");
 		assertFalse(hasDependency(pom, "juneau-rest-server-views"));
+	}
+
+	/** C4 deleted the theme-packs module; custom palettes are FTL-authored, so nothing may re-introduce it. */
+	@Test void a13_restParentPom_listsNoThemePacksModule() throws IOException {
+		var restPom = Files.readString(new File(new File(System.getProperty("user.dir")).getParentFile(), "pom.xml").toPath());
+		assertFalse(restPom.contains("<module>juneau-rest-server-theme-packs</module>"));
+	}
+
+	/**
+	 * {@code PageContractAssert} (C1-D3) ships at main scope so adopters can use it under any test framework;
+	 * it must not pull in JUnit or opentest4j.
+	 */
+	@Test void a20_pageContractAssert_hasNoTestFrameworkImports() throws Exception {
+		var src = java.nio.file.Files.readString(java.nio.file.Path.of(System.getProperty("user.dir"),
+			"src/main/java/org/apache/juneau/rest/server/console/test/PageContractAssert.java"));
+		assertFalse(src.contains("org.junit"), "PageContractAssert must not import JUnit");
+		assertFalse(src.contains("org.opentest4j"), "PageContractAssert must not import opentest4j");
+	}
+
+	/**
+	 * {@code views} now composes the console shell script (C1 Task 5) by taking a compile-scope dependency on
+	 * {@code console-ui}; that edge is one-directional &mdash; {@code console-ui} stays engine/toolkit-agnostic and
+	 * must still not depend back on {@code views} (see {@link #a12_consoleUi_doesNotDependOnViews()}).
+	 */
+	@Test void a21_viewsDependsOnConsoleUi_consoleUiStillNotOnViews() throws IOException {
+		var viewsPom = pomOf("juneau-rest-server-views");
+		assertTrue(hasDependency(viewsPom, "juneau-rest-server-console-ui"));
+		var consoleUiPom = pomOf("juneau-rest-server-console-ui");
+		assertFalse(hasDependency(consoleUiPom, "juneau-rest-server-views"));
 	}
 }

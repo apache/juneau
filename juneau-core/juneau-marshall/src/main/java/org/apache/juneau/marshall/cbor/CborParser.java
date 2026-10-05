@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.cbor;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -78,16 +78,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class CborParser extends InputStreamParser implements CborMetaProvider, TokenReadable, ArrayRecordReadable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_nativeMode = "nativeMode";
 
 	private static final int DEFAULT_MAX_LENGTH = CborInputStream.DEFAULT_MAX_LENGTH;
 
@@ -129,7 +124,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nativeMode = copyFrom.nativeMode;
 			maxLength = copyFrom.maxLength;
 		}
@@ -140,7 +135,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		 * @param copyFrom The parser to copy from.
 		 */
 		protected Builder(CborParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nativeMode = copyFrom.nativeMode;
 			maxLength = copyFrom.maxLength;
 		}
@@ -339,6 +334,6 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	@Override /* Overridden from InputStreamParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_nativeMode, nativeMode);
+			.a("nativeMode", nativeMode);
 	}
 }

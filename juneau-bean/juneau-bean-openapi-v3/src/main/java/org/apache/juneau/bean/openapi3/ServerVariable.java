@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -69,18 +68,10 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S116", // Field name uses trailing underscore (default_) to avoid Java keyword conflict
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ServerVariable extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_default = "default";
-	private static final String PROP_description = "description";
-	private static final String PROP_enum = "enum";
 
 	private List<Object> enum_ = list();
 	private String default_;
@@ -128,10 +119,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
-		if (nn(values))
-			for (var v : values)
-				if (nn(v))
-					enum_.add(v);
+		addAllNn(enum_, values);
 		return this;
 	}
 
@@ -145,11 +133,11 @@ public class ServerVariable extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_enum -> toType(getEnum(), type);
-			case PROP_default -> toType(getDefault(), type);
-			case PROP_description -> toType(getDescription(), type);
+			case "enum" -> toType(getEnum(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> toType(getDescription(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -193,9 +181,9 @@ public class ServerVariable extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(default_), PROP_default)
-			.addIf(nn(description), PROP_description)
-			.addIf(ine(enum_), PROP_enum)
+			.addIf(nn(default_), "default")
+			.addIf(nn(description), "description")
+			.addIf(ine(enum_), "enum")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -203,11 +191,11 @@ public class ServerVariable extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public ServerVariable set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_default -> setDefault(s(value));
-			case PROP_description -> setDescription(s(value));
-			case PROP_enum -> setEnum(lb(Object.class).addAny(value).sparse().build());
+			case "default" -> setDefault(s(value));
+			case "description" -> setDescription(s(value));
+			case "enum" -> setEnum(lb(Object.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

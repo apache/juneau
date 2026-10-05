@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.bson.DataType.*;
 
@@ -44,15 +43,14 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // Output streams managed by calling code
-	"rawtypes",   // Raw types necessary for generic type handling
-	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for serialization dispatch logic
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // Output streams managed by calling code
+	"unchecked" // Cast from raw type is safe by checked conditional above.
 })
 public class BsonSerializerSession extends OutputStreamSerializerSession implements RecordWritable, ArrayRecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -68,7 +66,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -86,7 +84,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	 * @return A new builder.
 	 */
 	public static Builder create(BsonSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private static BsonOutputStream getBsonOutputStream(SerializerPipe out) throws IOException {
@@ -316,9 +314,6 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 		}
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Cast from raw type is safe by checked conditional above.
-	})
 	private void writeArray(BsonOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		c = sort(c);
@@ -327,9 +322,6 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 			writeElement(out, String.valueOf(idx++), x, elementType, null);
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Cast from raw type is safe by checked conditional above.
-	})
 	private void writeMap(BsonOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 		var valueType = type.getValueType();
 		var keyType = type.getKeyType();

@@ -18,6 +18,7 @@ package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.httppart.*;
@@ -154,35 +155,28 @@ class HttpPartBeanMeta_Test {
 	}
 
 	// --------------------------------------------------
-	// ListQuery stock request bean
+	// BeanQueryRequest stock request bean
 	// --------------------------------------------------
 
 	@Test
-	void c01_listQuery_searchIsMultiNamedSearch() {
-		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
+	void c01_listQuery_searchIsSingleNamedSearch() {
+		var meta = RequestBeanMeta.create(BeanQueryRequest.class, AnnotationWorkList.create());
 		assertNotNull(meta);
 		var search = meta.getProperty("getSearch");
-		assertEquals("search", search.getPartName());
-		assertEquals(QUERY, search.getPartType());
-		assertEquals(HttpPartCollectionFormat.MULTI, search.getSchema().getCollectionFormat());
+		assertBean(search, "partName,partType,schema{collectionFormat}", "search,QUERY,{NO_COLLECTION_FORMAT}");
 	}
 
 	@Test
-	void c02_listQuery_optsIsMultiNamedOpt() {
-		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
+	void c02_listQuery_optsIsSingleNamedOpt() {
+		var meta = RequestBeanMeta.create(BeanQueryRequest.class, AnnotationWorkList.create());
 		var opts = meta.getProperty("getOpts");
-		assertEquals("opt", opts.getPartName());
-		assertEquals(QUERY, opts.getPartType());
-		assertEquals(HttpPartCollectionFormat.MULTI, opts.getSchema().getCollectionFormat());
+		assertBean(opts, "partName,partType,schema{collectionFormat}", "opts,QUERY,{NO_COLLECTION_FORMAT}");
 	}
 
 	@Test
 	void c03_listQuery_defaultWireNames() {
-		var meta = RequestBeanMeta.create(ListQuery.class, AnnotationWorkList.create());
-		assertEquals("view", meta.getProperty("getView").getPartName());
-		assertEquals("sort", meta.getProperty("getSort").getPartName());
-		assertEquals("position", meta.getProperty("getPosition").getPartName());
-		assertEquals("limit", meta.getProperty("getLimit").getPartName());
+		var meta = RequestBeanMeta.create(BeanQueryRequest.class, AnnotationWorkList.create());
+		assertMapped(meta, (m,p) -> m.getProperty(p).getPartName(), "getView,getSort,getPosition,getLimit", "view,sort,position,limit");
 	}
 
 	// Minimal mock to avoid requiring full HttpPartParserSession instantiation

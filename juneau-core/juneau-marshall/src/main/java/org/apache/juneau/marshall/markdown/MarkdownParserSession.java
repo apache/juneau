@@ -45,16 +45,17 @@ import org.apache.juneau.marshall.swap.spi.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for parser session hierarchy
 	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S3740", // Raw Map needed for generic map construction from ClassMeta
 	"java:S3776", // Cognitive complexity acceptable for doRead / readAnything
 	"java:S6541", // Brain method acceptable for readAnything
-	"unchecked",
-	"rawtypes",
-	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"rawtypes", // Raw Map is used where the map is created from ClassMeta and its key/value types are only known at runtime
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // (T) casts of parsed cell values and (Collection<Object>) casts of eType.newInstance() match the requested ClassMeta eType
 })
 public class MarkdownParserSession extends ReaderParserSession implements RecordReadable {
 
-	private static final String CONST_type = "_type";
-
+	// Q:  Use eq/neq in this file?
+	
 	final String nullValue;
 	private final Memoizer<JsonParser> json5Parser = memoizer(() -> {
 		var b = Json5Parser.create().marshallingContext((MarshallingContext) getContext());
@@ -226,8 +227,8 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		// Detect table type: if 2 columns and first header is "Property"/"Key", treat as key/value table
 		var isKeyValue = headers.size() == 2
-			&& (headers.get(0).equalsIgnoreCase("Property") || headers.get(0).equalsIgnoreCase("Key"))
-			&& headers.get(1).equalsIgnoreCase("Value");
+			&& (eqic(headers.get(0), "Property") || eqic(headers.get(0), "Key"))
+			&& eqic(headers.get(1), "Value");
 
 		if (isKeyValue)
 			return readKeyValueTable(headers, dataLines, eType, outer);
@@ -265,7 +266,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			ClassMeta<?> actualType = eType;
 			for (var line : dataLines) {
 				var cells = splitTableRow(line);
-				if (cells.size() >= 2 && CONST_type.equals(cells.get(0))) {
+				if (cells.size() >= 2 && eq(cells.get(0), "_type")) {
 					var typeName = cells.get(1);
 					var registry = eType.getBeanRegistry();
 					var resolved = registry != null ? registry.getClassMeta(typeName) : null;
@@ -282,7 +283,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				var key = cells.get(0);
 
 				// Skip _type row - it was used for type resolution above
-				if (CONST_type.equals(key))
+				if (eq(key, "_type"))
 					continue;
 
 				var rawVal = cells.get(1);
@@ -306,9 +307,6 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		}
 
 		if (eType.isMap()) {
-			@SuppressWarnings({
-				"java:S3740" // Raw Map needed for generic map construction from ClassMeta
-			})
 			Map map = eType.canCreateNewInstance(outer) ? (Map) eType.newInstance(outer) : newGenericMap();
 			var keyType = eType.getKeyType() != null ? eType.getKeyType() : string();
 			var valueType = eType.getValueType() != null ? eType.getValueType() : object();
@@ -435,7 +433,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		// Check if there's a _type column and resolve the actual type using the bean registry
 		ClassMeta<?> actualType = eType;
-		int typeColIndex = headers.indexOf(CONST_type);
+		int typeColIndex = headers.indexOf("_type");
 		if (typeColIndex >= 0 && typeColIndex < cells.size()) {
 			var typeName = cells.get(typeColIndex);
 			if (ine(typeName)) {
@@ -462,7 +460,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (CONST_type.equals(header))
+				if (eq(header, "_type"))
 					continue;
 				var val = i < cells.size() ? cells.get(i) : null;
 				m.put(header, readCellValue(val, object(), null));
@@ -475,7 +473,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			var m = newBeanMap(outer, actualType.inner());
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (CONST_type.equals(header))
+				if (eq(header, "_type"))
 					continue;
 				var rawVal = i < cells.size() ? cells.get(i) : null;
 				var pm = m.getPropertyMeta(header);
@@ -491,15 +489,12 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			return m.getBean();
 		}
 		if (actualType.isMap()) {
-			@SuppressWarnings({
-				"java:S3740" // Raw Map needed for generic map construction from ClassMeta
-			})
 			Map map = actualType.canCreateNewInstance(outer) ? (Map) actualType.newInstance(outer) : newGenericMap();
 			var keyType = actualType.getKeyType() != null ? actualType.getKeyType() : string();
 			var valueType = actualType.getValueType() != null ? actualType.getValueType() : object();
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (CONST_type.equals(header))
+				if (eq(header, "_type"))
 					continue;
 				var key = convertAttrToType(map, header, keyType);
 				var rawVal = i < cells.size() ? cells.get(i) : null;
@@ -530,7 +525,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			var trimmed = line.trim();
 			if (trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("+ "))
 				items.add(trimmed.substring(2));
-			else if (trimmed.equals("-") || trimmed.equals("*") || trimmed.equals("+"))
+			else if (eqa(trimmed, "-", "*", "+"))
 				items.add("");
 		}
 
@@ -620,8 +615,8 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		if (eType.isObject()) {
 			// Auto-detect type
-			if ("true".equals(val)) return (T) Boolean.TRUE;
-			if ("false".equals(val)) return (T) Boolean.FALSE;
+			if (eq(val, "true")) return (T) Boolean.TRUE;
+			if (eq(val, "false")) return (T) Boolean.FALSE;
 			try { return (T) Integer.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not int, try next */ }
 			try { return (T) Long.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not long, try next */ }
 			try { return (T) Double.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not double, treat as string */ }
@@ -690,7 +685,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		// Unescape Markdown table escaping first
 		cell = unescapeCell(cell);
 		// Booleans and numbers don't need quoting
-		if ("true".equals(cell) || "false".equals(cell))
+		if (eqa(cell, "true", "false"))
 			return cell;
 		try { Integer.parseInt(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not int, try next */ }
 		try { Long.parseLong(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not long, try next */ }
@@ -719,7 +714,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			if (!first) sb.append(",");
 			first = false;
 			sb.append(header).append(":");
-			if (CONST_type.equals(header)) {
+			if (eq(header, "_type")) {
 				// Keep _type as a quoted string so the JSON5 parser can resolve it
 				sb.append(cell == null ? "null" : "'" + cell + "'");
 			} else {
@@ -745,7 +740,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			if (!first) sb.append(",");
 			first = false;
 			sb.append(key).append(":");
-			if (CONST_type.equals(key)) {
+			if (eq(key, "_type")) {
 				sb.append(val == null ? "null" : "'" + val + "'");
 			} else {
 				sb.append(cellToJson5(val));

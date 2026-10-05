@@ -68,45 +68,6 @@ public class Constants {
 	public static final String LANG_RDFPROTO = "RDF/PROTO";
 
 	/**
-	 * RDF property identifier <js>"items"</js>.
-	 *
-	 * <p>
-	 * For resources that are collections, this property identifies the RDF Sequence container for the items in the
-	 * collection.
-	 */
-	public static final String RDF_juneauNs_ITEMS = "items";
-
-	/**
-	 * RDF property identifier <js>"root"</js>.
-	 *
-	 * <p>
-	 * Property added to root nodes to help identify them as root elements during parsing.
-	 *
-	 * <p>
-	 * Added if {@link RdfSerializer.Builder#addRootProperty()} setting is enabled.
-	 */
-	public static final String RDF_juneauNs_ROOT = "root";
-
-	/**
-	 * RDF property identifier <js>"class"</js>.
-	 *
-	 * <p>
-	 * Property added to bean resources to identify the class type.
-	 *
-	 * <p>
-	 * Added if {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting is enabled.
-	 */
-	public static final String RDF_juneauNs_TYPE = "_type";
-
-	/**
-	 * RDF property identifier <js>"value"</js>.
-	 *
-	 * <p>
-	 * Property added to nodes to identify a simple value.
-	 */
-	public static final String RDF_juneauNs_VALUE = "value";
-
-	/**
 	 * RDF resource that identifies a <jk>null</jk> value.
 	 */
 	public static final String RDF_NIL = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil";

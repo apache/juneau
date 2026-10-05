@@ -17,12 +17,14 @@
 package org.apache.juneau.rest.server.health;
 
 import static java.util.EnumSet.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -57,7 +59,29 @@ class HealthMixin_Test extends TestBase {
 		if (r.getStatusCode() != 503)
 			fail("Expected 503 but got " + r.getStatusCode() + " with body: " + r.getContent().asString());
 		r.assertContent().asString().isContains("\"status\":\"DOWN\"");
+		// Each named indicator is its own bean: db is UP, cache is DOWN.
+		var components = JsonMap.ofString(r.getContent().asString()).getMap("components");
+		assertBean(components, "db{status},cache{status}", "{UP},{DOWN}");
 		c.get("/livez").accept("application/json").run().assertStatus(200);
 		c.get("/readyz").accept("application/json").run().assertStatus(503);
+	}
+
+	/** Docs pattern (16.09 / 10.07): a package-private named {@code @Bean HealthIndicator} is honored. */
+	@Rest(mixins={HealthMixin.class})
+	public static class B extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Bean(name="dbHealth")
+		HealthIndicator dbHealth() {
+			return () -> Health.up("dbHealth").build();
+		}
+	}
+
+	@Test void b01_packagePrivateNamedIndicatorIncluded() throws Exception {
+		var c = MockRestClient.buildLax(B.class);
+		var r = c.get("/healthz").accept("application/json").run().cacheContent();
+		r.assertStatus(200);
+		var components = JsonMap.ofString(r.getContent().asString()).getMap("components");
+		assertBean(components, "dbHealth{status}", "{UP}");
 	}
 }

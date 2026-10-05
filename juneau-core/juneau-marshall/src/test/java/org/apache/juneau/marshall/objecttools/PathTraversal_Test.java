@@ -32,9 +32,9 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes",  // Raw types required for generic test utility.
-	"serial",  // serialVersionUID not required for test classes.
-	"java:S5961"  // Test comprehensiveness requires more than 25 assertions.
+	"java:S5961", // Test comprehensiveness requires more than 25 assertions.
+	"rawtypes", // Raw types required for generic test utility.
+	"serial" // serialVersionUID not required for test classes.
 })
 class PathTraversal_Test extends TestBase {
 

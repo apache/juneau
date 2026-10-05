@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.UriUtils.*;
 
@@ -64,12 +63,9 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class McpAuthorizationCodeAcquirer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -111,7 +107,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder authorizationEndpoint(URI value) {
-			authorizationEndpoint = assertSecureOrLoopback(assertArgNotNull(ARG_value, value));
+			authorizationEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -122,7 +118,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull(ARG_value, value));
+			tokenEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -133,7 +129,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank(ARG_value, value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -144,7 +140,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank(ARG_value, value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -156,9 +152,9 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -182,7 +178,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull(ARG_value, value);
+			resource = reqnn("value", value);
 			return this;
 		}
 
@@ -197,7 +193,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder expectedIssuer(URI value) {
-			expectedIssuer = assertArgNotNull(ARG_value, value);
+			expectedIssuer = reqnn("value", value);
 			return this;
 		}
 
@@ -239,8 +235,8 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder redirectPath(String value) {
-			redirectPath = assertArgNotNullOrBlank(ARG_value, value);
-			assertArg(redirectPath.startsWith("/"), "redirectPath must start with '/' (was '%s')", redirectPath);
+			redirectPath = reqnb("value", value);
+			req(redirectPath.startsWith("/"), "redirectPath must start with '/' (was '%s')", redirectPath);
 			return this;
 		}
 
@@ -258,7 +254,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder redirectPort(int value) {
-			assertArg(value == 0 || (value >= 1 && value <= 65535), "redirectPort must be 0 (ephemeral) or in 1..65535 (was %s)", value);
+			req(value == 0 || (value >= 1 && value <= 65535), "redirectPort must be 0 (ephemeral) or in 1..65535 (was %s)", value);
 			redirectPort = value;
 			return this;
 		}
@@ -270,7 +266,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder browserLauncher(Consumer<URI> value) {
-			browserLauncher = assertArgNotNull(ARG_value, value);
+			browserLauncher = reqnn("value", value);
 			return this;
 		}
 
@@ -281,7 +277,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder store(EphemeralStore value) {
-			store = assertArgNotNull(ARG_value, value);
+			store = reqnn("value", value);
 			return this;
 		}
 
@@ -292,8 +288,8 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull(ARG_value, value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -305,7 +301,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -414,7 +410,7 @@ public class McpAuthorizationCodeAcquirer {
 	 * @throws OAuthFlowException If the token-exchange HTTP round-trip fails or the IdP returns an error.
 	 */
 	public OAuthToken acquire(Duration timeout) {
-		assertArgNotNull("timeout", timeout);
+		reqnn("timeout", timeout);
 		LoopbackRedirectReceiver receiver;
 		try {
 			receiver = new LoopbackRedirectReceiver(redirectPath, redirectPort, DEFAULT_CALLBACK_HTML);
@@ -443,8 +439,8 @@ public class McpAuthorizationCodeAcquirer {
 	 * @return The authorization URL.
 	 */
 	public URI buildAuthorizationUrl(OAuthAuthorizationCodeFlow flow, String state, CodeVerifier verifier) {
-		assertArgNotNull("flow", flow);
-		assertArgNotNull("verifier", verifier);
+		reqnn("flow", flow);
+		reqnn("verifier", verifier);
 		var challenge = CodeChallenge.compute(CodeChallengeMethod.S256, verifier);
 		return flow.buildAuthorizationUrl(state, challenge);
 	}
@@ -463,8 +459,8 @@ public class McpAuthorizationCodeAcquirer {
 	 * 	check fails.
 	 */
 	public OAuthToken handleCallback(OAuthAuthorizationCodeFlow flow, URI callbackUri) {
-		assertArgNotNull("flow", flow);
-		assertArgNotNull("callbackUri", callbackUri);
+		reqnn("flow", flow);
+		reqnn("callbackUri", callbackUri);
 		var resp = parse(callbackUri);
 		var state = resp.getState() == null ? null : resp.getState().getValue();
 		if (state == null)
@@ -510,12 +506,12 @@ public class McpAuthorizationCodeAcquirer {
 	 * @throws McpAuthException If validation fails.
 	 */
 	public static String validateAuthorizationResponse(URI callbackUri, String expectedState, URI expectedIssuer, boolean requireIssuerParameter) {
-		assertArgNotNull("callbackUri", callbackUri);
-		assertArgNotNullOrBlank("expectedState", expectedState);
-		assertArgNotNull("expectedIssuer", expectedIssuer);
+		reqnn("callbackUri", callbackUri);
+		reqnb("expectedState", expectedState);
+		reqnn("expectedIssuer", expectedIssuer);
 		var resp = parse(callbackUri);
 		var state = resp.getState() == null ? null : resp.getState().getValue();
-		if (!expectedState.equals(state))
+		if (neq(expectedState, state))
 			throw new McpAuthException("Authorization callback state mismatch (possible CSRF)");
 		return extractCode(resp, expectedIssuer, false, requireIssuerParameter);
 	}

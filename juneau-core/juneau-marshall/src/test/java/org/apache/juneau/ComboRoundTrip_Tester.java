@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.yaml.*;
  * @param <T>
  */
 @SuppressWarnings({
-	"rawtypes",
+	"rawtypes", // Raw Consumer/Serializer.Builder/Parser.Builder types are used to apply type-erased builder customizers
 	"unchecked" // Consumer/Builder casts and generic round-trip in test infra
 })
 public class ComboRoundTrip_Tester<T> {
@@ -275,7 +275,7 @@ public class ComboRoundTrip_Tester<T> {
 	}
 
 	private boolean isSkipped(String testName, String expected) {
-		return expected == null || "SKIP".equals(expected) || skipTest.test(testName);
+		return expected == null || eq(expected, "SKIP") || skipTest.test(testName);
 	}
 
 	public void testSerialize(String testName) throws Exception {

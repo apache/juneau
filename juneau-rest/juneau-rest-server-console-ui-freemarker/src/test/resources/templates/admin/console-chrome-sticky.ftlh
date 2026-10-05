@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@console theme="open" icon="/app/logo.svg" brand="My App" title="Doc Title" chrome="true">
+--><@console icon="/app/logo.svg" brand="My App" title="Doc Title" chrome="true">
 <@body>data-runtime-tab="open"</@body>
 <@head phase="before-page-css"><link rel="stylesheet" href="app-early.css"></@head>
 <@navigation>

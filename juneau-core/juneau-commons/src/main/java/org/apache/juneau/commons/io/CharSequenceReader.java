@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -85,12 +84,9 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class CharSequenceReader extends BufferedReader {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_cbuf = "cbuf";
 
 	private final CharSequence cs;
 	private final String s;
@@ -150,7 +146,7 @@ public class CharSequenceReader extends BufferedReader {
 
 	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) {
-		assertArgNotNull(ARG_cbuf, cbuf);
+		reqnn("cbuf", cbuf);
 		if (next >= length)
 			return -1;
 		int n = Math.min(length - next, len);

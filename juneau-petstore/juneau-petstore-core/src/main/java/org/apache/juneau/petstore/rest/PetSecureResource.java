@@ -59,7 +59,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link AuthFilterChain}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
@@ -76,7 +76,24 @@ public class PetSecureResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient PetStore store = new PetStore();
+	/**
+	 * The shared store, injected from the parent's bean store (the runner registers one seeded {@code PetStore}).
+	 * When this resource is mounted standalone (unit tests), {@link #store()} falls back to a classic-rows store.
+	 */
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient PetStore store;
+
+	@SuppressWarnings({
+		"java:S2654" // synchronized guards the lazy standalone fallback, racing against the injected value.
+	})
+	private synchronized PetStore store() {
+		if (store == null)
+			store = new PetStore();
+		return store;
+	}
 
 	/**
 	 * Provides the {@link RestGuardList} that gates every op on this resource with a
@@ -103,7 +120,7 @@ public class PetSecureResource extends BasicRestServlet {
 	 */
 	@RestGet("/pets")
 	public Collection<Pet> getPets() {
-		return store.getPets();
+		return store().getPets();
 	}
 
 	/**
@@ -115,7 +132,7 @@ public class PetSecureResource extends BasicRestServlet {
 	 */
 	@RestGet("/pets/{id}")
 	public Pet getPet(@Path("id") long id) {
-		var pet = store.getPet(id);
+		var pet = store().getPet(id);
 		if (pet == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		return pet;

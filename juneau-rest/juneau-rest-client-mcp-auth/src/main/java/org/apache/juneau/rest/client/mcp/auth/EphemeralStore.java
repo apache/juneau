@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -105,13 +104,13 @@ public class EphemeralStore {
 	 * @param clock The clock for TTL comparisons.  Must not be <jk>null</jk>.
 	 */
 	public EphemeralStore(Duration ttl, int maxEntries, Clock clock) {
-		assertArgNotNull("ttl", ttl);
-		assertArg(!ttl.isZero() && !ttl.isNegative(), "ttl must be positive");
-		assertArg(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was %s)", ttl);
-		assertArg(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
+		reqnn("ttl", ttl);
+		req(!ttl.isZero() && !ttl.isNegative(), "ttl must be positive");
+		req(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was %s)", ttl);
+		req(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.ttl = ttl;
 		this.maxEntries = maxEntries;
-		this.clock = assertArgNotNull("clock", clock);
+		this.clock = reqnn("clock", clock);
 		this.entries = new LinkedHashMap<>(16, 0.75f, true) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -129,8 +128,8 @@ public class EphemeralStore {
 	 * @param expectedIssuer The discovered issuer for the SEP-2468 {@code iss} check.  May be <jk>null</jk>.
 	 */
 	public void store(String state, String codeVerifier, URI expectedIssuer) {
-		assertArgNotNullOrBlank("state", state);
-		assertArgNotNullOrBlank("codeVerifier", codeVerifier);
+		reqnb("state", state);
+		reqnb("codeVerifier", codeVerifier);
 		var now = clock.instant();
 		synchronized (lock) {
 			sweepExpired(now);

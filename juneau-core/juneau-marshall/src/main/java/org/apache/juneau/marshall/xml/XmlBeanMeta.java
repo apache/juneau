@@ -35,6 +35,9 @@ import org.apache.juneau.marshall.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3776" // The XmlBeanMetaBuilder constructor branches on every @Xml format (ATTR, ELEMENT, COLLAPSED, ATTRS, content formats).
+})
 public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	private static class XmlBeanMetaBuilder {
@@ -45,9 +48,6 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		BeanPropertyMeta contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for XML bean metadata building
-		})
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			var bmcm = (ClassMeta<?>) beanMeta.getBeanInfo();
 			var c = bmcm.inner();
@@ -126,9 +126,6 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for XML bean metadata initialization
-	})
 	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 

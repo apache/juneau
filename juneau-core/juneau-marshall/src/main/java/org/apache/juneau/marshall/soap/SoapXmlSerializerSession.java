@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.soap;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -34,14 +34,11 @@ import org.apache.juneau.marshall.xml.*;
  *
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class SoapXmlSerializerSession extends XmlSerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -57,7 +54,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SoapXmlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -76,7 +73,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(SoapXmlSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final SoapXmlSerializer ctx;

@@ -98,7 +98,7 @@ out.generic_stripHasNoDetailTestId = gStrip.dataset.testid !== 'detail-tabs';
 // The activation callback fires EXACTLY once per activation, with the activated pane.
 activations = [];
 env.setActive(null);
-gStrip.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+gStrip.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });
 out.kbd_right_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 out.kbd_right_focus = env.getActive() === gTabs[1];
 out.kbd_right_activationCount = activations.length;
@@ -106,25 +106,25 @@ out.kbd_right_activationId = activations.length ? activations[0].id : null;
 out.kbd_right_activationPane = activations.length ? activations[0].pane === panes[1] : false;
 
 activations = [];
-gStrip.dispatch('keydown', { key: 'End', preventDefault: function () {} });
+gStrip.dispatch('keydown', { key: 'End', preventDefault: function () { /* no-op */ } });
 out.kbd_end_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 out.kbd_end_activationCount = activations.length;
 
 activations = [];
-gStrip.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () {} });   // wraps End -> first
+gStrip.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });   // wraps End -> first
 out.kbd_rightWrap_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 
 activations = [];
-gStrip.dispatch('keydown', { key: 'ArrowLeft', preventDefault: function () {} });    // wraps first -> last
+gStrip.dispatch('keydown', { key: 'ArrowLeft', preventDefault: function () { /* no-op */ } });    // wraps first -> last
 out.kbd_leftWrap_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 
 activations = [];
-gStrip.dispatch('keydown', { key: 'Home', preventDefault: function () {} });
+gStrip.dispatch('keydown', { key: 'Home', preventDefault: function () { /* no-op */ } });
 out.kbd_home_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 out.kbd_home_activationCount = activations.length;
 
 activations = [];
-gStrip.dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+gStrip.dispatch('keydown', { key: 'Enter', preventDefault: function () { /* no-op */ } });
 out.kbd_unhandled_selected = gTabs.map(function (b) { return b.getAttribute('aria-selected'); }).join(',');
 out.kbd_unhandled_activationCount = activations.length;
 
@@ -178,7 +178,7 @@ out.sectioned_stripPresent = dStrip != null;
 out.sectioned_stripRole = dStrip ? dStrip.getAttribute('role') : null;
 out.sectioned_stripMode = dStrip ? dStrip.dataset.juneauStripMode : null;
 out.sectioned_stripClass = dStrip ? dStrip.className : null;
-out.sectioned_stripIsFirstChildOfWrap = wrap != null && wrap.firstChild === dStrip;
+out.sectioned_stripIsFirstChildOfWrap = wrap?.firstChild === dStrip;
 out.sectioned_noDetailTestId = sectionedDialog.querySelector('[data-testid="detail-tabs"]') === null;
 
 const dTabs = dStrip ? tabsOf(dStrip) : [];

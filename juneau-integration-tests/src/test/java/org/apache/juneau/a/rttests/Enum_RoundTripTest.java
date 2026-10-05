@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -153,11 +154,11 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		}
 
 		public static BEnum fromString(String val) {
-			if (val.equals("xfoo"))
+			if (eq(val, "xfoo"))
 				return FOO;
-			if (val.equals("xbar"))
+			if (eq(val, "xbar"))
 				return BAR;
-			if (val.equals("xbaz"))
+			if (eq(val, "xbaz"))
 				return BAZ;
 			return null;
 		}

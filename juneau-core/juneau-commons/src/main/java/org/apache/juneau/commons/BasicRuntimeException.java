@@ -28,7 +28,7 @@ public class BasicRuntimeException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings({
 		"java:S1104", // Field reassigned via setMessage() method, cannot be final
-		"java:S1165"  // Cannot be final; reassigned by setMessage() on mutable exception instances
+		"java:S1165" // Cannot be final; reassigned by setMessage() on mutable exception instances
 	})
 	String message;
 

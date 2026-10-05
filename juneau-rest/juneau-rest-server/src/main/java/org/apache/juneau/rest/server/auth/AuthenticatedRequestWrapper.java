@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.security.*;
 import java.util.*;
@@ -24,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An {@link HttpServletRequestWrapper} that surfaces the filter-resolved {@link Principal} and aggregated roles via the
@@ -51,13 +51,9 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_req = "req";
-	private static final String ARG_result = "result";
 
 	private final Principal principal;
 	private final Set<String> roles;
@@ -69,8 +65,8 @@ public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
 	 * @param result The authentication result. Must not be <jk>null</jk>.
 	 */
 	public AuthenticatedRequestWrapper(HttpServletRequest req, AuthResult result) {
-		super(assertArgNotNull(ARG_req, req));
-		assertArgNotNull(ARG_result, result);
+		super(reqnn("req", req));
+		reqnn("result", result);
 		this.principal = result.getPrincipal();
 		this.roles = new HashSet<>(result.getRoles());
 	}
@@ -113,7 +109,7 @@ public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override /* Overridden from HttpServletRequest */
 	public Object getAttribute(String name) {
-		if (RestServerConstants.PRINCIPAL_ATTR.equals(name))
+		if (eq(name, "juneau.principal"))
 			return principal;
 		return super.getAttribute(name);
 	}

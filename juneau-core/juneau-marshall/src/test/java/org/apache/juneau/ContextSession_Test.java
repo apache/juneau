@@ -64,7 +64,7 @@ class ContextSession_Test extends TestBase {
 	}
 
 	@Test void a03_property_nullKey() {
-		// Test line 142: assertArgNotNull on key
+		// Test line 142: reqnn on key
 		var session = MarshallingContext.DEFAULT.createSession();
 		assertThrows(IllegalArgumentException.class, () -> {
 			session.property(null, "value");

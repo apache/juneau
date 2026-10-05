@@ -61,33 +61,30 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"unused" // Unused in this context; kept for API consistency or future use.
+})
 class AuthFilterChain_GuardIntegration_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------
 	// Shared fixtures.
 	// -----------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"unused"  // Unused in this context; kept for API consistency or future use.
-	})
 	private static final Principal ALICE = () -> "alice";
-	@SuppressWarnings({
-		"unused"  // Unused in this context; kept for API consistency or future use.
-	})
 	private static final Principal BOB = () -> "bob";
 
 	/** TokenValidator: "bearer-user" → ClaimsPrincipal(alice, roles=[user]) */
 	private static final TokenValidator BEARER_VALIDATOR = token -> {
-		if ("bearer-user".equals(token))
+		if (eq(token, "bearer-user"))
 			return new ClaimsPrincipal("alice", Map.of("roles", List.of("user"), "sub", "alice"));
-		if ("bearer-admin".equals(token))
+		if (eq(token, "bearer-admin"))
 			return new ClaimsPrincipal("alice", Map.of("roles", List.of("admin"), "sub", "alice"));
 		throw new AuthenticationException("Unknown bearer token").wwwAuthenticate("Bearer realm=\"api\"");
 	};
 
 	/** ApiKeyStore: "apikey-admin" → ClaimsPrincipal(bob, roles=[admin]) */
 	private static final ApiKeyStore KEY_STORE = key -> {
-		if ("apikey-admin".equals(key))
+		if (eq(key, "apikey-admin"))
 			return o(new ClaimsPrincipal("bob", Map.of("roles", List.of("admin"), "sub", "bob")));
 		return oe();
 	};
@@ -188,7 +185,7 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 		var r = runChain(buildChain(), "Bearer bearer-user", null);
 		var w = (AuthenticatedRequestWrapper) r.captured;
 		// @Auth arg resolver reads PRINCIPAL_ATTR
-		var attr = w.getAttribute(RestServerConstants.PRINCIPAL_ATTR);
+		var attr = w.getAttribute("juneau.principal");
 		assertNotNull(attr);
 		assertInstanceOf(Principal.class, attr);
 		assertEquals("alice", ((Principal) attr).getName());
@@ -206,7 +203,7 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------
 
 	private static final TokenValidator MOCK_VALIDATOR = token -> {
-		if ("user-tok".equals(token))
+		if (eq(token, "user-tok"))
 			return new ClaimsPrincipal("alice", Map.of("roles", List.of("user"), "sub", "alice"));
 		throw new AuthenticationException("bad token").wwwAuthenticate("Bearer realm=\"test\"");
 	};

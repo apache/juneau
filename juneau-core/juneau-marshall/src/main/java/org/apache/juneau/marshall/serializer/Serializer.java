@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.serializer;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -72,28 +71,10 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"rawtypes"
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes" // createSerializerBuilder() returns the raw Builder because the concrete SELF type is only known reflectively via Context.createBuilder(c)
 })
 public class Serializer extends MarshallingTraverseContext {
-
-	// Property name constants
-	private static final String PROP_addBeanTypes = "addBeanTypes";
-	private static final String PROP_addRootType = "addRootType";
-	private static final String PROP_keepNullProperties = "keepNullProperties";
-	private static final String PROP_listener = "listener";
-	private static final String PROP_nonDefault = "nonDefault";
-	private static final String PROP_sortCollections = "sortCollections";
-	private static final String PROP_sortMaps = "sortMaps";
-	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
-	private static final String PROP_trimEmptyMaps = "trimEmptyMaps";
-	private static final String PROP_trimStrings = "trimStrings";
-	private static final String PROP_uriContext = "uriContext";
-	private static final String PROP_uriRelativity = "uriRelativity";
-	private static final String PROP_uriResolution = "uriResolution";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -147,7 +128,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;
@@ -172,7 +153,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;
@@ -494,7 +475,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/InclusionAndNullHandling">Inclusion and null handling</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NullAndInclusionPolicies">Inclusion and null handling</a>
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1064,8 +1045,8 @@ public class Serializer extends MarshallingTraverseContext {
 		uriResolution = builder.uriResolution;
 
 		this.producesMediaType = MediaType.of(produces);
-		this.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = u(nn(builder.accept) ? l(MediaType.ofAll(splita(builder.accept))) : l(this.producesMediaType));
+		this.acceptRanges = MediaRanges.of(nn(accept) ? accept : produces);
+		this.acceptMediaTypes = u(l(nn(builder.accept) ? MediaType.ofAll(splita(builder.accept)) : new MediaType[]{this.producesMediaType}));
 	}
 
 	@Override /* Overridden from Context */
@@ -1352,18 +1333,18 @@ public class Serializer extends MarshallingTraverseContext {
 	@Override /* Overridden from MarshallingTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypes, addBeanTypes)
-			.a(PROP_addRootType, addRootType)
-			.a(PROP_keepNullProperties, keepNullProperties)
-			.a(PROP_listener, listener)
-			.a(PROP_nonDefault, nonDefault)
-			.a(PROP_sortCollections, sortCollections)
-			.a(PROP_sortMaps, sortMaps)
-			.a(PROP_trimEmptyCollections, trimEmptyCollections)
-			.a(PROP_trimEmptyMaps, trimEmptyMaps)
-			.a(PROP_trimStrings, trimStrings)
-			.a(PROP_uriContext, uriContext)
-			.a(PROP_uriRelativity, uriRelativity)
-			.a(PROP_uriResolution, uriResolution);
+			.a("addBeanTypes", addBeanTypes)
+			.a("addRootType", addRootType)
+			.a("keepNullProperties", keepNullProperties)
+			.a("listener", listener)
+			.a("nonDefault", nonDefault)
+			.a("sortCollections", sortCollections)
+			.a("sortMaps", sortMaps)
+			.a("trimEmptyCollections", trimEmptyCollections)
+			.a("trimEmptyMaps", trimEmptyMaps)
+			.a("trimStrings", trimStrings)
+			.a("uriContext", uriContext)
+			.a("uriRelativity", uriRelativity)
+			.a("uriResolution", uriResolution);
 	}
 }

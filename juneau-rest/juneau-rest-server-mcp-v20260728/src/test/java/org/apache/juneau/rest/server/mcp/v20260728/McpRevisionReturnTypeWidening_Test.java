@@ -44,7 +44,9 @@ import org.junit.jupiter.api.Test;
  * to the sealed {@code McpDispatchResult}) landed on all four pinned signatures, and that it does
  * not disturb serialization of a normal (non-streaming) dispatch.
  */
-@SuppressWarnings({"resource"})
+@SuppressWarnings({
+	"resource" // The MockRestClient built in toolsCallJsonUnchangedAfterWidening() is in-memory and is deliberately not closed
+})
 class McpRevisionReturnTypeWidening_Test {
 
 	@Test

@@ -49,7 +49,9 @@ import org.junit.jupiter.api.*;
  * {@code maxLength} bound above): many pages that each individually pass {@code maxLength} must still be
  * rejected once their decompressed sizes sum past the configured ceiling.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked" // Tests cast the raw List returned by p.read(bytes, List.class, SimpleBean.class) to List<SimpleBean>
+})
 class ParquetParser_MaxLength_Test extends TestBase {
 
 	// The default row/element-count ceiling (ParquetParserSession.DEFAULT_MAX_COUNT).

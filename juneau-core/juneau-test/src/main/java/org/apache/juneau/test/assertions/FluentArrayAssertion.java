@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -107,13 +106,10 @@ import org.apache.juneau.commons.utils.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_entries = "entries";
-	private static final String ARG_test = "test";
 
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
 	private static final String MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty");
@@ -289,7 +285,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAll(Predicate<E> test) throws AssertionError {
-		assertArgNotNull(ARG_test, test);
+		reqnn("test", test);
 		for (int i = 0, j = length(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
@@ -304,7 +300,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAny(Predicate<E> test) throws AssertionError {
-		assertArgNotNull(ARG_test, test);
+		reqnn("test", test);
 		for (var v : value())
 			if (test.test(v))
 				return returns();
@@ -348,7 +344,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		"unchecked" // Type erasure requires cast for array has check
 	})
 	public R isHas(E...entries) throws AssertionError {
-		assertArgNotNull(ARG_entries, entries);
+		reqnn("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return is(p);
 	}

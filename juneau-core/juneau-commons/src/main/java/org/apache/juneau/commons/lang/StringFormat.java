@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.lang;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
@@ -74,12 +73,11 @@ import org.apache.juneau.commons.utils.*;
  * @see StringUtils#mformat(String, Object...)
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for this specific logic
+	"java:S6541" // parseTokens() is a single-pass tokenizer over the whole MessageFormat/printf pattern grammar
 })
 public final class StringFormat {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_pattern = "pattern";
 
 	/**
 	 * Literal text token.
@@ -151,10 +149,6 @@ public final class StringFormat {
 		}
 
 		@Override
-		@SuppressWarnings({
-			"java:S3776", // Cognitive complexity acceptable for this specific logic
-			"java:S6541", // StringBuilder used in local scope; no synchronization needed
-		})
 		void append(StringBuilder sb, Object[] args, Locale locale) {
 			// String.format() throws MissingFormatArgumentException when argument is missing
 			if (args == null || index >= args.length || index < 0) {
@@ -378,7 +372,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
 	 */
 	public static StringFormat ofPrintf(String pattern) {
-		assertArgNotNull(ARG_pattern, pattern);
+		reqnn("pattern", pattern);
 		return CACHE.get(pattern, () -> new StringFormat(pattern));
 	}
 
@@ -399,8 +393,6 @@ public final class StringFormat {
 	 */
 	@SuppressWarnings({
 		"java:S125", // S125: state-machine/docs comments
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
 		"java:S1871" // else-branch intentionally duplicates known-conversion branch; semantics differ (valid vs unknown format char)
 	})
 	private static List<Token> parseTokens(String pattern) {
@@ -493,7 +485,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
 	 */
 	public StringFormat(String pattern) {
-		this.pattern = assertArgNotNull(ARG_pattern, pattern);
+		this.pattern = reqnn("pattern", pattern);
 		this.tokens = parseTokens(pattern).toArray(Token[]::new);
 	}
 

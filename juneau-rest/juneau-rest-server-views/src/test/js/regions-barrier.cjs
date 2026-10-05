@@ -230,13 +230,13 @@ function emitOnce(h, id, msg) {
 		const h = scene();
 		out.t49d_value = h.R.BARRIER_DEADLINE_MS;
 		// Not settable through the published namespace...
-		try { h.R.BARRIER_DEADLINE_MS = 5; } catch (e) { /* strict-mode refusal is also an acceptable answer */ }
+		try { h.R.BARRIER_DEADLINE_MS = 5; } catch (error) { /* strict-mode refusal is also an acceptable answer */ }
 		// ...nor through a global the runtime might have consulted...
 		h.env.window.JUNEAU_BARRIER_DEADLINE_MS = 5;
 		h.env.window.juneauBarrierDeadlineMs = 5;
 		// ...nor through an attribute on the region or on its host.
 		h.R.registerRuntime('test');
-		const el = subscriber(h, 'slow', { enrol: false, returns: function () { return new Promise(function () {}); } });
+		const el = subscriber(h, 'slow', { enrol: false, returns: function () { return new Promise(function () { /* no-op */ }); } });
 		el.dataset.juneauRegionBarrierMs = '5';
 		el.dataset.juneauBarrierDeadline = '5';
 		h.env.body.dataset.juneauBarrierDeadline = '5';
@@ -731,7 +731,7 @@ function emitOnce(h, id, msg) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

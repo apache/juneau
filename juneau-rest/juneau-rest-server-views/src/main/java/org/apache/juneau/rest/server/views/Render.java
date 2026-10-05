@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * A named cell-renderer reference in the {@code VIEW_META} wire contract (design doc §6.6).
@@ -45,7 +46,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,meta,popover")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class Render {
 
 	/** The renderer id (registry key in {@code juneau-renders.js}). */
@@ -178,10 +181,11 @@ public class Render {
 	 * <p>
 	 * {@code tone} is one of the five status tones
 	 * {@code info}|{@code success}|{@code warning}|{@code error}|{@code neutral} (see
-	 * {@link org.apache.juneau.rest.server.widgets.StatusTone}).  A <jk>null</jk> or blank {@code tone} is omitted
+	 * {@link StatusTone}).  A <jk>null</jk> or blank {@code tone} is omitted
 	 * from {@code meta} (identical to {@link #pill()}); {@code neutral} is emitted verbatim and, like an absent tone,
-	 * leaves the dot inheriting {@code currentColor}.  The tone is validated fail-closed on the serving path by
-	 * {@code ViewDef.validate()} &mdash; on the cell host and on a fill sink alike.
+	 * leaves the dot inheriting {@code currentColor}.  The tone is not validated server-side: the client
+	 * (<c>NS._render.pillTones</c>) ignores an off-palette token, so the dot gets no tone class.  Prefer
+	 * {@link #pill(StatusTone)} to stay on the palette.
 	 *
 	 * <p>
 	 * Not to be confused with {@link #progress(int, Integer, Integer)}'s {@code warn}/{@code exceeds} meta, which are
@@ -195,5 +199,25 @@ public class Render {
 		if (tone != null && ! tone.isBlank())
 			r.meta("tone", tone);
 		return r;
+	}
+
+	/**
+	 * Creates a {@code pill} renderer with an explicit dot tone taken from the {@link StatusTone} palette.
+	 *
+	 * <p>
+	 * Equivalent to <c>pill(tone == <jk>null</jk> ? <jk>null</jk> : tone.wire())</c>; a <jk>null</jk> tone is
+	 * omitted from {@code meta}, identical to {@link #pill()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Renders as {id:"pill",meta:{tone:"warning"}}.</jc>
+	 * 	Render <jv>r</jv> = Render.<jsm>pill</jsm>(StatusTone.<jsf>WARNING</jsf>);
+	 * </p>
+	 *
+	 * @param tone The explicit dot tone.  Can be <jk>null</jk> to inherit.
+	 * @return A new {@link Render}.
+	 */
+	public static Render pill(StatusTone tone) {
+		return pill(tone == null ? null : tone.wire());
 	}
 }

@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Utility class for creating mocked writer serializers.
  */
+@SuppressWarnings({
+	"java:S9149" // Test fixture's static factories intentionally shadow the parent's.
+})
 public class FakeWriterSerializer extends WriterSerializer implements HttpPartSerializer {
 
 	//-----------------------------------------------------------------------------------------------------------------

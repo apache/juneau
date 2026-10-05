@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A repeatable {@link HttpBody} that streams content from a {@link File}.
@@ -42,7 +42,7 @@ public final class FileBody implements HttpBody {
 	private final String contentType;
 
 	private FileBody(File file, String contentType) {
-		this.file = assertArgNotNull("file", file);
+		this.file = reqnn("file", file);
 		this.contentType = contentType;
 	}
 

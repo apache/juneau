@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -48,7 +47,7 @@ import org.apache.juneau.marshall.sse.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are HTTP header names and REST protocol wire values; intentional
-	"resource"    // client is not owned here; run() transfers RestResponse ownership to caller
+	"resource" // client is not owned here; run() transfers RestResponse ownership to caller
 })
 public final class RestRequest {
 
@@ -135,7 +134,7 @@ public final class RestRequest {
 	 * @return <jk>true</jk> if the header is present.
 	 */
 	public boolean hasHeader(String name) {
-		return headers.stream().anyMatch(h -> name.equalsIgnoreCase(h.getName()));
+		return headers.stream().anyMatch(h -> eqic(name, h.getName()));
 	}
 
 	// --------------------------------------------------
@@ -507,7 +506,7 @@ public final class RestRequest {
 	 * @since 10.0.0
 	 */
 	public RestRequest requestId(String value) {
-		this.requestId = assertArgNotNull("value", value);
+		this.requestId = reqnn("value", value);
 		return header(RequestIdConstants.HEADER, value);
 	}
 
@@ -542,7 +541,7 @@ public final class RestRequest {
 	 */
 	String peekRequestIdHeader() {
 		return headers.stream()
-			.filter(h -> RequestIdConstants.HEADER.equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic(RequestIdConstants.HEADER, h.getName()))
 			.map(HttpHeader::getValue)
 			.filter(java.util.Objects::nonNull)
 			.findFirst()
@@ -711,7 +710,7 @@ public final class RestRequest {
 		}
 
 		if (client.parsers != null || client.defaultParser != null) {
-			var hasAccept = headers.stream().anyMatch(h -> "Accept".equalsIgnoreCase(h.getName()));
+			var hasAccept = headers.stream().anyMatch(h -> eqic("Accept", h.getName()));
 			if (! hasAccept) {
 				var accept = client.getDefaultAccept();
 				if (accept != null)
@@ -793,7 +792,7 @@ public final class RestRequest {
 		var result = template;
 		Object remainder = null;
 		for (var entry : pathData.entrySet()) {
-			if ("/*".equals(entry.getKey())) {
+			if (eq(entry.getKey(), "/*")) {
 				remainder = entry.getValue();  // @PathRemainder — applied after named substitutions
 				continue;
 			}

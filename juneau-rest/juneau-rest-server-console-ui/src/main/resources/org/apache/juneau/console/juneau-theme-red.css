@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 /*
- * Shipped "red" theme pack for the admin-console chrome.
+ * Shipped "red" stock theme for the admin-console chrome.
  *
  * GENERATED, drift-guarded: this html:root{} token block is provably identical to Theme.RED in
- * juneau-rest-server-console-ui (see ThemePackAssets_Test).  It is linked by the FTL <@theme name="red"/>
+ * juneau-rest-server-console-ui (see StockThemeCss_Test).  It is linked by the FTL <@theme name="red"/>
  * directive AFTER chrome.css, so its tokens win the cascade over chrome.css's baked-in Theme.OPEN block.
  * Do not hand-edit; regenerate from the Theme constant instead.
  */
@@ -74,15 +74,15 @@ html:root {
 	--jc-tag-red-bg: #f8d7da;
 	--jc-tag-red-text: #721c24;
 	--jc-tag-red-border: #f5c6cb;
-	--jc-probe-ok-bg: #d1fae5;
-	--jc-probe-ok-text: #065f46;
-	--jc-probe-ok-dot: #10b981;
-	--jc-probe-fail-bg: #fee2e2;
-	--jc-probe-fail-text: #991b1b;
-	--jc-probe-fail-dot: #dc2626;
-	--jc-probe-warn-bg: #fef3c7;
-	--jc-probe-warn-text: #92400e;
-	--jc-probe-warn-dot: #f59e0b;
+	--jc-probe-success-bg: #d1fae5;
+	--jc-probe-success-text: #065f46;
+	--jc-probe-success-dot: #10b981;
+	--jc-probe-error-bg: #fee2e2;
+	--jc-probe-error-text: #991b1b;
+	--jc-probe-error-dot: #dc2626;
+	--jc-probe-warning-bg: #fef3c7;
+	--jc-probe-warning-text: #92400e;
+	--jc-probe-warning-dot: #f59e0b;
 	--jc-probe-neutral-bg: #e5e7eb;
 	--jc-probe-neutral-text: #374151;
 	--jc-probe-neutral-dot: #6b7280;

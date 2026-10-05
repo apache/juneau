@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -148,7 +147,7 @@ public class Warning extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code code} is out of range or {@code agent}/{@code date} is invalid.
 		 */
 		public Builder warning(int code, String agent, String text, String date) {
-			assertArgNotNull("date", date);
+			reqnn("date", date);
 			return add(render(code, agent, text, date));
 		}
 
@@ -160,7 +159,7 @@ public class Warning extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder add(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("warning value must not be blank");
@@ -171,8 +170,8 @@ public class Warning extends HttpStringHeader {
 		private static String render(int code, String agent, String text, String date) {
 			if (code < 0 || code > 999)
 				throw iaex("warn-code must be in the range 0-999: %s", code);
-			assertArgNotNull("agent", agent);
-			assertArgNotNull("text", text);
+			reqnn("agent", agent);
+			reqnn("text", text);
 			var a = agent.trim();
 			if (a.isEmpty())
 				throw iaex("warn-agent must not be blank");

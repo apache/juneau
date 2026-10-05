@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -118,6 +117,9 @@ import org.apache.juneau.marshall.marshaller.*;
  * @see JsonSchemaPropertyValidatorFactory
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // validateAgainst(), validateNumber() and validateObject() check many independent JSON Schema keywords in a single pass each
+})
 public final class JsonSchemaValidator implements PropertyValidator {
 
 	private final JsonSchema<?> schema;
@@ -130,7 +132,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 * @return A new validator.
 	 */
 	public static JsonSchemaValidator of(JsonSchema<?> schema) {
-		assertArgNotNull("schema", schema);
+		reqnn("schema", schema);
 		return new JsonSchemaValidator(schema);
 	}
 
@@ -144,7 +146,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 * @return A new validator.
 	 */
 	public static JsonSchemaValidator of(JsonMap schemaMap) {
-		assertArgNotNull("schemaMap", schemaMap);
+		reqnn("schemaMap", schemaMap);
 		return of(JsonSchemaBeanGenerator.toBean(schemaMap));
 	}
 
@@ -171,9 +173,6 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		validateAgainst(schema, value, patternCache);
 	}
 
-	@SuppressWarnings({
-		"java:S3776"  // Cognitive complexity — dispatch table over the JSON Schema keyword set.
-	})
 	private static void validateAgainst(JsonSchema<?> s, Object value, Pattern patternOverride) {
 		validateEnum(s, value);
 		validateConst(s, value);
@@ -314,9 +313,6 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// Number
 	// =================================================================================================================
 
-	@SuppressWarnings({
-		"java:S3776"  // Numeric keyword fan-out is intentionally flat; each branch maps to one Draft 2020-12 keyword.
-	})
 	private static void validateNumber(JsonSchema<?> s, Number value) {
 		BigDecimal bd;
 		try {
@@ -387,9 +383,6 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// Object (Map / bean shape)
 	// =================================================================================================================
 
-	@SuppressWarnings({
-		"java:S3776"  // Cognitive complexity — flat fan-out over the Draft 2020-12 object keywords (min/maxProperties, required, properties).
-	})
 	private static void validateObject(JsonSchema<?> s, Map<?,?> value) {
 		var minP = s.getMinProperties();
 		var maxP = s.getMaxProperties();
@@ -430,9 +423,6 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		return new BigDecimal(n.toString());
 	}
 
-	@SuppressWarnings({
-		"java:S3776"  // Equality fan-out — mirrors the type matrix exposed by deserialized JSON Schema bean values.
-	})
 	private static boolean jsonEquals(Object a, Object b) {
 		if (a == b)
 			return true;

@@ -107,7 +107,9 @@ class MicroserviceTest_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("resource") // jsc.getServer() is the microservice's own Jetty Server; closing it from a test would be wrong.
+	@SuppressWarnings({
+		"resource" // jsc.getServer() is the microservice's own Jetty Server; closing it from a test would be wrong.
+	})
 	void a04_serverIsReallyListening(Microservice ms) {
 		var jsc = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow();
 		var listening = false;

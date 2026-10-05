@@ -38,6 +38,9 @@ import org.apache.juneau.marshall.serializer.*;
  * @param <T> The class type that this transform applies to.
  * @param <F> The transformed class type.
  */
+@SuppressWarnings({
+	"unchecked" // unswap() casts the result of the reflective unswap-method invocation to T; the method is selected to return the surrogate's normal class
+})
 public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 
 	/**
@@ -52,9 +55,8 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * @return The list of object swaps that apply to this class. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"rawtypes", // Raw types necessary for generic type handling
-		"java:S1452"  // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
+		"java:S1452", // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
+		"rawtypes" // Raw types necessary for generic type handling
 	})
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, MarshallingContext bc) {
 		List<SurrogateSwap<?,?>> l = ll();
@@ -99,9 +101,6 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T
-	})
 	public T unswap(MarshallingSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
 			throw new ParseException("unswap() method not implement on surrogate class '%2$s': %1$s", cn(f), getNormalClass().getNameFull());

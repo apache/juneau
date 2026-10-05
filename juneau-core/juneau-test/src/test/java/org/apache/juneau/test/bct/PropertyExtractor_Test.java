@@ -34,8 +34,8 @@ import org.junit.jupiter.api.*;
  * and edge case handling for PropertyExtractor implementations.</p>
  */
 @SuppressWarnings({
-	"unchecked", // Cast from Object to List; toList raw invocation in tests
-	"cast" // Explicit cast needed for type testing
+	"cast", // Explicit cast needed for type testing
+	"unchecked" // Cast from Object to List; toList raw invocation in tests
 })
 class PropertyExtractor_Test extends TestBase {
 
@@ -226,7 +226,7 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if ("error".equals(key)) {
+					if (eq(key, "error")) {
 						throw new RuntimeException("Intentional test exception");
 					}
 					return "SUCCESS:" + key;
@@ -247,12 +247,12 @@ class PropertyExtractor_Test extends TestBase {
 			var recursive = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
-					return o instanceof String && "recursive".equals(key);
+					return o instanceof String && eq(key, "recursive");
 				}
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if ("recursive".equals(key) && o instanceof String o2) {
+					if (eq(key, "recursive") && o instanceof String o2) {
 						// Use the converter recursively
 						return "RECURSIVE[" + converter.stringify(o2.length()) + "]";
 					}
@@ -315,7 +315,7 @@ class PropertyExtractor_Test extends TestBase {
 			var customExtractor = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
-					return "customProp".equals(key);
+					return eq(key, "customProp");
 				}
 
 				@Override
@@ -344,7 +344,7 @@ class PropertyExtractor_Test extends TestBase {
 			var first = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
-					return "first".equals(key);
+					return eq(key, "first");
 				}
 
 				@Override
@@ -356,7 +356,7 @@ class PropertyExtractor_Test extends TestBase {
 			var second = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
-					return "second".equals(key);
+					return eq(key, "second");
 				}
 
 				@Override
@@ -385,7 +385,7 @@ class PropertyExtractor_Test extends TestBase {
 			var custom = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
-					return "custom".equals(key);
+					return eq(key, "custom");
 				}
 
 				@Override

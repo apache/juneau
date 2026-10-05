@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * A functional interface representing an operation that accepts three arguments and returns no result.
@@ -70,12 +71,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface Consumer3<A,B,C> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer3} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -98,7 +96,7 @@ public interface Consumer3<A,B,C> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer3<A,B,C> andThen(Consumer3<? super A,? super B,? super C> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b, C c) -> {
 			apply(a, b, c);
 			after.apply(a, b, c);

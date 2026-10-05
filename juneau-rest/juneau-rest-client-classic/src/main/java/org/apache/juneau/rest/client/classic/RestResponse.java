@@ -73,9 +73,9 @@ import org.apache.juneau.test.assertions.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"resource" // Resource management handled externally
 })
 public class RestResponse implements HttpResponse, AutoCloseable {
 

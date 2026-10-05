@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonSupport">UON Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class UonConfigAnnotation {
 
 	/**
@@ -37,9 +40,6 @@ public class UonConfigAnnotation {
 	/**
 	 * Applies {@link UonConfig} annotations to a {@link UonParser.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {
 
 		/**
@@ -64,9 +64,6 @@ public class UonConfigAnnotation {
 	/**
 	 * Applies {@link UonConfig} annotations to a {@link UonSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<UonConfig,UonSerializer.Builder> {
 
 		/**

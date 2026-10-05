@@ -41,6 +41,9 @@ import org.junit.jupiter.api.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Microservice_PushPopOverlay_Test extends TestBase {
 
 	interface ExternalApi {
@@ -69,13 +72,7 @@ class Microservice_PushPopOverlay_Test extends TestBase {
 
 	@Test
 	void a01_pushedOverlay_shadowsProductionBean() {
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var beanStore = microservice.getBeanStore();
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var overlay = new TestBeanStore().override(ExternalApi.class, () -> "overlay-a01");
 
 		var snapshot = beanStore.pushOverlay(overlay);
@@ -89,9 +86,6 @@ class Microservice_PushPopOverlay_Test extends TestBase {
 
 	@Test
 	void a02_afterPop_productionBeanIsRestored_noRebuild() {
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var beanStore = microservice.getBeanStore();
 		assertEquals("production", beanStore.getBean(ExternalApi.class).orElseThrow().describe(),
 			"After the previous test popped its overlay, the same microservice should resolve the production bean");
@@ -99,13 +93,7 @@ class Microservice_PushPopOverlay_Test extends TestBase {
 
 	@Test
 	void a03_freshOverlay_doesNotSeePreviousTestsOverlay() {
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var beanStore = microservice.getBeanStore();
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var overlay = new TestBeanStore().override(ExternalApi.class, () -> "overlay-a03");
 
 		var snapshot = beanStore.pushOverlay(overlay);

@@ -47,10 +47,10 @@ const out = {};
 // by different code paths that may set attributes in a different order), and children recursively - which is a
 // stricter, not a looser, check than a literal innerHTML byte-compare would be for two independently-built trees.
 function escapeText(s) {
-	return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	return String(s == null ? '' : s).replaceAll(/&/g, '&amp;').replaceAll(/</g, '&lt;').replaceAll(/>/g, '&gt;');
 }
 function escapeAttr(s) {
-	return escapeText(s).replace(/"/g, '&quot;');
+	return escapeText(s).replaceAll(/"/g, '&quot;');
 }
 function serializeNode(n) {
 	if (n.nodeType === 3) return escapeText(n.textContent);
@@ -62,9 +62,9 @@ function serializeNode(n) {
 	// class at all; every helper's whole visual identity is carried by class names, so omitting it would make
 	// this "byte-identical" check blind to the one attribute two independently-built trees are most likely to
 	// differ on.
-	const attrMap = Object.assign({}, n.attrs || {});
+	const attrMap = { ...n.attrs };
 	if (n.className) attrMap.class = n.className; else delete attrMap.class;
-	const attrs = Object.keys(attrMap).sort()
+	const attrs = Object.keys(attrMap).sort((a, b) => Number(a > b) - Number(a < b))
 		.map(function (k) { return ' ' + k + '="' + escapeAttr(attrMap[k]) + '"'; }).join('');
 	// The shim's `el.textContent = v` setter (views-dom-shim.cjs) stores the string on a private `_text` field
 	// rather than minting a real child text node, so a leaf whose content was set that way has EMPTY childNodes -
@@ -81,7 +81,7 @@ function serializeChildren(el) {
 }
 
 function load(opts) {
-	return H.load(rendersJsPath, viewsJsPath, regionsJsPath, Object.assign({ helpersJsPath: helpersJsPath }, opts));
+	return H.load(rendersJsPath, viewsJsPath, regionsJsPath, { helpersJsPath: helpersJsPath, ...opts });
 }
 
 (async function () {
@@ -106,7 +106,7 @@ function load(opts) {
 		R.initRegion(el);
 		calls.resolve(0, { contractVersion: '1', fields: { status: 'ok' } });
 		await H.flush();
-		out.t2_declaredKeys = Object.keys(ctx.declared).sort();
+		out.t2_declaredKeys = Object.keys(ctx.declared).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t2_dataUrl = ctx.declared.dataUrl;
 		out.t2_renderer = ctx.declared.renderer;
 		out.t2_lazy = ctx.declared.lazy;
@@ -175,17 +175,17 @@ function load(opts) {
 		// 404 -> kind:"empty".
 		const p2 = ctx.fetchDeclared();
 		calls.resolve(2, { contractVersion: '1', fields: {} }, { status: 404 });
-		try { await p2; out.t13_404kind = 'did-not-reject'; } catch (e) { out.t13_404kind = e.kind; }
+		try { await p2; out.t13_404kind = 'did-not-reject'; } catch (error) { out.t13_404kind = error.kind; }
 
 		// Any other non-ok -> kind:"error".
 		const p3 = ctx.fetchDeclared();
 		calls.resolve(3, { contractVersion: '1', fields: {} }, { status: 500 });
-		try { await p3; out.t13_500kind = 'did-not-reject'; } catch (e) { out.t13_500kind = e.kind; }
+		try { await p3; out.t13_500kind = 'did-not-reject'; } catch (error) { out.t13_500kind = error.kind; }
 
 		// A contractVersion mismatch -> kind:"error".
 		const p4 = ctx.fetchDeclared();
 		calls.resolve(4, { contractVersion: '999', fields: { a: 1 } });
-		try { await p4; out.t13_mismatchKind = 'did-not-reject'; } catch (e) { out.t13_mismatchKind = e.kind; }
+		try { await p4; out.t13_mismatchKind = 'did-not-reject'; } catch (error) { out.t13_mismatchKind = error.kind; }
 	}
 	{
 		const { env, R } = load();
@@ -234,7 +234,7 @@ function load(opts) {
 	// =================================================================================================================
 	{
 		const src = fs.readFileSync(path.resolve(regionsJsPath), 'utf8');
-		const bodyMatch = src.match(/function runDefaultPopulate\(ctx, container\) \{[\s\S]*?\n\t\}/);
+		const bodyMatch = /function runDefaultPopulate\(ctx, container\) \{[\s\S]*?\n\t\}/.exec(src);
 		const body = bodyMatch ? bodyMatch[0] : '';
 		const fetchCallSites = (body.match(/fetchDeclared\(\)/g) || []).length;
 		out.t16g_oneFetchDeclaredCallSite = fetchCallSites;
@@ -272,7 +272,7 @@ function load(opts) {
 		R.initRegion(el);
 		calls.resolve(0, { contractVersion: '1', fields: { status: 'ok', count: 3 } });
 		await H.flush();
-		const keys = Object.keys(ctx.data).sort();
+		const keys = Object.keys(ctx.data).sort((a, b) => Number(a > b) - Number(a < b));
 		out.t16h_ctxDataKeys = keys; // must be exactly ['count','status'] - no contractVersion/status(transport)/ok/text
 		out.t16h_noEnvelopeLeak = keys.indexOf('contractVersion') < 0 && keys.indexOf('fields') < 0;
 		out.t16h_noTransportLeak = keys.indexOf('ok') < 0 && keys.indexOf('text') < 0;
@@ -284,7 +284,7 @@ function load(opts) {
 	// =================================================================================================================
 	{
 		const { env, R, clock } = load();
-		R.register('cap14a', function () {});
+		R.register('cap14a', function () { /* no-op */ });
 		const el = H.mkRegion(env, { id: 't14a', type: 'card-body', populate: 'cap14a',
 			declared: { refreshMs: 30000 } });
 		R.initRegion(el);
@@ -312,7 +312,7 @@ function load(opts) {
 		// the source level instead: `onPollTick` checks the busy flags BEFORE calling `runPopulate`, and on the
 		// busy branch it re-arms rather than dropping the region's poll forever.
 		const src = fs.readFileSync(path.resolve(regionsJsPath), 'utf8');
-		const bodyMatch = src.match(/function onPollTick\(region\) \{[\s\S]*?\n\t\}/);
+		const bodyMatch = /function onPollTick\(region\) \{[\s\S]*?\n\t\}/.exec(src);
 		const body = bodyMatch ? bodyMatch[0] : '';
 		out.t14b_checksBusyBeforeRepopulate = /if \(region\.invoking \|\| region\.inFlight\)/.test(body);
 		out.t14b_reArmsOnBusySkip = /armPollTimer\(region\)/.test(body) && /return;/.test(body);
@@ -411,13 +411,9 @@ function load(opts) {
 	}
 
 	// =================================================================================================================
-	// Test 16a (parity) - serializeParams: the JS twin's output for the closed rule set (design §8.2.1), for direct
-	// comparison against RegionDef.serializeParams's identical golden cases (RegionDef_Test.java g10-g16) from the
-	// Java side.  g17 (nested map) is DELIBERATELY excluded from the parity claim: the server throws
-	// IllegalArgumentException there (RegionDef_Test#g17), while the client silently drops a nested value in
-	// defensive depth (documented in juneau-regions.js's own serializeParams doc) since a validated descriptor can
-	// never reach the client carrying one - so the two sides' behavior diverges ONLY on an input that cannot occur
-	// on the wire, and that divergence is intentional, not a parity gap.
+	// Test 16a - serializeParams golden cases for the closed rule set (design §8.2.1).  juneau-regions.js is the only
+	// implementation; Regions_DeclarativeDefault_Test pins each output as a literal.  A nested map is dropped
+	// client-side (never thrown) because RegionDef.validate() rejects one before it can reach the wire.
 	// =================================================================================================================
 	{
 		const { R } = load();
@@ -433,7 +429,7 @@ function load(opts) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

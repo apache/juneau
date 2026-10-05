@@ -50,8 +50,8 @@ import org.opentest4j.*;
 
 
 @SuppressWarnings({
-	"java:S1186", // Empty test method intentional for framework testing
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S1186", // Empty test method intentional for framework testing
 	"serial" // Serialization not relevant in test code
 })
 class RrpcInterface_Test extends TestBase {

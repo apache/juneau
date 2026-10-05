@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Class-related utility methods.
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ResourceBundleUtils {
 
@@ -33,9 +33,6 @@ public class ResourceBundleUtils {
 	 * Prevents instantiation.
 	 */
 	private ResourceBundleUtils() {}
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_loader = "loader";
 
 	/**
 	 * Same as {@link ResourceBundle#getBundle(String, Locale, ClassLoader)} but never throws a {@link MissingResourceException}.
@@ -46,7 +43,7 @@ public class ResourceBundleUtils {
 	 * @return The matching resource bundle, or <jk>null</jk> if it could not be found.
 	 */
 	public static ResourceBundle findBundle(String baseName, Locale locale, ClassLoader loader) {
-		assertArgNotNull(ARG_loader, loader);
+		reqnn("loader", loader);
 		try {
 			return ResourceBundle.getBundle(baseName, locale, loader);
 		} catch (@SuppressWarnings("unused") MissingResourceException e) {

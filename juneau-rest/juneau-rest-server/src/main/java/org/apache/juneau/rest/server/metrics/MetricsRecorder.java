@@ -78,6 +78,9 @@ import java.time.*;
  * @since 10.0.0
  */
 @FunctionalInterface
+@SuppressWarnings({
+	"java:S6213" // 'record' is the established SPI method name; renaming would break the public observability API.
+})
 public interface MetricsRecorder {
 
 	/**
@@ -107,8 +110,7 @@ public interface MetricsRecorder {
 	 * 	Empty string (default) means no additional tags. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S6213", // 'record' is the established SPI method name; renaming would break the public observability API.
-		"java:S107"   // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.
+		"java:S107" // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.
 	})
 	void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);
 
@@ -134,9 +136,6 @@ public interface MetricsRecorder {
 	 * @param elapsed Wall-clock duration of the observed block. Never <jk>null</jk>; never negative.
 	 * @param error The exception thrown by the observed block, or <jk>null</jk> if it completed normally.
 	 */
-	@SuppressWarnings({
-		"java:S6213" // 'record' is the established SPI method name; renaming would break the public observability API.
-	})
 	default void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
 		// Default no-op: bridges that support custom observations override this.
 	}

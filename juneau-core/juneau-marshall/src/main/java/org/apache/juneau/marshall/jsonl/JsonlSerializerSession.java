@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jsonl;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -24,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonlSerializer}.
@@ -37,13 +37,11 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Resource management handled externally
 })
 public class JsonlSerializerSession extends JsonSerializerSession {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -62,7 +60,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -80,7 +78,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonlSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**

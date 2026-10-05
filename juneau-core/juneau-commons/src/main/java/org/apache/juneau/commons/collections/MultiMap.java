@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -102,13 +101,10 @@ import org.apache.juneau.commons.utils.*;
  * @param <V> The value type of this map.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Map/Iterator types used in multi-map structural operations where value collection type is erased
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740" // Raw Map/Iterator types used in multi-map structural operations where value collection type is erased
 })
 public class MultiMap<K,V> extends AbstractMap<K,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_maps = "maps";
 
 	/**
 	 * The underlying maps being wrapped by this MultiMap.
@@ -139,9 +135,9 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SafeVarargs
 	public MultiMap(Map<K,V>...maps) {
-		assertArgNotNull(ARG_maps, maps);
+		reqnn("maps", maps);
 		for (var map : maps)
-			assertArgNotNull(ARG_maps, map);
+			reqnn("maps", map);
 		m = maps;
 	}
 

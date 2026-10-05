@@ -190,12 +190,12 @@ class RestClient_RequestId_Test extends TestBase {
 				var res = client.get("/").run()) {
 				res.body().asString();
 			}
-			var record = cap.last();
-			assertNotNull(record);
+			var logRecord = cap.last();
+			assertNotNull(logRecord);
 			// Structured field carries the effective (echoed) id...
-			assertEquals("echoed-777", LogRecordContext.of(record).get("requestId"));
+			assertEquals("echoed-777", LogRecordContext.of(logRecord).get("requestId"));
 			// ...and the rendered message carries the matching prefix.
-			assertTrue(record.getMessage().contains("[requestId=echoed-777] "), record.getMessage());
+			assertTrue(logRecord.getMessage().contains("[requestId=echoed-777] "), logRecord.getMessage());
 		} finally {
 			logger.setLevel(prev);
 		}
@@ -213,11 +213,11 @@ class RestClient_RequestId_Test extends TestBase {
 				var res = client.get("/").run()) {
 				res.body().asString();
 			}
-			var record = cap.last();
-			assertNotNull(record);
+			var logRecord = cap.last();
+			assertNotNull(logRecord);
 			// No NPE from a null-valued Map.of, and no requestId field present.
-			assertFalse(LogRecordContext.of(record).containsKey("requestId"));
-			assertFalse(record.getMessage().contains("[requestId="));
+			assertFalse(LogRecordContext.of(logRecord).containsKey("requestId"));
+			assertFalse(logRecord.getMessage().contains("[requestId="));
 		} finally {
 			logger.setLevel(prev);
 		}

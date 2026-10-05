@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -44,8 +45,7 @@ class Theme_VarReferences_Test extends TestBase {
 			.token("--jc-danger", "#c23934")
 			.token("--jc-tag-red-text", "var(--jc-danger)")
 			.build();
-		assertEquals("#c23934", theme.getTokens().get("--jc-tag-red-text"));
-		assertEquals("#c23934", theme.getTokens().get("--jc-danger"));
+		assertBean(theme.getTokens(), "--jc-tag-red-text,--jc-danger", "#c23934,#c23934");
 	}
 
 	@Test void a02_forwardReference_resolvesRegardlessOfDeclarationOrder() {
@@ -69,8 +69,7 @@ class Theme_VarReferences_Test extends TestBase {
 			.token("--jc-b", "var(--jc-c)")
 			.token("--jc-c", "#0a0b0c")
 			.build();
-		assertEquals("#0a0b0c", theme.getTokens().get("--jc-a"));
-		assertEquals("#0a0b0c", theme.getTokens().get("--jc-b"));
+		assertBean(theme.getTokens(), "--jc-a,--jc-b", "#0a0b0c,#0a0b0c");
 	}
 
 	@Test void a05_recognitionVariants_shareTheSameNormalizationBelt() {
@@ -83,10 +82,7 @@ class Theme_VarReferences_Test extends TestBase {
 			.token("--jc-upper", "VAR(--jc-x)")
 			.token("--jc-space", "var( --jc-x )")
 			.build();
-		assertEquals("#123456", theme.getTokens().get("--jc-comment"));
-		assertEquals("#123456", theme.getTokens().get("--jc-inner-comment"));
-		assertEquals("#123456", theme.getTokens().get("--jc-upper"));
-		assertEquals("#123456", theme.getTokens().get("--jc-space"));
+		assertBean(theme.getTokens(), "--jc-comment,--jc-inner-comment,--jc-upper,--jc-space", "#123456,#123456,#123456,#123456");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -234,7 +230,6 @@ class Theme_VarReferences_Test extends TestBase {
 			.token("--jc-danger", "#900000")
 			.token("--jc-b", "var(--jc-danger)")
 			.build();
-		assertEquals("#111111", theme.getTokens().get("--jc-tag-red-text"));
-		assertEquals("#900000", theme.getTokens().get("--jc-b"));
+		assertBean(theme.getTokens(), "--jc-tag-red-text,--jc-b", "#111111,#900000");
 	}
 }

@@ -52,7 +52,7 @@ public class MediaRange extends MediaType {
 		List<NameValuePair> extensions2 = list();
 		boolean foundQ = false;
 		for (var p : e.getParameters()) {
-			if (p.getName().equals("q")) {
+			if (eq(p.getName(), "q")) {
 				qValue2 = Float.parseFloat(p.getValue());
 				foundQ = true;
 			} else if (foundQ) {

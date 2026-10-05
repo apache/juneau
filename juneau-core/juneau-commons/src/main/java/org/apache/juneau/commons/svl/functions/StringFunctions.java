@@ -37,8 +37,8 @@ public final class StringFunctions {
 
 	/** All function classes in this category, in registration order. */
 	@SuppressWarnings({
-		"unchecked",   // Array initializer with parameterized element type; class literals are always erased at runtime.
-		"java:S2386"   // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
+		"unchecked" // Array initializer with parameterized element type; class literals are always erased at runtime.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Substring.class, Upper.class, Lower.class, Trim.class, StripLeading.class,

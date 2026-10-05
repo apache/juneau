@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ResourceBundleUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -47,8 +47,8 @@ public class Messages {
 	 * @return A new message bundle.  Never <jk>null</jk>.
 	 */
 	public static Messages of(Class<?> forClass, String name) {
-		assertArgNotNull("forClass", forClass);
-		assertArgNotNull("name", name);
+		reqnn("forClass", forClass);
+		reqnn("name", name);
 		var baseName = forClass.getPackage().getName() + "." + name;
 		var bundle = findBundle(baseName, Locale.getDefault(), forClass.getClassLoader());
 		return new Messages(forClass, bundle);

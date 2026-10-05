@@ -29,7 +29,8 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1612" // Lambdas used instead of method references throughout; conditional checks before delegation prevent direct method ref conversion
+	"java:S1612", // Lambdas used instead of method references throughout; conditional checks before delegation prevent direct method ref conversion
+	"rawtypes" // Raw types required for reflective annotation application.
 })
 public class RdfConfigAnnotation {
 
@@ -38,9 +39,6 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link RdfParser.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParser.Builder> {
 
 		/**
@@ -91,9 +89,6 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializer.Builder> {
 
 		/**

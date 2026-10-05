@@ -36,7 +36,7 @@ import org.apache.juneau.commons.http.*;
  */
 @BeanType(properties="contractVersion,id,widgets")
 @SuppressWarnings({
-	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
 public class BarSlot implements Widget {
 
@@ -91,7 +91,7 @@ public class BarSlot implements Widget {
 
 	@Override /* Widget */
 	public void validate() {
-		if (! CONTRACT_VERSION.equals(contractVersion))
+		if (neq(contractVersion, CONTRACT_VERSION))
 			throw iaex("BarSlot contractVersion must be '%s': %s", CONTRACT_VERSION, contractVersion);
 		if (id == null || id.isBlank())
 			throw iaex("BarSlot id must not be null or blank.");

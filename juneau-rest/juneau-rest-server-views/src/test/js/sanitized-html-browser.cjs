@@ -119,7 +119,7 @@ const PROBE = async function () {
 	out.fosterCopyBNotNestedInTable = slot.querySelector('table b') === null;
 	out.fosterCopyCellSurvived = (() => {
 		const td = slot.querySelector('table td');
-		return !!td && td.textContent === 'cell';
+		return td?.textContent === 'cell';
 	})();
 	out.fosterCopySpanSurvived = slot.textContent.indexOf('after') >= 0;
 
@@ -133,8 +133,8 @@ const PROBE = async function () {
 	window.__juneauSanitizedHtmlTplExec = 0;
 	const TPL = '<template><script>window.__juneauSanitizedHtmlTplExec=1</script><b>hiddentplchild</b></template><span>aftertpl</span>';
 	const tplSrcEl = new DOMParser().parseFromString('<div>' + TPL + '</div>', 'text/html').body.firstChild.querySelector('template');
-	out.templateOwnChildNodesEmpty = !!tplSrcEl && tplSrcEl.childNodes.length === 0;
-	out.templateContentHasChildren = !!tplSrcEl && !!tplSrcEl.content && tplSrcEl.content.childNodes.length > 0;
+	out.templateOwnChildNodesEmpty = tplSrcEl?.childNodes.length === 0;
+	out.templateContentHasChildren = tplSrcEl?.content?.childNodes.length > 0;
 
 	I.fillSanitizedHtmlSlot(slot, TPL);
 	out.templateNotExecuted = window.__juneauSanitizedHtmlTplExec === 0;
@@ -174,7 +174,7 @@ const PROBE = async function () {
 	const SVGX = '<svg><script>window.__juneauSanitizedHtmlSvgExec=1</script><a href="javascript:alert(1)">clickme</a></svg><span>aftersvg</span>';
 	const svgSrcEl = new DOMParser().parseFromString('<div>' + SVGX + '</div>', 'text/html').body.firstChild.querySelector('svg');
 	const SVG_NS = 'http://www.w3.org/2000/svg';
-	out.svgIsRealForeignNamespace = !!svgSrcEl && svgSrcEl.namespaceURI === SVG_NS;
+	out.svgIsRealForeignNamespace = svgSrcEl?.namespaceURI === SVG_NS;
 	out.svgScriptIsForeignNamespace = !!svgSrcEl && !!svgSrcEl.querySelector('script')
 		&& svgSrcEl.querySelector('script').namespaceURI === SVG_NS;
 
@@ -212,7 +212,7 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An {@link HttpBody} backed by a UTF-8 string.
@@ -45,7 +45,7 @@ public final class StringBody implements HttpBody {
 	private final byte[] bytes;
 
 	private StringBody(String content, String contentType) {
-		this.content = assertArgNotNull("content", content);
+		this.content = reqnn("content", content);
 		this.contentType = contentType;
 		this.bytes = content.getBytes(StandardCharsets.UTF_8);
 	}

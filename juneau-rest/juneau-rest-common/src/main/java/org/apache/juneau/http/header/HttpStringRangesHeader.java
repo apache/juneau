@@ -30,8 +30,9 @@ import org.apache.juneau.commons.http.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S2160",
-	"unchecked"
+	"java:S2160", // equals/hashCode are inherited from HttpHeaderBean (name and wire value); lazySupplier/lazyMode only control how the value is produced
+	"java:S9149", // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+	"unchecked" // Supplier<?> is cast to Supplier<String>/Supplier<StringRanges> according to the lazyMode discriminator chosen by the factory methods
 })
 public class HttpStringRangesHeader extends HttpHeaderBean {
 
@@ -49,9 +50,6 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	 * @param wireValue Wire value (e.g. {@code "gzip;q=0.5, identity"}). May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringRangesHeader of(String name, String wireValue) {
 		return new HttpStringRangesHeader(name, wireValue);
 	}
@@ -63,9 +61,6 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	 * @param typedValue The string-ranges value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringRangesHeader of(String name, StringRanges typedValue) {
 		return new HttpStringRangesHeader(name, typedValue);
 	}

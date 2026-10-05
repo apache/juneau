@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.cbor;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -95,18 +95,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class CborSerializer extends OutputStreamSerializer implements CborMetaProvider, TokenWritable, ArrayRecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_builder = "builder";
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_addBeanTypesCbor = "addBeanTypesCbor";
-	private static final String PROP_useTags = "useTags";
 
 	/** Default serializer, BASE64 string output. */
 	public static class Base64 extends CborSerializer {
@@ -117,7 +110,7 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 		 * @param builder The builder for this object.
 		 */
 		public Base64(Builder builder) {
-			super(assertArgNotNull(ARG_builder, builder).binaryFormat(BinaryFormat.BASE64));
+			super(reqnn("builder", builder).binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -146,7 +139,7 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesCbor = copyFrom.addBeanTypesCbor;
 			useTags = copyFrom.useTags;
 		}
@@ -157,7 +150,7 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 		 * @param copyFrom The serializer to copy from.
 		 */
 		protected Builder(CborSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesCbor = copyFrom.addBeanTypesCbor;
 			useTags = copyFrom.useTags;
 		}
@@ -318,8 +311,8 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 	@Override /* Overridden from OutputStreamSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesCbor, addBeanTypesCbor)
-			.a(PROP_useTags, useTags);
+			.a("addBeanTypesCbor", addBeanTypesCbor)
+			.a("useTags", useTags);
 	}
 
 	/**

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -149,7 +150,7 @@ class ApacheHc45Transport_StaleConnectionRetry_Test {
 		private static int parseContentLength(String headers) {
 			for (var line : headers.split("\r\n")) {
 				var idx = line.indexOf(':');
-				if (idx > 0 && "content-length".equalsIgnoreCase(line.substring(0, idx).trim()))
+				if (idx > 0 && eqic("content-length", line.substring(0, idx).trim()))
 					return Integer.parseInt(line.substring(idx + 1).trim());
 			}
 			return 0;

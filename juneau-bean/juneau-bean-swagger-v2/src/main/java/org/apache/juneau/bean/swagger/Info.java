@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
@@ -90,21 +89,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Info extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_contact = "contact";
-	private static final String PROP_description = "description";
-	private static final String PROP_license = "license";
-	private static final String PROP_siteName = "siteName";
-	private static final String PROP_termsOfService = "termsOfService";
-	private static final String PROP_title = "title";
-	private static final String PROP_version = "version";
 
 	private String siteName;
 	private String title;
@@ -147,15 +134,15 @@ public class Info extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_contact -> toType(getContact(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_license -> toType(getLicense(), type);
-			case PROP_siteName -> toType(getSiteName(), type);
-			case PROP_termsOfService -> toType(getTermsOfService(), type);
-			case PROP_title -> toType(getTitle(), type);
-			case PROP_version -> toType(getVersion(), type);
+			case "contact" -> toType(getContact(), type);
+			case "description" -> toType(getDescription(), type);
+			case "license" -> toType(getLicense(), type);
+			case "siteName" -> toType(getSiteName(), type);
+			case "termsOfService" -> toType(getTermsOfService(), type);
+			case "title" -> toType(getTitle(), type);
+			case "version" -> toType(getVersion(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -234,13 +221,13 @@ public class Info extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(contact), PROP_contact)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(license), PROP_license)
-			.addIf(nn(siteName), PROP_siteName)
-			.addIf(nn(termsOfService), PROP_termsOfService)
-			.addIf(nn(title), PROP_title)
-			.addIf(nn(version), PROP_version)
+			.addIf(nn(contact), "contact")
+			.addIf(nn(description), "description")
+			.addIf(nn(license), "license")
+			.addIf(nn(siteName), "siteName")
+			.addIf(nn(termsOfService), "termsOfService")
+			.addIf(nn(title), "title")
+			.addIf(nn(version), "version")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -248,15 +235,15 @@ public class Info extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Info set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_contact -> setContact(toType(value, Contact.class));
-			case PROP_description -> setDescription(s(value));
-			case PROP_license -> setLicense(toType(value, License.class));
-			case PROP_siteName -> setSiteName(s(value));
-			case PROP_termsOfService -> setTermsOfService(s(value));
-			case PROP_title -> setTitle(s(value));
-			case PROP_version -> setVersion(s(value));
+			case "contact" -> setContact(toType(value, Contact.class));
+			case "description" -> setDescription(s(value));
+			case "license" -> setLicense(toType(value, License.class));
+			case "siteName" -> setSiteName(s(value));
+			case "termsOfService" -> setTermsOfService(s(value));
+			case "title" -> setTitle(s(value));
+			case "version" -> setVersion(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

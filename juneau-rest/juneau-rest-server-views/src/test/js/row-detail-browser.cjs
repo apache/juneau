@@ -50,7 +50,7 @@ const PROBE = async function () {
 	out.titleImgCount = slot.querySelectorAll('img').length;
 	out.xssFired = window.__juneauDetailXss === 1;
 
-	const hostile = '../etc/passwd?x=http://evil';
+	const hostile = '../etc/passwd?x=http://evil'; // NOSONAR javascript:S5332 -- fixture URL, not a production endpoint
 	out.sub = I.substituteDetailUrl('/data/alerts/{id}', hostile);
 	out.subEncoded = out.sub === '/data/alerts/' + encodeURIComponent(hostile);
 	return out;
@@ -80,7 +80,7 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

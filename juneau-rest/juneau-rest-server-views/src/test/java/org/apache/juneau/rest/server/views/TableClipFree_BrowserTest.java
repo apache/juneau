@@ -134,7 +134,9 @@ class TableClipFree_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The prober report is a JSON-parsed Object tree; sub() casts a known entry to Map<String,Object>
+	})
 	private static Map<String,Object> sub(String key) {
 		var m = (Map<String,Object>) report.get(key);
 		assertNotNull(m, () -> "the prober produced no `" + key + "` case: " + report);

@@ -168,7 +168,9 @@ class McpResourceTemplate_Test {
 		assertInstanceOf(McpResponseResult.class, result);
 		assertNull(((McpResponseResult) result).response().getError());
 		assertEquals("file:///Caf%C3%A9/two", captured.get("uri"));
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The captured 'variables' entry is a Map<String,String> by construction of the test handler.
+		})
 		var variables = (Map<String,String>) captured.get("variables");
 		assertEquals("Café", variables.get("b"));
 		assertEquals("two", variables.get("a"));

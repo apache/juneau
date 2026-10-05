@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -63,6 +64,9 @@ import org.junit.jupiter.api.condition.*;
  */
 @EnabledIfSystemProperty(named=ConfigPersistence_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"unchecked" // obj()/list()/views()/init() cast values of the JS-harness JSON report to Map<String,Object>/List<Object>
+})
 class ConfigPersistence_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */
@@ -85,10 +89,13 @@ class ConfigPersistence_BrowserTest extends TestBase {
 		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("config-persistence.cjs");
 
 		// The fixture restates nothing under test: it loads the REAL served juneau-views.js (for NS.init's CSRF
-		// helpers, which the server provider calls) followed by the REAL juneau-config.js, exactly the load
-		// order the module's own doc comment requires.
+		// helpers, which the server provider calls), then juneau-pagestate.js (so NS.pageState - the localStorage-
+		// backed store the View Settings reload round-trip rides on - exists), then the REAL juneau-config.js,
+		// exactly the load order the module's own doc comment requires.
 		var fixture = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"></head><body>\n<script>\n"
 			+ resource(ViewsMixin.VIEWS_JS_RESOURCE)
+			+ "\n</script>\n<script>\n"
+			+ resource(ViewsMixin.PAGESTATE_JS_RESOURCE)
 			+ "\n</script>\n<script>\n"
 			+ resource(ViewsJs_ConfigPersistence_Test.CONFIG_JS_RESOURCE)
 			+ "\n</script></body></html>";
@@ -130,13 +137,10 @@ class ConfigPersistence_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Map<String,Object> obj(String key) { return (Map<String,Object>) report.get(key); }
 
-	@SuppressWarnings("unchecked")
 	private static List<Object> list(String key) { return (List<Object>) report.get(key); }
 
-	@SuppressWarnings("unchecked")
 	private static List<Object> views(Map<String,Object> listResult) { return (List<Object>) listResult.get("views"); }
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -144,9 +148,7 @@ class ConfigPersistence_BrowserTest extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_runtimeLoadedWithNoScriptErrors() {
-		assertEquals(Boolean.TRUE, report.get("hasConfig"),
-			() -> "juneau-config.js did not populate JuneauViews.persistence/config: " + report);
-		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
+		assertBean(report, "hasConfig,jsFailures", "true,[]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -155,25 +157,23 @@ class ConfigPersistence_BrowserTest extends TestBase {
 
 	@Test void b01_listOnAnUnusedScopeIsEmptyNeverAnError() {
 		var r = obj("a_listEmpty");
-		assertNull(r.get("active"), () -> report.toString());
-		assertEquals(List.of(), views(r), () -> report.toString());
+		assertBean(r, "active,views", "<null>,[]");
 	}
 
 	@Test void b02_saveIsVisibleToASubsequentList() {
-		var names = views(obj("a_listAfterSave")).stream().map(x -> ((Map<?,?>) x).get("name")).toList();
-		assertEquals(List.of("My View"), names, () -> report.toString());
+		// #{name} collection-iteration syntax eliminates the manual stream/map name-extraction entirely.
+		assertBean(obj("a_listAfterSave"), "views{#{name}}", "{[{My View}]}");
 	}
 
 	@Test void b03_loadReturnsTheExactBlobThatWasSaved() {
 		var blob = obj("a_loaded");
-		assertEquals(1.0, ((Number) blob.get("schemaVersion")).doubleValue(), () -> report.toString());
+		assertEquals(2.0, ((Number) blob.get("schemaVersion")).doubleValue(), () -> report.toString());
 		assertEquals(List.of("x"), blob.get("columns"), () -> report.toString());
 	}
 
 	@Test void b04_setActiveIsReflectedByGetActive() {
 		var r = obj("a_activeAfterSetActive");
-		assertEquals("My View", r.get("name"), () -> report.toString());
-		assertEquals(Boolean.FALSE, r.get("dangling"), () -> report.toString());
+		assertBean(r, "name,dangling", "My View,false");
 	}
 
 	@Test void b05_deletingTheActiveViewResolvesToDefaultPlusDanglingNotice() {
@@ -185,8 +185,7 @@ class ConfigPersistence_BrowserTest extends TestBase {
 
 	@Test void b06_saveAndActivateIsAtomicFromTheCallersPerspective() {
 		var r = obj("a_activeAfterSaveAndActivate");
-		assertEquals("Second View", r.get("name"), () -> report.toString());
-		assertEquals(Boolean.FALSE, r.get("dangling"), () -> report.toString());
+		assertBean(r, "name,dangling", "Second View,false");
 	}
 
 	@Test void b07_twoPagesSharingAViewIdDoNotCollide() {
@@ -231,7 +230,6 @@ class ConfigPersistence_BrowserTest extends TestBase {
 
 	private static String url(Map<String,Object> call) { return (String) call.get("url"); }
 
-	@SuppressWarnings("unchecked")
 	private static Map<String,Object> init(Map<String,Object> call) { return (Map<String,Object>) call.get("init"); }
 
 	@Test void e01_list_isAPlainCsrfFreeGetWithSameOriginCredentials() {
@@ -246,13 +244,8 @@ class ConfigPersistence_BrowserTest extends TestBase {
 
 	@Test void e02_save_isAJsonPutCarryingTheCsrfHeaderAndNameAsAQueryParam_neverAPathSegment() {
 		var call = obj("d_saveCall");
-		var i = init(call);
-		assertEquals("PUT", i.get("method"), () -> report.toString());
-		assertEquals("same-origin", i.get("credentials"), () -> report.toString());
-		@SuppressWarnings("unchecked")
-		var h = (Map<String,Object>) i.get("headers");
-		assertEquals("application/json", h.get("Content-Type"), () -> report.toString());
-		assertEquals("tok-123", h.get("X-Csrf-Token"), () -> report.toString());
+		assertBean(call, "init{method,credentials,headers{Content-Type,X-Csrf-Token}}",
+			"{PUT,same-origin,{application/json,tok-123}}");
 		assertTrue(url(call).contains("name=My%20View") || url(call).contains("name=My+View"),
 			() -> "name must ride as a QUERY PARAM: " + url(call));
 		assertFalse(url(call).contains("/My%20View") || url(call).contains("/My+View"),
@@ -292,5 +285,34 @@ class ConfigPersistence_BrowserTest extends TestBase {
 		assertEquals("unavailable", r.get("code"), () -> report.toString());
 		assertEquals(0.0, ((Number) r.get("calls")).doubleValue(),
 			() -> "a fail-closed provider must never have issued a request: " + report);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) the last-applied View Settings survive a REAL page reload through the localStorage-backed page-state store
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_pageStateStoreIsPresentAfterReload() {
+		var r = obj("f_reload");
+		assertEquals(Boolean.TRUE, r.get("hasPageState"),
+			() -> "juneau-pagestate.js must populate NS.pageState (the reload round-trip rides on it): " + report);
+	}
+
+	@Test void f02_committedViewSettingsAreRestoredAfterReload() {
+		// The exact blob written before the reload comes back verbatim from REAL localStorage (design §6.1).
+		var restored = obj("f_reload");
+		assertBean(restored, "restored{schemaVersion,visible,search,sort,options{pageSize,wrap,density}}",
+			"{2,[a,b],[a],[{column=b,dir=asc}],{50,true,compact}}");
+	}
+
+	@Test void f03_secondViewIdKeepsItsOwnIndependentSlotAcrossReload() {
+		// Per-table keying (§6.2): a different view id is neither clobbered by nor merged with the first.
+		var restored = obj("f_reload");
+		assertBean(restored, "other{visible,options{pageSize,wrap,density}}", "{[z],{10,false,comfortable}}");
+	}
+
+	@Test void f04_neverWrittenViewAndTableWithNoViewIdBothReadBackNull() {
+		var restored = obj("f_reload");
+		assertNull(restored.get("absent"), () -> "a view id that was never written must read back null: " + report);
+		assertNull(restored.get("noId"), () -> "a table with no data-juneau-view has no scope, so null: " + report);
 	}
 }

@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -252,7 +253,7 @@ class JsonMap_Test extends TestBase {
 	}
 
 	private static void checkStep(int step, String input, String output, String expectedValue) {
-		if (!output.equals(expectedValue)) {
+		if (neq(output, expectedValue)) {
 			var msg = "Step #" + step + " failed: [" + input + "]->[" + output + "]...Expected value=[" + expectedValue + "]";
 			fail(msg);
 		}

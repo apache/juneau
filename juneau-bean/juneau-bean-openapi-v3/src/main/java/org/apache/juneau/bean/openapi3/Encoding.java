@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -73,21 +72,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class Encoding extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_key = "key";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_allowReserved = "allowReserved";
-	private static final String PROP_contentType = "contentType";
-	private static final String PROP_explode = "explode";
-	private static final String PROP_headers = "headers";
-	private static final String PROP_style = "style";
 
 	private String contentType;
 	private String style;
@@ -125,8 +112,8 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding addHeader(String key, HeaderInfo value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		headers.put(key, value);
 		return this;
 	}
@@ -142,13 +129,13 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_contentType -> toType(getContentType(), type);
-			case PROP_style -> toType(getStyle(), type);
-			case PROP_headers -> toType(getHeaders(), type);
-			case PROP_explode -> toType(getExplode(), type);
-			case PROP_allowReserved -> toType(getAllowReserved(), type);
+			case "contentType" -> toType(getContentType(), type);
+			case "style" -> toType(getStyle(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -201,11 +188,11 @@ public class Encoding extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(allowReserved), PROP_allowReserved)
-			.addIf(nn(contentType), PROP_contentType)
-			.addIf(nn(explode), PROP_explode)
-			.addIf(ine(headers), PROP_headers)
-			.addIf(nn(style), PROP_style)
+			.addIf(nn(allowReserved), "allowReserved")
+			.addIf(nn(contentType), "contentType")
+			.addIf(nn(explode), "explode")
+			.addIf(ine(headers), "headers")
+			.addIf(nn(style), "style")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -213,13 +200,13 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Encoding set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_allowReserved -> setAllowReserved(toBoolean(value));
-			case PROP_contentType -> setContentType(s(value));
-			case PROP_explode -> setExplode(toBoolean(value));
-			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case PROP_style -> setStyle(s(value));
+			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			case "contentType" -> setContentType(s(value));
+			case "explode" -> setExplode(toBoolean(value));
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "style" -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

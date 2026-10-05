@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
@@ -120,11 +119,9 @@ public class CacheControl extends HttpStringHeader {
 	 * @since 10.0.0
 	 */
 	@SuppressWarnings({
-		"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+		"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 	})
 	public static class Builder {
-
-		private static final String ARG_value = "value";
 
 		private String cacheability;        // "public" or "private" or null
 		private boolean noCache;
@@ -262,7 +259,7 @@ public class CacheControl extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or negative.
 		 */
 		public Builder maxAge(Duration value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			return maxAge(value.getSeconds());
 		}
 
@@ -288,7 +285,7 @@ public class CacheControl extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or negative.
 		 */
 		public Builder sMaxAge(Duration value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			return sMaxAge(value.getSeconds());
 		}
 
@@ -332,7 +329,7 @@ public class CacheControl extends HttpStringHeader {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder extension(String value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("cache-control extension must not be blank");

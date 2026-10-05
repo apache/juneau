@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.*;
@@ -25,9 +26,9 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 (TODO-364): {@code RestRequest} convenience logging methods ride the resolved per-operation
+ * Phase 4 (legacy item 364): {@code RestRequest} convenience logging methods ride the resolved per-operation
  * {@link RichLogger} and therefore auto-carry the active {@link LogContext} onto their emitted records, observable at
- * an <b>ancestor</b> (resource-class-level) capture via the {@code [TODO-365]} parent-chain propagation.
+ * an <b>ancestor</b> (resource-class-level) capture via the {@code [legacy item 365]} parent-chain propagation.
  *
  * @since 10.0.0
  */
@@ -92,10 +93,10 @@ class RestRequestLogContext_Test {
 			client.get("/go").run().assertStatus().asCode().is(200);
 
 			var inScope = c.getRecords().stream()
-				.filter(r -> opName.equals(r.getLoggerName()) && "in-scope".equals(r.getMessage()))
+				.filter(r -> opName.equals(r.getLoggerName()) && eq(r.getMessage(), "in-scope"))
 				.findFirst().orElse(null);
 			var outOfScope = c.getRecords().stream()
-				.filter(r -> opName.equals(r.getLoggerName()) && "out-of-scope".equals(r.getMessage()))
+				.filter(r -> opName.equals(r.getLoggerName()) && eq(r.getMessage(), "out-of-scope"))
 				.findFirst().orElse(null);
 
 			assertNotNull(inScope, "expected the in-scope FINE record");

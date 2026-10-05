@@ -59,6 +59,9 @@ import org.junit.jupiter.api.condition.*;
  */
 @EnabledIfSystemProperty(named=AsyncJob_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"unchecked" // Browser report values are cast to Map<String,Object>
+})
 class AsyncJob_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */
@@ -118,7 +121,6 @@ class AsyncJob_BrowserTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Map<String,Object> sub(String key) {
 		return (Map<String,Object>) report.get(key);
 	}
@@ -169,7 +171,6 @@ class AsyncJob_BrowserTest extends TestBase {
 		assertEquals(Boolean.TRUE, s.get("triggerReEnabled"), () -> "trigger not re-enabled on settle: " + report);
 		assertEquals(Boolean.FALSE, s.get("pollingFrozen"), () -> "polling frozen after settle: " + report);
 		assertNotNull(s.get("mergedRow"), () -> "success did not re-render from the authoritative result row: " + report);
-		@SuppressWarnings("unchecked")
 		var outcome = (Map<String,Object>) s.get("outcome");
 		assertEquals(Boolean.TRUE, outcome.get("visible"), () -> "success banner not visible: " + report);
 		assertEquals("success", outcome.get("state"), () -> report.toString());
@@ -191,7 +192,6 @@ class AsyncJob_BrowserTest extends TestBase {
 
 	@Test void d02_cancelledOutcomeArrivesOverStream() {
 		var cancel = sub("cancel");
-		@SuppressWarnings("unchecked")
 		var outcome = (Map<String,Object>) cancel.get("outcome");
 		assertEquals("cancelled", outcome.get("state"), () -> report.toString());
 		assertEquals(Boolean.TRUE, outcome.get("visible"), () -> "cancelled banner not visible: " + report);
@@ -213,7 +213,6 @@ class AsyncJob_BrowserTest extends TestBase {
 
 	@Test void e01_streamErrorRendersVisibleUnknown() {
 		var s = sub("streamError");
-		@SuppressWarnings("unchecked")
 		var outcome = (Map<String,Object>) s.get("outcome");
 		assertEquals("unknown", outcome.get("state"), () -> report.toString());
 		assertEquals(Boolean.TRUE, outcome.get("visible"), () -> "stream-error unknown banner not visible: " + report);

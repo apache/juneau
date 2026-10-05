@@ -17,16 +17,19 @@
 
 /*
  * dialog-bar-slot.cjs - always-on Node harness for the THIRD named bar-slot host: a BarSlot anchored to a dialog's
- * title (ModalDef.barSlot).  Loads juneau-views.js AND juneau-chrome.js into ONE sandbox sharing one fake document,
+ * title (ModalDef.barSlot).  Loads juneau-views.js AND juneau-console.js into ONE sandbox sharing one fake document,
  * the same shape detail-bar-slot.cjs uses for the row-detail host, because this slice reuses that host's identity
  * minting / enhance-on-insert / teardown machinery verbatim rather than reimplementing it.
  *
- *   Usage:  node dialog-bar-slot.cjs <juneau-views.js> <juneau-chrome.js>
+ *   Usage:  node dialog-bar-slot.cjs <juneau-views.js> <juneau-console.js> [<juneau-renders.js>]
+ *
+ *   juneau-renders.js is loaded first when given: the badge tone allow-list (NS._render.pillTones) comes from it, and
+ *   without it no tone attribute is ever set (fail-closed).
  *
  * Covers: painting the region + widgets + sidecar from JSON (client-side, since a dialog has no server-rendered pass
  * to ride into); the dialog-title anchor attribute; clone-time id minting reused from the row-detail host for two
- * stacked dialogs; enhance-on-insert via JuneauChrome.init.initAll() sharing the wired marker with wireSafeActions;
- * collapse teardown; and the fail-closed no-op for a missing/malformed/empty bar slot.
+ * stacked dialogs; enhance-on-insert via JuneauConsole.chrome.initAll() sharing the wired marker with
+ * wireSafeActions; collapse teardown; and the fail-closed no-op for a missing/malformed/empty bar slot.
  *
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
@@ -38,9 +41,10 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const viewsJsPath = process.argv[2];
-const chromeJsPath = process.argv[3];
-if (!viewsJsPath || !chromeJsPath) {
-	console.error('usage: node dialog-bar-slot.cjs <juneau-views.js> <juneau-chrome.js>');
+const consoleJsPath = process.argv[3];
+const rendersJsPath = process.argv[4];
+if (!viewsJsPath || !consoleJsPath) {
+	console.error('usage: node dialog-bar-slot.cjs <juneau-views.js> <juneau-console.js> [<juneau-renders.js>]');
 	process.exit(2);
 }
 
@@ -118,11 +122,11 @@ function dispatchFrom(node, ev) {
 }
 
 function datasetKeyToAttr(key) {
-	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+	return 'data-' + key.replaceAll(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
 }
 
 function attrToDatasetKey(attr) {
-	return attr.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+	return attr.slice(5).replaceAll(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
 }
 
 function makeDataset(node) {
@@ -145,7 +149,7 @@ function makeDataset(node) {
 		},
 		ownKeys() {
 			return Object.keys(node.attrs)
-				.filter(function (k) { return k.indexOf('data-') === 0; })
+				.filter(function (k) { return k.startsWith('data-'); })
 				.map(attrToDatasetKey);
 		},
 		getOwnPropertyDescriptor(_, key) {
@@ -255,7 +259,7 @@ const document = {
 	readyState: 'loading',
 	activeElement: null,
 	body: body,
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	createElement: function (tag) { return el(tag); },
 	getElementById: function (id) { return Object.hasOwn(byId, id) ? byId[id] : null; },
 	querySelectorAll: function (sel) { return body.querySelectorAll(sel); },
@@ -277,8 +281,8 @@ const window = {
 	innerWidth: 1024,
 	innerHeight: 768,
 	CustomEvent: CustomEvent,
-	addEventListener: function () {},
-	matchMedia: function () { return { matches: false, addEventListener: function () {} }; },
+	addEventListener: function () { /* no-op */ },
+	matchMedia: function () { return { matches: false, addEventListener: function () { /* no-op */ } }; },
 	getComputedStyle: function () { return { getPropertyValue: function () { return ''; } }; }
 };
 
@@ -288,22 +292,24 @@ const sandbox = {
 	console: console,
 	CustomEvent: CustomEvent,
 	setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
-	clearTimeout: function () {},
+	clearTimeout: function () { /* no-op */ },
 	setInterval: function () { return 0; },
-	clearInterval: function () {},
+	clearInterval: function () { /* no-op */ },
 	Promise: Promise
 };
 
 // NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
 // repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
+if (rendersJsPath)
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
-// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-chrome.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(chromeJsPath), 'utf8'), sandbox, { filename: 'juneau-chrome.js' });
+// NOSONAR javascript:S1523 -- same rationale: loading the production juneau-console.js under test into the sandbox.
+vm.runInNewContext(fs.readFileSync(path.resolve(consoleJsPath), 'utf8'), sandbox, { filename: 'juneau-console.js' });
 
 const VNS = window.JuneauViews;
 const V = VNS?.init;
-const CNS = window.JuneauChrome;
-const C = CNS?.init;
+const CNS = window.JuneauConsole;
+const C = CNS?.chrome;
 
 const out = {
 	hasViews: !!(typeof V?.buildDialogOverlay === 'function'),
@@ -377,14 +383,14 @@ function regionsIn(root) {
 	out.paint_hasDialogSlotClass = matchesClassToken(region, 'juneau-view-dialog-bar-slot');
 
 	const textWidget = region.querySelector('.jc-bar-text');
-	out.paint_textWidgetPainted = !!textWidget && textWidget.textContent === 'Region us-east';
+	out.paint_textWidgetPainted = textWidget?.textContent === 'Region us-east';
 	out.paint_textWidgetMarker = textWidget?.getAttribute(BAR_WIDGET_MARKER);
 
 	const badgeWidget = region.querySelector('.jc-bar-badge');
 	out.paint_badgeLabelPainted = badgeWidget?.querySelector('.jc-bar-label')?.textContent === 'Open';
 	const badge = badgeWidget?.querySelector('[data-juneau-badge]');
 	out.paint_badgeCountPainted = badge?.textContent === '3';
-	out.paint_badgeNamespaced = badge?.getAttribute('data-juneau-badge') === 'bar:open';
+	out.paint_badgeNamespaced = badge?.dataset.juneauBadge === 'bar:open';
 
 	const sidecar = f.dialog.querySelector('[' + BAR_META + ']');
 	out.paint_sidecarIsIdLess_beforeMint = false;   // insertDialogBarSlot mints immediately; checked via mint_ below
@@ -393,7 +399,7 @@ function regionsIn(root) {
 		try {
 			const j = JSON.parse(sidecar.textContent);
 			return j.contractVersion === '1' && j.badges['bar:open'] === 3;
-		} catch (e) { return false; }
+		} catch (error) { return false; }
 	})();
 })();
 
@@ -507,6 +513,31 @@ let safeFires = 0;
 	const fNoId = dialogFixture();
 	out.noop_missingId = V.insertDialogBarSlot(fNoId.dialog, fNoId.title,
 		{ contractVersion: '1', widgets: [{ id: 'a', text: 'A' }] }, 6);
+})();
+
+// ------------------------------------------------------------------------------------------------------------------
+// Badge tone: only a StatusTone wire token (case-insensitive) sets data-juneau-badge-tone, lower-cased; anything else
+// sets no attribute at all (fail-closed, so a stray value can never select a tone style).
+// ------------------------------------------------------------------------------------------------------------------
+
+(function () {
+	function toneAttr(tone) {
+		const f = dialogFixture();
+		const json = {
+			contractVersion: '1',
+			id: AUTHOR_ID,
+			widgets: [{ id: 'open', label: 'Open', badge: { count: 1, tone: tone } }]
+		};
+		V.insertDialogBarSlot(f.dialog, f.title, json, 20);
+		const badge = regionsIn(f.dialog)[0]?.querySelector('[data-juneau-badge]');
+		return badge ? (badge.dataset.juneauBadgeTone ?? null) : 'NO-BADGE';
+	}
+	out.tone_upperWarning = toneAttr('WARNING');
+	out.tone_error = toneAttr('error');
+	out.tone_bogus = toneAttr('bogus');
+	out.tone_retiredWarn = toneAttr('warn');
+	out.tone_retiredAccent = toneAttr('accent');
+	out.tone_absent = toneAttr(undefined);
 })();
 
 process.stdout.write(JSON.stringify(out, null, 2) + '\n');

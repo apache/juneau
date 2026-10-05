@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A sorted list implementation backed by an {@link ArrayList}.
@@ -87,12 +87,10 @@ import java.util.*;
  * @see SortedLinkedList
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // Type erasure requires cast for comparator initialization
 })
 public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
 
 	private final List<E> list;
 	private final Comparator<? super E> comparator;
@@ -105,9 +103,6 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @throws ClassCastException if elements are not comparable.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for comparator initialization
-	})
 	public SortedArrayList() {
 		this((Comparator<? super E>)Comparator.naturalOrder());
 	}
@@ -118,7 +113,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		this.list = new ArrayList<>();
 	}
 
@@ -127,9 +122,6 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @param initialCapacity The initial capacity.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for comparator initialization
-	})
 	public SortedArrayList(int initialCapacity) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), initialCapacity);
 	}
@@ -141,7 +133,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param initialCapacity The initial capacity.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator, int initialCapacity) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		this.list = new ArrayList<>(initialCapacity);
 	}
 
@@ -153,9 +145,6 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for comparator initialization
-	})
 	public SortedArrayList(Collection<? extends E> c) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), c);
 	}
@@ -167,7 +156,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator, Collection<? extends E> c) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		this.list = new ArrayList<>(c);
 		Collections.sort(this.list, this.comparator);
 	}

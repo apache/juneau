@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -94,15 +93,9 @@ import java.util.function.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FilteredList<E> extends AbstractList<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_elementType = "elementType";
-	private static final String ARG_filter = "filter";
-	private static final String ARG_list = "list";
-	private static final String ARG_value = "value";
 
 	/**
 	 * Builder for creating {@link FilteredList} instances.
@@ -159,7 +152,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> filter(Predicate<E> value) {
-			filter = filter.and(assertArgNotNull(ARG_value, value));
+			filter = filter.and(reqnn("value", value));
 			return this;
 		}
 
@@ -189,7 +182,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> inner(List<E> value) {
-			inner = assertArgNotNull(ARG_value, value);
+			inner = reqnn("value", value);
 			return this;
 		}
 
@@ -243,7 +236,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * @return A new builder.
 	 */
 	public static <E> Builder<E> create(Class<E> elementType) {
-		assertArgNotNull(ARG_elementType, elementType);
+		reqnn("elementType", elementType);
 		var builder = new Builder<E>();
 		builder.elementType = elementType;
 		return builder;
@@ -295,9 +288,9 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * @param elementFunction The element conversion function, or <jk>null</jk> if not specified.
 	 */
 	protected FilteredList(Predicate<E> filter, List<E> list, Class<E> elementType, Function<Object,E> elementFunction) {
-		this.filter = assertArgNotNull(ARG_filter, filter);
-		this.list = assertArgNotNull(ARG_list, list);
-		this.elementType = assertArgNotNull(ARG_elementType, elementType);
+		this.filter = reqnn("filter", filter);
+		this.list = reqnn("list", list);
+		this.elementType = reqnn("elementType", elementType);
 		this.elementFunction = elementFunction;
 	}
 

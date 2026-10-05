@@ -67,9 +67,11 @@ import org.apache.juneau.marshall.swap.spi.*;
  */
 @BeanType(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
-	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
-	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
-	"java:S6539"   // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
+	"java:S1200", // Class has 23 dependencies, acceptable for this core reflection metadata class
+	"java:S1452", // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
+	"java:S3776", // The ClassMeta constructor's type-category chain, findNameProperty()/findParentProperty() annotation scans and getExample() each branch over many type/annotation cases
+	"java:S6539", // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
+	"unchecked" // Casts to T, ObjectSwap<T,?>, BuilderSwap<T,?> and Collection/Map<Object,Object> in example creation, newInstance and swap discovery are guaranteed by inner()
 })
 public final class ClassMeta<T> extends BeanInfo<T> {
 
@@ -178,9 +180,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @param innerClass The class being wrapped.
 	 * @param marshallingContext The bean context that created this object.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for ClassMeta initialization with category detection
-	})
 	ClassMeta(Class<T> innerClass, MarshallingContext marshallingContext) {
 		super(innerClass);
 		this.marshallingContext = marshallingContext;
@@ -288,9 +287,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Constructor for args-arrays.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Object[] cast required for args-array type handling
-	})
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
@@ -585,10 +581,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @param jpSession The JSON parser for parsing examples into POJOs.
 	 * @return An example instance of this class, or <jk>null</jk> if no example is defined or one could not be created.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	public T getExample(MarshallingSession session, JsonParserSession jpSession) {
 		try {
 			if (example.isPresent())
@@ -781,9 +773,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @return An {@link Optional} containing the property value if the function returned a non-null value,
 	 * 	otherwise an empty {@link Optional}. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Optional<T2>
-	})
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
 		return (Optional<T2>)properties.get(name, () -> o(function.apply(this)));
 	}
@@ -1367,9 +1356,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for array instantiation
-	})
 	public T newInstance() throws ExecutableException {
 		if (super.isArray())
 			return (T)Array.newInstance(inner().getComponentType(), 0);
@@ -1413,9 +1399,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for enum/constructor instantiation
-	})
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
 		if (isEnum()) {
@@ -1483,9 +1466,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		return t.toString();
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for ObjectSwap<T,?>
-	})
 	private ObjectSwap<T,?> createSwap(Swap s) {
 		var c = s.value();
 		if (ClassUtils.isVoid(c))
@@ -1569,9 +1549,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		return null;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for BuilderSwap<T,?>
-	})
 	private BuilderSwap<T,?> findBuilderSwap() {
 		var bc = marshallingContext;
 		if (bc == null)
@@ -1579,10 +1556,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 	}
 
-	@SuppressWarnings({
-		"unchecked",   // Type erasure requires cast for List<ObjectSwap<T,?>>
-		"java:S3776"   // Cognitive complexity acceptable for swap resolution logic
-	})
 	private List<ObjectSwap<T,?>> findSwaps() {
 		if (marshallingContext == null)
 			return l();
@@ -1591,9 +1564,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		var swapArray = marshallingContext.getSwaps();
 		if (! swapArray.isEmpty()) {
 			var innerClass = inner();
-			for (var f : swapArray)
-				if (f.getNormalClass().isAssignableFrom(innerClass))
-					list.add((ObjectSwap<T,?>)f);
+			swapArray.stream().filter(f -> f.getNormalClass().isAssignableFrom(innerClass)).forEach(f -> list.add((ObjectSwap<T,?>)f));
 		}
 
 		var ap = marshallingContext.getAnnotationProvider();
@@ -1640,9 +1611,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			return l();
 		var list = new ArrayList<ObjectSwap<?,?>>();
 		var innerClass = inner();
-		for (var f : swapArray)
-			if (f.getNormalClass().isAssignableTo(innerClass))
-				list.add(f);
+		swapArray.stream().filter(f -> f.getNormalClass().isAssignableTo(innerClass)).forEach(list::add);
 		return u(list);
 	}
 
@@ -1738,9 +1707,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		// @formatter:on
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for ClassInfoTyped<? extends T>
-	})
 	private ClassInfoTyped<? extends T> findImplClass() {
 
 		if (is(Object.class))
@@ -1767,9 +1733,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			.build();
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for name property detection with annotation traversal
-	})
 	private Property<T,Object> findNameProperty() {
 		var ap = marshallingContext.getAnnotationProvider();
 
@@ -1862,9 +1825,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			.orElse(null);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parent property detection with annotation traversal
-	})
 	private Property<T,Object> findParentProperty() {
 		var ap = marshallingContext.getAnnotationProvider();
 

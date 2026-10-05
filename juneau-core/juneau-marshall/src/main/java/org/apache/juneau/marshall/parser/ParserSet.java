@@ -85,6 +85,10 @@ import org.apache.juneau.marshall.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes", // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+	"unchecked" // Raw Consumer/Class casts in forEach() dispatch and the (Class<? extends Parser>) cast when creating builders are guaranteed by the parser builder hierarchy
+})
 public class ParserSet {
 
 	/**
@@ -314,10 +318,6 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<Parser.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEach(Consumer<Parser.Builder<?>> action) {
 			builders(Parser.Builder.class).forEach((Consumer)action);
 			return this;
@@ -329,10 +329,6 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<InputStreamParser.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEachISP(Consumer<InputStreamParser.Builder<?>> action) {
 			return forEach((Class)InputStreamParser.Builder.class, (Consumer)action);
 		}
@@ -343,10 +339,6 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
-			"unchecked"  // Cast is safe: caller's Consumer<ReaderParser.Builder<?>> is compatible at runtime.
-		})
 		public Builder forEachRP(Consumer<ReaderParser.Builder<?>> action) {
 			return forEach((Class)ReaderParser.Builder.class, (Consumer)action);
 		}
@@ -450,9 +442,6 @@ public class ParserSet {
 					return ci.newInstance();
 
 				// Check for builder.
-				@SuppressWarnings({
-					"unchecked" // Type erasure requires unchecked casts
-				})
 				Parser.Builder<?> b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (nn(bcBuilder))
 					b.marshallingContext(bcBuilder);

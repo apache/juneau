@@ -33,6 +33,9 @@ import org.apache.juneau.marshall.*;
  *
  * @param <T> The bean type.
  */
+@SuppressWarnings({
+	"unchecked" // Casts of builder.build() and the supplied value to T, and of the type to Class<? extends Context>, are guaranteed by the creator's bean type.
+})
 public class ContextBeanCreator<T> {
 
 	/**
@@ -137,9 +140,6 @@ public class ContextBeanCreator<T> {
 	 *
 	 * @return The built bean, or <jk>null</jk> if neither an implementation nor a builder has been set on this creator.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T
-	})
 	public T create() {
 		if (nn(impl))
 			return impl;
@@ -154,9 +154,6 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean to set.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T
-	})
 	public ContextBeanCreator<T> impl(Object value) {
 		this.impl = (T)value;
 		return this;
@@ -171,9 +168,6 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean type.
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for Context builder type
-	})
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)

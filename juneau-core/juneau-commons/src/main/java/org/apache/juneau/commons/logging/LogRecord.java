@@ -60,27 +60,16 @@ import java.util.logging.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S100",  // Method names match java.util.logging.LogRecord for API compatibility
+	"java:S100", // Method names match java.util.logging.LogRecord for API compatibility
+	"java:S115", // Constants use UPPER_snakeCase convention
 	"java:S1192", // String literals intentionally duplicated for clarity
-	"java:S2176", // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields
-	"java:S2143"  // Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.
+	"java:S2143", // Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.
+	"java:S2176" // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields
 })
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
 	private transient MessageGenerator generator;
-
-	// Key constants for format placeholders
-	private static final String KEY_date = "date";
-	private static final String KEY_logger = "logger";
-	private static final String KEY_level = "level";
-	private static final String KEY_msg = "msg";
-	private static final String KEY_thrown = "thrown";
-	private static final String KEY_timestamp = "timestamp";
-	private static final String KEY_thread = "thread";
-	private static final String KEY_threadid = "threadid";
-	private static final String KEY_exception = "exception";
 
 	/**
 	 * Constructor.
@@ -239,14 +228,14 @@ public class LogRecord extends java.util.logging.LogRecord {
 		var date = new Date(rec.getMillis());
 
 		Function<String,Object> resolver = key -> switch (key) {
-			case KEY_date -> "%1$s";
-			case KEY_logger -> "%2$s";
-			case KEY_level -> "%3$s";
-			case KEY_msg -> "%4$s";
-			case KEY_thrown -> "%5$s";
-			case KEY_timestamp -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
-			case KEY_thread, KEY_threadid -> s(rec.getThreadID());
-			case KEY_exception -> o(rec.getThrown()).map(x -> x.getMessage()).orElse("");
+			case "date" -> "%1$s";
+			case "logger" -> "%2$s";
+			case "level" -> "%3$s";
+			case "msg" -> "%4$s";
+			case "thrown" -> "%5$s";
+			case "timestamp" -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
+			case "thread", "threadid" -> s(rec.getThreadID());
+			case "exception" -> o(rec.getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 

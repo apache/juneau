@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.internal;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -32,13 +31,9 @@ import org.apache.juneau.marshall.*;
  * @param <V> The value class type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_innerMap = "innerMap";
-	private static final String ARG_keys = "keys";
 
 	/**
 	 * A set with ordered entries (a List with a Set API).
@@ -78,11 +73,14 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
 	public FilteredKeyMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
-		assertArgNotNull(ARG_innerMap, innerMap);
-		assertArgNotNull(ARG_keys, keys);
+		reqnn("innerMap", innerMap);
+		reqnn("keys", keys);
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;
+		@SuppressWarnings({
+			"java:S9391" // Hot path; avoids stream allocation.
+		})
 		List<Map.Entry<K,V>> l = new ArrayList<>(keys.length);
 		for (var k : keys)
 			if (innerMap.containsKey(k))

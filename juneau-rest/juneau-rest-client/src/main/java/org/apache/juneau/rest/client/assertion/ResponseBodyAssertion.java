@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.assertion;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -64,7 +66,7 @@ public final class ResponseBodyAssertion {
 	})
 	public ResponseBodyAssertion equals(String expected) {
 		var actual = readBodyAsString();
-		if (expected == null ? actual != null : !expected.equals(actual))
+		if (expected == null ? actual != null : neq(expected, actual))
 			throw new AssertionError("Expected body '" + expected + "' but got '" + actual + "'");
 		return this;
 	}

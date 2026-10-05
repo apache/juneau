@@ -224,7 +224,7 @@ public class RestUtils {
 
 	@SuppressWarnings({
 		"java:S2677", // Return value intentionally ignored in this context
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	private static Map<String,List<String>> parseQuery(ParserPipe p) throws IOException {
 
@@ -353,7 +353,7 @@ public class RestUtils {
 	public static String validateServletPath(String value) {
 		if (value == null)
 			throw rex("Value is not a valid servlet path: [%s]", value);
-		if (! value.isEmpty() && (value.equals("/") || value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/'))
+		if (! value.isEmpty() && (eq(value, "/") || value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/'))
 			throw rex("Value is not a valid servlet path: [%s]", value);
 		return value;
 	}

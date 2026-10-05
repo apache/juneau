@@ -22,7 +22,7 @@ package org.apache.juneau.commons.utils;
  * <p>Mirrors the terse {@code *ex} forms exposed publicly by {@link Shorts}
  * ({@code rex}/{@code iaex}/{@code isex}/{@code uoex}/{@code uoroex}) so the {@code org.apache.juneau.commons.utils}
  * domain classes ({@link CollectionUtils}, {@link StringUtils}, {@link ThrowableUtils}, {@link FileUtils},
- * {@link IoUtils}, {@link AssertionUtils}) can construct exceptions tersely <b>without</b> taking a dependency on
+ * {@link IoUtils}, {@link Shorts#req}) can construct exceptions tersely <b>without</b> taking a dependency on
  * {@code Shorts}. Each factory builds the exception directly (self-contained — no delegation to {@code Shorts}),
  * using {@link StringUtils#format(String, Object...)} for message interpolation.
  */

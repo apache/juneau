@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -101,13 +100,10 @@ import java.util.stream.*;
  * @param <E> The element type of this set.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Set/Iterator types used in multi-set structural operations where element type is erased
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740" // Raw Set/Iterator types used in multi-set structural operations where element type is erased
 })
 public class MultiSet<E> extends AbstractSet<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_c = "c";
 
 	/**
 	 * The underlying collections being wrapped by this MultiSet.
@@ -138,9 +134,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		for (var cc : c)
-			assertArgNotNull(ARG_c, cc);
+			reqnn("c", cc);
 		l = c;
 	}
 

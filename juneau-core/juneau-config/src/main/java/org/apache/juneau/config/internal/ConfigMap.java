@@ -49,8 +49,9 @@ import org.apache.juneau.marshall.collections.*;
  * which is still required to make read-modify-write sequences atomic.
  */
 @SuppressWarnings({
-	"resource", // Complex nested structure; value equality not practical
 	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+	"java:S3776", // applyChange(), findDiffs() and loadIni() walk sections and entries with nested comparisons that read best as one pass
+	"resource" // Complex nested structure; value equality not practical
 })
 public class ConfigMap implements ConfigStoreListener {
 
@@ -82,9 +83,6 @@ public class ConfigMap implements ConfigStoreListener {
 		/**
 		 * Parses a section from a block of raw lines.
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for config section parsing
-		})
 		static ConfigSection parse(List<String> lines) {
 
 			String name2 = null;
@@ -255,7 +253,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private static void checkSectionName(String s) {
-		if (! ("".equals(s) || isValidNewSectionName(s)))
+		if (! (eq(s, "") || isValidNewSectionName(s)))
 			throw iaex("Invalid section name: '%s'", s);
 	}
 
@@ -315,7 +313,9 @@ public class ConfigMap implements ConfigStoreListener {
 	private final Set<ConfigEventListener> listeners = new CopyOnWriteArraySet<>();
 
 	// The immutable copy-on-write snapshot of this map's contents.  Published atomically; read lock-free.
-	@SuppressWarnings("java:S3077") // Copy-on-write snapshot: State is a deeply-immutable graph (unmodifiable collections of immutable ConfigSection/ConfigMapEntry records) replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.
+	@SuppressWarnings({
+		"java:S3077" // Copy-on-write snapshot: State is a deeply-immutable graph (unmodifiable collections of immutable ConfigSection/ConfigMapEntry records) replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.
+	})
 	private volatile State state = new State("", List.of(), Map.of(), Map.of(), List.of());
 
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
@@ -766,9 +766,6 @@ public class ConfigMap implements ConfigStoreListener {
 		return w;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for config change application
-	})
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		try (var x = lock.write()) {
 			var st = state;
@@ -844,9 +841,6 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for config diff detection
-	})
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
 		var changes2 = new ConfigEvents();
 		var newMap = new ConfigMap(store, name, updatedContents, format);
@@ -910,15 +904,16 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
-	@SuppressWarnings("javabugs:S2259") // False positive: 'format' is a final field assigned a non-null value in every constructor (defaults to IniConfigFormat.INSTANCE); Sonar's symbolic execution can't follow the ternary default across the constructor-to-load() call chain.
+	@SuppressWarnings({
+		"javabugs:S2259" // False positive: 'format' is a final field assigned a non-null value in every constructor (defaults to IniConfigFormat.INSTANCE); Sonar's symbolic execution can't follow the ternary default across the constructor-to-load() call chain.
+	})
 	private ConfigMap load(String contents) throws IOException {
 		var internalContents = format.toInternal(contents);
 		return loadIni(internalContents, contents);
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S6541" // Single-threaded context; synchronization unnecessary
 	})
 	private ConfigMap loadIni(String contents, String originalContents) throws IOException {
 		if (contents == null)

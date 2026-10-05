@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -69,12 +68,9 @@ import java.util.stream.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_list = "list";
 
 	private final List<E> list;
 
@@ -85,7 +81,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	 * @throws IllegalArgumentException if list is <jk>null</jk>.
 	 */
 	public ReversedList(List<E> list) {
-		this.list = assertArgNotNull(ARG_list, list);
+		this.list = reqnn("list", list);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.toml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -42,21 +41,19 @@ import org.apache.juneau.marshall.stream.*;
  * - java:S3776: Cognitive complexity; parser logic is inherently branched for TOML syntax.
  * - java:S6541: Brain method; parser orchestration spans many concerns.
  * - java:S135: Multiple break/continue per loop needed for TOML state-machine parsing.
- * - java:S115: ARG_ctx follows project assertion-param naming convention (ARG_<param>).
+ * - java:S1192: Duplicated literals (argument/property names) read more clearly inline than as constants.
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic Map/List handling
-	"unchecked", // Type erasure requires unchecked casts in convertValue
+	"java:S135", // Multiple breaks acceptable in parse loop
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1612", // Class.isAssignableFrom necessary when checking target type (Class<?>), not object instance
 	"java:S3776", // Cognitive complexity acceptable for readMessage
 	"java:S6541", // Brain method acceptable for readMessage
-	"java:S135", // Multiple breaks acceptable in parse loop
-	"java:S115", // ARG_ prefix follows framework convention
-	"java:S1612", // Class.isAssignableFrom necessary when checking target type (Class<?>), not object instance
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"rawtypes", // Raw types necessary for generic Map/List handling
+	"resource", // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"unchecked" // Type erasure requires unchecked casts in convertValue
 })
 public class TomlParserSession extends ReaderParserSession implements RecordReadable {
-
-	private static final String ARG_ctx = "ctx";
 
 	private static final String MSG_INVALID_NUMBER = "Invalid number: ";
 
@@ -68,7 +65,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		private TomlParser ctx;
 
 		protected Builder(TomlParser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -86,7 +83,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	 * @return The builder.
 	 */
 	public static Builder create(TomlParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final TomlParser ctx;
@@ -345,11 +342,11 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	private static Number readSpecialFloat(String s) {
 		if (s == null)
 			return null;
-		if (s.equals("inf") || s.equals("+inf"))
+		if (eqa(s, "inf", "+inf"))
 			return Double.POSITIVE_INFINITY;
-		if (s.equals("-inf"))
+		if (eq(s, "-inf"))
 			return Double.NEGATIVE_INFINITY;
-		if (s.equals("nan") || s.equals("+nan") || s.equals("-nan"))
+		if (eqa(s, "nan", "+nan", "-nan"))
 			return Double.NaN;
 		return null;
 	}
@@ -422,7 +419,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			var valueType = type.getValueType();
 			Map m = type.canCreateNewInstance(getOuter()) ? (Map) type.newInstance(getOuter()) : newGenericMap(type);
 			for (var e : map.entrySet()) {
-				String keyStr = "null".equals(e.getKey()) ? null : e.getKey();
+				String keyStr = eq(e.getKey(), "null") ? null : e.getKey();
 				Object key = convertAttrToType(m, keyStr, keyType);
 				Object val = convertValue(e.getValue(), valueType);
 				m.put(key, val);
@@ -460,6 +457,9 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S9391" // Hot path; avoids stream allocation (and loop body throws checked exceptions).
+	})
 	private Object convertValue(Object val, ClassMeta<?> targetType) throws ParseException, ExecutableException {
 		if (val == null)
 			return null;

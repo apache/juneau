@@ -107,9 +107,9 @@ public class CommonmarkMarkdownRenderer implements MarkdownRenderer {
 	private static final class SafeUrlAttributeProvider implements AttributeProvider {
 		@Override
 		public void setAttributes(Node node, String tagName, Map<String,String> attributes) {
-			if ("a".equals(tagName) && attributes.containsKey("href") && ! isSafeUrl(attributes.get("href")))
+			if (eq(tagName, "a") && attributes.containsKey("href") && ! isSafeUrl(attributes.get("href")))
 				attributes.remove("href");
-			if ("img".equals(tagName) && attributes.containsKey("src") && ! isSafeUrl(attributes.get("src")))
+			if (eq(tagName, "img") && attributes.containsKey("src") && ! isSafeUrl(attributes.get("src")))
 				attributes.remove("src");
 		}
 	}

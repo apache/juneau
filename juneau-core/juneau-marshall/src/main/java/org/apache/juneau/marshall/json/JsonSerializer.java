@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -126,17 +126,11 @@ import org.apache.juneau.marshall.swap.spi.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"   // writeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
+	"resource" // writeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, TokenWritable, ArrayRecordWritable {
-
-	// Property name constants
-	private static final String PROP_addBeanTypesJson = "addBeanTypesJson";
-	private static final String PROP_escapeSolidus = "escapeSolidus";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -168,7 +162,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 		}
@@ -180,7 +174,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 		}
@@ -443,8 +437,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesJson, addBeanTypesJson)
-			.a(PROP_escapeSolidus, escapeSolidus);
+			.a("addBeanTypesJson", addBeanTypesJson)
+			.a("escapeSolidus", escapeSolidus);
 	}
 
 	/**

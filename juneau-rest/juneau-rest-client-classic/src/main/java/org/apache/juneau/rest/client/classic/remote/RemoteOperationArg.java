@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.httppart.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+})
 public class RemoteOperationArg {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
@@ -65,9 +68,6 @@ public class RemoteOperationArg {
 
 	private final HttpPartSchema schema;
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
-	})
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
@@ -75,9 +75,6 @@ public class RemoteOperationArg {
 		this.schema = schema;
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
-	})
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
 		this.index = index;
 		this.partType = partType;

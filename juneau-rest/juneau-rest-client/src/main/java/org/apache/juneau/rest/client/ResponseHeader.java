@@ -150,7 +150,7 @@ public final class ResponseHeader {
 	 */
 	public List<String> getValues() {
 		return response.getHeaders().stream()
-			.filter(h -> name.equalsIgnoreCase(h.name()))
+			.filter(h -> eqic(name, h.name()))
 			.map(TransportHeader::value)
 			.toList();
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -100,7 +102,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		Map<?,?> clientBucket = null;
 		for (var b : snapshot) {
 			var m = (Map<?,?>) b;
-			if ("client-a".equals(m.get("key"))) {
+			if (eq(m.get("key"), "client-a")) {
 				clientBucket = m;
 				break;
 			}

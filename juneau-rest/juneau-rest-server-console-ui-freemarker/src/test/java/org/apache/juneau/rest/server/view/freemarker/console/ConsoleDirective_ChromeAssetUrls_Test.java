@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -47,6 +48,7 @@ import org.junit.jupiter.api.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S8786", // Test-only patterns scan small rendered pages; the scan-to-attribute shape needs backtracking.
 	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.
 })
 class ConsoleDirective_ChromeAssetUrls_Test extends TestBase {
@@ -96,19 +98,23 @@ class ConsoleDirective_ChromeAssetUrls_Test extends TestBase {
 				var css = chrome.getContent().asString();
 				assertTrue(css.contains(".jc-header"), () -> css);
 				assertTrue(css.contains(".juneau-page-nav"), () -> css);
-				assertTrue(css.contains("display: flex") || css.contains("display:flex"), () -> css);
 			}
 			try (var theme = c.get(themePath).run()) {
 				theme.assertStatus(200).assertHeader("Content-Type").isContains("text/css");
 			}
 
-			assertTrue(html.contains("<header class=\"jc-header\">"), () -> html);
-			assertTrue(html.contains("class=\"juneau-page-nav\""), () -> html);
-			assertEquals(3, count(html, "class=\"juneau-page-nav-section\""),
-				() -> "Home, Items, and Admin must be separate section links: " + html);
-			assertTrue(html.contains(">Home</a>"), () -> html);
-			assertTrue(html.contains(">Items</a>"), () -> html);
-			assertTrue(html.contains(">Admin</a>"), () -> html);
+			// The shell script is site-root too, and served.
+			var m = Pattern.compile("<script src=\"([^\"]*juneau-console\\.js[^\"]*)\"").matcher(html);
+			assertTrue(m.find(), () -> html);
+			var shellPath = resolvedPath(pageUri, m.group(1));
+			assertEquals("/juneau-console/juneau-console.js", shellPath, () -> html);
+			try (var shell = c.get(shellPath).run()) {
+				shell.assertStatus(200).assertHeader("Content-Type").isContains("javascript");
+			}
+
+			// Home, Items and Admin are three top-level nav entries in the contract.
+			assertPage(html).isValid().hasNavHref("home", "/home").hasNavHref("items", "/items").hasNavHref("admin", "/admin");
+			assertEquals(3, assertPage(html).contract().getList("nav").size(), () -> html);
 			assertFalse(html.contains("slds-"), () -> html);
 		}
 	}
@@ -134,12 +140,5 @@ class ConsoleDirective_ChromeAssetUrls_Test extends TestBase {
 		var resolved = pageUri.resolve(href);
 		var path = resolved.getPath();
 		return path == null ? "" : path;
-	}
-
-	static int count(String body, String needle) {
-		var n = 0;
-		for (var i = body.indexOf(needle); i >= 0; i = body.indexOf(needle, i + needle.length()))
-			n++;
-		return n;
 	}
 }

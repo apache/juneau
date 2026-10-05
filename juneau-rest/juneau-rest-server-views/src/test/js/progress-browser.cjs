@@ -47,11 +47,11 @@ const PROBE = async function () {
 	out.hostileEmpty = !host.querySelector('.jc-progress-bar');
 
 	host.innerHTML = r.display(50, {}, { max: '100' });
-	out.ok = !!host.querySelector('.is-ok');
+	out.ok = !!host.querySelector('.is-success');
 	host.innerHTML = r.display(80, {}, { max: '100', warn: '80' });
-	out.warn = !!host.querySelector('.is-warn');
+	out.warn = !!host.querySelector('.is-warning');
 	host.innerHTML = r.display(130, {}, { max: '100' });
-	out.exceeds = !!host.querySelector('.is-exceeds');
+	out.exceeds = !!host.querySelector('.is-error');
 	const bar = host.querySelector('.jc-progress-bar');
 	out.overWidth = bar ? bar.getAttribute('style') : '';
 	out.overLabel = host.textContent.indexOf('130%') >= 0;
@@ -82,7 +82,7 @@ const PROBE = async function () {
 	} finally {
 		await browser.close();
 	}
-})().catch(e => {
-	process.stderr.write(String(e?.stack || e) + '\n');
+})().catch(error => {
+	process.stderr.write(String(error?.stack || error) + '\n');
 	process.exit(1);
 });

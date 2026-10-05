@@ -43,13 +43,10 @@ import org.apache.juneau.commons.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // ParserReader is managed by caller
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
+	"resource" // ParserReader is managed by caller
 })
 public class ParserReader extends Reader implements Positionable {
-
-	// Error message constants
-	private static final String MSG_bufferUnderflow = "Buffer underflow.";
 
 	/**
 	 * Maximum number of previously-read characters preserved as unread lookback when the buffer is
@@ -280,7 +277,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
+		return r.read(cbuf, off, unbuffered ? 1 : len);
 	}
 
 	/**
@@ -360,11 +357,11 @@ public class ParserReader extends Reader implements Positionable {
 	public final ParserReader replace(int c, int offset) throws IOException {
 		if (c < 0x10000) {
 			if (offset < 1)
-				throw ioex(MSG_bufferUnderflow);
+				throw ioex("Buffer underflow.");
 			buff[iCurrent - offset] = (char)c;
 		} else {
 			if (offset < 2)
-				throw ioex(MSG_bufferUnderflow);
+				throw ioex("Buffer underflow.");
 			c -= 0x10000;
 			buff[iCurrent - offset] = (char)(0xd800 + (c >> 10));
 			buff[iCurrent - offset + 1] = (char)(0xdc00 + (c & 0x3ff));
@@ -385,7 +382,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public ParserReader unread() throws IOException {
 		if (iCurrent <= 0)
-			throw ioex(MSG_bufferUnderflow);
+			throw ioex("Buffer underflow.");
 		iCurrent--;
 		if (column == 0)
 			line--;

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.console.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -33,7 +35,7 @@ import org.junit.jupiter.api.*;
  *
  * <h5 class='section'>Defines vs calls &mdash; the distinction this guard is built on:</h5>
  * <p>
- * "One stack" is a statement about <b>ownership</b>, not about references.  {@code juneau-chrome.js} and
+ * "One stack" is a statement about <b>ownership</b>, not about references.  {@code juneau-console.js} and
  * {@code juneau-calendar.js} are legitimate, deliberate clients: they resolve
  * {@code window.JuneauViews.init.pushLayer} and call it, and a guard that merely searched for the identifier would
  * fail them for doing exactly the right thing.  So this guard looks only for <b>definition</b> forms &mdash; a
@@ -64,7 +66,7 @@ class LayerStackSingleton_Test extends TestBase {
 		ViewsMixin.ICONS_JS_RESOURCE,
 		ViewsMixin.CONFIG_JS_RESOURCE,
 		ViewsMixin.CALENDAR_JS_RESOURCE,
-		ViewsMixin.CHROME_JS_RESOURCE
+		ConsoleChromeMixin.CONSOLE_JS_RESOURCE
 	);
 
 	private static String read(String resource) throws IOException {
@@ -91,7 +93,7 @@ class LayerStackSingleton_Test extends TestBase {
 	/** No runtime file other than {@code juneau-views.js} may DEFINE {@code pushLayer} / {@code popLayer}. */
 	@Test void a01_onlyViewsJsDefinesTheLayerStack() throws Exception {
 		for (var res : RUNTIME_JS) {
-			if (OWNER.equals(res)) continue;
+			if (eq(res, OWNER)) continue;
 			var body = code(res);
 			for (var fn : List.of("pushLayer", "popLayer")) {
 				var m = defines(fn).matcher(body);
@@ -118,7 +120,7 @@ class LayerStackSingleton_Test extends TestBase {
 	 */
 	@Test void a03_onlyViewsJsEscalatesLayerZIndex() throws Exception {
 		for (var res : RUNTIME_JS) {
-			if (OWNER.equals(res)) continue;
+			if (eq(res, OWNER)) continue;
 			var body = code(res);
 			for (var token : List.of("--jc-dialog-z", "--jc-layer-step"))
 				assertFalse(body.contains(token),
@@ -133,7 +135,7 @@ class LayerStackSingleton_Test extends TestBase {
 	 * both files reference the stack heavily and must keep passing.
 	 */
 	@Test void a04_knownClientsStillCallTheSharedStack() throws Exception {
-		for (var res : List.of(ViewsMixin.CHROME_JS_RESOURCE, ViewsMixin.CALENDAR_JS_RESOURCE)) {
+		for (var res : List.of(ConsoleChromeMixin.CONSOLE_JS_RESOURCE, ViewsMixin.CALENDAR_JS_RESOURCE)) {
 			var body = code(res);
 			assertTrue(body.contains(".pushLayer("),
 				() -> res + " no longer calls the shared pushLayer - it must remain a client, not grow its own stack");

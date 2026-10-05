@@ -34,8 +34,8 @@ import org.junit.jupiter.api.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"java:S2925"  // Thread.sleep required to test TTL expiry; BoundedLruTokenCache has no clock injection point
+	"java:S2925", // Thread.sleep required to test TTL expiry; BoundedLruTokenCache has no clock injection point
+	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class BoundedLruTokenCache_Test extends TestBase {
 

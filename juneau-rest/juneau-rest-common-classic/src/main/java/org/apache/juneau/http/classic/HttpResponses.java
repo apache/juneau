@@ -25,6 +25,9 @@ import org.apache.juneau.http.classic.response.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1845" // Static factory methods (accepted(), ...) intentionally share names with the ACCEPTED-style constants, differing only by case
+})
 public class HttpResponses {
 
 	/**
@@ -324,9 +327,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field ACCEPTED
-	})
 	public static final Accepted accepted() {
 		return new Accepted();
 	}
@@ -354,9 +354,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field CONFLICT
-	})
 	public static final Conflict conflict() {
 		return new Conflict();
 	}
@@ -366,9 +363,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field CREATED
-	})
 	public static final Created created() {
 		return new Created();
 	}
@@ -405,9 +399,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field FORBIDDEN
-	})
 	public static final Forbidden forbidden() {
 		return new Forbidden();
 	}
@@ -418,9 +409,6 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field FOUND
-	})
 	public static final Found found(String location) {
 		return new Found().setLocation(location);
 	}
@@ -430,9 +418,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field GONE
-	})
 	public static final Gone gone() {
 		return new Gone();
 	}
@@ -496,9 +481,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field LOCKED
-	})
 	public static final Locked locked() {
 		return new Locked();
 	}
@@ -635,9 +617,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field OK
-	})
 	public static final Ok ok() {
 		return new Ok();
 	}
@@ -693,9 +672,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field PROCESSING
-	})
 	public static final Processing processing() {
 		return new Processing();
 	}
@@ -779,9 +755,6 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field UNAUTHORIZED
-	})
 	public static final Unauthorized unauthorized() {
 		return new Unauthorized();
 	}

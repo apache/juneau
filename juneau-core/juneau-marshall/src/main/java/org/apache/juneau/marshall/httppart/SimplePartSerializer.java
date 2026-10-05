@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.marshall.httppart;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
@@ -37,13 +37,9 @@ import org.apache.juneau.commons.conversion.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class SimplePartSerializer extends BaseHttpPartSerializer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -64,7 +60,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override
@@ -97,7 +93,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public SimplePartSerializer(Builder builder) {
-		super(assertArgNotNull(ARG_builder, builder));
+		super(reqnn("builder", builder));
 	}
 
 	@Override

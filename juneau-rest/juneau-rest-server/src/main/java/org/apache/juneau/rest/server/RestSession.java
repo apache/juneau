@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -47,21 +46,14 @@ import jakarta.servlet.http.*;
  *
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_context)
-	"resource"   // the per-call BasicBeanStore is owned by this RestSession (closed via finish/close paths); fluent add/addBean calls return the same store we already own.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource", // the per-call BasicBeanStore is owned by this RestSession (closed via finish/close paths); fluent add/addBean calls return the same store we already own.
+	"unchecked" // Type erasure requires cast for pathVars
 })
 public class RestSession extends ContextSession {
 
 	/** Logger for the finish-path diagnostic-failure containment token (see {@link #finish()}). */
 	private static final RichLogger LOG = RichLogger.getLogger(RestSession.class);
-
-	// Property name constants
-	private static final String PROP_context = "context";
-	private static final String PROP_resource = "resource";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
-	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
@@ -85,7 +77,7 @@ public class RestSession extends ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RestContext ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -123,9 +115,6 @@ public class RestSession extends ContextSession {
 		 * 	<br>Can be <jk>null</jk> (ignored).
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast for pathVars
-		})
 		public Builder pathVars(Map<String,String> value) {
 			if (nn(value) && ! value.isEmpty()) {
 				var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
@@ -157,7 +146,7 @@ public class RestSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder req(HttpServletRequest value) {
-			req = assertArgNotNull(ARG_value, value);
+			req = reqnn("value", value);
 			return this;
 		}
 
@@ -178,7 +167,7 @@ public class RestSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder res(HttpServletResponse value) {
-			res = assertArgNotNull(ARG_value, value);
+			res = reqnn("value", value);
 			return this;
 		}
 
@@ -219,7 +208,7 @@ public class RestSession extends ContextSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RestContext ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -300,7 +289,7 @@ public class RestSession extends ContextSession {
 		req.setAttribute(REQUEST_SESSION_ATTR, this);
 		req.setAttribute(settings.getAttributeKey(), requestId);
 		res.setHeader(RequestIdConstants.HEADER, requestId);
-		requestIdScope = RichLogger.context().with(RestServerConstants.REQUEST_ID, requestId);
+		requestIdScope = RichLogger.context().with("requestId", requestId);
 	}
 
 	/**
@@ -379,6 +368,35 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
+	 * If the specified failure is a client disconnect (see {@link ClientAborts#isClientAbort(Throwable)}), logs a single
+	 * FINE line without a stack trace.
+	 *
+	 * @param e The failure.
+	 * @return <jk>true</jk> if it was a client abort (and so should not be recorded as an exception).
+	 */
+	boolean logClientAbort(Throwable e) {
+		return logClientAbort(e, false);
+	}
+
+	/**
+	 * Same as {@link #logClientAbort(Throwable)} but matches only container client-abort types
+	 * (see {@link ClientAborts#isContainerClientAbort(Throwable)}).
+	 *
+	 * @param e The failure.
+	 * @return <jk>true</jk> if it was a container-reported client abort.
+	 */
+	boolean logContainerClientAbort(Throwable e) {
+		return logClientAbort(e, true);
+	}
+
+	private boolean logClientAbort(Throwable e, boolean strict) {
+		if (! (strict ? ClientAborts.isContainerClientAbort(e) : ClientAborts.isClientAbort(e)))
+			return false;
+		LOG.fine(() -> "Client disconnected before the response completed: " + req.getMethod() + " " + req.getRequestURI());
+		return true;
+	}
+
+	/**
 	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
 	 *
 	 * <p>
@@ -406,7 +424,8 @@ public class RestSession extends ContextSession {
 					res.flushBuffer();
 				}
 			} catch (Exception e) {
-				exception(e);
+				if (! logClientAbort(e))
+					exception(e);
 			}
 			// Skip synchronous emission on the async path — the completion hook emits after the body/headers are written.
 			if (asyncOwned)
@@ -603,9 +622,6 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return Resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for pathVars
-	})
 	public Map<String,String> getPathVars() {
 		var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 		return m == null ? emptyMap() : m;
@@ -621,7 +637,7 @@ public class RestSession extends ContextSession {
 	 */
 	public Map<String,String[]> getQueryParams() {
 		if (queryParams == null) {
-			if (req.getMethod().equalsIgnoreCase("POST")) {
+			if (eqic(req.getMethod(), "POST")) {
 				var listMap = RestUtils.parseQuery(req.getQueryString());
 				queryParams = map();
 				for (var e : listMap.entrySet()) {
@@ -798,7 +814,7 @@ public class RestSession extends ContextSession {
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_context, context)
-			.a(PROP_resource, resource);
+			.a("context", context)
+			.a("resource", resource);
 	}
 }

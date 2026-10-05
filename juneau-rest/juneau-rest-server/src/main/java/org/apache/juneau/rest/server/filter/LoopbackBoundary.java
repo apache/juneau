@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.filter;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -212,11 +211,11 @@ public class LoopbackBoundary {
 	 * @return {@link Result#ALLOWED} when every applicable check passed, else the first rejection encountered.
 	 */
 	public Result check(HttpServletRequest req) {
-		assertArgNotNull("req", req);
+		reqnn("req", req);
 
 		// Host applies to every request; it is the DNS-rebinding check and a read is just as exfiltratable as a write.
 		var host = req.getHeader("Host");
-		if (host == null || ! host.equalsIgnoreCase(authority))
+		if (host == null || neqic(host, authority))
 			return reject(Reason.HOST_MISMATCH, 421,
 				"Request 'Host' does not match this server's expected authority '%s'.", authority);
 
@@ -234,7 +233,7 @@ public class LoopbackBoundary {
 		// The presented value is deliberately not echoed back: it is caller-controlled, and a rejection message is
 		// rendered into a response body and a log line, neither of which should carry attacker-chosen text.
 		var fetchSite = req.getHeader("Sec-Fetch-Site");
-		if (fetchSite != null && ! "same-origin".equals(fetchSite))
+		if (fetchSite != null && neq(fetchSite, "same-origin"))
 			return reject(Reason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
 				"Request 'Sec-Fetch-Site' must be absent or 'same-origin' on a state-changing request.");
 
@@ -341,7 +340,7 @@ public class LoopbackBoundary {
 			return false;
 		var semi = contentType.indexOf(';');
 		var base = (semi < 0 ? contentType : contentType.substring(0, semi)).trim();
-		return base.equalsIgnoreCase(JSON_CONTENT_TYPE);
+		return eqic(base, JSON_CONTENT_TYPE);
 	}
 
 	private static Result reject(Reason reason, int status, String message, Object... args) {
@@ -464,7 +463,7 @@ public class LoopbackBoundary {
 		 * 	host-and-port.
 		 */
 		public Builder authority(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
 				throw iaex("Argument 'value' must not be blank.");
@@ -484,7 +483,7 @@ public class LoopbackBoundary {
 		 * 	positive.
 		 */
 		public Builder authority(String host, int port) {
-			assertArgNotNull("host", host);
+			reqnn("host", host);
 			if (port <= 0)
 				throw iaex("Argument 'port' must be positive: %s.", port);
 			return authority(host.trim() + ":" + port);
@@ -499,7 +498,7 @@ public class LoopbackBoundary {
 		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 		 */
 		public Builder csrfHeader(String value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isBlank())
 				throw iaex("Argument 'value' must not be blank.");
 			csrfHeader = value.trim();
@@ -517,7 +516,7 @@ public class LoopbackBoundary {
 		 * @return This object.
 		 */
 		public Builder token(SynchronizerToken value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			token = value;
 			return this;
 		}

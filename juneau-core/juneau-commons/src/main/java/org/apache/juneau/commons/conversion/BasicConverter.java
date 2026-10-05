@@ -150,11 +150,11 @@ import org.apache.juneau.commons.reflect.*;
  * This class is thread-safe. The singleton instance can be safely shared across multiple threads.
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic conversion dispatch
-	"unchecked", // Type erasure requires unchecked casts throughout conversion logic
-	"java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs
 	"java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy
-	"java:S1192" // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity
+	"java:S1192", // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity
+	"java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs
+	"rawtypes", // Raw types necessary for generic conversion dispatch
+	"unchecked" // Type erasure requires unchecked casts throughout conversion logic
 })
 public class BasicConverter extends CachingConverter {
 
@@ -275,7 +275,7 @@ public class BasicConverter extends CachingConverter {
 	private <O> Conversion<CharSequence,O> findNumberFromString(Class<O> outType) {
 		return (in, memberOf, session, args) -> {
 			var s = in.toString();
-			if (s.isEmpty() || "null".equals(s))
+			if (s.isEmpty() || eq(s, "null"))
 				return null;
 			return (O) parseNumber(s, (Class<? extends Number>) outType);
 		};
@@ -533,7 +533,7 @@ public class BasicConverter extends CachingConverter {
 		if (CharSequence.class.isAssignableFrom(inType) && outType == Boolean.class)
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
-				if (s.isEmpty() || "null".equals(s))
+				if (s.isEmpty() || eq(s, "null"))
 					return null;
 				return (O) Boolean.valueOf(s);
 			};
@@ -650,7 +650,7 @@ public class BasicConverter extends CachingConverter {
 			m.isNotStatic()
 			&& m.isNotDeprecated()
 			&& m.getParameterCount() == 0
-			&& m.getNameSimple().equalsIgnoreCase(methodName)
+			&& eqic(m.getNameSimple(), methodName)
 			&& m.hasReturnTypeParent(outType)
 		);
 		if (opt.isPresent()) {

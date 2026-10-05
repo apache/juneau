@@ -41,7 +41,8 @@ import org.apache.juneau.commons.http.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+	"java:S2160", // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
 })
 public class BasicMediaRangesHeader extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
@@ -56,9 +57,6 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static BasicMediaRangesHeader of(String name, MediaRanges value) {
 		return value == null ? null : new BasicMediaRangesHeader(name, value);
 	}
@@ -74,9 +72,6 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static BasicMediaRangesHeader of(String name, String value) {
 		return value == null ? null : new BasicMediaRangesHeader(name, value);
 	}

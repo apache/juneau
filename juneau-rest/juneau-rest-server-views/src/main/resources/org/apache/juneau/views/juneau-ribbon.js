@@ -19,7 +19,7 @@
  * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit.
  *
  * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv/print via DataTables Buttons, with
- * excel/pdf lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, pausePolling, collapseAll,
+ * excel/pdf lit up only when JSZip/pdfMake are present), refresh, pausePolling, collapseAll,
  * dialog (a row-less, ribbon-hosted dialog, opened through juneau-views.js's ribbon-catalog resolver),
  * option/optionGroup server-query toggles (with persisted state), and divider.
  *
@@ -28,7 +28,9 @@
  * RibbonAction.toQueryParams(ViewDef) produces (custom `param` options contribute `param=value` verbatim).  The
  * server maps unconditionally (it has no notion of "active"); the CLIENT owns active state, so ONLY active toggles
  * contribute here.  ribbonToQueryParams(viewDef, activeState) below is the pure counterpart of the Java mapping and
- * shares its fixtures so the two implementations cannot drift.
+ * shares its fixtures so the two implementations cannot drift.  A SERVER-mode table (POST/JSON wire) does not send
+ * these column-scoped params on the URL at all: ribbonColumnSearches + mergeColumnSearches below put them into the
+ * JSON body's columns[N].search.value, and only `param` options ride the URL (ribbonQueryParams).
  *
  * Everything in the "PURE LOGIC LAYER" is DOM/jQuery/DataTables-free (feature-detection takes its environment as an
  * argument), so it is unit-checkable (Option B) and Option-B-portable.  The "DOM/JQUERY BINDING LAYER" is the thin
@@ -86,8 +88,11 @@
 	 * client's ACTIVE toggle state.  `activeState` is a map keyed by option/group id:
 	 *   - a top-level `option` contributes iff activeState[option.id] is truthy;
 	 *   - an `optionGroup` contributes its member whose id === activeState[group.id] (the selected radio value).
-	 * refresh/columnSearchToggle/pausePolling/divider/export are not query-contributing and are skipped.
+	 * refresh/pausePolling/divider/export are not query-contributing and are skipped.
 	 */
+	/** The single-string, comma-joined request parameters (design §5.3): `search` and `opt`. */
+	const CLAUSE_JOIN_PARAMS = { search: true, opt: true };
+
 	function ribbonToQueryParams(viewDef, activeState, optsColumns) {
 		const out = {};
 		const state = activeState || {};
@@ -95,17 +100,160 @@
 			if (a.type === "option") {
 				if (state[a.id]) {
 					const p = optionParam(viewDef, a, optsColumns);
-					if (p) out[p.name] = p.value;
+					if (p) addQueryParam(out, p.name, p.value);
 				}
 			} else if (a.type === "optionGroup" && a.options) {
 				const selected = state[a.id];
 				a.options.forEach(function (o) {
 					if (o.id === selected) {
 						const p = optionParam(viewDef, o, optsColumns);
-						if (p) out[p.name] = p.value;
+						if (p) addQueryParam(out, p.name, p.value);
 					}
 				});
 			}
+		});
+		return out;
+	}
+
+	/**
+	 * The HTTP API carries exactly ONE `search` query parameter and ONE `opt` query parameter (design §5.3: no
+	 * repeated params).  When more than one active toggle contributes to the SAME single-string parameter, the browser
+	 * JOINS their clauses into that one string with a top-level comma - the very clause SEPARATOR the Java
+	 * {@code ClauseParser} uses to fold clauses server-side - rather than the later contribution
+	 * clobbering the earlier.  Each contributed value is an already-formed `key=value` clause and is spliced RAW (its
+	 * own `=` and any `$in(A,B)` parens are the $-language's, not this grammar's).  Any other parameter name is
+	 * single-valued (last contribution wins), exactly as before.
+	 */
+	function addQueryParam(out, name, value) {
+		if (CLAUSE_JOIN_PARAMS[name] && out[name] != null && out[name] !== "")
+			out[name] = out[name] + "," + value;
+		else
+			out[name] = value;
+	}
+
+	/**
+	 * Shared walk (BeanQuery DataTables design §3.1) over every ACTIVE query-contributing ribbon entry: a top-level
+	 * `option` whose `activeState[id]` is truthy, and the selected member of each `optionGroup`. Calls
+	 * `fn(opt, ownerId)` once per active entry, in `viewDef.ribbon`'s own declared order — `ownerId` is the
+	 * option's own id for a top-level option, or the enclosing group's id for a selected group member, which is
+	 * the id a later per-option diagnostic (a regex-value guard) keys its messages by. Other
+	 * ribbon action types (`export`, `refresh`, `divider`, ...) are skipped; they contribute no query state.
+	 * `ribbonColumnSearches` and `ribbonQueryParams` both walk through this one function, so the two can never
+	 * disagree about which options count as "active", and a future consumer (like a regex-value guard) only has one place
+	 * to hook in.
+	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`).
+	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @param {function(object, string)} fn - called once per active entry, as `fn(opt, ownerId)`.
+	 * @example
+	 *   // viewDef.ribbon = [{type:'optionGroup', id:'phase', options:[{id:'done', ...}]}]
+	 *   forEachActiveOption(viewDef, {phase: 'done'}, function (opt, ownerId) { ... });   // ownerId === 'phase'
+	 */
+	function forEachActiveOption(viewDef, activeState, fn) {
+		const state = activeState || {};
+		(viewDef.ribbon || []).forEach(function (a) {
+			if (a.type === "option") {
+				if (state[a.id]) fn(a, a.id);
+			} else if (a.type === "optionGroup" && a.options) {
+				const selected = state[a.id];
+				a.options.forEach(function (o) { if (o.id === selected) fn(o, a.id); });
+			}
+		});
+	}
+
+	/**
+	 * The pure counterpart of the server-side column-scoped ribbon mapping (BeanQuery DataTables design §3.1):
+	 * the column-scoped search expressions the ribbon's ACTIVE toggle state contributes, keyed by live `dtIndex`
+	 * (the same index the outgoing `columns[]` array in a BeanQuery DataTables POST body uses) — never by a
+	 * URL-shaped param name. This is the half of `ribbonToQueryParams`'s mapping that MUST land in the JSON body:
+	 * a POST/JSON server-mode endpoint (BeanQuery datatables design doc §3.1/D8) does not read URL query params at
+	 * all, so the old behavior of putting every ribbon contribution on the URL silently dropped column-scoped
+	 * filters once that switch happened (the bug this split fixes). Pair with `mergeColumnSearches` to AND a
+	 * contribution onto the user's own typed search on the same column, and never with `ribbonQueryParams`'s
+	 * output, which is the other, URL-legitimate half.
+	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`, `viewDef.columns`).
+	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @param {Array} [optsColumns] - the live, post-chooser `columns[]` array (gives the live `dtIndex`); omitted,
+	 *   falls back to the catalog order.
+	 * @returns {object} map of `{<dtIndex>: "<$-expression>"}` — empty when no column-scoped option is active. Two
+	 *   active options that target the SAME column combine as `$and(<first>,<second>)`, in `viewDef.ribbon`'s own
+	 *   declared order — this is a genuine AND of both filters, never one silently overwriting the other.
+	 * @example
+	 *   // viewDef.ribbon = [{type:'option', id:'dropped-only', column:'status', value:'$eq(DROPPED)'}]
+	 *   JuneauViews.ribbon.ribbonColumnSearches(viewDef, {'dropped-only': true}, optsColumns);
+	 *   // -> {2: '$eq(DROPPED)'}   (if "status" is dtIndex 2)
+	 * @example
+	 *   // Two active options on the same column (dtIndex 0) combine, they do not overwrite:
+	 *   JuneauViews.ribbon.ribbonColumnSearches({columns:[{data:'when'}],
+	 *       ribbon:[{type:'option', id:'a', column:'when', value:'$eq(DROPPED)'},
+	 *               {type:'option', id:'b', column:'when', value:'$gt(2026-01-01)'}]},
+	 *     {a: true, b: true}, null);
+	 *   // -> {0: '$and($eq(DROPPED),$gt(2026-01-01))'}
+	 */
+	function ribbonColumnSearches(viewDef, activeState, optsColumns) {
+		const out = {};
+		forEachActiveOption(viewDef, activeState, function (opt) {
+			if (opt.value == null || opt.column == null) return;
+			const idx = indexForRibbonColumn(viewDef, opt.column, optsColumns);
+			if (idx < 0) return;
+			out[idx] = out[idx] != null ? "$and(" + out[idx] + "," + opt.value + ")" : opt.value;
+		});
+		return out;
+	}
+
+	/**
+	 * The pure counterpart of the server-side `param:`-scoped ribbon mapping: the URL query parameters the ribbon's
+	 * ACTIVE toggle state contributes — every active option/member that is NOT column-scoped (`opt.column == null`,
+	 * `opt.param != null`). Column-scoped contributions are `ribbonColumnSearches`'s job, never this function's (see
+	 * that function's doc for why the split exists — BeanQuery DataTables design §3.1). Keeps the existing
+	 * `search`/`opt` clause-joining behavior (design doc §5.3) via the shared `addQueryParam` helper: multiple
+	 * active contributions to the SAME single-string parameter name are comma-joined rather than one clobbering
+	 * another; any other parameter name is single-valued (last contribution wins).
+	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`).
+	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @returns {object} map of `{<param>: "<value>"}` — empty when no `param:`-scoped option is active.
+	 * @example
+	 *   // viewDef.ribbon = [{type:'option', id:'mine', param:'owner', value:'me'}]
+	 *   JuneauViews.ribbon.ribbonQueryParams(viewDef, {mine: true});   // -> {owner: 'me'}
+	 */
+	function ribbonQueryParams(viewDef, activeState) {
+		const out = {};
+		forEachActiveOption(viewDef, activeState, function (opt) {
+			if (opt.value == null || opt.column != null || opt.param == null) return;
+			addQueryParam(out, opt.param, opt.value);
+		});
+		return out;
+	}
+
+	/**
+	 * Pure helper (BeanQuery DataTables design §3.1): merges a column-scoped ribbon contribution map
+	 * (`ribbonColumnSearches`'s own output shape) with the per-column search values the user has already typed,
+	 * keyed the same way (by `dtIndex`). When both sides set the same column, the ribbon narrows the user's search
+	 * rather than replacing it: the merged value is `$and(<user>,<ribbon>)`. When only one side sets a
+	 * column, that side's value passes through unchanged. A blank or whitespace-only user value is dropped before
+	 * merging, never ANDed in as a literal blank clause (`$and( ,$eq(DROPPED))`) — a column search box the user
+	 * cleared, or never touched, must behave exactly like no user search at all. Pure — returns a new map, mutates
+	 * neither input.
+	 * @param {object} userSearch - map of `{<dtIndex>: "<user's typed $-expression>"}`.
+	 * @param {object} columnSearches - map of `{<dtIndex>: "<ribbon's $-expression>"}` (`ribbonColumnSearches`'s output).
+	 * @returns {object} merged map of `{<dtIndex>: "<$-expression>"}`.
+	 * @example
+	 *   JuneauViews.ribbon.mergeColumnSearches({0: '$prefix(Ca)'}, {0: '$eq(DROPPED)'});
+	 *   // -> {0: '$and($prefix(Ca),$eq(DROPPED))'}
+	 * @example
+	 *   // A blank/whitespace-only user value is dropped, not ANDed in as a literal blank clause:
+	 *   JuneauViews.ribbon.mergeColumnSearches({0: '   '}, {0: '$eq(DROPPED)'});
+	 *   // -> {0: '$eq(DROPPED)'}
+	 */
+	function mergeColumnSearches(userSearch, columnSearches) {
+		const out = {};
+		const user = userSearch || {};
+		const ribbon = columnSearches || {};
+		Object.keys(user).forEach(function (k) {
+			const v = user[k];
+			if (v != null && String(v).trim() !== "") out[k] = v;
+		});
+		Object.keys(ribbon).forEach(function (k) {
+			out[k] = out[k] ? "$and(" + out[k] + "," + ribbon[k] + ")" : ribbon[k];
 		});
 		return out;
 	}
@@ -146,8 +294,8 @@
 
 	/**
 	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
-	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh/
-	 * columnSearchToggle (each renders exactly one button).  `print` is a button id like `copy`/`csv`/`excel`/`pdf` -
+	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh
+	 * (which renders exactly one button).  `print` is a button id like `copy`/`csv`/`excel`/`pdf` -
 	 * a caller opts into it via `RibbonAction.export("copy", "csv", "print")`; unlike `excel`/`pdf` it needs no extra
 	 * dependency (DataTables Buttons ships a native `print` button that opens the browser print dialog), so a
 	 * caller may put it in the always-on `buttons` list rather than the feature-gated `optional` one. `collapse` IS
@@ -169,12 +317,12 @@
 	 * cosmetic: an unlisted key does not fall through to a text label, it falls through resolveButtonIcon's
 	 * {@code "tune"} default - which resolves to the settings gear the column chooser already paints, i.e. the
 	 * documented outright-bug case above, not a compromise.  {@code new} is already registered
-	 * (juneau-icons.js's registerIcon("new", ...)) and already backed by the existing {@code juneau-sym-new} sprite
+	 * (juneau-icons.js's reg("new", ...)) and already backed by the existing {@code juneau-sym-new} sprite
 	 * id, so this needs zero new artwork and never touches the provenance-guarded sprite.
 	 */
 	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
-		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less",
+		refresh: "refresh", collapse: "unfold_less",
 		pausePolling: "cancel", dialog: "new"
 	};
 
@@ -182,8 +330,8 @@
 	 * Resolves the icon NAME (not markup) for a ribbon button - pure, DOM-free (§4.A).  An explicit `symbol` on the
 	 * action/Opt always wins; otherwise a `defaultKey` (the export button id, or the action `type`) resolves from
 	 * DEFAULT_ICONS; a custom option/optionGroup member with neither falls back to the neutral "tune" glyph, never
-	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> render title as
-	 * text" fallback both happen in the DOM binding layer, since this pure layer has no access to the registry's
+	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> draw nothing"
+	 * fallback both happen in the DOM binding layer, since this pure layer has no access to the registry's
 	 * runtime contents (apps can register icons after page load).
 	 */
 	function resolveButtonIcon(actionOrOpt, defaultKey) {
@@ -218,7 +366,7 @@
 		const moving = actions.filter(function (a) { return a.type === "refresh" && a.group == null; });
 		if (!moving.length) return actions;
 		const kept = actions.filter(function (a) { return !(a.type === "refresh" && a.group == null); });
-		while (kept.length && kept[kept.length - 1].type === "divider") kept.pop();
+		while (kept.length && kept.at(-1).type === "divider") kept.pop();
 		const moved = moving.map(function (a) { return Object.assign({}, a, { group: "__refresh" }); });
 		return kept.concat(moved);
 	}
@@ -274,14 +422,13 @@
 
 	/**
 	 * Builds the ribbon toolbar element for a view and wires it to its DataTables instance.  Returns the toolbar
-	 * element (or null when there is no ribbon).  `ctx` carries { table, dataTable (the DT api), activeState, redraw,
-	 * columnSearchOn, onColumnSearchToggle }.
+	 * element (or null when there is no ribbon).  `ctx` carries { table, dataTable (the DT api), activeState, redraw }.
 	 *
 	 * <p>Adjacent actions sharing a non-null {@code group} id (visual-parity design doc §4.A, item 2/5) are
 	 * clustered into ONE segmented {@code .juneau-view-ribbon-group} wrapper (shared borders, rounded only on the
 	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  Actions with no
 	 * explicit {@code group} (excluding {@code refresh}, see below) share the synthetic {@code __ungrouped} id so
-	 * consecutive icon buttons — e.g. {@code columnSearchToggle} + copy/csv/excel/pdf — render as one connected
+	 * consecutive icon buttons — e.g. {@code collapseAll} + copy/csv/excel/pdf — render as one connected
 	 * ribbon rather than orphan glyphs.  A {@code divider} always closes any open cluster; an explicit
 	 * {@code group} id still splits clusters the way the caller declared.
 	 *
@@ -340,12 +487,12 @@
 							exportOptions: { columns: ":visible" }
 						});
 						const exportGroupId = a.group ?? "__ungrouped";
-						ids.forEach(function (id) {
+						for (const id of ids) {
 							place(button(id, resolveButtonIcon(null, id), function () {
 								ctx.dataTable.button(id).trigger();
 							}, a.appearance), exportGroupId);
-						});
-					} catch (e) { /* Buttons present but init failed - degrade silently */ }
+						}
+					} catch (e) { /* Buttons present but init failed - degrade silently */ } // NOSONAR javascript:S2486 -- documented best-effort degrade
 				}
 				return;
 			}
@@ -369,14 +516,6 @@
 				place(button(a.title || a.id, resolveButtonIcon(a, "dialog"), function () {
 					if (typeof NS.init?.openRibbonDialog === "function") NS.init.openRibbonDialog(a.id, ctx.table, ctx);
 				}, a.appearance), a.group || "__ungrouped");
-				return;
-			}
-			if (a.type === "columnSearchToggle") {
-				const csBtn = button(a.title || "Column search", resolveButtonIcon(a, "columnSearchToggle"), function () {
-					csBtn.setAttribute("aria-pressed", toggleColumnSearch(viewDef, ctx) ? "true" : "false");
-				}, a.appearance);
-				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
-				place(csBtn, a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "pausePolling") {
@@ -419,8 +558,8 @@
 		if (t !== "") {
 			el.dataset.jcTip = t;
 			el.setAttribute("aria-label", t);
-		} else if (typeof el.removeAttribute === "function") {
-			el.removeAttribute("data-jc-tip");
+		} else {
+			delete el.dataset.jcTip;
 		}
 		if (typeof el.removeAttribute === "function") el.removeAttribute("title");
 		el.title = "";
@@ -431,10 +570,11 @@
 	 * `label` becomes data-jc-tip (custom cursor tooltip) and aria-label only — never a native `title`
 	 * (browsers cannot style that bubble).  Resolves
 	 * `iconName` via the icon registry (`NS.icons.resolveIcon`); the markup assigned to `innerHTML` is ALWAYS a
-	 * static, first-party, build-time-authored SVG string from that registry - never request-/app-supplied - so
-	 * this is not an HTML-injection sink (design doc §7).  An unregistered icon name falls back to rendering the
-	 * label as text (mirrors the "unknown render id -> warn once, fall back to raw value" convention already
-	 * documented for juneau-renders.js).
+	 * SVG `<use>` host string the icon registry builds from a sanitised sprite stem - never request-supplied markup;
+	 * the sprite layers themselves may be app-supplied (replacement / override URLs), but they are fetched and
+	 * parsed as SVG symbols, never assigned as HTML - so
+	 * this is not an HTML-injection sink (design doc §7).  An icon name found in none of the sprite layers
+	 * draws nothing (U11); the label remains the accessible name and tooltip.
 	 */
 	function button(label, iconName, onClick, appearance) {
 		const b = document.createElement("button");
@@ -442,11 +582,7 @@
 		b.className = "juneau-view-ribbon-btn";
 		stampChromeTip(b, label);
 		const markup = NS.icons?.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
-		if (markup != null) {
-			b.innerHTML = markup;
-		} else {
-			b.textContent = label;
-		}
+		if (markup != null) b.innerHTML = markup;   // unknown in every layer: draw nothing (label stays in aria-label / tooltip)
 		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");
 		b.addEventListener("click", onClick);
 		return b;
@@ -477,18 +613,6 @@
 		return wrap;
 	}
 
-	/**
-	 * Flips the shared per-column-search-visibility flag on `ctx` and notifies the DOM binding layer (juneau-
-	 * views.js's initTable(...)) so it can show/hide the per-column search row it owns.  Returns the new state so
-	 * the caller (the columnSearchToggle button's click handler above) can reflect it in `aria-pressed` - this
-	 * function itself never touches a DOM node's attributes (kept callable/testable without a live button element).
-	 */
-	function toggleColumnSearch(viewDef, ctx) {
-		ctx.columnSearchOn = !ctx.columnSearchOn;
-		if (ctx.onColumnSearchToggle) ctx.onColumnSearchToggle(ctx.columnSearchOn);
-		return ctx.columnSearchOn;
-	}
-
 	// ==================================================================================================================
 	// PUBLIC API
 	// ==================================================================================================================
@@ -499,6 +623,9 @@
 		optionParam: optionParam,
 		indexForRibbonColumn: indexForRibbonColumn,
 		ribbonToQueryParams: ribbonToQueryParams,
+		ribbonColumnSearches: ribbonColumnSearches,
+		ribbonQueryParams: ribbonQueryParams,
+		mergeColumnSearches: mergeColumnSearches,
 		detectExportFeatures: detectExportFeatures,
 		resolveExportButtons: resolveExportButtons,
 		ribbonStorageKey: ribbonStorageKey,

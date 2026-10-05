@@ -89,6 +89,11 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
+				<!-- JSON is Juneau's job here; keep Jackson off the runtime classpath. -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-jackson</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 

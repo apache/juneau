@@ -35,8 +35,9 @@ import org.junit.jupiter.api.*;
  * MAP loading, undefined/simple markers, and array/collection variants.
  */
 @SuppressWarnings({
-	"unused",   // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
-	"java:S125" // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S2699", // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 })
 class CborParserSession_Test extends TestBase {
 
@@ -252,9 +253,6 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
-	})
 	void f04_collectionFromMap() throws Exception {
 		// Collection target with MAP input -> falls into line 219, then cast(m, ...).
 		// Use a MAP that contains a _type discriminator so cast succeeds and returns a list.
@@ -269,9 +267,6 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
-	})
 	void f05_arrayFromMap() throws Exception {
 		// Object[] target with MAP input -> exercises line 233 array branch with MAP input.
 		var b = fromHex("A1616B01");

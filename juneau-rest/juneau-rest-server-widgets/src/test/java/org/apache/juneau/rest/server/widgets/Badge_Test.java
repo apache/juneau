@@ -16,9 +16,13 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -27,15 +31,13 @@ import org.junit.jupiter.api.*;
 class Badge_Test extends TestBase {
 
 	@Test void a01_count_factory() {
-		var b = Badge.count(3).tone(Tone.DANGER).max(99).label("unread");
-		assertEquals(3, b.count);
-		assertEquals(Tone.DANGER, b.tone);
-		assertEquals(99, b.max);
+		var b = Badge.count(3).tone(StatusTone.ERROR).max(99).label("unread");
+		assertBean(b, "count,tone,max,label", "3,ERROR,99,unread");
 		b.validate();
 	}
 
 	@Test void a02_dot_factory() {
-		var b = Badge.dot().tone(Tone.WARN);
+		var b = Badge.dot().tone(StatusTone.WARNING);
 		assertTrue(b.dot);
 		b.validate();
 	}
@@ -63,5 +65,23 @@ class Badge_Test extends TestBase {
 
 	@Test void a07_zeroCount_ok() {
 		Badge.count(0).validate();
+	}
+
+	@Test void a08_tone_serializesAsEnumName_lowercaseIsWireToken() {
+		for (var t : StatusTone.values()) {
+			var json = Json.of(Badge.dot().tone(t));
+			assertBean(Json.to(json, Map.class), "tone", t.name());
+			assertEquals(t.wire(), t.name().toLowerCase(Locale.ROOT));
+		}
+		assertBean(Json.to(Json.of(Badge.count(1).tone(StatusTone.WARNING)), Map.class), "tone", "WARNING");
+	}
+
+	@Test void a09_nullTone_validates() {
+		var b = Badge.count(2);
+		assertNull(b.tone);
+		b.validate();
+		b.tone(StatusTone.INFO).tone(null);
+		assertNull(b.tone);
+		b.validate();
 	}
 }

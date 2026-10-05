@@ -98,14 +98,14 @@ public class StringExpressionMatcher {
 
 		@Override /* Overridden from Exp */
 		boolean matches(String input) {
-			return operand.equals(input);
+			return eq(operand, input);
 		}
 	}
 
 	abstract static class Exp {
 		@SuppressWarnings({
-			"unused",    // set unused in base no-op; subclasses that override do use it
-			"java:S1172" // Same as above
+			"java:S1172", // set unused in base no-op; subclasses that override do use it
+			"unused" // set unused in base no-op; subclasses that override do use it
 		})
 		void appendTokens(Set<String> set) {}
 
@@ -232,9 +232,9 @@ public class StringExpressionMatcher {
 	}
 
 	@SuppressWarnings({
-		"java:S125",    // Inline /*...*/ documents implicit else condition
-		"java:S135",    // Multiple break statements necessary for state machine error handling
-		"java:S3776"    // Cognitive complexity acceptable for parser state machine
+		"java:S125", // Inline /*...*/ documents implicit else condition
+		"java:S135", // Multiple break statements necessary for state machine error handling
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
 	})
 	private Exp parse(String expression) throws ParseException {
 		if (ib(expression))

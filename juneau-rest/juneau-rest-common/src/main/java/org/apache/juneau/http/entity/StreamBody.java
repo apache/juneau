@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A non-repeatable {@link HttpBody} that streams content from an {@link InputStream}.
@@ -48,7 +48,7 @@ public final class StreamBody implements HttpBody {
 	private final String contentType;
 
 	private StreamBody(InputStream stream, String contentType) {
-		this.stream = assertArgNotNull("stream", stream);
+		this.stream = reqnn("stream", stream);
 		this.contentType = contentType;
 	}
 

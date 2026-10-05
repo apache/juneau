@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.csv;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -46,23 +45,13 @@ import org.apache.juneau.marshall.swap.spi.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., ARG_ctx)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for doWrite, formatForCsvCell
 	"java:S6541", // Brain method acceptable for doWrite, formatForCsvCell
-	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
+	"rawtypes", // doWrite() casts the first entry and swapped values to a raw Map after instanceof/ClassMeta checks
+	"resource" // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class CsvSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	// Property name constants
-	private static final String PROP_byteArrayFormat = "byteArrayFormat";
-	private static final String PROP_allowNestedStructures = "allowNestedStructures";
-	private static final String PROP_nullValue = "nullValue";
-	private static final String PROP_CsvSerializerSession_byteArrayFormat = "CsvSerializerSession.byteArrayFormat";
-	private static final String PROP_CsvSerializerSession_allowNestedStructures = "CsvSerializerSession.allowNestedStructures";
-	private static final String PROP_CsvSerializerSession_nullValue = "CsvSerializerSession.nullValue";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
@@ -71,9 +60,6 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth acceptable for builder hierarchy
-	})
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private CsvByteArrayCellFormat byteArrayFormat;
@@ -87,7 +73,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			byteArrayFormat = ctx.getByteArrayFormat();
 			allowNestedStructures = ctx.isAllowNestedStructures();
 			nullValue = ctx.getNullValue();
@@ -139,11 +125,11 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 				return this;
 			}
 			switch (key) {
-				case PROP_byteArrayFormat, PROP_CsvSerializerSession_byteArrayFormat:
+				case "byteArrayFormat", "CsvSerializerSession.byteArrayFormat":
 					return byteArrayFormat(cvt(value, CsvByteArrayCellFormat.class));
-				case PROP_allowNestedStructures, PROP_CsvSerializerSession_allowNestedStructures:
+				case "allowNestedStructures", "CsvSerializerSession.allowNestedStructures":
 					return allowNestedStructures(cvt(value, Boolean.class));
-				case PROP_nullValue, PROP_CsvSerializerSession_nullValue:
+				case "nullValue", "CsvSerializerSession.nullValue":
 					return nullValue(cvt(value, String.class));
 				default:
 					super.property(key, value);
@@ -161,7 +147,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 	 * @return A new builder.
 	 */
 	public static Builder create(CsvSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -197,9 +183,6 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 	 * @param type The class metadata of the value's type.
 	 * @return The swapped value, or the original value if no swap is registered.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for ObjectSwap handling
-	})
 	private Object applySwap(Object value, ClassMeta<?> type) {
 		try {
 			if (value == null || type == null)
@@ -226,7 +209,6 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
 		"unchecked" // Type erasure requires unchecked casts
 	})
 	@Override /* Overridden from SerializerSession */

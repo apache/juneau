@@ -51,8 +51,10 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S110" // Inheritance depth acceptable for this class hierarchy
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S3776", // Cognitive complexity acceptable for this specific logic
+	"rawtypes", // toList returns a raw List and getClassMetaForObject results are held as raw ClassMeta
+	"resource" // Resource management handled externally
 })
 public class OpenApiSerializerSession extends UonSerializerSession {
 
@@ -176,8 +178,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 	@Override /* Overridden from PartSerializer */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S6541" // Single-threaded session contexts do not require synchronization
 	})
 	public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
@@ -335,9 +336,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for generic list handling
-	})
 	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
@@ -378,10 +376,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return m;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic object tool operations
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	private Object toObject(HttpPartType partType, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (o == null)
 			return null;

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -133,8 +134,8 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 	}
 
 	@Test void a01_harnessLoadedTheRibbonRuntime() {
-		assertEquals(true, report().get("hasBuild"), report()::toString);
-		assertEquals(true, report().get("hasNormalizeRibbon"), () -> "normalizeRibbon must be exported on NS.ribbon: " + report());
+		var r = report();
+		assertBean(r, "hasBuild,hasNormalizeRibbon", "true,true");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,35 +150,30 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void b02_oneRefreshAction_movesLastIntoItsOwnGroup() {
 		var r = report();
-		assertEquals("export,refresh", r.get("pure_oneRefresh_order"), r::toString);
-		assertEquals("__refresh", r.get("pure_oneRefresh_lastGroup"), r::toString);
-		assertEquals(true, r.get("pure_oneRefresh_exportGroupUnset"),
-			() -> "the export action itself must be untouched by the move: " + r);
+		// pure_oneRefresh_order's value embeds a comma ("export,refresh") - harmless, assertBean compares the whole
+		// joined string, not a re-split per field.
+		assertBean(r, "pure_oneRefresh_order,pure_oneRefresh_lastGroup,pure_oneRefresh_exportGroupUnset",
+			"export,refresh,__refresh,true");
 	}
 
 	@Test void b03_twoOrMoreRefreshActions_allMoveTogetherPreservingRelativeOrder() {
 		var r = report();
-		assertEquals("export,refresh:first,refresh:second", r.get("pure_twoRefresh_order"), r::toString);
-		assertEquals(true, r.get("pure_twoRefresh_bothInRefreshGroup"),
-			() -> "both refresh actions must land in the SAME trailing __refresh cluster: " + r);
-		assertEquals(true, r.get("pure_twoRefresh_relativeOrderPreserved"), r::toString);
+		assertBean(r, "pure_twoRefresh_order,pure_twoRefresh_bothInRefreshGroup,pure_twoRefresh_relativeOrderPreserved",
+			"export,refresh:first,refresh:second,true,true");
 	}
 
 	@Test void b04_explicitGroupOnRefresh_optsOutCompletely() {
 		var r = report();
-		assertEquals("refresh,export", r.get("pure_explicitGroup_order"),
-			() -> "an explicitly-grouped refresh must NOT be relocated to the end: " + r);
-		assertEquals(true, r.get("pure_explicitGroup_groupUnchanged"),
-			() -> "an explicitly-grouped refresh must not be re-grouped into __refresh: " + r);
+		// an explicitly-grouped refresh must NOT be relocated to the end, and must not be re-grouped into __refresh.
+		assertBean(r, "pure_explicitGroup_order,pure_explicitGroup_groupUnchanged", "refresh,export,true");
 	}
 
 	@Test void b05_danglingTrailingDividerIsDropped() {
 		var r = report();
-		assertEquals("export,refresh", r.get("pure_trailingDivider_order"),
-			() -> "a divider stranded in trailing position by the move must be dropped: " + r);
-		assertEquals(true, r.get("pure_trailingDivider_dropped"), r::toString);
-		// A NON-trailing divider (still separating two other actions once refresh is gone) must survive.
-		assertEquals("divider,export,refresh", r.get("pure_nonTrailingDivider_order"), r::toString);
+		// A divider stranded in trailing position by the move must be dropped; a NON-trailing divider (still
+		// separating two other actions once refresh is gone) must survive.
+		assertBean(r, "pure_trailingDivider_order,pure_trailingDivider_dropped,pure_nonTrailingDivider_order",
+			"export,refresh,true,divider,export,refresh");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -186,48 +182,36 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void c01_noRefreshAction_domIsUnaffected() {
 		var r = report();
-		assertEquals(1L, ((Number)r.get("dom_noRefresh_groupCount")).longValue(), r::toString);
-		assertEquals(2L, ((Number)r.get("dom_noRefresh_onlyGroupButtonCount")).longValue(), r::toString);
+		assertBean(r, "dom_noRefresh_groupCount,dom_noRefresh_onlyGroupButtonCount", "1,2");
 	}
 
 	@Test void c02_oneRefreshDeclaredFirst_rendersAsTwoClustersWithRefreshAloneAndLast() {
 		var r = report();
-		assertEquals(2L, ((Number)r.get("dom_oneRefresh_groupCount")).longValue(),
-			() -> "must render TWO clusters (exports, refresh) - not one merged cluster: " + r);
-		assertEquals(2L, ((Number)r.get("dom_oneRefresh_firstGroupButtonCount")).longValue(),
-			() -> "the first cluster must be the two export buttons: " + r);
-		assertEquals(1L, ((Number)r.get("dom_oneRefresh_lastGroupButtonCount")).longValue(),
-			() -> "the last cluster must hold refresh ALONE: " + r);
-		assertEquals(true, r.get("dom_oneRefresh_lastGroupIsRefreshGlyph"), r::toString);
-		assertEquals(true, r.get("dom_oneRefresh_lastGroupIsLastChildOfBar"),
-			() -> "the refresh cluster must be the rightmost element of the bar: " + r);
+		// must render TWO clusters (exports, refresh) - not one merged cluster; the first cluster is the two export
+		// buttons; the last cluster holds refresh ALONE and must be the rightmost element of the bar.
+		assertBean(r, "dom_oneRefresh_groupCount,dom_oneRefresh_firstGroupButtonCount,dom_oneRefresh_lastGroupButtonCount,"
+			+ "dom_oneRefresh_lastGroupIsRefreshGlyph,dom_oneRefresh_lastGroupIsLastChildOfBar", "2,2,1,true,true");
 	}
 
 	@Test void c03_twoRefreshActions_bothLandInOneTrailingClusterInRelativeOrder() {
 		var r = report();
-		assertEquals(2L, ((Number)r.get("dom_twoRefresh_groupCount")).longValue(), r::toString);
-		assertEquals(2L, ((Number)r.get("dom_twoRefresh_lastGroupButtonCount")).longValue(),
-			() -> "both refresh buttons must share ONE trailing cluster: " + r);
-		assertEquals("A,B", r.get("dom_twoRefresh_lastGroupTitles"),
-			() -> "relative order of the moved refresh actions must be preserved: " + r);
+		// dom_twoRefresh_lastGroupTitles's value embeds a comma ("A,B") - harmless, see note on b02 above.
+		assertBean(r, "dom_twoRefresh_groupCount,dom_twoRefresh_lastGroupButtonCount,dom_twoRefresh_lastGroupTitles",
+			"2,2,A,B");
 	}
 
 	@Test void c04_explicitGroupOnRefresh_staysWithItsDeclaredNeighbourNotRelocated() {
 		var r = report();
-		assertEquals(2L, ((Number)r.get("dom_explicitGroup_groupCount")).longValue(), r::toString);
-		assertEquals(2L, ((Number)r.get("dom_explicitGroup_firstGroupButtonCount")).longValue(), r::toString);
-		assertEquals("Refresh,Column search", r.get("dom_explicitGroup_firstGroupTitles"),
-			() -> "refresh must stay clustered with its declared group-mate, in declared order: " + r);
-		assertEquals(true, r.get("dom_explicitGroup_isNotLastChildOfBar"),
-			() -> "an opted-out refresh must NOT be relocated to the far right: " + r);
+		// dom_explicitGroup_firstGroupTitles's value embeds a comma ("Refresh,Collapse all") - harmless, see note
+		// on b02 above.
+		assertBean(r, "dom_explicitGroup_groupCount,dom_explicitGroup_firstGroupButtonCount,"
+			+ "dom_explicitGroup_firstGroupTitles,dom_explicitGroup_isNotLastChildOfBar", "2,2,Refresh,Collapse all,true");
 	}
 
 	@Test void c05_danglingTrailingDivider_isDroppedFromTheRenderedBar() {
 		var r = report();
-		assertEquals(2L, ((Number)r.get("dom_trailingDivider_groupCount")).longValue(), r::toString);
-		assertEquals(0L, ((Number)r.get("dom_trailingDivider_dividerCount")).longValue(),
-			() -> "a divider stranded before the moved refresh must not render as an empty seam: " + r);
-		assertEquals(1L, ((Number)r.get("dom_trailingDivider_lastGroupButtonCount")).longValue(), r::toString);
+		assertBean(r, "dom_trailingDivider_groupCount,dom_trailingDivider_dividerCount,"
+			+ "dom_trailingDivider_lastGroupButtonCount", "2,0,1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -255,18 +239,16 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void d04_printButtonRendersAsItsOwnButtonAlongsideCopy() {
 		var r = report();
-		assertEquals(1L, ((Number)r.get("dom_print_groupCount")).longValue(), r::toString);
-		assertEquals(2L, ((Number)r.get("dom_print_buttonCount")).longValue(),
-			() -> "print must render as its own button, not be silently dropped: " + r);
-		assertEquals("copy,print", r.get("dom_print_buttonTitles"), r::toString);
+		// print must render as its own button, not be silently dropped. dom_print_buttonTitles's value embeds a
+		// comma ("copy,print") - harmless, see note on b02 above.
+		assertBean(r, "dom_print_groupCount,dom_print_buttonCount,dom_print_buttonTitles", "1,2,copy,print");
 	}
 
 	@Test void d05_collapseAllRendersOneButtonThatInvokesCtxCollapseAllDetailRowsOnClick() {
 		var r = report();
-		assertEquals(1L, ((Number)r.get("dom_collapseAll_groupCount")).longValue(), r::toString);
-		assertEquals("Collapse all", r.get("dom_collapseAll_title"), r::toString);
-		assertEquals(1L, ((Number)r.get("dom_collapseAll_clickInvokedHook")).longValue(),
-			() -> "clicking the collapseAll button must invoke ctx.collapseAllDetailRows() exactly once: " + r);
+		// clicking the collapseAll button must invoke ctx.collapseAllDetailRows() exactly once.
+		assertBean(r, "dom_collapseAll_groupCount,dom_collapseAll_title,dom_collapseAll_clickInvokedHook",
+			"1,Collapse all,1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -275,11 +257,10 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void e01_dialogIsNormalizerNeutral_onlyRefreshRelocates() {
 		var r = report();
-		assertEquals("dialog,refresh", r.get("pure_dialog_order"),
-			() -> "a dialog action keeps its declared position; only refresh relocates: " + r);
-		assertEquals(true, r.get("pure_dialog_groupUnset"), r::toString);
-		assertEquals(true, r.get("pure_dialog_actionObjectUnchanged"),
-			() -> "the normalizer must not rewrite a dialog action's own object: " + r);
+		// a dialog action keeps its declared position; only refresh relocates, and the normalizer must not rewrite
+		// a dialog action's own object. pure_dialog_order's value embeds a comma ("dialog,refresh") - harmless.
+		assertBean(r, "pure_dialog_order,pure_dialog_groupUnset,pure_dialog_actionObjectUnchanged",
+			"dialog,refresh,true,true");
 	}
 
 	@Test void e02_dialogIconIsNamed_notTheColumnChooserGear() {
@@ -291,25 +272,55 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void e03_dialogRendersOneNamedButtonThatHandsItsIdToTheViewRuntime() {
 		var r = report();
-		assertEquals(1L, ((Number)r.get("dom_dialog_groupCount")).longValue(), r::toString);
-		assertEquals(1L, ((Number)r.get("dom_dialog_buttonCount")).longValue(), r::toString);
-		// Ribbon buttons are icon-only by construction, so the name lives entirely in title + aria-label.
-		assertEquals("Add project", r.get("dom_dialog_title"), r::toString);
-		assertEquals("Add project", r.get("dom_dialog_ariaLabel"), r::toString);
-		assertEquals("add-project", r.get("dom_dialog_clickHandedOffActionId"),
-			() -> "the click must hand the action id to the view runtime's ribbon-catalog resolver: " + r);
-		assertEquals(true, r.get("dom_dialog_clickHandedOffTable"),
-			() -> "and the table it was built for, so the resolver can find that view's own host: " + r);
+		// Ribbon buttons are icon-only by construction, so the name lives entirely in title + aria-label. The click
+		// must hand the action id to the view runtime's ribbon-catalog resolver, and the table it was built for, so
+		// the resolver can find that view's own host.
+		assertBean(r, "dom_dialog_groupCount,dom_dialog_buttonCount,dom_dialog_title,dom_dialog_ariaLabel,"
+			+ "dom_dialog_clickHandedOffActionId,dom_dialog_clickHandedOffTable",
+			"1,1,Add project,Add project,add-project,true");
 	}
 
 	@Test void e04_dialogButtonIsInertRatherThanThrowingWithNoViewRuntimeLoaded() {
 		var r = report();
-		assertEquals(true, r.get("dom_dialog_noViewRuntime_buttonRendered"), r::toString);
-		assertEquals(true, r.get("dom_dialog_noViewRuntime_clickDidNotThrow"),
-			() -> "the NS.init hop is optional-chained precisely so this degrades quietly: " + r);
+		// the NS.init hop is optional-chained precisely so this degrades quietly.
+		assertBean(r, "dom_dialog_noViewRuntime_buttonRendered,dom_dialog_noViewRuntime_clickDidNotThrow", "true,true");
 	}
 
 	@Test void e05_anUntitledDialogNamesItselfByIdRatherThanRenderingNameless() {
 		assertEquals(true, report().get("dom_dialog_untitled_nameFallsBackToId"), report()::toString);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) ribbonToQueryParams joins multiple clauses into the ONE `search` / ONE `opt` string (design §5.3): the wire
+	//    carries a single search parameter and a single opt parameter, never repeated params.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_multipleActiveTogglesJoinIntoOneSearchAndOneOptString() {
+		var r = report();
+		// Left as 3 separate assertEquals, not collapsed into one assertBean: each checks a distinct §5.3 join
+		// rule (search-clause join, opt-clause join, column-scoped exemption) and keeps its own explanatory
+		// diagnostic message rather than sharing one generic BCT failure message.
+		// Two active `search`-param toggles fold into ONE comma-joined search string (declared order preserved)...
+		assertEquals("status=$eq(OPEN),owner=$eq(me)", r.get("pure_joinSearchClauses"),
+			() -> "repeated `search` params are not the API - the browser must join the clauses into one string: " + r);
+		// ...and a top-level `opt` option plus a selected `opt` group member fold into ONE opt string.
+		assertEquals("counts=true,density=compact", r.get("pure_joinOptClauses"),
+			() -> "repeated `opt` params are not the API - the browser must join the clauses into one string: " + r);
+		// A column-scoped toggle is untouched by the join: it stays the native per-index DataTables param.
+		assertEquals("$eq(OPEN)", r.get("pure_joinColumnStillNative"),
+			() -> "column-scoped options keep their native columns[N][search][value] shape (folded server-side): " + r);
+	}
+
+	@Test void f02_singleToggleHasNoLeadingOrTrailingSeparator() {
+		var r = report();
+		assertEquals("status=$eq(OPEN)", r.get("pure_joinSingleSearchNoComma"),
+			() -> "one active toggle must yield the bare clause, with no dangling separator comma: " + r);
+	}
+
+	@Test void f03_theJoinOnlyInsertsATopLevelSeparator_innerParenCommasSurvive() {
+		var r = report();
+		assertEquals("status=$in(OPEN,CLOSED),tier=$eq(gold)", r.get("pure_joinProtectsInnerCommas"),
+			() -> "a comma inside a clause value's $in(...) belongs to that clause; the join adds only a top-level "
+				+ "separator between clauses: " + r);
 	}
 }

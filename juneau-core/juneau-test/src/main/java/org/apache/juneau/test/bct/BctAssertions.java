@@ -17,7 +17,6 @@
 package org.apache.juneau.test.bct;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -184,20 +183,9 @@ import org.opentest4j.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class BctAssertions {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_actual = "actual";
-	private static final String ARG_expected = "expected";
-	private static final String ARG_fields = "fields";
-	private static final String ARG_function = "function";
-	private static final String ARG_pattern = "pattern";
-	private static final String ARG_properties = "properties";
-
-	// Message constants
-	private static final String MSG_value_was_null = "Value was null.";
-	private static final String JOINER_comma_space = "\", \"";
 
 	/**
 	 * Sets a custom bean converter for the current thread.
@@ -443,8 +431,8 @@ public class BctAssertions {
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");
-		assertArgNotNull(ARG_fields, fields);
-		assertArgNotNull(ARG_expected, expected);
+		reqnn("fields", fields);
+		reqnn("expected", expected);
 		var converter = BctConfiguration.getConverter();
 		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")), composeMessage(message, "Bean assertion failed."));
 	}
@@ -523,9 +511,9 @@ public class BctAssertions {
 	 * @see #assertBean(Object, String, String)
 	 */
 	public static void assertBeans(Supplier<String> message, Object actual, String fields, String...expected) {
-		assertNotNull(actual, MSG_value_was_null);
-		assertArgNotNull(ARG_fields, fields);
-		assertArgNotNull(ARG_expected, expected);
+		assertNotNull(actual, "Value was null.");
+		reqnn("fields", fields);
+		reqnn("expected", expected);
 
 		var converter = BctConfiguration.getConverter();
 		var tokens = tokenize(fields);
@@ -548,13 +536,10 @@ public class BctAssertions {
 		if (errors.isEmpty())
 			return;
 
-		var actualStrings = new ArrayList<String>();
-		for (var o : actualList) {
-			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
-		}
+		var actualStrings = actualList.stream().map(o -> tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(","))).toList();
 
-		throw assertEqualsFailed(Stream.of(expected).map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")),
-			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")),
+		throw assertEqualsFailed(Stream.of(expected).map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
 			composeMessage(message, "%s bean assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
@@ -599,9 +584,9 @@ public class BctAssertions {
 	 * @see #assertString(String, Object) for exact string matching
 	 */
 	public static void assertContains(Supplier<String> message, String expected, Object actual) {
-		assertArgNotNull(ARG_expected, expected);
-		assertArgNotNull(ARG_actual, actual);
-		assertNotNull(actual, MSG_value_was_null);
+		reqnn("expected", expected);
+		reqnn("actual", actual);
+		assertNotNull(actual, "Value was null.");
 
 		var a = BctConfiguration.getConverter().stringify(actual);
 		assertTrue(a.contains(expected), composeMessage(message, "String did not contain expected substring.  ==> expected: <%s> but was: <%s>", expected, a));
@@ -647,17 +632,14 @@ public class BctAssertions {
 	 * @see #assertContains(String, Object) for single substring assertions
 	 */
 	public static void assertContainsAll(Supplier<String> message, Object actual, String...expected) {
-		assertArgNotNull(ARG_expected, expected);
-		assertNotNull(actual, MSG_value_was_null);
+		reqnn("expected", expected);
+		assertNotNull(actual, "Value was null.");
 
 		var a = BctConfiguration.getConverter().stringify(actual);
-		var errors = new ArrayList<AssertionFailedError>();
-
-		for (var e : expected) {
-			if (! a.contains(e)) {
-				errors.add(assertEqualsFailed(true, false, composeMessage(message, "String did not contain expected substring.  ==> expected: <%s> but was: <%s>", e, a)));
-			}
-		}
+		var errors = Stream.of(expected)
+			.filter(e -> ! a.contains(e))
+			.map(e -> assertEqualsFailed(true, false, composeMessage(message, "String did not contain expected substring.  ==> expected: <%s> but was: <%s>", e, a)))
+			.toList();
 
 		if (errors.isEmpty())
 			return;
@@ -665,14 +647,9 @@ public class BctAssertions {
 		if (errors.size() == 1)
 			throw errors.get(0);
 
-		var missingSubstrings = new ArrayList<String>();
-		for (var e : expected) {
-			if (! a.contains(e)) {
-				missingSubstrings.add(e);
-			}
-		}
+		var missingSubstrings = Stream.of(expected).filter(e -> ! a.contains(e)).toList();
 
-		throw assertEqualsFailed(missingSubstrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")), escapeForJava(a),
+		throw assertEqualsFailed(missingSubstrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")), escapeForJava(a),
 			composeMessage(message, "%s substring assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
@@ -736,7 +713,7 @@ public class BctAssertions {
 	 * @see #assertSize(int, Object) for testing specific sizes
 	 */
 	public static void assertEmpty(Supplier<String> message, Object value) {
-		assertNotNull(value, MSG_value_was_null);
+		assertNotNull(value, "Value was null.");
 		var size = BctConfiguration.getConverter().size(value);
 		assertEquals(0, size, composeMessage(message, "Value was not empty. Size=<%s>", size));
 	}
@@ -754,7 +731,7 @@ public class BctAssertions {
 	 * @see #assertList(Supplier, Object, Object...)
 	 */
 	public static void assertList(Object actual, Object...expected) {
-		assertArgNotNull(ARG_actual, actual);
+		reqnn("actual", actual);
 		assertList(null, actual, expected);
 	}
 
@@ -811,12 +788,12 @@ public class BctAssertions {
 	 * @throws AssertionError if the List size or contents don't match expected values
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"unchecked" // Type erasure requires unchecked casts
 	})
 	public static void assertList(Supplier<String> message, Object actual, Object...expected) {
-		assertArgNotNull(ARG_expected, expected);
-		assertArgNotNull(ARG_actual, actual);
+		reqnn("expected", expected);
+		reqnn("actual", actual);
 
 		var converter = BctConfiguration.getConverter();
 		List<Object> list = converter.listify(actual);
@@ -848,16 +825,13 @@ public class BctAssertions {
 		if (errors.isEmpty())
 			return;
 
-		var actualStrings = new ArrayList<String>();
-		for (var o : list) {
-			actualStrings.add(converter.stringify(o));
-		}
+		var actualStrings = list.stream().map(converter::stringify).toList();
 
 		if (errors.size() == 1)
 			throw errors.get(0);
 
-		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "[\"", "\"]")),
-			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "[\"", "\"]")),
+		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(StringUtils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
 			composeMessage(message, "%s list assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
@@ -965,10 +939,10 @@ public class BctAssertions {
 	 * @see BasicBeanConverter
 	 */
 	public static <T> void assertMapped(Supplier<String> message, T actual, BiFunction<T,String,Object> function, String properties, String expected) {
-		assertNotNull(actual, MSG_value_was_null);
-		assertArgNotNull(ARG_function, function);
-		assertArgNotNull(ARG_properties, properties);
-		assertArgNotNull(ARG_expected, expected);
+		assertNotNull(actual, "Value was null.");
+		reqnn("function", function);
+		reqnn("properties", properties);
+		reqnn("expected", expected);
 
 		var m = new LinkedHashMap<String,Object>();
 		for (var p : tokenize(properties)) {
@@ -1045,8 +1019,8 @@ public class BctAssertions {
 	 * @see #assertContains(Supplier, String, Object) for substring matching
 	 */
 	public static void assertMatchesGlob(Supplier<String> message, String pattern, Object value) {
-		assertArgNotNull(ARG_pattern, pattern);
-		assertNotNull(value, MSG_value_was_null);
+		reqnn("pattern", pattern);
+		assertNotNull(value, "Value was null.");
 
 		var v = BctConfiguration.getConverter().stringify(value);
 		var m = StringUtils.getGlobMatchPattern(pattern).matcher(v);
@@ -1113,7 +1087,7 @@ public class BctAssertions {
 	 * @see #assertSize(Supplier, int, Object) for testing specific sizes
 	 */
 	public static void assertNotEmpty(Supplier<String> message, Object value) {
-		assertNotNull(value, MSG_value_was_null);
+		assertNotNull(value, "Value was null.");
 		int size = BctConfiguration.getConverter().size(value);
 		assertTrue(size > 0, composeMessage(message, "Value was empty."));
 	}
@@ -1159,7 +1133,7 @@ public class BctAssertions {
 	 * @throws AssertionError if the object is null or not the expected size.
 	 */
 	public static void assertSize(Supplier<String> message, int expected, Object actual) {
-		assertNotNull(actual, MSG_value_was_null);
+		assertNotNull(actual, "Value was null.");
 		var size = BctConfiguration.getConverter().size(actual);
 		assertEquals(expected, size, composeMessage(message, "Value not expected size."));
 	}
@@ -1208,7 +1182,7 @@ public class BctAssertions {
 	 * @see #assertMatchesGlob(Supplier, String, Object) for pattern-based matching
 	 */
 	public static void assertString(Supplier<String> message, String expected, Object actual) {
-		assertNotNull(actual, MSG_value_was_null);
+		assertNotNull(actual, "Value was null.");
 
 		var messageSupplier = message != null ? message : fs("");
 		assertEquals(expected, BctConfiguration.getConverter().stringify(actual), messageSupplier);

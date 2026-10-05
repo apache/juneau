@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.math.*;
@@ -89,16 +89,10 @@ import org.apache.juneau.marshall.serializer.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_camelCase convention (e.g., ARG_copyFrom, PROP_nativeTypes)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class ProtobufSerializer extends OutputStreamSerializer implements ProtobufMetaProvider {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_addBeanTypesProtobuf = "addBeanTypesProtobuf";
-	private static final String PROP_nativeTypes = "nativeTypes";
 
 	/**
 	 * Builder class.
@@ -126,7 +120,7 @@ public class ProtobufSerializer extends OutputStreamSerializer implements Protob
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesProtobuf = copyFrom.addBeanTypesProtobuf;
 			nativeTypes = copyFrom.nativeTypes;
 		}
@@ -138,7 +132,7 @@ public class ProtobufSerializer extends OutputStreamSerializer implements Protob
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesProtobuf = copyFrom.addBeanTypesProtobuf;
 			nativeTypes = copyFrom.nativeTypes;
 		}
@@ -266,7 +260,7 @@ public class ProtobufSerializer extends OutputStreamSerializer implements Protob
 	@Override /* Overridden from OutputStreamSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesProtobuf, addBeanTypesProtobuf)
-			.a(PROP_nativeTypes, nativeTypes);
+			.a("addBeanTypesProtobuf", addBeanTypesProtobuf)
+			.a("nativeTypes", nativeTypes);
 	}
 }

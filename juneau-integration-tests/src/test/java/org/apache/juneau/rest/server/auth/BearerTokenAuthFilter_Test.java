@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -88,7 +89,7 @@ class BearerTokenAuthFilter_Test extends TestBase {
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer tok")));
 		assertNotNull(ex.getMessage());
 		// Must carry a WWW-Authenticate challenge
-		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void a07_validatorThrowsWithChallenge_preservesExistingChallenge() {
@@ -98,7 +99,7 @@ class BearerTokenAuthFilter_Test extends TestBase {
 		var f = filter(detailed);
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer tok")));
 		var challenges = ex.getHeaders().stream()
-			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.map(h -> h.getValue())
 			.toList();
 		assertEquals(1, challenges.size());

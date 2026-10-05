@@ -39,12 +39,12 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"java:S5961",
-	"unused",      // Unused parameters/variables kept for consistent method signatures across test utilities.
-	"java:S125",   // Commented-out code is retained as historical reference / future re-enable candidate.
-	"java:S5778",  // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
-	"java:S5976"   // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+	"java:S5961", // Tests exercise many parser branches and each needs its own assertions
+	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"rawtypes", // Tests cast parse results to raw Map/List to inspect untyped values
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class UrlEncodingParserSession_Test extends TestBase {
 

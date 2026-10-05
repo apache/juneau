@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -158,34 +157,11 @@ import org.apache.juneau.commons.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Operation extends SwaggerElement {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_in = "in";
-	private static final String ARG_property = "property";
-	private static final String ARG_response = "response";
-	private static final String ARG_scheme = "scheme";
-	private static final String ARG_status = "status";
-	private static final String ARG_statusCode = "statusCode";
-	private static final String ARG_value = "value";
-
 	private interface MapStringList extends Map<String,List<String>> {}
-
-	// Property name constants
-	private static final String PROP_consumes = "consumes";
-	private static final String PROP_deprecated = "deprecated";
-	private static final String PROP_description = "description";
-	private static final String PROP_externalDocs = "externalDocs";
-	private static final String PROP_operationId = "operationId";
-	private static final String PROP_parameters = "parameters";
-	private static final String PROP_produces = "produces";
-	private static final String PROP_responses = "responses";
-	private static final String PROP_schemes = "schemes";
-	private static final String PROP_security = "security";
-	private static final String PROP_summary = "summary";
-	private static final String PROP_tags = "tags";
 
 	private String summary;
 	private String description;
@@ -263,10 +239,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(MediaType...value) {
-		if (nn(value))
-			for (var v : value)
-				if (nn(v))
-					consumes.add(v);
+		addAllNn(consumes, value);
 		return this;
 	}
 
@@ -298,10 +271,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(ParameterInfo...value) {
-		if (nn(value))
-			for (var v : value)
-				if (nn(v))
-					parameters.add(v);
+		addAllNn(parameters, value);
 		return this;
 	}
 
@@ -333,10 +303,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(MediaType...value) {
-		if (nn(value))
-			for (var v : value)
-				if (nn(v))
-					produces.add(v);
+		addAllNn(produces, value);
 		return this;
 	}
 
@@ -348,8 +315,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, ResponseInfo response) {
-		assertArgNotNull(ARG_statusCode, statusCode);
-		assertArgNotNull(ARG_response, response);
+		reqnn("statusCode", statusCode);
+		reqnn("response", response);
 		responses.put(statusCode, response);
 		return this;
 	}
@@ -383,10 +350,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(String...value) {
-		if (nn(value))
-			for (var v : value)
-				if (nn(v))
-					schemes.add(v);
+		addAllNn(schemes, value);
 		return this;
 	}
 
@@ -402,7 +366,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		security.addAll(value);
 		return this;
 	}
@@ -419,7 +383,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(String scheme, String...alternatives) {
-		assertArgNotNull(ARG_scheme, scheme);
+		reqnn("scheme", scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, l(alternatives));
 		security.add(m);
@@ -455,10 +419,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...value) {
-		if (nn(value))
-			for (var v : value)
-				if (nn(v))
-					tags.add(v);
+		addAllNn(tags, value);
 		return this;
 	}
 
@@ -473,20 +434,20 @@ public class Operation extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_consumes -> toType(getConsumes(), type);
-			case PROP_deprecated -> toType(getDeprecated(), type);
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_externalDocs -> toType(getExternalDocs(), type);
-			case PROP_operationId -> toType(getOperationId(), type);
-			case PROP_parameters -> toType(getParameters(), type);
-			case PROP_produces -> toType(getProduces(), type);
-			case PROP_responses -> toType(getResponses(), type);
-			case PROP_schemes -> toType(getSchemes(), type);
-			case PROP_security -> toType(getSecurity(), type);
-			case PROP_summary -> toType(getSummary(), type);
-			case PROP_tags -> toType(getTags(), type);
+			case "consumes" -> toType(getConsumes(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "produces" -> toType(getProduces(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "schemes" -> toType(getSchemes(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "tags" -> toType(getTags(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -549,10 +510,10 @@ public class Operation extends SwaggerElement {
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameter(String in, String name) {
-		assertArgNotNull(ARG_in, in);
+		reqnn("in", in);
 		// Note: name can be null for "body" parameters
 		for (var pi : parameters)
-			if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+			if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || eq(pi.getIn(), "body")))
 				return pi;
 		return null;
 	}
@@ -609,7 +570,7 @@ public class Operation extends SwaggerElement {
 	 * @return The response info, or <jk>null</jk> if not found.
 	 */
 	public ResponseInfo getResponse(String status) {
-		assertArgNotNull(ARG_status, status);
+		reqnn("status", status);
 		return responses.get(status);
 	}
 
@@ -678,18 +639,18 @@ public class Operation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(consumes), PROP_consumes)
-			.addIf(nn(deprecated), PROP_deprecated)
-			.addIf(nn(description), PROP_description)
-			.addIf(nn(externalDocs), PROP_externalDocs)
-			.addIf(nn(operationId), PROP_operationId)
-			.addIf(ine(parameters), PROP_parameters)
-			.addIf(ine(produces), PROP_produces)
-			.addIf(ine(responses), PROP_responses)
-			.addIf(ine(schemes), PROP_schemes)
-			.addIf(ine(security), PROP_security)
-			.addIf(nn(summary), PROP_summary)
-			.addIf(ine(tags), PROP_tags)
+			.addIf(ine(consumes), "consumes")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(operationId), "operationId")
+			.addIf(ine(parameters), "parameters")
+			.addIf(ine(produces), "produces")
+			.addIf(ine(responses), "responses")
+			.addIf(ine(schemes), "schemes")
+			.addIf(ine(security), "security")
+			.addIf(nn(summary), "summary")
+			.addIf(ine(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -701,20 +662,20 @@ public class Operation extends SwaggerElement {
 	})
 	@Override /* Overridden from SwaggerElement */
 	public Operation set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_consumes -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
-			case PROP_deprecated -> setDeprecated(toBoolean(value));
-			case PROP_description -> setDescription(s(value));
-			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_operationId -> setOperationId(s(value));
-			case PROP_parameters -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
-			case PROP_produces -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
-			case PROP_responses -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
-			case PROP_schemes -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
-			case PROP_security -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
-			case PROP_summary -> setSummary(s(value));
-			case PROP_tags -> setTags(toListBuilder(value, String.class).sparse().build());
+			case "consumes" -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId" -> setOperationId(s(value));
+			case "parameters" -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
+			case "produces" -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
+			case "summary" -> setSummary(s(value));
+			case "tags" -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

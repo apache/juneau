@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -49,13 +48,10 @@ import org.apache.juneau.test.assertions.*;
  */
 @Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_value)
-	"java:S3740"  // Raw Supplier/Object types used where HTTP part value type cannot be parameterized at this abstraction level
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740" // Raw Supplier/Object types used where HTTP part value type cannot be parameterized at this abstraction level
 })
 public class BasicPart implements NameValuePair, Headerable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
@@ -141,7 +137,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
 	 */
 	protected BasicPart(BasicPart copyFrom) {
-		assertArgNotNull(ARG_copyFrom, copyFrom);
+		reqnn("copyFrom", copyFrom);
 		this.name = copyFrom.name;
 		this.value = copyFrom.value;
 	}

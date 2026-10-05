@@ -29,15 +29,10 @@ import org.apache.juneau.commons.collections.*;
  * Instances are immutable and thread-safe.
  */
 @SuppressWarnings({
-	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., PROP_name)
-	"java:S1452"  // Wildcard required - Class<?> for property type metadata
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452" // Wildcard required - Class<?> for property type metadata
 })
 public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
-
-	// Property name constants
-	private static final String PROP_name = "name";
-	private static final String PROP_value = "value";
-	private static final String PROP_type = "type";
 
 	private final BeanPropertyMeta pMeta;
 	private final String name;
@@ -122,9 +117,9 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	public FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_name, name)
-			.a(PROP_value, value)
-			.a(PROP_type, cns(pMeta.getBeanInfo()));
+			.a("name", name)
+			.a("value", value)
+			.a("type", cns(pMeta.getBeanInfo()));
 		// @formatter:on
 	}
 

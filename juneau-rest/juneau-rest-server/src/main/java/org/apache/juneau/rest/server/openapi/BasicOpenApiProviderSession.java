@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.commons.svl.*;
@@ -51,67 +52,18 @@ import org.apache.juneau.rest.server.swagger.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Field/constant identifiers mirror OpenAPI/Swagger wire-format keys (camelCase, dollar-prefixed)
-	"java:S1192"  // Duplicate string literals are OpenAPI wire-format keys used in JSON map construction; intentional
+	"java:S115", // Field/constant identifiers mirror OpenAPI/Swagger wire-format keys (camelCase, dollar-prefixed)
+	"java:S1192", // Duplicate string literals are OpenAPI wire-format keys used in JSON map construction; intentional
+	"java:S3776" // transform(), transformOperation() and visitOperation() walk every Swagger 2 section to OpenAPI 3.1 in one pass; splitting them would obscure the mapping
 })
 public class BasicOpenApiProviderSession {
 
 	private static final String OPENAPI_VERSION = "3.1.0";
 
-	private static final String K_openapi = "openapi";
-	private static final String K_host = "host";
-	private static final String K_basePath = "basePath";
-	private static final String K_schemes = "schemes";
-	private static final String K_servers = "servers";
-	private static final String K_consumes = "consumes";
-	private static final String K_produces = "produces";
-	private static final String K_paths = "paths";
-	private static final String K_parameters = "parameters";
-	private static final String K_requestBody = "requestBody";
-	private static final String K_responses = "responses";
-	private static final String K_content = "content";
-	private static final String K_schema = "schema";
-	private static final String K_required = "required";
-	private static final String K_in = "in";
-	private static final String K_name = "name";
-	private static final String K_definitions = "definitions";
-	private static final String K_securityDefinitions = "securityDefinitions";
-	private static final String K_components = "components";
-	private static final String K_securitySchemes = "securitySchemes";
-	private static final String K_schemas = "schemas";
-	private static final String K_$ref = "$ref";
-	private static final String K_examples = "examples";
-	private static final String K_description = "description";
-	private static final String K_type = "type";
-	private static final String K_format = "format";
-	private static final String K_enum = "enum";
-	private static final String K_items = "items";
-	private static final String K_default = "default";
-	private static final String K_pattern = "pattern";
-	private static final String K_minLength = "minLength";
-	private static final String K_maxLength = "maxLength";
-	private static final String K_minimum = "minimum";
-	private static final String K_maximum = "maximum";
-	private static final String K_exclusiveMinimum = "exclusiveMinimum";
-	private static final String K_exclusiveMaximum = "exclusiveMaximum";
-	private static final String K_minItems = "minItems";
-	private static final String K_maxItems = "maxItems";
-	private static final String K_uniqueItems = "uniqueItems";
-	private static final String K_multipleOf = "multipleOf";
-	private static final String K_collectionFormat = "collectionFormat";
-	private static final String K_properties = "properties";
-
-	private static final String DEFINITIONS_PREFIX = "#/definitions/";
-	private static final String COMPONENTS_PREFIX = "#/components/schemas/";
-	private static final String FORM_URLENCODED = "application/x-www-form-urlencoded";
-	private static final String DEFAULT_MEDIA_TYPE = "application/json";
-	private static final String IN_BODY = "body";
-	private static final String IN_FORM_DATA = "formData";
-
 	private static final Set<String> PARAMETER_SCHEMA_KEYS = Set.of(
-		K_type, K_format, K_enum, K_items, K_default, K_pattern,
-		K_minLength, K_maxLength, K_minimum, K_maximum, K_exclusiveMinimum, K_exclusiveMaximum,
-		K_minItems, K_maxItems, K_uniqueItems, K_multipleOf, K_collectionFormat
+		"type", "format", "enum", "items", "default", "pattern",
+		"minLength", "maxLength", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum",
+		"minItems", "maxItems", "uniqueItems", "multipleOf", "collectionFormat"
 	);
 
 	private final BasicSwaggerProviderSession swaggerSession;
@@ -159,12 +111,9 @@ public class BasicOpenApiProviderSession {
 	 * @param swagger The Swagger 2.0 representation as a Json5Map.
 	 * @return A fresh {@link Json5Map} representing the OpenAPI 3.1 document.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for sequential field-by-field rewrite of spec map
-	})
 	static Json5Map transform(Json5Map swagger) {
 		var out = new Json5Map();
-		out.put(K_openapi, OPENAPI_VERSION);
+		out.put("openapi", OPENAPI_VERSION);
 
 		copyIfPresent(swagger, out, "info");
 		copyIfPresent(swagger, out, "tags");
@@ -173,13 +122,13 @@ public class BasicOpenApiProviderSession {
 		// Build servers from host / basePath / schemes.
 		var servers = buildServers(swagger);
 		if (! servers.isEmpty())
-			out.put(K_servers, servers);
+			out.put("servers", servers);
 
-		var topConsumes = listOfStrings(swagger.get(K_consumes));
-		var topProduces = listOfStrings(swagger.get(K_produces));
+		var topConsumes = listOfStrings(swagger.get("consumes"));
+		var topProduces = listOfStrings(swagger.get("produces"));
 
 		// Paths: rewrite each operation.
-		var paths = swagger.get(K_paths);
+		var paths = swagger.get("paths");
 		if (paths instanceof Map<?,?> paths2) {
 			var newPaths = new Json5Map();
 			for (var pe : paths2.entrySet()) {
@@ -195,28 +144,28 @@ public class BasicOpenApiProviderSession {
 				}
 				newPaths.put(path, newPathItem);
 			}
-			out.put(K_paths, newPaths);
+			out.put("paths", newPaths);
 		}
 
 		// definitions → components.schemas
 		var components = new Json5Map();
-		var defs = swagger.get(K_definitions);
+		var defs = swagger.get("definitions");
 		if (defs instanceof Map<?,?> defs2 && ! defs2.isEmpty()) {
 			var schemas = new Json5Map();
 			for (var e : defs2.entrySet())
 				schemas.put(String.valueOf(e.getKey()), rewriteRefs(e.getValue()));
-			components.put(K_schemas, schemas);
+			components.put("schemas", schemas);
 		}
 		// securityDefinitions → components.securitySchemes
-		var secDefs = swagger.get(K_securityDefinitions);
+		var secDefs = swagger.get("securityDefinitions");
 		if (secDefs instanceof Map<?,?> secDefs2 && ! secDefs2.isEmpty()) {
 			var schemes = new Json5Map();
 			for (var e : secDefs2.entrySet())
 				schemes.put(String.valueOf(e.getKey()), rewriteRefs(e.getValue()));
-			components.put(K_securitySchemes, schemes);
+			components.put("securitySchemes", schemes);
 		}
 		if (! components.isEmpty())
-			out.put(K_components, components);
+			out.put("components", components);
 
 		// Rewrite all $refs anywhere in the document so subsequent passes work uniformly.
 		var rewritten = (Json5Map) rewriteRefs(out);
@@ -245,10 +194,10 @@ public class BasicOpenApiProviderSession {
 		if (sites.isEmpty())
 			return doc;
 
-		var components = (Json5Map) doc.get(K_components);
+		var components = (Json5Map) doc.get("components");
 		if (components == null)
 			components = new Json5Map();
-		var schemas = (Json5Map) components.get(K_schemas);
+		var schemas = (Json5Map) components.get("schemas");
 		if (schemas == null)
 			schemas = new Json5Map();
 		var existingNames = new LinkedHashSet<>(schemas.keySet());
@@ -264,7 +213,7 @@ public class BasicOpenApiProviderSession {
 			existingNames.add(name);
 			schemas.put(name, inline);
 			var ref = new Json5Map();
-			ref.put(K_$ref, COMPONENTS_PREFIX + name);
+			ref.put("$ref", "#/components/schemas/" + name);
 			for (var s : occurrences)
 				s.replaceWith(new Json5Map(ref));
 			hoisted = true;
@@ -272,15 +221,15 @@ public class BasicOpenApiProviderSession {
 
 		if (hoisted) {
 			if (! schemas.isEmpty())
-				components.put(K_schemas, schemas);
+				components.put("schemas", schemas);
 			if (! components.isEmpty())
-				doc.put(K_components, components);
+				doc.put("components", components);
 		}
 		return doc;
 	}
 
 	private static void collectOperationSchemas(Json5Map doc, Map<String,List<SchemaSite>> sites) {
-		var paths = doc.get(K_paths);
+		var paths = doc.get("paths");
 		if (! (paths instanceof Map<?,?> paths2))
 			return;
 		for (var pe : paths2.entrySet()) {
@@ -295,17 +244,17 @@ public class BasicOpenApiProviderSession {
 	}
 
 	private static void visitOperation(Json5Map op, Map<String,List<SchemaSite>> sites) {
-		var params = op.get(K_parameters);
+		var params = op.get("parameters");
 		if (params instanceof List<?> params2) {
 			for (var p : params2) {
 				if (p instanceof Map<?,?> p2)
-					visitSchemaSlot(toJson5Map(p2), K_schema, sites);
+					visitSchemaSlot(toJson5Map(p2), "schema", sites);
 			}
 		}
-		var requestBody = op.get(K_requestBody);
+		var requestBody = op.get("requestBody");
 		if (requestBody instanceof Map<?,?> requestBody2)
 			visitContent(toJson5Map(requestBody2), sites);
-		var responses = op.get(K_responses);
+		var responses = op.get("responses");
 		if (responses instanceof Map<?,?> responses2) {
 			for (var re : responses2.entrySet()) {
 				if (re.getValue() instanceof Map<?,?> r)
@@ -315,12 +264,12 @@ public class BasicOpenApiProviderSession {
 	}
 
 	private static void visitContent(Json5Map holder, Map<String,List<SchemaSite>> sites) {
-		var content = holder.get(K_content);
+		var content = holder.get("content");
 		if (! (content instanceof Map<?,?> content2))
 			return;
 		for (var ce : content2.entrySet()) {
 			if (ce.getValue() instanceof Map<?,?> media)
-				visitSchemaSlot(toJson5Map(media), K_schema, sites);
+				visitSchemaSlot(toJson5Map(media), "schema", sites);
 		}
 	}
 
@@ -331,7 +280,7 @@ public class BasicOpenApiProviderSession {
 		var schema = toJson5Map(v2);
 		// Re-attach the normalized map so subsequent replaceWith() updates the document.
 		parent.put(key, schema);
-		if (schema.containsKey(K_$ref))
+		if (schema.containsKey("$ref"))
 			return;
 		if (schema.isEmpty())
 			return;
@@ -370,25 +319,24 @@ public class BasicOpenApiProviderSession {
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for OpenAPI operation transformation logic
-		"java:S6541"  // Brain Method acceptable for OpenAPI operation transformation dispatch
+		"java:S6541" // Brain Method acceptable for OpenAPI operation transformation dispatch
 	})
 	private static Json5Map transformOperation(Json5Map op, List<String> topConsumes, List<String> topProduces) {
 		var newOp = new Json5Map();
 		for (var e : op.entrySet()) {
 			var k = e.getKey();
-			if (K_parameters.equals(k) || K_responses.equals(k) || K_consumes.equals(k) || K_produces.equals(k))
+			if (eqa(k, "parameters", "responses", "consumes", "produces"))
 				continue;
 			newOp.put(k, e.getValue());
 		}
-		var consumes = listOfStrings(op.get(K_consumes));
+		var consumes = listOfStrings(op.get("consumes"));
 		if (consumes.isEmpty())
 			consumes = topConsumes;
-		var produces = listOfStrings(op.get(K_produces));
+		var produces = listOfStrings(op.get("produces"));
 		if (produces.isEmpty())
 			produces = topProduces;
 
-		var oldParams = op.get(K_parameters);
+		var oldParams = op.get("parameters");
 		var newParams = new ArrayList<Object>();
 		Json5Map requestBody = null;
 		Json5Map formSchema = null;
@@ -399,20 +347,20 @@ public class BasicOpenApiProviderSession {
 				if (! (p instanceof Map<?,?> p2))
 					continue;
 				var pmap = toJson5Map(p2);
-				var in = String.valueOf(pmap.getOrDefault(K_in, ""));
-				if (IN_BODY.equals(in)) {
+				var in = String.valueOf(pmap.getOrDefault("in", ""));
+				if (eq(in, "body")) {
 					requestBody = bodyParameterToRequestBody(pmap, consumes);
-				} else if (IN_FORM_DATA.equals(in)) {
+				} else if (eq(in, "formData")) {
 					if (formSchema == null) {
 						formSchema = new Json5Map();
-						formSchema.put(K_type, "object");
-						formSchema.put(K_properties, new Json5Map());
+						formSchema.put("type", "object");
+						formSchema.put("properties", new Json5Map());
 					}
-					var name = String.valueOf(pmap.getOrDefault(K_name, ""));
+					var name = String.valueOf(pmap.getOrDefault("name", ""));
 					if (! name.isEmpty()) {
-						var props = (Json5Map) formSchema.get(K_properties);
+						var props = (Json5Map) formSchema.get("properties");
 						props.put(name, extractInlineSchema(pmap));
-						if (isTrue(pmap.get(K_required)))
+						if (isTrue(pmap.get("required")))
 							formRequired.add(name);
 					}
 				} else {
@@ -424,20 +372,20 @@ public class BasicOpenApiProviderSession {
 		if (requestBody == null && formSchema != null) {
 			requestBody = new Json5Map();
 			if (! formRequired.isEmpty())
-				formSchema.put(K_required, new ArrayList<>(formRequired));
+				formSchema.put("required", new ArrayList<>(formRequired));
 			var content = new Json5Map();
 			var media = new Json5Map();
-			media.put(K_schema, formSchema);
-			content.put(FORM_URLENCODED, media);
-			requestBody.put(K_content, content);
+			media.put("schema", formSchema);
+			content.put("application/x-www-form-urlencoded", media);
+			requestBody.put("content", content);
 		}
 		if (requestBody != null)
-			newOp.put(K_requestBody, requestBody);
+			newOp.put("requestBody", requestBody);
 
 		if (! newParams.isEmpty())
-			newOp.put(K_parameters, newParams);
+			newOp.put("parameters", newParams);
 
-		var oldResponses = op.get(K_responses);
+		var oldResponses = op.get("responses");
 		if (oldResponses instanceof Map<?,?> oldResponses2) {
 			var newResponses = new Json5Map();
 			for (var re : oldResponses2.entrySet()) {
@@ -447,61 +395,55 @@ public class BasicOpenApiProviderSession {
 				else
 					newResponses.put(code, re.getValue());
 			}
-			newOp.put(K_responses, newResponses);
+			newOp.put("responses", newResponses);
 		}
 		return newOp;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for OpenAPI body-parameter to request-body conversion
-	})
 	private static Json5Map bodyParameterToRequestBody(Json5Map p, List<String> consumes) {
 		var rb = new Json5Map();
-		if (p.containsKey(K_description))
-			rb.put(K_description, p.get(K_description));
-		if (isTrue(p.get(K_required)))
-			rb.put(K_required, Boolean.TRUE);
-		var schema = p.get(K_schema);
-		if (schema == null && p.containsKey(K_type))
+		if (p.containsKey("description"))
+			rb.put("description", p.get("description"));
+		if (isTrue(p.get("required")))
+			rb.put("required", Boolean.TRUE);
+		var schema = p.get("schema");
+		if (schema == null && p.containsKey("type"))
 			schema = extractInlineSchema(p);
 		var content = new Json5Map();
-		var media = consumes.isEmpty() ? List.of(DEFAULT_MEDIA_TYPE) : consumes;
+		var media = consumes.isEmpty() ? List.of("application/json") : consumes;
 		for (var mt : media) {
 			var entry = new Json5Map();
 			if (schema != null)
-				entry.put(K_schema, schema);
+				entry.put("schema", schema);
 			content.put(mt, entry);
 		}
-		rb.put(K_content, content);
+		rb.put("content", content);
 		return rb;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for the schema vs examples-only content-block emission; the two branches differ in how each media entry is populated and are asserted by OpenAPI output tests.
-	})
 	private static Json5Map transformResponse(Json5Map response, List<String> produces) {
 		var newResp = new Json5Map();
 		for (var e : response.entrySet()) {
 			var k = e.getKey();
-			if (K_schema.equals(k) || K_examples.equals(k))
+			if (eqa(k, "schema", "examples"))
 				continue;
 			newResp.put(k, e.getValue());
 		}
-		var schema = response.get(K_schema);
+		var schema = response.get("schema");
 		if (schema != null) {
 			var content = new Json5Map();
-			var media = produces.isEmpty() ? List.of(DEFAULT_MEDIA_TYPE) : produces;
+			var media = produces.isEmpty() ? List.of("application/json") : produces;
 			for (var mt : media) {
 				var entry = new Json5Map();
-				entry.put(K_schema, schema);
+				entry.put("schema", schema);
 				addExamplesForMedia(response, mt, entry);
 				content.put(mt, entry);
 			}
-			newResp.put(K_content, content);
-		} else if (response.containsKey(K_examples)) {
+			newResp.put("content", content);
+		} else if (response.containsKey("examples")) {
 			// Examples without schema — still surface under content blocks.
 			var content = new Json5Map();
-			var media = produces.isEmpty() ? List.of(DEFAULT_MEDIA_TYPE) : produces;
+			var media = produces.isEmpty() ? List.of("application/json") : produces;
 			for (var mt : media) {
 				var entry = new Json5Map();
 				addExamplesForMedia(response, mt, entry);
@@ -509,13 +451,13 @@ public class BasicOpenApiProviderSession {
 					content.put(mt, entry);
 			}
 			if (! content.isEmpty())
-				newResp.put(K_content, content);
+				newResp.put("content", content);
 		}
 		return newResp;
 	}
 
 	private static void addExamplesForMedia(Json5Map response, String mediaType, Json5Map entry) {
-		var examples = response.get(K_examples);
+		var examples = response.get("examples");
 		if (examples instanceof Map<?,?> examples2 && examples2.containsKey(mediaType))
 			entry.put("example", examples2.get(mediaType));
 	}
@@ -526,16 +468,16 @@ public class BasicOpenApiProviderSession {
 		for (var e : p.entrySet()) {
 			var k = e.getKey();
 			if (PARAMETER_SCHEMA_KEYS.contains(k)) {
-				if (! K_collectionFormat.equals(k))
+				if (neq(k, "collectionFormat"))
 					schema.put(k, e.getValue());
 			} else {
 				newP.put(k, e.getValue());
 			}
 		}
 		if (! schema.isEmpty()) {
-			var existing = (Json5Map) newP.get(K_schema);
+			var existing = (Json5Map) newP.get("schema");
 			if (existing == null)
-				newP.put(K_schema, schema);
+				newP.put("schema", schema);
 			else
 				schema.forEach(existing::putIfAbsent);
 		}
@@ -546,7 +488,7 @@ public class BasicOpenApiProviderSession {
 		var schema = new Json5Map();
 		for (var e : p.entrySet()) {
 			var k = e.getKey();
-			if ((PARAMETER_SCHEMA_KEYS.contains(k) && ! K_collectionFormat.equals(k)) || K_$ref.equals(k))
+			if ((PARAMETER_SCHEMA_KEYS.contains(k) && neq(k, "collectionFormat")) || eq(k, "$ref"))
 				schema.put(k, e.getValue());
 		}
 		return schema;
@@ -554,9 +496,9 @@ public class BasicOpenApiProviderSession {
 
 	private static List<Object> buildServers(Json5Map swagger) {
 		var servers = new ArrayList<Object>();
-		var host = String.valueOf(swagger.getOrDefault(K_host, ""));
-		var basePath = String.valueOf(swagger.getOrDefault(K_basePath, ""));
-		var schemes = listOfStrings(swagger.get(K_schemes));
+		var host = String.valueOf(swagger.getOrDefault("host", ""));
+		var basePath = String.valueOf(swagger.getOrDefault("basePath", ""));
+		var schemes = listOfStrings(swagger.get("schemes"));
 		if (host.isEmpty() && basePath.isEmpty() && schemes.isEmpty())
 			return servers;
 		if (schemes.isEmpty())
@@ -573,10 +515,7 @@ public class BasicOpenApiProviderSession {
 	private static List<String> listOfStrings(Object o) {
 		if (! (o instanceof List<?> o2))
 			return List.of();
-		var out = new ArrayList<String>(o2.size());
-		for (var v : o2)
-			out.add(String.valueOf(v));
-		return out;
+		return o2.stream().map(String::valueOf).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private static Json5Map toJson5Map(Map<?,?> m) {
@@ -606,18 +545,15 @@ public class BasicOpenApiProviderSession {
 			for (var e : o2.entrySet()) {
 				var k = String.valueOf(e.getKey());
 				var v = e.getValue();
-				if (K_$ref.equals(k) && v instanceof String v2 && v2.startsWith(DEFINITIONS_PREFIX))
-					copy.put(k, COMPONENTS_PREFIX + v2.substring(DEFINITIONS_PREFIX.length()));
+				if (eq(k, "$ref") && v instanceof String v2 && v2.startsWith("#/definitions/"))
+					copy.put(k, "#/components/schemas/" + v2.substring("#/definitions/".length()));
 				else
 					copy.put(k, rewriteRefs(v));
 			}
 			return copy;
 		}
 		if (o instanceof List<?> o2) {
-			var copy = new ArrayList<>(o2.size());
-			for (var v : o2)
-				copy.add(rewriteRefs(v));
-			return copy;
+			return o2.stream().map(BasicOpenApiProviderSession::rewriteRefs).collect(Collectors.toCollection(ArrayList::new));
 		}
 		if (nn(o))
 			return o;

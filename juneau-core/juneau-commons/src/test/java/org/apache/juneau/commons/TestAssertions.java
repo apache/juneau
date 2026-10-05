@@ -37,9 +37,9 @@ import java.util.stream.*;
  * the standard JUnit assertion methods (assertEquals, assertTrue, etc.).</p>
  */
 @SuppressWarnings({
-	"java:S3011",  // Reflective access needed for assertBean/assertEmpty
-	"java:S1172",  // Consistent method signatures are intentional
-	"unused"       // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"java:S1172", // Consistent method signatures are intentional
+	"java:S3011", // Reflective access needed for assertBean/assertEmpty
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 public class TestAssertions {
 

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.uon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -49,20 +48,13 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes", // writeCollection(), writeMap() and the Map/Collection/BeanMap casts in the dispatch use raw types because the object was already matched by runtime kind
+	"resource", // Resource management handled externally
+	"unchecked" // Type erasure requires unchecked casts in collection/map serialization
 })
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession, RecordWritable {
-
-	// Property name constants
-	private static final String PROP_encoding = "encoding";
-	private static final String PROP_paramFormat = "paramFormat";
-	private static final String PROP_UonSerializerSession_encoding = "UonSerializerSession.encoding";
-	private static final String PROP_UonSerializerSession_paramFormat = "UonSerializerSession.paramFormat";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -82,7 +74,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			encoding = ctx.isEncoding();
 			paramFormat = ctx.getParamFormat();
 		}
@@ -118,9 +110,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_encoding, PROP_UonSerializerSession_encoding:
+				case "encoding", "UonSerializerSession.encoding":
 					return encoding(cvt(value, Boolean.class));
-				case PROP_paramFormat, PROP_UonSerializerSession_paramFormat:
+				case "paramFormat", "UonSerializerSession.paramFormat":
 					return paramFormat(cvt(value, ParamFormat.class));
 				default:
 					super.property(key, value);
@@ -151,7 +143,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(UonSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final boolean encoding;
@@ -244,10 +236,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private SerializerWriter<?> writeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
@@ -290,10 +278,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private SerializerWriter<?> writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -382,8 +366,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})
 	protected UonWriter writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 

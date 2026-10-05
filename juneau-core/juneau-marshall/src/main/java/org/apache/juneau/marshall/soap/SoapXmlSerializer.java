@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.soap;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -46,16 +46,10 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
-
-	// Property name constants
-	private static final String PROP_soapAction = "soapAction";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -82,7 +76,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			soapAction = copyFrom.soapAction;
 		}
 
@@ -93,7 +87,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SoapXmlSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			soapAction = copyFrom.soapAction;
 		}
 
@@ -127,7 +121,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * @return This object.
 		 */
 		public Builder soapAction(String value) {
-			soapAction = assertArgNotNull(ARG_value, value);
+			soapAction = reqnn("value", value);
 			return this;
 		}
 
@@ -195,6 +189,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	@Override /* Overridden from XmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_soapAction, soapAction);
+			.a("soapAction", soapAction);
 	}
 }

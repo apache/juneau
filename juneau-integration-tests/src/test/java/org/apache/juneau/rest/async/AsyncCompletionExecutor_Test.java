@@ -165,6 +165,17 @@ class AsyncCompletionExecutor_Test extends TestBase {
 		assertNotNull(CB);
 	}
 
+	@Test
+	void b03_verbOverride_eachOpResolvesItsOwnNamedPool() {
+		var ctx = RestContext.getGlobalRegistry().get(B.class);
+		assertNotNull(ctx, "RestContext should be registered after MockRestClient build");
+		var pools = new java.util.TreeMap<String,String>();
+		for (var op : ctx.getRestOperations().getOpContexts())
+			pools.put(op.getJavaMethod().getName(), ((CountingExecutor)op.getAsyncCompletionExecutor()).poolPrefix);
+		// Each named @Bean Executor method registers its own instance (they no longer collapse into one).
+		assertEquals("{inherited=resource-pool, overridden=op-pool}", pools.toString());
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// C: No override — default behavior (null executor, natural thread) is preserved.
 	// -----------------------------------------------------------------------------------------------------------------

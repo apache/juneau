@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.sse.*;
 /**
  * In-memory server-side SSE broadcaster.
  */
+@SuppressWarnings({
+	"resource" // SseSubscription returned by subscribe() is owned by the caller; the broadcaster only closes replaced or removed ones in subscribe()/removeSubscriber()
+})
 public class SseBroadcaster {
 
 	private static final Logger LOGGER = Logger.getLogger(SseBroadcaster.class.getName());
@@ -62,9 +65,6 @@ public class SseBroadcaster {
 	 * @param id The subscriber identifier. Must not be <jk>null</jk> or empty.
 	 * @return A new subscription.
 	 */
-	@SuppressWarnings({
-		"resource" // Returned subscription is caller-owned and closed by the caller/framework.
-	})
 	public SseSubscription subscribe(String id) {
 		if (isEmpty(id))
 			throw iaex("id cannot be null or empty.");
@@ -89,9 +89,6 @@ public class SseBroadcaster {
 		});
 	}
 
-	@SuppressWarnings({
-		"resource" // Not a leak: this callback runs from SseSubscription.close() itself (closed==true already), or from subscribe()'s replace path where the caller closes 'removed' directly above; the isClosed() guard just prevents a redundant close(), which the static analysis can't see through.
-	})
 	void removeSubscriber(String id) {
 		var removed = subscriptions.remove(id);
 		if (removed != null && ! removed.isClosed())

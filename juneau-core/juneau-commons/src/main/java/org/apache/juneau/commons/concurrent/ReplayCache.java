@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.concurrent;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * SPI for detecting reuse ("replay") of a one-time-use identifier.
@@ -131,7 +131,7 @@ public interface ReplayCache {
 	 * @return <jk>true</jk> if the caller should proceed; <jk>false</jk> if the submission should be rejected.
 	 */
 	default boolean checkAndRecord(String id, long expiresAtMs, FailMode failMode, Consumer<Exception> onFailure) {
-		assertArgNotNull("failMode", failMode);
+		reqnn("failMode", failMode);
 		try {
 			return checkAndRecord(id, expiresAtMs);
 		} catch (Exception e) {

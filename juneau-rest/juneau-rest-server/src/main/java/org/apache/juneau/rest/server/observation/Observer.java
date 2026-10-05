@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.observation;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
@@ -66,6 +65,7 @@ import org.apache.juneau.rest.server.tracing.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"resource" // start(...) returns the Observation for the caller's try-with-resources; ActiveObservation holds the tracer Scope it closes in its own close().
 })
 public final class Observer {
@@ -75,16 +75,6 @@ public final class Observer {
 	 * {@link Observation#NOOP}.
 	 */
 	public static final Observer NOOP = new Observer(NoOpMetricsRecorder.INSTANCE, NoOpTracerHook.INSTANCE);
-
-	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
-	@SuppressWarnings("java:S115")
-	private static final String ARG_recorder = "recorder";
-	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
-	@SuppressWarnings("java:S115")
-	private static final String ARG_tracer = "tracer";
-	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
-	@SuppressWarnings("java:S115")
-	private static final String ARG_name = "name";
 
 	private final MetricsRecorder recorder;
 	private final TracerHook tracer;
@@ -99,8 +89,8 @@ public final class Observer {
 	 * 	{@link NoOpTracerHook#INSTANCE} to disable tracing.
 	 */
 	public Observer(MetricsRecorder recorder, TracerHook tracer) {
-		this.recorder = assertArgNotNull(ARG_recorder, recorder);
-		this.tracer = assertArgNotNull(ARG_tracer, tracer);
+		this.recorder = reqnn("recorder", recorder);
+		this.tracer = reqnn("tracer", tracer);
 		this.active = recorder != NoOpMetricsRecorder.INSTANCE || tracer != NoOpTracerHook.INSTANCE;
 	}
 
@@ -119,7 +109,7 @@ public final class Observer {
 	 * @return The started {@link Observation}. Never <jk>null</jk>.
 	 */
 	public Observation start(String name, String tags) {
-		assertArgNotNullOrBlank(ARG_name, name);
+		reqnb("name", name);
 		if (! active)
 			return Observation.NOOP;
 		var scope = tracer.startSpan(name);

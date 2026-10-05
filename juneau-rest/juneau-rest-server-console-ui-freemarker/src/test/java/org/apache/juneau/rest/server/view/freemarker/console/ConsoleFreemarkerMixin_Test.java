@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -124,14 +125,13 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// c) Anti-pattern negative gate (wrong bean return type)
+	// c) Subtype bean return type (P8)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=FreemarkerMixin.class)
-	public static class WrongBeanTypeHost extends BasicRestServlet {
+	public static class SubtypeBeanHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		// Anti-pattern: declared return type is the SUBTYPE, not FreemarkerMixin -- invisible to the renderer's
-		// exact-type getBean(FreemarkerMixin.class) lookup.
+		// declared return type is the subtype; P8 makes this work.
 		@Bean public ConsoleFreemarkerMixin freemarker() {
 			// Explicit cast is required here (not just illustrative): the inherited fluent setter basePath(...)
 			// returns the PARENT FreemarkerMixin.Builder static type, so build() resolves at compile time against
@@ -145,18 +145,16 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	/**
-	 * The wrongly-typed bean is invisible to {@code FreemarkerViewRenderer}'s exact-type lookup, which falls back
-	 * to a vanilla {@code new FreemarkerMixin()} ({@code basePath="/"}). Asserting the *outcome* (no composed
-	 * chrome under {@code /templates/}), not a specific exception, since the failure mode is wiring-dependent.
+	 * P8: a bean declared as the {@code ConsoleFreemarkerMixin} subtype is found by the renderer, so the console
+	 * directives compose. (Before 10.0.0 the exact-type lookup missed it and silently used a plain mixin.)
 	 */
-	@Test void c01_wrongBeanReturnType_doesNotComposeChrome() throws Exception {
-		var c = MockRestClient.buildLax(WrongBeanTypeHost.class);
-		var res = c.get("/mypage").run();
-		if (res.getStatusCode() == 200) {
+	@Test void c01_subtypeBeanReturnType_isFound() throws Exception {
+		try (var c = MockRestClient.buildLax(SubtypeBeanHost.class);
+			var res = c.get("/mypage").run()) {
+			res.assertStatus(200);
 			var body = res.getContent().asString();
-			assertFalse(body.contains("tag status released"), () -> "wrong-bean-type wiring unexpectedly composed chrome, body:\n" + body);
+			assertTrue(body.contains("tag status released"), () -> body);
 		}
-		// else: non-200 (e.g. 500 from an unresolvable include) is also an acceptable "did not compose" outcome.
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -263,7 +261,7 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 			var cfg2 = mixin.resolveConfiguration(req);
 			var sameInstance = cfg1 == USER_CFG && cfg2 == USER_CFG;
 			var settingsUnchanged = cfg1.getObjectWrapper() == ORIGINAL_WRAPPER
-				&& Objects.equals(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
+				&& eq(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
 				&& cfg1.getOutputFormat() == ORIGINAL_OUTPUT_FORMAT
 				&& cfg1.getTemplateUpdateDelayMilliseconds() == ORIGINAL_UPDATE_DELAY;
 			var varsFilled = cfg1.getSharedVariable(PageDirectiveModel.NAME) != null

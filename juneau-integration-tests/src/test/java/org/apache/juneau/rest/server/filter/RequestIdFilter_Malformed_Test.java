@@ -49,7 +49,7 @@ class RequestIdFilter_Malformed_Test extends TestBase {
 		}
 		@RestGet(path="/a")
 		public String a(RestRequest req) {
-			return req.getAttribute(RestServerConstants.REQUEST_ID).asString().orElse("");
+			return req.getAttribute("requestId").asString().orElse("");
 		}
 	}
 
@@ -124,7 +124,7 @@ class RequestIdFilter_Malformed_Test extends TestBase {
 		}
 		@RestGet(path="/c")
 		public String c(RestRequest req) {
-			var underDefault = req.getAttribute(RestServerConstants.REQUEST_ID).asString().orElse("");
+			var underDefault = req.getAttribute("requestId").asString().orElse("");
 			var underCustom = req.getAttribute("customReqId").asString().orElse("");
 			return underDefault + "|" + underCustom;
 		}
@@ -153,7 +153,7 @@ class RequestIdFilter_Malformed_Test extends TestBase {
 			.build();
 		@RestStartCall
 		public void stamp(HttpServletRequest req, HttpServletResponse res) {
-			req.setAttribute(RestServerConstants.REQUEST_ID, "");
+			req.setAttribute("requestId", "");
 			FILTER.apply(req, res);
 		}
 		@RestGet(path="/d")

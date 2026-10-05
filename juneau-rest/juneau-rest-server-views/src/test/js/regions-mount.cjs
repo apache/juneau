@@ -67,7 +67,7 @@ function slot(env, id) {
 			&& details.dataset.juneauRegion === 'details';
 		const handles = await Promise.resolve(mounted);
 		out.t1_mountIsOnRegions = typeof R.mount === 'function' && NS.regions.mount === R.mount;
-		out.t1_notOnPages = NS.pages == null || NS.pages.mount == null;
+		out.t1_notOnPages = NS.pages?.mount == null;
 		out.t1_handleCount = handles.length;
 		out.t1_probesAttr = probes.dataset.juneauRegion;
 		out.t1_probesPopulate = probes.dataset.juneauRegionPopulate;
@@ -94,9 +94,9 @@ function slot(env, id) {
 		let message = '';
 		try {
 			R.mount({ probes: 'ssc-probes', details: 'ssc-probe-details' });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
-			message = String(e?.message ? e.message : e);
+			message = String(error?.message ? error.message : error);
 		}
 		out.t2_threw = threw;
 		out.t2_namesMissingId = message.indexOf("id 'details'") >= 0;
@@ -120,9 +120,9 @@ function slot(env, id) {
 		let message = '';
 		try {
 			R.mount({ probes: 'ssc-probes', details: 'no-such-populator' });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
-			message = String(e?.message ? e.message : e);
+			message = String(error?.message ? error.message : error);
 		}
 		out.t3_threw = threw;
 		out.t3_namesBadPopulator = message.indexOf('no-such-populator') >= 0;
@@ -143,7 +143,7 @@ function slot(env, id) {
 		let threw = false;
 		try {
 			R.mount({ probes: '  ' });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
 		}
 		out.t4_threw = threw;
@@ -212,7 +212,7 @@ function slot(env, id) {
 		nav.appendChild(sections);
 		nav.appendChild(children);
 		env.body.appendChild(nav);
-		if (typeof NS.init !== 'undefined' && typeof NS.init.initAll === 'function')
+		if (NS.init !== undefined && typeof NS.init.initAll === 'function')
 			NS.init.initAll();
 		out.t6_pageNavNotExported = NS.pageNav == null;
 		out.t6_authorAriaPreserved = runtime.getAttribute('aria-current') === 'page'
@@ -238,9 +238,9 @@ function slot(env, id) {
 		let message = '';
 		try {
 			R.mount({ incidents: 'juneau-table' });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
-			message = String(e?.message ? e.message : e);
+			message = String(error?.message ? error.message : error);
 		}
 		out.t7_threw = threw;
 		out.t7_pointsAtTableUrl = message.indexOf('{ table: url }') >= 0;
@@ -251,7 +251,7 @@ function slot(env, id) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

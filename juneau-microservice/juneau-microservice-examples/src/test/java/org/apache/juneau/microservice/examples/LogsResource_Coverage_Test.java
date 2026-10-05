@@ -40,6 +40,9 @@ import org.junit.jupiter.api.io.*;
  * link generation, child enumeration), the {@code VIEW} highlight branch (HTML severity-coloring path),
  * the {@code PARSE} operation (filtered log parser output), and the {@code DELETE} disabled branch.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class LogsResource_Coverage_Test extends TestBase {
 
 	@TempDir
@@ -75,9 +78,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	}
 
 	// Tests intentionally leave resources open; try-with-resources would obscure the test intent.
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	private static MockRestClient buildClient(boolean allowDeletes) {
 		var cfg = Config.create().memStore().build();
 		cfg.set("Logging/logDir", logRoot.toString());
@@ -186,9 +186,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	// B. End-to-end REST: VIEW with highlight, PARSE, DELETE-disabled, GET listing for nested directory.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b01_view_highlight_writesHtmlWithSeverityColors() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.request("VIEW", "/multi.log?highlight=true").run();
@@ -200,9 +197,6 @@ class LogsResource_Coverage_Test extends TestBase {
 				() -> "highlight=true output should contain CSS color spans, got: " + body);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b02_view_highlight_emptyFile_writesEmptyMarker() throws Exception {
 		// Filter out everything via a severity that doesn't match any line.
 		try (var c = buildClient(true)) {
@@ -213,9 +207,6 @@ class LogsResource_Coverage_Test extends TestBase {
 				() -> "Empty highlight result must contain the [EMPTY] marker, got: " + body);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b03_view_plain_noFilters_streamsRawReader() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.request("VIEW", "/plain.log").run();
@@ -223,9 +214,6 @@ class LogsResource_Coverage_Test extends TestBase {
 			assertTrue(resp.getContent().asString().contains("hello"));
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b04_view_plain_withFilters_usesParser() throws Exception {
 		// Passing thread/start/end/loggers params triggers the filter branch in getReader(...)
 		try (var c = buildClient(true)) {
@@ -233,26 +221,17 @@ class LogsResource_Coverage_Test extends TestBase {
 			resp.assertStatus(200);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b05_parse_returnsParsedEntries() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.request("PARSE", "/plain.log").run();
 			resp.assertStatus(200);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b06_delete_disabled_returns405() throws Exception {
 		try (var c = buildClient(/*allowDeletes*/false)) {
 			c.delete("/plain.log").run().assertStatus(405);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b07_get_directoryListing_includesChildLogs() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.get("/").run();
@@ -265,9 +244,6 @@ class LogsResource_Coverage_Test extends TestBase {
 			assertFalse(body.contains("README.txt"), "Non-.log files must be filtered out of the listing");
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b08_get_subdirectoryListing() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.get("/sub").run();
@@ -276,35 +252,23 @@ class LogsResource_Coverage_Test extends TestBase {
 			assertTrue(body.contains("nested.log"));
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b09_view_dateFilter_startEnd() throws Exception {
 		// Exercise the start/end branches of the date-filter parsing in viewFile().
 		try (var c = buildClient(true)) {
 			c.request("VIEW", "/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b10_parse_dateFilter_startEnd() throws Exception {
 		// Same date-filter branches in viewParsedEntries().
 		try (var c = buildClient(true)) {
 			c.request("PARSE", "/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b11_view_loggers_severity_filters() throws Exception {
 		try (var c = buildClient(true)) {
 			c.request("VIEW", "/multi.log?loggers=Foo&severity=INFO&severity=WARNING").run().assertStatus(200);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b12_download_returnsFileContents() throws Exception {
 		try (var c = buildClient(true)) {
 			var resp = c.request("DOWNLOAD", "/plain.log").run();
@@ -312,17 +276,11 @@ class LogsResource_Coverage_Test extends TestBase {
 			assertTrue(resp.getContent().asString().contains("hello"));
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b13_download_notFound_returns404() throws Exception {
 		try (var c = buildClient(true)) {
 			c.request("DOWNLOAD", "/nope.log").run().assertStatus(404);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b14_delete_existing_log_returnsRedirect() throws Exception {
 		// Create then delete a file via the REST surface to exercise deleteFile() with allowDeletes=true.
 		var toDelete = logRoot.resolve("delete-me.log");

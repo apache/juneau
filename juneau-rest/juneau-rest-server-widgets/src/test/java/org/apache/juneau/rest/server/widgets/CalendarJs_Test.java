@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.widgets;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -178,15 +179,9 @@ class CalendarJs_Test extends TestBase {
 		return report;
 	}
 
-	private static void assertNum(long expected, Object actual) {
-		assertInstanceOf(Number.class, actual, () -> "expected a number, got: " + actual);
-		assertEquals(expected, ((Number)actual).longValue());
-	}
-
 	@Test void b01_contractAndMinPoll() {
 		var r = report();
-		assertEquals("2", r.get("contractVersion"));
-		assertNum(5000, r.get("minPoll"));
+		assertBean(r, "contractVersion,minPoll", "2,5000");
 	}
 
 	/** Contract lockstep: the JS literal and the bean constant must move together, or old JS misrenders silently. */
@@ -206,119 +201,85 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void b02_daysInMonth_leapYearCorrect() {
 		var r = report();
-		assertNum(29, r.get("dim_feb2024"));
-		assertNum(28, r.get("dim_feb2026"));
-		assertNum(30, r.get("dim_apr"));
-		assertNum(31, r.get("dim_jan"));
+		assertBean(r, "dim_feb2024,dim_feb2026,dim_apr,dim_jan", "29,28,30,31");
 	}
 
 	@Test void b03_firstWeekdayOffset_bothWeekStarts() {
 		var r = report();
-		assertNum(6, r.get("dow_aug1"));       // Aug 1 2026 is a Saturday
-		assertNum(6, r.get("off_sunday"));
-		assertNum(5, r.get("off_monday"));
+		// dow_aug1: Aug 1 2026 is a Saturday.
+		assertBean(r, "dow_aug1,off_sunday,off_monday", "6,6,5");
 	}
 
 	@Test void b04_buildMonthCells_always42_adjacentTagged() {
 		var r = report();
-		assertNum(42, r.get("cells_count"));
-		assertNum(42, r.get("cellsMon_count"));
-		assertEquals("2026-08-01", r.get("cells_firstInMonth"));
-		assertEquals(true, r.get("cells_leadingAdjacent"));
-		assertEquals(true, r.get("cells_firstOfMonthAt6"));       // Sunday-start: 6 leading adjacent cells
-		assertEquals(true, r.get("cellsMon_firstOfMonthAt5"));    // Monday-start: 5 leading adjacent cells
-		assertNum(31, r.get("cells_inMonthCount"));
+		// cells_firstOfMonthAt6: Sunday-start, 6 leading adjacent cells; cellsMon_firstOfMonthAt5: Monday-start, 5.
+		assertBean(r, "cells_count,cellsMon_count,cells_firstInMonth,cells_leadingAdjacent,cells_firstOfMonthAt6,"
+			+ "cellsMon_firstOfMonthAt5,cells_inMonthCount", "42,42,2026-08-01,true,true,true,31");
 	}
 
 	@Test void b05_civilBucketing_neverDateParseShift() {
 		var r = report();
-		assertEquals("2026-08-14", r.get("civil_dateOnly"));
-		assertEquals("2026-08-14", r.get("civil_dateTime"));      // leading date only, no tz shift
-		assertNull(r.get("civil_bad"));
-		assertNull(r.get("civil_short"));
-		assertNull(r.get("civil_badSep"));
+		// civil_dateTime: leading date only, no tz shift.
+		assertBean(r, "civil_dateOnly,civil_dateTime,civil_bad,civil_short,civil_badSep",
+			"2026-08-14,2026-08-14,<null>,<null>,<null>");
 	}
 
 	@Test void b06_contractHandshake_strictStringTwo() {
 		var r = report();
-		assertEquals(true, r.get("contract_okStr"));
-		assertEquals(false, r.get("contract_badNum"));           // numeric 2 must fail strict ===
-		assertEquals(false, r.get("contract_bad1"));             // and so must the superseded v1 string
+		// contract_badNum: numeric 2 must fail strict ===; contract_bad1: so must the superseded v1 string.
+		assertBean(r, "contract_okStr,contract_badNum,contract_bad1", "true,false,false");
 	}
 
 	@Test void b07_echoCheck() {
 		var r = report();
-		assertEquals(true, r.get("echo_ok"));
-		assertEquals(false, r.get("echo_badMonth"));
-		assertEquals(false, r.get("echo_null"));
+		assertBean(r, "echo_ok,echo_badMonth,echo_null", "true,false,false");
 	}
 
 	@Test void b08_sanitize_dropsMissingAndDupWithWarn() {
 		var r = report();
-		assertEquals("a,b", r.get("sanitize_ids"));
-		assertEquals(true, r.get("sanitize_warned"));
+		// sanitize_ids's value embeds a comma ("a,b") - harmless, assertBean compares the whole joined string.
+		assertBean(r, "sanitize_ids,sanitize_warned", "a,b,true");
 	}
 
 	@Test void b09_colorToken_unknownFallsToNeutralWithWarn() {
 		var r = report();
-		assertEquals("blue", r.get("color_known"));
-		assertEquals("neutral", r.get("color_unknown"));
-		assertEquals(true, r.get("color_unknownWarned"));
-		assertEquals("neutral", r.get("color_none"));
+		assertBean(r, "color_known,color_unknown,color_unknownWarned,color_none", "blue,neutral,true,neutral");
 	}
 
 	@Test void b10_documentUrlSafety() {
 		var r = report();
-		assertEquals(true, r.get("url_path"));
-		assertEquals(true, r.get("url_rel"));
-		assertEquals(false, r.get("url_abs"));
-		assertEquals(false, r.get("url_protoRel"));
-		assertEquals(false, r.get("url_scheme"));
-		assertEquals(false, r.get("url_dotdot"));
+		assertBean(r, "url_path,url_rel,url_abs,url_protoRel,url_scheme,url_dotdot",
+			"true,true,false,false,false,false");
 	}
 
 	@Test void b11_substituteAndCapAndCoalesceKey() {
 		var r = report();
-		assertEquals("/events/2026/8", r.get("sub"));
-		assertEquals("1,2", r.get("eventsForDay_ids"));          // sorted by start ascending
-		assertNum(3, r.get("cap_shown"));
-		assertNum(2, r.get("cap_overflow"));
-		assertEquals("cal1:2026-8:4", r.get("coalesce"));
+		// eventsForDay_ids's value embeds a comma ("1,2") - harmless, see note on b08 above.
+		assertBean(r, "sub,eventsForDay_ids,cap_shown,cap_overflow,coalesce",
+			"/events/2026/8,1,2,3,2,cal1:2026-8:4");
 	}
 
 	@Test void b12_eventFill_usesTextContent_noMarkup() {
 		var r = report();
-		assertEquals("SPAN", r.get("fill_tag"));
+		assertBean(r, "fill_tag,fill_noChildEls,fill_class,fill_linkedTag,fill_linkedHref,fill_unsafeTag,"
+			+ "fill_unsafeNoHref", "SPAN,0,jc-cal-event jc-cal-cat--blue,A,/events/1,SPAN,true");
 		assertTrue(String.valueOf(r.get("fill_text")).contains("<img"));   // literal text, not parsed markup
-		assertNum(0, r.get("fill_noChildEls"));
-		assertEquals("jc-cal-event jc-cal-cat--blue", r.get("fill_class"));
-		assertEquals("A", r.get("fill_linkedTag"));
-		assertEquals("/events/1", r.get("fill_linkedHref"));
-		assertEquals("SPAN", r.get("fill_unsafeTag"));            // unsafe href not linked
-		assertEquals(true, r.get("fill_unsafeNoHref"));
 	}
 
 	@Test void b13_readCategoryMap_skipsColumnHeader() {
 		var r = report();
-		assertEquals("blue", r.get("map_team"));
-		assertEquals("green", r.get("map_review"));
-		assertEquals(true, r.get("map_noHeader"));
+		assertBean(r, "map_team,map_review,map_noHeader", "blue,green,true");
 	}
 
 	@Test void b14_seedMonth_paintedFromSidecar_noFetch() {
 		var r = report();
-		assertNum(6, r.get("seed_weeks"));
-		assertEquals(true, r.get("seed_painted"));
-		assertEquals(true, r.get("seed_noFetch"));
-		assertEquals(true, r.get("seed_todayCell"));
+		assertBean(r, "seed_weeks,seed_painted,seed_noFetch,seed_todayCell", "6,true,true,true");
 	}
 
 	@Test void b15_contractMismatch_failsLoud_noFetchNoPaint() {
 		var r = report();
-		assertEquals(true, r.get("badContract_error"));
-		assertEquals(true, r.get("badContract_noFetch"));
-		assertEquals(true, r.get("badContract_notInit"));
-		assertEquals(true, r.get("badContract_loud"));
+		assertBean(r, "badContract_error,badContract_noFetch,badContract_notInit,badContract_loud",
+			"true,true,true,true");
 	}
 
 	@Test void b16_liveBodyNumericContract_refused() {
@@ -333,17 +294,12 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void b18_coalesceAndAbort_staleMonthDropped() {
 		var r = report();
-		assertEquals(true, r.get("coalesce_aborted"));
-		assertEquals(true, r.get("coalesce_octPainted"));
-		assertEquals(true, r.get("coalesce_staleDropped"));
+		assertBean(r, "coalesce_aborted,coalesce_octPainted,coalesce_staleDropped", "true,true,true");
 	}
 
 	@Test void b19_fetchError_singleAttempt_emptyMonthVisibleError() {
 		var r = report();
-		assertEquals(true, r.get("err_visible"));
-		assertEquals(true, r.get("err_singleAttempt"));
-		assertEquals(true, r.get("err_emptyMonth"));
-		assertEquals(true, r.get("html_error"));
+		assertBean(r, "err_visible,err_singleAttempt,err_emptyMonth,html_error", "true,true,true,true");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -352,21 +308,17 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void c01_endInclusivity_allFourCases() {
 		var r = report();
-		assertEquals("2026-03-04", r.get("last_allDayInclusive"));          // date-only end is INCLUSIVE
-		assertEquals("2026-03-02", r.get("last_timedExclusive"));           // [09:00, 10:00) is the start day only
-		assertEquals("2026-03-03", r.get("last_timedMidnightCrossing"));
-		assertEquals("2026-03-02", r.get("last_timedEndsAtMidnight"));      // exclusive: midnight lands the day before
-		assertEquals("2026-03-02", r.get("last_allDaySameDay"));
-		assertEquals("2026-03-02", r.get("last_omittedEnd"));
-		assertEquals("2026-03-02", r.get("last_offsetIgnored"));
+		// last_allDayInclusive: date-only end is INCLUSIVE. last_timedExclusive: [09:00, 10:00) is the start day
+		// only. last_timedEndsAtMidnight: exclusive, so midnight lands the day before.
+		assertBean(r, "last_allDayInclusive,last_timedExclusive,last_timedMidnightCrossing,last_timedEndsAtMidnight,"
+			+ "last_allDaySameDay,last_omittedEnd,last_offsetIgnored",
+			"2026-03-04,2026-03-02,2026-03-03,2026-03-02,2026-03-02,2026-03-02,2026-03-02");
 	}
 
 	@Test void c02_spanning_onlyWhenMoreThanOneDayCellIsCovered() {
 		var r = report();
-		assertEquals(true, r.get("span_allDayThreeDay"));
-		assertEquals(false, r.get("span_timedHour"));
-		assertEquals(true, r.get("span_timedMidnight"));                    // a timed crossing is a BAR
-		assertEquals(false, r.get("span_omittedEnd"));                      // start-only is never a bar
+		// span_timedMidnight: a timed crossing is a BAR. span_omittedEnd: start-only is never a bar.
+		assertBean(r, "span_allDayThreeDay,span_timedHour,span_timedMidnight,span_omittedEnd", "true,false,true,false");
 	}
 
 	@Test void c03_malformedSet_isExactlyTheClosedList() {
@@ -388,9 +340,7 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void c05_timeLabels() {
 		var r = report();
-		assertEquals("09:05", r.get("timeLabel_timed"));
-		assertNull(r.get("timeLabel_allDay"));
-		assertEquals("14:30", r.get("timeLabel_offset"));
+		assertBean(r, "timeLabel_timed,timeLabel_allDay,timeLabel_offset", "09:05,<null>,14:30");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -399,52 +349,50 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void d01_chipOrdering_allDayFirstThenTimedAscending() {
 		var r = report();
-		assertEquals("a1,a2,t1,t2", r.get("chipOrder_ids"));
-		assertEquals("ch", r.get("chipOrder_spanExcluded"));   // a spanning event is a bar, not a chip
+		// chipOrder_ids's value embeds commas ("a1,a2,t1,t2") - harmless, see note on b08 above. A spanning event
+		// is a bar, not a chip, so it's excluded from chipOrder_spanExcluded.
+		assertBean(r, "chipOrder_ids,chipOrder_spanExcluded", "a1,a2,t1,t2,ch");
 	}
 
 	@Test void d02_laneBudget_derivedAndHardCapped() {
 		var r = report();
-		assertNum(3, r.get("laneBudget_default"));
-		assertNum(8, r.get("laneBudget_capped"));
+		assertBean(r, "laneBudget_default,laneBudget_capped", "3,8");
 	}
 
 	@Test void d03_weekBoundarySegmentation_withContinuationFlags() {
 		var r = report();
-		assertNum(2, r.get("seg_weekCross_count"));
-		assertEquals("1:6-6:-R 2:0-2:L-", r.get("seg_weekCross_shape"));
-		assertEquals(true, r.get("seg_weekCross_sameEvent"));
+		assertBean(r, "seg_weekCross_count,seg_weekCross_shape,seg_weekCross_sameEvent",
+			"2,1:6-6:-R 2:0-2:L-,true");
 	}
 
 	@Test void d04_spanLongerThanTheMonth_clipsWithFlagsOnBothEnds() {
 		var r = report();
-		assertNum(6, r.get("seg_clip_count"));
-		assertEquals(true, r.get("seg_clip_leftmost"));
-		assertEquals(true, r.get("seg_clip_rightmost"));
-		assertEquals(true, r.get("seg_clip_allInMonth"));
+		assertBean(r, "seg_clip_count,seg_clip_leftmost,seg_clip_rightmost,seg_clip_allInMonth", "6,true,true,true");
 	}
 
 	@Test void d05_laneSeating_andStabilityAcrossRerender() {
 		var r = report();
-		assertEquals("a@0,c@0,b@1", r.get("seg_lanes"));
-		assertEquals(true, r.get("seg_stable"));
+		// seg_lanes's value embeds commas ("a@0,c@0,b@1") - harmless, see note on b08 above.
+		assertBean(r, "seg_lanes,seg_stable", "a@0,c@0,b@1,true");
 	}
 
 	@Test void d06_lanesBeyondBudgetOverflowIntoMore() {
 		var r = report();
-		assertNum(2, r.get("seg_budget_seated"));
-		assertNum(2, r.get("seg_budget_laneCount"));
-		assertEquals("s3", r.get("seg_budget_overflowAtMon"));
+		assertBean(r, "seg_budget_seated,seg_budget_laneCount,seg_budget_overflowAtMon", "2,2,s3");
+	}
+
+	@Test void d06b_barsDoNotConsumeTheChipBudget() {
+		// Ported from the deleted CalendarLayout_Test#e01: two bars plus four chips on one day, maxPerDay = 3.
+		// split_shown's value embeds commas ("c1,c2,c3") - harmless, see note on b08 above.
+		var r = report();
+		assertBean(r, "split_seated,split_laneCount,split_shown,split_overflow,split_hidden", "2,2,c1,c2,c3,1,c4");
 	}
 
 	@Test void d07_timedChipsAndBarsPaint() {
 		var r = report();
-		assertEquals("Sprint", r.get("timed_barTitles"));
-		assertEquals("09:30Standup", r.get("timed_chipTitles"));
+		assertBean(r, "timed_barTitles,timed_chipTitles,timed_label,timed_barEventId,timed_barSpan",
+			"Sprint,09:30Standup,09:30,sp,3");
 		assertTrue(String.valueOf(r.get("timed_chipClass")).contains("jc-cal-event--timed"), r.toString());
-		assertEquals("09:30", r.get("timed_label"));
-		assertEquals("sp", r.get("timed_barEventId"));
-		assertEquals("3", r.get("timed_barSpan"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -453,33 +401,28 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void e01_legendToggle_hidesChipsAndSpanningSegments_noRefetch() {
 		var r = report();
-		assertEquals(true, r.get("filter_hasToggles"));
 		// Both chips are all-day on the same day, so the total order falls through to the event id: rc before tc.
-		assertEquals("ReviewChip,TeamChip", r.get("filter_initialChips"));
-		assertEquals("TeamBar", r.get("filter_initialBars"));
-		assertEquals("ReviewChip", r.get("filter_hiddenChips"));      // the team chip is gone
-		assertEquals("", r.get("filter_hiddenBars"));                 // and so is the team spanning bar
-		assertEquals(true, r.get("filter_pressedFalse"));
-		assertEquals(true, r.get("filter_noRefetch"));
+		// filter_initialChips/filter_hiddenChips embed a comma - harmless, see note on b08 above. filter_hiddenBars
+		// is the empty string (and so is the team spanning bar).
+		assertBean(r, "filter_hasToggles,filter_initialChips,filter_initialBars,filter_hiddenChips,filter_hiddenBars,"
+			+ "filter_pressedFalse,filter_noRefetch", "true,ReviewChip,TeamChip,TeamBar,ReviewChip,,true,true");
 	}
 
 	@Test void e02_legendToggle_revealsAgain() {
 		var r = report();
-		assertEquals("ReviewChip,TeamChip", r.get("filter_revealedChips"));
-		assertEquals("TeamBar", r.get("filter_revealedBars"));
-		assertEquals(true, r.get("filter_pressedTrueAgain"));
+		// filter_revealedChips embeds a comma - harmless, see note on b08 above.
+		assertBean(r, "filter_revealedChips,filter_revealedBars,filter_pressedTrueAgain",
+			"ReviewChip,TeamChip,TeamBar,true");
 	}
 
 	@Test void e03_filterResetsOnMonthNavigation() {
 		var r = report();
-		assertEquals("SepTeam", r.get("navReset_painted"));
-		assertEquals("true", r.get("navReset_pressed"));
+		assertBean(r, "navReset_painted,navReset_pressed", "SepTeam,true");
 	}
 
 	@Test void e04_failedNavigationPreservesTheFilter() {
 		var r = report();
-		assertEquals(true, r.get("navFail_error"));
-		assertEquals("false", r.get("navFail_pressed"));
+		assertBean(r, "navFail_error,navFail_pressed", "true,false");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -492,21 +435,12 @@ class CalendarJs_Test extends TestBase {
 
 	@Test void f02_missingSharedStack_failsLoud_noLocalSecondStack() {
 		var r = report();
-		assertEquals(true, r.get("pop_noStackLoud"));
-		assertEquals(true, r.get("pop_noStackNoPopover"));
-		assertEquals(true, r.get("pop_noStackVisibleError"));
+		assertBean(r, "pop_noStackLoud,pop_noStackNoPopover,pop_noStackVisibleError", "true,true,true");
 	}
 
 	@Test void f03_popoverRegistersOnSharedStack_escapePopsAndRestoresFocus() {
 		var r = report();
-		assertEquals(true, r.get("pop_registered"));
-		assertEquals(true, r.get("pop_lightDismiss"));
-		assertEquals(true, r.get("pop_zOrdered"));
-		assertEquals("true", r.get("pop_expanded"));
-		assertEquals("1", r.get("pop_listsHidden"));
-		assertEquals(true, r.get("pop_escapePopped"));
-		assertEquals(true, r.get("pop_detached"));
-		assertEquals(true, r.get("pop_focusRestored"));
-		assertEquals("false", r.get("pop_collapsed"));
+		assertBean(r, "pop_registered,pop_lightDismiss,pop_zOrdered,pop_expanded,pop_listsHidden,pop_escapePopped,"
+			+ "pop_detached,pop_focusRestored,pop_collapsed", "true,true,true,true,1,true,true,true,false");
 	}
 }

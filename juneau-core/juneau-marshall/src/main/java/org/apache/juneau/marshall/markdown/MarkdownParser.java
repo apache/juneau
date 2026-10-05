@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -75,12 +74,11 @@ import org.apache.juneau.marshall.stream.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider, RecordReadable {
-
-	private static final String ARG_copyFrom = "copyFrom";
-	private static final String CONST_null = "*null*";
 
 	/**
 	 * Builder class.
@@ -99,7 +97,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 		 */
 		protected Builder() {
 			consumes("text/markdown,text/x-markdown");
-			nullValue = CONST_null;
+			nullValue = "*null*";
 		}
 
 		/**
@@ -109,7 +107,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullValue = copyFrom.nullValue;
 		}
 
@@ -120,7 +118,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarkdownParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullValue = copyFrom.nullValue;
 		}
 
@@ -134,7 +132,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 		 * @return This object.
 		 */
 		public SELF nullValue(String value) {
-			nullValue = value == null ? CONST_null : value;
+			nullValue = value == null ? "*null*" : value;
 			return self();
 		}
 
@@ -203,7 +201,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 	 */
 	public MarkdownParser(Builder<?> builder) {
 		super(builder);
-		nullValue = or(builder.nullValue, CONST_null);
+		nullValue = or(builder.nullValue, "*null*");
 	}
 
 	/**

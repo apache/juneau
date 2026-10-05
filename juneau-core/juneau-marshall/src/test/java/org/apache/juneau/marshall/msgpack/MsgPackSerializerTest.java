@@ -225,7 +225,7 @@ class MsgPackSerializerTest extends TestBase {
 	}
 
 	//====================================================================================================
-	// BinaryFormat honored for byte[] output (TODO-353)
+	// BinaryFormat honored for byte[] output
 	//====================================================================================================
 	@Test void b01_spacedHexByteArrayPropertyHonorsBinaryFormat() throws Exception {
 		var bean = new BeanWithBytes();

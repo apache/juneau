@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
@@ -66,7 +65,7 @@ public class HttpPartBean implements HttpPart {
 	 * @param value The part value. May be <jk>null</jk>.
 	 */
 	protected HttpPartBean(String name, String value) {
-		this.name = assertArgNotNull("name", name);
+		this.name = reqnn("name", name);
 		this.valueSupplier = () -> value;
 	}
 
@@ -77,8 +76,8 @@ public class HttpPartBean implements HttpPart {
 	 * @param valueSupplier Supplier that provides the value at request time. Must not be <jk>null</jk>.
 	 */
 	protected HttpPartBean(String name, Supplier<String> valueSupplier) {
-		this.name = assertArgNotNull("name", name);
-		this.valueSupplier = assertArgNotNull("valueSupplier", valueSupplier);
+		this.name = reqnn("name", name);
+		this.valueSupplier = reqnn("valueSupplier", valueSupplier);
 	}
 
 	/**

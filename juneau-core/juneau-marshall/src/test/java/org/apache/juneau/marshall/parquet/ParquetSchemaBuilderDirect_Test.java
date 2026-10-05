@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -225,6 +226,6 @@ class ParquetSchemaBuilderDirect_Test extends TestBase {
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 1, false);
 		var schema = b.buildSchema(MC.getClassMeta(SelfRefBean.class), null);
 		// Schema should include the top-level bean but the recursive "child" property should be dropped
-		assertTrue(schema.stream().anyMatch(e -> "name".equals(e.name)));
+		assertTrue(schema.stream().anyMatch(e -> eq(e.name, "name")));
 	}
 }

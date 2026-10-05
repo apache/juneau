@@ -52,6 +52,9 @@ import java.util.stream.*;
  * This class is thread-safe. The cache uses {@link ConcurrentHashMap} for safe concurrent access.
  * </p>
  */
+@SuppressWarnings({
+	"unchecked" // Cast is safe: type parameter is verified at construction.
+})
 public abstract class CachingConverter implements Converter {
 
 	// Sentinel stored in the cache when findConversion() returns null.
@@ -74,9 +77,6 @@ public abstract class CachingConverter implements Converter {
 	 * @param <T> The target type.
 	 * @return The appropriate null default.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	static <T> T nullDefault(Class<T> type, Class<?>... args) {
 		if (type == Optional.class) {
 			if (args.length > 0)
@@ -103,9 +103,6 @@ public abstract class CachingConverter implements Converter {
 	 * @param <T> The target type.
 	 * @return The JVM zero/false default, or <jk>null</jk> if {@code type} is not a primitive.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	static <T> T primitiveDefault(Class<T> type) {
 		if (type == Integer.TYPE)   return (T) Integer.valueOf(0);
 		if (type == Long.TYPE)      return (T) Long.valueOf(0L);
@@ -143,9 +140,6 @@ public abstract class CachingConverter implements Converter {
 	 */
 	protected abstract <I,O> Conversion<I,O> findConversion(Class<I> inType, Class<O> outType);
 
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	private <I,O> Conversion<I,O> lookupConversion(Class<I> inType, Class<O> outType) {
 		var fn = conversions
 			.computeIfAbsent(inType, k -> new ConcurrentHashMap<>())
@@ -178,9 +172,6 @@ public abstract class CachingConverter implements Converter {
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	public <T> T to(Object o, Class<T> type) {
 		if (o == null)
 			return type.isPrimitive() ? primitiveDefault(type) : null;
@@ -214,9 +205,6 @@ public abstract class CachingConverter implements Converter {
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	public <T> T to(Object o, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class<?>) mainType);
 		var argClasses = Stream.of(args)
@@ -248,9 +236,6 @@ public abstract class CachingConverter implements Converter {
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
 		if (o == null)
 			return nullDefault(type);
@@ -280,9 +265,6 @@ public abstract class CachingConverter implements Converter {
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: type parameter is verified at construction.
-	})
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class<?>) mainType);
 		var argClasses = Stream.of(args)

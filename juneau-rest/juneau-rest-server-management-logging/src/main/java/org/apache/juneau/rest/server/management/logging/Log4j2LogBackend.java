@@ -55,11 +55,11 @@ import org.apache.logging.log4j.core.config.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // The LoggerContext (AutoCloseable) is the shared Log4j2 context owned by LogManager, not by this backend
+})
 public class Log4j2LogBackend implements LogBackend {
 
-	@SuppressWarnings({
-		"resource" // Shared Log4j2 LoggerContext owned by LogManager/caller - not closed here.
-	})
 	private final LoggerContext context;
 
 	/**
@@ -74,9 +74,6 @@ public class Log4j2LogBackend implements LogBackend {
 	 *
 	 * @param context The Log4j2 logger context. Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // The LoggerContext is externally owned (by Log4j2 LogManager) and must not be closed by this backend; the requireNonNull assignment on line 78 is a Closeable value ECJ flags.
-	})
 	public Log4j2LogBackend(LoggerContext context) {
 		this.context = Objects.requireNonNull(context, "context");
 	}
@@ -111,7 +108,7 @@ public class Log4j2LogBackend implements LogBackend {
 
 	@Override /* LogBackend */
 	public void setLevel(String name, String level) {
-		var target = (name == null || name.equals("ROOT")) ? LogManager.ROOT_LOGGER_NAME : name;
+		var target = (name == null || eq(name, "ROOT")) ? LogManager.ROOT_LOGGER_NAME : name;
 		// Null/blank clears the override back to the parent's level (Configurator treats null as "remove override").
 		Configurator.setLevel(target, level == null || level.isBlank() ? null : parse(level.trim()));
 	}
@@ -126,6 +123,6 @@ public class Log4j2LogBackend implements LogBackend {
 	}
 
 	private static String resolveName(String name) {
-		return (name == null || name.equals("ROOT")) ? "" : name;
+		return (name == null || eq(name, "ROOT")) ? "" : name;
 	}
 }

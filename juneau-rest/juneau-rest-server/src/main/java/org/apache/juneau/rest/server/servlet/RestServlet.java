@@ -65,15 +65,14 @@ import jakarta.servlet.http.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_servletInitError)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_servletInitError)
+	"java:S2654", // destroy(), init() and setContext() are synchronized to guard one-time lifecycle transitions of the context/initException references, which are also read lock-free on the request path
+	"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
 })
 public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
-
-	// Error message constants
-	private static final String MSG_servletInitError = "Servlet init error on class '%s'";
 
 	private final AtomicReference<RestContext> context = new AtomicReference<>();
 	private final AtomicReference<Exception> initException = new AtomicReference<>();
@@ -149,9 +148,6 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	@Override /* Overridden from GenericServlet */
-	@SuppressWarnings({
-		"java:S2654" // Coordinates with the synchronized init()/setContext() lifecycle methods so destroy() cannot interleave with an in-flight (re-)initialization of the shared 'context' field; lifecycle-only, not on the request-serving hot path.
-	})
 	public synchronized void destroy() {
 		var c = context.getAndSet(null);
 		if (nn(c))
@@ -175,9 +171,6 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The context information on this servlet.
 	 */
-	@SuppressWarnings({
-		"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
-	})
 	public RestContext getContext() {
 		var rc = context.get();
 		if (rc == null)
@@ -191,9 +184,6 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
-	@SuppressWarnings({
-		"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
-	})
 	public String getPath() {
 		var context2 = this.context.get();
 		if (nn(context2))
@@ -275,9 +265,6 @@ public abstract class RestServlet extends HttpServlet {
 	public RestResponse getResponse() { return getContext().getLocalSession().getOpSession().getResponse(); }
 
 	@Override /* Overridden from Servlet */
-	@SuppressWarnings({
-		"java:S2654" // Guards the non-atomic check-then-act one-time initialization (construct + postInit()/postInitChildFirst() side effects) of the shared 'context' field against concurrent re-entry; lifecycle-only, not on the request-serving hot path.
-	})
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (nn(context.get()))
@@ -288,14 +275,14 @@ public abstract class RestServlet extends HttpServlet {
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
 			initException.set(e);
-			log(SEVERE, e, MSG_servletInitError, cn(this));
+			log(SEVERE, e, "Servlet init error on class '%s'", cn(this));
 			throw e;
 		} catch (BasicHttpException e) {
 			initException.set(e);
-			log(SEVERE, e, MSG_servletInitError, cn(this));
+			log(SEVERE, e, "Servlet init error on class '%s'", cn(this));
 		} catch (Exception e) {
 			initException.set(new InternalServerError(e));
-			log(SEVERE, e, MSG_servletInitError, cn(this));
+			log(SEVERE, e, "Servlet init error on class '%s'", cn(this));
 		}
 	}
 
@@ -379,9 +366,6 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param context Sets the context object on this servlet.  Must not be <jk>null</jk>.
 	 * @throws ServletException If error occurred during initialization.
 	 */
-	@SuppressWarnings({
-		"java:S2654" // Guards the non-atomic check-then-act one-time population of the shared 'context' field (super.init() + context.set()) against concurrent re-entry; lifecycle-only, not on the request-serving hot path.
-	})
 	protected synchronized void setContext(RestContext context) throws ServletException {
 		if (this.context.get() == null) {
 			super.init(context.getBuilder());

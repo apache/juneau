@@ -45,10 +45,10 @@ import jakarta.servlet.http.*;
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings({
-	"serial", // Serialization not relevant
-	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S1186", // Empty method body intentional for REST/proxy interface testing
-	"java:S8692" // Diagnostic log lines intentionally record the real wall-clock time of each request.
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S8692", // Diagnostic log lines intentionally record the real wall-clock time of each request.
+	"serial" // Serialization not relevant
 })
 public class ThirdPartyProxyResource extends BasicRestServlet {
 

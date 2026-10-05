@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -97,17 +96,9 @@ import java.util.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FilteredMap<K,V> extends AbstractMap<K,V> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_filter = "filter";
-	private static final String ARG_keyType = "keyType";
-	private static final String ARG_map = "map";
-	private static final String ARG_pairs = "pairs";
-	private static final String ARG_value = "value";
-	private static final String ARG_valueType = "valueType";
 
 	/**
 	 * Builder for creating {@link FilteredMap} instances.
@@ -167,7 +158,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> filter(BiPredicate<K,V> value) {
-			filter = filter.and(assertArgNotNull(ARG_value, value));
+			filter = filter.and(reqnn("value", value));
 			return this;
 		}
 
@@ -197,7 +188,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> inner(Map<K,V> value) {
-			inner = assertArgNotNull(ARG_value, value);
+			inner = reqnn("value", value);
 			return this;
 		}
 
@@ -308,8 +299,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @return A new builder.
 	 */
 	public static <K,V> Builder<K,V> create(Class<K> keyType, Class<V> valueType) {
-		assertArgNotNull(ARG_keyType, keyType);
-		assertArgNotNull(ARG_valueType, valueType);
+		reqnn("keyType", keyType);
+		reqnn("valueType", valueType);
 		var builder = new Builder<K,V>();
 		builder.keyType = keyType;
 		builder.valueType = valueType;
@@ -368,10 +359,10 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @param valueFunction The value conversion function, or <jk>null</jk> if not specified.
 	 */
 	protected FilteredMap(BiPredicate<K,V> filter, Map<K,V> map, Class<K> keyType, Class<V> valueType, Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
-		this.filter = assertArgNotNull(ARG_filter, filter);
-		this.map = assertArgNotNull(ARG_map, map);
-		this.keyType = assertArgNotNull(ARG_keyType, keyType);
-		this.valueType = assertArgNotNull(ARG_valueType, valueType);
+		this.filter = reqnn("filter", filter);
+		this.map = reqnn("map", map);
+		this.keyType = reqnn("keyType", keyType);
+		this.valueType = reqnn("valueType", valueType);
 		this.keyFunction = keyFunction;
 		this.valueFunction = valueFunction;
 	}
@@ -657,7 +648,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @throws IllegalArgumentException If an odd number of parameters is provided.
 	 */
 	public FilteredMap<K,V> addPairs(Object...pairs) {
-		assertArgNotNull(ARG_pairs, pairs);
+		reqnn("pairs", pairs);
 		if (pairs.length % 2 != 0)
 			throw iaex("Odd number of parameters passed into addPairs()");
 		for (var i = 0; i < pairs.length; i += 2)

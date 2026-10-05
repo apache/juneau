@@ -79,24 +79,10 @@ import org.apache.juneau.marshall.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
-
-	// Property name constants
-	private static final String PROP_aside = "aside";
-	private static final String PROP_asideFloat = "asideFloat";
-	private static final String PROP_footer = "footer";
-	private static final String PROP_head = "head";
-	private static final String PROP_header = "header";
-	private static final String PROP_nav = "nav";
-	private static final String PROP_navlinks = "navlinks";
-	private static final String PROP_noResultsMessage = "noResultsMessage";
-	private static final String PROP_nowrap = "nowrap";
-	private static final String PROP_style = "style";
-	private static final String PROP_stylesheet = "stylesheet";
-	private static final String PROP_template = "template";
-	private static final String PROP_widgets = "widgets";
 
 	/**
 	 * Builder class.
@@ -837,10 +823,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static List<String> merge(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
 			for (var s : newValues) {
-				if ("NONE".equals(s)) {
+				if (eq(s, "NONE")) {
 					if (nn(old))
 						old.clear();
-				} else if ("INHERIT".equals(s)) {
+				} else if (eq(s, "INHERIT")) {
 					if (nn(old))
 						x.addAll(old);
 				} else {
@@ -856,10 +842,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
 			for (var s : newValues) {
-				if ("NONE".equals(s)) {
+				if (eq(s, "NONE")) {
 					if (nn(old))
 						old.clear();
-				} else if ("INHERIT".equals(s)) {
+				} else if (eq(s, "INHERIT")) {
 					if (nn(old))
 						x.addAll(old);
 				} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
@@ -1144,18 +1130,18 @@ final AsideFloat asideFloat;
 	@Override /* Overridden from HtmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_aside, aside)
-			.a(PROP_asideFloat, asideFloat)
-			.a(PROP_footer, footer)
-			.a(PROP_head, head)
-			.a(PROP_header, header)
-			.a(PROP_nav, nav)
-			.a(PROP_navlinks, navlinks)
-			.a(PROP_noResultsMessage, noResultsMessage)
-			.a(PROP_nowrap, nowrap)
-			.a(PROP_style, style)
-			.a(PROP_stylesheet, stylesheet)
-			.a(PROP_template, template)
-			.a(PROP_widgets, widgets);
+			.a("aside", aside)
+			.a("asideFloat", asideFloat)
+			.a("footer", footer)
+			.a("head", head)
+			.a("header", header)
+			.a("nav", nav)
+			.a("navlinks", navlinks)
+			.a("noResultsMessage", noResultsMessage)
+			.a("nowrap", nowrap)
+			.a("style", style)
+			.a("stylesheet", stylesheet)
+			.a("template", template)
+			.a("widgets", widgets);
 	}
 }

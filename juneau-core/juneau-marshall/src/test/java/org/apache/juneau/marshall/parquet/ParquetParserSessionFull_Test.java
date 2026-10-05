@@ -36,9 +36,9 @@ import org.junit.jupiter.api.*;
  * raw-byte[]/UUID/enum columns, native logical types (INT96/DECIMAL/DATE/TIME), and multi-page list columns.
  */
 @SuppressWarnings({
-	"unchecked",   // Parser returns raw types; explicit casts required for typed assertions
-	"java:S5961",  // High assertion count is acceptable in comprehensive data-driven test methods.
-	"java:S1192"   // Repeated schema-key string literals mirror production constants.
+	"java:S1192", // Repeated schema-key string literals mirror production constants.
+	"java:S5961", // High assertion count is acceptable in comprehensive data-driven test methods.
+	"unchecked" // Parser returns raw types; explicit casts required for typed assertions
 })
 class ParquetParserSessionFull_Test extends TestBase {
 

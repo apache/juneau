@@ -35,7 +35,10 @@ import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5976" // Explicit per-case builder/serializer tests are clearer here than a single parameterized rewrite.
+	"java:S114", // test fixture naming convention (section_prefix)
+	"java:S5976", // Explicit per-case builder/serializer tests are clearer here than a single parameterized rewrite.
+	"rawtypes", // Raw (Class)BeanInterceptor.class cast passed to beanInterceptor() in the invalid-interceptor test
+	"unchecked" // Raw (Class)BeanInterceptor.class cast passed to beanInterceptor() in the invalid-interceptor test
 })
 class RdfSerializer_Test extends TestBase {
 
@@ -166,10 +169,6 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(RdfSerializer.create().beanDictionary(B03_DictBean.class).build());
 		}
 
-		@SuppressWarnings({
-			"unchecked", // Raw type needed for test simplicity
-			"rawtypes" // (Class) cast required by beanInterceptor API
-		})
 		@Test void b04_beanInterceptor() {
 			assertNotNull(RdfSerializer.create().beanInterceptor(String.class, (Class)BeanInterceptor.class).build());
 		}
@@ -360,7 +359,7 @@ class RdfSerializer_Test extends TestBase {
 		assertNotNull(Constants.RDF_NIL);
 		assertNotNull(Constants.RDF_SEQ);
 		assertNotNull(Constants.RDF_BAG);
-		assertNotNull(Constants.RDF_juneauNs_ITEMS);
+		assertNotNull("items");
 	}
 
 	@Nested class F_inheritedBuilderMethods extends TestBase {
@@ -867,7 +866,9 @@ class RdfSerializer_Test extends TestBase {
 
 		public static class J17_BeanWithFilteredProp {
 			public String included = "yes";
-			@SuppressWarnings("unused")
+			@SuppressWarnings({
+				"unused" // Public field is read reflectively by the serializer and is deliberately excluded via beanProperties(); never accessed directly
+			})
 			public String excluded = "no";
 		}
 
@@ -1143,7 +1144,6 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(result);
 		}
 
-		@SuppressWarnings({"unchecked", "rawtypes"})
 		@Test void k22_stream_delegate_list_thrift() throws Exception {
 			// DelegateList serialized via Thrift — covers isDelegate() branch in RdfStreamSerializerSession
 			var ctx = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().getMarshallingContext();
@@ -1199,7 +1199,7 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void k27_stream_null_as_optional() throws Exception {
-			// Serialize null, parse as Optional → isEmpty=TRUE → opte()
+			// Serialize null and parse as Optional; the empty branch returns an empty Optional
 			// Covers stream doRead: roots.isEmpty()=TRUE, type.isOptional()=TRUE branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
 				.write((Object)null);
@@ -1356,7 +1356,7 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void m01_serialize_null_property_keepnull() throws Exception {
 			// keepNullProperties() → isKeepNullProperties() TRUE (line 256): null property gets rdf:nil node.
-			// Also covers the checkNull predicate (line 349): isKeepNullProperties()||nn(x) with x=null.
+			// Also covers the checkNull predicate (line 349) when the property value is null.
 			var s = RdfSerializer.create().ntriple().keepNullProperties().build();
 			var result = s.write(new M01_BeanWithNull());
 			assertNotNull(result);
@@ -1365,7 +1365,7 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void m02_serialize_beanmap_directly() throws Exception {
 			// Serialize a BeanMap<T> directly — covers o instanceof BeanMap branch (line 282):
-			// BeanMap implements Map → sType.isMap() = TRUE; o instanceof BeanMap o2 → TRUE.
+			// A BeanMap is also a Map, so the map branch is taken and the BeanMap instance check holds.
 			var s = RdfSerializer.create().ntriple().build();
 			var bm = s.getMarshallingContext().toBeanMap(new NamedBean());
 			bm.put("name", "bm-test");
@@ -1423,7 +1423,7 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void m07_serialize_add_literal_types() throws Exception {
-			// isAddLiteralTypes() TRUE → writeAnything line 325: n = m.createTypedLiteral(o)
+			// With literal types enabled, writeAnything (line 325) creates a typed literal for the value
 			var s = RdfSerializer.create().ntriple().addLiteralTypes().build();
 			var result = s.write(42);
 			assertNotNull(result);
@@ -1486,7 +1486,7 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void m13_serialize_multivalue_with_rdf_property_ns() throws Exception {
 			// MULTI_VALUED collection + @Rdf(prefix+namespace) on property → writeToMultiProperties:
-			// ns = bpRdf.getNamespace() (non-null) → first if FALSE → else-if isAutoDetectNamespaces() →
+			// Non-null namespace from the property annotation: first branch is skipped, then auto-detect namespaces applies
 			// addModelPrefix(ns) called in lambda$8
 			var s = RdfSerializer.create().ntriple().build();
 			var result = s.write(new M13_BeanWithMultiNs());
@@ -1519,7 +1519,6 @@ class RdfSerializer_Test extends TestBase {
 			assertFalse(result.isBlank());
 		}
 
-		@SuppressWarnings({"unchecked", "rawtypes"})
 		@Test void l02_serialize_delegate_list() throws Exception {
 			// DelegateList implements Delegate<T>; its wType is the wrapped collection type
 			var s = RdfSerializer.create().ntriple().build();

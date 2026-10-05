@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -87,13 +86,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class LocalDir {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_clazz = "clazz";
-	private static final String ARG_path = "path";
 
 	/**
 	 * Validates that the specified classpath resource exists and is a file.
@@ -148,8 +143,8 @@ public class LocalDir {
 	 *                  </ul>
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
-		this.clazz = assertArgNotNull(ARG_clazz, clazz);
-		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
+		this.clazz = reqnn("clazz", clazz);
+		this.clazzPath = eq(clazzPath, "/") ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = h(clazz, this.clazzPath);
 	}
@@ -178,7 +173,7 @@ public class LocalDir {
 	public LocalDir(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = assertArgNotNull(ARG_path, path);
+		this.path = reqnn("path", path);
 		this.hashCode = path.hashCode();
 	}
 
@@ -250,7 +245,7 @@ public class LocalDir {
 		"java:S3776" // Cognitive complexity acceptable for local file path resolution logic
 	})
 	public LocalFile resolve(String path) {
-		assertArgNotNull(ARG_path, path);
+		reqnn("path", path);
 		if (nn(clazz)) {
 			if (path.contains(".."))
 				throw iaex("Path escapes configured root directory.");
@@ -258,7 +253,7 @@ public class LocalDir {
 			if (clazzPath == null) {
 				// Relative to class package - keep path relative
 				p = path;
-			} else if ("/".equals(clazzPath)) {
+			} else if (eq(clazzPath, "/")) {
 				// Root - make path absolute
 				p = path.startsWith("/") ? path : "/" + path;
 			} else if (clazzPath.startsWith("/")) {

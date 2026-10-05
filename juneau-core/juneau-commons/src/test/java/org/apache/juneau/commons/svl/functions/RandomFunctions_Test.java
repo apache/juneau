@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -83,7 +84,7 @@ class RandomFunctions_Test extends TestBase {
 		assertFalse(seen.isEmpty());
 		assertTrue(seen.size() <= 3);
 		for (var s : seen)
-			assertTrue(s.equals("red") || s.equals("green") || s.equals("blue"));
+			assertTrue(eqa(s, "red", "green", "blue"));
 	}
 
 	@Test void a09_uuid_format() {

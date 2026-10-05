@@ -250,28 +250,6 @@ public class DirectoryResource extends BasicRestServlet {
 	static class RedirectToRoot extends SeeOtherRoot {}
 
 	private static final long serialVersionUID = 1L;
-	private static final String PREFIX = "DirectoryResource.";
-
-	/**
-	 * Root directory.
-	 */
-	public static final String DIRECTORY_RESOURCE_rootDir = PREFIX + "rootDir.s";
-
-	/**
-	 * Allow view and downloads on files.
-	 */
-	public static final String DIRECTORY_RESOURCE_allowViews = PREFIX + "allowViews.b";
-
-	/**
-	 * Allow deletes on files.
-	 */
-	public static final String DIRECTORY_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
-
-	/**
-	 * Allow uploads on files.
-	 */
-	public static final String DIRECTORY_RESOURCE_allowUploads = PREFIX + "allowUploads.b";
-
 	private final File rootDir;     // The root directory
 
 	// Properties enabled through servlet init parameters
@@ -285,10 +263,11 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param c The microservice configuration.
 	 */
 	public DirectoryResource(Config c) {
-		rootDir = new File(c.get(DIRECTORY_RESOURCE_rootDir).orElse("."));
-		allowViews = c.get(DIRECTORY_RESOURCE_allowViews).asBoolean().orElse(false);
-		allowDeletes = c.get(DIRECTORY_RESOURCE_allowDeletes).asBoolean().orElse(false);
-		allowUploads = c.get(DIRECTORY_RESOURCE_allowUploads).asBoolean().orElse(false);
+		// Q:  Can you concatenate these strings?
+		rootDir = new File(c.get("DirectoryResource." + "rootDir.s").orElse("."));
+		allowViews = c.get("DirectoryResource." + "allowViews.b").asBoolean().orElse(false);
+		allowDeletes = c.get("DirectoryResource." + "allowDeletes.b").asBoolean().orElse(false);
+		allowUploads = c.get("DirectoryResource." + "allowUploads.b").asBoolean().orElse(false);
 	}
 	/**
 	 * Deletes a file on the file system.

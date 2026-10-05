@@ -43,7 +43,8 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HtmlStrippedDocSerializer hierarchy
+	"java:S110", // Inheritance depth acceptable for HtmlStrippedDocSerializer hierarchy
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
 

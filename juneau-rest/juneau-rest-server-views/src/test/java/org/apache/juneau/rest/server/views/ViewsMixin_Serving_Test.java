@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
@@ -36,9 +37,9 @@ import org.junit.jupiter.api.*;
  * cache-buster and the {@code CONTRACT_VERSION} handshake constant are asserted directly.
  */
 @SuppressWarnings({
-	"resource", // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 	"deprecation", // Section b) deliberately exercises the deprecated compatibility mounts for the three relocated widget assets.
-	"java:S6126" // Assertion messages concatenate a fixture fragment with a diagnostic; a text block would not improve them.
+	"java:S6126", // Assertion messages concatenate a fixture fragment with a diagnostic; a text block would not improve them.
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class ViewsMixin_Serving_Test extends TestBase {
 
@@ -57,6 +58,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
 
+
+	@Rest(mixins={ViewsMixin.class, DataTablesMixin.class})
+	public static class WithDataTablesMixin extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
 
 	private static final MockRestClient cNoMixin = MockRestClient.buildLax(NoMixin.class);
 	private static final MockRestClient cWithMixin = MockRestClient.buildLax(WithMixin.class);
@@ -83,11 +90,22 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.REGIONS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.HELPERS_JS_PATH).run().assertStatus(404);
-		cNoMixin.get(ViewsMixin.PAGE_CARDS_JS_PATH).run().assertStatus(404);
 	}
 
 	@Test void h01_hostWithoutMixin_iconsJsRouteIs404() throws Exception {
 		cNoMixin.get(ViewsMixin.ICONS_JS_PATH).run().assertStatus(404);
+	}
+
+	@Test void h01a_hostWithoutMixin_searchJsRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.SEARCH_JS_PATH).run().assertStatus(404);
+	}
+
+	@Test void h01a2_hostWithoutMixin_pageStateJsRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.PAGESTATE_JS_PATH).run().assertStatus(404);
+	}
+
+	@Test void h01a3_hostWithoutMixin_urlStateJsRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.URLSTATE_JS_PATH).run().assertStatus(404);
 	}
 
 	@Test void h01b_hostWithoutMixin_symbolsSvgRouteIs404() throws Exception {
@@ -135,6 +153,30 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertContent().asString().isContains("juneau-renders.js");
 	}
 
+	@Test void b04_searchJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.SEARCH_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-search.js");
+	}
+
+	@Test void b04a_pageStateJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.PAGESTATE_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-pagestate.js");
+	}
+
+	@Test void b04b_urlStateJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.URLSTATE_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-urlstate.js");
+	}
+
 	@Test void b12_regionsJs_served() throws Exception {
 		cWithMixin.get(ViewsMixin.REGIONS_JS_PATH).run()
 			.assertStatus(200)
@@ -149,20 +191,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("text/javascript")
 			.assertHeader("Cache-Control").isContains("max-age")
 			.assertContent().asString().isContains("juneau-helpers.js");
-	}
-
-	@Test void b14_pageCardsJs_served() throws Exception {
-		var body = cWithMixin.get(ViewsMixin.PAGE_CARDS_JS_PATH).run()
-			.assertStatus(200)
-			.assertHeader("Content-Type").isContains("text/javascript")
-			.assertHeader("Cache-Control").isContains("max-age")
-			.getContent().asString();
-		// The served runtime IS the sidecar scanner: it defines JuneauPage, reads script.juneau-card-sidecar
-		// envelopes, hands slots to JuneauViews.regions.mount, and carries the sidecar contract-version handshake.
-		assertTrue(body.contains("JuneauPage"), body);
-		assertTrue(body.contains("juneau-card-sidecar"), body);
-		assertTrue(body.contains("regions.mount"), body);
-		assertTrue(body.contains("JUNEAU_PAGE_CARDS_CONTRACT_VERSION"), body);
 	}
 
 	@Test void b04_viewsCss_served() throws Exception {
@@ -195,7 +223,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * The three widget-owned runtime assets have now been <b>relocated</b> into {@code juneau-rest-server-widgets},
+	 * The two widget-owned runtime assets have now been <b>relocated</b> into {@code juneau-rest-server-widgets},
 	 * beside the bean contracts that drive them, so ownership of the "who ships these bytes" assertion moved with
 	 * them to {@code WidgetsMixin_Serving_Test}.  What this module still owes is the compatibility promise: an
 	 * application composing only this mixin keeps getting a {@code 200} with the right content type and caching
@@ -206,8 +234,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void b08_relocatedWidgetAssets_stillServeFromTheDeprecatedViewsMount() throws Exception {
 		for (var e : java.util.Map.of(
 				ViewsMixin.CALENDAR_JS_PATH, "/org/apache/juneau/widgets/juneau-calendar.js",
-				ViewsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css",
-				ViewsMixin.CHROME_JS_PATH, "/org/apache/juneau/widgets/juneau-chrome.js").entrySet()) {
+				ViewsMixin.CALENDAR_CSS_PATH, "/org/apache/juneau/widgets/juneau-calendar.css").entrySet()) {
 			var path = e.getKey();
 			var served = cWithMixin.get(path).run()
 				.assertStatus(200)
@@ -222,18 +249,16 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void b09_relocatedWidgetAssets_are404WithoutThisMixin() throws Exception {
 		cNoMixin.get(ViewsMixin.CALENDAR_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.CALENDAR_CSS_PATH).run().assertStatus(404);
-		cNoMixin.get(ViewsMixin.CHROME_JS_PATH).run().assertStatus(404);
 	}
 
 	/**
-	 * The relocated three hash and version through the <b>widget</b> module's asset cache, so this mixin's deprecated
+	 * The relocated two hash and version through the <b>widget</b> module's asset cache, so this mixin's deprecated
 	 * URL for one of them is character-identical to {@code WidgetsMixin}'s URL for it.  Two differently-busted URLs
 	 * for one body would make a page composing both mixins cache the same script twice.
 	 */
 	@Test void b10_relocatedWidgetAssets_carryTheSameCacheBusterAsTheWidgetMixin() throws Exception {
 		for (var path : new String[]{
-				ViewsMixin.CALENDAR_JS_PATH, ViewsMixin.CALENDAR_CSS_PATH,
-				ViewsMixin.CHROME_JS_PATH}) {
+				ViewsMixin.CALENDAR_JS_PATH, ViewsMixin.CALENDAR_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
 			var url = ViewsMixin.viewAssetUrl(path);
@@ -248,12 +273,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * that the new coordinates resolve to exactly one classpath entry.
 	 */
 	@Test void b11_relocatedWidgetAssets_areGoneFromThisModulesResources() throws Exception {
-		for (var name : new String[]{"juneau-calendar.js", "juneau-calendar.css", "juneau-chrome.js"}) {
+		for (var name : new String[]{"juneau-calendar.js", "juneau-calendar.css"}) {
 			assertNull(ViewsMixin.class.getResourceAsStream("/org/apache/juneau/views/" + name),
 				() -> name + ": still present at the old views coordinates - the move left a copy behind");
 			var found = java.util.Collections.list(ViewsMixin.class.getClassLoader().getResources("org/apache/juneau/widgets/" + name));
 			assertEquals(1, found.size(), () -> name + ": expected exactly one classpath entry, found " + found);
 		}
+	}
+
+	/** The standalone chrome and page-cards scripts were deleted in C1; even with this mixin composed, their old URLs are 404. */
+	@Test void b12_retiredScripts_are404() throws Exception {
+		cWithMixin.get("/juneau-chrome.js").run().assertStatus(404);
+		cWithMixin.get("/juneau-page-cards.js").run().assertStatus(404);
 	}
 
 	private static byte[] widgetClasspathBytes(String resource) throws Exception {
@@ -276,7 +307,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.PAGE_CARDS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -299,9 +330,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
 		for (var path : new String[]{
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
-				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH,
+				ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
 				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
-				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.PAGE_CARDS_JS_PATH,
+				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH,
 				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -310,12 +342,29 @@ class ViewsMixin_Serving_Test extends TestBase {
 		}
 	}
 
+	/**
+	 * {@link ViewsMixin#DATATABLES_JS_PATH} is named here but served by {@link DataTablesMixin}: its URL is busted
+	 * with the datatables module's version and the hash of the bytes that mixin serves, and this mixin alone does
+	 * not mount it (a second mount of the same path would fail route registration).  Because of that, the console
+	 * {@code "views"} pack emits the glue only for a page with a server-mode table card; only such hosts need
+	 * {@code DataTablesMixin} (see {@code PageDirective_Test#a05_*}).
+	 */
+	@Test void c05_viewAssetUrl_datatablesGlue_bustsDataTablesMixinBytes_notServedHere() throws Exception {
+		var served = MockRestClient.buildLax(WithDataTablesMixin.class).get(DataTablesMixin.GLUE_PATH).run()
+			.assertStatus(200).getContent().asBytes();
+		var v = DataTablesMixin.class.getPackage().getImplementationVersion();
+		assertEquals(DataTablesMixin.GLUE_PATH, ViewsMixin.DATATABLES_JS_PATH);
+		assertEquals("servlet:" + DataTablesMixin.GLUE_PATH + "?v=" + (v == null ? "dev" : v) + "-" + ChecksumUtils.hash8(served),
+			ViewsMixin.viewAssetUrl(ViewsMixin.DATATABLES_JS_PATH));
+		cWithMixin.get(ViewsMixin.DATATABLES_JS_PATH).run().assertStatus(404);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// d) Contract-version handshake constant
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_contractVersion_isFrozenFour() {
-		assertEquals("4", ViewsMixin.CONTRACT_VERSION);
+	@Test void d01_contractVersion_isFrozenFive() {
+		assertEquals("5", ViewsMixin.CONTRACT_VERSION);
 	}
 
 	@Test void d02_viewsJs_bakesInContractVersionHandshake() throws Exception {
@@ -471,7 +520,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var fnBody = functionBody(body, "function buildRibbon(");
 		assertTrue(fnBody.contains("function place("), fnBody);
 		assertTrue(fnBody.contains("juneau-view-ribbon-group"), fnBody);
-		// Ungrouped icon buttons (export, columnSearchToggle, etc.) share one synthetic cluster so they render as
+		// Ungrouped icon buttons (export, collapseAll, etc.) share one synthetic cluster so they render as
 		// a connected ribbon rather than orphan glyphs.  refresh is excluded from that cluster by default - it is
 		// normalized into its own trailing group instead (see normalizeRibbon) - unless it declares an explicit
 		// .group() of its own, in which case it joins that group like any other action.
@@ -484,24 +533,15 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Root-cause regression for the broken columnSearchToggle button (control-row layout item 4): the button's
-	 * click handler previously flipped `ctx.columnSearchOn` and invoked `ctx.onColumnSearchToggle` if present, but
-	 * NOTHING in juneau-views.js ever assigned that callback (grep-confirmed absent before this fix) - so toggling
-	 * silently did nothing, and the button never reflected state via `aria-pressed` either (unlike `optionToggle`'s
-	 * button, which already did). Asserts the ribbon-side half of the fix: the button's `aria-pressed` is now set
-	 * from `toggleColumnSearch(...)`'s return value, both initially and on every click.
+	 * The legacy {@code columnSearchToggle} ribbon type (and its hidden per-column search row) is gone, superseded by
+	 * the per-column header search icon + popover (WORK-J0547): neither the ribbon runtime nor the views runtime may
+	 * ship the type, its toggle function or its icon-map entry any more.
 	 */
-	@Test void f05_ribbonJs_columnSearchToggleButtonReflectsAriaPressed() throws Exception {
+	@Test void f05_ribbonJs_noLongerShipsTheLegacyColumnSearchToggle() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
-		var branchStart = body.indexOf("a.type === \"columnSearchToggle\"");
-		assertTrue(branchStart >= 0, () -> "columnSearchToggle branch not found:\n" + body);
-		var branchEnd = body.indexOf("if (a.type ===", branchStart + 1);
-		var branch = body.substring(branchStart, branchEnd < 0 ? body.length() : branchEnd);
-		assertTrue(branch.contains("csBtn.setAttribute(\"aria-pressed\""), branch);
-		assertTrue(branch.contains("toggleColumnSearch(viewDef, ctx)"), branch);
-
-		var fnBody = functionBody(body, "function toggleColumnSearch(");
-		assertTrue(fnBody.contains("return ctx.columnSearchOn;"), fnBody);
+		assertFalse(body.contains("columnSearchToggle"), body);
+		assertFalse(body.contains("toggleColumnSearch"), body);
+		assertFalse(body.contains("manage_search"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -877,13 +917,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(twoColumn >= 0 && twoColumn < at, body);
 	}
 
-	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {
+	@Test void o03_viewsCss_noLongerShipsTheLegacyColumnSearchRow() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-columnsearch-row > th {"), body);
-		assertTrue(body.contains(".juneau-view-columnsearch-input {"), body);
-		var start = body.indexOf(".juneau-view-columnsearch-input {");
-		var end = body.indexOf("}", start);
-		assertTrue(body.substring(start, end).contains("border: 1px solid"), body);
+		assertFalse(body.contains("juneau-view-columnsearch"), body);
 	}
 
 	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
@@ -1171,5 +1207,25 @@ class ViewsMixin_Serving_Test extends TestBase {
 			"expanded-row cards inherit content-card padding; this rule must not add a fatter inset: " + nested);
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// q) WORK-J0559 Task 5 - views composes the console-ui shell script
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * {@code views} takes a compile-scope dependency on {@code console-ui} (C1 Task 5) so that an application
+	 * composing only {@link ViewsMixin} can still serve the console shell at the same stable path
+	 * {@link org.apache.juneau.rest.server.console.ConsoleChromeMixin} uses, without separately composing that mixin.
+	 */
+	@Test void q01_consoleJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.CONSOLE_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("window.JuneauConsole");
+	}
+
+	@Test void q02_hostWithoutMixin_consoleJsRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.CONSOLE_JS_PATH).run().assertStatus(404);
+	}
 
 }

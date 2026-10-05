@@ -29,6 +29,7 @@ import org.apache.juneau.marshall.parser.*;
  * Utility class for creating mocked stream parser.
  */
 @SuppressWarnings({
+	"java:S9149", // Test fixture's static factories intentionally shadow the parent's.
 	"resource" // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
 })
 public class FakeStreamParser extends InputStreamParser {

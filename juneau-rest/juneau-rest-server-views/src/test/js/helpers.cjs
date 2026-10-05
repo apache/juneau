@@ -39,7 +39,7 @@ const { env, H } = load(rendersJsPath, viewsJsPath, helpersJsPath);
 const out = { hasHelpers: !!H };
 
 function textOf(el) { return el.textContent; }
-function throws(fn) { try { fn(); return null; } catch (e) { return e.message || String(e); } }
+function throws(fn) { try { fn(); return null; } catch (error) { return error.message || String(error); } }
 
 (async function () {
 
@@ -92,7 +92,7 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	// href wraps the plain-text value node in a safe <a>; an unsafe href does NOT wrap
 	const hrefGrid = H.fieldGrid([{ data: 'id', label: 'Id', href: '/widgets/{id}' }], { values: { id: '42' } });
 	const link = hrefGrid.querySelector('a');
-	out.fieldGrid_hrefWrapsSafeUrl = !!link && link.href === '/widgets/42';
+	out.fieldGrid_hrefWrapsSafeUrl = link?.href === '/widgets/42';
 	const unsafeHrefGrid = H.fieldGrid([{ data: 'id', label: 'Id', href: 'javascript:alert(1)//{id}' }], { values: { id: '1' } });
 	out.fieldGrid_unsafeHrefNotWrapped = !unsafeHrefGrid.querySelector('a');
 
@@ -107,7 +107,7 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	// just its FIRST token, which is how an earlier draft of this file mis-tested three of these).
 	const actionGrid = H.fieldGrid([{ data: 'z', label: 'Z', actions: [{ id: 'unlink', label: 'Unlink' }] }], { values: { z: '1' } });
 	const actionBtn = actionGrid.querySelector('.juneau-view-helper-field-actions').querySelector('button');
-	out.fieldGrid_actionDisabledWithoutHandler = !!actionBtn && actionBtn.disabled === true;
+	out.fieldGrid_actionDisabledWithoutHandler = actionBtn?.disabled === true;
 	let actionFired = null;
 	const actionGrid2 = H.fieldGrid([{ data: 'z', label: 'Z', actions: [{ id: 'unlink', label: 'Unlink' }] }], {
 		values: { z: '1' }, onAction: function (id, data) { actionFired = { id: id, data: data }; }
@@ -167,24 +167,29 @@ function throws(fn) { try { fn(); return null; } catch (e) { return e.message ||
 	const b2 = H.button({ label: 'Go' });
 	out.button_disabledWithoutOnClick = b2.disabled === true;
 
-	const row = H.buttonRow([{ label: 'A' }, { label: 'B', onClick: function () {} }]);
+	const row = H.buttonRow([{ label: 'A' }, { label: 'B', onClick: function () { /* no-op */ } }]);
 	out.buttonRow_count = row.querySelectorAll('button').length;
 
 	out.text_isTextNode = H.text('hi').nodeType === 3;
 	out.text_nullIsEmpty = H.text(null).textContent === '';
 
-	const p = H.pill('Open', 'ok');
+	const p = H.pill('Open', 'success');
 	out.pill_label = textOf(p.querySelector('.juneau-view-helper-pill-label'));
-	out.pill_toneClassApplied = !!p.querySelector('.juneau-view-helper-pill-dot--ok');
+	out.pill_toneClassApplied = !!p.querySelector('.juneau-view-helper-pill-dot--success');
+	// Off-palette (including the retired ok/warn/idle names) emits no modifier class.
+	out.pill_retiredToneNoClass = ['ok', 'warn', 'idle', 'bogus'].every(function (t) {
+		return !H.pill('Open', t).querySelector('.juneau-view-helper-pill-dot--' + t);
+	});
+	out.pill_warningToneApplied = !!H.pill('Open', 'warning').querySelector('.juneau-view-helper-pill-dot--warning');
 
 	const unknownIcon = H.icon('this-icon-does-not-exist');
 	out.icon_unknownIsHidden = unknownIcon.hidden === true;
 
-	const bIcon = H.button({ label: 'Go', appearance: 'icon', onClick: function () {} });
+	const bIcon = H.button({ label: 'Go', appearance: 'icon', onClick: function () { /* no-op */ } });
 	out.button_iconAppearanceClass = /\bjuneau-view-helper-btn--icon\b/.test(bIcon.className);
-	const bChrome = H.button({ label: 'Go', appearance: 'chrome', onClick: function () {} });
+	const bChrome = H.button({ label: 'Go', appearance: 'chrome', onClick: function () { /* no-op */ } });
 	out.button_chromeAppearanceHasNoIconClass = !/\bjuneau-view-helper-btn--icon\b/.test(bChrome.className);
-	const bDefault = H.button({ label: 'Go', onClick: function () {} });
+	const bDefault = H.button({ label: 'Go', onClick: function () { /* no-op */ } });
 	out.button_omittedAppearanceHasNoIconClass = !/\bjuneau-view-helper-btn--icon\b/.test(bDefault.className);
 	out.button_unknownAppearanceThrows = !!throws(function () { H.button({ label: 'Go', appearance: 'ghost' }); });
 })();
@@ -234,7 +239,7 @@ await (async function dataPaneTests() {
 	const pane3 = env.el('div');
 	const populate3 = H.dataPane({ load: function () { return Promise.reject(new Error('kaboom')); }, render: function () { return env.el('span'); } });
 	let threw3 = false;
-	try { await populate3(pane3, {}); } catch (e) { threw3 = true; }
+	try { await populate3(pane3, {}); } catch (error) { threw3 = true; }
 	out.dataPane_otherRejectionNeverRethrows = threw3 === false;
 	out.dataPane_otherRejectionPaintsErrorStatus = pane3.querySelectorAll('[role="status"]').length === 1;
 
@@ -242,7 +247,7 @@ await (async function dataPaneTests() {
 	const pane3b = env.el('div');
 	const populate3b = H.dataPane({ load: function () { throw new Error('sync throw'); }, render: function () { return env.el('span'); } });
 	let threw3b = false;
-	try { await populate3b(pane3b, {}); } catch (e) { threw3b = true; }
+	try { await populate3b(pane3b, {}); } catch (error) { threw3b = true; }
 	out.dataPane_syncThrowNeverRethrows = threw3b === false;
 
 	// empty result (array of length 0) -> the empty node, custom empty() honored
@@ -273,8 +278,8 @@ await (async function dataPaneTests() {
 	out.dataPane_emptyKindRejectionPaintsEmpty = pane7.querySelectorAll('.juneau-view-helper-empty').length === 1;
 
 	// invalid spec -> loud argument errors, not a silent broken helper
-	out.dataPane_missingLoadThrows = !!throws(function () { H.dataPane({ render: function () {} }); });
-	out.dataPane_missingRenderThrows = !!throws(function () { H.dataPane({ load: function () {} }); });
+	out.dataPane_missingLoadThrows = !!throws(function () { H.dataPane({ render: function () { /* no-op */ } }); });
+	out.dataPane_missingRenderThrows = !!throws(function () { H.dataPane({ load: function () { /* no-op */ } }); });
 })();
 
 // ================================================================================================
@@ -291,7 +296,7 @@ function clickTab(wrapper, id) {
 	stripOf(wrapper).dispatch('click', { target: btn });
 }
 function keyOnTab(wrapper, focusedBtn, key) {
-	stripOf(wrapper).dispatch('keydown', { key: key, target: focusedBtn, preventDefault: function () {} });
+	stripOf(wrapper).dispatch('keydown', { key: key, target: focusedBtn, preventDefault: function () { /* no-op */ } });
 }
 function selectedTabId(wrapper) {
 	const sel = wrapper.querySelectorAll('[role="tab"]').filter(b => b.getAttribute('aria-selected') === 'true')[0];
@@ -357,7 +362,7 @@ await (async function tabStripTests() {
 	out.tabStrip_abortPreventsFuturePopulate = abortedTabRan === false;
 
 	// (vi) loud argument error: both pane AND populate, or neither
-	out.tabStrip_bothPaneAndPopulateThrows = !!throws(function () { H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div'), populate: function () {} }]); });
+	out.tabStrip_bothPaneAndPopulateThrows = !!throws(function () { H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div'), populate: function () { /* no-op */ } }]); });
 	out.tabStrip_neitherPaneNorPopulateThrows = !!throws(function () { H.tabStrip([{ id: 'a', label: 'A' }]); });
 	out.tabStrip_emptyArrayThrows = !!throws(function () { H.tabStrip([]); });
 	out.tabStrip_duplicateIdThrows = !!throws(function () { H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'a', label: 'A2', pane: env.el('div') }]); });
@@ -404,7 +409,7 @@ await (async function tabStripTests() {
 	// two independent instances: fill-once state does not leak between them (purity, positive half of test 29)
 	let runsX = 0, runsY = 0;
 	const wrapX = H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', populate: function () { runsX++; } }]);
-	const wrapY = H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', populate: function () { runsY++; } }]);
+	H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', populate: function () { runsY++; } }]);
 	clickTab(wrapX, 'b');
 	clickTab(wrapX, 'b');
 	out.tabStrip_independentInstances_xRanOnce_yNeverRan = runsX === 1 && runsY === 0;
@@ -420,7 +425,7 @@ await (async function tabStripTests() {
 	out.dateRange_twoInputs = inputs.length === 2;
 	inputs[1].value = '2026-02-01';
 	inputs[1].dispatch('change', {});
-	out.dateRange_onChangeFires = !!lastRange && lastRange.to === '2026-02-01';
+	out.dateRange_onChangeFires = lastRange?.to === '2026-02-01';
 	inputs[0].value = '2026-03-01'; // from AFTER to -> validation status, no onChange
 	lastRange = null;
 	inputs[0].dispatch('change', {});
@@ -480,9 +485,9 @@ function clickPencil(leaf) {
 
 await (async function editableFieldTests() {
 	out.editableField_missingOnSaveThrows = !!throws(function () { H.editableField({ label: 'T', value: 'x' }); });
-	out.editableField_unknownTypeThrows = !!throws(function () { H.editableField({ type: 'date', onSave: function () {} }); });
+	out.editableField_unknownTypeThrows = !!throws(function () { H.editableField({ type: 'date', onSave: function () { /* no-op */ } }); });
 	out.editableField_selectWithoutOptionsThrows = !!throws(function () {
-		H.editableField({ type: 'select', onSave: function () {} });
+		H.editableField({ type: 'select', onSave: function () { /* no-op */ } });
 	});
 	out.fieldGrid_editableWithoutOnFieldSaveThrows = !!throws(function () {
 		H.fieldGrid([{ data: 'title', label: 'Title', editable: true }], { values: { title: 'x' } });
@@ -505,7 +510,7 @@ await (async function editableFieldTests() {
 	);
 	out.editableField_missingValuesKeyPaintsEmpty =
 		textOf(gridMissing.querySelector('.jc-editable-field-view')).indexOf('Edit Title') === -1
-		&& textOf(gridMissing.querySelector('.jc-editable-field-view')).replace(/\s+/g, '') === '';
+		&& textOf(gridMissing.querySelector('.jc-editable-field-view')).replaceAll(/\s+/g, '') === '';
 
 	const cb = H.editableField({ label: 'On', type: 'checkbox', value: false, onSave: function () { return Promise.resolve(); } });
 	out.editableField_checkboxHasNoPencil = !cb.querySelector('.jc-editable-field-pencil');
@@ -549,7 +554,7 @@ await (async function editableFieldTests() {
 	});
 	clickPencil(escLeaf);
 	escLeaf.querySelector('input').value = 'gone';
-	escLeaf.querySelector('input').dispatch('keydown', { key: 'Escape', preventDefault: function () {} });
+	escLeaf.querySelector('input').dispatch('keydown', { key: 'Escape', preventDefault: function () { /* no-op */ } });
 	out.editableField_escDiscards = escSaves === 0 && !cls(escLeaf, 'is-editing')
 		&& textOf(escLeaf.querySelector('.jc-editable-field-view')).indexOf('keep') >= 0;
 
@@ -560,7 +565,7 @@ await (async function editableFieldTests() {
 	});
 	clickPencil(enterLeaf);
 	enterLeaf.querySelector('input').value = 'b';
-	enterLeaf.querySelector('input').dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+	enterLeaf.querySelector('input').dispatch('keydown', { key: 'Enter', preventDefault: function () { /* no-op */ } });
 	await flush();
 	out.editableField_enterOnInputSaves = enterSaves.length === 1 && enterSaves[0] === 'b';
 
@@ -572,7 +577,7 @@ await (async function editableFieldTests() {
 	clickPencil(taLeaf);
 	out.editableField_multilineIsTextarea = !!taLeaf.querySelector('textarea');
 	taLeaf.querySelector('textarea').value = 'line\n2';
-	taLeaf.querySelector('textarea').dispatch('keydown', { key: 'Enter', preventDefault: function () {} });
+	taLeaf.querySelector('textarea').dispatch('keydown', { key: 'Enter', preventDefault: function () { /* no-op */ } });
 	await flush();
 	out.editableField_enterOnTextareaDoesNotSave = taSaves === 0 && cls(taLeaf, 'is-editing');
 

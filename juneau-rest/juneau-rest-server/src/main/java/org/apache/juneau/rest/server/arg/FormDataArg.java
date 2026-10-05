@@ -56,6 +56,9 @@ import org.apache.juneau.rest.server.validation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */
+@SuppressWarnings({
+	"unchecked" // The schema parser is cast to Class<? extends HttpPartParser>; the annotation contract guarantees the bound
+})
 public class FormDataArg implements RestOpArg {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
@@ -142,9 +145,6 @@ public class FormDataArg implements RestOpArg {
 
 		this.def = findDef(pi).or(() -> o(classLevelFormData).filter(f -> ine(f.def())).map(FormData::def)).orElse(null);
 		this.type = pi.getParameterType();
-		@SuppressWarnings({
-			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
-		})
 		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
@@ -156,8 +156,7 @@ public class FormDataArg implements RestOpArg {
 
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for REST argument resolution with generic types
-		"unchecked", // Type erasure requires unchecked casts in REST argument parsing
-		"resource", // as(Class)/as(Type,Type...) calls below are generic and conservatively treated as Closeable; the resolved form value is handed to the invoked op method, not owned/closed here.
+		"resource" // as(Class)/as(Type,Type...) calls below are generic and conservatively treated as Closeable; the resolved form value is handed to the invoked op method, not owned/closed here.
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {

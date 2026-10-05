@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.sse;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -58,12 +58,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for serializer hierarchy
-	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class SseSerializer extends WriterSerializer implements RecordWritable {
-
-	private static final String ARG_w = "w";
 
 	/**
 	 * Wire-format media type produced by this serializer: <c>text/event-stream</c>.
@@ -103,7 +102,7 @@ public class SseSerializer extends WriterSerializer implements RecordWritable {
 		 * @param copyFrom The builder to copy from. Must not be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		/**
@@ -112,7 +111,7 @@ public class SseSerializer extends WriterSerializer implements RecordWritable {
 		 * @param copyFrom The serializer to copy from. Must not be <jk>null</jk>.
 		 */
 		protected Builder(SseSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -166,7 +165,7 @@ public class SseSerializer extends WriterSerializer implements RecordWritable {
 		"java:S2095" // Writer ownership is the caller's; we only write/flush.
 	})
 	public static void writeComment(Writer w, String comment) throws IOException {
-		assertArgNotNull(ARG_w, w);
+		reqnn("w", w);
 		var c = comment == null ? "" : comment;
 		for (var line : c.split("\n", -1))
 			w.write(": " + line + "\n");

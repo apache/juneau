@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -61,7 +62,7 @@ class RestDebugFinishContainment_Test {
 			client.post("/echo", "request-payload").run().assertStatus().asCode().is(200).assertContent("request-payload");
 
 			var rec = c.getRecords().stream()
-				.filter(r -> FINISH_LOGGER.equals(r.getLoggerName()))
+				.filter(r -> eq(r.getLoggerName(), FINISH_LOGGER))
 				.reduce((a, b) -> b)
 				.orElse(null);
 			assertNotNull(rec, "a fixed diagnostic-failure token should be logged");
@@ -93,7 +94,7 @@ class RestDebugFinishContainment_Test {
 			client.post("/echo", "request-payload").run().assertStatus().asCode().is(200).assertContent("request-payload");
 
 			var rec = c.getRecords().stream()
-				.filter(r -> FINISH_LOGGER.equals(r.getLoggerName()))
+				.filter(r -> eq(r.getLoggerName(), FINISH_LOGGER))
 				.reduce((a, b) -> b)
 				.orElse(null);
 			assertNotNull(rec);

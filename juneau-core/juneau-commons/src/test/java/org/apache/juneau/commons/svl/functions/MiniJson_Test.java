@@ -27,6 +27,9 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /** Tests for {@link MiniJson}. */
+@SuppressWarnings({
+	"unchecked" // Unchecked cast required for generic test utility.
+})
 class MiniJson_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -178,18 +181,12 @@ class MiniJson_Test extends TestBase {
 		assertEquals(new LinkedHashMap<>(), MiniJson.parse("{ }"));
 	}
 
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	@Test void d03_parse_simpleObject() {
 		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1}");
 		assertEquals(1L, m.get("a"));
 		assertEquals(1, m.size());
 	}
 
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	@Test void d04_parse_multipleEntries() {
 		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1,\"b\":2,\"c\":3}");
 		assertEquals(3, m.size());
@@ -198,9 +195,6 @@ class MiniJson_Test extends TestBase {
 		assertEquals(3L, m.get("c"));
 	}
 
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	@Test void d05_parse_nestedObject() {
 		var m = (Map<String,Object>) MiniJson.parse("{\"a\":{\"b\":\"c\"}}");
 		var inner = (Map<String,Object>) m.get("a");
@@ -216,9 +210,6 @@ class MiniJson_Test extends TestBase {
 	}
 
 	@Test void d08_parse_objectInsertionOrderPreserved() {
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var m = (Map<String,Object>) MiniJson.parse("{\"z\":1,\"a\":2,\"m\":3}");
 		assertEquals(List.of("z", "a", "m"), new ArrayList<>(m.keySet()));
 	}
@@ -240,9 +231,6 @@ class MiniJson_Test extends TestBase {
 	}
 
 	@Test void e04_parse_arrayMixedTypes() {
-		@SuppressWarnings({
-			"unchecked"  // Unchecked cast required for generic test utility.
-		})
 		var l = (List<Object>) MiniJson.parse("[1,\"two\",true,null]");
 		assertEquals(4, l.size());
 		assertEquals(1L, l.get(0));

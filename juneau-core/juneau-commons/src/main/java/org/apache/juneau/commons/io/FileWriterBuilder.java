@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent builder for creating {@link Writer} instances for writing to files with configurable options.
@@ -81,14 +81,10 @@ import java.nio.file.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"resource" // Caller takes ownership of the returned Writer
 })
 public class FileWriterBuilder {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_cs = "cs";
-	private static final String ARG_file = "file";
 
 	/**
 	 * Creates a new builder.
@@ -262,7 +258,7 @@ public class FileWriterBuilder {
 	 * @throws FileNotFoundException If the file could not be created or opened for writing.
 	 */
 	public Writer build() throws FileNotFoundException {
-		assertArgNotNull(ARG_file, file);
+		reqnn("file", file);
 		var os = (OutputStream)new FileOutputStream(file, append);
 		if (buffered)
 			os = new BufferedOutputStream(os);
@@ -314,7 +310,7 @@ public class FileWriterBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder charset(String cs) {
-		this.cs = Charset.forName(assertArgNotNull(ARG_cs, cs));
+		this.cs = Charset.forName(reqnn("cs", cs));
 		return this;
 	}
 

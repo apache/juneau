@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A fluent wrapper around an arbitrary list that provides convenient methods for adding elements.
@@ -84,12 +84,9 @@ import java.util.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FluentList<E> extends AbstractList<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	private final List<E> list;
 
@@ -99,7 +96,7 @@ public class FluentList<E> extends AbstractList<E> {
 	 * @param inner The underlying list to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentList(List<E> inner) {
-		this.list = assertArgNotNull(ARG_inner, inner);
+		this.list = reqnn("inner", inner);
 	}
 
 	/**

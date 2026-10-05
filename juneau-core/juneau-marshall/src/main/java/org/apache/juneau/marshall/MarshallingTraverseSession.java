@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -50,19 +49,10 @@ import org.apache.juneau.marshall.collections.*;
  *
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?> for traversal metadata
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452" // Wildcard required - ClassMeta<?>, ObjectSwap<?,?> for traversal metadata
 })
 public class MarshallingTraverseSession extends MarshallingSession {
-
-	// Property name constants
-	private static final String PROP_indent = "indent";
-	private static final String PROP_depth = "depth";
-	private static final String PROP_initialDepth = "initialDepth";
-	private static final String PROP_BeanTraverseSession_initialDepth = "MarshallingTraverseSession.initialDepth";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -82,7 +72,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarshallingTraverseContext ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx).getMarshallingContext());
+			super(reqnn("ctx", ctx).getMarshallingContext());
 			this.ctx = ctx;
 			initialDepth = ctx.getInitialDepth();
 		}
@@ -106,7 +96,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_initialDepth, PROP_BeanTraverseSession_initialDepth:
+				case "initialDepth", "MarshallingTraverseSession.initialDepth":
 					return initialDepth(cvt(value, Integer.class));
 				default:
 					super.property(key, value);
@@ -117,20 +107,20 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	}
 
 	private class StackElement {
-		final int depth;
+		final int level;
 		final String name;
 		final Object o;
 		final ClassMeta<?> aType;
 
-		StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
-			this.depth = depth;
+		StackElement(int level, String name, Object o, ClassMeta<?> aType) {
+			this.level = level;
 			this.name = name;
 			this.o = o;
 			this.aType = aType;
 		}
 
 		String toString(boolean simple) {
-			var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
+			var sb = new StringBuilder().append('[').append(level).append(']').append(' ');
 			sb.append(ie(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(MarshallingTraverseSession.this))
@@ -268,9 +258,9 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		stack.forEach(x -> {
 			if (full) {
 				sb.append("\n\t");
-				for (var i = 1; i < x.depth; i++)
+				for (var i = 1; i < x.level; i++)
 					sb.append("  ");
-				if (x.depth > 0)
+				if (x.level > 0)
 					sb.append("->");
 				sb.append(x.toString(false));
 			} else {
@@ -333,8 +323,8 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_indent, indent)
-			.a(PROP_depth, depth);
+			.a("indent", indent)
+			.a("depth", depth);
 	}
 
 	/**

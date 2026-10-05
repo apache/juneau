@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console.datatables;
 
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 
 import freemarker.template.*;
@@ -57,6 +58,10 @@ import freemarker.template.*;
  * @since 10.0.0
  */
 public class ConsoleDataTablesFreemarkerMixin extends ConsoleFreemarkerMixin {
+
+	static {
+		FreemarkerMixin.registerSubtype(ConsoleDataTablesFreemarkerMixin.class);
+	}
 
 	/** The reserved classpath-root-relative location of the shipped {@code <@datatable>} macro template. */
 	public static final String DATATABLE_TEMPLATE_PATH = "org/apache/juneau/console/datatables/datatable.ftlh";

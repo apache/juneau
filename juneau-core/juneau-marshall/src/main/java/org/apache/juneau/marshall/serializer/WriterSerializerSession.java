@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.serializer;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -46,23 +45,10 @@ import org.apache.juneau.commons.collections.*;
  */
 @SuppressWarnings({
 	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class WriterSerializerSession extends SerializerSession {
-
-	// Property name constants
-	private static final String PROP_streamCharset = "streamCharset";
-	private static final String PROP_useWhitespace = "useWhitespace";
-	private static final String PROP_maxIndent = "maxIndent";
-	private static final String PROP_quoteChar = "quoteChar";
-	private static final String PROP_WriterSerializerSession_streamCharset = "WriterSerializerSession.streamCharset";
-	private static final String PROP_WriterSerializerSession_useWhitespace = "WriterSerializerSession.useWhitespace";
-	private static final String PROP_WriterSerializerSession_maxIndent = "WriterSerializerSession.maxIndent";
-	private static final String PROP_WriterSerializerSession_quoteChar = "WriterSerializerSession.quoteChar";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -84,7 +70,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(WriterSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			streamCharset = ctx.getStreamCharset();
 			useWhitespace = ctx.useWhitespace;
 			maxIndent = ctx.getMaxIndent();
@@ -114,13 +100,13 @@ public class WriterSerializerSession extends SerializerSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_streamCharset, PROP_WriterSerializerSession_streamCharset:
+				case "streamCharset", "WriterSerializerSession.streamCharset":
 					return streamCharset(cvt(value, Charset.class));
-				case PROP_useWhitespace, PROP_WriterSerializerSession_useWhitespace:
+				case "useWhitespace", "WriterSerializerSession.useWhitespace":
 					return useWhitespace(cvt(value, Boolean.class));
-				case PROP_maxIndent, PROP_WriterSerializerSession_maxIndent:
+				case "maxIndent", "WriterSerializerSession.maxIndent":
 					return maxIndent(cvt(value, Integer.class));
-				case PROP_quoteChar, PROP_WriterSerializerSession_quoteChar:
+				case "quoteChar", "WriterSerializerSession.quoteChar":
 					return quoteChar(cvt(value, Character.class));
 				default:
 					super.property(key, value);
@@ -201,7 +187,7 @@ public class WriterSerializerSession extends SerializerSession {
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(WriterSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final boolean useWhitespace;
@@ -291,9 +277,9 @@ public class WriterSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_streamCharset, streamCharset)
-			.a(PROP_useWhitespace, useWhitespace)
-			.a(PROP_maxIndent, maxIndent)
-			.a(PROP_quoteChar, quoteChar);
+			.a("streamCharset", streamCharset)
+			.a("useWhitespace", useWhitespace)
+			.a("maxIndent", maxIndent)
+			.a("quoteChar", quoteChar);
 	}
 }

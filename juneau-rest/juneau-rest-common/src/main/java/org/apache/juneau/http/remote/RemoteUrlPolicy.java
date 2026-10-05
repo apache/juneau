@@ -44,8 +44,8 @@ import java.util.regex.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S3516", // requireAllowedUrl is a validation passthrough: success returns the same URL that was supplied.
-	"java:S125" // Comments document URI-template blanking; they are not commented-out code.
+	"java:S125", // Comments document URI-template blanking; they are not commented-out code.
+	"java:S3516" // requireAllowedUrl is a validation passthrough: success returns the same URL that was supplied.
 })
 public final class RemoteUrlPolicy {
 
@@ -109,7 +109,7 @@ public final class RemoteUrlPolicy {
 		if (scheme == null)
 			return url; // Scheme-less relative value; resolved against the client root, not re-checked here.
 
-		if (! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
+		if (! (eqic(scheme, "http") || eqic(scheme, "https")))
 			throw iaex("Unsupported URL scheme '%s' in @Remote URL override; only http/https are allowed: %s", scheme, url);
 
 		URI uri;

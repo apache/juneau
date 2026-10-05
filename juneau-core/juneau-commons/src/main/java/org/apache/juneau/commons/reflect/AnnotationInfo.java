@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -71,14 +70,12 @@ import org.apache.juneau.commons.collections.*;
  * @param <T> The annotation type.
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S3740"  // Raw Annotation type used intentionally for unparameterized annotation introspection
+	"hiding", // Field/variable hiding intentional for specific scoping
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3740", // Raw Annotation type used intentionally for unparameterized annotation introspection
+	"unchecked" // Casts in cast() and the Class/Class[] value accessors follow isInstance/hasReturnType checks on the annotation member.
 })
 public class AnnotationInfo<T extends Annotation> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_on = "on";
-	private static final String ARG_a = "a";
 
 	/**
 	 * Creates a new annotation info object.
@@ -125,8 +122,8 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param a The annotation instance.
 	 */
 	AnnotationInfo(Annotatable on, T a) {
-		this.annotatable = assertArgNotNull(ARG_on, on);
-		this.a = assertArgNotNull(ARG_a, a);
+		this.annotatable = reqnn("on", on);
+		this.a = reqnn("a", a);
 		this.methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 		this.rank = findRank(a);
 		this.toString = memoize(this::findToString);
@@ -193,9 +190,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param type The annotation type to cast to.
 	 * @return This annotation info cast to the specified type, or <jk>null</jk> if the annotation is not of the specified type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to AnnotationInfo<A>
-	})
 	public <A extends Annotation> AnnotationInfo<A> cast(Class<A> type) {
 		return type.isInstance(a) ? (AnnotationInfo<A>)this : null;
 	}
@@ -257,9 +251,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param methodName The method name.
 	 * @return An {@link Optional} containing the class array value, or empty if not found or not a {@code Class[]} type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Class<?>[] for annotation value
-	})
 	public Optional<Class<?>[]> getClassArray(String methodName) {
 		return (Optional<Class<?>[]>)(Optional<?>)getMethod(methodName).filter(x -> x.hasReturnType(Class[].class)).map(x -> x.invoke(a));
 	}
@@ -280,10 +271,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method cast to the expected type,
 	 *         or empty if not found, not a class array, or any element is not assignable to the expected type.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"hiding", // Field/variable hiding intentional for specific scoping
-	})
 	public <T> Optional<Class<? extends T>[]> getClassArray(String methodName, Class<T> type) {
 		// @formatter:off
 		return getMethod(methodName)
@@ -316,9 +303,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param methodName The method name.
 	 * @return An {@link Optional} containing the class value, or empty if not found or not a {@link Class} type.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Class<?> for annotation value
-	})
 	public Optional<Class<?>> getClassValue(String methodName) {
 		return (Optional<Class<?>>)(Optional<?>)getMethod(methodName).filter(x -> x.hasReturnType(Class.class)).map(x -> x.invoke(a));
 	}
@@ -339,10 +323,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method cast to the expected type,
 	 *         or empty if not found, not a class, or not assignable to the expected type.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts
-		"hiding", // Field/variable hiding intentional for specific scoping
-	})
 	public <T> Optional<Class<? extends T>> getClassValue(String methodName, Class<T> type) {
 		// @formatter:off
 		return getMethod(methodName)
@@ -589,9 +569,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param name The name of the annotation method (field).
 	 * @return An {@link Optional} containing the value if found and type matches, empty otherwise.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to V for annotation value
-	})
 	public <V> Optional<V> getValue(Class<V> type, String name) {
 		// @formatter:off
 		return methods.get().stream()

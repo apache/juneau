@@ -31,8 +31,8 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for test bean handling
 	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"rawtypes" // Raw types necessary for test bean handling
 })
 class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 

@@ -36,21 +36,9 @@ import org.apache.juneau.commons.inject.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_avgTime)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class MethodExecStats {
-
-	// Property name constants
-	private static final String PROP_avgTime = "avgTime";
-	private static final String PROP_errors = "errors";
-	private static final String PROP_guid = "guid";
-	private static final String PROP_maxTime = "maxTime";
-	private static final String PROP_method = "method";
-	private static final String PROP_minTime = "minTime";
-	private static final String PROP_running = "running";
-	private static final String PROP_runs = "runs";
-	private static final String PROP_thrownStore = "thrownStore";
-	private static final String PROP_totalTime = "totalTime";
 
 	/**
 	 * Builder class.
@@ -307,16 +295,16 @@ public class MethodExecStats {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_avgTime, getAvgTime())
-			.a(PROP_errors, getErrors())
-			.a(PROP_guid, guid)
-			.a(PROP_maxTime, getMaxTime())
-			.a(PROP_method, method)
-			.a(PROP_minTime, getMinTime())
-			.a(PROP_running, getRunning())
-			.a(PROP_runs, getRuns())
-			.a(PROP_thrownStore, thrownStore)
-			.a(PROP_totalTime, getTotalTime());
+			.a("avgTime", getAvgTime())
+			.a("errors", getErrors())
+			.a("guid", guid)
+			.a("maxTime", getMaxTime())
+			.a("method", method)
+			.a("minTime", getMinTime())
+			.a("running", getRunning())
+			.a("runs", getRuns())
+			.a("thrownStore", thrownStore)
+			.a("totalTime", getTotalTime());
 		// @formatter:on
 	}
 

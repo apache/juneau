@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -207,10 +208,10 @@ class Characterization_Test {
 					}
 					@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
 					@Override public McpCompleter completer(String variableName) {
-						if (! "name".equals(variableName))
+						if (neq(variableName, "name"))
 							return null;
 						return (request, ctx) -> {
-							if ("cap".equals(request.getValue())) {
+							if (eq(request.getValue(), "cap")) {
 								var values = new ArrayList<String>();
 								for (var i = 0; i < 101; i++)
 									values.add("item" + i);
@@ -286,7 +287,9 @@ class Characterization_Test {
 
 	@ParameterizedTest
 	@MethodSource("fixtures")
-	@SuppressWarnings("resource") // Fluent builder returns 'this' (a Closeable) already owned by the enclosing try-with-resources; Eclipse JDT @Owning/resource warning is by design.
+	@SuppressWarnings({
+		"resource" // Fluent builder returns 'this' (a Closeable) already owned by the enclosing try-with-resources; Eclipse JDT @Owning/resource warning is by design.
+	})
 	void a01_wireIsUnchanged(String fixture) throws Exception {
 		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
 		try (var client = MockRestClient.create(servletFor(fixture)).json()

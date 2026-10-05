@@ -44,7 +44,8 @@ public class TomlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<TomlConfig> ai, TomlParser.Builder b) {
-			// No-op: Annotation applier with no work to do
+			TomlConfig a = ai.inner();
+			string(a.nullValue()).ifPresent(b::nullValue);
 		}
 	}
 
@@ -65,7 +66,11 @@ public class TomlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<TomlConfig> ai, TomlSerializer.Builder b) {
-			// No-op: Annotation applier with no work to do
+			TomlConfig a = ai.inner();
+			string(a.nullValue()).ifPresent(b::nullValue);
+			integer(a.inlineTableThreshold(), "inlineTableThreshold").ifPresent(b::inlineTableThreshold);
+			bool(a.useInlineTables()).ifPresent(b::useInlineTables);
+			bool(a.sortKeys()).ifPresent(b::sortKeys);
 		}
 	}
 }

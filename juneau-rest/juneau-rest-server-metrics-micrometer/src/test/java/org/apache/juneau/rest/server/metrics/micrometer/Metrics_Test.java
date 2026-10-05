@@ -34,7 +34,8 @@ import io.micrometer.core.instrument.simple.*;
  * is present.
  */
 @SuppressWarnings({
-	"resource" // Closeable MockRestClient fixtures; lifecycle managed by the test/framework, not a real leak.
+	"resource", // Closeable MockRestClient fixtures; lifecycle managed by the test/framework, not a real leak.
+	"unused" // scrape() on the test registry stubs is only invoked reflectively by MetricsManager, so it appears unused
 })
 class Metrics_Test extends TestBase {
 
@@ -44,7 +45,6 @@ class Metrics_Test extends TestBase {
 	 * reflectively, so any registry exposing a no-arg {@code scrape()} is treated as scrapeable.
 	 */
 	public static class ScrapeableRegistry extends SimpleMeterRegistry {
-		@SuppressWarnings("unused")
 		public String scrape() {
 			return "# HELP demo_total Demo.\n# TYPE demo_total counter\ndemo_total 1.0\n";
 		}
@@ -52,7 +52,6 @@ class Metrics_Test extends TestBase {
 
 	/** A registry whose {@code scrape()} returns {@code null} — exercises the null-result branch. */
 	public static class NullScrapeRegistry extends SimpleMeterRegistry {
-		@SuppressWarnings("unused")
 		public String scrape() {
 			return null;
 		}
@@ -60,7 +59,6 @@ class Metrics_Test extends TestBase {
 
 	/** A registry whose {@code scrape()} throws — exercises the reflective-failure rethrow branch. */
 	public static class ThrowingScrapeRegistry extends SimpleMeterRegistry {
-		@SuppressWarnings("unused")
 		public String scrape() {
 			throw new IllegalStateException("boom");
 		}

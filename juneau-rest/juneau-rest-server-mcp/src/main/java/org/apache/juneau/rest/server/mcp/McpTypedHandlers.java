@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -29,6 +28,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonschema.*;
 import org.apache.juneau.marshall.marshaller.Json;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Bridges {@link McpTypedToolHandler typed tool handlers} into raw {@link McpToolHandler}s.
@@ -67,8 +67,8 @@ public final class McpTypedHandlers {
 	 * @return A raw handler that derives schemas, binds arguments, and canonicalizes results. Never <jk>null</jk>.
 	 */
 	public static <A,R> McpToolHandler adaptTool(McpTypedToolHandler<A,R> typed) {
-		assertArgNotNull("typed", typed);
-		var declared = assertArgNotNull("typed.descriptor()", typed.descriptor());
+		reqnn("typed", typed);
+		var declared = reqnn("typed.descriptor()", typed.descriptor());
 		var descriptor = new McpToolSpec()
 			.setName(declared.getName())
 			.setDescription(declared.getDescription())
@@ -115,10 +115,10 @@ public final class McpTypedHandlers {
 	 * @return A raw handler that derives schemas, binds arguments, and canonicalizes results. Never <jk>null</jk>.
 	 */
 	public static <A,R> McpToolHandler tool(String name, String description, Class<A> argumentType, Class<R> resultType, BiFunction<A,BeanStore,R> call) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("argumentType", argumentType);
-		assertArgNotNull("resultType", resultType);
-		assertArgNotNull("call", call);
+		reqnn("name", name);
+		reqnn("argumentType", argumentType);
+		reqnn("resultType", resultType);
+		reqnn("call", call);
 		return adaptTool(new McpTypedToolHandler<A,R>() {
 			@Override public McpToolSpec descriptor() {
 				return new McpToolSpec().setName(name).setDescription(description);

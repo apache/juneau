@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@console theme="open" icon="/app/logo.svg" title="Doc Title Here" brand="Ignored When Title Set">
+--><@console icon="/app/logo.svg" title="Doc Title Here" brand="Ignored When Title Set">
 <@title><header class="my-custom-header">WHOLE HEADER</header></@title>
 <@main/>
 </@console>

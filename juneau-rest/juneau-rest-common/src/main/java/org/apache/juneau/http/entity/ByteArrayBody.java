@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An {@link HttpBody} backed by a raw byte array.
@@ -42,7 +42,7 @@ public final class ByteArrayBody implements HttpBody {
 	private final String contentType;
 
 	private ByteArrayBody(byte[] content, String contentType) {
-		this.content = Arrays.copyOf(assertArgNotNull("content", content), content.length);
+		this.content = Arrays.copyOf(reqnn("content", content), content.length);
 		this.contentType = contentType;
 	}
 

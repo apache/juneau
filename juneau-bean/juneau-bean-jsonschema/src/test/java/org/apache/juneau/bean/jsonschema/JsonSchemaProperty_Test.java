@@ -25,8 +25,8 @@ import org.junit.jupiter.api.*;
  * Tests for JsonSchemaProperty fluent setter overrides.
  */
 @SuppressWarnings({
-	"rawtypes",  // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
-	"unchecked"  // See rawtypes rationale above.
+	"rawtypes", // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
+	"unchecked" // See rawtypes rationale above.
 })
 class JsonSchemaProperty_Test extends TestBase {
 

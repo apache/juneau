@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link RestRequest#run()}.
  */
-@SuppressWarnings("resource") // 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.
+@SuppressWarnings({
+	"resource" // 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.
+})
 class RestRequest_Run_Test extends TestBase {
 
 	/**

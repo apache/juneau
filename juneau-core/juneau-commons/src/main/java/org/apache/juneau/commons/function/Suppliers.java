@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -26,11 +25,9 @@ import java.util.function.*;
 /** Supplier factories: memoizing wrappers moved from the former {@code Utils}. */
 @SuppressWarnings({
 	"java:S1118", // Utility class with static methods only.
-	"java:S115"   // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Suppliers {
-
-	private static final String ARG_supplier = "supplier";
 
 	/** Constructor — this class is meant to be subclassed. */
 	protected Suppliers() {}
@@ -42,10 +39,11 @@ public class Suppliers {
 	 * @param supplier The underlying supplier to memoize.  Must not be <jk>null</jk>.
 	 * @return A new memoizing supplier.
 	 */
-	@SuppressWarnings({ "java:S2789" // AtomicReference uses null for "uninitialized"; intentional.
+	@SuppressWarnings({
+		"java:S2789" // AtomicReference uses null for "uninitialized"; intentional.
 	})
 	public static <T> NullableSupplier<T> memoize(Supplier<T> supplier) {
-		assertArgNotNull(ARG_supplier, supplier);
+		reqnn("supplier", supplier);
 		var cache = new AtomicReference<Optional<T>>();
 		return () -> {
 			var h = cache.get();
@@ -65,7 +63,7 @@ public class Suppliers {
 	 * @return A new resettable memoizing supplier.
 	 */
 	public static <T> Memoizer<T> memoizer(Supplier<T> supplier) {
-		assertArgNotNull(ARG_supplier, supplier);
+		reqnn("supplier", supplier);
 		return new Memoizer<>(supplier);
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.cbor;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -44,14 +43,13 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",   // Output streams managed by calling code
-	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes", // Raw BeanMap/Map/Collection casts in writeAnything() and the writeMap()/writeCollection() helpers, where element types are only known at runtime.
+	"resource", // Output streams managed by calling code
+	"unchecked" // Type erasure requires unchecked operations
 })
 public class CborSerializerSession extends OutputStreamSerializerSession implements TokenWritable, ArrayRecordWritable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -65,7 +63,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CborSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 		}
 
 		@Override
@@ -85,10 +83,10 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	 * @return A new builder.
 	 */
 	public static Builder create(CborSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
-	/*
+	/**
 	 * Converts the specified output target object to an {@link CborOutputStream}.
 	 */
 	private static CborOutputStream getCborOutputStream(SerializerPipe out) throws IOException {
@@ -169,8 +167,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({
-		"rawtypes",   // Raw types necessary for generic type handling
-		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
+		"java:S3776" // Cognitive complexity acceptable for serialization dispatch logic
 	})
 	private CborOutputStream writeAnything(CborOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
@@ -293,10 +290,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		});
 	}
 
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic collection handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	private void writeCollection(CborOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
@@ -306,10 +299,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		l.forEach(x -> writeAnything(out, x, elementType, "<iterator>", null));
 	}
 
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic map handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	private void writeMap(CborOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

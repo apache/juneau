@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -33,17 +32,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class SecurityRequirement extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-	private static final String ARG_schemeName = "schemeName";
-	private static final String ARG_scopes = "scopes";
-
-	// Property name constants
-	private static final String PROP_requirements = "requirements";
 
 	private Map<String,List<String>> requirements;
 
@@ -70,8 +61,8 @@ public class SecurityRequirement extends OpenApiElement {
 	 * @return This object.
 	 */
 	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
-		assertArgNotNull(ARG_schemeName, schemeName);
-		assertArgNoNulls(ARG_scopes, scopes);
+		reqnn("schemeName", schemeName);
+		reqnns("scopes", scopes);
 		if (requirements == null)
 			requirements = m();
 		requirements.put(schemeName, l(scopes));
@@ -89,9 +80,9 @@ public class SecurityRequirement extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_requirements -> toType(getRequirements(), type);
+			case "requirements" -> toType(getRequirements(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -107,7 +98,7 @@ public class SecurityRequirement extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(requirements), PROP_requirements)
+			.addIf(nn(requirements), "requirements")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -118,9 +109,9 @@ public class SecurityRequirement extends OpenApiElement {
 	})
 	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_requirements -> setRequirements((Map<String,List<String>>)value);
+			case "requirements" -> setRequirements((Map<String,List<String>>)value);
 			default -> {
 				super.set(property, value);
 				yield this;

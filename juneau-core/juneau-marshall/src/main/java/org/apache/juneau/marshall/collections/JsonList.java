@@ -96,14 +96,12 @@ import org.apache.juneau.marshall.serializer.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110",  // Class has many fields, acceptable for collection implementation
+	"java:S110", // Class has many fields, acceptable for collection implementation
 	"java:S1206", // Inherits equals/hashCode from LinkedList; List equality is element-based
-	"java:S2160"  // equals() inherited from LinkedList; element-based equality is correct for a JSON list
+	"java:S2160", // equals() inherited from LinkedList; element-based equality is correct for a JSON list
+	"java:S9149" // Per-type static factories intentionally shadow the parent's.
 })
 public class JsonList extends MarshalledList {
-	@SuppressWarnings({
-		"java:S110" // Inner class has many fields, acceptable for collection implementation
-	})
 	private static class Unmodifiable extends JsonList {
 		private static final long serialVersionUID = 1L;
 
@@ -310,7 +308,6 @@ public class JsonList extends MarshalledList {
 	 * @serial exclude
 	 */
 	@SuppressWarnings({
-		"java:S110", // Anonymous class has many fields, acceptable for collection implementation
 		"java:S2386" // Public static final field accessed externally, cannot be protected
 	})
 	public static final JsonList EMPTY_LIST = new JsonList() {

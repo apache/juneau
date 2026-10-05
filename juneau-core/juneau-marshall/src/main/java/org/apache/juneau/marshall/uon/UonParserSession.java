@@ -50,19 +50,20 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110",   // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S125",   // State-machine comments are documentation, not commented-out code
-	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	"rawtypes",    // Raw types necessary for generic type handling
-	"resource",    // UonReader is managed by caller
-	"unchecked"    // Type erasure requires unchecked casts
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S125", // State-machine comments are documentation, not commented-out code
+	"java:S1168", // readIntoMap()/readIntoCollection()/readIntoBeanMap() return null for blank, literal null or '%00' input, which callers treat as 'no value'.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2583", // The post-loop state checks in readIntoCollection() look constant to static analysis but are reachable when input ends mid-entry.
+	"java:S3776", // readAnything() and the readInto*() methods are state machines over the UON grammar; splitting them would obscure the parse flow.
+	"java:S6541", // readAnything() is the single type-dispatch point of the parser and is long by design.
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // UonReader is managed by caller
+	"unchecked", // Type erasure requires unchecked casts
+	"unused" // Intentionally unused; variable/parameter is required by the interface contract
 })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession, RecordReadable {
-
-	// Property name constants
-	private static final String PROP_decoding = "decoding";
-	private static final String PROP_validateEnd = "validateEnd";
-	private static final String PROP_UonParserSession_validateEnd = "UonParserSession.validateEnd";
 
 	/**
 	 * Builder class.
@@ -106,9 +107,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_decoding:
+				case "decoding":
 					return decoding(cvt(value, Boolean.class));
-				case PROP_validateEnd, PROP_UonParserSession_validateEnd:
+				case "validateEnd", "UonParserSession.validateEnd":
 					return validateEnd(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -267,10 +268,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for parser state machine
-		"java:S6541"  // Synchronization not needed for session-local state
-	})
 	public <T> T readAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -408,9 +405,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else if (c == 'n') {
-			@SuppressWarnings({
-				"unused" // Intentionally unused; variable/parameter is required by the interface contract
-			})
 			int ignored = r.read();
 			readNull(r);
 		} else {
@@ -442,12 +436,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unrecognized syntax for boolean.  '%s'.", s);
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Intentionally returns null for empty/EOF or readAttrName('%00') in this parser state machine.
-		"java:S2583",    // S1 checks c==-1/AMP for defensive completeness; while-guard makes these sub-expressions always-false
-		"java:S3776",    // Cognitive complexity acceptable for this specific logic
-		"java:S6541",    // Single-threaded session contexts do not require synchronization
-	})
 	private <T> BeanMap<T> readIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();
@@ -554,12 +542,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
-		"java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern
-		"java:S6541",    // Brain method acceptable for parser state machine
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
+		"java:S1854", // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it
+		"java:S2589" // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern
 	})
 	private <E> Collection<E> readIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException {
@@ -581,9 +565,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else
 				throw new ParseException(this, "Could not find '(' marking beginning of collection.");
 		} else {
-			@SuppressWarnings({
-				"unused" // Intentionally unused; variable/parameter is required by the interface contract
-			})
 			int ignored = r.read();
 		}
 
@@ -599,9 +580,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					if (c == ')') {
 						if (state == S2) {
 							l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
-							@SuppressWarnings({
-								"unused" // Intentionally unused; variable/parameter is required by the interface contract
-							})
 							int ignored = r.read();
 						}
 						return l;
@@ -654,12 +632,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null;  // Unreachable.
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
-		"java:S2583",    // Defensive c==-1/AMP sub-checks inside the while(c!=-1 && c!=AMP) loop; kept for state-machine completeness.
-		"java:S6541",    // Brain method acceptable for parser state machine
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
-	})
 	private <K,V> Map<K,V> readIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -752,9 +724,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 */
 	private String readPString(UonReader r) throws IOException, ParseException {
 
-		@SuppressWarnings({
-			"unused" // Intentionally unused; variable/parameter is required by the interface contract
-		})
 		int ignored = r.read();
 		r.mark();
 		int c = 0;
@@ -858,9 +827,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Attribute name was malformed.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
-	})
 	protected final String readAttrName(UonReader r, boolean encoded) throws IOException, ParseException {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
@@ -954,7 +920,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	@Override /* Overridden from ReaderParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_decoding, decoding)
-			.a(PROP_validateEnd, validateEnd);
+			.a("decoding", decoding)
+			.a("validateEnd", validateEnd);
 	}
 }

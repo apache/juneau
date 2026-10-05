@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server.tracing;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.http.tracing.TraceContextCarrier;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Immutable, low-cardinality description of the operation a {@code TracerHook} bridge should name a
@@ -138,8 +138,8 @@ public final class TraceOperation {
 	 * @return A new {@link TraceOperation}. Never <jk>null</jk>.
 	 */
 	public static TraceOperation of(String spanName, Map<String,String> attributes) {
-		assertArgNotNullOrBlank("spanName", spanName);
-		assertArgNotNull("attributes", attributes);
+		reqnb("spanName", spanName);
+		reqnn("attributes", attributes);
 		return new TraceOperation(spanName, Collections.unmodifiableMap(new LinkedHashMap<>(attributes)));
 	}
 

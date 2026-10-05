@@ -224,8 +224,9 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
-	"java:S3740" // Raw Class/Builder types used intentionally for fluent mock client construction where response type is unknown at build time
+	"java:S3740", // Raw Class/Builder types used intentionally for fluent mock client construction where response type is unknown at build time
+	"resource", // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
+	"unchecked" // Type erasure requires cast for builder chain
 })
 public class MockRestClient extends RestClient implements HttpClientConnection {
 
@@ -294,9 +295,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast for builder chain
-		})
 		public Builder parsers(Class<? extends Parser>...value) {
 			super.parsers(value);
 			return this;
@@ -410,9 +408,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast for builder chain
-		})
 		public Builder serializers(Class<? extends org.apache.juneau.marshall.serializer.Serializer>...value) {
 			super.serializers(value);
 			return this;
@@ -843,7 +838,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
 		var contentEncoding = response.getLastHeader("Content-Encoding");
-		if (nn(contentEncoding) && contentEncoding.getValue().equalsIgnoreCase("gzip"))
+		if (nn(contentEncoding) && eqic(contentEncoding.getValue(), "gzip"))
 			is = new GZIPInputStream(is);
 		response.setEntity(new InputStreamEntity(is));
 	}

@@ -34,6 +34,9 @@ import org.junit.jupiter.params.provider.*;
  * TIME/DATE/TIMESTAMP(micros|nanos).  Read-side decode is always on; write-side native emission is
  * behind the {@code nativeLogicalTypes()} opt-in (default output unchanged).
  */
+@SuppressWarnings({
+	"unchecked" // ParquetParser.read(..., List.class, X.class) results are cast to List<DecBean>/List<TemporalBean>
+})
 class ParquetLogicalTypes_Test extends TestBase {
 
 	// =================================================================================
@@ -80,7 +83,6 @@ class ParquetLogicalTypes_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	void b2_01_decimalNativeRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = List.of(new DecBean(new BigDecimal("123.456")), new DecBean(new BigDecimal("0.000000001")));
@@ -104,7 +106,6 @@ class ParquetLogicalTypes_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	void b3_01_temporalNativeRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		// A timestamp with microsecond precision the default millis path would truncate.

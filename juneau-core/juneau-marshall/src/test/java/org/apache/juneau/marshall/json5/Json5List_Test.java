@@ -235,7 +235,7 @@ class Json5List_Test extends TestBase {
 
 	@SuppressWarnings({
 		"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
-		"java:S5961"  // High assertion count is acceptable in a comprehensive data-driven mutator-surface test.
+		"java:S5961" // High assertion count is acceptable in a comprehensive data-driven mutator-surface test.
 	})
 	@Test void a20_unmodifiableFullMutatorSurfaceThrows() {
 		// Regression: Json5List.Unmodifiable originally overrode only add(int,·)/remove(int)/set(int,·), leaving

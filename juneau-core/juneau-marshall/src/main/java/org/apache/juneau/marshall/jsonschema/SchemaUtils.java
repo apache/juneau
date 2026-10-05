@@ -73,7 +73,7 @@ public class SchemaUtils {
 			var s = o2;
 			if (s.isEmpty())
 				return new JsonMap();
-			if ("IGNORE".equalsIgnoreCase(s))
+			if (eqic("IGNORE", s))
 				return JsonMap.of("ignore", true);
 			if (! isProbablyJsonObject(s, true))
 				s = "{" + s + "}";

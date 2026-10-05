@@ -327,7 +327,7 @@ class MarshallerVariantClass_Test extends TestBase {
 		assertBean(m, "a", "1");
 	}
 
-	// NOTE (TODO-353): BsonSerializer/CborSerializer/MsgPackSerializer now honor the configured
+	// NOTE: BsonSerializer/CborSerializer/MsgPackSerializer now honor the configured
 	// BinaryFormat for byte[] output -- SPACED_HEX/BASE64 switch the byte[] wire representation from
 	// each format's native binary opcode to that format's native string type containing the
 	// spaced-hex/base64 text, so the SpacedHex/Base64 variant serializers produce visibly distinct

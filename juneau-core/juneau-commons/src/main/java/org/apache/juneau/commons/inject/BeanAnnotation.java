@@ -21,8 +21,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Utility classes and methods for the {@link Bean @Bean} annotation.
@@ -149,8 +151,8 @@ public class BeanAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
-		"annotationSuperInterface" // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
+		"annotationSuperInterface", // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Object extends AppliedAnnotationObject implements Bean {
 
@@ -221,5 +223,65 @@ public class BeanAnnotation {
 		if (! a.name().isEmpty())
 			return a.name();
 		return a.value();
+	}
+
+	/**
+	 * Finds the {@link Bean @Bean} annotation that applies to the specified method.
+	 *
+	 * <p>
+	 * The result is the method's <em>own</em> declared {@link Bean @Bean}, or else the one declared on a method it
+	 * truly overrides.  A parent method only counts as overridden when it is non-private, non-static, not a
+	 * bridge/synthetic method, and (when package-private) declared in the same package as the method.
+	 * This is stricter than {@link MethodInfo#getAnnotations()}, which also merges annotations from same-signature
+	 * private or static parent methods that are not overrides.
+	 *
+	 * <p>
+	 * Bridge and synthetic methods always return {@link Optional#empty()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> Parent {
+	 * 		<ja>@Bean</ja>(name=<js>"db"</js>)
+	 * 		<jk>public</jk> HealthIndicator dbIndicator() { ... }
+	 * 	}
+	 *
+	 * 	<jk>public class</jk> Child <jk>extends</jk> Parent {
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> HealthIndicator dbIndicator() { ... }  <jc>// Not annotated, but overrides an annotated method.</jc>
+	 * 	}
+	 *
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"dbIndicator"</js>)).get();
+	 * 	Optional&lt;Bean&gt; <jv>bean</jv> = BeanAnnotation.<jsm>find</jsm>(<jv>mi</jv>);  <jc>// Present, name="db".</jc>
+	 * </p>
+	 *
+	 * @param method The method to inspect.  Must not be <jk>null</jk>.
+	 * @return The applicable annotation, or {@link Optional#empty()} if none applies.
+	 */
+	public static Optional<Bean> find(MethodInfo method) {
+		reqnn("method", method);
+		if (method.isBridge() || method.isSynthetic())
+			return Optional.empty();
+		var own = method.inner().getAnnotation(Bean.class);
+		if (own != null)
+			return Optional.of(own);
+		if (method.isPrivate() || method.isStatic())
+			return Optional.empty();
+		var pkg = method.inner().getDeclaringClass().getPackageName();
+		var matching = method.getMatchingMethods();
+		for (var i = 1; i < matching.size(); i++) {
+			var parent = matching.get(i);
+			if (! isInheritableFrom(parent, pkg))
+				continue;
+			var a = parent.inner().getAnnotation(Bean.class);
+			if (a != null)
+				return Optional.of(a);
+		}
+		return Optional.empty();
+	}
+
+	private static boolean isInheritableFrom(MethodInfo parent, String pkg) {
+		if (parent.isPrivate() || parent.isStatic() || parent.isBridge() || parent.isSynthetic())
+			return false;
+		return parent.isPublic() || parent.isProtected() || pkg.equals(parent.inner().getDeclaringClass().getPackageName());
 	}
 }

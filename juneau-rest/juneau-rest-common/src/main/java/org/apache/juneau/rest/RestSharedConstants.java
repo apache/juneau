@@ -27,7 +27,7 @@ package org.apache.juneau.rest;
  * {@code RestServerConstants} in {@code juneau-rest-server}.
  */
 @SuppressWarnings({
-	"java:S115", // Names use HEADER_/QUERY_ + camelCase to mirror wire identifiers; not strict UPPER_SNAKE_CASE
+	"java:S115" // Names use HEADER_/QUERY_ + camelCase to mirror wire identifiers; not strict UPPER_SNAKE_CASE
 })
 public final class RestSharedConstants {
 

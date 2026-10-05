@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -102,8 +103,8 @@ class MockHttpSession_Test extends TestBase {
 		var seenB = false;
 		while (names.hasMoreElements()) {
 			var n = names.nextElement();
-			if ("a".equals(n)) seenA = true;
-			if ("b".equals(n)) seenB = true;
+			if (eq(n, "a")) seenA = true;
+			if (eq(n, "b")) seenB = true;
 		}
 		assertTrue(seenA);
 		assertTrue(seenB);

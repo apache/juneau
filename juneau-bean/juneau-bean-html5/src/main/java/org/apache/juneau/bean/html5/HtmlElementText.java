@@ -28,7 +28,9 @@ import org.apache.juneau.marshall.xml.*;
  *
  * @param <SELF> The self type for fluent setters.
  */
-@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+@SuppressWarnings({
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+})
 public abstract class HtmlElementText<SELF extends HtmlElementText<SELF>> extends HtmlElement<SELF> {
 
 	private Object text;

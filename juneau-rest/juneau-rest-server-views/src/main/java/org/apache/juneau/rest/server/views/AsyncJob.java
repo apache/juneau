@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -95,9 +95,9 @@ public final class AsyncJob {
 	 * @param maxSubscribers The maximum number of concurrent subscribers.
 	 */
 	AsyncJob(String id, Instant createdAt, Duration timeout, long maxOutputBytes, int maxSubscribers) {
-		this.id = assertArgNotNull("id", id);
-		this.createdAt = assertArgNotNull("createdAt", createdAt);
-		this.timeout = assertArgNotNull("timeout", timeout);
+		this.id = reqnn("id", id);
+		this.createdAt = reqnn("createdAt", createdAt);
+		this.timeout = reqnn("timeout", timeout);
 		this.maxOutputBytes = maxOutputBytes;
 		this.maxSubscribers = maxSubscribers;
 	}
@@ -138,7 +138,7 @@ public final class AsyncJob {
 	 * 	cap was hit (which itself terminates the job).
 	 */
 	public boolean progress(String text) {
-		assertArgNotNull("text", text);
+		reqnn("text", text);
 		synchronized (lock) {
 			if (result != null)
 				return false;
@@ -177,7 +177,7 @@ public final class AsyncJob {
 	 * 	wins).
 	 */
 	public boolean complete(ActionResult value) {
-		assertArgNotNull("value", value);
+		reqnn("value", value);
 		synchronized (lock) {
 			if (result != null)
 				return false;
@@ -213,7 +213,7 @@ public final class AsyncJob {
 	 * 	its deadline.
 	 */
 	public boolean enforceTimeout(Instant now) {
-		assertArgNotNull("now", now);
+		reqnn("now", now);
 		synchronized (lock) {
 			if (result != null || ! now.isAfter(deadline()))
 				return false;
@@ -259,7 +259,7 @@ public final class AsyncJob {
 	 * @return The new events (possibly empty) and the terminal result (<jk>null</jk> while still running).
 	 */
 	public Update awaitUpdate(int fromIndex, Duration timeout) {
-		assertArgNotNull("timeout", timeout);
+		reqnn("timeout", timeout);
 		var deadlineNanos = System.nanoTime() + Math.max(0L, timeout.toNanos());
 		synchronized (lock) {
 			while (true) {

@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  * notifications). {@code onStart} runs in registration order; {@code onStop} runs in the reverse order.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Microservice_Listener_Fanout_Test extends TestBase {
 
 	/**
@@ -115,9 +118,6 @@ class Microservice_Listener_Fanout_Test extends TestBase {
 	@Test void b01_noListeners_defaultBasicListenerRegistered() throws Exception {
 		var ms = Microservice.create().build();
 		try {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var listeners = ms.getBeanStore().getBeansOfType(MicroserviceListener.class).values();
 			assertEquals(1, listeners.size());
 			assertInstanceOf(BasicMicroserviceListener.class, listeners.iterator().next());
@@ -135,9 +135,6 @@ class Microservice_Listener_Fanout_Test extends TestBase {
 		var ms = Microservice.create().configurations(B_NamedListenerOnly.class).build();
 		try {
 			// Only the named listener should be present; no unnamed default added.
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var listeners = ms.getBeanStore().getBeansOfType(MicroserviceListener.class);
 			assertEquals(1, listeners.size());
 			assertEquals("only", listeners.keySet().iterator().next());

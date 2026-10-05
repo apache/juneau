@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -42,17 +41,15 @@ import org.apache.juneau.marshall.swap.spi.*;
  *
  */
 @SuppressWarnings({
-	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3740", // Raw ClassMeta/ObjectSwap types used throughout serializer session; parameterization requires extensive generic changes
 	"java:S3776", // Cognitive complexity acceptable for doWrite
 	"java:S6541", // Brain method acceptable for doWrite / writeAnything
-	"resource",   // MarkdownWriter/Writer lifecycle managed by SerializerPipe
-	"rawtypes",
+	"rawtypes", // Raw ClassMeta locals (cm, itemCm, swappedCm) in writeAnything(), writeCollection() and friends are passed to the ObjectSwap API, which is typed on the raw class
+	"resource" // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 })
 public class MarkdownSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
 
 	final String nullValue;
 	final boolean showHeaders;
@@ -61,7 +58,6 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * Builder class.
 	 */
 	@SuppressWarnings({
-		"java:S110", // Inheritance depth acceptable for serializer session builder hierarchy
 		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializerSession.Builder<SELF> {
@@ -76,7 +72,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarkdownSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			nullValue = ctx.getNullValue();
 			showHeaders = ctx.isShowHeaders();
 		}
@@ -109,7 +105,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(MarkdownSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	/**
@@ -368,7 +364,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	private static boolean isAmbiguousString(String s, String nullValue) {
 		if (s.isEmpty()) return true;
 		if (s.equals(nullValue)) return true;
-		if ("true".equals(s) || "false".equals(s)) return true;
+		if (eqa(s, "true", "false")) return true;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (c < 32 || c == 127) return true;

@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.rest;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.Shorts;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
@@ -53,7 +54,24 @@ public class PetHtmlResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient PetStore store = new PetStore();
+	/**
+	 * The shared store, injected from the parent's bean store (the runner registers one seeded {@code PetStore}).
+	 * When this resource is mounted standalone (unit tests), {@link #store()} falls back to a classic-rows store.
+	 */
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient PetStore store;
+
+	@SuppressWarnings({
+		"java:S2654" // synchronized guards the lazy standalone fallback, racing against the injected value.
+	})
+	private synchronized PetStore store() {
+		if (store == null)
+			store = new PetStore();
+		return store;
+	}
 
 	/**
 	 * Lists the child endpoints.
@@ -77,7 +95,7 @@ public class PetHtmlResource extends BasicRestServlet {
 	 */
 	@RestGet("/card/{id}")
 	public Div getPetCard(@Path("id") long id) {
-		var pet = store.getPet(id);
+		var pet = store().getPet(id);
 		if (pet == null)
 			throw new NotFound("Pet not found: id=%s", id);
 		return div(
@@ -97,7 +115,7 @@ public class PetHtmlResource extends BasicRestServlet {
 	public Table getPetTable() {
 		var rows = Shorts.l();
 		rows.add(tr(th("Name"), th("Species"), th("Price"), th("Status")));
-		for (var pet : store.getPets())
+		for (var pet : store().getPets())
 			rows.add(tr(td(pet.getName()), td(pet.getSpecies()), td(pet.getPrice()), td(pet.getStatus())));
 		return table(rows.toArray());
 	}

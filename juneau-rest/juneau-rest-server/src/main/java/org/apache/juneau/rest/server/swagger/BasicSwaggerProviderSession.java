@@ -43,6 +43,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.Contact;
 import org.apache.juneau.http.License;
 import org.apache.juneau.http.Tag;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
@@ -66,91 +67,19 @@ import jakarta.servlet.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S1168",    // Swagger/OpenAPI spec: null = omit field (e.g. parseList, parseMap, nullIfEmpty, toMap, firstNonEmpty)
-	"java:S115"      // Constants use UPPER_snakeCase convention (e.g., SWAGGER_paths)
+	"java:S112", // getSwagger(), addBodyExamples(), addRequestBeanParams() and getSchema() declare throws Exception because example generation and parsing surface arbitrary checked exceptions
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., SWAGGER_paths)
+	"java:S1168", // Swagger/OpenAPI spec: null = omit field (e.g. parseList, parseMap, nullIfEmpty, toMap, firstNonEmpty)
+	"java:S3776", // getSwagger() (plus merge(Schema) and addBodyExamples()) walks every Swagger section in one pass; splitting it would obscure the document structure
+	"resource" // Resource management handled externally
 })
 public class BasicSwaggerProviderSession {
 
 	private static final RichLogger LOG = RichLogger.getLogger(BasicSwaggerProviderSession.class);
 
-	// Swagger JSON property name constants
-	private static final String SWAGGER_allOf = "allOf";
-	private static final String SWAGGER_body = "body";
-	private static final String SWAGGER_collectionFormat = "collectionFormat";
-	private static final String SWAGGER_consumes = "consumes";
-	private static final String SWAGGER_contact = "contact";
-	private static final String SWAGGER_default = "default";
-	private static final String SWAGGER_definitions = "definitions";
-	private static final String SWAGGER_deprecated = "deprecated";
-	private static final String SWAGGER_description = "description";
-	private static final String SWAGGER_discriminator = "discriminator";
-	private static final String SWAGGER_email = "email";
-	private static final String SWAGGER_enum = "enum";
-	private static final String SWAGGER_example = "example";
-	private static final String SWAGGER_examples = "examples";
-	private static final String SWAGGER_exclusiveMaximum = "exclusiveMaximum";
-	private static final String SWAGGER_exclusiveMinimum = "exclusiveMinimum";
-	private static final String SWAGGER_externalDocs = "externalDocs";
-	private static final String SWAGGER_format = "format";
-	private static final String SWAGGER_headers = "headers";
-	private static final String SWAGGER_ignore = "ignore";
-	private static final String SWAGGER_in = "in";
-	private static final String SWAGGER_info = "info";
-	private static final String SWAGGER_items = "items";
-	private static final String SWAGGER_license = "license";
-	private static final String SWAGGER_maxItems = "maxItems";
-	private static final String SWAGGER_maxLength = "maxLength";
-	private static final String SWAGGER_maxProperties = "maxProperties";
-	private static final String SWAGGER_maximum = "maximum";
-	private static final String SWAGGER_minItems = "minItems";
-	private static final String SWAGGER_minLength = "minLength";
-	private static final String SWAGGER_minProperties = "minProperties";
-	private static final String SWAGGER_minimum = "minimum";
-	private static final String SWAGGER_multipleOf = "multipleOf";
-	private static final String SWAGGER_name = "name";
-	private static final String SWAGGER_object = "object";
-	private static final String SWAGGER_operationId = "operationId";
-	private static final String SWAGGER_parameters = "parameters";
-	private static final String SWAGGER_paths = "paths";
-	private static final String SWAGGER_pattern = "pattern";
-	private static final String SWAGGER_produces = "produces";
-	private static final String SWAGGER_readOnly = "readOnly";
-	private static final String SWAGGER_required = "required";
-	private static final String SWAGGER_responses = "responses";
-	private static final String SWAGGER_schema = "schema";
-	private static final String SWAGGER_schemes = "schemes";
-	private static final String SWAGGER_siteName = "siteName";
-	private static final String SWAGGER_summary = "summary";
-	private static final String SWAGGER_tags = "tags";
-	private static final String SWAGGER_termsOfService = "termsOfService";
-	private static final String SWAGGER_title = "title";
-	private static final String SWAGGER_true = "true";
-	private static final String SWAGGER_type = "type";
-	private static final String SWAGGER_uniqueItems = "uniqueItems";
-	private static final String SWAGGER_url = "url";
-	private static final String SWAGGER_version = "version";
-	private static final String SWAGGER_xml = "xml";
-	private static final String SWAGGER_$ref = "$ref";
-
-	// JSON-Schema extension property name constants (x-prefixed)
-	private static final String JSONSCHEMA_x_discriminator = "x-discriminator";
-	private static final String JSONSCHEMA_x_example = "x-example";
-	private static final String JSONSCHEMA_x_externalDocs = "x-externalDocs";
-	private static final String JSONSCHEMA_x_readOnly = "x-readOnly";
-	private static final String JSONSCHEMA_x_xml = "x-xml";
-
-	// Other constant values
-	private static final String CONST_200 = "200";
-	private static final String CONST_IGNORE = "IGNORE";
-	private static final String CONST_value = "_value";
-
 	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
 		var codes = new TreeSet<Integer>();
-		for (var a : la) {
-			for (var i : a.value())
-				codes.add(i);
-		}
+		la.stream().flatMapToInt(a -> Arrays.stream(a.value())).forEach(codes::add);
 		if (codes.isEmpty() && nn(def))
 			codes.add(def);
 		return codes;
@@ -221,9 +150,7 @@ public class BasicSwaggerProviderSession {
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // throws Exception intentional - callback/lifecycle method
-		"java:S6541", // Single-threaded context; synchronization unnecessary
-		"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+		"java:S6541" // Single-threaded context; synchronization unnecessary
 	})
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
@@ -246,24 +173,24 @@ public class BasicSwaggerProviderSession {
 
 		for (var rr : restAnnotations) {
 
-			var sInfo = omSwagger.getMap(SWAGGER_info, true);
+			var sInfo = omSwagger.getMap("info", true);
 
 			sInfo
-				.appendIf(ne, SWAGGER_title,
+				.appendIf(ne, "title",
 					firstNonEmpty(
-						sInfo.getString(SWAGGER_title),
+						sInfo.getString("title"),
 						resolve(rr.title())
 					)
 				)
-				.appendIf(ne, SWAGGER_description,
+				.appendIf(ne, "description",
 					firstNonEmpty(
-						sInfo.getString(SWAGGER_description),
+						sInfo.getString("description"),
 						resolve(rr.description())
 					)
 				)
-				.appendIf(ne, SWAGGER_siteName,
+				.appendIf(ne, "siteName",
 					firstNonEmpty(
-						sInfo.getString(SWAGGER_siteName),
+						sInfo.getString("siteName"),
 						resolve(rr.siteName())
 					)
 				);
@@ -273,59 +200,59 @@ public class BasicSwaggerProviderSession {
 			omSwagger.append(parseMap(r.value(), "@Swagger(value) on class %s", c));
 
 			if (! SwaggerAnnotation.empty(r)) {
-				var info = omSwagger.getMap(SWAGGER_info, true);
+				var info = omSwagger.getMap("info", true);
 
 				info
-					.appendIf(ne, SWAGGER_title, resolve(r.title()))
-					.appendIf(ne, SWAGGER_description, resolve(r.description()))
-					.appendIf(ne, SWAGGER_version, resolve(r.version()))
-					.appendIf(ne, SWAGGER_termsOfService, resolve(r.termsOfService()))
-					.appendIf(nem, SWAGGER_contact,
+					.appendIf(ne, "title", resolve(r.title()))
+					.appendIf(ne, "description", resolve(r.description()))
+					.appendIf(ne, "version", resolve(r.version()))
+					.appendIf(ne, "termsOfService", resolve(r.termsOfService()))
+					.appendIf(nem, "contact",
 						merge(
-							info.getMap(SWAGGER_contact),
+							info.getMap("contact"),
 							toMap(r.contact())
 						)
 					)
-					.appendIf(nem, SWAGGER_license,
+					.appendIf(nem, "license",
 						merge(
-							info.getMap(SWAGGER_license),
+							info.getMap("license"),
 							toMap(r.license())
 						)
 					);
 			}
 
 			omSwagger
-				.appendIf(nem, SWAGGER_externalDocs,
+				.appendIf(nem, "externalDocs",
 					merge(
-						omSwagger.getMap(SWAGGER_externalDocs),
+						omSwagger.getMap("externalDocs"),
 						toMap(r.externalDocs())
 					)
 				)
-				.appendIf(nec, SWAGGER_tags,
+				.appendIf(nec, "tags",
 					merge(
-						omSwagger.getList(SWAGGER_tags),
+						omSwagger.getList("tags"),
 						toList(r.tags())
 					)
 				);
 		}
 
-		omSwagger.appendIf(nem, SWAGGER_externalDocs, parseMap(mb.findFirstString(SWAGGER_externalDocs), "Messages/externalDocs on class %s", c));
+		omSwagger.appendIf(nem, "externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class %s", c));
 
-		var info = omSwagger.getMap(SWAGGER_info, true);
+		var info = omSwagger.getMap("info", true);
 
 		info
-			.appendIf(ne, SWAGGER_title, resolve(mb.findFirstString(SWAGGER_title)))
-			.appendIf(ne, SWAGGER_description, resolve(mb.findFirstString(SWAGGER_description)))
-			.appendIf(ne, SWAGGER_version, resolve(mb.findFirstString(SWAGGER_version)))
-			.appendIf(ne, SWAGGER_termsOfService, resolve(mb.findFirstString(SWAGGER_termsOfService)))
-			.appendIf(nem, SWAGGER_contact, parseMap(mb.findFirstString(SWAGGER_contact), "Messages/contact on class %s", c))
-			.appendIf(nem, SWAGGER_license, parseMap(mb.findFirstString(SWAGGER_license), "Messages/license on class %s", c));
+			.appendIf(ne, "title", resolve(mb.findFirstString("title")))
+			.appendIf(ne, "description", resolve(mb.findFirstString("description")))
+			.appendIf(ne, "version", resolve(mb.findFirstString("version")))
+			.appendIf(ne, "termsOfService", resolve(mb.findFirstString("termsOfService")))
+			.appendIf(nem, "contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class %s", c))
+			.appendIf(nem, "license", parseMap(mb.findFirstString("license"), "Messages/license on class %s", c));
 
 		if (info.isEmpty())
-			omSwagger.remove(SWAGGER_info);
+			omSwagger.remove("info");
 
-		var produces = omSwagger.getList(SWAGGER_produces, true);
-		var consumes = omSwagger.getList(SWAGGER_consumes, true);
+		var produces = omSwagger.getList("produces", true);
+		var consumes = omSwagger.getList("consumes", true);
 
 		if (consumes.isEmpty())
 			consumes.addAll(context.getConsumes());
@@ -333,9 +260,9 @@ public class BasicSwaggerProviderSession {
 			produces.addAll(context.getProduces());
 
 		Map<String,Json5Map> tagMap = map();
-		if (omSwagger.containsKey(SWAGGER_tags)) {
-			for (var om : omSwagger.getList(SWAGGER_tags).elements(Json5Map.class)) {
-				String name = om.getString(SWAGGER_name);
+		if (omSwagger.containsKey("tags")) {
+			for (var om : omSwagger.getList("tags").elements(Json5Map.class)) {
+				String name = om.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in swagger JSON.");
 				tagMap.put(name, om);
@@ -345,7 +272,7 @@ public class BasicSwaggerProviderSession {
 		var s = mb.findFirstString("tags");
 		if (nn(s)) {
 			for (var m : parseListOrCdl(s, "Messages/tags on class %s", c).elements(Json5Map.class)) {
-				var name = m.getString(SWAGGER_name);
+				var name = m.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class %s", c);
 				if (tagMap.containsKey(name))
@@ -356,7 +283,7 @@ public class BasicSwaggerProviderSession {
 		}
 
 		// Load our existing bean definitions into our session.
-		var definitions = omSwagger.getMap(SWAGGER_definitions, true);
+		var definitions = omSwagger.getMap("definitions", true);
 		for (var defId : definitions.keySet())
 			js.addBeanDef(defId, new JsonMap(definitions.getMap(defId)));
 
@@ -383,94 +310,94 @@ public class BasicSwaggerProviderSession {
 			var op = getOperation(omSwagger, sm.getPathPattern(), lcr(sm.getHttpMethod()));
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class %s method %s", c, m));
-			op.appendIf(ne, SWAGGER_operationId,
+			op.appendIf(ne, "operationId",
 				firstNonEmpty(
 					resolve(ms.operationId()),
-					op.getString(SWAGGER_operationId),
+					op.getString("operationId"),
 					mn
 				)
 			);
 
 		var summaryValue = Holder.<String>empty();
-		al.forEach(ai -> ai.getValue(String.class, SWAGGER_summary).filter(NOT_EMPTY).ifPresent(summaryValue::set));
-		op.appendIf(ne, SWAGGER_summary,
+		al.forEach(ai -> ai.getValue(String.class, "summary").filter(NOT_EMPTY).ifPresent(summaryValue::set));
+		op.appendIf(ne, "summary",
 			firstNonEmpty(
 				resolve(ms.summary()),
 				resolve(mb.findFirstString(mn + ".summary")),
-				op.getString(SWAGGER_summary),
+				op.getString("summary"),
 				resolve(summaryValue.orElse(null))
 			)
 		);
 
 		var descriptionValue = Holder.<String[]>empty();
-		al.forEach(ai -> ai.getValue(String[].class, SWAGGER_description).filter(x -> x.length > 0).ifPresent(descriptionValue::set));
-		op.appendIf(ne, SWAGGER_description,
+		al.forEach(ai -> ai.getValue(String[].class, "description").filter(x -> x.length > 0).ifPresent(descriptionValue::set));
+		op.appendIf(ne, "description",
 			firstNonEmpty(
 				resolve(ms.description()),
 				resolve(mb.findFirstString(mn + ".description")),
-				op.getString(SWAGGER_description),
+				op.getString("description"),
 				resolve(descriptionValue.orElse(new String[0]))
 			)
 		);
-			op.appendIf(ne, SWAGGER_deprecated,
+			op.appendIf(ne, "deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
-					(nn(m.getAnnotation(Deprecated.class)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotations(Deprecated.class).findFirst().map(AnnotationInfo::inner).orElse(null))) ? SWAGGER_true : null
+					(nn(m.getAnnotation(Deprecated.class)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotations(Deprecated.class).findFirst().map(AnnotationInfo::inner).orElse(null))) ? "true" : null
 				)
 			);
-			op.appendIf(nec, SWAGGER_tags,
+			op.appendIf(nec, "tags",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class %s method %s", c, m),
 					parseListOrCdl(ms.tags(), "@OpSwagger(tags) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nec, SWAGGER_schemes,
+			op.appendIf(nec, "schemes",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class %s method %s", c, m),
 					parseListOrCdl(ms.schemes(), "@OpSwagger(schemes) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nec, SWAGGER_consumes,
+			op.appendIf(nec, "consumes",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class %s method %s", c, m),
 					parseListOrCdl(ms.consumes(), "@OpSwagger(consumes) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nec, SWAGGER_produces,
+			op.appendIf(nec, "produces",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class %s method %s", c, m),
 					parseListOrCdl(ms.produces(), "@OpSwagger(produces) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nec, SWAGGER_parameters,
+			op.appendIf(nec, "parameters",
 				merge(
 					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class %s method %s", c, m),
 					parseList(ms.parameters(), "@OpSwagger(parameters) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nem, SWAGGER_responses,
+			op.appendIf(nem, "responses",
 				merge(
 					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class %s method %s", c, m),
 					parseMap(ms.responses(), "@OpSwagger(responses) on class %s method %s", c, m)
 				)
 			);
-			op.appendIf(nem, SWAGGER_externalDocs,
+			op.appendIf(nem, "externalDocs",
 				merge(
-					op.getMap(SWAGGER_externalDocs),
+					op.getMap("externalDocs"),
 					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class %s method %s", c, m),
 					toMap(ms.externalDocs())
 				)
 			);
 
-			if (op.containsKey(SWAGGER_tags))
-				for (var tag : op.getList(SWAGGER_tags).elements(String.class))
+			if (op.containsKey("tags"))
+				for (var tag : op.getList("tags").elements(String.class))
 					if (! tagMap.containsKey(tag))
-						tagMap.put(tag, Json5Map.of(SWAGGER_name, tag));
+						tagMap.put(tag, Json5Map.of("name", tag));
 
 			var paramMap = new Json5Map();
-			if (op.containsKey(SWAGGER_parameters))
-				for (var param : op.getList(SWAGGER_parameters).elements(Json5Map.class))
-					paramMap.put(param.getString(SWAGGER_in) + '.' + (SWAGGER_body.equals(param.getString(SWAGGER_in)) ? SWAGGER_body : param.getString(SWAGGER_name)), param);
+			if (op.containsKey("parameters"))
+				for (var param : op.getList("parameters").elements(Json5Map.class))
+					paramMap.put(param.getString("in") + '.' + (eq(param.getString("in"), "body") ? "body" : param.getString("name")), param);
 
 			// Finally, look for parameters defined on method.
 			for (var mpi : mi.getParameters()) {
@@ -479,54 +406,57 @@ public class BasicSwaggerProviderSession {
 				var type = pt.innerType();
 
 				if (ap.has(Content.class, mpi)) {
-					var param = paramMap.getMap(BODY + ".body", true).append(SWAGGER_in, BODY);
-					var schema = getSchema(param.getMap(SWAGGER_schema), type, bs);
+					var param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
+					var schema = getSchema(param.getMap("schema"), type, bs);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(schema, x.inner()));
 					rstream(ap.find(Content.class, mpi)).forEach(x -> merge(schema, x.inner().schema()));
 					pushupSchemaFields(BODY, param, schema);
-					param.appendIf(nem, SWAGGER_schema, schema);
-					param.putIfAbsent(SWAGGER_required, SWAGGER_true);
+					param.appendIf(nem, "schema", schema);
+					param.putIfAbsent("required", "true");
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (ap.has(Query.class, mpi)) {
 					var name = findAnnotationName(ap, Query.class, mpi).orElse(null);
-					var param = paramMap.getMap(QUERY + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, QUERY);
+					var param = paramMap.getMap(QUERY + "." + name, true).append("name", name).append("in", QUERY);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Query.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
-					pushupSchemaFields(QUERY, param, getSchema(param.getMap(SWAGGER_schema), type, bs));
-					addParamExample(sm, param, QUERY, type);
+					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, QUERY);
 
 				} else if (ap.has(FormData.class, mpi)) {
 					var name = findAnnotationName(ap, FormData.class, mpi).orElse(null);
-					var param = paramMap.getMap(FORM_DATA + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, FORM_DATA);
+					var param = paramMap.getMap(FORM_DATA + "." + name, true).append("name", name).append("in", FORM_DATA);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(FormData.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
-					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap(SWAGGER_schema), type, bs));
-					addParamExample(sm, param, FORM_DATA, type);
+					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, FORM_DATA);
 
 				} else if (ap.has(Header.class, mpi)) {
 					var name = findAnnotationName(ap, Header.class, mpi).orElse(null);
-					var param = paramMap.getMap(HEADER + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, HEADER);
+					var param = paramMap.getMap(HEADER + "." + name, true).append("name", name).append("in", HEADER);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Header.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
-					pushupSchemaFields(HEADER, param, getSchema(param.getMap(SWAGGER_schema), type, bs));
-					addParamExample(sm, param, HEADER, type);
+					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, HEADER);
 
 				} else if (ap.has(Path.class, mpi)) {
 					var name = findAnnotationName(ap, Path.class, mpi).orElse(null);
-					var param = paramMap.getMap(PATH + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, PATH);
+					var param = paramMap.getMap(PATH + "." + name, true).append("name", name).append("in", PATH);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Path.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
-					pushupSchemaFields(PATH, param, getSchema(param.getMap(SWAGGER_schema), type, bs));
-					addParamExample(sm, param, PATH, type);
-					param.putIfAbsent(SWAGGER_required, SWAGGER_true);
+					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, PATH);
+					param.putIfAbsent("required", "true");
+
+				} else if (ap.has(Request.class, mpi)) {
+					addRequestBeanParams(ap, sm, paramMap, mpi, bs);
 				}
 			}
 
 			if (! paramMap.isEmpty())
-				op.put(SWAGGER_parameters, paramMap.values());
+				op.put("parameters", paramMap.values());
 
-			var responses = op.getMap(SWAGGER_responses, true);
+			var responses = op.getMap("responses", true);
 
 			for (var eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
@@ -537,10 +467,10 @@ public class BasicSwaggerProviderSession {
 						for (var code : codes) {
 							var om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
-							var schema = getSchema(om.getMap(SWAGGER_schema), m.getGenericReturnType(), bs);
+							var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 							rstream(ap.find(Schema.class, eci)).forEach(x -> merge(schema, x.inner()));
 							pushupSchemaFields(RESPONSE, om, schema);
-							om.appendIf(nem, SWAGGER_schema, schema);
+							om.appendIf(nem, "schema", schema);
 					}
 				}
 				var methods = eci.getAllMethods();
@@ -552,10 +482,10 @@ public class BasicSwaggerProviderSession {
 						if (nn(a) && ! isMulti(a)) {
 							var ha = a.name();
 							for (var code : codes) {
-								var header = responses.getMap(String.valueOf(code), true).getMap(SWAGGER_headers, true).getMap(ha, true);
+								var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 								rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
 								rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Holder.class, Optional.class))).forEach(x -> merge(header, x.inner()));
-								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap(SWAGGER_schema), ecmi.getReturnType().unwrap(Holder.class, Optional.class).innerType(), bs));
+								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Holder.class, Optional.class).innerType(), bs));
 							}
 						}
 					}
@@ -570,10 +500,10 @@ public class BasicSwaggerProviderSession {
 					for (var code : codes) {
 						var om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
-						var schema = getSchema(om.getMap(SWAGGER_schema), m.getGenericReturnType(), bs);
+						var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 						rstream(ap.find(Schema.class, mi)).forEach(x -> merge(schema, x.inner()));
 						pushupSchemaFields(RESPONSE, om, schema);
-						om.appendIf(nem, SWAGGER_schema, schema);
+						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 					}
 			}
@@ -586,7 +516,7 @@ public class BasicSwaggerProviderSession {
 							var ha = a.name();
 							if (! isMulti(a)) {
 								for (var code : codes) {
-									var header = responses.getMap(String.valueOf(code), true).getMap(SWAGGER_headers, true).getMap(ha, true);
+									var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 									rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
 									rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Holder.class, Optional.class))).forEach(x -> merge(header, x.inner()));
 									merge(header, a.schema());
@@ -597,12 +527,12 @@ public class BasicSwaggerProviderSession {
 					}
 				}
 			} else if (m.getGenericReturnType() != void.class) {
-				var om = responses.getMap(CONST_200, true);
+				var om = responses.getMap("200", true);
 				var pt2 = ClassInfo.of(m.getGenericReturnType());
-				var schema = getSchema(om.getMap(SWAGGER_schema), m.getGenericReturnType(), bs);
+				var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 				rstream(ap.find(Schema.class, pt2)).forEach(x -> merge(schema, x.inner()));
 				pushupSchemaFields(RESPONSE, om, schema);
-				om.appendIf(nem, SWAGGER_schema, schema);
+				om.appendIf(nem, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 			}
 
@@ -620,7 +550,7 @@ public class BasicSwaggerProviderSession {
 					for (var a : la) {
 						if (! isMulti(a)) {
 							for (var code : codes) {
-								var header = responses.getMap(String.valueOf(code), true).getMap(SWAGGER_headers, true).getMap(name, true);
+								var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
 								rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(header, x.inner()));
 								merge(header, a.schema());
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
@@ -637,11 +567,11 @@ public class BasicSwaggerProviderSession {
 						for (var code : codes) {
 							var om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
-							var schema = getSchema(om.getMap(SWAGGER_schema), type, bs);
+							var schema = getSchema(om.getMap("schema"), type, bs);
 							rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(schema, x.inner()));
 							la.forEach(x -> merge(schema, x.schema()));
 							pushupSchemaFields(RESPONSE, om, schema);
-							om.appendIf(nem, SWAGGER_schema, schema);
+							om.appendIf(nem, "schema", schema);
 						}
 					}
 				}
@@ -652,24 +582,24 @@ public class BasicSwaggerProviderSession {
 				var key = e.getKey();
 				var val = responses.getMap(key);
 				if (isDecimal(key))
-					val.appendIfAbsentIf(ne, SWAGGER_description, RestUtils.getHttpResponseText(Integer.parseInt(key)));
+					val.appendIfAbsentIf(ne, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
 			}
 
 			if (responses.isEmpty())
-				op.remove(SWAGGER_responses);
+				op.remove("responses");
 			else
-				op.put(SWAGGER_responses, new TreeMap<>(responses));
+				op.put("responses", new TreeMap<>(responses));
 
-			if (! op.containsKey(SWAGGER_consumes)) {
+			if (! op.containsKey("consumes")) {
 				var mConsumes = sm.getSupportedContentTypes();
 				if (! mConsumes.equals(consumes))
-					op.put(SWAGGER_consumes, mConsumes);
+					op.put("consumes", mConsumes);
 			}
 
-			if (! op.containsKey(SWAGGER_produces)) {
+			if (! op.containsKey("produces")) {
 				var mProduces = sm.getSupportedAcceptTypes();
 				if (! mProduces.equals(produces))
-					op.put(SWAGGER_produces, mProduces);
+					op.put("produces", mProduces);
 			}
 		}
 
@@ -678,15 +608,15 @@ public class BasicSwaggerProviderSession {
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 
 		if (definitions.isEmpty())
-			omSwagger.remove(SWAGGER_definitions);
+			omSwagger.remove("definitions");
 
 		if (! tagMap.isEmpty())
-			omSwagger.put(SWAGGER_tags, tagMap.values());
+			omSwagger.put("tags", tagMap.values());
 
 		if (consumes.isEmpty())
-			omSwagger.remove(SWAGGER_consumes);
+			omSwagger.remove("consumes");
 		if (produces.isEmpty())
-			omSwagger.remove(SWAGGER_produces);
+			omSwagger.remove("produces");
 
 		try {
 			var swaggerJson = Json5R.of(omSwagger);
@@ -697,18 +627,14 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for example generation logic
-		"java:S112"   // throws Exception intentional - callback/lifecycle method
-	})
 	private void addBodyExamples(RestOpContext sm, MarshalledMap piri, boolean response, Type type, Locale locale) throws Exception {
 
-		var sex = piri.getString(SWAGGER_example);
+		var sex = piri.getString("example");
 
 		if (sex == null) {
-			var schema = resolveRef(piri.getMap(SWAGGER_schema));
+			var schema = resolveRef(piri.getMap("schema"));
 			if (nn(schema))
-				sex = schema.getString(SWAGGER_example, schema.getString(SWAGGER_example));
+				sex = schema.getString("example", schema.getString("example"));
 		}
 
 		if (isEmpty(sex))
@@ -724,7 +650,7 @@ public class BasicSwaggerProviderSession {
 			}
 		}
 
-		var examplesKey = SWAGGER_examples;  // Parameters don't have an examples attribute.
+		var examplesKey = "examples";  // Parameters don't have an examples attribute.
 
 		var examples = piri.getMap(examplesKey);
 		if (examples == null)
@@ -762,18 +688,67 @@ public class BasicSwaggerProviderSession {
 		"java:S1172", // Parameter kept to match interface contract
 		"unused" // Eclipse: type parameter unused but kept for API consistency
 	})
-	private static void addParamExample(RestOpContext sm, MarshalledMap piri, RestPartType in, Type type) {
+	/**
+	 * Documents each annotated getter of a {@link Request @Request} bean parameter as its own part parameter, merging
+	 * the getter's {@link Schema @Schema} and part-annotation {@code schema} the same way as for a plain part argument.
+	 *
+	 * <p>
+	 * {@link Content @Content} getters are skipped: a request bean's body is documented by the bean's own schema, not
+	 * by a part parameter.
+	 */
+	private void addRequestBeanParams(AnnotationProvider ap, RestOpContext sm, Json5Map paramMap, ParameterInfo mpi, MarshallingSession bs) throws Exception {
+		var rbm = RequestBeanMeta.create(mpi, AnnotationWorkList.create());
+		if (rbm == null)
+			return;
+		for (var pm : rbm.getProperties()) {
+			var mi = MethodInfo.of(pm.getGetter());
+			var type = pm.getGetter().getGenericReturnType();
+			var schemas = new ArrayList<Schema>();
+			rstream(ap.find(Schema.class, mi)).forEach(x -> schemas.add(x.inner()));
+			RestPartType in;
+			switch (pm.getPartType()) {
+				case QUERY -> {
+					in = QUERY;
+					rstream(ap.find(Query.class, mi)).forEach(x -> schemas.add(x.inner().schema()));
+				}
+				case FORMDATA -> {
+					in = FORM_DATA;
+					rstream(ap.find(FormData.class, mi)).forEach(x -> schemas.add(x.inner().schema()));
+				}
+				case HEADER -> {
+					in = HEADER;
+					rstream(ap.find(Header.class, mi)).forEach(x -> schemas.add(x.inner().schema()));
+				}
+				case PATH -> {
+					in = PATH;
+					rstream(ap.find(Path.class, mi)).forEach(x -> schemas.add(x.inner().schema()));
+				}
+				default -> {
+					continue;
+				}
+			}
+			var name = pm.getPartName();
+			var param = paramMap.getMap(in + "." + name, true).append("name", name).append("in", in);
+			schemas.forEach(x -> merge(param, x));
+			pushupSchemaFields(in, param, getSchema(param.getMap("schema"), type, bs));
+			addParamExample(sm, param, in);
+			if (in == PATH)
+				param.putIfAbsent("required", "true");
+		}
+	}
 
-		var s = piri.getString(SWAGGER_example);
+	private static void addParamExample(RestOpContext sm, MarshalledMap piri, RestPartType in) {
+
+		var s = piri.getString("example");
 
 		if (isEmpty(s))
 			return;
 
-		var examples = piri.getMap(SWAGGER_examples);
+		var examples = piri.getMap("examples");
 		if (examples == null)
 			examples = new Json5Map();
 
-		var paramName = piri.getString(SWAGGER_name);
+		var paramName = piri.getString("name");
 
 		if (in == QUERY)
 			s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
@@ -784,10 +759,10 @@ public class BasicSwaggerProviderSession {
 		else if (in == PATH)
 			s = sm.getPathPattern().replace("{" + paramName + "}", urlEncodeLax(s));
 
-		examples.put(SWAGGER_example, s);
+		examples.put("example", s);
 
 		if (! examples.isEmpty())
-			piri.put(SWAGGER_examples, examples);
+			piri.put("examples", examples);
 	}
 
 	@SafeVarargs
@@ -805,25 +780,22 @@ public class BasicSwaggerProviderSession {
 		Predicate<Object> nn = Shorts::nn;
 		// @formatter:off
 		om
-			.appendIf(nn, SWAGGER_discriminator, om.remove(JSONSCHEMA_x_discriminator))
-			.appendIf(nn, SWAGGER_readOnly, om.remove(JSONSCHEMA_x_readOnly))
-			.appendIf(nn, SWAGGER_xml, om.remove(JSONSCHEMA_x_xml))
-			.appendIf(nn, SWAGGER_externalDocs, om.remove(JSONSCHEMA_x_externalDocs))
-			.appendIf(nn, SWAGGER_example, om.remove(JSONSCHEMA_x_example));
+			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
+			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
+			.appendIf(nn, "xml", om.remove("x-xml"))
+			.appendIf(nn, "externalDocs", om.remove("x-externalDocs"))
+			.appendIf(nn, "example", om.remove("x-example"));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
 	private static MarshalledMap getOperation(MarshalledMap om, String path, String httpMethod) {
-		om = (MarshalledMap) om.computeIfAbsent(SWAGGER_paths, k -> new Json5Map());
+		om = (MarshalledMap) om.computeIfAbsent("paths", k -> new Json5Map());
 		om = (MarshalledMap) om.computeIfAbsent(path, k -> new Json5Map());
 		om.computeIfAbsent(httpMethod, k -> new Json5Map());
 		return (MarshalledMap) om.get(httpMethod);
 	}
 
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	private MarshalledMap getSchema(MarshalledMap schema, Type type, MarshallingSession bs) throws Exception {
 
 		if (type == Swagger.class)
@@ -833,17 +805,17 @@ public class BasicSwaggerProviderSession {
 
 		var cm = bs.getClassMeta(type);
 
-		if (schema.is(SWAGGER_ignore, false))
+		if (schema.is("ignore", false))
 			return null;
 
-		if (schema.containsKey(SWAGGER_type) || schema.containsKey(SWAGGER_$ref))
+		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
 
 		return fixSwaggerExtensions(schema.append(js.getSchema(cm)));
 	}
 
 	private static boolean isMulti(Header h) {
-		return "*".equals(h.name()) || "*".equals(h.value());
+		return eq(h.name(), "*") || eq(h.value(), "*");
 	}
 
 	private static MarshalledList merge(MarshalledList...lists) {
@@ -877,8 +849,8 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		return om
-			.appendIf(ne, SWAGGER_description, resolve(a.description()))
-			.appendIf(ne, SWAGGER_url, a.url())
+			.appendIf(ne, "description", resolve(a.description()))
+			.appendIf(ne, "url", a.url())
 		;
 		// @formatter:on
 	}
@@ -907,24 +879,24 @@ public class BasicSwaggerProviderSession {
 		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
-			.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
-			.appendIf(ne, SWAGGER_default, joinnl(a.default_(), a.df()))
-			.appendFirst(nec, SWAGGER_enum, toSet(a.enum_()), toSet(a.e()))
-			.appendFirst(ne, SWAGGER_format, a.format(), a.f())
-			.appendIf(nf, SWAGGER_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, SWAGGER_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, SWAGGER_items, merge(om.getMap(SWAGGER_items), a.items()))
-			.appendFirst(ne, SWAGGER_maximum, a.maximum(), a.max())
-			.appendFirst(nm1, SWAGGER_maxItems, a.maxItems(), a.maxi())
-			.appendFirst(nm1, SWAGGER_maxLength, a.maxLength(), a.maxl())
-			.appendFirst(ne, SWAGGER_minimum, a.minimum(), a.min())
-			.appendFirst(nm1, SWAGGER_minItems, a.minItems(), a.mini())
-			.appendFirst(nm1, SWAGGER_minLength, a.minLength(), a.minl())
-			.appendFirst(ne, SWAGGER_multipleOf, a.multipleOf(), a.mo())
-			.appendFirst(ne, SWAGGER_pattern, a.pattern(), a.p())
-			.appendIf(nf, SWAGGER_uniqueItems, a.uniqueItems() || a.ui())
-			.appendFirst(ne, SWAGGER_type, a.type(), a.t())
-			.appendIf(ne, SWAGGER_$ref, a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 		// @formatter:on
 	}
@@ -938,9 +910,9 @@ public class BasicSwaggerProviderSession {
 			merge(om, a.schema());
 		// @formatter:off
 		return om
-			.appendIf(nem, SWAGGER_examples, parseMap(a.examples()))
-			.appendIf(nem, SWAGGER_headers, merge(om.getMap(SWAGGER_headers), a.headers()))
-			.appendIf(nem, SWAGGER_schema, merge(om.getMap(SWAGGER_schema), a.schema()))
+			.appendIf(nem, "examples", parseMap(a.examples()))
+			.appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))
+			.appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))
 		;
 		// @formatter:on
 	}
@@ -957,36 +929,36 @@ public class BasicSwaggerProviderSession {
 			Predicate<Long> nm1 = Shorts::nm1;
 			// @formatter:off
 			return om
-				.appendIf(ne, SWAGGER_allOf, joinnl(a.allOf()))
-				.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
-				.appendIf(ne, SWAGGER_default, joinnl(a.default_(), a.df()))
-				.appendIf(ne, SWAGGER_discriminator, a.discriminator())
-				.appendIf(ne, SWAGGER_description, resolve(a.description(), a.d()))
-				.appendFirst(nec, SWAGGER_enum, toSet(a.enum_()), toSet(a.e()))
-				.appendIf(nf, SWAGGER_exclusiveMaximum, a.emax())
-				.appendIf(nf, SWAGGER_exclusiveMinimum, a.emin())
-				.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), a.externalDocs()))
-				.appendFirst(ne, SWAGGER_format, a.format(), a.f())
-				.appendIf(ne, SWAGGER_ignore, a.ignore() ? SWAGGER_true : null)
-				.appendIf(nem, SWAGGER_items, merge(om.getMap(SWAGGER_items), a.items()))
-				.appendFirst(ne, SWAGGER_maximum, a.maximum(), a.max())
-				.appendFirst(nm1, SWAGGER_maxItems, a.maxItems(), a.maxi())
-				.appendFirst(nm1, SWAGGER_maxLength, a.maxLength(), a.maxl())
-				.appendFirst(nm1, SWAGGER_maxProperties, a.maxProperties(), a.maxp())
-				.appendFirst(ne, SWAGGER_minimum, a.minimum(), a.min())
-				.appendFirst(nm1, SWAGGER_minItems, a.minItems(), a.mini())
-				.appendFirst(nm1, SWAGGER_minLength, a.minLength(), a.minl())
-				.appendFirst(nm1, SWAGGER_minProperties, a.minProperties(), a.minp())
-				.appendFirst(ne, SWAGGER_multipleOf, a.multipleOf(), a.mo())
-				.appendFirst(ne, SWAGGER_pattern, a.pattern(), a.p())
-				.appendIf(nf, SWAGGER_readOnly, a.readOnly() || a.ro())
-				.appendIf(nf, SWAGGER_required, a.required() || a.r())
-				.appendIf(ne, SWAGGER_summary, resolve(firstNonEmpty(a.summary(), a.su())))
-				.appendIf(ne, SWAGGER_title, a.title())
-				.appendFirst(ne, SWAGGER_type, a.type(), a.t())
-				.appendIf(nf, SWAGGER_uniqueItems, a.uniqueItems() || a.ui())
-				.appendIf(ne, SWAGGER_xml, joinnl(a.xml()))
-				.appendIf(ne, SWAGGER_$ref, a.$ref())
+				.appendIf(ne, "allOf", joinnl(a.allOf()))
+				.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+				.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+				.appendIf(ne, "discriminator", a.discriminator())
+				.appendIf(ne, "description", resolve(a.description(), a.d()))
+				.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
+				.appendIf(nf, "exclusiveMaximum", a.emax())
+				.appendIf(nf, "exclusiveMinimum", a.emin())
+				.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
+				.appendFirst(ne, "format", a.format(), a.f())
+				.appendIf(ne, "ignore", a.ignore() ? "true" : null)
+				.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+				.appendFirst(ne, "maximum", a.maximum(), a.max())
+				.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+				.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+				.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
+				.appendFirst(ne, "minimum", a.minimum(), a.min())
+				.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+				.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+				.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
+				.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+				.appendFirst(ne, "pattern", a.pattern(), a.p())
+				.appendIf(nf, "readOnly", a.readOnly() || a.ro())
+				.appendIf(nf, "required", a.required() || a.r())
+				.appendIf(ne, "summary", resolve(firstNonEmpty(a.summary(), a.su())))
+				.appendIf(ne, "title", a.title())
+				.appendFirst(ne, "type", a.type(), a.t())
+				.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+				.appendIf(ne, "xml", joinnl(a.xml()))
+				.appendIf(ne, "$ref", a.$ref())
 			;
 			// @formatter:on
 		} catch (ParseException e) {
@@ -1004,23 +976,23 @@ public class BasicSwaggerProviderSession {
 		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
-			.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
-			.appendIf(ne, SWAGGER_default, joinnl(a.default_(), a.df()))
-			.appendFirst(nec, SWAGGER_enum, toSet(a.enum_()), toSet(a.e()))
-			.appendIf(nf, SWAGGER_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, SWAGGER_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
-			.appendFirst(ne, SWAGGER_format, a.format(), a.f())
-			.appendFirst(ne, SWAGGER_maximum, a.maximum(), a.max())
-			.appendFirst(nm1, SWAGGER_maxItems, a.maxItems(), a.maxi())
-			.appendFirst(nm1, SWAGGER_maxLength, a.maxLength(), a.maxl())
-			.appendFirst(ne, SWAGGER_minimum, a.minimum(), a.min())
-			.appendFirst(nm1, SWAGGER_minItems, a.minItems(), a.mini())
-			.appendFirst(nm1, SWAGGER_minLength, a.minLength(), a.minl())
-			.appendFirst(ne, SWAGGER_multipleOf, a.multipleOf(), a.mo())
-			.appendFirst(ne, SWAGGER_pattern, a.pattern(), a.p())
-			.appendFirst(ne, SWAGGER_type, a.type(), a.t())
-			.appendIf(nf, SWAGGER_uniqueItems, a.uniqueItems() || a.ui())
-			.appendIf(ne, SWAGGER_$ref, a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 		// @formatter:on
 	}
@@ -1064,8 +1036,8 @@ public class BasicSwaggerProviderSession {
 			if (o2.isEmpty())
 				return null;
 			o2 = resolve(o2);
-			if (CONST_IGNORE.equalsIgnoreCase(o2))
-				return Json5Map.of(SWAGGER_ignore, true);
+			if (eqic("IGNORE", o2))
+				return Json5Map.of("ignore", true);
 			if (! isProbablyJsonObject(o2, true))
 				o2 = "{" + o2 + "}";
 			return Json5Map.ofString(o2);
@@ -1101,32 +1073,32 @@ public class BasicSwaggerProviderSession {
 		if (nn(schema) && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param
-					.appendIf(ne, SWAGGER_description, schema.remove(SWAGGER_description));
+					.appendIf(ne, "description", schema.remove("description"));
 			} else {
 				param
-					.appendIfAbsentIf(ne, SWAGGER_collectionFormat, schema.remove(SWAGGER_collectionFormat))
-					.appendIfAbsentIf(ne, SWAGGER_default, schema.remove(SWAGGER_default))
-					.appendIfAbsentIf(ne, SWAGGER_description, schema.remove(SWAGGER_description))
-					.appendIfAbsentIf(ne, SWAGGER_enum, schema.remove(SWAGGER_enum))
-					.appendIfAbsentIf(ne, SWAGGER_example, schema.remove(SWAGGER_example))
-					.appendIfAbsentIf(ne, SWAGGER_exclusiveMaximum, schema.remove(SWAGGER_exclusiveMaximum))
-					.appendIfAbsentIf(ne, SWAGGER_exclusiveMinimum, schema.remove(SWAGGER_exclusiveMinimum))
-					.appendIfAbsentIf(ne, SWAGGER_format, schema.remove(SWAGGER_format))
-					.appendIfAbsentIf(ne, SWAGGER_items, schema.remove(SWAGGER_items))
-					.appendIfAbsentIf(ne, SWAGGER_maximum, schema.remove(SWAGGER_maximum))
-					.appendIfAbsentIf(ne, SWAGGER_maxItems, schema.remove(SWAGGER_maxItems))
-					.appendIfAbsentIf(ne, SWAGGER_maxLength, schema.remove(SWAGGER_maxLength))
-					.appendIfAbsentIf(ne, SWAGGER_minimum, schema.remove(SWAGGER_minimum))
-					.appendIfAbsentIf(ne, SWAGGER_minItems, schema.remove(SWAGGER_minItems))
-					.appendIfAbsentIf(ne, SWAGGER_minLength, schema.remove(SWAGGER_minLength))
-					.appendIfAbsentIf(ne, SWAGGER_multipleOf, schema.remove(SWAGGER_multipleOf))
-					.appendIfAbsentIf(ne, SWAGGER_pattern, schema.remove(SWAGGER_pattern))
-					.appendIfAbsentIf(ne, SWAGGER_required, schema.remove(SWAGGER_required))
-					.appendIfAbsentIf(ne, SWAGGER_type, schema.remove(SWAGGER_type))
-					.appendIfAbsentIf(ne, SWAGGER_uniqueItems, schema.remove(SWAGGER_uniqueItems));
+					.appendIfAbsentIf(ne, "collectionFormat", schema.remove("collectionFormat"))
+					.appendIfAbsentIf(ne, "default", schema.remove("default"))
+					.appendIfAbsentIf(ne, "description", schema.remove("description"))
+					.appendIfAbsentIf(ne, "enum", schema.remove("enum"))
+					.appendIfAbsentIf(ne, "example", schema.remove("example"))
+					.appendIfAbsentIf(ne, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
+					.appendIfAbsentIf(ne, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
+					.appendIfAbsentIf(ne, "format", schema.remove("format"))
+					.appendIfAbsentIf(ne, "items", schema.remove("items"))
+					.appendIfAbsentIf(ne, "maximum", schema.remove("maximum"))
+					.appendIfAbsentIf(ne, "maxItems", schema.remove("maxItems"))
+					.appendIfAbsentIf(ne, "maxLength", schema.remove("maxLength"))
+					.appendIfAbsentIf(ne, "minimum", schema.remove("minimum"))
+					.appendIfAbsentIf(ne, "minItems", schema.remove("minItems"))
+					.appendIfAbsentIf(ne, "minLength", schema.remove("minLength"))
+					.appendIfAbsentIf(ne, "multipleOf", schema.remove("multipleOf"))
+					.appendIfAbsentIf(ne, "pattern", schema.remove("pattern"))
+					.appendIfAbsentIf(ne, "required", schema.remove("required"))
+					.appendIfAbsentIf(ne, "type", schema.remove("type"))
+					.appendIfAbsentIf(ne, "uniqueItems", schema.remove("uniqueItems"));
 
-				if (SWAGGER_object.equals(param.getString(SWAGGER_type)) && ! schema.isEmpty())
-					param.put(SWAGGER_schema, schema);
+				if (eq(param.getString("type"), "object") && ! schema.isEmpty())
+					param.put("schema", schema);
 			}
 		}
 
@@ -1151,9 +1123,9 @@ public class BasicSwaggerProviderSession {
 
 	private MarshalledMap resolve(MarshalledMap om) throws ParseException {
 		MarshalledMap om2 = null;
-		if (om.containsKey(CONST_value)) {
+		if (om.containsKey("_value")) {
 			om = om.modifiable();
-			om2 = parseMap(om.remove(CONST_value));
+			om2 = parseMap(om.remove("_value"));
 		} else {
 			om2 = new Json5Map();
 		}
@@ -1188,8 +1160,8 @@ public class BasicSwaggerProviderSession {
 	private MarshalledMap resolveRef(MarshalledMap m) {
 		if (m == null)
 			return null;
-		if (m.containsKey(SWAGGER_$ref) && nn(js.getBeanDefs())) {
-			var ref = m.getString(SWAGGER_$ref);
+		if (m.containsKey("$ref") && nn(js.getBeanDefs())) {
+			var ref = m.getString("$ref");
 			if (ref.startsWith("#/definitions/"))
 				return js.getBeanDefs().get(ref.substring(14));
 		}
@@ -1211,9 +1183,9 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
-			.appendIf(ne, SWAGGER_name, resolve(a.name()))
-			.appendIf(ne, SWAGGER_url, resolve(a.url()))
-			.appendIf(ne, SWAGGER_email, resolve(a.email()));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()))
+			.appendIf(ne, "email", resolve(a.email()));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
@@ -1224,8 +1196,8 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
-			.appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))
-			.appendIf(ne, SWAGGER_url, resolve(a.url()));
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(ne, "url", resolve(a.url()));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
@@ -1236,8 +1208,8 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
-			.appendIf(ne, SWAGGER_name, resolve(a.name()))
-			.appendIf(ne, SWAGGER_url, resolve(a.url()));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
@@ -1248,9 +1220,9 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Shorts::ine;
 		// @formatter:off
 		om
-			.appendIf(ne, SWAGGER_name, resolve(a.name()))
-			.appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))
-			.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), toMap(a.externalDocs())));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs())));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}

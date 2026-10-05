@@ -43,12 +43,12 @@ const rendersJsPath = process.argv[3];
 
 const document = {
 	readyState: 'loading',
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
 	getElementById: function () { return null; },
 	createElement: function () { return {}; },
-	body: { appendChild: function () {}, querySelectorAll: function () { return []; } }
+	body: { appendChild: function () { /* no-op */ }, querySelectorAll: function () { return []; } }
 };
 const window = { document: document, console: console };
 const sandbox = { window: window, document: document, console: console };

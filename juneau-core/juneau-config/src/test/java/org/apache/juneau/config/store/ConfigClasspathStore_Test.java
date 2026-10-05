@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,11 +73,11 @@ class ConfigClasspathStore_Test extends TestBase {
 
 		final var latch = new CountDownLatch(2);
 		fs.register("X.cfg", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("Y.cfg", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 

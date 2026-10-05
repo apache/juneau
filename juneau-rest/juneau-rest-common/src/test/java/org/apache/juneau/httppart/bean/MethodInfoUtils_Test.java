@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * ResponseBeanMeta) but are tested here directly since they are package-private and only the
  * exceptional branches matter for coverage.</p>
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+})
 class MethodInfoUtils_Test extends TestBase {
 
 	// --------------------------------------------------------------------------------
@@ -79,9 +82,6 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertArgType(m("oneIntArg", int.class), Query.class, String.class, int.class);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void a03_assertArgType_wrongType_throws() {
 		// Loop completes without match -> throws.
@@ -90,9 +90,6 @@ class MethodInfoUtils_Test extends TestBase {
 		assertTrue(thrown.getMessage().contains("Invalid return type"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void a04_assertArgType_zeroParams_throws() {
 		// params.size() == 0 != 1 -> throws.
@@ -101,9 +98,6 @@ class MethodInfoUtils_Test extends TestBase {
 		assertTrue(thrown.getMessage().contains("Only one parameter"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void a05_assertArgType_multipleParams_throws() {
 		// params.size() == 2 != 1 -> throws.
@@ -112,9 +106,6 @@ class MethodInfoUtils_Test extends TestBase {
 		assertTrue(thrown.getMessage().contains("Only one parameter"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void a06_assertArgType_emptyAllowed_throws() {
 		// No allowed classes -> always throws.
@@ -132,9 +123,6 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertNoArgs(m("noArgs"), Query.class);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void b02_assertNoArgs_hasParams_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
@@ -151,9 +139,6 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertReturnNotVoid(m("returnsString"), Query.class);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void c02_assertReturnNotVoid_void_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
@@ -176,9 +161,6 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertReturnType(m("returnsInt"), Query.class, String.class, int.class);
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void d03_assertReturnType_noMatch_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
@@ -186,9 +168,6 @@ class MethodInfoUtils_Test extends TestBase {
 		assertTrue(thrown.getMessage().contains("Invalid return type"));
 	}
 
-	@SuppressWarnings({
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
-	})
 	@Test
 	void d04_assertReturnType_emptyAllowed_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,

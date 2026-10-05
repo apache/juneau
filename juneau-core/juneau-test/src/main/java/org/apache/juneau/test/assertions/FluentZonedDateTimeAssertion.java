@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -110,15 +109,10 @@ import org.apache.juneau.commons.function.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S8688" // isAfterNow()/isBeforeNow() compare against the current instant by design; ZonedDateTime.now() is the intended system-clock seam and a ZoneId would not change the instant comparison.
 })
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_lower = "lower";
-	private static final String ARG_precision = "precision";
-	private static final String ARG_upper = "upper";
-	private static final String ARG_value = "value";
 
 	private static final Messages MESSAGES = Messages.of(FluentZonedDateTimeAssertion.class, "Messages");
 	private static final String MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
@@ -170,7 +164,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
-		assertArgNotNull(ARG_precision, precision);
+		reqnn("precision", precision);
 		var v = orElse(null);
 		if (valueIsNull() && value == null)
 			return returns();
@@ -190,7 +184,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		if (! (value().isAfter(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -212,7 +206,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 		if (! (value().isBefore(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -236,8 +230,8 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isBetween(ZonedDateTime lower, ZonedDateTime upper) throws AssertionError {
 		isExists();
-		assertArgNotNull(ARG_lower, lower);
-		assertArgNotNull(ARG_upper, upper);
+		reqnn("lower", lower);
+		reqnn("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

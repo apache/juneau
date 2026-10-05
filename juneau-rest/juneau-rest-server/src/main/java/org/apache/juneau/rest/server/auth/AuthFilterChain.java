@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -92,13 +91,9 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class AuthFilterChain implements Filter, Authenticator {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
-	private static final String ARG_pattern = "pattern";
 
 	/**
 	 * A single entry in the chain: an {@link AuthFilter} paired with an optional path pattern.
@@ -146,7 +141,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 		 * @return This object.
 		 */
 		public Builder append(AuthFilter value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			entries.add(new Entry(value, null));
 			return this;
 		}
@@ -163,8 +158,8 @@ public class AuthFilterChain implements Filter, Authenticator {
 		 * @return This object.
 		 */
 		public Builder append(AuthFilter value, String pattern) {
-			assertArgNotNull(ARG_value, value);
-			assertArgNotNullOrBlank(ARG_pattern, pattern);
+			reqnn("value", value);
+			reqnb("pattern", pattern);
 			entries.add(new Entry(value, UrlPathMatcher.of(pattern)));
 			return this;
 		}
@@ -246,10 +241,9 @@ public class AuthFilterChain implements Filter, Authenticator {
 		var urlPath = toUrlPath(hreq);
 
 		// Select matching entries.
-		var matchingEntries = new ArrayList<Entry>();
-		for (var e : entries)
-			if (e.matcher == null || e.matcher.match(urlPath) != null)
-				matchingEntries.add(e);
+		var matchingEntries = Arrays.stream(entries)
+			.filter(e -> e.matcher == null || e.matcher.match(urlPath) != null)
+			.toList();
 
 		// No filters match this path — does not apply.
 		if (matchingEntries.isEmpty())
@@ -295,7 +289,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 	private static AuthenticationException aggregate(List<AuthenticationException> failures) {
 		var wwwAuth = failures.stream()
 			.flatMap(e -> e.getHeaders().stream())
-			.filter(h -> AuthFilter.WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))
+			.filter(h -> eqic(AuthFilter.WWW_AUTHENTICATE, h.getName()))
 			.map(h -> h.getValue())
 			.distinct()
 			.collect(Collectors.joining(", "));

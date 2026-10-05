@@ -180,15 +180,9 @@ import org.apache.juneau.commons.utils.*;
  * @param <V> The type of values stored in this map.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_classEntries)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class ReflectionMap<V> {
-
-	// Property name constants
-	private static final String PROP_classEntries = "classEntries";
-	private static final String PROP_constructorEntries = "constructorEntries";
-	private static final String PROP_fieldEntries = "fieldEntries";
-	private static final String PROP_methodEntries = "methodEntries";
 
 	/**
 	 * Builder for creating {@link ReflectionMap} instances.
@@ -334,10 +328,6 @@ public class ReflectionMap<V> {
 	}
 
 	private record ClassEntry<V>(String simpleName, String fullName, V value) {
-		// Property name constants
-		private static final String PROP_fullName = "fullName";
-		private static final String PROP_simpleName = "simpleName";
-		private static final String PROP_value = "value";
 
 		static <V> ClassEntry<V> parse(String name, V value) {
 			return new ClassEntry<>(simpleClassName(name), name, value);
@@ -352,9 +342,9 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a(PROP_fullName, fullName)
-				.a(PROP_simpleName, simpleName)
-				.a(PROP_value, value);
+				.a("fullName", fullName)
+				.a("simpleName", simpleName)
+				.a("value", value);
 			// @formatter:on
 		}
 
@@ -365,11 +355,6 @@ public class ReflectionMap<V> {
 	}
 
 	record ConstructorEntry<V>(String simpleClassName, String fullClassName, String[] args, V value) {
-		// Property name constants
-		private static final String PROP_args = "args";
-		private static final String PROP_fullClassName = "fullClassName";
-		private static final String PROP_simpleClassName = "simpleClassName";
-		private static final String PROP_value = "value";
 
 		static <V> ConstructorEntry<V> parse(String name, V value) {
 			var i = name.indexOf('(');
@@ -406,10 +391,10 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a(PROP_args, args)
-				.a(PROP_fullClassName, fullClassName)
-				.a(PROP_simpleClassName, simpleClassName)
-				.a(PROP_value, value);
+				.a("args", args)
+				.a("fullClassName", fullClassName)
+				.a("simpleClassName", simpleClassName)
+				.a("value", value);
 			// @formatter:on
 		}
 
@@ -420,11 +405,6 @@ public class ReflectionMap<V> {
 	}
 
 	private record FieldEntry<V>(String simpleClassName, String fullClassName, String fieldName, V value) {
-		// Property name constants
-		private static final String PROP_fieldName = "fieldName";
-		private static final String PROP_fullClassName = "fullClassName";
-		private static final String PROP_simpleClassName = "simpleClassName";
-		private static final String PROP_value = "value";
 
 		static <V> FieldEntry<V> parse(String name, V value) {
 			var i = name.lastIndexOf('.');
@@ -443,10 +423,10 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a(PROP_fieldName, fieldName)
-				.a(PROP_fullClassName, fullClassName)
-				.a(PROP_simpleClassName, simpleClassName)
-				.a(PROP_value, value);
+				.a("fieldName", fieldName)
+				.a("fullClassName", fullClassName)
+				.a("simpleClassName", simpleClassName)
+				.a("value", value);
 			// @formatter:on
 		}
 
@@ -457,12 +437,6 @@ public class ReflectionMap<V> {
 	}
 
 	record MethodEntry<V>(String simpleClassName, String fullClassName, String methodName, String[] args, V value) {
-		// Property name constants
-		private static final String PROP_args = "args";
-		private static final String PROP_fullClassName = "fullClassName";
-		private static final String PROP_methodName = "methodName";
-		private static final String PROP_simpleClassName = "simpleClassName";
-		private static final String PROP_value = "value";
 
 		static <V> MethodEntry<V> parse(String name, V value) {
 			var i = name.indexOf('(');
@@ -510,11 +484,11 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a(PROP_args, o(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
-				.a(PROP_fullClassName, fullClassName)
-				.a(PROP_methodName, methodName)
-				.a(PROP_simpleClassName, simpleClassName)
-				.a(PROP_value, value);
+				.a("args", o(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
+				.a("fullClassName", fullClassName)
+				.a("methodName", methodName)
+				.a("simpleClassName", simpleClassName)
+				.a("value", value);
 			// @formatter:on
 		}
 
@@ -595,7 +569,7 @@ public class ReflectionMap<V> {
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		var cSimple = cns(c);
 		var cFull = cn(c);
-		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
+		if (eq(simpleName, cSimple) || eq(fullName, cFull) || eq(simpleName, "*"))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			var p = c.getPackage();
@@ -770,10 +744,10 @@ public class ReflectionMap<V> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_classEntries, classEntries)
-			.a(PROP_methodEntries, methodEntries)
-			.a(PROP_fieldEntries, fieldEntries)
-			.a(PROP_constructorEntries, constructorEntries);
+			.a("classEntries", classEntries)
+			.a("methodEntries", methodEntries)
+			.a("fieldEntries", fieldEntries)
+			.a("constructorEntries", constructorEntries);
 		// @formatter:on
 	}
 

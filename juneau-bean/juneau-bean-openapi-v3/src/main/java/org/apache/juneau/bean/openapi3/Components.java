@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -82,23 +81,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class Components extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_callbacks = "callbacks";
-	private static final String PROP_examples = "examples";
-	private static final String PROP_headers = "headers";
-	private static final String PROP_links = "links";
-	private static final String PROP_parameters = "parameters";
-	private static final String PROP_requestBodies = "requestBodies";
-	private static final String PROP_responses = "responses";
-	private static final String PROP_schemas = "schemas";
-	private static final String PROP_securitySchemes = "securitySchemes";
 
 	private Map<String,SchemaInfo> schemas;
 	private Map<String,Response> responses;
@@ -144,17 +129,17 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_schemas -> toType(getSchemas(), type);
-			case PROP_responses -> toType(getResponses(), type);
-			case PROP_parameters -> toType(getParameters(), type);
-			case PROP_examples -> toType(getExamples(), type);
-			case PROP_requestBodies -> toType(getRequestBodies(), type);
-			case PROP_headers -> toType(getHeaders(), type);
-			case PROP_securitySchemes -> toType(getSecuritySchemes(), type);
-			case PROP_links -> toType(getLinks(), type);
-			case PROP_callbacks -> toType(getCallbacks(), type);
+			case "schemas" -> toType(getSchemas(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "requestBodies" -> toType(getRequestBodies(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "securitySchemes" -> toType(getSecuritySchemes(), type);
+			case "links" -> toType(getLinks(), type);
+			case "callbacks" -> toType(getCallbacks(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -226,15 +211,15 @@ public class Components extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(callbacks), PROP_callbacks)
-			.addIf(nn(examples), PROP_examples)
-			.addIf(nn(headers), PROP_headers)
-			.addIf(nn(links), PROP_links)
-			.addIf(nn(parameters), PROP_parameters)
-			.addIf(nn(requestBodies), PROP_requestBodies)
-			.addIf(nn(responses), PROP_responses)
-			.addIf(nn(schemas), PROP_schemas)
-			.addIf(nn(securitySchemes), PROP_securitySchemes)
+			.addIf(nn(callbacks), "callbacks")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(headers), "headers")
+			.addIf(nn(links), "links")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(requestBodies), "requestBodies")
+			.addIf(nn(responses), "responses")
+			.addIf(nn(schemas), "schemas")
+			.addIf(nn(securitySchemes), "securitySchemes")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -242,17 +227,17 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Components set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
-			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
-			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case PROP_links -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
-			case PROP_parameters -> setParameters(toMapBuilder(value, String.class, Parameter.class).sparse().build());
-			case PROP_requestBodies -> setRequestBodies(toMapBuilder(value, String.class, RequestBodyInfo.class).sparse().build());
-			case PROP_responses -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
-			case PROP_schemas -> setSchemas(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
-			case PROP_securitySchemes -> setSecuritySchemes(toMapBuilder(value, String.class, SecuritySchemeInfo.class).sparse().build());
+			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
+			case "parameters" -> setParameters(toMapBuilder(value, String.class, Parameter.class).sparse().build());
+			case "requestBodies" -> setRequestBodies(toMapBuilder(value, String.class, RequestBodyInfo.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
+			case "schemas" -> setSchemas(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
+			case "securitySchemes" -> setSecuritySchemes(toMapBuilder(value, String.class, SecuritySchemeInfo.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

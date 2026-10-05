@@ -244,8 +244,8 @@ public class Messages extends ResourceBundle {
 		 * @return A new {@link Messages} bundle.
 		 */
 		@SuppressWarnings({
-			"unchecked", // Type erasure requires unchecked casts for message bundle access
 			"java:S3776", // Cognitive complexity acceptable for this specific logic
+			"unchecked" // Type erasure requires unchecked casts for message bundle access
 		})
 		public Messages build() {
 

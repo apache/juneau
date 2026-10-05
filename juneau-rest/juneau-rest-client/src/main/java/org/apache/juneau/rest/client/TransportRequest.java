@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -55,8 +54,8 @@ public final class TransportRequest {
 	private final boolean allowPrivateUrls;
 
 	private TransportRequest(Builder builder) {
-		this.method = assertArgNotNull("method", builder.method);
-		this.uri = assertArgNotNull("uri", builder.uri);
+		this.method = reqnn("method", builder.method);
+		this.uri = reqnn("uri", builder.uri);
 		this.headers = List.copyOf(builder.headers);
 		this.body = builder.body;
 		this.timeout = builder.timeout;

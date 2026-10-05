@@ -74,7 +74,7 @@ const sandbox = {
 	document: env.document,
 	console: console,
 	setTimeout: function (fn) { if (typeof fn === 'function') { fn(); } return 0; },
-	clearTimeout: function () {},
+	clearTimeout: function () { /* no-op */ },
 	setInterval: function (fn, ms) {
 		const id = nextIntervalId++;
 		intervals.push({ id: id, fn: fn, ms: ms });
@@ -453,6 +453,46 @@ const out = {};
 	startPolling(f, viewDef, ctx);
 
 	out.manualPause_drawNotCancelledWithoutAnOpenPanel = f.dt.land() === true;
+}
+
+// ----------------------------------------------------------------------------------------------------------------
+// G. Gap 7 auto-refresh: its own timer, paused by the same editing-surface rule, independent of initPolling.
+// ----------------------------------------------------------------------------------------------------------------
+{
+	const f = makeTable();
+	const ctx = { dataTable: f.dt };
+	NS.wireAutoRefresh(f.table, ctx, 30000);
+	fireIntervalsWithPeriod(30000);
+	out.autoRefresh_ticksWhenIdle = f.dt.reloads === 1;
+
+	ctx._configBackdrop = env.el('div');
+	fireIntervalsWithPeriod(30000);
+	out.autoRefresh_pausedByConfigBackdrop = f.dt.reloads === 1;
+
+	ctx._configBackdrop = null;
+	fireIntervalsWithPeriod(30000);
+	out.autoRefresh_resumesAfterConfigBackdropCleared = f.dt.reloads === 2;
+}
+{
+	// Re-wiring with a non-zero interval must not disturb an unrelated, independently-ticking
+	// viewDef.pollIntervalMs timer that initPolling already owns.
+	const f = makeTable();
+	const viewDef = { pollIntervalMs: 5000 };
+	const ctx = { dataTable: f.dt };
+	startPolling(f, viewDef, ctx);
+	NS.wireAutoRefresh(f.table, ctx, 60000);
+	fireIntervalsWithPeriod(5000);
+	fireIntervalsWithPeriod(60000);
+	out.autoRefresh_coexistsWithDeclaredPoll = f.dt.reloads === 2;
+}
+{
+	// autoRefreshMs: 0 (Off) wires nothing, and re-wiring Off after a non-zero value tears the old timer down.
+	const f = makeTable();
+	const ctx = { dataTable: f.dt };
+	NS.wireAutoRefresh(f.table, ctx, 30000);
+	NS.wireAutoRefresh(f.table, ctx, 0);
+	fireIntervalsWithPeriod(30000);
+	out.autoRefresh_offTearsDownPriorTimer = f.dt.reloads === 0;
 }
 
 process.stdout.write(JSON.stringify(out, null, 1));

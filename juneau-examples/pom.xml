@@ -33,7 +33,6 @@
 	<modules>
 		<module>juneau-examples-core</module>
 		<module>juneau-examples-mcp</module>
-		<module>juneau-examples-views</module>
 	</modules>
 
 	<build>

@@ -51,8 +51,8 @@ final class JsonShortcut {
 	 * {@code ]}, mirroring {@code ArgCoercer.parseStringArray}.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity: small inline parser.
-		"java:S135" // State-machine array-parse loop; early break/continue are clearer than restructuring.
+		"java:S135", // State-machine array-parse loop; early break/continue are clearer than restructuring.
+		"java:S3776" // Cognitive complexity: small inline parser.
 	})
 	static String[] decodeArray(String s) {
 		if (s == null) return new String[0];

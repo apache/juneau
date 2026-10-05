@@ -19,6 +19,7 @@ package org.apache.juneau.config.store;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -140,19 +141,19 @@ class ConfigFileStoreTest extends TestBase {
 
 		final var latch = new CountDownLatch(4);
 		fs.register("X.cfg", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("X", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("Y.cfg", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 		fs.register("Y", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 		pipe(reader("zzz"), new File(DIR, "Z.ini"));
@@ -167,19 +168,19 @@ class ConfigFileStoreTest extends TestBase {
 
 		final var latch = new CountDownLatch(4);
 		fs.register("X.cfg", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("X", contents -> {
-			if ("xxx".equals(contents))
+			if (eq(contents, "xxx"))
 				latch.countDown();
 		});
 		fs.register("Y.cfg", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 		fs.register("Y", contents -> {
-			if ("yyy".equals(contents))
+			if (eq(contents, "yyy"))
 				latch.countDown();
 		});
 

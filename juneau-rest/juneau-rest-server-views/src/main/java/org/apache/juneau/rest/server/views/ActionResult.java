@@ -87,7 +87,9 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,outcome,replay,refusalCode,message,row,resultForm")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
 public class ActionResult {
 
 	/**
@@ -207,6 +209,37 @@ public class ActionResult {
 		r.outcome = Outcome.SUCCESS.wire();
 		r.row = row;
 		return r;
+	}
+
+	/**
+	 * Readability alias for {@link #success(Object) success(null)} &mdash; a {@link Outcome#SUCCESS success} result
+	 * that carries no row (e.g. a delete, or a navigate/redraw action).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Equivalent to ActionResult.success(null).message(...)</jc>
+	 * 	<jk>return</jk> ActionResult.<jsm>ok</jsm>().message(<js>"Deleted"</js>);
+	 * </p>
+	 *
+	 * @return A new {@link ActionResult}.
+	 */
+	public static ActionResult ok() {
+		return success(null);
+	}
+
+	/**
+	 * Readability alias for {@link #success(Object)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>return</jk> ActionResult.<jsm>ok</jsm>(<jv>store</jv>.updatePet(<jv>pet</jv>)).message(<js>"Saved"</js>);
+	 * </p>
+	 *
+	 * @param row The authoritative row payload to re-render from.  Can be <jk>null</jk>.
+	 * @return A new {@link ActionResult}.
+	 */
+	public static ActionResult ok(Object row) {
+		return success(row);
 	}
 
 	/**

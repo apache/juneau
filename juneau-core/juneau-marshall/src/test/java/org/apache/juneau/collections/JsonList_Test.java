@@ -163,8 +163,9 @@ class JsonList_Test extends TestBase {
 		assertEquals(2, got.size());
 	}
 
-	@SuppressWarnings({"java:S5961", // Test comprehensiveness requires more than 25 assertions.
-		"java:S5778" // assertThrows lambdas contain multiple calls; only the collection-mutating call throws in practice.
+	@SuppressWarnings({
+		"java:S5778", // assertThrows lambdas contain multiple calls; only the collection-mutating call throws in practice.
+		"java:S5961" // Test comprehensiveness requires more than 25 assertions.
 	})
 	@Test void a22_unmodifiable() {
 		var l = JsonList.of(1, 2, 3).unmodifiable();

@@ -33,7 +33,6 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Reader/InputStream objects produce content that varies by media type, and RDF output from Jena
  * can be non-deterministic. RDF serialization is covered by other combo tests and dedicated tests.
  */
-@SuppressWarnings({})
 public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -67,7 +66,7 @@ public class HttpHeaderBean implements HttpHeader {
 	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	protected HttpHeaderBean(String name, String value) {
-		this.name = assertArgNotNull("name", name);
+		this.name = reqnn("name", name);
 		this.valueSupplier = () -> value;
 	}
 
@@ -78,8 +77,8 @@ public class HttpHeaderBean implements HttpHeader {
 	 * @param valueSupplier Supplier that provides the header value at request time. Must not be <jk>null</jk>.
 	 */
 	protected HttpHeaderBean(String name, Supplier<String> valueSupplier) {
-		this.name = assertArgNotNull("name", name);
-		this.valueSupplier = assertArgNotNull("valueSupplier", valueSupplier);
+		this.name = reqnn("name", name);
+		this.valueSupplier = reqnn("valueSupplier", valueSupplier);
 	}
 
 	/**

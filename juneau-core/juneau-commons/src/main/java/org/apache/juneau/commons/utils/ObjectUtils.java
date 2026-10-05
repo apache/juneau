@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.lang.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Canonical home for object-level helpers: null/empty checks, equality, comparison,
@@ -32,12 +32,11 @@ import org.apache.juneau.commons.lang.*;
  */
 @SuppressWarnings({
 	"java:S1118", // Utility class with static methods only.
-	"java:S115",  // Constants use UPPER_snakeCase convention
-	"java:S1221"  // equal(...) overloads (aliased by Shorts.eq) have 60+ callers reactor-wide; renaming would be a high-blast-radius public-API break.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1221", // equal(...) overloads (aliased by Shorts.eq) have 60+ callers reactor-wide; renaming would be a high-blast-radius public-API break.
+	"unchecked" // The (T) casts of boxed Number results in abs() are safe because each branch is selected by the runtime type of value.
 })
 public class ObjectUtils {
-
-	private static final String ARG_values = "values";
 
 	/** Constructor — this class is meant to be subclassed. */
 	protected ObjectUtils() {}
@@ -58,7 +57,7 @@ public class ObjectUtils {
 	/** Returns <jk>null</jk> typed as the specified class (type-inference helper). */
 	@SuppressWarnings({
 		"java:S1172", // Parameter used for type inference only.
-		"unused"      // Parameter used for type inference only.
+		"unused" // Parameter used for type inference only.
 	})
 	public static <T> T nullObject(Class<T> type) { return null; }
 
@@ -114,8 +113,7 @@ public class ObjectUtils {
 
 	/** Null-tolerant natural-order compare (0 if types differ / not Comparable). */
 	@SuppressWarnings({
-		"unchecked",   // Type erasure requires unchecked casts.
-		"java:S3740"   // Raw Comparable; parameterizing breaks compareTo.
+		"java:S3740" // Raw Comparable; parameterizing breaks compareTo.
 	})
 	public static int compare(Object o1, Object o2) {
 		if (o1 == null) return o2 == null ? 0 : -1;
@@ -266,8 +264,6 @@ public class ObjectUtils {
 	}
 
 	/** Absolute value across Number subtypes.  <br>Returns <jk>null</jk> if the argument is <jk>null</jk>. */
-	@SuppressWarnings({ "unchecked" // Type erasure requires unchecked cast for Number types.
-	})
 	public static <T extends Number> T abs(T value) {
 		if (value == null) return null;
 		if (value instanceof Integer) return (T)Integer.valueOf(Math.abs(value.intValue()));
@@ -287,7 +283,7 @@ public class ObjectUtils {
 
 	/** Content/annotation/array-aware hash.  <br>Throws {@link IllegalArgumentException} if the array is <jk>null</jk>. */
 	public static int hash(Object...values) {
-		assertArgNotNull(ARG_values, values);
+		reqnn("values", values);
 		return HashCode.of(values);
 	}
 

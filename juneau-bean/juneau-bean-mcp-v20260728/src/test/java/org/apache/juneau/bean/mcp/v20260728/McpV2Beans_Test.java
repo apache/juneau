@@ -35,6 +35,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Coverage for the MCP 2026-07-28 metadata, discovery, capability, tool-schema, and structured-content wire beans.
  */
+@SuppressWarnings({
+	"unchecked" // Tests cast generic map values (e.g. the schema "properties" map) to Map<String,Object>
+})
 class McpV2Beans_Test {
 
 	private static final JsonSerializer MCP_JSON =
@@ -751,10 +754,8 @@ class McpV2Beans_Test {
 		var view = request.getRequestedSchema();
 		assertThrows(UnsupportedOperationException.class, () -> view.put("type", "array"));
 
-		@SuppressWarnings("unchecked")
 		var properties = (Map<String,Object>) view.get("properties");
 		properties.put("extra", "leaked");
-		@SuppressWarnings("unchecked")
 		var propertiesAgain = (Map<String,Object>) request.getRequestedSchema().get("properties");
 		assertTrue(propertiesAgain.containsKey("extra"),
 			() -> "nested map must remain mutable through the view, matching sibling getters' shallow contract");

@@ -27,8 +27,8 @@ import org.apache.juneau.bean.atom.*;
  *
  */
 @SuppressWarnings({
-	"java:S1118", // Utility class instantiation intentional for this use case
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_timestamp)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., CONST_timestamp)
+	"java:S1118" // Utility class instantiation intentional for this use case
 })
 public class AtomFeed {
 

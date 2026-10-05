@@ -17,7 +17,6 @@
 package org.apache.juneau.test.assertions;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -102,13 +101,11 @@ import org.apache.juneau.commons.function.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // (E) Array.get(...) in the element accessor: E is the boxed element type of the primitive array T
 })
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_entries = "entries";
-	private static final String ARG_test = "test";
 
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = m();
 	static {
@@ -237,7 +234,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAll(Predicate<E> test) throws AssertionError {
-		assertArgNotNull(ARG_test, test);
+		reqnn("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
@@ -252,7 +249,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAny(Predicate<E> test) throws AssertionError {
-		assertArgNotNull(ARG_test, test);
+		reqnn("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
 			if (test.test(at(i)))
 				return returns();
@@ -292,11 +289,8 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for array has check
-	})
 	public R isHas(E...entries) throws AssertionError {
-		assertArgNotNull(ARG_entries, entries);
+		reqnn("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return is(p);
 	}
@@ -380,9 +374,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to E for array access
-	})
 	private E at(int index) {
 		return valueIsNull() || index < 0 || index >= length2() ? null : (E)Array.get(value(), index);
 	}

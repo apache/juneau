@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.io;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -83,14 +82,9 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class StringBuilderWriter extends Writer {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_cbuf = "cbuf";
-	private static final String ARG_sb = "sb";
-	private static final String ARG_str = "str";
 
 	private final StringBuilder sb;
 
@@ -131,7 +125,7 @@ public class StringBuilderWriter extends Writer {
 	 * @throws IllegalArgumentException If <tt>initialSize</tt> is negative.
 	 */
 	public StringBuilderWriter(int initialSize) {
-		assertArg(initialSize >= 0, "Argument 'initialSize' cannot be negative.");
+		req(initialSize >= 0, "Argument 'initialSize' cannot be negative.");
 		sb = new StringBuilder(initialSize);
 		lock = null;
 	}
@@ -155,7 +149,7 @@ public class StringBuilderWriter extends Writer {
 	 * @param sb The StringBuilder to wrap. Must not be <jk>null</jk>.
 	 */
 	public StringBuilderWriter(StringBuilder sb) {
-		this.sb = assertArgNotNull(ARG_sb, sb);
+		this.sb = reqnn("sb", sb);
 		lock = null;
 	}
 
@@ -198,7 +192,7 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int start, int length) {
-		assertArgNotNull(ARG_cbuf, cbuf);
+		reqnn("cbuf", cbuf);
 		sb.append(cbuf, start, length);
 	}
 
@@ -209,13 +203,13 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(String str) {
-		assertArgNotNull(ARG_str, str);
+		reqnn("str", str);
 		sb.append(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) {
-		assertArgNotNull(ARG_str, str);
+		reqnn("str", str);
 		sb.append(str.substring(off, off + len));
 	}
 }

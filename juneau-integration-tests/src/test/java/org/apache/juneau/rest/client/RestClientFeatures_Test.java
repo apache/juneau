@@ -644,8 +644,8 @@ class RestClientFeatures_Test {
 		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.get("/").run()) {
 				var headers = r.getHeaders();
-				assertTrue(headers.stream().anyMatch(h -> h.name().equals("X-Foo")));
-				assertTrue(headers.stream().anyMatch(h -> h.name().equals("X-Baz")));
+				assertTrue(headers.stream().anyMatch(h -> eq(h.name(), "X-Foo")));
+				assertTrue(headers.stream().anyMatch(h -> eq(h.name(), "X-Baz")));
 			}
 		}
 	}

@@ -17,7 +17,6 @@
 package org.apache.juneau.commons;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -120,14 +119,10 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
-	"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields accessed via those methods
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields accessed via those methods
 })
 public class AppliedAnnotationObject extends AnnotationObject {
-
-	// Argument name constants for assertArgNoNulls
-	private static final String ARG_value = "value";
-	private static final String ARG_values = "values";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -176,7 +171,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public Builder on(String...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			for (var v : values)
 				on = addAll(on, v);
 			return this;
@@ -222,7 +217,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderC on(Constructor<?>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -235,7 +230,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderC on(ConstructorInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -282,7 +277,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderM on(Method...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -295,7 +290,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderM on(MethodInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -345,7 +340,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderMF on(Field...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -358,7 +353,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderMF on(FieldInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -371,7 +366,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderMF on(Method...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -384,7 +379,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderMF on(MethodInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -440,7 +435,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderT on(Class<?>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				on = addAll(on, v.getName());
 			return this;
@@ -453,7 +448,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderT on(ClassInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				on = addAll(on, cn(v));
 			return this;
@@ -466,7 +461,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderT onClass(Class<?>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				onClass = addAll(onClass, v);
 			return this;
@@ -479,7 +474,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderT onClass(ClassInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				onClass = addAll(onClass, v.inner());
 			return this;
@@ -520,7 +515,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTM on(Method...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				on(info(v).getNameFull());
 			return this;
@@ -533,7 +528,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTM on(MethodInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				on(v.getNameFull());
 			return this;
@@ -588,7 +583,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMF on(Field...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -601,7 +596,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMF on(FieldInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -614,7 +609,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMF on(Method...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -627,7 +622,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMF on(MethodInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;
@@ -671,7 +666,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMFC on(Constructor<?>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(info(v).getNameFull());
 			return this;
@@ -684,7 +679,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderTMFC on(ConstructorInfo...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				super.on(v.getNameFull());
 			return this;

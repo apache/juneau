@@ -24,7 +24,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-431 Phase 3 gate: the framework's {@code <script>}-JSON sinks must route through
+ * Script-sink gate: the framework's {@code <script>}-JSON sinks must route through
  * {@link StringUtils#escapeForScript(String)}.
  *
  * <p>

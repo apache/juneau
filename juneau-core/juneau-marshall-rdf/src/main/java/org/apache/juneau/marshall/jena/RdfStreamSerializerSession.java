@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -51,17 +50,15 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes",
-	"unchecked",
-	"resource",
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115", // ARG_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for RDF stream serialization
-	"java:S6541"  // Brain method acceptable for RDF stream serialization dispatch logic
+	"java:S6541", // Brain method acceptable for RDF stream serialization dispatch logic
+	"rawtypes", // Raw Map/Collection/BeanMap casts in writeAnything(), writeMap() and the writeTo*() helpers, where element types are only known at runtime.
+	"resource", // The Jena Model created in the constructor is an in-memory session-lifetime field that is written out to the stream and never needs closing.
+	"unchecked" // Raw Map/Collection/ClassMeta casts in writeAnything() and the writeTo*() helpers are guarded by the sType.isMap()/isCollection() checks.
 })
 public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
-
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -71,7 +68,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		private RdfStreamSerializer ctx;
 
 		protected Builder(RdfStreamSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -179,7 +176,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfStreamSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final Model model;
@@ -200,8 +197,8 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		if (namespaces != null) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's namespaces() is never set, so getNamespaces() always returns a non-null (empty) array here.
 			for (var ns : namespaces) // HTT: unreachable — namespaces is always empty for stream serializers; see guard above.
 				addModelPrefix(ns); // HTT: unreachable — see guard above.
-		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), "root");
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), "value");
 
 		var langName = ctx.getLanguage();
 		lang = toLang(langName);
@@ -222,7 +219,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		var l = org.apache.jena.riot.RDFLanguages.nameToLang(langName);
 		if (l != null)
 			return l;
-		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+		if (eq(langName, "RDF/PROTO")) // HTT - not registered in Jena's RDFLanguages
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -312,7 +309,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				n = m.createResource(RDF_NIL);
 			}
 		} else if (sType.isUri() || isURI) {
-			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values need Resource emission, not literal text.
+			// RDF URI gate must come before isBean/isMap/isCharSequence: values annotated with Uri need Resource emission, not literal text.
 			var uri = getUri(o);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
@@ -331,7 +328,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			n = m.createResource();
 			writeMap((Map)o, (Resource)n, sType);
 		} else if (sType.isByteArray()) {
-			// byte[] gate must come before isCollectionOrArray: byte[] satisfies isArray() but RDF emits it as a typed base64 literal, not as a Seq of bytes.
+			// byte[] gate must come before isCollectionOrArray: a byte array also satisfies the array check but RDF emits it as a typed base64 literal, not as a Seq of bytes.
 			var b64 = Base64.getEncoder().encodeToString((byte[]) o);
 			n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);
 		} else if (sType.isCollectionOrArray()) {

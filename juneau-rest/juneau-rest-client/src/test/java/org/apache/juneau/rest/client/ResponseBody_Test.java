@@ -32,7 +32,9 @@ import org.junit.jupiter.api.*;
  */
 class ResponseBody_Test extends TestBase {
 
-	@SuppressWarnings("resource") // 'tr' is handed to (and closed by) the returned RestResponse.
+	@SuppressWarnings({
+		"resource" // 'tr' is handed to (and closed by) the returned RestResponse.
+	})
 	private static RestResponse response(int statusCode, String contentType, InputStream bodyStream) {
 		var b = TransportResponse.builder().statusCode(statusCode);
 		if (contentType != null)
@@ -75,7 +77,8 @@ class ResponseBody_Test extends TestBase {
 	@Test
 	void b01_negotiatedParser_noContentTypeHeader_matchesUnsupportedMediaType() throws Exception {
 		try (var resp = response(200, null, new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8)))) {
-			var ex = assertThrows(UnsupportedMediaType.class, () -> resp.body().as(Object.class));
+			var body = resp.body();
+			var ex = assertThrows(UnsupportedMediaType.class, () -> body.as(Object.class));
 			assertTrue(ex.getMessage().contains("'null'"), "Unexpected message: " + ex.getMessage());
 		}
 	}
@@ -83,7 +86,8 @@ class ResponseBody_Test extends TestBase {
 	@Test
 	void b02_negotiatedParser_unmatchedContentType_throwsUnsupportedMediaType() throws Exception {
 		try (var resp = response(200, "application/x-unregistered", new ByteArrayInputStream("x".getBytes(StandardCharsets.UTF_8)))) {
-			var ex = assertThrows(UnsupportedMediaType.class, () -> resp.body().as(Object.class));
+			var body = resp.body();
+			var ex = assertThrows(UnsupportedMediaType.class, () -> body.as(Object.class));
 			assertTrue(ex.getMessage().contains("application/x-unregistered"), "Unexpected message: " + ex.getMessage());
 		}
 	}

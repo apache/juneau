@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -74,22 +73,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Response extends OpenApiElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_key = "key";
-	private static final String ARG_mediaType = "mediaType";
-	private static final String ARG_name = "name";
-	private static final String ARG_property = "property";
-	private static final String ARG_value = "value";
-
-	// Property name constants
-	private static final String PROP_content = "content";
-	private static final String PROP_description = "description";
-	private static final String PROP_headers = "headers";
-	private static final String PROP_links = "links";
 
 	private String description;
 	private Map<String,HeaderInfo> headers = map();
@@ -123,8 +109,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addContent(String key, MediaType value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		content.put(key, value);
 		return this;
 	}
@@ -137,8 +123,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addHeader(String key, HeaderInfo value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		headers.put(key, value);
 		return this;
 	}
@@ -151,8 +137,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addLink(String key, Link value) {
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("key", key);
+		reqnn("value", value);
 		links.put(key, value);
 		return this;
 	}
@@ -168,12 +154,12 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_description -> toType(getDescription(), type);
-			case PROP_content -> toType(getContent(), type);
-			case PROP_headers -> toType(getHeaders(), type);
-			case PROP_links -> toType(getLinks(), type);
+			case "description" -> toType(getDescription(), type);
+			case "content" -> toType(getContent(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "links" -> toType(getLinks(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -192,7 +178,7 @@ public class Response extends OpenApiElement {
 	 * @return The media type info, or <jk>null</jk> if not found.
 	 */
 	public MediaType getContent(String mediaType) {
-		assertArgNotNull(ARG_mediaType, mediaType);
+		reqnn("mediaType", mediaType);
 		return content.get(mediaType);
 	}
 
@@ -213,7 +199,7 @@ public class Response extends OpenApiElement {
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return headers.get(name);
 	}
 
@@ -231,7 +217,7 @@ public class Response extends OpenApiElement {
 	 * @return The link info, or <jk>null</jk> if not found.
 	 */
 	public Link getLink(String name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		return links.get(name);
 	}
 
@@ -246,10 +232,10 @@ public class Response extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(ine(content), PROP_content)
-			.addIf(nn(description), PROP_description)
-			.addIf(ine(headers), PROP_headers)
-			.addIf(ine(links), PROP_links)
+			.addIf(ine(content), "content")
+			.addIf(nn(description), "description")
+			.addIf(ine(headers), "headers")
+			.addIf(ine(links), "links")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -257,12 +243,12 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Response set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_content -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
-			case PROP_description -> setDescription(s(value));
-			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case PROP_links -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
+			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
+			case "description" -> setDescription(s(value));
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

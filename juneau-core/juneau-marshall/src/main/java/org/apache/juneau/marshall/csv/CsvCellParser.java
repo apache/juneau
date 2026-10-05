@@ -199,11 +199,11 @@ public final class CsvCellParser {
 		var id = readIdentifier();
 		if (id.isEmpty())
 			throw new ParseException("Expected value at position " + pos);
-		if (id.equalsIgnoreCase(nullMarker))
+		if (eqic(id, nullMarker))
 			return null;
-		if (id.equals("true"))
+		if (eq(id, "true"))
 			return Boolean.TRUE;
-		if (id.equals("false"))
+		if (eq(id, "false"))
 			return Boolean.FALSE;
 		// Try number
 		try {

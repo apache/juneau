@@ -46,6 +46,9 @@ package org.apache.juneau.bean.mcp.v20260728;
  *
  * @param <T> The concrete subclass, for fluent-setter self-typing.
  */
+@SuppressWarnings({
+	"unchecked" // CRTP subclasses bind T to their own concrete type.
+})
 public abstract class CacheableResult<T extends CacheableResult<T>> extends Result<T> {
 
 	private Integer ttlMs;
@@ -67,9 +70,6 @@ public abstract class CacheableResult<T extends CacheableResult<T>> extends Resu
 	 * 	value meaning immediately stale.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({
-		"unchecked" // CRTP subclasses bind T to their own concrete type.
-	})
 	public T setTtlMs(Integer value) {
 		ttlMs = value;
 		return (T)this;
@@ -90,9 +90,6 @@ public abstract class CacheableResult<T extends CacheableResult<T>> extends Resu
 	 * @param value The new value. Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({
-		"unchecked" // CRTP subclasses bind T to their own concrete type.
-	})
 	public T setCacheScope(McpCacheScope value) {
 		cacheScope = value;
 		return (T)this;

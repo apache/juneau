@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Handler for a single MCP prompt.
@@ -57,9 +57,9 @@ public interface McpPromptHandler {
 	 * @return A new handler wiring both. Never <jk>null</jk>.
 	 */
 	static McpPromptHandler of(McpPromptSpec descriptor, BiFunction<Map<String,Object>,BeanStore,McpPromptOutcome> get) {
-		assertArgNotNull("descriptor", descriptor);
-		assertArgNotNullOrBlank("descriptor.getName()", descriptor.getName());
-		assertArgNotNull("get", get);
+		reqnn("descriptor", descriptor);
+		reqnb("descriptor.getName()", descriptor.getName());
+		reqnn("get", get);
 		return new McpPromptHandler() {
 			@Override public McpPromptSpec descriptor() {
 				return descriptor;

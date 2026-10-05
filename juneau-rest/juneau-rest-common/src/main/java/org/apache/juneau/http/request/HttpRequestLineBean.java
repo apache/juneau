@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.request;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.http.*;
@@ -54,9 +53,9 @@ public final class HttpRequestLineBean implements HttpRequestLine {
 	private final HttpProtocolVersion protocolVersion;
 
 	private HttpRequestLineBean(String method, String uri, HttpProtocolVersion protocolVersion) {
-		this.method = assertArgNotNull("method", method);
-		this.uri = assertArgNotNull("uri", uri);
-		this.protocolVersion = assertArgNotNull("protocolVersion", protocolVersion);
+		this.method = reqnn("method", method);
+		this.uri = reqnn("uri", uri);
+		this.protocolVersion = reqnn("protocolVersion", protocolVersion);
 	}
 
 	/**

@@ -30,6 +30,9 @@ import java.util.function.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+})
 public class Allow extends HttpCsvHeader {
 
 	public static final String NAME = "Allow";
@@ -46,9 +49,6 @@ public class Allow extends HttpCsvHeader {
 		super(NAME, supplier, lazyMode);
 	}
 
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static Allow of(String value) {
 		return new Allow(value);
 	}

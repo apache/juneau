@@ -68,8 +68,8 @@ function loadBoth() {
 	const loaded = loadViews(rendersJsPath, viewsJsPath, env);
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
-		setTimeout: function () { return 0; }, clearTimeout: function () {},
-		setInterval: function () { return 0; }, clearInterval: function () {}
+		setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
+		setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ }
 	};
 	// NOSONAR javascript:S1523 -- loading the production juneau-ribbon.js source into a VM sandbox is this
 	// harness's intended mechanism; the path is a fixed local file supplied by the test.

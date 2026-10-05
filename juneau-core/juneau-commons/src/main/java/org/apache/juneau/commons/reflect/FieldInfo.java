@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -88,14 +87,11 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	"java:S3011"  // Reflection access needed for field introspection
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3011", // Reflection access needed for field introspection
+	"unchecked" // (T)inner.get(o) and the (AnnotationInfo<A>) cast are guarded by the caller-supplied type / type.isInstance filter
 })
 public final class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_declaringClass = "declaringClass";
-	private static final String ARG_inner = "inner";
 
 	/**
 	 * Creates a FieldInfo wrapper for the specified field.
@@ -112,7 +108,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
-		assertArgNotNull(ARG_declaringClass, declaringClass);
+		reqnn("declaringClass", declaringClass);
 		return declaringClass.getField(inner);
 	}
 
@@ -132,7 +128,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(Field inner) {
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		return ClassInfo.of(inner.getDeclaringClass()).getField(inner);
 	}
 
@@ -156,7 +152,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field inner) {
 		super(inner, inner.getModifiers());
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = memoize(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));
@@ -191,9 +187,6 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for field retrieval
-	})
 	public <T> T get(Object o) throws BeanRuntimeException {
 		return safe(() -> {
 			inner.setAccessible(true);
@@ -245,9 +238,6 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * @param type The annotation type.
 	 * @return A stream of all matching annotations.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for annotation stream
-	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return annotations.get().stream().filter(x -> type.isInstance(x.inner())).map(x -> (AnnotationInfo<A>)x);
 	}
@@ -644,7 +634,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 				Type parameterizedType = fieldType.innerType();
 				var inner2 = o(ptUnwrapped.inner()).orElse(Object.class);
 
-				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
+				if (eqa(inner2, List.class, Set.class)) {
 					if (parameterizedType instanceof ParameterizedType parameterizedType2) {
 						var typeArgs = parameterizedType2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {

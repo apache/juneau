@@ -33,28 +33,11 @@ import org.apache.juneau.marshall.parser.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_collectionFormat)
+	"java:S100", // Builder/annotation methods such as default_(), enum_() and $ref() use trailing underscore/$ to avoid Java keywords and match JSON Schema names
+	"java:S116", // Field names match JSON Schema property names for API consistency
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class SubItemsAnnotation {
-
-	// Property name constants
-	private static final String PROP_collectionFormat = "collectionFormat";
-	private static final String PROP_default = "default";
-	private static final String PROP_enum = "enum";
-	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
-	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
-	private static final String PROP_format = "format";
-	private static final String PROP_maximum = "maximum";
-	private static final String PROP_maxItems = "maxItems";
-	private static final String PROP_maxLength = "maxLength";
-	private static final String PROP_minimum = "minimum";
-	private static final String PROP_minItems = "minItems";
-	private static final String PROP_minLength = "minLength";
-	private static final String PROP_multipleOf = "multipleOf";
-	private static final String PROP_pattern = "pattern";
-	private static final String PROP_ref = "$ref";
-	private static final String PROP_type = "type";
-	private static final String PROP_uniqueItems = "uniqueItems";
 
 	/**
 	 * Prevents instantiation.
@@ -68,9 +51,6 @@ public class SubItemsAnnotation {
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings({
-		"java:S116" // Field names match JSON Schema property names for API consistency
-	})
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
@@ -121,9 +101,6 @@ public class SubItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-		})
 		public Builder default_(String...value) {
 			default_ = value;
 			return this;
@@ -135,9 +112,6 @@ public class SubItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-		})
 		public Builder enum_(String...value) {
 			enum_ = value;
 			return this;
@@ -149,9 +123,6 @@ public class SubItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S100" // Method name uses $ prefix to match JSON Schema keyword
-		})
 		public Builder $ref(String value) {
 			this.$ref = value;
 			return this;
@@ -510,8 +481,7 @@ public class SubItemsAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S116",  // Field names match JSON Schema property names for API consistency
-		"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Object extends AnnotationObject implements SubItems {
 
@@ -800,23 +770,23 @@ public class SubItemsAnnotation {
 		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
-			.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())
-			.appendIf(ne, PROP_default, joinnl(a.default_(), a.df()))
-			.appendFirst(nec, PROP_enum, parseSet(a.enum_()), parseSet(a.e()))
-			.appendIf(nf, PROP_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, PROP_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
-			.appendFirst(ne, PROP_format, a.format(), a.f())
-			.appendFirst(ne, PROP_maximum, a.maximum(), a.max())
-			.appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())
-			.appendFirst(nm1, PROP_maxLength, a.maxLength(), a.maxl())
-			.appendFirst(ne, PROP_minimum, a.minimum(), a.min())
-			.appendFirst(nm1, PROP_minItems, a.minItems(), a.mini())
-			.appendFirst(nm1, PROP_minLength, a.minLength(), a.minl())
-			.appendFirst(ne, PROP_multipleOf, a.multipleOf(), a.mo())
-			.appendFirst(ne, PROP_pattern, a.pattern(), a.p())
-			.appendFirst(ne, PROP_type, a.type(), a.t())
-			.appendIf(nf, PROP_uniqueItems, a.uniqueItems() || a.ui())
-			.appendIf(ne, PROP_ref, a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 		// @formatter:on
 	}

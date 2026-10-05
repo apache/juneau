@@ -30,8 +30,8 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
 
 @SuppressWarnings({
-	"unchecked", // Cast from Object to T in round-trip test infra
-	"java:S101" // Underscore test-type naming (e.g. sibling ComboRoundTrip_Tester classes) is an established Juneau convention.
+	"java:S101", // Underscore test-type naming (e.g. sibling ComboRoundTrip_Tester classes) is an established Juneau convention.
+	"unchecked" // Cast from Object to T in round-trip test infra
 })
 public class RoundTrip_Tester {
 

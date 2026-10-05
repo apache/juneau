@@ -1117,8 +1117,8 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings({
-		"unchecked", // DelegateList construction from raw ClassMeta is intentional in this test
-		"rawtypes"   // ClassMeta must be raw: DelegateList<T extends Collection<?>> bound prevents parameterizing here
+		"rawtypes", // ClassMeta must be raw: DelegateList<T extends Collection<?>> bound prevents parameterizing here
+		"unchecked" // DelegateList construction from raw ClassMeta is intentional in this test
 	})
 	@Test void o01_delegateList_usesClassMeta() throws Exception {
 		// isDelegate() branch at line 1063 in XmlWriter version of writeAnything

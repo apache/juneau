@@ -40,8 +40,9 @@ import org.junit.jupiter.params.provider.*;
  * the inner brace as part of the body), the test asserts the observed legacy behavior.
  */
 @SuppressWarnings({
+	"java:S1186", // Empty methods in test fixtures — intentional.
 	"java:S5778", // Multi-statement assertThrows lambdas — intentional for compile/resolve flow.
-	"java:S1186"  // Empty methods in test fixtures — intentional.
+	"java:S5976" // Each test probes one template feature with its own expected output; parameterizing would blur which feature failed.
 })
 class VarTemplateCompiler_Test extends TestBase {
 
@@ -371,9 +372,6 @@ class VarTemplateCompiler_Test extends TestBase {
 	// g. Recursive-descent parser — function name
 	// =========================================================================
 
-	@SuppressWarnings({
-		"java:S5976" // Group of 8 IAE+message coverage probes deliberately split across distinct parser-feature sections (function-name/arg-list/quoted-string/bare-token/nested-marker), each documenting a specific error path/line; a single parameterized test would erase that organization and per-path documentation.
-	})
 	@Test void g01_emptyFunctionName() {
 		var vr = vr();
 		// "#{()}" — parseFunctionName: pos==start at line 447 -> "Expected function name".
@@ -442,9 +440,6 @@ class VarTemplateCompiler_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("Invalid script in template"), ex.getMessage());
 	}
 
-	@SuppressWarnings({
-		"java:S5976" // Group of 5 compile-throws coverage probes deliberately split across distinct parser-feature sections (arg-list and nested-marker), each documenting a specific error path/line; a single parameterized test would erase that organization and per-path documentation.
-	})
 	@Test void h03_trailingContentAfterCloseParen() {
 		var vr = vr();
 		// "#{upper(x)trailing}" — expectEnd fails (line 592-593).

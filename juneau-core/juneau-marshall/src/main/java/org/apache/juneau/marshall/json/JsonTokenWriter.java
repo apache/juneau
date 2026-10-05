@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -48,7 +47,7 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S3776", // Cognitive complexity acceptable for JSON encoder dispatch
-	"resource"    // The writer's underlying Writer/OutputStream is owned by the caller via try-with-resources on the writer itself; Eclipse JDT flags the inner stream as unclosed but that's by design.
+	"resource" // The writer's underlying Writer/OutputStream is owned by the caller via try-with-resources on the writer itself; Eclipse JDT flags the inner stream as unclosed but that's by design.
 })
 public class JsonTokenWriter implements TokenWriter {
 
@@ -81,7 +80,9 @@ public class JsonTokenWriter implements TokenWriter {
 	 * 	{@link org.apache.juneau.marshall.jcs.JcsSerializer}) where the cursor's POJO walker would
 	 * 	emit ordinary JSON instead of the format's special form.
 	 */
-	@SuppressWarnings("javadoc")
+	@SuppressWarnings({
+		"javadoc" // Settings record components are described in the record's class-level Javadoc rather than with per-component @param tags
+	})
 	public record Settings(
 			boolean useWhitespace,
 			int maxIndent,
@@ -150,8 +151,8 @@ public class JsonTokenWriter implements TokenWriter {
 	 * @param settings The output-formatting settings.
 	 */
 	JsonTokenWriter(Writer out, Closeable owned, boolean autoFlush, Settings settings) {
-		assertArgNotNull("out", out);
-		assertArgNotNull("settings", settings);
+		reqnn("out", out);
+		reqnn("settings", settings);
 		this.out = out;
 		this.owned = owned;
 		this.autoFlush = autoFlush;
@@ -203,7 +204,7 @@ public class JsonTokenWriter implements TokenWriter {
 	@Override /* Overridden from TokenWriter */
 	public TokenWriter fieldName(String name) throws IOException {
 		assertOpen();
-		assertArgNotNull("name", name);
+		reqnn("name", name);
 		if (currentContext() != CTX_OBJECT)
 			throw new IllegalStateException("field called outside an object");
 		if (awaitingFieldValue)
@@ -527,7 +528,7 @@ public class JsonTokenWriter implements TokenWriter {
 						out.write(c);
 					break;
 				default:
-					if (c < 0x20)
+					if (c < 0x20 || c == 0x7f)
 						out.write(String.format("\\u%04x", (int) c));
 					else
 						out.write(c);

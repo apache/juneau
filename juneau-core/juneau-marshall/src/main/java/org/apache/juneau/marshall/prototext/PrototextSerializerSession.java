@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.prototext;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -36,17 +35,15 @@ import org.apache.juneau.marshall.stream.*;
  * Session for serializing objects to Protobuf Text Format.
  */
 @SuppressWarnings({
-	"resource", // Writer managed by SerializerPipe; caller closes
-	"rawtypes", // Raw types necessary for generic Map/Collection handling
 	"java:S110", // Session classes inherit many parameters from base
-	"java:S115", // ARG_/CONST_ prefix follows framework convention
+	"java:S115", // CONST_ prefix follows framework convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S3776", // Cognitive complexity acceptable for serialize dispatch
-	"java:S6541"  // Brain method acceptable for writeAnything
+	"java:S6541", // Brain method acceptable for writeAnything
+	"rawtypes", // Raw types necessary for generic Map/Collection handling
+	"resource" // Writer managed by SerializerPipe; caller closes
 })
 public class PrototextSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	private static final String ARG_ctx = "ctx";
-	private static final String CONST_value = "_value";
 
 	/** Enable with -Djuneau.proto.serialize.debug=true or PrototextSerializerSession.setDebugTrace(true) */
 	private static boolean debugTrace = Boolean.getBoolean("juneau.proto.serialize.debug");
@@ -69,7 +66,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 		private PrototextSerializer ctx;
 
 		protected Builder(PrototextSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -87,7 +84,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	 * @return A new builder.
 	 */
 	public static Builder create(PrototextSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(reqnn("ctx", ctx));
 	}
 
 	private final PrototextSerializer ctx;
@@ -232,13 +229,13 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 					writeMap(out, (Map) o, sType);
 			}
 		} else if (sType.isCollection()) {
-			writeCollection(out, (Collection) o, sType, nn(fieldName) ? fieldName : CONST_value);
+			writeCollection(out, (Collection) o, sType, nn(fieldName) ? fieldName : "_value");
 		} else if (sType.isArray()) {
-			writeCollection(out, toList(sType.inner(), o), sType, nn(fieldName) ? fieldName : CONST_value);
+			writeCollection(out, toList(sType.inner(), o), sType, nn(fieldName) ? fieldName : "_value");
 		} else if (sType.isStreamable()) {
-			writeStreamable(out, o, sType, nn(fieldName) ? fieldName : CONST_value);
+			writeStreamable(out, o, sType, nn(fieldName) ? fieldName : "_value");
 		} else {
-			var name = nn(fieldName) ? fieldName : CONST_value;
+			var name = nn(fieldName) ? fieldName : "_value";
 			out.scalarField(name);
 			writeScalarValue(out, o, sType);
 			out.w('\n');

@@ -95,8 +95,8 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
+		"java:S1452", // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
+		"rawtypes" // Raw types necessary for generic type handling
 	})
 	public static ObjectSwap<?,?> find(MarshallingContext bc, ClassInfo ci) {
 

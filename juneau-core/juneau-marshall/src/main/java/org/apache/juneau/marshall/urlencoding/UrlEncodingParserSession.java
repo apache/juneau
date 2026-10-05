@@ -44,19 +44,17 @@ import org.apache.juneau.marshall.uon.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",   // Type erasure requires unchecked casts
-	"rawtypes",    // Raw types necessary for generic type handling
-	"resource",    // UonReader is managed by caller
-	"java:S110",   // Inheritance depth acceptable for session hierarchy
-	"java:S115"    // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S110", // Inheritance depth acceptable for session hierarchy
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S1168", // readIntoBeanMap()/readIntoMap2() return null for blank or literal null input, which callers treat as 'no value'.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // readAnything(), readIntoBeanMap() and readIntoMap2() are state machines over the URL-encoded grammar; splitting them would obscure the parse flow.
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource", // UonReader is managed by caller
+	"unchecked", // Type erasure requires unchecked casts
+	"unused" // Intentionally unused; variable/parameter is required by the interface contract
 })
 public class UrlEncodingParserSession extends UonParserSession {
-
-	private static final String CONST_value = "_value";
-
-	// Property name constants
-	private static final String PROP_expandedParams = "expandedParams";
-	private static final String PROP_UrlEncodingParserSession_expandedParams = "UrlEncodingParserSession.expandedParams";
 
 	/**
 	 * Builder class.
@@ -98,7 +96,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		public Builder property(String key, Object value) {
 			if (key == null) { super.property(key, value); return this; }
 			switch (key) {
-				case PROP_expandedParams, PROP_UrlEncodingParserSession_expandedParams:
+				case "expandedParams", "UrlEncodingParserSession.expandedParams":
 					return expandedParams(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
@@ -144,9 +142,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta((ClassMeta<?>) pMeta.getBeanMeta().getBeanInfo()).isExpandedParams());
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
-	})
 	private <T> T readAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -166,9 +161,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		int c = r.peekSkipWs();
 		if (c == '?') {
-			@SuppressWarnings({
-				"unused" // Intentionally unused; variable/parameter is required by the interface contract
-			})
 			int ignored = r.read();
 		}
 
@@ -177,8 +169,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (sType.isObject()) {
 			var m = newGenericMap();
 			readIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
-			if (m.containsKey(CONST_value))
-				o = m.get(CONST_value);
+			if (m.containsKey("_value"))
+				o = m.get("_value");
 			else
 				o = cast(m, null, eType);
 		} else if (nn(builder)) {
@@ -210,8 +202,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 			readIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
-			else if (m.containsKey(CONST_value))
-				o = unwrapValueAs(m.get(CONST_value), sType);
+			else if (m.containsKey("_value"))
+				o = unwrapValueAs(m.get("_value"), sType);
 			else if (nn(sType.getProxyInvocationHandler())) {
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			} else {
@@ -231,13 +223,11 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // Null when currAttr is '%00'. Parser state machine.
-		"java:S2177",    // Intentional: UrlEncodingParserSession provides its own private readIntoBeanMap() with expanded-params logic
-		"java:S125",     // State-machine comments (S1: ..., S2: ...)
-		"java:S2583",    // State variables persist across loop iterations
-		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S125", // State-machine comments (S1: ..., S2: ...)
+		"java:S2177", // Intentional: UrlEncodingParserSession provides its own private readIntoBeanMap() with expanded-params logic
+		"java:S2583", // State variables persist across loop iterations
+		"java:S2589", // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
+		"java:S6541" // Single-threaded session contexts do not require synchronization
 	})
 	private <T> BeanMap<T> readIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
@@ -372,10 +362,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings({
-		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
-		"java:S3776"     // Cognitive complexity acceptable for parser state machine
-	})
 	private <K,V> Map<K,V> readIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
 		var keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
@@ -488,9 +474,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (var r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?') {
-				@SuppressWarnings({
-					"unused" // Intentionally unused; variable/parameter is required by the interface contract
-				})
 				int ignored = r.read();
 			}
 			m = readIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
@@ -508,7 +491,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return ctx.getUrlEncodingClassMeta(cm);
 	}
 
-	/*
+	/**
 	 * Routes the {@code _value=...} top-level unwrap through the format-aware
 	 * Duration/Period/Date/Calendar/Temporal parsers when the target type is one of those
 	 * date/time/duration cluster types.  Otherwise falls through to the generic

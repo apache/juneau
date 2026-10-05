@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.uon;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -63,17 +63,12 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S110", // UonParser extends ReaderParser on the shared Parser base-class chain, and UonParser.Decoding subclasses it; the depth comes from that format-family design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider, RecordReadable {
-
-	// Property name constants
-	private static final String PROP_decoding = "decoding";
-	private static final String PROP_validateEnd = "validateEnd";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -104,7 +99,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}
@@ -116,7 +111,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}
@@ -218,9 +213,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Concrete default builder leaf for the non-subclassed {@link UonParser#create()} / {@link UonParser#copy()} path.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth follows the parser builder chain; intentional layered design
-	})
 	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
 		DefaultBuilder() {}
@@ -240,9 +232,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	/** Default parser, decoding. */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth acceptable for UonParser.Decoding hierarchy
-	})
 	public static class Decoding extends UonParser {
 
 		/**
@@ -432,7 +421,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_decoding, decoding)
-			.a(PROP_validateEnd, validateEnd);
+			.a("decoding", decoding)
+			.a("validateEnd", validateEnd);
 	}
 }

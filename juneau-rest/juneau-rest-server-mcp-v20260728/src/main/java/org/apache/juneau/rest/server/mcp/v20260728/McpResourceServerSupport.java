@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -184,7 +185,7 @@ public final class McpResourceServerSupport {
 	 */
 	static boolean isMcpDispatchMethod(Method m) {
 		return m != null
-			&& MCP_DISPATCH_METHOD.equals(m.getName())
+			&& eq(m.getName(), MCP_DISPATCH_METHOD)
 			&& McpEndpointMixin.class.isAssignableFrom(m.getDeclaringClass());
 	}
 
@@ -221,12 +222,12 @@ public final class McpResourceServerSupport {
 	 * host that does <i>not</i> allow overrides is challenged rather than 404'd, which never weakens the gate.
 	 */
 	static boolean isEffectivePost(HttpServletRequest req) {
-		if ("POST".equalsIgnoreCase(req.getMethod()))
+		if (eqic("POST", req.getMethod()))
 			return true;
 		var mp = RestUtils.parseQuery(req.getQueryString()).get("method");
-		if (mp != null && !mp.isEmpty() && "POST".equalsIgnoreCase(mp.get(0)))
+		if (mp != null && !mp.isEmpty() && eqic("POST", mp.get(0)))
 			return true;
-		return "POST".equalsIgnoreCase(req.getHeader("X-Method"));
+		return eqic("POST", req.getHeader("X-Method"));
 	}
 
 	/**
@@ -260,7 +261,7 @@ public final class McpResourceServerSupport {
 
 	/** Returns whether a context/servlet path denotes the origin root ({@code ""} or {@code "/"}). */
 	private static boolean isOriginRootPath(String p) {
-		return p.isEmpty() || p.equals("/");
+		return p.isEmpty() || eq(p, "/");
 	}
 
 	/**
@@ -413,7 +414,7 @@ public final class McpResourceServerSupport {
 			throw new Forbidden("Insufficient scope");
 		}
 		// M1: write the framework-standard principal attribute so @Auth Principal resolves downstream.
-		req.setAttribute(RestServerConstants.PRINCIPAL_ATTR, principal);
+		req.setAttribute("juneau.principal", principal);
 		// SEP-2350: stash the granted scopes so the POST-parse dispatch point can enforce per-operation step-up scopes.
 		req.setAttribute(GRANTED_SCOPES_ATTR, Set.copyOf(auth.getRoles()));
 		return principal;
@@ -425,7 +426,9 @@ public final class McpResourceServerSupport {
 	 * @param req The HTTP request.  May be <jk>null</jk>.
 	 * @return The granted scopes, or an empty set when none were stashed (RS auth disabled / gate not run).
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The granted-scopes request attribute is cast to Set<String> after an instanceof Set check; only authenticate() stores it
+	})
 	public static Set<String> grantedScopes(HttpServletRequest req) {
 		if (req == null)
 			return Set.of();
@@ -454,7 +457,7 @@ public final class McpResourceServerSupport {
 	public static Principal principal(HttpServletRequest req) {
 		if (req == null)
 			return null;
-		var v = req.getAttribute(RestServerConstants.PRINCIPAL_ATTR);
+		var v = req.getAttribute("juneau.principal");
 		return v instanceof Principal p ? p : null;
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -197,7 +198,7 @@ class PrototextSerializer_Test {
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
-		assertTrue(proto.trim().isEmpty() || proto.equals(""));
+		assertTrue(proto.trim().isEmpty() || eq(proto, ""));
 	}
 
 	@Test

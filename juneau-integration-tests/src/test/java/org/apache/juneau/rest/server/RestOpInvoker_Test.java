@@ -78,7 +78,7 @@ import org.junit.jupiter.params.provider.*;
  */
 @SuppressWarnings({
 	"java:S2187", // Some inner @Rest classes have no @Test methods of their own; that is intentional — they are test fixtures.
-	"java:S5961"  // High assertion / scenario count; targeted JaCoCo branch coverage requires many small fixtures.
+	"java:S5961" // High assertion / scenario count; targeted JaCoCo branch coverage requires many small fixtures.
 })
 class RestOpInvoker_Test extends TestBase {
 

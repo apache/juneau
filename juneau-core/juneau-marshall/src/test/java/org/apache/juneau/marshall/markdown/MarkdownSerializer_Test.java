@@ -32,6 +32,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Tests for {@link MarkdownSerializer} and {@link MarkdownSerializerSession} (fragment mode).
  */
+@SuppressWarnings({
+	"unchecked" // Tests cast fromMarkdown(md, List.class/Map.class, ...) results to List<B>/List<String>/Map<String,String>; the element types are supplied to the parse call.
+})
 class MarkdownSerializer_Test {
 
 	//====================================================================================================
@@ -202,9 +205,6 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void i02_roundTripBeanList() {
 		var original = List.of(new B("Alice", 30), new B("Bob", 25));
 		var md = toMarkdown(original);
@@ -217,9 +217,6 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void i03_roundTripStringList() {
 		var original = List.of("foo", "bar", "baz");
 		var md = toMarkdown(original);
@@ -228,9 +225,6 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"unchecked"  // Unchecked cast required for generic test utility.
-	})
 	void i04_roundTripMap() {
 		var original = new LinkedHashMap<String,String>();
 		original.put("k1", "v1");
@@ -390,7 +384,6 @@ class MarkdownSerializer_Test {
 		assertNotNull(md);
 		// The string should be wrapped in JSON5 backtick syntax (ambiguous due to backslash or single quote)
 		// Round-trip should preserve the value
-		@SuppressWarnings("unchecked")
 		var parsed = (java.util.Map<String,String>) MarkdownParser.DEFAULT.read(md, java.util.Map.class);
 		assertEquals("it's a \\test", parsed.get("val"));
 	}

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.httppart;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -96,14 +95,9 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_attributes)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class RequestAttributes {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_names = "names";
-	private static final String ARG_name = "name";
-	private static final String ARG_attributes = "attributes";
 
 	final RestRequest req;
 	final HttpServletRequest sreq;
@@ -203,7 +197,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the parameters with the specified names are present.
 	 */
 	public boolean contains(String...names) {
-		assertArgNotNull(ARG_names, names);
+		reqnn("names", names);
 		for (var n : names)
 			if (sreq.getAttribute(n) == null)
 				return false;
@@ -217,7 +211,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the attribute with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull(ARG_names, names);
+		reqnn("names", names);
 		for (var n : names)
 			if (nn(sreq.getAttribute(n)))
 				return true;
@@ -268,7 +262,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes remove(String...name) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		for (var n : name) {
 			sreq.removeAttribute(n);
 		}
@@ -282,7 +276,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(NamedAttribute...attributes) {
-		assertArgNotNull(ARG_attributes, attributes);
+		reqnn("attributes", attributes);
 		for (var p : attributes)
 			set(p.getName(), p.getValue());
 		return this;
@@ -298,7 +292,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(String name, Object value) {
-		assertArgNotNull(ARG_name, name);
+		reqnn("name", name);
 		sreq.setAttribute(name, value);
 		return this;
 	}
@@ -306,7 +300,7 @@ public class RequestAttributes {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(ARG_attributes, asMap());
+			.a("attributes", asMap());
 		// @formatter:on
 	}
 

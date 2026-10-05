@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.test.junit;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Fluent {@link BasicBeanStore} subclass for declaring test-time bean overrides.
@@ -97,7 +97,7 @@ public class TestBeanStore extends BasicBeanStore {
 	 * @return This object.
 	 */
 	public <T> TestBeanStore override(Class<T> type, T bean) {
-		assertArgNotNull("type", type);
+		reqnn("type", type);
 		addBean(type, bean);
 		return this;
 	}
@@ -112,7 +112,7 @@ public class TestBeanStore extends BasicBeanStore {
 	 * @return This object.
 	 */
 	public <T> TestBeanStore override(Class<T> type, T bean, String name) {
-		assertArgNotNull("type", type);
+		reqnn("type", type);
 		addBean(type, bean, name);
 		return this;
 	}
@@ -129,8 +129,8 @@ public class TestBeanStore extends BasicBeanStore {
 	 * @return This object.
 	 */
 	public <T> TestBeanStore override(Class<T> type, Supplier<T> supplier) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("supplier", supplier);
+		reqnn("type", type);
+		reqnn("supplier", supplier);
 		addSupplier(type, supplier);
 		return this;
 	}
@@ -148,8 +148,8 @@ public class TestBeanStore extends BasicBeanStore {
 	 * @return This object.
 	 */
 	public <T> TestBeanStore override(Class<T> type, Supplier<T> supplier, String name) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("supplier", supplier);
+		reqnn("type", type);
+		reqnn("supplier", supplier);
 		addSupplier(type, supplier, name);
 		return this;
 	}

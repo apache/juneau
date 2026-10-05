@@ -32,8 +32,8 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({
-	"serial",  // serialVersionUID not required for test classes.
-	"rawtypes"  // Raw types required for generic test utility.
+	"rawtypes", // Raw types required for generic test utility.
+	"serial" // serialVersionUID not required for test classes.
 })
 class BasicHtml_Test extends TestBase {
 

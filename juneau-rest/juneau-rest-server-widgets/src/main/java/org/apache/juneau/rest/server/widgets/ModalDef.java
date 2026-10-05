@@ -131,14 +131,17 @@ import org.apache.juneau.commons.bean.*;
  * its presence does not bump {@link #CONTRACT_VERSION}), and the {@code juneau-views.js} runtime paints the region
  * and its dynamic-count sidecar client-side from the JSON, the same way it already paints typed confirmation
  * {@link #fields} and {@link #form} controls &mdash; {@code textContent} only, never {@code innerHTML}.  The dialog
- * anchors its own region immediately after the title (the rich-view module's {@code
- * BarSlotTable.ANCHOR_DIALOG_TITLE}), owning that placement itself rather than leaning on the shared strip builder,
+ * anchors its own region immediately after the title (the {@code ANCHOR_DIALOG_TITLE}
+ * placement in {@code juneau-views.js}), owning that placement itself rather than leaning on the shared strip builder,
  * exactly as the row-detail host owns its own ribbon-trailing relocation.
  *
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions")
-@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+@SuppressWarnings({
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S3776" // Branching is inherent to validate() and validateChildActions(), which check many field/child-action combinations.
+})
 public class ModalDef implements Widget {
 
 	/**
@@ -246,7 +249,6 @@ public class ModalDef implements Widget {
 	 * @since 10.0.0
 	 */
 	@BeanType(properties="id,label,form,endpoint,method,onSuccess,carryDrafts")
-	@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	public static class ChildAction {
 
 		/** The action id a {@code type="action"} input in this dialog's form names.  Required, non-blank. */
@@ -589,9 +591,6 @@ public class ModalDef implements Widget {
 	 * @throws IllegalArgumentException If this modal is not well-formed.
 	 */
 	@Override
-	@SuppressWarnings({
-		"java:S3776" // Modal validation encodes dialog contract; complexity is inherent.
-	})
 	public void validate() {
 		if (title == null || title.isBlank())
 			throw iaex("ModalDef title must not be null or blank.");
@@ -601,7 +600,7 @@ public class ModalDef implements Widget {
 					throw iaex("ModalDef field must not be null.");
 				if (f.label == null || f.label.isBlank())
 					throw iaex("ModalDef.Field label must not be null or blank.");
-				if (f.kind != null && ! (FIELD_KIND_TEXT.equals(f.kind) || FIELD_KIND_CODE.equals(f.kind)))
+				if (f.kind != null && ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
 					throw iaex("ModalDef.Field kind must be '" + FIELD_KIND_TEXT + "' or '" + FIELD_KIND_CODE
 						+ "', not '" + f.kind + "'.");
 			}
@@ -620,9 +619,6 @@ public class ModalDef implements Widget {
 	 * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the
 	 * factory.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Child-action validation encodes dialog contract; complexity is inherent.
-	})
 	private void validateChildActions() {
 		if (childActions == null)
 			return;

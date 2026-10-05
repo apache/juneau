@@ -50,7 +50,7 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({
-	"deprecation",
+	"deprecation", // Date-keyed map tests use the deprecated new Date(year, month, day, ...) constructor for fixed values
 	"java:S1640" // HashMap required in one test for null key support (EnumMap doesn't allow)
 })
 class RoundTripMaps_Test extends TestBase {

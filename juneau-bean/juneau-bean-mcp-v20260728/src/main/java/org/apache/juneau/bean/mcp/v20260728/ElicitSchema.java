@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.mcp.v20260728;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -57,24 +56,11 @@ import org.apache.juneau.marshall.collections.*;
  * </p>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_minLength, ARG_value)
+	"java:S1192" // Duplicated literals (property names) read more clearly inline than as constants
 })
 public class ElicitSchema {
 
-	private static final String TYPE_STRING = "string";
-	private static final String TYPE_NUMBER = "number";
-	private static final String TYPE_INTEGER = "integer";
-	private static final String TYPE_BOOLEAN = "boolean";
-	private static final String TYPE_OBJECT = "object";
-
-	private static final Set<String> NUMERIC_TYPES = Set.of(TYPE_NUMBER, TYPE_INTEGER);
-
-	// Property name constants (wire JSON-schema keys)
-	private static final String PROP_minLength = "minLength";
-	private static final String PROP_maxLength = "maxLength";
-
-	// Argument name constant for assertArgNotNull
-	private static final String ARG_value = "value";
+	private static final Set<String> NUMERIC_TYPES = Set.of("number", "integer");
 
 	private final Map<String,JsonMap> properties = map();
 	private final Set<String> required = new LinkedHashSet<>();
@@ -99,7 +85,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 	 */
 	public ElicitSchema stringField(String name) {
-		return field(name, TYPE_STRING);
+		return field(name, "string");
 	}
 
 	/**
@@ -110,7 +96,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 	 */
 	public ElicitSchema numberField(String name) {
-		return field(name, TYPE_NUMBER);
+		return field(name, "number");
 	}
 
 	/**
@@ -121,7 +107,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 	 */
 	public ElicitSchema integerField(String name) {
-		return field(name, TYPE_INTEGER);
+		return field(name, "integer");
 	}
 
 	/**
@@ -132,7 +118,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 	 */
 	public ElicitSchema booleanField(String name) {
-		return field(name, TYPE_BOOLEAN);
+		return field(name, "boolean");
 	}
 
 	/**
@@ -147,19 +133,19 @@ public class ElicitSchema {
 	 * 	<jk>null</jk>, empty, or contains a <jk>null</jk> element.
 	 */
 	public ElicitSchema enumField(String name, String...values) {
-		assertArgNotNullOrBlank("name", name);
+		reqnb("name", name);
 		if (values == null || values.length == 0)
 			throw iaex("Field ''%s'': enumField values must not be null or empty", name);
 		for (var value : values)
 			if (value == null)
 				throw iaex("Field ''%s'': enumField values must not contain a null element", name);
-		field(name, TYPE_STRING);
+		field(name, "string");
 		properties.get(name).put("enum", List.of(values));
 		return this;
 	}
 
 	private ElicitSchema field(String name, String type) {
-		assertArgNotNullOrBlank("name", name);
+		reqnb("name", name);
 		var p = new JsonMap();
 		p.put("type", type);
 		// Last-field-wins: a redeclared field discards its prior per-field modifiers (see class Javadoc).
@@ -177,7 +163,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema title(String value) {
-		currentProperty().put("title", assertArgNotNull(ARG_value, value));
+		currentProperty().put("title", reqnn("value", value));
 		return this;
 	}
 
@@ -189,7 +175,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema description(String value) {
-		currentProperty().put("description", assertArgNotNull(ARG_value, value));
+		currentProperty().put("description", reqnn("value", value));
 		return this;
 	}
 
@@ -202,7 +188,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema format(String value) {
-		currentProperty().put("format", assertArgNotNull(ARG_value, value));
+		currentProperty().put("format", reqnn("value", value));
 		return this;
 	}
 
@@ -216,7 +202,7 @@ public class ElicitSchema {
 	 * @return This object (for method chaining).
 	 */
 	public ElicitSchema minLength(int value) {
-		currentProperty().put(PROP_minLength, value);
+		currentProperty().put("minLength", value);
 		return this;
 	}
 
@@ -230,7 +216,7 @@ public class ElicitSchema {
 	 * @return This object (for method chaining).
 	 */
 	public ElicitSchema maxLength(int value) {
-		currentProperty().put(PROP_maxLength, value);
+		currentProperty().put("maxLength", value);
 		return this;
 	}
 
@@ -243,7 +229,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema min(Number value) {
-		currentProperty().put("minimum", assertArgNotNull(ARG_value, value));
+		currentProperty().put("minimum", reqnn("value", value));
 		return this;
 	}
 
@@ -256,7 +242,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema max(Number value) {
-		currentProperty().put("maximum", assertArgNotNull(ARG_value, value));
+		currentProperty().put("maximum", reqnn("value", value));
 		return this;
 	}
 
@@ -293,7 +279,7 @@ public class ElicitSchema {
 			if (value == null)
 				throw iaex("enumNames values must not contain a null element");
 		var p = currentProperty();
-		var enumValues = (List<?>)p.get("enum");
+		var enumValues = p.getList("enum");
 		if (enumValues != null && enumValues.size() != values.length)
 			throw iaex("enumNames length (%s) must match enum length (%s)", values.length, enumValues.size());
 		p.put("enumNames", List.of(values));
@@ -349,7 +335,7 @@ public class ElicitSchema {
 		properties.forEach(this::validateField);
 		required.forEach(this::validateRequiredName);
 		var schema = new JsonMap();
-		schema.put("type", TYPE_OBJECT);
+		schema.put("type", "object");
 		// Deep-copy each per-field map so a caller who keeps the builder and applies further modifiers after
 		// build() cannot mutate an already-returned schema.
 		var propsCopy = new JsonMap();
@@ -376,7 +362,7 @@ public class ElicitSchema {
 	}
 
 	private void validateFormat(String name, JsonMap p, String type) {
-		if (p.containsKey("format") && ! TYPE_STRING.equals(type))
+		if (p.containsKey("format") && neq(type, "string"))
 			throw isex("Field ''%s'': format is only valid on string fields", name);
 	}
 
@@ -386,16 +372,17 @@ public class ElicitSchema {
 	}
 
 	private void validateLength(String name, JsonMap p, String type) {
-		if ((p.containsKey(PROP_minLength) || p.containsKey(PROP_maxLength)) && ! TYPE_STRING.equals(type))
+		if ((p.containsKey("minLength") || p.containsKey("maxLength")) && neq(type, "string"))
 			throw isex("Field ''%s'': minLength/maxLength are only valid on string fields", name);
-		if ((p.containsKey(PROP_minLength) || p.containsKey(PROP_maxLength)) && p.containsKey("enum"))
+		if ((p.containsKey("minLength") || p.containsKey("maxLength")) && p.containsKey("enum"))
 			throw isex("Field ''%s'': minLength/maxLength are not valid on an enum (closed-choice) field", name);
-		if (p.containsKey(PROP_minLength) && (int)p.get(PROP_minLength) < 0)
+		var minLength = p.getInt("minLength");
+		var maxLength = p.getInt("maxLength");
+		if (nn(minLength) && minLength < 0)
 			throw isex("Field ''%s'': minLength must not be negative", name);
-		if (p.containsKey(PROP_maxLength) && (int)p.get(PROP_maxLength) < 0)
+		if (nn(maxLength) && maxLength < 0)
 			throw isex("Field ''%s'': maxLength must not be negative", name);
-		if (p.containsKey(PROP_minLength) && p.containsKey(PROP_maxLength)
-			&& (int)p.get(PROP_minLength) > (int)p.get(PROP_maxLength))
+		if (nn(minLength) && nn(maxLength) && minLength > maxLength)
 			throw isex("Field ''%s'': minLength must not exceed maxLength", name);
 	}
 

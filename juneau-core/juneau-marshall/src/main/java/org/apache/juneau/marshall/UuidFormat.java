@@ -167,8 +167,8 @@ public enum UuidFormat {
 	 * @return <jk>false</jk>.
 	 */
 	@SuppressWarnings({
-		"static-method", // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
-		"java:S3400"     // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"java:S3400", // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.
+		"static-method" // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.
 	})
 	public boolean isNumeric() {
 		return false;

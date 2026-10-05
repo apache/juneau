@@ -75,11 +75,11 @@ function elWalk(node, sel, acc) {
 }
 
 function datasetKeyToAttr(key) {
-	return 'data-' + key.replace(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
+	return 'data-' + key.replaceAll(/[A-Z]/g, function (m) { return '-' + m.toLowerCase(); });
 }
 
 function attrToDatasetKey(attr) {
-	return attr.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+	return attr.slice(5).replaceAll(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
 }
 
 /** A minimal live `dataset` facade over `node`'s existing attrs store, so `.dataset.x` reads/writes stay in sync
@@ -104,7 +104,7 @@ function makeDataset(node) {
 		},
 		ownKeys() {
 			return Object.keys(node.attrs)
-				.filter(function (k) { return k.indexOf('data-') === 0; })
+				.filter(function (k) { return k.startsWith('data-'); })
 				.map(attrToDatasetKey);
 		},
 		getOwnPropertyDescriptor(_, key) {
@@ -216,7 +216,7 @@ function parseAttrs(raw, node) {
 	// values with no behavior-preserving equivalent, so it is left as-is.
 	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 	let m;
-	while ((m = re.exec(raw)))
+	for (m = re.exec(raw); m; m = re.exec(raw))
 		node.setAttribute(m[1], firstDefined(m[2], m[3], m[4]));
 }
 
@@ -225,7 +225,7 @@ function parseTestHtml(html) {
 	const stack = [root];
 	const re = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)\/?>|([^<]+)/g;
 	let m;
-	while ((m = re.exec(html))) {
+	for (m = re.exec(html); m; m = re.exec(html)) {
 		if (m[3] != null) {
 			stack.at(-1).appendChild(textNode(m[3]));
 			continue;
@@ -254,13 +254,13 @@ DOMParser.prototype.parseFromString = function (str) {
 const document = {
 	readyState: 'loading',
 	activeElement: null,
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
 	getElementById: function () { return null; },
 	createElement: function (tag) { return el(tag); },
 	createTextNode: function (v) { return textNode(v); },
-	body: { appendChild: function () {}, querySelectorAll: function () { return []; } }
+	body: { appendChild: function () { /* no-op */ }, querySelectorAll: function () { return []; } }
 };
 const window = { document: document, console: console, jQuery: undefined, DOMParser: DOMParser };
 const sandbox = { window: window, document: document, console: console, DOMParser: DOMParser };
@@ -367,7 +367,7 @@ if (out.hasPaintActionMessageIntoDetail) {
 	out.paint_text = paintSlot.textContent;
 	out.paint_xssNotInterpreted = paintSlot.textContent === paintMsg;
 
-	// LD-1 (TODO-J0474): a field-hosted bar paints into its OWN field's slot, not the section's first field.
+	// LD-1 (work item WORK-J0474): a field-hosted bar paints into its OWN field's slot, not the section's first field.
 	// Two fields in the section, the SECOND one hosting the bar, so "first field happens to be the bar's own
 	// field" cannot make this pass by accident -- painting the first field's slot instead of the second's would
 	// be exactly the pre-fix defect this case exists to catch.
@@ -554,10 +554,10 @@ out.sh_hasNoscript = xssTags.indexOf('NOSCRIPT') >= 0;
 out.sh_hasObject = xssTags.indexOf('OBJECT') >= 0;
 out.sh_hasEmbed = xssTags.indexOf('EMBED') >= 0;
 // The structural assertion: NO attribute anywhere in the output begins with "on", and no style/id/class rode along.
-out.sh_anyOnAttr = xssAttrs.some(function (a) { return a.indexOf('on') === 0; });
+out.sh_anyOnAttr = xssAttrs.some(function (a) { return a.startsWith('on'); });
 out.sh_anyStyleAttr = xssAttrs.indexOf('style') >= 0;
 out.sh_anyClassAttr = xssAttrs.indexOf('class') >= 0;
-out.sh_attrNames = xssAttrs.slice().sort().join(',');
+out.sh_attrNames = xssAttrs.slice().sort((a, b) => Number(a > b) - Number(a < b)).join(',');
 // No alert(...) payload survived as TEXT either (a dropped <script> must not become visible text).
 out.sh_textHasAlert = /alert\(\d+\)/.test(shXss.textContent);
 // Anchors: neither the plain nor the entity-encoded javascript: URL kept an href.
@@ -569,8 +569,8 @@ out.sh_anchorTextKept = shXss.textContent.indexOf('jslink') >= 0 && shXss.textCo
 const xssImgs = findTag(shXss, 'IMG', []);
 out.sh_imgCount = xssImgs.length;
 out.sh_imgSrcs = xssImgs.map(function (i) { return String(i.getAttribute('src')); }).join('|');
-out.sh_dataUriSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').indexOf('data:') === 0; });
-out.sh_protoRelSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').indexOf('//') === 0; });
+out.sh_dataUriSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').startsWith('data:'); });
+out.sh_protoRelSrc = xssImgs.some(function (i) { return String(i.getAttribute('src') || '').startsWith('//'); });
 out.sh_textHasStyled = shXss.textContent.indexOf('styled') >= 0;
 
 // 1b. Benign markup nested INSIDE and BESIDE hostile markup survives - its own paint so no earlier vector's
@@ -585,7 +585,7 @@ out.sh_nestedNoScript = collectTags(shNested, []).indexOf('SCRIPT') < 0;
 out.sh_nestedNoAlert = /alert\(\d+\)/.test(shNested.textContent) === false;
 out.sh_nestedDeepKept = findTag(shNested, 'EM', []).length === 1
 	&& shNested.textContent.indexOf('deep') >= 0;
-out.sh_nestedNoOnAttr = collectAttrNames(shNested, []).some(function (a) { return a.indexOf('on') === 0; });
+out.sh_nestedNoOnAttr = collectAttrNames(shNested, []).some(function (a) { return a.startsWith('on'); });
 
 // 1c. Recursion-depth bound: appendSanitizedHtmlChild/copySanitizedHtmlChildren are mutually recursive, one
 //     call-frame pair per level of input nesting.  A payload nested far beyond any real document (here: a
@@ -598,7 +598,7 @@ let deepThrew = false;
 let deepResult = null;
 try {
 	deepResult = sanitizedPaint(deepHtml);
-} catch (e) {
+} catch (error) {
 	deepThrew = true;
 }
 out.sh_deepNesting_doesNotThrow = !deepThrew;
@@ -881,7 +881,7 @@ const ribbon = I.buildRibbonStrip([
 ], {
 	className: 'juneau-view-ribbon-group juneau-view-detail-tabs',
 	testId: 'detail-tabs',
-	onActivate: function () {}
+	onActivate: function () { /* no-op */ }
 });
 const strip = ribbon.strip;
 const tabButtons = tabButtonsOf(strip);
@@ -910,18 +910,18 @@ out.act_pane0Hidden = ribbonPanes[0].hidden === true;
 I.activateDetailTab(ribbon.tabs, 'overview');
 
 document.activeElement = null;
-strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });
 out.kbd_right_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
 out.kbd_right_tab0Deselected = tabButtons[0].getAttribute('aria-selected') === 'false';
 out.kbd_right_pane1Visible = ribbonPanes[1].hidden === false;
 out.kbd_right_focusMoved = document.activeElement === tabButtons[1];
-strip._fire('keydown', { key: 'Home', preventDefault: function () {} });
+strip._fire('keydown', { key: 'Home', preventDefault: function () { /* no-op */ } });
 out.kbd_home_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
-strip._fire('keydown', { key: 'End', preventDefault: function () {} });
+strip._fire('keydown', { key: 'End', preventDefault: function () { /* no-op */ } });
 out.kbd_end_tab1Selected = tabButtons[1].getAttribute('aria-selected') === 'true';
-strip._fire('keydown', { key: 'ArrowLeft', preventDefault: function () {} });
+strip._fire('keydown', { key: 'ArrowLeft', preventDefault: function () { /* no-op */ } });
 out.kbd_left_tab0Selected = tabButtons[0].getAttribute('aria-selected') === 'true';
-strip._fire('keydown', { key: 'Enter', preventDefault: function () {} });
+strip._fire('keydown', { key: 'Enter', preventDefault: function () { /* no-op */ } });
 out.kbd_enter_noop = tabButtons[0].getAttribute('aria-selected') === 'true';
 
 const skillsPanes = [el('div'), el('div')];
@@ -933,7 +933,7 @@ out.skills_labels = tabButtonsOf(skills.strip).map(function (b) { return b.textC
 out.skills_tabCount = tabButtonsOf(skills.strip).length;
 
 let fetchCalls = 0;
-window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () {} }; } }; };
+window.fetch = function () { fetchCalls++; return { then: function () { return { catch: function () { /* no-op */ } }; } }; /* NOSONAR javascript:S7739 -- deliberate thenable stub of fetch() that never settles */ };
 const activated = [];
 const nfPanes = [el('div'), el('div')];
 const nf = I.buildRibbonStrip([
@@ -942,7 +942,7 @@ const nf = I.buildRibbonStrip([
 ], { onActivate: function (sid, pane) { activated.push({ sid: sid, pane: pane }); } });
 const nfTabs = tabButtonsOf(nf.strip);
 document.activeElement = null;
-nf.strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () {} });
+nf.strip._fire('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } });
 nf.strip._fire('click', { target: nfTabs[0] });
 out.noRefetch_fetchCalls = fetchCalls;
 out.noRefetch_clickSelectedTab0 = nfTabs[0].getAttribute('aria-selected') === 'true';
@@ -1186,7 +1186,7 @@ function fieldWithBar(key, actionId, rules) {
 // it is not a paint target, and painting the value must not disturb it.
 const dfa = fieldWithBar('assignee', 'esc');
 out.dfa_onePaintTargetInTheBlock = dfa.panel.querySelectorAll('[data-juneau-field]').length === 1;
-out.dfa_barIsNotAPaintTarget = dfa.bar.getAttribute('data-juneau-field') == null;
+out.dfa_barIsNotAPaintTarget = dfa.bar.dataset.juneauField == null;
 out.dfa_barIsASiblingOfTheValueSlot = dfa.block.childNodes.length === 3
 	&& dfa.block.childNodes[1] === dfa.value
 	&& dfa.block.childNodes[2] === dfa.bar
@@ -1249,7 +1249,7 @@ if (out.hasRenderAsyncStatus) {
 	const loading = asyncContainer.childNodes[1];
 	out.async_defaultLoadingText = loading.textContent === 'Loading…';
 	out.async_statusRole = loading.getAttribute('role') === 'status';
-	out.async_marker = loading.getAttribute('data-juneau-async-status') === '';
+	out.async_marker = loading.dataset.juneauAsyncStatus === '';
 	out.async_spinnerDecorative = loading.firstChild.className === 'juneau-view-spinner'
 		&& loading.firstChild.getAttribute('aria-hidden') === 'true';
 

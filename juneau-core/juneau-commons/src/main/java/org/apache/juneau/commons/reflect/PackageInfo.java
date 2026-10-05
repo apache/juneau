@@ -18,7 +18,6 @@ package org.apache.juneau.commons.reflect;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.function.Suppliers.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -72,12 +71,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class PackageInfo implements Annotatable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_inner = "inner";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -128,7 +124,7 @@ public class PackageInfo implements Annotatable {
 	 * @param inner The package object.  Must not be <jk>null</jk>.
 	 */
 	protected PackageInfo(Package inner) {
-		assertArgNotNull(ARG_inner, inner);
+		reqnn("inner", inner);
 		this.inner = inner;
 		this.annotations = memoize(
 			() -> o(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(emptyList()));

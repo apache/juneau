@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -106,7 +105,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @param body The response body. May be <jk>null</jk>.
 	 */
 	protected BasicHttpResponse(HttpStatusLine statusLine, List<HttpHeader> headers, HttpBody body) {
-		this.statusLine = assertArgNotNull("statusLine", statusLine);
+		this.statusLine = reqnn("statusLine", statusLine);
 		this.headers = HttpHeaderList.of(headers);
 		this.body = body;
 	}
@@ -117,7 +116,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpResponse(BasicHttpResponse<?> copyFrom) {
-		assertArgNotNull("copyFrom", copyFrom);
+		reqnn("copyFrom", copyFrom);
 		this.statusLine = copyFrom.statusLine;
 		this.headers = copyFrom.headers.copy();
 		this.body = copyFrom.body;
@@ -172,7 +171,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @return This object.
 	 */
 	public SELF setStatusLine(HttpStatusLine value) {
-		return modify(() -> statusLine = assertArgNotNull("value", value));
+		return modify(() -> statusLine = reqnn("value", value));
 	}
 
 	/**
@@ -203,7 +202,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 */
 	public SELF setProtocolVersion(HttpProtocolVersion value) {
 		return modify(() -> {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
 		});
 	}
@@ -391,7 +390,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @return This object.
 	 */
 	public SELF withHeader(HttpHeader header) {
-		return modify(() -> headers.append(assertArgNotNull("header", header)));
+		return modify(() -> headers.append(reqnn("header", header)));
 	}
 
 	/**

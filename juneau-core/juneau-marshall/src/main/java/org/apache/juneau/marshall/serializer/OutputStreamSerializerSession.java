@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.marshall.serializer;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.marshall.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
@@ -43,13 +43,10 @@ import org.apache.juneau.marshall.*;
  */
 @SuppressWarnings({
 	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"resource" // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class OutputStreamSerializerSession extends SerializerSession {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -68,7 +65,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(OutputStreamSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -100,7 +97,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
 	})
 	public static Builder<?> create(OutputStreamSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final OutputStreamSerializer ctx;

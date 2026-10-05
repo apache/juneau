@@ -34,8 +34,9 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S1172", // Unused parameters in tests are intentional
 	"java:S1186", // Empty test method intentional for framework testing
-	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"java:S9149", // Intentionally hides the parent's create(): this is the exact covariant-return static-factory convention BeanInstantiator's builder detection is being tested against.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class BeanInstantiator_Test extends TestBase {
 
@@ -260,9 +261,6 @@ class BeanInstantiator_Test extends TestBase {
 			}
 		}
 
-		@SuppressWarnings({
-			"java:S9149" // Intentionally hides the parent's create(): this is the exact covariant-return static-factory convention BeanInstantiator's builder detection is being tested against.
-		})
 		public static BuilderForChild create() {
 			return new BuilderForChild();
 		}
@@ -845,7 +843,7 @@ class BeanInstantiator_Test extends TestBase {
 
 			var bean = bc(C09_BeanWithMultipleFactoryMethods.class).factoryMethodNames("of", "from", "newInstance").run();
 
-			assertTrue(bean.getSource().equals("of") || bean.getSource().equals("from"));
+			assertTrue(eqa(bean.getSource(), "of", "from"));
 		}
 
 		/**
@@ -2049,9 +2047,6 @@ class BeanInstantiator_Test extends TestBase {
 			}
 
 			// Static method to return the builder (needed for builder detection on child class)
-			@SuppressWarnings({
-				"java:S9149" // Intentionally hides the parent's create(): this is the exact covariant-return static-factory convention BeanInstantiator's builder detection is being tested against.
-			})
 			public static D28_BuilderForParentMethod create() {
 				return new D28_BuilderForParentMethod();
 			}

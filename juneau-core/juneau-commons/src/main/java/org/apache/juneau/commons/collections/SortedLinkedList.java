@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A sorted list implementation backed by a {@link LinkedList}.
@@ -88,12 +88,10 @@ import java.util.*;
  * @see SortedArrayList
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"unchecked" // Type erasure requires cast for comparator initialization
 })
 public class SortedLinkedList<E> extends AbstractList<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_comparator = "comparator";
 
 	private final List<E> list;
 	private final Comparator<? super E> comparator;
@@ -106,9 +104,6 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 *
 	 * @throws ClassCastException if elements are not comparable.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for comparator initialization
-	})
 	public SortedLinkedList() {
 		this((Comparator<? super E>)Comparator.naturalOrder());
 	}
@@ -119,7 +114,7 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 */
 	public SortedLinkedList(Comparator<? super E> comparator) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		this.list = new LinkedList<>();
 	}
 
@@ -131,9 +126,6 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 *
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for comparator initialization
-	})
 	public SortedLinkedList(Collection<? extends E> c) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), c);
 	}
@@ -145,7 +137,7 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
 	public SortedLinkedList(Comparator<? super E> comparator, Collection<? extends E> c) {
-		this.comparator = assertArgNotNull(ARG_comparator, comparator);
+		this.comparator = reqnn("comparator", comparator);
 		this.list = new LinkedList<>(c);
 		Collections.sort(this.list, this.comparator);
 	}

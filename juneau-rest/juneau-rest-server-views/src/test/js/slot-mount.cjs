@@ -71,10 +71,10 @@ function envelope(NS, extra) {
 		const table = incidents.querySelector('table[data-juneau-view="releases"]');
 		const wrap = incidents.querySelector('[data-juneau-slot-table]');
 		out.t1_hasTable = table != null;
-		out.t1_thead = table != null && table.querySelector('thead') != null;
-		out.t1_noRegionOnSlot = incidents.getAttribute('data-juneau-region') == null;
-		out.t1_wrapperMarker = wrap != null && wrap.getAttribute('data-juneau-slot-table') === '1';
-		out.t1_layoutWide = wrap != null && wrap.getAttribute('data-juneau-layout') === 'wide';
+		out.t1_thead = table?.querySelector('thead') != null;
+		out.t1_noRegionOnSlot = incidents.dataset.juneauRegion == null;
+		out.t1_wrapperMarker = wrap?.dataset.juneauSlotTable === '1';
+		out.t1_layoutWide = wrap?.dataset.juneauLayout === 'wide';
 		out.t1_noErrors = rec.errors.length === 0;
 		out.t1_initFromDefExported = typeof NS.init.initTableFromDef === 'function'
 			&& typeof NS.init.mountTableSlot === 'function';
@@ -156,9 +156,9 @@ function envelope(NS, extra) {
 		let message = '';
 		try {
 			R.mount({ incidents: { table: '' } });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
-			message = String(e?.message ? e.message : e);
+			message = String(error?.message ? error.message : error);
 		}
 		out.t6_blankThrew = threw;
 		out.t6_blankNamesUrl = message.indexOf('blank or missing table URL') >= 0;
@@ -178,7 +178,7 @@ function envelope(NS, extra) {
 		let threw = false;
 		try {
 			R.mount({ incidents: { table: '   ' } });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
 		}
 		out.t7_wsThrew = threw;
@@ -195,7 +195,7 @@ function envelope(NS, extra) {
 		let threw = false;
 		try {
 			R.mount({ probes: 'ssc-probes', incidents: { table: envelope(NS) } });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
 		}
 		out.t8_missingIdThrew = threw;
@@ -204,13 +204,13 @@ function envelope(NS, extra) {
 
 	{
 		const { env, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		R.register('ssc-probes', function () {});
+		R.register('ssc-probes', function () { /* no-op */ });
 		const probes = slot(env, 'probes');
 		slot(env, 'incidents');
 		let threw = false;
 		try {
 			R.mount({ probes: 'ssc-probes', incidents: { foo: 1 } });
-		} catch (e) {
+		} catch (error) {
 			threw = true;
 		}
 		out.t9_badShapeThrew = threw;
@@ -285,23 +285,23 @@ function envelope(NS, extra) {
 		};
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
-		const dest = tpl && tpl.content ? tpl.content : null;
+		const dest = tpl?.content ? tpl.content : null;
 		out.t12_hasTemplate = tpl != null;
-		out.t12_lightDomEmpty = tpl != null && tpl.childNodes.length === 0;
-		out.t12_contentHasChildren = dest != null && dest.childNodes.length > 0;
-		out.t12_hasHeader = dest != null && dest.querySelector('.juneau-view-detail-header') != null;
-		const region = dest && dest.querySelector('[data-juneau-region="pd-mine-detail"]');
-		out.t12_regionType = region != null && region.getAttribute('data-juneau-region-type') === 'row-detail';
+		out.t12_lightDomEmpty = tpl?.childNodes.length === 0;
+		out.t12_contentHasChildren = dest?.childNodes.length > 0;
+		out.t12_hasHeader = dest?.querySelector('.juneau-view-detail-header') != null;
+		const region = dest?.querySelector('[data-juneau-region="pd-mine-detail"]');
+		out.t12_regionType = region?.dataset.juneauRegionType === 'row-detail';
 		let declared = null;
 		try {
-			declared = region ? JSON.parse(region.getAttribute('data-juneau-region-declared')) : null;
-		} catch (e) { declared = null; }
-		out.t12_declaredDataUrlOnly = !!(declared && declared.dataUrl === '/data/{id}'
+			declared = region ? JSON.parse(region.dataset.juneauRegionDeclared) : null;
+		} catch (error) { declared = null; }
+		out.t12_declaredDataUrlOnly = !!(declared?.dataUrl === '/data/{id}'
 			&& Object.keys(declared).length === 1);
 		out.t12_noRegionMeta = incidents.querySelector('[data-juneau-region-meta]') == null
-			&& (tpl == null || tpl.querySelector('[data-juneau-region-meta]') == null)
-			&& (dest == null || dest.querySelector('[data-juneau-region-meta]') == null);
-		out.t12_regionContract = region != null && region.getAttribute('data-juneau-region-contract') === '1';
+			&& tpl?.querySelector('[data-juneau-region-meta]') == null
+			&& dest?.querySelector('[data-juneau-region-meta]') == null;
+		out.t12_regionContract = region?.dataset.juneauRegionContract === '1';
 	}
 
 	// =================================================================================================================
@@ -336,10 +336,10 @@ function envelope(NS, extra) {
 		};
 		await Promise.resolve(R.mount({ incidents: { table: envl } }));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
-		const dest = tpl && tpl.content ? tpl.content : tpl;
-		out.t13_noNested = dest == null || dest.querySelector('[data-juneau-nested]') == null;
-		out.t13_hasRegion = dest != null && dest.querySelector('[data-juneau-region="pd-mine-detail"]') != null;
-		out.t13_noSectionFrame = dest == null || dest.querySelector('[data-juneau-detail-section]') == null;
+		const dest = tpl?.content ? tpl.content : tpl;
+		out.t13_noNested = dest?.querySelector('[data-juneau-nested]') == null;
+		out.t13_hasRegion = dest?.querySelector('[data-juneau-region="pd-mine-detail"]') != null;
+		out.t13_noSectionFrame = dest?.querySelector('[data-juneau-detail-section]') == null;
 	}
 
 	// =================================================================================================================
@@ -371,6 +371,8 @@ function envelope(NS, extra) {
 			id: 'qs',
 			items: [
 				{ id: 'open', label: 'Open', value: '3' },
+				{ id: 'warnTile', label: 'Warn', value: '1', tone: 'warning' },
+				{ id: 'accentTile', label: 'Accent', value: '2', tone: 'accent' },
 				{ id: 'used', label: 'Used', value: 2, max: 10 },
 				{ id: 'mix', label: 'Mix', segments: [{ count: 1, label: 'a' }] }
 			]
@@ -380,6 +382,13 @@ function envelope(NS, extra) {
 		out.t15_bar = incidents.querySelector('.jc-stat-bar') != null;
 		out.t15_segments = incidents.querySelector('.jc-stat-segments') != null;
 		out.t15_contract = incidents.querySelector('[data-juneau-quickstats-contract="1"]') != null;
+		// A status-tone token paints `is-<tone>`; an off-palette value (the retired `accent`) paints no modifier at all.
+		const toneValue = function (id) {
+			const tile = incidents.querySelector('[data-juneau-stat="' + id + '"]');
+			return tile?.querySelector('.jc-stat-value')?.className;
+		};
+		out.t15_toneWarningClass = toneValue('warnTile');
+		out.t15_toneAccentClass = toneValue('accentTile');
 	}
 
 	{
@@ -398,7 +407,7 @@ function envelope(NS, extra) {
 	}
 
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) {
-	process.stderr.write(String(e?.stack ? e.stack : e));
+})().catch(function (error) {
+	process.stderr.write(String(error?.stack ? error.stack : error));
 	process.exit(1);
 });

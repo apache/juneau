@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -29,13 +28,10 @@ import java.util.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic type handling
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"rawtypes" // Raw types necessary for generic type handling
 })
 public abstract class MapVar extends DefaultingVar {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_m = "m";
 
 	private final Map m;
 
@@ -47,7 +43,7 @@ public abstract class MapVar extends DefaultingVar {
 	 */
 	protected MapVar(String name, Map m) {
 		super(name);
-		assertArgNotNull(ARG_m, m);
+		reqnn("m", m);
 		this.m = m;
 	}
 

@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // BasicBeanStore is a short-lived in-memory test fixture consumed synchronously by .build(); nothing external to leak.
+})
 class RestOpContext_Test extends org.apache.juneau.TestBase {
 
 	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier) {
@@ -273,9 +276,6 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 
 	public static class Fix_BeanMethodScopeWildcard {
 		@Bean(methodScope = "*")
-		@SuppressWarnings({
-			"resource" // BasicBeanStore is a short-lived in-memory test fixture consumed synchronously by .build(); nothing external to leak.
-		})
 		public RestConverterList myConverters() { return RestConverterList.create(new BasicBeanStore()).build(); }
 		@RestGet
 		public String op() { return "x"; }
@@ -288,9 +288,6 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 
 	public static class Fix_BeanMethodScopeExactMatch {
 		@Bean(methodScope = "op")
-		@SuppressWarnings({
-			"resource" // BasicBeanStore is a short-lived in-memory test fixture consumed synchronously by .build(); nothing external to leak.
-		})
 		public RestConverterList myConverters() { return RestConverterList.create(new BasicBeanStore()).build(); }
 		@RestGet
 		public String op() { return "x"; }
@@ -303,9 +300,6 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 
 	public static class Fix_BeanMethodScopeNoMatch {
 		@Bean(methodScope = "someOtherMethod")
-		@SuppressWarnings({
-			"resource" // BasicBeanStore is a short-lived in-memory test fixture consumed synchronously by .build(); nothing external to leak.
-		})
 		public RestConverterList myConverters() { return RestConverterList.create(new BasicBeanStore()).build(); }
 		@RestOp(method = "GET", converters = MyConverter.class)
 		public String op() { return "x"; }
@@ -338,6 +332,18 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 	@Test void e05_matchesInjectScopeNamed_wrongBeanName_doesNotApply() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_BeanMethodScopeNamed_WrongName.class, Fix_BeanMethodScopeNamed_WrongName::new));
 		assertFalse(opOf(ctx, "op").getDefaultRequestAttributes().containsKey("X"));
+	}
+
+	public static class Fix_BeanMethodScopeNamed_ValueAlias {
+		@Bean(value = "defaultRequestAttributes", methodScope = "op")
+		public NamedAttributeMap myAttrs() { return NamedAttributeMap.create().add(BasicNamedAttribute.ofPair("X=Y")); }
+		@RestGet
+		public String op() { return "x"; }
+	}
+
+	@Test void e06_matchesInjectScopeNamed_valueAliasMatchesBeanName_applies() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_BeanMethodScopeNamed_ValueAlias.class, Fix_BeanMethodScopeNamed_ValueAlias::new));
+		assertTrue(opOf(ctx, "op").getDefaultRequestAttributes().containsKey("X"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------

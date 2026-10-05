@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
@@ -69,17 +68,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Contact extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_email = "email";
-	private static final String PROP_name = "name";
-	private static final String PROP_url = "url";
 
 	private String name;
 	private URI url;
@@ -114,11 +105,11 @@ public class Contact extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_email -> toType(getEmail(), type);
-			case PROP_name -> toType(getName(), type);
-			case PROP_url -> toType(getUrl(), type);
+			case "email" -> toType(getEmail(), type);
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -157,9 +148,9 @@ public class Contact extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(email), PROP_email)
-			.addIf(nn(name), PROP_name)
-			.addIf(nn(url), PROP_url)
+			.addIf(nn(email), "email")
+			.addIf(nn(name), "name")
+			.addIf(nn(url), "url")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -167,11 +158,11 @@ public class Contact extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Contact set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_email -> setEmail(s(value));
-			case PROP_name -> setName(s(value));
-			case PROP_url -> setUrl(toUri(value));
+			case "email" -> setEmail(s(value));
+			case "name" -> setName(s(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

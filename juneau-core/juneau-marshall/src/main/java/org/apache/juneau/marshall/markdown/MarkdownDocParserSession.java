@@ -41,8 +41,8 @@ import org.apache.juneau.marshall.parser.*;
 	"java:S115", // Constants use UPPER_snakeCase convention
 	"java:S3776", // Cognitive complexity acceptable for doRead / readSections
 	"java:S6541", // Brain method acceptable for readSections
-	"unchecked",
-	"rawtypes",
+	"rawtypes", // readMapFromDoc() builds its result as a raw Map (sType.newInstance / newGenericMap) and populates it reflectively
+	"unchecked" // Casts of the ClassMeta<?> property/value types to ClassMeta<Object>/ClassMeta<T> and of the result to T are guaranteed by the bean property or requested type
 })
 public class MarkdownDocParserSession extends MarkdownParserSession {
 
@@ -54,9 +54,6 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Inheritance depth acceptable for parser session builder hierarchy
-	})
 	public static class Builder extends MarkdownParserSession.Builder<Builder> {
 
 		int headingLevel;
@@ -190,8 +187,8 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 			if (!tableRows.isEmpty()) {
 				var headers = splitTableRow(tableRows.get(0));
 				var isKeyValue = headers.size() == 2
-					&& (headers.get(0).equalsIgnoreCase(CONST_Property) || headers.get(0).equalsIgnoreCase("Key"))
-					&& headers.get(1).equalsIgnoreCase(CONST_Value);
+					&& (eqic(headers.get(0), CONST_Property) || eqic(headers.get(0), "Key"))
+					&& eqic(headers.get(1), CONST_Value);
 
 				if (isKeyValue) {
 					var dataLines = tableRows.stream().skip(1).filter(l -> !isSeparatorRow(l)).toList();
@@ -241,8 +238,8 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 				if (!tableRows.isEmpty()) {
 					var tableHeaders = splitTableRow(tableRows.get(0));
 					var isKeyValue = tableHeaders.size() == 2
-						&& (tableHeaders.get(0).equalsIgnoreCase(CONST_Property) || tableHeaders.get(0).equalsIgnoreCase("Key"))
-						&& tableHeaders.get(1).equalsIgnoreCase(CONST_Value);
+						&& (eqic(tableHeaders.get(0), CONST_Property) || eqic(tableHeaders.get(0), "Key"))
+						&& eqic(tableHeaders.get(1), CONST_Value);
 
 					if (isKeyValue && propCm.isBean()) {
 						// Nested bean via key/value table
@@ -296,8 +293,8 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 			if (!tableRows.isEmpty()) {
 				var headers = splitTableRow(tableRows.get(0));
 				var isKeyValue = headers.size() == 2
-					&& (headers.get(0).equalsIgnoreCase(CONST_Property) || headers.get(0).equalsIgnoreCase("Key"))
-					&& headers.get(1).equalsIgnoreCase(CONST_Value);
+					&& (eqic(headers.get(0), CONST_Property) || eqic(headers.get(0), "Key"))
+					&& eqic(headers.get(1), CONST_Value);
 
 				if (isKeyValue) {
 					var dataLines = tableRows.stream().skip(1).filter(l -> !isSeparatorRow(l)).toList();

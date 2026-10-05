@@ -94,16 +94,13 @@ function emptyTrack(html) {
 	return html.indexOf('jc-progress-bar') < 0
 		&& html.indexOf('style=') < 0
 		&& html.indexOf('jc-progress-label') < 0
-		&& html.indexOf('is-ok') < 0
-		&& html.indexOf('is-warn') < 0
-		&& html.indexOf('is-exceeds') < 0;
+		&& html.indexOf('is-success') < 0
+		&& html.indexOf('is-warning') < 0
+		&& html.indexOf('is-error') < 0;
 }
 function widthOf(html) {
 	const m = WIDTH_RE.exec(html);
 	return m ? m[1] : null;
-}
-function hasState(html, state) {
-	return html.indexOf('jc-progress-bar ' + state) >= 0 || html.indexOf('jc-progress-bar is-' + state.replace('is-', '')) >= 0;
 }
 
 out.progress_null = emptyTrack(phtml(null, {}));
@@ -123,19 +120,19 @@ out.progress_zeroLabel = phtml(0, {}).indexOf('>0%</span>') >= 0;
 out.progress_strZeroWidth = widthOf(phtml('0', {}));
 out.progress_mid = widthOf(phtml(50, { max: '100' }));
 out.progress_eqMax = widthOf(phtml(100, { max: '100' }));
-out.progress_eqMaxOk = phtml(100, { max: '100' }).indexOf('is-ok') >= 0;
+out.progress_eqMaxOk = phtml(100, { max: '100' }).indexOf('is-success') >= 0;
 out.progress_overWidth = widthOf(phtml(130, { max: '100' }));
 out.progress_overLabel = phtml(130, { max: '100' }).indexOf('>130%</span>') >= 0;
-out.progress_overExceeds = phtml(130, { max: '100' }).indexOf('is-exceeds') >= 0;
+out.progress_overExceeds = phtml(130, { max: '100' }).indexOf('is-error') >= 0;
 out.progress_negWidth = widthOf(phtml(-10, { max: '100' }));
 out.progress_negLabel = phtml(-10, { max: '100' }).indexOf('>-10%</span>') >= 0;
 out.progress_round = widthOf(phtml(2, { max: '3' })); // 67
 out.progress_roundLabel = phtml(2, { max: '3' }).indexOf('>67%</span>') >= 0;
-out.progress_warnEq = phtml(80, { max: '100', warn: '80' }).indexOf('is-warn') >= 0;
-out.progress_exceedsEq = phtml(90, { max: '100', exceeds: '90' }).indexOf('is-exceeds') >= 0;
-out.progress_warnEqExceeds = phtml(80, { max: '100', warn: '80', exceeds: '80' }).indexOf('is-exceeds') >= 0;
-out.progress_exceedsBelowWarn = phtml(60, { max: '100', warn: '80', exceeds: '50' }).indexOf('is-exceeds') >= 0;
-out.progress_units = phtml(80, { max: '200', warn: '80' }).indexOf('is-warn') >= 0;
+out.progress_warnEq = phtml(80, { max: '100', warn: '80' }).indexOf('is-warning') >= 0;
+out.progress_exceedsEq = phtml(90, { max: '100', exceeds: '90' }).indexOf('is-error') >= 0;
+out.progress_warnEqExceeds = phtml(80, { max: '100', warn: '80', exceeds: '80' }).indexOf('is-error') >= 0;
+out.progress_exceedsBelowWarn = phtml(60, { max: '100', warn: '80', exceeds: '50' }).indexOf('is-error') >= 0;
+out.progress_units = phtml(80, { max: '200', warn: '80' }).indexOf('is-warning') >= 0;
 out.progress_labelNone = phtml(50, { label: 'none' }).indexOf('jc-progress-label') < 0;
 out.progress_labelValue = phtml(50, { label: 'value' }).indexOf('>50</span>') >= 0;
 out.progress_labelBogus = phtml(50, { label: 'nope' }).indexOf('>50%</span>') >= 0;
@@ -164,7 +161,7 @@ out.pill_display = pillHtml('ok', { field: 'state' });
 out.pill_class = String(pill['class']());
 out.pill_dotOff = pillHtml('ok', { field: 'state', dot: 'off' });
 // Tone class for the four coloured tones of the closed palette; neutral/absent/off-palette -> no tone class.
-out.pill_tones = (NS._render.pillTones || []).slice().sort().join(',');
+out.pill_tones = (NS._render.pillTones || []).slice().sort((a, b) => Number(a > b) - Number(a < b)).join(',');
 out.pill_toneInfo = pillHtml('open', { field: 'state', tone: 'info' }).indexOf('jc-pill-dot is-info') >= 0;
 out.pill_toneSuccess = pillHtml('open', { field: 'state', tone: 'success' }).indexOf('jc-pill-dot is-success') >= 0;
 out.pill_toneWarning = pillHtml('open', { field: 'state', tone: 'warning' }).indexOf('jc-pill-dot is-warning') >= 0;
@@ -222,7 +219,7 @@ NS.registerRenderer('tag', { display: function () { return '<img src=x onerror=a
 out.freeze_cellHonorsOverride = String(NS.resolveRenderer('tag').display()).indexOf('<img') >= 0;
 out.freeze_sinkStillBuiltin = builtinTag === NS.resolveSinkRenderer('tag');
 out.freeze_sinkDisplaySafe = String(NS.resolveSinkRenderer('tag').display('Released', {}, { field: 'status' })).indexOf('class="tag') >= 0;
-out.freeze_ids = (NS._render.frozenBuiltinIds || []).slice().sort().join(',');
+out.freeze_ids = (NS._render.frozenBuiltinIds || []).slice().sort((a, b) => Number(a > b) - Number(a < b)).join(',');
 
 // WORK-J0508 (Foundry WORK-P0063 row-detail-subtabs follow-up): `code` renderer - HTML-escaped, whitespace-
 // preserving, monospace via `.juneau-code`; a frozen fill-sink built-in like `json`/`tag`/`pill` above.

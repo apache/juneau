@@ -107,9 +107,36 @@ import java.lang.annotation.*;
  * 	<li class='note'>Methods and fields can be static or non-static.
  * 	<li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
  * 	<li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
+ * 	<li class='note'>{@code @Bean} methods and fields may have any visibility (public, protected, package-private or private).
+ * 		Non-public members are made accessible before use, so the containing package must be opened to
+ * 		module <c>org.apache.juneau.commons</c> when running on the module path.
  * 	<li class='note'>By default, the injected bean scope is class-level (applies to the entire class).  The
  * 		{@link Bean#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
+ *
+ * <h5 class='section'>Bean names:</h5>
+ * <p>
+ * 	Each {@code @Bean} method registers its own result.  Two methods returning the same type are distinguished by name,
+ * 	and both beans are kept.  Factory methods on <ja>@Rest</ja> resources and <ja>@Configuration</ja> classes
+ * 	are the common use.
+ * </p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Two beans of the same type, distinguished by name.  Each method's own result is registered.</jc>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+ *
+ * 		<ja>@Bean</ja>(name=<js>"db"</js>)
+ * 		HealthIndicator dbIndicator() {
+ * 			<jk>return</jk> () -&gt; Health.<jsm>up</jsm>(<js>"db"</js>).build();
+ * 		}
+ *
+ * 		<ja>@Bean</ja>(name=<js>"cache"</js>)
+ * 		HealthIndicator cacheIndicator() {
+ * 			<jk>return</jk> () -&gt; Health.<jsm>up</jsm>(<js>"cache"</js>).build();
+ * 		}
+ * 	}
+ * </p>
  *
  * <h5 class='section'>Precedence (since 10.0.0):</h5>
  * <p>

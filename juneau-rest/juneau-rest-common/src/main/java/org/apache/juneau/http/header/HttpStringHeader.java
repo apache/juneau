@@ -32,6 +32,9 @@ import java.util.function.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+})
 public class HttpStringHeader extends HttpHeaderBean {
 
 	/**
@@ -41,9 +44,6 @@ public class HttpStringHeader extends HttpHeaderBean {
 	 * @param value Wire value. May be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringHeader of(String name, String value) {
 		return new HttpStringHeader(name, value);
 	}
@@ -55,9 +55,6 @@ public class HttpStringHeader extends HttpHeaderBean {
 	 * @param valueSupplier Lazy wire value supplier. Must not be {@code null}.
 	 * @return A new instance. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static HttpStringHeader of(String name, Supplier<String> valueSupplier) {
 		return new HttpStringHeader(name, valueSupplier);
 	}

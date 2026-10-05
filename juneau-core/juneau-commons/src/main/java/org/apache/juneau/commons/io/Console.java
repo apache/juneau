@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  */
 @SuppressWarnings({
 	"java:S106", // System.err/out usage is intentional for console output utility
-	"java:S108"  // Nested blocks used for logical grouping in console operations
+	"java:S108" // Nested blocks used for logical grouping in console operations
 })
 public class Console {
 

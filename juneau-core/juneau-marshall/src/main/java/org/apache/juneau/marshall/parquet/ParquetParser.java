@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -40,13 +40,12 @@ import org.apache.juneau.marshall.stream.*;
  * Handles <c>Content-Type</c>: <bc>application/vnd.apache.parquet</bc>
  */
 @SuppressWarnings({
-	"java:S110",
-	"java:S115",
+	"java:S110", // ParquetParser extends InputStreamParser, which sits on the shared Parser base-class chain; the depth comes from that format-family design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class ParquetParser extends InputStreamParser implements ParquetMetaProvider, RecordReadable, ArrayRecordReadable {
-
-	private static final String ARG_copyFrom = "copyFrom";
 
 	private static final int DEFAULT_MAX_LENGTH = ParquetParserSession.DEFAULT_MAX_LENGTH;
 	private static final int DEFAULT_MAX_COUNT = ParquetParserSession.DEFAULT_MAX_COUNT;
@@ -85,7 +84,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		}
 
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
 			maxLength = copyFrom.maxLength;
 			maxCount = copyFrom.maxCount;
@@ -94,7 +93,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		}
 
 		protected Builder(ParquetParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
 			maxLength = copyFrom.maxLength;
 			maxCount = copyFrom.maxCount;

@@ -26,7 +26,9 @@ import org.junit.jupiter.api.*;
  * Direct coverage of package-private {@link ConfigMap} constructor overloads that have no
  * production caller.
  */
-@SuppressWarnings("resource") // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class ConfigMap_Test {
 
 	@Test void a01_contentsConstructor_noFormat_defaultsToIni() throws Exception {

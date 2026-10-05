@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.*;
@@ -168,7 +169,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a009_field_publicField() {
 		var field = ClassInfo.of(TestClass.class).getPublicFields().stream()
-			.filter(f -> f.getName().equals("publicField"))
+			.filter(f -> eq(f.getName(), "publicField"))
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass,String>create()
@@ -187,7 +188,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a010_field_privateField() {
 		var field = ClassInfo.of(TestClass.class).getDeclaredFields().stream()
-			.filter(f -> f.getName().equals("privateField"))
+			.filter(f -> eq(f.getName(), "privateField"))
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass,String>create()
@@ -271,7 +272,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a016_field_primitiveType() {
 		var field = ClassInfo.of(TestClass.class).getDeclaredFields().stream()
-			.filter(f -> f.getName().equals("intField"))
+			.filter(f -> eq(f.getName(), "intField"))
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass,Integer>create()
@@ -424,7 +425,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a025_field_roundTrip() {
 		var field = ClassInfo.of(TestClass.class).getPublicFields().stream()
-			.filter(f -> f.getName().equals("publicField"))
+			.filter(f -> eq(f.getName(), "publicField"))
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass,String>create()

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
@@ -46,8 +47,8 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
+	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"removal" // Tests deprecated API for backward compatibility
 })
 class RestClient_Response_Body_Test extends TestBase {
@@ -223,8 +224,8 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x6 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(HttpEntity.class);
 		assertTrue(x6 instanceof ResponseContent);
 
-		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7a.class).is(x->x.x.equals("foo"));
-		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7b.class).is(x->x.x.equals("foo"));
+		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7a.class).is(x->eq(x.x, "foo"));
+		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7b.class).is(x->eq(x.x, "foo"));
 		assertThrowsWithMessage(Exception.class, "Unsupported media-type", ()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class));
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class));
 

@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.http.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A mutable wrapper around an {@link HttpBody} that allows overriding the content type.
@@ -52,7 +52,7 @@ public final class HttpBodyBean implements HttpBody {
 	private final String contentType;
 
 	private HttpBodyBean(HttpBody delegate, String contentType) {
-		this.delegate = assertArgNotNull("delegate", delegate);
+		this.delegate = reqnn("delegate", delegate);
 		this.contentType = contentType;
 	}
 
@@ -74,7 +74,7 @@ public final class HttpBodyBean implements HttpBody {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpBodyBean of(HttpBody body) {
-		assertArgNotNull("body", body);
+		reqnn("body", body);
 		return new HttpBodyBean(body, body.getContentType());
 	}
 

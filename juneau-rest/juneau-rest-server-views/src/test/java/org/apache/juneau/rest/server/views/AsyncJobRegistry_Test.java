@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -33,8 +34,8 @@ import org.junit.jupiter.api.*;
  * hard-timeout sweep + retention reaping (driven by an injected clock rather than wall time).
  */
 @SuppressWarnings({
-	"resource", // AsyncJobRegistry is AutoCloseable; test-fixture lifecycle is managed by the test, not a real leak (mixed-module resource analysis on test code).
-	"java:S5778" // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+	"java:S5778", // assertThrows lambda may invoke helpers that also throw; splitting would obscure the LNN case.
+	"resource" // AsyncJobRegistry is AutoCloseable; test-fixture lifecycle is managed by the test, not a real leak (mixed-module resource analysis on test code).
 })
 class AsyncJobRegistry_Test extends TestBase {
 
@@ -204,5 +205,123 @@ class AsyncJobRegistry_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry((Duration) null));
 		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry(Duration.ZERO));
 		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry(Duration.ofSeconds(-1)));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i) De-duplication by IdempotencyKey (WORK-J0562)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_duplicateSubmitReturnsSameJob() {
+		var r = registry(new TestClock(T0));
+		var key = IdempotencyKey.mintSelfTargeted("create");
+		var first = r.create(key);
+		assertSame(first, r.create(key));
+		assertSame(first, r.tryCreate(key).orElseThrow());
+		assertSame(first, r.get(first.id()).orElseThrow());
+		assertEquals(1, r.size());
+	}
+
+	@Test void i02_distinctKeysGiveDistinctJobs() {
+		var r = registry(new TestClock(T0));
+		var a = r.create(IdempotencyKey.mintSelfTargeted("create"));
+		var b = r.create(IdempotencyKey.mintSelfTargeted("create"));
+		assertNotSame(a, b);
+		assertEquals(2, r.size());
+	}
+
+	@Test void i03_concurrentDuplicateSubmitsYieldOneJob() throws Exception {
+		var r = registry(new TestClock(T0));
+		var key = IdempotencyKey.mintSelfTargeted("create");
+		var threads = 16;
+		var start = new java.util.concurrent.CountDownLatch(1);
+		var pool = java.util.concurrent.Executors.newFixedThreadPool(threads);
+		try {
+			var futures = new ArrayList<java.util.concurrent.Future<AsyncJob>>();
+			for (var i = 0; i < threads; i++)
+				futures.add(pool.submit(() -> { start.await(); return r.create(key); }));
+			start.countDown();
+			var ids = new HashSet<String>();
+			for (var f : futures)
+				ids.add(f.get().id());
+			assertEquals(1, ids.size());
+			assertEquals(1, r.size());
+		} finally {
+			pool.shutdownNow();
+		}
+	}
+
+	@Test void i04_finishedKeyReplaysTerminalJobThenForgottenAfterReap() {
+		var clock = new TestClock(T0);
+		var r = registry(clock);
+		var key = IdempotencyKey.mintSelfTargeted("create");
+		var job = r.create(key);
+		job.complete(ActionResult.success(null));
+		// Within retention: the duplicate gets the finished job (and its result) back; nothing new runs.
+		clock.set(T0.plusSeconds(30));
+		var replay = r.create(key);
+		assertSame(job, replay);
+		assertTrue(replay.isTerminal());
+		// Past retention: the job is reaped and the key is forgotten, so the same key starts a fresh job.
+		clock.set(T0.plus(AsyncJobRegistry.RETENTION).plusSeconds(1));
+		var fresh = r.create(key);
+		assertNotSame(job, fresh);
+		assertFalse(fresh.isTerminal());
+	}
+
+	@Test void i05_duplicateIsNotRefusedByConcurrencyCap() {
+		var r = registry(new TestClock(T0));
+		var key = IdempotencyKey.mintSelfTargeted("create");
+		var job = r.create(key);
+		for (var i = 1; i < AsyncJobRegistry.MAX_CONCURRENT_JOBS; i++)
+			r.create();
+		assertEquals(AsyncJobRegistry.MAX_CONCURRENT_JOBS, r.runningCount());
+		assertSame(job, r.tryCreate(key).orElseThrow(), "a duplicate creates nothing, so the cap must not refuse it");
+		assertTrue(r.tryCreate(IdempotencyKey.mintSelfTargeted("create")).isEmpty(), "a new key is still subject to the cap");
+		assertThrows(IllegalStateException.class, () -> r.create(IdempotencyKey.mintSelfTargeted("create")));
+		assertThrows(IllegalArgumentException.class, () -> r.create((IdempotencyKey) null));
+	}
+	//------------------------------------------------------------------------------------------------------------------
+	// j) The concurrent-job cap is atomic under contention (WORK-J0576)
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final int RACE_THREADS = 32;
+	private static final int RACE_ROUNDS = 200;
+
+	/** Races {@link #RACE_THREADS} callers (released together by a latch) against a fresh registry, {@link #RACE_ROUNDS} times, and asserts exactly {@link AsyncJobRegistry#MAX_CONCURRENT_JOBS} were admitted. */
+	private static void race(java.util.function.BiFunction<AsyncJobRegistry,Integer,Optional<AsyncJob>> call) throws Exception {
+		var pool = java.util.concurrent.Executors.newFixedThreadPool(RACE_THREADS);
+		try {
+			for (var round = 0; round < RACE_ROUNDS; round++) {
+				var r = registry(new TestClock(T0));
+				var ready = new java.util.concurrent.CountDownLatch(RACE_THREADS);
+				var start = new java.util.concurrent.CountDownLatch(1);
+				var futures = new ArrayList<java.util.concurrent.Future<Optional<AsyncJob>>>();
+				for (var i = 0; i < RACE_THREADS; i++) {
+					var n = i;
+					futures.add(pool.submit(() -> { ready.countDown(); start.await(); return call.apply(r, n); }));
+				}
+				ready.await();
+				start.countDown();
+				var admitted = 0;
+				for (var f : futures)
+					if (f.get().isPresent())
+						admitted++;
+				assertBean(Map.of("admitted", admitted, "running", r.runningCount(), "size", r.size()), "admitted,running,size", "8,8,8");
+			}
+		} finally {
+			pool.shutdownNow();
+		}
+	}
+
+	@Test void j01_concurrentUnkeyedTryCreateNeverExceedsCap() throws Exception {
+		race((r, n) -> r.tryCreate());
+	}
+
+	@Test void j02_concurrentDistinctKeysNeverExceedCap() throws Exception {
+		race((r, n) -> r.tryCreate(IdempotencyKey.mintSelfTargeted("create")));
+	}
+
+	@Test void j03_concurrentKeyedAndUnkeyedMixNeverExceedCap() throws Exception {
+		race((r, n) -> n % 2 == 0 ? r.tryCreate() : r.tryCreate(IdempotencyKey.mintSelfTargeted("create")));
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -49,15 +48,12 @@ import org.apache.juneau.marshall.serializer.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110",  // Class has many fields, acceptable for collection implementation
+	"java:S110", // Class has many fields, acceptable for collection implementation
 	"java:S1206", // Inherits equals/hashCode from LinkedList; List equality is element-based
-	"java:S2160"  // equals() inherited from LinkedList; element-based equality is correct
+	"java:S2160" // equals() inherited from LinkedList; element-based equality is correct
 })
 public class MarshalledList extends LinkedList<Object> {
 
-	@SuppressWarnings({
-		"java:S110" // Inner class has many fields, acceptable for collection implementation
-	})
 	private static class Unmodifiable extends MarshalledList {
 		private static final long serialVersionUID = 1L;
 
@@ -265,7 +261,6 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @serial exclude
 	 */
 	@SuppressWarnings({
-		"java:S110", // Anonymous class has many fields, acceptable for collection implementation
 		"java:S2386" // Public static final field accessed externally, cannot be protected
 	})
 	public static final MarshalledList EMPTY_LIST = new MarshalledList() {
@@ -410,7 +405,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledList(CharSequence in, Parser p) throws ParseException {
-		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
+		this(reqnn("p", p).getMarshallingContext().getSession());
 		if (nn(in))
 			p.readIntoCollection(in, this, bs().object());
 	}
@@ -446,7 +441,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledList(java.io.Reader in, Parser p) throws ParseException {
-		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
+		this(reqnn("p", p).getMarshallingContext().getSession());
 		p.readIntoCollection(in, this, bs().object());
 	}
 

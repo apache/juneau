@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.rest.server.processor;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
@@ -75,7 +76,7 @@ public class ResponseProcessorList {
 		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
 		public Builder add(Class<?>...values) {
-			for (var v : assertClassArrayArgIsType("values", ResponseProcessor.class, values))
+			for (var v : reqcat("values", ResponseProcessor.class, values))
 				if (!entryClassExists(v))
 					entries.add(v);
 			return this;
@@ -102,13 +103,7 @@ public class ResponseProcessorList {
 		// Returns true if an entry with the given class is already present (either as a Class token
 		// or as an instantiated ResponseProcessor of that class).
 		private boolean entryClassExists(Class<?> cls) {
-			for (var e : entries) {
-				if (e instanceof Class<?> e2 && e2 == cls)
-					return true;
-				if (e instanceof ResponseProcessor e2 && e2.getClass() == cls)
-					return true;
-			}
-			return false;
+			return entries.stream().anyMatch(e -> (e instanceof Class<?> e2 && e2 == cls) || (e instanceof ResponseProcessor e3 && e3.getClass() == cls));
 		}
 
 		/**
@@ -169,20 +164,14 @@ public class ResponseProcessorList {
 			list.add(instantiate(x, bs));
 
 		// Partition pass: reposition ViewRenderers before the first CatchAllResponseProcessor.
-		var viewRenderers = new ArrayList<ResponseProcessor>();
-		for (var p : list)
-			if (p instanceof ViewRenderer)
-				viewRenderers.add(p);
+		var viewRenderers = list.stream().filter(ViewRenderer.class::isInstance).collect(Collectors.toCollection(ArrayList::new));
 
 		var hasCatchAll = list.stream().anyMatch(CatchAllResponseProcessor.class::isInstance);
 
 		if (!viewRenderers.isEmpty() && hasCatchAll) {
 			// Build new list: non-ViewRenderer entries in original order, then insert all
 			// ViewRenderers immediately before the first CatchAllResponseProcessor.
-			var reordered = new ArrayList<ResponseProcessor>(list.size());
-			for (var p : list)
-				if (!(p instanceof ViewRenderer))
-					reordered.add(p);
+			var reordered = list.stream().filter(p -> !(p instanceof ViewRenderer)).collect(Collectors.toCollection(ArrayList::new));
 
 			var insertAt = -1;
 			for (var i = 0; i < reordered.size(); i++) {

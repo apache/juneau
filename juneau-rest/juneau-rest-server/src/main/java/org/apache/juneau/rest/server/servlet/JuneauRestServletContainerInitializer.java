@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.servlet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -76,7 +78,7 @@ public class JuneauRestServletContainerInitializer implements ServletContainerIn
 
 	@Override /* ServletContainerInitializer */
 	public void onStartup(Set<Class<?>> classes, ServletContext ctx) throws ServletException {
-		if (! "true".equalsIgnoreCase(ctx.getInitParameter(AUTO_REGISTER_PARAM)))
+		if (neqic("true", ctx.getInitParameter(AUTO_REGISTER_PARAM)))
 			return;
 		if (classes == null)
 			return;

@@ -16,49 +16,51 @@
  */
 package org.apache.juneau.rest.server.converter;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.time.*;
+
+import org.apache.juneau.commons.beanquery.*;
+
 /**
- * Per-resource protocol-selection settings for the {@link ProtocolQueryable} converter.
+ * Per-resource limits and defaults for the {@link Queryable} converter.
  *
  * <p>
- * A resource chooses the active {@link QueryProtocol} for {@link ProtocolQueryable} by registering a
- * {@code QueryableSettings} bean in its bean store (mirrors the {@link IntrospectableSettings} idiom).  When no such
- * bean is present, {@link ProtocolQueryable} resolves the default ({@link NativeQueryProtocol}), so the out-of-the-box
- * behavior is the historical Juneau-native {@code s/v/o/p/l} protocol.
+ * A resource tunes {@link Queryable}'s BeanQuery engine by registering a {@code QueryableSettings} bean in its bean
+ * store (mirrors the {@link IntrospectableSettings} idiom).  When no such bean is present, {@link Queryable} uses
+ * {@link #DEFAULT}, which sets nothing and so leaves every setting at the context builder's own default.
  *
- * <h5 class='section'>Example - selecting the DataTables protocol:</h5>
+ * <p>
+ * The defaults live in {@link BeanQueryContext.Builder} only &mdash; this class never duplicates them.  Each setting
+ * is tracked as set or unset; {@link #applyTo(BeanQueryContext.Builder) applyTo} copies only the ones that were set,
+ * so an unset setting stays at the builder default (currently: {@code allowRegex} true, {@code regexTimeout} 50ms,
+ * {@code countPolicy} {@link CountPolicy#IF_REQUESTED IF_REQUESTED}, {@code defaultLimit} 100, {@code maxLimit} 1000,
+ * and caps of 64 search clauses, 8 sort keys, 4096 search characters and 16 expression levels).
+ *
+ * <p>
+ * Every setting here is a trusted, server-side cap or default; none of them is ever set from request data.
+ *
+ * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(converters=ProtocolQueryable.<jk>class</jk>)
- * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+ * 	<ja>@Rest</ja>(converters=Queryable.<jk>class</jk>)
+ * 	<jk>public class</jk> PeopleResource <jk>extends</jk> BasicRestServlet {
  *
  * 		<ja>@Bean</ja>
  * 		<jk>public</jk> QueryableSettings queryableSettings() {
- * 			<jk>return</jk> QueryableSettings.<jsm>create</jsm>()
- * 				.protocol(<jk>new</jk> DataTablesQueryProtocol())
- * 				.build();
+ * 			<jc>// allowRegex defaults to true; call allowRegex(false) here to opt this resource out.</jc>
+ * 			<jk>return</jk> QueryableSettings.<jsm>create</jsm>().defaultLimit(20).maxLimit(500).build();
+ * 		}
+ *
+ * 		<ja>@RestGet</ja>(<js>"/people"</js>)
+ * 		<jk>public</jk> List&lt;Person&gt; getPeople() {
+ * 			<jk>return</jk> <jf>people</jf>;
  * 		}
  * 	}
  * </p>
  *
- * <h5 class='section'>Hardening knobs:</h5>
- * <p>
- * Beyond protocol selection, {@code QueryableSettings} carries a few safety limits consumed by protocols that accept
- * richer (and potentially adversarial) client input than the native {@code s/v/o/p/l} form &mdash; most notably
- * {@code DataTablesQueryProtocol}, whose per-column search boxes and column/order descriptor arrays are driven directly
- * from the browser:
- * <ul class='spaced-list'>
- * 	<li>{@link #allowRegexSearch() allowRegexSearch} &mdash; whether client-supplied regular-expression search
- * 		({@code search[regex]=true}) is honored.  Defaults to <jk>false</jk> (treated as a literal substring search)
- * 		to close the ReDoS/CPU-burn vector of compiling and running arbitrary caller regexes against every row.
- * 	<li>{@link #maxColumns() maxColumns} &mdash; the maximum number of {@code columns[i]} descriptors parsed
- * 		(default {@value #DEFAULT_MAX_COLUMNS}), bounding the O(columns &times; params) parse cost.
- * 	<li>{@link #maxOrderColumns() maxOrderColumns} &mdash; the maximum number of {@code order[i]} descriptors parsed
- * 		(default {@value #DEFAULT_MAX_ORDER_COLUMNS}).
- * </ul>
- *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link ProtocolQueryable}
- * 	<li class='jc'>{@link QueryProtocol}
- * 	<li class='jc'>{@link NativeQueryProtocol}
+ * 	<li class='jc'>{@link Queryable}
+ * 	<li class='jc'>{@link BeanQueryContext.Builder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  *
@@ -66,131 +68,222 @@ package org.apache.juneau.rest.server.converter;
  */
 public class QueryableSettings {
 
-	/** The default {@link #maxColumns()} cap. */
-	public static final int DEFAULT_MAX_COLUMNS = 64;
-
-	/** The default {@link #maxOrderColumns()} cap. */
-	public static final int DEFAULT_MAX_ORDER_COLUMNS = 8;
-
-	/** The default settings ({@link NativeQueryProtocol}) used when no bean is registered. */
+	/** The default settings used when no bean is registered: nothing set, so every builder default applies. */
 	public static final QueryableSettings DEFAULT = create().build();
 
-	private final QueryProtocol protocol;
-	private final boolean allowRegexSearch;
-	private final int maxColumns;
-	private final int maxOrderColumns;
+	private final Boolean allowRegex;
+	private final Duration regexTimeout;
+	private final CountPolicy countPolicy;
+	private final Integer defaultLimit;
+	private final boolean maxLimitSet;
+	private final Integer maxLimit;
+	private final Integer maxSearchClauses;
+	private final Integer maxSortKeys;
+	private final Integer maxSearchLength;
+	private final Integer maxExpressionDepth;
 
 	private QueryableSettings(Builder b) {
-		this.protocol = b.protocol;
-		this.allowRegexSearch = b.allowRegexSearch;
-		this.maxColumns = b.maxColumns;
-		this.maxOrderColumns = b.maxOrderColumns;
+		this.allowRegex = b.allowRegex;
+		this.regexTimeout = b.regexTimeout;
+		this.countPolicy = b.countPolicy;
+		this.defaultLimit = b.defaultLimit;
+		this.maxLimitSet = b.maxLimitSet;
+		this.maxLimit = b.maxLimit;
+		this.maxSearchClauses = b.maxSearchClauses;
+		this.maxSortKeys = b.maxSortKeys;
+		this.maxSearchLength = b.maxSearchLength;
+		this.maxExpressionDepth = b.maxExpressionDepth;
 	}
 
 	/**
 	 * Builder creator.
 	 *
-	 * @return A new builder (defaults to the native protocol).
+	 * @return A new builder with nothing set.
 	 */
 	public static Builder create() {
 		return new Builder();
 	}
 
 	/**
-	 * Returns the selected query protocol.
+	 * Creates a builder pre-populated with these settings.
 	 *
-	 * @return The selected protocol.  Never <jk>null</jk> &mdash; returns {@link NativeQueryProtocol#INSTANCE} when none was set.
+	 * @return A new builder.
 	 */
-	public QueryProtocol protocol() {
-		return protocol == null ? NativeQueryProtocol.INSTANCE : protocol;
+	public Builder copy() {
+		var b = new Builder();
+		b.allowRegex = allowRegex;
+		b.regexTimeout = regexTimeout;
+		b.countPolicy = countPolicy;
+		b.defaultLimit = defaultLimit;
+		b.maxLimitSet = maxLimitSet;
+		b.maxLimit = maxLimit;
+		b.maxSearchClauses = maxSearchClauses;
+		b.maxSortKeys = maxSortKeys;
+		b.maxSearchLength = maxSearchLength;
+		b.maxExpressionDepth = maxExpressionDepth;
+		return b;
 	}
 
 	/**
-	 * Returns whether client-supplied regular-expression search is honored.
+	 * Copies every setting that was set onto a context builder.
 	 *
-	 * @return <jk>true</jk> if regex search is allowed; defaults to <jk>false</jk>.
-	 */
-	public boolean allowRegexSearch() {
-		return allowRegexSearch;
-	}
-
-	/**
-	 * Returns the maximum number of column descriptors a protocol should parse.
+	 * <p>
+	 * Settings that were not set are left untouched, so the builder's own defaults apply.
 	 *
-	 * @return The column cap ({@value #DEFAULT_MAX_COLUMNS} by default).
+	 * @param <B> The context builder type.
+	 * @param builder The builder to copy onto.  Must not be <jk>null</jk>.
+	 * @return The same builder, for chaining.
+	 * @throws IllegalArgumentException If a value is rejected by the builder (for example a non-positive limit).
 	 */
-	public int maxColumns() {
-		return maxColumns;
-	}
-
-	/**
-	 * Returns the maximum number of order descriptors a protocol should parse.
-	 *
-	 * @return The order cap ({@value #DEFAULT_MAX_ORDER_COLUMNS} by default).
-	 */
-	public int maxOrderColumns() {
-		return maxOrderColumns;
+	public <B extends BeanQueryContext.Builder<?,B>> B applyTo(B builder) {
+		reqnn("builder", builder);
+		// maxLimit goes before defaultLimit so that narrowing maxLimit can auto-narrow an unset defaultLimit, while an
+		// explicit defaultLimit is never silently changed.
+		if (maxLimitSet)
+			builder.maxLimit(maxLimit);
+		if (defaultLimit != null)
+			builder.defaultLimit(defaultLimit);
+		if (allowRegex != null)
+			builder.allowRegex(allowRegex);
+		if (regexTimeout != null)
+			builder.regexTimeout(regexTimeout);
+		if (countPolicy != null)
+			builder.countPolicy(countPolicy);
+		if (maxSearchClauses != null)
+			builder.maxSearchClauses(maxSearchClauses);
+		if (maxSortKeys != null)
+			builder.maxSortKeys(maxSortKeys);
+		if (maxSearchLength != null)
+			builder.maxSearchLength(maxSearchLength);
+		if (maxExpressionDepth != null)
+			builder.maxExpressionDepth(maxExpressionDepth);
+		return builder;
 	}
 
 	/**
 	 * Builder for {@link QueryableSettings}.
+	 *
+	 * <p>
+	 * Each setter records a value to be copied by {@link QueryableSettings#applyTo(BeanQueryContext.Builder)}; the
+	 * values are validated by the context builder when applied.
 	 */
 	public static class Builder {
-		private QueryProtocol protocol;
-		private boolean allowRegexSearch = false;
-		private int maxColumns = DEFAULT_MAX_COLUMNS;
-		private int maxOrderColumns = DEFAULT_MAX_ORDER_COLUMNS;
+		Boolean allowRegex;
+		Duration regexTimeout;
+		CountPolicy countPolicy;
+		Integer defaultLimit;
+		boolean maxLimitSet;
+		Integer maxLimit;
+		Integer maxSearchClauses;
+		Integer maxSortKeys;
+		Integer maxSearchLength;
+		Integer maxExpressionDepth;
+
+		Builder() {}
 
 		/**
-		 * Sets the query protocol {@link ProtocolQueryable} should use for this resource.
+		 * Enables or disables the {@code $regex} search operator.
 		 *
-		 * @param value The protocol.  If <jk>null</jk>, the native protocol is used.
+		 * @param value <jk>true</jk> to allow {@code $regex}.  Builder default is <jk>true</jk>; call
+		 * 	{@code allowRegex(false)} to opt out.
 		 * @return This object.
 		 */
-		public Builder protocol(QueryProtocol value) {
-			this.protocol = value;
+		public Builder allowRegex(boolean value) {
+			this.allowRegex = value;
 			return this;
 		}
 
 		/**
-		 * Enables or disables honoring client-supplied regular-expression search.
+		 * Sets the time budget for all {@code $regex} matching in one query.
 		 *
-		 * <p>
-		 * When disabled (the default), a protocol treats a {@code regex=true} search flag as a literal substring
-		 * search, closing the ReDoS/CPU-burn vector of running arbitrary caller regexes against every row.
-		 *
-		 * @param value <jk>true</jk> to allow regex search.
+		 * @param value The budget.  Must be positive.
 		 * @return This object.
 		 */
-		public Builder allowRegexSearch(boolean value) {
-			this.allowRegexSearch = value;
+		public Builder regexTimeout(Duration value) {
+			this.regexTimeout = reqnn("value", value);
 			return this;
 		}
 
 		/**
-		 * Sets the maximum number of column descriptors a protocol should parse.
+		 * Sets which counts are computed.
 		 *
-		 * @param value The cap.  Values &lt; 1 are clamped to 1.
+		 * @param value The policy.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder maxColumns(int value) {
-			this.maxColumns = Math.max(1, value);
+		public Builder countPolicy(CountPolicy value) {
+			this.countPolicy = reqnn("value", value);
 			return this;
 		}
 
 		/**
-		 * Sets the maximum number of order descriptors a protocol should parse.
+		 * Sets the page size used when the request specifies no limit.
 		 *
-		 * @param value The cap.  Values &lt; 1 are clamped to 1.
+		 * @param value The default limit.  Must be positive.
 		 * @return This object.
 		 */
-		public Builder maxOrderColumns(int value) {
-			this.maxOrderColumns = Math.max(1, value);
+		public Builder defaultLimit(int value) {
+			this.defaultLimit = value;
 			return this;
 		}
 
 		/**
-		 * Builds the settings.
+		 * Sets the largest page size a request may ask for; larger limits are clamped to it.
+		 *
+		 * @param value The cap, or <jk>null</jk> for no cap.  Must be positive if set.
+		 * @return This object.
+		 */
+		public Builder maxLimit(Integer value) {
+			this.maxLimitSet = true;
+			this.maxLimit = value;
+			return this;
+		}
+
+		/**
+		 * Sets the largest number of search clauses.
+		 *
+		 * @param value The cap.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder maxSearchClauses(int value) {
+			this.maxSearchClauses = value;
+			return this;
+		}
+
+		/**
+		 * Sets the largest number of sort keys.
+		 *
+		 * @param value The cap.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder maxSortKeys(int value) {
+			this.maxSortKeys = value;
+			return this;
+		}
+
+		/**
+		 * Sets the longest search, sort, view or opts string, in characters.
+		 *
+		 * @param value The cap.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder maxSearchLength(int value) {
+			this.maxSearchLength = value;
+			return this;
+		}
+
+		/**
+		 * Sets the deepest allowed expression nesting.
+		 *
+		 * @param value The cap.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder maxExpressionDepth(int value) {
+			this.maxExpressionDepth = value;
+			return this;
+		}
+
+		/**
+		 * Builds the (immutable) settings.
 		 *
 		 * @return A new {@link QueryableSettings}.
 		 */

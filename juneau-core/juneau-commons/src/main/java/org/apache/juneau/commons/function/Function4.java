@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.function.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A functional interface representing a function that accepts four arguments and produces a result.
@@ -71,12 +71,9 @@ import java.util.function.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public interface Function4<A,B,C,D,R> {
-
-	/** Argument name constant for assertArgNotNull. */
-	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed function that first applies this function to its input, and then applies
@@ -98,7 +95,7 @@ public interface Function4<A,B,C,D,R> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		assertArgNotNull(ARG_after, after);
+		reqnn("after", after);
 		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 

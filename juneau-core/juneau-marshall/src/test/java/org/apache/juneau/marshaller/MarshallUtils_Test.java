@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshaller;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -262,14 +263,14 @@ class MarshallUtils_Test extends TestBase {
 		var bytes = parquet(new A04_Bean());
 		// (byte[], Type) overload returns List<T>
 		List<A04_Bean> r1 = parquet(bytes, (java.lang.reflect.Type) A04_Bean.class);
-		assertList(r1, (Predicate<A04_Bean>) b -> "test".equals(b.x));
+		assertList(r1, (Predicate<A04_Bean>) b -> eq(b.x, "test"));
 
 		// (byte[], Type, Type...) overload
 		List<A04_Bean> r2 = parquet(bytes, List.class, A04_Bean.class);
-		assertList(r2, (Predicate<A04_Bean>) b -> "test".equals(b.x));
+		assertList(r2, (Predicate<A04_Bean>) b -> eq(b.x, "test"));
 
 		// (byte[], Class) overload
 		List<A04_Bean> r3 = parquet(bytes, A04_Bean.class);
-		assertList(r3, (Predicate<A04_Bean>) b -> "test".equals(b.x));
+		assertList(r3, (Predicate<A04_Bean>) b -> eq(b.x, "test"));
 	}
 }

@@ -977,6 +977,9 @@ class Cache2_Test extends TestBase {
 	 * entries are reclaimed once their keys are unreferenced - instead of racing an uncontrolled GC to observe a
 	 * transient entry count. Calling this on the current thread also covers the thread-local WEAK caches.
 	 */
+	@SuppressWarnings({
+		"java:S2925" // Polling for garbage collection of weak references has no deterministic alternative.
+	})
 	private static void gcUntilEmpty(Cache2<?,?,?> cache) {
 		for (var i = 0; i < 100 && ! cache.isEmpty(); i++) {
 			System.gc();

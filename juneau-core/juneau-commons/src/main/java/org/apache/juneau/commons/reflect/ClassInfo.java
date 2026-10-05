@@ -23,12 +23,14 @@ import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AnnotationUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.CollectionUtils.toList;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eqa;
+import static org.apache.juneau.commons.utils.Shorts.eqic;
+import static org.apache.juneau.commons.utils.Shorts.neq;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 
 import java.lang.annotation.*;
@@ -69,17 +71,15 @@ import org.apache.juneau.commons.inject.*;
  *
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
-	"rawtypes", // Raw types necessary for generic type handling
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S1452", // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
-	"java:S6539" // Monster class; ClassInfo is intentionally a single cohesive reflection-metadata facade over Class
+	"java:S3776", // appendNameFormatted(), getParameterType() and findToString() resolve class names/type variables/toString methods through many branching cases
+	"java:S6539", // Monster class; ClassInfo is intentionally a single cohesive reflection-metadata facade over Class
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_type = "type";
-	private static final String ARG_pt = "pt";
 
 	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
@@ -233,7 +233,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	protected ClassInfo(Class<?> inner, Type innerType) {
 		// @formatter:off
 		super(inner == null ? 0 : inner.getModifiers());
-		assertArg(inner != null || innerType != null, "At least one of inner or innerType must be specified.");
+		req(inner != null || innerType != null, "At least one of inner or innerType must be specified.");
 		this.innerType = innerType;
 		this.inner = inner;
 		this.isParameterizedType = innerType instanceof ParameterizedType;
@@ -303,8 +303,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	The same StringBuilder for method chaining.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for name formatting logic
-		"java:S6541"  // Synchronization not needed for local StringBuilder operations
+		"java:S6541" // Synchronization not needed for local StringBuilder operations
 	})
 	public StringBuilder appendNameFormatted(StringBuilder sb, ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
 		var dim = getDimensions();
@@ -733,7 +732,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return A stream of annotation infos of the specified type.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		assertArgNotNull(ARG_type, type);
+		reqnn("type", type);
 		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 	}
 
@@ -1374,11 +1373,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).  Must not be <jk>null</jk>.
 	 * @return The resolved real class.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parameter type resolution
-	})
 	public Class<?> getParameterType(int index, Class<?> pt) {
-		assertArgNotNull(ARG_pt, pt);
+		reqnn("pt", pt);
 
 		// We need to make up a mapping of type names.
 		var typeMap = new HashMap<Type,Type>();
@@ -1386,16 +1382,16 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class '%s' is not a subclass of parameterized type '%s'", inner.getSimpleName(), pt.getSimpleName());
+			req(nn(cc), "Class '%s' is not a subclass of parameterized type '%s'", inner.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		assertArg(gsc instanceof ParameterizedType, "Class '%s' is not a parameterized type", pt.getSimpleName());
+		req(gsc instanceof ParameterizedType, "Class '%s' is not a parameterized type", pt.getSimpleName());
 
 		var cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		assertArg(index < atArgs.length, "Invalid type index. index=%s, argsLength=%s", index, atArgs.length);
+		req(index < atArgs.length, "Invalid type index. index=%s, argsLength=%s", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
@@ -2339,7 +2335,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 */
 	public boolean isVoid() {
-		return inner != null && (inner == void.class || inner == Void.class || inner.getSimpleName().equalsIgnoreCase("void"));
+		return inner != null && (inner == void.class || inner == Void.class || eqic(inner.getSimpleName(), "void"));
 	}
 
 	/**
@@ -2656,9 +2652,6 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		return toString.get();
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for toString method finding
-	})
 	private String findToString() {
 		var sb = new StringBuilder(256);
 
@@ -3010,7 +3003,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 			return true;
 		var inner2 = o(this.inner()).orElse(Object.class);
 		// Only match the exact interfaces, not their implementations (matches Spring's behavior)
-		return eq(inner2, List.class) || eq(inner2, Set.class) || eq(inner2, Map.class);
+		return eqa(inner2, List.class, Set.class, Map.class);
 	}
 
 	/**

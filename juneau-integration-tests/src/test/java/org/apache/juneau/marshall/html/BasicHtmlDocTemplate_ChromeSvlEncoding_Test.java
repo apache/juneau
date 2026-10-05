@@ -376,11 +376,11 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	// h — RrpcServlet HTML nav still shows registered class/method names
 	//-----------------------------------------------------------------------------------------------------------------
 
-	public interface H_Interface {
+	public interface HInterface {
 		String echo(String input);
 	}
 
-	public static class H_Impl implements H_Interface {
+	public static class H_Impl implements HInterface {
 		@Override
 		public String echo(String input) {
 			return input;
@@ -389,7 +389,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 
 	@Rest
 	public static class H_RrpcServlet extends RrpcServlet {
-		private final Map<Class<?>,Object> services = Map.of(H_Interface.class, new H_Impl());
+		private final Map<Class<?>,Object> services = Map.of(HInterface.class, new H_Impl());
 
 		@Override
 		protected Map<Class<?>,Object> getServiceMap() {
@@ -399,7 +399,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 
 	@Test
 	void h01_rrpcHtmlNavShowsInterfaceAndMethodNames() throws Exception {
-		var iface = H_Interface.class.getName();
+		var iface = HInterface.class.getName();
 		var html = htmlGet(H_RrpcServlet.class, "/" + iface);
 		assertTrue(html.contains(iface), html);
 		assertTrue(html.contains("echo"), html);

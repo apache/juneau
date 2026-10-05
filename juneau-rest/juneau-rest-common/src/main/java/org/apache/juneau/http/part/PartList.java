@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -87,7 +86,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static PartList of(HttpPart... parts) {
-		assertArgNotNull("parts", parts);
+		reqnn("parts", parts);
 		return new PartList(Arrays.asList(parts));
 	}
 
@@ -98,7 +97,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static PartList of(List<HttpPart> parts) {
-		assertArgNotNull("parts", parts);
+		reqnn("parts", parts);
 		return new PartList(parts);
 	}
 
@@ -113,7 +112,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	 * @throws IllegalArgumentException If the number of arguments is odd.
 	 */
 	public static PartList ofPairs(String... pairs) {
-		assertArgNotNull("pairs", pairs);
+		reqnn("pairs", pairs);
 		if (pairs.length % 2 != 0)
 			throw iaex("pairs length must be even, got: %s", pairs.length);
 		var list = new ArrayList<HttpPart>(pairs.length / 2);
@@ -138,8 +137,8 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	 * @return The first matching part, or <jk>null</jk> if absent.
 	 */
 	public HttpPart getFirst(String name) {
-		assertArgNotNull("name", name);
-		return parts.stream().filter(p -> name.equals(p.getName())).findFirst().orElse(null);
+		reqnn("name", name);
+		return parts.stream().filter(p -> eq(name, p.getName())).findFirst().orElse(null);
 	}
 
 	/**
@@ -186,7 +185,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 
 	@Override /* HttpBody */
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		reqnn("out", out);
 		var sb = new StringBuilder();
 		var first = true;
 		for (var part : parts) {

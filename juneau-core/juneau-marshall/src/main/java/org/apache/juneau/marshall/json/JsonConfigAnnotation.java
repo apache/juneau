@@ -27,6 +27,9 @@ import org.apache.juneau.marshall.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class JsonConfigAnnotation {
 
 	/**
@@ -37,9 +40,6 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link JsonParser.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
 
 		/**
@@ -63,9 +63,6 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializer.Builder}.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw types required for reflective annotation application.
-	})
 	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializer.Builder> {
 
 		/**

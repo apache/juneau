@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unchecked" // findConversion() results are cast to Conversion<Object,Object> for the test calls.
+})
 class BeanContext_Test extends TestBase {
 
 	MarshallingContext bc = MarshallingContext.DEFAULT;
@@ -400,7 +403,6 @@ class BeanContext_Test extends TestBase {
 	// Invoke conversion lambdas to cover internal branches
 	//====================================================================================================
 
-	@SuppressWarnings("unchecked")
 	@Test void k01_invokeConversion_charSequenceToDuration() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, Duration.class);
 		assertNotNull(conv);
@@ -408,147 +410,126 @@ class BeanContext_Test extends TestBase {
 		assertEquals(Duration.ofHours(1), result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k02_invokeConversion_durationToString() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Duration.class, String.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(Duration.ofHours(1), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k03_invokeConversion_numberToCalendar() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Long.class, Calendar.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(0L, null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k04_invokeConversion_byteArrayToString() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(byte[].class, String.class);
 		assertNotNull(conv);
 		assertEquals("hello", conv.to("hello".getBytes(), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k05_invokeConversion_collectionToString() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, String.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(List.of("a", "b"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k06_invokeConversion_classToString() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Class.class, String.class);
 		assertNotNull(conv);
 		assertEquals("java.lang.String", conv.to(String.class, null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k07_invokeConversion_charSequenceToArray() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, int[].class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("[1,2,3]", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k08_invokeConversion_charSequenceToMap() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, Map.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("{a:'b'}", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k09_invokeConversion_listToCollection() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, Collection.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(List.of("x"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k10_invokeConversion_mapToCollection() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Map.class, Collection.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(Map.of("k", "v"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k11_invokeConversion_stringToArrayList() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, ArrayList.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("['a','b']", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k12_invokeConversion_mapToBean() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Map.class, MyBean.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(Map.of("name", "test"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k13_invokeConversion_stringToUrl() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, URL.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("http://example.com", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k14_invokeConversion_stringToBean() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, MyBean.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("{name:'test'}", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k15_invokeConversion_calendarToCalendar() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Calendar.class, Calendar.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(new GregorianCalendar(2024, 0, 1), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k16_invokeConversion_dateToCalendar() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Date.class, Calendar.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(new Date(0), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k17_invokeConversion_calendarToDate() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Calendar.class, Date.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(new GregorianCalendar(2024, 0, 1), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k18_invokeConversion_byteArrayToInputStream() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(byte[].class, InputStream.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("test".getBytes(), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k19_invokeConversion_stringToInputStream() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, InputStream.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("test", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k20_invokeConversion_byteArrayToReader() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(byte[].class, Reader.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("test".getBytes(), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k21_invokeConversion_stringToReader() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, Reader.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to("test", null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k22_invokeConversion_enumToInteger() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(TestEnum.class, Integer.class);
 		assertNotNull(conv);
@@ -556,14 +537,12 @@ class BeanContext_Test extends TestBase {
 		assertThrows(Exception.class, () -> conv.to(TestEnum.ONE, null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k23_invokeConversion_objectToBoolean() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(MyBean.class, Boolean.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(new MyBean("true"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k24_invokeConversion_objectSwap_normalToSwap() {
 		var bc2 = MarshallingContext.create().swaps(DummySwap.class).build();
 		var conv = (Conversion<Object,Object>) bc2.findConversion(DummyNormal.class, String.class);
@@ -571,7 +550,6 @@ class BeanContext_Test extends TestBase {
 		assertEquals("hello", conv.to(new DummyNormal("hello"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void k25_invokeConversion_objectSwap_swapToNormal() {
 		var bc2 = MarshallingContext.create().swaps(DummySwap.class).build();
 		var conv = (Conversion<Object,Object>) bc2.findConversion(String.class, DummyNormal.class);
@@ -583,21 +561,18 @@ class BeanContext_Test extends TestBase {
 	// newCollection() branches — exercise Set, SortedSet, and concrete-class paths
 	//====================================================================================================
 
-	@SuppressWarnings("unchecked")
 	@Test void l01_invokeConversion_listToSet() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, Set.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(List.of("a"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void l02_invokeConversion_listToSortedSet() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, SortedSet.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(List.of("a"), null, null));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void l03_invokeConversion_listToLinkedList() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, LinkedList.class);
 		assertNotNull(conv);
@@ -645,7 +620,6 @@ class BeanContext_Test extends TestBase {
 	// findConversion — collection with element-type arg (line 4535/4536)
 	//====================================================================================================
 
-	@SuppressWarnings("unchecked")
 	@Test void n01_invokeConversion_mapToCollection_withElementType() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Map.class, Collection.class);
 		assertNotNull(conv);
@@ -654,7 +628,6 @@ class BeanContext_Test extends TestBase {
 		assertNotNull(result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void n02_invokeConversion_listToCollection_withElementType() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, Collection.class);
 		assertNotNull(conv);
@@ -663,7 +636,6 @@ class BeanContext_Test extends TestBase {
 		assertNotNull(result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void n03_invokeConversion_listToCollection_alreadyAssignable() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(List.class, Collection.class);
 		assertNotNull(conv);
@@ -678,7 +650,6 @@ class BeanContext_Test extends TestBase {
 	// Use a minimal context with no serializer registered
 	//====================================================================================================
 
-	@SuppressWarnings("unchecked")
 	@Test void n04_invokeConversion_arrayToString_noSerializer() {
 		var bc2 = MarshallingContext.create().build();
 		var conv = (Conversion<Object,Object>) bc2.findConversion(String[].class, String.class);
@@ -692,7 +663,6 @@ class BeanContext_Test extends TestBase {
 	// findConversion — CharSequence→Collection with elemType arg in lambda (line 4552)
 	//====================================================================================================
 
-	@SuppressWarnings("unchecked")
 	@Test void n05_invokeConversion_stringToArrayList_withElementType() {
 		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(String.class, ArrayList.class);
 		assertNotNull(conv);
@@ -717,7 +687,7 @@ class BeanContext_Test extends TestBase {
 	//====================================================================================================
 	// Functional swap(...) builder overloads.
 	// Regression: the 3-arg serialize-only swap(nc,sc,swapFunction) overload used to delegate through
-	// the 4-arg overload's assertArgNotNull(unswapFunction) and therefore threw on EVERY call, so a
+	// the 4-arg overload's reqnn(unswapFunction) and therefore threw on EVERY call, so a
 	// serialize-only swap could never be registered.
 	//====================================================================================================
 

@@ -20,7 +20,7 @@
 
 @SuppressWarnings({
 	"java:S1220", // Intentionally in default package for test
-	"java:S1228", // Package documentation not required for test package
+	"java:S1228" // Package documentation not required for test package
 })
 public class DefaultPackageTestClass {
 	public int testField;  // Field for testing FieldInfo.getFullName() with null package

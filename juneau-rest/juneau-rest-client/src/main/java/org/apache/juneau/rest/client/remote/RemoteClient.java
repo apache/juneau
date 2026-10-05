@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.Constants.*;
@@ -26,7 +25,6 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
-import java.util.Date;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -78,6 +76,7 @@ import org.apache.juneau.rest.client.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
+	"java:S3776", // buildRequest(), bindParam() and processReturn() dispatch over every @Remote parameter and return kind
 	"resource" // Eclipse resource analysis: client is caller-owned, not closed by this holder
 })
 public final class RemoteClient {
@@ -90,7 +89,7 @@ public final class RemoteClient {
 	 * @param client The underlying REST client. Must not be <jk>null</jk>.
 	 */
 	public RemoteClient(RestClient client) {
-		this.client = assertArgNotNull("client", client);
+		this.client = reqnn("client", client);
 	}
 
 	/**
@@ -105,7 +104,7 @@ public final class RemoteClient {
 		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
 	})
 	public <T> T create(Class<T> iface) {
-		assertArgNotNull("iface", iface);
+		reqnn("iface", iface);
 		var meta = RrpcInterfaceMeta.of(iface);
 		return (T) Proxy.newProxyInstance(
 			iface.getClassLoader(),
@@ -168,9 +167,6 @@ public final class RemoteClient {
 		}
 
 		@Override
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for remote proxy invocation dispatch
-		})
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			// Handle Object methods directly
 			if (method.getDeclaringClass() == Object.class)
@@ -190,7 +186,7 @@ public final class RemoteClient {
 			var allowPrivateUrls = meta.isAllowPrivateUrls() || client.isAllowPrivateUrls();
 
 			// Apply the call-time @Url parameter / declarative baseUrl override (computed per call;
-			// never cached on the shared meta objects).  {var} substitution still runs at request time so @Path params
+			// never cached on the shared meta objects).  Path-token substitution still runs at request time so @Path params
 			// can fill tokens inside the resolved URL.
 			var effectivePath = resolveEffectiveUrl(methodMeta, method, args, fullPath, allowPrivateUrls);
 
@@ -326,7 +322,7 @@ public final class RemoteClient {
 			if (urlParamIndex >= 0) {
 				var arg = (args == null || urlParamIndex >= args.length) ? null : args[urlParamIndex];
 				var value = arg == null ? null : arg.toString();
-				assertArg(! isBlank(value), "@Url parameter on %s.%s must not be null or blank",
+				req(! isBlank(value), "@Url parameter on %s.%s must not be null or blank",
 					method.getDeclaringClass().getName(), method.getName());
 				return RemoteUrlPolicy.requireAllowedUrl(value.trim(), allowPrivateUrls);
 			}
@@ -442,9 +438,9 @@ public final class RemoteClient {
 			for (var e : methodLevel)
 				merged.put(e.getKey(), e.getValue());
 			merged.forEach((k, v) -> {
-				if (skipContentType && "Content-Type".equalsIgnoreCase(k))
+				if (skipContentType && eqic("Content-Type", k))
 					return;
-				if (skipAccept && HEADER_ACCEPT.equalsIgnoreCase(k))
+				if (skipAccept && eqic(HEADER_ACCEPT, k))
 					return;
 				req.header(k, v);
 			});
@@ -482,9 +478,6 @@ public final class RemoteClient {
 		 * {@code @Request}.  {@code @Query}/{@code @Header}/{@code @FormData} honor dynamic name/value expansion
 		 * (Map / {@code "*"} / part-list / bean) and parameter-level {@code def()} defaults for {@code null} args.
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for multi-part-type parameter binding dispatch
-		})
 		private void bindParam(RestRequest req, RrpcInterfaceMethodMeta methodMeta, Parameter param, Object arg, boolean soleParam, BodyFormat bodyFormat) throws IOException {
 			// @Url parameters supply the request URL (handled in resolveEffectiveUrl), not a part/body.
 			if (param.getAnnotation(Url.class) != null)
@@ -583,10 +576,10 @@ public final class RemoteClient {
 			var explicit = firstNonEmpty(annValue, annName);
 			if (arg == null) {
 				if (def != null && ! def.isEmpty())
-					adder.accept("*".equals(explicit) ? fallbackName : firstNonEmpty(explicit, fallbackName), def);
+					adder.accept(eq(explicit, "*") ? fallbackName : firstNonEmpty(explicit, fallbackName), def);
 				return;
 			}
-			if ("*".equals(explicit) || (explicit == null && isExpandable(arg))) {
+			if (eq(explicit, "*") || (explicit == null && isExpandable(arg))) {
 				expandPairs(partType, arg, serializer, adder);
 				return;
 			}
@@ -620,9 +613,6 @@ public final class RemoteClient {
 		 * name/value parts.  Map/bean values are part-serialized; {@link PartList}/{@link HttpHeaderList} entries
 		 * are already string-valued and passed through.
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for multi-type argument expansion dispatch
-		})
 		private static void expandPairs(HttpPartType partType, Object arg, HttpPartSerializer serializer, BiConsumer<String,String> adder) {
 			if (arg instanceof Map<?,?> m) {
 				m.forEach((k, v) -> { if (k != null && v != null) adder.accept(String.valueOf(k), serializePart(partType, null, v, serializer)); });
@@ -708,7 +698,7 @@ public final class RemoteClient {
 
 		private static boolean isBean(Object arg) {
 			return ! (arg instanceof CharSequence || arg instanceof Number || arg instanceof Boolean
-				|| arg instanceof Character || arg instanceof Enum || arg instanceof Date
+				|| arg instanceof Character || arg instanceof Enum || arg instanceof java.util.Date
 				|| arg instanceof Collection || arg.getClass().isArray());
 		}
 
@@ -737,9 +727,6 @@ public final class RemoteClient {
 		 * 		and wrapper returns ({@link Optional}/{@link Future}/{@link CompletableFuture}) are never retried.
 		 * </ul>
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for the gated retry loop (verb/body/status safety gates + backoff).
-		})
 		private Object processReturn(RequestSupplier reqSupplier, RrpcInterfaceMethodMeta methodMeta, Method method, boolean throwOnError, String acceptFallback) throws Exception {
 			var returnMode = methodMeta.getReturnType();
 			var returnType = method.getReturnType();
@@ -936,8 +923,6 @@ public final class RemoteClient {
 		 * Same lifecycle as {@link #processStreamReturn}: the response is not closed on success; the returned reader wraps
 		 * the live response stream (decoded as UTF-8) and closing it releases the connection.
 		 */
-		@SuppressWarnings({
-		})
 		private Reader processReaderReturn(RestRequest req, Method method, boolean throwOnError) throws Exception {
 			var resp = req.run();
 			var ok = false;
@@ -1161,7 +1146,7 @@ public final class RemoteClient {
 		/** Returns <jk>true</jk> if the {@code @Part} argument is a scalar that should be sent as a text field. */
 		private static boolean isScalarPart(Object arg) {
 			return arg instanceof CharSequence || arg instanceof Number || arg instanceof Boolean
-				|| arg instanceof Character || arg instanceof Enum || arg instanceof Date;
+				|| arg instanceof Character || arg instanceof Enum || arg instanceof java.util.Date;
 		}
 
 		/**
@@ -1172,8 +1157,6 @@ public final class RemoteClient {
 		 * directly from the response stream and the caller owns it (close the cursor when done).  On any failure before
 		 * the cursor is handed back, the response is closed.
 		 */
-		@SuppressWarnings({
-		})
 		private Object processCursor(RestRequest req, Class<?> returnType, Method method, boolean throwOnError) throws Exception {
 			var resp = req.run();
 			var ok = false;

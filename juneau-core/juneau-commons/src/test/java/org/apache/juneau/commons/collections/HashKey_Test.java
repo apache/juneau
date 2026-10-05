@@ -24,7 +24,8 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S4144" // Identical test methods intentional for testing different scenarios
+	"java:S4144", // Identical test methods intentional for testing different scenarios
+	"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
 })
 class HashKey_Test extends TestBase {
 
@@ -150,9 +151,6 @@ class HashKey_Test extends TestBase {
 		assertNotEquals(key1, key2);
 	}
 
-	@SuppressWarnings({
-		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
-	})
 	@Test
 	void b10_equals_withNullObject() {
 		HashKey key = HashKey.of("a", "b");
@@ -456,9 +454,6 @@ class HashKey_Test extends TestBase {
 		assertNotNull(key);
 	}
 
-	@SuppressWarnings({
-		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
-	})
 	@Test
 	void h05_equals_nonHashKeyObject() {
 		HashKey key = HashKey.of("a", "b");

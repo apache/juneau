@@ -103,7 +103,7 @@ public class RoleMatcher {
 		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
 			for (var role : roles)
-				if (operand.equals(role))
+				if (eq(operand, role))
 					return true;
 			return false;
 		}
@@ -244,10 +244,10 @@ public class RoleMatcher {
 	}
 
 	@SuppressWarnings({
-		"java:S125",    // Inline /*...*/ documents implicit else condition
-		"java:S135",    // Multiple break statements necessary for state machine error handling
-		"java:S3776",   // Cognitive complexity acceptable for parser state machine
-		"java:S6541"    // Thread-safe singleton pattern acceptable
+		"java:S125", // Inline /*...*/ documents implicit else condition
+		"java:S135", // Multiple break statements necessary for state machine error handling
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S6541" // Thread-safe singleton pattern acceptable
 	})
 	private Exp parse(String expression) throws ParseException {
 		if (StringUtils.isBlank(expression))

@@ -37,13 +37,13 @@ import org.junit.jupiter.api.*;
  * FILE/invalid-object error paths, and toType()'s conversion-failure wrapping.
  */
 @SuppressWarnings({
-	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S5976" // Separate test methods preferred over parameterized for clarity and independent failure reporting.
 })
 class OpenApiSerializerSession_Test extends TestBase {
 
 	private static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 
-	private static String w(HttpPartSchema schema, Object value) throws Exception {
+	private static String w(HttpPartSchema schema, Object value) {
 		return DS.write(null, schema, value);
 	}
 
@@ -54,7 +54,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	enum A_Enum { FOO, BAR }
 
 	@Test
-	void a01_swapOnNonDateType() throws Exception {
+	void a01_swapOnNonDateType() {
 		// nn(swap) && !isDateOrCalendarOrTemporal() -- an enum has a default swap and is not a
 		// date/calendar/temporal type, so the swap fires and re-resolves the class meta.
 		var s = w(T_STRING, A_Enum.FOO);
@@ -73,7 +73,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void a02_swapClassMetaResolvesToObject() throws Exception {
+	void a02_swapClassMetaResolvesToObject() {
 		// After swapping, swap.getSwapClassMeta(this).isObject() == true forces a second
 		// getClassMetaForObject(value) lookup to discover the swapped value's real runtime type.
 		var ctx = OpenApiSerializer.create().swaps(A_ObjSwap.class).build();
@@ -86,7 +86,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void b01_uriTypeResolved() throws Exception {
+	void b01_uriTypeResolved() {
 		// type.isUri() branch: value is resolved via getUriResolver() and re-typed as string().
 		var s = w(T_STRING, java.net.URI.create("http://foo"));
 		assertEquals("http://foo", s);
@@ -97,14 +97,14 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void c01_arrayStreamableValue() throws Exception {
+	void c01_arrayStreamableValue() {
 		// type.isStreamable() branch in the plain (non-UONC) ARRAY handler.
 		var s = w(T_ARRAY, Stream.of("a", "b"));
 		assertEquals("a,b", s);
 	}
 
 	@Test
-	void c02_arrayUoncDelegatesToList() throws Exception {
+	void c02_arrayUoncDelegatesToList() {
 		// cf == UONC branch: delegates to super.write() with a JsonList built by toList().
 		var ps = tArray().collectionFormat(HttpPartCollectionFormat.UONC).build();
 		var s = w(ps, List.of("a", "b"));
@@ -112,7 +112,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void c03_arrayUoncStreamableDelegatesViaToList() throws Exception {
+	void c03_arrayUoncStreamableDelegatesViaToList() {
 		// toList()'s own type.isStreamable() branch (distinct from write()'s plain-ARRAY streamable
 		// check in c01 -- this one is reached only through the UONC dispatch).
 		var ps = tArray().collectionFormat(HttpPartCollectionFormat.UONC).build();
@@ -121,7 +121,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void c04_arrayUoncScalarFallsThroughToListElse() throws Exception {
+	void c04_arrayUoncScalarFallsThroughToListElse() {
 		// toList()'s final else-branch: value is neither array, collection, nor streamable, so it's
 		// wrapped as a single-element list via toObject().
 		var ps = tArray().collectionFormat(HttpPartCollectionFormat.UONC).build();
@@ -134,7 +134,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void d01_objectUoncWithPropertiesAndMapValue() throws Exception {
+	void d01_objectUoncWithPropertiesAndMapValue() {
 		// cf == UONC branch with schema.hasProperties() && type.isMapOrBean() -- routes the map
 		// through toMap() before delegating to super.write().
 		var ps = tObject().p("a", tString()).collectionFormat(HttpPartCollectionFormat.UONC).build();
@@ -147,7 +147,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void d02_objectUoncWithPropertiesAndBeanValue() throws Exception {
+	void d02_objectUoncWithPropertiesAndBeanValue() {
 		// Same UONC+properties path as d01, but toMap()'s type.isBean() branch fires instead of its
 		// plain-Map else-branch.
 		var ps = tObject().p("a", tString()).collectionFormat(HttpPartCollectionFormat.UONC).build();
@@ -161,15 +161,15 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void d03_beanPropertyThrowsIsSkipped() throws Exception {
-		// type.isBean() branch's forEachValue callback: "if (thrown == null)" false-arm -- a
+	void d03_beanPropertyThrowsIsSkipped() {
+		// type.isBean() branch's forEachValue callback: the thrown-exception-present arm -- a
 		// property whose getter throws is silently excluded from the output instead of propagating.
 		var s = w(T_OBJECT, new D03_ThrowBean());
 		assertEquals("a=ok", s);
 	}
 
 	@Test
-	void d04_objectTypeNeitherMapNorBeanThrows() throws Exception {
+	void d04_objectTypeNeitherMapNorBeanThrows() {
 		// Final else-branch: schema forces OBJECT type but the value is a plain String (neither
 		// isBean() nor isMap()).
 		assertThrowsWithMessage(SerializeException.class, "Input is not a valid object type", () -> w(T_OBJECT, "hello"));
@@ -190,7 +190,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void f01_nestedArrayItemStringByteFormat() throws Exception {
+	void f01_nestedArrayItemStringByteFormat() {
 		// toObject()'s STRING/BYTE branch, reached while converting each element of a UONC array.
 		var ps = tArrayUon().items(tString().fByte()).build();
 		var s = w(ps, List.of("ab", "cd"));
@@ -198,7 +198,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void f02_nestedArrayItemArrayCsvJoin() throws Exception {
+	void f02_nestedArrayItemArrayCsvJoin() {
 		// toObject()'s ARRAY branch with cf == CSV, joining the nested list into a single string
 		// instead of returning the raw JsonList.
 		var ps = tArrayUon().items(tArrayCsv()).build();
@@ -207,7 +207,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void f03_nestedArrayItemObject() throws Exception {
+	void f03_nestedArrayItemObject() {
 		// toObject()'s OBJECT branch, delegating to toMap() for a nested map element.
 		var ps = tArrayUon().items(tObject()).build();
 		var s = w(ps, List.of(Map.of("k", "v")));
@@ -219,7 +219,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void h01_objectPipesFormat() throws Exception {
+	void h01_objectPipesFormat() {
 		// append(Object,Object)'s "cf == PIPES" branch -- g01a/b (OpenApi_Test) only exercise the
 		// default (comma) collection format for OBJECT-typed key=value output.
 		var ps = tObject().collectionFormat(HttpPartCollectionFormat.PIPES).build();
@@ -231,7 +231,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void h02_objectSsvFormat() throws Exception {
+	void h02_objectSsvFormat() {
 		// append(Object,Object)'s "cf == SSV || cf == TSV" branch.
 		var ps = tObject().collectionFormat(HttpPartCollectionFormat.SSV).build();
 		var m = new java.util.LinkedHashMap<String,Object>();
@@ -247,7 +247,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 
 	@Test
 	void g01_unconvertibleValueWrapsAsSerializeException() {
-		// toType()'s catch (InvalidDataConversionException e) -> throw new SerializeException(e).
+		// toType()'s InvalidDataConversionException catch arm, which rethrows as a SerializeException.
 		assertThrowsWithMessage(SerializeException.class, "Invalid data conversion", () -> w(T_BYTE, new Object()));
 	}
 
@@ -256,7 +256,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	// ============================================================
 
 	@Test
-	void i01_objectTsvFormat() throws Exception {
+	void i01_objectTsvFormat() {
 		// append(Object,Object)'s "cf == SSV || cf == TSV" branch, TSV arm specifically -- h02 only
 		// exercises SSV for this two-arg overload.
 		var ps = tObject().collectionFormat(HttpPartCollectionFormat.TSV).build();
@@ -268,7 +268,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i02_swapSkippedForDateOrCalendarType() throws Exception {
+	void i02_swapSkippedForDateOrCalendarType() {
 		// nn(swap) && !isDateOrCalendarOrTemporal()'s false-arm: java.util.Date has a registered
 		// default swap, but isDateOrCalendarOrTemporal() is true for it, so the swap is
 		// deliberately skipped and the DATE_TIME formatting path handles it directly instead.
@@ -278,7 +278,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i04_uriTypeResolvedWithoutParsedTypeMutation() throws Exception {
+	void i04_uriTypeResolvedWithoutParsedTypeMutation() {
 		// type.isUri() true-arm reached without the parsed-type mutater (line 217) first converting
 		// `type` away from URI: DEFAULT_SCHEMA's parsed type doesn't mutate a URI value, so it's
 		// still classified isUri() when reaching the dedicated URI-resolution branch (distinct from
@@ -289,7 +289,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i05_uoncObjectWithoutPropertiesSkipsToMapConversion() throws Exception {
+	void i05_uoncObjectWithoutPropertiesSkipsToMapConversion() {
 		// cf == UONC branch's "schema.hasProperties() && type.isMapOrBean()" false-arm: a UONC
 		// schema with no declared properties passes the raw map straight to super.write() instead
 		// of routing it through toMap() first (d01/d02 both declare properties).
@@ -304,7 +304,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i06_keepNullPropertiesIncludesNullBeanValue() throws Exception {
+	void i06_keepNullPropertiesIncludesNullBeanValue() {
 		// The OBJECT/isBean() branch's checkNull predicate: "isKeepNullProperties()" true-arm --
 		// with the option enabled, a null-valued property is still included in the output (d03/the
 		// default session only exercise the "nn(x)" true-arm via non-null values).
@@ -315,7 +315,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i07_keepNullPropertiesIncludesNullMapValueViaUonc() throws Exception {
+	void i07_keepNullPropertiesIncludesNullMapValueViaUonc() {
 		// toMap()'s isBean() branch's checkNull predicate: "isKeepNullProperties()" true-arm,
 		// reached via the UONC+properties dispatch (m17/d02 only exercise non-null bean values).
 		var ctx = OpenApiSerializer.create().keepNullProperties().build();
@@ -325,8 +325,8 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i08_toMapBeanPropertyThrowsIsSkipped() throws Exception {
-		// toMap()'s isBean() branch forEachValue callback: "if (thrown == null)" false-arm -- a
+	void i08_toMapBeanPropertyThrowsIsSkipped() {
+		// toMap()'s isBean() branch forEachValue callback: the thrown-exception-present arm -- a
 		// property whose getter throws is silently excluded, reached via the UONC+properties
 		// dispatch (d03 exercises the equivalent branch in write()'s own OBJECT/isBean() handler,
 		// not toMap()'s).
@@ -336,7 +336,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i09_sortedCollectionUoncArray() throws Exception {
+	void i09_sortedCollectionUoncArray() {
 		// toList()'s "isSortCollections()" true-arm -- unsorted input is re-sorted before being
 		// wrapped for the UONC array delegation.
 		var ctx = OpenApiSerializer.create().sortCollections().build();
@@ -346,7 +346,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i10_sortedMapUoncObject() throws Exception {
+	void i10_sortedMapUoncObject() {
 		// toMap()'s "isSortMaps()" true-arm -- unsorted input is re-sorted before being wrapped
 		// for the UONC object delegation.
 		var ctx = OpenApiSerializer.create().sortMaps().build();
@@ -359,7 +359,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i11a_nestedArrayItemStringDateFormat() throws Exception {
+	void i11a_nestedArrayItemStringDateFormat() {
 		// toObject()'s STRING/DATE branch (as opposed to i11's DATE_TIME), reached while converting
 		// each element of a UONC array.
 		var ps = tArrayUon().items(tString().format(org.apache.juneau.commons.httppart.HttpPartFormat.DATE)).build();
@@ -368,7 +368,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i11_nestedArrayItemStringDateTimeFormat() throws Exception {
+	void i11_nestedArrayItemStringDateTimeFormat() {
 		// toObject()'s STRING/DATE_TIME branch, reached while converting each element of a UONC
 		// array (f01 only exercises the BYTE format for this same dispatch point).
 		var ps = tArrayUon().items(tString().format(org.apache.juneau.commons.httppart.HttpPartFormat.DATE_TIME)).build();
@@ -377,7 +377,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i12_nestedArrayItemArrayPipesJoin() throws Exception {
+	void i12_nestedArrayItemArrayPipesJoin() {
 		// toObject()'s ARRAY branch with cf == PIPES, joining the nested list into a single
 		// pipe-delimited string (f02 only exercises CSV for this same dispatch point).
 		var ps = tArrayUon().items(tArrayPipes()).build();
@@ -386,7 +386,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i13_nestedArrayItemArraySsvJoin() throws Exception {
+	void i13_nestedArrayItemArraySsvJoin() {
 		// toObject()'s ARRAY branch with cf == SSV, joining the nested list with spaces.
 		var ps = tArrayUon().items(tArraySsv()).build();
 		var s = w(ps, List.of(List.of("a", "b")));
@@ -394,7 +394,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 	}
 
 	@Test
-	void i14_nestedArrayItemArrayTsvJoin() throws Exception {
+	void i14_nestedArrayItemArrayTsvJoin() {
 		// toObject()'s ARRAY branch with cf == TSV, joining the nested list with tabs.
 		var ps = tArrayUon().items(tArrayTsv()).build();
 		var s = w(ps, List.of(List.of("a", "b")));

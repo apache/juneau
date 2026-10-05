@@ -53,8 +53,9 @@ import org.apache.juneau.rest.server.*;
  * resource-class hierarchy &mdash; it is <b>not</b> contributed across a host's other endpoints by a mixin.  So a mixin
  * cannot silently inject page assets into <i>your</i> data endpoints; instead, add the wire-points to the resource (or
  * op) that renders the HTML table, referencing your chosen DataTables distribution and this served glue.  The URLs are
- * SVL-resolvable, so the DataTables location can be overridden per environment without code changes:
+ * SVL-resolvable, so the DataTables location can be overridden per environment without code changes.
  *
+ * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/releases"</js>, mixins=DataTablesMixin.<jk>class</jk>)
  * 	<ja>@HtmlDocConfig</ja>(
@@ -77,6 +78,35 @@ import org.apache.juneau.rest.server.*;
  * The convenience constants {@link #JQUERY_CDN_URL}, {@link #DATATABLES_JS_CDN_URL}, and
  * {@link #DATATABLES_CSS_CDN_URL} document known-good CDN coordinates for the caller-supplied library.
  *
+ * <h5 class='section'>Server-side processing ({@code JuneauDataTables.ajax}):</h5>
+ *
+ * <p>
+ * For a large table, let DataTables fetch pages from the server instead of rendering every row.  The served glue
+ * exposes <c>JuneauDataTables.ajax(url, extra?)</c>, which returns a DataTables {@code ajax} option that POSTs the
+ * server-side request as JSON to a {@code @RestOp(method="POST")} endpoint taking {@code @Content}
+ * {@link DataTablesRequest} &mdash; see {@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery} for
+ * the endpoint side:
+ *
+ * <p class='bhtml'>
+ * 	&lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+ * 	&lt;script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"&gt;&lt;/script&gt;
+ * 	&lt;script src="/releases/juneau-datatables.js"&gt;&lt;/script&gt;
+ * 	&lt;table id="releases"&gt;&lt;/table&gt;
+ * 	&lt;script&gt;
+ * 	  new DataTable('#releases', {
+ * 	    serverSide: true,
+ * 	    ajax: JuneauDataTables.ajax('/releases/query'),
+ * 	    columns: [{data: 'name', title: 'Name'}, {data: 'version', title: 'Version'}]
+ * 	  });
+ * 	&lt;/script&gt;
+ * </p>
+ *
+ * <p>
+ * A server-rendered {@link DataTablesTable} can skip the inline {@code <script>} entirely: give it the
+ * {@link DataTablesTable#AJAX_ATTR} attribute (e.g. via a direct {@code Table} DOM edit after
+ * {@link DataTablesTable#of(String, java.util.Collection, Class) DataTablesTable.of}) and the glue wires
+ * {@code opts.ajax}/{@code opts.serverSide} automatically on load.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -87,7 +117,7 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link DataTablesTable}
  * 	<li class='jc'>{@link DataTablesColumns}
- * 	<li class='jc'>{@link DataTablesQueryProtocol}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/examples/data_sources/dom">DataTables from a pre-rendered DOM table</a>
  * </ul>
  *
@@ -145,8 +175,9 @@ public class DataTablesMixin {
 	}
 
 	/** Returns the shipped glue-script bytes, reading (and caching) them from the classpath on first call. */
-	// IoUtils.read(InputStream) closes the stream (see its Javadoc); JDT can't see through the call.
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // IoUtils.read(InputStream) closes the stream; JDT can't see through the call.
+	})
 	private static byte[] glueScript() throws IOException {
 		var g = glueScript;
 		if (g == null) {

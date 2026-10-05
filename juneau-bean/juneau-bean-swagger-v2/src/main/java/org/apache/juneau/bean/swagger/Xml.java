@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -71,19 +70,9 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class Xml extends SwaggerElement {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_property = "property";
-
-	// Property name constants
-	private static final String PROP_attribute = "attribute";
-	private static final String PROP_namespace = "namespace";
-	private static final String PROP_prefix = "prefix";
-	private static final String PROP_name = "name";
-	private static final String PROP_wrapped = "wrapped";
 
 	private String name;
 	private String namespace;
@@ -122,13 +111,13 @@ public class Xml extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_attribute -> toType(getAttribute(), type);
-			case PROP_name -> toType(getName(), type);
-			case PROP_namespace -> toType(getNamespace(), type);
-			case PROP_prefix -> toType(getPrefix(), type);
-			case PROP_wrapped -> toType(getWrapped(), type);
+			case "attribute" -> toType(getAttribute(), type);
+			case "name" -> toType(getName(), type);
+			case "namespace" -> toType(getNamespace(), type);
+			case "prefix" -> toType(getPrefix(), type);
+			case "wrapped" -> toType(getWrapped(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -191,11 +180,11 @@ public class Xml extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = stb(String.class)
-			.addIf(nn(attribute), PROP_attribute)
-			.addIf(nn(name), PROP_name)
-			.addIf(nn(namespace), PROP_namespace)
-			.addIf(nn(prefix), PROP_prefix)
-			.addIf(nn(wrapped), PROP_wrapped)
+			.addIf(nn(attribute), "attribute")
+			.addIf(nn(name), "name")
+			.addIf(nn(namespace), "namespace")
+			.addIf(nn(prefix), "prefix")
+			.addIf(nn(wrapped), "wrapped")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -203,13 +192,13 @@ public class Xml extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Xml set(String property, Object value) {
-		assertArgNotNull(ARG_property, property);
+		reqnn("property", property);
 		return switch (property) {
-			case PROP_attribute -> setAttribute(toBoolean(value));
-			case PROP_name -> setName(s(value));
-			case PROP_namespace -> setNamespace(s(value));
-			case PROP_prefix -> setPrefix(s(value));
-			case PROP_wrapped -> setWrapped(toBoolean(value));
+			case "attribute" -> setAttribute(toBoolean(value));
+			case "name" -> setName(s(value));
+			case "namespace" -> setNamespace(s(value));
+			case "prefix" -> setPrefix(s(value));
+			case "wrapped" -> setWrapped(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

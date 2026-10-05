@@ -30,8 +30,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // Writer resource managed by calling code
-	"java:S3776" // Cognitive complexity acceptable for CSV cell quoting/escaping logic
+	"java:S3776", // Cognitive complexity acceptable for CSV cell quoting/escaping logic
+	"resource" // Writer resource managed by calling code
 })
 public class CsvWriter extends SerializerWriter<CsvWriter> {
 

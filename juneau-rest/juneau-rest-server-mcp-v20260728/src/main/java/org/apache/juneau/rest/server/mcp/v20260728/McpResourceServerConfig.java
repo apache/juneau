@@ -66,9 +66,6 @@ public class McpResourceServerConfig {
 	/** Default advertised/accepted bearer method. */
 	public static final String DEFAULT_BEARER_METHOD = "header";
 
-	// Error message constant (reused by every scope-mutation entry point below).
-	private static final String MSG_scopeMustNotBeNullOrBlank = "scope must not be null or blank";
-
 	private boolean enabled;
 	private URI resource;
 	private String audience;
@@ -86,7 +83,9 @@ public class McpResourceServerConfig {
 	private final Map<String,Set<String>> operationScopes = new LinkedHashMap<>();
 	private McpOperationScopeResolver operationScopeResolver;
 
-	@SuppressWarnings("java:S3077") // OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.
+	@SuppressWarnings({
+		"java:S3077" // OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.
+	})
 	private volatile OAuthFilter oauthFilter;
 
 	/**
@@ -263,7 +262,7 @@ public class McpResourceServerConfig {
 	 */
 	public McpResourceServerConfig addScopeSupported(String value) {
 		if (value == null || value.isBlank())
-			throw iaex(MSG_scopeMustNotBeNullOrBlank);
+			throw iaex("scope must not be null or blank");
 		scopesSupported.add(value);
 		return this;
 	}
@@ -286,7 +285,7 @@ public class McpResourceServerConfig {
 	 */
 	public McpResourceServerConfig addRequiredScope(String value) {
 		if (value == null || value.isBlank())
-			throw iaex(MSG_scopeMustNotBeNullOrBlank);
+			throw iaex("scope must not be null or blank");
 		requiredScopes.add(value);
 		scopesSupported.add(value);
 		return this;
@@ -328,7 +327,7 @@ public class McpResourceServerConfig {
 		var set = new LinkedHashSet<String>();
 		for (var s : scopes) {
 			if (s == null || s.isBlank())
-				throw iaex(MSG_scopeMustNotBeNullOrBlank);
+				throw iaex("scope must not be null or blank");
 			set.add(s);
 		}
 		scopesSupported.addAll(set);

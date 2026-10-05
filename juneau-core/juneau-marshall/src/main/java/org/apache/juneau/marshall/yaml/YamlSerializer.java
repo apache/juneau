@@ -16,13 +16,15 @@
  */
 package org.apache.juneau.marshall.yaml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
@@ -128,14 +130,14 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class YamlSerializer extends WriterSerializer implements RecordWritable, ArrayRecordWritable {
+public class YamlSerializer extends WriterSerializer implements YamlMetaProvider, RecordWritable, ArrayRecordWritable {
 
-	private static final String PROP_addBeanTypesYaml = "addBeanTypesYaml";
-
-	private static final String ARG_copyFrom = "copyFrom";
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,YamlClassMeta> yamlClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,YamlBeanPropertyMeta> yamlBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder class.
@@ -162,7 +164,7 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesYaml = copyFrom.addBeanTypesYaml;
 		}
 
@@ -173,7 +175,7 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(YamlSerializer copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			addBeanTypesYaml = copyFrom.addBeanTypesYaml;
 		}
 
@@ -269,6 +271,18 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 		addBeanTypes2 = addBeanTypesYaml || super.isAddBeanTypes();
 	}
 
+	@Override /* Overridden from YamlMetaProvider */
+	public YamlBeanPropertyMeta getYamlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return YamlBeanPropertyMeta.DEFAULT;
+		return yamlBeanPropertyMetas.computeIfAbsent(bpm, k -> new YamlBeanPropertyMeta(k, this));
+	}
+
+	@Override /* Overridden from YamlMetaProvider */
+	public YamlClassMeta getYamlClassMeta(ClassMeta<?> cm) {
+		return yamlClassMetas.computeIfAbsent(cm, k -> new YamlClassMeta(k, this));
+	}
+
 	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
@@ -296,7 +310,7 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_addBeanTypesYaml, addBeanTypesYaml);
+			.a("addBeanTypesYaml", addBeanTypesYaml);
 	}
 
 	/**

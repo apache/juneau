@@ -68,8 +68,9 @@ import org.apache.juneau.test.assertions.*;
 @BeanIgnore
 
 @SuppressWarnings({
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	"resource", // Content may be streams; only reference equality is used for the content field.
-	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"unchecked" // contentOrElse() casts the stored content to the caller's T, and self() is the standard CRTP cast.
 })
 public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implements HttpEntity {
 
@@ -441,9 +442,6 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	 * @param def The default value if <jk>null</jk>.
 	 * @return The content object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for content
-	})
 	protected <T> T contentOrElse(T def) {
 		Object o = content;
 		if (o == null && nn(contentSupplier))
@@ -467,9 +465,6 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings({
-		"unchecked" // CRTP self-type cast is safe: SELF is bound to the concrete leaf type.
-	})
 	protected final SELF self() { return (SELF) this; }
 
 	/**

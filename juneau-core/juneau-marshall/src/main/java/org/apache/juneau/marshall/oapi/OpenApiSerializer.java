@@ -39,7 +39,8 @@ import org.apache.juneau.marshall.uon.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for OpenApiSerializer hierarchy
+	"java:S110", // Inheritance depth acceptable for OpenApiSerializer hierarchy
+	"java:S9149" // Per-format static factories intentionally shadow the parent's.
 })
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
 

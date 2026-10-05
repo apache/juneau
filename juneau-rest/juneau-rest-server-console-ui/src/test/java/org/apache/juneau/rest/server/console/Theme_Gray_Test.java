@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -46,10 +47,8 @@ class Theme_Gray_Test extends TestBase {
 
 	@Test void b01_grayedSignatureValues() {
 		var tokens = Theme.GRAY.getTokens();
-		assertEquals("#f4f4f4", tokens.get("--jc-chrome-bg"));
-		assertEquals("#262626", tokens.get("--jc-text"));
-		assertEquals("#e0e0e0", tokens.get("--jc-border"));
-		assertTrue(tokens.get("--jc-page-bg").contains("#e8e8e8"), () -> "expected the neutral gray gradient, got: " + tokens.get("--jc-page-bg"));
+		assertBean(tokens, "--jc-chrome-bg,--jc-text,--jc-border", "#f4f4f4,#262626,#e0e0e0");
+		assertContains("#e8e8e8", tokens.get("--jc-page-bg"));
 	}
 
 	@Test void b02_keptFromOpen_statusAndBlueAccentValues_areUnchanged() {
@@ -60,18 +59,15 @@ class Theme_Gray_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
 		// Per the accent decision (RECOMMENDED / blue): GRAY keeps OPEN's blue affordances verbatim.
 		assertEquals(Theme.OPEN.getTokens().get("--jc-accent"), tokens.get("--jc-accent"));
-		assertEquals("#1589EE", tokens.get("--jc-accent"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-link"), tokens.get("--jc-link"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-btn-primary"), tokens.get("--jc-btn-primary"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-bg"), tokens.get("--jc-card-bg"));
-		assertEquals("#ffffff", tokens.get("--jc-card-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-main-bg"), tokens.get("--jc-main-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
-		assertEquals("16px 16px 8px", tokens.get("--jc-card-padding"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-chrome-icon"), tokens.get("--jc-chrome-icon"));
-		assertEquals("#666666", tokens.get("--jc-chrome-icon"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
-		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", tokens.get("--jc-card-shadow"));
+		assertBean(tokens, "--jc-accent,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-card-shadow",
+			"#1589EE,#ffffff,16px 16px 8px,#666666,0 2px 2px rgba(0, 0, 0, 0.05)");
 	}
 
 	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {

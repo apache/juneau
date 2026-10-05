@@ -19,7 +19,6 @@ package org.apache.juneau.marshall;
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -175,75 +174,15 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",  // Type erasure requires unchecked casts
-	"rawtypes",   // Raw types necessary for generic type handling
-	"java:S6539", // Monster class; MarshallingContext is intentionally the central bean-context configuration hub (also covers Collection.toArray() usage)
-	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
 	"java:S1452", // Wildcard required - ClassMeta<?> for parameter resolution and type variables
-	"java:S1612"  // Lambdas used instead of method references for readability in complex chained expressions
+	"java:S1612", // Lambdas used instead of method references for readability in complex chained expressions
+	"java:S3776", // findConversion() registers the whole conversion matrix in one method, and resolveClassMeta(Type, ...) dispatches over every Type shape
+	"java:S6539", // Monster class; MarshallingContext is intentionally the central bean-context configuration hub (also covers Collection.toArray() usage)
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked" // Type erasure requires unchecked casts
 })
 public class MarshallingContext extends Context implements ConversionFinder, BeanTypeResolver {
-
-	// Property name constants
-	private static final String PROP_beanClassVisibility = "beanClassVisibility";
-	private static final String PROP_beanConstructorVisibility = "beanConstructorVisibility";
-	private static final String PROP_beanDictionary = "beanDictionary";
-	private static final String PROP_beanFieldVisibility = "beanFieldVisibility";
-	private static final String PROP_beanMethodVisibility = "beanMethodVisibility";
-	private static final String PROP_beansRequireDefaultConstructor = "beansRequireDefaultConstructor";
-	private static final String PROP_beansRequireSerializable = "beansRequireSerializable";
-	private static final String PROP_beansRequireSettersForGetters = "beansRequireSettersForGetters";
-	private static final String PROP_beansRequireSomeProperties = "beansRequireSomeProperties";
-	private static final String PROP_id = "id";
-	private static final String PROP_ignoreInvocationExceptionsOnGetters = "ignoreInvocationExceptionsOnGetters";
-	private static final String PROP_ignoreInvocationExceptionsOnSetters = "ignoreInvocationExceptionsOnSetters";
-	private static final String PROP_ignoreTransientFields = "ignoreTransientFields";
-	private static final String PROP_ignoreUnknownBeanProperties = "ignoreUnknownBeanProperties";
-	private static final String PROP_ignoreUnknownNullBeanProperties = "ignoreUnknownNullBeanProperties";
-	private static final String PROP_notBeanClasses = "notBeanClasses";
-	private static final String PROP_notBeanPackageNames = "notBeanPackageNames";
-	private static final String PROP_notBeanPackagePrefixes = "notBeanPackagePrefixes";
-	private static final String PROP_unsortedProperties = "unsortedProperties";
-	private static final String PROP_swaps = "swaps";
-	private static final String PROP_durationFormat = "durationFormat";
-	private static final String PROP_periodFormat = "periodFormat";
-	private static final String PROP_calendarFormat = "calendarFormat";
-	private static final String PROP_dateFormat = "dateFormat";
-	private static final String PROP_temporalFormat = "temporalFormat";
-	private static final String PROP_timeZoneFormat = "timeZoneFormat";
-	private static final String PROP_localeFormat = "localeFormat";
-	private static final String PROP_binaryFormat = "binaryFormat";
-	private static final String PROP_enumFormat = "enumFormat";
-	private static final String PROP_uuidFormat = "uuidFormat";
-	private static final String PROP_bitSetFormat = "bitSetFormat";
-	private static final String PROP_bigNumberFormat = "bigNumberFormat";
-	private static final String PROP_booleanFormat = "booleanFormat";
-	private static final String PROP_floatFormat = "floatFormat";
-	private static final String PROP_currencyFormat = "currencyFormat";
-	private static final String PROP_classFormat = "classFormat";
-	private static final String PROP_classLoader = "classLoader";
-	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
-	private static final String PROP_useJavaBeanIntrospector = "useJavaBeanIntrospector";
-	private static final String PROP_validateSchema = "validateSchema";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_bc = "bc";
-	private static final String ARG_beanClass = "beanClass";
-	private static final String ARG_beanClassName = "beanClassName";
-	private static final String ARG_c = "c";
-	private static final String ARG_implClass = "implClass";
-	private static final String ARG_interfaceClass = "interfaceClass";
-	private static final String ARG_normalClass = "normalClass";
-	private static final String ARG_object = "object";
-	private static final String ARG_o = "o";
-	private static final String ARG_on = "on";
-	private static final String ARG_pojoClass = "pojoClass";
-	private static final String ARG_properties = "properties";
-	private static final String ARG_swapFunction = "swapFunction";
-	private static final String ARG_swappedClass = "swappedClass";
-	private static final String ARG_unswapFunction = "unswapFunction";
-	private static final String ARG_value = "value";
-	private static final String ARG_values = "values";
 
 	/**
 	 * Builder class.
@@ -524,7 +463,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanClassVisibility(Visibility value) {
-			beanClassVisibility = assertArgNotNull(ARG_value, value);
+			beanClassVisibility = reqnn("value", value);
 			return this;
 		}
 
@@ -573,7 +512,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
-			beanConstructorVisibility = assertArgNotNull(ARG_value, value);
+			beanConstructorVisibility = reqnn("value", value);
 			return this;
 		}
 
@@ -600,7 +539,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @see #beanDictionary(ClassInfo...)
 		 */
 		public Builder beanDictionary(Class<?>...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			return beanDictionary(Stream.of(values).map(x -> info(x)).toArray(ClassInfo[]::new));
 		}
 
@@ -696,7 +635,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanDictionary(ClassInfo...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			return beanDictionary(l(values));
 		}
 
@@ -710,7 +649,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @see #beanDictionary(ClassInfo...)
 		 */
 		public Builder beanDictionary(Collection<ClassInfo> values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			beanDictionary().addAll(0, values);
 			return this;
 		}
@@ -769,7 +708,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanFieldVisibility(Visibility value) {
-			beanFieldVisibility = assertArgNotNull(ARG_value, value);
+			beanFieldVisibility = reqnn("value", value);
 			return this;
 		}
 
@@ -826,8 +765,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().interceptor(value).build()).build());
 		}
 
@@ -918,7 +857,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
-			beanMethodVisibility = assertArgNotNull(ARG_value, value);
+			beanMethodVisibility = reqnn("value", value);
 			return this;
 		}
 
@@ -980,8 +919,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
-			assertArgNotNull(ARG_beanClass, beanClass);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClass", beanClass);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().p(properties).build()).build());
 		}
 
@@ -1044,7 +983,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
-			assertArgNotNull(ARG_values, values);
+			reqnn("values", values);
 			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().p(s(v)).build()).build()));
 			return this;
 		}
@@ -1108,8 +1047,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanProperties(String beanClassName, String properties) {
-			assertArgNotNull(ARG_beanClassName, beanClassName);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClassName", beanClassName);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().p(properties).build()).build());
 		}
 
@@ -1163,8 +1102,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			assertArgNotNull(ARG_beanClass, beanClass);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClass", beanClass);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().xp(properties).build()).build());
 		}
 
@@ -1219,7 +1158,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			assertArgNotNull(ARG_values, values);
+			reqnn("values", values);
 			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().xp(s(v)).build()).build()));
 			return this;
 		}
@@ -1276,8 +1215,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			assertArgNotNull(ARG_beanClassName, beanClassName);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClassName", beanClassName);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().xp(properties).build()).build());
 		}
 
@@ -1334,8 +1273,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			assertArgNotNull(ARG_beanClass, beanClass);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClass", beanClass);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().ro(properties).build()).build());
 		}
 
@@ -1393,7 +1332,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			assertArgNotNull(ARG_values, values);
+			reqnn("values", values);
 			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().ro(s(v)).build()).build()));
 			return this;
 		}
@@ -1451,8 +1390,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			assertArgNotNull(ARG_beanClassName, beanClassName);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClassName", beanClassName);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().ro(properties).build()).build());
 		}
 
@@ -1508,8 +1447,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			assertArgNotNull(ARG_beanClass, beanClass);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClass", beanClass);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().wo(properties).build()).build());
 		}
 
@@ -1566,7 +1505,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			assertArgNotNull(ARG_values, values);
+			reqnn("values", values);
 			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().wo(s(v)).build()).build()));
 			return this;
 		}
@@ -1623,8 +1562,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			assertArgNotNull(ARG_beanClassName, beanClassName);
-			assertArgNotNull(ARG_properties, properties);
+			reqnn("beanClassName", beanClassName);
+			reqnn("properties", properties);
 			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().wo(properties).build()).build());
 		}
 
@@ -1895,8 +1834,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNoNulls(ARG_values, values);
+			reqnn("on", on);
+			reqnns("values", values);
 			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().dictionary(values).build()).build());
 		}
 
@@ -2172,7 +2111,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
-			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(json).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(reqnn("pojoClass", pojoClass)).value(MarshalledAnnotation.create().example(json).build()).build());
 		}
 
 		/**
@@ -2222,7 +2161,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(Json5.of(o)).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(reqnn("pojoClass", pojoClass)).value(MarshalledAnnotation.create().example(Json5.of(o)).build()).build());
 		}
 
 		/**
@@ -2321,7 +2260,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder findFluentSetters(Class<?> on) {
-			assertArgNotNull(ARG_on, on);
+			reqnn("on", on);
 			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().findFluentSetters(true).build()).build());
 		}
 
@@ -2715,8 +2654,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			assertArgNotNull(ARG_interfaceClass, interfaceClass);
-			assertArgNotNull(ARG_implClass, implClass);
+			reqnn("interfaceClass", interfaceClass);
+			reqnn("implClass", implClass);
 			return annotations(MarshalledApplyAnnotation.create(interfaceClass).value(MarshalledAnnotation.create().implClass(implClass).build()).build());
 		}
 
@@ -2756,7 +2695,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			assertArgNotNull(ARG_values, values);
+			reqnn("values", values);
 			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().implClass(v).build()).build()));
 			return this;
 		}
@@ -2805,8 +2744,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().interfaceClass(value).build()).build());
 		}
 
@@ -2852,7 +2791,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
-			assertArgNoNulls(ARG_value, value);
+			reqnns("value", value);
 			for (var v : value)
 				annotations(BeanTypeApplyAnnotation.create(v).value(BeanTypeAnnotation.create().interfaceClass(v).build()).build());
 			return this;
@@ -2897,7 +2836,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			locale = assertArgNotNull(ARG_value, value);
+			locale = reqnn("value", value);
 			return this;
 		}
 
@@ -2967,7 +2906,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @see #notBeanClasses(ClassInfo...)
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			return notBeanClasses(Stream.of(values).map(x -> info(x)).toArray(ClassInfo[]::new));
 		}
 
@@ -3021,7 +2960,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder notBeanClasses(ClassInfo...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			notBeanClasses().addAll(l(values));
 			return this;
 		}
@@ -3036,7 +2975,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @see #notBeanClasses(ClassInfo...)
 		 */
 		public Builder notBeanClasses(Collection<ClassInfo> values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			notBeanClasses().addAll(values);
 			return this;
 		}
@@ -3064,7 +3003,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @see #notBeanPackages(String...)
 		 */
 		public Builder notBeanPackages(Collection<String> values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			notBeanPackages().addAll(values);
 			return this;
 		}
@@ -3107,7 +3046,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			return notBeanPackages(l(values));
 		}
 
@@ -3149,8 +3088,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().propertyNamer(value).build()).build());
 		}
 
@@ -3259,7 +3198,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder unsortedProperties(Class<?>...on) {
-			assertArgNoNulls(ARG_on, on);
+			reqnns("on", on);
 			for (var c : on)
 				annotations(BeanTypeApplyAnnotation.create(c).value(BeanTypeAnnotation.create().unsorted(true).build()).build());
 			return this;
@@ -3308,8 +3247,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> on, Class<?> value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().stopClass(value).build()).build());
 		}
 
@@ -3336,9 +3275,9 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			assertArgNotNull(ARG_normalClass, normalClass);
-			assertArgNotNull(ARG_swappedClass, swappedClass);
-			assertArgNotNull(ARG_swapFunction, swapFunction);
+			reqnn("normalClass", normalClass);
+			reqnn("swappedClass", swappedClass);
+			reqnn("swapFunction", swapFunction);
 			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, null));
 			return this;
 		}
@@ -3368,10 +3307,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			assertArgNotNull(ARG_normalClass, normalClass);
-			assertArgNotNull(ARG_swappedClass, swappedClass);
-			assertArgNotNull(ARG_swapFunction, swapFunction);
-			assertArgNotNull(ARG_unswapFunction, unswapFunction);
+			reqnn("normalClass", normalClass);
+			reqnn("swappedClass", swappedClass);
+			reqnn("swapFunction", swapFunction);
+			reqnn("unswapFunction", unswapFunction);
 			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
 			return this;
 		}
@@ -3403,7 +3342,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder swaps(Class<?>...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			swaps().addAll(0, accumulate((Object[])values));
 			return this;
 		}
@@ -3491,7 +3430,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder swaps(Object...values) {
-			assertArgNoNulls(ARG_values, values);
+			reqnns("values", values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3791,7 +3730,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends Context> value) {
-			assertArgNotNull(ARG_value, value);
+			reqnn("value", value);
 			super.type(value);
 			return this;
 		}
@@ -3840,8 +3779,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder typeName(Class<?> on, String value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().typeName(value).build()).build());
 		}
 
@@ -3888,8 +3827,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder typePropertyName(Class<?> on, String value) {
-			assertArgNotNull(ARG_on, on);
-			assertArgNotNull(ARG_value, value);
+			reqnn("on", on);
+			reqnn("value", value);
 			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().typePropertyName(value).build()).build());
 		}
 
@@ -3946,7 +3885,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
-			typePropertyName = assertArgNotNull(ARG_value, value);
+			typePropertyName = reqnn("value", value);
 			return this;
 		}
 
@@ -4209,7 +4148,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		beanConfigContext = memoize(this::buildBeanConfigContext);
 	}
 
-	/*
+	/**
 	 * Builds the {@link BeanConfigContext} snapshot exposed by {@link #getBeanConfigContext()}.
 	 *
 	 * Lifts the bean-modeling subset of this context's settings into a portable POJO that the bean-modeling
@@ -4348,6 +4287,24 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final ConfigurableConverter getConverter() { return converter; }
 
 	/**
+	 * Fallback for an ObjectSwap-conversion whose swap-class doesn't bridge to the input, but where the input
+	 * is already a {@link Map} matching the target's own Map shape -- copies its entries into a new instance
+	 * of the target type rather than dropping the value as {@code null}.
+	 *
+	 * @param toMeta The target type.
+	 * @param in The input value.
+	 * @return A new map instance of the target type populated with the input's entries, or <jk>null</jk> if
+	 * 	the target isn't Map-shaped or the input isn't a {@link Map}.
+	 */
+	private static Object copyMapEntries(ClassMeta<?> toMeta, Object in) {
+		if (! (toMeta.isMap() && in instanceof Map<?,?> in2))
+			return null;
+		var result = (Map<Object,Object>) (toMeta.canCreateNewInstance() ? toMeta.newInstance() : new LinkedHashMap<>());
+		result.putAll(in2);
+		return result;
+	}
+
+	/**
 	 * Implements {@link ConversionFinder} to provide all MarshallingContext-specific type conversions that cannot
 	 * be expressed in {@link BasicConverter} (which has no dependency on {@code juneau-marshall}).
 	 *
@@ -4368,29 +4325,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param outType The output type class.
 	 * @return A matching {@link Conversion}, or {@code null} if none applies.
 	 */
-	/**
-	 * Fallback for an ObjectSwap-conversion whose swap-class doesn't bridge to the input, but where the input
-	 * is already a {@link Map} matching the target's own Map shape -- copies its entries into a new instance
-	 * of the target type rather than dropping the value as {@code null}.
-	 *
-	 * @param toMeta The target type.
-	 * @param in The input value.
-	 * @return A new map instance of the target type populated with the input's entries, or <jk>null</jk> if
-	 * 	the target isn't Map-shaped or the input isn't a {@link Map}.
-	 */
-	private static Object copyMapEntries(ClassMeta<?> toMeta, Object in) {
-		if (! (toMeta.isMap() && in instanceof Map<?,?> in2))
-			return null;
-		var result = (Map<Object,Object>) (toMeta.canCreateNewInstance() ? toMeta.newInstance() : new LinkedHashMap<>());
-		result.putAll(in2);
-		return result;
-	}
-
 	@Override
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for comprehensive conversion dispatch
 		"java:S6541", // Brain Method: conversion dispatch inherently requires handling many type pairs in one place
-		"null"        // `builder` is guarded by `nn(builder)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
+		"null" // `builder` is guarded by `nn(builder)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
 	})
 	public Conversion<?,?> findConversion(Class<?> inType, Class<?> outType) {
 		var toMeta = getClassMeta(outType);
@@ -4834,7 +4772,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * 	this context.
 	 */
 	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		return getClassMeta(c).getBeanMeta();
 	}
 
@@ -4952,7 +4890,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @return The ClassMeta object.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
-		assertArgNotNull(ARG_o, o);
+		reqnn("o", o);
 		var unwrapped = getProxyFor(o);
 		return (ClassMeta<T>)getClassMeta(unwrapped != null ? unwrapped : o.getClass());
 	}
@@ -5032,7 +4970,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
 	public final boolean hasSameCache(MarshallingContext bc) {
-		assertArgNotNull(ARG_bc, bc);
+		reqnn("bc", bc);
 		return bc.getCmCache() == this.getCmCache();
 	}
 
@@ -5212,7 +5150,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @see MarshallingSession#newBeanMap(Class)
 	 */
 	public <T> BeanMap<T> newBeanMap(Class<T> c) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		return defaultSession.newBeanMap(c);
 	}
 
@@ -5235,7 +5173,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @see MarshallingSession#toBeanMap(Object)
 	 */
 	public <T> BeanMap<T> toBeanMap(T object) {
-		assertArgNotNull(ARG_object, object);
+		reqnn("object", object);
 		return defaultSession.toBeanMap(object);
 	}
 
@@ -5495,46 +5433,46 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_beanClassVisibility, beanClassVisibility)
-			.a(PROP_beanConstructorVisibility, beanConstructorVisibility)
-			.a(PROP_beanDictionary, beanDictionary)
-			.a(PROP_beanFieldVisibility, beanFieldVisibility)
-			.a(PROP_beanMethodVisibility, beanMethodVisibility)
-			.a(PROP_beansRequireDefaultConstructor, beansRequireDefaultConstructor)
-			.a(PROP_beansRequireSerializable, beansRequireSerializable)
-			.a(PROP_beansRequireSettersForGetters, beansRequireSettersForGetters)
-			.a(PROP_beansRequireSomeProperties, beansRequireSomeProperties)
-			.a(PROP_id, System.identityHashCode(this))
-			.a(PROP_ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnGetters)
-			.a(PROP_ignoreInvocationExceptionsOnSetters, ignoreInvocationExceptionsOnSetters)
-			.a(PROP_ignoreTransientFields, ignoreTransientFields)
-			.a(PROP_ignoreUnknownBeanProperties, ignoreUnknownBeanProperties)
-			.a(PROP_ignoreUnknownNullBeanProperties, ignoreUnknownNullBeanProperties)
-			.a(PROP_notBeanClasses, notBeanClasses)
-			.a(PROP_notBeanPackageNames, notBeanPackageNames)
-			.a(PROP_notBeanPackagePrefixes, notBeanPackagePrefixes)
-			.a(PROP_unsortedProperties, unsortedProperties)
-			.a(PROP_swaps, swaps)
-			.a(PROP_durationFormat, durationFormat)
-			.a(PROP_periodFormat, periodFormat)
-			.a(PROP_calendarFormat, calendarFormat)
-			.a(PROP_dateFormat, dateFormat)
-			.a(PROP_temporalFormat, temporalFormat)
-			.a(PROP_timeZoneFormat, timeZoneFormat)
-			.a(PROP_localeFormat, localeFormat)
-			.a(PROP_binaryFormat, binaryFormat)
-			.a(PROP_enumFormat, enumFormat)
-			.a(PROP_uuidFormat, uuidFormat)
-			.a(PROP_bitSetFormat, bitSetFormat)
-			.a(PROP_bigNumberFormat, bigNumberFormat)
-			.a(PROP_booleanFormat, booleanFormat)
-			.a(PROP_floatFormat, floatFormat)
-			.a(PROP_currencyFormat, currencyFormat)
-			.a(PROP_classFormat, classFormat)
-			.a(PROP_classLoader, classLoader)
-			.a(PROP_useInterfaceProxies, useInterfaceProxies)
-			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector)
-			.a(PROP_validateSchema, validateSchema);
+			.a("beanClassVisibility", beanClassVisibility)
+			.a("beanConstructorVisibility", beanConstructorVisibility)
+			.a("beanDictionary", beanDictionary)
+			.a("beanFieldVisibility", beanFieldVisibility)
+			.a("beanMethodVisibility", beanMethodVisibility)
+			.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+			.a("beansRequireSerializable", beansRequireSerializable)
+			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
+			.a("beansRequireSomeProperties", beansRequireSomeProperties)
+			.a("id", System.identityHashCode(this))
+			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.a("ignoreTransientFields", ignoreTransientFields)
+			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+			.a("notBeanClasses", notBeanClasses)
+			.a("notBeanPackageNames", notBeanPackageNames)
+			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
+			.a("unsortedProperties", unsortedProperties)
+			.a("swaps", swaps)
+			.a("durationFormat", durationFormat)
+			.a("periodFormat", periodFormat)
+			.a("calendarFormat", calendarFormat)
+			.a("dateFormat", dateFormat)
+			.a("temporalFormat", temporalFormat)
+			.a("timeZoneFormat", timeZoneFormat)
+			.a("localeFormat", localeFormat)
+			.a("binaryFormat", binaryFormat)
+			.a("enumFormat", enumFormat)
+			.a("uuidFormat", uuidFormat)
+			.a("bitSetFormat", bitSetFormat)
+			.a("bigNumberFormat", bigNumberFormat)
+			.a("booleanFormat", booleanFormat)
+			.a("floatFormat", floatFormat)
+			.a("currencyFormat", currencyFormat)
+			.a("classFormat", classFormat)
+			.a("classLoader", classLoader)
+			.a("useInterfaceProxies", useInterfaceProxies)
+			.a("useJavaBeanIntrospector", useJavaBeanIntrospector)
+			.a("validateSchema", validateSchema);
 	}
 
 	/**
@@ -5550,9 +5488,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with property annotations
-	})
 	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<BeanProp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		var cm = resolveClassMeta(ci, typeVarImpls);
 		var cm2 = cm;
@@ -5629,9 +5564,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param c The raw class.
 	 * @return The array of {@link ClassMeta} for each type parameter, or an empty array if parameters cannot be resolved.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for type parameter resolution
-	})
 	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
 			o = c;
@@ -5663,9 +5595,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		return new ClassMeta[0];
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with type variables
-	})
 	final ClassMeta resolveClassMeta(Type o, TypeVariables typeVars) {
 		if (o == null)
 			return null;

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.validation;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
@@ -219,16 +220,13 @@ public final class BeanValidator {
 		"java:S3776" // Cognitive complexity is marginally over (16) due to null-guard ternaries and the stable-ordering comparator; the validation payload shape is asserted by tests, so the logic is kept inline rather than fragmented.
 	})
 	private static List<ValidationViolation> toViolationList(Set<? extends ConstraintViolation<?>> violations) {
-		var result = new ArrayList<ValidationViolation>(violations.size());
-		for (var cv : violations) {
-			result.add(new ValidationViolation(
-				cv.getPropertyPath() == null ? null : cv.getPropertyPath().toString(),
-				cv.getMessage(),
-				cv.getConstraintDescriptor() == null || cv.getConstraintDescriptor().getAnnotation() == null
-					? null
-					: cv.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName()
-			));
-		}
+		var result = violations.stream().map(cv -> new ValidationViolation(
+			cv.getPropertyPath() == null ? null : cv.getPropertyPath().toString(),
+			cv.getMessage(),
+			cv.getConstraintDescriptor() == null || cv.getConstraintDescriptor().getAnnotation() == null
+				? null
+				: cv.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName()
+		)).collect(Collectors.toCollection(ArrayList::new));
 		// Stable ordering — Jakarta returns a Set, but tests assert on payload shape so we sort by path+message.
 		result.sort((a, b) -> {
 			var ap = a.getPath() == null ? "" : a.getPath();

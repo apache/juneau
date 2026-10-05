@@ -33,14 +33,14 @@ import org.apache.juneau.rest.server.*;
  * Handles aspects of matching and precedence ordering.
  *
  */
+@SuppressWarnings({
+	"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
+})
 public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 	/**
 	 * A file name pattern such as "favicon.ico" or "*.jsp".
 	 */
-	@SuppressWarnings({
-		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
-	})
 	static final class FileNameMatcher extends UrlPathMatcher {
 
 		private final String basePattern;
@@ -51,8 +51,8 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 			super(pattern);
 			var base = getBaseName(pattern);
 			var ext = getFileExtension(pattern);
-			basePattern = base.equals("*") ? null : base;
-			extPattern = ext.equals("*") ? null : ext;
+			basePattern = eq(base, "*") ? null : base;
+			extPattern = eq(ext, "*") ? null : ext;
 			this.comparator = pattern.replaceAll("\\w+", "X").replace("*", "W");
 		}
 
@@ -65,7 +65,7 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 			if (fileName.isPresent()) {
 				var base = getBaseName(fileName.get());
 				var ext = getFileExtension(fileName.get());
-				if ((basePattern == null || basePattern.equals(base)) && (extPattern == null || extPattern.equals(ext)))
+				if ((basePattern == null || eq(basePattern, base)) && (extPattern == null || eq(extPattern, ext)))
 					return new UrlPathMatch(pathInfo.getPath(), pathInfo.getParts().length, new String[0], new String[0]);
 			}
 			return null;
@@ -75,9 +75,6 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 	/**
 	 * A dir name pattern such as "/foo" or "/*".
 	 */
-	@SuppressWarnings({
-		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
-	})
 	static final class PathMatcher extends UrlPathMatcher {
 		private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
 
@@ -107,7 +104,7 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 
 			String[] parts2 = new UrlPath(pattern).getParts();
 
-			this.hasRemainder = parts2.length > 0 && "*".equals(parts2[parts2.length - 1]);
+			this.hasRemainder = parts2.length > 0 && eq(parts2[parts2.length - 1], "*");
 
 			parts2 = hasRemainder ? Arrays.copyOf(parts2, parts2.length - 1) : parts2;
 
@@ -145,8 +142,8 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 		 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 		 */
 		@SuppressWarnings({
-			"null", // Null handling verified by context or framework
 			"java:S3776", // Cognitive complexity acceptable for this specific logic
+			"null" // Null handling verified by context or framework
 		})
 		@Override
 		public UrlPathMatch match(UrlPath urlPath) {
@@ -164,7 +161,7 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 			}
 
 			for (var i = 0; i < parts.length; i++)
-				if (vars[i] == null && (pip.length <= i || ! ("*".equals(parts[i]) || pip[i].equals(parts[i]))))
+				if (vars[i] == null && (pip.length <= i || ! (eq(parts[i], "*") || pip[i].equals(parts[i]))))
 					return null;
 
 			String[] vals = varKeys == null ? null : new String[varKeys.length];

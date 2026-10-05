@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -93,7 +94,7 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var f = SamlAuthFilter.create().validator(validator).build();
 		var request = req(ACS, xml);
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
-		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void a03_publishedExampleRecipe_stillBindsRecipientOnFilterPath() throws Exception {
@@ -167,7 +168,7 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var f = SamlAuthFilter.create().validator(validator).build();
 		var request = reqNullRequestUrl("https", "sp.example.com", 443, "/saml/acs", xml);
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
-		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 
 	@Test void b04_nullRequestUrl_andNullScheme_failsClosedNotNpe() throws Exception {
@@ -179,6 +180,6 @@ class SamlAuthFilter_RecipientBinding_Test extends TestBase {
 		var f = SamlAuthFilter.create().validator(validator).build();
 		var request = reqNullRequestUrl(null, null, 0, null, xml);
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(request));
-		assertTrue(ex.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+		assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
 	}
 }

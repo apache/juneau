@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -25,6 +24,7 @@ import java.security.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
@@ -121,7 +121,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder introspectionEndpoint(URI value) {
-			introspectionEndpoint = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
+			introspectionEndpoint = UriUtils.assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -146,7 +146,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -158,7 +158,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -169,7 +169,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder tokenCache(TokenCache value) {
-			tokenCache = assertArgNotNull("value", value);
+			tokenCache = reqnn("value", value);
 			return this;
 		}
 
@@ -181,7 +181,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder cacheTtl(Duration value) {
-			assertArgNotNull("value", value);
+			reqnn("value", value);
 			if (value.isZero() || value.isNegative())
 				throw iaex("cacheTtl must be positive");
 			if (value.compareTo(MAX_CACHE_TTL) > 0)
@@ -202,9 +202,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder requiredScopes(String... scopes) {
-			assertArgNotNull("scopes", scopes);
+			reqnn("scopes", scopes);
 			for (var s : scopes) {
-				assertArgNotNullOrBlank("scope", s);
+				reqnb("scope", s);
 				requiredScopes.add(s);
 			}
 			return this;
@@ -228,9 +228,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder audience(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("audience", v);
+				reqnb("audience", v);
 				expectedAudiences.add(v);
 			}
 			return this;
@@ -258,7 +258,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -273,7 +273,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -378,7 +378,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 
 	@Override /* Overridden from TokenValidator */
 	public Principal validate(String token) throws AuthenticationException {
-		assertArgNotNullOrBlank("token", token);
+		reqnb("token", token);
 		var cached = tokenCache.getPrincipal(token);
 		if (cached.isPresent())
 			return cached.get();
@@ -430,11 +430,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		var s = success.getScope();
 		if (s == null)
 			return Collections.emptySet();
-		var out = new LinkedHashSet<String>();
-		for (var v : s.toStringList())
-			if (v != null && !v.isBlank()) // HTT: v==null branch unreachable; Nimbus Scope.toStringList() never returns null entries
-				out.add(v);
-		return out;
+		return s.toStringList().stream()
+			.filter(v -> v != null && !v.isBlank()) // HTT: v==null branch unreachable; Nimbus Scope.toStringList() never returns null entries
+			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
 	/**

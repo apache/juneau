@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -37,12 +36,9 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_value)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class EntityTag {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -68,11 +64,11 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public EntityTag(String value) {
-		assertArgNotNull(ARG_value, value);
+		reqnn("value", value);
 
 		value = trim(emptyIfNull(value));
 		isWeak = value.startsWith("W/");
-		isAny = "*".equals(value);
+		isAny = eq(value, "*");
 
 		if (! isAny) {
 			if (isWeak)

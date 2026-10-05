@@ -17,21 +17,27 @@
 package org.apache.juneau.rest.server.widgets;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * The one closed status-tone palette shared by every surface that paints a semantic status colour:
  * {@code info} / {@code success} / {@code warning} / {@code error} / {@code neutral}.
  *
  * <p>
- * Exactly five values, and no synonyms.  A surface that accepts a tone accepts a {@link #wire()} token from
- * {@link #WIRE_TOKENS} and <b>fails closed</b> on anything else, so the same five names mean the same five things in
- * Java, in the emitted {@code is-<tone>} CSS class, and in the {@code juneau-renders.js} tone map.
+ * Exactly five values, and no synonyms.  Server-side checks accept a {@link #wire()} token from
+ * {@link #WIRE_TOKENS} and reject anything else; the client-side painters (the pill, the QuickStats tiles and the
+ * dialog-bar badge) silently ignore an off-palette token and apply no tone class.  The same five names therefore mean
+ * the same five things in Java, in the emitted {@code is-<tone>} CSS class, and in the {@code juneau-renders.js} tone
+ * map.
  *
  * <p>
- * Deliberately distinct from {@link Tone}, which is the older {@link Badge} overlay palette
- * ({@code NEUTRAL, ACCENT, SUCCESS, DANGER, WARN}) and maps to a different set of {@code --jc-*} tokens.  The two are
- * not interchangeable: an {@code ACCENT}/{@code DANGER}/{@code WARN} name is not a status tone and is rejected by any
- * surface that takes a {@link StatusTone}.
+ * {@link Badge#tone} uses this same enum and serializes it as the enum name.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jk>boolean</jk> <jv>ok</jv> = StatusTone.<jsm>isValid</jsm>(<js>"warning"</js>);  <jc>// true</jc>
+ * 	String <jv>token</jv> = StatusTone.<jsf>WARNING</jsf>.wire();  <jc>// "warning"</jc>
+ * </p>
  *
  * @since 10.0.0
  */
@@ -56,18 +62,16 @@ public enum StatusTone {
 	 * The five legal wire tokens, in declaration order.
 	 *
 	 * <p>
-	 * The single source of truth every fail-closed tone check reads, so no caller can hand-roll a fourth or sixth
+	 * The single source of truth every server-side tone check reads, so no caller can hand-roll a fourth or sixth
 	 * value.
 	 */
 	@SuppressWarnings({
-		"java:S2386" // Read cross-module by juneau-rest-server-views (ViewDef); narrowing visibility breaks that public API. Value is an unmodifiableSet, so it is effectively immutable despite the Set type.
+		"java:S2386" // Public for adopters and tests; the value is an unmodifiable set, so it cannot be mutated despite the Set type.
 	})
 	public static final Set<String> WIRE_TOKENS = wireTokens();
 
 	private static Set<String> wireTokens() {
-		var s = new LinkedHashSet<String>();
-		for (var t : values())
-			s.add(t.wire());
+		Set<String> s = Arrays.stream(values()).map(StatusTone::wire).collect(Collectors.toCollection(LinkedHashSet<String>::new));
 		return Collections.unmodifiableSet(s);
 	}
 

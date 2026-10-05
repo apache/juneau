@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -123,13 +123,11 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource"   // readTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9149", // Per-format static factories intentionally shadow the parent's.
+	"resource" // readTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
 public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenReadable, ArrayRecordReadable {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -163,7 +161,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			validateEnd = copyFrom.validateEnd;
 		}
 
@@ -174,7 +172,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonParser copyFrom) {
-			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			super(reqnn("copyFrom", copyFrom));
 			validateEnd = copyFrom.validateEnd;
 		}
 

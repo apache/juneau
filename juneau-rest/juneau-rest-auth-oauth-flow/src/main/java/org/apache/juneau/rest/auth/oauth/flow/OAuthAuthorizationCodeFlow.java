@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.auth.oauth.flow;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.UriUtils.*;
 
@@ -68,6 +67,7 @@ import com.nimbusds.openid.connect.sdk.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"deprecation", // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
 	"java:S1192", // Duplicate string literals are OAuth protocol parameter names (e.g. "code", "grant_type"); intentional
 	"java:S9358" // Ternary chooses a different Scope constructor arity; moving it inside one call is not equivalent.
 })
@@ -106,7 +106,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder authorizationEndpoint(URI value) {
-			authorizationEndpoint = assertSecureOrLoopback(assertArgNotNull("value", value));
+			authorizationEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -117,7 +117,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull("value", value));
+			tokenEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -128,7 +128,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = reqnb("value", value);
 			return this;
 		}
 
@@ -139,7 +139,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			reqnb("value", value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -151,7 +151,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -162,7 +162,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder redirectUri(URI value) {
-			redirectUri = assertArgNotNull("value", value);
+			redirectUri = reqnn("value", value);
 			return this;
 		}
 
@@ -173,9 +173,9 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -188,7 +188,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+			resource = reqnn("value", value);
 			return this;
 		}
 
@@ -199,8 +199,8 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -212,7 +212,7 @@ public class OAuthAuthorizationCodeFlow {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -269,12 +269,9 @@ public class OAuthAuthorizationCodeFlow {
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @return The authorization URL.
 	 */
-	@SuppressWarnings({
-		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
-	})
 	public URI buildAuthorizationUrl(String state, CodeChallenge codeChallenge) {
-		assertArgNotNullOrBlank("state", state);
-		assertArgNotNull("codeChallenge", codeChallenge);
+		reqnb("state", state);
+		reqnn("codeChallenge", codeChallenge);
 		Scope nimbusScope = scopes.isEmpty() ? null : new Scope(scopes.toArray(new String[0]));
 		var requestBuilder = new AuthorizationRequest.Builder(new ResponseType(ResponseType.Value.CODE), new ClientID(clientId))
 			.endpointURI(authorizationEndpoint)
@@ -311,13 +308,10 @@ public class OAuthAuthorizationCodeFlow {
 	 * 	parameters.  May be <jk>null</jk>.
 	 * @return The authorization URL.
 	 */
-	@SuppressWarnings({
-		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
-	})
 	public URI buildAuthenticationUrl(String state, CodeChallenge codeChallenge, String nonce, Consumer<AuthenticationRequest.Builder> customizer) {
-		assertArgNotNullOrBlank("state", state);
-		assertArgNotNull("codeChallenge", codeChallenge);
-		assertArgNotNullOrBlank("nonce", nonce);
+		reqnb("state", state);
+		reqnn("codeChallenge", codeChallenge);
+		reqnb("nonce", nonce);
 		Scope nimbusScope = scopes.isEmpty() ? new Scope("openid") : new Scope(scopes.toArray(new String[0]));
 		var builder = new AuthenticationRequest.Builder(new ResponseType(ResponseType.Value.CODE), nimbusScope, new ClientID(clientId), redirectUri)
 			.endpointURI(authorizationEndpoint)
@@ -339,8 +333,8 @@ public class OAuthAuthorizationCodeFlow {
 	 * @return The acquired token.
 	 */
 	public OAuthToken exchange(String code, CodeVerifier codeVerifier) {
-		assertArgNotNullOrBlank("code", code);
-		assertArgNotNull("codeVerifier", codeVerifier);
+		reqnb("code", code);
+		reqnn("codeVerifier", codeVerifier);
 		var grant = new AuthorizationCodeGrant(new AuthorizationCode(code), redirectUri, codeVerifier);
 		TokenRequest.Builder reqBuilder;
 		if (clientSecretSupplier != null) {

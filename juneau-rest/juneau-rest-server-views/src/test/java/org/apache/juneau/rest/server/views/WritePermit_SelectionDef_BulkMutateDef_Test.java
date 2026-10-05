@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -126,7 +127,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 	 */
 	@Test void c05_onlyOneCreateOverload_andItsSignatureRequiresWritePermitFirst() {
 		var createMethods = Arrays.stream(BulkMutateDef.class.getMethods())
-			.filter(m -> m.getName().equals("create"))
+			.filter(m -> eq(m.getName(), "create"))
 			.toList();
 		assertEquals(1, createMethods.size(), () -> "expected exactly one create(...) overload: " + createMethods);
 		var m = createMethods.get(0);

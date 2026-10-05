@@ -23,8 +23,8 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961", // High assertion count acceptable in comprehensive test
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5961" // High assertion count acceptable in comprehensive test
 })
 class Args_Test extends TestBase {
 

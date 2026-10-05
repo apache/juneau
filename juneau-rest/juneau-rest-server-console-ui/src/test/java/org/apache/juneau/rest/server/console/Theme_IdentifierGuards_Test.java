@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -78,7 +79,6 @@ class Theme_IdentifierGuards_Test extends TestBase {
 
 	@Test void a05_positiveControl_roundTrips() {
 		var theme = Theme.create("salesforce").token("--jc-accent", "#1589EE").build();
-		assertEquals("salesforce", theme.getName());
-		assertEquals("#1589EE", theme.getTokens().get("--jc-accent"));
+		assertBean(theme, "name,tokens{--jc-accent}", "salesforce,{#1589EE}");
 	}
 }

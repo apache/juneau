@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 // Single-type import, not the usual wildcard: this package declares its own Method type, which would otherwise
 // shadow java.lang.reflect.Method here.
@@ -25,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Which HTTP methods are safe, and the startup check that an operation declared {@link Mutating} is not bound to
@@ -100,7 +100,7 @@ public class MethodSafety {
 	 * @throws InternalServerError If a mutating operation is bound to a safe method.
 	 */
 	public static void check(List<RestOpContext> ops) {
-		assertArgNotNull("ops", ops);
+		reqnn("ops", ops);
 		for (var op : ops)
 			checkOperation(op.getHttpMethod(), op.getJavaMethod());
 	}
@@ -118,7 +118,7 @@ public class MethodSafety {
 	 * @throws InternalServerError If {@code javaMethod} is declared mutating and {@code httpMethod} is safe.
 	 */
 	public static void checkOperation(String httpMethod, Method javaMethod) {
-		assertArgNotNull("javaMethod", javaMethod);
+		reqnn("javaMethod", javaMethod);
 
 		// Resolved through MethodInfo rather than Method.getAnnotation, so that an operation inheriting its
 		// declaration from a superclass or interface method is seen. Method.getAnnotation does not walk overrides,
@@ -130,7 +130,7 @@ public class MethodSafety {
 			return;
 
 		// A wildcard operation answers GET along with everything else, so it is bound to a safe method too.
-		var wildcard = "*".equals(httpMethod);
+		var wildcard = eq(httpMethod, "*");
 		if (! wildcard && ! isSafe(httpMethod))
 			return;
 

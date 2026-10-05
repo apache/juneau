@@ -100,9 +100,6 @@ public class FormDef implements Widget {
 	 * @since 10.0.0
 	 */
 	@BeanType(properties="name,label,type,required,value,options,pattern,maxLength,help,actionId")
-	@SuppressWarnings({
-		"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
-	})
 	public static class Input {
 
 		/**
@@ -333,10 +330,10 @@ public class FormDef implements Widget {
 			if (name == null || name.isBlank())
 				throw iaex("FormDef.Input name must not be null or blank.");
 			var t = resolveType();
-			var isAction = "action".equals(t);
-			var isTextual = "text".equals(t) || "textarea".equals(t);
+			var isAction = eq(t, "action");
+			var isTextual = eqa(t, "text", "textarea");
 
-			validateOptions("select".equals(t));
+			validateOptions(eq(t, "select"));
 			validateTextualOnlyFields(isTextual);
 			validatePattern();
 			validateActionField(isAction);
@@ -423,9 +420,6 @@ public class FormDef implements Widget {
 	 * @since 10.0.0
 	 */
 	@BeanType(properties="id,label,fields")
-	@SuppressWarnings({
-		"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
-	})
 	public static class Section {
 
 		/** The section's stable id, used as the strip tab's identity.  Must not be blank, and must be unique in the form. */

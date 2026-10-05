@@ -136,3 +136,27 @@
 	gap: 0.5em;
 	margin-top: 0.5em;
 }
+
+.juneau-config-sort-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.juneau-config-sort-row-unsorted {
+	opacity: 0.65;
+}
+
+.juneau-config-sort-name {
+	min-width: 7em;
+	flex: 1 1 7em;
+}
+
+.juneau-config-sort-dir {
+	min-width: 7em;
+}
+
+.juneau-config-sort-move {
+	padding: 0.15em 0.45em;
+}

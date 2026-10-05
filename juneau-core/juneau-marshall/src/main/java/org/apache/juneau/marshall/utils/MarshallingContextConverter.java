@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.*;
  */
 @SuppressWarnings({
 	"java:S6541", // Stateless converter, singleton for convenience
-	"java:S6548"  // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe shared converter
+	"java:S6548" // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe shared converter
 })
 public class MarshallingContextConverter implements Converter {
 

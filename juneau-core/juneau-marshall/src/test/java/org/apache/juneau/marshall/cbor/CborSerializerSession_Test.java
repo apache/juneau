@@ -75,7 +75,9 @@ class CborSerializerSession_Test extends TestBase {
 		list.add(list);
 		var s = CborSerializer.create().detectRecursions().ignoreRecursions().build();
 		var bytes = s.write(list);
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // CborParser.read(bytes, List.class, Object.class) returns a raw List that is cast to List<Object>
+		})
 		var p = (List<Object>) CborParser.DEFAULT.read(bytes, List.class, Object.class);
 		assertEquals("x", p.get(0));
 		assertNull(p.get(1));

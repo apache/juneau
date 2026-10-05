@@ -33,8 +33,8 @@ import org.junit.jupiter.params.provider.*;
  * by {@link CsvParser_Test} or {@link Csv_Test}.
  */
 @SuppressWarnings({
-	"unchecked", // parser produces unparameterized generics
-	"rawtypes"   // raw List/Map needed for several parser-result casts
+	"rawtypes", // raw List/Map needed for several parser-result casts
+	"unchecked" // parser produces unparameterized generics
 })
 class CsvParserSession_Test extends TestBase {
 

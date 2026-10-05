@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class Value_SupplierTypedFieldType_Test extends TestBase {
 

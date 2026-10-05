@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
@@ -52,12 +51,9 @@ import com.nimbusds.oauth2.sdk.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class McpClientRegistrationManager {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -95,7 +91,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder store(McpClientRegistrationStore value) {
-			store = assertArgNotNull(ARG_value, value);
+			store = reqnn("value", value);
 			return this;
 		}
 
@@ -106,7 +102,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder preRegistered(McpClientRegistration value) {
-			preRegistered = assertArgNotNull(ARG_value, value);
+			preRegistered = reqnn("value", value);
 			return this;
 		}
 
@@ -117,7 +113,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder applicationType(McpApplicationType value) {
-			applicationType = assertArgNotNull(ARG_value, value);
+			applicationType = reqnn("value", value);
 			return this;
 		}
 
@@ -129,8 +125,8 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder redirectUris(List<URI> values) {
-			assertArgNotNull("values", values);
-			assertArg(! values.isEmpty(), "redirectUris must not be empty");
+			reqnn("values", values);
+			req(! values.isEmpty(), "redirectUris must not be empty");
 			var copy = u(cp(values));
 			redirectUrisSupplier = () -> copy;
 			return this;
@@ -144,7 +140,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder redirectUrisSupplier(Supplier<List<URI>> value) {
-			redirectUrisSupplier = assertArgNotNull(ARG_value, value);
+			redirectUrisSupplier = reqnn("value", value);
 			return this;
 		}
 
@@ -155,9 +151,9 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			reqnn("values", values);
 			for (var v : values) {
-				assertArgNotNullOrBlank("scope", v);
+				reqnb("scope", v);
 				scopes.add(v);
 			}
 			return this;
@@ -181,7 +177,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder clientName(String value) {
-			clientName = assertArgNotNullOrBlank(ARG_value, value);
+			clientName = reqnb("value", value);
 			return this;
 		}
 
@@ -192,7 +188,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder initialAccessToken(String value) {
-			assertArgNotNullOrBlank(ARG_value, value);
+			reqnb("value", value);
 			initialAccessTokenSupplier = () -> value;
 			return this;
 		}
@@ -204,8 +200,8 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull(ARG_value, value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			reqnn("value", value);
+			req(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
 		}
@@ -217,7 +213,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
+			httpRequestConfigurator = reqnn("value", value);
 			return this;
 		}
 
@@ -233,7 +229,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder registrarFunction(Function<OidcMetadata,McpClientRegistration> value) {
-			dcrOverride = assertArgNotNull(ARG_value, value);
+			dcrOverride = reqnn("value", value);
 			return this;
 		}
 
@@ -288,7 +284,7 @@ public class McpClientRegistrationManager {
 	 * 	advertises no {@code registration_endpoint} and no matching pre-registered creds exist).
 	 */
 	public McpClientRegistration resolve(OidcMetadata as) {
-		assertArgNotNull("as", as);
+		reqnn("as", as);
 		var issuer = as.issuer();
 
 		// Pre-registered credentials: use only if bound to this exact AS; a mismatch means the AS migrated (SEP-2352

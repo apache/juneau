@@ -38,15 +38,15 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",  // ResponseBeanProcessor manages Closeable resources
-	"java:S3740" // Raw Class/BeanMeta types used for reflective response bean processing where generic type parameters are erased
+	"java:S3740", // Raw Class/BeanMeta types used for reflective response bean processing where generic type parameters are erased
+	"resource" // ResponseBeanProcessor manages Closeable resources
 })
 public class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
 	@SuppressWarnings({
-		"java:S6541", // Session objects are single-threaded by design
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541" // Session objects are single-threaded by design
 	})
 	public int process(RestOpSession opSession) throws IOException {
 
@@ -80,7 +80,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 				var o = hm.getGetter().invoke(output);
 				var ps = hm.getSchema();
 				var serializer = hm.getSerializer().orElse(defaultPartSerializer).getPartSession();
-				if ("*".equals(n)) {
+				if (eq(n, "*")) {
 					for (var o2 : iterate(o)) {
 						HttpHeader h;
 						if (o2 instanceof Map.Entry o3) {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -46,10 +47,7 @@ class Theme_Red_Test extends TestBase {
 
 	@Test void b01_recoloredSignatureValues() {
 		var tokens = Theme.RED.getTokens();
-		assertEquals("#BF2600", tokens.get("--jc-chrome-bg"));
-		assertEquals("#FF5630", tokens.get("--jc-accent"));
-		assertEquals("#BF2600", tokens.get("--jc-link"));
-		assertEquals("#BF2600", tokens.get("--jc-btn-primary"));
+		assertBean(tokens, "--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary", "#BF2600,#FF5630,#BF2600,#BF2600");
 	}
 
 	@Test void b02_keptFromOpen_semanticStatusAndTagValues_areUnchanged() {
@@ -64,9 +62,8 @@ class Theme_Red_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-bg"), tokens.get("--jc-tag-red-bg"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
-		assertEquals("16px 16px 8px", tokens.get("--jc-card-padding"));
 		assertEquals(Theme.OPEN.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
-		assertEquals("0 2px 2px rgba(0, 0, 0, 0.05)", tokens.get("--jc-card-shadow"));
+		assertBean(tokens, "--jc-card-padding,--jc-card-shadow", "16px 16px 8px,0 2px 2px rgba(0, 0, 0, 0.05)");
 	}
 
 	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {

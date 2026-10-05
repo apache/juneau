@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://juneau.apache.org/schemas/juneau-page/1.0/juneau-page.schema.json",
+  "title": "Juneau console page contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "title", "nav", "activeNav", "cards"],
+  "properties": {
+    "version":   { "const": "1" },
+    "title":     { "type": "string" },
+    "theme":     { "$ref": "#/$defs/theme" },
+    "header":    { "$ref": "#/$defs/header" },
+    "footer":    { "$ref": "#/$defs/footer" },
+    "navLayout": { "enum": ["horizontal", "vertical"], "default": "horizontal" },
+    "nav":       { "type": "array", "items": { "$ref": "#/$defs/navNode" } },
+    "activeNav": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+    "cards":     { "type": "array", "items": { "$ref": "#/$defs/card" } }
+  },
+  "$defs": {
+    "id":       { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "slotName": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+    "url":      { "type": "string", "minLength": 1 },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": { "name": { "type": "string", "minLength": 1 } }
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "href"],
+      "properties": {
+        "label":  { "type": "string", "minLength": 1 },
+        "href":   { "$ref": "#/$defs/url" },
+        "title":  { "type": "string" },
+        "target": { "enum": ["_self", "_blank"] }
+      }
+    },
+    "logo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src"],
+      "properties": {
+        "src":  { "$ref": "#/$defs/url" },
+        "href": { "$ref": "#/$defs/url" },
+        "alt":  { "type": "string" }
+      }
+    },
+    "userMenu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label":    { "type": "string", "minLength": 1 },
+        "initials": { "type": "string", "maxLength": 3 },
+        "avatar":   { "$ref": "#/$defs/url" },
+        "items":    { "type": "array", "items": { "$ref": "#/$defs/link" } }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/slotName" },
+      "additionalProperties": { "type": "string", "description": "id of a <template data-slot> element" }
+    },
+    "header": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title":    { "type": "string" },
+        "subtitle": { "type": "string" },
+        "logo":     { "$ref": "#/$defs/logo" },
+        "links":    { "type": "array", "items": { "$ref": "#/$defs/link" } },
+        "userMenu": { "$ref": "#/$defs/userMenu" },
+        "chrome":   { "type": "boolean", "default": false },
+        "slots": {
+          "allOf": [ { "$ref": "#/$defs/slots" } ],
+          "propertyNames": { "enum": ["brand", "actions", "replace", "banner"] }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text":  { "type": "string", "description": "Trusted, author-supplied HTML rendered as-is by the shell (not escaped) - entities decode and markup becomes real elements. Must come only from a server-side template/config value, never from request data." },
+        "links": { "type": "array", "items": { "$ref": "#/$defs/link" } },
+        "slots": {
+          "allOf": [ { "$ref": "#/$defs/slots" } ],
+          "propertyNames": { "enum": ["content"] }
+        }
+      },
+      "not": { "required": ["text", "slots"], "properties": { "slots": { "required": ["content"] } } }
+    },
+    "navNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id":       { "$ref": "#/$defs/id" },
+        "label":    { "type": "string", "minLength": 1 },
+        "href":     { "$ref": "#/$defs/url" },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/navNode" } }
+      },
+      "anyOf": [
+        { "required": ["href"] },
+        { "required": ["children"], "properties": { "children": { "minItems": 1 } } }
+      ]
+    },
+    "card": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id":       { "$ref": "#/$defs/id" },
+        "type":     { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "src":      { "$ref": "#/$defs/url" },
+        "title":    { "type": "string" },
+        "template": { "type": "string", "description": "id of a <template data-card> element" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/htmlCard" },
+        { "$ref": "#/$defs/datatablesCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables"] } } } }
+      ]
+    },
+    "htmlCard": {
+      "properties": {
+        "type": { "const": "html" },
+        "id": true, "src": true, "title": true, "template": true,
+        "bare": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false,
+      "oneOf": [ { "required": ["template"] }, { "required": ["src"] } ]
+    },
+    "datatablesCard": {
+      "description": "C1 bridge only. C2 replaces this definition.",
+      "properties": {
+        "type":  { "const": "datatables" },
+        "id": true, "src": true, "title": true,
+        "table": { "oneOf": [ { "type": "string", "minLength": 1 }, { "type": "object" } ] },
+        "page":  { "type": "object" }
+      },
+      "additionalProperties": false,
+      "required": ["table"]
+    }
+  }
+}

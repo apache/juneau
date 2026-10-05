@@ -28,7 +28,7 @@ package org.apache.juneau.rest.server.widgets;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
 public class EventCategory {
 

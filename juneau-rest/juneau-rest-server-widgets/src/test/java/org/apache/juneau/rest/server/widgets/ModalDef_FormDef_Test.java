@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,6 +35,9 @@ import org.junit.jupiter.api.*;
  * shape, the typed FormDef inputs the client paints (never template markup), plus the omit-when-unset rule for
  * the optional form and idempotency key.
  */
+@SuppressWarnings({
+	"unchecked" // The "form" entry of the parsed JSON Map is cast to Map<String,Object>
+})
 class ModalDef_FormDef_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -406,7 +410,6 @@ class ModalDef_FormDef_Test extends TestBase {
 		var modal = ModalDef.create("t").checked().form(FormDef.ofTemplate("u"));
 		var json = Json.of(modal);
 		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
-		@SuppressWarnings("unchecked")
 		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
 		assertEquals("2", formMap.get("contractVersion"));
 	}
@@ -454,7 +457,6 @@ class ModalDef_FormDef_Test extends TestBase {
 		var modal = ModalDef.create("Pick one").form(badForm);
 		var json = Json.of(modal);
 		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
-		@SuppressWarnings("unchecked")
 		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
 		assertEquals("2", formMap.get("contractVersion"));
 	}
@@ -567,9 +569,9 @@ class ModalDef_FormDef_Test extends TestBase {
 	/** Builds a minimal valid field of the given non-text type (for cross-type rejection tests). */
 	private static FormDef.Input baseFor(String type) {
 		var i = FormDef.Input.of("f", "F", type);
-		if ("select".equals(type))
+		if (eq(type, "select"))
 			i.option("a", "A");
-		else if ("action".equals(type))
+		else if (eq(type, "action"))
 			i.actionId("ack");
 		return i;
 	}

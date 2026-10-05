@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 /**
  * A simple mutable float value.
@@ -48,12 +49,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class FloatHolder extends Holder<Float> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new float value initialized to <c>0.0f</c>.
@@ -126,7 +124,7 @@ public class FloatHolder extends Holder<Float> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean is(float other, float precision) {
-		assertArg(precision >= 0, "Precision must be non-negative");
+		req(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null) {
 			return false;
@@ -157,8 +155,8 @@ public class FloatHolder extends Holder<Float> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean isAny(float precision, float...values) {
-		assertArg(precision >= 0, "Precision must be non-negative");
-		assertArgNotNull(ARG_values, values);
+		req(precision >= 0, "Precision must be non-negative");
+		reqnn("values", values);
 		var v = get();
 		if (v == null)
 			return false;

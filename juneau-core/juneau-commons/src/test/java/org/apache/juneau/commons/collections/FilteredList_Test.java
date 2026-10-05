@@ -17,8 +17,8 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -605,7 +605,7 @@ class FilteredList_Test extends TestBase {
 			.create(Integer.class)
 			.filter(v -> v != null)
 			.elementFunction(o -> {
-				assertArgNotNull("element", o);
+				reqnn("element", o);
 				return Integer.parseInt(o.toString());
 			})
 			.build();

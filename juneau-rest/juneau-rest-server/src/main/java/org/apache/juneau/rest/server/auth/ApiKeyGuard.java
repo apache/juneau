@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.security.*;
@@ -108,7 +108,7 @@ public class ApiKeyGuard extends RestGuard {
 
 		private ApiKeyStore store;
 		private Source source = Source.HEADER;
-		private String name = RestServerConstants.API_KEY_HEADER;
+		private String name = "X-API-Key";
 		private String realm = "api";
 
 		/**
@@ -123,7 +123,7 @@ public class ApiKeyGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder store(ApiKeyStore value) {
-			store = assertArgNotNull("value", value);
+			store = reqnn("value", value);
 			return this;
 		}
 
@@ -139,7 +139,7 @@ public class ApiKeyGuard extends RestGuard {
 		 */
 		public Builder fromHeader(String value) {
 			source = Source.HEADER;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -151,7 +151,7 @@ public class ApiKeyGuard extends RestGuard {
 		 */
 		public Builder fromQuery(String value) {
 			source = Source.QUERY;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -163,7 +163,7 @@ public class ApiKeyGuard extends RestGuard {
 		 */
 		public Builder fromCookie(String value) {
 			source = Source.COOKIE;
-			name = assertArgNotNullOrBlank("value", value);
+			name = reqnb("value", value);
 			return this;
 		}
 
@@ -174,7 +174,7 @@ public class ApiKeyGuard extends RestGuard {
 		 * @return This object.
 		 */
 		public Builder realm(String value) {
-			realm = assertArgNotNullOrBlank("value", value);
+			realm = reqnb("value", value);
 			return this;
 		}
 
@@ -238,7 +238,7 @@ public class ApiKeyGuard extends RestGuard {
 			res.setHeader(WWW_AUTHENTICATE, challenge);
 			throw new AuthenticationException(e, "API key lookup failed").wwwAuthenticate(challenge);
 		}
-		req.getAttributes().set(RestServerConstants.PRINCIPAL_ATTR, p);
+		req.getAttributes().set("juneau.principal", p);
 		return true;
 	}
 

@@ -321,7 +321,9 @@ class ArrayRecordStream_Test extends TestBase {
 		assertArrayEquals(bulk, baos.toByteArray());
 
 		// Round-trip: parse the streamed bytes back and verify.
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The (List<Bean>) cast of MsgPackParser.read(..., List.class, Bean.class) is safe because the element type is passed to the parse call.
+		})
 		var got = (List<Bean>) MsgPackParser.DEFAULT.read(baos.toByteArray(), List.class, Bean.class);
 		assertEquals(3, got.size());
 		assertEquals("a", got.get(0).name);

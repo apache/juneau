@@ -152,7 +152,7 @@ class AuthArg_Test extends TestBase {
 
 		@RestStartCall
 		public void stashWrongType(HttpServletRequest req) {
-			req.setAttribute(RestServerConstants.PRINCIPAL_ATTR, "not-a-principal");
+			req.setAttribute("juneau.principal", "not-a-principal");
 		}
 
 		@RestGet(path="/me")

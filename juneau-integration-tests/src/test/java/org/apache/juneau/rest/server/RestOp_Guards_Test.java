@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.guard.*;
@@ -75,13 +77,13 @@ class RestOp_Guards_Test extends TestBase {
 		public static class A1 extends RestGuard {
 			@Override /* RestGuard */
 			public boolean isRequestAllowed(RestRequest req) {
-				return req.getQueryParam("t1").orElse("").equals("1");
+				return eq(req.getQueryParam("t1").orElse(""), "1");
 			}
 		}
 		public static class A2 extends RestGuard {
 			@Override /* RestGuard */
 			public boolean isRequestAllowed(RestRequest req) {
-				return req.getQueryParam("t2").orElse("").equals("2");
+				return eq(req.getQueryParam("t2").orElse(""), "2");
 			}
 		}
 	}

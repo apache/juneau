@@ -38,6 +38,9 @@ import org.junit.jupiter.api.io.*;
  * {@code DELETE} delete-tree path, the {@code VIEW}/{@code DOWNLOAD} disabled branches, and the not-found
  * branches inside the disabled-views error path.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class DirectoryResource_Coverage_Test extends TestBase {
 
 	@TempDir
@@ -63,10 +66,10 @@ class DirectoryResource_Coverage_Test extends TestBase {
 
 		static Config buildConfig(boolean views, boolean uploads, boolean deletes) {
 			var cfg = Config.create().memStore().build();
-			cfg.set(DIRECTORY_RESOURCE_rootDir, dirRoot.toString());
-			cfg.set(DIRECTORY_RESOURCE_allowViews, String.valueOf(views));
-			cfg.set(DIRECTORY_RESOURCE_allowUploads, String.valueOf(uploads));
-			cfg.set(DIRECTORY_RESOURCE_allowDeletes, String.valueOf(deletes));
+			cfg.set("DirectoryResource." + "rootDir.s", dirRoot.toString());
+			cfg.set("DirectoryResource." + "allowViews.b", String.valueOf(views));
+			cfg.set("DirectoryResource." + "allowUploads.b", String.valueOf(uploads));
+			cfg.set("DirectoryResource." + "allowDeletes.b", String.valueOf(deletes));
 			return cfg;
 		}
 	}
@@ -86,9 +89,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	}
 
 	// Tests intentionally leave resources open; try-with-resources would obscure the test intent.
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	private static MockRestClient buildClient(Class<?> resourceClass) {
 		return MockRestClient.create(resourceClass)
 			.disableRedirectHandling()
@@ -110,17 +110,11 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// B. View / download disabled branches (allowViews=false).
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b01_view_disabled_returns405() throws Exception {
 		try (var c = buildClient(AllDisabledDirResource.class)) {
 			c.request("VIEW", "/hello.txt").run().assertStatus(405);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b02_download_disabled_returns405() throws Exception {
 		try (var c = buildClient(AllDisabledDirResource.class)) {
 			c.request("DOWNLOAD", "/hello.txt").run().assertStatus(405);
@@ -131,17 +125,11 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// C. Delete branches.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void c01_delete_disabled_returns405() throws Exception {
 		try (var c = buildClient(ReadOnlyDirResource.class)) {
 			c.delete("/hello.txt").run().assertStatus(405);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void c02_delete_existing_file_returnsRedirect() throws Exception {
 		var f = dirRoot.resolve("transient.txt");
 		Files.writeString(f, "x");
@@ -150,9 +138,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 			assertFalse(Files.exists(f));
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void c03_delete_directory_recurses() throws Exception {
 		var d = dirRoot.resolve("trans-dir");
 		Files.createDirectories(d);
@@ -168,17 +153,11 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// D. Upload (PUT) branches.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void d01_put_disabled_returns405() throws Exception {
 		try (var c = buildClient(ReadOnlyDirResource.class)) {
 			c.put("/uploaded.txt", "data").run().assertStatus(405);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void d02_put_creates_new_file() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			c.put("/uploaded.txt", "uploaded-content").run().assertStatus(303);
@@ -188,9 +167,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 			Files.deleteIfExists(f);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void d03_put_overwrites_existing_file() throws Exception {
 		var f = dirRoot.resolve("existing.txt");
 		Files.writeString(f, "original");
@@ -206,9 +182,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// E. FileResource action listing — exercise allowViews/allowDeletes branches.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void e01_actionListing_allowed_includesViewDownload_butNotDelete() throws Exception {
 		// The ReadOnlyDirResource has views=true but deletes=false, so the listing should expose
 		// "view" / "download" actions but not "delete".
@@ -223,9 +196,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 				"DELETE action must not appear when allowDeletes=false");
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void e02_actionListing_allDisabled_doesNotIncludeFileActions() throws Exception {
 		try (var c = buildClient(AllDisabledDirResource.class)) {
 			var resp = c.get("/").run();
@@ -239,9 +209,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 				"DELETE action must not appear when allowDeletes=false");
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void e03_actionListing_fullyEnabled_includesAllActions() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			var resp = c.get("/").run();
@@ -257,25 +224,16 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// F. View not-found branches.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void f01_view_notFound_returns404() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			c.request("VIEW", "/nope.txt").run().assertStatus(404);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void f02_download_notFound_returns404() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			c.request("DOWNLOAD", "/nope.txt").run().assertStatus(404);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void f03_get_notFound_returns404() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			c.get("/nope-dir").run().assertStatus(404);
@@ -286,9 +244,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	// G. Subdirectory listing exercises path-prefixing branch in FileResource.getFiles().
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void g01_subdirectory_listing_includesNestedFiles() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			var resp = c.get("/sub").run();
@@ -296,9 +251,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 			assertTrue(resp.getContent().asString().contains("nested.txt"));
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void g02_subdirectory_view_ofNestedFile() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
 			c.request("VIEW", "/sub/nested.txt").run()

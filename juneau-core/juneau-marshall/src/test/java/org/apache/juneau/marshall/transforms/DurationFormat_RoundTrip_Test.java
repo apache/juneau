@@ -71,8 +71,8 @@ import org.junit.jupiter.params.provider.*;
  * standalone-Duration test is skipped — there is no Duration round-trip semantics to assert in that case.
  */
 @SuppressWarnings({
-	"unused",   // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
-	"java:S125" // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 })
 class DurationFormat_RoundTrip_Test extends TestBase {
 

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -110,12 +109,10 @@ import java.util.stream.*;
  * @param <E> The element type of this list.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776" // iterator()'s anonymous iterator (hasNext/next/remove) walks the list-of-lists with nested bounds checks
 })
 public class MultiList<E> extends AbstractList<E> {
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_c = "c";
 
 	/**
 	 * The underlying lists being wrapped by this MultiList.
@@ -146,9 +143,9 @@ public class MultiList<E> extends AbstractList<E> {
 	 */
 	@SafeVarargs
 	public MultiList(List<E>...c) {
-		assertArgNotNull(ARG_c, c);
+		reqnn("c", c);
 		for (var cc : c)
-			assertArgNotNull(ARG_c, cc);
+			reqnn("c", cc);
 		l = c;
 	}
 
@@ -253,9 +250,6 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @return An iterator over all elements in all underlying lists.
 	 */
 	@Override /* List */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for iterator over multiple lists
-	})
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;
@@ -332,9 +326,6 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt; size()).
 	 */
 	@Override /* List */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for list iterator over multiple lists
-	})
 	public ListIterator<E> listIterator(int index) {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());

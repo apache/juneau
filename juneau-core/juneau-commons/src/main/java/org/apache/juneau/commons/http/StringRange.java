@@ -68,7 +68,7 @@ public class StringRange {
 		// The q parameter and stuff after is part of the range.
 		List<NameValuePair> extensions2 = list();
 		for (var p : e.getParameters()) {
-			if (p.getName().equals("q")) {
+			if (eq(p.getName(), "q")) {
 				qValue2 = Float.parseFloat(p.getValue());
 			} else {
 				extensions2.add(new BasicNameValuePair(p.getName(), p.getValue()));

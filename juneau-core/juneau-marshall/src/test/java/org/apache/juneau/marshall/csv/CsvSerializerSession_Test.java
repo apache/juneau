@@ -129,7 +129,7 @@ class CsvSerializerSession_Test extends TestBase {
 	}
 
 	@Test void a11_create_nullCtx_throws() {
-		// Static create(ctx) with null ctx -> assertArgNotNull throws.
+		// Static create(ctx) with null ctx -> reqnn throws.
 		CsvSerializer ctx = null;
 		assertThrows(IllegalArgumentException.class, () -> CsvSerializerSession.create(ctx));
 	}

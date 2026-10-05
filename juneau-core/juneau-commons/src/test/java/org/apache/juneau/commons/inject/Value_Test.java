@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -403,14 +404,14 @@ class Value_Test extends TestBase {
 	@Test
 	void f01_isValueAnnotation_juneau() {
 		var f = org.apache.juneau.commons.reflect.ClassInfo.of(StringFieldBean.class)
-			.getDeclaredField(x -> "greeting".equals(x.getName())).orElseThrow();
+			.getDeclaredField(x -> eq(x.getName(), "greeting")).orElseThrow();
 		assertTrue(f.getAnnotations().stream().anyMatch(JsrSupport::isValueAnnotation));
 	}
 
 	@Test
 	void f02_valueExpression_extractsValue() {
 		var f = org.apache.juneau.commons.reflect.ClassInfo.of(StringFieldBean.class)
-			.getDeclaredField(x -> "greeting".equals(x.getName())).orElseThrow();
+			.getDeclaredField(x -> eq(x.getName(), "greeting")).orElseThrow();
 		var expr = f.getAnnotations().stream()
 			.map(JsrSupport::valueExpression)
 			.filter(Objects::nonNull)
@@ -422,7 +423,7 @@ class Value_Test extends TestBase {
 	@Test
 	void f03_valueExpression_returnsNull_forNonValueAnnotation() {
 		var f = org.apache.juneau.commons.reflect.ClassInfo.of(ConflictFieldBean.class)
-			.getDeclaredField(x -> "mixed".equals(x.getName())).orElseThrow();
+			.getDeclaredField(x -> eq(x.getName(), "mixed")).orElseThrow();
 		var injectAnno = f.getAnnotations().stream()
 			.filter(a -> JsrSupport.isInjectAnnotation(a) && ! JsrSupport.isValueAnnotation(a))
 			.findFirst()
@@ -531,7 +532,7 @@ class Value_Test extends TestBase {
 	void h15_checkInjectConflict_noValueAnnotation_noop() {
 		// annotations present, but none is @Value → should short-circuit on the !hasValue branch.
 		var f = org.apache.juneau.commons.reflect.ClassInfo.of(SetterBean.class)
-			.getMethod(x -> "setField".equals(x.getName())).orElseThrow();
+			.getMethod(x -> eq(x.getName(), "setField")).orElseThrow();
 		assertDoesNotThrow(() -> ValueResolver.checkInjectConflict(f.getAnnotations(), "h15"));
 	}
 

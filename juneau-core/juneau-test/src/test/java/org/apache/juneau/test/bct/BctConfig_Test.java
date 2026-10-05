@@ -28,8 +28,8 @@ import org.junit.jupiter.api.*;
  * Unit tests for {@link BctConfig} annotation and extension.
  */
 @SuppressWarnings({
-	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S4144" // Identical methods intentional for different test scenarios
 })
 class BctConfig_Test extends TestBase {
 
@@ -274,8 +274,9 @@ class BctConfig_Test extends TestBase {
 		 * Converter without no-arg constructor (should fail).
 		 */
 		static class InvalidConverter extends BasicBeanConverter {
-			// 'arg' exists only to make this a non-no-arg constructor, which is the failure case under test.
-			@SuppressWarnings("unused")
+			@SuppressWarnings({
+				"unused" // 'arg' exists only to make this a non-no-arg constructor, which is the failure case under test.
+			})
 			public InvalidConverter(String arg) {
 				super(BasicBeanConverter.builder().defaultSettings());
 			}

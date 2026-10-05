@@ -32,8 +32,6 @@ import org.apache.juneau.marshall.*;
 @Marshalled
 public class JsonRpcResponse {
 
-	private static final String JSONRPC_2_0 = "2.0";
-
 	private String jsonrpc;
 	private Object id;
 	private Object result;
@@ -142,7 +140,7 @@ public class JsonRpcResponse {
 	 */
 	public static JsonRpcResponse ok(Object id, Object result) {
 		return new JsonRpcResponse()
-			.setJsonrpc(JSONRPC_2_0)
+			.setJsonrpc("2.0")
 			.setId(id)
 			.setResult(result);
 	}
@@ -170,7 +168,7 @@ public class JsonRpcResponse {
 	 */
 	public static JsonRpcResponse errorResponse(Object id, int code, String message, Object data) {
 		return new JsonRpcResponse()
-			.setJsonrpc(JSONRPC_2_0)
+			.setJsonrpc("2.0")
 			.setId(id)
 			.setError(new JsonRpcError().setCode(code).setMessage(message).setData(data));
 	}

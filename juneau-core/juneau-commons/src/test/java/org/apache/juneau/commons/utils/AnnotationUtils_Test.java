@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.AnnotationUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S5961", // High assertion count acceptable in comprehensive test
-	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AnnotationUtils_Test {
 
@@ -333,19 +334,19 @@ class AnnotationUtils_Test {
 				MemberEqualsTestAnnotation.class.getClassLoader(),
 				new Class<?>[] { MemberEqualsTestAnnotation.class },
 				(proxy, method, args) -> {
-					if (method.getName().equals("value")) {
+					if (eq(method.getName(), "value")) {
 						return null;  // Return null to test line 169
 					}
-					if (method.getName().equals("annotationType")) {
+					if (eq(method.getName(), "annotationType")) {
 						return MemberEqualsTestAnnotation.class;
 					}
-					if (method.getName().equals("toString")) {
+					if (eq(method.getName(), "toString")) {
 						return "@MemberEqualsTestAnnotation(null)";
 					}
-					if (method.getName().equals("hashCode")) {
+					if (eq(method.getName(), "hashCode")) {
 						return 0;
 					}
-					if (method.getName().equals("equals")) {
+					if (eq(method.getName(), "equals")) {
 						return proxy == args[0];
 					}
 					return method.invoke(a29, args);
@@ -357,19 +358,19 @@ class AnnotationUtils_Test {
 				MemberEqualsTestAnnotation.class.getClassLoader(),
 				new Class<?>[] { MemberEqualsTestAnnotation.class },
 				(proxy, method, args) -> {
-					if (method.getName().equals("value")) {
+					if (eq(method.getName(), "value")) {
 						return "test";  // Non-null value
 					}
-					if (method.getName().equals("annotationType")) {
+					if (eq(method.getName(), "annotationType")) {
 						return MemberEqualsTestAnnotation.class;
 					}
-					if (method.getName().equals("toString")) {
+					if (eq(method.getName(), "toString")) {
 						return "@MemberEqualsTestAnnotation(test)";
 					}
-					if (method.getName().equals("hashCode")) {
+					if (eq(method.getName(), "hashCode")) {
 						return 0;
 					}
-					if (method.getName().equals("equals")) {
+					if (eq(method.getName(), "equals")) {
 						return proxy == args[0];
 					}
 					return method.invoke(a29, args);
@@ -451,19 +452,19 @@ class AnnotationUtils_Test {
 				NullableMemberAnnotation.class.getClassLoader(),
 				new Class<?>[] { NullableMemberAnnotation.class },
 				(proxy, method, args) -> {
-					if (method.getName().equals("value")) {
+					if (eq(method.getName(), "value")) {
 						return null;  // Return null to test line 157
 					}
-					if (method.getName().equals("annotationType")) {
+					if (eq(method.getName(), "annotationType")) {
 						return NullableMemberAnnotation.class;
 					}
-					if (method.getName().equals("toString")) {
+					if (eq(method.getName(), "toString")) {
 						return "@NullableMemberAnnotation(null)";
 					}
-					if (method.getName().equals("hashCode")) {
+					if (eq(method.getName(), "hashCode")) {
 						return 0;
 					}
-					if (method.getName().equals("equals")) {
+					if (eq(method.getName(), "equals")) {
 						return proxy == args[0];
 					}
 					return method.invoke(a29, args);

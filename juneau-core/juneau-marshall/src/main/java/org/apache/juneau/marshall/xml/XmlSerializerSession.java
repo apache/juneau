@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -53,27 +52,16 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
-	"rawtypes",  // Raw Map/Collection necessary for serializer dispatch over heterogeneous types
-	"unchecked", // Type erasure requires unchecked casts in serializer dispatch
-	"resource",  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
-	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_addNamespaceUrisToRoot)
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1452", // create() and getXmlWriter() return wildcard Builder<?>/XmlWriter<?> because the concrete self-type is not known statically
+	"java:S3776", // Cognitive complexity acceptable for this specific logic
+	"java:S6541", // Single-threaded session contexts do not require synchronization
+	"null", // Null handling verified by context or framework
+	"rawtypes", // Raw Map/Collection necessary for serializer dispatch over heterogeneous types
+	"resource", // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
+	"unchecked" // Type erasure requires unchecked casts in serializer dispatch
 })
 public class XmlSerializerSession extends WriterSerializerSession implements RecordWritable {
-
-	// Property name constants
-	private static final String PROP_addNamespaceUrisToRoot = "addNamespaceUrisToRoot";
-	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
-	private static final String PROP_defaultNamespace = "defaultNamespace";
-	private static final String PROP_enableNamespaces = "enableNamespaces";
-	private static final String PROP_textNodeDelimiter = "textNodeDelimiter";
-	private static final String PROP_XmlSerializerSession_addNamespaceUrisToRoot = "XmlSerializerSession.addNamespaceUrisToRoot";
-	private static final String PROP_XmlSerializerSession_autoDetectNamespaces = "XmlSerializerSession.autoDetectNamespaces";
-	private static final String PROP_XmlSerializerSession_defaultNamespace = "XmlSerializerSession.defaultNamespace";
-	private static final String PROP_XmlSerializerSession_enableNamespaces = "XmlSerializerSession.enableNamespaces";
-	private static final String PROP_XmlSerializerSession_textNodeDelimiter = "XmlSerializerSession.textNodeDelimiter";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -97,7 +85,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx));
+			super(reqnn("ctx", ctx));
 			this.ctx = ctx;
 			addNamespaceUrisToRoot = ctx.isAddNamespaceUrlsToRoot();
 			autoDetectNamespaces = ctx.isAutoDetectNamespaces();
@@ -170,15 +158,15 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		public SELF property(String key, Object value) {
 			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
-				case PROP_addNamespaceUrisToRoot, PROP_XmlSerializerSession_addNamespaceUrisToRoot:
+				case "addNamespaceUrisToRoot", "XmlSerializerSession.addNamespaceUrisToRoot":
 					return addNamespaceUrisToRoot(cvt(value, Boolean.class));
-				case PROP_autoDetectNamespaces, PROP_XmlSerializerSession_autoDetectNamespaces:
+				case "autoDetectNamespaces", "XmlSerializerSession.autoDetectNamespaces":
 					return autoDetectNamespaces(cvt(value, Boolean.class));
-				case PROP_defaultNamespace, PROP_XmlSerializerSession_defaultNamespace:
+				case "defaultNamespace", "XmlSerializerSession.defaultNamespace":
 					return defaultNamespace(cvt(value, String.class));
-				case PROP_enableNamespaces, PROP_XmlSerializerSession_enableNamespaces:
+				case "enableNamespaces", "XmlSerializerSession.enableNamespaces":
 					return enableNamespaces(cvt(value, Boolean.class));
-				case PROP_textNodeDelimiter, PROP_XmlSerializerSession_textNodeDelimiter:
+				case "textNodeDelimiter", "XmlSerializerSession.textNodeDelimiter":
 					return textNodeDelimiter(cvt(value, String.class));
 				default:
 					super.property(key, value);
@@ -240,11 +228,8 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
-	})
 	public static Builder<?> create(XmlSerializer ctx) {
-		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
+		return new DefaultBuilder(reqnn("ctx", ctx));
 	}
 
 	private final String textNodeDelimiter;
@@ -314,9 +299,6 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 */
-	@SuppressWarnings({
-		"java:S1452" // Raw output may be any XmlWriter CRTP leaf; the concrete self-type is not nameable here.
-	})
 	public final XmlWriter<?> getXmlWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof XmlWriter<?> output2)
@@ -326,7 +308,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return w;
 	}
 
-	/*
+	/**
 	 * Add a namespace to this session.
 	 *
 	 * @param ns The namespace being added.
@@ -402,11 +384,6 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return o(new SimpleEntry<>(key, value));
 	}
 
-	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
-	})
 	private ContentResult writeBeanMap(XmlWriter<?> out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		var bm = m.getMeta();
@@ -684,10 +661,6 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * @param o The POJO to check.
 	 * @throws SerializeException Thrown if bean recursion occurred.
 	 */
-	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
 
@@ -857,10 +830,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * @throws SerializeException General serialization error occurred.
 	 */
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
-		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+		"java:S107" // Method has many parameters; acceptable for builder/configuration methods
 	})
 	protected ContentResult writeAnything(XmlWriter<?> out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {

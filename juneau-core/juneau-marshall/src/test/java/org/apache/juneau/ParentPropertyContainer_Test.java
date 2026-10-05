@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -49,6 +50,9 @@ import org.junit.jupiter.params.provider.*;
  * case that previously failed to round-trip because the parser injected the containing {@code List}
  * (not the grandparent bean) as the parent.
  */
+@SuppressWarnings({
+	"unchecked" // Parser.read(..., List.class, Person.class) results are cast to List<Person>
+})
 class ParentPropertyContainer_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -188,11 +192,11 @@ class ParentPropertyContainer_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	static Stream<Fmt> readerFormatsNoHocon() {
-		return formats().filter(f -> f.s instanceof WriterSerializer && f.p instanceof ReaderParser && ! "Hocon".equals(f.name));
+		return formats().filter(f -> f.s instanceof WriterSerializer && f.p instanceof ReaderParser && neq(f.name, "Hocon"));
 	}
 
 	static Stream<Fmt> formatsNoHocon() {
-		return formats().filter(f -> ! "Hocon".equals(f.name));
+		return formats().filter(f -> neq(f.name, "Hocon"));
 	}
 
 	@ParameterizedTest
@@ -200,7 +204,6 @@ class ParentPropertyContainer_Test extends TestBase {
 	void b01_topLevelListElementHasNullParent(Fmt f) throws Exception {
 		var l = new ArrayList<Person>(List.of(person("x"), person("y")));
 		var out = write(f.s, l);
-		@SuppressWarnings("unchecked")
 		List<Person> l2 = (List<Person>) f.p.read((String) out, List.class, Person.class);
 
 		assertEquals(2, l2.size(), f.name);
@@ -214,7 +217,6 @@ class ParentPropertyContainer_Test extends TestBase {
 		// Binary/stream formats: round-trip via byte[] / InputStream.
 		var l = new ArrayList<Person>(List.of(person("x")));
 		Object out = write(f.s, l);
-		@SuppressWarnings("unchecked")
 		List<Person> l2 = out instanceof byte[] b
 			? (List<Person>) f.p.read(new ByteArrayInputStream(b), List.class, Person.class)
 			: (List<Person>) f.p.read((String) out, List.class, Person.class);

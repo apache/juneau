@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Built-in, process-local, in-memory default implementation of {@link McpResponseCache}.
@@ -43,7 +43,7 @@ import java.util.function.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // ARG_-prefixed assertion-param constants use the project's UPPER_camelCase convention (ARG_<param>).
+	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
 public class InMemoryMcpResponseCache implements McpResponseCache {
 
@@ -52,12 +52,6 @@ public class InMemoryMcpResponseCache implements McpResponseCache {
 	 * entry is evicted to make room for a new one. See the class javadoc's size-bound/eviction-policy note.
 	 */
 	public static final int DEFAULT_MAX_ENTRIES = 10_000;
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_scope = "scope";
-	private static final String ARG_key = "key";
-	private static final String ARG_value = "value";
-	private static final String ARG_clock = "clock";
 
 	private record CacheEntry(Object value, long expiresAtMs) {}
 
@@ -102,7 +96,7 @@ public class InMemoryMcpResponseCache implements McpResponseCache {
 	 * 	least-recently-used entry is evicted. Must be positive.
 	 */
 	InMemoryMcpResponseCache(LongSupplier clock, int maxEntries) {
-		this.clock = assertArgNotNull(ARG_clock, clock);
+		this.clock = reqnn("clock", clock);
 		if (maxEntries <= 0)
 			throw new IllegalArgumentException("maxEntries must be positive: " + maxEntries);
 		this.entries = Collections.synchronizedMap(new LinkedHashMap<String,CacheEntry>(16, 0.75f, true) {
@@ -114,8 +108,8 @@ public class InMemoryMcpResponseCache implements McpResponseCache {
 
 	@Override /* Overridden from McpResponseCache */
 	public Optional<Object> get(String scope, String key) {
-		assertArgNotNull(ARG_scope, scope);
-		assertArgNotNull(ARG_key, key);
+		reqnn("scope", scope);
+		reqnn("key", key);
 		var partitionKey = partitionKey(scope, key);
 		synchronized (entries) {
 			var entry = entries.get(partitionKey);
@@ -131,9 +125,9 @@ public class InMemoryMcpResponseCache implements McpResponseCache {
 
 	@Override /* Overridden from McpResponseCache */
 	public void put(String scope, String key, Object value, long ttlMs) {
-		assertArgNotNull(ARG_scope, scope);
-		assertArgNotNull(ARG_key, key);
-		assertArgNotNull(ARG_value, value);
+		reqnn("scope", scope);
+		reqnn("key", key);
+		reqnn("value", value);
 		var expiresAtMs = ttlMs > 0 ? clock.getAsLong() + ttlMs : 0L;
 		entries.put(partitionKey(scope, key), new CacheEntry(value, expiresAtMs));
 	}

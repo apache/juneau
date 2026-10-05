@@ -16,9 +16,12 @@
  */
 package org.apache.juneau.petstore.springboot;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.rest.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.springboot.*;
 import org.apache.juneau.rest.server.widget.*;
@@ -88,4 +91,18 @@ import org.apache.juneau.rest.server.widget.*;
 public class RootResources extends BasicSpringRestServletGroup {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Registers the one {@link PetStore} shared by the {@code /petstore} API and the console tree, seeded with the
+	 * deterministic demo data set.
+	 *
+	 * <p>
+	 * Child resources inherit the group's beans, so a plain {@code @Bean} method is all that is needed.
+	 *
+	 * @return The seeded {@link PetStore}.
+	 */
+	@Bean
+	public PetStore petStore() {
+		return PetstoreSeed.create().populate(new PetStore());
+	}
 }

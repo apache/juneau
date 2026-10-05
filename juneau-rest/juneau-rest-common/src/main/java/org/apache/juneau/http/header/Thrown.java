@@ -33,6 +33,9 @@ import org.apache.juneau.http.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
+})
 public class Thrown extends HttpCsvHeader {
 
 	public static final String NAME = "Thrown";
@@ -49,9 +52,6 @@ public class Thrown extends HttpCsvHeader {
 		super(NAME, supplier, lazyMode);
 	}
 
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static Thrown of(String value) {
 		return new Thrown(value);
 	}
@@ -76,9 +76,6 @@ public class Thrown extends HttpCsvHeader {
 	 * @param values The throwables to encode. {@code null} entries are ignored.
 	 * @return A new header. Never {@code null}.
 	 */
-	@SuppressWarnings({
-		"java:S9149" // Public Juneau DSL factory; hiding parent of()/create() is intentional.
-	})
 	public static Thrown of(Throwable... values) {
 		var sb = new StringBuilder();
 		if (values != null) {

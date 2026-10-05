@@ -22,7 +22,12 @@
  * depth-first teardownNestedTables / activateNestedTablesInPane + initNestedTablesInVisiblePanes routing /
  * the table-ownership helpers that keep a parent from wiring itself to a nested table's rows.
  *
- *   Usage:  node nested-table.cjs <path-to-juneau-views.js>
+ *   Usage:  node nested-table.cjs <path-to-juneau-views.js> <path-to-juneau-datatables.js> <path-to-juneau-ribbon.js>
+ *
+ * juneau-datatables.js and juneau-ribbon.js are loaded into the SAME sandbox window as juneau-views.js (design doc
+ * §3.1/D8: server-mode buildOptions needs window.JuneauDataTables.ajax; BeanQuery DataTables design §3.1:
+ * buildOptions also needs window.JuneauViews.ribbon.{ribbonColumnSearches,ribbonQueryParams,mergeColumnSearches})
+ * before juneau-views.js runs - exactly as a real page loading all three scripts would have them present.
  *
  * Prints ONE JSON object to stdout; every assertion lives in the Java test.  No jQuery/DataTables: the happy-path
  * DataTable construction is stubbed to throw so we can read the state prepareNestedTable stamps BEFORE it hands off
@@ -36,8 +41,10 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const viewsJsPath = process.argv[2];
-if (!viewsJsPath) {
-	console.error('usage: node nested-table.cjs <juneau-views.js>');
+const dataTablesJsPath = process.argv[3];
+const ribbonJsPath = process.argv[4];
+if (!viewsJsPath || !dataTablesJsPath || !ribbonJsPath) {
+	console.error('usage: node nested-table.cjs <juneau-views.js> <juneau-datatables.js> <juneau-ribbon.js>');
 	process.exit(2);
 }
 
@@ -53,7 +60,7 @@ function elMatchesCompound(node, sel) {
 	const re = /\.[\w-]+|\[[\w:-]+(?:="[^"]*")?\]|^[a-zA-Z][\w-]*/g;
 	let m;
 	let matchedSomething = false;
-	while ((m = re.exec(sel))) {
+	for (m = re.exec(sel); m; m = re.exec(sel)) {
 		const tok = m[0];
 		matchedSomething = true;
 		if (tok.startsWith('.')) {
@@ -75,6 +82,7 @@ function elMatchesCompound(node, sel) {
  * match `node` and each compound to its left must match some ancestor, in order.
  */
 function elMatches(node, sel) {
+	if (String(sel).includes(',')) return String(sel).split(',').some(function (s) { return elMatches(node, s); });
 	const parts = String(sel).trim().split(/\s+/);
 	if (!elMatchesCompound(node, parts.at(-1))) return false;
 	let n = node.parentNode;
@@ -151,7 +159,7 @@ function el(tag) {
 			this._listeners[type] = list;
 			list.push(fn);
 		},
-		focus: function () {},
+		focus: function () { /* no-op */ },
 		set textContent(v) { this.childNodes.length = 0; this._text = v == null ? '' : String(v); },
 		get textContent() {
 			if (this.childNodes.length === 0) return this._text || '';
@@ -164,7 +172,7 @@ function el(tag) {
 
 /** Converts a `dataset` camelCase property name to its `data-` kebab-case attribute name (real DOM rule). */
 function toDataAttr(prop) {
-	return 'data-' + prop.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
+	return 'data-' + prop.replaceAll(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); });
 }
 
 function textNode(value) {
@@ -174,13 +182,13 @@ function textNode(value) {
 const document = {
 	readyState: 'loading',
 	activeElement: null,
-	addEventListener: function () {},
+	addEventListener: function () { /* no-op */ },
 	querySelectorAll: function () { return []; },
 	querySelector: function () { return null; },
 	getElementById: function () { return null; },
 	createElement: function (tag) { return el(tag); },
 	createTextNode: function (v) { return textNode(v); },
-	body: { appendChild: function () {}, querySelectorAll: function () { return []; } }
+	body: { appendChild: function () { /* no-op */ }, querySelectorAll: function () { return []; } }
 };
 const window = { document: document, console: console, jQuery: undefined };
 // teardownTable clears poll timers and closes job streams; record both so "zero live handles after teardown" is
@@ -191,8 +199,10 @@ const sandbox = {
 	setInterval: function () { return 0; },
 	clearInterval: function (id) { clearedIntervals.push(id); }
 };
-// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
-// juneau-views.js under test into an isolated vm sandbox; there is no untrusted input.
+// NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real juneau-datatables.js,
+// juneau-ribbon.js and juneau-views.js under test into an isolated vm sandbox; there is no untrusted input.
+vm.runInNewContext(fs.readFileSync(path.resolve(dataTablesJsPath), 'utf8'), sandbox, { filename: 'juneau-datatables.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(ribbonJsPath), 'utf8'), sandbox, { filename: 'juneau-ribbon.js' });
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
@@ -217,14 +227,16 @@ out.hasDepth = typeof I.nestedTableDepth === 'function';
 // applyNestedScope - merges ONE parent-scope param into opts.ajax.data in BOTH data modes.
 // ----------------------------------------------------------------------------------------------------------------
 
-// Server-mode-like: a pre-existing data fn (ribbon merge) is preserved AND the scope param added.
-const optsS = { ajax: { data: function (d) { d.ribbon = 'r'; return d; } } };
+// Server-mode-like: a pre-existing beforeSend fn (the ribbon URL re-derivation) is preserved AND the scope param
+// is appended to the already-ribbon-bearing URL that prior beforeSend produces.
+const optsS = { ajax: { beforeSend: function (jqXHR, settings) { settings.url = '/d?rb=1'; } } };
 I.applyNestedScope(optsS, { param: 'parentId', parentId: function () { return 'a1'; } });
-const ds = optsS.ajax.data({});
-out.scope_server_ribbonKept = ds.ribbon === 'r';
-out.scope_server_paramAdded = ds.parentId === 'a1';
+const settingsS = { url: '/d' };
+optsS.ajax.beforeSend(null, settingsS);
+out.scope_server_ribbonKept = settingsS.url.indexOf('rb=1') >= 0;
+out.scope_server_paramAdded = settingsS.url.indexOf('parentId=a1') >= 0;
 
-// Client-mode-like: no pre-existing data fn -> a data fn is installed that adds the scope param.
+// Client-mode-like: no pre-existing beforeSend or data fn -> a data fn is installed that adds the scope param.
 const optsC = { ajax: { dataSrc: '' } };
 I.applyNestedScope(optsC, { param: 'parentId', parentId: 'a1' });
 out.scope_client_paramAdded = optsC.ajax.data({}).parentId === 'a1';
@@ -250,35 +262,153 @@ I.applyNestedScope(optsN, { param: 'alertId', parentId: 'a1' });
 out.scope_customName = optsN.ajax.data({}).alertId === 'a1';
 
 // ----------------------------------------------------------------------------------------------------------------
-// buildOptions integration - the scope param rides both real ajax branches.
+// buildOptions integration (design doc §3.1/D8) - the scope param rides both real ajax branches: a re-derived URL
+// query parameter in server mode (via beforeSend), the GET data object in client mode.
 // ----------------------------------------------------------------------------------------------------------------
 
-const serverView = { contractVersion: '4', id: 'events', dataMode: 'server', dataUrl: '/d', columns: [{ data: 'when' }] };
+// serverView declares THREE ribbon options against window.JuneauViews.ribbon's real functions (loaded above, not
+// deps-mocked): "mine" is param:-scoped (contributes a URL query param through ribbonQueryParams); "dropped-only"
+// and "recent-only" are BOTH column-scoped against the SAME "when" column, dtIndex 0 (contributes a body column
+// search through ribbonColumnSearches) - the second exists so a test can activate both at once and prove they
+// combine via $and rather than one overwriting the other (the ribbon-corpus case
+// "two-options-same-column"). Only deps.ribbonActiveState - which toggle(s) are ACTIVE - is deps-supplied;
+// everything about how that state turns into request params goes through the real juneau-ribbon.js functions.
+const serverView = {
+	contractVersion: '5', id: 'events', dataMode: 'server', dataUrl: '/d',
+	columns: [{ data: 'when' }],
+	ribbon: [
+		{ type: 'option', id: 'mine', param: 'rb', value: '1' },
+		{ type: 'option', id: 'dropped-only', column: 'when', value: '$eq(DROPPED)' },
+		{ type: 'option', id: 'recent-only', column: 'when', value: '$gt(2026-01-01)' }
+	]
+};
 const optsSv = I.buildOptions(serverView, {
-	ribbonParams: function () { return { rb: '1' }; },
+	ribbonActiveState: function () { return { mine: true }; },   // "mine" active, "dropped-only" NOT active
 	nestedScope: { param: 'parentId', parentId: function () { return 'a1'; } }
 });
-const dsv = optsSv.ajax.data({});
 out.bo_server_serverSide = optsSv.serverSide === true;
-out.bo_server_ribbon = dsv.rb === '1';
-out.bo_server_scope = dsv.parentId === 'a1';
+out.bo_server_type = optsSv.ajax.type;
+out.bo_server_contentType = optsSv.ajax.contentType;
+out.bo_server_hasBeforeSend = typeof optsSv.ajax.beforeSend === 'function';
+out.bo_server_hasJsonDataFn = typeof optsSv.ajax.data === 'function';
+const settingsSv = { url: '/d' };
+optsSv.ajax.beforeSend(null, settingsSv);
+out.bo_server_urlHasRibbon = settingsSv.url.indexOf('rb=1') >= 0;
+out.bo_server_urlHasScope = settingsSv.url.indexOf('parentId=a1') >= 0;
 
-const clientView = { contractVersion: '4', id: 'events', dataMode: 'client', dataUrl: '/d', columns: [{ data: 'when' }] };
+// CSRF on the server-mode data request: the token rides beforeSend's jqXHR.setRequestHeader, resolved per request.
+function csrfHeadersFor(tableEl) {
+	const o = I.buildOptions(serverView, { table: tableEl });
+	const sent = {};
+	o.ajax.beforeSend({ setRequestHeader: function (k, v) { sent[k] = v; } }, { url: '/d' });
+	return sent;
+}
+const csrfTable = el('table');
+csrfTable.dataset.juneauCsrf = 'tok-table';
+out.bo_csrf_table = csrfHeadersFor(csrfTable);
+const csrfTableCustom = el('table');
+csrfTableCustom.dataset.juneauCsrf = 'tok-c';
+csrfTableCustom.dataset.juneauCsrfHeader = 'X-My-Csrf';
+out.bo_csrf_customHeader = csrfHeadersFor(csrfTableCustom);
+out.bo_csrf_none = csrfHeadersFor(el('table'));
+out.bo_csrf_blank = (function () { const t = el('table'); t.dataset.juneauCsrf = '  '; return csrfHeadersFor(t); })();
+const savedDocQs = document.querySelector;
+document.querySelector = function (sel) {
+	return sel === 'meta[name="csrf-token"]' ? { getAttribute: function () { return 'tok-meta'; } } : null;
+};
+out.bo_csrf_metaFallback = csrfHeadersFor(el('table'));
+out.bo_csrf_tableBeatsMeta = csrfHeadersFor(csrfTable);
+document.querySelector = savedDocQs;
+
+// Column-scoped ribbon filters: ribbon.ribbonColumnSearches's output lands in the
+// outgoing JSON body's columns[i].search.value through ribbon.mergeColumnSearches, inside JuneauDataTables.ajax's
+// own data() hook, NEVER on the URL - this is the exact bug (a ribbon filter sent as a URL param the POST-only
+// endpoint cannot read) made impossible to reintroduce. Now "dropped-only" is the active one, "mine" is not.
+const optsRibbonCol = I.buildOptions(serverView, { ribbonActiveState: function () { return { 'dropped-only': true }; } });
+const bodyNoUserSearch = JSON.parse(optsRibbonCol.ajax.data({ columns: [{ data: 'when', search: { value: '' } }] }));
+out.bo_server_columnSearch_ribbonOnly = bodyNoUserSearch.columns[0].search.value === '$eq(DROPPED)';
+// ...and the other half of the fix: with ONLY the column-scoped option active, beforeSend leaves the URL bare.
+const settingsRibbonCol = { url: '/d' };
+optsRibbonCol.ajax.beforeSend(null, settingsRibbonCol);
+out.bo_server_columnSearch_notOnUrl = settingsRibbonCol.url === '/d';
+
+const bodyWithUserSearch = JSON.parse(
+	optsRibbonCol.ajax.data({ columns: [{ data: 'when', search: { value: '$contains(x)' } }] }));
+out.bo_server_columnSearch_andedWithUserSearch =
+	bodyWithUserSearch.columns[0].search.value === '$and($contains(x),$eq(DROPPED))';
+
+// Two active ribbon options on the SAME column combine via $and, in viewDef.ribbon's own declared order - neither
+// one silently overwrites the other.
+const optsRibbonTwoSameCol = I.buildOptions(serverView,
+	{ ribbonActiveState: function () { return { 'dropped-only': true, 'recent-only': true }; } });
+const bodyTwoSameCol = JSON.parse(
+	optsRibbonTwoSameCol.ajax.data({ columns: [{ data: 'when', search: { value: '' } }] }));
+out.bo_server_columnSearch_twoOptionsSameColumn_and =
+	bodyTwoSameCol.columns[0].search.value === '$and($eq(DROPPED),$gt(2026-01-01))';
+
+// A whitespace-only user search value is dropped before merging, never ANDed in as a literal blank clause - a
+// column search box the user cleared (or never touched) must behave exactly like no user search at all.
+const bodyBlankUserValue = JSON.parse(
+	optsRibbonCol.ajax.data({ columns: [{ data: 'when', search: { value: '   ' } }] }));
+out.bo_server_columnSearch_blankUserValueDropped = bodyBlankUserValue.columns[0].search.value === '$eq(DROPPED)';
+
+// A ribbon filter on a column the author marked searchable:false still reaches the server: the server skips
+// non-searchable columns, so the hook flips the flag for every column the ribbon contributes to (and only those).
+const bodyNotSearchable = JSON.parse(optsRibbonCol.ajax.data({ columns: [
+	{ data: 'when', searchable: false, search: { value: '' } },
+	{ data: 'other', searchable: false, search: { value: '' } }
+] }));
+out.bo_server_columnSearch_nonSearchableTargetFlipped = bodyNotSearchable.columns[0].searchable === true
+	&& bodyNotSearchable.columns[0].search.value === '$eq(DROPPED)'
+	&& bodyNotSearchable.columns[1].searchable === false;
+
+// No active ribbon state at all -> the body passes through completely unchanged (never crashes, never drops
+// the user's own search).
+const optsNoRibbonCol = I.buildOptions(serverView, {});
+const bodyUnchanged = JSON.parse(optsNoRibbonCol.ajax.data({ columns: [{ data: 'when', search: { value: '$contains(y)' } }] }));
+out.bo_server_columnSearch_passthroughWhenNoDep = bodyUnchanged.columns[0].search.value === '$contains(y)';
+
+// ribbon.ribbonQueryParams's output (URL-only, param:-scoped options) is UNAFFECTED by the column-search fix -
+// still rides the URL, never the body, so the beforeSend assertions above (bo_server_urlHasRibbon) keep covering it.
+
+const clientView = { contractVersion: '5', id: 'events', dataMode: 'client', dataUrl: '/d', columns: [{ data: 'when' }] };
 const optsCv = I.buildOptions(clientView, { nestedScope: { param: 'parentId', parentId: 'a1' } });
 out.bo_client_serverSide = optsCv.serverSide === false;
 out.bo_client_dataSrc = optsCv.ajax.dataSrc === '';
 out.bo_client_scope = optsCv.ajax.data({}).parentId === 'a1';
 
-// A top-level view (no nestedScope) merges no parent param: server keeps only its plain data fn; client gets none.
+// A top-level view (no nestedScope) merges no parent param: server keeps only its plain ribbon beforeSend; client
+// gets no data fn at all.
 const optsTop = I.buildOptions(clientView, {});
 out.bo_top_client_noDataFn = typeof optsTop.ajax.data !== 'function';
+
+// Missing window.JuneauDataTables at server-mode init fails loudly via deps.warn - no silent GET fallback.
+const savedDt = window.JuneauDataTables;
+window.JuneauDataTables = undefined;
+let warnedMsg = null;
+const optsNoDt = I.buildOptions(serverView, { warn: function (msg) { warnedMsg = msg; } });
+out.bo_server_noDt_warned = typeof warnedMsg === 'string' && warnedMsg.length > 0;
+out.bo_server_noDt_noAjax = optsNoDt.ajax === undefined;
+window.JuneauDataTables = savedDt;
+
+// A view with ribbon options but no window.JuneauViews.ribbon loaded degrades (warns, contributes nothing) rather
+// than throwing - proves the "juneau-ribbon.js missing" branch Step 1b added to buildOptions.
+const savedRibbonNs = window.JuneauViews.ribbon;
+window.JuneauViews.ribbon = undefined;
+let warnedNoRibbonMsg = null;
+const optsNoRibbonNs = I.buildOptions(serverView, { warn: function (msg) { warnedNoRibbonMsg = msg; } });
+out.bo_server_noRibbonNs_warned = typeof warnedNoRibbonMsg === 'string' && warnedNoRibbonMsg.length > 0;
+out.bo_server_noRibbonNs_bodyUnchanged =
+	JSON.parse(optsNoRibbonNs.ajax.data({ columns: [{ data: 'when', search: { value: '$contains(z)' } }] }))
+		.columns[0].search.value === '$contains(z)';
+window.JuneauViews.ribbon = savedRibbonNs;
 
 // ----------------------------------------------------------------------------------------------------------------
 // findNestedSidecar - sibling [data-juneau-nested-meta] matched by author view id (id-less clone-safe lookup).
 // ----------------------------------------------------------------------------------------------------------------
 
 const VALID = JSON.stringify({
-	contractVersion: '4', id: 'events', dataMode: 'client', dataUrl: '/data/events',
+	contractVersion: '5', id: 'events', dataMode: 'client', dataUrl: '/data/events',
 	columns: [{ data: 'when' }, { data: 'what' }],
 	rowActions: [{ id: 'ack', label: 'Ack', method: 'POST', endpoint: '/data/events/{id}/ack' }],
 	columnConfig: { a: 1 }, pollIntervalMs: 9999, details: { endpoint: '/data/events/{id}' }
@@ -376,11 +506,11 @@ out.pnt_noJq_noCtx = noJq.table.__juneauCtx == null;
 // ----------------------------------------------------------------------------------------------------------------
 
 window.jQuery = function () { return { DataTable: function () { throw new Error('stub: no real DataTables'); } }; };
-window.jQuery.fn = { DataTable: function () {} };   // truthy so the jQuery/buildTable gates pass
+window.jQuery.fn = { DataTable: function () { /* no-op */ } };   // truthy so the jQuery/buildTable gates pass
 
 const okW = nestedWrapper({ viewId: 'events', scopeParam: 'alertId', selection: true, detailTemplate: true });
 let threw = false;
-try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw = true; out.pnt_ok_constructionError = String(e?.message || e); }
+try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (error) { threw = true; out.pnt_ok_constructionError = String(error?.message || error); }
 out.pnt_ok_construction_attempted = threw;   // proves it reached buildTable -> $(table).DataTable
 out.pnt_ok_initMarked = inited(okW.table);
 out.pnt_ok_parentStamped = okW.table.dataset.juneauParentId === 'a1';
@@ -411,12 +541,12 @@ out.pnt_ok_popoverBound = okW.table._juneauCellPopoverBound === true;
 out.pnt_ok_detailInflight = !!okCtx?._detailInflight;
 // Idempotent: a second call on an already-inited table is a no-op (no second construction throw).
 let threw2 = false;
-try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (e) { threw2 = true; out.pnt_ok_secondConstructionError = String(e?.message || e); }
+try { I.prepareNestedTable(okW.wrap, 'a1'); } catch (error) { threw2 = true; out.pnt_ok_secondConstructionError = String(error?.message || error); }
 out.pnt_ok_idempotent = threw2 === false;
 
 // A nested table with no selection stamp gets no selection state and binds no change listener.
 const noSelW = nestedWrapper({ viewId: 'events' });
-try { I.prepareNestedTable(noSelW.wrap, 'a1'); } catch (e) { out.pnt_noSel_constructionError = String(e?.message || e); }
+try { I.prepareNestedTable(noSelW.wrap, 'a1'); } catch (error) { out.pnt_noSel_constructionError = String(error?.message || error); }
 out.pnt_noSel_selectionNull = noSelW.table.__juneauCtx.selectionState === null;
 out.pnt_noSel_noChangeListener = (noSelW.table._listeners.change || []).length === 0;
 
@@ -481,8 +611,8 @@ out.mint_authorIdKept = rowA.table.dataset.juneauView === 'events';
 
 const sim1 = panelWithNested('events');
 const sim2 = panelWithNested('events');
-try { I.prepareNestedTable(sim1.wrap, 'a1'); } catch (e) { out.sim1_constructionError = String(e?.message || e); }
-try { I.prepareNestedTable(sim2.wrap, 'a2'); } catch (e) { out.sim2_constructionError = String(e?.message || e); }
+try { I.prepareNestedTable(sim1.wrap, 'a1'); } catch (error) { out.sim1_constructionError = String(error?.message || error); }
+try { I.prepareNestedTable(sim2.wrap, 'a2'); } catch (error) { out.sim2_constructionError = String(error?.message || error); }
 const c1 = sim1.table.__juneauCtx;
 const c2 = sim2.table.__juneauCtx;
 out.sim_bothInited = inited(sim1.table) && inited(sim2.table);
@@ -547,6 +677,32 @@ nestedTpl.dataset.juneauRowDetail = '1';
 ownPanel.wrap.appendChild(nestedTpl);
 out.own_parentTemplateNotTheNestedOne = I.findRowDetailTemplate(parentTable) === parentTpl;
 out.own_nestedTemplateIsItsOwn = I.findRowDetailTemplate(ownPanel.table) === nestedTpl;
+
+// A nested table with NO template of its own, not yet wrapped by DataTables (constructTable runs before
+// new DataTable), inside a DT2-wrapped parent: findViewWrapper walks up to the PARENT's .dt-container, which must be
+// rejected - otherwise the nested table resolves the parent's sibling template and grows a bogus expander column.
+const dtHost = el('div');
+const dtContainer = el('div');
+dtContainer.className = 'dt-container';
+dtHost.appendChild(dtContainer);
+const dtParentTpl = el('template');
+dtParentTpl.dataset.juneauRowDetail = '1';
+dtHost.appendChild(dtParentTpl);
+const dtCell = el('div');   // DT2 wraps the table as .dt-container > .dt-layout-row > .dt-layout-cell > table
+dtCell.className = 'dt-layout-cell';
+dtContainer.appendChild(dtCell);
+const dtParentTable = el('table');
+dtCell.appendChild(dtParentTable);
+const dtBody = el('tbody');
+dtParentTable.appendChild(dtBody);
+const dtChildRow = el('tr');
+dtBody.appendChild(dtChildRow);
+const dtChildCell = el('td');
+dtChildRow.appendChild(dtChildCell);
+const dtPanel = panelWithNested('events');
+dtChildCell.appendChild(dtPanel.panel);
+out.own_unwrappedNestedIgnoresParentWrapperTemplate = I.findRowDetailTemplate(dtPanel.table) == null;
+out.own_wrappedParentStillFindsItsTemplate = I.findRowDetailTemplate(dtParentTable) === dtParentTpl;
 
 // ----------------------------------------------------------------------------------------------------------------
 // teardownNestedTables - destroys every inited nested DataTable in a subtree, clears the marker.

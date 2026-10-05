@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.http.*;
@@ -57,7 +56,7 @@ public final class HttpStatusLineBean implements HttpStatusLine {
 	private final String reasonPhrase;
 
 	private HttpStatusLineBean(HttpProtocolVersion protocolVersion, int statusCode, String reasonPhrase) {
-		this.protocolVersion = assertArgNotNull("protocolVersion", protocolVersion);
+		this.protocolVersion = reqnn("protocolVersion", protocolVersion);
 		this.statusCode = statusCode;
 		this.reasonPhrase = reasonPhrase;
 	}
