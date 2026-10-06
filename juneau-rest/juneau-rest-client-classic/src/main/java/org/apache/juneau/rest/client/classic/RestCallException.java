@@ -20,8 +20,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.

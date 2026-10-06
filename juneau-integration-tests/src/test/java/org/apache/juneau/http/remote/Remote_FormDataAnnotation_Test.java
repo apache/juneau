@@ -26,7 +26,7 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
@@ -76,7 +76,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	public static class A {
 		@RestPost
 		public String a(@FormData("*") Json5Map m, @Header("Content-Type") String ct) {
-			assertEquals("application/x-www-form-urlencoded", ct);
+			assertEquals("application/x-www-form-urlencoded", ct.split(";", 2)[0]);
 			return m.toString();
 		}
 	}

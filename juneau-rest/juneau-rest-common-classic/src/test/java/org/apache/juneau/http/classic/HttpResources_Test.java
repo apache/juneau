@@ -56,7 +56,7 @@ class HttpResources_Test extends TestBase {
 	@Test void a03_byteArrayResource_bytes_withContentType() throws Exception {
 		var r = byteArrayResource(BYTES, CT_JSON);
 		assertArrayEquals(BYTES, r.asBytes());
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void a04_byteArrayResource_bytes_withContentType_null() {
@@ -79,7 +79,7 @@ class HttpResources_Test extends TestBase {
 		Supplier<byte[]> s = () -> BYTES;
 		var r = byteArrayResource(s, CT_JSON);
 		assertArrayEquals(BYTES, r.asBytes());
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void a08_byteArrayResource_supplier_withContentType_null() {
@@ -107,7 +107,7 @@ class HttpResources_Test extends TestBase {
 	@Test void b03_fileResource_file_withContentType() {
 		var f = new File("/tmp/nonexistent-juneau-test-file.txt");
 		var r = fileResource(f, CT_JSON);
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void b04_fileResource_file_withContentType_null() {
@@ -134,7 +134,7 @@ class HttpResources_Test extends TestBase {
 	@Test void c03_readerResource_reader_withContentType() throws Exception {
 		var rd = new StringReader("hello");
 		var r = readerResource(rd, CT_JSON);
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 		assertEquals("hello", r.asString());
 	}
 
@@ -162,7 +162,7 @@ class HttpResources_Test extends TestBase {
 		var in = new ByteArrayInputStream(BYTES);
 		var r = streamResource(in, BYTES.length, CT_JSON);
 		assertEquals(BYTES.length, r.getContentLength());
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void d04_streamResource_inputStream_unknownLength_nullCT() {
@@ -195,7 +195,7 @@ class HttpResources_Test extends TestBase {
 	@Test void e04_stringResource_string_withContentType() throws Exception {
 		var r = stringResource("hello", CT_JSON);
 		assertEquals("hello", r.asString());
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void e05_stringResource_string_withContentType_null() {
@@ -218,7 +218,7 @@ class HttpResources_Test extends TestBase {
 		Supplier<String> s = () -> "lazy";
 		var r = stringResource(s, CT_JSON);
 		assertEquals("lazy", r.asString());
-		assertEquals("application/json", r.getContentType().getValue());
+		assertEquals("application/json", r.getContentType());
 	}
 
 	@Test void e09_stringResource_supplier_withContentType_null() {

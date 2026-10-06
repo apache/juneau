@@ -22,7 +22,7 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 
 /**
  * A {@link NameValuePair} that consists of a single URL value.

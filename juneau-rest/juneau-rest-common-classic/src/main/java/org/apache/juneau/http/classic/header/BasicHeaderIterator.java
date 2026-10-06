@@ -20,11 +20,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
- * Basic implementation of a {@link HeaderIterator}.
+ * Basic implementation of a {@link Iterator<Header>}.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.utils.*;
 @SuppressWarnings({
 	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
-public class BasicHeaderIterator implements HeaderIterator {
+public class BasicHeaderIterator implements Iterator<Header> {
 
 	private final Header[] entries;
 	private final String name;
@@ -60,17 +60,16 @@ public class BasicHeaderIterator implements HeaderIterator {
 		this.currentIndex = findNext(-1);
 	}
 
-	@Override /* Overridden from HeaderIterator */
+	@Override /* Overridden from Iterator<Header> */
 	public boolean hasNext() {
 		return (currentIndex >= 0);
 	}
 
-	@Override /* Overridden from HeaderIterator */
-	public final Object next() throws NoSuchElementException {
+	@Override /* Overridden from Iterator<Header> */
+	public final Header next() throws NoSuchElementException {
 		return nextHeader();
 	}
 
-	@Override /* Overridden from HeaderIterator */
 	public Header nextHeader() throws NoSuchElementException {
 
 		int current = currentIndex;
@@ -86,7 +85,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	/**
 	 * Not supported.
 	 */
-	@Override /* Overridden from HeaderIterator */
+	@Override /* Overridden from Iterator<Header> */
 	public void remove() {
 		throw uoex();
 	}

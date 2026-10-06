@@ -23,9 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.junit.jupiter.api.*;
 
 // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -45,7 +46,7 @@ class FileResource_Test extends TestBase {
 
 		var x2 = new FileResource(contentType("text/plain"), f);
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertTrue(x2.isRepeatable());
 		assertFalse(x2.isStreaming());
 
@@ -85,11 +86,11 @@ class FileResource_Test extends TestBase {
 
 		var x = new FileResource(null, f)
 			.setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 
 		var x2 = new FileResource(null, f)
 			.setContentType(contentType("text/html"));
-		assertEquals("text/html", x2.getContentType().getValue());
+		assertEquals("text/html", x2.getContentType());
 
 		f.delete();
 	}
@@ -99,11 +100,11 @@ class FileResource_Test extends TestBase {
 
 		var x = new FileResource(null, f)
 			.setContentEncoding("identity");
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 
 		var x2 = new FileResource(null, f)
 			.setContentEncoding(contentEncoding("gzip"));
-		assertEquals("gzip", x2.getContentEncoding().getValue());
+		assertEquals("gzip", x2.getContentEncoding());
 
 		f.delete();
 	}
@@ -159,7 +160,7 @@ class FileResource_Test extends TestBase {
 		FileResource x2 = x.copy();
 		assertNotSame(x, x2);
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertEquals("bar", x2.getHeaders().getFirst("Foo").get().getValue());
 
 		f.delete();

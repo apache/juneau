@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import org.apache.http.client.methods.*;
+import org.apache.hc.client5.http.classic.methods.*;
 
 /**
  * Inner request class of {@link RestRequest} for requests without bodies.
@@ -28,17 +28,18 @@ import org.apache.http.client.methods.*;
 @SuppressWarnings({
 	"resource" // restRequest is owned by the RestClient call chain; lifecycle managed by the enclosing RestCall
 })
-class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated {
+class BasicHttpRequestBase extends HttpUriRequestBase implements RestRequestCreated {
 
 	final String method;
 	final RestRequest restRequest;
 
 	BasicHttpRequestBase(RestRequest restRequest, String method) {
+		super(method, java.net.URI.create("/"));
 		this.method = method;
 		this.restRequest = restRequest;
 	}
 
-	@Override /* Overridden from HttpRequestBase */
+	@Override /* Overridden from HttpUriRequestBase */
 	public String getMethod() { return method; }
 
 	@Override /* Overridden from RestRequestCreated */

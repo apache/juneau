@@ -25,9 +25,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.http.util.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.util.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.HttpHeaders;
@@ -526,7 +526,7 @@ public class HeaderList extends ArrayList<Header> {
 	 *
 	 * @return A new iterator over this list of headers.
 	 */
-	public HeaderIterator headerIterator() {
+	public Iterator<Header> headerIterator() {
 		return new BasicHeaderIterator(toArray(new Header[0]), null, caseSensitive);
 	}
 
@@ -537,7 +537,7 @@ public class HeaderList extends ArrayList<Header> {
 	 *
 	 * @return A new iterator over the matching headers in this list.
 	 */
-	public HeaderIterator headerIterator(String name) {
+	public Iterator<Header> headerIterator(String name) {
 		return new BasicHeaderIterator(getAll(name), name, caseSensitive);
 	}
 
@@ -779,7 +779,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	
+
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for this specific logic
 	})

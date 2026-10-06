@@ -21,9 +21,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.test.assertions.*;
 

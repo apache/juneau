@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -76,7 +76,7 @@ class BasicStatusLine_Test extends TestBase {
 	@Test void a08_setReasonPhraseCatalog() {
 		var sl = BasicStatusLine.create()
 			.setStatusCode(200)
-			.setReasonPhraseCatalog(org.apache.http.impl.EnglishReasonPhraseCatalog.INSTANCE);
+			.setReasonPhraseCatalog(org.apache.hc.core5.http.impl.EnglishReasonPhraseCatalog.INSTANCE);
 		// With a custom catalog, setReasonPhrase is null so it uses the catalog
 		assertNotNull(sl.getReasonPhrase());
 	}
@@ -208,7 +208,7 @@ class BasicStatusLine_Test extends TestBase {
 		// Regression: constructing the snapshot must not route the freeze through the throwing modify().
 		var sl = BasicStatusLine.create(200, "OK")
 			.setLocale(Locale.ENGLISH)
-			.setReasonPhraseCatalog(org.apache.http.impl.EnglishReasonPhraseCatalog.INSTANCE);
+			.setReasonPhraseCatalog(org.apache.hc.core5.http.impl.EnglishReasonPhraseCatalog.INSTANCE);
 		assertDoesNotThrow(sl::unmodifiable);
 	}
 }

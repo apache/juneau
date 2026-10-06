@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.marshall.bson.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.json.*;
@@ -84,7 +84,7 @@ class RestClient_Builder_Coverage_Test {
 	}
 
 	@Test void a01_addInterceptorFirst() throws Exception {
-		var itcp = (HttpResponseInterceptor)(response, context) -> {};
+		var itcp = (HttpResponseInterceptor)(response, entity, context) -> {};
 		try (var client = RestClient.create().addInterceptorFirst(itcp).build();
 				var req = client.get(url());
 				var res = req.run()) {
@@ -205,7 +205,7 @@ class RestClient_Builder_Coverage_Test {
 	}
 
 	@Test void a16_httpClientBuilder_custom() throws Exception {
-		var hcb = org.apache.http.impl.client.HttpClientBuilder.create();
+		var hcb = org.apache.hc.client5.http.impl.classic.HttpClientBuilder.create();
 		try (var client = RestClient.create().httpClientBuilder(hcb).build();
 				var req = client.get(url());
 				var res = req.run()) {
@@ -234,8 +234,8 @@ class RestClient_Builder_Coverage_Test {
 		var restCallItcp = new BasicRestCallInterceptor() {};
 		b.interceptors(
 			(Object)null,
-			(HttpRequestInterceptor)(request, context) -> {},
-			(HttpResponseInterceptor)(response, context) -> {},
+			(HttpRequestInterceptor)(request, entity, context) -> {},
+			(HttpResponseInterceptor)(response, entity, context) -> {},
 			restCallItcp
 		);
 		// A second call exercises the "interceptors already non-null" branch (addAll vs assign).

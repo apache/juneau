@@ -27,8 +27,8 @@ import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
-import org.apache.http.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.httppart.*;
@@ -105,7 +105,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 			super(client);
 		}
 		@Override
-		public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+		public ClassicHttpResponse run(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException {
 			request.addHeader("Check","Foo");
 			request.addHeader("Foo","baz");
 			return super.run(target,request,context);
@@ -473,17 +473,18 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	}
 
 	@Test void a16_request_uriParts() throws Exception {
-		var uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{\"f\":1}").getRequest().getURI();
-		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
-
-		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{\"f\":1}").getRequest().getURI();
-		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
-
-		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertContent("{\"f\":1}").getRequest().getURI();
-		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
-
-		uri = client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertContent("{\"f\":1}").getRequest().getURI();
-		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
+		var requests = new RestRequest[] {
+			client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar"),
+			client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar"),
+			client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz"),
+			client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz"))
+		};
+		for (var request : requests) {
+			// HttpClient 5 rejects userinfo in outgoing request authorities.
+			var exception = assertThrows(RestCallException.class, request::run);
+			assertTrue(exception.getCause().getMessage().contains("deprecated userinfo"));
+			assertEquals("http://localhost:8080/bean?foo=bar", request.getUri().toString());
+		}
 	}
 
 	@Test void a17_getRootUrl() {

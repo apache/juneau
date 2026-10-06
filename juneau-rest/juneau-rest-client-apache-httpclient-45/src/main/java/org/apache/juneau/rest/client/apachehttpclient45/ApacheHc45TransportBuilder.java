@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
-
-import org.apache.http.impl.client.*;
+import org.apache.hc.client5.http.impl.classic.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**

@@ -26,8 +26,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-client-apache-httpclient-45</artifactId>
-	<name>Apache Juneau NG REST Client — Apache HttpClient 4.5 Transport</name>
-	<description>Apache HttpClient 4.5 transport adapter for the next-generation Juneau REST client.</description>
+	<name>Apache Juneau NG REST Client — Apache HttpClient 5.6 Transport</name>
+	<description>Apache HttpClient 5.6 transport adapter for the next-generation Juneau REST client.</description>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -41,9 +41,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.14</version>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

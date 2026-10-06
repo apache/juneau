@@ -23,9 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
@@ -38,7 +39,7 @@ class HttpHeaders_Test extends TestBase {
 		var x3 = header("X3","3");
 		var x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = m("X5",(Object)"5").entrySet().iterator().next();
-		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
+		org.apache.hc.core5.http.message.BasicNameValuePair x6 = new org.apache.hc.core5.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");
 		SerializedPart x9 = serializedPart("X9",()->"9");

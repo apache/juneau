@@ -28,11 +28,11 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 import java.util.zip.*;
 
-import org.apache.http.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.conn.*;
-import org.apache.http.entity.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
@@ -228,7 +228,34 @@ import jakarta.servlet.http.*;
 	"resource", // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
 	"unchecked" // Type erasure requires cast for builder chain
 })
-public class MockRestClient extends RestClient implements HttpClientConnection {
+public class MockRestClient extends RestClient implements org.apache.hc.core5.http.io.HttpClientConnection {
+
+	@Override
+	public void close(org.apache.hc.core5.io.CloseMode mode) { }
+
+	@Override
+	public boolean isDataAvailable(org.apache.hc.core5.util.Timeout timeout) { return true; }
+
+	@Override
+	public boolean isConsistent() { return true; }
+
+	@Override
+	public void terminateRequest(ClassicHttpRequest request) { }
+
+	@Override
+	public EndpointDetails getEndpointDetails() { return null; }
+
+	@Override
+	public java.net.SocketAddress getLocalAddress() { return null; }
+
+	@Override
+	public java.net.SocketAddress getRemoteAddress() { return null; }
+
+	@Override
+	public ProtocolVersion getProtocolVersion() { return HttpVersion.HTTP_1_1; }
+
+	@Override
+	public javax.net.ssl.SSLSession getSSLSession() { return null; }
 
 	/**
 	 * Builder class.
@@ -448,7 +475,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return logRequests(DetailLevel.NONE, null, null);
 		}
 
-
 	}
 
 	private static Map<Class<?>,RestContext> restContexts = new ConcurrentHashMap<>();
@@ -645,6 +671,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private final Map<String,String> pathVars;
 	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
+	private final ThreadLocal<HttpRequest> activeRequest = new ThreadLocal<>();
 	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
 	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
 
@@ -674,7 +701,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return (MockRestRequest)super.callback(callString);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
 	public void close() throws IOException {
 		// Don't call super.close() because it will close the client.
 		rreq.remove();
@@ -688,7 +714,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return (MockRestRequest)super.delete(url);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
 	public void flush() throws IOException {
 		// No-op: Mock implementation - full functionality not required
 	}
@@ -762,26 +787,21 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 */
 	public MockServletResponse getCurrentServerResponse() { return sres.get(); }
 
-	@Override /* Overridden from HttpClientConnection */
 	public HttpConnectionMetrics getMetrics() { return null; }
 
-	@Override /* Overridden from HttpClientConnection */
-	public int getSocketTimeout() { return Integer.MAX_VALUE; }
+	public org.apache.hc.core5.util.Timeout getSocketTimeout() { return org.apache.hc.core5.util.Timeout.DISABLED; }
 
 	@Override /* Overridden from RestClient */
 	public MockRestRequest head(Object url) throws RestCallException {
 		return (MockRestRequest)super.head(url);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
 	public boolean isOpen() { return true; }
 
-	@Override /* Overridden from HttpClientConnection */
 	public boolean isResponseAvailable(int timeout) throws IOException {
 		return true;
 	}
 
-	@Override /* Overridden from HttpClientConnection */
 	public boolean isStale() { return false; }
 
 	@Override /* Overridden from RestClient */
@@ -834,17 +854,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return (MockRestRequest)super.put(url, body, contentType);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
+	public void receiveResponseEntity(ClassicHttpResponse response) throws HttpException, IOException {
+		// Preserve bodyless Reset Content responses when HttpClient 5 asks for their entity.
+		if (response.getCode() == 205)
+			return;
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
 		var contentEncoding = response.getLastHeader("Content-Encoding");
 		if (nn(contentEncoding) && eqic(contentEncoding.getValue(), "gzip"))
 			is = new GZIPInputStream(is);
-		response.setEntity(new InputStreamEntity(is));
+		response.setEntity(new InputStreamEntity(is, org.apache.hc.core5.http.ContentType.parse(response.getFirstHeader("Content-Type") == null ? null : response.getFirstHeader("Content-Type").getValue())));
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
+	public ClassicHttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			var res = MockServletResponse.create();
 			var logLevel = sreq.get().getLogLevel();
@@ -872,7 +893,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			sres.set(res);
 
-			var response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
+			var response = new BasicClassicHttpResponse(res.getStatus(), res.getStatus() >= 1000 && res.getMessage() == null ? "" : res.getMessage());
 			res.getHeaders().forEach((k, v) -> {
 				for (var hv : v)
 					response.addHeader(k, hv);
@@ -904,8 +925,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return (MockRestRequest)super.request(method, url, body);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
+	public void sendRequestEntity(ClassicHttpRequest request) throws HttpException, IOException {
 		byte[] body = {};
 		var entity = request.getEntity();
 		if (nn(entity)) {
@@ -920,10 +940,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		sreq.get().content(body);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
+	public void sendRequestHeader(ClassicHttpRequest request) throws HttpException, IOException {
 		try {
-			var rl = request.getRequestLine();
+			var rl = new RequestLine(request);
 			var path = rl.getUri();
 			var target = findTarget(request);
 
@@ -939,9 +958,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (nn(pr.getError()))
 				throw new IllegalStateException(pr.getError());
 
-			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).logLevel(isDebug() ? Level.FINEST : null);
+			var r = MockServletRequest.create(new RequestLine(request).getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).logLevel(isDebug() ? Level.FINEST : null);
 
-			for (var h : request.getAllHeaders())
+			for (var h : request.getHeaders())
 				r.header(h.getName(), h.getValue());
 
 			sreq.set(r);
@@ -951,12 +970,10 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void setSocketTimeout(int timeout) {
+	public void setSocketTimeout(org.apache.hc.core5.util.Timeout timeout) {
 		// No-op: Mock implementation - full functionality not required
 	}
 
-	@Override /* Overridden from HttpClientConnection */
 	public void shutdown() throws IOException {
 		// No-op: Mock implementation - full functionality not required
 	}
@@ -966,20 +983,22 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).
 	 */
 	private HttpRequest findRestRequest(HttpRequest req) {
-		if (req instanceof RestRequestCreated req2)
-			return req2.getRestRequest();
-		if (req instanceof HttpRequestWrapper req2)
-			return findRestRequest(req2.getOriginal());
-		return req;
+		if (req instanceof RestRequestCreated created) return created.getRestRequest();
+		return activeRequest.get() != null ? activeRequest.get() : req;
 	}
 
 	private static String findTarget(HttpRequest req) {
-		if (req instanceof HttpRequestWrapper req2) {
-			var httpHost = req2.getTarget();
-			if (nn(httpHost))
-				return httpHost.toURI();
+		return req.getAuthority() != null ? (req.getScheme() != null ? req.getScheme() : "http") + "://" + req.getAuthority() : "http://localhost";
+	}
+
+	@Override
+	protected ClassicHttpResponse run(HttpHost target, ClassicHttpRequest request, org.apache.hc.core5.http.protocol.HttpContext context) throws IOException {
+		activeRequest.set(request instanceof RestRequestCreated created ? created.getRestRequest() : request);
+		try {
+			return super.run(target, request, context);
+		} finally {
+			activeRequest.remove();
 		}
-		return "http://localhost";
 	}
 
 	@Override /* Overridden from RestClient */
@@ -988,7 +1007,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from RestClient */
-	protected MockRestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
+	protected MockRestResponse createResponse(RestRequest req, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
 		return new MockRestResponse(this, req, httpResponse, parser);
 	}
 

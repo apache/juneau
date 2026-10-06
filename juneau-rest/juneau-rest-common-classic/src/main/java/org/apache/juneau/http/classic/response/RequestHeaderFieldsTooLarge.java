@@ -21,12 +21,13 @@ import static org.apache.juneau.http.classic.response.RequestHeaderFieldsTooLarg
 
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 
 /**
  * Exception representing an HTTP 431 (Request Header Fields Too Large).
@@ -77,7 +78,7 @@ public class RequestHeaderFieldsTooLarge extends BasicHttpException {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public RequestHeaderFieldsTooLarge(HttpResponse response) {
+	public RequestHeaderFieldsTooLarge(ClassicHttpResponse response) {
 		super(response);
 		assertStatusCode(response);
 	}

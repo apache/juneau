@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 
-import org.apache.http.client.utils.*;
+import org.apache.hc.client5.http.utils.*;
 import org.apache.juneau.http.*;
 
 /**

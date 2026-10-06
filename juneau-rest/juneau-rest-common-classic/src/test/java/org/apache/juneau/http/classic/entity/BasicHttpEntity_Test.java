@@ -97,7 +97,7 @@ class BasicHttpEntity_Test extends TestBase {
 		var u = x.unmodifiable();
 		x.setContent("changed".getBytes()).setContentType("text/html").setChunked(true);
 		assertArrayEquals(BYTES, u.asBytes());
-		assertEquals("text/plain", u.getContentType().getValue());
+		assertEquals("text/plain", u.getContentType());
 		assertFalse(u.isChunked());
 	}
 

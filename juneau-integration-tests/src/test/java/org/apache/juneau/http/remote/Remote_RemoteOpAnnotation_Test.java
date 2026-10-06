@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -126,17 +126,17 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	public interface B1 {
 		void x1();
 		String x2();
-		HttpResponse x3();
+		ClassicHttpResponse x3();
 		Reader x4();
 		InputStream x5();
 		Future<Void> x6();
 		Future<String> x7();
-		Future<HttpResponse> x8();
+		Future<ClassicHttpResponse> x8();
 		Future<Reader> x9();
 		Future<InputStream> x10();
 		CompletableFuture<Void> x11();
 		CompletableFuture<String> x12();
-		CompletableFuture<HttpResponse> x13();
+		CompletableFuture<ClassicHttpResponse> x13();
 		CompletableFuture<Reader> x14();
 		CompletableFuture<InputStream> x15();
 	}
@@ -175,15 +175,15 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	@Remote
 	public interface C1 {
 		String postX1(@Content String foo);
-		HttpResponse postX2(@Content String foo);
+		ClassicHttpResponse postX2(@Content String foo);
 		Reader postX3(@Content String foo);
 		InputStream postX4(@Content String foo);
 		Future<String> postX5(@Content String foo);
-		Future<HttpResponse> postX6(@Content String foo);
+		Future<ClassicHttpResponse> postX6(@Content String foo);
 		Future<Reader> postX7(@Content String foo);
 		Future<InputStream> postX8(@Content String foo);
 		CompletableFuture<String> postX9(@Content String foo);
-		CompletableFuture<HttpResponse> postX10(@Content String foo);
+		CompletableFuture<ClassicHttpResponse> postX10(@Content String foo);
 		CompletableFuture<Reader> postX11(@Content String foo);
 		CompletableFuture<InputStream> postX12(@Content String foo);
 	}
@@ -219,15 +219,15 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	@Remote
 	public interface D1 {
 		String postX1(@Content String foo);
-		HttpResponse postX2(@Content String foo);
+		ClassicHttpResponse postX2(@Content String foo);
 		Reader postX3(@Content String foo);
 		InputStream postX4(@Content String foo);
 		Future<String> postX5(@Content String foo);
-		Future<HttpResponse> postX6(@Content String foo);
+		Future<ClassicHttpResponse> postX6(@Content String foo);
 		Future<Reader> postX7(@Content String foo);
 		Future<InputStream> postX8(@Content String foo);
 		CompletableFuture<String> postX9(@Content String foo);
-		CompletableFuture<HttpResponse> postX10(@Content String foo);
+		CompletableFuture<ClassicHttpResponse> postX10(@Content String foo);
 		CompletableFuture<Reader> postX11(@Content String foo);
 		CompletableFuture<InputStream> postX12(@Content String foo);
 	}

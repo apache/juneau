@@ -21,12 +21,13 @@ import static org.apache.juneau.http.classic.response.UriTooLong.*;
 
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 
 /**
  * Exception representing an HTTP 414 (URI Too Long).
@@ -78,7 +79,7 @@ public class UriTooLong extends BasicHttpException {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public UriTooLong(HttpResponse response) {
+	public UriTooLong(ClassicHttpResponse response) {
 		super(response);
 		assertStatusCode(response);
 	}

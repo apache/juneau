@@ -38,6 +38,8 @@ class ApacheHc45Transport_Test {
 
 	private static HttpServer server;
 	private static int port;
+	private static final java.util.concurrent.CountDownLatch streamRelease = new java.util.concurrent.CountDownLatch(1);
+	private static final java.util.concurrent.atomic.AtomicInteger unavailableCalls = new java.util.concurrent.atomic.AtomicInteger();
 
 	@BeforeAll
 	static void startServer() throws IOException {
@@ -87,6 +89,27 @@ class ApacheHc45Transport_Test {
 			exchange.close();
 		});
 
+		server.createContext("/unavailable", exchange -> {
+			unavailableCalls.incrementAndGet();
+			exchange.getRequestBody().readAllBytes();
+			exchange.sendResponseHeaders(503, -1);
+			exchange.close();
+		});
+
+		server.createContext("/sse", exchange -> {
+			exchange.getResponseHeaders().add("Content-Type", "text/event-stream; charset=UTF-8");
+			exchange.sendResponseHeaders(200, 0);
+			exchange.getResponseBody().write("data: foo\n\n".getBytes(StandardCharsets.UTF_8));
+			exchange.getResponseBody().flush();
+			try {
+				streamRelease.await(10, java.util.concurrent.TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			} finally {
+				exchange.close();
+			}
+		});
+
 		server.start();
 	}
 
@@ -134,6 +157,34 @@ class ApacheHc45Transport_Test {
 				assertNotNull(ct);
 				assertTrue(ct.value().startsWith("text/plain"), "Expected text/plain but got: " + ct.value());
 			}
+		}
+	}
+
+	@Test
+	void a04_post503_isNotReplayed() throws Exception {
+		unavailableCalls.set(0);
+		try (var client = RestClient.builder().transport(ApacheHc45Transport.create()).rootUrl(rootUrl()).build()) {
+			try (var response = client.post("/unavailable").body(StringBody.of("foo", "text/plain")).run()) {
+				assertEquals(503, response.getStatusCode());
+			}
+		}
+		assertEquals(1, unavailableCalls.get());
+	}
+
+	@Test
+	void a05_sse_closeDoesNotWaitForStreamEnd() throws Exception {
+		var executor = java.util.concurrent.Executors.newSingleThreadExecutor();
+		try (var client = RestClient.builder().transport(ApacheHc45Transport.create()).rootUrl(rootUrl()).build()) {
+			var response = client.get("/sse").run();
+			try {
+				assertEquals("data: foo\n\n", new String(response.getBodyStream().readNBytes(11), StandardCharsets.UTF_8));
+				executor.submit(() -> { response.close(); return null; }).get(2, java.util.concurrent.TimeUnit.SECONDS);
+			} finally {
+				streamRelease.countDown();
+				response.close();
+			}
+		} finally {
+			executor.shutdownNow();
 		}
 	}
 
@@ -283,7 +334,7 @@ class ApacheHc45Transport_Test {
 	@Test
 	void e01_builder_withExplicitHttpClient() throws Exception {
 		var transport = ApacheHc45Transport.builder()
-			.httpClient(org.apache.http.impl.client.HttpClients.createDefault())
+			.httpClient(org.apache.hc.client5.http.impl.classic.HttpClients.createDefault())
 			.build();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {

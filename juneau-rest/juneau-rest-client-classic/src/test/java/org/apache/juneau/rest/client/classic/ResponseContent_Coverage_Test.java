@@ -23,7 +23,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.junit.jupiter.api.*;
 
@@ -95,12 +95,12 @@ class ResponseContent_Coverage_Test {
 	}
 
 	@Test void a01_asBytes_basicHttpEntityFastPath() throws Exception {
-		// An org.apache.http.HttpResponseInterceptor runs as part of the HttpClient's own response-processing
-		// pipeline -- before RestClient wraps the raw HttpResponse into a RestResponse/ResponseContent -- so
+		// An org.apache.hc.core5.http.HttpResponseInterceptor runs as part of the HttpClient's own response-processing
+		// pipeline -- before RestClient wraps the raw ClassicHttpResponse into a RestResponse/ResponseContent -- so
 		// replacing the entity here (unlike via a RestCallInterceptor#onConnect, which runs too late) is visible to
 		// ResponseContent's captured `entity` field, exercising the `entity instanceof BasicHttpEntity<?>` fast path.
 		var content = "fast-path".getBytes(StandardCharsets.UTF_8);
-		HttpResponseInterceptor itcp = (response, context) -> response.setEntity(new ByteArrayEntity(null, content));
+		HttpResponseInterceptor itcp = (response, entity, context) -> ((org.apache.hc.core5.http.ClassicHttpResponse)response).setEntity(new ByteArrayEntity(null, content));
 		try (var client = RestClient.create().interceptors(itcp).build();
 				var req = client.get(url());
 				var res = req.run()) {
@@ -109,7 +109,7 @@ class ResponseContent_Coverage_Test {
 	}
 
 	@Test void a02_asInputStream_unsupportedOperationException_wrappedAsIOException() throws Exception {
-		// asInputStream()'s non-cached branch re-fetches the *live* entity from the raw HttpResponse on every call
+		// asInputStream()'s non-cached branch re-fetches the *live* entity from the raw ClassicHttpResponse on every call
 		// (unlike asBytes(), which uses the field captured at construction), so a RestCallInterceptor#onConnect
 		// substitution -- which runs after ResponseContent is constructed but before the caller reads the body --
 		// is late enough to be visible here.
@@ -117,15 +117,17 @@ class ResponseContent_Coverage_Test {
 			@Override
 			public void onConnect(RestRequest req, RestResponse res) {
 				res.asHttpResponse().setEntity(new HttpEntity() {
+					@Override public java.util.Set<String> getTrailerNames() { return java.util.Set.of(); }
+					@Override public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return null; }
 					@Override public boolean isRepeatable() { return false; }
 					@Override public boolean isChunked() { return false; }
 					@Override public long getContentLength() { return -1; }
-					@Override public Header getContentType() { return null; }
-					@Override public Header getContentEncoding() { return null; }
+					@Override public String getContentType() { return null; }
+					@Override public String getContentEncoding() { return null; }
 					@Override public InputStream getContent() { throw new UnsupportedOperationException("Simulated: entity content not available."); }
 					@Override public void writeTo(OutputStream outstream) { throw new UnsupportedOperationException("Not used by this test."); }
 					@Override public boolean isStreaming() { return false; }
-					@Override public void consumeContent() { /* no-op */ }
+					@Override public void close() { /* no-op */ }
 				});
 			}
 		};
@@ -206,14 +208,14 @@ class ResponseContent_Coverage_Test {
 	}
 
 	@Test void a11_nullEntitySentinel_pipeToAndAsBytes_neverDelegateToItsWriteTo() throws Exception {
-		// ResponseContent's NULL_ENTITY sentinel (used when the raw HttpResponse has no entity)
+		// ResponseContent's NULL_ENTITY sentinel (used when the raw ClassicHttpResponse has no entity)
 		// has its own writeTo(OutputStream) simplified to fail fast (it's never legitimately invoked -- see the
 		// in-source comment). Forcing the sentinel into play via an HttpResponseInterceptor (which runs before
 		// ResponseContent captures `entity`, same as a01 above) and exercising both read paths confirms neither
 		// pipeTo (which goes through ResponseContent#writeTo, then pipeTo, asInputStream and entity.getContent) nor
 		// asBytes ever reaches the sentinel's writeTo; if they did, this test would fail with an
 		// UnsupportedOperationException instead of observing empty content.
-		HttpResponseInterceptor itcp = (response, context) -> response.setEntity(null);
+		HttpResponseInterceptor itcp = (response, entity, context) -> ((org.apache.hc.core5.http.ClassicHttpResponse)response).setEntity(null);
 		try (var client = RestClient.create().interceptors(itcp).build();
 				var req = client.get(url());
 				var res = req.run()) {

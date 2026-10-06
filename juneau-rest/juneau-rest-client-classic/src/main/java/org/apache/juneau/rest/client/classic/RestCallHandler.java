@@ -18,17 +18,19 @@ package org.apache.juneau.rest.client.classic;
 
 import java.io.*;
 
-import org.apache.http.*;
-import org.apache.http.client.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.client5.http.classic.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.core5.http.protocol.*;
 
 /**
  * Interface that allows you to override the handling of HTTP requests.
  *
  * <p>
- * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpRequest,HttpContext)}.
- * <br>This can also be accomplished by providing your own {@link RestClient.Builder#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
+ * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,ClassicHttpRequest,HttpContext)}.
+ * <br>This can also be accomplished by providing your own {@link RestClient.Builder#connectionManager(org.apache.hc.client5.http.io.HttpClientConnectionManager) connection manager}
  * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
  *
  * <p>
@@ -51,7 +53,7 @@ import org.apache.http.protocol.*;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+ * 		<jk>public</jk> ClassicHttpResponse run(HttpHost <jv>target</jv>, ClassicHttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
  * 			<jk>if</jk> (<jv>target</jv> == <jk>null</jk>)
  * 				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)<jv>request</jv>, <jv>context</jv>);
  * 			<jk>return</jk> <jf>client</jf>.execute(<jv>target</jv>, <jv>request</jv>, <jv>context</jv>);
@@ -85,5 +87,5 @@ public interface RestCallHandler {
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException;
+	ClassicHttpResponse run(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException;
 }

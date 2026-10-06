@@ -24,12 +24,14 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
-import org.apache.http.conn.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.client5.http.io.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
@@ -74,7 +76,7 @@ public class ResponseContent implements HttpEntity {
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
 		@Override
-		public void consumeContent() throws IOException {
+		public void close() throws IOException {
 			// No-op: Mock implementation - full functionality not required
 		}
 
@@ -82,13 +84,19 @@ public class ResponseContent implements HttpEntity {
 		public InputStream getContent() throws IOException, UnsupportedOperationException { return new ByteArrayInputStream(new byte[0]); }
 
 		@Override
-		public Header getContentEncoding() { return ResponseHeader.NULL_HEADER; }
+		public String getContentEncoding() { return null; }
 
 		@Override
 		public long getContentLength() { return -1; }
 
 		@Override
-		public Header getContentType() { return ResponseHeader.NULL_HEADER; }
+		public String getContentType() { return null; }
+
+		@Override
+		public java.util.Set<String> getTrailerNames() { return java.util.Set.of(); }
+
+		@Override
+		public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return null; }
 
 		@Override
 		public boolean isChunked() { return false; }
@@ -166,7 +174,7 @@ public class ResponseContent implements HttpEntity {
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link HttpResource} - Response will be converted to a {@link StreamResource}.
-	 * 			<li>Any type that takes in an {@link HttpResponse} object.
+	 * 			<li>Any type that takes in an {@link ClassicHttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
@@ -254,13 +262,13 @@ public class ResponseContent implements HttpEntity {
 			if (type.isChildOf(RecordReader.class) || type.is(RecordReader.class))
 				return (T) asCursor(type);
 
-			if (type.is(HttpResponse.class))
+			if (type.is(ClassicHttpResponse.class))
 				return (T)response;
 
 			if (type.is(HttpResource.class) || type.is(BasicResource.class))
 				type = (ClassMeta<T>)getClassMeta(StreamResource.class);
 
-			var result = type.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).map(ci -> safe(() -> (T)ci.newInstance(response)));
+			var result = type.getPublicConstructor(x -> x.hasParameterTypes(ClassicHttpResponse.class)).map(ci -> safe(() -> (T)ci.newInstance(response)));
 			if (result.isPresent())
 				return result.get();
 
@@ -433,7 +441,7 @@ public class ResponseContent implements HttpEntity {
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link HttpResource} - Response will be converted to a {@link StreamResource}.
-	 * 			<li>Any type that takes in an {@link HttpResponse} object.
+	 * 			<li>Any type that takes in an {@link ClassicHttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
@@ -793,7 +801,7 @@ public class ResponseContent implements HttpEntity {
 
 		// Figure out what the charset of the response is.
 		String cs = null;
-		var ct = getContentType().orElse(null);
+		var ct = getContentTypeHeader().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.
 		if (nn(ct) && ct.contains("charset="))
@@ -1025,23 +1033,13 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
-	 * This method is called to indicate that the content of this entity is no longer required.
-	 *
-	 * <p>
-	 * This method is of particular importance for entities being received from a connection.
-	 * <br>The entity needs to be consumed completely in order to re-use the connection with keep-alive.
+	 * Closes the underlying response entity.
 	 *
 	 * @throws IOException If an I/O error occurs.
-	 * @deprecated Use standard java convention to ensure resource deallocation by calling {@link InputStream#close()} on
-	 * the input stream returned by {@link #getContent()}
 	 */
-	@Override /* Overridden from HttpEntity */
-	@Deprecated(since = "10.0", forRemoval = true)
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
-	})
-	public void consumeContent() throws IOException {
-		entity.consumeContent();
+	@Override
+	public void close() throws IOException {
+		entity.close();
 	}
 
 	/**
@@ -1070,8 +1068,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return The <c>Content-Encoding</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content encoding is unknown.
 	 */
-	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentEncoding() { return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding()); }
+	public ResponseHeader getContentEncodingHeader() { return new ResponseHeader("Content-Encoding", request, response, org.apache.juneau.http.classic.HttpHeaders.stringHeader("Content-Encoding", entity.getContentEncoding())); }
 
 	/**
 	 * Tells the length of the content, if known.
@@ -1084,7 +1081,7 @@ public class ResponseContent implements HttpEntity {
 	public long getContentLength() { return nn(body) ? body.length : entity.getContentLength(); }
 
 	/**
-	 * Obtains the <c>Content-Type</c> header, if known.
+	 * Gets the <c>Content-Type</c> header, if known.
 	 *
 	 * <p>
 	 * This is the header that should be used when sending the entity, or the one that was received with the entity.
@@ -1092,8 +1089,19 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return The <c>Content-Type</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content type is unknown.
 	 */
-	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentType() { return new ResponseHeader(HEADER_ContentType, request, response, entity.getContentType()); }
+	public ResponseHeader getContentTypeHeader() { return new ResponseHeader(HEADER_ContentType, request, response, org.apache.juneau.http.classic.HttpHeaders.stringHeader(HEADER_ContentType, entity.getContentType())); }
+
+	@Override
+	public String getContentType() { return entity.getContentType(); }
+
+	@Override
+	public String getContentEncoding() { return entity.getContentEncoding(); }
+
+	@Override
+	public java.util.Set<String> getTrailerNames() { return entity.getTrailerNames(); }
+
+	@Override
+	public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return entity.getTrailers(); }
 
 	/**
 	 * Tells about chunked encoding for this entity.

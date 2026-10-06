@@ -22,8 +22,8 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.test.assertions.*;
@@ -213,11 +213,16 @@ public class BasicHeader implements Header, Serializable {
 		return asString().orElseThrow(() -> new NoSuchElementException("Header value is not present"));
 	}
 
-	@Override
+	/**
+	 * Gets the parsed header elements.
+	 *
+	 * @return The header elements.
+	 * @throws ParseException If the header value cannot be parsed.
+	 */
 	public HeaderElement[] getElements() throws ParseException {
 		if (elements == null) {
 			var s = getValue();
-			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
+			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.INSTANCE.parseElements(s, new ParserCursor(0, s.length()));
 			if (supplier == null)
 				elements = x;
 			return cp(x);
@@ -226,6 +231,9 @@ public class BasicHeader implements Header, Serializable {
 	}
 
 	@Override /* Overridden from Header */
+	public boolean isSensitive() { return false; }
+
+	@Override
 	public String getName() { return name; }
 
 	@Override /* Overridden from Header */

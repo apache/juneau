@@ -22,10 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.junit.jupiter.api.*;
 
 // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -41,7 +42,7 @@ class BasicResource_Test extends TestBase {
 	@Test void a01_constructor_entity() throws Exception {
 		var x = new StringResource(contentType("text/plain"), "foo");
 		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 		assertNotNull(x.getEntity());
 		assertSame(x.getEntity(), x.getEntity());
 	}
@@ -52,13 +53,13 @@ class BasicResource_Test extends TestBase {
 		var x = new StringResource(src);
 		assertNotSame(src, x);
 		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 		assertEquals("bar", x.getHeaders().getFirst("Foo").get().getValue());
 	}
 
 	@Test void a03_constructor_httpResponse() throws Exception {
-		var resp = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK");
-		resp.setEntity(new org.apache.http.entity.StringEntity("hello"));
+		var resp = new org.apache.hc.core5.http.message.BasicClassicHttpResponse(200, "OK");
+		resp.setEntity(new org.apache.hc.core5.http.io.entity.StringEntity("hello"));
 		resp.addHeader("X-Foo", "bar");
 		resp.addHeader("Content-Type", "text/plain");
 		resp.addHeader("Content-Encoding", "identity");
@@ -66,8 +67,8 @@ class BasicResource_Test extends TestBase {
 		var x = new StreamResource(resp);
 		assertEquals("hello", toUtf8(x.getContent()));
 		assertEquals("bar", x.getHeaders().getFirst("X-Foo").get().getValue());
-		assertEquals("text/plain", x.getContentType().getValue());
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("text/plain", x.getContentType());
+		assertEquals("identity", x.getContentEncoding());
 		assertEquals(5L, x.getContentLength());
 	}
 
@@ -103,10 +104,10 @@ class BasicResource_Test extends TestBase {
 				header("Content-Length", "3"),
 				header("X-Foo", "bar"),
 				null,                          // null header skipped
-				new org.apache.http.message.BasicHeader("", "ignored") // empty-name header skipped
+				new org.apache.hc.core5.http.message.BasicHeader("", "ignored") // empty-name header skipped
 			);
-		assertEquals("text/plain", x.getContentType().getValue());
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("text/plain", x.getContentType());
+		assertEquals("identity", x.getContentEncoding());
 		assertEquals(3L, x.getContentLength());
 		assertEquals("bar", x.getHeaders().getFirst("X-Foo").get().getValue());
 	}
@@ -119,10 +120,10 @@ class BasicResource_Test extends TestBase {
 				header("Content-Length", "3"),
 				header("X-Foo", "bar"),
 				null,                          // null header skipped
-				new org.apache.http.message.BasicHeader("", "ignored") // empty-name header skipped
+				new org.apache.hc.core5.http.message.BasicHeader("", "ignored") // empty-name header skipped
 			);
-		assertEquals("text/plain", x.getContentType().getValue());
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("text/plain", x.getContentType());
+		assertEquals("identity", x.getContentEncoding());
 		assertEquals(3L, x.getContentLength());
 		assertEquals("bar", x.getHeaders().getFirst("X-Foo").get().getValue());
 	}
@@ -153,21 +154,21 @@ class BasicResource_Test extends TestBase {
 	@Test void c03_setContentType_string_andContentType() {
 		var x = new StringResource(null, "foo")
 			.setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 
 		var x2 = new StringResource(null, "foo")
 			.setContentType(contentType("text/html"));
-		assertEquals("text/html", x2.getContentType().getValue());
+		assertEquals("text/html", x2.getContentType());
 	}
 
 	@Test void c04_setContentEncoding_string_andContentEncoding() {
 		var x = new StringResource(null, "foo")
 			.setContentEncoding("identity");
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 
 		var x2 = new StringResource(null, "foo")
 			.setContentEncoding(contentEncoding("gzip"));
-		assertEquals("gzip", x2.getContentEncoding().getValue());
+		assertEquals("gzip", x2.getContentEncoding());
 	}
 
 	@Test void c05_setContentLength() {
@@ -213,7 +214,7 @@ class BasicResource_Test extends TestBase {
 		var x2 = x.copy();
 		assertNotSame(x, x2);
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertEquals("bar", x2.getHeaders().getFirst("Foo").get().getValue());
 	}
 
@@ -227,7 +228,7 @@ class BasicResource_Test extends TestBase {
 	@Test void d06_consumeContent() {
 		var x = new StringResource(null, "foo");
 		// consumeContent() is a no-op that must complete without throwing.
-		assertDoesNotThrow(x::consumeContent);
+		assertDoesNotThrow(x::close);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

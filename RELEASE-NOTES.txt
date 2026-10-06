@@ -11,6 +11,23 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 10.0.0 - YYYY-MM-DD
+
+** Changes - Apache HttpComponents 5
+
+    * Port the classic HTTP APIs and Apache transport to HttpClient 5.6.4 and HttpCore 5.4.4.
+    * Public Apache HTTP types now use the org.apache.hc.client5 and org.apache.hc.core5 packages.
+    * Entity content type and encoding getters return strings. ResponseContent provides
+      getContentTypeHeader() and getContentEncodingHeader() for fluent header assertions.
+    * Header iterators use Iterator<Header>; classic responses expose getCode(), getVersion(), and getHeaders().
+      getHeaderList() provides the mutable Juneau header builder on classic requests and responses.
+    * Remove the obsolete HttpParams APIs. Connection, socket, and TLS options configure HttpClient 5 connection managers.
+    * Adopt HttpClient 5 request framing validation, URI encoding, default reason phrases, and rejection of URI userinfo.
+    * Represent a missing classic HTTP response as status 500 (Missing HTTP response).
+    * Close Apache transport SSE responses immediately so cancellation does not wait for an unbounded stream to finish.
+    * Preserve classic retry behavior and credential stripping on cross-origin redirects.
+    * Retain the historical juneau-rest-client-apache-httpclient-45 artifact and Java class names; this module now uses HttpClient 5.
+
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
 ** New Features - CBOR (Concise Binary Object Representation) Support

@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.http.client.protocol.*;
-import org.apache.http.message.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.client5.http.protocol.*;
+import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -41,19 +41,19 @@ class BasicHttpRequestRetryHandler_Test {
 
 	@Test void a01_retryInterval_zero_skipsSleep() {
 		var h = new BasicHttpRequestRetryHandler(3, 0, true);
-		assertTrue(h.retryRequest(new IOException("x"), 1, context));
+		assertTrue(h.retryRequest(new org.apache.hc.core5.http.message.BasicHttpRequest("GET", "/"), new IOException("x"), 1, context));
 	}
 
 	@Test void a02_retryInterval_positive_sleeps() {
 		var h = new BasicHttpRequestRetryHandler(3, 1, true);
-		assertTrue(h.retryRequest(new IOException("x"), 1, context));
+		assertTrue(h.retryRequest(new org.apache.hc.core5.http.message.BasicHttpRequest("GET", "/"), new IOException("x"), 1, context));
 	}
 
 	@Test void a03_retryInterval_positive_interruptedSleep_setsInterruptFlagAndContinues() {
 		var h = new BasicHttpRequestRetryHandler(3, 5000, true);
 		Thread.currentThread().interrupt();
 		try {
-			assertTrue(h.retryRequest(new IOException("x"), 1, context));
+			assertTrue(h.retryRequest(new org.apache.hc.core5.http.message.BasicHttpRequest("GET", "/"), new IOException("x"), 1, context));
 			assertTrue(Thread.currentThread().isInterrupted(), "Interrupt status should have been restored");
 		} finally {
 			// Clear the interrupt flag so it doesn't leak into other tests.

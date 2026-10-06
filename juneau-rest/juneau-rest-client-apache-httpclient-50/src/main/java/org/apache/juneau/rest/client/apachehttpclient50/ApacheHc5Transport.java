@@ -147,7 +147,10 @@ public final class ApacheHc5Transport implements HttpTransport {
 
 	private static void closeQuietly(ClassicHttpResponse hcResponse) {
 		try {
-			hcResponse.close();
+			if (hcResponse instanceof org.apache.hc.core5.io.ModalCloseable closeable)
+				closeable.close(org.apache.hc.core5.io.CloseMode.IMMEDIATE);
+			else
+				hcResponse.close();
 		} catch (IOException e) {
 			// Best-effort cleanup on an already-failing path; nothing more can be done.
 		}
@@ -190,6 +193,12 @@ public final class ApacheHc5Transport implements HttpTransport {
 		for (var h : hcResponse.getHeaders())
 			builder.header(h.getName(), h.getValue());
 		var entity = hcResponse.getEntity();
+		var contentType = hcResponse.getFirstHeader("Content-Type");
+		if (contentType != null && "text/event-stream".equalsIgnoreCase(contentType.getValue().split(";", 2)[0].trim())
+				&& hcResponse instanceof org.apache.hc.core5.io.ModalCloseable closeable) {
+			// An SSE stream has no final chunk to drain; close the connection to unblock any reader.
+			builder.closeCallback(() -> closeable.close(org.apache.hc.core5.io.CloseMode.IMMEDIATE));
+		}
 		if (entity != null) {
 			try {
 				builder.body(entity.getContent());

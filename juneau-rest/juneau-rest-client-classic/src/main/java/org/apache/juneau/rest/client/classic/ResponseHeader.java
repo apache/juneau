@@ -25,10 +25,12 @@ import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
@@ -58,7 +60,7 @@ public class ResponseHeader extends BasicHeader {
 	static final Header NULL_HEADER = new Header() {
 
 		@Override /* Overridden from Header */
-		public HeaderElement[] getElements() throws org.apache.http.ParseException { return new HeaderElement[0]; }
+		public boolean isSensitive() { return false; }
 
 		@Override /* Overridden from Header */
 		public String getName() { return null; }
@@ -85,7 +87,7 @@ public class ResponseHeader extends BasicHeader {
 		super(name, header == null ? null : header.getValue());
 		this.request = request;
 		this.response = response;
-		this.elements = header == null ? new HeaderElement[0] : header.getElements();
+		this.elements = header == null ? new HeaderElement[0] : org.apache.hc.core5.http.message.MessageSupport.parse(header);
 		parser(null);
 	}
 
@@ -519,10 +521,10 @@ public class ResponseHeader extends BasicHeader {
 	 * Parses the value.
 	 *
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
-	 * @throws org.apache.http.ParseException In case of a parsing error.
+	 * @throws org.apache.hc.core5.http.ParseException In case of a parsing error.
 	 */
 	@Override /* Overridden from Header */
-	public HeaderElement[] getElements() throws org.apache.http.ParseException { return cp(elements); }
+	public HeaderElement[] getElements() throws org.apache.hc.core5.http.ParseException { return cp(elements); }
 
 	/**
 	 * Specifies the part parser to use for this header.

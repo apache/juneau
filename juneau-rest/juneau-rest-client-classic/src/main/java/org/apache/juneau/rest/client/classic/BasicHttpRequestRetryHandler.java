@@ -18,19 +18,21 @@ package org.apache.juneau.rest.client.classic;
 
 import java.io.*;
 
-import org.apache.http.impl.client.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
+import org.apache.hc.core5.http.protocol.*;
 
 /**
- * An extension of {@link StandardHttpRequestRetryHandler} that adds support for a retry interval.
+ * An extension of {@link DefaultHttpRequestRetryStrategy} that adds support for a retry interval.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
-class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
+class BasicHttpRequestRetryHandler extends DefaultHttpRequestRetryStrategy {
 
 	private final int retryInterval;
+	private final boolean requestSentRetryEnabled;
 
 	/**
 	 * Create the request retry handler.
@@ -48,12 +50,23 @@ class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
 	 * @param requestSentRetryEnabled Specify <jk>true</jk> if it's OK to retry non-idempotent requests that have been sent.
 	 */
 	public BasicHttpRequestRetryHandler(int retryCount, int retryInterval, boolean requestSentRetryEnabled) {
-		super(retryCount, requestSentRetryEnabled);
+		super(retryCount, org.apache.hc.core5.util.TimeValue.ofMilliseconds(Math.max(0, retryInterval)));
 		this.retryInterval = retryInterval;
+		this.requestSentRetryEnabled = requestSentRetryEnabled;
 	}
 
 	@Override
-	public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+	public boolean retryRequest(org.apache.hc.core5.http.HttpResponse response, int executionCount, HttpContext context) {
+		return false;
+	}
+
+	@Override
+	protected boolean handleAsIdempotent(org.apache.hc.core5.http.HttpRequest request) {
+		return requestSentRetryEnabled || super.handleAsIdempotent(request);
+	}
+
+	@Override
+	public boolean retryRequest(org.apache.hc.core5.http.HttpRequest request, IOException exception, int executionCount, HttpContext context) {
 		if (retryInterval > 0) {
 			try {
 				Thread.sleep(retryInterval);
@@ -61,6 +74,6 @@ class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
 				Thread.currentThread().interrupt();
 			}
 		}
-		return super.retryRequest(exception, executionCount, context);
+		return super.retryRequest(request, exception, executionCount, context);
 	}
 }

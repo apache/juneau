@@ -21,10 +21,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.apache.http.*;
-import org.apache.http.conn.*;
-import org.apache.http.conn.routing.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.client5.http.routing.*;
+import org.apache.hc.core5.http.protocol.*;
 
 /**
  * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockRestClient} class.
@@ -42,75 +42,65 @@ import org.apache.http.protocol.*;
  */
 class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
-	private ConnectionRequest cr;
+	private MockRestClient client;
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeExpiredConnections() {
-		// No-op: Mock implementation - full functionality not required
-	}
+	public void init(MockRestClient client) { this.client = client; }
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeIdleConnections(long idletime, TimeUnit tunit) {
-		// No-op: Mock implementation - full functionality not required
-	}
-
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {
-		// No-op: Mock implementation - full functionality not required
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		// All MockHttpClientConnectionManagers are considered equal.
-		return nn(o) && o instanceof MockHttpClientConnectionManager;
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return MockHttpClientConnectionManager.class.hashCode();
-	}
-
-	/**
-	 * Post-creation initialization method.
-	 *
-	 * @param mockRestClient Allows the connection manager to reference the mock rest client that created it.
-	 */
-	public void init(MockRestClient mockRestClient) {
-		this.cr = new ConnectionRequest() {
+	@Override
+	public LeaseRequest lease(String id, org.apache.hc.client5.http.HttpRoute route, org.apache.hc.core5.util.Timeout timeout, Object state) {
+		return new LeaseRequest() {
 			@Override
-			public boolean cancel() {
-				return false;
-			}
+			public boolean cancel() { return false; }
 
 			@Override
-			public HttpClientConnection get(long timeout, TimeUnit tunit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
-				return mockRestClient;
+			public ConnectionEndpoint get(org.apache.hc.core5.util.Timeout timeout) {
+				return new ConnectionEndpoint() {
+					@Override
+					public ClassicHttpResponse execute(String id, ClassicHttpRequest request,
+						org.apache.hc.core5.http.impl.io.HttpRequestExecutor executor, HttpContext context) throws IOException, HttpException {
+						return executor.execute(request, client, context);
+					}
+
+					@Override
+					public ClassicHttpResponse execute(String id, ClassicHttpRequest request,
+						ConnectionEndpoint.RequestExecutor executor, HttpContext context) throws IOException, HttpException {
+						return executor.execute(request, client, context);
+					}
+
+					@Override
+					public boolean isConnected() { return true; }
+
+					@Override
+					public void setSocketTimeout(org.apache.hc.core5.util.Timeout timeout) { }
+
+					@Override
+					public void close() { }
+
+					@Override
+					public void close(org.apache.hc.core5.io.CloseMode mode) { }
+				};
 			}
 		};
 	}
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {
-		// No-op: Mock implementation - full functionality not required
-	}
+	@Override
+	public void release(ConnectionEndpoint endpoint, Object state, org.apache.hc.core5.util.TimeValue duration) { }
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public ConnectionRequest requestConnection(HttpRoute route, Object state) {
-		return cr;
-	}
+	@Override
+	public void connect(ConnectionEndpoint endpoint, org.apache.hc.core5.util.TimeValue timeout, HttpContext context) { }
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void routeComplete(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {
-		// No-op: Mock implementation - full functionality not required
-	}
+	@Override
+	public void upgrade(ConnectionEndpoint endpoint, HttpContext context) { }
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void shutdown() {
-		// No-op: Mock implementation - full functionality not required
-	}
+	@Override
+	public void close() { }
 
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {
-		// No-op: Mock implementation - full functionality not required
-	}
+	@Override
+	public void close(org.apache.hc.core5.io.CloseMode mode) { }
+
+	@Override
+	public boolean equals(Object o) { return o instanceof MockHttpClientConnectionManager; }
+
+	@Override
+	public int hashCode() { return MockHttpClientConnectionManager.class.hashCode(); }
 }

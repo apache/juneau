@@ -83,10 +83,10 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		@RemoteOp(path="a") String getX14(@Header() @Schema(format="uon") Map<String,Bean> b);
 		@RemoteOp(path="a") String getX15(@Header("*") HeaderList b);
 		@RemoteOp(path="a") String getX16(@Header HeaderList b);
-		@RemoteOp(path="a") String getX17(@Header org.apache.http.Header b);
-		@RemoteOp(path="a") String getX18(@Header org.apache.http.Header[] b);
+		@RemoteOp(path="a") String getX17(@Header org.apache.hc.core5.http.Header b);
+		@RemoteOp(path="a") String getX18(@Header org.apache.hc.core5.http.Header[] b);
 		@RemoteOp(path="a") String getX19(@Header String b);
-		@RemoteOp(path="a") String getX20(@Header List<org.apache.http.Header> b);
+		@RemoteOp(path="a") String getX20(@Header List<org.apache.hc.core5.http.Header> b);
 	}
 
 	@Test void a01_objectTypes() {
@@ -747,7 +747,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		@Header(value="*") @Schema(aev=true) public HeaderList getB() { return headers("b1","true","b2","123","b3","null"); }
 		@Header("*") @Schema(aev=true) public HeaderList getC() { return headerList(stringHeader("c1","v1"),integerHeader("c2",123),basicHeader("c3",null),stringHeader("c4","")); }
 		@Header(value="*") @Schema(aev=true) public HeaderList getD() { return null; }
-		@Header() @Schema(aev=true) public org.apache.http.Header[] getE() { return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll(); }
+		@Header() @Schema(aev=true) public org.apache.hc.core5.http.Header[] getE() { return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll(); }
 		@Header() @Schema(aev=true) public BasicHeader[] getF() { return headerList(stringHeader("f1","v1"),integerHeader("f2",123),basicHeader("f3",null),stringHeader("f4","")).stream().toArray(BasicHeader[]::new); }
 	}
 
@@ -797,7 +797,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		return headerList(pairs);
 	}
 
-	private static org.apache.http.Header header(String key,Object val) {
+	private static org.apache.hc.core5.http.Header header(String key,Object val) {
 		return basicHeader(key,val);
 	}
 

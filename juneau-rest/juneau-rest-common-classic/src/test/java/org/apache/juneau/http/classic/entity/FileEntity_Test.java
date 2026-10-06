@@ -49,7 +49,7 @@ class FileEntity_Test extends TestBase {
 	@Test void a02_constructor_contentType() throws Exception {
 		var x = new FileEntity(ContentType.TEXT_PLAIN, tempFile);
 		assertEquals("hello world", x.asString());
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a03_asBytes_uncached() throws Exception {
@@ -124,7 +124,7 @@ class FileEntity_Test extends TestBase {
 		var copy = x.copy();
 		assertNotSame(x, copy);
 		assertEquals("hello world", copy.asString());
-		assertEquals("text/plain", copy.getContentType().getValue());
+		assertEquals("text/plain", copy.getContentType());
 	}
 
 	@Test void a14_setChunked() {
@@ -141,7 +141,7 @@ class FileEntity_Test extends TestBase {
 
 	@Test void a16_setContentType_string() {
 		var x = new FileEntity().setContent(tempFile).setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a17_setCharset() throws Exception {
@@ -158,12 +158,12 @@ class FileEntity_Test extends TestBase {
 
 	@Test void a19_setContentEncoding_string() {
 		var x = new FileEntity().setContent(tempFile).setContentEncoding("gzip");
-		assertEquals("gzip", x.getContentEncoding().getValue());
+		assertEquals("gzip", x.getContentEncoding());
 	}
 
 	@Test void a20_setContentEncoding_object() {
 		var x = new FileEntity().setContent(tempFile).setContentEncoding(ContentEncoding.of("identity"));
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 	}
 
 	@Test void a21_setContentLength() {
@@ -174,7 +174,7 @@ class FileEntity_Test extends TestBase {
 
 	@Test void a22_setContentType_object() {
 		var x = new FileEntity().setContent(tempFile).setContentType(ContentType.TEXT_HTML);
-		assertEquals("text/html", x.getContentType().getValue());
+		assertEquals("text/html", x.getContentType());
 	}
 
 	@Test void a23_unmodifiable() {

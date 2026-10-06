@@ -22,7 +22,7 @@ import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshall.collections.*;

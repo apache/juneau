@@ -25,10 +25,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.entity.*;
-import org.apache.http.message.*;
-import org.apache.http.params.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json5.*;
@@ -70,15 +69,15 @@ class RestClient_Response_Test extends TestBase {
 			super(b);
 		}
 		@Override
-		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		protected MockRestResponse createResponse(RestRequest request, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
 			return new MockRestResponse(this, request, null, parser);
 		}
 	}
 
 	@Test void a01_getStatusLine() throws RestCallException {
 		assertEquals(200,client().build().get("/bean").run().getStatusLine().getStatusCode());
-		assertThrowsWithMessage(Exception.class, "caused response code '0, null'", ()->client().build(A1.class).get("/bean").run());
-		assertEquals(0,client().ignoreErrors().build(A1.class).get("/bean").run().getStatusLine().getStatusCode());
+		assertThrowsWithMessage(Exception.class, "caused response code '500, Missing HTTP response'", ()->client().build(A1.class).get("/bean").run());
+		assertEquals(500,client().ignoreErrors().build(A1.class).get("/bean").run().getStatusLine().getStatusCode());
 	}
 
 	@Test void a03_getStatusCode() throws RestCallException {
@@ -86,11 +85,11 @@ class RestClient_Response_Test extends TestBase {
 	}
 
 	@Test void a05_getReasonPhrase() throws RestCallException {
-		assertNull(client().build().get("/bean").run().getReasonPhrase());
+		assertEquals("OK",client().build().get("/bean").run().getReasonPhrase());
 	}
 
 	@Test void a07_setStatusLine() throws RestCallException {
-		var sl = new BasicStatusLine(new ProtocolVersion("http",9,8),299,"foo");
+		var sl = new StatusLine(new ProtocolVersion("http",9,8),299,"foo");
 		var r = client().build().get("/bean").run();
 		r.setStatusLine(sl);
 		r
@@ -109,7 +108,7 @@ class RestClient_Response_Test extends TestBase {
 		r.setStatusLine(new ProtocolVersion("http",9,8),296,"foo");
 		r.assertStatus(296);
 
-		assertEquals(9, r.getProtocolVersion().getMajor());
+		assertEquals(9, r.getVersion().getMajor());
 	}
 
 	@Test void a08_setLocale() throws RestCallException {
@@ -180,10 +179,10 @@ class RestClient_Response_Test extends TestBase {
 		r.getLastHeader("Foo").assertValue().is("quux");
 
 		var i = r.headerIterator();
-		assertEquals("quux", i.nextHeader().getValue());
+		assertEquals("quux", i.next().getValue());
 
 		i = r.headerIterator("Foo");
-		assertEquals("quux", i.nextHeader().getValue());
+		assertEquals("quux", i.next().getValue());
 
 		r.removeHeader(basicHeader("Foo","quux"));
 		assertFalse(r.getFirstHeader("Foo").isPresent());
@@ -217,13 +216,6 @@ class RestClient_Response_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// Other.
 	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void e01_response_getParams_setParams() throws Exception {
-		var x = client(D.class).build().post("/bean",bean).run();
-		var p = new BasicHttpParams();
-		x.setParams(p);
-		assertSame(x.getParams(), p);
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.

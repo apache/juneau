@@ -109,8 +109,8 @@ class BasicHttpResource_Test extends TestBase {
 		assertEquals(3L, readerResource(reader("foo")).setContentLength(3).getContentLength());
 
 		var x13 = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
-		assertEquals("text/plain", x13.getContentType().getValue());
-		assertEquals("identity", x13.getContentEncoding().getValue());
+		assertEquals("text/plain", x13.getContentType());
+		assertEquals("identity", x13.getContentEncoding());
 
 		var x14 = stringResource("foo", null).setContentEncoding((String)null);
 		assertNull(x14.getContentType());
@@ -169,14 +169,14 @@ class BasicHttpResource_Test extends TestBase {
 
 	@Test void a08_contentType_String() {
 		var x1 = stringResource("foo").setContentType("text/plain");
-		assertEquals("text/plain", x1.getContentType().getValue());
+		assertEquals("text/plain", x1.getContentType());
 		var x2 = stringResource("foo").setContentType((String)null);
 		assertNull(x2.getContentType());
 	}
 
 	@Test void a09_contentEncoding_String() {
 		var x1 = stringResource("foo").setContentEncoding("identity");
-		assertEquals("identity", x1.getContentEncoding().getValue());
+		assertEquals("identity", x1.getContentEncoding());
 		var x2 = stringResource("foo").setContentEncoding((String)null);
 		assertNull(x2.getContentEncoding());
 	}

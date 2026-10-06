@@ -23,20 +23,21 @@ import static org.apache.juneau.test.assertions.Assertions.*;
 import java.net.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.http.impl.*;
-import org.apache.http.params.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.impl.*;
+import org.apache.hc.core5.http.message.StatusLine;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.marshall.*;
 
 /**
- * Basic implementation of the {@link HttpResponse} interface.
+ * Basic implementation of the {@link ClassicHttpResponse} interface.
  *
  * <p>
- * Although this class implements the various setters defined on the {@link HttpResponse} interface, it's in general
+ * Although this class implements the various setters defined on the {@link ClassicHttpResponse} interface, it's in general
  * going to be more efficient to set the status/headers/content of this bean through the builder.
  *
  * <p>
@@ -66,7 +67,33 @@ import org.apache.juneau.marshall.*;
 	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
-public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> implements HttpResponse {
+public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> implements ClassicHttpResponse {
+
+	@Override
+	public void close() throws java.io.IOException { if (content != null) content.close(); }
+
+	@Override
+	public int getCode() { return statusLine.getStatusCode(); }
+
+	@Override
+	public void setCode(int code) { modify(() -> statusLine.setStatusCode(code)); }
+
+	@Override
+	public String getReasonPhrase() { return statusLine.getReasonPhrase(); }
+
+	@Override
+	public void setVersion(ProtocolVersion version) { modify(() -> statusLine.setProtocolVersion(version)); }
+
+	@Override
+	public int countHeaders(String name) { return headers.getAll(name).length; }
+
+	@Override
+	public Header getHeader(String name) throws org.apache.hc.core5.http.ProtocolException {
+		Header[] values = getHeaders(name);
+		if (values.length > 1)
+			throw new org.apache.hc.core5.http.ProtocolException("Multiple headers: " + name);
+		return values.length == 0 ? null : values[0];
+	}
 
 	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
@@ -100,11 +127,11 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 *
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
-	protected BasicHttpResponse(HttpResponse response) {
+	protected BasicHttpResponse(ClassicHttpResponse response) {
 		reqnn("response", response);
-		setHeaders(response.getAllHeaders());
+		setHeaders(response.getHeaders());
 		setContent(response.getEntity());
-		setStatusLine(response.getStatusLine());
+		setStatusLine(new StatusLine(response));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -113,8 +140,8 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		modify(() -> headers.append(name, value));
+	public void addHeader(String name, Object value) {
+		modify(() -> headers.append(name, value == null ? null : value.toString()));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -123,7 +150,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() { return headers.getAll(); }
+	public Header[] getHeaders() { return headers.getAll(); }
 
 	@Override /* Overridden from HttpMessage */
 	public HttpEntity getEntity() {
@@ -143,7 +170,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList getHeaders() { return headers; }
+	public HeaderList getHeaderList() { return headers; }
 
 	@Override /* Overridden from HttpMessage */
 	public Header[] getHeaders(String name) {
@@ -159,21 +186,17 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	public Locale getLocale() { return statusLine.getLocale(); }
 
 	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() { return null; }
+	public ProtocolVersion getVersion() { return statusLine.getProtocolVersion(); }
+
+	public StatusLine getStatusLine() { return new StatusLine(getVersion(), getCode(), getReasonPhrase()); }
 
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() { return statusLine.getProtocolVersion(); }
-
-	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() { return statusLine; }
-
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
+	public Iterator<Header> headerIterator() {
 		return headers.headerIterator();
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
+	public Iterator<Header> headerIterator(String name) {
 		return headers.headerIterator(name);
 	}
 
@@ -185,13 +208,17 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
 
 	@Override /* Overridden from HttpMessage */
-	public void removeHeader(Header value) {
+	public boolean removeHeader(Header value) {
+		boolean present = Arrays.asList(headers.getAll()).contains(value);
 		modify(() -> headers.remove(value));
+		return present;
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void removeHeaders(String name) {
+	public boolean removeHeaders(String name) {
+		boolean present = headers.contains(name);
 		modify(() -> headers.remove(name));
+		return present;
 	}
 
 	/**
@@ -225,8 +252,8 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		modify(() -> headers.set(name, value));
+	public void setHeader(String name, Object value) {
+		modify(() -> headers.set(name, value == null ? null : value.toString()));
 	}
 
 	/**
@@ -247,7 +274,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @return This object.
 	 */
 	public SELF setHeader2(String name, String value) {
-		return modify(() -> headers.set(name, value));
+		return modify(() -> headers.set(name, value == null ? null : value.toString()));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -323,12 +350,6 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 		return modify(() -> headers.set(Location.of(value)));
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {
-		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
-		modify(() -> { /* No-op */ });
-	}
-
 	/**
 	 * Sets the protocol version on the status line.
 	 *
@@ -374,7 +395,6 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 		return modify(() -> statusLine.setReasonPhraseCatalog(value));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
 		modify(() -> statusLine.setStatusCode(code));
 	}
@@ -405,17 +425,14 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 		return modify(() -> statusLine = value.copy());
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
 		modify(() -> statusLine.setProtocolVersion(ver).setStatusCode(code));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
 		modify(() -> statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(StatusLine value) {
 		modify(() -> statusLine.setProtocolVersion(value.getProtocolVersion()).setReasonPhrase(value.getReasonPhrase()).setStatusCode(value.getStatusCode()));
 	}
@@ -497,10 +514,10 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If status code is not what was expected.
 	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+	protected void assertStatusCode(ClassicHttpResponse response) throws AssertionError {
 		reqnn("response", response);
 		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
+		int actual = response.getCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);
 	}
 }

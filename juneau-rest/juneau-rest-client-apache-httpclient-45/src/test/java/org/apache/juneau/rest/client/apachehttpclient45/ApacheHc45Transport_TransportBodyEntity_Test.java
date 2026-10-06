@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client.apachehttpclient45;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.entity.*;
+import org.apache.hc.core5.http.io.entity.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;

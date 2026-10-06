@@ -21,11 +21,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.test.assertions.*;
 
 /**
@@ -91,7 +92,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws IOException Rethrown from {@link HttpEntity#getContent()}.
 	 */
-	protected BasicResource(HttpResponse response) throws IOException {
+	protected BasicResource(ClassicHttpResponse response) throws IOException {
 		this(new StreamEntity());
 		copyFrom(response);
 	}
@@ -191,8 +192,8 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	}
 
 	@Override
-	public void consumeContent() throws IOException {
-		// No-op: Intentional empty implementation for optional interface method
+	public void close() throws IOException {
+		entity.close();
 	}
 
 	/**
@@ -212,9 +213,9 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * @return This object.
 	 * @throws IOException If content could not be retrieved.
 	 */
-	public SELF copyFrom(HttpResponse response) throws IOException {
+	public SELF copyFrom(ClassicHttpResponse response) throws IOException {
 		reqnn("response", response);
-		addHeaders(response.getAllHeaders());
+		addHeaders(response.getHeaders());
 		setContent(response.getEntity().getContent());
 		return self();
 	}
@@ -223,13 +224,13 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	public InputStream getContent() throws IOException, UnsupportedOperationException { return entity.getContent(); }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() { return entity.getContentEncoding(); }
+	public String getContentEncoding() { return entity.getContentEncoding(); }
 
 	@Override /* Overridden from HttpEntity */
 	public long getContentLength() { return entity.getContentLength(); }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentType() { return entity.getContentType(); }
+	public String getContentType() { return entity.getContentType(); }
 
 	/**
 	 * Returns access to the underlying builder for the HTTP entity.
@@ -240,6 +241,12 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 
 	@Override /* Overridden from HttpResource */
 	public HeaderList getHeaders() { return headers; }
+
+	@Override
+	public java.util.Set<String> getTrailerNames() { return java.util.Set.of(); }
+
+	@Override
+	public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return null; }
 
 	@Override /* Overridden from HttpEntity */
 	public boolean isChunked() { return entity.isChunked(); }

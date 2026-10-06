@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 class BasicHeader_Test extends TestBase {
 
-	@Test void a01_ofPair() {
+	@Test void a01_ofPair() throws Exception {
 		var x = stringHeader("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
@@ -50,26 +50,26 @@ class BasicHeader_Test extends TestBase {
 		assertNull(stringHeader((String)null));
 	}
 
-	@Test void a02_of() {
+	@Test void a02_of() throws Exception {
 		var x = header("Foo","bar");
 		assertString("Foo: bar", x);
 		x = header("Foo",()->"bar");
 		assertString("Foo: bar", x);
 	}
 
-	@Test void a05_assertions() {
+	@Test void a05_assertions() throws Exception {
 		var x = header("X1","1");
 		x.assertName().is("X1").assertStringValue().is("1");
 	}
 
-	@Test void a07_eqIC() {
+	@Test void a07_eqIC() throws Exception {
 		var x = header("X1","1");
 		assertTrue(x.equalsIgnoreCase("1"));
 		assertFalse(x.equalsIgnoreCase("2"));
 		assertFalse(x.equalsIgnoreCase(null));
 	}
 
-	@Test void a08_getElements() {
+	@Test void a08_getElements() throws Exception {
 		var m = Holder.of(1);
 		var h1 = header("X1","1");
 		var h2 = header("X2",()->m);
@@ -95,7 +95,7 @@ class BasicHeader_Test extends TestBase {
 		assertEquals(0, x.length);
 	}
 
-	@Test void a09_equals() {
+	@Test void a09_equals() throws Exception {
 		var h1 = header("Foo","bar");
 		var h2 = header("Foo","bar");
 		var h3 = header("Bar","bar");
@@ -133,7 +133,7 @@ class BasicHeader_Test extends TestBase {
 		var elements1 = h3.getElements(); // Force computation of elements
 		var cloned3 = h3.copy();
 		var elements2 = cloned3.getElements();
-		
+
 		// Elements should be cloned (different array instances)
 		assertNotSame(elements1, elements2);
 		// But should have same content

@@ -20,22 +20,23 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.config.*;
-import org.apache.http.conn.socket.*;
-import org.apache.http.conn.ssl.*;
-import org.apache.http.entity.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.impl.conn.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.core5.http.config.*;
+import org.apache.hc.client5.http.socket.*;
+import org.apache.hc.client5.http.ssl.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
 import org.apache.juneau.rest.client.*;
 
 /**
- * {@link HttpTransport} implementation backed by Apache HttpClient 4.5.
+ * {@link HttpTransport} implementation backed by Apache HttpClient 5.6.
  *
  * <p>
  * This transport is auto-discovered via {@link java.util.ServiceLoader} when
- * {@code org.apache.httpcomponents:httpclient} is on the classpath.  You can also instantiate it explicitly:
+ * {@code org.apache.httpcomponents.client5:httpclient5} is on the classpath.  You can also instantiate it explicitly:
  *
  * <p class='bjava'>
  * 	<jv>transport</jv> = ApacheHc45Transport.<jsm>builder</jsm>()
@@ -81,10 +82,22 @@ public final class ApacheHc45Transport implements HttpTransport {
 			.register("http", PlainConnectionSocketFactory.getSocketFactory())
 			.register("https", SSLConnectionSocketFactory.getSocketFactory())
 			.build();
-		var connectionManager = new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE);
+		var connectionManager = new PoolingHttpClientConnectionManager(registry, org.apache.hc.core5.pool.PoolConcurrencyPolicy.STRICT, org.apache.hc.core5.pool.PoolReusePolicy.LIFO, org.apache.hc.core5.util.TimeValue.NEG_ONE_MILLISECOND, null, PolicyPinningDnsResolver.INSTANCE, null);
 		return HttpClients.custom()
 			.setConnectionManager(connectionManager)
-			.addInterceptorLast(new Hc45RedirectCredentialGuard())
+			// Preserve HttpClient 4 IO retries without adding HttpClient 5 response-status retries.
+			.setRetryStrategy(new DefaultHttpRequestRetryStrategy(3, org.apache.hc.core5.util.TimeValue.ZERO_MILLISECONDS) {
+				@Override
+				protected boolean handleAsIdempotent(HttpRequest request) {
+					return request instanceof ClassicHttpRequest classic && classic.getEntity() == null;
+				}
+
+				@Override
+				public boolean retryRequest(HttpResponse response, int executionCount, org.apache.hc.core5.http.protocol.HttpContext context) {
+					return false;
+				}
+			})
+			.addRequestInterceptorLast(new Hc45RedirectCredentialGuard())
 			.setRedirectStrategy(new PolicyAwareRedirectStrategy())
 			.build();
 	}
@@ -179,8 +192,8 @@ public final class ApacheHc45Transport implements HttpTransport {
 	}
 
 	// A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before
-	// sending any response.  Apache HttpClient 4.5 surfaces this as a NoHttpResponseException ("failed to respond")
-	// or a connection-reset SocketException.  HttpClient 4.5's default retry handler does not retry these for
+	// sending any response.  Apache HttpClient 5.6 surfaces this as a NoHttpResponseException ("failed to respond")
+	// or a connection-reset SocketException.  The configured retry strategy does not retry these for
 	// entity-enclosing idempotent methods (e.g. PUT) or for POST, so the transport applies its own idempotency-safe
 	// retry here.
 	private static boolean isStaleConnectionFailure(IOException e) {
@@ -189,24 +202,15 @@ public final class ApacheHc45Transport implements HttpTransport {
 	}
 
 	private static void closeQuietly(CloseableHttpResponse hcResponse) {
-		try {
-			hcResponse.close();
-		} catch (IOException e) {
-			// Best-effort cleanup on an already-failing path; nothing more can be done.
-		}
-	}
-
-	@Override /* Closeable */
-	public void close() throws IOException {
-		httpClient.close();
+		hcResponse.close(org.apache.hc.core5.io.CloseMode.IMMEDIATE);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private static HttpUriRequest buildHcRequest(TransportRequest request) throws TransportException {
-		var builder = RequestBuilder.create(request.getMethod()).setUri(request.getUri());
+	private static ClassicHttpRequest buildHcRequest(TransportRequest request) throws TransportException {
+		var builder = org.apache.hc.core5.http.io.support.ClassicRequestBuilder.create(request.getMethod()).setUri(request.getUri());
 		for (var h : request.getHeaders())
 			builder.addHeader(h.name(), h.value());
 		var body = request.getBody();
@@ -220,14 +224,19 @@ public final class ApacheHc45Transport implements HttpTransport {
 	}
 
 	private static TransportResponse buildTransportResponse(CloseableHttpResponse hcResponse) throws TransportException {
-		var statusLine = hcResponse.getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine(hcResponse);
 		var builder = TransportResponse.builder()
 			.statusCode(statusLine.getStatusCode())
 			.reasonPhrase(statusLine.getReasonPhrase())
 			.closeCallback(hcResponse);
-		for (var h : hcResponse.getAllHeaders())
+		for (var h : hcResponse.getHeaders())
 			builder.header(h.getName(), h.getValue());
 		var entity = hcResponse.getEntity();
+		var contentType = hcResponse.getFirstHeader("Content-Type");
+		if (contentType != null && "text/event-stream".equalsIgnoreCase(contentType.getValue().split(";", 2)[0].trim())) {
+			// An SSE stream has no final chunk to drain; close the connection to unblock any reader.
+			builder.closeCallback(() -> hcResponse.close(org.apache.hc.core5.io.CloseMode.IMMEDIATE));
+		}
 		if (entity != null) {
 			try {
 				builder.body(entity.getContent());
@@ -268,11 +277,12 @@ public final class ApacheHc45Transport implements HttpTransport {
 		private final TransportBody body;
 
 		TransportBodyEntity(TransportBody body) {
+			super(body.getContentType(), null);
 			this.body = body;
-			var ct = body.getContentType();
-			if (ct != null)
-				setContentType(ct);
 		}
+
+		@Override
+		public void close() { }
 
 		@Override /* HttpEntity */
 		public boolean isRepeatable() {

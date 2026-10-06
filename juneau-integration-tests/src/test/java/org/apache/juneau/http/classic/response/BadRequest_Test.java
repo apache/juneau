@@ -21,9 +21,10 @@ import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.apache.juneau.http.classic.response.BadRequest.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;

@@ -21,13 +21,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.impl.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.impl.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.http.*;
 
 /**
- * A basic implementation of the {@link StatusLine} interface.
+ * A mutable HTTP status line.
  *
  * <p>
  * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator routes
@@ -38,7 +38,7 @@ import org.apache.juneau.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
-public class BasicStatusLine implements StatusLine {
+public class BasicStatusLine {
 
 	/**
 	 * Instantiates a new instance of this bean.
@@ -102,10 +102,18 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public Locale getLocale() { return locale; }
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the protocol version.
+	 *
+	 * @return The protocol version.
+	 */
 	public ProtocolVersion getProtocolVersion() { return protocolVersion; }
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the reason phrase.
+	 *
+	 * @return The explicit or catalog-derived reason phrase.
+	 */
 	public String getReasonPhrase() {
 		if (reasonPhrase == null) {
 			ReasonPhraseCatalog rfc = coalesce(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
@@ -114,7 +122,11 @@ public class BasicStatusLine implements StatusLine {
 		return reasonPhrase;
 	}
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the status code.
+	 *
+	 * @return The status code.
+	 */
 	public int getStatusCode() { return statusCode; }
 
 	/**
@@ -209,7 +221,7 @@ public class BasicStatusLine implements StatusLine {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
+		return new StatusLine(protocolVersion, statusCode, getReasonPhrase()).toString();
 	}
 
 	@Override

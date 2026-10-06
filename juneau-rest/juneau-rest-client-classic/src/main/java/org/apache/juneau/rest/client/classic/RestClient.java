@@ -35,6 +35,7 @@ import static org.apache.juneau.rest.client.classic.RestOperation.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
@@ -47,26 +48,37 @@ import java.util.regex.*;
 
 import javax.net.ssl.*;
 
-import org.apache.http.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.auth.*;
-import org.apache.http.client.*;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.*;
-import org.apache.http.client.entity.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.client.utils.*;
-import org.apache.http.config.*;
-import org.apache.http.conn.*;
-import org.apache.http.conn.routing.*;
-import org.apache.http.conn.socket.*;
-import org.apache.http.conn.ssl.*;
-import org.apache.http.conn.util.*;
-import org.apache.http.cookie.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.impl.conn.*;
-import org.apache.http.params.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.net.URIBuilder;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.client5.http.auth.*;
+import org.apache.hc.client5.http.classic.*;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.config.*;
+import org.apache.hc.client5.http.entity.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.utils.*;
+import org.apache.hc.core5.http.config.*;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.client5.http.routing.*;
+import org.apache.hc.client5.http.socket.*;
+import org.apache.hc.client5.http.ssl.*;
+import org.apache.hc.client5.http.*;
+import org.apache.hc.client5.http.cookie.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
+import org.apache.hc.core5.http.protocol.*;
+import org.apache.hc.core5.http.impl.io.HttpRequestExecutor;
+import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.util.*;
+import org.apache.hc.client5.http.protocol.*;
+import org.apache.hc.client5.http.impl.auth.*;
+import org.apache.hc.client5.http.impl.cookie.*;
+import org.apache.hc.client5.http.impl.*;
+import org.apache.hc.client5.http.psl.PublicSuffixMatcher;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
@@ -76,6 +88,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.classic.remote.RrpcInterfaceMeta;
 import org.apache.juneau.http.classic.resource.*;
@@ -526,7 +539,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link StatusLine}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link ResponseStatusLine}</c>
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link FluentResponseStatusLineAssertion}</c>
@@ -588,7 +601,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 		<li class='jm'><c>{@link RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link ResponseHeader}[]</c>
  * 		<li class='jm'><c>{@link RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
  * 		<li class='jm'><c>{@link RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
- * 		<li class='jm'><c>{@link RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@link ResponseHeader}[]</c>
+ * 		<li class='jm'><c>{@link RestResponse#getHeaders() getHeaders()} <jk>returns</jk> {@link ResponseHeader}[]</c>
  * 		<li class='jm'><c>{@link RestResponse#getStringHeader(String) getStringHeader(String)} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#containsHeader(String) containsHeader(String)} <jk>returns</jk> <jk>boolean</jk></c>
  * 	</ul>
@@ -802,13 +815,13 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	</ul>
  * 	<li class='jic'>{@link RestCallHandler}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestCallHandler#run(HttpHost,HttpRequest,HttpContext) run(HttpHost,HttpRequest,HttpContext)} <jk>returns</jk> HttpResponse</c>
+ * 		<li class='jm'><c>{@link RestCallHandler#run(HttpHost,ClassicHttpRequest,HttpContext) run(HttpHost,ClassicHttpRequest,HttpContext)} <jk>returns</jk> ClassicHttpResponse</c>
  * 	</ul>
  * </ul>
  *
  * <p>
  * Note that there are other ways of accomplishing this such as extending the {@link RestClient} class and overriding
- * the {@link #run(HttpHost,HttpRequest,HttpContext)} method
+ * the {@link #run(HttpHost,ClassicHttpRequest,HttpContext)} method
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
  *
  *
@@ -1034,7 +1047,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  *
  * 		<jd>/** Optionally override to implement your own call handling. </jd>
  * 		<ja>@Override</ja>
- * 		<jk>protected</jk> HttpResponse run(HttpHost, HttpRequest, HttpContext) {...}
+ * 		<jk>protected</jk> ClassicHttpResponse run(HttpHost, ClassicHttpRequest, HttpContext) {...}
  *
  * 		<jd>/** Optionally override to customize requests before they're executed. </jd>
  * 		<ja>@Override</ja>
@@ -1055,7 +1068,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  *
  * <p>
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
- * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
+ * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,ClassicHttpResponse,Parser)} methods.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -1108,6 +1121,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		private DetailLevel logRequests;
 		private ExecutorService executorService;
 		private HeaderList headerData;
+		private ConnectionConfig connectionConfig;
+		private SocketConfig socketConfig;
+		private int maxConnectionsPerRoute = 5;
+		private int maxConnectionsTotal = 25;
+		private SSLContext sslContext;
+		private HostnameVerifier hostnameVerifier;
+		private LayeredConnectionSocketFactory sslSocketFactory;
+		private TimeValue connectionTimeToLive;
+
 		private HttpClientBuilder httpClientBuilder;
 		private HttpClientConnectionManager connectionManager;
 		private HttpPartParser.Creator partParser;
@@ -1224,10 +1246,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param itcp New property value.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
+		 * @see HttpClientBuilder#addRequestInterceptorFirst(HttpRequestInterceptor)
 		 */
 		public SELF addInterceptorFirst(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(reqnn("itcp", itcp));
+			httpClientBuilder().addRequestInterceptorFirst(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1241,10 +1263,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param itcp New property value.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
+		 * @see HttpClientBuilder#addResponseInterceptorFirst(HttpResponseInterceptor)
 		 */
 		public SELF addInterceptorFirst(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(reqnn("itcp", itcp));
+			httpClientBuilder().addResponseInterceptorFirst(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1258,10 +1280,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param itcp New property value.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
+		 * @see HttpClientBuilder#addRequestInterceptorLast(HttpRequestInterceptor)
 		 */
 		public SELF addInterceptorLast(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(reqnn("itcp", itcp));
+			httpClientBuilder().addRequestInterceptorLast(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1275,10 +1297,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param itcp New property value.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
+		 * @see HttpClientBuilder#addResponseInterceptorLast(HttpResponseInterceptor)
 		 */
 		public SELF addInterceptorLast(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(reqnn("itcp", itcp));
+			httpClientBuilder().addResponseInterceptorLast(reqnn("itcp", itcp));
 			return self();
 		}
 
@@ -1371,7 +1393,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF basicAuth(String host, int port, String user, String pw) {
 			var scope = new AuthScope(host, port);
-			var up = new UsernamePasswordCredentials(user, pw);
+			var up = new UsernamePasswordCredentials(user, pw == null ? null : pw.toCharArray());
 			var p = new BasicCredentialsProvider();
 			p.setCredentials(scope, up);
 			defaultCredentialsProvider(p);
@@ -1395,7 +1417,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+		 * 		<jk>public</jk> ClassicHttpResponse run(HttpHost <jv>target</jv>, ClassicHttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
 		 * 			<jc>// Custom handle requests.</jc>
 		 * 		}
 		 * 	}
@@ -1408,7 +1430,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
-		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+		 * 		The {@link RestClient#run(HttpHost, ClassicHttpRequest, HttpContext)} method can also be overridden to produce the same results.
 		 * 	<li class='note'>
 		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} <c>impl(Object)</c> to specify an already instantiated instance.
 		 * 	<li class='note'>
@@ -1531,10 +1553,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param connTimeToLiveTimeUnit New property value.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
+		 * @see ConnectionConfig.Builder#setTimeToLive(TimeValue)
 		 */
 		public SELF connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
-			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
+			connectionTimeToLive = TimeValue.of(connTimeToLive, connTimeToLiveTimeUnit);
 			return self();
 		}
 
@@ -1555,7 +1577,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 
 		/**
-		 * Assigns a map of {@link org.apache.http.client.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
+		 * Assigns a map of {@link org.apache.hc.client5.http.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
 		 *
 		 * @param contentDecoderMap New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
@@ -1563,7 +1585,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 		 */
 		public SELF contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
-			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
+			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap == null ? null : new LinkedHashMap<>(contentDecoderMap));
 			return self();
 		}
 
@@ -1649,14 +1671,14 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 
 		/**
-		 * Assigns default {@link org.apache.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
+		 * Assigns default {@link org.apache.hc.client5.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param authSchemeRegistry New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 		 */
-		public SELF defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+		public SELF defaultAuthSchemeRegistry(Lookup<AuthSchemeFactory> authSchemeRegistry) {
 			httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
 			return self();
 		}
@@ -1671,10 +1693,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param config New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
+		 * @see PoolingHttpClientConnectionManager#setDefaultConnectionConfig(ConnectionConfig)
 		 */
 		public SELF defaultConnectionConfig(ConnectionConfig config) {
-			httpClientBuilder().setDefaultConnectionConfig(config);
+			connectionConfig = config;
 			return self();
 		}
 
@@ -1686,7 +1708,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 		 */
-		public SELF defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+		public SELF defaultCookieSpecRegistry(Lookup<CookieSpecFactory> cookieSpecRegistry) {
 			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
 			return self();
 		}
@@ -1740,10 +1762,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param config New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
+		 * @see PoolingHttpClientConnectionManager#setDefaultSocketConfig(SocketConfig)
 		 */
 		public SELF defaultSocketConfig(SocketConfig config) {
-			httpClientBuilder().setDefaultSocketConfig(config);
+			socketConfig = config;
 			return self();
 		}
 
@@ -1988,7 +2010,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 		 */
 		public SELF evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
-			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
+			httpClientBuilder().evictIdleConnections(TimeValue.of(maxIdleTime, maxIdleTimeUnit));
 			return self();
 		}
 
@@ -2622,10 +2644,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @param httpprocessor New property value.
 		 * @return This object.
-		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
 		public SELF httpProcessor(HttpProcessor httpprocessor) {
-			httpClientBuilder().setHttpProcessor(httpprocessor);
+			httpClientBuilder().addRequestInterceptorLast((request, entity, context) -> httpprocessor.process(request, entity, context));
+			httpClientBuilder().addResponseInterceptorLast((response, entity, context) -> httpprocessor.process(response, entity, context));
 			return self();
 		}
 
@@ -3259,10 +3281,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @param maxConnPerRoute New property value.
 		 * @return This object.
-		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
+		 * @see PoolingHttpClientConnectionManager#setDefaultMaxPerRoute(int)
 		 */
 		public SELF maxConnPerRoute(int maxConnPerRoute) {
-			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
+			maxConnectionsPerRoute = maxConnPerRoute;
 			return self();
 		}
 
@@ -3275,10 +3297,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @param maxConnTotal New property value.
 		 * @return This object.
-		 * @see HttpClientBuilder#setMaxConnTotal(int)
+		 * @see PoolingHttpClientConnectionManager#setMaxTotal(int)
 		 */
 		public SELF maxConnTotal(int maxConnTotal) {
-			httpClientBuilder().setMaxConnTotal(maxConnTotal);
+			maxConnectionsTotal = maxConnTotal;
 			return self();
 		}
 
@@ -4266,10 +4288,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param publicSuffixMatcher New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
+		 * @see DefaultHostnameVerifier#DefaultHostnameVerifier(PublicSuffixMatcher)
 		 */
 		public SELF publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
-			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
+			hostnameVerifier = new DefaultHostnameVerifier(publicSuffixMatcher);
 			return self();
 		}
 
@@ -4555,7 +4577,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 
 		/**
-		 * Assigns {@link HttpRequestRetryHandler} instance.
+		 * Assigns {@link HttpRequestRetryStrategy} instance.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #disableAutomaticRetries()} method.
@@ -4564,10 +4586,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param retryHandler New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
+		 * @see HttpClientBuilder#setRetryStrategy(HttpRequestRetryStrategy)
 		 */
-		public SELF retryHandler(HttpRequestRetryHandler retryHandler) {
-			httpClientBuilder().setRetryHandler(retryHandler);
+		public SELF retryHandler(HttpRequestRetryStrategy retryHandler) {
+			httpClientBuilder().setRetryStrategy(retryHandler);
 			return self();
 		}
 
@@ -4846,15 +4868,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 
 		/**
-		 * Assigns {@link ServiceUnavailableRetryStrategy} instance.
+		 * Assigns {@link HttpRequestRetryStrategy} instance.
 		 *
 		 * @param serviceUnavailStrategy New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
+		 * @see HttpClientBuilder#setRetryStrategy(HttpRequestRetryStrategy)
 		 */
-		public SELF serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
-			httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
+		public SELF serviceUnavailableRetryStrategy(HttpRequestRetryStrategy serviceUnavailStrategy) {
+			httpClientBuilder().setRetryStrategy(serviceUnavailStrategy);
 			return self();
 		}
 
@@ -5094,10 +5116,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param sslContext New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
 		public SELF sslContext(SSLContext sslContext) {
-			httpClientBuilder().setSSLContext(sslContext);
+			this.sslContext = sslContext;
 			return self();
 		}
 
@@ -5112,10 +5133,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param hostnameVerifier New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
 		public SELF sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
-			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
+			this.hostnameVerifier = hostnameVerifier;
 			return self();
 		}
 
@@ -5129,10 +5149,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param sslSocketFactory New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
-		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
 		public SELF sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
-			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
+			this.sslSocketFactory = sslSocketFactory;
 			return self();
 		}
 
@@ -5619,7 +5638,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			return urlEncodingSerializer;
 		}
 
-
 		/**
 		 * Assigns {@link UserTokenHandler} instance.
 		 *
@@ -5787,7 +5805,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * <p>
 		 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager} if {@link #pooled()}
-		 * was called or {@link BasicHttpClientConnectionManager} if not..
+		 * was called or {@link BasicHttpClientConnectionManager} if not.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -5806,18 +5824,25 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return The connection manager to use.
 		 */
 		protected HttpClientConnectionManager createConnectionManager() {
-			// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver)
-			// while leaving ordinary connections on the default registry (matching Apache HttpClientBuilder's own
-			// unconfigured default) completely unaffected.
+			var ssl = sslSocketFactory != null ? sslSocketFactory : new SSLConnectionSocketFactory(
+				sslContext != null ? sslContext : org.apache.hc.core5.ssl.SSLContexts.createSystemDefault(),
+				hostnameVerifier != null ? hostnameVerifier : new DefaultHostnameVerifier());
 			var registry = RegistryBuilder.<ConnectionSocketFactory>create()
-				.register("http", PlainConnectionSocketFactory.getSocketFactory())
-				.register("https", SSLConnectionSocketFactory.getSocketFactory())
-				.build();
-			return pooled
-				? new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE)
-				: new BasicHttpClientConnectionManager(registry, null, null, PolicyPinningDnsResolver.INSTANCE);
+				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", ssl).build();
+			var config = connectionConfig != null ? connectionConfig : ConnectionConfig.custom().setTimeToLive(connectionTimeToLive).build();
+			if (pooled) {
+				var manager = new PoolingHttpClientConnectionManager(registry, org.apache.hc.core5.pool.PoolConcurrencyPolicy.STRICT, org.apache.hc.core5.pool.PoolReusePolicy.LIFO, TimeValue.NEG_ONE_MILLISECOND, null, PolicyPinningDnsResolver.INSTANCE, null);
+				manager.setDefaultConnectionConfig(config);
+				if (socketConfig != null) manager.setDefaultSocketConfig(socketConfig);
+				manager.setMaxTotal(maxConnectionsTotal);
+				manager.setDefaultMaxPerRoute(maxConnectionsPerRoute);
+				return manager;
+			}
+			var manager = new BasicHttpClientConnectionManager(registry, null, null, PolicyPinningDnsResolver.INSTANCE);
+			manager.setConnectionConfig(config);
+			if (socketConfig != null) manager.setSocketConfig(socketConfig);
+			return manager;
 		}
-
 		/**
 		 * Creates the builder for the form data list.
 		 *
@@ -5885,7 +5910,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			if (connectionManager == null)
 				connectionManager = createConnectionManager();
 			httpClientBuilder().setConnectionManager(connectionManager);
-			httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
+			httpClientBuilder().addRequestInterceptorLast(new ClassicRedirectCredentialGuard());
 			httpClientBuilder().setRedirectStrategy(new PolicyAwareRedirectStrategy());
 			return httpClientBuilder().build();
 		}
@@ -5914,7 +5939,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return The HTTP client builder to use to create the HTTP client.
 		 */
 		protected HttpClientBuilder createHttpClientBuilder() {
-			return HttpClientBuilder.create();
+			return HttpClientBuilder.create().setRetryStrategy(new BasicHttpRequestRetryHandler(3, 0, false));
 		}
 
 		/**
@@ -6068,7 +6093,6 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		beanStore = builder.beanStore.addBean(RestClient.class, this);
 
 		callHandler = builder.callHandler().run();
-		connectionManager = builder.connectionManager;
 		console = nn(builder.console) ? builder.console : System.err;
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 		detectLeaks = builder.detectLeaks;
@@ -6077,6 +6101,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		formData = builder.formData().copy();
 		headerData = builder.headers().copy();
 		httpClient = builder.getHttpClient();
+		connectionManager = builder.connectionManager;
 		ssrfPolicySupported = builder.httpClient == null;
 		ignoreErrors = builder.ignoreErrors;
 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
@@ -6372,7 +6397,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException {
+	public ClassicHttpResponse execute(HttpHost target, ClassicHttpRequest request) throws IOException {
 		return httpClient.execute(target, request);
 	}
 
@@ -6381,7 +6406,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * 	<li class='note'>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
+	 * 	<li class='note'>The {@link #run(HttpHost,ClassicHttpRequest,HttpContext)} method has been provided as a wrapper around this method.
 	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
 	 * 	<li class='note'>The {@link RestCallHandler} interface can also be implemented to intercept this method.
 	 * </ul>
@@ -6400,7 +6425,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+	public ClassicHttpResponse execute(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException {
 		return httpClient.execute(target, request, context);
 	}
 
@@ -6409,7 +6434,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * <p>
 	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * to the connection manager automatically in all cases relieving individual {@link HttpClientResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -6426,7 +6451,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException {
+	public <T> T execute(HttpHost target, ClassicHttpRequest request, HttpClientResponseHandler<? extends T> responseHandler) throws IOException {
 		return httpClient.execute(target, request, responseHandler);
 	}
 
@@ -6435,7 +6460,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * <p>
 	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * to the connection manager automatically in all cases relieving individual {@link HttpClientResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -6453,8 +6478,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException {
-		return httpClient.execute(target, request, responseHandler, context);
+	public <T> T execute(HttpHost target, ClassicHttpRequest request, HttpContext context, HttpClientResponseHandler<? extends T> responseHandler) throws IOException {
+		return httpClient.execute(target, request, context, responseHandler);
 	}
 
 	/**
@@ -6474,7 +6499,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpUriRequest request) throws IOException {
+	public ClassicHttpResponse execute(ClassicHttpRequest request) throws IOException {
 		return httpClient.execute(request);
 	}
 
@@ -6496,7 +6521,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException {
+	public ClassicHttpResponse execute(ClassicHttpRequest request, HttpContext context) throws IOException {
 		return httpClient.execute(request, context);
 	}
 
@@ -6505,7 +6530,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * <p>
 	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * to the connection manager automatically in all cases relieving individual {@link HttpClientResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -6519,7 +6544,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException {
+	public <T> T execute(ClassicHttpRequest request, HttpClientResponseHandler<? extends T> responseHandler) throws IOException {
 		return httpClient.execute(request, responseHandler);
 	}
 
@@ -6528,7 +6553,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * <p>
 	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * to the connection manager automatically in all cases relieving individual {@link HttpClientResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -6543,8 +6568,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException {
-		return httpClient.execute(request, responseHandler, context);
+	public <T> T execute(ClassicHttpRequest request, HttpContext context, HttpClientResponseHandler<? extends T> responseHandler) throws IOException {
+		return httpClient.execute(request, context, responseHandler);
 	}
 
 	/**
@@ -6602,28 +6627,24 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	public RestRequest formPost(Object uri, Object body) throws RestCallException {
 		var req = request(op("POST", uri, NO_BODY));
-		try {
-			if (body instanceof Supplier<?> body2)
-				body = body2.get();
-			if (body instanceof NameValuePair body2)
-				return req.content(new UrlEncodedFormEntity(l(body2)));
-			if (body instanceof NameValuePair[] namevaluepairArray)
-				return req.content(new UrlEncodedFormEntity(l(namevaluepairArray)));
-			if (body instanceof PartList body2)
-				return req.content(new UrlEncodedFormEntity(body2));
-			if (body instanceof HttpResource body2)
-				body2.getHeaders().forEach(req::header);
-			if (body instanceof HttpEntity body2) {
-				if (body2.getContentType() == null)
-					req.header(ContentType.APPLICATION_FORM_URLENCODED);
-				return req.content(body2);
-			}
-			if (body instanceof Reader || body instanceof InputStream)
-				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
-			return req.content(serializedEntity(body, urlEncodingSerializer, null));
-		} catch (IOException e) {
-			throw new RestCallException(null, e, "Could not read form post body.");
+		if (body instanceof Supplier<?> body2)
+			body = body2.get();
+		if (body instanceof NameValuePair body2)
+			return req.content(new UrlEncodedFormEntity(l(body2)));
+		if (body instanceof NameValuePair[] namevaluepairArray)
+			return req.content(new UrlEncodedFormEntity(l(namevaluepairArray)));
+		if (body instanceof PartList body2)
+			return req.content(new UrlEncodedFormEntity(body2));
+		if (body instanceof HttpResource body2)
+			body2.getHeaders().forEach(req::header);
+		if (body instanceof HttpEntity body2) {
+			if (body2.getContentType() == null)
+				req.header(ContentType.APPLICATION_FORM_URLENCODED);
+			return req.content(body2);
 		}
+		if (body instanceof Reader || body instanceof InputStream)
+			return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
+		return req.content(serializedEntity(body, urlEncodingSerializer, null));
 	}
 
 	/**
@@ -6688,33 +6709,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	}
 
 	/**
-	 * Obtains the connection manager used by this client.
-	 *
-	 * @return The connection manager.
-	 * @deprecated Use {@link HttpClientBuilder}.
-	 */
-	@Deprecated(since = "10.0", forRemoval = true)
-	@Override /* Overridden from HttpClient */
-	public ClientConnectionManager getConnectionManager() { return httpClient.getConnectionManager(); }
-
-	/**
-	 * Returns the connection manager if one was specified in the client builder.
+	 * Gets the connection manager used by this client.
 	 *
 	 * @return The connection manager.  May be <jk>null</jk>.
 	 */
 	public HttpClientConnectionManager getHttpClientConnectionManager() { return connectionManager; }
-
-	/**
-	 * Obtains the parameters for this client.
-	 *
-	 * These parameters will become defaults for all requests being executed with this client, and for the parameters of dependent objects in this client.
-	 *
-	 * @return The default parameters.
-	 * @deprecated Use {@link RequestConfig}.
-	 */
-	@Deprecated(since = "10.0", forRemoval = true)
-	@Override /* Overridden from HttpClient */
-	public HttpParams getParams() { return httpClient.getParams(); }
 
 	/**
 	 * Create a new proxy interface against a 3rd-party REST interface.
@@ -7487,7 +7486,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	}
 
 	/**
-	 * Creates a {@link RestRequest} object from the specified {@link HttpRequest} object.
+	 * Creates a {@link RestRequest} object from the specified {@link ClassicHttpRequest} object.
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
@@ -7503,7 +7502,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	}
 
 	/**
-	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
+	 * Creates a {@link RestResponse} object from the specified {@link ClassicHttpResponse} object.
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestResponse} objects.
@@ -7515,7 +7514,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @return A new {@link RestResponse} object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected RestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
+	protected RestResponse createResponse(RestRequest request, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
 		return new RestResponse(this, request, httpResponse, parser);
 	}
 
@@ -7812,7 +7811,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+	protected ClassicHttpResponse run(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException {
 		return callHandler.run(target, request, context);
 	}
 
@@ -8033,7 +8032,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			if (ms > 0) {
 				var base = rc.getConfig();
 				var cb = base != null ? RequestConfig.copy(base) : RequestConfig.custom();
-				rc.config(cb.setSocketTimeout((int)ms).build());
+				rc.config(cb.setResponseTimeout(Timeout.ofMilliseconds(ms)).build());
 			}
 		}
 

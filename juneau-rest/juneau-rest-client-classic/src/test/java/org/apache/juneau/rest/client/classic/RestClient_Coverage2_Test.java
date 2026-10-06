@@ -23,11 +23,10 @@ import java.net.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
-import org.apache.http.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.conn.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.params.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.client5.http.impl.classic.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.marshall.uon.*;
@@ -113,20 +112,6 @@ class RestClient_Coverage2_Test {
 		}
 	}
 
-	@Test void a04_getParams_deprecated_delegatesToHttpClient() throws Exception {
-		// The default Apache HttpClient (built via HttpClientBuilder) doesn't support the legacy HttpParams API and
-		// throws on access; a custom CloseableHttpClient proves the successful delegation path completes normally.
-		// Not try-with-resources: the custom client's close() always throws (needed for a06 below), so close it via
-		// closeQuietly() instead of letting an auto-close propagate the simulated failure here.
-		var c1 = RestClient.create().httpClient(throwingHttpClient()).build();
-		assertNull(c1.getParams());
-		c1.closeQuietly();
-
-		try (var c2 = RestClient.create().build()) {
-			assertThrows(UnsupportedOperationException.class, c2::getParams);
-		}
-	}
-
 	@Test void a05_closeQuietly_suppressesExceptionFromHttpClientClose() {
 		var c = RestClient.create().httpClient(throwingHttpClient()).build();
 		assertDoesNotThrow(c::closeQuietly);
@@ -140,17 +125,14 @@ class RestClient_Coverage2_Test {
 	private static CloseableHttpClient throwingHttpClient() {
 		return new CloseableHttpClient() {
 			@Override
-			protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, org.apache.http.protocol.HttpContext context) {
+			protected CloseableHttpResponse doExecute(HttpHost target, ClassicHttpRequest request, org.apache.hc.core5.http.protocol.HttpContext context) {
 				throw new UnsupportedOperationException("Not used by this test.");
 			}
 			@Override
 			public void close() throws IOException {
 				throw new IOException("Simulated close failure.");
 			}
-			@Override
-			public HttpParams getParams() { return null; }
-			@Override
-			public ClientConnectionManager getConnectionManager() { return null; }
+			@Override public void close(org.apache.hc.core5.io.CloseMode mode) { }
 		};
 	}
 
@@ -193,13 +175,12 @@ class RestClient_Coverage2_Test {
 		var executed = new boolean[]{false};
 		var stubClient = new CloseableHttpClient() {
 			@Override
-			protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, org.apache.http.protocol.HttpContext context) {
+			protected CloseableHttpResponse doExecute(HttpHost target, ClassicHttpRequest request, org.apache.hc.core5.http.protocol.HttpContext context) {
 				executed[0] = true;
 				throw new UnsupportedOperationException("Not used by this test.");
 			}
 			@Override public void close() { /* no-op */ }
-			@Override public HttpParams getParams() { return null; }
-			@Override public ClientConnectionManager getConnectionManager() { return null; }
+			@Override public void close(org.apache.hc.core5.io.CloseMode mode) { }
 		};
 		try (var c = RestClient.create().httpClient(stubClient).rootUrl("http://example.com").build()) {
 			var proxy = c.getRemote(EchoRemote.class, null);
@@ -356,7 +337,7 @@ class RestClient_Coverage2_Test {
 	}
 
 	@Test void a22_onCallClose_checkedException_wrappedThenLoggedNotThrown() throws Exception {
-		// RestCallException extends org.apache.http.HttpException, a CHECKED exception, so RestResponse#close's own
+		// RestCallException extends org.apache.hc.core5.http.HttpException, a CHECKED exception, so RestResponse#close's own
 		// try/catch (RuntimeException rethrown, everything else logged) swallows it -- proving the generic-exception
 		// wrapping branch of onCallClose executes without asserting on a exception type that never surfaces to the caller.
 		try (var out = new ByteArrayOutputStream();

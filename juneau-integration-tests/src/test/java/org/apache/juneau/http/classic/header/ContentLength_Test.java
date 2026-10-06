@@ -53,11 +53,11 @@ class ContentLength_Test extends TestBase {
 	@Test void a01_basic() throws Exception {
 		var c = client().build();
 
-		// Normal usage.
-		c.get().header(contentLength(VALUE)).run().assertContent(VALUE);
-		c.get().header(contentLength(VALUE)).run().assertContent(VALUE);
-		c.get().header(contentLength(PARSED)).run().assertContent(VALUE);
-		c.get().header(contentLength(()->PARSED)).run().assertContent(VALUE);
+		// HttpClient 5 owns request framing and rejects caller-supplied framing headers.
+		assertThrowsWithMessage(RestCallException.class, "Call failed.", () -> c.get().header(contentLength(VALUE)).run());
+		assertThrowsWithMessage(RestCallException.class, "Call failed.", () -> c.get().header(contentLength(VALUE)).run());
+		assertThrowsWithMessage(RestCallException.class, "Call failed.", () -> c.get().header(contentLength(PARSED)).run());
+		assertThrowsWithMessage(RestCallException.class, "Call failed.", () -> c.get().header(contentLength(()->PARSED)).run());
 
 		// Invalid usage.
 		c.get().header(contentLength((String)null)).run().assertContent().isEmpty();

@@ -30,7 +30,7 @@ import java.security.*;
 import java.util.*;
 import java.util.logging.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.util.*;
 

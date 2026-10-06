@@ -25,11 +25,12 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.header.BasicHeader;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshall.*;

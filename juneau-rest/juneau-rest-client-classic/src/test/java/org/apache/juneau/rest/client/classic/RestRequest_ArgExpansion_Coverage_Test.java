@@ -23,8 +23,9 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.junit.jupiter.api.*;
 
@@ -135,7 +136,7 @@ class RestRequest_ArgExpansion_Coverage_Test {
 		try (var r = req().formDataArg("", "foo=bar", null, null, false)) {
 			// formDataCustom() sets the Content-Type header directly rather than touching the formData PartList.
 			assertTrue(r.getFormData().isEmpty());
-			assertEquals("application/x-www-form-urlencoded", r.getHeaders().getFirst("Content-Type").orElseThrow().getValue());
+			assertEquals("application/x-www-form-urlencoded", r.getHeaderList().getFirst("Content-Type").orElseThrow().getValue());
 		}
 	}
 
@@ -163,37 +164,37 @@ class RestRequest_ArgExpansion_Coverage_Test {
 
 	@Test void b01_headerArg_emptyName_castableSingleValue() {
 		try (var r = req().headerArg("", BasicHeader.of("X", "1"), null, null, false)) {
-			assertEquals("1", r.getHeaders().getFirst("X").orElseThrow().getValue());
+			assertEquals("1", r.getHeaderList().getFirst("X").orElseThrow().getValue());
 		}
 	}
 
 	@Test void b02_headerArg_starName_headerList() {
 		try (var r = req().headerArg("*", HeaderList.of(BasicHeader.of("Y", "2")), null, null, false)) {
-			assertEquals("2", r.getHeaders().getFirst("Y").orElseThrow().getValue());
+			assertEquals("2", r.getHeaderList().getFirst("Y").orElseThrow().getValue());
 		}
 	}
 
 	@Test void b03_headerArg_emptyName_collection() {
 		try (var r = req().headerArg("", List.of(BasicHeader.of("Z", "3")), null, null, false)) {
-			assertEquals("3", r.getHeaders().getFirst("Z").orElseThrow().getValue());
+			assertEquals("3", r.getHeaderList().getFirst("Z").orElseThrow().getValue());
 		}
 	}
 
 	@Test void b04_headerArg_emptyName_array() {
 		try (var r = req().headerArg("", new Header[]{BasicHeader.of("W", "4")}, null, null, false)) {
-			assertEquals("4", r.getHeaders().getFirst("W").orElseThrow().getValue());
+			assertEquals("4", r.getHeaderList().getFirst("W").orElseThrow().getValue());
 		}
 	}
 
 	@Test void b05_headerArg_emptyName_map() {
 		try (var r = req().headerArg("", Map.of("M", "5"), null, null, false)) {
-			assertEquals("5", r.getHeaders().getFirst("M").orElseThrow().getValue());
+			assertEquals("5", r.getHeaderList().getFirst("M").orElseThrow().getValue());
 		}
 	}
 
 	@Test void b06_headerArg_emptyName_bean() {
 		try (var r = req().headerArg("", new NameBean(), null, null, false)) {
-			assertEquals("bar", r.getHeaders().getFirst("foo").orElseThrow().getValue());
+			assertEquals("bar", r.getHeaderList().getFirst("foo").orElseThrow().getValue());
 		}
 	}
 
@@ -207,13 +208,13 @@ class RestRequest_ArgExpansion_Coverage_Test {
 
 	@Test void b08_headerArg_emptyName_skipIfEmpty_removesEmptyValueEntries() {
 		try (var r = req().headerArg("", List.of(BasicHeader.of("E", "")), null, null, true)) {
-			assertTrue(r.getHeaders().getFirst("E").isEmpty(), "Empty-valued entry should have been removed by skipIfEmpty");
+			assertTrue(r.getHeaderList().getFirst("E").isEmpty(), "Empty-valued entry should have been removed by skipIfEmpty");
 		}
 	}
 
 	@Test void b09_headerArg_singleValue_normal() {
 		try (var r = req().headerArg("k", "v", null, null, false)) {
-			assertEquals("v", r.getHeaders().getFirst("k").orElseThrow().getValue());
+			assertEquals("v", r.getHeaderList().getFirst("k").orElseThrow().getValue());
 		}
 	}
 

@@ -25,7 +25,7 @@ import java.time.format.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.test.assertions.*;
 
 /**

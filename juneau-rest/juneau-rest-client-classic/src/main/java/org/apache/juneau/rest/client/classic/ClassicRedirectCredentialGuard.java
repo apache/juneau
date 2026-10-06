@@ -18,8 +18,9 @@ package org.apache.juneau.rest.client.classic;
 
 import java.net.*;
 
-import org.apache.http.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -44,8 +45,9 @@ final class ClassicRedirectCredentialGuard implements HttpRequestInterceptor {
 	private static final String ATTR_ORIGIN = ClassicRedirectCredentialGuard.class.getName() + ".origin";
 
 	@Override /* HttpRequestInterceptor */
-	public void process(HttpRequest request, HttpContext context) {
-		var target = HttpCoreContext.adapt(context).getTargetHost();
+	public void process(HttpRequest request, EntityDetails entity, HttpContext context) {
+		var route = org.apache.hc.client5.http.protocol.HttpClientContext.adapt(context).getHttpRoute();
+		var target = route == null ? null : route.getTargetHost();
 		if (target == null)
 			return;
 		var current = originOf(target);

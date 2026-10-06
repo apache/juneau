@@ -20,7 +20,7 @@ package org.apache.juneau.http;
  * The first line of an HTTP response message, containing the protocol version, status code, and reason phrase.
  *
  * <p>
- * Mirrors the semantics of {@code org.apache.http.StatusLine} without the Apache HttpCore dependency.
+ * Mirrors the semantics of {@code org.apache.hc.core5.http.message.StatusLine} without the Apache HttpCore dependency.
  * The default immutable implementation is {@link org.apache.juneau.http.response.HttpStatusLineBean}.
  *
  * <p>

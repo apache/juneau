@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.http.classic.resource;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 
 /**
  * An extension of an {@link HttpEntity} that also includes arbitrary headers.

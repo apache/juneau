@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
  * A complete HTTP response message: status line, headers, and optional body.
  *
  * <p>
- * Mirrors the semantics of {@code org.apache.http.HttpResponse} without the Apache HttpCore dependency.
+ * Mirrors the semantics of {@code org.apache.hc.core5.http.ClassicHttpResponse} without the Apache HttpCore dependency.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.

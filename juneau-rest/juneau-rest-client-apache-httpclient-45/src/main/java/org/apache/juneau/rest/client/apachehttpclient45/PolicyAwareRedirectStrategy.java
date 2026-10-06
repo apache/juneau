@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
-import org.apache.http.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.core5.http.protocol.*;
 
 /**
  * {@link DefaultRedirectStrategy} that never auto-follows a redirect while
@@ -35,6 +35,16 @@ import org.apache.http.protocol.*;
  * @since 10.0.0
  */
 final class PolicyAwareRedirectStrategy extends DefaultRedirectStrategy {
+
+	@Override
+	public boolean isRedirectAllowed(HttpHost currentTarget, HttpHost newTarget, HttpRequest request, HttpContext context) {
+		if (org.apache.juneau.rest.client.RedirectSecurity.shouldStripCredentials(
+			java.net.URI.create(currentTarget.toURI()), java.net.URI.create(newTarget.toURI()))) {
+			for (var name : org.apache.juneau.rest.client.RedirectSecurity.stripOnCrossOrigin())
+				request.removeHeaders(name);
+		}
+		return super.isRedirectAllowed(currentTarget, newTarget, request, context);
+	}
 
 	@Override /* DefaultRedirectStrategy */
 	public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {

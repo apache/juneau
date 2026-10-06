@@ -21,14 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 
-import org.apache.http.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.conn.*;
-import org.apache.http.entity.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.message.*;
-import org.apache.http.params.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.junit.jupiter.api.*;
 
@@ -47,24 +46,23 @@ class ApacheHc45Transport_ErrorPaths_Test {
 
 	@FunctionalInterface
 	private interface Executor {
-		CloseableHttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException;
+		ClassicHttpResponse execute(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException;
 	}
 
 	private static final class FakeHttpClient extends CloseableHttpClient {
 		private final Executor executor;
 		FakeHttpClient(Executor executor) { this.executor = executor; }
-		@Override protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
-			return executor.execute(target, request, context);
+		@Override protected CloseableHttpResponse doExecute(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException {
+			return CloseableHttpResponse.adapt(executor.execute(target, request, context));
 		}
 		@Override public void close() { /* no real connections to release */ }
-		@Override @Deprecated public HttpParams getParams() { return null; }
-		@Override @Deprecated public ClientConnectionManager getConnectionManager() { return null; }
+		@Override public void close(org.apache.hc.core5.io.CloseMode mode) { }
 	}
 
-	private static final class FakeResponse extends BasicHttpResponse implements CloseableHttpResponse {
+	private static final class FakeResponse extends BasicClassicHttpResponse {
 		boolean closeThrows;
 		boolean closed;
-		FakeResponse(int statusCode) { super(new BasicStatusLine(HttpVersion.HTTP_1_1, statusCode, "OK")); }
+		FakeResponse(int statusCode) { super(statusCode, "OK"); }
 		@Override public void close() throws IOException {
 			closed = true;
 			if (closeThrows)
@@ -74,6 +72,8 @@ class ApacheHc45Transport_ErrorPaths_Test {
 
 	/** An entity whose {@code getContent()} always fails &mdash; simulates a body-read wiring failure. */
 	private static final class ThrowingEntity extends AbstractHttpEntity {
+		ThrowingEntity() { super((String)null, null); }
+		@Override public void close() { }
 		@Override public boolean isRepeatable() { return true; }
 		@Override public long getContentLength() { return -1; }
 		@Override public InputStream getContent() throws IOException { throw new IOException("content-boom"); }

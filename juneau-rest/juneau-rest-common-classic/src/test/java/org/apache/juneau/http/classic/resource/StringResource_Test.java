@@ -20,9 +20,10 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.junit.jupiter.api.*;
 
 // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -39,7 +40,7 @@ class StringResource_Test extends TestBase {
 
 		var x2 = new StringResource(contentType("text/plain"), "foo");
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertTrue(x2.isRepeatable());
 		assertFalse(x2.isStreaming());
 
@@ -69,21 +70,21 @@ class StringResource_Test extends TestBase {
 	@Test void a04_contentType() {
 		var x = new StringResource(null, "foo")
 			.setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 
 		var x2 = new StringResource(null, "foo")
 			.setContentType(contentType("text/html"));
-		assertEquals("text/html", x2.getContentType().getValue());
+		assertEquals("text/html", x2.getContentType());
 	}
 
 	@Test void a05_contentEncoding() {
 		var x = new StringResource(null, "foo")
 			.setContentEncoding("identity");
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 
 		var x2 = new StringResource(null, "foo")
 			.setContentEncoding(contentEncoding("gzip"));
-		assertEquals("gzip", x2.getContentEncoding().getValue());
+		assertEquals("gzip", x2.getContentEncoding());
 	}
 
 	@Test void a06_chunked() {
@@ -127,7 +128,7 @@ class StringResource_Test extends TestBase {
 		StringResource x2 = x.copy();
 		assertNotSame(x, x2);
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertEquals("bar", x2.getHeaders().getFirst("Foo").get().getValue());
 	}
 

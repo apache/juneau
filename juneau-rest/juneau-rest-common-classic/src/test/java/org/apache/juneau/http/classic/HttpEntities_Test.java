@@ -58,7 +58,7 @@ class HttpEntities_Test extends TestBase {
 	@Test void a03_byteArrayEntity_bytes_withContentType() throws Exception {
 		var e = byteArrayEntity(BYTES, CT_JSON);
 		assertArrayEquals(BYTES, e.asBytes());
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	@Test void a04_byteArrayEntity_bytes_withContentType_null() {
@@ -81,7 +81,7 @@ class HttpEntities_Test extends TestBase {
 		Supplier<byte[]> s = () -> BYTES;
 		var e = byteArrayEntity(s, CT_JSON);
 		assertArrayEquals(BYTES, e.asBytes());
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ class HttpEntities_Test extends TestBase {
 	@Test void b03_fileEntity_file_withContentType() {
 		var f = new File("/tmp/nonexistent-juneau-test-file.txt");
 		var e = fileEntity(f, CT_JSON);
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	@Test void b04_fileEntity_file_withContentType_null() {
@@ -130,7 +130,7 @@ class HttpEntities_Test extends TestBase {
 	@Test void c03_readerEntity_reader_withContentType() throws Exception {
 		var r = new StringReader("hello");
 		var e = readerEntity(r, CT_JSON);
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 		assertEquals("hello", e.asString());
 	}
 
@@ -208,7 +208,7 @@ class HttpEntities_Test extends TestBase {
 		var in = new ByteArrayInputStream(BYTES);
 		var e = streamEntity(in, BYTES.length, CT_JSON);
 		assertEquals(BYTES.length, e.getContentLength());
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	@Test void e04_streamEntity_inputStream_unknownLength() {
@@ -241,7 +241,7 @@ class HttpEntities_Test extends TestBase {
 	@Test void f04_stringEntity_string_withContentType() throws Exception {
 		var e = stringEntity("hello", CT_JSON);
 		assertEquals("hello", e.asString());
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	@Test void f05_stringEntity_string_withContentType_null() {
@@ -264,7 +264,7 @@ class HttpEntities_Test extends TestBase {
 		Supplier<String> s = () -> "lazy";
 		var e = stringEntity(s, CT_JSON);
 		assertEquals("lazy", e.asString());
-		assertEquals("application/json", e.getContentType().getValue());
+		assertEquals("application/json", e.getContentType());
 	}
 
 	@Test void f09_stringEntity_supplier_withContentType_null() {

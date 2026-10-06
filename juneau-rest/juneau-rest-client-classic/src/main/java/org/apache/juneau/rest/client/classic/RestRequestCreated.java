@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
 
 /**
  * Identify an {@link HttpRequest} that was created by a {@link RestRequest}.

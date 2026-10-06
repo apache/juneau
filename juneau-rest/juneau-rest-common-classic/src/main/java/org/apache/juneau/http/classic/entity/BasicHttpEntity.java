@@ -23,14 +23,15 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.test.assertions.*;
 
 /**
- * A basic {@link org.apache.http.HttpEntity} implementation with additional features.
+ * A basic {@link org.apache.hc.core5.http.HttpEntity} implementation with additional features.
  *
  * Provides the following features:
  * <ul class='spaced-list'>
@@ -178,8 +179,9 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public void consumeContent() throws IOException {
-		// No-op: Intentional empty implementation for optional interface method
+	public void close() throws IOException {
+		if (content instanceof Closeable closeable)
+			closeable.close();
 	}
 
 	/**
@@ -203,13 +205,13 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	public InputStream getContent() throws IOException, UnsupportedOperationException { return EMPTY_INPUT_STREAM; }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() { return contentEncoding; }
+	public String getContentEncoding() { return contentEncoding == null ? null : contentEncoding.getValue(); }
 
 	@Override /* Overridden from HttpEntity */
 	public long getContentLength() { return contentLength; }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentType() { return contentType; }
+	public String getContentType() { return contentType == null ? null : contentType.getValue(); }
 
 	/**
 	 * Returns the maximum number of bytes to read or write to and from stream-based resources.
@@ -224,6 +226,12 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	 * @return <jk>true</jk> if this entity is cached in-memory.
 	 */
 	public boolean isCached() { return cached; }
+
+	@Override
+	public java.util.Set<String> getTrailerNames() { return java.util.Set.of(); }
+
+	@Override
+	public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return null; }
 
 	@Override /* Overridden from HttpEntity */
 	public boolean isChunked() { return chunked; }

@@ -20,7 +20,7 @@ package org.apache.juneau.http;
  * The first line of an HTTP request message, containing the method, request URI, and protocol version.
  *
  * <p>
- * Mirrors the semantics of {@code org.apache.http.RequestLine} without the Apache HttpCore dependency.
+ * Mirrors the semantics of {@code org.apache.hc.core5.http.message.RequestLine} without the Apache HttpCore dependency.
  * The default immutable implementation is {@link org.apache.juneau.http.request.HttpRequestLineBean}.
  *
  * <p>

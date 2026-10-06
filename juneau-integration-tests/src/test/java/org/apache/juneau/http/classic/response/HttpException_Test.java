@@ -22,9 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -193,7 +194,7 @@ class HttpException_Test extends TestBase {
 
 	@Test void a09_fluentStatusLine_setters() {
 		var x = httpException().setStatusCode2(500);
-		var pv = new org.apache.http.ProtocolVersion("HTTP", 2, 0);
+		var pv = new org.apache.hc.core5.http.ProtocolVersion("HTTP", 2, 0);
 		assertSame(x, x.setProtocolVersion(pv));
 		assertSame(x, x.setLocale2(java.util.Locale.FRENCH));
 		assertSame(x, x.setMessage("new message"));

@@ -26,15 +26,17 @@ import java.io.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
-import org.apache.http.auth.*;
-import org.apache.http.client.config.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.concurrent.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.message.*;
-import org.apache.http.params.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.impl.io.HttpRequestExecutor;
+import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.client5.http.auth.*;
+import org.apache.hc.client5.http.config.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.core5.concurrent.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.parser.*;
@@ -133,13 +135,13 @@ class RestClient_Test extends TestBase {
 			return super.createRequest(uri, method, hasBody);
 		}
 		@Override
-		protected RestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		protected RestResponse createResponse(RestRequest req, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
 			createResponseCalled = true;
 			return super.createResponse(req, httpResponse, parser);
 		}
 		@Override /* HttpClient */
-		public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException {
-			return new BasicHttpResponse(new ProtocolVersion("http",1,1),200,null);
+		public ClassicHttpResponse execute(ClassicHttpRequest request, HttpContext context) throws IOException {
+			return new org.apache.hc.core5.http.message.BasicClassicHttpResponse(200, null);
 		}
 	}
 
@@ -155,20 +157,20 @@ class RestClient_Test extends TestBase {
 
 	public static class C01 implements HttpRequestInterceptor, HttpResponseInterceptor {
 		@Override
-		public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+		public void process(HttpRequest request, EntityDetails entity, HttpContext context) throws HttpException, IOException {
 			request.setHeader("A1","1");
 		}
 		@Override
-		public void process(HttpResponse response, HttpContext context) throws HttpException,IOException {
+		public void process(HttpResponse response, EntityDetails entity, HttpContext context) throws HttpException,IOException {
 			response.setHeader("B1","1");
 		}
 	}
 
 	@Test void c01_httpClient_interceptors() throws Exception {
-		HttpRequestInterceptor x1 = (request, context) -> request.setHeader("A1","1");
-		HttpResponseInterceptor x2 = (response, context) -> response.setHeader("B1","1");
-		HttpRequestInterceptor x3 = (request, context) -> request.setHeader("A2","2");
-		HttpResponseInterceptor x4 = (response, context) -> response.setHeader("B2","2");
+		HttpRequestInterceptor x1 = (request, entity, context) -> request.setHeader("A1","1");
+		HttpResponseInterceptor x2 = (response, entity, context) -> response.setHeader("B1","1");
+		HttpRequestInterceptor x3 = (request, entity, context) -> request.setHeader("A2","2");
+		HttpResponseInterceptor x4 = (response, entity, context) -> response.setHeader("B2","2");
 
 		client().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
 			.build().get("/echo").run().assertContent().isContains("A1: 1","A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");
@@ -179,11 +181,11 @@ class RestClient_Test extends TestBase {
 	@Test void c02_httpClient_httpProcessor() throws RestCallException {
 		var x = new HttpProcessor() {
 			@Override
-			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+			public void process(HttpRequest request, EntityDetails entity, HttpContext context) throws HttpException, IOException {
 				request.setHeader("A1","1");
 			}
 			@Override
-			public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
+			public void process(HttpResponse response, EntityDetails entity, HttpContext context) throws HttpException, IOException {
 				response.setHeader("B1","1");
 			}
 		};
@@ -194,9 +196,9 @@ class RestClient_Test extends TestBase {
 		var b1 = new AtomicBoolean();
 		var x = new HttpRequestExecutor() {
 			@Override
-			public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws HttpException, IOException {
+			public ClassicHttpResponse execute(ClassicHttpRequest request, HttpClientConnection conn, org.apache.hc.core5.http.io.HttpResponseInformationCallback informationCallback, HttpContext context) throws HttpException, IOException {
 				b1.set(true);
-				return super.execute(request, conn, context);
+				return super.execute(request, conn, informationCallback, context);
 			}
 		};
 		client().requestExecutor(x).build().get("/echo").run().assertContent().isContains("GET /echo HTTP/1.1");
@@ -213,8 +215,8 @@ class RestClient_Test extends TestBase {
 
 	@Test void c06_httpClient_unusedHttpClientMethods() {
 		var x = RestClient.create().build();
-		assertThrows(UnsupportedOperationException.class, x::getParams);
-		assertNotNull(x.getConnectionManager());
+
+		assertNotNull(x.getHttpClientConnectionManager());
 	}
 
 	@Test void c07_httpClient_executeHttpUriRequest() throws Exception {
@@ -244,28 +246,28 @@ class RestClient_Test extends TestBase {
 	@Test void c10_httpClient_executeResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","application/json");
-		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
+		var res = MockRestClient.create(A.class).build().execute(x,new BasicHttpClientResponseHandler());
 		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","application/json");
-		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
+		var res = MockRestClient.create(A.class).build().execute(x,new BasicHttpContext(),new BasicHttpClientResponseHandler());
 		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","application/json");
-		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
+		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicHttpContext(),new BasicHttpClientResponseHandler());
 		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","application/json");
-		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
+		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicHttpClientResponseHandler());
 		assertEquals("{\"f\":1}",res);
 	}
 
@@ -301,7 +303,7 @@ class RestClient_Test extends TestBase {
 	}
 
 	@Test void d01_basicAuth() throws RestCallException {
-		client(D.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertContent().isContains("OK");
+		client(D.class).basicAuth(null,-1,"user","pw").build().get("/echo").run().assertContent().isContains("OK");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -325,7 +327,7 @@ class RestClient_Test extends TestBase {
 
 	@Test void e03_httpRequestBase_protocolVersion() throws Exception {
 		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus(200);
-		var x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
+		var x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getVersion();
 		assertEquals(2,x.getMajor());
 	}
 
@@ -401,13 +403,6 @@ class RestClient_Test extends TestBase {
 		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
 	}
 
-	
-	@Test void e15_httpMessage_getParams() throws Exception {
-		var p = new BasicHttpParams();
-		var x = client().build().get("/bean");
-		x.setParams(p);
-		assertEquals(p, x.getParams());
-	}
 
 	@Test void e16_toMap() throws Exception {
 		assertNotNull(client().build().toString());

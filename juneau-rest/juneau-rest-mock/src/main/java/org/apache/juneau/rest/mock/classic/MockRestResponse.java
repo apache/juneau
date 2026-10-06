@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.mock.classic;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.classic.*;
 
@@ -40,7 +40,7 @@ public class MockRestResponse extends RestResponse {
 	 * @param response The HTTP response.  Can be <jk>null</jk> (a default empty response with a status code of <c>0</c> is substituted).
 	 * @param parser The overridden parser passed into {@link RestRequest#parser(Parser)}.
 	 */
-	public MockRestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
+	public MockRestResponse(RestClient client, RestRequest request, ClassicHttpResponse response, Parser parser) {
 		super(client, request, response, parser);
 		((MockRestClient)client).currentResponse(this);
 	}

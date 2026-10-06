@@ -19,10 +19,11 @@ package org.apache.juneau.http.classic.resource;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 
 /**
  * A streamed, non-repeatable resource that obtains its content from an {@link InputStream}.
@@ -68,7 +69,7 @@ public class StreamResource extends BasicResource<StreamResource> {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws IOException Rethrown from {@link HttpEntity#getContent()}.
 	 */
-	public StreamResource(HttpResponse response) throws IOException {
+	public StreamResource(ClassicHttpResponse response) throws IOException {
 		super(response);
 	}
 

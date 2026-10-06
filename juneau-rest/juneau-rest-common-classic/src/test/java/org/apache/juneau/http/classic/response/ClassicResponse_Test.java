@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -65,7 +65,7 @@ class ClassicResponse_Test extends TestBase {
 	@MethodSource
 	void a01_responseClasses(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
-		var statusLine = ((HttpResponse)instance).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)instance);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 		assertEquals(expectedPhrase, statusLine.getReasonPhrase());
 	}
@@ -83,7 +83,7 @@ class ClassicResponse_Test extends TestBase {
 	void a03_responseSetHeader(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setHeader2("X-Test", "value1");
-		var header = ((HttpResponse)instance).getFirstHeader("X-Test");
+		var header = ((ClassicHttpResponse)instance).getFirstHeader("X-Test");
 		assertNotNull(header);
 		assertEquals("value1", header.getValue());
 	}
@@ -93,7 +93,7 @@ class ClassicResponse_Test extends TestBase {
 	void a04_responseCopyConstructor(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		var copy = (BasicHttpResponse<?>) type.getMethod("copy").invoke(instance);
-		var statusLine = ((HttpResponse)copy).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)copy);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 		assertEquals(expectedPhrase, statusLine.getReasonPhrase());
 	}
@@ -154,7 +154,7 @@ class ClassicResponse_Test extends TestBase {
 	@MethodSource
 	void a06_exceptionClasses(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
-		var statusLine = ((HttpResponse)instance).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)instance);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 		assertEquals(expectedPhrase, statusLine.getReasonPhrase());
 	}
@@ -172,7 +172,7 @@ class ClassicResponse_Test extends TestBase {
 	void a08_exceptionWithMessage(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor(String.class, Object[].class).newInstance("test %s", new Object[]{"msg"});
 		assertEquals("test msg", instance.getMessage());
-		var statusLine = ((HttpResponse)instance).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)instance);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 	}
 
@@ -182,7 +182,7 @@ class ClassicResponse_Test extends TestBase {
 		var cause = new RuntimeException("root cause");
 		var instance = type.getDeclaredConstructor(Throwable.class).newInstance(cause);
 		assertSame(cause, instance.getCause());
-		var statusLine = ((HttpResponse)instance).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)instance);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 	}
 
@@ -191,7 +191,7 @@ class ClassicResponse_Test extends TestBase {
 	void a10_exceptionCopyConstructor(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		var copy = (BasicHttpException) type.getMethod("copy").invoke(instance);
-		var statusLine = ((HttpResponse)copy).getStatusLine();
+		var statusLine = new org.apache.hc.core5.http.message.StatusLine((ClassicHttpResponse)copy);
 		assertEquals(expectedCode, statusLine.getStatusCode());
 		assertEquals(expectedPhrase, statusLine.getReasonPhrase());
 	}
@@ -201,7 +201,7 @@ class ClassicResponse_Test extends TestBase {
 	void a11_exceptionSetHeader(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setHeader2("X-Test", "value1");
-		var header = ((HttpResponse)instance).getFirstHeader("X-Test");
+		var header = ((ClassicHttpResponse)instance).getFirstHeader("X-Test");
 		assertNotNull(header);
 		assertEquals("value1", header.getValue());
 	}

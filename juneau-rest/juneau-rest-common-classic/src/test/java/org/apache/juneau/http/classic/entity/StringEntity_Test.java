@@ -45,7 +45,7 @@ class StringEntity_Test extends TestBase {
 	@Test void a02_ctor_contentTypeAndContent() throws Exception {
 		var x = new StringEntity(ContentType.of("text/plain"), "foo");
 		assertEquals("foo", x.asString());
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a03_ctor_nullContent_treatedAsEmpty() throws Exception {

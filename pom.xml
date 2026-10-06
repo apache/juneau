@@ -104,6 +104,8 @@
 		<logback.version>1.5.18</logback.version>
 		<log4j.version>2.26.1</log4j.version>
 		<h2.version>2.3.232</h2.version>
+		<httpcore.version>5.4.4</httpcore.version>
+		<httpclient.version>5.6.4</httpclient.version>
 	</properties>
 
 	<modules>
@@ -128,6 +130,30 @@
 			<url>file:///tmp/site</url>
 		</site>
 	</distributionManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5</artifactId>
+				<version>${httpcore.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5-h2</artifactId>
+				<version>${httpcore.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5-cache</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -304,8 +330,8 @@
  						<links>
 							<link>https://docs.oracle.com/en/java/javase/${maven.compiler.target}/docs/api/</link>
 							<link>https://jakarta.ee/specifications/platform/8/apidocs/</link>
-							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
-							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
+							<link>https://hc.apache.org/httpcomponents-client-5.6.x/current/httpclient5/apidocs/</link>
+							<link>https://hc.apache.org/httpcomponents-core-5.4.x/current/httpcore5/apidocs/</link>
 						</links>
 						<failOnError>false</failOnError>
 					</configuration>

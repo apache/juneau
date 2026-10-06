@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.http.client.config.*;
+import org.apache.hc.client5.http.config.*;
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.utils.*;
@@ -409,7 +409,7 @@ class Path_Test extends TestBase {
 	}
 
 	@Test void f01_pathVariablesOnClass() throws Exception {
-		var f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().build()).build();
 		f.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent("a: {a=x1,b=x2}");
@@ -492,7 +492,7 @@ class Path_Test extends TestBase {
 	public static class G {}
 
 	@Test void g01_pathVariablesOnChildClass() throws Exception {
-		var g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().build()).build();
 		g.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent("a: {a=x1,b=x2}");
@@ -563,7 +563,7 @@ class Path_Test extends TestBase {
 	public static class H {}
 
 	@Test void h01_pathVariablesOnParentAndChildClass() throws Exception {
-		var h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().build()).build();
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertContent("a: {a=x1,b=x2,ha=ha1,hb=hb1}");

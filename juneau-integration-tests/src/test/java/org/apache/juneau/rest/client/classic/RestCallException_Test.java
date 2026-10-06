@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.http.entity.*;
+import org.apache.hc.core5.http.io.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.parser.*;

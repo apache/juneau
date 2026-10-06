@@ -23,7 +23,7 @@ import static org.apache.juneau.http.classic.HttpResources.*;
 
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;

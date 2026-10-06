@@ -22,9 +22,9 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.logging.*;
 
-import org.apache.http.*;
-import org.apache.http.entity.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
@@ -113,8 +113,8 @@ class RestClient_Logging_StreamClosed_Test extends TestBase {
 		}
 
 		@Override
-		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
-			var r = new BasicHttpResponse(new ProtocolVersion("http", 1, 1), 200, "");
+		protected MockRestResponse createResponse(RestRequest request, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
+			var r = new org.apache.hc.core5.http.message.BasicClassicHttpResponse(200, "");
 			r.setEntity(responseEntity);
 			r.addHeader("Content-Type", "application/json");
 			return new MockRestResponse(this, request, r, parser);
@@ -123,7 +123,7 @@ class RestClient_Logging_StreamClosed_Test extends TestBase {
 
 	private static InputStreamEntity failingEntity(String body) {
 		var data = body.getBytes(StandardCharsets.UTF_8);
-		return new InputStreamEntity(new FailingAfterCloseStream(data));
+		return new InputStreamEntity(new FailingAfterCloseStream(data), null);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ import static org.apache.juneau.BasicTestUtils.*;
 import java.io.*;
 import java.util.logging.*;
 
-import org.apache.http.entity.*;
+import org.apache.hc.core5.http.io.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.*;
@@ -83,7 +83,7 @@ class RestClient_Logging_Test extends TestBase {
 			"---request content---",
 			"{\"f\":1}",
 			"=== RESPONSE ===",
-			"HTTP/1.1 200 ",
+			"HTTP/1.1 200 OK",
 			"---response headers---",
 			"	Content-Type: application/json",
 			"---response content---",
@@ -100,7 +100,7 @@ class RestClient_Logging_Test extends TestBase {
 			"---request headers---",
 			"	Accept: application/json",
 			"=== RESPONSE ===",
-			"HTTP/1.1 200 ",
+			"HTTP/1.1 200 OK",
 			"---response headers---",
 			"	Content-Type: application/json",
 			"---response content---",
@@ -109,7 +109,7 @@ class RestClient_Logging_Test extends TestBase {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"), null)).complete();
 		c.assertContents().asReplaceAll("\\tX-Request-Id: [^\\r\\n]*\\R", "").asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -117,7 +117,7 @@ class RestClient_Logging_Test extends TestBase {
 			"---request headers---",
 			"---request entity---",
 			"=== RESPONSE ===",
-			"HTTP/1.1 200 ",
+			"HTTP/1.1 200 OK",
 			"---response headers---",
 			"	Content-Encoding: identity",
 			"---response content---",
@@ -126,7 +126,7 @@ class RestClient_Logging_Test extends TestBase {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"), null)).complete();
 		c.assertContents().isEmpty();
 		c.reset();
 	}
@@ -141,7 +141,7 @@ class RestClient_Logging_Test extends TestBase {
 
 		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
-		l.assertLastMessage().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
+		l.assertLastMessage().is("HTTP POST http://localhost/bean, HTTP/1.1 200 OK");
 		l.assertContents().isContains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200");
 		l.reset();
 
@@ -158,7 +158,7 @@ class RestClient_Logging_Test extends TestBase {
 			"---request content---",
 			"{\"f\":1}",
 			"=== RESPONSE ===",
-			"HTTP/1.1 200 ",
+			"HTTP/1.1 200 OK",
 			"---response headers---",
 			"	Content-Type: application/json",
 			"---response content---",
@@ -177,7 +177,7 @@ class RestClient_Logging_Test extends TestBase {
 			"---request content---",
 			"{\"f\":1}",
 			"=== RESPONSE ===",
-			"HTTP/1.1 200 ",
+			"HTTP/1.1 200 OK",
 			"---response headers---",
 			"	Content-Type: application/json",
 			"---response content---",

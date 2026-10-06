@@ -28,24 +28,28 @@ import static org.apache.juneau.rest.client.classic.RestOperation.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.http.*;
-import org.apache.http.ParseException;
-import org.apache.http.client.*;
-import org.apache.http.client.config.*;
-import org.apache.http.client.entity.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.client.utils.*;
-import org.apache.http.concurrent.*;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.params.*;
-import org.apache.http.protocol.*;
-import org.apache.http.util.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.RequestLine;
+import org.apache.hc.core5.net.URIBuilder;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.client5.http.classic.*;
+import org.apache.hc.client5.http.config.*;
+import org.apache.hc.client5.http.entity.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.utils.*;
+import org.apache.hc.core5.concurrent.*;
+import org.apache.hc.core5.http.io.entity.BasicHttpEntity;
+import org.apache.hc.core5.http.protocol.*;
+import org.apache.hc.core5.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.httppart.*;
@@ -119,6 +123,53 @@ import org.apache.juneau.marshall.xml.*;
 })
 public class RestRequest extends MarshallingSession implements HttpUriRequest, Configurable, AutoCloseable {
 
+	@Override
+	public void setVersion(ProtocolVersion version) { request.setVersion(version); }
+
+	@Override
+	public void setUri(URI uri) { request.setUri(uri); }
+
+	@Override
+	public String getRequestUri() { return request.getRequestUri(); }
+
+	@Override
+	public String getPath() { return request.getPath(); }
+
+	@Override
+	public void setPath(String path) { request.setPath(path); }
+
+	@Override
+	public String getScheme() { return request.getScheme(); }
+
+	@Override
+	public void setScheme(String scheme) { request.setScheme(scheme); }
+
+	@Override
+	public org.apache.hc.core5.net.URIAuthority getAuthority() { return request.getAuthority(); }
+
+	@Override
+	public void setAuthority(org.apache.hc.core5.net.URIAuthority authority) { request.setAuthority(authority); }
+
+	@Override
+	public int countHeaders(String name) { return headerData.getAll(name).length; }
+
+	@Override
+	public Header getHeader(String name) throws org.apache.hc.core5.http.ProtocolException {
+		Header[] values = getHeaders(name);
+		if (values.length > 1) throw new org.apache.hc.core5.http.ProtocolException("Multiple headers: " + name);
+		return values.length == 0 ? null : values[0];
+	}
+
+	@Override
+	public HttpEntity getEntity() { return request.getEntity(); }
+
+	@Override
+	public void setEntity(HttpEntity entity) { request.setEntity(entity); }
+
+	private static URI requestUri(HttpUriRequestBase request) {
+		try { return request.getUri(); } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
+	}
+
 	private static final String HEADER_ACCEPT = org.apache.juneau.http.header.Accept.NAME;
 	private static final String HEADER_CONTENT_TYPE = org.apache.juneau.http.header.ContentType.NAME;
 
@@ -138,7 +189,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		@Override
-		public HeaderElement[] getElements() throws ParseException { return new HeaderElement[0]; }
+		public boolean isSensitive() { return false; }
 	}
 
 	private class SimplePart implements NameValuePair {
@@ -199,7 +250,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	final RestClient client;                               // The client that created this call.
-	private final HttpRequestBase request;                 // The request.
+	private final HttpUriRequestBase request;                 // The request.
 	private boolean ignoreErrors;
 	private boolean suppressLogging;
 	private HttpContext context;
@@ -243,7 +294,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		this.ignoreErrors = client.ignoreErrors;
 		this.pathData = client.createPathData();
 		this.queryData = client.createQueryData();
-		this.uriBuilder = new URIBuilder(request.getURI());
+		this.uriBuilder = new URIBuilder(requestUri(request));
 	}
 
 	/**
@@ -320,8 +371,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		headerData.append(stringHeader(name, value));
+	public void addHeader(String name, Object value) {
+		headerData.append(stringHeader(name, value == null ? null : value.toString()));
 	}
 
 	/**
@@ -332,7 +383,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest cancellable(Cancellable cancellable) {
-		request.setCancellable(cancellable);
+		request.setDependency(cancellable);
 		return this;
 	}
 
@@ -402,7 +453,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
 	public RestRequest completed() {
-		request.completed();
+		request.reset();
 		return this;
 	}
 
@@ -783,7 +834,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return All the headers of this message
 	 */
 	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() { return headerData.getAll(); }
+	public Header[] getHeaders() { return headerData.getAll(); }
 
 	/**
 	 * Returns the actual request configuration.
@@ -821,7 +872,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * @return An immutable list of headers to send on the request.
 	 */
-	public HeaderList getHeaders() { return headerData; }
+	public HeaderList getHeaderList() { return headerData; }
 
 	/**
 	 * Returns all the headers with a specified name of this message.
@@ -843,7 +894,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * @return The body of this request, or <jk>null</jk> if it doesn't have a body.
 	 */
-	public HttpEntity getHttpEntity() { return hasHttpEntity() ? ((HttpEntityEnclosingRequestBase)request).getEntity() : null; }
+	public HttpEntity getHttpEntity() { return hasHttpEntity() ? ((HttpUriRequestBase)request).getEntity() : null; }
 
 	/**
 	 * Returns the last header with a specified name of this message.
@@ -870,16 +921,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public String getMethod() { return request.getMethod(); }
 
 	/**
-	 * Returns the parameters effective for this message as set by {@link #setParams(HttpParams)}.
-	 *
-	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.
-	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
-	 */
-	@Override /* Overridden from HttpMessage */
-	@Deprecated(since = "10.0", forRemoval = true)
-	public HttpParams getParams() { return request.getParams(); }
-
-	/**
 	 * Returns the path data for the request.
 	 *
 	 * @return An immutable list of path data to send on the request.
@@ -892,7 +933,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return The protocol version.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() { return request.getProtocolVersion(); }
+	public ProtocolVersion getVersion() { return request.getVersion(); }
 
 	/**
 	 * Returns the query data for the request.
@@ -906,8 +947,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * @return The request line.
 	 */
-	@Override /* Overridden from HttpRequest */
-	public RequestLine getRequestLine() { return request.getRequestLine(); }
+	public RequestLine getRequestLine() { return new RequestLine(request); }
 
 	/**
 	 * A shortcut for calling <c>run().getContent().as(<js>type</js>)</c>.
@@ -963,7 +1003,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return The original request URI.
 	 */
 	@Override /* Overridden from HttpUriRequest */
-	public URI getURI() { return request.getURI(); }
+	public URI getUri() { return requestUri(request); }
 
 	/**
 	 * Returns <jk>true</jk> if this request has a body.
@@ -971,7 +1011,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return <jk>true</jk> if this request has a body.
 	 */
 	public boolean hasHttpEntity() {
-		return request instanceof HttpEntityEnclosingRequestBase;
+		return request instanceof BasicHttpEntityRequestBase;
 	}
 
 	/**
@@ -1025,7 +1065,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return Iterator that returns {@link Header} objects in the sequence they are sent over a connection.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
+	public Iterator<Header> headerIterator() {
 		return headerData.headerIterator();
 	}
 
@@ -1036,7 +1076,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return Iterator that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
+	public Iterator<Header> headerIterator(String name) {
 		return headerData.headerIterator(name);
 	}
 
@@ -1807,7 +1847,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return This object.
 	 */
 	public RestRequest protocolVersion(ProtocolVersion version) {
-		request.setProtocolVersion(version);
+		request.setVersion(version);
 		return this;
 	}
 
@@ -1972,8 +2012,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Can be <jk>null</jk> (no-op).
 	 */
 	@Override /* Overridden from HttpMessage */
-	public void removeHeader(Header header) {
+	public boolean removeHeader(Header header) {
+		boolean present = Arrays.asList(headerData.getAll()).contains(header);
 		headerData.remove(header);
+		return present;
 	}
 
 	/**
@@ -1983,8 +2025,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public void removeHeaders(String name) {
+	public boolean removeHeaders(String name) {
+		boolean present = headerData.contains(name);
 		headerData.remove(name);
+		return present;
 	}
 
 	/**
@@ -2063,8 +2107,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				uriBuilder.setPath(path);
 			});
 
-			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase request3 ? request3 : null;
-			request.setURI(uriBuilder.build());
+			HttpUriRequestBase request2 = request instanceof BasicHttpEntityRequestBase request3 ? request3 : null;
+			request.setUri(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
 			var hl = headerData;
@@ -2088,7 +2132,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(request::addHeader);
 
 			if (request2 == null && content != NO_BODY)
-				throw new RestCallException(null, null, "Method does not support content entity.  Method=%s, URI=%s", getMethod(), getURI());
+				throw new RestCallException(null, null, "Method does not support content entity.  Method=%s, URI=%s", getMethod(), getUri());
 
 			if (nn(request2)) {
 
@@ -2161,7 +2205,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 						ConstructorInfo c = null;
 						var ci = ClassInfo.of(t);
 						Throwable thrownInstance = null;
-						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
+						c = ci.getPublicConstructor(x -> x.hasParameterTypes(ClassicHttpResponse.class)).orElse(null);
 						if (nn(c)) {
 							thrownInstance = c.<Throwable>newInstance(response);
 						} else {
@@ -2191,7 +2235,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 			if (errorCodes.test(sc) && ! ignoreErrors) {
 				// Surface the server-reported exception detail from the Thrown header (authoritative and independent of the response body) so callers still see the original failure detail.
-				throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s%s", method, getURI(), sc, response.getReasonPhrase(),
+				throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s%s", method, getUri(), sc, response.getReasonPhrase(),
 					response.getContent().asAbbreviatedString(1000), getThrownDetailSuffix(thrown));
 			}
 
@@ -2220,17 +2264,17 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * remains set on the calling thread), pin-on-connects each hop's resolved address.  Only called while
 	 * {@link RemoteUrlPolicyState#isActive()}, i.e. for a {@code @Remote} call with the SSRF guard in effect.
 	 */
-	private HttpResponse runWithPolicyRedirects() throws IOException {
+	private ClassicHttpResponse runWithPolicyRedirects() throws IOException {
 		var currentTarget = target;
-		HttpRequestBase currentRequest = request;
+		HttpUriRequestBase currentRequest = request;
 		for (var hop = 0; hop < RemoteUrlPolicy.MAX_REDIRECT_HOPS; hop++) {
 			// Hop 0's URI was already validated (or is the operator-configured client root, which the resolution
 			// path intentionally does not re-check -- see RemoteUrlPolicy.requireAllowedUrl) before this request
 			// was built; only a redirect Location -- a URL discovered at runtime -- needs a fresh pre-check here.
 			if (hop > 0)
-				requirePolicyAllowed(currentRequest.getURI());
+				requirePolicyAllowed(requestUri(currentRequest));
 			var httpResponse = client.run(currentTarget, currentRequest, context);
-			var sc = httpResponse.getStatusLine().getStatusCode();
+			var sc = httpResponse.getCode();
 			if (! isRedirectStatus(sc))
 				return httpResponse;
 			var locationHeader = httpResponse.getFirstHeader("Location");
@@ -2239,7 +2283,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				throw new ClientProtocolException("Redirect response (status " + sc + ") is missing a Location header");
 			URI target2;
 			try {
-				target2 = RemoteUrlPolicy.resolveRedirectLocation(currentRequest.getURI(), locationHeader.getValue());
+				target2 = RemoteUrlPolicy.resolveRedirectLocation(requestUri(currentRequest), locationHeader.getValue());
 			} catch (IllegalArgumentException e) {
 				throw new ClientProtocolException(e.getMessage(), e);
 			}
@@ -2247,7 +2291,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			currentTarget = null; // Recomputed by the connection route planner from the request's own absolute URI.
 		}
 		throw new ClientProtocolException("Redirect limit exceeded (" + RemoteUrlPolicy.MAX_REDIRECT_HOPS
-			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + request.getURI());
+			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + requestUri(request));
 	}
 
 	private static void requirePolicyAllowed(URI uri) throws ClientProtocolException {
@@ -2269,13 +2313,13 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * and entity. A non-{@linkplain HttpEntity#isRepeatable() repeatable} entity cannot be safely re-sent, so such a
 	 * redirect is refused (fail closed) rather than risking a corrupt or partial replay.
 	 */
-	private HttpRequestBase buildRedirectRequest(HttpRequestBase current, URI target2, int statusCode) throws ClientProtocolException {
+	private HttpUriRequestBase buildRedirectRequest(HttpUriRequestBase current, URI target2, int statusCode) throws ClientProtocolException {
 		var method = current.getMethod();
 		var preserveMethod = eqic(method, "GET") || eqic(method, "HEAD");
 		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);
-		var entity = (! rewriteToGet && current instanceof HttpEntityEnclosingRequestBase e) ? e.getEntity() : null;
+		var entity = (! rewriteToGet && current instanceof BasicHttpEntityRequestBase e) ? e.getEntity() : null;
 
-		HttpRequestBase next;
+		HttpUriRequestBase next;
 		if (entity != null) {
 			if (! entity.isRepeatable())
 				throw new ClientProtocolException("Redirect (status " + statusCode + ") requires re-sending a "
@@ -2287,8 +2331,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		} else {
 			next = new BasicHttpRequestBase(this, rewriteToGet ? "GET" : method);
 		}
-		next.setURI(target2);
-		for (var h : current.getAllHeaders())
+		next.setUri(target2);
+		for (var h : current.getHeaders())
 			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))))
 				next.addHeader(h);
 		return next;
@@ -2410,8 +2454,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		headerData.set(stringHeader(name, value));
+	public void setHeader(String name, Object value) {
+		headerData.set(stringHeader(name, value == null ? null : value.toString()));
 	}
 
 	/**
@@ -2424,19 +2468,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] headers) {
 		headerData.set(headers);
-	}
-
-	/**
-	 * Provides parameters to be used for the processing of this message.
-	 *
-	 * @param params The parameters.
-	 * 	<br>Can be <jk>null</jk> (default parameters will be used).
-	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
-	 */
-	@Override /* Overridden from HttpMessage */
-	@Deprecated(since = "10.0", forRemoval = true)
-	public void setParams(HttpParams params) {
-		request.setParams(params);
 	}
 
 	/**
@@ -2727,7 +2758,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	/**
-	 * Constructs the {@link HttpRequestBase} object that ends up being passed to the client execute method.
+	 * Constructs the {@link HttpUriRequestBase} object that ends up being passed to the client execute method.
 	 *
 	 * <p>
 	 * Subclasses can override this method to create their own request base objects.
@@ -2735,11 +2766,11 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @param method The HTTP method.
 	 * @param uri The HTTP URI.
 	 * @param hasBody Whether the HTTP request has a body.
-	 * @return A new {@link HttpRequestBase} object.
+	 * @return A new {@link HttpUriRequestBase} object.
 	 */
-	protected HttpRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {
+	protected HttpUriRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {
 		var req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);
-		req.setURI(uri);
+		req.setUri(uri);
 		return req;
 	}
 

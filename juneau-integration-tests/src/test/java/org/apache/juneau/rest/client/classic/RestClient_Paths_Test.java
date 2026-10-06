@@ -55,8 +55,8 @@ class RestClient_Paths_Test extends TestBase {
 	}
 
 	@Test void a01_path_String_Object() throws Exception {
-		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
-		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
+		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertContent().isContains("GET /echo/x%3D1 HTTP/1.1");
+		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertContent().isContains("GET /echo/x%3D1 HTTP/1.1");
 		assertThrowsWithMessage(IllegalStateException.class, "Path variable {y} was not found in path.", ()->client().build().get("/echo/{x}").pathData("y","foo").run());
 	}
 

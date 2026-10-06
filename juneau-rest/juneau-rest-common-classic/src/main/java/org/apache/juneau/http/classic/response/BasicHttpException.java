@@ -25,19 +25,20 @@ import static org.apache.juneau.test.assertions.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.impl.*;
-import org.apache.http.params.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.impl.*;
+import org.apache.hc.core5.http.message.StatusLine;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.marshall.*;
 
 /**
- * Basic implementation of the {@link HttpResponse} interface for error responses.
+ * Basic implementation of the {@link ClassicHttpResponse} interface for error responses.
  *
  * <p>
- * Although this class implements the various setters defined on the {@link HttpResponse} interface, it's in general
+ * Although this class implements the various setters defined on the {@link ClassicHttpResponse} interface, it's in general
  * going to be more efficient to set the status/headers/content of this bean through the builder.
  *
  * <p>
@@ -70,11 +71,37 @@ import org.apache.juneau.marshall.*;
 	"java:S1165", // headers/statusLine/content are replaced after construction by setters, so the exception's fields cannot be final
 	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
 })
-public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
+public class BasicHttpException extends BasicRuntimeException implements ClassicHttpResponse {
 
 	private static final long serialVersionUID = 1L;
 
 	HeaderList headers = HeaderList.create();
+	@Override
+	public void close() throws java.io.IOException { if (content != null) content.close(); }
+
+	@Override
+	public int getCode() { return statusLine.getStatusCode(); }
+
+	@Override
+	public void setCode(int code) { modify(() -> statusLine.setStatusCode(code)); }
+
+	@Override
+	public String getReasonPhrase() { return statusLine.getReasonPhrase(); }
+
+	@Override
+	public void setVersion(ProtocolVersion version) { modify(() -> statusLine.setProtocolVersion(version)); }
+
+	@Override
+	public int countHeaders(String name) { return headers.getAll(name).length; }
+
+	@Override
+	public Header getHeader(String name) throws org.apache.hc.core5.http.ProtocolException {
+		Header[] values = getHeaders(name);
+		if (values.length > 1)
+			throw new org.apache.hc.core5.http.ProtocolException("Multiple headers: " + name);
+		return values.length == 0 ? null : values[0];
+	}
+
 	transient BasicStatusLine statusLine = new BasicStatusLine();
 	transient HttpEntity content;
 
@@ -93,7 +120,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 *
 	 * @param response The HTTP response being parsed.  Must not be <jk>null</jk>.
 	 */
-	public BasicHttpException(HttpResponse response) {
+	public BasicHttpException(ClassicHttpResponse response) {
 		super((Throwable)null);
 		reqnn("response", response);
 		var h = response.getLastHeader("Thrown");
@@ -102,9 +129,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 			if (partsOpt.isPresent() && !partsOpt.get().isEmpty())
 				setMessage(partsOpt.get().get(0).getMessage());
 		}
-		setHeaders(response.getAllHeaders());
+		setHeaders(response.getHeaders());
 		setContent(response.getEntity());
-		setStatusCode(response.getStatusLine().getStatusCode());
+		setStatusCode(response.getCode());
 	}
 
 	/**
@@ -177,8 +204,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		modify(() -> headers.append(name, value));
+	public void addHeader(String name, Object value) {
+		modify(() -> headers.append(name, value == null ? null : value.toString()));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -187,7 +214,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() { return headers.getAll(); }
+	public Header[] getHeaders() { return headers.getAll(); }
 
 	@Override /* Overridden from HttpMessage */
 	public HttpEntity getEntity() {
@@ -241,7 +268,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList getHeaders() {
+	public HeaderList getHeaderList() {
 		return headers;
 	}
 
@@ -269,10 +296,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() { return null; }
-
-	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() { return statusLine.getProtocolVersion(); }
+	public ProtocolVersion getVersion() { return statusLine.getProtocolVersion(); }
 
 	/**
 	 * Returns the root cause of this exception.
@@ -296,8 +320,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return null;
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() { return statusLine; }
+	public StatusLine getStatusLine() { return new StatusLine(getVersion(), getCode(), getReasonPhrase()); }
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
@@ -314,12 +337,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
+	public Iterator<Header> headerIterator() {
 		return headers.headerIterator();
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
+	public Iterator<Header> headerIterator(String name) {
 		return headers.headerIterator(name);
 	}
 
@@ -331,13 +354,17 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
 
 	@Override /* Overridden from HttpMessage */
-	public void removeHeader(Header value) {
+	public boolean removeHeader(Header value) {
+		boolean present = Arrays.asList(headers.getAll()).contains(value);
 		modify(() -> headers.remove(value));
+		return present;
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void removeHeaders(String name) {
+	public boolean removeHeaders(String name) {
+		boolean present = headers.contains(name);
 		modify(() -> headers.remove(name));
+		return present;
 	}
 
 	/**
@@ -371,8 +398,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		modify(() -> headers.set(name, value));
+	public void setHeader(String name, Object value) {
+		modify(() -> headers.set(name, value == null ? null : value.toString()));
 	}
 
 	/**
@@ -383,7 +410,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeader2(String name, Object value) {
-		return modify(() -> headers.set(name, value));
+		return modify(() -> headers.set(name, value == null ? null : value.toString()));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -444,12 +471,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return modify(() -> super.setMessage(message, args));
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {
-		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
-		modify(() -> { /* No-op */ });
-	}
-
 	/**
 	 * Sets the protocol version on the status line.
 	 *
@@ -495,7 +516,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return modify(() -> statusLine.setReasonPhraseCatalog(value));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
 		modify(() -> statusLine.setStatusCode(code));
 	}
@@ -524,17 +544,14 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return modify(() -> statusLine = value.copy());
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
 		modify(() -> statusLine.setProtocolVersion(ver).setStatusCode(code));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
 		modify(() -> statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code));
 	}
 
-	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(StatusLine value) {
 		modify(() -> statusLine.setProtocolVersion(value.getProtocolVersion()).setReasonPhrase(value.getReasonPhrase()).setStatusCode(value.getStatusCode()));
 	}
@@ -565,10 +582,10 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If status code is not what was expected.
 	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+	protected void assertStatusCode(ClassicHttpResponse response) throws AssertionError {
 		reqnn("response", response);
 		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
+		int actual = response.getCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);
 	}
 

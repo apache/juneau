@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 
 /**
  * Identifies a class that can be converted to a {@link NameValuePair} object.

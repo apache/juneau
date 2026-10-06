@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.http.io.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
 
 /**
- * An implementation of {@link StatusLine} that adds assertions methods.
+ * An HTTP status line wrapper with assertion methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
@@ -29,7 +31,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
 @SuppressWarnings({
 	"resource" // response is owned by the RestCall that created this status line; lifecycle managed externally
 })
-public class ResponseStatusLine implements StatusLine {
+public class ResponseStatusLine {
 
 	private final RestResponse response;
 	private final StatusLine inner;
@@ -60,16 +62,28 @@ public class ResponseStatusLine implements StatusLine {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentResponseStatusLineAssertion<ResponseStatusLine> assertValue() {
-		return new FluentResponseStatusLineAssertion<>(this, this);
+		return new FluentResponseStatusLineAssertion<>(inner, this);
 	}
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the protocol version.
+	 *
+	 * @return The protocol version.
+	 */
 	public ProtocolVersion getProtocolVersion() { return inner.getProtocolVersion(); }
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the reason phrase.
+	 *
+	 * @return The reason phrase.
+	 */
 	public String getReasonPhrase() { return inner.getReasonPhrase(); }
 
-	@Override /* Overridden from StatusLine */
+	/**
+	 * Gets the status code.
+	 *
+	 * @return The status code.
+	 */
 	public int getStatusCode() { return inner.getStatusCode(); }
 
 	/**

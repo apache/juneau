@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
@@ -379,27 +379,27 @@ class HeaderList_Test extends TestBase {
 		var x = HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_XML);
 
 		var i1 = x.headerIterator();
-		assertString("Accept: text/xml", i1.nextHeader());
-		assertString("Content-Type: text/xml", i1.nextHeader());
-		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::nextHeader);
+		assertString("Accept: text/xml", i1.next());
+		assertString("Content-Type: text/xml", i1.next());
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::next);
 
 		var i2 = x.headerIterator();
 		assertString("Accept: text/xml", i2.next());
-		assertString("Content-Type: text/xml", i2.nextHeader());
+		assertString("Content-Type: text/xml", i2.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i2::next);
 
 		var i3 = x.headerIterator("accept");
-		assertString("Accept: text/xml", i3.nextHeader());
-		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::nextHeader);
+		assertString("Accept: text/xml", i3.next());
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::next);
 
 		var x2 = HeaderList.create().append(Accept.TEXT_XML,ContentType.TEXT_XML).caseSensitive(true);
 
 		var i4 = x2.headerIterator("Accept");
-		assertString("Accept: text/xml", i4.nextHeader());
-		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::nextHeader);
+		assertString("Accept: text/xml", i4.next());
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::next);
 
 		var i5 = x2.headerIterator("accept");
-		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::nextHeader);
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::next);
 
 		assertThrowsWithMessage(UnsupportedOperationException.class, "Not supported.", i5::remove);
 	}

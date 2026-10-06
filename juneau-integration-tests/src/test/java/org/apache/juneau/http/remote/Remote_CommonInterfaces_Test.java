@@ -208,7 +208,7 @@ class Remote_CommonInterfaces_Test extends TestBase {
 		assertEquals("foo",read(sr.getContent()));
 		assertEquals("foo",sr.getHeaders().getLast("Foo").orElseThrow(RuntimeException::new).getValue());
 		assertEquals("\"bar\"",sr.getHeaders().getLast("ETag").orElseThrow(RuntimeException::new).getValue());
-		assertEquals("text/foo",sr.getContentType().getValue());
+		assertEquals("text/foo",sr.getContentType());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

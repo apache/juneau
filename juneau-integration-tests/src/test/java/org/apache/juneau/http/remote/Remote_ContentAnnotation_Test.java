@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.entity.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Header;
@@ -128,7 +128,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 
 		@RestPost
 		public String x10(@Content Reader b, @Header("Content-Type") String ct) throws IOException {
-			assertEquals("application/x-www-form-urlencoded",ct);
+			assertEquals("application/x-www-form-urlencoded",ct.split(";", 2)[0]);
 			return read(b);
 		}
 	}
@@ -223,7 +223,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 
 		@RestPost
 		public Object x10(@Content Reader b, @Header("Content-Type") String ct) {
-			assertEquals("application/x-www-form-urlencoded",ct);
+			assertEquals("application/x-www-form-urlencoded",ct.split(";", 2)[0]);
 			return b;
 		}
 	}
@@ -251,7 +251,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
-		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
+		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.hc.core5.http.ContentType.create("text/plain"))));
 		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
 
@@ -330,7 +330,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		assertEquals("{k1={f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
-		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
+		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.hc.core5.http.ContentType.create("text/plain"))));
 		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
 }

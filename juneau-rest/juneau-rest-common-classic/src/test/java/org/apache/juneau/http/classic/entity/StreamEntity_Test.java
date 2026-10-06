@@ -45,7 +45,7 @@ class StreamEntity_Test extends TestBase {
 	@Test void a02_constructor_contentType() throws Exception {
 		var x = new StreamEntity(ContentType.TEXT_PLAIN, stream());
 		assertEquals("hello world", x.asString());
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a03_asBytes_uncached() throws Exception {
@@ -140,7 +140,7 @@ class StreamEntity_Test extends TestBase {
 		var copy = x.copy();
 		assertNotSame(x, copy);
 		assertEquals("hello world", copy.asString());
-		assertEquals("text/plain", copy.getContentType().getValue());
+		assertEquals("text/plain", copy.getContentType());
 	}
 
 	@Test void a18_setChunked() {
@@ -157,7 +157,7 @@ class StreamEntity_Test extends TestBase {
 
 	@Test void a20_setContentType_string() {
 		var x = new StreamEntity().setContent(stream()).setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a21_setCharset() throws Exception {
@@ -174,12 +174,12 @@ class StreamEntity_Test extends TestBase {
 
 	@Test void a23_setContentEncoding_string() {
 		var x = new StreamEntity().setContent(stream()).setContentEncoding("gzip");
-		assertEquals("gzip", x.getContentEncoding().getValue());
+		assertEquals("gzip", x.getContentEncoding());
 	}
 
 	@Test void a24_setContentEncoding_object() {
 		var x = new StreamEntity().setContent(stream()).setContentEncoding(ContentEncoding.of("identity"));
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 	}
 
 	@Test void a25_setContentLength() {
@@ -189,7 +189,7 @@ class StreamEntity_Test extends TestBase {
 
 	@Test void a26_setContentType_object() {
 		var x = new StreamEntity().setContent(stream()).setContentType(ContentType.TEXT_HTML);
-		assertEquals("text/html", x.getContentType().getValue());
+		assertEquals("text/html", x.getContentType());
 	}
 
 	@Test void a27_unmodifiable() {

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import org.apache.http.client.config.*;
+import org.apache.hc.client5.http.config.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.collections.*;
@@ -53,7 +53,7 @@ class Paths_Test extends TestBase {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
-	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().build()).build();
 
 	@Test void a01() throws Exception {
 		a.get("http://localhost/cp/sp").run()
@@ -192,7 +192,7 @@ class Paths_Test extends TestBase {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
-	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().build()).build();
 
 	@Test void b01() throws Exception {
 		b.get("http://localhost/cp/sp/subpath").run()
@@ -335,7 +335,7 @@ class Paths_Test extends TestBase {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
-	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().build()).build();
 
 	@Test void c01() throws Exception {
 		c.get("http://localhost/cp/sp/a").run()
@@ -478,7 +478,7 @@ class Paths_Test extends TestBase {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}
-	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().build()).build();
 
 	@Test void d01() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath").run()

@@ -18,9 +18,9 @@ package org.apache.juneau.rest.client.apachehttpclient45;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -40,7 +40,7 @@ class Hc45RedirectCredentialGuard_Test {
 		var context = new BasicHttpContext();
 		var request = new BasicHttpRequest("GET", "/");
 		request.addHeader("Authorization", "Bearer secret");
-		assertDoesNotThrow(() -> guard.process(request, context));
+		assertDoesNotThrow(() -> guard.process(request, null, context));
 		assertNotNull(request.getFirstHeader("Authorization"), "with no target host to compare against, credentials must be left untouched");
 	}
 
@@ -50,20 +50,20 @@ class Hc45RedirectCredentialGuard_Test {
 		// HttpHost.toURI() produces a string that URI.create(...) rejects with IllegalArgumentException —
 		// exactly the case originOf(...) guards against.
 		var context = new BasicHttpContext();
-		HttpCoreContext.adapt(context).setTargetHost(new HttpHost("exa|mple.com", 80, "http"));
+		org.apache.hc.client5.http.protocol.HttpClientContext.adapt(context).setRoute(new org.apache.hc.client5.http.HttpRoute(new HttpHost("http", "exa|mple.com", 80)));
 		var request = new BasicHttpRequest("GET", "/");
 		request.addHeader("Authorization", "Bearer secret");
-		assertDoesNotThrow(() -> guard.process(request, context));
+		assertDoesNotThrow(() -> guard.process(request, null, context));
 		assertNotNull(request.getFirstHeader("Authorization"), "an unresolvable origin must not strip credentials");
 	}
 
 	@Test
 	void a03_firstRequestInExchange_recordsOriginWithoutStrippingCredentials() {
 		var context = new BasicHttpContext();
-		HttpCoreContext.adapt(context).setTargetHost(new HttpHost("example.com", 80, "http"));
+		org.apache.hc.client5.http.protocol.HttpClientContext.adapt(context).setRoute(new org.apache.hc.client5.http.HttpRoute(new HttpHost("http", "example.com", 80)));
 		var request = new BasicHttpRequest("GET", "/");
 		request.addHeader("Authorization", "Bearer secret");
-		guard.process(request, context);
+		guard.process(request, null, context);
 		assertNotNull(request.getFirstHeader("Authorization"), "the first request of an exchange only records the origin; nothing to compare against yet");
 	}
 }

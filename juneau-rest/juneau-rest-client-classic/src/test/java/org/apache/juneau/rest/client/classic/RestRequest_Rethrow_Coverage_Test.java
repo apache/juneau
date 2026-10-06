@@ -40,10 +40,10 @@ class RestRequest_Rethrow_Coverage_Test {
 	// Constructors (and classes) are public: RestRequest#run() locates rethrow candidates via
 	// ClassInfo#getPublicConstructor(), which only sees public constructors.
 
-	/** Has only a {@code (HttpResponse)} constructor. */
+	/** Has only a {@code (ClassicHttpResponse)} constructor. */
 	public static class ExcWithResponseCtor extends RuntimeException {
 		private static final long serialVersionUID = 1L;
-		public ExcWithResponseCtor(org.apache.http.HttpResponse r) { super("response-ctor:" + r.getStatusLine().getStatusCode()); }
+		public ExcWithResponseCtor(org.apache.hc.core5.http.ClassicHttpResponse r) { super("response-ctor:" + r.getCode()); }
 	}
 
 	/** Has only a {@code (String)} constructor. */

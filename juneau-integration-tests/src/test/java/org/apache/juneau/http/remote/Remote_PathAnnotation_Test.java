@@ -25,8 +25,8 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
-import org.apache.http.client.config.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.config.*;
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
@@ -711,10 +711,10 @@ class Remote_PathAnnotation_Test extends TestBase {
 	}
 
 	private static RestClient.Builder<?> client(Class<?> c) {
-		return MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(true);
+		return MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().build()).allowPrivateUrls(true);
 	}
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
-		return MockRestClient.create(rest).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(true).build().getRemote(t);
+		return MockRestClient.create(rest).defaultRequestConfig(RequestConfig.custom().build()).allowPrivateUrls(true).build().getRemote(t);
 	}
 }

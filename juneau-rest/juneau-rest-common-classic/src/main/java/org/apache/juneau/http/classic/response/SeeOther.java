@@ -19,7 +19,7 @@ package org.apache.juneau.http.classic.response;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.SeeOther.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
@@ -68,7 +68,7 @@ public class SeeOther extends BasicHttpResponse<SeeOther> {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public SeeOther(HttpResponse response) {
+	public SeeOther(ClassicHttpResponse response) {
 		super(response);
 		assertStatusCode(response);
 	}

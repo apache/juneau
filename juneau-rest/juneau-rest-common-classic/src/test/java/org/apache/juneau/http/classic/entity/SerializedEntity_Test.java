@@ -43,7 +43,7 @@ class SerializedEntity_Test extends TestBase {
 	@Test void a03_constructor_full() throws Exception {
 		var x = new SerializedEntity(ContentType.APPLICATION_JSON, "hello", JsonSerializer.DEFAULT, null);
 		assertEquals("\"hello\"", x.asString());
-		assertEquals("application/json", x.getContentType().getValue());
+		assertEquals("application/json", x.getContentType());
 	}
 
 	@Test void a04_copy() throws Exception {
@@ -88,7 +88,7 @@ class SerializedEntity_Test extends TestBase {
 
 	@Test void a10_getContentType_explicit() {
 		var x = serializedEntity("hello", JsonSerializer.DEFAULT).setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a11_isRepeatable() {
@@ -134,12 +134,12 @@ class SerializedEntity_Test extends TestBase {
 
 	@Test void a18_setContentEncoding_string() {
 		var x = serializedEntity("hello", null).setContentEncoding("gzip");
-		assertEquals("gzip", x.getContentEncoding().getValue());
+		assertEquals("gzip", x.getContentEncoding());
 	}
 
 	@Test void a19_setContentEncoding_object() {
 		var x = serializedEntity("hello", null).setContentEncoding(ContentEncoding.of("identity"));
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 	}
 
 	@Test void a20_setContentLength() {
@@ -150,12 +150,12 @@ class SerializedEntity_Test extends TestBase {
 
 	@Test void a21_setContentType_string() {
 		var x = serializedEntity("hello", null).setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a22_setContentType_object() {
 		var x = serializedEntity("hello", null).setContentType(ContentType.TEXT_HTML);
-		assertEquals("text/html", x.getContentType().getValue());
+		assertEquals("text/html", x.getContentType());
 	}
 
 	@Test void a23_setMaxLength() {

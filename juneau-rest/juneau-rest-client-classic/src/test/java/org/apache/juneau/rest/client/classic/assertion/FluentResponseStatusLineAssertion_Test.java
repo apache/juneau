@@ -18,8 +18,8 @@ package org.apache.juneau.rest.client.classic.assertion;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  */
 class FluentResponseStatusLineAssertion_Test {
 
-	private final StatusLine statusLine = new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK");
+	private final StatusLine statusLine = new StatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK");
 
 	@Test void a01_asMajor() {
 		assertDoesNotThrow(() -> new FluentResponseStatusLineAssertion<>(statusLine, null).asMajor().is(1));

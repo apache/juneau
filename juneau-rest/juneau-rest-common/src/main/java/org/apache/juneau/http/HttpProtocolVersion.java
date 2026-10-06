@@ -25,7 +25,7 @@ import java.util.function.*;
  * The HTTP protocol version that appears in request and response start lines (e.g. {@code "HTTP/1.1"}).
  *
  * <p>
- * Mirrors the semantics of {@code org.apache.http.ProtocolVersion} without the Apache HttpCore dependency.
+ * Mirrors the semantics of {@code org.apache.hc.core5.http.ProtocolVersion} without the Apache HttpCore dependency.
  * The protocol name and major/minor numbers are stored separately so callers can compare versions numerically.
  *
  * <p>

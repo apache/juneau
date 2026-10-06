@@ -34,9 +34,8 @@ import org.junit.jupiter.api.*;
  * non-idempotent request (e.g. {@code POST}) under the same condition.
  *
  * <p>
- * The positive case uses {@code PUT} deliberately: HttpClient 4.5's own default retry handler does not retry
- * entity-enclosing methods such as {@code PUT} once the request has been sent, so a successful retry here proves the
- * transport-level retry — not the underlying client's built-in handler — is doing the work.
+ * The positive case uses {@code PUT}. The underlying client does not retry entity-enclosing requests, so a successful retry proves that
+ * the transport handles a stale connection without replaying a non-idempotent request.</p>
  */
 @SuppressWarnings({
 	"resource" // Transport/client instances are short-lived test fixtures.

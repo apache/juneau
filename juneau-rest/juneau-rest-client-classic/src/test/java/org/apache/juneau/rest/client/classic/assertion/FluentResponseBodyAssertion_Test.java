@@ -34,7 +34,7 @@ import com.sun.net.httpserver.*;
 /**
  * Exercises the {@link FluentResponseBodyAssertion} transform/configuration methods and its
  * {@code RestCallException} wrapping branches against a real local server -- a real
- * {@link org.apache.http.HttpEntity} stream is needed to reach the {@code IOException} paths (a
+ * {@link org.apache.hc.core5.http.HttpEntity} stream is needed to reach the {@code IOException} paths (a
  * Content-Length that overstates the bytes actually written triggers a connection-closed IOException when
  * the client tries to read out to the declared length). The wrapped exception is a {@link BadRequest}, not an
  * {@link AssertionError}, because the class's constructor configures {@code BadRequest} as its default

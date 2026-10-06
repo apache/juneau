@@ -25,8 +25,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
-import org.apache.http.util.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.util.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;

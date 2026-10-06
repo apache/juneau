@@ -19,7 +19,7 @@ package org.apache.juneau.http.classic.response;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.ResetContent.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
@@ -68,7 +68,7 @@ public class ResetContent extends BasicHttpResponse<ResetContent> {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public ResetContent(HttpResponse response) {
+	public ResetContent(ClassicHttpResponse response) {
 		super(response);
 		assertStatusCode(response);
 	}

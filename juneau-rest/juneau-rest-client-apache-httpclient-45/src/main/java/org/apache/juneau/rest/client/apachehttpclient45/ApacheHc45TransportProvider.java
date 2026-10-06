@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
  *
  * <p>
  * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
- * {@code RestClient} can auto-discover Apache HttpClient 4.5 when this module is on the classpath.
+ * {@code RestClient} can auto-discover Apache HttpClient 5.6 when this module is on the classpath.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
@@ -49,7 +49,7 @@ public final class ApacheHc45TransportProvider implements HttpTransportProvider 
 	@Override /* HttpTransportProvider */
 	public boolean isAvailable() {
 		try {
-			Class.forName("org.apache.http.impl.client.CloseableHttpClient");
+			Class.forName("org.apache.hc.client5.http.impl.classic.CloseableHttpClient");
 			return true;
 		} catch (ClassNotFoundException e) {
 			return false;

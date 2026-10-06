@@ -38,7 +38,7 @@ class ByteArrayEntity_Test extends TestBase {
 	@Test void a02_constructor_contentType() throws Exception {
 		var x = new ByteArrayEntity(ContentType.TEXT_PLAIN, BYTES);
 		assertArrayEquals(BYTES, x.asBytes());
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 	}
 
 	@Test void a03_getContent() throws Exception {

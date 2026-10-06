@@ -18,8 +18,9 @@ package org.apache.juneau.rest.client.classic;
 
 import java.net.*;
 
-import org.apache.http.conn.*;
-import org.apache.http.impl.conn.*;
+import org.apache.hc.client5.http.*;
+import org.apache.hc.client5.http.impl.*;
+import org.apache.hc.client5.http.impl.io.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 
@@ -39,6 +40,9 @@ final class PolicyPinningDnsResolver implements DnsResolver {
 	static final PolicyPinningDnsResolver INSTANCE = new PolicyPinningDnsResolver();
 
 	private PolicyPinningDnsResolver() {}
+
+	@Override
+	public String resolveCanonicalHostname(String host) throws UnknownHostException { return host; }
 
 	@Override /* DnsResolver */
 	public InetAddress[] resolve(String host) throws UnknownHostException {

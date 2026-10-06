@@ -26,7 +26,7 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
@@ -196,7 +196,7 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("{x:'foo,bar'}",x.getX3("foo","bar"));
 		assertEquals("x=foo%2Cbar",x.getX4("foo","bar"));
 		assertEquals("{x:'foo bar'}",x.getX5("foo","bar"));
-		assertEquals("x=foo+bar",x.getX6("foo","bar"));
+		assertEquals("x=foo%20bar",x.getX6("foo","bar"));
 		assertEquals("{x:'foo\\tbar'}",x.getX7("foo","bar"));
 		assertEquals("x=foo%09bar",x.getX8("foo","bar"));
 		assertEquals("{x:'foo|bar'}",x.getX9("foo","bar"));

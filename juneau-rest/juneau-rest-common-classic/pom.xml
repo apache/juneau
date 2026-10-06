@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-rest-common-classic</artifactId>
 	<name>Apache Juneau REST Common (Classic)</name>
-	<description>Apache Juneau REST Common API - Apache HttpClient 4.5-compatible facades.</description>
+	<description>Apache Juneau REST Common API - Apache HttpClient 5.6-compatible facades.</description>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -41,9 +41,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.4.16</version>
+			<groupId>org.apache.httpcomponents.core5</groupId>
+			<artifactId>httpcore5</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

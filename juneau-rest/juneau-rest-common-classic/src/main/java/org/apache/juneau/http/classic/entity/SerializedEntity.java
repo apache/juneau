@@ -23,10 +23,11 @@ import static org.apache.juneau.http.classic.HttpHeaders.*;
 
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
 
@@ -122,10 +123,10 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	public long getContentLength() { return -1; }
 
 	@Override
-	public Header getContentType() {
-		Header x = super.getContentType();
+	public String getContentType() {
+		String x = super.getContentType();
 		if (x == null && nn(serializer))
-			x = contentType(serializer.getPrimaryMediaType());
+			x = contentType(serializer.getPrimaryMediaType()).getValue();
 		return x;
 	}
 

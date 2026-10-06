@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -50,7 +50,7 @@ class BasicHeaderIterator_Test extends TestBase {
 		var it = new BasicHeaderIterator(headers, null, false);
 		var names = new ArrayList<String>();
 		while (it.hasNext())
-			names.add(it.nextHeader().getName());
+			names.add(it.next().getName());
 		assertEquals(List.of("A", "B", "A"), names);
 	}
 
@@ -63,7 +63,7 @@ class BasicHeaderIterator_Test extends TestBase {
 		Header[] headers = {h("Foo", "1"), h("foo", "2"), h("Bar", "3")};
 		var it = new BasicHeaderIterator(headers, "Foo", true);
 		assertTrue(it.hasNext());
-		assertEquals("1", it.nextHeader().getValue());
+		assertEquals("1", it.next().getValue());
 		assertFalse(it.hasNext());
 	}
 
@@ -71,9 +71,9 @@ class BasicHeaderIterator_Test extends TestBase {
 		Header[] headers = {h("Foo", "1"), h("foo", "2"), h("Bar", "3")};
 		var it = new BasicHeaderIterator(headers, "Foo", false);
 		assertTrue(it.hasNext());
-		assertEquals("1", it.nextHeader().getValue());
+		assertEquals("1", it.next().getValue());
 		assertTrue(it.hasNext());
-		assertEquals("2", it.nextHeader().getValue());
+		assertEquals("2", it.next().getValue());
 		assertFalse(it.hasNext());
 	}
 
@@ -96,8 +96,8 @@ class BasicHeaderIterator_Test extends TestBase {
 	@Test void c02_nextHeader_exhausted_throws() {
 		Header[] headers = {h("A", "1")};
 		var it = new BasicHeaderIterator(headers, null, false);
-		it.nextHeader();
-		assertThrows(NoSuchElementException.class, it::nextHeader);
+		it.next();
+		assertThrows(NoSuchElementException.class, it::next);
 	}
 
 	@Test void c03_empty_hasNextFalse() {

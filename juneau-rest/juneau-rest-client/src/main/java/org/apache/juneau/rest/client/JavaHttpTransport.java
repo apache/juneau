@@ -66,7 +66,7 @@ import org.apache.juneau.http.remote.*;
  * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal
  * rewrite cannot preserve TLS SNI/hostname verification for the original hostname; per the locked design, policy
  * -covered <b>HTTPS</b> requests are therefore refused (fail closed) on this transport &mdash; use a transport
- * that supports connect-time pinning (e.g. Apache HttpClient 4.5/5), or set {@code allowPrivateUrls(true)} if the
+ * that supports connect-time pinning (e.g. Apache HttpClient 5), or set {@code allowPrivateUrls(true)} if the
  * target is an intentional local-dev/intranet endpoint. A policy-covered request is also refused if the
  * underlying {@link HttpClient} was built with automatic redirect-following enabled ({@link Redirect#NORMAL} or
  * {@link Redirect#ALWAYS}), since this transport cannot re-validate hops that client follows on its own; build it
@@ -168,7 +168,7 @@ public final class JavaHttpTransport implements HttpTransport {
 			throw new TransportException("JavaHttpTransport cannot preserve TLS SNI/hostname verification while "
 				+ "pinning the resolved address (the JDK HttpClient has no connect-time/DNS SPI); refusing "
 				+ "(fail closed) a policy-covered HTTPS request: " + uri
-				+ ".  Use a transport with connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set "
+				+ ".  Use a transport with connect-time pinning support (e.g. Apache HttpClient 5), or set "
 				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
 		InetAddress pinned;
 		try {
@@ -211,7 +211,7 @@ public final class JavaHttpTransport implements HttpTransport {
 				+ "policy-covered HTTP request (the JDK HttpClient's restricted-header allowlist was already "
 				+ "initialized elsewhere in this JVM); refusing (fail closed): " + request.getUri()
 				+ ".  Set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "
-				+ "connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set allowPrivateUrls(true) if "
+				+ "connect-time pinning support (e.g. Apache HttpClient 5), or set allowPrivateUrls(true) if "
 				+ "this is an intentional local-dev/intranet target.", e);
 		}
 		HttpResponse<InputStream> jdkResponse;

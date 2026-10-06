@@ -112,7 +112,7 @@ class MockRestClient_Coverage_Test extends TestBase {
 
 	@Test void a06_getSocketTimeout() {
 		var client = MockRestClient.create(A.class).build();
-		assertEquals(Integer.MAX_VALUE, client.getSocketTimeout());
+		assertEquals(org.apache.hc.core5.util.Timeout.DISABLED, client.getSocketTimeout());
 	}
 
 	@Test void a07_isOpen() {
@@ -219,13 +219,11 @@ class MockRestClient_Coverage_Test extends TestBase {
 	@Test void d03_connectionManager_noOpMethods() {
 		var cm = new MockHttpClientConnectionManager();
 		// These should be no-ops
-		assertDoesNotThrow(cm::closeExpiredConnections);
-		assertDoesNotThrow(() -> cm.closeIdleConnections(10, java.util.concurrent.TimeUnit.SECONDS));
-		assertDoesNotThrow(() -> cm.connect(null, null, 0, null));
-		assertDoesNotThrow(() -> cm.releaseConnection(null, null, 0, java.util.concurrent.TimeUnit.SECONDS));
-		assertDoesNotThrow(() -> cm.routeComplete(null, null, null));
-		assertDoesNotThrow(cm::shutdown);
-		assertDoesNotThrow(() -> cm.upgrade(null, null, null));
+		assertDoesNotThrow(() -> cm.close());
+		assertDoesNotThrow(() -> cm.close(org.apache.hc.core5.io.CloseMode.GRACEFUL));
+		assertDoesNotThrow(() -> cm.connect(null, null, null));
+		assertDoesNotThrow(() -> cm.release(null, null, null));
+		assertDoesNotThrow(() -> cm.upgrade(null, null));
 	}
 
 	@Test void d04_connectionManager_requestConnection() throws Exception {

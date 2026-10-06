@@ -23,7 +23,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.marshall.cbor.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonl.*;
@@ -183,15 +183,17 @@ class ResponseContent_Cursor_Test {
 			@Override
 			public void onConnect(RestRequest req, RestResponse res) {
 				res.asHttpResponse().setEntity(new HttpEntity() {
+					@Override public java.util.Set<String> getTrailerNames() { return java.util.Set.of(); }
+					@Override public org.apache.hc.core5.function.Supplier<java.util.List<? extends Header>> getTrailers() { return null; }
 					@Override public boolean isRepeatable() { return false; }
 					@Override public boolean isChunked() { return false; }
 					@Override public long getContentLength() { return -1; }
-					@Override public Header getContentType() { return null; }
-					@Override public Header getContentEncoding() { return null; }
+					@Override public String getContentType() { return null; }
+					@Override public String getContentEncoding() { return null; }
 					@Override public InputStream getContent() { throw new UnsupportedOperationException("Simulated: entity content not available."); }
 					@Override public void writeTo(OutputStream outstream) { throw new UnsupportedOperationException("Not used by this test."); }
 					@Override public boolean isStreaming() { return false; }
-					@Override public void consumeContent() { /* no-op */ }
+					@Override public void close() { /* no-op */ }
 				});
 			}
 		};

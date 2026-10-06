@@ -61,9 +61,9 @@ class AcceptEncoding_Test extends TestBase {
 		c.get().header(acceptEncoding(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
-		c.get().header(acceptEncoding((String)null)).run().assertContent("gzip,deflate");
-		c.get().header(acceptEncoding((Supplier<StringRanges>)null)).run().assertContent("gzip,deflate");
-		c.get().header(acceptEncoding(()->null)).run().assertContent("gzip,deflate");
+		c.get().header(acceptEncoding((String)null)).run().assertContent().isContains("gzip", "deflate");
+		c.get().header(acceptEncoding((Supplier<StringRanges>)null)).run().assertContent().isContains("gzip", "deflate");
+		c.get().header(acceptEncoding(()->null)).run().assertContent().isContains("gzip", "deflate");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

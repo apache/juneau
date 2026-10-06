@@ -163,7 +163,7 @@ class RestClient_Headers_Test extends TestBase {
 		checkClient("Cache-Control").headers(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertContent("[\"none\"]");
 		checkClient("Client-Version").headers(new ClientVersion("1")).build().get("/headers").run().assertContent("[\"1\"]");
 		checkClient("Connection").headers(new Connection("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
-		checkClient("Content-Length").headers(new ContentLength(123L)).build().get("/headers").run().assertContent("[\"123\"]");
+		assertThrowsWithMessage(RestCallException.class, "Call failed.", () -> checkClient("Content-Length").headers(new ContentLength(123L)).build().get("/headers").run());
 		checkClient("Content-Type").headers(new ContentType("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
 		checkClient("Date").headers(new org.apache.juneau.http.classic.header.Date(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
 		checkClient("Date").headers(new org.apache.juneau.http.classic.header.Date(ZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
@@ -214,7 +214,7 @@ class RestClient_Headers_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static org.apache.http.Header header(String name, String val) {
+	private static org.apache.hc.core5.http.Header header(String name, String val) {
 		return basicHeader(name, val);
 	}
 

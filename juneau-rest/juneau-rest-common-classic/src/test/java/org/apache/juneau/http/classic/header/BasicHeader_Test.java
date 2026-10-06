@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -38,24 +38,24 @@ class BasicHeader_Test extends TestBase {
 	// Constructors / factories
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_ctor_nameAndValue() {
+	@Test void a01_ctor_nameAndValue() throws Exception {
 		var h = new BasicHeader("Foo", "bar");
 		assertEquals("Foo", h.getName());
 		assertEquals("bar", h.getValue());
 	}
 
-	@Test void a02_ctor_nonStringValue_convertsViaToString() {
+	@Test void a02_ctor_nonStringValue_convertsViaToString() throws Exception {
 		var h = new BasicHeader("Foo", 123);
 		assertEquals("123", h.getValue());
 	}
 
-	@Test void a03_ctor_nullValue() {
+	@Test void a03_ctor_nullValue() throws Exception {
 		var h = new BasicHeader("Foo", (Object)null);
 		assertNull(h.getValue());
 		assertTrue(h.asString().isEmpty());
 	}
 
-	@Test void a04_ctor_supplierValue_delaysEvaluation() {
+	@Test void a04_ctor_supplierValue_delaysEvaluation() throws Exception {
 		var calls = new int[1];
 		var h = new BasicHeader("Foo", () -> { calls[0]++; return "bar"; });
 		assertEquals(0, calls[0]);
@@ -63,31 +63,31 @@ class BasicHeader_Test extends TestBase {
 		assertEquals(1, calls[0]);
 	}
 
-	@Test void a05_ctor_nameNull_throws() {
+	@Test void a05_ctor_nameNull_throws() throws Exception {
 		assertThrows(IllegalArgumentException.class, () -> new BasicHeader(null, "bar"));
 	}
 
-	@Test void a06_ctor_nameEmpty_throws() {
+	@Test void a06_ctor_nameEmpty_throws() throws Exception {
 		assertThrows(IllegalArgumentException.class, () -> new BasicHeader("", "bar"));
 	}
 
-	@Test void a07_of_nameValuePair() {
+	@Test void a07_of_nameValuePair() throws Exception {
 		var h = BasicHeader.of(new BasicNameValuePair("Foo", "bar"));
 		assertEquals("Foo", h.getName());
 		assertEquals("bar", h.getValue());
 	}
 
-	@Test void a08_of_nameAndValue() {
+	@Test void a08_of_nameAndValue() throws Exception {
 		var h = BasicHeader.of("Foo", "bar");
 		assertEquals("Foo", h.getName());
 		assertEquals("bar", h.getValue());
 	}
 
-	@Test void a09_of_nameAndValue_null_returnsNull() {
+	@Test void a09_of_nameAndValue_null_returnsNull() throws Exception {
 		assertNull(BasicHeader.of("Foo", null));
 	}
 
-	@Test void a10_copy() {
+	@Test void a10_copy() throws Exception {
 		var h = new BasicHeader("Foo", "bar");
 		var h2 = h.copy();
 		assertNotSame(h, h2);
@@ -106,26 +106,26 @@ class BasicHeader_Test extends TestBase {
 	// equals() / hashCode()
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_equals_sameNameAndValue_isEqual() {
+	@Test void b01_equals_sameNameAndValue_isEqual() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		var b = new BasicHeader("Foo", "bar");
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
 
-	@Test void b02_equals_differentName_notEqual() {
+	@Test void b02_equals_differentName_notEqual() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		var b = new BasicHeader("Baz", "bar");
 		assertNotEquals(a, b);
 	}
 
-	@Test void b03_equals_differentValue_notEqual() {
+	@Test void b03_equals_differentValue_notEqual() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		var b = new BasicHeader("Foo", "baz");
 		assertNotEquals(a, b);
 	}
 
-	@Test void b04_equals_null_returnsFalse() {
+	@Test void b04_equals_null_returnsFalse() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		assertFalse(a.equals(null));
 	}
@@ -133,21 +133,21 @@ class BasicHeader_Test extends TestBase {
 	@SuppressWarnings({
 		"unlikely-arg-type" // Intentionally comparing to a mismatched type to cover the equals() type-guard branch.
 	})
-	@Test void b05_equals_notAHeader_returnsFalse() {
+	@Test void b05_equals_notAHeader_returnsFalse() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		assertFalse(a.equals("not a header"));
 	}
 
-	@Test void b06_equals_reflexive() {
+	@Test void b06_equals_reflexive() throws Exception {
 		var a = new BasicHeader("Foo", "bar");
 		assertEquals(a, a);
 	}
 
-	@Test void b07_equals_crossImplementation_otherHeaderType() {
+	@Test void b07_equals_crossImplementation_otherHeaderType() throws Exception {
 		// equals() gates on the Header *interface*, not this concrete class, so any Header impl with the same
 		// name+value compares equal.
 		var a = new BasicHeader("Foo", "bar");
-		var b = new org.apache.http.message.BasicHeader("Foo", "bar");
+		var b = new org.apache.hc.core5.http.message.BasicHeader("Foo", "bar");
 		assertEquals(a, b);
 	}
 
@@ -155,12 +155,12 @@ class BasicHeader_Test extends TestBase {
 	// equalsIgnoreCase()
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_equalsIgnoreCase_match() {
+	@Test void c01_equalsIgnoreCase_match() throws Exception {
 		var h = new BasicHeader("Foo", "BAR");
 		assertTrue(h.equalsIgnoreCase("bar"));
 	}
 
-	@Test void c02_equalsIgnoreCase_noMatch() {
+	@Test void c02_equalsIgnoreCase_noMatch() throws Exception {
 		var h = new BasicHeader("Foo", "bar");
 		assertFalse(h.equalsIgnoreCase("baz"));
 	}
@@ -169,41 +169,41 @@ class BasicHeader_Test extends TestBase {
 	// get() / isPresent() / isNotEmpty() / orElse() / asString()
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_get_present() {
+	@Test void d01_get_present() throws Exception {
 		var h = new BasicHeader("Foo", "bar");
 		assertEquals("bar", h.get());
 	}
 
-	@Test void d02_get_absent_throws() {
+	@Test void d02_get_absent_throws() throws Exception {
 		var h = new BasicHeader("Foo", (Object)null);
 		assertThrows(NoSuchElementException.class, h::get);
 	}
 
-	@Test void d03_isPresent_true() {
+	@Test void d03_isPresent_true() throws Exception {
 		assertTrue(new BasicHeader("Foo", "bar").isPresent());
 	}
 
-	@Test void d04_isPresent_false() {
+	@Test void d04_isPresent_false() throws Exception {
 		assertFalse(new BasicHeader("Foo", (Object)null).isPresent());
 	}
 
-	@Test void d05_isNotEmpty_true() {
+	@Test void d05_isNotEmpty_true() throws Exception {
 		assertTrue(new BasicHeader("Foo", "bar").isNotEmpty());
 	}
 
-	@Test void d06_isNotEmpty_false_whenAbsent() {
+	@Test void d06_isNotEmpty_false_whenAbsent() throws Exception {
 		assertFalse(new BasicHeader("Foo", (Object)null).isNotEmpty());
 	}
 
-	@Test void d07_isNotEmpty_false_whenEmptyString() {
+	@Test void d07_isNotEmpty_false_whenEmptyString() throws Exception {
 		assertFalse(new BasicHeader("Foo", "").isNotEmpty());
 	}
 
-	@Test void d08_orElse_present() {
+	@Test void d08_orElse_present() throws Exception {
 		assertEquals("bar", new BasicHeader("Foo", "bar").orElse("default"));
 	}
 
-	@Test void d09_orElse_absent() {
+	@Test void d09_orElse_absent() throws Exception {
 		assertEquals("default", new BasicHeader("Foo", (Object)null).orElse("default"));
 	}
 
@@ -237,15 +237,15 @@ class BasicHeader_Test extends TestBase {
 	// assertions / toString
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_assertName() {
+	@Test void f01_assertName() throws Exception {
 		new BasicHeader("Foo", "bar").assertName().is("Foo");
 	}
 
-	@Test void f02_assertStringValue() {
+	@Test void f02_assertStringValue() throws Exception {
 		new BasicHeader("Foo", "bar").assertStringValue().is("bar");
 	}
 
-	@Test void f03_toString() {
+	@Test void f03_toString() throws Exception {
 		assertEquals("Foo: bar", new BasicHeader("Foo", "bar").toString());
 	}
 }

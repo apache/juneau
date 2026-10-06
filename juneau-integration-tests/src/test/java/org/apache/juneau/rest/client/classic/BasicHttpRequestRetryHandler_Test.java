@@ -22,8 +22,10 @@ import static org.apache.juneau.http.classic.HttpResponses.*;
 import java.io.*;
 import java.net.*;
 
-import org.apache.http.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.impl.io.HttpRequestExecutor;
+import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -43,7 +45,7 @@ class BasicHttpRequestRetryHandler_Test extends TestBase {
 
 	public static class A1 extends HttpRequestExecutor {
 		@Override
-		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, BasicHttpException {
+		public ClassicHttpResponse execute(ClassicHttpRequest request, HttpClientConnection conn, org.apache.hc.core5.http.io.HttpResponseInformationCallback informationCallback, HttpContext context) throws IOException, HttpException {
 			throw new UnknownHostException("foo");
 		}
 	}

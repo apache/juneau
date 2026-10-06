@@ -18,7 +18,7 @@ package org.apache.juneau.http.classic.part;
 
 import java.util.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 
 /**
  * A type-safe iterator for {@link NameValuePair} objects.

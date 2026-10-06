@@ -19,7 +19,8 @@ package org.apache.juneau.rest.client.classic.assertion;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.http.io.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.test.assertions.*;

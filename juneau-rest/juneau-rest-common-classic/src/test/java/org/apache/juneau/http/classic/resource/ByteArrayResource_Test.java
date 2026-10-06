@@ -20,9 +20,10 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.junit.jupiter.api.*;
 
 // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -39,7 +40,7 @@ class ByteArrayResource_Test extends TestBase {
 
 		var x2 = new ByteArrayResource(contentType("text/plain"), "foo".getBytes());
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertTrue(x2.isRepeatable());
 		assertFalse(x2.isStreaming());
 	}
@@ -66,21 +67,21 @@ class ByteArrayResource_Test extends TestBase {
 	@Test void a04_contentType() {
 		var x = new ByteArrayResource(null, "foo".getBytes())
 			.setContentType("text/plain");
-		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("text/plain", x.getContentType());
 
 		var x2 = new ByteArrayResource(null, "foo".getBytes())
 			.setContentType(contentType("text/html"));
-		assertEquals("text/html", x2.getContentType().getValue());
+		assertEquals("text/html", x2.getContentType());
 	}
 
 	@Test void a05_contentEncoding() {
 		var x = new ByteArrayResource(null, "foo".getBytes())
 			.setContentEncoding("identity");
-		assertEquals("identity", x.getContentEncoding().getValue());
+		assertEquals("identity", x.getContentEncoding());
 
 		var x2 = new ByteArrayResource(null, "foo".getBytes())
 			.setContentEncoding(contentEncoding("gzip"));
-		assertEquals("gzip", x2.getContentEncoding().getValue());
+		assertEquals("gzip", x2.getContentEncoding());
 	}
 
 	@Test void a06_chunked() {
@@ -124,7 +125,7 @@ class ByteArrayResource_Test extends TestBase {
 		ByteArrayResource x2 = x.copy();
 		assertNotSame(x, x2);
 		assertEquals("foo", toUtf8(x2.getContent()));
-		assertEquals("text/plain", x2.getContentType().getValue());
+		assertEquals("text/plain", x2.getContentType());
 		assertEquals("bar", x2.getHeaders().getFirst("Foo").get().getValue());
 	}
 

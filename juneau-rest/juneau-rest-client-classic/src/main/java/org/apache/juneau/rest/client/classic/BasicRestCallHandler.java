@@ -18,9 +18,10 @@ package org.apache.juneau.rest.client.classic;
 
 import java.io.*;
 
-import org.apache.http.*;
-import org.apache.http.client.methods.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.core5.http.protocol.*;
 
 /**
  * Default HTTP call handler.
@@ -48,7 +49,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	}
 
 	@Override /* Overridden from RestCallHandler */
-	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+	public ClassicHttpResponse run(HttpHost target, ClassicHttpRequest request, HttpContext context) throws IOException {
 		return target == null ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);
 	}
 }

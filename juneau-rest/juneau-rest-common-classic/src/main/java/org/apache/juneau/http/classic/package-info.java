@@ -22,6 +22,6 @@
  * Provides static factory collections ({@link org.apache.juneau.http.classic.HttpHeaders},
  * {@link org.apache.juneau.http.classic.HttpParts}, {@link org.apache.juneau.http.classic.HttpEntities},
  * {@link org.apache.juneau.http.classic.HttpResources}, and {@link org.apache.juneau.http.classic.HttpResponses})
- * plus supporting types for use with the classic {@code org.apache.http} client and server stack.
+ * plus supporting types for use with the classic {@code org.apache.hc} client and server stack.
  */
 package org.apache.juneau.http.classic;

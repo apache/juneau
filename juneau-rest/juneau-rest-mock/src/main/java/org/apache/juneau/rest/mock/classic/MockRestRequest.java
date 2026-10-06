@@ -24,10 +24,10 @@ import java.security.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.client.config.*;
-import org.apache.http.concurrent.*;
-import org.apache.http.protocol.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.config.*;
+import org.apache.hc.core5.concurrent.*;
+import org.apache.hc.core5.http.protocol.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;

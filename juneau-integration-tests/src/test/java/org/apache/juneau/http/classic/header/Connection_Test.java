@@ -60,9 +60,9 @@ class Connection_Test extends TestBase {
 		c.get().header(connection(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
-		c.get().header(connection((String)null)).run().assertContent("Keep-Alive");
-		c.get().header(connection((Supplier<String>)null)).run().assertContent("Keep-Alive");
-		c.get().header(connection(()->null)).run().assertContent("Keep-Alive");
+		c.get().header(connection((String)null)).run().assertContent("keep-alive");
+		c.get().header(connection((Supplier<String>)null)).run().assertContent("keep-alive");
+		c.get().header(connection(()->null)).run().assertContent("keep-alive");
 	}
 
 	@Test void a02_other() {

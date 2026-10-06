@@ -31,10 +31,11 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
-import org.apache.http.conn.*;
-import org.apache.http.entity.*;
-import org.apache.http.message.*;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.EofSensorInputStream;
+import org.apache.hc.client5.http.io.*;
+import org.apache.hc.core5.http.io.entity.*;
+import org.apache.hc.core5.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -93,8 +94,8 @@ class RestClient_Response_Body_Test extends TestBase {
 			super(builder);
 		}
 		@Override
-		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
-			var r = new BasicHttpResponse(new ProtocolVersion("http", 1,1),200,"");
+		protected MockRestResponse createResponse(RestRequest request, ClassicHttpResponse httpResponse, Parser parser) throws RestCallException {
+			var r = new org.apache.hc.core5.http.message.BasicClassicHttpResponse(200, "");
 			r.setEntity(responseEntity);
 			for (var h : headers)
 				r.addHeader(h);
@@ -134,7 +135,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		is = r3.getContent().asInputStream();
 		assertEquals("{f:2}", toUtf8(is));
 		is = x.get("/bean").run().getContent().asInputStream();
-		((EofSensorInputStream)is).abortConnection();
+		((EofSensorInputStream)is).abort();
 
 		var rci = new BasicRestCallInterceptor() {
 			@Override
@@ -146,7 +147,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().cache().asInputStream());
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().asInputStream().close());
-		assertThrowsWithMessage(NullPointerException.class, "foo", ((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream())::abortConnection);
+		assertThrowsWithMessage(NullPointerException.class, "foo", ((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream())::abort);
 	}
 
 	@Test void a04_asReader() throws Exception {
@@ -171,7 +172,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{\"f\":1}").getContent().asBytes();
 		assertEquals("{\"f\":1}", toUtf8(x));
 
-		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes());
+		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream(), null)).get().run().getContent().asBytes());
 	}
 
 	@Test void a06_pipeTo() throws Exception {
@@ -241,7 +242,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
 		assertEquals("{f:1}", x14);
 
-		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asString());
+		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream(), null)).get().run().getContent().asString());
 
 		var x16 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asStringFuture();
 		assertEquals("{f:1}", x16.get());
@@ -281,14 +282,14 @@ class RestClient_Response_Body_Test extends TestBase {
 
 		assertFalse(x2.isChunked());
 
-		testClient().entity(inputStreamEntity("foo")).get().run().getContent().getContentEncoding().assertValue().isNull();
+		testClient().entity(inputStreamEntity("foo")).get().run().getContent().getContentEncodingHeader().assertValue().isNull();
 
 		var x3 = inputStreamEntity("foo");
 		x3.setContentType("text/foo");
 		x3.setContentEncoding("identity");
 		testClient().entity(x3).get().run().getContent().response()
-			.getContent().getContentType().assertValue().is("text/foo").response()
-			.getContent().getContentEncoding().assertValue().is("identity");
+			.getContent().getContentTypeHeader().assertValue().is("text/foo").response()
+			.getContent().getContentEncodingHeader().assertValue().is("identity");
 
 		var x4 = testClient().entity(inputStreamEntity("foo")).get().run().getContent().asInputStream();
 		assertBytes(x4).asString().is("foo");
@@ -301,18 +302,18 @@ class RestClient_Response_Body_Test extends TestBase {
 		assertFalse(testClient().entity(inputStreamEntity("foo")).get().run().getContent().cache().isStreaming());
 		assertFalse(testClient().entity(stringEntity("foo")).get().run().getContent().isStreaming());
 
-		testClient().entity(inputStreamEntity("foo")).get().run().getContent().consumeContent();
+		testClient().entity(inputStreamEntity("foo")).get().run().getContent().close();
 	}
 
 	@Test void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());
 		assertEquals(-1L, client().build().head("").run().getContent().getContentLength());
-		client().build().head("").run().getContent().getContentType().assertValue().isNull();
-		client().build().head("").run().getContent().getContentEncoding().assertValue().isNull();
+		client().build().head("").run().getContent().getContentTypeHeader().assertValue().isNull();
+		client().build().head("").run().getContent().getContentEncodingHeader().assertValue().isNull();
 		client().build().head("").run().getContent().writeTo(new ByteArrayOutputStream());
 		assertFalse(client().build().head("").run().getContent().isStreaming());
-		client().build().head("").run().getContent().consumeContent();
+		client().build().head("").run().getContent().close();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -339,8 +340,8 @@ class RestClient_Response_Body_Test extends TestBase {
 		return basicHeader(name, val);
 	}
 
-	private static InputStreamEntity inputStreamEntity(String in) {
-		return new InputStreamEntity(inputStream(in));
+	private static org.apache.juneau.http.classic.entity.StreamEntity inputStreamEntity(String in) {
+		return new org.apache.juneau.http.classic.entity.StreamEntity().setContent(inputStream(in));
 	}
 
 	private static <T> ClassMeta<T> cm(Class<T> t) {

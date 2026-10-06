@@ -23,11 +23,12 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.hc.core5.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshall.*;
 
@@ -355,7 +356,7 @@ public class HttpParts {
 	 * Returns <jk>true</jk> if the specified type is a part type.
 	 *
 	 * <p>
-	 * A part type extends from either {@link org.apache.http.Header} or {@link org.apache.http.NameValuePair}
+	 * A part type extends from either {@link org.apache.hc.core5.http.Header} or {@link org.apache.hc.core5.http.NameValuePair}
 	 * or is annotated with {@link org.apache.juneau.http.Header}, {@link org.apache.juneau.http.Query},
 	 * {@link org.apache.juneau.http.FormData}, or {@link org.apache.juneau.http.Path}.
 	 *
@@ -366,7 +367,7 @@ public class HttpParts {
 	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
 		return switch (partType) {
 			case PATH, QUERY, FORMDATA -> type.getProperty("HttpPart.isNameValuePair", x -> x.isAssignableTo(NameValuePair.class)).orElse(false);
-			case HEADER -> type.getProperty("HttpPart.isHeader", x -> x.isAssignableTo(org.apache.http.Header.class)).orElse(false);
+			case HEADER -> type.getProperty("HttpPart.isHeader", x -> x.isAssignableTo(org.apache.hc.core5.http.Header.class)).orElse(false);
 			default -> false;
 		};
 	}
