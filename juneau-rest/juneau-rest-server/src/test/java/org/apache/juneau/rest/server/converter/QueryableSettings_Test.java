@@ -84,21 +84,24 @@ class QueryableSettings_Test {
 
 	@Test void a06_maxSearchLength_rejectsOverlongSearch() {
 		try (var s = ctx(QueryableSettings.create().maxSearchLength(4).build()).getSession(people(1))) {
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> s.find(new BeanQuery().setSearch("name=toolong")));
+			var query = new BeanQuery().setSearch("name=toolong");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> s.find(query));
 			assertBean(e, "code", "SEARCH_TOO_LONG");
 		}
 	}
 
 	@Test void a07_allowRegex_falseOptsOut() {
 		try (var s = ctx(QueryableSettings.create().allowRegex(false).build()).getSession(people(1))) {
-			var e = assertThrows(BeanQuerySyntaxException.class, () -> s.find(new BeanQuery().setSearch("name=$regex(p.*)")));
+			var query = new BeanQuery().setSearch("name=$regex(p.*)");
+			var e = assertThrows(BeanQuerySyntaxException.class, () -> s.find(query));
 			assertBean(e, "code", "REGEX_DISABLED");
 		}
 	}
 
 	@Test void a08_maxSortKeys_rejectsTooManyKeys() {
 		try (var s = ctx(QueryableSettings.create().maxSortKeys(1).build()).getSession(people(1))) {
-			assertThrows(BeanQuerySyntaxException.class, () -> s.find(new BeanQuery().setSort("name,name")));
+			var query = new BeanQuery().setSort("name,name");
+			assertThrows(BeanQuerySyntaxException.class, () -> s.find(query));
 		}
 	}
 

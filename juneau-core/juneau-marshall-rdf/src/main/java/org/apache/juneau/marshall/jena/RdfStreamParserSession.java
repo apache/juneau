@@ -147,7 +147,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		model.setNsPrefix(ns.getName(), ns.getUri());
 	}
 
-	/*
+	/**
 	 * Decodes the specified string.
 	 * If {@link RdfStreamParser#isTrimWhitespace} is <jk>true</jk>, the resulting string is trimmed before decoding.
 	 * If {@link #isTrimStrings()} is <jk>true</jk>, the resulting string is trimmed after decoding.

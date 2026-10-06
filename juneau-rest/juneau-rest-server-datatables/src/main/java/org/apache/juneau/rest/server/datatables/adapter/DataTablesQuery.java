@@ -99,6 +99,9 @@ import org.apache.juneau.rest.server.datatables.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Cognitive complexity acceptable: query translation walks each DataTables request section in one pass.
+})
 public class DataTablesQuery {
 
 	private DataTablesQuery() {}
@@ -148,10 +151,7 @@ public class DataTablesQuery {
 		var columns = context.columns();
 		var query = toBeanQuery(request, context).copy().view(columns.toArray(new String[0])).build();
 		var page = session.findValues(query);
-		var rows = new ArrayList<List<Object>>();
-		for (var row : page.rows()) {
-			rows.add(columns.stream().<Object>map(row::get).toList());
-		}
+		var rows = page.rows().stream().map(row -> columns.stream().<Object>map(row::get).toList()).toList();
 		var r = DataTablesResults.<List<Object>>create().setDraw(request.getDraw()).setData(rows);
 		page.total().ifPresentOrElse(r::setRecordsTotal, () -> page.matched().ifPresent(r::setRecordsTotal));
 		page.matched().ifPresent(r::setRecordsFiltered);

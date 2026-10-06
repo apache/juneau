@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
  * null/checked-exception invoke results, and the "no invoke method" construction failure).
  */
 @SuppressWarnings({
+	"java:S1172", // invoke(String) parameter is required by TypedFunction's reflective signature matching.
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"unused" // Parameter required to match the 1-arg invoke() signature dispatched to via reflection.
 })

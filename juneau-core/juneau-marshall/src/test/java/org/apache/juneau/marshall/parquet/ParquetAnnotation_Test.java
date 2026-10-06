@@ -103,7 +103,8 @@ class ParquetAnnotation_Test {
 	public static class G01b_Class {}
 
 	@Test void g01b_parquetConfigSnappyWriteFailsFast() {
-		var ex = assertThrows(RuntimeException.class, () -> ParquetSerializer.create().applyAnnotations(G01b_Class.class).build());
+		var builder = ParquetSerializer.create();
+		var ex = assertThrows(RuntimeException.class, () -> builder.applyAnnotations(G01b_Class.class));
 		assertTrue(messages(ex).contains("SNAPPY"), () -> messages(ex));
 		assertTrue(messages(ex).contains("UNCOMPRESSED, GZIP"), () -> messages(ex));
 	}
@@ -112,7 +113,8 @@ class ParquetAnnotation_Test {
 	public static class G01c_Class {}
 
 	@Test void g01c_parquetConfigTypoFailsFast() {
-		var ex = assertThrows(RuntimeException.class, () -> ParquetSerializer.create().applyAnnotations(G01c_Class.class).build());
+		var builder = ParquetSerializer.create();
+		var ex = assertThrows(RuntimeException.class, () -> builder.applyAnnotations(G01c_Class.class));
 		assertTrue(messages(ex).contains("GZPI"), () -> messages(ex));
 		assertTrue(messages(ex).contains("UNCOMPRESSED, GZIP"), () -> messages(ex));
 	}

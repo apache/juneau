@@ -72,7 +72,7 @@ class QueryResolver_Test extends TestBase {
 
 		@Test void a02_validate() {
 			var hoistedTarget1 = new QuerySettings();
-			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", () -> hoistedTarget1.validate());
+			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", hoistedTarget1::validate);
 			var s = settings();
 			s.maxLimit = 50;
 			assertThrowsWithMessage(IllegalStateException.class, "maxLimit (50) must not be less than defaultLimit (100).", s::validate);

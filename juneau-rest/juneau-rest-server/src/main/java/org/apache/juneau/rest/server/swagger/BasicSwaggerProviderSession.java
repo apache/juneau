@@ -70,7 +70,9 @@ import jakarta.servlet.*;
 	"java:S112", // getSwagger(), addBodyExamples(), addRequestBeanParams() and getSchema() declare throws Exception because example generation and parsing surface arbitrary checked exceptions
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., SWAGGER_paths)
 	"java:S1168", // Swagger/OpenAPI spec: null = omit field (e.g. parseList, parseMap, nullIfEmpty, toMap, firstNonEmpty)
+	"java:S1192", // Swagger schema keys read more clearly inline than as constants.
 	"java:S3776", // getSwagger() (plus merge(Schema) and addBodyExamples()) walks every Swagger section in one pass; splitting it would obscure the document structure
+	"java:S9391", // Loops populate the mutable Swagger model in document order; stream pipelines would obscure that sequencing.
 	"resource" // Resource management handled externally
 })
 public class BasicSwaggerProviderSession {

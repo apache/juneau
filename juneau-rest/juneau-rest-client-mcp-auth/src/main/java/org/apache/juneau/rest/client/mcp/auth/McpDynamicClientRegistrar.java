@@ -319,8 +319,8 @@ public class McpDynamicClientRegistrar {
 		this.applicationType = b.applicationType;
 		this.redirectUris = u(cp(b.redirectUris));
 		this.scopes = u(new LinkedHashSet<>(b.scopes));
-		this.grantTypes = u(b.grantTypes.isEmpty() ? new LinkedHashSet<>(List.of("authorization_code", "refresh_token")) : new LinkedHashSet<>(b.grantTypes));
-		this.responseTypes = u(b.responseTypes.isEmpty() ? new LinkedHashSet<>(List.of("code")) : new LinkedHashSet<>(b.responseTypes));
+		this.grantTypes = u(new LinkedHashSet<>(b.grantTypes.isEmpty() ? List.of("authorization_code", "refresh_token") : b.grantTypes));
+		this.responseTypes = u(new LinkedHashSet<>(b.responseTypes.isEmpty() ? List.of("code") : b.responseTypes));
 		this.confidential = b.confidential;
 		this.clientName = b.clientName;
 		this.initialAccessTokenSupplier = b.initialAccessTokenSupplier;

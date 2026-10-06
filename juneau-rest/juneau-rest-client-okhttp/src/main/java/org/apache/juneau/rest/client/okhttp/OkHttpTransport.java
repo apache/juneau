@@ -19,7 +19,6 @@ package org.apache.juneau.rest.client.okhttp;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.time.*;
 
 import org.apache.juneau.rest.client.*;
 

@@ -55,6 +55,9 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals read more clearly inline than as constants.
+})
 public class RequestIdSettings {
 
 	private final Predicate<String> validator;
@@ -138,7 +141,7 @@ public class RequestIdSettings {
 		 * Overrides the servlet-request attribute key under which the resolved id is stashed.
 		 *
 		 * <p>
-		 * Defaults to {@link RestServerConstants#REQUEST_ID}.  Override only when coexisting with a third-party
+		 * Defaults to {@code "requestId"}.  Override only when coexisting with a third-party
 		 * filter that publishes the id under a different key.
 		 *
 		 * @param value The attribute key.  Must not be <jk>null</jk> or blank.

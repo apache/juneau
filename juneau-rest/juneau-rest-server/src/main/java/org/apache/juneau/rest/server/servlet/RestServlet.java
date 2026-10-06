@@ -66,6 +66,7 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_servletInitError)
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S2654", // destroy(), init() and setContext() are synchronized to guard one-time lifecycle transitions of the context/initException references, which are also read lock-free on the request path
 	"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
 })

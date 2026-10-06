@@ -114,6 +114,6 @@ class TomlConfigAnnotation_Test extends TestBase {
 		@TomlConfig(inlineTableThreshold="abc") class F {}
 		var work = work(F.class);
 		var builder = TomlSerializer.create();
-		assertThrows(RuntimeException.class, () -> builder.apply(work).build());
+		assertThrows(RuntimeException.class, () -> builder.apply(work));
 	}
 }

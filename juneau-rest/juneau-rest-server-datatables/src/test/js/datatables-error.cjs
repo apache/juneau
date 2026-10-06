@@ -40,7 +40,7 @@ $.fn = { dataTable: { ext: { errMode: 'alert' } }, DataTable: undefined };
 const win = { jQuery: $, alert: m => alerts.push(m) };
 win.window = win;
 const ctx = vm.createContext({ window: win, document: { readyState: 'complete' }, JSON, Object, Error });
-vm.runInContext(fs.readFileSync(process.argv[2], 'utf8'), ctx);
+vm.runInContext(fs.readFileSync(process.argv[2], 'utf8'), ctx); // NOSONAR javascript:S1523 - test harness evaluates the shipped script in a vm sandbox
 
 const settings = { nTable: table, sTableId: 'rel' };
 const xhr = (status, header, body) => ({

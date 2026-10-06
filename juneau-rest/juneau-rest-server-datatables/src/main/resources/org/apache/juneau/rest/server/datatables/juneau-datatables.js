@@ -117,7 +117,7 @@
 	 * Returning `true` tells DataTables the error has been handled; every other failure keeps the default handling.
 	 */
 	function onXhr(e, settings, json, xhr) {
-		if (json || !xhr || !(xhr.status >= 400) || typeof xhr.getResponseHeader !== "function") {
+		if (json || !xhr || !(xhr.status >= 400) || typeof xhr.getResponseHeader !== "function") { // NOSONAR javascript:S1940 - negation is intentional: a missing or non-numeric status must also take this early return, which "status < 400" would not
 			return undefined;
 		}
 		const code = xhr.getResponseHeader(ERROR_HEADER);

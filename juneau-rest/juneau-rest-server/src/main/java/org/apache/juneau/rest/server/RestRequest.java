@@ -2014,7 +2014,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Invoked by the framework after the {@link RestAuthenticator} fold resolves
 	 * an identity for this request.  The stored result drives {@link #getUserPrincipal()}, {@link #isUserInRole(String)},
 	 * and {@link #getRemoteUser()}, and (when a principal is present) stashes the principal under
-	 * {@link RestServerConstants#PRINCIPAL_ATTR} so {@code @Auth} argument injection resolves it.
+	 * {@code "juneau.principal"} so {@code @Auth} argument injection resolves it.
 	 *
 	 * @param value The result. Can be <jk>null</jk> to unset.
 	 * @return This object.

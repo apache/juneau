@@ -29,7 +29,7 @@ import java.security.*;
  * When a request reaches an op handler annotated with {@code @Auth}, the framework's
  * {@link AuthArg} resolver pulls the {@link Principal} previously stashed by an upstream AuthN guard
  * (such as {@link BearerTokenGuard} or {@link ApiKeyGuard}) on the request attributes under the
- * {@link org.apache.juneau.rest.server.RestServerConstants#PRINCIPAL_ATTR PRINCIPAL_ATTR} key.
+ * {@code "juneau.principal"} key.
  *
  * <p>
  * If an annotated parameter is reached without a principal being stashed (i.e. no guard ran, or the

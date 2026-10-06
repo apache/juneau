@@ -319,7 +319,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 	@Test
 	void e06_derivedColumnNeedsAccessor() {
 		var hoistedTarget2 = builder().column("initial", SearchType.TEXT);
-		assertThrowsWithMessage(IllegalArgumentException.class, "Column 'initial' is not a readable bean property of", () -> hoistedTarget2.build());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Column 'initial' is not a readable bean property of", hoistedTarget2::build);
 		var ctx = builder().column("initial", SearchType.TEXT).accessor("initial", r -> r.getName().substring(0, 1)).build();
 		try (var s = ctx.getSession(ROWS)) {
 			assertList(names(s.find(new BeanQuery().setSearch("initial=$eq(C)")).rows()), "Carol");
@@ -339,7 +339,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 	@Test
 	void e08_mapRowsRequireColumns() {
 		var hoistedTarget4 = InMemoryBeanQueryContext.<Map<String,Object>>create();
-		assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", () -> hoistedTarget4.build());
+		assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", hoistedTarget4::build);
 	}
 
 	@Test
@@ -382,7 +382,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 	@Test
 	void f03_rowsRequired() {
 		var hoistedTarget6 = context().createSession();
-		assertThrowsWithMessage(IllegalStateException.class, "InMemoryBeanQuerySession requires rows.", () -> hoistedTarget6.build());
+		assertThrowsWithMessage(IllegalStateException.class, "InMemoryBeanQuerySession requires rows.", hoistedTarget6::build);
 		var hoistedTarget7 = context();
 		assertThrows(IllegalArgumentException.class, () -> hoistedTarget7.getSession(null));
 	}

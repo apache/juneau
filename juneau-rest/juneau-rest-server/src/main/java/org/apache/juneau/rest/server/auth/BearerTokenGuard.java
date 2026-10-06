@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	<li>Confirms it starts with {@code "Bearer "} (case-insensitive) followed by a non-blank token.
  * 	<li>Delegates the raw token to the configured {@link TokenValidator}.
  * 	<li>On success, stashes the returned {@link Principal} on the request attributes under
- * 		{@link RestServerConstants#PRINCIPAL_ATTR} so downstream handlers can read it via
+ * 		{@code "juneau.principal"} so downstream handlers can read it via
  * 		{@link AuthArg @Auth Principal} or {@code req.getAttributes().get(PRINCIPAL_ATTR)}.
  * 	<li>On any failure path (missing header, malformed scheme, validator throws), throws
  * 		{@link AuthenticationException} with a {@code WWW-Authenticate: Bearer realm="<realm>"} response

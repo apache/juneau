@@ -18,7 +18,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -172,11 +172,7 @@ public final class InMemoryBeanQuerySession<T> extends BeanQuerySession<T> {
 		if (filter instanceof Filter.And and && and.items().isEmpty())
 			return scoped;  // No search: every scoped row matches, without constructing a RegexBudget for nothing.
 		var budget = new RegexBudget(settings.regexTimeout);  // One deadline for the whole call.
-		var l = new ArrayList<T>();
-		for (var r : scoped)
-			if (FilterEvaluator.matches(filter, col -> context.cell(r, col), budget))
-				l.add(r);
-		return l;
+		return scoped.stream().filter(r -> FilterEvaluator.matches(filter, col -> context.cell(r, col), budget)).toList();
 	}
 
 	private List<T> sorted(List<T> rows, ResolvedQuery query) {

@@ -45,6 +45,7 @@ import org.apache.juneau.commons.io.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"resource" // ParserReader is managed by caller
 })
 public class ParserReader extends Reader implements Positionable {

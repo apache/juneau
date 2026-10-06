@@ -216,7 +216,8 @@ class PetStore_Test extends TestBase {
 		var snap = s.getAudit();
 		s.createPet(newPet("B"));
 		assertSize(1, snap);
-		assertThrows(UnsupportedOperationException.class, () -> snap.add(new AuditEntry()));
+		var entry = new AuditEntry();
+		assertThrows(UnsupportedOperationException.class, () -> snap.add(entry));
 	}
 
 	@Test void e09_load_preservesIdsAndBumpsCounters() {

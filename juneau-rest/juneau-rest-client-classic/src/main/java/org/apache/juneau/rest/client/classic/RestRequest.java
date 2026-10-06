@@ -112,6 +112,7 @@ import org.apache.juneau.marshall.xml.*;
 @SuppressWarnings({
 	"java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
 	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S3776", // Cognitive complexity acceptable for request-building and dispatch logic.
 	"java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
 	"java:S6539", // Monster class; RestRequest is intentionally a single per-request fluent builder aggregating headers/query/form/body/serialization config
 	"resource", // Resource management handled externally

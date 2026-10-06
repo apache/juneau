@@ -169,7 +169,13 @@ public final class JettyHttpTransport implements HttpTransport {
 		try {
 			// A per-request timeout overrides the transport-level response header timeout.
 			var perRequest = request.getTimeout();
-			var waitMs = perRequest != null ? Math.max(1, perRequest.toMillis()) : (responseTimeoutMs > 0 ? responseTimeoutMs : Long.MAX_VALUE);
+			long waitMs;
+			if (perRequest != null)
+				waitMs = Math.max(1, perRequest.toMillis());
+			else if (responseTimeoutMs > 0)
+				waitMs = responseTimeoutMs;
+			else
+				waitMs = Long.MAX_VALUE;
 			jettyResponse = listener.get(waitMs, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -189,8 +195,8 @@ public final class JettyHttpTransport implements HttpTransport {
 	}
 
 	// A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before
-	// sending any response.  Jetty surfaces this as an EOFException (org.eclipse.jetty.io.EofException extends
-	// EOFException) or a ClosedChannelException.  Because listener.get() only returns once response headers have
+	// sending any response.  Jetty surfaces this as an end-of-file exception (Jetty's EofException is a subclass)
+	// or a closed-channel exception.  Because the response listener only returns once response headers have
 	// arrived, any such failure here is guaranteed to have occurred before any response bytes were read.
 	private static boolean isStaleConnectionFailure(Throwable cause) {
 		return cause instanceof EOFException || cause instanceof ClosedChannelException;

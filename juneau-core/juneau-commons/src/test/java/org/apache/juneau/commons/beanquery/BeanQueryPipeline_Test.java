@@ -225,7 +225,7 @@ class BeanQueryPipeline_Test extends TestBase {
 				assertThrowsWithMessage(BeanQuerySyntaxException.class, "Search string exceeds 3 characters.", () -> s.find(hoistedArg1));
 			}
 			var hoistedTarget1 = c.createSession().defaultLimit(2000);
-			assertThrowsWithMessage(IllegalStateException.class, "maxLimit (1000) must not be less than defaultLimit (2000).", () -> hoistedTarget1.build());
+			assertThrowsWithMessage(IllegalStateException.class, "maxLimit (1000) must not be less than defaultLimit (2000).", hoistedTarget1::build);
 		}
 
 		@Test void b04_restrictColumnsNarrowsOnly() {
@@ -238,7 +238,7 @@ class BeanQueryPipeline_Test extends TestBase {
 			var hoistedTarget2 = c.createSession();
 			assertThrowsWithMessage(IllegalArgumentException.class, "Column 'x' is not a column of this context; a session can only narrow the columns.", () -> hoistedTarget2.restrictColumns("x"));
 			var hoistedTarget3 = c.createSession().restrictColumns();
-			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", () -> hoistedTarget3.build());
+			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", hoistedTarget3::build);
 			assertList(c.columns(), "name", "age");  // The context is unchanged.
 		}
 
@@ -267,10 +267,10 @@ class BeanQueryPipeline_Test extends TestBase {
 
 		@Test void c02_buildRejectsMissingOrBadSettings() {
 			var hoistedTarget4 = new StubContext.Builder();
-			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", () -> hoistedTarget4.build());
+			assertThrowsWithMessage(IllegalStateException.class, "At least one column must be declared.", hoistedTarget4::build);
 			// defaultLimit is explicit here so maxLimit(10) can't auto-narrow past it -- it's still a real conflict.
 			var hoistedTarget5 = ctx().defaultLimit(50).maxLimit(10);
-			assertThrowsWithMessage(IllegalStateException.class, "must not be less than defaultLimit", () -> hoistedTarget5.build());
+			assertThrowsWithMessage(IllegalStateException.class, "must not be less than defaultLimit", hoistedTarget5::build);
 			var hoistedTarget6 = ctx();
 			assertThrowsWithMessage(IllegalArgumentException.class, "defaultLimit must be positive: 0", () -> hoistedTarget6.defaultLimit(0));
 			var hoistedTarget7 = ctx();

@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 		{@code X-API-Key}), query parameter, or cookie.
  * 	<li>Delegates lookup to the configured {@link ApiKeyStore}.
  * 	<li>On success, stashes the returned {@link Principal} on the request attributes under
- * 		{@link RestServerConstants#PRINCIPAL_ATTR}.
+ * 		{@code "juneau.principal"}.
  * 	<li>On any failure path (missing key, unknown key), throws {@link AuthenticationException}
  * 		with a {@code WWW-Authenticate: ApiKey realm="<realm>"} response header.
  * </ol>
@@ -132,7 +132,7 @@ public class ApiKeyGuard extends RestGuard {
 		 *
 		 * <p>
 		 * Calls equivalent to {@code source(Source.HEADER)} plus {@code name(value)}. Defaults to
-		 * {@link RestServerConstants#API_KEY_HEADER} ({@code "X-API-Key"}) when not set.
+		 * {@code "X-API-Key"} when not set.
 		 *
 		 * @param value The header name. Must not be <jk>null</jk> or blank.
 		 * @return This object.

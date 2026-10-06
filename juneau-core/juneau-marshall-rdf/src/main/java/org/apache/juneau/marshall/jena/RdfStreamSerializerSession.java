@@ -208,10 +208,9 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 
 	@Override /* OutputStreamSerializerSession */
 	public boolean hasNativeBytes() {
-		// The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an
-		// xsd:base64Binary typed literal or as a plain string literal
-		// carrying the configured BinaryFormat's text wire form (at any other BinaryFormat, after the
-		// BinarySwap fires).
+		// The RDF graph layer has no native byte-array literal type. A byte array is surfaced either as a
+		// base64Binary typed literal, or as a plain string literal carrying the text wire form of the
+		// configured binary format (for any other binary format, after the binary swap fires).
 		return false;
 	}
 

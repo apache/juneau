@@ -136,7 +136,7 @@ class ValueFormat_Test extends TestBase {
 		AtomicIntegerLike(int v) { this.v = v; }
 		@Override public int intValue() { return v; }
 		@Override public long longValue() { return v; }
-		@Override public float floatValue() { return v; }
+		@Override public float floatValue() { return (float)v; }
 		@Override public double doubleValue() { return v; }
 		@Override public String toString() { return String.valueOf(v); }
 	}

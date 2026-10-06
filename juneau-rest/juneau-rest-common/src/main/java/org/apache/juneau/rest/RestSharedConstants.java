@@ -23,8 +23,7 @@ package org.apache.juneau.rest;
  *
  * <p>
  * Add more {@code public static final} fields here when server and client (or other REST modules)
- * must agree on the same literal values. Server-only constants belong in
- * {@code RestServerConstants} in {@code juneau-rest-server}.
+ * must agree on the same literal values.
  */
 @SuppressWarnings({
 	"java:S115" // Names use HEADER_/QUERY_ + camelCase to mirror wire identifiers; not strict UPPER_SNAKE_CASE

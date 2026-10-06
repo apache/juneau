@@ -433,9 +433,9 @@ public final class SqlBeanQueryContext<T> extends BeanQueryContext<T> implements
 		var parts = new ArrayList<SqlFragment>();
 		// guard/sessionGuard are raw, caller-supplied SQL this library cannot verify is internally safe to AND
 		// unwrapped (e.g. it may itself be a top-level OR), so each is defensively parenthesized here.
-		for (var g : new SqlFragment[] {guard, sessionGuard})
-			if (g != null)
-				parts.add(SqlFragment.of("(" + g.sql() + ")", g.binds()));  // Parenthesized so an OR cannot escape.
+		Stream.of(guard, sessionGuard)
+			.filter(Objects::nonNull)
+			.forEach(g -> parts.add(SqlFragment.of("(" + g.sql() + ")", g.binds())));  // Parenthesized so an OR cannot escape.
 		if (applySearch) {
 			var filter = query.filter();
 			if (! (filter instanceof Filter.And and && and.items().isEmpty())) {

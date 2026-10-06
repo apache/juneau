@@ -63,6 +63,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 @SuppressWarnings({
 	"java:S115", // WRAP_KEY_value mirrors the JsonMap key literal it wraps; a conventional UPPER_SNAKE_CASE name would obscure that.
 	"java:S1181", // connect() and closeQuietly() catch Throwable so the transport is closed and any close failure is recorded as suppressed on the original handshake failure, which is then rethrown
+	"java:S1192", // Repeated "value" is the JSON field name read inline from protocol result maps; constants would obscure the wire format.
 	"resource" // connect() returns the built McpClient to the caller, who owns closing it (it is closed here only on handshake failure); the SSE reader is closed by SubscriptionPump.close()
 })
 public final class McpClient extends AbstractMcpClient {

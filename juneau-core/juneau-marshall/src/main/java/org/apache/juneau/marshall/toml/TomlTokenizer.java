@@ -34,6 +34,7 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use naming conventions that embed type info or config keys
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3776", // Cognitive complexity acceptable for TOML grammar
 	"java:S6541", // Brain method acceptable for tokenizer
 	"resource" // Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.

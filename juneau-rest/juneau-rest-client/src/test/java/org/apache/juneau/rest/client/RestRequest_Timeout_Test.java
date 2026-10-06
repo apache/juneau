@@ -36,14 +36,17 @@ class RestRequest_Timeout_Test {
 
 	@Test void a01_zeroTimeout_rejected() throws Exception {
 		try (var c = client()) {
-			var e = assertThrows(IllegalArgumentException.class, () -> c.get("http://x/").timeout(Duration.ZERO));
+			var req = c.get("http://x/");
+			var e = assertThrows(IllegalArgumentException.class, () -> req.timeout(Duration.ZERO));
 			assertTrue(e.getMessage().contains("must be positive"));
 		}
 	}
 
 	@Test void a02_negativeTimeout_rejected() throws Exception {
 		try (var c = client()) {
-			assertThrows(IllegalArgumentException.class, () -> c.get("http://x/").timeout(Duration.ofMillis(-1)));
+			var req = c.get("http://x/");
+			var negative = Duration.ofMillis(-1);
+			assertThrows(IllegalArgumentException.class, () -> req.timeout(negative));
 		}
 	}
 
@@ -55,7 +58,9 @@ class RestRequest_Timeout_Test {
 	}
 
 	@Test void a04_transportRequestBuilder_rejectsNonPositive() {
-		assertThrows(IllegalArgumentException.class, () -> TransportRequest.builder().timeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> TransportRequest.builder().timeout(Duration.ofSeconds(-1)));
+		var builder = TransportRequest.builder();
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> builder.timeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> builder.timeout(negative));
 	}
 }

@@ -72,15 +72,15 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	 * @param innerMap The map being wrapped.  Must not be <jk>null</jk>.
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S9391" // Hot path; avoids stream allocation.
+	})
 	public FilteredKeyMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
 		reqnn("innerMap", innerMap);
 		reqnn("keys", keys);
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;
-		@SuppressWarnings({
-			"java:S9391" // Hot path; avoids stream allocation.
-		})
 		List<Map.Entry<K,V>> l = new ArrayList<>(keys.length);
 		for (var k : keys)
 			if (innerMap.containsKey(k))

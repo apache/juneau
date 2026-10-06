@@ -20,7 +20,6 @@ package org.apache.juneau.rest.server.auth;
 import java.security.*;
 import java.util.*;
 
-import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -38,7 +37,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>{@link #getUserPrincipal()} &mdash; returns the authenticated principal.
  * 	<li>{@link #isUserInRole(String)} &mdash; checks the aggregated role set.
  * 	<li>{@link #getRemoteUser()} &mdash; returns {@link Principal#getName()}.
- * 	<li>{@link #getAttribute(String)} &mdash; for the key {@link RestServerConstants#PRINCIPAL_ATTR}, returns the
+ * 	<li>{@link #getAttribute(String)} &mdash; for the key {@code "juneau.principal"}, returns the
  * 		principal so the {@code @Auth} arg-resolver can find it.
  * </ul>
  *
@@ -101,7 +100,7 @@ public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Intercepts {@link RestServerConstants#PRINCIPAL_ATTR} so the {@code @Auth} arg-resolver can pick up the
+	 * Intercepts {@code "juneau.principal"} so the {@code @Auth} arg-resolver can pick up the
 	 * filter-stashed principal without any extra wiring.
 	 *
 	 * <p>

@@ -134,7 +134,7 @@
 
 			<!-- ===================================================================================== -->
 			<!-- Starter-relevant third-party versions (the small set the curated bundles need to be    -->
-			<!-- coherent).  NOT a whole-world third-party BOM (see TODO-174c Q2).                       -->
+			<!-- coherent).  NOT a whole-world third-party BOM.                                   -->
 			<!-- ===================================================================================== -->
 			<dependency><groupId>io.micrometer</groupId><artifactId>micrometer-core</artifactId><version>${micrometer.version}</version></dependency>
 			<dependency><groupId>io.micrometer</groupId><artifactId>micrometer-registry-otlp</artifactId><version>${micrometer.version}</version></dependency>

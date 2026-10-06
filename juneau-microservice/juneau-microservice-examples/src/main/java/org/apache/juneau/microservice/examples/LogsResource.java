@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.bean.*;
 import org.apache.juneau.commons.*;
@@ -163,10 +164,9 @@ public class LogsResource extends BasicRestServlet {
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;
-			var s = new TreeSet<>(FILE_COMPARATOR);
-			for (var fc : f.listFiles(FILE_FILTER))
-				s.add(new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
-			return s;
+			return Arrays.stream(f.listFiles(FILE_FILTER))
+				.map(fc -> new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false))
+				.collect(Collectors.toCollection(() -> new TreeSet<>(FILE_COMPARATOR)));
 		}
 
 		/**

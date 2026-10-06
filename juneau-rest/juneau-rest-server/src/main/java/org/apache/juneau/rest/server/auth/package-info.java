@@ -24,7 +24,7 @@
  * {@link org.apache.juneau.rest.server.auth.BearerTokenGuard} and {@link org.apache.juneau.rest.server.auth.ApiKeyGuard} are
  * framework-level guard implementations that run inside the Juneau request pipeline (after servlet routing).
  * They stash the resolved {@link java.security.Principal} on the request under
- * {@link org.apache.juneau.rest.server.RestServerConstants#PRINCIPAL_ATTR} so downstream handlers can read it via
+ * {@code "juneau.principal"} so downstream handlers can read it via
  * {@link org.apache.juneau.rest.server.auth.AuthArg @Auth Principal} or
  * {@code req.getAttributes().get(PRINCIPAL_ATTR)}.
  *
@@ -63,7 +63,7 @@
  * {@link jakarta.servlet.http.HttpServletRequest#isUserInRole(String)},
  * {@link jakarta.servlet.http.HttpServletRequest#getRemoteUser()}, and
  * {@link jakarta.servlet.http.HttpServletRequest#getAttribute(String)} for the
- * {@link org.apache.juneau.rest.server.RestServerConstants#PRINCIPAL_ATTR} key.
+ * {@code "juneau.principal"} key.
  * This makes {@link org.apache.juneau.rest.server.guard.RoleBasedRestGuard} and {@code @Auth Principal} arg injection work
  * with zero changes.
  *

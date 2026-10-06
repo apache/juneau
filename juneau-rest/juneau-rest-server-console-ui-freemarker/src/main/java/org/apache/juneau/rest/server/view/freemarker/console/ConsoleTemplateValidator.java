@@ -295,8 +295,8 @@ public final class ConsoleTemplateValidator {
 
 		var g = GLOBAL.matcher(text);
 		while (g.find()) {
-			var hint = eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "<@page> captures the page into the contract.";
-			add(out, name, lines, g.start(), "removed-global", String.format("'%s' was removed in 10.0.0; %s", g.group(1), hint));
+			add(out, name, lines, g.start(), "removed-global", String.format("'%s' was removed in 10.0.0; %s", g.group(1),
+				eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "<@page> captures the page into the contract."));
 		}
 
 		out.sort(Comparator.comparingInt(Finding::line).thenComparingInt(Finding::column));

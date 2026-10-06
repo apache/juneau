@@ -42,6 +42,7 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"java:S115", // CONST_ prefix follows framework convention
 	"java:S135", // Multiple break/continue necessary for tokenizer state machine loops
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3776", // Cognitive complexity acceptable for protobuf grammar
 	"java:S6541", // Brain method acceptable for tokenizer
 	"resource" // Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.

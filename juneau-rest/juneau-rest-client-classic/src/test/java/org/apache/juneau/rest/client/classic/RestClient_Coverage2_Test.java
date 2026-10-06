@@ -48,7 +48,7 @@ import com.sun.net.httpserver.*;
 	"removal", // Tests invoke RestClient.finalize() directly to cover its leak-detection branches
 	"resource" // Several tests here intentionally leave a RestClient unclosed (to exercise close()/closeQuietly()/finalize() behavior directly) rather than using try-with-resources; Eclipse JDT's @Owning warning is by design.
 })
-// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+// The separate-thread mode is required here: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
 @Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class RestClient_Coverage2_Test {
 
@@ -123,7 +123,7 @@ class RestClient_Coverage2_Test {
 		// The default Apache HttpClient (built via HttpClientBuilder) doesn't support the legacy HttpParams API and
 		// throws on access; a custom CloseableHttpClient proves the successful delegation path completes normally.
 		// Not try-with-resources: the custom client's close() always throws (needed for a06 below), so close it via
-		// closeQuietly() instead of letting an auto-close propagate the simulated failure here.
+		// the quiet-close helper instead of letting an auto-close propagate the simulated failure here.
 		var c1 = RestClient.create().httpClient(throwingHttpClient()).build();
 		assertNull(c1.getParams());
 		c1.closeQuietly();
@@ -209,7 +209,7 @@ class RestClient_Coverage2_Test {
 		};
 		try (var c = RestClient.create().httpClient(stubClient).rootUrl("http://example.com").build()) {
 			var proxy = c.getRemote(EchoRemote.class, null);
-			// EchoRemote#call() does not declare a checked exception, so the classic engine's checked
+			// The remote interface's call method does not declare a checked exception, so the classic engine's checked
 			// RestCallException surfaces through the JDK dynamic-proxy dispatch as an UndeclaredThrowableException.
 			var thrown = assertThrows(java.lang.reflect.UndeclaredThrowableException.class, proxy::call);
 			assertInstanceOf(RestCallException.class, thrown.getCause());
@@ -266,7 +266,7 @@ class RestClient_Coverage2_Test {
 
 	@Test void a16_finalize_detectLeaks_withCreationStack_logsWithStackTrace() throws Throwable {
 		var c = RestClient.create().detectLeaks().debug().build();
-		// debug() populates the creation stack trace that finalize then walks and logs.
+		// Enabling debug populates the creation stack trace that finalize then walks and logs.
 		assertDoesNotThrow(c::finalize);
 	}
 

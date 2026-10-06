@@ -18,8 +18,6 @@ package org.apache.juneau.commons.beanquery;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
-
 /**
  * The two neutral row counts a session can report: {@link #total()} (the rows in scope before the query's search) and
  * {@link #matched()} (the rows that survive the search, before any page limit).

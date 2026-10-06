@@ -31,6 +31,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
+		<surefire.extraArgs>-javaagent:${org.mockito:mockito-core:jar}</surefire.extraArgs>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<freemarker.version>2.3.35</freemarker.version>
 	</properties>
@@ -147,6 +148,20 @@
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Expose mockito-core's jar path as ${org.mockito:mockito-core:jar} so it can be loaded as a
+			     -javaagent (the inline mock maker's self-attach fails in sandboxed JVMs). -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>mockito-agent-path</id>
+						<goals>
+							<goal>properties</goal>
 						</goals>
 					</execution>
 				</executions>

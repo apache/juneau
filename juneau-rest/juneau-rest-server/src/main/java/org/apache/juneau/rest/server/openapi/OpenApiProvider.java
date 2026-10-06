@@ -40,6 +40,9 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">OpenAPI 3.1 Server Emission</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S9398" // Nested types are public API; moving them would break callers.
+})
 public interface OpenApiProvider {
 
 	/**

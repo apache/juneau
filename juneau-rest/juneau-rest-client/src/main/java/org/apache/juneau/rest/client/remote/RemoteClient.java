@@ -239,7 +239,7 @@ public final class RemoteClient {
 			if (methodMeta.isMultipart()) {
 				bindMultipartBody(req, method, args);
 			} else if (! hasBodyParam(method)) {
-				// Param-less constant body — method-level @Content(def) with no body parameter at all.
+				// Param-less constant body: the method-level content default applies when there is no body parameter at all.
 				var contentDefault = methodMeta.getContentDefault();
 				if (contentDefault != null)
 					withContentBody(req, contentDefault, bodyFormat);
@@ -494,7 +494,7 @@ public final class RemoteClient {
 			var path = param.getAnnotation(Path.class);
 			if (path != null) {
 				var name = firstNonEmpty(path.value(), path.name(), param.getName());
-				// Parameter-level def (non-_NONE_) wins, else method-level @Path(def=...).
+				// A parameter-level default (when one is set) wins, otherwise the method-level path default applies.
 				var pathDef = NONE.equals(path.def()) ? null : path.def();
 				var value = arg != null ? arg : firstNonEmpty(pathDef, methodMeta.getPathDefault(name));
 				if (value != null)
@@ -530,7 +530,7 @@ public final class RemoteClient {
 				return;
 			}
 
-			// @PathRemainder appends the (part-serialized) value as the trailing path remainder ("/*").
+			// A path-remainder parameter appends the part-serialized value as the trailing path remainder.
 			var pathRemainder = param.getAnnotation(PathRemainder.class);
 			if (pathRemainder != null) {
 				if (arg != null)
@@ -539,7 +539,7 @@ public final class RemoteClient {
 			}
 
 			if (param.getAnnotation(Content.class) != null) {
-				// A null body arg falls back to parameter-level @Content(def), then method-level @Content(def).
+				// A null body argument falls back to the parameter-level content default, then to the method-level content default.
 				var content = param.getAnnotation(Content.class);
 				Object body = arg != null ? arg : firstNonEmpty(content.def(), methodMeta.getContentDefault());
 				if (body != null)

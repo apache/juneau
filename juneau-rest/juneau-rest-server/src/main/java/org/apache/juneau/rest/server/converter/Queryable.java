@@ -218,8 +218,7 @@ public class Queryable implements RestConverter {
 	 * @return The cached context, or <jk>null</jk>.
 	 */
 	InMemoryBeanQueryContext<Object> cachedContext(Class<?> elementClass) {
-		var o = contextCache.get(elementClass);
-		return o == null ? null : o.orElse(null);
+		return contextCache.getOrDefault(elementClass, Optional.empty()).orElse(null);
 	}
 
 	private static List<Object> nonNull(Collection<?> c) {

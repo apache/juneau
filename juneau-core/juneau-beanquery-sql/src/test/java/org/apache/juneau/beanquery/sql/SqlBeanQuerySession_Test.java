@@ -297,7 +297,7 @@ class SqlBeanQuerySession_Test {
 	void s20_rowMapperFailureInStreamClosesTheCursor() {
 		try (var s = throwingRowMapperContext(new RuntimeException("boom")).getSession()) {
 			var hoistedTarget1 = s.stream(new BeanQuery()).iterator();
-			var e = assertThrows(BeanQueryExecutionException.class, () -> hoistedTarget1.next());
+			var e = assertThrows(BeanQueryExecutionException.class, hoistedTarget1::next);
 			assertBean(e, "message,cause{message}", "Query execution failed for table 'person'.,{boom}");
 			assertEquals(List.of("rs.close", "ps.close"), r.events.stream().filter(x -> x.endsWith(".close")).toList());  // The cursor closed itself; the session's own connection is still open.
 		}

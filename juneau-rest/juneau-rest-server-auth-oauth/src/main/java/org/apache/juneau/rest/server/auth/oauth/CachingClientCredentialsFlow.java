@@ -52,6 +52,9 @@ import com.nimbusds.oauth2.sdk.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated "value" is the argument-name literal passed to null checks; constants would obscure each call site.
+})
 public class CachingClientCredentialsFlow {
 
 	/**

@@ -33,6 +33,9 @@ import org.apache.juneau.marshall.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S9398" // Nested types are public API; moving them would break callers.
+})
 public interface StaticFiles extends FileFinder {
 
 	/**

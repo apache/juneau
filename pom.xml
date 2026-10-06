@@ -45,6 +45,10 @@
 		<junit.version>6.0.3</junit.version>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.15</jacoco.plugin.version>
+		<!-- Default so surefire's @{argLine} late binding resolves when jacoco is skipped. -->
+		<argLine></argLine>
+		<!-- Extra surefire JVM args; Mockito modules set a -javaagent here. -->
+		<surefire.extraArgs></surefire.extraArgs>
 		<jetty.version>12.1.13</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.25</tomcat.version>
@@ -355,6 +359,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
+						<!-- Sandbox-writable temp dir; @{argLine} carries jacoco's agent when it is active. -->
+						<argLine>@{argLine} -Djava.io.tmpdir=${project.build.directory} ${surefire.extraArgs}</argLine>
 						<systemPropertyVariables>
 							<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
 							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties</java.util.logging.config.file>

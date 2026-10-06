@@ -24,7 +24,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.console.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -77,8 +76,8 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 	}
 
 	@Test void b01_navRulesLiveInChromeCssWithoutPillsOrSlds() throws Exception {
-		// The nav shape moved to chrome.css in the C1 gated cleanup (ChromeCss_NavRules_Test pins that views carries none);
-		// ConsoleVisual_BrowserTest pins the computed styles.
+		// The nav shape now lives in the chrome stylesheet; the nav-rules test pins that the views stylesheet carries none,
+		// and the console visual browser test pins the computed styles.
 		var views = resource(ViewsMixin.VIEWS_CSS_RESOURCE);
 		assertFalse(views.contains(".juneau-page-nav"), views);
 		assertFalse(views.contains("slds-"), views);

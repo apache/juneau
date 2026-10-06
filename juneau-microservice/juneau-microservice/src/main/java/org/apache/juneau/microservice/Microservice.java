@@ -158,7 +158,11 @@ public class Microservice implements ConfigEventListener {
 			this.args = copyFrom.args;
 			this.manifest = copyFrom.manifest;
 			this.logger = copyFrom.logger;
+			this.config = copyFrom.config;
 			this.configName = copyFrom.configName;
+			this.configStore = copyFrom.configStore;
+			this.listener = copyFrom.listener;
+			this.consoleCommands = new ArrayList<>(copyFrom.consoleCommands);
 			this.logConfig = LogConfig.copyOrNull(copyFrom.logConfig);
 			this.consoleEnabled = copyFrom.consoleEnabled;
 			this.configBuilder = copyFrom.configBuilder;
@@ -703,11 +707,11 @@ public class Microservice implements ConfigEventListener {
 		// @Bean-supplied values become candidate inputs for field resolution below.
 		// Explicit builder calls always win and overwrite @Bean contributions afterward.
 		//
-		// Composition with overridingBeanStore (test-time overlay):
-		//   - no external store, no overlay  -> fresh BasicBeanStore()
-		//   - no external store, overlay set -> fresh BasicBeanStore(parent=null, overridingParent=overlay)
-		//   - external store, no overlay     -> use the external store as-is
-		//   - external store + overlay set   -> wrap with BasicBeanStore(parent=external, overridingParent=overlay)
+		// Composition with the overriding bean store (test-time overlay):
+		//   - no external store and no overlay: a fresh empty bean store is created.
+		//   - no external store but an overlay: a fresh bean store is created with the overlay as its overriding parent.
+		//   - an external store and no overlay: the external store is used as-is.
+		//   - an external store and an overlay: the external store is wrapped in a bean store with the overlay as its overriding parent.
 		// --------------------------------------------------------------------------------
 		if (nn(builder.overridingBeanStore)) {
 			this.beanStore = new BasicBeanStore(builder.beanStore, builder.overridingBeanStore);

@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.arg.*;
  * <p>
  * Resolution pulls the {@link Principal} stashed by an upstream AuthN guard
  * ({@link BearerTokenGuard} / {@link ApiKeyGuard}) on the request attributes under
- * {@link RestServerConstants#PRINCIPAL_ATTR}. If the stashed value is missing or not assignable to
+ * {@code "juneau.principal"}. If the stashed value is missing or not assignable to
  * the requested parameter type, <jk>null</jk> is injected &mdash; the guard chain is the contract
  * that guarantees a non-null value.
  *

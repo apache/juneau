@@ -24,7 +24,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isNotEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.rest.server.RestServerConstants.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.lang.annotation.*;
@@ -1209,8 +1208,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Returns {@code true} if context-level values for the given property should be merged.
 	 *
-	 * @param property The annotation attribute name (e.g. {@link RestServerConstants#PROPERTY_allowedParserOptions},
-	 * 	{@link RestServerConstants#PROPERTY_defaultCharset}, {@link RestServerConstants#PROPERTY_maxInput}).
+	 * @param property The annotation attribute name (e.g. {@code "allowedParserOptions"},
+	 * 	{@code "defaultCharset"}, {@code "maxInput"}).
 	 * @return {@code true} if {@code noInherit} does not contain this property.
 	 */
 	protected boolean isInherited(String property) {

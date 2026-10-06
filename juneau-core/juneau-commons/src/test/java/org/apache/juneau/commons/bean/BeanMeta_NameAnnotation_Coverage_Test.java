@@ -40,6 +40,7 @@ import org.junit.jupiter.api.*;
  * production caller can trigger it.
  */
 @SuppressWarnings({
+	"java:S1172", // Holder parameters exist only to carry a real @Name annotation for reflection.
 	"unused" // paramHolder()'s parameter exists only to carry a real @Name annotation, and the method is a reflection target that is never invoked
 })
 class BeanMeta_NameAnnotation_Coverage_Test extends TestBase {

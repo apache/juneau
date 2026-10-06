@@ -204,7 +204,7 @@ final class QueryResolver {
 				cols.add(t);
 			}
 		}
-		return cols.isEmpty() ? List.copyOf(s.columns.keySet()) : List.copyOf(cols);
+		return List.copyOf(cols.isEmpty() ? s.columns.keySet() : cols);
 	}
 
 	// Row 9 (limit half): missing -> default; negative -> cap; above cap -> cap; null only when uncapped.

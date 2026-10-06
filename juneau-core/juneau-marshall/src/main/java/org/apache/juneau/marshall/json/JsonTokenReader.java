@@ -49,6 +49,7 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S115", // Message-key constant uses UPPER_camelCase convention.
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3776", // Cognitive complexity acceptable for JSON tokenizer state machine
 	"java:S6541", // Brain method acceptable for tokenizer dispatch
 	"resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.

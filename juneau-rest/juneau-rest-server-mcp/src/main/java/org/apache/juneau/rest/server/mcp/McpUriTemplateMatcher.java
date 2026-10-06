@@ -398,9 +398,7 @@ public final class McpUriTemplateMatcher {
 		}
 		if (rest.isEmpty())
 			throw iaex("Malformed URI template ''%s'': empty variable list in expression at index %s", template, index);
-		var vars = new ArrayList<VarSpec>();
-		for (var part : rest.split(",", -1))
-			vars.add(parseVarSpec(part, template, index));
+		var vars = Arrays.stream(rest.split(",", -1)).map(part -> parseVarSpec(part, template, index)).toList();
 		return new ParsedExpr(operator, vars);
 	}
 

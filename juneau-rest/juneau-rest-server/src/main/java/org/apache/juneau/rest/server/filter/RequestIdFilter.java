@@ -32,7 +32,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <b>The correlation lifecycle is now owned by the always-on resolver built into {@link RestSession} at session-build
  * time</b> &mdash; it mints or honors the {@code X-Request-Id} correlation id for <i>every</i> request (including 404 /
  * early-error paths that never reach a {@code @RestStartCall} hook), stashes it under
- * {@link RestServerConstants#REQUEST_ID}, echoes it on the response, and opens the {@code requestId} log-context scope.
+ * {@code "requestId"}, echoes it on the response, and opens the {@code requestId} log-context scope.
  * The real tuning knobs live on {@link RequestIdSettings} (resolved via {@link RestContext#getRequestIdSettings()}).
  *
  * <p>
@@ -92,7 +92,7 @@ public class RequestIdFilter {
 	 *
 	 * <p>
 	 * Idempotent façade: the id was already minted/honored/echoed at session build.  This reads it back through the
-	 * {@link RestSession#fromRequest session-handle seam} (falling back to the {@link RestServerConstants#REQUEST_ID}
+	 * {@link RestSession#fromRequest session-handle seam} (falling back to the {@code "requestId"}
 	 * attribute) and re-echoes it on the response &mdash; it never double-mints.
 	 *
 	 * @param req The servlet request.  Must not be <jk>null</jk>.

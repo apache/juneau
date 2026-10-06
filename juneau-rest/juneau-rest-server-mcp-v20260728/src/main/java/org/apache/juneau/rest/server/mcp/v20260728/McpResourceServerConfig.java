@@ -56,7 +56,8 @@ import org.apache.juneau.rest.server.auth.oauth.OAuthFilter;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_scopeMustNotBeNullOrBlank)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_scopeMustNotBeNullOrBlank)
+	"java:S1192" // Duplicated validation-message literals read more clearly inline than as constants.
 })
 public class McpResourceServerConfig {
 

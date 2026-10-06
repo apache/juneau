@@ -654,9 +654,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			dec.readStructEnd();
 			if (name == null)
 				continue;
-			var parts = new ArrayList<String>();
-			for (var f : pathStack)
-				parts.add(f.name);
+			var parts = new ArrayList<>(pathStack.stream().map(f -> f.name).toList());
 			parts.add(name);
 			var path = String.join(".", parts);
 			if (numChildren != null && numChildren > 0) {

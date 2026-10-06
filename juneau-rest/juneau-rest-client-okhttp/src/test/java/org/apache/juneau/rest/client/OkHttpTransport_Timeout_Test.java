@@ -23,7 +23,6 @@ import java.net.*;
 import java.nio.charset.*;
 import java.time.*;
 
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.okhttp.*;
 import org.junit.jupiter.api.*;
 
@@ -82,7 +81,7 @@ class OkHttpTransport_Timeout_Test {
 		return TransportRequest.builder().method("GET").uri("http://127.0.0.1:" + port + path).timeout(timeout).build();
 	}
 
-	@Test void a01_shortTimeout_timesOutQuickly() throws Exception {
+	@Test void a01_shortTimeout_timesOutQuickly() {
 		try (var transport = OkHttpTransport.create()) {
 			var start = System.nanoTime();
 			var e = assertThrows(TransportException.class, () -> transport.execute(request("/slow", Duration.ofMillis(200))));

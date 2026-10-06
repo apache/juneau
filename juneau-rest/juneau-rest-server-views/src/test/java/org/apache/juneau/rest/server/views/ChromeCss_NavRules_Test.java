@@ -46,7 +46,21 @@ class ChromeCss_NavRules_Test extends TestBase {
 	}
 
 	private static String stripComments(String css) {
-		return css.replaceAll("/\\*[^*]*+\\*++(?:[^/*][^*]*+\\*++)*+/", "");
+		var sb = new StringBuilder();
+		var from = 0;
+		while (true) {
+			var start = css.indexOf("/*", from);
+			if (start < 0) {
+				sb.append(css, from, css.length());
+				break;
+			}
+			sb.append(css, from, start);
+			var end = css.indexOf("*/", start + 2);
+			if (end < 0)
+				break;
+			from = end + 2;
+		}
+		return sb.toString();
 	}
 
 	// Every selector in the file that mentions .juneau-page-nav, one per comma-separated entry, whitespace-normalized.

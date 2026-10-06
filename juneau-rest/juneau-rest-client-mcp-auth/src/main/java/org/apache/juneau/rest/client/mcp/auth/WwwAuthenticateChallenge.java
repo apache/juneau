@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * A parsed {@code WWW-Authenticate: Bearer ...} challenge as returned by an OAuth 2.1 / MCP resource server on a
@@ -222,10 +223,9 @@ public class WwwAuthenticateChallenge implements Serializable {
 		var v = parameters.get("scope");
 		if (v == null || v.isBlank())
 			return Set.of();
-		var out = new LinkedHashSet<String>();
-		for (var tok : v.strip().split("\\s+"))
-			if (!tok.isEmpty())
-				out.add(tok);
+		var out = Arrays.stream(v.strip().split("\\s+"))
+			.filter(tok -> !tok.isEmpty())
+			.collect(Collectors.toCollection(LinkedHashSet<String>::new));
 		return u(out);
 	}
 }

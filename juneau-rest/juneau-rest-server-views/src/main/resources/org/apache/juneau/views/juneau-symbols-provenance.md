@@ -84,7 +84,7 @@ Roles the shipped sprite keeps as **Juneau artwork** because IRS draws nothing t
 | `close` | `irs-artwork` | `2e796f9ad254be5490a9b0ffe209c92f6b9012c113d22a08ad66a43b2622af7d` |
 | `collapse_all` | `juneau-original` | `3567662a623db15fcb907156f14713566f0652f7a8649815c5e137cbffe391de` |
 | `columns` | `irs-artwork` | `63ce28c108c82ab89697705ebe62c11011e238a8c8b6e52c14b1df52dfdd6621` |
-| `copy` | `irs-artwork` | `d9ad73e6572d0d041c631d26ac771df2c8e317eb86c9992d4335daf77cba9eea` |
+| `copy` | `irs-artwork` | `1a7ae713f35b6259d8912fd02b695bae7348798fbf6d9f736817dde0aba23f50` |
 | `csv` | `irs-artwork` | `1d8eb08aaabb0b8eaf5cefb70b80d7087dae2783a046f7ab9bf6a83e9eb845bf` |
 | `download` | `irs-artwork` | `42ae2720c4d85efea0034637b2e0aadfe6ab4bb4d21bd859949e9c94af5ac239` |
 | `edit` | `irs-artwork` | `f1385ef077958b6888186280de8fe61698c07a70d6ec97d1681b46656216e585` |

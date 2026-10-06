@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;
 
@@ -117,7 +116,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		 * Reads the key from the supplied request header.
 		 *
 		 * <p>
-		 * Defaults to {@link RestServerConstants#API_KEY_HEADER} ({@code "X-API-Key"}) when not set.
+		 * Defaults to {@code "X-API-Key"} when not set.
 		 *
 		 * @param value The header name. Must not be <jk>null</jk> or blank.
 		 * @return This object.

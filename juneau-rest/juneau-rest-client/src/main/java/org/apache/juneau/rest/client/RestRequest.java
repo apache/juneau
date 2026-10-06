@@ -47,6 +47,7 @@ import org.apache.juneau.marshall.sse.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are HTTP header names and REST protocol wire values; intentional
+	"java:S3776", // Cognitive complexity acceptable for request-building and dispatch logic.
 	"resource" // client is not owned here; run() transfers RestResponse ownership to caller
 })
 public final class RestRequest {

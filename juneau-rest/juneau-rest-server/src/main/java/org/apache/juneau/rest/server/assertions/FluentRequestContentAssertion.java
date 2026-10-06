@@ -95,7 +95,8 @@ import org.apache.juneau.test.assertions.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_exceptionDuringCall)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_exceptionDuringCall)
+	"java:S1192" // Duplicated literals read more clearly inline than as constants.
 })
 public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
 

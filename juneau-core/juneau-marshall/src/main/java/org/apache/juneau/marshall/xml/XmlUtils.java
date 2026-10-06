@@ -38,6 +38,7 @@ import org.apache.juneau.commons.lang.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., CONST_x0000)
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3776", // encodeElementNameInner(), encodeAttrName(), encodeText() and findNamespace() apply XML name/text escaping and namespace rules char-by-char in one pass
 	"resource" // Resource management handled externally
 })

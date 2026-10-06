@@ -159,9 +159,7 @@ public class ResponseProcessorList {
 	protected ResponseProcessorList(Builder builder) {
 		var bs = builder.beanStore();
 		// Instantiate all entries first.
-		var list = new ArrayList<ResponseProcessor>(builder.entries.size());
-		for (var x : builder.entries)
-			list.add(instantiate(x, bs));
+		var list = builder.entries.stream().map(x -> instantiate(x, bs)).collect(Collectors.toCollection(ArrayList<ResponseProcessor>::new));
 
 		// Partition pass: reposition ViewRenderers before the first CatchAllResponseProcessor.
 		var viewRenderers = list.stream().filter(ViewRenderer.class::isInstance).collect(Collectors.toCollection(ArrayList::new));

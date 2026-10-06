@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.jena;
 
 import static org.apache.juneau.BasicTestUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -838,7 +837,7 @@ class RdfParser_Test extends TestBase {
 
 		@Test void i01_read_self_referential() throws Exception {
 			// Self-referential resource (subject == object) — line 181 FALSE branch:
-			// object.isResource() is true but object.equals(subject) is true → not added to objects set.
+			// The object is a resource but equals the subject, so it is not added to the objects set.
 			// The self-referential resource is still a root; recursing into it triggers cycle detection (line 274 TRUE).
 			var p = RdfParser.create().ntriple().build();
 			var bpNs = p.getJuneauBpNs().getUri();
@@ -1000,7 +999,7 @@ class RdfParser_Test extends TestBase {
 
 		@Test void i18_read_string_from_resource_without_pvalue_throws() {
 			// Named resource without pValue wrapper parsed as String — triggers getValue():
-			// n.isLiteral()=FALSE (line 193), n.isResource()=TRUE (line 195), nn(st)=FALSE (line 197) → ParseException
+			// The node is not a literal, is a resource, and has no statement, so a ParseException is thrown.
 			var rdf = "<http://ex.org/a> <http://ex.org/p> \"x\" .\n";
 			assertThrows(Exception.class, () -> RdfParser.create().ntriple().build().read(rdf, String.class));
 		}

@@ -103,8 +103,7 @@ final class InMemoryMatch {
 	private static boolean matchBare(Object value, boolean quoted, Object cell, SearchType type) {
 		var token = str(value);
 		switch (type) {
-			case TEXT:
-			case ID:      return (quoted || ! hasWildcard(token)) ? contains(cell, token) : wildcardMatches(cell, token);
+			case TEXT, ID: return (quoted || ! hasWildcard(token)) ? contains(cell, token) : wildcardMatches(cell, token);
 			case ENUM:    return (quoted || ! hasWildcard(token)) ? eqCi(cell, token, type) : wildcardMatches(cell, token);
 			case VERSION: return prefix(cell, token, type);
 			default:      return eqCi(cell, value, type);  // numeric / timestamp / boolean — not wildcards, quoting is a no-op.
@@ -118,9 +117,7 @@ final class InMemoryMatch {
 	/** Case-insensitive typed equality (bare-token default and {@code $eqic}). */
 	private static boolean eqCi(Object cell, Object arg, SearchType type) {
 		switch (type) {
-			case TEXT:
-			case ID:
-			case ENUM:    { var v = str(cell); return v != null && eqic(v, str(arg)); }
+			case TEXT, ID, ENUM: { var v = str(cell); return v != null && eqic(v, str(arg)); }
 			case BOOLEAN:  return boolEquals(cell, arg);
 			default:      { var c = cmp(cell, arg, type); return c != null && c == 0; }  // numeric / timestamp / version
 		}
@@ -129,9 +126,7 @@ final class InMemoryMatch {
 	/** Exact (case-sensitive) typed equality ({@code $eq} / {@code $ne} / {@code $in}, D2). */
 	private static boolean eqExact(Object cell, Object arg, SearchType type) {
 		switch (type) {
-			case TEXT:
-			case ID:
-			case ENUM:    { var v = str(cell); return v != null && eq(v, str(arg)); }
+			case TEXT, ID, ENUM: { var v = str(cell); return v != null && eq(v, str(arg)); }
 			case BOOLEAN:  return boolEquals(cell, arg);
 			default:      { var c = cmp(cell, arg, type); return c != null && c == 0; }  // numeric / timestamp / version
 		}
@@ -237,6 +232,9 @@ final class InMemoryMatch {
 	 * sides fail to coerce (comparing two already-opaque strings is always safe, since there is no coerced value on
 	 * either side for a lexical order to contradict).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Per-type coercion branches are inherent to the sort comparator; splitting would obscure the transitivity reasoning.
+	})
 	static int compareCells(Object a, Object b, SearchType type) {
 		if (a == null && b == null)
 			return 0;

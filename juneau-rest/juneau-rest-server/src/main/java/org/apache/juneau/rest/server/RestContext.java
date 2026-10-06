@@ -31,7 +31,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.rest.server.RestOpAnnotation.*;
-import static org.apache.juneau.rest.server.RestServerConstants.*;
 import static org.apache.juneau.rest.server.processor.ResponseProcessor.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
@@ -408,7 +407,7 @@ public class RestContext extends Context {
 	 * parent-linked to the host and <i>inherits</i> the host's {@code @Rest} annotation chain
 	 * ({@link #getRestAnnotationsForProperty(String)} walks host&rarr;mixin), so {@code @Mixin} overrides
 	 * <i>layer on top of</i> an inherited chain.  A {@link Child} is <i>isolated</i> ({@link #HOST_ONLY_PROPERTIES}
-	 * includes {@link RestServerConstants#PROPERTY_children}; children retain pre-10.0.0 isolated resolution with
+	 * includes {@code "children"}; children retain pre-10.0.0 isolated resolution with
 	 * no parent walk).  A {@code @Child} seed therefore does not <i>override</i> an inherited chain the way a
 	 * {@code @Mixin} override does — instead, {@link #computeRawRestAnnotations()} injects the seed's synthetic
 	 * {@code @Rest} at the <b>least-derived</b> slot of the child's own (still fully isolated) annotation chain,

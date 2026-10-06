@@ -46,6 +46,7 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S1172", // Builder-method parameters are required so injection must resolve (or fail to resolve) them.
 	"java:S2094", // Intentionally empty helper beans.
 	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 	"unused" // Fixture builder methods take parameters (e.g. A05_Builder.build(unresolvable)) they never read; they exist only for injection coverage

@@ -36,6 +36,9 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S9398" // Nested types are public API; moving them would break callers.
+})
 public interface SwaggerProvider {
 
 	/**

@@ -70,7 +70,8 @@ import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
  * </pre>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_consumerMustNotBeNull)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_consumerMustNotBeNull)
+	"java:S1192" // Duplicated validation-message literals read more clearly inline than as constants.
 })
 public class McpOptions {
 

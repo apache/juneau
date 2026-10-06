@@ -101,7 +101,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				// BinaryFormat's variant BinarySwap before falling through to convertValue's default
 				// String → byte[] UTF-8 coercion.  The collection-element route (Prototext's repeated
 				// bytes field) is intentionally not touched here.
-				if (raw instanceof String raw2 && type != null && type.inner() == byte[].class) {
+				if (raw instanceof String raw2 && type.inner() == byte[].class) {
 					var swap = type.getSwap(this);
 					if (swap != null)
 						return (T) unswap(swap, raw2, type);
@@ -276,7 +276,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	private <T> T convertMapToType(Map<String,Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
 		if (type.isMap()) {
 			var inner = type.inner();
-			if (inner != null && JsonMap.class.isAssignableFrom(inner)) {
+			if (JsonMap.class.isAssignableFrom(inner)) {
 				if (map instanceof JsonMap map2)
 					return (T) map2;
 				return (T) toJsonMap(map);
@@ -393,7 +393,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		//       bytesValue path emits each byte as a hex-escaped char ("\xFF" etc.); the proto
 		//       tokenizer decodes those escapes back into a Java String where each char's code
 		//       point equals the byte's unsigned value.  Reconstruct byte[] by iterating chars.
-		if (val instanceof String val2 && targetType != null && targetType.inner() == byte[].class) {
+		if (val instanceof String val2 && targetType.inner() == byte[].class) {
 			var swap = targetType.getSwap(this);
 			if (swap != null)
 				return unswap(swap, val2, targetType);

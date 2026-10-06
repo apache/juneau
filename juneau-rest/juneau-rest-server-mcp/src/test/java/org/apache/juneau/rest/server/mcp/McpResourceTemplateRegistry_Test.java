@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.mcp;
 
 import static org.apache.juneau.BasicTestUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

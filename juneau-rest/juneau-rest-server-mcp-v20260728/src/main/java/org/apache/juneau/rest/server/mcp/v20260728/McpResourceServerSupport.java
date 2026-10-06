@@ -30,7 +30,6 @@ import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.RestContext;
 import org.apache.juneau.rest.server.RestOpContext;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.rest.server.RestServerConstants;
 import org.apache.juneau.rest.server.auth.AuthenticationException;
 import org.apache.juneau.rest.server.auth.AuthResult;
 import org.apache.juneau.rest.server.mcp.McpEndpointMixin;
@@ -378,7 +377,7 @@ public final class McpResourceServerSupport {
 	 * Authenticates the request against the RS config, establishing the authenticated principal.
 	 *
 	 * <p>
-	 * On success the principal is stashed under {@link RestServerConstants#PRINCIPAL_ATTR} and returned.  On failure the
+	 * On success the principal is stashed under {@code "juneau.principal"} and returned.  On failure the
 	 * {@code WWW-Authenticate: Bearer ...} challenge (carrying the {@code resource_metadata} pointer) is written directly
 	 * to {@code res} &mdash; because an exception thrown from a {@code @RestStartCall} hook does not route through the
 	 * response processors that would otherwise copy an {@link AuthenticationException}'s headers &mdash; and then a
@@ -440,7 +439,7 @@ public final class McpResourceServerSupport {
 	 * Returns the authenticated {@link Principal} {@link #authenticate} stashed for this request (READY-312f F4).
 	 *
 	 * <p>
-	 * Reads the same framework-standard {@link RestServerConstants#PRINCIPAL_ATTR} attribute {@link #authenticate}
+	 * Reads the same framework-standard {@code "juneau.principal"} attribute {@link #authenticate}
 	 * writes on success, so this is the single source of truth for "who is calling this MCP request".  It is the seam
 	 * the {@code 2026-07-28} dispatcher threads into {@link RequestStateCodec#seal}/{@link RequestStateCodec#unseal}
 	 * for principal-bound {@code requestState} AAD.  Mirrors {@link #grantedScopes(HttpServletRequest)}:

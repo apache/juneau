@@ -402,7 +402,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 
 	/**
 	 * Returns the elements of a collection/array value if it is "table-worthy" (non-empty with every element a
-	 * non-null bean or map, so it can be written as a TOML array of tables), otherwise <jk>null</jk>.
+	 * non-null bean or map, so it can be written as a TOML array of tables), otherwise an empty list.
 	 */
 	private List<Object> tableElements(Object value) throws SerializeException {
 		List<Object> l;
@@ -411,14 +411,14 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		else if (value != null && value.getClass().isArray() && !value.getClass().getComponentType().isPrimitive())
 			l = new ArrayList<>(Arrays.asList((Object[])value));
 		else
-			return null;
+			return Collections.emptyList();
 		if (l.isEmpty())
-			return null;
+			return l;
 		for (Object el : l) {
 			if (el instanceof Map)
 				continue;
 			if (el == null || !getClassMetaForObject(el).isBean())
-				return null;
+				return Collections.emptyList();
 		}
 		return l;
 	}
@@ -447,7 +447,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			w.blankLine();
 			w.tableHeader(tablePath);
 			writeMapAsTable(w, tablePath, v2, getClassMetaForObject(value, hint));
-		} else if (tableElements(value) != null) {
+		} else if (! tableElements(value).isEmpty()) {
 			for (Object item : tableElements(value)) {
 				w.blankLine();
 				w.arrayOfTablesHeader(tablePath);
@@ -479,7 +479,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			return shouldUseInlineTable(bm);
 		}
 		if (aType.isCollectionOrArray())
-			return tableElements(value) == null;
+			return tableElements(value).isEmpty();
 		return !aType.isMap();
 	}
 

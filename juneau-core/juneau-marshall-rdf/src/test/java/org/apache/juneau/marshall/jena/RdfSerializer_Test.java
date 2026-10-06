@@ -327,8 +327,8 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void e02_classMeta_rdf_parent() throws Exception {
 			// E02_BeanWithRdfParent's ClassMeta has E02_RdfAnnotatedParent as parent with @Rdf(collectionFormat=SEQ)
-			// cm.forEachAnnotation(Rdf.class) with PARENTS+PACKAGE traversal finds @Rdf on the parent
-			// SEQ != DEFAULT so the filter at line 54 passes and collectionFormat = SEQ (true branch)
+			// Annotation lookup with parent and package traversal finds the Rdf annotation on the parent.
+			// SEQ differs from DEFAULT, so the filter passes and the collection format resolves to SEQ.
 			var s = (RdfSerializer) RdfSerializer.create().language("N-TRIPLE").build();
 			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(E02_BeanWithRdfParent.class);
@@ -1795,11 +1795,11 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void o10_stream_serialize_rawBeanMap_direct() throws Exception {
-			// Serializing a raw BeanMap object directly. BeanMap implements Delegate<T> AND is itself a
-			// java.util.Map, so aType.isDelegate()==true and aType gets reassigned to
-			// ((Delegate)o).getBeanInfo() == the WRAPPED bean's own ClassMeta (BEAN category). sType ends
-			// up BEAN-categorized, not MAP-categorized, so this write dispatches through the sType.isBean()
-			// branch instead of the sType.isMap() branch -- this test exercises the Delegate-unwrap itself.
+			// Serializing a raw BeanMap object directly. A BeanMap is both a Delegate and a Map, so the
+			// delegate check is true and the type is reassigned to the wrapped bean's own ClassMeta (BEAN
+			// category). The serialized type ends up BEAN-categorized, not MAP-categorized, so this write
+			// dispatches through the bean branch instead of the map branch -- this test exercises the
+			// delegate unwrap itself.
 			// (The dead "o instanceof BeanMap" fallback that used to live inside the isMap() branch for
 			// this exact never-reached scenario was removed.)
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
@@ -1970,9 +1970,9 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void q07_doWrite_looseCollections_null() throws Exception {
-			// isLooseCollections()==true with a null root object -- getClassMetaForObject(null) returns
-			// null (its single-arg overload defaults to null, unlike the two-arg overload used elsewhere
-			// in this class), so nn(cm)==false short-circuits the "cm.isCollectionOrArray()" sub-check,
+			// Loose collections enabled with a null root object -- the class-meta lookup for null returns
+			// null (its single-argument overload defaults to null, unlike the two-argument overload used
+			// elsewhere in this class), so the null check short-circuits the collection-or-array sub-check,
 			// covering the remaining branch combination that m14 (a non-null, non-collection bean) cannot
 			// reach.
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
@@ -2002,8 +2002,8 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void q10_serialize_reader_ioException_wrapped() {
-			// A Reader that throws mid-read -- covers the catch(IOException) -> onException.accept(e) ->
-			// handleThrown(e) path inside IoUtils.read(Reader, Consumer), never exercised by j03's
+			// A Reader that throws mid-read -- covers the IOException catch, which hands the exception to the
+			// consumer and then to the thrown-exception handler inside the reader utility, never exercised by j03's
 			// happy-path StringReader. Mirrors O_streamSerializerRemainingCoverage#o11 for the non-stream
 			// session.
 			var s = RdfSerializer.create().ntriple().build();

@@ -88,7 +88,8 @@ import org.apache.juneau.commons.io.*;
  *
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S9398" // Nested type is public API; moving it would break callers.
 })
 public interface FileFinder {
 

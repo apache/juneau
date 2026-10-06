@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;

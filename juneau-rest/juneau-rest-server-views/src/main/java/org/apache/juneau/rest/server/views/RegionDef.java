@@ -501,7 +501,7 @@ public class RegionDef {
 		if (titleFields != null && !titleFields.isEmpty())
 			m.put("titleFields", titleFields);
 		if (fields != null && !fields.isEmpty()) {
-			m.put("fields", fields.stream().map(f -> f.toContractMap()).toList());
+			m.put("fields", fields.stream().map(Field::toContractMap).toList());
 		}
 		return m;
 	}

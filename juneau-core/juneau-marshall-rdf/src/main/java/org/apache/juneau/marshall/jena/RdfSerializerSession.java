@@ -165,14 +165,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		model.setNsPrefix(ns.getName(), ns.getUri());
 	}
 
-	/*
+	/**
 	 * XML-encoded the specified element name using the {@link XmlUtils#encodeElementName(Object)} method.
 	 */
 	private String encodeElementName(Object o) {
 		return XmlUtils.encodeElementName(toString(o));
 	}
 
-	/*
+	/**
 	 * XML-encodes the specified string using the {@link XmlUtils#escapeText(Object)} method.
 	 */
 	// Package-private (not private) for white-box testing.

@@ -45,6 +45,7 @@ import org.apache.juneau.marshall.swap.spi.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for parser session hierarchy
 	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3740", // Raw Map needed for generic map construction from ClassMeta
 	"java:S3776", // Cognitive complexity acceptable for doRead / readAnything
 	"java:S6541", // Brain method acceptable for readAnything

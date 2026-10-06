@@ -23,7 +23,6 @@ import java.net.*;
 import java.nio.charset.*;
 import java.time.*;
 
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.jetty.*;
 import org.junit.jupiter.api.*;
 

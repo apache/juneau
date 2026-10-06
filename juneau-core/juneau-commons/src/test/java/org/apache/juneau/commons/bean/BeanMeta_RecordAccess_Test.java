@@ -40,7 +40,8 @@ public class BeanMeta_RecordAccess_Test extends TestBase {
 
 	@Test void a01_nonPublicRecord_notOpened_throwsClearMessage() {
 		var ci = ClassInfo.of(PackageRec.class);
-		var e = assertThrows(BeanRuntimeException.class, () -> BeanMeta.makeRecordConstructorAccessible(ci, ctor(PackageRec.class), x -> false));
+		var c = ctor(PackageRec.class);
+		var e = assertThrows(BeanRuntimeException.class, () -> BeanMeta.makeRecordConstructorAccessible(ci, c, x -> false));
 		var m = e.getMessage();
 		assertTrue(m.contains("PackageRec"), m);
 		assertTrue(m.contains("opens org.apache.juneau.commons.bean to"), m);
@@ -69,7 +70,8 @@ public class BeanMeta_RecordAccess_Test extends TestBase {
 	@Test void a05_publicRecordInNonPublicClass_failedAccess_throws() {
 		// Not effectively public, so a failed setAccessible is reported.
 		var ci = ClassInfo.of(Hidden.NestedPublicRec.class);
-		assertThrows(BeanRuntimeException.class, () -> BeanMeta.makeRecordConstructorAccessible(ci, ctor(Hidden.NestedPublicRec.class), x -> false));
+		var c = ctor(Hidden.NestedPublicRec.class);
+		assertThrows(BeanRuntimeException.class, () -> BeanMeta.makeRecordConstructorAccessible(ci, c, x -> false));
 	}
 
 	@Test void a06_publicRecordInNonPublicClass_bindsNormally() {

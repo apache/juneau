@@ -33,7 +33,8 @@ import org.apache.juneau.microservice.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MKEY_invalidArguments)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MKEY_invalidArguments)
+	"java:S1192" // Duplicated literals read more clearly inline than as constants.
 })
 public class ConfigCommand extends ConsoleCommand {
 

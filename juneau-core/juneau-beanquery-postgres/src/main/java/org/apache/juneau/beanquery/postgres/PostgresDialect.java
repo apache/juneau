@@ -134,8 +134,7 @@ public final class PostgresDialect implements SqlDialect {
 	@Override /* SqlDialect */
 	public SqlFragment renderBare(String columnSql, SearchType type, Object value, boolean quoted) {
 		switch (type) {
-			case TEXT:
-			case ID: {
+			case TEXT, ID: {
 				var token = text(value);
 				if (quoted || ! hasWildcard(token))
 					return frag(columnSql + " ILIKE ?", like("%", token, "%"));

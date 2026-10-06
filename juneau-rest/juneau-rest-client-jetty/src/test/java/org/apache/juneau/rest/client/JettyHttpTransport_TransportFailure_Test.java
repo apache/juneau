@@ -98,7 +98,7 @@ class JettyHttpTransport_TransportFailure_Test {
 				}
 			}, "interrupt-target");
 			thread.start();
-			// Give the request time to be sent and the thread to start blocking on listener.get(...).
+			// Give the request time to be sent and the thread to start blocking on the response listener.
 			Thread.sleep(200);
 			thread.interrupt();
 			thread.join(5000);
@@ -179,7 +179,7 @@ class JettyHttpTransport_TransportFailure_Test {
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 					}
-					// Mirrors sibling a01's Thread.sleep(200): gives Jetty's async state machine a moment to be
+					// Mirrors the 200ms sleep in sibling a01: gives Jetty's async state machine a moment to be
 					// actively mid-exchange (rather than just barely past accept()) before this thread fails, so
 					// the abort is reliably observed as a failure rather than racing the 500ms responseTimeoutMs.
 					try {
@@ -204,7 +204,7 @@ class JettyHttpTransport_TransportFailure_Test {
 	}
 
 	// =================================================================================================================
-	// E: close()'s catch(Exception) when the underlying HttpClient fails to stop (lines 164-165)
+	// E: the catch block in close() when the underlying HttpClient fails to stop
 	// =================================================================================================================
 
 	private static final class ExplodingOnStopHttpClient extends HttpClient {

@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.test.assertions.AssertionPredicate.*;
 
-import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 

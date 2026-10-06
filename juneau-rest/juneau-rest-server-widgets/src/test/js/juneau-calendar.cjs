@@ -191,7 +191,7 @@ function parseTestHtml(html) {
 		}
 		const name = m[1];
 		const closing = html.charAt(m.index + 1) === '/';
-		if (closing) { if (stack.length > 1) stack.pop(); continue; }
+		if (closing) { if (stack.length > 1) { stack.pop(); } continue; }
 		const node = el(name);
 		parseAttrs(m[2], node);
 		const parent = stack.at(-1);

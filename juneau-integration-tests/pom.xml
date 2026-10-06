@@ -31,6 +31,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
+		<surefire.extraArgs>-javaagent:${org.mockito:mockito-core:jar}</surefire.extraArgs>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Local (not inherited from root - see root pom's pluginManagement Surefire comment for why) default
 		     Surefire excludedGroups value, referenced via ${excludedGroups} below rather than a literal so it's
@@ -782,6 +783,20 @@
 								<exclude>**/examples/**/*</exclude>
 							</excludes>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Expose mockito-core's jar path as ${org.mockito:mockito-core:jar} so it can be loaded as a
+			     -javaagent (the inline mock maker's self-attach fails in sandboxed JVMs). -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>mockito-agent-path</id>
+						<goals>
+							<goal>properties</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
