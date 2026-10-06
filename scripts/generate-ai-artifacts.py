@@ -18,6 +18,9 @@ Outputs are written to static/ai:
  - manifest.json
  - juneau-knowledge.jsonl
  - taxonomy.json
+
+and the llmstxt.org-style index static/llms.txt (the parent of the output directory).
+llms-full.txt is deliberately not generated: the concatenated topics are ~3 MB.
 """
 
 from __future__ import annotations
@@ -36,6 +39,9 @@ from typing import Any
 
 TOPIC_GLOB = "pages/topics/*.md"
 RELEASE_NOTES_GLOB = "pages/release-notes/*.md"
+SIDEBARS_FILE = "sidebars.ts"
+SITE_URL = "https://juneau.apache.org"
+LLMS_SUMMARY_MAX = 200
 SCHEMA_VERSION = "1.0.0"
 REQUIRED_FIELDS = [
     "id",
@@ -233,6 +239,137 @@ def extract_api_metadata_records(juneau_root: Path, default_version: str) -> lis
     return records
 
 
+def parse_sidebar_tree(sidebars_text: str) -> list[dict[str, Any]]:
+    """Tokenize sidebars.ts into a tree of {type,label,id,link,children} dicts (top-level array items)."""
+    token_re = re.compile(
+        r"(?P<link>\blink\s*:\s*\{)|(?P<open>\{)|(?P<close>\})"
+        r"|\b(?P<key>type|label|id)\s*:\s*'(?P<val>(?:[^'\\]|\\.)*)'"
+    )
+    root: dict[str, Any] = {"children": []}
+    stack: list[dict[str, Any]] = [root]
+    kinds: list[str] = ["root"]
+    for m in token_re.finditer(sidebars_text):
+        if m.group("link") or m.group("open"):
+            node: dict[str, Any] = {"children": []}
+            stack.append(node)
+            kinds.append("link" if m.group("link") else "obj")
+        elif m.group("close"):
+            if len(stack) == 1:
+                continue
+            node = stack.pop()
+            kind = kinds.pop()
+            if kind == "link":
+                stack[-1]["link"] = node
+            else:
+                stack[-1]["children"].append(node)
+        else:
+            stack[-1][m.group("key")] = m.group("val").replace("\\'", "'")
+    # The mainSidebar array's single object wrapper is the root's only meaningful content.
+    return root["children"]
+
+
+def find_node(nodes: list[dict[str, Any]], label: str) -> dict[str, Any] | None:
+    for n in nodes:
+        if n.get("label") == label and n.get("type") == "category":
+            return n
+        found = find_node(n.get("children", []), label)
+        if found:
+            return found
+    return None
+
+
+def doc_ids_in_order(node: dict[str, Any]) -> list[str]:
+    """Depth-first doc ids for a category: its own link page first, then its items."""
+    ids: list[str] = []
+    link = node.get("link")
+    if link and link.get("id"):
+        ids.append(link["id"])
+    for child in node.get("children", []):
+        if child.get("type") == "category":
+            ids.extend(doc_ids_in_order(child))
+        elif child.get("id"):
+            ids.append(child["id"])
+    return ids
+
+
+def topic_url(record: dict[str, Any], docs_root: Path) -> str:
+    fm = parse_frontmatter(read_text(docs_root / record["source_path"]))
+    slug = fm.get("slug") or Path(record["source_path"]).stem
+    return f"{SITE_URL}/docs/topics/{slug}"
+
+
+def one_line(text: str, limit: int = LLMS_SUMMARY_MAX) -> str:
+    text = re.sub(r"<[^>]+>", "", text)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = text.replace("**", "")
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) <= limit:
+        return text
+    cut = text[: limit - 3].rsplit(" ", 1)[0].rstrip(",;:.")
+    return cut + "..."
+
+
+def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], current_release: str) -> str:
+    docs_root = config.docs_root
+    by_id: dict[str, dict[str, Any]] = {}
+    for rec in records:
+        if rec["source_type"] != "topic":
+            continue
+        fm = parse_frontmatter(read_text(docs_root / rec["source_path"]))
+        stem = Path(rec["source_path"]).stem
+        by_id["topics/" + (fm.get("id") or stem)] = rec
+
+    tree = parse_sidebar_tree(read_text(docs_root / SIDEBARS_FILE))
+    documentation = find_node(tree, "Documentation")
+    if documentation is None:
+        raise ValueError("Could not find 'Documentation' category in sidebars.ts")
+
+    lines = [
+        "# Apache Juneau",
+        "",
+        "> Apache Juneau is a Java toolkit for marshalling POJOs to and from many formats (JSON, XML, HTML, "
+        "UON, URL-encoding, MessagePack, RDF, CSV, YAML and more), building REST servers and clients, "
+        "and writing configurable microservices, built around a common bean-context and annotation model. "
+        "This index links to the documentation topics, grouped as in the site sidebar.",
+        "",
+    ]
+
+    seen: set[str] = set()
+    for section in documentation["children"]:
+        if section.get("type") != "category":
+            continue
+        entries = []
+        for doc_id in doc_ids_in_order(section):
+            rec = by_id.get(doc_id)
+            if rec is None or doc_id in seen:
+                continue
+            seen.add(doc_id)
+            summary = one_line(rec["summary"])
+            entries.append(f"- [{rec['title']}]({topic_url(rec, docs_root)}): {summary}")
+        if entries:
+            lines.append(f"## {section['label']}")
+            lines.append("")
+            lines.extend(entries)
+            lines.append("")
+
+    migration = next((r for r in records if r["source_path"].endswith("27.V10MigrationGuide.md")), None)
+    lines.append("## Resources")
+    lines.append("")
+    lines.append(f"- [Release notes {current_release}]({SITE_URL}/docs/release-notes/{current_release}): "
+                 "What changed in the current release.")
+    if migration:
+        lines.append(f"- [{migration['title']}]({topic_url(migration, docs_root)}): "
+                     "Upgrading from Juneau 9.x to 10.0.")
+    lines.append(f"- [Javadocs {current_release}]({SITE_URL}/javadocs/{current_release}/index.html): "
+                 "API reference for the current release.")
+    lines.append(f"- [Knowledge base (JSONL)]({SITE_URL}/ai/juneau-knowledge.jsonl): "
+                 "Machine-readable records of all topics, release notes and API metadata, for RAG pipelines.")
+    lines.append(f"- [Knowledge base manifest]({SITE_URL}/ai/manifest.json): "
+                 "Version, record count and source commits for the knowledge base.")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_records(config: ExtractConfig, current_release: str) -> list[dict[str, Any]]:
     records = []
     for path in sorted(config.docs_root.glob(TOPIC_GLOB)):
@@ -330,6 +467,7 @@ def main() -> int:
         config.output_dir / "juneau-knowledge.jsonl": render_jsonl(records),
         config.output_dir / "taxonomy.json": render_json(taxonomy),
         config.output_dir / "manifest.json": render_json(manifest),
+        config.output_dir.parent / "llms.txt": render_llms_txt(config, records, current_release),
     }
 
     if args.check:

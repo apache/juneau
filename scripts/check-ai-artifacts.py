@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Checks AI artifacts freshness and source drift signals.
+Checks AI artifacts freshness (including static/llms.txt) and source drift signals.
 """
 
 from __future__ import annotations
@@ -41,6 +41,16 @@ def check_ai_artifact_freshness(docs_root: Path) -> list[str]:
     if result.stderr:
         errors.append(result.stderr.strip())
     return errors
+
+
+def check_llms_txt_shape(docs_root: Path) -> list[str]:
+    path = docs_root / "static" / "llms.txt"
+    if not path.exists():
+        return [f"Missing llms.txt: {path}"]
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("# Apache Juneau\n"):
+        return ["llms.txt must start with the '# Apache Juneau' H1."]
+    return []
 
 
 def check_readme_version(docs_root: Path, release: str) -> list[str]:
@@ -105,6 +115,7 @@ def main() -> int:
     errors: list[str] = []
     errors.extend(check_ai_artifact_freshness(docs_root))
     errors.extend(check_manifest_shape(docs_root))
+    errors.extend(check_llms_txt_shape(docs_root))
     errors.extend(check_readme_version(docs_root, release))
     errors.extend(check_javadocs_link_consistency(docs_root))
     errors.extend(check_release_note_source_presence(docs_root, juneau_root, release))
