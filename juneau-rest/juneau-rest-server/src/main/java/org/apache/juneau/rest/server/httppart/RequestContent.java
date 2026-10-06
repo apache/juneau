@@ -594,7 +594,7 @@ public class RequestContent {
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				var o = session.read(in, cm);
-				drain(in);
+				drainQuietly(in);
 				if (nn(schema))
 					schema.validateOutput(o);
 				return o;
@@ -627,23 +627,7 @@ public class RequestContent {
 	// with an immediate EOF.  Draining here (blocking until end-of-stream) keeps the connection reusable.
 	//
 	// Best effort: the stream is still bounded by @Rest(maxInput), and any failure (limit exceeded, client gone)
-	// just falls back to the container's own unconsumed-content handling.  A zero-byte read also stops the loop,
-	// since BoundedServletInputStream returns 0 rather than -1 once its limit is reached.
-	// Q: Can we move this to IOUtils?
-	private static void drain(Closeable in) {
-		try {
-			if (in instanceof Reader r) {
-				var buf = new char[256];
-				while (r.read(buf) > 0) { /* discard */ }
-			} else if (in instanceof InputStream is) {
-				var buf = new byte[256];
-				while (is.read(buf) > 0) { /* discard */ }
-			}
-		} catch (IOException ignored) {
-			// best-effort; the parsed value is already complete
-		}
-	}
-
+	// just falls back to the container's own unconsumed-content handling.
 	/**
 	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
 	 *

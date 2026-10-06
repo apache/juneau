@@ -98,8 +98,12 @@ public class BoundedServletInputStream extends ServletInputStream {
 
 	@Override /* Overridden from InputStream */
 	public int read() throws IOException {
-		decrement();
-		return is.read();
+		if (remain <= 0)
+			return probeAtLimit();
+		var r = is.read();
+		if (r != -1)
+			remain--;
+		return r;
 	}
 
 	@Override /* Overridden from InputStream */
@@ -109,11 +113,13 @@ public class BoundedServletInputStream extends ServletInputStream {
 
 	@Override /* Overridden from InputStream */
 	public int read(byte[] b, int off, int len) throws IOException {
-		long numBytes = Math.min(len, remain);
-		int r = is.read(b, off, (int)numBytes);
-		if (r == -1)
-			return -1;
-		decrement(numBytes);
+		if (len == 0)
+			return 0;
+		if (remain <= 0)
+			return probeAtLimit();
+		int r = is.read(b, off, (int)Math.min(len, remain));
+		if (r > 0)
+			remain -= r;
 		return r;
 	}
 
@@ -136,10 +142,14 @@ public class BoundedServletInputStream extends ServletInputStream {
 		return r;
 	}
 
-	private void decrement() throws IOException {
-		remain--;
-		if (remain < 0)
-			throw ioex("Input limit exceeded.  See @Rest(maxInput).");
+	/**
+	 * Called when the limit has been reached: returns -1 if the underlying stream is also at end-of-stream
+	 * (i.e. the body was exactly the maximum size), otherwise the limit has been exceeded.
+	 */
+	private int probeAtLimit() throws IOException {
+		if (is.read() == -1)
+			return -1;
+		throw ioex("Input limit exceeded.  See @Rest(maxInput).");
 	}
 
 	private void decrement(long count) throws IOException {

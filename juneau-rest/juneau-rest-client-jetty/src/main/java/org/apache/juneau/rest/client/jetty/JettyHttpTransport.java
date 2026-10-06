@@ -167,7 +167,10 @@ public final class JettyHttpTransport implements HttpTransport {
 		jettyRequest.send(listener);
 		Response jettyResponse;
 		try {
-			jettyResponse = listener.get(responseTimeoutMs > 0 ? responseTimeoutMs : Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+			// A per-request timeout overrides the transport-level response header timeout.
+			var perRequest = request.getTimeout();
+			var waitMs = perRequest != null ? Math.max(1, perRequest.toMillis()) : (responseTimeoutMs > 0 ? responseTimeoutMs : Long.MAX_VALUE);
+			jettyResponse = listener.get(waitMs, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			abortQuietly(listener);

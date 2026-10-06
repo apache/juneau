@@ -59,6 +59,17 @@ class BasicMcpSubscriptionBroker_Test {
 		assertDoesNotThrow(() -> broker.unregister("nope"));
 	}
 
+	@Test void a03b_closeAll_closesAndRemovesEverySubscription() {
+		var broker = new BasicMcpSubscriptionBroker(4);
+		try (var s1 = broker.register("s1", new McpSubscriptionFilter(true, true, true, Set.of()));
+			var s2 = broker.register("s2", new McpSubscriptionFilter(true, true, true, Set.of()))) {
+			broker.closeAll();
+			assertEquals(0, broker.activeCount());
+			assertTrue(s1.isClosed());
+			assertTrue(s2.isClosed());
+		}
+	}
+
 	@Test void a04b_unregisterNullId_throws() {
 		var broker = new BasicMcpSubscriptionBroker(4);
 		assertThrows(IllegalArgumentException.class, () -> broker.unregister(null));

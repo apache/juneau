@@ -1,7 +1,7 @@
 # scripts/tests/
 
 Pytest harness for the juneau-only `scripts/` Python that has no other automated coverage:
-`push.py`'s tracker-audit gate, `reset-side-clones.py`, `repin-consumers.py`, and
+`push.py`'s tracker-audit gate, the `--js-tests` flags, `reset-side-clones.py`, `repin-consumers.py`, and
 `wave-survey.py`. Everything here is hermetic -- temp directories, synthetic fixture files, and
 real temporary git repositories built in fixtures -- and never touches the real
 `~/Project Work` trackers, the real `repos.md`, or the real side clones.
@@ -42,6 +42,12 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   off path never reaches `subprocess.run` at all -- not just that it returns early -- which is
   the strongest available proof the gate cannot affect push behavior, including runtime, while
   disabled.
+
+- `test_js_tests_flags.py` -- the `--js-tests` / `--no-js-tests` support in `scripts/test.py` and
+  `scripts/push.py` (WORK-J0608): flag parsing (incl. conflict rejection and push.py forwarding the
+  flags to test.py), auto-detect of changed `.js`/`.css`/`.ftl` files under `src/` (driven by a fake
+  changed-file list, no git), and the Node/npm-missing path (skip with notice when auto-enabled, fail
+  when explicit). Never runs mvn or push.py's real flow.
 
 - `test_reset_side_clones.py` -- `reset-side-clones.py` is not a per-project script. It reads
   the one global `~/Project Work/repos.md` and drives clones by absolute path, so a single copy

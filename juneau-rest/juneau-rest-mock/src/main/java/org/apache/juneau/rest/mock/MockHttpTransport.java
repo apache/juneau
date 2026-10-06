@@ -115,8 +115,38 @@ public final class MockHttpTransport implements HttpTransport {
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		if (request.isSsrfGuardActive())
-			return PolicyEnforcedRedirects.execute(request, this::dispatch);
-		return dispatch(request);
+			return PolicyEnforcedRedirects.execute(request, this::dispatchWithTimeout);
+		return dispatchWithTimeout(request);
+	}
+
+	// Simulates TransportRequest.getTimeout(): when set, the matched handler runs on a daemon thread and the call fails
+	// with a TransportException (cause: TimeoutException) if the handler has not returned within the timeout.  With no
+	// timeout the handler runs inline on the calling thread, exactly as before.
+	private TransportResponse dispatchWithTimeout(TransportRequest request) throws TransportException {
+		var timeout = request.getTimeout();
+		if (timeout == null)
+			return dispatch(request);
+		var task = new FutureTask<TransportResponse>(() -> dispatch(request));
+		var thread = new Thread(task, "juneau-mock-transport");
+		thread.setDaemon(true);
+		thread.start();
+		try {
+			return task.get(Math.max(1, timeout.toMillis()), TimeUnit.MILLISECONDS);
+		} catch (TimeoutException e) {
+			task.cancel(true);
+			throw new TransportException("HTTP request timed out", e);
+		} catch (InterruptedException e) {
+			task.cancel(true);
+			Thread.currentThread().interrupt();
+			throw new TransportException("HTTP request interrupted", e);
+		} catch (ExecutionException e) {
+			var cause = e.getCause();
+			if (cause instanceof TransportException te)
+				throw te;
+			if (cause instanceof RuntimeException re)
+				throw re;
+			throw new TransportException("HTTP transport error: " + cause.getMessage(), cause);
+		}
 	}
 
 	@Override /* HttpTransport */

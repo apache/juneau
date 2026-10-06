@@ -29,6 +29,11 @@ Usage: python3 push.py "commit message"
        python3 push.py "commit message" --sonarqube
        python3 push.py "commit message" --tracker-audit
        python3 push.py "commit message" --docs-only
+       python3 push.py "commit message" --js-tests      (force the headless-browser JS harness)
+       python3 push.py "commit message" --no-js-tests   (never run it)
+
+JS harness (-Pjs-tests): with neither flag, test.py runs it automatically when a .js/.css/.ftl file
+under a src/ tree differs from origin/master, and skips it with a notice if Node/npm are missing.
 """
 
 # Sound file paths
@@ -620,6 +625,16 @@ def verify_starter_repos(step_num):
     return True
 
 
+def build_test_command(test_script, timing_file, args):
+    """The test.py invocation for the test step; forwards --js-tests/--no-js-tests (auto-detect lives in test.py)."""
+    cmd = [sys.executable, str(test_script), "--full", "--timing-log", str(timing_file)]
+    if getattr(args, "js_tests", False):
+        cmd.append("--js-tests")
+    if getattr(args, "no_js_tests", False):
+        cmd.append("--no-js-tests")
+    return cmd
+
+
 def commit_and_push(
     repo_dir,
     message,
@@ -985,6 +1000,8 @@ Examples:
   python3 push.py "Fixed bug in RestClient" --sonarqube
   python3 push.py "Fixed bug in RestClient" --tracker-audit
   python3 push.py "Updated topic page" --docs-only
+  python3 push.py "Tweaked console JS" --js-tests
+  python3 push.py "Tweaked console JS" --no-js-tests
         """
     )
     
@@ -1042,7 +1059,28 @@ Examples:
         )
     )
     
+    parser.add_argument(
+        "--js-tests",
+        action="store_true",
+        dest="js_tests",
+        help=(
+            "Force the headless-browser JS harness (mvn -Pjs-tests, the CI js-tests job) as part of the "
+            "test step. Fails the push if Node/npm are missing. Default: test.py auto-enables it when a "
+            ".js/.css/.ftl file under a src/ tree changed vs origin/master, and skips with a notice if "
+            "Node/npm are missing."
+        )
+    )
+
+    parser.add_argument(
+        "--no-js-tests",
+        action="store_true",
+        dest="no_js_tests",
+        help="Never run the JS harness, even when JS/CSS/FTL files changed."
+    )
+
     args = parser.parse_args()
+    if args.js_tests and args.no_js_tests:
+        parser.error("--js-tests and --no-js-tests are mutually exclusive")
     
     # Get the Juneau root directory
     script_dir = Path(__file__).parent
@@ -1064,6 +1102,10 @@ Examples:
         print("🔎 SonarQube gate ENABLED (--sonarqube)")
     if args.tracker_audit:
         print("📋 Tracker audit gate ENABLED (--tracker-audit)")
+    if args.js_tests:
+        print("🌐 JS tests FORCED (--js-tests)")
+    if args.no_js_tests:
+        print("🌐 JS tests DISABLED (--no-js-tests)")
     if args.dry_run:
         print("🔍 DRY RUN MODE - No actual changes will be made")
     print("=" * 70)
@@ -1199,7 +1241,7 @@ Examples:
             try:
                 _test_start = time.time()
                 result = subprocess.run(
-                    [sys.executable, str(test_script), "--full", "--timing-log", str(timing_file)],
+                    build_test_command(test_script, timing_file, args),
                     cwd=juneau_root,
                     check=False
                 )

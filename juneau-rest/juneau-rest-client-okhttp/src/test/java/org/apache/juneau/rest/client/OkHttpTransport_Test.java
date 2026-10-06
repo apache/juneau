@@ -36,6 +36,8 @@ import okhttp3.*;
 @SuppressWarnings({
 	"resource" // Transport/response Closeables are exercised inline; lifecycle is managed by the test/framework, not a real leak.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class OkHttpTransport_Test {
 
 	private static HttpServer server;
@@ -43,7 +45,9 @@ class OkHttpTransport_Test {
 
 	@BeforeAll
 	static void startServer() throws IOException {
-		server = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind can be
+		// handed an ephemeral port another process already holds on 127.0.0.1 (SO_REUSEADDR), which then wins every "localhost" connection.
+		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		port = server.getAddress().getPort();
 
 		server.createContext("/hello", exchange -> {
@@ -99,7 +103,7 @@ class OkHttpTransport_Test {
 	}
 
 	private String rootUrl() {
-		return "http://localhost:" + port;
+		return "http://127.0.0.1:" + port;
 	}
 
 	// =================================================================================================================

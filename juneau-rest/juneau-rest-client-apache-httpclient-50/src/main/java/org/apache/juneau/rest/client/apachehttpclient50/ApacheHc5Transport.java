@@ -18,12 +18,15 @@ package org.apache.juneau.rest.client.apachehttpclient50;
 
 import java.io.*;
 
+import org.apache.hc.client5.http.config.*;
 import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.protocol.*;
 import org.apache.hc.client5.http.impl.io.*;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.*;
 import org.apache.hc.core5.http.io.support.*;
 import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.client.*;
 
@@ -132,7 +135,7 @@ public final class ApacheHc5Transport implements HttpTransport {
 		var hcRequest = buildHcRequest(request);
 		ClassicHttpResponse hcResponse;
 		try {
-			hcResponse = httpClient.executeOpen(null, hcRequest, null);
+			hcResponse = httpClient.executeOpen(null, hcRequest, buildContext(request));
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
@@ -161,6 +164,18 @@ public final class ApacheHc5Transport implements HttpTransport {
 	// -----------------------------------------------------------------------------------------------------------------
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
+
+	// Per-request response (socket read) timeout via a request-scoped RequestConfig; null context when no timeout is set.
+	private HttpClientContext buildContext(TransportRequest request) {
+		var timeout = request.getTimeout();
+		if (timeout == null)
+			return null;
+		var context = HttpClientContext.create();
+		// A context-level RequestConfig replaces (not merges with) the client default, so copy the client's default first.
+		var base = httpClient instanceof Configurable c && c.getConfig() != null ? c.getConfig() : RequestConfig.DEFAULT;
+		context.setRequestConfig(RequestConfig.copy(base).setResponseTimeout(Timeout.ofMilliseconds(Math.max(1, timeout.toMillis()))).build());
+		return context;
+	}
 
 	private static ClassicHttpRequest buildHcRequest(TransportRequest request) throws TransportException {
 		var builder = ClassicRequestBuilder.create(request.getMethod()).setUri(request.getUri());

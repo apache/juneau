@@ -374,31 +374,41 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
+	// Steps into a child table.  Per TOML, a header path that traverses an array of tables refers to its most recent element.
+	private static Object stepInto(Object current, String key) {
+		if (current instanceof List l && !l.isEmpty())
+			current = l.get(l.size() - 1);
+		return ((Map)current).computeIfAbsent(key, k -> new LinkedHashMap<String,Object>());
+	}
+
+	private static Map<String,Object> lastTable(Object current) {
+		if (current instanceof List l && !l.isEmpty())
+			current = l.get(l.size() - 1);
+		return (Map<String,Object>)current;
+	}
+
 	private static Object getOrCreateAt(Map<String,Object> root, String path) {
 		String[] parts = path.split("\\.");
 		Object current = root;
-		for (int i = 0; i < parts.length - 1; i++) {
-			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String,Object>());
-		}
-		return ((Map)current).get(parts[parts.length - 1]);
+		for (int i = 0; i < parts.length - 1; i++)
+			current = stepInto(current, parts[i]);
+		return lastTable(current).get(parts[parts.length - 1]);
 	}
 
 	private static Map<String,Object> getOrCreateTableAt(Map<String,Object> root, String path) {
 		String[] parts = path.split("\\.");
 		Object current = root;
-		for (String part : parts) {
-			current = ((Map)current).computeIfAbsent(part, k -> new LinkedHashMap<String,Object>());
-		}
-		return (Map<String,Object>) current;
+		for (String part : parts)
+			current = stepInto(current, part);
+		return lastTable(current);
 	}
 
 	private static void setAt(Map<String,Object> root, String path, Object value) {
 		String[] parts = path.split("\\.");
 		Object current = root;
-		for (int i = 0; i < parts.length - 1; i++) {
-			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String,Object>());
-		}
-		((Map)current).put(parts[parts.length - 1], value);
+		for (int i = 0; i < parts.length - 1; i++)
+			current = stepInto(current, parts[i]);
+		lastTable(current).put(parts[parts.length - 1], value);
 	}
 
 	private static void setValueAt(Map<String,Object> root, List<String> keyPath, Object value) {

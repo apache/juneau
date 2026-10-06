@@ -344,17 +344,26 @@ public final class RestRequest {
 	 * Sets a per-call response timeout for this request.
 	 *
 	 * <p>
-	 * Threaded onto the {@link TransportRequest}.  Connect timeouts remain a client-level setting.
+	 * Threaded onto the {@link TransportRequest}.  Intended as a response timeout; connect timeouts are otherwise a client-level setting.
 	 *
 	 * <p>
-	 * <b>Transport support:</b> currently only {@link JavaHttpTransport} applies this value (as the JDK
-	 * {@code HttpRequest} timeout).  The Apache HttpClient, OkHttp and Jetty transports do not consult it; configure
-	 * their own timeouts on the transport builder (e.g. {@code JettyHttpTransportBuilder.responseTimeoutMs(long)}).
+	 * <b>Transport support:</b> every built-in transport honors this value, using its native per-request mechanism:
+	 * the JDK {@code HttpRequest} timeout, an Apache HttpClient 4.5 {@code RequestConfig} (socket + connect timeout),
+	 * an Apache HttpClient 5 request-scoped response timeout, an OkHttp per-call read timeout, the Jetty response-header
+	 * wait, and a simulated handler deadline in the mock transport.  On expiry the transport throws a
+	 * {@link TransportException}.  When set, it overrides the transport's own default for this request only.
+	 *
+	 * <p>
+	 * A non-<jk>null</jk> value must be positive; zero and negative durations are rejected (matching the JDK
+	 * {@code HttpRequest.timeout} contract) so every transport behaves identically.
 	 *
 	 * @param value The response timeout. May be <jk>null</jk> to use the transport default.
 	 * @return This object.
+	 * @throws IllegalArgumentException If <c>value</c> is zero or negative.
 	 */
 	public RestRequest timeout(Duration value) {
+		if (value != null && (value.isZero() || value.isNegative()))
+			throw new IllegalArgumentException("Request timeout must be positive: " + value);
 		timeout = value;
 		return this;
 	}

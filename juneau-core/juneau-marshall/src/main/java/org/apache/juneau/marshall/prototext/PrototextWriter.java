@@ -106,14 +106,17 @@ public class PrototextWriter extends SerializerWriter<PrototextWriter> {
 	}
 
 	/**
-	 * Writes the end of a message: <c>}</c> with optional newline.
+	 * Writes the end of a message: <c>}</c> followed by a newline.
+	 *
+	 * <p>
+	 * The newline is always written (even without whitespace) so the closing brace is never directly
+	 * adjacent to the next field name; this matches scalar fields, which always end with a newline.
 	 *
 	 * @param depth The current indentation depth for the closing brace.
 	 * @return This object.
 	 */
 	public PrototextWriter messageEnd(int depth) {
-		i(depth).w('}');
-		nl(depth);
+		i(depth).w('}').w('\n');
 		return this;
 	}
 

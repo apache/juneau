@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -43,6 +44,8 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // Transport/client instances are short-lived test fixtures; closing is irrelevant to these assertions.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class JavaHttpTransport_Test extends TestBase {
 
 	private static HttpServer server;
@@ -50,7 +53,9 @@ class JavaHttpTransport_Test extends TestBase {
 
 	@BeforeAll
 	static void startServer() throws IOException {
-		server = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind can be
+		// handed an ephemeral port another process already holds on 127.0.0.1 (SO_REUSEADDR), which then wins every "localhost" connection.
+		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		port = server.getAddress().getPort();
 
 		server.createContext("/hello", exchange -> {
@@ -86,6 +91,17 @@ class JavaHttpTransport_Test extends TestBase {
 			exchange.close();
 		});
 
+		// Reports the request framing headers actually seen on the wire, plus the received body.
+		server.createContext("/echo-framing", exchange -> {
+			var h = exchange.getRequestHeaders();
+			var requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+			var out = ("Content-Length=" + h.getFirst("Content-Length") + "\nTransfer-Encoding=" + h.getFirst("Transfer-Encoding") + "\nbody=" + requestBody).getBytes(StandardCharsets.UTF_8);
+			exchange.getResponseHeaders().add("Content-Type", "text/plain");
+			exchange.sendResponseHeaders(200, out.length);
+			exchange.getResponseBody().write(out);
+			exchange.close();
+		});
+
 		server.createContext("/not-found", exchange -> {
 			exchange.sendResponseHeaders(404, -1);
 			exchange.close();
@@ -101,7 +117,7 @@ class JavaHttpTransport_Test extends TestBase {
 	}
 
 	private String rootUrl() {
-		return "http://localhost:" + port;
+		return "http://127.0.0.1:" + port;
 	}
 
 	// =================================================================================================================
@@ -394,5 +410,40 @@ class JavaHttpTransport_Test extends TestBase {
 			}
 		}
 		assertTrue(bodyClosed.isSet());
+	}
+
+	// =================================================================================================================
+	// E — Request framing (Content-Length vs. chunked)
+	// =================================================================================================================
+
+	private List<String> framing(org.apache.juneau.http.HttpBody body) throws Exception {
+		var transport = JavaHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.post("/echo-framing").body(body).run()) {
+				assertEquals(200, response.getStatusCode());
+				return List.of(response.getBodyAsString().split("\n", -1));
+			}
+		}
+	}
+
+	@Test
+	void e01_knownLengthRepeatableBody_sendsContentLengthNotChunked() throws Exception {
+		assertList(framing(StringBody.of("hello body", "text/plain")), "Content-Length=10", "Transfer-Encoding=null", "body=hello body");
+	}
+
+	@Test
+	void e02_knownLengthByteArrayBody_sendsContentLengthNotChunked() throws Exception {
+		assertList(framing(ByteArrayBody.of("bytes!".getBytes(StandardCharsets.UTF_8), "application/octet-stream")), "Content-Length=6", "Transfer-Encoding=null", "body=bytes!");
+	}
+
+	@Test
+	void e03_emptyKnownLengthBody_sendsZeroContentLength() throws Exception {
+		assertList(framing(StringBody.of("", "text/plain")), "Content-Length=0", "Transfer-Encoding=null", "body=");
+	}
+
+	@Test
+	void e04_unknownLengthStreamBody_staysChunked() throws Exception {
+		var stream = new ByteArrayInputStream("streamed".getBytes(StandardCharsets.UTF_8));
+		assertList(framing(StreamBody.of(stream, "text/plain")), "Content-Length=null", "Transfer-Encoding=chunked", "body=streamed");
 	}
 }

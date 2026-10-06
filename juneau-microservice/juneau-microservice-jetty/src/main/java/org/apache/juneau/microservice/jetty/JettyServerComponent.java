@@ -323,6 +323,10 @@ public class JettyServerComponent implements MicroserviceListener {
 					// ms.getBeanStore(), so the lifecycle-owned instance must be handed to it explicitly before
 					// it initializes; HealthServlet.initReadinessState() registers it into its own bean store.
 					hs.publishReadinessState(readinessState);
+				if (servlet instanceof ReadinessStateAware rsa)
+					// Lets servlets holding long-lived streams (e.g. MCP subscriptions/listen) end them when shutdown
+					// begins, so the graceful drain does not wait out the full stopTimeout for them.
+					rsa.acceptReadinessState(readinessState);
 				var pathSpecs = restPathsFor(servlet, store);
 				var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");
 				for (var pathSpec : pathSpecs)

@@ -38,6 +38,9 @@ import org.junit.jupiter.api.*;
 	"java:S2925", // The 200ms sleep lets the request get in flight and block on the never-responding server before the thread is interrupted.
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+// Fixtures bind/connect via explicit 127.0.0.1: a wildcard bind can be handed a port another process holds on 127.0.0.1.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class JettyHttpTransport_TransportFailure_Test {
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -49,14 +52,14 @@ class JettyHttpTransport_TransportFailure_Test {
 		private final ServerSocket serverSocket;
 
 		NeverRespondingServer() throws IOException {
-			this.serverSocket = new ServerSocket(0);
+			this.serverSocket = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"));
 			var acceptThread = new Thread(this::acceptLoop, "jetty-never-responding-server");
 			acceptThread.setDaemon(true);
 			acceptThread.start();
 		}
 
 		String rootUrl() {
-			return "http://localhost:" + serverSocket.getLocalPort();
+			return "http://127.0.0.1:" + serverSocket.getLocalPort();
 		}
 
 		private void acceptLoop() {
@@ -127,12 +130,12 @@ class JettyHttpTransport_TransportFailure_Test {
 	@Test
 	void c01_connectionRefused_throwsGenericTransportException() throws Exception {
 		int freePort;
-		try (var probe = new ServerSocket(0)) {
+		try (var probe = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"))) {
 			freePort = probe.getLocalPort();
 		}
 		// Nothing is listening on freePort now that the probe socket above has been closed.
 		var transport = JettyHttpTransport.create();
-		var request = TransportRequest.builder().method("GET").uri(URI.create("http://localhost:" + freePort + "/x")).build();
+		var request = TransportRequest.builder().method("GET").uri(URI.create("http://127.0.0.1:" + freePort + "/x")).build();
 		var ex = assertThrows(TransportException.class, () -> transport.execute(request));
 		assertTrue(ex.getMessage().contains("HTTP transport error"), ex.getMessage());
 	}
@@ -143,7 +146,7 @@ class JettyHttpTransport_TransportFailure_Test {
 
 	@Test
 	void d01_bodyWriteFails_requestAborted() throws Exception {
-		var serverSocket = new ServerSocket(0);
+		var serverSocket = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"));
 		// Signaled once the server has actually accepted the TCP connection, so the writer thread below
 		// cannot fail before HttpClient.send() has genuinely started the exchange (see failingBody, below).
 		var connectionAccepted = new CountDownLatch(1);
@@ -189,7 +192,7 @@ class JettyHttpTransport_TransportFailure_Test {
 			};
 			var request = TransportRequest.builder()
 				.method("POST")
-				.uri(URI.create("http://localhost:" + serverSocket.getLocalPort() + "/x"))
+				.uri(URI.create("http://127.0.0.1:" + serverSocket.getLocalPort() + "/x"))
 				.body(TransportBody.of(failingBody))
 				.build();
 			// The background writer thread hits the IOException catch and closes the content stream,

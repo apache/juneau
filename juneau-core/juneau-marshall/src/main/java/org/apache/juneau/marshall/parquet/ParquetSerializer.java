@@ -123,10 +123,13 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		/**
 		 * Sets the compression codec.
 		 *
-		 * @param value UNCOMPRESSED or GZIP.
+		 * @param value UNCOMPRESSED or GZIP.  <jk>null</jk> resets to UNCOMPRESSED.
 		 * @return This object.
+		 * @throws IllegalArgumentException If the codec cannot be written (e.g. SNAPPY, which is decode-only).
 		 */
 		public Builder compressionCodec(CompressionCodec value) {
+			if (value != null && ! value.writable())
+				throw CompressionCodec.forWriteError(value.name());
 			compressionCodec = or(value, CompressionCodec.UNCOMPRESSED);
 			return this;
 		}

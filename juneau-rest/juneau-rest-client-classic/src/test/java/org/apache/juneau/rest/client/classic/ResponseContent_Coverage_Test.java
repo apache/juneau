@@ -39,6 +39,8 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class ResponseContent_Coverage_Test {
 
 	private static HttpServer server;
@@ -47,10 +49,14 @@ class ResponseContent_Coverage_Test {
 
 	@BeforeAll
 	static void startServer() throws IOException {
-		server = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind
+		// can be handed an ephemeral port that another process already holds on 127.0.0.1 (SO_REUSEADDR), and that
+		// more-specific listener then wins every "localhost" connection -- the client hangs on its response.
+		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		port = server.getAddress().getPort();
 		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
-		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		// is a bottleneck under -T1C parallel load. (The "server failed to respond" flake once blamed on starvation was most likely
+		// the wildcard-bind port shadowing fixed by binding 127.0.0.1 above; the executor is kept as harmless.)
 		executor = Executors.newCachedThreadPool();
 		server.setExecutor(executor);
 		server.createContext("/echo", exchange -> {
@@ -87,11 +93,11 @@ class ResponseContent_Coverage_Test {
 	}
 
 	private static String url() {
-		return "http://localhost:" + port + "/echo";
+		return "http://127.0.0.1:" + port + "/echo";
 	}
 
 	private static String truncatedUrl() {
-		return "http://localhost:" + port + "/truncated";
+		return "http://127.0.0.1:" + port + "/truncated";
 	}
 
 	@Test void a01_asBytes_basicHttpEntityFastPath() throws Exception {

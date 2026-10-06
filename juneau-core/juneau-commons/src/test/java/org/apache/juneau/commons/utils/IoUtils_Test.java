@@ -82,6 +82,31 @@ class IoUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// drainQuietly(Closeable)
+	//====================================================================================================
+	@Test
+	void a001b_drainQuietly() throws IOException {
+		var is = new ByteArrayInputStream(new byte[1000]);
+		drainQuietly(is);
+		assertEquals(-1, is.read());
+
+		var r = new StringReader("x".repeat(1000));
+		drainQuietly(r);
+		assertEquals(-1, r.read());
+
+		// Throwing stream: exception swallowed.
+		assertDoesNotThrow(() -> drainQuietly(new InputStream() {
+			@Override public int read() throws IOException { throw new IOException("Test exception"); }
+		}));
+
+		// Non-stream Closeable and null: no-op, not closed.
+		var closed = new AtomicBoolean();
+		drainQuietly((Closeable)() -> closed.set(true));
+		drainQuietly(null);
+		assertFalse(closed.get());
+	}
+
+	//====================================================================================================
 	// closeQuietly(InputStream)
 	//====================================================================================================
 	@Test

@@ -30,8 +30,6 @@ class ParquetAnnotation_Test {
 	@Test void a01_defaultValue() {
 		var a = ParquetAnnotation.DEFAULT;
 		assertNotNull(a);
-		assertEquals("", a.parquetType());
-		assertEquals("", a.logicalType());
 	}
 
 	@Test void a02_defaultEquality() {
@@ -54,8 +52,6 @@ class ParquetAnnotation_Test {
 	@Test void d01_defaultDeclarativeAnnotations() {
 		var d1 = D1.class.getAnnotationsByType(Parquet.class)[0];
 		var d2 = D2.class.getAnnotationsByType(Parquet.class)[0];
-		assertEquals("", d1.parquetType());
-		assertEquals("", d1.logicalType());
 		assertEquals(d1, d2);
 		assertEquals(d1.hashCode(), d2.hashCode());
 	}
@@ -63,34 +59,6 @@ class ParquetAnnotation_Test {
 	@Test void d02_defaultEqualsDeclarative() {
 		var d1 = D1.class.getAnnotationsByType(Parquet.class)[0];
 		assertEquals(ParquetAnnotation.DEFAULT, d1);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Comparison with declared annotations — explicit values.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Parquet(parquetType="BYTE_ARRAY", logicalType="STRING")
-	public static class D3 {}
-
-	@Parquet(parquetType="BYTE_ARRAY", logicalType="STRING")
-	public static class D4 {}
-
-	@Test void d03_explicitValues() {
-		var d3 = D3.class.getAnnotationsByType(Parquet.class)[0];
-		assertEquals("BYTE_ARRAY", d3.parquetType());
-		assertEquals("STRING", d3.logicalType());
-	}
-
-	@Test void d04_explicitEquality() {
-		var d3 = D3.class.getAnnotationsByType(Parquet.class)[0];
-		var d4 = D4.class.getAnnotationsByType(Parquet.class)[0];
-		assertEquals(d3, d4);
-		assertEquals(d3.hashCode(), d4.hashCode());
-	}
-
-	@Test void d05_explicitNotEqualDefault() {
-		var d3 = D3.class.getAnnotationsByType(Parquet.class)[0];
-		assertNotEquals(ParquetAnnotation.DEFAULT, d3);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -134,10 +102,45 @@ class ParquetAnnotation_Test {
 	@ParquetConfig(compressionCodec = "SNAPPY")
 	public static class G01b_Class {}
 
-	@Test void g01b_parquetConfigNonGzipCodecFallsToUncompressed() {
-		// "SNAPPY" is not "GZIP" → ternary false branch → CompressionCodec.UNCOMPRESSED
-		var s = ParquetSerializer.create().applyAnnotations(G01b_Class.class).build();
-		assertNotNull(s);
+	@Test void g01b_parquetConfigSnappyWriteFailsFast() {
+		var ex = assertThrows(RuntimeException.class, () -> ParquetSerializer.create().applyAnnotations(G01b_Class.class).build());
+		assertTrue(messages(ex).contains("SNAPPY"), () -> messages(ex));
+		assertTrue(messages(ex).contains("UNCOMPRESSED, GZIP"), () -> messages(ex));
+	}
+
+	@ParquetConfig(compressionCodec = "GZPI")
+	public static class G01c_Class {}
+
+	@Test void g01c_parquetConfigTypoFailsFast() {
+		var ex = assertThrows(RuntimeException.class, () -> ParquetSerializer.create().applyAnnotations(G01c_Class.class).build());
+		assertTrue(messages(ex).contains("GZPI"), () -> messages(ex));
+		assertTrue(messages(ex).contains("UNCOMPRESSED, GZIP"), () -> messages(ex));
+	}
+
+	@ParquetConfig(compressionCodec = "gzip")
+	public static class G01d_Class {}
+
+	@ParquetConfig(compressionCodec = "Uncompressed")
+	public static class G01e_Class {}
+
+	@Test void g01d_parquetConfigValidCodecsCaseInsensitive() throws Exception {
+		for (var c : new Class<?>[] { G01d_Class.class, G01e_Class.class }) {
+			var s = ParquetSerializer.create().applyAnnotations(c).build();
+			var out = (java.util.List<ParquetSerializerBuilder_Test.KBean>) ParquetParser.DEFAULT.read(
+				s.write(java.util.List.of(new ParquetSerializerBuilder_Test.KBean("v"))), java.util.List.class, ParquetSerializerBuilder_Test.KBean.class);
+			assertEquals("v", out.get(0).k);
+		}
+	}
+
+	@Test void g01f_parquetConfigParserIgnoresCodec() {
+		assertNotNull(ParquetParser.create().applyAnnotations(G01b_Class.class).build());
+	}
+
+	private static String messages(Throwable t) {
+		var sb = new StringBuilder();
+		for (; t != null; t = t.getCause())
+			sb.append(t.getMessage()).append(" | ");
+		return sb.toString();
 	}
 
 	@ParquetConfig(addBeanTypes = "true")

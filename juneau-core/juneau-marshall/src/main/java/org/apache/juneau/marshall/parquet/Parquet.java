@@ -31,11 +31,4 @@ import java.lang.annotation.*;
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-public @interface Parquet {
-
-	/** Override Parquet physical type.  <b>Reserved:</b> currently read by neither the serializer nor the parser, so it has no effect. */
-	String parquetType() default "";
-
-	/** Override logical type.  <b>Reserved:</b> currently read by neither the serializer nor the parser, so it has no effect. */
-	String logicalType() default "";
-}
+public @interface Parquet {}

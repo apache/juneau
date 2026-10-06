@@ -141,6 +141,40 @@ class BoundedServletInputStream_Test extends TestBase {
 		}
 	}
 
+	@Test void c05_readBuf_exactBound_thenEof() throws Exception {
+		try (var in = new BoundedServletInputStream(new ByteArrayInputStream("abc".getBytes()), 3)) {
+			var buf = new byte[10];
+			assertEquals(3, in.read(buf, 0, 10));
+			assertEquals(-1, in.read(buf, 0, 10));
+			assertEquals(-1, in.read(buf));
+			assertEquals(-1, in.read());
+			assertEquals(0, in.read(buf, 0, 0));
+		}
+	}
+
+	@Test void c06_readBuf_overRead_throws() throws Exception {
+		try (var in = new BoundedServletInputStream(new ByteArrayInputStream("abcdef".getBytes()), 3)) {
+			var buf = new byte[10];
+			assertEquals(3, in.read(buf, 0, 10));
+			assertThrows(IOException.class, () -> in.read(buf, 0, 10));
+		}
+	}
+
+	@Test void c07_emptyBody_zeroLimit_returnsEof() throws Exception {
+		try (var in = new BoundedServletInputStream(new ByteArrayInputStream(new byte[0]), 0)) {
+			assertEquals(-1, in.read(new byte[10]));
+			assertEquals(-1, in.read());
+		}
+	}
+
+	@Test void c08_read_exactBound_singleByteThenEof() throws Exception {
+		try (var in = new BoundedServletInputStream(new ByteArrayInputStream("ab".getBytes()), 2)) {
+			assertEquals('a', in.read());
+			assertEquals('b', in.read());
+			assertEquals(-1, in.read());
+		}
+	}
+
 	@Test void c04_readBuf_overLimit_throws() throws Exception {
 		// With remain<0 enforcement, asking for more than remain gets clamped, but if a subsequent
 		// read goes negative we expect an IOException via decrement(numBytes).

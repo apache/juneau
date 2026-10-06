@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+// Fixtures bind/connect via explicit 127.0.0.1: a wildcard bind can be handed a port another process holds on 127.0.0.1.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class JettyHttpTransport_StaleConnectionRetry_Test {
 
 	// =================================================================================================================
@@ -85,14 +88,14 @@ class JettyHttpTransport_StaleConnectionRetry_Test {
 
 		A01_StaleServer(int staleConnections) throws IOException {
 			this.staleConnections = staleConnections;
-			this.serverSocket = new ServerSocket(0);
+			this.serverSocket = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"));
 			var acceptThread = new Thread(this::acceptLoop, "jetty-stale-server");
 			acceptThread.setDaemon(true);
 			acceptThread.start();
 		}
 
 		String rootUrl() {
-			return "http://localhost:" + serverSocket.getLocalPort();
+			return "http://127.0.0.1:" + serverSocket.getLocalPort();
 		}
 
 		int connectionCount() {

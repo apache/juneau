@@ -35,6 +35,8 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // client() returns a RestClient whose ownership is transferred to the caller, who is responsible for closing it; Eclipse JDT's @Owning warning is by design.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class RestRequest_Rethrow_Coverage_Test {
 
 	// Constructors (and classes) are public: RestRequest#run() locates rethrow candidates via
@@ -82,10 +84,14 @@ class RestRequest_Rethrow_Coverage_Test {
 
 	@BeforeAll
 	static void startServer() throws IOException {
-		server = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind
+		// can be handed an ephemeral port that another process already holds on 127.0.0.1 (SO_REUSEADDR), and that
+		// more-specific listener then wins every "localhost" connection -- the client hangs on its response.
+		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		port = server.getAddress().getPort();
 		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
-		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		// is a bottleneck under -T1C parallel load. (The "server failed to respond" flake once blamed on starvation was most likely
+		// the wildcard-bind port shadowing fixed by binding 127.0.0.1 above; the executor is kept as harmless.)
 		executor = Executors.newCachedThreadPool();
 		server.setExecutor(executor);
 		server.createContext("/thrown", exchange -> {
@@ -121,7 +127,7 @@ class RestRequest_Rethrow_Coverage_Test {
 	}
 
 	private static String url(String path) {
-		return "http://localhost:" + port + path;
+		return "http://127.0.0.1:" + port + path;
 	}
 
 	private static RestClient client() {

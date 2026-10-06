@@ -41,8 +41,9 @@ public @interface ParquetConfig {
 	 * Compression codec used when <b>writing</b> (<js>"UNCOMPRESSED"</js> or <js>"GZIP"</js>, case-insensitive).
 	 *
 	 * <p>
-	 * Any other value (including <js>"SNAPPY"</js>, which the parser can decode but the serializer cannot write)
-	 * falls back to <js>"UNCOMPRESSED"</js>.  The parser detects the codec from the file and ignores this setting.
+	 * Any other value fails fast with an {@link IllegalArgumentException} naming the bad value and the valid write
+	 * codecs.  This includes unknown names (typos) and <js>"SNAPPY"</js>, which the parser can decode but the
+	 * serializer cannot write.  The parser detects the codec from the file and ignores this setting.
 	 */
 	String compressionCodec() default "";
 

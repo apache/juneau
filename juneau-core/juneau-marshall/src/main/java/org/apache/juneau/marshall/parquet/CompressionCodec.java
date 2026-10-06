@@ -106,6 +106,30 @@ public enum CompressionCodec {
 		this.thriftValue = thriftValue;
 	}
 
+	/**
+	 * Resolves a codec name for <b>writing</b>.
+	 *
+	 * @param name The codec name (case-insensitive).  Only <c>UNCOMPRESSED</c> and <c>GZIP</c> are writable.
+	 * @return The matching codec.
+	 * @throws IllegalArgumentException If the name is unknown or names a decode-only codec such as <c>SNAPPY</c>.
+	 */
+	static CompressionCodec forWrite(String name) {
+		for (var c : values())
+			if (c.writable() && c.name().equalsIgnoreCase(name))
+				return c;
+		throw forWriteError(name);
+	}
+
+	static IllegalArgumentException forWriteError(String name) {
+		return new IllegalArgumentException("Unsupported Parquet compression codec for writing: '" + name
+			+ "'. Valid write codecs: UNCOMPRESSED, GZIP."
+			+ (SNAPPY.name().equalsIgnoreCase(name) ? " SNAPPY is decode-only and cannot be written." : ""));
+	}
+
+	boolean writable() {
+		return this != SNAPPY;
+	}
+
 	abstract byte[] compress(byte[] data) throws IOException;
 
 	abstract byte[] decompress(byte[] data, int uncompressedSize) throws IOException;

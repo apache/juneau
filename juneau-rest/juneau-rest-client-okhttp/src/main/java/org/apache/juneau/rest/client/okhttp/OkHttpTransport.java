@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.okhttp;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.time.*;
 
 import org.apache.juneau.rest.client.*;
 
@@ -122,9 +123,12 @@ public final class OkHttpTransport implements HttpTransport {
 
 	private static TransportResponse sendOnce(TransportRequest request, OkHttpClient client) throws TransportException {
 		var okRequest = buildOkRequest(request);
+		var timeout = request.getTimeout();
+		// Per-request read timeout (response-header wait and gaps between body reads); newBuilder() shares the connection pool.
+		var effective = timeout == null ? client : client.newBuilder().readTimeout(timeout).build();
 		Response okResponse;
 		try {
-			okResponse = client.newCall(okRequest).execute();
+			okResponse = effective.newCall(okRequest).execute();
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}

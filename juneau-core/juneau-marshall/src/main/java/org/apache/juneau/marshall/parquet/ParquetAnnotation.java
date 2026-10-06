@@ -31,12 +31,6 @@ public class ParquetAnnotation {
 		Object() {
 			super(new AnnotationObject.Builder(Parquet.class));
 		}
-
-		@Override
-		public String parquetType() { return ""; }
-
-		@Override
-		public String logicalType() { return ""; }
 	}
 
 	/** Default value */

@@ -80,10 +80,10 @@ final class SearchParser {
 			if (item != null)
 				items.add(item);
 			p.skipWs();
-			if (p.atEnd())
-				break;
-			p.expect(',');
-			p.skipWs();
+			if (! p.atEnd()) {
+				p.expect(',');
+				p.skipWs();
+			}
 		}
 		checkNoDuplicateTopLevelColumns(items);
 		return items;
@@ -147,7 +147,8 @@ final class SearchParser {
 			validateArity(kind, 0);
 			return null;
 		}
-		while (true) {
+		var closed = false;
+		while (! closed) {
 			rawCount++;
 			SearchItem child = parseItem();
 			if (child != null)
@@ -156,14 +157,12 @@ final class SearchParser {
 			if (atEnd())
 				throw new BeanQuerySyntaxException(BeanQuerySyntaxException.Code.UNBALANCED, "Unbalanced group in search.");
 			char c = peek();
-			if (c == ')') {
-				pos++;
-				break;
-			}
-			if (c != ',')
+			if (c != ')' && c != ',')
 				throw new BeanQuerySyntaxException(BeanQuerySyntaxException.Code.UNBALANCED, "Unbalanced group in search.");
 			pos++;
-			skipWs();
+			closed = c == ')';
+			if (! closed)
+				skipWs();
 		}
 		validateArity(kind, rawCount);
 		if (children.isEmpty())
@@ -197,14 +196,13 @@ final class SearchParser {
 			if (c == '\\' && pos + 1 < len) {
 				sb.append(s.charAt(pos + 1));
 				pos += 2;
-				continue;
-			}
-			if (c == '=') {
+			} else if (c == '=') {
 				pos++;
 				return sb.toString();
+			} else {
+				sb.append(c);
+				pos++;
 			}
-			sb.append(c);
-			pos++;
 		}
 		throw new BeanQuerySyntaxException(BeanQuerySyntaxException.Code.UNBALANCED, "Missing '=' after column '%s' in search.", sb);
 	}

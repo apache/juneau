@@ -354,6 +354,20 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 			assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, v), v.getClass().getName());
 	}
 
+	@Test void j03c_isScalarPart_calendarTypes_true() throws Exception {
+		for (var v : calendarValues())
+			assertEquals(true, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, v), v.getClass().getName());
+	}
+
+	@Test void e06c_isBean_calendarTypes_false() throws Exception {
+		for (var v : calendarValues())
+			assertEquals(false, invokeStatic("isBean", new Class<?>[]{Object.class}, v), v.getClass().getName());
+	}
+
+	private static Object[] calendarValues() {
+		return new Object[]{ java.util.Calendar.getInstance(), new java.util.GregorianCalendar(2026, 0, 2) };
+	}
+
 	@Test void j04_isScalarPart_nonScalar_false() throws Exception {
 		assertEquals(false, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, List.of("x")));
 		assertEquals(false, invokeStatic("isScalarPart", new Class<?>[]{Object.class}, new Object()));

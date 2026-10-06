@@ -54,6 +54,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>
  * 		Collections of beans are converted to repeated field names.
  * 	<li>
+ * 		Nested collections/arrays (e.g. <c>List&lt;List&lt;Integer&gt;&gt;</c>) have no native protobuf text syntax, so each inner
+ * 		list is written as a repeated message wrapping a single <c>_value</c> field (e.g. <c>grid {_value: [2, 3]}</c>).
+ * 		{@link PrototextParser} unwraps these when the target type is a list or array; parsing into an untyped
+ * 		map leaves the <c>_value</c> wrapper in place.
+ * 	<li>
+ * 		Every message ends with a newline, with or without whitespace enabled, so fields are always separated.
+ * 	<li>
  * 		{@link String Strings} are converted to quoted strings with C-style escaping.
  * 	<li>
  * 		{@link Number Numbers} (e.g. {@link Integer}, {@link Long}, {@link Double}) are converted to numeric literals.

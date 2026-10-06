@@ -35,6 +35,8 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // Client instances are short-lived test fixtures.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class RestClient_RedirectCredentials_Test {
 
 	private static HttpServer serverA;
@@ -46,22 +48,25 @@ class RestClient_RedirectCredentials_Test {
 	@BeforeAll
 	static void startServers() throws IOException {
 		// Without an explicit executor, exchanges run on each HttpServer's single internal dispatch thread,
-		// which starves under -T1C reactor-level parallel test load and can fail with "server failed to
-		// respond". One shared pool is enough since both servers only ever field short-lived test requests.
+		// which is a bottleneck under -T1C parallel load. (The "server failed to respond" flake once blamed on starvation was most
+		// likely the wildcard-bind port shadowing fixed by binding 127.0.0.1 above; the executor is kept as harmless.) One shared pool is enough since both servers only ever field short-lived test requests.
 		executor = Executors.newCachedThreadPool();
 
-		serverB = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind
+		// can be handed an ephemeral port that another process already holds on 127.0.0.1 (SO_REUSEADDR), and that
+		// more-specific listener then wins every "localhost" connection -- the client hangs on its response.
+		serverB = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		portB = serverB.getAddress().getPort();
 		serverB.setExecutor(executor);
 		serverB.createContext("/echo-creds", RestClient_RedirectCredentials_Test::echoCreds);
 		serverB.start();
 
-		serverA = HttpServer.create(new InetSocketAddress(0), 0);
+		serverA = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		portA = serverA.getAddress().getPort();
 		serverA.setExecutor(executor);
 		serverA.createContext("/echo-creds", RestClient_RedirectCredentials_Test::echoCreds);
-		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://localhost:" + portB + "/echo-creds"));
-		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://localhost:" + portA + "/echo-creds"));
+		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://127.0.0.1:" + portB + "/echo-creds"));
+		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
 		serverA.start();
 	}
 
@@ -94,7 +99,7 @@ class RestClient_RedirectCredentials_Test {
 
 	@Test
 	void a01_crossOrigin_stripsCredentials() throws Exception {
-		try (var client = RestClient.create().rootUrl("http://localhost:" + portA).build()) {
+		try (var client = RestClient.create().rootUrl("http://127.0.0.1:" + portA).build()) {
 			try (var response = client.get("/redirect-cross")
 					.header("Authorization", "Bearer secret-token")
 					.header("Cookie", "session=abc123")
@@ -107,7 +112,7 @@ class RestClient_RedirectCredentials_Test {
 
 	@Test
 	void a02_sameOrigin_forwardsCredentials() throws Exception {
-		try (var client = RestClient.create().rootUrl("http://localhost:" + portA).build()) {
+		try (var client = RestClient.create().rootUrl("http://127.0.0.1:" + portA).build()) {
 			try (var response = client.get("/redirect-same")
 					.header("Authorization", "Bearer secret-token")
 					.run()) {

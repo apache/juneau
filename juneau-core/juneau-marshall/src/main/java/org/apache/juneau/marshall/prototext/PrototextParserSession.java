@@ -324,6 +324,15 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	private Object convertValue(Object val, ClassMeta<?> targetType) throws ParseException, ExecutableException {
 		if (val == null)
 			return null;
+		// A repeated field with a single occurrence parses as a bare value rather than a one-element list,
+		// and a nested list is wrapped in a "_value" message (see PrototextSerializerSession); normalize both
+		// before dispatching on the declared collection/array type.
+		if (targetType.isCollectionOrArray() && targetType.inner() != byte[].class) {
+			if (val instanceof Map val2 && val2.size() == 1 && val2.containsKey("_value"))
+				val = val2.get("_value");
+			if (!(val instanceof List))
+				val = l(val);
+		}
 		if (val instanceof Map val2) {
 			if (JsonMap.class.isAssignableFrom(targetType.inner()))
 				return toJsonMap(val2);

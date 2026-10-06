@@ -25,12 +25,22 @@ Options:
     --no-container           Exclude @Tag("container") tests
     --timing-log <path>      Append per-(module, bucket) timing JSONL records
     --enforce-perf           Hard-fail if wall-clock exceeds perf-baseline.txt ±20% tolerance
+    --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
+                             juneau-rest-server-views).  Fails if Node/npm are missing.
+    --no-js-tests            Never run the JS harness (overrides auto-detect)
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
 
 Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
+
+JS tests (WORK-J0608):
+    CI's js-tests job is the only thing that normally runs the browser tests (-Pjs-tests).  When neither
+    --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .css or .ftl
+    file under a src/ tree differs from origin/master (committed, uncommitted or untracked).  If Node/npm
+    are not on the PATH, an auto-enabled run prints a notice and skips; an explicit --js-tests fails instead.
+    The first run downloads Playwright + Chromium (needs network); later runs reuse target/js.
 
 Perf guard (per-module, TODO-160):
     Timing/perf statistics are collected PER MODULE.  write_timing_log() discovers every
@@ -52,6 +62,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -387,6 +398,71 @@ def test(verbose=False, no_container=False):
 	return run_command(cmd, verbose)
 
 
+JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
+JS_SOURCE_SUFFIXES = (".js", ".css", ".ftl")
+
+
+def is_js_source(path):
+	"""True for a .js/.css/.ftl file that lives under a src/ tree (any module)."""
+	p = path.replace("\\", "/")
+	parts = p.split("/")
+	return p.lower().endswith(JS_SOURCE_SUFFIXES) and "src" in parts[:-1]
+
+
+def changed_files_vs_origin(repo_root=None, base="origin/master"):
+	"""Paths changed in HEAD, the working tree or untracked, relative to `base`.  Empty list if git/base unavailable."""
+	repo_root = repo_root or Path(__file__).parent.parent
+	names = []
+	try:
+		for args in (["diff", "--name-only", base], ["ls-files", "--others", "--exclude-standard"]):
+			r = subprocess.run(["git", *args], cwd=str(repo_root), capture_output=True, text=True, check=True)
+			names.extend(line for line in r.stdout.splitlines() if line.strip())
+	except Exception:
+		return []
+	return names
+
+
+def should_run_js_tests(js_flag, no_js_flag, changed_files):
+	"""Resolve (enabled, explicit).  Explicit flags win (--no-js-tests over --js-tests); otherwise auto-detect."""
+	if no_js_flag:
+		return False, False
+	if js_flag:
+		return True, True
+	return any(is_js_source(f) for f in changed_files), False
+
+
+def js_prereq_problem():
+	"""Return a description of the missing browser prerequisite, or None if Node and npm are on the PATH."""
+	missing = [tool for tool in ("node", "npm") if shutil.which(tool) is None]
+	if missing:
+		return f"{' and '.join(missing)} not found on the PATH (the -Pjs-tests profile needs Node and npm)"
+	return None
+
+
+def js_tests(verbose=False):
+	cmd = (f"mvn -Pjs-tests -pl {JS_TEST_MODULE} -am test -Drat.skip=true "
+		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
+	return run_command(cmd, verbose)
+
+
+def maybe_run_js_tests(js_flag, no_js_flag, changed_files, verbose=False, runner=None):
+	"""Run the JS harness if enabled.  Returns 0 on pass/skip, non-zero on failure."""
+	enabled, explicit = should_run_js_tests(js_flag, no_js_flag, changed_files)
+	if not enabled:
+		return 0
+	problem = js_prereq_problem()
+	if problem:
+		if explicit:
+			print(f"\n❌ --js-tests requested but cannot run: {problem}.")
+			return 1
+		print(f"\n⚠️  JS files changed, but skipping JS tests: {problem}. (CI will still run them.)")
+		return 0
+	print("\n🌐 Running JS browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
+	code, _ = (runner or js_tests)(verbose)
+	print("\n✅ JS tests passed!" if code == 0 else "\n❌ JS tests failed!")
+	return code
+
+
 def profile(module, verbose=False):
 	ts = datetime.now().strftime("%Y%m%d-%H%M%S")
 	profile_dir = Path("target/profile-results")
@@ -411,6 +487,8 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	parser.add_argument("--no-container", action="store_true")
 	parser.add_argument("--timing-log")
 	parser.add_argument("--enforce-perf", action="store_true")
+	parser.add_argument("--js-tests", action="store_true", dest="js_tests")
+	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--profile")
 	parser.add_argument("--help", "-h", action="store_true")
 	args, unknown = parser.parse_known_args()
@@ -433,6 +511,9 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 
 	if build_only and test_only:
 		print("Cannot combine --build-only and --test-only")
+		return 1
+	if args.js_tests and args.no_js_tests:
+		print("Cannot combine --js-tests and --no-js-tests")
 		return 1
 
 	exit_code = 0
@@ -468,6 +549,10 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		perf_exit = run_perf_guard(test_elapsed, baseline_file, args.timing_log, enforce=args.enforce_perf)
 		if perf_exit != 0:
 			return perf_exit
+		js_changed = [] if (args.js_tests or args.no_js_tests) else changed_files_vs_origin()
+		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed, verbose)
+		if js_exit != 0:
+			return js_exit
 	return exit_code
 
 if __name__ == '__main__':

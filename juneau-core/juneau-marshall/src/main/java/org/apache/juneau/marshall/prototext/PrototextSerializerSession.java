@@ -285,7 +285,12 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				// List<ChildBean>/List<Map> bean property still resolves to nested messages instead of
 				// degrading to scalar toString().
 				var elType = cMeta.isCollectionOrArray() ? cMeta.getElementType() : aType.getElementType();
-				if (elType.isBean() || elType.isMap()) {
+				var nested = isNestedCollection(elType);
+				if (!nested && elType.isObject() && !c.isEmpty())
+					nested = isNestedCollection(getClassMetaForObject(c.iterator().next()));
+				if (nested) {
+					writeCollection(out, c, cMeta.isCollectionOrArray() ? cMeta : aType, key);
+				} else if (elType.isBean() || elType.isMap()) {
 					if (ctx.useListSyntaxForBeans) {
 						out.scalarField(key);
 						out.listStart();
@@ -365,8 +370,22 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			writeBeanMap(out, toBeanMap(item), null);
 		else if (aType.isMap())
 			writeMap(out, (Map) item, aType);
-		else
+		else if (isNestedCollection(aType)) {
+			out.cr(indent);
+			writeCollection(out, aType.isArray() ? toList(aType.inner(), item) : (Collection<?>) item, aType, "_value");
+		} else
 			writeScalarValue(out, item, aType);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the type is a collection or array that must be written as a nested message.
+	 *
+	 * <p>
+	 * Protobuf text format has no list-of-lists syntax, so each inner list is written as a message containing
+	 * a single <c>_value</c> field (e.g. <c>grid { _value: [1, 2] }</c>).  <c>byte[]</c> is a scalar.
+	 */
+	private static boolean isNestedCollection(ClassMeta<?> type) {
+		return type.isCollection() || (type.isArray() && type.inner() != byte[].class);
 	}
 
 	private void writeBeanOrMapItem(PrototextWriter out, Object item) throws SerializeException {
@@ -380,10 +399,11 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	private void writeCollection(PrototextWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {
 		var elType = type.getElementType();
 		// When element type is Object, resolve actual type from first element for beans/maps
-		var elementIsBeanOrMap = elType.isBean() || elType.isMap();
+		// Nested collections/arrays are written as one message per element wrapping a "_value" field.
+		var elementIsBeanOrMap = elType.isBean() || elType.isMap() || isNestedCollection(elType);
 		if (!elementIsBeanOrMap && elType.isObject() && !c.isEmpty()) {
-			var first = c.iterator().next();
-			elementIsBeanOrMap = getClassMetaForObject(first).isBean() || getClassMetaForObject(first).isMap();
+			var firstType = getClassMetaForObject(c.iterator().next());
+			elementIsBeanOrMap = firstType.isBean() || firstType.isMap() || isNestedCollection(firstType);
 		}
 		if (elementIsBeanOrMap) {
 			if (ctx.useListSyntaxForBeans && nn(fieldName)) {

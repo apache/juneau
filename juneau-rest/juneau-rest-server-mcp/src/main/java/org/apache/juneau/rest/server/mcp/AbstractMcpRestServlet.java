@@ -23,6 +23,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.health.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**
@@ -57,7 +58,7 @@ import org.apache.juneau.rest.server.servlet.*;
  */
 @Rest
 @SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
-public abstract class AbstractMcpRestServlet extends BasicRestServlet {
+public abstract class AbstractMcpRestServlet extends BasicRestServlet implements ReadinessStateAware {
 	private static final long serialVersionUID = 1L;
 
 	private final transient AtomicReference<McpServerConfig> config = new AtomicReference<>();
@@ -129,6 +130,26 @@ public abstract class AbstractMcpRestServlet extends BasicRestServlet {
 	 */
 	protected McpSubscriptionBroker getSubscriptionBroker() {
 		return null;
+	}
+
+	/**
+	 * Closes this servlet's open subscription streams as soon as the embedded server begins shutting down.
+	 *
+	 * <p>
+	 * A {@code subscriptions/listen} stream never finishes on its own, so without this the server's graceful
+	 * drain would wait out its entire stop timeout (30s by default) for every connected subscriber before it
+	 * could stop.  Closing the subscriptions makes each stream send its terminal frame and complete, letting
+	 * the drain finish immediately.
+	 *
+	 * @param state The per-service readiness state published by the embedded-server lifecycle component.
+	 */
+	@Override /* ReadinessStateAware */
+	public void acceptReadinessState(ReadinessState state) {
+		state.onOutOfService(this, () -> {
+			var broker = getSubscriptionBroker();
+			if (broker != null)
+				broker.closeAll();
+		});
 	}
 
 	/**

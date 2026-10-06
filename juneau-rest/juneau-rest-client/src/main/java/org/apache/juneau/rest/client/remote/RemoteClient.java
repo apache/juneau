@@ -1149,9 +1149,10 @@ public final class RemoteClient {
 				|| arg instanceof Character || arg instanceof Enum || isDateTime(arg);
 		}
 
-		/** Returns <jk>true</jk> for {@link java.util.Date} and {@code java.time} values (Instant, LocalDate, Duration, Period, ...), which are scalars. */
+		/** Returns <jk>true</jk> for {@link java.util.Date}, {@link java.util.Calendar} and {@code java.time} values (Instant, LocalDate, Duration, Period, ...), which are scalars. */
 		private static boolean isDateTime(Object arg) {
-			return arg instanceof java.util.Date || arg instanceof java.time.temporal.Temporal || arg instanceof java.time.temporal.TemporalAmount;
+			// Q: Don't use FQCNs here.
+			return arg instanceof java.util.Date || arg instanceof java.util.Calendar || arg instanceof java.time.temporal.Temporal || arg instanceof java.time.temporal.TemporalAmount;
 		}
 
 		/**

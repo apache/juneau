@@ -21,6 +21,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.config.*;
 import org.apache.http.conn.socket.*;
@@ -205,10 +206,26 @@ public final class ApacheHc45Transport implements HttpTransport {
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private static HttpUriRequest buildHcRequest(TransportRequest request) throws TransportException {
+	// The effective default config to layer the per-request timeouts on: the request's own config if any, else the
+	// client's default, else the HttpClient defaults -- so client-level settings (redirects, cookie spec, ...) survive.
+	private RequestConfig baseConfig(RequestBuilder builder) {
+		if (builder.getConfig() != null)
+			return builder.getConfig();
+		if (httpClient instanceof Configurable c && c.getConfig() != null)
+			return c.getConfig();
+		return RequestConfig.DEFAULT;
+	}
+
+	private HttpUriRequest buildHcRequest(TransportRequest request) throws TransportException {
 		var builder = RequestBuilder.create(request.getMethod()).setUri(request.getUri());
 		for (var h : request.getHeaders())
 			builder.addHeader(h.name(), h.value());
+		var timeout = request.getTimeout();
+		if (timeout != null) {
+			// Per-request socket (read) and connect timeouts; overrides the client's default RequestConfig for this call only.
+			var ms = (int)Math.min(Integer.MAX_VALUE, Math.max(1, timeout.toMillis()));
+			builder.setConfig(RequestConfig.copy(baseConfig(builder)).setSocketTimeout(ms).setConnectTimeout(ms).build());
+		}
 		var body = request.getBody();
 		if (body != null)
 			builder.setEntity(new TransportBodyEntity(body));

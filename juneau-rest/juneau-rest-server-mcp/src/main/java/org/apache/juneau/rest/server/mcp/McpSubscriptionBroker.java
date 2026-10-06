@@ -86,4 +86,17 @@ public interface McpSubscriptionBroker extends McpSubscriptions {
 	 * @return The active count.
 	 */
 	int activeCount();
+
+	/**
+	 * Closes every currently registered subscription.
+	 *
+	 * <p>
+	 * Called when the server begins shutting down, so open {@code subscriptions/listen} streams complete
+	 * promptly instead of holding the graceful drain open until its stop timeout.  The default implementation
+	 * does nothing, so custom brokers that predate this method keep working (their streams then end on the
+	 * normal heartbeat/idle-timeout paths).
+	 */
+	default void closeAll() {
+		// No-op by default.
+	}
 }

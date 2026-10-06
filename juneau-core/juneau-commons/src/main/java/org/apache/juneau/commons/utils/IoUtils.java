@@ -130,6 +130,30 @@ public class IoUtils {
 	}
 
 	/**
+	 * Reads and discards the remainder of a reader or input stream, ignoring any exceptions.
+	 *
+	 * <p>
+	 * Reads until end-of-stream using a 256-unit buffer.  Any {@link IOException} stops the drain silently.
+	 * No-op if the object is <jk>null</jk> or is neither a {@link Reader} nor an {@link InputStream}.
+	 * The stream is not closed.
+	 *
+	 * @param in The reader or input stream to drain.
+	 */
+	public static void drainQuietly(Closeable in) {
+		try {
+			if (in instanceof Reader r) {
+				var buf = new char[256];
+				while (r.read(buf) != -1) { /* discard */ }
+			} else if (in instanceof InputStream is) {
+				var buf = new byte[256];
+				while (is.read(buf) != -1) { /* discard */ }
+			}
+		} catch (IOException ignored) {
+			// best-effort
+		}
+	}
+
+	/**
 	 * Close input stream and ignore any exceptions.
 	 *
 	 * <p>

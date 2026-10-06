@@ -203,20 +203,15 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 				} else if (aType.isMap()) {
 					w.tableHeader(newPath);
 					writeMapAsTable(w, newPath, (Map)value, cMeta);
-				} else if (aType.isCollection() || aType.isArray()) {
-					Collection<?> col = aType.isArray() ? toList(aType.inner(), value) : (Collection<?>)value;
-					ClassMeta<?> elType = aType.getElementType();
-					if (elType.isBean() || elType.isMap()) {
-						for (Object item : col) {
-							w.blankLine();
-							w.arrayOfTablesHeader(newPath);
-							if (elType.isBean())
-								writeBean(w, toBeanMap(item), newPath);
-							else
-								writeMapAsTable(w, newPath, (Map)item, elType);
-						}
-					} else {
-						writeKeyValue(w, key, value, pMeta);
+				} else {
+					// Only table-worthy collections/arrays (non-empty, all bean/map elements) reach this bucket.
+					for (Object item : tableElements(value)) {
+						w.blankLine();
+						w.arrayOfTablesHeader(newPath);
+						if (item instanceof Map<?,?> im)
+							writeMapAsTable(w, newPath, im, getClassMetaForObject(item));
+						else
+							writeBean(w, toBeanMap(item), newPath);
 					}
 				}
 			} else if (isKeepNullProperties()) {
@@ -286,29 +281,19 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			rType = swap.getSwapClassMeta(this);
 			if (rType.isObject())
 				rType = getClassMetaForObject(value);
-			aType = rType;
 		}
+		// Always dispatch on the runtime type: the declared/hinted type is often erased (e.g. Object for
+		// the elements of a List<Integer> whose runtime class is a raw List).
+		aType = rType;
 		if (value == null) {
 			w.stringValue(ctx.getNullValue());
 			return;
 		}
+		// A bean or map in value position (after '=' or inside an array) can only be an inline table.
 		if (aType.isBean()) {
-			BeanMap<?> bm = toBeanMap(value);
-			if (shouldUseInlineTable(bm)) {
-				w.inlineTableStart();
-				boolean[] first = {true};
-				Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
-				bm.forEachValue(checkNull, (pm, k, v, th) -> {
-					if (!first[0]) w.w(", ");
-					first[0] = false;
-					writeKey(w, k);
-					w.w(" = ");
-				writeValue(w, v, (ClassMeta<?>) pm.getBeanInfo(), pm);
-				});
-				w.inlineTableEnd();
-			} else {
-				writeBean(w, bm, "");
-			}
+			writeInlineTable(w, toBeanMap(value));
+		} else if (aType.isMap()) {
+			writeInlineTable(w, (Map<?,?>)value);
 		} else if (aType.isNumber()) {
 			if (value instanceof Float || value instanceof Double)
 				w.floatValue(((Number)value).doubleValue());
@@ -363,22 +348,18 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		} else if (aType.isCollection() || aType.isArray()) {
 			Collection<?> c = aType.isArray() ? toList(aType.inner(), value) : (Collection<?>)value;
 			ClassMeta<?> elType = aType.getElementType();
-			if (elType.isBean() || elType.isMap()) {
-				// Should have been handled in complex pass
-				w.stringValue(value.toString());
-			} else {
-				w.arrayStart();
-				boolean first = true;
-				for (Object el : c) {
-					if (!first) w.w(", ");
-					first = false;
-					if (el == null)
-						w.stringValue(ctx.getNullValue());
-					else
-						writeValue(w, el, elType, null);
-				}
-				w.arrayEnd();
+			// Beans/maps become inline tables inside the array; nested collections become nested arrays.
+			w.arrayStart();
+			boolean first = true;
+			for (Object el : c) {
+				if (!first) w.w(", ");
+				first = false;
+				if (el == null)
+					w.stringValue(ctx.getNullValue());
+				else
+					writeValue(w, el, elType, null);
 			}
+			w.arrayEnd();
 		} else {
 			w.stringValue(toString(value));
 		}
@@ -386,6 +367,60 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 
 	private void writeValue(TomlWriter w, Object value, ClassMeta<?> aType) throws SerializeException {
 		writeValue(w, value, aType, null);
+	}
+
+	private void writeInlineTable(TomlWriter w, BeanMap<?> bm) throws SerializeException {
+		w.inlineTableStart();
+		boolean[] first = {true};
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
+		bm.forEachValue(checkNull, (pm, k, v, th) -> {
+			if (!first[0]) w.w(", ");
+			first[0] = false;
+			writeKey(w, k);
+			w.w(" = ");
+			writeValue(w, v, (ClassMeta<?>) pm.getBeanInfo(), pm);
+		});
+		w.inlineTableEnd();
+	}
+
+	private void writeInlineTable(TomlWriter w, Map<?,?> map) throws SerializeException {
+		w.inlineTableStart();
+		boolean[] first = {true};
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
+		forEachEntry(map, e -> {
+			Object v = e.getValue();
+			if (!checkNull.test(v))
+				return;
+			if (!first[0]) w.w(", ");
+			first[0] = false;
+			writeKey(w, e.getKey() == null ? "null" : toString(e.getKey()));
+			w.w(" = ");
+			writeValue(w, v, object(), null);
+		});
+		w.inlineTableEnd();
+	}
+
+	/**
+	 * Returns the elements of a collection/array value if it is "table-worthy" (non-empty with every element a
+	 * non-null bean or map, so it can be written as a TOML array of tables), otherwise <jk>null</jk>.
+	 */
+	private List<Object> tableElements(Object value) throws SerializeException {
+		List<Object> l;
+		if (value instanceof Collection<?> c)
+			l = new ArrayList<>(c);
+		else if (value != null && value.getClass().isArray() && !value.getClass().getComponentType().isPrimitive())
+			l = new ArrayList<>(Arrays.asList((Object[])value));
+		else
+			return null;
+		if (l.isEmpty())
+			return null;
+		for (Object el : l) {
+			if (el instanceof Map)
+				continue;
+			if (el == null || !getClassMetaForObject(el).isBean())
+				return null;
+		}
+		return l;
 	}
 
 	private void writeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
@@ -412,8 +447,8 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			w.blankLine();
 			w.tableHeader(tablePath);
 			writeMapAsTable(w, tablePath, v2, getClassMetaForObject(value, hint));
-		} else if (value instanceof Collection<?> c && isTableWorthyCollection(c)) {
-			for (Object item : c) {
+		} else if (tableElements(value) != null) {
+			for (Object item : tableElements(value)) {
 				w.blankLine();
 				w.arrayOfTablesHeader(tablePath);
 				if (item instanceof Map<?,?> im)
@@ -424,18 +459,6 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		} else {
 			writeKeyValue(w, key, value, null);
 		}
-	}
-
-	private boolean isTableWorthyCollection(Collection<?> c) throws SerializeException {
-		if (c.isEmpty())
-			return false;
-		for (Object el : c) {
-			if (el instanceof Map)
-				continue;
-			if (el == null || !getClassMetaForObject(el).isBean())
-				return false;
-		}
-		return true;
 	}
 
 	private void writeArray(TomlWriter w, Collection<?> c, ClassMeta<?> type) throws SerializeException {
@@ -455,7 +478,9 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			BeanMap<?> bm = toBeanMap(value);
 			return shouldUseInlineTable(bm);
 		}
-		return !aType.isMap() && !(aType.isCollectionOrArray() && aType.getElementType().isBean());
+		if (aType.isCollectionOrArray())
+			return tableElements(value) == null;
+		return !aType.isMap();
 	}
 
 	private boolean shouldUseInlineTable(BeanMap<?> bm) {

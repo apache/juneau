@@ -138,4 +138,26 @@ class ParquetSerializerBuilder_Test extends TestBase {
 		}
 		assertNotNull(sb);
 	}
+
+	@Test void z01_builderSnappyFailsFast() {
+		var b = ParquetSerializer.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.compressionCodec(CompressionCodec.SNAPPY));
+		assertTrue(ex.getMessage().contains("SNAPPY"));
+		assertTrue(ex.getMessage().contains("UNCOMPRESSED, GZIP"));
+	}
+
+	@Test void z02_validWriteCodecsRoundTrip() throws Exception {
+		for (var c : new CompressionCodec[] { CompressionCodec.UNCOMPRESSED, CompressionCodec.GZIP }) {
+			var s = ParquetSerializer.create().compressionCodec(c).build();
+			var out = (List<KBean>) ParquetParser.DEFAULT.read(s.write(list(new KBean("v"))), List.class, KBean.class);
+			assertEquals("v", out.get(0).k);
+		}
+	}
+
+	@Test void z03_forWriteResolvesCaseInsensitive() {
+		assertSame(CompressionCodec.GZIP, CompressionCodec.forWrite("gZiP"));
+		assertSame(CompressionCodec.UNCOMPRESSED, CompressionCodec.forWrite("uncompressed"));
+		var ex = assertThrows(IllegalArgumentException.class, () -> CompressionCodec.forWrite("bogus"));
+		assertTrue(ex.getMessage().contains("'bogus'"));
+	}
 }

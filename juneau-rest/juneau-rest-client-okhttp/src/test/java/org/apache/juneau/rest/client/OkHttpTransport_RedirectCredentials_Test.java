@@ -36,6 +36,8 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
+// SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
+@Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class OkHttpTransport_RedirectCredentials_Test {
 
 	private static HttpServer serverA;
@@ -45,16 +47,18 @@ class OkHttpTransport_RedirectCredentials_Test {
 
 	@BeforeAll
 	static void startServers() throws IOException {
-		serverB = HttpServer.create(new InetSocketAddress(0), 0);
+		// Bind to (and connect via) the explicit IPv4 loopback, not the wildcard address + "localhost": a wildcard bind can be
+		// handed an ephemeral port another process already holds on 127.0.0.1 (SO_REUSEADDR), which then wins every "localhost" connection.
+		serverB = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		portB = serverB.getAddress().getPort();
 		serverB.createContext("/echo-creds", OkHttpTransport_RedirectCredentials_Test::echoCreds);
 		serverB.start();
 
-		serverA = HttpServer.create(new InetSocketAddress(0), 0);
+		serverA = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		portA = serverA.getAddress().getPort();
 		serverA.createContext("/echo-creds", OkHttpTransport_RedirectCredentials_Test::echoCreds);
-		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://localhost:" + portB + "/echo-creds"));
-		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://localhost:" + portA + "/echo-creds"));
+		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://127.0.0.1:" + portB + "/echo-creds"));
+		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
 		serverA.start();
 	}
 
@@ -86,7 +90,7 @@ class OkHttpTransport_RedirectCredentials_Test {
 	@Test
 	void a01_crossOrigin_stripsCredentials() throws Exception {
 		var transport = OkHttpTransport.create();
-		try (var client = RestClient.builder().transport(transport).rootUrl("http://localhost:" + portA).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://127.0.0.1:" + portA).build()) {
 			try (var response = client.get("/redirect-cross")
 					.header("Authorization", "Bearer secret-token")
 					.header("Cookie", "session=abc123")
@@ -100,7 +104,7 @@ class OkHttpTransport_RedirectCredentials_Test {
 	@Test
 	void a02_sameOrigin_forwardsCredentials() throws Exception {
 		var transport = OkHttpTransport.create();
-		try (var client = RestClient.builder().transport(transport).rootUrl("http://localhost:" + portA).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://127.0.0.1:" + portA).build()) {
 			try (var response = client.get("/redirect-same")
 					.header("Authorization", "Bearer secret-token")
 					.header("Cookie", "session=abc123")

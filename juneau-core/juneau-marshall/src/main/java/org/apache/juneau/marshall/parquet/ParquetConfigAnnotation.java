@@ -51,11 +51,8 @@ public class ParquetConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<ParquetConfig> ai, ParquetSerializer.Builder b) {
 			var a = ai.inner();
-			if (!a.compressionCodec().isEmpty()) {
-				var cc = eqic("GZIP", a.compressionCodec())
-					? CompressionCodec.GZIP : CompressionCodec.UNCOMPRESSED;
-				b.compressionCodec(cc);
-			}
+			if (!a.compressionCodec().isEmpty())
+				b.compressionCodec(CompressionCodec.forWrite(a.compressionCodec()));
 			if (!a.rowGroupSize().isEmpty())
 				b.rowGroupSize(Integer.parseInt(a.rowGroupSize()));
 			if (!a.pageSize().isEmpty())

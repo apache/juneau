@@ -148,7 +148,7 @@ public final class TransportRequest {
 	 *
 	 * <p>
 	 * A {@code null} value means the transport's own default applies.  Connect timeouts remain a client-level
-	 * concern.  Currently only {@link JavaHttpTransport} honors this value; other transports ignore it.
+	 * concern.  All built-in transports honor this value (JDK, Apache HttpClient 4.5/5, OkHttp, Jetty and the mock transport).
 	 *
 	 * @return The response timeout, possibly <jk>null</jk>.
 	 */
@@ -291,10 +291,13 @@ public final class TransportRequest {
 		/**
 		 * Sets the per-call response timeout.
 		 *
-		 * @param value The response timeout. May be <jk>null</jk> to use the transport default.
+		 * @param value The response timeout. May be <jk>null</jk> to use the transport default.  Must otherwise be positive.
 		 * @return This object.
+		 * @throws IllegalArgumentException If <c>value</c> is zero or negative.
 		 */
 		public Builder timeout(Duration value) {
+			if (value != null && (value.isZero() || value.isNegative()))
+				throw new IllegalArgumentException("Request timeout must be positive: " + value);
 			timeout = value;
 			return this;
 		}

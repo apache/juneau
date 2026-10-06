@@ -98,7 +98,7 @@ public final class JavaHttpTransport implements HttpTransport {
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");
 		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");
-		// Q: Can we use commons settings for accessing system properties?
+		// Raw System property access is intentional: the JDK reads this value from System properties only, so Settings overrides/sources must not be consulted.
 	}
 
 	private final HttpClient httpClient;
@@ -273,7 +273,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		// Use a pipe so body.writeTo() streams directly to the JDK client without full in-memory buffering.
 		// The writer runs on a daemon thread; the JDK client reads from the PipedInputStream on its own threads.
 		// The supplier runs when the client publishes the request body (not when the HttpRequest is built).
-		return BodyPublishers.ofInputStream(() -> {
+		var publisher = BodyPublishers.ofInputStream(() -> {
 			var in = new PipedInputStream();
 			try {
 				var out = new PipedOutputStream(in);
@@ -297,6 +297,12 @@ public final class JavaHttpTransport implements HttpTransport {
 				throw new UncheckedIOException(e);
 			}
 		});
+		// A repeatable body with a known length is sent fixed-length (Content-Length) rather than chunked;
+		// unknown-length (or non-repeatable streaming) bodies keep chunked transfer encoding.
+		var length = body.getContentLength();
+		if (body.isRepeatable() && length >= 0)
+			return length == 0 ? BodyPublishers.noBody() : BodyPublishers.fromPublisher(publisher, length);
+		return publisher;
 	}
 
 	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {

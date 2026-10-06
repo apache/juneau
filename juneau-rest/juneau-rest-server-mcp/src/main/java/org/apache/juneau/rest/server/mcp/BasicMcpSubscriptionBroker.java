@@ -106,6 +106,13 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 	}
 
 	@Override
+	public void closeAll() {
+		// close() removes the entry via the close callback; iterating a snapshot of the weakly-consistent view is safe.
+		for (var sub : subscriptions.values())
+			sub.close();
+	}
+
+	@Override
 	public void resourceUpdated(String uri) {
 		if (uri == null)
 			throw iaex("uri must not be null");

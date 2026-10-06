@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.health;
 
+import java.util.concurrent.*;
+
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -87,6 +89,7 @@ public final class ReadinessState {
 	}
 
 	private volatile boolean ready = true;
+	private final ConcurrentMap<Object,Runnable> outOfServiceListeners = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -130,6 +133,40 @@ public final class ReadinessState {
 	 */
 	public ReadinessState markOutOfService() {
 		ready = false;
+		for (var listener : outOfServiceListeners.values()) {
+			try {
+				listener.run();
+			} catch (RuntimeException e) { // NOSONAR - one failing listener must not stop shutdown or the remaining listeners
+				// Deliberately swallowed: shutdown must proceed regardless of a misbehaving listener.
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Registers a callback to run when this state is {@link #markOutOfService() marked out of service}.
+	 *
+	 * <p>
+	 * Lets components that hold long-lived connections (for example MCP {@code subscriptions/listen} SSE
+	 * streams) end them as soon as shutdown begins, instead of making the server's graceful drain wait out its
+	 * full stop timeout for streams that would otherwise never finish on their own.
+	 *
+	 * <p>
+	 * Registering a second callback under the same <c>key</c> replaces the first, so a component that is
+	 * re-published on every server (re)start does not accumulate duplicate callbacks.  Callbacks run on the
+	 * thread that calls {@link #markOutOfService()}; exceptions they throw are swallowed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>state</jv>.onOutOfService(<js>"my-streams"</js>, () -&gt; <jv>streamRegistry</jv>.closeAll());
+	 * </p>
+	 *
+	 * @param key The owner of the callback (typically the registering component).  Must not be <jk>null</jk>.
+	 * @param callback The callback to run.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ReadinessState onOutOfService(Object key, Runnable callback) {
+		outOfServiceListeners.put(key, callback);
 		return this;
 	}
 }
