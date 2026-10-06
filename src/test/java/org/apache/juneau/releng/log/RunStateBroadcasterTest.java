@@ -25,6 +25,9 @@ import org.junit.jupiter.api.Test;
 class RunStateBroadcasterTest {
 
 	@Test
+	@SuppressWarnings({
+		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
+	})
 	void a01_publishDeliversToEverySubscriber() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var a = new ArrayList<String>();
@@ -51,6 +54,9 @@ class RunStateBroadcasterTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
+	})
 	void a03_aThrowingSubscriberDoesNotBreakOthers() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var seen = new ArrayList<String>();

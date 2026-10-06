@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.juneau.commons.utils.Shorts;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.util.ProcessRunner;
 
@@ -130,7 +131,7 @@ public class EmailService {
 	 * Joins the non-blank sections with a single blank line between each and a trailing newline.
 	 */
 	private static String paragraphs(String... sections) {
-		return Arrays.stream(sections).filter(s -> ine(s)).collect(Collectors.joining("\n\n")) + "\n";
+		return Arrays.stream(sections).filter(Shorts::ine).collect(Collectors.joining("\n\n")) + "\n";
 	}
 
 	/**

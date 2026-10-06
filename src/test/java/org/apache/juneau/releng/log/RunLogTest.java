@@ -31,6 +31,9 @@ class RunLogTest {
 	// convention is applied by the caller when constructing one RunLog per step.
 
 	@Test
+	@SuppressWarnings({
+		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
+	})
 	void a01_appendsToDiskAndFansOutToBroadcaster(@TempDir Path dir) throws Exception {
 		var bc = new LogBroadcaster();
 		var got = new ArrayList<String>();
@@ -54,6 +57,9 @@ class RunLogTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
+	})
 	void a03_lineSinkFeedsBothDiskAndBroadcaster(@TempDir Path dir) throws Exception {
 		var bc = new LogBroadcaster();
 		var got = new ArrayList<String>();
