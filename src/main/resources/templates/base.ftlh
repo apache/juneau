@@ -33,8 +33,8 @@
     <@token name="--jc-tag-red-border" value="#f3c6c2"/>
 </@theme>
 <@head>
-    <script src="/js/csrf.js"></script>
-    <link rel="stylesheet" href="/css/chrome.css">
+    <script src="${assetUrl('/js/csrf.js')}"></script>
+    <link rel="stylesheet" href="${assetUrl('/css/chrome.css')}">
 </@head>
 <@actions>
     <button class="jc-icon-btn" title="Help" aria-label="Help">
@@ -53,6 +53,6 @@
 <@main/>
 <@footer text="Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases."/>
 <@scripts>
-    <script src="/js/renderers.js"></script>
+    <script src="${assetUrl('/js/renderers.js')}"></script>
 </@scripts>
 </@console>

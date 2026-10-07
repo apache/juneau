@@ -61,7 +61,10 @@ public class SetupRest extends BasicRestResource {
 	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
 	public FreemarkerMixin freemarker() {
-		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
+		var builder = ConsoleFreemarkerMixin.create();
+		builder.adopterAssets(getClass().getClassLoader(), "static");
+		builder.basePath("/templates/").templateSuffix(".ftlh");
+		return builder.build();
 	}
 
 	/**

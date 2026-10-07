@@ -93,6 +93,9 @@ class SetupRestTest {
 				assertTrue(body.contains("juneau-views.css"),
 					"Setup now pulls the views toolkit so the probes can adopt the Juneau probe helper: " + body);
 				assertTrue(body.contains("/juneau-console/chrome.css"), body);
+				assertTrue(body.matches("(?s).*/css/chrome\\.css\\?v=[0-9a-f]{8}.*"), "app chrome.css must be versioned: " + body);
+				assertTrue(body.matches("(?s).*/js/csrf\\.js\\?v=[0-9a-f]{8}.*"), "csrf.js must be versioned: " + body);
+				assertTrue(body.matches("(?s).*/js/rm-setup\\.js\\?v=[0-9a-f]{8}.*"), "rm-setup.js must be versioned: " + body);
 				assertTrue(body.contains("data-juneau-probe-group"), body);
 				assertTrue(body.contains("class=\"jc-probe jc-probe-neutral\""), body);
 				assertTrue(body.contains("data-juneau-probe=\"juneau-checkout\""), body);

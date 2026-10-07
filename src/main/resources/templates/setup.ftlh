@@ -17,7 +17,7 @@
 
 <#-- toolkit="views" pulls juneau-views.css/js so the Setup probes can adopt the Juneau probe helper
      (.jc-probe group + JuneauViews.enhanceProbeGroup); the console pack already ships the .jc-probe-* palette. -->
-<@page tab="setup" toolkit="views" init="/js/credentials.js,/js/rm-setup.js">
+<@page tab="setup" toolkit="views" init=assetUrl("/js/credentials.js") + "," + assetUrl("/js/rm-setup.js")>
     <div class="jc-page-header">
         <h1>Setup</h1>
         <p class="jc-page-sub">Every prerequisite this release manager needs, and the controls to fix them.</p>
