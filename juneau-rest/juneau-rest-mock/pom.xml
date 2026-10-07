@@ -97,7 +97,7 @@
 		<dependency>
 			<groupId>org.glassfish.expressly</groupId>
 			<artifactId>expressly</artifactId>
-			<version>5.0.0</version>
+			<version>6.0.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Test-only: MDC bridge tests import org.slf4j.MDC directly (main code probes it reflectively). Version matches Jetty's transitive slf4j-api. -->
