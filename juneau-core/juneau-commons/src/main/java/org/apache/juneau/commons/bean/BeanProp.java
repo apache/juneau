@@ -229,6 +229,55 @@ public @interface BeanProp {
 	Class<?>[] params() default {};
 
 	/**
+	 * Marks this property as required on input.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, parsers (and {@code Map}-to-bean conversion) throw a
+	 * {@code org.apache.juneau.marshall.parser.MissingRequiredPropertyException} if the input does not contain this
+	 * property.  The check runs once per bean, before the bean is constructed, so records and constructor-argument
+	 * beans get a clear error instead of a constructor failure.
+	 *
+	 * <p>
+	 * "Present" means the key appears in the input.  An explicit <jk>null</jk> value counts as present; use your own
+	 * validation (or a compact record constructor) to reject null values.
+	 *
+	 * <p>
+	 * The flag is OR-merged across the field, getter and setter: annotating any one of them makes the property required.
+	 * Wrapping an existing object (for example {@code MarshallingSession.toBeanMap(Object)}) never checks.
+	 *
+	 * <p>
+	 * This attribute is independent of {@code @Schema(required)}, which only affects generated schema documentation and
+	 * HTTP part validation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
+	 *
+	 * 	<jc>// Throws MissingRequiredPropertyException:
+	 * 	//   Missing required properties on bean class 'Person': [name]</jc>
+	 * 	JsonParser.<jsf>DEFAULT</jsf>.read(<js>"{\"age\":30}"</js>, Person.<jk>class</jk>);
+	 *
+	 * 	<jc>// OK: explicit null counts as present.</jc>
+	 * 	JsonParser.<jsf>DEFAULT</jsf>.read(<js>"{\"name\":null}"</js>, Person.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		A required property must be writable (a field, setter or constructor argument).  Marking a read-only
+	 * 		property required fails when the bean metadata is built.
+	 * 	<li class='note'>
+	 * 		For builder-based beans, put the annotation on the builder's setter.
+	 * 	<li class='note'>
+	 * 		On a non-record bean, put the annotation on the field or getter; it is not read from constructor parameters.
+	 * 	<li class='note'>
+	 * 		In REST methods, a missing required property in an {@code @Content} body produces <c>400 Bad Request</c>.
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if this property must be present in the input.
+	 */
+	boolean required() default false;
+
+	/**
 	 * Identifies a property as read-only.
 	 *
 	 * <p>

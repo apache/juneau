@@ -2483,5 +2483,92 @@
     "matches": [
       0
     ]
+  },
+  {
+    "id": "v01",
+    "group": "V_clientCells",
+    "search": "status=$ne(OPEN)",
+    "types": {
+      "status": "ENUM"
+    },
+    "operators": "standard",
+    "comment": "client-mode cell shapes (WORK-J0612): a row with the property missing entirely",
+    "rows": [
+      {
+        "id": "r1",
+        "status": "OPEN"
+      },
+      {
+        "id": "r2"
+      },
+      {
+        "id": "r3",
+        "status": "CLOSED"
+      }
+    ],
+    "matches": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "v02",
+    "group": "V_clientCells",
+    "search": "v=$eq(<b>bold</b>)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "client-mode cell shapes (WORK-J0612): HTML markup in the RAW cell is matched literally, never stripped",
+    "rows": [
+      "<b>bold</b>",
+      "bold"
+    ],
+    "matches": [
+      0
+    ]
+  },
+  {
+    "id": "v03",
+    "group": "V_clientCells",
+    "search": "v=$contains(<b>)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "client-mode cell shapes (WORK-J0612): markup substring",
+    "rows": [
+      "x<b>y",
+      "b",
+      "<B>"
+    ],
+    "matches": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "v04",
+    "group": "V_clientCells",
+    "search": "v=$contains(b)",
+    "types": {
+      "v": "TEXT"
+    },
+    "operators": "standard",
+    "comment": "client-mode cell shapes (WORK-J0612, D6): an array cell is matched as its string form",
+    "rows": [
+      [
+        "a",
+        "b"
+      ],
+      [
+        "c"
+      ],
+      "b"
+    ],
+    "matches": [
+      0,
+      2
+    ]
   }
 ]

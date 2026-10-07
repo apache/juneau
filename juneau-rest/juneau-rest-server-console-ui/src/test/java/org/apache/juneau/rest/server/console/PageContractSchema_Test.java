@@ -47,7 +47,10 @@ class PageContractSchema_Test extends TestBase {
 
 	@ParameterizedTest
 	@CsvSource(delimiter = '|', value = {
-		"invalid-version.json|$.version: must equal 1",
+		"invalid-version.json|$.contractVersion: must equal 1",
+		"invalid-legacy-version.json|missing required 'contractVersion'",
+		"invalid-legacy-version.json|$.version: not allowed",
+		"invalid-both-versions.json|$.version: not allowed",
 		"invalid-extra-top.json|$.x: not allowed",
 		"invalid-missing-cards.json|missing required 'cards'",
 		"invalid-navlayout.json|$.navLayout: must be one of",

@@ -1586,7 +1586,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 				}
 				});
 
-				return bm.getBean();
+				return MissingRequiredPropertyException.check(null, bm).getBean();
 
 			} else if (cm.isCollectionOrArray()) {
 				var items = (List)get("items");
@@ -1597,6 +1597,9 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
+			var mrpe = MissingRequiredPropertyException.find(e);
+			if (mrpe != null)
+				throw mrpe;
 			throw brex(e, cm.inner(), "Error occurred attempting to cast to an object of type '%s'", cn(cm));
 		}
 

@@ -61,6 +61,7 @@ public class BeanPropAnnotation {
 		private Class<?>[] params = new Class[0];
 		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String name = "";
+		private boolean required;
 		private String ro = "";
 		private String summary = "";
 		private String value = "";
@@ -138,6 +139,17 @@ public class BeanPropAnnotation {
 		}
 
 		/**
+		 * Sets the {@link BeanProp#required()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder required(boolean value) {
+			required = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link BeanProp#ro()} property on this annotation.
 		 *
 		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
@@ -208,6 +220,7 @@ public class BeanPropAnnotation {
 		private final Class<? extends BeanFactory> factory;
 		private final String name;
 		private final String value;
+		private final boolean required;
 		private final String ro;
 		private final String summary;
 		private final String wo;
@@ -219,6 +232,7 @@ public class BeanPropAnnotation {
 			factory = b.factory;
 			name = b.name;
 			params = cp(b.params);
+			required = b.required;
 			ro = b.ro;
 			summary = b.summary;
 			type = b.type;
@@ -249,6 +263,11 @@ public class BeanPropAnnotation {
 		@Override /* Overridden from BeanProp */
 		public Class<?>[] params() {
 			return cp(params);
+		}
+
+		@Override /* Overridden from BeanProp */
+		public boolean required() {
+			return required;
 		}
 
 		@Override /* Overridden from BeanProp */

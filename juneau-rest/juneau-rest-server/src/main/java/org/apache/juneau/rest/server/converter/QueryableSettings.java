@@ -31,7 +31,8 @@ import org.apache.juneau.commons.beanquery.*;
  * {@link #DEFAULT}, which sets nothing and so leaves every setting at the context builder's own default.
  *
  * <p>
- * The defaults live in {@link BeanQueryContext.Builder} only &mdash; this class never duplicates them.  Each setting
+ * The defaults live in {@link org.apache.juneau.commons.beanquery.BeanQueryContext.Builder BeanQueryContext.Builder}
+ * only &mdash; this class never duplicates them.  Each setting
  * is tracked as set or unset; {@link #applyTo(BeanQueryContext.Builder) applyTo} copies only the ones that were set,
  * so an unset setting stays at the builder default (currently: {@code allowRegex} true, {@code regexTimeout} 50ms,
  * {@code countPolicy} {@link CountPolicy#IF_REQUESTED IF_REQUESTED}, {@code defaultLimit} 100, {@code maxLimit} 1000,
@@ -60,7 +61,7 @@ import org.apache.juneau.commons.beanquery.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link Queryable}
- * 	<li class='jc'>{@link BeanQueryContext.Builder}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.beanquery.BeanQueryContext.Builder BeanQueryContext.Builder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  *

@@ -17,8 +17,10 @@
 package org.apache.juneau.petstore.springboot;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.petstore.service.*;
@@ -52,6 +54,7 @@ import org.apache.juneau.rest.server.widget.*;
 	title="Juneau Petstore (Spring Boot)",
 	description="Apache Juneau petstore sample application running under Spring Boot.",
 	children={
+		PetstoreConsoleResource.class,
 		PetStoreResource.class,
 		PetSecureResource.class,
 		PetMustacheViewResource.class,
@@ -104,5 +107,16 @@ public class RootResources extends BasicSpringRestServletGroup {
 	@Bean
 	public PetStore petStore() {
 		return PetstoreSeed.create().populate(new PetStore());
+	}
+
+	/**
+	 * {@code GET /} goes to the console store page (D-P6).
+	 *
+	 * @param req The request.
+	 * @return A 303 to {@code /console/store}.
+	 */
+	@RestGet(path="/")
+	public SeeOther index(RestRequest req) {
+		return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/console/store"));
 	}
 }

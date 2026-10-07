@@ -21,7 +21,7 @@ Options:
     --build-only, -b         Only build (skip tests)
     --test-only, -t          Only run tests (no build)
     --full, -f               Clean build + run tests (default)
-    --verbose, -v            Show full Maven output
+    --verbose, -v            Accepted for compatibility; Maven output always streams live
     --no-container           Exclude @Tag("container") tests
     --timing-log <path>      Append per-(module, bucket) timing JSONL records
     --enforce-perf           Hard-fail if wall-clock exceeds perf-baseline.txt ±20% tolerance
@@ -71,8 +71,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-def run_command(cmd, verbose=False):
-	"""Run a command and return exit code and full output."""
+def run_command(cmd):
+	"""Run a command, streaming its output live, and return exit code and full output."""
 	script_dir = Path(__file__).parent
 	project_root = script_dir.parent
 	# Optional command prefix (e.g. a lock script that serializes concurrent mvn runs on one checkout).
@@ -80,16 +80,16 @@ def run_command(cmd, verbose=False):
 	if wrapper and cmd.startswith("mvn "):
 		cmd = f"{wrapper} {cmd}"
 	print(f"Running: {cmd}")
-	print("-" * 80)
-	result = subprocess.run(cmd, shell=True, cwd=str(project_root), capture_output=True, text=True)
-	output = result.stdout + result.stderr
-	if verbose:
-		print(result.stdout)
-		print(result.stderr, file=sys.stderr)
-	else:
-		lines = output.splitlines()
-		print("\n".join(lines[-50:]) if len(lines) > 50 else output)
-	return result.returncode, output
+	print("-" * 80, flush=True)
+	# Echo each line as it arrives so a long or hung build is visible, and keep it for parse_test_results().
+	lines = []
+	with subprocess.Popen(cmd, shell=True, cwd=str(project_root), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+			text=True, errors="replace", bufsize=1) as proc:
+		for line in proc.stdout:
+			sys.stdout.write(line)
+			sys.stdout.flush()
+			lines.append(line)
+	return proc.returncode, "".join(lines)
 
 
 def git_value(args):
@@ -387,15 +387,15 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, en
 PARALLELISM = "-T1C"
 
 
-def build(verbose=False):
-	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", verbose)
+def build():
+	return run_command(f"mvn clean install {PARALLELISM} -DskipTests")
 
 
-def test(verbose=False, no_container=False):
+def test(no_container=False):
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd, verbose)
+	return run_command(cmd)
 
 
 JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
@@ -439,13 +439,13 @@ def js_prereq_problem():
 	return None
 
 
-def js_tests(verbose=False):
+def js_tests():
 	cmd = (f"mvn -Pjs-tests -pl {JS_TEST_MODULE} -am test -Drat.skip=true "
 		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
-	return run_command(cmd, verbose)
+	return run_command(cmd)
 
 
-def maybe_run_js_tests(js_flag, no_js_flag, changed_files, verbose=False, runner=None):
+def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None):
 	"""Run the JS harness if enabled.  Returns 0 on pass/skip, non-zero on failure."""
 	enabled, explicit = should_run_js_tests(js_flag, no_js_flag, changed_files)
 	if not enabled:
@@ -458,12 +458,12 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, verbose=False, runner
 		print(f"\n⚠️  JS files changed, but skipping JS tests: {problem}. (CI will still run them.)")
 		return 0
 	print("\n🌐 Running JS browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
-	code, _ = (runner or js_tests)(verbose)
+	code, _ = (runner or js_tests)()
 	print("\n✅ JS tests passed!" if code == 0 else "\n❌ JS tests failed!")
 	return code
 
 
-def profile(module, verbose=False):
+def profile(module):
 	ts = datetime.now().strftime("%Y%m%d-%H%M%S")
 	profile_dir = Path("target/profile-results")
 	profile_dir.mkdir(parents=True, exist_ok=True)
@@ -472,7 +472,7 @@ def profile(module, verbose=False):
 	# Overriding argLine deliberately drops the JaCoCo agent so instrumentation doesn't skew the profile.
 	argline = f"-XX:StartFlightRecording=filename={output_file},settings=profile,dumponexit=true"
 	cmd = f"mvn test -pl {module} -Drat.skip=true -DargLine='{argline}'"
-	code, out = run_command(cmd, verbose)
+	code, out = run_command(cmd)
 	if code == 0:
 		print(f"\n✅ JFR profile captured at {output_file}")
 	return code, out
@@ -503,10 +503,9 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	build_only = args.build_only
 	test_only = args.test_only
 	full = args.full or not (build_only or test_only or args.profile)
-	verbose = args.verbose
 
 	if args.profile:
-		exit_code, _ = profile(args.profile, verbose)
+		exit_code, _ = profile(args.profile)
 		return exit_code
 
 	if build_only and test_only:
@@ -519,7 +518,7 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	exit_code = 0
 	last_test_output = ""
 	if build_only or full:
-		exit_code, _ = build(verbose)
+		exit_code, _ = build()
 		if exit_code != 0:
 			print("\n❌ Build failed!")
 			return exit_code
@@ -531,7 +530,7 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		if not args.enforce_perf:
 			print("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
 		test_start = time.time()
-		exit_code, last_test_output = test(verbose, no_container=args.no_container)
+		exit_code, last_test_output = test(no_container=args.no_container)
 		test_elapsed = time.time() - test_start
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
@@ -550,7 +549,7 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		if perf_exit != 0:
 			return perf_exit
 		js_changed = [] if (args.js_tests or args.no_js_tests) else changed_files_vs_origin()
-		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed, verbose)
+		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed)
 		if js_exit != 0:
 			return js_exit
 	return exit_code

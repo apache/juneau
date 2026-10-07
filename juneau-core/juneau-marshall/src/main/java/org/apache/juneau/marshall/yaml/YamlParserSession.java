@@ -237,10 +237,10 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				o = cast(m2, pMeta, eType);
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
-				o = builder.build(this, readIntoBeanMap(r, m).getBean(), eType);
+				o = builder.build(this, checkRequired(readIntoBeanMap(r, m)).getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
-				o = readIntoBeanMap(r, m).getBean();
+				o = checkRequired(readIntoBeanMap(r, m)).getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				o = readFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -261,7 +261,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast((MarshalledMap)m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
-					o = newBeanMap(outer, sType.inner()).load(m).getBean();
+					o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 				else
 					throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
@@ -340,12 +340,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				var m = toBeanMap(builder.create(this, eType));
 				readBeanProperty(r, m, s);
 				readIntoBeanMapBlockRemainder(r, m, keyIndent);
-				return builder.build(this, m.getBean(), eType);
+				return builder.build(this, checkRequired(m).getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
 				readBeanProperty(r, m, s);
 				readIntoBeanMapBlockRemainder(r, m, keyIndent);
-				return m.getBean();
+				return checkRequired(m).getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				Object value = readAnything(sType.getValueType(), r, m, pMeta);
@@ -362,7 +362,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				if (m2.containsKey(getBeanTypePropertyName(eType)))
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
-					return newBeanMap(outer, sType.inner()).load(m2).getBean();
+					return checkRequired(newBeanMap(outer, sType.inner()).load(m2)).getBean();
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
 		}
@@ -393,12 +393,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				var m = toBeanMap(builder.create(this, eType));
 				readBeanProperty(r, m, s);
 				readIntoBeanMapBlockRemainder(r, m, keyIndent);
-				return builder.build(this, m.getBean(), eType);
+				return builder.build(this, checkRequired(m).getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
 				readBeanProperty(r, m, s);
 				readIntoBeanMapBlockRemainder(r, m, keyIndent);
-				return m.getBean();
+				return checkRequired(m).getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				Object value = readAnything(sType.getValueType(), r, m, pMeta);
@@ -415,7 +415,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				if (m2.containsKey(getBeanTypePropertyName(eType)))
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
-					return newBeanMap(outer, sType.inner()).load(m2).getBean();
+					return checkRequired(newBeanMap(outer, sType.inner()).load(m2)).getBean();
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
 		}

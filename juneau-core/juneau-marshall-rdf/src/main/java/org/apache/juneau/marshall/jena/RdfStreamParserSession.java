@@ -315,13 +315,13 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			if (! urisVisited.add(r))
 				return null;
 			var bm = toBeanMap(builder.create(this, eType));
-			o = builder.build(this, readIntoBeanMap(r, bm).getBean(), eType);
+			o = builder.build(this, checkRequired(readIntoBeanMap(r, bm)).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
 			var bm = newBeanMap(outer, sType.inner());
-			o = readIntoBeanMap(r, bm).getBean();
+			o = checkRequired(readIntoBeanMap(r, bm)).getBean();
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
@@ -388,7 +388,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((MarshalledMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
-				o = newBeanMap(outer, sType.inner()).load(m).getBean();
+				o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 			else
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else {

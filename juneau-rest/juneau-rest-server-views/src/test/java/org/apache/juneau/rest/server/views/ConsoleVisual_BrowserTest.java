@@ -36,7 +36,7 @@ import org.junit.jupiter.api.condition.*;
 class ConsoleVisual_BrowserTest extends TestBase {
 
 	private static final String PROBE_CONTRACT = """
-		{"version":"1","title":"Probe","header":{"title":"Probe","chrome":true},
+		{"contractVersion":"1","title":"Probe","header":{"title":"Probe","chrome":true},
 		 "nav":[
 		  {"id":"home","label":"Home","href":"/home","children":[
 		   {"id":"about","label":"About","href":"/home/about"},

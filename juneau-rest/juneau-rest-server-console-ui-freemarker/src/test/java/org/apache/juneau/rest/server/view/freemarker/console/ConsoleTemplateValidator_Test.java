@@ -212,6 +212,32 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// hardcoded-asset-url
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_hardcodedJuneauAssets_flagged() {
+		var f = lint("<link rel=\"stylesheet\" href=\"/rest/home/juneau-views.css\">\n"
+			+ "<script src='/juneau-console/juneau-console.js?v=1'></script>\n"
+			+ "<link href=\"/juneau-console/chrome.css\">\n"
+			+ "<link href=\"themes/juneau-theme-red.css\">");
+		assertBean(f, "size", "4");
+		assertBeans(f, "line,rule", "1,hardcoded-asset-url", "2,hardcoded-asset-url", "3,hardcoded-asset-url", "4,hardcoded-asset-url");
+		assertTrue(f.get(0).message().contains("'/rest/home/juneau-views.css'"), f.get(0).message());
+	}
+
+	@Test void i02_helperGeneratedAndAdopterAssets_clean() {
+		assertClean("<link rel=\"stylesheet\" href=\"${viewsCssUrl}\">");
+		assertClean("<script src=\"${viewAssetUrl(req, '/juneau-views.js')}\"></script>");
+		assertClean("<link href=\"/css/chrome.css\"><script src=\"/js/renderers.js\"></script>");
+		assertClean("<a href=\"/docs/juneau-views.html\">docs</a>");
+		assertClean("<script src=\"${assetUrl('/js/juneau-app.js')}\"></script>");
+	}
+
+	@Test void i03_commentedOut_isIgnored() {
+		assertClean("<#-- <script src=\"/juneau-views.js\"></script> -->");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// roots
 	//-----------------------------------------------------------------------------------------------------------------
 

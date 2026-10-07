@@ -216,6 +216,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private boolean ignoreUnknownBeanProperties;
 		private boolean ignoreUnknownEnumValues;
 		private boolean unsortedProperties;
+		private boolean recordComponentOrder;
 		private boolean useJavaBeanIntrospector;
 		private boolean validateSchema;
 		private String typePropertyName;
@@ -279,6 +280,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			notBeanPackages = new TreeSet<>();
 			propertyNamer = null;
 			unsortedProperties = env("MarshallingContext.unsortedProperties", false);
+			recordComponentOrder = env("MarshallingContext.recordComponentOrder", false);
 			swaps = list();
 			timeZone = env("MarshallingContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
 			durationFormat = env("MarshallingContext.durationFormat", DurationFormat.ISO_8601_WITH_DAYS);
@@ -335,6 +337,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			propertyNamer = copyFrom.propertyNamer;
 			unsortedProperties = copyFrom.unsortedProperties;
+			recordComponentOrder = copyFrom.recordComponentOrder;
 			swaps = cp(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			durationFormat = copyFrom.durationFormat;
@@ -394,6 +397,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
 			propertyNamer = copyFrom.propertyNamer;
 			unsortedProperties = copyFrom.unsortedProperties;
+			recordComponentOrder = copyFrom.recordComponentOrder;
 			swaps = cp(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			durationFormat = copyFrom.durationFormat;
@@ -2292,6 +2296,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				ignoreInvocationExceptionsOnSetters,
 				ignoreUnknownBeanProperties,
 				ignoreUnknownEnumValues,
+				recordComponentOrder,
 				unsortedProperties,
 				useJavaBeanIntrospector,
 				validateSchema,
@@ -3140,7 +3145,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 *
 		 * <p>
 		 * By default, all bean properties are serialized and accessed in alphabetical order.
-		 * Calling this method opts out of that behavior so that the natural JVM order is used instead.
+		 * Calling this method opts out of that behavior so that declaration order is used instead: record component order for records, field declaration order (superclass first) for other classes, then method-only properties alphabetically.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -3157,7 +3162,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.unsortedProperties()
 		 * 		.build();
 		 *
-		 * 	<jc>// Produces:  {"c":"1","b":"2","a":"3"} (JVM order)</jc>
+		 * 	<jc>// Produces:  {"c":"1","b":"2","a":"3"} (declaration order)</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
@@ -3179,6 +3184,49 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 */
 		public Builder unsortedProperties(boolean value) {
 			unsortedProperties = value;
+			return this;
+		}
+
+		/**
+		 * Use record component order for {@link Record} beans.
+		 *
+		 * <p>
+		 * By default, record properties are sorted alphabetically like every other bean.  Calling this method makes
+		 * records keep their component (declaration) order, even when other beans are sorted.  Non-record beans are
+		 * unaffected.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>public record</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {}
+		 *
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.recordComponentOrder()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"name":"Alice","age":30}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> Person(<js>"Alice"</js>, 30));
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link #unsortedProperties()} (declaration order for every bean, records included)
+		 * 	<li class='ja'>{@link BeanConfig#recordComponentOrder()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder recordComponentOrder() {
+			return recordComponentOrder(true);
+		}
+
+		/**
+		 * Same as {@link #recordComponentOrder()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder recordComponentOrder(boolean value) {
+			recordComponentOrder = value;
 			return this;
 		}
 
@@ -3971,6 +4019,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		return new Builder();
 	}
 
+	/** Runs the @BeanProp(required) check for a Map-to-bean conversion, adding the parse position when called from a parser. */
+	private static <T> BeanMap<T> checkRequired(MarshallingSession bs, BeanMap<T> bm) {
+		return MissingRequiredPropertyException.check(bs instanceof ParserSession ps ? ps : null, bm);
+	}
+
 	/**
 	 * Checks if the specified class should be cached.
 	 *
@@ -4006,6 +4059,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final boolean ignoreUnknownEnumValues;
 	private final boolean ignoreUnknownNullBeanProperties;
 	private final boolean unsortedProperties;
+	private final boolean recordComponentOrder;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
 	private final boolean validateSchema;
@@ -4084,6 +4138,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 		unsortedProperties = builder.unsortedProperties;
+		recordComponentOrder = builder.recordComponentOrder;
 		swaps = u(cp(builder.swaps));
 		timeZone = builder.timeZone;
 		durationFormat = builder.durationFormat;
@@ -4173,6 +4228,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.ignoreUnknownBeanProperties(ignoreUnknownBeanProperties)
 			.ignoreUnknownNullBeanProperties(ignoreUnknownNullBeanProperties)
 			.unsortedProperties(unsortedProperties)
+			.recordComponentOrder(recordComponentOrder)
 			.useInterfaceProxies(useInterfaceProxies)
 			.useJavaBeanIntrospector(useJavaBeanIntrospector)
 			.propertyNamer(propertyNamerBean)
@@ -4572,12 +4628,13 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 						if (created != null) {
 							var bm = bs.toBeanMap(created);
 							bm.load(m2);
-							return builder.build(bs, bm.getBean(), toMeta);
+							return builder.build(bs, checkRequired(bs, bm).getBean(), toMeta);
 						}
 					}
-					return bs.newBeanMap(toMeta.inner()).load(m2).getBean();
+					return checkRequired(bs, bs.newBeanMap(toMeta.inner()).load(m2)).getBean();
 				} catch (Exception e) {
-					throw rex(e);
+					var mrpe = MissingRequiredPropertyException.find(e);
+					throw nn(mrpe) ? mrpe : rex(e);
 				}
 			};
 		}
@@ -5103,13 +5160,21 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final boolean isIgnoreUnknownNullBeanProperties() { return ignoreUnknownNullBeanProperties; }
 
 	/**
-	 * Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).
+	 * Returns whether bean properties are unsorted (i.e. in declaration order rather than alphabetical).
 	 *
 	 * @see MarshallingContext.Builder#unsortedProperties()
 	 * @return
-	 * 	<jk>true</jk> if bean properties are in natural JVM order; <jk>false</jk> (the default) means alphabetical order.
+	 * 	<jk>true</jk> if bean properties are in declaration order; <jk>false</jk> (the default) means alphabetical order.
 	 */
 	public final boolean isUnsortedProperties() { return unsortedProperties; }
+
+	/**
+	 * Returns whether {@link Record} beans use record component order.
+	 *
+	 * @see MarshallingContext.Builder#recordComponentOrder()
+	 * @return <jk>true</jk> if record properties are in component order regardless of {@link #isUnsortedProperties()}.
+	 */
+	public final boolean isRecordComponentOrder() { return recordComponentOrder; }
 
 	/**
 	 * Use interface proxies.
@@ -5452,6 +5517,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.a("notBeanPackageNames", notBeanPackageNames)
 			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
 			.a("unsortedProperties", unsortedProperties)
+			.a("recordComponentOrder", recordComponentOrder)
 			.a("swaps", swaps)
 			.a("durationFormat", durationFormat)
 			.a("periodFormat", periodFormat)

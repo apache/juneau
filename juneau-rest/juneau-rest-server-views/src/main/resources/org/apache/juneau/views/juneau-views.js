@@ -278,6 +278,25 @@
 	}
 
 	/**
+	 * True when `url` resolves to the page's own origin (WORK-J0615).  Relative URLs and same-origin absolute URLs
+	 * pass; anything that resolves elsewhere (`https://other/..`, `//other/..`, `javascript:`, `data:`) or does not
+	 * parse fails.  Used on the CardEnvelope-supplied `detail.endpoint` and `savedViewsBase`, which a template may
+	 * have interpolated from untrusted data.  Falls back to a scheme/authority-prefix test where `URL` or
+	 * `window.location.origin` is unavailable.
+	 */
+	function isSameOriginUrl(url) {
+		if (url == null) return false;
+		const s = String(url).trim();
+		if (s === "") return false;
+		const loc = window.location;
+		if (loc?.origin && loc.href && typeof URL === "function") {
+			try { return new URL(s, loc.href).origin === loc.origin; }
+			catch (e) { return false; }
+		}
+		return !/^([a-z][a-z0-9+.-]*:|[\\/]{2}|\/\\)/i.test(s);
+	}
+
+	/**
 	 * Substitutes `{id}` via encodeURIComponent and re-checks the result is still a same-origin path.
 	 * Returns null when the template or the substituted URL is unsafe.
 	 */
@@ -779,6 +798,24 @@
 		return def;
 	}
 
+	/** Escapes a cell value for HTML display; sort/filter/type facets get the raw value. Used for inline `rows` tables. */
+	function escapingTextRender(data, type) {
+		if (type && type !== "display") return data;
+		if (data == null) return "";
+		return String(data).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+	}
+
+	/**
+	 * Re-reads a table's data: an ajax reload, or a plain redraw for an inline-`rows` table (which has no ajax source -
+	 * a reload there would GET the current page).  `holdPosition` keeps the current page.
+	 */
+	function reloadTableData(d, holdPosition) {
+		const node = typeof d.table === "function" ? d.table().node() : null;
+		if (node && Array.isArray(node.__juneauRows)) { d.draw(holdPosition ? false : undefined); return; }
+		if (holdPosition) d.ajax.reload(null, false); else d.ajax.reload();
+	}
+
 	/** Appends a renderer's `class` facet to a column def's className (no-op when the facet is absent or throws). */
 	function appendRendererClass(def, renderer, meta) {
 		if (!renderer || typeof renderer["class"] !== "function") return;
@@ -878,7 +915,17 @@
 		// Only the top header row is orderable.  The column-search row (second thead tr) must not sort.
 		opts.orderCellsTop = true;
 
-		if (viewDef.dataMode === "server") {
+		const staticRows = deps?.table?.__juneauRows;
+		if (Array.isArray(staticRows)) {
+			// Inline `rows` (WORK-J0606): the data is the envelope's own, so there is nothing to fetch.  No `opts.ajax`
+			// (a missing url would make DataTables GET the current page and clear the rows).  Every column without a
+			// named renderer is forced through a text renderer - DataTables renders cell data as HTML by default.
+			opts.serverSide = false;
+			opts.data = staticRows;
+			opts.columns.forEach(function (colDef) {
+				if (!colDef.render) colDef.render = escapingTextRender;
+			});
+		} else if (viewDef.dataMode === "server") {
 			opts.serverSide = true;
 			buildServerAjax(opts, viewDef, deps);
 		} else {
@@ -1362,7 +1409,7 @@
 		const orderSpan = flex.querySelector("span.dt-column-order");
 		if (orderSpan) flex.insertBefore(icon, orderSpan.nextSibling); else flex.insertBefore(icon, flex.firstChild);
 		// Reflect an already-applied filter (e.g. one restored from saved state or the URL) with the active class.
-		const current = (typeof col.search === "function" ? col.search() : "") || "";
+		const current = getColumnExpr(ctx, col);
 		if (current) icon.classList.add("is-active");
 		const open = function (e) {
 			if (e) { e.preventDefault(); e.stopPropagation(); }
@@ -1399,6 +1446,143 @@
 		return null;
 	}
 
+	// ---------------------------------------------------------------------------------------------------------------
+	// Client-filtered column-search DSL (WORK-J0612).  On a table DataTables filters itself (dataMode:'client', or
+	// inline `rows`), a column carrying `search` metadata keeps its expression in a per-table store
+	// (`ctx._colExprs[data]`) and filters through ONE `column().search.fixed("juneau-dsl", fn)` predicate built from
+	// `JuneauViews.search.compile(...)` - the same engine and server-parity semantics as BeanQuery's InMemoryMatch.
+	// `col.search()` then stays "", so DataTables' native smart-substring match never sees the expression.  Server
+	// mode, columns without metadata, and DataTables builds without `search.fixed` (DT1) keep native `col.search()`
+	// byte-for-byte.  Every read/write of a column's expression goes through getColumnExpr/setColumnExpr.
+	// ---------------------------------------------------------------------------------------------------------------
+
+	/** The `search.fixed` name the client-mode DSL predicate is installed under on each column. */
+	const DSL_FIXED_SEARCH = "juneau-dsl";
+
+	/**
+	 * Whether DataTables filters this table's rows itself (no server round trip): recorded as {@code !opts.serverSide}
+	 * by constructTable, which covers inline-`rows` tables (forced client-side) as well as {@code dataMode:'client'};
+	 * before construction it falls back to the view's {@code dataMode}.
+	 */
+	function isClientFiltered(ctx) {
+		if (typeof ctx?.clientFiltered === "boolean") return ctx.clientFiltered;
+		return !(ctx?.viewDef && ctx.viewDef.dataMode === "server");
+	}
+
+	/** Whether the column's own `search.operators` list offers `$regex` (S8: a shared link cannot smuggle one in). */
+	function columnAllowsRegex(meta) {
+		return Array.isArray(meta?.operators) && meta.operators.some(function (o) { return o?.name === "$regex"; });
+	}
+
+	/**
+	 * The DSL routing info for {@code col} - {@code {meta, type, data}} - when its expression must be evaluated by the
+	 * client-side engine, else {@code null} (native {@code col.search()}): the table is client-filtered, the engine is
+	 * loaded, the column shipped `search` metadata with a known type, and DataTables supports {@code search.fixed}.
+	 */
+	function dslColumnInfo(ctx, col) {
+		if (!col || !isClientFiltered(ctx)) return null;
+		const S = NS.search;
+		if (!S || typeof S.compile !== "function") return null;
+		if (typeof col.search !== "function" || typeof col.search.fixed !== "function") return null;
+		const meta = columnSearchMeta(ctx, col);
+		if (!meta) return null;
+		const type = S.SearchType?.fromWire ? S.SearchType.fromWire(meta.type) : null;
+		if (!type) return null;
+		const def = typeof col.index === "function" ? (ctx.optsColumns || [])[col.index()] : null;
+		if (def?.data == null) return null;
+		return { meta: meta, type: type, data: String(def.data) };
+	}
+
+	/**
+	 * Compiles {@code raw} for a DSL column with the server's strict rules (D3), against the page's custom-operator
+	 * registry (D4) and the column's own `$regex` allowance (S8).  A `custom:true` operator the column advertises
+	 * with no registered client predicate is rejected, and warned about once per name.
+	 */
+	function compileColumnExpr(ctx, info, raw) {
+		const c = NS.search.compile(raw, info.type, { column: info.data, allowRegex: columnAllowsRegex(info.meta) });
+		if (!c.ok && c.error?.code === "UNKNOWN_OPERATOR") warnUnregisteredCustoms(info.meta);
+		return c;
+	}
+
+	const warnedCustomOperators = {};
+
+	function warnUnregisteredCustoms(meta) {
+		(meta?.operators || []).forEach(function (o) {
+			if (!o?.custom || !o.name || warnedCustomOperators[o.name]) return;
+			if (typeof NS.search?.hasCustom === "function" && NS.search.hasCustom(o.name)) return;
+			warnedCustomOperators[o.name] = true;
+			warn("Juneau view: custom search operator '" + o.name + "' has no client-side predicate - register one with "
+				+ "JuneauViews.search.registerCustom(...) to use it on a client-filtered table.");
+		});
+	}
+
+	/**
+	 * A raw-cell reader for column {@code data}, built once per expression: DataTables' own {@code util.get} (dotted
+	 * paths) when available, else a plain dotted-path walk.  Reads the row's RAW value, never the rendered/stringified
+	 * search data, so the engine sees exactly what the server's InMemoryMatch sees (S5).
+	 */
+	function rawCellGetter(data) {
+		const util = window.jQuery?.fn?.dataTable?.util;
+		if (util && typeof util.get === "function") {
+			try { return util.get(data); } catch (e) { /* fall through to the dotted-path walk */ } // NOSONAR javascript:S2486 -- documented fallback
+		}
+		const parts = String(data).split(".");
+		return function (row) {
+			let v = row;
+			for (const p of parts) {
+				if (v == null) return undefined;
+				v = v[p];
+			}
+			return v;
+		};
+	}
+
+	/** The expression currently applied to {@code col}: the per-table store for a DSL column, else {@code col.search()}. */
+	function getColumnExpr(ctx, col) {
+		const info = dslColumnInfo(ctx, col);
+		if (info) {
+			const store = ctx._colExprs;
+			return store && Object.hasOwn(store, info.data) ? String(store[info.data]) : "";
+		}
+		return (typeof col?.search === "function" ? col.search() : "") || "";
+	}
+
+	/**
+	 * Applies {@code expr} to {@code col} WITHOUT drawing.  Returns {@code {ok, error, api}}: {@code api} is the
+	 * DataTables chain to {@code draw()} on success.  A DSL column installs (or, for a blank expression, removes) its
+	 * {@code search.fixed} predicate and records the expression in {@code ctx._colExprs}; an expression that fails
+	 * strict validation is NOT installed ({@code ok:false}, the coded {@code error} explaining why) and the
+	 * previously applied filter stays.  Any other column delegates to native {@code col.search(expr)} unchanged.
+	 */
+	function setColumnExpr(ctx, col, expr) {
+		const value = expr == null ? "" : String(expr);
+		const info = dslColumnInfo(ctx, col);
+		if (!info) return { ok: true, error: null, api: col.search(value) };
+		const c = compileColumnExpr(ctx, info, value);
+		if (!c.ok) return { ok: false, error: c.error, incomplete: c.incomplete, api: null };
+		ctx._colExprs = ctx._colExprs || {};
+		if (c.empty) {
+			delete ctx._colExprs[info.data];
+			return { ok: true, error: null, api: col.search.fixed(DSL_FIXED_SEARCH, null) };
+		}
+		ctx._colExprs[info.data] = c.raw;
+		// N2: one "now" per filter pass, so a relative window such as $gte(-24h) is stable across every row of a draw;
+		// refreshed here and on each data reload (xhr.dt, wired in constructTable).
+		ctx._searchNow = Date.now();
+		const get = rawCellGetter(info.data);
+		const fn = function (cellData, rowData) {
+			const cell = rowData != null && typeof rowData === "object" ? get(rowData) : cellData;
+			return c.test(cell, ctx._searchNow);
+		};
+		return { ok: true, error: null, api: col.search.fixed(DSL_FIXED_SEARCH, fn) };
+	}
+
+	/** Draws after setColumnExpr: the returned chain when it can draw, else the whole table. */
+	function drawColumnExpr(ctx, result) {
+		if (result?.api && typeof result.api.draw === "function") result.api.draw();
+		else if (typeof ctx?.dataTable?.draw === "function") ctx.dataTable.draw();
+	}
+
 	// A "$name" that is invoked as a function ("$name(...)").  Anchored on the following "(" so a literal "$5"
 	// inside an argument is not mistaken for an operator when checking membership in the column's effective set.
 	const COL_SEARCH_OP_RE = /\$[A-Za-z]\w*(?=\s*\()/g;
@@ -1418,23 +1602,38 @@
 	 * {@code $} expression (commit deferred to Enter/Apply); {@code rejected} = an unparseable expression OR one
 	 * naming an operator not on the column's effective set (a reject, not a silent rewrite - §4.3); {@code
 	 * incomplete} = a still-being-typed {@code $} draft that must not touch the grid.
+	 *
+	 * <p>
+	 * {@code strict} (optional, WORK-J0612 D3) is a {@code function (trimmed) -> JuneauViews.search.compile(...)
+	 * result} for a client-filtered DSL column: an expression that parses but that the server would reject
+	 * (unknown/unregistered operator, wrong arity, operator on the wrong type, bad typed value, disallowed or
+	 * over-length {@code $regex}) is then {@code rejected} too, with the engine's coded error in {@code error}.
 	 */
-	function evaluateColumnSearchDraft(raw, meta, search) {
+	function evaluateColumnSearchDraft(raw, meta, search, strict) {
 		const trimmed = (raw || "").trim();
 		const dollar = trimmed.charAt(0) === "$";
 		const desc = search && typeof search.parse === "function" ? search.parse(trimmed) : null;
 		let rejected = !!desc?.invalid;
+		let error = null;
 		if (dollar && meta && Array.isArray(meta.operators)) {
 			const allowed = {};
 			meta.operators.forEach(function (o) { if (o?.name) allowed[o.name] = true; });
 			usedOperatorNames(trimmed).forEach(function (n) { if (!allowed[n]) rejected = true; });
+		}
+		if (!rejected && !desc?.incomplete && trimmed !== "" && typeof strict === "function") {
+			const c = strict(trimmed);
+			if (c && !c.ok && !c.incomplete) {
+				rejected = true;
+				error = c.error || null;
+			}
 		}
 		return {
 			trimmed: trimmed,
 			dollar: dollar,
 			empty: trimmed === "",
 			incomplete: !!desc?.incomplete,
-			rejected: rejected
+			rejected: rejected,
+			error: error
 		};
 	}
 
@@ -1443,10 +1642,13 @@
 		const header = typeof col.header === "function" ? col.header() : iconEl.closest("th,td");
 		const titleEl = header?.querySelector(".dt-column-title");
 		const title = titleEl?.textContent.trim() || "Column";
-		const current = (typeof col.search === "function" ? col.search() : "") || "";
+		const current = getColumnExpr(ctx, col);
 		const meta = columnSearchMeta(ctx, col);
 		const search = window.JuneauViews?.search;
-		const serverSide = !!(ctx?.viewDef && ctx.viewDef.dataMode === "server");
+		const serverSide = !isClientFiltered(ctx);
+		// Client-filtered DSL column (WORK-J0612): commits go through the strict server-parity gate (D3).
+		const dsl = dslColumnInfo(ctx, col);
+		const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
 		const el = document.createElement("div");
 		el.className = "juneau-view-col-search-popover";
 		el.setAttribute("role", "dialog");
@@ -1484,6 +1686,8 @@
 			helpList.className = "juneau-view-col-search-popover-help";
 			meta.operators.forEach(function (o) {
 				if (!o || !o.name) return;
+				// D4: on a client-filtered table a custom operator is only offered once the page registered its predicate.
+				if (dsl && o.custom && !(typeof search?.hasCustom === "function" && search.hasCustom(o.name))) return;
 				const row = document.createElement("div");
 				row.className = "juneau-view-col-search-popover-help-op";
 				const code = document.createElement("code");
@@ -1498,6 +1702,14 @@
 			});
 			el.appendChild(helpList);
 		}
+		// S6: offset-less dates/date-times are UTC on both engines (server parity), which a local-time user would
+		// not guess - say so on a client-filtered timestamp column.
+		if (dsl?.type === "timestamp") {
+			const tz = document.createElement("div");
+			tz.className = "juneau-view-col-search-popover-tzhelp";
+			tz.textContent = "Dates and times without an offset are UTC (e.g. 2026-10-06 means 2026-10-06T00:00Z).";
+			el.appendChild(tz);
+		}
 		let committed = false;
 		let dirtyApplied = false;   // whether a live preview has changed the APPLIED search away from `current`
 		const setStatus = function (kind, message) {
@@ -1505,18 +1717,27 @@
 			el.classList.toggle("is-incomplete", kind === "incomplete");
 			status.textContent = message || "";
 		};
+		const REJECT_MESSAGE = "Not a valid search for this column.";
+		const rejectMessage = function (d) { return d.error?.message ? String(d.error.message) : REJECT_MESSAGE; };
+		// Returns false (grid untouched, status shows why) when a DSL column's strict gate refuses the value.
 		const applyValue = function (value) {
-			col.search(value).draw();
+			const r = setColumnExpr(ctx, col, value);
+			if (!r.ok) {
+				setStatus("invalid", r.error?.message ? String(r.error.message) : REJECT_MESSAGE);
+				return false;
+			}
+			drawColumnExpr(ctx, r);
 			iconEl.classList.toggle("is-active", !!value);
 			dirtyApplied = value !== current;
+			return true;
 		};
 		// Live preview per keystroke: an emptied box clears the filter; a bare quick-filter previews live on a client
 		// table but waits for Enter/Apply on a server table (no fetch-per-keystroke); a `$`-expression NEVER previews
 		// (design §5) - an incomplete draft must not blank the grid, and an out-of-set operator is a reject.
 		const onInput = function () {
-			const d = evaluateColumnSearchDraft(input.value, meta, search);
+			const d = evaluateColumnSearchDraft(input.value, meta, search, strict);
 			if (d.empty) { setStatus("", ""); applyValue(""); return; }
-			if (d.rejected) { setStatus("invalid", "Not a valid search for this column."); return; }
+			if (d.rejected) { setStatus("invalid", rejectMessage(d)); return; }
 			if (d.dollar) { setStatus(d.incomplete ? "incomplete" : "", ""); return; }
 			setStatus("", "");
 			if (!serverSide) applyValue(d.trimmed);
@@ -1524,10 +1745,10 @@
 		// Enter/Apply commit: empty clears; a `$`-expression must be complete, valid, and use only in-set operators;
 		// a bare quick-filter always commits.  A rejected or incomplete `$`-draft leaves the grid untouched.
 		const commit = function () {
-			const d = evaluateColumnSearchDraft(input.value, meta, search);
-			if (d.rejected) { setStatus("invalid", "Not a valid search for this column."); return; }
+			const d = evaluateColumnSearchDraft(input.value, meta, search, strict);
+			if (d.rejected) { setStatus("invalid", rejectMessage(d)); return; }
 			if (d.dollar && d.incomplete) { setStatus("incomplete", "Finish the expression to search."); return; }
-			applyValue(d.empty ? "" : d.trimmed);
+			if (!applyValue(d.empty ? "" : d.trimmed)) return;
 			committed = true;
 			closeColumnSearchPopover(ctx);
 		};
@@ -1544,7 +1765,7 @@
 			onDismiss: function () {
 				if (ctx._colSearchPopover === el) ctx._colSearchPopover = null;
 				if (!committed && dirtyApplied) {
-					col.search(current).draw();
+					drawColumnExpr(ctx, setColumnExpr(ctx, col, current));
 					iconEl.classList.toggle("is-active", !!current);
 				}
 				// Announce a reverted or never-applied edit (design §4.2): covers both the live-preview revert above
@@ -4152,7 +4373,7 @@
 			// Marks the reload as timer-originated so ctx._shouldCancelPollDraw can tell it apart from a draw the
 			// operator asked for, and discard it if an editor opens before it lands.
 			ctx._pollDrawPending = true;
-			dt.ajax.reload(null, false);
+			reloadTableData(dt, true);
 		}
 
 		if (ctx?._pollTimers) {
@@ -6571,6 +6792,9 @@
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
 		closeColumnSearchPopover(ctx);
+		// WORK-J0612 D7: a rebuild drops column filters, exactly as it always has for native col.search() (destroy()
+		// discards them and nothing re-applies them), so the client-mode DSL store is cleared with them.
+		ctx._colExprs = {};
 		if (table?.dataset) {
 			delete table.dataset.juneauHeaderSortSearch;
 			delete table.dataset.juneauUrlStateWired;
@@ -6839,7 +7063,7 @@
 			if (!ctx.dataTable) return;
 			if (hasInFlightRow(table)) return;
 			if (isPollSuspended(table, ctx, syntheticViewDef)) return;
-			ctx.dataTable.ajax.reload(null, false);
+			reloadTableData(ctx.dataTable, true);
 		}, autoRefreshMs);
 	}
 
@@ -6950,7 +7174,7 @@
 				const col = this; // NOSONAR javascript:S7740 -- DataTables columns().every() binds `this` to the column API; an arrow function cannot receive it
 				const def = cols[col.index()];
 				if (!def || def.data == null) return;
-				const expr = (typeof col.search === "function" ? col.search() : "") || "";
+				const expr = getColumnExpr(ctx, col);
 				if (String(expr) !== "") filters.push({ column: String(def.data), expr: String(expr) });
 			});
 		}
@@ -6971,6 +7195,9 @@
 	/**
 	 * Applies an open {@code ?state=} payload to the live grid (T19). Incomplete / rejected filter expressions are
 	 * skipped so a bad link cannot blank the grid. Does not touch View Settings (columns / membership / options).
+	 * Each filter is checked against its column's own `search` metadata (operator membership); on a client-filtered
+	 * DSL column it must also pass the strict server-parity gate (WORK-J0612 D3), which skips a `$regex` the column
+	 * does not offer or one over the server's pattern-length cap (S8), so a crafted link cannot hang the tab.
 	 */
 	function applyShareableOpenState(table, ctx, state) {
 		if (!state || !ctx || !ctx.dataTable) return;
@@ -7005,9 +7232,6 @@
 		for (const f of filters) {
 			if (!f || f.column == null || f.expr == null || String(f.expr) === "") continue;
 			const expr = String(f.expr);
-			// Incomplete / invalid $-DSL must not blank the grid (design §6.3 / column-search commit rule).
-			const draft = evaluateColumnSearchDraft(expr, null, search);
-			if (draft.incomplete || draft.rejected) continue;
 			let colIdx = -1;
 			for (let c = 0; c < cols.length; c++) {
 				if (cols[c] && cols[c].data != null && String(cols[c].data) === String(f.column)) {
@@ -7017,8 +7241,13 @@
 			}
 			if (colIdx < 0) continue;
 			const api = ctx.dataTable.column(colIdx);
-			if (api && typeof api.search === "function") {
-				api.search(expr);
+			if (!api || typeof api.search !== "function") continue;
+			// Incomplete / invalid $-DSL must not blank the grid (design §6.3 / column-search commit rule).
+			const dsl = dslColumnInfo(ctx, api);
+			const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
+			const draft = evaluateColumnSearchDraft(expr, columnSearchMeta(ctx, api), search, strict);
+			if (draft.incomplete || draft.rejected) continue;
+			if (setColumnExpr(ctx, api, expr).ok) {
 				const header = typeof api.header === "function" ? api.header() : null;
 				const icon = header?.querySelector?.(".juneau-view-col-search-icon");
 				icon?.classList?.add("is-active");
@@ -7180,6 +7409,9 @@
 		assembleFullColumnArray(opts, viewDef, ctx);
 		ctx.optsColumns = opts.columns;
 		ctx.effectiveColumns = effectiveColumns;
+		// WORK-J0612 S4: the one switch for client-side DSL evaluation - DataTables filters this table itself
+		// (dataMode:'client', or inline `rows`, which forces serverSide:false whatever the dataMode says).
+		ctx.clientFiltered = !opts.serverSide;
 
 		// DataTables treats column.title as HTML.  When juneau-config.js is present, strip titles from the
 		// opts array and paint header text with textContent after boot so a user label override cannot XSS.
@@ -7187,6 +7419,9 @@
 			NS.config.sanitizeColumnTitlesForDataTables(opts.columns);
 
 		ctx.dataTable = $(table).DataTable(opts);
+		// N2: re-anchor relative-duration column filters ($gte(-24h)) on every data reload.
+		if (ctx.clientFiltered && typeof ctx.dataTable.on === "function")
+			ctx.dataTable.on("xhr.dt", function () { ctx._searchNow = Date.now(); });
 		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
 			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
 		wireHeaderSortSearch(table, ctx);
@@ -7197,7 +7432,7 @@
 			// This draw is the operator's, not the timer's - clear the marker so a poll still in flight cannot make
 			// ctx._shouldCancelPollDraw swallow a refresh that was explicitly asked for.
 			ctx._pollDrawPending = false;
-			if (d.ajax) d.ajax.reload(); else d.draw();
+			if (d.ajax) reloadTableData(d); else d.draw();
 		};
 		ctx.collapseAllDetailRows = function () { collapseAllDetailRows(table, ctx); };
 
@@ -7398,7 +7633,7 @@
 			redraw: function () {
 				const d = ctx.dataTable;
 				if (!d) return;
-				if (d.ajax) d.ajax.reload(); else d.draw();
+				if (d.ajax) reloadTableData(d); else d.draw();
 			}
 		};
 		table.__juneauCtx = ctx;
@@ -7618,7 +7853,7 @@
 			redraw: function () {
 				const d = ctx.dataTable;
 				if (!d) return;
-				if (d.ajax) d.ajax.reload(); else d.draw();
+				if (d.ajax) reloadTableData(d); else d.draw();
 			}
 		};
 		table.__juneauCtx = ctx;
@@ -7776,12 +8011,21 @@
 		const wrapper = document.createElement("div");
 		wrapper.dataset.juneauLayout = envelope.layout || "wide";
 		wrapper.dataset.juneauSlotTable = "1";
-		if (envelope.savedViewsBase)
-			wrapper.dataset.juneauSavedViews = envelope.savedViewsBase;
+		if (envelope.savedViewsBase) {
+			if (isSameOriginUrl(envelope.savedViewsBase))
+				wrapper.dataset.juneauSavedViews = envelope.savedViewsBase;
+			else
+				warn("Juneau view '" + viewDef.id + "': savedViewsBase '" + envelope.savedViewsBase
+					+ "' is not same-origin; saved-views fetches skipped.");
+		}
 
 		if (quickStats) wrapper.appendChild(paintQuickStats(quickStats));
 
-		const table = buildSlotTableEl(viewDef, envelope.selection, detail, envelope.rows);
+		const staticRows = Array.isArray(envelope.rows) && !viewDef.dataUrl ? envelope.rows : null;
+		const table = buildSlotTableEl(viewDef, envelope.selection, detail, staticRows ? null : envelope.rows);
+		// Rows-only table: the whole row objects are handed to DataTables as `opts.data` (buildOptions), so
+		// `selection.rowIdField`, `{id}` tokens and rowClassRules see typed values and non-column fields.
+		if (staticRows) table.__juneauRows = staticRows;
 		copyCsrfOntoTable(slot, table);
 		if (envelope.selection) {
 			table.setAttribute(SELECT_ATTR, "1");
@@ -7966,7 +8210,12 @@
 		const tpl = document.createElement("template");
 		tpl.dataset.juneauRowDetail = "1";
 		tpl.dataset.juneauDetailContract = detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
-		if (detail.endpoint) tpl.dataset.juneauDetailUrl = detail.endpoint;
+		if (detail.endpoint) {
+			if (isSameOriginUrl(detail.endpoint))
+				tpl.dataset.juneauDetailUrl = detail.endpoint;
+			else
+				warn("Juneau view: detail.endpoint '" + detail.endpoint + "' is not same-origin; detail fetches skipped.");
+		}
 		if (detail.region?.titleFields?.length)
 			tpl.dataset.juneauTitleFields = detail.region.titleFields.join(",");
 		// Expand clones tpl.content (expandDetailRow). Chromium's template.appendChild
@@ -8396,6 +8645,9 @@
 		announce: announce,
 		columnSearchMeta: columnSearchMeta,
 		evaluateColumnSearchDraft: evaluateColumnSearchDraft,
+		isClientFiltered: isClientFiltered,
+		getColumnExpr: getColumnExpr,
+		setColumnExpr: setColumnExpr,
 		// Shareable URL facet (design §6.3 / T17–T19) — exposed for the node harness + host Copy link.
 		isShareablePrimaryTable: isShareablePrimaryTable,
 		announceMessages: ANNOUNCE,

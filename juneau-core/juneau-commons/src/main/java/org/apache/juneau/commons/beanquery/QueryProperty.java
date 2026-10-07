@@ -56,9 +56,9 @@ public final class QueryProperty {
 	QueryProperty(BeanPropertyMeta p) {
 		name = p.getName();
 		writeOnly = p.isWriteOnly();
-		getter = p.getGetter() == null ? null : p.getGetter().<Method>inner();
-		setter = p.getSetter() == null ? null : p.getSetter().<Method>inner();
-		field = p.getField() == null ? null : p.getField().<Field>inner();
+		getter = p.getGetter() == null ? null : p.getGetter().inner();
+		setter = p.getSetter() == null ? null : p.getSetter().inner();
+		field = p.getField() == null ? null : p.getField().inner();
 		if (nn(getter))
 			type = getter.getReturnType();
 		else if (nn(field))

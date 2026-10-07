@@ -332,7 +332,7 @@ public class OpenApiParserSession extends UonParserSession {
 							throw new ParseException("Invalid input %s for part type OBJECT.  Cannot find property %s", in, key);
 						m.put(key, read(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getBeanInfo()))));
 					}
-					return m.getBean();
+					return checkRequired(m).getBean();
 				}
 
 				var eType = type.isObject() ? string() : type.getValueType();

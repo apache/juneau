@@ -182,7 +182,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 			setProperty(m, entry, convertToType(map, entry.propertyType()));
 		});
 
-		return m.getBean();
+		return checkRequired(m).getBean();
 	}
 
 	/**

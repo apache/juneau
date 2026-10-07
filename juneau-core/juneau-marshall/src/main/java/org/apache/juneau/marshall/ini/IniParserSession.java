@@ -114,7 +114,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			}
 			var bm = toBeanMap(type.newInstance(getOuter()));
 			populateBean(bm, sections, "");
-			return type.cast(bm.getBean());
+			return type.cast(checkRequired(bm).getBean());
 		}
 	}
 
@@ -225,7 +225,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			if (cMeta.isBean()) {
 				var child = toBeanMap(cMeta.newInstance(getOuter()));
 				populateBean(child, sections, childPath);
-				bm.put(childName, child.getBean());
+				bm.put(childName, checkRequired(child).getBean());
 			} else if (cMeta.isMap() && sub != null) {
 				var valueType = cMeta.getValueType();
 				if (valueType == null)

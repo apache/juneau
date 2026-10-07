@@ -25,6 +25,8 @@ import java.util.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.rest.server.views.*;
+
 import freemarker.core.*;
 import freemarker.template.*;
 
@@ -87,6 +89,10 @@ public final class ConsoleTemplateValidator {
 	private static final Pattern IMPORT = Pattern.compile("<#import\\s+\"[^\"]+\"\\s+as\\s+([A-Za-z_]\\w*)");
 	private static final Pattern COMMENT = Pattern.compile("(?s)<#--.*?-->");
 	private static final Pattern GLOBAL = Pattern.compile("\\b(pageBody|pageTab|pageInit|pageCss|pageToolkitCss|pageToolkitJs|pageToolkit|pageThemeCss)\\b");
+	private static final Pattern VIEW_KEY = Pattern.compile("\\bview\\s*:\\s*\\{");
+	private static final Pattern VIEW_VERSION = Pattern.compile("^\\s*[\"']?contractVersion[\"']?\\s*:\\s*[\"']([^\"']*)[\"']");
+	private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");
+	private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");
 	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 	private static final Map<String,Set<String>> STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome"));
 	private static final Map<String,Set<String>> DIRECTIVES = directives();
@@ -274,6 +280,8 @@ public final class ConsoleTemplateValidator {
 						var tpl = attrs.get("template");
 						if (tpl != null && tpl.literal)
 							templateRefs.add(new Object[]{tpl.value, at});
+						if (type != null && type.literal && eq(type.value, "datatables") && ! selfClosing)
+							checkViewVersion(out, name, lines, text, m.end(), id == null ? "" : id.value);
 					}
 					case ConsoleDirectiveModel.NAME -> {
 						if (consoleAt < 0)
@@ -299,8 +307,47 @@ public final class ConsoleTemplateValidator {
 				eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "<@page> captures the page into the contract."));
 		}
 
+		var a = ASSET_REF.matcher(text);
+		while (a.find()) {
+			var url = a.group(1) != null ? a.group(1) : a.group(2);
+			if (! url.contains("${") && ! url.contains("<#") && JUNEAU_ASSET.matcher(url).find())
+				add(out, name, lines, a.start(), "hardcoded-asset-url", String.format(
+					"Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));
+		}
+
 		out.sort(Comparator.comparingInt(Finding::line).thenComparingInt(Finding::column));
 		return out;
+	}
+
+	/**
+	 * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a
+	 * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale
+	 * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}
+	 * keys (quickStats, detail, ...) are never mistaken for it.
+	 */
+	private static void checkViewVersion(List<Finding> out, String name, int[] lines, String text, int bodyStart, String cardId) {
+		var end = text.indexOf("</@card", bodyStart);
+		var body = text.substring(bodyStart, end < 0 ? text.length() : end);
+		var vm = VIEW_KEY.matcher(body);
+		if (! vm.find())
+			return;
+		var depth = 1;
+		for (var i = vm.end(); i < body.length() && depth > 0; i++) {
+			var c = body.charAt(i);
+			if (c == '{' || c == '[')
+				depth++;
+			else if (c == '}' || c == ']')
+				depth--;
+			else if (depth == 1 && c == 'c') {
+				var v = VIEW_VERSION.matcher(body.substring(i));
+				if (v.find() && ! eq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
+					add(out, name, lines, bodyStart + i, "view-contract-version", String.format(
+						"<@card id='%s'> view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",
+						cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));
+					return;
+				}
+			}
+		}
 	}
 
 	private record Value(String value, boolean literal) {}

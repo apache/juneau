@@ -44,7 +44,8 @@ import org.junit.jupiter.api.*;
  * help rendered before the operator help (and absent without search metadata); {@code b01} the per-table live
  * announcer (politely live, outside the wrapper, reused on repeat); {@code c01}-{@code c05} the dismiss announcements
  * (a revert names the column title, a never-previewed {@code $}-draft still announces, an Enter commit or a typed-then-
- * restored value never announces, and two reverts in a row both announce).
+ * restored value never announces, and two reverts in a row both announce); {@code d01} the client-mode DSL store
+ * path (WORK-J0612: writes go to the per-table store and one {@code search.fixed} predicate, never native search).
  */
 class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
@@ -215,5 +216,14 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 	@Test void c05_twoSeparateRevertsOnTheSameTableBothAnnounce() {
 		var r = report();
 		assertBean(r, "firstRevertAnnounced,secondRevertAnnounced,sameAnnouncerReusedAcrossReverts", "true,true,true");
+	}
+
+	@Test void d01_clientDslColumn_writesGoToTheStoreAndFixedPredicate() {
+		var r = report();
+		// WORK-J0612 D2: with DataTables' search.fixed available, the live bare preview and the Enter commit both go to
+		// the per-table store + one "juneau-dsl" predicate (server semantics: $eq is exact and case-sensitive); native
+		// col.search() is never written, and a reopened popover starts from the store's value.
+		assertBean(r, "dslLiveNative,dslLiveFixedNames,dslLiveStore,dslLiveDraws,dslReopenValue,dslCommitStore,dslPredicateExact,dslPredicateCaseSensitive,dslCommitNative",
+			",[juneau-dsl],abc,1,abc,$eq(OPEN),true,true,");
 	}
 }

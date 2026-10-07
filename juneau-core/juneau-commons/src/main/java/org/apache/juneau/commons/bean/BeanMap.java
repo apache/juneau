@@ -112,6 +112,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/** Temporary holding cache for beans with read-only properties.  Normally null. */
 	protected Map<String,Object> propertyCache;
 
+	private Set<String> presentProperties;  // Names of required properties seen so far.  null when the bean has no required properties.
+
 	/** Temporary holding cache for bean properties of array types when the add() method is being used. */
 	protected Map<String,List<?>> arrayPropertyCache;
 
@@ -138,6 +140,43 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (ine(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
 		this.typePropertyName = meta.getTypePropertyName();
+		if (meta.hasRequiredProperties())
+			presentProperties = new HashSet<>();
+	}
+
+	/**
+	 * Records that a property was written from input.  Only tracked when the bean has required properties.
+	 *
+	 * @param name The property name.
+	 */
+	void recordPresent(String name) {
+		if (nn(presentProperties))
+			presentProperties.add(name);
+	}
+
+	/**
+	 * Returns the {@code @BeanProp(required=true)} properties that have not been written to this map.
+	 *
+	 * <p>
+	 * A property counts as written once {@link #put(String, Object)} (or a collection {@code add}) has been called for
+	 * it, even with a <jk>null</jk> value.  Parsers call this once per bean, before the bean is constructed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// MyBean has @BeanProp(required=true) on 'name' and 'zip'.</jc>
+	 * 	BeanMap&lt;MyBean&gt; <jv>m</jv> = <jv>session</jv>.newBeanMap(MyBean.<jk>class</jk>);
+	 * 	<jv>m</jv>.put(<js>"name"</js>, <jk>null</jk>);
+	 *
+	 * 	<jc>// [zip]</jc>
+	 * 	List&lt;String&gt; <jv>missing</jv> = <jv>m</jv>.getMissingRequiredProperties();
+	 * </p>
+	 *
+	 * @return The missing required property names, in property order.  Empty (never <jk>null</jk>) if none.
+	 */
+	public List<String> getMissingRequiredProperties() {
+		if (presentProperties == null)
+			return List.of();
+		return meta.getRequiredPropertyNames().stream().filter(x -> ! presentProperties.contains(x)).toList();
 	}
 
 	/**

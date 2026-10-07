@@ -34,7 +34,7 @@ if (!rendersJsPath || !viewsJsPath) {
 	process.exit(2);
 }
 
-const { env, I } = loadViews(rendersJsPath, viewsJsPath);
+const { env, NS, I } = loadViews(rendersJsPath, viewsJsPath);
 const out = {
 	hasWireHeaderSortSearch: !!(I && typeof I.wireHeaderSortSearch === 'function')
 };
@@ -118,5 +118,31 @@ out.nonOrderableColumnGlyphOrder = glyphOrder(h2);
 // Active-state reflects an already-applied filter on first render (no popover interaction needed).
 out.unfilteredColumnActive = searchActive(h0);
 out.filteredColumnActive = searchActive(h1);
+
+// --- WORK-J0612: a client-filtered DSL column keeps its expression in the per-table store (col.search() stays ""),
+// and the icon's first-render active state must read that store.  A minimal engine stub stands in for
+// juneau-search.js (this harness does not load it); only the routing is under test here. ---------------------------
+NS.search = {
+	SearchType: { fromWire: function (w) { return w == null ? null : String(w); } },
+	compile: function (raw) { return { ok: true, empty: String(raw || '') === '', raw: String(raw || ''), test: function () { return true; } }; }
+};
+function dslCol(idx, header) {
+	const col = fakeCol(idx, header, '');
+	col.search.fixed = function () { return { draw: function () { return this; } }; };
+	return col;
+}
+const d0 = headerCell('Status', true);
+const d1 = headerCell('Name', true);
+const dslCols = [ dslCol(0, d0), dslCol(1, d1) ];
+const dslCtx = {
+	dataTable: fakeDt(dslCols),
+	viewDef: { dataMode: 'client', columns: [ { data: 'status', search: { type: 'enum', operators: [] } },
+		{ data: 'name', search: { type: 'text', operators: [] } } ] },
+	optsColumns: [ { data: 'status', title: 'Status' }, { data: 'name', title: 'Name' } ],
+	_colExprs: { status: '$in(Triaged,New)' }
+};
+I.wireHeaderSortSearch(env.el('table'), dslCtx);
+out.dslStoredColumnActive = searchActive(d0);   // true - from the store, though col.search() is ""
+out.dslEmptyColumnActive = searchActive(d1);    // false
 
 process.stdout.write(JSON.stringify(out));

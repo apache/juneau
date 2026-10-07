@@ -136,6 +136,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		notBeanPackages={"$X{foo1}","$X{foo2}"},
 		notBeanPackages_replace={"$X{foo1}","$X{foo2}","$X{foo3}"},
 		propertyNamer=PropertyNamerULC.class,
+		recordComponentOrder="$X{true}",
 		unsortedProperties="$X{false}",
 		useJavaBeanIntrospector="$X{true}"
 	)
@@ -164,6 +165,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("A1,A2,A3,Map,Collection,Reader,Writer,InputStream,OutputStream,Throwable", bs.getNotBeanClasses());
 		check("foo1,foo2,foo3,java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bs.getNotBeanPackagesNames());
 		check("PropertyNamerULC", bs.getPropertyNamer());
+		check("true", bs.isRecordComponentOrder());
 		check("false", bs.isUnsortedProperties());
 		check("false", bs.isUseInterfaceProxies());
 		check("true", bs.isUseJavaBeanIntrospector());
@@ -199,6 +201,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("BasicPropertyNamer", bc.getPropertyNamer());
 		check("false", bc.isUnsortedProperties());
+		check("false", bc.isRecordComponentOrder());
 		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}

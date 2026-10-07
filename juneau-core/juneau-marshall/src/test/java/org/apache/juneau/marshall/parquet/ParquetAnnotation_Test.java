@@ -128,7 +128,7 @@ class ParquetAnnotation_Test {
 	@Test void g01d_parquetConfigValidCodecsCaseInsensitive() throws Exception {
 		for (var c : new Class<?>[] { G01d_Class.class, G01e_Class.class }) {
 			var s = ParquetSerializer.create().applyAnnotations(c).build();
-			var out = (java.util.List<ParquetSerializerBuilder_Test.KBean>) ParquetParser.DEFAULT.read(
+			@SuppressWarnings("unchecked") var out = (java.util.List<ParquetSerializerBuilder_Test.KBean>) ParquetParser.DEFAULT.read(
 				s.write(java.util.List.of(new ParquetSerializerBuilder_Test.KBean("v"))), java.util.List.class, ParquetSerializerBuilder_Test.KBean.class);
 			assertEquals("v", out.get(0).k);
 		}

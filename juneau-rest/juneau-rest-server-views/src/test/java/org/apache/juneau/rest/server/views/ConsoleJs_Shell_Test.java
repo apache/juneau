@@ -233,6 +233,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	@CsvSource(delimiter = '|', value = {
 		"1|missing or unparseable <script id=\"juneau-page\">: '",
 		"2|unsupported page contract version '9'; this shell supports '1'",
+		"2r|page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau",
 		"3|card 'c' references template 'missing', but no <template data-card=\"missing\"> exists",
 		"4|card 'k' has unknown type 'kpi'; registered types: 'html, datatables'",
 		"5|activeNav 'a/b' is not a path in the nav tree (failed at 'b')",

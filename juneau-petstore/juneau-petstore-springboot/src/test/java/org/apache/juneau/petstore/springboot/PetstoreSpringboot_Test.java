@@ -96,7 +96,8 @@ class PetstoreSpringboot_Test {
 					.header("Accept", "text/html")
 					.GET()
 					.build();
-				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 200) {
+				// GET / is a 303 to /console/store (see a01); redirects aren't followed.
+				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 303) {
 					warmedUp = true;
 					return;
 				}
@@ -154,14 +155,20 @@ class PetstoreSpringboot_Test {
 	// a — root router page
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_rootRendersHtml() throws Exception {
+	@Test void a01_rootRedirectsToConsole() throws Exception {
 		var resp = get("/", "text/html");
+		assertEquals(303, resp.statusCode(), "body: " + resp.body());
+		var location = resp.headers().firstValue("Location").orElse("");
+		assertTrue(location.endsWith("/console/store"), "Location was: " + location);
+	}
+
+	@Test void a02_consoleStoreRenders() throws Exception {
+		var resp = get("/console/store", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		// Fail fast if any rendered menu item / navlink returned a server error (e.g. a $W widget var that
-		// failed to resolve renders an inline "HTTP 500: Internal Server Error ..." fragment inside the 200
-		// page). Surface that fragment directly instead of the opaque "expected petstore link" failure below.
-		assertFalse(resp.body().contains("HTTP 500"), "root page rendered an inline server error: " + resp.body());
-		assertTrue(resp.body().contains("petstore"), "expected petstore link on root: " + resp.body());
+		// Fail fast if the page rendered an inline server error inside a 200 body.
+		assertFalse(resp.body().contains("HTTP 500"), "console page rendered an inline server error: " + resp.body());
+		assertTrue(resp.body().contains("Juneau Petstore"), "expected console brand: " + resp.body());
+		assertTrue(resp.body().contains("id=\"juneau-page\""), "expected the page contract element: " + resp.body());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

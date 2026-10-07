@@ -304,7 +304,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 					onUnknownProperty(key, m, rawVal);
 				}
 			}
-			return m.getBean();
+			return checkRequired(m).getBean();
 		}
 
 		if (eType.isMap()) {
@@ -487,7 +487,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 					onUnknownProperty(header, m, rawVal);
 				}
 			}
-			return m.getBean();
+			return checkRequired(m).getBean();
 		}
 		if (actualType.isMap()) {
 			Map map = actualType.canCreateNewInstance(outer) ? (Map) actualType.newInstance(outer) : newGenericMap();

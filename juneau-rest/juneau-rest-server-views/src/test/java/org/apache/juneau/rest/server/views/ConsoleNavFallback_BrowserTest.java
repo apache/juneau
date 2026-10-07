@@ -35,7 +35,7 @@ import org.junit.jupiter.api.condition.*;
 class ConsoleNavFallback_BrowserTest extends TestBase {
 
 	private static final String NAV = """
-		{"version":"1","title":"Fallback","activeNav":[],"cards":[],"nav":[
+		{"contractVersion":"1","title":"Fallback","activeNav":[],"cards":[],"nav":[
 		 {"id":"home","label":"Home","href":"/home","children":[
 		  {"id":"about","label":"About","href":"/home/about"},
 		  {"id":"setup","label":"Setup","href":"/home/setup"}]},

@@ -32,11 +32,16 @@ import org.apache.juneau.rest.server.console.*;
  * <p>
  * Failures throw {@link AssertionError}, so the class works under any test framework.
  *
+ * <p>
+ * {@link #assertPage(String)} also fails immediately if the contract still carries the pre-rename top-level
+ * <c>version</c> key (now <c>contractVersion</c>), even when {@link #isValid()} is never called.
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	String <jv>html</jv> = <jv>client</jv>.get(<js>"/slo"</js>).run().getContent().asString();
  * 	PageContractAssert.<jsm>assertPage</jsm>(<jv>html</jv>)
  * 		.isValid()
+ * 		.hasContractVersion(<js>"1"</js>)
  * 		.hasActiveNav(<js>"slo"</js>)
  * 		.hasNavPath(<js>"home"</js>, <js>"about"</js>)
  * 		.hasNavHref(<js>"slo"</js>, <js>"/slo"</js>)
@@ -68,6 +73,8 @@ public final class PageContractAssert {
 		} catch (Exception e) {
 			throw new AssertionError("unparseable page contract: " + e.getMessage(), e);
 		}
+		if (contract.containsKey("version"))
+			throw new AssertionError("page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau");
 		templates = scanTemplates(html);
 	}
 
@@ -94,9 +101,9 @@ public final class PageContractAssert {
 		return this;
 	}
 
-	/** @param v The expected version. @return This object. */
-	public PageContractAssert hasVersion(String v) {
-		return eq("version", v, contract.getString("version"));
+	/** @param v The expected contract version. @return This object. */
+	public PageContractAssert hasContractVersion(String v) {
+		return eq("contractVersion", v, contract.getString("contractVersion"));
 	}
 
 	/** @param v The expected page title. @return This object. */

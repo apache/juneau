@@ -84,6 +84,7 @@ public class BeanConfigAnnotation {
 			bool(a.ignoreUnknownEnumValues()).ifPresent(b::ignoreUnknownEnumValues);
 			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(b::disableIgnoreUnknownNullBeanProperties);
 			bool(a.unsortedProperties()).ifPresent(b::unsortedProperties);
+			bool(a.recordComponentOrder()).ifPresent(b::recordComponentOrder);
 			bool(a.disableInterfaceProxies()).ifPresent(b::disableInterfaceProxies);
 			bool(a.useJavaBeanIntrospector()).ifPresent(b::useJavaBeanIntrospector);
 			classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);

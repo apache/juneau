@@ -35,7 +35,7 @@ import org.junit.jupiter.api.condition.*;
 class ConsoleBarSlot_BrowserTest extends TestBase {
 
 	private static final String SEG = """
-		{"version":"1","title":"Bar","cards":[{"id":"jc-seg-1","type":"html","template":"jc-seg-1","bare":true}]}
+		{"contractVersion":"1","title":"Bar","cards":[{"id":"jc-seg-1","type":"html","template":"jc-seg-1","bare":true}]}
 		""";
 
 	private static final String SEG_TEMPLATE = """
@@ -68,7 +68,7 @@ class ConsoleBarSlot_BrowserTest extends TestBase {
 		report = ConsoleBrowserFixture.create("bar-slot")
 			.page("scan", ORIGIN + "/scan", contractPage(SEG, SEG_TEMPLATE),
 				"badge", "[data-juneau-bar-slot=\"b1\"] [data-juneau-badge=\"pending\"]")
-			.page("insert", ORIGIN + "/insert", contractPage("{\"version\":\"1\",\"title\":\"Bar\",\"cards\":[]}", "", "", INSERT_PANEL),
+			.page("insert", ORIGIN + "/insert", contractPage("{\"contractVersion\":\"1\",\"title\":\"Bar\",\"cards\":[]}", "", "", INSERT_PANEL),
 				"badge", BADGE_B2)
 			.page("no-shell", ORIGIN + "/no-shell", viewsOnly, "badge", BADGE_B2)
 			.run();

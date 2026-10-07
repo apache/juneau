@@ -84,7 +84,7 @@ def test_prereq_reports_missing_tools(test_mod, monkeypatch):
 def test_auto_enabled_skips_with_notice_when_prereqs_missing(test_mod, monkeypatch, capsys):
     monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: "node not found on the PATH")
     calls = []
-    rc = test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda v: calls.append(v) or (0, ""))
+    rc = test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: calls.append(1) or (0, ""))
     assert rc == 0 and calls == []
     assert "skipping JS tests" in capsys.readouterr().out
 
@@ -92,15 +92,15 @@ def test_auto_enabled_skips_with_notice_when_prereqs_missing(test_mod, monkeypat
 def test_explicit_fails_when_prereqs_missing(test_mod, monkeypatch, capsys):
     monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: "node not found on the PATH")
     calls = []
-    rc = test_mod.maybe_run_js_tests(True, False, [], runner=lambda v: calls.append(v) or (0, ""))
+    rc = test_mod.maybe_run_js_tests(True, False, [], runner=lambda: calls.append(1) or (0, ""))
     assert rc == 1 and calls == []
     assert "--js-tests requested but cannot run" in capsys.readouterr().out
 
 
 def test_runs_and_propagates_exit_code(test_mod, monkeypatch):
     monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: None)
-    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda v: (0, "")) == 0
-    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda v: (1, "")) == 1
+    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda: (0, "")) == 0
+    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda: (1, "")) == 1
 
 
 def test_disabled_never_runs_or_checks_prereqs(test_mod, monkeypatch):
@@ -128,7 +128,7 @@ def test_test_py_help_documents_flags(test_mod):
 
 def test_test_py_accepts_flags(test_mod, monkeypatch):
     # --build-only with a stubbed build proves parsing accepts the flags and nothing else runs.
-    monkeypatch.setattr(test_mod, "build", lambda v: (0, ""))
+    monkeypatch.setattr(test_mod, "build", lambda: (0, ""))
     monkeypatch.setattr(sys, "argv", ["test.py", "--build-only", "--js-tests"])
     assert test_mod.main() == 0
 

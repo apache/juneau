@@ -264,7 +264,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 			setCurrentProperty(null);
 		}
 
-		return m.getBean();
+		return checkRequired(m).getBean();
 	}
 
 	/**

@@ -40,7 +40,7 @@ const shellSrc = fs.readFileSync(path.resolve(shellPath), 'utf8');
 
 /** Shallow helper: wraps a bare object as a frozen-looking page contract with version "1" unless overridden. */
 function C(partial) {
-	return { version: '1', ...partial };
+	return { contractVersion: '1', ...partial };
 }
 
 /** Appends a `<template data-{attr}="{id}">` to doc.body, with `build(doc, templateContentNode)` filling it in. */
@@ -256,8 +256,14 @@ out.errors = {};
 
 // E-JS-2: unsupported contract version (fatal).
 (function () {
-	const r = run({ version: '9' }, []);
+	const r = run({ contractVersion: '9' }, []);
 	out.errors['2'] = { threw: r.threw, errors: r.errors, banner: bannerText(r.doc) };
+})();
+
+// E-JS-2 (renamed): a leftover pre-rename 'version' key gets a dedicated diagnostic (fatal; never read for behavior).
+(function () {
+	const r = run({ version: '1' }, []);
+	out.errors['2r'] = { threw: r.threw, errors: r.errors, banner: bannerText(r.doc) };
 })();
 
 // E-JS-3: card references a template id that was never registered (fatal; caught by checkRefs() before the

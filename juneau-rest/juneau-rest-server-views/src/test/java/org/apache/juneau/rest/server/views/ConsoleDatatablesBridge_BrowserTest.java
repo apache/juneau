@@ -36,7 +36,7 @@ import org.junit.jupiter.api.condition.*;
 class ConsoleDatatablesBridge_BrowserTest extends TestBase {
 
 	private static final String TABLES = """
-		{"version":"1","title":"Tables","cards":[
+		{"contractVersion":"1","title":"Tables","cards":[
 		 {"id":"t1","type":"datatables","table":"/rest/a"},
 		 {"id":"t2","type":"datatables","table":{"dataUrl":"/rest/b"}}]}
 		""";

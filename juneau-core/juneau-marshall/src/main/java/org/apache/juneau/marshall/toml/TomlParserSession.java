@@ -438,7 +438,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 		BeanMap<?> bm = toBeanMap(type.newInstance(getOuter()));
 		populateBeanMap(bm, map);
-		return (T) bm.getBean();
+		return (T) checkRequired(bm).getBean();
 	}
 
 	private JsonMap toJsonMap(Map<?,?> map) throws ParseException, ExecutableException {
@@ -482,7 +482,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			if (targetType.isBean()) {
 				BeanMap<?> child = toBeanMap(targetType.newInstance(getOuter()));
 				populateBeanMap(child, val2);
-				return child.getBean();
+				return checkRequired(child).getBean();
 			}
 		}
 		if (val instanceof List val2 && targetType.isCollectionOrArray()) {

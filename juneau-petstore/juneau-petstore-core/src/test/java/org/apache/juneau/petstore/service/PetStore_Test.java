@@ -240,4 +240,14 @@ class PetStore_Test extends TestBase {
 		var e = s.recordAudit("job:restock", "Pet", "*", "RESTOCK", "3 per species");
 		assertBean(e, "id,actor,action,detail", "1,job:restock,RESTOCK,3 per species");
 	}
+
+	@Test void e11_restock_addsPetsAndOneSummaryAudit() {
+		var s = new PetStore();
+		var before = s.getAudit().size();
+		var added = s.restock(new LinkedHashMap<>(Map.of(Species.DOG, 2)), "job:restock");
+		assertSize(2, added);
+		assertEquals(before + 3, s.getAudit().size());
+		var last = s.getAudit().get(s.getAudit().size() - 1);
+		assertBean(last, "actor,entity,entityId,action,detail", "job:restock,Job,restock,RESTOCK,2 pets");
+	}
 }

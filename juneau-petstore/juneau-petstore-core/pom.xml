@@ -68,6 +68,38 @@
 			<version>2.3.34</version>
 		</dependency>
 
+		<!-- Console UI (C7 Plan A): chrome, FreeMarker bridge, DataTables, views and widgets. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-console-ui</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-console-ui-freemarker-datatables</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-views</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-datatables</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

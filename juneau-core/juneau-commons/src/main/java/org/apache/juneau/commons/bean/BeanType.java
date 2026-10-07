@@ -281,7 +281,8 @@ public @interface BeanType {
 	 *
 	 * <p>
 	 * By default, bean properties are serialized in alphabetical order.
-	 * When <jk>true</jk>, properties of this bean will use the natural JVM-dependent order instead.
+	 * When <jk>true</jk>, properties of this bean use declaration order instead: record component order for records,
+	 * field declaration order (superclass first) for other classes, then method-only properties alphabetically.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

@@ -405,7 +405,7 @@ public final class PageCapture {
 	 */
 	public String toContractJson() {
 		var m = new LinkedHashMap<String,Object>();
-		m.put("version", CONTRACT_VERSION);
+		m.put("contractVersion", CONTRACT_VERSION);
 		m.put("title", title);
 		if (theme != null)
 			m.put("theme", Map.of("name", theme));

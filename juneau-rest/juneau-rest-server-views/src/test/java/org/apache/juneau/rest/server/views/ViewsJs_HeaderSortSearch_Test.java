@@ -98,14 +98,17 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 	@Test void a04c_searchIcon_activeWhenColumnAlreadyFiltered() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function renderHeaderSearchIcon(");
-		assertTrue(fn.contains("col.search === \"function\""), fn);
+		// WORK-J0612: read through the store adapter, so a client-filtered DSL column (col.search() === "") still paints active.
+		assertTrue(fn.contains("getColumnExpr(ctx, col)"), fn);
 		assertTrue(fn.contains("classList.add(\"is-active\")"), fn);
 	}
 
 	@Test void a05_searchPopover_appliesColumnSearch() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function openColumnSearchPopover(");
-		assertTrue(fn.contains("col.search(value).draw()"), fn);
+		// WORK-J0612: every write goes through the store adapter (native col.search(value) off the DSL path).
+		assertTrue(fn.contains("setColumnExpr(ctx, col, value)"), fn);
+		assertTrue(fn.contains("drawColumnExpr(ctx, r)"), fn);
 		assertTrue(fn.contains("juneau-view-col-search-popover"), fn);
 		assertTrue(fn.contains("is-active"), fn);
 		assertFalse(fn.contains("btn-primary"), fn);
@@ -124,7 +127,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("if (!serverSide) applyValue"), fn);            // bare preview only on client tables
 		assertTrue(fn.contains("if (d.dollar)"), fn);                          // $-expression is NOT previewed
 		assertTrue(fn.contains("Not a valid search for this column."), fn);    // reject message
-		assertTrue(fn.contains("col.search(current).draw()"), fn);             // revert to opened-with value on dismiss
+		assertTrue(fn.contains("drawColumnExpr(ctx, setColumnExpr(ctx, col, current))"), fn); // revert to opened-with value on dismiss
 	}
 
 	// The draft classifier gates commit timing: leading "$" => deferred; an unparseable expression OR one naming an
@@ -144,6 +147,19 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		var fn = functionBody(body, "function teardownTable(");
 		assertTrue(fn.contains("closeColumnSearchPopover(ctx)"), fn);
 		assertTrue(fn.contains("delete table.dataset.juneauHeaderSortSearch"), fn);
+		// WORK-J0612 D7: a rebuild drops the client-mode DSL store along with the native filters destroy() discards.
+		assertTrue(fn.contains("ctx._colExprs = {}"), fn);
+	}
+
+	// WORK-J0612 D2: the store adapter keeps native col.search() for server mode / no-metadata columns and routes a
+	// client-filtered DSL column through ONE named search.fixed predicate.
+	@Test void a06b_setColumnExpr_routesDslColumnsThroughSearchFixed() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fn = functionBody(body, "function setColumnExpr(");
+		assertTrue(fn.contains("if (!info) return { ok: true, error: null, api: col.search(value) };"), fn);
+		assertTrue(fn.contains("col.search.fixed(DSL_FIXED_SEARCH, fn)"), fn);
+		assertTrue(fn.contains("col.search.fixed(DSL_FIXED_SEARCH, null)"), fn);
+		assertTrue(body.contains("const DSL_FIXED_SEARCH = \"juneau-dsl\";"), body);
 	}
 
 	@Test void a07_ensureHeaderSortControl_injectsSvgOnExistingDtOrderSpan() throws Exception {

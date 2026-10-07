@@ -50,10 +50,10 @@ class QueryModel_Test extends TestBase {
 		@BeanIgnore public String getPassword() { return "x"; }
 		public String getBoom() { throw new IllegalStateException("boom"); }
 		@BeanProp(wo="true") public String getSecret() { return "s"; }
-		public void setSecret(String v) { /* stored nowhere */ }
+		public void setSecret(@SuppressWarnings("unused") String v) { /* stored nowhere */ }
 		@BeanProp(ro="true") public String getLocked() { return "l"; }
-		public void setLocked(String v) { /* ignored */ }
-		public void setExplode(String v) { throw new IllegalStateException("bang"); }
+		public void setLocked(@SuppressWarnings("unused") String v) { /* ignored */ }
+		public void setExplode(@SuppressWarnings("unused") String v) { throw new IllegalStateException("bang"); }
 		public String getExplode() { return "e"; }
 	}
 
@@ -196,7 +196,7 @@ class QueryModel_Test extends TestBase {
 
 	public static class Throwing {
 		public Throwing() { throw new IllegalStateException("nope"); }
-		public void setX(String v) { /* unused */ }
+		public void setX(@SuppressWarnings("unused") String v) { /* unused */ }
 	}
 
 	public static class Setters {

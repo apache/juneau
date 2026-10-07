@@ -35,7 +35,7 @@ import org.junit.jupiter.api.condition.*;
 class ConsoleSlots_BrowserTest extends TestBase {
 
 	private static final String SLOTS = """
-		{"version":"1","title":"Slots",
+		{"contractVersion":"1","title":"Slots",
 		 "header":{"title":"T","slots":{"brand":"header.brand","actions":"header.actions","banner":"header.banner"}},
 		 "footer":{"slots":{"content":"footer.content"}},
 		 "cards":[{"id":"jc-seg-1","type":"html","template":"jc-seg-1","bare":true}]}
@@ -63,16 +63,16 @@ class ConsoleSlots_BrowserTest extends TestBase {
 		""";
 
 	private static final String REPLACE = """
-		{"version":"1","title":"Replace","header":{"title":"ignored","slots":{"replace":"header.replace"}},"cards":[]}
+		{"contractVersion":"1","title":"Replace","header":{"title":"ignored","slots":{"replace":"header.replace"}},"cards":[]}
 		""";
 
 	private static final String CHROME_ON = """
-		{"version":"1","title":"Chrome","header":{"title":"T","chrome":true,"slots":{"banner":"header.banner"}},
+		{"contractVersion":"1","title":"Chrome","header":{"title":"T","chrome":true,"slots":{"banner":"header.banner"}},
 		 "nav":[{"id":"home","label":"Home","href":"/chrome"}],"activeNav":["home"],"cards":[]}
 		""";
 
 	private static final String CHROME_OFF = """
-		{"version":"1","title":"NoChrome","header":{"title":"T","slots":{"banner":"header.banner"}},
+		{"contractVersion":"1","title":"NoChrome","header":{"title":"T","slots":{"banner":"header.banner"}},
 		 "nav":[{"id":"home","label":"Home","href":"/nochrome"}],"activeNav":["home"],"cards":[]}
 		""";
 

@@ -724,10 +724,8 @@
 		return f;
 	}
 
-	function regex(cell, args) {
-		const v = strVal(cell);
-		if (v == null)
-			return false;
+	/** The anchored RegExp a `$regex(pattern[, flags=...])` call evaluates, or null for a bad pattern. */
+	function buildRegex(args) {
 		let flags = "i";  // Default (case-insensitive) when no flags= given.
 		for (let i = 1; i < args.length; i++) {
 			const a = String(args[i]).trim();
@@ -736,10 +734,24 @@
 		}
 		try {
 			// Java Matcher.matches() is a full-string match; anchor the pattern to reproduce it.
-			return new RegExp("^(?:" + args[0] + ")$", flags).test(v);
+			return new RegExp("^(?:" + args[0] + ")$", flags);
 		} catch (e) {
-			return false;  // Bad pattern matches nothing (PatternSyntaxException parity).
+			return null;  // Bad pattern matches nothing (PatternSyntaxException parity).
 		}
+	}
+
+	function regex(cell, args) {
+		const v = strVal(cell);
+		if (v == null)
+			return false;
+		const re = buildRegex(args);
+		return re != null && re.test(v);
+	}
+
+	/** `$regex` against a pattern `compile()` already built once (null = bad pattern, which matches nothing). */
+	function matchCompiledRegex(re, cell) {
+		const v = strVal(cell);
+		return v != null && re != null && re.test(v);
 	}
 
 	function between(cell, args, type) {
@@ -800,6 +812,8 @@
 				return false;  // Malformed arity matches nothing rather than throwing.
 			if (o.combinator)
 				return matchCombinator(o.name, node, cell, type, customs);
+			if (node.compiledRegex !== undefined)
+				return matchCompiledRegex(node.compiledRegex, cell);
 			return matchLeaf(o.name, literalArgs(node), cell, type);
 		}
 		const custom = customs[node.name];
@@ -926,19 +940,26 @@
 	 * otherwise slip past `parseExprStrict` unchecked; this closes that gap for the strict, throwing entry point.
 	 *
 	 * <p>
-	 * <b>Known limitation:</b> unlike Java's {@code SearchExpressionParser.parse(raw, operators)}, which takes an
-	 * explicit, caller-supplied operator set that may include customs, this only consults the static builtin
-	 * {@link SearchOperators} catalog - a custom operator usable through {@link #matches}/`createEngine().custom(...)`
-	 * (no arity metadata exists for one here to check anyway) will always throw `UNKNOWN_OPERATOR` through this
-	 * path. `parseExprStrict` is builtin-syntax-only; it is not meant to validate an expression that also uses a
-	 * caller-registered custom operator.
+	 * Custom operators: with no `customs` table this consults only the static builtin {@link SearchOperators}
+	 * catalog, so a custom "$name" throws `UNKNOWN_OPERATOR`.  Pass a table (as `compile()` does from the
+	 * `registerCustom` registry) to accept the registered customs; no arity metadata exists for one on the client,
+	 * so its argument count is not checked.
 	 */
-	function validateStrict(node) {
+	function validateStrict(node, customs) {
 		if (isLiteral(node))
 			return;
 		const o = SearchOperators.get(node.name);
-		if (o == null)
-			throw searchError('UNKNOWN_OPERATOR', 'Unknown search operator: \'' + node.name + '\'.');
+		if (o == null) {
+			const custom = lookupCustom(customs, node.name);
+			if (custom == null)
+				throw searchError('UNKNOWN_OPERATOR', 'Unknown search operator: \'' + node.name + '\'.');
+			// A caller-registered custom operator: no arity metadata exists for it on the client, so any arg count
+			// is accepted (its predicate decides); the name is canonicalized to the registered spelling.
+			node.name = custom.name;
+			for (const arg of node.args)
+				validateStrict(arg, customs);
+			return;
+		}
 		if (! o.acceptsArgCount(argCount(node)))
 			throw searchError('BAD_ARG_COUNT', regexHint('Operator \'' + o.name + '\' does not accept ' + argCount(node) + ' argument(s).', o.name));
 		// Java's SearchExpression.func() always stores the operator's canonical registered name (SearchOperatorSet:
@@ -947,7 +968,15 @@
 		// deferred there (D6), so parseExprStrict - the Java-parity, throwing entry point - canonicalizes it here.
 		node.name = o.name;
 		for (const arg of node.args)
-			validateStrict(arg);
+			validateStrict(arg, customs);
+	}
+
+	/** The `{name, fn}` entry `customs` (a lowercase-"$name"-keyed table) holds for `name`, or null. */
+	function lookupCustom(customs, name) {
+		if (customs == null || name == null)
+			return null;
+		const key = String(name).toLowerCase();
+		return Object.hasOwn(customs, key) ? customs[key] : null;
 	}
 
 	/**
@@ -965,7 +994,7 @@
 	 *	}
 	 * </p>
 	 */
-	function parseExprStrict(raw) {
+	function parseExprStrict(raw, customs) {
 		const d = parse(raw);
 		if (d.empty)
 			return literalNode('', false);
@@ -979,12 +1008,12 @@
 				if (isUnterminatedQuote(token))
 					throw searchError('UNTERMINATED_QUOTE', 'Unterminated quoted value in search expression: \'' + token + '\'.');
 			}
-			validateStrict(d.root);  // Catches unknown-operator/bad-arg-count calls parse() left as "valid".
+			validateStrict(d.root, customs);  // Catches unknown-operator/bad-arg-count calls parse() left as "valid".
 			return d.root;
 		}
 		// Re-walk with parseFuncStrict directly so a definite (non-live-typing) failure gets a real code instead
 		// of the permissive INCOMPLETE/INVALID signal parse() swallows for the live-typing UI path.
-		return parseFuncStrict(raw.trim());
+		return parseFuncStrict(String(raw).trim(), customs);
 	}
 
 	/**
@@ -992,7 +1021,7 @@
 	 * Mirrors Java's `SearchExpressionParser` throw sites one for one (MALFORMED_OPERATOR, INVALID_OPERATOR_NAME,
 	 * UNKNOWN_OPERATOR, UNTERMINATED_QUOTE, UNBALANCED, EMPTY_ARGUMENT, TRAILING_TEXT, BAD_ARG_COUNT).
 	 */
-	function parseFuncStrict(s) {
+	function parseFuncStrict(s, customs) {
 		if (s.length > 1 && s.charAt(0) === '$' && IS_LETTER.test(s.charAt(1))) {
 			const open = s.indexOf('(');
 			if (open < 0)
@@ -1001,8 +1030,10 @@
 			if (! isValidName(name))
 				throw searchError('INVALID_OPERATOR_NAME', 'Invalid operator name: \'' + name + '\'.');
 			const o = SearchOperators.get(name);
-			if (o == null)
+			const custom = o == null ? lookupCustom(customs, name) : null;
+			if (o == null && custom == null)
 				throw searchError('UNKNOWN_OPERATOR', 'Unknown search operator: \'' + name + '\'.');
+			const opName = o != null ? o.name : custom.name;
 			const info = scanArgs(s, open);
 			// blankArg is checked first: Java's parseFunc throws EMPTY_ARGUMENT inline, the instant a top-level
 			// comma (or the closing paren) finds a blank slot behind it - before it can ever notice the rest of
@@ -1014,13 +1045,13 @@
 			if (info.state === 'unterminatedQuote')
 				throw searchError('UNTERMINATED_QUOTE', 'Unterminated quoted value in search expression: \'' + s + '\'.');
 			if (info.close < 0)
-				throw searchError('UNBALANCED', regexHint('Unclosed parenthesis in search expression: \'' + s + '\'.', o.name));
+				throw searchError('UNBALANCED', regexHint('Unclosed parenthesis in search expression: \'' + s + '\'.', opName));
 			if (s.substring(info.close + 1).length > 0)
 				throw searchError('TRAILING_TEXT', 'Unexpected text after \')\' in search expression: \'' + s + '\'.');
-			const argNodes = info.rawArgs.map(function (a) { return parseExprStrict(a.trim()); });
-			if (! o.acceptsArgCount(argNodes.length))
+			const argNodes = info.rawArgs.map(function (a) { return parseExprStrict(a.trim(), customs); });
+			if (o != null && ! o.acceptsArgCount(argNodes.length))
 				throw searchError('BAD_ARG_COUNT', regexHint('Operator \'' + o.name + '\' does not accept ' + argNodes.length + ' argument(s).', o.name));
-			return funcNode(o.name, argNodes);
+			return funcNode(opName, argNodes);
 		}
 		// Bare-literal fallthrough. In the current dispatch this is only reached via parseExprStrict's direct
 		// `parseFuncStrict(raw.trim())` call, which is itself only taken when the token starts with "$" + a
@@ -1175,15 +1206,158 @@
 	 * @param raw The column's expression (the text after "col=").
 	 * @param type The column SearchType wire token.
 	 * @param column Optional column name used in error messages.
+	 * @param customs Optional custom-operator table (see `registerCustom`); a custom "$name" found there is accepted
+	 * 	instead of raising UNKNOWN_OPERATOR.  Omitted, only the builtin catalog is consulted.
 	 */
-	function resolveStrict(raw, type, column) {
-		const tree = parseExprStrict(raw);
+	function resolveStrict(raw, type, column, customs) {
+		const tree = parseExprStrict(raw, customs);
 		const t = SearchType.fromWire(type);
 		if (t != null && ! (isLiteral(tree) && tree.value === '' && String(raw).trim() === '')) {
 			checkTypes(tree, t, column ?? 'v');
 			checkValues(tree, t, column ?? 'v');
 		}
 		return tree;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Client-side custom-operator registry + compile(): the client-mode grid's row predicate (WORK-J0612).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	// Mirrors QuerySettings.MAX_REGEX_LENGTH: a longer $regex pattern is REGEX_TOO_LONG, exactly as the server rejects it.
+	const MAX_REGEX_LENGTH = 256;
+
+	// Page-level custom operators: lowercase "$name" -> {name, fn}.  Lookup is case-insensitive (D6), like builtins.
+	const CUSTOM_REGISTRY = {};
+
+	/**
+	 * Registers a page-level predicate for a custom operator the server advertises in a column's
+	 * `search.operators` (a `custom:true` entry built from `CardEnvelope.addSearchMeta`'s `customOperators`), so a
+	 * client-filtered grid can evaluate it.  The predicate receives the raw cell value and the operator's literal
+	 * argument strings, and returns whether the cell matches - the same `(cell, args)` contract as the Java
+	 * `SearchOperator.predicate`.  A custom operator with no registered predicate is rejected on a client-filtered
+	 * table rather than silently matching nothing.  Re-registering a name replaces its predicate.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *	JuneauViews.search.registerCustom(<js>'$startsCI'</js>, <jk>function</jk> (<jv>cell</jv>, <jv>args</jv>) {
+	 *		<jk>return</jk> String(<jv>cell</jv> ?? <js>''</js>).toLowerCase().startsWith(String(<jv>args</jv>[0]).toLowerCase());
+	 *	});
+	 * </p>
+	 *
+	 * @param name The operator's "$"-name, e.g. "$startsCI" (must not shadow a builtin).
+	 * @param fn The predicate `function (cell, args) -> boolean`.
+	 */
+	function registerCustom(name, fn) {
+		if (name == null || typeof fn !== "function")
+			throw new TypeError("JuneauViews.search.registerCustom requires a \"$\"-name and a predicate function.");
+		const n = String(name).trim();
+		if (n.charAt(0) !== "$" || ! isValidName(n) || ! IS_LETTER.test(n.charAt(1)))
+			throw new TypeError("JuneauViews.search.registerCustom: invalid operator name '" + n + "'.");
+		if (SearchOperators.isBuiltin(n))
+			throw new TypeError("JuneauViews.search.registerCustom: '" + n + "' is a builtin operator.");
+		CUSTOM_REGISTRY[n.toLowerCase()] = { name: n, fn: fn };
+	}
+
+	/** Whether a predicate is registered (via `registerCustom`) for the custom operator `name` (case-insensitive). */
+	function hasCustom(name) {
+		return lookupCustom(CUSTOM_REGISTRY, name) != null;
+	}
+
+	/** The registry merged with an optional `{"$name": fn}` map of call-local predicates (those win), lowercase-keyed. */
+	function customTable(extra) {
+		const out = {};
+		for (const k of Object.keys(CUSTOM_REGISTRY))
+			out[k] = CUSTOM_REGISTRY[k];
+		if (extra != null)
+			for (const k of Object.keys(extra))
+				if (typeof extra[k] === "function")
+					out[k.toLowerCase()] = { name: k, fn: extra[k] };
+		return out;
+	}
+
+	/** Mirror of QueryResolver.checkRegex: REGEX_DISABLED when not allowed, REGEX_TOO_LONG past MAX_REGEX_LENGTH. */
+	function checkRegexStrict(node, allowRegex) {
+		if (isLiteral(node))
+			return;
+		if (node.name === "$regex") {
+			if (! allowRegex)
+				throw searchError('REGEX_DISABLED', 'Regex search is not enabled for this list.');
+			if (literalArgs(node)[0].length > MAX_REGEX_LENGTH)
+				throw searchError('REGEX_TOO_LONG', 'Regex pattern exceeds ' + MAX_REGEX_LENGTH + ' characters.');
+		}
+		for (const arg of node.args)
+			checkRegexStrict(arg, allowRegex);
+	}
+
+	/** Builds each `$regex` node's RegExp once (S8/N3), so a draw never constructs one per row. */
+	function precompileRegex(node) {
+		if (isLiteral(node))
+			return;
+		if (node.name === "$regex")
+			node.compiledRegex = buildRegex(literalArgs(node));
+		for (const arg of node.args)
+			precompileRegex(arg);
+	}
+
+	/**
+	 * Validates one column expression with the server's rules and compiles it into a reusable row predicate - the
+	 * client-filtered grid's single entry point (WORK-J0612).  Parsing, strict validation (`resolveStrict`: syntax,
+	 * unknown operator, arity, OPERATOR_TYPE, BAD_VALUE, plus the server's regex checks) and `$regex` compilation
+	 * all happen ONCE here; `test(cell, nowMs)` then evaluates the cached tree per row with no re-parse.
+	 *
+	 * <p>
+	 * Returns `{ok, empty, incomplete, error, raw, test}`:
+	 * <ul>
+	 * 	<li>blank input - `ok:true, empty:true`, and `test` matches every row;
+	 * 	<li>a still-being-typed draft (`$eq(`) - `ok:false, incomplete:true, error:null`;
+	 * 	<li>an expression the server would reject - `ok:false`, `error` a coded Error (`error.code` is the Java
+	 * 		`BeanQuerySyntaxException.Code` name; `error.message` mirrors the server's `X-BeanQuery-Error` text);
+	 * 	<li>otherwise `ok:true` and `test(cell, nowMs)`, where `nowMs` anchors relative durations such as `-24h`.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *	<jk>const</jk> <jv>c</jv> = JuneauViews.search.compile(<js>'$in(Triaged,New)'</js>, <js>'enum'</js>, { column: <js>'status'</js> });
+	 *	<jk>if</jk> (<jv>c</jv>.ok) <jv>rows</jv> = <jv>rows</jv>.filter(<jk>function</jk> (<jv>r</jv>) { <jk>return</jk> <jv>c</jv>.test(<jv>r</jv>.status, Date.now()); });
+	 * </p>
+	 *
+	 * @param raw The column's expression.
+	 * @param type The column SearchType wire token (an unknown type is rejected with UNKNOWN_TYPE).
+	 * @param options Optional `{column, allowRegex, customs}`: the column name for error messages; whether
+	 * 	`$regex` is enabled (default true); call-local `{"$name": fn}` custom predicates merged over the registry.
+	 */
+	function compile(raw, type, options) {
+		const o = options || {};
+		const text = raw == null ? "" : String(raw).trim();
+		const d = parse(text);
+		if (d.empty)
+			return compiled(true, true, false, null, "", function () { return true; });
+		if (d.incomplete)
+			return compiled(false, false, true, null, text, null);
+		const t = SearchType.fromWire(type);
+		if (t == null)
+			return compiled(false, false, false, searchError('UNKNOWN_TYPE', 'Unknown search type \'' + type + '\'.'), text, null);
+		const customs = customTable(o.customs);
+		let tree;
+		try {
+			tree = resolveStrict(text, t, o.column, customs);
+			checkRegexStrict(tree, o.allowRegex !== false);
+		} catch (e) {
+			if (e?.code)
+				return compiled(false, false, false, e, text, null);
+			throw e;
+		}
+		precompileRegex(tree);
+		const fns = {};
+		for (const k of Object.keys(customs))
+			fns[customs[k].name] = customs[k].fn;
+		return compiled(true, false, false, null, text, function (cell, nowMs) {
+			return withRequestTime(nowMs, function () { return matchNode(tree, cell, t, fns); });
+		});
+	}
+
+	function compiled(ok, empty, incomplete, error, raw, test) {
+		return { ok: ok, empty: empty, incomplete: incomplete, error: error, raw: raw, test: test };
 	}
 
 	NS.search = {
@@ -1194,6 +1368,10 @@
 		createEngine: createEngine,
 		parseExprStrict: parseExprStrict,
 		resolveStrict: resolveStrict,
-		isValidValue: isValidValue
+		isValidValue: isValidValue,
+		compile: compile,
+		registerCustom: registerCustom,
+		hasCustom: hasCustom,
+		MAX_REGEX_LENGTH: MAX_REGEX_LENGTH
 	};
 })();

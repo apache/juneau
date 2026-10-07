@@ -24,6 +24,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -63,6 +64,9 @@ public class PetStore {
 
 	/** Actor recorded for mutations made through the {@code /petstore} API. */
 	public static final String ACTOR_API = "api";
+
+	/** The most pets {@link #restock} adds for one species in one call. */
+	public static final int MAX_RESTOCK_PER_SPECIES = 1000;
 
 	/** Query context over pets; {@code tags} and {@code photo} are not searchable. */
 	public static final InMemoryBeanQueryContext<Pet> PET_QUERY = InMemoryBeanQueryContext.create(Pet.class).exclude("tags", "photo").build();
@@ -196,13 +200,52 @@ public class PetStore {
 	 * @return The stored pet.
 	 */
 	public Pet createPet(Pet pet, String actor) {
+		return addPet(pet, actor, null);
+	}
+
+	private Pet addPet(Pet pet, String actor, LongFunction<String> nameFromId) {
 		if (pet == null)
 			throw iaex("Pet must not be null");
 		var id = nextPetId.incrementAndGet();
 		pet.setId(id);
+		if (nameFromId != null)
+			pet.setName(nameFromId.apply(id));
 		pets.put(id, pet);
 		recordAudit(actor, "Pet", String.valueOf(id), ACTION_CREATE, pet.getName());
 		return pet;
+	}
+
+	/**
+	 * Adds a batch of available pets, one per requested count, and records one summary {@code RESTOCK} audit entry.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>var</jk> <jv>added</jv> = <jv>store</jv>.restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2, Species.<jsf>CAT</jsf>, 1), <js>"job:restock"</js>);
+	 * 	<jc>// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.</jc>
+	 * </p>
+	 *
+	 * @param perSpecies How many pets of each species to add.  Must not be <jk>null</jk>; each count must be
+	 * 	{@code 0..}{@link #MAX_RESTOCK_PER_SPECIES}.
+	 * @param actor Who is restocking, e.g. {@code "job:restock:console:alice"}.
+	 * @return The created pets.
+	 * @throws IllegalArgumentException If the map, a species, or a count is null, negative, or above the cap.  Nothing is added.
+	 */
+	public List<Pet> restock(Map<Species,Integer> perSpecies, String actor) {
+		if (perSpecies == null)
+			throw iaex("PerSpecies must not be null");
+		perSpecies.forEach((species, count) -> {
+			if (species == null)
+				throw iaex("Species must not be null");
+			if (count == null || count < 0 || count > MAX_RESTOCK_PER_SPECIES)
+				throw iaex("Count for '%s' must be between 0 and %s", species, MAX_RESTOCK_PER_SPECIES);
+		});
+		var created = new ArrayList<Pet>();
+		perSpecies.forEach((species, count) -> {
+			for (var i = 0; i < count; i++)
+				created.add(addPet(new Pet().setSpecies(species).setPrice(9.99f).setStatus(PetStatus.AVAILABLE), actor, id -> species + " #" + id));
+		});
+		recordAudit(actor, "Job", "restock", "RESTOCK", created.size() + " pets");
+		return created;
 	}
 
 	/**

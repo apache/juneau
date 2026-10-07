@@ -35,7 +35,7 @@ class PageCapture_Contract_Test extends TestBase {
 
 	@Test void a01_consoleTitleAndBrand() {
 		var html = render("console-full");
-		assertPage(html).isValid().hasVersion("1").hasTitle("Doc Title").hasHeaderTitle("Brand");
+		assertPage(html).isValid().hasContractVersion("1").hasTitle("Doc Title").hasHeaderTitle("Brand");
 		assertTrue(html.contains("<title>Doc Title</title>\n"), html);
 	}
 

@@ -2545,7 +2545,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Opt out of alphabetical property sorting globally.
 		 *
 		 * <p>
-		 * When called, bean properties will be serialized in natural JVM-dependent order instead of the default alphabetical order.
+		 * When called, bean properties will be serialized in declaration order instead of the default alphabetical order.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#unsortedProperties()}
@@ -2555,6 +2555,20 @@ public abstract class MarshallingContextable extends Context {
 		 */
 		public SELF unsortedProperties() {
 			bcBuilder.unsortedProperties();
+			return self();
+		}
+
+		/**
+		 * Use record component order for {@link Record} beans.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#recordComponentOrder()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public SELF recordComponentOrder() {
+			bcBuilder.recordComponentOrder();
 			return self();
 		}
 

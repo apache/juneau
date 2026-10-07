@@ -151,4 +151,17 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		// status-tone token paints is-<tone>; an off-palette tone paints no modifier
 		assertBean(r, "t15_toneWarningClass,t15_toneAccentClass", "jc-stat-value is-warning,jc-stat-value");
 	}
+
+	@Test void b13_rowsOnlyTableUsesInlineDataWithEscapingRenderAndNoFetch() {
+		var r = report();
+		assertAllTrue(r, "t17_hasTable", "t17_noFetch", "t17_rowsStashed", "t17_rowIdField", "t17_noDomRows",
+			"t17_noAjax", "t17_clientSide", "t17_dataIsRows", "t17_hasRender", "t17_escapes", "t17_rawForSort",
+			"t17_nullBlank", "t17_noErrors", "t17_dataUrlKeepsAjax");
+	}
+
+	@Test void b14_crossOriginDetailEndpointAndSavedViewsBaseAreRefusedWithWarning() {
+		var r = report();
+		assertAllTrue(r, "t18_relativeKept", "t18_sameOriginAbsKept", "t18_noWarnYet", "t18_crossOriginNotStamped",
+			"t18_warned");
+	}
 }

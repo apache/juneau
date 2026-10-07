@@ -35,6 +35,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.swap.spi.*;
 
 /**
@@ -972,9 +973,17 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @see MarshallingContext.Builder#unsortedProperties()
 	 * @return
-	 * 	<jk>true</jk> if bean properties are serialized in natural JVM-dependent order instead of alphabetically.
+	 * 	<jk>true</jk> if bean properties are serialized in declaration order instead of alphabetically.
 	 */
 	public final boolean isUnsortedProperties() { return ctx.isUnsortedProperties(); }
+
+	/**
+	 * Record component order.
+	 *
+	 * @see MarshallingContext.Builder#recordComponentOrder()
+	 * @return <jk>true</jk> if {@link Record} bean properties use component order.
+	 */
+	public final boolean isRecordComponentOrder() { return ctx.isRecordComponentOrder(); }
 
 	/**
 	 * Use interface proxies.
@@ -1269,7 +1278,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 					&& !((to.isMap() && !to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && !to.getElementType().isObject())))
 				return (T) value;
 			return ctx.getConverter().to(value, outer, this, to.innerType(), to.getParameters());
-		} catch (InvalidDataConversionException e) {
+		} catch (InvalidDataConversionException | MissingRequiredPropertyException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new InvalidDataConversionException(value, to, e);

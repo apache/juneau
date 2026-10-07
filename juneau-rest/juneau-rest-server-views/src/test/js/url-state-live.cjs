@@ -266,6 +266,39 @@ tabNames.forEach(function (name) {
 });
 out.f1ClickedExactlyMatchingTabs = JSON.stringify(clicked) === JSON.stringify(tabNames);
 
+// WORK-J0612: Copy link / address-bar collect must read a client-filtered DSL column's per-table store, since
+// col.search() stays "" on that path.  A minimal engine stub stands in for juneau-search.js (not loaded here).
+NS.search = {
+	parse: function () { return { incomplete: false, invalid: false }; },
+	SearchType: { fromWire: function (w) { return w == null ? null : String(w); } },
+	compile: function (raw) {
+		const t = String(raw || '').trim();
+		return { ok: true, empty: t === '', raw: t, test: function () { return true; } };
+	}
+};
+const dslTable = env.el('table');
+dslTable.dataset.juneauView = 'dsl';
+env.document.body.appendChild(dslTable);
+const dslCols = [fakeCol(0, 'status', ''), fakeCol(1, 'name', '')];
+dslCols.forEach(function (c) { c.search.fixed = function () { return { draw: function () { return this; } }; }; });
+const dslDt = fakeDt(dslCols, []);
+const dslCtx = {
+	table: dslTable,
+	viewDef: { id: 'dsl', primary: true, dataMode: 'client',
+		columns: [{ data: 'status', search: { type: 'enum', operators: [{ name: '$in' }] } }] },
+	dataTable: dslDt,
+	optsColumns: [{ data: 'status' }, { data: 'name' }],
+	_urlStateOpenApplied: true
+};
+dslTable.__juneauCtx = dslCtx;
+I.setColumnExpr(dslCtx, dslCols[0], '$in(Triaged,New)');
+out.dslNativeStaysEmpty = dslCols[0].search() === '';
+out.dslCollectReadsStore = JSON.stringify(I.collectLiveUrlState(dslTable, dslCtx).filters)
+	=== JSON.stringify([{ column: 'status', expr: '$in(Triaged,New)' }]);
+out.dslShareUrlCarriesFilter = I.buildShareableUrl(dslTable, dslCtx).indexOf('filter(status=$in(Triaged,New))') >= 0;
+I.applyShareableOpenState(dslTable, dslCtx, { tab: null, filters: [{ column: 'status', expr: '$in(New)' }], sort: null });
+out.dslRestoreWritesStore = I.getColumnExpr(dslCtx, dslCols[0]) === '$in(New)' && dslCols[0].search() === '';
+
 // Source-shape guard: no querySelector(All)? call may be built by string concatenation from a variable.
 const applySrc = I.applyShareableOpenState.toString();
 out.f1NoSelectorConcatenation = !/querySelector(All)?\([^)]*\+\s*/.test(applySrc);

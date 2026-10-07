@@ -289,7 +289,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		}
 		var bm = toBeanMap(type.newInstance(getOuter()));
 		populateBeanMap(bm, map);
-		return bm.getBean();
+		return checkRequired(bm).getBean();
 	}
 
 	private JsonMap toJsonMap(Map<?,?> map) throws ParseException, ExecutableException {
@@ -346,7 +346,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				}
 				var child = toBeanMap(beanType.newInstance(getOuter()));
 				populateBeanMap(child, val2);
-				return child.getBean();
+				return checkRequired(child).getBean();
 			}
 			if (targetType.isMap()) {
 				// When the bean property's declared key type is non-String (e.g. Map<TestEnum,String>),

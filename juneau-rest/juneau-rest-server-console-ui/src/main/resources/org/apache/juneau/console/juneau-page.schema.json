@@ -4,9 +4,9 @@
   "title": "Juneau console page contract",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "title", "nav", "activeNav", "cards"],
+  "required": ["contractVersion", "title", "nav", "activeNav", "cards"],
   "properties": {
-    "version":   { "const": "1" },
+    "contractVersion":   { "const": "1" },
     "title":     { "type": "string" },
     "theme":     { "$ref": "#/$defs/theme" },
     "header":    { "$ref": "#/$defs/header" },

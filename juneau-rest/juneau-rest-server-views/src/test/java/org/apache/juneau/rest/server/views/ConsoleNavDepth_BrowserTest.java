@@ -48,7 +48,7 @@ class ConsoleNavDepth_BrowserTest extends TestBase {
 		var active = new StringJoiner(",");
 		for (var k = 1; k <= activeLength; k++)
 			active.add("\"l" + k + "\"");
-		return "{\"version\":\"1\",\"title\":\"Depth\",\"nav\":[" + level(1, depth, "") + "],\"activeNav\":[" + active + "],\"cards\":[]}";
+		return "{\"contractVersion\":\"1\",\"title\":\"Depth\",\"nav\":[" + level(1, depth, "") + "],\"activeNav\":[" + active + "],\"cards\":[]}";
 	}
 
 	@BeforeAll

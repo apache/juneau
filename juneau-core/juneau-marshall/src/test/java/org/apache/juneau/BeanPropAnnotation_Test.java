@@ -38,6 +38,7 @@ class BeanPropAnnotation_Test extends TestBase {
 		.description("a")
 		.name("c")
 		.params(X1.class)
+		.required(true)
 		.ro("f")
 		.type(X1.class)
 		.value("g")
@@ -48,6 +49,7 @@ class BeanPropAnnotation_Test extends TestBase {
 		.description("a")
 		.name("c")
 		.params(X1.class)
+		.required(true)
 		.ro("f")
 		.type(X1.class)
 		.value("g")
@@ -55,7 +57,7 @@ class BeanPropAnnotation_Test extends TestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,name,params,ro,type,value,wo", "[a],c,[X1],f,X1,g,h");
+		assertBean(a1, "description,name,params,required,ro,type,value,wo", "[a],c,[X1],true,f,X1,g,h");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -64,17 +66,27 @@ class BeanPropAnnotation_Test extends TestBase {
 		assertEquals(a2.hashCode(), a1.hashCode());
 	}
 
+	@Test void a03_requiredDefaultFalse() {
+		assertBean(BeanPropAnnotation.create().build(), "required", "false");
+	}
+
+	@Test void a04_requiredAffectsEquality() {
+		var x = BeanPropAnnotation.create().name("a").build();
+		var y = BeanPropAnnotation.create().name("a").required(true).build();
+		assertNotEquals(x, y);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@BeanProp(description={ "a" }, name="c", params=X1.class, ro="f", type=X1.class, value="g", wo="h")
+		@BeanProp(description={ "a" }, name="c", params=X1.class, required=true, ro="f", type=X1.class, value="g", wo="h")
 		public int f;
 	}
 
 	public static class D2 {
-		@BeanProp(description={ "a" }, name="c", params=X1.class, ro="f", type=X1.class, value="g", wo="h")
+		@BeanProp(description={ "a" }, name="c", params=X1.class, required=true, ro="f", type=X1.class, value="g", wo="h")
 		public int f;
 	}
 

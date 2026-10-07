@@ -961,7 +961,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				} finally {
 					swapParentBean(pb);
 				}
-				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
+				o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
 			} else {
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				var pb = swapParentBean(m.getBean(false));
@@ -970,7 +970,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				} finally {
 					swapParentBean(pb);
 				}
-				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
+				o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
 			}
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
@@ -1011,7 +1011,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			readIntoMap(r, m, string(), object(), pMeta);
 			if (nn(wrapperAttr))
 				m = newGenericMap().append(wrapperAttr, m);
-			o = newBeanMap(outer, sType.inner()).load(m).getBean();
+			o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 		} else {
 			throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s', property: '%s'", cn(sType), sType.getNotABeanReason(),
 				pMeta == null ? null : pMeta.getName());

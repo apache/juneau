@@ -323,4 +323,35 @@ function wrappedTable() {
 	out.sameAnnouncerReusedAcrossReverts = firstAnnouncer === secondAnnouncer;
 })();
 
+// --- Scenario (WORK-J0612): a client-filtered column whose DataTables API has search.fixed routes every write
+// through the per-table store + one "juneau-dsl" predicate; native col.search() never sees the expression ----------
+(function dslStore() {
+	const ctx = makeCtx('client');
+	const col = fakeCol(0, headerCell('Status'));
+	const fixed = {};
+	let fixedDraws = 0;
+	const fixedApi = { draw: function () { fixedDraws++; return fixedApi; } };
+	col.search.fixed = function (name, fn) {
+		if (fn == null) delete fixed[name];
+		else fixed[name] = fn;
+		return fixedApi;
+	};
+	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
+	type(popInput(ctx), 'abc');
+	out.dslLiveNative = col.appliedValue();              // '' - the bare preview went to the predicate
+	out.dslLiveFixedNames = Object.keys(fixed);          // ['juneau-dsl']
+	out.dslLiveStore = I.getColumnExpr(ctx, col);        // 'abc'
+	out.dslLiveDraws = fixedDraws;                       // >= 1
+	pressEnter(popInput(ctx));
+	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
+	out.dslReopenValue = popInput(ctx).value;            // 'abc' - the popover opens on the store's value
+	type(popInput(ctx), '$eq(OPEN)');
+	pressEnter(popInput(ctx));
+	out.dslCommitStore = I.getColumnExpr(ctx, col);
+	const fn = fixed['juneau-dsl'];
+	out.dslPredicateExact = !!fn && fn('OPEN', { status: 'OPEN' }) === true;
+	out.dslPredicateCaseSensitive = !!fn && fn('open', { status: 'open' }) === false;
+	out.dslCommitNative = col.appliedValue();
+})();
+
 process.stdout.write(JSON.stringify(out));

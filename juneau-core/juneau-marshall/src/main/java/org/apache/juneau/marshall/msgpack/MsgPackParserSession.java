@@ -269,7 +269,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 					} finally {
 						swapParentBean(pb);
 					}
-					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
+					o = builder == null ? checkRequired(m).getBean() : builder.build(this, checkRequired(m).getBean(), eType);
 				} else {
 					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
@@ -345,7 +345,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
-					o = newBeanMap(outer, sType.inner()).load(m).getBean();
+					o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 				else
 					throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			} else {

@@ -176,11 +176,11 @@ public class UrlEncodingParserSession extends UonParserSession {
 		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
 			m = readIntoBeanMap(r, m);
-			o = m == null ? null : builder.build(this, m.getBean(), eType);
+			o = m == null ? null : builder.build(this, checkRequired(m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			var m = newBeanMap(outer, sType.inner());
 			m = readIntoBeanMap(r, m);
-			o = m == null ? null : m.getBean();
+			o = m == null ? null : checkRequired(m).getBean();
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
 			o = readIntoMap2(r, m, sType, m);
@@ -205,7 +205,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			else if (m.containsKey("_value"))
 				o = unwrapValueAs(m.get("_value"), sType);
 			else if (nn(sType.getProxyInvocationHandler())) {
-				o = newBeanMap(outer, sType.inner()).load(m).getBean();
+				o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 			} else {
 				if (nn(sType.getNotABeanReason()))
 					throw new ParseException(this, "Class '%s' could not be instantiated as application/x-www-form-urlencoded.  Reason: '%s'", sType, sType.getNotABeanReason());

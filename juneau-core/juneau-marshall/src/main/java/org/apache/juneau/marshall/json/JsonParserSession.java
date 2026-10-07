@@ -208,10 +208,10 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			}
 		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
-			o = builder.build(this, readIntoBeanMap2(r, m).getBean(), eType);
+			o = builder.build(this, checkRequired(readIntoBeanMap2(r, m)).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			var m = newBeanMap(outer, sType.inner());
-			o = readIntoBeanMap2(r, m).getBean();
+			o = checkRequired(readIntoBeanMap2(r, m)).getBean();
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = readIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -259,7 +259,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((MarshalledMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
-				o = newBeanMap(outer, sType.inner()).load(m).getBean();
+				o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();
 			else
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && canCoerceNonStringToString()) {

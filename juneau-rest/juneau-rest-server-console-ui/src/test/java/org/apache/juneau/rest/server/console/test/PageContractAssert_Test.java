@@ -27,7 +27,7 @@ class PageContractAssert_Test extends TestBase {
 	// inside a segment proves the depth-aware template scan.
 	static final String HTML = "<!DOCTYPE html><html><head><title>t</title></head><body data-juneau-csrf=\"x\">"
 		+ "<script type=\"application/json\" id=\"juneau-page\">"
-		+ "{\"version\":\"1\",\"title\":\"Support Enablement Console\",\"theme\":{\"name\":\"open\"},"
+		+ "{\"contractVersion\":\"1\",\"title\":\"Support Enablement Console\",\"theme\":{\"name\":\"open\"},"
 		+ "\"header\":{\"title\":\"Support Enablement Console\",\"chrome\":true,\"slots\":{\"banner\":\"header.banner\"}},"
 		+ "\"footer\":{\"text\":\"Sandbox Support Console\"},"
 		+ "\"nav\":[{\"id\":\"home\",\"label\":\"Home\",\"href\":\"/home\",\"children\":["
@@ -44,7 +44,7 @@ class PageContractAssert_Test extends TestBase {
 	@Test void a01_happyPath() {
 		PageContractAssert.assertPage(HTML)
 			.isValid()
-			.hasVersion("1")
+			.hasContractVersion("1")
 			.hasTitle("Support Enablement Console")
 			.hasTheme("open")
 			.hasActiveNav("home", "setup")
@@ -89,6 +89,17 @@ class PageContractAssert_Test extends TestBase {
 		var bad = HTML.replace("<template data-slot=\"header.banner\">", "<template data-slot=\"header.other\">");
 		assertMessage(() -> PageContractAssert.assertPage(bad).isValid(),
 			"page contract is invalid:\nR-4: template 'header.banner' is referenced but not present");
+	}
+
+	@Test void a05_leftoverVersionKeyFailsLoudly() {
+		var stale = HTML.replace("{\"contractVersion\":\"1\"", "{\"version\":\"1\"");
+		assertMessage(() -> PageContractAssert.assertPage(stale),
+			"page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau");
+	}
+
+	@Test void a06_hasContractVersionMismatch() {
+		assertMessage(() -> PageContractAssert.assertPage(HTML).hasContractVersion("2"),
+			"contractVersion: expected '2' but was '1'");
 	}
 
 	private static void assertMessage(Runnable r, String expected) {

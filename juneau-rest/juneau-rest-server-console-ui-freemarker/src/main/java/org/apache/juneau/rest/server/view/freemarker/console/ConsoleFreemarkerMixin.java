@@ -97,6 +97,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	private final String chromeTemplate;
 	private final List<ExtraPack> extraPacks;
 	private final boolean devMode;
+	private final ClassLoader adopterLoader;
+	private final String adopterRoot;
 
 	/**
 	 * No-arg constructor &mdash; mirrors {@link FreemarkerMixin#FreemarkerMixin()} so the mixin walk's
@@ -116,6 +118,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		this.chromeTemplate = builder.chromeTemplate;
 		this.extraPacks = List.copyOf(builder.extraPacks);
 		this.devMode = builder.devMode;
+		this.adopterLoader = builder.adopterLoader;
+		this.adopterRoot = builder.adopterRoot;
 	}
 
 	/** Extra toolkit pack registered through the builder, applied when {@code resolveConfiguration} builds the registry. */
@@ -230,7 +234,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 			cfg.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
 		}
 		if (cfg.getSharedVariable(CardDirectiveModel.NAME) == null)
-			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel());
+			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel(devMode));
 		if (cfg.getSharedVariable(NavigationDirectiveModel.NAME) == null)
 			cfg.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
 		if (cfg.getSharedVariable(NodeDirectiveModel.NAME) == null)
@@ -245,6 +249,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
 		if (cfg.getSharedVariable(HasToolkitMethodModel.NAME) == null)
 			cfg.setSharedVariable(HasToolkitMethodModel.NAME, new HasToolkitMethodModel());
+		if (adopterLoader != null && cfg.getSharedVariable(AssetUrlMethodModel.NAME) == null)
+			cfg.setSharedVariable(AssetUrlMethodModel.NAME, new AssetUrlMethodModel(adopterLoader, adopterRoot, devMode));
 		// The seven capture-only slot directives share one parameterized class, one instance registered per slot name.
 		for (var slot : ConsoleSlotDirectiveModel.SLOT_NAMES)
 			if (cfg.getSharedVariable(slot) == null)
@@ -259,6 +265,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		String chromeTemplate = DEFAULT_CHROME_TEMPLATE;
 		final List<ExtraPack> extraPacks = new ArrayList<>();
 		boolean devMode = Boolean.getBoolean("juneau.console.devMode");
+		ClassLoader adopterLoader;
+		String adopterRoot = "";
 
 		/** Constructor &mdash; package access for {@link ConsoleFreemarkerMixin#create()}. */
 		protected Builder() {}
@@ -330,6 +338,43 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 */
 		public Builder devMode(boolean value) {
 			devMode = value;
+			return this;
+		}
+
+		/**
+		 * Enables the {@code assetUrl(path)} template function that versions the adopter's own static assets.
+		 *
+		 * <p>
+		 * {@code assetUrl('/js/app.js')} returns {@code /js/app.js?v=<crc32 of the bundled bytes>}, where the bytes are
+		 * read once (and the token cached) from {@code resourceRoot + path} on {@code loader}. This is the adopter-side
+		 * counterpart of Juneau's own {@code viewAssetUrl}/{@code consoleJsUrl}/{@code chromeCssUrl}/{@code themeAssetUrl}
+		 * cache-busters, for files the servlet container's static handler serves. A path with a query string, a
+		 * non-root-absolute path (e.g. an external URL), or a path naming no bundled resource is returned unchanged
+		 * (the last also logs a warning in {@link #devMode(boolean) dev mode}). The URL path itself is never rewritten,
+		 * so any context-path prefix must be added by the template.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
+		 * 		<jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>()
+		 * 			.basePath(<js>"/templates/"</js>)
+		 * 			.adopterAssets(getClass().getClassLoader(), <js>"static"</js>)  <jc>// /js/app.js -&gt; classpath static/js/app.js</jc>
+		 * 			.build();
+		 * 	}
+		 * </p>
+		 * <p class='bftl'>
+		 * 	&lt;script src="${assetUrl('/js/app.js')}"&gt;&lt;/script&gt;
+		 * </p>
+		 *
+		 * @param loader The class loader that holds the assets. Must not be {@code null}.
+		 * @param resourceRoot The classpath directory the URL paths are relative to (e.g. {@code "static"}); a leading
+		 * 	and trailing slash are optional. Must not be {@code null}.
+		 * @return This object.
+		 */
+		public Builder adopterAssets(ClassLoader loader, String resourceRoot) {
+			// Q:  Use Shorts here and in this module.
+			this.adopterLoader = Objects.requireNonNull(loader, "loader");
+			this.adopterRoot = Objects.requireNonNull(resourceRoot, "resourceRoot");
 			return this;
 		}
 

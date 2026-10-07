@@ -638,7 +638,9 @@ public @interface BeanConfig {
 	 * Disable sorted bean properties.
 	 *
 	 * <p>
-	 * When <jk>true</jk>, bean properties are serialized and accessed in natural JVM order instead of the default alphabetical order.
+	 * When <jk>true</jk>, bean properties are serialized and accessed in declaration order instead of the default
+	 * alphabetical order: record component order for records, field declaration order (superclass first) for other
+	 * classes, then method-only properties alphabetically.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>
@@ -653,6 +655,36 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	String unsortedProperties() default "";
+
+	/**
+	 * Record component order.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, the properties of {@link Record} beans use record component (declaration) order even when
+	 * other beans are sorted alphabetically.  Non-record beans are unaffected.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@BeanConfig</ja>(recordComponentOrder=<js>"true"</js>)
+	 * 	<jk>public class</jk> MyRestResource { ... }
+	 *
+	 * 	<jk>public record</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {}
+	 * 	<jc>// Serialized as {"name":"Alice","age":30} instead of {"age":30,"name":"Alice"}</jc>
+	 * </p>
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default: record properties are sorted alphabetically like other beans)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String recordComponentOrder() default "";
 
 	/**
 	 * Use Java Introspector.

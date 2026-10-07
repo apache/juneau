@@ -58,7 +58,11 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 
 	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 
-	CardDirectiveModel() {}
+	private final boolean devMode;
+
+	CardDirectiveModel(boolean devMode) {
+		this.devMode = devMode;
+	}
 
 	@Override
 	@SuppressWarnings({
@@ -103,7 +107,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var src = FtlAttrLists.scalar(p, "src");
 		var template = FtlAttrLists.scalar(p, "template");
 		if (eq(type, "datatables"))
-			datatablesCard(cap, authoredId, title, src, template, markup);
+			datatablesCard(cap, authoredId, title, src, template, markup, env.getCurrentTemplate().getName());
 		else
 			htmlCard(cap, authoredId.isEmpty() ? cap.nextCardId() : authoredId, title, src, template, markup);
 	}
@@ -131,8 +135,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * The C1 datatables bridge (spec §4.6): a bare string body is a table URL; a JSON-object body is an author catalog
 	 * lifted by {@link CardEnvelope#liftTable}. The shell mounts it through {@code JuneauViews.regions.mount}.
 	 */
-	private static void datatablesCard(PageCapture cap, String id, String title, String src, String template,
-			String markup) throws TemplateModelException {
+	private void datatablesCard(PageCapture cap, String id, String title, String src, String template,
+			String markup, String ftlName) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject("<@card type=\"datatables\"> requires id=.");
 		if (! (src.isEmpty() && template.isEmpty()))
@@ -146,7 +150,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			card.title(title);
 		if (trimmed.startsWith("{")) {
 			var catalog = CardEnvelope.parse(trimmed);
-			card.body("table", CardEnvelope.liftTable(id, catalog));
+			card.body("table", CardEnvelope.liftTable(id, catalog, ftlName, devMode));
 			var page = catalog.get("page");
 			if (page != null)
 				card.body("page", page);

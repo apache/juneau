@@ -46,7 +46,8 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 		"c1/bool-selected-tru.ftlh",      // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/bool-selected-empty.ftlh",    // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/bool-chrome-tru.ftlh",        // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
-		"c1/bool-chrome-empty.ftlh"       // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
+		"c1/bool-chrome-empty.ftlh",      // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
+		"c1/cv-pinned-stale.ftlh"         // ViewContractVersion_Test.b03_render_mismatched_failsInDevMode expects the stale-pin failure
 	);
 
 	private static Path basedir() {

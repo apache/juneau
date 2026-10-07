@@ -85,9 +85,82 @@ class CardEnvelope_Test extends TestBase {
 		assertFalse(slot.getMap("view").containsKey("bulk"));
 	}
 
+	@Test void liftTable_slotLevelKeys_detailQuickStatsSavedViewsBase() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{" + BASE + """
+			, detail:{contractVersion:'1', endpoint:'/d/{id}'},
+			quickStats:{contractVersion:'1', id:'qs', items:[{id:'open', label:'Open', value:'3'}]},
+			savedViewsBase:'/saved'
+			}"""));
+		assertBean(slot, "detail{contractVersion,endpoint},quickStats{contractVersion,id},savedViewsBase",
+			"{1,/d/{id}},{1,qs},/saved");
+		for (var k : List.of("detail", "quickStats", "savedViewsBase"))
+			assertFalse(slot.getMap("view").containsKey(k), k);
+	}
+
+	@Test void liftTable_rowsOnly_noDataUrl() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse(
+			"{rows:[{id:1,a:'x'},{id:2,a:'<b>'}], columns:[{key:'a',label:'A'}]}"));
+		assertList(slot.getList("rows"), "{id=1,a=x}", "{id=2,a=<b>}");
+		assertFalse(slot.getMap("view").containsKey("dataUrl"));
+	}
+
+	@Test void liftTable_emptyRows_ok_nullRowsAbsent() {
+		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{rows:[], columns:[{key:'a'}]}"));
+		assertEquals(0, slot.getList("rows").size());
+		assertThrows(IllegalArgumentException.class,
+			() -> CardEnvelope.liftTable("c1", CardEnvelope.parse("{rows:null, columns:[{key:'a'}]}")));
+		// A blank dataUrl is absent, so rows alone is fine and dataUrl is not emitted.
+		var blank = CardEnvelope.liftTable("c1", CardEnvelope.parse("{dataUrl:' ', rows:[], columns:[{key:'a'}]}"));
+		assertFalse(blank.getMap("view").containsKey("dataUrl"));
+	}
+
+	@Test void liftTable_rowsAndDataUrl_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{" + BASE + ", rows:[]}")));
+		assertContains("exactly one of 'dataUrl' or 'rows'", ex.getMessage());
+	}
+
+	@Test void liftTable_neitherRowsNorDataUrl_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{columns:[{key:'a'}]}")));
+		assertContains("exactly one of 'dataUrl' or 'rows'", ex.getMessage());
+	}
+
+	@Test void liftTable_missingColumns_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{dataUrl:'/d'}")));
+		assertContains("'columns'", ex.getMessage());
+	}
+
+	@Test void liftTable_rowsMalformed_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{rows:'nope', columns:[{key:'a'}]}")));
+		assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{rows:[{a:1}, 'x'], columns:[{key:'a'}]}")));
+	}
+
+	@Test void liftTable_rowsWithServerModeOrPolling_rejected() {
+		var server = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{rows:[], dataMode:'server', columns:[{key:'a'}]}")));
+		assertContains("dataMode", server.getMessage());
+		var poll = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{rows:[], pollIntervalMs:5000, columns:[{key:'a'}]}")));
+		assertContains("pollIntervalMs", poll.getMessage());
+		// dataMode:'client' is fine.
+		assertDoesNotThrow(() -> CardEnvelope.liftTable("c1",
+			CardEnvelope.parse("{rows:[], dataMode:'client', columns:[{key:'a'}]}")));
+	}
+
+	@Test void liftTable_prebuiltEnvelope_withRowsAndDataUrl_passesThroughUntouched() {
+		var env = CardEnvelope.parse("{contractVersion:'1', view:{id:'t', dataUrl:'/d', columns:[]}, rows:[{a:1}]}");
+		var out = CardEnvelope.liftTable("t", env);
+		assertSame(env, out);
+		assertBean(out, "view{dataUrl},rows", "{/d},[{a=1}]");
+	}
+
 	@Test void liftTable_absentKeys_notEmitted() {
 		var slot = CardEnvelope.liftTable("c1", CardEnvelope.parse("{" + BASE + "}"));
-		for (var k : List.of("selection", "bulk"))
+		for (var k : List.of("selection", "bulk", "detail", "quickStats", "savedViewsBase", "rows"))
 			assertFalse(slot.containsKey(k), k);
 		for (var k : List.of("copyLink", "rowActions", "rowClassRules", "pausePollingWhileEditing"))
 			assertFalse(slot.getMap("view").containsKey(k), k);

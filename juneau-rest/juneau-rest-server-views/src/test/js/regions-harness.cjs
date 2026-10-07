@@ -123,6 +123,7 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 		setInterval: function () { return 0; },
 		clearInterval: function () { /* no-op */ },
 		Promise: Promise,
+		URL: URL,
 		fetch: function (...args) { return env.callFetch(...args); }
 	};
 	if (!opts.noAbortController) {

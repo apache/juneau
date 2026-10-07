@@ -216,6 +216,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	private final Supplier<List<MethodInfo>> allMethodsTopDown;  // All methods from this class and all parents, in parent-to-child order.
 	private final Supplier<List<FieldInfo>> publicFields;  // All public fields from this class and parents, deduplicated by name (child wins).
 	private final Supplier<List<FieldInfo>> declaredFields;  // All fields declared directly on this class (public, protected, package, private).
+	private final Supplier<List<FieldInfo>> declaredFieldsInDeclarationOrder;  // Same as declaredFields, but in JVM-reported (declaration) order instead of alphabetical.
 	private final Supplier<List<FieldInfo>> allFields;  // All fields from this class and all parents, in parent-to-child order.
 	private final Supplier<List<ConstructorInfo>> publicConstructors;  // All public constructors declared on this class.
 	private final Supplier<List<ConstructorInfo>> declaredConstructors;  // All constructors declared on this class (public, protected, package, private).
@@ -262,6 +263,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		this.allMethodsTopDown = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.publicFields = memoize(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && neq("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().toList());
 		this.declaredFields = memoize(() -> o(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> neq("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(emptyList()));
+		this.declaredFieldsInDeclarationOrder = memoize(() -> o(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> neq("$jacocoData", f.getName())).map(this::getField).toList()).orElse(emptyList()));
 		this.allFields = memoize(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
 		this.publicConstructors = memoize(() -> o(inner).map(x -> stream(x.getConstructors()).map(this::getConstructor).sorted().toList()).orElse(emptyList()));
 		this.declaredConstructors = memoize(() -> o(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructor).sorted().toList()).orElse(emptyList()));
@@ -822,6 +824,32 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getDeclaredFields() { return declaredFields.get(); }
+
+	/**
+	 * Returns all fields declared directly on this class, in the order reported by {@link Class#getDeclaredFields()}.
+	 *
+	 * <p>
+	 * Unlike {@link #getDeclaredFields()}, the result is <b>not</b> sorted.  On HotSpot and OpenJ9 this is source
+	 * declaration order.  The JLS does not guarantee it, so treat it as an ordering <i>hint</i> only.
+	 * Used by {@code BeanMeta} to seed bean properties in declaration order when unsorted properties are enabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>zeta</jf>;
+	 * 		<jk>public int</jk> <jf>alpha</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// [zeta, alpha]</jc>
+	 * 	List&lt;String&gt; <jv>names</jv> = ClassInfo.<jsm>of</jsm>(MyBean.<jk>class</jk>)
+	 * 		.getDeclaredFieldsInDeclarationOrder().stream().map(FieldInfo::getName).toList();
+	 * </p>
+	 *
+	 * @return
+	 * 	All declared fields on this class (including static and private fields, excluding the jacoco probe field).
+	 * 	<br>List is unmodifiable.  Elements are the same cached {@link FieldInfo} instances returned by {@link #getDeclaredFields()}.
+	 */
+	public List<FieldInfo> getDeclaredFieldsInDeclarationOrder() { return declaredFieldsInDeclarationOrder.get(); }
 
 	/**
 	 * Returns a list of interfaces declared on this class.

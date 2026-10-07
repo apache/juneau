@@ -34,12 +34,13 @@
 (function () {
 	"use strict";
 
-	const SUPPORTED_VERSIONS = Object.freeze(["1"]);
+	const SUPPORTED_CONTRACT_VERSIONS = Object.freeze(["1"]);
 	const TYPE_RE = /^[a-z][a-z0-9-]{0,31}$/;
 	const FATAL = new Set(["E-JS-1", "E-JS-2", "E-JS-3", "E-JS-5", "E-JS-6", "E-JS-7", "E-JS-11", "E-JS-12"]);
 	const MSG = {
 		"E-JS-1": "missing or unparseable <script id=\"juneau-page\">: '%s'",
 		"E-JS-2": "unsupported page contract version '%s'; this shell supports '%s'",
+		"E-JS-2-renamed": "page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau",
 		"E-JS-3": "%s references template '%s', but no <template data-%s=\"%s\"> exists",
 		"E-JS-4": "card '%s' has unknown type '%s'; registered types: '%s'",
 		"E-JS-5": "activeNav '%s' is not a path in the nav tree (failed at '%s')",
@@ -70,8 +71,9 @@
 	}
 
 	// Every loud failure: one banner listing all failures, console.error, and a throw for fatal codes.
-	function fail(doc, code, ...args) {
-		const msg = fmt(MSG[code], ...args);
+	function fail(doc, msgKey, ...args) {
+		const msg = fmt(MSG[msgKey], ...args);
+		const code = msgKey.replace(/-renamed$/, "");
 		const body = doc.body;
 		let banner = body && body.querySelector(".jc-console-error");
 		if (body && !banner) {
@@ -496,8 +498,11 @@
 		mountedRoots.add(root);
 
 		if (!contract || typeof contract !== "object") fail(doc, "E-JS-1", "not an object");
-		if (!SUPPORTED_VERSIONS.includes(contract.version))
-			fail(doc, "E-JS-2", contract.version, SUPPORTED_VERSIONS.join(", "));
+		// Diagnostic only: a leftover pre-rename 'version' key is named in the message but never read for behavior.
+		if (contract.contractVersion === undefined && contract.version !== undefined)
+			fail(doc, "E-JS-2-renamed");
+		if (!SUPPORTED_CONTRACT_VERSIONS.includes(contract.contractVersion))
+			fail(doc, "E-JS-2", contract.contractVersion, SUPPORTED_CONTRACT_VERSIONS.join(", "));
 
 		const tpl = indexTemplates(doc, root);
 		checkIds(doc, contract);
@@ -1031,7 +1036,7 @@
 	handlers.set("datatables", datatablesCard);
 
 	window.JuneauConsole = {
-		SUPPORTED_VERSIONS: SUPPORTED_VERSIONS,
+		SUPPORTED_CONTRACT_VERSIONS: SUPPORTED_CONTRACT_VERSIONS,
 		JuneauConsoleError: JuneauConsoleError,
 		mount: mount,
 		registerCard: registerCard,

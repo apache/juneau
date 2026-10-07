@@ -17,9 +17,11 @@
 package org.apache.juneau.petstore.jetty;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.microservice.examples.*;
+import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.petstore.service.*;
@@ -31,8 +33,8 @@ import org.apache.juneau.rest.server.widget.*;
  * Root router resource for the Jetty deployment.
  *
  * <p>
- * Mounts the deployment-agnostic {@link PetStoreResource} from {@code juneau-petstore-core} and the
- * Jetty/Microservice-specific admin resources ({@link ConfigResource}, {@link LogsResource},
+ * Mounts the deployment-agnostic {@link PetStoreResource} and {@link PetstoreConsoleResource} (the admin console at
+ * {@code /console}) from {@code juneau-petstore-core}, and the Jetty/Microservice-specific admin resources ({@link ConfigResource}, {@link LogsResource},
  * {@link ShutdownResource}).  The admin trio is a documented Jetty-only non-parity feature — the Spring Boot
  * deployment in {@code juneau-petstore-springboot} does not mount it.
  *
@@ -63,6 +65,7 @@ import org.apache.juneau.rest.server.widget.*;
 	title="Juneau Petstore (Jetty)",
 	description="Apache Juneau petstore sample application running under Jetty/Microservice.",
 	children={
+		PetstoreConsoleResource.class,
 		PetStoreResource.class,
 		PetSecureResource.class,
 		PetMustacheViewResource.class,
@@ -122,5 +125,16 @@ public class RootResources extends BasicRestServletGroup {
 	@Bean
 	public PetStore petStore() {
 		return PetstoreSeed.create().populate(new PetStore());
+	}
+
+	/**
+	 * {@code GET /} goes to the console store page (D-P6).
+	 *
+	 * @param req The request.
+	 * @return A 303 to {@code /console/store}.
+	 */
+	@RestGet(path="/")
+	public SeeOther index(RestRequest req) {
+		return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/console/store"));
 	}
 }

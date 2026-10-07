@@ -31,7 +31,7 @@ class PageCapture_Unit_Test extends TestBase {
 	@Test void a01_minimalContract() {
 		var cap = new PageCapture();
 		cap.title("T");
-		assertEquals("{\"version\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[]}", cap.toContractJson());
+		assertEquals("{\"contractVersion\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[]}", cap.toContractJson());
 	}
 
 	@Test void a02_fullContract_isValid() throws Exception {

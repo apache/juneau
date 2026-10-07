@@ -1,5 +1,5 @@
 {
-  "version": "1",
+  "contractVersion": "1",
   "title": "Support Enablement Console",
   "theme": { "name": "open" },
   "header": {

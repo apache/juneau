@@ -165,6 +165,13 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 		assertBean(report::toString, obj("f1"), "decodedFilterColumn,decodedFilterExpr,appliedExpr", "status,$eq(OK),$eq(OK)");
 	}
 
+	@Test void f1_03_onAClientDslColumnTheFilterLandsInTheStoreAndPredicate() {
+		// WORK-J0612: real juneau-search.js validates the restored $eq(OK); it installs the "juneau-dsl" predicate and
+		// the per-table store, never native col.search().
+		assertBean(report::toString, obj("f1"), "dslStoredExpr,dslNativeExpr,dslPredicateMatchesOk,dslPredicateRejectsOther",
+			"$eq(OK),,true,true");
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Scenario 2 (F3): keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home
 	//------------------------------------------------------------------------------------------------------------------

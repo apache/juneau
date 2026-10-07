@@ -406,6 +406,85 @@ function envelope(NS, extra) {
 		out.t16_noTable = incidents.querySelector('table[data-juneau-view]') == null;
 	}
 
+	// =================================================================================================================
+	// WORK-J0606: rows-only table.  No dataUrl: no fetch, no opts.ajax, whole row objects handed over as opts.data,
+	// plain-text columns forced through an escaping renderer; selection.rowIdField is kept on the table.
+	// =================================================================================================================
+	{
+		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const incidents = slot(env, 'incidents');
+		let fetched = 0;
+		env.setFetch(function () { fetched++; return Promise.resolve(H.jsonResponse([])); });
+		const rows = [
+			{ id: 7, name: '<img src=x onerror=alert(1)>', hidden: 'kept' },
+			{ id: 8, name: 'a&b', hidden: 'kept2' }
+		];
+		const envl = envelope(NS, { rows: rows, selection: { rowIdField: 'id', selectAll: true } });
+		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		const table = incidents.querySelector('table[data-juneau-view="releases"]');
+		out.t17_hasTable = table != null;
+		out.t17_noFetch = fetched === 0;
+		out.t17_rowsStashed = table?.__juneauRows === rows;
+		out.t17_rowIdField = table?.getAttribute('data-juneau-row-id-field') === 'id'
+			|| table?.dataset.juneauRowIdField === 'id';
+		out.t17_noDomRows = table?.querySelector('tbody') == null;
+		const opts = NS.init.buildOptions(envl.view, {
+			table: table, parseRenderId: NS.parseRenderId, resolveRenderer: NS.resolveRenderer, warn: function () {}
+		});
+		out.t17_noAjax = opts.ajax === undefined;
+		out.t17_clientSide = opts.serverSide === false;
+		out.t17_dataIsRows = opts.data === rows && opts.data[0].hidden === 'kept';
+		const render = opts.columns[0].render;
+		out.t17_hasRender = typeof render === 'function';
+		out.t17_escapes = render(rows[0].name, 'display') === '&lt;img src=x onerror=alert(1)&gt;'
+			&& render(rows[1].name, 'display') === 'a&amp;b';
+		out.t17_rawForSort = render(rows[1].name, 'sort') === 'a&b';
+		out.t17_nullBlank = render(null, 'display') === '';
+		out.t17_noErrors = rec.errors.length === 0;
+
+		// A dataUrl-bearing view keeps its ajax even when rows ride along (rows are then only the first-paint seed).
+		const seedTable = env.el('table');
+		const seeded = NS.init.buildOptions({ contractVersion: NS.CONTRACT_VERSION, id: 'seeded', dataUrl: '/d',
+			columns: [{ data: 'name' }] }, { table: seedTable, parseRenderId: NS.parseRenderId,
+			resolveRenderer: NS.resolveRenderer, warn: function () {} });
+		out.t17_dataUrlKeepsAjax = seeded.ajax?.url === '/d' && seeded.data === undefined;
+	}
+
+	// =================================================================================================================
+	// WORK-J0615: detail.endpoint / savedViewsBase must be same-origin; cross-origin warns and is not stamped.
+	// =================================================================================================================
+	{
+		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		env.window.location = { href: 'https://app.example.com/ctx/page', origin: 'https://app.example.com' };
+		function mountOne(id, extra) {
+			const el = slot(env, id);
+			return Promise.resolve(R.mount({ [id]: { table: envelope(NS, Object.assign({ viewId: 'v' + id }, extra)) } })).then(function () {
+				return {
+					saved: el.querySelector('[data-juneau-slot-table]')?.dataset.juneauSavedViews,
+					detail: el.querySelector('template[data-juneau-row-detail]')?.dataset.juneauDetailUrl
+				};
+			});
+		}
+		function det(endpoint) {
+			return { contractVersion: NS.ROW_DETAIL_CONTRACT_VERSION, endpoint: endpoint };
+		}
+		const rel = await mountOne('s1', { savedViewsBase: 'saved', detail: det('detail/{id}') });
+		const abs = await mountOne('s2', { savedViewsBase: 'https://app.example.com/ctx/saved',
+			detail: det('https://app.example.com/ctx/d/{id}') });
+		out.t18_relativeKept = rel.saved === 'saved' && rel.detail === 'detail/{id}';
+		out.t18_sameOriginAbsKept = abs.saved === 'https://app.example.com/ctx/saved'
+			&& abs.detail === 'https://app.example.com/ctx/d/{id}';
+		out.t18_noWarnYet = rec.warnsMatching('not same-origin').length === 0;
+		const x1 = await mountOne('s3', { savedViewsBase: 'https://evil.example.org/saved',
+			detail: det('https://evil.example.org/d/{id}') });
+		const x2 = await mountOne('s4', { savedViewsBase: '//evil.example.org/saved', detail: det('//evil.example.org/d') });
+		const x3 = await mountOne('s5', { savedViewsBase: 'http://app.example.com/saved' });
+		out.t18_crossOriginNotStamped = x1.saved === undefined && x1.detail === undefined
+			&& x2.saved === undefined && x2.detail === undefined && x3.saved === undefined;
+		out.t18_warned = rec.warnsMatching('savedViewsBase').length === 3
+			&& rec.warnsMatching('detail.endpoint').length === 2;
+	}
+
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (error) {
 	process.stderr.write(String(error?.stack ? error.stack : error));

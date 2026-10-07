@@ -37,7 +37,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 	private static Map<String,Map<String,Object>> report;
 
 	private static String c(String rest) {
-		return "{\"version\":\"1\",\"title\":\"F\"" + (rest.isEmpty() ? "" : "," + rest) + "}";
+		return "{\"contractVersion\":\"1\",\"title\":\"F\"" + (rest.isEmpty() ? "" : "," + rest) + "}";
 	}
 
 	@BeforeAll
@@ -47,7 +47,8 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 		report = ConsoleBrowserFixture.create("loud-failure")
 			.page("e1", ORIGIN + "/e1", noIsland)
 			.page("e1-json", ORIGIN + "/e1-json", contractPage("{not json", ""))
-			.page("e2", ORIGIN + "/e2", contractPage("{\"version\":\"2\",\"title\":\"F\"}", ""))
+			.page("e2", ORIGIN + "/e2", contractPage("{\"contractVersion\":\"2\",\"title\":\"F\"}", ""))
+			.page("e2b", ORIGIN + "/e2b", contractPage("{\"version\":\"1\",\"title\":\"F\"}", ""))
 			.page("e3", ORIGIN + "/e3", contractPage(c("\"header\":{\"title\":\"T\",\"slots\":{\"banner\":\"header.banner\"}}"), ""))
 			.page("e4", ORIGIN + "/e4", contractPage(c("\"cards\":[{\"id\":\"k\",\"type\":\"kpi\"}]"), ""))
 			.page("e5", ORIGIN + "/e5", contractPage(c("\"nav\":[{\"id\":\"a\",\"label\":\"A\",\"href\":\"/a\"}],\"activeNav\":[\"a\",\"zz\"]"), ""))
@@ -79,6 +80,11 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 
 	@Test void a03_unsupportedVersion() {
 		assertFailure(report.get("e2"), "E-JS-2", "unsupported page contract version '2'; this shell supports '1'");
+	}
+
+	@Test void a03b_renamedVersionKey() {
+		assertFailure(report.get("e2b"), "E-JS-2",
+			"page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau");
 	}
 
 	@Test void a04_missingSlotTemplate() {

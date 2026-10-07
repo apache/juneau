@@ -359,6 +359,14 @@ class ViewsJs_UrlState_Test extends TestBase {
 		assertBean(r, "incompleteSkippedKeptPrior,validSiblingApplied", "true,true");
 	}
 
+	@Test void c05b_clientDslColumn_collectAndRestoreGoThroughTheStore() {
+		var r = liveReport();
+		// WORK-J0612 S7: on a client-filtered DSL column col.search() stays "", so Copy link / the address bar must read
+		// the per-table store and ?state= restore must write it - otherwise links silently lose the filter.
+		assertBean(r, "dslNativeStaysEmpty,dslCollectReadsStore,dslShareUrlCarriesFilter,dslRestoreWritesStore",
+			"true,true,true,true");
+	}
+
 	@Test void c06_nestedTableIsNeverPrimary() {
 		var r = liveReport();
 		assertEquals(true, r.get("nestedNotPrimary"));

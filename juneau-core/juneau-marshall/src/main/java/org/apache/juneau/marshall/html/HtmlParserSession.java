@@ -170,7 +170,7 @@ public class HtmlParserSession extends XmlParserSession {
 			BeanMap<T> m = newBeanMap(beanType.inner());
 			m.put(uriProperty.orElse(""), href);
 			m.put(nameProperty.orElse(""), name);
-			return m.getBean();
+			return checkRequired(m).getBean();
 		}
 		return convertToType(href, beanType);
 	}
@@ -332,15 +332,15 @@ public class HtmlParserSession extends XmlParserSession {
 					o = readIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
-					o = builder.build(this, readIntoBean(r, m).getBean(), eType);
+					o = builder.build(this, checkRequired(readIntoBean(r, m)).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.inner());
-					o = readIntoBean(r, m).getBean();
+					o = checkRequired(readIntoBean(r, m)).getBean();
 				} else if (sType.isMap()) {
 					o = readIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(sType.getProxyInvocationHandler())) {
 					BeanMap m = newBeanMap(outer, sType.inner());
-					o = readIntoBean(r, m).getBean();
+					o = checkRequired(readIntoBean(r, m)).getBean();
 				} else {
 					isValid = false;
 				}
@@ -564,9 +564,9 @@ public class HtmlParserSession extends XmlParserSession {
 				if (m == null) {
 					element = null;
 				} else if (nn(builder)) {
-					element = builder.build(this, m.getBean(), elementType);
+					element = builder.build(this, checkRequired(m).getBean(), elementType);
 				} else {
-					element = (E)m.getBean();
+					element = (E)checkRequired(m).getBean();
 				}
 				if (nn(parentBean()) && nn(element))
 					setParent(elementType, element, parentBean());

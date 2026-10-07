@@ -113,6 +113,7 @@ public final class BeanConfigContext {
 	private final boolean ignoreUnknownBeanProperties;
 	private final boolean ignoreUnknownNullBeanProperties;
 	private final boolean unsortedProperties;
+	private final boolean recordComponentOrder;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
 
@@ -147,6 +148,7 @@ public final class BeanConfigContext {
 		ignoreUnknownBeanProperties = b.ignoreUnknownBeanProperties;
 		ignoreUnknownNullBeanProperties = b.ignoreUnknownNullBeanProperties;
 		unsortedProperties = b.unsortedProperties;
+		recordComponentOrder = b.recordComponentOrder;
 		useInterfaceProxies = b.useInterfaceProxies;
 		useJavaBeanIntrospector = b.useJavaBeanIntrospector;
 		propertyNamer = b.propertyNamer;
@@ -301,11 +303,26 @@ public final class BeanConfigContext {
 	public boolean isIgnoreUnknownNullBeanProperties() { return ignoreUnknownNullBeanProperties; }
 
 	/**
-	 * Returns whether properties should preserve their JVM-discovered (non-alphabetical) order.
+	 * Returns whether properties use declaration order instead of alphabetical order.
+	 *
+	 * <p>
+	 * Declaration order means record component order for records, field declaration order (superclass first) for
+	 * other classes, followed by method-only properties in alphabetical order.
 	 *
 	 * @return <jk>true</jk> if properties remain unsorted.
 	 */
 	public boolean isUnsortedProperties() { return unsortedProperties; }
+
+	/**
+	 * Returns whether record properties use record component (declaration) order.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, the properties of a {@link Record} are ordered by {@link Class#getRecordComponents()} even in
+	 * the default sorted mode.  Non-record beans are unaffected.
+	 *
+	 * @return <jk>true</jk> if records use component order.
+	 */
+	public boolean isRecordComponentOrder() { return recordComponentOrder; }
 
 	/**
 	 * Returns whether interface proxies should be created for bean interfaces.
@@ -453,6 +470,7 @@ public final class BeanConfigContext {
 		private boolean ignoreUnknownBeanProperties;
 		private boolean ignoreUnknownNullBeanProperties = true;
 		private boolean unsortedProperties;
+		private boolean recordComponentOrder;
 		private boolean useInterfaceProxies = true;
 		private boolean useJavaBeanIntrospector;
 
@@ -489,6 +507,7 @@ public final class BeanConfigContext {
 			ignoreUnknownBeanProperties = src.ignoreUnknownBeanProperties;
 			ignoreUnknownNullBeanProperties = src.ignoreUnknownNullBeanProperties;
 			unsortedProperties = src.unsortedProperties;
+			recordComponentOrder = src.recordComponentOrder;
 			useInterfaceProxies = src.useInterfaceProxies;
 			useJavaBeanIntrospector = src.useJavaBeanIntrospector;
 			propertyNamer = src.propertyNamer;
@@ -641,12 +660,20 @@ public final class BeanConfigContext {
 		public Builder ignoreUnknownNullBeanProperties(boolean value) { ignoreUnknownNullBeanProperties = value; return this; }
 
 		/**
-		 * Toggles whether properties remain in JVM-discovered (non-alphabetical) order.
+		 * Toggles declaration order (instead of alphabetical order) for bean properties.
 		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder unsortedProperties(boolean value) { unsortedProperties = value; return this; }
+
+		/**
+		 * Toggles record component (declaration) ordering for {@link Record} beans.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder recordComponentOrder(boolean value) { recordComponentOrder = value; return this; }
 
 		/**
 		 * Toggles automatic creation of interface proxies for bean interfaces.

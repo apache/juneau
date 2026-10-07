@@ -299,7 +299,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 				onUnknownProperty(header, m, val);
 			}
 		}
-		return (T) m.getBean();
+		return (T) checkRequired(m).getBean();
 	}
 
 	/**

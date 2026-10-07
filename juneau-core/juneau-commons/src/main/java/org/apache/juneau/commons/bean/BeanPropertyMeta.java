@@ -116,6 +116,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		private boolean canWrite;
 		private boolean readOnly;
 		private boolean writeOnly;
+		boolean required;  // @BeanProp(required=true) on the field, getter or setter (OR-merged).
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
@@ -384,6 +385,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						readOnly = b(beanp.ro());
 					if (ine(beanp.wo()))
 						writeOnly = b(beanp.wo());
+					required |= beanp.required();
 				});
 			}
 
@@ -399,6 +401,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						readOnly = b(beanp.ro());
 					if (ine(beanp.wo()))
 						writeOnly = b(beanp.wo());
+					required |= beanp.required();
 				});
 			}
 
@@ -414,6 +417,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						readOnly = b(beanp.ro());
 					if (ine(beanp.wo()))
 						writeOnly = b(beanp.wo());
+					required |= beanp.required();
 				});
 			}
 
@@ -490,6 +494,25 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return true;
 		}
 
+		/**
+		 * Returns whether this property is marked {@code @BeanProp(required=true)}.
+		 *
+		 * @return <jk>true</jk> if required.
+		 */
+		boolean isRequired() { return required; }
+
+		/**
+		 * Returns whether input can ever set this property, which a required property must allow.
+		 *
+		 * <p>
+		 * Call only after {@link #validate} and after constructor-argument marking.
+		 *
+		 * @return <jk>true</jk> if the property has a field, a setter, or is a constructor argument, and is not read-only or dynamic.
+		 */
+		boolean canSatisfyRequired() {
+			return ! isDyna && ! readOnly && (nn(field) || nn(setter) || isConstructorArg);
+		}
+
 	}
 
 	/**
@@ -523,6 +546,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
 	private final BeanInfo<?> rawTypeMeta;                           // The real class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
 	private final BiFunction<BeanSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.  Typed against the commons.bean SPI seam.
+	private final boolean required;                                  // True if this property is marked @BeanProp(required=true).
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
 	private final BeanInfo<?> typeMeta;                              // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
@@ -554,6 +578,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		overrideValue = b.overrideValue;
 		rawTypeMeta = b.rawTypeMeta;
 		readOnly = b.readOnly;
+		required = b.required;
 		setter = b.setter;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
@@ -594,6 +619,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		if (rawTypeMeta == null)
 			throw uoex("Property '%s' was built via the bean-modeling-only path; Collection/array add operations require a marshalling context.", name);
+
+		m.recordPresent(name);
 
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
@@ -694,6 +721,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		if (rawTypeMeta == null)
 			throw uoex("Property '%s' was built via the bean-modeling-only path; Map/bean add operations require a marshalling context.", name);
+
+		m.recordPresent(name);
 
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
@@ -1024,6 +1053,17 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public boolean isDyna() { return isDyna; }
 
 	/**
+	 * Returns whether this property is marked {@code @BeanProp(required=true)}.
+	 *
+	 * <p>
+	 * Required properties must be present in parser input (or in the source map of a {@code Map}-to-bean conversion);
+	 * see {@link BeanProp#required()}.
+	 *
+	 * @return <jk>true</jk> if this property is required.
+	 */
+	public boolean isRequired() { return required; }
+
+	/**
 	 * Returns <jk>true</jk> if this property is read-only.
 	 *
 	 * <p>
@@ -1080,6 +1120,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		Object value1 = m.meta.onWriteProperty(m.bean, pName, value);
+		if (! isDyna)
+			m.recordPresent(name);
 		try {
 
 			if (readOnly)

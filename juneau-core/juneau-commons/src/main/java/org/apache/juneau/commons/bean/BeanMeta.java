@@ -54,19 +54,30 @@ import org.apache.juneau.commons.utils.*;
  *
  * <h5 class='topic'>Bean property ordering</h5>
  *
- * The order of the properties are as follows:
+ * The order of the properties is as follows:
  * <ul class='spaced-list'>
  * 	<li>
  * 		If {@link BeanType#properties() @BeanType(properties)} is specified on the class, the order matches the
  * 		list of properties in the annotation.
  * 	<li>
- * 		Otherwise, the order is based on the following:
+ * 		Otherwise, by default, properties are sorted alphabetically.
+ * 	<li>
+ * 		When unsorted properties are enabled ({@link BeanConfigContext#isUnsortedProperties()},
+ * 		{@link BeanType#unsorted() @BeanType(unsorted=true)}, or a bean filter), properties use declaration order:
  * 		<ul>
- * 			<li>Public fields (same order as {@code Class.getFields()}).
- * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
- * 			<li>Non-standard getters/setters with {@link BeanProp @BeanProp} annotation defined on them.
+ * 			<li>Records: record component order.
+ * 			<li>Other classes: field declaration order, superclass fields first.  Getter/setter properties are ranked
+ * 				by their same-named field (even a private one), which is used as an ordering hint only.
+ * 			<li>Method-only properties (no backing field) follow, alphabetically.
  * 		</ul>
+ * 	<li>
+ * 		{@link BeanConfigContext#isRecordComponentOrder()} gives records component order even when other beans are
+ * 		sorted.
  * </ul>
+ *
+ * <p>
+ * Field order comes from {@link Class#getDeclaredFields()}, which is declaration order on HotSpot and OpenJ9 but is
+ * not guaranteed by the JLS.
  *
  * <h5 class='topic'>Thread safety</h5>
  *
@@ -368,7 +379,8 @@ public class BeanMeta<T> {
 	final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
-	private final boolean unsortedProperties;                                  // Whether properties should use natural JVM-dependent order.
+	private final List<String> requiredPropertyNames;                         // Names of @BeanProp(required=true) properties, in property order.
+	private final boolean unsortedProperties;                                  // Whether properties use declaration order instead of alphabetical order.
 	private final PropertyNamer propertyNamerOverride;                         // Optional per-instance namer override.  Null means resolve the normal way (bean filter, then config).  Non-null takes precedence over both.
 	private final ClassInfo stopClass;                                         // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
@@ -616,11 +628,23 @@ public class BeanMeta<T> {
 				m.setAsConstructorArg();
 			}
 
+			// @BeanProp(required=true) must be satisfiable from input (WORK-J0585).
+			for (var p : normalProps.values())
+				if (p.isRequired() && ! p.canSatisfyRequired())
+					throw brex(c, "Property '%s' on class '%s' is marked @BeanProp(required=true) but cannot be written (read-only, dynamic, or no field, setter or constructor argument).", p.name, ci.getNameSimple());
+
 			// Make sure at least one property was found (records with no components are exempt).
 			if (bf == null && config.isBeansRequireSomeProperties() && normalProps.isEmpty() && ! ci.isRecord())
 				notABeanReasonTemp = "No properties detected on bean class";
 
-			unsortedPropertiesTemp = config.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
+			// Records opt into component order via recordComponentOrder(); that is unsorted mode scoped to records.
+			var recordComponentOrder = ci.isRecord() && config.isRecordComponentOrder();
+			unsortedPropertiesTemp = recordComponentOrder || config.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
+
+			// Declaration-order seeding (WORK-J0585).  Skipped when an explicit @BeanType(properties) list exists
+			// (that list keeps absolute precedence) and on the java.beans.Introspector path.
+			if (unsortedPropertiesTemp && fixedBeanProps.isEmpty() && ! config.isUseJavaBeanIntrospector())
+				orderByDeclaration(normalProps);
 
 			propertiesValue.set(unsortedPropertiesTemp ? map() : sortedMap());
 
@@ -682,6 +706,7 @@ public class BeanMeta<T> {
 		setterProps = u(setterPropsMap);
 		dynaProperty = dynaPropertyValue.get();
 		unsortedProperties = unsortedPropertiesTemp;
+		requiredPropertyNames = properties == null ? List.<String>of() : properties.values().stream().filter(BeanPropertyMeta::isRequired).map(BeanPropertyMeta::getName).toList();
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(String.class).build();
 		// Map the synthetic "_type" property to the bean-level BeanRegistry so consumers calling
 		// typeProperty.getBeanRegistry() (currently none in-tree, but a public API path) get the same
@@ -724,6 +749,54 @@ public class BeanMeta<T> {
 		} catch (Exception e) {
 			throw brex(c, localizedMessage(e));
 		}
+	}
+
+	/**
+	 * Re-keys the discovered properties into declaration order.
+	 *
+	 * <ul class='spaced-list'>
+	 * 	<li>Records: record component order ({@link ClassInfo#getRecordComponents()}, defined by the JLS).  A component
+	 * 		is matched to its property through the property's field or accessor name, so renamed components keep
+	 * 		their position.
+	 * 	<li>Other classes: the position of the property's backing field (the visible field, or the same-named private
+	 * 		field recorded as {@code innerField}) in a superclass-first walk of
+	 * 		{@link ClassInfo#getDeclaredFieldsInDeclarationOrder()}.
+	 * 	<li>Properties with no backing field or component (method-only) go after all ranked properties, alphabetically.
+	 * </ul>
+	 *
+	 * <p>
+	 * Visibility is unchanged: private fields only <i>rank</i> properties, they never become properties.
+	 *
+	 * @param props The discovered properties.  Re-ordered in place.
+	 */
+	private void orderByDeclaration(Map<String,BeanPropertyMeta.Builder> props) {
+		var rank = new HashMap<String,Integer>();
+		if (classInfo.isRecord()) {
+			var components = classInfo.getRecordComponents();
+			for (var i = 0; i < components.size(); i++) {
+				var rcName = components.get(i).getName();
+				for (var e : props.entrySet()) {
+					var p = e.getValue();
+					if ((nn(p.field) && p.field.hasName(rcName)) || (nn(p.getter) && p.getter.hasName(rcName)))
+						rank.putIfAbsent(e.getKey(), i);
+				}
+			}
+		} else {
+			var fieldRank = new HashMap<Field,Integer>();
+			for (var c2 : classHierarchy.get())
+				for (var f : c2.getDeclaredFieldsInDeclarationOrder())
+					fieldRank.putIfAbsent(f.inner(), fieldRank.size());
+			props.forEach((k, p) -> {
+				var f = nn(p.field) ? p.field : p.innerField;
+				if (nn(f) && fieldRank.containsKey(f.inner()))
+					rank.put(k, fieldRank.get(f.inner()));
+			});
+		}
+		var keys = new ArrayList<>(props.keySet());
+		keys.sort(Comparator.<String>comparingInt(k -> rank.getOrDefault(k, Integer.MAX_VALUE)).thenComparing(Comparator.naturalOrder()));
+		var copy = new LinkedHashMap<>(props);
+		props.clear();
+		keys.forEach(k -> props.put(k, copy.get(k)));
 	}
 
 	@Override /* Overridden from Object */
@@ -1086,9 +1159,34 @@ public class BeanMeta<T> {
 	}
 
 	/**
+	 * Returns whether any property of this bean is marked {@code @BeanProp(required=true)}.
+	 *
+	 * @return <jk>true</jk> if at least one property is required.
+	 */
+	public boolean hasRequiredProperties() { return ! requiredPropertyNames.isEmpty(); }
+
+	/**
+	 * Returns the names of the properties marked {@code @BeanProp(required=true)}.
+	 *
+	 * <p>
+	 * Hidden and excluded properties are not included, since input can never set them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
+	 *
+	 * 	<jc>// [name]</jc>
+	 * 	List&lt;String&gt; <jv>required</jv> = BeanMeta.<jsm>of</jsm>(Person.<jk>class</jk>, BeanConfigContext.<jsf>DEFAULT</jsf>).getRequiredPropertyNames();
+	 * </p>
+	 *
+	 * @return An unmodifiable list of property names, in property order.  Never <jk>null</jk>.
+	 */
+	public List<String> getRequiredPropertyNames() { return requiredPropertyNames; }
+
+	/**
 	 * Returns whether this bean has opted out of alphabetical property sorting.
 	 *
-	 * @return <jk>true</jk> if properties should use natural JVM-dependent order.
+	 * @return <jk>true</jk> if properties use declaration order (see the class Javadoc).
 	 */
 	protected boolean isUnsortedProperties() { return unsortedProperties; }
 

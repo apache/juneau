@@ -49,6 +49,11 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   changed-file list, no git), and the Node/npm-missing path (skip with notice when auto-enabled, fail
   when explicit). Never runs mvn or push.py's real flow.
 
+- `test_test_py_run_command.py` -- `scripts/test.py`'s `run_command()` streams each output line to
+  the console as it arrives (stderr merged in) instead of buffering until the command exits, and
+  still returns the full output and exit code. The second test proves a line is echoed while the
+  command is still running. Uses trivial shell commands, never mvn.
+
 - `test_reset_side_clones.py` -- `reset-side-clones.py` is not a per-project script. It reads
   the one global `~/Project Work/repos.md` and drives clones by absolute path, so a single copy
   resets the juneau, console, and IRS pools and there is nothing for a second copy to

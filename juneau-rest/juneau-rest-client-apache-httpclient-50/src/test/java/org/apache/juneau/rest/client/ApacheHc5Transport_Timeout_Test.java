@@ -22,8 +22,8 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.time.*;
+import java.util.concurrent.*;
 
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.apachehttpclient50.*;
 import org.junit.jupiter.api.*;
 
@@ -44,6 +44,7 @@ import com.sun.net.httpserver.*;
 class ApacheHc5Transport_Timeout_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 
 	@BeforeAll
@@ -75,12 +76,16 @@ class ApacheHc5Transport_Timeout_Test {
 			exchange.getResponseBody().write(body);
 			exchange.close();
 		});
+		// A dedicated executor keeps a sleeping /slow handler from blocking /fast on the single default dispatcher thread.
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.start();
 	}
 
 	@AfterAll
 	static void stopServer() {
 		server.stop(0);
+		executor.shutdownNow();
 	}
 
 	private static TransportRequest request(String path, Duration timeout) {
@@ -118,7 +123,7 @@ class ApacheHc5Transport_Timeout_Test {
 	}
 
 	@Test void a04_shortTimeout_fastEndpoint_succeeds() throws Exception {
-		try (var transport = ApacheHc5Transport.create(); var response = transport.execute(request("/fast", Duration.ofMillis(200)))) {
+		try (var transport = ApacheHc5Transport.create(); var response = transport.execute(request("/fast", Duration.ofSeconds(1)))) {
 			assertEquals(200, response.getStatusCode());
 		}
 	}

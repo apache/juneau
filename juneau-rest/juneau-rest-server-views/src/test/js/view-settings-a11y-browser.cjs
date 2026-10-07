@@ -121,13 +121,51 @@ const DIALOG_STATE = () => {
 
 			const state = NS.urlState.readFromSearch(window.location.search);
 			NS.init.applyShareableOpenState(table, ctx, state);
+			// The DSL restore below re-applies the same state (and so re-clicks the tab); report only the first pass.
+			const clickedFirstPass = clicked.slice();
+
+			// WORK-J0612: the same link restored onto a client-filtered column that has search metadata and a
+			// DataTables search.fixed lands in the per-table store + "juneau-dsl" predicate, with the REAL
+			// juneau-search.js engine validating it; native col.search() is never written.
+			let dslNative = '';
+			const dslFixed = {};
+			const dslSearch = function (v) {
+				if (arguments.length) { dslNative = v == null ? '' : String(v); return dslCol; }
+				return dslNative;
+			};
+			dslSearch.fixed = function (name, fn) {
+				if (fn == null) delete dslFixed[name];
+				else dslFixed[name] = fn;
+				return { draw: function () { return this; } };
+			};
+			const dslCol = { index: function () { return 0; }, header: function () { return null; }, search: dslSearch };
+			const dslDt = {
+				columns: function () { return { every: function (fn) { fn.call(dslCol); } }; },
+				column: function () { return dslCol; },
+				order: function () { return dslDt; },
+				draw: function () { return dslDt; },
+				on: function () { return dslDt; }
+			};
+			const dslCtx = {
+				table: table,
+				viewDef: { id: 'f1browser', primary: true, dataMode: 'client',
+					columns: [{ data: 'status', search: { type: 'id', operators: [{ name: '$eq' }] } }] },
+				dataTable: dslDt,
+				optsColumns: [{ data: 'status' }]
+			};
+			NS.init.applyShareableOpenState(table, dslCtx, state);
+			const dslFn = dslFixed['juneau-dsl'];
 
 			return {
 				decodedTab: state ? state.tab : null,
 				decodedFilterColumn: state?.filters?.[0] ? state.filters[0].column : null,
 				decodedFilterExpr: state?.filters?.[0] ? state.filters[0].expr : null,
-				clicked: clicked,
-				appliedExpr: appliedExpr
+				clicked: clickedFirstPass,
+				appliedExpr: appliedExpr,
+				dslStoredExpr: NS.init.getColumnExpr(dslCtx, dslCol),
+				dslNativeExpr: dslNative,
+				dslPredicateMatchesOk: !!dslFn && dslFn('OK', { status: 'OK' }) === true,
+				dslPredicateRejectsOther: !!dslFn && dslFn('NO', { status: 'NO' }) === false
 			};
 		});
 

@@ -75,7 +75,8 @@ class PetstoreJetty_Test extends TestBase {
 					.header("Accept", "text/html")
 					.GET()
 					.build();
-				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 200)
+				// GET / is a 303 to /console/store (see a01); redirects aren't followed.
+				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 303)
 					return;
 			} catch (HttpTimeoutException | ConnectException e) {
 				last = e;
@@ -130,23 +131,23 @@ class PetstoreJetty_Test extends TestBase {
 	// a — root router page
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_rootRendersHtml() throws Exception {
+	@Test void a01_rootRedirectsToConsole() throws Exception {
 		var resp = get("/", "text/html");
-		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		var body = resp.body();
-		assertTrue(body.contains("petstore"), "expected petstore link on root: " + body);
+		assertEquals(303, resp.statusCode(), "body: " + resp.body());
+		var location = resp.headers().firstValue("Location").orElse("");
+		assertTrue(location.endsWith("/console/store"), "Location was: " + location);
 	}
 
 	/**
-	 * Confirms the Config API + SVL var-resolver showcase: {@code RootResources}'s {@code @HtmlDocConfig(header=...)}
-	 * references {@code $C{Petstore/appName}}, which resolves against the {@code [Petstore]} section of
-	 * {@code juneau-petstore-jetty.cfg} — proving the {@code .cfg} value reaches the rendered page.
+	 * Confirms the console store page renders in the console chrome.  (The old router page's
+	 * {@code $C{Petstore/appName}} header check left with that page; the console brand is static.)
 	 */
-	@Test void a02_rootHeaderResolvesConfigSvlAppName() throws Exception {
-		var resp = get("/", "text/html");
+	@Test void a02_consoleStoreRenders() throws Exception {
+		var resp = get("/console/store", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		var body = resp.body();
-		assertTrue(body.contains("Apache Juneau Petstore"), "expected $C{Petstore/appName}-resolved header: " + body);
+		assertTrue(body.contains("Juneau Petstore"), "expected console brand: " + body);
+		assertTrue(body.contains("id=\"juneau-page\""), "expected the page contract element: " + body);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

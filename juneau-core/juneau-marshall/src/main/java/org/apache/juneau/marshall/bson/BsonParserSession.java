@@ -214,7 +214,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				swapParentBean(pb);
 			}
 			is.readDocumentTerminator();
-			result = builder == null ? beanMap.getBean() : builder.build(this, beanMap.getBean(), eType);
+			result = builder == null ? checkRequired(beanMap).getBean() : builder.build(this, checkRequired(beanMap).getBean(), eType);
 		} else {
 			// Fallback: read document elements. Handles scalar, array, Optional roots (all wrapped as {"value":x}).
 			// Do NOT call readArray here - at root the next bytes are type+name of first element, not array doc.

@@ -913,6 +913,21 @@ public class ParserSession extends MarshallingSession {
 	}
 
 	/**
+	 * Throws {@link MissingRequiredPropertyException} if the bean map is missing {@code @BeanProp(required=true)} properties.
+	 *
+	 * <p>
+	 * Call once per bean, after all input properties have been put into the map and before {@link BeanMap#getBean()}
+	 * constructs it.  Do not call it for intermediate bean maps that are filled in later.
+	 *
+	 * @param <T> The bean type.
+	 * @param m The bean map.  Can be <jk>null</jk>.
+	 * @return The same bean map.
+	 */
+	protected final <T> BeanMap<T> checkRequired(BeanMap<T> m) {
+		return MissingRequiredPropertyException.check(this, m);
+	}
+
+	/**
 	 * Converts the specified {@link MarshalledMap} into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
@@ -947,7 +962,7 @@ public class ParserSession extends MarshallingSession {
 					bm.put(k, v);
 				}
 			});
-			return bm.getBean();
+			return checkRequired(bm).getBean();
 		}
 
 		return m;
