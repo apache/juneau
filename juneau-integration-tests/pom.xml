@@ -647,7 +647,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.3.0</version>
+						<version>3.6.4</version>
 						<configuration>
 							<!--
 								Use test-compile scope so all JMH and project test deps are on the
